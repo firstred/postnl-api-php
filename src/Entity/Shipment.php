@@ -102,10 +102,8 @@ class Shipment extends AbstractEntity
     public static $defaultProperties = [
         'Barcode'    => [
             'Addresses'                => BarcodeService::DOMAIN_NAMESPACE,
-            'Barcode'                  => BarcodeService::DOMAIN_NAMESPACE,
-            'Dimension'                => BarcodeService::DOMAIN_NAMESPACE,
-            'ProductCodeDelivery'      => BarcodeService::DOMAIN_NAMESPACE,
             'Amounts'                  => BarcodeService::DOMAIN_NAMESPACE,
+            'Barcode'                  => BarcodeService::DOMAIN_NAMESPACE,
             'CollectionTimeStampEnd'   => BarcodeService::DOMAIN_NAMESPACE,
             'CollectionTimeStampStart' => BarcodeService::DOMAIN_NAMESPACE,
             'Contacts'                 => BarcodeService::DOMAIN_NAMESPACE,
@@ -114,7 +112,9 @@ class Shipment extends AbstractEntity
             'CustomerOrderNumber'      => BarcodeService::DOMAIN_NAMESPACE,
             'Customs'                  => BarcodeService::DOMAIN_NAMESPACE,
             'DeliveryAddress'          => BarcodeService::DOMAIN_NAMESPACE,
+            'DeliveryTimestampEnd'     => BarcodeService::DOMAIN_NAMESPACE,
             'DeliveryDate'             => BarcodeService::DOMAIN_NAMESPACE,
+            'Dimension'                => BarcodeService::DOMAIN_NAMESPACE,
             'DownPartnerBarcode'       => BarcodeService::DOMAIN_NAMESPACE,
             'DownPartnerID'            => BarcodeService::DOMAIN_NAMESPACE,
             'DownPartnerLocation'      => BarcodeService::DOMAIN_NAMESPACE,
@@ -123,6 +123,7 @@ class Shipment extends AbstractEntity
             'IDNumber'                 => BarcodeService::DOMAIN_NAMESPACE,
             'IDType'                   => BarcodeService::DOMAIN_NAMESPACE,
             'ProductCodeCollect'       => BarcodeService::DOMAIN_NAMESPACE,
+            'ProductCodeDelivery'      => BarcodeService::DOMAIN_NAMESPACE,
             'ProductOptions'           => BarcodeService::DOMAIN_NAMESPACE,
             'ReceiverDateOfBirth'      => BarcodeService::DOMAIN_NAMESPACE,
             'Reference'                => BarcodeService::DOMAIN_NAMESPACE,
@@ -133,10 +134,8 @@ class Shipment extends AbstractEntity
         ],
         'Confirming' => [
             'Addresses'                => ConfirmingService::DOMAIN_NAMESPACE,
-            'Barcode'                  => ConfirmingService::DOMAIN_NAMESPACE,
-            'Dimension'                => ConfirmingService::DOMAIN_NAMESPACE,
-            'ProductCodeDelivery'      => ConfirmingService::DOMAIN_NAMESPACE,
             'Amounts'                  => ConfirmingService::DOMAIN_NAMESPACE,
+            'Barcode'                  => ConfirmingService::DOMAIN_NAMESPACE,
             'CollectionTimeStampEnd'   => ConfirmingService::DOMAIN_NAMESPACE,
             'CollectionTimeStampStart' => ConfirmingService::DOMAIN_NAMESPACE,
             'Contacts'                 => ConfirmingService::DOMAIN_NAMESPACE,
@@ -145,7 +144,9 @@ class Shipment extends AbstractEntity
             'CustomerOrderNumber'      => ConfirmingService::DOMAIN_NAMESPACE,
             'Customs'                  => ConfirmingService::DOMAIN_NAMESPACE,
             'DeliveryAddress'          => ConfirmingService::DOMAIN_NAMESPACE,
+            'DeliveryTimestampEnd'     => ConfirmingService::DOMAIN_NAMESPACE,
             'DeliveryDate'             => ConfirmingService::DOMAIN_NAMESPACE,
+            'Dimension'                => ConfirmingService::DOMAIN_NAMESPACE,
             'DownPartnerBarcode'       => ConfirmingService::DOMAIN_NAMESPACE,
             'DownPartnerID'            => ConfirmingService::DOMAIN_NAMESPACE,
             'DownPartnerLocation'      => ConfirmingService::DOMAIN_NAMESPACE,
@@ -154,6 +155,7 @@ class Shipment extends AbstractEntity
             'IDNumber'                 => ConfirmingService::DOMAIN_NAMESPACE,
             'IDType'                   => ConfirmingService::DOMAIN_NAMESPACE,
             'ProductCodeCollect'       => ConfirmingService::DOMAIN_NAMESPACE,
+            'ProductCodeDelivery'      => ConfirmingService::DOMAIN_NAMESPACE,
             'ProductOptions'           => ConfirmingService::DOMAIN_NAMESPACE,
             'ReceiverDateOfBirth'      => ConfirmingService::DOMAIN_NAMESPACE,
             'Reference'                => ConfirmingService::DOMAIN_NAMESPACE,
@@ -164,10 +166,8 @@ class Shipment extends AbstractEntity
         ],
         'Labelling'  => [
             'Addresses'                => LabellingService::DOMAIN_NAMESPACE,
-            'Barcode'                  => LabellingService::DOMAIN_NAMESPACE,
-            'Dimension'                => LabellingService::DOMAIN_NAMESPACE,
-            'ProductCodeDelivery'      => LabellingService::DOMAIN_NAMESPACE,
             'Amounts'                  => LabellingService::DOMAIN_NAMESPACE,
+            'Barcode'                  => LabellingService::DOMAIN_NAMESPACE,
             'CollectionTimeStampEnd'   => LabellingService::DOMAIN_NAMESPACE,
             'CollectionTimeStampStart' => LabellingService::DOMAIN_NAMESPACE,
             'Contacts'                 => LabellingService::DOMAIN_NAMESPACE,
@@ -176,7 +176,9 @@ class Shipment extends AbstractEntity
             'CustomerOrderNumber'      => LabellingService::DOMAIN_NAMESPACE,
             'Customs'                  => LabellingService::DOMAIN_NAMESPACE,
             'DeliveryAddress'          => LabellingService::DOMAIN_NAMESPACE,
+            'DeliveryTimestampEnd'     => LabellingService::DOMAIN_NAMESPACE,
             'DeliveryDate'             => LabellingService::DOMAIN_NAMESPACE,
+            'Dimension'                => LabellingService::DOMAIN_NAMESPACE,
             'DownPartnerBarcode'       => LabellingService::DOMAIN_NAMESPACE,
             'DownPartnerID'            => LabellingService::DOMAIN_NAMESPACE,
             'DownPartnerLocation'      => LabellingService::DOMAIN_NAMESPACE,
@@ -185,6 +187,7 @@ class Shipment extends AbstractEntity
             'IDNumber'                 => LabellingService::DOMAIN_NAMESPACE,
             'IDType'                   => LabellingService::DOMAIN_NAMESPACE,
             'ProductCodeCollect'       => LabellingService::DOMAIN_NAMESPACE,
+            'ProductCodeDelivery'      => LabellingService::DOMAIN_NAMESPACE,
             'ProductOptions'           => LabellingService::DOMAIN_NAMESPACE,
             'ReceiverDateOfBirth'      => LabellingService::DOMAIN_NAMESPACE,
             'Reference'                => LabellingService::DOMAIN_NAMESPACE,
@@ -197,14 +200,10 @@ class Shipment extends AbstractEntity
     // @codingStandardsIgnoreStart
     /** @var Address[] $Addresses */
     protected $Addresses = null;
-    /** @var string $Barcode */
-    protected $Barcode = null;
-    /** @var Dimension $Dimension */
-    protected $Dimension = null;
-    /** @var string $ProductCodeDelivery */
-    protected $ProductCodeDelivery = null;
     /** @var Amount[] $Amounts */
     protected $Amounts = null;
+    /** @var string $Barcode */
+    protected $Barcode = null;
     /** @var string $CollectionTimeStampEnd */
     protected $CollectionTimeStampEnd = null;
     /** @var string $CollectionTimeStampStart */
@@ -221,8 +220,12 @@ class Shipment extends AbstractEntity
     protected $Customs = null;
     /** @var string $DeliveryAddress */
     protected $DeliveryAddress = null;
+    /** @var string $DeliveryTimeStampEnd */
+    protected $DeliveryTimeStampEnd = null;
     /** @var string $DeliveryDate */
     protected $DeliveryDate = null;
+    /** @var Dimension $Dimension */
+    protected $Dimension = null;
     /** @var string $DownPartnerBarcode */
     protected $DownPartnerBarcode = null;
     /** @var string $DownPartnerID */
@@ -239,6 +242,8 @@ class Shipment extends AbstractEntity
     protected $IDType = null;
     /** @var string $ProductCodeCollect */
     protected $ProductCodeCollect = null;
+    /** @var string $ProductCodeDelivery */
+    protected $ProductCodeDelivery = null;
     /** @var ProductOption[] $ProductOptions */
     protected $ProductOptions = null;
     /** @var string $ReceiverDateOfBirth */
@@ -290,19 +295,18 @@ class Shipment extends AbstractEntity
      */
     public function __construct(
         array $addresses,
-        $barcode,
-        Dimension $dimension,
-        $productCodeDelivery,
         array $amounts = null,
-        $collectionTimeStampEnd = null,
-        $collectionTimeStampStart = null,
+        $barcode,
         array $contacts = null,
         $content = null,
+        $collectionTimeStampEnd = null,
+        $collectionTimeStampStart = null,
         $costCenter = null,
         $customerOrderNumber = null,
         Customs $customs = null,
         $deliveryAddress = null,
         $deliveryDate = null,
+        Dimension $dimension,
         $downPartnerBarcode = null,
         $downPartnerId = null,
         $downPartnerLocation = null,
@@ -311,6 +315,7 @@ class Shipment extends AbstractEntity
         $idNumber = null,
         $idType = null,
         $productCodeCollect = null,
+        $productCodeDelivery,
         array $productOptions = null,
         $receiverDateOfBirth = null,
         $reference = null,
@@ -322,10 +327,8 @@ class Shipment extends AbstractEntity
         parent::__construct();
 
         $this->setAddresses($addresses);
-        $this->setBarcode($barcode);
-        $this->setDimension($dimension);
-        $this->setProductCodeDelivery($productCodeDelivery);
         $this->setAmounts($amounts);
+        $this->setBarcode($barcode);
         $this->setCollectionTimeStampEnd($collectionTimeStampEnd);
         $this->setCollectionTimeStampStart($collectionTimeStampStart);
         $this->setContacts($contacts);
@@ -335,6 +338,7 @@ class Shipment extends AbstractEntity
         $this->setCustoms($customs);
         $this->setDeliveryAddress($deliveryAddress);
         $this->setDeliveryDate($deliveryDate);
+        $this->setDimension($dimension);
         $this->setDownPartnerBarcode($downPartnerBarcode);
         $this->setDownPartnerID($downPartnerId);
         $this->setDownPartnerLocation($downPartnerLocation);
@@ -343,6 +347,7 @@ class Shipment extends AbstractEntity
         $this->setIDNumber($idNumber);
         $this->setIDType($idType);
         $this->setProductCodeCollect($productCodeCollect);
+        $this->setProductCodeDelivery($productCodeDelivery);
         $this->setProductOptions($productOptions);
         $this->setReceiverDateOfBirth($receiverDateOfBirth);
         $this->setReference($reference);
