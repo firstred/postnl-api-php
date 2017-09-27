@@ -364,11 +364,45 @@ class Shipment extends AbstractEntity
         $xml = [];
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
             if ($propertyName === 'Addresses') {
-                $shipments = [];
-                foreach ($this->Addresses as $address) {
-                    $shipments[] = ["{{$namespace}}Address" => $address];
+                if (is_array($this->Addresses)) {
+                    $items = [];
+                    foreach ($this->Addresses as $address) {
+                        $items[] = ["{{$namespace}}Address" => $address];
+                    }
+                    $xml["{{$namespace}}Addresses"] = $items;
                 }
-                $xml["{{$namespace}}Addresses"] = $shipments;
+            } elseif ($propertyName === 'Amounts') {
+                if (is_array($this->Amounts)) {
+                    $items = [];
+                    foreach ($this->Amounts as $amount) {
+                        $items[] = ["{{$namespace}}Amount" => $amount];
+                    }
+                    $xml["{{$namespace}}Amounts"] = $items;
+                }
+            } elseif ($propertyName === 'Contacts') {
+                if (is_array($this->Contacts)) {
+                    $items = [];
+                    foreach ($this->Contacts as $contact) {
+                        $items[] = ["{{$namespace}}Contact" => $contact];
+                    }
+                    $xml["{{$namespace}}Contacts"] = $items;
+                }
+            } elseif ($propertyName === 'Groups') {
+                if (is_array($this->Groups)) {
+                    $items = [];
+                    foreach ($this->Groups as $group) {
+                        $items[] = ["{{$namespace}}Group" => $group];
+                    }
+                    $xml["{{$namespace}}Groups"] = $items;
+                }
+            } elseif ($propertyName === 'ProductOptions') {
+                if (is_array($this->ProductOptions)) {
+                    $items = [];
+                    foreach ($this->ProductOptions as $option) {
+                        $items[] = ["{{$namespace}}ProductOption" => $option];
+                    }
+                    $xml["{{$namespace}}ProductOptions"] = $items;
+                }
             } elseif (!is_null($this->{$propertyName})) {
                 $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
             }
