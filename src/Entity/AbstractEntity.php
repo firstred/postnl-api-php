@@ -139,7 +139,7 @@ abstract class AbstractEntity implements \JsonSerializable, XmlSerializable
         }
 
         foreach (array_keys(static::$defaultProperties[$this->currentService]) as $propertyName) {
-            if (!empty($this->{$propertyName})) {
+            if (isset($this->{$propertyName})) {
                 $json[$propertyName] = $this->{$propertyName};
             }
         }
