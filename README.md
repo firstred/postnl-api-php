@@ -32,11 +32,11 @@ hopefully be completed soon.
 | Barcode webservice                          | alpha                     | alpha                     | 1.1     |
 | Labelling webservice                        | alpha                     | alpha                     | 2.1     |
 | Confirming webservice                       | alpha                     | alpha                     | 1.10    |
-| Shippingstatus webservice                   | Expected: September, 2017 | Expected: September, 2017 | 1.6     |
+| Shippingstatus webservice                   | Expected: February, 2018  | Expected: February, 2018  | 1.6     |
 | **Delivery Options**                        |                           |                           |         |
-| Deliverydate webservice                     | Expected: September, 2017 | Expected: September, 2017 | 2.2     |
-| Location webservice                         | Expected: September, 2017 | Expected: September, 2017 | 2.1     |
-| Timeframe webservice                        | Expected: September, 2017 | Expected: September, 2017 | 2.1     |
+| Deliverydate webservice                     | Expected: February, 2018  | Expected: February, 2018  | 2.2     |
+| Location webservice                         | Expected: February, 2018  | Expected: February, 2018  | 2.1     |
+| Timeframe webservice                        | Expected: February, 2018  | Expected: February, 2018  | 2.1     |
 | **Mail**                                    |                           |                           |         |
 | Bulkmail webservice                         | N/A                       | N/A                       | N/A     |
 
