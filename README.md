@@ -29,9 +29,9 @@ hopefully be completed soon.
 | Fraudepreventie Check Basis                 | N/A                       | N/A                       | N/A     |
 | Kredietcheck Zakelijk                       | N/A                       | N/A                       | N/A     |
 | **Send & Track**                            |                           |                           |         |
-| Barcode webservice                          | alpha                     | alpha                     | 1.1     |
-| Labelling webservice                        | alpha                     | alpha                     | 2.1     |
-| Confirming webservice                       | alpha                     | alpha                     | 1.10    |
+| Barcode webservice                          | beta                      | beta                      | 1.1     |
+| Labelling webservice                        | beta                      | beta                      | 2.1     |
+| Confirming webservice                       | beta                      | beta                      | 1.10    |
 | Shippingstatus webservice                   | Expected: February, 2018  | Expected: February, 2018  | 1.6     |
 | **Delivery Options**                        |                           |                           |         |
 | Deliverydate webservice                     | Expected: February, 2018  | Expected: February, 2018  | 2.2     |
