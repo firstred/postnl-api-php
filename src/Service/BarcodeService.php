@@ -26,11 +26,8 @@
 
 namespace ThirtyBees\PostNL\Service;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use Hybridauth\Exception\Exception;
 use Sabre\Xml\Service as XmlService;
 use ThirtyBees\PostNL\Entity\Request\GenerateBarcode;
 use ThirtyBees\PostNL\Entity\SOAP\Security;
@@ -128,7 +125,6 @@ class BarcodeService extends AbstractService
                     throw new \Exception('Unknown error');
                 }
                 $barcode = $json['Barcode'];
-                echo $barcode;exit;
             } catch (\Exception $e) {
                 $barcode = $e;
             }

@@ -89,11 +89,13 @@ class LabellingService extends AbstractService
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
+     * @throws \Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
     public function generateLabelREST(GenerateLabel $generateLabel, $confirm = false)
     {
-        $response = $this->postnl->getHttpClient()->doRequests($this->buildGenerateLabelRESTRequest($generateLabel, $confirm));
+        $response = $this->postnl->getHttpClient()->doRequest($this->buildGenerateLabelRESTRequest($generateLabel, $confirm));
         static::validateRESTResponse($response);
         $body = json_decode(static::getResponseText($response), true);
         if (isset($body['ResponseShipments'])) {
@@ -150,12 +152,14 @@ class LabellingService extends AbstractService
      * @return GenerateLabelResponse
      * @throws CifDownException
      * @throws CifException
+     * @throws \Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Sabre\Xml\LibXMLException
      * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
     public function generateLabelSOAP(GenerateLabel $generateLabel, $confirm = false)
     {
-        $response = $this->postnl->getHttpClient()->doRequests($this->buildGenerateLabelSOAPRequest($generateLabel, $confirm));
+        $response = $this->postnl->getHttpClient()->doRequest($this->buildGenerateLabelSOAPRequest($generateLabel, $confirm));
         $xml = simplexml_load_string(static::getResponseText($response));
 
         static::registerNamespaces($xml);

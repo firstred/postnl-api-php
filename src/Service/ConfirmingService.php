@@ -27,7 +27,6 @@
 namespace ThirtyBees\PostNL\Service;
 
 use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Service as XmlService;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
@@ -36,7 +35,6 @@ use ThirtyBees\PostNL\Entity\Response\ConfirmingResponseShipment;
 use ThirtyBees\PostNL\Entity\Shipment;
 use ThirtyBees\PostNL\Entity\SOAP\Security;
 use ThirtyBees\PostNL\Exception\ApiException;
-use ThirtyBees\PostNL\Exception\CifException;
 use ThirtyBees\PostNL\PostNL;
 
 /**
@@ -91,7 +89,7 @@ class ConfirmingService extends AbstractService
      */
     public function confirmShipmentREST(Confirming $confirming)
     {
-        $response = $this->postnl->getHttpClient()->doRequests($this->buildConfirmRESTRequest($confirming));
+        $response = $this->postnl->getHttpClient()->doRequest($this->buildConfirmRESTRequest($confirming));
         static::validateRESTResponse($response);
         $body = json_decode(static::getResponseText($response), true);
         if (isset($body['ConfirmingResponseShipments'])) {
@@ -150,10 +148,11 @@ class ConfirmingService extends AbstractService
      * @throws \ThirtyBees\PostNL\Exception\CifDownException
      * @throws \ThirtyBees\PostNL\Exception\CifException
      * @throws \Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function confirmShipmentSOAP(Confirming $confirming)
     {
-        $response = $this->postnl->getHttpClient()->doRequests($this->buildConfirmSOAPRequest($confirming));
+        $response = $this->postnl->getHttpClient()->doRequest($this->buildConfirmSOAPRequest($confirming));
         $xml = simplexml_load_string(static::getResponseText($response));
         static::registerNamespaces($xml);
         static::validateSOAPResponse($xml);
