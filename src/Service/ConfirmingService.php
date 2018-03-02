@@ -26,6 +26,8 @@
 
 namespace ThirtyBees\PostNL\Service;
 
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Service as XmlService;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
@@ -34,6 +36,7 @@ use ThirtyBees\PostNL\Entity\Response\ConfirmingResponseShipment;
 use ThirtyBees\PostNL\Entity\Shipment;
 use ThirtyBees\PostNL\Entity\SOAP\Security;
 use ThirtyBees\PostNL\Exception\ApiException;
+use ThirtyBees\PostNL\Exception\CifException;
 use ThirtyBees\PostNL\PostNL;
 
 /**
@@ -82,17 +85,16 @@ class ConfirmingService extends AbstractService
      *
      * @return ConfirmingResponseShipment
      * @throws ApiException
+     * @throws \ThirtyBees\PostNL\Exception\CifDownException
+     * @throws \ThirtyBees\PostNL\Exception\CifException
+     * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
     public function confirmShipmentREST(Confirming $confirming)
     {
-        $result = call_user_func_array(
-            [$this->postnl->getHttpClient(), 'request'],
-            array_slice($this->buildConfirmRESTRequest($confirming), 1)
-        );
-
-        $confirming = json_decode($result[0], true);
-        static::validateRESTResponse($confirming);
-        if (isset($confirming['ConfirmingResponseShipments'])) {
+        $response = $this->postnl->getHttpClient()->doRequests($this->buildConfirmRESTRequest($confirming));
+        static::validateRESTResponse($response);
+        $body = json_decode(static::getResponseText($response), true);
+        if (isset($body['ConfirmingResponseShipments'])) {
             return AbstractEntity::jsonDeserialize($confirming['ConfirmingResponseShipments']);
         }
 
@@ -102,7 +104,7 @@ class ConfirmingService extends AbstractService
     /**
      * Confirm multiple shipments
      *
-     * @param array $confirms ['uuid' => Confirming, ...]
+     * @param Confirming[] $confirms ['uuid' => Confirming, ...]
      *
      * @return ConfirmingResponseShipment[]
      */
@@ -111,8 +113,9 @@ class ConfirmingService extends AbstractService
         $httpClient = $this->postnl->getHttpClient();
 
         foreach ($confirms as $confirm) {
-            call_user_func_array(
-                [$httpClient, 'addRequest'],
+
+            $httpClient->addOrUpdateRequest(
+                $confirm->getId(),
                 $this->buildConfirmRESTRequest($confirm)
             );
         }
@@ -143,20 +146,20 @@ class ConfirmingService extends AbstractService
      * @param Confirming $confirming
      *
      * @return ConfirmingResponseShipment
+     * @throws \Sabre\Xml\LibXMLException
+     * @throws \ThirtyBees\PostNL\Exception\CifDownException
+     * @throws \ThirtyBees\PostNL\Exception\CifException
+     * @throws \Exception
      */
     public function confirmShipmentSOAP(Confirming $confirming)
     {
-        $result = call_user_func_array(
-            [$this->postnl->getHttpClient(), 'request'],
-            array_slice($this->buildConfirmSOAPRequest($confirming), 1)
-        );
-
-        $xml = simplexml_load_string($result[0]);
+        $response = $this->postnl->getHttpClient()->doRequests($this->buildConfirmSOAPRequest($confirming));
+        $xml = simplexml_load_string(static::getResponseText($response));
         static::registerNamespaces($xml);
         static::validateSOAPResponse($xml);
 
         $reader = new Reader();
-        $reader->xml($result[0]);
+        $reader->xml(static::getResponseText($response));
         $array = array_values($reader->parse()['value'][0]['value'][0]['value']);
         $array = $array[0];
 
@@ -175,8 +178,8 @@ class ConfirmingService extends AbstractService
         $httpClient = $this->postnl->getHttpClient();
 
         foreach ($confirmings as $confirming) {
-            call_user_func_array(
-                [$httpClient, 'addRequest'],
+            $httpClient->addOrUpdateRequest(
+                $confirming->getId(),
                 $this->buildConfirmSOAPRequest($confirming)
             );
         }
@@ -211,7 +214,7 @@ class ConfirmingService extends AbstractService
     /**
      * @param Confirming $confirming
      *
-     * @return array
+     * @return Request
      */
     public function buildConfirmRESTRequest(Confirming $confirming)
     {
@@ -219,8 +222,7 @@ class ConfirmingService extends AbstractService
 
         $this->setService($confirming);
 
-        return [
-            $confirming->getId(),
+        return new Request(
             'POST',
             $this->postnl->getSandbox()
                 ? ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT)
@@ -230,15 +232,14 @@ class ConfirmingService extends AbstractService
                 'Content-Type: application/json',
                 'Accept: application/json',
             ],
-            [],
-            json_encode($confirming),
-        ];
+            json_encode($confirming)
+        );
     }
 
     /**
      * @param Confirming $confirming
      *
-     * @return array
+     * @return Request
      */
     protected function buildConfirmSOAPRequest(Confirming $confirming)
     {
@@ -268,17 +269,15 @@ class ConfirmingService extends AbstractService
             ? ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT)
             : ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT);
 
-        return [
-            $confirming->getId(),
+        return new Request(
             'POST',
             $endpoint,
             [
-                "SOAPAction: \"$soapAction\"",
-                'Content-Type: text/xml',
-                'Accept: text/xml',
+                ['SOAPAction' => "\"$soapAction\""],
+                ['Content-Type'=> 'text/xml'],
+                ['Accept' => 'text/xml'],
             ],
-            [],
-            $body,
-        ];
+            $body
+        );
     }
 }

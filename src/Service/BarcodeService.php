@@ -26,10 +26,16 @@
 
 namespace ThirtyBees\PostNL\Service;
 
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
+use Hybridauth\Exception\Exception;
 use Sabre\Xml\Service as XmlService;
 use ThirtyBees\PostNL\Entity\Request\GenerateBarcode;
 use ThirtyBees\PostNL\Entity\SOAP\Security;
 use ThirtyBees\PostNL\Exception\ApiException;
+use ThirtyBees\PostNL\Exception\ResponseException;
 use ThirtyBees\PostNL\PostNL;
 
 /**
@@ -76,16 +82,20 @@ class BarcodeService extends AbstractService
      *
      * @param GenerateBarcode $generateBarcode
      *
-     * @return string Barcode
+     * @return string|null Barcode
+     * @throws ResponseException
+     * @throws \Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \ThirtyBees\PostNL\Exception\CifDownException
+     * @throws \ThirtyBees\PostNL\Exception\CifException
      */
     public function generateBarcodeREST(GenerateBarcode $generateBarcode)
     {
-        $result = call_user_func_array(
-            [$this->postnl->getHttpClient(), 'request'],
-            array_slice($this->buildGenerateBarcodeRESTRequest($generateBarcode), 1)
-        );
+        /** @var Response $response */
+        $response = $this->postnl
+            ->getHttpClient()
+            ->doRequest($this->buildGenerateBarcodeRESTRequest($generateBarcode));
 
-        $response = json_decode($result[0], true);
         static::validateRESTResponse($response);
 
         return $response['Barcode'];
@@ -103,18 +113,22 @@ class BarcodeService extends AbstractService
         $httpClient = $this->postnl->getHttpClient();
 
         foreach ($generateBarcodes as $generateBarcode) {
-            call_user_func_array(
-                [$httpClient, 'addRequest'],
+            $httpClient->addOrUpdateRequest(
+                $generateBarcode->getId(),
                 $this->buildGenerateBarcodeRESTRequest($generateBarcode)
             );
         }
 
         $barcodes = [];
         foreach ($httpClient->doRequests() as $uuid => $response) {
-            $json = json_decode($response['body'], true);
             try {
-                static::validateRESTResponse($json);
+                static::validateRESTResponse($response);
+                $json = json_decode(static::getResponseText($response), true);
+                if (!isset($json['Barcode'])) {
+                    throw new \Exception('Unknown error');
+                }
                 $barcode = $json['Barcode'];
+                echo $barcode;exit;
             } catch (\Exception $e) {
                 $barcode = $e;
             }
@@ -131,15 +145,17 @@ class BarcodeService extends AbstractService
      * @param GenerateBarcode $generateBarcode
      *
      * @return string Barcode
+     * @throws ResponseException
+     * @throws \Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \ThirtyBees\PostNL\Exception\CifDownException
+     * @throws \ThirtyBees\PostNL\Exception\CifException
      */
     public function generateBarcodeSOAP(GenerateBarcode $generateBarcode)
     {
-        $result = call_user_func_array(
-            [$this->postnl->getHttpClient(), 'request'],
-            array_slice($this->buildGenerateBarcodeSOAPRequest($generateBarcode), 1)
-        );
+        $response = $this->postnl->getHttpClient()->doRequest($this->buildGenerateBarcodeSOAPRequest($generateBarcode));
+        $xml = simplexml_load_string(static::getResponseText($response));
 
-        $xml = simplexml_load_string($result[0]);
         static::registerNamespaces($xml);
         static::validateSOAPResponse($xml);
 
@@ -152,21 +168,22 @@ class BarcodeService extends AbstractService
      * @param GenerateBarcode[] $generateBarcodes
      *
      * @return array Barcodes
+     * @throws ResponseException
      */
     public function generateBarcodesSOAP(array $generateBarcodes)
     {
         $httpClient = $this->postnl->getHttpClient();
 
         foreach ($generateBarcodes as $generateBarcode) {
-            call_user_func_array(
-                [$httpClient, 'addRequest'],
+            $httpClient->addOrUpdateRequest(
+                $generateBarcode->getId(),
                 $this->buildGenerateBarcodeSOAPRequest($generateBarcode)
             );
         }
 
         $barcodes = [];
         foreach ($httpClient->doRequests() as $uuid => $response) {
-            $xml = simplexml_load_string($response['body']);
+            $xml = simplexml_load_string(static::getResponseText($response));
             if (!$xml instanceof \SimpleXMLElement) {
                 $barcode = new ApiException('Invalid API response');
             } else {
@@ -189,33 +206,30 @@ class BarcodeService extends AbstractService
      * Build the `generateBarcode` HTTP request for the REST API
      *
      * @param GenerateBarcode $generateBarcode
-     * @param int             $id              Override the request ID
      *
-     * @return array
+     * @return Request
      */
-    protected function buildGenerateBarcodeRESTRequest(GenerateBarcode $generateBarcode, $id = null)
+    protected function buildGenerateBarcodeRESTRequest(GenerateBarcode $generateBarcode)
     {
         $apiKey = $this->postnl->getRestApiKey();
         $this->setService($generateBarcode);
 
-        return [
-            $id ?: $generateBarcode->getId(),
+        return new Request(
             'GET',
-            $this->postnl->getSandbox()
+            ($this->postnl->getSandbox()
                 ? ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT)
-                : ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT),
+                : ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT))
+                .'?'.http_build_query([
+                     'CustomerCode'   => $generateBarcode->getCustomer()->getCustomerCode(),
+                     'CustomerNumber' => $generateBarcode->getCustomer()->getCustomerNumber(),
+                     'Type'           => $generateBarcode->getBarcode()->getType(),
+                     'Serie'          => $generateBarcode->getBarcode()->getSerie(),
+            ]),
             [
-                'Content-Type: application/json; charset=utf-8',
-                'Accept: application/json',
-                "apikey: $apiKey",
-            ],
-            [
-                'CustomerCode'   => $generateBarcode->getCustomer()->getCustomerCode(),
-                'CustomerNumber' => $generateBarcode->getCustomer()->getCustomerNumber(),
-                'Type'           => $generateBarcode->getBarcode()->getType(),
-                'Serie'          => $generateBarcode->getBarcode()->getSerie(),
-            ],
-        ];
+                'Accept'       => 'application/json',
+                'apikey'       => $apiKey,
+            ]
+        );
     }
 
     /**
@@ -224,7 +238,7 @@ class BarcodeService extends AbstractService
      * @param GenerateBarcode $generateBarcode
      * @param int             $id              Override ID
      *
-     * @return array
+     * @return Request
      */
     protected function buildGenerateBarcodeSOAPRequest(GenerateBarcode $generateBarcode, $id = null)
     {
@@ -251,19 +265,17 @@ class BarcodeService extends AbstractService
             ]
         );
 
-        return [
-            $id ?: $generateBarcode->getId(),
+        return new Request(
             'POST',
             $this->postnl->getSandbox()
                 ? ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT)
                 : ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT),
             [
-                "SOAPAction: \"$soapAction\"",
-                'Content-Type: text/xml',
-                'Accept: text/xml',
+                'SOAPAction'   => "\"$soapAction\"",
+                'Content-Type' => 'text/xml',
+                'Accept'       => 'text/xml',
             ],
-            [],
-            $request,
-        ];
+            $request
+        );
     }
 }

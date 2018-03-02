@@ -26,13 +26,16 @@
 
 namespace ThirtyBees\PostNL\Service;
 
+use GuzzleHttp\Psr7\Request;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Service as XmlService;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
-use ThirtyBees\PostNL\Entity\GenerateLabelResponse;
+use ThirtyBees\PostNL\Entity\Response\GenerateLabelResponse;
 use ThirtyBees\PostNL\Entity\Request\GenerateLabel;
 use ThirtyBees\PostNL\Entity\SOAP\Security;
 use ThirtyBees\PostNL\Exception\ApiException;
+use ThirtyBees\PostNL\Exception\CifDownException;
+use ThirtyBees\PostNL\Exception\CifException;
 use ThirtyBees\PostNL\PostNL;
 
 /**
@@ -84,16 +87,17 @@ class LabellingService extends AbstractService
      * @return GenerateLabelResponse
      *
      * @throws ApiException
+     * @throws CifDownException
+     * @throws CifException
+     * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
     public function generateLabelREST(GenerateLabel $generateLabel, $confirm = false)
     {
-        $client = $this->postnl->getHttpClient();
-        $result = call_user_func_array([$client, 'request'], array_slice($this->buildGenerateLabelRESTRequest($generateLabel, $confirm), 1));
-
-        $label = json_decode($result[0], true);
-        static::validateRESTResponse($label);
-        if (isset($label['ResponseShipments'])) {
-            return AbstractEntity::jsonDeserialize(['GenerateLabelResponse' => $label]);
+        $response = $this->postnl->getHttpClient()->doRequests($this->buildGenerateLabelRESTRequest($generateLabel, $confirm));
+        static::validateRESTResponse($response);
+        $body = json_decode(static::getResponseText($response), true);
+        if (isset($body['ResponseShipments'])) {
+            return AbstractEntity::jsonDeserialize(['GenerateLabelResponse' => $body]);
         }
 
         throw new ApiException('Unable to generate label');
@@ -110,9 +114,9 @@ class LabellingService extends AbstractService
     {
         $httpClient = $this->postnl->getHttpClient();
 
-        foreach ($generateLabels as $generateLabel) {
-            call_user_func_array(
-                [$httpClient, 'addRequest'],
+        foreach ($generateLabels as $uuid => $generateLabel) {
+            $httpClient->addOrUpdateRequest(
+                $uuid,
                 $this->buildGenerateLabelRESTRequest($generateLabel[0], $generateLabel[1])
             );
         }
@@ -144,21 +148,21 @@ class LabellingService extends AbstractService
      * @param bool          $confirm
      *
      * @return GenerateLabelResponse
+     * @throws CifDownException
+     * @throws CifException
+     * @throws \Sabre\Xml\LibXMLException
+     * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
     public function generateLabelSOAP(GenerateLabel $generateLabel, $confirm = false)
     {
-        $result =  call_user_func_array(
-            [$this->postnl->getHttpClient(), 'request'],
-            array_slice($this->buildGenerateLabelSOAPRequest($generateLabel, $confirm), 1)
-        );
-
-        $xml = simplexml_load_string($result[0]);
+        $response = $this->postnl->getHttpClient()->doRequests($this->buildGenerateLabelSOAPRequest($generateLabel, $confirm));
+        $xml = simplexml_load_string(static::getResponseText($response));
 
         static::registerNamespaces($xml);
         static::validateSOAPResponse($xml);
 
         $reader = new Reader();
-        $reader->xml($result[0]);
+        $reader->xml(static::getResponseText($response));
         $array = array_values($reader->parse()['value'][0]['value']);
         $array = $array[0];
 
@@ -176,9 +180,9 @@ class LabellingService extends AbstractService
     {
         $httpClient = $this->postnl->getHttpClient();
 
-        foreach ($generateLabels as $generateLabel) {
-            call_user_func_array(
-                [$httpClient, 'addRequest'],
+        foreach ($generateLabels as $uuid => $generateLabel) {
+            $httpClient->addOrUpdateRequest(
+                $uuid,
                 $this->buildGenerateLabelSOAPRequest($generateLabel[0], $generateLabel[1])
             );
         }
@@ -216,27 +220,25 @@ class LabellingService extends AbstractService
      * @param GenerateLabel $generateLabel
      * @param               $confirm
      *
-     * @return array
+     * @return Request
      */
     protected function buildGenerateLabelRESTRequest(GenerateLabel $generateLabel, $confirm)
     {
         $apiKey = $this->postnl->getRestApiKey();
         $this->setService($generateLabel);
 
-        return [
-            $generateLabel->getId(),
+        return new Request(
             'POST',
-            $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT,
+            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).'?'.http_build_query([
+                'confirm' => $confirm
+            ]),
             [
-                "apikey: $apiKey",
-                'Content-Type: application/json',
-                'Accept: application/json',
+                'apikey'       => $apiKey,
+                'Content-Type' => 'application/json',
+                'Accept'       => 'application/json',
             ],
-            [
-                'confirm' => $confirm,
-            ],
-            json_encode($generateLabel, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES),
-        ];
+            json_encode($generateLabel, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES)
+        );
     }
 
     /**
@@ -245,7 +247,7 @@ class LabellingService extends AbstractService
      * @param GenerateLabel $generateLabel
      * @param               $confirm
      *
-     * @return array
+     * @return Request
      */
     protected function buildGenerateLabelSOAPRequest(GenerateLabel $generateLabel, $confirm)
     {
@@ -275,17 +277,15 @@ class LabellingService extends AbstractService
             ? ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT)
             : ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT);
 
-        return [
-            $generateLabel->getId(),
+        return new Request(
             'POST',
             $endpoint,
             [
-                "SOAPAction: \"$soapAction\"",
-                'Content-Type: text/xml',
-                'Accept: text/xml',
+                'SOAPAction'   => "\"$soapAction\"",
+                'Content-Type' => 'text/xml',
+                'Accept'       => 'text/xml',
             ],
-            [],
-            $request,
-        ];
+            $request
+        );
     }
 }

@@ -26,10 +26,13 @@
 
 namespace ThirtyBees\PostNL\Service;
 
+use GuzzleHttp\Psr7\Response;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
+use ThirtyBees\PostNL\Exception\ApiException;
 use ThirtyBees\PostNL\Exception\CifDownException;
 use ThirtyBees\PostNL\Exception\CifException;
 use ThirtyBees\PostNL\Exception\InvalidMethodException;
+use ThirtyBees\PostNL\Exception\ResponseException;
 use ThirtyBees\PostNL\PostNL;
 
 /**
@@ -95,7 +98,11 @@ abstract class AbstractService
             return false;
         }
 
-        $reflection = new \ReflectionClass(get_called_class());
+        try {
+            $reflection = new \ReflectionClass(get_called_class());
+        } catch (\ReflectionException $e) {
+            return false;
+        }
         $service = substr($reflection->getShortName(), 0, strlen($reflection->getShortName()) - 7);
         $object->setCurrentService($service);
         $defaultProperties = $object::$defaultProperties;
@@ -129,25 +136,33 @@ abstract class AbstractService
     }
 
     /**
-     * @param array $response
+     * @param Response|\Exception $response
+     *
      * @return bool
      *
      * @throws CifDownException
      * @throws CifException
+     * @throws ResponseException
+     * @throws ApiException
      */
     protected function validateRESTResponse($response)
     {
-        if (isset($response['Envelope']['Body']['Fault']['Reason']['Text'][''])) {
-            throw new CifDownException($response['Envelope']['Body']['Fault']['Reason']['Text']['']);
+        $body = json_decode(static::getResponseText($response), true);
+
+        if (!empty($body['fault']['faultstring']) && $body['fault']['faultstring'] === 'Invalid ApiKey') {
+            throw new ApiException('Invalid Api Key');
+        }
+        if (isset($body['Envelope']['Body']['Fault']['Reason']['Text'][''])) {
+            throw new CifDownException($body['Envelope']['Body']['Fault']['Reason']['Text']['']);
         }
 
-        if (isset($response['Errors']['Error']) && !empty($response['Errors']['Error'])) {
+        if (!empty($body->Errors->Error)) {
             $exceptionData = [];
-            foreach ($response['Errors']['Error'] as $error) {
+            foreach ($body->Errors->Error as $error) {
                 $exceptionData[] = [
-                    'description' => isset($error['Description']) ? (string) $error['Description'] : null,
-                    'message'     => isset($error['ErrorMsg']) ? (string) $error['ErrorMsg'] : null,
-                    'code'        => isset($error['ErrorNumber']) ? (int) $error['ErrorNumber'] : 0,
+                    'description' => isset($error->Description) ? (string) $error->Description : null,
+                    'message'     => isset($error->ErrorMsg) ? (string) $error->ErrorMsg : null,
+                    'code'        => isset($error->ErrorNumber) ? (int) $error->ErrorNumber : 0,
                 ];
             }
             throw new CifException($exceptionData);
@@ -186,5 +201,43 @@ abstract class AbstractService
         }
 
         return true;
+    }
+
+    /**
+     * Get the response
+     *
+     * @param $response
+     *
+     * @return string
+     * @throws ResponseException
+     */
+    public static function getResponseText($response)
+    {
+        // Guzzle returned promises
+        if (is_array($response)) {
+            if (isset($response['reason'])) {
+                $response = $response['reason'];
+            } elseif (isset($response['value'])) {
+                $response = $response['value'];
+            }
+        }
+
+        if ($response instanceof Response) {
+            return (string) $response->getBody();
+        } elseif (is_a($response, 'GuzzleHttp\\Exception\\GuzzleException')) {
+            $exception = $response;
+            if (method_exists($response, 'getResponse')) {
+                $response = $response->getResponse();
+            }
+            if (!$response || $response instanceof $exception) {
+                throw $exception;
+            }
+
+            /** @var Response $response */
+            return (string) $response->getBody();
+        } else {
+            throw new ResponseException('Unknown response type');
+        }
+
     }
 }

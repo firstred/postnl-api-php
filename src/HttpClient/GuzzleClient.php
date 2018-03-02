@@ -18,13 +18,10 @@
  */
 
 namespace ThirtyBees\PostNL\HttpClient;
-
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\BadResponseException;
-use ThirtyBees\PostNL\Exception\ApiConnectionException;
-use ThirtyBees\PostNL\Exception\ApiException;
-use ThirtyBees\PostNL\PostNL;
-use ThirtyBees\PostNL\Util\Util;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
 
 /**
  * Class GuzzleClient
@@ -33,209 +30,123 @@ use ThirtyBees\PostNL\Util\Util;
  */
 class GuzzleClient implements ClientInterface
 {
-    const DEFAULT_TIMEOUT = 80;
-    const DEFAULT_CONNECT_TIMEOUT = 30;
-    /** @var GuzzleClient $instance */
-    private static $instance;
-    /** @var array|callable|null $defaultOptions */
-    protected $defaultOptions;
+    const DEFAULT_TIMEOUT = 60;
+    const DEFAULT_CONNECT_TIMEOUT = 20;
+
+    /** @var static $instance */
+    protected static $instance;
+    /** @var array $defaultOptions */
+    protected $defaultOptions = [];
+    /**
+     * List of pending PSR-7 requests
+     *
+     * @var Request[]
+     */
+    protected $pendingRequests = [];
     /** @var int $timeout */
     private $timeout = self::DEFAULT_TIMEOUT;
     /** @var int $connectTimeout */
     private $connectTimeout = self::DEFAULT_CONNECT_TIMEOUT;
 
     /**
-     * GuzzleClient constructor.
-     *
-     * Pass in a callable to $defaultOptions that returns an array of CURLOPT_* values to start
-     * off a request with, or an flat array with the same format used by curl_setopt_array() to
-     * provide a static set of options. Note that many options are overridden later in the request
-     * call, including timeouts, which can be set via setTimeout() and setConnectTimeout().
-     *
-     * Note that request() will silently ignore a non-callable, non-array $defaultOptions, and will
-     * throw an exception if $defaultOptions returns a non-array value.
-     *
-     * @param array|callable|null $defaultOptions
+     * @return GuzzleClient|static
      */
-    public function __construct($defaultOptions = null)
-    {
-        $this->defaultOptions = $defaultOptions;
-    }
-
-    /**
-     * @return GuzzleClient
-     *
-     * @since 1.0.0
-     */
-    public static function instance()
+    public static function getInstance()
     {
         if (!static::$instance) {
-            static::$instance = new self();
+            static::$instance = new static();
         }
 
         return static::$instance;
     }
 
     /**
-     * @return array|callable|null
+     * Set Guzzle option
      *
-     * @since 1.0.0
+     * @param string $name
+     * @param mixed  $value
      */
-    public function getDefaultOptions()
-    {
-        return $this->defaultOptions;
+    public function setOption($name, $value) {
+        $this->defaultOptions[$name] = $value;
     }
 
     /**
-     * @return int
+     * Get Guzzle option
      *
-     * @since 1.0.0
+     * @param string $name
+     *
+     * @return mixed|null
      */
-    public function getTimeout()
+    public function getOption($name)
     {
-        return $this->timeout;
-    }
-
-    /**
-     * @param int $seconds
-     *
-     * @return $this
-     *
-     * @since 1.0.0
-     */
-    public function setTimeout($seconds)
-    {
-        $this->timeout = (int) max($seconds, 0);
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     *
-     * @since 1.0.0
-     */
-    public function getConnectTimeout()
-    {
-        return $this->connectTimeout;
-    }
-
-    /**
-     * @param int $seconds
-     *
-     * @return $this
-     *
-     * @since 1.0.0
-     */
-    public function setConnectTimeout($seconds)
-    {
-        $this->connectTimeout = (int) max($seconds, 0);
-
-        return $this;
-    }
-
-    /**
-     * @param string      $method  The HTTP method being used
-     * @param string      $absUrl  The URL being requested, including domain and protocol
-     * @param array       $headers Headers to be used in the request (full strings, not KV pairs)
-     * @param array       $params  KV pairs for parameters. Can be nested for arrays and hashes
-     * @param string|null $body
-     *
-     * @return array
-     * @throws ApiConnectionException
-     * @throws ApiException
-     */
-    public function request($method, $absUrl, $headers, $params, $body = null)
-    {
-        $method = strtoupper($method);
-        $requestHeaders = [];
-        foreach ($headers as $header) {
-            $requestHeader = explode(': ', $header, 2);
-            if (is_array($requestHeader) && count($requestHeader) === 2) {
-                $requestHeaders[$requestHeader[0]] = $requestHeader[1];
-            }
+        if (isset($this->defaultOptions[$name])) {
+            return $this->defaultOptions[$name];
         }
 
-        $options = [
-            'headers' => $requestHeaders,
-            'verify'  => __DIR__.'/../../data/cacert.pem',
-        ];
-
-        if ($method === 'GET') {
-            if (count($params) > 0) {
-                $encoded = Util::urlEncode($params);
-                $absUrl = "$absUrl?$encoded";
-            }
-        } elseif ($method === 'DELETE') {
-            if (count($params) > 0) {
-                $encoded = Util::urlEncode($params);
-                $absUrl = "$absUrl?$encoded";
-            }
-        } elseif ($method === 'POST') {
-            if ($body) {
-                $options['body'] = $body;
-                if ($params) {
-                    $encoded = Util::urlEncode($params);
-                    $absUrl = "$absUrl?$encoded";
-                }
-            } else {
-                $options['body'] = Util::urlEncode($params);
-            }
-        } else {
-            throw new ApiException("Unrecognized method $method");
-        }
-
-        $guzzle = new Client(['http_errors' => false]);
-        try {
-            $response = $guzzle->request($method, $absUrl, $options);
-            $rbody = $response->getBody();
-            $rcode = $response->getStatusCode();
-            $rheaders = [];
-            foreach ($response->getHeaders() as $name => $values) {
-                if (is_array($values)) {
-                    $rheaders[$name] = implode(', ', $values);
-                } elseif (is_string($values)) {
-                    $rheaders[$name] = $values;
-                }
-            }
-        } catch (BadResponseException $e) {
-            $headers = [];
-            foreach ($e->getResponse()->getHeaders() as $name => $values) {
-                if (is_array($values)) {
-                    $headers[$name] = implode(', ', $values);
-                } elseif (is_string($values)) {
-                    $headers[$name] = $values;
-                }
-            }
-            throw new ApiConnectionException(
-                'Could not connect with PostNL',
-                $e->getResponse()->getStatusCode(),
-                (string) $e->getResponse()->getBody(),
-                json_encode((string) $e->getResponse()->getBody()),
-                $headers
-            );
-        } catch (\Exception $e) {
-            throw new ApiConnectionException('Could not connect with PostNL');
-        }
-
-        return [$rbody, $rcode, $rheaders];
+        return null;
     }
 
     /**
-     * Add async request
+     * Adds a request to the list of pending requests
+     * Using the ID you can replace a request
+     *
+     * @param string $id      Request ID
+     * @param string $request PSR-7 request
+     *
+     * @return int|string
+     */
+    public function addOrUpdateRequest($id, $request)
+    {
+        if (is_null($id)) {
+            return array_push($this->pendingRequests, $request);
+        }
+
+        $this->pendingRequests[$id] = $request;
+
+        return $id;
+    }
+
+    /**
+     * Remove a request from the list of pending requests
      *
      * @param string $id
-     * @param string $method
-     * @param string $absUrl
-     * @param array  $headers
-     * @param array  $params
-     * @param string $body
-     *
-     * @return void
      */
-    public function addRequest($id, $method, $absUrl, $headers, $params, $body = null)
+    public function removeRequest($id)
     {
+        unset($this->pendingRequests[$id]);
+    }
 
+    /**
+     * Clear all pending requests
+     */
+    public function clearRequests()
+    {
+        $this->pendingRequests = [];
+    }
+
+    /**
+     * Do a single request
+     *
+     * Exceptions are captured into the result array
+     *
+     * @param Request $request
+     *
+     * @return Response
+     *
+     * @throws \Exception|GuzzleException
+     */
+    public function doRequest($request)
+    {
+        // Initialize Guzzle, include the default options
+        $guzzle = new Client(array_merge(
+            $this->defaultOptions,
+            [
+                'timeout'         => $this->timeout,
+                'connect_timeout' => $this->connectTimeout,
+            ]
+        ));
+
+        return $guzzle->send($request);
     }
 
     /**
@@ -243,10 +154,40 @@ class GuzzleClient implements ClientInterface
      *
      * Exceptions are captured into the result array
      *
-     * @return array(array($rawBody, $httpStatusCode, $httpHeader), ...)
+     * @param Request[] $requests
+     *
+     * @return Response|Response[]|GuzzleException|GuzzleException[]|\Exception|\Exception[]
      */
-    public function doRequests()
+    public function doRequests($requests = [])
     {
+        // If this is a single request, create the requests array
+        if (!is_array($requests)) {
+            if (!$requests instanceof Request) {
+                return [];
+            }
 
+            $requests = [$requests];
+        }
+
+        // Handle pending requests
+        $requests = $this->pendingRequests + $requests;
+        $this->clearRequests();
+
+        // Initialize Guzzle, include the default options
+        $guzzle = new Client(array_merge(
+            $this->defaultOptions,
+            [
+                'timeout'         => $this->timeout,
+                'connect_timeout' => $this->connectTimeout,
+            ]
+        ));
+
+        // Concurrent requests
+        $promises = [];
+        foreach ($requests as $index => $request) {
+            $promises[$index] = $guzzle->sendAsync($request);
+        }
+
+        return \GuzzleHttp\Promise\settle($promises)->wait();
     }
 }

@@ -25,6 +25,9 @@
  */
 
 namespace ThirtyBees\PostNL\HttpClient;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
 
 /**
  * Interface ClientInterface
@@ -34,39 +37,56 @@ namespace ThirtyBees\PostNL\HttpClient;
 interface ClientInterface
 {
     /**
-     * Single sync request
+     * Get the HTTP Client instance
      *
-     * @param string      $method  The HTTP method being used
-     * @param string      $absUrl  The URL being requested, including domain and protocol
-     * @param array       $headers Headers to be used in the request (full strings, not KV pairs)
-     * @param array       $params  KV pairs for parameters. Can be nested for arrays and hashes
-     * @param string|null $body
-     *
-     * @throws \ThirtyBees\PostNL\Exception\ApiException | \ThirtyBees\PostNL\Exception\ApiConnectionException
-     * @return array($rawBody, $httpStatusCode, $httpHeader)
+     * @return static
      */
-    public function request($method, $absUrl, $headers, $params, $body = null);
+    public static function getInstance();
 
     /**
-     * Add async request
+     * Adds a request to the list of pending requests
+     * Using the ID you can replace a request
      *
-     * @param string      $id
-     * @param string      $method
-     * @param string      $absUrl
-     * @param array       $headers
-     * @param array       $params
-     * @param string|null $body
+     * @param string $id      Request ID
+     * @param string $request PSR-7 request
      *
-     * @return void
+     * @return int|string
      */
-    public function addRequest($id, $method, $absUrl, $headers, $params, $body = null);
+    public function addOrUpdateRequest($id, $request);
+
+    /**
+     * Remove a request from the list of pending requests
+     *
+     * @param string $id
+     */
+    public function removeRequest($id);
+
+    /**
+     * Clear all requests
+     */
+    public function clearRequests();
+
+    /**
+     * Do a single request
+     *
+     * Exceptions are captured into the result array
+     *
+     * @param Request $request
+     *
+     * @return Response
+     *
+     * @throws \Exception|GuzzleException
+     */
+    public function doRequest($request);
 
     /**
      * Do all async requests
      *
      * Exceptions are captured into the result array
      *
-     * @return array(array($rawBody, $httpStatusCode, $httpHeader), ...)
+     * @param Request[] $requests
+     *
+     * @return Response|Response[]|GuzzleException|GuzzleException[]|\Exception|\Exception[]
      */
-    public function doRequests();
+    public function doRequests($requests = []);
 }

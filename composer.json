@@ -12,9 +12,12 @@
     ],
     "require": {
         "php": "^5.5.5 || ~7.0",
-        "ext-curl": "*",
         "ext-json": "*",
-        "sabre/xml": "~1.5.0"
+        "sabre/xml": "~1.5.0",
+        "guzzlehttp/psr7": "^1.4"
+    },
+    "suggest": {
+        "guzzlehttp/guzzle": "Use other HTTP handlers besides cURL"
     },
     "autoload": {
         "psr-4": {

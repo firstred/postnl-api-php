@@ -33,7 +33,7 @@ use ThirtyBees\PostNL\Service\LabellingService;
 /**
  * Class Address
  *
- * @package ThirtyBeesPostNL\Entity\Address
+ * @package ThirtyBees\PostNL\Entity\Address
  *
  * @method string getAddressType()
  * @method string getFirstName()

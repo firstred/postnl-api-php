@@ -28,7 +28,7 @@ namespace ThirtyBees\PostNL;
 
 use ThirtyBees\PostNL\Entity\Barcode;
 use ThirtyBees\PostNL\Entity\Customer;
-use ThirtyBees\PostNL\Entity\GenerateLabelResponse;
+use ThirtyBees\PostNL\Entity\Response\GenerateLabelResponse;
 use ThirtyBees\PostNL\Entity\Label;
 use ThirtyBees\PostNL\Entity\Message\LabellingMessage;
 use ThirtyBees\PostNL\Entity\Request\Confirming;
@@ -289,15 +289,15 @@ class PostNL
     public function getHttpClient()
     {
         if (!$this->httpClient) {
-            if (class_exists('\\GuzzleHttp\\ClientInterface')
+            if (interface_exists('\\GuzzleHttp\\ClientInterface')
                 && version_compare(
                     \GuzzleHttp\ClientInterface::VERSION,
                     '6.0.0',
                     '>='
                 )) {
-                $this->httpClient = GuzzleClient::instance();
+                $this->httpClient = GuzzleClient::getInstance();
             } else {
-                $this->httpClient = CurlClient::instance();
+                $this->httpClient = CurlClient::getInstance();
             }
         }
 
@@ -434,6 +434,7 @@ class PostNL
      *
      * @return string The Barcode as a string
      * @throws InvalidConfigurationException
+     * @throws InvalidBarcodeException
      */
     public function generateBarcodeByCountryCode($iso)
     {
@@ -468,6 +469,7 @@ class PostNL
      *
      * @return array Country isos with the barcode as string
      * @throws InvalidConfigurationException
+     * @throws InvalidBarcodeException
      */
     public function generateBarcodesByCountryCodes(array $isos)
     {
@@ -528,13 +530,25 @@ class PostNL
      *
      * @return GenerateLabelResponse
      */
-    public function generateLabel(Shipment $shipment, $printertype = 'GraphicFile|PDF', $confirm = false, $format = Label::FORMAT_A4, $offset = 0)
-    {
-        return $this->getLabellingService()->generateLabel(new GenerateLabel([$shipment], new LabellingMessage($printertype), $this->customer), $confirm);
+    public function generateLabel(
+        Shipment $shipment,
+        $printertype = 'GraphicFile|PDF',
+        $confirm = false,
+        $format = Label::FORMAT_A4,
+        $offset = 0
+    ) {
+        return $this->getLabellingService()->generateLabel(
+            new GenerateLabel(
+                [$shipment],
+                new LabellingMessage($printertype),
+                $this->customer
+            ),
+            $confirm
+        );
     }
 
     /**
-     * @param Shipment[] $shipment (key = ID)
+     * @param Shipment[] $shipments   (key = ID)
      * @param string     $printertype
      * @param bool       $confirm
      * @param int        $format
@@ -542,8 +556,13 @@ class PostNL
      *
      * @return GenerateLabelResponse[]
      */
-    public function generateLabels(array $shipments, $printertype = 'GraphicFile|PDF', $confirm = false, $format = Label::FORMAT_A4, $offset = 0)
-    {
+    public function generateLabels(
+        array $shipments,
+        $printertype = 'GraphicFile|PDF',
+        $confirm = false,
+        $format = Label::FORMAT_A4,
+        $offset = 0
+    ) {
         $generateLabels = [];
         foreach ($shipments as $uuid => $shipment) {
             $generateLabels[$uuid] = [(new GenerateLabel([$shipment], new LabellingMessage($printertype), $this->customer))->setId($uuid), $confirm];
