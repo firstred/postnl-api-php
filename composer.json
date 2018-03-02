@@ -14,7 +14,9 @@
         "php": "^5.5.5 || ~7.0",
         "ext-json": "*",
         "sabre/xml": "~1.5.0",
-        "guzzlehttp/psr7": "^1.4"
+        "guzzlehttp/psr7": "^1.4",
+        "setasign/fpdi": "^2.0",
+        "setasign/fpdf": "^1.8"
     },
     "suggest": {
         "guzzlehttp/guzzle": "Use other HTTP handlers besides cURL"

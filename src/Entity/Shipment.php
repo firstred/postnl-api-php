@@ -112,6 +112,7 @@ class Shipment extends AbstractEntity
             'CustomerOrderNumber'      => BarcodeService::DOMAIN_NAMESPACE,
             'Customs'                  => BarcodeService::DOMAIN_NAMESPACE,
             'DeliveryAddress'          => BarcodeService::DOMAIN_NAMESPACE,
+            'DeliveryTimeStampStart'   => BarcodeService::DOMAIN_NAMESPACE,
             'DeliveryTimestampEnd'     => BarcodeService::DOMAIN_NAMESPACE,
             'DeliveryDate'             => BarcodeService::DOMAIN_NAMESPACE,
             'Dimension'                => BarcodeService::DOMAIN_NAMESPACE,
@@ -144,6 +145,7 @@ class Shipment extends AbstractEntity
             'CustomerOrderNumber'      => ConfirmingService::DOMAIN_NAMESPACE,
             'Customs'                  => ConfirmingService::DOMAIN_NAMESPACE,
             'DeliveryAddress'          => ConfirmingService::DOMAIN_NAMESPACE,
+            'DeliveryTimestampStart'   => ConfirmingService::DOMAIN_NAMESPACE,
             'DeliveryTimestampEnd'     => ConfirmingService::DOMAIN_NAMESPACE,
             'DeliveryDate'             => ConfirmingService::DOMAIN_NAMESPACE,
             'Dimension'                => ConfirmingService::DOMAIN_NAMESPACE,
@@ -176,6 +178,7 @@ class Shipment extends AbstractEntity
             'CustomerOrderNumber'      => LabellingService::DOMAIN_NAMESPACE,
             'Customs'                  => LabellingService::DOMAIN_NAMESPACE,
             'DeliveryAddress'          => LabellingService::DOMAIN_NAMESPACE,
+            'DeliveryTimestampStart'   => LabellingService::DOMAIN_NAMESPACE,
             'DeliveryTimestampEnd'     => LabellingService::DOMAIN_NAMESPACE,
             'DeliveryDate'             => LabellingService::DOMAIN_NAMESPACE,
             'Dimension'                => LabellingService::DOMAIN_NAMESPACE,
@@ -220,13 +223,16 @@ class Shipment extends AbstractEntity
     protected $Customs = null;
     /** @var string $DeliveryAddress */
     protected $DeliveryAddress = null;
+    /** @var string $DeliveryTimeStampStart */
+    protected $DeliveryTimeStampStart = null;
     /** @var string $DeliveryTimeStampEnd */
     protected $DeliveryTimeStampEnd = null;
     /** @var string $DeliveryDate */
     protected $DeliveryDate = null;
     /** @var Dimension $Dimension */
     protected $Dimension = null;
-    /** @var string $DownPartnerBarcode */
+    /** @var string $DownPartnerBarco
+     * de */
     protected $DownPartnerBarcode = null;
     /** @var string $DownPartnerID */
     protected $DownPartnerID = null;
@@ -408,7 +414,7 @@ class Shipment extends AbstractEntity
                     }
                     $xml["{{$namespace}}ProductOptions"] = $items;
                 }
-            } elseif (!is_null($this->{$propertyName})) {
+            } elseif (isset($this->{$propertyName})) {
                 $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
             }
         }

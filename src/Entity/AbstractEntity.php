@@ -68,6 +68,7 @@ abstract class AbstractEntity implements \JsonSerializable, XmlSerializable
      * @param array $properties
      *
      * @return static|null|object
+     * @throws \ReflectionException
      */
     public static function create(array $properties = [])
     {

@@ -26,24 +26,28 @@
 
 namespace ThirtyBees\PostNL;
 
+use setasign\Fpdi\PdfParser\StreamReader;
 use ThirtyBees\PostNL\Entity\Barcode;
 use ThirtyBees\PostNL\Entity\Customer;
-use ThirtyBees\PostNL\Entity\Response\GenerateLabelResponse;
 use ThirtyBees\PostNL\Entity\Label;
 use ThirtyBees\PostNL\Entity\Message\LabellingMessage;
 use ThirtyBees\PostNL\Entity\Request\Confirming;
 use ThirtyBees\PostNL\Entity\Request\GenerateBarcode;
 use ThirtyBees\PostNL\Entity\Request\GenerateLabel;
+use ThirtyBees\PostNL\Entity\Response\GenerateLabelResponse;
 use ThirtyBees\PostNL\Entity\Shipment;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
 use ThirtyBees\PostNL\Exception\InvalidBarcodeException;
 use ThirtyBees\PostNL\Exception\InvalidConfigurationException;
+use ThirtyBees\PostNL\Exception\NotSupportedException;
 use ThirtyBees\PostNL\HttpClient\ClientInterface;
 use ThirtyBees\PostNL\HttpClient\CurlClient;
 use ThirtyBees\PostNL\HttpClient\GuzzleClient;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\LabellingService;
+use ThirtyBees\PostNL\Util\RFPDI;
+use ThirtyBees\PostNL\Util\Util;
 
 /**
  * Class PostNL
@@ -69,6 +73,19 @@ class PostNL
         'LV', 'LT', 'LU', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'MC', 'AL', 'AD', 'BA', 'IC',
         'FO', 'GI', 'GL', 'GG', 'IS', 'JE', 'HR', 'LI', 'MK', 'MD', 'ME', 'NO', 'UA', 'SM', 'RS',
         'TR', 'VA', 'BY', 'CH',
+    ];
+
+    /**
+     * A6 positions
+     * (index = amount of a6 left on the page)
+     *
+     * @var array
+     */
+    public static $a6positions = [
+        4 => [-276, 2  ],
+        3 => [-132, 2  ],
+        2 => [-276, 110],
+        1 => [-132, 110],
     ];
 
     /**
@@ -141,9 +158,6 @@ class PostNL
      *                                                                     if that fails, REST
      *                                            - `MODE_LEGACY`: Use the legacy API (the plug can
      *                                                             be pulled at any time)
-     *
-     * @param int                  $currentMode   Sets the current mode
-     *                                            (`MODE_REST, `MODE_SOAP`, `MODE_LEGACY`)
      */
     public function __construct(
         Customer $customer,
@@ -525,17 +539,13 @@ class PostNL
      * @param Shipment $shipment
      * @param string   $printertype
      * @param bool     $confirm
-     * @param int      $format
-     * @param int      $offset
      *
      * @return GenerateLabelResponse
      */
     public function generateLabel(
         Shipment $shipment,
         $printertype = 'GraphicFile|PDF',
-        $confirm = false,
-        $format = Label::FORMAT_A4,
-        $offset = 0
+        $confirm = false
     ) {
         return $this->getLabellingService()->generateLabel(
             new GenerateLabel(
@@ -548,39 +558,116 @@ class PostNL
     }
 
     /**
-     * @param Shipment[] $shipments   (key = ID)
-     * @param string     $printertype
-     * @param bool       $confirm
-     * @param int        $format
-     * @param int        $offset
+     * @param Shipment[] $shipments (key = ID) Shipments
+     * @param string     $printertype          Printer type, see PostNL dev docs for available types
+     * @param bool       $confirm              Immediately confirm the shipments
+     * @param bool       $merge                Merge the PDFs and return them in a MyParcel way
+     * @param int        $format               A4 or A6
+     * @param int        $offset               Skip the first X A6s when they are merged onto the first page
      *
-     * @return GenerateLabelResponse[]
+     * @return GenerateLabelResponse[]|string
+     * @throws \Exception
+     * @throws \setasign\Fpdi\PdfReader\PdfReaderException
      */
     public function generateLabels(
         array $shipments,
         $printertype = 'GraphicFile|PDF',
         $confirm = false,
+        $merge = false,
         $format = Label::FORMAT_A4,
         $offset = 0
     ) {
+        if ($merge && $printertype !== 'GraphicFile|PDF') {
+            throw new NotSupportedException('Labels with the chosen printer type cannot be merged');
+        }
+
         $generateLabels = [];
         foreach ($shipments as $uuid => $shipment) {
             $generateLabels[$uuid] = [(new GenerateLabel([$shipment], new LabellingMessage($printertype), $this->customer))->setId($uuid), $confirm];
         }
+        $labels = $this->getLabellingService()->generateLabels($generateLabels, $confirm);
 
-        return $this->getLabellingService()->generateLabels($generateLabels, $confirm);
+        if (!$merge) {
+            return $labels;
+        }
+
+        // Disable header and footer
+        $pdf = new RFPdi('P', 'mm', $format === Label::FORMAT_A4 ? [210, 297] : [105, 148]);
+        $deferred = [];
+        if ($format === Label::FORMAT_A6) {
+            foreach ($labels as $label) {
+                $pdfContent = base64_decode($label->getResponseShipments()[0]->getLabels()[0]->getContent());
+                $sizes = Util::getPdfSizeAndOrientation($pdfContent);
+                if ($sizes['iso'] === 'A6') {
+                    $pdf->addPage('P');
+                    $pdf->rotateCounterClockWise();
+                    $pdf->setSourceFile(StreamReader::createByString($pdfContent));
+                    $pdf->useTemplate($pdf->importPage(1), -128, 0);
+                } else {
+                    // Assuming A4 here (could be multi-page) - defer to end
+                    $stream = StreamReader::createByString($pdfContent);
+                    $deferred[] = [
+                        'stream' => $stream,
+                        'sizes'  => $sizes,
+                    ];
+                }
+            }
+        } else {
+            $a6s = max(1, 4 - $offset); // Amount of A6s available
+            $pdf->addPage('P', [297, 210], 90);
+            foreach ($labels as $label) {
+                $pdfContent = base64_decode($label->getResponseShipments()[0]->getLabels()[0]->getContent());
+                $sizes = Util::getPdfSizeAndOrientation($pdfContent);
+                if ($sizes['iso'] === 'A6') {
+
+                    $pdf->rotateCounterClockWise();
+                    $pdf->setSourceFile(StreamReader::createByString($pdfContent));
+                    $pdf->useTemplate($pdf->importPage(1), static::$a6positions[$a6s][0], static::$a6positions[$a6s][1]);
+                    $a6s--;
+                    if ($a6s < 1) {
+                        if ($label !== end($labels)) {
+                            $pdf->addPage('P', [297, 210], 90);
+                        }
+                        $a6s = 4;
+                    }
+                } else {
+                    // Assuming A4 here (could be multi-page) - defer to end
+                    $stream = StreamReader::createByString($pdfContent);
+                    $deferred[] = [
+                        'stream' => $stream,
+                        'sizes'  => $sizes,
+                    ];
+                }
+            }
+        }
+        foreach ($deferred as $defer) {
+            $sizes = $defer['sizes'];
+            $pdf->addPage($sizes['orientation'], 'A4');
+            $pdf->rotateCounterClockWise();
+            $pages = $pdf->setSourceFile($defer['stream']);
+            for ($i = 1; $i < ($pages + 1); $i++) {
+                $pdf->useTemplate($pdf->importPage($i), -190, 0);
+            }
+        }
+
+        return $pdf->output('', 'S');
     }
 
     /**
      * @param Shipment $shipment
      *
-     * @return bool
+     * @return Entity\Response\ConfirmingResponseShipment
      */
     public function confirmShipment(Shipment $shipment)
     {
-        return $this->getConfirmingService()->confirm(new Confirming([$shipment], $this->customer));
+        return $this->getConfirmingService()->confirmShipment(new Confirming([$shipment], $this->customer));
     }
 
+    /**
+     * @param array $shipments
+     *
+     * @return Entity\Response\ConfirmingResponseShipment[]
+     */
     public function confirmShipments(array $shipments)
     {
         $confirmings = [];

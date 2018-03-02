@@ -32,7 +32,6 @@ use Sabre\Xml\Service as XmlService;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
 use ThirtyBees\PostNL\Entity\Request\Confirming;
 use ThirtyBees\PostNL\Entity\Response\ConfirmingResponseShipment;
-use ThirtyBees\PostNL\Entity\Shipment;
 use ThirtyBees\PostNL\Entity\SOAP\Security;
 use ThirtyBees\PostNL\Exception\ApiException;
 use ThirtyBees\PostNL\PostNL;
@@ -42,7 +41,8 @@ use ThirtyBees\PostNL\PostNL;
  *
  * @package ThirtyBees\PostNL\Service
  *
- * @method ConfirmingResponseShipment[] confirmShipments(Shipment[] $shipments)
+ * @method ConfirmingResponseShipment confirmShipment(Confirming $shipment)
+ * @method ConfirmingResponseShipment[] confirmShipments(Confirming[] $shipments)
  */
 class ConfirmingService extends AbstractService
 {
@@ -83,6 +83,8 @@ class ConfirmingService extends AbstractService
      *
      * @return ConfirmingResponseShipment
      * @throws ApiException
+     * @throws \Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \ThirtyBees\PostNL\Exception\CifDownException
      * @throws \ThirtyBees\PostNL\Exception\CifException
      * @throws \ThirtyBees\PostNL\Exception\ResponseException
@@ -105,6 +107,7 @@ class ConfirmingService extends AbstractService
      * @param Confirming[] $confirms ['uuid' => Confirming, ...]
      *
      * @return ConfirmingResponseShipment[]
+     * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
     public function confirmShipmentsREST(array $confirms)
     {
@@ -120,7 +123,7 @@ class ConfirmingService extends AbstractService
 
         $confirmingResponses = [];
         foreach ($httpClient->doRequests() as $uuid => $response) {
-            $confirmingResponse = json_decode($response['body'], true);
+            $confirmingResponse = json_decode(static::getResponseText($response), true);
             try {
                 static::validateRESTResponse($confirmingResponse);
                 if (isset($confirmingResponse['ConfirmingResponseShipments'])) {
@@ -171,6 +174,7 @@ class ConfirmingService extends AbstractService
      * @param array $confirmings ['uuid' => Confirming, ...]
      *
      * @return ConfirmingResponseShipment[]
+     * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
     public function confirmShipmentsSOAP(array $confirmings)
     {
@@ -185,7 +189,7 @@ class ConfirmingService extends AbstractService
 
         $responses = [];
         foreach ($httpClient->doRequests() as $uuid => $response) {
-            $xml = simplexml_load_string($response['body']);
+            $xml = simplexml_load_string(static::getResponseText($response));
             if (!$xml instanceof \SimpleXMLElement) {
                 $confirmingResponse = new ApiException('Invalid API response');
             } else {
@@ -194,7 +198,7 @@ class ConfirmingService extends AbstractService
                     static::validateSOAPResponse($xml);
 
                     $reader = new Reader();
-                    $reader->xml($response['body']);
+                    $reader->xml(static::getResponseText($response));
                     $array = array_values($reader->parse()['value'][0]['value'][0]['value']);
                     $array = $array[0];
 
@@ -272,9 +276,9 @@ class ConfirmingService extends AbstractService
             'POST',
             $endpoint,
             [
-                ['SOAPAction' => "\"$soapAction\""],
+                ['SOAPAction'  => "\"$soapAction\""],
                 ['Content-Type'=> 'text/xml'],
-                ['Accept' => 'text/xml'],
+                ['Accept'      => 'text/xml'],
             ],
             $body
         );

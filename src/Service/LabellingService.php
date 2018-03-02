@@ -111,6 +111,7 @@ class LabellingService extends AbstractService
      * @param array $generateLabels ['uuid' => [GenerateBarcode, confirm], ...]
      *
      * @return array
+     * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
     public function generateLabelsREST(array $generateLabels)
     {
@@ -125,9 +126,9 @@ class LabellingService extends AbstractService
 
         $labels = [];
         foreach ($httpClient->doRequests() as $uuid => $response) {
-            $label = json_decode($response['body'], true);
+            $label = json_decode(static::getResponseText($response), true);
             try {
-                static::validateRESTResponse($label);
+                static::validateRESTResponse($response);
                 if (isset($label['ResponseShipments'])) {
                     $barcode = AbstractEntity::jsonDeserialize(['GenerateLabelResponse' => $label]);
                 } else {
@@ -179,6 +180,7 @@ class LabellingService extends AbstractService
      * @param array $generateLabels ['uuid' => [GenerateBarcode, confirm], ...]
      *
      * @return array
+     * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
     public function generateLabelsSOAP(array $generateLabels)
     {
@@ -190,10 +192,9 @@ class LabellingService extends AbstractService
                 $this->buildGenerateLabelSOAPRequest($generateLabel[0], $generateLabel[1])
             );
         }
-
         $generateLabelResponses = [];
         foreach ($httpClient->doRequests() as $uuid => $response) {
-            $xml = simplexml_load_string($response['body']);
+            $xml = simplexml_load_string(static::getResponseText($response));
             if (!$xml instanceof \SimpleXMLElement) {
                 $generateLabelResponse = new ApiException('Invalid API response');
             } else {
@@ -202,7 +203,7 @@ class LabellingService extends AbstractService
                     static::validateSOAPResponse($xml);
 
                     $reader = new Reader();
-                    $reader->xml($response['body']);
+                    $reader->xml(static::getResponseText($response));
                     $array = array_values($reader->parse()['value'][0]['value']);
                     $array = $array[0];
 

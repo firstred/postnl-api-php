@@ -25,6 +25,8 @@
  */
 
 namespace ThirtyBees\PostNL\Util;
+use setasign\Fpdi\Fpdi;
+use setasign\Fpdi\PdfParser\StreamReader;
 
 /**
  * Class Util
@@ -33,6 +35,8 @@ namespace ThirtyBees\PostNL\Util;
  */
 class Util
 {
+    const ERROR_MARGIN = 2;
+
     /**
      * @param array       $arr    A map of param keys to values.
      * @param string|null $prefix
@@ -70,5 +74,50 @@ class Util
         }
 
         return implode("&", $r);
+    }
+
+    /**
+     * @param string $pdf     Raw PDF string
+     *
+     * @return array|false|string Returns an array with the dimensions or ISO size and orientation
+     *                            The orientation is in FPDF format, so L for Landscape and P for Portrait
+     *                            Sizes are in mm
+     */
+    public static function getPdfSizeAndOrientation($pdf)
+    {
+        try {
+            $fpdi = new Fpdi('P', 'mm');
+            $fpdi->setSourceFile(StreamReader::createByString($pdf));
+            // import page 1
+            $tplIdx1 = $fpdi->importPage(1);
+            $size = $fpdi->getTemplateSize($tplIdx1);
+            $width = $size['width'];
+            $height = $size['height'];
+            $orientation = $size['orientation'];
+
+            $length = $orientation === 'P' ? $height : $width;
+            if ($length >= (148 - static::ERROR_MARGIN) && $length <= (148 + static::ERROR_MARGIN)) {
+                $iso = 'A6';
+            } elseif ($length >= (210 - static::ERROR_MARGIN) && $length <= (210 + static::ERROR_MARGIN)) {
+                $iso = 'A5';
+            } elseif ($length >= (420 - static::ERROR_MARGIN) && $length <= (420 + static::ERROR_MARGIN)) {
+                $iso = 'A3';
+            } elseif ($length >= (594 - static::ERROR_MARGIN) && $length <= (594 + static::ERROR_MARGIN)) {
+                $iso = 'A2';
+            } elseif ($length >= (841 - static::ERROR_MARGIN) && $length <= (841 + static::ERROR_MARGIN)) {
+                $iso = 'A1';
+            } else {
+                $iso = 'A4';
+            }
+        } catch (\Exception $e) {
+            return false;
+        }
+
+        return [
+            'orientation' => $orientation,
+            'iso'         => $iso,
+            'width'       => $width,
+            'height'      => $height,
+        ];
     }
 }
