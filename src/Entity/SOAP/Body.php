@@ -20,7 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017 Thirty Development, LLC
+ * @copyright 2017-2018 Thirty Development, LLC
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
