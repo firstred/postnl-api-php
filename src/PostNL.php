@@ -650,6 +650,10 @@ class PostNL
             $a6s = 4; // Amount of A6s available
             $pdf->addPage('P', [297, 210], 90);
             foreach ($labels as $label) {
+                if ($label instanceof \Exception) {
+                    throw $label;
+                }
+
                 $pdfContent = base64_decode($label->getResponseShipments()[0]->getLabels()[0]->getContent());
                 $sizes = Util::getPdfSizeAndOrientation($pdfContent);
                 if ($sizes['iso'] === 'A6') {

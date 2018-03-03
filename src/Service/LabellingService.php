@@ -113,7 +113,10 @@ class LabellingService extends AbstractService
         }
         $body = json_decode(static::getResponseText($response), true);
         if (isset($body['ResponseShipments'])) {
-            if ($item instanceof CacheItemInterface && $response instanceof Response) {
+            if ($item instanceof CacheItemInterface
+                && $response instanceof Response
+                && $response->getStatusCode() === 200
+            ) {
                 $item->set(\GuzzleHttp\Psr7\str($response));
                 $this->cacheItem($item);
             }
@@ -160,7 +163,9 @@ class LabellingService extends AbstractService
         }
         $newResponses = $httpClient->doRequests();
         foreach ($newResponses as $uuid => $newResponse) {
-            if ($newResponse instanceof Response) {
+            if ($newResponse instanceof Response
+                && $newResponse->getStatusCode() === 200
+            ) {
                 $item = $this->retrieveCachedItem($uuid);
                 if ($item instanceof CacheItemInterface) {
                     $item->set(\GuzzleHttp\Psr7\str($newResponse));
@@ -225,7 +230,10 @@ class LabellingService extends AbstractService
         static::registerNamespaces($xml);
         static::validateSOAPResponse($xml);
 
-        if ($item instanceof CacheItemInterface && $response instanceof Response) {
+        if ($item instanceof CacheItemInterface
+            && $response instanceof Response
+            && $response->getStatusCode() === 200
+        ) {
             $item->set(\GuzzleHttp\Psr7\str($response));
             $this->cacheItem($item);
         }
@@ -275,7 +283,9 @@ class LabellingService extends AbstractService
 
         $newResponses = $httpClient->doRequests();
         foreach ($newResponses as $uuid => $newResponse) {
-            if ($newResponse instanceof Response) {
+            if ($newResponse instanceof Response
+                && $newResponse->getStatusCode() === 200
+            ) {
                 $item = $this->retrieveCachedItem($uuid);
                 if ($item instanceof CacheItemInterface) {
                     $item->set(\GuzzleHttp\Psr7\str($newResponse));
