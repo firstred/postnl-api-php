@@ -55,6 +55,22 @@ interface ClientInterface
     public function addOrUpdateRequest($id, $request);
 
     /**
+     * Set the verify setting
+     *
+     * @param bool|string $verify
+     *
+     * @return $this
+     */
+    public function setVerify($verify);
+
+    /**
+     * Return verify setting
+     *
+     * @return bool|string
+     */
+    public function getVerify();
+
+    /**
      * Remove a request from the list of pending requests
      *
      * @param string $id
@@ -77,7 +93,7 @@ interface ClientInterface
      *
      * @throws \Exception|GuzzleException
      */
-    public function doRequest($request);
+    public function doRequest(Request $request);
 
     /**
      * Do all async requests

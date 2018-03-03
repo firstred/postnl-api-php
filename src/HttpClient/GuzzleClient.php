@@ -67,9 +67,13 @@ class GuzzleClient implements ClientInterface
      *
      * @param string $name
      * @param mixed  $value
+     *
+     * @return GuzzleClient
      */
     public function setOption($name, $value) {
         $this->defaultOptions[$name] = $value;
+
+        return $this;
     }
 
     /**
@@ -87,6 +91,35 @@ class GuzzleClient implements ClientInterface
 
         return null;
     }
+
+    /**
+     * Set the verify setting
+     *
+     * @param bool|string $verify
+     *
+     * @return $this
+     */
+    public function setVerify($verify)
+    {
+        $this->defaultOptions['verify'] = $verify;
+
+        return $this;
+    }
+
+    /**
+     * Return verify setting
+     *
+     * @return bool|string
+     */
+    public function getVerify()
+    {
+        if (isset($this->defaultOptions['verify'])) {
+            return $this->defaultOptions['verify'];
+        }
+
+        return false;
+    }
+
 
     /**
      * Adds a request to the list of pending requests
@@ -137,7 +170,7 @@ class GuzzleClient implements ClientInterface
      *
      * @throws \Exception|GuzzleException
      */
-    public function doRequest($request)
+    public function doRequest(Request $request)
     {
         // Initialize Guzzle, include the default options
         $guzzle = new Client(array_merge(
