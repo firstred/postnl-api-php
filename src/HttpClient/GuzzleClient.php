@@ -18,10 +18,12 @@
  */
 
 namespace ThirtyBees\PostNL\HttpClient;
+
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use ThirtyBees\PostNL\Exception\ResponseException;
 
 /**
  * Class GuzzleClient
@@ -188,6 +190,17 @@ class GuzzleClient implements ClientInterface
             $promises[$index] = $guzzle->sendAsync($request);
         }
 
-        return \GuzzleHttp\Promise\settle($promises)->wait();
+        $responses = \GuzzleHttp\Promise\settle($promises)->wait();
+        foreach ($responses as &$response) {
+            if (!empty($response['value'])) {
+                $response = $response['value'];
+            } elseif (!empty($response['reason'])) {
+                $response = $response['reason'];
+            } else {
+                $response = ResponseException('Unknown reponse type');
+            }
+        }
+
+        return $responses;
     }
 }

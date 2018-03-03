@@ -27,6 +27,8 @@
 namespace ThirtyBees\PostNL\Service;
 
 use GuzzleHttp\Psr7\Response;
+use Psr\Cache\CacheItemInterface;
+use Psr\Cache\CacheItemPoolInterface;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
 use ThirtyBees\PostNL\Exception\ApiException;
 use ThirtyBees\PostNL\Exception\CifDownException;
@@ -51,14 +53,41 @@ abstract class AbstractService
     const ENVELOPE_NAMESPACE = 'http://schemas.xmlsoap.org/soap/envelope/';
     const OLD_ENVELOPE_NAMESPACE = 'http://www.w3.org/2003/05/soap-envelope';
 
+
+    /**
+     * TTL for the labelling cache
+     *
+     * `null` disables the cache
+     * `int` is the TTL in seconds
+     * Any `DateTime` will be used as the exact date/time at which to expire the data (auto calculate TTL)
+     * A `DateInterval` can be used as well to set the TTL
+     *
+     * @var null|int|\DateTimeInterface|\DateInterval $ttl
+     */
+    public $ttl = null;
+
+    /**
+     * The [PSR-6](https://www.php-fig.org/psr/psr-6/) CacheItemPoolInterface
+     *
+     * Use a caching library that implements [PSR-6](https://www.php-fig.org/psr/psr-6/) and you'll be good to go
+     * `null` disables the cache
+     *
+     * @var null|CacheItemPoolInterface
+     */
+    public $cache = null;
+
     /**
      * AbstractService constructor.
      *
-     * @param PostNL $postnl PostNL instance
+     * @param PostNL                                    $postnl PostNL instance
+     * @param null|CacheItemPoolInterface               $cache
+     * @param null|int|\DateTimeInterface|\DateInterval $ttl
      */
-    public function __construct($postnl)
+    public function __construct($postnl, $cache = null, $ttl = null)
     {
         $this->postnl = $postnl;
+        $this->cache = $cache;
+        $this->ttl = $ttl;
     }
 
     /**
@@ -238,6 +267,46 @@ abstract class AbstractService
         } else {
             throw new ResponseException('Unknown response type');
         }
+    }
 
+    /**
+     * Retrieve a cached item
+     *
+     * @param string $uuid
+     *
+     * @return null|CacheItemInterface
+     */
+    protected function retrieveCachedItem($uuid)
+    {
+        $uuid .= $this->postnl->getMode() === PostNL::MODE_REST ? 'rest' : 'soap';
+        $item = null;
+        if ($this->cache instanceof CacheItemPoolInterface && !is_null($this->ttl)) {
+            try {
+                $item = $this->cache->getItem($uuid);
+            } catch (\Psr\Cache\InvalidArgumentException $e) {
+            }
+        }
+
+        return $item;
+    }
+
+    /**
+     * @param CacheItemInterface $item
+     */
+    protected function cacheItem(CacheItemInterface $item)
+    {
+        if ($this->ttl instanceof \DateInterval || is_int($this->ttl)) {
+            // Reset expires at first -- it might have been set
+            $item->expiresAt(null);
+            // Then set the interval
+            $item->expiresAfter($this->ttl);
+        } else {
+            // Reset expires after first -- it might have been set
+            $item->expiresAfter(null);
+            // Then set the expiration time
+            $item->expiresAt($this->ttl);
+        }
+
+        $this->cache->save($item);
     }
 }

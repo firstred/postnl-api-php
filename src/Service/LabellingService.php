@@ -27,6 +27,9 @@
 namespace ThirtyBees\PostNL\Service;
 
 use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
+use Psr\Cache\CacheItemInterface;
+use Psr\Cache\CacheItemPoolInterface;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Service as XmlService;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
@@ -95,10 +98,26 @@ class LabellingService extends AbstractService
      */
     public function generateLabelREST(GenerateLabel $generateLabel, $confirm = false)
     {
-        $response = $this->postnl->getHttpClient()->doRequest($this->buildGenerateLabelRESTRequest($generateLabel, $confirm));
-        static::validateRESTResponse($response);
+        $item = $this->retrieveCachedItem($generateLabel->getId());
+        $response = null;
+        if ($item instanceof CacheItemInterface) {
+            $response = $item->get();
+            try {
+                $response = \GuzzleHttp\Psr7\parse_response($response);
+            } catch (\InvalidArgumentException $e) {
+            }
+        }
+        if (!$response instanceof Response) {
+            $response = $this->postnl->getHttpClient()->doRequest($this->buildGenerateLabelRESTRequest($generateLabel, $confirm));
+            static::validateRESTResponse($response);
+        }
         $body = json_decode(static::getResponseText($response), true);
         if (isset($body['ResponseShipments'])) {
+            if ($item instanceof CacheItemInterface && $response instanceof Response) {
+                $item->set(\GuzzleHttp\Psr7\str($response));
+                $this->cacheItem($item);
+            }
+
             return AbstractEntity::jsonDeserialize(['GenerateLabelResponse' => $body]);
         }
 
@@ -117,15 +136,44 @@ class LabellingService extends AbstractService
     {
         $httpClient = $this->postnl->getHttpClient();
 
+        $responses = [];
         foreach ($generateLabels as $uuid => $generateLabel) {
+            $item = $this->retrieveCachedItem($uuid);
+            $response = null;
+            if ($item instanceof CacheItemInterface) {
+                $response = $item->get();
+                try {
+                    $response = \GuzzleHttp\Psr7\parse_response($response);
+                } catch (\InvalidArgumentException $e) {
+                }
+                if ($response instanceof Response) {
+                    $responses[$uuid] = $response;
+
+                    continue;
+                }
+            }
+
             $httpClient->addOrUpdateRequest(
                 $uuid,
                 $this->buildGenerateLabelRESTRequest($generateLabel[0], $generateLabel[1])
             );
         }
+        $newResponses = $httpClient->doRequests();
+        foreach ($newResponses as $uuid => $newResponse) {
+            if ($newResponse instanceof Response) {
+                $item = $this->retrieveCachedItem($uuid);
+                if ($item instanceof CacheItemInterface) {
+                    $item->set(\GuzzleHttp\Psr7\str($newResponse));
+                    $this->cache->saveDeferred($item);
+                }
+            }
+        }
+        if ($this->cache instanceof CacheItemPoolInterface) {
+            $this->cache->commit();
+        }
 
         $labels = [];
-        foreach ($httpClient->doRequests() as $uuid => $response) {
+        foreach ($responses + $newResponses as $uuid => $response) {
             $label = json_decode(static::getResponseText($response), true);
             try {
                 static::validateRESTResponse($response);
@@ -160,11 +208,27 @@ class LabellingService extends AbstractService
      */
     public function generateLabelSOAP(GenerateLabel $generateLabel, $confirm = false)
     {
-        $response = $this->postnl->getHttpClient()->doRequest($this->buildGenerateLabelSOAPRequest($generateLabel, $confirm));
+        $item = $this->retrieveCachedItem($generateLabel->getId());
+        $response = null;
+        if ($item instanceof CacheItemInterface) {
+            $response = $item->get();
+            try {
+                $response = \GuzzleHttp\Psr7\parse_response($response);
+            } catch (\InvalidArgumentException $e) {
+            }
+        }
+        if (!$response instanceof Response) {
+            $response = $this->postnl->getHttpClient()->doRequest($this->buildGenerateLabelSOAPRequest($generateLabel, $confirm));
+        }
         $xml = simplexml_load_string(static::getResponseText($response));
 
         static::registerNamespaces($xml);
         static::validateSOAPResponse($xml);
+
+        if ($item instanceof CacheItemInterface && $response instanceof Response) {
+            $item->set(\GuzzleHttp\Psr7\str($response));
+            $this->cacheItem($item);
+        }
 
         $reader = new Reader();
         $reader->xml(static::getResponseText($response));
@@ -186,14 +250,45 @@ class LabellingService extends AbstractService
     {
         $httpClient = $this->postnl->getHttpClient();
 
+        $responses = [];
         foreach ($generateLabels as $uuid => $generateLabel) {
+            $item = $this->retrieveCachedItem($uuid);
+            $response = null;
+            if ($item instanceof CacheItemInterface) {
+                $response = $item->get();
+                try {
+                    $response = \GuzzleHttp\Psr7\parse_response($response);
+                } catch (\InvalidArgumentException $e) {
+                }
+                if ($response instanceof Response) {
+                    $responses[$uuid] = $response;
+
+                    continue;
+                }
+            }
+
             $httpClient->addOrUpdateRequest(
                 $uuid,
                 $this->buildGenerateLabelSOAPRequest($generateLabel[0], $generateLabel[1])
             );
         }
+
+        $newResponses = $httpClient->doRequests();
+        foreach ($newResponses as $uuid => $newResponse) {
+            if ($newResponse instanceof Response) {
+                $item = $this->retrieveCachedItem($uuid);
+                if ($item instanceof CacheItemInterface) {
+                    $item->set(\GuzzleHttp\Psr7\str($newResponse));
+                    $this->cache->saveDeferred($item);
+                }
+            }
+        }
+        if ($this->cache instanceof CacheItemPoolInterface) {
+            $this->cache->commit();
+        }
+
         $generateLabelResponses = [];
-        foreach ($httpClient->doRequests() as $uuid => $response) {
+        foreach ($responses + $newResponses as $uuid => $response) {
             $xml = simplexml_load_string(static::getResponseText($response));
             if (!$xml instanceof \SimpleXMLElement) {
                 $generateLabelResponse = new ApiException('Invalid API response');
