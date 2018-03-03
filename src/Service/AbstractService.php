@@ -185,13 +185,13 @@ abstract class AbstractService
             throw new CifDownException($body['Envelope']['Body']['Fault']['Reason']['Text']['']);
         }
 
-        if (!empty($body->Errors->Error)) {
+        if (!empty($body['Errors']['Error'])) {
             $exceptionData = [];
-            foreach ($body->Errors->Error as $error) {
+            foreach ($body['Errors']['Error'] as $error) {
                 $exceptionData[] = [
-                    'description' => isset($error->Description) ? (string) $error->Description : null,
-                    'message'     => isset($error->ErrorMsg) ? (string) $error->ErrorMsg : null,
-                    'code'        => isset($error->ErrorNumber) ? (int) $error->ErrorNumber : 0,
+                    'description' => isset($error['Description']) ? (string) $error['Description'] : null,
+                    'message'     => isset($error['ErrorMsg']) ? (string) $error['ErrorMsg'] : null,
+                    'code'        => isset($error['ErrorNumber']) ? (int) $error['ErrorNumber'] : 0,
                 ];
             }
             throw new CifException($exceptionData);
