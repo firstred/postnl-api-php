@@ -37,6 +37,7 @@ use ThirtyBees\PostNL\Entity\Request\GenerateLabel;
 use ThirtyBees\PostNL\Entity\Response\GenerateLabelResponse;
 use ThirtyBees\PostNL\Entity\Shipment;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
+use ThirtyBees\PostNL\Exception\AbstractException;
 use ThirtyBees\PostNL\Exception\InvalidBarcodeException;
 use ThirtyBees\PostNL\Exception\InvalidConfigurationException;
 use ThirtyBees\PostNL\Exception\NotSupportedException;
@@ -650,7 +651,7 @@ class PostNL
             $a6s = 4; // Amount of A6s available
             $pdf->addPage('P', [297, 210], 90);
             foreach ($labels as $label) {
-                if ($label instanceof \Exception) {
+                if ($label instanceof AbstractException) {
                     throw $label;
                 }
 
