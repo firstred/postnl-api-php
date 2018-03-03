@@ -31,6 +31,6 @@ namespace ThirtyBees\PostNL\Exception;
  *
  * @package ThirtyBees\PostNL\Exception
  */
-class InvalidBarcodeException extends \Exception
+class InvalidBarcodeException extends AbstractException
 {
 }

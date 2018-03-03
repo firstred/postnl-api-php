@@ -31,7 +31,7 @@ namespace ThirtyBees\PostNL\Exception;
  *
  * @package ThirtyBees\PostNL\Exception
  */
-class NotImplementedException extends \Exception
+class NotImplementedException extends AbstractException
 {
 
 }

@@ -26,7 +26,7 @@
 
 namespace ThirtyBees\PostNL\Exception;
 
-class ResponseException extends \Exception
+class ResponseException extends AbstractException
 {
 
 }

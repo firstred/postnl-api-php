@@ -26,12 +26,7 @@
 
 namespace ThirtyBees\PostNL\Exception;
 
-/**
- * Class InvalidArgumentException
- *
- * @package ThirtyBees\PostNL\Exception
- */
-class InvalidArgumentException extends AbstractException
+abstract class AbstractException extends \Exception
 {
 
 }

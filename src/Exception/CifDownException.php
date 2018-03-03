@@ -31,6 +31,6 @@ namespace ThirtyBees\PostNL\Exception;
  *
  * @package ThirtyBees\PostNL\Exception
  */
-class CifDownException extends \Exception
+class CifDownException extends AbstractException
 {
 }

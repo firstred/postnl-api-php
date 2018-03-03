@@ -31,7 +31,7 @@ namespace ThirtyBees\PostNL\Exception;
  *
  * @package ThirtyBees\PostNL\Exception
  */
-class InvalidMethodException extends \Exception
+class InvalidMethodException extends AbstractException
 {
 
 }

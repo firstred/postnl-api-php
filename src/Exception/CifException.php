@@ -31,7 +31,7 @@ namespace ThirtyBees\PostNL\Exception;
  *
  * @package ThirtyBees\PostNL\Exception
  */
-class CifException extends \Exception
+class CifException extends AbstractException
 {
     /** @var array $messages */
     protected $messages;

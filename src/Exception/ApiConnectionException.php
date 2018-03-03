@@ -31,7 +31,7 @@ namespace ThirtyBees\PostNL\Exception;
  *
  * @package ThirtyBees\PostNL\Exception
  */
-class ApiConnectionException extends \Exception
+class ApiConnectionException extends AbstractException
 {
     /** @var string $body */
     protected $body;

@@ -31,7 +31,7 @@ namespace ThirtyBees\PostNL\Exception;
  *
  * @package ThirtyBees\PostNL\Exception
  */
-class InvalidConfigurationException extends \Exception
+class InvalidConfigurationException extends AbstractException
 {
 
 }

@@ -31,7 +31,7 @@ namespace ThirtyBees\PostNL\Exception;
  *
  * @package ThirtyBees\PostNL\Exception
  */
-class ApiException extends \Exception
+class ApiException extends AbstractException
 {
 
 }
