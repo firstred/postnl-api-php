@@ -38,6 +38,7 @@ use ThirtyBees\PostNL\Entity\Response\GenerateLabelResponse;
 use ThirtyBees\PostNL\Entity\Shipment;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
 use ThirtyBees\PostNL\Exception\AbstractException;
+use ThirtyBees\PostNL\Exception\InvalidArgumentException;
 use ThirtyBees\PostNL\Exception\InvalidBarcodeException;
 use ThirtyBees\PostNL\Exception\InvalidConfigurationException;
 use ThirtyBees\PostNL\Exception\NotSupportedException;
@@ -149,12 +150,14 @@ class PostNL
      * @param Customer             $customer
      * @param UsernameToken|string $token
      * @param bool                 $sandbox
-     * @param int                  $mode Set the preferred connection strategy.
-     *                                            Valid options are:
-     *                                            - `MODE_REST`: New REST API
-     *                                            - `MODE_SOAP`: New SOAP API
-     *                                            - `MODE_LEGACY`: Use the legacy API (the plug can
-     *                                                             be pulled at any time)
+     * @param int                  $mode     Set the preferred connection strategy.
+     *                                       Valid options are:
+     *                                         - `MODE_REST`: New REST API
+     *                                         - `MODE_SOAP`: New SOAP API
+     *                                         - `MODE_LEGACY`: Use the legacy API (the plug can
+     *                                            be pulled at any time)
+     *
+     * @throws InvalidArgumentException
      */
     public function __construct(
         Customer $customer,
@@ -173,21 +176,24 @@ class PostNL
      *
      * @param string|UsernameToken $token
      *
-     * @return bool
+     * @return PostNL
+     * @throws InvalidArgumentException
      */
     public function setToken($token)
     {
         if ($token instanceof UsernameToken) {
             $this->token = $token;
 
-            return true;
+            return $this;
         } elseif (is_string($token)) {
             $this->token = new UsernameToken(null, $token);
 
-            return true;
+            return $this;
         }
 
-        return false;
+        throw new InvalidArgumentException('Invalid username/token');
+
+        return $this;
     }
 
     /**
@@ -232,10 +238,14 @@ class PostNL
      * Set PostNL Customer
      *
      * @param Customer $customer
+     *
+     * @return PostNL
      */
     public function setCustomer(Customer $customer)
     {
         $this->customer = $customer;
+
+        return $this;
     }
 
     /**
@@ -252,10 +262,14 @@ class PostNL
      * Set sandbox mode
      *
      * @param bool $sandbox
+     *
+     * @return PostNL
      */
     public function setSandbox($sandbox)
     {
         $this->sandbox = (bool) $sandbox;
+
+        return $this;
     }
 
     /**
@@ -273,7 +287,9 @@ class PostNL
      *
      * @param int $mode
      *
-     * @return bool Indicates whether the current mode has been successfully changed
+     * @return PostNL
+     *
+     * @throws InvalidArgumentException
      */
     public function setMode($mode)
     {
@@ -282,12 +298,12 @@ class PostNL
             static::MODE_SOAP,
             static::MODE_LEGACY,
         ])) {
-            return false;
+            throw new InvalidArgumentException('Mode not supported');
         }
 
         $this->mode = (int) $mode;
 
-        return true;
+        return $this;
     }
 
     /**
