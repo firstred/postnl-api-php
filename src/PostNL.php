@@ -46,7 +46,7 @@ use ThirtyBees\PostNL\HttpClient\GuzzleClient;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\LabellingService;
-use ThirtyBees\PostNL\Util\RFPDI;
+use ThirtyBees\PostNL\Util\RFPdi;
 use ThirtyBees\PostNL\Util\Util;
 
 /**
@@ -64,7 +64,7 @@ class PostNL
     const MODE_LEGACY = 5;
 
     /**
-     * 3S countries
+     * 3S (or EU Pack Special) countries
      *
      * @var array
      */
@@ -152,10 +152,6 @@ class PostNL
      *                                            Valid options are:
      *                                            - `MODE_REST`: New REST API
      *                                            - `MODE_SOAP`: New SOAP API
-     *                                            - `MODE_REST_THEN_SOAP`: First try the REST API
-     *                                                                     if that fails, SOAP
-     *                                            - `MODE_SOAP_THEN_REST`: First try the SOAP API
-     *                                                                     if that fails, REST
      *                                            - `MODE_LEGACY`: Use the legacy API (the plug can
      *                                                             be pulled at any time)
      */
@@ -558,12 +554,38 @@ class PostNL
     }
 
     /**
-     * @param Shipment[] $shipments (key = ID) Shipments
-     * @param string     $printertype          Printer type, see PostNL dev docs for available types
-     * @param bool       $confirm              Immediately confirm the shipments
-     * @param bool       $merge                Merge the PDFs and return them in a MyParcel way
-     * @param int        $format               A4 or A6
-     * @param int        $offset               Skip the first X A6s when they are merged onto the first page
+     * @param Shipment[] $shipments   (key = ID) Shipments
+     * @param string     $printertype Printer type, see PostNL dev docs for available types
+     * @param bool       $confirm     Immediately confirm the shipments
+     * @param bool       $merge       Merge the PDFs and return them in a MyParcel way
+     * @param int        $format      A4 or A6
+     * @param array      $positions   Set the positions of the A6s on the first A4
+     *                                The indices should be the position number, marked with `true` or `false`
+     *                                These are the position numbers:
+     *                                ```
+     *                                +-+-+
+     *                                |2|4|
+     *                                +-+-+
+     *                                |1|3|
+     *                                +-+-+
+     *                                ```
+     *                                So, for
+     *                                ```
+     *                                +-+-+
+     *                                |x|✔|
+     *                                +-+-+
+     *                                |✔|x|
+     *                                +-+-+
+     *                                ```
+     *                                you would have to pass:
+     *                                ```php
+     *                                [
+     *                                  1 => true,
+     *                                  2 => false,
+     *                                  3 => false,
+     *                                  4 => true,
+     *                                ]
+     *                                ```
      *
      * @return GenerateLabelResponse[]|string
      * @throws \Exception
@@ -575,10 +597,22 @@ class PostNL
         $confirm = false,
         $merge = false,
         $format = Label::FORMAT_A4,
-        $offset = 0
+        $positions = [
+            1 => true,
+            2 => true,
+            3 => true,
+            4 => true,
+        ]
     ) {
-        if ($merge && $printertype !== 'GraphicFile|PDF') {
-            throw new NotSupportedException('Labels with the chosen printer type cannot be merged');
+        if ($merge) {
+            if ($printertype !== 'GraphicFile|PDF') {
+                throw new NotSupportedException('Labels with the chosen printer type cannot be merged');
+            }
+            foreach ([1, 2, 3, 4] as $i) {
+                if (!array_key_exists($i, $positions)) {
+                    throw new NotSupportedException('All label positions need to be passed for merge mode');
+                }
+            }
         }
 
         $generateLabels = [];
@@ -613,13 +647,16 @@ class PostNL
                 }
             }
         } else {
-            $a6s = max(1, 4 - $offset); // Amount of A6s available
+            $a6s = 4; // Amount of A6s available
             $pdf->addPage('P', [297, 210], 90);
             foreach ($labels as $label) {
                 $pdfContent = base64_decode($label->getResponseShipments()[0]->getLabels()[0]->getContent());
                 $sizes = Util::getPdfSizeAndOrientation($pdfContent);
                 if ($sizes['iso'] === 'A6') {
-
+                    while (empty($positions[5 - $a6s]) && $a6s >= 1) {
+                        $positions[5 - $a6s] = true;
+                        $a6s--;
+                    }
                     $pdf->rotateCounterClockWise();
                     $pdf->setSourceFile(StreamReader::createByString($pdfContent));
                     $pdf->useTemplate($pdf->importPage(1), static::$a6positions[$a6s][0], static::$a6positions[$a6s][1]);
