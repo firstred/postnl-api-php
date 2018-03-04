@@ -26,7 +26,6 @@ use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use Psr\Log\LoggerInterface;
 
 /**
  * Class GuzzleClient
@@ -37,7 +36,6 @@ class GuzzleClient implements ClientInterface
 {
     const DEFAULT_TIMEOUT = 60;
     const DEFAULT_CONNECT_TIMEOUT = 20;
-    const MAX_RETRIES = 3;
 
     /** @var static $instance */
     protected static $instance;
@@ -53,6 +51,8 @@ class GuzzleClient implements ClientInterface
     private $timeout = self::DEFAULT_TIMEOUT;
     /** @var int $connectTimeout */
     private $connectTimeout = self::DEFAULT_CONNECT_TIMEOUT;
+    /** @var int $maxRetries */
+    private $maxRetries = 3;
 
     /**
      * @return GuzzleClient|static
@@ -124,6 +124,29 @@ class GuzzleClient implements ClientInterface
         return false;
     }
 
+    /**
+     * Set the amount of retries
+     *
+     * @param int $maxRetries
+     *
+     * @return $this
+     */
+    public function setMaxRetries($maxRetries)
+    {
+        $this->maxRetries = $maxRetries;
+
+        return $this;
+    }
+
+    /**
+     * Return max retries
+     *
+     * @return int
+     */
+    public function getMaxRetries()
+    {
+        return $this->maxRetries;
+    }
 
     /**
      * Adds a request to the list of pending requests
@@ -256,7 +279,7 @@ class GuzzleClient implements ClientInterface
             Response $response = null,
             RequestException $exception = null
         ) {
-            if ($retries >= static::MAX_RETRIES) {
+            if ($retries >= $this->maxRetries) {
                 return false;
             }
             if (!(static::isServerError($response) || static::isConnectError($exception))) {
