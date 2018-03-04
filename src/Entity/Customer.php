@@ -28,7 +28,11 @@ namespace ThirtyBees\PostNL\Entity;
 
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
+use ThirtyBees\PostNL\Service\DeliveryDateService;
 use ThirtyBees\PostNL\Service\LabellingService;
+use ThirtyBees\PostNL\Service\LocationService;
+use ThirtyBees\PostNL\Service\ShippingStatusService;
+use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
  * Class Customer
@@ -59,11 +63,11 @@ class Customer extends AbstractEntity
 {
     /** @var string[] $defaultProperties */
     public static $defaultProperties = [
-        'Barcode'    => [
-            'CustomerCode'       => BarcodeService::DOMAIN_NAMESPACE,
-            'CustomerNumber'     => BarcodeService::DOMAIN_NAMESPACE,
+        'Barcode'        => [
+            'CustomerCode'   => BarcodeService::DOMAIN_NAMESPACE,
+            'CustomerNumber' => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming' => [
+        'Confirming'     => [
             'Address'            => ConfirmingService::DOMAIN_NAMESPACE,
             'CollectionLocation' => ConfirmingService::DOMAIN_NAMESPACE,
             'ContactPerson'      => ConfirmingService::DOMAIN_NAMESPACE,
@@ -72,7 +76,7 @@ class Customer extends AbstractEntity
             'Email'              => ConfirmingService::DOMAIN_NAMESPACE,
             'Name'               => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'  => [
+        'Labelling'      => [
             'Address'            => LabellingService::DOMAIN_NAMESPACE,
             'CollectionLocation' => LabellingService::DOMAIN_NAMESPACE,
             'ContactPerson'      => LabellingService::DOMAIN_NAMESPACE,
@@ -80,6 +84,42 @@ class Customer extends AbstractEntity
             'CustomerNumber'     => LabellingService::DOMAIN_NAMESPACE,
             'Email'              => LabellingService::DOMAIN_NAMESPACE,
             'Name'               => LabellingService::DOMAIN_NAMESPACE,
+        ],
+        'ShippingStatus' => [
+            'Address'            => ShippingStatusService::DOMAIN_NAMESPACE,
+            'CollectionLocation' => ShippingStatusService::DOMAIN_NAMESPACE,
+            'ContactPerson'      => ShippingStatusService::DOMAIN_NAMESPACE,
+            'CustomerCode'       => ShippingStatusService::DOMAIN_NAMESPACE,
+            'CustomerNumber'     => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Email'              => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Name'               => ShippingStatusService::DOMAIN_NAMESPACE,
+        ],
+        'DeliveryDate'   => [
+            'Address'            => DeliveryDateService::DOMAIN_NAMESPACE,
+            'CollectionLocation' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'ContactPerson'      => DeliveryDateService::DOMAIN_NAMESPACE,
+            'CustomerCode'       => DeliveryDateService::DOMAIN_NAMESPACE,
+            'CustomerNumber'     => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Email'              => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Name'               => DeliveryDateService::DOMAIN_NAMESPACE,
+        ],
+        'Location'       => [
+            'Address'            => LocationService::DOMAIN_NAMESPACE,
+            'CollectionLocation' => LocationService::DOMAIN_NAMESPACE,
+            'ContactPerson'      => LocationService::DOMAIN_NAMESPACE,
+            'CustomerCode'       => LocationService::DOMAIN_NAMESPACE,
+            'CustomerNumber'     => LocationService::DOMAIN_NAMESPACE,
+            'Email'              => LocationService::DOMAIN_NAMESPACE,
+            'Name'               => LocationService::DOMAIN_NAMESPACE,
+        ],
+        'Timeframe'      => [
+            'Address'            => TimeframeService::DOMAIN_NAMESPACE,
+            'CollectionLocation' => TimeframeService::DOMAIN_NAMESPACE,
+            'ContactPerson'      => TimeframeService::DOMAIN_NAMESPACE,
+            'CustomerCode'       => TimeframeService::DOMAIN_NAMESPACE,
+            'CustomerNumber'     => TimeframeService::DOMAIN_NAMESPACE,
+            'Email'              => TimeframeService::DOMAIN_NAMESPACE,
+            'Name'               => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart

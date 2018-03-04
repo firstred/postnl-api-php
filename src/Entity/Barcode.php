@@ -28,7 +28,11 @@ namespace ThirtyBees\PostNL\Entity;
 
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
+use ThirtyBees\PostNL\Service\DeliveryDateService;
 use ThirtyBees\PostNL\Service\LabellingService;
+use ThirtyBees\PostNL\Service\LocationService;
+use ThirtyBees\PostNL\Service\ShippingStatusService;
+use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
  * Class Barcode
@@ -47,20 +51,40 @@ class Barcode extends AbstractEntity
 {
     /** @var string[] $defaultProperties */
     public static $defaultProperties = [
-        'Barcode'    => [
+        'Barcode'        => [
             'Type'  => BarcodeService::DOMAIN_NAMESPACE,
             'Range' => BarcodeService::DOMAIN_NAMESPACE,
             'Serie' => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming' => [
+        'Confirming'     => [
             'Type'  => ConfirmingService::DOMAIN_NAMESPACE,
             'Range' => ConfirmingService::DOMAIN_NAMESPACE,
             'Serie' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'  => [
+        'Labelling'      => [
             'Type'  => LabellingService::DOMAIN_NAMESPACE,
             'Range' => LabellingService::DOMAIN_NAMESPACE,
             'Serie' => LabellingService::DOMAIN_NAMESPACE,
+        ],
+        'ShippingStatus' => [
+            'Type'  => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Range' => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Serie' => ShippingStatusService::DOMAIN_NAMESPACE,
+        ],
+        'DeliveryDate'   => [
+            'Type'  => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Range' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Serie' => DeliveryDateService::DOMAIN_NAMESPACE,
+        ],
+        'Location'       => [
+            'Type'  => LocationService::DOMAIN_NAMESPACE,
+            'Range' => LocationService::DOMAIN_NAMESPACE,
+            'Serie' => LocationService::DOMAIN_NAMESPACE,
+        ],
+        'Timeframe'      => [
+            'Type'  => TimeframeService::DOMAIN_NAMESPACE,
+            'Range' => TimeframeService::DOMAIN_NAMESPACE,
+            'Serie' => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart

@@ -275,10 +275,13 @@ abstract class AbstractService
      * @param string $uuid
      *
      * @return null|CacheItemInterface
+     * @throws \ReflectionException
      */
     protected function retrieveCachedItem($uuid)
     {
+        $reflection = new \ReflectionClass($this);
         $uuid .= $this->postnl->getMode() === PostNL::MODE_REST ? 'rest' : 'soap';
+        $uuid .= strtolower(substr($reflection->getShortName(), 0, strlen($reflection->getShortName()) - 7));
         $item = null;
         if ($this->cache instanceof CacheItemPoolInterface && !is_null($this->ttl)) {
             try {

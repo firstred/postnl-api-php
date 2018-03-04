@@ -28,7 +28,11 @@ namespace ThirtyBees\PostNL\Entity;
 
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
+use ThirtyBees\PostNL\Service\DeliveryDateService;
 use ThirtyBees\PostNL\Service\LabellingService;
+use ThirtyBees\PostNL\Service\LocationService;
+use ThirtyBees\PostNL\Service\ShippingStatusService;
+use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
  * Class Contact
@@ -49,23 +53,47 @@ class Contact extends AbstractEntity
 {
     /** @var string[] $defaultProperties */
     public static $defaultProperties = [
-        'Barcode'    => [
+        'Barcode'        => [
             'ContactType' => BarcodeService::DOMAIN_NAMESPACE,
             'Email'       => BarcodeService::DOMAIN_NAMESPACE,
             'SMSNr'       => BarcodeService::DOMAIN_NAMESPACE,
             'TelNr'       => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming' => [
+        'Confirming'     => [
             'ContactType' => ConfirmingService::DOMAIN_NAMESPACE,
             'Email'       => ConfirmingService::DOMAIN_NAMESPACE,
             'SMSNr'       => ConfirmingService::DOMAIN_NAMESPACE,
             'TelNr'       => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'  => [
+        'Labelling'      => [
             'ContactType' => LabellingService::DOMAIN_NAMESPACE,
             'Email'       => LabellingService::DOMAIN_NAMESPACE,
             'SMSNr'       => LabellingService::DOMAIN_NAMESPACE,
             'TelNr'       => LabellingService::DOMAIN_NAMESPACE,
+        ],
+        'ShippingStatus' => [
+            'ContactType' => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Email'       => ShippingStatusService::DOMAIN_NAMESPACE,
+            'SMSNr'       => ShippingStatusService::DOMAIN_NAMESPACE,
+            'TelNr'       => ShippingStatusService::DOMAIN_NAMESPACE,
+        ],
+        'DeliveryDate'   => [
+            'ContactType' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Email'       => DeliveryDateService::DOMAIN_NAMESPACE,
+            'SMSNr'       => DeliveryDateService::DOMAIN_NAMESPACE,
+            'TelNr'       => DeliveryDateService::DOMAIN_NAMESPACE,
+        ],
+        'Location'       => [
+            'ContactType' => LocationService::DOMAIN_NAMESPACE,
+            'Email'       => LocationService::DOMAIN_NAMESPACE,
+            'SMSNr'       => LocationService::DOMAIN_NAMESPACE,
+            'TelNr'       => LocationService::DOMAIN_NAMESPACE,
+        ],
+        'Timeframe'      => [
+            'ContactType' => TimeframeService::DOMAIN_NAMESPACE,
+            'Email'       => TimeframeService::DOMAIN_NAMESPACE,
+            'SMSNr'       => TimeframeService::DOMAIN_NAMESPACE,
+            'TelNr'       => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart

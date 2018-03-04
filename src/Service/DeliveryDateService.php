@@ -49,7 +49,7 @@ use ThirtyBees\PostNL\PostNL;
  * @method GenerateLabelResponse   generateLabel(GenerateLabel $generateLabel, bool $confirm)
  * @method GenerateLabelResponse[] generateLabels(GenerateLabel[] $generateLabel, bool $confirm)
  */
-class LabellingService extends AbstractService
+class DeliveryDateService extends AbstractService
 {
     // API Version
     const VERSION = '2.1';

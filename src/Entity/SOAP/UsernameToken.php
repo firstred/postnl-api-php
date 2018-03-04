@@ -56,6 +56,10 @@ class UsernameToken extends AbstractEntity
             'Username' => Security::SECURITY_NAMESPACE,
             'Password' => Security::SECURITY_NAMESPACE,
         ],
+        'ShippingStatus'  => [
+            'Username' => Security::SECURITY_NAMESPACE,
+            'Password' => Security::SECURITY_NAMESPACE,
+        ],
     ];
     // @codingStandardsIgnoreStart
     /** @var string $Username */

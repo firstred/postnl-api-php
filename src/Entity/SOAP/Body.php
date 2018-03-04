@@ -27,7 +27,7 @@
 namespace ThirtyBees\PostNL\Entity\SOAP;
 
 use ThirtyBees\PostNL\Entity\AbstractEntity;
-use ThirtyBees\PostNL\Entity\GenerateBarcodeResponse;
+use ThirtyBees\PostNL\Entity\Response\GenerateBarcodeResponse;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\LabellingService;
@@ -50,6 +50,18 @@ class Body extends AbstractEntity
             'GenerateBarcodeResponse' => ConfirmingService::ENVELOPE_NAMESPACE,
         ],
         'Labelling'  => [
+            'GenerateBarcodeResponse' => LabellingService::ENVELOPE_NAMESPACE,
+        ],
+        'ShippingStatus'  => [
+            'GenerateBarcodeResponse' => LabellingService::ENVELOPE_NAMESPACE,
+        ],
+        'DeliveryDate'  => [
+            'GenerateBarcodeResponse' => LabellingService::ENVELOPE_NAMESPACE,
+        ],
+        'Location'  => [
+            'GenerateBarcodeResponse' => LabellingService::ENVELOPE_NAMESPACE,
+        ],
+        'Timeframe'  => [
             'GenerateBarcodeResponse' => LabellingService::ENVELOPE_NAMESPACE,
         ],
     ];

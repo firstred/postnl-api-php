@@ -33,7 +33,11 @@ use ThirtyBees\PostNL\Entity\Message\LabellingMessage;
 use ThirtyBees\PostNL\Entity\Shipment;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
+use ThirtyBees\PostNL\Service\DeliveryDateService;
 use ThirtyBees\PostNL\Service\LabellingService;
+use ThirtyBees\PostNL\Service\LocationService;
+use ThirtyBees\PostNL\Service\ShippingStatusService;
+use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
  * Class GenerateLabel
@@ -56,20 +60,40 @@ class GenerateLabel extends AbstractEntity
      * @var array $defaultProperties
      */
     public static $defaultProperties = [
-        'Barcode' => [
+        'Barcode'        => [
             'Customer'  => BarcodeService::DOMAIN_NAMESPACE,
             'Message'   => BarcodeService::DOMAIN_NAMESPACE,
             'Shipments' => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming' => [
+        'Confirming'     => [
             'Customer'  => ConfirmingService::DOMAIN_NAMESPACE,
             'Message'   => ConfirmingService::DOMAIN_NAMESPACE,
             'Shipments' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling' => [
+        'Labelling'      => [
             'Customer'  => LabellingService::DOMAIN_NAMESPACE,
             'Message'   => LabellingService::DOMAIN_NAMESPACE,
             'Shipments' => LabellingService::DOMAIN_NAMESPACE,
+        ],
+        'ShippingStatus' => [
+            'Message'   => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Customer'  => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Shipments' => ShippingStatusService::DOMAIN_NAMESPACE,
+        ],
+        'DeliveryDate'   => [
+            'Message'   => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Customer'  => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Shipments' => DeliveryDateService::DOMAIN_NAMESPACE,
+        ],
+        'Location'       => [
+            'Message'   => LocationService::DOMAIN_NAMESPACE,
+            'Customer'  => LocationService::DOMAIN_NAMESPACE,
+            'Shipments' => LocationService::DOMAIN_NAMESPACE,
+        ],
+        'Timeframe'      => [
+            'Message'   => TimeframeService::DOMAIN_NAMESPACE,
+            'Customer'  => TimeframeService::DOMAIN_NAMESPACE,
+            'Shipments' => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart

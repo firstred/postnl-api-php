@@ -28,7 +28,11 @@ namespace ThirtyBees\PostNL\Entity;
 
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
+use ThirtyBees\PostNL\Service\DeliveryDateService;
 use ThirtyBees\PostNL\Service\LabellingService;
+use ThirtyBees\PostNL\Service\LocationService;
+use ThirtyBees\PostNL\Service\ShippingStatusService;
+use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
  * Class Group
@@ -49,23 +53,47 @@ class Group extends AbstractEntity
 {
     /** @var string[] $defaultProperties */
     public static $defaultProperties = [
-        'Barcode'    => [
+        'Barcode'        => [
             'GroupCount'    => BarcodeService::DOMAIN_NAMESPACE,
             'GroupSequence' => BarcodeService::DOMAIN_NAMESPACE,
             'GroupType'     => BarcodeService::DOMAIN_NAMESPACE,
             'MainBarcode'   => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming' => [
+        'Confirming'     => [
             'GroupCount'    => ConfirmingService::DOMAIN_NAMESPACE,
             'GroupSequence' => ConfirmingService::DOMAIN_NAMESPACE,
             'GroupType'     => ConfirmingService::DOMAIN_NAMESPACE,
             'MainBarcode'   => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'  => [
+        'Labelling'      => [
             'GroupCount'    => LabellingService::DOMAIN_NAMESPACE,
             'GroupSequence' => LabellingService::DOMAIN_NAMESPACE,
             'GroupType'     => LabellingService::DOMAIN_NAMESPACE,
             'MainBarcode'   => LabellingService::DOMAIN_NAMESPACE,
+        ],
+        'ShippingStatus' => [
+            'GroupCount'    => ShippingStatusService::DOMAIN_NAMESPACE,
+            'GroupSequence' => ShippingStatusService::DOMAIN_NAMESPACE,
+            'GroupType'     => ShippingStatusService::DOMAIN_NAMESPACE,
+            'MainBarcode'   => ShippingStatusService::DOMAIN_NAMESPACE,
+        ],
+        'DeliveryDate'   => [
+            'GroupCount'    => DeliveryDateService::DOMAIN_NAMESPACE,
+            'GroupSequence' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'GroupType'     => DeliveryDateService::DOMAIN_NAMESPACE,
+            'MainBarcode'   => DeliveryDateService::DOMAIN_NAMESPACE,
+        ],
+        'Location'       => [
+            'GroupCount'    => LocationService::DOMAIN_NAMESPACE,
+            'GroupSequence' => LocationService::DOMAIN_NAMESPACE,
+            'GroupType'     => LocationService::DOMAIN_NAMESPACE,
+            'MainBarcode'   => LocationService::DOMAIN_NAMESPACE,
+        ],
+        'Timeframe'      => [
+            'GroupCount'    => TimeframeService::DOMAIN_NAMESPACE,
+            'GroupSequence' => TimeframeService::DOMAIN_NAMESPACE,
+            'GroupType'     => TimeframeService::DOMAIN_NAMESPACE,
+            'MainBarcode'   => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart

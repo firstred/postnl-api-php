@@ -28,7 +28,11 @@ namespace ThirtyBees\PostNL\Entity\Message;
 
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
+use ThirtyBees\PostNL\Service\DeliveryDateService;
 use ThirtyBees\PostNL\Service\LabellingService;
+use ThirtyBees\PostNL\Service\LocationService;
+use ThirtyBees\PostNL\Service\ShippingStatusService;
+use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
  * Class LabellingMessage
@@ -47,20 +51,40 @@ class LabellingMessage extends Message
 {
     /** @var string[] $defaultProperties */
     public static $defaultProperties = [
-        'Barcode'    => [
+        'Barcode'        => [
             'MessageID'        => BarcodeService::DOMAIN_NAMESPACE,
             'MessageTimeStamp' => BarcodeService::DOMAIN_NAMESPACE,
             'Printertype'      => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming' => [
+        'Confirming'     => [
             'MessageID'        => ConfirmingService::DOMAIN_NAMESPACE,
             'MessageTimeStamp' => ConfirmingService::DOMAIN_NAMESPACE,
             'Printertype'      => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'  => [
+        'Labelling'      => [
             'MessageID'        => LabellingService::DOMAIN_NAMESPACE,
             'MessageTimeStamp' => LabellingService::DOMAIN_NAMESPACE,
             'Printertype'      => LabellingService::DOMAIN_NAMESPACE,
+        ],
+        'ShippingStatus' => [
+            'MessageID'        => ShippingStatusService::DOMAIN_NAMESPACE,
+            'MessageTimeStamp' => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Printertype'      => ShippingStatusService::DOMAIN_NAMESPACE,
+        ],
+        'DeliveryDate'   => [
+            'MessageID'        => DeliveryDateService::DOMAIN_NAMESPACE,
+            'MessageTimeStamp' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Printertype'      => DeliveryDateService::DOMAIN_NAMESPACE,
+        ],
+        'Location'       => [
+            'MessageID'        => LocationService::DOMAIN_NAMESPACE,
+            'MessageTimeStamp' => LocationService::DOMAIN_NAMESPACE,
+            'Printertype'      => LocationService::DOMAIN_NAMESPACE,
+        ],
+        'Timeframe'      => [
+            'MessageID'        => TimeframeService::DOMAIN_NAMESPACE,
+            'MessageTimeStamp' => TimeframeService::DOMAIN_NAMESPACE,
+            'Printertype'      => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     /**

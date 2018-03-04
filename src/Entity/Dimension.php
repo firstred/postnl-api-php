@@ -28,7 +28,11 @@ namespace ThirtyBees\PostNL\Entity;
 
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
+use ThirtyBees\PostNL\Service\DeliveryDateService;
 use ThirtyBees\PostNL\Service\LabellingService;
+use ThirtyBees\PostNL\Service\LocationService;
+use ThirtyBees\PostNL\Service\ShippingStatusService;
+use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
  * Class Dimension
@@ -51,26 +55,54 @@ class Dimension extends AbstractEntity
 {
     /** @var string[] $defaultProperties */
     public static $defaultProperties = [
-        'Barcode'    => [
+        'Barcode'        => [
             'Height' => BarcodeService::DOMAIN_NAMESPACE,
             'Length' => BarcodeService::DOMAIN_NAMESPACE,
             'Volume' => BarcodeService::DOMAIN_NAMESPACE,
             'Weight' => BarcodeService::DOMAIN_NAMESPACE,
             'Width'  => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming' => [
+        'Confirming'     => [
             'Height' => ConfirmingService::DOMAIN_NAMESPACE,
             'Length' => ConfirmingService::DOMAIN_NAMESPACE,
             'Volume' => ConfirmingService::DOMAIN_NAMESPACE,
             'Weight' => ConfirmingService::DOMAIN_NAMESPACE,
             'Width'  => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'  => [
+        'Labelling'      => [
             'Height' => LabellingService::DOMAIN_NAMESPACE,
             'Length' => LabellingService::DOMAIN_NAMESPACE,
             'Volume' => LabellingService::DOMAIN_NAMESPACE,
             'Weight' => LabellingService::DOMAIN_NAMESPACE,
             'Width'  => LabellingService::DOMAIN_NAMESPACE,
+        ],
+        'ShippingStatus' => [
+            'Height' => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Length' => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Volume' => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Weight' => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Width'  => ShippingStatusService::DOMAIN_NAMESPACE,
+        ],
+        'DeliveryDate'   => [
+            'Height' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Length' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Volume' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Weight' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Width'  => DeliveryDateService::DOMAIN_NAMESPACE,
+        ],
+        'Location'       => [
+            'Height' => LocationService::DOMAIN_NAMESPACE,
+            'Length' => LocationService::DOMAIN_NAMESPACE,
+            'Volume' => LocationService::DOMAIN_NAMESPACE,
+            'Weight' => LocationService::DOMAIN_NAMESPACE,
+            'Width'  => LocationService::DOMAIN_NAMESPACE,
+        ],
+        'Timeframe'      => [
+            'Height' => TimeframeService::DOMAIN_NAMESPACE,
+            'Length' => TimeframeService::DOMAIN_NAMESPACE,
+            'Volume' => TimeframeService::DOMAIN_NAMESPACE,
+            'Weight' => TimeframeService::DOMAIN_NAMESPACE,
+            'Width'  => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart

@@ -26,8 +26,9 @@
 
 namespace ThirtyBees\PostNL\Entity\Response;
 
+use Sabre\Xml\Writer;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
-use ThirtyBees\PostNL\Entity\Label;
+use ThirtyBees\PostNL\Entity\Shipment;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
@@ -37,65 +38,89 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class MergedLabel
+ * Class CurrentStatusResponse
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method string[] getBarcodes()
- * @method Label[]  getLabels()
+ * @method string getShipments()
  *
- * @method MergedLabel setBarcodes(string[] $barcodes)
- * @method MergedLabel setLabels(Label[] $labels)
+ * @method CurrentStatusResponse setShipments(Shipment[] $shipments)
  */
-class MergedLabel extends AbstractEntity
+class CurrentStatusResponse extends AbstractEntity
 {
-    /** @var string[] $defaultProperties */
+    /**
+     * Default properties and namespaces for the SOAP API
+     *
+     * @var array $defaultProperties
+     */
     public static $defaultProperties = [
         'Barcode'        => [
-            'Barcodes' => BarcodeService::DOMAIN_NAMESPACE,
-            'Labels'   => BarcodeService::DOMAIN_NAMESPACE,
+            'Shipments' => BarcodeService::DOMAIN_NAMESPACE,
         ],
         'Confirming'     => [
-            'Barcodes' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Labels'   => ConfirmingService::DOMAIN_NAMESPACE,
+            'Shipments' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
         'Labelling'      => [
-            'Barcodes' => LabellingService::DOMAIN_NAMESPACE,
-            'Labels'   => LabellingService::DOMAIN_NAMESPACE,
+            'Shipments' => LabellingService::DOMAIN_NAMESPACE,
         ],
         'ShippingStatus' => [
-            'Barcodes' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Labels'   => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Shipments' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate'   => [
-            'Barcodes' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Labels'   => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Shipments' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
         'Location'       => [
-            'Barcodes' => LocationService::DOMAIN_NAMESPACE,
-            'Labels'   => LocationService::DOMAIN_NAMESPACE,
+            'Shipments' => LocationService::DOMAIN_NAMESPACE,
         ],
         'Timeframe'      => [
-            'Barcodes' => TimeframeService::DOMAIN_NAMESPACE,
-            'Labels'   => TimeframeService::DOMAIN_NAMESPACE,
+            'Shipments' => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string[] $Barcodes */
-    protected $Barcodes = null;
-    /** @var Label[] $Labels */
-    protected $Labels = null;
+    /** @var string $Shipments */
+    public $Shipments;
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string[] $barcodes
-     * @param Label[]  $labels
+     * LabelRequest constructor.
+     *
+     * @param array $shipments
      */
-    public function __construct(array $barcodes, array $labels)
+    public function __construct(array $shipments)
     {
         parent::__construct();
 
-        $this->setBarcodes($barcodes);
-        $this->setLabels($labels);
+        $this->setShipments($shipments);
+    }
+
+    /**
+     * Return a serializable array for the XMLWriter
+     *
+     * @param Writer $writer
+     *
+     * @return void
+     */
+    public function xmlSerialize(Writer $writer)
+    {
+        $xml = [];
+        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
+            $writer->write($xml);
+
+            return;
+        }
+
+        foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
+            if ($propertyName === 'Shipments') {
+                $shipments = [];
+                foreach ($this->Shipments as $shipment) {
+                    $shipments[] = ["{{$namespace}}Shipment" => $shipment];
+                }
+                $xml["{{$namespace}}Shipments"] = $shipments;
+            } elseif (!is_null($this->{$propertyName})) {
+                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
+            }
+        }
+        // Auto extending this object with other properties is not supported with SOAP
+        $writer->write($xml);
     }
 }

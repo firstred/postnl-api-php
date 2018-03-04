@@ -29,7 +29,11 @@ namespace ThirtyBees\PostNL\Entity\Response;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
+use ThirtyBees\PostNL\Service\DeliveryDateService;
 use ThirtyBees\PostNL\Service\LabellingService;
+use ThirtyBees\PostNL\Service\LocationService;
+use ThirtyBees\PostNL\Service\ShippingStatusService;
+use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
  * Class GenerateLabelResponse
@@ -50,17 +54,33 @@ class GenerateLabelResponse extends AbstractEntity
      * @var array $defaultProperties
      */
     public static $defaultProperties = [
-        'Barcode' => [
-            'MergedLabels' => BarcodeService::DOMAIN_NAMESPACE,
+        'Barcode'        => [
+            'MergedLabels'      => BarcodeService::DOMAIN_NAMESPACE,
             'ResponseShipments' => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming' => [
-            'MergedLabels' => ConfirmingService::DOMAIN_NAMESPACE,
+        'Confirming'     => [
+            'MergedLabels'      => ConfirmingService::DOMAIN_NAMESPACE,
             'ResponseShipments' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling' => [
-            'MergedLabels' => LabellingService::DOMAIN_NAMESPACE,
+        'Labelling'      => [
+            'MergedLabels'      => LabellingService::DOMAIN_NAMESPACE,
             'ResponseShipments' => LabellingService::DOMAIN_NAMESPACE,
+        ],
+        'ShippingStatus' => [
+            'MergedLabels'      => ShippingStatusService::DOMAIN_NAMESPACE,
+            'ResponseShipments' => ShippingStatusService::DOMAIN_NAMESPACE,
+        ],
+        'DeliveryDate'   => [
+            'MergedLabels'      => DeliveryDateService::DOMAIN_NAMESPACE,
+            'ResponseShipments' => DeliveryDateService::DOMAIN_NAMESPACE,
+        ],
+        'Location'       => [
+            'MergedLabels'      => LocationService::DOMAIN_NAMESPACE,
+            'ResponseShipments' => LocationService::DOMAIN_NAMESPACE,
+        ],
+        'Timeframe'      => [
+            'MergedLabels'      => TimeframeService::DOMAIN_NAMESPACE,
+            'ResponseShipments' => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart

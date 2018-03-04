@@ -28,7 +28,11 @@ namespace ThirtyBees\PostNL\Entity;
 
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
+use ThirtyBees\PostNL\Service\DeliveryDateService;
 use ThirtyBees\PostNL\Service\LabellingService;
+use ThirtyBees\PostNL\Service\LocationService;
+use ThirtyBees\PostNL\Service\ShippingStatusService;
+use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
  * Class Amount
@@ -86,6 +90,46 @@ class Amount
             'Reference'         => LabellingService::DOMAIN_NAMESPACE,
             'TransactionNumber' => LabellingService::DOMAIN_NAMESPACE,
             'Value'             => LabellingService::DOMAIN_NAMESPACE,
+        ],
+        'ShippingStatus'  => [
+            'AccountName'       => ShippingStatusService::DOMAIN_NAMESPACE,
+            'AmountType'        => ShippingStatusService::DOMAIN_NAMESPACE,
+            'BIC'               => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Currency'          => ShippingStatusService::DOMAIN_NAMESPACE,
+            'IBAN'              => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Reference'         => ShippingStatusService::DOMAIN_NAMESPACE,
+            'TransactionNumber' => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Value'             => ShippingStatusService::DOMAIN_NAMESPACE,
+        ],
+        'DeliveryDate'  => [
+            'AccountName'       => DeliveryDateService::DOMAIN_NAMESPACE,
+            'AmountType'        => DeliveryDateService::DOMAIN_NAMESPACE,
+            'BIC'               => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Currency'          => DeliveryDateService::DOMAIN_NAMESPACE,
+            'IBAN'              => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Reference'         => DeliveryDateService::DOMAIN_NAMESPACE,
+            'TransactionNumber' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Value'             => DeliveryDateService::DOMAIN_NAMESPACE,
+        ],
+        'Location'  => [
+            'AccountName'       => LocationService::DOMAIN_NAMESPACE,
+            'AmountType'        => LocationService::DOMAIN_NAMESPACE,
+            'BIC'               => LocationService::DOMAIN_NAMESPACE,
+            'Currency'          => LocationService::DOMAIN_NAMESPACE,
+            'IBAN'              => LocationService::DOMAIN_NAMESPACE,
+            'Reference'         => LocationService::DOMAIN_NAMESPACE,
+            'TransactionNumber' => LocationService::DOMAIN_NAMESPACE,
+            'Value'             => LocationService::DOMAIN_NAMESPACE,
+        ],
+        'Timeframe'  => [
+            'AccountName'       => TimeframeService::DOMAIN_NAMESPACE,
+            'AmountType'        => TimeframeService::DOMAIN_NAMESPACE,
+            'BIC'               => TimeframeService::DOMAIN_NAMESPACE,
+            'Currency'          => TimeframeService::DOMAIN_NAMESPACE,
+            'IBAN'              => TimeframeService::DOMAIN_NAMESPACE,
+            'Reference'         => TimeframeService::DOMAIN_NAMESPACE,
+            'TransactionNumber' => TimeframeService::DOMAIN_NAMESPACE,
+            'Value'             => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart

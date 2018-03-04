@@ -26,10 +26,11 @@
 
 namespace ThirtyBees\PostNL\Entity\Request;
 
+use Sabre\Xml\Writer;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
-use ThirtyBees\PostNL\Entity\Barcode;
 use ThirtyBees\PostNL\Entity\Customer;
 use ThirtyBees\PostNL\Entity\Message\Message;
+use ThirtyBees\PostNL\Entity\Shipment;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
@@ -39,19 +40,19 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class GenerateLabel
+ * Class CurrentStatus
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method Customer getCustomer()
- * @method Message  getMessage()
- * @method Barcode  getBarcode()
+ * @method Message    getMessage()
+ * @method Customer   getCustomer()
+ * @method Shipment   getShipment()
  *
- * @method GenerateBarcode setCustomer(Customer $customer)
- * @method GenerateBarcode setMessage(Message $message)
- * @method GenerateBarcode setBarcode(Barcode $shipments)
+ * @method CurrentStatus setMessage(Message $message)
+ * @method CurrentStatus setCustomer(Customer $customer)
+ * @method CurrentStatus setShipment(Shipment $shipment)
  */
-class GenerateBarcode extends AbstractEntity
+class CurrentStatus extends AbstractEntity
 {
     /**
      * Default properties and namespaces for the SOAP API
@@ -62,37 +63,37 @@ class GenerateBarcode extends AbstractEntity
         'Barcode'        => [
             'Message'  => BarcodeService::DOMAIN_NAMESPACE,
             'Customer' => BarcodeService::DOMAIN_NAMESPACE,
-            'Barcode'  => BarcodeService::DOMAIN_NAMESPACE,
+            'Shipment' => BarcodeService::DOMAIN_NAMESPACE,
         ],
         'Confirming'     => [
             'Message'  => ConfirmingService::DOMAIN_NAMESPACE,
             'Customer' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Barcode'  => ConfirmingService::DOMAIN_NAMESPACE,
+            'Shipment' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
         'Labelling'      => [
             'Message'  => LabellingService::DOMAIN_NAMESPACE,
             'Customer' => LabellingService::DOMAIN_NAMESPACE,
-            'Barcode'  => LabellingService::DOMAIN_NAMESPACE,
+            'Shipment' => LabellingService::DOMAIN_NAMESPACE,
         ],
         'ShippingStatus' => [
-            'Message'   => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Customer'  => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Shipments' => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Message'  => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Customer' => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Shipment' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate'   => [
-            'Message'   => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Customer'  => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Shipments' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Message'  => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Customer' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Shipment' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
         'Location'       => [
-            'Message'   => LocationService::DOMAIN_NAMESPACE,
-            'Customer'  => LocationService::DOMAIN_NAMESPACE,
-            'Shipments' => LocationService::DOMAIN_NAMESPACE,
+            'Message'  => LocationService::DOMAIN_NAMESPACE,
+            'Customer' => LocationService::DOMAIN_NAMESPACE,
+            'Shipment' => LocationService::DOMAIN_NAMESPACE,
         ],
         'Timeframe'      => [
-            'Message'   => TimeframeService::DOMAIN_NAMESPACE,
-            'Customer'  => TimeframeService::DOMAIN_NAMESPACE,
-            'Shipments' => TimeframeService::DOMAIN_NAMESPACE,
+            'Message'  => TimeframeService::DOMAIN_NAMESPACE,
+            'Customer' => TimeframeService::DOMAIN_NAMESPACE,
+            'Shipment' => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
@@ -100,23 +101,48 @@ class GenerateBarcode extends AbstractEntity
     public $Message;
     /** @var Customer $Customer */
     public $Customer;
-    /** @var Barcode $Barcode */
-    public $Barcode;
+    /** @var Shipment $Shipment */
+    public $Shipment;
     // @codingStandardsIgnoreEnd
 
     /**
      * LabelRequest constructor.
      *
-     * @param Barcode      $barcode
-     * @param Customer     $customer
-     * @param Message|null $message
+     * @param Shipment $shipment
+     * @param Customer $customer
+     * @param Message  $message
      */
-    public function __construct(Barcode $barcode, Customer $customer, Message $message = null)
+    public function __construct(Shipment $shipment, Customer $customer, Message $message = null)
     {
         parent::__construct();
 
-        $this->setBarcode($barcode);
-        $this->setCustomer($customer);
         $this->setMessage($message ?: new Message());
+        $this->setShipment($shipment);
+        $this->setCustomer($customer);
+    }
+
+    /**
+     * Return a serializable array for the XMLWriter
+     *
+     * @param Writer $writer
+     *
+     * @return void
+     */
+    public function xmlSerialize(Writer $writer)
+    {
+        $xml = [];
+        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
+            $writer->write($xml);
+
+            return;
+        }
+
+        foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
+            if (!is_null($this->{$propertyName})) {
+                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
+            }
+        }
+        // Auto extending this object with other properties is not supported with SOAP
+        $writer->write($xml);
     }
 }

@@ -31,9 +31,13 @@ use ThirtyBees\PostNL\Entity\Barcode;
 use ThirtyBees\PostNL\Entity\Customer;
 use ThirtyBees\PostNL\Entity\Label;
 use ThirtyBees\PostNL\Entity\Message\LabellingMessage;
+use ThirtyBees\PostNL\Entity\Message\Message;
 use ThirtyBees\PostNL\Entity\Request\Confirming;
+use ThirtyBees\PostNL\Entity\Request\CurrentStatus;
 use ThirtyBees\PostNL\Entity\Request\GenerateBarcode;
 use ThirtyBees\PostNL\Entity\Request\GenerateLabel;
+use ThirtyBees\PostNL\Entity\Response\ConfirmingResponseShipment;
+use ThirtyBees\PostNL\Entity\Response\CurrentStatusResponse;
 use ThirtyBees\PostNL\Entity\Response\GenerateLabelResponse;
 use ThirtyBees\PostNL\Entity\Shipment;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
@@ -48,6 +52,7 @@ use ThirtyBees\PostNL\HttpClient\GuzzleClient;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\LabellingService;
+use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Util\RFPdi;
 use ThirtyBees\PostNL\Util\Util;
 
@@ -143,6 +148,9 @@ class PostNL
 
     /** @var ConfirmingService $confirmingService */
     protected $confirmingService;
+
+    /** @var ShippingStatusService $shippingStatusService */
+    protected $shippingStatusService;
 
     /**
      * PostNL constructor.
@@ -417,6 +425,32 @@ class PostNL
     public function setConfirmingService(ConfirmingService $service)
     {
         $this->confirmingService = $service;
+    }
+
+    /**
+     * Confirming service
+     *
+     * Automatically load the barcode service
+     *
+     * @return ConfirmingService
+     */
+    public function getShippingStatusService()
+    {
+        if (!$this->shippingStatusService) {
+            $this->shippingStatusService = new ShippingStatusService($this);
+        }
+
+        return $this->shippingStatusService;
+    }
+
+    /**
+     * Set the confirming service
+     *
+     * @param ConfirmingService $service
+     */
+    public function setShippingStatusService(ShippingStatusService $service)
+    {
+        $this->shippingStatusService = $service;
     }
 
     /**
@@ -714,7 +748,7 @@ class PostNL
     /**
      * @param Shipment $shipment
      *
-     * @return Entity\Response\ConfirmingResponseShipment
+     * @return ConfirmingResponseShipment
      */
     public function confirmShipment(Shipment $shipment)
     {
@@ -724,7 +758,7 @@ class PostNL
     /**
      * @param array $shipments
      *
-     * @return Entity\Response\ConfirmingResponseShipment[]
+     * @return ConfirmingResponseShipment[]
      */
     public function confirmShipments(array $shipments)
     {
@@ -734,6 +768,21 @@ class PostNL
         }
 
         return $this->getConfirmingService()->confirmShipments($confirmings);
+    }
+
+    /**
+     * @param CurrentStatus $currentStatus
+     *
+     * @return CurrentStatusResponse
+     */
+    public function getCurrentStatus(CurrentStatus $currentStatus)
+    {
+        $currentStatus->setCustomer($this->getCustomer());
+        if (!$currentStatus->getMessage()) {
+            $currentStatus->setMessage(new Message());
+        }
+
+        return $this->getShippingStatusService()->currentStatus($currentStatus);
     }
 
     /**

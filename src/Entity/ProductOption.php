@@ -28,7 +28,11 @@ namespace ThirtyBees\PostNL\Entity;
 
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
+use ThirtyBees\PostNL\Service\DeliveryDateService;
 use ThirtyBees\PostNL\Service\LabellingService;
+use ThirtyBees\PostNL\Service\LocationService;
+use ThirtyBees\PostNL\Service\ShippingStatusService;
+use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
  * Class ProductOption
@@ -56,6 +60,22 @@ class ProductOption extends AbstractEntity
         'Labelling'  => [
             'Characteristic' => LabellingService::DOMAIN_NAMESPACE,
             'Option'         => LabellingService::DOMAIN_NAMESPACE,
+        ],
+        'ShippingStatus'  => [
+            'Characteristic' => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Option'         => ShippingStatusService::DOMAIN_NAMESPACE,
+        ],
+        'DeliveryDate'  => [
+            'Characteristic' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Option'         => DeliveryDateService::DOMAIN_NAMESPACE,
+        ],
+        'Location'  => [
+            'Characteristic' => LocationService::DOMAIN_NAMESPACE,
+            'Option'         => LocationService::DOMAIN_NAMESPACE,
+        ],
+        'Timeframe'  => [
+            'Characteristic' => TimeframeService::DOMAIN_NAMESPACE,
+            'Option'         => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart

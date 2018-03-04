@@ -43,13 +43,25 @@ class Security extends AbstractEntity
 
     /** @var string[] $defaultProperties */
     public static $defaultProperties = [
-        'Barcode' => [
+        'Barcode'        => [
             'UsernameToken' => self::SECURITY_NAMESPACE,
         ],
-        'Confirming' => [
+        'Confirming'     => [
             'UsernameToken' => self::SECURITY_NAMESPACE,
         ],
-        'Labelling' => [
+        'Labelling'      => [
+            'UsernameToken' => self::SECURITY_NAMESPACE,
+        ],
+        'ShippingStatus' => [
+            'UsernameToken' => self::SECURITY_NAMESPACE,
+        ],
+        'DeliveryDate'   => [
+            'UsernameToken' => self::SECURITY_NAMESPACE,
+        ],
+        'Location'       => [
+            'UsernameToken' => self::SECURITY_NAMESPACE,
+        ],
+        'Timeframe'      => [
             'UsernameToken' => self::SECURITY_NAMESPACE,
         ],
     ];

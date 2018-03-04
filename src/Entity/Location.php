@@ -28,7 +28,11 @@ namespace ThirtyBees\PostNL\Entity;
 
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
+use ThirtyBees\PostNL\Service\DeliveryDateService;
 use ThirtyBees\PostNL\Service\LabellingService;
+use ThirtyBees\PostNL\Service\LocationService;
+use ThirtyBees\PostNL\Service\ShippingStatusService;
+use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
  * Class Location
@@ -61,7 +65,7 @@ class Location extends AbstractEntity
 {
     /** @var string[] $defaultProperties */
     public static $defaultProperties = [
-        'Barcode' => [
+        'Barcode'        => [
             'City'               => BarcodeService::DOMAIN_NAMESPACE,
             'Coordinates'        => BarcodeService::DOMAIN_NAMESPACE,
             'HouseNr'            => BarcodeService::DOMAIN_NAMESPACE,
@@ -74,7 +78,7 @@ class Location extends AbstractEntity
             'OpeningTime'        => BarcodeService::DOMAIN_NAMESPACE,
             'Options'            => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming' => [
+        'Confirming'     => [
             'City'               => ConfirmingService::DOMAIN_NAMESPACE,
             'Coordinates'        => ConfirmingService::DOMAIN_NAMESPACE,
             'HouseNr'            => ConfirmingService::DOMAIN_NAMESPACE,
@@ -87,7 +91,7 @@ class Location extends AbstractEntity
             'OpeningTime'        => ConfirmingService::DOMAIN_NAMESPACE,
             'Options'            => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling' => [
+        'Labelling'      => [
             'City'               => LabellingService::DOMAIN_NAMESPACE,
             'Coordinates'        => LabellingService::DOMAIN_NAMESPACE,
             'HouseNr'            => LabellingService::DOMAIN_NAMESPACE,
@@ -99,6 +103,58 @@ class Location extends AbstractEntity
             'DeliveryOptions'    => LabellingService::DOMAIN_NAMESPACE,
             'OpeningTime'        => LabellingService::DOMAIN_NAMESPACE,
             'Options'            => LabellingService::DOMAIN_NAMESPACE,
+        ],
+        'ShippingStatus' => [
+            'City'               => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Coordinates'        => ShippingStatusService::DOMAIN_NAMESPACE,
+            'HouseNr'            => ShippingStatusService::DOMAIN_NAMESPACE,
+            'HouseNrExt'         => ShippingStatusService::DOMAIN_NAMESPACE,
+            'PostalCode'         => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Street'             => ShippingStatusService::DOMAIN_NAMESPACE,
+            'AllowSundaySorting' => ShippingStatusService::DOMAIN_NAMESPACE,
+            'DeliveryDate'       => ShippingStatusService::DOMAIN_NAMESPACE,
+            'DeliveryOptions'    => ShippingStatusService::DOMAIN_NAMESPACE,
+            'OpeningTime'        => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Options'            => ShippingStatusService::DOMAIN_NAMESPACE,
+        ],
+        'DeliveryDate'   => [
+            'City'               => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Coordinates'        => DeliveryDateService::DOMAIN_NAMESPACE,
+            'HouseNr'            => DeliveryDateService::DOMAIN_NAMESPACE,
+            'HouseNrExt'         => DeliveryDateService::DOMAIN_NAMESPACE,
+            'PostalCode'         => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Street'             => DeliveryDateService::DOMAIN_NAMESPACE,
+            'AllowSundaySorting' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'DeliveryDate'       => DeliveryDateService::DOMAIN_NAMESPACE,
+            'DeliveryOptions'    => DeliveryDateService::DOMAIN_NAMESPACE,
+            'OpeningTime'        => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Options'            => DeliveryDateService::DOMAIN_NAMESPACE,
+        ],
+        'Location'       => [
+            'City'               => LocationService::DOMAIN_NAMESPACE,
+            'Coordinates'        => LocationService::DOMAIN_NAMESPACE,
+            'HouseNr'            => LocationService::DOMAIN_NAMESPACE,
+            'HouseNrExt'         => LocationService::DOMAIN_NAMESPACE,
+            'PostalCode'         => LocationService::DOMAIN_NAMESPACE,
+            'Street'             => LocationService::DOMAIN_NAMESPACE,
+            'AllowSundaySorting' => LocationService::DOMAIN_NAMESPACE,
+            'DeliveryDate'       => LocationService::DOMAIN_NAMESPACE,
+            'DeliveryOptions'    => LocationService::DOMAIN_NAMESPACE,
+            'OpeningTime'        => LocationService::DOMAIN_NAMESPACE,
+            'Options'            => LocationService::DOMAIN_NAMESPACE,
+        ],
+        'Timeframe'      => [
+            'City'               => TimeframeService::DOMAIN_NAMESPACE,
+            'Coordinates'        => TimeframeService::DOMAIN_NAMESPACE,
+            'HouseNr'            => TimeframeService::DOMAIN_NAMESPACE,
+            'HouseNrExt'         => TimeframeService::DOMAIN_NAMESPACE,
+            'PostalCode'         => TimeframeService::DOMAIN_NAMESPACE,
+            'Street'             => TimeframeService::DOMAIN_NAMESPACE,
+            'AllowSundaySorting' => TimeframeService::DOMAIN_NAMESPACE,
+            'DeliveryDate'       => TimeframeService::DOMAIN_NAMESPACE,
+            'DeliveryOptions'    => TimeframeService::DOMAIN_NAMESPACE,
+            'OpeningTime'        => TimeframeService::DOMAIN_NAMESPACE,
+            'Options'            => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart

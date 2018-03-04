@@ -131,12 +131,13 @@ abstract class AbstractEntity implements \JsonSerializable, XmlSerializable
      * Return a serializable array for `json_encode`
      *
      * @return array
+     * @throws InvalidArgumentException
      */
     public function jsonSerialize()
     {
         $json = [];
         if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
-            return $json;
+            throw new InvalidArgumentException('Service not set before serialization');
         }
 
         foreach (array_keys(static::$defaultProperties[$this->currentService]) as $propertyName) {
@@ -154,14 +155,13 @@ abstract class AbstractEntity implements \JsonSerializable, XmlSerializable
      * @param Writer $writer
      *
      * @return void
+     * @throws InvalidArgumentException
      */
     public function xmlSerialize(Writer $writer)
     {
         $xml = [];
         if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
-            $writer->write($xml);
-
-            return;
+            throw new InvalidArgumentException('Service not set before serialization');
         }
 
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {

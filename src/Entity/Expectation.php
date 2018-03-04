@@ -35,65 +35,65 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class Coordinates
+ * Class Expectation
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method string getLatitude()
- * @method string getLongitude()
+ * @method string getETAFrom()
+ * @method string getETATo()
  *
- * @method Coordinates setLatitude(string $lat)
- * @method Coordinates setLongitude(string $long)
+ * @method Expectation setETAFrom(string $dateTime)
+ * @method Expectation setETATo(string $dateTime)
  */
-class Coordinates extends AbstractEntity
+class Expectation extends AbstractEntity
 {
     /** @var string[] $defaultProperties */
     public static $defaultProperties = [
         'Barcode'        => [
-            'Latitude'  => BarcodeService::DOMAIN_NAMESPACE,
-            'Longitude' => BarcodeService::DOMAIN_NAMESPACE,
+            'ETAFrom' => BarcodeService::DOMAIN_NAMESPACE,
+            'ETATo'   => BarcodeService::DOMAIN_NAMESPACE,
         ],
         'Confirming'     => [
-            'Latitude'  => ConfirmingService::DOMAIN_NAMESPACE,
-            'Longitude' => ConfirmingService::DOMAIN_NAMESPACE,
+            'ETAFrom' => ConfirmingService::DOMAIN_NAMESPACE,
+            'ETATo'   => ConfirmingService::DOMAIN_NAMESPACE,
         ],
         'Labelling'      => [
-            'Latitude'  => LabellingService::DOMAIN_NAMESPACE,
-            'Longitude' => LabellingService::DOMAIN_NAMESPACE,
+            'ETAFrom' => LabellingService::DOMAIN_NAMESPACE,
+            'ETATo'   => LabellingService::DOMAIN_NAMESPACE,
         ],
         'ShippingStatus' => [
-            'Latitude'  => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Longitude' => ShippingStatusService::DOMAIN_NAMESPACE,
+            'ETAFrom' => ShippingStatusService::DOMAIN_NAMESPACE,
+            'ETATo'   => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate'   => [
-            'Latitude'  => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Longitude' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'ETAFrom' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'ETATo'   => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
         'Location'       => [
-            'Latitude'  => LocationService::DOMAIN_NAMESPACE,
-            'Longitude' => LocationService::DOMAIN_NAMESPACE,
+            'ETAFrom' => LocationService::DOMAIN_NAMESPACE,
+            'ETATo'   => LocationService::DOMAIN_NAMESPACE,
         ],
         'Timeframe'      => [
-            'Latitude'  => TimeframeService::DOMAIN_NAMESPACE,
-            'Longitude' => TimeframeService::DOMAIN_NAMESPACE,
+            'ETAFrom' => TimeframeService::DOMAIN_NAMESPACE,
+            'ETATo'   => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string $Latitude */
-    protected $Latitude = null;
-    /** @var string $Longitude */
-    protected $Longitude = null;
+    /** @var string $ETAFrom */
+    protected $ETAFrom = null;
+    /** @var string $ETATo */
+    protected $ETATo = null;
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string $lat
-     * @param string $long
+     * @param string $from
+     * @param string $to
      */
-    public function __construct($lat, $long)
+    public function __construct($from, $to)
     {
         parent::__construct();
 
-        $this->setLatitude($lat);
-        $this->setLongitude($long);
+        $this->setETAFrom($from);
+        $this->setETATo($to);
     }
 }

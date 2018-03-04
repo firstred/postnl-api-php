@@ -28,7 +28,11 @@ namespace ThirtyBees\PostNL\Entity;
 
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
+use ThirtyBees\PostNL\Service\DeliveryDateService;
 use ThirtyBees\PostNL\Service\LabellingService;
+use ThirtyBees\PostNL\Service\LocationService;
+use ThirtyBees\PostNL\Service\ShippingStatusService;
+use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
  * Class OpeningHours
@@ -55,7 +59,7 @@ class OpeningHours extends AbstractEntity
 {
     /** @var string[] $defaultProperties */
     public static $defaultProperties = [
-        'Barcode'    => [
+        'Barcode'        => [
             'Monday'    => BarcodeService::DOMAIN_NAMESPACE,
             'Tuesday'   => BarcodeService::DOMAIN_NAMESPACE,
             'Wednesday' => BarcodeService::DOMAIN_NAMESPACE,
@@ -64,7 +68,7 @@ class OpeningHours extends AbstractEntity
             'Saturday'  => BarcodeService::DOMAIN_NAMESPACE,
             'Sunday'    => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming' => [
+        'Confirming'     => [
             'Monday'    => ConfirmingService::DOMAIN_NAMESPACE,
             'Tuesday'   => ConfirmingService::DOMAIN_NAMESPACE,
             'Wednesday' => ConfirmingService::DOMAIN_NAMESPACE,
@@ -73,7 +77,7 @@ class OpeningHours extends AbstractEntity
             'Saturday'  => ConfirmingService::DOMAIN_NAMESPACE,
             'Sunday'    => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'  => [
+        'Labelling'      => [
             'Monday'    => LabellingService::DOMAIN_NAMESPACE,
             'Tuesday'   => LabellingService::DOMAIN_NAMESPACE,
             'Wednesday' => LabellingService::DOMAIN_NAMESPACE,
@@ -81,6 +85,42 @@ class OpeningHours extends AbstractEntity
             'Friday'    => LabellingService::DOMAIN_NAMESPACE,
             'Saturday'  => LabellingService::DOMAIN_NAMESPACE,
             'Sunday'    => LabellingService::DOMAIN_NAMESPACE,
+        ],
+        'ShippingStatus' => [
+            'Monday'    => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Tuesday'   => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Wednesday' => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Thursday'  => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Friday'    => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Saturday'  => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Sunday'    => ShippingStatusService::DOMAIN_NAMESPACE,
+        ],
+        'DeliveryDate'   => [
+            'Monday'    => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Tuesday'   => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Wednesday' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Thursday'  => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Friday'    => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Saturday'  => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Sunday'    => DeliveryDateService::DOMAIN_NAMESPACE,
+        ],
+        'Location'       => [
+            'Monday'    => LocationService::DOMAIN_NAMESPACE,
+            'Tuesday'   => LocationService::DOMAIN_NAMESPACE,
+            'Wednesday' => LocationService::DOMAIN_NAMESPACE,
+            'Thursday'  => LocationService::DOMAIN_NAMESPACE,
+            'Friday'    => LocationService::DOMAIN_NAMESPACE,
+            'Saturday'  => LocationService::DOMAIN_NAMESPACE,
+            'Sunday'    => LocationService::DOMAIN_NAMESPACE,
+        ],
+        'Timeframe'      => [
+            'Monday'    => TimeframeService::DOMAIN_NAMESPACE,
+            'Tuesday'   => TimeframeService::DOMAIN_NAMESPACE,
+            'Wednesday' => TimeframeService::DOMAIN_NAMESPACE,
+            'Thursday'  => TimeframeService::DOMAIN_NAMESPACE,
+            'Friday'    => TimeframeService::DOMAIN_NAMESPACE,
+            'Saturday'  => TimeframeService::DOMAIN_NAMESPACE,
+            'Sunday'    => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart

@@ -64,6 +64,22 @@ class Envelope extends AbstractEntity
             'Header' => LabellingService::ENVELOPE_NAMESPACE,
             'Body'   => LabellingService::ENVELOPE_NAMESPACE,
         ],
+        'ShippingStatus'  => [
+            'Header' => LabellingService::ENVELOPE_NAMESPACE,
+            'Body'   => LabellingService::ENVELOPE_NAMESPACE,
+        ],
+        'DeliveryDate'  => [
+            'Header' => LabellingService::ENVELOPE_NAMESPACE,
+            'Body'   => LabellingService::ENVELOPE_NAMESPACE,
+        ],
+        'Location'  => [
+            'Header' => LabellingService::ENVELOPE_NAMESPACE,
+            'Body'   => LabellingService::ENVELOPE_NAMESPACE,
+        ],
+        'Timeframe'  => [
+            'Header' => LabellingService::ENVELOPE_NAMESPACE,
+            'Body'   => LabellingService::ENVELOPE_NAMESPACE,
+        ],
     ];
     // @codingStandardsIgnoreStart
     /** @var Header $Header */

@@ -28,7 +28,11 @@ namespace ThirtyBees\PostNL\Entity;
 
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
+use ThirtyBees\PostNL\Service\DeliveryDateService;
 use ThirtyBees\PostNL\Service\LabellingService;
+use ThirtyBees\PostNL\Service\LocationService;
+use ThirtyBees\PostNL\Service\ShippingStatusService;
+use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
  * Class Address
@@ -131,6 +135,82 @@ class Address extends AbstractEntity
             'Remark'       => LabellingService::DOMAIN_NAMESPACE,
             'Street'       => LabellingService::DOMAIN_NAMESPACE,
             'Zipcode'      => LabellingService::DOMAIN_NAMESPACE,
+        ],
+        'ShippingStatus' => [
+            'AddressType'  => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Area'         => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Buildingname' => ShippingStatusService::DOMAIN_NAMESPACE,
+            'City'         => ShippingStatusService::DOMAIN_NAMESPACE,
+            'CompanyName'  => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Countrycode'  => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Department'   => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Doorcode'     => ShippingStatusService::DOMAIN_NAMESPACE,
+            'FirstName'    => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Floor'        => ShippingStatusService::DOMAIN_NAMESPACE,
+            'HouseNr'      => ShippingStatusService::DOMAIN_NAMESPACE,
+            'HouseNrExt'   => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Name'         => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Region'       => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Remark'       => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Street'       => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Zipcode'      => ShippingStatusService::DOMAIN_NAMESPACE,
+        ],
+        'DeliveryDate' => [
+            'AddressType'  => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Area'         => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Buildingname' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'City'         => DeliveryDateService::DOMAIN_NAMESPACE,
+            'CompanyName'  => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Countrycode'  => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Department'   => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Doorcode'     => DeliveryDateService::DOMAIN_NAMESPACE,
+            'FirstName'    => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Floor'        => DeliveryDateService::DOMAIN_NAMESPACE,
+            'HouseNr'      => DeliveryDateService::DOMAIN_NAMESPACE,
+            'HouseNrExt'   => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Name'         => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Region'       => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Remark'       => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Street'       => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Zipcode'      => DeliveryDateService::DOMAIN_NAMESPACE,
+        ],
+        'Location' => [
+            'AddressType'  => LocationService::DOMAIN_NAMESPACE,
+            'Area'         => LocationService::DOMAIN_NAMESPACE,
+            'Buildingname' => LocationService::DOMAIN_NAMESPACE,
+            'City'         => LocationService::DOMAIN_NAMESPACE,
+            'CompanyName'  => LocationService::DOMAIN_NAMESPACE,
+            'Countrycode'  => LocationService::DOMAIN_NAMESPACE,
+            'Department'   => LocationService::DOMAIN_NAMESPACE,
+            'Doorcode'     => LocationService::DOMAIN_NAMESPACE,
+            'FirstName'    => LocationService::DOMAIN_NAMESPACE,
+            'Floor'        => LocationService::DOMAIN_NAMESPACE,
+            'HouseNr'      => LocationService::DOMAIN_NAMESPACE,
+            'HouseNrExt'   => LocationService::DOMAIN_NAMESPACE,
+            'Name'         => LocationService::DOMAIN_NAMESPACE,
+            'Region'       => LocationService::DOMAIN_NAMESPACE,
+            'Remark'       => LocationService::DOMAIN_NAMESPACE,
+            'Street'       => LocationService::DOMAIN_NAMESPACE,
+            'Zipcode'      => LocationService::DOMAIN_NAMESPACE,
+        ],
+        'Timeframe' => [
+            'AddressType'  => TimeframeService::DOMAIN_NAMESPACE,
+            'Area'         => TimeframeService::DOMAIN_NAMESPACE,
+            'Buildingname' => TimeframeService::DOMAIN_NAMESPACE,
+            'City'         => TimeframeService::DOMAIN_NAMESPACE,
+            'CompanyName'  => TimeframeService::DOMAIN_NAMESPACE,
+            'Countrycode'  => TimeframeService::DOMAIN_NAMESPACE,
+            'Department'   => TimeframeService::DOMAIN_NAMESPACE,
+            'Doorcode'     => TimeframeService::DOMAIN_NAMESPACE,
+            'FirstName'    => TimeframeService::DOMAIN_NAMESPACE,
+            'Floor'        => TimeframeService::DOMAIN_NAMESPACE,
+            'HouseNr'      => TimeframeService::DOMAIN_NAMESPACE,
+            'HouseNrExt'   => TimeframeService::DOMAIN_NAMESPACE,
+            'Name'         => TimeframeService::DOMAIN_NAMESPACE,
+            'Region'       => TimeframeService::DOMAIN_NAMESPACE,
+            'Remark'       => TimeframeService::DOMAIN_NAMESPACE,
+            'Street'       => TimeframeService::DOMAIN_NAMESPACE,
+            'Zipcode'      => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart

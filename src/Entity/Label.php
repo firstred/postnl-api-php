@@ -28,7 +28,11 @@ namespace ThirtyBees\PostNL\Entity;
 
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
+use ThirtyBees\PostNL\Service\DeliveryDateService;
 use ThirtyBees\PostNL\Service\LabellingService;
+use ThirtyBees\PostNL\Service\LocationService;
+use ThirtyBees\PostNL\Service\ShippingStatusService;
+use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
  * Class Label
@@ -50,21 +54,41 @@ class Label extends AbstractEntity
 
     /** @var string[] $defaultProperties */
     public static $defaultProperties = [
-        'Content'     => [
-            'Barcode'    => BarcodeService::DOMAIN_NAMESPACE,
-            'Confirming' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Labelling'  => LabellingService::DOMAIN_NAMESPACE,
-            ],
-        'Contenttype' => [
-            'Barcode'    => BarcodeService::DOMAIN_NAMESPACE,
-            'Confirming' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Labelling'  => LabellingService::DOMAIN_NAMESPACE,
-            ],
-        'Labeltype'   => [
-            'Barcode'    => BarcodeService::DOMAIN_NAMESPACE,
-            'Confirming' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Labelling'  => LabellingService::DOMAIN_NAMESPACE,
-            ],
+        'Barcode'        => [
+            'Content'     => BarcodeService::DOMAIN_NAMESPACE,
+            'ContentType' => BarcodeService::DOMAIN_NAMESPACE,
+            'Labeltype'   => BarcodeService::DOMAIN_NAMESPACE,
+        ],
+        'Confirming'     => [
+            'Content'     => ConfirmingService::DOMAIN_NAMESPACE,
+            'ContentType' => ConfirmingService::DOMAIN_NAMESPACE,
+            'Labeltype'   => ConfirmingService::DOMAIN_NAMESPACE,
+        ],
+        'Labelling'      => [
+            'Content'     => LabellingService::DOMAIN_NAMESPACE,
+            'ContentType' => LabellingService::DOMAIN_NAMESPACE,
+            'Labeltype'   => LabellingService::DOMAIN_NAMESPACE,
+        ],
+        'ShippingStatus' => [
+            'Content'     => ShippingStatusService::DOMAIN_NAMESPACE,
+            'ContentType' => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Labeltype'   => ShippingStatusService::DOMAIN_NAMESPACE,
+        ],
+        'DeliveryDate'   => [
+            'Content'     => DeliveryDateService::DOMAIN_NAMESPACE,
+            'ContentType' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Labeltype'   => DeliveryDateService::DOMAIN_NAMESPACE,
+        ],
+        'Location'       => [
+            'Content'     => LocationService::DOMAIN_NAMESPACE,
+            'ContentType' => LocationService::DOMAIN_NAMESPACE,
+            'Labeltype'   => LocationService::DOMAIN_NAMESPACE,
+        ],
+        'Timeframe'      => [
+            'Content'     => TimeframeService::DOMAIN_NAMESPACE,
+            'ContentType' => TimeframeService::DOMAIN_NAMESPACE,
+            'Labeltype'   => TimeframeService::DOMAIN_NAMESPACE,
+        ],
     ];
     // @codingStandardsIgnoreStart
     /**

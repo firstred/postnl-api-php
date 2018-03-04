@@ -28,7 +28,11 @@ namespace ThirtyBees\PostNL\Entity;
 
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
+use ThirtyBees\PostNL\Service\DeliveryDateService;
 use ThirtyBees\PostNL\Service\LabellingService;
+use ThirtyBees\PostNL\Service\LocationService;
+use ThirtyBees\PostNL\Service\ShippingStatusService;
+use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
  * Class TimeframeTimeFrame
@@ -47,20 +51,40 @@ class TimeframeTimeFrame extends AbstractEntity
 {
     /** @var string[] $defaultProperties */
     public static $defaultProperties = [
-        'Barcode'    => [
+        'Barcode'        => [
             'From'    => BarcodeService::DOMAIN_NAMESPACE,
             'To'      => BarcodeService::DOMAIN_NAMESPACE,
             'Options' => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming' => [
+        'Confirming'     => [
             'From'    => ConfirmingService::DOMAIN_NAMESPACE,
             'To'      => ConfirmingService::DOMAIN_NAMESPACE,
             'Options' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'  => [
+        'Labelling'      => [
             'From'    => LabellingService::DOMAIN_NAMESPACE,
             'To'      => LabellingService::DOMAIN_NAMESPACE,
             'Options' => LabellingService::DOMAIN_NAMESPACE,
+        ],
+        'ShippingStatus' => [
+            'From'    => ShippingStatusService::DOMAIN_NAMESPACE,
+            'To'      => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Options' => ShippingStatusService::DOMAIN_NAMESPACE,
+        ],
+        'DeliveryDate'   => [
+            'From'    => DeliveryDateService::DOMAIN_NAMESPACE,
+            'To'      => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Options' => DeliveryDateService::DOMAIN_NAMESPACE,
+        ],
+        'Location'       => [
+            'From'    => LocationService::DOMAIN_NAMESPACE,
+            'To'      => LocationService::DOMAIN_NAMESPACE,
+            'Options' => LocationService::DOMAIN_NAMESPACE,
+        ],
+        'Timeframe'      => [
+            'From'    => TimeframeService::DOMAIN_NAMESPACE,
+            'To'      => TimeframeService::DOMAIN_NAMESPACE,
+            'Options' => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart

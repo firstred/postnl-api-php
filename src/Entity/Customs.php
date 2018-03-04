@@ -28,7 +28,11 @@ namespace ThirtyBees\PostNL\Entity;
 
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
+use ThirtyBees\PostNL\Service\DeliveryDateService;
 use ThirtyBees\PostNL\Service\LabellingService;
+use ThirtyBees\PostNL\Service\LocationService;
+use ThirtyBees\PostNL\Service\ShippingStatusService;
+use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
  * Class Customs
@@ -61,7 +65,7 @@ class Customs extends AbstractEntity
 {
     /** @var string[] $defaultProperties */
     public static $defaultProperties = [
-        'Barcode' => [
+        'Barcode'        => [
             'Certificate'            => BarcodeService::DOMAIN_NAMESPACE,
             'CertificateNr'          => BarcodeService::DOMAIN_NAMESPACE,
             'Content'                => BarcodeService::DOMAIN_NAMESPACE,
@@ -73,7 +77,7 @@ class Customs extends AbstractEntity
             'LicenseNr'              => BarcodeService::DOMAIN_NAMESPACE,
             'ShipmentType'           => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming' => [
+        'Confirming'     => [
             'Certificate'            => ConfirmingService::DOMAIN_NAMESPACE,
             'CertificateNr'          => ConfirmingService::DOMAIN_NAMESPACE,
             'Content'                => ConfirmingService::DOMAIN_NAMESPACE,
@@ -85,7 +89,7 @@ class Customs extends AbstractEntity
             'LicenseNr'              => ConfirmingService::DOMAIN_NAMESPACE,
             'ShipmentType'           => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling' => [
+        'Labelling'      => [
             'Certificate'            => LabellingService::DOMAIN_NAMESPACE,
             'CertificateNr'          => LabellingService::DOMAIN_NAMESPACE,
             'Content'                => LabellingService::DOMAIN_NAMESPACE,
@@ -96,6 +100,54 @@ class Customs extends AbstractEntity
             'License'                => LabellingService::DOMAIN_NAMESPACE,
             'LicenseNr'              => LabellingService::DOMAIN_NAMESPACE,
             'ShipmentType'           => LabellingService::DOMAIN_NAMESPACE,
+        ],
+        'ShippingStatus' => [
+            'Certificate'            => ShippingStatusService::DOMAIN_NAMESPACE,
+            'CertificateNr'          => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Content'                => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Currency'               => ShippingStatusService::DOMAIN_NAMESPACE,
+            'HandleAsNonDeliverable' => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Invoice'                => ShippingStatusService::DOMAIN_NAMESPACE,
+            'InvoiceNr'              => ShippingStatusService::DOMAIN_NAMESPACE,
+            'License'                => ShippingStatusService::DOMAIN_NAMESPACE,
+            'LicenseNr'              => ShippingStatusService::DOMAIN_NAMESPACE,
+            'ShipmentType'           => ShippingStatusService::DOMAIN_NAMESPACE,
+        ],
+        'DeliveryDate'   => [
+            'Certificate'            => DeliveryDateService::DOMAIN_NAMESPACE,
+            'CertificateNr'          => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Content'                => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Currency'               => DeliveryDateService::DOMAIN_NAMESPACE,
+            'HandleAsNonDeliverable' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Invoice'                => DeliveryDateService::DOMAIN_NAMESPACE,
+            'InvoiceNr'              => DeliveryDateService::DOMAIN_NAMESPACE,
+            'License'                => DeliveryDateService::DOMAIN_NAMESPACE,
+            'LicenseNr'              => DeliveryDateService::DOMAIN_NAMESPACE,
+            'ShipmentType'           => DeliveryDateService::DOMAIN_NAMESPACE,
+        ],
+        'Location'       => [
+            'Certificate'            => LocationService::DOMAIN_NAMESPACE,
+            'CertificateNr'          => LocationService::DOMAIN_NAMESPACE,
+            'Content'                => LocationService::DOMAIN_NAMESPACE,
+            'Currency'               => LocationService::DOMAIN_NAMESPACE,
+            'HandleAsNonDeliverable' => LocationService::DOMAIN_NAMESPACE,
+            'Invoice'                => LocationService::DOMAIN_NAMESPACE,
+            'InvoiceNr'              => LocationService::DOMAIN_NAMESPACE,
+            'License'                => LocationService::DOMAIN_NAMESPACE,
+            'LicenseNr'              => LocationService::DOMAIN_NAMESPACE,
+            'ShipmentType'           => LocationService::DOMAIN_NAMESPACE,
+        ],
+        'Timeframe'      => [
+            'Certificate'            => TimeframeService::DOMAIN_NAMESPACE,
+            'CertificateNr'          => TimeframeService::DOMAIN_NAMESPACE,
+            'Content'                => TimeframeService::DOMAIN_NAMESPACE,
+            'Currency'               => TimeframeService::DOMAIN_NAMESPACE,
+            'HandleAsNonDeliverable' => TimeframeService::DOMAIN_NAMESPACE,
+            'Invoice'                => TimeframeService::DOMAIN_NAMESPACE,
+            'InvoiceNr'              => TimeframeService::DOMAIN_NAMESPACE,
+            'License'                => TimeframeService::DOMAIN_NAMESPACE,
+            'LicenseNr'              => TimeframeService::DOMAIN_NAMESPACE,
+            'ShipmentType'           => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart

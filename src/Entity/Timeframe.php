@@ -28,7 +28,11 @@ namespace ThirtyBees\PostNL\Entity;
 
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
+use ThirtyBees\PostNL\Service\DeliveryDateService;
 use ThirtyBees\PostNL\Service\LabellingService;
+use ThirtyBees\PostNL\Service\LocationService;
+use ThirtyBees\PostNL\Service\ShippingStatusService;
+use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
  * Class Timeframe
@@ -45,17 +49,33 @@ class Timeframe extends AbstractEntity
 {
     /** @var string[] $defaultProperties */
     public static $defaultProperties = [
-        'Barcode'    => [
+        'Barcode'        => [
             'Date'       => BarcodeService::DOMAIN_NAMESPACE,
             'Timeframes' => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming' => [
+        'Confirming'     => [
             'Date'       => ConfirmingService::DOMAIN_NAMESPACE,
             'Timeframes' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'  => [
+        'Labelling'      => [
             'Date'       => LabellingService::DOMAIN_NAMESPACE,
             'Timeframes' => LabellingService::DOMAIN_NAMESPACE,
+        ],
+        'ShippingStatus' => [
+            'Date'       => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Timeframes' => ShippingStatusService::DOMAIN_NAMESPACE,
+        ],
+        'DeliveryDate'   => [
+            'Date'       => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Timeframes' => DeliveryDateService::DOMAIN_NAMESPACE,
+        ],
+        'Location'       => [
+            'Date'       => LocationService::DOMAIN_NAMESPACE,
+            'Timeframes' => LocationService::DOMAIN_NAMESPACE,
+        ],
+        'Timeframe'      => [
+            'Date'       => TimeframeService::DOMAIN_NAMESPACE,
+            'Timeframes' => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart

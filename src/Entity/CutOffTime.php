@@ -28,7 +28,11 @@ namespace ThirtyBees\PostNL\Entity;
 
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
+use ThirtyBees\PostNL\Service\DeliveryDateService;
 use ThirtyBees\PostNL\Service\LabellingService;
+use ThirtyBees\PostNL\Service\LocationService;
+use ThirtyBees\PostNL\Service\ShippingStatusService;
+use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
  * Class CutOffTime
@@ -45,17 +49,33 @@ class CutOffTime extends AbstractEntity
 {
     /** @var string[] $defaultProperties */
     public static $defaultProperties = [
-        'Barcode'    => [
+        'Barcode'        => [
             'Day'  => BarcodeService::DOMAIN_NAMESPACE,
             'Time' => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming' => [
+        'Confirming'     => [
             'Day'  => ConfirmingService::DOMAIN_NAMESPACE,
             'Time' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'  => [
+        'Labelling'      => [
             'Day'  => LabellingService::DOMAIN_NAMESPACE,
             'Time' => LabellingService::DOMAIN_NAMESPACE,
+        ],
+        'ShippingStatus' => [
+            'Day'  => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Time' => ShippingStatusService::DOMAIN_NAMESPACE,
+        ],
+        'DeliveryDate'   => [
+            'Day'  => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Time' => DeliveryDateService::DOMAIN_NAMESPACE,
+        ],
+        'Location'       => [
+            'Day'  => LocationService::DOMAIN_NAMESPACE,
+            'Time' => LocationService::DOMAIN_NAMESPACE,
+        ],
+        'Timeframe'      => [
+            'Day'  => TimeframeService::DOMAIN_NAMESPACE,
+            'Time' => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart

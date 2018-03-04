@@ -28,7 +28,11 @@ namespace ThirtyBees\PostNL\Entity;
 
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
+use ThirtyBees\PostNL\Service\DeliveryDateService;
 use ThirtyBees\PostNL\Service\LabellingService;
+use ThirtyBees\PostNL\Service\LocationService;
+use ThirtyBees\PostNL\Service\ShippingStatusService;
+use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
  * Class Area
@@ -56,6 +60,22 @@ class Area extends AbstractEntity
         'Labelling' => [
             'CoordinatesNorthWest' => LabellingService::DOMAIN_NAMESPACE,
             'CoordinatesSouthEast' => LabellingService::DOMAIN_NAMESPACE,
+        ],
+        'ShippingStatus' => [
+            'CoordinatesNorthWest' => ShippingStatusService::DOMAIN_NAMESPACE,
+            'CoordinatesSouthEast' => ShippingStatusService::DOMAIN_NAMESPACE,
+        ],
+        'DeliveryDate' => [
+            'CoordinatesNorthWest' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'CoordinatesSouthEast' => DeliveryDateService::DOMAIN_NAMESPACE,
+        ],
+        'Location' => [
+            'CoordinatesNorthWest' => LocationService::DOMAIN_NAMESPACE,
+            'CoordinatesSouthEast' => LocationService::DOMAIN_NAMESPACE,
+        ],
+        'Timeframe' => [
+            'CoordinatesNorthWest' => TimeframeService::DOMAIN_NAMESPACE,
+            'CoordinatesSouthEast' => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
