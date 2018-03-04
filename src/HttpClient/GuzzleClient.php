@@ -52,7 +52,7 @@ class GuzzleClient implements ClientInterface
     /** @var int $connectTimeout */
     private $connectTimeout = self::DEFAULT_CONNECT_TIMEOUT;
     /** @var int $maxRetries */
-    private $maxRetries = 3;
+    private $maxRetries = 1;
 
     /**
      * @return GuzzleClient|static
