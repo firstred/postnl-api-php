@@ -279,6 +279,11 @@ abstract class AbstractService
      */
     protected function retrieveCachedItem($uuid)
     {
+        // An integer cache key means it should not be cached
+        if (is_int($uuid)) {
+            return null;
+        }
+
         $reflection = new \ReflectionClass($this);
         $uuid .= $this->postnl->getMode() === PostNL::MODE_REST ? 'rest' : 'soap';
         $uuid .= strtolower(substr($reflection->getShortName(), 0, strlen($reflection->getShortName()) - 7));
