@@ -31,6 +31,7 @@ use ThirtyBees\PostNL\Entity\Address;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
 use ThirtyBees\PostNL\Entity\Amount;
 use ThirtyBees\PostNL\Entity\Barcode;
+use ThirtyBees\PostNL\Entity\Customer;
 use ThirtyBees\PostNL\Entity\Dimension;
 use ThirtyBees\PostNL\Entity\Expectation;
 use ThirtyBees\PostNL\Entity\Group;
@@ -46,37 +47,43 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class CurrentStatusResponseShipment
+ * Class CompleteStatusResponseShipment
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method Address[]       getAddresses()
- * @method Amount[]        getAmounts()
- * @method Barcode         getBarcode()
- * @method string          getDeliveryDate()
- * @method Dimension       getDimension()
- * @method Expectation     getExpectation()
- * @method Group[]         getGroups()
- * @method string          getProductCode()
- * @method ProductOption[] getProductOptions()
- * @method string          getReference()
- * @method Status          getStatus()
- * @method Warning[]       getWarnings()
+ * @method Address[]                       getAddresses()
+ * @method Amount[]                        getAmounts()
+ * @method Barcode                         getBarcode()
+ * @method Customer                        getCustomer()
+ * @method string                          getDeliveryDate()
+ * @method Dimension                       getDimension()
+ * @method CompleteStatusResponseEvent[]   getEvent()
+ * @method Expectation                     getExpectation()
+ * @method Group[]                         getGroups()
+ * @method CompleteStatusResponseOldStatus getOldStatuses()
+ * @method string                          getProductCode()
+ * @method ProductOption[]                 getProductOptions()
+ * @method string                          getReference()
+ * @method Status                          getStatus()
+ * @method Warning[]                       getWarnings()
  *
- * @method CurrentStatusResponseShipment setAddresses(Address[] $addresses = null)
- * @method CurrentStatusResponseShipment setAmounts(Amount[] $amounts = null)
- * @method CurrentStatusResponseShipment setBarcode(string $barcode)
- * @method CurrentStatusResponseShipment setDeliveryDate(string $date)
- * @method CurrentStatusResponseShipment setDimension(Dimension $dimension)
- * @method CurrentStatusResponseShipment setExpectation(Expectation $expectation)
- * @method CurrentStatusResponseShipment setGroups(Group[] $groups = null)
- * @method CurrentStatusResponseShipment setProductCode(string $productCode)
- * @method CurrentStatusResponseShipment setProductOptions(ProductOption[] $options = null)
- * @method CurrentStatusResponseShipment setReference(string $reference)
- * @method CurrentStatusResponseShipment setStatus(Status $status)
- * @method CurrentStatusResponseShipment setWarnings(Warning[] $warnings = null)
+ * @method CompleteStatusResponseShipment setAddresses(Address [] $addresses = null)
+ * @method CompleteStatusResponseShipment setAmounts(Amount [] $amounts = null)
+ * @method CompleteStatusResponseShipment setBarcode(string $barcode)
+ * @method CompleteStatusResponseShipment setCustomer(Customer $customer = null)
+ * @method CompleteStatusResponseShipment setDeliveryDate(string $date)
+ * @method CompleteStatusResponseShipment setDimension(Dimension $dimension)
+ * @method CompleteStatusResponseShipment setEvent(CompleteStatusResponseEvent [] $events = null)
+ * @method CompleteStatusResponseShipment setExpectation(Expectation $expectation)
+ * @method CompleteStatusResponseShipment setGroups(Group [] $groups = null)
+ * @method CompleteStatusResponseShipment setOldStatuses(CompleteStatusResponseOldStatus $oldStatuses = null)
+ * @method CompleteStatusResponseShipment setProductCode(string $productCode)
+ * @method CompleteStatusResponseShipment setProductOptions(ProductOption [] $options = null)
+ * @method CompleteStatusResponseShipment setReference(string $reference)
+ * @method CompleteStatusResponseShipment setStatus(Status $status)
+ * @method CompleteStatusResponseShipment setWarnings(Warning [] $warnings = null)
  */
-class CurrentStatusResponseShipment extends AbstractEntity
+class CompleteStatusResponseShipment extends AbstractEntity
 {
     /** @var string[] $defaultProperties */
     public static $defaultProperties = [
@@ -84,10 +91,13 @@ class CurrentStatusResponseShipment extends AbstractEntity
             'Addresses'      => BarcodeService::DOMAIN_NAMESPACE,
             'Amounts'        => BarcodeService::DOMAIN_NAMESPACE,
             'Barcode'        => BarcodeService::DOMAIN_NAMESPACE,
+            'Customer'       => BarcodeService::DOMAIN_NAMESPACE,
             'DeliveryDate'   => BarcodeService::DOMAIN_NAMESPACE,
             'Dimension'      => BarcodeService::DOMAIN_NAMESPACE,
+            'Event'          => BarcodeService::DOMAIN_NAMESPACE,
             'Expectation'    => BarcodeService::DOMAIN_NAMESPACE,
             'Groups'         => BarcodeService::DOMAIN_NAMESPACE,
+            'OldStatuses'    => BarcodeService::DOMAIN_NAMESPACE,
             'ProductCode'    => BarcodeService::DOMAIN_NAMESPACE,
             'ProductOptions' => BarcodeService::DOMAIN_NAMESPACE,
             'Reference'      => BarcodeService::DOMAIN_NAMESPACE,
@@ -98,10 +108,13 @@ class CurrentStatusResponseShipment extends AbstractEntity
             'Addresses'      => ConfirmingService::DOMAIN_NAMESPACE,
             'Amounts'        => ConfirmingService::DOMAIN_NAMESPACE,
             'Barcode'        => ConfirmingService::DOMAIN_NAMESPACE,
+            'Customer'       => ConfirmingService::DOMAIN_NAMESPACE,
             'DeliveryDate'   => ConfirmingService::DOMAIN_NAMESPACE,
             'Dimension'      => ConfirmingService::DOMAIN_NAMESPACE,
+            'Event'          => ConfirmingService::DOMAIN_NAMESPACE,
             'Expectation'    => ConfirmingService::DOMAIN_NAMESPACE,
             'Groups'         => ConfirmingService::DOMAIN_NAMESPACE,
+            'OldStatuses'    => ConfirmingService::DOMAIN_NAMESPACE,
             'ProductCode'    => ConfirmingService::DOMAIN_NAMESPACE,
             'ProductOptions' => ConfirmingService::DOMAIN_NAMESPACE,
             'Reference'      => ConfirmingService::DOMAIN_NAMESPACE,
@@ -112,10 +125,13 @@ class CurrentStatusResponseShipment extends AbstractEntity
             'Addresses'      => LabellingService::DOMAIN_NAMESPACE,
             'Amounts'        => LabellingService::DOMAIN_NAMESPACE,
             'Barcode'        => LabellingService::DOMAIN_NAMESPACE,
+            'Customer'       => LabellingService::DOMAIN_NAMESPACE,
             'DeliveryDate'   => LabellingService::DOMAIN_NAMESPACE,
             'Dimension'      => LabellingService::DOMAIN_NAMESPACE,
+            'Event'          => LabellingService::DOMAIN_NAMESPACE,
             'Expectation'    => LabellingService::DOMAIN_NAMESPACE,
             'Groups'         => LabellingService::DOMAIN_NAMESPACE,
+            'OldStatuses'    => LabellingService::DOMAIN_NAMESPACE,
             'ProductCode'    => LabellingService::DOMAIN_NAMESPACE,
             'ProductOptions' => LabellingService::DOMAIN_NAMESPACE,
             'Reference'      => LabellingService::DOMAIN_NAMESPACE,
@@ -126,10 +142,13 @@ class CurrentStatusResponseShipment extends AbstractEntity
             'Addresses'      => ShippingStatusService::DOMAIN_NAMESPACE,
             'Amounts'        => ShippingStatusService::DOMAIN_NAMESPACE,
             'Barcode'        => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Customer'       => ShippingStatusService::DOMAIN_NAMESPACE,
             'DeliveryDate'   => ShippingStatusService::DOMAIN_NAMESPACE,
             'Dimension'      => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Event'          => ShippingStatusService::DOMAIN_NAMESPACE,
             'Expectation'    => ShippingStatusService::DOMAIN_NAMESPACE,
             'Groups'         => ShippingStatusService::DOMAIN_NAMESPACE,
+            'OldStatuses'    => ShippingStatusService::DOMAIN_NAMESPACE,
             'ProductCode'    => ShippingStatusService::DOMAIN_NAMESPACE,
             'ProductOptions' => ShippingStatusService::DOMAIN_NAMESPACE,
             'Reference'      => ShippingStatusService::DOMAIN_NAMESPACE,
@@ -140,10 +159,13 @@ class CurrentStatusResponseShipment extends AbstractEntity
             'Addresses'      => DeliveryDateService::DOMAIN_NAMESPACE,
             'Amounts'        => DeliveryDateService::DOMAIN_NAMESPACE,
             'Barcode'        => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Customer'       => DeliveryDateService::DOMAIN_NAMESPACE,
             'DeliveryDate'   => DeliveryDateService::DOMAIN_NAMESPACE,
             'Dimension'      => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Event'          => DeliveryDateService::DOMAIN_NAMESPACE,
             'Expectation'    => DeliveryDateService::DOMAIN_NAMESPACE,
             'Groups'         => DeliveryDateService::DOMAIN_NAMESPACE,
+            'OldStatuses'    => DeliveryDateService::DOMAIN_NAMESPACE,
             'ProductCode'    => DeliveryDateService::DOMAIN_NAMESPACE,
             'ProductOptions' => DeliveryDateService::DOMAIN_NAMESPACE,
             'Reference'      => DeliveryDateService::DOMAIN_NAMESPACE,
@@ -154,10 +176,13 @@ class CurrentStatusResponseShipment extends AbstractEntity
             'Addresses'      => LocationService::DOMAIN_NAMESPACE,
             'Amounts'        => LocationService::DOMAIN_NAMESPACE,
             'Barcode'        => LocationService::DOMAIN_NAMESPACE,
+            'Customer'       => LocationService::DOMAIN_NAMESPACE,
             'DeliveryDate'   => LocationService::DOMAIN_NAMESPACE,
             'Dimension'      => LocationService::DOMAIN_NAMESPACE,
+            'Event'          => LocationService::DOMAIN_NAMESPACE,
             'Expectation'    => LocationService::DOMAIN_NAMESPACE,
             'Groups'         => LocationService::DOMAIN_NAMESPACE,
+            'OldStatuses'    => LocationService::DOMAIN_NAMESPACE,
             'ProductCode'    => LocationService::DOMAIN_NAMESPACE,
             'ProductOptions' => LocationService::DOMAIN_NAMESPACE,
             'Reference'      => LocationService::DOMAIN_NAMESPACE,
@@ -168,10 +193,13 @@ class CurrentStatusResponseShipment extends AbstractEntity
             'Addresses'      => TimeframeService::DOMAIN_NAMESPACE,
             'Amounts'        => TimeframeService::DOMAIN_NAMESPACE,
             'Barcode'        => TimeframeService::DOMAIN_NAMESPACE,
+            'Customer'       => TimeframeService::DOMAIN_NAMESPACE,
             'DeliveryDate'   => TimeframeService::DOMAIN_NAMESPACE,
             'Dimension'      => TimeframeService::DOMAIN_NAMESPACE,
+            'Event'          => TimeframeService::DOMAIN_NAMESPACE,
             'Expectation'    => TimeframeService::DOMAIN_NAMESPACE,
             'Groups'         => TimeframeService::DOMAIN_NAMESPACE,
+            'OldStatuses'    => TimeframeService::DOMAIN_NAMESPACE,
             'ProductCode'    => TimeframeService::DOMAIN_NAMESPACE,
             'ProductOptions' => TimeframeService::DOMAIN_NAMESPACE,
             'Reference'      => TimeframeService::DOMAIN_NAMESPACE,
@@ -186,17 +214,23 @@ class CurrentStatusResponseShipment extends AbstractEntity
     protected $Amounts;
     /** @var Barcode $Barcode */
     protected $Barcode;
+    /** @var Customer $customer */
+    protected $Customer;
     /** @var string $DeliveryDate */
     protected $DeliveryDate;
     /** @var Dimension Dimension */
     protected $Dimension;
+    /** @var CompleteStatusResponseEvent[] $Event */
+    protected $Event;
     /** @var Expectation $Expectation */
     protected $Expectation;
     /** @var Group[] $Groups */
     protected $Groups;
+    /** @var CompleteStatusResponseOldStatus[] $OldStatuses */
+    protected $OldStatuses;
     /** @var string $ProductCode */
     protected $ProductCode;
-    /** @var ProductOption[] $ProuctOptions */
+    /** @var ProductOption[] $ProductOptions */
     protected $ProductOptions;
     /** @var string $Reference */
     protected $Reference;
@@ -207,33 +241,39 @@ class CurrentStatusResponseShipment extends AbstractEntity
     // @codingStandardsIgnoreEnd
 
     /**
-     * CurrentStatusResponseShipment constructor.
+     * CompleteStatusResponseShipment constructor.
      *
-     * @param Address[]|null $addresses
-     * @param Amount[]|null $amounts
-     * @param null       $barcode
-     * @param null       $deliveryDate
-     * @param null       $dimension
-     * @param null       $expectation
-     * @param Group[]|null $groups
-     * @param null       $productCode
-     * @param ProductOption[]|null $productOptions
-     * @param null       $reference
-     * @param null       $status
-     * @param Warning[]|null $warnings
+     * @param Address[]|null                         $addresses
+     * @param Amount[]|null                          $amounts
+     * @param string|null                            $barcode
+     * @param Customer|null                          $customer
+     * @param string|null                            $deliveryDate
+     * @param Dimension|null                         $dimension
+     * @param array|null                             $event
+     * @param Expectation|null                       $expectation
+     * @param Group[]|null                           $groups
+     * @param string|null                            $productCode
+     * @param CompleteStatusResponseOldStatus[]|null $oldStatuses
+     * @param ProductOption[]|null                   $productOptions
+     * @param string|null                            $reference
+     * @param Status|null                            $status
+     * @param Warning[]|null                         $warnings
      */
     public function __construct(
         array $addresses = null,
         array $amounts = null,
         $barcode = null,
+        Customer $customer = null,
         $deliveryDate = null,
-        $dimension = null,
-        $expectation = null,
+        Dimension $dimension = null,
+        array $event = null,
+        Expectation $expectation = null,
         array $groups = null,
+        array $oldStatuses = null,
         $productCode = null,
         array $productOptions = null,
         $reference = null,
-        $status = null,
+        Status $status = null,
         array $warnings = null
     ) {
         parent::__construct();
@@ -241,10 +281,13 @@ class CurrentStatusResponseShipment extends AbstractEntity
         $this->setAddresses($addresses);
         $this->setAmounts($amounts);
         $this->setBarcode($barcode);
+        $this->setCustomer($customer);
         $this->setDeliveryDate($deliveryDate);
         $this->setDimension($dimension);
+        $this->setEvent($event);
         $this->setExpectation($expectation);
         $this->setGroups($groups);
+        $this->setOldStatuses($oldStatuses);
         $this->setProductCode($productCode);
         $this->setProductOptions($productOptions);
         $this->setReference($reference);
@@ -287,7 +330,19 @@ class CurrentStatusResponseShipment extends AbstractEntity
                     $groups[] = ["{{$namespace}}Group" => $group];
                 }
                 $xml["{{$namespace}}Groups"] = $groups;
-            } elseif ($propertyName === 'ProductOption') {
+            } elseif ($propertyName === 'Event') {
+                $events = [];
+                foreach ($this->Event as $event) {
+                    $events[] = ["{{$namespace}}CompleteStatusResponseEvent" => $event];
+                }
+                $xml["{{$namespace}}Event"] = $events;
+             }elseif ($propertyName === 'OldStatuses') {
+                $oldStatuses = [];
+                foreach ($this->OldStatuses as $oldStatus) {
+                    $oldStatuses[] = ["{{$namespace}}CompleteStatusResponseOldStatus" => $oldStatus];
+                }
+                $xml["{{$namespace}}OldStatuses"] = $oldStatuses;
+            }  elseif ($propertyName === 'ProductOption') {
                 $productOptions = [];
                 foreach ($this->ProductOptions as $productOption) {
                     $productOptions[] = ["{{$namespace}}ProductOptions" => $productOption];

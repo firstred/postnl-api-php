@@ -786,6 +786,26 @@ class PostNL
     }
 
     /**
+     * @param CurrentStatus $currentStatus
+     *
+     * @return CurrentStatusResponse
+     */
+    public function getCurrentStatusByReference(CurrentStatus $currentStatus)
+    {
+        return $this->getCurrentStatus($currentStatus);
+    }
+
+    /**
+     * @param CurrentStatus $currentStatus
+     *
+     * @return CurrentStatusResponse
+     */
+    public function getCurrentStatusByPhase(CurrentStatus $currentStatus)
+    {
+        return $this->getCurrentStatus($currentStatus);
+    }
+
+    /**
      * Find a suitable serie for the barcode
      *
      * @param string $type

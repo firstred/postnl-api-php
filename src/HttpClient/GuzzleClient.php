@@ -20,10 +20,13 @@
 namespace ThirtyBees\PostNL\HttpClient;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use ThirtyBees\PostNL\Exception\ResponseException;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class GuzzleClient
@@ -34,6 +37,7 @@ class GuzzleClient implements ClientInterface
 {
     const DEFAULT_TIMEOUT = 60;
     const DEFAULT_CONNECT_TIMEOUT = 20;
+    const MAX_RETRIES = 3;
 
     /** @var static $instance */
     protected static $instance;
@@ -208,7 +212,9 @@ class GuzzleClient implements ClientInterface
         $requests = $this->pendingRequests + $requests;
         $this->clearRequests();
 
-        // Initialize Guzzle, include the default options
+        // Initialize Guzzle and the retry middleware, include the default options
+        $stack = HandlerStack::create(\GuzzleHttp\choose_handler());
+        $stack->push(\GuzzleHttp\Middleware::retry(static::createRetryHandler()));
         $guzzle = new Client(array_merge(
             $this->defaultOptions,
             [
@@ -230,10 +236,54 @@ class GuzzleClient implements ClientInterface
             } elseif (!empty($response['reason'])) {
                 $response = $response['reason'];
             } else {
-                $response = ResponseException('Unknown reponse type');
+                $response = \ThirtyBees\PostNL\Exception\ResponseException('Unknown reponse type');
             }
         }
 
         return $responses;
+    }
+
+    /**
+     * Create the retry handler
+     *
+     * @return \Closure
+     */
+    protected function createRetryHandler()
+    {
+        return function (
+            $retries,
+            Request $request,
+            Response $response = null,
+            RequestException $exception = null
+        ) {
+            if ($retries >= static::MAX_RETRIES) {
+                return false;
+            }
+            if (!(static::isServerError($response) || static::isConnectError($exception))) {
+                return false;
+            }
+
+            return true;
+        };
+    }
+
+    /**
+     * @param Response $response
+     *
+     * @return bool
+     */
+    protected function isServerError(Response $response = null)
+    {
+        return $response && $response->getStatusCode() >= 500;
+    }
+
+    /**
+     * @param RequestException $exception
+     *
+     * @return bool
+     */
+    protected function isConnectError(RequestException $exception = null)
+    {
+        return $exception instanceof ConnectException;
     }
 }

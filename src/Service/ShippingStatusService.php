@@ -108,7 +108,7 @@ class ShippingStatusService extends AbstractService
             static::validateRESTResponse($response);
         }
         $body = json_decode(static::getResponseText($response), true);
-        if (isset($body['ResponseShipments'])) {
+        if (isset($body['Shipments'])) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof Response
                 && $response->getStatusCode() === 200

@@ -24,14 +24,13 @@
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\HttpClient;
+namespace ThirtyBees\PostNL\HttpClient\cURL;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use ThirtyBees\PostNL\Exception\ApiConnectionException;
 use ThirtyBees\PostNL\Exception\ApiException;
-use ThirtyBees\PostNL\Exception\NotImplementedException;
-use ThirtyBees\PostNL\Util\Util;
+use ThirtyBees\PostNL\HttpClient\ClientInterface;
 
 if (!defined('CURL_SSLVERSION_TLSv1')) {
     define('CURL_SSLVERSION_TLSv1', 1);
