@@ -372,6 +372,9 @@ class PostNL implements LoggerAwareInterface
     public function setLogger(LoggerInterface $logger)
     {
         $this->logger = $logger;
+        if ($this->getHttpClient() instanceof ClientInterface) {
+            $this->getHttpClient()->setLogger($logger);
+        }
 
         return $this;
     }
