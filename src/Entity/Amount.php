@@ -57,7 +57,7 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method Amount setTransactionNumber(string $transactionNr)
  * @method Amount setValue(string $value)
  */
-class Amount
+class Amount extends AbstractEntity
 {
     /** @var string[] $defaultProperties */
     public static $defaultProperties = [
@@ -162,14 +162,14 @@ class Amount
      * @param string $value
      */
     public function __construct(
-        $accountName,
-        $amountType,
-        $bic,
-        $currency,
-        $iban,
-        $reference,
-        $transactionNumber,
-        $value
+        $accountName = null,
+        $amountType = null,
+        $bic = null,
+        $currency = null,
+        $iban = null,
+        $reference = null,
+        $transactionNumber = null,
+        $value = null
     ) {
         parent::__construct();
 

@@ -89,7 +89,7 @@ class ProductOption extends AbstractEntity
      * @param string $characteristic
      * @param string $option
      */
-    public function __construct($characteristic, $option)
+    public function __construct($characteristic = null, $option = null)
     {
         parent::__construct();
 

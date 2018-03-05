@@ -137,8 +137,14 @@ class Content extends AbstractEntity
      * @param string $val
      * @param string $weight
      */
-    public function __construct($countryOfOrigin, $description, $hsTariffNr, $qty, $val, $weight)
-    {
+    public function __construct(
+        $countryOfOrigin = null,
+        $description = null,
+        $hsTariffNr = null,
+        $qty = null,
+        $val = null,
+        $weight = null
+    ) {
         parent::__construct();
 
         $this->setCountryOfOrigin($countryOfOrigin);

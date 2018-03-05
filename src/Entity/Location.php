@@ -245,8 +245,8 @@ class Location extends AbstractEntity
      * @param string               $retailNetworkId
      */
     public function __construct(
-        $zipcode,
-        $allowSundaySorting,
+        $zipcode = null,
+        $allowSundaySorting = null,
         $deliveryDate = null,
         array $deliveryOptions = ['PG'],
         array $options = ['Daytime'],

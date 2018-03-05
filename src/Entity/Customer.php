@@ -153,9 +153,9 @@ class Customer extends AbstractEntity
      * @param Address $address
      */
     public function __construct(
-        $customerNr,
-        $customerCode,
-        $collectionLocation,
+        $customerNr = null,
+        $customerCode = null,
+        $collectionLocation = null,
         $contactPerson = null,
         $email = null,
         $name = null,

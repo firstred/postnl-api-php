@@ -101,7 +101,7 @@ class Barcode extends AbstractEntity
      * @param string $range
      * @param string $serie
      */
-    public function __construct($type, $range, $serie = '000000000-999999999')
+    public function __construct($type = null, $range = null, $serie = '000000000-999999999')
     {
         parent::__construct();
 

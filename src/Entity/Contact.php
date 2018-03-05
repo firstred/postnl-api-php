@@ -113,7 +113,7 @@ class Contact extends AbstractEntity
      * @param string $smsNr
      * @param string $telNr
      */
-    public function __construct($contactType, $email, $smsNr, $telNr)
+    public function __construct($contactType = null, $email = null, $smsNr = null, $telNr = null)
     {
         parent::__construct();
 

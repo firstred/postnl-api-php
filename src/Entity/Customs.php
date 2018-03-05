@@ -186,16 +186,16 @@ class Customs extends AbstractEntity
      * @param string    $shipmentType
      */
     public function __construct(
-        $certificate,
-        $certificateNr,
-        array $content,
-        $currency,
-        $handleAsNonDeliverable,
-        $invoice,
-        $invoiceNr,
-        $license,
-        $licenseNr,
-        $shipmentType
+        $certificate = null,
+        $certificateNr = null,
+        array $content = [],
+        $currency = null,
+        $handleAsNonDeliverable = null,
+        $invoice = null,
+        $invoiceNr = null,
+        $license = null,
+        $licenseNr = null,
+        $shipmentType = null
     ) {
         parent::__construct();
 

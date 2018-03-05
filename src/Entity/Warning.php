@@ -89,7 +89,7 @@ class Warning extends AbstractEntity
      * @param string $code
      * @param string $description
      */
-    public function __construct($code, $description)
+    public function __construct($code = null, $description = null)
     {
         parent::__construct();
 

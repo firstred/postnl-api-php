@@ -125,18 +125,47 @@ class OpeningHours extends AbstractEntity
     ];
     // @codingStandardsIgnoreStart
     /** @var string $Monday */
-    protected $Monday;
+    protected $Monday = '';
     /** @var string $Tuesday */
-    protected $Tuesday;
+    protected $Tuesday = '';
     /** @var string $Wednesday */
-    protected $Wednesday;
+    protected $Wednesday = '';
     /** @var string $Thursday */
-    protected $Thursday;
+    protected $Thursday = '';
     /** @var string $Friday */
-    protected $Friday;
+    protected $Friday = '';
     /** @var string $Saturday */
-    protected $Saturday;
+    protected $Saturday = '';
     /** @var string $Sunday */
-    protected $Sunday;
+    protected $Sunday = '';
     // @codingStandardsIgnoreEnd
+
+    /**
+     * OpeningHours constructor.
+     *
+     * @param string $monday
+     * @param string $tuesday
+     * @param string $wednesday
+     * @param string $thursday
+     * @param string $friday
+     * @param string $saturday
+     * @param string $sunday
+     */
+    public function __construct(
+        $monday = '',
+        $tuesday = '',
+        $wednesday = '',
+        $thursday = '',
+        $friday = '',
+        $saturday = '',
+        $sunday = ''
+    ) {
+        $this->setMonday($monday);
+        $this->setTuesday($tuesday);
+        $this->setWednesday($wednesday);
+        $this->setThursday($thursday);
+        $this->setFriday($friday);
+        $this->setSaturday($saturday);
+        $this->setSunday($sunday);
+    }
 }

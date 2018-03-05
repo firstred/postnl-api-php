@@ -89,7 +89,7 @@ class Area extends AbstractEntity
      * @param Coordinates $NW
      * @param Coordinates $SE
      */
-    public function __construct($NW, $SE)
+    public function __construct($NW = null, $SE = null)
     {
         parent::__construct();
 

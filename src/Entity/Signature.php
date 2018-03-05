@@ -80,25 +80,15 @@ class Signature extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string $CurrentPhaseCode */
-    protected $CurrentPhaseCode;
-    /** @var string $CurrentPhaseDescription */
-    protected $CurrentPhaseDescription;
-    /** @var string $CurrentSignatureCode */
-    protected $CurrentSignatureCode;
-    /** @var string $CurrentSignatureDescription */
-    protected $CurrentSignatureDescription;
-    /** @var string $CurrentSignatureTimeStamp */
-    protected $CurrentSignatureTimeStamp;
+    /** @var GetSignatureResponseSignature $GetSignatureResponseSignature */
+    protected $GetSignatureResponseSignature;
+    /** @var Warning[] $Warnings */
+    protected $Warnings;
     // @codingStandardsIgnoreEnd
 
-    /**
-     * @param null|GetSignatureResponseSignature $signature
-     * @param null|Warning[] $warnings
-     */
     public function __construct(
         GetSignatureResponseSignature $signature = null,
-        array $warnings = null
+        array $warnings = []
     ) {
         parent::__construct();
 

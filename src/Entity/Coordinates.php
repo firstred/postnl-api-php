@@ -89,7 +89,7 @@ class Coordinates extends AbstractEntity
      * @param string $lat
      * @param string $long
      */
-    public function __construct($lat, $long)
+    public function __construct($lat = null, $long = null)
     {
         parent::__construct();
 

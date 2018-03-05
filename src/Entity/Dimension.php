@@ -125,7 +125,7 @@ class Dimension extends AbstractEntity
      * @param string $volume
      * @param string $width
      */
-    public function __construct($weight, $height = null, $length = null, $volume = null, $width = null)
+    public function __construct($weight = null, $height = null, $length = null, $volume = null, $width = null)
     {
         parent::__construct();
 

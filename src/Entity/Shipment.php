@@ -469,9 +469,9 @@ class Shipment extends AbstractEntity
      * @param string|null          $dateTo
      */
     public function __construct(
-        array $addresses,
+        array $addresses = [],
         array $amounts = null,
-        $barcode,
+        $barcode = null,
         array $contacts = null,
         $content = null,
         $collectionTimeStampEnd = null,
@@ -481,7 +481,7 @@ class Shipment extends AbstractEntity
         Customs $customs = null,
         $deliveryAddress = null,
         $deliveryDate = null,
-        Dimension $dimension,
+        Dimension $dimension = null,
         $downPartnerBarcode = null,
         $downPartnerId = null,
         $downPartnerLocation = null,
@@ -490,7 +490,7 @@ class Shipment extends AbstractEntity
         $idNumber = null,
         $idType = null,
         $productCodeCollect = null,
-        $productCodeDelivery,
+        $productCodeDelivery = null,
         array $productOptions = null,
         $receiverDateOfBirth = null,
         $reference = null,
