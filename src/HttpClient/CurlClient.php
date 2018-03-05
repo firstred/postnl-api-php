@@ -235,7 +235,9 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
      */
     public function doRequest(Request $request)
     {
-        $this->logger->debug(\GuzzleHttp\Psr7\str($request));
+        if ($this->logger instanceof LoggerInterface) {
+            $this->logger->debug(\GuzzleHttp\Psr7\str($request));
+        }
 
         $curl = curl_init();
         // Create a callback to capture HTTP headers for the response
@@ -249,7 +251,9 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
         }
         curl_close($curl);
 
-        $this->logger->debug($rbody);
+        if ($this->logger instanceof LoggerInterface) {
+            $this->logger->debug($rbody);
+        }
 
         return \GuzzleHttp\Psr7\parse_response($rbody);
     }
@@ -270,7 +274,7 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
         $curlHandles = [];
         $mh = curl_multi_init();
         foreach ($this->pendingRequests + $requests as $uuid => $request) {
-            if ($request instanceof Request) {
+            if ($request instanceof Request && $this->logger instanceof LoggerInterface) {
                 $this->logger->debug(\GuzzleHttp\Psr7\str($request));
             }
 
@@ -297,7 +301,9 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
         }
         $responses = [];
         foreach ($responseBodies as $uuid => $responseBody) {
-            $this->logger->debug($responseBody);
+            if ($this->logger instanceof LoggerInterface) {
+                $this->logger->debug($responseBody);
+            }
             $responses[$uuid] = \GuzzleHttp\Psr7\parse_response($responseBody);
         }
 

@@ -279,7 +279,7 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
         // Concurrent requests
         $promises = [];
         foreach ($requests as $index => $request) {
-            if ($request instanceof Request) {
+            if ($request instanceof Request && $this->logger instanceof LoggerInterface) {
                 $this->logger->debug(\GuzzleHttp\Psr7\str($request));
             }
             $promises[$index] = $guzzle->sendAsync($request);
@@ -294,7 +294,7 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
             } else {
                 $response = \ThirtyBees\PostNL\Exception\ResponseException('Unknown reponse type');
             }
-            if ($response instanceof Response) {
+            if ($response instanceof Response && $this->logger instanceof LoggerInterface) {
                 $this->logger->debug(\GuzzleHttp\Psr7\str($response));
             }
         }
