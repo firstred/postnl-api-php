@@ -35,8 +35,8 @@ hopefully be completed soon.
 | Shippingstatus webservice                   | alpha                     | alpha                     | 1.6     |
 | **Delivery Options**                        |                           |                           |         |
 | Deliverydate webservice                     | alpha                     | alpha                     | 2.2     |
-| Location webservice                         | Expected: March, 2018     | Expected: March, 2018     | 2.1     |
-| Timeframe webservice                        | Expected: March, 2018     | Expected: March, 2018     | 2.1     |
+| Location webservice                         | alpha                     | alpha                     | 2.1     |
+| Timeframe webservice                        | alpha                     | alpha                     | 2.1     |
 | **Mail**                                    |                           |                           |         |
 | Bulkmail webservice                         | N/A                       | N/A                       | N/A     |
 
