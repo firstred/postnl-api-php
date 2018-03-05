@@ -134,6 +134,7 @@ class LabellingService extends AbstractService
      *
      * @return array
      * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws \ReflectionException
      */
     public function generateLabelsREST(array $generateLabels)
     {
@@ -345,8 +346,8 @@ class LabellingService extends AbstractService
             ]),
             [
                 'apikey'       => $apiKey,
-                'Content-Type' => 'application/json',
                 'Accept'       => 'application/json',
+                'Content-Type' => 'application/json;charset=UTF-8',
             ],
             json_encode($generateLabel, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES)
         );
@@ -393,8 +394,8 @@ class LabellingService extends AbstractService
             $endpoint,
             [
                 'SOAPAction'   => "\"$soapAction\"",
-                'Content-Type' => 'text/xml',
                 'Accept'       => 'text/xml',
+                'Content-Type' => 'text/xml;charset=UTF-8',
             ],
             $request
         );

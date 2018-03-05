@@ -475,8 +475,8 @@ class ShippingStatusService extends AbstractService
             ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint,
             [
                 'apikey'       => $apiKey,
-                'Content-Type' => 'application/json',
                 'Accept'       => 'application/json',
+                'Content-Type' => 'application/json;charset=UTF-8',
             ]
         );
     }
@@ -521,8 +521,8 @@ class ShippingStatusService extends AbstractService
             $endpoint,
             [
                 'SOAPAction'   => "\"$soapAction\"",
-                'Content-Type' => 'text/xml',
                 'Accept'       => 'text/xml',
+                'Content-Type' => 'text/xml;charset=UTF-8',
             ],
             $request
         );
@@ -574,8 +574,8 @@ class ShippingStatusService extends AbstractService
             ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint,
             [
                 'apikey'       => $apiKey,
-                'Content-Type' => 'application/json',
                 'Accept'       => 'application/json',
+                'Content-Type' => 'application/json;charset=UTF-8',
             ]
         );
     }
@@ -626,8 +626,8 @@ class ShippingStatusService extends AbstractService
             $endpoint,
             [
                 'SOAPAction'   => "\"$soapAction\"",
-                'Content-Type' => 'text/xml',
                 'Accept'       => 'text/xml',
+                'Content-Type' => 'text/xml;charset=UTF-8',
             ],
             $request
         );
@@ -650,8 +650,8 @@ class ShippingStatusService extends AbstractService
             $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT."/signature/{$getSignature->getShipment()->geBarcode()}",
             [
                 'apikey'       => $apiKey,
-                'Content-Type' => 'application/json',
                 'Accept'       => 'application/json',
+                'Content-Type' => 'application/json;charset=UTF-8',
             ]
         );
     }
@@ -696,8 +696,8 @@ class ShippingStatusService extends AbstractService
             $endpoint,
             [
                 'SOAPAction'   => "\"$soapAction\"",
-                'Content-Type' => 'text/xml',
                 'Accept'       => 'text/xml',
+                'Content-Type' => 'text/xml;charset=UTF-8',
             ],
             $request
         );

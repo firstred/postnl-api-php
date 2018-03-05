@@ -24,7 +24,7 @@
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Tests;
+namespace ThirtyBees\PostNL\Tests\Misc;
 
 use ThirtyBees\PostNL\Entity\Address;
 use ThirtyBees\PostNL\Entity\Customer;
@@ -34,7 +34,7 @@ use ThirtyBees\PostNL\PostNL;
 /**
  * Class PostNLTest
  *
- * @package ThirtyBees\PostNL\Tests
+ * @package ThirtyBees\PostNL\Tests\Misc
  *
  * @testdox The PostNL object
  */
@@ -98,7 +98,7 @@ class PostNLTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @testdox returns a valid customer code in XML mode
+     * @testdox returns a valid customer code in SOAP mode
      */
     public function testPostNLSoap()
     {

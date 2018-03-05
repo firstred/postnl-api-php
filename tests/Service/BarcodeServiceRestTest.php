@@ -146,6 +146,7 @@ class BarcodeServiceRestTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEmpty((string) $request->getBody());
         $this->assertEquals('test', $request->getHeaderLine('apikey'));
+        $this->assertEquals('', $request->getHeaderLine('Content-Type'));
         $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
     }
 

@@ -268,8 +268,8 @@ class BarcodeService extends AbstractService
                 : ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT),
             [
                 'SOAPAction'   => "\"$soapAction\"",
-                'Content-Type' => 'text/xml',
                 'Accept'       => 'text/xml',
+                'Content-Type' => 'text/xml;charset=UTF-8',
             ],
             $request
         );

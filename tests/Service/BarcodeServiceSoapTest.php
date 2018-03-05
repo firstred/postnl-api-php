@@ -114,19 +114,27 @@ class BarcodeServiceSoapTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreatesAValid3SBarcodeRequest()
     {
-        $this->lastRequest = $request = $this->service->buildGenerateBarcodeRESTRequest(
+        $type = '3S';
+        $range = $this->getRange('3S');
+        $serie = $this->postnl->findBarcodeSerie('3S', $range, false);
+
+        $this->lastRequest = $request = $this->service->buildGenerateBarcodeSOAPRequest(
             GenerateBarcode::create()
                 ->setBarcode(
                     Barcode::create()
-                        ->setRange($this->getRange('3S'))
-                        ->setSerie($this->postnl->findBarcodeSerie('3S', $this->getRange('3S'), false))
-                        ->setType('3S')
+                        ->setRange($range)
+                        ->setSerie($serie)
+                        ->setType($type)
                 )
                 ->setMessage(new Message())
                 ->setCustomer($this->postnl->getCustomer())
         );
 
-        $this->assertTrue(true);
+        global $logger;
+        $logger->debug((string) $request->getBody());
+
+        $this->assertEmpty($request->getHeaderLine('apikey'));
+        $this->assertEquals('text/xml', $request->getHeaderLine('Accept'));
     }
 
     /**
