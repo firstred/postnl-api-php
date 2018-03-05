@@ -200,8 +200,6 @@ class PostNL
         }
 
         throw new InvalidArgumentException('Invalid username/token');
-
-        return $this;
     }
 
     /**
