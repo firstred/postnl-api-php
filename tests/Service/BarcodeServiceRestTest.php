@@ -26,17 +26,31 @@
 
 namespace ThirtyBees\PostNL\Tests\Service;
 
+use GuzzleHttp\Psr7\Request;
 use ThirtyBees\PostNL\Entity\Address;
+use ThirtyBees\PostNL\Entity\Barcode;
 use ThirtyBees\PostNL\Entity\Customer;
+use ThirtyBees\PostNL\Entity\Message\Message;
+use ThirtyBees\PostNL\Entity\Request\GenerateBarcode;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
 use ThirtyBees\PostNL\PostNL;
+use ThirtyBees\PostNL\Service\BarcodeService;
 
+/**
+ * Class BarcodeServiceTest
+ *
+ * @package ThirtyBees\PostNL\Tests\Service
+ *
+ * @testdox The BarcodeService (REST)
+ */
 class BarcodeServiceTest extends \PHPUnit_Framework_TestCase
 {
     /** @var PostNL $postnl */
-    protected $postnlXml;
-    /** @var PostNL $postnlRest */
-    protected $postnlRest;
+    protected $postnl;
+    /** @var BarcodeService $service */
+    protected $service;
+    /** @var $lastRequest */
+    protected $lastRequest;
 
     /**
      * @before
@@ -45,29 +59,7 @@ class BarcodeServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function setupPostNL()
     {
-        $this->postnlXml = new PostNL(
-            Customer::create()
-                ->setCollectionLocation('123456')
-                ->setCustomerCode('DEVC')
-                ->setCustomerNumber('11223344')
-                ->setContactPerson('Test')
-                ->setAddress(Address::create([
-                    'AddressType' => '02',
-                    'City'        => 'Hoofddorp',
-                    'CompanyName' => 'PostNL',
-                    'Countrycode' => 'NL',
-                    'HouseNr'     => '42',
-                    'Street'      => 'Siriusdreef',
-                    'Zipcode'     => '2132WT',
-                ]))
-                ->setGlobalPackBarcodeType('AB')
-                ->setGlobalPackCustomerCode('1234')
-            , new UsernameToken(null, 'test'),
-            true,
-            PostNL::MODE_SOAP
-        );
-
-        $this->postnlRest = new PostNL(
+        $this->postnl = new PostNL(
             Customer::create()
                 ->setCollectionLocation('123456')
                 ->setCustomerCode('DEVC')
@@ -88,10 +80,66 @@ class BarcodeServiceTest extends \PHPUnit_Framework_TestCase
             true,
             PostNL::MODE_REST
         );
+
+        $this->service = $this->postnl->getBarcodeService();
     }
 
-    public function testDummy()
+    /**
+     * @after
+     */
+    public function logPendingRequest()
     {
-        $this->assertTrue(true);
+        if (!$this->lastRequest instanceof Request) {
+            return;
+        }
+
+        global $logger;
+        $logger->debug($this->getName()." Request\n".\GuzzleHttp\Psr7\str($this->lastRequest));
+        $this->lastRequest = null;
+    }
+
+    /**
+     * @testdox returns a valid service object
+     */
+    public function testHasValidBarcodeService()
+    {
+        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Service\\BarcodeService', $this->service);
+    }
+
+    /**
+     * @testdox creates a valid 3S barcode request
+     *
+     * @throws \ReflectionException
+     * @throws \ThirtyBees\PostNL\Exception\InvalidBarcodeException
+     */
+    public function testCreatesAValid3SBarcodeRequest()
+    {
+        $this->lastRequest = $request = $this->service->buildGenerateBarcodeRESTRequest(
+            GenerateBarcode::create()
+                ->setBarcode(
+                    Barcode::create()
+                        ->setRange($this->getRange('3S'))
+                        ->setSerie($this->postnl->findBarcodeSerie('3S', $this->getRange('3S'), false))
+                        ->setType('3S')
+                )
+                ->setMessage(new Message())
+                ->setCustomer($this->postnl->getCustomer())
+        );
+
+        $this->assertInstanceOf('\\GuzzleHttp\\Psr7\\Request', $request);
+    }
+
+    /**
+     * @param string $type
+     *
+     * @return string
+     */
+    protected function getRange($type)
+    {
+        if (in_array($type, ['2S', '3S'])) {
+            return $this->postnl->getCustomer()->getCustomerCode();
+        } else {
+            return $this->postnl->getCustomer()->getGlobalPackCustomerCode();
+        }
     }
 }

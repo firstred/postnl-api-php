@@ -462,7 +462,7 @@ class PostNL implements LoggerAwareInterface
      *
      * Automatically load the barcode service
      *
-     * @return ConfirmingService
+     * @return ShippingStatusService
      */
     public function getShippingStatusService()
     {
@@ -494,7 +494,7 @@ class PostNL implements LoggerAwareInterface
      * @return string The barcode as a string
      * @throws InvalidBarcodeException
      */
-    public function generateBarcode($type, $range = null, $serie = null, $eps = false)
+    public function generateBarcode($type = '3S', $range = null, $serie = null, $eps = false)
     {
         if (!in_array($type, ['2S', '3S', 'CC', 'CD', 'CF', 'CP', 'CX'])) {
             throw new InvalidBarcodeException("Barcode type `$type` is invalid");
@@ -845,7 +845,7 @@ class PostNL implements LoggerAwareInterface
      * @return string
      * @throws InvalidBarcodeException
      */
-    protected function findBarcodeSerie($type, $range, $eps)
+    public function findBarcodeSerie($type, $range, $eps)
     {
         switch ($type) {
             case '2S':

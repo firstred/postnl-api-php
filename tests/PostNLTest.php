@@ -31,6 +31,13 @@ use ThirtyBees\PostNL\Entity\Customer;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
 use ThirtyBees\PostNL\PostNL;
 
+/**
+ * Class PostNLTest
+ *
+ * @package ThirtyBees\PostNL\Tests
+ *
+ * @testdox The PostNL object
+ */
 class PostNLTest extends \PHPUnit_Framework_TestCase
 {
     /** @var PostNL $postnl */
@@ -90,15 +97,27 @@ class PostNLTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @testdox returns a valid customer code in XML mode
+     */
     public function testPostNLXml()
     {
         $this->assertEquals('DEVC', $this->postnlXml->getCustomer()->getCustomerCode());
     }
 
+    /**
+     * @testdox returns a valid customer code in REST mode
+     */
     public function testPostNLRest()
     {
         $this->assertEquals('DEVC', $this->postnlRest->getCustomer()->getCustomerCode());
     }
 
-
+    /**
+     * @testdox returns a valid customer
+     */
+    public function testCustomer()
+    {
+        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Customer', $this->postnlRest->getCustomer());
+    }
 }
