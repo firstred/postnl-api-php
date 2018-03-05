@@ -44,18 +44,19 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method bool         getAllowSundaySorting()
- * @method string       getCity()
- * @method string       getCountryCode()
- * @method CutOffTime[] getCutOffTimes()
- * @method string       getHouseNr()
- * @method string       getHouseNrExt()
- * @method string[]     getOptions()
- * @method string       getOriginCountryCode()
- * @method string       getPostalCode()
- * @method string       getShippingDate()
- * @method string       getStreet()
- * @method string       getGetDeliveryDate()
+ * @method bool            getAllowSundaySorting()
+ * @method string          getCity()
+ * @method string          getCountryCode()
+ * @method CutOffTime[]    getCutOffTimes()
+ * @method string          getHouseNr()
+ * @method string          getHouseNrExt()
+ * @method string[]        getOptions()
+ * @method string          getOriginCountryCode()
+ * @method string          getPostalCode()
+ * @method string          getShippingDate()
+ * @method string          getShippingDuration()
+ * @method string          getStreet()
+ * @method GetDeliveryDate getGetDeliveryDate()
  *
  * @method GetDeliveryDate setAllowSundaySorting(bool $allowSundaySorting)
  * @method GetDeliveryDate setCity(string $city)
@@ -67,6 +68,7 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method GetDeliveryDate setOriginCountryCode(string $code)
  * @method GetDeliveryDate setPostalCode(string $postcode)
  * @method GetDeliveryDate setShippingDate(string $date)
+ * @method GetDeliveryDate setShippingDuration(int $duration)
  * @method GetDeliveryDate setStreet(string $street)
  * @method GetDeliveryDate setGetDeliveryDate(GetDeliveryDate $date)
  */
@@ -89,6 +91,7 @@ class GetDeliveryDate extends AbstractEntity
             'OriginCountryCode'  => BarcodeService::DOMAIN_NAMESPACE,
             'PostalCode'         => BarcodeService::DOMAIN_NAMESPACE,
             'ShippingDate'       => BarcodeService::DOMAIN_NAMESPACE,
+            'ShippingDuration'   => BarcodeService::DOMAIN_NAMESPACE,
             'Street'             => BarcodeService::DOMAIN_NAMESPACE,
             'GetDeliveryDate'    => BarcodeService::DOMAIN_NAMESPACE,
         ],
@@ -103,6 +106,7 @@ class GetDeliveryDate extends AbstractEntity
             'OriginCountryCode'  => ConfirmingService::DOMAIN_NAMESPACE,
             'PostalCode'         => ConfirmingService::DOMAIN_NAMESPACE,
             'ShippingDate'       => ConfirmingService::DOMAIN_NAMESPACE,
+            'ShippingDuration'   => ConfirmingService::DOMAIN_NAMESPACE,
             'Street'             => ConfirmingService::DOMAIN_NAMESPACE,
             'GetDeliveryDate'    => ConfirmingService::DOMAIN_NAMESPACE,
         ],
@@ -117,6 +121,7 @@ class GetDeliveryDate extends AbstractEntity
             'OriginCountryCode'  => LabellingService::DOMAIN_NAMESPACE,
             'PostalCode'         => LabellingService::DOMAIN_NAMESPACE,
             'ShippingDate'       => LabellingService::DOMAIN_NAMESPACE,
+            'ShippingDuration'   => LabellingService::DOMAIN_NAMESPACE,
             'Street'             => LabellingService::DOMAIN_NAMESPACE,
             'GetDeliveryDate'    => LabellingService::DOMAIN_NAMESPACE,
         ],
@@ -131,6 +136,7 @@ class GetDeliveryDate extends AbstractEntity
             'OriginCountryCode'  => ShippingStatusService::DOMAIN_NAMESPACE,
             'PostalCode'         => ShippingStatusService::DOMAIN_NAMESPACE,
             'ShippingDate'       => ShippingStatusService::DOMAIN_NAMESPACE,
+            'ShippingDuration'   => ShippingStatusService::DOMAIN_NAMESPACE,
             'Street'             => ShippingStatusService::DOMAIN_NAMESPACE,
             'GetDeliveryDate'    => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
@@ -145,6 +151,7 @@ class GetDeliveryDate extends AbstractEntity
             'OriginCountryCode'  => DeliveryDateService::DOMAIN_NAMESPACE,
             'PostalCode'         => DeliveryDateService::DOMAIN_NAMESPACE,
             'ShippingDate'       => DeliveryDateService::DOMAIN_NAMESPACE,
+            'ShippingDuration'   => DeliveryDateService::DOMAIN_NAMESPACE,
             'Street'             => DeliveryDateService::DOMAIN_NAMESPACE,
             'GetDeliveryDate'    => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
@@ -159,6 +166,7 @@ class GetDeliveryDate extends AbstractEntity
             'OriginCountryCode'  => LocationService::DOMAIN_NAMESPACE,
             'PostalCode'         => LocationService::DOMAIN_NAMESPACE,
             'ShippingDate'       => LocationService::DOMAIN_NAMESPACE,
+            'ShippingDuration'   => LocationService::DOMAIN_NAMESPACE,
             'Street'             => LocationService::DOMAIN_NAMESPACE,
             'GetDeliveryDate'    => LocationService::DOMAIN_NAMESPACE,
         ],
@@ -173,6 +181,7 @@ class GetDeliveryDate extends AbstractEntity
             'OriginCountryCode'  => TimeframeService::DOMAIN_NAMESPACE,
             'PostalCode'         => TimeframeService::DOMAIN_NAMESPACE,
             'ShippingDate'       => TimeframeService::DOMAIN_NAMESPACE,
+            'ShippingDuration'   => TimeframeService::DOMAIN_NAMESPACE,
             'Street'             => TimeframeService::DOMAIN_NAMESPACE,
             'GetDeliveryDate'    => TimeframeService::DOMAIN_NAMESPACE,
         ],
@@ -209,17 +218,18 @@ class GetDeliveryDate extends AbstractEntity
     /**
      * GetDeliveryDate constructor.
      *
-     * @param bool            $allowSundaySorting
-     * @param string|null     $city
-     * @param string|null     $countryCode
-     * @param array           $cutOffTimes
-     * @param string|null     $houseNr
-     * @param string|null     $houseNrExt
-     * @param array           $options
-     * @param string|null     $originCountryCode
-     * @param string|null     $postalCode
-     * @param string|null     $shippingDate
-     * @param string|null     $street
+     * @param bool        $allowSundaySorting
+     * @param string|null $city
+     * @param string|null $countryCode
+     * @param array       $cutOffTimes
+     * @param string|null $houseNr
+     * @param string|null $houseNrExt
+     * @param array       $options
+     * @param string|null $originCountryCode
+     * @param string|null $postalCode
+     * @param string|null $shippingDate
+     * @param string|null $shippingDuration
+     * @param string|null $street
      * @param GetDeliveryDate $getDeliveryDate
      */
     public function __construct(
@@ -233,6 +243,7 @@ class GetDeliveryDate extends AbstractEntity
         $originCountryCode = null,
         $postalCode = null,
         $shippingDate = null,
+        $shippingDuration = null,
         $street = null,
         GetDeliveryDate $getDeliveryDate = null
     ) {
@@ -248,6 +259,7 @@ class GetDeliveryDate extends AbstractEntity
         $this->setOriginCountryCode($originCountryCode);
         $this->setPostalCode($postalCode);
         $this->setShippingDate($shippingDate);
+        $this->setShippingDuration($shippingDuration);
         $this->setStreet($street);
         $this->setGetDeliveryDate($getDeliveryDate);
     }

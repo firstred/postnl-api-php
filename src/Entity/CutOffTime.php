@@ -41,41 +41,50 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @method string getDay()
  * @method string getTime()
+ * @method bool   getAvailable()
  *
  * @method CutOffTime setDay(string $day)
  * @method CutOffTime setTime(string $time)
+ * @method CutOffTime setAvailable(bool $available)
  */
 class CutOffTime extends AbstractEntity
 {
     /** @var string[] $defaultProperties */
     public static $defaultProperties = [
         'Barcode'        => [
-            'Day'  => BarcodeService::DOMAIN_NAMESPACE,
-            'Time' => BarcodeService::DOMAIN_NAMESPACE,
+            'Day'       => BarcodeService::DOMAIN_NAMESPACE,
+            'Time'      => BarcodeService::DOMAIN_NAMESPACE,
+            'Available' => BarcodeService::DOMAIN_NAMESPACE,
         ],
         'Confirming'     => [
-            'Day'  => ConfirmingService::DOMAIN_NAMESPACE,
-            'Time' => ConfirmingService::DOMAIN_NAMESPACE,
+            'Day'       => ConfirmingService::DOMAIN_NAMESPACE,
+            'Time'      => ConfirmingService::DOMAIN_NAMESPACE,
+            'Available' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
         'Labelling'      => [
-            'Day'  => LabellingService::DOMAIN_NAMESPACE,
-            'Time' => LabellingService::DOMAIN_NAMESPACE,
+            'Day'       => LabellingService::DOMAIN_NAMESPACE,
+            'Time'      => LabellingService::DOMAIN_NAMESPACE,
+            'Available' => LabellingService::DOMAIN_NAMESPACE,
         ],
         'ShippingStatus' => [
-            'Day'  => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Time' => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Day'       => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Time'      => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Available' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate'   => [
-            'Day'  => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Time' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Day'       => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Time'      => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Available' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
         'Location'       => [
-            'Day'  => LocationService::DOMAIN_NAMESPACE,
-            'Time' => LocationService::DOMAIN_NAMESPACE,
+            'Day'       => LocationService::DOMAIN_NAMESPACE,
+            'Time'      => LocationService::DOMAIN_NAMESPACE,
+            'Available' => LocationService::DOMAIN_NAMESPACE,
         ],
         'Timeframe'      => [
-            'Day'  => TimeframeService::DOMAIN_NAMESPACE,
-            'Time' => TimeframeService::DOMAIN_NAMESPACE,
+            'Day'       => TimeframeService::DOMAIN_NAMESPACE,
+            'Time'      => TimeframeService::DOMAIN_NAMESPACE,
+            'Available' => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
@@ -83,17 +92,21 @@ class CutOffTime extends AbstractEntity
     protected $Day;
     /** @var string $Time */
     protected $Time;
+    /** @var bool $Available */
+    protected $Available;
     // @codingStandardsIgnoreEnd
 
     /**
      * @param string $day
      * @param string $time
+     * @param bool $available
      */
-    public function __construct($day = null, $time = null)
+    public function __construct($day = null, $time = null, $available = false)
     {
         parent::__construct();
 
         $this->setDay($day);
         $this->setTime($time);
+        $this->setAvailable($available);
     }
 }

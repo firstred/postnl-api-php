@@ -468,7 +468,7 @@ class ShippingStatusService extends AbstractService
           } else {
             $endpoint = "/barcode/{$currentStatus->getShipment()->getBarcode()}";
         }
-        $endpoint .= '?'.\GuzzleHttp\Psr7\build_query($query);
+        $endpoint .= '?'.http_build_query($query);
 
         return new Request(
             'POST',

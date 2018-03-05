@@ -34,7 +34,7 @@ hopefully be completed soon.
 | Confirming webservice                       | beta                      | beta                      | 1.10    |
 | Shippingstatus webservice                   | alpha                     | alpha                     | 1.6     |
 | **Delivery Options**                        |                           |                           |         |
-| Deliverydate webservice                     | Expected: March, 2018     | Expected: March, 2018     | 2.2     |
+| Deliverydate webservice                     | alpha                     | alpha                     | 2.2     |
 | Location webservice                         | Expected: March, 2018     | Expected: March, 2018     | 2.1     |
 | Timeframe webservice                        | Expected: March, 2018     | Expected: March, 2018     | 2.1     |
 | **Mail**                                    |                           |                           |         |

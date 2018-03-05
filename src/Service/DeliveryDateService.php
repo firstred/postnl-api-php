@@ -29,12 +29,14 @@ namespace ThirtyBees\PostNL\Service;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Psr\Cache\CacheItemInterface;
-use Psr\Cache\CacheItemPoolInterface;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Service as XmlService;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
-use ThirtyBees\PostNL\Entity\Response\GetDeliveryDateResponse;
+use ThirtyBees\PostNL\Entity\CutOffTime;
 use ThirtyBees\PostNL\Entity\Request\GetDeliveryDate;
+use ThirtyBees\PostNL\Entity\Request\GetSentDate;
+use ThirtyBees\PostNL\Entity\Response\GetDeliveryDateResponse;
+use ThirtyBees\PostNL\Entity\Response\GetSentDateResponse;
 use ThirtyBees\PostNL\Entity\SOAP\Security;
 use ThirtyBees\PostNL\Exception\ApiException;
 use ThirtyBees\PostNL\Exception\CifDownException;
@@ -46,8 +48,8 @@ use ThirtyBees\PostNL\PostNL;
  *
  * @package ThirtyBees\PostNL\Service
  *
- * @method GetDeliveryDateResponse   GetDeliveryDate(GetDeliveryDate $GetDeliveryDate, bool $confirm)
- * @method GetDeliveryDateResponse[] GetDeliveryDates(GetDeliveryDate[] $GetDeliveryDate, bool $confirm)
+ * @method GetDeliveryDateResponse getDeliveryDate(GetDeliveryDate $getDeliveryDate)
+ * @method GetSentDateResponse     getSentDate(GetSentDate $getSentDate)
  */
 class DeliveryDateService extends AbstractService
 {
@@ -84,7 +86,7 @@ class DeliveryDateService extends AbstractService
     /**
      * Get a delivery date via REST
      *
-     * @param GetDeliveryDate $GetDeliveryDate
+     * @param GetDeliveryDate $getDeliveryDate
      *
      * @return GetDeliveryDateResponse
      *
@@ -95,9 +97,9 @@ class DeliveryDateService extends AbstractService
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
-    public function GetDeliveryDateREST(GetDeliveryDate $GetDeliveryDate)
+    public function getDeliveryDateREST(GetDeliveryDate $getDeliveryDate)
     {
-        $item = $this->retrieveCachedItem($GetDeliveryDate->getId());
+        $item = $this->retrieveCachedItem($getDeliveryDate->getId());
         $response = null;
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
@@ -107,11 +109,11 @@ class DeliveryDateService extends AbstractService
             }
         }
         if (!$response instanceof Response) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetDeliveryDateRESTRequest($GetDeliveryDate));
+            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetDeliveryDateRESTRequest($getDeliveryDate));
             static::validateRESTResponse($response);
         }
         $body = json_decode(static::getResponseText($response), true);
-        if (isset($body['ResponseShipments'])) {
+        if (isset($body['DeliveryDate'])) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof Response
                 && $response->getStatusCode() === 200
@@ -127,80 +129,9 @@ class DeliveryDateService extends AbstractService
     }
 
     /**
-     * Generate multiple labels at once
-     *
-     * @param array $GetDeliveryDates ['uuid' => [GenerateBarcode, confirm], ...]
-     *
-     * @return array
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
-     */
-    public function GetDeliveryDatesREST(array $GetDeliveryDates)
-    {
-        $httpClient = $this->postnl->getHttpClient();
-
-        $responses = [];
-        foreach ($GetDeliveryDates as $uuid => $GetDeliveryDate) {
-            $item = $this->retrieveCachedItem($uuid);
-            $response = null;
-            if ($item instanceof CacheItemInterface) {
-                $response = $item->get();
-                try {
-                    $response = \GuzzleHttp\Psr7\parse_response($response);
-                } catch (\InvalidArgumentException $e) {
-                }
-                if ($response instanceof Response) {
-                    $responses[$uuid] = $response;
-
-                    continue;
-                }
-            }
-
-            $httpClient->addOrUpdateRequest(
-                $uuid,
-                $this->buildGetDeliveryDateRESTRequest($GetDeliveryDate[0], $GetDeliveryDate[1])
-            );
-        }
-        $newResponses = $httpClient->doRequests();
-        foreach ($newResponses as $uuid => $newResponse) {
-            if ($newResponse instanceof Response
-                && $newResponse->getStatusCode() === 200
-            ) {
-                $item = $this->retrieveCachedItem($uuid);
-                if ($item instanceof CacheItemInterface) {
-                    $item->set(\GuzzleHttp\Psr7\str($newResponse));
-                    $this->cache->saveDeferred($item);
-                }
-            }
-        }
-        if ($this->cache instanceof CacheItemPoolInterface) {
-            $this->cache->commit();
-        }
-
-        $labels = [];
-        foreach ($responses + $newResponses as $uuid => $response) {
-            $label = json_decode(static::getResponseText($response), true);
-            try {
-                static::validateRESTResponse($response);
-                if (isset($label['ResponseShipments'])) {
-                    $barcode = AbstractEntity::jsonDeserialize(['GetDeliveryDateResponse' => $label]);
-                } else {
-                    throw new ApiException('Unable to generate label');
-                }
-            } catch (\Exception $e) {
-                $barcode = $e;
-            }
-
-            $labels[$uuid] = $barcode;
-        }
-
-        return $labels;
-    }
-
-    /**
      * Generate a single label via SOAP
      *
-     * @param GetDeliveryDate $GetDeliveryDate
-     * @param bool          $confirm
+     * @param GetDeliveryDate $getDeliveryDate
      *
      * @return GetDeliveryDateResponse
      * @throws CifDownException
@@ -210,7 +141,101 @@ class DeliveryDateService extends AbstractService
      * @throws \Sabre\Xml\LibXMLException
      * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
-    public function GetDeliveryDateSOAP(GetDeliveryDate $GetDeliveryDate, $confirm = false)
+    public function getDeliveryDateSOAP(GetDeliveryDate $getDeliveryDate)
+    {
+        $item = $this->retrieveCachedItem($getDeliveryDate->getId());
+        $response = null;
+        if ($item instanceof CacheItemInterface) {
+            $response = $item->get();
+            try {
+                $response = \GuzzleHttp\Psr7\parse_response($response);
+            } catch (\InvalidArgumentException $e) {
+            }
+        }
+        if (!$response instanceof Response) {
+            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetDeliveryDateSOAPRequest($getDeliveryDate));
+        }
+        $xml = simplexml_load_string(static::getResponseText($response));
+
+        static::registerNamespaces($xml);
+        static::validateSOAPResponse($xml);
+
+        if ($item instanceof CacheItemInterface
+            && $response instanceof Response
+            && $response->getStatusCode() === 200
+        ) {
+            $item->set(\GuzzleHttp\Psr7\str($response));
+            $this->cacheItem($item);
+        }
+
+        $reader = new Reader();
+        $reader->xml(static::getResponseText($response));
+        $array = array_values($reader->parse()['value'][0]['value']);
+        $array = $array[0];
+
+        return AbstractEntity::xmlDeserialize($array);
+    }
+
+    /**
+     * Get the sent date via REST
+     *
+     * @param GetSentDate $getSentDate
+     *
+     * @return GetDeliveryDateResponse
+     *
+     * @throws ApiException
+     * @throws CifDownException
+     * @throws CifException
+     * @throws \Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     */
+    public function getSentDateREST(GetSentDate $getSentDate)
+    {
+        $item = $this->retrieveCachedItem($getSentDate->getId());
+        $response = null;
+        if ($item instanceof CacheItemInterface) {
+            $response = $item->get();
+            try {
+                $response = \GuzzleHttp\Psr7\parse_response($response);
+            } catch (\InvalidArgumentException $e) {
+            }
+        }
+        if (!$response instanceof Response) {
+            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetDeliveryDateRESTRequest($getSentDate));
+            static::validateRESTResponse($response);
+        }
+        $body = json_decode(static::getResponseText($response), true);
+        if (isset($body['DeliveryDate'])) {
+            if ($item instanceof CacheItemInterface
+                && $response instanceof Response
+                && $response->getStatusCode() === 200
+            ) {
+                $item->set(\GuzzleHttp\Psr7\str($response));
+                $this->cacheItem($item);
+            }
+
+            return AbstractEntity::jsonDeserialize(['GetSentDateResponse' => $body]);
+        }
+
+        throw new ApiException('Unable to generate label');
+    }
+
+    /**
+     * Generate a single label via SOAP
+     *
+     * @param GetSentDate $GetDeliveryDate
+     * @param bool        $confirm
+     *
+     * @return GetDeliveryDateResponse
+     * @throws CifDownException
+     * @throws CifException
+     * @throws \Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Sabre\Xml\LibXMLException
+     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     */
+    public function getSentDateSOAP(GetSentDate $GetDeliveryDate, $confirm = false)
     {
         $item = $this->retrieveCachedItem($GetDeliveryDate->getId());
         $response = null;
@@ -246,106 +271,96 @@ class DeliveryDateService extends AbstractService
     }
 
     /**
-     * Generate multiple labels at once
-     *
-     * @param array $GetDeliveryDates ['uuid' => [GenerateBarcode, confirm], ...]
-     *
-     * @return array
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
-     * @throws \ReflectionException
-     */
-    public function GetDeliveryDatesSOAP(array $GetDeliveryDates)
-    {
-        $httpClient = $this->postnl->getHttpClient();
-
-        $responses = [];
-        foreach ($GetDeliveryDates as $uuid => $GetDeliveryDate) {
-            $item = $this->retrieveCachedItem($uuid);
-            $response = null;
-            if ($item instanceof CacheItemInterface) {
-                $response = $item->get();
-                try {
-                    $response = \GuzzleHttp\Psr7\parse_response($response);
-                } catch (\InvalidArgumentException $e) {
-                }
-                if ($response instanceof Response) {
-                    $responses[$uuid] = $response;
-
-                    continue;
-                }
-            }
-
-            $httpClient->addOrUpdateRequest(
-                $uuid,
-                $this->buildGetDeliveryDateSOAPRequest($GetDeliveryDate[0], $GetDeliveryDate[1])
-            );
-        }
-
-        $newResponses = $httpClient->doRequests();
-        foreach ($newResponses as $uuid => $newResponse) {
-            if ($newResponse instanceof Response
-                && $newResponse->getStatusCode() === 200
-            ) {
-                $item = $this->retrieveCachedItem($uuid);
-                if ($item instanceof CacheItemInterface) {
-                    $item->set(\GuzzleHttp\Psr7\str($newResponse));
-                    $this->cache->saveDeferred($item);
-                }
-            }
-        }
-        if ($this->cache instanceof CacheItemPoolInterface) {
-            $this->cache->commit();
-        }
-
-        $GetDeliveryDateResponses = [];
-        foreach ($responses + $newResponses as $uuid => $response) {
-            $xml = simplexml_load_string(static::getResponseText($response));
-            if (!$xml instanceof \SimpleXMLElement) {
-                $GetDeliveryDateResponse = new ApiException('Invalid API response');
-            } else {
-                try {
-                    static::registerNamespaces($xml);
-                    static::validateSOAPResponse($xml);
-
-                    $reader = new Reader();
-                    $reader->xml(static::getResponseText($response));
-                    $array = array_values($reader->parse()['value'][0]['value']);
-                    $array = $array[0];
-
-                    $GetDeliveryDateResponse = AbstractEntity::xmlDeserialize($array);
-                } catch (\Exception $e) {
-                    $GetDeliveryDateResponse = $e;
-                }
-            }
-
-            $GetDeliveryDateResponses[$uuid] = $GetDeliveryDateResponse;
-        }
-
-        return $GetDeliveryDateResponses;
-    }
-
-    /**
      * Build the GetDeliveryDate request for the REST API
      *
-     * @param GetDeliveryDate $GetDeliveryDate
-     * @param               $confirm
+     * @param GetDeliveryDate $getDeliveryDate
      *
      * @return Request
      */
-    protected function buildGetDeliveryDateRESTRequest(GetDeliveryDate $GetDeliveryDate)
+    protected function buildGetDeliveryDateRESTRequest(GetDeliveryDate $getDeliveryDate)
     {
         $apiKey = $this->postnl->getRestApiKey();
-        $this->setService($GetDeliveryDate);
+        $this->setService($getDeliveryDate);
+
+        $query = [
+            'ShippingDate' => $getDeliveryDate->getShippingDate(),
+            'Options'      => 'DayTime',
+        ];
+        if ($shippingDuration = $getDeliveryDate->getShippingDuration()) {
+            $query['ShippingDuration'] = $shippingDuration;
+        }
+        if ($times = $cutOffTime = $getDeliveryDate->getCutOffTimes()) {
+            foreach ($times as $time) {
+                /** @var CutOffTime $time */
+                switch ($time->getDay()) {
+                    case '00':
+                        $query['CutOffTime'] = date('H:i:s', strtotime($time->getTime()));
+                        break;
+                    case '01':
+                        $query['CutOffTimeMonday'] = date('H:i:s', strtotime($time->getTime()));
+                        $query['AvailableMonday'] = $time->getAvailable() ? 'true' : false;
+                        break;
+                    case '02':
+                        $query['CutOffTimeTuesday'] = date('H:i:s', strtotime($time->getTime()));
+                        $query['AvailableTuesday'] = $time->getAvailable() ? 'true' : false;
+                        break;
+                    case '03':
+                        $query['CutOffTimeWednesday'] = date('H:i:s', strtotime($time->getTime()));
+                        $query['AvailableWednesday'] = $time->getAvailable() ? 'true' : false;
+                        break;
+                    case '04':
+                        $query['CutOffTimeThursday'] = date('H:i:s', strtotime($time->getTime()));
+                        $query['AvailableThursday'] = $time->getAvailable() ? 'true' : false;
+                        break;
+                    case '05':
+                        $query['CutOffTimeFriday'] = date('H:i:s', strtotime($time->getTime()));
+                        $query['AvailableFriday'] = $time->getAvailable() ? 'true' : false;
+                        break;
+                    case '06':
+                        $query['CutOffTimeSaturday'] = date('H:i:s', strtotime($time->getTime()));
+                        $query['AvailableSaturday'] = $time->getAvailable() ? 'true' : false;
+                        break;
+                    case '07':
+                        $query['CutOffTimeSunday'] = date('H:i:s', strtotime($time->getTime()));
+                        $query['AvailableSunday'] = $time->getAvailable() ? 'true' : false;
+                        break;
+                }
+            }
+        }
+        if ($postcode = $getDeliveryDate->getPostalCode()) {
+            $query['PostalCode'] = $postcode;
+        }
+        $query['CountryCode'] = $getDeliveryDate->getCountryCode();
+        if ($originCountryCode = $getDeliveryDate->getOriginCountryCode()) {
+            $query['OriginCountryCode'] = $originCountryCode;
+        }
+        if ($city = $getDeliveryDate->getCity()) {
+            $query['City'] = $city;
+        }
+        if ($houseNr = $getDeliveryDate->getHouseNr()) {
+            $query['HouseNr'] = $houseNr;
+        }
+        if ($houseNrExt = $getDeliveryDate->getHouseNrExt()) {
+            $query['HouseNrExt'] = $houseNrExt;
+        }
+        foreach ($getDeliveryDate->getOptions() as $option) {
+            if ($option === 'DayTime') {
+                continue;
+            }
+
+            $query['Options'] .= ",$option";
+        }
+
+        $endpoint = '/delivery?'.http_build_query($query);
 
         return new Request(
             'POST',
-            $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT,
+            $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT.$endpoint,
             [
                 'apikey'       => $apiKey,
                 'Content-Type' => 'application/json',
                 'Accept'       => 'application/json',
-            ],
-            json_encode($GetDeliveryDate, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES)
+            ]
         );
     }
 
@@ -353,11 +368,10 @@ class DeliveryDateService extends AbstractService
      * Build the GetDeliveryDate request for the SOAP API
      *
      * @param GetDeliveryDate $getDeliveryDate
-     * @param               $confirm
      *
      * @return Request
      */
-    protected function buildGetDeliveryDateSOAPRequest(GetDeliveryDate $getDeliveryDate, $confirm)
+    protected function buildGetDeliveryDateSOAPRequest(GetDeliveryDate $getDeliveryDate)
     {
         $soapAction = static::SOAP_ACTION;
         $xmlService = new XmlService();
@@ -377,6 +391,101 @@ class DeliveryDateService extends AbstractService
                 ],
                 '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
                     '{'.static::SERVICES_NAMESPACE.'}GetDeliveryDate' => $getDeliveryDate,
+                ],
+            ]
+        );
+
+        $endpoint = $this->postnl->getSandbox()
+            ? ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT)
+            : ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT);
+
+        return new Request(
+            'POST',
+            $endpoint,
+            [
+                'SOAPAction'   => "\"$soapAction\"",
+                'Content-Type' => 'text/xml',
+                'Accept'       => 'text/xml',
+            ],
+            $request
+        );
+    }
+
+    /**
+     * Build the GetSentDate request for the REST API
+     *
+     * @param GetSentDate $getSentDate
+     *
+     * @return Request
+     */
+    protected function buildGetSentDateRESTRequest(GetSentDate $getSentDate)
+    {
+        $apiKey = $this->postnl->getRestApiKey();
+        $this->setService($getSentDate);
+
+        $query = [
+            'ShippingDate' => $getSentDate->getDeliveryDate(),
+        ];
+        $query['CountryCode'] = $getSentDate->getCountryCode();
+        if ($originCountryCode = $getSentDate->getOriginCountryCode()) {
+            $query['OriginCountryCode'] = $originCountryCode;
+        }
+        if ($duration = $getSentDate->getShippingDuration()) {
+            $query['ShippingDuration'] = $duration;
+        }
+        if ($postcode = $getSentDate->getPostalCode()) {
+            $query['PostalCode'] = $postcode;
+        }
+        if ($city = $getSentDate->getCity()) {
+            $query['City'] = $city;
+        }
+        if ($houseNr = $getSentDate->getHouseNr()) {
+            $query['HouseNr'] = $houseNr;
+        }
+        if ($houseNrExt = $getSentDate->getHouseNrExt()) {
+            $query['HouseNrExt'] = $houseNrExt;
+        }
+
+        $endpoint = '/shipping?'.http_build_query($query);
+
+        return new Request(
+            'POST',
+            $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT.$endpoint,
+            [
+                'apikey'       => $apiKey,
+                'Content-Type' => 'application/json',
+                'Accept'       => 'application/json',
+            ]
+        );
+    }
+
+    /**
+     * Build the GetSentDate request for the SOAP API
+     *
+     * @param GetSentDate $getSentDate
+     *
+     * @return Request
+     */
+    protected function buildGetSentDateSOAPRequest(GetSentDate $getSentDate)
+    {
+        $soapAction = static::SOAP_ACTION;
+        $xmlService = new XmlService();
+        foreach (static::$namespaces as $namespace => $prefix) {
+            $xmlService->namespaceMap[$namespace] = $prefix;
+        }
+        $security = new Security($this->postnl->getToken());
+
+        $this->setService($security);
+        $this->setService($getSentDate);
+
+        $request = $xmlService->write(
+            '{'.static::ENVELOPE_NAMESPACE.'}Envelope',
+            [
+                '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
+                    ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
+                ],
+                '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
+                    '{'.static::SERVICES_NAMESPACE.'}GetSentDate' => $getSentDate,
                 ],
             ]
         );
