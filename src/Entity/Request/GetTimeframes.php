@@ -125,15 +125,13 @@ class GetTimeframes extends AbstractEntity
         }
 
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            // TODO: figure something out for the Timeframes
-//            if ($propertyName === 'Timeframes') {
-//                $shipments = [];
-//                foreach ($this->Shipments as $shipment) {
-//                    $shipments[] = ["{{$namespace}}Shipment" => $shipment];
-//                }
-//                $xml["{{$namespace}}Shipments"] = $shipments;
-//            } else
-                if (!is_null($this->{$propertyName})) {
+            if ($propertyName === 'Timeframe') {
+                $timeframes = [];
+                foreach ($this->Timeframe as $timeframe) {
+                    $timeframes[] = $timeframe;
+                }
+                $xml["{{$namespace}}Timeframe"] = $timeframes;
+            } elseif (!is_null($this->{$propertyName})) {
                 $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
             }
         }
