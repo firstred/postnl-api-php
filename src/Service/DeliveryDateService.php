@@ -33,8 +33,8 @@ use Psr\Cache\CacheItemPoolInterface;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Service as XmlService;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
-use ThirtyBees\PostNL\Entity\Response\GenerateLabelResponse;
-use ThirtyBees\PostNL\Entity\Request\GenerateLabel;
+use ThirtyBees\PostNL\Entity\Response\GetDeliveryDateResponse;
+use ThirtyBees\PostNL\Entity\Request\GetDeliveryDate;
 use ThirtyBees\PostNL\Entity\SOAP\Security;
 use ThirtyBees\PostNL\Exception\ApiException;
 use ThirtyBees\PostNL\Exception\CifDownException;
@@ -46,25 +46,25 @@ use ThirtyBees\PostNL\PostNL;
  *
  * @package ThirtyBees\PostNL\Service
  *
- * @method GenerateLabelResponse   generateLabel(GenerateLabel $generateLabel, bool $confirm)
- * @method GenerateLabelResponse[] generateLabels(GenerateLabel[] $generateLabel, bool $confirm)
+ * @method GetDeliveryDateResponse   GetDeliveryDate(GetDeliveryDate $GetDeliveryDate, bool $confirm)
+ * @method GetDeliveryDateResponse[] GetDeliveryDates(GetDeliveryDate[] $GetDeliveryDate, bool $confirm)
  */
 class DeliveryDateService extends AbstractService
 {
     // API Version
-    const VERSION = '2.1';
+    const VERSION = '2.2';
 
     // Endpoints
-    const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v2_1/label';
-    const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2_1/label';
-    const LEGACY_SANDBOX_ENDPOINT = 'https://testservice.postnl.com/CIF_SB/LabellingWebService/2_1/LabellingWebService.svc';
-    const LEGACY_LIVE_ENDPOINT = 'https://service.postnl.com/CIF/LabellingWebService/2_1/LabellingWebService.svc';
+    const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v2_2/calculate/date';
+    const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2_2/calculate/date/';
+    const LEGACY_SANDBOX_ENDPOINT = 'https://testservice.postnl.com/CIF_SB/DeliveryDateWebService/2_1/DeliveryDateWebService.svc';
+    const LEGACY_LIVE_ENDPOINT = 'https://service.postnl.com/CIF/DeliveryDateWebService/2_1/DeliveryDateWebService.svc';
 
     // SOAP API
-    const SOAP_ACTION = 'http://postnl.nl/cif/services/LabellingWebService/ILabellingWebService/GenerateLabel';
-    const SOAP_ACTION_NO_CONFIRM = 'http://postnl.nl/cif/services/LabellingWebService/ILabellingWebService/GenerateLabelWithoutConfirm';
-    const SERVICES_NAMESPACE = 'http://postnl.nl/cif/services/LabellingWebService/';
-    const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/LabellingWebService/';
+    const SOAP_ACTION = 'http://postnl.nl/cif/services/DeliveryDateWebService/IDeliveryDateWebService/GetDeliveryDate';
+    const SOAP_ACTION_SENT = 'http://postnl.nl/cif/services/DeliveryDateWebService/IDeliveryDateWebService/GetSentDate';
+    const SERVICES_NAMESPACE = 'http://postnl.nl/cif/services/DeliveryDateWebService/';
+    const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/DeliveryDateWebService/';
 
     /**
      * Namespaces uses for the SOAP version of this service
@@ -82,12 +82,11 @@ class DeliveryDateService extends AbstractService
     ];
 
     /**
-     * Generate a single barcode via REST
+     * Get a delivery date via REST
      *
-     * @param GenerateLabel $generateLabel
-     * @param bool          $confirm
+     * @param GetDeliveryDate $GetDeliveryDate
      *
-     * @return GenerateLabelResponse
+     * @return GetDeliveryDateResponse
      *
      * @throws ApiException
      * @throws CifDownException
@@ -96,9 +95,9 @@ class DeliveryDateService extends AbstractService
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
-    public function generateLabelREST(GenerateLabel $generateLabel, $confirm = false)
+    public function GetDeliveryDateREST(GetDeliveryDate $GetDeliveryDate)
     {
-        $item = $this->retrieveCachedItem($generateLabel->getId());
+        $item = $this->retrieveCachedItem($GetDeliveryDate->getId());
         $response = null;
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
@@ -108,7 +107,7 @@ class DeliveryDateService extends AbstractService
             }
         }
         if (!$response instanceof Response) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildGenerateLabelRESTRequest($generateLabel, $confirm));
+            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetDeliveryDateRESTRequest($GetDeliveryDate));
             static::validateRESTResponse($response);
         }
         $body = json_decode(static::getResponseText($response), true);
@@ -121,7 +120,7 @@ class DeliveryDateService extends AbstractService
                 $this->cacheItem($item);
             }
 
-            return AbstractEntity::jsonDeserialize(['GenerateLabelResponse' => $body]);
+            return AbstractEntity::jsonDeserialize(['GetDeliveryDateResponse' => $body]);
         }
 
         throw new ApiException('Unable to generate label');
@@ -130,17 +129,17 @@ class DeliveryDateService extends AbstractService
     /**
      * Generate multiple labels at once
      *
-     * @param array $generateLabels ['uuid' => [GenerateBarcode, confirm], ...]
+     * @param array $GetDeliveryDates ['uuid' => [GenerateBarcode, confirm], ...]
      *
      * @return array
      * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
-    public function generateLabelsREST(array $generateLabels)
+    public function GetDeliveryDatesREST(array $GetDeliveryDates)
     {
         $httpClient = $this->postnl->getHttpClient();
 
         $responses = [];
-        foreach ($generateLabels as $uuid => $generateLabel) {
+        foreach ($GetDeliveryDates as $uuid => $GetDeliveryDate) {
             $item = $this->retrieveCachedItem($uuid);
             $response = null;
             if ($item instanceof CacheItemInterface) {
@@ -158,7 +157,7 @@ class DeliveryDateService extends AbstractService
 
             $httpClient->addOrUpdateRequest(
                 $uuid,
-                $this->buildGenerateLabelRESTRequest($generateLabel[0], $generateLabel[1])
+                $this->buildGetDeliveryDateRESTRequest($GetDeliveryDate[0], $GetDeliveryDate[1])
             );
         }
         $newResponses = $httpClient->doRequests();
@@ -183,7 +182,7 @@ class DeliveryDateService extends AbstractService
             try {
                 static::validateRESTResponse($response);
                 if (isset($label['ResponseShipments'])) {
-                    $barcode = AbstractEntity::jsonDeserialize(['GenerateLabelResponse' => $label]);
+                    $barcode = AbstractEntity::jsonDeserialize(['GetDeliveryDateResponse' => $label]);
                 } else {
                     throw new ApiException('Unable to generate label');
                 }
@@ -200,10 +199,10 @@ class DeliveryDateService extends AbstractService
     /**
      * Generate a single label via SOAP
      *
-     * @param GenerateLabel $generateLabel
+     * @param GetDeliveryDate $GetDeliveryDate
      * @param bool          $confirm
      *
-     * @return GenerateLabelResponse
+     * @return GetDeliveryDateResponse
      * @throws CifDownException
      * @throws CifException
      * @throws \Exception
@@ -211,9 +210,9 @@ class DeliveryDateService extends AbstractService
      * @throws \Sabre\Xml\LibXMLException
      * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
-    public function generateLabelSOAP(GenerateLabel $generateLabel, $confirm = false)
+    public function GetDeliveryDateSOAP(GetDeliveryDate $GetDeliveryDate, $confirm = false)
     {
-        $item = $this->retrieveCachedItem($generateLabel->getId());
+        $item = $this->retrieveCachedItem($GetDeliveryDate->getId());
         $response = null;
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
@@ -223,7 +222,7 @@ class DeliveryDateService extends AbstractService
             }
         }
         if (!$response instanceof Response) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildGenerateLabelSOAPRequest($generateLabel, $confirm));
+            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetDeliveryDateSOAPRequest($GetDeliveryDate, $confirm));
         }
         $xml = simplexml_load_string(static::getResponseText($response));
 
@@ -249,18 +248,18 @@ class DeliveryDateService extends AbstractService
     /**
      * Generate multiple labels at once
      *
-     * @param array $generateLabels ['uuid' => [GenerateBarcode, confirm], ...]
+     * @param array $GetDeliveryDates ['uuid' => [GenerateBarcode, confirm], ...]
      *
      * @return array
      * @throws \ThirtyBees\PostNL\Exception\ResponseException
      * @throws \ReflectionException
      */
-    public function generateLabelsSOAP(array $generateLabels)
+    public function GetDeliveryDatesSOAP(array $GetDeliveryDates)
     {
         $httpClient = $this->postnl->getHttpClient();
 
         $responses = [];
-        foreach ($generateLabels as $uuid => $generateLabel) {
+        foreach ($GetDeliveryDates as $uuid => $GetDeliveryDate) {
             $item = $this->retrieveCachedItem($uuid);
             $response = null;
             if ($item instanceof CacheItemInterface) {
@@ -278,7 +277,7 @@ class DeliveryDateService extends AbstractService
 
             $httpClient->addOrUpdateRequest(
                 $uuid,
-                $this->buildGenerateLabelSOAPRequest($generateLabel[0], $generateLabel[1])
+                $this->buildGetDeliveryDateSOAPRequest($GetDeliveryDate[0], $GetDeliveryDate[1])
             );
         }
 
@@ -298,11 +297,11 @@ class DeliveryDateService extends AbstractService
             $this->cache->commit();
         }
 
-        $generateLabelResponses = [];
+        $GetDeliveryDateResponses = [];
         foreach ($responses + $newResponses as $uuid => $response) {
             $xml = simplexml_load_string(static::getResponseText($response));
             if (!$xml instanceof \SimpleXMLElement) {
-                $generateLabelResponse = new ApiException('Invalid API response');
+                $GetDeliveryDateResponse = new ApiException('Invalid API response');
             } else {
                 try {
                     static::registerNamespaces($xml);
@@ -313,56 +312,54 @@ class DeliveryDateService extends AbstractService
                     $array = array_values($reader->parse()['value'][0]['value']);
                     $array = $array[0];
 
-                    $generateLabelResponse = AbstractEntity::xmlDeserialize($array);
+                    $GetDeliveryDateResponse = AbstractEntity::xmlDeserialize($array);
                 } catch (\Exception $e) {
-                    $generateLabelResponse = $e;
+                    $GetDeliveryDateResponse = $e;
                 }
             }
 
-            $generateLabelResponses[$uuid] = $generateLabelResponse;
+            $GetDeliveryDateResponses[$uuid] = $GetDeliveryDateResponse;
         }
 
-        return $generateLabelResponses;
+        return $GetDeliveryDateResponses;
     }
 
     /**
-     * Build the GenerateLabel request for the REST API
+     * Build the GetDeliveryDate request for the REST API
      *
-     * @param GenerateLabel $generateLabel
+     * @param GetDeliveryDate $GetDeliveryDate
      * @param               $confirm
      *
      * @return Request
      */
-    protected function buildGenerateLabelRESTRequest(GenerateLabel $generateLabel, $confirm)
+    protected function buildGetDeliveryDateRESTRequest(GetDeliveryDate $GetDeliveryDate)
     {
         $apiKey = $this->postnl->getRestApiKey();
-        $this->setService($generateLabel);
+        $this->setService($GetDeliveryDate);
 
         return new Request(
             'POST',
-            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).'?'.http_build_query([
-                'confirm' => $confirm
-            ]),
+            $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT,
             [
                 'apikey'       => $apiKey,
                 'Content-Type' => 'application/json',
                 'Accept'       => 'application/json',
             ],
-            json_encode($generateLabel, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES)
+            json_encode($GetDeliveryDate, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES)
         );
     }
 
     /**
-     * Build the GenerateLabel request for the SOAP API
+     * Build the GetDeliveryDate request for the SOAP API
      *
-     * @param GenerateLabel $generateLabel
+     * @param GetDeliveryDate $getDeliveryDate
      * @param               $confirm
      *
      * @return Request
      */
-    protected function buildGenerateLabelSOAPRequest(GenerateLabel $generateLabel, $confirm)
+    protected function buildGetDeliveryDateSOAPRequest(GetDeliveryDate $getDeliveryDate, $confirm)
     {
-        $soapAction = $confirm ? static::SOAP_ACTION : static::SOAP_ACTION_NO_CONFIRM;
+        $soapAction = static::SOAP_ACTION;
         $xmlService = new XmlService();
         foreach (static::$namespaces as $namespace => $prefix) {
             $xmlService->namespaceMap[$namespace] = $prefix;
@@ -370,7 +367,7 @@ class DeliveryDateService extends AbstractService
         $security = new Security($this->postnl->getToken());
 
         $this->setService($security);
-        $this->setService($generateLabel);
+        $this->setService($getDeliveryDate);
 
         $request = $xmlService->write(
             '{'.static::ENVELOPE_NAMESPACE.'}Envelope',
@@ -379,7 +376,7 @@ class DeliveryDateService extends AbstractService
                     ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
                 ],
                 '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
-                    '{'.static::SERVICES_NAMESPACE.'}GenerateLabel' => $generateLabel,
+                    '{'.static::SERVICES_NAMESPACE.'}GetDeliveryDate' => $getDeliveryDate,
                 ],
             ]
         );

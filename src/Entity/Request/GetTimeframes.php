@@ -28,9 +28,9 @@ namespace ThirtyBees\PostNL\Entity\Request;
 
 use Sabre\Xml\Writer;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
-use ThirtyBees\PostNL\Entity\Customer;
-use ThirtyBees\PostNL\Entity\Message\LabellingMessage;
+use ThirtyBees\PostNL\Entity\Message\Message;
 use ThirtyBees\PostNL\Entity\Shipment;
+use ThirtyBees\PostNL\Entity\Timeframe;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
@@ -40,19 +40,17 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class GenerateLabel
+ * Class GetTimeframes
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method Customer         getCustomer()
- * @method LabellingMessage getMessage()
- * @method Shipment[]       getShipments()
+ * @method Message     getMessage()
+ * @method Timeframe[] getTimeframe()
  *
- * @method GenerateLabel setCustomer(Customer $customer)
- * @method GenerateLabel setMessage(LabellingMessage $message)
- * @method GenerateLabel setShipments(Shipment[] $shipments)
+ * @method GetTimeframes setMessage(Message $message)
+ * @method GetTimeframes setTimeframe(Timeframe[] $timeframes)
  */
-class GenerateLabel extends AbstractEntity
+class GetTimeframes extends AbstractEntity
 {
     /**
      * Default properties and namespaces for the SOAP API
@@ -61,90 +59,53 @@ class GenerateLabel extends AbstractEntity
      */
     public static $defaultProperties = [
         'Barcode'        => [
-            'Customer'  => BarcodeService::DOMAIN_NAMESPACE,
             'Message'   => BarcodeService::DOMAIN_NAMESPACE,
-            'Shipments' => BarcodeService::DOMAIN_NAMESPACE,
+            'Timeframe' => BarcodeService::DOMAIN_NAMESPACE,
         ],
         'Confirming'     => [
-            'Customer'  => ConfirmingService::DOMAIN_NAMESPACE,
             'Message'   => ConfirmingService::DOMAIN_NAMESPACE,
-            'Shipments' => ConfirmingService::DOMAIN_NAMESPACE,
+            'Timeframe' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
         'Labelling'      => [
-            'Customer'  => LabellingService::DOMAIN_NAMESPACE,
             'Message'   => LabellingService::DOMAIN_NAMESPACE,
-            'Shipments' => LabellingService::DOMAIN_NAMESPACE,
+            'Timeframe' => LabellingService::DOMAIN_NAMESPACE,
         ],
         'ShippingStatus' => [
             'Message'   => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Customer'  => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Shipments' => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Timeframe' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate'   => [
             'Message'   => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Customer'  => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Shipments' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Timeframe' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
         'Location'       => [
             'Message'   => LocationService::DOMAIN_NAMESPACE,
-            'Customer'  => LocationService::DOMAIN_NAMESPACE,
-            'Shipments' => LocationService::DOMAIN_NAMESPACE,
+            'Timeframe' => LocationService::DOMAIN_NAMESPACE,
         ],
         'Timeframe'      => [
             'Message'   => TimeframeService::DOMAIN_NAMESPACE,
-            'Customer'  => TimeframeService::DOMAIN_NAMESPACE,
-            'Shipments' => TimeframeService::DOMAIN_NAMESPACE,
+            'Timeframe' => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var Customer $Customer */
-    protected $Customer;
-    /** @var LabellingMessage $Message */
+    /** @var Message $Message */
     protected $Message;
-    /** @var Shipment[] $Shipments */
-    protected $Shipments;
+    /** @var Timeframe[] $Timeframe */
+    protected $Timeframe;
     // @codingStandardsIgnoreEnd
 
     /**
-     * GenerateLabel constructor.
+     * GetTimeframes constructor.
      *
-     * @param Shipment[]       $shipments
-     * @param LabellingMessage $message
-     * @param Customer         $customer
+     * @param Message     $message
+     * @param Timeframe[] $timeframes
      */
-    public function __construct(array $shipments, LabellingMessage $message = null, Customer $customer = null)
+    public function __construct(Message $message = null, array $timeframes = [])
     {
         parent::__construct();
 
-        $this->setShipments($shipments);
-        $this->setMessage($message ?: new LabellingMessage());
-        $this->setCustomer($customer);
-    }
-
-    /**
-     * Return a serializable array for `json_encode`
-     *
-     * @return array
-     */
-    public function jsonSerialize()
-    {
-        $json = [];
-        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
-            return $json;
-        }
-
-        foreach (array_keys(static::$defaultProperties[$this->currentService]) as $propertyName) {
-            if (!is_null($this->{$propertyName})) {
-                // The REST API only seems to accept one shipment per request at the moment of writing (Sep. 24th, 2017)
-                if ($propertyName === 'Shipments' && count($this->{$propertyName}) >= 1) {
-                    $json[$propertyName] = $this->{$propertyName}[0];
-                } else {
-                    $json[$propertyName] = $this->{$propertyName};
-                }
-            }
-        }
-
-        return $json;
+        $this->setMessage($message ?: new Message());
+        $this->setTimeframe($timeframes);
     }
 
     /**
@@ -164,13 +125,15 @@ class GenerateLabel extends AbstractEntity
         }
 
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if ($propertyName === 'Shipments') {
-                $shipments = [];
-                foreach ($this->Shipments as $shipment) {
-                    $shipments[] = ["{{$namespace}}Shipment" => $shipment];
-                }
-                $xml["{{$namespace}}Shipments"] = $shipments;
-            } elseif (!is_null($this->{$propertyName})) {
+            // TODO: figure something out for the Timeframes
+//            if ($propertyName === 'Timeframes') {
+//                $shipments = [];
+//                foreach ($this->Shipments as $shipment) {
+//                    $shipments[] = ["{{$namespace}}Shipment" => $shipment];
+//                }
+//                $xml["{{$namespace}}Shipments"] = $shipments;
+//            } else
+                if (!is_null($this->{$propertyName})) {
                 $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
             }
         }

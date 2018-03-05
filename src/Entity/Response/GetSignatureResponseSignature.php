@@ -102,7 +102,7 @@ class GetSignatureResponseSignature extends AbstractEntity
     // @codingStandardsIgnoreEnd
 
     /**
-     * LabelRequest constructor.
+     * GetSignatureResponseSignature constructor.
      *
      * @param string|null $barcode
      * @param string|null $signatureDate

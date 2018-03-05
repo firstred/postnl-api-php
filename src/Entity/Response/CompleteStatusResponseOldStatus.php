@@ -124,7 +124,7 @@ class CompleteStatusResponseOldStatus extends AbstractEntity
     // @codingStandardsIgnoreEnd
 
     /**
-     * LabelRequest constructor.
+     * CompleteStatusResponseOldStatus constructor.
      *
      * @param string|null $code
      * @param string|null $description

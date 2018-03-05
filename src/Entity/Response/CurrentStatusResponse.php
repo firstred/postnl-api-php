@@ -77,12 +77,12 @@ class CurrentStatusResponse extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string $Shipments */
+    /** @var array $Shipments */
     protected $Shipments;
     // @codingStandardsIgnoreEnd
 
     /**
-     * LabelRequest constructor.
+     * CurrentStatusResponse constructor.
      *
      * @param array $shipments
      */

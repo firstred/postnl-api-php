@@ -82,7 +82,7 @@ class CompleteStatusResponse extends AbstractEntity
     // @codingStandardsIgnoreEnd
 
     /**
-     * LabelRequest constructor.
+     * CompleteStatusResponse constructor.
      *
      * @param array $shipments
      */

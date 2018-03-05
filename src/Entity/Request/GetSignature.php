@@ -106,7 +106,7 @@ class GetSignature extends AbstractEntity
     // @codingStandardsIgnoreEnd
 
     /**
-     * LabelRequest constructor.
+     * GetSignature constructor.
      *
      * @param Shipment $shipment
      * @param Customer $customer

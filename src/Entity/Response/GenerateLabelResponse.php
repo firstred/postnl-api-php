@@ -91,7 +91,7 @@ class GenerateLabelResponse extends AbstractEntity
     // @codingStandardsIgnoreEnd
 
     /**
-     * LabelRequest constructor.
+     * GenerateLabelResponse constructor.
      *
      * @param MergedLabel[]      $mergedLabels
      * @param ResponseShipment[] $responseShipments

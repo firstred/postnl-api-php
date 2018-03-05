@@ -146,7 +146,7 @@ class CompleteStatusResponseEvent extends AbstractEntity
     // @codingStandardsIgnoreEnd
 
     /**
-     * LabelRequest constructor.
+     * CompleteStatusResponseEvent constructor.
      *
      * @param string $code
      * @param string $description

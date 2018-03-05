@@ -27,8 +27,7 @@
 namespace ThirtyBees\PostNL\Entity\Request;
 
 use ThirtyBees\PostNL\Entity\AbstractEntity;
-use ThirtyBees\PostNL\Entity\Barcode;
-use ThirtyBees\PostNL\Entity\Customer;
+use ThirtyBees\PostNL\Entity\Location;
 use ThirtyBees\PostNL\Entity\Message\Message;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
@@ -39,19 +38,19 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class GenerateLabel
+ * Class GetLocation
+ *
+ * This class is both the container and can be the actual GetLocation object itself!
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method Customer getCustomer()
+ * @method Location getLocation()
  * @method Message  getMessage()
- * @method Barcode  getBarcode()
  *
- * @method GenerateBarcode setCustomer(Customer $customer)
- * @method GenerateBarcode setMessage(Message $message)
- * @method GenerateBarcode setBarcode(Barcode $shipments)
+ * @method GetLocation setLocation(Location $location = null)
+ * @method GetLocation setMessage(Message $message = null)
  */
-class GenerateBarcode extends AbstractEntity
+class GetLocation extends AbstractEntity
 {
     /**
      * Default properties and namespaces for the SOAP API
@@ -60,63 +59,54 @@ class GenerateBarcode extends AbstractEntity
      */
     public static $defaultProperties = [
         'Barcode'        => [
-            'Message'  => BarcodeService::DOMAIN_NAMESPACE,
-            'Customer' => BarcodeService::DOMAIN_NAMESPACE,
-            'Barcode'  => BarcodeService::DOMAIN_NAMESPACE,
+            'Location'    => BarcodeService::DOMAIN_NAMESPACE,
+            'Message'     => BarcodeService::DOMAIN_NAMESPACE,
         ],
         'Confirming'     => [
-            'Message'  => ConfirmingService::DOMAIN_NAMESPACE,
-            'Customer' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Barcode'  => ConfirmingService::DOMAIN_NAMESPACE,
+            'Location'    => ConfirmingService::DOMAIN_NAMESPACE,
+            'Message'     => ConfirmingService::DOMAIN_NAMESPACE,
         ],
         'Labelling'      => [
-            'Message'  => LabellingService::DOMAIN_NAMESPACE,
-            'Customer' => LabellingService::DOMAIN_NAMESPACE,
-            'Barcode'  => LabellingService::DOMAIN_NAMESPACE,
+            'Location'    => LabellingService::DOMAIN_NAMESPACE,
+            'Message'     => LabellingService::DOMAIN_NAMESPACE,
         ],
         'ShippingStatus' => [
-            'Message'   => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Customer'  => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Shipments' => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Location'    => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Message'     => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate'   => [
-            'Message'   => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Customer'  => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Shipments' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Location'    => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Message'     => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
         'Location'       => [
-            'Message'   => LocationService::DOMAIN_NAMESPACE,
-            'Customer'  => LocationService::DOMAIN_NAMESPACE,
-            'Shipments' => LocationService::DOMAIN_NAMESPACE,
+            'Location'    => LocationService::DOMAIN_NAMESPACE,
+            'Message'     => LocationService::DOMAIN_NAMESPACE,
         ],
         'Timeframe'      => [
-            'Message'   => TimeframeService::DOMAIN_NAMESPACE,
-            'Customer'  => TimeframeService::DOMAIN_NAMESPACE,
-            'Shipments' => TimeframeService::DOMAIN_NAMESPACE,
+            'Location'    => TimeframeService::DOMAIN_NAMESPACE,
+            'Message'     => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
+    /** @var Location $Location */
+    protected $Location;
     /** @var Message $Message */
     protected $Message;
-    /** @var Customer $Customer */
-    protected $Customer;
-    /** @var Barcode $Barcode */
-    protected $Barcode;
     // @codingStandardsIgnoreEnd
 
     /**
-     * GenerateBarcode constructor.
+     * GetLocation constructor.
      *
-     * @param Barcode      $barcode
-     * @param Customer     $customer
-     * @param Message|null $message
+     * @param Location|null $location
+     * @param Message|null  $message
      */
-    public function __construct(Barcode $barcode, Customer $customer, Message $message = null)
-    {
+    public function __construct(
+        Location $location = null,
+        Message $message = null
+    ) {
         parent::__construct();
 
-        $this->setBarcode($barcode);
-        $this->setCustomer($customer);
+        $this->setLocation($location);
         $this->setMessage($message ?: new Message());
     }
 }

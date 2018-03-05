@@ -24,28 +24,24 @@
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity\Response;
+namespace ThirtyBees\PostNL\Entity\Request;
 
 use ThirtyBees\PostNL\Entity\AbstractEntity;
-use ThirtyBees\PostNL\Entity\Signature;
+use ThirtyBees\PostNL\Entity\Message\Message;
 use ThirtyBees\PostNL\Service\BarcodeService;
-use ThirtyBees\PostNL\Service\ConfirmingService;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
-use ThirtyBees\PostNL\Service\LabellingService;
-use ThirtyBees\PostNL\Service\LocationService;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
-use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class SignatureResponse
+ * Class GetSentDateRequest
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method string getSignature()
+ * @method GetSentDate getGetSentDate()
+ * @method Message     getMessage()
  *
- * @method SignatureResponse setSignature(Signature $signature)
+ * @method GetSentDateRequest setGetSentDate(GetSentDate $date)
+ * @method GetSentDateRequest setMessage(Message $message)
  */
-class SignatureResponse extends AbstractEntity
+class GetSentDateRequest extends AbstractEntity
 {
     /**
      * Default properties and namespaces for the SOAP API
@@ -54,41 +50,54 @@ class SignatureResponse extends AbstractEntity
      */
     public static $defaultProperties = [
         'Barcode'        => [
-            'Signature' => BarcodeService::DOMAIN_NAMESPACE,
+            'GetSentDate' => BarcodeService::DOMAIN_NAMESPACE,
+            'Message'     => BarcodeService::DOMAIN_NAMESPACE,
         ],
         'Confirming'     => [
-            'Signature' => ConfirmingService::DOMAIN_NAMESPACE,
+            'GetSentDate' => BarcodeService::DOMAIN_NAMESPACE,
+            'Message'     => BarcodeService::DOMAIN_NAMESPACE,
         ],
         'Labelling'      => [
-            'Signature' => LabellingService::DOMAIN_NAMESPACE,
+            'GetSentDate' => BarcodeService::DOMAIN_NAMESPACE,
+            'Message'     => BarcodeService::DOMAIN_NAMESPACE,
         ],
         'ShippingStatus' => [
-            'Signature' => ShippingStatusService::DOMAIN_NAMESPACE,
+            'GetSentDate' => BarcodeService::DOMAIN_NAMESPACE,
+            'Message'     => BarcodeService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate'   => [
-            'Signature' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'GetSentDate' => BarcodeService::DOMAIN_NAMESPACE,
+            'Message'     => BarcodeService::DOMAIN_NAMESPACE,
         ],
         'Location'       => [
-            'Signature' => LocationService::DOMAIN_NAMESPACE,
+            'GetSentDate' => BarcodeService::DOMAIN_NAMESPACE,
+            'Message'     => BarcodeService::DOMAIN_NAMESPACE,
         ],
         'Timeframe'      => [
-            'Signature' => TimeframeService::DOMAIN_NAMESPACE,
+            'GetSentDate' => BarcodeService::DOMAIN_NAMESPACE,
+            'Message'     => BarcodeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var Signature $Signature */
-    protected $Signature;
+    /** @var GetSentDate $GetSentDate */
+    protected $GetSentDate;
+    /** @var Message $Message */
+    protected $Message;
     // @codingStandardsIgnoreEnd
 
     /**
-     * SignatureResponse constructor.
+     * GetSentDate constructor.
      *
-     * @param Signature $signature
+     * @param GetSentDate|null $date
+     * @param Message|null     $message
      */
-    public function __construct(Signature $signature)
-    {
+    public function __construct(
+        GetSentDate $date = null,
+        Message $message = null
+    ) {
         parent::__construct();
 
-        $this->setSignature($signature);
+        $this->setGetSentDate($date);
+        $this->setMessage($message ?: new Message());
     }
 }

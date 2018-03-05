@@ -24,13 +24,10 @@
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity\Request;
+namespace ThirtyBees\PostNL\Entity\Response;
 
 use Sabre\Xml\Writer;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
-use ThirtyBees\PostNL\Entity\Customer;
-use ThirtyBees\PostNL\Entity\Message\Message;
-use ThirtyBees\PostNL\Entity\Shipment;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
@@ -40,19 +37,15 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class Confirming
+ * Class GetLocationsResult
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method Customer   getCustomer()
- * @method Message    getMessage()
- * @method Shipment[] getShipments()
+ * @method ResponseLocation getResponseLocation()
  *
- * @method Confirming setCustomer(Customer $customer)
- * @method Confirming setMessage(Message $message)
- * @method Confirming setShipments(Shipment[] $shipments)
+ * @method GetLocationsResult setResponseLocation(ResponseLocation $location = null)
  */
-class Confirming extends AbstractEntity
+class GetLocationsResult extends AbstractEntity
 {
     /**
      * Default properties and namespaces for the SOAP API
@@ -61,64 +54,42 @@ class Confirming extends AbstractEntity
      */
     public static $defaultProperties = [
         'Barcode'        => [
-            'Customer'  => BarcodeService::DOMAIN_NAMESPACE,
-            'Message'   => BarcodeService::DOMAIN_NAMESPACE,
-            'Shipments' => BarcodeService::DOMAIN_NAMESPACE,
+            'ResponseLocation' => BarcodeService::DOMAIN_NAMESPACE,
         ],
         'Confirming'     => [
-            'Customer'  => ConfirmingService::DOMAIN_NAMESPACE,
-            'Message'   => ConfirmingService::DOMAIN_NAMESPACE,
-            'Shipments' => ConfirmingService::DOMAIN_NAMESPACE,
+            'ResponseLocation' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
         'Labelling'      => [
-            'Customer'  => LabellingService::DOMAIN_NAMESPACE,
-            'Message'   => LabellingService::DOMAIN_NAMESPACE,
-            'Shipments' => LabellingService::DOMAIN_NAMESPACE,
+            'ResponseLocation' => LabellingService::DOMAIN_NAMESPACE,
         ],
         'ShippingStatus' => [
-            'Message'   => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Customer'  => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Shipments' => ShippingStatusService::DOMAIN_NAMESPACE,
+            'ResponseLocation' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate'   => [
-            'Message'   => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Customer'  => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Shipments' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'ResponseLocation' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
         'Location'       => [
-            'Message'   => LocationService::DOMAIN_NAMESPACE,
-            'Customer'  => LocationService::DOMAIN_NAMESPACE,
-            'Shipments' => LocationService::DOMAIN_NAMESPACE,
+            'ResponseLocation' => LocationService::DOMAIN_NAMESPACE,
         ],
         'Timeframe'      => [
-            'Message'   => TimeframeService::DOMAIN_NAMESPACE,
-            'Customer'  => TimeframeService::DOMAIN_NAMESPACE,
-            'Shipments' => TimeframeService::DOMAIN_NAMESPACE,
+            'ResponseLocation' => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var Customer $Customer */
-    protected $Customer;
-    /** @var Message $Message */
-    protected $Message;
-    /** @var Shipment[] $Shipments */
-    protected $Shipments;
+    /** @var ResponseLocation[] $ResponseLocation */
+    protected $ResponseLocation;
     // @codingStandardsIgnoreEnd
 
     /**
-     * Confirming constructor.
+     * GetLocationsResult constructor.
      *
-     * @param Shipment[] $shipments
-     * @param Customer   $customer
-     * @param Message    $message
+     * @param ResponseLocation[]|null $locations
      */
-    public function __construct(array $shipments, Customer $customer, Message $message = null)
+    public function __construct(array $locations = null)
     {
         parent::__construct();
 
-        $this->setShipments($shipments);
-        $this->setMessage($message ?: new Message());
-        $this->setCustomer($customer);
+        $this->setResponseLocation($locations);
     }
 
     /**
@@ -138,12 +109,12 @@ class Confirming extends AbstractEntity
         }
 
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if ($propertyName === 'Shipments') {
-                $shipments = [];
-                foreach ($this->Shipments as $shipment) {
-                    $shipments[] = ["{{$namespace}}Shipment" => $shipment];
+            if ($propertyName === 'ResponseLocation') {
+                $locations = [];
+                foreach ($this->ResponseLocation as $location) {
+                    $locations[] = ["{{$namespace}}ResponseLocation" => $location];
                 }
-                $xml["{{$namespace}}Shipments"] = $shipments;
+                $xml["{{$namespace}}ResponseLocation"] = $locations;
             } elseif (!is_null($this->{$propertyName})) {
                 $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
             }

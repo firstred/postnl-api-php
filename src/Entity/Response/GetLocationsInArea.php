@@ -24,27 +24,27 @@
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity\SOAP;
+namespace ThirtyBees\PostNL\Entity\Response;
 
 use ThirtyBees\PostNL\Entity\AbstractEntity;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
+use ThirtyBees\PostNL\Service\DeliveryDateService;
 use ThirtyBees\PostNL\Service\LabellingService;
+use ThirtyBees\PostNL\Service\LocationService;
+use ThirtyBees\PostNL\Service\ShippingStatusService;
+use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class Envelope
+ * Class GetLocationsInArea
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method Header getHeader()
- * @method Body   getBody()
+ * @method GetLocationsResult getGetLocationsResult()
  *
- * @method Envelope setHeader(Header $header)
- * @method Envelope setBody(Body $body)
- *
- * NOTE: this class has been introduced for deserializing
+ * @method GetLocationsInArea setGetLocationsResult(GetLocationsResult $result = null)
  */
-class Envelope extends AbstractEntity
+class GetLocationsInArea extends AbstractEntity
 {
     /**
      * Default properties and namespaces for the SOAP API
@@ -52,57 +52,42 @@ class Envelope extends AbstractEntity
      * @var array $defaultProperties
      */
     public static $defaultProperties = [
-        'Barcode'    => [
-            'Header' => BarcodeService::ENVELOPE_NAMESPACE,
-            'Body'   => BarcodeService::ENVELOPE_NAMESPACE,
+        'Barcode'        => [
+            'GetLocationsResult' => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming' => [
-            'Header' => ConfirmingService::ENVELOPE_NAMESPACE,
-            'Body'   => ConfirmingService::ENVELOPE_NAMESPACE,
+        'Confirming'     => [
+            'GetLocationsResult' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'  => [
-            'Header' => LabellingService::ENVELOPE_NAMESPACE,
-            'Body'   => LabellingService::ENVELOPE_NAMESPACE,
+        'Labelling'      => [
+            'GetLocationsResult' => LabellingService::DOMAIN_NAMESPACE,
         ],
-        'ShippingStatus'  => [
-            'Header' => LabellingService::ENVELOPE_NAMESPACE,
-            'Body'   => LabellingService::ENVELOPE_NAMESPACE,
+        'ShippingStatus' => [
+            'GetLocationsResult' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'  => [
-            'Header' => LabellingService::ENVELOPE_NAMESPACE,
-            'Body'   => LabellingService::ENVELOPE_NAMESPACE,
+        'DeliveryDate'   => [
+            'GetLocationsResult' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'  => [
-            'Header' => LabellingService::ENVELOPE_NAMESPACE,
-            'Body'   => LabellingService::ENVELOPE_NAMESPACE,
+        'Location'       => [
+            'GetLocationsResult' => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'  => [
-            'Header' => LabellingService::ENVELOPE_NAMESPACE,
-            'Body'   => LabellingService::ENVELOPE_NAMESPACE,
+        'Timeframe'      => [
+            'GetLocationsResult' => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var Header $Header */
-    protected $Header;
-    /** @var Body $Body */
-    protected $Body;
+    /** @var GetLocationsResult $GetLocationsResult */
+    protected $GetLocationsResult;
     // @codingStandardsIgnoreEnd
 
     /**
-     * Envelope constructor.
+     * GetLocationsInArea constructor.
      *
-     * @param Header $header
-     * @param Body   $body
+     * @param GetLocationsResult|null $result
      */
-    public function __construct(Header $header = null, Body $body = null)
+    public function __construct(GetLocationsResult $result = null)
     {
         parent::__construct();
 
-        if ($header) {
-            $this->setHeader($header);
-        }
-        if ($body) {
-            $this->setBody($body);
-        }
+        $this->setGetLocationsResult($result);
     }
 }

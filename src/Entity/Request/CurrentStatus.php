@@ -106,7 +106,7 @@ class CurrentStatus extends AbstractEntity
     // @codingStandardsIgnoreEnd
 
     /**
-     * LabelRequest constructor.
+     * CurrentStatus constructor.
      *
      * @param Shipment $shipment
      * @param Customer $customer

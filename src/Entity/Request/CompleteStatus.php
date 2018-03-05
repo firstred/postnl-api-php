@@ -106,7 +106,7 @@ class CompleteStatus extends AbstractEntity
     // @codingStandardsIgnoreEnd
 
     /**
-     * LabelRequest constructor.
+     * CompleteStatus constructor.
      *
      * @param Shipment $shipment
      * @param Customer $customer

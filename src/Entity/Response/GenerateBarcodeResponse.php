@@ -80,7 +80,7 @@ class GenerateBarcodeResponse extends AbstractEntity
     // @codingStandardsIgnoreEnd
 
     /**
-     * LabelRequest constructor.
+     * GenerateBarcodeResponse constructor.
      *
      * @param string $barcode
      */
