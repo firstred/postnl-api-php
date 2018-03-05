@@ -269,7 +269,11 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
         // Reset request headers array
         $curlHandles = [];
         $mh = curl_multi_init();
-        foreach ($this->pendingRequests as $uuid => $request) {
+        foreach ($this->pendingRequests + $requests as $uuid => $request) {
+            if ($request instanceof Request) {
+                $this->logger->debug(\GuzzleHttp\Psr7\str($request));
+            }
+
             $curl = curl_init();
             $curlHandles[$uuid] = $curl;
             $this->prepareRequest($curl, $request);
@@ -293,6 +297,7 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
         }
         $responses = [];
         foreach ($responseBodies as $uuid => $responseBody) {
+            $this->logger->debug($responseBody);
             $responses[$uuid] = \GuzzleHttp\Psr7\parse_response($responseBody);
         }
 
