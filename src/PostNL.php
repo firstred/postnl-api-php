@@ -189,7 +189,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @param string|UsernameToken $token
      *
-     * @return static
+     * @return PostNL
      * @throws InvalidArgumentException
      */
     public function setToken($token)
@@ -250,7 +250,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @param Customer $customer
      *
-     * @return static
+     * @return PostNL
      */
     public function setCustomer(Customer $customer)
     {
@@ -274,7 +274,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @param bool $sandbox
      *
-     * @return static
+     * @return PostNL
      */
     public function setSandbox($sandbox)
     {
@@ -298,7 +298,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @param int $mode
      *
-     * @return static
+     * @return PostNL
      *
      * @throws InvalidArgumentException
      */
@@ -322,7 +322,7 @@ class PostNL implements LoggerAwareInterface
      *
      * Automatically load Guzzle when available
      *
-     * @return static
+     * @return ClientInterface
      */
     public function getHttpClient()
     {
@@ -339,7 +339,7 @@ class PostNL implements LoggerAwareInterface
             }
         }
 
-        return $this;
+        return $this->httpClient;
     }
 
     /**
@@ -367,7 +367,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @param LoggerInterface $logger
      *
-     * @return static
+     * @return PostNL
      */
     public function setLogger(LoggerInterface $logger)
     {

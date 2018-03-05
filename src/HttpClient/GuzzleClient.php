@@ -158,7 +158,7 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
      *
      * @param LoggerInterface $logger
      *
-     * @return static
+     * @return GuzzleClient
      */
     public function setLogger(LoggerInterface $logger)
     {

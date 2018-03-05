@@ -77,7 +77,7 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
     /**
      * CurlClient Singleton
      *
-     * @return static
+     * @return CurlClient
      */
     public static function getInstance()
     {
@@ -93,7 +93,7 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
      *
      * @param int $seconds
      *
-     * @return static
+     * @return CurlClient
      */
     public function setTimeout($seconds)
     {
@@ -107,7 +107,7 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
      *
      * @param int $seconds
      *
-     * @return static
+     * @return CurlClient
      */
     public function setConnectTimeout($seconds)
     {
@@ -121,7 +121,7 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
      *
      * @param bool|string $verify
      *
-     * @return static
+     * @return CurlClient
      */
     public function setVerify($verify)
     {
@@ -135,7 +135,7 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
      *
      * @param LoggerInterface $logger
      *
-     * @return static
+     * @return CurlClient
      */
     public function setLogger(LoggerInterface $logger)
     {
