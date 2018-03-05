@@ -37,13 +37,13 @@ use ThirtyBees\PostNL\PostNL;
 use ThirtyBees\PostNL\Service\BarcodeService;
 
 /**
- * Class BarcodeServiceRestTest
+ * Class BarcodeServiceSoapTest
  *
  * @package ThirtyBees\PostNL\Tests\Service
  *
- * @testdox The BarcodeService (REST)
+ * @testdox The BarcodeService (SOAP)
  */
-class BarcodeServiceRestTest extends \PHPUnit_Framework_TestCase
+class BarcodeServiceSoapTest extends \PHPUnit_Framework_TestCase
 {
     /** @var PostNL $postnl */
     protected $postnl;
@@ -114,41 +114,20 @@ class BarcodeServiceRestTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreatesAValid3SBarcodeRequest()
     {
-        $type = '3S';
-        $range = $this->getRange('3S');
-        $serie = $this->postnl->findBarcodeSerie('3S', $range, false);
-
         $this->lastRequest = $request = $this->service->buildGenerateBarcodeRESTRequest(
             GenerateBarcode::create()
                 ->setBarcode(
                     Barcode::create()
-                        ->setRange($range)
-                        ->setSerie($serie)
-                        ->setType($type)
+                        ->setRange($this->getRange('3S'))
+                        ->setSerie($this->postnl->findBarcodeSerie('3S', $this->getRange('3S'), false))
+                        ->setType('3S')
                 )
                 ->setMessage(new Message())
                 ->setCustomer($this->postnl->getCustomer())
         );
 
-        $query = \GuzzleHttp\Psr7\parse_query($request->getUri()->getQuery());
-
-        $this->assertEquals([
-            'CustomerCode'   => 'DEVC',
-            'CustomerNumber' => '11223344',
-            'Type'           => '3S',
-            'Serie'          => '987000000-987600000',
-        ],
-            $query,
-            null,
-            0,
-            10,
-            true
-        );
-        $this->assertEmpty((string) $request->getBody());
-        $this->assertEquals('test', $request->getHeaderLine('apikey'));
-        $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
+        $this->assertInstanceOf('\\GuzzleHttp\\Psr7\\Request', $request);
     }
-
 
     /**
      * @param string $type

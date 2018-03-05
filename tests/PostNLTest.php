@@ -41,7 +41,7 @@ use ThirtyBees\PostNL\PostNL;
 class PostNLTest extends \PHPUnit_Framework_TestCase
 {
     /** @var PostNL $postnl */
-    protected $postnlXml;
+    protected $postnlSoap;
     /** @var PostNL $postnlRest */
     protected $postnlRest;
 
@@ -52,7 +52,7 @@ class PostNLTest extends \PHPUnit_Framework_TestCase
      */
     public function setupPostNL()
     {
-        $this->postnlXml = new PostNL(
+        $this->postnlSoap = new PostNL(
             Customer::create()
                 ->setCollectionLocation('123456')
                 ->setCustomerCode('DEVC')
@@ -100,9 +100,9 @@ class PostNLTest extends \PHPUnit_Framework_TestCase
     /**
      * @testdox returns a valid customer code in XML mode
      */
-    public function testPostNLXml()
+    public function testPostNLSoap()
     {
-        $this->assertEquals('DEVC', $this->postnlXml->getCustomer()->getCustomerCode());
+        $this->assertEquals('DEVC', $this->postnlSoap->getCustomer()->getCustomerCode());
     }
 
     /**
