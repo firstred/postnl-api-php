@@ -16,6 +16,13 @@
       <directory>.</directory>
     </testsuite>
   </testsuites>
+  <filter>
+    <whitelist processUncoveredFilesFromWhitelist="true">
+      <directory suffix=".php">/Service/</directory>
+      <file>PostNLTest.php</file>
+      <exclude />
+    </whitelist>
+  </filter>
   <logging>
     <log type="coverage-clover" target="clover.xml"/>
   </logging>
