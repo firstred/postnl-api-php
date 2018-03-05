@@ -20,6 +20,11 @@
         "psr/cache": "^1.0",
         "psr/log": "^1.0"
     },
+    "require-dev": {
+        "php": "^5.5.5 || ~7.0",
+        "phpunit/phpunit": "^7.0"
+
+    },
     "suggest": {
         "guzzlehttp/guzzle": "Use other HTTP handlers besides cURL"
     },
