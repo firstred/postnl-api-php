@@ -205,6 +205,7 @@ class GuzzleClient implements ClientInterface
             [
                 'timeout'         => $this->timeout,
                 'connect_timeout' => $this->connectTimeout,
+                'http_errors'     => false,
             ]
         ));
 
