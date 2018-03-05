@@ -17,7 +17,8 @@
         "guzzlehttp/psr7": "^1.4",
         "setasign/fpdi": "^2.0",
         "setasign/fpdf": "^1.8",
-        "psr/cache": "^1.0"
+        "psr/cache": "^1.0",
+        "psr/log": "^1.0"
     },
     "suggest": {
         "guzzlehttp/guzzle": "Use other HTTP handlers besides cURL"

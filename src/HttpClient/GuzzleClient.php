@@ -26,13 +26,15 @@ use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class GuzzleClient
  *
  * @package ThirtyBees\PostNL\HttpClient
  */
-class GuzzleClient implements ClientInterface
+class GuzzleClient implements ClientInterface, LoggerAwareInterface
 {
     const DEFAULT_TIMEOUT = 60;
     const DEFAULT_CONNECT_TIMEOUT = 20;
@@ -47,10 +49,13 @@ class GuzzleClient implements ClientInterface
      * @var Request[]
      */
     protected $pendingRequests = [];
+    /** @var LoggerInterface $logger */
+    protected $logger;
     /** @var int $timeout */
     private $timeout = self::DEFAULT_TIMEOUT;
     /** @var int $connectTimeout */
     private $connectTimeout = self::DEFAULT_CONNECT_TIMEOUT;
+
     /** @var int $maxRetries */
     private $maxRetries = 1;
 
@@ -146,6 +151,30 @@ class GuzzleClient implements ClientInterface
     public function getMaxRetries()
     {
         return $this->maxRetries;
+    }
+
+    /**
+     * Set the logger
+     *
+     * @param LoggerInterface $logger
+     *
+     * @return static
+     */
+    public function setLogger(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+
+        return $this;
+    }
+
+    /**
+     * Get the logger
+     *
+     * @return LoggerInterface
+     */
+    public function getLogger()
+    {
+        return $this->logger;
     }
 
     /**
@@ -250,6 +279,9 @@ class GuzzleClient implements ClientInterface
         // Concurrent requests
         $promises = [];
         foreach ($requests as $index => $request) {
+            if ($request instanceof Request) {
+                $this->logger->debug(\GuzzleHttp\Psr7\str($request));
+            }
             $promises[$index] = $guzzle->sendAsync($request);
         }
 
@@ -261,6 +293,9 @@ class GuzzleClient implements ClientInterface
                 $response = $response['reason'];
             } else {
                 $response = \ThirtyBees\PostNL\Exception\ResponseException('Unknown reponse type');
+            }
+            if ($response instanceof Response) {
+                $this->logger->debug(\GuzzleHttp\Psr7\str($response));
             }
         }
 

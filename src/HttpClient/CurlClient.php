@@ -28,6 +28,8 @@ namespace ThirtyBees\PostNL\HttpClient;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerInterface;
 use ThirtyBees\PostNL\Exception\ApiConnectionException;
 use ThirtyBees\PostNL\Exception\ApiException;
 
@@ -46,7 +48,7 @@ if (!defined('CURLE_SSL_CACERT_BADFILE')) {
  *
  * @package ThirtyBees\PostNL\HttpClient
  */
-class CurlClient implements ClientInterface
+class CurlClient implements ClientInterface, LoggerAwareInterface
 {
     const DEFAULT_TIMEOUT = 80;
     const DEFAULT_CONNECT_TIMEOUT = 30;
@@ -67,13 +69,15 @@ class CurlClient implements ClientInterface
     protected $defaultOptions;
     /** @var array $userAgentInfo */
     protected $userAgentInfo;
-    /** @var array $p */
+    /** @var array $pendingRequests */
     protected $pendingRequests = [];
+    /** @var LoggerInterface $logger */
+    protected $logger;
 
     /**
      * CurlClient Singleton
      *
-     * @return CurlClient
+     * @return static
      */
     public static function getInstance()
     {
@@ -89,7 +93,7 @@ class CurlClient implements ClientInterface
      *
      * @param int $seconds
      *
-     * @return $this
+     * @return static
      */
     public function setTimeout($seconds)
     {
@@ -103,7 +107,7 @@ class CurlClient implements ClientInterface
      *
      * @param int $seconds
      *
-     * @return CurlClient
+     * @return static
      */
     public function setConnectTimeout($seconds)
     {
@@ -117,11 +121,25 @@ class CurlClient implements ClientInterface
      *
      * @param bool|string $verify
      *
-     * @return $this
+     * @return static
      */
     public function setVerify($verify)
     {
         $this->verify = $verify;
+
+        return $this;
+    }
+
+    /**
+     * Set the logger
+     *
+     * @param LoggerInterface $logger
+     *
+     * @return static
+     */
+    public function setLogger(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
 
         return $this;
     }
@@ -154,6 +172,16 @@ class CurlClient implements ClientInterface
     public function getVerify()
     {
         return $this->verify;
+    }
+
+    /**
+     * Get logger
+     *
+     * @return LoggerInterface
+     */
+    public function getLogger()
+    {
+        return $this->logger;
     }
 
     /**
@@ -207,6 +235,8 @@ class CurlClient implements ClientInterface
      */
     public function doRequest(Request $request)
     {
+        $this->logger->debug(\GuzzleHttp\Psr7\str($request));
+
         $curl = curl_init();
         // Create a callback to capture HTTP headers for the response
         $this->prepareRequest($curl, $request);
@@ -218,6 +248,8 @@ class CurlClient implements ClientInterface
             $this->handleCurlError($request->getUri(), $errno, $message);
         }
         curl_close($curl);
+
+        $this->logger->debug($rbody);
 
         return \GuzzleHttp\Psr7\parse_response($rbody);
     }

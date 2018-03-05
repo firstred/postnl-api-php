@@ -26,6 +26,8 @@
 
 namespace ThirtyBees\PostNL;
 
+use Psr\Log\LoggerInterface;
+use Psr\Log\LoggerAwareInterface;
 use setasign\Fpdi\PdfParser\StreamReader;
 use ThirtyBees\PostNL\Entity\Barcode;
 use ThirtyBees\PostNL\Entity\Customer;
@@ -61,7 +63,7 @@ use ThirtyBees\PostNL\Util\Util;
  *
  * @package ThirtyBees\PostNL
  */
-class PostNL
+class PostNL implements LoggerAwareInterface
 {
     // New REST API
     const MODE_REST = 1;
@@ -133,6 +135,9 @@ class PostNL
     /** @var ClientInterface $httpClient */
     protected $httpClient;
 
+    /** @var LoggerInterface $logger */
+    protected $logger;
+
     /**
      * This is the current mode
      *
@@ -184,7 +189,7 @@ class PostNL
      *
      * @param string|UsernameToken $token
      *
-     * @return PostNL
+     * @return static
      * @throws InvalidArgumentException
      */
     public function setToken($token)
@@ -245,7 +250,7 @@ class PostNL
      *
      * @param Customer $customer
      *
-     * @return PostNL
+     * @return static
      */
     public function setCustomer(Customer $customer)
     {
@@ -269,7 +274,7 @@ class PostNL
      *
      * @param bool $sandbox
      *
-     * @return PostNL
+     * @return static
      */
     public function setSandbox($sandbox)
     {
@@ -293,7 +298,7 @@ class PostNL
      *
      * @param int $mode
      *
-     * @return PostNL
+     * @return static
      *
      * @throws InvalidArgumentException
      */
@@ -317,7 +322,7 @@ class PostNL
      *
      * Automatically load Guzzle when available
      *
-     * @return ClientInterface
+     * @return static
      */
     public function getHttpClient()
     {
@@ -334,7 +339,7 @@ class PostNL
             }
         }
 
-        return $this->httpClient;
+        return $this;
     }
 
     /**
@@ -345,6 +350,30 @@ class PostNL
     public function setHttpClient(ClientInterface $client)
     {
         $this->httpClient = $client;
+    }
+
+    /**
+     * Get the logger
+     *
+     * @return LoggerInterface
+     */
+    public function getLogger()
+    {
+        return $this->logger;
+    }
+
+    /**
+     * Set the logger
+     *
+     * @param LoggerInterface $logger
+     *
+     * @return static
+     */
+    public function setLogger(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+
+        return $this;
     }
 
     /**
