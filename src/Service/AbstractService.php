@@ -121,7 +121,7 @@ abstract class AbstractService
      *
      * @return bool
      */
-    protected function setService($object)
+    public function setService($object)
     {
         if (!$object instanceof AbstractEntity) {
             return false;
@@ -157,7 +157,7 @@ abstract class AbstractService
      *
      * @param \SimpleXMLElement $element
      */
-    protected static function registerNamespaces(\SimpleXMLElement $element)
+    public static function registerNamespaces(\SimpleXMLElement $element)
     {
         foreach (static::$namespaces as $namespace => $prefix) {
             $element->registerXPathNamespace($prefix, $namespace);
@@ -174,7 +174,7 @@ abstract class AbstractService
      * @throws ResponseException
      * @throws ApiException
      */
-    protected function validateRESTResponse($response)
+    public function validateRESTResponse($response)
     {
         $body = json_decode(static::getResponseText($response), true);
 
@@ -207,7 +207,7 @@ abstract class AbstractService
      * @throws CifDownException
      * @throws CifException
      */
-    protected static function validateSOAPResponse(\SimpleXMLElement $xml)
+    public static function validateSOAPResponse(\SimpleXMLElement $xml)
     {
         if (count($xml->xpath('//env:Fault/env:Reason/env:Text')) >= 1) {
             throw new CifDownException((string) $xml->xpath('//env:Fault/env:Reason/env:Text')[0]);
