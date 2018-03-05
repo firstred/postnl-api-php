@@ -5,6 +5,9 @@ php:
   - '7.1'
   - '7.2'
 
+directories:
+  - $HOME/.composer/cache
+
 before_script:
   - composer install
 
