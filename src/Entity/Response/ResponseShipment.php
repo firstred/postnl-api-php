@@ -130,11 +130,11 @@ class ResponseShipment extends AbstractEntity
     /** @var string $Barcode */
     protected $Barcode;
     /** @var string $DownPartnerBarcode */
-    protected $DownPartnerBarcode = null;
+    protected $DownPartnerBarcode;
     /** @var string $DownPartnerID */
-    protected $DownPartnerID = null;
+    protected $DownPartnerID;
     /** @var string $DownPartnerLocation */
-    protected $DownPartnerLocation = null;
+    protected $DownPartnerLocation;
     /** @var Label[] $Labels */
     protected $Labels;
     /** @var string $ProductCodeDelivery */

@@ -98,13 +98,13 @@ class Contact extends AbstractEntity
     ];
     // @codingStandardsIgnoreStart
     /** @var string $ContactType */
-    protected $ContactType = null;
+    protected $ContactType;
     /** @var string $Email */
-    protected $Email = null;
+    protected $Email;
     /** @var string $SMSNr */
-    protected $SMSNr = null;
+    protected $SMSNr;
     /** @var string $TelNr */
-    protected $TelNr = null;
+    protected $TelNr;
     // @codingStandardsIgnoreEnd
 
     /**

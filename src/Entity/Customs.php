@@ -152,25 +152,25 @@ class Customs extends AbstractEntity
     ];
     // @codingStandardsIgnoreStart
     /** @var string $Certificate */
-    protected $Certificate = null;
+    protected $Certificate;
     /** @var string $CertificateNr */
-    protected $CertificateNr = null;
+    protected $CertificateNr;
     /** @var Content[] $Content */
-    protected $Content = null;
+    protected $Content;
     /** @var string $Currency */
-    protected $Currency = null;
+    protected $Currency;
     /** @var string $HandleAsNonDeliverable */
-    protected $HandleAsNonDeliverable = null;
+    protected $HandleAsNonDeliverable;
     /** @var string $Invoice */
-    protected $Invoice = null;
+    protected $Invoice;
     /** @var string $InvoiceNr */
-    protected $InvoiceNr = null;
+    protected $InvoiceNr;
     /** @var string $License */
-    protected $License = null;
+    protected $License;
     /** @var string $LicenseNr */
-    protected $LicenseNr = null;
+    protected $LicenseNr;
     /** @var string $ShipmentType */
-    protected $ShipmentType = null;
+    protected $ShipmentType;
     // @codingStandardsIgnoreEnd
 
     /**

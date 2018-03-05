@@ -80,9 +80,9 @@ class Area extends AbstractEntity
     ];
     // @codingStandardsIgnoreStart
     /** @var Coordinates $CoordinatesNorthWest */
-    protected $CoordinatesNorthWest = null;
+    protected $CoordinatesNorthWest;
     /** @var Coordinates $CoordinatesSouthEast */
-    protected $CoordinatesSouthEast = null;
+    protected $CoordinatesSouthEast;
     // @codingStandardsIgnoreEnd
 
     /**

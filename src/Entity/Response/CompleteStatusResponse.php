@@ -78,7 +78,7 @@ class CompleteStatusResponse extends AbstractEntity
     ];
     // @codingStandardsIgnoreStart
     /** @var array $Shipments */
-    public $Shipments;
+    protected $Shipments;
     // @codingStandardsIgnoreEnd
 
     /**

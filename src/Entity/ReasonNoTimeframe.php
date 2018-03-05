@@ -98,13 +98,13 @@ class ReasonNoTimeframe extends AbstractEntity
     ];
     // @codingStandardsIgnoreStart
     /** @var string $Code */
-    protected $Code = null;
+    protected $Code;
     /** @var string $Date */
-    protected $Date = null;
+    protected $Date;
     /** @var string $Description */
-    protected $Description = null;
+    protected $Description;
     /** @var string[] $Options */
-    protected $Options = null;
+    protected $Options;
     // @codingStandardsIgnoreEnd
 
     /**

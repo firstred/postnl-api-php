@@ -159,27 +159,27 @@ class Location extends AbstractEntity
     ];
     // @codingStandardsIgnoreStart
     /** @var string $City */
-    protected $City = null;
+    protected $City;
     /** @var Coordinates $Coordinates */
-    protected $Coordinates = null;
+    protected $Coordinates;
     /** @var string $HouseNr */
-    protected $HouseNr = null;
+    protected $HouseNr;
     /** @var string $HouseNrExt */
-    protected $HouseNrExt = null;
+    protected $HouseNrExt;
     /** @var string $Postalcode */
-    protected $Postalcode = null;
+    protected $Postalcode;
     /** @var string $Street */
-    protected $Street = null;
+    protected $Street;
     /** @var string $AllowSundaySorting */
-    protected $AllowSundaySorting = null;
+    protected $AllowSundaySorting;
     /** @var string $DeliveryDate */
-    protected $DeliveryDate = null;
+    protected $DeliveryDate;
     /** @var string[] $DeliveryOptions */
-    protected $DeliveryOptions = null;
+    protected $DeliveryOptions;
     /** @var string $OpeningTime */
-    protected $OpeningTime = null;
+    protected $OpeningTime;
     /** @var string[] $Options */
-    protected $Options = null;
+    protected $Options;
     // @codingStandardsIgnoreEnd
 
     /**

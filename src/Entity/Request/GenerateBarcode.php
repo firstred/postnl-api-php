@@ -97,11 +97,11 @@ class GenerateBarcode extends AbstractEntity
     ];
     // @codingStandardsIgnoreStart
     /** @var Message $Message */
-    public $Message;
+    protected $Message;
     /** @var Customer $Customer */
-    public $Customer;
+    protected $Customer;
     /** @var Barcode $Barcode */
-    public $Barcode;
+    protected $Barcode;
     // @codingStandardsIgnoreEnd
 
     /**

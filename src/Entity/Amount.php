@@ -134,21 +134,21 @@ class Amount
     ];
     // @codingStandardsIgnoreStart
     /** @var string $AccountName */
-    protected $AccountName = null;
+    protected $AccountName;
     /** @var string $AmountType */
-    protected $AmountType = null;
+    protected $AmountType;
     /** @var string $BIC */
-    protected $BIC = null;
+    protected $BIC;
     /** @var string $Currency */
-    protected $Currency = null;
+    protected $Currency;
     /** @var string $IBAN */
-    protected $IBAN = null;
+    protected $IBAN;
     /** @var string $Reference */
-    protected $Reference = null;
+    protected $Reference;
     /** @var string $TransactionNumber */
-    protected $TransactionNumber = null;
+    protected $TransactionNumber;
     /** @var string $Value */
-    protected $Value = null;
+    protected $Value;
     // @codingStandardsIgnoreEnd
 
     /**

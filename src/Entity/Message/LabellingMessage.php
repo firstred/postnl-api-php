@@ -90,7 +90,7 @@ class LabellingMessage extends Message
     /**
      * @var string $Printertype
      */
-    protected $Printertype = null;
+    protected $Printertype;
 
     /**
      * @param string $printerType

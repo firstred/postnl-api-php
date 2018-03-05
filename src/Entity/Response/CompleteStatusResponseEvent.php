@@ -130,19 +130,19 @@ class CompleteStatusResponseEvent extends AbstractEntity
     ];
     // @codingStandardsIgnoreStart
     /** @var string $Code */
-    public $Code;
+    protected $Code;
     /** @var string $Description */
-    public $Description;
+    protected $Description;
     /** @var string $DestinationLocationCode */
-    public $DestinationLocationCode;
+    protected $DestinationLocationCode;
     /** @var string $LocationCode */
-    public $LocationCode;
+    protected $LocationCode;
     /** @var string $RouteCode */
-    public $RouteCode;
+    protected $RouteCode;
     /** @var string $RouteName */
-    public $RouteName;
+    protected $RouteName;
     /** @var string $TimeStamp */
-    public $TimeStamp;
+    protected $TimeStamp;
     // @codingStandardsIgnoreEnd
 
     /**

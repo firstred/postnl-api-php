@@ -89,11 +89,11 @@ class TimeframeTimeFrame extends AbstractEntity
     ];
     // @codingStandardsIgnoreStart
     /** @var string $From */
-    protected $From = null;
+    protected $From;
     /** @var string $To */
-    protected $To = null;
+    protected $To;
     /** @var string[] $Options */
-    protected $Options = null;
+    protected $Options;
     // @codingStandardsIgnoreEnd
 
     /**

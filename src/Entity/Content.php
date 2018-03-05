@@ -116,17 +116,17 @@ class Content extends AbstractEntity
     ];
     // @codingStandardsIgnoreStart
     /** @var string $CountryOfOrigin */
-    protected $CountryOfOrigin = null;
+    protected $CountryOfOrigin;
     /** @var string $Description */
-    protected $Description = null;
+    protected $Description;
     /** @var string $HSTariffNr */
-    protected $HSTariffNr = null;
+    protected $HSTariffNr;
     /** @var string $Quantity */
-    protected $Quantity = null;
+    protected $Quantity;
     /** @var string $Value */
-    protected $Value = null;
+    protected $Value;
     /** @var string $Weight */
-    protected $Weight = null;
+    protected $Weight;
     // @codingStandardsIgnoreEnd
 
     /**

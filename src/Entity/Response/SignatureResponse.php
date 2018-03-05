@@ -24,10 +24,10 @@
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity;
+namespace ThirtyBees\PostNL\Entity\Response;
 
-use Sabre\Xml\Writer;
-use ThirtyBees\PostNL\Entity\Response\CompleteStatusResponseEvent;
+use ThirtyBees\PostNL\Entity\AbstractEntity;
+use ThirtyBees\PostNL\Entity\Signature;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
@@ -37,52 +37,58 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class Event
+ * Class SignatureResponse
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method string getCompleteStatusResponseEvent()
+ * @method string getSignature()
  *
- * @method Event setCompleteStatusResponseEvent(CompleteStatusResponseEvent|null $event)
+ * @method SignatureResponse setSignature(Signature $signature)
  */
-class Event extends AbstractEntity
+class SignatureResponse extends AbstractEntity
 {
-    /** @var string[] $defaultProperties */
+    /**
+     * Default properties and namespaces for the SOAP API
+     *
+     * @var array $defaultProperties
+     */
     public static $defaultProperties = [
         'Barcode'        => [
-            'CompleteStatusResponseEvent' => BarcodeService::DOMAIN_NAMESPACE,
+            'Signature' => BarcodeService::DOMAIN_NAMESPACE,
         ],
         'Confirming'     => [
-            'CompleteStatusResponseEvent' => ConfirmingService::DOMAIN_NAMESPACE,
+            'Signature' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
         'Labelling'      => [
-            'CompleteStatusResponseEvent' => LabellingService::DOMAIN_NAMESPACE,
+            'Signature' => LabellingService::DOMAIN_NAMESPACE,
         ],
         'ShippingStatus' => [
-            'CompleteStatusResponseEvent' => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Signature' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate'   => [
-            'CompleteStatusResponseEvent' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Signature' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
         'Location'       => [
-            'CompleteStatusResponseEvent' => LocationService::DOMAIN_NAMESPACE,
+            'Signature' => LocationService::DOMAIN_NAMESPACE,
         ],
         'Timeframe'      => [
-            'CompleteStatusResponseEvent' => TimeframeService::DOMAIN_NAMESPACE,
+            'Signature' => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var CompleteStatusResponseEvent $completeStatusResponseEvent */
-    protected $CompleteStatusResponseEvent;
+    /** @var Signature $Signature */
+    protected $Signature;
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param CompleteStatusResponseEvent|null $completeStatusResponseEvent
+     * LabelRequest constructor.
+     *
+     * @param Signature $signature
      */
-    public function __construct($completeStatusResponseEvent = null)
+    public function __construct(Signature $signature)
     {
         parent::__construct();
 
-        $this->setCompleteStatusResponseEvent($completeStatusResponseEvent);
+        $this->setSignature($signature);
     }
 }

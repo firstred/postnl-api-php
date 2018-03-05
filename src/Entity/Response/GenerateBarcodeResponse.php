@@ -76,7 +76,7 @@ class GenerateBarcodeResponse extends AbstractEntity
     ];
     // @codingStandardsIgnoreStart
     /** @var string $Barcode */
-    public $Barcode;
+    protected $Barcode;
     // @codingStandardsIgnoreEnd
 
     /**

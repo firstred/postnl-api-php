@@ -48,9 +48,9 @@ abstract class AbstractEntity implements \JsonSerializable, XmlSerializable
     /** @var array $defaultProperties */
     public static $defaultProperties = [];
     /** @var string $id */
-    public $id;
+    protected $id;
     /** @var string $currentService */
-    public $currentService;
+    protected $currentService;
     // @codingStandardsIgnoreEnd
 
     /**

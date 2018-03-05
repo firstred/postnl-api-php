@@ -125,18 +125,18 @@ class OpeningHours extends AbstractEntity
     ];
     // @codingStandardsIgnoreStart
     /** @var string $Monday */
-    protected $Monday = null;
+    protected $Monday;
     /** @var string $Tuesday */
-    protected $Tuesday = null;
+    protected $Tuesday;
     /** @var string $Wednesday */
-    protected $Wednesday = null;
+    protected $Wednesday;
     /** @var string $Thursday */
-    protected $Thursday = null;
+    protected $Thursday;
     /** @var string $Friday */
-    protected $Friday = null;
+    protected $Friday;
     /** @var string $Saturday */
-    protected $Saturday = null;
+    protected $Saturday;
     /** @var string $Sunday */
-    protected $Sunday = null;
+    protected $Sunday;
     // @codingStandardsIgnoreEnd
 }

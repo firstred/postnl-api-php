@@ -80,9 +80,9 @@ class ProductOption extends AbstractEntity
     ];
     // @codingStandardsIgnoreStart
     /** @var string $Characteristic */
-    protected $Characteristic = null;
+    protected $Characteristic;
     /** @var string $Option */
-    protected $Option = null;
+    protected $Option;
     // @codingStandardsIgnoreEnd
 
     /**

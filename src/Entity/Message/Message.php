@@ -83,9 +83,9 @@ class Message extends AbstractEntity
     ];
     // @codingStandardsIgnoreStart
     /** @var string $MessageID */
-    protected $MessageID = null;
+    protected $MessageID;
     /** @var string $MessageTimeStamp */
-    protected $MessageTimeStamp = null;
+    protected $MessageTimeStamp;
     // @codingStandardsIgnoreEnd
 
     /**

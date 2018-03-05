@@ -80,9 +80,9 @@ class Timeframe extends AbstractEntity
     ];
     // @codingStandardsIgnoreStart
     /** @var string $Date */
-    protected $Date = null;
+    protected $Date;
     /** @var Timeframe[] $Timeframes */
-    protected $Timeframes = null;
+    protected $Timeframes;
     // @codingStandardsIgnoreEnd
 
     /**

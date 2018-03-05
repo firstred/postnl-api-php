@@ -80,16 +80,16 @@ class Expectation extends AbstractEntity
     ];
     // @codingStandardsIgnoreStart
     /** @var string $ETAFrom */
-    protected $ETAFrom = null;
+    protected $ETAFrom;
     /** @var string $ETATo */
-    protected $ETATo = null;
+    protected $ETATo;
     // @codingStandardsIgnoreEnd
 
     /**
      * @param string $from
      * @param string $to
      */
-    public function __construct($from, $to)
+    public function __construct($from = null, $to = null)
     {
         parent::__construct();
 

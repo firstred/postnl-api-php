@@ -83,9 +83,9 @@ class Envelope extends AbstractEntity
     ];
     // @codingStandardsIgnoreStart
     /** @var Header $Header */
-    public $Header;
+    protected $Header;
     /** @var Body $Body */
-    public $Body;
+    protected $Body;
     // @codingStandardsIgnoreEnd
 
     /**

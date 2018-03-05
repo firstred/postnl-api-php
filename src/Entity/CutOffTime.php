@@ -80,16 +80,16 @@ class CutOffTime extends AbstractEntity
     ];
     // @codingStandardsIgnoreStart
     /** @var string $Day */
-    protected $Day = null;
+    protected $Day;
     /** @var string $Time */
-    protected $Time = null;
+    protected $Time;
     // @codingStandardsIgnoreEnd
 
     /**
      * @param string $day
      * @param string $time
      */
-    public function __construct($day, $time)
+    public function __construct($day = null, $time = null)
     {
         parent::__construct();
 

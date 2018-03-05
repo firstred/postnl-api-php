@@ -89,11 +89,11 @@ class Barcode extends AbstractEntity
     ];
     // @codingStandardsIgnoreStart
     /** @var string $Type */
-    protected $Type = null;
+    protected $Type;
     /** @var string $Range */
-    protected $Range = null;
+    protected $Range;
     /** @var string $Serie */
-    protected $Serie = null;
+    protected $Serie;
     // @codingStandardsIgnoreEnd
 
     /**

@@ -63,9 +63,9 @@ class UsernameToken extends AbstractEntity
     ];
     // @codingStandardsIgnoreStart
     /** @var string $Username */
-    public $Username;
+    protected $Username;
     /** @var string $Password */
-    public $Password;
+    protected $Password;
     // @codingStandardsIgnoreEnd
 
     /**

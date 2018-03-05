@@ -67,7 +67,7 @@ class Security extends AbstractEntity
     ];
     // @codingStandardsIgnoreStart
     /** @var UsernameToken $UsernameToken */
-    public $UsernameToken;
+    protected $UsernameToken;
     // @codingStandardsIgnoreEnd
 
     /**

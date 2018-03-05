@@ -80,9 +80,9 @@ class Coordinates extends AbstractEntity
     ];
     // @codingStandardsIgnoreStart
     /** @var string $Latitude */
-    protected $Latitude = null;
+    protected $Latitude;
     /** @var string $Longitude */
-    protected $Longitude = null;
+    protected $Longitude;
     // @codingStandardsIgnoreEnd
 
     /**

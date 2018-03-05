@@ -80,9 +80,9 @@ class Warning extends AbstractEntity
     ];
     // @codingStandardsIgnoreStart
     /** @var string $Code */
-    protected $Code = null;
+    protected $Code;
     /** @var string $Description */
-    protected $Description = null;
+    protected $Description;
     // @codingStandardsIgnoreEnd
 
     /**

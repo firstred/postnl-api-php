@@ -36,17 +36,19 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class GenerateLabelResponse
+ * Class GetSignatureResponseSignature
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method MergedLabel[]      getMergedLabels()
- * @method ResponseShipment[] getResponseShipments()
+ * @method string getBarcode()
+ * @method string getSignatureDate()
+ * @method string getSignatureImage()
  *
- * @method GenerateLabelResponse setMergedLabels(MergedLabel[] $mergedLabels)
- * @method GenerateLabelResponse setResponseShipments(ResponseShipment[] $responseShipment)
+ * @method SignatureResponse setBarcode(string $barcode)
+ * @method SignatureResponse setSignatureDate(string $signatureDate)
+ * @method SignatureResponse setSignatureImage(string $signatureImage)
  */
-class GenerateLabelResponse extends AbstractEntity
+class GetSignatureResponseSignature extends AbstractEntity
 {
     /**
      * Default properties and namespaces for the SOAP API
@@ -55,52 +57,63 @@ class GenerateLabelResponse extends AbstractEntity
      */
     public static $defaultProperties = [
         'Barcode'        => [
-            'MergedLabels'      => BarcodeService::DOMAIN_NAMESPACE,
-            'ResponseShipments' => BarcodeService::DOMAIN_NAMESPACE,
+            'Barcode'        => BarcodeService::DOMAIN_NAMESPACE,
+            'SignatureDate'  => BarcodeService::DOMAIN_NAMESPACE,
+            'SignatureImage' => BarcodeService::DOMAIN_NAMESPACE,
         ],
         'Confirming'     => [
-            'MergedLabels'      => ConfirmingService::DOMAIN_NAMESPACE,
-            'ResponseShipments' => ConfirmingService::DOMAIN_NAMESPACE,
+            'Barcode'        => ConfirmingService::DOMAIN_NAMESPACE,
+            'SignatureDate'  => ConfirmingService::DOMAIN_NAMESPACE,
+            'SignatureImage' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
         'Labelling'      => [
-            'MergedLabels'      => LabellingService::DOMAIN_NAMESPACE,
-            'ResponseShipments' => LabellingService::DOMAIN_NAMESPACE,
+            'Barcode'        => LabellingService::DOMAIN_NAMESPACE,
+            'SignatureDate'  => LabellingService::DOMAIN_NAMESPACE,
+            'SignatureImage' => LabellingService::DOMAIN_NAMESPACE,
         ],
         'ShippingStatus' => [
-            'MergedLabels'      => ShippingStatusService::DOMAIN_NAMESPACE,
-            'ResponseShipments' => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Barcode'        => ShippingStatusService::DOMAIN_NAMESPACE,
+            'SignatureDate'  => ShippingStatusService::DOMAIN_NAMESPACE,
+            'SignatureImage' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate'   => [
-            'MergedLabels'      => DeliveryDateService::DOMAIN_NAMESPACE,
-            'ResponseShipments' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Barcode'        => DeliveryDateService::DOMAIN_NAMESPACE,
+            'SignatureDate'  => DeliveryDateService::DOMAIN_NAMESPACE,
+            'SignatureImage' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
         'Location'       => [
-            'MergedLabels'      => LocationService::DOMAIN_NAMESPACE,
-            'ResponseShipments' => LocationService::DOMAIN_NAMESPACE,
+            'Barcode'        => LocationService::DOMAIN_NAMESPACE,
+            'SignatureDate'  => LocationService::DOMAIN_NAMESPACE,
+            'SignatureImage' => LocationService::DOMAIN_NAMESPACE,
         ],
         'Timeframe'      => [
-            'MergedLabels'      => TimeframeService::DOMAIN_NAMESPACE,
-            'ResponseShipments' => TimeframeService::DOMAIN_NAMESPACE,
+            'Barcode'        => TimeframeService::DOMAIN_NAMESPACE,
+            'SignatureDate'  => TimeframeService::DOMAIN_NAMESPACE,
+            'SignatureImage' => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var MergedLabel[] $MergedLabels */
-    protected $MergedLabels;
-    /** @var ResponseShipment[] $ResponseShipments */
-    protected $ResponseShipments;
+    /** @var string $Barcode */
+    protected $Barcode;
+    /** @var string $SignatureDate */
+    protected $SignatureDate;
+    /** @var string $SignatureImage */
+    protected $SignatureImage;
     // @codingStandardsIgnoreEnd
 
     /**
      * LabelRequest constructor.
      *
-     * @param MergedLabel[]      $mergedLabels
-     * @param ResponseShipment[] $responseShipments
+     * @param string|null $barcode
+     * @param string|null $signatureDate
+     * @param string|null $signatureImage
      */
-    public function __construct(array $mergedLabels, array $responseShipments)
+    public function __construct($barcode = null, $signatureDate = null, $signatureImage = null)
     {
         parent::__construct();
 
-        $this->setMergedLabels($mergedLabels);
-        $this->setResponseShipments($responseShipments);
+        $this->setBarcode($barcode);
+        $this->setSignatureDate($signatureDate);
+        $this->setSignatureImage($signatureImage);
     }
 }

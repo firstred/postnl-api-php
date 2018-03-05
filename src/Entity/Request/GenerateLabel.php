@@ -98,11 +98,11 @@ class GenerateLabel extends AbstractEntity
     ];
     // @codingStandardsIgnoreStart
     /** @var Customer $Customer */
-    public $Customer;
+    protected $Customer;
     /** @var LabellingMessage $Message */
-    public $Message;
+    protected $Message;
     /** @var Shipment[] $Shipments */
-    public $Shipments;
+    protected $Shipments;
     // @codingStandardsIgnoreEnd
 
     /**

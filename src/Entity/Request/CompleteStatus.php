@@ -98,11 +98,11 @@ class CompleteStatus extends AbstractEntity
     ];
     // @codingStandardsIgnoreStart
     /** @var Message $Message */
-    public $Message;
+    protected $Message;
     /** @var Customer $Customer */
-    public $Customer;
+    protected $Customer;
     /** @var Shipment $Shipment */
-    public $Shipment;
+    protected $Shipment;
     // @codingStandardsIgnoreEnd
 
     /**

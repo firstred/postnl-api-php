@@ -124,23 +124,23 @@ class Customer extends AbstractEntity
     ];
     // @codingStandardsIgnoreStart
     /** @var Address $Address */
-    protected $Address = null;
+    protected $Address;
     /** @var string $CollectionLocation */
-    protected $CollectionLocation = null;
+    protected $CollectionLocation;
     /** @var string $ContactPerson */
-    protected $ContactPerson = null;
+    protected $ContactPerson;
     /** @var string $CustomerCode */
-    protected $CustomerCode = null;
+    protected $CustomerCode;
     /** @var string $CustomerNumber */
-    protected $CustomerNumber = null;
+    protected $CustomerNumber;
     /** @var null|string $GlobalPackCustomerCode */
-    protected $GlobalPackCustomerCode = null;
+    protected $GlobalPackCustomerCode;
     /** @var null|string $GlobalPackBarcodeType */
-    protected $GlobalPackBarcodeType = null;
+    protected $GlobalPackBarcodeType;
     /** @var string $Email */
-    protected $Email = null;
+    protected $Email;
     /** @var string $Name */
-    protected $Name = null;
+    protected $Name;
     // @codingStandardsIgnoreEnd
 
     /**

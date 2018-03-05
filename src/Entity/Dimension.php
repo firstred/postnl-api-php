@@ -107,15 +107,15 @@ class Dimension extends AbstractEntity
     ];
     // @codingStandardsIgnoreStart
     /** @var string $Height */
-    protected $Height = null;
+    protected $Height;
     /** @var string $Length */
-    protected $Length = null;
+    protected $Length;
     /** @var string $Volume */
-    protected $Volume = null;
+    protected $Volume;
     /** @var string $Weight */
-    protected $Weight = null;
+    protected $Weight;
     /** @var string $Width */
-    protected $Width = null;
+    protected $Width;
     // @codingStandardsIgnoreEnd
 
     /**

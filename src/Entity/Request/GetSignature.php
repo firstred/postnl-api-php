@@ -24,10 +24,12 @@
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity\Response;
+namespace ThirtyBees\PostNL\Entity\Request;
 
 use Sabre\Xml\Writer;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
+use ThirtyBees\PostNL\Entity\Customer;
+use ThirtyBees\PostNL\Entity\Message\Message;
 use ThirtyBees\PostNL\Entity\Shipment;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
@@ -38,15 +40,19 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class CurrentStatusResponse
+ * Class GetSignature
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method string getShipments()
+ * @method Message    getMessage()
+ * @method Customer   getCustomer()
+ * @method Shipment   getShipment()
  *
- * @method CurrentStatusResponse setShipments(Shipment[] $shipments)
+ * @method GetSignature setMessage(Message $message)
+ * @method GetSignature setCustomer(Customer $customer)
+ * @method GetSignature setShipment(Shipment $shipment)
  */
-class CurrentStatusResponse extends AbstractEntity
+class GetSignature extends AbstractEntity
 {
     /**
      * Default properties and namespaces for the SOAP API
@@ -55,42 +61,64 @@ class CurrentStatusResponse extends AbstractEntity
      */
     public static $defaultProperties = [
         'Barcode'        => [
-            'Shipments' => BarcodeService::DOMAIN_NAMESPACE,
+            'Message'  => BarcodeService::DOMAIN_NAMESPACE,
+            'Customer' => BarcodeService::DOMAIN_NAMESPACE,
+            'Shipment' => BarcodeService::DOMAIN_NAMESPACE,
         ],
         'Confirming'     => [
-            'Shipments' => ConfirmingService::DOMAIN_NAMESPACE,
+            'Message'  => ConfirmingService::DOMAIN_NAMESPACE,
+            'Customer' => ConfirmingService::DOMAIN_NAMESPACE,
+            'Shipment' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
         'Labelling'      => [
-            'Shipments' => LabellingService::DOMAIN_NAMESPACE,
+            'Message'  => LabellingService::DOMAIN_NAMESPACE,
+            'Customer' => LabellingService::DOMAIN_NAMESPACE,
+            'Shipment' => LabellingService::DOMAIN_NAMESPACE,
         ],
         'ShippingStatus' => [
-            'Shipments' => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Message'  => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Customer' => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Shipment' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate'   => [
-            'Shipments' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Message'  => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Customer' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Shipment' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
         'Location'       => [
-            'Shipments' => LocationService::DOMAIN_NAMESPACE,
+            'Message'  => LocationService::DOMAIN_NAMESPACE,
+            'Customer' => LocationService::DOMAIN_NAMESPACE,
+            'Shipment' => LocationService::DOMAIN_NAMESPACE,
         ],
         'Timeframe'      => [
-            'Shipments' => TimeframeService::DOMAIN_NAMESPACE,
+            'Message'  => TimeframeService::DOMAIN_NAMESPACE,
+            'Customer' => TimeframeService::DOMAIN_NAMESPACE,
+            'Shipment' => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string $Shipments */
-    protected $Shipments;
+    /** @var Message $Message */
+    protected $Message;
+    /** @var Customer $Customer */
+    protected $Customer;
+    /** @var Shipment $Shipment */
+    protected $Shipment;
     // @codingStandardsIgnoreEnd
 
     /**
      * LabelRequest constructor.
      *
-     * @param array $shipments
+     * @param Shipment $shipment
+     * @param Customer $customer
+     * @param Message  $message
      */
-    public function __construct(array $shipments)
+    public function __construct(Shipment $shipment, Customer $customer, Message $message = null)
     {
         parent::__construct();
 
-        $this->setShipments($shipments);
+        $this->setMessage($message ?: new Message());
+        $this->setShipment($shipment);
+        $this->setCustomer($customer);
     }
 
     /**
@@ -110,13 +138,7 @@ class CurrentStatusResponse extends AbstractEntity
         }
 
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if ($propertyName === 'Shipments') {
-                $shipments = [];
-                foreach ($this->Shipments as $shipment) {
-                    $shipments[] = ["{{$namespace}}Shipment" => $shipment];
-                }
-                $xml["{{$namespace}}Shipments"] = $shipments;
-            } elseif (!is_null($this->{$propertyName})) {
+            if (!is_null($this->{$propertyName})) {
                 $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
             }
         }

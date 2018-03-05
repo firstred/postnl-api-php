@@ -112,15 +112,15 @@ class CompleteStatusResponseOldStatus extends AbstractEntity
     ];
     // @codingStandardsIgnoreStart
     /** @var string $Code */
-    public $Code;
+    protected $Code;
     /** @var string $Description */
-    public $Description;
+    protected $Description;
     /** @var string $PhaseCode */
-    public $PhaseCode;
+    protected $PhaseCode;
     /** @var string $PhaseDescription */
-    public $PhaseDescription;
+    protected $PhaseDescription;
     /** @var string $TimeStamp */
-    public $TimeStamp;
+    protected $TimeStamp;
     // @codingStandardsIgnoreEnd
 
     /**

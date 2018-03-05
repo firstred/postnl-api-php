@@ -72,6 +72,7 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method string          getRemark()
  * @method string          getReturnBarcode()
  * @method string          getReturnReference()
+ * @method string          getStatusCode()
  *
  * @method Shipment setAddresses(Address[] $addresses)
  * @method Shipment setBarcode(string $barcode)
@@ -105,6 +106,7 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method Shipment setRemark(string $remark)
  * @method Shipment setReturnBarcode(string $returnBarcode)
  * @method Shipment setReturnReference(string $returnReference)
+ * @method Shipment setStatusCode(string $statusCode)
  */
 class Shipment extends AbstractEntity
 {
@@ -143,6 +145,7 @@ class Shipment extends AbstractEntity
             'Remark'                   => BarcodeService::DOMAIN_NAMESPACE,
             'ReturnBarcode'            => BarcodeService::DOMAIN_NAMESPACE,
             'ReturnReference'          => BarcodeService::DOMAIN_NAMESPACE,
+            'StatusCode'               => BarcodeService::DOMAIN_NAMESPACE,
         ],
         'Confirming'     => [
             'Addresses'                => ConfirmingService::DOMAIN_NAMESPACE,
@@ -177,6 +180,7 @@ class Shipment extends AbstractEntity
             'Remark'                   => ConfirmingService::DOMAIN_NAMESPACE,
             'ReturnBarcode'            => ConfirmingService::DOMAIN_NAMESPACE,
             'ReturnReference'          => ConfirmingService::DOMAIN_NAMESPACE,
+            'StatusCode'               => ConfirmingService::DOMAIN_NAMESPACE,
         ],
         'Labelling'      => [
             'Addresses'                => LabellingService::DOMAIN_NAMESPACE,
@@ -211,6 +215,7 @@ class Shipment extends AbstractEntity
             'Remark'                   => LabellingService::DOMAIN_NAMESPACE,
             'ReturnBarcode'            => LabellingService::DOMAIN_NAMESPACE,
             'ReturnReference'          => LabellingService::DOMAIN_NAMESPACE,
+            'StatusCode'               => LabellingService::DOMAIN_NAMESPACE,
         ],
         'ShippingStatus' => [
             'Addresses'                => ShippingStatusService::DOMAIN_NAMESPACE,
@@ -245,6 +250,7 @@ class Shipment extends AbstractEntity
             'Remark'                   => ShippingStatusService::DOMAIN_NAMESPACE,
             'ReturnBarcode'            => ShippingStatusService::DOMAIN_NAMESPACE,
             'ReturnReference'          => ShippingStatusService::DOMAIN_NAMESPACE,
+            'StatusCode'               => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate'   => [
             'Addresses'                => DeliveryDateService::DOMAIN_NAMESPACE,
@@ -279,6 +285,7 @@ class Shipment extends AbstractEntity
             'Remark'                   => DeliveryDateService::DOMAIN_NAMESPACE,
             'ReturnBarcode'            => DeliveryDateService::DOMAIN_NAMESPACE,
             'ReturnReference'          => DeliveryDateService::DOMAIN_NAMESPACE,
+            'StatusCode'               => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
         'Location'       => [
             'Addresses'                => LocationService::DOMAIN_NAMESPACE,
@@ -313,6 +320,7 @@ class Shipment extends AbstractEntity
             'Remark'                   => LocationService::DOMAIN_NAMESPACE,
             'ReturnBarcode'            => LocationService::DOMAIN_NAMESPACE,
             'ReturnReference'          => LocationService::DOMAIN_NAMESPACE,
+            'StatusCode'               => LocationService::DOMAIN_NAMESPACE,
         ],
         'Timeframe'      => [
             'Addresses'                => TimeframeService::DOMAIN_NAMESPACE,
@@ -347,77 +355,80 @@ class Shipment extends AbstractEntity
             'Remark'                   => TimeframeService::DOMAIN_NAMESPACE,
             'ReturnBarcode'            => TimeframeService::DOMAIN_NAMESPACE,
             'ReturnReference'          => TimeframeService::DOMAIN_NAMESPACE,
+            'StatusCode'               => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
     /** @var Address[] $Addresses */
-    protected $Addresses = null;
+    protected $Addresses;
     /** @var Amount[] $Amounts */
-    protected $Amounts = null;
+    protected $Amounts;
     /** @var string $Barcode */
-    protected $Barcode = null;
+    protected $Barcode;
     /** @var string $CollectionTimeStampEnd */
-    protected $CollectionTimeStampEnd = null;
+    protected $CollectionTimeStampEnd;
     /** @var string $CollectionTimeStampStart */
-    protected $CollectionTimeStampStart = null;
+    protected $CollectionTimeStampStart;
     /** @var Contact[] $Contacts */
-    protected $Contacts = null;
+    protected $Contacts;
     /** @var string $Content */
-    protected $Content = null;
+    protected $Content;
     /** @var string $CostCenter */
-    protected $CostCenter = null;
+    protected $CostCenter;
     /** @var string $CustomerOrderNumber */
-    protected $CustomerOrderNumber = null;
+    protected $CustomerOrderNumber;
     /** @var Customs $Customs */
-    protected $Customs = null;
+    protected $Customs;
+    /** @var string $StatusCode */
+    protected $StatusCode;
     /** @var int $PhaseCode */
-    protected $PhaseCode = null;
+    protected $PhaseCode;
     /** @var string $DateFrom */
-    protected $DateFrom = null;
+    protected $DateFrom;
     /** @var string $DateTo */
-    protected $DateTo = null;
+    protected $DateTo;
     /** @var string $DeliveryAddress */
-    protected $DeliveryAddress = null;
+    protected $DeliveryAddress;
     /** @var string $DeliveryTimeStampStart */
-    protected $DeliveryTimeStampStart = null;
+    protected $DeliveryTimeStampStart;
     /** @var string $DeliveryTimeStampEnd */
-    protected $DeliveryTimeStampEnd = null;
+    protected $DeliveryTimeStampEnd;
     /** @var string $DeliveryDate */
-    protected $DeliveryDate = null;
+    protected $DeliveryDate;
     /** @var Dimension $Dimension */
-    protected $Dimension = null;
+    protected $Dimension;
     /** @var string $DownPartnerBarcode */
-    protected $DownPartnerBarcode = null;
+    protected $DownPartnerBarcode;
     /** @var string $DownPartnerID */
-    protected $DownPartnerID = null;
+    protected $DownPartnerID;
     /** @var string $DownPartnerLocation */
-    protected $DownPartnerLocation = null;
+    protected $DownPartnerLocation;
     /** @var Group[] $Groups */
-    protected $Groups = null;
+    protected $Groups;
     /** @var string $IDExpiration */
-    protected $IDExpiration = null;
+    protected $IDExpiration;
     /** @var string $IDNumber */
-    protected $IDNumber = null;
+    protected $IDNumber;
     /** @var string $IDType */
-    protected $IDType = null;
+    protected $IDType;
     /** @var string $ProductCodeCollect */
-    protected $ProductCodeCollect = null;
+    protected $ProductCodeCollect;
     /** @var string $ProductCodeDelivery */
-    protected $ProductCodeDelivery = null;
+    protected $ProductCodeDelivery;
     /** @var ProductOption[] $ProductOptions */
-    protected $ProductOptions = null;
+    protected $ProductOptions;
     /** @var string $ReceiverDateOfBirth */
-    protected $ReceiverDateOfBirth = null;
+    protected $ReceiverDateOfBirth;
     /** @var string $Reference */
-    protected $Reference = null;
+    protected $Reference;
     /** @var string $ReferenceCollect */
-    protected $ReferenceCollect = null;
+    protected $ReferenceCollect;
     /** @var string $Remark */
-    protected $Remark = null;
+    protected $Remark;
     /** @var string $ReturnBarcode */
-    protected $ReturnBarcode = null;
+    protected $ReturnBarcode;
     /** @var string $ReturnReference */
-    protected $ReturnReference = null;
+    protected $ReturnReference;
     // @codingStandardsIgnoreEnd
 
     /**
@@ -452,6 +463,7 @@ class Shipment extends AbstractEntity
      * @param string|null          $remark
      * @param string|null          $returnBarcode
      * @param string|null          $returnReference
+     * @param string|null          $statusCode
      * @param int|null             $phaseCode
      * @param string|null          $dateFrom
      * @param string|null          $dateTo
@@ -486,6 +498,7 @@ class Shipment extends AbstractEntity
         $remark = null,
         $returnBarcode = null,
         $returnReference = null,
+        $statusCode = null,
         $phaseCode = null,
         $dateFrom = null,
         $dateTo = null
@@ -521,6 +534,7 @@ class Shipment extends AbstractEntity
         $this->setRemark($remark);
         $this->setReturnBarcode($returnBarcode);
         $this->setReturnReference($returnReference);
+        $this->setStatusCode($statusCode);
         $this->setPhaseCode($phaseCode);
         $this->setDateFrom($dateFrom);
         $this->setDateTo($dateTo);

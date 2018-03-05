@@ -96,11 +96,11 @@ class Label extends AbstractEntity
      *
      * Base 64 encoded content
      */
-    protected $Content = null;
+    protected $Content;
     /** @var string $Contenttype */
-    protected $Contenttype = null;
+    protected $Contenttype;
     /** @var string $Labeltype */
-    protected $Labeltype = null;
+    protected $Labeltype;
     // @codingStandardsIgnoreEnd
 
     /**
@@ -108,7 +108,7 @@ class Label extends AbstractEntity
      * @param string $contentType
      * @param string $labelType
      */
-    public function __construct($content, $contentType, $labelType)
+    public function __construct($content = null, $contentType = null, $labelType = null)
     {
         parent::__construct();
 

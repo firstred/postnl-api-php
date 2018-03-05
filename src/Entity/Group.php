@@ -102,13 +102,13 @@ class Group extends AbstractEntity
      *
      * @var string $GroupCount
      */
-    protected $GroupCount = null;
+    protected $GroupCount;
     /**
      * Sequence number.
      *
      * @var string $GroupSequence
      */
-    protected $GroupSequence = null;
+    protected $GroupSequence;
     /**
      * The type of group.
      *
@@ -120,13 +120,13 @@ class Group extends AbstractEntity
      *
      * @var string $GroupType
      */
-    protected $GroupType = null;
+    protected $GroupType;
     /**
      * Main barcode for the shipment.
      *
      * @var string $MainBarcode
      */
-    protected $MainBarcode = null;
+    protected $MainBarcode;
     // @codingStandardsIgnoreEnd
 
     /**
@@ -137,7 +137,7 @@ class Group extends AbstractEntity
      * @param string $groupType
      * @param string $mainBarcode
      */
-    public function __construct($groupCount, $groupSequence, $groupType, $mainBarcode)
+    public function __construct($groupCount = null, $groupSequence = null, $groupType = null, $mainBarcode = null)
     {
         parent::__construct();
 

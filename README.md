@@ -32,7 +32,7 @@ hopefully be completed soon.
 | Barcode webservice                          | beta                      | beta                      | 1.1     |
 | Labelling webservice                        | beta                      | beta                      | 2.1     |
 | Confirming webservice                       | beta                      | beta                      | 1.10    |
-| Shippingstatus webservice                   | Expected: March, 2018     | Expected: March, 2018     | 1.6     |
+| Shippingstatus webservice                   | alpha                     | alpha                     | 1.6     |
 | **Delivery Options**                        |                           |                           |         |
 | Deliverydate webservice                     | Expected: March, 2018     | Expected: March, 2018     | 2.2     |
 | Location webservice                         | Expected: March, 2018     | Expected: March, 2018     | 2.1     |

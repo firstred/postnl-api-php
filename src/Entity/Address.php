@@ -246,39 +246,39 @@ class Address extends AbstractEntity
      * At least one other AddressType must be specified, other than AddressType 02
      * In most cases this will be AddressType 01, the receiver address.
      */
-    protected $AddressType = null;
+    protected $AddressType;
     /** @var string $Area */
-    protected $Area = null;
+    protected $Area;
     /** @var string $Buildingname */
-    protected $Buildingname = null;
+    protected $Buildingname;
     /** @var string $City */
-    protected $City = null;
+    protected $City;
     /** @var string $CompanyName */
-    protected $CompanyName = null;
+    protected $CompanyName;
     /** @var string $Countrycode */
-    protected $Countrycode = null;
+    protected $Countrycode;
     /** @var string $Department */
-    protected $Department = null;
+    protected $Department;
     /** @var string $Doorcode */
-    protected $Doorcode = null;
+    protected $Doorcode;
     /** @var string $FirstName */
-    protected $FirstName = null;
+    protected $FirstName;
     /** @var string $Floor */
-    protected $Floor = null;
+    protected $Floor;
     /** @var string $HouseNr */
-    protected $HouseNr = null;
+    protected $HouseNr;
     /** @var string $HouseNrExt */
-    protected $HouseNrExt = null;
+    protected $HouseNrExt;
     /** @var string $Name */
-    protected $Name = null;
+    protected $Name;
     /** @var string $Region */
-    protected $Region = null;
+    protected $Region;
     /** @var string $Remark */
-    protected $Remark = null;
+    protected $Remark;
     /** @var string $Street */
-    protected $Street = null;
+    protected $Street;
     /** @var string $Zipcode */
-    protected $Zipcode = null;
+    protected $Zipcode;
     /** @var array Array with optional properties */
     protected $other = [];
     // @codingStandardsIgnoreEnd

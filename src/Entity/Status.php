@@ -107,15 +107,15 @@ class Status extends AbstractEntity
     ];
     // @codingStandardsIgnoreStart
     /** @var string $CurrentPhaseCode */
-    protected $CurrentPhaseCode = null;
+    protected $CurrentPhaseCode;
     /** @var string $CurrentPhaseDescription */
-    protected $CurrentPhaseDescription = null;
+    protected $CurrentPhaseDescription;
     /** @var string $CurrentStatusCode */
-    protected $CurrentStatusCode = null;
+    protected $CurrentStatusCode;
     /** @var string $CurrentStatusDescription */
-    protected $CurrentStatusDescription = null;
+    protected $CurrentStatusDescription;
     /** @var string $CurrentStatusTimeStamp */
-    protected $CurrentStatusTimeStamp = null;
+    protected $CurrentStatusTimeStamp;
     // @codingStandardsIgnoreEnd
 
     /**

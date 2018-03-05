@@ -82,9 +82,9 @@ class MergedLabel extends AbstractEntity
     ];
     // @codingStandardsIgnoreStart
     /** @var string[] $Barcodes */
-    protected $Barcodes = null;
+    protected $Barcodes;
     /** @var Label[] $Labels */
-    protected $Labels = null;
+    protected $Labels;
     // @codingStandardsIgnoreEnd
 
     /**
