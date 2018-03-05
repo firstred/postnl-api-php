@@ -29,15 +29,14 @@ class EntityTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox should throw an exception when the value to set is missing
-     *
-     * @throws \ReflectionException
      */
     public function testNegativeMissingValue()
     {
         $this->expectException('\\ThirtyBees\\PostNL\\Exception\\InvalidArgumentException');
 
-        $address = Address::create();
-        $address->setArea();
+        (new Address())
+            ->setArea()
+        ;
     }
 
     /**
@@ -52,42 +51,34 @@ class EntityTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox should return `null` when the property does not exist
-     *
-     * @throws \ReflectionException
      */
     public function testNegativeReturnNullWhenPropertyDoesNotExist()
     {
-        $this->assertNull((Address::create())->getNothing());
+        $this->assertNull((new Address())->getNothing());
     }
 
     /**
      * @testdox should throw an exception when the method does not exist
-     *
-     * @throws \ReflectionException
      */
     public function testNegativeThrowExceptionWhenMethodDoesNotExist()
     {
         $this->expectException('\\ThirtyBees\\PostNL\\Exception\\InvalidArgumentException');
 
-        (Address::create())->blab();
+        (new Address())->blab();
     }
 
     /**
      * @testdox should throw an exception when json serializing without having a service
-     *
-     * @throws \ReflectionException
      */
     public function testNegativeThrowExceptionWhenServiceNotSetJson()
     {
         $this->expectException('\\ThirtyBees\\PostNL\\Exception\\InvalidArgumentException');
 
-        json_encode(Address::create());
+        json_encode(new Address());
     }
 
     /**
      * @testdox should throw an exception when xml serializing without having a service
-     *
-     * @throws \ReflectionException
      */
     public function testNegativeThrowExceptionWhenServiceNotSetXml()
     {
@@ -96,7 +87,7 @@ class EntityTest extends \PHPUnit_Framework_TestCase
         $service = new XmlService();
 
         $service->write('{test}a',
-            Address::create()
+            new Address()
         );
     }
 }
