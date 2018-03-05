@@ -33,8 +33,10 @@ use Psr\Cache\CacheItemPoolInterface;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Service as XmlService;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
+use ThirtyBees\PostNL\Entity\Request\GetTimeframes;
 use ThirtyBees\PostNL\Entity\Response\GenerateLabelResponse;
 use ThirtyBees\PostNL\Entity\Request\GenerateLabel;
+use ThirtyBees\PostNL\Entity\Response\ResponseTimeframes;
 use ThirtyBees\PostNL\Entity\SOAP\Security;
 use ThirtyBees\PostNL\Exception\ApiException;
 use ThirtyBees\PostNL\Exception\CifDownException;
@@ -42,7 +44,7 @@ use ThirtyBees\PostNL\Exception\CifException;
 use ThirtyBees\PostNL\PostNL;
 
 /**
- * Class LabellingService
+ * Class TimeframeService
  *
  * @package ThirtyBees\PostNL\Service
  *
@@ -55,16 +57,15 @@ class TimeframeService extends AbstractService
     const VERSION = '2.1';
 
     // Endpoints
-    const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v2_1/label';
-    const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2_1/label';
-    const LEGACY_SANDBOX_ENDPOINT = 'https://testservice.postnl.com/CIF_SB/LabellingWebService/2_1/LabellingWebService.svc';
-    const LEGACY_LIVE_ENDPOINT = 'https://service.postnl.com/CIF/LabellingWebService/2_1/LabellingWebService.svc';
+    const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v2_1/calculate/timeframes';
+    const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2_1/calculate/timeframes';
+    const LEGACY_SANDBOX_ENDPOINT = 'https://testservice.postnl.com/CIF_SB/TimeframeWebService/2_0/TimeframeWebService.svc';
+    const LEGACY_LIVE_ENDPOINT = 'https://service.postnl.com/CIF/TimeframeWebService/2_0/TimeframeWebService.svc';
 
     // SOAP API
-    const SOAP_ACTION = 'http://postnl.nl/cif/services/LabellingWebService/ILabellingWebService/GenerateLabel';
-    const SOAP_ACTION_NO_CONFIRM = 'http://postnl.nl/cif/services/LabellingWebService/ILabellingWebService/GenerateLabelWithoutConfirm';
-    const SERVICES_NAMESPACE = 'http://postnl.nl/cif/services/LabellingWebService/';
-    const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/LabellingWebService/';
+    const SOAP_ACTION = 'http://postnl.nl/cif/services/TimeframeWebService/ITimeframeWebService/GetTimeframes';
+    const SERVICES_NAMESPACE = 'http://postnl.nl/cif/services/TimeframeWebService/';
+    const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/TimeframeWebService/';
 
     /**
      * Namespaces uses for the SOAP version of this service
@@ -82,12 +83,11 @@ class TimeframeService extends AbstractService
     ];
 
     /**
-     * Generate a single barcode via REST
+     * Get timeframes via REST
      *
-     * @param GenerateLabel $generateLabel
-     * @param bool          $confirm
+     * @param GetTimeframes $getTimeframes
      *
-     * @return GenerateLabelResponse
+     * @return ResponseTimeframes
      *
      * @throws ApiException
      * @throws CifDownException
@@ -96,9 +96,9 @@ class TimeframeService extends AbstractService
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
-    public function generateLabelREST(GenerateLabel $generateLabel, $confirm = false)
+    public function getTimeframesREST(GetTimeframes $getTimeframes)
     {
-        $item = $this->retrieveCachedItem($generateLabel->getId());
+        $item = $this->retrieveCachedItem($getTimeframes->getId());
         $response = null;
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
@@ -108,7 +108,7 @@ class TimeframeService extends AbstractService
             }
         }
         if (!$response instanceof Response) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildGenerateLabelRESTRequest($generateLabel, $confirm));
+            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetTimeframesRESTRequest($getTimeframes));
             static::validateRESTResponse($response);
         }
         $body = json_decode(static::getResponseText($response), true);
@@ -128,80 +128,9 @@ class TimeframeService extends AbstractService
     }
 
     /**
-     * Generate multiple labels at once
+     * Get timeframes via SOAP
      *
-     * @param array $generateLabels ['uuid' => [GenerateBarcode, confirm], ...]
-     *
-     * @return array
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
-     */
-    public function generateLabelsREST(array $generateLabels)
-    {
-        $httpClient = $this->postnl->getHttpClient();
-
-        $responses = [];
-        foreach ($generateLabels as $uuid => $generateLabel) {
-            $item = $this->retrieveCachedItem($uuid);
-            $response = null;
-            if ($item instanceof CacheItemInterface) {
-                $response = $item->get();
-                try {
-                    $response = \GuzzleHttp\Psr7\parse_response($response);
-                } catch (\InvalidArgumentException $e) {
-                }
-                if ($response instanceof Response) {
-                    $responses[$uuid] = $response;
-
-                    continue;
-                }
-            }
-
-            $httpClient->addOrUpdateRequest(
-                $uuid,
-                $this->buildGenerateLabelRESTRequest($generateLabel[0], $generateLabel[1])
-            );
-        }
-        $newResponses = $httpClient->doRequests();
-        foreach ($newResponses as $uuid => $newResponse) {
-            if ($newResponse instanceof Response
-                && $newResponse->getStatusCode() === 200
-            ) {
-                $item = $this->retrieveCachedItem($uuid);
-                if ($item instanceof CacheItemInterface) {
-                    $item->set(\GuzzleHttp\Psr7\str($newResponse));
-                    $this->cache->saveDeferred($item);
-                }
-            }
-        }
-        if ($this->cache instanceof CacheItemPoolInterface) {
-            $this->cache->commit();
-        }
-
-        $labels = [];
-        foreach ($responses + $newResponses as $uuid => $response) {
-            $label = json_decode(static::getResponseText($response), true);
-            try {
-                static::validateRESTResponse($response);
-                if (isset($label['ResponseShipments'])) {
-                    $barcode = AbstractEntity::jsonDeserialize(['GenerateLabelResponse' => $label]);
-                } else {
-                    throw new ApiException('Unable to generate label');
-                }
-            } catch (\Exception $e) {
-                $barcode = $e;
-            }
-
-            $labels[$uuid] = $barcode;
-        }
-
-        return $labels;
-    }
-
-    /**
-     * Generate a single label via SOAP
-     *
-     * @param GenerateLabel $generateLabel
-     * @param bool          $confirm
+     * @param GetTimeframes $getTimeframes
      *
      * @return GenerateLabelResponse
      * @throws CifDownException
@@ -211,9 +140,9 @@ class TimeframeService extends AbstractService
      * @throws \Sabre\Xml\LibXMLException
      * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
-    public function generateLabelSOAP(GenerateLabel $generateLabel, $confirm = false)
+    public function getTimeframesSOAP(GetTimeframes $getTimeframes)
     {
-        $item = $this->retrieveCachedItem($generateLabel->getId());
+        $item = $this->retrieveCachedItem($getTimeframes->getId());
         $response = null;
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
@@ -223,7 +152,7 @@ class TimeframeService extends AbstractService
             }
         }
         if (!$response instanceof Response) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildGenerateLabelSOAPRequest($generateLabel, $confirm));
+            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetTimeframesSOAPRequest($getTimeframes));
         }
         $xml = simplexml_load_string(static::getResponseText($response));
 
@@ -247,122 +176,71 @@ class TimeframeService extends AbstractService
     }
 
     /**
-     * Generate multiple labels at once
+     * Build the GetTimeframes request for the REST API
      *
-     * @param array $generateLabels ['uuid' => [GenerateBarcode, confirm], ...]
-     *
-     * @return array
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
-     * @throws \ReflectionException
-     */
-    public function generateLabelsSOAP(array $generateLabels)
-    {
-        $httpClient = $this->postnl->getHttpClient();
-
-        $responses = [];
-        foreach ($generateLabels as $uuid => $generateLabel) {
-            $item = $this->retrieveCachedItem($uuid);
-            $response = null;
-            if ($item instanceof CacheItemInterface) {
-                $response = $item->get();
-                try {
-                    $response = \GuzzleHttp\Psr7\parse_response($response);
-                } catch (\InvalidArgumentException $e) {
-                }
-                if ($response instanceof Response) {
-                    $responses[$uuid] = $response;
-
-                    continue;
-                }
-            }
-
-            $httpClient->addOrUpdateRequest(
-                $uuid,
-                $this->buildGenerateLabelSOAPRequest($generateLabel[0], $generateLabel[1])
-            );
-        }
-
-        $newResponses = $httpClient->doRequests();
-        foreach ($newResponses as $uuid => $newResponse) {
-            if ($newResponse instanceof Response
-                && $newResponse->getStatusCode() === 200
-            ) {
-                $item = $this->retrieveCachedItem($uuid);
-                if ($item instanceof CacheItemInterface) {
-                    $item->set(\GuzzleHttp\Psr7\str($newResponse));
-                    $this->cache->saveDeferred($item);
-                }
-            }
-        }
-        if ($this->cache instanceof CacheItemPoolInterface) {
-            $this->cache->commit();
-        }
-
-        $generateLabelResponses = [];
-        foreach ($responses + $newResponses as $uuid => $response) {
-            $xml = simplexml_load_string(static::getResponseText($response));
-            if (!$xml instanceof \SimpleXMLElement) {
-                $generateLabelResponse = new ApiException('Invalid API response');
-            } else {
-                try {
-                    static::registerNamespaces($xml);
-                    static::validateSOAPResponse($xml);
-
-                    $reader = new Reader();
-                    $reader->xml(static::getResponseText($response));
-                    $array = array_values($reader->parse()['value'][0]['value']);
-                    $array = $array[0];
-
-                    $generateLabelResponse = AbstractEntity::xmlDeserialize($array);
-                } catch (\Exception $e) {
-                    $generateLabelResponse = $e;
-                }
-            }
-
-            $generateLabelResponses[$uuid] = $generateLabelResponse;
-        }
-
-        return $generateLabelResponses;
-    }
-
-    /**
-     * Build the GenerateLabel request for the REST API
-     *
-     * @param GenerateLabel $generateLabel
-     * @param               $confirm
+     * @param GetTimeframes $getTimeframes
      *
      * @return Request
      */
-    protected function buildGenerateLabelRESTRequest(GenerateLabel $generateLabel, $confirm)
+    protected function buildGetTimeframesRESTRequest(GetTimeframes $getTimeframes)
     {
         $apiKey = $this->postnl->getRestApiKey();
-        $this->setService($generateLabel);
+        $this->setService($getTimeframes);
+        $timeframe = $getTimeframes->getTimeframe()[0];
+        $query = [
+            'AllowSundaySorting' => $timeframe->getSundaySorting(),
+            'StartDate'         => $timeframe->getStartDate(),
+            'EndDate'    => $timeframe->getEndDate(),
+            'PostalCode'    => $timeframe->getPostalCode(),
+            'HouseNumber'    => $timeframe->getHouseNr(),
+            'CountryCode'    => $timeframe->getCountryCode(),
+            'Options'    => 'DayTime',
+        ];
+        if ($interval = $timeframe->getInterval()) {
+            $query['Interval'] = $interval;
+        }
+        if ($houseNrExt = $timeframe->getHouseNrExt()) {
+            $query['HouseNrExt'] = $houseNrExt;
+        }
+        if ($timeframeRange = $timeframe->getTimeframeRange()) {
+            $query['TimeframeRange'] = $timeframeRange;
+        }
+        if ($street = $timeframe->getStreet()) {
+            $query['Street'] = $street;
+        }
+        if ($city = $timeframe->getCity()) {
+            $query['City'] = $city;
+        }
+        foreach ($timeframe->getOptions() as $option) {
+            if ($option === 'PG') {
+                continue;
+            }
+            $query['DeliveryOptions'] .= ",$option";
+        }
+        $endpoint = '?'.http_build_query($query);
 
         return new Request(
             'POST',
-            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).'?'.http_build_query([
-                'confirm' => $confirm
-            ]),
+            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint,
             [
                 'apikey'       => $apiKey,
                 'Content-Type' => 'application/json',
                 'Accept'       => 'application/json',
             ],
-            json_encode($generateLabel, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES)
+            json_encode($getTimeframes, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES)
         );
     }
 
     /**
-     * Build the GenerateLabel request for the SOAP API
+     * Build the GetTimeframes request for the SOAP API
      *
-     * @param GenerateLabel $generateLabel
-     * @param               $confirm
+     * @param GetTimeframes $getTimeframes
      *
      * @return Request
      */
-    protected function buildGenerateLabelSOAPRequest(GenerateLabel $generateLabel, $confirm)
+    protected function buildGetTimeframesSOAPRequest(GetTimeframes $getTimeframes)
     {
-        $soapAction = $confirm ? static::SOAP_ACTION : static::SOAP_ACTION_NO_CONFIRM;
+        $soapAction = static::SOAP_ACTION;
         $xmlService = new XmlService();
         foreach (static::$namespaces as $namespace => $prefix) {
             $xmlService->namespaceMap[$namespace] = $prefix;
@@ -370,7 +248,7 @@ class TimeframeService extends AbstractService
         $security = new Security($this->postnl->getToken());
 
         $this->setService($security);
-        $this->setService($generateLabel);
+        $this->setService($getTimeframes);
 
         $request = $xmlService->write(
             '{'.static::ENVELOPE_NAMESPACE.'}Envelope',
@@ -379,7 +257,7 @@ class TimeframeService extends AbstractService
                     ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
                 ],
                 '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
-                    '{'.static::SERVICES_NAMESPACE.'}GenerateLabel' => $generateLabel,
+                    '{'.static::SERVICES_NAMESPACE.'}GetTimeframes' => $getTimeframes,
                 ],
             ]
         );

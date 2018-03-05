@@ -443,7 +443,7 @@ class ShippingStatusService extends AbstractService
      *
      * @return Request
      */
-    protected function buildCurrentStatusRESTRequest(CurrentStatus $currentStatus)
+    public function buildCurrentStatusRESTRequest(CurrentStatus $currentStatus)
     {
         $apiKey = $this->postnl->getRestApiKey();
         $this->setService($currentStatus);
@@ -488,7 +488,7 @@ class ShippingStatusService extends AbstractService
      *
      * @return Request
      */
-    protected function buildCurrentStatusSOAPRequest(CurrentStatus $currentStatus)
+    public function buildCurrentStatusSOAPRequest(CurrentStatus $currentStatus)
     {
         $soapAction = static::SOAP_ACTION;
         $xmlService = new XmlService();
@@ -541,7 +541,7 @@ class ShippingStatusService extends AbstractService
      *
      * @return Request
      */
-    protected function buildCompleteStatusRESTRequest(CompleteStatus $completeStatus)
+    public function buildCompleteStatusRESTRequest(CompleteStatus $completeStatus)
     {
        $apiKey = $this->postnl->getRestApiKey();
         $this->setService($completeStatus);
@@ -593,7 +593,7 @@ class ShippingStatusService extends AbstractService
      *
      * @return Request
      */
-    protected function buildCompleteStatusSOAPRequest(CompleteStatus $completeStatus)
+    public function buildCompleteStatusSOAPRequest(CompleteStatus $completeStatus)
     {
         $soapAction = static::SOAP_ACTION_COMPLETE;
         $xmlService = new XmlService();
@@ -640,7 +640,7 @@ class ShippingStatusService extends AbstractService
      *
      * @return Request
      */
-    protected function buildGetSignatureRESTRequest(GetSignature $getSignature)
+    public function buildGetSignatureRESTRequest(GetSignature $getSignature)
     {
         $apiKey = $this->postnl->getRestApiKey();
         $this->setService($getSignature);
@@ -663,7 +663,7 @@ class ShippingStatusService extends AbstractService
      *
      * @return Request
      */
-    protected function buildGetSignatureSOAPRequest(GetSignature $getSignature)
+    public function buildGetSignatureSOAPRequest(GetSignature $getSignature)
     {
         $soapAction = static::SOAP_ACTION_SIGNATURE;
         $xmlService = new XmlService();

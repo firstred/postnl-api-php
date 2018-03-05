@@ -333,7 +333,7 @@ class LabellingService extends AbstractService
      *
      * @return Request
      */
-    protected function buildGenerateLabelRESTRequest(GenerateLabel $generateLabel, $confirm)
+    public function buildGenerateLabelRESTRequest(GenerateLabel $generateLabel, $confirm)
     {
         $apiKey = $this->postnl->getRestApiKey();
         $this->setService($generateLabel);
@@ -360,7 +360,7 @@ class LabellingService extends AbstractService
      *
      * @return Request
      */
-    protected function buildGenerateLabelSOAPRequest(GenerateLabel $generateLabel, $confirm)
+    public function buildGenerateLabelSOAPRequest(GenerateLabel $generateLabel, $confirm)
     {
         $soapAction = $confirm ? static::SOAP_ACTION : static::SOAP_ACTION_NO_CONFIRM;
         $xmlService = new XmlService();

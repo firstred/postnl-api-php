@@ -33,8 +33,15 @@ use Psr\Cache\CacheItemPoolInterface;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Service as XmlService;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
+use ThirtyBees\PostNL\Entity\Coordinates;
+use ThirtyBees\PostNL\Entity\Location;
+use ThirtyBees\PostNL\Entity\Request\GetLocation;
+use ThirtyBees\PostNL\Entity\Request\GetLocationsInArea;
+use ThirtyBees\PostNL\Entity\Request\GetNearestLocations;
 use ThirtyBees\PostNL\Entity\Response\GenerateLabelResponse;
 use ThirtyBees\PostNL\Entity\Request\GenerateLabel;
+use ThirtyBees\PostNL\Entity\Response\GetLocationsInAreaResponse;
+use ThirtyBees\PostNL\Entity\Response\GetNearestLocationsResponse;
 use ThirtyBees\PostNL\Entity\SOAP\Security;
 use ThirtyBees\PostNL\Exception\ApiException;
 use ThirtyBees\PostNL\Exception\CifDownException;
@@ -42,7 +49,7 @@ use ThirtyBees\PostNL\Exception\CifException;
 use ThirtyBees\PostNL\PostNL;
 
 /**
- * Class LabellingService
+ * Class LocationService
  *
  * @package ThirtyBees\PostNL\Service
  *
@@ -55,16 +62,17 @@ class LocationService extends AbstractService
     const VERSION = '2.1';
 
     // Endpoints
-    const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v2_1/label';
-    const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2_1/label';
-    const LEGACY_SANDBOX_ENDPOINT = 'https://testservice.postnl.com/CIF_SB/LabellingWebService/2_1/LabellingWebService.svc';
-    const LEGACY_LIVE_ENDPOINT = 'https://service.postnl.com/CIF/LabellingWebService/2_1/LabellingWebService.svc';
+    const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v2_1/locations';
+    const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2_1/locations';
+    const LEGACY_SANDBOX_ENDPOINT = 'https://testservice.postnl.com/CIF_SB/LocationWebService/2_1/LocationWebService.svc';
+    const LEGACY_LIVE_ENDPOINT = 'https://service.postnl.com/CIF/LocationWebService/2_1/LocationWebService.svc';
 
     // SOAP API
-    const SOAP_ACTION = 'http://postnl.nl/cif/services/LabellingWebService/ILabellingWebService/GenerateLabel';
-    const SOAP_ACTION_NO_CONFIRM = 'http://postnl.nl/cif/services/LabellingWebService/ILabellingWebService/GenerateLabelWithoutConfirm';
-    const SERVICES_NAMESPACE = 'http://postnl.nl/cif/services/LabellingWebService/';
-    const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/LabellingWebService/';
+    const SOAP_ACTION = 'http://postnl.nl/cif/services/LocationWebService/ILocationWebService/GetNearestLocations';
+    const SOAP_ACTION_LOCATIONS_IN_AREA = 'http://postnl.nl/cif/services/LocationWebService/ILocationWebService/GetNearestLocations';
+    const SOAP_ACTION_LOCATION = 'http://postnl.nl/cif/services/LocationWebService/ILocationWebService/GetLocation';
+    const SERVICES_NAMESPACE = 'http://postnl.nl/cif/services/LocationWebService/';
+    const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/LocationWebService/';
 
     /**
      * Namespaces uses for the SOAP version of this service
@@ -82,12 +90,11 @@ class LocationService extends AbstractService
     ];
 
     /**
-     * Generate a single barcode via REST
+     * Get the nearest locations via REST
      *
-     * @param GenerateLabel $generateLabel
-     * @param bool          $confirm
+     * @param GetNearestLocations $getNearestLocations
      *
-     * @return GenerateLabelResponse
+     * @return GetNearestLocationsResponse
      *
      * @throws ApiException
      * @throws CifDownException
@@ -96,9 +103,9 @@ class LocationService extends AbstractService
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
-    public function generateLabelREST(GenerateLabel $generateLabel, $confirm = false)
+    public function getNearestLocationsREST(GetNearestLocations $getNearestLocations)
     {
-        $item = $this->retrieveCachedItem($generateLabel->getId());
+        $item = $this->retrieveCachedItem($getNearestLocations->getId());
         $response = null;
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
@@ -108,11 +115,11 @@ class LocationService extends AbstractService
             }
         }
         if (!$response instanceof Response) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildGenerateLabelRESTRequest($generateLabel, $confirm));
+            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetNearestLocationsRESTRequest($getNearestLocations));
             static::validateRESTResponse($response);
         }
         $body = json_decode(static::getResponseText($response), true);
-        if (isset($body['ResponseShipments'])) {
+        if (is_array($body)) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof Response
                 && $response->getStatusCode() === 200
@@ -121,87 +128,16 @@ class LocationService extends AbstractService
                 $this->cacheItem($item);
             }
 
-            return AbstractEntity::jsonDeserialize(['GenerateLabelResponse' => $body]);
+            return AbstractEntity::jsonDeserialize(['GetNearestLocationsResponse' => $body]);
         }
 
-        throw new ApiException('Unable to generate label');
+        throw new ApiException('Unable to retrieve the nearest locations');
     }
 
     /**
-     * Generate multiple labels at once
+     * Get the nearest locations via SOAP
      *
-     * @param array $generateLabels ['uuid' => [GenerateBarcode, confirm], ...]
-     *
-     * @return array
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
-     */
-    public function generateLabelsREST(array $generateLabels)
-    {
-        $httpClient = $this->postnl->getHttpClient();
-
-        $responses = [];
-        foreach ($generateLabels as $uuid => $generateLabel) {
-            $item = $this->retrieveCachedItem($uuid);
-            $response = null;
-            if ($item instanceof CacheItemInterface) {
-                $response = $item->get();
-                try {
-                    $response = \GuzzleHttp\Psr7\parse_response($response);
-                } catch (\InvalidArgumentException $e) {
-                }
-                if ($response instanceof Response) {
-                    $responses[$uuid] = $response;
-
-                    continue;
-                }
-            }
-
-            $httpClient->addOrUpdateRequest(
-                $uuid,
-                $this->buildGenerateLabelRESTRequest($generateLabel[0], $generateLabel[1])
-            );
-        }
-        $newResponses = $httpClient->doRequests();
-        foreach ($newResponses as $uuid => $newResponse) {
-            if ($newResponse instanceof Response
-                && $newResponse->getStatusCode() === 200
-            ) {
-                $item = $this->retrieveCachedItem($uuid);
-                if ($item instanceof CacheItemInterface) {
-                    $item->set(\GuzzleHttp\Psr7\str($newResponse));
-                    $this->cache->saveDeferred($item);
-                }
-            }
-        }
-        if ($this->cache instanceof CacheItemPoolInterface) {
-            $this->cache->commit();
-        }
-
-        $labels = [];
-        foreach ($responses + $newResponses as $uuid => $response) {
-            $label = json_decode(static::getResponseText($response), true);
-            try {
-                static::validateRESTResponse($response);
-                if (isset($label['ResponseShipments'])) {
-                    $barcode = AbstractEntity::jsonDeserialize(['GenerateLabelResponse' => $label]);
-                } else {
-                    throw new ApiException('Unable to generate label');
-                }
-            } catch (\Exception $e) {
-                $barcode = $e;
-            }
-
-            $labels[$uuid] = $barcode;
-        }
-
-        return $labels;
-    }
-
-    /**
-     * Generate a single label via SOAP
-     *
-     * @param GenerateLabel $generateLabel
-     * @param bool          $confirm
+     * @param GetNearestLocations $getNearestLocations
      *
      * @return GenerateLabelResponse
      * @throws CifDownException
@@ -211,9 +147,9 @@ class LocationService extends AbstractService
      * @throws \Sabre\Xml\LibXMLException
      * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
-    public function generateLabelSOAP(GenerateLabel $generateLabel, $confirm = false)
+    public function getNearestLocationsSOAP(GetNearestLocations $getNearestLocations)
     {
-        $item = $this->retrieveCachedItem($generateLabel->getId());
+        $item = $this->retrieveCachedItem($getNearestLocations->getId());
         $response = null;
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
@@ -223,7 +159,7 @@ class LocationService extends AbstractService
             }
         }
         if (!$response instanceof Response) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildGenerateLabelSOAPRequest($generateLabel, $confirm));
+            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetNearestLocationsSOAPRequest($getNearestLocations));
         }
         $xml = simplexml_load_string(static::getResponseText($response));
 
@@ -247,122 +183,263 @@ class LocationService extends AbstractService
     }
 
     /**
-     * Generate multiple labels at once
+     * Get the nearest locations via REST
      *
-     * @param array $generateLabels ['uuid' => [GenerateBarcode, confirm], ...]
+     * @param GetLocationsInArea $getLocations
      *
-     * @return array
+     * @return GetLocationsInAreaResponse
+     *
+     * @throws ApiException
+     * @throws CifDownException
+     * @throws CifException
+     * @throws \Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \ThirtyBees\PostNL\Exception\ResponseException
-     * @throws \ReflectionException
      */
-    public function generateLabelsSOAP(array $generateLabels)
+    public function getGetLocationsInAreaREST(GetLocationsInArea $getLocations)
     {
-        $httpClient = $this->postnl->getHttpClient();
-
-        $responses = [];
-        foreach ($generateLabels as $uuid => $generateLabel) {
-            $item = $this->retrieveCachedItem($uuid);
-            $response = null;
-            if ($item instanceof CacheItemInterface) {
-                $response = $item->get();
-                try {
-                    $response = \GuzzleHttp\Psr7\parse_response($response);
-                } catch (\InvalidArgumentException $e) {
-                }
-                if ($response instanceof Response) {
-                    $responses[$uuid] = $response;
-
-                    continue;
-                }
+        $item = $this->retrieveCachedItem($getLocations->getId());
+        $response = null;
+        if ($item instanceof CacheItemInterface) {
+            $response = $item->get();
+            try {
+                $response = \GuzzleHttp\Psr7\parse_response($response);
+            } catch (\InvalidArgumentException $e) {
             }
-
-            $httpClient->addOrUpdateRequest(
-                $uuid,
-                $this->buildGenerateLabelSOAPRequest($generateLabel[0], $generateLabel[1])
-            );
         }
-
-        $newResponses = $httpClient->doRequests();
-        foreach ($newResponses as $uuid => $newResponse) {
-            if ($newResponse instanceof Response
-                && $newResponse->getStatusCode() === 200
+        if (!$response instanceof Response) {
+            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetLocationsInAreaRESTRequest($getLocations));
+            static::validateRESTResponse($response);
+        }
+        $body = json_decode(static::getResponseText($response), true);
+        if (is_array($body)) {
+            if ($item instanceof CacheItemInterface
+                && $response instanceof Response
+                && $response->getStatusCode() === 200
             ) {
-                $item = $this->retrieveCachedItem($uuid);
-                if ($item instanceof CacheItemInterface) {
-                    $item->set(\GuzzleHttp\Psr7\str($newResponse));
-                    $this->cache->saveDeferred($item);
-                }
-            }
-        }
-        if ($this->cache instanceof CacheItemPoolInterface) {
-            $this->cache->commit();
-        }
-
-        $generateLabelResponses = [];
-        foreach ($responses + $newResponses as $uuid => $response) {
-            $xml = simplexml_load_string(static::getResponseText($response));
-            if (!$xml instanceof \SimpleXMLElement) {
-                $generateLabelResponse = new ApiException('Invalid API response');
-            } else {
-                try {
-                    static::registerNamespaces($xml);
-                    static::validateSOAPResponse($xml);
-
-                    $reader = new Reader();
-                    $reader->xml(static::getResponseText($response));
-                    $array = array_values($reader->parse()['value'][0]['value']);
-                    $array = $array[0];
-
-                    $generateLabelResponse = AbstractEntity::xmlDeserialize($array);
-                } catch (\Exception $e) {
-                    $generateLabelResponse = $e;
-                }
+                $item->set(\GuzzleHttp\Psr7\str($response));
+                $this->cacheItem($item);
             }
 
-            $generateLabelResponses[$uuid] = $generateLabelResponse;
+            return AbstractEntity::jsonDeserialize(['GetLocationsInAreaResponse' => $body]);
         }
 
-        return $generateLabelResponses;
+        throw new ApiException('Unable to retrieve the nearest locations');
+    }
+
+    /**
+     * Get the nearest locations via SOAP
+     *
+     * @param GetNearestLocations $getNearestLocations
+     *
+     * @return GenerateLabelResponse
+     * @throws CifDownException
+     * @throws CifException
+     * @throws \Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Sabre\Xml\LibXMLException
+     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     */
+    public function getLocationsInAreaSOAP(GetNearestLocations $getNearestLocations)
+    {
+        $item = $this->retrieveCachedItem($getNearestLocations->getId());
+        $response = null;
+        if ($item instanceof CacheItemInterface) {
+            $response = $item->get();
+            try {
+                $response = \GuzzleHttp\Psr7\parse_response($response);
+            } catch (\InvalidArgumentException $e) {
+            }
+        }
+        if (!$response instanceof Response) {
+            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetLocationsInAreaSOAPRequest($getNearestLocations));
+        }
+        $xml = simplexml_load_string(static::getResponseText($response));
+
+        static::registerNamespaces($xml);
+        static::validateSOAPResponse($xml);
+
+        if ($item instanceof CacheItemInterface
+            && $response instanceof Response
+            && $response->getStatusCode() === 200
+        ) {
+            $item->set(\GuzzleHttp\Psr7\str($response));
+            $this->cacheItem($item);
+        }
+
+        $reader = new Reader();
+        $reader->xml(static::getResponseText($response));
+        $array = array_values($reader->parse()['value'][0]['value']);
+        $array = $array[0];
+
+        return AbstractEntity::xmlDeserialize($array);
+    }
+
+    /**
+     * Get the location via REST
+     *
+     * @param GetLocation $getLocation
+     *
+     * @return GetLocationsInAreaResponse
+     *
+     * @throws ApiException
+     * @throws CifDownException
+     * @throws CifException
+     * @throws \Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     */
+    public function getGetLocationREST(GetLocation $getLocation)
+    {
+        $item = $this->retrieveCachedItem($getLocation->getId());
+        $response = null;
+        if ($item instanceof CacheItemInterface) {
+            $response = $item->get();
+            try {
+                $response = \GuzzleHttp\Psr7\parse_response($response);
+            } catch (\InvalidArgumentException $e) {
+            }
+        }
+        if (!$response instanceof Response) {
+            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetLocationRESTRequest($getLocation));
+            static::validateRESTResponse($response);
+        }
+        $body = json_decode(static::getResponseText($response), true);
+        if (is_array($body)) {
+            if ($item instanceof CacheItemInterface
+                && $response instanceof Response
+                && $response->getStatusCode() === 200
+            ) {
+                $item->set(\GuzzleHttp\Psr7\str($response));
+                $this->cacheItem($item);
+            }
+
+            return AbstractEntity::jsonDeserialize(['GetLocationsInAreaResponse' => $body]);
+        }
+
+        throw new ApiException('Unable to retrieve the nearest locations');
+    }
+
+    /**
+     * Get the nearest locations via SOAP
+     *
+     * @param GetLocation $getLocation
+     *
+     * @return GetLocationsInAreaResponse
+     *
+     * @throws CifDownException
+     * @throws CifException
+     * @throws \Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Sabre\Xml\LibXMLException
+     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     */
+    public function getLocationSOAP(GetLocation $getLocation)
+    {
+        $item = $this->retrieveCachedItem($getLocation->getId());
+        $response = null;
+        if ($item instanceof CacheItemInterface) {
+            $response = $item->get();
+            try {
+                $response = \GuzzleHttp\Psr7\parse_response($response);
+            } catch (\InvalidArgumentException $e) {
+            }
+        }
+        if (!$response instanceof Response) {
+            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetLocationSOAPRequest($getLocation));
+        }
+        $xml = simplexml_load_string(static::getResponseText($response));
+
+        static::registerNamespaces($xml);
+        static::validateSOAPResponse($xml);
+
+        if ($item instanceof CacheItemInterface
+            && $response instanceof Response
+            && $response->getStatusCode() === 200
+        ) {
+            $item->set(\GuzzleHttp\Psr7\str($response));
+            $this->cacheItem($item);
+        }
+
+        $reader = new Reader();
+        $reader->xml(static::getResponseText($response));
+        $array = array_values($reader->parse()['value'][0]['value']);
+        $array = $array[0];
+
+        return AbstractEntity::xmlDeserialize($array);
     }
 
     /**
      * Build the GenerateLabel request for the REST API
      *
-     * @param GenerateLabel $generateLabel
-     * @param               $confirm
+     * @param GetNearestLocations $getNearestLocations
      *
      * @return Request
      */
-    protected function buildGenerateLabelRESTRequest(GenerateLabel $generateLabel, $confirm)
+    public function buildGetNearestLocationsRESTRequest(GetNearestLocations $getNearestLocations)
     {
+        $endpoint = '/nearest';
+        $location = $getNearestLocations->getLocation();
         $apiKey = $this->postnl->getRestApiKey();
-        $this->setService($generateLabel);
+        $this->setService($getNearestLocations);
+        $query = [
+            'CountryCode'     => $getNearestLocations->getCountryCode(),
+            'PostalCode'      => $location->getPostalCode(),
+            'DeliveryOptions' => 'PG',
+        ];
+        if ($city = $location->getCity()) {
+            $query['City'] = $city;
+        }
+        if ($street = $location->getStreet()) {
+            $query['Street'] = $street;
+        }
+        if ($houseNumber = $location->getHouseNr()) {
+            $query['HouseNumber'] = $houseNumber;
+        }
+        if ($deliveryDate = $location->getDeliveryDate()) {
+            $query['DeliveryDate'] = date('d-m-Y', strtotime($deliveryDate));
+        }
+        if ($openingTime = $location->getOpeningTime()) {
+            $query['OpeningTime'] = date('H:i:00', strtotime($openingTime));
+        }
+        if ($location->getCoordinates() instanceof Coordinates) {
+            $endpoint .= '/geocode';
+            unset($query['Street']);
+            unset($query['PostalCode']);
+            unset($query['City']);
+            unset($query['HouseNumber']);
+            $query['Latitude'] = $location->getCoordinates()->getLatitude();
+            $query['Longitude'] = $location->getCoordinates()->getLongitude();
+        }
+        foreach ($location->getDeliveryOptions() as $option) {
+            if ($option === 'PG') {
+                continue;
+            }
+            $query['DeliveryOptions'] .= ",$option";
+        }
+        $endpoint .= '?'.http_build_query($query);
 
         return new Request(
             'POST',
-            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).'?'.http_build_query([
-                'confirm' => $confirm
-            ]),
+            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint,
             [
                 'apikey'       => $apiKey,
                 'Content-Type' => 'application/json',
                 'Accept'       => 'application/json',
-            ],
-            json_encode($generateLabel, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES)
+            ]
         );
     }
 
     /**
      * Build the GenerateLabel request for the SOAP API
      *
-     * @param GenerateLabel $generateLabel
-     * @param               $confirm
+     * @param GetNearestLocations $getLocations
      *
      * @return Request
      */
-    protected function buildGenerateLabelSOAPRequest(GenerateLabel $generateLabel, $confirm)
+    public function buildGetNearestLocationsSOAPRequest(GetNearestLocations $getLocations)
     {
-        $soapAction = $confirm ? static::SOAP_ACTION : static::SOAP_ACTION_NO_CONFIRM;
+        $soapAction = static::SOAP_ACTION;
         $xmlService = new XmlService();
         foreach (static::$namespaces as $namespace => $prefix) {
             $xmlService->namespaceMap[$namespace] = $prefix;
@@ -370,7 +447,7 @@ class LocationService extends AbstractService
         $security = new Security($this->postnl->getToken());
 
         $this->setService($security);
-        $this->setService($generateLabel);
+        $this->setService($getLocations);
 
         $request = $xmlService->write(
             '{'.static::ENVELOPE_NAMESPACE.'}Envelope',
@@ -379,7 +456,179 @@ class LocationService extends AbstractService
                     ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
                 ],
                 '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
-                    '{'.static::SERVICES_NAMESPACE.'}GenerateLabel' => $generateLabel,
+                    '{'.static::SERVICES_NAMESPACE.'}GetNearestLocations' => $getLocations,
+                ],
+            ]
+        );
+
+        $endpoint = $this->postnl->getSandbox()
+            ? ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT)
+            : ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT);
+
+        return new Request(
+            'POST',
+            $endpoint,
+            [
+                'SOAPAction'   => "\"$soapAction\"",
+                'Content-Type' => 'text/xml',
+                'Accept'       => 'text/xml',
+            ],
+            $request
+        );
+    }
+
+    /**
+     * Build the GetLocationsInArea request for the REST API
+     *
+     * @param GetLocationsInArea $getLocations
+     *
+     * @return Request
+     */
+    public function buildGetLocationsInAreaRESTRequest(GetLocationsInArea $getLocations)
+    {
+        $location = $getLocations->getLocation();
+        $apiKey = $this->postnl->getRestApiKey();
+        $this->setService($getLocations);
+        $query = [
+            'DeliveryOptions' => 'PG',
+            'LatitudeNorth' => $location->getCoordinatesNorthWest()->getLatitude(),
+            'LongitudeWest' => $location->getCoordinatesNorthWest()->getLongitude(),
+            'LatitudeSouth' => $location->getCoordinatesSouthEast()->getLatitude(),
+            'LongitudeEast' => $location->getCoordinatesSouthEast()->getLongitude(),
+        ];
+        if ($countryCode = $getLocations->getCountryCode()) {
+            $query['CountryCode'] = $countryCode;
+        }
+        if ($deliveryDate = $location->getDeliveryDate()) {
+            $query['DeliveryDate'] = date('d-m-Y', strtotime($deliveryDate));
+        }
+        if ($openingTime = $location->getOpeningTime()) {
+            $query['OpeningTime'] = date('H:i:00', strtotime($openingTime));
+        }
+        foreach ($location->getDeliveryOptions() as $option) {
+            if ($option === 'PG') {
+                continue;
+            }
+            $query['DeliveryOptions'] .= ",$option";
+        }
+        $endpoint = '/area?'.http_build_query($query);
+
+        return new Request(
+            'POST',
+            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint,
+            [
+                'apikey'       => $apiKey,
+                'Content-Type' => 'application/json',
+                'Accept'       => 'application/json',
+            ]
+        );
+    }
+
+    /**
+     * Build the GetLocationsInArea request for the SOAP API
+     *
+     * @param GetLocationsInArea $getLocations
+     *
+     * @return Request
+     */
+    public function buildGetLocationsInAreaSOAPRequest(GetLocationsInArea $getLocations)
+    {
+        $soapAction = static::SOAP_ACTION_LOCATIONS_IN_AREA;
+        $xmlService = new XmlService();
+        foreach (static::$namespaces as $namespace => $prefix) {
+            $xmlService->namespaceMap[$namespace] = $prefix;
+        }
+        $security = new Security($this->postnl->getToken());
+
+        $this->setService($security);
+        $this->setService($getLocations);
+
+        $request = $xmlService->write(
+            '{'.static::ENVELOPE_NAMESPACE.'}Envelope',
+            [
+                '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
+                    ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
+                ],
+                '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
+                    '{'.static::SERVICES_NAMESPACE.'}GetLocationsInArea' => $getLocations,
+                ],
+            ]
+        );
+
+        $endpoint = $this->postnl->getSandbox()
+            ? ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT)
+            : ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT);
+
+        return new Request(
+            'POST',
+            $endpoint,
+            [
+                'SOAPAction'   => "\"$soapAction\"",
+                'Content-Type' => 'text/xml',
+                'Accept'       => 'text/xml',
+            ],
+            $request
+        );
+    }
+
+    /**
+     * Build the GetLocation request for the REST API
+     *
+     * @param GetLocation $getLocation
+     *
+     * @return Request
+     */
+    public function buildGetLocationRESTRequest(GetLocation $getLocation)
+    {
+        $location = $getLocation->getLocation();
+        $apiKey = $this->postnl->getRestApiKey();
+        $this->setService($getLocation);
+        $query = [
+            'LocationCode' => $location->getLocationCode(),
+        ];
+        if ($id = $location->getRetailNetworkID()) {
+            $query['RetailNetworkID'] = $id;
+        }
+        $endpoint = '/lookup?'.http_build_query($query);
+
+        return new Request(
+            'POST',
+            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint,
+            [
+                'apikey'       => $apiKey,
+                'Content-Type' => 'application/json',
+                'Accept'       => 'application/json',
+            ]
+        );
+    }
+
+    /**
+     * Build the GetLocation request for the SOAP API
+     *
+     * @param GetLocation $getLocations
+     *
+     * @return Request
+     */
+    public function buildGetLocationSOAPRequest(GetLocation $getLocations)
+    {
+        $soapAction = static::SOAP_ACTION_LOCATIONS_IN_AREA;
+        $xmlService = new XmlService();
+        foreach (static::$namespaces as $namespace => $prefix) {
+            $xmlService->namespaceMap[$namespace] = $prefix;
+        }
+        $security = new Security($this->postnl->getToken());
+
+        $this->setService($security);
+        $this->setService($getLocations);
+
+        $request = $xmlService->write(
+            '{'.static::ENVELOPE_NAMESPACE.'}Envelope',
+            [
+                '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
+                    ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
+                ],
+                '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
+                    '{'.static::SERVICES_NAMESPACE.'}GetLocation' => $getLocations,
                 ],
             ]
         );

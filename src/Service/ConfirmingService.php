@@ -244,7 +244,7 @@ class ConfirmingService extends AbstractService
      *
      * @return Request
      */
-    protected function buildConfirmSOAPRequest(Confirming $confirming)
+    public function buildConfirmSOAPRequest(Confirming $confirming)
     {
         $soapAction = static::SOAP_ACTION;
         $xmlService = new XmlService();

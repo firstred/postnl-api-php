@@ -24,9 +24,8 @@
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity\Response;
+namespace ThirtyBees\PostNL\Entity;
 
-use ThirtyBees\PostNL\Entity\AbstractEntity;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
@@ -36,58 +35,65 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class GetLocationsInArea
+ * Class CoordinatesSouthEast
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method GetLocationsResult getGetLocationsResult()
+ * @method string getLatitude()
+ * @method string getLongitude()
  *
- * @method GetLocationsInArea setGetLocationsResult(GetLocationsResult $result = null)
+ * @method CoordinatesSouthEast setLatitude(string $lat)
+ * @method CoordinatesSouthEast setLongitude(string $long)
  */
-class GetLocationsInArea extends AbstractEntity
+class CoordinatesSouthEast extends AbstractEntity
 {
-    /**
-     * Default properties and namespaces for the SOAP API
-     *
-     * @var array $defaultProperties
-     */
+    /** @var string[] $defaultProperties */
     public static $defaultProperties = [
         'Barcode'        => [
-            'GetLocationsResult' => BarcodeService::DOMAIN_NAMESPACE,
+            'Latitude'  => BarcodeService::DOMAIN_NAMESPACE,
+            'Longitude' => BarcodeService::DOMAIN_NAMESPACE,
         ],
         'Confirming'     => [
-            'GetLocationsResult' => ConfirmingService::DOMAIN_NAMESPACE,
+            'Latitude'  => ConfirmingService::DOMAIN_NAMESPACE,
+            'Longitude' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
         'Labelling'      => [
-            'GetLocationsResult' => LabellingService::DOMAIN_NAMESPACE,
+            'Latitude'  => LabellingService::DOMAIN_NAMESPACE,
+            'Longitude' => LabellingService::DOMAIN_NAMESPACE,
         ],
         'ShippingStatus' => [
-            'GetLocationsResult' => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Latitude'  => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Longitude' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate'   => [
-            'GetLocationsResult' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Latitude'  => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Longitude' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
         'Location'       => [
-            'GetLocationsResult' => LocationService::DOMAIN_NAMESPACE,
+            'Latitude'  => LocationService::DOMAIN_NAMESPACE,
+            'Longitude' => LocationService::DOMAIN_NAMESPACE,
         ],
         'Timeframe'      => [
-            'GetLocationsResult' => TimeframeService::DOMAIN_NAMESPACE,
+            'Latitude'  => TimeframeService::DOMAIN_NAMESPACE,
+            'Longitude' => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var GetLocationsResult $GetLocationsResult */
-    protected $GetLocationsResult;
+    /** @var string $Latitude */
+    protected $Latitude;
+    /** @var string $Longitude */
+    protected $Longitude;
     // @codingStandardsIgnoreEnd
 
     /**
-     * GetLocationsInArea constructor.
-     *
-     * @param GetLocationsResult|null $result
+     * @param string $lat
+     * @param string $long
      */
-    public function __construct(GetLocationsResult $result = null)
+    public function __construct($lat, $long)
     {
         parent::__construct();
 
-        $this->setGetLocationsResult($result);
+        $this->setLatitude($lat);
+        $this->setLongitude($long);
     }
 }

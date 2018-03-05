@@ -44,7 +44,7 @@ use ThirtyBees\PostNL\Exception\CifException;
 use ThirtyBees\PostNL\PostNL;
 
 /**
- * Class LabellingService
+ * Class DeliveryDateService
  *
  * @package ThirtyBees\PostNL\Service
  *
@@ -277,7 +277,7 @@ class DeliveryDateService extends AbstractService
      *
      * @return Request
      */
-    protected function buildGetDeliveryDateRESTRequest(GetDeliveryDate $getDeliveryDate)
+    public function buildGetDeliveryDateRESTRequest(GetDeliveryDate $getDeliveryDate)
     {
         $apiKey = $this->postnl->getRestApiKey();
         $this->setService($getDeliveryDate);
@@ -371,7 +371,7 @@ class DeliveryDateService extends AbstractService
      *
      * @return Request
      */
-    protected function buildGetDeliveryDateSOAPRequest(GetDeliveryDate $getDeliveryDate)
+    public function buildGetDeliveryDateSOAPRequest(GetDeliveryDate $getDeliveryDate)
     {
         $soapAction = static::SOAP_ACTION;
         $xmlService = new XmlService();
@@ -418,7 +418,7 @@ class DeliveryDateService extends AbstractService
      *
      * @return Request
      */
-    protected function buildGetSentDateRESTRequest(GetSentDate $getSentDate)
+    public function buildGetSentDateRESTRequest(GetSentDate $getSentDate)
     {
         $apiKey = $this->postnl->getRestApiKey();
         $this->setService($getSentDate);
@@ -466,7 +466,7 @@ class DeliveryDateService extends AbstractService
      *
      * @return Request
      */
-    protected function buildGetSentDateSOAPRequest(GetSentDate $getSentDate)
+    public function buildGetSentDateSOAPRequest(GetSentDate $getSentDate)
     {
         $soapAction = static::SOAP_ACTION;
         $xmlService = new XmlService();

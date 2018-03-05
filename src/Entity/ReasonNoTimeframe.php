@@ -43,57 +43,75 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method string   getDate()
  * @method string   getDescription()
  * @method string[] getOptions()
+ * @method string   getFrom()
+ * @method string   getTo()
  *
  * @method ReasonNoTimeframe setCode(string $code)
  * @method ReasonNoTimeframe setDate(string $date)
  * @method ReasonNoTimeframe setDescription(string $desc)
- * @method ReasonNoTimeframe setOptions(string [] $options)
+ * @method ReasonNoTimeframe setOptions(string[] $options)
+ * @method ReasonNoTimeframe setFrom(string $from)
+ * @method ReasonNoTimeframe setTo(string $to)
  */
 class ReasonNoTimeframe extends AbstractEntity
 {
     /** @var string $defaultProperties */
     public static $defaultProperties = [
-        'Barcode'    => [
+        'Barcode'        => [
             'Code'        => BarcodeService::DOMAIN_NAMESPACE,
             'Date'        => BarcodeService::DOMAIN_NAMESPACE,
             'Description' => BarcodeService::DOMAIN_NAMESPACE,
             'Options'     => BarcodeService::DOMAIN_NAMESPACE,
+            'From'        => BarcodeService::DOMAIN_NAMESPACE,
+            'To'          => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming' => [
+        'Confirming'     => [
             'Code'        => ConfirmingService::DOMAIN_NAMESPACE,
             'Date'        => ConfirmingService::DOMAIN_NAMESPACE,
             'Description' => ConfirmingService::DOMAIN_NAMESPACE,
             'Options'     => ConfirmingService::DOMAIN_NAMESPACE,
+            'From'        => ConfirmingService::DOMAIN_NAMESPACE,
+            'To'          => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'  => [
+        'Labelling'      => [
             'Code'        => LabellingService::DOMAIN_NAMESPACE,
             'Date'        => LabellingService::DOMAIN_NAMESPACE,
             'Description' => LabellingService::DOMAIN_NAMESPACE,
             'Options'     => LabellingService::DOMAIN_NAMESPACE,
+            'From'        => LabellingService::DOMAIN_NAMESPACE,
+            'To'          => LabellingService::DOMAIN_NAMESPACE,
         ],
-        'ShippingStatus'  => [
+        'ShippingStatus' => [
             'Code'        => ShippingStatusService::DOMAIN_NAMESPACE,
             'Date'        => ShippingStatusService::DOMAIN_NAMESPACE,
             'Description' => ShippingStatusService::DOMAIN_NAMESPACE,
             'Options'     => ShippingStatusService::DOMAIN_NAMESPACE,
+            'From'        => ShippingStatusService::DOMAIN_NAMESPACE,
+            'To'          => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'  => [
+        'DeliveryDate'   => [
             'Code'        => DeliveryDateService::DOMAIN_NAMESPACE,
             'Date'        => DeliveryDateService::DOMAIN_NAMESPACE,
             'Description' => DeliveryDateService::DOMAIN_NAMESPACE,
             'Options'     => DeliveryDateService::DOMAIN_NAMESPACE,
+            'From'        => DeliveryDateService::DOMAIN_NAMESPACE,
+            'To'          => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'  => [
+        'Location'       => [
             'Code'        => LocationService::DOMAIN_NAMESPACE,
             'Date'        => LocationService::DOMAIN_NAMESPACE,
             'Description' => LocationService::DOMAIN_NAMESPACE,
             'Options'     => LocationService::DOMAIN_NAMESPACE,
+            'From'        => LocationService::DOMAIN_NAMESPACE,
+            'To'          => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'  => [
+        'Timeframe'      => [
             'Code'        => TimeframeService::DOMAIN_NAMESPACE,
             'Date'        => TimeframeService::DOMAIN_NAMESPACE,
             'Description' => TimeframeService::DOMAIN_NAMESPACE,
             'Options'     => TimeframeService::DOMAIN_NAMESPACE,
+            'From'        => TimeframeService::DOMAIN_NAMESPACE,
+            'To'          => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
@@ -105,6 +123,10 @@ class ReasonNoTimeframe extends AbstractEntity
     protected $Description;
     /** @var string[] $Options */
     protected $Options;
+    /** @var string $From */
+    protected $From;
+    /** @var string $To */
+    protected $To;
     // @codingStandardsIgnoreEnd
 
     /**
@@ -112,8 +134,17 @@ class ReasonNoTimeframe extends AbstractEntity
      * @param string   $date
      * @param string   $desc
      * @param string[] $options
+     * @param string   $from
+     * @param string   $to
      */
-    public function __construct($code, $date, $desc, array $options)
+    public function __construct(
+        $code = null,
+        $date = null,
+        $desc = null,
+        array $options = [],
+        $from = null,
+        $to = null
+    )
     {
         parent::__construct();
 
@@ -121,5 +152,7 @@ class ReasonNoTimeframe extends AbstractEntity
         $this->setDate($date);
         $this->setDescription($desc);
         $this->setOptions($options);
+        $this->setFrom($from);
+        $this->setTo($to);
     }
 }

@@ -205,7 +205,7 @@ class BarcodeService extends AbstractService
      *
      * @return Request
      */
-    protected function buildGenerateBarcodeRESTRequest(GenerateBarcode $generateBarcode)
+    public function buildGenerateBarcodeRESTRequest(GenerateBarcode $generateBarcode)
     {
         $apiKey = $this->postnl->getRestApiKey();
         $this->setService($generateBarcode);
@@ -236,7 +236,7 @@ class BarcodeService extends AbstractService
      *
      * @return Request
      */
-    protected function buildGenerateBarcodeSOAPRequest(GenerateBarcode $generateBarcode, $id = null)
+    public function buildGenerateBarcodeSOAPRequest(GenerateBarcode $generateBarcode, $id = null)
     {
         $soapAction = static::SOAP_ACTION;
         $xmlService = new XmlService();
