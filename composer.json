@@ -23,7 +23,8 @@
     "require-dev": {
         "php": "^5.5.5 || ~7.0",
         "phpunit/phpunit": "~5.0",
-        "wappr/logger": "^1.2"
+        "wappr/logger": "^1.2",
+        "guzzlehttp/guzzle": "^6.3"
     },
     "suggest": {
         "guzzlehttp/guzzle": "Use other HTTP handlers besides cURL"

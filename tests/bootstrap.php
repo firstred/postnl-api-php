@@ -9,7 +9,7 @@ $autoloader = require __DIR__.'/../vendor/autoload.php';
 $autoloader->add('ThirtyBees\\PostNL\\Tests\\', __DIR__);
 
 $filesystemAdapter = new Local(__DIR__.'/');
-$filesystem        = new Filesystem($filesystemAdapter);
+$filesystem = new Filesystem($filesystemAdapter);
 
 $adapter = new Local(__DIR__.'/logs/');
 $logfs = new Filesystem($adapter);
