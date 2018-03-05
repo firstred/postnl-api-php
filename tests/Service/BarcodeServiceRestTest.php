@@ -26,13 +26,17 @@
 
 namespace ThirtyBees\PostNL\Tests\Service;
 
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
 use ThirtyBees\PostNL\Entity\Address;
 use ThirtyBees\PostNL\Entity\Barcode;
 use ThirtyBees\PostNL\Entity\Customer;
 use ThirtyBees\PostNL\Entity\Message\Message;
 use ThirtyBees\PostNL\Entity\Request\GenerateBarcode;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
+use ThirtyBees\PostNL\HttpClient\MockClient;
 use ThirtyBees\PostNL\PostNL;
 use ThirtyBees\PostNL\Service\BarcodeService;
 
@@ -163,5 +167,66 @@ class BarcodeServiceRestTest extends \PHPUnit_Framework_TestCase
         } else {
             return $this->postnl->getCustomer()->getGlobalPackCustomerCode();
         }
+    }
+
+    /**
+     * @testdox return a valid single barcode
+     *
+     * @throws \ThirtyBees\PostNL\Exception\InvalidBarcodeException
+     */
+    public function testSingleBarcodeRest()
+    {
+        $mock = new MockHandler([
+            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode([
+                'Barcode' => '3SDEVC816223392',
+            ])),
+        ]);
+        $handler = HandlerStack::create($mock);
+        $mockClient = new MockClient();
+        $mockClient->setHandler($handler);
+        $this->postnl->setHttpClient($mockClient);
+
+        $this->assertEquals('3SDEVC816223392', $this->postnl->generateBarcode('3S'));
+    }
+
+    /**
+     * @testdox returns several barcodes
+     *
+     * @throws \ThirtyBees\PostNL\Exception\InvalidBarcodeException
+     * @throws \ThirtyBees\PostNL\Exception\InvalidConfigurationException
+     */
+    public function testMultipleNLBarcodesRest()
+    {
+        $mock = new MockHandler([
+            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode([
+                'Barcode' => '3SDEVC816223392',
+            ])),
+            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode([
+                'Barcode' => '3SDEVC816223393',
+            ])),
+            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode([
+                'Barcode' => '3SDEVC816223394',
+            ])),
+            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode([
+                'Barcode' => '3SDEVC816223395',
+            ])),
+        ]);
+        $handler = HandlerStack::create($mock);
+        $mockClient = new MockClient();
+        $mockClient->setHandler($handler);
+        $this->postnl->setHttpClient($mockClient);
+
+        $barcodes = $this->postnl->generateBarcodesByCountryCodes(['NL' => 4]);
+
+        $this->assertEquals([
+            'NL' => [
+                '3SDEVC816223392',
+                '3SDEVC816223393',
+                '3SDEVC816223394',
+                '3SDEVC816223395',
+            ],
+        ],
+            $barcodes
+        );
     }
 }

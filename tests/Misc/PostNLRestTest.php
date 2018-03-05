@@ -26,24 +26,26 @@
 
 namespace ThirtyBees\PostNL\Tests\Misc;
 
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Response;
 use ThirtyBees\PostNL\Entity\Address;
 use ThirtyBees\PostNL\Entity\Customer;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
+use ThirtyBees\PostNL\HttpClient\MockClient;
 use ThirtyBees\PostNL\PostNL;
 
 /**
- * Class PostNLTest
+ * Class PostNLRestTest
  *
  * @package ThirtyBees\PostNL\Tests\Misc
  *
  * @testdox The PostNL object
  */
-class PostNLTest extends \PHPUnit_Framework_TestCase
+class PostNLRestTest extends \PHPUnit_Framework_TestCase
 {
     /** @var PostNL $postnl */
-    protected $postnlSoap;
-    /** @var PostNL $postnlRest */
-    protected $postnlRest;
+    protected $postnl;
 
     /**
      * @before
@@ -52,29 +54,7 @@ class PostNLTest extends \PHPUnit_Framework_TestCase
      */
     public function setupPostNL()
     {
-        $this->postnlSoap = new PostNL(
-            Customer::create()
-                ->setCollectionLocation('123456')
-                ->setCustomerCode('DEVC')
-                ->setCustomerNumber('11223344')
-                ->setContactPerson('Test')
-                ->setAddress(Address::create([
-                    'AddressType' => '02',
-                    'City'        => 'Hoofddorp',
-                    'CompanyName' => 'PostNL',
-                    'Countrycode' => 'NL',
-                    'HouseNr'     => '42',
-                    'Street'      => 'Siriusdreef',
-                    'Zipcode'     => '2132WT',
-                ]))
-                ->setGlobalPackBarcodeType('AB')
-                ->setGlobalPackCustomerCode('1234')
-            , new UsernameToken(null, 'test'),
-            true,
-            PostNL::MODE_SOAP
-        );
-
-        $this->postnlRest = new PostNL(
+        $this->postnl = new PostNL(
             Customer::create()
                 ->setCollectionLocation('123456')
                 ->setCustomerCode('DEVC')
@@ -98,19 +78,11 @@ class PostNLTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @testdox returns a valid customer code in SOAP mode
-     */
-    public function testPostNLSoap()
-    {
-        $this->assertEquals('DEVC', $this->postnlSoap->getCustomer()->getCustomerCode());
-    }
-
-    /**
      * @testdox returns a valid customer code in REST mode
      */
     public function testPostNLRest()
     {
-        $this->assertEquals('DEVC', $this->postnlRest->getCustomer()->getCustomerCode());
+        $this->assertEquals('DEVC', $this->postnl->getCustomer()->getCustomerCode());
     }
 
     /**
@@ -118,6 +90,6 @@ class PostNLTest extends \PHPUnit_Framework_TestCase
      */
     public function testCustomer()
     {
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Customer', $this->postnlRest->getCustomer());
+        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Customer', $this->postnl->getCustomer());
     }
 }

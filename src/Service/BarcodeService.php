@@ -95,7 +95,9 @@ class BarcodeService extends AbstractService
 
         static::validateRESTResponse($response);
 
-        return $response['Barcode'];
+        $json = json_decode((string) $response->getBody(), true);
+
+        return $json['Barcode'];
     }
 
     /**
