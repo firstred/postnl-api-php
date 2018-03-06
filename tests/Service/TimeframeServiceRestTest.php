@@ -39,13 +39,13 @@ use ThirtyBees\PostNL\PostNL;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class TimeframeRestTest
+ * Class TimeframeServiceRestTest
  *
  * @package ThirtyBees\PostNL\Tests\Service
  *
  * @testdox The TimeframeService (REST)
  */
-class TimeframeRestTest extends \PHPUnit_Framework_TestCase
+class TimeframeServiceRestTest extends \PHPUnit_Framework_TestCase
 {
     /** @var PostNL $postnl */
     protected $postnl;

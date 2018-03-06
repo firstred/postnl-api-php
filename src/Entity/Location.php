@@ -26,6 +26,7 @@
 
 namespace ThirtyBees\PostNL\Entity;
 
+use Sabre\Xml\Writer;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
@@ -76,142 +77,126 @@ class Location extends AbstractEntity
     /** @var string[] $defaultProperties */
     public static $defaultProperties = [
         'Barcode'        => [
-            'City'                 => BarcodeService::DOMAIN_NAMESPACE,
-            'Coordinates'          => BarcodeService::DOMAIN_NAMESPACE,
-            'CoordinatesNorthWest' => BarcodeService::DOMAIN_NAMESPACE,
-            'CoordinatesSouthEast' => BarcodeService::DOMAIN_NAMESPACE,
-            'HouseNr'              => BarcodeService::DOMAIN_NAMESPACE,
-            'HouseNrExt'           => BarcodeService::DOMAIN_NAMESPACE,
-            'PostalCode'           => BarcodeService::DOMAIN_NAMESPACE,
-            'Street'               => BarcodeService::DOMAIN_NAMESPACE,
             'AllowSundaySorting'   => BarcodeService::DOMAIN_NAMESPACE,
             'DeliveryDate'         => BarcodeService::DOMAIN_NAMESPACE,
             'DeliveryOptions'      => BarcodeService::DOMAIN_NAMESPACE,
             'OpeningTime'          => BarcodeService::DOMAIN_NAMESPACE,
             'Options'              => BarcodeService::DOMAIN_NAMESPACE,
+            'City'                 => BarcodeService::DOMAIN_NAMESPACE,
+            'HouseNr'              => BarcodeService::DOMAIN_NAMESPACE,
+            'HouseNrExt'           => BarcodeService::DOMAIN_NAMESPACE,
+            'Postalcode'           => BarcodeService::DOMAIN_NAMESPACE,
+            'Street'               => BarcodeService::DOMAIN_NAMESPACE,
+            'Coordinates'          => BarcodeService::DOMAIN_NAMESPACE,
+            'CoordinatesNorthWest' => BarcodeService::DOMAIN_NAMESPACE,
+            'CoordinatesSouthEast' => BarcodeService::DOMAIN_NAMESPACE,
             'LocationCode'         => BarcodeService::DOMAIN_NAMESPACE,
             'RetailNetworkID'      => BarcodeService::DOMAIN_NAMESPACE,
         ],
         'Confirming'     => [
-            'City'                 => ConfirmingService::DOMAIN_NAMESPACE,
-            'Coordinates'          => ConfirmingService::DOMAIN_NAMESPACE,
-            'CoordinatesNorthWest' => ConfirmingService::DOMAIN_NAMESPACE,
-            'CoordinatesSouthEast' => ConfirmingService::DOMAIN_NAMESPACE,
-            'HouseNr'              => ConfirmingService::DOMAIN_NAMESPACE,
-            'HouseNrExt'           => ConfirmingService::DOMAIN_NAMESPACE,
-            'PostalCode'           => ConfirmingService::DOMAIN_NAMESPACE,
-            'Street'               => ConfirmingService::DOMAIN_NAMESPACE,
-            'AllowSundaySorting'   => ConfirmingService::DOMAIN_NAMESPACE,
-            'DeliveryDate'         => ConfirmingService::DOMAIN_NAMESPACE,
-            'DeliveryOptions'      => ConfirmingService::DOMAIN_NAMESPACE,
-            'OpeningTime'          => ConfirmingService::DOMAIN_NAMESPACE,
+            'AllowSundaySorting'                 => ConfirmingService::DOMAIN_NAMESPACE,
+            'DeliveryDate'          => ConfirmingService::DOMAIN_NAMESPACE,
+            'DeliveryOptions' => ConfirmingService::DOMAIN_NAMESPACE,
+            'OpeningTime' => ConfirmingService::DOMAIN_NAMESPACE,
             'Options'              => ConfirmingService::DOMAIN_NAMESPACE,
+            'City'           => ConfirmingService::DOMAIN_NAMESPACE,
+            'HouseNr'           => ConfirmingService::DOMAIN_NAMESPACE,
+            'HouseNrExt'               => ConfirmingService::DOMAIN_NAMESPACE,
+            'Postalcode'   => ConfirmingService::DOMAIN_NAMESPACE,
+            'Street'         => ConfirmingService::DOMAIN_NAMESPACE,
+            'Coordinates'      => ConfirmingService::DOMAIN_NAMESPACE,
+            'CoordinatesNorthWest'          => ConfirmingService::DOMAIN_NAMESPACE,
+            'CoordinatesSouthEast'              => ConfirmingService::DOMAIN_NAMESPACE,
             'LocationCode'         => ConfirmingService::DOMAIN_NAMESPACE,
             'RetailNetworkID'      => ConfirmingService::DOMAIN_NAMESPACE,
         ],
         'Labelling'      => [
-            'City'                 => LabellingService::DOMAIN_NAMESPACE,
-            'Coordinates'          => LabellingService::DOMAIN_NAMESPACE,
-            'CoordinatesNorthWest' => LabellingService::DOMAIN_NAMESPACE,
-            'CoordinatesSouthEast' => LabellingService::DOMAIN_NAMESPACE,
-            'HouseNr'              => LabellingService::DOMAIN_NAMESPACE,
-            'HouseNrExt'           => LabellingService::DOMAIN_NAMESPACE,
-            'PostalCode'           => LabellingService::DOMAIN_NAMESPACE,
-            'Street'               => LabellingService::DOMAIN_NAMESPACE,
-            'AllowSundaySorting'   => LabellingService::DOMAIN_NAMESPACE,
-            'DeliveryDate'         => LabellingService::DOMAIN_NAMESPACE,
-            'DeliveryOptions'      => LabellingService::DOMAIN_NAMESPACE,
-            'OpeningTime'          => LabellingService::DOMAIN_NAMESPACE,
+            'AllowSundaySorting'                 => LabellingService::DOMAIN_NAMESPACE,
+            'DeliveryDate'          => LabellingService::DOMAIN_NAMESPACE,
+            'DeliveryOptions' => LabellingService::DOMAIN_NAMESPACE,
+            'OpeningTime' => LabellingService::DOMAIN_NAMESPACE,
             'Options'              => LabellingService::DOMAIN_NAMESPACE,
+            'City'           => LabellingService::DOMAIN_NAMESPACE,
+            'HouseNr'           => LabellingService::DOMAIN_NAMESPACE,
+            'HouseNrExt'               => LabellingService::DOMAIN_NAMESPACE,
+            'Postalcode'   => LabellingService::DOMAIN_NAMESPACE,
+            'Street'         => LabellingService::DOMAIN_NAMESPACE,
+            'Coordinates'      => LabellingService::DOMAIN_NAMESPACE,
+            'CoordinatesNorthWest'          => LabellingService::DOMAIN_NAMESPACE,
+            'CoordinatesSouthEast'              => LabellingService::DOMAIN_NAMESPACE,
             'LocationCode'         => LabellingService::DOMAIN_NAMESPACE,
             'RetailNetworkID'      => LabellingService::DOMAIN_NAMESPACE,
         ],
         'ShippingStatus' => [
-            'City'                 => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Coordinates'          => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CoordinatesNorthWest' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CoordinatesSouthEast' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'HouseNr'              => ShippingStatusService::DOMAIN_NAMESPACE,
-            'HouseNrExt'           => ShippingStatusService::DOMAIN_NAMESPACE,
-            'PostalCode'           => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Street'               => ShippingStatusService::DOMAIN_NAMESPACE,
-            'AllowSundaySorting'   => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DeliveryDate'         => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DeliveryOptions'      => ShippingStatusService::DOMAIN_NAMESPACE,
-            'OpeningTime'          => ShippingStatusService::DOMAIN_NAMESPACE,
+            'AllowSundaySorting'                 => ShippingStatusService::DOMAIN_NAMESPACE,
+            'DeliveryDate'          => ShippingStatusService::DOMAIN_NAMESPACE,
+            'DeliveryOptions' => ShippingStatusService::DOMAIN_NAMESPACE,
+            'OpeningTime' => ShippingStatusService::DOMAIN_NAMESPACE,
             'Options'              => ShippingStatusService::DOMAIN_NAMESPACE,
+            'City'           => ShippingStatusService::DOMAIN_NAMESPACE,
+            'HouseNr'           => ShippingStatusService::DOMAIN_NAMESPACE,
+            'HouseNrExt'               => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Postalcode'   => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Street'         => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Coordinates'      => ShippingStatusService::DOMAIN_NAMESPACE,
+            'CoordinatesNorthWest'          => ShippingStatusService::DOMAIN_NAMESPACE,
+            'CoordinatesSouthEast'              => ShippingStatusService::DOMAIN_NAMESPACE,
             'LocationCode'         => ShippingStatusService::DOMAIN_NAMESPACE,
             'RetailNetworkID'      => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate'   => [
-            'City'                 => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Coordinates'          => DeliveryDateService::DOMAIN_NAMESPACE,
-            'CoordinatesNorthWest' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'CoordinatesSouthEast' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'HouseNr'              => DeliveryDateService::DOMAIN_NAMESPACE,
-            'HouseNrExt'           => DeliveryDateService::DOMAIN_NAMESPACE,
-            'PostalCode'           => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Street'               => DeliveryDateService::DOMAIN_NAMESPACE,
-            'AllowSundaySorting'   => DeliveryDateService::DOMAIN_NAMESPACE,
-            'DeliveryDate'         => DeliveryDateService::DOMAIN_NAMESPACE,
-            'DeliveryOptions'      => DeliveryDateService::DOMAIN_NAMESPACE,
-            'OpeningTime'          => DeliveryDateService::DOMAIN_NAMESPACE,
+            'AllowSundaySorting'                 => DeliveryDateService::DOMAIN_NAMESPACE,
+            'DeliveryDate'          => DeliveryDateService::DOMAIN_NAMESPACE,
+            'DeliveryOptions' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'OpeningTime' => DeliveryDateService::DOMAIN_NAMESPACE,
             'Options'              => DeliveryDateService::DOMAIN_NAMESPACE,
+            'City'           => DeliveryDateService::DOMAIN_NAMESPACE,
+            'HouseNr'           => DeliveryDateService::DOMAIN_NAMESPACE,
+            'HouseNrExt'               => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Postalcode'   => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Street'         => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Coordinates'      => DeliveryDateService::DOMAIN_NAMESPACE,
+            'CoordinatesNorthWest'          => DeliveryDateService::DOMAIN_NAMESPACE,
+            'CoordinatesSouthEast'              => DeliveryDateService::DOMAIN_NAMESPACE,
             'LocationCode'         => DeliveryDateService::DOMAIN_NAMESPACE,
             'RetailNetworkID'      => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
         'Location'       => [
-            'City'                 => LocationService::DOMAIN_NAMESPACE,
-            'Coordinates'          => LocationService::DOMAIN_NAMESPACE,
-            'CoordinatesNorthWest' => LocationService::DOMAIN_NAMESPACE,
-            'CoordinatesSouthEast' => LocationService::DOMAIN_NAMESPACE,
-            'HouseNr'              => LocationService::DOMAIN_NAMESPACE,
-            'HouseNrExt'           => LocationService::DOMAIN_NAMESPACE,
-            'PostalCode'           => LocationService::DOMAIN_NAMESPACE,
-            'Street'               => LocationService::DOMAIN_NAMESPACE,
-            'AllowSundaySorting'   => LocationService::DOMAIN_NAMESPACE,
-            'DeliveryDate'         => LocationService::DOMAIN_NAMESPACE,
-            'DeliveryOptions'      => LocationService::DOMAIN_NAMESPACE,
-            'OpeningTime'          => LocationService::DOMAIN_NAMESPACE,
+            'AllowSundaySorting'                 => LocationService::DOMAIN_NAMESPACE,
+            'DeliveryDate'          => LocationService::DOMAIN_NAMESPACE,
+            'DeliveryOptions' => LocationService::DOMAIN_NAMESPACE,
+            'OpeningTime' => LocationService::DOMAIN_NAMESPACE,
             'Options'              => LocationService::DOMAIN_NAMESPACE,
+            'City'           => LocationService::DOMAIN_NAMESPACE,
+            'HouseNr'           => LocationService::DOMAIN_NAMESPACE,
+            'HouseNrExt'               => LocationService::DOMAIN_NAMESPACE,
+            'Postalcode'   => LocationService::DOMAIN_NAMESPACE,
+            'Street'         => LocationService::DOMAIN_NAMESPACE,
+            'Coordinates'      => LocationService::DOMAIN_NAMESPACE,
+            'CoordinatesNorthWest'          => LocationService::DOMAIN_NAMESPACE,
+            'CoordinatesSouthEast'              => LocationService::DOMAIN_NAMESPACE,
             'LocationCode'         => LocationService::DOMAIN_NAMESPACE,
             'RetailNetworkID'      => LocationService::DOMAIN_NAMESPACE,
         ],
         'Timeframe'      => [
-            'City'                 => TimeframeService::DOMAIN_NAMESPACE,
-            'Coordinates'          => TimeframeService::DOMAIN_NAMESPACE,
-            'CoordinatesNorthWest' => TimeframeService::DOMAIN_NAMESPACE,
-            'CoordinatesSouthEast' => TimeframeService::DOMAIN_NAMESPACE,
-            'HouseNr'              => TimeframeService::DOMAIN_NAMESPACE,
-            'HouseNrExt'           => TimeframeService::DOMAIN_NAMESPACE,
-            'PostalCode'           => TimeframeService::DOMAIN_NAMESPACE,
-            'Street'               => TimeframeService::DOMAIN_NAMESPACE,
-            'AllowSundaySorting'   => TimeframeService::DOMAIN_NAMESPACE,
-            'DeliveryDate'         => TimeframeService::DOMAIN_NAMESPACE,
-            'DeliveryOptions'      => TimeframeService::DOMAIN_NAMESPACE,
-            'OpeningTime'          => TimeframeService::DOMAIN_NAMESPACE,
+            'AllowSundaySorting'                 => TimeframeService::DOMAIN_NAMESPACE,
+            'DeliveryDate'          => TimeframeService::DOMAIN_NAMESPACE,
+            'DeliveryOptions' => TimeframeService::DOMAIN_NAMESPACE,
+            'OpeningTime' => TimeframeService::DOMAIN_NAMESPACE,
             'Options'              => TimeframeService::DOMAIN_NAMESPACE,
+            'City'           => TimeframeService::DOMAIN_NAMESPACE,
+            'HouseNr'           => TimeframeService::DOMAIN_NAMESPACE,
+            'HouseNrExt'               => TimeframeService::DOMAIN_NAMESPACE,
+            'Postalcode'   => TimeframeService::DOMAIN_NAMESPACE,
+            'Street'         => TimeframeService::DOMAIN_NAMESPACE,
+            'Coordinates'      => TimeframeService::DOMAIN_NAMESPACE,
+            'CoordinatesNorthWest'          => TimeframeService::DOMAIN_NAMESPACE,
+            'CoordinatesSouthEast'              => TimeframeService::DOMAIN_NAMESPACE,
             'LocationCode'         => TimeframeService::DOMAIN_NAMESPACE,
             'RetailNetworkID'      => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string $City */
-    protected $City;
-    /** @var Coordinates $Coordinates */
-    protected $Coordinates;
-    /** @var CoordinatesNorthWest $CoordinatesNorthWest */
-    protected $CoordinatesNorthWest;
-    /** @var CoordinatesSouthEast $CoordinatesSouthEast */
-    protected $CoordinatesSouthEast;
-    /** @var string $HouseNr */
-    protected $HouseNr;
-    /** @var string $HouseNrExt */
-    protected $HouseNrExt;
-    /** @var string $Postalcode */
-    protected $Postalcode;
-    /** @var string $Street */
-    protected $Street;
     /** @var string $AllowSundaySorting */
     protected $AllowSundaySorting;
     /** @var string $DeliveryDate */
@@ -222,6 +207,22 @@ class Location extends AbstractEntity
     protected $OpeningTime;
     /** @var string[] $Options */
     protected $Options;
+    /** @var string $City */
+    protected $City;
+    /** @var string $HouseNr */
+    protected $HouseNr;
+    /** @var string $HouseNrExt */
+    protected $HouseNrExt;
+    /** @var string $Postalcode */
+    protected $Postalcode;
+    /** @var string $Street */
+    protected $Street;
+    /** @var Coordinates $Coordinates */
+    protected $Coordinates;
+    /** @var CoordinatesNorthWest $CoordinatesNorthWest */
+    protected $CoordinatesNorthWest;
+    /** @var CoordinatesSouthEast $CoordinatesSouthEast */
+    protected $CoordinatesSouthEast;
     /** @var string $LocationCode */
     protected $LocationCode;
     /** @var string $RetailNetworkID */
@@ -248,8 +249,8 @@ class Location extends AbstractEntity
         $zipcode = null,
         $allowSundaySorting = null,
         $deliveryDate = null,
-        array $deliveryOptions = ['PG'],
-        array $options = ['Daytime'],
+        array $deliveryOptions = null,
+        array $options = null,
         Coordinates $coordinates = null,
         CoordinatesNorthWest $coordinatesNW = null,
         CoordinatesSouthEast $coordinatesSE = null,
@@ -276,5 +277,56 @@ class Location extends AbstractEntity
         $this->setHouseNrExt($houseNrExt);
         $this->setLocationCode($locationCode);
         $this->setRetailNetworkID($retailNetworkId);
+    }
+
+    /**
+     * Return a serializable array for the XMLWriter
+     *
+     * @param Writer $writer
+     *
+     * @return void
+     */
+    public function xmlSerialize(Writer $writer)
+    {
+        $xml = [];
+        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
+            $writer->write($xml);
+
+            return;
+        }
+
+        foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
+            if ($propertyName === 'Options') {
+                if (is_array($this->Options)) {
+                    $options = [];
+                    foreach ($this->Options as $option) {
+                        $options[] = ["{http://schemas.microsoft.com/2003/10/Serialization/Arrays}string" => $option];
+                    }
+                    $xml["{{$namespace}}Options"] = $options;
+                }
+
+            } elseif ($propertyName === 'DeliveryOptions') {
+                if (is_array($this->DeliveryOptions)) {
+                    $options = [];
+                    foreach ($this->DeliveryOptions as $option) {
+                        $options[] = ["{http://schemas.microsoft.com/2003/10/Serialization/Arrays}string" => $option];
+                    }
+                    $xml["{{$namespace}}DeliveryOptions"] = $options;
+                }
+
+            } elseif ($propertyName === 'AllowSundaySorting') {
+                if (isset($this->AllowSundaySorting)) {
+                    if (is_bool($this->AllowSundaySorting)) {
+                        $xml["{{$namespace}}AllowSundaySorting"] = $this->AllowSundaySorting ? 'true' : 'false';
+                    } else {
+                        $xml["{{$namespace}}AllowSundaySorting"] = $this->AllowSundaySorting;
+                    }
+                }
+            } elseif (!is_null($this->{$propertyName})) {
+                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
+            }
+        }
+        // Auto extending this object with other properties is not supported with SOAP
+        $writer->write($xml);
     }
 }

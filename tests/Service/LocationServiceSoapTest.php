@@ -31,25 +31,25 @@ use GuzzleHttp\Psr7\Request;
 use Psr\Log\LoggerInterface;
 use ThirtyBees\PostNL\Entity\Address;
 use ThirtyBees\PostNL\Entity\Customer;
+use ThirtyBees\PostNL\Entity\Location;
 use ThirtyBees\PostNL\Entity\Message\Message;
-use ThirtyBees\PostNL\Entity\Request\GetTimeframes;
+use ThirtyBees\PostNL\Entity\Request\GetNearestLocations;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
-use ThirtyBees\PostNL\Entity\Timeframe;
 use ThirtyBees\PostNL\PostNL;
-use ThirtyBees\PostNL\Service\TimeframeService;
+use ThirtyBees\PostNL\Service\LocationService;
 
 /**
- * Class TimeframeServiceSoapTest
+ * Class LocationServiceSoapTest
  *
  * @package ThirtyBees\PostNL\Tests\Service
  *
- * @testdox The TimeframeService (SOAP)
+ * @testdox The LocationService (SOAP)
  */
-class TimeframeServiceSoapTest extends \PHPUnit_Framework_TestCase
+class LocationServiceSoapTest extends \PHPUnit_Framework_TestCase
 {
     /** @var PostNL $postnl */
     protected $postnl;
-    /** @var TimeframeService $service */
+    /** @var LocationService $service */
     protected $service;
     /** @var $lastRequest */
     protected $lastRequest;
@@ -83,7 +83,7 @@ class TimeframeServiceSoapTest extends \PHPUnit_Framework_TestCase
             PostNL::MODE_SOAP
         );
 
-        $this->service = $this->postnl->getTimeframeService();
+        $this->service = $this->postnl->getLocationService();
         $this->service->cache = new VoidCachePool();
         $this->service->ttl = 1;
     }
@@ -105,36 +105,38 @@ class TimeframeServiceSoapTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @testdox creates a valid timeframes request
+     * @testdox creates a valid NearestLocations request
+     * @throws \ReflectionException
      */
-    public function testGetTimeframesRequestSoap()
+    public function testGetNearestLocationsSoap()
     {
         $message = new Message();
 
-        $this->lastRequest = $request = $this->service->buildGetTimeframesSOAPRequest(
-            (new GetTimeframes())
+        $this->lastRequest = $request = $this->service->buildGetNearestLocationsSOAPRequest(
+            (new GetNearestLocations())
                 ->setMessage($message)
-                ->setTimeframe([
-                    (new Timeframe())
-                        ->setCity('Hoofddorp')
-                        ->setCountryCode('NL')
-                        ->setEndDate('02-07-2016')
-                        ->setHouseNr('42')
-                        ->setHouseNrExt('A')
-                        ->setOptions([
-                            'Evening'
-                        ])
-                        ->setPostalCode('2132WT')
-                        ->setStartDate('30-06-2016')
-                        ->setStreet('Siriusdreef')
-                        ->setSundaySorting(true)
-                ])
+                ->setCountrycode('NL')
+                ->setLocation(Location::create([
+                    'AllowSundaySorting' => true,
+                    'DeliveryDate'       => '29-06-2016',
+                    'DeliveryOptions'    => [
+                        'PGE',
+                    ],
+                    'OpeningTime'        => '09:00:00',
+                    'Options'    => [
+                        'Daytime'
+                    ],
+                    'City'               => 'Hoofddorp',
+                    'HouseNr'            => '42',
+                    'HouseNrExt'         => 'A',
+                    'Postalcode'         => '2132WT',
+                    'Street'             => 'Siriusdreef',
+                ]))
         );
 
-        $this->assertEmpty($request->getHeaderLine('apikey'));
-        $this->assertEquals('text/xml', $request->getHeaderLine('Accept'));
+
         $this->assertEquals("<?xml version=\"1.0\"?>
-<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:services=\"http://postnl.nl/cif/services/TimeframeWebService/\" xmlns:domain=\"http://postnl.nl/cif/domain/TimeframeWebService/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\" xmlns:schema=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:common=\"http://postnl.nl/cif/services/common/\" xmlns:arr=\"http://schemas.microsoft.com/2003/10/Serialization/Arrays\">
+<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:services=\"http://postnl.nl/cif/services/LocationWebService/\" xmlns:domain=\"http://postnl.nl/cif/domain/LocationWebService/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\" xmlns:schema=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:common=\"http://postnl.nl/cif/services/common/\" xmlns:arr=\"http://schemas.microsoft.com/2003/10/Serialization/Arrays\">
  <soap:Header>
   <wsse:Security>
    <wsse:UsernameToken>
@@ -143,28 +145,33 @@ class TimeframeServiceSoapTest extends \PHPUnit_Framework_TestCase
   </wsse:Security>
  </soap:Header>
  <soap:Body>
-  <services:GetTimeframes>
+  <services:GetNearestLocations>
+   <domain:Countrycode>NL</domain:Countrycode>
+   <domain:Location>
+    <domain:AllowSundaySorting>true</domain:AllowSundaySorting>
+    <domain:DeliveryDate>29-06-2016</domain:DeliveryDate>
+    <domain:DeliveryOptions>
+     <arr:string>PGE</arr:string>
+    </domain:DeliveryOptions>
+    <domain:OpeningTime>09:00:00</domain:OpeningTime>
+    <domain:Options>
+     <arr:string>Daytime</arr:string>
+    </domain:Options>
+    <domain:City>Hoofddorp</domain:City>
+    <domain:HouseNr>42</domain:HouseNr>
+    <domain:HouseNrExt>A</domain:HouseNrExt>
+    <domain:Postalcode>2132WT</domain:Postalcode>
+    <domain:Street>Siriusdreef</domain:Street>
+   </domain:Location>
    <domain:Message>
     <domain:MessageID>{$message->getMessageID()}</domain:MessageID>
     <domain:MessageTimeStamp>{$message->getMessageTimeStamp()}</domain:MessageTimeStamp>
    </domain:Message>
-   <domain:Timeframe>
-    <domain:City>Hoofddorp</domain:City>
-    <domain:CountryCode>NL</domain:CountryCode>
-    <domain:EndDate>02-07-2016</domain:EndDate>
-    <domain:HouseNr>42</domain:HouseNr>
-    <domain:HouseNrExt>A</domain:HouseNrExt>
-    <domain:Options>
-     <arr:string>Evening</arr:string>
-    </domain:Options>
-    <domain:PostalCode>2132WT</domain:PostalCode>
-    <domain:StartDate>30-06-2016</domain:StartDate>
-    <domain:Street>Siriusdreef</domain:Street>
-    <domain:SundaySorting>true</domain:SundaySorting>
-   </domain:Timeframe>
-  </services:GetTimeframes>
+  </services:GetNearestLocations>
  </soap:Body>
 </soap:Envelope>
 ", (string) $request->getBody());
+        $this->assertEmpty($request->getHeaderLine('apikey'));
+        $this->assertEquals('text/xml', $request->getHeaderLine('Accept'));
     }
 }

@@ -44,11 +44,11 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method string   getCountryCode()
+ * @method string   getCountrycode()
  * @method Location getLocation()
  * @method Message  getMessage()
  *
- * @method GetNearestLocations setCountryCode(string $countryCode)
+ * @method GetNearestLocations setCountrycode(string $countrycode)
  * @method GetNearestLocations setLocation(Location $location = null)
  * @method GetNearestLocations setMessage(Message $message = null)
  */
@@ -61,44 +61,44 @@ class GetNearestLocations extends AbstractEntity
      */
     public static $defaultProperties = [
         'Barcode'        => [
-            'CountryCode' => BarcodeService::DOMAIN_NAMESPACE,
+            'Countrycode' => BarcodeService::DOMAIN_NAMESPACE,
             'Location'    => BarcodeService::DOMAIN_NAMESPACE,
             'Message'     => BarcodeService::DOMAIN_NAMESPACE,
         ],
         'Confirming'     => [
-            'CountryCode' => ConfirmingService::DOMAIN_NAMESPACE,
+            'Countrycode' => ConfirmingService::DOMAIN_NAMESPACE,
             'Location'    => ConfirmingService::DOMAIN_NAMESPACE,
             'Message'     => ConfirmingService::DOMAIN_NAMESPACE,
         ],
         'Labelling'      => [
-            'CountryCode' => LabellingService::DOMAIN_NAMESPACE,
+            'Countrycode' => LabellingService::DOMAIN_NAMESPACE,
             'Location'    => LabellingService::DOMAIN_NAMESPACE,
             'Message'     => LabellingService::DOMAIN_NAMESPACE,
         ],
         'ShippingStatus' => [
-            'CountryCode' => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Countrycode' => ShippingStatusService::DOMAIN_NAMESPACE,
             'Location'    => ShippingStatusService::DOMAIN_NAMESPACE,
             'Message'     => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate'   => [
-            'CountryCode' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Countrycode' => DeliveryDateService::DOMAIN_NAMESPACE,
             'Location'    => DeliveryDateService::DOMAIN_NAMESPACE,
             'Message'     => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
         'Location'       => [
-            'CountryCode' => LocationService::DOMAIN_NAMESPACE,
+            'Countrycode' => LocationService::DOMAIN_NAMESPACE,
             'Location'    => LocationService::DOMAIN_NAMESPACE,
             'Message'     => LocationService::DOMAIN_NAMESPACE,
         ],
         'Timeframe'      => [
-            'CountryCode' => TimeframeService::DOMAIN_NAMESPACE,
+            'Countrycode' => TimeframeService::DOMAIN_NAMESPACE,
             'Location'    => TimeframeService::DOMAIN_NAMESPACE,
             'Message'     => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string $CountryCode */
-    protected $CountryCode;
+    /** @var string $Countrycode */
+    protected $Countrycode;
     /** @var Location $Location */
     protected $Location;
     /** @var Message $Message */
@@ -108,18 +108,18 @@ class GetNearestLocations extends AbstractEntity
     /**
      * GetNearestLocations constructor.
      *
-     * @param string|null   $countryCode
+     * @param string|null   $Countrycode
      * @param Location|null $location
      * @param Message|null  $message
      */
     public function __construct(
-        $countryCode = null,
+        $Countrycode = null,
         Location $location = null,
         Message $message = null
     ) {
         parent::__construct();
 
-        $this->setCountryCode($countryCode);
+        $this->setCountrycode($Countrycode);
         $this->setLocation($location);
         $this->setMessage($message ?: new Message());
     }

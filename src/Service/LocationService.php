@@ -80,13 +80,14 @@ class LocationService extends AbstractService
      * @var array $namespaces
      */
     public static $namespaces = [
-        self::ENVELOPE_NAMESPACE     => 'soap',
-        self::OLD_ENVELOPE_NAMESPACE => 'env',
-        self::SERVICES_NAMESPACE     => 'services',
-        self::DOMAIN_NAMESPACE       => 'domain',
-        Security::SECURITY_NAMESPACE => 'wsse',
-        self::XML_SCHEMA_NAMESPACE   => 'schema',
-        self::COMMON_NAMESPACE       => 'common',
+        self::ENVELOPE_NAMESPACE                                    => 'soap',
+        self::OLD_ENVELOPE_NAMESPACE                                => 'env',
+        self::SERVICES_NAMESPACE                                    => 'services',
+        self::DOMAIN_NAMESPACE                                      => 'domain',
+        Security::SECURITY_NAMESPACE                                => 'wsse',
+        self::XML_SCHEMA_NAMESPACE                                  => 'schema',
+        self::COMMON_NAMESPACE                                      => 'common',
+        'http://schemas.microsoft.com/2003/10/Serialization/Arrays' => 'arr',
     ];
 
     /**
