@@ -127,9 +127,6 @@ class DeliveryDateService extends AbstractService
             return AbstractEntity::jsonDeserialize(['GetDeliveryDateResponse' => $body]);
         }
 
-        global $logger;
-        $logger->debug(\GuzzleHttp\Psr7\str($response));
-
         throw new ApiException('Unable to retrieve the delivery date');
     }
 

@@ -266,9 +266,6 @@ abstract class AbstractService
             /** @var Response $response */
             return (string) $response->getBody();
         } else {
-            global $logger;
-            $logger->debug($response);
-
             throw new ResponseException('Unknown response type');
         }
     }
