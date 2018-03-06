@@ -189,12 +189,12 @@ class TimeframeService extends AbstractService
         $timeframe = $getTimeframes->getTimeframe()[0];
         $query = [
             'AllowSundaySorting' => $timeframe->getSundaySorting(),
-            'StartDate'         => $timeframe->getStartDate(),
-            'EndDate'    => $timeframe->getEndDate(),
-            'PostalCode'    => $timeframe->getPostalCode(),
-            'HouseNumber'    => $timeframe->getHouseNr(),
-            'CountryCode'    => $timeframe->getCountryCode(),
-            'Options'    => 'DayTime',
+            'StartDate'          => $timeframe->getStartDate(),
+            'EndDate'            => $timeframe->getEndDate(),
+            'PostalCode'         => $timeframe->getPostalCode(),
+            'HouseNumber'        => $timeframe->getHouseNr(),
+            'CountryCode'        => $timeframe->getCountryCode(),
+            'Options'            => 'Daytime',
         ];
         if ($interval = $timeframe->getInterval()) {
             $query['Interval'] = $interval;

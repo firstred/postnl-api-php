@@ -101,7 +101,7 @@ class TimeframeTimeFrame extends AbstractEntity
      * @param string   $to
      * @param string[] $options
      */
-    public function __construct($from = null, $to = null, array $options = [])
+    public function __construct($from = null, $to = null, array $options = null)
     {
         parent::__construct();
 

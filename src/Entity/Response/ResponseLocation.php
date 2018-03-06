@@ -125,7 +125,7 @@ class ResponseLocation extends AbstractEntity
      */
     public function __construct(
         Address $address = null,
-        array $deliveryOptions = [],
+        array $deliveryOptions = null,
         Location $location = null,
         $warnings = null
     ) {

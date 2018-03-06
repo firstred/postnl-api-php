@@ -28,7 +28,6 @@ namespace ThirtyBees\PostNL\Entity\Request;
 
 use Sabre\Xml\Writer;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
-use ThirtyBees\PostNL\Entity\CutOffTime;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
@@ -45,11 +44,9 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method bool         getAllowSundaySorting()
  * @method string       getCity()
  * @method string       getCountryCode()
- * @method CutOffTime[] getCutOffTimes()
  * @method string       getHouseNr()
  * @method string       getHouseNrExt()
  * @method string[]     getOptions()
- * @method string       getOriginCountryCode()
  * @method string       getPostalCode()
  * @method string       getDeliveryDate()
  * @method string       getShippingDuration()
@@ -58,11 +55,9 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method GetSentDate setAllowSundaySorting(bool $allowSundaySorting)
  * @method GetSentDate setCity(string $city)
  * @method GetSentDate setCountryCode(string $code)
- * @method GetSentDate setCutOffTimes(CutOffTime[] $times)
  * @method GetSentDate setHouseNr(string $houseNr)
  * @method GetSentDate setHouseNrExt(string $houseNrExt)
  * @method GetSentDate setOptions(array $options)
- * @method GetSentDate setOriginCountryCode(string $code)
  * @method GetSentDate setPostalCode(string $postcode)
  * @method GetSentDate setDeliveryDate(string $date)
  * @method GetSentDate setShippingDuration(string $duration)
@@ -80,13 +75,11 @@ class GetSentDate extends AbstractEntity
             'AllowSundaySorting' => BarcodeService::DOMAIN_NAMESPACE,
             'City'               => BarcodeService::DOMAIN_NAMESPACE,
             'CountryCode'        => BarcodeService::DOMAIN_NAMESPACE,
-            'CutOffTimes'        => BarcodeService::DOMAIN_NAMESPACE,
+            'DeliveryDate'       => BarcodeService::DOMAIN_NAMESPACE,
             'HouseNr'            => BarcodeService::DOMAIN_NAMESPACE,
             'HouseNrExt'         => BarcodeService::DOMAIN_NAMESPACE,
             'Options'            => BarcodeService::DOMAIN_NAMESPACE,
-            'OriginCountryCode'  => BarcodeService::DOMAIN_NAMESPACE,
             'PostalCode'         => BarcodeService::DOMAIN_NAMESPACE,
-            'DeliveryDate'       => BarcodeService::DOMAIN_NAMESPACE,
             'ShippingDuration'   => BarcodeService::DOMAIN_NAMESPACE,
             'Street'             => BarcodeService::DOMAIN_NAMESPACE,
         ],
@@ -94,13 +87,11 @@ class GetSentDate extends AbstractEntity
             'AllowSundaySorting' => ConfirmingService::DOMAIN_NAMESPACE,
             'City'               => ConfirmingService::DOMAIN_NAMESPACE,
             'CountryCode'        => ConfirmingService::DOMAIN_NAMESPACE,
-            'CutOffTimes'        => ConfirmingService::DOMAIN_NAMESPACE,
+            'DeliveryDate'       => ConfirmingService::DOMAIN_NAMESPACE,
             'HouseNr'            => ConfirmingService::DOMAIN_NAMESPACE,
             'HouseNrExt'         => ConfirmingService::DOMAIN_NAMESPACE,
             'Options'            => ConfirmingService::DOMAIN_NAMESPACE,
-            'OriginCountryCode'  => ConfirmingService::DOMAIN_NAMESPACE,
             'PostalCode'         => ConfirmingService::DOMAIN_NAMESPACE,
-            'DeliveryDate'       => ConfirmingService::DOMAIN_NAMESPACE,
             'ShippingDuration'   => ConfirmingService::DOMAIN_NAMESPACE,
             'Street'             => ConfirmingService::DOMAIN_NAMESPACE,
         ],
@@ -108,13 +99,11 @@ class GetSentDate extends AbstractEntity
             'AllowSundaySorting' => LabellingService::DOMAIN_NAMESPACE,
             'City'               => LabellingService::DOMAIN_NAMESPACE,
             'CountryCode'        => LabellingService::DOMAIN_NAMESPACE,
-            'CutOffTimes'        => LabellingService::DOMAIN_NAMESPACE,
+            'DeliveryDate'       => LabellingService::DOMAIN_NAMESPACE,
             'HouseNr'            => LabellingService::DOMAIN_NAMESPACE,
             'HouseNrExt'         => LabellingService::DOMAIN_NAMESPACE,
             'Options'            => LabellingService::DOMAIN_NAMESPACE,
-            'OriginCountryCode'  => LabellingService::DOMAIN_NAMESPACE,
             'PostalCode'         => LabellingService::DOMAIN_NAMESPACE,
-            'DeliveryDate'       => LabellingService::DOMAIN_NAMESPACE,
             'ShippingDuration'   => LabellingService::DOMAIN_NAMESPACE,
             'Street'             => LabellingService::DOMAIN_NAMESPACE,
         ],
@@ -122,13 +111,11 @@ class GetSentDate extends AbstractEntity
             'AllowSundaySorting' => ShippingStatusService::DOMAIN_NAMESPACE,
             'City'               => ShippingStatusService::DOMAIN_NAMESPACE,
             'CountryCode'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CutOffTimes'        => ShippingStatusService::DOMAIN_NAMESPACE,
+            'DeliveryDate'       => ShippingStatusService::DOMAIN_NAMESPACE,
             'HouseNr'            => ShippingStatusService::DOMAIN_NAMESPACE,
             'HouseNrExt'         => ShippingStatusService::DOMAIN_NAMESPACE,
             'Options'            => ShippingStatusService::DOMAIN_NAMESPACE,
-            'OriginCountryCode'  => ShippingStatusService::DOMAIN_NAMESPACE,
             'PostalCode'         => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DeliveryDate'       => ShippingStatusService::DOMAIN_NAMESPACE,
             'ShippingDuration'   => ShippingStatusService::DOMAIN_NAMESPACE,
             'Street'             => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
@@ -136,13 +123,11 @@ class GetSentDate extends AbstractEntity
             'AllowSundaySorting' => DeliveryDateService::DOMAIN_NAMESPACE,
             'City'               => DeliveryDateService::DOMAIN_NAMESPACE,
             'CountryCode'        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'CutOffTimes'        => DeliveryDateService::DOMAIN_NAMESPACE,
+            'DeliveryDate'       => DeliveryDateService::DOMAIN_NAMESPACE,
             'HouseNr'            => DeliveryDateService::DOMAIN_NAMESPACE,
             'HouseNrExt'         => DeliveryDateService::DOMAIN_NAMESPACE,
             'Options'            => DeliveryDateService::DOMAIN_NAMESPACE,
-            'OriginCountryCode'  => DeliveryDateService::DOMAIN_NAMESPACE,
             'PostalCode'         => DeliveryDateService::DOMAIN_NAMESPACE,
-            'DeliveryDate'       => DeliveryDateService::DOMAIN_NAMESPACE,
             'ShippingDuration'   => DeliveryDateService::DOMAIN_NAMESPACE,
             'Street'             => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
@@ -150,13 +135,11 @@ class GetSentDate extends AbstractEntity
             'AllowSundaySorting' => LocationService::DOMAIN_NAMESPACE,
             'City'               => LocationService::DOMAIN_NAMESPACE,
             'CountryCode'        => LocationService::DOMAIN_NAMESPACE,
-            'CutOffTimes'        => LocationService::DOMAIN_NAMESPACE,
+            'DeliveryDate'       => LocationService::DOMAIN_NAMESPACE,
             'HouseNr'            => LocationService::DOMAIN_NAMESPACE,
             'HouseNrExt'         => LocationService::DOMAIN_NAMESPACE,
             'Options'            => LocationService::DOMAIN_NAMESPACE,
-            'OriginCountryCode'  => LocationService::DOMAIN_NAMESPACE,
             'PostalCode'         => LocationService::DOMAIN_NAMESPACE,
-            'DeliveryDate'       => LocationService::DOMAIN_NAMESPACE,
             'ShippingDuration'   => LocationService::DOMAIN_NAMESPACE,
             'Street'             => LocationService::DOMAIN_NAMESPACE,
         ],
@@ -164,13 +147,11 @@ class GetSentDate extends AbstractEntity
             'AllowSundaySorting' => TimeframeService::DOMAIN_NAMESPACE,
             'City'               => TimeframeService::DOMAIN_NAMESPACE,
             'CountryCode'        => TimeframeService::DOMAIN_NAMESPACE,
-            'CutOffTimes'        => TimeframeService::DOMAIN_NAMESPACE,
+            'DeliveryDate'       => TimeframeService::DOMAIN_NAMESPACE,
             'HouseNr'            => TimeframeService::DOMAIN_NAMESPACE,
             'HouseNrExt'         => TimeframeService::DOMAIN_NAMESPACE,
             'Options'            => TimeframeService::DOMAIN_NAMESPACE,
-            'OriginCountryCode'  => TimeframeService::DOMAIN_NAMESPACE,
             'PostalCode'         => TimeframeService::DOMAIN_NAMESPACE,
-            'DeliveryDate'       => TimeframeService::DOMAIN_NAMESPACE,
             'ShippingDuration'   => TimeframeService::DOMAIN_NAMESPACE,
             'Street'             => TimeframeService::DOMAIN_NAMESPACE,
         ],
@@ -204,11 +185,9 @@ class GetSentDate extends AbstractEntity
      * @param bool        $allowSundaySorting
      * @param string|null $city
      * @param string|null $countryCode
-     * @param array       $cutOffTimes
      * @param string|null $houseNr
      * @param string|null $houseNrExt
      * @param array       $options
-     * @param string|null $originCountryCode
      * @param string|null $postalCode
      * @param string|null $DeliveryDate
      * @param string|null $street
@@ -218,11 +197,9 @@ class GetSentDate extends AbstractEntity
         $allowSundaySorting = false,
         $city = null,
         $countryCode = null,
-        array $cutOffTimes = [],
         $houseNr = null,
         $houseNrExt = null,
-        array $options = [],
-        $originCountryCode = null,
+        array $options = null,
         $postalCode = null,
         $DeliveryDate = null,
         $street = null,
@@ -233,11 +210,9 @@ class GetSentDate extends AbstractEntity
         $this->setAllowSundaySorting($allowSundaySorting);
         $this->setCity($city);
         $this->setCountryCode($countryCode);
-        $this->setCutOffTimes($cutOffTimes);
         $this->setHouseNr($houseNr);
         $this->setHouseNrExt($houseNrExt);
         $this->setOptions($options);
-        $this->setOriginCountryCode($originCountryCode);
         $this->setPostalCode($postalCode);
         $this->setDeliveryDate($DeliveryDate);
         $this->setStreet($street);
@@ -262,11 +237,13 @@ class GetSentDate extends AbstractEntity
 
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
             if ($propertyName === 'Options') {
-                $options = [];
-                foreach ($this->Options as $option) {
-                    $options[] = ["{{$namespace}}string" => $option];
+                if (isset($this->Options)) {
+                    $options = [];
+                    foreach ($this->Options as $option) {
+                        $options[] = ["{http://schemas.microsoft.com/2003/10/Serialization/Arrays}string" => $option];
+                    }
+                    $xml["{{$namespace}}Options"] = $options;
                 }
-                $xml["{{$namespace}}Options"] = $options;
             } elseif ($propertyName === 'AllowSundaySorting') {
                 $xml["{{$namespace}}AllowSundaySorting"] = $this->AllowSundaySorting ? 'true' : 'false';
             } elseif (!is_null($this->{$propertyName})) {

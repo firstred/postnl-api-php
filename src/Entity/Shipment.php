@@ -469,7 +469,7 @@ class Shipment extends AbstractEntity
      * @param string|null          $dateTo
      */
     public function __construct(
-        array $addresses = [],
+        array $addresses = null,
         array $amounts = null,
         $barcode = null,
         array $contacts = null,

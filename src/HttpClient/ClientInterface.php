@@ -28,6 +28,7 @@ namespace ThirtyBees\PostNL\HttpClient;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use Psr\Log\LoggerInterface;
 
 /**
  * Interface ClientInterface
@@ -36,6 +37,13 @@ use GuzzleHttp\Psr7\Response;
  */
 interface ClientInterface
 {
+    /**
+     * Set the logger
+     *
+     * @param LoggerInterface $logger
+     */
+    public function setLogger(LoggerInterface $logger);
+
     /**
      * Get the HTTP Client instance
      *

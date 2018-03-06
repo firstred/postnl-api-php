@@ -26,6 +26,7 @@
 
 namespace ThirtyBees\PostNL\Entity;
 
+use Sabre\Xml\Writer;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
@@ -141,11 +142,10 @@ class ReasonNoTimeframe extends AbstractEntity
         $code = null,
         $date = null,
         $desc = null,
-        array $options = [],
+        array $options = null,
         $from = null,
         $to = null
-    )
-    {
+    ) {
         parent::__construct();
 
         $this->setCode($code);
@@ -154,5 +154,40 @@ class ReasonNoTimeframe extends AbstractEntity
         $this->setOptions($options);
         $this->setFrom($from);
         $this->setTo($to);
+    }
+
+    /**
+     * Return a serializable array for the XMLWriter
+     *
+     * @param Writer $writer
+     *
+     * @return void
+     */
+    public function xmlSerialize(Writer $writer)
+    {
+        $xml = [];
+        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
+            $writer->write($xml);
+
+            return;
+        }
+
+        foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
+            if ($propertyName === 'Options') {
+                if (isset($this->Options)) {
+                    $options = [];
+                    if (is_array($this->Options)) {
+                        foreach ($this->Options as $option) {
+                            $options[] = ["{http://schemas.microsoft.com/2003/10/Serialization/Arrays}string" => $option];
+                        }
+                    }
+                    $xml["{{$namespace}}Options"] = $options;
+                }
+            } elseif (!is_null($this->{$propertyName})) {
+                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
+            }
+        }
+        // Auto extending this object with other properties is not supported with SOAP
+        $writer->write($xml);
     }
 }

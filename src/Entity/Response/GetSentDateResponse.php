@@ -57,31 +57,31 @@ class GetSentDateResponse extends AbstractEntity
     public static $defaultProperties = [
         'Barcode'        => [
             'SentDate' => BarcodeService::DOMAIN_NAMESPACE,
-            'Options'  => 'http://schemas.microsoft.com/2003/10/Serialization/Arrays',
+            'Options'  => BarcodeService::DOMAIN_NAMESPACE,
         ],
         'Confirming'     => [
             'SentDate' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Options'  => 'http://schemas.microsoft.com/2003/10/Serialization/Arrays',
+            'Options'  => ConfirmingService::DOMAIN_NAMESPACE,
         ],
         'Labelling'      => [
             'SentDate' => LabellingService::DOMAIN_NAMESPACE,
-            'Options'  => 'http://schemas.microsoft.com/2003/10/Serialization/Arrays',
+            'Options'  => LabellingService::DOMAIN_NAMESPACE,
         ],
         'ShippingStatus' => [
             'SentDate' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Options'  => 'http://schemas.microsoft.com/2003/10/Serialization/Arrays',
+            'Options'  => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate'   => [
             'SentDate' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Options'  => 'http://schemas.microsoft.com/2003/10/Serialization/Arrays',
+            'Options'  => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
         'Location'       => [
             'SentDate' => LocationService::DOMAIN_NAMESPACE,
-            'Options'  => 'http://schemas.microsoft.com/2003/10/Serialization/Arrays',
+            'Options'  => LocationService::DOMAIN_NAMESPACE,
         ],
         'Timeframe'      => [
             'SentDate' => TimeframeService::DOMAIN_NAMESPACE,
-            'Options'  => 'http://schemas.microsoft.com/2003/10/Serialization/Arrays',
+            'Options'  => timeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
@@ -97,7 +97,7 @@ class GetSentDateResponse extends AbstractEntity
      * @param string      $date
      * @param string[] $options
      */
-    public function __construct($date = null, array $options = [])
+    public function __construct($date = null, array $options = null)
     {
         parent::__construct();
 
@@ -122,14 +122,16 @@ class GetSentDateResponse extends AbstractEntity
         }
 
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if ($propertyName === 'Shipments') {
-                $options = [];
-                if (is_array($this->Options)) {
-                    foreach ($this->Options as $option) {
-                        $options[] = ["{{$namespace}}string" => $option];
+            if ($propertyName === 'Options') {
+                if (isset($this->Options)) {
+                    $options = [];
+                    if (is_array($this->Options)) {
+                        foreach ($this->Options as $option) {
+                            $options[] = ["{http://schemas.microsoft.com/2003/10/Serialization/Arrays}string" => $option];
+                        }
                     }
+                    $xml["{{$namespace}}Options"] = $options;
                 }
-                $xml["{{$namespace}}Options"] = $options;
             } elseif (!is_null($this->{$propertyName})) {
                 $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
             }

@@ -34,13 +34,14 @@ use Sabre\Xml\Service as XmlService;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
 use ThirtyBees\PostNL\Entity\CutOffTime;
 use ThirtyBees\PostNL\Entity\Request\GetDeliveryDate;
-use ThirtyBees\PostNL\Entity\Request\GetSentDate;
+use ThirtyBees\PostNL\Entity\Request\GetSentDateRequest;
 use ThirtyBees\PostNL\Entity\Response\GetDeliveryDateResponse;
 use ThirtyBees\PostNL\Entity\Response\GetSentDateResponse;
 use ThirtyBees\PostNL\Entity\SOAP\Security;
 use ThirtyBees\PostNL\Exception\ApiException;
 use ThirtyBees\PostNL\Exception\CifDownException;
 use ThirtyBees\PostNL\Exception\CifException;
+use ThirtyBees\PostNL\Exception\ResponseException;
 use ThirtyBees\PostNL\PostNL;
 
 /**
@@ -49,7 +50,7 @@ use ThirtyBees\PostNL\PostNL;
  * @package ThirtyBees\PostNL\Service
  *
  * @method GetDeliveryDateResponse getDeliveryDate(GetDeliveryDate $getDeliveryDate)
- * @method GetSentDateResponse     getSentDate(GetSentDate $getSentDate)
+ * @method GetSentDateResponse     getSentDate(GetSentDateRequest $getSentDate)
  */
 class DeliveryDateService extends AbstractService
 {
@@ -74,13 +75,14 @@ class DeliveryDateService extends AbstractService
      * @var array $namespaces
      */
     public static $namespaces = [
-        self::ENVELOPE_NAMESPACE     => 'soap',
-        self::OLD_ENVELOPE_NAMESPACE => 'env',
-        self::SERVICES_NAMESPACE     => 'services',
-        self::DOMAIN_NAMESPACE       => 'domain',
-        Security::SECURITY_NAMESPACE => 'wsse',
-        self::XML_SCHEMA_NAMESPACE   => 'schema',
-        self::COMMON_NAMESPACE       => 'common',
+        self::ENVELOPE_NAMESPACE                                    => 'soap',
+        self::OLD_ENVELOPE_NAMESPACE                                => 'env',
+        self::SERVICES_NAMESPACE                                    => 'services',
+        self::DOMAIN_NAMESPACE                                      => 'domain',
+        Security::SECURITY_NAMESPACE                                => 'wsse',
+        self::XML_SCHEMA_NAMESPACE                                  => 'schema',
+        self::COMMON_NAMESPACE                                      => 'common',
+        'http://schemas.microsoft.com/2003/10/Serialization/Arrays' => 'arr',
     ];
 
     /**
@@ -95,7 +97,7 @@ class DeliveryDateService extends AbstractService
      * @throws CifException
      * @throws \Exception
      * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws ResponseException
      */
     public function getDeliveryDateREST(GetDeliveryDate $getDeliveryDate)
     {
@@ -125,7 +127,10 @@ class DeliveryDateService extends AbstractService
             return AbstractEntity::jsonDeserialize(['GetDeliveryDateResponse' => $body]);
         }
 
-        throw new ApiException('Unable to generate label');
+        global $logger;
+        $logger->debug(\GuzzleHttp\Psr7\str($response));
+
+        throw new ApiException('Unable to retrieve the delivery date');
     }
 
     /**
@@ -139,7 +144,7 @@ class DeliveryDateService extends AbstractService
      * @throws \Exception
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Sabre\Xml\LibXMLException
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws ResponseException
      */
     public function getDeliveryDateSOAP(GetDeliveryDate $getDeliveryDate)
     {
@@ -179,7 +184,7 @@ class DeliveryDateService extends AbstractService
     /**
      * Get the sent date via REST
      *
-     * @param GetSentDate $getSentDate
+     * @param GetSentDateRequest $getSentDate
      *
      * @return GetDeliveryDateResponse
      *
@@ -188,9 +193,9 @@ class DeliveryDateService extends AbstractService
      * @throws CifException
      * @throws \Exception
      * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws ResponseException
      */
-    public function getSentDateREST(GetSentDate $getSentDate)
+    public function getSentDateREST(GetSentDateRequest $getSentDate)
     {
         $item = $this->retrieveCachedItem($getSentDate->getId());
         $response = null;
@@ -202,11 +207,11 @@ class DeliveryDateService extends AbstractService
             }
         }
         if (!$response instanceof Response) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetDeliveryDateRESTRequest($getSentDate));
+            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetSentDateRESTRequest($getSentDate));
             static::validateRESTResponse($response);
         }
         $body = json_decode(static::getResponseText($response), true);
-        if (isset($body['DeliveryDate'])) {
+        if (isset($body['SentDate'])) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof Response
                 && $response->getStatusCode() === 200
@@ -224,20 +229,19 @@ class DeliveryDateService extends AbstractService
     /**
      * Generate a single label via SOAP
      *
-     * @param GetSentDate $GetDeliveryDate
-     * @param bool        $confirm
+     * @param GetSentDateRequest $getSentDate
      *
-     * @return GetDeliveryDateResponse
+     * @return GetSentDateResponse
      * @throws CifDownException
      * @throws CifException
      * @throws \Exception
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Sabre\Xml\LibXMLException
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws ResponseException
      */
-    public function getSentDateSOAP(GetSentDate $GetDeliveryDate, $confirm = false)
+    public function getSentDateSOAP(GetSentDateRequest $getSentDate)
     {
-        $item = $this->retrieveCachedItem($GetDeliveryDate->getId());
+        $item = $this->retrieveCachedItem($getSentDate->getId());
         $response = null;
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
@@ -247,7 +251,7 @@ class DeliveryDateService extends AbstractService
             }
         }
         if (!$response instanceof Response) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetDeliveryDateSOAPRequest($GetDeliveryDate, $confirm));
+            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetSentDateSOAPRequest($getSentDate));
         }
         $xml = simplexml_load_string(static::getResponseText($response));
 
@@ -281,15 +285,16 @@ class DeliveryDateService extends AbstractService
     {
         $apiKey = $this->postnl->getRestApiKey();
         $this->setService($getDeliveryDate);
+        $deliveryDate = $getDeliveryDate->getGetDeliveryDate();
 
         $query = [
-            'ShippingDate' => $getDeliveryDate->getShippingDate(),
-            'Options'      => 'DayTime',
+            'ShippingDate' => $deliveryDate->getShippingDate(),
+            'Options'      => 'Daytime',
         ];
-        if ($shippingDuration = $getDeliveryDate->getShippingDuration()) {
+        if ($shippingDuration = $deliveryDate->getShippingDuration()) {
             $query['ShippingDuration'] = $shippingDuration;
         }
-        if ($times = $cutOffTime = $getDeliveryDate->getCutOffTimes()) {
+        if ($times = $cutOffTime = $deliveryDate->getCutOffTimes()) {
             foreach ($times as $time) {
                 /** @var CutOffTime $time */
                 switch ($time->getDay()) {
@@ -327,35 +332,37 @@ class DeliveryDateService extends AbstractService
                 }
             }
         }
-        if ($postcode = $getDeliveryDate->getPostalCode()) {
+        if ($postcode = $deliveryDate->getPostalCode()) {
             $query['PostalCode'] = $postcode;
         }
-        $query['CountryCode'] = $getDeliveryDate->getCountryCode();
-        if ($originCountryCode = $getDeliveryDate->getOriginCountryCode()) {
+        $query['CountryCode'] = $deliveryDate->getCountryCode();
+        if ($originCountryCode = $deliveryDate->getOriginCountryCode()) {
             $query['OriginCountryCode'] = $originCountryCode;
         }
-        if ($city = $getDeliveryDate->getCity()) {
+        if ($city = $deliveryDate->getCity()) {
             $query['City'] = $city;
         }
-        if ($houseNr = $getDeliveryDate->getHouseNr()) {
+        if ($houseNr = $deliveryDate->getHouseNr()) {
             $query['HouseNr'] = $houseNr;
         }
-        if ($houseNrExt = $getDeliveryDate->getHouseNrExt()) {
+        if ($houseNrExt = $deliveryDate->getHouseNrExt()) {
             $query['HouseNrExt'] = $houseNrExt;
         }
-        foreach ($getDeliveryDate->getOptions() as $option) {
-            if ($option === 'DayTime') {
-                continue;
-            }
+        if (is_array($deliveryDate->getOptions())) {
+            foreach ($deliveryDate->getOptions() as $option) {
+                if ($option === 'Daytime') {
+                    continue;
+                }
 
-            $query['Options'] .= ",$option";
+                $query['Options'] .= ",$option";
+            }
         }
 
         $endpoint = '/delivery?'.http_build_query($query);
 
         return new Request(
             'POST',
-            $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT.$endpoint,
+            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint,
             [
                 'apikey'       => $apiKey,
                 'Accept'       => 'application/json',
@@ -414,35 +421,33 @@ class DeliveryDateService extends AbstractService
     /**
      * Build the GetSentDate request for the REST API
      *
-     * @param GetSentDate $getSentDate
+     * @param GetSentDateRequest $getSentDate
      *
      * @return Request
      */
-    public function buildGetSentDateRESTRequest(GetSentDate $getSentDate)
+    public function buildGetSentDateRESTRequest(GetSentDateRequest $getSentDate)
     {
         $apiKey = $this->postnl->getRestApiKey();
         $this->setService($getSentDate);
 
+        $sentDate = $getSentDate->getGetSentDate();
         $query = [
-            'ShippingDate' => $getSentDate->getDeliveryDate(),
+            'ShippingDate' => $sentDate->getDeliveryDate(),
         ];
-        $query['CountryCode'] = $getSentDate->getCountryCode();
-        if ($originCountryCode = $getSentDate->getOriginCountryCode()) {
-            $query['OriginCountryCode'] = $originCountryCode;
-        }
-        if ($duration = $getSentDate->getShippingDuration()) {
+        $query['CountryCode'] = $sentDate->getCountryCode();
+        if ($duration = $sentDate->getShippingDuration()) {
             $query['ShippingDuration'] = $duration;
         }
-        if ($postcode = $getSentDate->getPostalCode()) {
+        if ($postcode = $sentDate->getPostalCode()) {
             $query['PostalCode'] = $postcode;
         }
-        if ($city = $getSentDate->getCity()) {
+        if ($city = $sentDate->getCity()) {
             $query['City'] = $city;
         }
-        if ($houseNr = $getSentDate->getHouseNr()) {
+        if ($houseNr = $sentDate->getHouseNr()) {
             $query['HouseNr'] = $houseNr;
         }
-        if ($houseNrExt = $getSentDate->getHouseNrExt()) {
+        if ($houseNrExt = $sentDate->getHouseNrExt()) {
             $query['HouseNrExt'] = $houseNrExt;
         }
 
@@ -462,11 +467,11 @@ class DeliveryDateService extends AbstractService
     /**
      * Build the GetSentDate request for the SOAP API
      *
-     * @param GetSentDate $getSentDate
+     * @param GetSentDateRequest $getSentDate
      *
      * @return Request
      */
-    public function buildGetSentDateSOAPRequest(GetSentDate $getSentDate)
+    public function buildGetSentDateSOAPRequest(GetSentDateRequest $getSentDate)
     {
         $soapAction = static::SOAP_ACTION;
         $xmlService = new XmlService();
@@ -485,7 +490,7 @@ class DeliveryDateService extends AbstractService
                     ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
                 ],
                 '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
-                    '{'.static::SERVICES_NAMESPACE.'}GetSentDate' => $getSentDate,
+                    '{'.static::SERVICES_NAMESPACE.'}GetSentDateRequest' => $getSentDate,
                 ],
             ]
         );

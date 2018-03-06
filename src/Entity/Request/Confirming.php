@@ -112,7 +112,7 @@ class Confirming extends AbstractEntity
      * @param Customer   $customer
      * @param Message    $message
      */
-    public function __construct(array $shipments = [], Customer $customer = null, Message $message = null)
+    public function __construct(array $shipments = null, Customer $customer = null, Message $message = null)
     {
         parent::__construct();
 

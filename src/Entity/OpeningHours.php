@@ -160,6 +160,8 @@ class OpeningHours extends AbstractEntity
         $saturday = '',
         $sunday = ''
     ) {
+        parent::__construct();
+
         $this->setMonday($monday);
         $this->setTuesday($tuesday);
         $this->setWednesday($wednesday);

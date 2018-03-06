@@ -32,17 +32,23 @@ use setasign\Fpdi\PdfParser\StreamReader;
 use ThirtyBees\PostNL\Entity\Barcode;
 use ThirtyBees\PostNL\Entity\Customer;
 use ThirtyBees\PostNL\Entity\Label;
+use ThirtyBees\PostNL\Entity\Location;
 use ThirtyBees\PostNL\Entity\Message\LabellingMessage;
 use ThirtyBees\PostNL\Entity\Message\Message;
 use ThirtyBees\PostNL\Entity\Request\Confirming;
 use ThirtyBees\PostNL\Entity\Request\CurrentStatus;
 use ThirtyBees\PostNL\Entity\Request\GenerateBarcode;
 use ThirtyBees\PostNL\Entity\Request\GenerateLabel;
+use ThirtyBees\PostNL\Entity\Request\GetDeliveryDate;
+use ThirtyBees\PostNL\Entity\Request\GetSentDateRequest;
 use ThirtyBees\PostNL\Entity\Response\ConfirmingResponseShipment;
 use ThirtyBees\PostNL\Entity\Response\CurrentStatusResponse;
 use ThirtyBees\PostNL\Entity\Response\GenerateLabelResponse;
+use ThirtyBees\PostNL\Entity\Response\GetDeliveryDateResponse;
+use ThirtyBees\PostNL\Entity\Response\GetSentDateResponse;
 use ThirtyBees\PostNL\Entity\Shipment;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
+use ThirtyBees\PostNL\Entity\Timeframe;
 use ThirtyBees\PostNL\Exception\AbstractException;
 use ThirtyBees\PostNL\Exception\InvalidArgumentException;
 use ThirtyBees\PostNL\Exception\InvalidBarcodeException;
@@ -53,8 +59,11 @@ use ThirtyBees\PostNL\HttpClient\CurlClient;
 use ThirtyBees\PostNL\HttpClient\GuzzleClient;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
+use ThirtyBees\PostNL\Service\DeliveryDateService;
 use ThirtyBees\PostNL\Service\LabellingService;
+use ThirtyBees\PostNL\Service\LocationService;
 use ThirtyBees\PostNL\Service\ShippingStatusService;
+use ThirtyBees\PostNL\Service\TimeframeService;
 use ThirtyBees\PostNL\Util\RFPdi;
 use ThirtyBees\PostNL\Util\Util;
 
@@ -156,6 +165,15 @@ class PostNL implements LoggerAwareInterface
 
     /** @var ShippingStatusService $shippingStatusService */
     protected $shippingStatusService;
+
+    /** @var DeliveryDateService $deliveryDateService */
+    protected $deliveryDateService;
+
+    /** @var TimeframeService $timeframeService */
+    protected $timeframeService;
+
+    /** @var LocationService $locationService */
+    protected $locationService;
 
     /**
      * PostNL constructor.
@@ -382,7 +400,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Barcode client
+     * Barcode service
      *
      * Automatically load the barcode service
      *
@@ -436,7 +454,7 @@ class PostNL implements LoggerAwareInterface
     /**
      * Confirming service
      *
-     * Automatically load the barcode service
+     * Automatically load the confirming service
      *
      * @return ConfirmingService
      */
@@ -460,9 +478,9 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Confirming service
+     * Shipping status service
      *
-     * Automatically load the barcode service
+     * Automatically load the shipping status service
      *
      * @return ShippingStatusService
      */
@@ -476,13 +494,92 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Set the confirming service
+     * Set the shipping status service
      *
-     * @param ConfirmingService $service
+     * @param ShippingStatusService $service
      */
     public function setShippingStatusService(ShippingStatusService $service)
     {
         $this->shippingStatusService = $service;
+    }
+
+    /**
+     * Delivery date service
+     *
+     * Automatically load the delivery date service
+     *
+     * @return DeliveryDateService
+     */
+    public function getDeliveryDateService()
+    {
+        if (!$this->deliveryDateService) {
+            $this->setDeliveryDateService(new DeliveryDateService($this));
+        }
+
+        return $this->deliveryDateService;
+    }
+
+    /**
+     * Set the delivery date service
+     *
+     * @param DeliveryDateService $service
+     *
+     */
+    public function setDeliveryDateService(DeliveryDateService $service)
+    {
+        $this->deliveryDateService = $service;
+    }
+
+    /**
+     * Timeframe service
+     *
+     * Automatically load the timeframe service
+     *
+     * @return TimeframeService
+     */
+    public function getTimeframeService()
+    {
+        if (!$this->timeframeService) {
+            $this->setTimeframeService(new TimeframeService($this));
+        }
+
+        return $this->timeframeService;
+    }
+
+    /**
+     * Set the timeframe service
+     *
+     * @param TimeframeService $service
+     */
+    public function setTimeframeService(TimeframeService $service)
+    {
+        $this->timeframeService = $service;
+    }
+
+    /**
+     * Location service
+     *
+     * Automatically load the location service
+     *
+     * @return LocationService
+     */
+    public function getLocationService()
+    {
+        if (!$this->locationService) {
+            $this->setLocationService(new LocationService($this));
+        }
+
+        return $this->locationService;
+    }
+
+    /**
+     * Set the location service
+     *
+     * @param LocationService $service
+     */
+    public function setLocationService(LocationService $service)
+    {
+        $this->locationService = $service;
     }
 
     /**
@@ -835,6 +932,30 @@ class PostNL implements LoggerAwareInterface
     public function getCurrentStatusByPhase(CurrentStatus $currentStatus)
     {
         return $this->getCurrentStatus($currentStatus);
+    }
+
+    /**
+     * Get a delivery date
+     *
+     * @param GetDeliveryDate $getDeliveryDate
+     *
+     * @return GetDeliveryDateResponse
+     */
+    public function getDeliveryDate(GetDeliveryDate $getDeliveryDate)
+    {
+        return $this->getDeliveryDateService()->getDeliveryDate($getDeliveryDate);
+    }
+
+    /**
+     * Get a delivery date
+     *
+     * @param GetSentDateRequest $getSentDate
+     *
+     * @return GetSentDateResponse
+     */
+    public function getSentDate(GetSentDateRequest $getSentDate)
+    {
+        return $this->getDeliveryDateService()->getSentDate($getSentDate);
     }
 
     /**

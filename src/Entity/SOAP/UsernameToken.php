@@ -44,19 +44,31 @@ class UsernameToken extends AbstractEntity
 {
     /** @var string[] $defaultProperties */
     public static $defaultProperties = [
-        'Barcode'    => [
+        'Barcode'        => [
             'Username' => Security::SECURITY_NAMESPACE,
             'Password' => Security::SECURITY_NAMESPACE,
         ],
-        'Confirming' => [
+        'Confirming'     => [
             'Username' => Security::SECURITY_NAMESPACE,
             'Password' => Security::SECURITY_NAMESPACE,
         ],
-        'Labelling'  => [
+        'Labelling'      => [
             'Username' => Security::SECURITY_NAMESPACE,
             'Password' => Security::SECURITY_NAMESPACE,
         ],
-        'ShippingStatus'  => [
+        'ShippingStatus' => [
+            'Username' => Security::SECURITY_NAMESPACE,
+            'Password' => Security::SECURITY_NAMESPACE,
+        ],
+        'DeliveryDate'   => [
+            'Username' => Security::SECURITY_NAMESPACE,
+            'Password' => Security::SECURITY_NAMESPACE,
+        ],
+        'Timeframe'      => [
+            'Username' => Security::SECURITY_NAMESPACE,
+            'Password' => Security::SECURITY_NAMESPACE,
+        ],
+        'Location'       => [
             'Username' => Security::SECURITY_NAMESPACE,
             'Password' => Security::SECURITY_NAMESPACE,
         ],

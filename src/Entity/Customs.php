@@ -188,7 +188,7 @@ class Customs extends AbstractEntity
     public function __construct(
         $certificate = null,
         $certificateNr = null,
-        array $content = [],
+        array $content = null,
         $currency = null,
         $handleAsNonDeliverable = null,
         $invoice = null,

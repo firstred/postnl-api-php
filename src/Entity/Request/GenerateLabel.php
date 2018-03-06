@@ -112,7 +112,7 @@ class GenerateLabel extends AbstractEntity
      * @param LabellingMessage $message
      * @param Customer         $customer
      */
-    public function __construct(array $shipments = [], LabellingMessage $message = null, Customer $customer = null)
+    public function __construct(array $shipments = null, LabellingMessage $message = null, Customer $customer = null)
     {
         parent::__construct();
 

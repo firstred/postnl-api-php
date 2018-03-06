@@ -44,8 +44,10 @@ use ThirtyBees\PostNL\PostNL;
  */
 abstract class AbstractService
 {
+    /** @var array $namespaces */
     public static $namespaces;
 
+    /** @var PostNL $postnl */
     protected $postnl;
 
     const COMMON_NAMESPACE = 'http://postnl.nl/cif/services/common/';
@@ -55,7 +57,7 @@ abstract class AbstractService
 
 
     /**
-     * TTL for the labelling cache
+     * TTL for the cache
      *
      * `null` disables the cache
      * `int` is the TTL in seconds
@@ -135,7 +137,6 @@ abstract class AbstractService
         $service = substr($reflection->getShortName(), 0, strlen($reflection->getShortName()) - 7);
         $object->setCurrentService($service);
         $defaultProperties = $object::$defaultProperties;
-
         foreach (array_keys($defaultProperties[$service]) as $propertyName) {
             $item = $object->{'get'.$propertyName}();
             if ($item instanceof AbstractEntity) {

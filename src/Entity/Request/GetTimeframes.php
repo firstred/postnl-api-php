@@ -100,7 +100,7 @@ class GetTimeframes extends AbstractEntity
      * @param Message     $message
      * @param Timeframe[] $timeframes
      */
-    public function __construct(Message $message = null, array $timeframes = [])
+    public function __construct(Message $message = null, array $timeframes = null)
     {
         parent::__construct();
 

@@ -29,6 +29,12 @@ namespace ThirtyBees\PostNL\Entity\Request;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
 use ThirtyBees\PostNL\Entity\Message\Message;
 use ThirtyBees\PostNL\Service\BarcodeService;
+use ThirtyBees\PostNL\Service\ConfirmingService;
+use ThirtyBees\PostNL\Service\DeliveryDateService;
+use ThirtyBees\PostNL\Service\LabellingService;
+use ThirtyBees\PostNL\Service\LocationService;
+use ThirtyBees\PostNL\Service\ShippingStatusService;
+use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
  * Class GetSentDateRequest
@@ -54,28 +60,28 @@ class GetSentDateRequest extends AbstractEntity
             'Message'     => BarcodeService::DOMAIN_NAMESPACE,
         ],
         'Confirming'     => [
-            'GetSentDate' => BarcodeService::DOMAIN_NAMESPACE,
-            'Message'     => BarcodeService::DOMAIN_NAMESPACE,
+            'GetSentDate' => ConfirmingService::DOMAIN_NAMESPACE,
+            'Message'     => ConfirmingService::DOMAIN_NAMESPACE,
         ],
         'Labelling'      => [
-            'GetSentDate' => BarcodeService::DOMAIN_NAMESPACE,
-            'Message'     => BarcodeService::DOMAIN_NAMESPACE,
+            'GetSentDate' => LabellingService::DOMAIN_NAMESPACE,
+            'Message'     => LabellingService::DOMAIN_NAMESPACE,
         ],
         'ShippingStatus' => [
-            'GetSentDate' => BarcodeService::DOMAIN_NAMESPACE,
-            'Message'     => BarcodeService::DOMAIN_NAMESPACE,
+            'GetSentDate' => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Message'     => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate'   => [
-            'GetSentDate' => BarcodeService::DOMAIN_NAMESPACE,
-            'Message'     => BarcodeService::DOMAIN_NAMESPACE,
+            'GetSentDate' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Message'     => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
         'Location'       => [
-            'GetSentDate' => BarcodeService::DOMAIN_NAMESPACE,
-            'Message'     => BarcodeService::DOMAIN_NAMESPACE,
+            'GetSentDate' => LocationService::DOMAIN_NAMESPACE,
+            'Message'     => LocationService::DOMAIN_NAMESPACE,
         ],
         'Timeframe'      => [
-            'GetSentDate' => BarcodeService::DOMAIN_NAMESPACE,
-            'Message'     => BarcodeService::DOMAIN_NAMESPACE,
+            'GetSentDate' => TimeframeService::DOMAIN_NAMESPACE,
+            'Message'     => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart

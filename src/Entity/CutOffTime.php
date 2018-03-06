@@ -101,7 +101,7 @@ class CutOffTime extends AbstractEntity
      * @param string $time
      * @param bool $available
      */
-    public function __construct($day = null, $time = null, $available = false)
+    public function __construct($day = null, $time = null, $available = null)
     {
         parent::__construct();
 
