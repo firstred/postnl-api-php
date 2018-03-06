@@ -117,6 +117,8 @@ class BarcodeServiceSoapTest extends \PHPUnit_Framework_TestCase
         $range = $this->getRange('3S');
         $serie = $this->postnl->findBarcodeSerie('3S', $range, false);
 
+        $message = new Message();
+
         $this->lastRequest = $request = $this->service->buildGenerateBarcodeSOAPRequest(
             GenerateBarcode::create()
                 ->setBarcode(
@@ -125,12 +127,40 @@ class BarcodeServiceSoapTest extends \PHPUnit_Framework_TestCase
                         ->setSerie($serie)
                         ->setType($type)
                 )
-                ->setMessage(new Message())
+                ->setMessage($message)
                 ->setCustomer($this->postnl->getCustomer())
         );
 
         $this->assertEmpty($request->getHeaderLine('apikey'));
         $this->assertEquals('text/xml', $request->getHeaderLine('Accept'));
+        $this->assertEquals("<?xml version=\"1.0\"?>
+<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:services=\"http://postnl.nl/cif/services/BarcodeWebService/\" xmlns:domain=\"http://postnl.nl/cif/domain/BarcodeWebService/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\" xmlns:schema=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:common=\"http://postnl.nl/cif/services/common/\">
+ <soap:Header>
+  <wsse:Security>
+   <wsse:UsernameToken>
+    <wsse:Password>test</wsse:Password>
+   </wsse:UsernameToken>
+  </wsse:Security>
+ </soap:Header>
+ <soap:Body>
+  <services:GenerateBarcode>
+   <domain:Message>
+    <domain:MessageID>{$message->getMessageID()}</domain:MessageID>
+    <domain:MessageTimeStamp>{$message->getMessageTimeStamp()}</domain:MessageTimeStamp>
+   </domain:Message>
+   <domain:Customer>
+    <domain:CustomerCode>DEVC</domain:CustomerCode>
+    <domain:CustomerNumber>11223344</domain:CustomerNumber>
+   </domain:Customer>
+   <domain:Barcode>
+    <domain:Type>3S</domain:Type>
+    <domain:Range>DEVC</domain:Range>
+    <domain:Serie>987000000-987600000</domain:Serie>
+   </domain:Barcode>
+  </services:GenerateBarcode>
+ </soap:Body>
+</soap:Envelope>
+", (string) $request->getBody());
     }
 
     /**
@@ -149,6 +179,39 @@ class BarcodeServiceSoapTest extends \PHPUnit_Framework_TestCase
         $this->postnl->setHttpClient($mockClient);
 
         $this->assertEquals('3SDEVC816223392', $this->postnl->generateBarcode('3S'));
+    }
+
+    /**
+     * @testdox returns several barcodes
+     *
+     * @throws \ThirtyBees\PostNL\Exception\InvalidBarcodeException
+     * @throws \ThirtyBees\PostNL\Exception\InvalidConfigurationException
+     */
+    public function testMultipleNLBarcodesSoap()
+    {
+        $mock = new MockHandler([
+            new Response(200, ['Content-Type' => 'text/xml;charset=UTF-8'], $this->mockValidBarcodeResponse('3SDEVC816223392')),
+            new Response(200, ['Content-Type' => 'text/xml;charset=UTF-8'], $this->mockValidBarcodeResponse('3SDEVC816223393')),
+            new Response(200, ['Content-Type' => 'text/xml;charset=UTF-8'], $this->mockValidBarcodeResponse('3SDEVC816223394')),
+            new Response(200, ['Content-Type' => 'text/xml;charset=UTF-8'], $this->mockValidBarcodeResponse('3SDEVC816223395')),
+        ]);
+        $handler = HandlerStack::create($mock);
+        $mockClient = new MockClient();
+        $mockClient->setHandler($handler);
+        $this->postnl->setHttpClient($mockClient);
+
+        $barcodes = $this->postnl->generateBarcodesByCountryCodes(['NL' => 4]);
+
+        $this->assertEquals([
+            'NL' => [
+                '3SDEVC816223392',
+                '3SDEVC816223393',
+                '3SDEVC816223394',
+                '3SDEVC816223395',
+            ],
+        ],
+            $barcodes
+        );
     }
 
     /**

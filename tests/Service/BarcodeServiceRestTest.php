@@ -30,7 +30,6 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use League\Flysystem\Exception;
 use Psr\Log\LoggerInterface;
 use ThirtyBees\PostNL\Entity\Address;
 use ThirtyBees\PostNL\Entity\Barcode;
