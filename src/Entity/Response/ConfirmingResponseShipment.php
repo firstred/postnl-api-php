@@ -52,25 +52,32 @@ class ConfirmingResponseShipment extends AbstractEntity
     /** @var string[] $defaultProperties */
     public static $defaultProperties = [
         'Barcode'        => [
-            'Barcode' => BarcodeService::DOMAIN_NAMESPACE,
+            'Barcode'  => BarcodeService::DOMAIN_NAMESPACE,
+            'Warnings' => BarcodeService::DOMAIN_NAMESPACE,
         ],
         'Confirming'     => [
-            'Barcode' => ConfirmingService::DOMAIN_NAMESPACE,
+            'Barcode'  => ConfirmingService::DOMAIN_NAMESPACE,
+            'Warnings' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
         'Labelling'      => [
-            'Barcode' => LabellingService::DOMAIN_NAMESPACE,
+            'Barcode'  => LabellingService::DOMAIN_NAMESPACE,
+            'Warnings' => LabellingService::DOMAIN_NAMESPACE,
         ],
         'ShippingStatus' => [
-            'Barcode' => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Barcode'  => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Warnings' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate'   => [
-            'Barcode' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Barcode'  => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Warnings' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
         'Location'       => [
-            'Barcode' => LocationService::DOMAIN_NAMESPACE,
+            'Barcode'  => LocationService::DOMAIN_NAMESPACE,
+            'Warnings' => LocationService::DOMAIN_NAMESPACE,
         ],
         'Timeframe'      => [
-            'Barcode' => TimeframeService::DOMAIN_NAMESPACE,
+            'Barcode'  => TimeframeService::DOMAIN_NAMESPACE,
+            'Warnings' => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart

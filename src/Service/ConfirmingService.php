@@ -34,6 +34,7 @@ use ThirtyBees\PostNL\Entity\Request\Confirming;
 use ThirtyBees\PostNL\Entity\Response\ConfirmingResponseShipment;
 use ThirtyBees\PostNL\Entity\SOAP\Security;
 use ThirtyBees\PostNL\Exception\ApiException;
+use ThirtyBees\PostNL\Exception\ResponseException;
 use ThirtyBees\PostNL\PostNL;
 
 /**
@@ -94,8 +95,12 @@ class ConfirmingService extends AbstractService
         $response = $this->postnl->getHttpClient()->doRequest($this->buildConfirmRESTRequest($confirming));
         static::validateRESTResponse($response);
         $body = json_decode(static::getResponseText($response), true);
-        if (isset($body['ConfirmingResponseShipments'])) {
-            return AbstractEntity::jsonDeserialize($confirming['ConfirmingResponseShipments']);
+        if (isset($body['ResponseShipments'])) {
+            return AbstractEntity::jsonDeserialize(['ConfirmingResponseShipment' => $body['ResponseShipments'][0]]);
+        }
+
+        if ($response->getStatusCode() === 200) {
+            throw new ResponseException('Invalid API Response', null, null, $response);
         }
 
         throw new ApiException('Unable to confirm');
@@ -125,11 +130,11 @@ class ConfirmingService extends AbstractService
         foreach ($httpClient->doRequests() as $uuid => $response) {
             $confirmingResponse = json_decode(static::getResponseText($response), true);
             try {
-                static::validateRESTResponse($confirmingResponse);
-                if (isset($confirmingResponse['ConfirmingResponseShipments'])) {
-                    $confirming = AbstractEntity::jsonDeserialize($confirmingResponse['ConfirmingResponseShipments']);
+                static::validateRESTResponse($response);
+                if (isset($confirmingResponse['ResponseShipments'])) {
+                    $confirming = AbstractEntity::jsonDeserialize(['ConfirmingResponseShipment' => $confirmingResponse['ResponseShipments'][0]]);
                 } else {
-                    throw new ApiException('Unable to generate label');
+                    throw new ResponseException('Invalid API Response', null, null, $response);
                 }
             } catch (\Exception $e) {
                 $confirming = $e;

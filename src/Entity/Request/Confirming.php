@@ -151,4 +151,30 @@ class Confirming extends AbstractEntity
         // Auto extending this object with other properties is not supported with SOAP
         $writer->write($xml);
     }
+
+    /**
+     * Return a serializable array for `json_encode`
+     *
+     * @return array
+     */
+    public function jsonSerialize()
+    {
+        $json = [];
+        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
+            return $json;
+        }
+
+        foreach (array_keys(static::$defaultProperties[$this->currentService]) as $propertyName) {
+            if (!is_null($this->{$propertyName})) {
+                // The REST API only seems to accept one shipment per request at the moment of writing (Sep. 24th, 2017)
+                if ($propertyName === 'Shipments' && count($this->{$propertyName}) >= 1) {
+                    $json[$propertyName] = $this->{$propertyName}[0];
+                } else {
+                    $json[$propertyName] = $this->{$propertyName};
+                }
+            }
+        }
+
+        return $json;
+    }
 }
