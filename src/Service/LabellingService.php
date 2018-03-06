@@ -39,6 +39,7 @@ use ThirtyBees\PostNL\Entity\SOAP\Security;
 use ThirtyBees\PostNL\Exception\ApiException;
 use ThirtyBees\PostNL\Exception\CifDownException;
 use ThirtyBees\PostNL\Exception\CifException;
+use ThirtyBees\PostNL\Exception\ResponseException;
 use ThirtyBees\PostNL\PostNL;
 
 /**
@@ -92,13 +93,17 @@ class LabellingService extends AbstractService
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
-     * @throws \Exception
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
-    public function generateLabelREST(GenerateLabel $generateLabel, $confirm = false)
+    public function generateLabelREST(GenerateLabel $generateLabel, $confirm = true)
     {
-        $item = $this->retrieveCachedItem($generateLabel->getId());
+        try {
+            $item = $this->retrieveCachedItem($generateLabel->getId());
+        } catch (\ReflectionException $e) {
+            $item = null;
+        }
+
         $response = null;
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
@@ -122,6 +127,10 @@ class LabellingService extends AbstractService
             }
 
             return AbstractEntity::jsonDeserialize(['GenerateLabelResponse' => $body]);
+        }
+
+        if ($response->getStatusCode() === 200) {
+            throw new ResponseException('Invalid API response', null, null, $response);
         }
 
         throw new ApiException('Unable to generate label');
@@ -226,7 +235,14 @@ class LabellingService extends AbstractService
         if (!$response instanceof Response) {
             $response = $this->postnl->getHttpClient()->doRequest($this->buildGenerateLabelSOAPRequest($generateLabel, $confirm));
         }
-        $xml = simplexml_load_string(static::getResponseText($response));
+        $xml = @simplexml_load_string(static::getResponseText($response));
+        if ($xml === false) {
+            if ($response->getStatusCode() === 200) {
+                throw new ResponseException('Invalid API Response', null, null, $response);
+            } else {
+                throw new ApiException('Invalid API Response');
+            }
+        }
 
         static::registerNamespaces($xml);
         static::validateSOAPResponse($xml);
