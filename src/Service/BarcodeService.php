@@ -102,6 +102,10 @@ class BarcodeService extends AbstractService
 
         $json = json_decode((string) $response->getBody(), true);
 
+        if (!isset($json['Barcode'])) {
+            throw new ResponseException('Invalid API Response', null, null, $response);
+        }
+
         return $json['Barcode'];
     }
 
@@ -178,7 +182,10 @@ class BarcodeService extends AbstractService
      *
      * @param GenerateBarcode[] $generateBarcodes
      *
-     * @return array Barcodes
+     * @return string[] Barcodes
+     *
+     * @throws CifDownException
+     * @throws CifException
      * @throws ResponseException
      */
     public function generateBarcodesSOAP(array $generateBarcodes)
@@ -194,17 +201,17 @@ class BarcodeService extends AbstractService
 
         $barcodes = [];
         foreach ($httpClient->doRequests() as $uuid => $response) {
-            $xml = simplexml_load_string(static::getResponseText($response));
+            try {
+                $xml = simplexml_load_string(static::getResponseText($response));
+            } catch (\Exception $e) {
+                $barcode = new ResponseException($e->getMessage(), $e->getCode(), $e, $response);
+            }
             if (!$xml instanceof \SimpleXMLElement) {
-                $barcode = new ApiException('Invalid API response');
+                $barcode = new ResponseException('Invalid API response', 0, null, $response);
             } else {
-                try {
-                    static::registerNamespaces($xml);
-                    static::validateSOAPResponse($xml);
-                    $barcode = (string) $xml->xpath('//services:GenerateBarcodeResponse/domain:Barcode')[0][0];
-                } catch (\Exception $e) {
-                    $barcode = $e;
-                }
+                static::registerNamespaces($xml);
+                static::validateSOAPResponse($xml);
+                $barcode = (string) $xml->xpath('//services:GenerateBarcodeResponse/domain:Barcode')[0][0];
             }
 
             $barcodes[$uuid] = $barcode;
@@ -247,11 +254,10 @@ class BarcodeService extends AbstractService
      * Build the `generateBarcode` HTTP request for the SOAP API
      *
      * @param GenerateBarcode $generateBarcode
-     * @param int             $id              Override ID
      *
      * @return Request
      */
-    public function buildGenerateBarcodeSOAPRequest(GenerateBarcode $generateBarcode, $id = null)
+    public function buildGenerateBarcodeSOAPRequest(GenerateBarcode $generateBarcode)
     {
         $soapAction = static::SOAP_ACTION;
         $xmlService = new XmlService();

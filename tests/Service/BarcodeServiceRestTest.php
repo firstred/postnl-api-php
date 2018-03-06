@@ -30,6 +30,8 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use League\Flysystem\Exception;
+use Psr\Log\LoggerInterface;
 use ThirtyBees\PostNL\Entity\Address;
 use ThirtyBees\PostNL\Entity\Barcode;
 use ThirtyBees\PostNL\Entity\Customer;
@@ -98,7 +100,9 @@ class BarcodeServiceRestTest extends \PHPUnit_Framework_TestCase
         }
 
         global $logger;
-        $logger->debug($this->getName()." Request\n".\GuzzleHttp\Psr7\str($this->lastRequest));
+        if ($logger instanceof LoggerInterface) {
+            $logger->debug($this->getName()." Request\n".\GuzzleHttp\Psr7\str($this->lastRequest));
+        }
         $this->lastRequest = null;
     }
 
@@ -228,5 +232,24 @@ class BarcodeServiceRestTest extends \PHPUnit_Framework_TestCase
         ],
             $barcodes
         );
+    }
+
+    /**
+     * @testdox return a valid single barcode
+     * @throws \ThirtyBees\PostNL\Exception\InvalidBarcodeException
+     */
+    public function testNegativeSingleBarcodeInvalidResponse()
+    {
+        $this->expectException('ThirtyBees\\PostNL\\Exception\\ResponseException');
+
+        $mock = new MockHandler([
+            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], 'asdfojasuidfo'),
+        ]);
+        $handler = HandlerStack::create($mock);
+        $mockClient = new MockClient();
+        $mockClient->setHandler($handler);
+        $this->postnl->setHttpClient($mockClient);
+
+        $this->postnl->generateBarcode('3S');
     }
 }
