@@ -19,11 +19,9 @@
   <filter>
     <whitelist processUncoveredFilesFromWhitelist="true">
       <directory suffix=".php">../src/Entity</directory>
-      <directory suffix=".php">../src/Exception</directory>
       <directory suffix=".php">../src/Service</directory>
       <directory suffix=".php">../src/Util</directory>
       <file>../src/PostNL.php</file>
-      <exclude />
     </whitelist>
   </filter>
   <logging>
