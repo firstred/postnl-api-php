@@ -73,13 +73,14 @@ class TimeframeService extends AbstractService
      * @var array $namespaces
      */
     public static $namespaces = [
-        self::ENVELOPE_NAMESPACE     => 'soap',
-        self::OLD_ENVELOPE_NAMESPACE => 'env',
-        self::SERVICES_NAMESPACE     => 'services',
-        self::DOMAIN_NAMESPACE       => 'domain',
-        Security::SECURITY_NAMESPACE => 'wsse',
-        self::XML_SCHEMA_NAMESPACE   => 'schema',
-        self::COMMON_NAMESPACE       => 'common',
+        self::ENVELOPE_NAMESPACE                                    => 'soap',
+        self::OLD_ENVELOPE_NAMESPACE                                => 'env',
+        self::SERVICES_NAMESPACE                                    => 'services',
+        self::DOMAIN_NAMESPACE                                      => 'domain',
+        Security::SECURITY_NAMESPACE                                => 'wsse',
+        self::XML_SCHEMA_NAMESPACE                                  => 'schema',
+        self::COMMON_NAMESPACE                                      => 'common',
+        'http://schemas.microsoft.com/2003/10/Serialization/Arrays' => 'arr',
     ];
 
     /**
@@ -182,7 +183,7 @@ class TimeframeService extends AbstractService
      *
      * @return Request
      */
-    protected function buildGetTimeframesRESTRequest(GetTimeframes $getTimeframes)
+    public function buildGetTimeframesRESTRequest(GetTimeframes $getTimeframes)
     {
         $apiKey = $this->postnl->getRestApiKey();
         $this->setService($getTimeframes);
@@ -194,7 +195,7 @@ class TimeframeService extends AbstractService
             'PostalCode'         => $timeframe->getPostalCode(),
             'HouseNumber'        => $timeframe->getHouseNr(),
             'CountryCode'        => $timeframe->getCountryCode(),
-            'Options'            => 'Daytime',
+            'Options'            => '',
         ];
         if ($interval = $timeframe->getInterval()) {
             $query['Interval'] = $interval;
@@ -215,8 +216,9 @@ class TimeframeService extends AbstractService
             if ($option === 'PG') {
                 continue;
             }
-            $query['DeliveryOptions'] .= ",$option";
+            $query['Options'] .= ",$option";
         }
+        $query['Options'] = ltrim(',', $query['Options']);
         $endpoint = '?'.http_build_query($query);
 
         return new Request(
@@ -238,7 +240,7 @@ class TimeframeService extends AbstractService
      *
      * @return Request
      */
-    protected function buildGetTimeframesSOAPRequest(GetTimeframes $getTimeframes)
+    public function buildGetTimeframesSOAPRequest(GetTimeframes $getTimeframes)
     {
         $soapAction = static::SOAP_ACTION;
         $xmlService = new XmlService();

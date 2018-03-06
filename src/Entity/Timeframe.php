@@ -241,6 +241,41 @@ class Timeframe extends AbstractEntity
     }
 
     /**
+     * Return a serializable array for `json_encode`
+     *
+     * @return array
+     */
+    public function jsonSerialize()
+    {
+        $json = [];
+        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
+            return $json;
+        }
+
+        foreach (array_keys(static::$defaultProperties[$this->currentService]) as $propertyName) {
+            if (!is_null($this->{$propertyName})) {
+                if ($propertyName === 'Options') {
+                    $json[$propertyName] = $this->{$propertyName};
+                } elseif ($propertyName === 'SundaySorting') {
+                    if (!is_null($this->{$propertyName})) {
+                        if (is_bool($this->{$propertyName})) {
+                            $value = $this->{$propertyName} ? 'true' : 'false';
+                        } else {
+                            $value = $this->{$propertyName};
+                        }
+
+                        $json[$propertyName] = $value;
+                    }
+                } else {
+                    $json[$propertyName] = $this->{$propertyName};
+                }
+            }
+        }
+
+        return $json;
+    }
+
+    /**
      * Return a serializable array for the XMLWriter
      *
      * @param Writer $writer
@@ -256,12 +291,22 @@ class Timeframe extends AbstractEntity
         }
 
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if ($propertyName === 'Options') {
-                $options = [];
-                foreach ($this->Options as $option) {
-                    $options[] = ["{{$namespace}}string" => $option];
+            if ($propertyName === 'SundaySorting') {
+                if (isset($this->SundaySorting)) {
+                    if (is_bool($this->SundaySorting)) {
+                        $xml["{{$namespace}}SundaySorting"] = $this->SundaySorting ? 'true' : 'false';
+                    } else {
+                        $xml["{{$namespace}}SundaySorting"] = $this->SundaySorting;
+                    }
                 }
-                $xml["{{$namespace}}Options"] = $options;
+            } elseif ($propertyName === 'Options') {
+                if (isset($this->Options)) {
+                    $options = [];
+                    foreach ($this->Options as $option) {
+                        $options[] = ["{http://schemas.microsoft.com/2003/10/Serialization/Arrays}string" => $option];
+                    }
+                    $xml["{{$namespace}}Options"] = $options;
+                }
             } elseif (!is_null($this->{$propertyName})) {
                 $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
             }
