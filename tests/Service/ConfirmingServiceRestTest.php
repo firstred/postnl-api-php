@@ -26,6 +26,7 @@
 
 namespace ThirtyBees\PostNL\Tests\Service;
 
+use Cache\Adapter\Void\VoidCachePool;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
@@ -88,6 +89,8 @@ class ConfirmingServiceRestTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->service = $this->postnl->getConfirmingService();
+        $this->service->cache = new VoidCachePool();
+        $this->service->ttl = 1;
     }
 
     /**

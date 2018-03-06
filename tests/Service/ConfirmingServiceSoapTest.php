@@ -26,6 +26,7 @@
 
 namespace ThirtyBees\PostNL\Tests\Service;
 
+use Cache\Adapter\Void\VoidCachePool;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
@@ -36,7 +37,6 @@ use ThirtyBees\PostNL\Entity\Customer;
 use ThirtyBees\PostNL\Entity\Dimension;
 use ThirtyBees\PostNL\Entity\Message\LabellingMessage;
 use ThirtyBees\PostNL\Entity\Request\Confirming;
-use ThirtyBees\PostNL\Entity\Request\GenerateLabel;
 use ThirtyBees\PostNL\Entity\Shipment;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
 use ThirtyBees\PostNL\HttpClient\MockClient;
@@ -89,6 +89,8 @@ class ConfirmingServiceSoapTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->service = $this->postnl->getConfirmingService();
+        $this->service->cache = new VoidCachePool();
+        $this->service->ttl = 1;
     }
 
     /**

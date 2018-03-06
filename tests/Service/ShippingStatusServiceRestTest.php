@@ -26,21 +26,17 @@
 
 namespace ThirtyBees\PostNL\Tests\Service;
 
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
+use Cache\Adapter\Void\VoidCachePool;
 use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
 use Psr\Log\LoggerInterface;
 use ThirtyBees\PostNL\Entity\Address;
 use ThirtyBees\PostNL\Entity\Customer;
-use ThirtyBees\PostNL\Entity\CutOffTime;
 use ThirtyBees\PostNL\Entity\Message\Message;
 use ThirtyBees\PostNL\Entity\Request\CompleteStatus;
 use ThirtyBees\PostNL\Entity\Request\CurrentStatus;
 use ThirtyBees\PostNL\Entity\Request\GetSignature;
 use ThirtyBees\PostNL\Entity\Shipment;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
-use ThirtyBees\PostNL\HttpClient\MockClient;
 use ThirtyBees\PostNL\PostNL;
 use ThirtyBees\PostNL\Service\ShippingStatusService;
 
@@ -90,6 +86,8 @@ class ShippingStatusRestTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->service = $this->postnl->getShippingStatusService();
+        $this->service->cache = new VoidCachePool();
+        $this->service->ttl = 1;
     }
 
     /**

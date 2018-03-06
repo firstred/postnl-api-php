@@ -93,6 +93,7 @@ class LabellingServiceRestTest extends \PHPUnit_Framework_TestCase
 
         $this->service = $this->postnl->getLabellingService();
         $this->service->cache = new VoidCachePool();
+        $this->service->ttl = 1;
     }
 
     /**
