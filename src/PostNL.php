@@ -624,7 +624,7 @@ class PostNL implements LoggerAwareInterface
     public function generateLabel(
         Shipment $shipment,
         $printertype = 'GraphicFile|PDF',
-        $confirm = false
+        $confirm = true
     ) {
         return $this->getLabellingService()->generateLabel(
             new GenerateLabel(
@@ -677,7 +677,7 @@ class PostNL implements LoggerAwareInterface
     public function generateLabels(
         array $shipments,
         $printertype = 'GraphicFile|PDF',
-        $confirm = false,
+        $confirm = true,
         $merge = false,
         $format = Label::FORMAT_A4,
         $positions = [

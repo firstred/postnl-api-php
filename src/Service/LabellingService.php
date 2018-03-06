@@ -212,7 +212,7 @@ class LabellingService extends AbstractService
      * @throws \Sabre\Xml\LibXMLException
      * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
-    public function generateLabelSOAP(GenerateLabel $generateLabel, $confirm = false)
+    public function generateLabelSOAP(GenerateLabel $generateLabel, $confirm = true)
     {
         $item = $this->retrieveCachedItem($generateLabel->getId());
         $response = null;
@@ -334,7 +334,7 @@ class LabellingService extends AbstractService
      *
      * @return Request
      */
-    public function buildGenerateLabelRESTRequest(GenerateLabel $generateLabel, $confirm)
+    public function buildGenerateLabelRESTRequest(GenerateLabel $generateLabel, $confirm = true)
     {
         $apiKey = $this->postnl->getRestApiKey();
         $this->setService($generateLabel);
@@ -361,7 +361,7 @@ class LabellingService extends AbstractService
      *
      * @return Request
      */
-    public function buildGenerateLabelSOAPRequest(GenerateLabel $generateLabel, $confirm)
+    public function buildGenerateLabelSOAPRequest(GenerateLabel $generateLabel, $confirm = true)
     {
         $soapAction = $confirm ? static::SOAP_ACTION : static::SOAP_ACTION_NO_CONFIRM;
         $xmlService = new XmlService();
