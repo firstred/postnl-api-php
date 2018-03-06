@@ -171,7 +171,7 @@ class ShippingStatusRestTest extends \PHPUnit_Framework_TestCase
             (new CurrentStatus())
                 ->setShipment(
                     (new Shipment())
-                        ->setStatusCode('1')
+                        ->setStatusCode($status)
                 )
                 ->setMessage($message)
         );
@@ -200,7 +200,7 @@ class ShippingStatusRestTest extends \PHPUnit_Framework_TestCase
             (new CurrentStatus())
                 ->setShipment(
                     (new Shipment())
-                        ->setPhaseCode('1')
+                        ->setPhaseCode($phase)
                 )
                 ->setMessage($message)
         );

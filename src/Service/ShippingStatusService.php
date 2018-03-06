@@ -32,6 +32,7 @@ use Psr\Cache\CacheItemInterface;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Service as XmlService;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
+use ThirtyBees\PostNL\Entity\Customer;
 use ThirtyBees\PostNL\Entity\Request\CompleteStatus;
 use ThirtyBees\PostNL\Entity\Request\CurrentStatus;
 use ThirtyBees\PostNL\Entity\Request\GetSignature;
@@ -500,6 +501,13 @@ class ShippingStatusService extends AbstractService
      */
     public function buildCurrentStatusSOAPRequest(CurrentStatus $currentStatus)
     {
+        if (!$currentStatus->getCustomer() || !$currentStatus->getCustomer() instanceof Customer) {
+            $currentStatus->setCustomer((new Customer())
+                ->setCustomerCode($this->postnl->getCustomer()->getCustomerCode())
+                ->setCustomerNumber($this->postnl->getCustomer()->getCustomerNumber())
+            );
+        }
+
         $soapAction = static::SOAP_ACTION;
         $xmlService = new XmlService();
         foreach (static::$namespaces as $namespace => $prefix) {
@@ -553,7 +561,7 @@ class ShippingStatusService extends AbstractService
      */
     public function buildCompleteStatusRESTRequest(CompleteStatus $completeStatus)
     {
-       $apiKey = $this->postnl->getRestApiKey();
+        $apiKey = $this->postnl->getRestApiKey();
         $this->setService($completeStatus);
 
         if ($completeStatus->getShipment()->getReference()) {
@@ -619,6 +627,13 @@ class ShippingStatusService extends AbstractService
      */
     public function buildCompleteStatusSOAPRequest(CompleteStatus $completeStatus)
     {
+        if (!$completeStatus->getCustomer() || !$completeStatus->getCustomer() instanceof Customer) {
+            $completeStatus->setCustomer((new Customer())
+                ->setCustomerCode($this->postnl->getCustomer()->getCustomerCode())
+                ->setCustomerNumber($this->postnl->getCustomer()->getCustomerNumber())
+            );
+        }
+
         $soapAction = static::SOAP_ACTION_COMPLETE;
         $xmlService = new XmlService();
         foreach (static::$namespaces as $namespace => $prefix) {
@@ -636,7 +651,7 @@ class ShippingStatusService extends AbstractService
                     ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
                 ],
                 '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
-                    '{'.static::SERVICES_NAMESPACE.'}CurrentStatus' => $completeStatus,
+                    '{'.static::SERVICES_NAMESPACE.'}CompleteStatus' => $completeStatus,
                 ],
             ]
         );
@@ -689,6 +704,13 @@ class ShippingStatusService extends AbstractService
      */
     public function buildGetSignatureSOAPRequest(GetSignature $getSignature)
     {
+        if (!$getSignature->getCustomer() || !$getSignature->getCustomer() instanceof Customer) {
+            $getSignature->setCustomer((new Customer())
+                ->setCustomerCode($this->postnl->getCustomer()->getCustomerCode())
+                ->setCustomerNumber($this->postnl->getCustomer()->getCustomerNumber())
+            );
+        }
+
         $soapAction = static::SOAP_ACTION_SIGNATURE;
         $xmlService = new XmlService();
         foreach (static::$namespaces as $namespace => $prefix) {
@@ -706,7 +728,7 @@ class ShippingStatusService extends AbstractService
                     ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
                 ],
                 '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
-                    '{'.static::SERVICES_NAMESPACE.'}CurrentStatus' => $getSignature,
+                    '{'.static::SERVICES_NAMESPACE.'}GetSignature' => $getSignature,
                 ],
             ]
         );
