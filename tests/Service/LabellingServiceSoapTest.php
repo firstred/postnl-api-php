@@ -42,6 +42,7 @@ use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
 use ThirtyBees\PostNL\HttpClient\MockClient;
 use ThirtyBees\PostNL\PostNL;
 use ThirtyBees\PostNL\Service\LabellingService;
+use ThirtyBees\PostNL\Util\Util;
 
 /**
  * Class LabellingServiceSoapTest
@@ -444,6 +445,17 @@ xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">
         );
 
         $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\GenerateLabelResponse', $label[1]);
+    }
+
+    /**
+     * @testdox can grab the dimensions from a PDF
+     */
+    public function testGetPdfDimensions()
+    {
+        $pdf = base64_decode(static::$base64LabelContent);
+        $sizes = Util::getPdfSizeAndOrientation($pdf);
+
+        $this->assertEquals('L', $sizes['orientation']);
     }
 
     /**
