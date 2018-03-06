@@ -153,9 +153,9 @@ class ResponseShipment extends AbstractEntity
      * @param array       $warnings
      */
     public function __construct(
-        $barcode,
-        $productCodeDelivery,
-        array $labels,
+        $barcode = null,
+        $productCodeDelivery = null,
+        array $labels = [],
         $downPartnerBarcode = null,
         $downPartnerId = null,
         $downPartnerLocation = null,

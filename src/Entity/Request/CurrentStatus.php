@@ -112,7 +112,7 @@ class CurrentStatus extends AbstractEntity
      * @param Customer $customer
      * @param Message  $message
      */
-    public function __construct(Shipment $shipment, Customer $customer, Message $message = null)
+    public function __construct(Shipment $shipment = null, Customer $customer = null, Message $message = null)
     {
         parent::__construct();
 

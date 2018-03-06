@@ -86,7 +86,7 @@ class CurrentStatusResponse extends AbstractEntity
      *
      * @param array $shipments
      */
-    public function __construct(array $shipments)
+    public function __construct(array $shipments = [])
     {
         parent::__construct();
 

@@ -16,12 +16,45 @@ class EntityTest extends \PHPUnit_Framework_TestCase
     public function testConstructors()
     {
         foreach (scandir(__DIR__.'/../../src/Entity') as $entityName) {
-            if (in_array($entityName, ['.', '..', 'AbstractEntity.php']) || is_dir(__DIR__.'/../../src/Entity/'.$entityName)) {
+            if (in_array($entityName, ['.', '..', 'AbstractEntity.php']) || is_dir(__DIR__."/../../src/Entity/$entityName")) {
                 continue;
             }
 
             $entityName = substr($entityName, 0, strlen($entityName) - 4);
             $entityName = "\\ThirtyBees\\PostNL\\Entity\\$entityName";
+            $entity = new $entityName();
+            $this->assertInstanceOf("\\ThirtyBees\\PostNL\\Entity\\AbstractEntity", $entity);
+        }
+
+        foreach (scandir(__DIR__.'/../../src/Entity/Message') as $entityName) {
+            if (in_array($entityName, ['.', '..']) || is_dir(__DIR__."/../../src/Entity/Message/$entityName")) {
+                continue;
+            }
+
+            $entityName = substr($entityName, 0, strlen($entityName) - 4);
+            $entityName = "\\ThirtyBees\\PostNL\\Entity\\Message\\$entityName";
+            $entity = new $entityName();
+            $this->assertInstanceOf("\\ThirtyBees\\PostNL\\Entity\\AbstractEntity", $entity);
+        }
+
+        foreach (scandir(__DIR__.'/../../src/Entity/Request') as $entityName) {
+            if (in_array($entityName, ['.', '..']) || is_dir(__DIR__."/../../src/Entity/Request/$entityName")) {
+                continue;
+            }
+
+            $entityName = substr($entityName, 0, strlen($entityName) - 4);
+            $entityName = "\\ThirtyBees\\PostNL\\Entity\\Request\\$entityName";
+            $entity = new $entityName();
+            $this->assertInstanceOf("\\ThirtyBees\\PostNL\\Entity\\AbstractEntity", $entity);
+        }
+
+        foreach (scandir(__DIR__.'/../../src/Entity/Response') as $entityName) {
+            if (in_array($entityName, ['.', '..']) || is_dir(__DIR__."/../../src/Entity/Response/$entityName")) {
+                continue;
+            }
+
+            $entityName = substr($entityName, 0, strlen($entityName) - 4);
+            $entityName = "\\ThirtyBees\\PostNL\\Entity\\Response\\$entityName";
             $entity = new $entityName();
             $this->assertInstanceOf("\\ThirtyBees\\PostNL\\Entity\\AbstractEntity", $entity);
         }

@@ -96,7 +96,7 @@ class GenerateLabelResponse extends AbstractEntity
      * @param MergedLabel[]      $mergedLabels
      * @param ResponseShipment[] $responseShipments
      */
-    public function __construct(array $mergedLabels, array $responseShipments)
+    public function __construct(array $mergedLabels = [], array $responseShipments = [])
     {
         parent::__construct();
 

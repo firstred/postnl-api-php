@@ -84,7 +84,7 @@ class GenerateBarcodeResponse extends AbstractEntity
      *
      * @param string $barcode
      */
-    public function __construct($barcode)
+    public function __construct($barcode = null)
     {
         parent::__construct();
 

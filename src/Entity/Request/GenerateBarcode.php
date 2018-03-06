@@ -111,7 +111,7 @@ class GenerateBarcode extends AbstractEntity
      * @param Customer     $customer
      * @param Message|null $message
      */
-    public function __construct(Barcode $barcode, Customer $customer, Message $message = null)
+    public function __construct(Barcode $barcode = null, Customer $customer = null, Message $message = null)
     {
         parent::__construct();
 

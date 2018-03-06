@@ -97,7 +97,7 @@ class GetDeliveryDateResponse extends AbstractEntity
      * @param string      $date
      * @param string[] $options
      */
-    public function __construct($date, array $options = [])
+    public function __construct($date = null, array $options = [])
     {
         parent::__construct();
 
