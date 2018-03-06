@@ -326,6 +326,7 @@ class PostNL implements LoggerAwareInterface
      */
     public function getHttpClient()
     {
+        // @codeCoverageIgnoreStart
         if (!$this->httpClient) {
             if (interface_exists('\\GuzzleHttp\\ClientInterface')
                 && version_compare(
@@ -338,6 +339,7 @@ class PostNL implements LoggerAwareInterface
                 $this->httpClient = CurlClient::getInstance();
             }
         }
+        // @codeCoverageIgnoreEnd
 
         return $this->httpClient;
     }
@@ -389,7 +391,7 @@ class PostNL implements LoggerAwareInterface
     public function getBarcodeService()
     {
         if (!$this->barcodeService) {
-            $this->barcodeService = new BarcodeService($this);
+            $this->setBarcodeService(new BarcodeService($this));
         }
 
         return $this->barcodeService;
@@ -415,7 +417,7 @@ class PostNL implements LoggerAwareInterface
     public function getLabellingService()
     {
         if (!$this->labellingService) {
-            $this->labellingService = new LabellingService($this);
+            $this->setLabellingService(new LabellingService($this));
         }
 
         return $this->labellingService;
@@ -441,7 +443,7 @@ class PostNL implements LoggerAwareInterface
     public function getConfirmingService()
     {
         if (!$this->confirmingService) {
-            $this->confirmingService = new ConfirmingService($this);
+            $this->setConfirmingService(new ConfirmingService($this));
         }
 
         return $this->confirmingService;
@@ -467,7 +469,7 @@ class PostNL implements LoggerAwareInterface
     public function getShippingStatusService()
     {
         if (!$this->shippingStatusService) {
-            $this->shippingStatusService = new ShippingStatusService($this);
+            $this->setShippingStatusService(new ShippingStatusService($this));
         }
 
         return $this->shippingStatusService;

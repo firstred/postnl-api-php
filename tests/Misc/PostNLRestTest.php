@@ -26,13 +26,9 @@
 
 namespace ThirtyBees\PostNL\Tests\Misc;
 
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Response;
 use ThirtyBees\PostNL\Entity\Address;
 use ThirtyBees\PostNL\Entity\Customer;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
-use ThirtyBees\PostNL\HttpClient\MockClient;
 use ThirtyBees\PostNL\PostNL;
 
 /**
@@ -91,5 +87,74 @@ class PostNLRestTest extends \PHPUnit_Framework_TestCase
     public function testCustomer()
     {
         $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Customer', $this->postnl->getCustomer());
+    }
+
+    /**
+     * @testdox accepts a string token
+     *
+     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     */
+    public function testSetTokenString()
+    {
+        $this->postnl->setToken('test');
+        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\SOAP\\UsernameToken', $this->postnl->getToken());
+    }
+
+    /**
+     * @testdox accepts a token object
+     *
+     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     */
+    public function testSetTokenObject()
+    {
+        $this->postnl->setToken(new UsernameToken(null, 'test'));
+        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\SOAP\\UsernameToken', $this->postnl->getToken());
+    }
+
+    /**
+     * @testdox accepts a `null` logger
+     */
+    public function testSetNullLogger()
+    {
+        $this->postnl->setLogger(null);
+
+        $this->assertNull($this->postnl->getLogger());
+    }
+
+    /**
+     * @testdox does not accept an invalid token object
+     *
+     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     */
+    public function testNegativeInvalidToken()
+    {
+        $this->expectException('\\ThirtyBees\\PostNL\\Exception\\InvalidArgumentException');
+        $this->postnl->setToken(new Address());
+    }
+
+    /**
+     * @testdox returns `false` when the API key is missing
+     *
+     * @throws \ReflectionException
+     */
+    public function testNegativeKeyMissing()
+    {
+        $reflection = new \ReflectionClass('\\ThirtyBees\\PostNL\\PostNL');
+        /** @var PostNL $postnl */
+        $postnl = $reflection->newInstanceWithoutConstructor();
+
+        $this->assertFalse($postnl->getRestApiKey());
+    }
+
+    /**
+     * @testdox throws an exception when setting an invalid mode
+     *
+     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     */
+    public function testNegativeInvalidMode()
+    {
+        $this->expectException('\\ThirtyBees\\PostNL\\Exception\\InvalidArgumentException');
+
+        $this->postnl->setMode('invalid');
     }
 }
