@@ -42,6 +42,8 @@ class Util
      * @param string|null $prefix
      *
      * @return string A querystring, essentially.
+     *
+     * @codeCoverageIgnore
      */
     public static function urlEncode($arr, $prefix = null)
     {

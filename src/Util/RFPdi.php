@@ -34,6 +34,8 @@ use setasign\Fpdi\Fpdi;
  * @package ThirtyBees\PostNL\Util
  *
  * @credits to haakym on Stack Overflow: https://stackoverflow.com/a/40526456
+ *
+ * @codeCoverageIgnore
  */
 class RFPdi extends Fpdi
 {
