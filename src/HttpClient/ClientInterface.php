@@ -91,7 +91,7 @@ interface ClientInterface
      *
      * @return Response
      *
-     * @throws \Exception|GuzzleException
+     * @throws GuzzleException
      */
     public function doRequest(Request $request);
 
@@ -102,7 +102,7 @@ interface ClientInterface
      *
      * @param Request[] $requests
      *
-     * @return Response|Response[]|GuzzleException|GuzzleException[]|\Exception|\Exception[]
+     * @return Response|Response[]|GuzzleException|GuzzleException[]
      */
     public function doRequests($requests = []);
 }

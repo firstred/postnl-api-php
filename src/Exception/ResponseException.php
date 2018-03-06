@@ -26,7 +26,42 @@
 
 namespace ThirtyBees\PostNL\Exception;
 
+use GuzzleHttp\Psr7\Response;
+use Throwable;
+
 class ResponseException extends AbstractException
 {
+    /** @var Response $response */
+    private $response;
 
+    /**
+     * ResponseException constructor.
+     *
+     * @param string         $message
+     * @param int            $code
+     * @param Throwable|null $previous
+     * @param Response|null  $response
+     */
+    public function __construct($message = "", $code = 0, $previous = null, Response $response = null)
+    {
+        parent::__construct($message, $code, $previous);
+
+        $this->response = $response;
+    }
+
+    /**
+     * @param Response $response
+     */
+    public function setResponse(Response $response)
+    {
+        $this->response = $response;
+    }
+
+    /**
+     * @return Response
+     */
+    public function getResponse()
+    {
+        return $this->response;
+    }
 }

@@ -28,5 +28,4 @@ namespace ThirtyBees\PostNL\Exception;
 
 abstract class AbstractException extends \Exception
 {
-
 }

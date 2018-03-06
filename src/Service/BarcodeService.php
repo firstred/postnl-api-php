@@ -26,12 +26,16 @@
 
 namespace ThirtyBees\PostNL\Service;
 
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Sabre\Xml\Service as XmlService;
 use ThirtyBees\PostNL\Entity\Request\GenerateBarcode;
 use ThirtyBees\PostNL\Entity\SOAP\Security;
 use ThirtyBees\PostNL\Exception\ApiException;
+use ThirtyBees\PostNL\Exception\CifDownException;
+use ThirtyBees\PostNL\Exception\CifException;
 use ThirtyBees\PostNL\Exception\ResponseException;
 use ThirtyBees\PostNL\PostNL;
 
@@ -80,11 +84,12 @@ class BarcodeService extends AbstractService
      * @param GenerateBarcode $generateBarcode
      *
      * @return string|null Barcode
+     *
      * @throws ResponseException
-     * @throws \Exception
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \ThirtyBees\PostNL\Exception\CifDownException
-     * @throws \ThirtyBees\PostNL\Exception\CifException
+     * @throws ApiException
+     * @throws GuzzleException
+     * @throws CifDownException
+     * @throws CifException
      */
     public function generateBarcodeREST(GenerateBarcode $generateBarcode)
     {
@@ -105,7 +110,7 @@ class BarcodeService extends AbstractService
      *
      * @param GenerateBarcode[] $generateBarcodes
      *
-     * @return array Barcodes
+     * @return string[]|ClientException[]|ResponseException[]|ApiException[]|CifDownException[]|CifException[] Barcodes
      */
     public function generateBarcodesREST(array $generateBarcodes)
     {
@@ -124,10 +129,18 @@ class BarcodeService extends AbstractService
                 static::validateRESTResponse($response);
                 $json = json_decode(static::getResponseText($response), true);
                 if (!isset($json['Barcode'])) {
-                    throw new \Exception('Unknown error');
+                    throw new ResponseException('Unknown response', null, null, $response);
                 }
                 $barcode = $json['Barcode'];
-            } catch (\Exception $e) {
+            } catch (ClientException $e) {
+                $barcode = $e;
+            } catch (ResponseException $e) {
+                $barcode = $e;
+            } catch (ApiException $e) {
+                $barcode = $e;
+            } catch (CifDownException $e) {
+                $barcode = $e;
+            } catch (CifException $e) {
                 $barcode = $e;
             }
 
