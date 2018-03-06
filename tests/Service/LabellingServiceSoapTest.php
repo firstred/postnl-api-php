@@ -26,6 +26,7 @@
 
 namespace ThirtyBees\PostNL\Tests\Service;
 
+use Cache\Adapter\Void\VoidCachePool;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
@@ -90,6 +91,7 @@ class LabellingServiceSoapTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->service = $this->postnl->getLabellingService();
+        $this->service->cache = new VoidCachePool();
     }
 
     /**

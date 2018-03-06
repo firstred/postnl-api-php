@@ -85,7 +85,7 @@ class BarcodeServiceRestTest extends \PHPUnit_Framework_TestCase
             true,
             PostNL::MODE_REST
         );
-
+        
         $this->service = $this->postnl->getBarcodeService();
     }
 
