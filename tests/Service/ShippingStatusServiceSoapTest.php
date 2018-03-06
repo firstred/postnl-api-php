@@ -389,6 +389,8 @@ class ShippingStatusSoapTest extends \PHPUnit_Framework_TestCase
                 ->setShipment(
                     (new Shipment())
                         ->setStatusCode($status)
+                        ->setDateFrom('29-06-2016')
+                        ->setDateTo('20-07-2016')
                 )
                 ->setMessage($message)
         );
@@ -413,6 +415,8 @@ class ShippingStatusSoapTest extends \PHPUnit_Framework_TestCase
     <domain:CustomerNumber>{$this->postnl->getCustomer()->getCustomerNumber()}</domain:CustomerNumber>
    </domain:Customer>
    <domain:Shipment>
+    <domain:DateFrom>29-06-2016</domain:DateFrom>
+    <domain:DateTo>20-07-2016</domain:DateTo>
     <domain:StatusCode>{$status}</domain:StatusCode>
    </domain:Shipment>
   </services:CompleteStatus>
@@ -434,6 +438,8 @@ class ShippingStatusSoapTest extends \PHPUnit_Framework_TestCase
                 ->setShipment(
                     (new Shipment())
                         ->setPhaseCode($phase)
+                        ->setDateFrom('29-06-2016')
+                        ->setDateTo('20-07-2016')
                 )
                 ->setMessage($message)
         );
@@ -458,6 +464,8 @@ class ShippingStatusSoapTest extends \PHPUnit_Framework_TestCase
     <domain:CustomerNumber>{$this->postnl->getCustomer()->getCustomerNumber()}</domain:CustomerNumber>
    </domain:Customer>
    <domain:Shipment>
+    <domain:DateFrom>29-06-2016</domain:DateFrom>
+    <domain:DateTo>20-07-2016</domain:DateTo>
     <domain:PhaseCode>{$phase}</domain:PhaseCode>
    </domain:Shipment>
   </services:CompleteStatus>

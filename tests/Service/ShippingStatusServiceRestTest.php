@@ -285,7 +285,9 @@ class ShippingStatusRestTest extends \PHPUnit_Framework_TestCase
             (new CompleteStatus())
                 ->setShipment(
                     (new Shipment())
-                        ->setStatusCode('1')
+                        ->setStatusCode($status)
+                        ->setDateFrom('29-06-2016')
+                        ->setDateTo('20-07-2016')
                 )
                 ->setMessage($message)
         );
@@ -297,6 +299,8 @@ class ShippingStatusRestTest extends \PHPUnit_Framework_TestCase
             'customerNumber' => $this->postnl->getCustomer()->getCustomerNumber(),
             'status'         => $status,
             'detail'         => 'true',
+            'startDate'      => '29-06-2016',
+            'endDate'        => '20-07-2016',
         ], $query);
         $this->assertEquals('test', $request->getHeaderLine('apikey'));
         $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
@@ -315,7 +319,9 @@ class ShippingStatusRestTest extends \PHPUnit_Framework_TestCase
             (new CompleteStatus())
                 ->setShipment(
                     (new Shipment())
-                        ->setPhaseCode('1')
+                        ->setPhaseCode($phase)
+                        ->setDateFrom('29-06-2016')
+                        ->setDateTo('20-07-2016')
                 )
                 ->setMessage($message)
         );
@@ -327,6 +333,8 @@ class ShippingStatusRestTest extends \PHPUnit_Framework_TestCase
             'customerNumber' => $this->postnl->getCustomer()->getCustomerNumber(),
             'phase'          => $phase,
             'detail'         => 'true',
+            'startDate'      => '29-06-2016',
+            'endDate'        => '20-07-2016',
         ], $query);
         $this->assertEquals('test', $request->getHeaderLine('apikey'));
         $this->assertEquals('application/json', $request->getHeaderLine('Accept'));

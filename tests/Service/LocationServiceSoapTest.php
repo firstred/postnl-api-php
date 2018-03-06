@@ -258,7 +258,6 @@ class LocationServiceSoapTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox creates a valid GetLocation request
-     * @throws \ReflectionException
      */
     public function testGetLocationRequestSoap()
     {

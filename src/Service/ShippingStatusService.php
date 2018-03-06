@@ -577,6 +577,8 @@ class ShippingStatusService extends AbstractService
             ];
             $endpoint = "/search";
             $query['status'] = $completeStatus->getShipment()->getStatusCode();
+            $query['startDate'] = $completeStatus->getShipment()->getDateFrom();
+            $query['endDate'] = $completeStatus->getShipment()->getDateTo();
         } elseif ($completeStatus->getShipment()->getPhaseCode()) {
             $query['startDate'] = $completeStatus->getShipment()->getDateFrom();
             $query['endDate'] = $completeStatus->getShipment()->getDateTo();
