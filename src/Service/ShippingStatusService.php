@@ -447,17 +447,26 @@ class ShippingStatusService extends AbstractService
     {
         $apiKey = $this->postnl->getRestApiKey();
         $this->setService($currentStatus);
-        $query = [
-            'customerCode'   => $this->postnl->getCustomer()->getCustomerCode(),
-            'customerNumber' => $this->postnl->getCustomer()->getCustomerNumber(),
-        ];
+
         if ($currentStatus->getShipment()->getReference()) {
+            $query = [
+                'customerCode'   => $this->postnl->getCustomer()->getCustomerCode(),
+                'customerNumber' => $this->postnl->getCustomer()->getCustomerNumber(),
+            ];
             $endpoint = "/reference/{$currentStatus->getShipment()->getReference()}";
         } elseif ($currentStatus->getShipment()->getStatusCode()) {
-            $endpoint = "/search/";
+            $query = [
+                'customerCode'   => $this->postnl->getCustomer()->getCustomerCode(),
+                'customerNumber' => $this->postnl->getCustomer()->getCustomerNumber(),
+            ];
+            $endpoint = "/search";
             $query['status'] = $currentStatus->getShipment()->getStatusCode();
         } elseif ($currentStatus->getShipment()->getPhaseCode()) {
-            $endpoint = "/search/";
+            $query = [
+                'customerCode'   => $this->postnl->getCustomer()->getCustomerCode(),
+                'customerNumber' => $this->postnl->getCustomer()->getCustomerNumber(),
+            ];
+            $endpoint = "/search";
             $query['phase'] = $currentStatus->getShipment()->getPhaseCode();
             if ($currentStatus->getShipment()->getDateFrom()) {
                 $query['startDate'] = $currentStatus->getShipment()->getDateFrom();
@@ -466,6 +475,7 @@ class ShippingStatusService extends AbstractService
                 $query['endDate'] = $currentStatus->getShipment()->getDateTo();
             }
           } else {
+            $query = [];
             $endpoint = "/barcode/{$currentStatus->getShipment()->getBarcode()}";
         }
         $endpoint .= '?'.http_build_query($query);
@@ -545,18 +555,29 @@ class ShippingStatusService extends AbstractService
     {
        $apiKey = $this->postnl->getRestApiKey();
         $this->setService($completeStatus);
-        $query = [
-            'customerCode'   => $this->postnl->getCustomer()->getCustomerCode(),
-            'customerNumber' => $this->postnl->getCustomer()->getCustomerNumber(),
-            'detail'         => 1,
-        ];
+
         if ($completeStatus->getShipment()->getReference()) {
+            $query = [
+                'customerCode'   => $this->postnl->getCustomer()->getCustomerCode(),
+                'customerNumber' => $this->postnl->getCustomer()->getCustomerNumber(),
+                'detail'         => 'true',
+            ];
             $endpoint = "/reference/{$completeStatus->getShipment()->getReference()}";
         } elseif ($completeStatus->getShipment()->getStatusCode()) {
-            $endpoint = "/search/";
+            $query = [
+                'customerCode'   => $this->postnl->getCustomer()->getCustomerCode(),
+                'customerNumber' => $this->postnl->getCustomer()->getCustomerNumber(),
+                'detail'         => 'true',
+            ];
+            $endpoint = "/search";
             $query['status'] = $completeStatus->getShipment()->getStatusCode();
         } elseif ($completeStatus->getShipment()->getPhaseCode()) {
-            $endpoint = "/search/";
+            $query = [
+                'customerCode'   => $this->postnl->getCustomer()->getCustomerCode(),
+                'customerNumber' => $this->postnl->getCustomer()->getCustomerNumber(),
+                'detail'         => 'true',
+            ];
+            $endpoint = "/search";
             $query['phase'] = $completeStatus->getShipment()->getPhaseCode();
             if ($completeStatus->getShipment()->getDateFrom()) {
                 $query['startDate'] = $completeStatus->getShipment()->getDateFrom();
@@ -565,6 +586,9 @@ class ShippingStatusService extends AbstractService
                 $query['endDate'] = $completeStatus->getShipment()->getDateTo();
             }
         } else {
+            $query = [
+                'detail' => 'true',
+            ];
             $endpoint = "/barcode/{$completeStatus->getShipment()->getBarcode()}";
         }
         $endpoint .= '?'.\GuzzleHttp\Psr7\build_query($query);
@@ -647,7 +671,7 @@ class ShippingStatusService extends AbstractService
 
         return new Request(
             'POST',
-            $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT."/signature/{$getSignature->getShipment()->geBarcode()}",
+            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT)."/signature/{$getSignature->getShipment()->getBarcode()}",
             [
                 'apikey'       => $apiKey,
                 'Accept'       => 'application/json',
