@@ -462,6 +462,8 @@ class ShippingStatusService extends AbstractService
             ];
             $endpoint = "/search";
             $query['status'] = $currentStatus->getShipment()->getStatusCode();
+            $query['startDate'] = $currentStatus->getShipment()->getDateFrom();
+            $query['endDate'] = $currentStatus->getShipment()->getDateTo();
         } elseif ($currentStatus->getShipment()->getPhaseCode()) {
             $query = [
                 'customerCode'   => $this->postnl->getCustomer()->getCustomerCode(),
@@ -469,12 +471,8 @@ class ShippingStatusService extends AbstractService
             ];
             $endpoint = "/search";
             $query['phase'] = $currentStatus->getShipment()->getPhaseCode();
-            if ($currentStatus->getShipment()->getDateFrom()) {
-                $query['startDate'] = $currentStatus->getShipment()->getDateFrom();
-            }
-            if ($currentStatus->getShipment()->getDateFrom()) {
-                $query['endDate'] = $currentStatus->getShipment()->getDateTo();
-            }
+            $query['startDate'] = $currentStatus->getShipment()->getDateFrom();
+            $query['endDate'] = $currentStatus->getShipment()->getDateTo();
           } else {
             $query = [];
             $endpoint = "/barcode/{$currentStatus->getShipment()->getBarcode()}";
@@ -580,6 +578,8 @@ class ShippingStatusService extends AbstractService
             $endpoint = "/search";
             $query['status'] = $completeStatus->getShipment()->getStatusCode();
         } elseif ($completeStatus->getShipment()->getPhaseCode()) {
+            $query['startDate'] = $completeStatus->getShipment()->getDateFrom();
+            $query['endDate'] = $completeStatus->getShipment()->getDateTo();
             $query = [
                 'customerCode'   => $this->postnl->getCustomer()->getCustomerCode(),
                 'customerNumber' => $this->postnl->getCustomer()->getCustomerNumber(),
@@ -587,12 +587,8 @@ class ShippingStatusService extends AbstractService
             ];
             $endpoint = "/search";
             $query['phase'] = $completeStatus->getShipment()->getPhaseCode();
-            if ($completeStatus->getShipment()->getDateFrom()) {
-                $query['startDate'] = $completeStatus->getShipment()->getDateFrom();
-            }
-            if ($completeStatus->getShipment()->getDateFrom()) {
-                $query['endDate'] = $completeStatus->getShipment()->getDateTo();
-            }
+            $query['startDate'] = $completeStatus->getShipment()->getDateFrom();
+            $query['endDate'] = $completeStatus->getShipment()->getDateTo();
         } else {
             $query = [
                 'detail' => 'true',
