@@ -125,7 +125,7 @@ class LabellingServiceSoapTest extends \PHPUnit_Framework_TestCase
      *
      * @throws \ReflectionException
      */
-    public function testCreatesAValidLabelRequest()
+    public function testGenerateSingleLabelRequestSoap()
     {
         $message = new LabellingMessage();
 

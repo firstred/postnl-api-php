@@ -26,13 +26,12 @@
 
 namespace ThirtyBees\PostNL;
 
-use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerInterface;
 use setasign\Fpdi\PdfParser\StreamReader;
 use ThirtyBees\PostNL\Entity\Barcode;
 use ThirtyBees\PostNL\Entity\Customer;
 use ThirtyBees\PostNL\Entity\Label;
-use ThirtyBees\PostNL\Entity\Location;
 use ThirtyBees\PostNL\Entity\Message\LabellingMessage;
 use ThirtyBees\PostNL\Entity\Message\Message;
 use ThirtyBees\PostNL\Entity\Request\Confirming;
@@ -41,14 +40,15 @@ use ThirtyBees\PostNL\Entity\Request\GenerateBarcode;
 use ThirtyBees\PostNL\Entity\Request\GenerateLabel;
 use ThirtyBees\PostNL\Entity\Request\GetDeliveryDate;
 use ThirtyBees\PostNL\Entity\Request\GetSentDateRequest;
+use ThirtyBees\PostNL\Entity\Request\GetTimeframes;
 use ThirtyBees\PostNL\Entity\Response\ConfirmingResponseShipment;
 use ThirtyBees\PostNL\Entity\Response\CurrentStatusResponse;
 use ThirtyBees\PostNL\Entity\Response\GenerateLabelResponse;
 use ThirtyBees\PostNL\Entity\Response\GetDeliveryDateResponse;
 use ThirtyBees\PostNL\Entity\Response\GetSentDateResponse;
+use ThirtyBees\PostNL\Entity\Response\ResponseTimeframes;
 use ThirtyBees\PostNL\Entity\Shipment;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
-use ThirtyBees\PostNL\Entity\Timeframe;
 use ThirtyBees\PostNL\Exception\AbstractException;
 use ThirtyBees\PostNL\Exception\InvalidArgumentException;
 use ThirtyBees\PostNL\Exception\InvalidBarcodeException;
@@ -947,7 +947,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Get a delivery date
+     * Get a shipping date
      *
      * @param GetSentDateRequest $getSentDate
      *
@@ -956,6 +956,18 @@ class PostNL implements LoggerAwareInterface
     public function getSentDate(GetSentDateRequest $getSentDate)
     {
         return $this->getDeliveryDateService()->getSentDate($getSentDate);
+    }
+
+    /**
+     * Get timefreames
+     *
+     * @param GetTimeframes $getTimeframes
+     *
+     * @return ResponseTimeframes
+     */
+    public function getTimeframes(GetTimeframes $getTimeframes)
+    {
+        return $this->getTimeframeService()->getTimeframes($getTimeframes);
     }
 
     /**

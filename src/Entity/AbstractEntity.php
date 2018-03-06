@@ -68,7 +68,6 @@ abstract class AbstractEntity implements \JsonSerializable, XmlSerializable
      * @param array $properties
      *
      * @return static|null|object
-     * @throws \ReflectionException
      */
     public static function create(array $properties = [])
     {
@@ -76,7 +75,11 @@ abstract class AbstractEntity implements \JsonSerializable, XmlSerializable
             return null;
         }
 
-        $reflectionClass = new \ReflectionClass(get_called_class());
+        try {
+            $reflectionClass = new \ReflectionClass(get_called_class());
+        } catch (\Exception $e) {
+            return null;
+        }
 
         $instance = $reflectionClass->newInstanceWithoutConstructor();
 

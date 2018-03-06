@@ -96,7 +96,11 @@ class ConfirmingService extends AbstractService
         static::validateRESTResponse($response);
         $body = json_decode(static::getResponseText($response), true);
         if (isset($body['ResponseShipments'])) {
-            return AbstractEntity::jsonDeserialize(['ConfirmingResponseShipment' => $body['ResponseShipments'][0]]);
+            /** @var ConfirmingResponseShipment $object */
+            $object = AbstractEntity::jsonDeserialize(['ConfirmingResponseShipment' => $body['ResponseShipments'][0]]);
+            $this->setService($object);
+
+            return $object;
         }
 
         if ($response->getStatusCode() === 200) {
@@ -132,7 +136,9 @@ class ConfirmingService extends AbstractService
             try {
                 static::validateRESTResponse($response);
                 if (isset($confirmingResponse['ResponseShipments'])) {
+                    /** @var ConfirmingResponseShipment $confirming */
                     $confirming = AbstractEntity::jsonDeserialize(['ConfirmingResponseShipment' => $confirmingResponse['ResponseShipments'][0]]);
+                    $this->setService($confirming);
                 } else {
                     throw new ResponseException('Invalid API Response', null, null, $response);
                 }
@@ -152,11 +158,12 @@ class ConfirmingService extends AbstractService
      * @param Confirming $confirming
      *
      * @return ConfirmingResponseShipment
+     *
      * @throws \Sabre\Xml\LibXMLException
      * @throws \ThirtyBees\PostNL\Exception\CifDownException
      * @throws \ThirtyBees\PostNL\Exception\CifException
-     * @throws \Exception
      * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws ResponseException
      */
     public function confirmShipmentSOAP(Confirming $confirming)
     {
@@ -170,7 +177,11 @@ class ConfirmingService extends AbstractService
         $array = array_values($reader->parse()['value'][0]['value'][0]['value']);
         $array = $array[0];
 
-        return AbstractEntity::xmlDeserialize($array);
+        /** @var ConfirmingResponseShipment $object */
+        $object = AbstractEntity::xmlDeserialize($array);
+        $this->setService($object);
+
+        return $object;
     }
 
     /**
@@ -179,6 +190,7 @@ class ConfirmingService extends AbstractService
      * @param array $confirmings ['uuid' => Confirming, ...]
      *
      * @return ConfirmingResponseShipment[]
+     *
      * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
     public function confirmShipmentsSOAP(array $confirmings)
@@ -207,7 +219,9 @@ class ConfirmingService extends AbstractService
                     $array = array_values($reader->parse()['value'][0]['value'][0]['value']);
                     $array = $array[0];
 
+                    /** @var ConfirmingResponseShipment $confirmingResponse */
                     $confirmingResponse = AbstractEntity::xmlDeserialize($array);
+                    $this->setService($confirmingResponse);
                 } catch (\Exception $e) {
                     $confirmingResponse = $e;
                 }

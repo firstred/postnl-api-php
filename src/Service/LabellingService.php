@@ -126,7 +126,11 @@ class LabellingService extends AbstractService
                 $this->cacheItem($item);
             }
 
-            return AbstractEntity::jsonDeserialize(['GenerateLabelResponse' => $body]);
+            /** @var GenerateLabelResponse $object */
+            $object = AbstractEntity::jsonDeserialize(['GenerateLabelResponse' => $body]);
+            $this->setService($object);
+
+            return $object;
         }
 
         if ($response->getStatusCode() === 200) {
@@ -193,15 +197,17 @@ class LabellingService extends AbstractService
             try {
                 static::validateRESTResponse($response);
                 if (isset($label['ResponseShipments'])) {
-                    $barcode = AbstractEntity::jsonDeserialize(['GenerateLabelResponse' => $label]);
+                    /** @var GenerateLabelResponse $generateLabelResponse */
+                    $generateLabelResponse = AbstractEntity::jsonDeserialize(['GenerateLabelResponse' => $label]);
+                    $this->setService($generateLabelResponse);
                 } else {
                     throw new ApiException('Unable to generate label');
                 }
             } catch (\Exception $e) {
-                $barcode = $e;
+                $generateLabelResponse = $e;
             }
 
-            $labels[$uuid] = $barcode;
+            $labels[$uuid] = $generateLabelResponse;
         }
 
         return $labels;
@@ -260,7 +266,11 @@ class LabellingService extends AbstractService
         $array = array_values($reader->parse()['value'][0]['value']);
         $array = $array[0];
 
-        return AbstractEntity::xmlDeserialize($array);
+        /** @var GenerateLabelResponse $object */
+        $object = AbstractEntity::xmlDeserialize($array);
+        $this->setService($object);
+
+        return $object;
     }
 
     /**
@@ -330,7 +340,9 @@ class LabellingService extends AbstractService
                     $array = array_values($reader->parse()['value'][0]['value']);
                     $array = $array[0];
 
+                    /** @var GenerateLabelResponse $generateLabelResponse */
                     $generateLabelResponse = AbstractEntity::xmlDeserialize($array);
+                    $this->setService($generateLabelResponse);
                 } catch (\Exception $e) {
                     $generateLabelResponse = $e;
                 }

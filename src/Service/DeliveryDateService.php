@@ -124,21 +124,25 @@ class DeliveryDateService extends AbstractService
                 $this->cacheItem($item);
             }
 
-            return AbstractEntity::jsonDeserialize(['GetDeliveryDateResponse' => $body]);
+            /** @var GetDeliveryDateResponse $object */
+            $object = AbstractEntity::jsonDeserialize(['GetDeliveryDateResponse' => $body]);
+            $this->setService($object);
+
+            return $object;
         }
 
         throw new ApiException('Unable to retrieve the delivery date');
     }
 
     /**
-     * Generate a single label via SOAP
+     * Get a delivery date via SOAP
      *
      * @param GetDeliveryDate $getDeliveryDate
      *
      * @return GetDeliveryDateResponse
+     *
      * @throws CifDownException
      * @throws CifException
-     * @throws \Exception
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Sabre\Xml\LibXMLException
      * @throws ResponseException
@@ -175,7 +179,10 @@ class DeliveryDateService extends AbstractService
         $array = array_values($reader->parse()['value'][0]['value']);
         $array = $array[0];
 
-        return AbstractEntity::xmlDeserialize($array);
+        /** @var GetDeliveryDateResponse $object */
+        $object = AbstractEntity::xmlDeserialize($array);
+
+        return $object;
     }
 
     /**
@@ -217,7 +224,11 @@ class DeliveryDateService extends AbstractService
                 $this->cacheItem($item);
             }
 
-            return AbstractEntity::jsonDeserialize(['GetSentDateResponse' => $body]);
+            /** @var GetSentDateResponse $object */
+            $object = AbstractEntity::jsonDeserialize(['GetSentDateResponse' => $body]);
+            $this->setService($object);
+
+            return $object;
         }
 
         throw new ApiException('Unable to generate label');
@@ -268,7 +279,11 @@ class DeliveryDateService extends AbstractService
         $array = array_values($reader->parse()['value'][0]['value']);
         $array = $array[0];
 
-        return AbstractEntity::xmlDeserialize($array);
+        /** @var GetSentDateResponse $object */
+        $object = AbstractEntity::xmlDeserialize($array);
+        $this->setService($object);
+
+        return $object;
     }
 
     /**

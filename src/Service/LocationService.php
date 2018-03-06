@@ -129,7 +129,11 @@ class LocationService extends AbstractService
                 $this->cacheItem($item);
             }
 
-            return AbstractEntity::jsonDeserialize(['GetNearestLocationsResponse' => $body]);
+            /** @var GetNearestLocationsResponse $object */
+            $object = AbstractEntity::jsonDeserialize(['GetNearestLocationsResponse' => $body]);
+            $this->setService($object);
+
+            return $object;
         }
 
         throw new ApiException('Unable to retrieve the nearest locations');
@@ -141,9 +145,9 @@ class LocationService extends AbstractService
      * @param GetNearestLocations $getNearestLocations
      *
      * @return GenerateLabelResponse
+     *
      * @throws CifDownException
      * @throws CifException
-     * @throws \Exception
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Sabre\Xml\LibXMLException
      * @throws \ThirtyBees\PostNL\Exception\ResponseException
@@ -180,7 +184,11 @@ class LocationService extends AbstractService
         $array = array_values($reader->parse()['value'][0]['value']);
         $array = $array[0];
 
-        return AbstractEntity::xmlDeserialize($array);
+        /** @var GenerateLabelResponse $object */
+        $object = AbstractEntity::xmlDeserialize($array);
+        $this->setService($object);
+
+        return $object;
     }
 
     /**
@@ -193,7 +201,6 @@ class LocationService extends AbstractService
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
-     * @throws \Exception
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
@@ -222,7 +229,11 @@ class LocationService extends AbstractService
                 $this->cacheItem($item);
             }
 
-            return AbstractEntity::jsonDeserialize(['GetLocationsInAreaResponse' => $body]);
+            /** @var GetLocationsInAreaResponse $object */
+            $object = AbstractEntity::jsonDeserialize(['GetLocationsInAreaResponse' => $body]);
+            $this->setService($object);
+
+            return $object;
         }
 
         throw new ApiException('Unable to retrieve the nearest locations');
@@ -234,6 +245,7 @@ class LocationService extends AbstractService
      * @param GetNearestLocations $getNearestLocations
      *
      * @return GenerateLabelResponse
+     *
      * @throws CifDownException
      * @throws CifException
      * @throws \Exception
@@ -273,7 +285,11 @@ class LocationService extends AbstractService
         $array = array_values($reader->parse()['value'][0]['value']);
         $array = $array[0];
 
-        return AbstractEntity::xmlDeserialize($array);
+        /** @var GenerateLabelResponse $object */
+        $object = AbstractEntity::xmlDeserialize($array);
+        $this->setService($object);
+
+        return $object;
     }
 
     /**
@@ -315,7 +331,11 @@ class LocationService extends AbstractService
                 $this->cacheItem($item);
             }
 
-            return AbstractEntity::jsonDeserialize(['GetLocationsInAreaResponse' => $body]);
+            /** @var GetLocationsInAreaResponse $object */
+            $object = AbstractEntity::jsonDeserialize(['GetLocationsInAreaResponse' => $body]);
+            $this->setService($object);
+
+            return $object;
         }
 
         throw new ApiException('Unable to retrieve the nearest locations');
@@ -330,7 +350,6 @@ class LocationService extends AbstractService
      *
      * @throws CifDownException
      * @throws CifException
-     * @throws \Exception
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Sabre\Xml\LibXMLException
      * @throws \ThirtyBees\PostNL\Exception\ResponseException
@@ -367,7 +386,11 @@ class LocationService extends AbstractService
         $array = array_values($reader->parse()['value'][0]['value']);
         $array = $array[0];
 
-        return AbstractEntity::xmlDeserialize($array);
+        /** @var GetLocationsInAreaResponse $object */
+        $object = AbstractEntity::xmlDeserialize($array);
+        $this->setService($object);
+
+        return $object;
     }
 
     /**

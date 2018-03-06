@@ -45,7 +45,7 @@ use ThirtyBees\PostNL\PostNL;
  * @package ThirtyBees\PostNL\Service
  *
  * @method string generateBarcode(GenerateBarcode $generateBarcode)
- * @method array generateBarcodes(GenerateBarcode[] $generateBarcode)
+ * @method string[] generateBarcodes(GenerateBarcode[] $generateBarcode)
  */
 class BarcodeService extends AbstractService
 {
@@ -186,7 +186,6 @@ class BarcodeService extends AbstractService
      *
      * @throws CifDownException
      * @throws CifException
-     * @throws ResponseException
      */
     public function generateBarcodesSOAP(array $generateBarcodes)
     {

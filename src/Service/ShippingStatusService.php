@@ -51,6 +51,8 @@ use ThirtyBees\PostNL\PostNL;
  * @package ThirtyBees\PostNL\Service
  *
  * @method CurrentStatusResponse currentStatus(CurrentStatus $currentStatus)
+ * @method CompleteStatusResponse completeStatus(CompleteStatus $completeStatus)
+ * @method GetSignature getSignature(GetSignature $getSignature)
  */
 class ShippingStatusService extends AbstractService
 {
@@ -135,7 +137,11 @@ class ShippingStatusService extends AbstractService
                 $this->cacheItem($item);
             }
 
-            return AbstractEntity::jsonDeserialize(['CurrentStatusResponse' => $body]);
+            /** @var CurrentStatusResponse $object */
+            $object = AbstractEntity::jsonDeserialize(['CurrentStatusResponse' => $body]);
+            $this->setService($object);
+
+            return $object;
         }
 
         throw new ApiException('Unable to generate label');
@@ -161,7 +167,6 @@ class ShippingStatusService extends AbstractService
      *
      * @throws CifDownException
      * @throws CifException
-     * @throws \Exception
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Sabre\Xml\LibXMLException
      * @throws \ThirtyBees\PostNL\Exception\ResponseException
@@ -198,7 +203,11 @@ class ShippingStatusService extends AbstractService
         $array = array_values($reader->parse()['value'][0]['value']);
         $array = $array[0];
 
-        return AbstractEntity::xmlDeserialize($array);
+        /** @var CurrentStatusResponse $object */
+        $object = AbstractEntity::xmlDeserialize($array);
+        $this->setService($object);
+
+        return $object;
     }
 
     /**
@@ -250,7 +259,11 @@ class ShippingStatusService extends AbstractService
                 $this->cacheItem($item);
             }
 
-            return AbstractEntity::jsonDeserialize(['CompleteStatusResponse' => $body]);
+            /** @var CompleteStatusResponse $object */
+            $object = AbstractEntity::jsonDeserialize(['CompleteStatusResponse' => $body]);
+            $this->setService($object);
+
+            return $object;
         }
 
         throw new ApiException('Unable to generate label');
@@ -313,7 +326,11 @@ class ShippingStatusService extends AbstractService
         $array = array_values($reader->parse()['value'][0]['value']);
         $array = $array[0];
 
-        return AbstractEntity::xmlDeserialize($array);
+        /** @var CompleteStatusResponse $object */
+        $object = AbstractEntity::xmlDeserialize($array);;
+        $this->setService($object);
+
+        return $object;
     }
 
     /**
@@ -365,7 +382,11 @@ class ShippingStatusService extends AbstractService
                 $this->cacheItem($item);
             }
 
-            return AbstractEntity::jsonDeserialize(['GetSignatureResponseSignature' => $body]);
+            /** @var GetSignatureResponseSignature $object */
+            $object = AbstractEntity::jsonDeserialize(['GetSignatureResponseSignature' => $body]);
+            $this->setService($object);
+
+            return $object;
         }
 
         throw new ApiException('Unable to generate label');
@@ -428,7 +449,11 @@ class ShippingStatusService extends AbstractService
         $array = array_values($reader->parse()['value'][0]['value']);
         $array = $array[0];
 
-        return AbstractEntity::xmlDeserialize($array);
+        /** @var GetSignatureResponseSignature $object */
+        $object = AbstractEntity::xmlDeserialize($array);
+        $this->setService($object);
+
+        return $object;
     }
 
     /**

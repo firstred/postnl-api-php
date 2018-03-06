@@ -29,18 +29,17 @@ namespace ThirtyBees\PostNL\Service;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Psr\Cache\CacheItemInterface;
-use Psr\Cache\CacheItemPoolInterface;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Service as XmlService;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
 use ThirtyBees\PostNL\Entity\Request\GetTimeframes;
 use ThirtyBees\PostNL\Entity\Response\GenerateLabelResponse;
-use ThirtyBees\PostNL\Entity\Request\GenerateLabel;
 use ThirtyBees\PostNL\Entity\Response\ResponseTimeframes;
 use ThirtyBees\PostNL\Entity\SOAP\Security;
 use ThirtyBees\PostNL\Exception\ApiException;
 use ThirtyBees\PostNL\Exception\CifDownException;
 use ThirtyBees\PostNL\Exception\CifException;
+use ThirtyBees\PostNL\Exception\ResponseException;
 use ThirtyBees\PostNL\PostNL;
 
 /**
@@ -48,8 +47,7 @@ use ThirtyBees\PostNL\PostNL;
  *
  * @package ThirtyBees\PostNL\Service
  *
- * @method GenerateLabelResponse   generateLabel(GenerateLabel $generateLabel, bool $confirm)
- * @method GenerateLabelResponse[] generateLabels(GenerateLabel[] $generateLabel, bool $confirm)
+ * @method ResponseTimeframes getTimeframes(GetTimeframes $getTimeframes)
  */
 class TimeframeService extends AbstractService
 {
@@ -113,7 +111,7 @@ class TimeframeService extends AbstractService
             static::validateRESTResponse($response);
         }
         $body = json_decode(static::getResponseText($response), true);
-        if (isset($body['ResponseShipments'])) {
+        if (isset($body['Timeframes'])) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof Response
                 && $response->getStatusCode() === 200
@@ -122,10 +120,17 @@ class TimeframeService extends AbstractService
                 $this->cacheItem($item);
             }
 
-            return AbstractEntity::jsonDeserialize(['GenerateLabelResponse' => $body]);
+            /** @var ResponseTimeframes $object */
+            $object = AbstractEntity::jsonDeserialize(['ResponseTimeframes' => $body]);
+            $this->setService($object);
+
+            global $logger;
+            $logger->debug(json_encode($object));
+
+            return $object;
         }
 
-        throw new ApiException('Unable to generate label');
+        throw new ApiException('Unable to retrieve timeframes');
     }
 
     /**
@@ -133,10 +138,10 @@ class TimeframeService extends AbstractService
      *
      * @param GetTimeframes $getTimeframes
      *
-     * @return GenerateLabelResponse
+     * @return ResponseTimeframes
+     *
      * @throws CifDownException
      * @throws CifException
-     * @throws \Exception
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Sabre\Xml\LibXMLException
      * @throws \ThirtyBees\PostNL\Exception\ResponseException
@@ -173,7 +178,11 @@ class TimeframeService extends AbstractService
         $array = array_values($reader->parse()['value'][0]['value']);
         $array = $array[0];
 
-        return AbstractEntity::xmlDeserialize($array);
+        /** @var ResponseTimeframes $object */
+        $object = AbstractEntity::xmlDeserialize($array);
+        $this->setService($object);
+
+        return $object;
     }
 
     /**
