@@ -44,11 +44,13 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method Location getLocation()
- * @method Message  getMessage()
+ * @method string  getLocationCode()
+ * @method Message getMessage()
+ * @method string  getRetailNetworkID()
  *
- * @method GetLocation setLocation(Location $location = null)
+ * @method GetLocation setLocationCode(string $location = null)
  * @method GetLocation setMessage(Message $message = null)
+ * @method GetLocation setRetailNetworkID(string $id = null)
  */
 class GetLocation extends AbstractEntity
 {
@@ -59,54 +61,66 @@ class GetLocation extends AbstractEntity
      */
     public static $defaultProperties = [
         'Barcode'        => [
-            'Location'    => BarcodeService::DOMAIN_NAMESPACE,
-            'Message'     => BarcodeService::DOMAIN_NAMESPACE,
+            'LocationCode'    => BarcodeService::DOMAIN_NAMESPACE,
+            'Message'         => BarcodeService::DOMAIN_NAMESPACE,
+            'RetailNetworkID' => BarcodeService::DOMAIN_NAMESPACE,
         ],
         'Confirming'     => [
-            'Location'    => ConfirmingService::DOMAIN_NAMESPACE,
-            'Message'     => ConfirmingService::DOMAIN_NAMESPACE,
+            'LocationCode'    => ConfirmingService::DOMAIN_NAMESPACE,
+            'Message'         => ConfirmingService::DOMAIN_NAMESPACE,
+            'RetailNetworkID' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
         'Labelling'      => [
-            'Location'    => LabellingService::DOMAIN_NAMESPACE,
-            'Message'     => LabellingService::DOMAIN_NAMESPACE,
+            'LocationCode'    => LabellingService::DOMAIN_NAMESPACE,
+            'Message'         => LabellingService::DOMAIN_NAMESPACE,
+            'RetailNetworkID' => LabellingService::DOMAIN_NAMESPACE,
         ],
         'ShippingStatus' => [
-            'Location'    => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Message'     => ShippingStatusService::DOMAIN_NAMESPACE,
+            'LocationCode'    => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Message'         => ShippingStatusService::DOMAIN_NAMESPACE,
+            'RetailNetworkID' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate'   => [
-            'Location'    => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Message'     => DeliveryDateService::DOMAIN_NAMESPACE,
+            'LocationCode'    => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Message'         => DeliveryDateService::DOMAIN_NAMESPACE,
+            'RetailNetworkID' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
         'Location'       => [
-            'Location'    => LocationService::DOMAIN_NAMESPACE,
-            'Message'     => LocationService::DOMAIN_NAMESPACE,
+            'LocationCode'    => LocationService::DOMAIN_NAMESPACE,
+            'Message'         => LocationService::DOMAIN_NAMESPACE,
+            'RetailNetworkID' => LocationService::DOMAIN_NAMESPACE,
         ],
         'Timeframe'      => [
-            'Location'    => TimeframeService::DOMAIN_NAMESPACE,
-            'Message'     => TimeframeService::DOMAIN_NAMESPACE,
+            'LocationCode'    => TimeframeService::DOMAIN_NAMESPACE,
+            'Message'         => TimeframeService::DOMAIN_NAMESPACE,
+            'RetailNetworkID' => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var Location $Location */
-    protected $Location;
+    /** @var string $LocationCode */
+    protected $LocationCode;
     /** @var Message $Message */
     protected $Message;
+    /** @var string $RetailNetworkID */
+    protected $RetailNetworkID;
     // @codingStandardsIgnoreEnd
 
     /**
      * GetLocation constructor.
      *
-     * @param Location|null $location
-     * @param Message|null  $message
+     * @param string|null  $location
+     * @param Message|null $message
+     * @param string|null  $networkId
      */
     public function __construct(
-        Location $location = null,
-        Message $message = null
+        $location = null,
+        Message $message = null,
+        $networkId = null
     ) {
         parent::__construct();
 
-        $this->setLocation($location);
+        $this->setLocationCode($location);
         $this->setMessage($message ?: new Message());
+        $this->setRetailNetworkID($networkId);
     }
 }
