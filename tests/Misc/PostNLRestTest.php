@@ -116,7 +116,7 @@ class PostNLRestTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetNullLogger()
     {
-        $this->postnl->setLogger(null);
+        $this->postnl->setLogger();
 
         $this->assertNull($this->postnl->getLogger());
     }

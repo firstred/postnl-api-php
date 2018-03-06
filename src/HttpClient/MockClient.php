@@ -161,7 +161,7 @@ class MockClient implements ClientInterface, LoggerAwareInterface
      *
      * @return MockClient
      */
-    public function setLogger(LoggerInterface $logger)
+    public function setLogger(LoggerInterface $logger = null)
     {
         $this->logger = $logger;
 

@@ -371,7 +371,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @return PostNL
      */
-    public function setLogger(LoggerInterface $logger)
+    public function setLogger(LoggerInterface $logger = null)
     {
         $this->logger = $logger;
         if ($this->getHttpClient() instanceof ClientInterface) {
