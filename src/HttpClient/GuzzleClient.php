@@ -238,7 +238,12 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
             ]
         ));
 
-        return $guzzle->send($request);
+        $response = $guzzle->send($request);
+        if ($response instanceof Response && $this->logger instanceof LoggerInterface) {
+            $this->logger->debug(\GuzzleHttp\Psr7\str($response));
+        }
+
+        return $response;
     }
 
     /**
