@@ -996,7 +996,7 @@ class PostNL implements LoggerAwareInterface
      */
     public function getLocationsInArea(GetLocationsInArea $getLocationsInArea)
     {
-        return $this->getLocationService()->getGetLocationsInArea($getLocationsInArea);
+        return $this->getLocationService()->getLocationsInArea($getLocationsInArea);
     }
 
     /**
