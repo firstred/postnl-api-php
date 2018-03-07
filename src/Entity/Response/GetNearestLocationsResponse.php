@@ -90,4 +90,33 @@ class GetNearestLocationsResponse extends AbstractEntity
 
         $this->setGetLocationsResult($result);
     }
+
+    /**
+     * Return a serializable array for `json_encode`
+     *
+     * @return array
+     */
+    public function jsonSerialize()
+    {
+        $json = [];
+        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
+            return $json;
+        }
+
+        foreach (array_keys(static::$defaultProperties[$this->currentService]) as $propertyName) {
+            if (isset($this->{$propertyName})) {
+                if ($propertyName === 'GetLocationsResult') {
+                    $locations = [];
+                    foreach ($this->GetLocationsResult as $location) {
+                        $locations[] = $location;
+                    }
+                    $json[$propertyName] = ['ResponseLocation' => $locations];
+                } else {
+                    $json[$propertyName] = $this->{$propertyName};
+                }
+            }
+        }
+
+        return $json;
+    }
 }
