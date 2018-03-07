@@ -39,6 +39,8 @@ use ThirtyBees\PostNL\Entity\Request\CurrentStatus;
 use ThirtyBees\PostNL\Entity\Request\GenerateBarcode;
 use ThirtyBees\PostNL\Entity\Request\GenerateLabel;
 use ThirtyBees\PostNL\Entity\Request\GetDeliveryDate;
+use ThirtyBees\PostNL\Entity\Request\GetLocation;
+use ThirtyBees\PostNL\Entity\Request\GetLocationsInArea;
 use ThirtyBees\PostNL\Entity\Request\GetNearestLocations;
 use ThirtyBees\PostNL\Entity\Request\GetSentDateRequest;
 use ThirtyBees\PostNL\Entity\Request\GetTimeframes;
@@ -46,6 +48,7 @@ use ThirtyBees\PostNL\Entity\Response\ConfirmingResponseShipment;
 use ThirtyBees\PostNL\Entity\Response\CurrentStatusResponse;
 use ThirtyBees\PostNL\Entity\Response\GenerateLabelResponse;
 use ThirtyBees\PostNL\Entity\Response\GetDeliveryDateResponse;
+use ThirtyBees\PostNL\Entity\Response\GetLocationsInAreaResponse;
 use ThirtyBees\PostNL\Entity\Response\GetNearestLocationsResponse;
 use ThirtyBees\PostNL\Entity\Response\GetSentDateResponse;
 use ThirtyBees\PostNL\Entity\Response\ResponseTimeframes;
@@ -982,6 +985,30 @@ class PostNL implements LoggerAwareInterface
     public function getNearestLocations(GetNearestLocations $getNearestLocations)
     {
         return $this->getLocationService()->getNearestLocations($getNearestLocations);
+    }
+
+    /**
+     * Get locations in area
+     *
+     * @param GetLocationsInArea $getLocationsInArea
+     *
+     * @return GetLocationsInAreaResponse
+     */
+    public function getLocationsInArea(GetLocationsInArea $getLocationsInArea)
+    {
+        return $this->getLocationService()->getGetLocationsInArea($getLocationsInArea);
+    }
+
+    /**
+     * Get locations in area
+     *
+     * @param GetLocation $getLocation
+     *
+     * @return GetLocationsInAreaResponse
+     */
+    public function getLocation(GetLocation $getLocation)
+    {
+        return $this->getLocationService()->getLocation($getLocation);
     }
 
     /**

@@ -51,6 +51,8 @@ use ThirtyBees\PostNL\PostNL;
  * @package ThirtyBees\PostNL\Service
  *
  * @method GetNearestLocationsResponse getNearestLocations(GetNearestLocations $getNearestLocations)
+ * @method GetLocationsInAreaResponse getLocationsInArea(GetLocationsInArea $getLocationsInArea)
+ * @method GetLocationsInAreaResponse getLocation(GetLocation $getLocation)
  */
 class LocationService extends AbstractService
 {
@@ -200,7 +202,7 @@ class LocationService extends AbstractService
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
-    public function getGetLocationsInAreaREST(GetLocationsInArea $getLocations)
+    public function getLocationsInAreaREST(GetLocationsInArea $getLocations)
     {
         $item = $this->retrieveCachedItem($getLocations->getId());
         $response = null;
@@ -302,7 +304,7 @@ class LocationService extends AbstractService
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
-    public function getGetLocationREST(GetLocation $getLocation)
+    public function getLocationREST(GetLocation $getLocation)
     {
         $item = $this->retrieveCachedItem($getLocation->getId());
         $response = null;

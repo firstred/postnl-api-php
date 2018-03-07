@@ -225,8 +225,14 @@ abstract class AbstractEntity implements \JsonSerializable, XmlSerializable
                             $entities[] = static::jsonDeserialize([$name => $val]);
                         }
                     } elseif ($key === 'GetLocationsResult') {
-                        foreach ($item as $itemName => $val) {
-                            $entities[] = static::jsonDeserialize([$itemName => $val]);
+                        if (!isset($item['Address'])) {
+                            // GetNearestLocations / LocationsInArea responses = array
+                            foreach ($item as $itemName => $val) {
+                                $entities[] = static::jsonDeserialize([$itemName => $val]);
+                            }
+                        } else {
+                            // GetLocation = ResponseLocation object
+                            $entities = ['ResponseLocation' => $item];
                         }
                     } else {
                         $entities[] = static::jsonDeserialize([$propertyName => $item]);
