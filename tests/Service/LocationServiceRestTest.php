@@ -118,7 +118,8 @@ class LocationServiceRestTest extends \PHPUnit_Framework_TestCase
     {
         $message = new Message();
 
-        $this->lastRequest = $request = $this->service->buildGetNearestLocationsRESTRequest(
+        /** @var Request $request */
+        $this->lastRequest = $request = $this->service->buildGetNearestLocationsRequest(
             (new GetNearestLocations())
                 ->setMessage($message)
                 ->setCountrycode('NL')
@@ -188,7 +189,7 @@ class LocationServiceRestTest extends \PHPUnit_Framework_TestCase
             ])));
 
         $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\GetNearestLocationsResponse', $response);
-        $this->assertEquals(20, count($response->getGetLocationsResult()));
+        $this->assertEquals(20, count((array) $response->getGetLocationsResult()));
         $this->assertEquals(json_encode(json_decode(static::getNearestLocationsMockResponse())), json_encode($response));
     }
 
@@ -199,7 +200,8 @@ class LocationServiceRestTest extends \PHPUnit_Framework_TestCase
     {
         $message = new Message();
 
-        $this->lastRequest = $request = $this->service->buildGetLocationsInAreaRESTRequest(
+        /** @var Request $request */
+        $this->lastRequest = $request = $this->service->buildGetLocationsInAreaRequest(
             (new GetLocationsInArea())
                 ->setMessage($message)
                 ->setCountrycode('NL')
@@ -276,7 +278,7 @@ class LocationServiceRestTest extends \PHPUnit_Framework_TestCase
             ])));
 
         $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\GetLocationsInAreaResponse', $response);
-        $this->assertEquals(20, count($response->getGetLocationsResult()));
+        $this->assertEquals(20, count((array) $response->getGetLocationsResult()));
         $this->assertEquals(json_encode(json_decode(static::getLocationsInAreaMockResponse())), json_encode($response));
     }
 
@@ -287,7 +289,8 @@ class LocationServiceRestTest extends \PHPUnit_Framework_TestCase
     {
         $message = new Message();
 
-        $this->lastRequest = $request = $this->service->buildGetLocationRESTRequest(
+        /** @var Request $request */
+        $this->lastRequest = $request = $this->service->buildGetLocationRequest(
             (new GetLocation())
                 ->setLocationCode('161503')
                 ->setMessage($message)
@@ -325,7 +328,7 @@ class LocationServiceRestTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\GetLocationsInAreaResponse', $response);
-        $this->assertEquals(1, count($response->getGetLocationsResult()));
+        $this->assertEquals(1, count((array) $response->getGetLocationsResult()));
         // No JSON test here since the GetLocationsInAreaResponse always contains an LocationsResult array
         // (which does not correspond to the API response here)
     }

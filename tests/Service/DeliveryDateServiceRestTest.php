@@ -63,7 +63,6 @@ class DeliveryDateRestTest extends \PHPUnit_Framework_TestCase
     /**
      * @before
      * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
-     * @throws \ReflectionException
      */
     public function setupPostNL()
     {
@@ -117,7 +116,7 @@ class DeliveryDateRestTest extends \PHPUnit_Framework_TestCase
     {
         $message = new Message();
 
-        $this->lastRequest = $request = $this->service->buildGetDeliveryDateRESTRequest(
+        $this->lastRequest = $request = $this->service->buildGetDeliveryDateRequestREST(
             (new GetDeliveryDate())
                 ->setGetDeliveryDate(
                     (new GetDeliveryDate())
@@ -213,7 +212,7 @@ class DeliveryDateRestTest extends \PHPUnit_Framework_TestCase
     {
         $message = new Message();
 
-        $this->lastRequest = $request = $this->service->buildGetSentDateRESTRequest((new GetSentDateRequest())
+        $this->lastRequest = $request = $this->service->buildGetSentDateRequestREST((new GetSentDateRequest())
             ->setGetSentDate(
                 (new GetSentDate())
                     ->setAllowSundaySorting(true)

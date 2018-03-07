@@ -26,6 +26,7 @@
 
 namespace ThirtyBees\PostNL;
 
+use Psr\Cache\CacheItemInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use setasign\Fpdi\PdfParser\StreamReader;
@@ -59,6 +60,7 @@ use ThirtyBees\PostNL\Exception\InvalidArgumentException;
 use ThirtyBees\PostNL\Exception\InvalidBarcodeException;
 use ThirtyBees\PostNL\Exception\InvalidConfigurationException;
 use ThirtyBees\PostNL\Exception\NotSupportedException;
+use ThirtyBees\PostNL\Exception\ResponseException;
 use ThirtyBees\PostNL\HttpClient\ClientInterface;
 use ThirtyBees\PostNL\HttpClient\CurlClient;
 use ThirtyBees\PostNL\HttpClient\GuzzleClient;
@@ -985,6 +987,86 @@ class PostNL implements LoggerAwareInterface
     public function getNearestLocations(GetNearestLocations $getNearestLocations)
     {
         return $this->getLocationService()->getNearestLocations($getNearestLocations);
+    }
+
+    /**
+     * All-in-one function for checkout widgets. It retrieves and returns the
+     * - timeframes
+     * - locations
+     * - delivery date
+     *
+     * @param GetTimeframes       $getTimeframes
+     * @param GetNearestLocations $getNearestLocations
+     * @param GetDeliveryDate     $getDeliveryDate
+     *
+     * @return array [uuid => ResponseTimeframes, uuid => GetNearestLocationsResponse, uuid => GetDeliveryDateResponse]
+     *
+     * @codeCoverageIgnore
+     * @throws ResponseException
+     */
+    public function getTimeframesAndNearestLocations(
+        GetTimeframes $getTimeframes,
+        GetNearestLocations $getNearestLocations,
+        GetDeliveryDate $getDeliveryDate
+    ) {
+        $results = [];
+        $itemTimeframe = $this->getTimeframeService()->retrieveCachedItem($getTimeframes->getId());
+        if ($itemTimeframe instanceof CacheItemInterface && $itemTimeframe->get()) {
+            $results['timeframes'] = \GuzzleHttp\Psr7\parse_response($itemTimeframe->get());
+        }
+        $itemLocation = $this->getLocationService()->retrieveCachedItem($getNearestLocations->getId());
+        if ($itemLocation instanceof CacheItemInterface && $itemLocation->get()) {
+            $results['locations'] = \GuzzleHttp\Psr7\parse_response($itemLocation->get());
+        }
+        $itemDeliveryDate = $this->getDeliveryDateService()->retrieveCachedItem($getDeliveryDate->getId());
+        if ($itemDeliveryDate instanceof CacheItemInterface && $itemDeliveryDate->get()) {
+            $results['delivery_date'] = \GuzzleHttp\Psr7\parse_response($itemDeliveryDate->get());
+        }
+
+        $this->getHttpClient()->addOrUpdateRequest(
+            'timeframes',
+            $this->getTimeframeService()->buildGetTimeframesRequest($getTimeframes)
+        );
+        $this->getHttpClient()->addOrUpdateRequest(
+            'locations',
+            $this->getLocationService()->buildGetNearestLocationsRequest($getNearestLocations)
+        );
+        $this->getHttpClient()->addOrUpdateRequest(
+            'delivery_date',
+            $this->getDeliveryDateService()->buildGetDeliveryDateRequest($getDeliveryDate)
+        );
+
+        $responses = $this->getHttpClient()->doRequests();
+        foreach ($responses as $uuid => $response) {
+            if (!empty($response['value'])) {
+                $results[$uuid] = $response['value'];
+            } elseif (!empty($response['reason'])) {
+                throw new ResponseException('Invalid multi-request', null, null, $response['reason']);
+            } else {
+                $results[$uuid] = $results;
+            }
+        }
+        foreach ($results as $type => $result) {
+            if (!$result instanceof \Response) {
+                throw new ResponseException('Invalid multi-request', null, null, $result);
+            } else {
+                switch ($type) {
+                    case 'timeframes':
+
+                        break;
+                    case 'locations':
+                        break;
+                    case 'delivery_date':
+                        break;
+                }
+            }
+        }
+
+        return [
+            'timeframes'    => $this->getTimeframeService()->processGetTimeframesResponse($results['timeframes']),
+            'locations'     => $this->getLocationService()->processGetNearestLocationsResponse($results['locations']),
+            'delivery_date' => $this->getDeliveryDateService()->processGetDeliveryDateResponse($results['delivery_date']),
+        ];
     }
 
     /**

@@ -59,7 +59,6 @@ class ShippingStatusRestTest extends \PHPUnit_Framework_TestCase
     /**
      * @before
      * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
-     * @throws \ReflectionException
      */
     public function setupPostNL()
     {
@@ -114,7 +113,7 @@ class ShippingStatusRestTest extends \PHPUnit_Framework_TestCase
         $barcode = '3SDEVC201611210';
         $message = new Message();
 
-        $this->lastRequest = $request = $this->service->buildCurrentStatusRESTRequest(
+        $this->lastRequest = $request = $this->service->buildCurrentStatusRequestREST(
             (new CurrentStatus())
                 ->setShipment(
                     (new Shipment())
@@ -139,7 +138,7 @@ class ShippingStatusRestTest extends \PHPUnit_Framework_TestCase
         $reference = '339820938';
         $message = new Message();
 
-        $this->lastRequest = $request = $this->service->buildCurrentStatusRESTRequest(
+        $this->lastRequest = $request = $this->service->buildCurrentStatusRequestREST(
             (new CurrentStatus())
                 ->setShipment(
                     (new Shipment())
@@ -167,7 +166,7 @@ class ShippingStatusRestTest extends \PHPUnit_Framework_TestCase
         $status = '1';
         $message = new Message();
 
-        $this->lastRequest = $request = $this->service->buildCurrentStatusRESTRequest(
+        $this->lastRequest = $request = $this->service->buildCurrentStatusRequestREST(
             (new CurrentStatus())
                 ->setShipment(
                     (new Shipment())
@@ -196,7 +195,7 @@ class ShippingStatusRestTest extends \PHPUnit_Framework_TestCase
         $phase = '1';
         $message = new Message();
 
-        $this->lastRequest = $request = $this->service->buildCurrentStatusRESTRequest(
+        $this->lastRequest = $request = $this->service->buildCurrentStatusRequestREST(
             (new CurrentStatus())
                 ->setShipment(
                     (new Shipment())
@@ -225,7 +224,7 @@ class ShippingStatusRestTest extends \PHPUnit_Framework_TestCase
         $barcode = '3SDEVC201611210';
         $message = new Message();
 
-        $this->lastRequest = $request = $this->service->buildCompleteStatusRESTRequest(
+        $this->lastRequest = $request = $this->service->buildCompleteStatusRequestREST(
             (new CompleteStatus())
                 ->setShipment(
                     (new Shipment())
@@ -252,7 +251,7 @@ class ShippingStatusRestTest extends \PHPUnit_Framework_TestCase
         $reference = '339820938';
         $message = new Message();
 
-        $this->lastRequest = $request = $this->service->buildCompleteStatusRESTRequest(
+        $this->lastRequest = $request = $this->service->buildCompleteStatusRequestREST(
             (new CompleteStatus())
                 ->setShipment(
                     (new Shipment())
@@ -281,7 +280,7 @@ class ShippingStatusRestTest extends \PHPUnit_Framework_TestCase
         $status = '1';
         $message = new Message();
 
-        $this->lastRequest = $request = $this->service->buildCompleteStatusRESTRequest(
+        $this->lastRequest = $request = $this->service->buildCompleteStatusRequestREST(
             (new CompleteStatus())
                 ->setShipment(
                     (new Shipment())
@@ -315,7 +314,7 @@ class ShippingStatusRestTest extends \PHPUnit_Framework_TestCase
         $phase = '1';
         $message = new Message();
 
-        $this->lastRequest = $request = $this->service->buildCompleteStatusRESTRequest(
+        $this->lastRequest = $request = $this->service->buildCompleteStatusRequestREST(
             (new CompleteStatus())
                 ->setShipment(
                     (new Shipment())
@@ -349,7 +348,7 @@ class ShippingStatusRestTest extends \PHPUnit_Framework_TestCase
         $barcode = '3S9283920398234';
         $message = new Message();
 
-        $this->lastRequest = $request = $this->service->buildGetSignatureRESTRequest(
+        $this->lastRequest = $request = $this->service->buildGetSignatureRequestREST(
             (new GetSignature())
                 ->setCustomer($this->postnl->getCustomer())
                 ->setMessage($message)

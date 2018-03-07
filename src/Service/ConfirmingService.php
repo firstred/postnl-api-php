@@ -42,7 +42,9 @@ use ThirtyBees\PostNL\PostNL;
  *
  * @package ThirtyBees\PostNL\Service
  *
- * @method ConfirmingResponseShipment confirmShipment(Confirming $shipment)
+ * @method ConfirmingResponseShipment   confirmShipment(Confirming $shipment)
+ * @method Request                      buildConfirmShipmentRequest(Confirming $shipment)
+ * @method ConfirmingResponseShipment   processConfirmShipmentResponse(mixed $response)
  * @method ConfirmingResponseShipment[] confirmShipments(Confirming[] $shipments)
  */
 class ConfirmingService extends AbstractService
@@ -92,14 +94,10 @@ class ConfirmingService extends AbstractService
      */
     public function confirmShipmentREST(Confirming $confirming)
     {
-        $response = $this->postnl->getHttpClient()->doRequest($this->buildConfirmRESTRequest($confirming));
-        static::validateRESTResponse($response);
-        $body = json_decode(static::getResponseText($response), true);
-        if (isset($body['ResponseShipments'])) {
-            /** @var ConfirmingResponseShipment $object */
-            $object = AbstractEntity::jsonDeserialize(['ConfirmingResponseShipment' => $body['ResponseShipments'][0]]);
-            $this->setService($object);
+        $response = $this->postnl->getHttpClient()->doRequest($this->buildConfirmRequestREST($confirming));
+        $object = $this->processConfirmResponseREST($response);
 
+        if ($object instanceof ConfirmingResponseShipment) {
             return $object;
         }
 
@@ -116,7 +114,6 @@ class ConfirmingService extends AbstractService
      * @param Confirming[] $confirms ['uuid' => Confirming, ...]
      *
      * @return ConfirmingResponseShipment[]
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
     public function confirmShipmentsREST(array $confirms)
     {
@@ -126,20 +123,15 @@ class ConfirmingService extends AbstractService
 
             $httpClient->addOrUpdateRequest(
                 $confirm->getId(),
-                $this->buildConfirmRESTRequest($confirm)
+                $this->buildConfirmRequestREST($confirm)
             );
         }
 
         $confirmingResponses = [];
         foreach ($httpClient->doRequests() as $uuid => $response) {
-            $confirmingResponse = json_decode(static::getResponseText($response), true);
             try {
-                static::validateRESTResponse($response);
-                if (isset($confirmingResponse['ResponseShipments'])) {
-                    /** @var ConfirmingResponseShipment $confirming */
-                    $confirming = AbstractEntity::jsonDeserialize(['ConfirmingResponseShipment' => $confirmingResponse['ResponseShipments'][0]]);
-                    $this->setService($confirming);
-                } else {
+                $confirming = $this->processConfirmResponseREST($response);
+                if (!$confirming instanceof ConfirmingResponseShipment) {
                     throw new ResponseException('Invalid API Response', null, null, $response);
                 }
             } catch (\Exception $e) {
@@ -167,19 +159,8 @@ class ConfirmingService extends AbstractService
      */
     public function confirmShipmentSOAP(Confirming $confirming)
     {
-        $response = $this->postnl->getHttpClient()->doRequest($this->buildConfirmSOAPRequest($confirming));
-        $xml = simplexml_load_string(static::getResponseText($response));
-        static::registerNamespaces($xml);
-        static::validateSOAPResponse($xml);
-
-        $reader = new Reader();
-        $reader->xml(static::getResponseText($response));
-        $array = array_values($reader->parse()['value'][0]['value'][0]['value']);
-        $array = $array[0];
-
-        /** @var ConfirmingResponseShipment $object */
-        $object = AbstractEntity::xmlDeserialize($array);
-        $this->setService($object);
+        $response = $this->postnl->getHttpClient()->doRequest($this->buildConfirmRequestSOAP($confirming));
+        $object = $this->processConfirmResponseSOAP($response);
 
         return $object;
     }
@@ -190,8 +171,6 @@ class ConfirmingService extends AbstractService
      * @param array $confirmings ['uuid' => Confirming, ...]
      *
      * @return ConfirmingResponseShipment[]
-     *
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
     public function confirmShipmentsSOAP(array $confirmings)
     {
@@ -200,31 +179,16 @@ class ConfirmingService extends AbstractService
         foreach ($confirmings as $confirming) {
             $httpClient->addOrUpdateRequest(
                 $confirming->getId(),
-                $this->buildConfirmSOAPRequest($confirming)
+                $this->buildConfirmRequestSOAP($confirming)
             );
         }
 
         $responses = [];
         foreach ($httpClient->doRequests() as $uuid => $response) {
-            $xml = simplexml_load_string(static::getResponseText($response));
-            if (!$xml instanceof \SimpleXMLElement) {
-                $confirmingResponse = new ApiException('Invalid API response');
-            } else {
-                try {
-                    static::registerNamespaces($xml);
-                    static::validateSOAPResponse($xml);
-
-                    $reader = new Reader();
-                    $reader->xml(static::getResponseText($response));
-                    $array = array_values($reader->parse()['value'][0]['value'][0]['value']);
-                    $array = $array[0];
-
-                    /** @var ConfirmingResponseShipment $confirmingResponse */
-                    $confirmingResponse = AbstractEntity::xmlDeserialize($array);
-                    $this->setService($confirmingResponse);
-                } catch (\Exception $e) {
-                    $confirmingResponse = $e;
-                }
+            try {
+                $confirmingResponse = $this->processConfirmResponseSOAP($response);
+            } catch (\Exception $e) {
+                $confirmingResponse = $e;
             }
 
             $responses[$uuid] = $confirmingResponse;
@@ -238,7 +202,7 @@ class ConfirmingService extends AbstractService
      *
      * @return Request
      */
-    public function buildConfirmRESTRequest(Confirming $confirming)
+    public function buildConfirmRequestREST(Confirming $confirming)
     {
         $apiKey = $this->postnl->getRestApiKey();
 
@@ -259,11 +223,37 @@ class ConfirmingService extends AbstractService
     }
 
     /**
+     * Proces Confirm REST Response
+     *
+     * @param mixed $response
+     *
+     * @return null|ConfirmingResponseShipment
+     * @throws ApiException
+     * @throws ResponseException
+     * @throws \ThirtyBees\PostNL\Exception\CifDownException
+     * @throws \ThirtyBees\PostNL\Exception\CifException
+     */
+    public function processConfirmResponseREST($response)
+    {
+        static::validateRESTResponse($response);
+        $body = json_decode(static::getResponseText($response), true);
+        if (isset($body['ResponseShipments'])) {
+            /** @var ConfirmingResponseShipment $object */
+            $object = AbstractEntity::jsonDeserialize(['ConfirmingResponseShipment' => $body['ResponseShipments'][0]]);
+            $this->setService($object);
+
+            return $object;
+        }
+
+        return null;
+    }
+
+    /**
      * @param Confirming $confirming
      *
      * @return Request
      */
-    public function buildConfirmSOAPRequest(Confirming $confirming)
+    public function buildConfirmRequestSOAP(Confirming $confirming)
     {
         $soapAction = static::SOAP_ACTION;
         $xmlService = new XmlService();
@@ -302,4 +292,34 @@ class ConfirmingService extends AbstractService
             $body
         );
     }
+
+    /**
+     * Process Confirm SOAP response
+     *
+     * @param mixed $response
+     *
+     * @return ConfirmingResponseShipment
+     * @throws ResponseException
+     * @throws \Sabre\Xml\LibXMLException
+     * @throws \ThirtyBees\PostNL\Exception\CifDownException
+     * @throws \ThirtyBees\PostNL\Exception\CifException
+     */
+    public function processConfirmResponseSOAP($response)
+    {
+        $xml = simplexml_load_string(static::getResponseText($response));
+        static::registerNamespaces($xml);
+        static::validateSOAPResponse($xml);
+
+        $reader = new Reader();
+        $reader->xml(static::getResponseText($response));
+        $array = array_values($reader->parse()['value'][0]['value'][0]['value']);
+        $array = $array[0];
+
+        /** @var ConfirmingResponseShipment $object */
+        $object = AbstractEntity::xmlDeserialize($array);
+        $this->setService($object);
+
+        return $object;
+    }
+
 }

@@ -62,7 +62,6 @@ class ConfirmingServiceRestTest extends \PHPUnit_Framework_TestCase
     /**
      * @before
      * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
-     * @throws \ReflectionException
      */
     public function setupPostNL()
     {
@@ -119,14 +118,12 @@ class ConfirmingServiceRestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox confirms a label properly
-     *
-     * @throws \ReflectionException
      */
     public function testConfirmsALabelRequestRest()
     {
         $message = new LabellingMessage();
 
-        $this->lastRequest = $request = $this->service->buildConfirmRESTRequest(
+        $this->lastRequest = $request = $this->service->buildConfirmRequestREST(
             Confirming::create()
                 ->setShipments([
                     Shipment::create()
@@ -221,8 +218,6 @@ class ConfirmingServiceRestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox can generate a single label
-     *
-     * @throws \ReflectionException
      */
     public function testConfirmsALabelRest()
     {
@@ -283,7 +278,6 @@ class ConfirmingServiceRestTest extends \PHPUnit_Framework_TestCase
      * @testdox can confirm multiple labels
      *
      * @throws \Exception
-     * @throws \ReflectionException
      */
     public function testConfirmMultipleLabelsRest()
     {
@@ -383,7 +377,6 @@ class ConfirmingServiceRestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox throws exception on invalid response
-     * @throws \ReflectionException
      */
     public function testNegativeGenerateLabelInvalidResponseRest()
     {

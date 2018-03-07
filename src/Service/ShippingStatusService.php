@@ -38,11 +38,13 @@ use ThirtyBees\PostNL\Entity\Request\CurrentStatus;
 use ThirtyBees\PostNL\Entity\Request\GetSignature;
 use ThirtyBees\PostNL\Entity\Response\CompleteStatusResponse;
 use ThirtyBees\PostNL\Entity\Response\CurrentStatusResponse;
+use ThirtyBees\PostNL\Entity\Response\GetSentDateResponse;
 use ThirtyBees\PostNL\Entity\Response\GetSignatureResponseSignature;
 use ThirtyBees\PostNL\Entity\SOAP\Security;
 use ThirtyBees\PostNL\Exception\ApiException;
 use ThirtyBees\PostNL\Exception\CifDownException;
 use ThirtyBees\PostNL\Exception\CifException;
+use ThirtyBees\PostNL\Exception\ResponseException;
 use ThirtyBees\PostNL\PostNL;
 
 /**
@@ -50,9 +52,15 @@ use ThirtyBees\PostNL\PostNL;
  *
  * @package ThirtyBees\PostNL\Service
  *
- * @method CurrentStatusResponse currentStatus(CurrentStatus $currentStatus)
+ * @method CurrentStatusResponse  currentStatus(CurrentStatus $currentStatus)
+ * @method Request                buildCurrentStatusRequest(CurrentStatus $currentStatus)
+ * @method CurrentStatusResponse  processCurrentStatusResponse(mixed $response)
  * @method CompleteStatusResponse completeStatus(CompleteStatus $completeStatus)
- * @method GetSignature getSignature(GetSignature $getSignature)
+ * @method Request                buildCompleteStatusRequest(CompleteStatus $completeStatus)
+ * @method CompleteStatusResponse processCompleteStatusResponse(mixed $response)
+ * @method GetSignature           getSignature(GetSignature $getSignature)
+ * @method Request                buildGetSignatureRequest(GetSignature $getSignature)
+ * @method GetSignature           processGetSignatureResponse(mixed $response)
  */
 class ShippingStatusService extends AbstractService
 {
@@ -124,11 +132,12 @@ class ShippingStatusService extends AbstractService
             }
         }
         if (!$response instanceof Response) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildCurrentStatusRESTRequest($currentStatus));
+            $response = $this->postnl->getHttpClient()->doRequest($this->buildCurrentStatusRequestREST($currentStatus));
             static::validateRESTResponse($response);
         }
-        $body = json_decode(static::getResponseText($response), true);
-        if (isset($body['Shipments'])) {
+
+        $object = $this->processCurrentStatusResponse($response);
+        if ($object instanceof CurrentStatusResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof Response
                 && $response->getStatusCode() === 200
@@ -137,14 +146,11 @@ class ShippingStatusService extends AbstractService
                 $this->cacheItem($item);
             }
 
-            /** @var CurrentStatusResponse $object */
-            $object = AbstractEntity::jsonDeserialize(['CurrentStatusResponse' => $body]);
-            $this->setService($object);
-
             return $object;
         }
 
-        throw new ApiException('Unable to generate label');
+
+        throw new ApiException('Unable to retrieve current status');
     }
 
     /**
@@ -165,11 +171,8 @@ class ShippingStatusService extends AbstractService
      *
      * @return CurrentStatusResponse
      *
-     * @throws CifDownException
-     * @throws CifException
+     * @throws ApiException
      * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \Sabre\Xml\LibXMLException
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
     public function currentStatusSOAP(CurrentStatus $currentStatus)
     {
@@ -183,31 +186,23 @@ class ShippingStatusService extends AbstractService
             }
         }
         if (!$response instanceof Response) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildCurrentStatusSOAPRequest($currentStatus));
-        }
-        $xml = simplexml_load_string(static::getResponseText($response));
-
-        static::registerNamespaces($xml);
-        static::validateSOAPResponse($xml);
-
-        if ($item instanceof CacheItemInterface
-            && $response instanceof Response
-            && $response->getStatusCode() === 200
-        ) {
-            $item->set(\GuzzleHttp\Psr7\str($response));
-            $this->cacheItem($item);
+            $response = $this->postnl->getHttpClient()->doRequest($this->buildCurrentStatusRequestSOAP($currentStatus));
         }
 
-        $reader = new Reader();
-        $reader->xml(static::getResponseText($response));
-        $array = array_values($reader->parse()['value'][0]['value']);
-        $array = $array[0];
+        $object = $this->processCurrentStatusResponse($response);
+        if ($object instanceof CurrentStatusResponse) {
+            if ($item instanceof CacheItemInterface
+                && $response instanceof Response
+                && $response->getStatusCode() === 200
+            ) {
+                $item->set(\GuzzleHttp\Psr7\str($response));
+                $this->cacheItem($item);
+            }
 
-        /** @var CurrentStatusResponse $object */
-        $object = AbstractEntity::xmlDeserialize($array);
-        $this->setService($object);
+            return $object;
+        }
 
-        return $object;
+        throw new ApiException('Unable to retrieve current status');
     }
 
     /**
@@ -246,11 +241,12 @@ class ShippingStatusService extends AbstractService
             }
         }
         if (!$response instanceof Response) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildCompleteStatusRESTRequest($completeStatus));
+            $response = $this->postnl->getHttpClient()->doRequest($this->buildCompleteStatusRequestREST($completeStatus));
             static::validateRESTResponse($response);
         }
-        $body = json_decode(static::getResponseText($response), true);
-        if (isset($body['Shipments'])) {
+
+        $object = $this->processCompleteStatusResponse($response);
+        if ($object instanceof CompleteStatusResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof Response
                 && $response->getStatusCode() === 200
@@ -259,14 +255,10 @@ class ShippingStatusService extends AbstractService
                 $this->cacheItem($item);
             }
 
-            /** @var CompleteStatusResponse $object */
-            $object = AbstractEntity::jsonDeserialize(['CompleteStatusResponse' => $body]);
-            $this->setService($object);
-
             return $object;
         }
 
-        throw new ApiException('Unable to generate label');
+        throw new ApiException('Unable to retrieve complete status');
     }
 
     /**
@@ -287,12 +279,8 @@ class ShippingStatusService extends AbstractService
      *
      * @return CompleteStatusResponse
      *
-     * @throws CifDownException
-     * @throws CifException
-     * @throws \Exception
+     * @throws ApiException
      * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \Sabre\Xml\LibXMLException
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
     public function completeStatusSOAP(CompleteStatus $completeStatus)
     {
@@ -306,31 +294,23 @@ class ShippingStatusService extends AbstractService
             }
         }
         if (!$response instanceof Response) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildCompleteStatusSOAPRequest($completeStatus));
-        }
-        $xml = simplexml_load_string(static::getResponseText($response));
-
-        static::registerNamespaces($xml);
-        static::validateSOAPResponse($xml);
-
-        if ($item instanceof CacheItemInterface
-            && $response instanceof Response
-            && $response->getStatusCode() === 200
-        ) {
-            $item->set(\GuzzleHttp\Psr7\str($response));
-            $this->cacheItem($item);
+            $response = $this->postnl->getHttpClient()->doRequest($this->buildCompleteStatusRequestSOAP($completeStatus));
         }
 
-        $reader = new Reader();
-        $reader->xml(static::getResponseText($response));
-        $array = array_values($reader->parse()['value'][0]['value']);
-        $array = $array[0];
+        $object = $this->processCompleteStatusResponse($response);
+        if ($object instanceof CompleteStatusResponse) {
+            if ($item instanceof CacheItemInterface
+                && $response instanceof Response
+                && $response->getStatusCode() === 200
+            ) {
+                $item->set(\GuzzleHttp\Psr7\str($response));
+                $this->cacheItem($item);
+            }
 
-        /** @var CompleteStatusResponse $object */
-        $object = AbstractEntity::xmlDeserialize($array);;
-        $this->setService($object);
+            return $object;
+        }
 
-        return $object;
+        throw new ApiException('Unable to retrieve complete status');
     }
 
     /**
@@ -369,7 +349,7 @@ class ShippingStatusService extends AbstractService
             }
         }
         if (!$response instanceof Response) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetSignatureRESTRequest($getSignature));
+            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetSignatureRequestREST($getSignature));
             static::validateRESTResponse($response);
         }
         $body = json_decode(static::getResponseText($response), true);
@@ -429,31 +409,23 @@ class ShippingStatusService extends AbstractService
             }
         }
         if (!$response instanceof Response) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetSignatureSOAPRequest($getSignature));
-        }
-        $xml = simplexml_load_string(static::getResponseText($response));
-
-        static::registerNamespaces($xml);
-        static::validateSOAPResponse($xml);
-
-        if ($item instanceof CacheItemInterface
-            && $response instanceof Response
-            && $response->getStatusCode() === 200
-        ) {
-            $item->set(\GuzzleHttp\Psr7\str($response));
-            $this->cacheItem($item);
+            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetSignatureRequestSOAP($getSignature));
         }
 
-        $reader = new Reader();
-        $reader->xml(static::getResponseText($response));
-        $array = array_values($reader->parse()['value'][0]['value']);
-        $array = $array[0];
+        $object = $this->processGetSignatureResponse($response);
+        if ($object instanceof GetSignatureResponseSignature) {
+            if ($item instanceof CacheItemInterface
+                && $response instanceof Response
+                && $response->getStatusCode() === 200
+            ) {
+                $item->set(\GuzzleHttp\Psr7\str($response));
+                $this->cacheItem($item);
+            }
 
-        /** @var GetSignatureResponseSignature $object */
-        $object = AbstractEntity::xmlDeserialize($array);
-        $this->setService($object);
+            return $object;
+        }
 
-        return $object;
+        throw new ApiException('Unable to retrieve signature');
     }
 
     /**
@@ -469,7 +441,7 @@ class ShippingStatusService extends AbstractService
      *
      * @return Request
      */
-    public function buildCurrentStatusRESTRequest(CurrentStatus $currentStatus)
+    public function buildCurrentStatusRequestREST(CurrentStatus $currentStatus)
     {
         $apiKey = $this->postnl->getRestApiKey();
         $this->setService($currentStatus);
@@ -516,13 +488,36 @@ class ShippingStatusService extends AbstractService
     }
 
     /**
+     * Process CurrentStatus Response REST
+     *
+     * @param mixed $response
+     *
+     * @return CurrentStatusResponse
+     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     */
+    public function processCurrentStatusResponseREST($response)
+    {
+        $body = json_decode(static::getResponseText($response), true);
+        if (isset($body['Shipments'])) {
+
+            /** @var CurrentStatusResponse $object */
+            $object = AbstractEntity::jsonDeserialize(['CurrentStatusResponse' => $body]);
+            $this->setService($object);
+
+            return $object;
+        }
+
+        return null;
+    }
+
+    /**
      * Build the CurrentStatus request for the SOAP API
      *
      * @param CurrentStatus $currentStatus
      *
      * @return Request
      */
-    public function buildCurrentStatusSOAPRequest(CurrentStatus $currentStatus)
+    public function buildCurrentStatusRequestSOAP(CurrentStatus $currentStatus)
     {
         if (!$currentStatus->getCustomer() || !$currentStatus->getCustomer() instanceof Customer) {
             $currentStatus->setCustomer((new Customer())
@@ -570,6 +565,38 @@ class ShippingStatusService extends AbstractService
     }
 
     /**
+     * Process CurrentStatus Response SOAP
+     *
+     * @param mixed $response
+     *
+     * @return CurrentStatusResponse
+     * @throws CifDownException
+     * @throws CifException
+     * @throws \Sabre\Xml\LibXMLException
+     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     */
+    public function processCurrentStatusResponseSOAP($response)
+    {
+        $xml = simplexml_load_string(static::getResponseText($response));
+
+        static::registerNamespaces($xml);
+        static::validateSOAPResponse($xml);
+
+
+        $reader = new Reader();
+        $reader->xml(static::getResponseText($response));
+        $array = array_values($reader->parse()['value'][0]['value']);
+        $array = $array[0];
+
+        /** @var CurrentStatusResponse $object */
+        $object = AbstractEntity::xmlDeserialize($array);
+
+        $this->setService($object);
+
+        return $object;
+    }
+
+    /**
      * Build the CompleteStatus request for the REST API
      *
      * This function auto-detects and adjusts the following requests:
@@ -582,7 +609,7 @@ class ShippingStatusService extends AbstractService
      *
      * @return Request
      */
-    public function buildCompleteStatusRESTRequest(CompleteStatus $completeStatus)
+    public function buildCompleteStatusRequestREST(CompleteStatus $completeStatus)
     {
         $apiKey = $this->postnl->getRestApiKey();
         $this->setService($completeStatus);
@@ -636,6 +663,29 @@ class ShippingStatusService extends AbstractService
     }
 
     /**
+     * Process CompleteStatus Response REST
+     *
+     * @param mixed $response
+     *
+     * @return null|CompleteStatusResponse
+     * @throws ResponseException
+     */
+    public function processCompleteStatusResponseREST($response)
+    {
+        $body = json_decode(static::getResponseText($response), true);
+        if (isset($body['Shipments'])) {
+            /** @var CompleteStatusResponse $object */
+            $object = AbstractEntity::jsonDeserialize(['CompleteStatusResponse' => $body]);
+            $this->setService($object);
+
+            return $object;
+        }
+
+        return null;
+
+    }
+
+    /**
      * Build the CompleteStatus request for the SOAP API
      *
      * This function handles following requests:
@@ -648,7 +698,7 @@ class ShippingStatusService extends AbstractService
      *
      * @return Request
      */
-    public function buildCompleteStatusSOAPRequest(CompleteStatus $completeStatus)
+    public function buildCompleteStatusRequestSOAP(CompleteStatus $completeStatus)
     {
         if (!$completeStatus->getCustomer() || !$completeStatus->getCustomer() instanceof Customer) {
             $completeStatus->setCustomer((new Customer())
@@ -696,13 +746,44 @@ class ShippingStatusService extends AbstractService
     }
 
     /**
+     * Process CompleteStatus Response SOAP
+     *
+     * @param mixed $response
+     *
+     * @return CompleteStatusResponse
+     *
+     * @throws CifDownException
+     * @throws CifException
+     * @throws ResponseException
+     * @throws \Sabre\Xml\LibXMLException
+     */
+    public function processCompleteStatusResponseSOAP($response)
+    {
+        $xml = simplexml_load_string(static::getResponseText($response));
+
+        static::registerNamespaces($xml);
+        static::validateSOAPResponse($xml);
+
+        $reader = new Reader();
+        $reader->xml(static::getResponseText($response));
+        $array = array_values($reader->parse()['value'][0]['value']);
+        $array = $array[0];
+
+        /** @var CompleteStatusResponse $object */
+        $object = AbstractEntity::xmlDeserialize($array);;
+        $this->setService($object);
+
+        return $object;
+    }
+
+    /**
      * Build the GetSignature request for the REST API
      *
      * @param GetSignature $getSignature
      *
      * @return Request
      */
-    public function buildGetSignatureRESTRequest(GetSignature $getSignature)
+    public function buildGetSignatureRequestREST(GetSignature $getSignature)
     {
         $apiKey = $this->postnl->getRestApiKey();
         $this->setService($getSignature);
@@ -719,13 +800,35 @@ class ShippingStatusService extends AbstractService
     }
 
     /**
+     * Process GetSignature Response REST
+     *
+     * @param mixed $response
+     *
+     * @return null|GetSignatureResponseSignature
+     * @throws ResponseException
+     */
+    public function processGetSignatureResponseREST($response)
+    {
+        $body = json_decode(static::getResponseText($response), true);
+        if (!empty($body['Barcode'])) {
+            /** @var GetSignatureResponseSignature $object */
+            $object = AbstractEntity::jsonDeserialize(['GetSignatureResponseSignature' => $body]);
+            $this->setService($object);
+
+            return $object;
+        }
+
+        return null;
+    }
+
+    /**
      * Build the GetSignature request for the SOAP API
      *
      * @param GetSignature $getSignature
      *
      * @return Request
      */
-    public function buildGetSignatureSOAPRequest(GetSignature $getSignature)
+    public function buildGetSignatureRequestSOAP(GetSignature $getSignature)
     {
         if (!$getSignature->getCustomer() || !$getSignature->getCustomer() instanceof Customer) {
             $getSignature->setCustomer((new Customer())
@@ -770,5 +873,37 @@ class ShippingStatusService extends AbstractService
             ],
             $request
         );
+    }
+
+    /**
+     * Process GetSignature Response SOAP
+     *
+     * @param mixed $response
+     *
+     * @return GetSignatureResponseSignature
+     * @throws CifDownException
+     * @throws CifException
+     * @throws ResponseException
+     * @throws \Sabre\Xml\LibXMLException
+     */
+    public function processGetSignatureResponseSOAP($response)
+    {
+        $xml = simplexml_load_string(static::getResponseText($response));
+
+        static::registerNamespaces($xml);
+        static::validateSOAPResponse($xml);
+
+
+
+        $reader = new Reader();
+        $reader->xml(static::getResponseText($response));
+        $array = array_values($reader->parse()['value'][0]['value']);
+        $array = $array[0];
+
+        /** @var GetSignatureResponseSignature $object */
+        $object = AbstractEntity::xmlDeserialize($array);
+        $this->setService($object);
+
+        return $object;
     }
 }

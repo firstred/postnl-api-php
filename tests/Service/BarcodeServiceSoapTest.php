@@ -61,7 +61,6 @@ class BarcodeServiceSoapTest extends \PHPUnit_Framework_TestCase
     /**
      * @before
      * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
-     * @throws \ReflectionException
      */
     public function setupPostNL()
     {
@@ -122,7 +121,7 @@ class BarcodeServiceSoapTest extends \PHPUnit_Framework_TestCase
 
         $message = new Message();
 
-        $this->lastRequest = $request = $this->service->buildGenerateBarcodeSOAPRequest(
+        $this->lastRequest = $request = $this->service->buildGenerateBarcodeRequestSOAP(
             GenerateBarcode::create()
                 ->setBarcode(
                     Barcode::create()

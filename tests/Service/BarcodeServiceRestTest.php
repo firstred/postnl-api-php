@@ -123,7 +123,7 @@ class BarcodeServiceRestTest extends \PHPUnit_Framework_TestCase
         $range = $this->getRange('3S');
         $serie = $this->postnl->findBarcodeSerie('3S', $range, false);
 
-        $this->lastRequest = $request = $this->service->buildGenerateBarcodeRESTRequest(
+        $this->lastRequest = $request = $this->service->buildGenerateBarcodeRequestREST(
             GenerateBarcode::create()
                 ->setBarcode(
                     Barcode::create()

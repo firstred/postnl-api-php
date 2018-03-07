@@ -48,6 +48,8 @@ use ThirtyBees\PostNL\PostNL;
  * @package ThirtyBees\PostNL\Service
  *
  * @method GenerateLabelResponse   generateLabel(GenerateLabel $generateLabel, bool $confirm)
+ * @method Request                 buildGenerateLabelRequest(GenerateLabel $generateLabel, bool $confirm)
+ * @method GenerateLabelResponse   processGenerateLabelResponse(mixed $response)
  * @method GenerateLabelResponse[] generateLabels(GenerateLabel[] $generateLabel, bool $confirm)
  */
 class LabellingService extends AbstractService
@@ -98,12 +100,7 @@ class LabellingService extends AbstractService
      */
     public function generateLabelREST(GenerateLabel $generateLabel, $confirm = true)
     {
-        try {
-            $item = $this->retrieveCachedItem($generateLabel->getId());
-        } catch (\ReflectionException $e) {
-            $item = null;
-        }
-
+        $item = $this->retrieveCachedItem($generateLabel->getId());
         $response = null;
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
@@ -113,11 +110,12 @@ class LabellingService extends AbstractService
             }
         }
         if (!$response instanceof Response) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildGenerateLabelRESTRequest($generateLabel, $confirm));
+            $response = $this->postnl->getHttpClient()->doRequest($this->buildGenerateLabelRequestREST($generateLabel, $confirm));
             static::validateRESTResponse($response);
         }
-        $body = json_decode(static::getResponseText($response), true);
-        if (isset($body['ResponseShipments'])) {
+
+        $object = $this->processGenerateLabelResponseREST($response);
+        if ($object instanceof GenerateLabelResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof Response
                 && $response->getStatusCode() === 200
@@ -125,10 +123,6 @@ class LabellingService extends AbstractService
                 $item->set(\GuzzleHttp\Psr7\str($response));
                 $this->cacheItem($item);
             }
-
-            /** @var GenerateLabelResponse $object */
-            $object = AbstractEntity::jsonDeserialize(['GenerateLabelResponse' => $body]);
-            $this->setService($object);
 
             return $object;
         }
@@ -147,7 +141,6 @@ class LabellingService extends AbstractService
      *
      * @return array
      * @throws \ThirtyBees\PostNL\Exception\ResponseException
-     * @throws \ReflectionException
      */
     public function generateLabelsREST(array $generateLabels)
     {
@@ -172,7 +165,7 @@ class LabellingService extends AbstractService
 
             $httpClient->addOrUpdateRequest(
                 $uuid,
-                $this->buildGenerateLabelRESTRequest($generateLabel[0], $generateLabel[1])
+                $this->buildGenerateLabelRequestREST($generateLabel[0], $generateLabel[1])
             );
         }
         $newResponses = $httpClient->doRequests();
@@ -193,16 +186,8 @@ class LabellingService extends AbstractService
 
         $labels = [];
         foreach ($responses + $newResponses as $uuid => $response) {
-            $label = json_decode(static::getResponseText($response), true);
             try {
-                static::validateRESTResponse($response);
-                if (isset($label['ResponseShipments'])) {
-                    /** @var GenerateLabelResponse $generateLabelResponse */
-                    $generateLabelResponse = AbstractEntity::jsonDeserialize(['GenerateLabelResponse' => $label]);
-                    $this->setService($generateLabelResponse);
-                } else {
-                    throw new ApiException('Unable to generate label');
-                }
+                $generateLabelResponse = $this->processGenerateLabelResponseREST($response);
             } catch (\Exception $e) {
                 $generateLabelResponse = $e;
             }
@@ -220,12 +205,12 @@ class LabellingService extends AbstractService
      * @param bool          $confirm
      *
      * @return GenerateLabelResponse
+     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
-     * @throws \Exception
+     * @throws ResponseException
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Sabre\Xml\LibXMLException
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
     public function generateLabelSOAP(GenerateLabel $generateLabel, $confirm = true)
     {
@@ -239,21 +224,13 @@ class LabellingService extends AbstractService
             }
         }
         if (!$response instanceof Response) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildGenerateLabelSOAPRequest($generateLabel, $confirm));
-        }
-        $xml = @simplexml_load_string(static::getResponseText($response));
-        if ($xml === false) {
-            if ($response->getStatusCode() === 200) {
-                throw new ResponseException('Invalid API Response', null, null, $response);
-            } else {
-                throw new ApiException('Invalid API Response');
-            }
+            $response = $this->postnl->getHttpClient()->doRequest($this->buildGenerateLabelRequestSOAP($generateLabel, $confirm));
         }
 
-        static::registerNamespaces($xml);
-        static::validateSOAPResponse($xml);
+        $object = static::processGenerateLabelResponseSOAP($response);
 
-        if ($item instanceof CacheItemInterface
+        if ($object instanceof GenerateLabelResponse
+            && $item instanceof CacheItemInterface
             && $response instanceof Response
             && $response->getStatusCode() === 200
         ) {
@@ -261,26 +238,15 @@ class LabellingService extends AbstractService
             $this->cacheItem($item);
         }
 
-        $reader = new Reader();
-        $reader->xml(static::getResponseText($response));
-        $array = array_values($reader->parse()['value'][0]['value']);
-        $array = $array[0];
-
-        /** @var GenerateLabelResponse $object */
-        $object = AbstractEntity::xmlDeserialize($array);
-        $this->setService($object);
-
         return $object;
     }
 
     /**
-     * Generate multiple labels at once
+     * Generate multiple labels at once via SOAP
      *
      * @param array $generateLabels ['uuid' => [GenerateBarcode, confirm], ...]
      *
      * @return array
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
-     * @throws \ReflectionException
      */
     public function generateLabelsSOAP(array $generateLabels)
     {
@@ -305,7 +271,7 @@ class LabellingService extends AbstractService
 
             $httpClient->addOrUpdateRequest(
                 $uuid,
-                $this->buildGenerateLabelSOAPRequest($generateLabel[0], $generateLabel[1])
+                $this->buildGenerateLabelRequestSOAP($generateLabel[0], $generateLabel[1])
             );
         }
 
@@ -327,26 +293,12 @@ class LabellingService extends AbstractService
 
         $generateLabelResponses = [];
         foreach ($responses + $newResponses as $uuid => $response) {
-            $xml = simplexml_load_string(static::getResponseText($response));
-            if (!$xml instanceof \SimpleXMLElement) {
-                $generateLabelResponse = new ApiException('Invalid API response');
-            } else {
                 try {
-                    static::registerNamespaces($xml);
-                    static::validateSOAPResponse($xml);
-
-                    $reader = new Reader();
-                    $reader->xml(static::getResponseText($response));
-                    $array = array_values($reader->parse()['value'][0]['value']);
-                    $array = $array[0];
-
-                    /** @var GenerateLabelResponse $generateLabelResponse */
-                    $generateLabelResponse = AbstractEntity::xmlDeserialize($array);
-                    $this->setService($generateLabelResponse);
+                    $generateLabelResponse = $this->processGenerateLabelResponseSOAP($response);
                 } catch (\Exception $e) {
                     $generateLabelResponse = $e;
                 }
-            }
+
 
             $generateLabelResponses[$uuid] = $generateLabelResponse;
         }
@@ -362,7 +314,7 @@ class LabellingService extends AbstractService
      *
      * @return Request
      */
-    public function buildGenerateLabelRESTRequest(GenerateLabel $generateLabel, $confirm = true)
+    public function buildGenerateLabelRequestREST(GenerateLabel $generateLabel, $confirm = true)
     {
         $apiKey = $this->postnl->getRestApiKey();
         $this->setService($generateLabel);
@@ -382,6 +334,28 @@ class LabellingService extends AbstractService
     }
 
     /**
+     * Process the GenerateLabel REST Response
+     *
+     * @param Response $response
+     *
+     * @return GenerateLabelResponse|null
+     * @throws ResponseException
+     */
+    public function processGenerateLabelResponseREST($response)
+    {
+        $body = json_decode(static::getResponseText($response), true);
+        if (isset($body['ResponseShipments'])) {
+            /** @var GenerateLabelResponse $object */
+            $object = AbstractEntity::jsonDeserialize(['GenerateLabelResponse' => $body]);
+            $this->setService($object);
+
+            return $object;
+        }
+
+        return null;
+    }
+
+    /**
      * Build the GenerateLabel request for the SOAP API
      *
      * @param GenerateLabel $generateLabel
@@ -389,7 +363,7 @@ class LabellingService extends AbstractService
      *
      * @return Request
      */
-    public function buildGenerateLabelSOAPRequest(GenerateLabel $generateLabel, $confirm = true)
+    public function buildGenerateLabelRequestSOAP(GenerateLabel $generateLabel, $confirm = true)
     {
         $soapAction = $confirm ? static::SOAP_ACTION : static::SOAP_ACTION_NO_CONFIRM;
         $xmlService = new XmlService();
@@ -427,5 +401,42 @@ class LabellingService extends AbstractService
             ],
             $request
         );
+    }
+
+    /**
+     * @param Response $response
+     *
+     * @return GenerateLabelResponse
+     * @throws ApiException
+     * @throws CifDownException
+     * @throws CifException
+     * @throws ResponseException
+     * @throws \Sabre\Xml\LibXMLException
+     */
+    public function processGenerateLabelResponseSOAP($response)
+    {
+        $xml = @simplexml_load_string(static::getResponseText($response));
+        if ($xml === false) {
+            if ($response->getStatusCode() === 200) {
+                throw new ResponseException('Invalid API Response', null, null, $response);
+            } else {
+                throw new ApiException('Invalid API Response');
+            }
+        }
+
+        static::registerNamespaces($xml);
+        static::validateSOAPResponse($xml);
+
+
+        $reader = new Reader();
+        $reader->xml(static::getResponseText($response));
+        $array = array_values($reader->parse()['value'][0]['value']);
+        $array = $array[0];
+
+        /** @var GenerateLabelResponse $object */
+        $object = AbstractEntity::xmlDeserialize($array);
+        $this->setService($object);
+
+        return $object;
     }
 }

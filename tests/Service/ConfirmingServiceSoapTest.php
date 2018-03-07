@@ -62,7 +62,6 @@ class ConfirmingServiceSoapTest extends \PHPUnit_Framework_TestCase
     /**
      * @before
      * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
-     * @throws \ReflectionException
      */
     public function setupPostNL()
     {
@@ -119,14 +118,12 @@ class ConfirmingServiceSoapTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox creates a confirm request
-     *
-     * @throws \ReflectionException
      */
     public function testCreatesAValidLabelRequest()
     {
         $message = new LabellingMessage();
 
-        $this->lastRequest = $request = $this->service->buildConfirmSOAPRequest(
+        $this->lastRequest = $request = $this->service->buildConfirmRequestSOAP(
             Confirming::create()
                 ->setShipments([
                     Shipment::create()
@@ -158,8 +155,7 @@ class ConfirmingServiceSoapTest extends \PHPUnit_Framework_TestCase
                         ->setProductCodeDelivery('3085')
                 ])
                 ->setMessage($message)
-                ->setCustomer($this->postnl->getCustomer()),
-            false
+                ->setCustomer($this->postnl->getCustomer())
         );
 
         $this->assertEquals("<?xml version=\"1.0\"?>
@@ -237,8 +233,6 @@ class ConfirmingServiceSoapTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox can confirm a single label
-     *
-     * @throws \ReflectionException
      */
     public function testGenerateSingleLabelSoap()
     {
@@ -300,8 +294,6 @@ xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">
      * @testdox can confirm multiple labels
      *
      * @throws \Exception
-     * @throws \ReflectionException
-     * @throws \setasign\Fpdi\PdfReader\PdfReaderException
      */
     public function testGenerateMultipleLabelsSoap()
     {
@@ -402,7 +394,6 @@ xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">
 
     /**
      * @testdox throws exception on invalid response
-     * @throws \ReflectionException
      */
     public function testNegativeGenerateLabelInvalidResponseSoap()
     {

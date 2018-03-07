@@ -105,7 +105,7 @@ class TimeframeService extends AbstractService
             }
         }
         if (!$response instanceof Response) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetTimeframesRESTRequest($getTimeframes));
+            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetTimeframesRequestREST($getTimeframes));
             static::validateRESTResponse($response);
         }
         $body = json_decode(static::getResponseText($response), true);
@@ -153,7 +153,7 @@ class TimeframeService extends AbstractService
             }
         }
         if (!$response instanceof Response) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetTimeframesSOAPRequest($getTimeframes));
+            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetTimeframesRequestSOAP($getTimeframes));
         }
         $xml = simplexml_load_string(static::getResponseText($response));
 
@@ -187,7 +187,7 @@ class TimeframeService extends AbstractService
      *
      * @return Request
      */
-    public function buildGetTimeframesRESTRequest(GetTimeframes $getTimeframes)
+    public function buildGetTimeframesRequestREST(GetTimeframes $getTimeframes)
     {
         $apiKey = $this->postnl->getRestApiKey();
         $this->setService($getTimeframes);
@@ -244,7 +244,7 @@ class TimeframeService extends AbstractService
      *
      * @return Request
      */
-    public function buildGetTimeframesSOAPRequest(GetTimeframes $getTimeframes)
+    public function buildGetTimeframesRequestSOAP(GetTimeframes $getTimeframes)
     {
         $soapAction = static::SOAP_ACTION;
         $xmlService = new XmlService();

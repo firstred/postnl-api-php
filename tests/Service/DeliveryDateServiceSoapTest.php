@@ -63,7 +63,6 @@ class DeliveryDateSoapTest extends \PHPUnit_Framework_TestCase
     /**
      * @before
      * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
-     * @throws \ReflectionException
      */
     public function setupPostNL()
     {
@@ -117,7 +116,7 @@ class DeliveryDateSoapTest extends \PHPUnit_Framework_TestCase
     {
         $message = new Message();
 
-        $this->lastRequest = $request = $this->service->buildGetDeliveryDateSOAPRequest(
+        $this->lastRequest = $request = $this->service->buildGetDeliveryDateRequestSOAP(
             (new GetDeliveryDate())
                 ->setGetDeliveryDate(
                     (new GetDeliveryDate())
@@ -244,7 +243,7 @@ xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
     {
         $message = new Message();
 
-        $this->lastRequest = $request = $this->service->buildGetSentDateSOAPRequest((new GetSentDateRequest())
+        $this->lastRequest = $request = $this->service->buildGetSentDateRequestSOAP((new GetSentDateRequest())
             ->setGetSentDate(
                 (new GetSentDate())
                     ->setAllowSundaySorting(true)

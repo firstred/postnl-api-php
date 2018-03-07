@@ -57,7 +57,6 @@ class TimeframeServiceSoapTest extends \PHPUnit_Framework_TestCase
     /**
      * @before
      * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
-     * @throws \ReflectionException
      */
     public function setupPostNL()
     {
@@ -111,7 +110,7 @@ class TimeframeServiceSoapTest extends \PHPUnit_Framework_TestCase
     {
         $message = new Message();
 
-        $this->lastRequest = $request = $this->service->buildGetTimeframesSOAPRequest(
+        $this->lastRequest = $request = $this->service->buildGetTimeframesRequestSOAP(
             (new GetTimeframes())
                 ->setMessage($message)
                 ->setTimeframe([

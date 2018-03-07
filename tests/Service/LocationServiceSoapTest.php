@@ -39,6 +39,7 @@ use ThirtyBees\PostNL\Entity\Request\GetLocation;
 use ThirtyBees\PostNL\Entity\Request\GetLocationsInArea;
 use ThirtyBees\PostNL\Entity\Request\GetNearestLocations;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
+use ThirtyBees\PostNL\Exception\ResponseException;
 use ThirtyBees\PostNL\PostNL;
 use ThirtyBees\PostNL\Service\LocationService;
 
@@ -114,7 +115,8 @@ class LocationServiceSoapTest extends \PHPUnit_Framework_TestCase
     {
         $message = new Message();
 
-        $this->lastRequest = $request = $this->service->buildGetNearestLocationsSOAPRequest(
+        /** @var Request $request */
+        $this->lastRequest = $request = $this->service->buildGetNearestLocationsRequest(
             (new GetNearestLocations())
                 ->setMessage($message)
                 ->setCountrycode('NL')
@@ -184,7 +186,8 @@ class LocationServiceSoapTest extends \PHPUnit_Framework_TestCase
     {
         $message = new Message();
 
-        $this->lastRequest = $request = $this->service->buildGetLocationsInAreaSOAPRequest(
+        /** @var Request $request */
+        $this->lastRequest = $request = $this->service->buildGetLocationsInAreaRequest(
             (new GetLocationsInArea())
                 ->setMessage($message)
                 ->setCountrycode('NL')
@@ -260,7 +263,8 @@ class LocationServiceSoapTest extends \PHPUnit_Framework_TestCase
     {
         $message = new Message();
 
-        $this->lastRequest = $request = $this->service->buildGetLocationSOAPRequest(
+        /** @var Request $request */
+        $this->lastRequest = $request = $this->service->buildGetLocationRequest(
             (new GetLocation())
                 ->setLocationCode('161503')
                 ->setMessage($message)

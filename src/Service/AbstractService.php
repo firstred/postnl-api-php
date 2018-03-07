@@ -277,7 +277,7 @@ abstract class AbstractService
      *
      * @return null|CacheItemInterface
      */
-    protected function retrieveCachedItem($uuid)
+    public function retrieveCachedItem($uuid)
     {
         // An integer cache key means it should not be cached
         if (is_int($uuid)) {
@@ -305,7 +305,7 @@ abstract class AbstractService
     /**
      * @param CacheItemInterface $item
      */
-    protected function cacheItem(CacheItemInterface $item)
+    public function cacheItem(CacheItemInterface $item)
     {
         if ($this->ttl instanceof \DateInterval || is_int($this->ttl)) {
             // Reset expires at first -- it might have been set

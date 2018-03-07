@@ -65,7 +65,6 @@ class LabellingServiceRestTest extends \PHPUnit_Framework_TestCase
     /**
      * @before
      * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
-     * @throws \ReflectionException
      */
     public function setupPostNL()
     {
@@ -129,7 +128,7 @@ class LabellingServiceRestTest extends \PHPUnit_Framework_TestCase
     {
         $message = new LabellingMessage();
 
-        $this->lastRequest = $request = $this->service->buildGenerateLabelRESTRequest(
+        $this->lastRequest = $request = $this->service->buildGenerateLabelRequestREST(
             GenerateLabel::create()
                 ->setShipments([
                     Shipment::create()
@@ -225,8 +224,6 @@ class LabellingServiceRestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox can generate a single label
-     *
-     * @throws \ReflectionException
      */
     public function testGenerateSingleLabelRest()
     {
@@ -289,9 +286,9 @@ class LabellingServiceRestTest extends \PHPUnit_Framework_TestCase
     /**
      * @testdox can generate multiple labels
      *
-     * @throws \Exception
      * @throws \ReflectionException
      * @throws \setasign\Fpdi\PdfReader\PdfReaderException
+     * @throws \Exception
      */
     public function testGenerateMultipleLabelsRest()
     {
@@ -397,7 +394,6 @@ class LabellingServiceRestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox throws exception on invalid response
-     * @throws \ReflectionException
      */
     public function testNegativeGenerateLabelInvalidResponseRest()
     {

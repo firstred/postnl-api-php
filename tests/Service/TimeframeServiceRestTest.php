@@ -114,7 +114,7 @@ class TimeframeServiceRestTest extends \PHPUnit_Framework_TestCase
     {
         $message = new Message();
 
-        $this->lastRequest = $request = $this->service->buildGetTimeframesRESTRequest(
+        $this->lastRequest = $request = $this->service->buildGetTimeframesRequestREST(
             (new GetTimeframes())
                 ->setMessage($message)
                 ->setTimeframe([
