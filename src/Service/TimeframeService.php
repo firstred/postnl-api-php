@@ -46,6 +46,8 @@ use ThirtyBees\PostNL\PostNL;
  * @package ThirtyBees\PostNL\Service
  *
  * @method ResponseTimeframes getTimeframes(GetTimeframes $getTimeframes)
+ * @method Request            buildGetTimeframesRequest(GetTimeframes $getTimeframes)
+ * @method ResponseTimeframes processGetTimeframesResponse(mixed $response)
  */
 class TimeframeService extends AbstractService
 {
