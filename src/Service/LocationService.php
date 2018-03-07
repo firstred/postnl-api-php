@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017 Thirty Development, LLC
+ * Copyright (c) 2017-2018 Thirty Development, LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -604,13 +604,12 @@ class LocationService extends AbstractService
      */
     public function buildGetLocationRESTRequest(GetLocation $getLocation)
     {
-        $location = $getLocation->getLocation();
         $apiKey = $this->postnl->getRestApiKey();
         $this->setService($getLocation);
         $query = [
-            'LocationCode' => $location->getLocationCode(),
+            'LocationCode' => $getLocation->getLocationCode(),
         ];
-        if ($id = $location->getRetailNetworkID()) {
+        if ($id = $getLocation->getRetailNetworkID()) {
             $query['RetailNetworkID'] = $id;
         }
         $endpoint = '/lookup?'.http_build_query($query);

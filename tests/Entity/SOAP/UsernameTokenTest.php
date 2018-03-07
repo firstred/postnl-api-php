@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017 Thirty Development, LLC
+ * Copyright (c) 2017-2018 Thirty Development, LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,7 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017 Thirty Development, LLC
+ * @copyright 2017-2018 Thirty Development, LLC
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 

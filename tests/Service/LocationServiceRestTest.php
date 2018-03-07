@@ -43,13 +43,13 @@ use ThirtyBees\PostNL\PostNL;
 use ThirtyBees\PostNL\Service\LocationService;
 
 /**
- * Class LocationServiceSoapTest
+ * Class LocationServiceRestTest
  *
  * @package ThirtyBees\PostNL\Tests\Service
  *
  * @testdox The LocationService (SOAP)
  */
-class LocationServiceSoapTest extends \PHPUnit_Framework_TestCase
+class LocationServiceRestTest extends \PHPUnit_Framework_TestCase
 {
     /** @var PostNL $postnl */
     protected $postnl;
@@ -110,11 +110,11 @@ class LocationServiceSoapTest extends \PHPUnit_Framework_TestCase
     /**
      * @testdox creates a valid NearestLocations request
      */
-    public function testGetNearestLocationsRequestSoap()
+    public function testGetNearestLocationsRequestRest()
     {
         $message = new Message();
 
-        $this->lastRequest = $request = $this->service->buildGetNearestLocationsSOAPRequest(
+        $this->lastRequest = $request = $this->service->buildGetNearestLocationsRESTRequest(
             (new GetNearestLocations())
                 ->setMessage($message)
                 ->setCountrycode('NL')
@@ -136,55 +136,29 @@ class LocationServiceSoapTest extends \PHPUnit_Framework_TestCase
                 ]))
         );
 
+        $query = \GuzzleHttp\Psr7\parse_query($request->getUri()->getQuery());
 
-        $this->assertEquals("<?xml version=\"1.0\"?>
-<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:services=\"http://postnl.nl/cif/services/LocationWebService/\" xmlns:domain=\"http://postnl.nl/cif/domain/LocationWebService/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\" xmlns:schema=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:common=\"http://postnl.nl/cif/services/common/\" xmlns:arr=\"http://schemas.microsoft.com/2003/10/Serialization/Arrays\">
- <soap:Header>
-  <wsse:Security>
-   <wsse:UsernameToken>
-    <wsse:Password>test</wsse:Password>
-   </wsse:UsernameToken>
-  </wsse:Security>
- </soap:Header>
- <soap:Body>
-  <services:GetNearestLocations>
-   <domain:Countrycode>NL</domain:Countrycode>
-   <domain:Location>
-    <domain:AllowSundaySorting>true</domain:AllowSundaySorting>
-    <domain:DeliveryDate>29-06-2016</domain:DeliveryDate>
-    <domain:DeliveryOptions>
-     <arr:string>PGE</arr:string>
-    </domain:DeliveryOptions>
-    <domain:OpeningTime>09:00:00</domain:OpeningTime>
-    <domain:Options>
-     <arr:string>Daytime</arr:string>
-    </domain:Options>
-    <domain:City>Hoofddorp</domain:City>
-    <domain:HouseNr>42</domain:HouseNr>
-    <domain:HouseNrExt>A</domain:HouseNrExt>
-    <domain:Postalcode>2132WT</domain:Postalcode>
-    <domain:Street>Siriusdreef</domain:Street>
-   </domain:Location>
-   <domain:Message>
-    <domain:MessageID>{$message->getMessageID()}</domain:MessageID>
-    <domain:MessageTimeStamp>{$message->getMessageTimeStamp()}</domain:MessageTimeStamp>
-   </domain:Message>
-  </services:GetNearestLocations>
- </soap:Body>
-</soap:Envelope>
-", (string) $request->getBody());
-        $this->assertEmpty($request->getHeaderLine('apikey'));
-        $this->assertEquals('text/xml', $request->getHeaderLine('Accept'));
+        $this->assertEquals([
+            'DeliveryOptions' => 'PG,PGE',
+            'City'            => 'Hoofddorp',
+            'Street'          => 'Siriusdreef',
+            'HouseNumber'     => '42',
+            'DeliveryDate'    => '29-06-2016',
+            'OpeningTime'     => '09:00:00',
+        ], $query);
+        $this->assertEquals('test', $request->getHeaderLine('apikey'));
+        $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
+        $this->assertEquals('application/json;charset=UTF-8', $request->getHeaderLine('Content-Type'));
     }
 
     /**
      * @testdox creates a valid GetLocationsInArea request
      */
-    public function testGetLocationsInAreaRequestSoap()
+    public function testGetLocationsInAreaRequestRest()
     {
         $message = new Message();
 
-        $this->lastRequest = $request = $this->service->buildGetLocationsInAreaSOAPRequest(
+        $this->lastRequest = $request = $this->service->buildGetLocationsInAreaRESTRequest(
             (new GetLocationsInArea())
                 ->setMessage($message)
                 ->setCountrycode('NL')
@@ -209,87 +183,44 @@ class LocationServiceSoapTest extends \PHPUnit_Framework_TestCase
                 ]))
         );
 
+        $query = \GuzzleHttp\Psr7\parse_query($request->getUri()->getQuery());
 
-        $this->assertEquals("<?xml version=\"1.0\"?>
-<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:services=\"http://postnl.nl/cif/services/LocationWebService/\" xmlns:domain=\"http://postnl.nl/cif/domain/LocationWebService/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\" xmlns:schema=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:common=\"http://postnl.nl/cif/services/common/\" xmlns:arr=\"http://schemas.microsoft.com/2003/10/Serialization/Arrays\">
- <soap:Header>
-  <wsse:Security>
-   <wsse:UsernameToken>
-    <wsse:Password>test</wsse:Password>
-   </wsse:UsernameToken>
-  </wsse:Security>
- </soap:Header>
- <soap:Body>
-  <services:GetLocationsInArea>
-   <domain:Countrycode>NL</domain:Countrycode>
-   <domain:Location>
-    <domain:AllowSundaySorting>true</domain:AllowSundaySorting>
-    <domain:DeliveryDate>29-06-2016</domain:DeliveryDate>
-    <domain:DeliveryOptions>
-     <arr:string>PG</arr:string>
-    </domain:DeliveryOptions>
-    <domain:OpeningTime>09:00:00</domain:OpeningTime>
-    <domain:Options>
-     <arr:string>Daytime</arr:string>
-    </domain:Options>
-    <domain:CoordinatesNorthWest>
-     <domain:Latitude>52.156439</domain:Latitude>
-     <domain:Longitude>5.015643</domain:Longitude>
-    </domain:CoordinatesNorthWest>
-    <domain:CoordinatesSouthEast>
-     <domain:Latitude>52.017473</domain:Latitude>
-     <domain:Longitude>5.065254</domain:Longitude>
-    </domain:CoordinatesSouthEast>
-   </domain:Location>
-   <domain:Message>
-    <domain:MessageID>{$message->getMessageID()}</domain:MessageID>
-    <domain:MessageTimeStamp>{$message->getMessageTimeStamp()}</domain:MessageTimeStamp>
-   </domain:Message>
-  </services:GetLocationsInArea>
- </soap:Body>
-</soap:Envelope>
-", (string) $request->getBody());
-        $this->assertEmpty($request->getHeaderLine('apikey'));
-        $this->assertEquals('text/xml', $request->getHeaderLine('Accept'));
+        $this->assertEquals([
+            'DeliveryOptions' => 'PG',
+            'LatitudeNorth'   => '52.156439',
+            'LongitudeWest'   => '5.015643',
+            'LatitudeSouth'   => '52.017473',
+            'LongitudeEast'   => '5.065254',
+            'DeliveryDate'    => '29-06-2016',
+            'OpeningTime'     => '09:00:00',
+        ], $query);
+        $this->assertEquals('test', $request->getHeaderLine('apikey'));
+        $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
+        $this->assertEquals('application/json;charset=UTF-8', $request->getHeaderLine('Content-Type'));
     }
 
     /**
      * @testdox creates a valid GetLocation request
      */
-    public function testGetLocationRequestSoap()
+    public function testGetLocationRequestRest()
     {
         $message = new Message();
 
-        $this->lastRequest = $request = $this->service->buildGetLocationSOAPRequest(
+        $this->lastRequest = $request = $this->service->buildGetLocationRESTRequest(
             (new GetLocation())
                 ->setLocationCode('161503')
                 ->setMessage($message)
                 ->setRetailNetworkID('PNPNL-01')
         );
 
+        $query = \GuzzleHttp\Psr7\parse_query($request->getUri()->getQuery());
 
-        $this->assertEquals("<?xml version=\"1.0\"?>
-<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:services=\"http://postnl.nl/cif/services/LocationWebService/\" xmlns:domain=\"http://postnl.nl/cif/domain/LocationWebService/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\" xmlns:schema=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:common=\"http://postnl.nl/cif/services/common/\" xmlns:arr=\"http://schemas.microsoft.com/2003/10/Serialization/Arrays\">
- <soap:Header>
-  <wsse:Security>
-   <wsse:UsernameToken>
-    <wsse:Password>test</wsse:Password>
-   </wsse:UsernameToken>
-  </wsse:Security>
- </soap:Header>
- <soap:Body>
-  <services:GetLocation>
-   <domain:LocationCode>161503</domain:LocationCode>
-   <domain:Message>
-    <domain:MessageID>{$message->getMessageID()}</domain:MessageID>
-    <domain:MessageTimeStamp>{$message->getMessageTimeStamp()}</domain:MessageTimeStamp>
-   </domain:Message>
-   <domain:RetailNetworkID>PNPNL-01</domain:RetailNetworkID>
-  </services:GetLocation>
- </soap:Body>
-</soap:Envelope>
-", (string) $request->getBody());
-        $this->assertEmpty($request->getHeaderLine('apikey'));
-        $this->assertEquals('text/xml', $request->getHeaderLine('Accept'));
+        $this->assertEquals([
+            'LocationCode'    => '161503',
+            'RetailNetworkID' => 'PNPNL-01',
+        ], $query);
+        $this->assertEquals('test', $request->getHeaderLine('apikey'));
+        $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
+        $this->assertEquals('application/json;charset=UTF-8', $request->getHeaderLine('Content-Type'));
     }
 }
