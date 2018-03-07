@@ -49,7 +49,7 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  */
 class LabellingMessage extends Message
 {
-    /** @var string[] $defaultProperties */
+    /** @var string[][] $defaultProperties */
     public static $defaultProperties = [
         'Barcode'        => [
             'MessageID'        => BarcodeService::DOMAIN_NAMESPACE,

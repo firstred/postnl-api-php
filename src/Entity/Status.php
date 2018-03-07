@@ -53,7 +53,7 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  */
 class Status extends AbstractEntity
 {
-    /** @var string[] $defaultProperties */
+    /** @var string[][] $defaultProperties */
     public static $defaultProperties = [
         'Barcode'        => [
             'CurrentPhaseCode'         => BarcodeService::DOMAIN_NAMESPACE,

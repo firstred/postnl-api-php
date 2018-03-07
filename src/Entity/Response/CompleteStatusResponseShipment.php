@@ -85,7 +85,7 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  */
 class CompleteStatusResponseShipment extends AbstractEntity
 {
-    /** @var string[] $defaultProperties */
+    /** @var string[][] $defaultProperties */
     public static $defaultProperties = [
         'Barcode'        => [
             'Addresses'      => BarcodeService::DOMAIN_NAMESPACE,

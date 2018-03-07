@@ -47,7 +47,7 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  */
 class Event extends AbstractEntity
 {
-    /** @var string[] $defaultProperties */
+    /** @var string[][] $defaultProperties */
     public static $defaultProperties = [
         'Barcode'        => [
             'CompleteStatusResponseEvent' => BarcodeService::DOMAIN_NAMESPACE,

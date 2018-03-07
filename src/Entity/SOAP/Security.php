@@ -41,7 +41,7 @@ class Security extends AbstractEntity
 {
     const SECURITY_NAMESPACE = 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd';
 
-    /** @var string[] $defaultProperties */
+    /** @var string[][] $defaultProperties */
     public static $defaultProperties = [
         'Barcode'        => [
             'UsernameToken' => self::SECURITY_NAMESPACE,

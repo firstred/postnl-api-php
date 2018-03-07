@@ -74,7 +74,7 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  */
 class Location extends AbstractEntity
 {
-    /** @var string[] $defaultProperties */
+    /** @var string[][] $defaultProperties */
     public static $defaultProperties = [
         'Barcode'        => [
             'AllowSundaySorting'   => BarcodeService::DOMAIN_NAMESPACE,

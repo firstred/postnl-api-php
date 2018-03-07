@@ -48,7 +48,7 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  */
 class Signature extends AbstractEntity
 {
-    /** @var string[] $defaultProperties */
+    /** @var string[][] $defaultProperties */
     public static $defaultProperties = [
         'Barcode'           => [
             'GetSignatureResponseSignature' => BarcodeService::DOMAIN_NAMESPACE,

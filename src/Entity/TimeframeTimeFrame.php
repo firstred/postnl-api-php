@@ -39,72 +39,85 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
+ * @method string   getDate()
  * @method string   getFrom()
  * @method string   getTo()
  * @method string[] getOptions()
  *
+ * @method TimeframeTimeFrame setDate(string $date)
  * @method TimeframeTimeFrame setFrom(string $from)
  * @method TimeframeTimeFrame setTo(string $to)
  * @method TimeframeTimeFrame setOptions(string [] $options)
  */
 class TimeframeTimeFrame extends AbstractEntity
 {
-    /** @var string[] $defaultProperties */
+    /** @var string[][] $defaultProperties */
     public static $defaultProperties = [
         'Barcode'        => [
+            'Date'    => BarcodeService::DOMAIN_NAMESPACE,
             'From'    => BarcodeService::DOMAIN_NAMESPACE,
-            'To'      => BarcodeService::DOMAIN_NAMESPACE,
             'Options' => BarcodeService::DOMAIN_NAMESPACE,
+            'To'      => BarcodeService::DOMAIN_NAMESPACE,
         ],
         'Confirming'     => [
+            'Date'    => ConfirmingService::DOMAIN_NAMESPACE,
             'From'    => ConfirmingService::DOMAIN_NAMESPACE,
-            'To'      => ConfirmingService::DOMAIN_NAMESPACE,
             'Options' => ConfirmingService::DOMAIN_NAMESPACE,
+            'To'      => ConfirmingService::DOMAIN_NAMESPACE,
         ],
         'Labelling'      => [
+            'Date'    => LabellingService::DOMAIN_NAMESPACE,
             'From'    => LabellingService::DOMAIN_NAMESPACE,
-            'To'      => LabellingService::DOMAIN_NAMESPACE,
             'Options' => LabellingService::DOMAIN_NAMESPACE,
+            'To'      => LabellingService::DOMAIN_NAMESPACE,
         ],
         'ShippingStatus' => [
+            'Date'    => ShippingStatusService::DOMAIN_NAMESPACE,
             'From'    => ShippingStatusService::DOMAIN_NAMESPACE,
-            'To'      => ShippingStatusService::DOMAIN_NAMESPACE,
             'Options' => ShippingStatusService::DOMAIN_NAMESPACE,
+            'To'      => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate'   => [
+            'Date'    => DeliveryDateService::DOMAIN_NAMESPACE,
             'From'    => DeliveryDateService::DOMAIN_NAMESPACE,
-            'To'      => DeliveryDateService::DOMAIN_NAMESPACE,
             'Options' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'To'      => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
         'Location'       => [
+            'Date'    => LocationService::DOMAIN_NAMESPACE,
             'From'    => LocationService::DOMAIN_NAMESPACE,
-            'To'      => LocationService::DOMAIN_NAMESPACE,
             'Options' => LocationService::DOMAIN_NAMESPACE,
+            'To'      => LocationService::DOMAIN_NAMESPACE,
         ],
         'Timeframe'      => [
+            'Date'    => TimeframeService::DOMAIN_NAMESPACE,
             'From'    => TimeframeService::DOMAIN_NAMESPACE,
-            'To'      => TimeframeService::DOMAIN_NAMESPACE,
             'Options' => TimeframeService::DOMAIN_NAMESPACE,
+            'To'      => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
+    /** @var string $Date */
+    protected $Date;
     /** @var string $From */
     protected $From;
-    /** @var string $To */
-    protected $To;
     /** @var string[] $Options */
     protected $Options;
+    /** @var string $To */
+    protected $To;
     // @codingStandardsIgnoreEnd
 
     /**
+     * @param string   $date
      * @param string   $from
      * @param string   $to
      * @param string[] $options
      */
-    public function __construct($from = null, $to = null, array $options = null)
+    public function __construct($date = null, $from = null, $to = null, array $options = null)
     {
         parent::__construct();
 
+        $this->setDate($date);
         $this->setFrom($from);
         $this->setTo($to);
         $this->setOptions($options);

@@ -49,7 +49,7 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  */
 class MergedLabel extends AbstractEntity
 {
-    /** @var string[] $defaultProperties */
+    /** @var string[][] $defaultProperties */
     public static $defaultProperties = [
         'Barcode'        => [
             'Barcodes' => BarcodeService::DOMAIN_NAMESPACE,

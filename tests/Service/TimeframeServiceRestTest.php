@@ -157,177 +157,177 @@ class TimeframeServiceRestTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetTimeframesRest()
     {
-        return;
-        $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode([
-                'ReasonNotimeframes' => [
-                    'ReasonNoTimeframe' => [
-                        [
-                            'Code'        => '05',
-                            'Date'        => '10-03-2018',
-                            'Description' => 'Geen avondbelevering mogelijk',
-                            'Options'     => [
-                                'string' => 'Evening',
-                            ],
+        $payload = [
+            'ReasonNotimeframes' => [
+                'ReasonNoTimeframe' => [
+                    [
+                        'Code'        => '05',
+                        'Date'        => '10-03-2018',
+                        'Description' => 'Geen avondbelevering mogelijk',
+                        'Options'     => [
+                            'string' => 'Evening',
                         ],
-                        [
-                            'Code'        => '03',
-                            'Date'        => '11-03-2018',
-                            'Description' => 'Dag uitgesloten van tijdvak',
-                            'Options'     => [
-                                'string' => 'Daytime',
-                            ],
+                    ],
+                    [
+                        'Code'        => '03',
+                        'Date'        => '11-03-2018',
+                        'Description' => 'Dag uitgesloten van tijdvak',
+                        'Options'     => [
+                            'string' => 'Daytime',
                         ],
-                        [
-                            'Code'        => '03',
-                            'Date'        => '11-03-2018',
-                            'Description' => 'Dag uitgesloten van tijdvak',
-                            'Options'     => [
-                                'string' => 'Evening',
-                            ],
+                    ],
+                    [
+                        'Code'        => '03',
+                        'Date'        => '11-03-2018',
+                        'Description' => 'Dag uitgesloten van tijdvak',
+                        'Options'     => [
+                            'string' => 'Evening',
                         ],
-                        [
-                            'Code'        => '01',
-                            'Date'        => '12-03-2018',
-                            'Description' => 'Geen routeplan tijdvak',
-                            'Options'     => [
-                                'string' => 'Daytime',
-                            ],
+                    ],
+                    [
+                        'Code'        => '01',
+                        'Date'        => '12-03-2018',
+                        'Description' => 'Geen routeplan tijdvak',
+                        'Options'     => [
+                            'string' => 'Daytime',
                         ],
-                        [
-                            'Code'        => '05',
-                            'Date'        => '12-03-2018',
-                            'Description' => 'Geen avondbelevering mogelijk',
-                            'Options'     => [
-                                'string' => 'Evening',
-                            ],
+                    ],
+                    [
+                        'Code'        => '05',
+                        'Date'        => '12-03-2018',
+                        'Description' => 'Geen avondbelevering mogelijk',
+                        'Options'     => [
+                            'string' => 'Evening',
                         ],
                     ],
                 ],
-                'Timeframes' => [
-                    'Timeframe' => [
-                        [
-                            'Date' => '07-03-2018',
-                            'Timeframes' => [
-                                'TimeframeTimeFrame' => [
-                                    [
-                                        'From' => '16:00:00',
-                                        'Options' => [
-                                            'string' => 'Daytime',
-                                        ],
-                                        'To' => '18:30:00',
+            ],
+            'Timeframes' => [
+                'Timeframe' => [
+                    [
+                        'Date' => '07-03-2018',
+                        'Timeframes' => [
+                            'TimeframeTimeFrame' => [
+                                [
+                                    'From' => '16:00:00',
+                                    'Options' => [
+                                        'string' => 'Daytime',
                                     ],
-                                    [
-                                        'From' => '18:00:00',
-                                        'Options' => [
-                                            'string' => 'Evening',
-                                        ],
-                                        'To' => '22:00:00',
+                                    'To' => '18:30:00',
+                                ],
+                                [
+                                    'From' => '18:00:00',
+                                    'Options' => [
+                                        'string' => 'Evening',
                                     ],
-                                ]
+                                    'To' => '22:00:00',
+                                ],
                             ]
-                        ],
-                        [
-                            'Date' => '08-03-2018',
-                            'Timeframes' => [
-                                'TimeframeTimeFrame' => [
-                                    [
-                                        'From' => '15:45:00',
-                                        'Options' => [
-                                            'string' => 'Daytime',
-                                        ],
-                                        'To' => '18:15:00',
+                        ]
+                    ],
+                    [
+                        'Date' => '08-03-2018',
+                        'Timeframes' => [
+                            'TimeframeTimeFrame' => [
+                                [
+                                    'From' => '15:45:00',
+                                    'Options' => [
+                                        'string' => 'Daytime',
                                     ],
-                                    [
-                                        'From' => '18:00:00',
-                                        'Options' => [
-                                            'string' => 'Evening',
-                                        ],
-                                        'To' => '22:00:00',
+                                    'To' => '18:15:00',
+                                ],
+                                [
+                                    'From' => '18:00:00',
+                                    'Options' => [
+                                        'string' => 'Evening',
                                     ],
-                                ]
+                                    'To' => '22:00:00',
+                                ],
                             ]
-                        ],
-                        [
-                            'Date' => '09-03-2018',
-                            'Timeframes' => [
-                                'TimeframeTimeFrame' => [
-                                    [
-                                        'From' => '15:30:00',
-                                        'Options' => [
-                                            'string' => 'Daytime',
-                                        ],
-                                        'To' => '18:00:00',
+                        ]
+                    ],
+                    [
+                        'Date' => '09-03-2018',
+                        'Timeframes' => [
+                            'TimeframeTimeFrame' => [
+                                [
+                                    'From' => '15:30:00',
+                                    'Options' => [
+                                        'string' => 'Daytime',
                                     ],
-                                    [
-                                        'From' => '18:00:00',
-                                        'Options' => [
-                                            'string' => 'Evening',
-                                        ],
-                                        'To' => '22:00:00',
+                                    'To' => '18:00:00',
+                                ],
+                                [
+                                    'From' => '18:00:00',
+                                    'Options' => [
+                                        'string' => 'Evening',
                                     ],
-                                ]
+                                    'To' => '22:00:00',
+                                ],
                             ]
-                        ],
-                        [
-                            'Date' => '10-03-2018',
-                            'Timeframes' => [
-                                'TimeframeTimeFrame' => [
-                                    [
-                                        'From' => '16:15:00',
-                                        'Options' => [
-                                            'string' => 'Daytime',
-                                        ],
-                                        'To' => '18:45:00',
+                        ]
+                    ],
+                    [
+                        'Date' => '10-03-2018',
+                        'Timeframes' => [
+                            'TimeframeTimeFrame' => [
+                                [
+                                    'From' => '16:15:00',
+                                    'Options' => [
+                                        'string' => 'Daytime',
                                     ],
-                                ]
+                                    'To' => '18:45:00',
+                                ],
                             ]
-                        ],
-                        [
-                            'Date' => '13-03-2018',
-                            'Timeframes' => [
-                                'TimeframeTimeFrame' => [
-                                    [
-                                        'From' => '16:00:00',
-                                        'Options' => [
-                                            'string' => 'Daytime',
-                                        ],
-                                        'To' => '18:30:00',
+                        ]
+                    ],
+                    [
+                        'Date' => '13-03-2018',
+                        'Timeframes' => [
+                            'TimeframeTimeFrame' => [
+                                [
+                                    'From' => '16:00:00',
+                                    'Options' => [
+                                        'string' => 'Daytime',
                                     ],
-                                    [
-                                        'From' => '18:00:00',
-                                        'Options' => [
-                                            'string' => 'Evening',
-                                        ],
-                                        'To' => '22:00:00',
+                                    'To' => '18:30:00',
+                                ],
+                                [
+                                    'From' => '18:00:00',
+                                    'Options' => [
+                                        'string' => 'Evening',
                                     ],
-                                ]
+                                    'To' => '22:00:00',
+                                ],
                             ]
-                        ],
-                        [
-                            'Date'       => '14-03-2018',
-                            'Timeframes' => [
-                                'TimeframeTimeFrame' => [
-                                    [
-                                        'From'    => '16:00:00',
-                                        'Options' => [
-                                            'string' => 'Daytime',
-                                        ],
-                                        'To'      => '18:30:00',
+                        ]
+                    ],
+                    [
+                        'Date'       => '14-03-2018',
+                        'Timeframes' => [
+                            'TimeframeTimeFrame' => [
+                                [
+                                    'From'    => '16:00:00',
+                                    'Options' => [
+                                        'string' => 'Daytime',
                                     ],
-                                    [
-                                        'From'    => '18:00:00',
-                                        'Options' => [
-                                            'string' => 'Evening',
-                                        ],
-                                        'To'      => '20:00:00',
+                                    'To'      => '18:30:00',
+                                ],
+                                [
+                                    'From'    => '18:00:00',
+                                    'Options' => [
+                                        'string' => 'Evening',
                                     ],
+                                    'To'      => '20:00:00',
                                 ],
                             ],
                         ],
-                    ]
+                    ],
                 ]
-            ])),
+            ]
+        ];
+        $mock = new MockHandler([
+            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode($payload)),
         ]);
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();
@@ -352,7 +352,11 @@ class TimeframeServiceRestTest extends \PHPUnit_Framework_TestCase
                 ])
         );
 
+        // Should be a ResponeTimefarmes instance
         $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\ResponseTimeframes', $responseTimeframes);
+        // Check for data loss
+        $this->assertEquals(5, count($responseTimeframes->getReasonNoTimeframes()));
         $this->assertEquals(6, count($responseTimeframes->getTimeframes()));
+        $this->assertEquals(json_encode($payload), json_encode($responseTimeframes));
     }
 }

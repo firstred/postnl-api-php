@@ -33,13 +33,11 @@ use Sabre\Xml\Reader;
 use Sabre\Xml\Service as XmlService;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
 use ThirtyBees\PostNL\Entity\Request\GetTimeframes;
-use ThirtyBees\PostNL\Entity\Response\GenerateLabelResponse;
 use ThirtyBees\PostNL\Entity\Response\ResponseTimeframes;
 use ThirtyBees\PostNL\Entity\SOAP\Security;
 use ThirtyBees\PostNL\Exception\ApiException;
 use ThirtyBees\PostNL\Exception\CifDownException;
 use ThirtyBees\PostNL\Exception\CifException;
-use ThirtyBees\PostNL\Exception\ResponseException;
 use ThirtyBees\PostNL\PostNL;
 
 /**
@@ -123,9 +121,6 @@ class TimeframeService extends AbstractService
             /** @var ResponseTimeframes $object */
             $object = AbstractEntity::jsonDeserialize(['ResponseTimeframes' => $body]);
             $this->setService($object);
-
-            global $logger;
-            $logger->debug(json_encode($object));
 
             return $object;
         }

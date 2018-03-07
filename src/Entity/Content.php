@@ -55,7 +55,7 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  */
 class Content extends AbstractEntity
 {
-    /** @var string[] $defaultProperties */
+    /** @var string[][] $defaultProperties */
     public static $defaultProperties = [
         'Barcode'        => [
             'CountryOfOrigin' => BarcodeService::DOMAIN_NAMESPACE,

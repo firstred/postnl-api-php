@@ -51,7 +51,7 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  */
 class Contact extends AbstractEntity
 {
-    /** @var string[] $defaultProperties */
+    /** @var string[][] $defaultProperties */
     public static $defaultProperties = [
         'Barcode'        => [
             'ContactType' => BarcodeService::DOMAIN_NAMESPACE,

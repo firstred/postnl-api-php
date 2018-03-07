@@ -57,7 +57,7 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  */
 class OpeningHours extends AbstractEntity
 {
-    /** @var string[] $defaultProperties */
+    /** @var string[][] $defaultProperties */
     public static $defaultProperties = [
         'Barcode'        => [
             'Monday'    => BarcodeService::DOMAIN_NAMESPACE,

@@ -51,7 +51,7 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  */
 class Group extends AbstractEntity
 {
-    /** @var string[] $defaultProperties */
+    /** @var string[][] $defaultProperties */
     public static $defaultProperties = [
         'Barcode'        => [
             'GroupCount'    => BarcodeService::DOMAIN_NAMESPACE,

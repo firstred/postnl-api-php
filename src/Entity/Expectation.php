@@ -47,7 +47,7 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  */
 class Expectation extends AbstractEntity
 {
-    /** @var string[] $defaultProperties */
+    /** @var string[][] $defaultProperties */
     public static $defaultProperties = [
         'Barcode'        => [
             'ETAFrom' => BarcodeService::DOMAIN_NAMESPACE,

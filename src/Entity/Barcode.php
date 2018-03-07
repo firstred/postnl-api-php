@@ -49,7 +49,7 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  */
 class Barcode extends AbstractEntity
 {
-    /** @var string[] $defaultProperties */
+    /** @var string[][] $defaultProperties */
     public static $defaultProperties = [
         'Barcode'        => [
             'Type'  => BarcodeService::DOMAIN_NAMESPACE,

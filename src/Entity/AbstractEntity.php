@@ -107,6 +107,8 @@ abstract class AbstractEntity implements \JsonSerializable, XmlSerializable
             $propertyName = 'id';
         } elseif ($propertyName === 'CurrentService') {
             $propertyName = 'currentService';
+        } elseif ($propertyName === 'ReasonNotimeframes') {
+            $propertyName = 'ReasonNoTimeframes';
         }
 
         if ($methodName === 'get') {
@@ -206,12 +208,25 @@ abstract class AbstractEntity implements \JsonSerializable, XmlSerializable
             if (!$fullClassName && substr($key, -1) === 's') {
                 $fullClassName = static::getFullEntityClassName(substr($key, 0, strlen($key) - 1));
                 $propertyName = substr($propertyName, 0, strlen($propertyName) - 1);
+                // Timeframe fix
+                if ($propertyName === 'ReasonNotimeframe') {
+                    $propertyName = 'ReasonNoTimeframe';
+                }
             }
 
             if (is_array($value) && is_subclass_of($fullClassName, AbstractEntity::class)) {
                 $entities = [];
-                foreach ($value as $item) {
-                    $entities[] = static::jsonDeserialize([$propertyName => $item]);
+                foreach ($value as $name => $item) {
+                    if ($key === 'ReasonNotimeframes' && $name === 'ReasonNoTimeframe'
+                        || $key === 'Timeframes' && $name === 'Timeframe'
+                        || $key === 'Timeframes' && $name === 'TimeframeTimeFrame'
+                    ) {
+                        foreach ($item as $val) {
+                            $entities[] = static::jsonDeserialize([$name => $val]);
+                        }
+                    } else {
+                        $entities[] = static::jsonDeserialize([$propertyName => $item]);
+                    }
                 }
                 $object->{'set'.$key}($entities);
             } else {

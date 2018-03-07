@@ -31,6 +31,7 @@ use Sabre\Xml\Writer;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
 use ThirtyBees\PostNL\Entity\ReasonNoTimeframe;
 use ThirtyBees\PostNL\Entity\Timeframe;
+use ThirtyBees\PostNL\Entity\TimeframeTimeFrame;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
@@ -52,7 +53,7 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  */
 class ResponseTimeframes extends AbstractEntity
 {
-    /** @var string[] $defaultProperties */
+    /** @var array $defaultProperties */
     public static $defaultProperties = [
         'Barcode'        => [
             'ReasonNoTimeframes' => BarcodeService::DOMAIN_NAMESPACE,
@@ -105,38 +106,73 @@ class ResponseTimeframes extends AbstractEntity
     }
 
     /**
-     * Return a serializable array for the XMLWriter
+     * Return a serializable array for `json_encode`
      *
-     * @param Writer $writer
-     *
-     * @return void
-     * @throws InvalidArgumentException
+     * @return array
      */
-    public function xmlSerialize(Writer $writer)
+    public function jsonSerialize()
     {
-        $xml = [];
+        $json = [];
         if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
-            throw new InvalidArgumentException('Service not set before serialization');
+            return $json;
         }
 
-        foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if ($propertyName === 'ReasonNoTimeframes') {
-                $noTimeframes = [];
-                foreach ($this->ReasonNoTimeframes as $noTimeframe) {
-                    $options[] = ["{{$namespace}}ReasonNoTimeframe" => $noTimeframe];
+        foreach (array_keys(static::$defaultProperties[$this->currentService]) as $propertyName) {
+            if (isset($this->{$propertyName})) {
+                if ($propertyName === 'ReasonNoTimeframes') {
+                    $noTimeframes = [];
+                    foreach ($this->ReasonNoTimeframes as $noTimeframe) {
+                        $noTimeframes[] = $noTimeframe;
+                    }
+                    $json['ReasonNotimeframes'] = ['ReasonNoTimeframe' => $noTimeframes];
+                } elseif ($propertyName === 'Timeframes') {
+                    $timeframes = [];
+                    foreach ($this->Timeframes as $timeframe) {
+                        $timeframes[] = $timeframe;
+                    }
+                    $json[$propertyName] = ['Timeframe' => $timeframes];
+                } else {
+                    $json[$propertyName] = $this->{$propertyName};
                 }
-                $xml["{{$namespace}}ReasonNoTimeframes"] = $noTimeframes;
-            } elseif ($propertyName === 'Timeframes') {
-                $timeframes = [];
-                foreach ($this->Timeframes as $timeframe) {
-                    $timeframes[] = ["{{$namespace}}Timeframe" => $timeframe];
-                }
-                $xml["{{$namespace}}Timeframes"] = $timeframes;
-            } elseif (!is_null($this->{$propertyName})) {
-                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
             }
         }
 
-        $writer->write($xml);
+        return $json;
     }
+//
+//    /**
+//     * Return a serializable array for the XMLWriter
+//     *
+//     * @param Writer $writer
+//     *
+//     * @return void
+//     * @throws InvalidArgumentException
+//     */
+//    public function xmlSerialize(Writer $writer)
+//    {
+//        $xml = [];
+//        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
+//            throw new InvalidArgumentException('Service not set before serialization');
+//        }
+//
+//        foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
+//            if ($propertyName === 'ReasonNoTimeframes') {
+//                $noTimeframes = [];
+//                foreach ($this->ReasonNoTimeframes as $noTimeframe) {
+//                    $options[] = ["{{$namespace}}ReasonNoTimeFrame" => $noTimeframe];
+//                }
+//                $xml["{{$namespace}}ReasonNoTimeframes"] = $noTimeframes;
+//            } elseif ($propertyName === 'Timeframes') {
+//                $timeframes = [];
+//                foreach ($this->Timeframes as $timeframe) {
+//                    $timeframes[] = ["{{$namespace}}Timeframe" => $timeframe];
+//                }
+//                $xml["{{$namespace}}Timeframes"] = $timeframes;
+//            } elseif (!is_null($this->{$propertyName})) {
+//                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
+//            }
+//        }
+//
+//        $writer->write($xml);
+//    }
 }

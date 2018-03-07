@@ -47,7 +47,7 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  */
 class CoordinatesNorthWest extends AbstractEntity
 {
-    /** @var string[] $defaultProperties */
+    /** @var string[][] $defaultProperties */
     public static $defaultProperties = [
         'Barcode'        => [
             'Latitude'  => BarcodeService::DOMAIN_NAMESPACE,

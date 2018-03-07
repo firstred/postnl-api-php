@@ -59,7 +59,7 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  */
 class Amount extends AbstractEntity
 {
-    /** @var string[] $defaultProperties */
+    /** @var string[][] $defaultProperties */
     public static $defaultProperties = [
         'Barcode'    => [
             'AccountName'       => BarcodeService::DOMAIN_NAMESPACE,

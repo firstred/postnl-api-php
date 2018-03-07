@@ -53,7 +53,7 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  */
 class Dimension extends AbstractEntity
 {
-    /** @var string[] $defaultProperties */
+    /** @var string[][] $defaultProperties */
     public static $defaultProperties = [
         'Barcode'        => [
             'Height' => BarcodeService::DOMAIN_NAMESPACE,

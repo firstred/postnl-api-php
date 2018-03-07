@@ -49,7 +49,7 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  */
 class CutOffTime extends AbstractEntity
 {
-    /** @var string[] $defaultProperties */
+    /** @var string[][] $defaultProperties */
     public static $defaultProperties = [
         'Barcode'        => [
             'Day'       => BarcodeService::DOMAIN_NAMESPACE,
