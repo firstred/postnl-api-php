@@ -1046,17 +1046,25 @@ class PostNL implements LoggerAwareInterface
                 $results[$uuid] = $results;
             }
         }
-        foreach ($results as $type => $result) {
-            if (!$result instanceof \Response) {
-                throw new ResponseException('Invalid multi-request', null, null, $result);
-            } else {
+        foreach ($responses as $type => $response) {
+            if (!$response instanceof \Response) {
+                throw new ResponseException('Invalid multi-request', null, null, $response);
+            } elseif ($response->getStatusCode() === 200) {
                 switch ($type) {
                     case 'timeframes':
+                        $itemTimeframe->set(\GuzzleHttp\Psr7\str($response));
+                        $this->getTimeframeService()->cacheItem($itemTimeframe);
 
                         break;
                     case 'locations':
+                        $itemLocation->set(\GuzzleHttp\Psr7\str($response));
+                        $this->getLocationService()->cacheItem($itemLocation);
+
                         break;
                     case 'delivery_date':
+                        $itemDeliveryDate->set(\GuzzleHttp\Psr7\str($response));
+                        $this->getDeliveryDateService()->cacheItem($itemDeliveryDate);
+
                         break;
                 }
             }
