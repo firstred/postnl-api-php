@@ -14,8 +14,7 @@ improved performance.
 
 ## Important notice
 The PHP bindings can connect to both PostNL's SOAP and REST API.  
-The library is still a work-in-progress, but the Barcode, Labelling and Confirming will 
-hopefully be completed soon.
+The library is still a work-in-progress, but is expected to hit stable status soon.
 
 ### Status
 | Service                                     | Status REST               | Status SOAP               | Version |
@@ -37,11 +36,11 @@ hopefully be completed soon.
 | Barcode webservice                          | beta                      | beta                      | 1.1     |
 | Labelling webservice                        | beta                      | beta                      | 2.1     |
 | Confirming webservice                       | beta                      | beta                      | 1.10    |
-| Shippingstatus webservice                   | alpha                     | alpha                     | 1.6     |
+| Shippingstatus webservice                   | beta                      | beta                      | 1.6     |
 | **Delivery Options**                        |                           |                           |         |
-| Deliverydate webservice                     | alpha                     | alpha                     | 2.2     |
-| Location webservice                         | alpha                     | alpha                     | 2.1     |
-| Timeframe webservice                        | alpha                     | alpha                     | 2.1     |
+| Deliverydate webservice                     | beta                      | beta                      | 2.2     |
+| Location webservice                         | beta                      | beta                      | 2.1     |
+| Timeframe webservice                        | beta                      | beta                      | 2.1     |
 | **Mail**                                    |                           |                           |         |
 | Bulkmail webservice                         | N/A                       | N/A                       | N/A     |
 
