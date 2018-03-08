@@ -27,7 +27,10 @@
 namespace ThirtyBees\PostNL\Tests\Service;
 
 use Cache\Adapter\Void\VoidCachePool;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
 use Psr\Log\LoggerInterface;
 use ThirtyBees\PostNL\Entity\Address;
 use ThirtyBees\PostNL\Entity\Customer;
@@ -35,6 +38,7 @@ use ThirtyBees\PostNL\Entity\Message\Message;
 use ThirtyBees\PostNL\Entity\Request\GetTimeframes;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
 use ThirtyBees\PostNL\Entity\Timeframe;
+use ThirtyBees\PostNL\HttpClient\MockClient;
 use ThirtyBees\PostNL\PostNL;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
@@ -165,5 +169,95 @@ class TimeframeServiceSoapTest extends \PHPUnit_Framework_TestCase
  </soap:Body>
 </soap:Envelope>
 ", (string) $request->getBody());
+    }
+
+    /**
+     * @testdox can retrieve the available timeframes
+     */
+    public function testGetTimeframesSoap()
+    {
+        $mock = new MockHandler([
+            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], '<s:Envelope xmlns:a="http://postnl.nl/cif/domain/TimeframeWebService/"
+            xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays"
+            xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+    <s:Body>
+        <ResponseTimeframes xmlns="http://postnl.nl/cif/services/TimeframeWebService/"
+                          xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <a:ReasonNoTimeframes>
+                <a:ReasonNoTimeframe>
+                    <a:Code>05</a:Code>
+                    <a:Date>09-03-2018</a:Date>
+                    <a:Description>Geen avondbelevering mogelijk</a:Description>
+                    <a:Options>
+                        <b:string>Evening</b:string>
+                    </a:Options>
+                </a:ReasonNoTimeframe>
+                <a:ReasonNoTimeframe>
+                    <a:Code>05</a:Code>
+                    <a:Date>10-03-2018</a:Date>
+                    <a:Description>Geen avondbelevering mogelijk</a:Description>
+                    <a:Options>
+                        <b:string>Evening</b:string>
+                    </a:Options>
+                </a:ReasonNoTimeframe>
+            </a:ReasonNoTimeframes>
+            <a:Timeframes>
+                <a:Timeframe>
+                    <a:Date>09-03-2018</a:Date>
+                    <a:Timeframes>
+                        <a:TimeframeTimeFrame>
+                            <a:From>10:15:00</a:From>
+                            <a:Options>
+                                <b:string>Daytime</b:string>
+                            </a:Options>
+                            <a:To>12:45:00</a:To>
+                        </a:TimeframeTimeFrame>
+                    </a:Timeframes>
+                </a:Timeframe>
+                <a:Timeframe>
+                    <a:Date>10-03-2018</a:Date>
+                    <a:Timeframes>
+                        <a:TimeframeTimeFrame>
+                            <a:From>09:30:00</a:From>
+                            <a:Options>
+                                <b:string>Daytime</b:string>
+                            </a:Options>
+                            <a:To>12:00:00</a:To>
+                        </a:TimeframeTimeFrame>
+                    </a:Timeframes>
+                </a:Timeframe>
+            </a:Timeframes>
+        </ResponseTimeframes>
+    </s:Body>
+</s:Envelope>'),
+        ]);
+        $handler = HandlerStack::create($mock);
+        $mockClient = new MockClient();
+        $mockClient->setHandler($handler);
+        $this->postnl->setHttpClient($mockClient);
+
+        $responseTimeframes = $this->postnl->getTimeframes(
+            (new GetTimeframes())
+                ->setTimeframe([(new Timeframe())
+                                    ->setCity('Hoofddorp')
+                                    ->setCountryCode('NL')
+                                    ->setEndDate('02-07-2016')
+                                    ->setHouseNr('42')
+                                    ->setHouseNrExt('A')
+                                    ->setOptions([
+                                        'Evening',
+                                    ])
+                                    ->setPostalCode('2132WT')
+                                    ->setStartDate('30-06-2016')
+                                    ->setStreet('Siriusdreef')
+                                    ->setSundaySorting(false)
+                ])
+        );
+
+        // Should be a ResponeTimefarmes instance
+        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\ResponseTimeframes', $responseTimeframes);
+        // Check for data loss
+        $this->assertEquals(2, count($responseTimeframes->getReasonNoTimeframes()));
+        $this->assertEquals(2, count($responseTimeframes->getTimeframes()));
     }
 }
