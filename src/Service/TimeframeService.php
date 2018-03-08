@@ -120,6 +120,8 @@ class TimeframeService extends AbstractService
                 $item->set(\GuzzleHttp\Psr7\str($response));
                 $this->cacheItem($item);
             }
+
+            return $object;
         }
 
         throw new ApiException('Unable to retrieve timeframes');
@@ -132,11 +134,8 @@ class TimeframeService extends AbstractService
      *
      * @return ResponseTimeframes
      *
-     * @throws CifDownException
-     * @throws CifException
+     * @throws ApiException
      * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \Sabre\Xml\LibXMLException
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
     public function getTimeframesSOAP(GetTimeframes $getTimeframes)
     {
