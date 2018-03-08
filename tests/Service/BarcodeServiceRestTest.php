@@ -155,7 +155,6 @@ class BarcodeServiceRestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
     }
 
-
     /**
      * @param string $type
      *
@@ -188,6 +187,27 @@ class BarcodeServiceRestTest extends \PHPUnit_Framework_TestCase
         $this->postnl->setHttpClient($mockClient);
 
         $this->assertEquals('3SDEVC816223392', $this->postnl->generateBarcode('3S'));
+    }
+
+    /**
+     * @testdox return a valid single barcode for a country
+     *
+     * @throws \ThirtyBees\PostNL\Exception\InvalidBarcodeException
+     * @throws \ThirtyBees\PostNL\Exception\InvalidConfigurationException
+     */
+    public function testSingleBarCodeByCountryRest()
+    {
+        $mock = new MockHandler([
+            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode([
+                'Barcode' => '3SDEVC816223392',
+            ])),
+        ]);
+        $handler = HandlerStack::create($mock);
+        $mockClient = new MockClient();
+        $mockClient->setHandler($handler);
+        $this->postnl->setHttpClient($mockClient);
+
+        $this->assertEquals('3SDEVC816223392', $this->postnl->generateBarcodeByCountryCode('NL'));
     }
 
     /**
