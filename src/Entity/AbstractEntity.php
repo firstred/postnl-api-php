@@ -285,7 +285,11 @@ abstract class AbstractEntity implements \JsonSerializable, XmlSerializable
 
             if (!$value['value']) {
                 $object->{'set'.$shortClassName}($value['value']);
-            } elseif (is_array($value['value']) && count($value['value']) >= 1 && is_subclass_of($fullClassName, AbstractEntity::class)) {
+            } elseif (is_array($value['value'])
+                && count($value['value']) >= 1
+                && !in_array($shortClassName, ['Customer'])
+                && is_subclass_of($fullClassName, AbstractEntity::class)
+            ) {
                 $entities = [];
                 foreach (array_values($value['value']) as $item) {
                     $entities[] = static::xmlDeserialize([$item]);

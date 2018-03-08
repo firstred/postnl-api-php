@@ -331,7 +331,7 @@ xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">
         $mockClient->setHandler($handler);
         $this->postnl->setHttpClient($mockClient);
 
-        $label = $this->postnl->confirmShipments([
+        $confirmShipments = $this->postnl->confirmShipments([
                 (new Shipment())
                     ->setAddresses([
                         Address::create([
@@ -389,7 +389,7 @@ xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">
             ]
         );
 
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\ConfirmingResponseShipment', $label[1]);
+        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\ConfirmingResponseShipment', $confirmShipments[1]);
     }
 
     /**

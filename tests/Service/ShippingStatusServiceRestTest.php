@@ -27,7 +27,10 @@
 namespace ThirtyBees\PostNL\Tests\Service;
 
 use Cache\Adapter\Void\VoidCachePool;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
 use Psr\Log\LoggerInterface;
 use ThirtyBees\PostNL\Entity\Address;
 use ThirtyBees\PostNL\Entity\Customer;
@@ -37,6 +40,7 @@ use ThirtyBees\PostNL\Entity\Request\CurrentStatus;
 use ThirtyBees\PostNL\Entity\Request\GetSignature;
 use ThirtyBees\PostNL\Entity\Shipment;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
+use ThirtyBees\PostNL\HttpClient\MockClient;
 use ThirtyBees\PostNL\PostNL;
 use ThirtyBees\PostNL\Service\ShippingStatusService;
 
@@ -128,6 +132,99 @@ class ShippingStatusRestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('test', $request->getHeaderLine('apikey'));
         $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
         $this->assertEquals("/shipment/v1_6/status/barcode/$barcode", $request->getUri()->getPath());
+    }
+
+    /**
+     * @testdox can get the current status
+     */
+    public function testGetCurrentStatusRest()
+    {
+        $mock = new MockHandler([
+            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], '{
+  "CurrentStatus": {
+    "Shipment": {
+      "MainBarcode": "3SDEVC302392342",
+      "Barcode": "3SDEVC302392342",
+      "ShipmentAmount": "1",
+      "ShipmentCounter": "1",
+      "Customer": {
+        "CustomerCode": "DEVC",
+        "CustomerNumber": "11223344",
+        "Name": "kja fasdfasdf"
+      },
+      "ProductCode": "003089",
+      "ProductDescription": "Handtek. voor Ontvangst\/Alleen huisadres",
+      "Reference": "SK123456",
+      "Dimension": {
+        "Height": "110",
+        "Length": "255",
+        "Volume": "5330",
+        "Weight": "260",
+        "Width": "190"
+      },
+      "Address": [
+        {
+          "AddressType": "01",
+          "Building": {},
+          "City": "Nijmegen",
+          "CompanyName": {},
+          "CountryCode": "NL",
+          "DepartmentName": {},
+          "District": {},
+          "FirstName": "A",
+          "Floor": {},
+          "HouseNumber": "12",
+          "HouseNumberSuffix": {},
+          "LastName": "B",
+          "Region": {},
+          "Remark": {},
+          "Street": "Ergens",
+          "Zipcode": "1234GN"
+        },
+        {
+          "AddressType": "02",
+          "Building": {},
+          "City": "Hoofddorp",
+          "CompanyName": "PostNL",
+          "CountryCode": "NL",
+          "DepartmentName": {},
+          "District": {},
+          "FirstName": {},
+          "Floor": {},
+          "HouseNumber": "42",
+          "HouseNumberSuffix": {},
+          "LastName": {},
+          "Region": {},
+          "Remark": {},
+          "Street": "Siriusdreef",
+          "Zipcode": "3212WT"
+        }
+      ],
+      "Status": {
+        "TimeStamp": "07-03-2018 23:20:05",
+        "StatusCode": "2",
+        "StatusDescription": "Zending in ontvangst genomen",
+        "PhaseCode": "1",
+        "PhaseDescription": "Collectie"
+      }
+    }
+  }
+}
+')]);
+        $handler = HandlerStack::create($mock);
+        $mockClient = new MockClient();
+        $mockClient->setHandler($handler);
+        $this->postnl->setHttpClient($mockClient);
+
+        $currentStatusResponse = $this->postnl->getCurrentStatus(
+            (new CurrentStatus())
+                ->setShipment(
+                    (new Shipment())
+                        ->setBarcode('3S8392302392342')
+                )
+        );
+
+        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\CurrentStatusResponse', $currentStatusResponse);
     }
 
     /**
@@ -241,6 +338,175 @@ class ShippingStatusRestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('test', $request->getHeaderLine('apikey'));
         $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
         $this->assertEquals("/shipment/v1_6/status/barcode/$barcode", $request->getUri()->getPath());
+    }
+
+    /**
+     * @testdox can retrieve the complete status
+     */
+    public function testGetCompleteStatusRest()
+    {
+        $mock = new MockHandler([
+            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], '{
+  "CompleteStatus": {
+    "Shipment": {
+      "MainBarcode": "33DEVC123456789",
+      "Barcode": "3SDEVC123456789",
+      "ShipmentAmount": "1",
+      "ShipmentCounter": "1",
+      "Customer": {
+        "CustomerCode": "DEVC",
+        "CustomerNumber": "11223344",
+        "Name": "ASDFASDFASDFASFDD"
+      },
+      "ProductCode": "003089",
+      "ProductDescription": "Handtek. voor Ontvangst\/Alleen huisadres",
+      "Reference": "DF00DF91",
+      "Dimension": {
+        "Height": "110",
+        "Length": "255",
+        "Volume": "5330",
+        "Weight": "260",
+        "Width": "190"
+      },
+      "Address": [
+        {
+          "AddressType": "01",
+          "Building": {},
+          "City": "Nijmegen",
+          "CompanyName": {},
+          "CountryCode": "NL",
+          "DepartmentName": {},
+          "District": {},
+          "FirstName": "SADFASDF",
+          "Floor": {},
+          "HouseNumber": "12",
+          "HouseNumberSuffix": {},
+          "LastName": "SAD ASDF",
+          "Region": {},
+          "Remark": {},
+          "Street": "ASDFDFDFD",
+          "Zipcode": "1234DF"
+        },
+        {
+          "AddressType": "02",
+          "Building": {},
+          "City": "ASDFD DF ASDFDFDFD",
+          "CompanyName": "ASD ASDFASDF DF",
+          "CountryCode": "NL",
+          "DepartmentName": {},
+          "District": {},
+          "FirstName": {},
+          "Floor": {},
+          "HouseNumber": "7",
+          "HouseNumberSuffix": {},
+          "LastName": {},
+          "Region": {},
+          "Remark": {},
+          "Street": "ASDFASDFASDD ASDFASDFASDF",
+          "Zipcode": "1234DF"
+        }
+      ],
+      "Event": [
+        {
+          "Code": "01B",
+          "Description": "Zending is bij PostNL",
+          "DestinationLocationCode": "156731",
+          "LocationCode": "166886",
+          "RouteCode": "419",
+          "RouteName": "419 Nm-Altrada",
+          "TimeStamp": "07-03-2018 23:20:05"
+        },
+        {
+          "Code": "01A",
+          "Description": "Zending wordt verwacht, maar zit nog niet in sorteerproces",
+          "DestinationLocationCode": {},
+          "LocationCode": "888888",
+          "RouteCode": {},
+          "RouteName": {},
+          "TimeStamp": "07-03-2018 09:51:08"
+        },
+        {
+          "Code": "01A",
+          "Description": "Zending wordt verwacht, maar zit nog niet in sorteerproces",
+          "DestinationLocationCode": {},
+          "LocationCode": "888888",
+          "RouteCode": {},
+          "RouteName": {},
+          "TimeStamp": "07-03-2018 09:50:47"
+        }
+      ],
+      "Expectation": {
+        "ETAFrom": "2018-03-08T11:30:00",
+        "ETATo": "2018-03-08T14:00:00"
+      },
+      "Status": {
+        "TimeStamp": "07-03-2018 23:20:05",
+        "StatusCode": "2",
+        "StatusDescription": "Zending in ontvangst genomen",
+        "PhaseCode": "1",
+        "PhaseDescription": "Collectie"
+      },
+      "OldStatus": [
+        {
+          "TimeStamp": "07-03-2018 23:22:56.326",
+          "StatusCode": "99",
+          "StatusDescription": "Niet van toepassing",
+          "PhaseCode": "99",
+          "PhaseDescription": "Niet van toepassing"
+        },
+        {
+          "TimeStamp": "07-03-2018 23:20:05",
+          "StatusCode": "2",
+          "StatusDescription": "Zending in ontvangst genomen",
+          "PhaseCode": "1",
+          "PhaseDescription": "Collectie"
+        },
+        {
+          "TimeStamp": "07-03-2018 09:55:35.976",
+          "StatusCode": "99",
+          "StatusDescription": "Niet van toepassing",
+          "PhaseCode": "99",
+          "PhaseDescription": "Niet van toepassing"
+        },
+        {
+          "TimeStamp": "07-03-2018 09:51:08",
+          "StatusCode": "1",
+          "StatusDescription": "Zending voorgemeld",
+          "PhaseCode": "1",
+          "PhaseDescription": "Collectie"
+        },
+        {
+          "TimeStamp": "07-03-2018 09:50:47",
+          "StatusCode": "1",
+          "StatusDescription": "Zending voorgemeld",
+          "PhaseCode": "1",
+          "PhaseDescription": "Collectie"
+        }
+      ]
+    }
+  }
+}
+')]);
+        $handler = HandlerStack::create($mock);
+        $mockClient = new MockClient();
+        $mockClient->setHandler($handler);
+        $this->postnl->setHttpClient($mockClient);
+
+        $completeStatusResponse = $this->postnl->getCompleteStatus(
+            (new CompleteStatus())
+                ->setShipment(
+                    (new Shipment())
+                        ->setBarcode('3SABCD6659149')
+                )
+        );
+
+        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\CompleteStatusResponse', $completeStatusResponse);
+        $this->assertEquals(2, count($completeStatusResponse->getShipments()[0]->getAddresses()));
+        $this->assertEquals(0, count($completeStatusResponse->getShipments()[0]->getAmounts()));
+        $this->assertEquals(3, count($completeStatusResponse->getShipments()[0]->getEvents()));
+        $this->assertEquals(0, count($completeStatusResponse->getShipments()[0]->getGroups()));
+        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Customer', $completeStatusResponse->getShipments()[0]->getCustomer());
+        $this->assertEquals('07-03-2018 09:50:47', $completeStatusResponse->getShipments()[0]->getOldStatuses()[4]->getTimeStamp());
     }
 
     /**
@@ -365,124 +631,32 @@ class ShippingStatusRestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("/shipment/v1_6/status/signature/$barcode", $request->getUri()->getPath());
     }
 
-//    /**
-//     * @testdox can generate a single label
-//     *
-//     * @throws \ReflectionException
-//     */
-//    public function testGetCurrentStatusRest()
-//    {
-//        [
-//            'Shipments' => [
-//                [
-//                    'Addresses' => [
-//                        [
-//                            'AddressType'
-//                        ]
-//                    ]
-//                ]
-//            ]
-//        ]
-//        /*
-//        <a:Shipments>
-//         <a:CurrentStatusResponseShipment>
-//           <a:Addresses>
-//             <a:ResponseAddress>
-//               <a:AddressType>01</a:AddressType>
-//               <a:City>Hoofddorp</a:City>
-//               <a:CountryCode>NL</a:CountryCode>
-//               <a:LastName>de Ruiter</a:LastName>
-//               <a:RegistrationDate>01-01-0001 00:00:00</a:RegistrationDate>
-//               <a:Street>Siriusdreef</a:Street>
-//               <a:Zipcode>2132WT</a:Zipcode>
-//             </a:ResponseAddress>
-//             <a:ResponseAddress>
-//               <a:AddressType>02</a:AddressType>
-//               <a:City>Vianen</a:City>
-//               <a:CompanyName>PostNL</a:CompanyName>
-//               <a:CountryCode>NL</a:CountryCode>
-//               <a:HouseNumber>1</a:HouseNumber>
-//               <a:HouseNumberSuffix>A</a:HouseNumberSuffix>
-//               <a:RegistrationDate>01-01-0001 00:00:00</a:RegistrationDate>
-//               <a:Street>Lage Biezenweg</a:Street>
-//               <a:Zipcode>4131LV</a:Zipcode>
-//             </a:ResponseAddress>
-//           </a:Addresses>
-//           <a:Barcode>3SABCD6659149</a:Barcode>
-//           <a:Groups>
-//             <a:ResponseGroup>
-//               <a:GroupType>4</a:GroupType>
-//               <a:MainBarcode>3SABCD6659149</a:MainBarcode>
-//               <a:ShipmentAmount>1</a:ShipmentAmount>
-//               <a:ShipmentCounter>1</a:ShipmentCounter>
-//             </a:ResponseGroup>
-//           </a:Groups>
-//           <a:ProductCode>003052</a:ProductCode>
-//           <a:Reference>2016014567</a:Reference>
-//           <a:Status>
-//             <a:CurrentPhaseCode>4</a:CurrentPhaseCode>
-//             <a:CurrentPhaseDescription>Afgeleverd</a:CurrentPhaseDescription>
-//             <a:CurrentStatusCode>11</a:CurrentStatusCode>
-//             <a:CurrentStatusDescription>Zending afgeleverd</a:CurrentStatusDescription>
-//             <a:CurrentStatusTimeStamp>06-06-2016 18:00:41</a:CurrentStatusTimeStamp>
-//           </a:Status>
-//         </a:CurrentStatusResponseShipment>
-//       </a:Shipments>
-//        */
-//
-//
-//        $mock = new MockHandler([
-//            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode([
-//                'MergedLabels' => [],
-//                'ResponseShipments' => [
-//                    [
-//                        'Barcode' => '3SDEVC201611210',
-//                        'DownPartnerLocation' => [],
-//                        'ProductCodeDelivery' => '3085',
-//                        'Labels' => [
-//                            [
-//                                'Labeltype' => 'Label',
-//                            ]
-//                        ]
-//                    ]
-//                ]
-//            ])),
-//        ]);
-//        $handler = HandlerStack::create($mock);
-//        $mockClient = new MockClient();
-//        $mockClient->setHandler($handler);
-//        $this->postnl->setHttpClient($mockClient);
-//
-//        $label = $this->postnl->generateLabel(
-//            (new Shipment())
-//                ->setAddresses([
-//                    Address::create([
-//                        'AddressType' => '01',
-//                        'City'        => 'Utrecht',
-//                        'Countrycode' => 'NL',
-//                        'FirstName'   => 'Peter',
-//                        'HouseNr'     => '9',
-//                        'HouseNrExt'  => 'a bis',
-//                        'Name'        => 'de Ruijter',
-//                        'Street'      => 'Bilderdijkstraat',
-//                        'Zipcode'     => '3521VA',
-//                    ]),
-//                    Address::create([
-//                        'AddressType' => '02',
-//                        'City'        => 'Hoofddorp',
-//                        'CompanyName' => 'PostNL',
-//                        'Countrycode' => 'NL',
-//                        'HouseNr'     => '42',
-//                        'Street'      => 'Siriusdreef',
-//                        'Zipcode'     => '2132WT',
-//                    ]),
-//                ])
-//                ->setBarcode('3S1234567890123')
-//                ->setDeliveryAddress('01')
-//                ->setDimension(new Dimension('2000'))
-//                ->setProductCodeDelivery('3085')
-//        );
-//
-//        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\GenerateLabelResponse', $label);
-//    }
+    /**
+     * @testdox can get the signature
+     */
+    public function testGetSignatureRest()
+    {
+        $mock = new MockHandler([
+            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], '{
+  "Signature": {
+    "Barcode": "3SDEVC123456789",
+    "SignatureDate": "2018-03-07T13:52:45.000+01:00",
+    "SignatureImage": "R0lGODdh8ACRADMAACwAAAAA8ACRAIMAAACAAAAAgACAgAAAAICAAIAAgICAgIDAwMD\/AAAA\/wD\/\/wAAAP\/\/AP8A\/\/\/\/\/\/8E\/\/DJSau9OOvNu\/8XAIBkaZ5oqq5sW4miK890bd8rHON87\/9AD+yxCxqPyCRqSBwpn9CoskiUWq\/YGVNCzXq\/YMyWGy6bwePmec1+dtXtuJyX5jrn+HzuDdf7\/x91doCEhSF3FnyGi3mKg4yQeo59kZVtk1WWmmuYmJufboiHoKRZnp6lqT2ooqquQKytr7M3qJS0uDS2trm9ILy8vsIawbLDx0LGYsrIzaO\/zM7StxzB077W1NfT2Znb393d36ri0eO9gtXm57Tp6uzO7u\/wyOJk9Mf29\/jY68T+\/DbpeyRJB8CAEwYSjGNQHsJlLRQGMdjkYEN8EheioVhxQ0OO9P8yasRy0Y6xjyJxOSRx8EfJhHxePnyR0lsUmRVF4ZyZqOW8UIJ0wATJM0NNbT52mnSitOgzLT5VEKUZo6lTiDaOHpKHMqpTrTBrTe1p9apHsGFljCW71mwgr9BYlB0q1G0KtDSXtKVa1+5duCWy7eW70m8HvE\/PFs652PBhwCY69VU82fEeJJUHU\/hoGSrQuYwrd5YLec\/arqJHk57SF\/UQzar\/YnaXBnZs2UZSG9V92wVivtAa99YLq7Ht4ZeTLj6OfDUO3oSbTyz9L5Zw6c51QV9KHXvg7lQp\/\/aOVe0k0OTFQlXGPL36iEG3u3fZfTLn+VJEVr2P\/4r+9v1NFyD\/OQOmMl6BVhyI4E3gLVhGgw5uFKFAEE5oSoUWZqjhhhx26OGHIIYo4ogklmjiiSimqOKKLLbo4oswxijjjDTWaOONOOao44489ujjj0AGKeSQRBZp5JFIJqnkkkw26eSTUEZp5AFUHkCBlVdKUOWWWm6JZZZgToCllzB++cCXZp6pJQZpmmmlm26uKaaLaapp55x3VtBmlnGiKSeeK9YJqJyC5pnnm3ziuSeLhRo6ppdj6gmon3ZGGqaKaFb5J6FskjmpopxemmKdloJ6AaVdeupnqZuOagGrlbIZ5qKrttpoiXF+2uqgsK4J56a3msilnlReCamthvoq6ZnDSunsCLPQRistHhEAADs="
+  }
+}
+')]);
+        $handler = HandlerStack::create($mock);
+        $mockClient = new MockClient();
+        $mockClient->setHandler($handler);
+        $this->postnl->setHttpClient($mockClient);
+
+        $signatureResponse = $this->postnl->getSignature(
+            (new GetSignature())
+                ->setShipment((new Shipment())
+                    ->setBarcode('3SABCD6659149')
+                )
+        );
+
+        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\GetSignatureResponseSignature', $signatureResponse);
+    }
 }

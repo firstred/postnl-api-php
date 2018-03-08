@@ -27,8 +27,6 @@
 namespace ThirtyBees\PostNL\Entity;
 
 use Sabre\Xml\Writer;
-use ThirtyBees\PostNL\Entity\Response\CompleteStatusResponse;
-use ThirtyBees\PostNL\Entity\Response\CompleteStatusResponseShipment;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
@@ -55,6 +53,7 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method Contact[]       getContacts()
  * @method string          getContent()
  * @method string          getCostCenter()
+ * @method Customer        getCustomer()
  * @method string          getCustomerOrderNumber()
  * @method Customs         getCustoms()
  * @method string          getDeliveryAddress()
@@ -62,10 +61,12 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method string          getDownPartnerBarcode()
  * @method string          getDownPartnerID()
  * @method string          getDownPartnerLocation()
+ * @method Event[]         getEvents()
  * @method Group[]         getGroups()
  * @method string          getIDExpiration()
  * @method string          getIDNumber()
  * @method string          getIDType()
+ * @method OldStatus[]     getOldStatuses()
  * @method string          getProductCodeCollect()
  * @method ProductOption[] getProductOptions()
  * @method string          getReceiverDateOfBirth()
@@ -86,6 +87,7 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method Shipment setContacts(Contact[] $contact)
  * @method Shipment setContent(string $content)
  * @method Shipment setCostCenter(string $costCenter)
+ * @method Shipment setCustomer(Customer $customer)
  * @method Shipment setCustomerOrderNumber(string $customerOrderNumber)
  * @method Shipment setCustoms(Customs $customs)
  * @method Shipment setPhaseCode(int $phaseCode)
@@ -96,10 +98,12 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method Shipment setDownPartnerBarcode(string $downPartnerBarcode)
  * @method Shipment setDownPartnerID(string $downPartnerID)
  * @method Shipment setDownPartnerLocation(string $downPartnerLocation)
+ * @method Shipment setEvents(Event[] $events)
  * @method Shipment setGroups(Group[] $groups)
  * @method Shipment setIDExpiration(string $idExpiration)
  * @method Shipment setIDNumber(string $idNumber)
  * @method Shipment setIDType(string $idType)
+ * @method Shipment setOldStatuses(OldStatus[] $oldStatuses)
  * @method Shipment setProductCodeCollect(string $productCodeCollect)
  * @method Shipment setProductOptions(ProductOption[] $productOptions)
  * @method Shipment setReceiverDateOfBirth(string $receiverDateOfBirth)
@@ -115,263 +119,284 @@ class Shipment extends AbstractEntity
     /** @var string[][] $defaultProperties */
     public static $defaultProperties = [
         'Barcode'        => [
-            'Addresses'                       => BarcodeService::DOMAIN_NAMESPACE,
-            'Amounts'                         => BarcodeService::DOMAIN_NAMESPACE,
-            'Barcode'                         => BarcodeService::DOMAIN_NAMESPACE,
-            'CollectionTimeStampEnd'          => BarcodeService::DOMAIN_NAMESPACE,
-            'CollectionTimeStampStart'        => BarcodeService::DOMAIN_NAMESPACE,
-            'Contacts'                        => BarcodeService::DOMAIN_NAMESPACE,
-            'Content'                         => BarcodeService::DOMAIN_NAMESPACE,
-            'CostCenter'                      => BarcodeService::DOMAIN_NAMESPACE,
-            'CustomerOrderNumber'             => BarcodeService::DOMAIN_NAMESPACE,
-            'Customs'                         => BarcodeService::DOMAIN_NAMESPACE,
-            'DateFrom'                        => BarcodeService::DOMAIN_NAMESPACE,
-            'DateTo'                          => BarcodeService::DOMAIN_NAMESPACE,
-            'DeliveryAddress'                 => BarcodeService::DOMAIN_NAMESPACE,
-            'DeliveryTimeStampStart'          => BarcodeService::DOMAIN_NAMESPACE,
-            'DeliveryTimestampEnd'            => BarcodeService::DOMAIN_NAMESPACE,
-            'DeliveryDate'                    => BarcodeService::DOMAIN_NAMESPACE,
-            'Dimension'                       => BarcodeService::DOMAIN_NAMESPACE,
-            'DownPartnerBarcode'              => BarcodeService::DOMAIN_NAMESPACE,
-            'DownPartnerID'                   => BarcodeService::DOMAIN_NAMESPACE,
-            'DownPartnerLocation'             => BarcodeService::DOMAIN_NAMESPACE,
-            'Groups'                          => BarcodeService::DOMAIN_NAMESPACE,
-            'IDExpiration'                    => BarcodeService::DOMAIN_NAMESPACE,
-            'IDNumber'                        => BarcodeService::DOMAIN_NAMESPACE,
-            'IDType'                          => BarcodeService::DOMAIN_NAMESPACE,
-            'PhaseCode'                       => BarcodeService::DOMAIN_NAMESPACE,
-            'ProductCodeCollect'              => BarcodeService::DOMAIN_NAMESPACE,
-            'ProductCodeDelivery'             => BarcodeService::DOMAIN_NAMESPACE,
-            'ProductOptions'                  => BarcodeService::DOMAIN_NAMESPACE,
-            'ReceiverDateOfBirth'             => BarcodeService::DOMAIN_NAMESPACE,
-            'Reference'                       => BarcodeService::DOMAIN_NAMESPACE,
-            'ReferenceCollect'                => BarcodeService::DOMAIN_NAMESPACE,
-            'Remark'                          => BarcodeService::DOMAIN_NAMESPACE,
-            'ReturnBarcode'                   => BarcodeService::DOMAIN_NAMESPACE,
-            'ReturnReference'                 => BarcodeService::DOMAIN_NAMESPACE,
-            'StatusCode'                      => BarcodeService::DOMAIN_NAMESPACE,
+            'Addresses'                => BarcodeService::DOMAIN_NAMESPACE,
+            'Amounts'                  => BarcodeService::DOMAIN_NAMESPACE,
+            'Barcode'                  => BarcodeService::DOMAIN_NAMESPACE,
+            'CollectionTimeStampEnd'   => BarcodeService::DOMAIN_NAMESPACE,
+            'CollectionTimeStampStart' => BarcodeService::DOMAIN_NAMESPACE,
+            'Contacts'                 => BarcodeService::DOMAIN_NAMESPACE,
+            'Content'                  => BarcodeService::DOMAIN_NAMESPACE,
+            'CostCenter'               => BarcodeService::DOMAIN_NAMESPACE,
+            'Customer'                 => BarcodeService::DOMAIN_NAMESPACE,
+            'CustomerOrderNumber'      => BarcodeService::DOMAIN_NAMESPACE,
+            'Customs'                  => BarcodeService::DOMAIN_NAMESPACE,
+            'DateFrom'                 => BarcodeService::DOMAIN_NAMESPACE,
+            'DateTo'                   => BarcodeService::DOMAIN_NAMESPACE,
+            'DeliveryAddress'          => BarcodeService::DOMAIN_NAMESPACE,
+            'DeliveryTimeStampStart'   => BarcodeService::DOMAIN_NAMESPACE,
+            'DeliveryTimestampEnd'     => BarcodeService::DOMAIN_NAMESPACE,
+            'DeliveryDate'             => BarcodeService::DOMAIN_NAMESPACE,
+            'Dimension'                => BarcodeService::DOMAIN_NAMESPACE,
+            'DownPartnerBarcode'       => BarcodeService::DOMAIN_NAMESPACE,
+            'DownPartnerID'            => BarcodeService::DOMAIN_NAMESPACE,
+            'DownPartnerLocation'      => BarcodeService::DOMAIN_NAMESPACE,
+            'Events'                   => BarcodeService::DOMAIN_NAMESPACE,
+            'Groups'                   => BarcodeService::DOMAIN_NAMESPACE,
+            'IDExpiration'             => BarcodeService::DOMAIN_NAMESPACE,
+            'IDNumber'                 => BarcodeService::DOMAIN_NAMESPACE,
+            'IDType'                   => BarcodeService::DOMAIN_NAMESPACE,
+            'OldStatuses'              => BarcodeService::DOMAIN_NAMESPACE,
+            'PhaseCode'                => BarcodeService::DOMAIN_NAMESPACE,
+            'ProductCodeCollect'       => BarcodeService::DOMAIN_NAMESPACE,
+            'ProductCodeDelivery'      => BarcodeService::DOMAIN_NAMESPACE,
+            'ProductOptions'           => BarcodeService::DOMAIN_NAMESPACE,
+            'ReceiverDateOfBirth'      => BarcodeService::DOMAIN_NAMESPACE,
+            'Reference'                => BarcodeService::DOMAIN_NAMESPACE,
+            'ReferenceCollect'         => BarcodeService::DOMAIN_NAMESPACE,
+            'Remark'                   => BarcodeService::DOMAIN_NAMESPACE,
+            'ReturnBarcode'            => BarcodeService::DOMAIN_NAMESPACE,
+            'ReturnReference'          => BarcodeService::DOMAIN_NAMESPACE,
+            'StatusCode'               => BarcodeService::DOMAIN_NAMESPACE,
         ],
         'Confirming'     => [
-            'Addresses'                       => ConfirmingService::DOMAIN_NAMESPACE,
-            'Amounts'                         => ConfirmingService::DOMAIN_NAMESPACE,
-            'Barcode'                         => ConfirmingService::DOMAIN_NAMESPACE,
-            'CollectionTimeStampEnd'          => ConfirmingService::DOMAIN_NAMESPACE,
-            'CollectionTimeStampStart'        => ConfirmingService::DOMAIN_NAMESPACE,
-            'Contacts'                        => ConfirmingService::DOMAIN_NAMESPACE,
-            'Content'                         => ConfirmingService::DOMAIN_NAMESPACE,
-            'CostCenter'                      => ConfirmingService::DOMAIN_NAMESPACE,
-            'CustomerOrderNumber'             => ConfirmingService::DOMAIN_NAMESPACE,
-            'Customs'                         => ConfirmingService::DOMAIN_NAMESPACE,
-            'DateFrom'                        => ConfirmingService::DOMAIN_NAMESPACE,
-            'DateTo'                          => ConfirmingService::DOMAIN_NAMESPACE,
-            'DeliveryAddress'                 => ConfirmingService::DOMAIN_NAMESPACE,
-            'DeliveryTimestampStart'          => ConfirmingService::DOMAIN_NAMESPACE,
-            'DeliveryTimestampEnd'            => ConfirmingService::DOMAIN_NAMESPACE,
-            'DeliveryDate'                    => ConfirmingService::DOMAIN_NAMESPACE,
-            'Dimension'                       => ConfirmingService::DOMAIN_NAMESPACE,
-            'DownPartnerBarcode'              => ConfirmingService::DOMAIN_NAMESPACE,
-            'DownPartnerID'                   => ConfirmingService::DOMAIN_NAMESPACE,
-            'DownPartnerLocation'             => ConfirmingService::DOMAIN_NAMESPACE,
-            'Groups'                          => ConfirmingService::DOMAIN_NAMESPACE,
-            'IDExpiration'                    => ConfirmingService::DOMAIN_NAMESPACE,
-            'IDNumber'                        => ConfirmingService::DOMAIN_NAMESPACE,
-            'IDType'                          => ConfirmingService::DOMAIN_NAMESPACE,
-            'PhaseCode'                       => ConfirmingService::DOMAIN_NAMESPACE,
-            'ProductCodeCollect'              => ConfirmingService::DOMAIN_NAMESPACE,
-            'ProductCodeDelivery'             => ConfirmingService::DOMAIN_NAMESPACE,
-            'ProductOptions'                  => ConfirmingService::DOMAIN_NAMESPACE,
-            'ReceiverDateOfBirth'             => ConfirmingService::DOMAIN_NAMESPACE,
-            'Reference'                       => ConfirmingService::DOMAIN_NAMESPACE,
-            'ReferenceCollect'                => ConfirmingService::DOMAIN_NAMESPACE,
-            'Remark'                          => ConfirmingService::DOMAIN_NAMESPACE,
-            'ReturnBarcode'                   => ConfirmingService::DOMAIN_NAMESPACE,
-            'ReturnReference'                 => ConfirmingService::DOMAIN_NAMESPACE,
-            'StatusCode'                      => ConfirmingService::DOMAIN_NAMESPACE,
+            'Addresses'                => ConfirmingService::DOMAIN_NAMESPACE,
+            'Amounts'                  => ConfirmingService::DOMAIN_NAMESPACE,
+            'Barcode'                  => ConfirmingService::DOMAIN_NAMESPACE,
+            'CollectionTimeStampEnd'   => ConfirmingService::DOMAIN_NAMESPACE,
+            'CollectionTimeStampStart' => ConfirmingService::DOMAIN_NAMESPACE,
+            'Contacts'                 => ConfirmingService::DOMAIN_NAMESPACE,
+            'Content'                  => ConfirmingService::DOMAIN_NAMESPACE,
+            'CostCenter'               => ConfirmingService::DOMAIN_NAMESPACE,
+            'Customer'                 => ConfirmingService::DOMAIN_NAMESPACE,
+            'CustomerOrderNumber'      => ConfirmingService::DOMAIN_NAMESPACE,
+            'Customs'                  => ConfirmingService::DOMAIN_NAMESPACE,
+            'DateFrom'                 => ConfirmingService::DOMAIN_NAMESPACE,
+            'DateTo'                   => ConfirmingService::DOMAIN_NAMESPACE,
+            'DeliveryAddress'          => ConfirmingService::DOMAIN_NAMESPACE,
+            'DeliveryTimestampStart'   => ConfirmingService::DOMAIN_NAMESPACE,
+            'DeliveryTimestampEnd'     => ConfirmingService::DOMAIN_NAMESPACE,
+            'DeliveryDate'             => ConfirmingService::DOMAIN_NAMESPACE,
+            'Dimension'                => ConfirmingService::DOMAIN_NAMESPACE,
+            'DownPartnerBarcode'       => ConfirmingService::DOMAIN_NAMESPACE,
+            'DownPartnerID'            => ConfirmingService::DOMAIN_NAMESPACE,
+            'DownPartnerLocation'      => ConfirmingService::DOMAIN_NAMESPACE,
+            'Events'                   => ConfirmingService::DOMAIN_NAMESPACE,
+            'Groups'                   => ConfirmingService::DOMAIN_NAMESPACE,
+            'IDExpiration'             => ConfirmingService::DOMAIN_NAMESPACE,
+            'IDNumber'                 => ConfirmingService::DOMAIN_NAMESPACE,
+            'IDType'                   => ConfirmingService::DOMAIN_NAMESPACE,
+            'OldStatuses'              => ConfirmingService::DOMAIN_NAMESPACE,
+            'PhaseCode'                => ConfirmingService::DOMAIN_NAMESPACE,
+            'ProductCodeCollect'       => ConfirmingService::DOMAIN_NAMESPACE,
+            'ProductCodeDelivery'      => ConfirmingService::DOMAIN_NAMESPACE,
+            'ProductOptions'           => ConfirmingService::DOMAIN_NAMESPACE,
+            'ReceiverDateOfBirth'      => ConfirmingService::DOMAIN_NAMESPACE,
+            'Reference'                => ConfirmingService::DOMAIN_NAMESPACE,
+            'ReferenceCollect'         => ConfirmingService::DOMAIN_NAMESPACE,
+            'Remark'                   => ConfirmingService::DOMAIN_NAMESPACE,
+            'ReturnBarcode'            => ConfirmingService::DOMAIN_NAMESPACE,
+            'ReturnReference'          => ConfirmingService::DOMAIN_NAMESPACE,
+            'StatusCode'               => ConfirmingService::DOMAIN_NAMESPACE,
         ],
         'Labelling'      => [
-            'Addresses'                       => LabellingService::DOMAIN_NAMESPACE,
-            'Amounts'                         => LabellingService::DOMAIN_NAMESPACE,
-            'Barcode'                         => LabellingService::DOMAIN_NAMESPACE,
-            'CollectionTimeStampEnd'          => LabellingService::DOMAIN_NAMESPACE,
-            'CollectionTimeStampStart'        => LabellingService::DOMAIN_NAMESPACE,
-            'Contacts'                        => LabellingService::DOMAIN_NAMESPACE,
-            'Content'                         => LabellingService::DOMAIN_NAMESPACE,
-            'CostCenter'                      => LabellingService::DOMAIN_NAMESPACE,
-            'CustomerOrderNumber'             => LabellingService::DOMAIN_NAMESPACE,
-            'Customs'                         => LabellingService::DOMAIN_NAMESPACE,
-            'DateFrom'                        => LabellingService::DOMAIN_NAMESPACE,
-            'DateTo'                          => LabellingService::DOMAIN_NAMESPACE,
-            'DeliveryAddress'                 => LabellingService::DOMAIN_NAMESPACE,
-            'DeliveryTimestampStart'          => LabellingService::DOMAIN_NAMESPACE,
-            'DeliveryTimestampEnd'            => LabellingService::DOMAIN_NAMESPACE,
-            'DeliveryDate'                    => LabellingService::DOMAIN_NAMESPACE,
-            'Dimension'                       => LabellingService::DOMAIN_NAMESPACE,
-            'DownPartnerBarcode'              => LabellingService::DOMAIN_NAMESPACE,
-            'DownPartnerID'                   => LabellingService::DOMAIN_NAMESPACE,
-            'DownPartnerLocation'             => LabellingService::DOMAIN_NAMESPACE,
-            'Groups'                          => LabellingService::DOMAIN_NAMESPACE,
-            'IDExpiration'                    => LabellingService::DOMAIN_NAMESPACE,
-            'IDNumber'                        => LabellingService::DOMAIN_NAMESPACE,
-            'IDType'                          => LabellingService::DOMAIN_NAMESPACE,
-            'PhaseCode'                       => LabellingService::DOMAIN_NAMESPACE,
-            'ProductCodeCollect'              => LabellingService::DOMAIN_NAMESPACE,
-            'ProductCodeDelivery'             => LabellingService::DOMAIN_NAMESPACE,
-            'ProductOptions'                  => LabellingService::DOMAIN_NAMESPACE,
-            'ReceiverDateOfBirth'             => LabellingService::DOMAIN_NAMESPACE,
-            'Reference'                       => LabellingService::DOMAIN_NAMESPACE,
-            'ReferenceCollect'                => LabellingService::DOMAIN_NAMESPACE,
-            'Remark'                          => LabellingService::DOMAIN_NAMESPACE,
-            'ReturnBarcode'                   => LabellingService::DOMAIN_NAMESPACE,
-            'ReturnReference'                 => LabellingService::DOMAIN_NAMESPACE,
-            'StatusCode'                      => LabellingService::DOMAIN_NAMESPACE,
+            'Addresses'                => LabellingService::DOMAIN_NAMESPACE,
+            'Amounts'                  => LabellingService::DOMAIN_NAMESPACE,
+            'Barcode'                  => LabellingService::DOMAIN_NAMESPACE,
+            'CollectionTimeStampEnd'   => LabellingService::DOMAIN_NAMESPACE,
+            'CollectionTimeStampStart' => LabellingService::DOMAIN_NAMESPACE,
+            'Contacts'                 => LabellingService::DOMAIN_NAMESPACE,
+            'Content'                  => LabellingService::DOMAIN_NAMESPACE,
+            'CostCenter'               => LabellingService::DOMAIN_NAMESPACE,
+            'Customer'                 => LabellingService::DOMAIN_NAMESPACE,
+            'CustomerOrderNumber'      => LabellingService::DOMAIN_NAMESPACE,
+            'Customs'                  => LabellingService::DOMAIN_NAMESPACE,
+            'DateFrom'                 => LabellingService::DOMAIN_NAMESPACE,
+            'DateTo'                   => LabellingService::DOMAIN_NAMESPACE,
+            'DeliveryAddress'          => LabellingService::DOMAIN_NAMESPACE,
+            'DeliveryTimestampStart'   => LabellingService::DOMAIN_NAMESPACE,
+            'DeliveryTimestampEnd'     => LabellingService::DOMAIN_NAMESPACE,
+            'DeliveryDate'             => LabellingService::DOMAIN_NAMESPACE,
+            'Dimension'                => LabellingService::DOMAIN_NAMESPACE,
+            'DownPartnerBarcode'       => LabellingService::DOMAIN_NAMESPACE,
+            'DownPartnerID'            => LabellingService::DOMAIN_NAMESPACE,
+            'DownPartnerLocation'      => LabellingService::DOMAIN_NAMESPACE,
+            'Events'                   => LabellingService::DOMAIN_NAMESPACE,
+            'Groups'                   => LabellingService::DOMAIN_NAMESPACE,
+            'IDExpiration'             => LabellingService::DOMAIN_NAMESPACE,
+            'IDNumber'                 => LabellingService::DOMAIN_NAMESPACE,
+            'IDType'                   => LabellingService::DOMAIN_NAMESPACE,
+            'OldStatuses'              => LabellingService::DOMAIN_NAMESPACE,
+            'PhaseCode'                => LabellingService::DOMAIN_NAMESPACE,
+            'ProductCodeCollect'       => LabellingService::DOMAIN_NAMESPACE,
+            'ProductCodeDelivery'      => LabellingService::DOMAIN_NAMESPACE,
+            'ProductOptions'           => LabellingService::DOMAIN_NAMESPACE,
+            'ReceiverDateOfBirth'      => LabellingService::DOMAIN_NAMESPACE,
+            'Reference'                => LabellingService::DOMAIN_NAMESPACE,
+            'ReferenceCollect'         => LabellingService::DOMAIN_NAMESPACE,
+            'Remark'                   => LabellingService::DOMAIN_NAMESPACE,
+            'ReturnBarcode'            => LabellingService::DOMAIN_NAMESPACE,
+            'ReturnReference'          => LabellingService::DOMAIN_NAMESPACE,
+            'StatusCode'               => LabellingService::DOMAIN_NAMESPACE,
         ],
         'ShippingStatus' => [
-            'Addresses'                       => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Amounts'                         => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Barcode'                         => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CollectionTimeStampEnd'          => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CollectionTimeStampStart'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Contacts'                        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Content'                         => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CostCenter'                      => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CustomerOrderNumber'             => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Customs'                         => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DateFrom'                        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DateTo'                          => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DeliveryAddress'                 => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DeliveryTimestampStart'          => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DeliveryTimestampEnd'            => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DeliveryDate'                    => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Dimension'                       => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DownPartnerBarcode'              => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DownPartnerID'                   => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DownPartnerLocation'             => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Groups'                          => ShippingStatusService::DOMAIN_NAMESPACE,
-            'IDExpiration'                    => ShippingStatusService::DOMAIN_NAMESPACE,
-            'IDNumber'                        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'IDType'                          => ShippingStatusService::DOMAIN_NAMESPACE,
-            'PhaseCode'                       => ShippingStatusService::DOMAIN_NAMESPACE,
-            'ProductCodeCollect'              => ShippingStatusService::DOMAIN_NAMESPACE,
-            'ProductCodeDelivery'             => ShippingStatusService::DOMAIN_NAMESPACE,
-            'ProductOptions'                  => ShippingStatusService::DOMAIN_NAMESPACE,
-            'ReceiverDateOfBirth'             => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Reference'                       => ShippingStatusService::DOMAIN_NAMESPACE,
-            'ReferenceCollect'                => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Remark'                          => ShippingStatusService::DOMAIN_NAMESPACE,
-            'ReturnBarcode'                   => ShippingStatusService::DOMAIN_NAMESPACE,
-            'ReturnReference'                 => ShippingStatusService::DOMAIN_NAMESPACE,
-            'StatusCode'                      => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Addresses'                => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Amounts'                  => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Barcode'                  => ShippingStatusService::DOMAIN_NAMESPACE,
+            'CollectionTimeStampEnd'   => ShippingStatusService::DOMAIN_NAMESPACE,
+            'CollectionTimeStampStart' => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Contacts'                 => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Content'                  => ShippingStatusService::DOMAIN_NAMESPACE,
+            'CostCenter'               => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Customer'                 => ShippingStatusService::DOMAIN_NAMESPACE,
+            'CustomerOrderNumber'      => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Customs'                  => ShippingStatusService::DOMAIN_NAMESPACE,
+            'DateFrom'                 => ShippingStatusService::DOMAIN_NAMESPACE,
+            'DateTo'                   => ShippingStatusService::DOMAIN_NAMESPACE,
+            'DeliveryAddress'          => ShippingStatusService::DOMAIN_NAMESPACE,
+            'DeliveryTimestampStart'   => ShippingStatusService::DOMAIN_NAMESPACE,
+            'DeliveryTimestampEnd'     => ShippingStatusService::DOMAIN_NAMESPACE,
+            'DeliveryDate'             => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Dimension'                => ShippingStatusService::DOMAIN_NAMESPACE,
+            'DownPartnerBarcode'       => ShippingStatusService::DOMAIN_NAMESPACE,
+            'DownPartnerID'            => ShippingStatusService::DOMAIN_NAMESPACE,
+            'DownPartnerLocation'      => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Events'                   => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Groups'                   => ShippingStatusService::DOMAIN_NAMESPACE,
+            'IDExpiration'             => ShippingStatusService::DOMAIN_NAMESPACE,
+            'IDNumber'                 => ShippingStatusService::DOMAIN_NAMESPACE,
+            'IDType'                   => ShippingStatusService::DOMAIN_NAMESPACE,
+            'OldStatuses'              => ShippingStatusService::DOMAIN_NAMESPACE,
+            'PhaseCode'                => ShippingStatusService::DOMAIN_NAMESPACE,
+            'ProductCodeCollect'       => ShippingStatusService::DOMAIN_NAMESPACE,
+            'ProductCodeDelivery'      => ShippingStatusService::DOMAIN_NAMESPACE,
+            'ProductOptions'           => ShippingStatusService::DOMAIN_NAMESPACE,
+            'ReceiverDateOfBirth'      => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Reference'                => ShippingStatusService::DOMAIN_NAMESPACE,
+            'ReferenceCollect'         => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Remark'                   => ShippingStatusService::DOMAIN_NAMESPACE,
+            'ReturnBarcode'            => ShippingStatusService::DOMAIN_NAMESPACE,
+            'ReturnReference'          => ShippingStatusService::DOMAIN_NAMESPACE,
+            'StatusCode'               => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate'   => [
-            'Addresses'                       => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Amounts'                         => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Barcode'                         => DeliveryDateService::DOMAIN_NAMESPACE,
-            'CollectionTimeStampEnd'          => DeliveryDateService::DOMAIN_NAMESPACE,
-            'CollectionTimeStampStart'        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Contacts'                        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Content'                         => DeliveryDateService::DOMAIN_NAMESPACE,
-            'CostCenter'                      => DeliveryDateService::DOMAIN_NAMESPACE,
-            'CustomerOrderNumber'             => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Customs'                         => DeliveryDateService::DOMAIN_NAMESPACE,
-            'DateFrom'                        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'DateTo'                          => DeliveryDateService::DOMAIN_NAMESPACE,
-            'DeliveryAddress'                 => DeliveryDateService::DOMAIN_NAMESPACE,
-            'DeliveryTimestampStart'          => DeliveryDateService::DOMAIN_NAMESPACE,
-            'DeliveryTimestampEnd'            => DeliveryDateService::DOMAIN_NAMESPACE,
-            'DeliveryDate'                    => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Dimension'                       => DeliveryDateService::DOMAIN_NAMESPACE,
-            'DownPartnerBarcode'              => DeliveryDateService::DOMAIN_NAMESPACE,
-            'DownPartnerID'                   => DeliveryDateService::DOMAIN_NAMESPACE,
-            'DownPartnerLocation'             => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Groups'                          => DeliveryDateService::DOMAIN_NAMESPACE,
-            'IDExpiration'                    => DeliveryDateService::DOMAIN_NAMESPACE,
-            'IDNumber'                        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'IDType'                          => DeliveryDateService::DOMAIN_NAMESPACE,
-            'PhaseCode'                       => DeliveryDateService::DOMAIN_NAMESPACE,
-            'ProductCodeCollect'              => DeliveryDateService::DOMAIN_NAMESPACE,
-            'ProductCodeDelivery'             => DeliveryDateService::DOMAIN_NAMESPACE,
-            'ProductOptions'                  => DeliveryDateService::DOMAIN_NAMESPACE,
-            'ReceiverDateOfBirth'             => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Reference'                       => DeliveryDateService::DOMAIN_NAMESPACE,
-            'ReferenceCollect'                => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Remark'                          => DeliveryDateService::DOMAIN_NAMESPACE,
-            'ReturnBarcode'                   => DeliveryDateService::DOMAIN_NAMESPACE,
-            'ReturnReference'                 => DeliveryDateService::DOMAIN_NAMESPACE,
-            'StatusCode'                      => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Addresses'                => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Amounts'                  => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Barcode'                  => DeliveryDateService::DOMAIN_NAMESPACE,
+            'CollectionTimeStampEnd'   => DeliveryDateService::DOMAIN_NAMESPACE,
+            'CollectionTimeStampStart' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Contacts'                 => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Content'                  => DeliveryDateService::DOMAIN_NAMESPACE,
+            'CostCenter'               => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Customer'                 => DeliveryDateService::DOMAIN_NAMESPACE,
+            'CustomerOrderNumber'      => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Customs'                  => DeliveryDateService::DOMAIN_NAMESPACE,
+            'DateFrom'                 => DeliveryDateService::DOMAIN_NAMESPACE,
+            'DateTo'                   => DeliveryDateService::DOMAIN_NAMESPACE,
+            'DeliveryAddress'          => DeliveryDateService::DOMAIN_NAMESPACE,
+            'DeliveryTimestampStart'   => DeliveryDateService::DOMAIN_NAMESPACE,
+            'DeliveryTimestampEnd'     => DeliveryDateService::DOMAIN_NAMESPACE,
+            'DeliveryDate'             => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Dimension'                => DeliveryDateService::DOMAIN_NAMESPACE,
+            'DownPartnerBarcode'       => DeliveryDateService::DOMAIN_NAMESPACE,
+            'DownPartnerID'            => DeliveryDateService::DOMAIN_NAMESPACE,
+            'DownPartnerLocation'      => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Events'                   => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Groups'                   => DeliveryDateService::DOMAIN_NAMESPACE,
+            'IDExpiration'             => DeliveryDateService::DOMAIN_NAMESPACE,
+            'IDNumber'                 => DeliveryDateService::DOMAIN_NAMESPACE,
+            'IDType'                   => DeliveryDateService::DOMAIN_NAMESPACE,
+            'OldStatuses'              => DeliveryDateService::DOMAIN_NAMESPACE,
+            'PhaseCode'                => DeliveryDateService::DOMAIN_NAMESPACE,
+            'ProductCodeCollect'       => DeliveryDateService::DOMAIN_NAMESPACE,
+            'ProductCodeDelivery'      => DeliveryDateService::DOMAIN_NAMESPACE,
+            'ProductOptions'           => DeliveryDateService::DOMAIN_NAMESPACE,
+            'ReceiverDateOfBirth'      => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Reference'                => DeliveryDateService::DOMAIN_NAMESPACE,
+            'ReferenceCollect'         => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Remark'                   => DeliveryDateService::DOMAIN_NAMESPACE,
+            'ReturnBarcode'            => DeliveryDateService::DOMAIN_NAMESPACE,
+            'ReturnReference'          => DeliveryDateService::DOMAIN_NAMESPACE,
+            'StatusCode'               => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
         'Location'       => [
-            'Addresses'                       => LocationService::DOMAIN_NAMESPACE,
-            'Amounts'                         => LocationService::DOMAIN_NAMESPACE,
-            'Barcode'                         => LocationService::DOMAIN_NAMESPACE,
-            'CollectionTimeStampEnd'          => LocationService::DOMAIN_NAMESPACE,
-            'CollectionTimeStampStart'        => LocationService::DOMAIN_NAMESPACE,
-            'Contacts'                        => LocationService::DOMAIN_NAMESPACE,
-            'Content'                         => LocationService::DOMAIN_NAMESPACE,
-            'CostCenter'                      => LocationService::DOMAIN_NAMESPACE,
-            'CustomerOrderNumber'             => LocationService::DOMAIN_NAMESPACE,
-            'Customs'                         => LocationService::DOMAIN_NAMESPACE,
-            'DateFrom'                        => LocationService::DOMAIN_NAMESPACE,
-            'DateTo'                          => LocationService::DOMAIN_NAMESPACE,
-            'DeliveryAddress'                 => LocationService::DOMAIN_NAMESPACE,
-            'DeliveryTimestampStart'          => LocationService::DOMAIN_NAMESPACE,
-            'DeliveryTimestampEnd'            => LocationService::DOMAIN_NAMESPACE,
-            'DeliveryDate'                    => LocationService::DOMAIN_NAMESPACE,
-            'Dimension'                       => LocationService::DOMAIN_NAMESPACE,
-            'DownPartnerBarcode'              => LocationService::DOMAIN_NAMESPACE,
-            'DownPartnerID'                   => LocationService::DOMAIN_NAMESPACE,
-            'DownPartnerLocation'             => LocationService::DOMAIN_NAMESPACE,
-            'Groups'                          => LocationService::DOMAIN_NAMESPACE,
-            'IDExpiration'                    => LocationService::DOMAIN_NAMESPACE,
-            'IDNumber'                        => LocationService::DOMAIN_NAMESPACE,
-            'IDType'                          => LocationService::DOMAIN_NAMESPACE,
-            'PhaseCode'                       => LocationService::DOMAIN_NAMESPACE,
-            'ProductCodeCollect'              => LocationService::DOMAIN_NAMESPACE,
-            'ProductCodeDelivery'             => LocationService::DOMAIN_NAMESPACE,
-            'ProductOptions'                  => LocationService::DOMAIN_NAMESPACE,
-            'ReceiverDateOfBirth'             => LocationService::DOMAIN_NAMESPACE,
-            'Reference'                       => LocationService::DOMAIN_NAMESPACE,
-            'ReferenceCollect'                => LocationService::DOMAIN_NAMESPACE,
-            'Remark'                          => LocationService::DOMAIN_NAMESPACE,
-            'ReturnBarcode'                   => LocationService::DOMAIN_NAMESPACE,
-            'ReturnReference'                 => LocationService::DOMAIN_NAMESPACE,
-            'StatusCode'                      => LocationService::DOMAIN_NAMESPACE,
+            'Addresses'                => LocationService::DOMAIN_NAMESPACE,
+            'Amounts'                  => LocationService::DOMAIN_NAMESPACE,
+            'Barcode'                  => LocationService::DOMAIN_NAMESPACE,
+            'CollectionTimeStampEnd'   => LocationService::DOMAIN_NAMESPACE,
+            'CollectionTimeStampStart' => LocationService::DOMAIN_NAMESPACE,
+            'Contacts'                 => LocationService::DOMAIN_NAMESPACE,
+            'Content'                  => LocationService::DOMAIN_NAMESPACE,
+            'CostCenter'               => LocationService::DOMAIN_NAMESPACE,
+            'Customer'                 => LocationService::DOMAIN_NAMESPACE,
+            'CustomerOrderNumber'      => LocationService::DOMAIN_NAMESPACE,
+            'Customs'                  => LocationService::DOMAIN_NAMESPACE,
+            'DateFrom'                 => LocationService::DOMAIN_NAMESPACE,
+            'DateTo'                   => LocationService::DOMAIN_NAMESPACE,
+            'DeliveryAddress'          => LocationService::DOMAIN_NAMESPACE,
+            'DeliveryTimestampStart'   => LocationService::DOMAIN_NAMESPACE,
+            'DeliveryTimestampEnd'     => LocationService::DOMAIN_NAMESPACE,
+            'DeliveryDate'             => LocationService::DOMAIN_NAMESPACE,
+            'Dimension'                => LocationService::DOMAIN_NAMESPACE,
+            'DownPartnerBarcode'       => LocationService::DOMAIN_NAMESPACE,
+            'DownPartnerID'            => LocationService::DOMAIN_NAMESPACE,
+            'DownPartnerLocation'      => LocationService::DOMAIN_NAMESPACE,
+            'Events'                   => LocationService::DOMAIN_NAMESPACE,
+            'Groups'                   => LocationService::DOMAIN_NAMESPACE,
+            'IDExpiration'             => LocationService::DOMAIN_NAMESPACE,
+            'IDNumber'                 => LocationService::DOMAIN_NAMESPACE,
+            'IDType'                   => LocationService::DOMAIN_NAMESPACE,
+            'OldStatuses'              => LocationService::DOMAIN_NAMESPACE,
+            'PhaseCode'                => LocationService::DOMAIN_NAMESPACE,
+            'ProductCodeCollect'       => LocationService::DOMAIN_NAMESPACE,
+            'ProductCodeDelivery'      => LocationService::DOMAIN_NAMESPACE,
+            'ProductOptions'           => LocationService::DOMAIN_NAMESPACE,
+            'ReceiverDateOfBirth'      => LocationService::DOMAIN_NAMESPACE,
+            'Reference'                => LocationService::DOMAIN_NAMESPACE,
+            'ReferenceCollect'         => LocationService::DOMAIN_NAMESPACE,
+            'Remark'                   => LocationService::DOMAIN_NAMESPACE,
+            'ReturnBarcode'            => LocationService::DOMAIN_NAMESPACE,
+            'ReturnReference'          => LocationService::DOMAIN_NAMESPACE,
+            'StatusCode'               => LocationService::DOMAIN_NAMESPACE,
         ],
         'Timeframe'      => [
-            'Addresses'                       => TimeframeService::DOMAIN_NAMESPACE,
-            'Amounts'                         => TimeframeService::DOMAIN_NAMESPACE,
-            'Barcode'                         => TimeframeService::DOMAIN_NAMESPACE,
-            'CollectionTimeStampEnd'          => TimeframeService::DOMAIN_NAMESPACE,
-            'CollectionTimeStampStart'        => TimeframeService::DOMAIN_NAMESPACE,
-            'Contacts'                        => TimeframeService::DOMAIN_NAMESPACE,
-            'Content'                         => TimeframeService::DOMAIN_NAMESPACE,
-            'CostCenter'                      => TimeframeService::DOMAIN_NAMESPACE,
-            'CustomerOrderNumber'             => TimeframeService::DOMAIN_NAMESPACE,
-            'Customs'                         => TimeframeService::DOMAIN_NAMESPACE,
-            'DateFrom'                        => TimeframeService::DOMAIN_NAMESPACE,
-            'DateTo'                          => TimeframeService::DOMAIN_NAMESPACE,
-            'DeliveryAddress'                 => TimeframeService::DOMAIN_NAMESPACE,
-            'DeliveryTimestampStart'          => TimeframeService::DOMAIN_NAMESPACE,
-            'DeliveryTimestampEnd'            => TimeframeService::DOMAIN_NAMESPACE,
-            'DeliveryDate'                    => TimeframeService::DOMAIN_NAMESPACE,
-            'Dimension'                       => TimeframeService::DOMAIN_NAMESPACE,
-            'DownPartnerBarcode'              => TimeframeService::DOMAIN_NAMESPACE,
-            'DownPartnerID'                   => TimeframeService::DOMAIN_NAMESPACE,
-            'DownPartnerLocation'             => TimeframeService::DOMAIN_NAMESPACE,
-            'Groups'                          => TimeframeService::DOMAIN_NAMESPACE,
-            'IDExpiration'                    => TimeframeService::DOMAIN_NAMESPACE,
-            'IDNumber'                        => TimeframeService::DOMAIN_NAMESPACE,
-            'IDType'                          => TimeframeService::DOMAIN_NAMESPACE,
-            'PhaseCode'                       => TimeframeService::DOMAIN_NAMESPACE,
-            'ProductCodeCollect'              => TimeframeService::DOMAIN_NAMESPACE,
-            'ProductCodeDelivery'             => TimeframeService::DOMAIN_NAMESPACE,
-            'ProductOptions'                  => TimeframeService::DOMAIN_NAMESPACE,
-            'ReceiverDateOfBirth'             => TimeframeService::DOMAIN_NAMESPACE,
-            'Reference'                       => TimeframeService::DOMAIN_NAMESPACE,
-            'ReferenceCollect'                => TimeframeService::DOMAIN_NAMESPACE,
-            'Remark'                          => TimeframeService::DOMAIN_NAMESPACE,
-            'ReturnBarcode'                   => TimeframeService::DOMAIN_NAMESPACE,
-            'ReturnReference'                 => TimeframeService::DOMAIN_NAMESPACE,
-            'StatusCode'                      => TimeframeService::DOMAIN_NAMESPACE,
+            'Addresses'                => TimeframeService::DOMAIN_NAMESPACE,
+            'Amounts'                  => TimeframeService::DOMAIN_NAMESPACE,
+            'Barcode'                  => TimeframeService::DOMAIN_NAMESPACE,
+            'CollectionTimeStampEnd'   => TimeframeService::DOMAIN_NAMESPACE,
+            'CollectionTimeStampStart' => TimeframeService::DOMAIN_NAMESPACE,
+            'Contacts'                 => TimeframeService::DOMAIN_NAMESPACE,
+            'Content'                  => TimeframeService::DOMAIN_NAMESPACE,
+            'CostCenter'               => TimeframeService::DOMAIN_NAMESPACE,
+            'Customer'                 => TimeframeService::DOMAIN_NAMESPACE,
+            'CustomerOrderNumber'      => TimeframeService::DOMAIN_NAMESPACE,
+            'Customs'                  => TimeframeService::DOMAIN_NAMESPACE,
+            'DateFrom'                 => TimeframeService::DOMAIN_NAMESPACE,
+            'DateTo'                   => TimeframeService::DOMAIN_NAMESPACE,
+            'DeliveryAddress'          => TimeframeService::DOMAIN_NAMESPACE,
+            'DeliveryTimestampStart'   => TimeframeService::DOMAIN_NAMESPACE,
+            'DeliveryTimestampEnd'     => TimeframeService::DOMAIN_NAMESPACE,
+            'DeliveryDate'             => TimeframeService::DOMAIN_NAMESPACE,
+            'Dimension'                => TimeframeService::DOMAIN_NAMESPACE,
+            'DownPartnerBarcode'       => TimeframeService::DOMAIN_NAMESPACE,
+            'DownPartnerID'            => TimeframeService::DOMAIN_NAMESPACE,
+            'DownPartnerLocation'      => TimeframeService::DOMAIN_NAMESPACE,
+            'Events'                   => TimeframeService::DOMAIN_NAMESPACE,
+            'Groups'                   => TimeframeService::DOMAIN_NAMESPACE,
+            'IDExpiration'             => TimeframeService::DOMAIN_NAMESPACE,
+            'IDNumber'                 => TimeframeService::DOMAIN_NAMESPACE,
+            'IDType'                   => TimeframeService::DOMAIN_NAMESPACE,
+            'OldStatuses'              => TimeframeService::DOMAIN_NAMESPACE,
+            'PhaseCode'                => TimeframeService::DOMAIN_NAMESPACE,
+            'ProductCodeCollect'       => TimeframeService::DOMAIN_NAMESPACE,
+            'ProductCodeDelivery'      => TimeframeService::DOMAIN_NAMESPACE,
+            'ProductOptions'           => TimeframeService::DOMAIN_NAMESPACE,
+            'ReceiverDateOfBirth'      => TimeframeService::DOMAIN_NAMESPACE,
+            'Reference'                => TimeframeService::DOMAIN_NAMESPACE,
+            'ReferenceCollect'         => TimeframeService::DOMAIN_NAMESPACE,
+            'Remark'                   => TimeframeService::DOMAIN_NAMESPACE,
+            'ReturnBarcode'            => TimeframeService::DOMAIN_NAMESPACE,
+            'ReturnReference'          => TimeframeService::DOMAIN_NAMESPACE,
+            'StatusCode'               => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
@@ -393,6 +418,8 @@ class Shipment extends AbstractEntity
     protected $CostCenter;
     /** @var string $CustomerOrderNumber */
     protected $CustomerOrderNumber;
+    /** @var Customer $Customer */
+    protected $Customer;
     /** @var Customs $Customs */
     protected $Customs;
     /** @var string $StatusCode */
@@ -419,6 +446,8 @@ class Shipment extends AbstractEntity
     protected $DownPartnerID;
     /** @var string $DownPartnerLocation */
     protected $DownPartnerLocation;
+    /** @var Event[] $Events */
+    protected $Events;
     /** @var Group[] $Groups */
     protected $Groups;
     /** @var string $IDExpiration */
@@ -427,6 +456,8 @@ class Shipment extends AbstractEntity
     protected $IDNumber;
     /** @var string $IDType */
     protected $IDType;
+    /** @var string $OldStatuses */
+    protected $OldStatuses;
     /** @var string $ProductCodeCollect */
     protected $ProductCodeCollect;
     /** @var string $ProductCodeDelivery */
@@ -460,6 +491,7 @@ class Shipment extends AbstractEntity
      * @param Contact[]|null       $contacts
      * @param string|null          $content
      * @param string|null          $costCenter
+     * @param Customer|null        $customer
      * @param string|null          $customerOrderNumber
      * @param Customs|null         $customs
      * @param string|null          $deliveryAddress
@@ -467,10 +499,12 @@ class Shipment extends AbstractEntity
      * @param string|null          $downPartnerBarcode
      * @param string|null          $downPartnerId
      * @param string|null          $downPartnerLocation
+     * @param Event[]|null         $events
      * @param Group[]|null         $groups
      * @param string|null          $idExpiration
      * @param string|null          $idNumber
      * @param string|null          $idType
+     * @param OldStatus|null       $oldStatuses
      * @param string|null          $productCodeCollect
      * @param ProductOption[]|null $productOptions
      * @param string|null          $receiverDateOfBirth
@@ -493,6 +527,7 @@ class Shipment extends AbstractEntity
         $collectionTimeStampEnd = null,
         $collectionTimeStampStart = null,
         $costCenter = null,
+        $customer = null,
         $customerOrderNumber = null,
         Customs $customs = null,
         $deliveryAddress = null,
@@ -501,10 +536,12 @@ class Shipment extends AbstractEntity
         $downPartnerBarcode = null,
         $downPartnerId = null,
         $downPartnerLocation = null,
+        array $events = null,
         array $groups = null,
         $idExpiration = null,
         $idNumber = null,
         $idType = null,
+        array $oldStatuses = null,
         $productCodeCollect = null,
         $productCodeDelivery = null,
         array $productOptions = null,
@@ -529,6 +566,7 @@ class Shipment extends AbstractEntity
         $this->setContacts($contacts);
         $this->setContent($content);
         $this->setCostCenter($costCenter);
+        $this->setCustomer($customer);
         $this->setCustomerOrderNumber($customerOrderNumber);
         $this->setCustoms($customs);
         $this->setDeliveryAddress($deliveryAddress);
@@ -537,10 +575,12 @@ class Shipment extends AbstractEntity
         $this->setDownPartnerBarcode($downPartnerBarcode);
         $this->setDownPartnerID($downPartnerId);
         $this->setDownPartnerLocation($downPartnerLocation);
+        $this->setEvents($events);
         $this->setGroups($groups);
         $this->setIDExpiration($idExpiration);
         $this->setIDNumber($idNumber);
         $this->setIDType($idType);
+        $this->setOldStatuses($oldStatuses);
         $this->setProductCodeCollect($productCodeCollect);
         $this->setProductCodeDelivery($productCodeDelivery);
         $this->setProductOptions($productOptions);
@@ -591,6 +631,14 @@ class Shipment extends AbstractEntity
                     }
                     $xml["{{$namespace}}Contacts"] = $items;
                 }
+            } elseif ($propertyName === 'Events') {
+                if (is_array($this->Events)) {
+                    $items = [];
+                    foreach ($this->Events as $event) {
+                        $items[] = ["{{$namespace}}Event" => $event];
+                    }
+                    $xml["{{$namespace}}Events"] = $items;
+                }
             } elseif ($propertyName === 'Groups') {
                 if (is_array($this->Groups)) {
                     $items = [];
@@ -599,7 +647,17 @@ class Shipment extends AbstractEntity
                     }
                     $xml["{{$namespace}}Groups"] = $items;
                 }
-            } elseif ($propertyName === 'ProductOptions') {
+            }
+//            elseif ($propertyName === 'OldStatuses') {
+//                if (is_array($this->OldStatuses)) {
+//                    $items = [];
+//                    foreach ($this->OldStatuses as $option) {
+//                        $items[] = ["{{$namespace}}OldStatus" => $option];
+//                    }
+//                    $xml["{{$namespace}}OldStatuses"] = $items;
+//                }
+//            }
+            elseif ($propertyName === 'ProductOptions') {
                 if (is_array($this->ProductOptions)) {
                     $items = [];
                     foreach ($this->ProductOptions as $option) {

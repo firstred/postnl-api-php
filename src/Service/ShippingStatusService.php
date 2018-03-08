@@ -134,7 +134,7 @@ class ShippingStatusService extends AbstractService
             static::validateRESTResponse($response);
         }
 
-        $object = $this->processCurrentStatusResponse($response);
+        $object = $this->processCurrentStatusResponseREST($response);
         if ($object instanceof CurrentStatusResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof Response
@@ -183,10 +183,10 @@ class ShippingStatusService extends AbstractService
             }
         }
         if (!$response instanceof Response) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildCurrentStatusRequest($currentStatus));
+            $response = $this->postnl->getHttpClient()->doRequest($this->buildCurrentStatusRequestSOAP($currentStatus));
         }
 
-        $object = $this->processCurrentStatusResponse($response);
+        $object = $this->processCurrentStatusResponseSOAP($response);
         if ($object instanceof CurrentStatusResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof Response
@@ -220,9 +220,10 @@ class ShippingStatusService extends AbstractService
      *
      * @return CompleteStatusResponse
      *
+     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws ResponseException
      */
     public function completeStatusREST(CompleteStatus $completeStatus)
     {
@@ -240,7 +241,7 @@ class ShippingStatusService extends AbstractService
             static::validateRESTResponse($response);
         }
 
-        $object = $this->processCompleteStatusResponse($response);
+        $object = $this->processCompleteStatusResponseREST($response);
         if ($object instanceof CompleteStatusResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof Response
@@ -275,6 +276,10 @@ class ShippingStatusService extends AbstractService
      * @return CompleteStatusResponse
      *
      * @throws ApiException
+     * @throws CifDownException
+     * @throws CifException
+     * @throws ResponseException
+     * @throws \Sabre\Xml\LibXMLException
      */
     public function completeStatusSOAP(CompleteStatus $completeStatus)
     {
@@ -291,7 +296,7 @@ class ShippingStatusService extends AbstractService
             $response = $this->postnl->getHttpClient()->doRequest($this->buildCompleteStatusRequestSOAP($completeStatus));
         }
 
-        $object = $this->processCompleteStatusResponse($response);
+        $object = $this->processCompleteStatusResponseSOAP($response);
         if ($object instanceof CompleteStatusResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof Response
@@ -345,8 +350,9 @@ class ShippingStatusService extends AbstractService
             $response = $this->postnl->getHttpClient()->doRequest($this->buildGetSignatureRequestREST($getSignature));
             static::validateRESTResponse($response);
         }
-        $body = json_decode(static::getResponseText($response), true);
-        if (!empty($body['Barcode'])) {
+
+        $object = $this->processGetSignatureResponseREST($response);
+        if ($object instanceof GetSignatureResponseSignature) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof Response
                 && $response->getStatusCode() === 200
@@ -355,14 +361,10 @@ class ShippingStatusService extends AbstractService
                 $this->cacheItem($item);
             }
 
-            /** @var GetSignatureResponseSignature $object */
-            $object = AbstractEntity::jsonDeserialize(['GetSignatureResponseSignature' => $body]);
-            $this->setService($object);
-
             return $object;
         }
 
-        throw new ApiException('Unable to generate label');
+        throw new ApiException('Unable to get signature');
     }
 
     /**
@@ -487,8 +489,7 @@ class ShippingStatusService extends AbstractService
     public function processCurrentStatusResponseREST($response)
     {
         $body = json_decode(static::getResponseText($response), true);
-        if (isset($body['Shipments'])) {
-
+        if (isset($body['CurrentStatus'])) {
             /** @var CurrentStatusResponse $object */
             $object = AbstractEntity::jsonDeserialize(['CurrentStatusResponse' => $body]);
             $this->setService($object);
@@ -570,7 +571,6 @@ class ShippingStatusService extends AbstractService
 
         static::registerNamespaces($xml);
         static::validateSOAPResponse($xml);
-
 
         $reader = new Reader();
         $reader->xml(static::getResponseText($response));
@@ -662,9 +662,35 @@ class ShippingStatusService extends AbstractService
     public function processCompleteStatusResponseREST($response)
     {
         $body = json_decode(static::getResponseText($response), true);
-        if (isset($body['Shipments'])) {
+        if (isset($body['CompleteStatus'])) {
+            if (isset($body['CompleteStatus']['Shipment'])) {
+                $body['CompleteStatus']['Shipments'] = [$body['CompleteStatus']['Shipment']];
+                unset($body['CompleteStatus']['Shipment']);
+            }
+            foreach ($body['CompleteStatus']['Shipments'] as &$shipment) {
+                $shipment['Customer'] = AbstractEntity::jsonDeserialize(['Customer' => $shipment['Customer']]);
+            }
+            foreach ($body['CompleteStatus']['Shipments'] as &$shipment) {
+                $shipment['Addresses'] = $shipment['Address'];
+                unset($shipment['Address']);
+            }
+            foreach ($body['CompleteStatus']['Shipments'] as &$shipment) {
+                $shipment['Events'] = $shipment['Event'];
+                unset($shipment['Event']);
+                foreach ($shipment['Events'] as &$event) {
+                    $event = ['CompleteStatusResponseEvent' => $event];
+                }
+            }
+            foreach ($body['CompleteStatus']['Shipments'] as &$shipment) {
+                $shipment['OldStatuses'] = $shipment['OldStatus'];
+                unset($shipment['OldStatus']);
+                foreach ($shipment['OldStatuses'] as &$oldStatus) {
+                    $oldStatus = AbstractEntity::jsonDeserialize(['CompleteStatusResponseOldStatus' => $oldStatus]);
+                }
+            }
+
             /** @var CompleteStatusResponse $object */
-            $object = AbstractEntity::jsonDeserialize(['CompleteStatusResponse' => $body]);
+            $object = AbstractEntity::jsonDeserialize(['CompleteStatusResponse' => $body['CompleteStatus']]);
             $this->setService($object);
 
             return $object;
@@ -799,7 +825,7 @@ class ShippingStatusService extends AbstractService
     public function processGetSignatureResponseREST($response)
     {
         $body = json_decode(static::getResponseText($response), true);
-        if (!empty($body['Barcode'])) {
+        if (!empty($body['Signature'])) {
             /** @var GetSignatureResponseSignature $object */
             $object = AbstractEntity::jsonDeserialize(['GetSignatureResponseSignature' => $body]);
             $this->setService($object);

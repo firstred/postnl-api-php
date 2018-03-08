@@ -263,17 +263,17 @@ class CompleteStatusResponseShipment extends AbstractEntity
         array $addresses = null,
         array $amounts = null,
         $barcode = null,
-        Customer $customer = null,
+        $customer = null,
         $deliveryDate = null,
-        Dimension $dimension = null,
+        $dimension = null,
         array $events = null,
-        Expectation $expectation = null,
+        $expectation = null,
         array $groups = null,
         array $oldStatuses = null,
         $productCode = null,
         array $productOptions = null,
         $reference = null,
-        Status $status = null,
+        $status = null,
         array $warnings = null
     ) {
         parent::__construct();

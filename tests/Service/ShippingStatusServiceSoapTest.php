@@ -156,7 +156,7 @@ class ShippingStatusSoapTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @testdox can generate a single label
+     * @testdox can get the current status
      */
     public function testGetCurrentStatusSoap()
     {
@@ -454,7 +454,7 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
     }
 
     /**
-     * @testdox can generate a single label
+     * @testdox can get the complete status
      */
     public function testGetCompleteStatusSoap()
     {
@@ -611,6 +611,7 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
         $this->assertEquals(2, count($completeStatusResponse->getShipments()[0]->getAmounts()));
         $this->assertEquals(5, count($completeStatusResponse->getShipments()[0]->getEvents()));
         $this->assertEquals(1, count($completeStatusResponse->getShipments()[0]->getGroups()));
+        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Customer', $completeStatusResponse->getShipments()[0]->getCustomer());
         $this->assertEquals('19-04-2016 06:06:16', $completeStatusResponse->getShipments()[0]->getOldStatuses()[4]->getTimeStamp());
     }
 
@@ -757,7 +758,7 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
     }
 
     /**
-     * @testdox can generate a single label
+     * @testdox can get the signature
      */
     public function testGetSignatureSoap()
     {

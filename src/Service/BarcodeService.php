@@ -166,9 +166,6 @@ class BarcodeService extends AbstractService
      * @param GenerateBarcode[] $generateBarcodes
      *
      * @return string[] Barcodes
-     *
-     * @throws CifDownException
-     * @throws CifException
      */
     public function generateBarcodesSOAP(array $generateBarcodes)
     {
