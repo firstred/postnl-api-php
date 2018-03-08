@@ -27,7 +27,10 @@
 namespace ThirtyBees\PostNL\Tests\Service;
 
 use Cache\Adapter\Void\VoidCachePool;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
 use Psr\Log\LoggerInterface;
 use ThirtyBees\PostNL\Entity\Address;
 use ThirtyBees\PostNL\Entity\CoordinatesNorthWest;
@@ -40,6 +43,7 @@ use ThirtyBees\PostNL\Entity\Request\GetLocationsInArea;
 use ThirtyBees\PostNL\Entity\Request\GetNearestLocations;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
 use ThirtyBees\PostNL\Exception\ResponseException;
+use ThirtyBees\PostNL\HttpClient\MockClient;
 use ThirtyBees\PostNL\PostNL;
 use ThirtyBees\PostNL\Service\LocationService;
 
@@ -180,6 +184,43 @@ class LocationServiceSoapTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @testdox can request nearest locations
+     */
+    public function testGetNearestLocationsSoap()
+    {
+        $mock = new MockHandler([
+            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], static::getNearestLocationsMockResponse()),
+        ]);
+        $handler = HandlerStack::create($mock);
+        $mockClient = new MockClient();
+        $mockClient->setHandler($handler);
+        $this->postnl->setHttpClient($mockClient);
+
+        $response = $this->postnl->getNearestLocations((new GetNearestLocations())
+            ->setCountrycode('NL')
+            ->setLocation(Location::create([
+                'AllowSundaySorting' => true,
+                'DeliveryDate'       => '29-06-2016',
+                'DeliveryOptions'    => [
+                    'PG',
+                    'PGE',
+                ],
+                'OpeningTime'        => '09:00:00',
+                'Options'    => [
+                    'Daytime'
+                ],
+                'City'               => 'Hoofddorp',
+                'HouseNr'            => '42',
+                'HouseNrExt'         => 'A',
+                'Postalcode'         => '2132WT',
+                'Street'             => 'Siriusdreef',
+            ])));
+
+        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\GetNearestLocationsResponse', $response);
+        $this->assertEquals(1, count((array) $response->getGetLocationsResult()));
+    }
+
+    /**
      * @testdox creates a valid GetLocationsInArea request
      */
     public function testGetLocationsInAreaRequestSoap()
@@ -257,6 +298,45 @@ class LocationServiceSoapTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @testdox can request locations in area
+     */
+    public function testGetLocationsInAreaSoap()
+    {
+        $mock = new MockHandler([
+            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], static::getLocationsInAreaMockResponse()),
+        ]);
+        $handler = HandlerStack::create($mock);
+        $mockClient = new MockClient();
+        $mockClient->setHandler($handler);
+        $this->postnl->setHttpClient($mockClient);
+
+        $response = $this->postnl->getLocationsInArea((new GetLocationsInArea())
+            ->setCountrycode('NL')
+            ->setLocation(Location::create([
+                'AllowSundaySorting'   => true,
+                'DeliveryDate'         => '29-06-2016',
+                'DeliveryOptions'      => [
+                    'PG',
+                ],
+                'OpeningTime'          => '09:00:00',
+                'Options'              => [
+                    'Daytime',
+                ],
+                'CoordinatesNorthWest' => CoordinatesNorthWest::create([
+                    'Latitude'  => '52.156439',
+                    'Longitude' => '5.015643',
+                ]),
+                'CoordinatesSouthEast' => CoordinatesSouthEast::create([
+                    'Latitude'  => '52.017473',
+                    'Longitude' => '5.065254',
+                ]),
+            ])));
+
+        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\GetLocationsInAreaResponse', $response);
+        $this->assertEquals(1, count((array) $response->getGetLocationsResult()));
+    }
+
+    /**
      * @testdox creates a valid GetLocation request
      */
     public function testGetLocationRequestSoap()
@@ -295,5 +375,210 @@ class LocationServiceSoapTest extends \PHPUnit_Framework_TestCase
 ", (string) $request->getBody());
         $this->assertEmpty($request->getHeaderLine('apikey'));
         $this->assertEquals('text/xml', $request->getHeaderLine('Accept'));
+    }
+
+    /**
+     * @testdox can request locations in area
+     */
+    public function testGetLocationSoap()
+    {
+        $mock = new MockHandler([
+            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], static::getLocationMockResponse()),
+        ]);
+        $handler = HandlerStack::create($mock);
+        $mockClient = new MockClient();
+        $mockClient->setHandler($handler);
+        $this->postnl->setHttpClient($mockClient);
+
+        $response = $this->postnl->getLocation(
+            (new GetLocation())
+                ->setLocationCode('161503')
+                ->setRetailNetworkID('PNPNL-01')
+        );
+
+        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\GetLocationsInAreaResponse', $response);
+        $this->assertEquals(1, count((array) $response->getGetLocationsResult()));
+    }
+
+    /**
+     * @return string
+     */
+    protected function getNearestLocationsMockResponse()
+    {
+        return $json = '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+  <s:Body>
+    <GetNearestLocationsResponse xmlns="http://postnl.nl/cif/services/LocationWebService/"
+xmlns:a="http://postnl.nl/cif/domain/LocationWebService/"
+xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+      <a:GetLocationsResult>
+        <a:ResponseLocation>
+          <a:Address>
+            <a:City>Hoofddorp</a:City>
+            <a:Countrycode>NL</a:Countrycode>
+            <a:HouseNr>10</a:HouseNr>
+            <a:Remark>Dit is een Business Point. Post en pakketten die u op werkdagen vóór de lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag.</a:Remark>
+            <a:Street>Jacobus Spijkerdreef</a:Street>
+            <a:Zipcode>2132PZ</a:Zipcode>
+          </a:Address>
+          <a:DeliveryOptions xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+            <b:string>DO</b:string>
+            <b:string>PG</b:string>
+            <b:string>PGE</b:string>
+            <b:string>UL</b:string>
+          </a:DeliveryOptions>
+          <a:Distance>355</a:Distance>
+          <a:Latitude>52.2864669620795</a:Latitude>
+          <a:LocationCode>173187</a:LocationCode>
+          <a:Longitude>4.68239055845954</a:Longitude>
+          <a:Name>Gamma</a:Name>
+          <a:OpeningHours>
+            <a:Friday xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+              <b:string>08:00-18:30</b:string>
+            </a:Friday>
+            <a:Monday xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+              <b:string>08:00-18:30</b:string>
+            </a:Monday>
+            <a:Saturday xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+              <b:string>08:00-17:00</b:string>
+            </a:Saturday>
+            <a:Thursday xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+              <b:string>08:00-18:30</b:string>
+            </a:Thursday>
+            <a:Tuesday xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+              <b:string>08:00-18:30</b:string>
+            </a:Tuesday>
+            <a:Wednesday xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+              <b:string>08:00-18:30</b:string>
+            </a:Wednesday>
+          </a:OpeningHours>
+          <a:PartnerName>PostNL</a:PartnerName>
+          <a:PhoneNumber>023-5576310</a:PhoneNumber>
+          <a:RetailNetworkID>PNPNL-01</a:RetailNetworkID>
+          <a:Saleschannel>PKT XL</a:Saleschannel>
+          <a:TerminalType>NRS</a:TerminalType>
+        </a:ResponseLocation>
+      </a:GetLocationsResult>
+    </GetNearestLocationsResponse>
+  </s:Body>
+</s:Envelope>';
+    }
+
+    /**
+     * @return string
+     */
+    protected function getLocationsInAreaMockResponse()
+    {
+        return '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+   <s:Body>
+      <GetLocationsInAreaResponse xmlns="http://postnl.nl/cif/services/LocationWebService/"
+xmlns:a="http://postnl.nl/cif/domain/LocationWebService/"
+xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+         <a:GetLocationsResult>
+            <a:ResponseLocation>
+               <a:Address>
+                  <a:City>de Meern</a:City>
+                  <a:Countrycode>NL</a:Countrycode>
+                  <a:HouseNr>22</a:HouseNr>
+                  <a:Remark>&lt;b>Brieven en pakketten die je ma t/m vr afgeeft, worden uiterlijk om 18.00 uur dezelfde dag opgehaald voor bezorging &lt;/b></a:Remark>
+                  <a:Street>Mereveldplein</a:Street>
+                  <a:Zipcode>3454CK</a:Zipcode>
+               </a:Address>
+               <a:DeliveryOptions xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+                  <b:string>DO</b:string>
+                  <b:string>PG</b:string>
+                  <b:string>UL</b:string>
+               </a:DeliveryOptions>
+               <a:Distance>355</a:Distance>
+               <a:Latitude>52.0794943427349</a:Latitude>
+               <a:LocationCode>175812</a:LocationCode>
+               <a:Longitude>5.03762153082277</a:Longitude>
+               <a:Name>Kantoorboekhandel Kees Visscher</a:Name>
+               <a:OpeningHours>
+                  <a:Friday xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+                     <b:string>08:30-18:00</b:string>
+                  </a:Friday>
+                  <a:Monday xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+                     <b:string>08:30-18:00</b:string>
+                  </a:Monday>
+                  <a:Saturday xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+                     <b:string>08:30-17:00</b:string>
+                  </a:Saturday>
+                  <a:Thursday xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+                     <b:string>08:30-18:00</b:string>
+                  </a:Thursday>
+                  <a:Tuesday xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+                     <b:string>08:30-18:00</b:string>
+                  </a:Tuesday>
+                  <a:Wednesday xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+                     <b:string>08:30-18:00</b:string>
+                  </a:Wednesday>
+               </a:OpeningHours>
+               <a:PhoneNumber>030-6662230</a:PhoneNumber>
+               <a:RetailNetworkID>PNPNL-01</a:RetailNetworkID>
+               <a:Saleschannel>PKT M</a:Saleschannel>
+               <a:TerminalType>NRS</a:TerminalType>
+            </a:ResponseLocation>
+            </a:GetLocationsResult>
+      </GetLocationsInAreaResponse>
+   </s:Body>
+</s:Envelope>';
+    }
+
+    /**
+     * @return string
+     */
+    protected function getLocationMockResponse()
+    {
+        return '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+   <s:Body>
+      <GetLocationsInAreaResponse xmlns="http://postnl.nl/cif/services/LocationWebService/"
+xmlns:a="http://postnl.nl/cif/domain/LocationWebService/"
+xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+         <a:GetLocationsResult>
+            <a:ResponseLocation>
+               <a:Address>
+                  <a:City>Hoofddorp</a:City>
+                  <a:Countrycode>NL</a:Countrycode>
+                  <a:HouseNr>10</a:HouseNr>
+                  <a:Remark>&lt;b>Brieven en pakketten die je ma t/m vr afgeeft, worden uiterlijk om 18.00 uur dezelfde dag opgehaald voor bezorging &lt;/b></a:Remark>
+                  <a:Street>Jacobus Spijkerdreef</a:Street>
+                  <a:Zipcode>2132PZ</a:Zipcode>
+               </a:Address>
+               <a:DeliveryOptions xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+                  <b:string>DO</b:string>
+               </a:DeliveryOptions>
+               <a:Latitude>52.2864669620795</a:Latitude>
+               <a:LocationCode>161503</a:LocationCode>
+               <a:Longitude>4.68239055845954</a:Longitude>
+               <a:Name>Gamma</a:Name>
+               <a:OpeningHours>
+                  <a:Friday xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+                     <b:string>08:00-18:30</b:string>
+                  </a:Friday>
+                  <a:Monday xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+                     <b:string>08:00-18:30</b:string>
+                  </a:Monday>
+                  <a:Saturday xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+                     <b:string>08:00-17:00</b:string>
+                  </a:Saturday>
+                  <a:Thursday xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+                     <b:string>08:00-18:30</b:string>
+                  </a:Thursday>
+                  <a:Tuesday xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+                     <b:string>08:00-18:30</b:string>
+                  </a:Tuesday>
+                  <a:Wednesday xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+                     <b:string>08:00-18:30</b:string>
+                  </a:Wednesday>
+               </a:OpeningHours>
+               <a:PhoneNumber>023-5576310</a:PhoneNumber>
+               <a:RetailNetworkID>PNPNL-01</a:RetailNetworkID>
+               <a:Saleschannel>PKT XL</a:Saleschannel>
+               <a:TerminalType>NRS</a:TerminalType>
+            </a:ResponseLocation>
+         </a:GetLocationsResult>
+      </GetLocationsInAreaResponse>
+   </s:Body>
+</s:Envelope>';
     }
 }
