@@ -336,6 +336,9 @@ class LocationServiceRestTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return string
+     */
     protected function getNearestLocationsMockResponse()
     {
         return $json = '{
@@ -1366,6 +1369,9 @@ class LocationServiceRestTest extends \PHPUnit_Framework_TestCase
 }';
     }
 
+    /**
+     * @return string
+     */
     protected function getLocationsInAreaMockResponse()
     {
         return '{
@@ -2398,6 +2404,9 @@ class LocationServiceRestTest extends \PHPUnit_Framework_TestCase
 }';
     }
 
+    /**
+     * @return string
+     */
     protected function getLocationMockResponse()
     {
         return '{

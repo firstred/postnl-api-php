@@ -19,7 +19,6 @@
   <filter>
     <whitelist processUncoveredFilesFromWhitelist="true">
       <directory suffix=".php">../src/Service</directory>
-      <directory suffix=".php">../src/Util</directory>
       <file>../src/PostNL.php</file>
     </whitelist>
   </filter>
