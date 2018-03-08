@@ -27,7 +27,12 @@
 namespace ThirtyBees\PostNL\Tests\Service;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use ThirtyBees\PostNL\Entity\Address;
+use ThirtyBees\PostNL\Entity\Customer;
+use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
+use ThirtyBees\PostNL\PostNL;
 use ThirtyBees\PostNL\Service\AbstractService;
+use ThirtyBees\PostNL\Service\LabellingService;
 
 /**
  * Class AbstractServiceTest
@@ -58,5 +63,110 @@ class AbstractServiceTest extends \PHPUnit_Framework_TestCase
         $response = new \GuzzleHttp\Exception\ClientException(null, new Request('POST', 'localhost', []), new Response(500, [], 'test'));
 
         $this->assertEquals('test', AbstractService::getResponseText(['value' => $response]));
+    }
+
+    /**
+     * @testdox can detect and throw a CifDownException (REST)
+     *
+     * @throws \ThirtyBees\PostNL\Exception\ApiException
+     * @throws \ThirtyBees\PostNL\Exception\CifDownException
+     * @throws \ThirtyBees\PostNL\Exception\CifException
+     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     */
+    public function testCifDownExceptionRest()
+    {
+        $this->expectException('\\ThirtyBees\\PostNL\\Exception\\CifDownException');
+
+        $response = new Response(500, [], json_encode([
+            'Envelope' => ['Body' => ['Fault' => ['Reason' => ['Text' => ['' => 'error']]]]],
+        ]));
+
+        AbstractService::validateRESTResponse($response);
+    }
+
+    /**
+     * @testdox can detect and throw a CifException (REST)
+     *
+     * @throws \ThirtyBees\PostNL\Exception\ApiException
+     * @throws \ThirtyBees\PostNL\Exception\CifDownException
+     * @throws \ThirtyBees\PostNL\Exception\CifException
+     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     */
+    public function testCifExceptionRest()
+    {
+        $this->expectException('\\ThirtyBees\\PostNL\\Exception\\CifException');
+
+        $response = new Response(500, [], json_encode([
+            'Errors' => [
+                'Error' => [
+                    [
+                        'Description' => 'desc',
+                        'ErrorMsg'    => 'Description',
+                        'ErrorNumber' => 200,
+                    ],
+                ],
+            ],
+        ]));
+
+        AbstractService::validateRESTResponse($response);
+    }
+
+    /**
+     * @testdox can detect and throw a CifDownException (SOAP)
+     *
+     * @throws \ThirtyBees\PostNL\Exception\CifDownException
+     * @throws \ThirtyBees\PostNL\Exception\CifException
+     */
+    public function testCifDownExceptionSoap()
+    {
+        $this->expectException('\\ThirtyBees\\PostNL\\Exception\\CifDownException');
+
+        $response = simplexml_load_string('<?xml version="1.0" encoding="UTF-8"?>
+<Envelope xmlns:env="http://www.w3.org/2003/05/soap-envelope">
+    <encodingStyle>http://schemas.xmlsoap.org/soap/encoding/</encodingStyle>
+    <env:Body>
+        <env:Fault>
+            <faultcode>soap:Server</faultcode>
+            <faultstring>Failed to execute the ExtractVariables: payloadExtractVariables</faultstring>
+            <faultactor/>
+            <env:Reason>
+                <env:Text>steps.extractvariables.ExecutionFailed</env:Text>
+            </env:Reason>
+        </env:Fault>
+    </env:Body>
+</Envelope>');
+        $response->registerXPathNamespace('env', 'http://www.w3.org/2003/05/soap-envelope');
+        $response->registerXPathNamespace('common', 'http://postnl.nl/cif/services/common/');
+
+        AbstractService::validateSOAPResponse($response);
+    }
+
+    /**
+     * @testdox can detect and throw a CifException (SOAP)
+     *
+     * @throws \ThirtyBees\PostNL\Exception\CifDownException
+     * @throws \ThirtyBees\PostNL\Exception\CifException
+     */
+    public function testCifExceptionSoap()
+    {
+        $this->expectException('\\ThirtyBees\\PostNL\\Exception\\CifException');
+
+        $response = simplexml_load_string('<?xml version="1.0" encoding="UTF-8"?>
+<Envelope xmlns:common="http://postnl.nl/cif/services/common/">
+    <encodingStyle>http://schemas.xmlsoap.org/soap/encoding/</encodingStyle>
+    <common:CifException>
+        <common:Errors>
+            <common:ExceptionData>
+                <common:Description>ExecutionFailed</common:Description>
+                <common:ErrorMsg>steps.extractvariables.ExecutionFailed</common:ErrorMsg>
+                <common:ErrorNumber>1</common:ErrorNumber>
+            </common:ExceptionData>
+        </common:Errors>
+    </common:CifException>
+</Envelope>');
+        $response->registerXPathNamespace('env', 'http://www.w3.org/2003/05/soap-envelope');
+        $response->registerXPathNamespace('common', 'http://postnl.nl/cif/services/common/');
+
+        AbstractService::validateSOAPResponse($response);
     }
 }

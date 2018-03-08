@@ -45,7 +45,7 @@ use ThirtyBees\PostNL\PostNL;
 abstract class AbstractService
 {
     /** @var array $namespaces */
-    public static $namespaces;
+    public static $namespaces = [];
 
     /** @var PostNL $postnl */
     protected $postnl;
