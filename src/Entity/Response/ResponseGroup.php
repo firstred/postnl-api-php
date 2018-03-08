@@ -24,8 +24,9 @@
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity;
+namespace ThirtyBees\PostNL\Entity\Response;
 
+use ThirtyBees\PostNL\Entity\AbstractEntity;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
@@ -37,7 +38,7 @@ use ThirtyBees\PostNL\Service\TimeframeService;
 /**
  * Class ResponseGroup
  *
- * @package ThirtyBees\PostNL\Entity
+ * @package ThirtyBees\PostNL\Entity\Response
  *
  * @method string getGroupCount()
  * @method string getGroupSequence()
