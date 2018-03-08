@@ -502,9 +502,9 @@ class ShippingStatusRestTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\CompleteStatusResponse', $completeStatusResponse);
         $this->assertEquals(2, count($completeStatusResponse->getShipments()[0]->getAddresses()));
-        $this->assertEquals(0, count($completeStatusResponse->getShipments()[0]->getAmounts()));
+        $this->assertNull($completeStatusResponse->getShipments()[0]->getAmounts());
         $this->assertEquals(3, count($completeStatusResponse->getShipments()[0]->getEvents()));
-        $this->assertEquals(0, count($completeStatusResponse->getShipments()[0]->getGroups()));
+        $this->assertNull($completeStatusResponse->getShipments()[0]->getGroups());
         $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Customer', $completeStatusResponse->getShipments()[0]->getCustomer());
         $this->assertEquals('07-03-2018 09:50:47', $completeStatusResponse->getShipments()[0]->getOldStatuses()[4]->getTimeStamp());
     }
