@@ -16,7 +16,8 @@ Requirements
 
    If you use the Guzzle client, you do not need to have the cURL extension installed.
    As an alternative, you can enable ``allow_url_fopen`` in your system's php.ini. The included Guzzle version can
-   work with the PHP stream wrapper to handle HTTP requests.
+   work with the PHP stream wrapper to handle HTTP requests. For more information check out
+  `Guzzle's documentation <http://guzzle.readthedocs.io/en/stable/overview.html>`.
 
 .. _installation:
 

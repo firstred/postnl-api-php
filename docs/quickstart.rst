@@ -10,25 +10,69 @@ page.
 Making a Request
 ================
 
-You can send requests by creating the request objects and passing them to one of the functions in the main `PostNL`
+You can send requests by creating the request objects and passing them to one of the functions in the main ``PostNL``
 class.
 
 
-Creating a Client
+Requesting a merged label
 -----------------
 
 .. code-block:: php
 
-    use GuzzleHttp\Client;
+      use ThirtyBees\PostNL\PostNL;
+      use ThirtyBees\PostNL\Entity\Customer;
+      use ThirtyBees\PostNL\Entity\Address;
+      use ThirtyBees\PostNL\Entity\Shipment;
+      use ThirtyBees\PostNL\Entity\Dimension;
 
-    $client = new Client([
-        // Base URI is used with relative requests
-        'base_uri' => 'http://httpbin.org',
-        // You can set any number of default request options.
-        'timeout'  => 2.0,
-    ]);
+      require_once __DIR__.'/vendor/autoload.php';
 
-Clients are immutable in Guzzle 6, which means that you cannot change the defaults used by a client after it's created.
+      // Your PostNL credentials
+      $customer = Customer::create([
+          'CollectionLocation' => '123456',
+          'CustomerCode' => 'DEVC',
+          'CustomerNumber' => '11223344',
+          'ContactPerson' => 'Lesley',
+          'Address' => Address::create([
+              'AddressType' => '02',
+              'City'        => 'Hoofddorp',
+              'CompanyName' => 'PostNL',
+              'Countrycode' => 'NL',
+              'HouseNr'     => '42',
+              'Street'      => 'Siriusdreef',
+              'Zipcode'     => '2132WT',
+          ]),
+          'Email' => 'michael@thirtybees.com',
+          'Name' => 'Michael',
+      ]);
+
+      $apikey = 'YOUR_API_KEY_HERE';
+      $sandbox = true;
+
+      $postnl = new PostNL($customer, $apikey, $sandbox);
+
+      $barcode = $postnl->generateBarcodeByCountryCode('NL');
+
+      $shipment = Shipment::create([
+          'Addresses' => [
+              Address::create([
+                  'AddressType' => '01',
+                  'City'        => 'Utrecht',
+                  'Countrycode' => 'NL',
+                  'FirstName'   => 'Peter',
+                  'HouseNr'     => '9',
+                  'HouseNrExt'  => 'a bis',
+                  'Name'        => 'de Ruijter',
+                  'Street'      => 'Bilderdijkstraat',
+                  'Zipcode'     => '3521VA',
+              ]),
+          ],
+          'Barcode' => $barcode,
+          'Dimension' => new Dimension('2000'),
+          'ProductCodeDelivery' => '3085',
+      ]);
+
+      $label = $postnl->generateLabel($shipment, 'GraphicFile|PDF', true);
 
 The client constructor accepts an associative array of options:
 
