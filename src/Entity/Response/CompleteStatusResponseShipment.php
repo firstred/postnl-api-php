@@ -57,7 +57,7 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method Customer                        getCustomer()
  * @method string                          getDeliveryDate()
  * @method Dimension                       getDimension()
- * @method CompleteStatusResponseEvent[]   getEvent()
+ * @method CompleteStatusResponseEvent[]   getEvents()
  * @method Expectation                     getExpectation()
  * @method Group[]                         getGroups()
  * @method CompleteStatusResponseOldStatus getOldStatuses()
@@ -73,7 +73,7 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method CompleteStatusResponseShipment setCustomer(Customer $customer = null)
  * @method CompleteStatusResponseShipment setDeliveryDate(string $date)
  * @method CompleteStatusResponseShipment setDimension(Dimension $dimension)
- * @method CompleteStatusResponseShipment setEvent(CompleteStatusResponseEvent [] $events = null)
+ * @method CompleteStatusResponseShipment setEvents(CompleteStatusResponseEvent [] $events = null)
  * @method CompleteStatusResponseShipment setExpectation(Expectation $expectation)
  * @method CompleteStatusResponseShipment setGroups(Group [] $groups = null)
  * @method CompleteStatusResponseShipment setOldStatuses(CompleteStatusResponseOldStatus $oldStatuses = null)
@@ -94,7 +94,7 @@ class CompleteStatusResponseShipment extends AbstractEntity
             'Customer'       => BarcodeService::DOMAIN_NAMESPACE,
             'DeliveryDate'   => BarcodeService::DOMAIN_NAMESPACE,
             'Dimension'      => BarcodeService::DOMAIN_NAMESPACE,
-            'Event'          => BarcodeService::DOMAIN_NAMESPACE,
+            'Events'         => BarcodeService::DOMAIN_NAMESPACE,
             'Expectation'    => BarcodeService::DOMAIN_NAMESPACE,
             'Groups'         => BarcodeService::DOMAIN_NAMESPACE,
             'OldStatuses'    => BarcodeService::DOMAIN_NAMESPACE,
@@ -111,7 +111,7 @@ class CompleteStatusResponseShipment extends AbstractEntity
             'Customer'       => ConfirmingService::DOMAIN_NAMESPACE,
             'DeliveryDate'   => ConfirmingService::DOMAIN_NAMESPACE,
             'Dimension'      => ConfirmingService::DOMAIN_NAMESPACE,
-            'Event'          => ConfirmingService::DOMAIN_NAMESPACE,
+            'Events'         => ConfirmingService::DOMAIN_NAMESPACE,
             'Expectation'    => ConfirmingService::DOMAIN_NAMESPACE,
             'Groups'         => ConfirmingService::DOMAIN_NAMESPACE,
             'OldStatuses'    => ConfirmingService::DOMAIN_NAMESPACE,
@@ -128,7 +128,7 @@ class CompleteStatusResponseShipment extends AbstractEntity
             'Customer'       => LabellingService::DOMAIN_NAMESPACE,
             'DeliveryDate'   => LabellingService::DOMAIN_NAMESPACE,
             'Dimension'      => LabellingService::DOMAIN_NAMESPACE,
-            'Event'          => LabellingService::DOMAIN_NAMESPACE,
+            'Events'         => LabellingService::DOMAIN_NAMESPACE,
             'Expectation'    => LabellingService::DOMAIN_NAMESPACE,
             'Groups'         => LabellingService::DOMAIN_NAMESPACE,
             'OldStatuses'    => LabellingService::DOMAIN_NAMESPACE,
@@ -145,7 +145,7 @@ class CompleteStatusResponseShipment extends AbstractEntity
             'Customer'       => ShippingStatusService::DOMAIN_NAMESPACE,
             'DeliveryDate'   => ShippingStatusService::DOMAIN_NAMESPACE,
             'Dimension'      => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Event'          => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Events'         => ShippingStatusService::DOMAIN_NAMESPACE,
             'Expectation'    => ShippingStatusService::DOMAIN_NAMESPACE,
             'Groups'         => ShippingStatusService::DOMAIN_NAMESPACE,
             'OldStatuses'    => ShippingStatusService::DOMAIN_NAMESPACE,
@@ -162,7 +162,7 @@ class CompleteStatusResponseShipment extends AbstractEntity
             'Customer'       => DeliveryDateService::DOMAIN_NAMESPACE,
             'DeliveryDate'   => DeliveryDateService::DOMAIN_NAMESPACE,
             'Dimension'      => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Event'          => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Events'         => DeliveryDateService::DOMAIN_NAMESPACE,
             'Expectation'    => DeliveryDateService::DOMAIN_NAMESPACE,
             'Groups'         => DeliveryDateService::DOMAIN_NAMESPACE,
             'OldStatuses'    => DeliveryDateService::DOMAIN_NAMESPACE,
@@ -179,7 +179,7 @@ class CompleteStatusResponseShipment extends AbstractEntity
             'Customer'       => LocationService::DOMAIN_NAMESPACE,
             'DeliveryDate'   => LocationService::DOMAIN_NAMESPACE,
             'Dimension'      => LocationService::DOMAIN_NAMESPACE,
-            'Event'          => LocationService::DOMAIN_NAMESPACE,
+            'Events'         => LocationService::DOMAIN_NAMESPACE,
             'Expectation'    => LocationService::DOMAIN_NAMESPACE,
             'Groups'         => LocationService::DOMAIN_NAMESPACE,
             'OldStatuses'    => LocationService::DOMAIN_NAMESPACE,
@@ -196,7 +196,7 @@ class CompleteStatusResponseShipment extends AbstractEntity
             'Customer'       => TimeframeService::DOMAIN_NAMESPACE,
             'DeliveryDate'   => TimeframeService::DOMAIN_NAMESPACE,
             'Dimension'      => TimeframeService::DOMAIN_NAMESPACE,
-            'Event'          => TimeframeService::DOMAIN_NAMESPACE,
+            'Events'         => TimeframeService::DOMAIN_NAMESPACE,
             'Expectation'    => TimeframeService::DOMAIN_NAMESPACE,
             'Groups'         => TimeframeService::DOMAIN_NAMESPACE,
             'OldStatuses'    => TimeframeService::DOMAIN_NAMESPACE,
@@ -220,8 +220,8 @@ class CompleteStatusResponseShipment extends AbstractEntity
     protected $DeliveryDate;
     /** @var Dimension Dimension */
     protected $Dimension;
-    /** @var CompleteStatusResponseEvent[] $Event */
-    protected $Event;
+    /** @var CompleteStatusResponseEvent[] $Events */
+    protected $Events;
     /** @var Expectation $Expectation */
     protected $Expectation;
     /** @var Group[] $Groups */
@@ -249,7 +249,7 @@ class CompleteStatusResponseShipment extends AbstractEntity
      * @param Customer|null                          $customer
      * @param string|null                            $deliveryDate
      * @param Dimension|null                         $dimension
-     * @param array|null                             $event
+     * @param array|null                             $events
      * @param Expectation|null                       $expectation
      * @param Group[]|null                           $groups
      * @param string|null                            $productCode
@@ -266,7 +266,7 @@ class CompleteStatusResponseShipment extends AbstractEntity
         Customer $customer = null,
         $deliveryDate = null,
         Dimension $dimension = null,
-        array $event = null,
+        array $events = null,
         Expectation $expectation = null,
         array $groups = null,
         array $oldStatuses = null,
@@ -284,7 +284,7 @@ class CompleteStatusResponseShipment extends AbstractEntity
         $this->setCustomer($customer);
         $this->setDeliveryDate($deliveryDate);
         $this->setDimension($dimension);
-        $this->setEvent($event);
+        $this->setEvents($events);
         $this->setExpectation($expectation);
         $this->setGroups($groups);
         $this->setOldStatuses($oldStatuses);
@@ -330,12 +330,12 @@ class CompleteStatusResponseShipment extends AbstractEntity
                     $groups[] = ["{{$namespace}}Group" => $group];
                 }
                 $xml["{{$namespace}}Groups"] = $groups;
-            } elseif ($propertyName === 'Event') {
+            } elseif ($propertyName === 'Events') {
                 $events = [];
-                foreach ($this->Event as $event) {
+                foreach ($this->Events as $event) {
                     $events[] = ["{{$namespace}}CompleteStatusResponseEvent" => $event];
                 }
-                $xml["{{$namespace}}Event"] = $events;
+                $xml["{{$namespace}}Events"] = $events;
              }elseif ($propertyName === 'OldStatuses') {
                 $oldStatuses = [];
                 foreach ($this->OldStatuses as $oldStatus) {

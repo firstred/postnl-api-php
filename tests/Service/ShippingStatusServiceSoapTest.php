@@ -598,7 +598,7 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
         $mockClient->setHandler($handler);
         $this->postnl->setHttpClient($mockClient);
 
-        $signatureResponse = $this->postnl->getCompleteStatus(
+        $completeStatusResponse = $this->postnl->getCompleteStatus(
             (new CompleteStatus())
                 ->setShipment(
                     (new Shipment())
@@ -606,7 +606,12 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
                 )
         );
 
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\CompleteStatusResponse', $signatureResponse);
+        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\CompleteStatusResponse', $completeStatusResponse);
+        $this->assertEquals(1, count($completeStatusResponse->getShipments()[0]->getAddresses()));
+        $this->assertEquals(2, count($completeStatusResponse->getShipments()[0]->getAmounts()));
+        $this->assertEquals(5, count($completeStatusResponse->getShipments()[0]->getEvents()));
+        $this->assertEquals(1, count($completeStatusResponse->getShipments()[0]->getGroups()));
+        $this->assertEquals('19-04-2016 06:06:16', $completeStatusResponse->getShipments()[0]->getOldStatuses()[4]->getTimeStamp());
     }
 
     /**

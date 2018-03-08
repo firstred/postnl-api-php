@@ -277,7 +277,9 @@ abstract class AbstractEntity implements \JsonSerializable, XmlSerializable
             $fullClassName = static::getFullEntityClassName($shortClassName);
 
             // If key is plural, try the singular version, because this might be an array
-            if (!$fullClassName && substr($shortClassName, -1) === 's') {
+            if (!$fullClassName && substr($shortClassName, -2) === 'es') {
+                $fullClassName = static::getFullEntityClassName(substr($shortClassName, 0, strlen($shortClassName) - 2));
+            } elseif (!$fullClassName && substr($shortClassName, -1) === 's') {
                 $fullClassName = static::getFullEntityClassName(substr($shortClassName, 0, strlen($shortClassName) - 1));
             }
 
