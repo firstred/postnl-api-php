@@ -5,8 +5,9 @@ Overview
 Requirements
 ============
 
-#. PHP 5.5.5
+#. PHP 5.5.5 or higher
 #. JSON extension
+#. XML Support (SimpleXMLElement)
 #. By default this library utilizes cURL for communication.
 #. To use the cURL client, you must have a recent version of cURL >= 7.19.4
    compiled with OpenSSL and zlib.
