@@ -403,7 +403,6 @@ class ShippingStatusService extends AbstractService
         }
 
         $object = $this->processGetSignatureResponse($response);
-        var_dump($object);
         if ($object instanceof SignatureResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof Response
