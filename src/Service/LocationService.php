@@ -104,7 +104,6 @@ class LocationService extends AbstractService
      * @throws CifDownException
      * @throws CifException
      * @throws \Exception
-     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
     public function getNearestLocationsREST(GetNearestLocations $getNearestLocations)
@@ -147,7 +146,6 @@ class LocationService extends AbstractService
      * @return GetNearestLocationsResponse
      *
      * @throws ApiException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getNearestLocationsSOAP(GetNearestLocations $getNearestLocations)
     {
@@ -190,7 +188,6 @@ class LocationService extends AbstractService
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
     public function getLocationsInAreaREST(GetLocationsInArea $getLocations)
@@ -233,7 +230,6 @@ class LocationService extends AbstractService
      * @return GetLocationsInAreaResponse
      *
      * @throws ApiException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getLocationsInAreaSOAP(GetLocationsInArea $getNearestLocations)
     {
@@ -277,8 +273,6 @@ class LocationService extends AbstractService
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
-     * @throws \Exception
-     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
     public function getLocationREST(GetLocation $getLocation)
@@ -321,7 +315,6 @@ class LocationService extends AbstractService
      * @return GetLocationsInAreaResponse
      *
      * @throws ApiException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getLocationSOAP(GetLocation $getLocation)
     {

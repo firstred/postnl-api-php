@@ -86,8 +86,6 @@ class ConfirmingService extends AbstractService
      *
      * @return ConfirmingResponseShipment
      * @throws ApiException
-     * @throws \Exception
-     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \ThirtyBees\PostNL\Exception\CifDownException
      * @throws \ThirtyBees\PostNL\Exception\CifException
      * @throws \ThirtyBees\PostNL\Exception\ResponseException
@@ -154,7 +152,6 @@ class ConfirmingService extends AbstractService
      * @throws \Sabre\Xml\LibXMLException
      * @throws \ThirtyBees\PostNL\Exception\CifDownException
      * @throws \ThirtyBees\PostNL\Exception\CifException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws ResponseException
      */
     public function confirmShipmentSOAP(Confirming $confirming)

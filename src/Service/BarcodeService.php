@@ -26,8 +26,6 @@
 
 namespace ThirtyBees\PostNL\Service;
 
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Sabre\Xml\Service as XmlService;
@@ -87,11 +85,10 @@ class BarcodeService extends AbstractService
      *
      * @return string|null Barcode
      *
-     * @throws ResponseException
      * @throws ApiException
-     * @throws GuzzleException
      * @throws CifDownException
      * @throws CifException
+     * @throws ResponseException
      */
     public function generateBarcodeREST(GenerateBarcode $generateBarcode)
     {
@@ -153,8 +150,6 @@ class BarcodeService extends AbstractService
      *
      * @return string Barcode
      * @throws ResponseException
-     * @throws \Exception
-     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \ThirtyBees\PostNL\Exception\CifDownException
      * @throws \ThirtyBees\PostNL\Exception\CifException
      */

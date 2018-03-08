@@ -38,8 +38,8 @@ use ThirtyBees\PostNL\Entity\Request\CurrentStatus;
 use ThirtyBees\PostNL\Entity\Request\GetSignature;
 use ThirtyBees\PostNL\Entity\Response\CompleteStatusResponse;
 use ThirtyBees\PostNL\Entity\Response\CurrentStatusResponse;
-use ThirtyBees\PostNL\Entity\Response\GetSentDateResponse;
 use ThirtyBees\PostNL\Entity\Response\GetSignatureResponseSignature;
+use ThirtyBees\PostNL\Entity\Response\SignatureResponse;
 use ThirtyBees\PostNL\Entity\SOAP\Security;
 use ThirtyBees\PostNL\Exception\ApiException;
 use ThirtyBees\PostNL\Exception\CifDownException;
@@ -116,8 +116,6 @@ class ShippingStatusService extends AbstractService
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
-     * @throws \Exception
-     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
     public function currentStatusREST(CurrentStatus $currentStatus)
@@ -172,7 +170,6 @@ class ShippingStatusService extends AbstractService
      * @return CurrentStatusResponse
      *
      * @throws ApiException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function currentStatusSOAP(CurrentStatus $currentStatus)
     {
@@ -186,7 +183,7 @@ class ShippingStatusService extends AbstractService
             }
         }
         if (!$response instanceof Response) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildCurrentStatusRequestSOAP($currentStatus));
+            $response = $this->postnl->getHttpClient()->doRequest($this->buildCurrentStatusRequest($currentStatus));
         }
 
         $object = $this->processCurrentStatusResponse($response);
@@ -225,8 +222,6 @@ class ShippingStatusService extends AbstractService
      *
      * @throws CifDownException
      * @throws CifException
-     * @throws \Exception
-     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
     public function completeStatusREST(CompleteStatus $completeStatus)
@@ -280,7 +275,6 @@ class ShippingStatusService extends AbstractService
      * @return CompleteStatusResponse
      *
      * @throws ApiException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function completeStatusSOAP(CompleteStatus $completeStatus)
     {
@@ -331,11 +325,10 @@ class ShippingStatusService extends AbstractService
      *
      * @return GetSignatureResponseSignature
      *
+     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
-     * @throws \Exception
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws ResponseException
      */
     public function getSignatureREST(GetSignature $getSignature)
     {
@@ -388,14 +381,9 @@ class ShippingStatusService extends AbstractService
      *
      * @param GetSignature $getSignature
      *
-     * @return GetSignatureResponseSignature
+     * @return GetSignature
      *
-     * @throws CifDownException
-     * @throws CifException
-     * @throws \Exception
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \Sabre\Xml\LibXMLException
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws ApiException
      */
     public function getSignatureSOAP(GetSignature $getSignature)
     {
@@ -413,7 +401,8 @@ class ShippingStatusService extends AbstractService
         }
 
         $object = $this->processGetSignatureResponse($response);
-        if ($object instanceof GetSignatureResponseSignature) {
+        var_dump($object);
+        if ($object instanceof SignatureResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof Response
                 && $response->getStatusCode() === 200

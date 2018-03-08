@@ -95,7 +95,6 @@ class LabellingService extends AbstractService
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
     public function generateLabelREST(GenerateLabel $generateLabel, $confirm = true)
@@ -209,7 +208,6 @@ class LabellingService extends AbstractService
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Sabre\Xml\LibXMLException
      */
     public function generateLabelSOAP(GenerateLabel $generateLabel, $confirm = true)

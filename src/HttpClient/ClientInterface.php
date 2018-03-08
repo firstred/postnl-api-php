@@ -25,10 +25,10 @@
  */
 
 namespace ThirtyBees\PostNL\HttpClient;
-use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Psr\Log\LoggerInterface;
+use ThirtyBees\PostNL\Exception\HttpClientException;
 
 /**
  * Interface ClientInterface
@@ -98,8 +98,6 @@ interface ClientInterface
      * @param Request $request
      *
      * @return Response
-     *
-     * @throws GuzzleException
      */
     public function doRequest(Request $request);
 
@@ -110,7 +108,7 @@ interface ClientInterface
      *
      * @param Request[] $requests
      *
-     * @return Response|Response[]|GuzzleException|GuzzleException[]
+     * @return Response|Response[]|HttpClientException|HttpClientException[]
      */
     public function doRequests($requests = []);
 }

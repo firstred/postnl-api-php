@@ -100,7 +100,6 @@ class DeliveryDateService extends AbstractService
      * @throws CifDownException
      * @throws CifException
      * @throws \Exception
-     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws ResponseException
      */
     public function getDeliveryDateREST(GetDeliveryDate $getDeliveryDate)
@@ -144,7 +143,6 @@ class DeliveryDateService extends AbstractService
      *
      * @throws CifDownException
      * @throws CifException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Sabre\Xml\LibXMLException
      * @throws ResponseException
      * @throws ApiException
@@ -191,8 +189,6 @@ class DeliveryDateService extends AbstractService
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
-     * @throws \Exception
-     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws ResponseException
      */
     public function getSentDateREST(GetSentDateRequest $getSentDate)
@@ -236,7 +232,6 @@ class DeliveryDateService extends AbstractService
      * @throws CifDownException
      * @throws CifException
      * @throws \Exception
-     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Sabre\Xml\LibXMLException
      * @throws ResponseException
      */

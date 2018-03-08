@@ -27,16 +27,21 @@
 namespace ThirtyBees\PostNL\Tests\Service;
 
 use Cache\Adapter\Void\VoidCachePool;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
 use Psr\Log\LoggerInterface;
 use ThirtyBees\PostNL\Entity\Address;
 use ThirtyBees\PostNL\Entity\Customer;
+use ThirtyBees\PostNL\Entity\Dimension;
 use ThirtyBees\PostNL\Entity\Message\Message;
 use ThirtyBees\PostNL\Entity\Request\CompleteStatus;
 use ThirtyBees\PostNL\Entity\Request\CurrentStatus;
 use ThirtyBees\PostNL\Entity\Request\GetSignature;
 use ThirtyBees\PostNL\Entity\Shipment;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
+use ThirtyBees\PostNL\HttpClient\MockClient;
 use ThirtyBees\PostNL\PostNL;
 use ThirtyBees\PostNL\Service\ShippingStatusService;
 
@@ -517,124 +522,44 @@ class ShippingStatusSoapTest extends \PHPUnit_Framework_TestCase
 ", (string) $request->getBody());
     }
 
-//    /**
-//     * @testdox can generate a single label
-//     *
-//     * @throws \ReflectionException
-//     */
-//    public function testGetCurrentStatusRest()
-//    {
-//        [
-//            'Shipments' => [
-//                [
-//                    'Addresses' => [
-//                        [
-//                            'AddressType'
-//                        ]
-//                    ]
-//                ]
-//            ]
-//        ]
-//        /*
-//        <a:Shipments>
-//         <a:CurrentStatusResponseShipment>
-//           <a:Addresses>
-//             <a:ResponseAddress>
-//               <a:AddressType>01</a:AddressType>
-//               <a:City>Hoofddorp</a:City>
-//               <a:CountryCode>NL</a:CountryCode>
-//               <a:LastName>de Ruiter</a:LastName>
-//               <a:RegistrationDate>01-01-0001 00:00:00</a:RegistrationDate>
-//               <a:Street>Siriusdreef</a:Street>
-//               <a:Zipcode>2132WT</a:Zipcode>
-//             </a:ResponseAddress>
-//             <a:ResponseAddress>
-//               <a:AddressType>02</a:AddressType>
-//               <a:City>Vianen</a:City>
-//               <a:CompanyName>PostNL</a:CompanyName>
-//               <a:CountryCode>NL</a:CountryCode>
-//               <a:HouseNumber>1</a:HouseNumber>
-//               <a:HouseNumberSuffix>A</a:HouseNumberSuffix>
-//               <a:RegistrationDate>01-01-0001 00:00:00</a:RegistrationDate>
-//               <a:Street>Lage Biezenweg</a:Street>
-//               <a:Zipcode>4131LV</a:Zipcode>
-//             </a:ResponseAddress>
-//           </a:Addresses>
-//           <a:Barcode>3SABCD6659149</a:Barcode>
-//           <a:Groups>
-//             <a:ResponseGroup>
-//               <a:GroupType>4</a:GroupType>
-//               <a:MainBarcode>3SABCD6659149</a:MainBarcode>
-//               <a:ShipmentAmount>1</a:ShipmentAmount>
-//               <a:ShipmentCounter>1</a:ShipmentCounter>
-//             </a:ResponseGroup>
-//           </a:Groups>
-//           <a:ProductCode>003052</a:ProductCode>
-//           <a:Reference>2016014567</a:Reference>
-//           <a:Status>
-//             <a:CurrentPhaseCode>4</a:CurrentPhaseCode>
-//             <a:CurrentPhaseDescription>Afgeleverd</a:CurrentPhaseDescription>
-//             <a:CurrentStatusCode>11</a:CurrentStatusCode>
-//             <a:CurrentStatusDescription>Zending afgeleverd</a:CurrentStatusDescription>
-//             <a:CurrentStatusTimeStamp>06-06-2016 18:00:41</a:CurrentStatusTimeStamp>
-//           </a:Status>
-//         </a:CurrentStatusResponseShipment>
-//       </a:Shipments>
-//        */
-//
-//
-//        $mock = new MockHandler([
-//            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode([
-//                'MergedLabels' => [],
-//                'ResponseShipments' => [
-//                    [
-//                        'Barcode' => '3SDEVC201611210',
-//                        'DownPartnerLocation' => [],
-//                        'ProductCodeDelivery' => '3085',
-//                        'Labels' => [
-//                            [
-//                                'Labeltype' => 'Label',
-//                            ]
-//                        ]
-//                    ]
-//                ]
-//            ])),
-//        ]);
-//        $handler = HandlerStack::create($mock);
-//        $mockClient = new MockClient();
-//        $mockClient->setHandler($handler);
-//        $this->postnl->setHttpClient($mockClient);
-//
-//        $label = $this->postnl->generateLabel(
-//            (new Shipment())
-//                ->setAddresses([
-//                    Address::create([
-//                        'AddressType' => '01',
-//                        'City'        => 'Utrecht',
-//                        'Countrycode' => 'NL',
-//                        'FirstName'   => 'Peter',
-//                        'HouseNr'     => '9',
-//                        'HouseNrExt'  => 'a bis',
-//                        'Name'        => 'de Ruijter',
-//                        'Street'      => 'Bilderdijkstraat',
-//                        'Zipcode'     => '3521VA',
-//                    ]),
-//                    Address::create([
-//                        'AddressType' => '02',
-//                        'City'        => 'Hoofddorp',
-//                        'CompanyName' => 'PostNL',
-//                        'Countrycode' => 'NL',
-//                        'HouseNr'     => '42',
-//                        'Street'      => 'Siriusdreef',
-//                        'Zipcode'     => '2132WT',
-//                    ]),
-//                ])
-//                ->setBarcode('3S1234567890123')
-//                ->setDeliveryAddress('01')
-//                ->setDimension(new Dimension('2000'))
-//                ->setProductCodeDelivery('3085')
-//        );
-//
-//        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\GenerateLabelResponse', $label);
-//    }
+    /**
+     * @testdox can generate a single label
+     */
+    public function testGetCurrentStatusRest()
+    {
+        $mock = new MockHandler([
+            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+   <s:Body>
+     <SignatureResponse
+xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://postnl.nl/cif/domain/ShippingStatusWebService/" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+          <a:Signature>
+             <a:GetSignatureResponseSignature>
+                <a:Barcode>3SABCD6659149</a:Barcode>
+                <a:SignatureDate>27-06-2015 13:34:19</a:SignatureDate>
+                <a:SignatureImage>[Base64 string]</a:SignatureImage>
+             </a:GetSignatureResponseSignature>
+             <a:Warnings>
+                 <a:Warning>
+                   <a:Code>00</a:Code>
+                   <a:Description>Warning</a:Description>
+                </a:Warning>
+             </a:Warnings>
+          </a:Signature>
+       </SignatureResponse>
+    </s:Body>
+</s:Envelope>')]);
+        $handler = HandlerStack::create($mock);
+        $mockClient = new MockClient();
+        $mockClient->setHandler($handler);
+        $this->postnl->setHttpClient($mockClient);
+
+        $signatureResponse = $this->postnl->getSignature(
+            (new GetSignature())
+                ->setShipment((new Shipment())
+                    ->setBarcode('3SABCD6659149')
+                )
+        );
+
+        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\SignatureResponse', $signatureResponse);
+    }
 }

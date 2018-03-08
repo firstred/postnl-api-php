@@ -19,15 +19,16 @@
 
 namespace ThirtyBees\PostNL\HttpClient;
 
-use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ConnectException;
-use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
+use ThirtyBees\PostNL\Exception\HttpClientException;
 
 /**
  * Class GuzzleClient
@@ -224,7 +225,7 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
      *
      * @return Response
      *
-     * @throws \Exception|GuzzleException
+     * @throws \Exception|HttpClientException
      */
     public function doRequest(Request $request)
     {
@@ -238,7 +239,11 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
             ]
         ));
 
-        $response = $guzzle->send($request);
+        try {
+            $response = $guzzle->send($request);
+        } catch (GuzzleException $e) {
+            throw new HttpClientException($e->getMessage(), $e->getCode(), $e);
+        }
         if ($response instanceof Response && $this->logger instanceof LoggerInterface) {
             $this->logger->debug(\GuzzleHttp\Psr7\str($response));
         }
@@ -253,7 +258,7 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
      *
      * @param Request[] $requests
      *
-     * @return Response|Response[]|GuzzleException|GuzzleException[]|\Exception|\Exception[]
+     * @return Response|Response[]|HttpClientException|HttpClientException[]
      */
     public function doRequests($requests = [])
     {
@@ -295,7 +300,21 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
             if (!empty($response['value'])) {
                 $response = $response['value'];
             } elseif (!empty($response['reason'])) {
-                $response = $response['reason'];
+                if ($response['reason'] instanceof GuzzleException) {
+                    if (method_exists($response['reason'], 'getMessage')
+                        && method_exists($response['reason'], 'getCode')
+                    ) {
+                        $response = new HttpClientException(
+                            $response['reason']->getMessage(),
+                            $response['reason']->getCode(),
+                            $response['reason']
+                        );
+                    } else {
+                        $response = new HttpClientException(null, null, $response['reason']);
+                    }
+                 } else {
+                    $response = $response['reason'];
+                }
             } else {
                 $response = \ThirtyBees\PostNL\Exception\ResponseException('Unknown reponse type');
             }

@@ -26,7 +26,6 @@
 
 namespace ThirtyBees\PostNL;
 
-use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Response;
 use Psr\Cache\CacheItemInterface;
 use Psr\Log\LoggerAwareInterface;
@@ -37,6 +36,7 @@ use ThirtyBees\PostNL\Entity\Customer;
 use ThirtyBees\PostNL\Entity\Label;
 use ThirtyBees\PostNL\Entity\Message\LabellingMessage;
 use ThirtyBees\PostNL\Entity\Message\Message;
+use ThirtyBees\PostNL\Entity\Request\CompleteStatus;
 use ThirtyBees\PostNL\Entity\Request\Confirming;
 use ThirtyBees\PostNL\Entity\Request\CurrentStatus;
 use ThirtyBees\PostNL\Entity\Request\GenerateBarcode;
@@ -46,7 +46,9 @@ use ThirtyBees\PostNL\Entity\Request\GetLocation;
 use ThirtyBees\PostNL\Entity\Request\GetLocationsInArea;
 use ThirtyBees\PostNL\Entity\Request\GetNearestLocations;
 use ThirtyBees\PostNL\Entity\Request\GetSentDateRequest;
+use ThirtyBees\PostNL\Entity\Request\GetSignature;
 use ThirtyBees\PostNL\Entity\Request\GetTimeframes;
+use ThirtyBees\PostNL\Entity\Response\CompleteStatusResponse;
 use ThirtyBees\PostNL\Entity\Response\ConfirmingResponseShipment;
 use ThirtyBees\PostNL\Entity\Response\CurrentStatusResponse;
 use ThirtyBees\PostNL\Entity\Response\GenerateLabelResponse;
@@ -63,7 +65,6 @@ use ThirtyBees\PostNL\Exception\InvalidArgumentException;
 use ThirtyBees\PostNL\Exception\InvalidBarcodeException;
 use ThirtyBees\PostNL\Exception\InvalidConfigurationException;
 use ThirtyBees\PostNL\Exception\NotSupportedException;
-use ThirtyBees\PostNL\Exception\ResponseException;
 use ThirtyBees\PostNL\HttpClient\ClientInterface;
 use ThirtyBees\PostNL\HttpClient\CurlClient;
 use ThirtyBees\PostNL\HttpClient\GuzzleClient;
@@ -744,6 +745,11 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
+     * Generate or retrieve multiple labels
+     *
+     * Note that instead of returning a GenerateLabelResponse this function can merge the labels and return a
+     * string which contains the PDF with the merged pages as well.
+     *
      * @param Shipment[] $shipments   (key = ID) Shipments
      * @param string     $printertype Printer type, see PostNL dev docs for available types
      * @param bool       $confirm     Immediately confirm the shipments
@@ -885,6 +891,8 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
+     * Confirm a single shipment
+     *
      * @param Shipment $shipment
      *
      * @return ConfirmingResponseShipment
@@ -895,6 +903,8 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
+     * Confirm multiple shipments
+     *
      * @param array $shipments
      *
      * @return ConfirmingResponseShipment[]
@@ -910,6 +920,19 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
+     * Get the current status of a shipment
+     *
+     * This is a combi-function, supporting the following:
+     * - CurrentStatus (by barcode):
+     *   - Fill the Shipment->Barcode property. Leave the rest empty.
+     * - CurrentStatusByReference:
+     *   - Fill the Shipment->Reference property. Leave the rest empty.
+     * - CurrentStatusByPhase:
+     *   - Fill the Shipment->PhaseCode property, do not pass Barcode or Reference.
+     *     Optionally add DateFrom and/or DateTo.
+     * - CurrentStatusByStatus:
+     *   - Fill the Shipment->StatuCode property. Leave the rest empty.
+     *
      * @param CurrentStatus $currentStatus
      *
      * @return CurrentStatusResponse
@@ -925,23 +948,48 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * @param CurrentStatus $currentStatus
+     * Get the complete status of a shipment
      *
-     * @return CurrentStatusResponse
+     * This is a combi-function, supporting the following:
+     * - CurrentStatus (by barcode):
+     *   - Fill the Shipment->Barcode property. Leave the rest empty.
+     * - CurrentStatusByReference:
+     *   - Fill the Shipment->Reference property. Leave the rest empty.
+     * - CurrentStatusByPhase:
+     *   - Fill the Shipment->PhaseCode property, do not pass Barcode or Reference.
+     *     Optionally add DateFrom and/or DateTo.
+     * - CurrentStatusByStatus:
+     *   - Fill the Shipment->StatuCode property. Leave the rest empty.
+     *
+     * @param CompleteStatus $completeStatus
+     *
+     * @return CompleteStatusResponse
      */
-    public function getCurrentStatusByReference(CurrentStatus $currentStatus)
+    public function getCompleteStatus(CompleteStatus $completeStatus)
     {
-        return $this->getCurrentStatus($currentStatus);
+        $completeStatus->setCustomer($this->getCustomer());
+        if (!$completeStatus->getMessage()) {
+            $completeStatus->setMessage(new Message());
+        }
+
+        return $this->getShippingStatusService()->completeStatus($completeStatus);
     }
 
     /**
-     * @param CurrentStatus $currentStatus
+     * Get the signature of a shipment
      *
-     * @return CurrentStatusResponse
+     * @param GetSignature $signature
+     *
+     * @return GetSignature
      */
-    public function getCurrentStatusByPhase(CurrentStatus $currentStatus)
+    public function getSignature(GetSignature $signature)
     {
-        return $this->getCurrentStatus($currentStatus);
+        $signature->setCustomer($this->getCustomer());
+        if (!$signature->getMessage()) {
+            $signature->setMessage(new Message());
+        }
+
+        return $this->getShippingStatusService()->getSignature($signature);
     }
 
     /**

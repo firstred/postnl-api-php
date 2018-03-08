@@ -21,12 +21,12 @@ namespace ThirtyBees\PostNL\HttpClient;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
+use ThirtyBees\PostNL\Exception\HttpClientException;
 
 /**
  * Class MockClient
@@ -243,7 +243,7 @@ class MockClient implements ClientInterface, LoggerAwareInterface
      *
      * @return Response
      *
-     * @throws \Exception|GuzzleException
+     * @throws HttpClientException
      */
     public function doRequest(Request $request)
     {
@@ -258,7 +258,11 @@ class MockClient implements ClientInterface, LoggerAwareInterface
             ]
         ));
 
-        return $guzzle->send($request);
+        try {
+            return $guzzle->send($request);
+        } catch (GuzzleException $e) {
+            throw new HttpClientException(null, null, $e);
+        }
     }
 
     /**
@@ -268,7 +272,7 @@ class MockClient implements ClientInterface, LoggerAwareInterface
      *
      * @param Request[] $requests
      *
-     * @return Response|Response[]|GuzzleException|GuzzleException[]|\Exception|\Exception[]
+     * @return Response|Response[]|HttpClientException|HttpClientException[]
      */
     public function doRequests($requests = [])
     {

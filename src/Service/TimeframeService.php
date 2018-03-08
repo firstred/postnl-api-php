@@ -91,8 +91,6 @@ class TimeframeService extends AbstractService
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
-     * @throws \Exception
-     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
     public function getTimeframesREST(GetTimeframes $getTimeframes)
@@ -135,7 +133,6 @@ class TimeframeService extends AbstractService
      * @return ResponseTimeframes
      *
      * @throws ApiException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getTimeframesSOAP(GetTimeframes $getTimeframes)
     {

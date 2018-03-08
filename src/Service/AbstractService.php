@@ -254,7 +254,9 @@ abstract class AbstractService
 
         if ($response instanceof Response) {
             return (string) $response->getBody();
-        } elseif (is_a($response, 'GuzzleHttp\\Exception\\GuzzleException')) {
+        } elseif (is_a($response, 'GuzzleHttp\\Exception\\GuzzleException')
+            || is_a($response, 'ThirtyBees\\PostNL\\Exception\\HttpClientException')
+        ) {
             $exception = $response;
             if (method_exists($response, 'getResponse')) {
                 $response = $response->getResponse();
