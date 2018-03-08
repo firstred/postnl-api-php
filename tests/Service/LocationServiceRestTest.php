@@ -51,7 +51,7 @@ use ThirtyBees\PostNL\Service\LocationService;
  *
  * @package ThirtyBees\PostNL\Tests\Service
  *
- * @testdox The LocationService (SOAP)
+ * @testdox The LocationService (REST)
  */
 class LocationServiceRestTest extends \PHPUnit_Framework_TestCase
 {

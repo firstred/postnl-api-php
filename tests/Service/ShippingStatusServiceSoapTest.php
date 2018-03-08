@@ -45,7 +45,7 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
  *
  * @package ThirtyBees\PostNL\Tests\Service
  *
- * @testdox The ShippingStatusService (REST)
+ * @testdox The ShippingStatusService (SOAP)
  */
 class ShippingStatusSoapTest extends \PHPUnit_Framework_TestCase
 {
