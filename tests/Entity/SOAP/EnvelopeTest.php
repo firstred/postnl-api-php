@@ -40,8 +40,6 @@ class EnvelopeTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @testdox can return the header
-     *
-     * @throws \ReflectionException
      */
     public function testHeader()
     {
@@ -54,8 +52,6 @@ class EnvelopeTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox can return the body
-     *
-     * @throws \ReflectionException
      */
     public function testBody()
     {

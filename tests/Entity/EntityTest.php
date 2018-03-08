@@ -74,8 +74,6 @@ class EntityTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox should be `null` when instantiating the AbstractEntity
-     *
-     * @throws \ReflectionException
      */
     public function testNegativeCannotInstantiateAbstract()
     {

@@ -238,8 +238,6 @@ class LabellingServiceSoapTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox can generate a single label
-     *
-     * @throws \ReflectionException
      */
     public function testGenerateSingleLabelSoap()
     {
@@ -316,7 +314,6 @@ xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">
      * @testdox can generate multiple labels
      *
      * @throws \Exception
-     * @throws \ReflectionException
      * @throws \setasign\Fpdi\PdfReader\PdfReaderException
      */
     public function testGenerateMultipleLabelsSoap()

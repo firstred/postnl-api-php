@@ -40,8 +40,6 @@ class SecurityTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @testdox can return the header
-     *
-     * @throws \ReflectionException
      */
     public function testUsernameToken()
     {

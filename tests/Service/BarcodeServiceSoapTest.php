@@ -110,7 +110,6 @@ class BarcodeServiceSoapTest extends \PHPUnit_Framework_TestCase
     /**
      * @testdox creates a valid 3S barcode request
      *
-     * @throws \ReflectionException
      * @throws \ThirtyBees\PostNL\Exception\InvalidBarcodeException
      */
     public function testCreatesAValid3SBarcodeRequest()
