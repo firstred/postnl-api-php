@@ -26,6 +26,8 @@
 
 namespace ThirtyBees\PostNL;
 
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Psr7\Response;
 use Psr\Cache\CacheItemInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
@@ -56,6 +58,7 @@ use ThirtyBees\PostNL\Entity\Response\ResponseTimeframes;
 use ThirtyBees\PostNL\Entity\Shipment;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
 use ThirtyBees\PostNL\Exception\AbstractException;
+use ThirtyBees\PostNL\Exception\ApiException;
 use ThirtyBees\PostNL\Exception\InvalidArgumentException;
 use ThirtyBees\PostNL\Exception\InvalidBarcodeException;
 use ThirtyBees\PostNL\Exception\InvalidConfigurationException;
@@ -1001,8 +1004,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @return array [uuid => ResponseTimeframes, uuid => GetNearestLocationsResponse, uuid => GetDeliveryDateResponse]
      *
-     * @codeCoverageIgnore
-     * @throws ResponseException
+     * @throws ApiException
      */
     public function getTimeframesAndNearestLocations(
         GetTimeframes $getTimeframes,
@@ -1038,32 +1040,37 @@ class PostNL implements LoggerAwareInterface
 
         $responses = $this->getHttpClient()->doRequests();
         foreach ($responses as $uuid => $response) {
-            if (!empty($response['value'])) {
-                $results[$uuid] = $response['value'];
-            } elseif (!empty($response['reason'])) {
-                throw new ResponseException('Invalid multi-request', null, null, $response['reason']);
+            if ($response instanceof Response) {
+                $results[$uuid] = $response;
             } else {
-                $results[$uuid] = $results;
+                throw new ApiException('Invalid multi-request');
             }
         }
+
         foreach ($responses as $type => $response) {
-            if (!$response instanceof \Response) {
-                throw new ResponseException('Invalid multi-request', null, null, $response);
+            if (!$response instanceof Response) {
+                throw new ApiException('Invalid multi-request');
             } elseif ($response->getStatusCode() === 200) {
                 switch ($type) {
                     case 'timeframes':
-                        $itemTimeframe->set(\GuzzleHttp\Psr7\str($response));
-                        $this->getTimeframeService()->cacheItem($itemTimeframe);
+                        if ($itemTimeframe instanceof CacheItemInterface) {
+                            $itemTimeframe->set(\GuzzleHttp\Psr7\str($response));
+                            $this->getTimeframeService()->cacheItem($itemTimeframe);
+                        }
 
                         break;
                     case 'locations':
-                        $itemLocation->set(\GuzzleHttp\Psr7\str($response));
-                        $this->getLocationService()->cacheItem($itemLocation);
+                        if ($itemTimeframe instanceof CacheItemInterface) {
+                            $itemLocation->set(\GuzzleHttp\Psr7\str($response));
+                            $this->getLocationService()->cacheItem($itemLocation);
+                        }
 
                         break;
                     case 'delivery_date':
-                        $itemDeliveryDate->set(\GuzzleHttp\Psr7\str($response));
-                        $this->getDeliveryDateService()->cacheItem($itemDeliveryDate);
+                        if ($itemTimeframe instanceof CacheItemInterface) {
+                            $itemDeliveryDate->set(\GuzzleHttp\Psr7\str($response));
+                            $this->getDeliveryDateService()->cacheItem($itemDeliveryDate);
+                        }
 
                         break;
                 }

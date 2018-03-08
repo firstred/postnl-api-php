@@ -110,8 +110,9 @@ class TimeframeService extends AbstractService
             $response = $this->postnl->getHttpClient()->doRequest($this->buildGetTimeframesRequestREST($getTimeframes));
             static::validateRESTResponse($response);
         }
-        $body = json_decode(static::getResponseText($response), true);
-        if (isset($body['Timeframes'])) {
+
+        $object = $this->processGetTimeframesResponse($response);
+        if ($object instanceof ResponseTimeframes) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof Response
                 && $response->getStatusCode() === 200
@@ -119,12 +120,6 @@ class TimeframeService extends AbstractService
                 $item->set(\GuzzleHttp\Psr7\str($response));
                 $this->cacheItem($item);
             }
-
-            /** @var ResponseTimeframes $object */
-            $object = AbstractEntity::jsonDeserialize(['ResponseTimeframes' => $body]);
-            $this->setService($object);
-
-            return $object;
         }
 
         throw new ApiException('Unable to retrieve timeframes');
@@ -157,29 +152,21 @@ class TimeframeService extends AbstractService
         if (!$response instanceof Response) {
             $response = $this->postnl->getHttpClient()->doRequest($this->buildGetTimeframesRequestSOAP($getTimeframes));
         }
-        $xml = simplexml_load_string(static::getResponseText($response));
 
-        static::registerNamespaces($xml);
-        static::validateSOAPResponse($xml);
+        $object = $this->processGetTimeframesResponse($response);
+        if ($object instanceof ResponseTimeframes) {
+            if ($item instanceof CacheItemInterface
+                && $response instanceof Response
+                && $response->getStatusCode() === 200
+            ) {
+                $item->set(\GuzzleHttp\Psr7\str($response));
+                $this->cacheItem($item);
+            }
 
-        if ($item instanceof CacheItemInterface
-            && $response instanceof Response
-            && $response->getStatusCode() === 200
-        ) {
-            $item->set(\GuzzleHttp\Psr7\str($response));
-            $this->cacheItem($item);
+            return $object;
         }
 
-        $reader = new Reader();
-        $reader->xml(static::getResponseText($response));
-        $array = array_values($reader->parse()['value'][0]['value']);
-        $array = $array[0];
-
-        /** @var ResponseTimeframes $object */
-        $object = AbstractEntity::xmlDeserialize($array);
-        $this->setService($object);
-
-        return $object;
+        throw new ApiException('Unable to retrieve timeframes');
     }
 
     /**
@@ -240,6 +227,30 @@ class TimeframeService extends AbstractService
     }
 
     /**
+     * Process GetTimeframes Response REST
+     *
+     * @param mixed $response
+     *
+     * @return null|ResponseTimeframes
+     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     */
+    public function processGetTimeframesResponseREST($response)
+    {
+        $body = json_decode(static::getResponseText($response), true);
+        if (isset($body['Timeframes'])) {
+
+
+            /** @var ResponseTimeframes $object */
+            $object = AbstractEntity::jsonDeserialize(['ResponseTimeframes' => $body]);
+            $this->setService($object);
+
+            return $object;
+        }
+
+        return null;
+    }
+
+    /**
      * Build the GetTimeframes request for the SOAP API
      *
      * @param GetTimeframes $getTimeframes
@@ -284,5 +295,37 @@ class TimeframeService extends AbstractService
             ],
             $request
         );
+    }
+
+    /**
+     * Process GetTimeframes Response SOAP
+     *
+     * @param mixed $response
+     *
+     * @return ResponseTimeframes
+     * @throws CifDownException
+     * @throws CifException
+     * @throws \Sabre\Xml\LibXMLException
+     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     */
+    public function processGetTimeframesResponseSOAP($response)
+    {
+        $xml = simplexml_load_string(static::getResponseText($response));
+
+        static::registerNamespaces($xml);
+        static::validateSOAPResponse($xml);
+
+
+
+        $reader = new Reader();
+        $reader->xml(static::getResponseText($response));
+        $array = array_values($reader->parse()['value'][0]['value']);
+        $array = $array[0];
+
+        /** @var ResponseTimeframes $object */
+        $object = AbstractEntity::xmlDeserialize($array);
+        $this->setService($object);
+
+        return $object;
     }
 }

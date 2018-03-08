@@ -301,6 +301,20 @@ class MockClient implements ClientInterface, LoggerAwareInterface
             $promises[$index] = $guzzle->sendAsync($request);
         }
 
-        return \GuzzleHttp\Promise\settle($promises)->wait();
+        $responses = \GuzzleHttp\Promise\settle($promises)->wait();
+        foreach ($responses as &$response) {
+            if (isset($response['value'])) {
+                $response = $response['value'];
+            } elseif (isset($response['reason'])) {
+                $response = $response['reason'];
+            } else {
+                $response = \ThirtyBees\PostNL\Exception\ResponseException('Unknown reponse type');
+            }
+            if ($response instanceof Response && $this->logger instanceof LoggerInterface) {
+                $this->logger->debug(\GuzzleHttp\Psr7\str($response));
+            }
+        }
+
+        return $responses;
     }
 }

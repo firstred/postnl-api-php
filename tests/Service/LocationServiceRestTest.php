@@ -175,6 +175,7 @@ class LocationServiceRestTest extends \PHPUnit_Framework_TestCase
                 'AllowSundaySorting' => true,
                 'DeliveryDate'       => '29-06-2016',
                 'DeliveryOptions'    => [
+                    'PG',
                     'PGE',
                 ],
                 'OpeningTime'        => '09:00:00',
@@ -329,8 +330,10 @@ class LocationServiceRestTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\GetLocationsInAreaResponse', $response);
         $this->assertEquals(1, count((array) $response->getGetLocationsResult()));
-        // No JSON test here since the GetLocationsInAreaResponse always contains an LocationsResult array
-        // (which does not correspond to the API response here)
+        $this->assertEquals(
+            json_encode(json_decode(static::getLocationMockResponse()), JSON_PRETTY_PRINT),
+            json_encode($response, JSON_PRETTY_PRINT)
+        );
     }
 
     protected function getNearestLocationsMockResponse()

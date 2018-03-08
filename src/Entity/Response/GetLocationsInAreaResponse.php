@@ -105,7 +105,10 @@ class GetLocationsInAreaResponse extends AbstractEntity
 
         foreach (array_keys(static::$defaultProperties[$this->currentService]) as $propertyName) {
             if (isset($this->{$propertyName})) {
-                if ($propertyName === 'GetLocationsResult' && is_array($this->GetLocationsResult)) {
+                if ($propertyName === 'GetLocationsResult'
+                    && is_array($this->GetLocationsResult)
+                    && count($this->GetLocationsResult) > 1
+                ) {
                     $locations = [];
                     foreach ($this->GetLocationsResult as $location) {
                         $locations[] = $location;
