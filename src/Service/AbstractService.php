@@ -175,7 +175,7 @@ abstract class AbstractService
      * @throws ResponseException
      * @throws ApiException
      */
-    public function validateRESTResponse($response)
+    public static function validateRESTResponse($response)
     {
         $body = json_decode(static::getResponseText($response), true);
 
