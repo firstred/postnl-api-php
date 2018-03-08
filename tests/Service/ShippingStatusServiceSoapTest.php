@@ -156,6 +156,79 @@ class ShippingStatusSoapTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @testdox can generate a single label
+     */
+    public function testGetCurrentStatusSoap()
+    {
+        $mock = new MockHandler([
+            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+   <s:Body>
+     <CurrentStatusResponse
+xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://postnl.nl/cif/domain/ShippingStatusWebService/" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+       <a:Shipments>
+         <a:CurrentStatusResponseShipment>
+           <a:Addresses>
+             <a:ResponseAddress>
+               <a:AddressType>01</a:AddressType>
+               <a:City>Hoofddorp</a:City>
+               <a:CountryCode>NL</a:CountryCode>
+               <a:LastName>de Ruiter</a:LastName>
+               <a:RegistrationDate>01-01-0001 00:00:00</a:RegistrationDate>
+               <a:Street>Siriusdreef</a:Street>
+               <a:Zipcode>2132WT</a:Zipcode>
+             </a:ResponseAddress>
+             <a:ResponseAddress>
+               <a:AddressType>02</a:AddressType>
+               <a:City>Vianen</a:City>
+               <a:CompanyName>PostNL</a:CompanyName>
+               <a:CountryCode>NL</a:CountryCode>
+               <a:HouseNumber>1</a:HouseNumber>
+               <a:HouseNumberSuffix>A</a:HouseNumberSuffix>
+               <a:RegistrationDate>01-01-0001 00:00:00</a:RegistrationDate>
+               <a:Street>Lage Biezenweg</a:Street>
+               <a:Zipcode>4131LV</a:Zipcode>
+             </a:ResponseAddress>
+           </a:Addresses>
+           <a:Barcode>3SABCD6659149</a:Barcode>
+           <a:Groups>
+             <a:ResponseGroup>
+               <a:GroupType>4</a:GroupType>
+               <a:MainBarcode>3SABCD6659149</a:MainBarcode>
+               <a:ShipmentAmount>1</a:ShipmentAmount>
+               <a:ShipmentCounter>1</a:ShipmentCounter>
+             </a:ResponseGroup>
+           </a:Groups>
+           <a:ProductCode>003052</a:ProductCode>
+           <a:Reference>2016014567</a:Reference>
+           <a:Status>
+             <a:CurrentPhaseCode>4</a:CurrentPhaseCode>
+             <a:CurrentPhaseDescription>Afgeleverd</a:CurrentPhaseDescription>
+             <a:CurrentStatusCode>11</a:CurrentStatusCode>
+             <a:CurrentStatusDescription>Zending afgeleverd</a:CurrentStatusDescription>
+             <a:CurrentStatusTimeStamp>06-06-2016 18:00:41</a:CurrentStatusTimeStamp>
+           </a:Status>
+         </a:CurrentStatusResponseShipment>
+       </a:Shipments>
+     </CurrentStatusResponse>
+   </s:Body>
+</s:Envelope>')]);
+        $handler = HandlerStack::create($mock);
+        $mockClient = new MockClient();
+        $mockClient->setHandler($handler);
+        $this->postnl->setHttpClient($mockClient);
+
+        $currentStatusResponse = $this->postnl->getCurrentStatus(
+            (new CurrentStatus())
+                ->setShipment(
+                    (new Shipment())
+                        ->setBarcode('3S8392302392342')
+                )
+        );
+
+        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\CurrentStatusResponse', $currentStatusResponse);
+    }
+
+    /**
      * @testdox creates a valid CurrentStatusByReference request
      */
     public function testGetCurrentStatusByReferenceRequestSoap()
@@ -381,6 +454,162 @@ class ShippingStatusSoapTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @testdox can generate a single label
+     */
+    public function testGetCompleteStatusSoap()
+    {
+        $mock = new MockHandler([
+            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+   <s:Body>
+     <CompleteStatusResponse
+xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://postnl.nl/cif/domain/ShippingStatusWebService/" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+       <a:Shipments>
+         <a:CompleteStatusResponseShipment>
+           <a:Addresses>
+             <a:ResponseAddress>
+               <a:AddressType>01</a:AddressType>
+               <a:City>Rimini</a:City>
+               <a:CountryCode>IT</a:CountryCode>
+               <a:HouseNumber>37</a:HouseNumber>
+               <a:HouseNumberSuffix>b</a:HouseNumberSuffix>
+               <a:LastName>Carlo</a:LastName>
+               <a:RegistrationDate>01-01-0001 00:00:00</a:RegistrationDate>
+               <a:Street>Via Italia </a:Street>
+               <a:Zipcode>46855</a:Zipcode>
+             </a:ResponseAddress>
+           </a:Addresses>
+           <a:Amounts>
+             <a:ResponseAmount>
+               <a:AmountType>RemboursBedrag</a:AmountType>
+               <a:Value>0</a:Value>
+             </a:ResponseAmount>
+             <a:ResponseAmount>
+               <a:AmountType>VerzekerdBedrag</a:AmountType>
+               <a:Value>0</a:Value>
+             </a:ResponseAmount>
+           </a:Amounts>
+           <a:Barcode>3SABCD6659149</a:Barcode>
+           <a:Customer>
+             <a:CustomerCode>ABCD</a:CustomerCode>
+             <a:CustomerNumber>11223344</a:CustomerNumber>
+           </a:Customer>
+           <a:Dimension>
+             <a:Height>1400</a:Height>
+             <a:Length>2000</a:Length>
+             <a:Volume>30000</a:Volume>
+             <a:Weight>4300</a:Weight>
+             <a:Width>1500</a:Width>
+           </a:Dimension>
+           <a:Events>
+             <a:CompleteStatusResponseEvent>
+               <a:Code>01A</a:Code>
+               <a:Description>Zending is aangemeld maar nog niet ontvangen door PostNL</a:Description>
+               <a:LocationCode>156789</a:LocationCode>
+               <a:TimeStamp>03-08-2015 18:27:00</a:TimeStamp>
+             </a:CompleteStatusResponseEvent>
+             <a:CompleteStatusResponseEvent>
+               <a:Code>05Y</a:Code>
+               <a:Description>Bezorger is onderweg</a:Description>
+               <a:LocationCode>166253</a:LocationCode>
+               <a:TimeStamp>21-04-2016 09:50:53</a:TimeStamp>
+             </a:CompleteStatusResponseEvent>
+             <a:CompleteStatusResponseEvent>
+               <a:Code>01B</a:Code>
+               <a:Description>Zending is ontvangen door PostNL</a:Description>
+               <a:DestinationLocationCode>160662</a:DestinationLocationCode>
+               <a:LocationCode>160662</a:LocationCode>
+               <a:TimeStamp>20-04-2016 00:39:13</a:TimeStamp>
+             </a:CompleteStatusResponseEvent>
+             <a:CompleteStatusResponseEvent>
+               <a:Code>02M</a:Code>
+               <a:Description>Voorgemelde zending niet aangetroffen: manco</a:Description>
+               <a:LocationCode>888888</a:LocationCode>
+               <a:TimeStamp>20-04-2016 06:06:16</a:TimeStamp>
+             </a:CompleteStatusResponseEvent>
+             <a:CompleteStatusResponseEvent>
+               <a:Code>01A</a:Code>
+               <a:Description>Zending is aangemeld maar nog niet ontvangen door PostNL</a:Description>
+               <a:LocationCode>888888</a:LocationCode>
+               <a:TimeStamp>20-04-2016 06:06:16</a:TimeStamp>
+             </a:CompleteStatusResponseEvent>
+           </a:Events>
+           <a:Groups>
+             <a:ResponseGroup>
+               <a:GroupType>4</a:GroupType>
+               <a:MainBarcode>3SDUGS0101223</a:MainBarcode>
+               <a:ShipmentAmount>1</a:ShipmentAmount>
+               <a:ShipmentCounter>1</a:ShipmentCounter>
+             </a:ResponseGroup>
+           </a:Groups>
+           <a:OldStatuses>
+             <a:CompleteStatusResponseOldStatus>
+               <a:Code>99</a:Code>
+               <a:Description>niet van toepassing</a:Description>
+               <a:PhaseCode>99</a:PhaseCode>
+               <a:PhaseDescription>niet van toepassing</a:PhaseDescription>
+               <a:TimeStamp>20-04-2016 00:00:00</a:TimeStamp>
+             </a:CompleteStatusResponseOldStatus>
+             <a:CompleteStatusResponseOldStatus>
+               <a:Code>7</a:Code>
+               <a:Description>Zending in distributieproces</a:Description>
+               <a:PhaseCode>3</a:PhaseCode>
+               <a:PhaseDescription>Distributie</a:PhaseDescription>
+               <a:TimeStamp>19-04-2016 23:53:58</a:TimeStamp>
+             </a:CompleteStatusResponseOldStatus>
+             <a:CompleteStatusResponseOldStatus>
+               <a:Code>3</a:Code>
+               <a:Description>Zending afgehaald</a:Description>
+               <a:PhaseCode>1</a:PhaseCode>
+               <a:PhaseDescription>Collectie</a:PhaseDescription>
+               <a:TimeStamp>19-04-2016 23:50:15</a:TimeStamp>
+             </a:CompleteStatusResponseOldStatus>
+             <a:CompleteStatusResponseOldStatus>
+               <a:Code>13</a:Code>
+               <a:Description>Voorgemeld: nog niet aangenomen</a:Description>
+               <a:PhaseCode>1</a:PhaseCode>
+               <a:PhaseDescription>Collectie</a:PhaseDescription>
+               <a:TimeStamp>19-04-2016 06:06:16</a:TimeStamp>
+             </a:CompleteStatusResponseOldStatus>
+             <a:CompleteStatusResponseOldStatus>
+               <a:Code>1</a:Code>
+               <a:Description>Zending voorgemeld</a:Description>
+               <a:PhaseCode>1</a:PhaseCode>
+               <a:PhaseDescription>Collectie</a:PhaseDescription>
+               <a:TimeStamp>19-04-2016 06:06:16</a:TimeStamp>
+             </a:CompleteStatusResponseOldStatus>
+           </a:OldStatuses>
+           <a:ProductCode>004944</a:ProductCode>
+           <a:ProductDescription>EPS to Consumer</a:ProductDescription>
+           <a:Reference>100101101</a:Reference>
+           <a:Status>
+             <a:CurrentPhaseCode>4</a:CurrentPhaseCode>
+             <a:CurrentPhaseDescription>Afgeleverd</a:CurrentPhaseDescription>
+             <a:CurrentStatusCode>11</a:CurrentStatusCode>
+             <a:CurrentStatusDescription>Zending afgeleverd</a:CurrentStatusDescription>
+             <a:CurrentStatusTimeStamp>19-04-2016 18:27:00</a:CurrentStatusTimeStamp>
+           </a:Status>
+         </a:CompleteStatusResponseShipment>
+       </a:Shipments>
+     </CompleteStatusResponse>
+   </s:Body>
+</s:Envelope>')]);
+        $handler = HandlerStack::create($mock);
+        $mockClient = new MockClient();
+        $mockClient->setHandler($handler);
+        $this->postnl->setHttpClient($mockClient);
+
+        $signatureResponse = $this->postnl->getCompleteStatus(
+            (new CompleteStatus())
+                ->setShipment(
+                    (new Shipment())
+                        ->setBarcode('3SABCD6659149')
+                )
+        );
+
+        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\CompleteStatusResponse', $signatureResponse);
+    }
+
+    /**
      * @testdox creates a valid CompleteStatusByStatus request
      */
     public function testGetCompleteStatusByStatusRequestSoap()
@@ -525,7 +754,7 @@ class ShippingStatusSoapTest extends \PHPUnit_Framework_TestCase
     /**
      * @testdox can generate a single label
      */
-    public function testGetCurrentStatusRest()
+    public function testGetSignatureSoap()
     {
         $mock = new MockHandler([
             new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
