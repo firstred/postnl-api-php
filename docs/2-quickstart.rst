@@ -206,7 +206,7 @@ As soon as you've done your first request with this library, you will find that 
 As mentioned in the `Building Requests` section, these Response objects are based on the SOAP API, regardless of the mode set.
 The properties of a Response object can be looked up in the code, but it can be a bit confusing at times, since the
 Response object will likely not contain all properties at once. It often depends on the context of the request. For this reason,
-you're better off by having a look at the `SOAP API documentation <https://developer.postnl.nl>` directly or by checking out some of
+you're better off by having a look at the `SOAP API documentation <https://developer.postnl.nl>`_ directly or by checking out some of
 the examples in this documentation.
 
 HTTP Client
@@ -265,7 +265,7 @@ To enable caching for a certain service you can use the following:
 
 .. note::
 
-        This example used the Flysystem (filesystem) cache. An extensive list of supported caches can be found on this page: https://www.php-cache.com/en/latest/
+        This example used the Flysystem (filesystem) cache. An extensive list of supported caches can be found on `this page <https://www.php-cache.com/en/latest/>`_.
 
 Logging
 =======
