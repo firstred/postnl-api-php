@@ -162,9 +162,9 @@ The PostNL client constructor accepts a few options:
 
 ``mode``
     (int) This library has three ways to connect to the API:
-      - 1: REST mode
-      - 2: SOAP mode
-      - 5: Legacy mode -- This is the previous SOAP API, which at the moment of writing is still in operation.
+    * 1: REST mode
+    * 2: SOAP mode
+    * 5: Legacy mode -- This is the previous SOAP API, which at the moment of writing is still in operation.
 
 
 Building Requests
