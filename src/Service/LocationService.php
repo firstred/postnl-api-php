@@ -234,6 +234,10 @@ class LocationService extends AbstractService
      * @return GetLocationsInAreaResponse
      *
      * @throws ApiException
+     * @throws CifDownException
+     * @throws CifException
+     * @throws \Sabre\Xml\LibXMLException
+     * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
     public function getLocationsInAreaSOAP(GetLocationsInArea $getNearestLocations)
     {
@@ -248,10 +252,10 @@ class LocationService extends AbstractService
         }
 
         if (!$response instanceof Response) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetLocationsInAreaRequest($getNearestLocations));
+            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetLocationsInAreaRequestSOAP($getNearestLocations));
         }
 
-        $object = $this->processGetLocationsInAreaResponse($response);
+        $object = $this->processGetLocationsInAreaResponseSOAP($response);
         if ($object instanceof GetLocationsInAreaResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof Response
@@ -291,11 +295,11 @@ class LocationService extends AbstractService
             }
         }
         if (!$response instanceof Response) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetLocationRequest($getLocation));
+            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetLocationRequestREST($getLocation));
             static::validateRESTResponse($response);
         }
 
-        $object = $this->processGetLocationResponse($response);
+        $object = $this->processGetLocationResponseREST($response);
         if ($object instanceof GetLocationsInAreaResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof Response
@@ -332,10 +336,10 @@ class LocationService extends AbstractService
             }
         }
         if (!$response instanceof Response) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetLocationRequest($getLocation));
+            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetLocationRequestSOAP($getLocation));
         }
 
-        $object = $this->processGetLocationResponse($response);
+        $object = $this->processGetLocationResponseSOAP($response);
         if ($object instanceof GetLocationsInAreaResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof Response
@@ -425,6 +429,38 @@ class LocationService extends AbstractService
     {
         $body = json_decode(static::getResponseText($response), true);
         if (is_array($body)) {
+            if (isset($body['GetLocationsResult']['ResponseLocation'])
+            && is_array($body['GetLocationsResult']['ResponseLocation'])
+            ) {
+                if (isset($body['GetLocationsResult']['ResponseLocation']['Address'])) {
+                    $body['GetLocationsResult']['ResponseLocation'] = [$body['GetLocationsResult']['ResponseLocation']];
+                }
+
+                $newLocations = [];
+                foreach ($body['GetLocationsResult']['ResponseLocation'] as $location) {
+                    if (isset($location['Address'])) {
+                        $location['Address'] = AbstractEntity::jsonDeserialize(['Address' => $location['Address']]);
+                    }
+
+                    if (isset($location['DeliveryOptions']['string'])) {
+                        $location['DeliveryOptions'] = $location['DeliveryOptions']['string'];
+                    }
+
+                    if (isset($location['OpeningHours'])) {
+                        foreach ($location['OpeningHours'] as $day => $hour) {
+                            if (isset($hour['string'])) {
+                                $location['OpeningHours'][$day] = $hour['string'];
+                            }
+                        }
+
+                        $location['OpeningHours'] = AbstractEntity::jsonDeserialize(['OpeningHours' => $location['OpeningHours']]);
+                    }
+
+                    $newLocations[] = AbstractEntity::jsonDeserialize(['ResponseLocation' => $location]);
+                }
+                $body['GetLocationsResult'] = $newLocations;
+            }
+
             /** @var GetNearestLocationsResponse $object */
             $object = AbstractEntity::jsonDeserialize(['GetNearestLocationsResponse' => $body]);
             $this->setService($object);
@@ -573,6 +609,38 @@ class LocationService extends AbstractService
     {
         $body = json_decode(static::getResponseText($response), true);
         if (is_array($body)) {
+            if (isset($body['GetLocationsResult']['ResponseLocation'])
+                && is_array($body['GetLocationsResult']['ResponseLocation'])
+            ) {
+                if (isset($body['GetLocationsResult']['ResponseLocation']['Address'])) {
+                    $body['GetLocationsResult']['ResponseLocation'] = [$body['GetLocationsResult']['ResponseLocation']];
+                }
+
+                $newLocations = [];
+                foreach ($body['GetLocationsResult']['ResponseLocation'] as $location) {
+                    if (isset($location['Address'])) {
+                        $location['Address'] = AbstractEntity::jsonDeserialize(['Address' => $location['Address']]);
+                    }
+
+                    if (isset($location['DeliveryOptions']['string'])) {
+                        $location['DeliveryOptions'] = $location['DeliveryOptions']['string'];
+                    }
+
+                    if (isset($location['OpeningHours'])) {
+                        foreach ($location['OpeningHours'] as $day => $hour) {
+                            if (isset($hour['string'])) {
+                                $location['OpeningHours'][$day] = $hour['string'];
+                            }
+                        }
+
+                        $location['OpeningHours'] = AbstractEntity::jsonDeserialize(['OpeningHours' => $location['OpeningHours']]);
+                    }
+
+                    $newLocations[] = AbstractEntity::jsonDeserialize(['ResponseLocation' => $location]);
+                }
+                $body['GetLocationsResult'] = $newLocations;
+            }
+
             /** @var GetLocationsInAreaResponse $object */
             $object = AbstractEntity::jsonDeserialize(['GetLocationsInAreaResponse' => $body]);
             $this->setService($object);

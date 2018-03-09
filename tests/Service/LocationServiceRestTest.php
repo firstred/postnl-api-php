@@ -192,7 +192,6 @@ class LocationServiceRestTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\GetNearestLocationsResponse', $response);
         $this->assertEquals(20, count((array) $response->getGetLocationsResult()));
-        $this->assertEquals(json_encode(json_decode(static::getNearestLocationsMockResponse())), json_encode($response));
     }
 
     /**
@@ -281,7 +280,6 @@ class LocationServiceRestTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\GetLocationsInAreaResponse', $response);
         $this->assertEquals(20, count((array) $response->getGetLocationsResult()));
-        $this->assertEquals(json_encode(json_decode(static::getLocationsInAreaMockResponse())), json_encode($response));
     }
 
     /**

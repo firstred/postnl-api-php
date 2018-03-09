@@ -235,9 +235,11 @@ class TimeframeService extends AbstractService
         $body = json_decode(static::getResponseText($response), true);
         if (isset($body['Timeframes'])) {
             // Standardize the object here
-            if (isset($body['ReasonNotimeframes']['ReasonNoTimeframe'])
-                && is_array($body['ReasonNotimeframes']['ReasonNoTimeframe'])
-            ) {
+            if (isset($body['ReasonNotimeframes']['ReasonNoTimeframe'])) {
+                if (isset($body['ReasonNotimeframes']['ReasonNoTimeframe']['Code'])) {
+                    $body['ReasonNotimeframes']['ReasonNoTimeframe'] = [$body['ReasonNotimeframes']['ReasonNoTimeframe']];
+                }
+
                 $newNotimeframes = [];
                 foreach ($body['ReasonNotimeframes']['ReasonNoTimeframe'] as &$reasonNotimeframe) {
                     $newNotimeframes[] = AbstractEntity::jsonDeserialize(['ReasonNoTimeFrame' => $reasonNotimeframe]);
@@ -245,12 +247,17 @@ class TimeframeService extends AbstractService
                 $body['ReasonNotimeframes'] = $newNotimeframes;
             }
 
-            if (isset($body['Timeframes']['Timeframe'])
-                && is_array($body['Timeframes']['Timeframe'])
-            ) {
+            if (isset($body['Timeframes']['Timeframe'])) {
+                if (isset($body['Timeframes']['Timeframe']['Date'])) {
+                    $body['Timeframes']['Timeframe'] = [$body['Timeframes']['Timeframe']];
+                }
+
                 $newTimeframes = [];
                 foreach ($body['Timeframes']['Timeframe'] as $timeframe) {
                     $newTimeframeTimeframe = [];
+                    if (isset($timeframe['Timeframes']['TimeframeTimeFrame']['From'])) {
+                        $timeframe['Timeframes']['TimeframeTimeFrame'] = [$timeframe['Timeframes']['TimeframeTimeFrame']];
+                    }
                     foreach ($timeframe['Timeframes']['TimeframeTimeFrame'] as $timeframetimeframe) {
                         $newTimeframeTimeframe[] = AbstractEntity::jsonDeserialize(['TimeframeTimeFrame' => $timeframetimeframe]);
                     }
