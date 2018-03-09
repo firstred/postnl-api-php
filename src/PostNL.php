@@ -61,6 +61,7 @@ use ThirtyBees\PostNL\Entity\Shipment;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
 use ThirtyBees\PostNL\Exception\AbstractException;
 use ThirtyBees\PostNL\Exception\ApiException;
+use ThirtyBees\PostNL\Exception\HttpClientException;
 use ThirtyBees\PostNL\Exception\InvalidArgumentException;
 use ThirtyBees\PostNL\Exception\InvalidBarcodeException;
 use ThirtyBees\PostNL\Exception\InvalidConfigurationException;
@@ -1053,7 +1054,8 @@ class PostNL implements LoggerAwareInterface
      *
      * @return array [uuid => ResponseTimeframes, uuid => GetNearestLocationsResponse, uuid => GetDeliveryDateResponse]
      *
-     * @throws ResponseException
+     * @throws HttpClientException
+     * @throws InvalidArgumentException
      */
     public function getTimeframesAndNearestLocations(
         GetTimeframes $getTimeframes,
@@ -1092,13 +1094,19 @@ class PostNL implements LoggerAwareInterface
             if ($response instanceof Response) {
                 $results[$uuid] = $response;
             } else {
-                throw new ResponseException('Invalid multi-request', null, null, $response);
+                if ($response instanceof \Exception) {
+                    throw $response;
+                }
+                throw new InvalidArgumentException('Invalid multi-request');
             }
         }
 
         foreach ($responses as $type => $response) {
             if (!$response instanceof Response) {
-                throw new ResponseException('Invalid multi-request', null, null, $response);
+                if ($response instanceof \Exception) {
+                    throw $response;
+                }
+                throw new InvalidArgumentException('Invalid multi-request');
             } elseif ($response->getStatusCode() === 200) {
                 switch ($type) {
                     case 'timeframes':

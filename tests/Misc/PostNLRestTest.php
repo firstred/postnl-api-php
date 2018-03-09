@@ -381,6 +381,9 @@ class PostNLRestTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertTrue(is_array($results));
+        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\ResponseTimeframes', $results['timeframes']);
+        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\GetNearestLocationsResponse', $results['locations']);
+        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\GetDeliveryDateResponse', $results['delivery_date']);
     }
 
     /**
