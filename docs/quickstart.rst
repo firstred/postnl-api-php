@@ -15,10 +15,11 @@ class.
 
 
 Requesting a merged label
------------------
+-------------------------
 
 .. code-block:: php
 
+      use ThirtyBees\PostNL\Entity\Label;
       use ThirtyBees\PostNL\PostNL;
       use ThirtyBees\PostNL\Entity\Customer;
       use ThirtyBees\PostNL\Entity\Address;
@@ -30,10 +31,10 @@ Requesting a merged label
       // Your PostNL credentials
       $customer = Customer::create([
           'CollectionLocation' => '123456',
-          'CustomerCode' => 'DEVC',
-          'CustomerNumber' => '11223344',
-          'ContactPerson' => 'Lesley',
-          'Address' => Address::create([
+          'CustomerCode'       => 'DEVC',
+          'CustomerNumber'     => '11223344',
+          'ContactPerson'      => 'Lesley',
+          'Address'            => Address::create([
               'AddressType' => '02',
               'City'        => 'Hoofddorp',
               'CompanyName' => 'PostNL',
@@ -42,570 +43,245 @@ Requesting a merged label
               'Street'      => 'Siriusdreef',
               'Zipcode'     => '2132WT',
           ]),
-          'Email' => 'michael@thirtybees.com',
-          'Name' => 'Michael',
+          'Email'              => 'michael@thirtybees.com',
+          'Name'               => 'Michael',
       ]);
 
       $apikey = 'YOUR_API_KEY_HERE';
       $sandbox = true;
 
-      $postnl = new PostNL($customer, $apikey, $sandbox);
+      $postnl = new PostNL($customer, $apikey, $sandbox, PostNL::MODE_REST);
 
-      $barcode = $postnl->generateBarcodeByCountryCode('NL');
+      $barcodes = $postnl->generateBarcodesByCountryCodes(['NL' => 2]);
 
-      $shipment = Shipment::create([
-          'Addresses' => [
-              Address::create([
-                  'AddressType' => '01',
-                  'City'        => 'Utrecht',
-                  'Countrycode' => 'NL',
-                  'FirstName'   => 'Peter',
-                  'HouseNr'     => '9',
-                  'HouseNrExt'  => 'a bis',
-                  'Name'        => 'de Ruijter',
-                  'Street'      => 'Bilderdijkstraat',
-                  'Zipcode'     => '3521VA',
-              ]),
-          ],
-          'Barcode' => $barcode,
-          'Dimension' => new Dimension('2000'),
-          'ProductCodeDelivery' => '3085',
-      ]);
+      $shipments = [
+          Shipment::create([
+              'Addresses'           => [
+                  Address::create([
+                      'AddressType' => '01',
+                      'City'        => 'Utrecht',
+                      'Countrycode' => 'NL',
+                      'FirstName'   => 'Peter',
+                      'HouseNr'     => '9',
+                      'HouseNrExt'  => 'a bis',
+                      'Name'        => 'de Ruijter',
+                      'Street'      => 'Bilderdijkstraat',
+                      'Zipcode'     => '3521VA',
+                  ]),
+              ],
+              'Barcode'             => $barcodes['NL'][0],
+              'Dimension'           => new Dimension('1000'),
+              'ProductCodeDelivery' => '3085',
+          ]),
+          Shipment::create([
+              'Addresses'           => [
+                  Address::create([
+                      'AddressType' => '01',
+                      'City'        => 'Utrecht',
+                      'Countrycode' => 'NL',
+                      'FirstName'   => 'Peter',
+                      'HouseNr'     => '9',
+                      'HouseNrExt'  => 'a bis',
+                      'Name'        => 'de Ruijter',
+                      'Street'      => 'Bilderdijkstraat',
+                      'Zipcode'     => '3521VA',
+                  ]),
+              ],
+              'Barcode'             => $barcodes['NL'][1],
+              'Dimension'           => new Dimension('1000'),
+              'ProductCodeDelivery' => '3085',
+          ]),
+      ];
 
-      $label = $postnl->generateLabel($shipment, 'GraphicFile|PDF', true);
+      $label = $postnl->generateLabels(
+          $shipments,
+          'GraphicFile|PDF', // Printertype (only PDFs can be merged -- no need to use the Merged types)
+          true, // Confirm immediately
+          true, // Merge
+          Label::FORMAT_A4, // Format -- this merges multiple A6 labels onto an A4
+          [
+              1 => true,
+              2 => true,
+              3 => true,
+              4 => true,
+          ] // Positions
+      );
 
-The client constructor accepts an associative array of options:
+      file_put_contents('labels.pdf', $label);
 
-``base_uri``
-    (string|UriInterface) Base URI of the client that is merged into relative
-    URIs. Can be a string or instance of UriInterface. When a relative URI
-    is provided to a client, the client will combine the base URI with the
-    relative URI using the rules described in
-    `RFC 3986, section 2 <http://tools.ietf.org/html/rfc3986#section-5.2>`_.
+This will write a ``labels.pdf`` that looks like this:
+
+.. image:: img/mergedlabels.png
+
+The PostNL client constructor accepts a few options:
+
+``customer``
+    (Customer) The ``Customer`` object that is used to configure the client and let PostNL know
+    who requests the data.
 
     .. code-block:: php
 
-        // Create a client with a base URI
-        $client = new GuzzleHttp\Client(['base_uri' => 'https://foo.com/api/']);
-        // Send a request to https://foo.com/api/test
-        $response = $client->request('GET', 'test');
-        // Send a request to https://foo.com/root
-        $response = $client->request('GET', '/root');
-
-    Don't feel like reading RFC 3986? Here are some quick examples on how a
-    ``base_uri`` is resolved with another URI.
-
-    =======================  ==================  ===============================
-    base_uri                 URI                 Result
-    =======================  ==================  ===============================
-    ``http://foo.com``       ``/bar``            ``http://foo.com/bar``
-    ``http://foo.com/foo``   ``/bar``            ``http://foo.com/bar``
-    ``http://foo.com/foo``   ``bar``             ``http://foo.com/bar``
-    ``http://foo.com/foo/``  ``bar``             ``http://foo.com/foo/bar``
-    ``http://foo.com``       ``http://baz.com``  ``http://baz.com``
-    ``http://foo.com/?bar``  ``bar``             ``http://foo.com/bar``
-    =======================  ==================  ===============================
-
-``handler``
-    (callable) Function that transfers HTTP requests over the wire. The
-    function is called with a ``Psr7\Http\Message\RequestInterface`` and array
-    of transfer options, and must return a
-    ``GuzzleHttp\Promise\PromiseInterface`` that is fulfilled with a
-    ``Psr7\Http\Message\ResponseInterface`` on success. ``handler`` is a
-    constructor only option that cannot be overridden in per/request options.
-
-``...``
-    (mixed) All other options passed to the constructor are used as default
-    request options with every request created by the client.
-
-
-Sending Requests
-----------------
-
-Magic methods on the client make it easy to send synchronous requests:
-
-.. code-block:: php
-
-    $response = $client->get('http://httpbin.org/get');
-    $response = $client->delete('http://httpbin.org/delete');
-    $response = $client->head('http://httpbin.org/get');
-    $response = $client->options('http://httpbin.org/get');
-    $response = $client->patch('http://httpbin.org/patch');
-    $response = $client->post('http://httpbin.org/post');
-    $response = $client->put('http://httpbin.org/put');
-
-You can create a request and then send the request with the client when you're
-ready:
-
-.. code-block:: php
-
-    use GuzzleHttp\Psr7\Request;
-
-    $request = new Request('PUT', 'http://httpbin.org/put');
-    $response = $client->send($request, ['timeout' => 2]);
-
-Client objects provide a great deal of flexibility in how request are
-transferred including default request options, default handler stack middleware
-that are used by each request, and a base URI that allows you to send requests
-with relative URIs.
-
-You can find out more about client middleware in the
-:doc:`handlers-and-middleware` page of the documentation.
-
-
-Async Requests
---------------
-
-You can send asynchronous requests using the magic methods provided by a client:
-
-.. code-block:: php
-
-    $promise = $client->getAsync('http://httpbin.org/get');
-    $promise = $client->deleteAsync('http://httpbin.org/delete');
-    $promise = $client->headAsync('http://httpbin.org/get');
-    $promise = $client->optionsAsync('http://httpbin.org/get');
-    $promise = $client->patchAsync('http://httpbin.org/patch');
-    $promise = $client->postAsync('http://httpbin.org/post');
-    $promise = $client->putAsync('http://httpbin.org/put');
-
-You can also use the `sendAsync()` and `requestAsync()` methods of a client:
-
-.. code-block:: php
-
-    use GuzzleHttp\Psr7\Request;
-
-    // Create a PSR-7 request object to send
-    $headers = ['X-Foo' => 'Bar'];
-    $body = 'Hello!';
-    $request = new Request('HEAD', 'http://httpbin.org/head', $headers, $body);
-    $promise = $client->sendAsync($request);
-
-    // Or, if you don't need to pass in a request instance:
-    $promise = $client->requestAsync('GET', 'http://httpbin.org/get');
-
-The promise returned by these methods implements the
-`Promises/A+ spec <https://promisesaplus.com/>`_, provided by the
-`Guzzle promises library <https://github.com/guzzle/promises>`_. This means
-that you can chain ``then()`` calls off of the promise. These then calls are
-either fulfilled with a successful ``Psr\Http\Message\ResponseInterface`` or
-rejected with an exception.
-
-.. code-block:: php
-
-    use Psr\Http\Message\ResponseInterface;
-    use GuzzleHttp\Exception\RequestException;
-
-    $promise = $client->requestAsync('GET', 'http://httpbin.org/get');
-    $promise->then(
-        function (ResponseInterface $res) {
-            echo $res->getStatusCode() . "\n";
-        },
-        function (RequestException $e) {
-            echo $e->getMessage() . "\n";
-            echo $e->getRequest()->getMethod();
-        }
-    );
-
-
-Concurrent requests
--------------------
-
-You can send multiple requests concurrently using promises and asynchronous
-requests.
-
-.. code-block:: php
-
-    use GuzzleHttp\Client;
-    use GuzzleHttp\Promise;
-
-    $client = new Client(['base_uri' => 'http://httpbin.org/']);
-
-    // Initiate each request but do not block
-    $promises = [
-        'image' => $client->getAsync('/image'),
-        'png'   => $client->getAsync('/image/png'),
-        'jpeg'  => $client->getAsync('/image/jpeg'),
-        'webp'  => $client->getAsync('/image/webp')
-    ];
-
-    // Wait on all of the requests to complete. Throws a ConnectException
-    // if any of the requests fail
-    $results = Promise\unwrap($promises);
-
-    // Wait for the requests to complete, even if some of them fail
-    $results = Promise\settle($promises)->wait();
-
-    // You can access each result using the key provided to the unwrap
-    // function.
-    echo $results['image']['value']->getHeader('Content-Length')[0]
-    echo $results['png']['value']->getHeader('Content-Length')[0]
-
-You can use the ``GuzzleHttp\Pool`` object when you have an indeterminate
-amount of requests you wish to send.
-
-.. code-block:: php
-
-    use GuzzleHttp\Pool;
-    use GuzzleHttp\Client;
-    use GuzzleHttp\Psr7\Request;
-
-    $client = new Client();
-
-    $requests = function ($total) {
-        $uri = 'http://127.0.0.1:8126/guzzle-server/perf';
-        for ($i = 0; $i < $total; $i++) {
-            yield new Request('GET', $uri);
-        }
-    };
-
-    $pool = new Pool($client, $requests(100), [
-        'concurrency' => 5,
-        'fulfilled' => function ($response, $index) {
-            // this is delivered each successful response
-        },
-        'rejected' => function ($reason, $index) {
-            // this is delivered each failed request
-        },
-    ]);
-
-    // Initiate the transfers and create a promise
-    $promise = $pool->promise();
-
-    // Force the pool of requests to complete.
-    $promise->wait();
-
-Or using a closure that will return a promise once the pool calls the closure.
-
-.. code-block:: php
-
-    $client = new Client();
-
-    $requests = function ($total) use ($client) {
-        $uri = 'http://127.0.0.1:8126/guzzle-server/perf';
-        for ($i = 0; $i < $total; $i++) {
-            yield function() use ($client, $uri) {
-                return $client->getAsync($uri);
-            };
-        }
-    };
-
-    $pool = new Pool($client, $requests(100));
-
-
-Using Responses
-===============
-
-In the previous examples, we retrieved a ``$response`` variable or we were
-delivered a response from a promise. The response object implements a PSR-7
-response, ``Psr\Http\Message\ResponseInterface``, and contains lots of
-helpful information.
-
-You can get the status code and reason phrase of the response:
-
-.. code-block:: php
-
-    $code = $response->getStatusCode(); // 200
-    $reason = $response->getReasonPhrase(); // OK
-
-You can retrieve headers from the response:
-
-.. code-block:: php
-
-    // Check if a header exists.
-    if ($response->hasHeader('Content-Length')) {
-        echo "It exists";
-    }
-
-    // Get a header from the response.
-    echo $response->getHeader('Content-Length')[0];
-
-    // Get all of the response headers.
-    foreach ($response->getHeaders() as $name => $values) {
-        echo $name . ': ' . implode(', ', $values) . "\r\n";
-    }
-
-The body of a response can be retrieved using the ``getBody`` method. The body
-can be used as a string, cast to a string, or used as a stream like object.
-
-.. code-block:: php
-
-    $body = $response->getBody();
-    // Implicitly cast the body to a string and echo it
-    echo $body;
-    // Explicitly cast the body to a string
-    $stringBody = (string) $body;
-    // Read 10 bytes from the body
-    $tenBytes = $body->read(10);
-    // Read the remaining contents of the body as a string
-    $remainingBytes = $body->getContents();
-
-
-Query String Parameters
-=======================
-
-You can provide query string parameters with a request in several ways.
-
-You can set query string parameters in the request's URI:
-
-.. code-block:: php
-
-    $response = $client->request('GET', 'http://httpbin.org?foo=bar');
-
-You can specify the query string parameters using the ``query`` request
-option as an array.
-
-.. code-block:: php
-
-    $client->request('GET', 'http://httpbin.org', [
-        'query' => ['foo' => 'bar']
-    ]);
-
-Providing the option as an array will use PHP's ``http_build_query`` function
-to format the query string.
-
-And finally, you can provide the ``query`` request option as a string.
-
-.. code-block:: php
-
-    $client->request('GET', 'http://httpbin.org', ['query' => 'foo=bar']);
-
-
-Uploading Data
-==============
-
-Guzzle provides several methods for uploading data.
-
-You can send requests that contain a stream of data by passing a string,
-resource returned from ``fopen``, or an instance of a
-``Psr\Http\Message\StreamInterface`` to the ``body`` request option.
-
-.. code-block:: php
-
-    // Provide the body as a string.
-    $r = $client->request('POST', 'http://httpbin.org/post', [
-        'body' => 'raw data'
-    ]);
-
-    // Provide an fopen resource.
-    $body = fopen('/path/to/file', 'r');
-    $r = $client->request('POST', 'http://httpbin.org/post', ['body' => $body]);
-
-    // Use the stream_for() function to create a PSR-7 stream.
-    $body = \GuzzleHttp\Psr7\stream_for('hello!');
-    $r = $client->request('POST', 'http://httpbin.org/post', ['body' => $body]);
-
-An easy way to upload JSON data and set the appropriate header is using the
-``json`` request option:
-
-.. code-block:: php
-
-    $r = $client->request('PUT', 'http://httpbin.org/put', [
-        'json' => ['foo' => 'bar']
-    ]);
-
-
-POST/Form Requests
-------------------
-
-In addition to specifying the raw data of a request using the ``body`` request
-option, Guzzle provides helpful abstractions over sending POST data.
-
-
-Sending form fields
-~~~~~~~~~~~~~~~~~~~
-
-Sending ``application/x-www-form-urlencoded`` POST requests requires that you
-specify the POST fields as an array in the ``form_params`` request options.
-
-.. code-block:: php
-
-    $response = $client->request('POST', 'http://httpbin.org/post', [
-        'form_params' => [
-            'field_name' => 'abc',
-            'other_field' => '123',
-            'nested_field' => [
-                'nested' => 'hello'
-            ]
-        ]
-    ]);
-
-
-Sending form files
-~~~~~~~~~~~~~~~~~~
-
-You can send files along with a form (``multipart/form-data`` POST requests),
-using the ``multipart`` request option. ``multipart`` accepts an array of
-associative arrays, where each associative array contains the following keys:
-
-- name: (required, string) key mapping to the form field name.
-- contents: (required, mixed) Provide a string to send the contents of the
-  file as a string, provide an fopen resource to stream the contents from a
-  PHP stream, or provide a ``Psr\Http\Message\StreamInterface`` to stream
-  the contents from a PSR-7 stream.
-
-.. code-block:: php
-
-    $response = $client->request('POST', 'http://httpbin.org/post', [
-        'multipart' => [
-            [
-                'name'     => 'field_name',
-                'contents' => 'abc'
-            ],
-            [
-                'name'     => 'file_name',
-                'contents' => fopen('/path/to/file', 'r')
-            ],
-            [
-                'name'     => 'other_file',
-                'contents' => 'hello',
-                'filename' => 'filename.txt',
-                'headers'  => [
-                    'X-Foo' => 'this is an extra header to include'
-                ]
-            ]
-        ]
-    ]);
-
-
-Cookies
+        // Create a new customer
+        $client = new Customer::create([
+          'CollectionLocation' => '123456',                    // Your collection location
+          'CustomerCode'       => 'DEVC',                      // Your Customer Code
+          'CustomerNumber'     => '11223344',                  // Your Customer Number
+          'GlobalPackBarcodeType('CX'),                        // Add your GlobalPack information if you need
+          'GlobalPackCustomerCode('1234'),                     // to create international shipment labels
+          'ContactPerson'      => 'Lesley',
+          'Address'            => Address::create([
+              'AddressType' => '02',                           // This address will be shown on the labels
+              'City'        => 'Hoofddorp',
+              'CompanyName' => 'PostNL',
+              'Countrycode' => 'NL',
+              'HouseNr'     => '42',
+              'Street'      => 'Siriusdreef',
+              'Zipcode'     => '2132WT',
+          ]),
+          'Email'              => 'michael@thirtybees.com',
+          'Name'               => 'Michael',
+      ]);
+
+``apikey``
+    (string|UsernameToken) The ``apikey`` to use for the API. Note that if you want to switch from the legacy API to
+    the new SOAP and REST API you will have to request a new key. The username can be omitted.
+    If you want to connect to the legacy API you should pass a ``UsernameToken`` with your username and token set:
+
+    .. code-block:: php
+
+        $usernameToken = new UsernameToken('username', 'token');
+
+    You can request an API key for the sandbox environment on this page: https://developer.postnl.nl/content/request-api-key
+    For a live key you should contact your PostNL account manager.
+
+``sandbox``
+    (bool) Indicate whether you'd like to connect to the sandbox environment. When `false` the library uses the live endpoints.
+
+``mode``
+    (int) This library has three ways to connect to the API:
+      - 1: REST mode
+      - 2: SOAP mode
+      - 5: Legacy mode -- This is the previous SOAP API, which at the moment of writing is still in operation.
+
+
+Building Requests
+=================
+
+In most cases you would want to create request objects and pass them to one of the methods of the main object (``PostNL``).
+One exception is the Barcode Service. You can directly request multiple barcodes and for multiple countries at once. The library
+will internally handle the concurrent requests to the API.
+
+In the above-mentioned merged label example we are passing two ``Shipment`` objects, filled with the needed information to generate the labels.
+To merge those labels manually, we have to set the merge option to ``false`` and can omit both the ``format`` and ``positions`` parameters.
+This will in turn make the library return ``GenerateLabelResponse`` objects.
+
+These are in line with the ``GenerateLabelResponse`` nodes generated by the SOAP API, even when using the REST API.
+The main reason for this standardization is that the SOAP API has better documentation. If you need a quick reference of
+the ``GenerateLabelResponse`` object, you can either look up the code of the ``GenerateLabelResponse`` class or
+`navigate to the API documentation directly <https://developer.postnl.nl/apis/labelling-webservice/documentation#toc-9>`_.
+
+Sending concurrent requests
+---------------------------
+
+There is no direct need to manually handle concurrent requests. This library handles most cases automatically
+and even provides a special function to quickly grab timeframe and location data for frontend delivery options widgets.
+
+In case you manually want to send a custom mix of requests, you can look up the corresponding functions in the
+Service class of your choice and call the ```buildXXXXXXRequest()``` functions manually. Thanks to the PSR-7 standard
+used by this library you can use the ``Request`` object that is returned to access the full request that would otherwise
+be sent directly. To pick up where you left off you can then grab the response and pass it to one of the ``processXXXXXXXResponse()```
+functions of the Service class. The easiest method is to grab the raw HTTP message and parse it with the included PSR-7 library.
+An example can be found in the `cURL client <https://github.com/thirtybees/postnl-api-php/blob/b3837cec23e1b8e806c5ea29d79d0fae82a0e956/src/HttpClient/CurlClient.php#L258>`_.
+
+Using Response objects
+======================
+
+.. note::
+    This section refers to Response objects returned by the library, not the standardized PSR-7 messages.
+
+As soon as you've done your first request with this library, you will find that it returns a Response object.
+As mentioned in the `Building Requests` section, these Response objects are based on the SOAP API, regardless of the mode set.
+The properties of a Response object can be looked up in the code, but it can be a bit confusing at times, since the
+Response object will likely not contain all properties at once. It often depends on the context of the request. For this reason,
+you're better off by having a look at the `SOAP API documentation <https://developer.postnl.nl>` directly or by checking out some of
+the examples in this documentation.
+
+Caching
 =======
 
-Guzzle can maintain a cookie session for you if instructed using the
-``cookies`` request option. When sending a request, the ``cookies`` option
-must be set to an instance of ``GuzzleHttp\Cookie\CookieJarInterface``.
+PSR-6 caching is supported, which means you can grab any caching library for PHP that you like and plug it right into this library.
+
+Note that not all services can be cached. At the moment cacheable services are:
+- Labelling webservice
+- Timeframes webservice
+- Location webservice
+- Deliverydate webservice
+- Shippingstatus webservice
+
+To enable caching for a certain service you can use the following:
 
 .. code-block:: php
 
-    // Use a specific cookie jar
-    $jar = new \GuzzleHttp\Cookie\CookieJar;
-    $r = $client->request('GET', 'http://httpbin.org/cookies', [
-        'cookies' => $jar
-    ]);
+        <?php
+        use Cache\Adapter\Filesystem\FilesystemCachePool;
+        use League\Flysystem\Adapter\Local;
+        use League\Flysystem\Filesystem;
 
-You can set ``cookies`` to ``true`` in a client constructor if you would like
-to use a shared cookie jar for all requests.
+        // Cache in the `/cache` folder relative to this directory
+        $filesystemAdapter = new Local(__DIR__.'/');
+        $filesystem = new Filesystem($filesystemAdapter);
 
-.. code-block:: php
+        $postnl = new PostNL(...);
 
-    // Use a shared client cookie jar
-    $client = new \GuzzleHttp\Client(['cookies' => true]);
-    $r = $client->request('GET', 'http://httpbin.org/cookies');
+        $labellingService = $postnl->getLabellingService();
+        $labellingService->cache = new FilesystemCachePool($filesystem);
 
+        // Set a TTL of 600 seconds
+        $labellingService->ttl = 600;
 
-Redirects
-=========
+        // Using a DateInterval (600 seconds)
+        $labellingServiceervice->ttl = new DateInterval('PT600S');
 
-Guzzle will automatically follow redirects unless you tell it not to. You can
-customize the redirect behavior using the ``allow_redirects`` request option.
+        // Setting a deadline instead, useful for the timeframe service, so you can cache until the cut-off-time or
+        // until the next day
+        $labellingServiceervice = $postnl->getTimeframeService();
+        $labellingService->ttl = new DateTime('14:00:00');
 
-- Set to ``true`` to enable normal redirects with a maximum number of 5
-  redirects. This is the default setting.
-- Set to ``false`` to disable redirects.
-- Pass an associative array containing the 'max' key to specify the maximum
-  number of redirects and optionally provide a 'strict' key value to specify
-  whether or not to use strict RFC compliant redirects (meaning redirect POST
-  requests with POST requests vs. doing what most browsers do which is
-  redirect POST requests with GET requests).
+.. note::
 
-.. code-block:: php
+        This example used the Flysystem (filesystem) cache. An extensive list of supported caches can be found on this page: https://www.php-cache.com/en/latest/
 
-    $response = $client->request('GET', 'http://github.com');
-    echo $response->getStatusCode();
-    // 200
+Logging
+=======
 
-The following example shows that redirects can be disabled.
+Requests and responses can be logged for debugging purposes.
+In order to enable logging you will need to pass a PSR-3 compatible logger.
 
 .. code-block:: php
 
-    $response = $client->request('GET', 'http://github.com', [
-        'allow_redirects' => false
-    ]);
-    echo $response->getStatusCode();
-    // 301
+        <?php
+        use League\Flysystem\Adapter\Local;
+        use League\Flysystem\Filesystem;
 
+        use Psr\Log\LogLevel;
+        use wappr\Logger;
 
-Exceptions
-==========
+        // Initialize the file system adapter
+        $logfs = new Filesystem($adapter);
 
-Guzzle throws exceptions for errors that occur during a transfer.
+        // Set the DEBUG log level
+        $logger = new Logger($logfs, LogLevel::DEBUG);
 
-- In the event of a networking error (connection timeout, DNS errors, etc.),
-  a ``GuzzleHttp\Exception\RequestException`` is thrown. This exception
-  extends from ``GuzzleHttp\Exception\TransferException``. Catching this
-  exception will catch any exception that can be thrown while transferring
-  requests.
+        // Set the filename format, we're creating one file for every minute of request/responses
+        $logger->setFilenameFormat('Y-m-d H:i');
 
-  .. code-block:: php
+        // Set this logger for all services at once
+        $postnl->setLogger($logger);
 
-      use GuzzleHttp\Psr7;
-      use GuzzleHttp\Exception\RequestException;
+        // Set the logger for just the Labelling service
+        $postnl->getLabellingService()->setLogger($logger);
 
-      try {
-          $client->request('GET', 'https://github.com/_abc_123_404');
-      } catch (RequestException $e) {
-          echo Psr7\str($e->getRequest());
-          if ($e->hasResponse()) {
-              echo Psr7\str($e->getResponse());
-          }
-      }
+.. note::
 
-- A ``GuzzleHttp\Exception\ConnectException`` exception is thrown in the
-  event of a networking error. This exception extends from
-  ``GuzzleHttp\Exception\RequestException``.
-
-- A ``GuzzleHttp\Exception\ClientException`` is thrown for 400
-  level errors if the ``http_errors`` request option is set to true. This
-  exception extends from ``GuzzleHttp\Exception\BadResponseException`` and
-  ``GuzzleHttp\Exception\BadResponseException`` extends from
-  ``GuzzleHttp\Exception\RequestException``.
-
-  .. code-block:: php
-
-      use GuzzleHttp\Exception\ClientException;
-
-      try {
-          $client->request('GET', 'https://github.com/_abc_123_404');
-      } catch (ClientException $e) {
-          echo Psr7\str($e->getRequest());
-          echo Psr7\str($e->getResponse());
-      }
-
-- A ``GuzzleHttp\Exception\ServerException`` is thrown for 500 level
-  errors if the ``http_errors`` request option is set to true. This
-  exception extends from ``GuzzleHttp\Exception\BadResponseException``.
-
-- A ``GuzzleHttp\Exception\TooManyRedirectsException`` is thrown when too
-  many redirects are followed. This exception extends from ``GuzzleHttp\Exception\RequestException``.
-
-All of the above exceptions extend from
-``GuzzleHttp\Exception\TransferException``.
-
-
-Environment Variables
-=====================
-
-Guzzle exposes a few environment variables that can be used to customize the
-behavior of the library.
-
-``GUZZLE_CURL_SELECT_TIMEOUT``
-    Controls the duration in seconds that a curl_multi_* handler will use when
-    selecting on curl handles using ``curl_multi_select()``. Some systems
-    have issues with PHP's implementation of ``curl_multi_select()`` where
-    calling this function always results in waiting for the maximum duration of
-    the timeout.
-``HTTP_PROXY``
-    Defines the proxy to use when sending requests using the "http" protocol.
-
-    Note: because the HTTP_PROXY variable may contain arbitrary user input on some (CGI) environments, the variable is only used on the CLI SAPI. See https://httpoxy.org for more information.
-``HTTPS_PROXY``
-    Defines the proxy to use when sending requests using the "https" protocol.
-
-
-Relevant ini Settings
----------------------
-
-Guzzle can utilize PHP ini settings when configuring clients.
-
-``openssl.cafile``
-    Specifies the path on disk to a CA file in PEM format to use when sending
-    requests over "https". See: https://wiki.php.net/rfc/tls-peer-verification#phpini_defaults
+        This example used the Wappr logger. You can use any logger you like, as long as it implements the PSR-3 standard.
+        The log level needs to be set at ``DEBUG``.

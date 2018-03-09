@@ -1,4 +1,5 @@
 # PostNL REST/SOAP API PHP Bindings
+
 [![Build Status](https://travis-ci.org/thirtybees/postnl-api-php.svg?branch=master)](https://travis-ci.org/thirtybees/postnl-api-php)
 [![Documentation Status](https://readthedocs.org/projects/postnl-php/badge/?version=latest)](https://postnl-php.readthedocs.io/en/latest/?badge=latest)
 [![codecov](https://codecov.io/gh/thirtybees/postnl-api-php/branch/master/graph/badge.svg)](https://codecov.io/gh/thirtybees/postnl-api-php)
@@ -6,6 +7,7 @@
 [![license mit](https://poser.pugx.org/thirtybees/postnl-api-php/license.svg)](https://packagist.org/packages/thirtybees/postnl-api-php)
 
 ## About
+
 This PHP library for both PostNL's REST and SOAP API aims to provide a simple way to connect your 
 application with PostNL. By abstracting away needless complexity when processing shipment 
 information and increased fault-tolerance, you can get up and running with PostNL in minutes.  
@@ -13,10 +15,12 @@ At the lower level this library uses asynchronous communication and payload spli
 improved performance.
 
 ## Important notice
+
 The PHP bindings can connect to both PostNL's SOAP and REST API.  
 The library is still a work-in-progress, but is expected to hit stable status soon.
 
 ### Status
+
 | Service                                     | Status REST               | Status SOAP               | Version |
 | ------------------------------------------- | ------------------------- | ------------------------- | ------- |
 | **Addresses**                               |                           |                           |         |
@@ -45,13 +49,17 @@ The library is still a work-in-progress, but is expected to hit stable status so
 | Bulkmail webservice                         | N/A                       | N/A                       | N/A     |
 
 ## Instructions
+
 - Clone this repo
 - Optionally run `composer require guzzlehttp/guzzle` to use Guzzle instead of cURL directly
 - Run `composer install` (Don't have composer? Visit https://getcomposer.org/)
 - You're good to go! A few small examples can be found in this README.
 
-## Example
-Creating a label using default REST API
+## Documentation
+
+### Example
+
+Creating a label using the default REST API
 
 ```php
 <?php
@@ -110,5 +118,35 @@ $shipment = Shipment::create([
 
 $label = $postnl->generateLabel($shipment, 'GraphicFile|PDF', true);
 
-var_dump($label);die();
+die(var_dump($label));
+```
+
+### Full documentation
+
+The full documentation can be found on this page: [https://postnl-php.readthedocs.io/](https://postnl-php.readthedocs.io/)
+
+## License
+
+This library has been licensed with the MIT license.
+
+```
+Copyright (c) 2017-2018 thirty bees <https://github.com/thirtybees>
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in
+    all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+    THE SOFTWARE.
 ```

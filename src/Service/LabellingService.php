@@ -33,8 +33,8 @@ use Psr\Cache\CacheItemPoolInterface;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Service as XmlService;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
-use ThirtyBees\PostNL\Entity\Response\GenerateLabelResponse;
 use ThirtyBees\PostNL\Entity\Request\GenerateLabel;
+use ThirtyBees\PostNL\Entity\Response\GenerateLabelResponse;
 use ThirtyBees\PostNL\Entity\SOAP\Security;
 use ThirtyBees\PostNL\Exception\ApiException;
 use ThirtyBees\PostNL\Exception\CifDownException;
@@ -139,7 +139,6 @@ class LabellingService extends AbstractService
      * @param array $generateLabels ['uuid' => [GenerateBarcode, confirm], ...]
      *
      * @return array
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
     public function generateLabelsREST(array $generateLabels)
     {
