@@ -119,7 +119,7 @@ class LocationServiceRestTest extends \PHPUnit_Framework_TestCase
         $message = new Message();
 
         /** @var Request $request */
-        $this->lastRequest = $request = $this->service->buildGetNearestLocationsRequest(
+        $this->lastRequest = $request = $this->service->buildGetNearestLocationsRequestREST(
             (new GetNearestLocations())
                 ->setMessage($message)
                 ->setCountrycode('NL')

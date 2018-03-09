@@ -208,23 +208,12 @@ abstract class AbstractEntity implements \JsonSerializable, XmlSerializable
             if (!$fullClassName && substr($key, -1) === 's') {
                 $fullClassName = static::getFullEntityClassName(substr($key, 0, strlen($key) - 1));
                 $propertyName = substr($propertyName, 0, strlen($propertyName) - 1);
-                // Timeframe fix
-                if ($propertyName === 'ReasonNotimeframe') {
-                    $propertyName = 'ReasonNoTimeframe';
-                }
             }
 
             if (is_array($value) && is_subclass_of($fullClassName, AbstractEntity::class)) {
                 $entities = [];
                 foreach ($value as $name => $item) {
-                    if ($key === 'ReasonNotimeframes' && $name === 'ReasonNoTimeframe'
-                        || $key === 'Timeframes' && $name === 'Timeframe'
-                        || $key === 'Timeframes' && $name === 'TimeframeTimeFrame'
-                    ) {
-                        foreach ($item as $val) {
-                            $entities[] = static::jsonDeserialize([$name => $val]);
-                        }
-                    } elseif ($key === 'GetLocationsResult') {
+                    if ($key === 'GetLocationsResult') {
                         if (!isset($item['Address'])) {
                             // GetNearestLocations / LocationsInArea responses = array
                             foreach ($item as $itemName => $val) {
@@ -325,5 +314,21 @@ abstract class AbstractEntity implements \JsonSerializable, XmlSerializable
         }
 
         return false;
+    }
+
+    /**
+     * Determine if the array is associative
+     *
+     * @param array $array
+     *
+     * @return bool
+     */
+    protected static function isAssociativeArray($array)
+    {
+        if ([] === $array || !is_array($array)) {
+            return false;
+        }
+
+        return array_keys($array) !== range(0, count($array) - 1);
     }
 }

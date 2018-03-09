@@ -109,7 +109,7 @@ class TimeframeService extends AbstractService
             static::validateRESTResponse($response);
         }
 
-        $object = $this->processGetTimeframesResponse($response);
+        $object = $this->processGetTimeframesResponseREST($response);
         if ($object instanceof ResponseTimeframes) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof Response
@@ -149,7 +149,7 @@ class TimeframeService extends AbstractService
             $response = $this->postnl->getHttpClient()->doRequest($this->buildGetTimeframesRequestSOAP($getTimeframes));
         }
 
-        $object = $this->processGetTimeframesResponse($response);
+        $object = $this->processGetTimeframesResponseSOAP($response);
         if ($object instanceof ResponseTimeframes) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof Response
@@ -234,7 +234,24 @@ class TimeframeService extends AbstractService
     {
         $body = json_decode(static::getResponseText($response), true);
         if (isset($body['Timeframes'])) {
+            // Standardize the object here
+            $newNotimeframes = [];
+            foreach ($body['ReasonNotimeframes']['ReasonNoTimeframe'] as &$reasonNotimeframe) {
+                $newNotimeframes[] = AbstractEntity::jsonDeserialize(['ReasonNoTimeFrame' => $reasonNotimeframe]);
+            }
+            $body['ReasonNotimeframes'] = $newNotimeframes;
 
+            $newTimeframes = [];
+            foreach ($body['Timeframes']['Timeframe'] as $timeframe) {
+                $newTimeframeTimeframe = [];
+                foreach ($timeframe['Timeframes']['TimeframeTimeFrame'] as $timeframetimeframe) {
+                    $newTimeframeTimeframe[] = AbstractEntity::jsonDeserialize(['TimeframeTimeFrame' => $timeframetimeframe]);
+                }
+                $timeframe['Timeframes'] = $newTimeframeTimeframe;
+
+                $newTimeframes[] = AbstractEntity::jsonDeserialize(['Timeframe' => $timeframe]);
+            }
+            $body['Timeframes'] = $newTimeframes;
 
             /** @var ResponseTimeframes $object */
             $object = AbstractEntity::jsonDeserialize(['ResponseTimeframes' => $body]);

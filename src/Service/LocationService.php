@@ -210,7 +210,7 @@ class LocationService extends AbstractService
             static::validateRESTResponse($response);
         }
 
-        $object = $this->processGetLocationsInAreaResponse($response);
+        $object = $this->processGetLocationsInAreaResponseREST($response);
         if ($object instanceof GetLocationsInAreaResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof Response
@@ -425,8 +425,6 @@ class LocationService extends AbstractService
     {
         $body = json_decode(static::getResponseText($response), true);
         if (is_array($body)) {
-
-
             /** @var GetNearestLocationsResponse $object */
             $object = AbstractEntity::jsonDeserialize(['GetNearestLocationsResponse' => $body]);
             $this->setService($object);

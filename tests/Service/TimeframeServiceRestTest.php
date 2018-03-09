@@ -352,11 +352,12 @@ class TimeframeServiceRestTest extends \PHPUnit_Framework_TestCase
                 ])
         );
 
-        // Should be a ResponeTimefarmes instance
+        // Should be a ResponeTimeframes instance
         $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\ResponseTimeframes', $responseTimeframes);
         // Check for data loss
         $this->assertEquals(5, count($responseTimeframes->getReasonNoTimeframes()));
         $this->assertEquals(6, count($responseTimeframes->getTimeframes()));
+        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Timeframe', $responseTimeframes->getTimeframes()[0]);
         $this->assertEquals(json_encode($payload), json_encode($responseTimeframes));
     }
 }
