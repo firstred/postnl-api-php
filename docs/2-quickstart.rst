@@ -19,98 +19,98 @@ Requesting a merged label
 
 .. code-block:: php
 
-      <?php
-      use ThirtyBees\PostNL\Entity\Label;
-      use ThirtyBees\PostNL\PostNL;
-      use ThirtyBees\PostNL\Entity\Customer;
-      use ThirtyBees\PostNL\Entity\Address;
-      use ThirtyBees\PostNL\Entity\Shipment;
-      use ThirtyBees\PostNL\Entity\Dimension;
+    <?php
+    use ThirtyBees\PostNL\Entity\Label;
+    use ThirtyBees\PostNL\PostNL;
+    use ThirtyBees\PostNL\Entity\Customer;
+    use ThirtyBees\PostNL\Entity\Address;
+    use ThirtyBees\PostNL\Entity\Shipment;
+    use ThirtyBees\PostNL\Entity\Dimension;
 
-      require_once __DIR__.'/vendor/autoload.php';
+    require_once __DIR__.'/vendor/autoload.php';
 
-      // Your PostNL credentials
-      $customer = Customer::create([
-          'CollectionLocation' => '123456',
-          'CustomerCode'       => 'DEVC',
-          'CustomerNumber'     => '11223344',
-          'ContactPerson'      => 'Lesley',
-          'Address'            => Address::create([
-              'AddressType' => '02',
-              'City'        => 'Hoofddorp',
-              'CompanyName' => 'PostNL',
-              'Countrycode' => 'NL',
-              'HouseNr'     => '42',
-              'Street'      => 'Siriusdreef',
-              'Zipcode'     => '2132WT',
-          ]),
-          'Email'              => 'michael@thirtybees.com',
-          'Name'               => 'Michael',
-      ]);
+    // Your PostNL credentials
+    $customer = Customer::create([
+        'CollectionLocation' => '123456',
+        'CustomerCode'       => 'DEVC',
+        'CustomerNumber'     => '11223344',
+        'ContactPerson'      => 'Lesley',
+        'Address'            => Address::create([
+            'AddressType' => '02',
+            'City'        => 'Hoofddorp',
+            'CompanyName' => 'PostNL',
+            'Countrycode' => 'NL',
+            'HouseNr'     => '42',
+            'Street'      => 'Siriusdreef',
+            'Zipcode'     => '2132WT',
+        ]),
+        'Email'              => 'michael@thirtybees.com',
+        'Name'               => 'Michael',
+    ]);
 
-      $apikey = 'YOUR_API_KEY_HERE';
-      $sandbox = true;
+    $apikey = 'YOUR_API_KEY_HERE';
+    $sandbox = true;
 
-      $postnl = new PostNL($customer, $apikey, $sandbox, PostNL::MODE_REST);
+    $postnl = new PostNL($customer, $apikey, $sandbox, PostNL::MODE_REST);
 
-      $barcodes = $postnl->generateBarcodesByCountryCodes(['NL' => 2]);
+    $barcodes = $postnl->generateBarcodesByCountryCodes(['NL' => 2]);
 
-      $shipments = [
-          Shipment::create([
-              'Addresses'           => [
-                  Address::create([
-                      'AddressType' => '01',
-                      'City'        => 'Utrecht',
-                      'Countrycode' => 'NL',
-                      'FirstName'   => 'Peter',
-                      'HouseNr'     => '9',
-                      'HouseNrExt'  => 'a bis',
-                      'Name'        => 'de Ruijter',
-                      'Street'      => 'Bilderdijkstraat',
-                      'Zipcode'     => '3521VA',
-                  ]),
-              ],
-              'Barcode'             => $barcodes['NL'][0],
-              'Dimension'           => new Dimension('1000'),
-              'ProductCodeDelivery' => '3085',
-          ]),
-          Shipment::create([
-              'Addresses'           => [
-                  Address::create([
-                      'AddressType' => '01',
-                      'City'        => 'Utrecht',
-                      'Countrycode' => 'NL',
-                      'FirstName'   => 'Peter',
-                      'HouseNr'     => '9',
-                      'HouseNrExt'  => 'a bis',
-                      'Name'        => 'de Ruijter',
-                      'Street'      => 'Bilderdijkstraat',
-                      'Zipcode'     => '3521VA',
-                  ]),
-              ],
-              'Barcode'             => $barcodes['NL'][1],
-              'Dimension'           => new Dimension('1000'),
-              'ProductCodeDelivery' => '3085',
-          ]),
-      ];
+    $shipments = [
+        Shipment::create([
+            'Addresses'           => [
+                Address::create([
+                    'AddressType' => '01',
+                    'City'        => 'Utrecht',
+                    'Countrycode' => 'NL',
+                    'FirstName'   => 'Peter',
+                    'HouseNr'     => '9',
+                    'HouseNrExt'  => 'a bis',
+                    'Name'        => 'de Ruijter',
+                    'Street'      => 'Bilderdijkstraat',
+                    'Zipcode'     => '3521VA',
+                ]),
+            ],
+            'Barcode'             => $barcodes['NL'][0],
+            'Dimension'           => new Dimension('1000'),
+            'ProductCodeDelivery' => '3085',
+        ]),
+        Shipment::create([
+            'Addresses'           => [
+                Address::create([
+                    'AddressType' => '01',
+                    'City'        => 'Utrecht',
+                    'Countrycode' => 'NL',
+                    'FirstName'   => 'Peter',
+                    'HouseNr'     => '9',
+                    'HouseNrExt'  => 'a bis',
+                    'Name'        => 'de Ruijter',
+                    'Street'      => 'Bilderdijkstraat',
+                    'Zipcode'     => '3521VA',
+                ]),
+            ],
+            'Barcode'             => $barcodes['NL'][1],
+            'Dimension'           => new Dimension('1000'),
+            'ProductCodeDelivery' => '3085',
+        ]),
+    ];
 
-      $label = $postnl->generateLabels(
-          $shipments,
-          'GraphicFile|PDF', // Printertype (only PDFs can be merged -- no need to use the Merged types)
-          true, // Confirm immediately
-          true, // Merge
-          Label::FORMAT_A4, // Format -- this merges multiple A6 labels onto an A4
-          [
-              1 => true,
-              2 => true,
-              3 => true,
-              4 => true,
-          ] // Positions
-      );
+    $label = $postnl->generateLabels(
+        $shipments,
+        'GraphicFile|PDF', // Printertype (only PDFs can be merged -- no need to use the Merged types)
+        true, // Confirm immediately
+        true, // Merge
+        Label::FORMAT_A4, // Format -- this merges multiple A6 labels onto an A4
+        [
+            1 => true,
+            2 => true,
+            3 => true,
+            4 => true,
+        ] // Positions
+    );
 
-      file_put_contents('labels.pdf', $label);
+    file_put_contents('labels.pdf', $label);
 
-This will write a ``labels.pdf`` that looks like this:
+This will write a ``labels.pdf`` file that looks like this:
 
 .. image:: img/mergedlabels.png
 
@@ -209,6 +209,19 @@ Response object will likely not contain all properties at once. It often depends
 you're better off by having a look at the `SOAP API documentation <https://developer.postnl.nl>` directly or by checking out some of
 the examples in this documentation.
 
+HTTP Client
+===========
+
+By default the library will use cURL or Guzzle when available. You can always switch HTTP clients as follows:
+
+.. code-block:: php
+
+    <?php
+    $postnl = new PostNL(...);
+    $postnl->setHttpClient(\ThirtyBees\PostNL\HttpClient\CurlClient::getInstance());
+
+An HTTP client will need to implement the ``\ThirtyBees\PostNL\HttpClient\ClientInterface`` interface.
+
 Caching
 =======
 
@@ -225,30 +238,30 @@ To enable caching for a certain service you can use the following:
 
 .. code-block:: php
 
-        <?php
-        use Cache\Adapter\Filesystem\FilesystemCachePool;
-        use League\Flysystem\Adapter\Local;
-        use League\Flysystem\Filesystem;
+    <?php
+    use Cache\Adapter\Filesystem\FilesystemCachePool;
+    use League\Flysystem\Adapter\Local;
+    use League\Flysystem\Filesystem;
 
-        // Cache in the `/cache` folder relative to this directory
-        $filesystemAdapter = new Local(__DIR__.'/');
-        $filesystem = new Filesystem($filesystemAdapter);
+    // Cache in the `/cache` folder relative to this directory
+    $filesystemAdapter = new Local(__DIR__.'/');
+    $filesystem = new Filesystem($filesystemAdapter);
 
-        $postnl = new PostNL(...);
+    $postnl = new PostNL(...);
 
-        $labellingService = $postnl->getLabellingService();
-        $labellingService->cache = new FilesystemCachePool($filesystem);
+    $labellingService = $postnl->getLabellingService();
+    $labellingService->cache = new FilesystemCachePool($filesystem);
 
-        // Set a TTL of 600 seconds
-        $labellingService->ttl = 600;
+    // Set a TTL of 600 seconds
+    $labellingService->ttl = 600;
 
-        // Using a DateInterval (600 seconds)
-        $labellingServiceervice->ttl = new DateInterval('PT600S');
+    // Using a DateInterval (600 seconds)
+    $labellingServiceervice->ttl = new DateInterval('PT600S');
 
-        // Setting a deadline instead, useful for the timeframe service, so you can cache until the cut-off-time or
-        // until the next day
-        $labellingServiceervice = $postnl->getTimeframeService();
-        $labellingService->ttl = new DateTime('14:00:00');
+    // Setting a deadline instead, useful for the timeframe service, so you can cache until the cut-off-time or
+    // until the next day
+    $labellingServiceervice = $postnl->getTimeframeService();
+    $labellingService->ttl = new DateTime('14:00:00');
 
 .. note::
 
@@ -262,29 +275,29 @@ In order to enable logging you will need to pass a PSR-3 compatible logger.
 
 .. code-block:: php
 
-        <?php
-        use League\Flysystem\Adapter\Local;
-        use League\Flysystem\Filesystem;
+    <?php
+    use League\Flysystem\Adapter\Local;
+    use League\Flysystem\Filesystem;
 
-        use Psr\Log\LogLevel;
-        use wappr\Logger;
+    use Psr\Log\LogLevel;
+    use wappr\Logger;
 
-        // Initialize the file system adapter
-        $logfs = new Filesystem($adapter);
+    // Initialize the file system adapter
+    $logfs = new Filesystem($adapter);
 
-        // Set the DEBUG log level
-        $logger = new Logger($logfs, LogLevel::DEBUG);
+    // Set the DEBUG log level
+    $logger = new Logger($logfs, LogLevel::DEBUG);
 
-        // Set the filename format, we're creating one file for every minute of request/responses
-        $logger->setFilenameFormat('Y-m-d H:i');
+    // Set the filename format, we're creating one file for every minute of request/responses
+    $logger->setFilenameFormat('Y-m-d H:i');
 
-        // Set this logger for all services at once
-        $postnl->setLogger($logger);
+    // Set this logger for all services at once
+    $postnl->setLogger($logger);
 
-        // Set the logger for just the Labelling service
-        $postnl->getLabellingService()->setLogger($logger);
+    // Set the logger for just the Labelling service
+    $postnl->getLabellingService()->setLogger($logger);
 
 .. note::
 
-        This example used the Wappr logger. You can use any logger you like, as long as it implements the PSR-3 standard.
-        The log level needs to be set at ``DEBUG``.
+     This example used the Wappr logger. You can use any logger you like, as long as it implements the PSR-3 standard.
+     The log level needs to be set at ``DEBUG``.

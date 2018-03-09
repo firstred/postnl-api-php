@@ -34,6 +34,12 @@ installs them into your project.
     # Install Composer
     curl -sS https://getcomposer.org/installer | php
 
+Install the PostNL library:
+
+.. code-block:: bash
+
+    php composer.phar require thirtybees/postnl-api-php:~1.0
+
 You can optionally add Guzzle as a dependency using the composer.phar CLI:
 
 .. code-block:: bash
