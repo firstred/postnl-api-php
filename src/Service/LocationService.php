@@ -118,11 +118,11 @@ class LocationService extends AbstractService
             }
         }
         if (!$response instanceof Response) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetNearestLocationsRequest($getNearestLocations));
+            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetNearestLocationsRequestREST($getNearestLocations));
             static::validateRESTResponse($response);
         }
 
-        $object = $this->processGetNearestLocationsResponse($response);
+        $object = $this->processGetNearestLocationsResponseREST($response);
         if ($object instanceof GetNearestLocationsResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof Response
@@ -146,6 +146,10 @@ class LocationService extends AbstractService
      * @return GetNearestLocationsResponse
      *
      * @throws ApiException
+     * @throws CifDownException
+     * @throws CifException
+     * @throws \Sabre\Xml\LibXMLException
+     * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
     public function getNearestLocationsSOAP(GetNearestLocations $getNearestLocations)
     {
@@ -159,10 +163,10 @@ class LocationService extends AbstractService
             }
         }
         if (!$response instanceof Response) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetNearestLocationsRequest($getNearestLocations));
+            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetNearestLocationsRequestSOAP($getNearestLocations));
         }
 
-        $object = $this->processGetNearestLocationsResponse($response);
+        $object = $this->processGetNearestLocationsResponseSOAP($response);
         if ($object instanceof GetNearestLocationsResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof Response
@@ -399,7 +403,7 @@ class LocationService extends AbstractService
         $endpoint .= '?'.http_build_query($query);
 
         return new Request(
-            'POST',
+            'GET',
             ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint,
             [
                 'apikey'       => $apiKey,
@@ -549,7 +553,7 @@ class LocationService extends AbstractService
         $endpoint = '/area?'.http_build_query($query);
 
         return new Request(
-            'POST',
+            'GET',
             ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint,
             [
                 'apikey'       => $apiKey,
