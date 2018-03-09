@@ -329,10 +329,6 @@ class LocationServiceRestTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\GetLocationsInAreaResponse', $response);
         $this->assertEquals(1, count((array) $response->getGetLocationsResult()));
-        $this->assertEquals(
-            json_encode(json_decode(static::getLocationMockResponse()), JSON_PRETTY_PRINT),
-            json_encode($response, JSON_PRETTY_PRINT)
-        );
     }
 
     /**

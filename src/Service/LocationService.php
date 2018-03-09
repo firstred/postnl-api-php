@@ -323,6 +323,10 @@ class LocationService extends AbstractService
      * @return GetLocationsInAreaResponse
      *
      * @throws ApiException
+     * @throws CifDownException
+     * @throws CifException
+     * @throws \Sabre\Xml\LibXMLException
+     * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
     public function getLocationSOAP(GetLocation $getLocation)
     {
@@ -769,6 +773,34 @@ class LocationService extends AbstractService
     {
         $body = json_decode(static::getResponseText($response), true);
         if (is_array($body)) {
+            if (isset($body['GetLocationsResult']['ResponseLocation']['Address'])) {
+                $body['GetLocationsResult']['ResponseLocation'] = [$body['GetLocationsResult']['ResponseLocation']];
+            }
+
+            $newLocations = [];
+            foreach ($body['GetLocationsResult']['ResponseLocation'] as $location) {
+                if (isset($location['Address'])) {
+                    $location['Address'] = AbstractEntity::jsonDeserialize(['Address' => $location['Address']]);
+                }
+
+                if (isset($location['DeliveryOptions']['string'])) {
+                    $location['DeliveryOptions'] = $location['DeliveryOptions']['string'];
+                }
+
+                if (isset($location['OpeningHours'])) {
+                    foreach ($location['OpeningHours'] as $day => $hour) {
+                        if (isset($hour['string'])) {
+                            $location['OpeningHours'][$day] = $hour['string'];
+                        }
+                    }
+
+                    $location['OpeningHours'] = AbstractEntity::jsonDeserialize(['OpeningHours' => $location['OpeningHours']]);
+                }
+
+                $newLocations[] = AbstractEntity::jsonDeserialize(['ResponseLocation' => $location]);
+            }
+            $body['GetLocationsResult'] = $newLocations;
+
             /** @var GetLocationsInAreaResponse $object */
             $object = AbstractEntity::jsonDeserialize(['GetLocationsInAreaResponse' => $body]);
             $this->setService($object);
