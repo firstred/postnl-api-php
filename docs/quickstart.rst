@@ -19,6 +19,7 @@ Requesting a merged label
 
 .. code-block:: php
 
+      <?php
       use ThirtyBees\PostNL\Entity\Label;
       use ThirtyBees\PostNL\PostNL;
       use ThirtyBees\PostNL\Entity\Customer;
@@ -121,6 +122,7 @@ The PostNL client constructor accepts a few options:
 
     .. code-block:: php
 
+        <?php
         // Create a new customer
         $client = new Customer::create([
           'CollectionLocation' => '123456',                    // Your collection location
@@ -149,6 +151,7 @@ The PostNL client constructor accepts a few options:
 
     .. code-block:: php
 
+        <?php
         $usernameToken = new UsernameToken('username', 'token');
 
     You can request an API key for the sandbox environment on this page: https://developer.postnl.nl/content/request-api-key
