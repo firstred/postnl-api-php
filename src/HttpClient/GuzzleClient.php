@@ -59,6 +59,33 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
 
     /** @var int $maxRetries */
     private $maxRetries = 1;
+    /** @var Client $client */
+    private $client;
+
+    /**
+     * Get the Guzzle client
+     *
+     * @return Client
+     */
+    private function getClient()
+    {
+        if (!$this->client) {
+            // Initialize Guzzle and the retry middleware, include the default options
+            $stack = HandlerStack::create(\GuzzleHttp\choose_handler());
+            $stack->push(\GuzzleHttp\Middleware::retry(static::createRetryHandler()));
+            $guzzle = new Client(array_merge(
+                $this->defaultOptions,
+                [
+                    'timeout'         => $this->timeout,
+                    'connect_timeout' => $this->connectTimeout,
+                ]
+            ));
+
+            $this->client = $guzzle;
+        }
+
+        return $this->client;
+    }
 
     /**
      * @return GuzzleClient|static
@@ -81,7 +108,10 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
      * @return GuzzleClient
      */
     public function setOption($name, $value) {
+        // Set the default option
         $this->defaultOptions[$name] = $value;
+        // Reset the non-mutable Guzzle client
+        $this->client = null;
 
         return $this;
     }
@@ -111,7 +141,10 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
      */
     public function setVerify($verify)
     {
+        // Set the verify option
         $this->defaultOptions['verify'] = $verify;
+        // Reset the non-mutable Guzzle client
+        $this->client = null;
 
         return $this;
     }
@@ -230,15 +263,7 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
     public function doRequest(Request $request)
     {
         // Initialize Guzzle, include the default options
-        $guzzle = new Client(array_merge(
-            $this->defaultOptions,
-            [
-                'timeout'         => $this->timeout,
-                'connect_timeout' => $this->connectTimeout,
-                'http_errors'     => false,
-            ]
-        ));
-
+        $guzzle = $this->getClient();
         try {
             $response = $guzzle->send($request);
         } catch (GuzzleException $e) {
@@ -275,17 +300,7 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
         $requests = $this->pendingRequests + $requests;
         $this->clearRequests();
 
-        // Initialize Guzzle and the retry middleware, include the default options
-        $stack = HandlerStack::create(\GuzzleHttp\choose_handler());
-        $stack->push(\GuzzleHttp\Middleware::retry(static::createRetryHandler()));
-        $guzzle = new Client(array_merge(
-            $this->defaultOptions,
-            [
-                'timeout'         => $this->timeout,
-                'connect_timeout' => $this->connectTimeout,
-            ]
-        ));
-
+        $guzzle = $this->getClient();
         // Concurrent requests
         $promises = [];
         foreach ($requests as $index => $request) {
