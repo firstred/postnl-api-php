@@ -65,6 +65,7 @@ use ThirtyBees\PostNL\Exception\InvalidArgumentException;
 use ThirtyBees\PostNL\Exception\InvalidBarcodeException;
 use ThirtyBees\PostNL\Exception\InvalidConfigurationException;
 use ThirtyBees\PostNL\Exception\NotSupportedException;
+use ThirtyBees\PostNL\Exception\ResponseException;
 use ThirtyBees\PostNL\HttpClient\ClientInterface;
 use ThirtyBees\PostNL\HttpClient\CurlClient;
 use ThirtyBees\PostNL\HttpClient\GuzzleClient;
@@ -1052,7 +1053,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @return array [uuid => ResponseTimeframes, uuid => GetNearestLocationsResponse, uuid => GetDeliveryDateResponse]
      *
-     * @throws ApiException
+     * @throws ResponseException
      */
     public function getTimeframesAndNearestLocations(
         GetTimeframes $getTimeframes,
@@ -1091,13 +1092,13 @@ class PostNL implements LoggerAwareInterface
             if ($response instanceof Response) {
                 $results[$uuid] = $response;
             } else {
-                throw new ApiException('Invalid multi-request');
+                throw new ResponseException('Invalid multi-request', null, null, $response);
             }
         }
 
         foreach ($responses as $type => $response) {
             if (!$response instanceof Response) {
-                throw new ApiException('Invalid multi-request');
+                throw new ResponseException('Invalid multi-request', null, null, $response);
             } elseif ($response->getStatusCode() === 200) {
                 switch ($type) {
                     case 'timeframes':

@@ -367,7 +367,7 @@ class LocationService extends AbstractService
         $this->setService($getNearestLocations);
         $query = [
             'CountryCode'     => $getNearestLocations->getCountryCode(),
-            'PostalCode'      => $location->getPostalCode(),
+            'PostalCode'      => $location->getPostalcode(),
             'DeliveryOptions' => 'PG',
         ];
         if ($city = $location->getCity()) {

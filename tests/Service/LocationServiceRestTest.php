@@ -150,6 +150,7 @@ class LocationServiceRestTest extends \PHPUnit_Framework_TestCase
             'HouseNumber'     => '42',
             'DeliveryDate'    => '29-06-2016',
             'OpeningTime'     => '09:00:00',
+            'PostalCode'      => '2132WT',
         ], $query);
         $this->assertEquals('test', $request->getHeaderLine('apikey'));
         $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
