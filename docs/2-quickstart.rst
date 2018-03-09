@@ -17,6 +17,8 @@ class.
 Requesting a merged label
 -------------------------
 
+Here is how you can request two labels and have them merged into a single PDF automatically:
+
 .. code-block:: php
 
     <?php
@@ -161,10 +163,11 @@ The PostNL client constructor accepts a few options:
     (bool) Indicate whether you'd like to connect to the sandbox environment. When `false` the library uses the live endpoints.
 
 ``mode``
-    (int) This library has three ways to connect to the API:
-    * 1: REST mode
-    * 2: SOAP mode
-    * 5: Legacy mode -- This is the previous SOAP API, which at the moment of writing is still in operation.
+    (int) This library provides three ways to connect to the API:
+
+    - 1: REST mode
+    - 2: SOAP mode
+    - 5: Legacy mode -- This is the previous SOAP API, which at the moment of writing is still in operation.
 
 
 Building Requests
@@ -200,6 +203,7 @@ Using Response objects
 ======================
 
 .. note::
+
     This section refers to Response objects returned by the library, not the standardized PSR-7 messages.
 
 As soon as you've done your first request with this library, you will find that it returns a Response object.
@@ -228,11 +232,12 @@ Caching
 PSR-6 caching is supported, which means you can grab any caching library for PHP that you like and plug it right into this library.
 
 Note that not all services can be cached. At the moment cacheable services are:
-- Labelling webservice
-- Timeframes webservice
-- Location webservice
-- Deliverydate webservice
-- Shippingstatus webservice
+
+    - Labelling webservice
+    - Timeframes webservice
+    - Location webservice
+    - Deliverydate webservice
+    - Shippingstatus webservice
 
 To enable caching for a certain service you can use the following:
 
@@ -265,7 +270,7 @@ To enable caching for a certain service you can use the following:
 
 .. note::
 
-        This example used the Flysystem (filesystem) cache. An extensive list of supported caches can be found on `this page <https://www.php-cache.com/en/latest/>`_.
+    This example used the Flysystem (filesystem) cache. An extensive list of supported caches can be found on `this page <https://www.php-cache.com/en/latest/>`_.
 
 Logging
 =======
