@@ -170,4 +170,19 @@ class OpeningHours extends AbstractEntity
         $this->setSaturday($saturday);
         $this->setSunday($sunday);
     }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        $array = [];
+        foreach (array_keys(static::$defaultProperties['Barcode']) as $property) {
+            if (isset($this->{$property})) {
+                $array[$property] = $this->{$property};
+            }
+        }
+
+        return $array;
+    }
 }
