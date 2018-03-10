@@ -143,7 +143,7 @@ class TimeframeServiceRestTest extends \PHPUnit_Framework_TestCase
             'PostalCode'         => '2132WT',
             'HouseNumber'        => '42',
             'CountryCode'        => 'NL',
-            'Options'            => '',
+            'Options'            => 'Evening',
             'HouseNrExt'         => 'A',
             'Street'             => 'Siriusdreef',
             'City'               => 'Hoofddorp',
