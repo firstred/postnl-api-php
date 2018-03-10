@@ -119,7 +119,7 @@ This will write a ``labels.pdf`` file that looks like this:
 The PostNL client constructor accepts a few options:
 
 ``customer``
-    (Customer) The ``Customer`` object that is used to configure the client and let PostNL know
+    (``Customer`` [`required`]) The ``Customer`` object that is used to configure the client and let PostNL know
     who requests the data.
 
     .. code-block:: php
@@ -147,7 +147,7 @@ The PostNL client constructor accepts a few options:
       ]);
 
 ``apikey``
-    (string|UsernameToken) The ``apikey`` to use for the API. Note that if you want to switch from the legacy API to
+    (``string``|``UsernameToken`` [`required`]) The ``apikey`` to use for the API. Note that if you want to switch from the legacy API to
     the new SOAP and REST API you will have to request a new key. The username can be omitted.
     If you want to connect to the legacy API you should pass a ``UsernameToken`` with your username and token set:
 
@@ -160,10 +160,10 @@ The PostNL client constructor accepts a few options:
     For a live key you should contact your PostNL account manager.
 
 ``sandbox``
-    (bool) Indicate whether you'd like to connect to the sandbox environment. When `false` the library uses the live endpoints.
+    (``bool`` [`required`]) Indicate whether you'd like to connect to the sandbox environment. When `false` the library uses the live endpoints.
 
 ``mode``
-    (int) This library provides three ways to connect to the API:
+    (``int`` [`optional, defaults to REST`) This library provides three ways to connect to the API:
 
     - 1: REST mode
     - 2: SOAP mode
@@ -213,96 +213,3 @@ Response object will likely not contain all properties at once. It often depends
 you're better off by having a look at the `SOAP API documentation <https://developer.postnl.nl>`_ directly or by checking out some of
 the examples in this documentation.
 
-HTTP Client
-===========
-
-By default the library will use cURL or Guzzle when available. You can always switch HTTP clients as follows:
-
-.. code-block:: php
-
-    <?php
-    $postnl = new PostNL(...);
-    $postnl->setHttpClient(\ThirtyBees\PostNL\HttpClient\CurlClient::getInstance());
-
-An HTTP client will need to implement the ``\ThirtyBees\PostNL\HttpClient\ClientInterface`` interface.
-
-Caching
-=======
-
-PSR-6 caching is supported, which means you can grab any caching library for PHP that you like and plug it right into this library.
-
-Note that not all services can be cached. At the moment cacheable services are:
-
-    - Labelling webservice
-    - Timeframes webservice
-    - Location webservice
-    - Deliverydate webservice
-    - Shippingstatus webservice
-
-To enable caching for a certain service you can use the following:
-
-.. code-block:: php
-
-    <?php
-    use Cache\Adapter\Filesystem\FilesystemCachePool;
-    use League\Flysystem\Adapter\Local;
-    use League\Flysystem\Filesystem;
-
-    // Cache in the `/cache` folder relative to this directory
-    $filesystemAdapter = new Local(__DIR__.'/');
-    $filesystem = new Filesystem($filesystemAdapter);
-
-    $postnl = new PostNL(...);
-
-    $labellingService = $postnl->getLabellingService();
-    $labellingService->cache = new FilesystemCachePool($filesystem);
-
-    // Set a TTL of 600 seconds
-    $labellingService->ttl = 600;
-
-    // Using a DateInterval (600 seconds)
-    $labellingServiceervice->ttl = new DateInterval('PT600S');
-
-    // Setting a deadline instead, useful for the timeframe service, so you can cache until the cut-off-time or
-    // until the next day
-    $labellingServiceervice = $postnl->getTimeframeService();
-    $labellingService->ttl = new DateTime('14:00:00');
-
-.. note::
-
-    This example used the Flysystem (filesystem) cache. An extensive list of supported caches can be found on `this page <https://www.php-cache.com/en/latest/>`_.
-
-Logging
-=======
-
-Requests and responses can be logged for debugging purposes.
-In order to enable logging you will need to pass a PSR-3 compatible logger.
-
-.. code-block:: php
-
-    <?php
-    use League\Flysystem\Adapter\Local;
-    use League\Flysystem\Filesystem;
-
-    use Psr\Log\LogLevel;
-    use wappr\Logger;
-
-    // Initialize the file system adapter
-    $logfs = new Filesystem($adapter);
-
-    // Set the DEBUG log level
-    $logger = new Logger($logfs, LogLevel::DEBUG);
-
-    // Set the filename format, we're creating one file for every minute of request/responses
-    $logger->setFilenameFormat('Y-m-d H:i');
-
-    // Set this logger for all services at once
-    $postnl->setLogger($logger);
-
-    // Set the logger for just the Labelling service
-    $postnl->getLabellingService()->setLogger($logger);
-
-.. note::
-
-     This example used the Wappr logger. You can use any logger you like, as long as it implements the PSR-3 standard.
-     The log level needs to be set at ``DEBUG``.
