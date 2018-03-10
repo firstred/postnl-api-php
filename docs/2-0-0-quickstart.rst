@@ -114,7 +114,7 @@ Here is how you can request two labels and have them merged into a single PDF au
 
 This will write a ``labels.pdf`` file that looks like this:
 
-.. image:: img/mergedlabels.png
+//.. image:: img/mergedlabels.png
 
 The PostNL client constructor accepts a few options:
 
