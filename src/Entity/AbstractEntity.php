@@ -254,7 +254,7 @@ abstract class AbstractEntity implements \JsonSerializable, XmlSerializable
             $fullClassName = static::getFullEntityClassName($shortClassName);
 
             // If key is plural, try the singular version, because this might be an array
-            if (!$fullClassName && substr($shortClassName, -2) === 'es') {
+            if (in_array($shortClassName, ['OldStatuses', 'Statuses', 'Addresses'])) {
                 $fullClassName = static::getFullEntityClassName(substr($shortClassName, 0, strlen($shortClassName) - 2));
             } elseif (!$fullClassName && substr($shortClassName, -1) === 's') {
                 $fullClassName = static::getFullEntityClassName(substr($shortClassName, 0, strlen($shortClassName) - 1));
@@ -264,14 +264,23 @@ abstract class AbstractEntity implements \JsonSerializable, XmlSerializable
                 $object->{'set'.$shortClassName}($value['value']);
             } elseif (is_array($value['value'])
                 && count($value['value']) >= 1
-                && !in_array($shortClassName, ['Customer'])
+                && !in_array($shortClassName, ['Customer', 'OpeningHours', 'Customs'])
                 && is_subclass_of($fullClassName, AbstractEntity::class)
             ) {
                 $entities = [];
-                foreach (array_values($value['value']) as $item) {
-                    $entities[] = static::xmlDeserialize([$item]);
+                if (isset($value['value'][0]['value']) && !is_array($value['value'][0]['value'])) {
+                    $object->{'set'.$shortClassName}(static::xmlDeserialize([$value]));
+                } else {
+                    foreach (array_values($value['value']) as $item) {
+                        if (!is_array($item['value'])) {
+                            $entities[$item['name']] = $item['value'];
+                        } else {
+                            $entities[] = static::xmlDeserialize([$item]);
+                        }
+                    }
+
+                    $object->{'set'.$shortClassName}($entities);
                 }
-                $object->{'set'.$shortClassName}($entities);
             } else {
                 $object->{'set'.$shortClassName}(static::xmlDeserialize([$value]));
             }

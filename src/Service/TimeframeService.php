@@ -343,11 +343,22 @@ class TimeframeService extends AbstractService
         static::registerNamespaces($xml);
         static::validateSOAPResponse($xml);
 
-
-
         $reader = new Reader();
         $reader->xml(static::getResponseText($response));
         $array = array_values($reader->parse()['value'][0]['value']);
+        foreach ($array[0]['value'][1]['value'] as &$timeframes) {
+            foreach ($timeframes['value'] as &$item) {
+                if (strpos($item['name'], 'Timeframes') !== false) {
+                    foreach ($item['value'] as &$timeframeTimeframe) {
+                        foreach ($timeframeTimeframe['value'] as &$thing) {
+                            if (strpos($thing['name'], 'Options') !== false) {
+                                $thing['value'] = [$thing['value'][0]['value']];
+                            }
+                        }
+                    }
+                }
+            }
+        }
         $array = $array[0];
 
         /** @var ResponseTimeframes $object */

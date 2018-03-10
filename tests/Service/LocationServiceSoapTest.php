@@ -217,7 +217,7 @@ class LocationServiceSoapTest extends \PHPUnit_Framework_TestCase
             ])));
 
         $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\GetNearestLocationsResponse', $response);
-        $this->assertEquals(1, count((array) $response->getGetLocationsResult()));
+        $this->assertEquals(1, count($response->getGetLocationsResult()));
     }
 
     /**
@@ -333,7 +333,7 @@ class LocationServiceSoapTest extends \PHPUnit_Framework_TestCase
             ])));
 
         $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\GetLocationsInAreaResponse', $response);
-        $this->assertEquals(1, count((array) $response->getGetLocationsResult()));
+        $this->assertEquals(1, count($response->getGetLocationsResult()));
     }
 
     /**
@@ -397,7 +397,7 @@ class LocationServiceSoapTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\GetLocationsInAreaResponse', $response);
-        $this->assertEquals(1, count((array) $response->getGetLocationsResult()));
+        $this->assertEquals(1, count($response->getGetLocationsResult()));
     }
 
     /**

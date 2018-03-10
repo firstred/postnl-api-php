@@ -43,7 +43,7 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method string|null getAddress()
+ * @method Address|null getAddress()
  * @method string[]|null getDeliveryOptions()
  * @method string|null getDistance()
  * @method string|null getLatitude()
