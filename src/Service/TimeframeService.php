@@ -207,7 +207,7 @@ class TimeframeService extends AbstractService
             }
             $query['Options'] .= ",$option";
         }
-        $query['Options'] = ltrim(',', $query['Options']);
+        $query['Options'] = ltrim($query['Options'], ',');
         $endpoint = '?'.http_build_query($query);
 
         return new Request(
