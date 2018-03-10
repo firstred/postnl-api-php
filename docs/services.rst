@@ -1,5 +1,8 @@
+Services
+========
+
 Barcode service
-===============
+---------------
 
 .. note::
 
@@ -10,7 +13,7 @@ Usually you would reserve an amount of barcodes, generate shipping labels and ev
 According to PostNL, this flow is necessary for a higher delivery success rate.
 
 Generate a single barcode
--------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can generate a single barcode for domestic shipments as follows:
 
@@ -48,7 +51,7 @@ The function accepts the following arguments:
     Indicates whether this is an EU Pack Special shipment.
 
 Generate a barcode by country code
-----------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 It is possible to generate a barcode by country code. This will let the library figure out what
 type, range, serie to use.
@@ -70,7 +73,7 @@ The function accepts the following arguments:
     The two letter country ISO code. Make sure you use UPPERCASE.
 
 Generate multiple barcodes by using country codes
--------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can generate a whole batch of barcodes at once by providing country codes and the
 amounts you would like to generate.
@@ -107,3 +110,22 @@ The function accepts the following argument:
 
     An associative array with country codes as key and the amount of barcodes you'd like to generate
     per country as the value.
+
+Labelling service
+=================
+
+Confirming service
+==================
+
+Shipping status service
+=======================
+
+Delivery date service
+=====================
+
+Timeframe service
+=================
+
+Location service
+================
+

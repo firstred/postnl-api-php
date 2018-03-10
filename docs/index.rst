@@ -8,7 +8,7 @@ Contents
    :maxdepth: 2
    :glob:
 
-   overview/*
-   quickstart/*
-   services/*
-   authors/*
+   overview.rst
+   quickstart.rst
+   services.rst
+   authors.rst

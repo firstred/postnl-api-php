@@ -1,3 +1,0 @@
-Delivery date service
-=====================
-
