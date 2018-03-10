@@ -130,7 +130,7 @@ class GetDeliveryDateResponse extends AbstractEntity
                     }
                 }
                 $xml["{{$namespace}}Options"] = $options;
-            } elseif (!is_null($this->{$propertyName})) {
+            } elseif (isset($this->{$propertyName})) {
                 $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
             }
         }

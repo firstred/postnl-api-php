@@ -281,7 +281,7 @@ class Timeframe extends AbstractEntity
         }
 
         foreach (array_keys(static::$defaultProperties[$this->currentService]) as $propertyName) {
-            if (!is_null($this->{$propertyName})) {
+            if (isset($this->{$propertyName})) {
                 if ($propertyName === 'Options') {
                     $json[$propertyName] = $this->{$propertyName};
                 } elseif ($propertyName === 'Timeframes') {
@@ -291,7 +291,7 @@ class Timeframe extends AbstractEntity
                     }
                     $json['Timeframes'] = ['TimeframeTimeFrame' => $timeframes];
                 } elseif ($propertyName === 'SundaySorting') {
-                    if (!is_null($this->{$propertyName})) {
+                    if (isset($this->{$propertyName})) {
                         if (is_bool($this->{$propertyName})) {
                             $value = $this->{$propertyName} ? 'true' : 'false';
                         } else {
@@ -341,7 +341,7 @@ class Timeframe extends AbstractEntity
                     }
                     $xml["{{$namespace}}Options"] = $options;
                 }
-            } elseif (!is_null($this->{$propertyName})) {
+            } elseif (isset($this->{$propertyName})) {
                 $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
             }
         }

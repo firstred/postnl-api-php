@@ -131,7 +131,7 @@ class GetTimeframes extends AbstractEntity
                     $timeframes[] = $timeframe;
                 }
                 $xml["{{$namespace}}Timeframe"] = $timeframes;
-            } elseif (!is_null($this->{$propertyName})) {
+            } elseif (isset($this->{$propertyName})) {
                 $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
             }
         }

@@ -299,7 +299,7 @@ class CurrentStatusResponseShipment extends AbstractEntity
                     $warnings[] = ["{{$namespace}}Warning" => $warning];
                 }
                 $xml["{{$namespace}}Warnings"] = $warnings;
-            } elseif (!is_null($this->{$propertyName})) {
+            } elseif (isset($this->{$propertyName})) {
                 $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
             }
         }

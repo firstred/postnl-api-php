@@ -134,7 +134,7 @@ class GenerateLabel extends AbstractEntity
         }
 
         foreach (array_keys(static::$defaultProperties[$this->currentService]) as $propertyName) {
-            if (!is_null($this->{$propertyName})) {
+            if (isset($this->{$propertyName})) {
                 // The REST API only seems to accept one shipment per request at the moment of writing (Sep. 24th, 2017)
                 if ($propertyName === 'Shipments' && count($this->{$propertyName}) >= 1) {
                     $json[$propertyName] = $this->{$propertyName}[0];
@@ -170,7 +170,7 @@ class GenerateLabel extends AbstractEntity
                     $shipments[] = ["{{$namespace}}Shipment" => $shipment];
                 }
                 $xml["{{$namespace}}Shipments"] = $shipments;
-            } elseif (!is_null($this->{$propertyName})) {
+            } elseif (isset($this->{$propertyName})) {
                 $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
             }
         }

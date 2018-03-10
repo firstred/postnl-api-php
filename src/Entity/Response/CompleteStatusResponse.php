@@ -118,7 +118,7 @@ class CompleteStatusResponse extends AbstractEntity
                     }
                 }
                 $xml["{{$namespace}}Shipments"] = $shipments;
-            } elseif (!is_null($this->{$propertyName})) {
+            } elseif (isset($this->{$propertyName})) {
                 $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
             }
         }

@@ -114,7 +114,7 @@ class Timeframes extends AbstractEntity
         }
 
         foreach (array_keys(static::$defaultProperties[$this->currentService]) as $propertyName) {
-            if (!is_null($this->{$propertyName})) {
+            if (isset($this->{$propertyName})) {
                 if ($propertyName === 'Timeframes') {
                     $timeframes = [];
                     foreach ($this->Timeframes as $timeframe) {

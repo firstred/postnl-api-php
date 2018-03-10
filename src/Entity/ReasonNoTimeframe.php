@@ -56,7 +56,7 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  */
 class ReasonNoTimeframe extends AbstractEntity
 {
-    /** @var string $defaultProperties */
+    /** @var string[][] $defaultProperties */
     public static $defaultProperties = [
         'Barcode'        => [
             'Code'        => BarcodeService::DOMAIN_NAMESPACE,
@@ -183,7 +183,7 @@ class ReasonNoTimeframe extends AbstractEntity
                     }
                     $xml["{{$namespace}}Options"] = $options;
                 }
-            } elseif (!is_null($this->{$propertyName})) {
+            } elseif (isset($this->{$propertyName})) {
                 $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
             }
         }

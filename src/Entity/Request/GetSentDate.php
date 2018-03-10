@@ -246,7 +246,7 @@ class GetSentDate extends AbstractEntity
                 }
             } elseif ($propertyName === 'AllowSundaySorting') {
                 $xml["{{$namespace}}AllowSundaySorting"] = $this->AllowSundaySorting ? 'true' : 'false';
-            } elseif (!is_null($this->{$propertyName})) {
+            } elseif (isset($this->{$propertyName})) {
                 $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
             }
         }

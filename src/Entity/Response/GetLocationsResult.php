@@ -115,7 +115,7 @@ class GetLocationsResult extends AbstractEntity
                     $locations[] = $location;
                 }
                 $xml["{{$namespace}}ResponseLocation"] = $locations;
-            } elseif (!is_null($this->{$propertyName})) {
+            } elseif (isset($this->{$propertyName})) {
                 $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
             }
         }
