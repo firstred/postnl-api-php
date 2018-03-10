@@ -11,7 +11,8 @@ Contents
    overview.rst
    quickstart.rst
    services.rst
-   authors.rst
    httpclient.rst
    caching.rst
    logging.rst
+   authors.rst
+

@@ -6,7 +6,8 @@ Barcode service
 
 .. note::
 
-    PostNL API documentation for this service: https://developer.postnl.nl/apis/barcode-webservice/overview
+    | PostNL API documentation for this service:
+    | https://developer.postnl.nl/apis/barcode-webservice/overview
 
 The barcode service allows you to generate barcodes for your shipment labels.
 Usually you would reserve an amount of barcodes, generate shipping labels and eventually confirm those labels.
@@ -31,7 +32,7 @@ The function accepts the following arguments:
 
     The barcode type. This is 2S/3S for the Netherlands and EU Pack Special shipments.
     For other destinations this is your GlobalPack barcode type.
-    For more info, check the `PostNL barcode service page<https://developer.postnl.nl/apis/barcode-webservice/how-use#toc-7>`_.
+    For more info, check the `PostNL barcode service page <https://developer.postnl.nl/apis/barcode-webservice/how-use#toc-7>`_.
 
 ``range``
     (``string`` [`optional, can be found automatically`])
@@ -42,7 +43,7 @@ The function accepts the following arguments:
     (``string`` [`optional, can be found automatically`])
 
     This is the barcode range for your shipment(s).
-    Check the `PostNL barcode service page<https://developer.postnl.nl/apis/barcode-webservice/how-use#toc-7>`_
+    Check the `PostNL barcode service page <https://developer.postnl.nl/apis/barcode-webservice/how-use#toc-7>`_
     for the ranges that are available.
 
 ``eps``
@@ -90,7 +91,6 @@ This will return a list of barcodes:
 .. code-block:: php
 
     <?php
-    ...
     [
         'NL' => [
             '3SDEVC11111111111',
@@ -112,20 +112,49 @@ The function accepts the following argument:
     per country as the value.
 
 Labelling service
-=================
+-----------------
+
+.. note::
+
+    | PostNL API documentation for this service:
+    | https://developer.postnl.nl/apis/labelling-webservice
 
 Confirming service
-==================
+------------------
+
+.. note::
+
+    | PostNL API documentation for this service:
+    | https://developer.postnl.nl/apis/confirming-webservice
 
 Shipping status service
-=======================
+-----------------------
+
+.. note::
+
+    | PostNL API documentation for this service:
+    | https://developer.postnl.nl/apis/shippingstatus-webservice
 
 Delivery date service
-=====================
+---------------------
+
+.. note::
+
+    | PostNL API documentation for this service:
+    | https://developer.postnl.nl/apis/deliverydate-webservice
 
 Timeframe service
-=================
+-----------------
+
+.. note::
+
+    | PostNL API documentation for this service:
+    | https://developer.postnl.nl/apis/timeframe-webservice
 
 Location service
-================
+----------------
 
+.. note::
+
+    | PostNL API documentation for this service:
+    | https://developer.postnl.nl/apis/location-webservice
