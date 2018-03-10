@@ -8,4 +8,7 @@ Contents
    :maxdepth: 2
    :glob:
 
-   *
+   overview/*
+   quickstart/*
+   services/*
+   authors/*
