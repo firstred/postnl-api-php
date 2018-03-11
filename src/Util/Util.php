@@ -27,6 +27,7 @@
 namespace ThirtyBees\PostNL\Util;
 use setasign\Fpdi\Fpdi;
 use setasign\Fpdi\PdfParser\StreamReader;
+use ThirtyBees\PostNL\Exception\InvalidArgumentException;
 
 /**
  * Class Util
@@ -48,7 +49,7 @@ class Util
     public static function urlEncode($arr, $prefix = null)
     {
         if (!is_array($arr)) {
-            return $arr;
+            return (string) $arr;
         }
 
         $r = [];
@@ -122,4 +123,165 @@ class Util
             'height'      => $height,
         ];
     }
+
+    /**
+     * Offline delivery date calculation
+     *
+     * @param string $deliveryDate   Delivery date in any format accepted by DateTime
+     * @param bool   $mondayDelivery Sunday sorting/Monday delivery enabled
+     * @param bool   $sundayDelivery Sunday delivery enabled
+     *
+     * @return string (format: `Y-m-d H:i:s`)
+     * @throws \Exception
+     */
+    public static function getDeliveryDate($deliveryDate, $mondayDelivery = false, $sundayDelivery = false)
+    {
+        $deliveryDate = new \DateTime($deliveryDate);
+
+        $holidays = static::getHolidaysForYear(date('Y', $deliveryDate->getTimestamp()));
+
+        do {
+            $deliveryDate->add(new \DateInterval('P1D'));
+        } while (in_array($deliveryDate->format('Y-m-d'), $holidays)
+            || (!$sundayDelivery && $deliveryDate->format('w') == 0)
+            || (!$mondayDelivery && $deliveryDate->format('w') == 1)
+        );
+
+        return $deliveryDate->format('Y-m-d H:i:s');
+    }
+
+    /**
+     * Offline shipping day calculation
+     *
+     * @param string $deliveryDate
+     * @param array  $days
+     *
+     * @return string
+     * @throws InvalidArgumentException
+     */
+    public static function getShippingDay(
+        $deliveryDate,
+        $days = [0 => false, 1 => true, 2 => true, 3 => true, 4 => true, 5 => true, 6 => true]
+    ) {
+        if (array_sum($days) < 1) {
+            throw new InvalidArgumentException('There should be at least one shipping day');
+        }
+
+        $deliveryDate = new \DateTime($deliveryDate);
+
+        $holidays = static::getHolidaysForYear(date('Y', $deliveryDate->getTimestamp()));
+
+        do {
+            try {
+                $deliveryDate->sub(new \DateInterval('P1D'));
+            } catch (\Exception $e) {
+                throw new InvalidArgumentException('Invalid date provided');
+            }
+        } while (in_array($deliveryDate->format('Y-m-d'), $holidays)
+            || empty($days[$deliveryDate->format('w')])
+        );
+
+        return $deliveryDate->format('Y-m-d H:i:s');
+    }
+
+    /**
+     * Calculates amount of days remaining
+     * i.e. preferred delivery date the day tomorrow => today = 0
+     * i.e. preferred delivery date the day after tomorrow => today + tomorrow = 1
+     * i.e. preferred delivery date the day after tomorrow, but one holiday => today + holiday = 0
+     *
+     * 0 means: should ship today
+     * < 0 means: should've shipped in the past
+     * anything higher means: you've got some more time
+     *
+     * @param string $shippingDate Shipping date (format: `Y-m-d H:i:s`)
+     * @param string $preferredDeliveryDate Customer preference
+     *
+     * @return int
+     * @throws \Exception
+     */
+    public static function getShippingDaysRemaining($shippingDate, $preferredDeliveryDate)
+    {
+        // Remove the hours/minutes/seconds
+        $shippingDate = date('Y-m-d 00:00:00', strtotime($shippingDate));
+
+        // Find the nearest delivery date
+        $nearestDeliveryDate = static::getDeliveryDate($shippingDate);
+
+        // Calculate the interval
+        $nearestDeliveryDate = new \DateTime($nearestDeliveryDate);
+        $preferredDeliveryDate = new \DateTime(date('Y-m-d 00:00:00', strtotime($preferredDeliveryDate)));
+
+        $daysRemaining = (int) $nearestDeliveryDate->diff($preferredDeliveryDate)->format('%R%a');
+
+        // Subtract an additional day if we cannot ship today (Sunday or holiday)
+        if (date('w', strtotime($shippingDate)) == 0 ||
+            in_array(
+                date('Y-m-d', strtotime($shippingDate)),
+                static::getHolidaysForYear(date('Y', strtotime($shippingDate)))
+            )
+        ) {
+            $daysRemaining--;
+        }
+
+        return $daysRemaining;
+    }
+
+    /**
+     * Get an array with all Dutch holidays for the given year
+     *
+     * @param string $year
+     *
+     * @return array
+     *
+     * Credits to @tvlooy (https://gist.github.com/tvlooy/1894247)
+     * @throws \Exception
+     */
+    protected static function getHolidaysForYear($year)
+    {
+        // Avoid holidays
+        // Fixed
+        $nieuwjaar = new \DateTime($year.'-01-01');
+        $eersteKerstDag = new \DateTime($year.'-12-25');
+        $tweedeKerstDag = new \DateTime($year.'-12-25');
+        $koningsdag = new \DateTime($year.'-04-27');
+        // Dynamic
+        $pasen = new \DateTime();
+        $pasen->setTimestamp(easter_date($year)); // thanks PHP!
+        $paasMaandag = clone $pasen;
+        try {
+            $paasMaandag->add(new \DateInterVal('P1D'));
+        } catch (\Exception $e) {
+        }
+        $hemelvaart = clone $pasen;
+        try {
+            $hemelvaart->add(new \DateInterVal('P39D'));
+        } catch (\Exception $e) {
+        }
+        $pinksteren = clone $hemelvaart;
+        try {
+            $pinksteren->add(new \DateInterVal('P10D'));
+        } catch (\Exception $e) {
+        }
+        $pinksterMaandag = clone $pinksteren;
+        try {
+            $pinksterMaandag->add(new \DateInterVal('P1D'));
+        } catch (\Exception $e) {
+        }
+
+        $holidays = array(
+            $nieuwjaar->format('Y-m-d'),
+            $pasen->format('Y-m-d'),
+            $koningsdag->format('Y-m-d'),
+            $paasMaandag->format('Y-m-d'),
+            $hemelvaart->format('Y-m-d'),
+            $pinksteren->format('Y-m-d'),
+            $pinksterMaandag->format('Y-m-d'),
+            $eersteKerstDag->format('Y-m-d'),
+            $tweedeKerstDag->format('Y-m-d'),
+        );
+
+        return $holidays;
+    }
+
 }
