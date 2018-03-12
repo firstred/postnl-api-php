@@ -54,6 +54,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method string               getOpeningTime()
  * @method string[]             getOptions()
  * @method string               getLocationCode()
+ * @method string               getSaleschannel()
+ * @method string               getTerminalType()
  * @method string               getRetailNetworkID()
  *
  * @method Location setPostalcode(string $postcode)
@@ -70,6 +72,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method Location setOpeningTime(string $openingTime)
  * @method Location setOptions(string[] $options)
  * @method Location setLocationCode(string $code)
+ * @method Location setSaleschannel(string $channel = null)
+ * @method Location setTerminalType(string $type = null)
  * @method Location setRetailNetworkID(string $id)
  */
 class Location extends AbstractEntity
@@ -91,6 +95,8 @@ class Location extends AbstractEntity
             'CoordinatesNorthWest' => BarcodeService::DOMAIN_NAMESPACE,
             'CoordinatesSouthEast' => BarcodeService::DOMAIN_NAMESPACE,
             'LocationCode'         => BarcodeService::DOMAIN_NAMESPACE,
+            'Saleschannel'         => BarcodeService::DOMAIN_NAMESPACE,
+            'TerminalType'         => BarcodeService::DOMAIN_NAMESPACE,
             'RetailNetworkID'      => BarcodeService::DOMAIN_NAMESPACE,
         ],
         'Confirming'     => [
@@ -108,6 +114,8 @@ class Location extends AbstractEntity
             'CoordinatesNorthWest' => ConfirmingService::DOMAIN_NAMESPACE,
             'CoordinatesSouthEast' => ConfirmingService::DOMAIN_NAMESPACE,
             'LocationCode'         => ConfirmingService::DOMAIN_NAMESPACE,
+            'Saleschannel'         => ConfirmingService::DOMAIN_NAMESPACE,
+            'TerminalType'         => ConfirmingService::DOMAIN_NAMESPACE,
             'RetailNetworkID'      => ConfirmingService::DOMAIN_NAMESPACE,
         ],
         'Labelling'      => [
@@ -125,6 +133,8 @@ class Location extends AbstractEntity
             'CoordinatesNorthWest' => LabellingService::DOMAIN_NAMESPACE,
             'CoordinatesSouthEast' => LabellingService::DOMAIN_NAMESPACE,
             'LocationCode'         => LabellingService::DOMAIN_NAMESPACE,
+            'Saleschannel'         => LabellingService::DOMAIN_NAMESPACE,
+            'TerminalType'         => LabellingService::DOMAIN_NAMESPACE,
             'RetailNetworkID'      => LabellingService::DOMAIN_NAMESPACE,
         ],
         'ShippingStatus' => [
@@ -142,6 +152,8 @@ class Location extends AbstractEntity
             'CoordinatesNorthWest' => ShippingStatusService::DOMAIN_NAMESPACE,
             'CoordinatesSouthEast' => ShippingStatusService::DOMAIN_NAMESPACE,
             'LocationCode'         => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Saleschannel'         => ShippingStatusService::DOMAIN_NAMESPACE,
+            'TerminalType'         => ShippingStatusService::DOMAIN_NAMESPACE,
             'RetailNetworkID'      => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate'   => [
@@ -159,6 +171,8 @@ class Location extends AbstractEntity
             'CoordinatesNorthWest' => DeliveryDateService::DOMAIN_NAMESPACE,
             'CoordinatesSouthEast' => DeliveryDateService::DOMAIN_NAMESPACE,
             'LocationCode'         => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Saleschannel'         => DeliveryDateService::DOMAIN_NAMESPACE,
+            'TerminalType'         => DeliveryDateService::DOMAIN_NAMESPACE,
             'RetailNetworkID'      => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
         'Location'       => [
@@ -176,6 +190,8 @@ class Location extends AbstractEntity
             'CoordinatesNorthWest' => LocationService::DOMAIN_NAMESPACE,
             'CoordinatesSouthEast' => LocationService::DOMAIN_NAMESPACE,
             'LocationCode'         => LocationService::DOMAIN_NAMESPACE,
+            'Saleschannel'         => LocationService::DOMAIN_NAMESPACE,
+            'TerminalType'         => LocationService::DOMAIN_NAMESPACE,
             'RetailNetworkID'      => LocationService::DOMAIN_NAMESPACE,
         ],
         'Timeframe'      => [
@@ -193,6 +209,8 @@ class Location extends AbstractEntity
             'CoordinatesNorthWest' => TimeframeService::DOMAIN_NAMESPACE,
             'CoordinatesSouthEast' => TimeframeService::DOMAIN_NAMESPACE,
             'LocationCode'         => TimeframeService::DOMAIN_NAMESPACE,
+            'Saleschannel'         => TimeframeService::DOMAIN_NAMESPACE,
+            'TerminalType'         => TimeframeService::DOMAIN_NAMESPACE,
             'RetailNetworkID'      => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
@@ -225,6 +243,10 @@ class Location extends AbstractEntity
     protected $CoordinatesSouthEast;
     /** @var string $LocationCode */
     protected $LocationCode;
+    /** @var string $Saleschannel */
+    protected $Saleschannel;
+    /** @var string $TerminalType */
+    protected $TerminalType;
     /** @var string $RetailNetworkID */
     protected $RetailNetworkID;
     // @codingStandardsIgnoreEnd
@@ -243,6 +265,8 @@ class Location extends AbstractEntity
      * @param string               $houseNr
      * @param string               $houseNrExt
      * @param string               $locationCode
+     * @param string               $saleschannel
+     * @param string               $terminalType
      * @param string               $retailNetworkId
      */
     public function __construct(
@@ -259,6 +283,8 @@ class Location extends AbstractEntity
         $houseNr = null,
         $houseNrExt = null,
         $locationCode = null,
+        $saleschannel = null,
+        $terminalType = null,
         $retailNetworkId = null
     ) {
         parent::__construct();
@@ -276,6 +302,8 @@ class Location extends AbstractEntity
         $this->setHouseNr($houseNr);
         $this->setHouseNrExt($houseNrExt);
         $this->setLocationCode($locationCode);
+        $this->setSaleschannel($saleschannel);
+        $this->setTerminalType($terminalType);
         $this->setRetailNetworkID($retailNetworkId);
     }
 
