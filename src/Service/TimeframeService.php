@@ -133,6 +133,10 @@ class TimeframeService extends AbstractService
      * @return ResponseTimeframes
      *
      * @throws ApiException
+     * @throws CifDownException
+     * @throws CifException
+     * @throws \Sabre\Xml\LibXMLException
+     * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
     public function getTimeframesSOAP(GetTimeframes $getTimeframes)
     {

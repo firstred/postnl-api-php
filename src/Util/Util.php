@@ -151,7 +151,7 @@ class Util
     }
 
     /**
-     * Offline shipping day calculation
+     * Offline shipping date calculation
      *
      * @param string $deliveryDate
      * @param array  $days
@@ -159,7 +159,7 @@ class Util
      * @return string
      * @throws InvalidArgumentException
      */
-    public static function getShippingDay(
+    public static function getShippingDate(
         $deliveryDate,
         $days = [0 => false, 1 => true, 2 => true, 3 => true, 4 => true, 5 => true, 6 => true]
     ) {
