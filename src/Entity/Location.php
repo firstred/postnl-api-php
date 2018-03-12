@@ -341,7 +341,7 @@ class Location extends AbstractEntity
      *
      * @return Location
      */
-    public function setPostalcode($postcode)
+    public function setPostalcode($postcode = null)
     {
         if (is_null($postcode)) {
             $this->Postalcode = null;
