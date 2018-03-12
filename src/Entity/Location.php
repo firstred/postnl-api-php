@@ -57,6 +57,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method string               getSaleschannel()
  * @method string               getTerminalType()
  * @method string               getRetailNetworkID()
+ * @method string               getDownPartnerID()
+ * @method string               getDownPartnerLocation()
  *
  * @method Location setPostalcode(string $postcode)
  * @method Location setCoordinates(Coordinates $coordinates)
@@ -75,6 +77,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method Location setSaleschannel(string $channel = null)
  * @method Location setTerminalType(string $type = null)
  * @method Location setRetailNetworkID(string $id)
+ * @method Location setDownPartnerID(string $id)
+ * @method Location setDownPartnerLocation(string $location)
  */
 class Location extends AbstractEntity
 {
@@ -98,6 +102,8 @@ class Location extends AbstractEntity
             'Saleschannel'         => BarcodeService::DOMAIN_NAMESPACE,
             'TerminalType'         => BarcodeService::DOMAIN_NAMESPACE,
             'RetailNetworkID'      => BarcodeService::DOMAIN_NAMESPACE,
+            'DownPartnerID'        => BarcodeService::DOMAIN_NAMESPACE,
+            'DownPartnerLocation'  => BarcodeService::DOMAIN_NAMESPACE,
         ],
         'Confirming'     => [
             'AllowSundaySorting'   => ConfirmingService::DOMAIN_NAMESPACE,
@@ -117,6 +123,8 @@ class Location extends AbstractEntity
             'Saleschannel'         => ConfirmingService::DOMAIN_NAMESPACE,
             'TerminalType'         => ConfirmingService::DOMAIN_NAMESPACE,
             'RetailNetworkID'      => ConfirmingService::DOMAIN_NAMESPACE,
+            'DownPartnerID'        => ConfirmingService::DOMAIN_NAMESPACE,
+            'DownPartnerLocation'  => ConfirmingService::DOMAIN_NAMESPACE,
         ],
         'Labelling'      => [
             'AllowSundaySorting'   => LabellingService::DOMAIN_NAMESPACE,
@@ -136,6 +144,8 @@ class Location extends AbstractEntity
             'Saleschannel'         => LabellingService::DOMAIN_NAMESPACE,
             'TerminalType'         => LabellingService::DOMAIN_NAMESPACE,
             'RetailNetworkID'      => LabellingService::DOMAIN_NAMESPACE,
+            'DownPartnerID'        => LabellingService::DOMAIN_NAMESPACE,
+            'DownPartnerLocation'  => LabellingService::DOMAIN_NAMESPACE,
         ],
         'ShippingStatus' => [
             'AllowSundaySorting'   => ShippingStatusService::DOMAIN_NAMESPACE,
@@ -155,6 +165,8 @@ class Location extends AbstractEntity
             'Saleschannel'         => ShippingStatusService::DOMAIN_NAMESPACE,
             'TerminalType'         => ShippingStatusService::DOMAIN_NAMESPACE,
             'RetailNetworkID'      => ShippingStatusService::DOMAIN_NAMESPACE,
+            'DownPartnerID'        => ShippingStatusService::DOMAIN_NAMESPACE,
+            'DownPartnerLocation'  => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate'   => [
             'AllowSundaySorting'   => DeliveryDateService::DOMAIN_NAMESPACE,
@@ -174,6 +186,8 @@ class Location extends AbstractEntity
             'Saleschannel'         => DeliveryDateService::DOMAIN_NAMESPACE,
             'TerminalType'         => DeliveryDateService::DOMAIN_NAMESPACE,
             'RetailNetworkID'      => DeliveryDateService::DOMAIN_NAMESPACE,
+            'DownPartnerID'        => DeliveryDateService::DOMAIN_NAMESPACE,
+            'DownPartnerLocation'  => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
         'Location'       => [
             'AllowSundaySorting'   => LocationService::DOMAIN_NAMESPACE,
@@ -193,6 +207,8 @@ class Location extends AbstractEntity
             'Saleschannel'         => LocationService::DOMAIN_NAMESPACE,
             'TerminalType'         => LocationService::DOMAIN_NAMESPACE,
             'RetailNetworkID'      => LocationService::DOMAIN_NAMESPACE,
+            'DownPartnerID'        => LocationService::DOMAIN_NAMESPACE,
+            'DownPartnerLocation'  => LocationService::DOMAIN_NAMESPACE,
         ],
         'Timeframe'      => [
             'AllowSundaySorting'   => TimeframeService::DOMAIN_NAMESPACE,
@@ -212,6 +228,8 @@ class Location extends AbstractEntity
             'Saleschannel'         => TimeframeService::DOMAIN_NAMESPACE,
             'TerminalType'         => TimeframeService::DOMAIN_NAMESPACE,
             'RetailNetworkID'      => TimeframeService::DOMAIN_NAMESPACE,
+            'DownPartnerID'        => TimeframeService::DOMAIN_NAMESPACE,
+            'DownPartnerLocation'  => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
@@ -249,6 +267,10 @@ class Location extends AbstractEntity
     protected $TerminalType;
     /** @var string $RetailNetworkID */
     protected $RetailNetworkID;
+    /** @var string $DownPartnerID */
+    protected $DownPartnerID;
+    /** @var string $DownPartnerLocation */
+    protected $DownPartnerLocation;
     // @codingStandardsIgnoreEnd
 
     /**
@@ -268,6 +290,8 @@ class Location extends AbstractEntity
      * @param string               $saleschannel
      * @param string               $terminalType
      * @param string               $retailNetworkId
+     * @param string               $downPartnerID
+     * @param string               $downPartnerLocation
      */
     public function __construct(
         $zipcode = null,
@@ -285,7 +309,9 @@ class Location extends AbstractEntity
         $locationCode = null,
         $saleschannel = null,
         $terminalType = null,
-        $retailNetworkId = null
+        $retailNetworkId = null,
+        $downPartnerID = null,
+        $downPartnerLocation = null
     ) {
         parent::__construct();
 
@@ -305,6 +331,8 @@ class Location extends AbstractEntity
         $this->setSaleschannel($saleschannel);
         $this->setTerminalType($terminalType);
         $this->setRetailNetworkID($retailNetworkId);
+        $this->setDownPartnerID($downPartnerID);
+        $this->setDownPartnerLocation($downPartnerLocation);
     }
 
     /**
