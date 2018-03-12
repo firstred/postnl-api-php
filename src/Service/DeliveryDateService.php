@@ -63,7 +63,7 @@ class DeliveryDateService extends AbstractService
 
     // Endpoints
     const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v2_2/calculate/date';
-    const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2_2/calculate/date/';
+    const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2_2/calculate/date';
     const LEGACY_SANDBOX_ENDPOINT = 'https://testservice.postnl.com/CIF_SB/DeliveryDateWebService/2_1/DeliveryDateWebService.svc';
     const LEGACY_LIVE_ENDPOINT = 'https://service.postnl.com/CIF/DeliveryDateWebService/2_1/DeliveryDateWebService.svc';
 
@@ -286,44 +286,40 @@ class DeliveryDateService extends AbstractService
         if ($shippingDuration = $deliveryDate->getShippingDuration()) {
             $query['ShippingDuration'] = $shippingDuration;
         }
-        if ($times = $cutOffTime = $deliveryDate->getCutOffTimes()) {
-            foreach ($times as $time) {
-                /** @var CutOffTime $time */
-                switch ($time->getDay()) {
-                    case '00':
-                        $query['CutOffTime'] = date('H:i:s', strtotime($time->getTime()));
-                        break;
-                    case '01':
-                        $query['CutOffTimeMonday'] = date('H:i:s', strtotime($time->getTime()));
-                        $query['AvailableMonday'] = $time->getAvailable() ? 'true' : false;
-                        break;
-                    case '02':
-                        $query['CutOffTimeTuesday'] = date('H:i:s', strtotime($time->getTime()));
-                        $query['AvailableTuesday'] = $time->getAvailable() ? 'true' : false;
-                        break;
-                    case '03':
-                        $query['CutOffTimeWednesday'] = date('H:i:s', strtotime($time->getTime()));
-                        $query['AvailableWednesday'] = $time->getAvailable() ? 'true' : false;
-                        break;
-                    case '04':
-                        $query['CutOffTimeThursday'] = date('H:i:s', strtotime($time->getTime()));
-                        $query['AvailableThursday'] = $time->getAvailable() ? 'true' : false;
-                        break;
-                    case '05':
-                        $query['CutOffTimeFriday'] = date('H:i:s', strtotime($time->getTime()));
-                        $query['AvailableFriday'] = $time->getAvailable() ? 'true' : false;
-                        break;
-                    case '06':
-                        $query['CutOffTimeSaturday'] = date('H:i:s', strtotime($time->getTime()));
-                        $query['AvailableSaturday'] = $time->getAvailable() ? 'true' : false;
-                        break;
-                    case '07':
-                        $query['CutOffTimeSunday'] = date('H:i:s', strtotime($time->getTime()));
-                        $query['AvailableSunday'] = $time->getAvailable() ? 'true' : false;
-                        break;
+
+        $times = $deliveryDate->getCutOffTimes();
+        if (!is_array($times)) {
+            $times = [];
+        }
+
+        $key = array_search('00', array_map(function ($time) {
+            /** @var CutOffTime $time */
+            return $time->getDay();
+        }, $times));
+        if ($key !== false) {
+            $query['CutOffTime'] = date('H:i:s', strtotime($times[$key]->getTime()));
+        } else {
+            $query['CutOffTime'] = '15:30:00';
+        }
+
+        // There need to be more cut off times besides the default 00 one in order to override
+        if (count($times) > 1) {
+            foreach (range(1, 7) as $day) {
+                $dayName = date('l', strtotime("Sunday +{$day} days"));
+                $key = array_search(str_pad($day, 2, '0', STR_PAD_LEFT), array_map(function ($time) {
+                    /** @var CutOffTime $time */
+                    return $time->getDay();
+                }, $times));
+                if ($key !== false) {
+                    $query["CutOffTime{$dayName}"] = date('H:i:s', strtotime($times[$key]->getTime()));
+                    $query["Available{$dayName}"] = 'true';
+                } else {
+                    $query["CutOffTime{$dayName}"] = '00:00:00';
+                    $query["Available{$dayName}"] = 'false';
                 }
             }
         }
+
         if ($postcode = $deliveryDate->getPostalCode()) {
             $query['PostalCode'] = $postcode;
         }
@@ -350,10 +346,10 @@ class DeliveryDateService extends AbstractService
             }
         }
 
-        $endpoint = '/delivery?'.http_build_query($query);
+        $endpoint = '/delivery?'.\GuzzleHttp\Psr7\build_query($query);
 
         return new Request(
-            'POST',
+            'GET',
             ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint,
             [
                 'apikey'       => $apiKey,
