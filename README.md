@@ -74,10 +74,10 @@ require_once __DIR__.'/vendor/autoload.php';
 
 $customer = Customer::create([
     'CollectionLocation' => '123456',
-    'CustomerCode' => 'DEVC',
-    'CustomerNumber' => '11223344',
-    'ContactPerson' => 'Lesley',
-    'Address' => Address::create([
+    'CustomerCode'       => 'DEVC',
+    'CustomerNumber'     => '11223344',
+    'ContactPerson'      => 'Lesley',
+    'Address'            => Address::create([
         'AddressType' => '02',
         'City'        => 'Hoofddorp',
         'CompanyName' => 'PostNL',
@@ -86,8 +86,8 @@ $customer = Customer::create([
         'Street'      => 'Siriusdreef',
         'Zipcode'     => '2132WT',
     ]),
-    'Email' => 'michael@thirtybees.com',
-    'Name' => 'Michael',
+    'Email'              => 'michael@thirtybees.com',
+    'Name'               => 'Michael',
 ]);
 
 $apikey = 'YOUR_API_KEY_HERE';
@@ -98,7 +98,7 @@ $postnl = new PostNL($customer, $apikey, $sandbox);
 $barcode = $postnl->generateBarcodeByCountryCode('NL');
 
 $shipment = Shipment::create([
-    'Addresses' => [
+    'Addresses'           => [
         Address::create([
             'AddressType' => '01',
             'City'        => 'Utrecht',
@@ -111,8 +111,8 @@ $shipment = Shipment::create([
             'Zipcode'     => '3521VA',
         ]),
     ],
-    'Barcode' => $barcode,
-    'Dimension' => new Dimension('2000'),
+    'Barcode'             => $barcode,
+    'Dimension'           => new Dimension('2000'),
     'ProductCodeDelivery' => '3085',
 ]);
 
