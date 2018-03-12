@@ -28,26 +28,26 @@ This will generate a 3S barcode meant for domestic shipments only.
 The function accepts the following arguments:
 
 type
-    (``string`` [`optional, defaults to 3S`])
+    ``string`` - `optional, defaults to 3S`
 
     The barcode type. This is 2S/3S for the Netherlands and EU Pack Special shipments.
     For other destinations this is your GlobalPack barcode type.
     For more info, check the `PostNL barcode service page <https://developer.postnl.nl/apis/barcode-webservice/how-use#toc-7>`_.
 
 range
-    (``string`` [`optional, can be found automatically`])
+    ``string`` - `optional, can be found automatically`
 
      For domestic and EU shipments this is your customer code. Otherwise, your GlobalPack customer code.
 
 serie
-    (``string`` [`optional, can be found automatically`])
+    ``string`` - `optional, can be found automatically`
 
     This is the barcode range for your shipment(s).
     Check the `PostNL barcode service page <https://developer.postnl.nl/apis/barcode-webservice/how-use#toc-7>`_
     for the ranges that are available.
 
 eps
-    (``bool`` [`optional, defaults to false`])
+    ``bool`` - `optional, defaults to false`
 
     Indicates whether this is an EU Pack Special shipment.
 
@@ -69,7 +69,7 @@ This will generate a 3S barcode meant for domestic shipments only.
 The function accepts the following arguments:
 
 iso
-    (``string`` [`required`])
+    ``string`` - `required`
 
     The two letter country ISO code. Make sure you use UPPERCASE.
 
@@ -106,7 +106,7 @@ This will return a list of barcodes:
 The function accepts the following argument:
 
 type
-    (``string`` [`required`])
+    ``string`` - `required`
 
     An associative array with country codes as key and the amount of barcodes you'd like to generate
     per country as the value.

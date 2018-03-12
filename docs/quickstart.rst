@@ -118,9 +118,11 @@ This will write a ``labels.pdf`` file that looks like this:
 
 The PostNL client constructor accepts a few options:
 
-``customer``
-    (``Customer`` [`required`]) The ``Customer`` object that is used to configure the client and let PostNL know
-    who requests the data.
+customer
+    ``Customer`` - `required`
+
+    The ``Customer`` object that is used to configure the client and let PostNL know
+    who is requesting the data.
 
     .. code-block:: php
 
@@ -146,8 +148,10 @@ The PostNL client constructor accepts a few options:
           'Name'               => 'Michael',
       ]);
 
-``apikey``
-    (``string``|``UsernameToken`` [`required`]) The ``apikey`` to use for the API. Note that if you want to switch from the legacy API to
+apikey
+    ``string``|``UsernameToken`` - `required`
+
+    The ``apikey`` to use for the API. Note that if you want to switch from the legacy API to
     the new SOAP and REST API you will have to request a new key. The username can be omitted.
     If you want to connect to the legacy API you should pass a ``UsernameToken`` with your username and token set:
 
@@ -159,11 +163,15 @@ The PostNL client constructor accepts a few options:
     You can request an API key for the sandbox environment on this page: https://developer.postnl.nl/content/request-api-key
     For a live key you should contact your PostNL account manager.
 
-``sandbox``
-    (``bool`` [`required`]) Indicate whether you'd like to connect to the sandbox environment. When `false` the library uses the live endpoints.
+sandbox
+    ``bool`` - `required`
 
-``mode``
-    (``int`` [`optional, defaults to REST`) This library provides three ways to connect to the API:
+    Indicate whether you'd like to connect to the sandbox environment. When `false` the library uses the live endpoints.
+
+mode
+    ``int`` - `optional, defaults to REST`
+
+    This library provides three ways to connect to the API:
 
     - 1: REST mode
     - 2: SOAP mode
