@@ -343,7 +343,11 @@ class Location extends AbstractEntity
      */
     public function setPostalcode($postcode)
     {
-        $this->Postalcode = strtoupper(str_replace(' ', '', $postcode));
+        if (is_null($postcode)) {
+            $this->Postalcode = null;
+        } else {
+            $this->Postalcode = strtoupper(str_replace(' ', '', $postcode));
+        }
 
         return $this;
     }

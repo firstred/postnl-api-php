@@ -276,7 +276,11 @@ class Timeframe extends AbstractEntity
      */
     public function setPostalCode($postcode)
     {
-        $this->PostalCode = strtoupper(str_replace(' ', '', $postcode));
+        if (is_null($postcode)) {
+            $this->PostalCode = null;
+        } else {
+            $this->PostalCode = strtoupper(str_replace(' ', '', $postcode));
+        }
 
         return $this;
     }
