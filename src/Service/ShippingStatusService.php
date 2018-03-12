@@ -170,6 +170,10 @@ class ShippingStatusService extends AbstractService
      * @return CurrentStatusResponse
      *
      * @throws ApiException
+     * @throws CifDownException
+     * @throws CifException
+     * @throws ResponseException
+     * @throws \Sabre\Xml\LibXMLException
      */
     public function currentStatusSOAP(CurrentStatus $currentStatus)
     {
@@ -449,8 +453,12 @@ class ShippingStatusService extends AbstractService
             ];
             $endpoint = "/search";
             $query['status'] = $currentStatus->getShipment()->getStatusCode();
-            $query['startDate'] = $currentStatus->getShipment()->getDateFrom();
-            $query['endDate'] = $currentStatus->getShipment()->getDateTo();
+            if ($startDate = $currentStatus->getShipment()->getDateFrom()) {
+                $query['startDate'] = $startDate;
+            }
+            if ($endDate = $currentStatus->getShipment()->getDateTo()) {
+                $query['endDate'] = $endDate;
+            }
         } elseif ($currentStatus->getShipment()->getPhaseCode()) {
             $query = [
                 'customerCode'   => $this->postnl->getCustomer()->getCustomerCode(),
@@ -458,16 +466,20 @@ class ShippingStatusService extends AbstractService
             ];
             $endpoint = "/search";
             $query['phase'] = $currentStatus->getShipment()->getPhaseCode();
-            $query['startDate'] = $currentStatus->getShipment()->getDateFrom();
-            $query['endDate'] = $currentStatus->getShipment()->getDateTo();
+            if ($startDate = $currentStatus->getShipment()->getDateFrom()) {
+                $query['startDate'] = $startDate;
+            }
+            if ($endDate = $currentStatus->getShipment()->getDateTo()) {
+                $query['endDate'] = $endDate;
+            }
           } else {
             $query = [];
             $endpoint = "/barcode/{$currentStatus->getShipment()->getBarcode()}";
         }
-        $endpoint .= '?'.http_build_query($query);
+        $endpoint .= '?'.\GuzzleHttp\Psr7\build_query($query);
 
         return new Request(
-            'POST',
+            'GET',
             ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint,
             [
                 'apikey'       => $apiKey,
@@ -617,11 +629,13 @@ class ShippingStatusService extends AbstractService
             ];
             $endpoint = "/search";
             $query['status'] = $completeStatus->getShipment()->getStatusCode();
-            $query['startDate'] = $completeStatus->getShipment()->getDateFrom();
-            $query['endDate'] = $completeStatus->getShipment()->getDateTo();
+            if ($startDate = $completeStatus->getShipment()->getDateFrom()) {
+                $query['startDate'] = $startDate;
+            }
+            if ($endDate = $completeStatus->getShipment()->getDateTo()) {
+                $query['endDate'] = $endDate;
+            }
         } elseif ($completeStatus->getShipment()->getPhaseCode()) {
-            $query['startDate'] = $completeStatus->getShipment()->getDateFrom();
-            $query['endDate'] = $completeStatus->getShipment()->getDateTo();
             $query = [
                 'customerCode'   => $this->postnl->getCustomer()->getCustomerCode(),
                 'customerNumber' => $this->postnl->getCustomer()->getCustomerNumber(),
@@ -629,8 +643,12 @@ class ShippingStatusService extends AbstractService
             ];
             $endpoint = "/search";
             $query['phase'] = $completeStatus->getShipment()->getPhaseCode();
-            $query['startDate'] = $completeStatus->getShipment()->getDateFrom();
-            $query['endDate'] = $completeStatus->getShipment()->getDateTo();
+            if ($startDate = $completeStatus->getShipment()->getDateFrom()) {
+                $query['startDate'] = $startDate;
+            }
+            if ($endDate = $completeStatus->getShipment()->getDateTo()) {
+                $query['endDate'] = $endDate;
+            }
         } else {
             $query = [
                 'detail' => 'true',

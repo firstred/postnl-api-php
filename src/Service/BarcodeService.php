@@ -107,7 +107,7 @@ class BarcodeService extends AbstractService
      *
      * @param GenerateBarcode[] $generateBarcodes
      *
-     * @return string[]|ClientException[]|ResponseException[]|ApiException[]|CifDownException[]|CifException[] Barcodes
+     * @return string[]|ResponseException[]|ApiException[]|CifDownException[]|CifException[] Barcodes
      */
     public function generateBarcodesREST(array $generateBarcodes)
     {
@@ -125,8 +125,6 @@ class BarcodeService extends AbstractService
             try {
                 $json = $this->processGenerateBarcodeResponseREST($response);
                 $barcode = $json['Barcode'];
-            } catch (ClientException $e) {
-                $barcode = $e;
             } catch (ResponseException $e) {
                 $barcode = $e;
             } catch (ApiException $e) {
@@ -209,7 +207,7 @@ class BarcodeService extends AbstractService
             ($this->postnl->getSandbox()
                 ? ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT)
                 : ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT))
-                .'?'.http_build_query([
+                .'?'.\GuzzleHttp\Psr7\build_query([
                      'CustomerCode'   => $generateBarcode->getCustomer()->getCustomerCode(),
                      'CustomerNumber' => $generateBarcode->getCustomer()->getCustomerNumber(),
                      'Type'           => $generateBarcode->getBarcode()->getType(),

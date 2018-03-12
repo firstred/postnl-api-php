@@ -374,7 +374,7 @@ class LocationService extends AbstractService
         $apiKey = $this->postnl->getRestApiKey();
         $this->setService($getNearestLocations);
         $query = [
-            'CountryCode'     => $getNearestLocations->getCountryCode(),
+            'CountryCode'     => $getNearestLocations->getCountrycode(),
             'PostalCode'      => $location->getPostalcode(),
             'DeliveryOptions' => 'PG',
         ];
@@ -408,7 +408,7 @@ class LocationService extends AbstractService
             }
             $query['DeliveryOptions'] .= ",$option";
         }
-        $endpoint .= '?'.http_build_query($query);
+        $endpoint .= '?'.\GuzzleHttp\Psr7\build_query($query);
 
         return new Request(
             'GET',
@@ -604,7 +604,7 @@ class LocationService extends AbstractService
             }
             $query['DeliveryOptions'] .= ",$option";
         }
-        $endpoint = '/area?'.http_build_query($query);
+        $endpoint = '/area?'.\GuzzleHttp\Psr7\build_query($query);
 
         return new Request(
             'GET',
@@ -764,10 +764,10 @@ class LocationService extends AbstractService
         if ($id = $getLocation->getRetailNetworkID()) {
             $query['RetailNetworkID'] = $id;
         }
-        $endpoint = '/lookup?'.http_build_query($query);
+        $endpoint = '/lookup?'.\GuzzleHttp\Psr7\build_query($query);
 
         return new Request(
-            'POST',
+            'GET',
             ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint,
             [
                 'apikey'       => $apiKey,

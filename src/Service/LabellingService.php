@@ -318,7 +318,7 @@ class LabellingService extends AbstractService
 
         return new Request(
             'POST',
-            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).'?'.http_build_query([
+            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).'?'.\GuzzleHttp\Psr7\build_query([
                 'confirm' => $confirm
             ]),
             [

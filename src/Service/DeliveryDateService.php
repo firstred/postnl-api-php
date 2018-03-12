@@ -490,7 +490,7 @@ class DeliveryDateService extends AbstractService
             $query['HouseNrExt'] = $houseNrExt;
         }
 
-        $endpoint = '/shipping?'.http_build_query($query);
+        $endpoint = '/shipping?'.\GuzzleHttp\Psr7\build_query($query);
 
         return new Request(
             'POST',

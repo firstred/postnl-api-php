@@ -212,17 +212,16 @@ class TimeframeService extends AbstractService
             $query['Options'] .= ",$option";
         }
         $query['Options'] = ltrim($query['Options'], ',');
-        $endpoint = '?'.http_build_query($query);
+        $endpoint = '?'.\GuzzleHttp\Psr7\build_query($query);
 
         return new Request(
-            'POST',
+            'GET',
             ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint,
             [
                 'apikey'       => $apiKey,
                 'Accept'       => 'application/json',
                 'Content-Type' => 'application/json;charset=UTF-8',
-            ],
-            json_encode($getTimeframes, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES)
+            ]
         );
     }
 
