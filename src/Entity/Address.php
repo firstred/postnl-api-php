@@ -57,7 +57,6 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method string getRegion()
  * @method string getRemark()
  *
- * @method Address setAddressType(string $addressType)
  * @method Address setFirstName(string $firstName)
  * @method Address setName(string $name)
  * @method Address setCompanyName(string $companyName)
@@ -342,5 +341,23 @@ class Address extends AbstractEntity
         $this->setFloor($floor);
         $this->setRegion($region);
         $this->setRemark($remark);
+    }
+
+    /**
+     * Set the AddressType
+     *
+     * @param int|string|null $addressType
+     *
+     * @return $this
+     */
+    public function setAddressType($addressType = null)
+    {
+        if (is_null($addressType)) {
+            $this->AddressType = null;
+        } else {
+            $this->AddressType = str_pad($addressType, 2, '0', STR_PAD_LEFT);
+        }
+
+        return $this;
     }
 }
