@@ -63,7 +63,6 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method Timeframe setHouseNr(string $houseNr)
  * @method Timeframe setHouseNrExt(string $houseNrExt)
  * @method Timeframe setOptions(string[] $options)
- * @method Timeframe setPostalCode(string $postcode)
  * @method Timeframe setStartDate(string $date)
  * @method Timeframe setStreet(string $street)
  * @method Timeframe setSundaySorting(string $sunday)
@@ -266,6 +265,20 @@ class Timeframe extends AbstractEntity
         $this->setInterval($interval);
         $this->setTimeframeRange($range);
         $this->setTimeframes($timeframes);
+    }
+
+    /**
+     * Set the postcode
+     *
+     * @param string $postcode
+     *
+     * @return $this
+     */
+    public function setPostalCode($postcode)
+    {
+        $this->PostalCode = strtoupper(str_replace(' ', '', $postcode));
+
+        return $this;
     }
 
     /**

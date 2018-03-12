@@ -60,7 +60,6 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method string               getDownPartnerID()
  * @method string               getDownPartnerLocation()
  *
- * @method Location setPostalcode(string $postcode)
  * @method Location setCoordinates(Coordinates $coordinates)
  * @method Location setCoordinatesNorthWest(CoordinatesNorthWest $coordinates)
  * @method Location setCoordinatesSouthEast(CoordinatesSouthEast $coordinates)
@@ -333,6 +332,20 @@ class Location extends AbstractEntity
         $this->setRetailNetworkID($retailNetworkId);
         $this->setDownPartnerID($downPartnerID);
         $this->setDownPartnerLocation($downPartnerLocation);
+    }
+
+    /**
+     * Set the postcode
+     *
+     * @param string $postcode
+     *
+     * @return Location
+     */
+    public function setPostalcode($postcode)
+    {
+        $this->Postalcode = strtoupper(str_replace(' ', '', $postcode));
+
+        return $this;
     }
 
     /**

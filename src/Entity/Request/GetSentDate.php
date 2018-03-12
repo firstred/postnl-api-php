@@ -58,7 +58,6 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method GetSentDate setHouseNr(string $houseNr)
  * @method GetSentDate setHouseNrExt(string $houseNrExt)
  * @method GetSentDate setOptions(array $options)
- * @method GetSentDate setPostalCode(string $postcode)
  * @method GetSentDate setDeliveryDate(string $date)
  * @method GetSentDate setShippingDuration(string $duration)
  * @method GetSentDate setStreet(string $street)
@@ -217,6 +216,20 @@ class GetSentDate extends AbstractEntity
         $this->setDeliveryDate($DeliveryDate);
         $this->setStreet($street);
         $this->setShippingDuration($shippingDuration);
+    }
+
+    /**
+     * Set the postcode
+     *
+     * @param string $postcode
+     *
+     * @return $this
+     */
+    public function setPostalCode($postcode)
+    {
+        $this->PostalCode = strtoupper(str_replace(' ', '', $postcode));
+
+        return $this;
     }
 
     /**

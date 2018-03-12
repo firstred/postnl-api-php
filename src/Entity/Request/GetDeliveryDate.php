@@ -68,7 +68,6 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method GetDeliveryDate setHouseNrExt(string $houseNrExt)
  * @method GetDeliveryDate setOptions(string[] $options)
  * @method GetDeliveryDate setOriginCountryCode(string $code)
- * @method GetDeliveryDate setPostalCode(string $postcode)
  * @method GetDeliveryDate setShippingDate(string $date)
  * @method GetDeliveryDate setShippingDuration(int $duration)
  * @method GetDeliveryDate setStreet(string $street)
@@ -277,6 +276,20 @@ class GetDeliveryDate extends AbstractEntity
         $this->setStreet($street);
         $this->setGetDeliveryDate($getDeliveryDate);
         $this->setMessage($message);
+    }
+
+    /**
+     * Set the postcode
+     *
+     * @param string $postcode
+     *
+     * @return $this
+     */
+    public function setPostalCode($postcode)
+    {
+        $this->PostalCode = strtoupper(str_replace(' ', '', $postcode));
+
+        return $this;
     }
 
     /**
