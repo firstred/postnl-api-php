@@ -39,19 +39,19 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method string getCountryOfOrigin()
- * @method string getDescription()
- * @method string getHSTariffNr()
- * @method string getQuantity()
- * @method string getValue()
- * @method string getWeight()
+ * @method string|null getCountryOfOrigin()
+ * @method string|null getDescription()
+ * @method string|null getHSTariffNr()
+ * @method string|null getQuantity()
+ * @method string|null getValue()
+ * @method string|null getWeight()
  *
- * @method Content setCountryOfOrigin(string $countryOfOrigin)
- * @method Content setDescription(string $description)
- * @method Content setHSTariffNr(string $hsTariffNr)
- * @method Content setQuantity(string $qty)
- * @method Content setValue(string $val)
- * @method Content setWeight(string $weight)
+ * @method Content setCountryOfOrigin(string|null $countryOfOrigin = null)
+ * @method Content setDescription(string|null $description = null)
+ * @method Content setHSTariffNr(string|null $hsTariffNr = null)
+ * @method Content setQuantity(string|null $qty = null)
+ * @method Content setValue(string|null $val = null)
+ * @method Content setWeight(string|null $weight = null)
  */
 class Content extends AbstractEntity
 {
@@ -115,27 +115,27 @@ class Content extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string $CountryOfOrigin */
+    /** @var string|null $CountryOfOrigin */
     protected $CountryOfOrigin;
-    /** @var string $Description */
+    /** @var string|null $Description */
     protected $Description;
-    /** @var string $HSTariffNr */
+    /** @var string|null $HSTariffNr */
     protected $HSTariffNr;
-    /** @var string $Quantity */
+    /** @var string|null $Quantity */
     protected $Quantity;
-    /** @var string $Value */
+    /** @var string|null $Value */
     protected $Value;
-    /** @var string $Weight */
+    /** @var string|null $Weight */
     protected $Weight;
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string $countryOfOrigin
-     * @param string $description
-     * @param string $hsTariffNr
-     * @param string $qty
-     * @param string $val
-     * @param string $weight
+     * @param string|null $countryOfOrigin
+     * @param string|null $description
+     * @param string|null $hsTariffNr
+     * @param string|null $qty
+     * @param string|null $val
+     * @param string|null $weight
      */
     public function __construct(
         $countryOfOrigin = null,

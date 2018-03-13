@@ -39,11 +39,11 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method string getCode()
- * @method string getDescription()
+ * @method string|null getCode()
+ * @method string|null getDescription()
  *
- * @method Warning setCode(string $code)
- * @method Warning setDescription(string $description)
+ * @method Warning setCode(string|null $code = null)
+ * @method Warning setDescription(string|null $description = null)
  */
 class Warning extends AbstractEntity
 {
@@ -79,15 +79,15 @@ class Warning extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string $Code */
+    /** @var string|null $Code */
     protected $Code;
-    /** @var string $Description */
+    /** @var string|null $Description */
     protected $Description;
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string $code
-     * @param string $description
+     * @param string|null $code
+     * @param string|null $description
      */
     public function __construct($code = null, $description = null)
     {

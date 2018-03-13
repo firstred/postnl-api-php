@@ -40,13 +40,13 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method string getBarcode()
- * @method string getSignatureDate()
- * @method string getSignatureImage()
+ * @method string|null getBarcode()
+ * @method string|null getSignatureDate()
+ * @method string|null getSignatureImage()
  *
- * @method SignatureResponse setBarcode(string $barcode)
- * @method SignatureResponse setSignatureDate(string $signatureDate)
- * @method SignatureResponse setSignatureImage(string $signatureImage)
+ * @method SignatureResponse setBarcode(string|null $barcode = null)
+ * @method SignatureResponse setSignatureDate(string|null $signatureDate = null)
+ * @method SignatureResponse setSignatureImage(string|null $signatureImage = null)
  */
 class GetSignatureResponseSignature extends AbstractEntity
 {
@@ -93,11 +93,11 @@ class GetSignatureResponseSignature extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string $Barcode */
+    /** @var string|null $Barcode */
     protected $Barcode;
-    /** @var string $SignatureDate */
+    /** @var string|null $SignatureDate */
     protected $SignatureDate;
-    /** @var string $SignatureImage */
+    /** @var string|null $SignatureImage */
     protected $SignatureImage;
     // @codingStandardsIgnoreEnd
 

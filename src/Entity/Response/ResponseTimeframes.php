@@ -45,11 +45,11 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method ReasonNoTimeframe[] getReasonNoTimeframes()
- * @method Timeframe[]         getTimeframes()
+ * @method ReasonNoTimeframe[]|null getReasonNoTimeframes()
+ * @method Timeframe[]|null         getTimeframes()
  *
- * @method ResponseTimeframes setReasonNoTimeframes(ReasonNoTimeframe[] $noTimeframes)
- * @method ResponseTimeframes setTimeframes(Timeframe[] $timeframes)
+ * @method ResponseTimeframes setReasonNoTimeframes(ReasonNoTimeframe[]|null $noTimeframes = null)
+ * @method ResponseTimeframes setTimeframes(Timeframe[]|null $timeframes = null)
  */
 class ResponseTimeframes extends AbstractEntity
 {
@@ -85,15 +85,15 @@ class ResponseTimeframes extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var ReasonNoTimeframe[] $ReasonNoTimeframes */
+    /** @var ReasonNoTimeframe[]|null $ReasonNoTimeframes */
     protected $ReasonNoTimeframes;
-    /** @var Timeframe[] $Timeframes */
+    /** @var Timeframe[]|null $Timeframes */
     protected $Timeframes;
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param ReasonNoTimeframe[] $noTimeframes
-     * @param Timeframe[]         $timeframes
+     * @param ReasonNoTimeframe[]|null $noTimeframes
+     * @param Timeframe[]|null         $timeframes
      */
     public function __construct(
         array $noTimeframes = null,

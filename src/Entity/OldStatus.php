@@ -39,17 +39,17 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method string getCurrentPhaseCode()
- * @method string getCurrentPhaseDescription()
- * @method string getCurrentOldStatusCode()
- * @method string getCurrentOldStatusDescription()
- * @method string getCurrentOldStatusTimeStamp()
+ * @method string|null getCurrentPhaseCode()
+ * @method string|null getCurrentPhaseDescription()
+ * @method string|null getCurrentOldStatusCode()
+ * @method string|null getCurrentOldStatusDescription()
+ * @method string|null getCurrentOldStatusTimeStamp()
  *
- * @method OldStatus setCurrentPhaseCode(string $code)
- * @method OldStatus setCurrentPhaseDescription(string $desc)
- * @method OldStatus setCurrentOldStatusCode(string $code)
- * @method OldStatus setCurrentOldStatusDescription(string $desc)
- * @method OldStatus setCurrentOldStatusTimeStamp(string $dateTime)
+ * @method OldStatus setCurrentPhaseCode(string|null $code)
+ * @method OldStatus setCurrentPhaseDescription(string|null $desc)
+ * @method OldStatus setCurrentOldStatusCode(string|null $code)
+ * @method OldStatus setCurrentOldStatusDescription(string|null $desc)
+ * @method OldStatus setCurrentOldStatusTimeStamp(string|null $dateTime)
  */
 class OldStatus extends AbstractEntity
 {
@@ -106,15 +106,15 @@ class OldStatus extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string $CurrentPhaseCode */
+    /** @var string|null $CurrentPhaseCode */
     protected $CurrentPhaseCode;
-    /** @var string $CurrentPhaseDescription */
+    /** @var string|null $CurrentPhaseDescription */
     protected $CurrentPhaseDescription;
-    /** @var string $CurrentOldStatusCode */
+    /** @var string|null $CurrentOldStatusCode */
     protected $CurrentOldStatusCode;
-    /** @var string $CurrentOldStatusDescription */
+    /** @var string|null $CurrentOldStatusDescription */
     protected $CurrentOldStatusDescription;
-    /** @var string $CurrentOldStatusTimeStamp */
+    /** @var string|null $CurrentOldStatusTimeStamp */
     protected $CurrentOldStatusTimeStamp;
     // @codingStandardsIgnoreEnd
 

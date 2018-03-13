@@ -41,11 +41,11 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity\Message
  *
- * @method string getMessageID()
- * @method string getMessageTimeStamp()
+ * @method string|null getMessageID()
+ * @method string|null getMessageTimeStamp()
  *
- * @method Message setMessageID(string $mid)
- * @method Message setMessageTimeStamp(string $timestamp)
+ * @method Message setMessageID(string|null $mid = null)
+ * @method Message setMessageTimeStamp(string|null $timestamp = null)
  *
  */
 class Message extends AbstractEntity
@@ -82,15 +82,15 @@ class Message extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string $MessageID */
+    /** @var string|null $MessageID */
     protected $MessageID;
-    /** @var string $MessageTimeStamp */
+    /** @var string|null $MessageTimeStamp */
     protected $MessageTimeStamp;
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string $mid
-     * @param string $timestamp
+     * @param string|null $mid
+     * @param string|null $timestamp
      */
     public function __construct($mid = null, $timestamp = null)
     {

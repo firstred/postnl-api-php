@@ -40,23 +40,23 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity\Response
  *
- * @method string getAccountName()
- * @method string getResponseAmountType()
- * @method string getBIC()
- * @method string getCurrency()
- * @method string getIBAN()
- * @method string getReference()
- * @method string getTransactionNumber()
- * @method string getValue()
+ * @method string|null getAccountName()
+ * @method string|null getResponseAmountType()
+ * @method string|null getBIC()
+ * @method string|null getCurrency()
+ * @method string|null getIBAN()
+ * @method string|null getReference()
+ * @method string|null getTransactionNumber()
+ * @method string|null getValue()
  *
- * @method ResponseAmount setAccountName(string $accountName)
- * @method ResponseAmount setResponseAmountType(string $ResponseAmountType)
- * @method ResponseAmount setBIC(string $bic)
- * @method ResponseAmount setCurrency(string $currency)
- * @method ResponseAmount setIBAN(string $iban)
- * @method ResponseAmount setReference(string $reference)
- * @method ResponseAmount setTransactionNumber(string $transactionNr)
- * @method ResponseAmount setValue(string $value)
+ * @method ResponseAmount setAccountName(string|null $accountName = null)
+ * @method ResponseAmount setResponseAmountType(string|null $ResponseAmountType = null)
+ * @method ResponseAmount setBIC(string|null $bic = null)
+ * @method ResponseAmount setCurrency(string|null $currency = null)
+ * @method ResponseAmount setIBAN(string|null $iban = null)
+ * @method ResponseAmount setReference(string|null $reference = null)
+ * @method ResponseAmount setTransactionNumber(string|null $transactionNr = null)
+ * @method ResponseAmount setValue(string|null $value = null)
  */
 class ResponseAmount extends AbstractEntity
 {
@@ -134,33 +134,33 @@ class ResponseAmount extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string $AccountName */
+    /** @var string|null $AccountName */
     protected $AccountName;
-    /** @var string $ResponseAmountType */
+    /** @var string|null $ResponseAmountType */
     protected $ResponseAmountType;
-    /** @var string $BIC */
+    /** @var string|null $BIC */
     protected $BIC;
-    /** @var string $Currency */
+    /** @var string|null $Currency */
     protected $Currency;
-    /** @var string $IBAN */
+    /** @var string|null $IBAN */
     protected $IBAN;
-    /** @var string $Reference */
+    /** @var string|null $Reference */
     protected $Reference;
-    /** @var string $TransactionNumber */
+    /** @var string|null $TransactionNumber */
     protected $TransactionNumber;
-    /** @var string $Value */
+    /** @var string|null $Value */
     protected $Value;
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string $accountName
-     * @param string $responseAmount
-     * @param string $bic
-     * @param string $currency
-     * @param string $iban
-     * @param string $reference
-     * @param string $transactionNumber
-     * @param string $value
+     * @param string|null $accountName
+     * @param string|null $responseAmount
+     * @param string|null $bic
+     * @param string|null $currency
+     * @param string|null $iban
+     * @param string|null $reference
+     * @param string|null $transactionNumber
+     * @param string|null $value
      */
     public function __construct(
         $accountName = null,

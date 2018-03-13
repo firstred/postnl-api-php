@@ -39,27 +39,27 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method string    getCertificate()
- * @method string    getCertificateNr()
- * @method Content[] getContent()
- * @method string    getCurrency()
- * @method string    getHandleAsNonDeliverable()
- * @method string    getInvoice()
- * @method string    getInvoiceNr()
- * @method string    getLicense()
- * @method string    getLicenseNr()
- * @method string    getShipmentType()
+ * @method string|null    getCertificate()
+ * @method string|null    getCertificateNr()
+ * @method Content[]|null getContent()
+ * @method string|null    getCurrency()
+ * @method string|null    getHandleAsNonDeliverable()
+ * @method string|null    getInvoice()
+ * @method string|null    getInvoiceNr()
+ * @method string|null    getLicense()
+ * @method string|null    getLicenseNr()
+ * @method string|null    getShipmentType()
  *
- * @method Customs setCertificate(string $certificate)
- * @method Customs setCertificateNr(string $certificateNr)
- * @method Customs setContent(Content[] $content)
- * @method Customs setCurrency(string $currency)
- * @method Customs setHandleAsNonDeliverable(string $nonDeliverable)
- * @method Customs setInvoice(string $invoice)
- * @method Customs setInvoiceNr(string $invoiceNr)
- * @method Customs setLicense(string $license)
- * @method Customs setLicenseNr(string $licenseNr)
- * @method Customs setShipmentType(string $shipmentType)
+ * @method Customs setCertificate(string|null $certificate = null)
+ * @method Customs setCertificateNr(string|null $certificateNr = null)
+ * @method Customs setContent(Content[]|null $content = null)
+ * @method Customs setCurrency(string|null $currency = null)
+ * @method Customs setHandleAsNonDeliverable(string|null $nonDeliverable = null)
+ * @method Customs setInvoice(string|null $invoice = null)
+ * @method Customs setInvoiceNr(string|null $invoiceNr = null)
+ * @method Customs setLicense(string|null $license = null)
+ * @method Customs setLicenseNr(string|null $licenseNr = null)
+ * @method Customs setShipmentType(string|null $shipmentType = null)
  */
 class Customs extends AbstractEntity
 {
@@ -151,39 +151,39 @@ class Customs extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string $Certificate */
+    /** @var string|null $Certificate */
     protected $Certificate;
-    /** @var string $CertificateNr */
+    /** @var string|null $CertificateNr */
     protected $CertificateNr;
-    /** @var Content[] $Content */
+    /** @var Content[]|null $Content */
     protected $Content;
-    /** @var string $Currency */
+    /** @var string|null $Currency */
     protected $Currency;
-    /** @var string $HandleAsNonDeliverable */
+    /** @var string|null $HandleAsNonDeliverable */
     protected $HandleAsNonDeliverable;
-    /** @var string $Invoice */
+    /** @var string|null $Invoice */
     protected $Invoice;
-    /** @var string $InvoiceNr */
+    /** @var string|null $InvoiceNr */
     protected $InvoiceNr;
-    /** @var string $License */
+    /** @var string|null $License */
     protected $License;
-    /** @var string $LicenseNr */
+    /** @var string|null $LicenseNr */
     protected $LicenseNr;
-    /** @var string $ShipmentType */
+    /** @var string|null $ShipmentType */
     protected $ShipmentType;
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string    $certificate
-     * @param string    $certificateNr
-     * @param Content[] $content
-     * @param string    $currency
-     * @param string    $handleAsNonDeliverable
-     * @param string    $invoice
-     * @param string    $invoiceNr
-     * @param string    $license
-     * @param string    $licenseNr
-     * @param string    $shipmentType
+     * @param string|null    $certificate
+     * @param string|null    $certificateNr
+     * @param Content[]|null $content
+     * @param string|null    $currency
+     * @param string|null    $handleAsNonDeliverable
+     * @param string|null    $invoice
+     * @param string|null    $invoiceNr
+     * @param string|null    $license
+     * @param string|null    $licenseNr
+     * @param string|null    $shipmentType
      */
     public function __construct(
         $certificate = null,

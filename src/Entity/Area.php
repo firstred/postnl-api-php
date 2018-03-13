@@ -39,11 +39,11 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method Coordinates getCoordinatesNorthWest()
- * @method Coordinates getCoordinatesSouthEast()
+ * @method Coordinates|null getCoordinatesNorthWest()
+ * @method Coordinates|null getCoordinatesSouthEast()
  *
- * @method Area setCoordinatesNorthWest(Coordinates $NW)
- * @method Area setCoordinatesSouthEast(Coordinates $SE)
+ * @method Area setCoordinatesNorthWest(Coordinates|null $NW = null)
+ * @method Area setCoordinatesSouthEast(Coordinates|null $SE = null)
  */
 class Area extends AbstractEntity
 {
@@ -79,15 +79,15 @@ class Area extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var Coordinates $CoordinatesNorthWest */
+    /** @var Coordinates|null $CoordinatesNorthWest */
     protected $CoordinatesNorthWest;
-    /** @var Coordinates $CoordinatesSouthEast */
+    /** @var Coordinates|null $CoordinatesSouthEast */
     protected $CoordinatesSouthEast;
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param Coordinates $NW
-     * @param Coordinates $SE
+     * @param Coordinates|null $NW
+     * @param Coordinates|null $SE
      */
     public function __construct($NW = null, $SE = null)
     {

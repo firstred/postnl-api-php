@@ -39,15 +39,15 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method string getContactType()
- * @method string getEmail()
- * @method string getSMSNr()
- * @method string getTelNr()
+ * @method string|null getContactType()
+ * @method string|null getEmail()
+ * @method string|null getSMSNr()
+ * @method string|null getTelNr()
  *
- * @method Contact setContactType(string $contactType)
- * @method Contact setEmail(string $email)
- * @method Contact setSMSNr(string $smsNr)
- * @method Contact setTelNr(string $telNr)
+ * @method Contact setContactType(string|null $contactType = null)
+ * @method Contact setEmail(string|null $email = null)
+ * @method Contact setSMSNr(string|null $smsNr = null)
+ * @method Contact setTelNr(string|null $telNr = null)
  */
 class Contact extends AbstractEntity
 {
@@ -97,21 +97,21 @@ class Contact extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string $ContactType */
+    /** @var string|null $ContactType */
     protected $ContactType;
-    /** @var string $Email */
+    /** @var string|null $Email */
     protected $Email;
-    /** @var string $SMSNr */
+    /** @var string|null $SMSNr */
     protected $SMSNr;
-    /** @var string $TelNr */
+    /** @var string|null $TelNr */
     protected $TelNr;
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string $contactType
-     * @param string $email
-     * @param string $smsNr
-     * @param string $telNr
+     * @param string|null $contactType
+     * @param string|null $email
+     * @param string|null $smsNr
+     * @param string|null $telNr
      */
     public function __construct($contactType = null, $email = null, $smsNr = null, $telNr = null)
     {

@@ -44,13 +44,13 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method string   getCountrycode()
- * @method Location getLocation()
- * @method Message  getMessage()
+ * @method string|null   getCountrycode()
+ * @method Location|null getLocation()
+ * @method Message|null  getMessage()
  *
- * @method GetNearestLocations setCountrycode(string $countrycode)
- * @method GetNearestLocations setLocation(Location $location = null)
- * @method GetNearestLocations setMessage(Message $message = null)
+ * @method GetNearestLocations setCountrycode(string|null $countrycode = null)
+ * @method GetNearestLocations setLocation(Location|null $location = null)
+ * @method GetNearestLocations setMessage(Message|null $message = null)
  */
 class GetNearestLocations extends AbstractEntity
 {
@@ -97,11 +97,11 @@ class GetNearestLocations extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string $Countrycode */
+    /** @var string|null $Countrycode */
     protected $Countrycode;
-    /** @var Location $Location */
+    /** @var Location|null $Location */
     protected $Location;
-    /** @var Message $Message */
+    /** @var Message|null $Message */
     protected $Message;
     // @codingStandardsIgnoreEnd
 

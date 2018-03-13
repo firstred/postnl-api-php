@@ -39,25 +39,25 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method string getCustomerNumber()
- * @method string getCustomerCode()
- * @method string getCollectionLocation()
- * @method string getContactPerson()
- * @method string getEmail()
- * @method string getName()
- * @method string getAddress()
- * @method string getGlobalPackCustomerCode()
- * @method string getGlobalPackBarcodeType()
+ * @method string|null getCustomerNumber()
+ * @method string|null getCustomerCode()
+ * @method string|null getCollectionLocation()
+ * @method string|null getContactPerson()
+ * @method string|null getEmail()
+ * @method string|null getName()
+ * @method string|null getAddress()
+ * @method string|null getGlobalPackCustomerCode()
+ * @method string|null getGlobalPackBarcodeType()
  *
- * @method Customer setCustomerNumber(string $customerNr)
- * @method Customer setCustomerCode(string $customerCode)
- * @method Customer setCollectionLocation(string $collectionLocation)
- * @method Customer setContactPerson(string $contactPerson)
- * @method Customer setEmail(string $email)
- * @method Customer setName(string $name)
- * @method Customer setAddress(Address $address)
- * @method Customer setGlobalPackCustomerCode(string $code)
- * @method Customer setGlobalPackBarcodeType(string $type)
+ * @method Customer setCustomerNumber(string|null $customerNr = null)
+ * @method Customer setCustomerCode(string|null $customerCode = null)
+ * @method Customer setCollectionLocation(string|null $collectionLocation = null)
+ * @method Customer setContactPerson(string|null $contactPerson = null)
+ * @method Customer setEmail(string|null $email = null)
+ * @method Customer setName(string|null $name = null)
+ * @method Customer setAddress(Address|null $address = null)
+ * @method Customer setGlobalPackCustomerCode(string|null $code = null)
+ * @method Customer setGlobalPackBarcodeType(string|null $type = null)
  */
 class Customer extends AbstractEntity
 {
@@ -123,23 +123,23 @@ class Customer extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var Address $Address */
+    /** @var Address|null $Address */
     protected $Address;
-    /** @var string $CollectionLocation */
+    /** @var string|null $CollectionLocation */
     protected $CollectionLocation;
-    /** @var string $ContactPerson */
+    /** @var string|null $ContactPerson */
     protected $ContactPerson;
-    /** @var string $CustomerCode */
+    /** @var string|null $CustomerCode */
     protected $CustomerCode;
-    /** @var string $CustomerNumber */
+    /** @var string|null $CustomerNumber */
     protected $CustomerNumber;
     /** @var null|string $GlobalPackCustomerCode */
     protected $GlobalPackCustomerCode;
     /** @var null|string $GlobalPackBarcodeType */
     protected $GlobalPackBarcodeType;
-    /** @var string $Email */
+    /** @var string|null $Email */
     protected $Email;
-    /** @var string $Name */
+    /** @var string|null $Name */
     protected $Name;
     // @codingStandardsIgnoreEnd
 

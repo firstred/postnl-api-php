@@ -50,31 +50,31 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method Address[]       getAddresses()
- * @method Amount[]        getAmounts()
- * @method Barcode         getBarcode()
- * @method string          getDeliveryDate()
- * @method Dimension       getDimension()
- * @method Expectation     getExpectation()
- * @method Group[]         getGroups()
- * @method string          getProductCode()
- * @method ProductOption[] getProductOptions()
- * @method string          getReference()
- * @method Status          getStatus()
- * @method Warning[]       getWarnings()
+ * @method Address[]|null       getAddresses()
+ * @method Amount[]|null        getAmounts()
+ * @method Barcode|null         getBarcode()
+ * @method string|null          getDeliveryDate()
+ * @method Dimension|null       getDimension()
+ * @method Expectation|null     getExpectation()
+ * @method Group[]|null         getGroups()
+ * @method string|null          getProductCode()
+ * @method ProductOption[]|null getProductOptions()
+ * @method string|null          getReference()
+ * @method Status|null          getStatus()
+ * @method Warning[]|null       getWarnings()
  *
- * @method CurrentStatusResponseShipment setAddresses(Address[] $addresses = null)
- * @method CurrentStatusResponseShipment setAmounts(Amount[] $amounts = null)
- * @method CurrentStatusResponseShipment setBarcode(string $barcode)
- * @method CurrentStatusResponseShipment setDeliveryDate(string $date)
- * @method CurrentStatusResponseShipment setDimension(Dimension $dimension)
- * @method CurrentStatusResponseShipment setExpectation(Expectation $expectation)
- * @method CurrentStatusResponseShipment setGroups(Group[] $groups = null)
- * @method CurrentStatusResponseShipment setProductCode(string $productCode)
- * @method CurrentStatusResponseShipment setProductOptions(ProductOption[] $options = null)
- * @method CurrentStatusResponseShipment setReference(string $reference)
- * @method CurrentStatusResponseShipment setStatus(Status $status)
- * @method CurrentStatusResponseShipment setWarnings(Warning[] $warnings = null)
+ * @method CurrentStatusResponseShipment setAddresses(Address[]|null $addresses = null)
+ * @method CurrentStatusResponseShipment setAmounts(Amount[]|null $amounts = null)
+ * @method CurrentStatusResponseShipment setBarcode(string|null $barcode = null)
+ * @method CurrentStatusResponseShipment setDeliveryDate(string|null $date = null)
+ * @method CurrentStatusResponseShipment setDimension(Dimension|null $dimension = null)
+ * @method CurrentStatusResponseShipment setExpectation(Expectation|null $expectation = null)
+ * @method CurrentStatusResponseShipment setGroups(Group[]|null $groups = null)
+ * @method CurrentStatusResponseShipment setProductCode(string|null $productCode = null)
+ * @method CurrentStatusResponseShipment setProductOptions(ProductOption[]|null $options = null)
+ * @method CurrentStatusResponseShipment setReference(string|null $reference = null)
+ * @method CurrentStatusResponseShipment setStatus(Status|null $status = null)
+ * @method CurrentStatusResponseShipment setWarnings(Warning[]|null $warnings = null)
  */
 class CurrentStatusResponseShipment extends AbstractEntity
 {
@@ -180,47 +180,47 @@ class CurrentStatusResponseShipment extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var Address[] $Addresses */
+    /** @var Address[]|null $Addresses */
     protected $Addresses;
-    /** @var Amount[] $Amounts */
+    /** @var Amount[]|null $Amounts */
     protected $Amounts;
-    /** @var Barcode $Barcode */
+    /** @var Barcode|null $Barcode */
     protected $Barcode;
-    /** @var string $DeliveryDate */
+    /** @var string|null $DeliveryDate */
     protected $DeliveryDate;
-    /** @var Dimension Dimension */
+    /** @var Dimension|null Dimension */
     protected $Dimension;
-    /** @var Expectation $Expectation */
+    /** @var Expectation|null $Expectation */
     protected $Expectation;
-    /** @var Group[] $Groups */
+    /** @var Group[]|null $Groups */
     protected $Groups;
-    /** @var string $ProductCode */
+    /** @var string|null $ProductCode */
     protected $ProductCode;
-    /** @var ProductOption[] $ProuctOptions */
+    /** @var ProductOption[]|null $ProuctOptions */
     protected $ProductOptions;
-    /** @var string $Reference */
+    /** @var string|null $Reference */
     protected $Reference;
-    /** @var Status $Status */
+    /** @var Status|null $Status */
     protected $Status;
-    /** @var Warning[] $Warnings */
+    /** @var Warning[]|null $Warnings */
     protected $Warnings;
     // @codingStandardsIgnoreEnd
 
     /**
      * CurrentStatusResponseShipment constructor.
      *
-     * @param Address[]|null $addresses
-     * @param Amount[]|null $amounts
-     * @param null       $barcode
-     * @param null       $deliveryDate
-     * @param null       $dimension
-     * @param null       $expectation
-     * @param Group[]|null $groups
-     * @param null       $productCode
+     * @param Address[]|null       $addresses
+     * @param Amount[]|null        $amounts
+     * @param Barcode|null         $barcode
+     * @param string|null          $deliveryDate
+     * @param Dimension|null       $dimension
+     * @param Expectation|null     $expectation
+     * @param Group[]|null         $groups
+     * @param string|null          $productCode
      * @param ProductOption[]|null $productOptions
-     * @param null       $reference
-     * @param null       $status
-     * @param Warning[]|null $warnings
+     * @param string|null          $reference
+     * @param Status|null          $status
+     * @param Warning[]|null       $warnings
      */
     public function __construct(
         array $addresses = null,

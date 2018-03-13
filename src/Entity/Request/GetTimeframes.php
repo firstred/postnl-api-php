@@ -44,11 +44,11 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method Message     getMessage()
- * @method Timeframe[] getTimeframe()
+ * @method Message|null     getMessage()
+ * @method Timeframe[]|null getTimeframe()
  *
- * @method GetTimeframes setMessage(Message $message)
- * @method GetTimeframes setTimeframe(Timeframe[] $timeframes)
+ * @method GetTimeframes setMessage(Message|null $message = null)
+ * @method GetTimeframes setTimeframe(Timeframe[]|null $timeframes = null)
  */
 class GetTimeframes extends AbstractEntity
 {
@@ -88,17 +88,17 @@ class GetTimeframes extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var Message $Message */
+    /** @var Message|null $Message */
     protected $Message;
-    /** @var Timeframe[] $Timeframe */
+    /** @var Timeframe[]|null $Timeframe */
     protected $Timeframe;
     // @codingStandardsIgnoreEnd
 
     /**
      * GetTimeframes constructor.
      *
-     * @param Message     $message
-     * @param Timeframe[] $timeframes
+     * @param Message|null     $message
+     * @param Timeframe[]|null $timeframes
      */
     public function __construct(Message $message = null, array $timeframes = null)
     {

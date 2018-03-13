@@ -41,11 +41,11 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method string[] getBarcodes()
- * @method Label[]  getLabels()
+ * @method string[]|null getBarcodes()
+ * @method Label[]|null  getLabels()
  *
- * @method MergedLabel setBarcodes(string[] $barcodes)
- * @method MergedLabel setLabels(Label[] $labels)
+ * @method MergedLabel setBarcodes(string[]|null $barcodes = null)
+ * @method MergedLabel setLabels(Label[]|null $labels = null)
  */
 class MergedLabel extends AbstractEntity
 {
@@ -81,15 +81,15 @@ class MergedLabel extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string[] $Barcodes */
+    /** @var string[]|null $Barcodes */
     protected $Barcodes;
-    /** @var Label[] $Labels */
+    /** @var Label[]|null $Labels */
     protected $Labels;
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string[] $barcodes
-     * @param Label[]  $labels
+     * @param string[]|null $barcodes
+     * @param Label[]|null  $labels
      */
     public function __construct(array $barcodes = null, array $labels = null)
     {

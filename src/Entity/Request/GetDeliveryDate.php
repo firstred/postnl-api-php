@@ -45,34 +45,34 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method bool            getAllowSundaySorting()
- * @method string          getCity()
- * @method string          getCountryCode()
- * @method CutOffTime[]    getCutOffTimes()
- * @method string          getHouseNr()
- * @method string          getHouseNrExt()
- * @method string[]        getOptions()
- * @method string          getOriginCountryCode()
- * @method string          getPostalCode()
- * @method string          getShippingDate()
- * @method string          getShippingDuration()
- * @method string          getStreet()
- * @method GetDeliveryDate getGetDeliveryDate()
- * @method Message         getMessage()
+ * @method bool|null            getAllowSundaySorting()
+ * @method string|null          getCity()
+ * @method string|null          getCountryCode()
+ * @method CutOffTime[]|null    getCutOffTimes()
+ * @method string|null          getHouseNr()
+ * @method string|null          getHouseNrExt()
+ * @method string[]|null        getOptions()
+ * @method string|null          getOriginCountryCode()
+ * @method string|null          getPostalCode()
+ * @method string|null          getShippingDate()
+ * @method string|null          getShippingDuration()
+ * @method string|null          getStreet()
+ * @method GetDeliveryDate|null getGetDeliveryDate()
+ * @method Message|null         getMessage()
  *
- * @method GetDeliveryDate setAllowSundaySorting(bool $allowSundaySorting)
- * @method GetDeliveryDate setCity(string $city)
- * @method GetDeliveryDate setCountryCode(string $code)
- * @method GetDeliveryDate setCutOffTimes(CutOffTime[] $times)
- * @method GetDeliveryDate setHouseNr(string $houseNr)
- * @method GetDeliveryDate setHouseNrExt(string $houseNrExt)
- * @method GetDeliveryDate setOptions(string[] $options)
- * @method GetDeliveryDate setOriginCountryCode(string $code)
- * @method GetDeliveryDate setShippingDate(string $date)
- * @method GetDeliveryDate setShippingDuration(int $duration)
- * @method GetDeliveryDate setStreet(string $street)
- * @method GetDeliveryDate setGetDeliveryDate(GetDeliveryDate $date)
- * @method GetDeliveryDate setMessage(Message $message)
+ * @method GetDeliveryDate setAllowSundaySorting(bool|null $allowSundaySorting = null)
+ * @method GetDeliveryDate setCity(string|null $city = null)
+ * @method GetDeliveryDate setCountryCode(string|null $code = null)
+ * @method GetDeliveryDate setCutOffTimes(CutOffTime[]|null $times = null)
+ * @method GetDeliveryDate setHouseNr(string|null $houseNr = null)
+ * @method GetDeliveryDate setHouseNrExt(string|null $houseNrExt = null)
+ * @method GetDeliveryDate setOptions(string[]|null $options = null)
+ * @method GetDeliveryDate setOriginCountryCode(string|null $code = null)
+ * @method GetDeliveryDate setShippingDate(string|null $date = null)
+ * @method GetDeliveryDate setShippingDuration(int|null $duration = null)
+ * @method GetDeliveryDate setStreet(string|null $street = null)
+ * @method GetDeliveryDate setGetDeliveryDate(GetDeliveryDate|null $date = null)
+ * @method GetDeliveryDate setMessage(Message|null $message = null)
  */
 class GetDeliveryDate extends AbstractEntity
 {
@@ -196,46 +196,46 @@ class GetDeliveryDate extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var bool $AllowSundaySorting */
+    /** @var bool|null $AllowSundaySorting */
     protected $AllowSundaySorting;
-    /** @var string $City */
+    /** @var string|null $City */
     protected $City;
-    /** @var string $CountryCode */
+    /** @var string|null $CountryCode */
     protected $CountryCode;
-    /** @var CutOffTime[] $CutOffTimes */
+    /** @var CutOffTime[]|null $CutOffTimes */
     protected $CutOffTimes;
-    /** @var string $HouseNr */
+    /** @var string|null $HouseNr */
     protected $HouseNr;
-    /** @var string $HouseNrExt */
+    /** @var string|null $HouseNrExt */
     protected $HouseNrExt;
-    /** @var string[] $Options */
+    /** @var string[]|null $Options */
     protected $Options;
-    /** @var string $OriginCountryCode */
+    /** @var string|null $OriginCountryCode */
     protected $OriginCountryCode;
-    /** @var string $PostalCode */
+    /** @var string|null $PostalCode */
     protected $PostalCode;
-    /** @var string $ShippingDate */
+    /** @var string|null $ShippingDate */
     protected $ShippingDate;
-    /** @var string $ShippingDuration */
+    /** @var string|null $ShippingDuration */
     protected $ShippingDuration;
-    /** @var string $Street */
+    /** @var string|null $Street */
     protected $Street;
-    /** @var GetDeliveryDate $GetDeliveryDate */
+    /** @var GetDeliveryDate|null $GetDeliveryDate */
     protected $GetDeliveryDate;
-    /** @var Message $Message */
+    /** @var Message|null $Message */
     protected $Message;
     // @codingStandardsIgnoreEnd
 
     /**
      * GetDeliveryDate constructor.
      *
-     * @param bool                 $allowSundaySorting
+     * @param bool|null            $allowSundaySorting
      * @param string|null          $city
      * @param string|null          $countryCode
-     * @param array                $cutOffTimes
+     * @param array|null           $cutOffTimes
      * @param string|null          $houseNr
      * @param string|null          $houseNrExt
-     * @param array                $options
+     * @param array|null           $options
      * @param string|null          $originCountryCode
      * @param string|null          $postalCode
      * @param string|null          $shippingDate
@@ -281,7 +281,7 @@ class GetDeliveryDate extends AbstractEntity
     /**
      * Set the postcode
      *
-     * @param string $postcode
+     * @param string|null $postcode
      *
      * @return $this
      */

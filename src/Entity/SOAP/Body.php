@@ -66,7 +66,7 @@ class Body extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var GenerateBarcodeResponse $GenerateBarcodeResponse */
+    /** @var GenerateBarcodeResponse|null $GenerateBarcodeResponse */
     protected $GenerateBarcodeResponse;
     // @codingStandardsIgnoreEnd
 }

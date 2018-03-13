@@ -39,13 +39,13 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method string getType()
- * @method string getRange()
- * @method string getSerie()
+ * @method string|null getType()
+ * @method string|null getRange()
+ * @method string|null getSerie()
  *
- * @method Barcode setType(string $type)
- * @method Barcode setRange(string $range)
- * @method Barcode setSerie(string $serie)
+ * @method Barcode setType(string|null $type = null)
+ * @method Barcode setRange(string|null $range = null)
+ * @method Barcode setSerie(string|null $serie = null)
  */
 class Barcode extends AbstractEntity
 {
@@ -88,18 +88,18 @@ class Barcode extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string $Type */
+    /** @var string|null $Type */
     protected $Type;
-    /** @var string $Range */
+    /** @var string|null $Range */
     protected $Range;
-    /** @var string $Serie */
+    /** @var string|null $Serie */
     protected $Serie;
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string $type
-     * @param string $range
-     * @param string $serie
+     * @param string|null $type
+     * @param string|null $range
+     * @param string|null $serie
      */
     public function __construct($type = null, $range = null, $serie = '000000000-999999999')
     {

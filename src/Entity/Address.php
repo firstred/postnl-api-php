@@ -39,40 +39,40 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity\Address
  *
- * @method string getAddressType()
- * @method string getFirstName()
- * @method string getName()
- * @method string getCompanyName()
- * @method string getStreet()
- * @method string getHouseNr()
- * @method string getHouseNrExt()
- * @method string getZipcode()
- * @method string getCity()
- * @method string getCountrycode()
- * @method string getArea()
- * @method string getBuildingname()
- * @method string getDepartment()
- * @method string getDoorcode()
- * @method string getFloor()
- * @method string getRegion()
- * @method string getRemark()
+ * @method string|null getAddressType()
+ * @method string|null getFirstName()
+ * @method string|null getName()
+ * @method string|null getCompanyName()
+ * @method string|null getStreet()
+ * @method string|null getHouseNr()
+ * @method string|null getHouseNrExt()
+ * @method string|null getZipcode()
+ * @method string|null getCity()
+ * @method string|null getCountrycode()
+ * @method string|null getArea()
+ * @method string|null getBuildingname()
+ * @method string|null getDepartment()
+ * @method string|null getDoorcode()
+ * @method string|null getFloor()
+ * @method string|null getRegion()
+ * @method string|null getRemark()
  *
- * @method Address setFirstName(string $firstName)
- * @method Address setName(string $name)
- * @method Address setCompanyName(string $companyName)
- * @method Address setStreet(string $street)
- * @method Address setHouseNr(string $houseNr)
- * @method Address setHouseNrExt(string $houseNrExt)
- * @method Address setZipcode(string $zipcode)
- * @method Address setCity(string $city)
- * @method Address setCountrycode(string $countrycode)
- * @method Address setArea(string $area)
- * @method Address setBuildingname(string $buildingName)
- * @method Address setDepartment(string $department)
- * @method Address setDoorcode(string $doorcode)
- * @method Address setFloor(string $floor)
- * @method Address setRegion(string $region)
- * @method Address setRemark(string $remark)
+ * @method Address setFirstName(string|null $firstName = null)
+ * @method Address setName(string|null $name = null)
+ * @method Address setCompanyName(string|null $companyName = null)
+ * @method Address setStreet(string|null $street = null)
+ * @method Address setHouseNr(string|null $houseNr = null)
+ * @method Address setHouseNrExt(string|null $houseNrExt = null)
+ * @method Address setZipcode(string|null $zipcode = null)
+ * @method Address setCity(string|null $city = null)
+ * @method Address setCountrycode(string|null $countrycode = null)
+ * @method Address setArea(string|null $area = null)
+ * @method Address setBuildingname(string|null $buildingName = null)
+ * @method Address setDepartment(string|null $department = null)
+ * @method Address setDoorcode(string|null $doorcode = null)
+ * @method Address setFloor(string|null $floor = null)
+ * @method Address setRegion(string|null $region = null)
+ * @method Address setRemark(string|null $remark = null)
  */
 class Address extends AbstractEntity
 {
@@ -214,7 +214,7 @@ class Address extends AbstractEntity
     ];
     // @codingStandardsIgnoreStart
     /**
-     * @var string $AddressType
+     * @var string|null $AddressType
      *
      * PostNL internal applications validate the receiver address. In case the spelling of
      * addresses should be different according to our PostNL information, the address details will
@@ -246,53 +246,53 @@ class Address extends AbstractEntity
      * In most cases this will be AddressType 01, the receiver address.
      */
     protected $AddressType;
-    /** @var string $Area */
+    /** @var string|null $Area */
     protected $Area;
-    /** @var string $Buildingname */
+    /** @var string|null $Buildingname */
     protected $Buildingname;
-    /** @var string $City */
+    /** @var string|null $City */
     protected $City;
-    /** @var string $CompanyName */
+    /** @var string|null $CompanyName */
     protected $CompanyName;
-    /** @var string $Countrycode */
+    /** @var string|null $Countrycode */
     protected $Countrycode;
-    /** @var string $Department */
+    /** @var string|null $Department */
     protected $Department;
-    /** @var string $Doorcode */
+    /** @var string|null $Doorcode */
     protected $Doorcode;
-    /** @var string $FirstName */
+    /** @var string|null $FirstName */
     protected $FirstName;
-    /** @var string $Floor */
+    /** @var string|null $Floor */
     protected $Floor;
-    /** @var string $HouseNr */
+    /** @var string|null $HouseNr */
     protected $HouseNr;
-    /** @var string $HouseNrExt */
+    /** @var string|null $HouseNrExt */
     protected $HouseNrExt;
-    /** @var string $Name */
+    /** @var string|null $Name */
     protected $Name;
-    /** @var string $Region */
+    /** @var string|null $Region */
     protected $Region;
-    /** @var string $Remark */
+    /** @var string|null $Remark */
     protected $Remark;
-    /** @var string $Street */
+    /** @var string|null $Street */
     protected $Street;
-    /** @var string $Zipcode */
+    /** @var string|null $Zipcode */
     protected $Zipcode;
-    /** @var array Array with optional properties */
-    protected $other = [];
+    /** @var array|null Array with optional properties */
+    protected $other;
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string      $addressType
-     * @param string      $firstName
-     * @param string      $name
-     * @param string      $companyName
-     * @param string      $street
-     * @param string      $houseNr
-     * @param string      $houseNrExt
-     * @param string      $zipcode
-     * @param string      $city
-     * @param string      $countryCode
+     * @param string|null $addressType
+     * @param string|null $firstName
+     * @param string|null $name
+     * @param string|null $companyName
+     * @param string|null $street
+     * @param string|null $houseNr
+     * @param string|null $houseNrExt
+     * @param string|null $zipcode
+     * @param string|null $city
+     * @param string|null $countryCode
      * @param string|null $area
      * @param string|null $buildingName
      * @param string|null $department

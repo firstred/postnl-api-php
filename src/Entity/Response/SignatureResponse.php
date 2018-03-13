@@ -41,9 +41,9 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method string getSignature()
+ * @method string|null getSignature()
  *
- * @method SignatureResponse setSignature(Signature $signature)
+ * @method SignatureResponse setSignature(Signature|null $signature = null)
  */
 class SignatureResponse extends AbstractEntity
 {
@@ -76,14 +76,14 @@ class SignatureResponse extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var Signature $Signature */
+    /** @var Signature|null $Signature */
     protected $Signature;
     // @codingStandardsIgnoreEnd
 
     /**
      * SignatureResponse constructor.
      *
-     * @param Signature $signature
+     * @param Signature|null $signature
      */
     public function __construct(Signature $signature = null)
     {

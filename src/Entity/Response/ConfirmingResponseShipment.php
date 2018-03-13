@@ -41,11 +41,11 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method string    getBarcode()
- * @method Warning[] getWarnings()
+ * @method string|null    getBarcode()
+ * @method Warning[]|null getWarnings()
  *
- * @method ConfirmingResponseShipment setBarcode(string $barcode)
- * @method ConfirmingResponseShipment setWarnings(Warning[] $warnings)
+ * @method ConfirmingResponseShipment setBarcode(string|null $barcode = null)
+ * @method ConfirmingResponseShipment setWarnings(Warning[]|null $warnings = null)
  */
 class ConfirmingResponseShipment extends AbstractEntity
 {
@@ -81,15 +81,15 @@ class ConfirmingResponseShipment extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string $Barcode */
+    /** @var string|null $Barcode */
     protected $Barcode;
-    /** @var Warning[] $warnings */
+    /** @var Warning[]|null $warnings */
     protected $Warnings;
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string    $barcode
-     * @param Warning[] $warnings
+     * @param string|null    $barcode
+     * @param Warning[]|null $warnings
      */
     public function __construct(
         $barcode = null,

@@ -40,9 +40,9 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method GetLocationsResult getGetLocationsResult()
+ * @method GetLocationsResult|null getGetLocationsResult()
  *
- * @method GetLocationsInAreaResponse setGetLocationsResult(GetLocationsResult $result = null)
+ * @method GetLocationsInAreaResponse setGetLocationsResult(GetLocationsResult|null $result = null)
  */
 class GetLocationsInAreaResponse extends AbstractEntity
 {
@@ -75,7 +75,7 @@ class GetLocationsInAreaResponse extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var GetLocationsResult $GetLocationsResult */
+    /** @var GetLocationsResult|null $GetLocationsResult */
     protected $GetLocationsResult;
     // @codingStandardsIgnoreEnd
 

@@ -41,9 +41,9 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method string getCompleteStatusResponseEvent()
+ * @method string|null getCompleteStatusResponseEvent()
  *
- * @method Event setCompleteStatusResponseEvent(CompleteStatusResponseEvent|null $event)
+ * @method Event setCompleteStatusResponseEvent(CompleteStatusResponseEvent|null $event = null)
  */
 class Event extends AbstractEntity
 {
@@ -72,7 +72,7 @@ class Event extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var CompleteStatusResponseEvent $completeStatusResponseEvent */
+    /** @var CompleteStatusResponseEvent|null $completeStatusResponseEvent */
     protected $CompleteStatusResponseEvent;
     // @codingStandardsIgnoreEnd
 

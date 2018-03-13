@@ -39,21 +39,21 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package MijnPostNLExportModule\Postnl\ComplexTypes
  *
- * @method string getMonday()
- * @method string getTuesday()
- * @method string getWednesday()
- * @method string getThursday()
- * @method string getFriday()
- * @method string getSaturday()
- * @method string getSunday()
+ * @method string|null getMonday()
+ * @method string|null getTuesday()
+ * @method string|null getWednesday()
+ * @method string|null getThursday()
+ * @method string|null getFriday()
+ * @method string|null getSaturday()
+ * @method string|null getSunday()
  *
- * @method OpeningHours setMonday(string $monday)
- * @method OpeningHours setTuesday(string $tuesday)
- * @method OpeningHours setWednesday(string $wednesday)
- * @method OpeningHours setThursday(string $thursday)
- * @method OpeningHours setFriday(string $friday)
- * @method OpeningHours setSaturday(string $saturday)
- * @method OpeningHours setSunday(string $sunday)
+ * @method OpeningHours setMonday(string|null $monday = null)
+ * @method OpeningHours setTuesday(string|null $tuesday = null)
+ * @method OpeningHours setWednesday(string|null $wednesday = null)
+ * @method OpeningHours setThursday(string|null $thursday = null)
+ * @method OpeningHours setFriday(string|null $friday = null)
+ * @method OpeningHours setSaturday(string|null $saturday = null)
+ * @method OpeningHours setSunday(string|null $sunday = null)
  */
 class OpeningHours extends AbstractEntity
 {
@@ -124,32 +124,32 @@ class OpeningHours extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string $Monday */
+    /** @var string|null $Monday */
     protected $Monday = '';
-    /** @var string $Tuesday */
+    /** @var string|null $Tuesday */
     protected $Tuesday = '';
-    /** @var string $Wednesday */
+    /** @var string|null $Wednesday */
     protected $Wednesday = '';
-    /** @var string $Thursday */
+    /** @var string|null $Thursday */
     protected $Thursday = '';
-    /** @var string $Friday */
+    /** @var string|null $Friday */
     protected $Friday = '';
-    /** @var string $Saturday */
+    /** @var string|null $Saturday */
     protected $Saturday = '';
-    /** @var string $Sunday */
+    /** @var string|null $Sunday */
     protected $Sunday = '';
     // @codingStandardsIgnoreEnd
 
     /**
      * OpeningHours constructor.
      *
-     * @param string $monday
-     * @param string $tuesday
-     * @param string $wednesday
-     * @param string $thursday
-     * @param string $friday
-     * @param string $saturday
-     * @param string $sunday
+     * @param string|null $monday
+     * @param string|null $tuesday
+     * @param string|null $wednesday
+     * @param string|null $thursday
+     * @param string|null $friday
+     * @param string|null $saturday
+     * @param string|null $sunday
      */
     public function __construct(
         $monday = '',

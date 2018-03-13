@@ -60,22 +60,22 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method string|null     getDownPartnerID()
  * @method string|null     getDownPartnerLocation()
  *
- * @method ResponseLocation setAddress(Address $address = null)
- * @method ResponseLocation setDeliveryOptions(string[] $options)
- * @method ResponseLocation setDistance(string $dist = null)
- * @method ResponseLocation setLatitude(string $lat = null)
- * @method ResponseLocation setLongitude(string $long = null)
- * @method ResponseLocation setName(string $name = null)
- * @method ResponseLocation setOpeningHours(string[] $hours = null)
- * @method ResponseLocation setPartnerName(string $partnerName = null)
- * @method ResponseLocation setPhoneNumber(string $number = null)
- * @method ResponseLocation setRetailNetworkID(string $id = null)
- * @method ResponseLocation setLocationCode(string $code = null)
- * @method ResponseLocation setSaleschannel(string $channel = null)
- * @method ResponseLocation setTerminalType(string $type = null)
- * @method ResponseLocation setWarnings(Warning[] $warnings = null)
- * @method ResponseLocation setDownPartnerID(string $downPartnerID = null)
- * @method ResponseLocation setDownPartnerLocation(string $downPartnerLocation = null)
+ * @method ResponseLocation setAddress(Address|null $address = null)
+ * @method ResponseLocation setDeliveryOptions(string[]|null $options)
+ * @method ResponseLocation setDistance(string|null $dist = null)
+ * @method ResponseLocation setLatitude(string|null $lat = null)
+ * @method ResponseLocation setLongitude(string|null $long = null)
+ * @method ResponseLocation setName(string|null $name = null)
+ * @method ResponseLocation setOpeningHours(string[]|null $hours = null)
+ * @method ResponseLocation setPartnerName(string|null $partnerName = null)
+ * @method ResponseLocation setPhoneNumber(string|null $number = null)
+ * @method ResponseLocation setRetailNetworkID(string|null $id = null)
+ * @method ResponseLocation setLocationCode(string|null $code = null)
+ * @method ResponseLocation setSaleschannel(string|null $channel = null)
+ * @method ResponseLocation setTerminalType(string|null $type = null)
+ * @method ResponseLocation setWarnings(Warning[]|null $warnings = null)
+ * @method ResponseLocation setDownPartnerID(string|null $downPartnerID = null)
+ * @method ResponseLocation setDownPartnerLocation(string|null $downPartnerLocation = null)
  */
 class ResponseLocation extends AbstractEntity
 {
@@ -214,37 +214,37 @@ class ResponseLocation extends AbstractEntity
     ];
 
     // @codingStandardsIgnoreStart
-    /** @var Address $Address */
+    /** @var Address|null $Address */
     protected $Address;
-    /** @var string[] $DeliveryOptions */
+    /** @var string[]|null $DeliveryOptions */
     protected $DeliveryOptions;
-    /** @var string $Distance */
+    /** @var string|null $Distance */
     protected $Distance;
-    /** @var string $Latitude */
+    /** @var string|null $Latitude */
     protected $Latitude;
-    /** @var string $Longitude */
+    /** @var string|null $Longitude */
     protected $Longitude;
-    /** @var string $Name */
+    /** @var string|null $Name */
     protected $Name;
-    /** @var string[][] $OpeningHours */
+    /** @var string[]|null $OpeningHours */
     protected $OpeningHours;
-    /** @var string $PartnerName */
+    /** @var string|null $PartnerName */
     protected $PartnerName;
-    /** @var string $PhoneNumber */
+    /** @var string|null $PhoneNumber */
     protected $PhoneNumber;
-    /** @var string $LocationCode */
+    /** @var string|null $LocationCode */
     protected $LocationCode;
-    /** @var string $RetailNetworkID */
+    /** @var string|null $RetailNetworkID */
     protected $RetailNetworkID;
-    /** @var string $Saleschannel */
+    /** @var string|null $Saleschannel */
     protected $Saleschannel;
-    /** @var string $TerminalType */
+    /** @var string|null $TerminalType */
     protected $TerminalType;
-    /** @var Warning[] $Warnings */
+    /** @var Warning[]|null $Warnings */
     protected $Warnings;
-    /** @var string $DownPartnerID */
+    /** @var string|null $DownPartnerID */
     protected $DownPartnerID;
-    /** @var string $DownPartnerLocation */
+    /** @var string|null $DownPartnerLocation */
     protected $DownPartnerLocation;
     // @codingStandardsIgnoreEnd
 
@@ -252,12 +252,12 @@ class ResponseLocation extends AbstractEntity
      * ResponseLocation constructor.
      *
      * @param Address|null   $address
-     * @param string[]       $deliveryOptions
+     * @param string[]|null  $deliveryOptions
      * @param string|null    $distance
      * @param string|null    $latitude
      * @param string|null    $longitude
      * @param string|null    $name
-     * @param string|null    $openingHours
+     * @param string[]|null  $openingHours
      * @param string|null    $partnerName
      * @param string|null    $phoneNumber
      * @param string|null    $locationCode

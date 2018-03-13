@@ -41,26 +41,26 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method bool         getAllowSundaySorting()
- * @method string       getCity()
- * @method string       getCountryCode()
- * @method string       getHouseNr()
- * @method string       getHouseNrExt()
- * @method string[]     getOptions()
- * @method string       getPostalCode()
- * @method string       getDeliveryDate()
- * @method string       getShippingDuration()
- * @method string       getStreet()
+ * @method bool|null         getAllowSundaySorting()
+ * @method string|null       getCity()
+ * @method string|null       getCountryCode()
+ * @method string|null       getHouseNr()
+ * @method string|null       getHouseNrExt()
+ * @method string[]|null     getOptions()
+ * @method string|null       getPostalCode()
+ * @method string|null       getDeliveryDate()
+ * @method string|null       getShippingDuration()
+ * @method string|null       getStreet()
  *
- * @method GetSentDate setAllowSundaySorting(bool $allowSundaySorting)
- * @method GetSentDate setCity(string $city)
- * @method GetSentDate setCountryCode(string $code)
- * @method GetSentDate setHouseNr(string $houseNr)
- * @method GetSentDate setHouseNrExt(string $houseNrExt)
- * @method GetSentDate setOptions(array $options)
- * @method GetSentDate setDeliveryDate(string $date)
- * @method GetSentDate setShippingDuration(string $duration)
- * @method GetSentDate setStreet(string $street)
+ * @method GetSentDate setAllowSundaySorting(bool|null $allowSundaySorting = null)
+ * @method GetSentDate setCity(string|null $city = null)
+ * @method GetSentDate setCountryCode(string|null $code = null)
+ * @method GetSentDate setHouseNr(string|null $houseNr = null)
+ * @method GetSentDate setHouseNrExt(string|null $houseNrExt = null)
+ * @method GetSentDate setOptions(array|null $options = null)
+ * @method GetSentDate setDeliveryDate(string|null $date = null)
+ * @method GetSentDate setShippingDuration(string|null $duration = null)
+ * @method GetSentDate setStreet(string|null $street = null)
  */
 class GetSentDate extends AbstractEntity
 {
@@ -156,37 +156,37 @@ class GetSentDate extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var bool $AllowSundaySorting */
+    /** @var bool|null $AllowSundaySorting */
     protected $AllowSundaySorting;
-    /** @var string $City */
+    /** @var string|null $City */
     protected $City;
-    /** @var string $CountryCode */
+    /** @var string|null $CountryCode */
     protected $CountryCode;
-    /** @var string $DeliveryDate */
+    /** @var string|null $DeliveryDate */
     protected $DeliveryDate;
-    /** @var string $HouseNr */
+    /** @var string|null $HouseNr */
     protected $HouseNr;
-    /** @var string $HouseNrExt */
+    /** @var string|null $HouseNrExt */
     protected $HouseNrExt;
-    /** @var string[] $Options */
+    /** @var string[]|null $Options */
     protected $Options;
-    /** @var string $PostalCode */
+    /** @var string|null $PostalCode */
     protected $PostalCode;
-    /** @var string $ShippingDuration */
+    /** @var string|null $ShippingDuration */
     protected $ShippingDuration;
-    /** @var string $Street */
+    /** @var string|null $Street */
     protected $Street;
     // @codingStandardsIgnoreEnd
 
     /**
      * GetSentDate constructor.
      *
-     * @param bool        $allowSundaySorting
+     * @param bool|null   $allowSundaySorting
      * @param string|null $city
      * @param string|null $countryCode
      * @param string|null $houseNr
      * @param string|null $houseNrExt
-     * @param array       $options
+     * @param array|null  $options
      * @param string|null $postalCode
      * @param string|null $DeliveryDate
      * @param string|null $street
@@ -221,7 +221,7 @@ class GetSentDate extends AbstractEntity
     /**
      * Set the postcode
      *
-     * @param string $postcode
+     * @param string|null $postcode
      *
      * @return $this
      */

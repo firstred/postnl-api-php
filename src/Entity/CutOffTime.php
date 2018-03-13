@@ -40,13 +40,13 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method string getDay()
- * @method string getTime()
- * @method bool   getAvailable()
+ * @method string|null getDay()
+ * @method string|null getTime()
+ * @method bool|null   getAvailable()
  *
- * @method CutOffTime setDay(string $day)
- * @method CutOffTime setTime(string $time)
- * @method CutOffTime setAvailable(bool $available)
+ * @method CutOffTime setDay(string|null $day = null)
+ * @method CutOffTime setTime(string|null $time = null)
+ * @method CutOffTime setAvailable(bool|null $available = null)
  */
 class CutOffTime extends AbstractEntity
 {
@@ -89,11 +89,11 @@ class CutOffTime extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string $Day */
+    /** @var string|null $Day */
     protected $Day;
-    /** @var string $Time */
+    /** @var string|null $Time */
     protected $Time;
-    /** @var bool $Available */
+    /** @var bool|null $Available */
     protected $Available;
     // @codingStandardsIgnoreEnd
 

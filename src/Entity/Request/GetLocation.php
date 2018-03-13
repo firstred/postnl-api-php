@@ -44,13 +44,13 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method string  getLocationCode()
- * @method Message getMessage()
- * @method string  getRetailNetworkID()
+ * @method string|null  getLocationCode()
+ * @method Message|null getMessage()
+ * @method string|null  getRetailNetworkID()
  *
- * @method GetLocation setLocationCode(string $location = null)
- * @method GetLocation setMessage(Message $message = null)
- * @method GetLocation setRetailNetworkID(string $id = null)
+ * @method GetLocation setLocationCode(string|null $location = null)
+ * @method GetLocation setMessage(Message|null $message = null)
+ * @method GetLocation setRetailNetworkID(string|null $id = null)
  */
 class GetLocation extends AbstractEntity
 {
@@ -97,11 +97,11 @@ class GetLocation extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string $LocationCode */
+    /** @var string|null $LocationCode */
     protected $LocationCode;
-    /** @var Message $Message */
+    /** @var Message|null $Message */
     protected $Message;
-    /** @var string $RetailNetworkID */
+    /** @var string|null $RetailNetworkID */
     protected $RetailNetworkID;
     // @codingStandardsIgnoreEnd
 

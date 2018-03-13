@@ -40,17 +40,17 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method string getCode()
- * @method string getDescription()
- * @method string getPhaseCode()
- * @method string getPhaseDescription()
- * @method string getTimeStamp()
+ * @method string|null getCode()
+ * @method string|null getDescription()
+ * @method string|null getPhaseCode()
+ * @method string|null getPhaseDescription()
+ * @method string|null getTimeStamp()
  *
- * @method CompleteStatusResponseOldStatus setCode(string $code)
- * @method CompleteStatusResponseOldStatus setDescription(string $description)
- * @method CompleteStatusResponseOldStatus setPhaseCode(string $code)
- * @method CompleteStatusResponseOldStatus setPhaseDescription(string $description)
- * @method CompleteStatusResponseOldStatus setTimeStamp(string $timestamp)
+ * @method CompleteStatusResponseOldStatus setCode(string|null $code = null)
+ * @method CompleteStatusResponseOldStatus setDescription(string|null $description = null)
+ * @method CompleteStatusResponseOldStatus setPhaseCode(string|null $code = null)
+ * @method CompleteStatusResponseOldStatus setPhaseDescription(string|null $description = null)
+ * @method CompleteStatusResponseOldStatus setTimeStamp(string|null $timestamp = null)
  */
 class CompleteStatusResponseOldStatus extends AbstractEntity
 {
@@ -111,15 +111,15 @@ class CompleteStatusResponseOldStatus extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string $Code */
+    /** @var string|null $Code */
     protected $Code;
-    /** @var string $Description */
+    /** @var string|null $Description */
     protected $Description;
-    /** @var string $PhaseCode */
+    /** @var string|null $PhaseCode */
     protected $PhaseCode;
-    /** @var string $PhaseDescription */
+    /** @var string|null $PhaseDescription */
     protected $PhaseDescription;
-    /** @var string $TimeStamp */
+    /** @var string|null $TimeStamp */
     protected $TimeStamp;
     // @codingStandardsIgnoreEnd
 

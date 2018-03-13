@@ -39,11 +39,11 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method string getLatitude()
- * @method string getLongitude()
+ * @method string|null getLatitude()
+ * @method string|null getLongitude()
  *
- * @method Coordinates setLatitude(string $lat)
- * @method Coordinates setLongitude(string $long)
+ * @method Coordinates setLatitude(string|null $lat = null)
+ * @method Coordinates setLongitude(string|null $long = null)
  */
 class Coordinates extends AbstractEntity
 {
@@ -79,9 +79,9 @@ class Coordinates extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string $Latitude */
+    /** @var string|null $Latitude */
     protected $Latitude;
-    /** @var string $Longitude */
+    /** @var string|null $Longitude */
     protected $Longitude;
     // @codingStandardsIgnoreEnd
 

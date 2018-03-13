@@ -40,11 +40,11 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method GetSignatureResponseSignature getGetSignatureResponseSignature()
- * @method Warning[] getWarnings()
+ * @method GetSignatureResponseSignature|null getGetSignatureResponseSignature()
+ * @method Warning[]|null getWarnings()
  *
- * @method Signature setGetSignatureResponseSignature(GetSignatureResponseSignature $signature)
- * @method Signature setWarnings(Warning[] $warnings)
+ * @method Signature setGetSignatureResponseSignature(GetSignatureResponseSignature|null $signature = null)
+ * @method Signature setWarnings(Warning[]|null $warnings = null)
  */
 class Signature extends AbstractEntity
 {
@@ -80,9 +80,9 @@ class Signature extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var GetSignatureResponseSignature $GetSignatureResponseSignature */
+    /** @var GetSignatureResponseSignature|null $GetSignatureResponseSignature */
     protected $GetSignatureResponseSignature;
-    /** @var Warning[] $Warnings */
+    /** @var Warning[]|null $Warnings */
     protected $Warnings;
     // @codingStandardsIgnoreEnd
 

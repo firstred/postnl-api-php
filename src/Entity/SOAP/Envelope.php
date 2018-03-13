@@ -36,11 +36,11 @@ use ThirtyBees\PostNL\Service\LabellingService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method Header getHeader()
- * @method Body   getBody()
+ * @method Header|null getHeader()
+ * @method Body|null   getBody()
  *
- * @method Envelope setHeader(Header $header)
- * @method Envelope setBody(Body $body)
+ * @method Envelope setHeader(Header|null $header = null)
+ * @method Envelope setBody(Body|null $body = null)
  *
  * NOTE: this class has been introduced for deserializing
  */
@@ -82,17 +82,17 @@ class Envelope extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var Header $Header */
+    /** @var Header|null $Header */
     protected $Header;
-    /** @var Body $Body */
+    /** @var Body|null $Body */
     protected $Body;
     // @codingStandardsIgnoreEnd
 
     /**
      * Envelope constructor.
      *
-     * @param Header $header
-     * @param Body   $body
+     * @param Header|null $header
+     * @param Body|null   $body
      */
     public function __construct(Header $header = null, Body $body = null)
     {

@@ -39,15 +39,15 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method string getGroupCount()
- * @method string getGroupSequence()
- * @method string getGroupType()
- * @method string getMainBarcode()
+ * @method string|null getGroupCount()
+ * @method string|null getGroupSequence()
+ * @method string|null getGroupType()
+ * @method string|null getMainBarcode()
  *
- * @method Group setGroupCount(string $groupCount)
- * @method Group setGroupSequence(string $groupSequence)
- * @method Group setGroupType(string $groupType)
- * @method Group setMainBarcode(string $mainBarcode)
+ * @method Group setGroupCount(string|null $groupCount = null)
+ * @method Group setGroupSequence(string|null $groupSequence = null)
+ * @method Group setGroupType(string|null $groupType = null)
+ * @method Group setMainBarcode(string|null $mainBarcode = null)
  */
 class Group extends AbstractEntity
 {
@@ -100,13 +100,13 @@ class Group extends AbstractEntity
     /**
      * Amount of shipments in the group.
      *
-     * @var string $GroupCount
+     * @var string|null $GroupCount
      */
     protected $GroupCount;
     /**
      * Sequence number.
      *
-     * @var string $GroupSequence
+     * @var string|null $GroupSequence
      */
     protected $GroupSequence;
     /**
@@ -118,13 +118,13 @@ class Group extends AbstractEntity
      * - `03`: Multiple parcels in one shipment (multi-colli)
      * - `04`: Single parcel in one shipment
      *
-     * @var string $GroupType
+     * @var string|null $GroupType
      */
     protected $GroupType;
     /**
      * Main barcode for the shipment.
      *
-     * @var string $MainBarcode
+     * @var string|null $MainBarcode
      */
     protected $MainBarcode;
     // @codingStandardsIgnoreEnd
@@ -132,10 +132,10 @@ class Group extends AbstractEntity
     /**
      * Group Constructor.
      *
-     * @param string $groupCount
-     * @param string $groupSequence
-     * @param string $groupType
-     * @param string $mainBarcode
+     * @param string|null $groupCount
+     * @param string|null $groupSequence
+     * @param string|null $groupType
+     * @param string|null $mainBarcode
      */
     public function __construct($groupCount = null, $groupSequence = null, $groupType = null, $mainBarcode = null)
     {

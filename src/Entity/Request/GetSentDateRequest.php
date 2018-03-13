@@ -41,11 +41,11 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method GetSentDate getGetSentDate()
- * @method Message     getMessage()
+ * @method GetSentDate|null getGetSentDate()
+ * @method Message|null     getMessage()
  *
- * @method GetSentDateRequest setGetSentDate(GetSentDate $date)
- * @method GetSentDateRequest setMessage(Message $message)
+ * @method GetSentDateRequest setGetSentDate(GetSentDate|null $date = null)
+ * @method GetSentDateRequest setMessage(Message|null $message = null)
  */
 class GetSentDateRequest extends AbstractEntity
 {
@@ -85,9 +85,9 @@ class GetSentDateRequest extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var GetSentDate $GetSentDate */
+    /** @var GetSentDate|null $GetSentDate */
     protected $GetSentDate;
-    /** @var Message $Message */
+    /** @var Message|null $Message */
     protected $Message;
     // @codingStandardsIgnoreEnd
 

@@ -44,13 +44,13 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method Message    getMessage()
- * @method Customer   getCustomer()
- * @method Shipment   getShipment()
+ * @method Message|null    getMessage()
+ * @method Customer|null   getCustomer()
+ * @method Shipment|null   getShipment()
  *
- * @method CompleteStatus setMessage(Message $message)
- * @method CompleteStatus setCustomer(Customer $customer)
- * @method CompleteStatus setShipment(Shipment $shipment)
+ * @method CompleteStatus setMessage(Message|null $message = null)
+ * @method CompleteStatus setCustomer(Customer|null $customer = null)
+ * @method CompleteStatus setShipment(Shipment|null $shipment = null)
  */
 class CompleteStatus extends AbstractEntity
 {
@@ -97,20 +97,20 @@ class CompleteStatus extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var Message $Message */
+    /** @var Message|null $Message */
     protected $Message;
-    /** @var Customer $Customer */
+    /** @var Customer|null $Customer */
     protected $Customer;
-    /** @var Shipment $Shipment */
+    /** @var Shipment|null $Shipment */
     protected $Shipment;
     // @codingStandardsIgnoreEnd
 
     /**
      * CompleteStatus constructor.
      *
-     * @param Shipment $shipment
-     * @param Customer $customer
-     * @param Message  $message
+     * @param Shipment|null $shipment
+     * @param Customer|null $customer
+     * @param Message|null  $message
      */
     public function __construct(Shipment $shipment = null, Customer $customer = null, Message $message = null)
     {

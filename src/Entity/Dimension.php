@@ -39,17 +39,17 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method string getHeight()
- * @method string getLength()
- * @method string getVolume()
- * @method string getWeight()
- * @method string getWidth()
+ * @method string|null getHeight()
+ * @method string|null getLength()
+ * @method string|null getVolume()
+ * @method string|null getWeight()
+ * @method string|null getWidth()
  *
- * @method Dimension setHeight(string $height)
- * @method Dimension setLength(string $length)
- * @method Dimension setVolume(string $volume)
- * @method Dimension setWeight(string $weight)
- * @method Dimension setWidth(string $width)
+ * @method Dimension setHeight(string|null $height = null)
+ * @method Dimension setLength(string|null $length = null)
+ * @method Dimension setVolume(string|null $volume = null)
+ * @method Dimension setWeight(string|null $weight = null)
+ * @method Dimension setWidth(string|null $width = null)
  */
 class Dimension extends AbstractEntity
 {
@@ -106,15 +106,15 @@ class Dimension extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string $Height */
+    /** @var string|null $Height */
     protected $Height;
-    /** @var string $Length */
+    /** @var string|null $Length */
     protected $Length;
-    /** @var string $Volume */
+    /** @var string|null $Volume */
     protected $Volume;
-    /** @var string $Weight */
+    /** @var string|null $Weight */
     protected $Weight;
-    /** @var string $Width */
+    /** @var string|null $Width */
     protected $Width;
     // @codingStandardsIgnoreEnd
 

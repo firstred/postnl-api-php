@@ -42,21 +42,21 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method string      getBarcode()
- * @method string      getProductCodeDelivery()
- * @method string|null getDownPartnerBarcode()
- * @method string|null getDownPartnerId()
- * @method string|null getDownPartnerLocation()
- * @method Label[]     getLabels()
- * @method Warning[]   getWarnings()
+ * @method string|null    getBarcode()
+ * @method string|null    getProductCodeDelivery()
+ * @method string|null    getDownPartnerBarcode()
+ * @method string|null    getDownPartnerId()
+ * @method string|null    getDownPartnerLocation()
+ * @method Label[]|null   getLabels()
+ * @method Warning[]|null getWarnings()
  *
- * @method MergedLabel setBarcode(string $barcode)
- * @method MergedLabel setProductCodeDelivery(string $productCodeDelivery)
- * @method MergedLabel setDownPartnerBarcode(string|null $downPartnerCode)
- * @method MergedLabel setDownPartnerId(string|null $downPartnerId)
- * @method MergedLabel setDownPartnerLocation(string|null $downPartnerLocation)
- * @method MergedLabel setLabels(Label[] $labels)
- * @method MergedLabel setWarnings(Warning[] $warnings)
+ * @method MergedLabel setBarcode(string|null $barcode = null)
+ * @method MergedLabel setProductCodeDelivery(string|null $productCodeDelivery = null)
+ * @method MergedLabel setDownPartnerBarcode(string|null $downPartnerCode = null)
+ * @method MergedLabel setDownPartnerId(string|null $downPartnerId = null)
+ * @method MergedLabel setDownPartnerLocation(string|null $downPartnerLocation = null)
+ * @method MergedLabel setLabels(Label[]|null $labels = null)
+ * @method MergedLabel setWarnings(Warning[]|null $warnings = null)
  */
 class ResponseShipment extends AbstractEntity
 {
@@ -127,30 +127,30 @@ class ResponseShipment extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string $Barcode */
+    /** @var string|null $Barcode */
     protected $Barcode;
-    /** @var string $DownPartnerBarcode */
+    /** @var string|null $DownPartnerBarcode */
     protected $DownPartnerBarcode;
-    /** @var string $DownPartnerID */
+    /** @var string|null $DownPartnerID */
     protected $DownPartnerID;
-    /** @var string $DownPartnerLocation */
+    /** @var string|null $DownPartnerLocation */
     protected $DownPartnerLocation;
-    /** @var Label[] $Labels */
+    /** @var Label[]|null $Labels */
     protected $Labels;
-    /** @var string $ProductCodeDelivery */
+    /** @var string|null $ProductCodeDelivery */
     protected $ProductCodeDelivery;
-    /** @var Warning[] $Warnings */
+    /** @var Warning[]|null $Warnings */
     protected $Warnings;
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string      $barcode
-     * @param string      $productCodeDelivery
-     * @param Label[]     $labels
-     * @param string|null $downPartnerBarcode
-     * @param string|null $downPartnerId
-     * @param string|null $downPartnerLocation
-     * @param array       $warnings
+     * @param string|null  $barcode
+     * @param string|null  $productCodeDelivery
+     * @param Label[]|null $labels
+     * @param string|null  $downPartnerBarcode
+     * @param string|null  $downPartnerId
+     * @param string|null  $downPartnerLocation
+     * @param array|null   $warnings
      */
     public function __construct(
         $barcode = null,

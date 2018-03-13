@@ -39,15 +39,15 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method string   getDate()
- * @method string   getFrom()
- * @method string   getTo()
- * @method string[] getOptions()
+ * @method string|null   getDate()
+ * @method string|null   getFrom()
+ * @method string|null   getTo()
+ * @method string[]|null getOptions()
  *
- * @method TimeframeTimeFrame setDate(string $date)
- * @method TimeframeTimeFrame setFrom(string $from)
- * @method TimeframeTimeFrame setTo(string $to)
- * @method TimeframeTimeFrame setOptions(string [] $options)
+ * @method TimeframeTimeFrame setDate(string|null $date = null)
+ * @method TimeframeTimeFrame setFrom(string|null $from = null)
+ * @method TimeframeTimeFrame setTo(string|null $to = null)
+ * @method TimeframeTimeFrame setOptions(string[]|null $options = null)
  */
 class TimeframeTimeFrame extends AbstractEntity
 {
@@ -97,21 +97,21 @@ class TimeframeTimeFrame extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string $Date */
+    /** @var string|null $Date */
     protected $Date;
-    /** @var string $From */
+    /** @var string|null $From */
     protected $From;
-    /** @var string[] $Options */
+    /** @var string[]|null $Options */
     protected $Options;
-    /** @var string $To */
+    /** @var string|null $To */
     protected $To;
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string   $date
-     * @param string   $from
-     * @param string   $to
-     * @param string[] $options
+     * @param string|null   $date
+     * @param string|null   $from
+     * @param string|null   $to
+     * @param string[]|null $options
      */
     public function __construct($date = null, $from = null, $to = null, array $options = null)
     {

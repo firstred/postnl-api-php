@@ -41,11 +41,11 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method string   getSentDate()
- * @method string[] getOptions()
+ * @method string|null   getSentDate()
+ * @method string[]|null getOptions()
  *
- * @method GetSentDateResponse setSentDate(string $date)
- * @method GetSentDateResponse setOptions(string[] $options)
+ * @method GetSentDateResponse setSentDate(string|null $date = null)
+ * @method GetSentDateResponse setOptions(string[]|null $options = null)
  */
 class GetSentDateResponse extends AbstractEntity
 {
@@ -85,17 +85,17 @@ class GetSentDateResponse extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string $SentDate */
+    /** @var string|null $SentDate */
     protected $SentDate;
-    /** @var string[] $Options */
+    /** @var string[]|null $Options */
     protected $Options;
     // @codingStandardsIgnoreEnd
 
     /**
      * GetSentDateResponse constructor.
      *
-     * @param string      $date
-     * @param string[] $options
+     * @param string|null      $date
+     * @param string[]|null $options
      */
     public function __construct($date = null, array $options = null)
     {

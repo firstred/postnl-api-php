@@ -40,9 +40,9 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method string getBarcode()
+ * @method string|null getBarcode()
  *
- * @method GenerateBarcodeResponse setBarcode(string $shipments)
+ * @method GenerateBarcodeResponse setBarcode(string|null $shipments = null)
  */
 class GenerateBarcodeResponse extends AbstractEntity
 {
@@ -75,14 +75,14 @@ class GenerateBarcodeResponse extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string $Barcode */
+    /** @var string|null $Barcode */
     protected $Barcode;
     // @codingStandardsIgnoreEnd
 
     /**
      * GenerateBarcodeResponse constructor.
      *
-     * @param string $barcode
+     * @param string|null $barcode
      */
     public function __construct($barcode = null)
     {

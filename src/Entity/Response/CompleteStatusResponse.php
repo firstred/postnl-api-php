@@ -42,9 +42,9 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method string getShipments()
+ * @method string|null getShipments()
  *
- * @method CompleteStatusResponse setShipments(Shipment[] $shipments)
+ * @method CompleteStatusResponse setShipments(Shipment[] $shipments = null)
  */
 class CompleteStatusResponse extends AbstractEntity
 {
@@ -77,14 +77,14 @@ class CompleteStatusResponse extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var array $Shipments */
+    /** @var array|null $Shipments */
     protected $Shipments;
     // @codingStandardsIgnoreEnd
 
     /**
      * CompleteStatusResponse constructor.
      *
-     * @param array $shipments
+     * @param array|null $shipments
      */
     public function __construct(array $shipments = null)
     {

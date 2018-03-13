@@ -39,13 +39,13 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method string getContent()
- * @method string getContentType()
- * @method string getLabelType()
+ * @method string|null getContent()
+ * @method string|null getContentType()
+ * @method string|null getLabelType()
  *
- * @method Label setContent(string $content)
- * @method Label setContentType(string $contentType)
- * @method Label setLabelType(string $labelType)
+ * @method Label setContent(string|null $content = null)
+ * @method Label setContentType(string|null $contentType = null)
+ * @method Label setLabelType(string|null $labelType = null)
  */
 class Label extends AbstractEntity
 {
@@ -92,21 +92,21 @@ class Label extends AbstractEntity
     ];
     // @codingStandardsIgnoreStart
     /**
-     * @var string $Content
+     * @var string|null $Content
      *
      * Base 64 encoded content
      */
     protected $Content;
-    /** @var string $Contenttype */
+    /** @var string|null $Contenttype */
     protected $Contenttype;
-    /** @var string $Labeltype */
+    /** @var string|null $Labeltype */
     protected $Labeltype;
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string $content
-     * @param string $contentType
-     * @param string $labelType
+     * @param string|null $content
+     * @param string|null $contentType
+     * @param string|null $labelType
      */
     public function __construct($content = null, $contentType = null, $labelType = null)
     {

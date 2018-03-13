@@ -39,13 +39,13 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity\Message
  *
- * @method string getMessageID()
- * @method string getMessageTimeStamp()
- * @method string getPrinterType()
+ * @method string|null getMessageID()
+ * @method string|null getMessageTimeStamp()
+ * @method string|null getPrinterType()
  *
- * @method Message setMessageID(string $mid)
- * @method Message setMessageTimeStamp(string $timestamp)
- * @method Message setPrinterType(string $printerType)
+ * @method Message setMessageID(string|null $mid = null)
+ * @method Message setMessageTimeStamp(string|null $timestamp = null)
+ * @method Message setPrinterType(string|null $printerType = null)
  */
 class LabellingMessage extends Message
 {
@@ -88,14 +88,14 @@ class LabellingMessage extends Message
         ],
     ];
     /**
-     * @var string $Printertype
+     * @var string|null $Printertype
      */
     protected $Printertype;
 
     /**
-     * @param string $printerType
-     * @param string $mid
-     * @param string $timestamp
+     * @param string|null $printerType
+     * @param string|null $mid
+     * @param string|null $timestamp
      */
     public function __construct(
         $printerType = 'GraphicFile|PDF',

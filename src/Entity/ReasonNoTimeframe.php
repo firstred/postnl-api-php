@@ -40,19 +40,19 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method string   getCode()
- * @method string   getDate()
- * @method string   getDescription()
- * @method string[] getOptions()
- * @method string   getFrom()
- * @method string   getTo()
+ * @method string|null   getCode()
+ * @method string|null   getDate()
+ * @method string|null   getDescription()
+ * @method string[]|null getOptions()
+ * @method string|null   getFrom()
+ * @method string|null   getTo()
  *
- * @method ReasonNoTimeframe setCode(string $code)
- * @method ReasonNoTimeframe setDate(string $date)
- * @method ReasonNoTimeframe setDescription(string $desc)
- * @method ReasonNoTimeframe setOptions(string[] $options)
- * @method ReasonNoTimeframe setFrom(string $from)
- * @method ReasonNoTimeframe setTo(string $to)
+ * @method ReasonNoTimeframe setCode(string|null $code = null)
+ * @method ReasonNoTimeframe setDate(string|null $date = null)
+ * @method ReasonNoTimeframe setDescription(string|null $desc = null)
+ * @method ReasonNoTimeframe setOptions(string[]|null $options = null)
+ * @method ReasonNoTimeframe setFrom(string|null $from = null)
+ * @method ReasonNoTimeframe setTo(string|null $to = null)
  */
 class ReasonNoTimeframe extends AbstractEntity
 {
@@ -116,27 +116,27 @@ class ReasonNoTimeframe extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string $Code */
+    /** @var string|null $Code */
     protected $Code;
-    /** @var string $Date */
+    /** @var string|null $Date */
     protected $Date;
-    /** @var string $Description */
+    /** @var string|null $Description */
     protected $Description;
-    /** @var string[] $Options */
+    /** @var string[]|null $Options */
     protected $Options;
-    /** @var string $From */
+    /** @var string|null $From */
     protected $From;
-    /** @var string $To */
+    /** @var string|null $To */
     protected $To;
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string   $code
-     * @param string   $date
-     * @param string   $desc
-     * @param string[] $options
-     * @param string   $from
-     * @param string   $to
+     * @param string|null   $code
+     * @param string|null   $date
+     * @param string|null   $desc
+     * @param string[]|null $options
+     * @param string|null   $from
+     * @param string|null   $to
      */
     public function __construct(
         $code = null,

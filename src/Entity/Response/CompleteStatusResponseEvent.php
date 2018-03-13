@@ -40,21 +40,21 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method string getCode()
- * @method string getDescription()
- * @method string getDestinationLocationCode()
- * @method string getLocationCode()
- * @method string getRouteCode()
- * @method string getRouteName()
- * @method string getTimeStamp()
+ * @method string|null getCode()
+ * @method string|null getDescription()
+ * @method string|null getDestinationLocationCode()
+ * @method string|null getLocationCode()
+ * @method string|null getRouteCode()
+ * @method string|null getRouteName()
+ * @method string|null getTimeStamp()
  *
- * @method CompleteStatusResponseEvent setCode(string $code)
- * @method CompleteStatusResponseEvent setDescription(string $description)
- * @method CompleteStatusResponseEvent setDestinationLocationCode(string $code)
- * @method CompleteStatusResponseEvent setLocationCode(string $code)
- * @method CompleteStatusResponseEvent setRouteCode(string $code)
- * @method CompleteStatusResponseEvent setRouteName(string $name)
- * @method CompleteStatusResponseEvent setTimeStamp(string $timestamp)
+ * @method CompleteStatusResponseEvent setCode(string|null $code = null)
+ * @method CompleteStatusResponseEvent setDescription(string|null $description = null)
+ * @method CompleteStatusResponseEvent setDestinationLocationCode(string|null $code = null)
+ * @method CompleteStatusResponseEvent setLocationCode(string|null $code = null)
+ * @method CompleteStatusResponseEvent setRouteCode(string|null $code = null)
+ * @method CompleteStatusResponseEvent setRouteName(string|null $name = null)
+ * @method CompleteStatusResponseEvent setTimeStamp(string|null $timestamp = null)
  */
 class CompleteStatusResponseEvent extends AbstractEntity
 {
@@ -129,32 +129,32 @@ class CompleteStatusResponseEvent extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string $Code */
+    /** @var string|null $Code */
     protected $Code;
-    /** @var string $Description */
+    /** @var string|null $Description */
     protected $Description;
-    /** @var string $DestinationLocationCode */
+    /** @var string|null $DestinationLocationCode */
     protected $DestinationLocationCode;
-    /** @var string $LocationCode */
+    /** @var string|null $LocationCode */
     protected $LocationCode;
-    /** @var string $RouteCode */
+    /** @var string|null $RouteCode */
     protected $RouteCode;
-    /** @var string $RouteName */
+    /** @var string|null $RouteName */
     protected $RouteName;
-    /** @var string $TimeStamp */
+    /** @var string|null $TimeStamp */
     protected $TimeStamp;
     // @codingStandardsIgnoreEnd
 
     /**
      * CompleteStatusResponseEvent constructor.
      *
-     * @param string $code
-     * @param string $description
-     * @param string $destinationLocationCode
-     * @param string $locationCode
-     * @param string $routeCode
-     * @param string $routeName
-     * @param string $timeStamp
+     * @param string|null $code
+     * @param string|null $description
+     * @param string|null $destinationLocationCode
+     * @param string|null $locationCode
+     * @param string|null $routeCode
+     * @param string|null $routeName
+     * @param string|null $timeStamp
      */
     public function __construct(
         $code = null,

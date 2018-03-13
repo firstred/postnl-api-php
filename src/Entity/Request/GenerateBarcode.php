@@ -43,13 +43,13 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method Customer getCustomer()
- * @method Message  getMessage()
- * @method Barcode  getBarcode()
+ * @method Customer|null getCustomer()
+ * @method Message|null  getMessage()
+ * @method Barcode|null  getBarcode()
  *
- * @method GenerateBarcode setCustomer(Customer $customer)
- * @method GenerateBarcode setMessage(Message $message)
- * @method GenerateBarcode setBarcode(Barcode $shipments)
+ * @method GenerateBarcode setCustomer(Customer|null $customer = null)
+ * @method GenerateBarcode setMessage(Message|null $message = null)
+ * @method GenerateBarcode setBarcode(Barcode|null $shipments = null)
  */
 class GenerateBarcode extends AbstractEntity
 {
@@ -96,20 +96,20 @@ class GenerateBarcode extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var Message $Message */
+    /** @var Message|null $Message */
     protected $Message;
-    /** @var Customer $Customer */
+    /** @var Customer|null $Customer */
     protected $Customer;
-    /** @var Barcode $Barcode */
+    /** @var Barcode|null $Barcode */
     protected $Barcode;
     // @codingStandardsIgnoreEnd
 
     /**
      * GenerateBarcode constructor.
      *
-     * @param Barcode      $barcode
-     * @param Customer     $customer
-     * @param Message|null $message
+     * @param Barcode|null  $barcode
+     * @param Customer|null $customer
+     * @param Message|null  $message
      */
     public function __construct(Barcode $barcode = null, Customer $customer = null, Message $message = null)
     {

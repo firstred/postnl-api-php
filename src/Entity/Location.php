@@ -40,44 +40,44 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method string               getPostalcode()
- * @method Coordinates          getCoordinates()
- * @method CoordinatesNorthWest getCoordinatesNorthWest()
- * @method CoordinatesSouthEast getCoordinatesSouthEast()
- * @method string               getCity()
- * @method string               getStreet()
- * @method string               getHouseNr()
- * @method string               getHouseNrExt()
- * @method string               getAllowSundaySorting()
- * @method string               getDeliveryDate()
- * @method string[]             getDeliveryOptions()
- * @method string               getOpeningTime()
- * @method string[]             getOptions()
- * @method string               getLocationCode()
- * @method string               getSaleschannel()
- * @method string               getTerminalType()
- * @method string               getRetailNetworkID()
- * @method string               getDownPartnerID()
- * @method string               getDownPartnerLocation()
+ * @method string|null               getPostalcode()
+ * @method Coordinates|null          getCoordinates()
+ * @method CoordinatesNorthWest|null getCoordinatesNorthWest()
+ * @method CoordinatesSouthEast|null getCoordinatesSouthEast()
+ * @method string|null               getCity()
+ * @method string|null               getStreet()
+ * @method string|null               getHouseNr()
+ * @method string|null               getHouseNrExt()
+ * @method string|null               getAllowSundaySorting()
+ * @method string|null               getDeliveryDate()
+ * @method string[]|null             getDeliveryOptions()
+ * @method string|null               getOpeningTime()
+ * @method string[]|null             getOptions()
+ * @method string|null               getLocationCode()
+ * @method string|null               getSaleschannel()
+ * @method string|null               getTerminalType()
+ * @method string|null               getRetailNetworkID()
+ * @method string|null               getDownPartnerID()
+ * @method string|null               getDownPartnerLocation()
  *
- * @method Location setCoordinates(Coordinates $coordinates)
- * @method Location setCoordinatesNorthWest(CoordinatesNorthWest $coordinates)
- * @method Location setCoordinatesSouthEast(CoordinatesSouthEast $coordinates)
- * @method Location setCity(string $city)
- * @method Location setStreet(string $street)
- * @method Location setHouseNr(string $houseNr)
- * @method Location setHouseNrExt(string $houseNrExt)
- * @method Location setAllowSundaySorting(string $sundaySorting)
- * @method Location setDeliveryDate(string $deliveryDate)
- * @method Location setDeliveryOptions(string[] $deliveryOptions)
- * @method Location setOpeningTime(string $openingTime)
- * @method Location setOptions(string[] $options)
- * @method Location setLocationCode(string $code)
- * @method Location setSaleschannel(string $channel = null)
- * @method Location setTerminalType(string $type = null)
- * @method Location setRetailNetworkID(string $id)
- * @method Location setDownPartnerID(string $id)
- * @method Location setDownPartnerLocation(string $location)
+ * @method Location setCoordinates(Coordinates|null $coordinates = null)
+ * @method Location setCoordinatesNorthWest(CoordinatesNorthWest|null $coordinates = null)
+ * @method Location setCoordinatesSouthEast(CoordinatesSouthEast|null $coordinates = null)
+ * @method Location setCity(string|null $city = null)
+ * @method Location setStreet(string|null $street = null)
+ * @method Location setHouseNr(string|null $houseNr = null)
+ * @method Location setHouseNrExt(string|null $houseNrExt = null)
+ * @method Location setAllowSundaySorting(string|null $sundaySorting = null)
+ * @method Location setDeliveryDate(string|null $deliveryDate = null)
+ * @method Location setDeliveryOptions(string[]|null $deliveryOptions = null)
+ * @method Location setOpeningTime(string|null $openingTime = null)
+ * @method Location setOptions(string[]|null $options = null)
+ * @method Location setLocationCode(string|null $code = null)
+ * @method Location setSaleschannel(string|null $channel = null)
+ * @method Location setTerminalType(string|null $type = null)
+ * @method Location setRetailNetworkID(string|null $id = null)
+ * @method Location setDownPartnerID(string|null $id = null)
+ * @method Location setDownPartnerLocation(string|null $location = null)
  */
 class Location extends AbstractEntity
 {
@@ -232,65 +232,65 @@ class Location extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string $AllowSundaySorting */
+    /** @var string|null $AllowSundaySorting */
     protected $AllowSundaySorting;
-    /** @var string $DeliveryDate */
+    /** @var string|null $DeliveryDate */
     protected $DeliveryDate;
-    /** @var string[] $DeliveryOptions */
+    /** @var string[]|null $DeliveryOptions */
     protected $DeliveryOptions;
-    /** @var string $OpeningTime */
+    /** @var string|null $OpeningTime */
     protected $OpeningTime;
-    /** @var string[] $Options */
+    /** @var string[]|null $Options */
     protected $Options;
-    /** @var string $City */
+    /** @var string|null $City */
     protected $City;
-    /** @var string $HouseNr */
+    /** @var string|null $HouseNr */
     protected $HouseNr;
-    /** @var string $HouseNrExt */
+    /** @var string|null $HouseNrExt */
     protected $HouseNrExt;
-    /** @var string $Postalcode */
+    /** @var string|null $Postalcode */
     protected $Postalcode;
-    /** @var string $Street */
+    /** @var string|null $Street */
     protected $Street;
-    /** @var Coordinates $Coordinates */
+    /** @var Coordinates|null $Coordinates */
     protected $Coordinates;
-    /** @var CoordinatesNorthWest $CoordinatesNorthWest */
+    /** @var CoordinatesNorthWest|null $CoordinatesNorthWest */
     protected $CoordinatesNorthWest;
-    /** @var CoordinatesSouthEast $CoordinatesSouthEast */
+    /** @var CoordinatesSouthEast|null $CoordinatesSouthEast */
     protected $CoordinatesSouthEast;
-    /** @var string $LocationCode */
+    /** @var string|null $LocationCode */
     protected $LocationCode;
-    /** @var string $Saleschannel */
+    /** @var string|null $Saleschannel */
     protected $Saleschannel;
-    /** @var string $TerminalType */
+    /** @var string|null $TerminalType */
     protected $TerminalType;
-    /** @var string $RetailNetworkID */
+    /** @var string|null $RetailNetworkID */
     protected $RetailNetworkID;
-    /** @var string $DownPartnerID */
+    /** @var string|null $DownPartnerID */
     protected $DownPartnerID;
-    /** @var string $DownPartnerLocation */
+    /** @var string|null $DownPartnerLocation */
     protected $DownPartnerLocation;
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string               $zipcode
-     * @param string               $allowSundaySorting
-     * @param string               $deliveryDate
-     * @param array                $deliveryOptions
-     * @param array                $options
-     * @param Coordinates          $coordinates
-     * @param CoordinatesNorthWest $coordinatesNW
-     * @param CoordinatesSouthEast $coordinatesSE
-     * @param string               $city
-     * @param string               $street
-     * @param string               $houseNr
-     * @param string               $houseNrExt
-     * @param string               $locationCode
-     * @param string               $saleschannel
-     * @param string               $terminalType
-     * @param string               $retailNetworkId
-     * @param string               $downPartnerID
-     * @param string               $downPartnerLocation
+     * @param string|null               $zipcode
+     * @param string|null               $allowSundaySorting
+     * @param string|null               $deliveryDate
+     * @param array|null                $deliveryOptions
+     * @param array|null                $options
+     * @param Coordinates|null          $coordinates
+     * @param CoordinatesNorthWest|null $coordinatesNW
+     * @param CoordinatesSouthEast|null $coordinatesSE
+     * @param string|null               $city
+     * @param string|null               $street
+     * @param string|null               $houseNr
+     * @param string|null               $houseNrExt
+     * @param string|null               $locationCode
+     * @param string|null               $saleschannel
+     * @param string|null               $terminalType
+     * @param string|null               $retailNetworkId
+     * @param string|null               $downPartnerID
+     * @param string|null               $downPartnerLocation
      */
     public function __construct(
         $zipcode = null,
@@ -337,7 +337,7 @@ class Location extends AbstractEntity
     /**
      * Set the postcode
      *
-     * @param string $postcode
+     * @param string|null $postcode
      *
      * @return Location
      */

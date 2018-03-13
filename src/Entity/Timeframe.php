@@ -41,34 +41,34 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method string      getCity()
- * @method string      getCountryCode()
- * @method string      getDate()
- * @method string      getEndDate()
- * @method string      getHouseNr()
- * @method string      getHouseNrExt()
- * @method string[]    getOptions()
- * @method string      getPostalCode()
- * @method string      getStartDate()
- * @method string      getStreet()
- * @method string      getSundaySorting()
- * @method string      getInterval()
- * @method string      getTimeframeRange()
- * @method Timeframe[] getTimeframes()
+ * @method string|null      getCity()
+ * @method string|null      getCountryCode()
+ * @method string|null      getDate()
+ * @method string|null      getEndDate()
+ * @method string|null      getHouseNr()
+ * @method string|null      getHouseNrExt()
+ * @method string[]|null    getOptions()
+ * @method string|null      getPostalCode()
+ * @method string|null      getStartDate()
+ * @method string|null      getStreet()
+ * @method string|null      getSundaySorting()
+ * @method string|null      getInterval()
+ * @method string|null      getTimeframeRange()
+ * @method Timeframe[]|null getTimeframes()
  *
- * @method Timeframe setCity(string $city)
- * @method Timeframe setCountryCode(string $code)
- * @method Timeframe setDate(string $date)
- * @method Timeframe setEndDate(string $date)
- * @method Timeframe setHouseNr(string $houseNr)
- * @method Timeframe setHouseNrExt(string $houseNrExt)
- * @method Timeframe setOptions(string[] $options)
- * @method Timeframe setStartDate(string $date)
- * @method Timeframe setStreet(string $street)
- * @method Timeframe setSundaySorting(string $sunday)
- * @method Timeframe setInterval(string $interval)
- * @method Timeframe setTimeframeRange(string $range)
- * @method Timeframe setTimeframes(Timeframe[] $timeframes)
+ * @method Timeframe setCity(string|null $city = null)
+ * @method Timeframe setCountryCode(string|null $code = null)
+ * @method Timeframe setDate(string|null $date = null)
+ * @method Timeframe setEndDate(string|null $date = null)
+ * @method Timeframe setHouseNr(string|null $houseNr = null)
+ * @method Timeframe setHouseNrExt(string|null $houseNrExt = null)
+ * @method Timeframe setOptions(string[]|null $options = null)
+ * @method Timeframe setStartDate(string|null $date = null)
+ * @method Timeframe setStreet(string|null $street = null)
+ * @method Timeframe setSundaySorting(string|null $sunday = null)
+ * @method Timeframe setInterval(string|null $interval = null)
+ * @method Timeframe setTimeframeRange(string|null $range = null)
+ * @method Timeframe setTimeframes(Timeframe[]|null $timeframes = null)
  */
 class Timeframe extends AbstractEntity
 {
@@ -188,52 +188,52 @@ class Timeframe extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string $City */
+    /** @var string|null $City */
     protected $City;
-    /** @var string $CountryCode */
+    /** @var string|null $CountryCode */
     protected $CountryCode;
-    /** @var string $Date */
+    /** @var string|null $Date */
     protected $Date;
-    /** @var string $EndDate */
+    /** @var string|null $EndDate */
     protected $EndDate;
-    /** @var string $HouseNr */
+    /** @var string|null $HouseNr */
     protected $HouseNr;
-    /** @var string $HouseNrExt */
+    /** @var string|null $HouseNrExt */
     protected $HouseNrExt;
-    /** @var string[] $Options */
+    /** @var string[]|null $Options */
     protected $Options;
-    /** @var string $PostalCode */
+    /** @var string|null $PostalCode */
     protected $PostalCode;
-    /** @var string $StartDate */
+    /** @var string|null $StartDate */
     protected $StartDate;
-    /** @var string $Street */
+    /** @var string|null $Street */
     protected $Street;
-    /** @var string $SundaySorting */
+    /** @var string|null $SundaySorting */
     protected $SundaySorting;
-    /** @var string $Interval */
+    /** @var string|null $Interval */
     protected $Interval;
-    /** @var string $TimeframeRange */
+    /** @var string|null $TimeframeRange */
     protected $TimeframeRange;
-    /** @var TimeframeTimeFrame[]|Timeframe[] $Timeframes */
+    /** @var TimeframeTimeFrame[]|Timeframe[]|null $Timeframes */
     protected $Timeframes;
     // @codingStandardsIgnoreEnd
 
     /**
      * Timeframe constructor.
      *
-     * @param string|null $city
-     * @param string|null $countryCode
-     * @param string|null $date
-     * @param string|null $endDate
-     * @param string|null $houseNr
-     * @param string|null $houseNrExt
-     * @param array       $options
-     * @param string|null $postalCode
-     * @param string|null $street
-     * @param string      $sundaySorting
-     * @param string      $interval
-     * @param string      $range
-     * @param Timeframe[] $timeframes
+     * @param string|null      $city
+     * @param string|null      $countryCode
+     * @param string|null      $date
+     * @param string|null      $endDate
+     * @param string|null      $houseNr
+     * @param string|null      $houseNrExt
+     * @param array|null       $options
+     * @param string|null      $postalCode
+     * @param string|null      $street
+     * @param string|null      $sundaySorting
+     * @param string|null      $interval
+     * @param string|null      $range
+     * @param Timeframe[]|null $timeframes
      */
     public function __construct(
         $city = null,
@@ -270,7 +270,7 @@ class Timeframe extends AbstractEntity
     /**
      * Set the postcode
      *
-     * @param string $postcode
+     * @param string|null $postcode
      *
      * @return $this
      */

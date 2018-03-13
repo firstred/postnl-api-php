@@ -39,11 +39,11 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method string getCharacteristic()
- * @method string getOption()
+ * @method string|null getCharacteristic()
+ * @method string|null getOption()
  *
- * @method ProductOption setCharacteristic(string $characteristic)
- * @method ProductOption setOption(string $option)
+ * @method ProductOption setCharacteristic(string|null $characteristic = null)
+ * @method ProductOption setOption(string|null $option = null)
  */
 class ProductOption extends AbstractEntity
 {
@@ -79,15 +79,15 @@ class ProductOption extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string $Characteristic */
+    /** @var string|null $Characteristic */
     protected $Characteristic;
-    /** @var string $Option */
+    /** @var string|null $Option */
     protected $Option;
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string $characteristic
-     * @param string $option
+     * @param string|null $characteristic
+     * @param string|null $option
      */
     public function __construct($characteristic = null, $option = null)
     {

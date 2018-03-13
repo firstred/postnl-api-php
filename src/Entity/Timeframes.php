@@ -39,11 +39,11 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method Timeframe[] getTimeframess()
- * @method TimeframeTimeFrame[] getTimeframeTimeFrame()
+ * @method Timeframe[]|null getTimeframess()
+ * @method TimeframeTimeFrame[]|null getTimeframeTimeFrame()
  *
- * @method Timeframes setTimeframes(Timeframe[] $timeframes)
- * @method Timeframes setTimeframeTimeFrames(TimeframeTimeFrame[] $timeframes)
+ * @method Timeframes setTimeframes(Timeframe[]|null $timeframes = null)
+ * @method Timeframes setTimeframeTimeFrames(TimeframeTimeFrame[]|null $timeframes = null)
  */
 class Timeframes extends AbstractEntity
 {
@@ -79,9 +79,9 @@ class Timeframes extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var Timeframe[] $Timeframes */
+    /** @var Timeframe[]|null $Timeframes */
     protected $Timeframes;
-    /** @var TimeframeTimeFrame[] $TimeframeTimeFrames */
+    /** @var TimeframeTimeFrame[]|null $TimeframeTimeFrames */
     protected $TimeframeTimeFrames;
     // @codingStandardsIgnoreEnd
 

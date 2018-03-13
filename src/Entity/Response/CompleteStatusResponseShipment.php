@@ -51,37 +51,37 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method Address[]                       getAddresses()
- * @method Amount[]                        getAmounts()
- * @method Barcode                         getBarcode()
- * @method Customer                        getCustomer()
- * @method string                          getDeliveryDate()
- * @method Dimension                       getDimension()
- * @method CompleteStatusResponseEvent[]   getEvents()
- * @method Expectation                     getExpectation()
- * @method Group[]                         getGroups()
- * @method CompleteStatusResponseOldStatus getOldStatuses()
- * @method string                          getProductCode()
- * @method ProductOption[]                 getProductOptions()
- * @method string                          getReference()
- * @method Status                          getStatus()
- * @method Warning[]                       getWarnings()
+ * @method Address[]|null                       getAddresses()
+ * @method Amount[]|null                        getAmounts()
+ * @method Barcode|null                         getBarcode()
+ * @method Customer|null                        getCustomer()
+ * @method string|null                          getDeliveryDate()
+ * @method Dimension|null                       getDimension()
+ * @method CompleteStatusResponseEvent[]|null   getEvents()
+ * @method Expectation|null                     getExpectation()
+ * @method Group[]|null                         getGroups()
+ * @method CompleteStatusResponseOldStatus|null getOldStatuses()
+ * @method string|null                          getProductCode()
+ * @method ProductOption[]|null                 getProductOptions()
+ * @method string|null                          getReference()
+ * @method Status|null                          getStatus()
+ * @method Warning[]|null                       getWarnings()
  *
- * @method CompleteStatusResponseShipment setAddresses(Address [] $addresses = null)
- * @method CompleteStatusResponseShipment setAmounts(Amount [] $amounts = null)
- * @method CompleteStatusResponseShipment setBarcode(string $barcode)
- * @method CompleteStatusResponseShipment setCustomer(Customer $customer = null)
- * @method CompleteStatusResponseShipment setDeliveryDate(string $date)
- * @method CompleteStatusResponseShipment setDimension(Dimension $dimension)
- * @method CompleteStatusResponseShipment setEvents(CompleteStatusResponseEvent [] $events = null)
- * @method CompleteStatusResponseShipment setExpectation(Expectation $expectation)
- * @method CompleteStatusResponseShipment setGroups(Group [] $groups = null)
- * @method CompleteStatusResponseShipment setOldStatuses(CompleteStatusResponseOldStatus $oldStatuses = null)
- * @method CompleteStatusResponseShipment setProductCode(string $productCode)
- * @method CompleteStatusResponseShipment setProductOptions(ProductOption [] $options = null)
- * @method CompleteStatusResponseShipment setReference(string $reference)
- * @method CompleteStatusResponseShipment setStatus(Status $status)
- * @method CompleteStatusResponseShipment setWarnings(Warning [] $warnings = null)
+ * @method CompleteStatusResponseShipment setAddresses(Address[]|null $addresses = null)
+ * @method CompleteStatusResponseShipment setAmounts(Amount[]|null $amounts = null)
+ * @method CompleteStatusResponseShipment setBarcode(string|null $barcode = null)
+ * @method CompleteStatusResponseShipment setCustomer(Customer|null $customer = null)
+ * @method CompleteStatusResponseShipment setDeliveryDate(string|null $date = null)
+ * @method CompleteStatusResponseShipment setDimension(Dimension|null $dimension = null)
+ * @method CompleteStatusResponseShipment setEvents(CompleteStatusResponseEvent[]|null $events = null)
+ * @method CompleteStatusResponseShipment setExpectation(Expectation|null $expectation = null)
+ * @method CompleteStatusResponseShipment setGroups(Group[]|null $groups = null)
+ * @method CompleteStatusResponseShipment setOldStatuses(CompleteStatusResponseOldStatus|null $oldStatuses = null)
+ * @method CompleteStatusResponseShipment setProductCode(string|null $productCode = null)
+ * @method CompleteStatusResponseShipment setProductOptions(ProductOption[]|null $options = null)
+ * @method CompleteStatusResponseShipment setReference(string|null $reference = null)
+ * @method CompleteStatusResponseShipment setStatus(Status|null $status = null)
+ * @method CompleteStatusResponseShipment setWarnings(Warning[]|null $warnings = null)
  */
 class CompleteStatusResponseShipment extends AbstractEntity
 {
@@ -208,35 +208,35 @@ class CompleteStatusResponseShipment extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var Address[] $Addresses */
+    /** @var Address[]|null $Addresses */
     protected $Addresses;
-    /** @var Amount[] $Amounts */
+    /** @var Amount[]|null $Amounts */
     protected $Amounts;
-    /** @var Barcode $Barcode */
+    /** @var Barcode|null $Barcode */
     protected $Barcode;
-    /** @var Customer $customer */
+    /** @var Customer|null $customer */
     protected $Customer;
-    /** @var string $DeliveryDate */
+    /** @var string|null $DeliveryDate */
     protected $DeliveryDate;
-    /** @var Dimension Dimension */
+    /** @var Dimension|null Dimension */
     protected $Dimension;
-    /** @var CompleteStatusResponseEvent[] $Events */
+    /** @var CompleteStatusResponseEvent[]|null $Events */
     protected $Events;
-    /** @var Expectation $Expectation */
+    /** @var Expectation|null $Expectation */
     protected $Expectation;
-    /** @var Group[] $Groups */
+    /** @var Group[]|null $Groups */
     protected $Groups;
-    /** @var CompleteStatusResponseOldStatus[] $OldStatuses */
+    /** @var CompleteStatusResponseOldStatus[]|null $OldStatuses */
     protected $OldStatuses;
-    /** @var string $ProductCode */
+    /** @var string|null $ProductCode */
     protected $ProductCode;
-    /** @var ProductOption[] $ProductOptions */
+    /** @var ProductOption[]|null $ProductOptions */
     protected $ProductOptions;
-    /** @var string $Reference */
+    /** @var string|null $Reference */
     protected $Reference;
-    /** @var Status $Status */
+    /** @var Status|null $Status */
     protected $Status;
-    /** @var Warning[] $Warnings */
+    /** @var Warning[]|null $Warnings */
     protected $Warnings;
     // @codingStandardsIgnoreEnd
 

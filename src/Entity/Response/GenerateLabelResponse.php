@@ -40,18 +40,18 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method MergedLabel[]      getMergedLabels()
- * @method ResponseShipment[] getResponseShipments()
+ * @method MergedLabel[]|null      getMergedLabels()
+ * @method ResponseShipment[]|null getResponseShipments()
  *
- * @method GenerateLabelResponse setMergedLabels(MergedLabel[] $mergedLabels)
- * @method GenerateLabelResponse setResponseShipments(ResponseShipment[] $responseShipment)
+ * @method GenerateLabelResponse setMergedLabels(MergedLabel[]|null $mergedLabels = null)
+ * @method GenerateLabelResponse setResponseShipments(ResponseShipment[]|null $responseShipment = null)
  */
 class GenerateLabelResponse extends AbstractEntity
 {
     /**
      * Default properties and namespaces for the SOAP API
      *
-     * @var array $defaultProperties
+     * @var array|null $defaultProperties
      */
     public static $defaultProperties = [
         'Barcode'        => [
@@ -84,17 +84,17 @@ class GenerateLabelResponse extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var MergedLabel[] $MergedLabels */
+    /** @var MergedLabel[]|null $MergedLabels */
     protected $MergedLabels;
-    /** @var ResponseShipment[] $ResponseShipments */
+    /** @var ResponseShipment[]|null $ResponseShipments */
     protected $ResponseShipments;
     // @codingStandardsIgnoreEnd
 
     /**
      * GenerateLabelResponse constructor.
      *
-     * @param MergedLabel[]      $mergedLabels
-     * @param ResponseShipment[] $responseShipments
+     * @param MergedLabel[]|null      $mergedLabels
+     * @param ResponseShipment[]|null $responseShipments
      */
     public function __construct(array $mergedLabels = null, array $responseShipments = null)
     {

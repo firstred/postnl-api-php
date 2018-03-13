@@ -39,23 +39,23 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method string getAccountName()
- * @method string getAmountType()
- * @method string getBIC()
- * @method string getCurrency()
- * @method string getIBAN()
- * @method string getReference()
- * @method string getTransactionNumber()
- * @method string getValue()
+ * @method string|null getAccountName()
+ * @method string|null getAmountType()
+ * @method string|null getBIC()
+ * @method string|null getCurrency()
+ * @method string|null getIBAN()
+ * @method string|null getReference()
+ * @method string|null getTransactionNumber()
+ * @method string|null getValue()
  *
- * @method Amount setAccountName(string $accountName)
- * @method Amount setAmountType(string $amountType)
- * @method Amount setBIC(string $bic)
- * @method Amount setCurrency(string $currency)
- * @method Amount setIBAN(string $iban)
- * @method Amount setReference(string $reference)
- * @method Amount setTransactionNumber(string $transactionNr)
- * @method Amount setValue(string $value)
+ * @method Amount setAccountName(string|null $accountName = null)
+ * @method Amount setAmountType(string|null $amountType = null)
+ * @method Amount setBIC(string|null $bic = null)
+ * @method Amount setCurrency(string|null $currency = null)
+ * @method Amount setIBAN(string|null $iban = null)
+ * @method Amount setReference(string|null $reference = null)
+ * @method Amount setTransactionNumber(string|null $transactionNr = null)
+ * @method Amount setValue(string|null $value = null)
  */
 class Amount extends AbstractEntity
 {
@@ -133,33 +133,33 @@ class Amount extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string $AccountName */
+    /** @var string|null $AccountName */
     protected $AccountName;
-    /** @var string $AmountType */
+    /** @var string|null $AmountType */
     protected $AmountType;
-    /** @var string $BIC */
+    /** @var string|null $BIC */
     protected $BIC;
-    /** @var string $Currency */
+    /** @var string|null $Currency */
     protected $Currency;
-    /** @var string $IBAN */
+    /** @var string|null $IBAN */
     protected $IBAN;
-    /** @var string $Reference */
+    /** @var string|null $Reference */
     protected $Reference;
-    /** @var string $TransactionNumber */
+    /** @var string|null $TransactionNumber */
     protected $TransactionNumber;
-    /** @var string $Value */
+    /** @var string|null $Value */
     protected $Value;
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string $accountName
-     * @param string $amountType
-     * @param string $bic
-     * @param string $currency
-     * @param string $iban
-     * @param string $reference
-     * @param string $transactionNumber
-     * @param string $value
+     * @param string|null $accountName
+     * @param string|null $amountType
+     * @param string|null $bic
+     * @param string|null $currency
+     * @param string|null $iban
+     * @param string|null $reference
+     * @param string|null $transactionNumber
+     * @param string|null $value
      */
     public function __construct(
         $accountName = null,

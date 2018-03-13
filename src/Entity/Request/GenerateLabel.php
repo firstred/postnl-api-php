@@ -44,13 +44,13 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method Customer         getCustomer()
- * @method LabellingMessage getMessage()
- * @method Shipment[]       getShipments()
+ * @method Customer|null         getCustomer()
+ * @method LabellingMessage|null getMessage()
+ * @method Shipment[]|null       getShipments()
  *
- * @method GenerateLabel setCustomer(Customer $customer)
- * @method GenerateLabel setMessage(LabellingMessage $message)
- * @method GenerateLabel setShipments(Shipment[] $shipments)
+ * @method GenerateLabel setCustomer(Customer|null $customer = null)
+ * @method GenerateLabel setMessage(LabellingMessage|null $message = null)
+ * @method GenerateLabel setShipments(Shipment[]|null $shipments = null)
  */
 class GenerateLabel extends AbstractEntity
 {
@@ -97,20 +97,20 @@ class GenerateLabel extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var Customer $Customer */
+    /** @var Customer|null $Customer */
     protected $Customer;
-    /** @var LabellingMessage $Message */
+    /** @var LabellingMessage|null $Message */
     protected $Message;
-    /** @var Shipment[] $Shipments */
+    /** @var Shipment[]|null $Shipments */
     protected $Shipments;
     // @codingStandardsIgnoreEnd
 
     /**
      * GenerateLabel constructor.
      *
-     * @param Shipment[]       $shipments
-     * @param LabellingMessage $message
-     * @param Customer         $customer
+     * @param Shipment[]|null       $shipments
+     * @param LabellingMessage|null $message
+     * @param Customer|null         $customer
      */
     public function __construct(array $shipments = null, LabellingMessage $message = null, Customer $customer = null)
     {

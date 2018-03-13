@@ -39,11 +39,11 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method string getETAFrom()
- * @method string getETATo()
+ * @method string|null getETAFrom()
+ * @method string|null getETATo()
  *
- * @method Expectation setETAFrom(string $dateTime)
- * @method Expectation setETATo(string $dateTime)
+ * @method Expectation setETAFrom(string|null $dateTime = null)
+ * @method Expectation setETATo(string|null $dateTime = null)
  */
 class Expectation extends AbstractEntity
 {
@@ -79,9 +79,9 @@ class Expectation extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string $ETAFrom */
+    /** @var string|null $ETAFrom */
     protected $ETAFrom;
-    /** @var string $ETATo */
+    /** @var string|null $ETATo */
     protected $ETATo;
     // @codingStandardsIgnoreEnd
 

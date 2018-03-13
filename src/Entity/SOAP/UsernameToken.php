@@ -34,11 +34,11 @@ use ThirtyBees\PostNL\Entity\AbstractEntity;
  *
  * @package ThirtyBees\PostNL\Entity\SOAP
  *
- * @method string getUsername()
- * @method string getPassword()
+ * @method string|null getUsername()
+ * @method string|null getPassword()
  *
- * @method UsernameToken setUsername(string $username)
- * @method UsernameToken setPassword(string $password)
+ * @method UsernameToken setUsername(string|null $username = null)
+ * @method UsernameToken setPassword(string|null $password = null)
  */
 class UsernameToken extends AbstractEntity
 {
@@ -74,17 +74,17 @@ class UsernameToken extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string $Username */
+    /** @var string|null $Username */
     protected $Username;
-    /** @var string $Password */
+    /** @var string|null $Password */
     protected $Password;
     // @codingStandardsIgnoreEnd
 
     /**
      * UsernameToken constructor.
      *
-     * @param string $username
-     * @param string $password Plaintext password
+     * @param string|null $username
+     * @param string|null $password Plaintext password
      */
     public function __construct($username, $password)
     {

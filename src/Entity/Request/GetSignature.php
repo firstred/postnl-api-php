@@ -44,13 +44,13 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method Message    getMessage()
- * @method Customer   getCustomer()
- * @method Shipment   getShipment()
+ * @method Message|null    getMessage()
+ * @method Customer|null   getCustomer()
+ * @method Shipment|null   getShipment()
  *
- * @method GetSignature setMessage(Message $message)
- * @method GetSignature setCustomer(Customer $customer)
- * @method GetSignature setShipment(Shipment $shipment)
+ * @method GetSignature setMessage(Message|null $message = null)
+ * @method GetSignature setCustomer(Customer|null $customer = null)
+ * @method GetSignature setShipment(Shipment|null $shipment = null)
  */
 class GetSignature extends AbstractEntity
 {
@@ -97,20 +97,20 @@ class GetSignature extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var Message $Message */
+    /** @var Message|null $Message */
     protected $Message;
-    /** @var Customer $Customer */
+    /** @var Customer|null $Customer */
     protected $Customer;
-    /** @var Shipment $Shipment */
+    /** @var Shipment|null $Shipment */
     protected $Shipment;
     // @codingStandardsIgnoreEnd
 
     /**
      * GetSignature constructor.
      *
-     * @param Shipment $shipment
-     * @param Customer $customer
-     * @param Message  $message
+     * @param Shipment|null $shipment
+     * @param Customer|null $customer
+     * @param Message|null  $message
      */
     public function __construct(Shipment $shipment = null, Customer $customer = null, Message $message = null)
     {

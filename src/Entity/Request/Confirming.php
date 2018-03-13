@@ -44,13 +44,13 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method Customer   getCustomer()
- * @method Message    getMessage()
- * @method Shipment[] getShipments()
+ * @method Customer|null   getCustomer()
+ * @method Message|null    getMessage()
+ * @method Shipment[]|null getShipments()
  *
- * @method Confirming setCustomer(Customer $customer)
- * @method Confirming setMessage(Message $message)
- * @method Confirming setShipments(Shipment[] $shipments)
+ * @method Confirming setCustomer(Customer|null $customer = null)
+ * @method Confirming setMessage(Message|null $message = null)
+ * @method Confirming setShipments(Shipment[]|null $shipments = null)
  */
 class Confirming extends AbstractEntity
 {
@@ -97,20 +97,20 @@ class Confirming extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var Customer $Customer */
+    /** @var Customer|null $Customer */
     protected $Customer;
-    /** @var Message $Message */
+    /** @var Message|null $Message */
     protected $Message;
-    /** @var Shipment[] $Shipments */
+    /** @var Shipment[]|null $Shipments */
     protected $Shipments;
     // @codingStandardsIgnoreEnd
 
     /**
      * Confirming constructor.
      *
-     * @param Shipment[] $shipments
-     * @param Customer   $customer
-     * @param Message    $message
+     * @param Shipment[]|null $shipments
+     * @param Customer|null   $customer
+     * @param Message|null    $message
      */
     public function __construct(array $shipments = null, Customer $customer = null, Message $message = null)
     {

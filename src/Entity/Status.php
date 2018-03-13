@@ -39,17 +39,17 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method string getCurrentPhaseCode()
- * @method string getCurrentPhaseDescription()
- * @method string getCurrentStatusCode()
- * @method string getCurrentStatusDescription()
- * @method string getCurrentStatusTimeStamp()
+ * @method string|null getCurrentPhaseCode()
+ * @method string|null getCurrentPhaseDescription()
+ * @method string|null getCurrentStatusCode()
+ * @method string|null getCurrentStatusDescription()
+ * @method string|null getCurrentStatusTimeStamp()
  *
- * @method Status setCurrentPhaseCode(string $code)
- * @method Status setCurrentPhaseDescription(string $desc)
- * @method Status setCurrentStatusCode(string $code)
- * @method Status setCurrentStatusDescription(string $desc)
- * @method Status setCurrentStatusTimeStamp(string $dateTime)
+ * @method Status setCurrentPhaseCode(string|null $code = null)
+ * @method Status setCurrentPhaseDescription(string|null $desc = null)
+ * @method Status setCurrentStatusCode(string|null $code = null)
+ * @method Status setCurrentStatusDescription(string|null $desc = null)
+ * @method Status setCurrentStatusTimeStamp(string|null $dateTime = null)
  */
 class Status extends AbstractEntity
 {
@@ -106,15 +106,15 @@ class Status extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string $CurrentPhaseCode */
+    /** @var string|null $CurrentPhaseCode */
     protected $CurrentPhaseCode;
-    /** @var string $CurrentPhaseDescription */
+    /** @var string|null $CurrentPhaseDescription */
     protected $CurrentPhaseDescription;
-    /** @var string $CurrentStatusCode */
+    /** @var string|null $CurrentStatusCode */
     protected $CurrentStatusCode;
-    /** @var string $CurrentStatusDescription */
+    /** @var string|null $CurrentStatusDescription */
     protected $CurrentStatusDescription;
-    /** @var string $CurrentStatusTimeStamp */
+    /** @var string|null $CurrentStatusTimeStamp */
     protected $CurrentStatusTimeStamp;
     // @codingStandardsIgnoreEnd
 
