@@ -25,7 +25,9 @@
         "phpunit/phpunit": "^5.0",
         "wappr/logger": "^1.2",
         "guzzlehttp/guzzle": "^6.3",
-        "cache/void-adapter": "^1.0"
+        "cache/void-adapter": "^1.0",
+        "juliushaertl/phpdoc-to-rst": "dev-master",
+        "phpdocumentor/reflection": "dev-develop"
     },
     "suggest": {
         "guzzlehttp/guzzle": "Process requests faster + auto retry failed requests"

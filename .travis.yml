@@ -9,7 +9,7 @@ directories:
   - $HOME/.composer/cache
 
 before_script:
-  - composer install
+  - composer install --ignore-platform-reqs --prefer-dist
 
 script:
   - cd tests/
