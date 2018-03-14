@@ -845,11 +845,13 @@ class PostNL implements LoggerAwareInterface
         // Disable header and footer
         $pdf = new RFPdi('P', 'mm', $format === Label::FORMAT_A4 ? [210, 297] : [105, 148]);
         $deferred = [];
+        $firstPage = true;
         if ($format === Label::FORMAT_A6) {
             foreach ($labels as $label) {
                 $pdfContent = base64_decode($label->getResponseShipments()[0]->getLabels()[0]->getContent());
                 $sizes = Util::getPdfSizeAndOrientation($pdfContent);
                 if ($sizes['iso'] === 'A6') {
+                    $firstPage = false;
                     $pdf->addPage('P');
                     $pdf->rotateCounterClockWise();
                     $pdf->setSourceFile(StreamReader::createByString($pdfContent));
@@ -865,7 +867,6 @@ class PostNL implements LoggerAwareInterface
             }
         } else {
             $a6s = 4; // Amount of A6s available
-            $pdf->addPage('P', [297, 210], 90);
             foreach ($labels as $label) {
                 if ($label instanceof AbstractException) {
                     throw $label;
@@ -874,6 +875,10 @@ class PostNL implements LoggerAwareInterface
                 $pdfContent = base64_decode($label->getResponseShipments()[0]->getLabels()[0]->getContent());
                 $sizes = Util::getPdfSizeAndOrientation($pdfContent);
                 if ($sizes['iso'] === 'A6') {
+                    if ($firstPage) {
+                        $pdf->addPage('P', [297, 210], 90);
+                    }
+                    $firstPage = false;
                     while (empty($positions[5 - $a6s]) && $a6s >= 1) {
                         $positions[5 - $a6s] = true;
                         $a6s--;
@@ -882,7 +887,7 @@ class PostNL implements LoggerAwareInterface
                     $pdf->setSourceFile(StreamReader::createByString($pdfContent));
                     $pdf->useTemplate($pdf->importPage(1), static::$a6positions[$a6s][0], static::$a6positions[$a6s][1]);
                     $a6s--;
-                    if ($a6s < 1) {
+                    if ($a6s <= 1) {
                         if ($label !== end($labels)) {
                             $pdf->addPage('P', [297, 210], 90);
                         }
@@ -890,11 +895,22 @@ class PostNL implements LoggerAwareInterface
                     }
                 } else {
                     // Assuming A4 here (could be multi-page) - defer to end
-                    $stream = StreamReader::createByString($pdfContent);
-                    $deferred[] = [
-                        'stream' => $stream,
-                        'sizes'  => $sizes,
-                    ];
+                    if (count($label->getResponseShipments()[0]->getLabels()) > 1) {
+                        $stream = [];
+                        foreach ($label->getResponseShipments()[0]->getLabels() as $labelContent) {
+                            $stream[] = StreamReader::createByString(base64_decode($labelContent->getContent()));
+                        }
+                        $deferred[] = [
+                            'stream'     => $stream,
+                            'sizes'      => $sizes,
+                        ];
+                    } else {
+                        $stream = StreamReader::createByString(base64_decode($pdfContent));
+                        $deferred[] = [
+                            'stream'     => $stream,
+                            'sizes'      => $sizes,
+                        ];
+                    }
                 }
             }
         }
@@ -902,9 +918,34 @@ class PostNL implements LoggerAwareInterface
             $sizes = $defer['sizes'];
             $pdf->addPage($sizes['orientation'], 'A4');
             $pdf->rotateCounterClockWise();
-            $pages = $pdf->setSourceFile($defer['stream']);
-            for ($i = 1; $i < ($pages + 1); $i++) {
-                $pdf->useTemplate($pdf->importPage($i), -190, 0);
+            if (is_array($defer['stream']) && count($defer['stream']) > 1) {
+                // Multilabel
+                if (count($deferred['stream']) === 2) {
+                    $pdf->setSourceFile($defer['stream'][0]);
+                    $pdf->useTemplate($pdf->importPage(1), -190, 0);
+                    $pdf->setSourceFile($defer['stream'][1]);
+                    $pdf->useTemplate($pdf->importPage(1), -190, 148);
+                } else {
+                    $pdf->setSourceFile($defer['stream'][0]);
+                    $pdf->useTemplate($pdf->importPage(1), -190, 0);
+                    $pdf->setSourceFile($defer['stream'][1]);
+                    $pdf->useTemplate($pdf->importPage(1), -190, 148);
+                    for ($i = 2; $i < count($defer['stream']); $i++) {
+                        $pages = $pdf->setSourceFile($defer['stream'][$i]);
+                        for ($j = 1; $j < $pages + 1; $j++) {
+                            $pdf->addPage($sizes['orientation'], 'A4');
+                            $pdf->rotateCounterClockWise();
+                            $pdf->useTemplate($pdf->importPage(1), -190, 0);
+                        }
+                    }
+                }
+            } else {
+                if (is_resource($defer['stream'])) {
+                    $pdf->setSourceFile($defer['stream']);
+                } else {
+                    $pdf->setSourceFile($defer['stream'][0]);
+                }
+                $pdf->useTemplate($pdf->importPage(1), -190, 0);
             }
         }
 
