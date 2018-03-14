@@ -39,12 +39,13 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method string|null getCountryOfOrigin()
- * @method string|null getDescription()
- * @method string|null getHSTariffNr()
- * @method string|null getQuantity()
- * @method string|null getValue()
- * @method string|null getWeight()
+ * @method string|null    getCountryOfOrigin()
+ * @method string|null    getDescription()
+ * @method string|null    getHSTariffNr()
+ * @method string|null    getQuantity()
+ * @method string|null    getValue()
+ * @method string|null    getWeight()
+ * @method Content[]|null getContent()
  *
  * @method Content setCountryOfOrigin(string|null $countryOfOrigin = null)
  * @method Content setDescription(string|null $description = null)
@@ -52,6 +53,7 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method Content setQuantity(string|null $qty = null)
  * @method Content setValue(string|null $val = null)
  * @method Content setWeight(string|null $weight = null)
+ * @method Content setContent(Content[]|null $content = null)
  */
 class Content extends AbstractEntity
 {
@@ -64,6 +66,7 @@ class Content extends AbstractEntity
             'Quantity'        => BarcodeService::DOMAIN_NAMESPACE,
             'Value'           => BarcodeService::DOMAIN_NAMESPACE,
             'Weight'          => BarcodeService::DOMAIN_NAMESPACE,
+            'Content'         => BarcodeService::DOMAIN_NAMESPACE,
         ],
         'Confirming'     => [
             'CountryOfOrigin' => ConfirmingService::DOMAIN_NAMESPACE,
@@ -72,6 +75,7 @@ class Content extends AbstractEntity
             'Quantity'        => ConfirmingService::DOMAIN_NAMESPACE,
             'Value'           => ConfirmingService::DOMAIN_NAMESPACE,
             'Weight'          => ConfirmingService::DOMAIN_NAMESPACE,
+            'Content'         => ConfirmingService::DOMAIN_NAMESPACE,
         ],
         'Labelling'      => [
             'CountryOfOrigin' => LabellingService::DOMAIN_NAMESPACE,
@@ -80,6 +84,7 @@ class Content extends AbstractEntity
             'Quantity'        => LabellingService::DOMAIN_NAMESPACE,
             'Value'           => LabellingService::DOMAIN_NAMESPACE,
             'Weight'          => LabellingService::DOMAIN_NAMESPACE,
+            'Content'         => LabellingService::DOMAIN_NAMESPACE,
         ],
         'ShippingStatus' => [
             'CountryOfOrigin' => ShippingStatusService::DOMAIN_NAMESPACE,
@@ -88,6 +93,7 @@ class Content extends AbstractEntity
             'Quantity'        => ShippingStatusService::DOMAIN_NAMESPACE,
             'Value'           => ShippingStatusService::DOMAIN_NAMESPACE,
             'Weight'          => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Content'         => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate'   => [
             'CountryOfOrigin' => DeliveryDateService::DOMAIN_NAMESPACE,
@@ -96,6 +102,7 @@ class Content extends AbstractEntity
             'Quantity'        => DeliveryDateService::DOMAIN_NAMESPACE,
             'Value'           => DeliveryDateService::DOMAIN_NAMESPACE,
             'Weight'          => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Content'         => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
         'Location'       => [
             'CountryOfOrigin' => LocationService::DOMAIN_NAMESPACE,
@@ -104,6 +111,7 @@ class Content extends AbstractEntity
             'Quantity'        => LocationService::DOMAIN_NAMESPACE,
             'Value'           => LocationService::DOMAIN_NAMESPACE,
             'Weight'          => LocationService::DOMAIN_NAMESPACE,
+            'Content'         => LocationService::DOMAIN_NAMESPACE,
         ],
         'Timeframe'      => [
             'CountryOfOrigin' => TimeframeService::DOMAIN_NAMESPACE,
@@ -112,6 +120,7 @@ class Content extends AbstractEntity
             'Quantity'        => TimeframeService::DOMAIN_NAMESPACE,
             'Value'           => TimeframeService::DOMAIN_NAMESPACE,
             'Weight'          => TimeframeService::DOMAIN_NAMESPACE,
+            'Content'         => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
@@ -127,15 +136,18 @@ class Content extends AbstractEntity
     protected $Value;
     /** @var string|null $Weight */
     protected $Weight;
+    /** @var Content[]|null $content */
+    protected $Content;
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string|null $countryOfOrigin
-     * @param string|null $description
-     * @param string|null $hsTariffNr
-     * @param string|null $qty
-     * @param string|null $val
-     * @param string|null $weight
+     * @param string|null    $countryOfOrigin
+     * @param string|null    $description
+     * @param string|null    $hsTariffNr
+     * @param string|null    $qty
+     * @param string|null    $val
+     * @param string|null    $weight
+     * @param Content[]|null $content
      */
     public function __construct(
         $countryOfOrigin = null,
@@ -143,7 +155,8 @@ class Content extends AbstractEntity
         $hsTariffNr = null,
         $qty = null,
         $val = null,
-        $weight = null
+        $weight = null,
+        $content = null
     ) {
         parent::__construct();
 
@@ -153,5 +166,6 @@ class Content extends AbstractEntity
         $this->setQuantity($qty);
         $this->setValue($val);
         $this->setWeight($weight);
+        $this->setContent($content);
     }
 }
