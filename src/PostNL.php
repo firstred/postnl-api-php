@@ -98,10 +98,31 @@ class PostNL implements LoggerAwareInterface
      * @var array
      */
     public static $threeSCountries = [
-        'NL', 'BE', 'AT', 'BG', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GB', 'GR', 'HU', 'IE', 'IT',
-        'LV', 'LT', 'LU', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'MC', 'AL', 'AD', 'BA', 'IC',
-        'FO', 'GI', 'GL', 'GG', 'IS', 'JE', 'HR', 'LI', 'MK', 'MD', 'ME', 'NO', 'UA', 'SM', 'RS',
-        'TR', 'VA', 'BY', 'CH',
+        'AT',
+        'BE',
+        'BG',
+        'CZ',
+        'DK',
+        'EE',
+        'FI',
+        'FR',
+        'DE',
+        'GB',
+        'GR',
+        'HU',
+        'IE',
+        'IT',
+        'LV',
+        'LT',
+        'LU',
+        'NL',
+        'PL',
+        'PT',
+        'RO',
+        'SK',
+        'SI',
+        'ES',
+        'EE',
     ];
 
     /**
