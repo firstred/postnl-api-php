@@ -37,6 +37,8 @@ use ThirtyBees\PostNL\Entity\Customer;
 use ThirtyBees\PostNL\Entity\Dimension;
 use ThirtyBees\PostNL\Entity\Message\Message;
 use ThirtyBees\PostNL\Entity\Request\CompleteStatus;
+use ThirtyBees\PostNL\Entity\Request\CompleteStatusByPhase;
+use ThirtyBees\PostNL\Entity\Request\CompleteStatusByStatus;
 use ThirtyBees\PostNL\Entity\Request\CurrentStatus;
 use ThirtyBees\PostNL\Entity\Request\GetSignature;
 use ThirtyBees\PostNL\Entity\Shipment;
@@ -624,7 +626,7 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
         $message = new Message();
 
         $this->lastRequest = $request = $this->service->buildCompleteStatusRequestSOAP(
-            (new CompleteStatus())
+            (new CompleteStatusByStatus())
                 ->setShipment(
                     (new Shipment())
                         ->setStatusCode($status)
@@ -644,7 +646,7 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
   </wsse:Security>
  </soap:Header>
  <soap:Body>
-  <services:CompleteStatus>
+  <services:CompleteStatusByStatus>
    <domain:Message>
     <domain:MessageID>{$message->getMessageID()}</domain:MessageID>
     <domain:MessageTimeStamp>{$message->getMessageTimeStamp()}</domain:MessageTimeStamp>
@@ -654,11 +656,11 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
     <domain:CustomerNumber>{$this->postnl->getCustomer()->getCustomerNumber()}</domain:CustomerNumber>
    </domain:Customer>
    <domain:Shipment>
+    <domain:StatusCode>{$status}</domain:StatusCode>
     <domain:DateFrom>29-06-2016</domain:DateFrom>
     <domain:DateTo>20-07-2016</domain:DateTo>
-    <domain:StatusCode>{$status}</domain:StatusCode>
    </domain:Shipment>
-  </services:CompleteStatus>
+  </services:CompleteStatusByStatus>
  </soap:Body>
 </soap:Envelope>
 ", (string) $request->getBody());
@@ -673,7 +675,7 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
         $message = new Message();
 
         $this->lastRequest = $request = $this->service->buildCompleteStatusRequestSOAP(
-            (new CompleteStatus())
+            (new CompleteStatusByPhase())
                 ->setShipment(
                     (new Shipment())
                         ->setPhaseCode($phase)
@@ -683,6 +685,7 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
                 ->setMessage($message)
         );
 
+        $this->assertEquals('"'.ShippingStatusService::SOAP_ACTION_COMPLETE_PHASE.'"', $request->getHeaderLine('SOAPAction'));
         $this->assertEquals("<?xml version=\"1.0\"?>
 <soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:services=\"http://postnl.nl/cif/services/ShippingStatusWebService/\" xmlns:domain=\"http://postnl.nl/cif/domain/ShippingStatusWebService/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\" xmlns:schema=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:common=\"http://postnl.nl/cif/services/common/\">
  <soap:Header>
@@ -693,7 +696,7 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
   </wsse:Security>
  </soap:Header>
  <soap:Body>
-  <services:CompleteStatus>
+  <services:CompleteStatusByPhase>
    <domain:Message>
     <domain:MessageID>{$message->getMessageID()}</domain:MessageID>
     <domain:MessageTimeStamp>{$message->getMessageTimeStamp()}</domain:MessageTimeStamp>
@@ -703,11 +706,11 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
     <domain:CustomerNumber>{$this->postnl->getCustomer()->getCustomerNumber()}</domain:CustomerNumber>
    </domain:Customer>
    <domain:Shipment>
+    <domain:PhaseCode>{$phase}</domain:PhaseCode>
     <domain:DateFrom>29-06-2016</domain:DateFrom>
     <domain:DateTo>20-07-2016</domain:DateTo>
-    <domain:PhaseCode>{$phase}</domain:PhaseCode>
    </domain:Shipment>
-  </services:CompleteStatus>
+  </services:CompleteStatusByPhase>
  </soap:Body>
 </soap:Envelope>
 ", (string) $request->getBody());
