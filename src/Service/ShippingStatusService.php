@@ -34,8 +34,13 @@ use Sabre\Xml\Service as XmlService;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
 use ThirtyBees\PostNL\Entity\Customer;
 use ThirtyBees\PostNL\Entity\Request\CompleteStatus;
+use ThirtyBees\PostNL\Entity\Request\CompleteStatusByPhase;
+use ThirtyBees\PostNL\Entity\Request\CompleteStatusByReference;
+use ThirtyBees\PostNL\Entity\Request\CompleteStatusByStatus;
 use ThirtyBees\PostNL\Entity\Request\CurrentStatus;
 use ThirtyBees\PostNL\Entity\Request\CurrentStatusByPhase;
+use ThirtyBees\PostNL\Entity\Request\CurrentStatusByReference;
+use ThirtyBees\PostNL\Entity\Request\CurrentStatusByStatus;
 use ThirtyBees\PostNL\Entity\Request\GetSignature;
 use ThirtyBees\PostNL\Entity\Response\CompleteStatusResponse;
 use ThirtyBees\PostNL\Entity\Response\CurrentStatusResponse;
@@ -77,8 +82,13 @@ class ShippingStatusService extends AbstractService
 
     // SOAP API
     const SOAP_ACTION = 'http://postnl.nl/cif/services/ShippingStatusWebService/IShippingStatusWebService/CurrentStatus';
+    const SOAP_ACTION_REFERENCE = 'http://postnl.nl/cif/services/ShippingStatusWebService/IShippingStatusWebService/CurrentStatusByReference';
     const SOAP_ACTION_PHASE = 'http://postnl.nl/cif/services/ShippingStatusWebService/IShippingStatusWebService/CurrentStatusByPhase';
+    const SOAP_ACTION_STATUS = 'http://postnl.nl/cif/services/ShippingStatusWebService/IShippingStatusWebService/CurrentStatusByStatus';
     const SOAP_ACTION_COMPLETE = 'http://postnl.nl/cif/services/ShippingStatusWebService/IShippingStatusWebService/CompleteStatus';
+    const SOAP_ACTION_COMPLETE_REFERENCE = 'http://postnl.nl/cif/services/ShippingStatusWebService/IShippingStatusWebService/CompleteStatusByReference';
+    const SOAP_ACTION_COMPLETE_PHASE = 'http://postnl.nl/cif/services/ShippingStatusWebService/IShippingStatusWebService/CompleteStatusByPhase';
+    const SOAP_ACTION_COMPLETE_STATUS = 'http://postnl.nl/cif/services/ShippingStatusWebService/IShippingStatusWebService/CompleteStatusByStatus';
     const SOAP_ACTION_SIGNATURE = 'http://postnl.nl/cif/services/ShippingStatusWebService/IShippingStatusWebService/GetSignature';
     const SERVICES_NAMESPACE = 'http://postnl.nl/cif/services/ShippingStatusWebService/';
     const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/ShippingStatusWebService/';
@@ -112,7 +122,7 @@ class ShippingStatusService extends AbstractService
      * - CurrentStatusByStatus:
      *   - Fill the Shipment->StatuCode property. Leave the rest empty.
      *
-     * @param CurrentStatus $currentStatus
+     * @param CurrentStatus|CurrentStatusByReference|CurrentStatusByPhase|CurrentStatusByStatus $currentStatus
      *
      * @return CurrentStatusResponse
      *
@@ -121,7 +131,7 @@ class ShippingStatusService extends AbstractService
      * @throws CifException
      * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
-    public function currentStatusREST(CurrentStatus $currentStatus)
+    public function currentStatusREST($currentStatus)
     {
         $item = $this->retrieveCachedItem($currentStatus->getId());
         $response = null;
@@ -168,13 +178,14 @@ class ShippingStatusService extends AbstractService
      * - CurrentStatusByStatus:
      *   - Fill the Shipment->StatuCode property. Leave the rest empty.
      *
-     * @param CurrentStatus $currentStatus
+     * @param CurrentStatus|CurrentStatusByReference|CurrentStatusByPhase|CurrentStatusByStatus $currentStatus
      *
      * @return CurrentStatusResponse
      *
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
+     * @throws InvalidArgumentException
      * @throws ResponseException
      * @throws \Sabre\Xml\LibXMLException
      */
@@ -278,7 +289,7 @@ class ShippingStatusService extends AbstractService
      * - CurrentStatusByStatus:
      *   - Fill the Shipment->StatusCode property. Leave the rest empty.
      *
-     * @param CompleteStatus $completeStatus
+     * @param CompleteStatus|CompleteStatusByReference|CompleteStatusByPhase|CompleteStatusByStatus $completeStatus
      *
      * @return CompleteStatusResponse
      *
@@ -287,8 +298,9 @@ class ShippingStatusService extends AbstractService
      * @throws CifException
      * @throws ResponseException
      * @throws \Sabre\Xml\LibXMLException
+     * @throws InvalidArgumentException
      */
-    public function completeStatusSOAP(CompleteStatus $completeStatus)
+    public function completeStatusSOAP($completeStatus)
     {
         $item = $this->retrieveCachedItem($completeStatus->getId());
         $response = null;
@@ -434,11 +446,11 @@ class ShippingStatusService extends AbstractService
      * - CurrentStatusByPhase
      * - CurrentStatusByStatus
      *
-     * @param CurrentStatus $currentStatus
+     * @param CurrentStatus|CurrentStatusByReference|CurrentStatusByPhase|CurrentStatusByStatus $currentStatus
      *
      * @return Request
      */
-    public function buildCurrentStatusRequestREST(CurrentStatus $currentStatus)
+    public function buildCurrentStatusRequestREST($currentStatus)
     {
         $apiKey = $this->postnl->getRestApiKey();
         $this->setService($currentStatus);
@@ -502,7 +514,6 @@ class ShippingStatusService extends AbstractService
      */
     public function processCurrentStatusResponseREST($response)
     {
-        echo static::getResponseText($response);exit;
         $body = json_decode(static::getResponseText($response), true);
         if (isset($body['CurrentStatus'])) {
             /** @var CurrentStatusResponse $object */
@@ -518,9 +529,10 @@ class ShippingStatusService extends AbstractService
     /**
      * Build the CurrentStatus request for the SOAP API
      *
-     * @param CurrentStatus $currentStatus
+     * @param CurrentStatus|CurrentStatusByReference|CurrentStatusByPhase|CurrentStatusByStatus $currentStatus
      *
      * @return Request
+     *
      * @throws InvalidArgumentException
      */
     public function buildCurrentStatusRequestSOAP($currentStatus)
@@ -535,9 +547,15 @@ class ShippingStatusService extends AbstractService
         if ($currentStatus instanceof CurrentStatus) {
             $soapAction = static::SOAP_ACTION;
             $item = 'CurrentStatus';
-        } elseif ($currentStatus instanceof CurrentStatusByPhase) {
+        } elseif ($currentStatus instanceof CurrentStatusByReference) {
+            $soapAction = static::SOAP_ACTION_REFERENCE;
+            $item = 'CurrentStatusByReference';
+        } elseif($currentStatus instanceof CurrentStatusByPhase) {
             $soapAction = static::SOAP_ACTION_PHASE;
             $item = 'CurrentStatusByPhase';
+        } elseif($currentStatus instanceof CurrentStatusByStatus) {
+            $soapAction = static::SOAP_ACTION_STATUS;
+            $item = 'CurrentStatusByStatus';
         } else {
             throw new InvalidArgumentException('Invalid CurrentStatus service');
         }
@@ -739,11 +757,12 @@ class ShippingStatusService extends AbstractService
      * - CompleteStatusByPhase
      * - CompleteStatusByStatus
      *
-     * @param CompleteStatus $completeStatus
+     * @param CompleteStatus|CompleteStatusByReference|CompleteStatusByPhase|CompleteStatusByStatus $completeStatus
      *
      * @return Request
+     * @throws InvalidArgumentException
      */
-    public function buildCompleteStatusRequestSOAP(CompleteStatus $completeStatus)
+    public function buildCompleteStatusRequestSOAP($completeStatus)
     {
         if (!$completeStatus->getCustomer() || !$completeStatus->getCustomer() instanceof Customer) {
             $completeStatus->setCustomer((new Customer())
@@ -752,7 +771,22 @@ class ShippingStatusService extends AbstractService
             );
         }
 
-        $soapAction = static::SOAP_ACTION_COMPLETE;
+        if ($completeStatus instanceof CompleteStatus) {
+            $soapAction = static::SOAP_ACTION_COMPLETE;
+            $item = 'CompleteStatus';
+        } elseif ($completeStatus instanceof CompleteStatusByReference) {
+            $soapAction = static::SOAP_ACTION_COMPLETE_REFERENCE;
+            $item = 'CompleteStatusByReference';
+        } elseif ($completeStatus instanceof CompleteStatusByPhase) {
+            $soapAction = static::SOAP_ACTION_COMPLETE_PHASE;
+            $item = 'CompleteStatusByPhase';
+        } elseif ($completeStatus instanceof CompleteStatusByStatus) {
+            $soapAction = static::SOAP_ACTION_COMPLETE_STATUS;
+            $item = 'CompleteStatusByStatus';
+        } else {
+            throw new InvalidArgumentException('Invalid CompleteStatus service');
+        }
+
         $xmlService = new XmlService();
         foreach (static::$namespaces as $namespace => $prefix) {
             $xmlService->namespaceMap[$namespace] = $prefix;
@@ -769,7 +803,7 @@ class ShippingStatusService extends AbstractService
                     ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
                 ],
                 '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
-                    '{'.static::SERVICES_NAMESPACE.'}CompleteStatus' => $completeStatus,
+                    '{'.static::SERVICES_NAMESPACE.'}'.$item => $completeStatus,
                 ],
             ]
         );
@@ -937,8 +971,6 @@ class ShippingStatusService extends AbstractService
 
         static::registerNamespaces($xml);
         static::validateSOAPResponse($xml);
-
-
 
         $reader = new Reader();
         $reader->xml(static::getResponseText($response));
