@@ -995,13 +995,17 @@ class PostNL implements LoggerAwareInterface
      * - CurrentStatusByStatus:
      *   - Fill the Shipment->StatuCode property. Leave the rest empty.
      *
-     * @param CurrentStatus $currentStatus
+     * @param CurrentStatus|CurrentStatusByStatus|CurrentStatusByReference|CurrentStatusByPhase $currentStatus
      *
      * @return CurrentStatusResponse
      */
-    public function getCurrentStatus(CurrentStatus $currentStatus)
+    public function getCurrentStatus($currentStatus)
     {
-        $currentStatus->setCustomer($this->getCustomer());
+        $fullCustomer = $this->getCustomer();
+        $currentStatus->setCustomer((new Customer())
+            ->setCustomerCode($fullCustomer->getCustomerCode())
+            ->setCustomerNumber($fullCustomer->getCustomerNumber())
+        );
         if (!$currentStatus->getMessage()) {
             $currentStatus->setMessage(new Message());
         }
@@ -1023,13 +1027,18 @@ class PostNL implements LoggerAwareInterface
      * - CurrentStatusByStatus:
      *   - Fill the Shipment->StatuCode property. Leave the rest empty.
      *
-     * @param CompleteStatus $completeStatus
+     * @param CompleteStatus|CompleteStatusByStatus|CompleteStatusByReference|CompleteStatusByPhase $completeStatus
      *
      * @return CompleteStatusResponse
      */
-    public function getCompleteStatus(CompleteStatus $completeStatus)
+    public function getCompleteStatus($completeStatus)
     {
-        $completeStatus->setCustomer($this->getCustomer());
+        $fullCustomer = $this->getCustomer();
+
+        $completeStatus->setCustomer((new Customer)
+            ->setCustomerCode($fullCustomer->getCustomerCode())
+            ->setCustomerNumber($fullCustomer->getCustomerNumber())
+        );
         if (!$completeStatus->getMessage()) {
             $completeStatus->setMessage(new Message());
         }

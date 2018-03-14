@@ -35,6 +35,7 @@ use ThirtyBees\PostNL\Entity\AbstractEntity;
 use ThirtyBees\PostNL\Entity\Customer;
 use ThirtyBees\PostNL\Entity\Request\CompleteStatus;
 use ThirtyBees\PostNL\Entity\Request\CurrentStatus;
+use ThirtyBees\PostNL\Entity\Request\CurrentStatusByPhase;
 use ThirtyBees\PostNL\Entity\Request\GetSignature;
 use ThirtyBees\PostNL\Entity\Response\CompleteStatusResponse;
 use ThirtyBees\PostNL\Entity\Response\CurrentStatusResponse;
@@ -44,6 +45,7 @@ use ThirtyBees\PostNL\Entity\SOAP\Security;
 use ThirtyBees\PostNL\Exception\ApiException;
 use ThirtyBees\PostNL\Exception\CifDownException;
 use ThirtyBees\PostNL\Exception\CifException;
+use ThirtyBees\PostNL\Exception\InvalidArgumentException;
 use ThirtyBees\PostNL\Exception\ResponseException;
 use ThirtyBees\PostNL\PostNL;
 
@@ -75,6 +77,7 @@ class ShippingStatusService extends AbstractService
 
     // SOAP API
     const SOAP_ACTION = 'http://postnl.nl/cif/services/ShippingStatusWebService/IShippingStatusWebService/CurrentStatus';
+    const SOAP_ACTION_PHASE = 'http://postnl.nl/cif/services/ShippingStatusWebService/IShippingStatusWebService/CurrentStatusByPhase';
     const SOAP_ACTION_COMPLETE = 'http://postnl.nl/cif/services/ShippingStatusWebService/IShippingStatusWebService/CompleteStatus';
     const SOAP_ACTION_SIGNATURE = 'http://postnl.nl/cif/services/ShippingStatusWebService/IShippingStatusWebService/GetSignature';
     const SERVICES_NAMESPACE = 'http://postnl.nl/cif/services/ShippingStatusWebService/';
@@ -175,7 +178,7 @@ class ShippingStatusService extends AbstractService
      * @throws ResponseException
      * @throws \Sabre\Xml\LibXMLException
      */
-    public function currentStatusSOAP(CurrentStatus $currentStatus)
+    public function currentStatusSOAP($currentStatus)
     {
         $item = $this->retrieveCachedItem($currentStatus->getId());
         $response = null;
@@ -454,10 +457,10 @@ class ShippingStatusService extends AbstractService
             $endpoint = "/search";
             $query['status'] = $currentStatus->getShipment()->getStatusCode();
             if ($startDate = $currentStatus->getShipment()->getDateFrom()) {
-                $query['startDate'] = $startDate;
+                $query['startDate'] = date('d-m-Y', strtotime($startDate));
             }
             if ($endDate = $currentStatus->getShipment()->getDateTo()) {
-                $query['endDate'] = $endDate;
+                $query['endDate'] = date('d-m-Y', strtotime($endDate));
             }
         } elseif ($currentStatus->getShipment()->getPhaseCode()) {
             $query = [
@@ -467,10 +470,10 @@ class ShippingStatusService extends AbstractService
             $endpoint = "/search";
             $query['phase'] = $currentStatus->getShipment()->getPhaseCode();
             if ($startDate = $currentStatus->getShipment()->getDateFrom()) {
-                $query['startDate'] = $startDate;
+                $query['startDate'] = date('d-m-Y', strtotime($startDate));
             }
             if ($endDate = $currentStatus->getShipment()->getDateTo()) {
-                $query['endDate'] = $endDate;
+                $query['endDate'] = date('d-m-Y', strtotime($endDate));
             }
           } else {
             $query = [];
@@ -499,6 +502,7 @@ class ShippingStatusService extends AbstractService
      */
     public function processCurrentStatusResponseREST($response)
     {
+        echo static::getResponseText($response);exit;
         $body = json_decode(static::getResponseText($response), true);
         if (isset($body['CurrentStatus'])) {
             /** @var CurrentStatusResponse $object */
@@ -517,8 +521,9 @@ class ShippingStatusService extends AbstractService
      * @param CurrentStatus $currentStatus
      *
      * @return Request
+     * @throws InvalidArgumentException
      */
-    public function buildCurrentStatusRequestSOAP(CurrentStatus $currentStatus)
+    public function buildCurrentStatusRequestSOAP($currentStatus)
     {
         if (!$currentStatus->getCustomer() || !$currentStatus->getCustomer() instanceof Customer) {
             $currentStatus->setCustomer((new Customer())
@@ -527,7 +532,16 @@ class ShippingStatusService extends AbstractService
             );
         }
 
-        $soapAction = static::SOAP_ACTION;
+        if ($currentStatus instanceof CurrentStatus) {
+            $soapAction = static::SOAP_ACTION;
+            $item = 'CurrentStatus';
+        } elseif ($currentStatus instanceof CurrentStatusByPhase) {
+            $soapAction = static::SOAP_ACTION_PHASE;
+            $item = 'CurrentStatusByPhase';
+        } else {
+            throw new InvalidArgumentException('Invalid CurrentStatus service');
+        }
+
         $xmlService = new XmlService();
         foreach (static::$namespaces as $namespace => $prefix) {
             $xmlService->namespaceMap[$namespace] = $prefix;
@@ -544,11 +558,10 @@ class ShippingStatusService extends AbstractService
                     ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
                 ],
                 '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
-                    '{'.static::SERVICES_NAMESPACE.'}CurrentStatus' => $currentStatus,
+                    '{'.static::SERVICES_NAMESPACE.'}'.$item => $currentStatus,
                 ],
             ]
         );
-
         $endpoint = $this->postnl->getSandbox()
             ? ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT)
             : ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT);
@@ -630,10 +643,10 @@ class ShippingStatusService extends AbstractService
             $endpoint = "/search";
             $query['status'] = $completeStatus->getShipment()->getStatusCode();
             if ($startDate = $completeStatus->getShipment()->getDateFrom()) {
-                $query['startDate'] = $startDate;
+                $query['startDate'] = date('d-m-Y', strtotime($startDate));
             }
             if ($endDate = $completeStatus->getShipment()->getDateTo()) {
-                $query['endDate'] = $endDate;
+                $query['endDate'] = date('d-m-Y', strtotime($endDate));
             }
         } elseif ($completeStatus->getShipment()->getPhaseCode()) {
             $query = [
@@ -644,10 +657,10 @@ class ShippingStatusService extends AbstractService
             $endpoint = "/search";
             $query['phase'] = $completeStatus->getShipment()->getPhaseCode();
             if ($startDate = $completeStatus->getShipment()->getDateFrom()) {
-                $query['startDate'] = $startDate;
+                $query['startDate'] = date('d-m-Y', strtotime($startDate));
             }
             if ($endDate = $completeStatus->getShipment()->getDateTo()) {
-                $query['endDate'] = $endDate;
+                $query['endDate'] = date('d-m-Y', strtotime($endDate));
             }
         } else {
             $query = [
