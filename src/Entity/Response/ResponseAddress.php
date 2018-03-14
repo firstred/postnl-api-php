@@ -65,7 +65,6 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method ResponseAddress setStreet(string|null $street = null)
  * @method ResponseAddress setHouseNr(string|null $houseNr = null)
  * @method ResponseAddress setHouseNrExt(string|null $houseNrExt = null)
- * @method ResponseAddress setZipcode(string|null $zipcode = null)
  * @method ResponseAddress setCity(string|null $city = null)
  * @method ResponseAddress setCountrycode(string|null $countrycode = null)
  * @method ResponseAddress setArea(string|null $area = null)
@@ -343,5 +342,23 @@ class ResponseAddress extends AbstractEntity
         $this->setFloor($floor);
         $this->setRegion($region);
         $this->setRemark($remark);
+    }
+
+    /**
+     * Set postcode
+     *
+     * @param string|null $zip
+     *
+     * @return $this
+     */
+    public function setZipcode($zip = null)
+    {
+        if (is_null($zip)) {
+            $this->Zipcode = null;
+        } else {
+            $this->Zipcode = strtoupper(str_replace(' ', '', $zip));
+        }
+
+        return $this;
     }
 }

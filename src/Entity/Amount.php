@@ -26,6 +26,8 @@
 
 namespace ThirtyBees\PostNL\Entity;
 
+use InvalidArgumentException;
+use Sabre\Xml\Writer;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
@@ -49,7 +51,6 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method string|null getValue()
  *
  * @method Amount setAccountName(string|null $accountName = null)
- * @method Amount setAmountType(string|null $amountType = null)
  * @method Amount setBIC(string|null $bic = null)
  * @method Amount setCurrency(string|null $currency = null)
  * @method Amount setIBAN(string|null $iban = null)
@@ -181,5 +182,52 @@ class Amount extends AbstractEntity
         $this->setReference($reference);
         $this->setTransactionNumber($transactionNumber);
         $this->setValue($value);
+    }
+
+    /**
+     * Set amount type
+     *
+     * @param string|int|null $type
+     *
+     * @return $this
+     */
+    public function setAmountType($type = null)
+    {
+        if (is_null($type)) {
+            $this->AmountType = null;
+        } else {
+            $this->AmountType = str_pad($type, 2, '0', STR_PAD_LEFT);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Return a serializable array for the XMLWriter
+     *
+     * @param Writer $writer
+     *
+     * @return void
+     * @throws InvalidArgumentException
+     */
+    public function xmlSerialize(Writer $writer)
+    {
+        $xml = [];
+        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
+            throw new InvalidArgumentException('Service not set before serialization');
+        }
+
+        foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
+            if (isset($this->{$propertyName})) {
+
+                if ($propertyName === 'Value') {
+                    $xml["{{$namespace}}Value"] = number_format($this->Value, 2);
+                } else {
+                    $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
+                }
+            }
+        }
+
+        $writer->write($xml);
     }
 }
