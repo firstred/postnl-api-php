@@ -275,7 +275,7 @@ class GetDeliveryDate extends AbstractEntity
         $this->setShippingDuration($shippingDuration);
         $this->setStreet($street);
         $this->setGetDeliveryDate($getDeliveryDate);
-        $this->setMessage($message ?: new Message());
+        $this->setMessage($message);
     }
 
     /**
