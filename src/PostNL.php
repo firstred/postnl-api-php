@@ -871,9 +871,8 @@ class PostNL implements LoggerAwareInterface
                 if ($label instanceof AbstractException) {
                     throw $label;
                 }
-
                 $pdfContent = base64_decode($label->getResponseShipments()[0]->getLabels()[0]->getContent());
-                $sizes = Util::getPdfSizeAndOrientation($pdfContent);
+                $sizes = \ThirtyBeesPostNL\ThirtyBees\PostNL\Util\Util::getPdfSizeAndOrientation($pdfContent);
                 if ($sizes['iso'] === 'A6') {
                     if ($firstPage) {
                         $pdf->addPage('P', [297, 210], 90);
@@ -883,11 +882,15 @@ class PostNL implements LoggerAwareInterface
                         $positions[5 - $a6s] = true;
                         $a6s--;
                     }
+                    if ($a6s < 1) {
+                        $pdf->addPage('P', [297, 210], 90);
+                        $a6s = 4;
+                    }
                     $pdf->rotateCounterClockWise();
-                    $pdf->setSourceFile(StreamReader::createByString($pdfContent));
+                    $pdf->setSourceFile(\ThirtyBeesPostNL\setasign\Fpdi\PdfParser\StreamReader::createByString($pdfContent));
                     $pdf->useTemplate($pdf->importPage(1), static::$a6positions[$a6s][0], static::$a6positions[$a6s][1]);
                     $a6s--;
-                    if ($a6s <= 1) {
+                    if ($a6s < 1) {
                         if ($label !== end($labels)) {
                             $pdf->addPage('P', [297, 210], 90);
                         }
@@ -898,18 +901,12 @@ class PostNL implements LoggerAwareInterface
                     if (count($label->getResponseShipments()[0]->getLabels()) > 1) {
                         $stream = [];
                         foreach ($label->getResponseShipments()[0]->getLabels() as $labelContent) {
-                            $stream[] = StreamReader::createByString(base64_decode($labelContent->getContent()));
+                            $stream[] = \ThirtyBeesPostNL\setasign\Fpdi\PdfParser\StreamReader::createByString(base64_decode($labelContent->getContent()));
                         }
-                        $deferred[] = [
-                            'stream'     => $stream,
-                            'sizes'      => $sizes,
-                        ];
+                        $deferred[] = ['stream' => $stream, 'sizes' => $sizes];
                     } else {
-                        $stream = StreamReader::createByString(base64_decode($pdfContent));
-                        $deferred[] = [
-                            'stream'     => $stream,
-                            'sizes'      => $sizes,
-                        ];
+                        $stream = \ThirtyBeesPostNL\setasign\Fpdi\PdfParser\StreamReader::createByString(base64_decode($pdfContent));
+                        $deferred[] = ['stream' => $stream, 'sizes' => $sizes];
                     }
                 }
             }
