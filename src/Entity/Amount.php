@@ -221,7 +221,7 @@ class Amount extends AbstractEntity
             if (isset($this->{$propertyName})) {
 
                 if ($propertyName === 'Value') {
-                    $xml["{{$namespace}}Value"] = number_format($this->Value, 2);
+                    $xml["{{$namespace}}Value"] = number_format($this->Value, 2, '.', '');
                 } else {
                     $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
                 }
