@@ -59,11 +59,11 @@ use ThirtyBees\PostNL\PostNL;
  *
  * @package ThirtyBees\PostNL\Service
  *
- * @method CurrentStatusResponse  currentStatus(CurrentStatus $currentStatus)
- * @method Request                buildCurrentStatusRequest(CurrentStatus $currentStatus)
+ * @method CurrentStatusResponse  currentStatus(CurrentStatus|CurrentStatusByReference|CurrentStatusByPhase|CurrentStatusByStatus $currentStatus)
+ * @method Request                buildCurrentStatusRequest(CurrentStatus|CurrentStatusByReference|CurrentStatusByPhase|CurrentStatusByStatus $currentStatus)
  * @method CurrentStatusResponse  processCurrentStatusResponse(mixed $response)
- * @method CompleteStatusResponse completeStatus(CompleteStatus $completeStatus)
- * @method Request                buildCompleteStatusRequest(CompleteStatus $completeStatus)
+ * @method CompleteStatusResponse completeStatus(CompleteStatus|CompleteStatusByReference|CompleteStatusByPhase|CompleteStatusByStatus $completeStatus)
+ * @method Request                buildCompleteStatusRequest(CompleteStatus|CompleteStatusByReference|CompleteStatusByPhase|CompleteStatusByStatus $completeStatus)
  * @method CompleteStatusResponse processCompleteStatusResponse(mixed $response)
  * @method GetSignature           getSignature(GetSignature $getSignature)
  * @method Request                buildGetSignatureRequest(GetSignature $getSignature)
