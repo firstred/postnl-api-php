@@ -872,7 +872,7 @@ class PostNL implements LoggerAwareInterface
                     throw $label;
                 }
                 $pdfContent = base64_decode($label->getResponseShipments()[0]->getLabels()[0]->getContent());
-                $sizes = \ThirtyBeesPostNL\ThirtyBees\PostNL\Util\Util::getPdfSizeAndOrientation($pdfContent);
+                $sizes = Util::getPdfSizeAndOrientation($pdfContent);
                 if ($sizes['iso'] === 'A6') {
                     if ($firstPage) {
                         $pdf->addPage('P', [297, 210], 90);
@@ -887,7 +887,7 @@ class PostNL implements LoggerAwareInterface
                         $a6s = 4;
                     }
                     $pdf->rotateCounterClockWise();
-                    $pdf->setSourceFile(\ThirtyBeesPostNL\setasign\Fpdi\PdfParser\StreamReader::createByString($pdfContent));
+                    $pdf->setSourceFile(StreamReader::createByString($pdfContent));
                     $pdf->useTemplate($pdf->importPage(1), static::$a6positions[$a6s][0], static::$a6positions[$a6s][1]);
                     $a6s--;
                     if ($a6s < 1) {
@@ -901,11 +901,11 @@ class PostNL implements LoggerAwareInterface
                     if (count($label->getResponseShipments()[0]->getLabels()) > 1) {
                         $stream = [];
                         foreach ($label->getResponseShipments()[0]->getLabels() as $labelContent) {
-                            $stream[] = \ThirtyBeesPostNL\setasign\Fpdi\PdfParser\StreamReader::createByString(base64_decode($labelContent->getContent()));
+                            $stream[] = StreamReader::createByString(base64_decode($labelContent->getContent()));
                         }
                         $deferred[] = ['stream' => $stream, 'sizes' => $sizes];
                     } else {
-                        $stream = \ThirtyBeesPostNL\setasign\Fpdi\PdfParser\StreamReader::createByString(base64_decode($pdfContent));
+                        $stream = StreamReader::createByString(base64_decode($pdfContent));
                         $deferred[] = ['stream' => $stream, 'sizes' => $sizes];
                     }
                 }
