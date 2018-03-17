@@ -738,6 +738,22 @@ class LocationService extends AbstractService
         $reader = new Reader();
         $reader->xml(static::getResponseText($response));
         $array = array_values($reader->parse()['value'][0]['value']);
+        foreach ($array[0]['value'][0]['value'] as &$responseLocation) {
+            foreach ($responseLocation['value'] as &$item) {
+                if (strpos($item['name'], 'DeliveryOptions') !== false) {
+                    $newDeliveryOptions = [];
+                    foreach ($item['value'] as $option) {
+                        $newDeliveryOptions[] = $option['value'];
+                    }
+
+                    $item['value'] = $newDeliveryOptions;
+                } elseif (strpos($item['name'], 'OpeningHours') !== false) {
+                    foreach ($item['value'] as &$openingHour) {
+                        $openingHour['value'] = $openingHour['value'][0]['value'];
+                    }
+                }
+            }
+        }
         $array = $array[0];
 
         /** @var GetLocationsInAreaResponse $object */
