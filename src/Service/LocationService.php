@@ -72,7 +72,7 @@ class LocationService extends AbstractService
 
     // SOAP API
     const SOAP_ACTION = 'http://postnl.nl/cif/services/LocationWebService/ILocationWebService/GetNearestLocations';
-    const SOAP_ACTION_LOCATIONS_IN_AREA = 'http://postnl.nl/cif/services/LocationWebService/ILocationWebService/GetNearestLocations';
+    const SOAP_ACTION_LOCATIONS_IN_AREA = 'http://postnl.nl/cif/services/LocationWebService/ILocationWebService/GetLocationsInArea';
     const SOAP_ACTION_LOCATION = 'http://postnl.nl/cif/services/LocationWebService/ILocationWebService/GetLocation';
     const SERVICES_NAMESPACE = 'http://postnl.nl/cif/services/LocationWebService/';
     const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/LocationWebService/';
