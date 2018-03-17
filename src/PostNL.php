@@ -840,6 +840,12 @@ class PostNL implements LoggerAwareInterface
 
         if (!$merge) {
             return $labels;
+        } else {
+            foreach ($labels as $label) {
+                if (!$label instanceof GenerateLabelResponse) {
+                    return $labels;
+                }
+            }
         }
 
         // Disable header and footer
@@ -851,7 +857,6 @@ class PostNL implements LoggerAwareInterface
                 $pdfContent = base64_decode($label->getResponseShipments()[0]->getLabels()[0]->getContent());
                 $sizes = Util::getPdfSizeAndOrientation($pdfContent);
                 if ($sizes['iso'] === 'A6') {
-                    $firstPage = false;
                     $pdf->addPage('P');
                     $pdf->rotateCounterClockWise();
                     $pdf->setSourceFile(StreamReader::createByString($pdfContent));
