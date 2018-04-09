@@ -36,14 +36,14 @@ The PHP bindings can connect to both PostNL's SOAP and REST API.
 | Fraudepreventie Check Basis                 | N/A                       | N/A                       | N/A     |
 | Kredietcheck Zakelijk                       | N/A                       | N/A                       | N/A     |
 | **Send & Track**                            |                           |                           |         |
-| Barcode webservice                          | beta                      | beta                      | 1.1     |
-| Labelling webservice                        | beta                      | beta                      | 2.1     |
-| Confirming webservice                       | beta                      | beta                      | 1.10    |
-| Shippingstatus webservice                   | beta                      | beta                      | 1.6     |
+| Barcode webservice                          | ✓                         | ✓                         | 1.1     |
+| Labelling webservice                        | ✓                         | ✓                         | 2.1     |
+| Confirming webservice                       | ✓                         | ✓                         | 1.10    |
+| Shippingstatus webservice                   | ✓                         | ✓                         | 1.6     |
 | **Delivery Options**                        |                           |                           |         |
-| Deliverydate webservice                     | beta                      | beta                      | 2.2     |
-| Location webservice                         | beta                      | beta                      | 2.1     |
-| Timeframe webservice                        | beta                      | beta                      | 2.1     |
+| Deliverydate webservice                     | ✓                         | ✓                         | 2.2     |
+| Location webservice                         | ✓                         | ✓                         | 2.1     |
+| Timeframe webservice                        | ✓                         | ✓                         | 2.1     |
 | **Mail**                                    |                           |                           |         |
 | Bulkmail webservice                         | N/A                       | N/A                       | N/A     |
 
