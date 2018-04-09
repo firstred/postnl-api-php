@@ -13,6 +13,103 @@ Making a Request
 You can send requests by creating the request objects and passing them to one of the functions in the main ``PostNL``
 class.
 
+Requesting timeframes, locations and the delivery date
+------------------------------------------------------
+
+You can the timeframes, locations and delivery date at once to quickly retrieve all the available delivery options.
+Here's how it is done:
+
+.. code-block:: php
+
+    <?php
+use ThirtyBees\PostNL\Entity\Label;
+    use ThirtyBees\PostNL\PostNL;
+    use ThirtyBees\PostNL\Entity\Customer;
+    use ThirtyBees\PostNL\Entity\Address;
+    use ThirtyBees\PostNL\Entity\Shipment;
+    use ThirtyBees\PostNL\Entity\Dimension;
+
+    require_once __DIR__.'/vendor/autoload.php';
+
+    // Your PostNL credentials
+    $customer = Customer::create([
+        'CollectionLocation' => '123456',
+        'CustomerCode'       => 'DEVC',
+        'CustomerNumber'     => '11223344',
+        'ContactPerson'      => 'Lesley',
+        'Address'            => Address::create([
+            'AddressType' => '02',
+            'City'        => 'Hoofddorp',
+            'CompanyName' => 'PostNL',
+            'Countrycode' => 'NL',
+            'HouseNr'     => '42',
+            'Street'      => 'Siriusdreef',
+            'Zipcode'     => '2132WT',
+        ]),
+        'Email'              => 'michael@thirtybees.com',
+        'Name'               => 'Michael',
+    ]);
+
+    $apikey = 'YOUR_API_KEY_HERE';
+    $sandbox = true;
+
+    $postnl = new PostNL($customer, $apikey, $sandbox, PostNL::MODE_SOAP);
+
+    $mondayDelivery = true;
+    $deliveryDaysWindow = 7; // Amount of days to show ahead
+    $dropoffDelay = 0;       // Amount of days to delay delivery
+
+    $cutoffTime = '15:00:00';
+    $dropoffDays = [1 => true, 2 => true, 3 => true, 4 => true, 5 => true, 6 => false, 7 => false];
+    foreach (range(1, 7) as $day) {
+        if (isset($dropoffDays[$day])) {
+            $cutOffTimes[] = new CutOffTime(
+                str_pad($day, 2, '0', STR_PAD_LEFT),
+                date('H:i:00', strtotime($cutoffTime)),
+                true
+            );
+        }
+    }
+
+    $response = $postnl->getTimeframesAndNearestLocations(
+        (new GetTimeframes())
+            ->setTimeframe([
+                (new Timeframe())
+                    ->setCountryCode('NL')
+                    ->setEndDate(date('d-m-Y', strtotime(" +{$deliveryDaysWindow} days +{$dropoffDelay} days")))
+                    ->setHouseNr('66')
+                    ->setOptions(['Morning', 'Daytime'])
+                    ->setPostalCode('2132WT')
+                    ->setStartDate(date('d-m-Y', strtotime(" +1 day +{$request['dropoff_delay']} days")))
+                    ->setSundaySorting(!empty($mondayDelivery) && date('w', strtotime("+{$dropoffDelay} days")))
+            ]),
+        (new GetNearestLocations())
+            ->setCountrycode($request['cc'])
+            ->setLocation(
+                (new Location())
+                    ->setAllowSundaySorting(!empty($mondayDelivery))
+                    ->setDeliveryOptions(['PG', 'PGE'])
+                    ->setOptions(['Daytime'])
+                    ->setHouseNr('66')
+                    ->setPostalcode('2132WT')
+            ),
+        (new GetDeliveryDate())
+            ->setGetDeliveryDate(
+                (new GetDeliveryDate())
+                    ->setAllowSundaySorting(!empty($mondayDelivery))
+                    ->setCountryCode('NL')
+                    ->setCutOffTimes($cutOffTimes)
+                    ->setHouseNr($request['number'])
+                    ->setOptions($deliveryOptions)
+                    ->setPostalCode('2132WT')
+                    ->setShippingDate(date('d-m-Y H:i:s'))
+                    ->setShippingDuration(strval(1 + (int) $dropoffDelay))
+            )
+            ->setMessage(new Message())
+    );
+
+The response variable will contain the timeframes, nearest locations and delivery date. The reponse will be an array with the keys
+`timeframes`, `locations` and `delivery_date`. You can then use the delivery date to prune any timeframes that can no longer be guaranteed.
 
 Requesting a merged label
 -------------------------
@@ -53,7 +150,7 @@ Here is how you can request two labels and have them merged into a single PDF au
     $apikey = 'YOUR_API_KEY_HERE';
     $sandbox = true;
 
-    $postnl = new PostNL($customer, $apikey, $sandbox, PostNL::MODE_REST);
+    $postnl = new PostNL($customer, $apikey, $sandbox, PostNL::MODE_SOAP);
 
     $barcodes = $postnl->generateBarcodesByCountryCodes(['NL' => 2]);
 
