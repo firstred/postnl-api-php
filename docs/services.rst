@@ -283,7 +283,8 @@ positions
     ``bool[]`` - `optional, defaults to all positions`
 
     This will set the positions of the labels. The following image shows the available positions, use `true` or `false` to resp. enable or disable a position:
-    .. image:: img/positions.png
+
+.. image:: img/positions.png
 
 Confirming service
 ------------------
