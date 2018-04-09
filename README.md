@@ -17,7 +17,6 @@ improved performance.
 ## Important notice
 
 The PHP bindings can connect to both PostNL's SOAP and REST API.  
-The library is still a work-in-progress, but is expected to hit stable status soon.
 
 ### Status
 
