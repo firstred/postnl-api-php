@@ -296,7 +296,7 @@ Confirming service
 
 You can confirm shipments that have previously not been confirmed. The available methods are `confirmShipment` and `confirmShipments`.
 The first method accepts a single `Shipment` object whereas the latter accepts an array of `Shipment`s.
-The output is a boolean, or an array with booleans in case you are confirming multiple shipments. The results will be tied to the indices of your request array.
+The output is a boolean, or an array with booleans in case you are confirming multiple shipments. The results will be tied to the keys of your request array.
 
 Shipping status service
 -----------------------
@@ -308,11 +308,191 @@ Shipping status service
 
 This service can be used to retrieve shipping statuses. For a short update use the `CurrentStatus` method, otherwise `CompleteStatus` will provide you with a long list containing the shipment's history.
 
-Current Status
-~~~~~~~~~~~~~~
+Current Status by Barcode
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Complete Status
-~~~~~~~~~~~~~~~
+Gets the current status by Barcode
+
+.. code-block:: php
+
+    <?php
+     $this->getClient()->getCurrentStatus((new CurrentStatus())
+         ->setShipment(
+             (new Shipment())
+                 ->setBarcode('3SDEVC98237423')
+         )
+     );
+
+statusrequest
+    ``CurrentStatus`` - `required`
+
+    The CurrentStatus object. Check the API documentation for all possibilities.
+
+
+Current Status by Reference
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Gets the current status by reference. Note that you must have set the reference on the shipment label first.
+
+.. code-block:: php
+
+    <?php
+     $this->getClient()->getCurrentStatusByReference((new CurrentStatusByReference())
+         ->setShipment(
+             (new Shipment())
+                 ->setReference('myref')
+         )
+     );
+
+statusrequest
+    ``CurrentStatusByReference`` - `required`
+
+    The CurrentStatusByReference object. Check the API documentation for all possibilities.
+
+Current Status by Status Code
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Gets the current status by status.
+
+.. code-block:: php
+
+    <?php
+     $this->getClient()->getCurrentStatusByStatus((new CurrentStatusByStatus())
+         ->setShipment(
+             (new Shipment())
+                 ->setStatusCode('5')
+         )
+     );
+
+statusrequest
+    ``CurrentStatusByStatus`` - `required`
+
+    The CurrentStatusByStatus object. Check the API documentation for all possibilities.
+
+Current Status by Phase Code
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Gets the current status by phase code. Note that the date range is required.
+
+.. code-block:: php
+
+    <?php
+     $this->getClient()->getCurrentStatusByReference((new CurrentStatusByPhase())
+         ->setShipment(
+             (new Shipment())
+                 ->setPhaseCode('5')
+                 ->setDateFrom(date('d-m-Y H:i:s', strtotime('-7 days'))
+                 ->setDateTo(date('d-m-Y H:i:s')
+         )
+     );
+
+statusrequest
+    ``CurrentStatusByPhase`` - `required`
+
+    The CurrentStatusByPhase object. Check the API documentation for all possibilities.
+
+Complete Status by Barcode
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Gets the complete status by Barcode
+
+.. code-block:: php
+
+    <?php
+     $this->getClient()->getCompleteStatus((new CompleteStatus())
+         ->setShipment(
+             (new Shipment())
+                 ->setBarcode('3SDEVC98237423')
+         )
+     );
+
+statusrequest
+    ``CompleteStatus`` - `required`
+
+    The CompleteStatus object. Check the API documentation for all possibilities.
+
+Complete Status by Reference
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Gets the complete status by reference. Note that you must have set the reference on the shipment label first.
+
+.. code-block:: php
+
+    <?php
+     $this->getClient()->getCompleteStatusByReference((new CompleteStatusByReference())
+         ->setShipment(
+             (new Shipment())
+                 ->setReference('myref')
+         )
+     );
+
+statusrequest
+    ``CompleteStatusByReference`` - `required`
+
+    The CompleteStatusByReference object. Check the API documentation for all possibilities.
+
+Complete Status by Status Code
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Gets the complete status by status.
+
+.. code-block:: php
+
+    <?php
+     $this->getClient()->getCompleteStatusByStatus((new CompleteStatusByStatus())
+         ->setShipment(
+             (new Shipment())
+                 ->setStatusCode('5')
+         )
+     );
+
+statusrequest
+    ``CompleteStatusByStatus`` - `required`
+
+    The CompleteStatusByStatus object. Check the API documentation for all possibilities.
+
+Complete Status by Phase Code
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Gets the complete status by phase code. Note that the date range is required.
+
+.. code-block:: php
+
+    <?php
+     $this->getClient()->getCompleteStatusByReference((new CompleteStatusByPhase())
+         ->setShipment(
+             (new Shipment())
+                 ->setPhaseCode('5')
+                 ->setDateFrom(date('d-m-Y H:i:s', strtotime('-7 days'))
+                 ->setDateTo(date('d-m-Y H:i:s')
+         )
+     );
+
+statusrequest
+    ``CompleteStatusByPhase`` - `required`
+
+    The CompleteStatusByPhase object. Check the API documentation for all possibilities.
+
+Get Signature
+~~~~~~~~~~~~~
+
+Gets the signature of the shipment when available. A signature can be accessed by barcode only.
+
+.. code-block:: php
+
+    $this->getClient()->getSignature(
+        (new GetSignature())
+            ->setShipment((new Shipment)
+                ->setBarcode('3SDEVC23987423')
+            )
+    );
+
+It accepts the following arguments
+
+getsignature
+    ``GetSignature`` - `required`
+
+    The `GetSignature` object. It needs to have one `Shipment` set with a barcode.
 
 Delivery date service
 ---------------------
