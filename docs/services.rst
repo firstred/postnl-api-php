@@ -119,6 +119,172 @@ Labelling service
     | PostNL API documentation for this service:
     | https://developer.postnl.nl/apis/labelling-webservice
 
+The labelling service allows you to create shipment labels and optionally confirm the shipments.
+The library has a built-in way to merge labels automatically, so you can request labels for multiple shipments at once.
+
+Generate a single label
+~~~~~~~~~~~~~~~~~~~~~~~
+
+The following example generates a single shipment label for a domestic shipment:
+
+.. code-block:: php
+
+    <?php
+    $postnl = new PostNL(...);
+    $postnl->generateLabel(
+        Shipment::create()
+            ->setAddresses([
+                Address::create([
+                    'AddressType' => '01',
+                    'City'        => 'Utrecht',
+                    'Countrycode' => 'NL',
+                    'FirstName'   => 'Peter',
+                    'HouseNr'     => '9',
+                    'HouseNrExt'  => 'a bis',
+                    'Name'        => 'de Ruijter',
+                    'Street'      => 'Bilderdijkstraat',
+                    'Zipcode'     => '3521VA',
+                ]),
+                Address::create([
+                    'AddressType' => '02',
+                    'City'        => 'Hoofddorp',
+                    'CompanyName' => 'PostNL',
+                    'Countrycode' => 'NL',
+                    'HouseNr'     => '42',
+                    'Street'      => 'Siriusdreef',
+                    'Zipcode'     => '2132WT',
+                ]),
+            ])
+            ->setBarcode($barcode)
+            ->setDeliveryAddress('01')
+            ->setDimension(new Dimension('2000'))
+            ->setProductCodeDelivery('3085'),
+        'GraphicFile|PDF',
+        false
+    );
+
+This will create a standard shipment (product code 3085). You can access the label (base64 encoded PDF) this way:
+
+.. code-block:: php
+
+    <?php
+    $pdf = base64_decode($label->getResponseShipments()[0]->getLabels()[0]->getContent());
+
+This function accepts the following arguments:
+
+shipment
+    ``Shipment`` - `required`
+
+    The Shipment object. Visit the PostNL API documentation to find out what a Shipment object consists of.
+
+printertype
+    ``string`` - `optional, defaults to GraphicFile|PDF`
+
+    The list of supported printer types can be found on this page: https://developer.postnl.nl/browse-apis/send-and-track/labelling-webservice/documentation-soap/
+
+confirm
+    ``string`` - `optional, defaults to true`
+
+    Indicates whether the shipment should immediately be confirmed.
+
+Generate multiple shipment labels
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The following example shows how a label can be merged:
+
+.. code-block:: php
+
+    <?php
+    $shipments = [
+        Shipment::create([
+            'Addresses'           => [
+                Address::create([
+                    'AddressType' => '01',
+                    'City'        => 'Utrecht',
+                    'Countrycode' => 'NL',
+                    'FirstName'   => 'Peter',
+                    'HouseNr'     => '9',
+                    'HouseNrExt'  => 'a bis',
+                    'Name'        => 'de Ruijter',
+                    'Street'      => 'Bilderdijkstraat',
+                    'Zipcode'     => '3521VA',
+                ]),
+            ],
+            'Barcode'             => $barcodes['NL'][0],
+            'Dimension'           => new Dimension('1000'),
+            'ProductCodeDelivery' => '3085',
+        ]),
+        Shipment::create([
+            'Addresses'           => [
+                Address::create([
+                    'AddressType' => '01',
+                    'City'        => 'Utrecht',
+                    'Countrycode' => 'NL',
+                    'FirstName'   => 'Peter',
+                    'HouseNr'     => '9',
+                    'HouseNrExt'  => 'a bis',
+                    'Name'        => 'de Ruijter',
+                    'Street'      => 'Bilderdijkstraat',
+                    'Zipcode'     => '3521VA',
+                ]),
+            ],
+            'Barcode'             => $barcodes['NL'][1],
+            'Dimension'           => new Dimension('1000'),
+            'ProductCodeDelivery' => '3085',
+        ]),
+    ];
+
+    $label = $postnl->generateLabels(
+        $shipments,
+        'GraphicFile|PDF', // Printertype (only PDFs can be merged -- no need to use the Merged types)
+        true, // Confirm immediately
+        true, // Merge
+        Label::FORMAT_A4, // Format -- this merges multiple A6 labels onto an A4
+        [
+            1 => true,
+            2 => true,
+            3 => true,
+            4 => true,
+        ] // Positions
+    );
+
+    file_put_contents('labels.pdf', $label);
+
+By setting the `merge` flag it will automatically merge the labels into a PDF string.
+
+The function accepts the following arguments:
+
+shipments
+    ``Shipment[]`` - `required`
+
+    The Shipment objects. Visit the PostNL API documentation to find out what a Shipment object consists of.
+
+printertype
+    ``string`` - `optional, defaults to GraphicFile|PDF`
+
+    The list of supported printer types can be found on this page: https://developer.postnl.nl/browse-apis/send-and-track/labelling-webservice/documentation-soap/
+
+confirm
+    ``string`` - `optional, defaults to true`
+
+    Indicates whether the shipment should immediately be confirmed.
+
+merge
+    ``bool`` - `optional, default to false`
+
+    This will merge the labels and make the function return a pdf string of the merged label.
+
+format
+    ``int`` - `optional, defaults to 1 (FORMAT_A4)`
+
+    This sets the paper format (can be A4 or A4).
+
+positions
+    ``bool[]`` - `optional, defaults to all positions`
+
+    This will set the positions of the labels. The following image shows the available positions, use `true` or `false` to resp. enable or disable a position:
+    .. image:: img/positions.png
+
 Confirming service
 ------------------
 
@@ -127,6 +293,10 @@ Confirming service
     | PostNL API documentation for this service:
     | https://developer.postnl.nl/apis/confirming-webservice
 
+You can confirm shipments that have previously not been confirmed. The available methods are `confirmShipment` and `confirmShipments`.
+The first method accepts a single `Shipment` object whereas the latter accepts an array of `Shipment`s.
+The output is a boolean, or an array with booleans in case you are confirming multiple shipments. The results will be tied to the indices of your request array.
+
 Shipping status service
 -----------------------
 
@@ -134,6 +304,14 @@ Shipping status service
 
     | PostNL API documentation for this service:
     | https://developer.postnl.nl/apis/shippingstatus-webservice
+
+This service can be used to retrieve shipping statuses. For a short update use the `CurrentStatus` method, otherwise `CompleteStatus` will provide you with a long list containing the shipment's history.
+
+Current Status
+~~~~~~~~~~~~~~
+
+Complete Status
+~~~~~~~~~~~~~~~
 
 Delivery date service
 ---------------------
