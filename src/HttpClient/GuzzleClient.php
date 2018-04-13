@@ -19,10 +19,10 @@
 
 namespace ThirtyBees\PostNL\HttpClient;
 
+use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\TransferException;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
@@ -78,6 +78,7 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
                 [
                     'timeout'         => $this->timeout,
                     'connect_timeout' => $this->connectTimeout,
+                    'http_errors'     => false,
                 ]
             ));
 
@@ -266,7 +267,7 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
         $guzzle = $this->getClient();
         try {
             $response = $guzzle->send($request);
-        } catch (GuzzleException $e) {
+        } catch (TransferException $e) {
             throw new HttpClientException($e->getMessage(), $e->getCode(), $e);
         }
         if ($response instanceof Response && $this->logger instanceof LoggerInterface) {
@@ -315,7 +316,7 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
             if (!empty($response['value'])) {
                 $response = $response['value'];
             } elseif (!empty($response['reason'])) {
-                if ($response['reason'] instanceof GuzzleException) {
+                if ($response['reason'] instanceof TransferException) {
                     if (method_exists($response['reason'], 'getMessage')
                         && method_exists($response['reason'], 'getCode')
                     ) {
@@ -331,7 +332,7 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
                     $response = $response['reason'];
                 }
             } else {
-                $response = \ThirtyBees\PostNL\Exception\ResponseException('Unknown reponse type');
+                $response = new \ThirtyBees\PostNL\Exception\ResponseException('Unknown reponse type');
             }
             if ($response instanceof Response && $this->logger instanceof LoggerInterface) {
                 $this->logger->debug(\GuzzleHttp\Psr7\str($response));
