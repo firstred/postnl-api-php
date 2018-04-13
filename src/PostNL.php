@@ -771,41 +771,44 @@ class PostNL implements LoggerAwareInterface
      * Note that instead of returning a GenerateLabelResponse this function can merge the labels and return a
      * string which contains the PDF with the merged pages as well.
      *
-     * @param Shipment[] $shipments   (key = ID) Shipments
-     * @param string     $printertype Printer type, see PostNL dev docs for available types
-     * @param bool       $confirm     Immediately confirm the shipments
-     * @param bool       $merge       Merge the PDFs and return them in a MyParcel way
-     * @param int        $format      A4 or A6
-     * @param array      $positions   Set the positions of the A6s on the first A4
-     *                                The indices should be the position number, marked with `true` or `false`
-     *                                These are the position numbers:
-     *                                ```
-     *                                +-+-+
-     *                                |2|4|
-     *                                +-+-+
-     *                                |1|3|
-     *                                +-+-+
-     *                                ```
-     *                                So, for
-     *                                ```
-     *                                +-+-+
-     *                                |x|✔|
-     *                                +-+-+
-     *                                |✔|x|
-     *                                +-+-+
-     *                                ```
-     *                                you would have to pass:
-     *                                ```php
-     *                                [
+     * @param Shipment[] $shipments     (key = ID) Shipments
+     * @param string     $printertype   Printer type, see PostNL dev docs for available types
+     * @param bool       $confirm       Immediately confirm the shipments
+     * @param bool       $merge         Merge the PDFs and return them in a MyParcel way
+     * @param int        $format        A4 or A6
+     * @param array      $positions     Set the positions of the A6s on the first A4
+     *                                  The indices should be the position number, marked with `true` or `false`
+     *                                  These are the position numbers:
+     *                                  ```
+     *                                  +-+-+
+     *                                  |2|4|
+     *                                  +-+-+
+     *                                  |1|3|
+     *                                  +-+-+
+     *                                  ```
+     *                                  So, for
+     *                                  ```
+     *                                  +-+-+
+     *                                  |x|✔|
+     *                                  +-+-+
+     *                                  |✔|x|
+     *                                  +-+-+
+     *                                  ```
+     *                                  you would have to pass:
+     *                                  ```php
+     *                                  [
      *                                  1 => true,
      *                                  2 => false,
      *                                  3 => false,
      *                                  4 => true,
-     *                                ]
-     *                                ```
+     *                                  ]
+     *                                  ```
+     *
+     * @param string     $a6Orientation A6 orientation (P or L)
      *
      * @return GenerateLabelResponse[]|string
-     * @throws \Exception
+     * @throws AbstractException
+     * @throws NotSupportedException
      * @throws \setasign\Fpdi\PdfReader\PdfReaderException
      */
     public function generateLabels(
@@ -819,7 +822,8 @@ class PostNL implements LoggerAwareInterface
             2 => true,
             3 => true,
             4 => true,
-        ]
+        ],
+        $a6Orientation = 'P'
     ) {
         if ($merge) {
             if ($printertype !== 'GraphicFile|PDF') {
@@ -857,10 +861,12 @@ class PostNL implements LoggerAwareInterface
                 $pdfContent = base64_decode($label->getResponseShipments()[0]->getLabels()[0]->getContent());
                 $sizes = Util::getPdfSizeAndOrientation($pdfContent);
                 if ($sizes['iso'] === 'A6') {
-                    $pdf->addPage('P');
-                    $pdf->rotateCounterClockWise();
+                    $pdf->addPage($a6Orientation);
+                    if ($a6Orientation === 'P') {
+                        $pdf->rotateCounterClockWise();
+                    }
                     $pdf->setSourceFile(StreamReader::createByString($pdfContent));
-                    $pdf->useTemplate($pdf->importPage(1), -128, 0);
+                    $pdf->useTemplate($pdf->importPage(1), $a6Orientation === 'P' ? -128 : 0, 0);
                 } else {
                     // Assuming A4 here (could be multi-page) - defer to end
                     $stream = StreamReader::createByString($pdfContent);
