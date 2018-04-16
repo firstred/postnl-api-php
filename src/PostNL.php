@@ -862,11 +862,13 @@ class PostNL implements LoggerAwareInterface
                 $sizes = Util::getPdfSizeAndOrientation($pdfContent);
                 if ($sizes['iso'] === 'A6') {
                     $pdf->addPage($a6Orientation);
-                    if ($a6Orientation != $sizes['orientation']) {
+                    if ($a6Orientation === 'L' && $sizes['orientation'] === 'P') {
+                        $pdf->rotateCounterClockWise();
+                    } elseif ($a6Orientation === 'P' && $sizes['orientation'] === 'L') {
                         $pdf->rotateCounterClockWise();
                     }
                     $pdf->setSourceFile(StreamReader::createByString($pdfContent));
-                    $pdf->useTemplate($pdf->importPage(1), $a6Orientation === 'P' ? -128 : 0, 0);
+                    $pdf->useTemplate($pdf->importPage(1), $a6Orientation === 'P' ? -128 : 0, $a6Orientation === 'L' ? -128 : 0);
                 } else {
                     // Assuming A4 here (could be multi-page) - defer to end
                     $stream = StreamReader::createByString($pdfContent);
