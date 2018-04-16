@@ -182,7 +182,7 @@ class TimeframeService extends AbstractService
         $this->setService($getTimeframes);
         $timeframe = $getTimeframes->getTimeframe()[0];
         $query = [
-            'AllowSundaySorting' => $timeframe->getSundaySorting(),
+            'AllowSundaySorting' => in_array($timeframe->getSundaySorting(), [true, 'true', 1], 1) ? '1' : '0' ,
             'StartDate'          => $timeframe->getStartDate(),
             'EndDate'            => $timeframe->getEndDate(),
             'PostalCode'         => $timeframe->getPostalCode(),
