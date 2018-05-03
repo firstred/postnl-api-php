@@ -24,6 +24,7 @@ use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\TransferException;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Promise\EachPromise;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Psr\Log\LoggerAwareInterface;
@@ -56,9 +57,10 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
     private $timeout = self::DEFAULT_TIMEOUT;
     /** @var int $connectTimeout */
     private $connectTimeout = self::DEFAULT_CONNECT_TIMEOUT;
-
     /** @var int $maxRetries */
-    private $maxRetries = 1;
+    private $maxRetries = 5;
+    /** @var int $concurrency */
+    private $concurrency = 5;
     /** @var Client $client */
     private $client;
 
@@ -189,6 +191,30 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
+     * Set the concurrency
+     *
+     * @param int $concurrency
+     *
+     * @return $this
+     */
+    public function setConcurrency($concurrency)
+    {
+        $this->concurrency = $concurrency;
+
+        return $this;
+    }
+
+    /**
+     * Return concurrency
+     *
+     * @return int
+     */
+    public function getConcurrency()
+    {
+        return $this->concurrency;
+    }
+
+    /**
      * Set the logger
      *
      * @param LoggerInterface $logger
@@ -303,19 +329,29 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
 
         $guzzle = $this->getClient();
         // Concurrent requests
-        $promises = [];
-        foreach ($requests as $index => $request) {
-            if ($request instanceof Request && $this->logger instanceof LoggerInterface) {
-                $this->logger->debug(\GuzzleHttp\Psr7\str($request));
+        $promises = call_user_func(function () use ($requests, $guzzle) {
+            foreach ($requests as $index => $request) {
+                if ($request instanceof Request && $this->logger instanceof LoggerInterface) {
+                    $this->logger->debug(\GuzzleHttp\Psr7\str($request));
+                }
+                yield $index => $guzzle->sendAsync($request);
             }
-            $promises[$index] = $guzzle->sendAsync($request);
-        }
+        });
 
-        $responses = \GuzzleHttp\Promise\settle($promises)->wait();
+        $responses = [];
+        (new EachPromise($promises, [
+            'concurrency' => $this->concurrency,
+            'fulfilled' => function ($response, $index) use (&$responses) {
+                $responses[$index] = $response;
+            },
+            'rejected' => function ($response, $index) use (&$responses) {
+                $responses[$index] = $response;
+            },
+        ]))->promise()->wait();
         foreach ($responses as &$response) {
-            if (!empty($response['value'])) {
+            if (is_array($response) && !empty($response['value'])) {
                 $response = $response['value'];
-            } elseif (!empty($response['reason'])) {
+            } elseif (is_array($response) && !empty($response['reason'])) {
                 if ($response['reason'] instanceof TransferException) {
                     if (method_exists($response['reason'], 'getMessage')
                         && method_exists($response['reason'], 'getCode')
@@ -331,8 +367,8 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
                  } else {
                     $response = $response['reason'];
                 }
-            } else {
-                $response = new \ThirtyBees\PostNL\Exception\ResponseException('Unknown reponse type');
+            } elseif (!$response instanceof Response) {
+                $response = new \ThirtyBees\PostNL\Exception\ResponseException('Unknown response type');
             }
             if ($response instanceof Response && $this->logger instanceof LoggerInterface) {
                 $this->logger->debug(\GuzzleHttp\Psr7\str($response));
@@ -373,7 +409,17 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
      */
     protected function isServerError(Response $response = null)
     {
-        return $response && $response->getStatusCode() >= 500;
+        if ($response instanceof Response) {
+            $content = (string) $response->getBody();
+            if (strpos($content, 'The Service is temporarily unavailable') !== false) {
+                sleep(2); // Been sending too many requests, go for a short break
+            }
+        } else {
+            return false;
+        }
+
+        return $response->getStatusCode() >= 500
+            || strpos($content, 'The Service is temporarily unavailable') !== false;
     }
 
     /**
