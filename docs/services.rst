@@ -316,7 +316,8 @@ Gets the current status by Barcode
 .. code-block:: php
 
     <?php
-     $this->getClient()->getCurrentStatus((new CurrentStatus())
+     $postnl = new PostNL(...);
+     $postnl->getCurrentStatus((new CurrentStatus())
          ->setShipment(
              (new Shipment())
                  ->setBarcode('3SDEVC98237423')
@@ -337,7 +338,8 @@ Gets the current status by reference. Note that you must have set the reference 
 .. code-block:: php
 
     <?php
-     $this->getClient()->getCurrentStatusByReference((new CurrentStatusByReference())
+     $postnl = new PostNL(...);
+     $postnl->getCurrentStatusByReference((new CurrentStatusByReference())
          ->setShipment(
              (new Shipment())
                  ->setReference('myref')
@@ -357,12 +359,13 @@ Gets the current status by status.
 .. code-block:: php
 
     <?php
-     $this->getClient()->getCurrentStatusByStatus((new CurrentStatusByStatus())
-         ->setShipment(
-             (new Shipment())
-                 ->setStatusCode('5')
-         )
-     );
+    $postnl = new PostNL(...);
+    $postnl->getCurrentStatusByStatus((new CurrentStatusByStatus())
+        ->setShipment(
+            (new Shipment())
+                ->setStatusCode('5')
+        )
+    );
 
 statusrequest
     ``CurrentStatusByStatus`` - `required`
@@ -377,14 +380,15 @@ Gets the current status by phase code. Note that the date range is required.
 .. code-block:: php
 
     <?php
-     $this->getClient()->getCurrentStatusByReference((new CurrentStatusByPhase())
-         ->setShipment(
-             (new Shipment())
-                 ->setPhaseCode('5')
-                 ->setDateFrom(date('d-m-Y H:i:s', strtotime('-7 days'))
-                 ->setDateTo(date('d-m-Y H:i:s')
-         )
-     );
+    $postnl = new PostNL(...);
+    $postnl->getCurrentStatusByReference((new CurrentStatusByPhase())
+        ->setShipment(
+            (new Shipment())
+                ->setPhaseCode('5')
+                ->setDateFrom(date('d-m-Y H:i:s', strtotime('-7 days'))
+                ->setDateTo(date('d-m-Y H:i:s')
+        )
+    );
 
 statusrequest
     ``CurrentStatusByPhase`` - `required`
@@ -399,12 +403,13 @@ Gets the complete status by Barcode
 .. code-block:: php
 
     <?php
-     $this->getClient()->getCompleteStatus((new CompleteStatus())
-         ->setShipment(
-             (new Shipment())
-                 ->setBarcode('3SDEVC98237423')
-         )
-     );
+    $postnl = new PostNL(...);
+    $postnl->getCompleteStatus((new CompleteStatus())
+        ->setShipment(
+            (new Shipment())
+                ->setBarcode('3SDEVC98237423')
+        )
+    );
 
 statusrequest
     ``CompleteStatus`` - `required`
@@ -419,12 +424,13 @@ Gets the complete status by reference. Note that you must have set the reference
 .. code-block:: php
 
     <?php
-     $this->getClient()->getCompleteStatusByReference((new CompleteStatusByReference())
-         ->setShipment(
-             (new Shipment())
-                 ->setReference('myref')
-         )
-     );
+    $postnl = new PostNL(...);
+    $postnl->getCompleteStatusByReference((new CompleteStatusByReference())
+        ->setShipment(
+            (new Shipment())
+                ->setReference('myref')
+        )
+    );
 
 statusrequest
     ``CompleteStatusByReference`` - `required`
@@ -439,12 +445,13 @@ Gets the complete status by status.
 .. code-block:: php
 
     <?php
-     $this->getClient()->getCompleteStatusByStatus((new CompleteStatusByStatus())
-         ->setShipment(
-             (new Shipment())
-                 ->setStatusCode('5')
-         )
-     );
+    $postnl = new PostNL(...);
+    $postnl->getCompleteStatusByStatus((new CompleteStatusByStatus())
+        ->setShipment(
+            (new Shipment())
+                ->setStatusCode('5')
+        )
+    );
 
 statusrequest
     ``CompleteStatusByStatus`` - `required`
@@ -459,14 +466,15 @@ Gets the complete status by phase code. Note that the date range is required.
 .. code-block:: php
 
     <?php
-     $this->getClient()->getCompleteStatusByReference((new CompleteStatusByPhase())
-         ->setShipment(
-             (new Shipment())
-                 ->setPhaseCode('5')
-                 ->setDateFrom(date('d-m-Y H:i:s', strtotime('-7 days'))
-                 ->setDateTo(date('d-m-Y H:i:s')
-         )
-     );
+    $postnl = new PostNL(...);
+    $postnl->getCompleteStatusByReference((new CompleteStatusByPhase())
+        ->setShipment(
+            (new Shipment())
+                ->setPhaseCode('5')
+                ->setDateFrom(date('d-m-Y H:i:s', strtotime('-7 days'))
+                ->setDateTo(date('d-m-Y H:i:s')
+        )
+    );
 
 statusrequest
     ``CompleteStatusByPhase`` - `required`
@@ -479,8 +487,9 @@ Get Signature
 Gets the signature of the shipment when available. A signature can be accessed by barcode only.
 
 .. code-block:: php
-
-    $this->getClient()->getSignature(
+    <?php
+    $postnl = new PostNL(...);
+    $postnl->getSignature(
         (new GetSignature())
             ->setShipment((new Shipment)
                 ->setBarcode('3SDEVC23987423')
