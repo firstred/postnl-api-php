@@ -24,6 +24,7 @@ use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\TransferException;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Middleware;
 use GuzzleHttp\Promise\EachPromise;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
@@ -74,13 +75,40 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
         if (!$this->client) {
             // Initialize Guzzle and the retry middleware, include the default options
             $stack = HandlerStack::create(\GuzzleHttp\choose_handler());
-            $stack->push(\GuzzleHttp\Middleware::retry(static::createRetryHandler()));
+            $stack->push(Middleware::retry(function (
+                $retries,
+                Request $request,
+                Response $response = null,
+                RequestException $exception = null
+            ) {
+                // Limit the number of retries to 5
+                if ($retries >= 5) {
+                    return false;
+                }
+
+                // Retry connection exceptions
+                if ($exception instanceof ConnectException) {
+                    return true;
+                }
+
+                if ($response) {
+                    // Retry on server errors
+                    if ($response->getStatusCode() >= 500) {
+                        return true;
+                    }
+                }
+
+                return false;
+            }, function ($retries) {
+                return $retries * 1000;
+            }));
             $guzzle = new Client(array_merge(
                 $this->defaultOptions,
                 [
                     'timeout'         => $this->timeout,
                     'connect_timeout' => $this->connectTimeout,
                     'http_errors'     => false,
+                    'handler'         => $stack,
                 ]
             ));
 
@@ -376,59 +404,5 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
         }
 
         return $responses;
-    }
-
-    /**
-     * Create the retry handler
-     *
-     * @return \Closure
-     */
-    protected function createRetryHandler()
-    {
-        return function (
-            $retries,
-            Request $request,
-            Response $response = null,
-            RequestException $exception = null
-        ) {
-            if ($retries >= $this->maxRetries) {
-                return false;
-            }
-            if (!(static::isServerError($response) || static::isConnectError($exception))) {
-                return false;
-            }
-
-            return true;
-        };
-    }
-
-    /**
-     * @param Response $response
-     *
-     * @return bool
-     */
-    protected function isServerError(Response $response = null)
-    {
-        if ($response instanceof Response) {
-            $content = (string) $response->getBody();
-            if (strpos($content, 'The Service is temporarily unavailable') !== false) {
-                sleep(2); // Been sending too many requests, go for a short break
-            }
-        } else {
-            return false;
-        }
-
-        return $response->getStatusCode() >= 500
-            || strpos($content, 'The Service is temporarily unavailable') !== false;
-    }
-
-    /**
-     * @param RequestException $exception
-     *
-     * @return bool
-     */
-    protected function isConnectError(RequestException $exception = null)
-    {
-        return $exception instanceof ConnectException;
     }
 }
