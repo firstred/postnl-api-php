@@ -22,7 +22,7 @@ Here's how it is done:
 .. code-block:: php
 
     <?php
-use ThirtyBees\PostNL\Entity\Label;
+    use ThirtyBees\PostNL\Entity\Label;
     use ThirtyBees\PostNL\PostNL;
     use ThirtyBees\PostNL\Entity\Customer;
     use ThirtyBees\PostNL\Entity\Address;
