@@ -56,6 +56,7 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method string|null getFloor()
  * @method string|null getRegion()
  * @method string|null getRemark()
+ * @method string|null getStreetHouseNrExt()
  *
  * @method Address setFirstName(string|null $firstName = null)
  * @method Address setName(string|null $name = null)
@@ -72,6 +73,7 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method Address setFloor(string|null $floor = null)
  * @method Address setRegion(string|null $region = null)
  * @method Address setRemark(string|null $remark = null)
+ * @method Address setStreetHouseNrExt(string|null $streetHouseNrExt = null)
  */
 class Address extends AbstractEntity
 {
@@ -267,6 +269,8 @@ class Address extends AbstractEntity
     protected $HouseNr;
     /** @var string|null $HouseNrExt */
     protected $HouseNrExt;
+    /** @var string|null $HouseNrExt */
+    protected $StreetHouseNrExt;
     /** @var string|null $Name */
     protected $Name;
     /** @var string|null $Region */
@@ -299,6 +303,7 @@ class Address extends AbstractEntity
      * @param string|null $floor
      * @param string|null $region
      * @param string|null $remark
+     * @param string|null $streetHouseNrExt
      */
     public function __construct(
         $addressType = null,
@@ -317,7 +322,8 @@ class Address extends AbstractEntity
         $doorcode = null,
         $floor = null,
         $region = null,
-        $remark = null
+        $remark = null,
+        $streetHouseNrExt = null
     ) {
         parent::__construct();
 
@@ -340,6 +346,7 @@ class Address extends AbstractEntity
         $this->setFloor($floor);
         $this->setRegion($region);
         $this->setRemark($remark);
+        $this->setStreetHouseNrExt($streetHouseNrExt);
     }
 
     /**
