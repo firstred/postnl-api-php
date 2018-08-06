@@ -40,14 +40,14 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @package ThirtyBees\PostNL\Entity
  *
- * @method string|null getCode()
- * @method string|null getDescription()
+ * @method string|null getStatusCode()
+ * @method string|null getStatusDescription()
  * @method string|null getPhaseCode()
  * @method string|null getPhaseDescription()
  * @method string|null getTimeStamp()
  *
- * @method CompleteStatusResponseOldStatus setCode(string|null $code = null)
- * @method CompleteStatusResponseOldStatus setDescription(string|null $description = null)
+ * @method CompleteStatusResponseOldStatus setStatusCode(string|null $code = null)
+ * @method CompleteStatusResponseOldStatus setStatusDescription(string|null $description = null)
  * @method CompleteStatusResponseOldStatus setPhaseCode(string|null $code = null)
  * @method CompleteStatusResponseOldStatus setPhaseDescription(string|null $description = null)
  * @method CompleteStatusResponseOldStatus setTimeStamp(string|null $timestamp = null)
@@ -61,60 +61,60 @@ class CompleteStatusResponseOldStatus extends AbstractEntity
      */
     public static $defaultProperties = [
         'Barcode'        => [
-            'Code'             => BarcodeService::DOMAIN_NAMESPACE,
-            'Description'      => BarcodeService::DOMAIN_NAMESPACE,
+            'StatusCode'             => BarcodeService::DOMAIN_NAMESPACE,
+            'StatusDescription'      => BarcodeService::DOMAIN_NAMESPACE,
             'PhaseCode'        => BarcodeService::DOMAIN_NAMESPACE,
             'PhaseDescription' => BarcodeService::DOMAIN_NAMESPACE,
             'TimeStamp'        => BarcodeService::DOMAIN_NAMESPACE,
         ],
         'Confirming'     => [
-            'Code'             => ConfirmingService::DOMAIN_NAMESPACE,
-            'Description'      => ConfirmingService::DOMAIN_NAMESPACE,
+            'StatusCode'             => ConfirmingService::DOMAIN_NAMESPACE,
+            'StatusDescription'      => ConfirmingService::DOMAIN_NAMESPACE,
             'PhaseCode'        => ConfirmingService::DOMAIN_NAMESPACE,
             'PhaseDescription' => ConfirmingService::DOMAIN_NAMESPACE,
             'TimeStamp'        => ConfirmingService::DOMAIN_NAMESPACE,
         ],
         'Labelling'      => [
-            'Code'             => LabellingService::DOMAIN_NAMESPACE,
-            'Description'      => LabellingService::DOMAIN_NAMESPACE,
+            'StatusCode'             => LabellingService::DOMAIN_NAMESPACE,
+            'StatusDescription'      => LabellingService::DOMAIN_NAMESPACE,
             'PhaseCode'        => LabellingService::DOMAIN_NAMESPACE,
             'PhaseDescription' => LabellingService::DOMAIN_NAMESPACE,
             'TimeStamp'        => LabellingService::DOMAIN_NAMESPACE,
         ],
         'ShippingStatus' => [
-            'Code'             => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Description'      => ShippingStatusService::DOMAIN_NAMESPACE,
+            'StatusCode'             => ShippingStatusService::DOMAIN_NAMESPACE,
+            'StatusDescription'      => ShippingStatusService::DOMAIN_NAMESPACE,
             'PhaseCode'        => ShippingStatusService::DOMAIN_NAMESPACE,
             'PhaseDescription' => ShippingStatusService::DOMAIN_NAMESPACE,
             'TimeStamp'        => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate'   => [
-            'Code'             => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Description'      => DeliveryDateService::DOMAIN_NAMESPACE,
+            'StatusCode'             => DeliveryDateService::DOMAIN_NAMESPACE,
+            'StatusDescription'      => DeliveryDateService::DOMAIN_NAMESPACE,
             'PhaseCode'        => DeliveryDateService::DOMAIN_NAMESPACE,
             'PhaseDescription' => DeliveryDateService::DOMAIN_NAMESPACE,
             'TimeStamp'        => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
         'Location'       => [
-            'Code'             => LocationService::DOMAIN_NAMESPACE,
-            'Description'      => LocationService::DOMAIN_NAMESPACE,
+            'StatusCode'             => LocationService::DOMAIN_NAMESPACE,
+            'StatusDescription'      => LocationService::DOMAIN_NAMESPACE,
             'PhaseCode'        => LocationService::DOMAIN_NAMESPACE,
             'PhaseDescription' => LocationService::DOMAIN_NAMESPACE,
             'TimeStamp'        => LocationService::DOMAIN_NAMESPACE,
         ],
         'Timeframe'      => [
-            'Code'             => TimeframeService::DOMAIN_NAMESPACE,
-            'Description'      => TimeframeService::DOMAIN_NAMESPACE,
+            'StatusCode'             => TimeframeService::DOMAIN_NAMESPACE,
+            'StatusDescription'      => TimeframeService::DOMAIN_NAMESPACE,
             'PhaseCode'        => TimeframeService::DOMAIN_NAMESPACE,
             'PhaseDescription' => TimeframeService::DOMAIN_NAMESPACE,
             'TimeStamp'        => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string|null $Code */
-    protected $Code;
-    /** @var string|null $Description */
-    protected $Description;
+    /** @var string|null $StatusCode */
+    protected $StatusCode;
+    /** @var string|null $StatusDescription */
+    protected $StatusDescription;
     /** @var string|null $PhaseCode */
     protected $PhaseCode;
     /** @var string|null $PhaseDescription */
@@ -141,8 +141,8 @@ class CompleteStatusResponseOldStatus extends AbstractEntity
     ) {
         parent::__construct();
 
-        $this->setCode($code);
-        $this->setDescription($description);
+        $this->setStatusCode($code);
+        $this->setStatusDescription($description);
         $this->setPhaseCode($phaseCode);
         $this->setPhaseDescription($phaseDescription);
         $this->setTimeStamp($timeStamp);
