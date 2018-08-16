@@ -1,4 +1,4 @@
-Welcome to the thirty bees' PostNL PHP library documentation!
+Welcome to the unofficial PostNL PHP library documentation!
 =============================================================
 
 These API bindings make it easy to connect to PostNL's CIF API, used for retrieving delivery options, printing shipment labels and finding shipment statuses.
