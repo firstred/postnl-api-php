@@ -1,12 +1,12 @@
 {
-    "name": "thirtybees/postnl-api-php",
+    "name": "firstred/postnl-api-php",
     "description": "PostNL REST API PHP Bindings",
     "type": "library",
     "license": "MIT",
     "authors": [
         {
             "name": "Michael Dekker",
-            "email": "michael@thirtybees.com"
+            "email": "git@michaeldekker.nl"
         }
     ],
     "require": {
