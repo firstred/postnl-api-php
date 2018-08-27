@@ -487,7 +487,7 @@ class ShippingStatusService extends AbstractService
             if ($endDate = $currentStatus->getShipment()->getDateTo()) {
                 $query['endDate'] = date('d-m-Y', strtotime($endDate));
             }
-          } else {
+        } else {
             $query = [];
             $endpoint = "/barcode/{$currentStatus->getShipment()->getBarcode()}";
         }
@@ -712,7 +712,13 @@ class ShippingStatusService extends AbstractService
         $body = json_decode(static::getResponseText($response), true);
         if (isset($body['CompleteStatus'])) {
             if (isset($body['CompleteStatus']['Shipment'])) {
-                $body['CompleteStatus']['Shipments'] = [$body['CompleteStatus']['Shipment']];
+
+                if (!is_array($body['CompleteStatus']['Shipment'])) {
+                    $body['CompleteStatus']['Shipments'] = [$body['CompleteStatus']['Shipment']];
+                } else {
+                    $body['CompleteStatus']['Shipments'] = $body['CompleteStatus']['Shipment'];
+                }
+
                 unset($body['CompleteStatus']['Shipment']);
             }
             foreach ($body['CompleteStatus']['Shipments'] as &$shipment) {
