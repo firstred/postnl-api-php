@@ -711,16 +711,14 @@ class ShippingStatusService extends AbstractService
     {
         $body = json_decode(static::getResponseText($response), true);
         if (isset($body['CompleteStatus'])) {
-            if (isset($body['CompleteStatus']['Shipment'])) {
-
-                if (!is_array($body['CompleteStatus']['Shipment'])) {
-                    $body['CompleteStatus']['Shipments'] = [$body['CompleteStatus']['Shipment']];
-                } else {
-                    $body['CompleteStatus']['Shipments'] = $body['CompleteStatus']['Shipment'];
-                }
-
-                unset($body['CompleteStatus']['Shipment']);
+            if (isset($body['CompleteStatus']['Shipment']['MainBarcode'])) {
+                $body['CompleteStatus']['Shipments'] = [$body['CompleteStatus']['Shipment']];
+            } else {
+                $body['CompleteStatus']['Shipments'] = $body['CompleteStatus']['Shipment'];
             }
+
+            unset($body['CompleteStatus']['Shipment']);
+
             foreach ($body['CompleteStatus']['Shipments'] as &$shipment) {
                 $shipment['Customer'] = AbstractEntity::jsonDeserialize(['Customer' => $shipment['Customer']]);
             }
