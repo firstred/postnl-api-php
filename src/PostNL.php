@@ -870,11 +870,11 @@ class PostNL implements LoggerAwareInterface
                     } elseif ($a6Orientation === 'P' && $sizes['orientation'] === 'L') {
                         $pdf->rotateCounterClockWise();
                     }
-                    $pdf->setSourceFile(\ThirtyBeesPostNL\setasign\Fpdi\PdfParser\StreamReader::createByString($pdfContent));
+                    $pdf->setSourceFile(StreamReader::createByString($pdfContent));
                     $pdf->useTemplate($pdf->importPage(1), $correction[0], $correction[1]);
                 } else {
                     // Assuming A4 here (could be multi-page) - defer to end
-                    $stream = \ThirtyBeesPostNL\setasign\Fpdi\PdfParser\StreamReader::createByString($pdfContent);
+                    $stream = StreamReader::createByString($pdfContent);
                     $deferred[] = ['stream' => $stream, 'sizes' => $sizes];
                 }
             }
