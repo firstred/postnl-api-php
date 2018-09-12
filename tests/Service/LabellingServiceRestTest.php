@@ -283,12 +283,12 @@ class LabellingServiceRestTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @testdox can generate multiple labels
+     * @testdox can generate multiple A4-merged labels
      *
      * @throws \setasign\Fpdi\PdfReader\PdfReaderException
      * @throws \Exception
      */
-    public function testMergeMultipleLabelsRest()
+    public function testMergeMultipleA4LabelsRest()
     {
         $mock = new MockHandler([
             new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode([
@@ -389,6 +389,124 @@ class LabellingServiceRestTest extends \PHPUnit_Framework_TestCase
             true,
             true,
             Label::FORMAT_A4,
+            [
+                1 => true,
+                2 => true,
+                3 => true,
+                4 => true,
+            ]
+        );
+
+        $this->assertTrue(is_string($label));
+    }
+
+    /**
+     * @testdox can generate multiple A6-merged labels
+     *
+     * @throws \setasign\Fpdi\PdfReader\PdfReaderException
+     * @throws \Exception
+     */
+    public function testMergeMultipleA6LabelsRest()
+    {
+        $mock = new MockHandler([
+            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode([
+                'MergedLabels' => [],
+                'ResponseShipments' => [
+                    [
+                        'Barcode' => '3SDEVC201611210',
+                        'DownPartnerLocation' => [],
+                        'ProductCodeDelivery' => '3085',
+                        'Labels' => [
+                            [
+                                'Content' => static::$base64LabelContent,
+                                'Labeltype' => 'Label',
+                            ]
+                        ]
+                    ]
+                ]
+            ])),
+            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode([
+                'MergedLabels' => [],
+                'ResponseShipments' => [
+                    [
+                        'Barcode' => '3SDEVC201611211',
+                        'DownPartnerLocation' => [],
+                        'ProductCodeDelivery' => '3085',
+                        'Labels' => [
+                            [
+                                'Content' => static::$base64LabelContent,
+                                'Labeltype' => 'Label',
+                            ]
+                        ]
+                    ]
+                ]
+            ])),
+        ]);
+        $handler = HandlerStack::create($mock);
+        $mockClient = new MockClient();
+        $mockClient->setHandler($handler);
+        $this->postnl->setHttpClient($mockClient);
+
+        $label = $this->postnl->generateLabels([
+            (new Shipment())
+                ->setAddresses([
+                    Address::create([
+                        'AddressType' => '01',
+                        'City'        => 'Utrecht',
+                        'Countrycode' => 'NL',
+                        'FirstName'   => 'Peter',
+                        'HouseNr'     => '9',
+                        'HouseNrExt'  => 'a bis',
+                        'Name'        => 'de Ruijter',
+                        'Street'      => 'Bilderdijkstraat',
+                        'Zipcode'     => '3521VA',
+                    ]),
+                    Address::create([
+                        'AddressType' => '02',
+                        'City'        => 'Hoofddorp',
+                        'CompanyName' => 'PostNL',
+                        'Countrycode' => 'NL',
+                        'HouseNr'     => '42',
+                        'Street'      => 'Siriusdreef',
+                        'Zipcode'     => '2132WT',
+                    ]),
+                ])
+                ->setBarcode('3SDEVC201611210')
+                ->setDeliveryAddress('01')
+                ->setDimension(new Dimension('2000'))
+                ->setProductCodeDelivery('3085'),
+            (new Shipment())
+                ->setAddresses([
+                    Address::create([
+                        'AddressType' => '01',
+                        'City'        => 'Utrecht',
+                        'Countrycode' => 'NL',
+                        'FirstName'   => 'Peter',
+                        'HouseNr'     => '9',
+                        'HouseNrExt'  => 'a bis',
+                        'Name'        => 'de Ruijter',
+                        'Street'      => 'Bilderdijkstraat',
+                        'Zipcode'     => '3521VA',
+                    ]),
+                    Address::create([
+                        'AddressType' => '02',
+                        'City'        => 'Hoofddorp',
+                        'CompanyName' => 'PostNL',
+                        'Countrycode' => 'NL',
+                        'HouseNr'     => '42',
+                        'Street'      => 'Siriusdreef',
+                        'Zipcode'     => '2132WT',
+                    ]),
+                ])
+                ->setBarcode('3SDEVC201611211')
+                ->setDeliveryAddress('01')
+                ->setDimension(new Dimension('2000'))
+                ->setProductCodeDelivery('3085'),
+        ],
+            'GraphicFile|PDF',
+            true,
+            true,
+            Label::FORMAT_A6,
             [
                 1 => true,
                 2 => true,
