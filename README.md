@@ -1,9 +1,9 @@
 # PostNL REST/SOAP API PHP Bindings
 
-[![Build Status](https://travis-ci.org/thirtybees/postnl-api-php.svg?branch=master)](https://travis-ci.org/thirtybees/postnl-api-php)
+[![Build Status](https://travis-ci.org/firstred/postnl-api-php.svg?branch=master)](https://travis-ci.org/firstred/postnl-api-php)
 [![Documentation Status](https://readthedocs.org/projects/postnl-php/badge/?version=latest)](https://postnl-php.readthedocs.io/en/latest/?badge=latest)
-[![codecov](https://codecov.io/gh/thirtybees/postnl-api-php/branch/master/graph/badge.svg)](https://codecov.io/gh/thirtybees/postnl-api-php)
-[![latest stable version](https://poser.pugx.org/thirtybees/postnl-api-php/v/stable.svg)](https://packagist.org/packages/thirtybees/postnl-api-php)
+[![codecov](https://codecov.io/gh/firstred/postnl-api-php/branch/master/graph/badge.svg)](https://codecov.io/gh/firstred/postnl-api-php)
+[![latest stable version](https://poser.pugx.org/firstred/postnl-api-php/v/stable.svg)](https://packagist.org/packages/thirtybees/postnl-api-php)
 [![license mit](https://poser.pugx.org/thirtybees/postnl-api-php/license.svg)](https://packagist.org/packages/thirtybees/postnl-api-php)
 
 ## About
