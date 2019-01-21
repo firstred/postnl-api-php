@@ -50,9 +50,11 @@ class AbstractServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetResponseTextFromArray()
     {
-        $response = new Response('POST', [], 'test');
+        $response = new Response(200, [], 'test');
 
-        $this->assertEquals('test', AbstractService::getResponseText(['value' => $response]));
+        $result = AbstractService::getResponseText(['value' => $response]);
+
+        $this->assertEquals('test', $result);
     }
 
     /**
