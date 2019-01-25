@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2019 Michael Dekker
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,12 +19,12 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2019 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Tests\Service;
+namespace Firstred\PostNL\Tests\Service;
 
 use Cache\Adapter\Void\VoidCachePool;
 use GuzzleHttp\Handler\MockHandler;
@@ -32,24 +32,24 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Psr\Log\LoggerInterface;
-use ThirtyBees\PostNL\Entity\Address;
-use ThirtyBees\PostNL\Entity\CoordinatesNorthWest;
-use ThirtyBees\PostNL\Entity\CoordinatesSouthEast;
-use ThirtyBees\PostNL\Entity\Customer;
-use ThirtyBees\PostNL\Entity\Location;
-use ThirtyBees\PostNL\Entity\Message\Message;
-use ThirtyBees\PostNL\Entity\Request\GetLocation;
-use ThirtyBees\PostNL\Entity\Request\GetLocationsInArea;
-use ThirtyBees\PostNL\Entity\Request\GetNearestLocations;
-use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
-use ThirtyBees\PostNL\HttpClient\MockClient;
-use ThirtyBees\PostNL\PostNL;
-use ThirtyBees\PostNL\Service\LocationService;
+use Firstred\PostNL\Entity\Address;
+use Firstred\PostNL\Entity\CoordinatesNorthWest;
+use Firstred\PostNL\Entity\CoordinatesSouthEast;
+use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Entity\Location;
+use Firstred\PostNL\Entity\Message\Message;
+use Firstred\PostNL\Entity\Request\GetLocation;
+use Firstred\PostNL\Entity\Request\GetLocationsInArea;
+use Firstred\PostNL\Entity\Request\GetNearestLocations;
+use Firstred\PostNL\Entity\SOAP\UsernameToken;
+use Firstred\PostNL\HttpClient\MockClient;
+use Firstred\PostNL\PostNL;
+use Firstred\PostNL\Service\LocationService;
 
 /**
  * Class LocationServiceRestTest
  *
- * @package ThirtyBees\PostNL\Tests\Service
+ * @package Firstred\PostNL\Tests\Service
  *
  * @testdox The LocationService (REST)
  */
@@ -64,7 +64,7 @@ class LocationServiceRestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @before
-     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      */
     public function setupPostNL()
     {
@@ -191,7 +191,7 @@ class LocationServiceRestTest extends \PHPUnit_Framework_TestCase
                 'Street'             => 'Siriusdreef',
             ])));
 
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\GetNearestLocationsResponse', $response);
+        $this->assertInstanceOf('\\Firstred\\PostNL\\Entity\\Response\\GetNearestLocationsResponse', $response);
         $this->assertEquals(20, count((array) $response->getGetLocationsResult()));
     }
 
@@ -279,7 +279,7 @@ class LocationServiceRestTest extends \PHPUnit_Framework_TestCase
                 ]),
             ])));
 
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\GetLocationsInAreaResponse', $response);
+        $this->assertInstanceOf('\\Firstred\\PostNL\\Entity\\Response\\GetLocationsInAreaResponse', $response);
         $this->assertEquals(20, count((array) $response->getGetLocationsResult()));
     }
 
@@ -328,7 +328,7 @@ class LocationServiceRestTest extends \PHPUnit_Framework_TestCase
                 ->setRetailNetworkID('PNPNL-01')
         );
 
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\GetLocationsInAreaResponse', $response);
+        $this->assertInstanceOf('\\Firstred\\PostNL\\Entity\\Response\\GetLocationsInAreaResponse', $response);
         $this->assertEquals(1, count((array) $response->getGetLocationsResult()));
     }
 

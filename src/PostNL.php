@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2019 Michael Dekker
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,69 +19,69 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2019 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL;
+namespace Firstred\PostNL;
 
 use GuzzleHttp\Psr7\Response;
 use Psr\Cache\CacheItemInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use setasign\Fpdi\PdfParser\StreamReader;
-use ThirtyBees\PostNL\Entity\Barcode;
-use ThirtyBees\PostNL\Entity\Customer;
-use ThirtyBees\PostNL\Entity\Label;
-use ThirtyBees\PostNL\Entity\Message\LabellingMessage;
-use ThirtyBees\PostNL\Entity\Message\Message;
-use ThirtyBees\PostNL\Entity\Request\CompleteStatus;
-use ThirtyBees\PostNL\Entity\Request\Confirming;
-use ThirtyBees\PostNL\Entity\Request\CurrentStatus;
-use ThirtyBees\PostNL\Entity\Request\GenerateBarcode;
-use ThirtyBees\PostNL\Entity\Request\GenerateLabel;
-use ThirtyBees\PostNL\Entity\Request\GetDeliveryDate;
-use ThirtyBees\PostNL\Entity\Request\GetLocation;
-use ThirtyBees\PostNL\Entity\Request\GetLocationsInArea;
-use ThirtyBees\PostNL\Entity\Request\GetNearestLocations;
-use ThirtyBees\PostNL\Entity\Request\GetSentDateRequest;
-use ThirtyBees\PostNL\Entity\Request\GetSignature;
-use ThirtyBees\PostNL\Entity\Request\GetTimeframes;
-use ThirtyBees\PostNL\Entity\Response\CompleteStatusResponse;
-use ThirtyBees\PostNL\Entity\Response\ConfirmingResponseShipment;
-use ThirtyBees\PostNL\Entity\Response\CurrentStatusResponse;
-use ThirtyBees\PostNL\Entity\Response\GenerateLabelResponse;
-use ThirtyBees\PostNL\Entity\Response\GetDeliveryDateResponse;
-use ThirtyBees\PostNL\Entity\Response\GetLocationsInAreaResponse;
-use ThirtyBees\PostNL\Entity\Response\GetNearestLocationsResponse;
-use ThirtyBees\PostNL\Entity\Response\GetSentDateResponse;
-use ThirtyBees\PostNL\Entity\Response\ResponseTimeframes;
-use ThirtyBees\PostNL\Entity\Shipment;
-use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
-use ThirtyBees\PostNL\Exception\AbstractException;
-use ThirtyBees\PostNL\Exception\HttpClientException;
-use ThirtyBees\PostNL\Exception\InvalidArgumentException;
-use ThirtyBees\PostNL\Exception\InvalidBarcodeException;
-use ThirtyBees\PostNL\Exception\InvalidConfigurationException;
-use ThirtyBees\PostNL\Exception\NotSupportedException;
-use ThirtyBees\PostNL\HttpClient\ClientInterface;
-use ThirtyBees\PostNL\HttpClient\CurlClient;
-use ThirtyBees\PostNL\HttpClient\GuzzleClient;
-use ThirtyBees\PostNL\Service\BarcodeService;
-use ThirtyBees\PostNL\Service\ConfirmingService;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
-use ThirtyBees\PostNL\Service\LabellingService;
-use ThirtyBees\PostNL\Service\LocationService;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
-use ThirtyBees\PostNL\Service\TimeframeService;
-use ThirtyBees\PostNL\Util\RFPdi;
-use ThirtyBees\PostNL\Util\Util;
+use Firstred\PostNL\Entity\Barcode;
+use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Entity\Label;
+use Firstred\PostNL\Entity\Message\LabellingMessage;
+use Firstred\PostNL\Entity\Message\Message;
+use Firstred\PostNL\Entity\Request\CompleteStatus;
+use Firstred\PostNL\Entity\Request\Confirming;
+use Firstred\PostNL\Entity\Request\CurrentStatus;
+use Firstred\PostNL\Entity\Request\GenerateBarcode;
+use Firstred\PostNL\Entity\Request\GenerateLabel;
+use Firstred\PostNL\Entity\Request\GetDeliveryDate;
+use Firstred\PostNL\Entity\Request\GetLocation;
+use Firstred\PostNL\Entity\Request\GetLocationsInArea;
+use Firstred\PostNL\Entity\Request\GetNearestLocations;
+use Firstred\PostNL\Entity\Request\GetSentDateRequest;
+use Firstred\PostNL\Entity\Request\GetSignature;
+use Firstred\PostNL\Entity\Request\GetTimeframes;
+use Firstred\PostNL\Entity\Response\CompleteStatusResponse;
+use Firstred\PostNL\Entity\Response\ConfirmingResponseShipment;
+use Firstred\PostNL\Entity\Response\CurrentStatusResponse;
+use Firstred\PostNL\Entity\Response\GenerateLabelResponse;
+use Firstred\PostNL\Entity\Response\GetDeliveryDateResponse;
+use Firstred\PostNL\Entity\Response\GetLocationsInAreaResponse;
+use Firstred\PostNL\Entity\Response\GetNearestLocationsResponse;
+use Firstred\PostNL\Entity\Response\GetSentDateResponse;
+use Firstred\PostNL\Entity\Response\ResponseTimeframes;
+use Firstred\PostNL\Entity\Shipment;
+use Firstred\PostNL\Entity\SOAP\UsernameToken;
+use Firstred\PostNL\Exception\AbstractException;
+use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidBarcodeException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
+use Firstred\PostNL\Exception\NotSupportedException;
+use Firstred\PostNL\HttpClient\ClientInterface;
+use Firstred\PostNL\HttpClient\CurlClient;
+use Firstred\PostNL\HttpClient\GuzzleClient;
+use Firstred\PostNL\Service\BarcodeService;
+use Firstred\PostNL\Service\ConfirmingService;
+use Firstred\PostNL\Service\DeliveryDateService;
+use Firstred\PostNL\Service\LabellingService;
+use Firstred\PostNL\Service\LocationService;
+use Firstred\PostNL\Service\ShippingStatusService;
+use Firstred\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Util\RFPdi;
+use Firstred\PostNL\Util\Util;
 
 /**
  * Class PostNL
  *
- * @package ThirtyBees\PostNL
+ * @package Firstred\PostNL
  */
 class PostNL implements LoggerAwareInterface
 {

@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2019 Michael Dekker
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,19 +19,19 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2019 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\HttpClient;
+namespace Firstred\PostNL\HttpClient;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
-use ThirtyBees\PostNL\Exception\ApiConnectionException;
-use ThirtyBees\PostNL\Exception\ApiException;
+use Firstred\PostNL\Exception\ApiConnectionException;
+use Firstred\PostNL\Exception\ApiException;
 
 if (!defined('CURL_SSLVERSION_TLSv1')) {
     define('CURL_SSLVERSION_TLSv1', 1);
@@ -46,7 +46,7 @@ if (!defined('CURLE_SSL_CACERT_BADFILE')) {
 /**
  * Class CurlClient
  *
- * @package ThirtyBees\PostNL\HttpClient
+ * @package Firstred\PostNL\HttpClient
  */
 class CurlClient implements ClientInterface, LoggerAwareInterface
 {

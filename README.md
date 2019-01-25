@@ -63,11 +63,11 @@ Creating a label using the default REST API
 ```php
 <?php
 
-use ThirtyBees\PostNL\PostNL;
-use ThirtyBees\PostNL\Entity\Customer;
-use ThirtyBees\PostNL\Entity\Address;
-use ThirtyBees\PostNL\Entity\Shipment;
-use ThirtyBees\PostNL\Entity\Dimension;
+use Firstred\PostNL\PostNL;
+use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Entity\Address;
+use Firstred\PostNL\Entity\Shipment;
+use Firstred\PostNL\Entity\Dimension;
 
 require_once __DIR__.'/vendor/autoload.php';
 

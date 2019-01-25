@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2019 Michael Dekker
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,20 +19,20 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2019 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity;
+namespace Firstred\PostNL\Entity;
 
-use ThirtyBees\PostNL\Service\BarcodeService;
-use ThirtyBees\PostNL\Service\ConfirmingService;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
-use ThirtyBees\PostNL\Service\LabellingService;
-use ThirtyBees\PostNL\Service\LocationService;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
-use ThirtyBees\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Service\BarcodeService;
+use Firstred\PostNL\Service\ConfirmingService;
+use Firstred\PostNL\Service\DeliveryDateService;
+use Firstred\PostNL\Service\LabellingService;
+use Firstred\PostNL\Service\LocationService;
+use Firstred\PostNL\Service\ShippingStatusService;
+use Firstred\PostNL\Service\TimeframeService;
 
 /**
  * Class OpeningHours

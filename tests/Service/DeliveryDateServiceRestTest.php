@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2019 Michael Dekker
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,12 +19,12 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2019 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Tests\Service;
+namespace Firstred\PostNL\Tests\Service;
 
 use Cache\Adapter\Void\VoidCachePool;
 use GuzzleHttp\Handler\MockHandler;
@@ -32,22 +32,22 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Psr\Log\LoggerInterface;
-use ThirtyBees\PostNL\Entity\Address;
-use ThirtyBees\PostNL\Entity\Customer;
-use ThirtyBees\PostNL\Entity\CutOffTime;
-use ThirtyBees\PostNL\Entity\Message\Message;
-use ThirtyBees\PostNL\Entity\Request\GetDeliveryDate;
-use ThirtyBees\PostNL\Entity\Request\GetSentDate;
-use ThirtyBees\PostNL\Entity\Request\GetSentDateRequest;
-use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
-use ThirtyBees\PostNL\HttpClient\MockClient;
-use ThirtyBees\PostNL\PostNL;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
+use Firstred\PostNL\Entity\Address;
+use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Entity\CutOffTime;
+use Firstred\PostNL\Entity\Message\Message;
+use Firstred\PostNL\Entity\Request\GetDeliveryDate;
+use Firstred\PostNL\Entity\Request\GetSentDate;
+use Firstred\PostNL\Entity\Request\GetSentDateRequest;
+use Firstred\PostNL\Entity\SOAP\UsernameToken;
+use Firstred\PostNL\HttpClient\MockClient;
+use Firstred\PostNL\PostNL;
+use Firstred\PostNL\Service\DeliveryDateService;
 
 /**
  * Class DeliveryDateRestTest
  *
- * @package ThirtyBees\PostNL\Tests\Service
+ * @package Firstred\PostNL\Tests\Service
  *
  * @testdox The DeliveryDateService (REST)
  */
@@ -62,7 +62,7 @@ class DeliveryDateRestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @before
-     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      */
     public function setupPostNL()
     {
@@ -199,7 +199,7 @@ class DeliveryDateRestTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertInstanceOf(
-            '\\ThirtyBees\\PostNL\\Entity\\Response\\GetDeliveryDateResponse',
+            '\\Firstred\\PostNL\\Entity\\Response\\GetDeliveryDateResponse',
             $response
         );
         $this->assertEquals('30-06-2016', $response->getDeliveryDate());
@@ -270,7 +270,7 @@ class DeliveryDateRestTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertInstanceOf(
-            '\\ThirtyBees\\PostNL\\Entity\\Response\\GetSentDateResponse',
+            '\\Firstred\\PostNL\\Entity\\Response\\GetSentDateResponse',
             $response
         );
         $this->assertEquals('29-06-2016', $response->getSentDate());

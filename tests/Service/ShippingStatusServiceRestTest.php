@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2019 Michael Dekker
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,12 +19,12 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2019 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Tests\Service;
+namespace Firstred\PostNL\Tests\Service;
 
 use Cache\Adapter\Void\VoidCachePool;
 use GuzzleHttp\Handler\MockHandler;
@@ -32,22 +32,22 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Psr\Log\LoggerInterface;
-use ThirtyBees\PostNL\Entity\Address;
-use ThirtyBees\PostNL\Entity\Customer;
-use ThirtyBees\PostNL\Entity\Message\Message;
-use ThirtyBees\PostNL\Entity\Request\CompleteStatus;
-use ThirtyBees\PostNL\Entity\Request\CurrentStatus;
-use ThirtyBees\PostNL\Entity\Request\GetSignature;
-use ThirtyBees\PostNL\Entity\Shipment;
-use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
-use ThirtyBees\PostNL\HttpClient\MockClient;
-use ThirtyBees\PostNL\PostNL;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
+use Firstred\PostNL\Entity\Address;
+use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Entity\Message\Message;
+use Firstred\PostNL\Entity\Request\CompleteStatus;
+use Firstred\PostNL\Entity\Request\CurrentStatus;
+use Firstred\PostNL\Entity\Request\GetSignature;
+use Firstred\PostNL\Entity\Shipment;
+use Firstred\PostNL\Entity\SOAP\UsernameToken;
+use Firstred\PostNL\HttpClient\MockClient;
+use Firstred\PostNL\PostNL;
+use Firstred\PostNL\Service\ShippingStatusService;
 
 /**
  * Class ShippingStatusRestTest
  *
- * @package ThirtyBees\PostNL\Tests\Service
+ * @package Firstred\PostNL\Tests\Service
  *
  * @testdox The ShippingStatusService (REST)
  */
@@ -62,7 +62,7 @@ class ShippingStatusRestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @before
-     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      */
     public function setupPostNL()
     {
@@ -224,7 +224,7 @@ class ShippingStatusRestTest extends \PHPUnit_Framework_TestCase
                 )
         );
 
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\CurrentStatusResponse', $currentStatusResponse);
+        $this->assertInstanceOf('\\Firstred\\PostNL\\Entity\\Response\\CurrentStatusResponse', $currentStatusResponse);
     }
 
     /**
@@ -500,12 +500,12 @@ class ShippingStatusRestTest extends \PHPUnit_Framework_TestCase
                 )
         );
 
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\CompleteStatusResponse', $completeStatusResponse);
+        $this->assertInstanceOf('\\Firstred\\PostNL\\Entity\\Response\\CompleteStatusResponse', $completeStatusResponse);
         $this->assertEquals(2, count($completeStatusResponse->getShipments()[0]->getAddresses()));
         $this->assertNull($completeStatusResponse->getShipments()[0]->getAmounts());
         $this->assertEquals(3, count($completeStatusResponse->getShipments()[0]->getEvents()));
         $this->assertNull($completeStatusResponse->getShipments()[0]->getGroups());
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Customer', $completeStatusResponse->getShipments()[0]->getCustomer());
+        $this->assertInstanceOf('\\Firstred\\PostNL\\Entity\\Customer', $completeStatusResponse->getShipments()[0]->getCustomer());
         $this->assertEquals('07-03-2018 09:50:47', $completeStatusResponse->getShipments()[0]->getOldStatuses()[4]->getTimeStamp());
     }
 
@@ -657,6 +657,6 @@ class ShippingStatusRestTest extends \PHPUnit_Framework_TestCase
                 )
         );
 
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\GetSignatureResponseSignature', $signatureResponse);
+        $this->assertInstanceOf('\\Firstred\\PostNL\\Entity\\Response\\GetSignatureResponseSignature', $signatureResponse);
     }
 }

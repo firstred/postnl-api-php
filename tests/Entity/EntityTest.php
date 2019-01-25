@@ -1,8 +1,8 @@
 <?php
 
-namespace ThirtyBees\PostNL\Tests\Entity;
-use ThirtyBees\PostNL\Entity\AbstractEntity;
-use ThirtyBees\PostNL\Entity\Address;
+namespace Firstred\PostNL\Tests\Entity;
+use Firstred\PostNL\Entity\AbstractEntity;
+use Firstred\PostNL\Entity\Address;
 use Sabre\Xml\Service as XmlService;
 
 /**
@@ -21,9 +21,9 @@ class EntityTest extends \PHPUnit_Framework_TestCase
             }
 
             $entityName = substr($entityName, 0, strlen($entityName) - 4);
-            $entityName = "\\ThirtyBees\\PostNL\\Entity\\$entityName";
+            $entityName = "\\Firstred\\PostNL\\Entity\\$entityName";
             $entity = new $entityName();
-            $this->assertInstanceOf("\\ThirtyBees\\PostNL\\Entity\\AbstractEntity", $entity);
+            $this->assertInstanceOf("\\Firstred\\PostNL\\Entity\\AbstractEntity", $entity);
         }
 
         foreach (scandir(__DIR__.'/../../src/Entity/Message') as $entityName) {
@@ -32,9 +32,9 @@ class EntityTest extends \PHPUnit_Framework_TestCase
             }
 
             $entityName = substr($entityName, 0, strlen($entityName) - 4);
-            $entityName = "\\ThirtyBees\\PostNL\\Entity\\Message\\$entityName";
+            $entityName = "\\Firstred\\PostNL\\Entity\\Message\\$entityName";
             $entity = new $entityName();
-            $this->assertInstanceOf("\\ThirtyBees\\PostNL\\Entity\\AbstractEntity", $entity);
+            $this->assertInstanceOf("\\Firstred\\PostNL\\Entity\\AbstractEntity", $entity);
         }
 
         foreach (scandir(__DIR__.'/../../src/Entity/Request') as $entityName) {
@@ -43,9 +43,9 @@ class EntityTest extends \PHPUnit_Framework_TestCase
             }
 
             $entityName = substr($entityName, 0, strlen($entityName) - 4);
-            $entityName = "\\ThirtyBees\\PostNL\\Entity\\Request\\$entityName";
+            $entityName = "\\Firstred\\PostNL\\Entity\\Request\\$entityName";
             $entity = new $entityName();
-            $this->assertInstanceOf("\\ThirtyBees\\PostNL\\Entity\\AbstractEntity", $entity);
+            $this->assertInstanceOf("\\Firstred\\PostNL\\Entity\\AbstractEntity", $entity);
         }
 
         foreach (scandir(__DIR__.'/../../src/Entity/Response') as $entityName) {
@@ -54,9 +54,9 @@ class EntityTest extends \PHPUnit_Framework_TestCase
             }
 
             $entityName = substr($entityName, 0, strlen($entityName) - 4);
-            $entityName = "\\ThirtyBees\\PostNL\\Entity\\Response\\$entityName";
+            $entityName = "\\Firstred\\PostNL\\Entity\\Response\\$entityName";
             $entity = new $entityName();
-            $this->assertInstanceOf("\\ThirtyBees\\PostNL\\Entity\\AbstractEntity", $entity);
+            $this->assertInstanceOf("\\Firstred\\PostNL\\Entity\\AbstractEntity", $entity);
         }
     }
 
@@ -65,7 +65,7 @@ class EntityTest extends \PHPUnit_Framework_TestCase
      */
     public function testNegativeMissingValue()
     {
-        $this->expectException('\\ThirtyBees\\PostNL\\Exception\\InvalidArgumentException');
+        $this->expectException('\\Firstred\\PostNL\\Exception\\InvalidArgumentException');
 
         (new Address())
             ->setArea()
@@ -93,7 +93,7 @@ class EntityTest extends \PHPUnit_Framework_TestCase
      */
     public function testNegativeThrowExceptionWhenMethodDoesNotExist()
     {
-        $this->expectException('\\ThirtyBees\\PostNL\\Exception\\InvalidArgumentException');
+        $this->expectException('\\Firstred\\PostNL\\Exception\\InvalidArgumentException');
 
         (new Address())->blab();
     }
@@ -103,7 +103,7 @@ class EntityTest extends \PHPUnit_Framework_TestCase
      */
     public function testNegativeThrowExceptionWhenServiceNotSetJson()
     {
-        $this->expectException('\\ThirtyBees\\PostNL\\Exception\\InvalidArgumentException');
+        $this->expectException('\\Firstred\\PostNL\\Exception\\InvalidArgumentException');
 
         json_encode(new Address());
     }
@@ -113,7 +113,7 @@ class EntityTest extends \PHPUnit_Framework_TestCase
      */
     public function testNegativeThrowExceptionWhenServiceNotSetXml()
     {
-        $this->expectException('\\ThirtyBees\\PostNL\\Exception\\InvalidArgumentException');
+        $this->expectException('\\Firstred\\PostNL\\Exception\\InvalidArgumentException');
 
         $service = new XmlService();
 

@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2019 Michael Dekker
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,25 +19,25 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2019 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Tests\Service;
+namespace Firstred\PostNL\Tests\Service;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use ThirtyBees\PostNL\Entity\Address;
-use ThirtyBees\PostNL\Entity\Customer;
-use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
-use ThirtyBees\PostNL\PostNL;
-use ThirtyBees\PostNL\Service\AbstractService;
-use ThirtyBees\PostNL\Service\LabellingService;
+use Firstred\PostNL\Entity\Address;
+use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Entity\SOAP\UsernameToken;
+use Firstred\PostNL\PostNL;
+use Firstred\PostNL\Service\AbstractService;
+use Firstred\PostNL\Service\LabellingService;
 
 /**
  * Class AbstractServiceTest
  *
- * @package ThirtyBees\PostNL\Tests\Service
+ * @package Firstred\PostNL\Tests\Service
  *
  * @testdox The AbstractService class
  */
@@ -46,7 +46,7 @@ class AbstractServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * @testdox can get the response text from the value property
      *
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws \Firstred\PostNL\Exception\ResponseException
      */
     public function testGetResponseTextFromArray()
     {
@@ -58,7 +58,7 @@ class AbstractServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws \Firstred\PostNL\Exception\ResponseException
      */
     public function testGetResponseTextFromException()
     {
@@ -70,14 +70,14 @@ class AbstractServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * @testdox can detect and throw a CifDownException (REST)
      *
-     * @throws \ThirtyBees\PostNL\Exception\ApiException
-     * @throws \ThirtyBees\PostNL\Exception\CifDownException
-     * @throws \ThirtyBees\PostNL\Exception\CifException
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws \Firstred\PostNL\Exception\ApiException
+     * @throws \Firstred\PostNL\Exception\CifDownException
+     * @throws \Firstred\PostNL\Exception\CifException
+     * @throws \Firstred\PostNL\Exception\ResponseException
      */
     public function testCifDownExceptionRest()
     {
-        $this->expectException('\\ThirtyBees\\PostNL\\Exception\\CifDownException');
+        $this->expectException('\\Firstred\\PostNL\\Exception\\CifDownException');
 
         $response = new Response(500, [], json_encode([
             'Envelope' => ['Body' => ['Fault' => ['Reason' => ['Text' => ['' => 'error']]]]],
@@ -89,14 +89,14 @@ class AbstractServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * @testdox can detect and throw a CifException (REST)
      *
-     * @throws \ThirtyBees\PostNL\Exception\ApiException
-     * @throws \ThirtyBees\PostNL\Exception\CifDownException
-     * @throws \ThirtyBees\PostNL\Exception\CifException
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws \Firstred\PostNL\Exception\ApiException
+     * @throws \Firstred\PostNL\Exception\CifDownException
+     * @throws \Firstred\PostNL\Exception\CifException
+     * @throws \Firstred\PostNL\Exception\ResponseException
      */
     public function testCifExceptionRest()
     {
-        $this->expectException('\\ThirtyBees\\PostNL\\Exception\\CifException');
+        $this->expectException('\\Firstred\\PostNL\\Exception\\CifException');
 
         $response = new Response(500, [], json_encode([
             'Errors' => [
@@ -116,12 +116,12 @@ class AbstractServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * @testdox can detect and throw a CifDownException (SOAP)
      *
-     * @throws \ThirtyBees\PostNL\Exception\CifDownException
-     * @throws \ThirtyBees\PostNL\Exception\CifException
+     * @throws \Firstred\PostNL\Exception\CifDownException
+     * @throws \Firstred\PostNL\Exception\CifException
      */
     public function testCifDownExceptionSoap()
     {
-        $this->expectException('\\ThirtyBees\\PostNL\\Exception\\CifDownException');
+        $this->expectException('\\Firstred\\PostNL\\Exception\\CifDownException');
 
         $response = simplexml_load_string('<?xml version="1.0" encoding="UTF-8"?>
 <Envelope xmlns:env="http://www.w3.org/2003/05/soap-envelope">
@@ -146,12 +146,12 @@ class AbstractServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * @testdox can detect and throw a CifException (SOAP)
      *
-     * @throws \ThirtyBees\PostNL\Exception\CifDownException
-     * @throws \ThirtyBees\PostNL\Exception\CifException
+     * @throws \Firstred\PostNL\Exception\CifDownException
+     * @throws \Firstred\PostNL\Exception\CifException
      */
     public function testCifExceptionSoap()
     {
-        $this->expectException('\\ThirtyBees\\PostNL\\Exception\\CifException');
+        $this->expectException('\\Firstred\\PostNL\\Exception\\CifException');
 
         $response = simplexml_load_string('<?xml version="1.0" encoding="UTF-8"?>
 <Envelope xmlns:common="http://postnl.nl/cif/services/common/">

@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2019 Michael Dekker
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,35 +19,35 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2019 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Service;
+namespace Firstred\PostNL\Service;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Psr\Cache\CacheItemInterface;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Service as XmlService;
-use ThirtyBees\PostNL\Entity\AbstractEntity;
-use ThirtyBees\PostNL\Entity\Coordinates;
-use ThirtyBees\PostNL\Entity\Request\GetLocation;
-use ThirtyBees\PostNL\Entity\Request\GetLocationsInArea;
-use ThirtyBees\PostNL\Entity\Request\GetNearestLocations;
-use ThirtyBees\PostNL\Entity\Response\GetLocationsInAreaResponse;
-use ThirtyBees\PostNL\Entity\Response\GetNearestLocationsResponse;
-use ThirtyBees\PostNL\Entity\SOAP\Security;
-use ThirtyBees\PostNL\Exception\ApiException;
-use ThirtyBees\PostNL\Exception\CifDownException;
-use ThirtyBees\PostNL\Exception\CifException;
-use ThirtyBees\PostNL\PostNL;
+use Firstred\PostNL\Entity\AbstractEntity;
+use Firstred\PostNL\Entity\Coordinates;
+use Firstred\PostNL\Entity\Request\GetLocation;
+use Firstred\PostNL\Entity\Request\GetLocationsInArea;
+use Firstred\PostNL\Entity\Request\GetNearestLocations;
+use Firstred\PostNL\Entity\Response\GetLocationsInAreaResponse;
+use Firstred\PostNL\Entity\Response\GetNearestLocationsResponse;
+use Firstred\PostNL\Entity\SOAP\Security;
+use Firstred\PostNL\Exception\ApiException;
+use Firstred\PostNL\Exception\CifDownException;
+use Firstred\PostNL\Exception\CifException;
+use Firstred\PostNL\PostNL;
 
 /**
  * Class LocationService
  *
- * @package ThirtyBees\PostNL\Service
+ * @package Firstred\PostNL\Service
  *
  * @method GetNearestLocationsResponse getNearestLocations(GetNearestLocations $getNearestLocations)
  * @method Request                     buildGetNearestLocationsRequest(GetNearestLocations $getNearestLocations)
@@ -104,7 +104,7 @@ class LocationService extends AbstractService
      * @throws CifDownException
      * @throws CifException
      * @throws \Exception
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws \Firstred\PostNL\Exception\ResponseException
      */
     public function getNearestLocationsREST(GetNearestLocations $getNearestLocations)
     {
@@ -149,7 +149,7 @@ class LocationService extends AbstractService
      * @throws CifDownException
      * @throws CifException
      * @throws \Sabre\Xml\LibXMLException
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws \Firstred\PostNL\Exception\ResponseException
      */
     public function getNearestLocationsSOAP(GetNearestLocations $getNearestLocations)
     {
@@ -192,7 +192,7 @@ class LocationService extends AbstractService
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws \Firstred\PostNL\Exception\ResponseException
      */
     public function getLocationsInAreaREST(GetLocationsInArea $getLocations)
     {
@@ -237,7 +237,7 @@ class LocationService extends AbstractService
      * @throws CifDownException
      * @throws CifException
      * @throws \Sabre\Xml\LibXMLException
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws \Firstred\PostNL\Exception\ResponseException
      */
     public function getLocationsInAreaSOAP(GetLocationsInArea $getNearestLocations)
     {
@@ -281,7 +281,7 @@ class LocationService extends AbstractService
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws \Firstred\PostNL\Exception\ResponseException
      */
     public function getLocationREST(GetLocation $getLocation)
     {
@@ -326,7 +326,7 @@ class LocationService extends AbstractService
      * @throws CifDownException
      * @throws CifException
      * @throws \Sabre\Xml\LibXMLException
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws \Firstred\PostNL\Exception\ResponseException
      */
     public function getLocationSOAP(GetLocation $getLocation)
     {
@@ -427,7 +427,7 @@ class LocationService extends AbstractService
      * @param mixed $response
      *
      * @return null|GetNearestLocationsResponse
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws \Firstred\PostNL\Exception\ResponseException
      */
     public function processGetNearestLocationsResponseREST($response)
     {
@@ -532,7 +532,7 @@ class LocationService extends AbstractService
      * @throws CifDownException
      * @throws CifException
      * @throws \Sabre\Xml\LibXMLException
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws \Firstred\PostNL\Exception\ResponseException
      */
     public function processGetNearestLocationsResponseSOAP($response)
     {
@@ -623,7 +623,7 @@ class LocationService extends AbstractService
      * @param mixed $response
      *
      * @return null|GetLocationsInAreaResponse
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws \Firstred\PostNL\Exception\ResponseException
      */
     public function processGetLocationsInAreaResponseREST($response)
     {
@@ -725,7 +725,7 @@ class LocationService extends AbstractService
      * @throws CifDownException
      * @throws CifException
      * @throws \Sabre\Xml\LibXMLException
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws \Firstred\PostNL\Exception\ResponseException
      */
     public function processGetLocationsInAreaResponseSOAP($response)
     {
@@ -799,7 +799,7 @@ class LocationService extends AbstractService
      * @param mixed $response
      *
      * @return null|GetLocationsInAreaResponse
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws \Firstred\PostNL\Exception\ResponseException
      */
     public function processGetLocationResponseREST($response)
     {
@@ -899,7 +899,7 @@ class LocationService extends AbstractService
      * @throws CifDownException
      * @throws CifException
      * @throws \Sabre\Xml\LibXMLException
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws \Firstred\PostNL\Exception\ResponseException
      */
     public function processGetLocationResponseSOAP($response)
     {

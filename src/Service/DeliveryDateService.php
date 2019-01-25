@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2019 Michael Dekker
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,35 +19,35 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2019 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Service;
+namespace Firstred\PostNL\Service;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Psr\Cache\CacheItemInterface;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Service as XmlService;
-use ThirtyBees\PostNL\Entity\AbstractEntity;
-use ThirtyBees\PostNL\Entity\CutOffTime;
-use ThirtyBees\PostNL\Entity\Request\GetDeliveryDate;
-use ThirtyBees\PostNL\Entity\Request\GetSentDateRequest;
-use ThirtyBees\PostNL\Entity\Response\GetDeliveryDateResponse;
-use ThirtyBees\PostNL\Entity\Response\GetSentDateResponse;
-use ThirtyBees\PostNL\Entity\SOAP\Security;
-use ThirtyBees\PostNL\Exception\ApiException;
-use ThirtyBees\PostNL\Exception\CifDownException;
-use ThirtyBees\PostNL\Exception\CifException;
-use ThirtyBees\PostNL\Exception\ResponseException;
-use ThirtyBees\PostNL\PostNL;
+use Firstred\PostNL\Entity\AbstractEntity;
+use Firstred\PostNL\Entity\CutOffTime;
+use Firstred\PostNL\Entity\Request\GetDeliveryDate;
+use Firstred\PostNL\Entity\Request\GetSentDateRequest;
+use Firstred\PostNL\Entity\Response\GetDeliveryDateResponse;
+use Firstred\PostNL\Entity\Response\GetSentDateResponse;
+use Firstred\PostNL\Entity\SOAP\Security;
+use Firstred\PostNL\Exception\ApiException;
+use Firstred\PostNL\Exception\CifDownException;
+use Firstred\PostNL\Exception\CifException;
+use Firstred\PostNL\Exception\ResponseException;
+use Firstred\PostNL\PostNL;
 
 /**
  * Class DeliveryDateService
  *
- * @package ThirtyBees\PostNL\Service
+ * @package Firstred\PostNL\Service
  *
  * @method GetDeliveryDateResponse getDeliveryDate(GetDeliveryDate $getDeliveryDate)
  * @method Request                 buildGetDeliveryDateRequest(GetDeliveryDate $getDeliveryDate)

@@ -7,6 +7,6 @@ By default the library will use cURL or Guzzle when available. You can always sw
 
     <?php
     $postnl = new PostNL(...);
-    $postnl->setHttpClient(\ThirtyBees\PostNL\HttpClient\CurlClient::getInstance());
+    $postnl->setHttpClient(\Firstred\PostNL\HttpClient\CurlClient::getInstance());
 
-You can create a custom HTTP Client by implementing the ``\ThirtyBees\PostNL\HttpClient\ClientInterface`` interface.
+You can create a custom HTTP Client by implementing the ``\Firstred\PostNL\HttpClient\ClientInterface`` interface.

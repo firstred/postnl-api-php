@@ -22,12 +22,12 @@ Here's how it is done:
 .. code-block:: php
 
     <?php
-    use ThirtyBees\PostNL\Entity\Label;
-    use ThirtyBees\PostNL\PostNL;
-    use ThirtyBees\PostNL\Entity\Customer;
-    use ThirtyBees\PostNL\Entity\Address;
-    use ThirtyBees\PostNL\Entity\Shipment;
-    use ThirtyBees\PostNL\Entity\Dimension;
+    use Firstred\PostNL\Entity\Label;
+    use Firstred\PostNL\PostNL;
+    use Firstred\PostNL\Entity\Customer;
+    use Firstred\PostNL\Entity\Address;
+    use Firstred\PostNL\Entity\Shipment;
+    use Firstred\PostNL\Entity\Dimension;
 
     require_once __DIR__.'/vendor/autoload.php';
 
@@ -119,12 +119,12 @@ Here is how you can request two labels and have them merged into a single PDF au
 .. code-block:: php
 
     <?php
-    use ThirtyBees\PostNL\Entity\Label;
-    use ThirtyBees\PostNL\PostNL;
-    use ThirtyBees\PostNL\Entity\Customer;
-    use ThirtyBees\PostNL\Entity\Address;
-    use ThirtyBees\PostNL\Entity\Shipment;
-    use ThirtyBees\PostNL\Entity\Dimension;
+    use Firstred\PostNL\Entity\Label;
+    use Firstred\PostNL\PostNL;
+    use Firstred\PostNL\Entity\Customer;
+    use Firstred\PostNL\Entity\Address;
+    use Firstred\PostNL\Entity\Shipment;
+    use Firstred\PostNL\Entity\Dimension;
 
     require_once __DIR__.'/vendor/autoload.php';
 

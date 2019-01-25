@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2019 Michael Dekker
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,20 +19,20 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2019 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Tests\Entity\SOAP;
-use ThirtyBees\PostNL\Entity\SOAP\Body;
-use ThirtyBees\PostNL\Entity\SOAP\Envelope;
-use ThirtyBees\PostNL\Entity\SOAP\Header;
+namespace Firstred\PostNL\Tests\Entity\SOAP;
+use Firstred\PostNL\Entity\SOAP\Body;
+use Firstred\PostNL\Entity\SOAP\Envelope;
+use Firstred\PostNL\Entity\SOAP\Header;
 
 /**
  * Class EnvelopeTest
  *
- * @package ThirtyBees\PostNL\Tests\Entity\SOAP
+ * @package Firstred\PostNL\Tests\Entity\SOAP
  *
  * @testdox The Envelope class
  */
@@ -47,7 +47,7 @@ class EnvelopeTest extends \PHPUnit_Framework_TestCase
             ->setHeader(Header::create())
         ;
 
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\SOAP\\Header', $envelope->getHeader());
+        $this->assertInstanceOf('\\Firstred\\PostNL\\Entity\\SOAP\\Header', $envelope->getHeader());
     }
 
     /**
@@ -59,6 +59,6 @@ class EnvelopeTest extends \PHPUnit_Framework_TestCase
             ->setBody(Body::create())
         ;
 
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\SOAP\\Body', $envelope->getBody());
+        $this->assertInstanceOf('\\Firstred\\PostNL\\Entity\\SOAP\\Body', $envelope->getBody());
     }
 }

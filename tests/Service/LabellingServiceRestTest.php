@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2019 Michael Dekker
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,12 +19,12 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2019 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Tests\Service;
+namespace Firstred\PostNL\Tests\Service;
 
 use Cache\Adapter\Void\VoidCachePool;
 use GuzzleHttp\Handler\MockHandler;
@@ -32,22 +32,22 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Psr\Log\LoggerInterface;
-use ThirtyBees\PostNL\Entity\Address;
-use ThirtyBees\PostNL\Entity\Customer;
-use ThirtyBees\PostNL\Entity\Dimension;
-use ThirtyBees\PostNL\Entity\Label;
-use ThirtyBees\PostNL\Entity\Message\LabellingMessage;
-use ThirtyBees\PostNL\Entity\Request\GenerateLabel;
-use ThirtyBees\PostNL\Entity\Shipment;
-use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
-use ThirtyBees\PostNL\HttpClient\MockClient;
-use ThirtyBees\PostNL\PostNL;
-use ThirtyBees\PostNL\Service\LabellingService;
+use Firstred\PostNL\Entity\Address;
+use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Entity\Dimension;
+use Firstred\PostNL\Entity\Label;
+use Firstred\PostNL\Entity\Message\LabellingMessage;
+use Firstred\PostNL\Entity\Request\GenerateLabel;
+use Firstred\PostNL\Entity\Shipment;
+use Firstred\PostNL\Entity\SOAP\UsernameToken;
+use Firstred\PostNL\HttpClient\MockClient;
+use Firstred\PostNL\PostNL;
+use Firstred\PostNL\Service\LabellingService;
 
 /**
  * Class LabellingServiceRestTest
  *
- * @package ThirtyBees\PostNL\Tests\Service
+ * @package Firstred\PostNL\Tests\Service
  *
  * @testdox The LabellingService (REST)
  */
@@ -65,7 +65,7 @@ class LabellingServiceRestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @before
-     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      */
     public function setupPostNL()
     {
@@ -117,7 +117,7 @@ class LabellingServiceRestTest extends \PHPUnit_Framework_TestCase
      */
     public function testHasValidLabellingService()
     {
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Service\\LabellingService', $this->service);
+        $this->assertInstanceOf('\\Firstred\\PostNL\\Service\\LabellingService', $this->service);
     }
 
     /**
@@ -279,7 +279,7 @@ class LabellingServiceRestTest extends \PHPUnit_Framework_TestCase
                 ->setProductCodeDelivery('3085')
         );
 
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\GenerateLabelResponse', $label);
+        $this->assertInstanceOf('\\Firstred\\PostNL\\Entity\\Response\\GenerateLabelResponse', $label);
     }
 
     /**
@@ -623,7 +623,7 @@ class LabellingServiceRestTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\GenerateLabelResponse', $label[1]);
+        $this->assertInstanceOf('\\Firstred\\PostNL\\Entity\\Response\\GenerateLabelResponse', $label[1]);
     }
 
     /**
@@ -631,7 +631,7 @@ class LabellingServiceRestTest extends \PHPUnit_Framework_TestCase
      */
     public function testNegativeGenerateLabelInvalidResponseRest()
     {
-        $this->expectException('ThirtyBees\\PostNL\\Exception\\ResponseException');
+        $this->expectException('Firstred\\PostNL\\Exception\\ResponseException');
 
         $mock = new MockHandler([
             new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], 'asdfojasuidfo'),

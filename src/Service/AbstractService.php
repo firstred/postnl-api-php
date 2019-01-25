@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2019 Michael Dekker
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,28 +19,28 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2019 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Service;
+namespace Firstred\PostNL\Service;
 
 use GuzzleHttp\Psr7\Response;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
-use ThirtyBees\PostNL\Entity\AbstractEntity;
-use ThirtyBees\PostNL\Exception\ApiException;
-use ThirtyBees\PostNL\Exception\CifDownException;
-use ThirtyBees\PostNL\Exception\CifException;
-use ThirtyBees\PostNL\Exception\InvalidMethodException;
-use ThirtyBees\PostNL\Exception\ResponseException;
-use ThirtyBees\PostNL\PostNL;
+use Firstred\PostNL\Entity\AbstractEntity;
+use Firstred\PostNL\Exception\ApiException;
+use Firstred\PostNL\Exception\CifDownException;
+use Firstred\PostNL\Exception\CifException;
+use Firstred\PostNL\Exception\InvalidMethodException;
+use Firstred\PostNL\Exception\ResponseException;
+use Firstred\PostNL\PostNL;
 
 /**
  * Class AbstractService
  *
- * @package ThirtyBees\PostNL\Service
+ * @package Firstred\PostNL\Service
  */
 abstract class AbstractService
 {
@@ -255,7 +255,7 @@ abstract class AbstractService
         if ($response instanceof Response) {
             return (string) $response->getBody();
         } elseif (is_a($response, 'GuzzleHttp\\Exception\\GuzzleException')
-            || is_a($response, 'ThirtyBees\\PostNL\\Exception\\HttpClientException')
+            || is_a($response, 'Firstred\\PostNL\\Exception\\HttpClientException')
         ) {
             $exception = $response;
             if (method_exists($response, 'getResponse')) {

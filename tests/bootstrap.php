@@ -1,12 +1,10 @@
 <?php
+require __DIR__.'/../vendor/autoload.php';
 
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
 use Psr\Log\LogLevel;
 use wappr\Logger;
-
-$autoloader = require __DIR__.'/../vendor/autoload.php';
-$autoloader->add('ThirtyBees\\PostNL\\Tests\\', __DIR__);
 
 $filesystemAdapter = new Local(__DIR__.'/');
 $filesystem = new Filesystem($filesystemAdapter);

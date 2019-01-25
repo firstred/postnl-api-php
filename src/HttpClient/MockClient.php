@@ -17,7 +17,7 @@
  * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
-namespace ThirtyBees\PostNL\HttpClient;
+namespace Firstred\PostNL\HttpClient;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
@@ -26,12 +26,12 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
-use ThirtyBees\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\HttpClientException;
 
 /**
  * Class MockClient
  *
- * @package ThirtyBees\PostNL\HttpClient
+ * @package Firstred\PostNL\HttpClient
  */
 class MockClient implements ClientInterface, LoggerAwareInterface
 {
@@ -312,7 +312,7 @@ class MockClient implements ClientInterface, LoggerAwareInterface
             } elseif (isset($response['reason'])) {
                 $response = $response['reason'];
             } else {
-                $response = \ThirtyBees\PostNL\Exception\ResponseException('Unknown reponse type');
+                $response = \Firstred\PostNL\Exception\ResponseException('Unknown reponse type');
             }
             if ($response instanceof Response && $this->logger instanceof LoggerInterface) {
                 $this->logger->debug(\GuzzleHttp\Psr7\str($response));

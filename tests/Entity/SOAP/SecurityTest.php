@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2019 Michael Dekker
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,20 +19,20 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2019 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Tests\Entity\SOAP;
+namespace Firstred\PostNL\Tests\Entity\SOAP;
 
-use ThirtyBees\PostNL\Entity\SOAP\Security;
-use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
+use Firstred\PostNL\Entity\SOAP\Security;
+use Firstred\PostNL\Entity\SOAP\UsernameToken;
 
 /**
  * Class SecurityTest
  *
- * @package ThirtyBees\PostNL\Tests\Entity\SOAP
+ * @package Firstred\PostNL\Tests\Entity\SOAP
  *
  * @testdox The Envelope class
  */
@@ -47,6 +47,6 @@ class SecurityTest extends \PHPUnit_Framework_TestCase
             ->setUsernameToken(UsernameToken::create())
         ;
 
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\SOAP\\UsernameToken', $envelope->getUsernameToken());
+        $this->assertInstanceOf('\\Firstred\\PostNL\\Entity\\SOAP\\UsernameToken', $envelope->getUsernameToken());
     }
 }

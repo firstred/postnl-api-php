@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2019 Michael Dekker
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,32 +19,32 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2019 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Tests\Service;
+namespace Firstred\PostNL\Tests\Service;
 
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Psr\Log\LoggerInterface;
-use ThirtyBees\PostNL\Entity\Address;
-use ThirtyBees\PostNL\Entity\Barcode;
-use ThirtyBees\PostNL\Entity\Customer;
-use ThirtyBees\PostNL\Entity\Message\Message;
-use ThirtyBees\PostNL\Entity\Request\GenerateBarcode;
-use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
-use ThirtyBees\PostNL\HttpClient\MockClient;
-use ThirtyBees\PostNL\PostNL;
-use ThirtyBees\PostNL\Service\BarcodeService;
+use Firstred\PostNL\Entity\Address;
+use Firstred\PostNL\Entity\Barcode;
+use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Entity\Message\Message;
+use Firstred\PostNL\Entity\Request\GenerateBarcode;
+use Firstred\PostNL\Entity\SOAP\UsernameToken;
+use Firstred\PostNL\HttpClient\MockClient;
+use Firstred\PostNL\PostNL;
+use Firstred\PostNL\Service\BarcodeService;
 
 /**
  * Class BarcodeServiceRestTest
  *
- * @package ThirtyBees\PostNL\Tests\Service
+ * @package Firstred\PostNL\Tests\Service
  *
  * @testdox The BarcodeService (REST)
  */
@@ -59,7 +59,7 @@ class BarcodeServiceRestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @before
-     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      */
     public function setupPostNL()
     {
@@ -109,13 +109,13 @@ class BarcodeServiceRestTest extends \PHPUnit_Framework_TestCase
      */
     public function testHasValidBarcodeService()
     {
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Service\\BarcodeService', $this->service);
+        $this->assertInstanceOf('\\Firstred\\PostNL\\Service\\BarcodeService', $this->service);
     }
 
     /**
      * @testdox creates a valid 3S barcode request
      *
-     * @throws \ThirtyBees\PostNL\Exception\InvalidBarcodeException
+     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
      */
     public function testCreatesAValid3SBarcodeRequest()
     {
@@ -172,7 +172,7 @@ class BarcodeServiceRestTest extends \PHPUnit_Framework_TestCase
     /**
      * @testdox return a valid single barcode
      *
-     * @throws \ThirtyBees\PostNL\Exception\InvalidBarcodeException
+     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
      */
     public function testSingleBarcodeRest()
     {
@@ -192,8 +192,8 @@ class BarcodeServiceRestTest extends \PHPUnit_Framework_TestCase
     /**
      * @testdox return a valid single barcode for a country
      *
-     * @throws \ThirtyBees\PostNL\Exception\InvalidBarcodeException
-     * @throws \ThirtyBees\PostNL\Exception\InvalidConfigurationException
+     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
+     * @throws \Firstred\PostNL\Exception\InvalidConfigurationException
      */
     public function testSingleBarCodeByCountryRest()
     {
@@ -213,8 +213,8 @@ class BarcodeServiceRestTest extends \PHPUnit_Framework_TestCase
     /**
      * @testdox returns several barcodes
      *
-     * @throws \ThirtyBees\PostNL\Exception\InvalidBarcodeException
-     * @throws \ThirtyBees\PostNL\Exception\InvalidConfigurationException
+     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
+     * @throws \Firstred\PostNL\Exception\InvalidConfigurationException
      */
     public function testMultipleNLBarcodesRest()
     {
@@ -253,11 +253,11 @@ class BarcodeServiceRestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox return a valid single barcode
-     * @throws \ThirtyBees\PostNL\Exception\InvalidBarcodeException
+     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
      */
     public function testNegativeSingleBarcodeInvalidResponse()
     {
-        $this->expectException('ThirtyBees\\PostNL\\Exception\\ResponseException');
+        $this->expectException('Firstred\\PostNL\\Exception\\ResponseException');
 
         $mock = new MockHandler([
             new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], 'asdfojasuidfo'),

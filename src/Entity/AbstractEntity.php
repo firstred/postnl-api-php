@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2019 Michael Dekker
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,22 +19,22 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2019 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity;
+namespace Firstred\PostNL\Entity;
 
 use Sabre\Xml\Writer;
 use Sabre\Xml\XmlSerializable;
-use ThirtyBees\PostNL\Exception\InvalidArgumentException;
-use ThirtyBees\PostNL\Util\UUID;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Util\UUID;
 
 /**
  * Class Entity
  *
- * @package ThirtyBees\PostNL\Entity
+ * @package Firstred\PostNL\Entity
  *
  * @method string getId()
  * @method string getCurrentService()
@@ -299,11 +299,11 @@ abstract class AbstractEntity implements \JsonSerializable, XmlSerializable
     public static function getFullEntityClassName($shortName)
     {
         foreach ([
-            '\\ThirtyBees\\PostNL\\Entity',
-            '\\ThirtyBees\\PostNL\\Entity\\Message',
-            '\\ThirtyBees\\PostNL\\Entity\\Request',
-            '\\ThirtyBees\\PostNL\\Entity\\Response',
-            '\\ThirtyBees\\PostNL\\Entity\\SOAP',
+            '\\Firstred\\PostNL\\Entity',
+            '\\Firstred\\PostNL\\Entity\\Message',
+            '\\Firstred\\PostNL\\Entity\\Request',
+            '\\Firstred\\PostNL\\Entity\\Response',
+            '\\Firstred\\PostNL\\Entity\\SOAP',
         ] as $namespace) {
             if (class_exists("$namespace\\$shortName")) {
                 return "$namespace\\$shortName";
