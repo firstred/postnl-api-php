@@ -1,6 +1,6 @@
 {
     "name": "firstred/postnl-api-php",
-    "description": "PostNL REST API PHP Bindings",
+    "description": "PostNL REST/SOAP API PHP Bindings",
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -10,28 +10,32 @@
         }
     ],
     "require": {
-        "php": "^5.6 || ^7.0",
+        "php": "^7.1",
         "ext-json": "*",
-        "sabre/xml": "~1.5.0",
-        "guzzlehttp/psr7": "^1.4",
-        "setasign/fpdi": "^2.0",
-        "setasign/fpdf": "^1.8",
-        "psr/cache": "^1.0",
-        "psr/log": "^1.0"
+        "sabre/xml": "^2.1.2",
+        "guzzlehttp/psr7": "^1.5.2",
+        "setasign/fpdi": "^2.1.1",
+        "setasign/fpdf": "^1.8.1",
+        "psr/cache": "^1.0.1",
+        "psr/log": "^1.1.0"
     },
     "require-dev": {
-        "php": "^5.6 || ^7.0",
-        "phpunit/phpunit": "^5.0",
-        "wappr/logger": "^1.2",
-        "guzzlehttp/guzzle": "^6.3",
-        "cache/void-adapter": "^1.0"
+        "phpunit/phpunit": "^7.5.2",
+        "wappr/logger": "^1.2.0",
+        "guzzlehttp/guzzle": "^6.3.3",
+        "cache/void-adapter": "^1.0.0"
     },
     "suggest": {
         "guzzlehttp/guzzle": "Process requests faster + auto retry failed requests"
     },
     "autoload": {
         "psr-4": {
-            "ThirtyBees\\PostNL\\": "src/"
+            "Firstred\\PostNL\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Firstred\\PostNL\\": "tests/"
         }
     }
 }
