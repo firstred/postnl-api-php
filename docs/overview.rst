@@ -5,7 +5,7 @@ Overview
 Requirements
 ============
 
-#. PHP 5.5.5 or higher
+#. PHP 7.1 or higher
 #. JSON extension
 #. XML Support (SimpleXMLElement)
 #. By default this library utilizes cURL for communication.
@@ -38,7 +38,7 @@ Install the PostNL library:
 
 .. code-block:: bash
 
-    php composer.phar require thirtybees/postnl-api-php:~1.0
+    php composer.phar require firstred/postnl-api-php:~2.0
 
 You can optionally add Guzzle as a dependency using the composer.phar CLI:
 
@@ -71,13 +71,13 @@ Bleeding edge
 -------------
 
 During your development, you can keep up with the latest changes on the master
-branch by setting the version requirement for this library to ``~1.0@dev``.
+branch by setting the version requirement for this library to ``~2.0@dev``.
 
 .. code-block:: js
 
    {
       "require": {
-         "thirtybees/postnl-api-php": "~1.0@dev"
+         "firstred/postnl-api-php": "~2.0@dev"
       }
    }
 
@@ -87,7 +87,7 @@ License
 
 Licensed using the `MIT license <http://opensource.org/licenses/MIT>`_.
 
-    Copyright (c) 2017-2018 thirty bees <https://github.com/thirtybees>
+    Copyright (c) 2017-2019 Michael Dekker <https://github.com/firstred>
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
@@ -118,10 +118,10 @@ Guidelines
 1. This library utilizes PSR-1, PSR-2, PSR-3, PSR-4, PSR-6 and PSR-7.
 2. The library is meant to be lean, fast and sticks to the standards of the SOAP API. This means
    that not every feature request will be accepted.
-3. The PostNL library has a minimum PHP version requirement of PHP 5.5.5. Pull requests must
-   not require a PHP version greater than PHP 5.5.5.
+3. The PostNL library has a minimum PHP version requirement of PHP 7.1. Pull requests must
+   not require a PHP version greater than PHP 7.1.
 4. All pull requests must include unit tests to ensure the change works as
-   expected and to prevent regressions.
+   expected and to prevent regressions. If you need help with adding tests, don't hesitate to leave a comment.
 
 
 Running the tests
@@ -132,7 +132,7 @@ install the dependencies using Composer:
 
 .. code-block:: bash
 
-    git clone https://github.com/thirtybees/postnl-api-php.git
+    git clone https://github.com/firstred/postnl-api-php.git
     cd postnl-api-php && curl -s http://getcomposer.org/installer | php && ./composer.phar install --dev
 
 This library is unit tested with PHPUnit. Run the tests using the included PHPUnit version:
@@ -144,5 +144,5 @@ This library is unit tested with PHPUnit. Run the tests using the included PHPUn
 
 .. note::
 
-    You'll need to use PHP 5.6 or newer in order to perform
+    You'll need to use PHP 7.1 or newer in order to perform
     the tests.

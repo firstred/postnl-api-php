@@ -46,7 +46,7 @@ Here's how it is done:
             'Street'      => 'Siriusdreef',
             'Zipcode'     => '2132WT',
         ]),
-        'Email'              => 'michael@thirtybees.com',
+        'Email'              => 'git@michaeldekker.nl',
         'Name'               => 'Michael',
     ]);
 
@@ -143,7 +143,7 @@ Here is how you can request two labels and have them merged into a single PDF au
             'Street'      => 'Siriusdreef',
             'Zipcode'     => '2132WT',
         ]),
-        'Email'              => 'michael@thirtybees.com',
+        'Email'              => 'git@michaeldekker.nl',
         'Name'               => 'Michael',
     ]);
 
@@ -241,7 +241,7 @@ customer
               'Street'      => 'Siriusdreef',
               'Zipcode'     => '2132WT',
           ]),
-          'Email'              => 'michael@thirtybees.com',
+          'Email'              => 'git@michaeldekker.nl',
           'Name'               => 'Michael',
       ]);
 
@@ -302,7 +302,7 @@ Service class of your choice and call the ```buildXXXXXXRequest()``` functions m
 used by this library you can use the ``Request`` object that is returned to access the full request that would otherwise
 be sent directly. To pick up where you left off you can then grab the response and pass it to one of the ``processXXXXXXXResponse()```
 functions of the Service class. The easiest method is to grab the raw HTTP message and parse it with the included PSR-7 library.
-An example can be found in the `cURL client <https://github.com/thirtybees/postnl-api-php/blob/b3837cec23e1b8e806c5ea29d79d0fae82a0e956/src/HttpClient/CurlClient.php#L258>`_.
+An example can be found in the `cURL client <https://github.com/firstred/postnl-api-php/blob/b3837cec23e1b8e806c5ea29d79d0fae82a0e956/src/HttpClient/CurlClient.php#L258>`_.
 
 Using Response objects
 ======================
