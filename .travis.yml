@@ -13,7 +13,7 @@ before_script:
 script:
   - composer test:unit
   - >
-    if [[ "${TRAVIS_PULL_REQUEST" == "false" ]]; then
+    if [[ "${TRAVIS_PULL_REQUEST" = "false" ]]; then
       composer test:integration
     fi
 
