@@ -13,12 +13,12 @@ $dotenv = Dotenv::create(__DIR__.'/../');
 try {
     $dotenv->load();
 } catch (InvalidPathException $e) {
-    // Do absolutely nothing with this error :D
+    // Do absolute nothing with the error :D
 }
 $dotenv->required([
     'POSTNL_API_KEY',
     'POSTNL_COLLECTION_LOCATION',
-    'POSTNL_CONTACT_PERSION',
+    'POSTNL_CONTACT_PERSON',
     'POSTNL_CUSTOMER_CODE',
     'POSTNL_CUSTOMER_NUMBER',
 ]);
