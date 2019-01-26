@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker
+ * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,13 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
+ *
  * @copyright 2017-2019 Michael Dekker
+ *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Entity;
 
-use Sabre\Xml\Writer;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
@@ -34,11 +36,10 @@ use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
+use Sabre\Xml\Writer;
 
 /**
  * Class CutOffTime
- *
- * @package Firstred\PostNL\Entity
  *
  * @method string|null getDay()
  * @method string|null getTime()
@@ -100,7 +101,7 @@ class CutOffTime extends AbstractEntity
     /**
      * @param string $day
      * @param string $time
-     * @param bool $available
+     * @param bool   $available
      */
     public function __construct($day = null, $time = null, $available = null)
     {
@@ -117,8 +118,10 @@ class CutOffTime extends AbstractEntity
      * @param Writer $writer
      *
      * @return void
+     *
+     * @since 1.0.0
      */
-    public function xmlSerialize(Writer $writer)
+    public function xmlSerialize(Writer $writer): void
     {
         $xml = [];
         if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
@@ -129,7 +132,7 @@ class CutOffTime extends AbstractEntity
 
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
             if (isset($this->{$propertyName})) {
-                if ($propertyName === 'Available') {
+                if ('Available' === $propertyName) {
                     if (is_bool($this->{$propertyName})) {
                         $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName} ? 'true' : 'false';
                     } elseif (is_int($this->{$propertyName})) {

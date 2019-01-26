@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker
+ * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,7 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
+ *
  * @copyright 2017-2019 Michael Dekker
+ *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -37,8 +40,6 @@ use Firstred\PostNL\Service\TimeframeService;
 
 /**
  * Class ResponseAmount
- *
- * @package Firstred\PostNL\Entity\Response
  *
  * @method string|null getAccountName()
  * @method string|null getResponseAmountType()
@@ -162,16 +163,8 @@ class ResponseAmount extends AbstractEntity
      * @param string|null $transactionNumber
      * @param string|null $value
      */
-    public function __construct(
-        $accountName = null,
-        $responseAmount = null,
-        $bic = null,
-        $currency = null,
-        $iban = null,
-        $reference = null,
-        $transactionNumber = null,
-        $value = null
-    ) {
+    public function __construct(?string $accountName = null, ?string $responseAmount = null, ?string $bic = null, ?string $currency = null, ?string $iban = null, ?string $reference = null, ?string $transactionNumber = null, ?string $value = null)
+    {
         parent::__construct();
 
         $this->setAccountName($accountName);

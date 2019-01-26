@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker
+ * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,7 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
+ *
  * @copyright 2017-2019 Michael Dekker
+ *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -28,8 +31,6 @@ namespace Firstred\PostNL\Exception;
 
 /**
  * Class CifException
- *
- * @package Firstred\PostNL\Exception
  */
 class CifException extends AbstractException
 {
@@ -41,9 +42,9 @@ class CifException extends AbstractException
      *
      * @param string|string[] $message  In case of multiple errors, the format looks like:
      *                                  [
-     *                                    'description' => string <The description>,
-     *                                    'message'     => string <The error message>,
-     *                                    'code'        => int <The error code>
+     *                                  'description' => string <The description>,
+     *                                  'message'     => string <The error message>,
+     *                                  'code'        => int <The error code>
      *                                  ]
      *                                  The code param will be discarded if `$message` is an array
      * @param int             $code

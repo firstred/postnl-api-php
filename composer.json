@@ -1,41 +1,51 @@
 {
-    "name": "firstred/postnl-api-php",
-    "description": "PostNL REST/SOAP API PHP Bindings",
-    "type": "library",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Michael Dekker",
-            "email": "git@michaeldekker.nl"
-        }
-    ],
-    "require": {
-        "php": "^7.1",
-        "ext-json": "*",
-        "sabre/xml": "^2.1.2",
-        "guzzlehttp/psr7": "^1.5.2",
-        "setasign/fpdi": "^2.1.1",
-        "setasign/fpdf": "^1.8.1",
-        "psr/cache": "^1.0.1",
-        "psr/log": "^1.1.0"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "^7.5.2",
-        "wappr/logger": "^1.2.0",
-        "guzzlehttp/guzzle": "^6.3.3",
-        "cache/void-adapter": "^1.0.0"
-    },
-    "suggest": {
-        "guzzlehttp/guzzle": "Process requests faster + auto retry failed requests"
-    },
-    "autoload": {
-        "psr-4": {
-            "Firstred\\PostNL\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Firstred\\PostNL\\": "tests/"
-        }
+  "name": "firstred/postnl-api-php",
+  "description": "PostNL REST/SOAP API PHP Bindings",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Michael Dekker",
+      "email": "git@michaeldekker.nl"
     }
+  ],
+  "scripts": {
+    "install:phpcs": "vendor/bin/phpcs --config-set installed_paths vendor/escapestudios/symfony2-coding-standard",
+    "phpcs": "vendor/bin/phpcs --standard=Symfony --extensions=php src/ tests/",
+    "phpcs:src": "vendor/bin/phpcs --standard=Symfony --extensions=php src/",
+    "phpcs:tests": "vendor/bin/phpcs --standard=Symfony --extensions=php tests/",
+    "phpcbf": "vendor/bin/phpcbf --standard=Symfony --extensions=php src/ tests/",
+    "phpcbf:src": "vendor/bin/phpcbf --standard=Symfony --extensions=php src/",
+    "phpcbf:tests": "vendor/bin/phpcbf --standard=Symfony --extensions=php tests/"
+  },
+  "require": {
+    "php": "^7.1",
+    "sabre/xml": "^2.1.2",
+    "guzzlehttp/psr7": "^1.5.2",
+    "setasign/fpdi": "^2.1.1",
+    "setasign/fpdf": "^1.8.1",
+    "psr/cache": "^1.0.1",
+    "psr/log": "^1.1.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^7.5.2",
+    "wappr/logger": "^1.2.0",
+    "guzzlehttp/guzzle": "^6.3.3",
+    "cache/void-adapter": "^1.0.0",
+    "squizlabs/php_codesniffer": "^3.4",
+    "escapestudios/symfony2-coding-standard": "3.x-dev"
+  },
+  "suggest": {
+    "guzzlehttp/guzzle": "Process requests faster + auto retry failed requests"
+  },
+  "autoload": {
+    "psr-4": {
+      "Firstred\\PostNL\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Firstred\\PostNL\\": "tests/"
+    }
+  }
 }

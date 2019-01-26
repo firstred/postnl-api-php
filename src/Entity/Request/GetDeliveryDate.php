@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker
+ * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,13 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
+ *
  * @copyright 2017-2019 Michael Dekker
+ *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Entity\Request;
 
-use Sabre\Xml\Writer;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\CutOffTime;
 use Firstred\PostNL\Entity\Message\Message;
@@ -37,13 +39,12 @@ use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
+use Sabre\Xml\Writer;
 
 /**
  * Class GetDeliveryDate
  *
  * This class is both the container and can be the actual GetDeliveryDate object itself!
- *
- * @package Firstred\PostNL\Entity
  *
  * @method bool|null            getAllowSundaySorting()
  * @method string|null          getCity()
@@ -244,22 +245,8 @@ class GetDeliveryDate extends AbstractEntity
      * @param GetDeliveryDate|null $getDeliveryDate
      * @param Message|null         $message
      */
-    public function __construct(
-        $allowSundaySorting = null,
-        $city = null,
-        $countryCode = null,
-        array $cutOffTimes = null,
-        $houseNr = null,
-        $houseNrExt = null,
-        array $options = null,
-        $originCountryCode = null,
-        $postalCode = null,
-        $shippingDate = null,
-        $shippingDuration = null,
-        $street = null,
-        GetDeliveryDate $getDeliveryDate = null,
-        $message = null
-    ) {
+    public function __construct(?bool $allowSundaySorting = null, ?string $city = null, ?string $countryCode = null, ?array $cutOffTimes = null, ?string $houseNr = null, ?string $houseNrExt = null, ?array $options = null, ?string $originCountryCode = null, ?string $postalCode = null, ?string $shippingDate = null, ?string $shippingDuration = null, ?string $street = null, ?GetDeliveryDate $getDeliveryDate = null, ?Message $message = null)
+    {
         parent::__construct();
 
         $this->setAllowSundaySorting($allowSundaySorting);
@@ -283,13 +270,15 @@ class GetDeliveryDate extends AbstractEntity
      *
      * @param string|null $postcode
      *
-     * @return $this
+     * @return self
      */
     public function setPostalCode($postcode = null)
     {
         if (is_null($postcode)) {
+            // @codingStandardsIgnoreLine
             $this->PostalCode = null;
         } else {
+            // @codingStandardsIgnoreLine
             $this->PostalCode = strtoupper(str_replace(' ', '', $postcode));
         }
 
@@ -302,8 +291,10 @@ class GetDeliveryDate extends AbstractEntity
      * @param Writer $writer
      *
      * @return void
+     *
+     * @since 1.0.0
      */
-    public function xmlSerialize(Writer $writer)
+    public function xmlSerialize(Writer $writer): void
     {
         $xml = [];
         if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
@@ -313,29 +304,31 @@ class GetDeliveryDate extends AbstractEntity
         }
 
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if ($propertyName === 'CutOffTimes') {
+            if ('CutOffTimes' === $propertyName) {
+                // @codingStandardsIgnoreLine
                 if (isset($this->CutOffTimes)) {
                     $cutOffTimes = [];
+                    // @codingStandardsIgnoreLine
                     foreach ($this->CutOffTimes as $cutOffTime) {
                         $cutOffTimes[] = ["{{$namespace}}CutOffTime" => $cutOffTime];
                     }
                     $xml["{{$namespace}}CutOffTimes"] = $cutOffTimes;
                 }
-            } elseif ($propertyName === 'Options') {
+            } elseif ('Options' === $propertyName) {
+                // @codingStandardsIgnoreLine
                 if (isset($this->Options)) {
                     $options = [];
+                    // @codingStandardsIgnoreLine
                     foreach ($this->Options as $option) {
                         $options[] = ["{http://schemas.microsoft.com/2003/10/Serialization/Arrays}string" => $option];
                     }
                     $xml["{{$namespace}}Options"] = $options;
                 }
-            } elseif ($propertyName === 'AllowSundaySorting') {
+            } elseif ('AllowSundaySorting' === $propertyName) {
+                // @codingStandardsIgnoreLine
                 if (isset($this->AllowSundaySorting)) {
-                    if (is_bool($this->AllowSundaySorting)) {
-                        $xml["{{$namespace}}AllowSundaySorting"] = $this->AllowSundaySorting ? 'true' : 'false';
-                    } else {
-                        $xml["{{$namespace}}AllowSundaySorting"] = $this->AllowSundaySorting;
-                    }
+                    // @codingStandardsIgnoreLine
+                    $xml["{{$namespace}}AllowSundaySorting"] = $this->AllowSundaySorting ? 'true' : 'false';
                 }
             } elseif (isset($this->{$propertyName})) {
                 $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};

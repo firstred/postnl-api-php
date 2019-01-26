@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker
+ * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,15 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
+ *
  * @copyright 2017-2019 Michael Dekker
+ *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Entity\Response;
 
-use Sabre\Xml\Writer;
-use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\AbstractEntity;
+use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Amount;
 use Firstred\PostNL\Entity\Barcode;
 use Firstred\PostNL\Entity\Dimension;
@@ -44,11 +46,10 @@ use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
+use Sabre\Xml\Writer;
 
 /**
  * Class CurrentStatusResponseShipment
- *
- * @package Firstred\PostNL\Entity
  *
  * @method Address[]|null       getAddresses()
  * @method Amount[]|null        getAmounts()
@@ -222,20 +223,8 @@ class CurrentStatusResponseShipment extends AbstractEntity
      * @param Status|null          $status
      * @param Warning[]|null       $warnings
      */
-    public function __construct(
-        array $addresses = null,
-        array $amounts = null,
-        $barcode = null,
-        $deliveryDate = null,
-        $dimension = null,
-        $expectation = null,
-        array $groups = null,
-        $productCode = null,
-        array $productOptions = null,
-        $reference = null,
-        $status = null,
-        array $warnings = null
-    ) {
+    public function __construct(?array $addresses = null, ?array $amounts = null, ?Barcode $barcode = null, ?string $deliveryDate = null, ?Dimension $dimension = null, ?Expectation $expectation = null, ?array $groups = null, ?string $productCode = null, ?array $productOptions = null, ?string $reference = null, ?Status $status = null, ?array $warnings = null)
+    {
         parent::__construct();
 
         $this->setAddresses($addresses);
@@ -258,8 +247,10 @@ class CurrentStatusResponseShipment extends AbstractEntity
      * @param Writer $writer
      *
      * @return void
+     *
+     * @since 1.0.0
      */
-    public function xmlSerialize(Writer $writer)
+    public function xmlSerialize(Writer $writer): void
     {
         $xml = [];
         if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
@@ -269,32 +260,37 @@ class CurrentStatusResponseShipment extends AbstractEntity
         }
 
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if ($propertyName === 'Addresses') {
+            if ('Addresses' === $propertyName) {
                 $addresses = [];
+                // @codingStandardsIgnoreLine
                 foreach ($this->Addresses as $address) {
                     $addresses[] = ["{{$namespace}}Address" => $address];
                 }
                 $xml["{{$namespace}}Addresses"] = $addresses;
-            } elseif ($propertyName === 'Amounts') {
+            } elseif ('Amounts' === $propertyName) {
                 $amounts = [];
+                // @codingStandardsIgnoreLine
                 foreach ($this->Amounts as $amount) {
                     $amounts[] = ["{{$namespace}}Amount" => $amount];
                 }
                 $xml["{{$namespace}}Amounts"] = $amounts;
-            } elseif ($propertyName === 'Groups') {
+            } elseif ('Groups' === $propertyName) {
                 $groups = [];
+                // @codingStandardsIgnoreLine
                 foreach ($this->Groups as $group) {
                     $groups[] = ["{{$namespace}}Group" => $group];
                 }
                 $xml["{{$namespace}}Groups"] = $groups;
-            } elseif ($propertyName === 'ProductOption') {
+            } elseif ('ProductOption' === $propertyName) {
                 $productOptions = [];
+                // @codingStandardsIgnoreLine
                 foreach ($this->ProductOptions as $productOption) {
                     $productOptions[] = ["{{$namespace}}ProductOptions" => $productOption];
                 }
                 $xml["{{$namespace}}ProductOptions"] = $productOptions;
-            } elseif ($propertyName === 'Warnings') {
+            } elseif ('Warnings' === $propertyName) {
                 $warnings = [];
+                // @codingStandardsIgnoreLine
                 foreach ($this->Warnings as $warning) {
                     $warnings[] = ["{{$namespace}}Warning" => $warning];
                 }

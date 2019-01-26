@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker
+ * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,13 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
+ *
  * @copyright 2017-2019 Michael Dekker
+ *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Entity;
 
-use Sabre\Xml\Writer;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
@@ -34,11 +36,10 @@ use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
+use Sabre\Xml\Writer;
 
 /**
  * Class ReasonNoTimeframe
- *
- * @package Firstred\PostNL\Entity
  *
  * @method string|null   getCode()
  * @method string|null   getDate()
@@ -137,15 +138,11 @@ class ReasonNoTimeframe extends AbstractEntity
      * @param string[]|null $options
      * @param string|null   $from
      * @param string|null   $to
+     *
+     * @since 1.0.0
      */
-    public function __construct(
-        $code = null,
-        $date = null,
-        $desc = null,
-        array $options = null,
-        $from = null,
-        $to = null
-    ) {
+    public function __construct(?string $code = null, ?string $date = null, ?string $desc = null, array $options = null, ?string $from = null, ?string $to = null)
+    {
         parent::__construct();
 
         $this->setCode($code);
@@ -162,8 +159,10 @@ class ReasonNoTimeframe extends AbstractEntity
      * @param Writer $writer
      *
      * @return void
+     *
+     * @since 1.0.0
      */
-    public function xmlSerialize(Writer $writer)
+    public function xmlSerialize(Writer $writer): void
     {
         $xml = [];
         if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
@@ -173,10 +172,13 @@ class ReasonNoTimeframe extends AbstractEntity
         }
 
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if ($propertyName === 'Options') {
+            if ('Options' === $propertyName) {
+                // @codingStandardsIgnoreLine
                 if (isset($this->Options)) {
                     $options = [];
+                    // @codingStandardsIgnoreLine
                     if (is_array($this->Options)) {
+                        // @codingStandardsIgnoreLine
                         foreach ($this->Options as $option) {
                             $options[] = ["{http://schemas.microsoft.com/2003/10/Serialization/Arrays}string" => $option];
                         }

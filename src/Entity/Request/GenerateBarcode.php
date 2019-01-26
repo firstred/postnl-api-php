@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker
+ * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,7 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
+ *
  * @copyright 2017-2019 Michael Dekker
+ *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -40,8 +43,6 @@ use Firstred\PostNL\Service\TimeframeService;
 
 /**
  * Class GenerateLabel
- *
- * @package Firstred\PostNL\Entity
  *
  * @method Customer|null getCustomer()
  * @method Message|null  getMessage()
@@ -110,6 +111,10 @@ class GenerateBarcode extends AbstractEntity
      * @param Barcode|null  $barcode
      * @param Customer|null $customer
      * @param Message|null  $message
+     *
+     * @throws \Exception
+     *
+     * @since 1.0.0
      */
     public function __construct(Barcode $barcode = null, Customer $customer = null, Message $message = null)
     {

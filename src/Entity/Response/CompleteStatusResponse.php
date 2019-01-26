@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker
+ * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,13 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
+ *
  * @copyright 2017-2019 Michael Dekker
+ *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Entity\Response;
 
-use Sabre\Xml\Writer;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Shipment;
 use Firstred\PostNL\Service\BarcodeService;
@@ -36,13 +38,12 @@ use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
+use Sabre\Xml\Writer;
 
 /**
  * Class CompleteStatusResponse
  *
- * @package Firstred\PostNL\Entity
- *
- * @method string|null getShipments()
+ * @method Shipment[]|null getShipments()
  *
  * @method CompleteStatusResponse setShipments(Shipment[] $shipments = null)
  */
@@ -85,8 +86,10 @@ class CompleteStatusResponse extends AbstractEntity
      * CompleteStatusResponse constructor.
      *
      * @param array|null $shipments
+     *
+     * @since 1.0.0
      */
-    public function __construct(array $shipments = null)
+    public function __construct(?array $shipments = null)
     {
         parent::__construct();
 
@@ -99,8 +102,10 @@ class CompleteStatusResponse extends AbstractEntity
      * @param Writer $writer
      *
      * @return void
+     *
+     * @since 1.0.0
      */
-    public function xmlSerialize(Writer $writer)
+    public function xmlSerialize(Writer $writer): void
     {
         $xml = [];
         if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
@@ -110,9 +115,11 @@ class CompleteStatusResponse extends AbstractEntity
         }
 
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if ($propertyName === 'Shipments') {
+            if ('Shipments' === $propertyName) {
                 $shipments = [];
+                // @codingStandardsIgnoreLine
                 if (is_array($this->Shipments)) {
+                    // @codingStandardsIgnoreLine
                     foreach ($this->Shipments as $shipment) {
                         $shipments[] = ["{{$namespace}}Shipment" => $shipment];
                     }

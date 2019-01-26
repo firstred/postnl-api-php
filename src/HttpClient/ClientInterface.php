@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker
+ * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,30 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
+ *
  * @copyright 2017-2019 Michael Dekker
+ *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\HttpClient;
+
+use Firstred\PostNL\Exception\HttpClientException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Psr\Log\LoggerInterface;
-use Firstred\PostNL\Exception\HttpClientException;
 
 /**
  * Interface ClientInterface
- *
- * @package Firstred\PostNL\HttpClient
  */
 interface ClientInterface
 {
-    /**
-     * Set the logger
-     *
-     * @param LoggerInterface $logger
-     */
-    public function setLogger(LoggerInterface $logger);
-
     /**
      * Get the HTTP Client instance
      *
@@ -52,22 +47,29 @@ interface ClientInterface
     public static function getInstance();
 
     /**
+     * Set the logger
+     *
+     * @param LoggerInterface $logger
+     */
+    public function setLogger(LoggerInterface $logger);
+
+    /**
      * Adds a request to the list of pending requests
      * Using the ID you can replace a request
      *
-     * @param string $id      Request ID
-     * @param string $request PSR-7 request
+     * @param string  $id      Request ID
+     * @param Request $request PSR-7 request
      *
      * @return int|string
      */
-    public function addOrUpdateRequest($id, $request);
+    public function addOrUpdateRequest(string $id, Request $request);
 
     /**
      * Set the verify setting
      *
      * @param bool|string $verify
      *
-     * @return $this
+     * @return self
      */
     public function setVerify($verify);
 
@@ -83,7 +85,7 @@ interface ClientInterface
      *
      * @param string $id
      */
-    public function removeRequest($id);
+    public function removeRequest(string $id);
 
     /**
      * Clear all requests
@@ -110,5 +112,5 @@ interface ClientInterface
      *
      * @return Response|Response[]|HttpClientException|HttpClientException[]
      */
-    public function doRequests($requests = []);
+    public function doRequests(array $requests = []);
 }

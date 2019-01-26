@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker
+ * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,7 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
+ *
  * @copyright 2017-2019 Michael Dekker
+ *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -31,6 +34,7 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Customer;
@@ -39,7 +43,6 @@ use Firstred\PostNL\Entity\Request\CompleteStatus;
 use Firstred\PostNL\Entity\Request\CurrentStatus;
 use Firstred\PostNL\Entity\Request\GetSignature;
 use Firstred\PostNL\Entity\Shipment;
-use Firstred\PostNL\Entity\SOAP\UsernameToken;
 use Firstred\PostNL\HttpClient\MockClient;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\ShippingStatusService;
@@ -47,11 +50,9 @@ use Firstred\PostNL\Service\ShippingStatusService;
 /**
  * Class ShippingStatusRestTest
  *
- * @package Firstred\PostNL\Tests\Service
- *
  * @testdox The ShippingStatusService (REST)
  */
-class ShippingStatusRestTest extends \PHPUnit_Framework_TestCase
+class ShippingStatusRestTest extends TestCase
 {
     /** @var PostNL $postnl */
     protected $postnl;
@@ -62,6 +63,7 @@ class ShippingStatusRestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @before
+     *
      * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      */
     public function setupPostNL()
@@ -82,8 +84,8 @@ class ShippingStatusRestTest extends \PHPUnit_Framework_TestCase
                     'Zipcode'     => '2132WT',
                 ]))
                 ->setGlobalPackBarcodeType('AB')
-                ->setGlobalPackCustomerCode('1234')
-            , new UsernameToken(null, 'test'),
+                ->setGlobalPackCustomerCode('1234'),
+            'test',
             true,
             PostNL::MODE_REST
         );
@@ -111,6 +113,8 @@ class ShippingStatusRestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox creates a valid CurrentStatus request
+     *
+     * @throws \Exception
      */
     public function testGetCurrentStatusRequestRest()
     {
@@ -136,6 +140,8 @@ class ShippingStatusRestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox can get the current status
+     *
+     * @throws \Exception
      */
     public function testGetCurrentStatusRest()
     {
@@ -210,7 +216,7 @@ class ShippingStatusRestTest extends \PHPUnit_Framework_TestCase
     }
   }
 }
-')]);
+'), ]);
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();
         $mockClient->setHandler($handler);
@@ -229,6 +235,8 @@ class ShippingStatusRestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox creates a valid CurrentStatusByReference request
+     *
+     * @throws \Exception
      */
     public function testGetCurrentStatusByReferenceRequestRest()
     {
@@ -257,6 +265,8 @@ class ShippingStatusRestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox creates a valid CurrentStatusByStatus request
+     *
+     * @throws \Exception
      */
     public function testGetCurrentStatusByStatusRequestRest()
     {
@@ -286,6 +296,8 @@ class ShippingStatusRestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox creates a valid CurrentStatusByPhase request
+     *
+     * @throws \Exception
      */
     public function testGetCurrentStatusByPhaseRequestRest()
     {
@@ -315,6 +327,8 @@ class ShippingStatusRestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox creates a valid CompleteStatus request
+     *
+     * @throws \Exception
      */
     public function testGetCompleteStatusRequestRest()
     {
@@ -342,6 +356,8 @@ class ShippingStatusRestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox can retrieve the complete status
+     *
+     * @throws \Exception
      */
     public function testGetCompleteStatusRest()
     {
@@ -486,7 +502,7 @@ class ShippingStatusRestTest extends \PHPUnit_Framework_TestCase
     }
   }
 }
-')]);
+'), ]);
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();
         $mockClient->setHandler($handler);
@@ -506,11 +522,13 @@ class ShippingStatusRestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(3, count($completeStatusResponse->getShipments()[0]->getEvents()));
         $this->assertNull($completeStatusResponse->getShipments()[0]->getGroups());
         $this->assertInstanceOf('\\Firstred\\PostNL\\Entity\\Customer', $completeStatusResponse->getShipments()[0]->getCustomer());
-        $this->assertEquals('07-03-2018 09:50:47', $completeStatusResponse->getShipments()[0]->getOldStatuses()[4]->getTimeStamp());
+        $this->assertEquals('07-03-2018 09:50:47', $completeStatusResponse->getShipments()[0]->getOldStatuses()[4]->getCurrentOldStatusTimeStamp());
     }
 
     /**
      * @testdox creates a valid CompleteStatusByReference request
+     *
+     * @throws \Exception
      */
     public function testGetCompleteStatusByReferenceRequestRest()
     {
@@ -540,6 +558,8 @@ class ShippingStatusRestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox creates a valid CompleteStatusByStatus request
+     *
+     * @throws \Exception
      */
     public function testGetCompleteStatusByStatusRequestRest()
     {
@@ -574,6 +594,8 @@ class ShippingStatusRestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox creates a valid CompleteStatusByPhase request
+     *
+     * @throws \Exception
      */
     public function testGetCompleteStatusByPhaseRequestRest()
     {
@@ -608,6 +630,8 @@ class ShippingStatusRestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox creates a valid GetSignature request
+     *
+     * @throws \Exception
      */
     public function testGetSignatureRequestRest()
     {
@@ -619,8 +643,7 @@ class ShippingStatusRestTest extends \PHPUnit_Framework_TestCase
                 ->setCustomer($this->postnl->getCustomer())
                 ->setMessage($message)
                 ->setShipment((new Shipment())
-                    ->setBarcode($barcode)
-                )
+                ->setBarcode($barcode))
         );
 
         $query = \GuzzleHttp\Psr7\parse_query($request->getUri()->getQuery());
@@ -633,6 +656,8 @@ class ShippingStatusRestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox can get the signature
+     *
+     * @throws \Exception
      */
     public function testGetSignatureRest()
     {
@@ -644,7 +669,7 @@ class ShippingStatusRestTest extends \PHPUnit_Framework_TestCase
     "SignatureImage": "R0lGODdh8ACRADMAACwAAAAA8ACRAIMAAACAAAAAgACAgAAAAICAAIAAgICAgIDAwMD\/AAAA\/wD\/\/wAAAP\/\/AP8A\/\/\/\/\/\/8E\/\/DJSau9OOvNu\/8XAIBkaZ5oqq5sW4miK890bd8rHON87\/9AD+yxCxqPyCRqSBwpn9CoskiUWq\/YGVNCzXq\/YMyWGy6bwePmec1+dtXtuJyX5jrn+HzuDdf7\/x91doCEhSF3FnyGi3mKg4yQeo59kZVtk1WWmmuYmJufboiHoKRZnp6lqT2ooqquQKytr7M3qJS0uDS2trm9ILy8vsIawbLDx0LGYsrIzaO\/zM7StxzB077W1NfT2Znb393d36ri0eO9gtXm57Tp6uzO7u\/wyOJk9Mf29\/jY68T+\/DbpeyRJB8CAEwYSjGNQHsJlLRQGMdjkYEN8EheioVhxQ0OO9P8yasRy0Y6xjyJxOSRx8EfJhHxePnyR0lsUmRVF4ZyZqOW8UIJ0wATJM0NNbT52mnSitOgzLT5VEKUZo6lTiDaOHpKHMqpTrTBrTe1p9apHsGFljCW71mwgr9BYlB0q1G0KtDSXtKVa1+5duCWy7eW70m8HvE\/PFs652PBhwCY69VU82fEeJJUHU\/hoGSrQuYwrd5YLec\/arqJHk57SF\/UQzar\/YnaXBnZs2UZSG9V92wVivtAa99YLq7Ht4ZeTLj6OfDUO3oSbTyz9L5Zw6c51QV9KHXvg7lQp\/\/aOVe0k0OTFQlXGPL36iEG3u3fZfTLn+VJEVr2P\/4r+9v1NFyD\/OQOmMl6BVhyI4E3gLVhGgw5uFKFAEE5oSoUWZqjhhhx26OGHIIYo4ogklmjiiSimqOKKLLbo4oswxijjjDTWaOONOOao44489ujjj0AGKeSQRBZp5JFIJqnkkkw26eSTUEZp5AFUHkCBlVdKUOWWWm6JZZZgToCllzB++cCXZp6pJQZpmmmlm26uKaaLaapp55x3VtBmlnGiKSeeK9YJqJyC5pnnm3ziuSeLhRo6ppdj6gmon3ZGGqaKaFb5J6FskjmpopxemmKdloJ6AaVdeupnqZuOagGrlbIZ5qKrttpoiXF+2uqgsK4J56a3msilnlReCamthvoq6ZnDSunsCLPQRistHhEAADs="
   }
 }
-')]);
+'), ]);
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();
         $mockClient->setHandler($handler);
@@ -653,8 +678,7 @@ class ShippingStatusRestTest extends \PHPUnit_Framework_TestCase
         $signatureResponse = $this->postnl->getSignature(
             (new GetSignature())
                 ->setShipment((new Shipment())
-                    ->setBarcode('3SABCD6659149')
-                )
+                ->setBarcode('3SABCD6659149'))
         );
 
         $this->assertInstanceOf('\\Firstred\\PostNL\\Entity\\Response\\GetSignatureResponseSignature', $signatureResponse);

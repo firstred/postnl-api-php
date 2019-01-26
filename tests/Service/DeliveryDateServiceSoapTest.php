@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker
+ * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,7 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
+ *
  * @copyright 2017-2019 Michael Dekker
+ *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -31,6 +34,7 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Customer;
@@ -39,7 +43,6 @@ use Firstred\PostNL\Entity\Message\Message;
 use Firstred\PostNL\Entity\Request\GetDeliveryDate;
 use Firstred\PostNL\Entity\Request\GetSentDate;
 use Firstred\PostNL\Entity\Request\GetSentDateRequest;
-use Firstred\PostNL\Entity\SOAP\UsernameToken;
 use Firstred\PostNL\HttpClient\MockClient;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\DeliveryDateService;
@@ -47,11 +50,9 @@ use Firstred\PostNL\Service\DeliveryDateService;
 /**
  * Class DeliveryDateSoapTest
  *
- * @package Firstred\PostNL\Tests\Service
- *
  * @testdox The DeliveryDateService (SOAP)
  */
-class DeliveryDateSoapTest extends \PHPUnit_Framework_TestCase
+class DeliveryDateSoapTest extends TestCase
 {
     /** @var PostNL $postnl */
     protected $postnl;
@@ -62,6 +63,7 @@ class DeliveryDateSoapTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @before
+     *
      * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      */
     public function setupPostNL()
@@ -82,8 +84,8 @@ class DeliveryDateSoapTest extends \PHPUnit_Framework_TestCase
                     'Zipcode'     => '2132WT',
                 ]))
                 ->setGlobalPackBarcodeType('AB')
-                ->setGlobalPackCustomerCode('1234')
-            , new UsernameToken(null, 'test'),
+                ->setGlobalPackCustomerCode('1234'),
+            'test',
             false,
             PostNL::MODE_SOAP
         );
@@ -111,6 +113,8 @@ class DeliveryDateSoapTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox creates a valid delivery date request
+     *
+     * @throws \Exception
      */
     public function testGetDeliveryDateRequestSoap()
     {
@@ -120,11 +124,11 @@ class DeliveryDateSoapTest extends \PHPUnit_Framework_TestCase
             (new GetDeliveryDate())
                 ->setGetDeliveryDate(
                     (new GetDeliveryDate())
-                        ->setAllowSundaySorting('false')
+                        ->setAllowSundaySorting(false)
                         ->setCity('Hoofddorp')
                         ->setCountryCode('NL')
                         ->setCutOffTimes([
-                            new CutOffTime('00', '14:00:00')
+                            new CutOffTime('00', '14:00:00'),
                         ])
                         ->setHouseNr('42')
                         ->setHouseNrExt('A')
@@ -133,7 +137,7 @@ class DeliveryDateSoapTest extends \PHPUnit_Framework_TestCase
                         ])
                         ->setPostalCode('2132WT')
                         ->setShippingDate('29-06-2016 14:00:00')
-                        ->setShippingDuration('1')
+                        ->setShippingDuration(1)
                         ->setStreet('Siriusdreef')
                 )
                 ->setMessage($message)
@@ -192,8 +196,7 @@ class DeliveryDateSoapTest extends \PHPUnit_Framework_TestCase
    <s:Body>
       <GetDeliveryDateResponse
 xmlns="http://postnl.nl/cif/services/DeliveryDateWebService/"
-xmlns:a="http://postnl.nl/cif/domain/DeliveryDateWebService/"
-xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+xmlns:a="http://postnl.nl/cif/domain/DeliveryDateWebService/">
          <a:DeliveryDate>30-06-2016</a:DeliveryDate>
          <a:Options xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
             <b:string>Daytime</b:string>
@@ -208,25 +211,26 @@ xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
         $mockClient->setHandler($handler);
         $this->postnl->setHttpClient($mockClient);
 
-        $response = $this->postnl->getDeliveryDate((new GetDeliveryDate())
-            ->setGetDeliveryDate(
-                (new GetDeliveryDate())
-                    ->setAllowSundaySorting('false')
-                    ->setCity('Hoofddorp')
-                    ->setCountryCode('NL')
-                    ->setCutOffTimes([
-                        new CutOffTime('00', '14:00:00')
-                    ])
-                    ->setHouseNr('42')
-                    ->setHouseNrExt('A')
-                    ->setOptions([
-                        'Daytime',
-                    ])
-                    ->setPostalCode('2132WT')
-                    ->setShippingDate('29-06-2016 14:00:00')
-                    ->setShippingDuration('1')
-                    ->setStreet('Siriusdreef')
-            )
+        $response = $this->postnl->getDeliveryDate(
+            (new GetDeliveryDate())
+                ->setGetDeliveryDate(
+                    (new GetDeliveryDate())
+                        ->setAllowSundaySorting(false)
+                        ->setCity('Hoofddorp')
+                        ->setCountryCode('NL')
+                        ->setCutOffTimes([
+                            new CutOffTime('00', '14:00:00'),
+                        ])
+                        ->setHouseNr('42')
+                        ->setHouseNrExt('A')
+                        ->setOptions([
+                            'Daytime',
+                        ])
+                        ->setPostalCode('2132WT')
+                        ->setShippingDate('29-06-2016 14:00:00')
+                        ->setShippingDuration(1)
+                        ->setStreet('Siriusdreef')
+                )
         );
 
         $this->assertInstanceOf(
@@ -238,6 +242,8 @@ xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
 
     /**
      * @testdox creates a valid sent date request
+     *
+     * @throws \Exception
      */
     public function testGetSentDateRequestSoap()
     {
@@ -259,8 +265,7 @@ xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
                     ->setShippingDuration('1')
                     ->setStreet('Siriusdreef')
             )
-            ->setMessage($message)
-        );
+        ->setMessage($message));
 
         $this->assertEmpty($request->getHeaderLine('apikey'));
         $this->assertEquals('text/xml', $request->getHeaderLine('Accept'));
@@ -301,6 +306,8 @@ xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
 
     /**
      * @testdox return a valid sent date
+     *
+     * @throws \Exception
      */
     public function testGetSentDateSoap()
     {
@@ -309,10 +316,9 @@ xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
    <s:Body>
       <GetSentDateResponse
 xmlns="http://postnl.nl/cif/services/DeliveryDateWebService/"
-xmlns:a="http://postnl.nl/cif/domain/DeliveryDateWebService/"
-xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+xmlns:a="http://postnl.nl/cif/domain/DeliveryDateWebService/">
          <a:SentDate>29-06-2016</a:SentDate>
-         <a:Options xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+         <a:Options/>
        </GetSentDateResponse>
    </s:Body>
 </s:Envelope>'),
@@ -323,22 +329,23 @@ xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
         $mockClient->setHandler($handler);
         $this->postnl->setHttpClient($mockClient);
 
-        $response = $this->postnl->getSentDate((new GetSentDateRequest())
-            ->setGetSentDate(
-                (new GetSentDate())
-                    ->setAllowSundaySorting(true)
-                    ->setCity('Hoofddorp')
-                    ->setCountryCode('NL')
-                    ->setDeliveryDate('30-06-2016')
-                    ->setHouseNr('42')
-                    ->setHouseNrExt('A')
-                    ->setOptions([
-                        'Daytime',
-                    ])
-                    ->setPostalCode('2132WT')
-                    ->setShippingDuration('1')
-                    ->setStreet('Siriusdreef')
-            )
+        $response = $this->postnl->getSentDate(
+            (new GetSentDateRequest())
+                ->setGetSentDate(
+                    (new GetSentDate())
+                        ->setAllowSundaySorting(true)
+                        ->setCity('Hoofddorp')
+                        ->setCountryCode('NL')
+                        ->setDeliveryDate('30-06-2016')
+                        ->setHouseNr('42')
+                        ->setHouseNrExt('A')
+                        ->setOptions([
+                            'Daytime',
+                        ])
+                        ->setPostalCode('2132WT')
+                        ->setShippingDuration('1')
+                        ->setStreet('Siriusdreef')
+                )
         );
 
         $this->assertInstanceOf(

@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker
+ * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,15 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
+ *
  * @copyright 2017-2019 Michael Dekker
+ *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Service;
 
-use GuzzleHttp\Psr7\Response;
-use Psr\Cache\CacheItemInterface;
-use Psr\Cache\CacheItemPoolInterface;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
@@ -36,26 +36,21 @@ use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\InvalidMethodException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\PostNL;
+use GuzzleHttp\Psr7\Response;
+use Psr\Cache\CacheItemInterface;
+use Psr\Cache\CacheItemPoolInterface;
 
 /**
  * Class AbstractService
- *
- * @package Firstred\PostNL\Service
  */
 abstract class AbstractService
 {
-    /** @var array $namespaces */
-    public static $namespaces = [];
-
-    /** @var PostNL $postnl */
-    protected $postnl;
-
     const COMMON_NAMESPACE = 'http://postnl.nl/cif/services/common/';
     const XML_SCHEMA_NAMESPACE = 'http://www.w3.org/2001/XMLSchema-instance';
     const ENVELOPE_NAMESPACE = 'http://schemas.xmlsoap.org/soap/envelope/';
     const OLD_ENVELOPE_NAMESPACE = 'http://www.w3.org/2003/05/soap-envelope';
-
-
+    /** @var array $namespaces */
+    public static $namespaces = [];
     /**
      * TTL for the cache
      *
@@ -67,7 +62,6 @@ abstract class AbstractService
      * @var null|int|\DateTimeInterface|\DateInterval $ttl
      */
     public $ttl = null;
-
     /**
      * The [PSR-6](https://www.php-fig.org/psr/psr-6/) CacheItemPoolInterface
      *
@@ -77,6 +71,8 @@ abstract class AbstractService
      * @var null|CacheItemPoolInterface
      */
     public $cache = null;
+    /** @var PostNL $postnl */
+    protected $postnl;
 
     /**
      * AbstractService constructor.
@@ -93,6 +89,133 @@ abstract class AbstractService
     }
 
     /**
+     * @param Response|\Exception $response
+     *
+     * @return bool
+     *
+     * @throws CifDownException
+     * @throws CifException
+     * @throws ResponseException
+     * @throws ApiException
+     */
+    public static function validateRESTResponse($response)
+    {
+        $body = json_decode(static::getResponseText($response), true);
+
+        if (!empty($body['fault']['faultstring']) && $body['fault']['faultstring'] === 'Invalid ApiKey') {
+            throw new ApiException('Invalid Api Key');
+        }
+        if (isset($body['Envelope']['Body']['Fault']['Reason']['Text'][''])) {
+            throw new CifDownException($body['Envelope']['Body']['Fault']['Reason']['Text']['']);
+        }
+
+        if (!empty($body['Errors']['Error'])) {
+            $exceptionData = [];
+            foreach ($body['Errors']['Error'] as $error) {
+                $exceptionData[] = [
+                    'description' => isset($error['Description']) ? (string) $error['Description'] : null,
+                    'message'     => isset($error['ErrorMsg']) ? (string) $error['ErrorMsg'] : null,
+                    'code'        => isset($error['ErrorNumber']) ? (int) $error['ErrorNumber'] : 0,
+                ];
+            }
+            throw new CifException($exceptionData);
+        }
+
+        return true;
+    }
+
+    /**
+     * Get the response
+     *
+     * @param array|Response $response
+     *
+     * @return string
+     *
+     * @throws ResponseException
+     *
+     * @since 1.0.0
+     */
+    public static function getResponseText($response)
+    {
+        // Guzzle returned promises
+        if (is_array($response)) {
+            if (isset($response['reason'])) {
+                $response = $response['reason'];
+            } elseif (isset($response['value'])) {
+                $response = $response['value'];
+            }
+        }
+
+        if ($response instanceof Response) {
+            return (string) $response->getBody();
+        }
+        if (is_a($response, 'GuzzleHttp\\Exception\\GuzzleException')
+            || is_a($response, 'Firstred\\PostNL\\Exception\\HttpClientException')
+        ) {
+            $exception = $response;
+            if (method_exists($response, 'getResponse')) {
+                $response = $response->getResponse();
+            }
+            if (!$response || $response instanceof $exception) {
+                throw $exception;
+            }
+
+            /** @var Response $response */
+
+            return (string) $response->getBody();
+        }
+
+        throw new ResponseException('Unknown response type');
+    }
+
+    /**
+     * @param \SimpleXMLElement $xml
+     *
+     * @return bool
+     *
+     * @throws CifDownException
+     * @throws CifException
+     *
+     * @since 1.0.0
+     */
+    public static function validateSOAPResponse(\SimpleXMLElement $xml): bool
+    {
+        if (count($xml->xpath('//env:Fault/env:Reason/env:Text')) >= 1) {
+            throw new CifDownException((string) $xml->xpath('//env:Fault/env:Reason/env:Text')[0]);
+        }
+
+        // Detect errors
+        $cifErrors = $xml->xpath('//common:CifException/common:Errors/common:ExceptionData');
+        if (count($cifErrors)) {
+            $exceptionData = [];
+            foreach ($cifErrors as $error) {
+                /** @var \SimpleXMLElement $error */
+                static::registerNamespaces($error);
+                $exceptionData[] = [
+                    'description' => (string) $error->xpath('//common:Description')[0],
+                    'message'     => (string) $error->xpath('//common:ErrorMsg')[0],
+                    'code'        => (int) $error->xpath('//common:ErrorNumber')[0],
+                ];
+            }
+            throw new CifException($exceptionData);
+        }
+
+        return true;
+    }
+
+    /**
+     * Register namespaces
+     *
+     * @param \SimpleXMLElement $element
+     */
+    public static function registerNamespaces(\SimpleXMLElement $element)
+    {
+        foreach (static::$namespaces as $namespace => $prefix) {
+            $element->registerXPathNamespace($prefix, $namespace);
+        }
+    }
+
+    /**
      * @param string $name
      * @param mixed  $args
      *
@@ -106,7 +229,8 @@ abstract class AbstractService
 
         if (method_exists($this, "{$name}{$mode}")) {
             return call_user_func_array([$this, "{$name}{$mode}"], $args);
-        } elseif (method_exists($this, $name)) {
+        }
+        if (method_exists($this, $name)) {
             return call_user_func_array([$this, $name], $args);
         }
 
@@ -154,130 +278,13 @@ abstract class AbstractService
     }
 
     /**
-     * Register namespaces
-     *
-     * @param \SimpleXMLElement $element
-     */
-    public static function registerNamespaces(\SimpleXMLElement $element)
-    {
-        foreach (static::$namespaces as $namespace => $prefix) {
-            $element->registerXPathNamespace($prefix, $namespace);
-        }
-    }
-
-    /**
-     * @param Response|\Exception $response
-     *
-     * @return bool
-     *
-     * @throws CifDownException
-     * @throws CifException
-     * @throws ResponseException
-     * @throws ApiException
-     */
-    public static function validateRESTResponse($response)
-    {
-        $body = json_decode(static::getResponseText($response), true);
-
-        if (!empty($body['fault']['faultstring']) && $body['fault']['faultstring'] === 'Invalid ApiKey') {
-            throw new ApiException('Invalid Api Key');
-        }
-        if (isset($body['Envelope']['Body']['Fault']['Reason']['Text'][''])) {
-            throw new CifDownException($body['Envelope']['Body']['Fault']['Reason']['Text']['']);
-        }
-
-        if (!empty($body['Errors']['Error'])) {
-            $exceptionData = [];
-            foreach ($body['Errors']['Error'] as $error) {
-                $exceptionData[] = [
-                    'description' => isset($error['Description']) ? (string) $error['Description'] : null,
-                    'message'     => isset($error['ErrorMsg']) ? (string) $error['ErrorMsg'] : null,
-                    'code'        => isset($error['ErrorNumber']) ? (int) $error['ErrorNumber'] : 0,
-                ];
-            }
-            throw new CifException($exceptionData);
-        }
-
-        return true;
-    }
-
-    /**
-     * @param \SimpleXMLElement $xml
-     *
-     * @return bool
-     * @throws CifDownException
-     * @throws CifException
-     */
-    public static function validateSOAPResponse(\SimpleXMLElement $xml)
-    {
-        if (count($xml->xpath('//env:Fault/env:Reason/env:Text')) >= 1) {
-            throw new CifDownException((string) $xml->xpath('//env:Fault/env:Reason/env:Text')[0]);
-        }
-
-        // Detect errors
-        $cifErrors = $xml->xpath('//common:CifException/common:Errors/common:ExceptionData');
-        if (count($cifErrors)) {
-            $exceptionData = [];
-            foreach ($cifErrors as $error) {
-                /** @var \SimpleXMLElement $error */
-                static::registerNamespaces($error);
-                $exceptionData[] = [
-                    'description' => (string) $error->xpath('//common:Description')[0],
-                    'message'     => (string) $error->xpath('//common:ErrorMsg')[0],
-                    'code'        => (int) $error->xpath('//common:ErrorNumber')[0],
-                ];
-            }
-            throw new CifException($exceptionData);
-        }
-
-        return true;
-    }
-
-    /**
-     * Get the response
-     *
-     * @param $response
-     *
-     * @return string
-     * @throws ResponseException
-     */
-    public static function getResponseText($response)
-    {
-        // Guzzle returned promises
-        if (is_array($response)) {
-            if (isset($response['reason'])) {
-                $response = $response['reason'];
-            } elseif (isset($response['value'])) {
-                $response = $response['value'];
-            }
-        }
-
-        if ($response instanceof Response) {
-            return (string) $response->getBody();
-        } elseif (is_a($response, 'GuzzleHttp\\Exception\\GuzzleException')
-            || is_a($response, 'Firstred\\PostNL\\Exception\\HttpClientException')
-        ) {
-            $exception = $response;
-            if (method_exists($response, 'getResponse')) {
-                $response = $response->getResponse();
-            }
-            if (!$response || $response instanceof $exception) {
-                throw $exception;
-            }
-
-            /** @var Response $response */
-            return (string) $response->getBody();
-        } else {
-            throw new ResponseException('Unknown response type');
-        }
-    }
-
-    /**
      * Retrieve a cached item
      *
      * @param string $uuid
      *
      * @return null|CacheItemInterface
+     *
+     * @since 1.0.0
      */
     public function retrieveCachedItem($uuid)
     {

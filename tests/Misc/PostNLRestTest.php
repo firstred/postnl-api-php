@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker
+ * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,7 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
+ *
  * @copyright 2017-2019 Michael Dekker
+ *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -36,25 +39,24 @@ use Firstred\PostNL\Entity\Location;
 use Firstred\PostNL\Entity\Request\GetDeliveryDate;
 use Firstred\PostNL\Entity\Request\GetNearestLocations;
 use Firstred\PostNL\Entity\Request\GetTimeframes;
-use Firstred\PostNL\Entity\SOAP\UsernameToken;
 use Firstred\PostNL\Entity\Timeframe;
 use Firstred\PostNL\HttpClient\MockClient;
 use Firstred\PostNL\PostNL;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class PostNLRestTest
  *
- * @package Firstred\PostNL\Tests\Misc
- *
  * @testdox The PostNL object
  */
-class PostNLRestTest extends \PHPUnit_Framework_TestCase
+class PostNLRestTest extends TestCase
 {
     /** @var PostNL $postnl */
     protected $postnl;
 
     /**
      * @before
+     *
      * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      */
     public function setupPostNL()
@@ -75,8 +77,8 @@ class PostNLRestTest extends \PHPUnit_Framework_TestCase
                     'Zipcode'     => '2132WT',
                 ]))
                 ->setGlobalPackBarcodeType('AB')
-                ->setGlobalPackCustomerCode('1234')
-            , new UsernameToken(null, 'test'),
+                ->setGlobalPackCustomerCode('1234'),
+            'test',
             true,
             PostNL::MODE_REST
         );
@@ -99,28 +101,6 @@ class PostNLRestTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @testdox accepts a string token
-     *
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     */
-    public function testSetTokenString()
-    {
-        $this->postnl->setToken('test');
-        $this->assertInstanceOf('\\Firstred\\PostNL\\Entity\\SOAP\\UsernameToken', $this->postnl->getToken());
-    }
-
-    /**
-     * @testdox accepts a token object
-     *
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     */
-    public function testSetTokenObject()
-    {
-        $this->postnl->setToken(new UsernameToken(null, 'test'));
-        $this->assertInstanceOf('\\Firstred\\PostNL\\Entity\\SOAP\\UsernameToken', $this->postnl->getToken());
-    }
-
-    /**
      * @testdox accepts a `null` logger
      */
     public function testSetNullLogger()
@@ -132,8 +112,8 @@ class PostNLRestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox returns a combinations of timeframes, locations and the delivery date
-     * @throws \Firstred\PostNL\Exception\ResponseException
-     * @throws \Firstred\PostNL\Exception\ApiException
+     *
+     * @throws \Exception
      */
     public function testGetTimeframesAndLocations()
     {
@@ -202,8 +182,8 @@ class PostNLRestTest extends \PHPUnit_Framework_TestCase
                                     ],
                                     'To' => '22:00:00',
                                 ],
-                            ]
-                        ]
+                            ],
+                        ],
                     ],
                     [
                         'Date' => '08-03-2018',
@@ -223,8 +203,8 @@ class PostNLRestTest extends \PHPUnit_Framework_TestCase
                                     ],
                                     'To' => '22:00:00',
                                 ],
-                            ]
-                        ]
+                            ],
+                        ],
                     ],
                     [
                         'Date' => '09-03-2018',
@@ -244,8 +224,8 @@ class PostNLRestTest extends \PHPUnit_Framework_TestCase
                                     ],
                                     'To' => '22:00:00',
                                 ],
-                            ]
-                        ]
+                            ],
+                        ],
                     ],
                     [
                         'Date' => '10-03-2018',
@@ -258,8 +238,8 @@ class PostNLRestTest extends \PHPUnit_Framework_TestCase
                                     ],
                                     'To' => '18:45:00',
                                 ],
-                            ]
-                        ]
+                            ],
+                        ],
                     ],
                     [
                         'Date' => '13-03-2018',
@@ -279,8 +259,8 @@ class PostNLRestTest extends \PHPUnit_Framework_TestCase
                                     ],
                                     'To' => '22:00:00',
                                 ],
-                            ]
-                        ]
+                            ],
+                        ],
                     ],
                     [
                         'Date'       => '14-03-2018',
@@ -303,8 +283,8 @@ class PostNLRestTest extends \PHPUnit_Framework_TestCase
                             ],
                         ],
                     ],
-                ]
-            ]
+                ],
+            ],
         ];
         $locationsPayload = json_decode($this->getNearestLocationsMockResponse());
         $deliveryDatePayload = [
@@ -339,7 +319,7 @@ class PostNLRestTest extends \PHPUnit_Framework_TestCase
                         ->setPostalCode('2132WT')
                         ->setStartDate('30-06-2016')
                         ->setStreet('Siriusdreef')
-                        ->setSundaySorting(false)
+                        ->setSundaySorting(false),
                 ]),
             (new GetNearestLocations())
                 ->setCountrycode('NL')
@@ -351,7 +331,7 @@ class PostNLRestTest extends \PHPUnit_Framework_TestCase
                     ],
                     'OpeningTime'        => '09:00:00',
                     'Options'    => [
-                        'Daytime'
+                        'Daytime',
                     ],
                     'City'               => 'Hoofddorp',
                     'HouseNr'            => '42',
@@ -366,7 +346,7 @@ class PostNLRestTest extends \PHPUnit_Framework_TestCase
                         ->setCity('Hoofddorp')
                         ->setCountryCode('NL')
                         ->setCutOffTimes([
-                            new CutOffTime('00', '14:00:00')
+                            new CutOffTime('00', '14:00:00'),
                         ])
                         ->setHouseNr('42')
                         ->setHouseNrExt('A')
@@ -375,7 +355,7 @@ class PostNLRestTest extends \PHPUnit_Framework_TestCase
                         ])
                         ->setPostalCode('2132WT')
                         ->setShippingDate('29-06-2016 14:00:00')
-                        ->setShippingDuration('1')
+                        ->setShippingDuration(1)
                         ->setStreet('Siriusdreef')
                 )
         );
@@ -384,17 +364,6 @@ class PostNLRestTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\\Firstred\\PostNL\\Entity\\Response\\ResponseTimeframes', $results['timeframes']);
         $this->assertInstanceOf('\\Firstred\\PostNL\\Entity\\Response\\GetNearestLocationsResponse', $results['locations']);
         $this->assertInstanceOf('\\Firstred\\PostNL\\Entity\\Response\\GetDeliveryDateResponse', $results['delivery_date']);
-    }
-
-    /**
-     * @testdox does not accept an invalid token object
-     *
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     */
-    public function testNegativeInvalidToken()
-    {
-        $this->expectException('\\Firstred\\PostNL\\Exception\\InvalidArgumentException');
-        $this->postnl->setToken(new Address());
     }
 
     /**
@@ -408,21 +377,12 @@ class PostNLRestTest extends \PHPUnit_Framework_TestCase
         /** @var PostNL $postnl */
         $postnl = $reflection->newInstanceWithoutConstructor();
 
-        $this->assertFalse($postnl->getRestApiKey());
+        $this->assertFalse($postnl->getApiKey());
     }
 
     /**
-     * @testdox throws an exception when setting an invalid mode
-     *
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @return string
      */
-    public function testNegativeInvalidMode()
-    {
-        $this->expectException('\\Firstred\\PostNL\\Exception\\InvalidArgumentException');
-
-        $this->postnl->setMode('invalid');
-    }
-
     protected function getNearestLocationsMockResponse()
     {
         return $json = '{

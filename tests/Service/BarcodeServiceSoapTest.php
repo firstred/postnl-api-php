@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker
+ * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,7 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
+ *
  * @copyright 2017-2019 Michael Dekker
+ *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -31,13 +34,13 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Barcode;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Message\Message;
 use Firstred\PostNL\Entity\Request\GenerateBarcode;
-use Firstred\PostNL\Entity\SOAP\UsernameToken;
 use Firstred\PostNL\HttpClient\MockClient;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\BarcodeService;
@@ -45,11 +48,9 @@ use Firstred\PostNL\Service\BarcodeService;
 /**
  * Class BarcodeServiceSoapTest
  *
- * @package Firstred\PostNL\Tests\Service
- *
  * @testdox The BarcodeService (SOAP)
  */
-class BarcodeServiceSoapTest extends \PHPUnit_Framework_TestCase
+class BarcodeServiceSoapTest extends TestCase
 {
     /** @var PostNL $postnl */
     protected $postnl;
@@ -60,6 +61,7 @@ class BarcodeServiceSoapTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @before
+     *
      * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      */
     public function setupPostNL()
@@ -80,8 +82,8 @@ class BarcodeServiceSoapTest extends \PHPUnit_Framework_TestCase
                     'Zipcode'     => '2132WT',
                 ]))
                 ->setGlobalPackBarcodeType('AB')
-                ->setGlobalPackCustomerCode('1234')
-            , new UsernameToken(null, 'test'),
+                ->setGlobalPackCustomerCode('1234'),
+            'test',
             true,
             PostNL::MODE_SOAP
         );
@@ -111,6 +113,8 @@ class BarcodeServiceSoapTest extends \PHPUnit_Framework_TestCase
      * @testdox creates a valid 3S barcode request
      *
      * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
+     *
+     * @throws \Exception
      */
     public function testCreatesAValid3SBarcodeRequest()
     {
@@ -203,14 +207,15 @@ class BarcodeServiceSoapTest extends \PHPUnit_Framework_TestCase
 
         $barcodes = $this->postnl->generateBarcodesByCountryCodes(['NL' => 4]);
 
-        $this->assertEquals([
+        $this->assertEquals(
+            [
             'NL' => [
                 '3SDEVC816223392',
                 '3SDEVC816223393',
                 '3SDEVC816223394',
                 '3SDEVC816223395',
             ],
-        ],
+            ],
             $barcodes
         );
     }
@@ -224,9 +229,9 @@ class BarcodeServiceSoapTest extends \PHPUnit_Framework_TestCase
     {
         if (in_array($type, ['2S', '3S'])) {
             return $this->postnl->getCustomer()->getCustomerCode();
-        } else {
-            return $this->postnl->getCustomer()->getGlobalPackCustomerCode();
         }
+
+        return $this->postnl->getCustomer()->getGlobalPackCustomerCode();
     }
 
     /**
@@ -239,8 +244,7 @@ class BarcodeServiceSoapTest extends \PHPUnit_Framework_TestCase
         return "<code><s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\">
   <s:Body>
     <GenerateBarcodeResponse xmlns=\"http://postnl.nl/cif/services/BarcodeWebService/\"
-xmlns:a=\"http://postnl.nl/cif/domain/BarcodeWebService/\"
-xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">
+xmlns:a=\"http://postnl.nl/cif/domain/BarcodeWebService/\">
       <a:Barcode>{$barcode}</a:Barcode>
     </GenerateBarcodeResponse>
   </s:Body>

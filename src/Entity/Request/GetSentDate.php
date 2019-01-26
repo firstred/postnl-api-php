@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker
+ * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,13 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
+ *
  * @copyright 2017-2019 Michael Dekker
+ *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Entity\Request;
 
-use Sabre\Xml\Writer;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\ConfirmingService;
@@ -35,11 +37,10 @@ use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
+use Sabre\Xml\Writer;
 
 /**
  * Class GetSentDate
- *
- * @package Firstred\PostNL\Entity
  *
  * @method bool|null         getAllowSundaySorting()
  * @method string|null       getCity()
@@ -70,7 +71,7 @@ class GetSentDate extends AbstractEntity
      * @var array $defaultProperties
      */
     public static $defaultProperties = [
-        'Barcode' => [
+        'Barcode'        => [
             'AllowSundaySorting' => BarcodeService::DOMAIN_NAMESPACE,
             'City'               => BarcodeService::DOMAIN_NAMESPACE,
             'CountryCode'        => BarcodeService::DOMAIN_NAMESPACE,
@@ -188,22 +189,14 @@ class GetSentDate extends AbstractEntity
      * @param string|null $houseNrExt
      * @param array|null  $options
      * @param string|null $postalCode
-     * @param string|null $DeliveryDate
+     * @param string|null $deliveryDate
      * @param string|null $street
      * @param string|null $shippingDuration
+     *
+     * @since 1.00
      */
-    public function __construct(
-        $allowSundaySorting = false,
-        $city = null,
-        $countryCode = null,
-        $houseNr = null,
-        $houseNrExt = null,
-        array $options = null,
-        $postalCode = null,
-        $DeliveryDate = null,
-        $street = null,
-        $shippingDuration = null
-    ) {
+    public function __construct(?bool $allowSundaySorting = false, ?string $city = null, ?string $countryCode = null, ?string $houseNr = null, ?string $houseNrExt = null, ?array $options = null, ?string $postalCode = null, ?string $deliveryDate = null, ?string $street = null, ?string $shippingDuration = null)
+    {
         parent::__construct();
 
         $this->setAllowSundaySorting($allowSundaySorting);
@@ -213,7 +206,7 @@ class GetSentDate extends AbstractEntity
         $this->setHouseNrExt($houseNrExt);
         $this->setOptions($options);
         $this->setPostalCode($postalCode);
-        $this->setDeliveryDate($DeliveryDate);
+        $this->setDeliveryDate($deliveryDate);
         $this->setStreet($street);
         $this->setShippingDuration($shippingDuration);
     }
@@ -223,13 +216,15 @@ class GetSentDate extends AbstractEntity
      *
      * @param string|null $postcode
      *
-     * @return $this
+     * @return self
      */
     public function setPostalCode($postcode = null)
     {
         if (is_null($postcode)) {
+            // @codingStandardsIgnoreLine
             $this->PostalCode = null;
         } else {
+            // @codingStandardsIgnoreLine
             $this->PostalCode = strtoupper(str_replace(' ', '', $postcode));
         }
 
@@ -242,8 +237,10 @@ class GetSentDate extends AbstractEntity
      * @param Writer $writer
      *
      * @return void
+     *
+     * @since 1.0.0
      */
-    public function xmlSerialize(Writer $writer)
+    public function xmlSerialize(Writer $writer): void
     {
         $xml = [];
         if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
@@ -253,15 +250,18 @@ class GetSentDate extends AbstractEntity
         }
 
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if ($propertyName === 'Options') {
+            if ('Options' === $propertyName) {
+                // @codingStandardsIgnoreLine
                 if (isset($this->Options)) {
                     $options = [];
+                    // @codingStandardsIgnoreLine
                     foreach ($this->Options as $option) {
                         $options[] = ["{http://schemas.microsoft.com/2003/10/Serialization/Arrays}string" => $option];
                     }
                     $xml["{{$namespace}}Options"] = $options;
                 }
-            } elseif ($propertyName === 'AllowSundaySorting') {
+            } elseif ('AllowSundaySorting' === $propertyName) {
+                // @codingStandardsIgnoreLine
                 $xml["{{$namespace}}AllowSundaySorting"] = $this->AllowSundaySorting ? 'true' : 'false';
             } elseif (isset($this->{$propertyName})) {
                 $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};

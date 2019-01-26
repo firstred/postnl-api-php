@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker
+ * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,14 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
+ *
  * @copyright 2017-2019 Michael Dekker
+ *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Entity;
 
-use InvalidArgumentException;
-use Sabre\Xml\Writer;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
@@ -35,11 +36,11 @@ use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
+use InvalidArgumentException;
+use Sabre\Xml\Writer;
 
 /**
  * Class Timeframe
- *
- * @package Firstred\PostNL\Entity
  *
  * @method string|null      getCity()
  * @method string|null      getCountryCode()
@@ -65,7 +66,7 @@ use Firstred\PostNL\Service\TimeframeService;
  * @method Timeframe setOptions(string[]|null $options = null)
  * @method Timeframe setStartDate(string|null $date = null)
  * @method Timeframe setStreet(string|null $street = null)
- * @method Timeframe setSundaySorting(string|null $sunday = null)
+ * @method Timeframe setSundaySorting(bool|null $sunday = null)
  * @method Timeframe setInterval(string|null $interval = null)
  * @method Timeframe setTimeframeRange(string|null $range = null)
  * @method Timeframe setTimeframes(Timeframe[]|null $timeframes = null)
@@ -235,21 +236,8 @@ class Timeframe extends AbstractEntity
      * @param string|null      $range
      * @param Timeframe[]|null $timeframes
      */
-    public function __construct(
-        $city = null,
-        $countryCode = null,
-        $date = null,
-        $endDate = null,
-        $houseNr = null,
-        $houseNrExt = null,
-        array $options = [],
-        $postalCode = null,
-        $street = null,
-        $sundaySorting = 'false',
-        $interval = null,
-        $range = null,
-        array $timeframes = null
-    ) {
+    public function __construct(?string $city = null, ?string $countryCode = null, ?string $date = null, ?string $endDate = null, ?string $houseNr = null, ?string $houseNrExt = null, ?array $options = [], ?string $postalCode = null, ?string $street = null, ?string $sundaySorting = 'false', ?string $interval = null, ?string $range = null, ?array $timeframes = null)
+    {
         parent::__construct();
 
         $this->setCity($city);
@@ -272,13 +260,15 @@ class Timeframe extends AbstractEntity
      *
      * @param string|null $postcode
      *
-     * @return $this
+     * @return self
      */
     public function setPostalCode($postcode = null)
     {
         if (is_null($postcode)) {
+            // @codingStandardsIgnoreLine
             $this->PostalCode = null;
         } else {
+            // @codingStandardsIgnoreLine
             $this->PostalCode = strtoupper(str_replace(' ', '', $postcode));
         }
 
@@ -289,8 +279,10 @@ class Timeframe extends AbstractEntity
      * Return a serializable array for `json_encode`
      *
      * @return array
+     *
+     * @since 1.0.0
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         $json = [];
         if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
@@ -299,15 +291,16 @@ class Timeframe extends AbstractEntity
 
         foreach (array_keys(static::$defaultProperties[$this->currentService]) as $propertyName) {
             if (isset($this->{$propertyName})) {
-                if ($propertyName === 'Options') {
+                if ('Options' === $propertyName) {
                     $json[$propertyName] = $this->{$propertyName};
-                } elseif ($propertyName === 'Timeframes') {
+                } elseif ('Timeframes' === $propertyName) {
                     $timeframes = [];
+                    // @codingStandardsIgnoreLine
                     foreach ($this->Timeframes as $timeframe) {
                         $timeframes[] = $timeframe;
                     }
                     $json['Timeframes'] = ['TimeframeTimeFrame' => $timeframes];
-                } elseif ($propertyName === 'SundaySorting') {
+                } elseif ('SundaySorting' === $propertyName) {
                     if (isset($this->{$propertyName})) {
                         if (is_bool($this->{$propertyName})) {
                             $value = $this->{$propertyName} ? 'true' : 'false';
@@ -332,9 +325,12 @@ class Timeframe extends AbstractEntity
      * @param Writer $writer
      *
      * @return void
+     *
      * @throws InvalidArgumentException
+     *
+     * @since 1.0.0
      */
-    public function xmlSerialize(Writer $writer)
+    public function xmlSerialize(Writer $writer): void
     {
         $xml = [];
         if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
@@ -342,17 +338,17 @@ class Timeframe extends AbstractEntity
         }
 
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if ($propertyName === 'SundaySorting') {
+            if ('SundaySorting' === $propertyName) {
+                // @codingStandardsIgnoreLine
                 if (isset($this->SundaySorting)) {
-                    if (is_bool($this->SundaySorting)) {
-                        $xml["{{$namespace}}SundaySorting"] = $this->SundaySorting ? 'true' : 'false';
-                    } else {
-                        $xml["{{$namespace}}SundaySorting"] = $this->SundaySorting;
-                    }
+                    // @codingStandardsIgnoreLine
+                    $xml["{{$namespace}}SundaySorting"] = $this->SundaySorting ? 'true' : 'false';
                 }
-            } elseif ($propertyName === 'Options') {
+            } elseif ('Options' === $propertyName) {
+                // @codingStandardsIgnoreLine
                 if (isset($this->Options)) {
                     $options = [];
+                    // @codingStandardsIgnoreLine
                     foreach ($this->Options as $option) {
                         $options[] = ["{http://schemas.microsoft.com/2003/10/Serialization/Arrays}string" => $option];
                     }

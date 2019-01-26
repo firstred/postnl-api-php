@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker
+ * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,18 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
+ *
  * @copyright 2017-2019 Michael Dekker
+ *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Entity\Response;
 
-use InvalidArgumentException;
-use Sabre\Xml\Writer;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\ReasonNoTimeframe;
 use Firstred\PostNL\Entity\Timeframe;
-use Firstred\PostNL\Entity\TimeframeTimeFrame;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
@@ -42,8 +42,6 @@ use Firstred\PostNL\Service\TimeframeService;
 
 /**
  * Class ResponseTimeframes
- *
- * @package Firstred\PostNL\Entity
  *
  * @method ReasonNoTimeframe[]|null getReasonNoTimeframes()
  * @method Timeframe[]|null         getTimeframes()
@@ -94,11 +92,11 @@ class ResponseTimeframes extends AbstractEntity
     /**
      * @param ReasonNoTimeframe[]|null $noTimeframes
      * @param Timeframe[]|null         $timeframes
+     *
+     * @since 1.0.0
      */
-    public function __construct(
-        array $noTimeframes = null,
-        array $timeframes = null
-    ) {
+    public function __construct(array $noTimeframes = null, array $timeframes = null)
+    {
         parent::__construct();
 
         $this->setReasonNoTimeframes($noTimeframes);
@@ -109,8 +107,10 @@ class ResponseTimeframes extends AbstractEntity
      * Return a serializable array for `json_encode`
      *
      * @return array
+     *
+     * @since 1.0.0
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         $json = [];
         if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
@@ -119,14 +119,16 @@ class ResponseTimeframes extends AbstractEntity
 
         foreach (array_keys(static::$defaultProperties[$this->currentService]) as $propertyName) {
             if (isset($this->{$propertyName})) {
-                if ($propertyName === 'ReasonNoTimeframes') {
+                if ('ReasonNoTimeframes' === $propertyName) {
                     $noTimeframes = [];
+                    // @codingStandardsIgnoreLine
                     foreach ($this->ReasonNoTimeframes as $noTimeframe) {
                         $noTimeframes[] = $noTimeframe;
                     }
                     $json['ReasonNotimeframes'] = ['ReasonNoTimeframe' => $noTimeframes];
-                } elseif ($propertyName === 'Timeframes') {
+                } elseif ('Timeframes' === $propertyName) {
                     $timeframes = [];
+                    // @codingStandardsIgnoreLine
                     foreach ($this->Timeframes as $timeframe) {
                         $timeframes[] = $timeframe;
                     }
@@ -139,40 +141,4 @@ class ResponseTimeframes extends AbstractEntity
 
         return $json;
     }
-//
-//    /**
-//     * Return a serializable array for the XMLWriter
-//     *
-//     * @param Writer $writer
-//     *
-//     * @return void
-//     * @throws InvalidArgumentException
-//     */
-//    public function xmlSerialize(Writer $writer)
-//    {
-//        $xml = [];
-//        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
-//            throw new InvalidArgumentException('Service not set before serialization');
-//        }
-//
-//        foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-//            if ($propertyName === 'ReasonNoTimeframes') {
-//                $noTimeframes = [];
-//                foreach ($this->ReasonNoTimeframes as $noTimeframe) {
-//                    $options[] = ["{{$namespace}}ReasonNoTimeFrame" => $noTimeframe];
-//                }
-//                $xml["{{$namespace}}ReasonNoTimeframes"] = $noTimeframes;
-//            } elseif ($propertyName === 'Timeframes') {
-//                $timeframes = [];
-//                foreach ($this->Timeframes as $timeframe) {
-//                    $timeframes[] = ["{{$namespace}}Timeframe" => $timeframe];
-//                }
-//                $xml["{{$namespace}}Timeframes"] = $timeframes;
-//            } elseif (!is_null($this->{$propertyName})) {
-//                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
-//            }
-//        }
-//
-//        $writer->write($xml);
-//    }
 }

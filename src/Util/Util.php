@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker
+ * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,19 +21,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
+ *
  * @copyright 2017-2019 Michael Dekker
+ *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Util;
+
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use setasign\Fpdi\Fpdi;
 use setasign\Fpdi\PdfParser\StreamReader;
-use Firstred\PostNL\Exception\InvalidArgumentException;
 
 /**
  * Class Util
- *
- * @package Firstred\PostNL\Util
  */
 class Util
 {
@@ -59,7 +61,7 @@ class Util
             }
 
             if ($prefix) {
-                if ($k !== null && (!is_int($k) || is_array($v))) {
+                if (null !== $k && (!is_int($k) || is_array($v))) {
                     $k = $prefix."[".$k."]";
                 } else {
                     $k = $prefix."[]";
@@ -80,7 +82,7 @@ class Util
     }
 
     /**
-     * @param string $pdf     Raw PDF string
+     * @param string $pdf Raw PDF string
      *
      * @return array|false|string Returns an array with the dimensions or ISO size and orientation
      *                            The orientation is in FPDF format, so L for Landscape and P for Portrait
@@ -125,44 +127,20 @@ class Util
     }
 
     /**
-     * Offline delivery date calculation
-     *
-     * @param string $deliveryDate   Delivery date in any format accepted by DateTime
-     * @param bool   $mondayDelivery Sunday sorting/Monday delivery enabled
-     * @param bool   $sundayDelivery Sunday delivery enabled
-     *
-     * @return string (format: `Y-m-d H:i:s`)
-     * @throws \Exception
-     */
-    public static function getDeliveryDate($deliveryDate, $mondayDelivery = false, $sundayDelivery = false)
-    {
-        $deliveryDate = new \DateTime($deliveryDate);
-
-        $holidays = static::getHolidaysForYear(date('Y', $deliveryDate->getTimestamp()));
-
-        do {
-            $deliveryDate->add(new \DateInterval('P1D'));
-        } while (in_array($deliveryDate->format('Y-m-d'), $holidays)
-            || (!$sundayDelivery && $deliveryDate->format('w') == 0)
-            || (!$mondayDelivery && $deliveryDate->format('w') == 1)
-        );
-
-        return $deliveryDate->format('Y-m-d H:i:s');
-    }
-
-    /**
      * Offline shipping date calculation
      *
      * @param string $deliveryDate
      * @param array  $days
      *
      * @return string
+     *
      * @throws InvalidArgumentException
+     * @throws \Exception
+     *
+     * @since 1.0.0
      */
-    public static function getShippingDate(
-        $deliveryDate,
-        $days = [0 => false, 1 => true, 2 => true, 3 => true, 4 => true, 5 => true, 6 => true]
-    ) {
+    public static function getShippingDate($deliveryDate, $days = [0 => false, 1 => true, 2 => true, 3 => true, 4 => true, 5 => true, 6 => true]): string
+    {
         if (array_sum($days) < 1) {
             throw new InvalidArgumentException('There should be at least one shipping day');
         }
@@ -178,7 +156,7 @@ class Util
                 throw new InvalidArgumentException('Invalid date provided');
             }
         } while (in_array($deliveryDate->format('Y-m-d'), $holidays)
-            || empty($days[$deliveryDate->format('w')])
+        || empty($days[$deliveryDate->format('w')])
         );
 
         return $deliveryDate->format('Y-m-d H:i:s');
@@ -194,13 +172,16 @@ class Util
      * < 0 means: should've shipped in the past
      * anything higher means: you've got some more time
      *
-     * @param string $shippingDate Shipping date (format: `Y-m-d H:i:s`)
+     * @param string $shippingDate          Shipping date (format: `Y-m-d H:i:s`)
      * @param string $preferredDeliveryDate Customer preference
      *
      * @return int
+     *
      * @throws \Exception
+     *
+     * @since 1.0.0
      */
-    public static function getShippingDaysRemaining($shippingDate, $preferredDeliveryDate)
+    public static function getShippingDaysRemaining($shippingDate, $preferredDeliveryDate): int
     {
         // Remove the hours/minutes/seconds
         $shippingDate = date('Y-m-d 00:00:00', strtotime($shippingDate));
@@ -215,7 +196,7 @@ class Util
         $daysRemaining = (int) $nearestDeliveryDate->diff($preferredDeliveryDate)->format('%R%a');
 
         // Subtract an additional day if we cannot ship today (Sunday or holiday)
-        if (date('w', strtotime($shippingDate)) == 0 ||
+        if (0 === (int) date('w', strtotime($shippingDate)) ||
             in_array(
                 date('Y-m-d', strtotime($shippingDate)),
                 static::getHolidaysForYear(date('Y', strtotime($shippingDate)))
@@ -228,16 +209,48 @@ class Util
     }
 
     /**
+     * Offline delivery date calculation
+     *
+     * @param string $deliveryDate   Delivery date in any format accepted by DateTime
+     * @param bool   $mondayDelivery Sunday sorting/Monday delivery enabled
+     * @param bool   $sundayDelivery Sunday delivery enabled
+     *
+     * @return string (format: `Y-m-d H:i:s`)
+     *
+     * @throws \Exception
+     *
+     * @since 1.0.0
+     */
+    public static function getDeliveryDate($deliveryDate, $mondayDelivery = false, $sundayDelivery = false): string
+    {
+        $deliveryDate = new \DateTime($deliveryDate);
+
+        $holidays = static::getHolidaysForYear(date('Y', $deliveryDate->getTimestamp()));
+
+        do {
+            $deliveryDate->add(new \DateInterval('P1D'));
+        } while (in_array($deliveryDate->format('Y-m-d'), $holidays)
+        || 0 === (int) (!$sundayDelivery && $deliveryDate->format('w'))
+        || 1 === (!$mondayDelivery && $deliveryDate->format('w'))
+        );
+
+        return $deliveryDate->format('Y-m-d H:i:s');
+    }
+
+    /**
      * Get an array with all Dutch holidays for the given year
+     *
+     * Credits to tvlooy (https://gist.github.com/tvlooy/1894247)
      *
      * @param string $year
      *
      * @return array
      *
-     * Credits to @tvlooy (https://gist.github.com/tvlooy/1894247)
      * @throws \Exception
+     *
+     * @since 1.0.0
      */
-    protected static function getHolidaysForYear($year)
+    protected static function getHolidaysForYear(string $year): array
     {
         // Avoid holidays
         // Fixed
@@ -269,7 +282,7 @@ class Util
         } catch (\Exception $e) {
         }
 
-        $holidays = array(
+        $holidays = [
             $nieuwjaar->format('Y-m-d'),
             $pasen->format('Y-m-d'),
             $koningsdag->format('Y-m-d'),
@@ -279,9 +292,8 @@ class Util
             $pinksterMaandag->format('Y-m-d'),
             $eersteKerstDag->format('Y-m-d'),
             $tweedeKerstDag->format('Y-m-d'),
-        );
+        ];
 
         return $holidays;
     }
-
 }

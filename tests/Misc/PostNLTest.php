@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker
+ * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,7 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
+ *
  * @copyright 2017-2019 Michael Dekker
+ *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -40,21 +43,21 @@ use Firstred\PostNL\Entity\SOAP\UsernameToken;
 use Firstred\PostNL\Entity\Timeframe;
 use Firstred\PostNL\HttpClient\MockClient;
 use Firstred\PostNL\PostNL;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class PostNLTest
  *
- * @package Firstred\PostNL\Tests\Misc
- *
  * @testdox The PostNL object
  */
-class PostNLTest extends \PHPUnit_Framework_TestCase
+class PostNLTest extends TestCase
 {
     /** @var PostNL $postnl */
     protected $postnl;
 
     /**
      * @before
+     *
      * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      */
     public function setupPostNL()
@@ -75,8 +78,8 @@ class PostNLTest extends \PHPUnit_Framework_TestCase
                     'Zipcode'     => '2132WT',
                 ]))
                 ->setGlobalPackBarcodeType('AB')
-                ->setGlobalPackCustomerCode('1234')
-            , new UsernameToken(null, 'test'),
+                ->setGlobalPackCustomerCode('1234'),
+            new UsernameToken(null, 'test'),
             true,
             PostNL::MODE_REST
         );

@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker
+ * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,7 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
+ *
  * @copyright 2017-2019 Michael Dekker
+ *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -37,8 +40,6 @@ use Firstred\PostNL\Service\TimeframeService;
 
 /**
  * Class CompleteStatusResponseOldStatus
- *
- * @package Firstred\PostNL\Entity
  *
  * @method string|null getStatusCode()
  * @method string|null getStatusDescription()
@@ -61,53 +62,53 @@ class CompleteStatusResponseOldStatus extends AbstractEntity
      */
     public static $defaultProperties = [
         'Barcode'        => [
-            'StatusCode'             => BarcodeService::DOMAIN_NAMESPACE,
-            'StatusDescription'      => BarcodeService::DOMAIN_NAMESPACE,
-            'PhaseCode'        => BarcodeService::DOMAIN_NAMESPACE,
-            'PhaseDescription' => BarcodeService::DOMAIN_NAMESPACE,
-            'TimeStamp'        => BarcodeService::DOMAIN_NAMESPACE,
+            'StatusCode'        => BarcodeService::DOMAIN_NAMESPACE,
+            'StatusDescription' => BarcodeService::DOMAIN_NAMESPACE,
+            'PhaseCode'         => BarcodeService::DOMAIN_NAMESPACE,
+            'PhaseDescription'  => BarcodeService::DOMAIN_NAMESPACE,
+            'TimeStamp'         => BarcodeService::DOMAIN_NAMESPACE,
         ],
         'Confirming'     => [
-            'StatusCode'             => ConfirmingService::DOMAIN_NAMESPACE,
-            'StatusDescription'      => ConfirmingService::DOMAIN_NAMESPACE,
-            'PhaseCode'        => ConfirmingService::DOMAIN_NAMESPACE,
-            'PhaseDescription' => ConfirmingService::DOMAIN_NAMESPACE,
-            'TimeStamp'        => ConfirmingService::DOMAIN_NAMESPACE,
+            'StatusCode'        => ConfirmingService::DOMAIN_NAMESPACE,
+            'StatusDescription' => ConfirmingService::DOMAIN_NAMESPACE,
+            'PhaseCode'         => ConfirmingService::DOMAIN_NAMESPACE,
+            'PhaseDescription'  => ConfirmingService::DOMAIN_NAMESPACE,
+            'TimeStamp'         => ConfirmingService::DOMAIN_NAMESPACE,
         ],
         'Labelling'      => [
-            'StatusCode'             => LabellingService::DOMAIN_NAMESPACE,
-            'StatusDescription'      => LabellingService::DOMAIN_NAMESPACE,
-            'PhaseCode'        => LabellingService::DOMAIN_NAMESPACE,
-            'PhaseDescription' => LabellingService::DOMAIN_NAMESPACE,
-            'TimeStamp'        => LabellingService::DOMAIN_NAMESPACE,
+            'StatusCode'        => LabellingService::DOMAIN_NAMESPACE,
+            'StatusDescription' => LabellingService::DOMAIN_NAMESPACE,
+            'PhaseCode'         => LabellingService::DOMAIN_NAMESPACE,
+            'PhaseDescription'  => LabellingService::DOMAIN_NAMESPACE,
+            'TimeStamp'         => LabellingService::DOMAIN_NAMESPACE,
         ],
         'ShippingStatus' => [
-            'StatusCode'             => ShippingStatusService::DOMAIN_NAMESPACE,
-            'StatusDescription'      => ShippingStatusService::DOMAIN_NAMESPACE,
-            'PhaseCode'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'PhaseDescription' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'TimeStamp'        => ShippingStatusService::DOMAIN_NAMESPACE,
+            'StatusCode'        => ShippingStatusService::DOMAIN_NAMESPACE,
+            'StatusDescription' => ShippingStatusService::DOMAIN_NAMESPACE,
+            'PhaseCode'         => ShippingStatusService::DOMAIN_NAMESPACE,
+            'PhaseDescription'  => ShippingStatusService::DOMAIN_NAMESPACE,
+            'TimeStamp'         => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate'   => [
-            'StatusCode'             => DeliveryDateService::DOMAIN_NAMESPACE,
-            'StatusDescription'      => DeliveryDateService::DOMAIN_NAMESPACE,
-            'PhaseCode'        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'PhaseDescription' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'TimeStamp'        => DeliveryDateService::DOMAIN_NAMESPACE,
+            'StatusCode'        => DeliveryDateService::DOMAIN_NAMESPACE,
+            'StatusDescription' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'PhaseCode'         => DeliveryDateService::DOMAIN_NAMESPACE,
+            'PhaseDescription'  => DeliveryDateService::DOMAIN_NAMESPACE,
+            'TimeStamp'         => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
         'Location'       => [
-            'StatusCode'             => LocationService::DOMAIN_NAMESPACE,
-            'StatusDescription'      => LocationService::DOMAIN_NAMESPACE,
-            'PhaseCode'        => LocationService::DOMAIN_NAMESPACE,
-            'PhaseDescription' => LocationService::DOMAIN_NAMESPACE,
-            'TimeStamp'        => LocationService::DOMAIN_NAMESPACE,
+            'StatusCode'        => LocationService::DOMAIN_NAMESPACE,
+            'StatusDescription' => LocationService::DOMAIN_NAMESPACE,
+            'PhaseCode'         => LocationService::DOMAIN_NAMESPACE,
+            'PhaseDescription'  => LocationService::DOMAIN_NAMESPACE,
+            'TimeStamp'         => LocationService::DOMAIN_NAMESPACE,
         ],
         'Timeframe'      => [
-            'StatusCode'             => TimeframeService::DOMAIN_NAMESPACE,
-            'StatusDescription'      => TimeframeService::DOMAIN_NAMESPACE,
-            'PhaseCode'        => TimeframeService::DOMAIN_NAMESPACE,
-            'PhaseDescription' => TimeframeService::DOMAIN_NAMESPACE,
-            'TimeStamp'        => TimeframeService::DOMAIN_NAMESPACE,
+            'StatusCode'        => TimeframeService::DOMAIN_NAMESPACE,
+            'StatusDescription' => TimeframeService::DOMAIN_NAMESPACE,
+            'PhaseCode'         => TimeframeService::DOMAIN_NAMESPACE,
+            'PhaseDescription'  => TimeframeService::DOMAIN_NAMESPACE,
+            'TimeStamp'         => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
@@ -131,14 +132,11 @@ class CompleteStatusResponseOldStatus extends AbstractEntity
      * @param string|null $phaseCode
      * @param string|null $phaseDescription
      * @param string|null $timeStamp
+     *
+     * @since 1.0.0
      */
-    public function __construct(
-        $code = null,
-        $description = null,
-        $phaseCode = null,
-        $phaseDescription = null,
-        $timeStamp = null
-    ) {
+    public function __construct(?string $code = null, ?string $description = null, ?string $phaseCode = null, ?string $phaseDescription = null, ?string $timeStamp = null)
+    {
         parent::__construct();
 
         $this->setStatusCode($code);

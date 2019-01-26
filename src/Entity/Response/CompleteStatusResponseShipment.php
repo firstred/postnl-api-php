@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker
+ * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,15 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
+ *
  * @copyright 2017-2019 Michael Dekker
+ *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Entity\Response;
 
-use Sabre\Xml\Writer;
-use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\AbstractEntity;
+use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Amount;
 use Firstred\PostNL\Entity\Barcode;
 use Firstred\PostNL\Entity\Customer;
@@ -45,11 +47,10 @@ use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
+use Sabre\Xml\Writer;
 
 /**
  * Class CompleteStatusResponseShipment
- *
- * @package Firstred\PostNL\Entity
  *
  * @method Address[]|null                       getAddresses()
  * @method Amount[]|null                        getAmounts()
@@ -76,7 +77,7 @@ use Firstred\PostNL\Service\TimeframeService;
  * @method CompleteStatusResponseShipment setEvents(CompleteStatusResponseEvent[]|null $events = null)
  * @method CompleteStatusResponseShipment setExpectation(Expectation|null $expectation = null)
  * @method CompleteStatusResponseShipment setGroups(Group[]|null $groups = null)
- * @method CompleteStatusResponseShipment setOldStatuses(CompleteStatusResponseOldStatus|null $oldStatuses = null)
+ * @method CompleteStatusResponseShipment setOldStatuses(CompleteStatusResponseOldStatus[]|null $oldStatuses = null)
  * @method CompleteStatusResponseShipment setProductCode(string|null $productCode = null)
  * @method CompleteStatusResponseShipment setProductOptions(ProductOption[]|null $options = null)
  * @method CompleteStatusResponseShipment setReference(string|null $reference = null)
@@ -243,39 +244,24 @@ class CompleteStatusResponseShipment extends AbstractEntity
     /**
      * CompleteStatusResponseShipment constructor.
      *
-     * @param Address[]|null                         $addresses
-     * @param Amount[]|null                          $amounts
-     * @param string|null                            $barcode
-     * @param Customer|null                          $customer
-     * @param string|null                            $deliveryDate
-     * @param Dimension|null                         $dimension
-     * @param array|null                             $events
-     * @param Expectation|null                       $expectation
-     * @param Group[]|null                           $groups
-     * @param string|null                            $productCode
-     * @param CompleteStatusResponseOldStatus[]|null $oldStatuses
-     * @param ProductOption[]|null                   $productOptions
-     * @param string|null                            $reference
-     * @param Status|null                            $status
-     * @param Warning[]|null                         $warnings
+     * @param Address[]|null                    $addresses
+     * @param Amount[]|null                     $amounts
+     * @param string|null                       $barcode
+     * @param Customer|null                     $customer
+     * @param string|null                       $deliveryDate
+     * @param Dimension|null                    $dimension
+     * @param array|null                        $events
+     * @param Expectation|null                  $expectation
+     * @param Group[]|null                      $groups
+     * @param CompleteStatusResponseOldStatus[] $oldStatuses
+     * @param string|null                       $productCode
+     * @param ProductOption[]|null              $productOptions
+     * @param string|null                       $reference
+     * @param Status|null                       $status
+     * @param Warning[]|null                    $warnings
      */
-    public function __construct(
-        array $addresses = null,
-        array $amounts = null,
-        $barcode = null,
-        $customer = null,
-        $deliveryDate = null,
-        $dimension = null,
-        array $events = null,
-        $expectation = null,
-        array $groups = null,
-        array $oldStatuses = null,
-        $productCode = null,
-        array $productOptions = null,
-        $reference = null,
-        $status = null,
-        array $warnings = null
-    ) {
+    public function __construct(array $addresses = null, array $amounts = null, ?string $barcode = null, ?Customer $customer = null, ?string $deliveryDate = null, ?Dimension $dimension = null, array $events = null, ?Expectation $expectation = null, array $groups = null, array $oldStatuses = null, ?string $productCode = null, array $productOptions = null, ?string $reference = null, ?Status $status = null, array $warnings = null)
+    {
         parent::__construct();
 
         $this->setAddresses($addresses);
@@ -301,8 +287,10 @@ class CompleteStatusResponseShipment extends AbstractEntity
      * @param Writer $writer
      *
      * @return void
+     *
+     * @since 1.0.0
      */
-    public function xmlSerialize(Writer $writer)
+    public function xmlSerialize(Writer $writer): void
     {
         $xml = [];
         if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
@@ -312,44 +300,57 @@ class CompleteStatusResponseShipment extends AbstractEntity
         }
 
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if ($propertyName === 'Addresses') {
+            if ('Addresses' === $propertyName) {
                 $addresses = [];
+                // @codingStandardsIgnoreLine
                 foreach ($this->Addresses as $address) {
                     $addresses[] = ["{{$namespace}}Address" => $address];
                 }
                 $xml["{{$namespace}}Addresses"] = $addresses;
+                // @codingStandardsIgnoreLine
             } elseif ($propertyName === 'Amounts') {
                 $amounts = [];
+                // @codingStandardsIgnoreLine
                 foreach ($this->Amounts as $amount) {
                     $amounts[] = ["{{$namespace}}Amount" => $amount];
                 }
                 $xml["{{$namespace}}Amounts"] = $amounts;
+                // @codingStandardsIgnoreLine
             } elseif ($propertyName === 'Groups') {
                 $groups = [];
+                // @codingStandardsIgnoreLine
                 foreach ($this->Groups as $group) {
                     $groups[] = ["{{$namespace}}Group" => $group];
                 }
                 $xml["{{$namespace}}Groups"] = $groups;
+                // @codingStandardsIgnoreLine
             } elseif ($propertyName === 'Events') {
                 $events = [];
+                // @codingStandardsIgnoreLine
                 foreach ($this->Events as $event) {
                     $events[] = ["{{$namespace}}CompleteStatusResponseEvent" => $event];
                 }
                 $xml["{{$namespace}}Events"] = $events;
-             }elseif ($propertyName === 'OldStatuses') {
+                // @codingStandardsIgnoreLine
+            } elseif ($propertyName === 'OldStatuses') {
                 $oldStatuses = [];
+                // @codingStandardsIgnoreLine
                 foreach ($this->OldStatuses as $oldStatus) {
                     $oldStatuses[] = ["{{$namespace}}CompleteStatusResponseOldStatus" => $oldStatus];
                 }
                 $xml["{{$namespace}}OldStatuses"] = $oldStatuses;
-            }  elseif ($propertyName === 'ProductOption') {
+                // @codingStandardsIgnoreLine
+            } elseif ($propertyName === 'ProductOption') {
                 $productOptions = [];
+                // @codingStandardsIgnoreLine
                 foreach ($this->ProductOptions as $productOption) {
                     $productOptions[] = ["{{$namespace}}ProductOptions" => $productOption];
                 }
                 $xml["{{$namespace}}ProductOptions"] = $productOptions;
+                // @codingStandardsIgnoreLine
             } elseif ($propertyName === 'Warnings') {
                 $warnings = [];
+                // @codingStandardsIgnoreLine
                 foreach ($this->Warnings as $warning) {
                     $warnings[] = ["{{$namespace}}Warning" => $warning];
                 }

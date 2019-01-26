@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker
+ * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,7 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
+ *
  * @copyright 2017-2019 Michael Dekker
+ *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -28,7 +31,6 @@ namespace Firstred\PostNL\Entity\Response;
 
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Address;
-use Firstred\PostNL\Entity\Location;
 use Firstred\PostNL\Entity\Warning;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\ConfirmingService;
@@ -40,8 +42,6 @@ use Firstred\PostNL\Service\TimeframeService;
 
 /**
  * Class ResponseLocation
- *
- * @package Firstred\PostNL\Entity
  *
  * @method Address|null    getAddress()
  * @method string[]|null   getDeliveryOptions()
@@ -268,24 +268,8 @@ class ResponseLocation extends AbstractEntity
      * @param string|null    $downPartnerID
      * @param string|null    $downPartnerLocation
      */
-    public function __construct(
-        Address $address = null,
-        array $deliveryOptions = null,
-        $distance = null,
-        $latitude = null,
-        $longitude = null,
-        $name = null,
-        $openingHours = null,
-        $partnerName = null,
-        $phoneNumber = null,
-        $locationCode = null,
-        $retailNetworkId = null,
-        $saleschannel = null,
-        $terminalType = null,
-        $warnings = null,
-        $downPartnerID = null,
-        $downPartnerLocation = null
-    ) {
+    public function __construct(?Address $address = null, ?array $deliveryOptions = null, ?string $distance = null, ?string $latitude = null, ?string $longitude = null, ?string $name = null, ?array $openingHours = null, ?string $partnerName = null, ?string $phoneNumber = null, ?string $locationCode = null, ?string $retailNetworkId = null, ?string $saleschannel = null, ?string $terminalType = null, ?array $warnings = null, ?string $downPartnerID = null, ?string $downPartnerLocation = null)
+    {
         parent::__construct();
 
         $this->setAddress($address);

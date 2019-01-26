@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker
+ * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,24 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
+ *
  * @copyright 2017-2019 Michael Dekker
+ *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Entity\SOAP;
 
-use Sabre\Xml\Writer;
 use Firstred\PostNL\Entity\AbstractEntity;
+use Sabre\Xml\Writer;
 
 /**
  * Class UsernameToken
  *
- * @package Firstred\PostNL\Entity\SOAP
- *
- * @method string|null getUsername()
  * @method string|null getPassword()
  *
- * @method UsernameToken setUsername(string|null $username = null)
  * @method UsernameToken setPassword(string|null $password = null)
  */
 class UsernameToken extends AbstractEntity
@@ -83,14 +82,12 @@ class UsernameToken extends AbstractEntity
     /**
      * UsernameToken constructor.
      *
-     * @param string|null $username
-     * @param string|null $password Plaintext password
+     * @param string $password Plaintext password
      */
-    public function __construct($username, $password)
+    public function __construct(string $password)
     {
         parent::__construct();
 
-        $this->setUsername($username);
         $this->setPassword($password);
     }
 
@@ -100,18 +97,15 @@ class UsernameToken extends AbstractEntity
      * @param Writer $writer
      *
      * @return void
+     *
+     * @since 1.0.0
      */
-    public function xmlSerialize(Writer $writer)
+    public function xmlSerialize(Writer $writer): void
     {
         $xml = [];
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
             if (isset($this->{$propertyName})) {
-                // Lack of username means new API and no hash needed
-                if ($this->Username && $propertyName === 'Password') {
-                    $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = sha1($this->{$propertyName});
-                } else {
-                    $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
-                }
+                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
             }
         }
 

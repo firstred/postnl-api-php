@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker
+ * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,12 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
+ *
  * @copyright 2017-2019 Michael Dekker
+ *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\HttpClient;
 
+use Firstred\PostNL\Exception\HttpClientException;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
@@ -37,12 +41,9 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
-use Firstred\PostNL\Exception\HttpClientException;
 
 /**
  * Class GuzzleClient
- *
- * @package Firstred\PostNL\HttpClient
  */
 class GuzzleClient implements ClientInterface, LoggerAwareInterface
 {
@@ -73,60 +74,9 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
     private $client;
 
     /**
-     * Get the Guzzle client
-     *
-     * @return Client
-     */
-    private function getClient()
-    {
-        if (!$this->client) {
-            // Initialize Guzzle and the retry middleware, include the default options
-            $stack = HandlerStack::create(\GuzzleHttp\choose_handler());
-            $stack->push(Middleware::retry(function (
-                $retries,
-                Request $request,
-                Response $response = null,
-                RequestException $exception = null
-            ) {
-                // Limit the number of retries to 5
-                if ($retries >= 5) {
-                    return false;
-                }
-
-                // Retry connection exceptions
-                if ($exception instanceof ConnectException) {
-                    return true;
-                }
-
-                if ($response) {
-                    // Retry on server errors
-                    if ($response->getStatusCode() >= 500) {
-                        return true;
-                    }
-                }
-
-                return false;
-            }, function ($retries) {
-                return $retries * 1000;
-            }));
-            $guzzle = new Client(array_merge(
-                $this->defaultOptions,
-                [
-                    'timeout'         => $this->timeout,
-                    'connect_timeout' => $this->connectTimeout,
-                    'http_errors'     => false,
-                    'handler'         => $stack,
-                ]
-            ));
-
-            $this->client = $guzzle;
-        }
-
-        return $this->client;
-    }
-
-    /**
      * @return GuzzleClient|static
+     *
+     * @since 1.0.0
      */
     public static function getInstance()
     {
@@ -143,9 +93,12 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
      * @param string $name
      * @param mixed  $value
      *
-     * @return GuzzleClient
+     * @return self
+     *
+     * @since 1.0.0
      */
-    public function setOption($name, $value) {
+    public function setOption(string $name, $value): self
+    {
         // Set the default option
         $this->defaultOptions[$name] = $value;
         // Reset the non-mutable Guzzle client
@@ -160,8 +113,10 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
      * @param string $name
      *
      * @return mixed|null
+     *
+     * @since 1.0.0
      */
-    public function getOption($name)
+    public function getOption(string $name)
     {
         if (isset($this->defaultOptions[$name])) {
             return $this->defaultOptions[$name];
@@ -175,9 +130,11 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
      *
      * @param bool|string $verify
      *
-     * @return $this
+     * @return self
+     *
+     * @since 1.0.0
      */
-    public function setVerify($verify)
+    public function setVerify($verify): self
     {
         // Set the verify option
         $this->defaultOptions['verify'] = $verify;
@@ -191,6 +148,8 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
      * Return verify setting
      *
      * @return bool|string
+     *
+     * @since 1.0.0
      */
     public function getVerify()
     {
@@ -202,39 +161,29 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
-     * Set the amount of retries
-     *
-     * @param int $maxRetries
-     *
-     * @return $this
-     */
-    public function setMaxRetries($maxRetries)
-    {
-        $this->maxRetries = $maxRetries;
-
-        return $this;
-    }
-
-    /**
      * Return max retries
      *
      * @return int
+     *
+     * @since 1.0.0
      */
-    public function getMaxRetries()
+    public function getMaxRetries(): int
     {
         return $this->maxRetries;
     }
 
     /**
-     * Set the concurrency
+     * Set the amount of retries
      *
-     * @param int $concurrency
+     * @param int $maxRetries
      *
-     * @return $this
+     * @return self
+     *
+     * @since 1.0.0
      */
-    public function setConcurrency($concurrency)
+    public function setMaxRetries($maxRetries): self
     {
-        $this->concurrency = $concurrency;
+        $this->maxRetries = $maxRetries;
 
         return $this;
     }
@@ -243,22 +192,26 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
      * Return concurrency
      *
      * @return int
+     *
+     * @since 1.0.0
      */
-    public function getConcurrency()
+    public function getConcurrency(): int
     {
         return $this->concurrency;
     }
 
     /**
-     * Set the logger
+     * Set the concurrency
      *
-     * @param LoggerInterface $logger
+     * @param int $concurrency
      *
-     * @return GuzzleClient
+     * @return self
+     *
+     * @since 1.0.0
      */
-    public function setLogger(LoggerInterface $logger = null)
+    public function setConcurrency($concurrency): self
     {
-        $this->logger = $logger;
+        $this->concurrency = $concurrency;
 
         return $this;
     }
@@ -267,25 +220,46 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
      * Get the logger
      *
      * @return LoggerInterface
+     *
+     * @since 1.0.0
      */
-    public function getLogger()
+    public function getLogger(): LoggerInterface
     {
         return $this->logger;
+    }
+
+    /**
+     * Set the logger
+     *
+     * @param LoggerInterface $logger
+     *
+     * @return self
+     *
+     * @since 1.0.0
+     */
+    public function setLogger(LoggerInterface $logger = null): self
+    {
+        $this->logger = $logger;
+
+        return $this;
     }
 
     /**
      * Adds a request to the list of pending requests
      * Using the ID you can replace a request
      *
-     * @param string $id      Request ID
-     * @param string $request PSR-7 request
+     * @param string  $id      Request ID
+     * @param Request $request PSR-7 request
      *
-     * @return int|string
+     * @return string
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Returns `string`s only
      */
-    public function addOrUpdateRequest($id, $request)
+    public function addOrUpdateRequest(string $id, Request $request): string
     {
         if (is_null($id)) {
-            return array_push($this->pendingRequests, $request);
+            return (string) array_push($this->pendingRequests, $request);
         }
 
         $this->pendingRequests[$id] = $request;
@@ -297,16 +271,104 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
      * Remove a request from the list of pending requests
      *
      * @param string $id
+     *
+     * @return void
+     *
+     * @since 1.0.0
      */
-    public function removeRequest($id)
+    public function removeRequest(string $id): void
     {
         unset($this->pendingRequests[$id]);
     }
 
     /**
-     * Clear all pending requests
+     * Do all async requests
+     *
+     * Exceptions are captured into the result array
+     *
+     * @param Request[] $requests
+     *
+     * @return Response|Response[]|HttpClientException|HttpClientException[]
      */
-    public function clearRequests()
+    public function doRequests(array $requests = [])
+    {
+        // If this is a single request, create the requests array
+        if (!is_array($requests)) {
+            if (!$requests instanceof Request) {
+                return [];
+            }
+
+            $requests = [$requests];
+        }
+
+        // Handle pending requests
+        $requests = $this->pendingRequests + $requests;
+        $this->clearRequests();
+
+        $guzzle = $this->getClient();
+        // Concurrent requests
+        $promises = call_user_func(
+            function () use ($requests, $guzzle) {
+                foreach ($requests as $index => $request) {
+                    if ($request instanceof Request && $this->logger instanceof LoggerInterface) {
+                        $this->logger->debug(\GuzzleHttp\Psr7\str($request));
+                    }
+                    yield $index => $guzzle->sendAsync($request);
+                }
+            }
+        );
+
+        $responses = [];
+        (new EachPromise(
+            $promises,
+            [
+                'concurrency' => $this->concurrency,
+                'fulfilled'   => function ($response, $index) use (&$responses) {
+                    $responses[$index] = $response;
+                },
+                'rejected'    => function ($response, $index) use (&$responses) {
+                    $responses[$index] = $response;
+                },
+            ]
+        ))->promise()->wait();
+        foreach ($responses as &$response) {
+            if (is_array($response) && !empty($response['value'])) {
+                $response = $response['value'];
+            } elseif (is_array($response) && !empty($response['reason'])) {
+                if ($response['reason'] instanceof TransferException) {
+                    if (method_exists($response['reason'], 'getMessage')
+                        && method_exists($response['reason'], 'getCode')
+                    ) {
+                        $response = new HttpClientException(
+                            $response['reason']->getMessage(),
+                            $response['reason']->getCode(),
+                            $response['reason']
+                        );
+                    } else {
+                        $response = new HttpClientException(null, null, $response['reason']);
+                    }
+                } else {
+                    $response = $response['reason'];
+                }
+            } elseif (!$response instanceof Response) {
+                $response = new \Firstred\PostNL\Exception\ResponseException('Unknown response type');
+            }
+            if ($response instanceof Response && $this->logger instanceof LoggerInterface) {
+                $this->logger->debug(\GuzzleHttp\Psr7\str($response));
+            }
+        }
+
+        return $responses;
+    }
+
+    /**
+     * Clear all pending requests
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
+    public function clearRequests(): void
     {
         $this->pendingRequests = [];
     }
@@ -321,6 +383,9 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
      * @return Response
      *
      * @throws \Exception|HttpClientException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     *
+     * @since 1.0.0
      */
     public function doRequest(Request $request)
     {
@@ -339,77 +404,65 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
-     * Do all async requests
+     * Get the Guzzle client
      *
-     * Exceptions are captured into the result array
+     * @return Client
      *
-     * @param Request[] $requests
-     *
-     * @return Response|Response[]|HttpClientException|HttpClientException[]
+     * @since 1.0.0
      */
-    public function doRequests($requests = [])
+    private function getClient(): Client
     {
-        // If this is a single request, create the requests array
-        if (!is_array($requests)) {
-            if (!$requests instanceof Request) {
-                return [];
-            }
-
-            $requests = [$requests];
-        }
-
-        // Handle pending requests
-        $requests = $this->pendingRequests + $requests;
-        $this->clearRequests();
-
-        $guzzle = $this->getClient();
-        // Concurrent requests
-        $promises = call_user_func(function () use ($requests, $guzzle) {
-            foreach ($requests as $index => $request) {
-                if ($request instanceof Request && $this->logger instanceof LoggerInterface) {
-                    $this->logger->debug(\GuzzleHttp\Psr7\str($request));
-                }
-                yield $index => $guzzle->sendAsync($request);
-            }
-        });
-
-        $responses = [];
-        (new EachPromise($promises, [
-            'concurrency' => $this->concurrency,
-            'fulfilled' => function ($response, $index) use (&$responses) {
-                $responses[$index] = $response;
-            },
-            'rejected' => function ($response, $index) use (&$responses) {
-                $responses[$index] = $response;
-            },
-        ]))->promise()->wait();
-        foreach ($responses as &$response) {
-            if (is_array($response) && !empty($response['value'])) {
-                $response = $response['value'];
-            } elseif (is_array($response) && !empty($response['reason'])) {
-                if ($response['reason'] instanceof TransferException) {
-                    if (method_exists($response['reason'], 'getMessage')
-                        && method_exists($response['reason'], 'getCode')
+        if (!$this->client) {
+            // Initialize Guzzle and the retry middleware, include the default options
+            $stack = HandlerStack::create(\GuzzleHttp\choose_handler());
+            $stack->push(
+                Middleware::retry(
+                    function (
+                        $retries,
+                        /** @noinspection PhpUnusedParameterInspection */
+                        Request $request,
+                        Response $response = null,
+                        RequestException $exception = null
                     ) {
-                        $response = new HttpClientException(
-                            $response['reason']->getMessage(),
-                            $response['reason']->getCode(),
-                            $response['reason']
-                        );
-                    } else {
-                        $response = new HttpClientException(null, null, $response['reason']);
+                        // Limit the number of retries to 5
+                        if ($retries >= 5) {
+                            return false;
+                        }
+
+                        // Retry connection exceptions
+                        if ($exception instanceof ConnectException) {
+                            return true;
+                        }
+
+                        if ($response) {
+                            // Retry on server errors
+                            if ($response->getStatusCode() >= 500) {
+                                return true;
+                            }
+                        }
+
+                        return false;
+                    },
+                    function ($retries) {
+                        return $retries * 1000;
                     }
-                 } else {
-                    $response = $response['reason'];
-                }
-            } elseif (!$response instanceof Response) {
-                $response = new \Firstred\PostNL\Exception\ResponseException('Unknown response type');
-            }
-            if ($response instanceof Response && $this->logger instanceof LoggerInterface) {
-                $this->logger->debug(\GuzzleHttp\Psr7\str($response));
-            }
+                )
+            );
+            $guzzle = new Client(
+                array_merge(
+                    $this->defaultOptions,
+                    [
+                        'timeout'         => $this->timeout,
+                        'connect_timeout' => $this->connectTimeout,
+                        'http_errors'     => false,
+                        'handler'         => $stack,
+                    ]
+                )
+            );
+
+            $this->client = $guzzle;
         }
 
-        return $responses;
+        return $this->client;
     }
 }

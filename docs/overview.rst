@@ -87,7 +87,7 @@ License
 
 Licensed using the `MIT license <http://opensource.org/licenses/MIT>`_.
 
-    Copyright (c) 2017-2019 Michael Dekker <https://github.com/firstred>
+    *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred) <https://github.com/firstred>
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal

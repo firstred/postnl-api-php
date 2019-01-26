@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker
+ * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,7 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
+ *
  * @copyright 2017-2019 Michael Dekker
+ *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -30,8 +33,6 @@ use Firstred\PostNL\Entity\AbstractEntity;
 
 /**
  * Class Security
- *
- * @package Firstred\PostNL\Entity\SOAP
  *
  * @method UsernameToken getUsernameToken()
  *
@@ -66,19 +67,22 @@ class Security extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var UsernameToken $UsernameToken */
+    /** @var string $UsernameToken */
     protected $UsernameToken;
     // @codingStandardsIgnoreEnd
 
     /**
      * Security constructor.
      *
-     * @param UsernameToken $token
+     * @param string $apiKey
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Only accepts the API Key (legacy has been removed)
      */
-    public function __construct(UsernameToken $token)
+    public function __construct(string $apiKey)
     {
         parent::__construct();
 
-        $this->setUsernameToken($token);
+        $this->setUsernameToken(new UsernameToken($apiKey));
     }
 }

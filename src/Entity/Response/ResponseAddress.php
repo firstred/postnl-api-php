@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker
+ * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,7 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
+ *
  * @copyright 2017-2019 Michael Dekker
+ *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -37,8 +40,6 @@ use Firstred\PostNL\Service\TimeframeService;
 
 /**
  * Class ResponseAddress
- *
- * @package Firstred\PostNL\Entity\Response
  *
  * @method string|null getAddressType()
  * @method string|null getFirstName()
@@ -284,7 +285,7 @@ class ResponseAddress extends AbstractEntity
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string|null $AddressType
+     * @param string|null $addressType
      * @param string|null $firstName
      * @param string|null $name
      * @param string|null $companyName
@@ -301,29 +302,14 @@ class ResponseAddress extends AbstractEntity
      * @param string|null $floor
      * @param string|null $region
      * @param string|null $remark
+     *
+     * @since 1.0.0
      */
-    public function __construct(
-        $AddressType = null,
-        $firstName = null,
-        $name = null,
-        $companyName = null,
-        $street = null,
-        $houseNr = null,
-        $houseNrExt = null,
-        $zipcode = null,
-        $city = null,
-        $countryCode = null,
-        $area = null,
-        $buildingName = null,
-        $department = null,
-        $doorcode = null,
-        $floor = null,
-        $region = null,
-        $remark = null
-    ) {
+    public function __construct(?string $addressType = null, ?string $firstName = null, ?string $name = null, ?string $companyName = null, ?string $street = null, ?string $houseNr = null, ?string $houseNrExt = null, ?string $zipcode = null, ?string $city = null, ?string $countryCode = null, ?string $area = null, ?string $buildingName = null, ?string $department = null, ?string $doorcode = null, ?string $floor = null, ?string $region = null, ?string $remark = null)
+    {
         parent::__construct();
 
-        $this->setAddressType($AddressType);
+        $this->setAddressType($addressType);
         $this->setFirstName($firstName);
         $this->setName($name);
         $this->setCompanyName($companyName);
@@ -349,13 +335,17 @@ class ResponseAddress extends AbstractEntity
      *
      * @param string|null $zip
      *
-     * @return $this
+     * @return self
+     *
+     * @since 1.0.0
      */
-    public function setZipcode($zip = null)
+    public function setZipcode($zip = null): self
     {
         if (is_null($zip)) {
+            // @codingStandardsIgnoreLine
             $this->Zipcode = null;
         } else {
+            // @codingStandardsIgnoreLine
             $this->Zipcode = strtoupper(str_replace(' ', '', $zip));
         }
 

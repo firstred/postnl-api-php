@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker
+ * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,17 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
+ *
  * @copyright 2017-2019 Michael Dekker
+ *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Service;
 
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
-use Psr\Cache\CacheItemInterface;
-use Sabre\Xml\Reader;
-use Sabre\Xml\Service as XmlService;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Request\CompleteStatus;
@@ -52,22 +50,32 @@ use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\ResponseException;
-use Firstred\PostNL\PostNL;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
+use Psr\Cache\CacheItemInterface;
+use Sabre\Xml\Reader;
+use Sabre\Xml\Service as XmlService;
 
 /**
  * Class ShippingStatusService
  *
- * @package Firstred\PostNL\Service
- *
- * @method CurrentStatusResponse  currentStatus(CurrentStatus|CurrentStatusByReference|CurrentStatusByPhase|CurrentStatusByStatus $currentStatus)
- * @method Request                buildCurrentStatusRequest(CurrentStatus|CurrentStatusByReference|CurrentStatusByPhase|CurrentStatusByStatus $currentStatus)
- * @method CurrentStatusResponse  processCurrentStatusResponse(mixed $response)
- * @method CompleteStatusResponse completeStatus(CompleteStatus|CompleteStatusByReference|CompleteStatusByPhase|CompleteStatusByStatus $completeStatus)
- * @method Request                buildCompleteStatusRequest(CompleteStatus|CompleteStatusByReference|CompleteStatusByPhase|CompleteStatusByStatus $completeStatus)
- * @method CompleteStatusResponse processCompleteStatusResponse(mixed $response)
- * @method GetSignature           getSignature(GetSignature $getSignature)
- * @method Request                buildGetSignatureRequest(GetSignature $getSignature)
- * @method GetSignature           processGetSignatureResponse(mixed $response)
+ * @method CurrentStatusResponse
+ *         currentStatus(CurrentStatus|CurrentStatusByReference|CurrentStatusByPhase|CurrentStatusByStatus
+ *         $currentStatus)
+ * @method Request
+ *         buildCurrentStatusRequest(CurrentStatus|CurrentStatusByReference|CurrentStatusByPhase|CurrentStatusByStatus
+ *         $currentStatus)
+ * @method CurrentStatusResponse         processCurrentStatusResponse(mixed $response)
+ * @method CompleteStatusResponse
+ *         completeStatus(CompleteStatus|CompleteStatusByReference|CompleteStatusByPhase|CompleteStatusByStatus
+ *         $completeStatus)
+ * @method Request
+ *         buildCompleteStatusRequest(CompleteStatus|CompleteStatusByReference|CompleteStatusByPhase|CompleteStatusByStatus
+ *         $completeStatus)
+ * @method CompleteStatusResponse        processCompleteStatusResponse(mixed $response)
+ * @method GetSignatureResponseSignature getSignature(GetSignature $getSignature)
+ * @method Request                       buildGetSignatureRequest(GetSignature $getSignature)
+ * @method GetSignatureResponseSignature processGetSignatureResponse(mixed $response)
  */
 class ShippingStatusService extends AbstractService
 {
@@ -77,8 +85,6 @@ class ShippingStatusService extends AbstractService
     // Endpoints
     const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v1_6/status';
     const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v1_6/status';
-    const LEGACY_SANDBOX_ENDPOINT = 'https://testservice.postnl.com/CIF_SB/ShippingStatusWebService/1_6/ShippingStatusWebService.svc';
-    const LEGACY_LIVE_ENDPOINT = 'https://service.postnl.com/CIF/ShippingStatusWebService/1_6/ShippingStatusWebService.svc';
 
     // SOAP API
     const SOAP_ACTION = 'http://postnl.nl/cif/services/ShippingStatusWebService/IShippingStatusWebService/CurrentStatus';
@@ -130,8 +136,10 @@ class ShippingStatusService extends AbstractService
      * @throws CifDownException
      * @throws CifException
      * @throws \Firstred\PostNL\Exception\ResponseException
+     *
+     * @since 1.0.0
      */
-    public function currentStatusREST($currentStatus)
+    public function currentStatusREST($currentStatus): CurrentStatusResponse
     {
         $item = $this->retrieveCachedItem($currentStatus->getId());
         $response = null;
@@ -165,279 +173,6 @@ class ShippingStatusService extends AbstractService
     }
 
     /**
-     * Gets the current status
-     *
-     * This is a combi-function, supporting the following:
-     * - CurrentStatus (by barcode):
-     *   - Fill the Shipment->Barcode property. Leave the rest empty.
-     * - CurrentStatusByReference:
-     *   - Fill the Shipment->Reference property. Leave the rest empty.
-     * - CurrentStatusByPhase:
-     *   - Fill the Shipment->PhaseCode property, do not pass Barcode or Reference.
-     *     Optionally add DateFrom and/or DateTo.
-     * - CurrentStatusByStatus:
-     *   - Fill the Shipment->StatuCode property. Leave the rest empty.
-     *
-     * @param CurrentStatus|CurrentStatusByReference|CurrentStatusByPhase|CurrentStatusByStatus $currentStatus
-     *
-     * @return CurrentStatusResponse
-     *
-     * @throws ApiException
-     * @throws CifDownException
-     * @throws CifException
-     * @throws InvalidArgumentException
-     * @throws ResponseException
-     * @throws \Sabre\Xml\LibXMLException
-     */
-    public function currentStatusSOAP($currentStatus)
-    {
-        $item = $this->retrieveCachedItem($currentStatus->getId());
-        $response = null;
-        if ($item instanceof CacheItemInterface) {
-            $response = $item->get();
-            try {
-                $response = \GuzzleHttp\Psr7\parse_response($response);
-            } catch (\InvalidArgumentException $e) {
-            }
-        }
-        if (!$response instanceof Response) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildCurrentStatusRequestSOAP($currentStatus));
-        }
-
-        $object = $this->processCurrentStatusResponseSOAP($response);
-        if ($object instanceof CurrentStatusResponse) {
-            if ($item instanceof CacheItemInterface
-                && $response instanceof Response
-                && $response->getStatusCode() === 200
-            ) {
-                $item->set(\GuzzleHttp\Psr7\str($response));
-                $this->cacheItem($item);
-            }
-
-            return $object;
-        }
-
-        throw new ApiException('Unable to retrieve current status');
-    }
-
-    /**
-     * Gets the complete status
-     *
-     * This is a combi-function, supporting the following:
-     * - CurrentStatus (by barcode):
-     *   - Fill the Shipment->Barcode property. Leave the rest empty.
-     * - CurrentStatusByReference:
-     *   - Fill the Shipment->Reference property. Leave the rest empty.
-     * - CurrentStatusByPhase:
-     *   - Fill the Shipment->PhaseCode property, do not pass Barcode or Reference.
-     *     Optionally add DateFrom and/or DateTo.
-     * - CurrentStatusByStatus:
-     *   - Fill the Shipment->StatuCode property. Leave the rest empty.
-     *
-     * @param CompleteStatus $completeStatus
-     *
-     * @return CompleteStatusResponse
-     *
-     * @throws ApiException
-     * @throws CifDownException
-     * @throws CifException
-     * @throws ResponseException
-     */
-    public function completeStatusREST(CompleteStatus $completeStatus)
-    {
-        $item = $this->retrieveCachedItem($completeStatus->getId());
-        $response = null;
-        if ($item instanceof CacheItemInterface) {
-            $response = $item->get();
-            try {
-                $response = \GuzzleHttp\Psr7\parse_response($response);
-            } catch (\InvalidArgumentException $e) {
-            }
-        }
-        if (!$response instanceof Response) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildCompleteStatusRequestREST($completeStatus));
-            static::validateRESTResponse($response);
-        }
-
-        $object = $this->processCompleteStatusResponseREST($response);
-        if ($object instanceof CompleteStatusResponse) {
-            if ($item instanceof CacheItemInterface
-                && $response instanceof Response
-                && $response->getStatusCode() === 200
-            ) {
-                $item->set(\GuzzleHttp\Psr7\str($response));
-                $this->cacheItem($item);
-            }
-
-            return $object;
-        }
-
-        throw new ApiException('Unable to retrieve complete status');
-    }
-
-    /**
-     * Gets the complete status
-     *
-     * This is a combi-function, supporting the following:
-     * - CurrentStatus (by barcode):
-     *   - Fill the Shipment->Barcode property. Leave the rest empty.
-     * - CurrentStatusByReference:
-     *   - Fill the Shipment->Reference property. Leave the rest empty.
-     * - CurrentStatusByPhase:
-     *   - Fill the Shipment->PhaseCode property, do not pass Barcode or Reference.
-     *     Optionally add DateFrom and/or DateTo.
-     * - CurrentStatusByStatus:
-     *   - Fill the Shipment->StatusCode property. Leave the rest empty.
-     *
-     * @param CompleteStatus|CompleteStatusByReference|CompleteStatusByPhase|CompleteStatusByStatus $completeStatus
-     *
-     * @return CompleteStatusResponse
-     *
-     * @throws ApiException
-     * @throws CifDownException
-     * @throws CifException
-     * @throws ResponseException
-     * @throws \Sabre\Xml\LibXMLException
-     * @throws InvalidArgumentException
-     */
-    public function completeStatusSOAP($completeStatus)
-    {
-        $item = $this->retrieveCachedItem($completeStatus->getId());
-        $response = null;
-        if ($item instanceof CacheItemInterface) {
-            $response = $item->get();
-            try {
-                $response = \GuzzleHttp\Psr7\parse_response($response);
-            } catch (\InvalidArgumentException $e) {
-            }
-        }
-        if (!$response instanceof Response) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildCompleteStatusRequestSOAP($completeStatus));
-        }
-
-        $object = $this->processCompleteStatusResponseSOAP($response);
-        if ($object instanceof CompleteStatusResponse) {
-            if ($item instanceof CacheItemInterface
-                && $response instanceof Response
-                && $response->getStatusCode() === 200
-            ) {
-                $item->set(\GuzzleHttp\Psr7\str($response));
-                $this->cacheItem($item);
-            }
-
-            return $object;
-        }
-
-        throw new ApiException('Unable to retrieve complete status');
-    }
-
-    /**
-     * Gets the complete status
-     *
-     * This is a combi-function, supporting the following:
-     * - CurrentStatus (by barcode):
-     *   - Fill the Shipment->Barcode property. Leave the rest empty.
-     * - CurrentStatusByReference:
-     *   - Fill the Shipment->Reference property. Leave the rest empty.
-     * - CurrentStatusByPhase:
-     *   - Fill the Shipment->PhaseCode property, do not pass Barcode or Reference.
-     *     Optionally add DateFrom and/or DateTo.
-     * - CurrentStatusByStatus:
-     *   - Fill the Shipment->StatuCode property. Leave the rest empty.
-     *
-     * @param GetSignature $getSignature
-     *
-     * @return GetSignatureResponseSignature
-     *
-     * @throws ApiException
-     * @throws CifDownException
-     * @throws CifException
-     * @throws ResponseException
-     */
-    public function getSignatureREST(GetSignature $getSignature)
-    {
-        $item = $this->retrieveCachedItem($getSignature->getId());
-        $response = null;
-        if ($item instanceof CacheItemInterface) {
-            $response = $item->get();
-            try {
-                $response = \GuzzleHttp\Psr7\parse_response($response);
-            } catch (\InvalidArgumentException $e) {
-            }
-        }
-        if (!$response instanceof Response) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetSignatureRequestREST($getSignature));
-            static::validateRESTResponse($response);
-        }
-
-        $object = $this->processGetSignatureResponseREST($response);
-        if ($object instanceof GetSignatureResponseSignature) {
-            if ($item instanceof CacheItemInterface
-                && $response instanceof Response
-                && $response->getStatusCode() === 200
-            ) {
-                $item->set(\GuzzleHttp\Psr7\str($response));
-                $this->cacheItem($item);
-            }
-
-            return $object;
-        }
-
-        throw new ApiException('Unable to get signature');
-    }
-
-    /**
-     * Gets the complete status
-     *
-     * This is a combi-function, supporting the following:
-     * - CurrentStatus (by barcode):
-     *   - Fill the Shipment->Barcode property. Leave the rest empty.
-     * - CurrentStatusByReference:
-     *   - Fill the Shipment->Reference property. Leave the rest empty.
-     * - CurrentStatusByPhase:
-     *   - Fill the Shipment->PhaseCode property, do not pass Barcode or Reference.
-     *     Optionally add DateFrom and/or DateTo.
-     * - CurrentStatusByStatus:
-     *   - Fill the Shipment->StatuCode property. Leave the rest empty.
-     *
-     * @param GetSignature $getSignature
-     *
-     * @return GetSignature
-     *
-     * @throws ApiException
-     */
-    public function getSignatureSOAP(GetSignature $getSignature)
-    {
-        $item = $this->retrieveCachedItem($getSignature->getId());
-        $response = null;
-        if ($item instanceof CacheItemInterface) {
-            $response = $item->get();
-            try {
-                $response = \GuzzleHttp\Psr7\parse_response($response);
-            } catch (\InvalidArgumentException $e) {
-            }
-        }
-        if (!$response instanceof Response) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetSignatureRequestSOAP($getSignature));
-        }
-
-        $object = $this->processGetSignatureResponse($response);
-        if ($object instanceof SignatureResponse) {
-            if ($item instanceof CacheItemInterface
-                && $response instanceof Response
-                && $response->getStatusCode() === 200
-            ) {
-                $item->set(\GuzzleHttp\Psr7\str($response));
-                $this->cacheItem($item);
-            }
-
-            return $object;
-        }
-
-        throw new ApiException('Unable to retrieve signature');
-    }
-
-    /**
      * Build the CurrentStatus request for the REST API
      *
      * This function auto-detects and adjusts the following requests:
@@ -449,10 +184,12 @@ class ShippingStatusService extends AbstractService
      * @param CurrentStatus|CurrentStatusByReference|CurrentStatusByPhase|CurrentStatusByStatus $currentStatus
      *
      * @return Request
+     *
+     * @since 1.0.0
      */
-    public function buildCurrentStatusRequestREST($currentStatus)
+    public function buildCurrentStatusRequestREST($currentStatus): Request
     {
-        $apiKey = $this->postnl->getRestApiKey();
+        $apiKey = $this->postnl->getApiKey();
         $this->setService($currentStatus);
 
         if ($currentStatus->getShipment()->getReference()) {
@@ -491,7 +228,7 @@ class ShippingStatusService extends AbstractService
             $query = [];
             $endpoint = "/barcode/{$currentStatus->getShipment()->getBarcode()}";
         }
-        $endpoint .= '?'.\GuzzleHttp\Psr7\build_query($query);
+        $endpoint .= '?'.http_build_query($query);
 
         return new Request(
             'GET',
@@ -510,9 +247,12 @@ class ShippingStatusService extends AbstractService
      * @param mixed $response
      *
      * @return CurrentStatusResponse
+     *
      * @throws \Firstred\PostNL\Exception\ResponseException
+     *
+     * @since 1.0.0
      */
-    public function processCurrentStatusResponseREST($response)
+    public function processCurrentStatusResponseREST($response): CurrentStatusResponse
     {
         $body = json_decode(static::getResponseText($response), true);
         if (isset($body['CurrentStatus'])) {
@@ -527,6 +267,64 @@ class ShippingStatusService extends AbstractService
     }
 
     /**
+     * Gets the current status
+     *
+     * This is a combi-function, supporting the following:
+     * - CurrentStatus (by barcode):
+     *   - Fill the Shipment->Barcode property. Leave the rest empty.
+     * - CurrentStatusByReference:
+     *   - Fill the Shipment->Reference property. Leave the rest empty.
+     * - CurrentStatusByPhase:
+     *   - Fill the Shipment->PhaseCode property, do not pass Barcode or Reference.
+     *     Optionally add DateFrom and/or DateTo.
+     * - CurrentStatusByStatus:
+     *   - Fill the Shipment->StatusCode property. Leave the rest empty.
+     *
+     * @param CurrentStatus|CurrentStatusByReference|CurrentStatusByPhase|CurrentStatusByStatus $currentStatus
+     *
+     * @return CurrentStatusResponse
+     *
+     * @throws ApiException
+     * @throws CifDownException
+     * @throws CifException
+     * @throws InvalidArgumentException
+     * @throws ResponseException
+     * @throws \Sabre\Xml\LibXMLException
+     *
+     * @since 1.0.0
+     */
+    public function currentStatusSOAP($currentStatus): CurrentStatusResponse
+    {
+        $item = $this->retrieveCachedItem($currentStatus->getId());
+        $response = null;
+        if ($item instanceof CacheItemInterface) {
+            $response = $item->get();
+            try {
+                $response = \GuzzleHttp\Psr7\parse_response($response);
+            } catch (\InvalidArgumentException $e) {
+            }
+        }
+        if (!$response instanceof Response) {
+            $response = $this->postnl->getHttpClient()->doRequest($this->buildCurrentStatusRequestSOAP($currentStatus));
+        }
+
+        $object = $this->processCurrentStatusResponseSOAP($response);
+        if ($object instanceof CurrentStatusResponse) {
+            if ($item instanceof CacheItemInterface
+                && $response instanceof Response
+                && $response->getStatusCode() === 200
+            ) {
+                $item->set(\GuzzleHttp\Psr7\str($response));
+                $this->cacheItem($item);
+            }
+
+            return $object;
+        }
+
+        throw new ApiException('Unable to retrieve current status');
+    }
+
+    /**
      * Build the CurrentStatus request for the SOAP API
      *
      * @param CurrentStatus|CurrentStatusByReference|CurrentStatusByPhase|CurrentStatusByStatus $currentStatus
@@ -534,13 +332,16 @@ class ShippingStatusService extends AbstractService
      * @return Request
      *
      * @throws InvalidArgumentException
+     *
+     * @since 1.0.0
      */
-    public function buildCurrentStatusRequestSOAP($currentStatus)
+    public function buildCurrentStatusRequestSOAP($currentStatus): Request
     {
         if (!$currentStatus->getCustomer() || !$currentStatus->getCustomer() instanceof Customer) {
-            $currentStatus->setCustomer((new Customer())
-                ->setCustomerCode($this->postnl->getCustomer()->getCustomerCode())
-                ->setCustomerNumber($this->postnl->getCustomer()->getCustomerNumber())
+            $currentStatus->setCustomer(
+                (new Customer())
+                    ->setCustomerCode($this->postnl->getCustomer()->getCustomerCode())
+                    ->setCustomerNumber($this->postnl->getCustomer()->getCustomerNumber())
             );
         }
 
@@ -550,10 +351,10 @@ class ShippingStatusService extends AbstractService
         } elseif ($currentStatus instanceof CurrentStatusByReference) {
             $soapAction = static::SOAP_ACTION_REFERENCE;
             $item = 'CurrentStatusByReference';
-        } elseif($currentStatus instanceof CurrentStatusByPhase) {
+        } elseif ($currentStatus instanceof CurrentStatusByPhase) {
             $soapAction = static::SOAP_ACTION_PHASE;
             $item = 'CurrentStatusByPhase';
-        } elseif($currentStatus instanceof CurrentStatusByStatus) {
+        } elseif ($currentStatus instanceof CurrentStatusByStatus) {
             $soapAction = static::SOAP_ACTION_STATUS;
             $item = 'CurrentStatusByStatus';
         } else {
@@ -564,7 +365,7 @@ class ShippingStatusService extends AbstractService
         foreach (static::$namespaces as $namespace => $prefix) {
             $xmlService->namespaceMap[$namespace] = $prefix;
         }
-        $security = new Security($this->postnl->getToken());
+        $security = new Security($this->postnl->getApiKey());
 
         $this->setService($security);
         $this->setService($currentStatus);
@@ -580,13 +381,10 @@ class ShippingStatusService extends AbstractService
                 ],
             ]
         );
-        $endpoint = $this->postnl->getSandbox()
-            ? ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT)
-            : ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT);
 
         return new Request(
             'POST',
-            $endpoint,
+            $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT,
             [
                 'SOAPAction'   => "\"$soapAction\"",
                 'Accept'       => 'text/xml',
@@ -602,12 +400,15 @@ class ShippingStatusService extends AbstractService
      * @param mixed $response
      *
      * @return CurrentStatusResponse
+     *
      * @throws CifDownException
      * @throws CifException
      * @throws \Sabre\Xml\LibXMLException
      * @throws \Firstred\PostNL\Exception\ResponseException
+     *
+     * @since 1.0.0
      */
-    public function processCurrentStatusResponseSOAP($response)
+    public function processCurrentStatusResponseSOAP($response): CurrentStatusResponse
     {
         $xml = simplexml_load_string(static::getResponseText($response));
 
@@ -616,15 +417,72 @@ class ShippingStatusService extends AbstractService
 
         $reader = new Reader();
         $reader->xml(static::getResponseText($response));
-        $array = array_values($reader->parse()['value'][0]['value']);
-        $array = $array[0];
 
         /** @var CurrentStatusResponse $object */
-        $object = AbstractEntity::xmlDeserialize($array);
+        $object = AbstractEntity::xmlDeserialize((array) array_values($reader->parse()['value'][0]['value'])[0]);
 
         $this->setService($object);
 
         return $object;
+    }
+
+    /**
+     * Gets the complete status
+     *
+     * This is a combi-function, supporting the following:
+     * - CurrentStatus (by barcode):
+     *   - Fill the Shipment->Barcode property. Leave the rest empty.
+     * - CurrentStatusByReference:
+     *   - Fill the Shipment->Reference property. Leave the rest empty.
+     * - CurrentStatusByPhase:
+     *   - Fill the Shipment->PhaseCode property, do not pass Barcode or Reference.
+     *     Optionally add DateFrom and/or DateTo.
+     * - CurrentStatusByStatus:
+     *   - Fill the Shipment->StatuCode property. Leave the rest empty.
+     *
+     * @param CompleteStatus $completeStatus
+     *
+     * @return CompleteStatusResponse
+     *
+     * @throws ApiException
+     * @throws CifDownException
+     * @throws CifException
+     * @throws ResponseException
+     *
+     * @since 1.0.0
+     */
+    public function completeStatusREST(CompleteStatus $completeStatus): CompleteStatusResponse
+    {
+        $item = $this->retrieveCachedItem($completeStatus->getId());
+        $response = null;
+        if ($item instanceof CacheItemInterface) {
+            $response = $item->get();
+            try {
+                $response = \GuzzleHttp\Psr7\parse_response($response);
+            } catch (\InvalidArgumentException $e) {
+            }
+        }
+        if (!$response instanceof Response) {
+            $response = $this->postnl->getHttpClient()->doRequest(
+                $this->buildCompleteStatusRequestREST($completeStatus)
+            );
+            static::validateRESTResponse($response);
+        }
+
+        $object = $this->processCompleteStatusResponseREST($response);
+        if ($object instanceof CompleteStatusResponse) {
+            if ($item instanceof CacheItemInterface
+                && $response instanceof Response
+                && $response->getStatusCode() === 200
+            ) {
+                $item->set(\GuzzleHttp\Psr7\str($response));
+                $this->cacheItem($item);
+            }
+
+            return $object;
+        }
+
+        throw new ApiException('Unable to retrieve complete status');
     }
 
     /**
@@ -639,10 +497,12 @@ class ShippingStatusService extends AbstractService
      * @param CompleteStatus $completeStatus
      *
      * @return Request
+     *
+     * @since 1.0.0
      */
-    public function buildCompleteStatusRequestREST(CompleteStatus $completeStatus)
+    public function buildCompleteStatusRequestREST(CompleteStatus $completeStatus): Request
     {
-        $apiKey = $this->postnl->getRestApiKey();
+        $apiKey = $this->postnl->getApiKey();
         $this->setService($completeStatus);
 
         if ($completeStatus->getShipment()->getReference()) {
@@ -686,7 +546,7 @@ class ShippingStatusService extends AbstractService
             ];
             $endpoint = "/barcode/{$completeStatus->getShipment()->getBarcode()}";
         }
-        $endpoint .= '?'.\GuzzleHttp\Psr7\build_query($query);
+        $endpoint .= '?'.http_build_query($query);
 
         return new Request(
             'POST',
@@ -705,9 +565,12 @@ class ShippingStatusService extends AbstractService
      * @param mixed $response
      *
      * @return null|CompleteStatusResponse
+     *
      * @throws ResponseException
+     *
+     * @since 1.0.0
      */
-    public function processCompleteStatusResponseREST($response)
+    public function processCompleteStatusResponseREST($response): ?CompleteStatusResponse
     {
         $body = json_decode(static::getResponseText($response), true);
         if (isset($body['CompleteStatus'])) {
@@ -730,7 +593,7 @@ class ShippingStatusService extends AbstractService
                 $shipment['Events'] = $shipment['Event'];
                 unset($shipment['Event']);
                 foreach ($shipment['Events'] as &$event) {
-                    $event  = AbstractEntity::jsonDeserialize(['CompleteStatusResponseEvent' => $event]);
+                    $event = AbstractEntity::jsonDeserialize(['CompleteStatusResponseEvent' => $event]);
                     //$event = ['CompleteStatusResponseEvent' => $event];
                 }
             }
@@ -750,7 +613,66 @@ class ShippingStatusService extends AbstractService
         }
 
         return null;
+    }
 
+    /**
+     * Gets the complete status
+     *
+     * This is a combi-function, supporting the following:
+     * - CurrentStatus (by barcode):
+     *   - Fill the Shipment->Barcode property. Leave the rest empty.
+     * - CurrentStatusByReference:
+     *   - Fill the Shipment->Reference property. Leave the rest empty.
+     * - CurrentStatusByPhase:
+     *   - Fill the Shipment->PhaseCode property, do not pass Barcode or Reference.
+     *     Optionally add DateFrom and/or DateTo.
+     * - CurrentStatusByStatus:
+     *   - Fill the Shipment->StatusCode property. Leave the rest empty.
+     *
+     * @param CompleteStatus|CompleteStatusByReference|CompleteStatusByPhase|CompleteStatusByStatus $completeStatus
+     *
+     * @return CompleteStatusResponse
+     *
+     * @throws ApiException
+     * @throws CifDownException
+     * @throws CifException
+     * @throws ResponseException
+     * @throws \Sabre\Xml\LibXMLException
+     * @throws InvalidArgumentException
+     *
+     * @since 1.0.0
+     */
+    public function completeStatusSOAP($completeStatus): CompleteStatusResponse
+    {
+        $item = $this->retrieveCachedItem($completeStatus->getId());
+        $response = null;
+        if ($item instanceof CacheItemInterface) {
+            $response = $item->get();
+            try {
+                $response = \GuzzleHttp\Psr7\parse_response($response);
+            } catch (\InvalidArgumentException $e) {
+            }
+        }
+        if (!$response instanceof Response) {
+            $response = $this->postnl->getHttpClient()->doRequest(
+                $this->buildCompleteStatusRequestSOAP($completeStatus)
+            );
+        }
+
+        $object = $this->processCompleteStatusResponseSOAP($response);
+        if ($object instanceof CompleteStatusResponse) {
+            if ($item instanceof CacheItemInterface
+                && $response instanceof Response
+                && $response->getStatusCode() === 200
+            ) {
+                $item->set(\GuzzleHttp\Psr7\str($response));
+                $this->cacheItem($item);
+            }
+
+            return $object;
+        }
+
+        throw new ApiException('Unable to retrieve complete status');
     }
 
     /**
@@ -765,14 +687,18 @@ class ShippingStatusService extends AbstractService
      * @param CompleteStatus|CompleteStatusByReference|CompleteStatusByPhase|CompleteStatusByStatus $completeStatus
      *
      * @return Request
+     *
      * @throws InvalidArgumentException
+     *
+     * @since 1.0.0
      */
-    public function buildCompleteStatusRequestSOAP($completeStatus)
+    public function buildCompleteStatusRequestSOAP($completeStatus): Request
     {
         if (!$completeStatus->getCustomer() || !$completeStatus->getCustomer() instanceof Customer) {
-            $completeStatus->setCustomer((new Customer())
-                ->setCustomerCode($this->postnl->getCustomer()->getCustomerCode())
-                ->setCustomerNumber($this->postnl->getCustomer()->getCustomerNumber())
+            $completeStatus->setCustomer(
+                (new Customer())
+                    ->setCustomerCode($this->postnl->getCustomer()->getCustomerCode())
+                    ->setCustomerNumber($this->postnl->getCustomer()->getCustomerNumber())
             );
         }
 
@@ -796,7 +722,7 @@ class ShippingStatusService extends AbstractService
         foreach (static::$namespaces as $namespace => $prefix) {
             $xmlService->namespaceMap[$namespace] = $prefix;
         }
-        $security = new Security($this->postnl->getToken());
+        $security = new Security($this->postnl->getApiKey());
 
         $this->setService($security);
         $this->setService($completeStatus);
@@ -813,13 +739,9 @@ class ShippingStatusService extends AbstractService
             ]
         );
 
-        $endpoint = $this->postnl->getSandbox()
-            ? ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT)
-            : ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT);
-
         return new Request(
             'POST',
-            $endpoint,
+            $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : self::LIVE_ENDPOINT,
             [
                 'SOAPAction'   => "\"$soapAction\"",
                 'Accept'       => 'text/xml',
@@ -840,8 +762,10 @@ class ShippingStatusService extends AbstractService
      * @throws CifException
      * @throws ResponseException
      * @throws \Sabre\Xml\LibXMLException
+     *
+     * @since 1.0.0
      */
-    public function processCompleteStatusResponseSOAP($response)
+    public function processCompleteStatusResponseSOAP($response): CompleteStatusResponse
     {
         $xml = simplexml_load_string(static::getResponseText($response));
 
@@ -850,14 +774,69 @@ class ShippingStatusService extends AbstractService
 
         $reader = new Reader();
         $reader->xml(static::getResponseText($response));
-        $array = array_values($reader->parse()['value'][0]['value']);
-        $array = $array[0];
 
         /** @var CompleteStatusResponse $object */
-        $object = AbstractEntity::xmlDeserialize($array);;
+        $object = AbstractEntity::xmlDeserialize((array) array_values($reader->parse()['value'][0]['value'])[0]);
         $this->setService($object);
 
         return $object;
+    }
+
+    /**
+     * Gets the complete status
+     *
+     * This is a combi-function, supporting the following:
+     * - CurrentStatus (by barcode):
+     *   - Fill the Shipment->Barcode property. Leave the rest empty.
+     * - CurrentStatusByReference:
+     *   - Fill the Shipment->Reference property. Leave the rest empty.
+     * - CurrentStatusByPhase:
+     *   - Fill the Shipment->PhaseCode property, do not pass Barcode or Reference.
+     *     Optionally add DateFrom and/or DateTo.
+     * - CurrentStatusByStatus:
+     *   - Fill the Shipment->StatuCode property. Leave the rest empty.
+     *
+     * @param GetSignature $getSignature
+     *
+     * @return GetSignatureResponseSignature
+     *
+     * @throws ApiException
+     * @throws CifDownException
+     * @throws CifException
+     * @throws ResponseException
+     *
+     * @since 1.0.0
+     */
+    public function getSignatureREST(GetSignature $getSignature): GetSignatureResponseSignature
+    {
+        $item = $this->retrieveCachedItem($getSignature->getId());
+        $response = null;
+        if ($item instanceof CacheItemInterface) {
+            $response = $item->get();
+            try {
+                $response = \GuzzleHttp\Psr7\parse_response($response);
+            } catch (\InvalidArgumentException $e) {
+            }
+        }
+        if (!$response instanceof Response) {
+            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetSignatureRequestREST($getSignature));
+            static::validateRESTResponse($response);
+        }
+
+        $object = $this->processGetSignatureResponseREST($response);
+        if ($object instanceof GetSignatureResponseSignature) {
+            if ($item instanceof CacheItemInterface
+                && $response instanceof Response
+                && $response->getStatusCode() === 200
+            ) {
+                $item->set(\GuzzleHttp\Psr7\str($response));
+                $this->cacheItem($item);
+            }
+
+            return $object;
+        }
+
+        throw new ApiException('Unable to get signature');
     }
 
     /**
@@ -866,15 +845,18 @@ class ShippingStatusService extends AbstractService
      * @param GetSignature $getSignature
      *
      * @return Request
+     *
+     * @since 1.0.0
      */
-    public function buildGetSignatureRequestREST(GetSignature $getSignature)
+    public function buildGetSignatureRequestREST(GetSignature $getSignature): Request
     {
-        $apiKey = $this->postnl->getRestApiKey();
+        $apiKey = $this->postnl->getApiKey();
         $this->setService($getSignature);
 
         return new Request(
             'POST',
-            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT)."/signature/{$getSignature->getShipment()->getBarcode()}",
+            ($this->postnl->getSandbox(
+            ) ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT)."/signature/{$getSignature->getShipment()->getBarcode()}",
             [
                 'apikey'       => $apiKey,
                 'Accept'       => 'application/json',
@@ -889,9 +871,12 @@ class ShippingStatusService extends AbstractService
      * @param mixed $response
      *
      * @return null|GetSignatureResponseSignature
+     *
      * @throws ResponseException
+     *
+     * @since 1.0.0
      */
-    public function processGetSignatureResponseREST($response)
+    public function processGetSignatureResponseREST($response): ?GetSignatureResponseSignature
     {
         $body = json_decode(static::getResponseText($response), true);
         if (!empty($body['Signature'])) {
@@ -906,18 +891,74 @@ class ShippingStatusService extends AbstractService
     }
 
     /**
+     * Gets the complete status
+     *
+     * This is a combi-function, supporting the following:
+     * - CurrentStatus (by barcode):
+     *   - Fill the Shipment->Barcode property. Leave the rest empty.
+     * - CurrentStatusByReference:
+     *   - Fill the Shipment->Reference property. Leave the rest empty.
+     * - CurrentStatusByPhase:
+     *   - Fill the Shipment->PhaseCode property, do not pass Barcode or Reference.
+     *     Optionally add DateFrom and/or DateTo.
+     * - CurrentStatusByStatus:
+     *   - Fill the Shipment->StatusCode property. Leave the rest empty.
+     *
+     * @param GetSignature $getSignature
+     *
+     * @return SignatureResponse
+     *
+     * @throws ApiException
+     *
+     * @since 1.0.0
+     */
+    public function getSignatureSOAP(GetSignature $getSignature): SignatureResponse
+    {
+        $item = $this->retrieveCachedItem($getSignature->getId());
+        $response = null;
+        if ($item instanceof CacheItemInterface) {
+            $response = $item->get();
+            try {
+                $response = \GuzzleHttp\Psr7\parse_response($response);
+            } catch (\InvalidArgumentException $e) {
+            }
+        }
+        if (!$response instanceof Response) {
+            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetSignatureRequestSOAP($getSignature));
+        }
+
+        $object = $this->processGetSignatureResponse($response);
+        if ($object instanceof SignatureResponse) {
+            if ($item instanceof CacheItemInterface
+                && $response instanceof Response
+                && $response->getStatusCode() === 200
+            ) {
+                $item->set(\GuzzleHttp\Psr7\str($response));
+                $this->cacheItem($item);
+            }
+
+            return $object;
+        }
+
+        throw new ApiException('Unable to retrieve signature');
+    }
+
+    /**
      * Build the GetSignature request for the SOAP API
      *
      * @param GetSignature $getSignature
      *
      * @return Request
+     *
+     * @since 1.0.0
      */
-    public function buildGetSignatureRequestSOAP(GetSignature $getSignature)
+    public function buildGetSignatureRequestSOAP(GetSignature $getSignature): Request
     {
         if (!$getSignature->getCustomer() || !$getSignature->getCustomer() instanceof Customer) {
-            $getSignature->setCustomer((new Customer())
-                ->setCustomerCode($this->postnl->getCustomer()->getCustomerCode())
-                ->setCustomerNumber($this->postnl->getCustomer()->getCustomerNumber())
+            $getSignature->setCustomer(
+                (new Customer())
+                    ->setCustomerCode($this->postnl->getCustomer()->getCustomerCode())
+                    ->setCustomerNumber($this->postnl->getCustomer()->getCustomerNumber())
             );
         }
 
@@ -926,7 +967,7 @@ class ShippingStatusService extends AbstractService
         foreach (static::$namespaces as $namespace => $prefix) {
             $xmlService->namespaceMap[$namespace] = $prefix;
         }
-        $security = new Security($this->postnl->getToken());
+        $security = new Security($this->postnl->getApiKey());
 
         $this->setService($security);
         $this->setService($getSignature);
@@ -943,13 +984,9 @@ class ShippingStatusService extends AbstractService
             ]
         );
 
-        $endpoint = $this->postnl->getSandbox()
-            ? ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT)
-            : ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT);
-
         return new Request(
             'POST',
-            $endpoint,
+            $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT,
             [
                 'SOAPAction'   => "\"$soapAction\"",
                 'Accept'       => 'text/xml',
@@ -965,12 +1002,15 @@ class ShippingStatusService extends AbstractService
      * @param mixed $response
      *
      * @return GetSignatureResponseSignature
+     *
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
      * @throws \Sabre\Xml\LibXMLException
+     *
+     * @since 1.0.0
      */
-    public function processGetSignatureResponseSOAP($response)
+    public function processGetSignatureResponseSOAP($response): GetSignatureResponseSignature
     {
         $xml = simplexml_load_string(static::getResponseText($response));
 
@@ -979,11 +1019,9 @@ class ShippingStatusService extends AbstractService
 
         $reader = new Reader();
         $reader->xml(static::getResponseText($response));
-        $array = array_values($reader->parse()['value'][0]['value']);
-        $array = $array[0];
 
         /** @var GetSignatureResponseSignature $object */
-        $object = AbstractEntity::xmlDeserialize($array);
+        $object = AbstractEntity::xmlDeserialize((array) array_values($reader->parse()['value'][0]['value'])[0]);
         $this->setService($object);
 
         return $object;

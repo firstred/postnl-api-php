@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker
+ * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,7 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
+ *
  * @copyright 2017-2019 Michael Dekker
+ *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -31,10 +34,10 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Customer;
-use Firstred\PostNL\Entity\Dimension;
 use Firstred\PostNL\Entity\Message\Message;
 use Firstred\PostNL\Entity\Request\CompleteStatus;
 use Firstred\PostNL\Entity\Request\CompleteStatusByPhase;
@@ -42,7 +45,6 @@ use Firstred\PostNL\Entity\Request\CompleteStatusByStatus;
 use Firstred\PostNL\Entity\Request\CurrentStatus;
 use Firstred\PostNL\Entity\Request\GetSignature;
 use Firstred\PostNL\Entity\Shipment;
-use Firstred\PostNL\Entity\SOAP\UsernameToken;
 use Firstred\PostNL\HttpClient\MockClient;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\ShippingStatusService;
@@ -50,11 +52,9 @@ use Firstred\PostNL\Service\ShippingStatusService;
 /**
  * Class ShippingStatusSoapTest
  *
- * @package Firstred\PostNL\Tests\Service
- *
  * @testdox The ShippingStatusService (SOAP)
  */
-class ShippingStatusSoapTest extends \PHPUnit_Framework_TestCase
+class ShippingStatusSoapTest extends TestCase
 {
     /** @var PostNL $postnl */
     protected $postnl;
@@ -65,6 +65,7 @@ class ShippingStatusSoapTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @before
+     *
      * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      */
     public function setupPostNL()
@@ -85,8 +86,8 @@ class ShippingStatusSoapTest extends \PHPUnit_Framework_TestCase
                     'Zipcode'     => '2132WT',
                 ]))
                 ->setGlobalPackBarcodeType('AB')
-                ->setGlobalPackCustomerCode('1234')
-            , new UsernameToken(null, 'test'),
+                ->setGlobalPackCustomerCode('1234'),
+            'test',
             true,
             PostNL::MODE_SOAP
         );
@@ -114,6 +115,8 @@ class ShippingStatusSoapTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox creates a valid CurrentStatus request
+     *
+     * @throws \Exception
      */
     public function testGetCurrentStatusRequestSoap()
     {
@@ -159,6 +162,8 @@ class ShippingStatusSoapTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox can get the current status
+     *
+     * @throws \Exception
      */
     public function testGetCurrentStatusSoap()
     {
@@ -166,7 +171,7 @@ class ShippingStatusSoapTest extends \PHPUnit_Framework_TestCase
             new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
    <s:Body>
      <CurrentStatusResponse
-xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://postnl.nl/cif/domain/ShippingStatusWebService/" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://postnl.nl/cif/domain/ShippingStatusWebService/">
        <a:Shipments>
          <a:CurrentStatusResponseShipment>
            <a:Addresses>
@@ -213,7 +218,7 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
        </a:Shipments>
      </CurrentStatusResponse>
    </s:Body>
-</s:Envelope>')]);
+</s:Envelope>'), ]);
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();
         $mockClient->setHandler($handler);
@@ -232,6 +237,8 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
 
     /**
      * @testdox creates a valid CurrentStatusByReference request
+     *
+     * @throws \Exception
      */
     public function testGetCurrentStatusByReferenceRequestSoap()
     {
@@ -277,6 +284,8 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
 
     /**
      * @testdox creates a valid CurrentStatusByStatus request
+     *
+     * @throws \Exception
      */
     public function testGetCurrentStatusByStatusRequestSoap()
     {
@@ -322,6 +331,8 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
 
     /**
      * @testdox creates a valid CurrentStatusByPhase request
+     *
+     * @throws \Exception
      */
     public function testGetCurrentStatusByPhaseRequestSoap()
     {
@@ -367,6 +378,8 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
 
     /**
      * @testdox creates a valid CompleteStatus request
+     *
+     * @throws \Exception
      */
     public function testGetCompleteStatusRequestSoap()
     {
@@ -412,6 +425,8 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
 
     /**
      * @testdox creates a valid CompleteStatusByReference request
+     *
+     * @throws \Exception
      */
     public function testGetCompleteStatusByReferenceRequestSoap()
     {
@@ -457,6 +472,8 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
 
     /**
      * @testdox can get the complete status
+     *
+     * @throws \Exception
      */
     public function testGetCompleteStatusSoap()
     {
@@ -464,7 +481,7 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
             new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
    <s:Body>
      <CompleteStatusResponse
-xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://postnl.nl/cif/domain/ShippingStatusWebService/" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://postnl.nl/cif/domain/ShippingStatusWebService/">
        <a:Shipments>
          <a:CompleteStatusResponseShipment>
            <a:Addresses>
@@ -594,7 +611,7 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
        </a:Shipments>
      </CompleteStatusResponse>
    </s:Body>
-</s:Envelope>')]);
+</s:Envelope>'), ]);
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();
         $mockClient->setHandler($handler);
@@ -614,11 +631,13 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
         $this->assertEquals(5, count($completeStatusResponse->getShipments()[0]->getEvents()));
         $this->assertEquals(1, count($completeStatusResponse->getShipments()[0]->getGroups()));
         $this->assertInstanceOf('\\Firstred\\PostNL\\Entity\\Customer', $completeStatusResponse->getShipments()[0]->getCustomer());
-        $this->assertEquals('19-04-2016 06:06:16', $completeStatusResponse->getShipments()[0]->getOldStatuses()[4]->getTimeStamp());
+        $this->assertEquals('19-04-2016 06:06:16', $completeStatusResponse->getShipments()[0]->getOldStatuses()[4]->getCurrentOldStatusTimeStamp());
     }
 
     /**
      * @testdox creates a valid CompleteStatusByStatus request
+     *
+     * @throws \Exception
      */
     public function testGetCompleteStatusByStatusRequestSoap()
     {
@@ -668,6 +687,8 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
 
     /**
      * @testdox creates a valid CompleteStatusByPhase request
+     *
+     * @throws \Exception
      */
     public function testGetCompleteStatusByPhaseRequestSoap()
     {
@@ -718,6 +739,8 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
 
     /**
      * @testdox creates a valid GetSignature request
+     *
+     * @throws \Exception
      */
     public function testGetSignatureRequestSoap()
     {
@@ -728,8 +751,7 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
             (new GetSignature())
                 ->setMessage($message)
                 ->setShipment((new Shipment())
-                    ->setBarcode($barcode)
-                )
+                ->setBarcode($barcode))
         );
 
         $this->assertEquals("<?xml version=\"1.0\"?>
@@ -762,6 +784,8 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
 
     /**
      * @testdox can get the signature
+     *
+     * @throws \Exception
      */
     public function testGetSignatureSoap()
     {
@@ -769,7 +793,7 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
             new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
    <s:Body>
      <SignatureResponse
-xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://postnl.nl/cif/domain/ShippingStatusWebService/" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://postnl.nl/cif/domain/ShippingStatusWebService/">
           <a:Signature>
              <a:GetSignatureResponseSignature>
                 <a:Barcode>3SABCD6659149</a:Barcode>
@@ -785,7 +809,7 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
           </a:Signature>
        </SignatureResponse>
     </s:Body>
-</s:Envelope>')]);
+</s:Envelope>'), ]);
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();
         $mockClient->setHandler($handler);
@@ -794,8 +818,7 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
         $signatureResponse = $this->postnl->getSignature(
             (new GetSignature())
                 ->setShipment((new Shipment())
-                    ->setBarcode('3SABCD6659149')
-                )
+                ->setBarcode('3SABCD6659149'))
         );
 
         $this->assertInstanceOf('\\Firstred\\PostNL\\Entity\\Response\\SignatureResponse', $signatureResponse);

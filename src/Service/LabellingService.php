@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker
+ * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,18 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
+ *
  * @copyright 2017-2019 Michael Dekker
+ *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Service;
 
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
-use Psr\Cache\CacheItemInterface;
-use Psr\Cache\CacheItemPoolInterface;
-use Sabre\Xml\Reader;
-use Sabre\Xml\Service as XmlService;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Request\GenerateLabel;
 use Firstred\PostNL\Entity\Response\GenerateLabelResponse;
@@ -40,12 +37,15 @@ use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\ResponseException;
-use Firstred\PostNL\PostNL;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
+use Psr\Cache\CacheItemInterface;
+use Psr\Cache\CacheItemPoolInterface;
+use Sabre\Xml\Reader;
+use Sabre\Xml\Service as XmlService;
 
 /**
  * Class LabellingService
- *
- * @package Firstred\PostNL\Service
  *
  * @method GenerateLabelResponse   generateLabel(GenerateLabel $generateLabel, bool $confirm)
  * @method Request                 buildGenerateLabelRequest(GenerateLabel $generateLabel, bool $confirm)
@@ -60,8 +60,6 @@ class LabellingService extends AbstractService
     // Endpoints
     const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v2_1/label';
     const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2_1/label';
-    const LEGACY_SANDBOX_ENDPOINT = 'https://testservice.postnl.com/CIF_SB/LabellingWebService/2_1/LabellingWebService.svc';
-    const LEGACY_LIVE_ENDPOINT = 'https://service.postnl.com/CIF/LabellingWebService/2_1/LabellingWebService.svc';
 
     // SOAP API
     const SOAP_ACTION = 'http://postnl.nl/cif/services/LabellingWebService/ILabellingWebService/GenerateLabel';
@@ -109,7 +107,9 @@ class LabellingService extends AbstractService
             }
         }
         if (!$response instanceof Response) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildGenerateLabelRequestREST($generateLabel, $confirm));
+            $response = $this->postnl->getHttpClient()->doRequest(
+                $this->buildGenerateLabelRequestREST($generateLabel, $confirm)
+            );
             static::validateRESTResponse($response);
         }
 
@@ -131,6 +131,58 @@ class LabellingService extends AbstractService
         }
 
         throw new ApiException('Unable to generate label');
+    }
+
+    /**
+     * Build the GenerateLabel request for the REST API
+     *
+     * @param GenerateLabel $generateLabel
+     * @param bool          $confirm
+     *
+     * @return Request
+     */
+    public function buildGenerateLabelRequestREST(GenerateLabel $generateLabel, bool $confirm = true): Request
+    {
+        $apiKey = $this->postnl->getApiKey();
+        $this->setService($generateLabel);
+
+        return new Request(
+            'POST',
+            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).'?'.http_build_query(
+                ['confirm' => $confirm]
+            ),
+            [
+                'apikey'       => $apiKey,
+                'Accept'       => 'application/json',
+                'Content-Type' => 'application/json;charset=UTF-8',
+            ],
+            json_encode($generateLabel, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES)
+        );
+    }
+
+    /**
+     * Process the GenerateLabel REST Response
+     *
+     * @param Response $response
+     *
+     * @return GenerateLabelResponse|null
+     *
+     * @throws ResponseException
+     *
+     * @since 1.0.0
+     */
+    public function processGenerateLabelResponseREST($response): ?GenerateLabelResponse
+    {
+        $body = json_decode(static::getResponseText($response), true);
+        if (isset($body['ResponseShipments'])) {
+            /** @var GenerateLabelResponse $object */
+            $object = AbstractEntity::jsonDeserialize(['GenerateLabelResponse' => $body]);
+            $this->setService($object);
+
+            return $object;
+        }
+
+        return null;
     }
 
     /**
@@ -203,13 +255,16 @@ class LabellingService extends AbstractService
      * @param bool          $confirm
      *
      * @return GenerateLabelResponse
+     *
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
      * @throws \Sabre\Xml\LibXMLException
+     *
+     * @since 1.00
      */
-    public function generateLabelSOAP(GenerateLabel $generateLabel, $confirm = true)
+    public function generateLabelSOAP(GenerateLabel $generateLabel, $confirm = true): GenerateLabelResponse
     {
         $item = $this->retrieveCachedItem($generateLabel->getId());
         $response = null;
@@ -221,7 +276,9 @@ class LabellingService extends AbstractService
             }
         }
         if (!$response instanceof Response) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildGenerateLabelRequestSOAP($generateLabel, $confirm));
+            $response = $this->postnl->getHttpClient()->doRequest(
+                $this->buildGenerateLabelRequestSOAP($generateLabel, $confirm)
+            );
         }
 
         $object = static::processGenerateLabelResponseSOAP($response);
@@ -234,6 +291,88 @@ class LabellingService extends AbstractService
             $item->set(\GuzzleHttp\Psr7\str($response));
             $this->cacheItem($item);
         }
+
+        return $object;
+    }
+
+    /**
+     * Build the GenerateLabel request for the SOAP API
+     *
+     * @param GenerateLabel $generateLabel
+     * @param bool          $confirm
+     *
+     * @return Request
+     */
+    public function buildGenerateLabelRequestSOAP(GenerateLabel $generateLabel, bool $confirm = true): Request
+    {
+        $soapAction = $confirm ? static::SOAP_ACTION : static::SOAP_ACTION_NO_CONFIRM;
+        $xmlService = new XmlService();
+        foreach (static::$namespaces as $namespace => $prefix) {
+            $xmlService->namespaceMap[$namespace] = $prefix;
+        }
+        $security = new Security($this->postnl->getApiKey());
+
+        $this->setService($security);
+        $this->setService($generateLabel);
+
+        $request = $xmlService->write(
+            '{'.static::ENVELOPE_NAMESPACE.'}Envelope',
+            [
+                '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
+                    ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
+                ],
+                '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
+                    '{'.static::SERVICES_NAMESPACE.'}GenerateLabel' => $generateLabel,
+                ],
+            ]
+        );
+
+        return new Request(
+            'POST',
+            $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT,
+            [
+                'SOAPAction'   => "\"$soapAction\"",
+                'Accept'       => 'text/xml',
+                'Content-Type' => 'text/xml;charset=UTF-8',
+            ],
+            $request
+        );
+    }
+
+    /**
+     * @param Response $response
+     *
+     * @return GenerateLabelResponse
+     *
+     * @throws ApiException
+     * @throws CifDownException
+     * @throws CifException
+     * @throws ResponseException
+     * @throws \Sabre\Xml\LibXMLException
+     *
+     * @since 1.0.0
+     */
+    public function processGenerateLabelResponseSOAP($response)
+    {
+        $xml = @simplexml_load_string(static::getResponseText($response));
+        if (false === $xml) {
+            if ($response->getStatusCode() === 200) {
+                throw new ResponseException('Invalid API Response', null, null, $response);
+            }
+
+            throw new ApiException('Invalid API Response');
+        }
+
+        static::registerNamespaces($xml);
+        static::validateSOAPResponse($xml);
+
+
+        $reader = new Reader();
+        $reader->xml(static::getResponseText($response));
+
+        /** @var GenerateLabelResponse $object */
+        $object = AbstractEntity::xmlDeserialize((array) array_values($reader->parse()['value'][0]['value'])[0]);
+        $this->setService($object);
 
         return $object;
     }
@@ -290,150 +429,15 @@ class LabellingService extends AbstractService
 
         $generateLabelResponses = [];
         foreach ($responses + $newResponses as $uuid => $response) {
-                try {
-                    $generateLabelResponse = $this->processGenerateLabelResponseSOAP($response);
-                } catch (\Exception $e) {
-                    $generateLabelResponse = $e;
-                }
-
+            try {
+                $generateLabelResponse = $this->processGenerateLabelResponseSOAP($response);
+            } catch (\Exception $e) {
+                $generateLabelResponse = $e;
+            }
 
             $generateLabelResponses[$uuid] = $generateLabelResponse;
         }
 
         return $generateLabelResponses;
-    }
-
-    /**
-     * Build the GenerateLabel request for the REST API
-     *
-     * @param GenerateLabel $generateLabel
-     * @param               $confirm
-     *
-     * @return Request
-     */
-    public function buildGenerateLabelRequestREST(GenerateLabel $generateLabel, $confirm = true)
-    {
-        $apiKey = $this->postnl->getRestApiKey();
-        $this->setService($generateLabel);
-
-        return new Request(
-            'POST',
-            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).'?'.\GuzzleHttp\Psr7\build_query([
-                'confirm' => $confirm
-            ]),
-            [
-                'apikey'       => $apiKey,
-                'Accept'       => 'application/json',
-                'Content-Type' => 'application/json;charset=UTF-8',
-            ],
-            json_encode($generateLabel, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES)
-        );
-    }
-
-    /**
-     * Process the GenerateLabel REST Response
-     *
-     * @param Response $response
-     *
-     * @return GenerateLabelResponse|null
-     * @throws ResponseException
-     */
-    public function processGenerateLabelResponseREST($response)
-    {
-        $body = json_decode(static::getResponseText($response), true);
-        if (isset($body['ResponseShipments'])) {
-            /** @var GenerateLabelResponse $object */
-            $object = AbstractEntity::jsonDeserialize(['GenerateLabelResponse' => $body]);
-            $this->setService($object);
-
-            return $object;
-        }
-
-        return null;
-    }
-
-    /**
-     * Build the GenerateLabel request for the SOAP API
-     *
-     * @param GenerateLabel $generateLabel
-     * @param               $confirm
-     *
-     * @return Request
-     */
-    public function buildGenerateLabelRequestSOAP(GenerateLabel $generateLabel, $confirm = true)
-    {
-        $soapAction = $confirm ? static::SOAP_ACTION : static::SOAP_ACTION_NO_CONFIRM;
-        $xmlService = new XmlService();
-        foreach (static::$namespaces as $namespace => $prefix) {
-            $xmlService->namespaceMap[$namespace] = $prefix;
-        }
-        $security = new Security($this->postnl->getToken());
-
-        $this->setService($security);
-        $this->setService($generateLabel);
-
-        $request = $xmlService->write(
-            '{'.static::ENVELOPE_NAMESPACE.'}Envelope',
-            [
-                '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
-                    ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
-                ],
-                '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
-                    '{'.static::SERVICES_NAMESPACE.'}GenerateLabel' => $generateLabel,
-                ],
-            ]
-        );
-
-        $endpoint = $this->postnl->getSandbox()
-            ? ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT)
-            : ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT);
-
-        return new Request(
-            'POST',
-            $endpoint,
-            [
-                'SOAPAction'   => "\"$soapAction\"",
-                'Accept'       => 'text/xml',
-                'Content-Type' => 'text/xml;charset=UTF-8',
-            ],
-            $request
-        );
-    }
-
-    /**
-     * @param Response $response
-     *
-     * @return GenerateLabelResponse
-     * @throws ApiException
-     * @throws CifDownException
-     * @throws CifException
-     * @throws ResponseException
-     * @throws \Sabre\Xml\LibXMLException
-     */
-    public function processGenerateLabelResponseSOAP($response)
-    {
-        $xml = @simplexml_load_string(static::getResponseText($response));
-        if ($xml === false) {
-            if ($response->getStatusCode() === 200) {
-                throw new ResponseException('Invalid API Response', null, null, $response);
-            } else {
-                throw new ApiException('Invalid API Response');
-            }
-        }
-
-        static::registerNamespaces($xml);
-        static::validateSOAPResponse($xml);
-
-
-        $reader = new Reader();
-        $reader->xml(static::getResponseText($response));
-        $array = array_values($reader->parse()['value'][0]['value']);
-        $array = $array[0];
-
-        /** @var GenerateLabelResponse $object */
-        $object = AbstractEntity::xmlDeserialize($array);
-        $this->setService($object);
-
-        return $object;
     }
 }

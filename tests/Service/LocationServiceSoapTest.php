@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker
+ * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,18 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
+ *
  * @copyright 2017-2019 Michael Dekker
+ *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Tests\Service;
 
 use Cache\Adapter\Void\VoidCachePool;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
-use Psr\Log\LoggerInterface;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\CoordinatesNorthWest;
 use Firstred\PostNL\Entity\CoordinatesSouthEast;
@@ -41,20 +39,22 @@ use Firstred\PostNL\Entity\Message\Message;
 use Firstred\PostNL\Entity\Request\GetLocation;
 use Firstred\PostNL\Entity\Request\GetLocationsInArea;
 use Firstred\PostNL\Entity\Request\GetNearestLocations;
-use Firstred\PostNL\Entity\SOAP\UsernameToken;
-use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\HttpClient\MockClient;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\LocationService;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class LocationServiceSoapTest
  *
- * @package Firstred\PostNL\Tests\Service
- *
  * @testdox The LocationService (SOAP)
  */
-class LocationServiceSoapTest extends \PHPUnit_Framework_TestCase
+class LocationServiceSoapTest extends TestCase
 {
     /** @var PostNL $postnl */
     protected $postnl;
@@ -65,6 +65,7 @@ class LocationServiceSoapTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @before
+     *
      * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      */
     public function setupPostNL()
@@ -75,18 +76,22 @@ class LocationServiceSoapTest extends \PHPUnit_Framework_TestCase
                 ->setCustomerCode('DEVC')
                 ->setCustomerNumber('11223344')
                 ->setContactPerson('Test')
-                ->setAddress(Address::create([
-                    'AddressType' => '02',
-                    'City'        => 'Hoofddorp',
-                    'CompanyName' => 'PostNL',
-                    'Countrycode' => 'NL',
-                    'HouseNr'     => '42',
-                    'Street'      => 'Siriusdreef',
-                    'Zipcode'     => '2132WT',
-                ]))
+                ->setAddress(
+                    Address::create(
+                        [
+                            'AddressType' => '02',
+                            'City'        => 'Hoofddorp',
+                            'CompanyName' => 'PostNL',
+                            'Countrycode' => 'NL',
+                            'HouseNr'     => '42',
+                            'Street'      => 'Siriusdreef',
+                            'Zipcode'     => '2132WT',
+                        ]
+                    )
+                )
                 ->setGlobalPackBarcodeType('AB')
-                ->setGlobalPackCustomerCode('1234')
-            , new UsernameToken(null, 'test'),
+                ->setGlobalPackCustomerCode('1234'),
+            'test',
             false,
             PostNL::MODE_SOAP
         );
@@ -114,6 +119,8 @@ class LocationServiceSoapTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox creates a valid NearestLocations request
+     *
+     * @throws \Exception
      */
     public function testGetNearestLocationsRequestSoap()
     {
@@ -124,26 +131,31 @@ class LocationServiceSoapTest extends \PHPUnit_Framework_TestCase
             (new GetNearestLocations())
                 ->setMessage($message)
                 ->setCountrycode('NL')
-                ->setLocation(Location::create([
-                    'AllowSundaySorting' => true,
-                    'DeliveryDate'       => '29-06-2016',
-                    'DeliveryOptions'    => [
-                        'PGE',
-                    ],
-                    'OpeningTime'        => '09:00:00',
-                    'Options'    => [
-                        'Daytime'
-                    ],
-                    'City'               => 'Hoofddorp',
-                    'HouseNr'            => '42',
-                    'HouseNrExt'         => 'A',
-                    'Postalcode'         => '2132WT',
-                    'Street'             => 'Siriusdreef',
-                ]))
+                ->setLocation(
+                    Location::create(
+                        [
+                            'AllowSundaySorting' => true,
+                            'DeliveryDate'       => '29-06-2016',
+                            'DeliveryOptions'    => [
+                                'PGE',
+                            ],
+                            'OpeningTime'        => '09:00:00',
+                            'Options'            => [
+                                'Daytime',
+                            ],
+                            'City'               => 'Hoofddorp',
+                            'HouseNr'            => '42',
+                            'HouseNrExt'         => 'A',
+                            'Postalcode'         => '2132WT',
+                            'Street'             => 'Siriusdreef',
+                        ]
+                    )
+                )
         );
 
 
-        $this->assertEquals("<?xml version=\"1.0\"?>
+        $this->assertEquals(
+            "<?xml version=\"1.0\"?>
 <soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:services=\"http://postnl.nl/cif/services/LocationWebService/\" xmlns:domain=\"http://postnl.nl/cif/domain/LocationWebService/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\" xmlns:schema=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:common=\"http://postnl.nl/cif/services/common/\" xmlns:arr=\"http://schemas.microsoft.com/2003/10/Serialization/Arrays\">
  <soap:Header>
   <wsse:Security>
@@ -178,43 +190,59 @@ class LocationServiceSoapTest extends \PHPUnit_Framework_TestCase
   </services:GetNearestLocations>
  </soap:Body>
 </soap:Envelope>
-", (string) $request->getBody());
+",
+            (string) $request->getBody()
+        );
         $this->assertEmpty($request->getHeaderLine('apikey'));
         $this->assertEquals('text/xml', $request->getHeaderLine('Accept'));
     }
 
     /**
      * @testdox can request nearest locations
+     *
+     * @throws \Exception
      */
     public function testGetNearestLocationsSoap()
     {
-        $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], static::getNearestLocationsMockResponse()),
-        ]);
+        $mock = new MockHandler(
+            [
+                new Response(
+                    200,
+                    ['Content-Type' => 'application/json;charset=UTF-8'],
+                    static::getNearestLocationsMockResponse()
+                ),
+            ]
+        );
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();
         $mockClient->setHandler($handler);
         $this->postnl->setHttpClient($mockClient);
 
-        $response = $this->postnl->getNearestLocations((new GetNearestLocations())
-            ->setCountrycode('NL')
-            ->setLocation(Location::create([
-                'AllowSundaySorting' => true,
-                'DeliveryDate'       => '29-06-2016',
-                'DeliveryOptions'    => [
-                    'PG',
-                    'PGE',
-                ],
-                'OpeningTime'        => '09:00:00',
-                'Options'    => [
-                    'Daytime'
-                ],
-                'City'               => 'Hoofddorp',
-                'HouseNr'            => '42',
-                'HouseNrExt'         => 'A',
-                'Postalcode'         => '2132WT',
-                'Street'             => 'Siriusdreef',
-            ])));
+        $response = $this->postnl->getNearestLocations(
+            (new GetNearestLocations())
+                ->setCountrycode('NL')
+                ->setLocation(
+                    Location::create(
+                        [
+                            'AllowSundaySorting' => true,
+                            'DeliveryDate'       => '29-06-2016',
+                            'DeliveryOptions'    => [
+                                'PG',
+                                'PGE',
+                            ],
+                            'OpeningTime'        => '09:00:00',
+                            'Options'            => [
+                                'Daytime',
+                            ],
+                            'City'               => 'Hoofddorp',
+                            'HouseNr'            => '42',
+                            'HouseNrExt'         => 'A',
+                            'Postalcode'         => '2132WT',
+                            'Street'             => 'Siriusdreef',
+                        ]
+                    )
+                )
+        );
 
         $this->assertInstanceOf('\\Firstred\\PostNL\\Entity\\Response\\GetNearestLocationsResponse', $response);
         $this->assertEquals(1, count($response->getGetLocationsResult()));
@@ -222,6 +250,8 @@ class LocationServiceSoapTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox creates a valid GetLocationsInArea request
+     *
+     * @throws \Exception
      */
     public function testGetLocationsInAreaRequestSoap()
     {
@@ -232,29 +262,38 @@ class LocationServiceSoapTest extends \PHPUnit_Framework_TestCase
             (new GetLocationsInArea())
                 ->setMessage($message)
                 ->setCountrycode('NL')
-                ->setLocation(Location::create([
-                    'AllowSundaySorting'   => true,
-                    'DeliveryDate'         => '29-06-2016',
-                    'DeliveryOptions'      => [
-                        'PG',
-                    ],
-                    'OpeningTime'          => '09:00:00',
-                    'Options'              => [
-                        'Daytime',
-                    ],
-                    'CoordinatesNorthWest' => CoordinatesNorthWest::create([
-                        'Latitude'  => '52.156439',
-                        'Longitude' => '5.015643',
-                    ]),
-                    'CoordinatesSouthEast' => CoordinatesSouthEast::create([
-                        'Latitude'  => '52.017473',
-                        'Longitude' => '5.065254',
-                    ]),
-                ]))
+                ->setLocation(
+                    Location::create(
+                        [
+                            'AllowSundaySorting'   => true,
+                            'DeliveryDate'         => '29-06-2016',
+                            'DeliveryOptions'      => [
+                                'PG',
+                            ],
+                            'OpeningTime'          => '09:00:00',
+                            'Options'              => [
+                                'Daytime',
+                            ],
+                            'CoordinatesNorthWest' => CoordinatesNorthWest::create(
+                                [
+                                    'Latitude'  => '52.156439',
+                                    'Longitude' => '5.015643',
+                                ]
+                            ),
+                            'CoordinatesSouthEast' => CoordinatesSouthEast::create(
+                                [
+                                    'Latitude'  => '52.017473',
+                                    'Longitude' => '5.065254',
+                                ]
+                            ),
+                        ]
+                    )
+                )
         );
 
 
-        $this->assertEquals("<?xml version=\"1.0\"?>
+        $this->assertEquals(
+            "<?xml version=\"1.0\"?>
 <soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:services=\"http://postnl.nl/cif/services/LocationWebService/\" xmlns:domain=\"http://postnl.nl/cif/domain/LocationWebService/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\" xmlns:schema=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:common=\"http://postnl.nl/cif/services/common/\" xmlns:arr=\"http://schemas.microsoft.com/2003/10/Serialization/Arrays\">
  <soap:Header>
   <wsse:Security>
@@ -292,45 +331,65 @@ class LocationServiceSoapTest extends \PHPUnit_Framework_TestCase
   </services:GetLocationsInArea>
  </soap:Body>
 </soap:Envelope>
-", (string) $request->getBody());
+",
+            (string) $request->getBody()
+        );
         $this->assertEmpty($request->getHeaderLine('apikey'));
         $this->assertEquals('text/xml', $request->getHeaderLine('Accept'));
     }
 
     /**
      * @testdox can request locations in area
+     *
+     * @throws \Exception
      */
     public function testGetLocationsInAreaSoap()
     {
-        $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], static::getLocationsInAreaMockResponse()),
-        ]);
+        $mock = new MockHandler(
+            [
+                new Response(
+                    200,
+                    ['Content-Type' => 'application/json;charset=UTF-8'],
+                    static::getLocationsInAreaMockResponse()
+                ),
+            ]
+        );
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();
         $mockClient->setHandler($handler);
         $this->postnl->setHttpClient($mockClient);
 
-        $response = $this->postnl->getLocationsInArea((new GetLocationsInArea())
-            ->setCountrycode('NL')
-            ->setLocation(Location::create([
-                'AllowSundaySorting'   => true,
-                'DeliveryDate'         => '29-06-2016',
-                'DeliveryOptions'      => [
-                    'PG',
-                ],
-                'OpeningTime'          => '09:00:00',
-                'Options'              => [
-                    'Daytime',
-                ],
-                'CoordinatesNorthWest' => CoordinatesNorthWest::create([
-                    'Latitude'  => '52.156439',
-                    'Longitude' => '5.015643',
-                ]),
-                'CoordinatesSouthEast' => CoordinatesSouthEast::create([
-                    'Latitude'  => '52.017473',
-                    'Longitude' => '5.065254',
-                ]),
-            ])));
+        $response = $this->postnl->getLocationsInArea(
+            (new GetLocationsInArea())
+                ->setCountrycode('NL')
+                ->setLocation(
+                    Location::create(
+                        [
+                            'AllowSundaySorting'   => true,
+                            'DeliveryDate'         => '29-06-2016',
+                            'DeliveryOptions'      => [
+                                'PG',
+                            ],
+                            'OpeningTime'          => '09:00:00',
+                            'Options'              => [
+                                'Daytime',
+                            ],
+                            'CoordinatesNorthWest' => CoordinatesNorthWest::create(
+                                [
+                                    'Latitude'  => '52.156439',
+                                    'Longitude' => '5.015643',
+                                ]
+                            ),
+                            'CoordinatesSouthEast' => CoordinatesSouthEast::create(
+                                [
+                                    'Latitude'  => '52.017473',
+                                    'Longitude' => '5.065254',
+                                ]
+                            ),
+                        ]
+                    )
+                )
+        );
 
         $this->assertInstanceOf('\\Firstred\\PostNL\\Entity\\Response\\GetLocationsInAreaResponse', $response);
         $this->assertEquals(1, count($response->getGetLocationsResult()));
@@ -338,6 +397,8 @@ class LocationServiceSoapTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox creates a valid GetLocation request
+     *
+     * @throws \Exception
      */
     public function testGetLocationRequestSoap()
     {
@@ -352,7 +413,8 @@ class LocationServiceSoapTest extends \PHPUnit_Framework_TestCase
         );
 
 
-        $this->assertEquals("<?xml version=\"1.0\"?>
+        $this->assertEquals(
+            "<?xml version=\"1.0\"?>
 <soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:services=\"http://postnl.nl/cif/services/LocationWebService/\" xmlns:domain=\"http://postnl.nl/cif/domain/LocationWebService/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\" xmlns:schema=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:common=\"http://postnl.nl/cif/services/common/\" xmlns:arr=\"http://schemas.microsoft.com/2003/10/Serialization/Arrays\">
  <soap:Header>
   <wsse:Security>
@@ -372,19 +434,29 @@ class LocationServiceSoapTest extends \PHPUnit_Framework_TestCase
   </services:GetLocation>
  </soap:Body>
 </soap:Envelope>
-", (string) $request->getBody());
+",
+            (string) $request->getBody()
+        );
         $this->assertEmpty($request->getHeaderLine('apikey'));
         $this->assertEquals('text/xml', $request->getHeaderLine('Accept'));
     }
 
     /**
      * @testdox can request locations in area
+     *
+     * @throws \Exception
      */
     public function testGetLocationSoap()
     {
-        $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], static::getLocationMockResponse()),
-        ]);
+        $mock = new MockHandler(
+            [
+                new Response(
+                    200,
+                    ['Content-Type' => 'application/json;charset=UTF-8'],
+                    static::getLocationMockResponse()
+                ),
+            ]
+        );
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();
         $mockClient->setHandler($handler);
@@ -408,8 +480,7 @@ class LocationServiceSoapTest extends \PHPUnit_Framework_TestCase
         return $json = '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
   <s:Body>
     <GetNearestLocationsResponse xmlns="http://postnl.nl/cif/services/LocationWebService/"
-xmlns:a="http://postnl.nl/cif/domain/LocationWebService/"
-xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+xmlns:a="http://postnl.nl/cif/domain/LocationWebService/">
       <a:GetLocationsResult>
         <a:ResponseLocation>
           <a:Address>
@@ -471,8 +542,7 @@ xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
         return '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
    <s:Body>
       <GetLocationsInAreaResponse xmlns="http://postnl.nl/cif/services/LocationWebService/"
-xmlns:a="http://postnl.nl/cif/domain/LocationWebService/"
-xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+xmlns:a="http://postnl.nl/cif/domain/LocationWebService/">
          <a:GetLocationsResult>
             <a:ResponseLocation>
                <a:Address>
@@ -532,8 +602,7 @@ xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
         return '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
    <s:Body>
       <GetLocationsInAreaResponse xmlns="http://postnl.nl/cif/services/LocationWebService/"
-xmlns:a="http://postnl.nl/cif/domain/LocationWebService/"
-xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+xmlns:a="http://postnl.nl/cif/domain/LocationWebService/">
          <a:GetLocationsResult>
             <a:ResponseLocation>
                <a:Address>

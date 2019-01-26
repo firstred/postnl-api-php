@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker
+ * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,13 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
+ *
  * @copyright 2017-2019 Michael Dekker
+ *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Entity;
 
-use Sabre\Xml\Writer;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
@@ -34,11 +36,10 @@ use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
+use Sabre\Xml\Writer;
 
 /**
  * Class Shipment
- *
- * @package Firstred\PostNL\Entity
  *
  * @method Address[]|null       getAddresses()
  * @method string|null          getBarcode()
@@ -79,7 +80,7 @@ use Firstred\PostNL\Service\TimeframeService;
  *
  * @method Shipment setAddresses(Address[]|null $addresses = null)
  * @method Shipment setBarcode(string|null $barcode = null)
- * @method Shipment setDimension(string|null $dimension = null)
+ * @method Shipment setDimension(Dimension|null $dimension = null)
  * @method Shipment setProductCodeDelivery(string|null $productCodeDelivery = null)
  * @method Shipment setAmounts(Amount[]|null $amounts = null)
  * @method Shipment setCollectionTimeStampEnd(string|null $value = null)
@@ -90,7 +91,7 @@ use Firstred\PostNL\Service\TimeframeService;
  * @method Shipment setCustomer(Customer|null $customer = null)
  * @method Shipment setCustomerOrderNumber(string|null $customerOrderNumber = null)
  * @method Shipment setCustoms(Customs|null $customs = null)
- * @method Shipment setPhaseCode(int|null $phaseCode = null)
+ * @method Shipment setPhaseCode(string|null $phaseCode = null)
  * @method Shipment setDateFrom(string|null $date = null)
  * @method Shipment setDateTo(string $date = null)
  * @method Shipment setDeliveryAddress(string|null $deliveryAddress = null)
@@ -422,7 +423,7 @@ class Shipment extends AbstractEntity
     protected $Customer;
     /** @var Customs|null $Customs */
     protected $Customs;
-    /** @var string |null$StatusCode */
+    /** @var string |null $StatusCode */
     protected $StatusCode;
     /** @var int|null $PhaseCode */
     protected $PhaseCode;
@@ -518,44 +519,8 @@ class Shipment extends AbstractEntity
      * @param string|null          $dateFrom
      * @param string|null          $dateTo
      */
-    public function __construct(
-        array $addresses = null,
-        array $amounts = null,
-        $barcode = null,
-        array $contacts = null,
-        $content = null,
-        $collectionTimeStampEnd = null,
-        $collectionTimeStampStart = null,
-        $costCenter = null,
-        $customer = null,
-        $customerOrderNumber = null,
-        Customs $customs = null,
-        $deliveryAddress = null,
-        $deliveryDate = null,
-        Dimension $dimension = null,
-        $downPartnerBarcode = null,
-        $downPartnerId = null,
-        $downPartnerLocation = null,
-        array $events = null,
-        array $groups = null,
-        $idExpiration = null,
-        $idNumber = null,
-        $idType = null,
-        array $oldStatuses = null,
-        $productCodeCollect = null,
-        $productCodeDelivery = null,
-        array $productOptions = null,
-        $receiverDateOfBirth = null,
-        $reference = null,
-        $referenceCollect = null,
-        $remark = null,
-        $returnBarcode = null,
-        $returnReference = null,
-        $statusCode = null,
-        $phaseCode = null,
-        $dateFrom = null,
-        $dateTo = null
-    ) {
+    public function __construct(?array $addresses = null, ?array $amounts = null, ?string $barcode = null, ?array $contacts = null, ?string $content = null, ?string $collectionTimeStampEnd = null, ?string $collectionTimeStampStart = null, ?string $costCenter = null, ?Customer $customer = null, ?string $customerOrderNumber = null, ?Customs $customs = null, ?string $deliveryAddress = null, ?string $deliveryDate = null, ?Dimension $dimension = null, ?string $downPartnerBarcode = null, ?string $downPartnerId = null, ?string $downPartnerLocation = null, ?array $events = null, ?array $groups = null, ?string $idExpiration = null, ?string $idNumber = null, ?string $idType = null, ?array $oldStatuses = null, ?string $productCodeCollect = null, ?string $productCodeDelivery = null, ?array $productOptions = null, ?string $receiverDateOfBirth = null, ?string $reference = null, ?string $referenceCollect = null, ?string $remark = null, ?string $returnBarcode = null, ?string $returnReference = null, ?string $statusCode = null, ?int $phaseCode = null, ?string $dateFrom = null, ?string $dateTo = null)
+    {
         parent::__construct();
 
         $this->setAddresses($addresses);
@@ -602,64 +567,68 @@ class Shipment extends AbstractEntity
      * @param Writer $writer
      *
      * @return void
+     *
+     * @since 1.0.0
      */
-    public function xmlSerialize(Writer $writer)
+    public function xmlSerialize(Writer $writer): void
     {
         $xml = [];
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if ($propertyName === 'Addresses') {
+            if ('Addresses' === $propertyName) {
+                // @codingStandardsIgnoreLine
                 if (is_array($this->Addresses)) {
                     $items = [];
+                    // @codingStandardsIgnoreLine
                     foreach ($this->Addresses as $address) {
                         $items[] = ["{{$namespace}}Address" => $address];
                     }
                     $xml["{{$namespace}}Addresses"] = $items;
                 }
-            } elseif ($propertyName === 'Amounts') {
+            } elseif ('Amounts' === $propertyName) {
+                // @codingStandardsIgnoreLine
                 if (is_array($this->Amounts)) {
                     $items = [];
+                    // @codingStandardsIgnoreLine
                     foreach ($this->Amounts as $amount) {
                         $items[] = ["{{$namespace}}Amount" => $amount];
                     }
                     $xml["{{$namespace}}Amounts"] = $items;
                 }
-            } elseif ($propertyName === 'Contacts') {
+            } elseif ('Contacts' === $propertyName) {
+                // @codingStandardsIgnoreLine
                 if (is_array($this->Contacts)) {
                     $items = [];
+                    // @codingStandardsIgnoreLine
                     foreach ($this->Contacts as $contact) {
                         $items[] = ["{{$namespace}}Contact" => $contact];
                     }
                     $xml["{{$namespace}}Contacts"] = $items;
                 }
-            } elseif ($propertyName === 'Events') {
+            } elseif ('Events' === $propertyName) {
+                // @codingStandardsIgnoreLine
                 if (is_array($this->Events)) {
                     $items = [];
+                    // @codingStandardsIgnoreLine
                     foreach ($this->Events as $event) {
                         $items[] = ["{{$namespace}}Event" => $event];
                     }
                     $xml["{{$namespace}}Events"] = $items;
                 }
-            } elseif ($propertyName === 'Groups') {
+            } elseif ('Groups' === $propertyName) {
+                // @codingStandardsIgnoreLine
                 if (is_array($this->Groups)) {
                     $items = [];
+                    // @codingStandardsIgnoreLine
                     foreach ($this->Groups as $group) {
                         $items[] = ["{{$namespace}}Group" => $group];
                     }
                     $xml["{{$namespace}}Groups"] = $items;
                 }
-            }
-//            elseif ($propertyName === 'OldStatuses') {
-//                if (is_array($this->OldStatuses)) {
-//                    $items = [];
-//                    foreach ($this->OldStatuses as $option) {
-//                        $items[] = ["{{$namespace}}OldStatus" => $option];
-//                    }
-//                    $xml["{{$namespace}}OldStatuses"] = $items;
-//                }
-//            }
-            elseif ($propertyName === 'ProductOptions') {
+            } elseif ('ProductOptions' === $propertyName) {
+                // @codingStandardsIgnoreLine
                 if (is_array($this->ProductOptions)) {
                     $items = [];
+                    // @codingStandardsIgnoreLine
                     foreach ($this->ProductOptions as $option) {
                         $items[] = ["{{$namespace}}ProductOption" => $option];
                     }

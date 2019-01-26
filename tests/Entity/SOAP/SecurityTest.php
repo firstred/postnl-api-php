@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker
+ * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,7 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
+ *
  * @copyright 2017-2019 Michael Dekker
+ *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -28,15 +31,14 @@ namespace Firstred\PostNL\Tests\Entity\SOAP;
 
 use Firstred\PostNL\Entity\SOAP\Security;
 use Firstred\PostNL\Entity\SOAP\UsernameToken;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class SecurityTest
  *
- * @package Firstred\PostNL\Tests\Entity\SOAP
- *
  * @testdox The Envelope class
  */
-class SecurityTest extends \PHPUnit_Framework_TestCase
+class SecurityTest extends TestCase
 {
     /**
      * @testdox can return the header

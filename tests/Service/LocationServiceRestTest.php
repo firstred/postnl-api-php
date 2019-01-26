@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker
+ * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,18 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
+ *
  * @copyright 2017-2019 Michael Dekker
+ *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Tests\Service;
 
 use Cache\Adapter\Void\VoidCachePool;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
-use Psr\Log\LoggerInterface;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\CoordinatesNorthWest;
 use Firstred\PostNL\Entity\CoordinatesSouthEast;
@@ -41,19 +39,22 @@ use Firstred\PostNL\Entity\Message\Message;
 use Firstred\PostNL\Entity\Request\GetLocation;
 use Firstred\PostNL\Entity\Request\GetLocationsInArea;
 use Firstred\PostNL\Entity\Request\GetNearestLocations;
-use Firstred\PostNL\Entity\SOAP\UsernameToken;
 use Firstred\PostNL\HttpClient\MockClient;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\LocationService;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class LocationServiceRestTest
  *
- * @package Firstred\PostNL\Tests\Service
- *
  * @testdox The LocationService (REST)
  */
-class LocationServiceRestTest extends \PHPUnit_Framework_TestCase
+class LocationServiceRestTest extends TestCase
 {
     /** @var PostNL $postnl */
     protected $postnl;
@@ -64,6 +65,7 @@ class LocationServiceRestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @before
+     *
      * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      */
     public function setupPostNL()
@@ -74,18 +76,22 @@ class LocationServiceRestTest extends \PHPUnit_Framework_TestCase
                 ->setCustomerCode('DEVC')
                 ->setCustomerNumber('11223344')
                 ->setContactPerson('Test')
-                ->setAddress(Address::create([
-                    'AddressType' => '02',
-                    'City'        => 'Hoofddorp',
-                    'CompanyName' => 'PostNL',
-                    'Countrycode' => 'NL',
-                    'HouseNr'     => '42',
-                    'Street'      => 'Siriusdreef',
-                    'Zipcode'     => '2132WT',
-                ]))
+                ->setAddress(
+                    Address::create(
+                        [
+                            'AddressType' => '02',
+                            'City'        => 'Hoofddorp',
+                            'CompanyName' => 'PostNL',
+                            'Countrycode' => 'NL',
+                            'HouseNr'     => '42',
+                            'Street'      => 'Siriusdreef',
+                            'Zipcode'     => '2132WT',
+                        ]
+                    )
+                )
                 ->setGlobalPackBarcodeType('AB')
-                ->setGlobalPackCustomerCode('1234')
-            , new UsernameToken(null, 'test'),
+                ->setGlobalPackCustomerCode('1234'),
+            'test',
             false,
             PostNL::MODE_REST
         );
@@ -113,6 +119,8 @@ class LocationServiceRestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox creates a valid NearestLocations request
+     *
+     * @throws \Exception
      */
     public function testGetNearestLocationsRequestRest()
     {
@@ -123,36 +131,43 @@ class LocationServiceRestTest extends \PHPUnit_Framework_TestCase
             (new GetNearestLocations())
                 ->setMessage($message)
                 ->setCountrycode('NL')
-                ->setLocation(Location::create([
-                    'AllowSundaySorting' => true,
-                    'DeliveryDate'       => '29-06-2016',
-                    'DeliveryOptions'    => [
-                        'PGE',
-                    ],
-                    'OpeningTime'        => '09:00:00',
-                    'Options'    => [
-                        'Daytime'
-                    ],
-                    'City'               => 'Hoofddorp',
-                    'HouseNr'            => '42',
-                    'HouseNrExt'         => 'A',
-                    'Postalcode'         => '2132WT',
-                    'Street'             => 'Siriusdreef',
-                ]))
+                ->setLocation(
+                    Location::create(
+                        [
+                            'AllowSundaySorting' => true,
+                            'DeliveryDate'       => '29-06-2016',
+                            'DeliveryOptions'    => [
+                                'PGE',
+                            ],
+                            'OpeningTime'        => '09:00:00',
+                            'Options'            => [
+                                'Daytime',
+                            ],
+                            'City'               => 'Hoofddorp',
+                            'HouseNr'            => '42',
+                            'HouseNrExt'         => 'A',
+                            'Postalcode'         => '2132WT',
+                            'Street'             => 'Siriusdreef',
+                        ]
+                    )
+                )
         );
 
         $query = \GuzzleHttp\Psr7\parse_query($request->getUri()->getQuery());
 
-        $this->assertEquals([
-            'DeliveryOptions' => 'PG,PGE',
-            'City'            => 'Hoofddorp',
-            'Street'          => 'Siriusdreef',
-            'HouseNumber'     => '42',
-            'DeliveryDate'    => '29-06-2016',
-            'OpeningTime'     => '09:00:00',
-            'PostalCode'      => '2132WT',
-            'CountryCode'     => 'NL',
-        ], $query);
+        $this->assertEquals(
+            [
+                'DeliveryOptions' => 'PG,PGE',
+                'City'            => 'Hoofddorp',
+                'Street'          => 'Siriusdreef',
+                'HouseNumber'     => '42',
+                'DeliveryDate'    => '29-06-2016',
+                'OpeningTime'     => '09:00:00',
+                'PostalCode'      => '2132WT',
+                'CountryCode'     => 'NL',
+            ],
+            $query
+        );
         $this->assertEquals('test', $request->getHeaderLine('apikey'));
         $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
         $this->assertEquals('application/json;charset=UTF-8', $request->getHeaderLine('Content-Type'));
@@ -160,36 +175,50 @@ class LocationServiceRestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox can request nearest locations
+     *
+     * @throws \Exception
      */
     public function testGetNearestLocationsRest()
     {
-        $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], static::getNearestLocationsMockResponse()),
-        ]);
+        $mock = new MockHandler(
+            [
+                new Response(
+                    200,
+                    ['Content-Type' => 'application/json;charset=UTF-8'],
+                    static::getNearestLocationsMockResponse()
+                ),
+            ]
+        );
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();
         $mockClient->setHandler($handler);
         $this->postnl->setHttpClient($mockClient);
 
-        $response = $this->postnl->getNearestLocations((new GetNearestLocations())
-            ->setCountrycode('NL')
-            ->setLocation(Location::create([
-                'AllowSundaySorting' => true,
-                'DeliveryDate'       => '29-06-2016',
-                'DeliveryOptions'    => [
-                    'PG',
-                    'PGE',
-                ],
-                'OpeningTime'        => '09:00:00',
-                'Options'    => [
-                    'Daytime'
-                ],
-                'City'               => 'Hoofddorp',
-                'HouseNr'            => '42',
-                'HouseNrExt'         => 'A',
-                'Postalcode'         => '2132WT',
-                'Street'             => 'Siriusdreef',
-            ])));
+        $response = $this->postnl->getNearestLocations(
+            (new GetNearestLocations())
+                ->setCountrycode('NL')
+                ->setLocation(
+                    Location::create(
+                        [
+                            'AllowSundaySorting' => true,
+                            'DeliveryDate'       => '29-06-2016',
+                            'DeliveryOptions'    => [
+                                'PG',
+                                'PGE',
+                            ],
+                            'OpeningTime'        => '09:00:00',
+                            'Options'            => [
+                                'Daytime',
+                            ],
+                            'City'               => 'Hoofddorp',
+                            'HouseNr'            => '42',
+                            'HouseNrExt'         => 'A',
+                            'Postalcode'         => '2132WT',
+                            'Street'             => 'Siriusdreef',
+                        ]
+                    )
+                )
+        );
 
         $this->assertInstanceOf('\\Firstred\\PostNL\\Entity\\Response\\GetNearestLocationsResponse', $response);
         $this->assertEquals(20, count((array) $response->getGetLocationsResult()));
@@ -197,6 +226,8 @@ class LocationServiceRestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox creates a valid GetLocationsInArea request
+     *
+     * @throws \Exception
      */
     public function testGetLocationsInAreaRequestRest()
     {
@@ -207,38 +238,49 @@ class LocationServiceRestTest extends \PHPUnit_Framework_TestCase
             (new GetLocationsInArea())
                 ->setMessage($message)
                 ->setCountrycode('NL')
-                ->setLocation(Location::create([
-                    'AllowSundaySorting'   => true,
-                    'DeliveryDate'         => '29-06-2016',
-                    'DeliveryOptions'      => [
-                        'PG',
-                    ],
-                    'OpeningTime'          => '09:00:00',
-                    'Options'              => [
-                        'Daytime',
-                    ],
-                    'CoordinatesNorthWest' => CoordinatesNorthWest::create([
-                        'Latitude'  => '52.156439',
-                        'Longitude' => '5.015643',
-                    ]),
-                    'CoordinatesSouthEast' => CoordinatesSouthEast::create([
-                        'Latitude'  => '52.017473',
-                        'Longitude' => '5.065254',
-                    ]),
-                ]))
+                ->setLocation(
+                    Location::create(
+                        [
+                            'AllowSundaySorting'   => true,
+                            'DeliveryDate'         => '29-06-2016',
+                            'DeliveryOptions'      => [
+                                'PG',
+                            ],
+                            'OpeningTime'          => '09:00:00',
+                            'Options'              => [
+                                'Daytime',
+                            ],
+                            'CoordinatesNorthWest' => CoordinatesNorthWest::create(
+                                [
+                                    'Latitude'  => '52.156439',
+                                    'Longitude' => '5.015643',
+                                ]
+                            ),
+                            'CoordinatesSouthEast' => CoordinatesSouthEast::create(
+                                [
+                                    'Latitude'  => '52.017473',
+                                    'Longitude' => '5.065254',
+                                ]
+                            ),
+                        ]
+                    )
+                )
         );
 
         $query = \GuzzleHttp\Psr7\parse_query($request->getUri()->getQuery());
 
-        $this->assertEquals([
-            'DeliveryOptions' => 'PG',
-            'LatitudeNorth'   => '52.156439',
-            'LongitudeWest'   => '5.015643',
-            'LatitudeSouth'   => '52.017473',
-            'LongitudeEast'   => '5.065254',
-            'DeliveryDate'    => '29-06-2016',
-            'OpeningTime'     => '09:00:00',
-        ], $query);
+        $this->assertEquals(
+            [
+                'DeliveryOptions' => 'PG',
+                'LatitudeNorth'   => '52.156439',
+                'LongitudeWest'   => '5.015643',
+                'LatitudeSouth'   => '52.017473',
+                'LongitudeEast'   => '5.065254',
+                'DeliveryDate'    => '29-06-2016',
+                'OpeningTime'     => '09:00:00',
+            ],
+            $query
+        );
         $this->assertEquals('test', $request->getHeaderLine('apikey'));
         $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
         $this->assertEquals('application/json;charset=UTF-8', $request->getHeaderLine('Content-Type'));
@@ -246,38 +288,56 @@ class LocationServiceRestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox can request locations in area
+     *
+     * @throws \Exception
      */
     public function testGetLocationsInAreaRest()
     {
-        $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], static::getLocationsInAreaMockResponse()),
-        ]);
+        $mock = new MockHandler(
+            [
+                new Response(
+                    200,
+                    ['Content-Type' => 'application/json;charset=UTF-8'],
+                    static::getLocationsInAreaMockResponse()
+                ),
+            ]
+        );
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();
         $mockClient->setHandler($handler);
         $this->postnl->setHttpClient($mockClient);
 
-        $response = $this->postnl->getLocationsInArea((new GetLocationsInArea())
-            ->setCountrycode('NL')
-            ->setLocation(Location::create([
-                'AllowSundaySorting'   => true,
-                'DeliveryDate'         => '29-06-2016',
-                'DeliveryOptions'      => [
-                    'PG',
-                ],
-                'OpeningTime'          => '09:00:00',
-                'Options'              => [
-                    'Daytime',
-                ],
-                'CoordinatesNorthWest' => CoordinatesNorthWest::create([
-                    'Latitude'  => '52.156439',
-                    'Longitude' => '5.015643',
-                ]),
-                'CoordinatesSouthEast' => CoordinatesSouthEast::create([
-                    'Latitude'  => '52.017473',
-                    'Longitude' => '5.065254',
-                ]),
-            ])));
+        $response = $this->postnl->getLocationsInArea(
+            (new GetLocationsInArea())
+                ->setCountrycode('NL')
+                ->setLocation(
+                    Location::create(
+                        [
+                            'AllowSundaySorting'   => true,
+                            'DeliveryDate'         => '29-06-2016',
+                            'DeliveryOptions'      => [
+                                'PG',
+                            ],
+                            'OpeningTime'          => '09:00:00',
+                            'Options'              => [
+                                'Daytime',
+                            ],
+                            'CoordinatesNorthWest' => CoordinatesNorthWest::create(
+                                [
+                                    'Latitude'  => '52.156439',
+                                    'Longitude' => '5.015643',
+                                ]
+                            ),
+                            'CoordinatesSouthEast' => CoordinatesSouthEast::create(
+                                [
+                                    'Latitude'  => '52.017473',
+                                    'Longitude' => '5.065254',
+                                ]
+                            ),
+                        ]
+                    )
+                )
+        );
 
         $this->assertInstanceOf('\\Firstred\\PostNL\\Entity\\Response\\GetLocationsInAreaResponse', $response);
         $this->assertEquals(20, count((array) $response->getGetLocationsResult()));
@@ -285,6 +345,8 @@ class LocationServiceRestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox creates a valid GetLocation request
+     *
+     * @throws \Exception
      */
     public function testGetLocationRequestRest()
     {
@@ -300,10 +362,13 @@ class LocationServiceRestTest extends \PHPUnit_Framework_TestCase
 
         $query = \GuzzleHttp\Psr7\parse_query($request->getUri()->getQuery());
 
-        $this->assertEquals([
-            'LocationCode'    => '161503',
-            'RetailNetworkID' => 'PNPNL-01',
-        ], $query);
+        $this->assertEquals(
+            [
+                'LocationCode'    => '161503',
+                'RetailNetworkID' => 'PNPNL-01',
+            ],
+            $query
+        );
         $this->assertEquals('test', $request->getHeaderLine('apikey'));
         $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
         $this->assertEquals('application/json;charset=UTF-8', $request->getHeaderLine('Content-Type'));
@@ -311,12 +376,20 @@ class LocationServiceRestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox can request locations in area
+     *
+     * @throws \Exception
      */
     public function testGetLocationRest()
     {
-        $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], static::getLocationMockResponse()),
-        ]);
+        $mock = new MockHandler(
+            [
+                new Response(
+                    200,
+                    ['Content-Type' => 'application/json;charset=UTF-8'],
+                    static::getLocationMockResponse()
+                ),
+            ]
+        );
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();
         $mockClient->setHandler($handler);

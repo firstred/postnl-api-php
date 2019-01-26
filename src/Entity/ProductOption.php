@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker
+ * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,7 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
+ *
  * @copyright 2017-2019 Michael Dekker
+ *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -37,8 +40,6 @@ use Firstred\PostNL\Service\TimeframeService;
 /**
  * Class ProductOption
  *
- * @package Firstred\PostNL\Entity
- *
  * @method string|null getCharacteristic()
  * @method string|null getOption()
  *
@@ -49,31 +50,31 @@ class ProductOption extends AbstractEntity
 {
     /** @var string[][] $defaultProperties */
     public static $defaultProperties = [
-        'Barcode'    => [
+        'Barcode'        => [
             'Characteristic' => BarcodeService::DOMAIN_NAMESPACE,
             'Option'         => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming' => [
+        'Confirming'     => [
             'Characteristic' => ConfirmingService::DOMAIN_NAMESPACE,
             'Option'         => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'  => [
+        'Labelling'      => [
             'Characteristic' => LabellingService::DOMAIN_NAMESPACE,
             'Option'         => LabellingService::DOMAIN_NAMESPACE,
         ],
-        'ShippingStatus'  => [
+        'ShippingStatus' => [
             'Characteristic' => ShippingStatusService::DOMAIN_NAMESPACE,
             'Option'         => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'  => [
+        'DeliveryDate'   => [
             'Characteristic' => DeliveryDateService::DOMAIN_NAMESPACE,
             'Option'         => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'  => [
+        'Location'       => [
             'Characteristic' => LocationService::DOMAIN_NAMESPACE,
             'Option'         => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'  => [
+        'Timeframe'      => [
             'Characteristic' => TimeframeService::DOMAIN_NAMESPACE,
             'Option'         => TimeframeService::DOMAIN_NAMESPACE,
         ],

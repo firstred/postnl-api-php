@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker
+ * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,29 +21,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
+ *
  * @copyright 2017-2019 Michael Dekker
+ *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Tests\Entity\SOAP;
+
+use PHPUnit\Framework\TestCase;
 use Sabre\Xml\Service as XmlService;
 use Firstred\PostNL\Entity\SOAP\UsernameToken;
 
 /**
  * Class UsernameTokenTest
  *
- * @package Firstred\PostNL\Tests\Entity\SOAP
- *
  * @testdox The UsernameToken class
  */
-class UsernameTokenTest extends \PHPUnit_Framework_TestCase
+class UsernameTokenTest extends TestCase
 {
     /**
      * @testdox should automatically hash the password for the legacy API
      */
     public function testLegacyPassword()
     {
-        $token = new UsernameToken('test', 'test');
+        $token = new UsernameToken('test');
         $token->setCurrentService('Barcode');
         $xmlService = new XmlService();
         $write = $xmlService->write(

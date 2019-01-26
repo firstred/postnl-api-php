@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker
+ * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,7 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
+ *
  * @copyright 2017-2019 Michael Dekker
+ *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -36,8 +39,6 @@ use Firstred\PostNL\Service\TimeframeService;
 
 /**
  * Class OpeningHours
- *
- * @package MijnPostNLExportModule\Postnl\ComplexTypes
  *
  * @method string|null getMonday()
  * @method string|null getTuesday()
@@ -150,16 +151,11 @@ class OpeningHours extends AbstractEntity
      * @param string|null $friday
      * @param string|null $saturday
      * @param string|null $sunday
+     *
+     * @since 1.0.0
      */
-    public function __construct(
-        $monday = '',
-        $tuesday = '',
-        $wednesday = '',
-        $thursday = '',
-        $friday = '',
-        $saturday = '',
-        $sunday = ''
-    ) {
+    public function __construct(?string $monday = '', ?string $tuesday = '', ?string $wednesday = '', ?string $thursday = '', ?string $friday = '', ?string $saturday = '', ?string $sunday = '')
+    {
         parent::__construct();
 
         $this->setMonday($monday);

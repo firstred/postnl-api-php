@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker
+ * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,12 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
+ *
  * @copyright 2017-2019 Michael Dekker
+ *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\HttpClient;
 
+use Firstred\PostNL\Exception\HttpClientException;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\HandlerStack;
@@ -33,12 +37,9 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
-use Firstred\PostNL\Exception\HttpClientException;
 
 /**
  * Class MockClient
- *
- * @package Firstred\PostNL\HttpClient
  */
 class MockClient implements ClientInterface, LoggerAwareInterface
 {
@@ -85,9 +86,12 @@ class MockClient implements ClientInterface, LoggerAwareInterface
      * @param string $name
      * @param mixed  $value
      *
-     * @return MockClient
+     * @return self
+     *
+     * @since 1.0.0
      */
-    public function setOption($name, $value) {
+    public function setOption($name, $value): self
+    {
         $this->defaultOptions[$name] = $value;
 
         return $this;
@@ -99,6 +103,8 @@ class MockClient implements ClientInterface, LoggerAwareInterface
      * @param string $name
      *
      * @return mixed|null
+     *
+     * @since 1.0.0
      */
     public function getOption($name)
     {
@@ -114,9 +120,11 @@ class MockClient implements ClientInterface, LoggerAwareInterface
      *
      * @param bool|string $verify
      *
-     * @return $this
+     * @return self
+     *
+     * @since 1.0.0
      */
-    public function setVerify($verify)
+    public function setVerify($verify): self
     {
         $this->defaultOptions['verify'] = $verify;
 
@@ -138,11 +146,21 @@ class MockClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
+     * Return max retries
+     *
+     * @return int
+     */
+    public function getMaxRetries()
+    {
+        return $this->maxRetries;
+    }
+
+    /**
      * Set the amount of retries
      *
      * @param int $maxRetries
      *
-     * @return $this
+     * @return self
      */
     public function setMaxRetries($maxRetries)
     {
@@ -152,13 +170,13 @@ class MockClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
-     * Return max retries
+     * Get the logger
      *
-     * @return int
+     * @return LoggerInterface
      */
-    public function getMaxRetries()
+    public function getLogger()
     {
-        return $this->maxRetries;
+        return $this->logger;
     }
 
     /**
@@ -176,25 +194,15 @@ class MockClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
-     * Get the logger
-     *
-     * @return LoggerInterface
-     */
-    public function getLogger()
-    {
-        return $this->logger;
-    }
-
-    /**
      * Adds a request to the list of pending requests
      * Using the ID you can replace a request
      *
-     * @param string $id      Request ID
-     * @param string $request PSR-7 request
+     * @param string  $id      Request ID
+     * @param Request $request PSR-7 request
      *
      * @return int|string
      */
-    public function addOrUpdateRequest($id, $request)
+    public function addOrUpdateRequest(string $id, Request $request)
     {
         if (is_null($id)) {
             return array_push($this->pendingRequests, $request);
@@ -210,35 +218,33 @@ class MockClient implements ClientInterface, LoggerAwareInterface
      *
      * @param string $id
      */
-    public function removeRequest($id)
+    public function removeRequest(string $id)
     {
         unset($this->pendingRequests[$id]);
     }
 
     /**
-     * Clear all pending requests
+     * @return HandlerStack
+     *
+     * @since 1.0.0
      */
-    public function clearRequests()
+    public function getHandler(): HandlerStack
     {
-        $this->pendingRequests = [];
+        return $this->handler;
     }
 
     /**
-     * @return MockClient
+     * @param HandlerStack $handler
+     *
+     * @return self
+     *
+     * @since 1.0.0
      */
-    public function setHandler(HandlerStack $handler)
+    public function setHandler(HandlerStack $handler): self
     {
         $this->handler = $handler;
 
         return $this;
-    }
-
-    /**
-     * @return HandlerStack
-     */
-    public function getHandler()
-    {
-        return $this->handler;
     }
 
     /**
@@ -251,19 +257,23 @@ class MockClient implements ClientInterface, LoggerAwareInterface
      * @return Response
      *
      * @throws HttpClientException
+     *
+     * @since 1.0.0
      */
-    public function doRequest(Request $request)
+    public function doRequest(Request $request): Response
     {
         // Initialize Guzzle, include the default options
-        $guzzle = new Client(array_merge(
-            $this->defaultOptions,
-            [
-                'timeout'         => $this->timeout,
-                'connect_timeout' => $this->connectTimeout,
-                'http_errors'     => false,
-                'handler'         => $this->handler,
-            ]
-        ));
+        $guzzle = new Client(
+            array_merge(
+                $this->defaultOptions,
+                [
+                    'timeout'         => $this->timeout,
+                    'connect_timeout' => $this->connectTimeout,
+                    'http_errors'     => false,
+                    'handler'         => $this->handler,
+                ]
+            )
+        );
 
         try {
             return $guzzle->send($request);
@@ -280,8 +290,10 @@ class MockClient implements ClientInterface, LoggerAwareInterface
      * @param Request[] $requests
      *
      * @return Response|Response[]|HttpClientException|HttpClientException[]
+     *
+     * @since 1.0.0
      */
-    public function doRequests($requests = [])
+    public function doRequests(array $requests = [])
     {
         // If this is a single request, create the requests array
         if (!is_array($requests)) {
@@ -297,14 +309,16 @@ class MockClient implements ClientInterface, LoggerAwareInterface
         $this->clearRequests();
 
         // Initialize Guzzle and the retry middleware, include the default options
-        $guzzle = new Client(array_merge(
-            $this->defaultOptions,
-            [
-                'timeout'         => $this->timeout,
-                'connect_timeout' => $this->connectTimeout,
-                'handler'         => $this->handler,
-            ]
-        ));
+        $guzzle = new Client(
+            array_merge(
+                $this->defaultOptions,
+                [
+                    'timeout'         => $this->timeout,
+                    'connect_timeout' => $this->connectTimeout,
+                    'handler'         => $this->handler,
+                ]
+            )
+        );
 
         // Concurrent requests
         $promises = [];
@@ -319,7 +333,7 @@ class MockClient implements ClientInterface, LoggerAwareInterface
             } elseif (isset($response['reason'])) {
                 $response = $response['reason'];
             } else {
-                $response = \Firstred\PostNL\Exception\ResponseException('Unknown reponse type');
+                $response = new \Firstred\PostNL\Exception\ResponseException('Unknown reponse type');
             }
             if ($response instanceof Response && $this->logger instanceof LoggerInterface) {
                 $this->logger->debug(\GuzzleHttp\Psr7\str($response));
@@ -327,5 +341,13 @@ class MockClient implements ClientInterface, LoggerAwareInterface
         }
 
         return $responses;
+    }
+
+    /**
+     * Clear all pending requests
+     */
+    public function clearRequests()
+    {
+        $this->pendingRequests = [];
     }
 }

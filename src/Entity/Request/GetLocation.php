@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker
+ * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,14 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
+ *
  * @copyright 2017-2019 Michael Dekker
+ *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Entity\Request;
 
 use Firstred\PostNL\Entity\AbstractEntity;
-use Firstred\PostNL\Entity\Location;
 use Firstred\PostNL\Entity\Message\Message;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\ConfirmingService;
@@ -41,8 +43,6 @@ use Firstred\PostNL\Service\TimeframeService;
  * Class GetLocation
  *
  * This class is both the container and can be the actual GetLocation object itself!
- *
- * @package Firstred\PostNL\Entity
  *
  * @method string|null  getLocationCode()
  * @method Message|null getMessage()
@@ -111,12 +111,13 @@ class GetLocation extends AbstractEntity
      * @param string|null  $location
      * @param Message|null $message
      * @param string|null  $networkId
+     *
+     * @throws \Exception
+     *
+     * @since 1.0.0
      */
-    public function __construct(
-        $location = null,
-        Message $message = null,
-        $networkId = null
-    ) {
+    public function __construct(?string $location = null, ?Message $message = null, ?string $networkId = null)
+    {
         parent::__construct();
 
         $this->setLocationCode($location);

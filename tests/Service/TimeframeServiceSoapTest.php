@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker
+ * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,7 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
+ *
  * @copyright 2017-2019 Michael Dekker
+ *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -31,12 +34,12 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Message\Message;
 use Firstred\PostNL\Entity\Request\GetTimeframes;
-use Firstred\PostNL\Entity\SOAP\UsernameToken;
 use Firstred\PostNL\Entity\Timeframe;
 use Firstred\PostNL\HttpClient\MockClient;
 use Firstred\PostNL\PostNL;
@@ -45,11 +48,9 @@ use Firstred\PostNL\Service\TimeframeService;
 /**
  * Class TimeframeServiceSoapTest
  *
- * @package Firstred\PostNL\Tests\Service
- *
  * @testdox The TimeframeService (SOAP)
  */
-class TimeframeServiceSoapTest extends \PHPUnit_Framework_TestCase
+class TimeframeServiceSoapTest extends TestCase
 {
     /** @var PostNL $postnl */
     protected $postnl;
@@ -60,6 +61,7 @@ class TimeframeServiceSoapTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @before
+     *
      * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      */
     public function setupPostNL()
@@ -80,8 +82,8 @@ class TimeframeServiceSoapTest extends \PHPUnit_Framework_TestCase
                     'Zipcode'     => '2132WT',
                 ]))
                 ->setGlobalPackBarcodeType('AB')
-                ->setGlobalPackCustomerCode('1234')
-            , new UsernameToken(null, 'test'),
+                ->setGlobalPackCustomerCode('1234'),
+            'test',
             false,
             PostNL::MODE_SOAP
         );
@@ -109,6 +111,8 @@ class TimeframeServiceSoapTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox creates a valid timeframes request
+     *
+     * @throws \Exception
      */
     public function testGetTimeframesRequestSoap()
     {
@@ -125,12 +129,12 @@ class TimeframeServiceSoapTest extends \PHPUnit_Framework_TestCase
                         ->setHouseNr('42')
                         ->setHouseNrExt('A')
                         ->setOptions([
-                            'Evening'
+                            'Evening',
                         ])
                         ->setPostalCode('2132WT')
                         ->setStartDate('30-06-2016')
                         ->setStreet('Siriusdreef')
-                        ->setSundaySorting(true)
+                        ->setSundaySorting(true),
                 ])
         );
 
@@ -173,6 +177,8 @@ class TimeframeServiceSoapTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox can retrieve the available timeframes
+     *
+     * @throws \Exception
      */
     public function testGetTimeframesSoap()
     {
@@ -181,8 +187,7 @@ class TimeframeServiceSoapTest extends \PHPUnit_Framework_TestCase
             xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays"
             xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
     <s:Body>
-        <ResponseTimeframes xmlns="http://postnl.nl/cif/services/TimeframeWebService/"
-                          xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+        <ResponseTimeframes xmlns="http://postnl.nl/cif/services/TimeframeWebService/">
             <a:ReasonNoTimeframes>
                 <a:ReasonNoTimeframe>
                     <a:Code>05</a:Code>
@@ -250,7 +255,7 @@ class TimeframeServiceSoapTest extends \PHPUnit_Framework_TestCase
                                     ->setPostalCode('2132WT')
                                     ->setStartDate('30-06-2016')
                                     ->setStreet('Siriusdreef')
-                                    ->setSundaySorting(false)
+                                    ->setSundaySorting(false),
                 ])
         );
 

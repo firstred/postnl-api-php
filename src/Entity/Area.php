@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker
+ * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,7 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
+ *
  * @copyright 2017-2019 Michael Dekker
+ *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -37,8 +40,6 @@ use Firstred\PostNL\Service\TimeframeService;
 /**
  * Class Area
  *
- * @package Firstred\PostNL\Entity
- *
  * @method Coordinates|null getCoordinatesNorthWest()
  * @method Coordinates|null getCoordinatesSouthEast()
  *
@@ -49,15 +50,15 @@ class Area extends AbstractEntity
 {
     /** @var string[][] $defaultProperties */
     public static $defaultProperties = [
-        'Barcode' => [
+        'Barcode'        => [
             'CoordinatesNorthWest' => BarcodeService::DOMAIN_NAMESPACE,
             'CoordinatesSouthEast' => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming' => [
+        'Confirming'     => [
             'CoordinatesNorthWest' => ConfirmingService::DOMAIN_NAMESPACE,
             'CoordinatesSouthEast' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling' => [
+        'Labelling'      => [
             'CoordinatesNorthWest' => LabellingService::DOMAIN_NAMESPACE,
             'CoordinatesSouthEast' => LabellingService::DOMAIN_NAMESPACE,
         ],
@@ -65,15 +66,15 @@ class Area extends AbstractEntity
             'CoordinatesNorthWest' => ShippingStatusService::DOMAIN_NAMESPACE,
             'CoordinatesSouthEast' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate' => [
+        'DeliveryDate'   => [
             'CoordinatesNorthWest' => DeliveryDateService::DOMAIN_NAMESPACE,
             'CoordinatesSouthEast' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location' => [
+        'Location'       => [
             'CoordinatesNorthWest' => LocationService::DOMAIN_NAMESPACE,
             'CoordinatesSouthEast' => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe' => [
+        'Timeframe'      => [
             'CoordinatesNorthWest' => TimeframeService::DOMAIN_NAMESPACE,
             'CoordinatesSouthEast' => TimeframeService::DOMAIN_NAMESPACE,
         ],

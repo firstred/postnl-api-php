@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker
+ * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,7 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
+ *
  * @copyright 2017-2019 Michael Dekker
+ *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -39,8 +42,6 @@ use Firstred\PostNL\Service\TimeframeService;
 
 /**
  * Class ResponseShipment
- *
- * @package Firstred\PostNL\Entity
  *
  * @method string|null    getBarcode()
  * @method string|null    getProductCodeDelivery()
@@ -152,15 +153,8 @@ class ResponseShipment extends AbstractEntity
      * @param string|null  $downPartnerLocation
      * @param array|null   $warnings
      */
-    public function __construct(
-        $barcode = null,
-        $productCodeDelivery = null,
-        array $labels = null,
-        $downPartnerBarcode = null,
-        $downPartnerId = null,
-        $downPartnerLocation = null,
-        $warnings = null
-    ) {
+    public function __construct(?string $barcode = null, ?string $productCodeDelivery = null, ?array $labels = null, ?string $downPartnerBarcode = null, ?string $downPartnerId = null, ?string $downPartnerLocation = null, ?array $warnings = null)
+    {
         parent::__construct();
 
         $this->setBarcode($barcode);

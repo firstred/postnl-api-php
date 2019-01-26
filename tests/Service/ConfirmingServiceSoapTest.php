@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker
+ * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,7 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
+ *
  * @copyright 2017-2019 Michael Dekker
+ *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -31,6 +34,7 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Customer;
@@ -46,11 +50,9 @@ use Firstred\PostNL\Service\ConfirmingService;
 /**
  * Class ConfirmingServiceSoapTest
  *
- * @package Firstred\PostNL\Tests\Service
- *
  * @testdox The ConfirmingService (SOAP)
  */
-class ConfirmingServiceSoapTest extends \PHPUnit_Framework_TestCase
+class ConfirmingServiceSoapTest extends TestCase
 {
     /** @var PostNL $postnl */
     protected $postnl;
@@ -61,6 +63,7 @@ class ConfirmingServiceSoapTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @before
+     *
      * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      */
     public function setupPostNL()
@@ -81,8 +84,8 @@ class ConfirmingServiceSoapTest extends \PHPUnit_Framework_TestCase
                     'Zipcode'     => '2132WT',
                 ]))
                 ->setGlobalPackBarcodeType('AB')
-                ->setGlobalPackCustomerCode('1234')
-            , new UsernameToken(null, 'test'),
+                ->setGlobalPackCustomerCode('1234'),
+            'test',
             true,
             PostNL::MODE_SOAP
         );
@@ -151,14 +154,15 @@ class ConfirmingServiceSoapTest extends \PHPUnit_Framework_TestCase
                         ])
                         ->setBarcode('3S1234567890123')
                         ->setDeliveryAddress('01')
-                        ->setDimension(new Dimension('2000'))
-                        ->setProductCodeDelivery('3085')
+                        ->setDimension(new Dimension(2000))
+                        ->setProductCodeDelivery('3085'),
                 ])
                 ->setMessage($message)
                 ->setCustomer($this->postnl->getCustomer())
         );
 
-        $this->assertEquals("<?xml version=\"1.0\"?>
+        $this->assertEquals(
+            "<?xml version=\"1.0\"?>
 <soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:services=\"http://postnl.nl/cif/services/ConfirmingWebService/\" xmlns:domain=\"http://postnl.nl/cif/domain/ConfirmingWebService/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\" xmlns:schema=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:common=\"http://postnl.nl/cif/services/common/\">
  <soap:Header>
   <wsse:Security>
@@ -225,7 +229,8 @@ class ConfirmingServiceSoapTest extends \PHPUnit_Framework_TestCase
  </soap:Body>
 </soap:Envelope>
 ",
-            (string) $request->getBody());
+            (string) $request->getBody()
+        );
         $this->assertEquals('', $request->getHeaderLine('apikey'));
         $this->assertEquals('text/xml;charset=UTF-8', $request->getHeaderLine('Content-Type'));
         $this->assertEquals('text/xml', $request->getHeaderLine('Accept'));
@@ -311,7 +316,7 @@ xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">
     </ConfirmingResponseShipments>
   </s:Body>
 </s:Envelope>
-"),new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], "<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\">
+"), new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], "<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\">
   <s:Body>
     <ConfirmingResponseShipments
 xmlns=\"http://postnl.nl/cif/services/ConfirmingWebService/\"
@@ -386,8 +391,7 @@ xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">
                     ->setDeliveryAddress('01')
                     ->setDimension(new Dimension('2000'))
                     ->setProductCodeDelivery('3085'),
-            ]
-        );
+        ]);
 
         $this->assertInstanceOf('\\Firstred\\PostNL\\Entity\\Response\\ConfirmingResponseShipment', $confirmShipments[1]);
     }

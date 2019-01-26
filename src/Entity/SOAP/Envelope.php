@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker
+ * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,7 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
+ *
  * @copyright 2017-2019 Michael Dekker
+ *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -33,8 +36,6 @@ use Firstred\PostNL\Service\LabellingService;
 
 /**
  * Class Envelope
- *
- * @package Firstred\PostNL\Entity
  *
  * @method Header|null getHeader()
  * @method Body|null   getBody()
@@ -52,31 +53,31 @@ class Envelope extends AbstractEntity
      * @var array $defaultProperties
      */
     public static $defaultProperties = [
-        'Barcode'    => [
+        'Barcode'        => [
             'Header' => BarcodeService::ENVELOPE_NAMESPACE,
             'Body'   => BarcodeService::ENVELOPE_NAMESPACE,
         ],
-        'Confirming' => [
+        'Confirming'     => [
             'Header' => ConfirmingService::ENVELOPE_NAMESPACE,
             'Body'   => ConfirmingService::ENVELOPE_NAMESPACE,
         ],
-        'Labelling'  => [
+        'Labelling'      => [
             'Header' => LabellingService::ENVELOPE_NAMESPACE,
             'Body'   => LabellingService::ENVELOPE_NAMESPACE,
         ],
-        'ShippingStatus'  => [
+        'ShippingStatus' => [
             'Header' => LabellingService::ENVELOPE_NAMESPACE,
             'Body'   => LabellingService::ENVELOPE_NAMESPACE,
         ],
-        'DeliveryDate'  => [
+        'DeliveryDate'   => [
             'Header' => LabellingService::ENVELOPE_NAMESPACE,
             'Body'   => LabellingService::ENVELOPE_NAMESPACE,
         ],
-        'Location'  => [
+        'Location'       => [
             'Header' => LabellingService::ENVELOPE_NAMESPACE,
             'Body'   => LabellingService::ENVELOPE_NAMESPACE,
         ],
-        'Timeframe'  => [
+        'Timeframe'      => [
             'Header' => LabellingService::ENVELOPE_NAMESPACE,
             'Body'   => LabellingService::ENVELOPE_NAMESPACE,
         ],

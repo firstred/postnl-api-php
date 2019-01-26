@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker
+ * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,14 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
+ *
  * @copyright 2017-2019 Michael Dekker
+ *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Entity;
 
-use InvalidArgumentException;
-use Sabre\Xml\Writer;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
@@ -35,11 +36,11 @@ use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
+use InvalidArgumentException;
+use Sabre\Xml\Writer;
 
 /**
  * Class Amount
- *
- * @package Firstred\PostNL\Entity
  *
  * @method string|null getAccountName()
  * @method string|null getAmountType()
@@ -62,7 +63,7 @@ class Amount extends AbstractEntity
 {
     /** @var string[][] $defaultProperties */
     public static $defaultProperties = [
-        'Barcode'    => [
+        'Barcode'        => [
             'AccountName'       => BarcodeService::DOMAIN_NAMESPACE,
             'AmountType'        => BarcodeService::DOMAIN_NAMESPACE,
             'BIC'               => BarcodeService::DOMAIN_NAMESPACE,
@@ -72,7 +73,7 @@ class Amount extends AbstractEntity
             'TransactionNumber' => BarcodeService::DOMAIN_NAMESPACE,
             'Value'             => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming' => [
+        'Confirming'     => [
             'AccountName'       => ConfirmingService::DOMAIN_NAMESPACE,
             'AmountType'        => ConfirmingService::DOMAIN_NAMESPACE,
             'BIC'               => ConfirmingService::DOMAIN_NAMESPACE,
@@ -82,7 +83,7 @@ class Amount extends AbstractEntity
             'TransactionNumber' => ConfirmingService::DOMAIN_NAMESPACE,
             'Value'             => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'  => [
+        'Labelling'      => [
             'AccountName'       => LabellingService::DOMAIN_NAMESPACE,
             'AmountType'        => LabellingService::DOMAIN_NAMESPACE,
             'BIC'               => LabellingService::DOMAIN_NAMESPACE,
@@ -92,7 +93,7 @@ class Amount extends AbstractEntity
             'TransactionNumber' => LabellingService::DOMAIN_NAMESPACE,
             'Value'             => LabellingService::DOMAIN_NAMESPACE,
         ],
-        'ShippingStatus'  => [
+        'ShippingStatus' => [
             'AccountName'       => ShippingStatusService::DOMAIN_NAMESPACE,
             'AmountType'        => ShippingStatusService::DOMAIN_NAMESPACE,
             'BIC'               => ShippingStatusService::DOMAIN_NAMESPACE,
@@ -102,7 +103,7 @@ class Amount extends AbstractEntity
             'TransactionNumber' => ShippingStatusService::DOMAIN_NAMESPACE,
             'Value'             => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'  => [
+        'DeliveryDate'   => [
             'AccountName'       => DeliveryDateService::DOMAIN_NAMESPACE,
             'AmountType'        => DeliveryDateService::DOMAIN_NAMESPACE,
             'BIC'               => DeliveryDateService::DOMAIN_NAMESPACE,
@@ -112,7 +113,7 @@ class Amount extends AbstractEntity
             'TransactionNumber' => DeliveryDateService::DOMAIN_NAMESPACE,
             'Value'             => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'  => [
+        'Location'       => [
             'AccountName'       => LocationService::DOMAIN_NAMESPACE,
             'AmountType'        => LocationService::DOMAIN_NAMESPACE,
             'BIC'               => LocationService::DOMAIN_NAMESPACE,
@@ -122,7 +123,7 @@ class Amount extends AbstractEntity
             'TransactionNumber' => LocationService::DOMAIN_NAMESPACE,
             'Value'             => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'  => [
+        'Timeframe'      => [
             'AccountName'       => TimeframeService::DOMAIN_NAMESPACE,
             'AmountType'        => TimeframeService::DOMAIN_NAMESPACE,
             'BIC'               => TimeframeService::DOMAIN_NAMESPACE,
@@ -162,16 +163,8 @@ class Amount extends AbstractEntity
      * @param string|null $transactionNumber
      * @param string|null $value
      */
-    public function __construct(
-        $accountName = null,
-        $amountType = null,
-        $bic = null,
-        $currency = null,
-        $iban = null,
-        $reference = null,
-        $transactionNumber = null,
-        $value = null
-    ) {
+    public function __construct(?string $accountName = null, ?string $amountType = null, ?string $bic = null, ?string $currency = null, ?string $iban = null, ?string $reference = null, ?string $transactionNumber = null, ?string $value = null)
+    {
         parent::__construct();
 
         $this->setAccountName($accountName);
@@ -189,13 +182,17 @@ class Amount extends AbstractEntity
      *
      * @param string|int|null $type
      *
-     * @return $this
+     * @return self
+     *
+     * @since 1.0.0
      */
-    public function setAmountType($type = null)
+    public function setAmountType($type = null): self
     {
         if (is_null($type)) {
+            // @codingStandardsIgnoreLine
             $this->AmountType = null;
         } else {
+            // @codingStandardsIgnoreLine
             $this->AmountType = str_pad($type, 2, '0', STR_PAD_LEFT);
         }
 
@@ -208,9 +205,12 @@ class Amount extends AbstractEntity
      * @param Writer $writer
      *
      * @return void
+     *
      * @throws InvalidArgumentException
+     *
+     * @since 1.0.0
      */
-    public function xmlSerialize(Writer $writer)
+    public function xmlSerialize(Writer $writer): void
     {
         $xml = [];
         if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
@@ -219,8 +219,8 @@ class Amount extends AbstractEntity
 
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
             if (isset($this->{$propertyName})) {
-
-                if ($propertyName === 'Value') {
+                if ('Value' === $propertyName) {
+                    // @codingStandardsIgnoreLine
                     $xml["{{$namespace}}Value"] = number_format($this->Value, 2, '.', '');
                 } else {
                     $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};

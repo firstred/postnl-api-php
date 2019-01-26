@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker
+ * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,23 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
+ *
  * @copyright 2017-2019 Michael Dekker
+ *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\HttpClient;
 
+use Firstred\PostNL\Exception\ApiConnectionException;
+use Firstred\PostNL\Exception\ApiException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
-use Firstred\PostNL\Exception\ApiConnectionException;
-use Firstred\PostNL\Exception\ApiException;
 
 if (!defined('CURL_SSLVERSION_TLSv1')) {
+    // @codingStandardsIgnoreLine
     define('CURL_SSLVERSION_TLSv1', 1);
 }
 if (!defined('CURL_SSLVERSION_TLSv1_2')) {
+    // @codingStandardsIgnoreLine
     define('CURL_SSLVERSION_TLSv1_2', 6);
 }
 if (!defined('CURLE_SSL_CACERT_BADFILE')) {
@@ -45,24 +50,11 @@ if (!defined('CURLE_SSL_CACERT_BADFILE')) {
 
 /**
  * Class CurlClient
- *
- * @package Firstred\PostNL\HttpClient
  */
 class CurlClient implements ClientInterface, LoggerAwareInterface
 {
     const DEFAULT_TIMEOUT = 80;
     const DEFAULT_CONNECT_TIMEOUT = 30;
-
-    /** @var int $timeout */
-    private $timeout = self::DEFAULT_TIMEOUT;
-    /** @var int $connectTimeout */
-    private $connectTimeout = self::DEFAULT_CONNECT_TIMEOUT;
-    /**
-     * Verify the server SSL certificate
-     *
-     * @var bool|string $verify
-     */
-    private $verify = true;
     /** @var static $instance */
     private static $instance;
     /** @var array|callable|null $defaultOptions */
@@ -73,13 +65,25 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
     protected $pendingRequests = [];
     /** @var LoggerInterface $logger */
     protected $logger;
+    /** @var int $timeout */
+    private $timeout = self::DEFAULT_TIMEOUT;
+    /** @var int $connectTimeout */
+    private $connectTimeout = self::DEFAULT_CONNECT_TIMEOUT;
+    /**
+     * Verify the server SSL certificate
+     *
+     * @var bool|string $verify
+     */
+    private $verify = true;
 
     /**
      * CurlClient Singleton
      *
-     * @return CurlClient
+     * @return self
+     *
+     * @since 1.0.0
      */
-    public static function getInstance()
+    public static function getInstance(): self
     {
         if (!static::$instance) {
             static::$instance = new self();
@@ -89,13 +93,27 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
+     * Get timeout
+     *
+     * @return int
+     *
+     * @since 1.0.0
+     */
+    public function getTimeout(): int
+    {
+        return $this->timeout;
+    }
+
+    /**
      * Set timeout
      *
      * @param int $seconds
      *
-     * @return CurlClient
+     * @return self
+     *
+     * @since 1.0.0
      */
-    public function setTimeout($seconds)
+    public function setTimeout($seconds): self
     {
         $this->timeout = (int) max($seconds, 0);
 
@@ -103,13 +121,27 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
+     * Get connection timeout
+     *
+     * @return int
+     *
+     * @since 1.0.0
+     */
+    public function getConnectTimeout(): int
+    {
+        return $this->connectTimeout;
+    }
+
+    /**
      * Set connection timeout
      *
      * @param int $seconds
      *
-     * @return CurlClient
+     * @return self
+     *
+     * @since 1.0.0
      */
-    public function setConnectTimeout($seconds)
+    public function setConnectTimeout($seconds): self
     {
         $this->connectTimeout = (int) max($seconds, 0);
 
@@ -117,57 +149,11 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
-     * Set the verify setting
-     *
-     * @param bool|string $verify
-     *
-     * @return CurlClient
-     */
-    public function setVerify($verify)
-    {
-        $this->verify = $verify;
-
-        return $this;
-    }
-
-    /**
-     * Set the logger
-     *
-     * @param LoggerInterface $logger
-     *
-     * @return CurlClient
-     */
-    public function setLogger(LoggerInterface $logger = null)
-    {
-        $this->logger = $logger;
-
-        return $this;
-    }
-
-    /**
-     * Get timeout
-     *
-     * @return int
-     */
-    public function getTimeout()
-    {
-        return $this->timeout;
-    }
-
-    /**
-     * Get connection timeout
-     *
-     * @return int
-     */
-    public function getConnectTimeout()
-    {
-        return $this->connectTimeout;
-    }
-
-    /**
      * Return verify setting
      *
      * @return bool|string
+     *
+     * @since 1.0.0
      */
     public function getVerify()
     {
@@ -175,25 +161,61 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
+     * Set the verify setting
+     *
+     * @param bool|string $verify
+     *
+     * @return self
+     *
+     * @since 1.0.0
+     */
+    public function setVerify($verify): self
+    {
+        $this->verify = $verify;
+
+        return $this;
+    }
+
+    /**
      * Get logger
      *
      * @return LoggerInterface
+     *
+     * @since 1.0.0
      */
-    public function getLogger()
+    public function getLogger(): LoggerInterface
     {
         return $this->logger;
+    }
+
+    /**
+     * Set the logger
+     *
+     * @param LoggerInterface $logger
+     *
+     * @return self
+     *
+     * @since 1.0.0
+     */
+    public function setLogger(LoggerInterface $logger = null): self
+    {
+        $this->logger = $logger;
+
+        return $this;
     }
 
     /**
      * Adds a request to the list of pending requests
      * Using the ID you can replace a request
      *
-     * @param string $id      Request ID
-     * @param string $request PSR-7 request
+     * @param string  $id      Request ID
+     * @param Request $request PSR-7 request
      *
      * @return int|string
+     *
+     * @since 1.0.0
      */
-    public function addOrUpdateRequest($id, $request)
+    public function addOrUpdateRequest(string $id, Request $request)
     {
         if (is_null($id)) {
             return array_push($this->pendingRequests, $request);
@@ -208,16 +230,24 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
      * Remove a request from the list of pending requests
      *
      * @param string $id
+     *
+     * @return void
+     *
+     * @since 1.0.0
      */
-    public function removeRequest($id)
+    public function removeRequest(string $id): void
     {
         unset($this->pendingRequests[$id]);
     }
 
     /**
      * Clear all pending requests
+     *
+     * @return void
+     *
+     * @since 1.0.0
      */
-    public function clearRequests()
+    public function clearRequests(): void
     {
         $this->pendingRequests = [];
     }
@@ -232,6 +262,8 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
      * @return Response
      *
      * @throws \Exception
+     *
+     * @since 1.0.0
      */
     public function doRequest(Request $request)
     {
@@ -243,7 +275,7 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
         // Create a callback to capture HTTP headers for the response
         $this->prepareRequest($curl, $request);
         $rbody = curl_exec($curl);
-        if ($rbody === false) {
+        if (false === $rbody) {
             $errno = curl_errno($curl);
             $message = curl_error($curl);
             curl_close($curl);
@@ -266,9 +298,12 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
      * @param Request[] $requests
      *
      * @return Response|Response[]|\Exception|\Exception[]
+     *
      * @throws ApiException
+     *
+     * @since 1.0.0
      */
-    public function doRequests($requests = [])
+    public function doRequests(array $requests = [])
     {
         // Reset request headers array
         $curlHandles = [];
@@ -312,13 +347,18 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
 
         return $responses;
     }
+
     /**
      * @param resource $curl
-     * @param Request   $request
+     * @param Request  $request
      *
      * @throws ApiException
+     *
+     * @return void
+     *
+     * @since 1.0.0
      */
-    protected function prepareRequest($curl, Request $request)
+    protected function prepareRequest($curl, Request $request): void
     {
         $method = strtolower($request->getMethod());
         $body = (string) $request->getBody();
@@ -337,14 +377,14 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
         } elseif (is_array($this->defaultOptions)) { // set default curlopts from array
             $opts = $this->defaultOptions;
         }
-        if ($method == 'get') {
+        if ('get' === $method) {
             $opts[CURLOPT_HTTPGET] = 1;
-        } elseif ($method == 'post') {
+        } elseif ('post' === $method) {
             $opts[CURLOPT_POST] = 1;
             if ($body) {
                 $opts[CURLOPT_POSTFIELDS] = $body;
             }
-        } elseif ($method == 'delete') {
+        } elseif ('delete' === $method) {
             $opts[CURLOPT_CUSTOMREQUEST] = 'DELETE';
         } else {
             throw new ApiException("Unrecognized method $method");
@@ -369,14 +409,21 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
         }
         curl_setopt_array($curl, $opts);
     }
+
     /**
-     * @param number $errno
+     * @param string $url
+     * @param int    $errno
      * @param string $message
      *
+     * @reurn void
+     *
      * @throws ApiConnectionException
+     *
+     * @since 1.0.0
      */
-    private function handleCurlError($url, $errno, $message)
+    private function handleCurlError(string $url, int $errno, string $message): void
     {
+        // @codingStandardsIgnoreStart
         switch ($errno) {
             case CURLE_COULDNT_CONNECT:
             case CURLE_COULDNT_RESOLVE_HOST:
@@ -397,6 +444,7 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
                 $msg = "Unexpected error communicating with PostNL.  "
                     ."If this problem persists,";
         }
+        // @codingStandardsIgnoreEnd
         $msg .= " contact developer@postnl.nl";
         $msg .= "\n\n(Network error [errno $errno]: $message)";
         throw new ApiConnectionException($msg);

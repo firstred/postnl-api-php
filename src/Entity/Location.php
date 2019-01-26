@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker
+ * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,13 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
+ *
  * @copyright 2017-2019 Michael Dekker
+ *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Entity;
 
-use Sabre\Xml\Writer;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
@@ -34,11 +36,10 @@ use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
+use Sabre\Xml\Writer;
 
 /**
  * Class Location
- *
- * @package Firstred\PostNL\Entity
  *
  * @method string|null               getPostalcode()
  * @method Coordinates|null          getCoordinates()
@@ -291,27 +292,13 @@ class Location extends AbstractEntity
      * @param string|null               $retailNetworkId
      * @param string|null               $downPartnerID
      * @param string|null               $downPartnerLocation
+     *
+     * @throws \Exception
+     *
+     * @since 1.0.0
      */
-    public function __construct(
-        $zipcode = null,
-        $allowSundaySorting = null,
-        $deliveryDate = null,
-        array $deliveryOptions = null,
-        array $options = null,
-        Coordinates $coordinates = null,
-        CoordinatesNorthWest $coordinatesNW = null,
-        CoordinatesSouthEast $coordinatesSE = null,
-        $city = null,
-        $street = null,
-        $houseNr = null,
-        $houseNrExt = null,
-        $locationCode = null,
-        $saleschannel = null,
-        $terminalType = null,
-        $retailNetworkId = null,
-        $downPartnerID = null,
-        $downPartnerLocation = null
-    ) {
+    public function __construct(?string $zipcode = null, ?string $allowSundaySorting = null, ?string $deliveryDate = null, ?array $deliveryOptions = null, ?array $options = null, ?Coordinates $coordinates = null, ?CoordinatesNorthWest $coordinatesNW = null, ?CoordinatesSouthEast $coordinatesSE = null, ?string $city = null, ?string $street = null, ?string $houseNr = null, ?string $houseNrExt = null, ?string $locationCode = null, ?string $saleschannel = null, ?string $terminalType = null, ?string $retailNetworkId = null, ?string $downPartnerID = null, ?string $downPartnerLocation = null)
+    {
         parent::__construct();
 
         $this->setAllowSundaySorting($allowSundaySorting);
@@ -344,8 +331,10 @@ class Location extends AbstractEntity
     public function setPostalcode($postcode = null)
     {
         if (is_null($postcode)) {
+            // @codingStandardsIgnoreLine
             $this->Postalcode = null;
         } else {
+            // @codingStandardsIgnoreLine
             $this->Postalcode = strtoupper(str_replace(' ', '', $postcode));
         }
 
@@ -358,8 +347,10 @@ class Location extends AbstractEntity
      * @param Writer $writer
      *
      * @return void
+     *
+     * @since 1.0.0
      */
-    public function xmlSerialize(Writer $writer)
+    public function xmlSerialize(Writer $writer): void
     {
         $xml = [];
         if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
@@ -369,29 +360,35 @@ class Location extends AbstractEntity
         }
 
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if ($propertyName === 'Options') {
+            if ('Options' === $propertyName) {
+                // @codingStandardsIgnoreLine
                 if (is_array($this->Options)) {
                     $options = [];
+                    // @codingStandardsIgnoreLine
                     foreach ($this->Options as $option) {
                         $options[] = ["{http://schemas.microsoft.com/2003/10/Serialization/Arrays}string" => $option];
                     }
                     $xml["{{$namespace}}Options"] = $options;
                 }
-
-            } elseif ($propertyName === 'DeliveryOptions') {
+            } elseif ('DeliveryOptions' === $propertyName) {
+                // @codingStandardsIgnoreLine
                 if (is_array($this->DeliveryOptions)) {
                     $options = [];
+                    // @codingStandardsIgnoreLine
                     foreach ($this->DeliveryOptions as $option) {
                         $options[] = ["{http://schemas.microsoft.com/2003/10/Serialization/Arrays}string" => $option];
                     }
                     $xml["{{$namespace}}DeliveryOptions"] = $options;
                 }
-
-            } elseif ($propertyName === 'AllowSundaySorting') {
+            } elseif ('AllowSundaySorting' === $propertyName) {
+                // @codingStandardsIgnoreLine
                 if (isset($this->AllowSundaySorting)) {
+                    // @codingStandardsIgnoreLine
                     if (is_bool($this->AllowSundaySorting)) {
+                        // @codingStandardsIgnoreLine
                         $xml["{{$namespace}}AllowSundaySorting"] = $this->AllowSundaySorting ? 'true' : 'false';
                     } else {
+                        // @codingStandardsIgnoreLine
                         $xml["{{$namespace}}AllowSundaySorting"] = $this->AllowSundaySorting;
                     }
                 }

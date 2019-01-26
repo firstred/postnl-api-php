@@ -1,8 +1,10 @@
 <?php
+declare(strict_types=1);
+
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker
+ * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,21 +22,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
+ *
  * @copyright 2017-2019 Michael Dekker
+ *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Entity;
 
-use Sabre\Xml\Writer;
-use Sabre\Xml\XmlSerializable;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Util\UUID;
+use Sabre\Xml\Writer;
+use Sabre\Xml\XmlSerializable;
 
 /**
  * Class Entity
- *
- * @package Firstred\PostNL\Entity
  *
  * @method string getId()
  * @method string getCurrentService()
@@ -92,100 +94,15 @@ abstract class AbstractEntity implements \JsonSerializable, XmlSerializable
     }
 
     /**
-     * @param string $name
-     * @param mixed  $value
-     *
-     * @return object|null
-     *
-     * @throws InvalidArgumentException
-     */
-    public function __call($name, $value)
-    {
-        $methodName = substr($name, 0, 3);
-        $propertyName = substr($name, 3, strlen($name));
-        if ($propertyName === 'Id') {
-            $propertyName = 'id';
-        } elseif ($propertyName === 'CurrentService') {
-            $propertyName = 'currentService';
-        } elseif ($propertyName === 'ReasonNotimeframes') {
-            $propertyName = 'ReasonNoTimeframes';
-        }
-
-        if ($methodName === 'get') {
-            if (property_exists($this, $propertyName)) {
-                return $this->{$propertyName};
-            } else {
-                return null;
-            }
-        } elseif ($methodName === 'set') {
-            if (!is_array($value) || count($value) < 1) {
-                throw new InvalidArgumentException('Value is missing');
-            }
-
-            if (property_exists($this, $propertyName)) {
-                $this->{$propertyName} = $value[0];
-            }
-
-            return $this;
-        }
-
-        throw new InvalidArgumentException('Not a valid `get` or `set` method');
-    }
-
-    /**
-     * Return a serializable array for `json_encode`
-     *
-     * @return array
-     * @throws InvalidArgumentException
-     */
-    public function jsonSerialize()
-    {
-        $json = [];
-        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
-            throw new InvalidArgumentException('Service not set before serialization');
-        }
-
-        foreach (array_keys(static::$defaultProperties[$this->currentService]) as $propertyName) {
-            if (isset($this->{$propertyName})) {
-                $json[$propertyName] = $this->{$propertyName};
-            }
-        }
-
-        return $json;
-    }
-
-    /**
-     * Return a serializable array for the XMLWriter
-     *
-     * @param Writer $writer
-     *
-     * @return void
-     * @throws InvalidArgumentException
-     */
-    public function xmlSerialize(Writer $writer)
-    {
-        $xml = [];
-        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
-            throw new InvalidArgumentException('Service not set before serialization');
-        }
-
-        foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if (isset($this->{$propertyName})) {
-                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
-            }
-        }
-
-        $writer->write($xml);
-    }
-
-    /**
      * Deserialize JSON
      *
      * @param array $json JSON as associative array
      *
      * @return AbstractEntity
+     *
+     * @since 1.0.0
      */
-    public static function jsonDeserialize(array $json)
+    public static function jsonDeserialize(array $json): AbstractEntity
     {
         reset($json);
         $shortClassName = key($json);
@@ -225,13 +142,137 @@ abstract class AbstractEntity implements \JsonSerializable, XmlSerializable
     }
 
     /**
+     * @param string $name
+     * @param mixed  $value
+     *
+     * @return object|null
+     *
+     * @throws InvalidArgumentException
+     *
+     * @since 1.0.0
+     */
+    public function __call($name, $value)
+    {
+        $methodName = substr($name, 0, 3);
+        $propertyName = substr($name, 3, strlen($name));
+        if ('Id' === $propertyName) {
+            $propertyName = 'id';
+        } elseif ('CurrentService' === $propertyName) {
+            $propertyName = 'currentService';
+        } elseif ('ReasonNotimeframes' === $propertyName) {
+            $propertyName = 'ReasonNoTimeframes';
+        }
+
+        if ('get' === $methodName) {
+            if (property_exists($this, $propertyName)) {
+                return $this->{$propertyName};
+            }
+
+            return null;
+        } elseif ('set' === $methodName) {
+            if (!is_array($value) || count($value) < 1) {
+                throw new InvalidArgumentException('Value is missing');
+            }
+
+            if (property_exists($this, $propertyName)) {
+                $this->{$propertyName} = $value[0];
+            }
+
+            return $this;
+        }
+
+        throw new InvalidArgumentException('Not a valid `get` or `set` method');
+    }
+
+    /**
+     * Get the full class (incl. namespace) for the given short class name
+     *
+     * @param string $shortName
+     *
+     * @return string|null The full name if found, else `null`
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Returns a `null` when not found instead of `false`
+     */
+    public static function getFullEntityClassName($shortName)
+    {
+        foreach ([
+                     '\\Firstred\\PostNL\\Entity',
+                     '\\Firstred\\PostNL\\Entity\\Message',
+                     '\\Firstred\\PostNL\\Entity\\Request',
+                     '\\Firstred\\PostNL\\Entity\\Response',
+                     '\\Firstred\\PostNL\\Entity\\SOAP',
+                 ] as $namespace) {
+            if (class_exists("$namespace\\$shortName")) {
+                return "$namespace\\$shortName";
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Return a serializable array for `json_encode`
+     *
+     * @return array
+     *
+     * @throws InvalidArgumentException
+     *
+     * @since 1.0.0
+     */
+    public function jsonSerialize(): array
+    {
+        $json = [];
+        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
+            throw new InvalidArgumentException('Service not set before serialization');
+        }
+
+        foreach (array_keys(static::$defaultProperties[$this->currentService]) as $propertyName) {
+            if (isset($this->{$propertyName})) {
+                $json[$propertyName] = $this->{$propertyName};
+            }
+        }
+
+        return $json;
+    }
+
+    /**
+     * Return a serializable array for the XMLWriter
+     *
+     * @param Writer $writer
+     *
+     * @return void
+     *
+     * @throws InvalidArgumentException
+     *
+     * @since 1.0.0
+     */
+    public function xmlSerialize(Writer $writer): void
+    {
+        $xml = [];
+        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
+            throw new InvalidArgumentException('Service not set before serialization');
+        }
+
+        foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
+            if (isset($this->{$propertyName})) {
+                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
+            }
+        }
+
+        $writer->write($xml);
+    }
+
+    /**
      * Deserialize XML
      *
      * @param array $xml Associative array representation of XML response, using Clark notation for namespaces
      *
      * @return AbstractEntity
+     *
+     * @since 1.0.0
      */
-    public static function xmlDeserialize(array $xml)
+    public static function xmlDeserialize(array $xml): AbstractEntity
     {
         if (!isset($xml['name']) && isset($xml[0]['name'])) {
             $xml = $xml[0];
@@ -255,9 +296,13 @@ abstract class AbstractEntity implements \JsonSerializable, XmlSerializable
 
             // If key is plural, try the singular version, because this might be an array
             if (in_array($shortClassName, ['OldStatuses', 'Statuses', 'Addresses'])) {
-                $fullClassName = static::getFullEntityClassName(substr($shortClassName, 0, strlen($shortClassName) - 2));
+                $fullClassName = static::getFullEntityClassName(
+                    substr($shortClassName, 0, strlen($shortClassName) - 2)
+                );
             } elseif (!$fullClassName && substr($shortClassName, -1) === 's') {
-                $fullClassName = static::getFullEntityClassName(substr($shortClassName, 0, strlen($shortClassName) - 1));
+                $fullClassName = static::getFullEntityClassName(
+                    substr($shortClassName, 0, strlen($shortClassName) - 1)
+                );
             }
 
             if (!$value['value']) {
@@ -290,37 +335,15 @@ abstract class AbstractEntity implements \JsonSerializable, XmlSerializable
     }
 
     /**
-     * Get the full class (incl. namespace) for the given short class name
-     *
-     * @param string $shortName
-     *
-     * @return false|string The full name if found, else `false`
-     */
-    public static function getFullEntityClassName($shortName)
-    {
-        foreach ([
-            '\\Firstred\\PostNL\\Entity',
-            '\\Firstred\\PostNL\\Entity\\Message',
-            '\\Firstred\\PostNL\\Entity\\Request',
-            '\\Firstred\\PostNL\\Entity\\Response',
-            '\\Firstred\\PostNL\\Entity\\SOAP',
-        ] as $namespace) {
-            if (class_exists("$namespace\\$shortName")) {
-                return "$namespace\\$shortName";
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * Determine if the array is associative
      *
      * @param array $array
      *
      * @return bool
+     *
+     * @since 1.0.0
      */
-    protected static function isAssociativeArray($array)
+    protected static function isAssociativeArray($array): bool
     {
         if ([] === $array || !is_array($array)) {
             return false;

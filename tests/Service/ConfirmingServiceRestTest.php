@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker
+ * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,7 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
+ *
  * @copyright 2017-2019 Michael Dekker
+ *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -31,6 +34,7 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Customer;
@@ -46,11 +50,9 @@ use Firstred\PostNL\Service\ConfirmingService;
 /**
  * Class ConfirmingServiceRestTest
  *
- * @package Firstred\PostNL\Tests\Service
- *
  * @testdox The ConfirmingService (REST)
  */
-class ConfirmingServiceRestTest extends \PHPUnit_Framework_TestCase
+class ConfirmingServiceRestTest extends TestCase
 {
     /** @var PostNL $postnl */
     protected $postnl;
@@ -61,6 +63,7 @@ class ConfirmingServiceRestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @before
+     *
      * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      */
     public function setupPostNL()
@@ -81,8 +84,8 @@ class ConfirmingServiceRestTest extends \PHPUnit_Framework_TestCase
                     'Zipcode'     => '2132WT',
                 ]))
                 ->setGlobalPackBarcodeType('AB')
-                ->setGlobalPackCustomerCode('1234')
-            , new UsernameToken(null, 'test'),
+                ->setGlobalPackCustomerCode('1234'),
+            new UsernameToken(null, 'test'),
             true,
             PostNL::MODE_REST
         );
@@ -152,13 +155,14 @@ class ConfirmingServiceRestTest extends \PHPUnit_Framework_TestCase
                         ->setBarcode('3S1234567890123')
                         ->setDeliveryAddress('01')
                         ->setDimension(new Dimension('2000'))
-                        ->setProductCodeDelivery('3085')
+                        ->setProductCodeDelivery('3085'),
                 ])
                 ->setMessage($message)
                 ->setCustomer($this->postnl->getCustomer())
         );
 
-        $this->assertEquals([
+        $this->assertEquals(
+            [
             'Customer'  => [
                 'Address'            => [
                     'AddressType' => '02',
@@ -209,8 +213,9 @@ class ConfirmingServiceRestTest extends \PHPUnit_Framework_TestCase
                 ],
                 'ProductCodeDelivery' => '3085',
             ],
-        ],
-            json_decode((string) $request->getBody(), true));
+            ],
+            json_decode((string) $request->getBody(), true)
+        );
         $this->assertEquals('test', $request->getHeaderLine('apikey'));
         $this->assertEquals('application/json;charset=UTF-8', $request->getHeaderLine('Content-Type'));
         $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
@@ -233,7 +238,7 @@ class ConfirmingServiceRestTest extends \PHPUnit_Framework_TestCase
                             ],
                         ],
                     ],
-                ]
+                ],
             ])),
         ]);
         $handler = HandlerStack::create($mock);
@@ -293,7 +298,7 @@ class ConfirmingServiceRestTest extends \PHPUnit_Framework_TestCase
                             ],
                         ],
                     ],
-                ]
+                ],
             ])),
             new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode([
                 'ResponseShipments' => [
@@ -306,7 +311,7 @@ class ConfirmingServiceRestTest extends \PHPUnit_Framework_TestCase
                             ],
                         ],
                     ],
-                ]
+                ],
             ])),
         ]);
         $handler = HandlerStack::create($mock);
@@ -369,8 +374,7 @@ class ConfirmingServiceRestTest extends \PHPUnit_Framework_TestCase
                     ->setDeliveryAddress('01')
                     ->setDimension(new Dimension('2000'))
                     ->setProductCodeDelivery('3085'),
-            ]
-        );
+        ]);
 
         $this->assertInstanceOf('\\Firstred\\PostNL\\Entity\\Response\\ConfirmingResponseShipment', $confirms[1]);
     }

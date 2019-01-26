@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker
+ * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,7 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
+ *
  * @copyright 2017-2019 Michael Dekker
+ *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -41,8 +44,6 @@ use Firstred\PostNL\Service\TimeframeService;
  * Class GetLocationsInArea
  *
  * This class is both the container and can be the actual GetLocationsInArea object itself!
- *
- * @package Firstred\PostNL\Entity
  *
  * @method string|null   getCountrycode()
  * @method Location|null getLocation()
@@ -108,18 +109,19 @@ class GetLocationsInArea extends AbstractEntity
     /**
      * GetLocationsInArea constructor.
      *
-     * @param string|null   $Countrycode
+     * @param string|null   $countryCode
      * @param Location|null $location
      * @param Message|null  $message
+     *
+     * @throws \Exception
+     *
+     * @since 1.0.0
      */
-    public function __construct(
-        $Countrycode = null,
-        Location $location = null,
-        Message $message = null
-    ) {
+    public function __construct($countryCode = null, Location $location = null, Message $message = null)
+    {
         parent::__construct();
 
-        $this->setCountrycode($Countrycode);
+        $this->setCountrycode($countryCode);
         $this->setLocation($location);
         $this->setMessage($message ?: new Message());
     }
