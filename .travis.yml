@@ -11,10 +11,10 @@ before_script:
   - composer install --prefer-dist
 
 script:
-  - composer test:unit
+  - vendor/bin/phpunit --testdox --testsuite unit
   - >
     if [[ "${TRAVIS_PULL_REQUEST" = "false" ]]; then
-      composer test:integration
+      vendor/bin/phpunit --testdox --testsuite integration
     fi
 
 after_success:
