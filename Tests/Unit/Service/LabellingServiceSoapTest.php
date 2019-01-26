@@ -115,7 +115,7 @@ class LabellingServiceSoapTest extends TestCase
     }
 
     /**
-     * @testdox returns a valid service object
+     * @testdox Returns a valid service object
      */
     public function testHasValidLabellingService()
     {
@@ -123,7 +123,7 @@ class LabellingServiceSoapTest extends TestCase
     }
 
     /**
-     * @testdox creates a valid label request
+     * @testdox Creates a valid label request
      *
      * @throws \Exception
      */
@@ -236,7 +236,7 @@ class LabellingServiceSoapTest extends TestCase
     }
 
     /**
-     * @testdox can generate a single label
+     * @testdox Can generate a single label
      *
      * @throws \Exception
      */
@@ -312,7 +312,7 @@ xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">
     }
 
     /**
-     * @testdox can generate multiple labels
+     * @testdox Can generate multiple labels
      *
      * @throws \Exception
      * @throws \setasign\Fpdi\PdfReader\PdfReaderException
@@ -443,7 +443,7 @@ xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">
     }
 
     /**
-     * @testdox can grab the dimensions from a PDF
+     * @testdox Can grab the dimensions from a PDF
      */
     public function testGetPdfDimensions()
     {
@@ -454,7 +454,7 @@ xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">
     }
 
     /**
-     * @testdox throws exception on invalid response
+     * @testdox Throws exception on invalid response
      *
      * @throws \Exception
      */

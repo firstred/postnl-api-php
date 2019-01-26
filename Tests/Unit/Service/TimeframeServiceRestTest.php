@@ -110,7 +110,7 @@ class TimeframeServiceRestTest extends TestCase
     }
 
     /**
-     * @testdox creates a valid timeframes request
+     * @testdox Creates a valid timeframes request
      *
      * @throws \Exception
      */
@@ -157,7 +157,7 @@ class TimeframeServiceRestTest extends TestCase
     }
 
     /**
-     * @testdox can retrieve the available timeframes
+     * @testdox Can retrieve the available timeframes
      *
      * @throws \Exception
      */

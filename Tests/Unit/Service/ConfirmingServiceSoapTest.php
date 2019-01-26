@@ -111,7 +111,7 @@ class ConfirmingServiceSoapTest extends TestCase
     }
 
     /**
-     * @testdox returns a valid service object
+     * @testdox Returns a valid service object
      */
     public function testHasValidConfirmingService()
     {
@@ -119,7 +119,7 @@ class ConfirmingServiceSoapTest extends TestCase
     }
 
     /**
-     * @testdox creates a confirm request
+     * @testdox Creates a confirm request
      *
      * @throws \Exception
      */
@@ -231,7 +231,7 @@ class ConfirmingServiceSoapTest extends TestCase
     }
 
     /**
-     * @testdox can confirm a single label
+     * @testdox Can confirm a single label
      *
      * @throws \Exception
      */
@@ -292,7 +292,7 @@ xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">
     }
 
     /**
-     * @testdox can confirm multiple labels
+     * @testdox Can confirm multiple labels
      *
      * @throws \Exception
      */
@@ -393,7 +393,7 @@ xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">
     }
 
     /**
-     * @testdox throws exception on invalid response
+     * @testdox Throws exception on invalid response
      *
      * @throws \Exception
      */

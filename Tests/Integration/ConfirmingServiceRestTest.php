@@ -109,7 +109,7 @@ class ConfirmingServiceRestTest extends TestCase
     }
 
     /**
-     * @testdox can generate a single label
+     * @testdox Can generate a single label
      *
      * @throws \Exception
      */
@@ -149,7 +149,7 @@ class ConfirmingServiceRestTest extends TestCase
     }
 
     /**
-     * @testdox can confirm multiple labels
+     * @testdox Can confirm multiple labels
      *
      * @throws \Exception
      */

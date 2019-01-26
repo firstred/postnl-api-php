@@ -116,7 +116,7 @@ class DeliveryDateRestTest extends TestCase
     }
 
     /**
-     * @testdox creates a valid delivery date request
+     * @testdox Creates a valid delivery date request
      *
      * @throws \Exception
      */
@@ -172,7 +172,7 @@ class DeliveryDateRestTest extends TestCase
     }
 
     /**
-     * @testdox return a valid delivery date
+     * @testdox Returns a valid delivery date
      */
     public function testGetDeliveryDateRest()
     {
@@ -232,7 +232,7 @@ class DeliveryDateRestTest extends TestCase
     }
 
     /**
-     * @testdox creates a valid sent date request
+     * @testdox Creates a valid sent date request
      *
      * @throws \Exception
      */
@@ -267,7 +267,7 @@ class DeliveryDateRestTest extends TestCase
     }
 
     /**
-     * @testdox return a valid sent date
+     * @testdox Returns a valid sent date
      *
      * @throws \Exception
      */

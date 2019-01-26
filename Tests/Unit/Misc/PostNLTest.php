@@ -75,7 +75,7 @@ class PostNLTest extends TestCase
     }
 
     /**
-     * @testdox cannot generate an international barcode without a GlobalPack range
+     * @testdox Cannot generate an international barcode without a GlobalPack range
      *
      * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
      * @throws \Firstred\PostNL\Exception\InvalidConfigurationException
@@ -90,7 +90,7 @@ class PostNLTest extends TestCase
     }
 
     /**
-     * @testdox cannot generate an international barcode without a GlobalPack type
+     * @testdox Cannot generate an international barcode without a GlobalPack type
      *
      * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
      * @throws \Firstred\PostNL\Exception\InvalidConfigurationException

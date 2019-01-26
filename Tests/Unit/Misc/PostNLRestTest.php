@@ -85,7 +85,7 @@ class PostNLRestTest extends TestCase
     }
 
     /**
-     * @testdox returns a valid customer code in REST mode
+     * @testdox Returns a valid customer code in REST mode
      */
     public function testPostNLRest()
     {
@@ -93,7 +93,7 @@ class PostNLRestTest extends TestCase
     }
 
     /**
-     * @testdox returns a valid customer
+     * @testdox Returns a valid customer
      */
     public function testCustomer()
     {
@@ -101,7 +101,7 @@ class PostNLRestTest extends TestCase
     }
 
     /**
-     * @testdox accepts a `null` logger
+     * @testdox Accepts a `null` logger
      */
     public function testSetNullLogger()
     {
@@ -111,7 +111,7 @@ class PostNLRestTest extends TestCase
     }
 
     /**
-     * @testdox returns a combinations of timeframes, locations and the delivery date
+     * @testdox Returns a combinations of timeframes, locations and the delivery date
      *
      * @throws \Exception
      */
@@ -367,7 +367,7 @@ class PostNLRestTest extends TestCase
     }
 
     /**
-     * @testdox returns `false` when the API key is missing
+     * @testdox Returns `false` when the API key is missing
      *
      * @throws \ReflectionException
      */

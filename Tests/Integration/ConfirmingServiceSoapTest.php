@@ -109,7 +109,7 @@ class ConfirmingServiceSoapTest extends TestCase
     }
 
     /**
-     * @testdox can confirm a single label
+     * @testdox Can confirm a single label
      *
      * @throws \Exception
      */
@@ -149,7 +149,7 @@ class ConfirmingServiceSoapTest extends TestCase
     }
 
     /**
-     * @testdox can confirm multiple labels
+     * @testdox Can confirm multiple labels
      *
      * @throws \Exception
      */

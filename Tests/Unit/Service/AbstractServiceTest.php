@@ -66,7 +66,7 @@ class AbstractServiceTest extends TestCase
     }
 
     /**
-     * @testdox can detect and throw a CifDownException (REST)
+     * @testdox Can detect and throw a CifDownException (REST)
      *
      * @throws \Firstred\PostNL\Exception\ApiException
      * @throws \Firstred\PostNL\Exception\CifDownException
@@ -85,7 +85,7 @@ class AbstractServiceTest extends TestCase
     }
 
     /**
-     * @testdox can detect and throw a CifException (REST)
+     * @testdox Can detect and throw a CifException (REST)
      *
      * @throws \Firstred\PostNL\Exception\ApiException
      * @throws \Firstred\PostNL\Exception\CifDownException
@@ -112,7 +112,7 @@ class AbstractServiceTest extends TestCase
     }
 
     /**
-     * @testdox can detect and throw a CifDownException (SOAP)
+     * @testdox Can detect and throw a CifDownException (SOAP)
      *
      * @throws \Firstred\PostNL\Exception\CifDownException
      * @throws \Firstred\PostNL\Exception\CifException
@@ -142,7 +142,7 @@ class AbstractServiceTest extends TestCase
     }
 
     /**
-     * @testdox can detect and throw a CifException (SOAP)
+     * @testdox Can detect and throw a CifException (SOAP)
      *
      * @throws \Firstred\PostNL\Exception\CifDownException
      * @throws \Firstred\PostNL\Exception\CifException

@@ -101,7 +101,7 @@ class BarcodeServiceSoapTest extends TestCase
     }
 
     /**
-     * @testdox return a valid single barcode
+     * @testdox Returns a valid single barcode
      *
      * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
      */
@@ -111,7 +111,7 @@ class BarcodeServiceSoapTest extends TestCase
     }
 
     /**
-     * @testdox returns several barcodes
+     * @testdox Returns several barcodes
      *
      * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
      * @throws \Firstred\PostNL\Exception\InvalidConfigurationException

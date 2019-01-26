@@ -40,7 +40,7 @@ use Sabre\Xml\Service as XmlService;
 class EntityTest extends TestCase
 {
     /**
-     * @testdox have a working constructor
+     * @testdox Have a working constructor
      */
     public function testConstructors()
     {
@@ -90,7 +90,7 @@ class EntityTest extends TestCase
     }
 
     /**
-     * @testdox should throw an exception when the value to set is missing
+     * @testdox Should throw an exception when the value to set is missing
      */
     public function testNegativeMissingValue()
     {
@@ -102,7 +102,7 @@ class EntityTest extends TestCase
     }
 
     /**
-     * @testdox should be `null` when instantiating the AbstractEntity
+     * @testdox Should be `null` when instantiating the AbstractEntity
      */
     public function testNegativeCannotInstantiateAbstract()
     {
@@ -110,7 +110,7 @@ class EntityTest extends TestCase
     }
 
     /**
-     * @testdox should return `null` when the property does not exist
+     * @testdox Should return `null` when the property does not exist
      */
     public function testNegativeReturnNullWhenPropertyDoesNotExist()
     {
@@ -118,7 +118,7 @@ class EntityTest extends TestCase
     }
 
     /**
-     * @testdox should throw an exception when the method does not exist
+     * @testdox Should throw an exception when the method does not exist
      */
     public function testNegativeThrowExceptionWhenMethodDoesNotExist()
     {
@@ -128,7 +128,7 @@ class EntityTest extends TestCase
     }
 
     /**
-     * @testdox should throw an exception when json serializing without having a service
+     * @testdox Should throw an exception when json serializing without having a service
      */
     public function testNegativeThrowExceptionWhenServiceNotSetJson()
     {
@@ -138,7 +138,7 @@ class EntityTest extends TestCase
     }
 
     /**
-     * @testdox should throw an exception when xml serializing without having a service
+     * @testdox Should throw an exception when xml serializing without having a service
      */
     public function testNegativeThrowExceptionWhenServiceNotSetXml()
     {

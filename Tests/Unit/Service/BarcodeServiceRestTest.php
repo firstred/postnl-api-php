@@ -107,7 +107,7 @@ class BarcodeServiceRestTest extends TestCase
     }
 
     /**
-     * @testdox returns a valid service object
+     * @testdox Returns a valid service object
      */
     public function testHasValidBarcodeService()
     {
@@ -115,7 +115,7 @@ class BarcodeServiceRestTest extends TestCase
     }
 
     /**
-     * @testdox creates a valid 3S barcode request
+     * @testdox Creates a valid 3S barcode request
      *
      * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
      * @throws \Exception
@@ -142,10 +142,10 @@ class BarcodeServiceRestTest extends TestCase
 
         $this->assertEquals(
             [
-            'CustomerCode'   => 'DEVC',
-            'CustomerNumber' => '11223344',
-            'Type'           => '3S',
-            'Serie'          => '987000000-987600000',
+                'CustomerCode'   => 'DEVC',
+                'CustomerNumber' => '11223344',
+                'Type'           => '3S',
+                'Serie'          => '987000000-987600000',
             ],
             $query,
             '',
@@ -160,7 +160,7 @@ class BarcodeServiceRestTest extends TestCase
     }
 
     /**
-     * @testdox return a valid single barcode
+     * @testdox Returns a valid single barcode
      *
      * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
      */
@@ -180,7 +180,7 @@ class BarcodeServiceRestTest extends TestCase
     }
 
     /**
-     * @testdox return a valid single barcode for a country
+     * @testdox Returns a valid single barcode for a country
      *
      * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
      * @throws \Firstred\PostNL\Exception\InvalidConfigurationException
@@ -201,7 +201,7 @@ class BarcodeServiceRestTest extends TestCase
     }
 
     /**
-     * @testdox returns several barcodes
+     * @testdox Returns several barcodes
      *
      * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
      * @throws \Firstred\PostNL\Exception\InvalidConfigurationException
@@ -231,19 +231,19 @@ class BarcodeServiceRestTest extends TestCase
 
         $this->assertEquals(
             [
-            'NL' => [
-                '3SDEVC816223392',
-                '3SDEVC816223393',
-                '3SDEVC816223394',
-                '3SDEVC816223395',
-            ],
+                'NL' => [
+                    '3SDEVC816223392',
+                    '3SDEVC816223393',
+                    '3SDEVC816223394',
+                    '3SDEVC816223395',
+                ],
             ],
             $barcodes
         );
     }
 
     /**
-     * @testdox return a valid single barcode
+     * @testdox Returns a valid single barcode
      *
      * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
      */

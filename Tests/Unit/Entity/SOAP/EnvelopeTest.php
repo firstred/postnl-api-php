@@ -42,7 +42,7 @@ use PHPUnit\Framework\TestCase;
 class EnvelopeTest extends TestCase
 {
     /**
-     * @testdox can return the body
+     * @testdox Can return the body
      */
     public function testBody()
     {

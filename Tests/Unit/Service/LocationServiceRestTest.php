@@ -118,7 +118,7 @@ class LocationServiceRestTest extends TestCase
     }
 
     /**
-     * @testdox creates a valid NearestLocations request
+     * @testdox Creates a valid NearestLocations request
      *
      * @throws \Exception
      */
@@ -174,7 +174,7 @@ class LocationServiceRestTest extends TestCase
     }
 
     /**
-     * @testdox can request nearest locations
+     * @testdox Can request nearest locations
      *
      * @throws \Exception
      */
@@ -225,7 +225,7 @@ class LocationServiceRestTest extends TestCase
     }
 
     /**
-     * @testdox creates a valid GetLocationsInArea request
+     * @testdox Creates a valid GetLocationsInArea request
      *
      * @throws \Exception
      */
@@ -287,7 +287,7 @@ class LocationServiceRestTest extends TestCase
     }
 
     /**
-     * @testdox can request locations in area
+     * @testdox Can request locations in area
      *
      * @throws \Exception
      */
@@ -344,7 +344,7 @@ class LocationServiceRestTest extends TestCase
     }
 
     /**
-     * @testdox creates a valid GetLocation request
+     * @testdox Creates a valid GetLocation request
      *
      * @throws \Exception
      */
@@ -375,7 +375,7 @@ class LocationServiceRestTest extends TestCase
     }
 
     /**
-     * @testdox can request locations in area
+     * @testdox Can request locations in area
      *
      * @throws \Exception
      */

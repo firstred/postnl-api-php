@@ -98,7 +98,7 @@ class BarcodeServiceRestTest extends TestCase
     }
 
     /**
-     * @testdox return a valid single barcode
+     * @testdox Returns a valid single barcode
      *
      * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
      */
@@ -108,7 +108,7 @@ class BarcodeServiceRestTest extends TestCase
     }
 
     /**
-     * @testdox return a valid single barcode for a country
+     * @testdox Returns a valid single barcode for a country
      *
      * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
      * @throws \Firstred\PostNL\Exception\InvalidConfigurationException
@@ -119,7 +119,7 @@ class BarcodeServiceRestTest extends TestCase
     }
 
     /**
-     * @testdox returns several barcodes
+     * @testdox Returns several barcodes
      *
      * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
      * @throws \Firstred\PostNL\Exception\InvalidConfigurationException

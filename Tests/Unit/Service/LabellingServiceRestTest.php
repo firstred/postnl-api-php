@@ -115,7 +115,7 @@ class LabellingServiceRestTest extends TestCase
     }
 
     /**
-     * @testdox returns a valid service object
+     * @testdox Returns a valid service object
      */
     public function testHasValidLabellingService()
     {
@@ -123,7 +123,7 @@ class LabellingServiceRestTest extends TestCase
     }
 
     /**
-     * @testdox creates a valid label request
+     * @testdox Creates a valid label request
      */
     public function testCreatesAValidLabelRequest()
     {
@@ -230,7 +230,7 @@ class LabellingServiceRestTest extends TestCase
     }
 
     /**
-     * @testdox can generate a single label
+     * @testdox Can generate a single label
      */
     public function testGenerateSingleLabelRest()
     {
@@ -291,7 +291,7 @@ class LabellingServiceRestTest extends TestCase
     }
 
     /**
-     * @testdox can generate multiple A4-merged labels
+     * @testdox Can generate multiple A4-merged labels
      *
      * @throws \setasign\Fpdi\PdfReader\PdfReaderException
      * @throws \Exception
@@ -410,7 +410,7 @@ class LabellingServiceRestTest extends TestCase
     }
 
     /**
-     * @testdox can generate multiple A6-merged labels
+     * @testdox Can generate multiple A6-merged labels
      *
      * @throws \setasign\Fpdi\PdfReader\PdfReaderException
      * @throws \Exception
@@ -529,7 +529,7 @@ class LabellingServiceRestTest extends TestCase
     }
 
     /**
-     * @testdox can generate multiple labels
+     * @testdox Can generate multiple labels
      *
      * @throws \setasign\Fpdi\PdfReader\PdfReaderException
      * @throws \Exception
@@ -638,7 +638,7 @@ class LabellingServiceRestTest extends TestCase
     }
 
     /**
-     * @testdox throws exception on invalid response
+     * @testdox Throws exception on invalid response
      */
     public function testNegativeGenerateLabelInvalidResponseRest()
     {

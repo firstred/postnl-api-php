@@ -118,7 +118,7 @@ class ShippingStatusSoapTest extends TestCase
     }
 
     /**
-     * @testdox creates a valid CurrentStatus request
+     * @testdox Creates a valid CurrentStatus request
      *
      * @throws \Exception
      */
@@ -158,7 +158,7 @@ class ShippingStatusSoapTest extends TestCase
     }
 
     /**
-     * @testdox can get the current status
+     * @testdox Can get the current status
      *
      * @throws \Exception
      */
@@ -241,7 +241,7 @@ xmlns=\"http://postnl.nl/cif/services/ShippingStatusWebService/\" xmlns:a=\"http
     }
 
     /**
-     * @testdox creates a valid CurrentStatusByReference request
+     * @testdox Creates a valid CurrentStatusByReference request
      *
      * @throws \Exception
      */
@@ -281,7 +281,7 @@ xmlns=\"http://postnl.nl/cif/services/ShippingStatusWebService/\" xmlns:a=\"http
     }
 
     /**
-     * @testdox creates a valid CurrentStatusByStatus request
+     * @testdox Creates a valid CurrentStatusByStatus request
      *
      * @throws \Exception
      */
@@ -321,7 +321,7 @@ xmlns=\"http://postnl.nl/cif/services/ShippingStatusWebService/\" xmlns:a=\"http
     }
 
     /**
-     * @testdox creates a valid CurrentStatusByPhase request
+     * @testdox Creates a valid CurrentStatusByPhase request
      *
      * @throws \Exception
      */
@@ -361,7 +361,7 @@ xmlns=\"http://postnl.nl/cif/services/ShippingStatusWebService/\" xmlns:a=\"http
     }
 
     /**
-     * @testdox creates a valid CompleteStatus request
+     * @testdox Creates a valid CompleteStatus request
      *
      * @throws \Exception
      */
@@ -401,7 +401,7 @@ xmlns=\"http://postnl.nl/cif/services/ShippingStatusWebService/\" xmlns:a=\"http
     }
 
     /**
-     * @testdox creates a valid CompleteStatusByReference request
+     * @testdox Creates a valid CompleteStatusByReference request
      *
      * @throws \Exception
      */
@@ -441,7 +441,7 @@ xmlns=\"http://postnl.nl/cif/services/ShippingStatusWebService/\" xmlns:a=\"http
     }
 
     /**
-     * @testdox can get the complete status
+     * @testdox Can get the complete status
      *
      * @throws \Exception
      */
@@ -622,7 +622,7 @@ xmlns=\"http://postnl.nl/cif/services/ShippingStatusWebService/\" xmlns:a=\"http
     }
 
     /**
-     * @testdox creates a valid CompleteStatusByStatus request
+     * @testdox Creates a valid CompleteStatusByStatus request
      *
      * @throws \Exception
      */
@@ -666,7 +666,7 @@ xmlns=\"http://postnl.nl/cif/services/ShippingStatusWebService/\" xmlns:a=\"http
     }
 
     /**
-     * @testdox creates a valid CompleteStatusByPhase request
+     * @testdox Creates a valid CompleteStatusByPhase request
      *
      * @throws \Exception
      */
@@ -714,7 +714,7 @@ xmlns=\"http://postnl.nl/cif/services/ShippingStatusWebService/\" xmlns:a=\"http
     }
 
     /**
-     * @testdox creates a valid GetSignature request
+     * @testdox Creates a valid GetSignature request
      *
      * @throws \Exception
      */
@@ -754,7 +754,7 @@ xmlns=\"http://postnl.nl/cif/services/ShippingStatusWebService/\" xmlns:a=\"http
     }
 
     /**
-     * @testdox can get the signature
+     * @testdox Can get the signature
      *
      * @throws \Exception
      */

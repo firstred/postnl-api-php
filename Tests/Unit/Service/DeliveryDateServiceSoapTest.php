@@ -112,7 +112,7 @@ class DeliveryDateSoapTest extends TestCase
     }
 
     /**
-     * @testdox creates a valid delivery date request
+     * @testdox Creates a valid delivery date request
      *
      * @throws \Exception
      */
@@ -180,7 +180,7 @@ class DeliveryDateSoapTest extends TestCase
     }
 
     /**
-     * @testdox return a valid delivery date
+     * @testdox Returns a valid delivery date
      */
     public function testGetDeliveryDateSoap()
     {
@@ -234,7 +234,7 @@ xmlns:a="http://postnl.nl/cif/domain/DeliveryDateWebService/">
     }
 
     /**
-     * @testdox creates a valid sent date request
+     * @testdox Creates a valid sent date request
      *
      * @throws \Exception
      */
@@ -291,7 +291,7 @@ xmlns:a="http://postnl.nl/cif/domain/DeliveryDateWebService/">
     }
 
     /**
-     * @testdox return a valid sent date
+     * @testdox Returns a valid sent date
      *
      * @throws \Exception
      */

@@ -110,7 +110,7 @@ class BarcodeServiceSoapTest extends TestCase
     }
 
     /**
-     * @testdox creates a valid 3S barcode request
+     * @testdox Creates a valid 3S barcode request
      *
      * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
      *
@@ -180,7 +180,7 @@ class BarcodeServiceSoapTest extends TestCase
     }
 
     /**
-     * @testdox returns several barcodes
+     * @testdox Returns several barcodes
      *
      * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
      * @throws \Firstred\PostNL\Exception\InvalidConfigurationException

@@ -111,7 +111,7 @@ class ConfirmingServiceRestTest extends TestCase
     }
 
     /**
-     * @testdox returns a valid service object
+     * @testdox Returns a valid service object
      */
     public function testHasValidConfirmingService()
     {
@@ -119,7 +119,7 @@ class ConfirmingServiceRestTest extends TestCase
     }
 
     /**
-     * @testdox confirms a label properly
+     * @testdox Confirms a label properly
      *
      * @throws \Exception
      */
@@ -223,7 +223,7 @@ class ConfirmingServiceRestTest extends TestCase
     }
 
     /**
-     * @testdox can generate a single label
+     * @testdox Can generate a single label
      *
      * @throws \Exception
      */
@@ -283,7 +283,7 @@ class ConfirmingServiceRestTest extends TestCase
     }
 
     /**
-     * @testdox can confirm multiple labels
+     * @testdox Can confirm multiple labels
      *
      * @throws \Exception
      */
@@ -375,7 +375,7 @@ class ConfirmingServiceRestTest extends TestCase
     }
 
     /**
-     * @testdox throws exception on invalid response
+     * @testdox Throws exception on invalid response
      *
      * @throws \Exception
      */
