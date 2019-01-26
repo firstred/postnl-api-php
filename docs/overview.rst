@@ -140,7 +140,7 @@ This library is unit tested with PHPUnit. Run the tests using the included PHPUn
 .. code-block:: bash
 
     cd tests/
-    php ../vendor/bin/phpunit --testdox
+    php vendor/bin/phpunit --testdox
 
 .. note::
 
