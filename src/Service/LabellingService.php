@@ -54,11 +54,11 @@ use Sabre\Xml\Service as XmlService;
 class LabellingService extends AbstractService
 {
     // API Version
-    const VERSION = '2.1';
+    const VERSION = '2.2';
 
     // Endpoints
-    const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v2_1/label';
-    const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2_1/label';
+    const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v2_2/label';
+    const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2_2/label';
 
     // SOAP API
     const SOAP_ACTION = 'http://postnl.nl/cif/services/LabellingWebService/ILabellingWebService/GenerateLabel';
