@@ -170,7 +170,7 @@ Here is how you can request two labels and have them merged into a single PDF au
                 ]),
             ],
             'Barcode'             => $barcodes['NL'][0],
-            'Dimension'           => new Dimension('1000'),
+            'Dimension'           => new Dimension(1000),
             'ProductCodeDelivery' => '3085',
         ]),
         Shipment::create([
@@ -188,7 +188,7 @@ Here is how you can request two labels and have them merged into a single PDF au
                 ]),
             ],
             'Barcode'             => $barcodes['NL'][1],
-            'Dimension'           => new Dimension('1000'),
+            'Dimension'           => new Dimension(1000),
             'ProductCodeDelivery' => '3085',
         ]),
     ];

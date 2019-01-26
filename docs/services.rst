@@ -157,7 +157,7 @@ The following example generates a single shipment label for a domestic shipment:
             ])
             ->setBarcode($barcode)
             ->setDeliveryAddress('01')
-            ->setDimension(new Dimension('2000'))
+            ->setDimension(new Dimension(2000))
             ->setProductCodeDelivery('3085'),
         'GraphicFile|PDF',
         false
@@ -211,7 +211,7 @@ The following example shows how a label can be merged:
                 ]),
             ],
             'Barcode'             => $barcodes['NL'][0],
-            'Dimension'           => new Dimension('1000'),
+            'Dimension'           => new Dimension(1000),
             'ProductCodeDelivery' => '3085',
         ]),
         Shipment::create([
@@ -229,7 +229,7 @@ The following example shows how a label can be merged:
                 ]),
             ],
             'Barcode'             => $barcodes['NL'][1],
-            'Dimension'           => new Dimension('1000'),
+            'Dimension'           => new Dimension(1000),
             'ProductCodeDelivery' => '3085',
         ]),
     ];
