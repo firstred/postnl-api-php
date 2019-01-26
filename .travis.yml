@@ -13,7 +13,7 @@ before_script:
 script:
   - vendor/bin/phpunit --testdox --testsuite unit
   - >
-    if [[ "${TRAVIS_PULL_REQUEST" = "false" ]]; then
+    if [[ "${TRAVIS_PULL_REQUEST}" = "false" ]]; then
       vendor/bin/phpunit --testdox --testsuite integration
     fi
 
