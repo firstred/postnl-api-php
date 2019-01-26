@@ -3,3 +3,4 @@ vendor/
 composer.lock
 Tests/logs
 Tests/clover.xml
+.env
