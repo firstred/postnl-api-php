@@ -29,6 +29,7 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity\Response;
 
+use Error;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Warning;
 use Firstred\PostNL\Service\BarcodeService;
@@ -44,9 +45,11 @@ use Firstred\PostNL\Service\TimeframeService;
  *
  * @method string|null    getBarcode()
  * @method Warning[]|null getWarnings()
+ * @method Error[]|null   getErrors()
  *
  * @method ConfirmingResponseShipment setBarcode(string|null $barcode = null)
  * @method ConfirmingResponseShipment setWarnings(Warning[]|null $warnings = null)
+ * @method ConfirmingResponseShipment setErrors(Error[]|null $warnings = null)
  */
 class ConfirmingResponseShipment extends AbstractEntity
 {
@@ -55,30 +58,37 @@ class ConfirmingResponseShipment extends AbstractEntity
         'Barcode'        => [
             'Barcode'  => BarcodeService::DOMAIN_NAMESPACE,
             'Warnings' => BarcodeService::DOMAIN_NAMESPACE,
+            'Errors'   => BarcodeService::DOMAIN_NAMESPACE,
         ],
         'Confirming'     => [
             'Barcode'  => ConfirmingService::DOMAIN_NAMESPACE,
             'Warnings' => ConfirmingService::DOMAIN_NAMESPACE,
+            'Errors'   => ConfirmingService::DOMAIN_NAMESPACE,
         ],
         'Labelling'      => [
             'Barcode'  => LabellingService::DOMAIN_NAMESPACE,
             'Warnings' => LabellingService::DOMAIN_NAMESPACE,
+            'Errors'   => LabellingService::DOMAIN_NAMESPACE,
         ],
         'ShippingStatus' => [
             'Barcode'  => ShippingStatusService::DOMAIN_NAMESPACE,
             'Warnings' => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Errors'   => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate'   => [
             'Barcode'  => DeliveryDateService::DOMAIN_NAMESPACE,
             'Warnings' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Errors'   => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
         'Location'       => [
             'Barcode'  => LocationService::DOMAIN_NAMESPACE,
             'Warnings' => LocationService::DOMAIN_NAMESPACE,
+            'Errors'   => LocationService::DOMAIN_NAMESPACE,
         ],
         'Timeframe'      => [
             'Barcode'  => TimeframeService::DOMAIN_NAMESPACE,
             'Warnings' => TimeframeService::DOMAIN_NAMESPACE,
+            'Errors'   => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
@@ -91,14 +101,16 @@ class ConfirmingResponseShipment extends AbstractEntity
     /**
      * @param string|null    $barcode
      * @param Warning[]|null $warnings
+     * @param Error[]|null   $errors
      *
      * @since 1.0.0
      */
-    public function __construct($barcode = null, $warnings = null)
+    public function __construct(?string $barcode = null, ?array $warnings = null, ?array $errors = null)
     {
         parent::__construct();
 
         $this->setBarcode($barcode);
         $this->setWarnings($warnings);
+        $this->setErrors($errors);
     }
 }

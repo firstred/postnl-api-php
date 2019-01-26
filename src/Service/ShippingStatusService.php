@@ -584,7 +584,6 @@ class ShippingStatusService extends AbstractService
                 unset($shipment['Event']);
                 foreach ($shipment['Events'] as &$event) {
                     $event = AbstractEntity::jsonDeserialize(['CompleteStatusResponseEvent' => $event]);
-                    //$event = ['CompleteStatusResponseEvent' => $event];
                 }
             }
             foreach ($body['CompleteStatus']['Shipments'] as &$shipment) {

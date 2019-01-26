@@ -52,8 +52,8 @@ class ConfirmingService extends AbstractService
     const VERSION = '2.0';
 
     // Endpoints
-    const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v2/confirm';
-    const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2/confirm';
+    const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v1_10/confirm';
+    const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v1_10/confirm';
 
     // SOAP API
     const SOAP_ACTION = 'http://postnl.nl/cif/services/ConfirmingWebService/IConfirmingWebService/Confirming';
@@ -148,12 +148,9 @@ class ConfirmingService extends AbstractService
     {
         static::validateRESTResponse($response);
         $body = json_decode(static::getResponseText($response), true);
-
-        if (isset($body['ResponseShipments'])) {
+        if (isset($body['ConfirmingResponseShipments'])) {
             /** @var ConfirmingResponseShipment $object */
-            $object = AbstractEntity::jsonDeserialize(
-                ['ConfirmingResponseShipment' => ['ResponseShipments' => $body['ResponseShipments']]]
-            );
+            $object = AbstractEntity::jsonDeserialize($body['ConfirmingResponseShipments']);
             $this->setService($object);
 
             return $object;
@@ -241,7 +238,7 @@ class ConfirmingService extends AbstractService
         $body = $xmlService->write(
             '{'.static::ENVELOPE_NAMESPACE.'}Envelope',
             [
-                '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
+                '{'.static::ENVELOPE_NAMESPACE.'}Body' => [
                     '{'.static::SERVICES_NAMESPACE.'}Confirming' => $confirming,
                 ],
             ]

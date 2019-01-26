@@ -230,19 +230,19 @@ class ConfirmingServiceRestTest extends TestCase
     public function testConfirmsALabelRest()
     {
         $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode([
-                'ResponseShipments' => [
-                    [
-                        'Barcode'  => '3SDEVC201611210',
-                        'Warnings' => [
-                            [
-                                'Code'        => '',
-                                'Description' => '',
-                            ],
+            new Response(
+                200,
+                ['Content-Type' => 'application/json;charset=UTF-8'],
+                json_encode([
+                    'ConfirmingResponseShipments' => [
+                        'ConfirmingResponseShipment' => [
+                            'Barcode' => '3SDEVC987119100',
+                            'Warnings' => [],
+                            'Errors' => [],
                         ],
                     ],
-                ],
-            ])),
+                ])
+            ),
         ]);
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();
@@ -291,28 +291,20 @@ class ConfirmingServiceRestTest extends TestCase
     {
         $mock = new MockHandler([
             new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode([
-                'ResponseShipments' => [
-                    [
-                        'Barcode'  => '3SDEVC201611210',
-                        'Warnings' => [
-                            [
-                                'Code'        => '',
-                                'Description' => '',
-                            ],
-                        ],
+                'ConfirmingResponseShipments' => [
+                    'ConfirmingResponseShipment' => [
+                        'Barcode' => '3SDEVC201611210',
+                        'Warnings' => [],
+                        'Errors' => [],
                     ],
                 ],
             ])),
             new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode([
-                'ResponseShipments' => [
-                    [
-                        'Barcode'  => '3SDEVC201611211',
-                        'Warnings' => [
-                            [
-                                'Code'        => '',
-                                'Description' => '',
-                            ],
-                        ],
+                'ConfirmingResponseShipments' => [
+                    'ConfirmingResponseShipment' => [
+                        'Barcode' => '3SDEVC201611211',
+                        'Warnings' => [],
+                        'Errors' => [],
                     ],
                 ],
             ])),
