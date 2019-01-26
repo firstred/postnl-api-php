@@ -11,12 +11,12 @@
   ],
   "scripts": {
     "install:phpcs": "vendor/bin/phpcs --config-set installed_paths vendor/escapestudios/symfony2-coding-standard",
-    "phpcs": "vendor/bin/phpcs --standard=Symfony --extensions=php src/ tests/",
+    "phpcs": "vendor/bin/phpcs --standard=Symfony --extensions=php src/ Tests/",
     "phpcs:src": "vendor/bin/phpcs --standard=Symfony --extensions=php src/",
-    "phpcs:tests": "vendor/bin/phpcs --standard=Symfony --extensions=php tests/",
-    "phpcbf": "vendor/bin/phpcbf --standard=Symfony --extensions=php src/ tests/",
+    "phpcs:tests": "vendor/bin/phpcs --standard=Symfony --extensions=php Tests/",
+    "phpcbf": "vendor/bin/phpcbf --standard=Symfony --extensions=php src/ Tests/",
     "phpcbf:src": "vendor/bin/phpcbf --standard=Symfony --extensions=php src/",
-    "phpcbf:tests": "vendor/bin/phpcbf --standard=Symfony --extensions=php tests/",
+    "phpcbf:tests": "vendor/bin/phpcbf --standard=Symfony --extensions=php Tests/",
     "test": "vendor/bin/phpunit --testdox",
     "test:unit": "vendor/bin/phpunit --testdox --testsuite unit",
     "test:integration": "vendor/bin/phpunit --testdox --testsuite integration"
