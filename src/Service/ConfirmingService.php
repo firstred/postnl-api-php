@@ -49,11 +49,11 @@ use Sabre\Xml\Service as XmlService;
 class ConfirmingService extends AbstractService
 {
     // API Version
-    const VERSION = '2.1';
+    const VERSION = '2.0';
 
     // Endpoints
-    const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v1_10/confirm';
-    const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v1_10/confirm';
+    const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v2/confirm';
+    const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2/confirm';
 
     // SOAP API
     const SOAP_ACTION = 'http://postnl.nl/cif/services/ConfirmingWebService/IConfirmingWebService/Confirming';
