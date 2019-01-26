@@ -27,8 +27,9 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace Firstred\PostNL\Tests\Service;
+namespace Firstred\PostNL\Tests\Unit\Service;
 
+use Cache\Adapter\Void\VoidCachePool;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
@@ -45,11 +46,11 @@ use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\BarcodeService;
 
 /**
- * Class BarcodeServiceRestTest
+ * Class BarcodeServiceSoapTest
  *
- * @testdox The BarcodeService (REST)
+ * @testdox The BarcodeService (SOAP)
  */
-class BarcodeServiceRestTest extends TestCase
+class BarcodeServiceSoapTest extends TestCase
 {
     /** @var PostNL $postnl */
     protected $postnl;
@@ -84,10 +85,12 @@ class BarcodeServiceRestTest extends TestCase
                 ->setGlobalPackCustomerCode('1234'),
             'test',
             true,
-            PostNL::MODE_REST
+            PostNL::MODE_SOAP
         );
 
         $this->service = $this->postnl->getBarcodeService();
+        $this->service->cache = new VoidCachePool();
+        $this->service->ttl = 1;
     }
 
     /**
@@ -107,17 +110,10 @@ class BarcodeServiceRestTest extends TestCase
     }
 
     /**
-     * @testdox returns a valid service object
-     */
-    public function testHasValidBarcodeService()
-    {
-        $this->assertInstanceOf('\\Firstred\\PostNL\\Service\\BarcodeService', $this->service);
-    }
-
-    /**
      * @testdox creates a valid 3S barcode request
      *
      * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
+     *
      * @throws \Exception
      */
     public function testCreatesAValid3SBarcodeRequest()
@@ -126,7 +122,9 @@ class BarcodeServiceRestTest extends TestCase
         $range = $this->getRange('3S');
         $serie = $this->postnl->findBarcodeSerie('3S', $range, false);
 
-        $this->lastRequest = $request = $this->service->buildGenerateBarcodeRequestREST(
+        $message = new Message();
+
+        $this->lastRequest = $request = $this->service->buildGenerateBarcodeRequestSOAP(
             GenerateBarcode::create()
                 ->setBarcode(
                     Barcode::create()
@@ -134,29 +132,33 @@ class BarcodeServiceRestTest extends TestCase
                         ->setSerie($serie)
                         ->setType($type)
                 )
-                ->setMessage(new Message())
+                ->setMessage($message)
                 ->setCustomer($this->postnl->getCustomer())
         );
 
-        $query = \GuzzleHttp\Psr7\parse_query($request->getUri()->getQuery());
-
-        $this->assertEquals(
-            [
-            'CustomerCode'   => 'DEVC',
-            'CustomerNumber' => '11223344',
-            'Type'           => '3S',
-            'Serie'          => '987000000-987600000',
-            ],
-            $query,
-            '',
-            0,
-            10,
-            true
-        );
-        $this->assertEmpty((string) $request->getBody());
-        $this->assertEquals('test', $request->getHeaderLine('apikey'));
-        $this->assertEquals('', $request->getHeaderLine('Content-Type'));
-        $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
+        $this->assertEquals($this->postnl->getApiKey(), $request->getHeaderLine('apikey'));
+        $this->assertEquals('text/xml', $request->getHeaderLine('Accept'));
+        $this->assertEquals("<?xml version=\"1.0\"?>
+<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:services=\"http://postnl.nl/cif/services/BarcodeWebService/\" xmlns:domain=\"http://postnl.nl/cif/domain/BarcodeWebService/\" xmlns:schema=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:common=\"http://postnl.nl/cif/services/common/\">
+ <soap:Body>
+  <services:GenerateBarcode>
+   <domain:Message>
+    <domain:MessageID>{$message->getMessageID()}</domain:MessageID>
+    <domain:MessageTimeStamp>{$message->getMessageTimeStamp()}</domain:MessageTimeStamp>
+   </domain:Message>
+   <domain:Customer>
+    <domain:CustomerCode>DEVC</domain:CustomerCode>
+    <domain:CustomerNumber>11223344</domain:CustomerNumber>
+   </domain:Customer>
+   <domain:Barcode>
+    <domain:Type>3S</domain:Type>
+    <domain:Range>DEVC</domain:Range>
+    <domain:Serie>987000000-987600000</domain:Serie>
+   </domain:Barcode>
+  </services:GenerateBarcode>
+ </soap:Body>
+</soap:Envelope>
+", (string) $request->getBody());
     }
 
     /**
@@ -164,12 +166,10 @@ class BarcodeServiceRestTest extends TestCase
      *
      * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
      */
-    public function testSingleBarcodeRest()
+    public function testSingleBarcodeSoap()
     {
         $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode([
-                'Barcode' => '3SDEVC816223392',
-            ])),
+            new Response(200, ['Content-Type' => 'text/xml;charset=UTF-8'], $this->mockValidBarcodeResponse('3SDEVC816223392')),
         ]);
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();
@@ -180,47 +180,18 @@ class BarcodeServiceRestTest extends TestCase
     }
 
     /**
-     * @testdox return a valid single barcode for a country
-     *
-     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
-     * @throws \Firstred\PostNL\Exception\InvalidConfigurationException
-     */
-    public function testSingleBarCodeByCountryRest()
-    {
-        $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode([
-                'Barcode' => '3SDEVC816223392',
-            ])),
-        ]);
-        $handler = HandlerStack::create($mock);
-        $mockClient = new MockClient();
-        $mockClient->setHandler($handler);
-        $this->postnl->setHttpClient($mockClient);
-
-        $this->assertEquals('3SDEVC816223392', $this->postnl->generateBarcodeByCountryCode('NL'));
-    }
-
-    /**
      * @testdox returns several barcodes
      *
      * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
      * @throws \Firstred\PostNL\Exception\InvalidConfigurationException
      */
-    public function testMultipleNLBarcodesRest()
+    public function testMultipleNLBarcodesSoap()
     {
         $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode([
-                'Barcode' => '3SDEVC816223392',
-            ])),
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode([
-                'Barcode' => '3SDEVC816223393',
-            ])),
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode([
-                'Barcode' => '3SDEVC816223394',
-            ])),
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode([
-                'Barcode' => '3SDEVC816223395',
-            ])),
+            new Response(200, ['Content-Type' => 'text/xml;charset=UTF-8'], $this->mockValidBarcodeResponse('3SDEVC816223392')),
+            new Response(200, ['Content-Type' => 'text/xml;charset=UTF-8'], $this->mockValidBarcodeResponse('3SDEVC816223393')),
+            new Response(200, ['Content-Type' => 'text/xml;charset=UTF-8'], $this->mockValidBarcodeResponse('3SDEVC816223394')),
+            new Response(200, ['Content-Type' => 'text/xml;charset=UTF-8'], $this->mockValidBarcodeResponse('3SDEVC816223395')),
         ]);
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();
@@ -243,26 +214,6 @@ class BarcodeServiceRestTest extends TestCase
     }
 
     /**
-     * @testdox return a valid single barcode
-     *
-     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
-     */
-    public function testNegativeSingleBarcodeInvalidResponse()
-    {
-        $this->expectException('Firstred\\PostNL\\Exception\\ResponseException');
-
-        $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], 'asdfojasuidfo'),
-        ]);
-        $handler = HandlerStack::create($mock);
-        $mockClient = new MockClient();
-        $mockClient->setHandler($handler);
-        $this->postnl->setHttpClient($mockClient);
-
-        $this->postnl->generateBarcode('3S');
-    }
-
-    /**
      * @param string $type
      *
      * @return string
@@ -274,5 +225,23 @@ class BarcodeServiceRestTest extends TestCase
         }
 
         return $this->postnl->getCustomer()->getGlobalPackCustomerCode();
+    }
+
+    /**
+     * @param string $barcode
+     *
+     * @return string
+     */
+    protected function mockValidBarcodeResponse($barcode)
+    {
+        return "<code><s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\">
+  <s:Body>
+    <GenerateBarcodeResponse xmlns=\"http://postnl.nl/cif/services/BarcodeWebService/\"
+xmlns:a=\"http://postnl.nl/cif/domain/BarcodeWebService/\">
+      <a:Barcode>{$barcode}</a:Barcode>
+    </GenerateBarcodeResponse>
+  </s:Body>
+</s:Envelope>
+</code>";
     }
 }

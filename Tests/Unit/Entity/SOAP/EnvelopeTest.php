@@ -27,41 +27,29 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace Firstred\PostNL\Tests\Entity\SOAP;
+namespace Firstred\PostNL\Tests\Unit\Entity\SOAP;
 
+use Firstred\PostNL\Entity\SOAP\Body;
+use Firstred\PostNL\Entity\SOAP\Envelope;
+use Firstred\PostNL\Entity\SOAP\Header;
 use PHPUnit\Framework\TestCase;
-use Sabre\Xml\Service as XmlService;
-use Firstred\PostNL\Entity\SOAP\UsernameToken;
 
 /**
- * Class UsernameTokenTest
+ * Class EnvelopeTest
  *
- * @testdox The UsernameToken class
+ * @testdox The Envelope class
  */
-class UsernameTokenTest extends TestCase
+class EnvelopeTest extends TestCase
 {
     /**
-     * @testdox should automatically hash the password for the legacy API
+     * @testdox can return the body
      */
-    public function testLegacyPassword()
+    public function testBody()
     {
-        $token = new UsernameToken('test');
-        $token->setCurrentService('Barcode');
-        $xmlService = new XmlService();
-        $write = $xmlService->write(
-            '{test}UserNameToken',
-            [
-                '{test}token' => $token,
-            ]
-        );
+        $envelope = Envelope::create()
+            ->setBody(Body::create())
+        ;
 
-        $this->assertEquals('<?xml version="1.0"?>
-<x1:UserNameToken xmlns:x1="test">
- <x1:token xmlns:x1="test">
-  <x2:Username xmlns:x2="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">test</x2:Username>
-  <x2:Password xmlns:x2="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">a94a8fe5ccb19ba61c4c0873d391e987982fbbd3</x2:Password>
- </x1:token>
-</x1:UserNameToken>
-', $write);
+        $this->assertInstanceOf('\\Firstred\\PostNL\\Entity\\SOAP\\Body', $envelope->getBody());
     }
 }

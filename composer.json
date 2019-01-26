@@ -16,7 +16,10 @@
     "phpcs:tests": "vendor/bin/phpcs --standard=Symfony --extensions=php tests/",
     "phpcbf": "vendor/bin/phpcbf --standard=Symfony --extensions=php src/ tests/",
     "phpcbf:src": "vendor/bin/phpcbf --standard=Symfony --extensions=php src/",
-    "phpcbf:tests": "vendor/bin/phpcbf --standard=Symfony --extensions=php tests/"
+    "phpcbf:tests": "vendor/bin/phpcbf --standard=Symfony --extensions=php tests/",
+    "test": "vendor/bin/phpunit --testdox",
+    "test:unit": "vendor/bin/phpunit --testdox --testsuite unit",
+    "test:integration": "vendor/bin/phpunit --testdox --testsuite integration"
   },
   "require": {
     "php": "^7.1",
@@ -45,7 +48,18 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Firstred\\PostNL\\": "tests/"
+      "Firstred\\PostNL\\": "Tests/"
+    }
+  },
+  "extra": {
+    "hooks": {
+      "pre-commit": [
+        "echo committing as $(git config user.name)",
+        "composer phpcs"
+      ],
+      "pre-push": [
+        "composer test:unit"
+      ]
     }
   }
 }

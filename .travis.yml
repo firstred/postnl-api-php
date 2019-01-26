@@ -11,8 +11,11 @@ before_script:
   - composer install --prefer-dist
 
 script:
-  - cd tests/
-  - php ../vendor/bin/phpunit --testdox
+  - composer test:unit
+  - >
+    if [[ "${TRAVIS_PULL_REQUEST" == "false" ]]; then
+      composer test:integration
+    fi
 
 after_success:
 - bash <(curl -s https://codecov.io/bash)

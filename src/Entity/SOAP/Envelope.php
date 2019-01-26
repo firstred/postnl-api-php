@@ -37,10 +37,8 @@ use Firstred\PostNL\Service\LabellingService;
 /**
  * Class Envelope
  *
- * @method Header|null getHeader()
  * @method Body|null   getBody()
  *
- * @method Envelope setHeader(Header|null $header = null)
  * @method Envelope setBody(Body|null $body = null)
  *
  * NOTE: this class has been introduced for deserializing
@@ -54,37 +52,28 @@ class Envelope extends AbstractEntity
      */
     public static $defaultProperties = [
         'Barcode'        => [
-            'Header' => BarcodeService::ENVELOPE_NAMESPACE,
-            'Body'   => BarcodeService::ENVELOPE_NAMESPACE,
+            'Body' => BarcodeService::ENVELOPE_NAMESPACE,
         ],
         'Confirming'     => [
-            'Header' => ConfirmingService::ENVELOPE_NAMESPACE,
-            'Body'   => ConfirmingService::ENVELOPE_NAMESPACE,
+            'Body' => ConfirmingService::ENVELOPE_NAMESPACE,
         ],
         'Labelling'      => [
-            'Header' => LabellingService::ENVELOPE_NAMESPACE,
-            'Body'   => LabellingService::ENVELOPE_NAMESPACE,
+            'Body' => LabellingService::ENVELOPE_NAMESPACE,
         ],
         'ShippingStatus' => [
-            'Header' => LabellingService::ENVELOPE_NAMESPACE,
-            'Body'   => LabellingService::ENVELOPE_NAMESPACE,
+            'Body' => LabellingService::ENVELOPE_NAMESPACE,
         ],
         'DeliveryDate'   => [
-            'Header' => LabellingService::ENVELOPE_NAMESPACE,
-            'Body'   => LabellingService::ENVELOPE_NAMESPACE,
+            'Body' => LabellingService::ENVELOPE_NAMESPACE,
         ],
         'Location'       => [
-            'Header' => LabellingService::ENVELOPE_NAMESPACE,
-            'Body'   => LabellingService::ENVELOPE_NAMESPACE,
+            'Body' => LabellingService::ENVELOPE_NAMESPACE,
         ],
         'Timeframe'      => [
-            'Header' => LabellingService::ENVELOPE_NAMESPACE,
-            'Body'   => LabellingService::ENVELOPE_NAMESPACE,
+            'Body' => LabellingService::ENVELOPE_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var Header|null $Header */
-    protected $Header;
     /** @var Body|null $Body */
     protected $Body;
     // @codingStandardsIgnoreEnd
@@ -92,16 +81,14 @@ class Envelope extends AbstractEntity
     /**
      * Envelope constructor.
      *
-     * @param Header|null $header
-     * @param Body|null   $body
+     * @param Body|null $body
+     *
+     * @since 1.0.0
      */
-    public function __construct(Header $header = null, Body $body = null)
+    public function __construct(Body $body = null)
     {
         parent::__construct();
 
-        if ($header) {
-            $this->setHeader($header);
-        }
         if ($body) {
             $this->setBody($body);
         }

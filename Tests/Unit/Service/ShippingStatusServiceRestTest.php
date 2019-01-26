@@ -27,7 +27,7 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace Firstred\PostNL\Tests\Service;
+namespace Firstred\PostNL\Tests\Unit\Service;
 
 use Cache\Adapter\Void\VoidCachePool;
 use GuzzleHttp\Handler\MockHandler;
@@ -522,7 +522,7 @@ class ShippingStatusRestTest extends TestCase
         $this->assertEquals(3, count($completeStatusResponse->getShipments()[0]->getEvents()));
         $this->assertNull($completeStatusResponse->getShipments()[0]->getGroups());
         $this->assertInstanceOf('\\Firstred\\PostNL\\Entity\\Customer', $completeStatusResponse->getShipments()[0]->getCustomer());
-        $this->assertEquals('07-03-2018 09:50:47', $completeStatusResponse->getShipments()[0]->getOldStatuses()[4]->getCurrentOldStatusTimeStamp());
+        $this->assertEquals('07-03-2018 09:50:47', $completeStatusResponse->getShipments()[0]->getOldStatuses()[4]->getTimeStamp());
     }
 
     /**
@@ -681,6 +681,6 @@ class ShippingStatusRestTest extends TestCase
                 ->setBarcode('3SABCD6659149'))
         );
 
-        $this->assertInstanceOf('\\Firstred\\PostNL\\Entity\\Response\\GetSignatureResponseSignature', $signatureResponse);
+        $this->assertInstanceOf('\\Firstred\\PostNL\\Entity\\Response\\SignatureResponse', $signatureResponse);
     }
 }

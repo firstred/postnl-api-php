@@ -30,7 +30,6 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Service;
 
 use Firstred\PostNL\Entity\Request\GenerateBarcode;
-use Firstred\PostNL\Entity\SOAP\Security;
 use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
@@ -57,6 +56,7 @@ class BarcodeService extends AbstractService
     const ENVELOPE_NAMESPACE = 'http://schemas.xmlsoap.org/soap/envelope/';
     const SERVICES_NAMESPACE = 'http://postnl.nl/cif/services/BarcodeWebService/';
     const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/BarcodeWebService/';
+
     /**
      * Namespaces uses for the SOAP version of this service
      *
@@ -67,7 +67,6 @@ class BarcodeService extends AbstractService
         self::OLD_ENVELOPE_NAMESPACE => 'env',
         self::SERVICES_NAMESPACE     => 'services',
         self::DOMAIN_NAMESPACE       => 'domain',
-        Security::SECURITY_NAMESPACE => 'wsse',
         self::XML_SCHEMA_NAMESPACE   => 'schema',
         self::COMMON_NAMESPACE       => 'common',
     ];
@@ -107,22 +106,21 @@ class BarcodeService extends AbstractService
      */
     public function buildGenerateBarcodeRequestREST(GenerateBarcode $generateBarcode)
     {
-        $apiKey = $this->postnl->getApiKey();
         $this->setService($generateBarcode);
 
         return new Request(
             'GET',
-            $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT.'?'.http_build_query(
+            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).'?'.http_build_query(
                 [
-                        'CustomerCode'   => $generateBarcode->getCustomer()->getCustomerCode(),
-                        'CustomerNumber' => $generateBarcode->getCustomer()->getCustomerNumber(),
-                        'Type'           => $generateBarcode->getBarcode()->getType(),
-                        'Serie'          => $generateBarcode->getBarcode()->getSerie(),
-                    ]
+                    'CustomerCode'   => $generateBarcode->getCustomer()->getCustomerCode(),
+                    'CustomerNumber' => $generateBarcode->getCustomer()->getCustomerNumber(),
+                    'Type'           => $generateBarcode->getBarcode()->getType(),
+                    'Serie'          => $generateBarcode->getBarcode()->getSerie(),
+                ]
             ),
             [
                 'Accept' => 'application/json',
-                'apikey' => $apiKey,
+                'apikey' => $this->postnl->getApiKey(),
             ]
         );
     }
@@ -146,7 +144,7 @@ class BarcodeService extends AbstractService
         $json = json_decode(static::getResponseText($response), true);
 
         if (!isset($json['Barcode'])) {
-            throw new ResponseException('Invalid API Response', null, null, $response);
+            throw new ResponseException('Invalid API Response', 0, null, $response);
         }
 
         return $json;
@@ -247,17 +245,11 @@ class BarcodeService extends AbstractService
             $xmlService->namespaceMap[$namespace] = $prefix;
         }
 
-        $security = new Security($this->postnl->getApiKey());
-
-        $this->setService($security);
         $this->setService($generateBarcode);
 
         $request = $xmlService->write(
             '{'.static::ENVELOPE_NAMESPACE.'}Envelope',
             [
-                '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
-                    ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
-                ],
                 '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
                     '{'.static::SERVICES_NAMESPACE.'}GenerateBarcode' => $generateBarcode,
                 ],
@@ -271,6 +263,7 @@ class BarcodeService extends AbstractService
                 'SOAPAction'   => "\"$soapAction\"",
                 'Accept'       => 'text/xml',
                 'Content-Type' => 'text/xml;charset=UTF-8',
+                'apikey'       => $this->postnl->getApiKey(),
             ],
             $request
         );
@@ -299,7 +292,7 @@ class BarcodeService extends AbstractService
             try {
                 $barcode = $this->processGenerateBarcodeResponseSOAP($response);
             } catch (\Exception $e) {
-                $barcode = new ResponseException($e->getMessage(), $e->getCode(), $e, $response);
+                $barcode = new ResponseException($e->getMessage(), (int) $e->getCode() ?: 0, $e, $response);
             }
 
             $barcodes[$uuid] = $barcode;

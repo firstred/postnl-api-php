@@ -1,5 +1,5 @@
 .idea/
 vendor/
 composer.lock
-tests/logs
-tests/clover.xml
+Tests/logs
+Tests/clover.xml

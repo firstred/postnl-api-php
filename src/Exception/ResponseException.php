@@ -50,7 +50,7 @@ class ResponseException extends AbstractException
      *
      * @since 1.0.0
      */
-    public function __construct($message = "", $code = 0, $previous = null, Response $response = null)
+    public function __construct(string $message = "", int $code = 0, ?Throwable $previous = null, ?Response $response = null)
     {
         parent::__construct($message, $code, $previous);
 

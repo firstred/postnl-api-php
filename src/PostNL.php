@@ -60,8 +60,8 @@ use Firstred\PostNL\Entity\Response\GetDeliveryDateResponse;
 use Firstred\PostNL\Entity\Response\GetLocationsInAreaResponse;
 use Firstred\PostNL\Entity\Response\GetNearestLocationsResponse;
 use Firstred\PostNL\Entity\Response\GetSentDateResponse;
-use Firstred\PostNL\Entity\Response\GetSignatureResponseSignature;
 use Firstred\PostNL\Entity\Response\ResponseTimeframes;
+use Firstred\PostNL\Entity\Response\SignatureResponse;
 use Firstred\PostNL\Entity\Shipment;
 use Firstred\PostNL\Exception\AbstractException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
@@ -185,7 +185,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @var int $mode
      */
-    protected $mode;
+    protected $mode = self::MODE_REST;
 
     /** @var BarcodeService $barcodeService */
     protected $barcodeService;
@@ -236,7 +236,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @since 2.0.0
      */
-    public function getApiKey(): string
+    public function getApiKey(): ?string
     {
         return $this->apiKey;
     }
@@ -318,7 +318,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @since 1.0.0
      */
-    public function getLogger(): LoggerInterface
+    public function getLogger(): ?LoggerInterface
     {
         return $this->logger;
     }
@@ -333,7 +333,7 @@ class PostNL implements LoggerAwareInterface
      * @since 1.0.0
      * @since 2.0.0 Return `self`
      */
-    public function setLogger(LoggerInterface $logger = null): self
+    public function setLogger(?LoggerInterface $logger = null): self
     {
         $this->logger = $logger;
         if ($this->getHttpClient() instanceof ClientInterface) {
@@ -805,12 +805,12 @@ class PostNL implements LoggerAwareInterface
 
         $generateLabels = [];
         foreach ($shipments as $uuid => $shipment) {
-            $generateLabels[$uuid] = [
+            $generateLabels[(string) $uuid] = [
                 (new GenerateLabel(
                     [$shipment],
                     new LabellingMessage($printerType),
                     $this->customer
-                ))->setId($uuid),
+                ))->setId((string) $uuid),
                 $confirm,
             ];
         }
@@ -1127,13 +1127,13 @@ class PostNL implements LoggerAwareInterface
      *
      * @param GetSignature $signature
      *
-     * @return GetSignatureResponseSignature
+     * @return SignatureResponse
      *
      * @throws \Exception
      *
      * @since 1.0.0
      */
-    public function getSignature(GetSignature $signature): GetSignatureResponseSignature
+    public function getSignature(GetSignature $signature): SignatureResponse
     {
         $signature->setCustomer($this->getCustomer());
         if (!$signature->getMessage()) {

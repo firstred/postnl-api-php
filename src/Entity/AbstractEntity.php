@@ -98,11 +98,11 @@ abstract class AbstractEntity implements \JsonSerializable, XmlSerializable
      *
      * @param array $json JSON as associative array
      *
-     * @return AbstractEntity
+     * @return mixed
      *
      * @since 1.0.0
      */
-    public static function jsonDeserialize(array $json): AbstractEntity
+    public static function jsonDeserialize(array $json)
     {
         reset($json);
         $shortClassName = key($json);
@@ -268,11 +268,11 @@ abstract class AbstractEntity implements \JsonSerializable, XmlSerializable
      *
      * @param array $xml Associative array representation of XML response, using Clark notation for namespaces
      *
-     * @return AbstractEntity
+     * @return mixed
      *
      * @since 1.0.0
      */
-    public static function xmlDeserialize(array $xml): AbstractEntity
+    public static function xmlDeserialize(array $xml)
     {
         if (!isset($xml['name']) && isset($xml[0]['name'])) {
             $xml = $xml[0];

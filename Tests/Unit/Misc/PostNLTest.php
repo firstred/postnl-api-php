@@ -27,21 +27,10 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace Firstred\PostNL\Tests\Misc;
+namespace Firstred\PostNL\Tests\Unit\Misc;
 
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Response;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Customer;
-use Firstred\PostNL\Entity\CutOffTime;
-use Firstred\PostNL\Entity\Location;
-use Firstred\PostNL\Entity\Request\GetDeliveryDate;
-use Firstred\PostNL\Entity\Request\GetNearestLocations;
-use Firstred\PostNL\Entity\Request\GetTimeframes;
-use Firstred\PostNL\Entity\SOAP\UsernameToken;
-use Firstred\PostNL\Entity\Timeframe;
-use Firstred\PostNL\HttpClient\MockClient;
 use Firstred\PostNL\PostNL;
 use PHPUnit\Framework\TestCase;
 
@@ -79,7 +68,7 @@ class PostNLTest extends TestCase
                 ]))
                 ->setGlobalPackBarcodeType('AB')
                 ->setGlobalPackCustomerCode('1234'),
-            new UsernameToken(null, 'test'),
+            'test',
             true,
             PostNL::MODE_REST
         );

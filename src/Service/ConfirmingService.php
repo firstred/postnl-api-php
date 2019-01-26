@@ -32,7 +32,6 @@ namespace Firstred\PostNL\Service;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Request\Confirming;
 use Firstred\PostNL\Entity\Response\ConfirmingResponseShipment;
-use Firstred\PostNL\Entity\SOAP\Security;
 use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\ResponseException;
 use GuzzleHttp\Psr7\Request;
@@ -74,7 +73,6 @@ class ConfirmingService extends AbstractService
         self::OLD_ENVELOPE_NAMESPACE => 'env',
         self::SERVICES_NAMESPACE     => 'services',
         self::DOMAIN_NAMESPACE       => 'domain',
-        Security::SECURITY_NAMESPACE => 'wsse',
         self::XML_SCHEMA_NAMESPACE   => 'schema',
         self::COMMON_NAMESPACE       => 'common',
     ];
@@ -103,7 +101,7 @@ class ConfirmingService extends AbstractService
         }
 
         if ($response->getStatusCode() === 200) {
-            throw new ResponseException('Invalid API Response', null, null, $response);
+            throw new ResponseException('Invalid API Response', 0, null, $response);
         }
 
         throw new ApiException('Unable to confirm');
@@ -118,24 +116,22 @@ class ConfirmingService extends AbstractService
      */
     public function buildConfirmRequestREST(Confirming $confirming)
     {
-        $apiKey = $this->postnl->getApiKey();
-
         $this->setService($confirming);
 
         return new Request(
             'POST',
             $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT,
             [
-                'apikey'       => $apiKey,
                 'Accept'       => 'application/json',
                 'Content-Type' => 'application/json;charset=UTF-8',
+                'apikey'       => $this->postnl->getApiKey(),
             ],
             json_encode($confirming)
         );
     }
 
     /**
-     * Proces Confirm REST Response
+     * Process Confirm REST Response
      *
      * @param mixed $response
      *
@@ -152,10 +148,11 @@ class ConfirmingService extends AbstractService
     {
         static::validateRESTResponse($response);
         $body = json_decode(static::getResponseText($response), true);
-        if (isset($body['ConfirmingResponseShipments'])) {
+
+        if (isset($body['ResponseShipments'])) {
             /** @var ConfirmingResponseShipment $object */
             $object = AbstractEntity::jsonDeserialize(
-                ['ConfirmingResponseShipment' => $body['ConfirmingResponseShipments']['ConfirmingResponseShipment']]
+                ['ConfirmingResponseShipment' => ['ResponseShipments' => $body['ResponseShipments']]]
             );
             $this->setService($object);
 
@@ -180,7 +177,7 @@ class ConfirmingService extends AbstractService
 
         foreach ($confirms as $confirm) {
             $httpClient->addOrUpdateRequest(
-                $confirm->getId(),
+                (string) $confirm->getId(),
                 $this->buildConfirmRequestREST($confirm)
             );
         }
@@ -190,7 +187,7 @@ class ConfirmingService extends AbstractService
             try {
                 $confirming = $this->processConfirmResponseREST($response);
                 if (!$confirming instanceof ConfirmingResponseShipment) {
-                    throw new ResponseException('Invalid API Response', null, null, $response);
+                    throw new ResponseException('Invalid API Response', 0, null, $response);
                 }
             } catch (\Exception $e) {
                 $confirming = $e;
@@ -238,17 +235,12 @@ class ConfirmingService extends AbstractService
         foreach (static::$namespaces as $namespace => $prefix) {
             $xmlService->namespaceMap[$namespace] = $prefix;
         }
-        $security = new Security($this->postnl->getApiKey());
 
-        $this->setService($security);
         $this->setService($confirming);
 
         $body = $xmlService->write(
             '{'.static::ENVELOPE_NAMESPACE.'}Envelope',
             [
-                '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
-                    ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
-                ],
                 '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
                     '{'.static::SERVICES_NAMESPACE.'}Confirming' => $confirming,
                 ],
@@ -262,6 +254,7 @@ class ConfirmingService extends AbstractService
                 'SOAPAction'   => "\"$soapAction\"",
                 'Accept'       => 'text/xml',
                 'Content-Type' => 'text/xml;charset=UTF-8',
+                'apikey'       => $this->postnl->getApiKey(),
             ],
             $body
         );
@@ -314,7 +307,7 @@ class ConfirmingService extends AbstractService
 
         foreach ($confirmings as $confirming) {
             $httpClient->addOrUpdateRequest(
-                $confirming->getId(),
+                (string) $confirming->getId(),
                 $this->buildConfirmRequestSOAP($confirming)
             );
         }

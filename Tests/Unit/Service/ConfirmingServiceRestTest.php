@@ -27,7 +27,7 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace Firstred\PostNL\Tests\Service;
+namespace Firstred\PostNL\Tests\Unit\Service;
 
 use Cache\Adapter\Void\VoidCachePool;
 use GuzzleHttp\Handler\MockHandler;
@@ -42,7 +42,6 @@ use Firstred\PostNL\Entity\Dimension;
 use Firstred\PostNL\Entity\Message\LabellingMessage;
 use Firstred\PostNL\Entity\Request\Confirming;
 use Firstred\PostNL\Entity\Shipment;
-use Firstred\PostNL\Entity\SOAP\UsernameToken;
 use Firstred\PostNL\HttpClient\MockClient;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\ConfirmingService;
@@ -85,7 +84,7 @@ class ConfirmingServiceRestTest extends TestCase
                 ]))
                 ->setGlobalPackBarcodeType('AB')
                 ->setGlobalPackCustomerCode('1234'),
-            new UsernameToken(null, 'test'),
+            'test',
             true,
             PostNL::MODE_REST
         );
@@ -121,6 +120,8 @@ class ConfirmingServiceRestTest extends TestCase
 
     /**
      * @testdox confirms a label properly
+     *
+     * @throws \Exception
      */
     public function testConfirmsALabelRequestRest()
     {
@@ -154,7 +155,7 @@ class ConfirmingServiceRestTest extends TestCase
                         ])
                         ->setBarcode('3S1234567890123')
                         ->setDeliveryAddress('01')
-                        ->setDimension(new Dimension('2000'))
+                        ->setDimension(new Dimension(2000))
                         ->setProductCodeDelivery('3085'),
                 ])
                 ->setMessage($message)
@@ -223,6 +224,8 @@ class ConfirmingServiceRestTest extends TestCase
 
     /**
      * @testdox can generate a single label
+     *
+     * @throws \Exception
      */
     public function testConfirmsALabelRest()
     {
@@ -272,7 +275,7 @@ class ConfirmingServiceRestTest extends TestCase
                 ])
                 ->setBarcode('3S1234567890123')
                 ->setDeliveryAddress('01')
-                ->setDimension(new Dimension('2000'))
+                ->setDimension(new Dimension(2000))
                 ->setProductCodeDelivery('3085')
         );
 
@@ -345,7 +348,7 @@ class ConfirmingServiceRestTest extends TestCase
                     ])
                     ->setBarcode('3SDEVC201611210')
                     ->setDeliveryAddress('01')
-                    ->setDimension(new Dimension('2000'))
+                    ->setDimension(new Dimension(2000))
                     ->setProductCodeDelivery('3085'),
                 (new Shipment())
                     ->setAddresses([
@@ -372,7 +375,7 @@ class ConfirmingServiceRestTest extends TestCase
                     ])
                     ->setBarcode('3SDEVC201611211')
                     ->setDeliveryAddress('01')
-                    ->setDimension(new Dimension('2000'))
+                    ->setDimension(new Dimension(2000))
                     ->setProductCodeDelivery('3085'),
         ]);
 
@@ -381,6 +384,8 @@ class ConfirmingServiceRestTest extends TestCase
 
     /**
      * @testdox throws exception on invalid response
+     *
+     * @throws \Exception
      */
     public function testNegativeGenerateLabelInvalidResponseRest()
     {
@@ -420,7 +425,7 @@ class ConfirmingServiceRestTest extends TestCase
                 ])
                 ->setBarcode('3S1234567890123')
                 ->setDeliveryAddress('01')
-                ->setDimension(new Dimension('2000'))
+                ->setDimension(new Dimension(2000))
                 ->setProductCodeDelivery('3085')
         );
     }

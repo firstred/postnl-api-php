@@ -32,7 +32,6 @@ namespace Firstred\PostNL\Service;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Request\GetTimeframes;
 use Firstred\PostNL\Entity\Response\ResponseTimeframes;
-use Firstred\PostNL\Entity\SOAP\Security;
 use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
@@ -75,7 +74,6 @@ class TimeframeService extends AbstractService
         self::OLD_ENVELOPE_NAMESPACE                                => 'env',
         self::SERVICES_NAMESPACE                                    => 'services',
         self::DOMAIN_NAMESPACE                                      => 'domain',
-        Security::SECURITY_NAMESPACE                                => 'wsse',
         self::XML_SCHEMA_NAMESPACE                                  => 'schema',
         self::COMMON_NAMESPACE                                      => 'common',
         'http://schemas.microsoft.com/2003/10/Serialization/Arrays' => 'arr',
@@ -136,11 +134,10 @@ class TimeframeService extends AbstractService
      */
     public function buildGetTimeframesRequestREST(GetTimeframes $getTimeframes)
     {
-        $apiKey = $this->postnl->getApiKey();
         $this->setService($getTimeframes);
         $timeframe = $getTimeframes->getTimeframe()[0];
         $query = [
-            'AllowSundaySorting' => in_array($timeframe->getSundaySorting(), [true, 'true', 1], 1) ? '1' : '0',
+            'AllowSundaySorting' => in_array($timeframe->getSundaySorting(), [true, 'true', 1], true),
             'StartDate'          => $timeframe->getStartDate(),
             'EndDate'            => $timeframe->getEndDate(),
             'PostalCode'         => $timeframe->getPostalCode(),
@@ -176,9 +173,9 @@ class TimeframeService extends AbstractService
             'GET',
             ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint,
             [
-                'apikey'       => $apiKey,
                 'Accept'       => 'application/json',
                 'Content-Type' => 'application/json;charset=UTF-8',
+                'apikey'       => $this->postnl->getApiKey(),
             ]
         );
     }
@@ -304,17 +301,12 @@ class TimeframeService extends AbstractService
         foreach (static::$namespaces as $namespace => $prefix) {
             $xmlService->namespaceMap[$namespace] = $prefix;
         }
-        $security = new Security($this->postnl->getApiKey());
 
-        $this->setService($security);
         $this->setService($getTimeframes);
 
         $request = $xmlService->write(
             '{'.static::ENVELOPE_NAMESPACE.'}Envelope',
             [
-                '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
-                    ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
-                ],
                 '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
                     '{'.static::SERVICES_NAMESPACE.'}GetTimeframes' => $getTimeframes,
                 ],
@@ -328,6 +320,7 @@ class TimeframeService extends AbstractService
                 'SOAPAction'   => "\"$soapAction\"",
                 'Accept'       => 'text/xml',
                 'Content-Type' => 'text/xml;charset=UTF-8',
+                'apikey'       => $this->postnl->getApiKey(),
             ],
             $request
         );

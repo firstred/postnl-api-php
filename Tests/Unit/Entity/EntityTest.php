@@ -27,7 +27,7 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace Firstred\PostNL\Tests\Entity;
+namespace Firstred\PostNL\Tests\Unit\Entity;
 
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Address;
@@ -44,8 +44,8 @@ class EntityTest extends TestCase
      */
     public function testConstructors()
     {
-        foreach (scandir(__DIR__.'/../../src/Entity') as $entityName) {
-            if (in_array($entityName, ['.', '..', 'AbstractEntity.php']) || is_dir(__DIR__."/../../src/Entity/$entityName")) {
+        foreach (scandir(__DIR__.'/../../../src/Entity') as $entityName) {
+            if (in_array($entityName, ['.', '..', 'AbstractEntity.php']) || is_dir(__DIR__."/../../../src/Entity/$entityName")) {
                 continue;
             }
 
@@ -55,7 +55,7 @@ class EntityTest extends TestCase
             $this->assertInstanceOf("\\Firstred\\PostNL\\Entity\\AbstractEntity", $entity);
         }
 
-        foreach (scandir(__DIR__.'/../../src/Entity/Message') as $entityName) {
+        foreach (scandir(__DIR__.'/../../../src/Entity/Message') as $entityName) {
             if (in_array($entityName, ['.', '..']) || is_dir(__DIR__."/../../src/Entity/Message/$entityName")) {
                 continue;
             }
@@ -66,7 +66,7 @@ class EntityTest extends TestCase
             $this->assertInstanceOf("\\Firstred\\PostNL\\Entity\\AbstractEntity", $entity);
         }
 
-        foreach (scandir(__DIR__.'/../../src/Entity/Request') as $entityName) {
+        foreach (scandir(__DIR__.'/../../../src/Entity/Request') as $entityName) {
             if (in_array($entityName, ['.', '..']) || is_dir(__DIR__."/../../src/Entity/Request/$entityName")) {
                 continue;
             }
@@ -77,7 +77,7 @@ class EntityTest extends TestCase
             $this->assertInstanceOf("\\Firstred\\PostNL\\Entity\\AbstractEntity", $entity);
         }
 
-        foreach (scandir(__DIR__.'/../../src/Entity/Response') as $entityName) {
+        foreach (scandir(__DIR__.'/../../../src/Entity/Response') as $entityName) {
             if (in_array($entityName, ['.', '..']) || is_dir(__DIR__."/../../src/Entity/Response/$entityName")) {
                 continue;
             }

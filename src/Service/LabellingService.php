@@ -32,7 +32,6 @@ namespace Firstred\PostNL\Service;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Request\GenerateLabel;
 use Firstred\PostNL\Entity\Response\GenerateLabelResponse;
-use Firstred\PostNL\Entity\SOAP\Security;
 use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
@@ -77,7 +76,6 @@ class LabellingService extends AbstractService
         self::OLD_ENVELOPE_NAMESPACE => 'env',
         self::SERVICES_NAMESPACE     => 'services',
         self::DOMAIN_NAMESPACE       => 'domain',
-        Security::SECURITY_NAMESPACE => 'wsse',
         self::XML_SCHEMA_NAMESPACE   => 'schema',
         self::COMMON_NAMESPACE       => 'common',
     ];
@@ -127,7 +125,7 @@ class LabellingService extends AbstractService
         }
 
         if ($response->getStatusCode() === 200) {
-            throw new ResponseException('Invalid API response', null, null, $response);
+            throw new ResponseException('Invalid API response', 0, null, $response);
         }
 
         throw new ApiException('Unable to generate label');
@@ -143,7 +141,6 @@ class LabellingService extends AbstractService
      */
     public function buildGenerateLabelRequestREST(GenerateLabel $generateLabel, bool $confirm = true): Request
     {
-        $apiKey = $this->postnl->getApiKey();
         $this->setService($generateLabel);
 
         return new Request(
@@ -152,9 +149,9 @@ class LabellingService extends AbstractService
                 ['confirm' => $confirm]
             ),
             [
-                'apikey'       => $apiKey,
                 'Accept'       => 'application/json',
                 'Content-Type' => 'application/json;charset=UTF-8',
+                'apikey'       => $this->postnl->getApiKey(),
             ],
             json_encode($generateLabel, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES)
         );
@@ -198,6 +195,7 @@ class LabellingService extends AbstractService
 
         $responses = [];
         foreach ($generateLabels as $uuid => $generateLabel) {
+            $uuid = (string) $uuid;
             $item = $this->retrieveCachedItem($uuid);
             $response = null;
             if ($item instanceof CacheItemInterface) {
@@ -214,7 +212,7 @@ class LabellingService extends AbstractService
             }
 
             $httpClient->addOrUpdateRequest(
-                $uuid,
+                (string) $uuid,
                 $this->buildGenerateLabelRequestREST($generateLabel[0], $generateLabel[1])
             );
         }
@@ -310,17 +308,12 @@ class LabellingService extends AbstractService
         foreach (static::$namespaces as $namespace => $prefix) {
             $xmlService->namespaceMap[$namespace] = $prefix;
         }
-        $security = new Security($this->postnl->getApiKey());
 
-        $this->setService($security);
         $this->setService($generateLabel);
 
         $request = $xmlService->write(
             '{'.static::ENVELOPE_NAMESPACE.'}Envelope',
             [
-                '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
-                    ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
-                ],
                 '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
                     '{'.static::SERVICES_NAMESPACE.'}GenerateLabel' => $generateLabel,
                 ],
@@ -334,6 +327,7 @@ class LabellingService extends AbstractService
                 'SOAPAction'   => "\"$soapAction\"",
                 'Accept'       => 'text/xml',
                 'Content-Type' => 'text/xml;charset=UTF-8',
+                'apikey'       => $this->postnl->getApiKey(),
             ],
             $request
         );
@@ -357,7 +351,7 @@ class LabellingService extends AbstractService
         $xml = @simplexml_load_string(static::getResponseText($response));
         if (false === $xml) {
             if ($response->getStatusCode() === 200) {
-                throw new ResponseException('Invalid API Response', null, null, $response);
+                throw new ResponseException('Invalid API Response', 0, null, $response);
             }
 
             throw new ApiException('Invalid API Response');
@@ -390,6 +384,7 @@ class LabellingService extends AbstractService
 
         $responses = [];
         foreach ($generateLabels as $uuid => $generateLabel) {
+            $uuid = (string) $uuid;
             $item = $this->retrieveCachedItem($uuid);
             $response = null;
             if ($item instanceof CacheItemInterface) {
@@ -406,7 +401,7 @@ class LabellingService extends AbstractService
             }
 
             $httpClient->addOrUpdateRequest(
-                $uuid,
+                (string) $uuid,
                 $this->buildGenerateLabelRequestSOAP($generateLabel[0], $generateLabel[1])
             );
         }

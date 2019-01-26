@@ -44,7 +44,6 @@ use Firstred\PostNL\Entity\Response\CompleteStatusResponse;
 use Firstred\PostNL\Entity\Response\CurrentStatusResponse;
 use Firstred\PostNL\Entity\Response\GetSignatureResponseSignature;
 use Firstred\PostNL\Entity\Response\SignatureResponse;
-use Firstred\PostNL\Entity\SOAP\Security;
 use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
@@ -69,13 +68,11 @@ use Sabre\Xml\Service as XmlService;
  * @method CompleteStatusResponse
  *         completeStatus(CompleteStatus|CompleteStatusByReference|CompleteStatusByPhase|CompleteStatusByStatus
  *         $completeStatus)
- * @method Request
- *         buildCompleteStatusRequest(CompleteStatus|CompleteStatusByReference|CompleteStatusByPhase|CompleteStatusByStatus
- *         $completeStatus)
+ * @method Request buildCompleteStatusRequest(CompleteStatus|CompleteStatusByReference|CompleteStatusByPhase|CompleteStatusByStatus $completeStatus)
  * @method CompleteStatusResponse        processCompleteStatusResponse(mixed $response)
- * @method GetSignatureResponseSignature getSignature(GetSignature $getSignature)
+ * @method SignatureResponse             getSignature(GetSignature $getSignature)
  * @method Request                       buildGetSignatureRequest(GetSignature $getSignature)
- * @method GetSignatureResponseSignature processGetSignatureResponse(mixed $response)
+ * @method SignatureResponse             processGetSignatureResponse(mixed $response)
  */
 class ShippingStatusService extends AbstractService
 {
@@ -109,7 +106,6 @@ class ShippingStatusService extends AbstractService
         self::OLD_ENVELOPE_NAMESPACE => 'env',
         self::SERVICES_NAMESPACE     => 'services',
         self::DOMAIN_NAMESPACE       => 'domain',
-        Security::SECURITY_NAMESPACE => 'wsse',
         self::XML_SCHEMA_NAMESPACE   => 'schema',
         self::COMMON_NAMESPACE       => 'common',
     ];
@@ -189,7 +185,6 @@ class ShippingStatusService extends AbstractService
      */
     public function buildCurrentStatusRequestREST($currentStatus): Request
     {
-        $apiKey = $this->postnl->getApiKey();
         $this->setService($currentStatus);
 
         if ($currentStatus->getShipment()->getReference()) {
@@ -234,9 +229,9 @@ class ShippingStatusService extends AbstractService
             'GET',
             ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint,
             [
-                'apikey'       => $apiKey,
                 'Accept'       => 'application/json',
                 'Content-Type' => 'application/json;charset=UTF-8',
+                'apikey'       => $this->postnl->getApiKey(),
             ]
         );
     }
@@ -365,17 +360,12 @@ class ShippingStatusService extends AbstractService
         foreach (static::$namespaces as $namespace => $prefix) {
             $xmlService->namespaceMap[$namespace] = $prefix;
         }
-        $security = new Security($this->postnl->getApiKey());
 
-        $this->setService($security);
         $this->setService($currentStatus);
 
         $request = $xmlService->write(
             '{'.static::ENVELOPE_NAMESPACE.'}Envelope',
             [
-                '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
-                    ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
-                ],
                 '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
                     '{'.static::SERVICES_NAMESPACE.'}'.$item => $currentStatus,
                 ],
@@ -389,6 +379,7 @@ class ShippingStatusService extends AbstractService
                 'SOAPAction'   => "\"$soapAction\"",
                 'Accept'       => 'text/xml',
                 'Content-Type' => 'text/xml;charset=UTF-8',
+                'apikey'       => $this->postnl->getApiKey(),
             ],
             $request
         );
@@ -502,7 +493,6 @@ class ShippingStatusService extends AbstractService
      */
     public function buildCompleteStatusRequestREST(CompleteStatus $completeStatus): Request
     {
-        $apiKey = $this->postnl->getApiKey();
         $this->setService($completeStatus);
 
         if ($completeStatus->getShipment()->getReference()) {
@@ -552,9 +542,9 @@ class ShippingStatusService extends AbstractService
             'POST',
             ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint,
             [
-                'apikey'       => $apiKey,
                 'Accept'       => 'application/json',
                 'Content-Type' => 'application/json;charset=UTF-8',
+                'apikey'       => $this->postnl->getApiKey(),
             ]
         );
     }
@@ -722,17 +712,12 @@ class ShippingStatusService extends AbstractService
         foreach (static::$namespaces as $namespace => $prefix) {
             $xmlService->namespaceMap[$namespace] = $prefix;
         }
-        $security = new Security($this->postnl->getApiKey());
 
-        $this->setService($security);
         $this->setService($completeStatus);
 
         $request = $xmlService->write(
             '{'.static::ENVELOPE_NAMESPACE.'}Envelope',
             [
-                '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
-                    ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
-                ],
                 '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
                     '{'.static::SERVICES_NAMESPACE.'}'.$item => $completeStatus,
                 ],
@@ -746,6 +731,7 @@ class ShippingStatusService extends AbstractService
                 'SOAPAction'   => "\"$soapAction\"",
                 'Accept'       => 'text/xml',
                 'Content-Type' => 'text/xml;charset=UTF-8',
+                'apikey'       => $this->postnl->getApiKey(),
             ],
             $request
         );
@@ -798,7 +784,7 @@ class ShippingStatusService extends AbstractService
      *
      * @param GetSignature $getSignature
      *
-     * @return GetSignatureResponseSignature
+     * @return SignatureResponse
      *
      * @throws ApiException
      * @throws CifDownException
@@ -807,7 +793,7 @@ class ShippingStatusService extends AbstractService
      *
      * @since 1.0.0
      */
-    public function getSignatureREST(GetSignature $getSignature): GetSignatureResponseSignature
+    public function getSignatureREST(GetSignature $getSignature): SignatureResponse
     {
         $item = $this->retrieveCachedItem($getSignature->getId());
         $response = null;
@@ -824,7 +810,7 @@ class ShippingStatusService extends AbstractService
         }
 
         $object = $this->processGetSignatureResponseREST($response);
-        if ($object instanceof GetSignatureResponseSignature) {
+        if ($object instanceof SignatureResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof Response
                 && $response->getStatusCode() === 200
@@ -850,7 +836,6 @@ class ShippingStatusService extends AbstractService
      */
     public function buildGetSignatureRequestREST(GetSignature $getSignature): Request
     {
-        $apiKey = $this->postnl->getApiKey();
         $this->setService($getSignature);
 
         return new Request(
@@ -858,9 +843,9 @@ class ShippingStatusService extends AbstractService
             ($this->postnl->getSandbox(
             ) ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT)."/signature/{$getSignature->getShipment()->getBarcode()}",
             [
-                'apikey'       => $apiKey,
                 'Accept'       => 'application/json',
                 'Content-Type' => 'application/json;charset=UTF-8',
+                'apikey'       => $this->postnl->getApiKey(),
             ]
         );
     }
@@ -870,18 +855,18 @@ class ShippingStatusService extends AbstractService
      *
      * @param mixed $response
      *
-     * @return null|GetSignatureResponseSignature
+     * @return null|SignatureResponse
      *
      * @throws ResponseException
      *
      * @since 1.0.0
      */
-    public function processGetSignatureResponseREST($response): ?GetSignatureResponseSignature
+    public function processGetSignatureResponseREST($response): ?SignatureResponse
     {
         $body = json_decode(static::getResponseText($response), true);
         if (!empty($body['Signature'])) {
-            /** @var GetSignatureResponseSignature $object */
-            $object = AbstractEntity::jsonDeserialize(['GetSignatureResponseSignature' => $body]);
+            /** @var SignatureResponse $object */
+            $object = AbstractEntity::jsonDeserialize(['SignatureResponse' => $body]);
             $this->setService($object);
 
             return $object;
@@ -967,17 +952,12 @@ class ShippingStatusService extends AbstractService
         foreach (static::$namespaces as $namespace => $prefix) {
             $xmlService->namespaceMap[$namespace] = $prefix;
         }
-        $security = new Security($this->postnl->getApiKey());
 
-        $this->setService($security);
         $this->setService($getSignature);
 
         $request = $xmlService->write(
             '{'.static::ENVELOPE_NAMESPACE.'}Envelope',
             [
-                '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
-                    ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
-                ],
                 '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
                     '{'.static::SERVICES_NAMESPACE.'}GetSignature' => $getSignature,
                 ],
@@ -991,6 +971,7 @@ class ShippingStatusService extends AbstractService
                 'SOAPAction'   => "\"$soapAction\"",
                 'Accept'       => 'text/xml',
                 'Content-Type' => 'text/xml;charset=UTF-8',
+                'apikey'       => $this->postnl->getApiKey(),
             ],
             $request
         );
@@ -1001,7 +982,7 @@ class ShippingStatusService extends AbstractService
      *
      * @param mixed $response
      *
-     * @return GetSignatureResponseSignature
+     * @return SignatureResponse
      *
      * @throws CifDownException
      * @throws CifException
@@ -1010,7 +991,7 @@ class ShippingStatusService extends AbstractService
      *
      * @since 1.0.0
      */
-    public function processGetSignatureResponseSOAP($response): GetSignatureResponseSignature
+    public function processGetSignatureResponseSOAP($response): SignatureResponse
     {
         $xml = simplexml_load_string(static::getResponseText($response));
 

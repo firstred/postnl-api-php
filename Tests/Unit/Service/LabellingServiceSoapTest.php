@@ -27,7 +27,7 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace Firstred\PostNL\Tests\Service;
+namespace Firstred\PostNL\Tests\Unit\Service;
 
 use Cache\Adapter\Void\VoidCachePool;
 use GuzzleHttp\Handler\MockHandler;
@@ -39,20 +39,20 @@ use Psr\Log\LoggerInterface;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Dimension;
-use Firstred\PostNL\Entity\Label;
 use Firstred\PostNL\Entity\Message\LabellingMessage;
 use Firstred\PostNL\Entity\Request\GenerateLabel;
 use Firstred\PostNL\Entity\Shipment;
 use Firstred\PostNL\HttpClient\MockClient;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\LabellingService;
+use Firstred\PostNL\Util\Util;
 
 /**
- * Class LabellingServiceRestTest
+ * Class LabellingServiceSoapTest
  *
- * @testdox The LabellingService (REST)
+ * @testdox The LabellingService (SOAP)
  */
-class LabellingServiceRestTest extends TestCase
+class LabellingServiceSoapTest extends TestCase
 {
     /** @var PostNL $postnl */
     protected $postnl;
@@ -90,7 +90,7 @@ class LabellingServiceRestTest extends TestCase
                 ->setGlobalPackCustomerCode('1234'),
             'test',
             true,
-            PostNL::MODE_REST
+            PostNL::MODE_SOAP
         );
 
         $this->service = $this->postnl->getLabellingService();
@@ -124,12 +124,14 @@ class LabellingServiceRestTest extends TestCase
 
     /**
      * @testdox creates a valid label request
+     *
+     * @throws \Exception
      */
-    public function testCreatesAValidLabelRequest()
+    public function testGenerateSingleLabelRequestSoap()
     {
         $message = new LabellingMessage();
 
-        $this->lastRequest = $request = $this->service->buildGenerateLabelRequestREST(
+        $this->lastRequest = $request = $this->service->buildGenerateLabelRequestSOAP(
             GenerateLabel::create()
                 ->setShipments([
                     Shipment::create()
@@ -166,91 +168,110 @@ class LabellingServiceRestTest extends TestCase
         );
 
         $this->assertEquals(
-            [
-            'Customer'  => [
-                'Address'            => [
-                    'AddressType' => '02',
-                    'City'        => 'Hoofddorp',
-                    'CompanyName' => 'PostNL',
-                    'Countrycode' => 'NL',
-                    'HouseNr'     => '42',
-                    'Street'      => 'Siriusdreef',
-                    'Zipcode'     => '2132WT',
-                ],
-                'CollectionLocation' => '123456',
-                'ContactPerson'      => 'Test',
-                'CustomerCode'       => 'DEVC',
-                'CustomerNumber'     => '11223344',
-            ],
-            'Message'   => [
-                'MessageID'        => (string) $message->getMessageID(),
-                'MessageTimeStamp' => (string) $message->getMessageTimeStamp(),
-                'Printertype'      => 'GraphicFile|PDF',
-            ],
-            'Shipments' => [
-                'Addresses'           => [
-                    [
-                        'AddressType' => '01',
-                        'City'        => 'Utrecht',
-                        'Countrycode' => 'NL',
-                        'FirstName'   => 'Peter',
-                        'HouseNr'     => '9',
-                        'HouseNrExt'  => 'a bis',
-                        'Name'        => 'de Ruijter',
-                        'Street'      => 'Bilderdijkstraat',
-                        'Zipcode'     => '3521VA',
-                    ],
-                    [
-                        'AddressType' => '02',
-                        'City'        => 'Hoofddorp',
-                        'CompanyName' => 'PostNL',
-                        'Countrycode' => 'NL',
-                        'HouseNr'     => '42',
-                        'Street'      => 'Siriusdreef',
-                        'Zipcode'     => '2132WT',
-                    ],
-                ],
-                'Barcode'             => '3S1234567890123',
-                'DeliveryAddress'     => '01',
-                'Dimension'           => [
-                    'Weight' => '2000',
-                ],
-                'ProductCodeDelivery' => '3085',
-            ],
-            ],
-            json_decode((string) $request->getBody(), true),
-            '',
-            0,
-            10,
-            true
+            "<?xml version=\"1.0\"?>
+<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:services=\"http://postnl.nl/cif/services/LabellingWebService/\" xmlns:domain=\"http://postnl.nl/cif/domain/LabellingWebService/\" xmlns:schema=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:common=\"http://postnl.nl/cif/services/common/\">
+ <soap:Body>
+  <services:GenerateLabel>
+   <domain:Customer>
+    <domain:Address>
+     <domain:AddressType>02</domain:AddressType>
+     <domain:City>Hoofddorp</domain:City>
+     <domain:CompanyName>PostNL</domain:CompanyName>
+     <domain:Countrycode>NL</domain:Countrycode>
+     <domain:HouseNr>42</domain:HouseNr>
+     <domain:Street>Siriusdreef</domain:Street>
+     <domain:Zipcode>2132WT</domain:Zipcode>
+    </domain:Address>
+    <domain:CollectionLocation>123456</domain:CollectionLocation>
+    <domain:ContactPerson>Test</domain:ContactPerson>
+    <domain:CustomerCode>DEVC</domain:CustomerCode>
+    <domain:CustomerNumber>11223344</domain:CustomerNumber>
+   </domain:Customer>
+   <domain:Message>
+    <domain:MessageID>{$message->getMessageID()}</domain:MessageID>
+    <domain:MessageTimeStamp>{$message->getMessageTimeStamp()}</domain:MessageTimeStamp>
+    <domain:Printertype>GraphicFile|PDF</domain:Printertype>
+   </domain:Message>
+   <domain:Shipments>
+    <domain:Shipment>
+     <domain:Addresses>
+      <domain:Address>
+       <domain:AddressType>01</domain:AddressType>
+       <domain:City>Utrecht</domain:City>
+       <domain:Countrycode>NL</domain:Countrycode>
+       <domain:FirstName>Peter</domain:FirstName>
+       <domain:HouseNr>9</domain:HouseNr>
+       <domain:HouseNrExt>a bis</domain:HouseNrExt>
+       <domain:Name>de Ruijter</domain:Name>
+       <domain:Street>Bilderdijkstraat</domain:Street>
+       <domain:Zipcode>3521VA</domain:Zipcode>
+      </domain:Address>
+      <domain:Address>
+       <domain:AddressType>02</domain:AddressType>
+       <domain:City>Hoofddorp</domain:City>
+       <domain:CompanyName>PostNL</domain:CompanyName>
+       <domain:Countrycode>NL</domain:Countrycode>
+       <domain:HouseNr>42</domain:HouseNr>
+       <domain:Street>Siriusdreef</domain:Street>
+       <domain:Zipcode>2132WT</domain:Zipcode>
+      </domain:Address>
+     </domain:Addresses>
+     <domain:Barcode>3S1234567890123</domain:Barcode>
+     <domain:DeliveryAddress>01</domain:DeliveryAddress>
+     <domain:Dimension>
+      <domain:Weight>2000</domain:Weight>
+     </domain:Dimension>
+     <domain:ProductCodeDelivery>3085</domain:ProductCodeDelivery>
+    </domain:Shipment>
+   </domain:Shipments>
+  </services:GenerateLabel>
+ </soap:Body>
+</soap:Envelope>
+",
+            (string) $request->getBody()
         );
         $this->assertEquals('test', $request->getHeaderLine('apikey'));
-        $this->assertEquals('application/json;charset=UTF-8', $request->getHeaderLine('Content-Type'));
-        $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
+        $this->assertEquals('text/xml;charset=UTF-8', $request->getHeaderLine('Content-Type'));
+        $this->assertEquals('text/xml', $request->getHeaderLine('Accept'));
     }
 
     /**
      * @testdox can generate a single label
+     *
+     * @throws \Exception
      */
-    public function testGenerateSingleLabelRest()
+    public function testGenerateSingleLabelSoap()
     {
+        $encodedContent = static::$encodedLabelContent;
         $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode([
-                'MergedLabels' => [],
-                'ResponseShipments' => [
-                    [
-                        'Barcode' => '3SDEVC201611210',
-                        'DownPartnerLocation' => [],
-                        'ProductCodeDelivery' => '3085',
-                        'Labels' => [
-                            [
-                                'Content' => static::$encodedLabelContent,
-                                'Labeltype' => 'Label',
-                            ],
-                        ],
-                    ],
-                ],
-            ])),
+            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], "<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\">
+  <s:Body>
+    <GenerateLabelResponse
+xmlns=\"http://postnl.nl/cif/services/LabellingWebService/\"
+xmlns:a=\"http://postnl.nl/cif/domain/LabellingWebService/\"
+xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">
+      <a:MergedLabels i:nil=\"true\"/>
+      <a:ResponseShipments>
+        <a:ResponseShipment>
+          <a:Barcode>3S1234567890123</a:Barcode>
+          <a:DownPartnerBarcode i:nil=\"true\"/>
+          <a:DownPartnerID i:nil=\"true\"/>
+          <a:DownPartnerLocation i:nil=\"true\"/>
+          <a:Labels>
+            <a:Label>
+              <a:Content>{$encodedContent}</a:Content>
+              <a:Contenttype i:nil=\"true\"/>
+              <a:Labeltype>Label</a:Labeltype>
+            </a:Label>
+          </a:Labels>
+          <a:ProductCodeDelivery>3085</a:ProductCodeDelivery>
+          <a:Warnings i:nil=\"true\"/>
+        </a:ResponseShipment>
+      </a:ResponseShipments>
+    </GenerateLabelResponse>
+  </s:Body>
+</s:Envelope>
+"),
         ]);
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();
@@ -291,284 +312,70 @@ class LabellingServiceRestTest extends TestCase
     }
 
     /**
-     * @testdox can generate multiple A4-merged labels
-     *
-     * @throws \setasign\Fpdi\PdfReader\PdfReaderException
-     * @throws \Exception
-     */
-    public function testMergeMultipleA4LabelsRest()
-    {
-        $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode([
-                'MergedLabels' => [],
-                'ResponseShipments' => [
-                    [
-                        'Barcode' => '3SDEVC201611210',
-                        'DownPartnerLocation' => [],
-                        'ProductCodeDelivery' => '3085',
-                        'Labels' => [
-                            [
-                                'Content' => static::$encodedLabelContent,
-                                'Labeltype' => 'Label',
-                            ],
-                        ],
-                    ],
-                ],
-            ])),
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode([
-                'MergedLabels' => [],
-                'ResponseShipments' => [
-                    [
-                        'Barcode' => '3SDEVC201611211',
-                        'DownPartnerLocation' => [],
-                        'ProductCodeDelivery' => '3085',
-                        'Labels' => [
-                            [
-                                'Content' => static::$encodedLabelContent,
-                                'Labeltype' => 'Label',
-                            ],
-                        ],
-                    ],
-                ],
-            ])),
-        ]);
-        $handler = HandlerStack::create($mock);
-        $mockClient = new MockClient();
-        $mockClient->setHandler($handler);
-        $this->postnl->setHttpClient($mockClient);
-
-        $label = $this->postnl->generateLabels(
-            [
-                (new Shipment())
-                    ->setAddresses([
-                        Address::create([
-                            'AddressType' => '01',
-                            'City'        => 'Utrecht',
-                            'Countrycode' => 'NL',
-                            'FirstName'   => 'Peter',
-                            'HouseNr'     => '9',
-                            'HouseNrExt'  => 'a bis',
-                            'Name'        => 'de Ruijter',
-                            'Street'      => 'Bilderdijkstraat',
-                            'Zipcode'     => '3521VA',
-                        ]),
-                        Address::create([
-                            'AddressType' => '02',
-                            'City'        => 'Hoofddorp',
-                            'CompanyName' => 'PostNL',
-                            'Countrycode' => 'NL',
-                            'HouseNr'     => '42',
-                            'Street'      => 'Siriusdreef',
-                            'Zipcode'     => '2132WT',
-                        ]),
-                    ])
-                    ->setBarcode('3SDEVC201611210')
-                    ->setDeliveryAddress('01')
-                    ->setDimension(new Dimension(2000))
-                    ->setProductCodeDelivery('3085'),
-                (new Shipment())
-                    ->setAddresses([
-                        Address::create([
-                            'AddressType' => '01',
-                            'City'        => 'Utrecht',
-                            'Countrycode' => 'NL',
-                            'FirstName'   => 'Peter',
-                            'HouseNr'     => '9',
-                            'HouseNrExt'  => 'a bis',
-                            'Name'        => 'de Ruijter',
-                            'Street'      => 'Bilderdijkstraat',
-                            'Zipcode'     => '3521VA',
-                        ]),
-                        Address::create([
-                            'AddressType' => '02',
-                            'City'        => 'Hoofddorp',
-                            'CompanyName' => 'PostNL',
-                            'Countrycode' => 'NL',
-                            'HouseNr'     => '42',
-                            'Street'      => 'Siriusdreef',
-                            'Zipcode'     => '2132WT',
-                        ]),
-                    ])
-                    ->setBarcode('3SDEVC201611211')
-                    ->setDeliveryAddress('01')
-                    ->setDimension(new Dimension(2000))
-                    ->setProductCodeDelivery('3085'),
-            ],
-            'GraphicFile|PDF',
-            true,
-            true,
-            Label::FORMAT_A4,
-            [
-                1 => true,
-                2 => true,
-                3 => true,
-                4 => true,
-            ]
-        );
-
-        $this->assertTrue(is_string($label));
-    }
-
-    /**
-     * @testdox can generate multiple A6-merged labels
-     *
-     * @throws \setasign\Fpdi\PdfReader\PdfReaderException
-     * @throws \Exception
-     */
-    public function testMergeMultipleA6LabelsRest()
-    {
-        $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode([
-                'MergedLabels' => [],
-                'ResponseShipments' => [
-                    [
-                        'Barcode' => '3SDEVC201611210',
-                        'DownPartnerLocation' => [],
-                        'ProductCodeDelivery' => '3085',
-                        'Labels' => [
-                            [
-                                'Content' => static::$encodedLabelContent,
-                                'Labeltype' => 'Label',
-                            ],
-                        ],
-                    ],
-                ],
-            ])),
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode([
-                'MergedLabels' => [],
-                'ResponseShipments' => [
-                    [
-                        'Barcode' => '3SDEVC201611211',
-                        'DownPartnerLocation' => [],
-                        'ProductCodeDelivery' => '3085',
-                        'Labels' => [
-                            [
-                                'Content' => static::$encodedLabelContent,
-                                'Labeltype' => 'Label',
-                            ],
-                        ],
-                    ],
-                ],
-            ])),
-        ]);
-        $handler = HandlerStack::create($mock);
-        $mockClient = new MockClient();
-        $mockClient->setHandler($handler);
-        $this->postnl->setHttpClient($mockClient);
-
-        $label = $this->postnl->generateLabels(
-            [
-            (new Shipment())
-                ->setAddresses([
-                    Address::create([
-                        'AddressType' => '01',
-                        'City'        => 'Utrecht',
-                        'Countrycode' => 'NL',
-                        'FirstName'   => 'Peter',
-                        'HouseNr'     => '9',
-                        'HouseNrExt'  => 'a bis',
-                        'Name'        => 'de Ruijter',
-                        'Street'      => 'Bilderdijkstraat',
-                        'Zipcode'     => '3521VA',
-                    ]),
-                    Address::create([
-                        'AddressType' => '02',
-                        'City'        => 'Hoofddorp',
-                        'CompanyName' => 'PostNL',
-                        'Countrycode' => 'NL',
-                        'HouseNr'     => '42',
-                        'Street'      => 'Siriusdreef',
-                        'Zipcode'     => '2132WT',
-                    ]),
-                ])
-                ->setBarcode('3SDEVC201611210')
-                ->setDeliveryAddress('01')
-                ->setDimension(new Dimension(2000))
-                ->setProductCodeDelivery('3085'),
-            (new Shipment())
-                ->setAddresses([
-                    Address::create([
-                        'AddressType' => '01',
-                        'City'        => 'Utrecht',
-                        'Countrycode' => 'NL',
-                        'FirstName'   => 'Peter',
-                        'HouseNr'     => '9',
-                        'HouseNrExt'  => 'a bis',
-                        'Name'        => 'de Ruijter',
-                        'Street'      => 'Bilderdijkstraat',
-                        'Zipcode'     => '3521VA',
-                    ]),
-                    Address::create([
-                        'AddressType' => '02',
-                        'City'        => 'Hoofddorp',
-                        'CompanyName' => 'PostNL',
-                        'Countrycode' => 'NL',
-                        'HouseNr'     => '42',
-                        'Street'      => 'Siriusdreef',
-                        'Zipcode'     => '2132WT',
-                    ]),
-                ])
-                ->setBarcode('3SDEVC201611211')
-                ->setDeliveryAddress('01')
-                ->setDimension(new Dimension(2000))
-                ->setProductCodeDelivery('3085'),
-            ],
-            'GraphicFile|PDF',
-            true,
-            true,
-            Label::FORMAT_A6,
-            [
-                1 => true,
-                2 => true,
-                3 => true,
-                4 => true,
-            ]
-        );
-
-        $this->assertTrue(is_string($label));
-    }
-
-    /**
      * @testdox can generate multiple labels
      *
-     * @throws \setasign\Fpdi\PdfReader\PdfReaderException
      * @throws \Exception
+     * @throws \setasign\Fpdi\PdfReader\PdfReaderException
      */
-    public function testGenerateMultipleLabelsRest()
+    public function testGenerateMultipleLabelsSoap()
     {
+        $encodedLabelContent = static::$encodedLabelContent;
         $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode([
-                'MergedLabels' => [],
-                'ResponseShipments' => [
-                    [
-                        'Barcode' => '3SDEVC201611210',
-                        'DownPartnerLocation' => [],
-                        'ProductCodeDelivery' => '3085',
-                        'Labels' => [
-                            [
-                                'Content' => static::$encodedLabelContent,
-                                'Labeltype' => 'Label',
-                            ],
-                        ],
-                    ],
-                ],
-            ])),
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode([
-                'MergedLabels' => [],
-                'ResponseShipments' => [
-                    [
-                        'Barcode' => '3SDEVC201611211',
-                        'DownPartnerLocation' => [],
-                        'ProductCodeDelivery' => '3085',
-                        'Labels' => [
-                            [
-                                'Content' => static::$encodedLabelContent,
-                                'Labeltype' => 'Label',
-                            ],
-                        ],
-                    ],
-                ],
-            ])),
+            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], "<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\">
+  <s:Body>
+    <GenerateLabelResponse
+xmlns=\"http://postnl.nl/cif/services/LabellingWebService/\"
+xmlns:a=\"http://postnl.nl/cif/domain/LabellingWebService/\"
+xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">
+      <a:MergedLabels i:nil=\"true\"/>
+      <a:ResponseShipments>
+        <a:ResponseShipment>
+          <a:Barcode>3SDEVC201611210</a:Barcode>
+          <a:DownPartnerBarcode i:nil=\"true\"/>
+          <a:DownPartnerID i:nil=\"true\"/>
+          <a:DownPartnerLocation i:nil=\"true\"/>
+          <a:Labels>
+            <a:Label>
+              <a:Content>{$encodedLabelContent}</a:Content>
+              <a:Contenttype i:nil=\"true\"/>
+              <a:Labeltype>Label</a:Labeltype>
+            </a:Label>
+          </a:Labels>
+          <a:ProductCodeDelivery>3085</a:ProductCodeDelivery>
+          <a:Warnings i:nil=\"true\"/>
+        </a:ResponseShipment>
+      </a:ResponseShipments>
+    </GenerateLabelResponse>
+  </s:Body>
+</s:Envelope>
+"), new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], "<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\">
+  <s:Body>
+    <GenerateLabelResponse
+xmlns=\"http://postnl.nl/cif/services/LabellingWebService/\"
+xmlns:a=\"http://postnl.nl/cif/domain/LabellingWebService/\"
+xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">
+      <a:MergedLabels i:nil=\"true\"/>
+      <a:ResponseShipments>
+        <a:ResponseShipment>
+          <a:Barcode>3SDEVC201611211</a:Barcode>
+          <a:DownPartnerBarcode i:nil=\"true\"/>
+          <a:DownPartnerID i:nil=\"true\"/>
+          <a:DownPartnerLocation i:nil=\"true\"/>
+          <a:Labels>
+            <a:Label>
+              <a:Content>{$encodedLabelContent}</a:Content>
+              <a:Contenttype i:nil=\"true\"/>
+              <a:Labeltype>Label</a:Labeltype>
+            </a:Label>
+          </a:Labels>
+          <a:ProductCodeDelivery>3085</a:ProductCodeDelivery>
+          <a:Warnings i:nil=\"true\"/>
+        </a:ResponseShipment>
+      </a:ResponseShipments>
+    </GenerateLabelResponse>
+  </s:Body>
+</s:Envelope>
+"),
         ]);
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();
@@ -636,9 +443,22 @@ class LabellingServiceRestTest extends TestCase
     }
 
     /**
-     * @testdox throws exception on invalid response
+     * @testdox can grab the dimensions from a PDF
      */
-    public function testNegativeGenerateLabelInvalidResponseRest()
+    public function testGetPdfDimensions()
+    {
+        $pdf = base64_decode(static::$encodedLabelContent);
+        $sizes = Util::getPdfSizeAndOrientation($pdf);
+
+        $this->assertEquals('L', $sizes['orientation']);
+    }
+
+    /**
+     * @testdox throws exception on invalid response
+     *
+     * @throws \Exception
+     */
+    public function testNegativeGenerateLabelInvalidResponseSoap()
     {
         $this->expectException('Firstred\\PostNL\\Exception\\ResponseException');
 

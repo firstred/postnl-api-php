@@ -36,7 +36,6 @@ use Firstred\PostNL\Entity\Request\GetLocationsInArea;
 use Firstred\PostNL\Entity\Request\GetNearestLocations;
 use Firstred\PostNL\Entity\Response\GetLocationsInAreaResponse;
 use Firstred\PostNL\Entity\Response\GetNearestLocationsResponse;
-use Firstred\PostNL\Entity\SOAP\Security;
 use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
@@ -85,7 +84,6 @@ class LocationService extends AbstractService
         self::OLD_ENVELOPE_NAMESPACE                                => 'env',
         self::SERVICES_NAMESPACE                                    => 'services',
         self::DOMAIN_NAMESPACE                                      => 'domain',
-        Security::SECURITY_NAMESPACE                                => 'wsse',
         self::XML_SCHEMA_NAMESPACE                                  => 'schema',
         self::COMMON_NAMESPACE                                      => 'common',
         'http://schemas.microsoft.com/2003/10/Serialization/Arrays' => 'arr',
@@ -149,7 +147,6 @@ class LocationService extends AbstractService
     {
         $endpoint = '/nearest';
         $location = $getNearestLocations->getLocation();
-        $apiKey = $this->postnl->getApiKey();
         $this->setService($getNearestLocations);
         $query = [
             'CountryCode'     => $getNearestLocations->getCountrycode(),
@@ -192,9 +189,9 @@ class LocationService extends AbstractService
             'GET',
             ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint,
             [
-                'apikey'       => $apiKey,
                 'Accept'       => 'application/json',
                 'Content-Type' => 'application/json;charset=UTF-8',
+                'apikey'       => $this->postnl->getApiKey(),
             ]
         );
     }
@@ -318,17 +315,12 @@ class LocationService extends AbstractService
         foreach (static::$namespaces as $namespace => $prefix) {
             $xmlService->namespaceMap[$namespace] = $prefix;
         }
-        $security = new Security($this->postnl->getApiKey());
 
-        $this->setService($security);
         $this->setService($getLocations);
 
         $request = $xmlService->write(
             '{'.static::ENVELOPE_NAMESPACE.'}Envelope',
             [
-                '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
-                    ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
-                ],
                 '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
                     '{'.static::SERVICES_NAMESPACE.'}GetNearestLocations' => $getLocations,
                 ],
@@ -342,6 +334,7 @@ class LocationService extends AbstractService
                 'SOAPAction'   => "\"$soapAction\"",
                 'Accept'       => 'text/xml',
                 'Content-Type' => 'text/xml;charset=UTF-8',
+                'apikey'       => $this->postnl->getApiKey(),
             ],
             $request
         );
@@ -439,7 +432,7 @@ class LocationService extends AbstractService
     }
 
     /**
-     * Proess GetLocationsInArea Response REST
+     * Process GetLocationsInArea Response REST
      *
      * @param mixed $response
      *
@@ -560,17 +553,12 @@ class LocationService extends AbstractService
         foreach (static::$namespaces as $namespace => $prefix) {
             $xmlService->namespaceMap[$namespace] = $prefix;
         }
-        $security = new Security($this->postnl->getApiKey());
 
-        $this->setService($security);
         $this->setService($getLocations);
 
         $request = $xmlService->write(
             '{'.static::ENVELOPE_NAMESPACE.'}Envelope',
             [
-                '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
-                    ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
-                ],
                 '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
                     '{'.static::SERVICES_NAMESPACE.'}GetLocationsInArea' => $getLocations,
                 ],
@@ -584,6 +572,7 @@ class LocationService extends AbstractService
                 'SOAPAction'   => "\"$soapAction\"",
                 'Accept'       => 'text/xml',
                 'Content-Type' => 'text/xml;charset=UTF-8',
+                'apikey'       => $this->postnl->getApiKey(),
             ],
             $request
         );
@@ -691,7 +680,6 @@ class LocationService extends AbstractService
      */
     public function buildGetLocationRequestREST(GetLocation $getLocation): Request
     {
-        $apiKey = $this->postnl->getApiKey();
         $this->setService($getLocation);
         $query = [
             'LocationCode' => $getLocation->getLocationCode(),
@@ -705,9 +693,9 @@ class LocationService extends AbstractService
             'GET',
             ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint,
             [
-                'apikey'       => $apiKey,
                 'Accept'       => 'application/json',
                 'Content-Type' => 'application/json;charset=UTF-8',
+                'apikey'       => $this->postnl->getApiKey(),
             ]
         );
     }
@@ -825,17 +813,12 @@ class LocationService extends AbstractService
         foreach (static::$namespaces as $namespace => $prefix) {
             $xmlService->namespaceMap[$namespace] = $prefix;
         }
-        $security = new Security($this->postnl->getApiKey());
 
-        $this->setService($security);
         $this->setService($getLocations);
 
         $request = $xmlService->write(
             '{'.static::ENVELOPE_NAMESPACE.'}Envelope',
             [
-                '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
-                    ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
-                ],
                 '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
                     '{'.static::SERVICES_NAMESPACE.'}GetLocation' => $getLocations,
                 ],
@@ -849,6 +832,7 @@ class LocationService extends AbstractService
                 'SOAPAction'   => "\"$soapAction\"",
                 'Accept'       => 'text/xml',
                 'Content-Type' => 'text/xml;charset=UTF-8',
+                'apikey'       => $this->postnl->getApiKey(),
             ],
             $request
         );
@@ -896,7 +880,6 @@ class LocationService extends AbstractService
     public function buildGetLocationsInAreaRequestREST(GetLocationsInArea $getLocations)
     {
         $location = $getLocations->getLocation();
-        $apiKey = $this->postnl->getApiKey();
         $this->setService($getLocations);
         $query = [
             'DeliveryOptions' => 'PG',
@@ -926,9 +909,9 @@ class LocationService extends AbstractService
             'GET',
             ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint,
             [
-                'apikey'       => $apiKey,
                 'Accept'       => 'application/json',
                 'Content-Type' => 'application/json;charset=UTF-8',
+                'apikey'       => $this->postnl->getApiKey(),
             ]
         );
     }

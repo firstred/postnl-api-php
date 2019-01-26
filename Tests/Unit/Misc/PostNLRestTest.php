@@ -27,7 +27,7 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace Firstred\PostNL\Tests\Misc;
+namespace Firstred\PostNL\Tests\Unit\Misc;
 
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
@@ -377,7 +377,7 @@ class PostNLRestTest extends TestCase
         /** @var PostNL $postnl */
         $postnl = $reflection->newInstanceWithoutConstructor();
 
-        $this->assertFalse($postnl->getApiKey());
+        $this->assertNull($postnl->getApiKey());
     }
 
     /**

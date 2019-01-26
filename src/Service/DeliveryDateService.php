@@ -35,7 +35,6 @@ use Firstred\PostNL\Entity\Request\GetDeliveryDate;
 use Firstred\PostNL\Entity\Request\GetSentDateRequest;
 use Firstred\PostNL\Entity\Response\GetDeliveryDateResponse;
 use Firstred\PostNL\Entity\Response\GetSentDateResponse;
-use Firstred\PostNL\Entity\SOAP\Security;
 use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
@@ -81,7 +80,6 @@ class DeliveryDateService extends AbstractService
         self::OLD_ENVELOPE_NAMESPACE                                => 'env',
         self::SERVICES_NAMESPACE                                    => 'services',
         self::DOMAIN_NAMESPACE                                      => 'domain',
-        Security::SECURITY_NAMESPACE                                => 'wsse',
         self::XML_SCHEMA_NAMESPACE                                  => 'schema',
         self::COMMON_NAMESPACE                                      => 'common',
         'http://schemas.microsoft.com/2003/10/Serialization/Arrays' => 'arr',
@@ -143,7 +141,6 @@ class DeliveryDateService extends AbstractService
      */
     public function buildGetDeliveryDateRequestREST(GetDeliveryDate $getDeliveryDate)
     {
-        $apiKey = $this->postnl->getApiKey();
         $this->setService($getDeliveryDate);
         $deliveryDate = $getDeliveryDate->getGetDeliveryDate();
 
@@ -230,9 +227,9 @@ class DeliveryDateService extends AbstractService
             'GET',
             ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint,
             [
-                'apikey'       => $apiKey,
                 'Accept'       => 'application/json',
                 'Content-Type' => 'application/json;charset=UTF-8',
+                'apikey'       => $this->postnl->getApiKey(),
             ]
         );
     }
@@ -322,17 +319,12 @@ class DeliveryDateService extends AbstractService
         foreach (static::$namespaces as $namespace => $prefix) {
             $xmlService->namespaceMap[$namespace] = $prefix;
         }
-        $security = new Security($this->postnl->getApiKey());
 
-        $this->setService($security);
         $this->setService($getDeliveryDate);
 
         $request = $xmlService->write(
             '{'.static::ENVELOPE_NAMESPACE.'}Envelope',
             [
-                '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
-                    ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
-                ],
                 '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
                     '{'.static::SERVICES_NAMESPACE.'}GetDeliveryDate' => $getDeliveryDate,
                 ],
@@ -346,6 +338,7 @@ class DeliveryDateService extends AbstractService
                 'SOAPAction'   => "\"$soapAction\"",
                 'Accept'       => 'text/xml',
                 'Content-Type' => 'text/xml;charset=UTF-8',
+                'apikey'       => $this->postnl->getApiKey(),
             ],
             $request
         );
@@ -431,7 +424,6 @@ class DeliveryDateService extends AbstractService
      */
     public function buildGetSentDateRequestREST(GetSentDateRequest $getSentDate)
     {
-        $apiKey = $this->postnl->getApiKey();
         $this->setService($getSentDate);
 
         $sentDate = $getSentDate->getGetSentDate();
@@ -461,9 +453,9 @@ class DeliveryDateService extends AbstractService
             'POST',
             $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT.$endpoint,
             [
-                'apikey'       => $apiKey,
                 'Accept'       => 'application/json',
                 'Content-Type' => 'application/json;charset=UTF-8',
+                'apikey'       => $this->postnl->getApiKey(),
             ]
         );
     }
@@ -555,17 +547,12 @@ class DeliveryDateService extends AbstractService
         foreach (static::$namespaces as $namespace => $prefix) {
             $xmlService->namespaceMap[$namespace] = $prefix;
         }
-        $security = new Security($this->postnl->getApiKey());
 
-        $this->setService($security);
         $this->setService($getSentDate);
 
         $request = $xmlService->write(
             '{'.static::ENVELOPE_NAMESPACE.'}Envelope',
             [
-                '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
-                    ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
-                ],
                 '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
                     '{'.static::SERVICES_NAMESPACE.'}GetSentDateRequest' => $getSentDate,
                 ],
@@ -579,6 +566,7 @@ class DeliveryDateService extends AbstractService
                 'SOAPAction'   => "\"$soapAction\"",
                 'Accept'       => 'text/xml',
                 'Content-Type' => 'text/xml;charset=UTF-8',
+                'apikey'       => $this->postnl->getApiKey(),
             ],
             $request
         );

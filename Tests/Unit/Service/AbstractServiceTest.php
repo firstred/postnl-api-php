@@ -27,16 +27,11 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace Firstred\PostNL\Tests\Service;
+namespace Firstred\PostNL\Tests\Unit\Service;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use Firstred\PostNL\Entity\Address;
-use Firstred\PostNL\Entity\Customer;
-use Firstred\PostNL\Entity\SOAP\UsernameToken;
-use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\AbstractService;
-use Firstred\PostNL\Service\LabellingService;
 use PHPUnit\Framework\TestCase;
 
 /**

@@ -27,7 +27,7 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace Firstred\PostNL\Tests\Service;
+namespace Firstred\PostNL\Tests\Unit\Service;
 
 use Cache\Adapter\Void\VoidCachePool;
 use Firstred\PostNL\Entity\Address;
@@ -153,17 +153,9 @@ class LocationServiceSoapTest extends TestCase
                 )
         );
 
-
         $this->assertEquals(
             "<?xml version=\"1.0\"?>
-<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:services=\"http://postnl.nl/cif/services/LocationWebService/\" xmlns:domain=\"http://postnl.nl/cif/domain/LocationWebService/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\" xmlns:schema=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:common=\"http://postnl.nl/cif/services/common/\" xmlns:arr=\"http://schemas.microsoft.com/2003/10/Serialization/Arrays\">
- <soap:Header>
-  <wsse:Security>
-   <wsse:UsernameToken>
-    <wsse:Password>test</wsse:Password>
-   </wsse:UsernameToken>
-  </wsse:Security>
- </soap:Header>
+<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:services=\"http://postnl.nl/cif/services/LocationWebService/\" xmlns:domain=\"http://postnl.nl/cif/domain/LocationWebService/\" xmlns:schema=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:common=\"http://postnl.nl/cif/services/common/\" xmlns:arr=\"http://schemas.microsoft.com/2003/10/Serialization/Arrays\">
  <soap:Body>
   <services:GetNearestLocations>
    <domain:Countrycode>NL</domain:Countrycode>
@@ -193,7 +185,7 @@ class LocationServiceSoapTest extends TestCase
 ",
             (string) $request->getBody()
         );
-        $this->assertEmpty($request->getHeaderLine('apikey'));
+        $this->assertEquals('test', $request->getHeaderLine('apikey'));
         $this->assertEquals('text/xml', $request->getHeaderLine('Accept'));
     }
 
@@ -294,14 +286,7 @@ class LocationServiceSoapTest extends TestCase
 
         $this->assertEquals(
             "<?xml version=\"1.0\"?>
-<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:services=\"http://postnl.nl/cif/services/LocationWebService/\" xmlns:domain=\"http://postnl.nl/cif/domain/LocationWebService/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\" xmlns:schema=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:common=\"http://postnl.nl/cif/services/common/\" xmlns:arr=\"http://schemas.microsoft.com/2003/10/Serialization/Arrays\">
- <soap:Header>
-  <wsse:Security>
-   <wsse:UsernameToken>
-    <wsse:Password>test</wsse:Password>
-   </wsse:UsernameToken>
-  </wsse:Security>
- </soap:Header>
+<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:services=\"http://postnl.nl/cif/services/LocationWebService/\" xmlns:domain=\"http://postnl.nl/cif/domain/LocationWebService/\" xmlns:schema=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:common=\"http://postnl.nl/cif/services/common/\" xmlns:arr=\"http://schemas.microsoft.com/2003/10/Serialization/Arrays\">
  <soap:Body>
   <services:GetLocationsInArea>
    <domain:Countrycode>NL</domain:Countrycode>
@@ -334,7 +319,7 @@ class LocationServiceSoapTest extends TestCase
 ",
             (string) $request->getBody()
         );
-        $this->assertEmpty($request->getHeaderLine('apikey'));
+        $this->assertEquals('test', $request->getHeaderLine('apikey'));
         $this->assertEquals('text/xml', $request->getHeaderLine('Accept'));
     }
 
@@ -415,14 +400,7 @@ class LocationServiceSoapTest extends TestCase
 
         $this->assertEquals(
             "<?xml version=\"1.0\"?>
-<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:services=\"http://postnl.nl/cif/services/LocationWebService/\" xmlns:domain=\"http://postnl.nl/cif/domain/LocationWebService/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\" xmlns:schema=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:common=\"http://postnl.nl/cif/services/common/\" xmlns:arr=\"http://schemas.microsoft.com/2003/10/Serialization/Arrays\">
- <soap:Header>
-  <wsse:Security>
-   <wsse:UsernameToken>
-    <wsse:Password>test</wsse:Password>
-   </wsse:UsernameToken>
-  </wsse:Security>
- </soap:Header>
+<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:services=\"http://postnl.nl/cif/services/LocationWebService/\" xmlns:domain=\"http://postnl.nl/cif/domain/LocationWebService/\" xmlns:schema=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:common=\"http://postnl.nl/cif/services/common/\" xmlns:arr=\"http://schemas.microsoft.com/2003/10/Serialization/Arrays\">
  <soap:Body>
   <services:GetLocation>
    <domain:LocationCode>161503</domain:LocationCode>
@@ -437,7 +415,7 @@ class LocationServiceSoapTest extends TestCase
 ",
             (string) $request->getBody()
         );
-        $this->assertEmpty($request->getHeaderLine('apikey'));
+        $this->assertEquals('test', $request->getHeaderLine('apikey'));
         $this->assertEquals('text/xml', $request->getHeaderLine('Accept'));
     }
 
@@ -475,9 +453,10 @@ class LocationServiceSoapTest extends TestCase
     /**
      * @return string
      */
-    protected function getNearestLocationsMockResponse()
+    protected function getNearestLocationsMockResponse(): string
     {
-        return $json = '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+        return '<?xml version="1.0"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
   <s:Body>
     <GetNearestLocationsResponse xmlns="http://postnl.nl/cif/services/LocationWebService/"
 xmlns:a="http://postnl.nl/cif/domain/LocationWebService/">
@@ -539,7 +518,8 @@ xmlns:a="http://postnl.nl/cif/domain/LocationWebService/">
      */
     protected function getLocationsInAreaMockResponse()
     {
-        return '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+        return '<?xml version="1.0"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
    <s:Body>
       <GetLocationsInAreaResponse xmlns="http://postnl.nl/cif/services/LocationWebService/"
 xmlns:a="http://postnl.nl/cif/domain/LocationWebService/">
@@ -599,7 +579,8 @@ xmlns:a="http://postnl.nl/cif/domain/LocationWebService/">
      */
     protected function getLocationMockResponse()
     {
-        return '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+        return '<?xml version="1.0"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
    <s:Body>
       <GetLocationsInAreaResponse xmlns="http://postnl.nl/cif/services/LocationWebService/"
 xmlns:a="http://postnl.nl/cif/domain/LocationWebService/">
