@@ -15,13 +15,17 @@ try {
 } catch (InvalidPathException $e) {
     // Do absolute nothing with the error :D
 }
-$dotenv->required([
-    'POSTNL_API_KEY',
-    'POSTNL_COLLECTION_LOCATION',
-    'POSTNL_CONTACT_PERSON',
-    'POSTNL_CUSTOMER_CODE',
-    'POSTNL_CUSTOMER_NUMBER',
-]);
+if (!getenv('TRAVIS_PULL_REQUEST')) {
+    $dotenv->required(
+        [
+            'POSTNL_API_KEY',
+            'POSTNL_COLLECTION_LOCATION',
+            'POSTNL_CONTACT_PERSON',
+            'POSTNL_CUSTOMER_CODE',
+            'POSTNL_CUSTOMER_NUMBER',
+        ]
+    );
+}
 
 $filesystemAdapter = new Local(__DIR__.'/');
 $filesystem = new Filesystem($filesystemAdapter);
