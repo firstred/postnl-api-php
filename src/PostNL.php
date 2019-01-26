@@ -95,6 +95,8 @@ class PostNL implements LoggerAwareInterface
     const MODE_REST = 1;
     // SOAP API
     const MODE_SOAP = 2;
+    // AUTO - will try REST first, SOAP when REST is unavailable
+    const MODE_AUTO = 3;
 
     /**
      * 3S (or EU Pack Special) countries
@@ -216,12 +218,13 @@ class PostNL implements LoggerAwareInterface
      * @param bool     $sandbox  Sandbox mode
      * @param int      $mode     Set the preferred connection strategy.
      *                           Valid options are:
-     *                           - `MODE_REST`: New REST API
-     *                           - `MODE_SOAP`: New SOAP API
+     *                           - `MODE_REST`: REST API
+     *                           - `MODE_SOAP`: SOAP API
+     *                           - `MODE_AUTO`: Auto select
      *
      * @throws InvalidArgumentException
      */
-    public function __construct(Customer $customer, string $apiKey, bool $sandbox, int $mode = self::MODE_REST)
+    public function __construct(Customer $customer, string $apiKey, bool $sandbox, int $mode = self::MODE_AUTO)
     {
         $this->setCustomer($customer);
         $this->setApiKey($apiKey);
@@ -301,6 +304,7 @@ class PostNL implements LoggerAwareInterface
             [
                 static::MODE_REST,
                 static::MODE_SOAP,
+                static::MODE_AUTO,
             ]
         )) {
             throw new InvalidArgumentException('Mode not supported');
