@@ -130,7 +130,7 @@ class Customer extends AbstractEntity
     protected $CollectionLocation;
     /** @var string|null $ContactPerson */
     protected $ContactPerson;
-    /** @var string|null $CustomerCode */
+    /** @var int|null $CustomerCode */
     protected $CustomerCode;
     /** @var string|null $CustomerNumber */
     protected $CustomerNumber;

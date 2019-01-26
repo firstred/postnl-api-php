@@ -31,6 +31,7 @@ namespace Firstred\PostNL\Entity\Response;
 
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Label;
+use Firstred\PostNL\Entity\Warning;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
@@ -42,10 +43,14 @@ use Firstred\PostNL\Service\TimeframeService;
 /**
  * Class MergedLabel
  *
- * @method string[]|null getBarcodes()
- * @method Label[]|null  getLabels()
+ * @method int|null       getProductCodeDelivery()
+ * @method string[]|null  getBarcodes()
+ * @method Warning[]|null getWarnings()
+ * @method Label[]|null   getLabels()
  *
+ * @method MergedLabel setProductCodeDelivery(int|null $code = null)
  * @method MergedLabel setBarcodes(string[]|null $barcodes = null)
+ * @method MergedLabel setWarnings(Warning[]|null $warnings = null)
  * @method MergedLabel setLabels(Label[]|null $labels = null)
  */
 class MergedLabel extends AbstractEntity
@@ -53,32 +58,46 @@ class MergedLabel extends AbstractEntity
     /** @var string[][] $defaultProperties */
     public static $defaultProperties = [
         'Barcode'        => [
-            'Barcodes' => BarcodeService::DOMAIN_NAMESPACE,
-            'Labels'   => BarcodeService::DOMAIN_NAMESPACE,
+            'ProductCodeDelivery' => BarcodeService::DOMAIN_NAMESPACE,
+            'Barcodes'            => BarcodeService::DOMAIN_NAMESPACE,
+            'Warnings'            => BarcodeService::DOMAIN_NAMESPACE,
+            'Labels'              => BarcodeService::DOMAIN_NAMESPACE,
         ],
         'Confirming'     => [
-            'Barcodes' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Labels'   => ConfirmingService::DOMAIN_NAMESPACE,
+            'ProductCodeDelivery' => ConfirmingService::DOMAIN_NAMESPACE,
+            'Barcodes'            => ConfirmingService::DOMAIN_NAMESPACE,
+            'Warnings'            => ConfirmingService::DOMAIN_NAMESPACE,
+            'Labels'              => ConfirmingService::DOMAIN_NAMESPACE,
         ],
         'Labelling'      => [
-            'Barcodes' => LabellingService::DOMAIN_NAMESPACE,
-            'Labels'   => LabellingService::DOMAIN_NAMESPACE,
+            'ProductCodeDelivery' => LabellingService::DOMAIN_NAMESPACE,
+            'Barcodes'            => LabellingService::DOMAIN_NAMESPACE,
+            'Warnings'            => LabellingService::DOMAIN_NAMESPACE,
+            'Labels'              => LabellingService::DOMAIN_NAMESPACE,
         ],
         'ShippingStatus' => [
-            'Barcodes' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Labels'   => ShippingStatusService::DOMAIN_NAMESPACE,
+            'ProductCodeDelivery' => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Barcodes'            => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Warnings'            => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Labels'              => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate'   => [
-            'Barcodes' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Labels'   => DeliveryDateService::DOMAIN_NAMESPACE,
+            'ProductCodeDelivery' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Barcodes'            => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Warnings'            => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Labels'              => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
         'Location'       => [
-            'Barcodes' => LocationService::DOMAIN_NAMESPACE,
-            'Labels'   => LocationService::DOMAIN_NAMESPACE,
+            'ProductCodeDelivery' => LocationService::DOMAIN_NAMESPACE,
+            'Barcodes'            => LocationService::DOMAIN_NAMESPACE,
+            'Warnings'            => LocationService::DOMAIN_NAMESPACE,
+            'Labels'              => LocationService::DOMAIN_NAMESPACE,
         ],
         'Timeframe'      => [
-            'Barcodes' => TimeframeService::DOMAIN_NAMESPACE,
-            'Labels'   => TimeframeService::DOMAIN_NAMESPACE,
+            'ProductCodeDelivery' => TimeframeService::DOMAIN_NAMESPACE,
+            'Barcodes'            => TimeframeService::DOMAIN_NAMESPACE,
+            'Warnings'            => TimeframeService::DOMAIN_NAMESPACE,
+            'Labels'              => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
@@ -89,14 +108,18 @@ class MergedLabel extends AbstractEntity
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string[]|null $barcodes
-     * @param Label[]|null  $labels
+     * @param int|null       $productCodeDelivery
+     * @param string[]|null  $barcodes
+     * @param Warning[]|null $warnings
+     * @param Label[]|null   $labels
      */
-    public function __construct(array $barcodes = null, array $labels = null)
+    public function __construct(?int $productCodeDelivery = null, array $barcodes = null, array $warnings = null, array $labels = null)
     {
         parent::__construct();
 
+        $this->setProductCodeDelivery($productCodeDelivery);
         $this->setBarcodes($barcodes);
+        $this->setWarnings($warnings);
         $this->setLabels($labels);
     }
 }
