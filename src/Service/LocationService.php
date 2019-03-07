@@ -376,7 +376,7 @@ class LocationService extends AbstractService
         $query = [
             'CountryCode'     => $getNearestLocations->getCountrycode(),
             'PostalCode'      => $location->getPostalcode(),
-            'DeliveryOptions' => 'PG',
+            'DeliveryOptions' => null,
         ];
         if ($city = $location->getCity()) {
             $query['City'] = $city;
@@ -402,13 +402,19 @@ class LocationService extends AbstractService
             $query['Latitude'] = $location->getCoordinates()->getLatitude();
             $query['Longitude'] = $location->getCoordinates()->getLongitude();
         }
-        foreach ($location->getDeliveryOptions() as $option) {
-            if ($option === 'PG') {
-                continue;
+        if ($deliveryOptions = $location->getDeliveryOptions()) {
+            foreach ($deliveryOptions as $option) {
+                if (!array_key_exists('DeliveryOptions', $query)) {
+                    $query['DeliveryOptions'] = $option;
+                } else {
+                    $query['DeliveryOptions'] .= ',' . $option;
+                }
             }
-            $query['DeliveryOptions'] .= ",$option";
+        } else {
+            $query['DeliveryOptions'] = 'PG';
         }
-        $endpoint .= '?'.\GuzzleHttp\Psr7\build_query($query);
+
+        $endpoint .= '?'.\GuzzleHttp\Psr7\build_query($query, PHP_QUERY_RFC1738);
 
         return new Request(
             'GET',
@@ -583,7 +589,6 @@ class LocationService extends AbstractService
         $apiKey = $this->postnl->getRestApiKey();
         $this->setService($getLocations);
         $query = [
-            'DeliveryOptions' => 'PG',
             'LatitudeNorth' => $location->getCoordinatesNorthWest()->getLatitude(),
             'LongitudeWest' => $location->getCoordinatesNorthWest()->getLongitude(),
             'LatitudeSouth' => $location->getCoordinatesSouthEast()->getLatitude(),
@@ -598,13 +603,18 @@ class LocationService extends AbstractService
         if ($openingTime = $location->getOpeningTime()) {
             $query['OpeningTime'] = date('H:i:00', strtotime($openingTime));
         }
-        foreach ($location->getDeliveryOptions() as $option) {
-            if ($option === 'PG') {
-                continue;
+        if ($deliveryOptions = $location->getDeliveryOptions()) {
+            foreach ($deliveryOptions as $option) {
+                if (!array_key_exists('DeliveryOptions', $query)) {
+                    $query['DeliveryOptions'] = $option;
+                } else {
+                    $query['DeliveryOptions'] .= ',' . $option;
+                }
             }
-            $query['DeliveryOptions'] .= ",$option";
+        } else {
+            $query['DeliveryOptions'] = 'PG';
         }
-        $endpoint = '/area?'.\GuzzleHttp\Psr7\build_query($query);
+        $endpoint = '/area?'.\GuzzleHttp\Psr7\build_query($query, PHP_QUERY_RFC1738);
 
         return new Request(
             'GET',
