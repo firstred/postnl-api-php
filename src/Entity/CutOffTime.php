@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -29,74 +29,17 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
-use Firstred\PostNL\Service\TimeframeService;
-use Sabre\Xml\Writer;
-
 /**
  * Class CutOffTime
- *
- * @method string|null getDay()
- * @method string|null getTime()
- * @method bool|null   getAvailable()
- *
- * @method CutOffTime setDay(string|null $day = null)
- * @method CutOffTime setTime(string|null $time = null)
- * @method CutOffTime setAvailable(bool|null $available = null)
  */
 class CutOffTime extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
-    public static $defaultProperties = [
-        'Barcode'        => [
-            'Day'       => BarcodeService::DOMAIN_NAMESPACE,
-            'Time'      => BarcodeService::DOMAIN_NAMESPACE,
-            'Available' => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming'     => [
-            'Day'       => ConfirmingService::DOMAIN_NAMESPACE,
-            'Time'      => ConfirmingService::DOMAIN_NAMESPACE,
-            'Available' => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling'      => [
-            'Day'       => LabellingService::DOMAIN_NAMESPACE,
-            'Time'      => LabellingService::DOMAIN_NAMESPACE,
-            'Available' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Day'       => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Time'      => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Available' => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
-            'Day'       => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Time'      => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Available' => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location'       => [
-            'Day'       => LocationService::DOMAIN_NAMESPACE,
-            'Time'      => LocationService::DOMAIN_NAMESPACE,
-            'Available' => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe'      => [
-            'Day'       => TimeframeService::DOMAIN_NAMESPACE,
-            'Time'      => TimeframeService::DOMAIN_NAMESPACE,
-            'Available' => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null $Day */
-    protected $Day;
-    /** @var string|null $Time */
-    protected $Time;
-    /** @var bool|null $Available */
-    protected $Available;
-    // @codingStandardsIgnoreEnd
+    /** @var string|null $day */
+    protected $day;
+    /** @var string|null $time */
+    protected $time;
+    /** @var bool|null $available */
+    protected $available;
 
     /**
      * @param string $day
@@ -113,39 +56,74 @@ class CutOffTime extends AbstractEntity
     }
 
     /**
-     * Return a serializable array for the XMLWriter
+     * @return string|null
      *
-     * @param Writer $writer
-     *
-     * @return void
-     *
-     * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
-    public function xmlSerialize(Writer $writer): void
+    public function getDay(): ?string
     {
-        $xml = [];
-        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
-            $writer->write($xml);
+        return $this->day;
+    }
 
-            return;
-        }
+    /**
+     * @param string|null $day
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setDay(?string $day): CutOffTime
+    {
+        $this->day = $day;
 
-        foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if (isset($this->{$propertyName})) {
-                if ('Available' === $propertyName) {
-                    if (is_bool($this->{$propertyName})) {
-                        $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName} ? 'true' : 'false';
-                    } elseif (is_int($this->{$propertyName})) {
-                        $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName} === 1 ? 'true' : 'false';
-                    } else {
-                        $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
-                    }
-                } else {
-                    $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
-                }
-            }
-        }
-        // Auto extending this object with other properties is not supported with SOAP
-        $writer->write($xml);
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getTime(): ?string
+    {
+        return $this->time;
+    }
+
+    /**
+     * @param string|null $time
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setTime(?string $time): CutOffTime
+    {
+        $this->time = $time;
+
+        return $this;
+    }
+
+    /**
+     * @return bool|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getAvailable(): ?bool
+    {
+        return $this->available;
+    }
+
+    /**
+     * @param bool|null $available
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setAvailable(?bool $available): CutOffTime
+    {
+        $this->available = $available;
+
+        return $this;
     }
 }

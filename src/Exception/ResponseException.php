@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -29,7 +29,7 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Exception;
 
-use GuzzleHttp\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
 /**
@@ -37,20 +37,20 @@ use Throwable;
  */
 class ResponseException extends AbstractException
 {
-    /** @var Response $response */
+    /** @var ResponseInterface $response */
     private $response;
 
     /**
      * ResponseException constructor.
      *
-     * @param string         $message
-     * @param int            $code
-     * @param Throwable|null $previous
-     * @param Response|null  $response
+     * @param string                 $message
+     * @param int                    $code
+     * @param Throwable|null         $previous
+     * @param ResponseInterface|null $response
      *
      * @since 1.0.0
      */
-    public function __construct(string $message = "", int $code = 0, ?Throwable $previous = null, ?Response $response = null)
+    public function __construct(string $message = "", int $code = 0, ?Throwable $previous = null, ?ResponseInterface $response = null)
     {
         parent::__construct($message, $code, $previous);
 
@@ -58,7 +58,7 @@ class ResponseException extends AbstractException
     }
 
     /**
-     * @return Response
+     * @return ResponseInterface
      *
      * @since 1.0.0
      */
@@ -68,13 +68,13 @@ class ResponseException extends AbstractException
     }
 
     /**
-     * @param Response $response
+     * @param ResponseInterface $response
      *
      * @return void
      *
      * @since 1.0.0
      */
-    public function setResponse(Response $response): void
+    public function setResponse(ResponseInterface $response): void
     {
         $this->response = $response;
     }

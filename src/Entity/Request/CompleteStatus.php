@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -29,82 +29,23 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity\Request;
 
+use Exception;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Message\Message;
 use Firstred\PostNL\Entity\Shipment;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
-use Firstred\PostNL\Service\TimeframeService;
-use Sabre\Xml\Writer;
 
 /**
  * Class CompleteStatus
- *
- * @method Message|null    getMessage()
- * @method Customer|null   getCustomer()
- * @method Shipment|null   getShipment()
- *
- * @method CompleteStatus setMessage(Message|null $message = null)
- * @method CompleteStatus setCustomer(Customer|null $customer = null)
- * @method CompleteStatus setShipment(Shipment|null $shipment = null)
  */
 class CompleteStatus extends AbstractEntity
 {
-    /**
-     * Default properties and namespaces for the SOAP API
-     *
-     * @var array $defaultProperties
-     */
-    public static $defaultProperties = [
-        'Barcode'        => [
-            'Message'  => BarcodeService::DOMAIN_NAMESPACE,
-            'Customer' => BarcodeService::DOMAIN_NAMESPACE,
-            'Shipment' => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming'     => [
-            'Message'  => ConfirmingService::DOMAIN_NAMESPACE,
-            'Customer' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Shipment' => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling'      => [
-            'Message'  => LabellingService::DOMAIN_NAMESPACE,
-            'Customer' => LabellingService::DOMAIN_NAMESPACE,
-            'Shipment' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Message'  => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Customer' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Shipment' => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
-            'Message'  => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Customer' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Shipment' => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location'       => [
-            'Message'  => LocationService::DOMAIN_NAMESPACE,
-            'Customer' => LocationService::DOMAIN_NAMESPACE,
-            'Shipment' => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe'      => [
-            'Message'  => TimeframeService::DOMAIN_NAMESPACE,
-            'Customer' => TimeframeService::DOMAIN_NAMESPACE,
-            'Shipment' => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var Message|null $Message */
-    protected $Message;
-    /** @var Customer|null $Customer */
-    protected $Customer;
-    /** @var Shipment|null $Shipment */
-    protected $Shipment;
-    // @codingStandardsIgnoreEnd
+    /** @var Message|null $message */
+    protected $message;
+    /** @var Customer|null $customer */
+    protected $customer;
+    /** @var Shipment|null $shipment */
+    protected $shipment;
 
     /**
      * CompleteStatus constructor.
@@ -113,9 +54,10 @@ class CompleteStatus extends AbstractEntity
      * @param Customer|null $customer
      * @param Message|null  $message
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function __construct(Shipment $shipment = null, Customer $customer = null, Message $message = null)
     {
@@ -127,29 +69,74 @@ class CompleteStatus extends AbstractEntity
     }
 
     /**
-     * Return a serializable array for the XMLWriter
+     * @return Message|null
      *
-     * @param Writer $writer
-     *
-     * @return void
-     *
-     * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
-    public function xmlSerialize(Writer $writer): void
+    public function getMessage(): ?Message
     {
-        $xml = [];
-        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
-            $writer->write($xml);
+        return $this->message;
+    }
 
-            return;
-        }
+    /**
+     * @param Message|null $message
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setMessage(?Message $message): CompleteStatus
+    {
+        $this->message = $message;
 
-        foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if (isset($this->{$propertyName})) {
-                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
-            }
-        }
-        // Auto extending this object with other properties is not supported with SOAP
-        $writer->write($xml);
+        return $this;
+    }
+
+    /**
+     * @return Customer|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getCustomer(): ?Customer
+    {
+        return $this->customer;
+    }
+
+    /**
+     * @param Customer|null $customer
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setCustomer(?Customer $customer): CompleteStatus
+    {
+        $this->customer = $customer;
+
+        return $this;
+    }
+
+    /**
+     * @return Shipment|null
+     *
+     * @since 2.0.0
+     */
+    public function getShipment(): ?Shipment
+    {
+        return $this->shipment;
+    }
+
+    /**
+     * @param Shipment|null $shipment
+     *
+     * @return static
+     *
+     * @since 2.0.0
+     */
+    public function setShipment(?Shipment $shipment): CompleteStatus
+    {
+        $this->shipment = $shipment;
+
+        return $this;
     }
 }

@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -31,8 +31,10 @@ namespace Firstred\PostNL\Tests\Unit\Entity;
 
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Address;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use Sabre\Xml\Service as XmlService;
+use ReflectionClass;
+use ReflectionException;
 
 /**
  * @testdox The Entities
@@ -52,7 +54,7 @@ class EntityTest extends TestCase
             $entityName = substr($entityName, 0, strlen($entityName) - 4);
             $entityName = "\\Firstred\\PostNL\\Entity\\$entityName";
             $entity = new $entityName();
-            $this->assertInstanceOf("\\Firstred\\PostNL\\Entity\\AbstractEntity", $entity);
+            $this->assertInstanceOf(AbstractEntity::class, $entity);
         }
 
         foreach (scandir(__DIR__.'/../../../src/Entity/Message') as $entityName) {
@@ -63,7 +65,7 @@ class EntityTest extends TestCase
             $entityName = substr($entityName, 0, strlen($entityName) - 4);
             $entityName = "\\Firstred\\PostNL\\Entity\\Message\\$entityName";
             $entity = new $entityName();
-            $this->assertInstanceOf("\\Firstred\\PostNL\\Entity\\AbstractEntity", $entity);
+            $this->assertInstanceOf(AbstractEntity::class, $entity);
         }
 
         foreach (scandir(__DIR__.'/../../../src/Entity/Request') as $entityName) {
@@ -74,7 +76,7 @@ class EntityTest extends TestCase
             $entityName = substr($entityName, 0, strlen($entityName) - 4);
             $entityName = "\\Firstred\\PostNL\\Entity\\Request\\$entityName";
             $entity = new $entityName();
-            $this->assertInstanceOf("\\Firstred\\PostNL\\Entity\\AbstractEntity", $entity);
+            $this->assertInstanceOf(AbstractEntity::class, $entity);
         }
 
         foreach (scandir(__DIR__.'/../../../src/Entity/Response') as $entityName) {
@@ -85,7 +87,79 @@ class EntityTest extends TestCase
             $entityName = substr($entityName, 0, strlen($entityName) - 4);
             $entityName = "\\Firstred\\PostNL\\Entity\\Response\\$entityName";
             $entity = new $entityName();
-            $this->assertInstanceOf("\\Firstred\\PostNL\\Entity\\AbstractEntity", $entity);
+            $this->assertInstanceOf(AbstractEntity::class, $entity);
+        }
+    }
+
+    /**
+     * @testdox Properties should be readable and writable
+     *
+     * @throws ReflectionException
+     */
+    public function testProperties()
+    {
+        foreach (scandir(__DIR__.'/../../../src/Entity') as $entityName) {
+            if (in_array($entityName, ['.', '..', 'AbstractEntity.php']) || is_dir(__DIR__."/../../../src/Entity/$entityName")) {
+                continue;
+            }
+
+            $entityName = substr($entityName, 0, strlen($entityName) - 4);
+            $entityName = "\\Firstred\\PostNL\\Entity\\$entityName";
+            $entity = new $entityName();
+            $reflection = new ReflectionClass($entityName);
+            foreach (array_keys($reflection->getDefaultProperties()) as $var) {
+                $var = ucfirst($var);
+                $this->assertTrue(method_exists($entity, "get$var"));
+                $this->assertTrue(method_exists($entity, "set$var"));
+            }
+        }
+
+        foreach (scandir(__DIR__.'/../../../src/Entity/Message') as $entityName) {
+            if (in_array($entityName, ['.', '..']) || is_dir(__DIR__."/../../src/Entity/Message/$entityName")) {
+                continue;
+            }
+
+            $entityName = substr($entityName, 0, strlen($entityName) - 4);
+            $entityName = "\\Firstred\\PostNL\\Entity\\Message\\$entityName";
+            $entity = new $entityName();
+            $reflection = new ReflectionClass($entityName);
+            foreach (array_keys($reflection->getDefaultProperties()) as $var) {
+                $var = ucfirst($var);
+                $this->assertTrue(method_exists($entity, "get$var"));
+                $this->assertTrue(method_exists($entity, "set$var"));
+            }
+        }
+
+        foreach (scandir(__DIR__.'/../../../src/Entity/Request') as $entityName) {
+            if (in_array($entityName, ['.', '..']) || is_dir(__DIR__."/../../src/Entity/Request/$entityName")) {
+                continue;
+            }
+
+            $entityName = substr($entityName, 0, strlen($entityName) - 4);
+            $entityName = "\\Firstred\\PostNL\\Entity\\Request\\$entityName";
+            $entity = new $entityName();
+            $reflection = new ReflectionClass($entityName);
+            foreach (array_keys($reflection->getDefaultProperties()) as $var) {
+                $var = ucfirst($var);
+                $this->assertTrue(method_exists($entity, "get$var"));
+                $this->assertTrue(method_exists($entity, "set$var"));
+            }
+        }
+
+        foreach (scandir(__DIR__.'/../../../src/Entity/Response') as $entityName) {
+            if (in_array($entityName, ['.', '..']) || is_dir(__DIR__."/../../src/Entity/Response/$entityName")) {
+                continue;
+            }
+
+            $entityName = substr($entityName, 0, strlen($entityName) - 4);
+            $entityName = "\\Firstred\\PostNL\\Entity\\Response\\$entityName";
+            $entity = new $entityName();
+            $reflection = new ReflectionClass($entityName);
+            foreach (array_keys($reflection->getDefaultProperties()) as $var) {
+                $var = ucfirst($var);
+                $this->assertTrue(method_exists($entity, "get$var"));
+                $this->assertTrue(method_exists($entity, "set$var"));
+            }
         }
     }
 
@@ -94,11 +168,9 @@ class EntityTest extends TestCase
      */
     public function testNegativeMissingValue()
     {
-        $this->expectException('\\Firstred\\PostNL\\Exception\\InvalidArgumentException');
+        $this->expectException('\\ArgumentCountError');
 
-        (new Address())
-            ->setArea()
-        ;
+        (new Address())->setArea();
     }
 
     /**
@@ -106,7 +178,9 @@ class EntityTest extends TestCase
      */
     public function testNegativeCannotInstantiateAbstract()
     {
-        $this->assertNull(AbstractEntity::create());
+        $this->expectException(InvalidArgumentException::class);
+
+        AbstractEntity::create();
     }
 
     /**
@@ -114,6 +188,8 @@ class EntityTest extends TestCase
      */
     public function testNegativeReturnNullWhenPropertyDoesNotExist()
     {
+        $this->expectException('Error');
+
         $this->assertNull((new Address())->getNothing());
     }
 
@@ -122,33 +198,8 @@ class EntityTest extends TestCase
      */
     public function testNegativeThrowExceptionWhenMethodDoesNotExist()
     {
-        $this->expectException('\\Firstred\\PostNL\\Exception\\InvalidArgumentException');
+        $this->expectException('Error');
 
         (new Address())->blab();
-    }
-
-    /**
-     * @testdox Should throw an exception when json serializing without having a service
-     */
-    public function testNegativeThrowExceptionWhenServiceNotSetJson()
-    {
-        $this->expectException('\\Firstred\\PostNL\\Exception\\InvalidArgumentException');
-
-        json_encode(new Address());
-    }
-
-    /**
-     * @testdox Should throw an exception when xml serializing without having a service
-     */
-    public function testNegativeThrowExceptionWhenServiceNotSetXml()
-    {
-        $this->expectException('\\Firstred\\PostNL\\Exception\\InvalidArgumentException');
-
-        $service = new XmlService();
-
-        $service->write(
-            '{test}a',
-            new Address()
-        );
     }
 }

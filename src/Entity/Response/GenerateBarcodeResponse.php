@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -30,55 +30,14 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity\Response;
 
 use Firstred\PostNL\Entity\AbstractEntity;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
-use Firstred\PostNL\Service\TimeframeService;
 
 /**
  * Class GenerateBarcodeResponse
- *
- * @method string|null getBarcode()
- *
- * @method GenerateBarcodeResponse setBarcode(string|null $shipments = null)
  */
 class GenerateBarcodeResponse extends AbstractEntity
 {
-    /**
-     * Default properties and namespaces for the SOAP API
-     *
-     * @var array $defaultProperties
-     */
-    public static $defaultProperties = [
-        'Barcode'        => [
-            'Barcode' => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming'     => [
-            'Barcode' => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling'      => [
-            'Barcode' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Barcode' => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
-            'Barcode' => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location'       => [
-            'Barcode' => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe'      => [
-            'Barcode' => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null $Barcode */
-    protected $Barcode;
-    // @codingStandardsIgnoreEnd
+    /** @var string|null $barcode */
+    protected $barcode;
 
     /**
      * GenerateBarcodeResponse constructor.
@@ -86,11 +45,36 @@ class GenerateBarcodeResponse extends AbstractEntity
      * @param string|null $barcode
      *
      * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function __construct($barcode = null)
     {
         parent::__construct();
 
         $this->setBarcode($barcode);
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getBarcode(): ?string
+    {
+        return $this->barcode;
+    }
+
+    /**
+     * @param string|null $barcode
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setBarcode(?string $barcode): GenerateBarcodeResponse
+    {
+        $this->barcode = $barcode;
+
+        return $this;
     }
 }

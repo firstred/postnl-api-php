@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -30,61 +30,22 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity\Response;
 
 use Firstred\PostNL\Entity\AbstractEntity;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
-use Firstred\PostNL\Service\TimeframeService;
-use Sabre\Xml\Writer;
 
 /**
  * Class GetLocationsResult
- *
- * @method ResponseLocation[]|null getResponseLocation()
- *
- * @method GetLocationsResult setResponseLocation(ResponseLocation|null $location = null)
  */
 class GetLocationsResult extends AbstractEntity
 {
-    /**
-     * Default properties and namespaces for the SOAP API
-     *
-     * @var array $defaultProperties
-     */
-    public static $defaultProperties = [
-        'Barcode'        => [
-            'ResponseLocation' => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming'     => [
-            'ResponseLocation' => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling'      => [
-            'ResponseLocation' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'ResponseLocation' => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
-            'ResponseLocation' => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location'       => [
-            'ResponseLocation' => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe'      => [
-            'ResponseLocation' => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var ResponseLocation[]|null $ResponseLocation */
-    protected $ResponseLocation;
-    // @codingStandardsIgnoreEnd
+    /** @var ResponseLocation[]|null $responseLocation */
+    protected $responseLocation;
 
     /**
      * GetLocationsResult constructor.
      *
      * @param ResponseLocation[]|null $locations
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function __construct(array $locations = null)
     {
@@ -94,36 +55,26 @@ class GetLocationsResult extends AbstractEntity
     }
 
     /**
-     * Return a serializable array for the XMLWriter
+     * @return ResponseLocation[]|null
      *
-     * @param Writer $writer
-     *
-     * @return void
-     *
-     * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
-    public function xmlSerialize(Writer $writer): void
+    public function getResponseLocation(): ?array
     {
-        $xml = [];
-        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
-            $writer->write($xml);
+        return $this->responseLocation;
+    }
 
-            return;
-        }
+    /**
+     * @param ResponseLocation[]|null $responseLocation
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setResponseLocation(?array $responseLocation): GetLocationsResult
+    {
+        $this->responseLocation = $responseLocation;
 
-        foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if ('ResponseLocation' === $propertyName) {
-                $locations = [];
-                // @codingStandardsIgnoreLine
-                foreach ($this->ResponseLocation as $location) {
-                    $locations[] = $location;
-                }
-                $xml["{{$namespace}}ResponseLocation"] = $locations;
-            } elseif (isset($this->{$propertyName})) {
-                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
-            }
-        }
-        // Auto extending this object with other properties is not supported with SOAP
-        $writer->write($xml);
+        return $this;
     }
 }

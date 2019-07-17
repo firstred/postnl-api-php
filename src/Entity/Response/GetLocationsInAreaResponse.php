@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -30,60 +30,22 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity\Response;
 
 use Firstred\PostNL\Entity\AbstractEntity;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
-use Firstred\PostNL\Service\TimeframeService;
 
 /**
  * Class GetLocationsInAreaResponse
- *
- * @method GetLocationsResult|null getGetLocationsResult()
- *
- * @method GetLocationsInAreaResponse setGetLocationsResult(GetLocationsResult|null $result = null)
  */
 class GetLocationsInAreaResponse extends AbstractEntity
 {
-    /**
-     * Default properties and namespaces for the SOAP API
-     *
-     * @var array $defaultProperties
-     */
-    public static $defaultProperties = [
-        'Barcode'        => [
-            'GetLocationsResult' => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming'     => [
-            'GetLocationsResult' => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling'      => [
-            'GetLocationsResult' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'GetLocationsResult' => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
-            'GetLocationsResult' => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location'       => [
-            'GetLocationsResult' => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe'      => [
-            'GetLocationsResult' => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var GetLocationsResult|null $GetLocationsResult */
-    protected $GetLocationsResult;
-    // @codingStandardsIgnoreEnd
+    /** @var GetLocationsResult|null $getLocationsResult */
+    protected $getLocationsResult;
 
     /**
      * GetLocationsInAreaResponse constructor.
      *
      * @param GetLocationsResult|null $result
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function __construct(GetLocationsResult $result = null)
     {
@@ -98,20 +60,16 @@ class GetLocationsInAreaResponse extends AbstractEntity
      * @return array
      *
      * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function jsonSerialize(): array
     {
         $json = [];
-        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
-            return $json;
-        }
-
-        foreach (array_keys(static::$defaultProperties[$this->currentService]) as $propertyName) {
+        foreach (array_keys(get_class_vars(static::class)) as $propertyName) {
             if (isset($this->{$propertyName})) {
                 if ('GetLocationsResult' === $propertyName) {
                     $locations = [];
-                    // @codingStandardsIgnoreLine
-                    foreach ($this->GetLocationsResult as $location) {
+                    foreach ($this->getLocationsResult as $location) {
                         $locations[] = $location;
                     }
                     $json[$propertyName] = ['ResponseLocation' => $locations];
@@ -122,5 +80,29 @@ class GetLocationsInAreaResponse extends AbstractEntity
         }
 
         return $json;
+    }
+
+    /**
+     * @return GetLocationsResult|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getGetLocationsResult(): ?GetLocationsResult
+    {
+        return $this->getLocationsResult;
+    }
+
+    /**
+     * @param GetLocationsResult|null $getLocationsResult
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setGetLocationsResult(?GetLocationsResult $getLocationsResult): GetLocationsInAreaResponse
+    {
+        $this->getLocationsResult = $getLocationsResult;
+
+        return $this;
     }
 }

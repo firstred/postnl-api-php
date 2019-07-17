@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -29,62 +29,15 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
-use Firstred\PostNL\Service\TimeframeService;
-
 /**
  * Class ProductOption
- *
- * @method string|null getCharacteristic()
- * @method string|null getOption()
- *
- * @method ProductOption setCharacteristic(string|null $characteristic = null)
- * @method ProductOption setOption(string|null $option = null)
  */
 class ProductOption extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
-    public static $defaultProperties = [
-        'Barcode'        => [
-            'Characteristic' => BarcodeService::DOMAIN_NAMESPACE,
-            'Option'         => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming'     => [
-            'Characteristic' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Option'         => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling'      => [
-            'Characteristic' => LabellingService::DOMAIN_NAMESPACE,
-            'Option'         => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Characteristic' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Option'         => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
-            'Characteristic' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Option'         => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location'       => [
-            'Characteristic' => LocationService::DOMAIN_NAMESPACE,
-            'Option'         => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe'      => [
-            'Characteristic' => TimeframeService::DOMAIN_NAMESPACE,
-            'Option'         => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null $Characteristic */
-    protected $Characteristic;
-    /** @var string|null $Option */
-    protected $Option;
-    // @codingStandardsIgnoreEnd
+    /** @var string|null $characteristic */
+    protected $characteristic;
+    /** @var string|null $option */
+    protected $option;
 
     /**
      * @param string|null $characteristic
@@ -96,5 +49,53 @@ class ProductOption extends AbstractEntity
 
         $this->setCharacteristic($characteristic);
         $this->setOption($option);
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getCharacteristic(): ?string
+    {
+        return $this->characteristic;
+    }
+
+    /**
+     * @param string|null $characteristic
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setCharacteristic(?string $characteristic): ProductOption
+    {
+        $this->characteristic = $characteristic;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getOption(): ?string
+    {
+        return $this->option;
+    }
+
+    /**
+     * @param string|null $option
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setOption(?string $option): ProductOption
+    {
+        $this->option = $option;
+
+        return $this;
     }
 }

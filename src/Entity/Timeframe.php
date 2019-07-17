@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -29,195 +29,39 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
-use Firstred\PostNL\Service\TimeframeService;
-use InvalidArgumentException;
-use Sabre\Xml\Writer;
-
 /**
  * Class Timeframe
- *
- * @method string|null      getCity()
- * @method string|null      getCountryCode()
- * @method string|null      getDate()
- * @method string|null      getEndDate()
- * @method string|null      getHouseNr()
- * @method string|null      getHouseNrExt()
- * @method string[]|null    getOptions()
- * @method string|null      getPostalCode()
- * @method string|null      getStartDate()
- * @method string|null      getStreet()
- * @method string|null      getSundaySorting()
- * @method string|null      getInterval()
- * @method string|null      getTimeframeRange()
- * @method Timeframe[]|null getTimeframes()
- *
- * @method Timeframe setCity(string|null $city = null)
- * @method Timeframe setCountryCode(string|null $code = null)
- * @method Timeframe setDate(string|null $date = null)
- * @method Timeframe setEndDate(string|null $date = null)
- * @method Timeframe setHouseNr(string|null $houseNr = null)
- * @method Timeframe setHouseNrExt(string|null $houseNrExt = null)
- * @method Timeframe setOptions(string[]|null $options = null)
- * @method Timeframe setStartDate(string|null $date = null)
- * @method Timeframe setStreet(string|null $street = null)
- * @method Timeframe setSundaySorting(bool|null $sunday = null)
- * @method Timeframe setInterval(string|null $interval = null)
- * @method Timeframe setTimeframeRange(string|null $range = null)
- * @method Timeframe setTimeframes(Timeframe[]|null $timeframes = null)
  */
 class Timeframe extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
-    public static $defaultProperties = [
-        'Barcode'        => [
-            'City'           => BarcodeService::DOMAIN_NAMESPACE,
-            'CountryCode'    => BarcodeService::DOMAIN_NAMESPACE,
-            'Date'           => BarcodeService::DOMAIN_NAMESPACE,
-            'EndDate'        => BarcodeService::DOMAIN_NAMESPACE,
-            'HouseNr'        => BarcodeService::DOMAIN_NAMESPACE,
-            'HouseNrExt'     => BarcodeService::DOMAIN_NAMESPACE,
-            'Options'        => BarcodeService::DOMAIN_NAMESPACE,
-            'PostalCode'     => BarcodeService::DOMAIN_NAMESPACE,
-            'StartDate'      => BarcodeService::DOMAIN_NAMESPACE,
-            'Street'         => BarcodeService::DOMAIN_NAMESPACE,
-            'SundaySorting'  => BarcodeService::DOMAIN_NAMESPACE,
-            'Interval'       => BarcodeService::DOMAIN_NAMESPACE,
-            'TimeframeRange' => BarcodeService::DOMAIN_NAMESPACE,
-            'Timeframes'     => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming'     => [
-            'City'           => ConfirmingService::DOMAIN_NAMESPACE,
-            'CountryCode'    => ConfirmingService::DOMAIN_NAMESPACE,
-            'Date'           => ConfirmingService::DOMAIN_NAMESPACE,
-            'EndDate'        => ConfirmingService::DOMAIN_NAMESPACE,
-            'HouseNr'        => ConfirmingService::DOMAIN_NAMESPACE,
-            'HouseNrExt'     => ConfirmingService::DOMAIN_NAMESPACE,
-            'Options'        => ConfirmingService::DOMAIN_NAMESPACE,
-            'PostalCode'     => ConfirmingService::DOMAIN_NAMESPACE,
-            'StartDate'      => ConfirmingService::DOMAIN_NAMESPACE,
-            'Street'         => ConfirmingService::DOMAIN_NAMESPACE,
-            'SundaySorting'  => ConfirmingService::DOMAIN_NAMESPACE,
-            'Interval'       => ConfirmingService::DOMAIN_NAMESPACE,
-            'TimeframeRange' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Timeframes'     => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling'      => [
-            'City'           => LabellingService::DOMAIN_NAMESPACE,
-            'CountryCode'    => LabellingService::DOMAIN_NAMESPACE,
-            'Date'           => LabellingService::DOMAIN_NAMESPACE,
-            'EndDate'        => LabellingService::DOMAIN_NAMESPACE,
-            'HouseNr'        => LabellingService::DOMAIN_NAMESPACE,
-            'HouseNrExt'     => LabellingService::DOMAIN_NAMESPACE,
-            'Options'        => LabellingService::DOMAIN_NAMESPACE,
-            'PostalCode'     => LabellingService::DOMAIN_NAMESPACE,
-            'StartDate'      => LabellingService::DOMAIN_NAMESPACE,
-            'Street'         => LabellingService::DOMAIN_NAMESPACE,
-            'SundaySorting'  => LabellingService::DOMAIN_NAMESPACE,
-            'Interval'       => LabellingService::DOMAIN_NAMESPACE,
-            'TimeframeRange' => LabellingService::DOMAIN_NAMESPACE,
-            'Timeframes'     => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'City'           => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CountryCode'    => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Date'           => ShippingStatusService::DOMAIN_NAMESPACE,
-            'EndDate'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'HouseNr'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'HouseNrExt'     => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Options'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'PostalCode'     => ShippingStatusService::DOMAIN_NAMESPACE,
-            'StartDate'      => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Street'         => ShippingStatusService::DOMAIN_NAMESPACE,
-            'SundaySorting'  => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Interval'       => ShippingStatusService::DOMAIN_NAMESPACE,
-            'TimeframeRange' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Timeframes'     => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
-            'City'           => DeliveryDateService::DOMAIN_NAMESPACE,
-            'CountryCode'    => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Date'           => DeliveryDateService::DOMAIN_NAMESPACE,
-            'EndDate'        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'HouseNr'        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'HouseNrExt'     => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Options'        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'PostalCode'     => DeliveryDateService::DOMAIN_NAMESPACE,
-            'StartDate'      => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Street'         => DeliveryDateService::DOMAIN_NAMESPACE,
-            'SundaySorting'  => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Interval'       => DeliveryDateService::DOMAIN_NAMESPACE,
-            'TimeframeRange' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Timeframes'     => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location'       => [
-            'City'           => LocationService::DOMAIN_NAMESPACE,
-            'CountryCode'    => LocationService::DOMAIN_NAMESPACE,
-            'Date'           => LocationService::DOMAIN_NAMESPACE,
-            'EndDate'        => LocationService::DOMAIN_NAMESPACE,
-            'HouseNr'        => LocationService::DOMAIN_NAMESPACE,
-            'HouseNrExt'     => LocationService::DOMAIN_NAMESPACE,
-            'Options'        => LocationService::DOMAIN_NAMESPACE,
-            'PostalCode'     => LocationService::DOMAIN_NAMESPACE,
-            'StartDate'      => LocationService::DOMAIN_NAMESPACE,
-            'Street'         => LocationService::DOMAIN_NAMESPACE,
-            'SundaySorting'  => LocationService::DOMAIN_NAMESPACE,
-            'Interval'       => LocationService::DOMAIN_NAMESPACE,
-            'TimeframeRange' => LocationService::DOMAIN_NAMESPACE,
-            'Timeframes'     => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe'      => [
-            'City'           => TimeframeService::DOMAIN_NAMESPACE,
-            'CountryCode'    => TimeframeService::DOMAIN_NAMESPACE,
-            'Date'           => TimeframeService::DOMAIN_NAMESPACE,
-            'EndDate'        => TimeframeService::DOMAIN_NAMESPACE,
-            'HouseNr'        => TimeframeService::DOMAIN_NAMESPACE,
-            'HouseNrExt'     => TimeframeService::DOMAIN_NAMESPACE,
-            'Options'        => TimeframeService::DOMAIN_NAMESPACE,
-            'PostalCode'     => TimeframeService::DOMAIN_NAMESPACE,
-            'StartDate'      => TimeframeService::DOMAIN_NAMESPACE,
-            'Street'         => TimeframeService::DOMAIN_NAMESPACE,
-            'SundaySorting'  => TimeframeService::DOMAIN_NAMESPACE,
-            'Interval'       => TimeframeService::DOMAIN_NAMESPACE,
-            'TimeframeRange' => TimeframeService::DOMAIN_NAMESPACE,
-            'Timeframes'     => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null $City */
-    protected $City;
-    /** @var string|null $CountryCode */
-    protected $CountryCode;
-    /** @var string|null $Date */
-    protected $Date;
-    /** @var string|null $EndDate */
-    protected $EndDate;
-    /** @var string|null $HouseNr */
-    protected $HouseNr;
-    /** @var string|null $HouseNrExt */
-    protected $HouseNrExt;
-    /** @var string[]|null $Options */
-    protected $Options;
-    /** @var string|null $PostalCode */
-    protected $PostalCode;
-    /** @var string|null $StartDate */
-    protected $StartDate;
-    /** @var string|null $Street */
-    protected $Street;
-    /** @var string|null $SundaySorting */
-    protected $SundaySorting;
-    /** @var string|null $Interval */
-    protected $Interval;
-    /** @var string|null $TimeframeRange */
-    protected $TimeframeRange;
-    /** @var TimeframeTimeFrame[]|Timeframe[]|null $Timeframes */
-    protected $Timeframes;
-    // @codingStandardsIgnoreEnd
+    /** @var string|null $city */
+    protected $city;
+    /** @var string|null $countryCode */
+    protected $countryCode;
+    /** @var string|null $date */
+    protected $date;
+    /** @var string|null $endDate */
+    protected $endDate;
+    /** @var string|null $houseNr */
+    protected $houseNr;
+    /** @var string|null $houseNrExt */
+    protected $houseNrExt;
+    /** @var string[]|null $options */
+    protected $options;
+    /** @var string|null $postalCode */
+    protected $postalCode;
+    /** @var string|null $startDate */
+    protected $startDate;
+    /** @var string|null $street */
+    protected $street;
+    /** @var string|null $sundaySorting */
+    protected $sundaySorting;
+    /** @var string|null $interval */
+    protected $interval;
+    /** @var string|null $timeframeRange */
+    protected $timeframeRange;
+    /** @var TimeframeTimeFrame[]|Timeframe[]|null $timeframes */
+    protected $timeframes;
 
     /**
      * Timeframe constructor.
@@ -231,12 +75,15 @@ class Timeframe extends AbstractEntity
      * @param array|null       $options
      * @param string|null      $postalCode
      * @param string|null      $street
-     * @param string|null      $sundaySorting
+     * @param bool|null        $sundaySorting
      * @param string|null      $interval
      * @param string|null      $range
      * @param Timeframe[]|null $timeframes
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
-    public function __construct(?string $city = null, ?string $countryCode = null, ?string $date = null, ?string $endDate = null, ?string $houseNr = null, ?string $houseNrExt = null, ?array $options = [], ?string $postalCode = null, ?string $street = null, ?string $sundaySorting = 'false', ?string $interval = null, ?string $range = null, ?array $timeframes = null)
+    public function __construct(?string $city = null, ?string $countryCode = null, ?string $date = null, ?string $endDate = null, ?string $houseNr = null, ?string $houseNrExt = null, ?array $options = [], ?string $postalCode = null, ?string $street = null, ?bool $sundaySorting = false, ?string $interval = null, ?string $range = null, ?array $timeframes = null)
     {
         parent::__construct();
 
@@ -256,20 +103,30 @@ class Timeframe extends AbstractEntity
     }
 
     /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getPostalCode(): ?string
+    {
+        return $this->postalCode;
+    }
+
+    /**
      * Set the postcode
      *
      * @param string|null $postcode
      *
-     * @return self
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
      */
-    public function setPostalCode($postcode = null)
+    public function setPostalCode(?string $postcode = null): Timeframe
     {
         if (is_null($postcode)) {
-            // @codingStandardsIgnoreLine
-            $this->PostalCode = null;
+            $this->postalCode = null;
         } else {
-            // @codingStandardsIgnoreLine
-            $this->PostalCode = strtoupper(str_replace(' ', '', $postcode));
+            $this->postalCode = strtoupper(str_replace(' ', '', $postcode));
         }
 
         return $this;
@@ -285,18 +142,13 @@ class Timeframe extends AbstractEntity
     public function jsonSerialize(): array
     {
         $json = [];
-        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
-            return $json;
-        }
-
-        foreach (array_keys(static::$defaultProperties[$this->currentService]) as $propertyName) {
+        foreach (array_keys(get_class_vars(static::class)) as $propertyName) {
             if (isset($this->{$propertyName})) {
                 if ('Options' === $propertyName) {
                     $json[$propertyName] = $this->{$propertyName};
                 } elseif ('Timeframes' === $propertyName) {
                     $timeframes = [];
-                    // @codingStandardsIgnoreLine
-                    foreach ($this->Timeframes as $timeframe) {
+                    foreach ($this->timeframes as $timeframe) {
                         $timeframes[] = $timeframe;
                     }
                     $json['Timeframes'] = ['TimeframeTimeFrame' => $timeframes];
@@ -320,45 +172,314 @@ class Timeframe extends AbstractEntity
     }
 
     /**
-     * Return a serializable array for the XMLWriter
+     * @return string|null
      *
-     * @param Writer $writer
-     *
-     * @return void
-     *
-     * @throws InvalidArgumentException
-     *
-     * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
-    public function xmlSerialize(Writer $writer): void
+    public function getCity(): ?string
     {
-        $xml = [];
-        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
-            throw new InvalidArgumentException('Service not set before serialization');
-        }
+        return $this->city;
+    }
 
-        foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if ('SundaySorting' === $propertyName) {
-                // @codingStandardsIgnoreLine
-                if (isset($this->SundaySorting)) {
-                    // @codingStandardsIgnoreLine
-                    $xml["{{$namespace}}SundaySorting"] = $this->SundaySorting ? 'true' : 'false';
-                }
-            } elseif ('Options' === $propertyName) {
-                // @codingStandardsIgnoreLine
-                if (isset($this->Options)) {
-                    $options = [];
-                    // @codingStandardsIgnoreLine
-                    foreach ($this->Options as $option) {
-                        $options[] = ["{http://schemas.microsoft.com/2003/10/Serialization/Arrays}string" => $option];
-                    }
-                    $xml["{{$namespace}}Options"] = $options;
-                }
-            } elseif (isset($this->{$propertyName})) {
-                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
-            }
-        }
+    /**
+     * @param string|null $city
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setCity(?string $city): Timeframe
+    {
+        $this->city = $city;
 
-        $writer->write($xml);
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getCountryCode(): ?string
+    {
+        return $this->countryCode;
+    }
+
+    /**
+     * @param string|null $countryCode
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setCountryCode(?string $countryCode): Timeframe
+    {
+        $this->countryCode = $countryCode;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getDate(): ?string
+    {
+        return $this->date;
+    }
+
+    /**
+     * @param string|null $date
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setDate(?string $date): Timeframe
+    {
+        $this->date = $date;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getEndDate(): ?string
+    {
+        return $this->endDate;
+    }
+
+    /**
+     * @param string|null $endDate
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setEndDate(?string $endDate): Timeframe
+    {
+        $this->endDate = $endDate;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getHouseNr(): ?string
+    {
+        return $this->houseNr;
+    }
+
+    /**
+     * @param string|null $houseNr
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setHouseNr(?string $houseNr): Timeframe
+    {
+        $this->houseNr = $houseNr;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getHouseNrExt(): ?string
+    {
+        return $this->houseNrExt;
+    }
+
+    /**
+     * @param string|null $houseNrExt
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setHouseNrExt(?string $houseNrExt): Timeframe
+    {
+        $this->houseNrExt = $houseNrExt;
+
+        return $this;
+    }
+
+    /**
+     * @return string[]|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getOptions(): ?array
+    {
+        return $this->options;
+    }
+
+    /**
+     * @param string[]|null $options
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setOptions(?array $options): Timeframe
+    {
+        $this->options = $options;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getStartDate(): ?string
+    {
+        return $this->startDate;
+    }
+
+    /**
+     * @param string|null $startDate
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setStartDate(?string $startDate): Timeframe
+    {
+        $this->startDate = $startDate;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getStreet(): ?string
+    {
+        return $this->street;
+    }
+
+    /**
+     * @param string|null $street
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setStreet(?string $street): Timeframe
+    {
+        $this->street = $street;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getSundaySorting(): ?string
+    {
+        return $this->sundaySorting;
+    }
+
+    /**
+     * @param bool|null $sundaySorting
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setSundaySorting(?bool $sundaySorting): Timeframe
+    {
+        $this->sundaySorting = $sundaySorting;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getInterval(): ?string
+    {
+        return $this->interval;
+    }
+
+    /**
+     * @param string|null $interval
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setInterval(?string $interval): Timeframe
+    {
+        $this->interval = $interval;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getTimeframeRange(): ?string
+    {
+        return $this->timeframeRange;
+    }
+
+    /**
+     * @param string|null $timeframeRange
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setTimeframeRange(?string $timeframeRange): Timeframe
+    {
+        $this->timeframeRange = $timeframeRange;
+
+        return $this;
+    }
+
+    /**
+     * @return Timeframe[]|TimeframeTimeFrame[]|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getTimeframes()
+    {
+        return $this->timeframes;
+    }
+
+    /**
+     * @param Timeframe[]|TimeframeTimeFrame[]|null $timeframes
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setTimeframes($timeframes): Timeframe
+    {
+        $this->timeframes = $timeframes;
+
+        return $this;
     }
 }

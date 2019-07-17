@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -29,9 +29,6 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Tests\Unit\Misc;
 
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Response;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\CutOffTime;
@@ -40,9 +37,11 @@ use Firstred\PostNL\Entity\Request\GetDeliveryDate;
 use Firstred\PostNL\Entity\Request\GetNearestLocations;
 use Firstred\PostNL\Entity\Request\GetTimeframes;
 use Firstred\PostNL\Entity\Timeframe;
-use Firstred\PostNL\HttpClient\MockClient;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\PostNL;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use ReflectionException;
 
 /**
  * Class PostNLRestTest
@@ -57,7 +56,8 @@ class PostNLRestTest extends TestCase
     /**
      * @before
      *
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
      */
     public function setupPostNL()
     {
@@ -97,7 +97,7 @@ class PostNLRestTest extends TestCase
      */
     public function testCustomer()
     {
-        $this->assertInstanceOf('\\Firstred\\PostNL\\Entity\\Customer', $this->postnl->getCustomer());
+        $this->assertInstanceOf(Customer::class, $this->postnl->getCustomer());
     }
 
     /**
@@ -373,7 +373,7 @@ class PostNLRestTest extends TestCase
      */
     public function testNegativeKeyMissing()
     {
-        $reflection = new \ReflectionClass('\\Firstred\\PostNL\\PostNL');
+        $reflection = new ReflectionClass(PostNL::class);
         /** @var PostNL $postnl */
         $postnl = $reflection->newInstanceWithoutConstructor();
 

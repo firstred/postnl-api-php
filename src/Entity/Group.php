@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -29,87 +29,23 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
-use Firstred\PostNL\Service\TimeframeService;
-
 /**
  * Class Group
- *
- * @method string|null getGroupCount()
- * @method string|null getGroupSequence()
- * @method string|null getGroupType()
- * @method string|null getMainBarcode()
- *
- * @method Group setGroupCount(string|null $groupCount = null)
- * @method Group setGroupSequence(string|null $groupSequence = null)
- * @method Group setGroupType(string|null $groupType = null)
- * @method Group setMainBarcode(string|null $mainBarcode = null)
  */
 class Group extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
-    public static $defaultProperties = [
-        'Barcode'        => [
-            'GroupCount'    => BarcodeService::DOMAIN_NAMESPACE,
-            'GroupSequence' => BarcodeService::DOMAIN_NAMESPACE,
-            'GroupType'     => BarcodeService::DOMAIN_NAMESPACE,
-            'MainBarcode'   => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming'     => [
-            'GroupCount'    => ConfirmingService::DOMAIN_NAMESPACE,
-            'GroupSequence' => ConfirmingService::DOMAIN_NAMESPACE,
-            'GroupType'     => ConfirmingService::DOMAIN_NAMESPACE,
-            'MainBarcode'   => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling'      => [
-            'GroupCount'    => LabellingService::DOMAIN_NAMESPACE,
-            'GroupSequence' => LabellingService::DOMAIN_NAMESPACE,
-            'GroupType'     => LabellingService::DOMAIN_NAMESPACE,
-            'MainBarcode'   => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'GroupCount'    => ShippingStatusService::DOMAIN_NAMESPACE,
-            'GroupSequence' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'GroupType'     => ShippingStatusService::DOMAIN_NAMESPACE,
-            'MainBarcode'   => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
-            'GroupCount'    => DeliveryDateService::DOMAIN_NAMESPACE,
-            'GroupSequence' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'GroupType'     => DeliveryDateService::DOMAIN_NAMESPACE,
-            'MainBarcode'   => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location'       => [
-            'GroupCount'    => LocationService::DOMAIN_NAMESPACE,
-            'GroupSequence' => LocationService::DOMAIN_NAMESPACE,
-            'GroupType'     => LocationService::DOMAIN_NAMESPACE,
-            'MainBarcode'   => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe'      => [
-            'GroupCount'    => TimeframeService::DOMAIN_NAMESPACE,
-            'GroupSequence' => TimeframeService::DOMAIN_NAMESPACE,
-            'GroupType'     => TimeframeService::DOMAIN_NAMESPACE,
-            'MainBarcode'   => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
     /**
      * Amount of shipments in the group.
      *
-     * @var string|null $GroupCount
+     * @var string|null $groupCount
      */
-    protected $GroupCount;
+    protected $groupCount;
     /**
      * Sequence number.
      *
-     * @var string|null $GroupSequence
+     * @var string|null $groupSequence
      */
-    protected $GroupSequence;
+    protected $groupSequence;
     /**
      * The type of group.
      *
@@ -119,16 +55,15 @@ class Group extends AbstractEntity
      * - `03`: Multiple parcels in one shipment (multi-colli)
      * - `04`: Single parcel in one shipment
      *
-     * @var string|null $GroupType
+     * @var string|null $groupType
      */
-    protected $GroupType;
+    protected $groupType;
     /**
      * Main barcode for the shipment.
      *
-     * @var string|null $MainBarcode
+     * @var string|null $mainBarcode
      */
-    protected $MainBarcode;
-    // @codingStandardsIgnoreEnd
+    protected $mainBarcode;
 
     /**
      * Group Constructor.
@@ -146,5 +81,101 @@ class Group extends AbstractEntity
         $this->setGroupSequence($groupSequence);
         $this->setGroupType($groupType);
         $this->setMainBarcode($mainBarcode);
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getGroupCount(): ?string
+    {
+        return $this->groupCount;
+    }
+
+    /**
+     * @param string|null $groupCount
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setGroupCount(?string $groupCount): Group
+    {
+        $this->groupCount = $groupCount;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getGroupSequence(): ?string
+    {
+        return $this->groupSequence;
+    }
+
+    /**
+     * @param string|null $groupSequence
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setGroupSequence(?string $groupSequence): Group
+    {
+        $this->groupSequence = $groupSequence;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getGroupType(): ?string
+    {
+        return $this->groupType;
+    }
+
+    /**
+     * @param string|null $groupType
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setGroupType(?string $groupType): Group
+    {
+        $this->groupType = $groupType;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getMainBarcode(): ?string
+    {
+        return $this->mainBarcode;
+    }
+
+    /**
+     * @param string|null $mainBarcode
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setMainBarcode(?string $mainBarcode): Group
+    {
+        $this->mainBarcode = $mainBarcode;
+
+        return $this;
     }
 }

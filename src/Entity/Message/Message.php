@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -30,72 +30,27 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity\Message;
 
 use DateTime;
+use Exception;
 use Firstred\PostNL\Entity\AbstractEntity;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
-use Firstred\PostNL\Service\TimeframeService;
 
 /**
  * Class Message
- *
- * @method string|null getMessageID()
- * @method string|null getMessageTimeStamp()
- *
- * @method Message setMessageID(string|null $mid = null)
- * @method Message setMessageTimeStamp(string|null $timestamp = null)
- *
  */
 class Message extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
-    public static $defaultProperties = [
-        'Barcode'        => [
-            'MessageID'        => BarcodeService::DOMAIN_NAMESPACE,
-            'MessageTimeStamp' => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming'     => [
-            'MessageID'        => ConfirmingService::DOMAIN_NAMESPACE,
-            'MessageTimeStamp' => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling'      => [
-            'MessageID'        => LabellingService::DOMAIN_NAMESPACE,
-            'MessageTimeStamp' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'MessageID'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'MessageTimeStamp' => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
-            'MessageID'        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'MessageTimeStamp' => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location'       => [
-            'MessageID'        => LocationService::DOMAIN_NAMESPACE,
-            'MessageTimeStamp' => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe'      => [
-            'MessageID'        => TimeframeService::DOMAIN_NAMESPACE,
-            'MessageTimeStamp' => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null $MessageID */
-    protected $MessageID;
-    /** @var string|null $MessageTimeStamp */
-    protected $MessageTimeStamp;
-    // @codingStandardsIgnoreEnd
+    /** @var string|null $messageID */
+    protected $messageID;
+    /** @var string|null $messageTimeStamp */
+    protected $messageTimeStamp;
 
     /**
      * @param string|null $mid
      * @param string|null $timestamp
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function __construct($mid = null, $timestamp = null)
     {
@@ -103,5 +58,53 @@ class Message extends AbstractEntity
 
         $this->setMessageID($mid ?: substr(str_replace('-', '', $this->getid()), 0, 12));
         $this->setMessageTimeStamp($timestamp ?: (new DateTime())->format('d-m-Y H:i:s'));
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getMessageID(): ?string
+    {
+        return $this->messageID;
+    }
+
+    /**
+     * @param string|null $messageID
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setMessageID(?string $messageID): Message
+    {
+        $this->messageID = $messageID;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getMessageTimeStamp(): ?string
+    {
+        return $this->messageTimeStamp;
+    }
+
+    /**
+     * @param string|null $messageTimeStamp
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setMessageTimeStamp(?string $messageTimeStamp): Message
+    {
+        $this->messageTimeStamp = $messageTimeStamp;
+
+        return $this;
     }
 }

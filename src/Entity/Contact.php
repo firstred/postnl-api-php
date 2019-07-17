@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -29,84 +29,19 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
-use Firstred\PostNL\Service\TimeframeService;
-
 /**
  * Class Contact
- *
- * @method string|null getContactType()
- * @method string|null getEmail()
- * @method string|null getSMSNr()
- * @method string|null getTelNr()
- *
- * @method Contact setContactType(string|null $contactType = null)
- * @method Contact setEmail(string|null $email = null)
- * @method Contact setSMSNr(string|null $smsNr = null)
- * @method Contact setTelNr(string|null $telNr = null)
  */
 class Contact extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
-    public static $defaultProperties = [
-        'Barcode'        => [
-            'ContactType' => BarcodeService::DOMAIN_NAMESPACE,
-            'Email'       => BarcodeService::DOMAIN_NAMESPACE,
-            'SMSNr'       => BarcodeService::DOMAIN_NAMESPACE,
-            'TelNr'       => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming'     => [
-            'ContactType' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Email'       => ConfirmingService::DOMAIN_NAMESPACE,
-            'SMSNr'       => ConfirmingService::DOMAIN_NAMESPACE,
-            'TelNr'       => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling'      => [
-            'ContactType' => LabellingService::DOMAIN_NAMESPACE,
-            'Email'       => LabellingService::DOMAIN_NAMESPACE,
-            'SMSNr'       => LabellingService::DOMAIN_NAMESPACE,
-            'TelNr'       => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'ContactType' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Email'       => ShippingStatusService::DOMAIN_NAMESPACE,
-            'SMSNr'       => ShippingStatusService::DOMAIN_NAMESPACE,
-            'TelNr'       => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
-            'ContactType' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Email'       => DeliveryDateService::DOMAIN_NAMESPACE,
-            'SMSNr'       => DeliveryDateService::DOMAIN_NAMESPACE,
-            'TelNr'       => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location'       => [
-            'ContactType' => LocationService::DOMAIN_NAMESPACE,
-            'Email'       => LocationService::DOMAIN_NAMESPACE,
-            'SMSNr'       => LocationService::DOMAIN_NAMESPACE,
-            'TelNr'       => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe'      => [
-            'ContactType' => TimeframeService::DOMAIN_NAMESPACE,
-            'Email'       => TimeframeService::DOMAIN_NAMESPACE,
-            'SMSNr'       => TimeframeService::DOMAIN_NAMESPACE,
-            'TelNr'       => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null $ContactType */
-    protected $ContactType;
-    /** @var string|null $Email */
-    protected $Email;
+    /** @var string|null $contactType */
+    protected $contactType;
+    /** @var string|null $email */
+    protected $email;
     /** @var string|null $SMSNr */
     protected $SMSNr;
-    /** @var string|null $TelNr */
-    protected $TelNr;
-    // @codingStandardsIgnoreEnd
+    /** @var string|null $telNr */
+    protected $telNr;
 
     /**
      * @param string|null $contactType
@@ -114,7 +49,7 @@ class Contact extends AbstractEntity
      * @param string|null $smsNr
      * @param string|null $telNr
      */
-    public function __construct($contactType = null, $email = null, $smsNr = null, $telNr = null)
+    public function __construct(?string $contactType = null, ?string $email = null, ?string $smsNr = null, ?string $telNr = null)
     {
         parent::__construct();
 
@@ -122,5 +57,93 @@ class Contact extends AbstractEntity
         $this->setEmail($email);
         $this->setSMSNr($smsNr);
         $this->setTelNr($telNr);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getContactType(): ?string
+    {
+        return $this->contactType;
+    }
+
+    /**
+     * @param string|null $contactType
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setContactType(?string $contactType): Contact
+    {
+        $this->contactType = $contactType;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    /**
+     * @param string|null $email
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setEmail(?string $email): Contact
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getSMSNr(): ?string
+    {
+        return $this->SMSNr;
+    }
+
+    /**
+     * @param string|null $SMSNr
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setSMSNr(?string $SMSNr): Contact
+    {
+        $this->SMSNr = $SMSNr;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getTelNr(): ?string
+    {
+        return $this->telNr;
+    }
+
+    /**
+     * @param string|null $telNr
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setTelNr(?string $telNr): Contact
+    {
+        $this->telNr = $telNr;
+
+        return $this;
     }
 }

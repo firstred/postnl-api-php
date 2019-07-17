@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -29,68 +29,19 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity\Request;
 
+use Exception;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Message\Message;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
-use Firstred\PostNL\Service\TimeframeService;
 
 /**
  * Class GetSentDateRequest
- *
- * @method GetSentDate|null getGetSentDate()
- * @method Message|null     getMessage()
- *
- * @method GetSentDateRequest setGetSentDate(GetSentDate|null $date = null)
- * @method GetSentDateRequest setMessage(Message|null $message = null)
  */
 class GetSentDateRequest extends AbstractEntity
 {
-    /**
-     * Default properties and namespaces for the SOAP API
-     *
-     * @var array $defaultProperties
-     */
-    public static $defaultProperties = [
-        'Barcode'        => [
-            'GetSentDate' => BarcodeService::DOMAIN_NAMESPACE,
-            'Message'     => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming'     => [
-            'GetSentDate' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Message'     => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling'      => [
-            'GetSentDate' => LabellingService::DOMAIN_NAMESPACE,
-            'Message'     => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'GetSentDate' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Message'     => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
-            'GetSentDate' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Message'     => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location'       => [
-            'GetSentDate' => LocationService::DOMAIN_NAMESPACE,
-            'Message'     => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe'      => [
-            'GetSentDate' => TimeframeService::DOMAIN_NAMESPACE,
-            'Message'     => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var GetSentDate|null $GetSentDate */
-    protected $GetSentDate;
-    /** @var Message|null $Message */
-    protected $Message;
-    // @codingStandardsIgnoreEnd
+    /** @var GetSentDate|null $getSentDate */
+    protected $getSentDate;
+    /** @var Message|null $message */
+    protected $message;
 
     /**
      * GetSentDate constructor.
@@ -98,9 +49,10 @@ class GetSentDateRequest extends AbstractEntity
      * @param GetSentDate|null $date
      * @param Message|null     $message
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function __construct(GetSentDate $date = null, Message $message = null)
     {
@@ -108,5 +60,53 @@ class GetSentDateRequest extends AbstractEntity
 
         $this->setGetSentDate($date);
         $this->setMessage($message ?: new Message());
+    }
+
+    /**
+     * @return GetSentDate|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getGetSentDate(): ?GetSentDate
+    {
+        return $this->getSentDate;
+    }
+
+    /**
+     * @param GetSentDate|null $getSentDate
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setGetSentDate(?GetSentDate $getSentDate): GetSentDateRequest
+    {
+        $this->getSentDate = $getSentDate;
+
+        return $this;
+    }
+
+    /**
+     * @return Message|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getMessage(): ?Message
+    {
+        return $this->message;
+    }
+
+    /**
+     * @param Message|null $message
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setMessage(?Message $message): GetSentDateRequest
+    {
+        $this->message = $message;
+
+        return $this;
     }
 }

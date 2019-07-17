@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -31,65 +31,51 @@ namespace Firstred\PostNL\Entity\Response;
 
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Signature;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
-use Firstred\PostNL\Service\TimeframeService;
 
 /**
  * Class SignatureResponse
- *
- * @method string|null getSignature()
- *
- * @method SignatureResponse setSignature(Signature|null $signature = null)
  */
 class SignatureResponse extends AbstractEntity
 {
-    /**
-     * Default properties and namespaces for the SOAP API
-     *
-     * @var array $defaultProperties
-     */
-    public static $defaultProperties = [
-        'Barcode'        => [
-            'Signature' => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming'     => [
-            'Signature' => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling'      => [
-            'Signature' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Signature' => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
-            'Signature' => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location'       => [
-            'Signature' => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe'      => [
-            'Signature' => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var Signature|null $Signature */
-    protected $Signature;
-    // @codingStandardsIgnoreEnd
+    /** @var Signature|null $signature */
+    protected $signature;
 
     /**
      * SignatureResponse constructor.
      *
      * @param Signature|null $signature
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function __construct(Signature $signature = null)
     {
         parent::__construct();
 
         $this->setSignature($signature);
+    }
+
+    /**
+     * @return Signature|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getSignature(): ?Signature
+    {
+        return $this->signature;
+    }
+
+    /**
+     * @param Signature|null $signature
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setSignature(?Signature $signature): SignatureResponse
+    {
+        $this->signature = $signature;
+
+        return $this;
     }
 }

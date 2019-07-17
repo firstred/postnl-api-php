@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -29,70 +29,20 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity\Request;
 
+use Exception;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Message\Message;
 use Firstred\PostNL\Entity\Timeframe;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
-use Firstred\PostNL\Service\TimeframeService;
-use Sabre\Xml\Writer;
 
 /**
  * Class GetTimeframes
- *
- * @method Message|null     getMessage()
- * @method Timeframe[]|null getTimeframe()
- *
- * @method GetTimeframes setMessage(Message|null $message = null)
- * @method GetTimeframes setTimeframe(Timeframe[]|null $timeframes = null)
  */
 class GetTimeframes extends AbstractEntity
 {
-    /**
-     * Default properties and namespaces for the SOAP API
-     *
-     * @var array $defaultProperties
-     */
-    public static $defaultProperties = [
-        'Barcode'        => [
-            'Message'   => BarcodeService::DOMAIN_NAMESPACE,
-            'Timeframe' => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming'     => [
-            'Message'   => ConfirmingService::DOMAIN_NAMESPACE,
-            'Timeframe' => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling'      => [
-            'Message'   => LabellingService::DOMAIN_NAMESPACE,
-            'Timeframe' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Message'   => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Timeframe' => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
-            'Message'   => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Timeframe' => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location'       => [
-            'Message'   => LocationService::DOMAIN_NAMESPACE,
-            'Timeframe' => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe'      => [
-            'Message'   => TimeframeService::DOMAIN_NAMESPACE,
-            'Timeframe' => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var Message|null $Message */
-    protected $Message;
-    /** @var Timeframe[]|null $Timeframe */
-    protected $Timeframe;
-    // @codingStandardsIgnoreEnd
+    /** @var Message|null $message */
+    protected $message;
+    /** @var Timeframe[]|null $timeframe */
+    protected $timeframe;
 
     /**
      * GetTimeframes constructor.
@@ -100,9 +50,10 @@ class GetTimeframes extends AbstractEntity
      * @param Message|null     $message
      * @param Timeframe[]|null $timeframes
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @since 1.0.0
+     * @since 2.0.0 Strict typingq
      */
     public function __construct(Message $message = null, array $timeframes = null)
     {
@@ -113,36 +64,50 @@ class GetTimeframes extends AbstractEntity
     }
 
     /**
-     * Return a serializable array for the XMLWriter
+     * @return Message|null
      *
-     * @param Writer $writer
-     *
-     * @return void
-     *
-     * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
-    public function xmlSerialize(Writer $writer): void
+    public function getMessage(): ?Message
     {
-        $xml = [];
-        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
-            $writer->write($xml);
+        return $this->message;
+    }
 
-            return;
-        }
+    /**
+     * @param Message|null $message
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setMessage(?Message $message): GetTimeframes
+    {
+        $this->message = $message;
 
-        foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if ('Timeframe' === $propertyName) {
-                $timeframes = [];
-                // @codingStandardsIgnoreLine
-                foreach ($this->Timeframe as $timeframe) {
-                    $timeframes[] = $timeframe;
-                }
-                $xml["{{$namespace}}Timeframe"] = $timeframes;
-            } elseif (isset($this->{$propertyName})) {
-                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
-            }
-        }
-        // Auto extending this object with other properties is not supported with SOAP
-        $writer->write($xml);
+        return $this;
+    }
+
+    /**
+     * @return Timeframe[]|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getTimeframe(): ?array
+    {
+        return $this->timeframe;
+    }
+
+    /**
+     * @param Timeframe[]|null $timeframe
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setTimeframe(?array $timeframe): GetTimeframes
+    {
+        $this->timeframe = $timeframe;
+
+        return $this;
     }
 }

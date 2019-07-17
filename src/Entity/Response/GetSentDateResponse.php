@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -30,73 +30,25 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity\Response;
 
 use Firstred\PostNL\Entity\AbstractEntity;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
-use Firstred\PostNL\Service\TimeframeService;
-use Sabre\Xml\Writer;
 
 /**
  * Class GetSentDateResponse
- *
- * @method string|null   getSentDate()
- * @method string[]|null getOptions()
- *
- * @method GetSentDateResponse setSentDate(string|null $date = null)
- * @method GetSentDateResponse setOptions(string[]|null $options = null)
  */
 class GetSentDateResponse extends AbstractEntity
 {
-    /**
-     * Default properties and namespaces for the SOAP API
-     *
-     * @var array $defaultProperties
-     */
-    public static $defaultProperties = [
-        'Barcode'        => [
-            'SentDate' => BarcodeService::DOMAIN_NAMESPACE,
-            'Options'  => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming'     => [
-            'SentDate' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Options'  => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling'      => [
-            'SentDate' => LabellingService::DOMAIN_NAMESPACE,
-            'Options'  => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'SentDate' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Options'  => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
-            'SentDate' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Options'  => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location'       => [
-            'SentDate' => LocationService::DOMAIN_NAMESPACE,
-            'Options'  => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe'      => [
-            'SentDate' => TimeframeService::DOMAIN_NAMESPACE,
-            'Options'  => timeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null $SentDate */
-    protected $SentDate;
-    /** @var string[]|null $Options */
-    protected $Options;
-    // @codingStandardsIgnoreEnd
+    /** @var string|null $sentDate */
+    protected $sentDate;
+    /** @var string[]|null $options */
+    protected $options;
 
     /**
      * GetSentDateResponse constructor.
      *
      * @param string|null   $date
      * @param string[]|null $options
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function __construct($date = null, array $options = null)
     {
@@ -107,42 +59,50 @@ class GetSentDateResponse extends AbstractEntity
     }
 
     /**
-     * Return a serializable array for the XMLWriter
+     * @return string|null
      *
-     * @param Writer $writer
-     *
-     * @return void
-     *
-     * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
-    public function xmlSerialize(Writer $writer): void
+    public function getSentDate(): ?string
     {
-        $xml = [];
-        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
-            $writer->write($xml);
+        return $this->sentDate;
+    }
 
-            return;
-        }
+    /**
+     * @param string|null $sentDate
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setSentDate(?string $sentDate): GetSentDateResponse
+    {
+        $this->sentDate = $sentDate;
 
-        foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if ('Options' === $propertyName) {
-                // @codingStandardsIgnoreLine
-                if (isset($this->Options)) {
-                    $options = [];
-                    // @codingStandardsIgnoreLine
-                    if (is_array($this->Options)) {
-                        // @codingStandardsIgnoreLine
-                        foreach ($this->Options as $option) {
-                            $options[] = ["{http://schemas.microsoft.com/2003/10/Serialization/Arrays}string" => $option];
-                        }
-                    }
-                    $xml["{{$namespace}}Options"] = $options;
-                }
-            } elseif (isset($this->{$propertyName})) {
-                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
-            }
-        }
-        // Auto extending this object with other properties is not supported with SOAP
-        $writer->write($xml);
+        return $this;
+    }
+
+    /**
+     * @return string[]|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getOptions(): ?array
+    {
+        return $this->options;
+    }
+
+    /**
+     * @param string[]|null $options
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setOptions(?array $options): GetSentDateResponse
+    {
+        $this->options = $options;
+
+        return $this;
     }
 }

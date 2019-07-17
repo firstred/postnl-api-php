@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -29,81 +29,23 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity\Request;
 
+use Exception;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Message\Message;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
-use Firstred\PostNL\Service\TimeframeService;
 
 /**
  * Class GetLocation
  *
  * This class is both the container and can be the actual GetLocation object itself!
- *
- * @method string|null  getLocationCode()
- * @method Message|null getMessage()
- * @method string|null  getRetailNetworkID()
- *
- * @method GetLocation setLocationCode(string|null $location = null)
- * @method GetLocation setMessage(Message|null $message = null)
- * @method GetLocation setRetailNetworkID(string|null $id = null)
  */
 class GetLocation extends AbstractEntity
 {
-    /**
-     * Default properties and namespaces for the SOAP API
-     *
-     * @var array $defaultProperties
-     */
-    public static $defaultProperties = [
-        'Barcode'        => [
-            'LocationCode'    => BarcodeService::DOMAIN_NAMESPACE,
-            'Message'         => BarcodeService::DOMAIN_NAMESPACE,
-            'RetailNetworkID' => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming'     => [
-            'LocationCode'    => ConfirmingService::DOMAIN_NAMESPACE,
-            'Message'         => ConfirmingService::DOMAIN_NAMESPACE,
-            'RetailNetworkID' => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling'      => [
-            'LocationCode'    => LabellingService::DOMAIN_NAMESPACE,
-            'Message'         => LabellingService::DOMAIN_NAMESPACE,
-            'RetailNetworkID' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'LocationCode'    => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Message'         => ShippingStatusService::DOMAIN_NAMESPACE,
-            'RetailNetworkID' => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
-            'LocationCode'    => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Message'         => DeliveryDateService::DOMAIN_NAMESPACE,
-            'RetailNetworkID' => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location'       => [
-            'LocationCode'    => LocationService::DOMAIN_NAMESPACE,
-            'Message'         => LocationService::DOMAIN_NAMESPACE,
-            'RetailNetworkID' => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe'      => [
-            'LocationCode'    => TimeframeService::DOMAIN_NAMESPACE,
-            'Message'         => TimeframeService::DOMAIN_NAMESPACE,
-            'RetailNetworkID' => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null $LocationCode */
-    protected $LocationCode;
-    /** @var Message|null $Message */
-    protected $Message;
-    /** @var string|null $RetailNetworkID */
-    protected $RetailNetworkID;
-    // @codingStandardsIgnoreEnd
+    /** @var string|null $locationCode */
+    protected $locationCode;
+    /** @var Message|null $message */
+    protected $message;
+    /** @var string|null $retailNetworkID */
+    protected $retailNetworkID;
 
     /**
      * GetLocation constructor.
@@ -112,9 +54,10 @@ class GetLocation extends AbstractEntity
      * @param Message|null $message
      * @param string|null  $networkId
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function __construct(?string $location = null, ?Message $message = null, ?string $networkId = null)
     {
@@ -123,5 +66,77 @@ class GetLocation extends AbstractEntity
         $this->setLocationCode($location);
         $this->setMessage($message ?: new Message());
         $this->setRetailNetworkID($networkId);
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getLocationCode(): ?string
+    {
+        return $this->locationCode;
+    }
+
+    /**
+     * @param string|null $locationCode
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setLocationCode(?string $locationCode): GetLocation
+    {
+        $this->locationCode = $locationCode;
+
+        return $this;
+    }
+
+    /**
+     * @return Message|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getMessage(): ?Message
+    {
+        return $this->message;
+    }
+
+    /**
+     * @param Message|null $message
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setMessage(?Message $message): GetLocation
+    {
+        $this->message = $message;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getRetailNetworkID(): ?string
+    {
+        return $this->retailNetworkID;
+    }
+
+    /**
+     * @param string|null $retailNetworkID
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setRetailNetworkID(?string $retailNetworkID): GetLocation
+    {
+        $this->retailNetworkID = $retailNetworkID;
+
+        return $this;
     }
 }

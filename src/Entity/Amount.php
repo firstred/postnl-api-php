@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -29,129 +29,27 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
-use Firstred\PostNL\Service\TimeframeService;
-use InvalidArgumentException;
-use Sabre\Xml\Writer;
-
 /**
  * Class Amount
- *
- * @method string|null getAccountName()
- * @method string|null getAmountType()
- * @method string|null getBIC()
- * @method string|null getCurrency()
- * @method string|null getIBAN()
- * @method string|null getReference()
- * @method string|null getTransactionNumber()
- * @method string|null getValue()
- *
- * @method Amount setAccountName(string|null $accountName = null)
- * @method Amount setBIC(string|null $bic = null)
- * @method Amount setCurrency(string|null $currency = null)
- * @method Amount setIBAN(string|null $iban = null)
- * @method Amount setReference(string|null $reference = null)
- * @method Amount setTransactionNumber(string|null $transactionNr = null)
- * @method Amount setValue(string|null $value = null)
  */
 class Amount extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
-    public static $defaultProperties = [
-        'Barcode'        => [
-            'AccountName'       => BarcodeService::DOMAIN_NAMESPACE,
-            'AmountType'        => BarcodeService::DOMAIN_NAMESPACE,
-            'BIC'               => BarcodeService::DOMAIN_NAMESPACE,
-            'Currency'          => BarcodeService::DOMAIN_NAMESPACE,
-            'IBAN'              => BarcodeService::DOMAIN_NAMESPACE,
-            'Reference'         => BarcodeService::DOMAIN_NAMESPACE,
-            'TransactionNumber' => BarcodeService::DOMAIN_NAMESPACE,
-            'Value'             => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming'     => [
-            'AccountName'       => ConfirmingService::DOMAIN_NAMESPACE,
-            'AmountType'        => ConfirmingService::DOMAIN_NAMESPACE,
-            'BIC'               => ConfirmingService::DOMAIN_NAMESPACE,
-            'Currency'          => ConfirmingService::DOMAIN_NAMESPACE,
-            'IBAN'              => ConfirmingService::DOMAIN_NAMESPACE,
-            'Reference'         => ConfirmingService::DOMAIN_NAMESPACE,
-            'TransactionNumber' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Value'             => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling'      => [
-            'AccountName'       => LabellingService::DOMAIN_NAMESPACE,
-            'AmountType'        => LabellingService::DOMAIN_NAMESPACE,
-            'BIC'               => LabellingService::DOMAIN_NAMESPACE,
-            'Currency'          => LabellingService::DOMAIN_NAMESPACE,
-            'IBAN'              => LabellingService::DOMAIN_NAMESPACE,
-            'Reference'         => LabellingService::DOMAIN_NAMESPACE,
-            'TransactionNumber' => LabellingService::DOMAIN_NAMESPACE,
-            'Value'             => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'AccountName'       => ShippingStatusService::DOMAIN_NAMESPACE,
-            'AmountType'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'BIC'               => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Currency'          => ShippingStatusService::DOMAIN_NAMESPACE,
-            'IBAN'              => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Reference'         => ShippingStatusService::DOMAIN_NAMESPACE,
-            'TransactionNumber' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Value'             => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
-            'AccountName'       => DeliveryDateService::DOMAIN_NAMESPACE,
-            'AmountType'        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'BIC'               => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Currency'          => DeliveryDateService::DOMAIN_NAMESPACE,
-            'IBAN'              => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Reference'         => DeliveryDateService::DOMAIN_NAMESPACE,
-            'TransactionNumber' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Value'             => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location'       => [
-            'AccountName'       => LocationService::DOMAIN_NAMESPACE,
-            'AmountType'        => LocationService::DOMAIN_NAMESPACE,
-            'BIC'               => LocationService::DOMAIN_NAMESPACE,
-            'Currency'          => LocationService::DOMAIN_NAMESPACE,
-            'IBAN'              => LocationService::DOMAIN_NAMESPACE,
-            'Reference'         => LocationService::DOMAIN_NAMESPACE,
-            'TransactionNumber' => LocationService::DOMAIN_NAMESPACE,
-            'Value'             => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe'      => [
-            'AccountName'       => TimeframeService::DOMAIN_NAMESPACE,
-            'AmountType'        => TimeframeService::DOMAIN_NAMESPACE,
-            'BIC'               => TimeframeService::DOMAIN_NAMESPACE,
-            'Currency'          => TimeframeService::DOMAIN_NAMESPACE,
-            'IBAN'              => TimeframeService::DOMAIN_NAMESPACE,
-            'Reference'         => TimeframeService::DOMAIN_NAMESPACE,
-            'TransactionNumber' => TimeframeService::DOMAIN_NAMESPACE,
-            'Value'             => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null $AccountName */
-    protected $AccountName;
-    /** @var string|null $AmountType */
-    protected $AmountType;
+    /** @var string|null $accountName */
+    protected $accountName;
+    /** @var string|null $amountType */
+    protected $amountType;
     /** @var string|null $BIC */
     protected $BIC;
-    /** @var string|null $Currency */
-    protected $Currency;
+    /** @var string|null $currency */
+    protected $currency;
     /** @var string|null $IBAN */
     protected $IBAN;
-    /** @var string|null $Reference */
-    protected $Reference;
-    /** @var string|null $TransactionNumber */
-    protected $TransactionNumber;
-    /** @var string|null $Value */
-    protected $Value;
-    // @codingStandardsIgnoreEnd
+    /** @var string|null $reference */
+    protected $reference;
+    /** @var string|null $transactionNumber */
+    protected $transactionNumber;
+    /** @var string|null $value */
+    protected $value;
 
     /**
      * @param string|null $accountName
@@ -178,56 +76,187 @@ class Amount extends AbstractEntity
     }
 
     /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getAmountType(): ?string
+    {
+        return $this->amountType;
+    }
+
+    /**
      * Set amount type
      *
-     * @param string|int|null $type
+     * @param string|null $type
      *
-     * @return self
+     * @return static
      *
      * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
-    public function setAmountType($type = null): self
+    public function setAmountType(?string $type = null): Amount
     {
         if (is_null($type)) {
-            // @codingStandardsIgnoreLine
-            $this->AmountType = null;
+            $this->amountType = null;
         } else {
-            // @codingStandardsIgnoreLine
-            $this->AmountType = str_pad($type, 2, '0', STR_PAD_LEFT);
+            $this->amountType = str_pad($type, 2, '0', STR_PAD_LEFT);
         }
 
         return $this;
     }
 
     /**
-     * Return a serializable array for the XMLWriter
-     *
-     * @param Writer $writer
-     *
-     * @return void
-     *
-     * @throws InvalidArgumentException
-     *
-     * @since 1.0.0
+     * @return string|null
      */
-    public function xmlSerialize(Writer $writer): void
+    public function getAccountName(): ?string
     {
-        $xml = [];
-        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
-            throw new InvalidArgumentException('Service not set before serialization');
-        }
+        return $this->accountName;
+    }
 
-        foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if (isset($this->{$propertyName})) {
-                if ('Value' === $propertyName) {
-                    // @codingStandardsIgnoreLine
-                    $xml["{{$namespace}}Value"] = number_format($this->Value, 2, '.', '');
-                } else {
-                    $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
-                }
-            }
-        }
+    /**
+     * @param string|null $accountName
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setAccountName(?string $accountName): Amount
+    {
+        $this->accountName = $accountName;
 
-        $writer->write($xml);
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getBIC(): ?string
+    {
+        return $this->BIC;
+    }
+
+    /**
+     * @param string|null $BIC
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setBIC(?string $BIC): Amount
+    {
+        $this->BIC = $BIC;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCurrency(): ?string
+    {
+        return $this->currency;
+    }
+
+    /**
+     * @param string|null $currency
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setCurrency(?string $currency): Amount
+    {
+        $this->currency = $currency;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getIBAN(): ?string
+    {
+        return $this->IBAN;
+    }
+
+    /**
+     * @param string|null $IBAN
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setIBAN(?string $IBAN): Amount
+    {
+        $this->IBAN = $IBAN;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getReference(): ?string
+    {
+        return $this->reference;
+    }
+
+    /**
+     * @param string|null $reference
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setReference(?string $reference): Amount
+    {
+        $this->reference = $reference;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getTransactionNumber(): ?string
+    {
+        return $this->transactionNumber;
+    }
+
+    /**
+     * @param string|null $transactionNumber
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setTransactionNumber(?string $transactionNumber): Amount
+    {
+        $this->transactionNumber = $transactionNumber;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getValue(): ?string
+    {
+        return $this->value;
+    }
+
+    /**
+     * @param string|null $value
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setValue(?string $value): Amount
+    {
+        $this->value = $value;
+
+        return $this;
     }
 }

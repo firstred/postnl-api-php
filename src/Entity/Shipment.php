@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -29,455 +29,87 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
-use Firstred\PostNL\Service\TimeframeService;
-use Sabre\Xml\Writer;
-
 /**
  * Class Shipment
- *
- * @method Address[]|null       getAddresses()
- * @method string|null          getBarcode()
- * @method int|null             getPhaseCode()
- * @method string|null          getDateFrom()
- * @method string|null          getDateTo()
- * @method Dimension|null       getDimension()
- * @method string|null          getProductCodeDelivery()
- * @method Amount[]|null        getAmounts()
- * @method string|null          getCollectionTimeStampEnd()
- * @method string|null          getCollectionTimeStampStart()
- * @method Contact[]|null       getContacts()
- * @method string|null          getContent()
- * @method string|null          getCostCenter()
- * @method Customer|null        getCustomer()
- * @method string|null          getCustomerOrderNumber()
- * @method Customs|null         getCustoms()
- * @method string|null          getDeliveryAddress()
- * @method string|null          getDeliveryDate()
- * @method string|null          getDownPartnerBarcode()
- * @method string|null          getDownPartnerID()
- * @method string|null          getDownPartnerLocation()
- * @method Event[]|null         getEvents()
- * @method Group[]|null         getGroups()
- * @method string|null          getIDExpiration()
- * @method string|null          getIDNumber()
- * @method string|null          getIDType()
- * @method OldStatus[]|null     getOldStatuses()
- * @method string|null          getProductCodeCollect()
- * @method ProductOption[]|null getProductOptions()
- * @method string|null          getReceiverDateOfBirth()
- * @method string|null          getReference()
- * @method string|null          getReferenceCollect()
- * @method string|null          getRemark()
- * @method string|null          getReturnBarcode()
- * @method string|null          getReturnReference()
- * @method string|null          getStatusCode()
- *
- * @method Shipment setAddresses(Address[]|null $addresses = null)
- * @method Shipment setBarcode(string|null $barcode = null)
- * @method Shipment setDimension(Dimension|null $dimension = null)
- * @method Shipment setProductCodeDelivery(string|null $productCodeDelivery = null)
- * @method Shipment setAmounts(Amount[]|null $amounts = null)
- * @method Shipment setCollectionTimeStampEnd(string|null $value = null)
- * @method Shipment setCollectionTimeStampStart(string|null $value = null)
- * @method Shipment setContacts(Contact[]|null $contact = null)
- * @method Shipment setContent(string|null $content = null)
- * @method Shipment setCostCenter(string|null $costCenter = null)
- * @method Shipment setCustomer(Customer|null $customer = null)
- * @method Shipment setCustomerOrderNumber(string|null $customerOrderNumber = null)
- * @method Shipment setCustoms(Customs|null $customs = null)
- * @method Shipment setPhaseCode(string|null $phaseCode = null)
- * @method Shipment setDateFrom(string|null $date = null)
- * @method Shipment setDateTo(string $date = null)
- * @method Shipment setDeliveryAddress(string|null $deliveryAddress = null)
- * @method Shipment setDeliveryDate(string|null $deliveryDate = null)
- * @method Shipment setDownPartnerBarcode(string|null $downPartnerBarcode = null)
- * @method Shipment setDownPartnerID(string|null $downPartnerID = null)
- * @method Shipment setDownPartnerLocation(string|null $downPartnerLocation = null)
- * @method Shipment setEvents(Event[]|null $events = null)
- * @method Shipment setGroups(Group[]|null $groups = null)
- * @method Shipment setIDExpiration(string|null $idExpiration = null)
- * @method Shipment setIDNumber(string|null $idNumber = null)
- * @method Shipment setIDType(string|null $idType = null)
- * @method Shipment setOldStatuses(OldStatus[]|null $oldStatuses = null)
- * @method Shipment setProductCodeCollect(string|null $productCodeCollect = null)
- * @method Shipment setProductOptions(ProductOption[]|null $productOptions = null)
- * @method Shipment setReceiverDateOfBirth(string|null $receiverDateOfBirth = null)
- * @method Shipment setReference(string|null $reference = null)
- * @method Shipment setReferenceCollect(string|null $referenceCollect = null)
- * @method Shipment setRemark(string|null $remark = null)
- * @method Shipment setReturnBarcode(string|null $returnBarcode = null)
- * @method Shipment setReturnReference(string|null $returnReference = null)
- * @method Shipment setStatusCode(string|null $statusCode = null)
  */
 class Shipment extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
-    public static $defaultProperties = [
-        'Barcode'        => [
-            'Addresses'                => BarcodeService::DOMAIN_NAMESPACE,
-            'Amounts'                  => BarcodeService::DOMAIN_NAMESPACE,
-            'Barcode'                  => BarcodeService::DOMAIN_NAMESPACE,
-            'CollectionTimeStampEnd'   => BarcodeService::DOMAIN_NAMESPACE,
-            'CollectionTimeStampStart' => BarcodeService::DOMAIN_NAMESPACE,
-            'Contacts'                 => BarcodeService::DOMAIN_NAMESPACE,
-            'Content'                  => BarcodeService::DOMAIN_NAMESPACE,
-            'CostCenter'               => BarcodeService::DOMAIN_NAMESPACE,
-            'Customer'                 => BarcodeService::DOMAIN_NAMESPACE,
-            'CustomerOrderNumber'      => BarcodeService::DOMAIN_NAMESPACE,
-            'Customs'                  => BarcodeService::DOMAIN_NAMESPACE,
-            'DeliveryAddress'          => BarcodeService::DOMAIN_NAMESPACE,
-            'DeliveryTimeStampStart'   => BarcodeService::DOMAIN_NAMESPACE,
-            'DeliveryTimestampEnd'     => BarcodeService::DOMAIN_NAMESPACE,
-            'DeliveryDate'             => BarcodeService::DOMAIN_NAMESPACE,
-            'Dimension'                => BarcodeService::DOMAIN_NAMESPACE,
-            'DownPartnerBarcode'       => BarcodeService::DOMAIN_NAMESPACE,
-            'DownPartnerID'            => BarcodeService::DOMAIN_NAMESPACE,
-            'DownPartnerLocation'      => BarcodeService::DOMAIN_NAMESPACE,
-            'Events'                   => BarcodeService::DOMAIN_NAMESPACE,
-            'Groups'                   => BarcodeService::DOMAIN_NAMESPACE,
-            'IDExpiration'             => BarcodeService::DOMAIN_NAMESPACE,
-            'IDNumber'                 => BarcodeService::DOMAIN_NAMESPACE,
-            'IDType'                   => BarcodeService::DOMAIN_NAMESPACE,
-            'OldStatuses'              => BarcodeService::DOMAIN_NAMESPACE,
-            'PhaseCode'                => BarcodeService::DOMAIN_NAMESPACE,
-            'ProductCodeCollect'       => BarcodeService::DOMAIN_NAMESPACE,
-            'ProductCodeDelivery'      => BarcodeService::DOMAIN_NAMESPACE,
-            'ProductOptions'           => BarcodeService::DOMAIN_NAMESPACE,
-            'ReceiverDateOfBirth'      => BarcodeService::DOMAIN_NAMESPACE,
-            'Reference'                => BarcodeService::DOMAIN_NAMESPACE,
-            'ReferenceCollect'         => BarcodeService::DOMAIN_NAMESPACE,
-            'Remark'                   => BarcodeService::DOMAIN_NAMESPACE,
-            'ReturnBarcode'            => BarcodeService::DOMAIN_NAMESPACE,
-            'ReturnReference'          => BarcodeService::DOMAIN_NAMESPACE,
-            'StatusCode'               => BarcodeService::DOMAIN_NAMESPACE,
-            'DateFrom'                 => BarcodeService::DOMAIN_NAMESPACE,
-            'DateTo'                   => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming'     => [
-            'Addresses'                => ConfirmingService::DOMAIN_NAMESPACE,
-            'Amounts'                  => ConfirmingService::DOMAIN_NAMESPACE,
-            'Barcode'                  => ConfirmingService::DOMAIN_NAMESPACE,
-            'CollectionTimeStampEnd'   => ConfirmingService::DOMAIN_NAMESPACE,
-            'CollectionTimeStampStart' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Contacts'                 => ConfirmingService::DOMAIN_NAMESPACE,
-            'Content'                  => ConfirmingService::DOMAIN_NAMESPACE,
-            'CostCenter'               => ConfirmingService::DOMAIN_NAMESPACE,
-            'Customer'                 => ConfirmingService::DOMAIN_NAMESPACE,
-            'CustomerOrderNumber'      => ConfirmingService::DOMAIN_NAMESPACE,
-            'Customs'                  => ConfirmingService::DOMAIN_NAMESPACE,
-            'DeliveryAddress'          => ConfirmingService::DOMAIN_NAMESPACE,
-            'DeliveryTimestampStart'   => ConfirmingService::DOMAIN_NAMESPACE,
-            'DeliveryTimestampEnd'     => ConfirmingService::DOMAIN_NAMESPACE,
-            'DeliveryDate'             => ConfirmingService::DOMAIN_NAMESPACE,
-            'Dimension'                => ConfirmingService::DOMAIN_NAMESPACE,
-            'DownPartnerBarcode'       => ConfirmingService::DOMAIN_NAMESPACE,
-            'DownPartnerID'            => ConfirmingService::DOMAIN_NAMESPACE,
-            'DownPartnerLocation'      => ConfirmingService::DOMAIN_NAMESPACE,
-            'Events'                   => ConfirmingService::DOMAIN_NAMESPACE,
-            'Groups'                   => ConfirmingService::DOMAIN_NAMESPACE,
-            'IDExpiration'             => ConfirmingService::DOMAIN_NAMESPACE,
-            'IDNumber'                 => ConfirmingService::DOMAIN_NAMESPACE,
-            'IDType'                   => ConfirmingService::DOMAIN_NAMESPACE,
-            'OldStatuses'              => ConfirmingService::DOMAIN_NAMESPACE,
-            'PhaseCode'                => ConfirmingService::DOMAIN_NAMESPACE,
-            'ProductCodeCollect'       => ConfirmingService::DOMAIN_NAMESPACE,
-            'ProductCodeDelivery'      => ConfirmingService::DOMAIN_NAMESPACE,
-            'ProductOptions'           => ConfirmingService::DOMAIN_NAMESPACE,
-            'ReceiverDateOfBirth'      => ConfirmingService::DOMAIN_NAMESPACE,
-            'Reference'                => ConfirmingService::DOMAIN_NAMESPACE,
-            'ReferenceCollect'         => ConfirmingService::DOMAIN_NAMESPACE,
-            'Remark'                   => ConfirmingService::DOMAIN_NAMESPACE,
-            'ReturnBarcode'            => ConfirmingService::DOMAIN_NAMESPACE,
-            'ReturnReference'          => ConfirmingService::DOMAIN_NAMESPACE,
-            'StatusCode'               => ConfirmingService::DOMAIN_NAMESPACE,
-            'DateFrom'                 => ConfirmingService::DOMAIN_NAMESPACE,
-            'DateTo'                   => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling'      => [
-            'Addresses'                => LabellingService::DOMAIN_NAMESPACE,
-            'Amounts'                  => LabellingService::DOMAIN_NAMESPACE,
-            'Barcode'                  => LabellingService::DOMAIN_NAMESPACE,
-            'CollectionTimeStampEnd'   => LabellingService::DOMAIN_NAMESPACE,
-            'CollectionTimeStampStart' => LabellingService::DOMAIN_NAMESPACE,
-            'Contacts'                 => LabellingService::DOMAIN_NAMESPACE,
-            'Content'                  => LabellingService::DOMAIN_NAMESPACE,
-            'CostCenter'               => LabellingService::DOMAIN_NAMESPACE,
-            'Customer'                 => LabellingService::DOMAIN_NAMESPACE,
-            'CustomerOrderNumber'      => LabellingService::DOMAIN_NAMESPACE,
-            'Customs'                  => LabellingService::DOMAIN_NAMESPACE,
-            'DeliveryAddress'          => LabellingService::DOMAIN_NAMESPACE,
-            'DeliveryTimestampStart'   => LabellingService::DOMAIN_NAMESPACE,
-            'DeliveryTimestampEnd'     => LabellingService::DOMAIN_NAMESPACE,
-            'DeliveryDate'             => LabellingService::DOMAIN_NAMESPACE,
-            'Dimension'                => LabellingService::DOMAIN_NAMESPACE,
-            'DownPartnerBarcode'       => LabellingService::DOMAIN_NAMESPACE,
-            'DownPartnerID'            => LabellingService::DOMAIN_NAMESPACE,
-            'DownPartnerLocation'      => LabellingService::DOMAIN_NAMESPACE,
-            'Events'                   => LabellingService::DOMAIN_NAMESPACE,
-            'Groups'                   => LabellingService::DOMAIN_NAMESPACE,
-            'IDExpiration'             => LabellingService::DOMAIN_NAMESPACE,
-            'IDNumber'                 => LabellingService::DOMAIN_NAMESPACE,
-            'IDType'                   => LabellingService::DOMAIN_NAMESPACE,
-            'OldStatuses'              => LabellingService::DOMAIN_NAMESPACE,
-            'PhaseCode'                => LabellingService::DOMAIN_NAMESPACE,
-            'ProductCodeCollect'       => LabellingService::DOMAIN_NAMESPACE,
-            'ProductCodeDelivery'      => LabellingService::DOMAIN_NAMESPACE,
-            'ProductOptions'           => LabellingService::DOMAIN_NAMESPACE,
-            'ReceiverDateOfBirth'      => LabellingService::DOMAIN_NAMESPACE,
-            'Reference'                => LabellingService::DOMAIN_NAMESPACE,
-            'ReferenceCollect'         => LabellingService::DOMAIN_NAMESPACE,
-            'Remark'                   => LabellingService::DOMAIN_NAMESPACE,
-            'ReturnBarcode'            => LabellingService::DOMAIN_NAMESPACE,
-            'ReturnReference'          => LabellingService::DOMAIN_NAMESPACE,
-            'StatusCode'               => LabellingService::DOMAIN_NAMESPACE,
-            'DateFrom'                 => LabellingService::DOMAIN_NAMESPACE,
-            'DateTo'                   => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Addresses'                => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Amounts'                  => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Barcode'                  => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CollectionTimeStampEnd'   => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CollectionTimeStampStart' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Contacts'                 => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Content'                  => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CostCenter'               => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Customer'                 => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CustomerOrderNumber'      => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Customs'                  => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DeliveryAddress'          => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DeliveryTimestampStart'   => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DeliveryTimestampEnd'     => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DeliveryDate'             => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Dimension'                => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DownPartnerBarcode'       => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DownPartnerID'            => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DownPartnerLocation'      => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Events'                   => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Groups'                   => ShippingStatusService::DOMAIN_NAMESPACE,
-            'IDExpiration'             => ShippingStatusService::DOMAIN_NAMESPACE,
-            'IDNumber'                 => ShippingStatusService::DOMAIN_NAMESPACE,
-            'IDType'                   => ShippingStatusService::DOMAIN_NAMESPACE,
-            'OldStatuses'              => ShippingStatusService::DOMAIN_NAMESPACE,
-            'PhaseCode'                => ShippingStatusService::DOMAIN_NAMESPACE,
-            'ProductCodeCollect'       => ShippingStatusService::DOMAIN_NAMESPACE,
-            'ProductCodeDelivery'      => ShippingStatusService::DOMAIN_NAMESPACE,
-            'ProductOptions'           => ShippingStatusService::DOMAIN_NAMESPACE,
-            'ReceiverDateOfBirth'      => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Reference'                => ShippingStatusService::DOMAIN_NAMESPACE,
-            'ReferenceCollect'         => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Remark'                   => ShippingStatusService::DOMAIN_NAMESPACE,
-            'ReturnBarcode'            => ShippingStatusService::DOMAIN_NAMESPACE,
-            'ReturnReference'          => ShippingStatusService::DOMAIN_NAMESPACE,
-            'StatusCode'               => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DateFrom'                 => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DateTo'                   => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
-            'Addresses'                => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Amounts'                  => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Barcode'                  => DeliveryDateService::DOMAIN_NAMESPACE,
-            'CollectionTimeStampEnd'   => DeliveryDateService::DOMAIN_NAMESPACE,
-            'CollectionTimeStampStart' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Contacts'                 => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Content'                  => DeliveryDateService::DOMAIN_NAMESPACE,
-            'CostCenter'               => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Customer'                 => DeliveryDateService::DOMAIN_NAMESPACE,
-            'CustomerOrderNumber'      => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Customs'                  => DeliveryDateService::DOMAIN_NAMESPACE,
-            'DeliveryAddress'          => DeliveryDateService::DOMAIN_NAMESPACE,
-            'DeliveryTimestampStart'   => DeliveryDateService::DOMAIN_NAMESPACE,
-            'DeliveryTimestampEnd'     => DeliveryDateService::DOMAIN_NAMESPACE,
-            'DeliveryDate'             => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Dimension'                => DeliveryDateService::DOMAIN_NAMESPACE,
-            'DownPartnerBarcode'       => DeliveryDateService::DOMAIN_NAMESPACE,
-            'DownPartnerID'            => DeliveryDateService::DOMAIN_NAMESPACE,
-            'DownPartnerLocation'      => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Events'                   => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Groups'                   => DeliveryDateService::DOMAIN_NAMESPACE,
-            'IDExpiration'             => DeliveryDateService::DOMAIN_NAMESPACE,
-            'IDNumber'                 => DeliveryDateService::DOMAIN_NAMESPACE,
-            'IDType'                   => DeliveryDateService::DOMAIN_NAMESPACE,
-            'OldStatuses'              => DeliveryDateService::DOMAIN_NAMESPACE,
-            'PhaseCode'                => DeliveryDateService::DOMAIN_NAMESPACE,
-            'ProductCodeCollect'       => DeliveryDateService::DOMAIN_NAMESPACE,
-            'ProductCodeDelivery'      => DeliveryDateService::DOMAIN_NAMESPACE,
-            'ProductOptions'           => DeliveryDateService::DOMAIN_NAMESPACE,
-            'ReceiverDateOfBirth'      => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Reference'                => DeliveryDateService::DOMAIN_NAMESPACE,
-            'ReferenceCollect'         => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Remark'                   => DeliveryDateService::DOMAIN_NAMESPACE,
-            'ReturnBarcode'            => DeliveryDateService::DOMAIN_NAMESPACE,
-            'ReturnReference'          => DeliveryDateService::DOMAIN_NAMESPACE,
-            'StatusCode'               => DeliveryDateService::DOMAIN_NAMESPACE,
-            'DateFrom'                 => DeliveryDateService::DOMAIN_NAMESPACE,
-            'DateTo'                   => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location'       => [
-            'Addresses'                => LocationService::DOMAIN_NAMESPACE,
-            'Amounts'                  => LocationService::DOMAIN_NAMESPACE,
-            'Barcode'                  => LocationService::DOMAIN_NAMESPACE,
-            'CollectionTimeStampEnd'   => LocationService::DOMAIN_NAMESPACE,
-            'CollectionTimeStampStart' => LocationService::DOMAIN_NAMESPACE,
-            'Contacts'                 => LocationService::DOMAIN_NAMESPACE,
-            'Content'                  => LocationService::DOMAIN_NAMESPACE,
-            'CostCenter'               => LocationService::DOMAIN_NAMESPACE,
-            'Customer'                 => LocationService::DOMAIN_NAMESPACE,
-            'CustomerOrderNumber'      => LocationService::DOMAIN_NAMESPACE,
-            'Customs'                  => LocationService::DOMAIN_NAMESPACE,
-            'DeliveryAddress'          => LocationService::DOMAIN_NAMESPACE,
-            'DeliveryTimestampStart'   => LocationService::DOMAIN_NAMESPACE,
-            'DeliveryTimestampEnd'     => LocationService::DOMAIN_NAMESPACE,
-            'DeliveryDate'             => LocationService::DOMAIN_NAMESPACE,
-            'Dimension'                => LocationService::DOMAIN_NAMESPACE,
-            'DownPartnerBarcode'       => LocationService::DOMAIN_NAMESPACE,
-            'DownPartnerID'            => LocationService::DOMAIN_NAMESPACE,
-            'DownPartnerLocation'      => LocationService::DOMAIN_NAMESPACE,
-            'Events'                   => LocationService::DOMAIN_NAMESPACE,
-            'Groups'                   => LocationService::DOMAIN_NAMESPACE,
-            'IDExpiration'             => LocationService::DOMAIN_NAMESPACE,
-            'IDNumber'                 => LocationService::DOMAIN_NAMESPACE,
-            'IDType'                   => LocationService::DOMAIN_NAMESPACE,
-            'OldStatuses'              => LocationService::DOMAIN_NAMESPACE,
-            'PhaseCode'                => LocationService::DOMAIN_NAMESPACE,
-            'ProductCodeCollect'       => LocationService::DOMAIN_NAMESPACE,
-            'ProductCodeDelivery'      => LocationService::DOMAIN_NAMESPACE,
-            'ProductOptions'           => LocationService::DOMAIN_NAMESPACE,
-            'ReceiverDateOfBirth'      => LocationService::DOMAIN_NAMESPACE,
-            'Reference'                => LocationService::DOMAIN_NAMESPACE,
-            'ReferenceCollect'         => LocationService::DOMAIN_NAMESPACE,
-            'Remark'                   => LocationService::DOMAIN_NAMESPACE,
-            'ReturnBarcode'            => LocationService::DOMAIN_NAMESPACE,
-            'ReturnReference'          => LocationService::DOMAIN_NAMESPACE,
-            'StatusCode'               => LocationService::DOMAIN_NAMESPACE,
-            'DateFrom'                 => LocationService::DOMAIN_NAMESPACE,
-            'DateTo'                   => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe'      => [
-            'Addresses'                => TimeframeService::DOMAIN_NAMESPACE,
-            'Amounts'                  => TimeframeService::DOMAIN_NAMESPACE,
-            'Barcode'                  => TimeframeService::DOMAIN_NAMESPACE,
-            'CollectionTimeStampEnd'   => TimeframeService::DOMAIN_NAMESPACE,
-            'CollectionTimeStampStart' => TimeframeService::DOMAIN_NAMESPACE,
-            'Contacts'                 => TimeframeService::DOMAIN_NAMESPACE,
-            'Content'                  => TimeframeService::DOMAIN_NAMESPACE,
-            'CostCenter'               => TimeframeService::DOMAIN_NAMESPACE,
-            'Customer'                 => TimeframeService::DOMAIN_NAMESPACE,
-            'CustomerOrderNumber'      => TimeframeService::DOMAIN_NAMESPACE,
-            'Customs'                  => TimeframeService::DOMAIN_NAMESPACE,
-            'DeliveryAddress'          => TimeframeService::DOMAIN_NAMESPACE,
-            'DeliveryTimestampStart'   => TimeframeService::DOMAIN_NAMESPACE,
-            'DeliveryTimestampEnd'     => TimeframeService::DOMAIN_NAMESPACE,
-            'DeliveryDate'             => TimeframeService::DOMAIN_NAMESPACE,
-            'Dimension'                => TimeframeService::DOMAIN_NAMESPACE,
-            'DownPartnerBarcode'       => TimeframeService::DOMAIN_NAMESPACE,
-            'DownPartnerID'            => TimeframeService::DOMAIN_NAMESPACE,
-            'DownPartnerLocation'      => TimeframeService::DOMAIN_NAMESPACE,
-            'Events'                   => TimeframeService::DOMAIN_NAMESPACE,
-            'Groups'                   => TimeframeService::DOMAIN_NAMESPACE,
-            'IDExpiration'             => TimeframeService::DOMAIN_NAMESPACE,
-            'IDNumber'                 => TimeframeService::DOMAIN_NAMESPACE,
-            'IDType'                   => TimeframeService::DOMAIN_NAMESPACE,
-            'OldStatuses'              => TimeframeService::DOMAIN_NAMESPACE,
-            'PhaseCode'                => TimeframeService::DOMAIN_NAMESPACE,
-            'ProductCodeCollect'       => TimeframeService::DOMAIN_NAMESPACE,
-            'ProductCodeDelivery'      => TimeframeService::DOMAIN_NAMESPACE,
-            'ProductOptions'           => TimeframeService::DOMAIN_NAMESPACE,
-            'ReceiverDateOfBirth'      => TimeframeService::DOMAIN_NAMESPACE,
-            'Reference'                => TimeframeService::DOMAIN_NAMESPACE,
-            'ReferenceCollect'         => TimeframeService::DOMAIN_NAMESPACE,
-            'Remark'                   => TimeframeService::DOMAIN_NAMESPACE,
-            'ReturnBarcode'            => TimeframeService::DOMAIN_NAMESPACE,
-            'ReturnReference'          => TimeframeService::DOMAIN_NAMESPACE,
-            'StatusCode'               => TimeframeService::DOMAIN_NAMESPACE,
-            'DateFrom'                 => TimeframeService::DOMAIN_NAMESPACE,
-            'DateTo'                   => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var Address[]|null $Addresses */
-    protected $Addresses;
-    /** @var Amount[]|null $Amounts */
-    protected $Amounts;
-    /** @var string|null $Barcode */
-    protected $Barcode;
-    /** @var string|null $CollectionTimeStampEnd */
-    protected $CollectionTimeStampEnd;
-    /** @var string|null $CollectionTimeStampStart */
-    protected $CollectionTimeStampStart;
-    /** @var Contact[]|null $Contacts */
-    protected $Contacts;
-    /** @var string|null $Content */
-    protected $Content;
-    /** @var string|null $CostCenter */
-    protected $CostCenter;
-    /** @var string|null $CustomerOrderNumber */
-    protected $CustomerOrderNumber;
-    /** @var Customer|null $Customer */
-    protected $Customer;
-    /** @var Customs|null $Customs */
-    protected $Customs;
-    /** @var string |null $StatusCode */
-    protected $StatusCode;
-    /** @var int|null $PhaseCode */
-    protected $PhaseCode;
-    /** @var string|null $DateFrom */
-    protected $DateFrom;
-    /** @var string|null $DateTo */
-    protected $DateTo;
-    /** @var string|null $DeliveryAddress */
-    protected $DeliveryAddress;
-    /** @var string|null $DeliveryTimeStampStart */
-    protected $DeliveryTimeStampStart;
-    /** @var string|null $DeliveryTimeStampEnd */
-    protected $DeliveryTimeStampEnd;
-    /** @var string|null $DeliveryDate */
-    protected $DeliveryDate;
-    /** @var Dimension|null $Dimension */
-    protected $Dimension;
-    /** @var string|null $DownPartnerBarcode */
-    protected $DownPartnerBarcode;
-    /** @var string|null $DownPartnerID */
-    protected $DownPartnerID;
-    /** @var string|null $DownPartnerLocation */
-    protected $DownPartnerLocation;
-    /** @var Event[]|null $Events */
-    protected $Events;
-    /** @var Group[]|null $Groups */
-    protected $Groups;
+    /** @var Address[]|null $addresses */
+    protected $addresses;
+    /** @var Amount[]|null $amounts */
+    protected $amounts;
+    /** @var string|null $barcode */
+    protected $barcode;
+    /** @var string|null $collectionTimeStampEnd */
+    protected $collectionTimeStampEnd;
+    /** @var string|null $collectionTimeStampStart */
+    protected $collectionTimeStampStart;
+    /** @var Contact[]|null $contacts */
+    protected $contacts;
+    /** @var string|null $content */
+    protected $content;
+    /** @var string|null $costCenter */
+    protected $costCenter;
+    /** @var string|null $customerOrderNumber */
+    protected $customerOrderNumber;
+    /** @var Customer|null $customer */
+    protected $customer;
+    /** @var Customs|null $customs */
+    protected $customs;
+    /** @var string|null $statusCode */
+    protected $statusCode;
+    /** @var string|null $phaseCode */
+    protected $phaseCode;
+    /** @var string|null $dateFrom */
+    protected $dateFrom;
+    /** @var string|null $dateTo */
+    protected $dateTo;
+    /** @var string|null $deliveryAddress */
+    protected $deliveryAddress;
+    /** @var string|null $deliveryTimeStampStart */
+    protected $deliveryTimeStampStart;
+    /** @var string|null $deliveryTimeStampEnd */
+    protected $deliveryTimeStampEnd;
+    /** @var string|null $deliveryDate */
+    protected $deliveryDate;
+    /** @var Dimension|null $dimension */
+    protected $dimension;
+    /** @var string|null $downPartnerBarcode */
+    protected $downPartnerBarcode;
+    /** @var string|null $downPartnerID */
+    protected $downPartnerID;
+    /** @var string|null $downPartnerLocation */
+    protected $downPartnerLocation;
+    /** @var Event[]|null $events */
+    protected $events;
+    /** @var Group[]|null $groups */
+    protected $groups;
     /** @var string|null $IDExpiration */
     protected $IDExpiration;
     /** @var string|null $IDNumber */
     protected $IDNumber;
     /** @var string|null $IDType */
     protected $IDType;
-    /** @var string|null $OldStatuses */
-    protected $OldStatuses;
-    /** @var string|null $ProductCodeCollect */
-    protected $ProductCodeCollect;
-    /** @var string|null $ProductCodeDelivery */
-    protected $ProductCodeDelivery;
-    /** @var ProductOption[]|null $ProductOptions */
-    protected $ProductOptions;
-    /** @var string|null $ReceiverDateOfBirth */
-    protected $ReceiverDateOfBirth;
-    /** @var string|null $Reference */
-    protected $Reference;
-    /** @var string|null $ReferenceCollect */
-    protected $ReferenceCollect;
-    /** @var string|null $Remark */
-    protected $Remark;
-    /** @var string|null $ReturnBarcode */
-    protected $ReturnBarcode;
-    /** @var string|null $ReturnReference */
-    protected $ReturnReference;
-    // @codingStandardsIgnoreEnd
+    /** @var Status[]|null $oldStatuses */
+    protected $oldStatuses;
+    /** @var string|null $productCodeCollect */
+    protected $productCodeCollect;
+    /** @var string|null $productCodeDelivery */
+    protected $productCodeDelivery;
+    /** @var ProductOption[]|null $productOptions */
+    protected $productOptions;
+    /** @var string|null $receiverDateOfBirth */
+    protected $receiverDateOfBirth;
+    /** @var string|null $reference */
+    protected $reference;
+    /** @var string|null $referenceCollect */
+    protected $referenceCollect;
+    /** @var string|null $remark */
+    protected $remark;
+    /** @var string|null $returnBarcode */
+    protected $returnBarcode;
+    /** @var string|null $returnReference */
+    protected $returnReference;
 
     /**
      * Shipment constructor.
@@ -515,11 +147,14 @@ class Shipment extends AbstractEntity
      * @param string|null          $returnBarcode
      * @param string|null          $returnReference
      * @param string|null          $statusCode
-     * @param int|null             $phaseCode
+     * @param string|null          $phaseCode
      * @param string|null          $dateFrom
      * @param string|null          $dateTo
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
-    public function __construct(?array $addresses = null, ?array $amounts = null, ?string $barcode = null, ?array $contacts = null, ?string $content = null, ?string $collectionTimeStampEnd = null, ?string $collectionTimeStampStart = null, ?string $costCenter = null, ?Customer $customer = null, ?string $customerOrderNumber = null, ?Customs $customs = null, ?string $deliveryAddress = null, ?string $deliveryDate = null, ?Dimension $dimension = null, ?string $downPartnerBarcode = null, ?string $downPartnerId = null, ?string $downPartnerLocation = null, ?array $events = null, ?array $groups = null, ?string $idExpiration = null, ?string $idNumber = null, ?string $idType = null, ?array $oldStatuses = null, ?string $productCodeCollect = null, ?string $productCodeDelivery = null, ?array $productOptions = null, ?string $receiverDateOfBirth = null, ?string $reference = null, ?string $referenceCollect = null, ?string $remark = null, ?string $returnBarcode = null, ?string $returnReference = null, ?string $statusCode = null, ?int $phaseCode = null, ?string $dateFrom = null, ?string $dateTo = null)
+    public function __construct(?array $addresses = null, ?array $amounts = null, ?string $barcode = null, ?array $contacts = null, ?string $content = null, ?string $collectionTimeStampEnd = null, ?string $collectionTimeStampStart = null, ?string $costCenter = null, ?Customer $customer = null, ?string $customerOrderNumber = null, ?Customs $customs = null, ?string $deliveryAddress = null, ?string $deliveryDate = null, ?Dimension $dimension = null, ?string $downPartnerBarcode = null, ?string $downPartnerId = null, ?string $downPartnerLocation = null, ?array $events = null, ?array $groups = null, ?string $idExpiration = null, ?string $idNumber = null, ?string $idType = null, ?array $oldStatuses = null, ?string $productCodeCollect = null, ?string $productCodeDelivery = null, ?array $productOptions = null, ?string $receiverDateOfBirth = null, ?string $reference = null, ?string $referenceCollect = null, ?string $remark = null, ?string $returnBarcode = null, ?string $returnReference = null, ?string $statusCode = null, ?string $phaseCode = null, ?string $dateFrom = null, ?string $dateTo = null)
     {
         parent::__construct();
 
@@ -562,83 +197,914 @@ class Shipment extends AbstractEntity
     }
 
     /**
-     * Return a serializable array for the XMLWriter
+     * @return Address[]|null
      *
-     * @param Writer $writer
-     *
-     * @return void
-     *
-     * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
-    public function xmlSerialize(Writer $writer): void
+    public function getAddresses(): ?array
     {
-        $xml = [];
-        foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if ('Addresses' === $propertyName) {
-                // @codingStandardsIgnoreLine
-                if (is_array($this->Addresses)) {
-                    $items = [];
-                    // @codingStandardsIgnoreLine
-                    foreach ($this->Addresses as $address) {
-                        $items[] = ["{{$namespace}}Address" => $address];
-                    }
-                    $xml["{{$namespace}}Addresses"] = $items;
-                }
-            } elseif ('Amounts' === $propertyName) {
-                // @codingStandardsIgnoreLine
-                if (is_array($this->Amounts)) {
-                    $items = [];
-                    // @codingStandardsIgnoreLine
-                    foreach ($this->Amounts as $amount) {
-                        $items[] = ["{{$namespace}}Amount" => $amount];
-                    }
-                    $xml["{{$namespace}}Amounts"] = $items;
-                }
-            } elseif ('Contacts' === $propertyName) {
-                // @codingStandardsIgnoreLine
-                if (is_array($this->Contacts)) {
-                    $items = [];
-                    // @codingStandardsIgnoreLine
-                    foreach ($this->Contacts as $contact) {
-                        $items[] = ["{{$namespace}}Contact" => $contact];
-                    }
-                    $xml["{{$namespace}}Contacts"] = $items;
-                }
-            } elseif ('Events' === $propertyName) {
-                // @codingStandardsIgnoreLine
-                if (is_array($this->Events)) {
-                    $items = [];
-                    // @codingStandardsIgnoreLine
-                    foreach ($this->Events as $event) {
-                        $items[] = ["{{$namespace}}Event" => $event];
-                    }
-                    $xml["{{$namespace}}Events"] = $items;
-                }
-            } elseif ('Groups' === $propertyName) {
-                // @codingStandardsIgnoreLine
-                if (is_array($this->Groups)) {
-                    $items = [];
-                    // @codingStandardsIgnoreLine
-                    foreach ($this->Groups as $group) {
-                        $items[] = ["{{$namespace}}Group" => $group];
-                    }
-                    $xml["{{$namespace}}Groups"] = $items;
-                }
-            } elseif ('ProductOptions' === $propertyName) {
-                // @codingStandardsIgnoreLine
-                if (is_array($this->ProductOptions)) {
-                    $items = [];
-                    // @codingStandardsIgnoreLine
-                    foreach ($this->ProductOptions as $option) {
-                        $items[] = ["{{$namespace}}ProductOption" => $option];
-                    }
-                    $xml["{{$namespace}}ProductOptions"] = $items;
-                }
-            } elseif (isset($this->{$propertyName})) {
-                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
-            }
-        }
-        // Auto extending this object with other properties is not supported with SOAP
-        $writer->write($xml);
+        return $this->addresses;
+    }
+
+    /**
+     * @param Address[]|null $addresses
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setAddresses(?array $addresses): Shipment
+    {
+        $this->addresses = $addresses;
+
+        return $this;
+    }
+
+    /**
+     * @return Amount[]|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getAmounts(): ?array
+    {
+        return $this->amounts;
+    }
+
+    /**
+     * @param Amount[]|null $amounts
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setAmounts(?array $amounts): Shipment
+    {
+        $this->amounts = $amounts;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getBarcode(): ?string
+    {
+        return $this->barcode;
+    }
+
+    /**
+     * @param string|null $barcode
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setBarcode(?string $barcode): Shipment
+    {
+        $this->barcode = $barcode;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getCollectionTimeStampEnd(): ?string
+    {
+        return $this->collectionTimeStampEnd;
+    }
+
+    /**
+     * @param string|null $collectionTimeStampEnd
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setCollectionTimeStampEnd(?string $collectionTimeStampEnd): Shipment
+    {
+        $this->collectionTimeStampEnd = $collectionTimeStampEnd;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getCollectionTimeStampStart(): ?string
+    {
+        return $this->collectionTimeStampStart;
+    }
+
+    /**
+     * @param string|null $collectionTimeStampStart
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setCollectionTimeStampStart(?string $collectionTimeStampStart): Shipment
+    {
+        $this->collectionTimeStampStart = $collectionTimeStampStart;
+
+        return $this;
+    }
+
+    /**
+     * @return Contact[]|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getContacts(): ?array
+    {
+        return $this->contacts;
+    }
+
+    /**
+     * @param Contact[]|null $contacts
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setContacts(?array $contacts): Shipment
+    {
+        $this->contacts = $contacts;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getContent(): ?string
+    {
+        return $this->content;
+    }
+
+    /**
+     * @param string|null $content
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setContent(?string $content): Shipment
+    {
+        $this->content = $content;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getCostCenter(): ?string
+    {
+        return $this->costCenter;
+    }
+
+    /**
+     * @param string|null $costCenter
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setCostCenter(?string $costCenter): Shipment
+    {
+        $this->costCenter = $costCenter;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getCustomerOrderNumber(): ?string
+    {
+        return $this->customerOrderNumber;
+    }
+
+    /**
+     * @param string|null $customerOrderNumber
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setCustomerOrderNumber(?string $customerOrderNumber): Shipment
+    {
+        $this->customerOrderNumber = $customerOrderNumber;
+
+        return $this;
+    }
+
+    /**
+     * @return Customer|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getCustomer(): ?Customer
+    {
+        return $this->customer;
+    }
+
+    /**
+     * @param Customer|null $customer
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setCustomer(?Customer $customer): Shipment
+    {
+        $this->customer = $customer;
+
+        return $this;
+    }
+
+    /**
+     * @return Customs|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getCustoms(): ?Customs
+    {
+        return $this->customs;
+    }
+
+    /**
+     * @param Customs|null $customs
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setCustoms(?Customs $customs): Shipment
+    {
+        $this->customs = $customs;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getStatusCode(): ?string
+    {
+        return $this->statusCode;
+    }
+
+    /**
+     * @param string|null $statusCode
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setStatusCode(?string $statusCode): Shipment
+    {
+        $this->statusCode = $statusCode;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getPhaseCode(): ?string
+    {
+        return $this->phaseCode;
+    }
+
+    /**
+     * @param string|null $phaseCode
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setPhaseCode(?string $phaseCode): Shipment
+    {
+        $this->phaseCode = $phaseCode;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getDateFrom(): ?string
+    {
+        return $this->dateFrom;
+    }
+
+    /**
+     * @param string|null $dateFrom
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setDateFrom(?string $dateFrom): Shipment
+    {
+        $this->dateFrom = $dateFrom;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getDateTo(): ?string
+    {
+        return $this->dateTo;
+    }
+
+    /**
+     * @param string|null $dateTo
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setDateTo(?string $dateTo): Shipment
+    {
+        $this->dateTo = $dateTo;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getDeliveryAddress(): ?string
+    {
+        return $this->deliveryAddress;
+    }
+
+    /**
+     * @param string|null $deliveryAddress
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setDeliveryAddress(?string $deliveryAddress): Shipment
+    {
+        $this->deliveryAddress = $deliveryAddress;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getDeliveryTimeStampStart(): ?string
+    {
+        return $this->deliveryTimeStampStart;
+    }
+
+    /**
+     * @param string|null $deliveryTimeStampStart
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setDeliveryTimeStampStart(?string $deliveryTimeStampStart): Shipment
+    {
+        $this->deliveryTimeStampStart = $deliveryTimeStampStart;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getDeliveryTimeStampEnd(): ?string
+    {
+        return $this->deliveryTimeStampEnd;
+    }
+
+    /**
+     * @param string|null $deliveryTimeStampEnd
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setDeliveryTimeStampEnd(?string $deliveryTimeStampEnd): Shipment
+    {
+        $this->deliveryTimeStampEnd = $deliveryTimeStampEnd;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getDeliveryDate(): ?string
+    {
+        return $this->deliveryDate;
+    }
+
+    /**
+     * @param string|null $deliveryDate
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setDeliveryDate(?string $deliveryDate): Shipment
+    {
+        $this->deliveryDate = $deliveryDate;
+
+        return $this;
+    }
+
+    /**
+     * @return Dimension|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getDimension(): ?Dimension
+    {
+        return $this->dimension;
+    }
+
+    /**
+     * @param Dimension|null $dimension
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setDimension(?Dimension $dimension): Shipment
+    {
+        $this->dimension = $dimension;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getDownPartnerBarcode(): ?string
+    {
+        return $this->downPartnerBarcode;
+    }
+
+    /**
+     * @param string|null $downPartnerBarcode
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setDownPartnerBarcode(?string $downPartnerBarcode): Shipment
+    {
+        $this->downPartnerBarcode = $downPartnerBarcode;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getDownPartnerID(): ?string
+    {
+        return $this->downPartnerID;
+    }
+
+    /**
+     * @param string|null $downPartnerID
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setDownPartnerID(?string $downPartnerID): Shipment
+    {
+        $this->downPartnerID = $downPartnerID;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getDownPartnerLocation(): ?string
+    {
+        return $this->downPartnerLocation;
+    }
+
+    /**
+     * @param string|null $downPartnerLocation
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setDownPartnerLocation(?string $downPartnerLocation): Shipment
+    {
+        $this->downPartnerLocation = $downPartnerLocation;
+
+        return $this;
+    }
+
+    /**
+     * @return Event[]|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getEvents(): ?array
+    {
+        return $this->events;
+    }
+
+    /**
+     * @param Event[]|null $events
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setEvents(?array $events): Shipment
+    {
+        $this->events = $events;
+
+        return $this;
+    }
+
+    /**
+     * @return Group[]|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getGroups(): ?array
+    {
+        return $this->groups;
+    }
+
+    /**
+     * @param Group[]|null $groups
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setGroups(?array $groups): Shipment
+    {
+        $this->groups = $groups;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getIDExpiration(): ?string
+    {
+        return $this->IDExpiration;
+    }
+
+    /**
+     * @param string|null $IDExpiration
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setIDExpiration(?string $IDExpiration): Shipment
+    {
+        $this->IDExpiration = $IDExpiration;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getIDNumber(): ?string
+    {
+        return $this->IDNumber;
+    }
+
+    /**
+     * @param string|null $IDNumber
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setIDNumber(?string $IDNumber): Shipment
+    {
+        $this->IDNumber = $IDNumber;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getIDType(): ?string
+    {
+        return $this->IDType;
+    }
+
+    /**
+     * @param string|null $IDType
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setIDType(?string $IDType): Shipment
+    {
+        $this->IDType = $IDType;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getOldStatuses(): ?string
+    {
+        return $this->oldStatuses;
+    }
+
+    /**
+     * @param Status[]|null $oldStatuses
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setOldStatuses(?array $oldStatuses): Shipment
+    {
+        $this->oldStatuses = $oldStatuses;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getProductCodeCollect(): ?string
+    {
+        return $this->productCodeCollect;
+    }
+
+    /**
+     * @param string|null $productCodeCollect
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setProductCodeCollect(?string $productCodeCollect): Shipment
+    {
+        $this->productCodeCollect = $productCodeCollect;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getProductCodeDelivery(): ?string
+    {
+        return $this->productCodeDelivery;
+    }
+
+    /**
+     * @param string|null $productCodeDelivery
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setProductCodeDelivery(?string $productCodeDelivery): Shipment
+    {
+        $this->productCodeDelivery = $productCodeDelivery;
+
+        return $this;
+    }
+
+    /**
+     * @return ProductOption[]|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getProductOptions(): ?array
+    {
+        return $this->productOptions;
+    }
+
+    /**
+     * @param ProductOption[]|null $productOptions
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setProductOptions(?array $productOptions): Shipment
+    {
+        $this->productOptions = $productOptions;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getReceiverDateOfBirth(): ?string
+    {
+        return $this->receiverDateOfBirth;
+    }
+
+    /**
+     * @param string|null $receiverDateOfBirth
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setReceiverDateOfBirth(?string $receiverDateOfBirth): Shipment
+    {
+        $this->receiverDateOfBirth = $receiverDateOfBirth;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getReference(): ?string
+    {
+        return $this->reference;
+    }
+
+    /**
+     * @param string|null $reference
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setReference(?string $reference): Shipment
+    {
+        $this->reference = $reference;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getReferenceCollect(): ?string
+    {
+        return $this->referenceCollect;
+    }
+
+    /**
+     * @param string|null $referenceCollect
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setReferenceCollect(?string $referenceCollect): Shipment
+    {
+        $this->referenceCollect = $referenceCollect;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getRemark(): ?string
+    {
+        return $this->remark;
+    }
+
+    /**
+     * @param string|null $remark
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setRemark(?string $remark): Shipment
+    {
+        $this->remark = $remark;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getReturnBarcode(): ?string
+    {
+        return $this->returnBarcode;
+    }
+
+    /**
+     * @param string|null $returnBarcode
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setReturnBarcode(?string $returnBarcode): Shipment
+    {
+        $this->returnBarcode = $returnBarcode;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getReturnReference(): ?string
+    {
+        return $this->returnReference;
+    }
+
+    /**
+     * @param string|null $returnReference
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setReturnReference(?string $returnReference): Shipment
+    {
+        $this->returnReference = $returnReference;
+
+        return $this;
     }
 }

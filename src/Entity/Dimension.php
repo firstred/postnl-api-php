@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -29,95 +29,21 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
-use Firstred\PostNL\Service\TimeframeService;
-
 /**
  * Class Dimension
- *
- * @method string|null getHeight()
- * @method string|null getLength()
- * @method string|null getVolume()
- * @method string|null getWeight()
- * @method string|null getWidth()
- *
- * @method Dimension setHeight(string|null $height = null)
- * @method Dimension setLength(string|null $length = null)
- * @method Dimension setVolume(string|null $volume = null)
- * @method Dimension setWeight(string|null $weight = null)
- * @method Dimension setWidth(string|null $width = null)
  */
 class Dimension extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
-    public static $defaultProperties = [
-        'Barcode'        => [
-            'Height' => BarcodeService::DOMAIN_NAMESPACE,
-            'Length' => BarcodeService::DOMAIN_NAMESPACE,
-            'Volume' => BarcodeService::DOMAIN_NAMESPACE,
-            'Weight' => BarcodeService::DOMAIN_NAMESPACE,
-            'Width'  => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming'     => [
-            'Height' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Length' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Volume' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Weight' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Width'  => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling'      => [
-            'Height' => LabellingService::DOMAIN_NAMESPACE,
-            'Length' => LabellingService::DOMAIN_NAMESPACE,
-            'Volume' => LabellingService::DOMAIN_NAMESPACE,
-            'Weight' => LabellingService::DOMAIN_NAMESPACE,
-            'Width'  => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Height' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Length' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Volume' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Weight' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Width'  => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
-            'Height' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Length' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Volume' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Weight' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Width'  => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location'       => [
-            'Height' => LocationService::DOMAIN_NAMESPACE,
-            'Length' => LocationService::DOMAIN_NAMESPACE,
-            'Volume' => LocationService::DOMAIN_NAMESPACE,
-            'Weight' => LocationService::DOMAIN_NAMESPACE,
-            'Width'  => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe'      => [
-            'Height' => TimeframeService::DOMAIN_NAMESPACE,
-            'Length' => TimeframeService::DOMAIN_NAMESPACE,
-            'Volume' => TimeframeService::DOMAIN_NAMESPACE,
-            'Weight' => TimeframeService::DOMAIN_NAMESPACE,
-            'Width'  => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null $Height */
-    protected $Height;
-    /** @var string|null $Length */
-    protected $Length;
-    /** @var string|null $Volume */
-    protected $Volume;
-    /** @var string|null $Weight */
-    protected $Weight;
-    /** @var string|null $Width */
-    protected $Width;
-    // @codingStandardsIgnoreEnd
+    /** @var string|null $height */
+    protected $height;
+    /** @var string|null $length */
+    protected $length;
+    /** @var string|null $volume */
+    protected $volume;
+    /** @var string|null $weight */
+    protected $weight;
+    /** @var string|null $width */
+    protected $width;
 
     /**
      * @param int $weight
@@ -137,5 +63,125 @@ class Dimension extends AbstractEntity
         $this->setLength($length);
         $this->setVolume($volume);
         $this->setWidth($width);
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getHeight(): ?string
+    {
+        return $this->height;
+    }
+
+    /**
+     * @param string|null $height
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setHeight(?string $height): Dimension
+    {
+        $this->height = $height;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getLength(): ?string
+    {
+        return $this->length;
+    }
+
+    /**
+     * @param string|null $length
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setLength(?string $length): Dimension
+    {
+        $this->length = $length;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getVolume(): ?string
+    {
+        return $this->volume;
+    }
+
+    /**
+     * @param string|null $volume
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setVolume(?string $volume): Dimension
+    {
+        $this->volume = $volume;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getWeight(): ?string
+    {
+        return $this->weight;
+    }
+
+    /**
+     * @param string|null $weight
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setWeight(?string $weight): Dimension
+    {
+        $this->weight = $weight;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getWidth(): ?string
+    {
+        return $this->width;
+    }
+
+    /**
+     * @param string|null $width
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setWidth(?string $width): Dimension
+    {
+        $this->width = $width;
+
+        return $this;
     }
 }

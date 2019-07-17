@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -29,62 +29,15 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
-use Firstred\PostNL\Service\TimeframeService;
-
 /**
  * Class CoordinatesNorthWest
- *
- * @method string|null getLatitude()
- * @method string|null getLongitude()
- *
- * @method CoordinatesNorthWest setLatitude(string|null $lat = null)
- * @method CoordinatesNorthWest setLongitude(string|null $long = null)
  */
 class CoordinatesNorthWest extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
-    public static $defaultProperties = [
-        'Barcode'        => [
-            'Latitude'  => BarcodeService::DOMAIN_NAMESPACE,
-            'Longitude' => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming'     => [
-            'Latitude'  => ConfirmingService::DOMAIN_NAMESPACE,
-            'Longitude' => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling'      => [
-            'Latitude'  => LabellingService::DOMAIN_NAMESPACE,
-            'Longitude' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Latitude'  => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Longitude' => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
-            'Latitude'  => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Longitude' => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location'       => [
-            'Latitude'  => LocationService::DOMAIN_NAMESPACE,
-            'Longitude' => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe'      => [
-            'Latitude'  => TimeframeService::DOMAIN_NAMESPACE,
-            'Longitude' => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null $Latitude */
-    protected $Latitude;
-    /** @var string|null $Longitude */
-    protected $Longitude;
-    // @codingStandardsIgnoreEnd
+    /** @var string|null $latitude */
+    protected $latitude;
+    /** @var string|null $longitude */
+    protected $longitude;
 
     /**
      * @param string $lat
@@ -96,5 +49,53 @@ class CoordinatesNorthWest extends AbstractEntity
 
         $this->setLatitude($lat);
         $this->setLongitude($long);
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getLatitude(): ?string
+    {
+        return $this->latitude;
+    }
+
+    /**
+     * @param string|null $latitude
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setLatitude(?string $latitude): CoordinatesNorthWest
+    {
+        $this->latitude = $latitude;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getLongitude(): ?string
+    {
+        return $this->longitude;
+    }
+
+    /**
+     * @param string|null $longitude
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setLongitude(?string $longitude): CoordinatesNorthWest
+    {
+        $this->longitude = $longitude;
+
+        return $this;
     }
 }

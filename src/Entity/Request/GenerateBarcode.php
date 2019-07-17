@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -29,81 +29,23 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity\Request;
 
+use Exception;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Barcode;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Message\Message;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
-use Firstred\PostNL\Service\TimeframeService;
 
 /**
  * Class GenerateLabel
- *
- * @method Customer|null getCustomer()
- * @method Message|null  getMessage()
- * @method Barcode|null  getBarcode()
- *
- * @method GenerateBarcode setCustomer(Customer|null $customer = null)
- * @method GenerateBarcode setMessage(Message|null $message = null)
- * @method GenerateBarcode setBarcode(Barcode|null $shipments = null)
  */
 class GenerateBarcode extends AbstractEntity
 {
-    /**
-     * Default properties and namespaces for the SOAP API
-     *
-     * @var array $defaultProperties
-     */
-    public static $defaultProperties = [
-        'Barcode'        => [
-            'Message'  => BarcodeService::DOMAIN_NAMESPACE,
-            'Customer' => BarcodeService::DOMAIN_NAMESPACE,
-            'Barcode'  => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming'     => [
-            'Message'  => ConfirmingService::DOMAIN_NAMESPACE,
-            'Customer' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Barcode'  => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling'      => [
-            'Message'  => LabellingService::DOMAIN_NAMESPACE,
-            'Customer' => LabellingService::DOMAIN_NAMESPACE,
-            'Barcode'  => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Message'   => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Customer'  => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Shipments' => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
-            'Message'   => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Customer'  => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Shipments' => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location'       => [
-            'Message'   => LocationService::DOMAIN_NAMESPACE,
-            'Customer'  => LocationService::DOMAIN_NAMESPACE,
-            'Shipments' => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe'      => [
-            'Message'   => TimeframeService::DOMAIN_NAMESPACE,
-            'Customer'  => TimeframeService::DOMAIN_NAMESPACE,
-            'Shipments' => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var Message|null $Message */
-    protected $Message;
-    /** @var Customer|null $Customer */
-    protected $Customer;
-    /** @var Barcode|null $Barcode */
-    protected $Barcode;
-    // @codingStandardsIgnoreEnd
+    /** @var Message|null $message */
+    protected $message;
+    /** @var Customer|null $customer */
+    protected $customer;
+    /** @var Barcode|null $barcode */
+    protected $barcode;
 
     /**
      * GenerateBarcode constructor.
@@ -112,9 +54,10 @@ class GenerateBarcode extends AbstractEntity
      * @param Customer|null $customer
      * @param Message|null  $message
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function __construct(Barcode $barcode = null, Customer $customer = null, Message $message = null)
     {
@@ -123,5 +66,77 @@ class GenerateBarcode extends AbstractEntity
         $this->setBarcode($barcode);
         $this->setCustomer($customer);
         $this->setMessage($message ?: new Message());
+    }
+
+    /**
+     * @return Message|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getMessage(): ?Message
+    {
+        return $this->message;
+    }
+
+    /**
+     * @param Message|null $message
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setMessage(?Message $message): GenerateBarcode
+    {
+        $this->message = $message;
+
+        return $this;
+    }
+
+    /**
+     * @return Customer|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getCustomer(): ?Customer
+    {
+        return $this->customer;
+    }
+
+    /**
+     * @param Customer|null $customer
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setCustomer(?Customer $customer): GenerateBarcode
+    {
+        $this->customer = $customer;
+
+        return $this;
+    }
+
+    /**
+     * @return Barcode|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getBarcode(): ?Barcode
+    {
+        return $this->barcode;
+    }
+
+    /**
+     * @param Barcode|null $barcode
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setBarcode(?Barcode $barcode): GenerateBarcode
+    {
+        $this->barcode = $barcode;
+
+        return $this;
     }
 }

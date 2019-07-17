@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -29,62 +29,15 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
-use Firstred\PostNL\Service\TimeframeService;
-
 /**
  * Class Warning
- *
- * @method string|null getCode()
- * @method string|null getDescription()
- *
- * @method Warning setCode(string|null $code = null)
- * @method Warning setDescription(string|null $description = null)
  */
 class Warning extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
-    public static $defaultProperties = [
-        'Barcode'        => [
-            'Code'        => BarcodeService::DOMAIN_NAMESPACE,
-            'Description' => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming'     => [
-            'Code'        => ConfirmingService::DOMAIN_NAMESPACE,
-            'Description' => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling'      => [
-            'Code'        => LabellingService::DOMAIN_NAMESPACE,
-            'Description' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Code'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Description' => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
-            'Code'        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Description' => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location'       => [
-            'Code'        => LocationService::DOMAIN_NAMESPACE,
-            'Description' => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe'      => [
-            'Code'        => TimeframeService::DOMAIN_NAMESPACE,
-            'Description' => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null $Code */
-    protected $Code;
-    /** @var string|null $Description */
-    protected $Description;
-    // @codingStandardsIgnoreEnd
+    /** @var string|null $code */
+    protected $code;
+    /** @var string|null $description */
+    protected $description;
 
     /**
      * @param string|null $code
@@ -96,5 +49,53 @@ class Warning extends AbstractEntity
 
         $this->setCode($code);
         $this->setDescription($description);
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getCode(): ?string
+    {
+        return $this->code;
+    }
+
+    /**
+     * @param string|null $code
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setCode(?string $code): Warning
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string|null $description
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setDescription(?string $description): Warning
+    {
+        $this->description = $description;
+
+        return $this;
     }
 }

@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -29,95 +29,21 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
-use Firstred\PostNL\Service\TimeframeService;
-
 /**
  * Class OldStatus
- *
- * @method string|null getCurrentPhaseCode()
- * @method string|null getCurrentPhaseDescription()
- * @method string|null getCurrentOldStatusCode()
- * @method string|null getCurrentOldStatusDescription()
- * @method string|null getCurrentOldStatusTimeStamp()
- *
- * @method OldStatus setCurrentPhaseCode(string|null $code)
- * @method OldStatus setCurrentPhaseDescription(string|null $desc)
- * @method OldStatus setCurrentOldStatusCode(string|null $code)
- * @method OldStatus setCurrentOldStatusDescription(string|null $desc)
- * @method OldStatus setCurrentOldStatusTimeStamp(string|null $dateTime)
  */
 class OldStatus extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
-    public static $defaultProperties = [
-        'Barcode'        => [
-            'CurrentPhaseCode'            => BarcodeService::DOMAIN_NAMESPACE,
-            'CurrentPhaseDescription'     => BarcodeService::DOMAIN_NAMESPACE,
-            'CurrentOldStatusCode'        => BarcodeService::DOMAIN_NAMESPACE,
-            'CurrentOldStatusDescription' => BarcodeService::DOMAIN_NAMESPACE,
-            'CurrentOldStatusTimeStamp'   => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming'     => [
-            'CurrentPhaseCode'            => ConfirmingService::DOMAIN_NAMESPACE,
-            'CurrentPhaseDescription'     => ConfirmingService::DOMAIN_NAMESPACE,
-            'CurrentOldStatusCode'        => ConfirmingService::DOMAIN_NAMESPACE,
-            'CurrentOldStatusDescription' => ConfirmingService::DOMAIN_NAMESPACE,
-            'CurrentOldStatusTimeStamp'   => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling'      => [
-            'CurrentPhaseCode'            => LabellingService::DOMAIN_NAMESPACE,
-            'CurrentPhaseDescription'     => LabellingService::DOMAIN_NAMESPACE,
-            'CurrentOldStatusCode'        => LabellingService::DOMAIN_NAMESPACE,
-            'CurrentOldStatusDescription' => LabellingService::DOMAIN_NAMESPACE,
-            'CurrentOldStatusTimeStamp'   => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'CurrentPhaseCode'            => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CurrentPhaseDescription'     => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CurrentOldStatusCode'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CurrentOldStatusDescription' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CurrentOldStatusTimeStamp'   => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
-            'CurrentPhaseCode'            => DeliveryDateService::DOMAIN_NAMESPACE,
-            'CurrentPhaseDescription'     => DeliveryDateService::DOMAIN_NAMESPACE,
-            'CurrentOldStatusCode'        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'CurrentOldStatusDescription' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'CurrentOldStatusTimeStamp'   => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location'       => [
-            'CurrentPhaseCode'            => LocationService::DOMAIN_NAMESPACE,
-            'CurrentPhaseDescription'     => LocationService::DOMAIN_NAMESPACE,
-            'CurrentOldStatusCode'        => LocationService::DOMAIN_NAMESPACE,
-            'CurrentOldStatusDescription' => LocationService::DOMAIN_NAMESPACE,
-            'CurrentOldStatusTimeStamp'   => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe'      => [
-            'CurrentPhaseCode'            => TimeframeService::DOMAIN_NAMESPACE,
-            'CurrentPhaseDescription'     => TimeframeService::DOMAIN_NAMESPACE,
-            'CurrentOldStatusCode'        => TimeframeService::DOMAIN_NAMESPACE,
-            'CurrentOldStatusDescription' => TimeframeService::DOMAIN_NAMESPACE,
-            'CurrentOldStatusTimeStamp'   => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null $CurrentPhaseCode */
-    protected $CurrentPhaseCode;
-    /** @var string|null $CurrentPhaseDescription */
-    protected $CurrentPhaseDescription;
-    /** @var string|null $CurrentOldStatusCode */
-    protected $CurrentOldStatusCode;
-    /** @var string|null $CurrentOldStatusDescription */
-    protected $CurrentOldStatusDescription;
-    /** @var string|null $CurrentOldStatusTimeStamp */
-    protected $CurrentOldStatusTimeStamp;
-    // @codingStandardsIgnoreEnd
+    /** @var string|null $currentPhaseCode */
+    protected $currentPhaseCode;
+    /** @var string|null $currentPhaseDescription */
+    protected $currentPhaseDescription;
+    /** @var string|null $currentOldStatusCode */
+    protected $currentOldStatusCode;
+    /** @var string|null $currentOldStatusDescription */
+    protected $currentOldStatusDescription;
+    /** @var string|null $currentOldStatusTimeStamp */
+    protected $currentOldStatusTimeStamp;
 
     /**
      * @param null|string $phaseCode
@@ -137,5 +63,125 @@ class OldStatus extends AbstractEntity
         $this->setCurrentOldStatusCode($oldStatusCode);
         $this->setCurrentOldStatusDescription($oldStatusDesc);
         $this->setCurrentOldStatusTimeStamp($timeStamp);
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getCurrentPhaseCode(): ?string
+    {
+        return $this->currentPhaseCode;
+    }
+
+    /**
+     * @param string|null $currentPhaseCode
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setCurrentPhaseCode(?string $currentPhaseCode): OldStatus
+    {
+        $this->currentPhaseCode = $currentPhaseCode;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getCurrentPhaseDescription(): ?string
+    {
+        return $this->currentPhaseDescription;
+    }
+
+    /**
+     * @param string|null $currentPhaseDescription
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setCurrentPhaseDescription(?string $currentPhaseDescription): OldStatus
+    {
+        $this->currentPhaseDescription = $currentPhaseDescription;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getCurrentOldStatusCode(): ?string
+    {
+        return $this->currentOldStatusCode;
+    }
+
+    /**
+     * @param string|null $currentOldStatusCode
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setCurrentOldStatusCode(?string $currentOldStatusCode): OldStatus
+    {
+        $this->currentOldStatusCode = $currentOldStatusCode;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getCurrentOldStatusDescription(): ?string
+    {
+        return $this->currentOldStatusDescription;
+    }
+
+    /**
+     * @param string|null $currentOldStatusDescription
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setCurrentOldStatusDescription(?string $currentOldStatusDescription): OldStatus
+    {
+        $this->currentOldStatusDescription = $currentOldStatusDescription;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getCurrentOldStatusTimeStamp(): ?string
+    {
+        return $this->currentOldStatusTimeStamp;
+    }
+
+    /**
+     * @param string|null $currentOldStatusTimeStamp
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setCurrentOldStatusTimeStamp(?string $currentOldStatusTimeStamp): OldStatus
+    {
+        $this->currentOldStatusTimeStamp = $currentOldStatusTimeStamp;
+
+        return $this;
     }
 }

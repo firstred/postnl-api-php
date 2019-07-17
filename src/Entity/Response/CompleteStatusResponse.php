@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -30,57 +30,14 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity\Response;
 
 use Firstred\PostNL\Entity\AbstractEntity;
-use Firstred\PostNL\Entity\Shipment;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
-use Firstred\PostNL\Service\TimeframeService;
-use Sabre\Xml\Writer;
 
 /**
  * Class CompleteStatusResponse
- *
- * @method Shipment[]|null getShipments()
- *
- * @method CompleteStatusResponse setShipments(Shipment[] $shipments = null)
  */
 class CompleteStatusResponse extends AbstractEntity
 {
-    /**
-     * Default properties and namespaces for the SOAP API
-     *
-     * @var array $defaultProperties
-     */
-    public static $defaultProperties = [
-        'Barcode'        => [
-            'Shipments' => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming'     => [
-            'Shipments' => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling'      => [
-            'Shipments' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Shipments' => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
-            'Shipments' => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location'       => [
-            'Shipments' => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe'      => [
-            'Shipments' => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var array|null $Shipments */
-    protected $Shipments;
-    // @codingStandardsIgnoreEnd
+    /** @var array|null $shipments */
+    protected $shipments;
 
     /**
      * CompleteStatusResponse constructor.
@@ -88,6 +45,7 @@ class CompleteStatusResponse extends AbstractEntity
      * @param array|null $shipments
      *
      * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function __construct(?array $shipments = null)
     {
@@ -97,39 +55,26 @@ class CompleteStatusResponse extends AbstractEntity
     }
 
     /**
-     * Return a serializable array for the XMLWriter
+     * @return array|null
      *
-     * @param Writer $writer
-     *
-     * @return void
-     *
-     * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
-    public function xmlSerialize(Writer $writer): void
+    public function getShipments(): ?array
     {
-        $xml = [];
-        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
-            $writer->write($xml);
+        return $this->shipments;
+    }
 
-            return;
-        }
+    /**
+     * @param array|null $shipments
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setShipments(?array $shipments): CompleteStatusResponse
+    {
+        $this->shipments = $shipments;
 
-        foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if ('Shipments' === $propertyName) {
-                $shipments = [];
-                // @codingStandardsIgnoreLine
-                if (is_array($this->Shipments)) {
-                    // @codingStandardsIgnoreLine
-                    foreach ($this->Shipments as $shipment) {
-                        $shipments[] = ["{{$namespace}}Shipment" => $shipment];
-                    }
-                }
-                $xml["{{$namespace}}Shipments"] = $shipments;
-            } elseif (isset($this->{$propertyName})) {
-                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
-            }
-        }
-        // Auto extending this object with other properties is not supported with SOAP
-        $writer->write($xml);
+        return $this;
     }
 }

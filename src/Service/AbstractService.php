@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -29,16 +29,18 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Service;
 
-use Firstred\PostNL\Entity\AbstractEntity;
+use DateInterval;
+use DateTimeInterface;
 use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
-use Firstred\PostNL\Exception\InvalidMethodException;
-use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\PostNL;
-use GuzzleHttp\Psr7\Response;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
+use Psr\Cache\InvalidArgumentException;
+use Psr\Http\Message\ResponseInterface;
+use ReflectionClass;
+use ReflectionException;
 
 /**
  * Class AbstractService
@@ -46,11 +48,6 @@ use Psr\Cache\CacheItemPoolInterface;
 abstract class AbstractService
 {
     const COMMON_NAMESPACE = 'http://postnl.nl/cif/services/common/';
-    const XML_SCHEMA_NAMESPACE = 'http://www.w3.org/2001/XMLSchema-instance';
-    const ENVELOPE_NAMESPACE = 'http://schemas.xmlsoap.org/soap/envelope/';
-    const OLD_ENVELOPE_NAMESPACE = 'http://www.w3.org/2003/05/soap-envelope';
-    /** @var array $namespaces */
-    public static $namespaces = [];
     /**
      * TTL for the cache
      *
@@ -59,7 +56,7 @@ abstract class AbstractService
      * Any `DateTime` will be used as the exact date/time at which to expire the data (auto calculate TTL)
      * A `DateInterval` can be used as well to set the TTL
      *
-     * @var null|int|\DateTimeInterface|\DateInterval $ttl
+     * @var null|int|DateTimeInterface|DateInterval $ttl
      */
     public $ttl = null;
     /**
@@ -77,9 +74,9 @@ abstract class AbstractService
     /**
      * AbstractService constructor.
      *
-     * @param PostNL                                    $postnl PostNL instance
-     * @param null|CacheItemPoolInterface               $cache
-     * @param null|int|\DateTimeInterface|\DateInterval $ttl
+     * @param PostNL                                  $postnl PostNL instance
+     * @param null|CacheItemPoolInterface             $cache
+     * @param null|int|DateTimeInterface|DateInterval $ttl
      */
     public function __construct($postnl, $cache = null, $ttl = null)
     {
@@ -89,16 +86,17 @@ abstract class AbstractService
     }
 
     /**
-     * @param Response|\Exception $response
+     * @param ResponseInterface $response
      *
      * @return bool
      *
      * @throws CifDownException
      * @throws CifException
-     * @throws ResponseException
      * @throws ApiException
+     *
+     * @since 1.0.0
      */
-    public static function validateRESTResponse($response)
+    public static function validateResponse(ResponseInterface $response)
     {
         $body = json_decode(static::getResponseText($response), true);
 
@@ -127,154 +125,15 @@ abstract class AbstractService
     /**
      * Get the response
      *
-     * @param array|Response $response
+     * @param ResponseInterface $response
      *
      * @return string
      *
-     * @throws ResponseException
-     *
      * @since 1.0.0
      */
-    public static function getResponseText($response)
+    public static function getResponseText(ResponseInterface $response)
     {
-        // Guzzle returned promises
-        if (is_array($response)) {
-            if (isset($response['reason'])) {
-                $response = $response['reason'];
-            } elseif (isset($response['value'])) {
-                $response = $response['value'];
-            }
-        }
-
-        if ($response instanceof Response) {
-            return (string) $response->getBody();
-        }
-        if (is_a($response, 'GuzzleHttp\\Exception\\GuzzleException')
-            || is_a($response, 'Firstred\\PostNL\\Exception\\HttpClientException')
-        ) {
-            $exception = $response;
-            if (method_exists($response, 'getResponse')) {
-                $response = $response->getResponse();
-            }
-            if (!$response || $response instanceof $exception) {
-                throw $exception;
-            }
-
-            /** @var Response $response */
-
-            return (string) $response->getBody();
-        }
-
-        throw new ResponseException('Unknown response type');
-    }
-
-    /**
-     * @param \SimpleXMLElement $xml
-     *
-     * @return bool
-     *
-     * @throws CifDownException
-     * @throws CifException
-     *
-     * @since 1.0.0
-     */
-    public static function validateSOAPResponse(\SimpleXMLElement $xml): bool
-    {
-        if (count($xml->xpath('//env:Fault/env:Reason/env:Text')) >= 1) {
-            throw new CifDownException((string) $xml->xpath('//env:Fault/env:Reason/env:Text')[0]);
-        }
-
-        // Detect errors
-        $cifErrors = $xml->xpath('//common:CifException/common:Errors/common:ExceptionData');
-        if (count($cifErrors)) {
-            $exceptionData = [];
-            foreach ($cifErrors as $error) {
-                /** @var \SimpleXMLElement $error */
-                static::registerNamespaces($error);
-                $exceptionData[] = [
-                    'description' => (string) $error->xpath('//common:Description')[0],
-                    'message'     => (string) $error->xpath('//common:ErrorMsg')[0],
-                    'code'        => (int) $error->xpath('//common:ErrorNumber')[0],
-                ];
-            }
-            throw new CifException($exceptionData);
-        }
-
-        return true;
-    }
-
-    /**
-     * Register namespaces
-     *
-     * @param \SimpleXMLElement $element
-     */
-    public static function registerNamespaces(\SimpleXMLElement $element)
-    {
-        foreach (static::$namespaces as $namespace => $prefix) {
-            $element->registerXPathNamespace($prefix, $namespace);
-        }
-    }
-
-    /**
-     * @param string $name
-     * @param mixed  $args
-     *
-     * @return mixed
-     *
-     * @throws InvalidMethodException
-     */
-    public function __call($name, $args)
-    {
-        $mode = ($this->postnl->getMode() === PostNL::MODE_REST || $this->postnl->getMode() === PostNL::MODE_AUTO) ? 'Rest' : 'Soap';
-
-        if (method_exists($this, "{$name}{$mode}")) {
-            return call_user_func_array([$this, "{$name}{$mode}"], $args);
-        }
-        if (method_exists($this, $name)) {
-            return call_user_func_array([$this, $name], $args);
-        }
-
-        $class = get_called_class();
-        throw new InvalidMethodException("`$class::$name` is not a valid method");
-    }
-
-    /**
-     * Set the webservice on the object
-     *
-     * This lets the object know for which service it should serialize
-     *
-     * @param AbstractEntity $object
-     *
-     * @return bool
-     */
-    public function setService($object)
-    {
-        if (!$object instanceof AbstractEntity) {
-            return false;
-        }
-
-        try {
-            $reflection = new \ReflectionClass(get_called_class());
-        } catch (\ReflectionException $e) {
-            return false;
-        }
-        $service = substr($reflection->getShortName(), 0, strlen($reflection->getShortName()) - 7);
-        $object->setCurrentService($service);
-        $defaultProperties = $object::$defaultProperties;
-        foreach (array_keys($defaultProperties[$service]) as $propertyName) {
-            $item = $object->{'get'.$propertyName}();
-            if ($item instanceof AbstractEntity) {
-                $this->setService($item);
-            } elseif (is_array($item)) {
-                foreach ($item as $child) {
-                    if ($child instanceof AbstractEntity) {
-                        $this->setService($child);
-                    }
-                }
-            }
-        }
-
-        return true;
+        return (string) $response->getBody();
     }
 
     /**
@@ -294,17 +153,16 @@ abstract class AbstractService
         }
 
         try {
-            $reflection = new \ReflectionClass($this);
-        } catch (\ReflectionException $exception) {
+            $reflection = new ReflectionClass($this);
+        } catch (ReflectionException $exception) {
             return null;
         }
-        $uuid .= ($this->postnl->getMode() === PostNL::MODE_REST || $this->postnl->getMode() === PostNL::MODE_AUTO) ? 'rest' : 'soap';
         $uuid .= strtolower(substr($reflection->getShortName(), 0, strlen($reflection->getShortName()) - 7));
         $item = null;
         if ($this->cache instanceof CacheItemPoolInterface && !is_null($this->ttl)) {
             try {
                 $item = $this->cache->getItem($uuid);
-            } catch (\Psr\Cache\InvalidArgumentException $e) {
+            } catch (InvalidArgumentException $e) {
             }
         }
 
@@ -316,7 +174,7 @@ abstract class AbstractService
      */
     public function cacheItem(CacheItemInterface $item)
     {
-        if ($this->ttl instanceof \DateInterval || is_int($this->ttl)) {
+        if ($this->ttl instanceof DateInterval || is_int($this->ttl)) {
             // Reset expires at first -- it might have been set
             $item->expiresAt(null);
             // Then set the interval

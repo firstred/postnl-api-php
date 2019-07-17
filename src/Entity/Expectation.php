@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -29,62 +29,15 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
-use Firstred\PostNL\Service\TimeframeService;
-
 /**
  * Class Expectation
- *
- * @method string|null getETAFrom()
- * @method string|null getETATo()
- *
- * @method Expectation setETAFrom(string|null $dateTime = null)
- * @method Expectation setETATo(string|null $dateTime = null)
  */
 class Expectation extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
-    public static $defaultProperties = [
-        'Barcode'        => [
-            'ETAFrom' => BarcodeService::DOMAIN_NAMESPACE,
-            'ETATo'   => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming'     => [
-            'ETAFrom' => ConfirmingService::DOMAIN_NAMESPACE,
-            'ETATo'   => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling'      => [
-            'ETAFrom' => LabellingService::DOMAIN_NAMESPACE,
-            'ETATo'   => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'ETAFrom' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'ETATo'   => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
-            'ETAFrom' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'ETATo'   => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location'       => [
-            'ETAFrom' => LocationService::DOMAIN_NAMESPACE,
-            'ETATo'   => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe'      => [
-            'ETAFrom' => TimeframeService::DOMAIN_NAMESPACE,
-            'ETATo'   => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
     /** @var string|null $ETAFrom */
     protected $ETAFrom;
     /** @var string|null $ETATo */
     protected $ETATo;
-    // @codingStandardsIgnoreEnd
 
     /**
      * @param string $from
@@ -96,5 +49,53 @@ class Expectation extends AbstractEntity
 
         $this->setETAFrom($from);
         $this->setETATo($to);
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getETAFrom(): ?string
+    {
+        return $this->ETAFrom;
+    }
+
+    /**
+     * @param string|null $ETAFrom
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setETAFrom(?string $ETAFrom): Expectation
+    {
+        $this->ETAFrom = $ETAFrom;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getETATo(): ?string
+    {
+        return $this->ETATo;
+    }
+
+    /**
+     * @param string|null $ETATo
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setETATo(?string $ETATo): Expectation
+    {
+        $this->ETATo = $ETATo;
+
+        return $this;
     }
 }

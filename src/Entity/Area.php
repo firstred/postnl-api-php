@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -29,66 +29,21 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
-use Firstred\PostNL\Service\TimeframeService;
-
 /**
  * Class Area
- *
- * @method Coordinates|null getCoordinatesNorthWest()
- * @method Coordinates|null getCoordinatesSouthEast()
- *
- * @method Area setCoordinatesNorthWest(Coordinates|null $NW = null)
- * @method Area setCoordinatesSouthEast(Coordinates|null $SE = null)
  */
 class Area extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
-    public static $defaultProperties = [
-        'Barcode'        => [
-            'CoordinatesNorthWest' => BarcodeService::DOMAIN_NAMESPACE,
-            'CoordinatesSouthEast' => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming'     => [
-            'CoordinatesNorthWest' => ConfirmingService::DOMAIN_NAMESPACE,
-            'CoordinatesSouthEast' => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling'      => [
-            'CoordinatesNorthWest' => LabellingService::DOMAIN_NAMESPACE,
-            'CoordinatesSouthEast' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'CoordinatesNorthWest' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CoordinatesSouthEast' => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
-            'CoordinatesNorthWest' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'CoordinatesSouthEast' => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location'       => [
-            'CoordinatesNorthWest' => LocationService::DOMAIN_NAMESPACE,
-            'CoordinatesSouthEast' => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe'      => [
-            'CoordinatesNorthWest' => TimeframeService::DOMAIN_NAMESPACE,
-            'CoordinatesSouthEast' => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var Coordinates|null $CoordinatesNorthWest */
-    protected $CoordinatesNorthWest;
-    /** @var Coordinates|null $CoordinatesSouthEast */
-    protected $CoordinatesSouthEast;
-    // @codingStandardsIgnoreEnd
+    /** @var Coordinates|null $coordinatesNorthWest */
+    protected $coordinatesNorthWest;
+    /** @var Coordinates|null $coordinatesSouthEast */
+    protected $coordinatesSouthEast;
 
     /**
      * @param Coordinates|null $NW
      * @param Coordinates|null $SE
+     *
+     * @since 2.0.0 Strict typing
      */
     public function __construct($NW = null, $SE = null)
     {
@@ -96,5 +51,53 @@ class Area extends AbstractEntity
 
         $this->setCoordinatesNorthWest($NW);
         $this->setCoordinatesSouthEast($SE);
+    }
+
+    /**
+     * @return Coordinates|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getCoordinatesNorthWest(): ?Coordinates
+    {
+        return $this->coordinatesNorthWest;
+    }
+
+    /**
+     * @param Coordinates|null $coordinatesNorthWest
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setCoordinatesNorthWest(?Coordinates $coordinatesNorthWest): Area
+    {
+        $this->coordinatesNorthWest = $coordinatesNorthWest;
+
+        return $this;
+    }
+
+    /**
+     * @return Coordinates|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getCoordinatesSouthEast(): ?Coordinates
+    {
+        return $this->coordinatesSouthEast;
+    }
+
+    /**
+     * @param Coordinates|null $coordinatesSouthEast
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setCoordinatesSouthEast(?Coordinates $coordinatesSouthEast): Area
+    {
+        $this->coordinatesSouthEast = $coordinatesSouthEast;
+
+        return $this;
     }
 }

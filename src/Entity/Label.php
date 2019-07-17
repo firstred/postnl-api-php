@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -29,80 +29,24 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
-use Firstred\PostNL\Service\TimeframeService;
-
 /**
  * Class Label
- *
- * @method string|null getContent()
- * @method string|null getContentType()
- * @method string|null getLabelType()
- *
- * @method Label setContent(string|null $content = null)
- * @method Label setContentType(string|null $contentType = null)
- * @method Label setLabelType(string|null $labelType = null)
  */
 class Label extends AbstractEntity
 {
     const FORMAT_A4 = 1;
     const FORMAT_A6 = 2;
 
-    /** @var string[][] $defaultProperties */
-    public static $defaultProperties = [
-        'Barcode'        => [
-            'Content'     => BarcodeService::DOMAIN_NAMESPACE,
-            'ContentType' => BarcodeService::DOMAIN_NAMESPACE,
-            'Labeltype'   => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming'     => [
-            'Content'     => ConfirmingService::DOMAIN_NAMESPACE,
-            'ContentType' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Labeltype'   => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling'      => [
-            'Content'     => LabellingService::DOMAIN_NAMESPACE,
-            'ContentType' => LabellingService::DOMAIN_NAMESPACE,
-            'Labeltype'   => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Content'     => ShippingStatusService::DOMAIN_NAMESPACE,
-            'ContentType' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Labeltype'   => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
-            'Content'     => DeliveryDateService::DOMAIN_NAMESPACE,
-            'ContentType' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Labeltype'   => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location'       => [
-            'Content'     => LocationService::DOMAIN_NAMESPACE,
-            'ContentType' => LocationService::DOMAIN_NAMESPACE,
-            'Labeltype'   => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe'      => [
-            'Content'     => TimeframeService::DOMAIN_NAMESPACE,
-            'ContentType' => TimeframeService::DOMAIN_NAMESPACE,
-            'Labeltype'   => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
     /**
-     * @var string|null $Content
+     * @var string|null $content
      *
      * Base 64 encoded content
      */
-    protected $Content;
-    /** @var string|null $Contenttype */
-    protected $Contenttype;
-    /** @var string|null $Labeltype */
-    protected $Labeltype;
-    // @codingStandardsIgnoreEnd
+    protected $content;
+    /** @var string|null $contenttype */
+    protected $contenttype;
+    /** @var string|null $labeltype */
+    protected $labeltype;
 
     /**
      * @param string|null $content
@@ -116,5 +60,77 @@ class Label extends AbstractEntity
         $this->setContent($content);
         $this->setContenttype($contentType);
         $this->setLabeltype($labelType);
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getContent(): ?string
+    {
+        return $this->content;
+    }
+
+    /**
+     * @param string|null $content
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setContent(?string $content): Label
+    {
+        $this->content = $content;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getContenttype(): ?string
+    {
+        return $this->contenttype;
+    }
+
+    /**
+     * @param string|null $contenttype
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setContenttype(?string $contenttype): Label
+    {
+        $this->contenttype = $contenttype;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getLabeltype(): ?string
+    {
+        return $this->labeltype;
+    }
+
+    /**
+     * @param string|null $labeltype
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setLabeltype(?string $labeltype): Label
+    {
+        $this->labeltype = $labeltype;
+
+        return $this;
     }
 }

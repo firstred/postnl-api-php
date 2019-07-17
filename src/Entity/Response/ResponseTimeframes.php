@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -32,68 +32,23 @@ namespace Firstred\PostNL\Entity\Response;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\ReasonNoTimeframe;
 use Firstred\PostNL\Entity\Timeframe;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
-use Firstred\PostNL\Service\TimeframeService;
 
 /**
  * Class ResponseTimeframes
- *
- * @method ReasonNoTimeframe[]|null getReasonNoTimeframes()
- * @method Timeframe[]|null         getTimeframes()
- *
- * @method ResponseTimeframes setReasonNoTimeframes(ReasonNoTimeframe[]|null $noTimeframes = null)
- * @method ResponseTimeframes setTimeframes(Timeframe[]|null $timeframes = null)
  */
 class ResponseTimeframes extends AbstractEntity
 {
-    /** @var array $defaultProperties */
-    public static $defaultProperties = [
-        'Barcode'        => [
-            'ReasonNoTimeframes' => BarcodeService::DOMAIN_NAMESPACE,
-            'Timeframes'         => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming'     => [
-            'ReasonNoTimeframes' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Timeframes'         => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling'      => [
-            'ReasonNoTimeframes' => LabellingService::DOMAIN_NAMESPACE,
-            'Timeframes'         => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'ReasonNoTimeframes' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Timeframes'         => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
-            'ReasonNoTimeframes' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Timeframes'         => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location'       => [
-            'ReasonNoTimeframes' => LocationService::DOMAIN_NAMESPACE,
-            'Timeframes'         => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe'      => [
-            'ReasonNoTimeframes' => TimeframeService::DOMAIN_NAMESPACE,
-            'Timeframes'         => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var ReasonNoTimeframe[]|null $ReasonNoTimeframes */
-    protected $ReasonNoTimeframes;
-    /** @var Timeframe[]|null $Timeframes */
-    protected $Timeframes;
-    // @codingStandardsIgnoreEnd
+    /** @var ReasonNoTimeframe[]|null $reasonNoTimeframes */
+    protected $reasonNoTimeframes;
+    /** @var Timeframe[]|null $timeframes */
+    protected $timeframes;
 
     /**
      * @param ReasonNoTimeframe[]|null $noTimeframes
      * @param Timeframe[]|null         $timeframes
      *
      * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function __construct(array $noTimeframes = null, array $timeframes = null)
     {
@@ -109,27 +64,22 @@ class ResponseTimeframes extends AbstractEntity
      * @return array
      *
      * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function jsonSerialize(): array
     {
         $json = [];
-        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
-            return $json;
-        }
-
-        foreach (array_keys(static::$defaultProperties[$this->currentService]) as $propertyName) {
+        foreach (array_keys(get_class_vars(static::class)) as $propertyName) {
             if (isset($this->{$propertyName})) {
                 if ('ReasonNoTimeframes' === $propertyName) {
                     $noTimeframes = [];
-                    // @codingStandardsIgnoreLine
-                    foreach ($this->ReasonNoTimeframes as $noTimeframe) {
+                    foreach ($this->reasonNoTimeframes as $noTimeframe) {
                         $noTimeframes[] = $noTimeframe;
                     }
                     $json['ReasonNotimeframes'] = ['ReasonNoTimeframe' => $noTimeframes];
                 } elseif ('Timeframes' === $propertyName) {
                     $timeframes = [];
-                    // @codingStandardsIgnoreLine
-                    foreach ($this->Timeframes as $timeframe) {
+                    foreach ($this->timeframes as $timeframe) {
                         $timeframes[] = $timeframe;
                     }
                     $json[$propertyName] = ['Timeframe' => $timeframes];
@@ -140,5 +90,53 @@ class ResponseTimeframes extends AbstractEntity
         }
 
         return $json;
+    }
+
+    /**
+     * @return ReasonNoTimeframe[]|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getReasonNoTimeframes(): ?array
+    {
+        return $this->reasonNoTimeframes;
+    }
+
+    /**
+     * @param ReasonNoTimeframe[]|null $reasonNoTimeframes
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setReasonNoTimeframes(?array $reasonNoTimeframes): ResponseTimeframes
+    {
+        $this->reasonNoTimeframes = $reasonNoTimeframes;
+
+        return $this;
+    }
+
+    /**
+     * @return Timeframe[]|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getTimeframes(): ?array
+    {
+        return $this->timeframes;
+    }
+
+    /**
+     * @param Timeframe[]|null $timeframes
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setTimeframes(?array $timeframes): ResponseTimeframes
+    {
+        $this->timeframes = $timeframes;
+
+        return $this;
     }
 }

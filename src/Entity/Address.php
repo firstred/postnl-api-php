@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -29,201 +29,13 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
-use Firstred\PostNL\Service\TimeframeService;
-
 /**
  * Class Address
- *
- * @method string|null getAddressType()
- * @method string|null getFirstName()
- * @method string|null getName()
- * @method string|null getCompanyName()
- * @method string|null getStreet()
- * @method string|null getHouseNr()
- * @method string|null getHouseNrExt()
- * @method string|null getZipcode()
- * @method string|null getCity()
- * @method string|null getCountrycode()
- * @method string|null getArea()
- * @method string|null getBuildingname()
- * @method string|null getDepartment()
- * @method string|null getDoorcode()
- * @method string|null getFloor()
- * @method string|null getRegion()
- * @method string|null getRemark()
- * @method string|null getStreetHouseNrExt()
- *
- * @method Address setFirstName(string|null $firstName = null)
- * @method Address setName(string|null $name = null)
- * @method Address setCompanyName(string|null $companyName = null)
- * @method Address setStreet(string|null $street = null)
- * @method Address setHouseNr(string|null $houseNr = null)
- * @method Address setHouseNrExt(string|null $houseNrExt = null)
- * @method Address setCity(string|null $city = null)
- * @method Address setCountrycode(string|null $countrycode = null)
- * @method Address setArea(string|null $area = null)
- * @method Address setBuildingname(string|null $buildingName = null)
- * @method Address setDepartment(string|null $department = null)
- * @method Address setDoorcode(string|null $doorcode = null)
- * @method Address setFloor(string|null $floor = null)
- * @method Address setRegion(string|null $region = null)
- * @method Address setRemark(string|null $remark = null)
- * @method Address setStreetHouseNrExt(string|null $streetHouseNrExt = null)
  */
 class Address extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
-    public static $defaultProperties = [
-        'Barcode'        => [
-            'AddressType'      => BarcodeService::DOMAIN_NAMESPACE,
-            'Area'             => BarcodeService::DOMAIN_NAMESPACE,
-            'Buildingname'     => BarcodeService::DOMAIN_NAMESPACE,
-            'City'             => BarcodeService::DOMAIN_NAMESPACE,
-            'CompanyName'      => BarcodeService::DOMAIN_NAMESPACE,
-            'Countrycode'      => BarcodeService::DOMAIN_NAMESPACE,
-            'Department'       => BarcodeService::DOMAIN_NAMESPACE,
-            'Doorcode'         => BarcodeService::DOMAIN_NAMESPACE,
-            'FirstName'        => BarcodeService::DOMAIN_NAMESPACE,
-            'Floor'            => BarcodeService::DOMAIN_NAMESPACE,
-            'HouseNr'          => BarcodeService::DOMAIN_NAMESPACE,
-            'HouseNrExt'       => BarcodeService::DOMAIN_NAMESPACE,
-            'StreetHouseNrExt' => BarcodeService::DOMAIN_NAMESPACE,
-            'Name'             => BarcodeService::DOMAIN_NAMESPACE,
-            'Region'           => BarcodeService::DOMAIN_NAMESPACE,
-            'Remark'           => BarcodeService::DOMAIN_NAMESPACE,
-            'Street'           => BarcodeService::DOMAIN_NAMESPACE,
-            'Zipcode'          => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming'     => [
-            'AddressType'      => ConfirmingService::DOMAIN_NAMESPACE,
-            'Area'             => ConfirmingService::DOMAIN_NAMESPACE,
-            'Buildingname'     => ConfirmingService::DOMAIN_NAMESPACE,
-            'City'             => ConfirmingService::DOMAIN_NAMESPACE,
-            'CompanyName'      => ConfirmingService::DOMAIN_NAMESPACE,
-            'Countrycode'      => ConfirmingService::DOMAIN_NAMESPACE,
-            'Department'       => ConfirmingService::DOMAIN_NAMESPACE,
-            'Doorcode'         => ConfirmingService::DOMAIN_NAMESPACE,
-            'FirstName'        => ConfirmingService::DOMAIN_NAMESPACE,
-            'Floor'            => ConfirmingService::DOMAIN_NAMESPACE,
-            'HouseNr'          => ConfirmingService::DOMAIN_NAMESPACE,
-            'HouseNrExt'       => ConfirmingService::DOMAIN_NAMESPACE,
-            'StreetHouseNrExt' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Name'             => ConfirmingService::DOMAIN_NAMESPACE,
-            'Region'           => ConfirmingService::DOMAIN_NAMESPACE,
-            'Remark'           => ConfirmingService::DOMAIN_NAMESPACE,
-            'Street'           => ConfirmingService::DOMAIN_NAMESPACE,
-            'Zipcode'          => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling'      => [
-            'AddressType'      => LabellingService::DOMAIN_NAMESPACE,
-            'Area'             => LabellingService::DOMAIN_NAMESPACE,
-            'Buildingname'     => LabellingService::DOMAIN_NAMESPACE,
-            'City'             => LabellingService::DOMAIN_NAMESPACE,
-            'CompanyName'      => LabellingService::DOMAIN_NAMESPACE,
-            'Countrycode'      => LabellingService::DOMAIN_NAMESPACE,
-            'Department'       => LabellingService::DOMAIN_NAMESPACE,
-            'Doorcode'         => LabellingService::DOMAIN_NAMESPACE,
-            'FirstName'        => LabellingService::DOMAIN_NAMESPACE,
-            'Floor'            => LabellingService::DOMAIN_NAMESPACE,
-            'HouseNr'          => LabellingService::DOMAIN_NAMESPACE,
-            'HouseNrExt'       => LabellingService::DOMAIN_NAMESPACE,
-            'StreetHouseNrExt' => LabellingService::DOMAIN_NAMESPACE,
-            'Name'             => LabellingService::DOMAIN_NAMESPACE,
-            'Region'           => LabellingService::DOMAIN_NAMESPACE,
-            'Remark'           => LabellingService::DOMAIN_NAMESPACE,
-            'Street'           => LabellingService::DOMAIN_NAMESPACE,
-            'Zipcode'          => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'AddressType'      => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Area'             => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Buildingname'     => ShippingStatusService::DOMAIN_NAMESPACE,
-            'City'             => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CompanyName'      => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Countrycode'      => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Department'       => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Doorcode'         => ShippingStatusService::DOMAIN_NAMESPACE,
-            'FirstName'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Floor'            => ShippingStatusService::DOMAIN_NAMESPACE,
-            'HouseNr'          => ShippingStatusService::DOMAIN_NAMESPACE,
-            'HouseNrExt'       => ShippingStatusService::DOMAIN_NAMESPACE,
-            'StreetHouseNrExt' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Name'             => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Region'           => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Remark'           => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Street'           => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Zipcode'          => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
-            'AddressType'      => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Area'             => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Buildingname'     => DeliveryDateService::DOMAIN_NAMESPACE,
-            'City'             => DeliveryDateService::DOMAIN_NAMESPACE,
-            'CompanyName'      => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Countrycode'      => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Department'       => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Doorcode'         => DeliveryDateService::DOMAIN_NAMESPACE,
-            'FirstName'        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Floor'            => DeliveryDateService::DOMAIN_NAMESPACE,
-            'HouseNr'          => DeliveryDateService::DOMAIN_NAMESPACE,
-            'HouseNrExt'       => DeliveryDateService::DOMAIN_NAMESPACE,
-            'StreetHouseNrExt' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Name'             => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Region'           => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Remark'           => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Street'           => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Zipcode'          => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location'       => [
-            'AddressType'      => LocationService::DOMAIN_NAMESPACE,
-            'Area'             => LocationService::DOMAIN_NAMESPACE,
-            'Buildingname'     => LocationService::DOMAIN_NAMESPACE,
-            'City'             => LocationService::DOMAIN_NAMESPACE,
-            'CompanyName'      => LocationService::DOMAIN_NAMESPACE,
-            'Countrycode'      => LocationService::DOMAIN_NAMESPACE,
-            'Department'       => LocationService::DOMAIN_NAMESPACE,
-            'Doorcode'         => LocationService::DOMAIN_NAMESPACE,
-            'FirstName'        => LocationService::DOMAIN_NAMESPACE,
-            'Floor'            => LocationService::DOMAIN_NAMESPACE,
-            'HouseNr'          => LocationService::DOMAIN_NAMESPACE,
-            'HouseNrExt'       => LocationService::DOMAIN_NAMESPACE,
-            'StreetHouseNrExt' => LocationService::DOMAIN_NAMESPACE,
-            'Name'             => LocationService::DOMAIN_NAMESPACE,
-            'Region'           => LocationService::DOMAIN_NAMESPACE,
-            'Remark'           => LocationService::DOMAIN_NAMESPACE,
-            'Street'           => LocationService::DOMAIN_NAMESPACE,
-            'Zipcode'          => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe'      => [
-            'AddressType'      => TimeframeService::DOMAIN_NAMESPACE,
-            'Area'             => TimeframeService::DOMAIN_NAMESPACE,
-            'Buildingname'     => TimeframeService::DOMAIN_NAMESPACE,
-            'City'             => TimeframeService::DOMAIN_NAMESPACE,
-            'CompanyName'      => TimeframeService::DOMAIN_NAMESPACE,
-            'Countrycode'      => TimeframeService::DOMAIN_NAMESPACE,
-            'Department'       => TimeframeService::DOMAIN_NAMESPACE,
-            'Doorcode'         => TimeframeService::DOMAIN_NAMESPACE,
-            'FirstName'        => TimeframeService::DOMAIN_NAMESPACE,
-            'Floor'            => TimeframeService::DOMAIN_NAMESPACE,
-            'HouseNr'          => TimeframeService::DOMAIN_NAMESPACE,
-            'HouseNrExt'       => TimeframeService::DOMAIN_NAMESPACE,
-            'StreetHouseNrExt' => TimeframeService::DOMAIN_NAMESPACE,
-            'Name'             => TimeframeService::DOMAIN_NAMESPACE,
-            'Region'           => TimeframeService::DOMAIN_NAMESPACE,
-            'Remark'           => TimeframeService::DOMAIN_NAMESPACE,
-            'Street'           => TimeframeService::DOMAIN_NAMESPACE,
-            'Zipcode'          => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
     /**
-     * @var string|null $AddressType
+     * @var string|null $addressType
      *
      * PostNL internal applications validate the receiver address. In case the spelling of
      * addresses should be different according to our PostNL information, the address details will
@@ -254,44 +66,41 @@ class Address extends AbstractEntity
      * At least one other AddressType must be specified, other than AddressType 02
      * In most cases this will be AddressType 01, the receiver address.
      */
-    protected $AddressType;
-    /** @var string|null $Area */
-    protected $Area;
-    /** @var string|null $Buildingname */
-    protected $Buildingname;
-    /** @var string|null $City */
-    protected $City;
-    /** @var string|null $CompanyName */
-    protected $CompanyName;
-    /** @var string|null $Countrycode */
-    protected $Countrycode;
-    /** @var string|null $Department */
-    protected $Department;
-    /** @var string|null $Doorcode */
-    protected $Doorcode;
-    /** @var string|null $FirstName */
-    protected $FirstName;
-    /** @var string|null $Floor */
-    protected $Floor;
-    /** @var string|null $HouseNr */
-    protected $HouseNr;
+    protected $addressType;
+    /** @var string|null $area */
+    protected $area;
+    /** @var string|null $buildingname */
+    protected $buildingname;
+    /** @var string|null $city */
+    protected $city;
+    /** @var string|null $companyName */
+    protected $companyName;
+    /** @var string|null $countrycode */
+    protected $countrycode;
+    /** @var string|null $department */
+    protected $department;
+    /** @var string|null $doorcode */
+    protected $doorcode;
+    /** @var string|null $firstname */
+    protected $firstname;
+    /** @var string|null $floor */
+    protected $floor;
+    /** @var string|null $houseNr */
+    protected $houseNr;
+    /** @var string|null $houseNrExt */
+    protected $houseNrExt;
     /** @var string|null $HouseNrExt */
-    protected $HouseNrExt;
-    /** @var string|null $HouseNrExt */
-    protected $StreetHouseNrExt;
-    /** @var string|null $Name */
-    protected $Name;
-    /** @var string|null $Region */
-    protected $Region;
-    /** @var string|null $Remark */
-    protected $Remark;
-    /** @var string|null $Street */
-    protected $Street;
-    /** @var string|null $Zipcode */
-    protected $Zipcode;
-    /** @var array|null Array with optional properties */
-    protected $other;
-    // @codingStandardsIgnoreEnd
+    protected $streetHouseNrExt;
+    /** @var string|null $name */
+    protected $name;
+    /** @var string|null $region */
+    protected $region;
+    /** @var string|null $remark */
+    protected $remark;
+    /** @var string|null $street */
+    protected $street;
+    /** @var string|null $zipcode */
+    protected $zipcode;
 
     /**
      * @param string|null $addressType
@@ -318,7 +127,7 @@ class Address extends AbstractEntity
         parent::__construct();
 
         $this->setAddressType($addressType);
-        $this->setFirstName($firstName);
+        $this->setFirstname($firstName);
         $this->setName($name);
         $this->setCompanyName($companyName);
         $this->setStreet($street);
@@ -340,23 +149,43 @@ class Address extends AbstractEntity
     }
 
     /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getAddressType(): ?string
+    {
+        return $this->addressType;
+    }
+
+    /**
      * Set the AddressType
      *
-     * @param int|string|null $addressType
+     * @param string|null $addressType
      *
-     * @return self
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
      */
-    public function setAddressType($addressType = null)
+    public function setAddressType(?string $addressType = null): Address
     {
         if (is_null($addressType)) {
-            // @codingStandardsIgnoreLine
-            $this->AddressType = null;
+            $this->addressType = null;
         } else {
-            // @codingStandardsIgnoreLine
-            $this->AddressType = str_pad($addressType, 2, '0', STR_PAD_LEFT);
+            $this->addressType = str_pad($addressType, 2, '0', STR_PAD_LEFT);
         }
 
         return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getZipcode(): ?string
+    {
+        return $this->zipcode;
     }
 
     /**
@@ -364,19 +193,370 @@ class Address extends AbstractEntity
      *
      * @param string|null $zip
      *
-     * @return self
+     * @return static
      *
      * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
-    public function setZipcode($zip = null)
+    public function setZipcode(?string $zip = null): Address
     {
         if (is_null($zip)) {
-            // @codingStandardsIgnoreLine
-            $this->Zipcode = null;
+            $this->zipcode = null;
         } else {
-            // @codingStandardsIgnoreLine
-            $this->Zipcode = strtoupper(str_replace(' ', '', $zip));
+            $this->zipcode = strtoupper(str_replace(' ', '', $zip));
         }
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getArea(): ?string
+    {
+        return $this->area;
+    }
+
+    /**
+     * @param string|null $area
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setArea(?string $area): Address
+    {
+        $this->area = $area;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getBuildingname(): ?string
+    {
+        return $this->buildingname;
+    }
+
+    /**
+     * @param string|null $buildingname
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setBuildingname(?string $buildingname): Address
+    {
+        $this->buildingname = $buildingname;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCity(): ?string
+    {
+        return $this->city;
+    }
+
+    /**
+     * @param string|null $city
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setCity(?string $city): Address
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCompanyName(): ?string
+    {
+        return $this->companyName;
+    }
+
+    /**
+     * @param string|null $companyName
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setCompanyName(?string $companyName): Address
+    {
+        $this->companyName = $companyName;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCountrycode(): ?string
+    {
+        return $this->countrycode;
+    }
+
+    /**
+     * @param string|null $countrycode
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setCountrycode(?string $countrycode): Address
+    {
+        $this->countrycode = $countrycode;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getDepartment(): ?string
+    {
+        return $this->department;
+    }
+
+    /**
+     * @param string|null $department
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setDepartment(?string $department): Address
+    {
+        $this->department = $department;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getDoorcode(): ?string
+    {
+        return $this->doorcode;
+    }
+
+    /**
+     * @param string|null $doorcode
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setDoorcode(?string $doorcode): Address
+    {
+        $this->doorcode = $doorcode;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getFirstname(): ?string
+    {
+        return $this->firstname;
+    }
+
+    /**
+     * @param string|null $firstname
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setFirstname(?string $firstname): Address
+    {
+        $this->firstname = $firstname;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getFloor(): ?string
+    {
+        return $this->floor;
+    }
+
+    /**
+     * @param string|null $floor
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setFloor(?string $floor): Address
+    {
+        $this->floor = $floor;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getHouseNr(): ?string
+    {
+        return $this->houseNr;
+    }
+
+    /**
+     * @param string|null $houseNr
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setHouseNr(?string $houseNr): Address
+    {
+        $this->houseNr = $houseNr;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getHouseNrExt(): ?string
+    {
+        return $this->houseNrExt;
+    }
+
+    /**
+     * @param string|null $houseNrExt
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setHouseNrExt(?string $houseNrExt): Address
+    {
+        $this->houseNrExt = $houseNrExt;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getStreetHouseNrExt(): ?string
+    {
+        return $this->streetHouseNrExt;
+    }
+
+    /**
+     * @param string|null $streetHouseNrExt
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setStreetHouseNrExt(?string $streetHouseNrExt): Address
+    {
+        $this->streetHouseNrExt = $streetHouseNrExt;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string|null $name
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setName(?string $name): Address
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getRegion(): ?string
+    {
+        return $this->region;
+    }
+
+    /**
+     * @param string|null $region
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setRegion(?string $region): Address
+    {
+        $this->region = $region;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getRemark(): ?string
+    {
+        return $this->remark;
+    }
+
+    /**
+     * @param string|null $remark
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setRemark(?string $remark): Address
+    {
+        $this->remark = $remark;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getStreet(): ?string
+    {
+        return $this->street;
+    }
+
+    /**
+     * @param string|null $street
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setStreet(?string $street): Address
+    {
+        $this->street = $street;
 
         return $this;
     }

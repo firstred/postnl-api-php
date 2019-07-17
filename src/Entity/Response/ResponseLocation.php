@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -32,221 +32,44 @@ namespace Firstred\PostNL\Entity\Response;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Warning;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
-use Firstred\PostNL\Service\TimeframeService;
 
 /**
  * Class ResponseLocation
- *
- * @method Address|null    getAddress()
- * @method string[]|null   getDeliveryOptions()
- * @method string|null     getDistance()
- * @method string|null     getLatitude()
- * @method string|null     getLongitude()
- * @method string|null     getName()
- * @method string[][]|null getOpeningHours()
- * @method string|null     getPartnerName()
- * @method string|null     getPhoneNumber()
- * @method string|null     getRetailNetworkID()
- * @method string|null     getLocationCode()
- * @method string|null     getSaleschannel()
- * @method string|null     getTerminalType()
- * @method Warning[]|null  getWarnings()
- * @method string|null     getDownPartnerID()
- * @method string|null     getDownPartnerLocation()
- *
- * @method ResponseLocation setAddress(Address|null $address = null)
- * @method ResponseLocation setDeliveryOptions(string[]|null $options)
- * @method ResponseLocation setDistance(string|null $dist = null)
- * @method ResponseLocation setLatitude(string|null $lat = null)
- * @method ResponseLocation setLongitude(string|null $long = null)
- * @method ResponseLocation setName(string|null $name = null)
- * @method ResponseLocation setOpeningHours(string[]|null $hours = null)
- * @method ResponseLocation setPartnerName(string|null $partnerName = null)
- * @method ResponseLocation setPhoneNumber(string|null $number = null)
- * @method ResponseLocation setRetailNetworkID(string|null $id = null)
- * @method ResponseLocation setLocationCode(string|null $code = null)
- * @method ResponseLocation setSaleschannel(string|null $channel = null)
- * @method ResponseLocation setTerminalType(string|null $type = null)
- * @method ResponseLocation setWarnings(Warning[]|null $warnings = null)
- * @method ResponseLocation setDownPartnerID(string|null $downPartnerID = null)
- * @method ResponseLocation setDownPartnerLocation(string|null $downPartnerLocation = null)
  */
 class ResponseLocation extends AbstractEntity
 {
-    /**
-     * Default properties and namespaces for the SOAP API
-     *
-     * @var array $defaultProperties
-     */
-    public static $defaultProperties = [
-        'Barcode'        => [
-            'Address'             => BarcodeService::DOMAIN_NAMESPACE,
-            'DeliveryOptions'     => BarcodeService::DOMAIN_NAMESPACE,
-            'Distance'            => BarcodeService::DOMAIN_NAMESPACE,
-            'Latitude'            => BarcodeService::DOMAIN_NAMESPACE,
-            'Longitude'           => BarcodeService::DOMAIN_NAMESPACE,
-            'Name'                => BarcodeService::DOMAIN_NAMESPACE,
-            'OpeningHours'        => BarcodeService::DOMAIN_NAMESPACE,
-            'PartnerName'         => BarcodeService::DOMAIN_NAMESPACE,
-            'PhoneNumber'         => BarcodeService::DOMAIN_NAMESPACE,
-            'LocationCode'        => BarcodeService::DOMAIN_NAMESPACE,
-            'RetailNetworkID'     => BarcodeService::DOMAIN_NAMESPACE,
-            'Saleschannel'        => BarcodeService::DOMAIN_NAMESPACE,
-            'TerminalType'        => BarcodeService::DOMAIN_NAMESPACE,
-            'Warnings'            => BarcodeService::DOMAIN_NAMESPACE,
-            'DownPartnerID'       => BarcodeService::DOMAIN_NAMESPACE,
-            'DownPartnerLocation' => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming'     => [
-            'Address'             => ConfirmingService::DOMAIN_NAMESPACE,
-            'DeliveryOptions'     => ConfirmingService::DOMAIN_NAMESPACE,
-            'Distance'            => ConfirmingService::DOMAIN_NAMESPACE,
-            'Latitude'            => ConfirmingService::DOMAIN_NAMESPACE,
-            'Longitude'           => ConfirmingService::DOMAIN_NAMESPACE,
-            'Name'                => ConfirmingService::DOMAIN_NAMESPACE,
-            'OpeningHours'        => ConfirmingService::DOMAIN_NAMESPACE,
-            'PartnerName'         => ConfirmingService::DOMAIN_NAMESPACE,
-            'PhoneNumber'         => ConfirmingService::DOMAIN_NAMESPACE,
-            'LocationCode'        => ConfirmingService::DOMAIN_NAMESPACE,
-            'RetailNetworkID'     => ConfirmingService::DOMAIN_NAMESPACE,
-            'Saleschannel'        => ConfirmingService::DOMAIN_NAMESPACE,
-            'TerminalType'        => ConfirmingService::DOMAIN_NAMESPACE,
-            'Warnings'            => ConfirmingService::DOMAIN_NAMESPACE,
-            'DownPartnerID'       => ConfirmingService::DOMAIN_NAMESPACE,
-            'DownPartnerLocation' => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling'      => [
-            'Address'             => LabellingService::DOMAIN_NAMESPACE,
-            'DeliveryOptions'     => LabellingService::DOMAIN_NAMESPACE,
-            'Distance'            => LabellingService::DOMAIN_NAMESPACE,
-            'Latitude'            => LabellingService::DOMAIN_NAMESPACE,
-            'Longitude'           => LabellingService::DOMAIN_NAMESPACE,
-            'Name'                => LabellingService::DOMAIN_NAMESPACE,
-            'OpeningHours'        => LabellingService::DOMAIN_NAMESPACE,
-            'PartnerName'         => LabellingService::DOMAIN_NAMESPACE,
-            'PhoneNumber'         => LabellingService::DOMAIN_NAMESPACE,
-            'LocationCode'        => LabellingService::DOMAIN_NAMESPACE,
-            'RetailNetworkID'     => LabellingService::DOMAIN_NAMESPACE,
-            'Saleschannel'        => LabellingService::DOMAIN_NAMESPACE,
-            'TerminalType'        => LabellingService::DOMAIN_NAMESPACE,
-            'Warnings'            => LabellingService::DOMAIN_NAMESPACE,
-            'DownPartnerID'       => LabellingService::DOMAIN_NAMESPACE,
-            'DownPartnerLocation' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Address'             => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DeliveryOptions'     => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Distance'            => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Latitude'            => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Longitude'           => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Name'                => ShippingStatusService::DOMAIN_NAMESPACE,
-            'OpeningHours'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'PartnerName'         => ShippingStatusService::DOMAIN_NAMESPACE,
-            'PhoneNumber'         => ShippingStatusService::DOMAIN_NAMESPACE,
-            'LocationCode'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'RetailNetworkID'     => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Saleschannel'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'TerminalType'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Warnings'            => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DownPartnerID'       => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DownPartnerLocation' => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
-            'Address'             => DeliveryDateService::DOMAIN_NAMESPACE,
-            'DeliveryOptions'     => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Distance'            => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Latitude'            => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Longitude'           => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Name'                => DeliveryDateService::DOMAIN_NAMESPACE,
-            'OpeningHours'        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'PartnerName'         => DeliveryDateService::DOMAIN_NAMESPACE,
-            'PhoneNumber'         => DeliveryDateService::DOMAIN_NAMESPACE,
-            'LocationCode'        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'RetailNetworkID'     => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Saleschannel'        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'TerminalType'        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Warnings'            => DeliveryDateService::DOMAIN_NAMESPACE,
-            'DownPartnerID'       => DeliveryDateService::DOMAIN_NAMESPACE,
-            'DownPartnerLocation' => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location'       => [
-            'Address'             => LocationService::DOMAIN_NAMESPACE,
-            'DeliveryOptions'     => LocationService::DOMAIN_NAMESPACE,
-            'Distance'            => LocationService::DOMAIN_NAMESPACE,
-            'Latitude'            => LocationService::DOMAIN_NAMESPACE,
-            'Longitude'           => LocationService::DOMAIN_NAMESPACE,
-            'Name'                => LocationService::DOMAIN_NAMESPACE,
-            'OpeningHours'        => LocationService::DOMAIN_NAMESPACE,
-            'PartnerName'         => LocationService::DOMAIN_NAMESPACE,
-            'PhoneNumber'         => LocationService::DOMAIN_NAMESPACE,
-            'LocationCode'        => LocationService::DOMAIN_NAMESPACE,
-            'RetailNetworkID'     => LocationService::DOMAIN_NAMESPACE,
-            'Saleschannel'        => LocationService::DOMAIN_NAMESPACE,
-            'TerminalType'        => LocationService::DOMAIN_NAMESPACE,
-            'Warnings'            => LocationService::DOMAIN_NAMESPACE,
-            'DownPartnerID'       => LocationService::DOMAIN_NAMESPACE,
-            'DownPartnerLocation' => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe'      => [
-            'Address'             => TimeframeService::DOMAIN_NAMESPACE,
-            'DeliveryOptions'     => TimeframeService::DOMAIN_NAMESPACE,
-            'Distance'            => TimeframeService::DOMAIN_NAMESPACE,
-            'Latitude'            => TimeframeService::DOMAIN_NAMESPACE,
-            'Longitude'           => TimeframeService::DOMAIN_NAMESPACE,
-            'Name'                => TimeframeService::DOMAIN_NAMESPACE,
-            'OpeningHours'        => TimeframeService::DOMAIN_NAMESPACE,
-            'PartnerName'         => TimeframeService::DOMAIN_NAMESPACE,
-            'PhoneNumber'         => TimeframeService::DOMAIN_NAMESPACE,
-            'LocationCode'        => TimeframeService::DOMAIN_NAMESPACE,
-            'RetailNetworkID'     => TimeframeService::DOMAIN_NAMESPACE,
-            'Saleschannel'        => TimeframeService::DOMAIN_NAMESPACE,
-            'TerminalType'        => TimeframeService::DOMAIN_NAMESPACE,
-            'Warnings'            => TimeframeService::DOMAIN_NAMESPACE,
-            'DownPartnerID'       => TimeframeService::DOMAIN_NAMESPACE,
-            'DownPartnerLocation' => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-
-    // @codingStandardsIgnoreStart
-    /** @var Address|null $Address */
-    protected $Address;
-    /** @var string[]|null $DeliveryOptions */
-    protected $DeliveryOptions;
-    /** @var string|null $Distance */
-    protected $Distance;
-    /** @var string|null $Latitude */
-    protected $Latitude;
-    /** @var string|null $Longitude */
-    protected $Longitude;
-    /** @var string|null $Name */
-    protected $Name;
-    /** @var string[]|null $OpeningHours */
-    protected $OpeningHours;
-    /** @var string|null $PartnerName */
-    protected $PartnerName;
-    /** @var string|null $PhoneNumber */
-    protected $PhoneNumber;
-    /** @var string|null $LocationCode */
-    protected $LocationCode;
-    /** @var string|null $RetailNetworkID */
-    protected $RetailNetworkID;
-    /** @var string|null $Saleschannel */
-    protected $Saleschannel;
-    /** @var string|null $TerminalType */
-    protected $TerminalType;
-    /** @var Warning[]|null $Warnings */
-    protected $Warnings;
-    /** @var string|null $DownPartnerID */
-    protected $DownPartnerID;
-    /** @var string|null $DownPartnerLocation */
-    protected $DownPartnerLocation;
-    // @codingStandardsIgnoreEnd
+    /** @var Address|null $address */
+    protected $address;
+    /** @var string[]|null $deliveryOptions */
+    protected $deliveryOptions;
+    /** @var string|null $distance */
+    protected $distance;
+    /** @var string|null $latitude */
+    protected $latitude;
+    /** @var string|null $longitude */
+    protected $longitude;
+    /** @var string|null $name */
+    protected $name;
+    /** @var string[]|null $openingHours */
+    protected $openingHours;
+    /** @var string|null $partnerName */
+    protected $partnerName;
+    /** @var string|null $phoneNumber */
+    protected $phoneNumber;
+    /** @var string|null $locationCode */
+    protected $locationCode;
+    /** @var string|null $retailNetworkID */
+    protected $retailNetworkID;
+    /** @var string|null $saleschannel */
+    protected $saleschannel;
+    /** @var string|null $terminalType */
+    protected $terminalType;
+    /** @var Warning[]|null $warnings */
+    protected $warnings;
+    /** @var string|null $downPartnerID */
+    protected $downPartnerID;
+    /** @var string|null $downPartnerLocation */
+    protected $downPartnerLocation;
 
     /**
      * ResponseLocation constructor.
@@ -267,6 +90,9 @@ class ResponseLocation extends AbstractEntity
      * @param Warning[]|null $warnings
      * @param string|null    $downPartnerID
      * @param string|null    $downPartnerLocation
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function __construct(?Address $address = null, ?array $deliveryOptions = null, ?string $distance = null, ?string $latitude = null, ?string $longitude = null, ?string $name = null, ?array $openingHours = null, ?string $partnerName = null, ?string $phoneNumber = null, ?string $locationCode = null, ?string $retailNetworkId = null, ?string $saleschannel = null, ?string $terminalType = null, ?array $warnings = null, ?string $downPartnerID = null, ?string $downPartnerLocation = null)
     {
@@ -288,5 +114,389 @@ class ResponseLocation extends AbstractEntity
         $this->setWarnings($warnings);
         $this->setDownPartnerID($downPartnerID);
         $this->setDownPartnerLocation($downPartnerLocation);
+    }
+
+    /**
+     * @return Address|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getAddress(): ?Address
+    {
+        return $this->address;
+    }
+
+    /**
+     * @param Address|null $address
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setAddress(?Address $address): ResponseLocation
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    /**
+     * @return string[]|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getDeliveryOptions(): ?array
+    {
+        return $this->deliveryOptions;
+    }
+
+    /**
+     * @param string[]|null $deliveryOptions
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setDeliveryOptions(?array $deliveryOptions): ResponseLocation
+    {
+        $this->deliveryOptions = $deliveryOptions;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getDistance(): ?string
+    {
+        return $this->distance;
+    }
+
+    /**
+     * @param string|null $distance
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setDistance(?string $distance): ResponseLocation
+    {
+        $this->distance = $distance;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getLatitude(): ?string
+    {
+        return $this->latitude;
+    }
+
+    /**
+     * @param string|null $latitude
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setLatitude(?string $latitude): ResponseLocation
+    {
+        $this->latitude = $latitude;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getLongitude(): ?string
+    {
+        return $this->longitude;
+    }
+
+    /**
+     * @param string|null $longitude
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setLongitude(?string $longitude): ResponseLocation
+    {
+        $this->longitude = $longitude;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string|null $name
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setName(?string $name): ResponseLocation
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return string[]|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getOpeningHours(): ?array
+    {
+        return $this->openingHours;
+    }
+
+    /**
+     * @param string[]|null $openingHours
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setOpeningHours(?array $openingHours): ResponseLocation
+    {
+        $this->openingHours = $openingHours;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getPartnerName(): ?string
+    {
+        return $this->partnerName;
+    }
+
+    /**
+     * @param string|null $partnerName
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setPartnerName(?string $partnerName): ResponseLocation
+    {
+        $this->partnerName = $partnerName;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getPhoneNumber(): ?string
+    {
+        return $this->phoneNumber;
+    }
+
+    /**
+     * @param string|null $phoneNumber
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setPhoneNumber(?string $phoneNumber): ResponseLocation
+    {
+        $this->phoneNumber = $phoneNumber;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getLocationCode(): ?string
+    {
+        return $this->locationCode;
+    }
+
+    /**
+     * @param string|null $locationCode
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setLocationCode(?string $locationCode): ResponseLocation
+    {
+        $this->locationCode = $locationCode;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getRetailNetworkID(): ?string
+    {
+        return $this->retailNetworkID;
+    }
+
+    /**
+     * @param string|null $retailNetworkID
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setRetailNetworkID(?string $retailNetworkID): ResponseLocation
+    {
+        $this->retailNetworkID = $retailNetworkID;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getSaleschannel(): ?string
+    {
+        return $this->saleschannel;
+    }
+
+    /**
+     * @param string|null $saleschannel
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setSaleschannel(?string $saleschannel): ResponseLocation
+    {
+        $this->saleschannel = $saleschannel;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getTerminalType(): ?string
+    {
+        return $this->terminalType;
+    }
+
+    /**
+     * @param string|null $terminalType
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setTerminalType(?string $terminalType): ResponseLocation
+    {
+        $this->terminalType = $terminalType;
+
+        return $this;
+    }
+
+    /**
+     * @return Warning[]|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getWarnings(): ?array
+    {
+        return $this->warnings;
+    }
+
+    /**
+     * @param Warning[]|null $warnings
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setWarnings(?array $warnings): ResponseLocation
+    {
+        $this->warnings = $warnings;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getDownPartnerID(): ?string
+    {
+        return $this->downPartnerID;
+    }
+
+    /**
+     * @param string|null $downPartnerID
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setDownPartnerID(?string $downPartnerID): ResponseLocation
+    {
+        $this->downPartnerID = $downPartnerID;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getDownPartnerLocation(): ?string
+    {
+        return $this->downPartnerLocation;
+    }
+
+    /**
+     * @param string|null $downPartnerLocation
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setDownPartnerLocation(?string $downPartnerLocation): ResponseLocation
+    {
+        $this->downPartnerLocation = $downPartnerLocation;
+
+        return $this;
     }
 }

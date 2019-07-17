@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -40,213 +40,49 @@ use Firstred\PostNL\Entity\Group;
 use Firstred\PostNL\Entity\ProductOption;
 use Firstred\PostNL\Entity\Status;
 use Firstred\PostNL\Entity\Warning;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
-use Firstred\PostNL\Service\TimeframeService;
-use Sabre\Xml\Writer;
 
 /**
  * Class CompleteStatusResponseShipment
- *
- * @method Address[]|null                       getAddresses()
- * @method Amount[]|null                        getAmounts()
- * @method Barcode|null                         getBarcode()
- * @method Customer|null                        getCustomer()
- * @method string|null                          getDeliveryDate()
- * @method Dimension|null                       getDimension()
- * @method CompleteStatusResponseEvent[]|null   getEvents()
- * @method Expectation|null                     getExpectation()
- * @method Group[]|null                         getGroups()
- * @method CompleteStatusResponseOldStatus|null getOldStatuses()
- * @method string|null                          getProductCode()
- * @method ProductOption[]|null                 getProductOptions()
- * @method string|null                          getReference()
- * @method Status|null                          getStatus()
- * @method Warning[]|null                       getWarnings()
- *
- * @method CompleteStatusResponseShipment setAddresses(Address[]|null $addresses = null)
- * @method CompleteStatusResponseShipment setAmounts(Amount[]|null $amounts = null)
- * @method CompleteStatusResponseShipment setBarcode(string|null $barcode = null)
- * @method CompleteStatusResponseShipment setCustomer(Customer|null $customer = null)
- * @method CompleteStatusResponseShipment setDeliveryDate(string|null $date = null)
- * @method CompleteStatusResponseShipment setDimension(Dimension|null $dimension = null)
- * @method CompleteStatusResponseShipment setEvents(CompleteStatusResponseEvent[]|null $events = null)
- * @method CompleteStatusResponseShipment setExpectation(Expectation|null $expectation = null)
- * @method CompleteStatusResponseShipment setGroups(Group[]|null $groups = null)
- * @method CompleteStatusResponseShipment setOldStatuses(CompleteStatusResponseOldStatus[]|null $oldStatuses = null)
- * @method CompleteStatusResponseShipment setProductCode(string|null $productCode = null)
- * @method CompleteStatusResponseShipment setProductOptions(ProductOption[]|null $options = null)
- * @method CompleteStatusResponseShipment setReference(string|null $reference = null)
- * @method CompleteStatusResponseShipment setStatus(Status|null $status = null)
- * @method CompleteStatusResponseShipment setWarnings(Warning[]|null $warnings = null)
  */
 class CompleteStatusResponseShipment extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
-    public static $defaultProperties = [
-        'Barcode'        => [
-            'Addresses'      => BarcodeService::DOMAIN_NAMESPACE,
-            'Amounts'        => BarcodeService::DOMAIN_NAMESPACE,
-            'Barcode'        => BarcodeService::DOMAIN_NAMESPACE,
-            'Customer'       => BarcodeService::DOMAIN_NAMESPACE,
-            'DeliveryDate'   => BarcodeService::DOMAIN_NAMESPACE,
-            'Dimension'      => BarcodeService::DOMAIN_NAMESPACE,
-            'Events'         => BarcodeService::DOMAIN_NAMESPACE,
-            'Expectation'    => BarcodeService::DOMAIN_NAMESPACE,
-            'Groups'         => BarcodeService::DOMAIN_NAMESPACE,
-            'OldStatuses'    => BarcodeService::DOMAIN_NAMESPACE,
-            'ProductCode'    => BarcodeService::DOMAIN_NAMESPACE,
-            'ProductOptions' => BarcodeService::DOMAIN_NAMESPACE,
-            'Reference'      => BarcodeService::DOMAIN_NAMESPACE,
-            'Status'         => BarcodeService::DOMAIN_NAMESPACE,
-            'Warnings'       => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming'     => [
-            'Addresses'      => ConfirmingService::DOMAIN_NAMESPACE,
-            'Amounts'        => ConfirmingService::DOMAIN_NAMESPACE,
-            'Barcode'        => ConfirmingService::DOMAIN_NAMESPACE,
-            'Customer'       => ConfirmingService::DOMAIN_NAMESPACE,
-            'DeliveryDate'   => ConfirmingService::DOMAIN_NAMESPACE,
-            'Dimension'      => ConfirmingService::DOMAIN_NAMESPACE,
-            'Events'         => ConfirmingService::DOMAIN_NAMESPACE,
-            'Expectation'    => ConfirmingService::DOMAIN_NAMESPACE,
-            'Groups'         => ConfirmingService::DOMAIN_NAMESPACE,
-            'OldStatuses'    => ConfirmingService::DOMAIN_NAMESPACE,
-            'ProductCode'    => ConfirmingService::DOMAIN_NAMESPACE,
-            'ProductOptions' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Reference'      => ConfirmingService::DOMAIN_NAMESPACE,
-            'Status'         => ConfirmingService::DOMAIN_NAMESPACE,
-            'Warnings'       => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling'      => [
-            'Addresses'      => LabellingService::DOMAIN_NAMESPACE,
-            'Amounts'        => LabellingService::DOMAIN_NAMESPACE,
-            'Barcode'        => LabellingService::DOMAIN_NAMESPACE,
-            'Customer'       => LabellingService::DOMAIN_NAMESPACE,
-            'DeliveryDate'   => LabellingService::DOMAIN_NAMESPACE,
-            'Dimension'      => LabellingService::DOMAIN_NAMESPACE,
-            'Events'         => LabellingService::DOMAIN_NAMESPACE,
-            'Expectation'    => LabellingService::DOMAIN_NAMESPACE,
-            'Groups'         => LabellingService::DOMAIN_NAMESPACE,
-            'OldStatuses'    => LabellingService::DOMAIN_NAMESPACE,
-            'ProductCode'    => LabellingService::DOMAIN_NAMESPACE,
-            'ProductOptions' => LabellingService::DOMAIN_NAMESPACE,
-            'Reference'      => LabellingService::DOMAIN_NAMESPACE,
-            'Status'         => LabellingService::DOMAIN_NAMESPACE,
-            'Warnings'       => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Addresses'      => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Amounts'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Barcode'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Customer'       => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DeliveryDate'   => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Dimension'      => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Events'         => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Expectation'    => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Groups'         => ShippingStatusService::DOMAIN_NAMESPACE,
-            'OldStatuses'    => ShippingStatusService::DOMAIN_NAMESPACE,
-            'ProductCode'    => ShippingStatusService::DOMAIN_NAMESPACE,
-            'ProductOptions' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Reference'      => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Status'         => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Warnings'       => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
-            'Addresses'      => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Amounts'        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Barcode'        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Customer'       => DeliveryDateService::DOMAIN_NAMESPACE,
-            'DeliveryDate'   => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Dimension'      => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Events'         => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Expectation'    => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Groups'         => DeliveryDateService::DOMAIN_NAMESPACE,
-            'OldStatuses'    => DeliveryDateService::DOMAIN_NAMESPACE,
-            'ProductCode'    => DeliveryDateService::DOMAIN_NAMESPACE,
-            'ProductOptions' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Reference'      => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Status'         => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Warnings'       => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location'       => [
-            'Addresses'      => LocationService::DOMAIN_NAMESPACE,
-            'Amounts'        => LocationService::DOMAIN_NAMESPACE,
-            'Barcode'        => LocationService::DOMAIN_NAMESPACE,
-            'Customer'       => LocationService::DOMAIN_NAMESPACE,
-            'DeliveryDate'   => LocationService::DOMAIN_NAMESPACE,
-            'Dimension'      => LocationService::DOMAIN_NAMESPACE,
-            'Events'         => LocationService::DOMAIN_NAMESPACE,
-            'Expectation'    => LocationService::DOMAIN_NAMESPACE,
-            'Groups'         => LocationService::DOMAIN_NAMESPACE,
-            'OldStatuses'    => LocationService::DOMAIN_NAMESPACE,
-            'ProductCode'    => LocationService::DOMAIN_NAMESPACE,
-            'ProductOptions' => LocationService::DOMAIN_NAMESPACE,
-            'Reference'      => LocationService::DOMAIN_NAMESPACE,
-            'Status'         => LocationService::DOMAIN_NAMESPACE,
-            'Warnings'       => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe'      => [
-            'Addresses'      => TimeframeService::DOMAIN_NAMESPACE,
-            'Amounts'        => TimeframeService::DOMAIN_NAMESPACE,
-            'Barcode'        => TimeframeService::DOMAIN_NAMESPACE,
-            'Customer'       => TimeframeService::DOMAIN_NAMESPACE,
-            'DeliveryDate'   => TimeframeService::DOMAIN_NAMESPACE,
-            'Dimension'      => TimeframeService::DOMAIN_NAMESPACE,
-            'Events'         => TimeframeService::DOMAIN_NAMESPACE,
-            'Expectation'    => TimeframeService::DOMAIN_NAMESPACE,
-            'Groups'         => TimeframeService::DOMAIN_NAMESPACE,
-            'OldStatuses'    => TimeframeService::DOMAIN_NAMESPACE,
-            'ProductCode'    => TimeframeService::DOMAIN_NAMESPACE,
-            'ProductOptions' => TimeframeService::DOMAIN_NAMESPACE,
-            'Reference'      => TimeframeService::DOMAIN_NAMESPACE,
-            'Status'         => TimeframeService::DOMAIN_NAMESPACE,
-            'Warnings'       => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var Address[]|null $Addresses */
-    protected $Addresses;
-    /** @var Amount[]|null $Amounts */
-    protected $Amounts;
-    /** @var Barcode|null $Barcode */
-    protected $Barcode;
+    /** @var Address[]|null $addresses */
+    protected $addresses;
+    /** @var Amount[]|null $amounts */
+    protected $amounts;
+    /** @var Barcode|null $barcode */
+    protected $barcode;
     /** @var Customer|null $customer */
-    protected $Customer;
-    /** @var string|null $DeliveryDate */
-    protected $DeliveryDate;
+    protected $customer;
+    /** @var string|null $deliveryDate */
+    protected $deliveryDate;
     /** @var Dimension|null Dimension */
-    protected $Dimension;
-    /** @var CompleteStatusResponseEvent[]|null $Events */
-    protected $Events;
-    /** @var Expectation|null $Expectation */
-    protected $Expectation;
-    /** @var Group[]|null $Groups */
-    protected $Groups;
-    /** @var CompleteStatusResponseOldStatus[]|null $OldStatuses */
-    protected $OldStatuses;
-    /** @var string|null $ProductCode */
-    protected $ProductCode;
-    /** @var ProductOption[]|null $ProductOptions */
-    protected $ProductOptions;
-    /** @var string|null $Reference */
-    protected $Reference;
-    /** @var Status|null $Status */
-    protected $Status;
-    /** @var Warning[]|null $Warnings */
-    protected $Warnings;
-    // @codingStandardsIgnoreEnd
+    protected $dimension;
+    /** @var CompleteStatusResponseEvent[]|null $events */
+    protected $events;
+    /** @var Expectation|null $expectation */
+    protected $expectation;
+    /** @var Group[]|null $groups */
+    protected $groups;
+    /** @var CompleteStatusResponseOldStatus[]|null $oldStatuses */
+    protected $oldStatuses;
+    /** @var string|null $productCode */
+    protected $productCode;
+    /** @var ProductOption[]|null $productOptions */
+    protected $productOptions;
+    /** @var string|null $reference */
+    protected $reference;
+    /** @var Status|null $status */
+    protected $status;
+    /** @var Warning[]|null $warnings */
+    protected $warnings;
 
     /**
      * CompleteStatusResponseShipment constructor.
      *
      * @param Address[]|null                    $addresses
      * @param Amount[]|null                     $amounts
-     * @param string|null                       $barcode
+     * @param Barcode|null                      $barcode
      * @param Customer|null                     $customer
      * @param string|null                       $deliveryDate
      * @param Dimension|null                    $dimension
@@ -259,8 +95,11 @@ class CompleteStatusResponseShipment extends AbstractEntity
      * @param string|null                       $reference
      * @param Status|null                       $status
      * @param Warning[]|null                    $warnings
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
-    public function __construct(array $addresses = null, array $amounts = null, ?string $barcode = null, ?Customer $customer = null, ?string $deliveryDate = null, ?Dimension $dimension = null, array $events = null, ?Expectation $expectation = null, array $groups = null, array $oldStatuses = null, ?string $productCode = null, array $productOptions = null, ?string $reference = null, ?Status $status = null, array $warnings = null)
+    public function __construct(array $addresses = null, array $amounts = null, ?Barcode $barcode = null, ?Customer $customer = null, ?string $deliveryDate = null, ?Dimension $dimension = null, array $events = null, ?Expectation $expectation = null, array $groups = null, array $oldStatuses = null, ?string $productCode = null, array $productOptions = null, ?string $reference = null, ?Status $status = null, array $warnings = null)
     {
         parent::__construct();
 
@@ -282,84 +121,362 @@ class CompleteStatusResponseShipment extends AbstractEntity
     }
 
     /**
-     * Return a serializable array for the XMLWriter
+     * @return Address[]|null
      *
-     * @param Writer $writer
-     *
-     * @return void
-     *
-     * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
-    public function xmlSerialize(Writer $writer): void
+    public function getAddresses(): ?array
     {
-        $xml = [];
-        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
-            $writer->write($xml);
+        return $this->addresses;
+    }
 
-            return;
-        }
+    /**
+     * @param Address[]|null $addresses
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setAddresses(?array $addresses): CompleteStatusResponseShipment
+    {
+        $this->addresses = $addresses;
 
-        foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if ('Addresses' === $propertyName) {
-                $addresses = [];
-                // @codingStandardsIgnoreLine
-                foreach ($this->Addresses as $address) {
-                    $addresses[] = ["{{$namespace}}Address" => $address];
-                }
-                $xml["{{$namespace}}Addresses"] = $addresses;
-                // @codingStandardsIgnoreLine
-            } elseif ($propertyName === 'Amounts') {
-                $amounts = [];
-                // @codingStandardsIgnoreLine
-                foreach ($this->Amounts as $amount) {
-                    $amounts[] = ["{{$namespace}}Amount" => $amount];
-                }
-                $xml["{{$namespace}}Amounts"] = $amounts;
-                // @codingStandardsIgnoreLine
-            } elseif ($propertyName === 'Groups') {
-                $groups = [];
-                // @codingStandardsIgnoreLine
-                foreach ($this->Groups as $group) {
-                    $groups[] = ["{{$namespace}}Group" => $group];
-                }
-                $xml["{{$namespace}}Groups"] = $groups;
-                // @codingStandardsIgnoreLine
-            } elseif ($propertyName === 'Events') {
-                $events = [];
-                // @codingStandardsIgnoreLine
-                foreach ($this->Events as $event) {
-                    $events[] = ["{{$namespace}}CompleteStatusResponseEvent" => $event];
-                }
-                $xml["{{$namespace}}Events"] = $events;
-                // @codingStandardsIgnoreLine
-            } elseif ($propertyName === 'OldStatuses') {
-                $oldStatuses = [];
-                // @codingStandardsIgnoreLine
-                foreach ($this->OldStatuses as $oldStatus) {
-                    $oldStatuses[] = ["{{$namespace}}CompleteStatusResponseOldStatus" => $oldStatus];
-                }
-                $xml["{{$namespace}}OldStatuses"] = $oldStatuses;
-                // @codingStandardsIgnoreLine
-            } elseif ($propertyName === 'ProductOption') {
-                $productOptions = [];
-                // @codingStandardsIgnoreLine
-                foreach ($this->ProductOptions as $productOption) {
-                    $productOptions[] = ["{{$namespace}}ProductOptions" => $productOption];
-                }
-                $xml["{{$namespace}}ProductOptions"] = $productOptions;
-                // @codingStandardsIgnoreLine
-            } elseif ($propertyName === 'Warnings') {
-                $warnings = [];
-                // @codingStandardsIgnoreLine
-                foreach ($this->Warnings as $warning) {
-                    $warnings[] = ["{{$namespace}}Warning" => $warning];
-                }
-                $xml["{{$namespace}}Warnings"] = $warnings;
-            } elseif (isset($this->{$propertyName})) {
-                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
-            }
-        }
-        // Auto extending this object with other properties is not supported with SOAP
-        $writer->write($xml);
+        return $this;
+    }
+
+    /**
+     * @return Amount[]|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getAmounts(): ?array
+    {
+        return $this->amounts;
+    }
+
+    /**
+     * @param Amount[]|null $amounts
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setAmounts(?array $amounts): CompleteStatusResponseShipment
+    {
+        $this->amounts = $amounts;
+
+        return $this;
+    }
+
+    /**
+     * @return Barcode|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getBarcode(): ?Barcode
+    {
+        return $this->barcode;
+    }
+
+    /**
+     * @param Barcode|null $barcode
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setBarcode(?Barcode $barcode): CompleteStatusResponseShipment
+    {
+        $this->barcode = $barcode;
+
+        return $this;
+    }
+
+    /**
+     * @return Customer|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getCustomer(): ?Customer
+    {
+        return $this->customer;
+    }
+
+    /**
+     * @param Customer|null $customer
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setCustomer(?Customer $customer): CompleteStatusResponseShipment
+    {
+        $this->customer = $customer;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getDeliveryDate(): ?string
+    {
+        return $this->deliveryDate;
+    }
+
+    /**
+     * @param string|null $deliveryDate
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setDeliveryDate(?string $deliveryDate): CompleteStatusResponseShipment
+    {
+        $this->deliveryDate = $deliveryDate;
+
+        return $this;
+    }
+
+    /**
+     * @return Dimension|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getDimension(): ?Dimension
+    {
+        return $this->dimension;
+    }
+
+    /**
+     * @param Dimension|null $dimension
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setDimension(?Dimension $dimension): CompleteStatusResponseShipment
+    {
+        $this->dimension = $dimension;
+
+        return $this;
+    }
+
+    /**
+     * @return CompleteStatusResponseEvent[]|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getEvents(): ?array
+    {
+        return $this->events;
+    }
+
+    /**
+     * @param CompleteStatusResponseEvent[]|null $events
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setEvents(?array $events): CompleteStatusResponseShipment
+    {
+        $this->events = $events;
+
+        return $this;
+    }
+
+    /**
+     * @return Expectation|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getExpectation(): ?Expectation
+    {
+        return $this->expectation;
+    }
+
+    /**
+     * @param Expectation|null $expectation
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setExpectation(?Expectation $expectation): CompleteStatusResponseShipment
+    {
+        $this->expectation = $expectation;
+
+        return $this;
+    }
+
+    /**
+     * @return Group[]|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getGroups(): ?array
+    {
+        return $this->groups;
+    }
+
+    /**
+     * @param Group[]|null $groups
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setGroups(?array $groups): CompleteStatusResponseShipment
+    {
+        $this->groups = $groups;
+
+        return $this;
+    }
+
+    /**
+     * @return CompleteStatusResponseOldStatus[]|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getOldStatuses(): ?array
+    {
+        return $this->oldStatuses;
+    }
+
+    /**
+     * @param CompleteStatusResponseOldStatus[]|null $oldStatuses
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setOldStatuses(?array $oldStatuses): CompleteStatusResponseShipment
+    {
+        $this->oldStatuses = $oldStatuses;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getProductCode(): ?string
+    {
+        return $this->productCode;
+    }
+
+    /**
+     * @param string|null $productCode
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setProductCode(?string $productCode): CompleteStatusResponseShipment
+    {
+        $this->productCode = $productCode;
+
+        return $this;
+    }
+
+    /**
+     * @return ProductOption[]|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getProductOptions(): ?array
+    {
+        return $this->productOptions;
+    }
+
+    /**
+     * @param ProductOption[]|null $productOptions
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setProductOptions(?array $productOptions): CompleteStatusResponseShipment
+    {
+        $this->productOptions = $productOptions;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getReference(): ?string
+    {
+        return $this->reference;
+    }
+
+    /**
+     * @param string|null $reference
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setReference(?string $reference): CompleteStatusResponseShipment
+    {
+        $this->reference = $reference;
+
+        return $this;
+    }
+
+    /**
+     * @return Status|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getStatus(): ?Status
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param Status|null $status
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setStatus(?Status $status): CompleteStatusResponseShipment
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * @return Warning[]|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getWarnings(): ?array
+    {
+        return $this->warnings;
+    }
+
+    /**
+     * @param Warning[]|null $warnings
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setWarnings(?array $warnings): CompleteStatusResponseShipment
+    {
+        $this->warnings = $warnings;
+
+        return $this;
     }
 }

@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -29,78 +29,25 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
-use Firstred\PostNL\Service\TimeframeService;
-
 /**
  * Class Barcode
- *
- * @method string|null getType()
- * @method string|null getRange()
- * @method string|null getSerie()
- *
- * @method Barcode setType(string|null $type = null)
- * @method Barcode setRange(string|null $range = null)
- * @method Barcode setSerie(string|null $serie = null)
  */
 class Barcode extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
-    public static $defaultProperties = [
-        'Barcode'        => [
-            'Type'  => BarcodeService::DOMAIN_NAMESPACE,
-            'Range' => BarcodeService::DOMAIN_NAMESPACE,
-            'Serie' => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming'     => [
-            'Type'  => ConfirmingService::DOMAIN_NAMESPACE,
-            'Range' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Serie' => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling'      => [
-            'Type'  => LabellingService::DOMAIN_NAMESPACE,
-            'Range' => LabellingService::DOMAIN_NAMESPACE,
-            'Serie' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Type'  => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Range' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Serie' => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
-            'Type'  => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Range' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Serie' => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location'       => [
-            'Type'  => LocationService::DOMAIN_NAMESPACE,
-            'Range' => LocationService::DOMAIN_NAMESPACE,
-            'Serie' => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe'      => [
-            'Type'  => TimeframeService::DOMAIN_NAMESPACE,
-            'Range' => TimeframeService::DOMAIN_NAMESPACE,
-            'Serie' => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null $Type */
-    protected $Type;
-    /** @var string|null $Range */
-    protected $Range;
-    /** @var string|null $Serie */
-    protected $Serie;
-    // @codingStandardsIgnoreEnd
+    /** @var string|null $type */
+    protected $type;
+    /** @var string|null $range */
+    protected $range;
+    /** @var string|null $serie */
+    protected $serie;
 
     /**
      * @param string|null $type
      * @param string|null $range
      * @param string|null $serie
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function __construct($type = null, $range = null, $serie = '000000000-999999999')
     {
@@ -109,5 +56,77 @@ class Barcode extends AbstractEntity
         $this->setType($type);
         $this->setRange($range);
         $this->setSerie($serie);
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string|null $type
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setType(?string $type): Barcode
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getRange(): ?string
+    {
+        return $this->range;
+    }
+
+    /**
+     * @param string|null $range
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setRange(?string $range): Barcode
+    {
+        $this->range = $range;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getSerie(): ?string
+    {
+        return $this->serie;
+    }
+
+    /**
+     * @param string|null $serie
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setSerie(?string $serie): Barcode
+    {
+        $this->serie = $serie;
+
+        return $this;
     }
 }

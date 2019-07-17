@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -29,95 +29,21 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
-use Firstred\PostNL\Service\TimeframeService;
-
 /**
  * Class Status
- *
- * @method string|null getCurrentPhaseCode()
- * @method string|null getCurrentPhaseDescription()
- * @method string|null getCurrentStatusCode()
- * @method string|null getCurrentStatusDescription()
- * @method string|null getCurrentStatusTimeStamp()
- *
- * @method Status setCurrentPhaseCode(string|null $code = null)
- * @method Status setCurrentPhaseDescription(string|null $desc = null)
- * @method Status setCurrentStatusCode(string|null $code = null)
- * @method Status setCurrentStatusDescription(string|null $desc = null)
- * @method Status setCurrentStatusTimeStamp(string|null $dateTime = null)
  */
 class Status extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
-    public static $defaultProperties = [
-        'Barcode'        => [
-            'CurrentPhaseCode'         => BarcodeService::DOMAIN_NAMESPACE,
-            'CurrentPhaseDescription'  => BarcodeService::DOMAIN_NAMESPACE,
-            'CurrentStatusCode'        => BarcodeService::DOMAIN_NAMESPACE,
-            'CurrentStatusDescription' => BarcodeService::DOMAIN_NAMESPACE,
-            'CurrentStatusTimeStamp'   => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming'     => [
-            'CurrentPhaseCode'         => ConfirmingService::DOMAIN_NAMESPACE,
-            'CurrentPhaseDescription'  => ConfirmingService::DOMAIN_NAMESPACE,
-            'CurrentStatusCode'        => ConfirmingService::DOMAIN_NAMESPACE,
-            'CurrentStatusDescription' => ConfirmingService::DOMAIN_NAMESPACE,
-            'CurrentStatusTimeStamp'   => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling'      => [
-            'CurrentPhaseCode'         => LabellingService::DOMAIN_NAMESPACE,
-            'CurrentPhaseDescription'  => LabellingService::DOMAIN_NAMESPACE,
-            'CurrentStatusCode'        => LabellingService::DOMAIN_NAMESPACE,
-            'CurrentStatusDescription' => LabellingService::DOMAIN_NAMESPACE,
-            'CurrentStatusTimeStamp'   => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'CurrentPhaseCode'         => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CurrentPhaseDescription'  => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CurrentStatusCode'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CurrentStatusDescription' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CurrentStatusTimeStamp'   => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
-            'CurrentPhaseCode'         => DeliveryDateService::DOMAIN_NAMESPACE,
-            'CurrentPhaseDescription'  => DeliveryDateService::DOMAIN_NAMESPACE,
-            'CurrentStatusCode'        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'CurrentStatusDescription' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'CurrentStatusTimeStamp'   => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location'       => [
-            'CurrentPhaseCode'         => LocationService::DOMAIN_NAMESPACE,
-            'CurrentPhaseDescription'  => LocationService::DOMAIN_NAMESPACE,
-            'CurrentStatusCode'        => LocationService::DOMAIN_NAMESPACE,
-            'CurrentStatusDescription' => LocationService::DOMAIN_NAMESPACE,
-            'CurrentStatusTimeStamp'   => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe'      => [
-            'CurrentPhaseCode'         => TimeframeService::DOMAIN_NAMESPACE,
-            'CurrentPhaseDescription'  => TimeframeService::DOMAIN_NAMESPACE,
-            'CurrentStatusCode'        => TimeframeService::DOMAIN_NAMESPACE,
-            'CurrentStatusDescription' => TimeframeService::DOMAIN_NAMESPACE,
-            'CurrentStatusTimeStamp'   => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null $CurrentPhaseCode */
-    protected $CurrentPhaseCode;
-    /** @var string|null $CurrentPhaseDescription */
-    protected $CurrentPhaseDescription;
-    /** @var string|null $CurrentStatusCode */
-    protected $CurrentStatusCode;
-    /** @var string|null $CurrentStatusDescription */
-    protected $CurrentStatusDescription;
-    /** @var string|null $CurrentStatusTimeStamp */
-    protected $CurrentStatusTimeStamp;
-    // @codingStandardsIgnoreEnd
+    /** @var string|null $currentPhaseCode */
+    protected $currentPhaseCode;
+    /** @var string|null $currentPhaseDescription */
+    protected $currentPhaseDescription;
+    /** @var string|null $currentStatusCode */
+    protected $currentStatusCode;
+    /** @var string|null $currentStatusDescription */
+    protected $currentStatusDescription;
+    /** @var string|null $currentStatusTimeStamp */
+    protected $currentStatusTimeStamp;
 
     /**
      * @param null|string $phaseCode
@@ -127,6 +53,7 @@ class Status extends AbstractEntity
      * @param null|string $timeStamp
      *
      * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function __construct(?string $phaseCode = null, ?string $phaseDesc = null, ?string $statusCode = null, ?string $statusDesc = null, ?string $timeStamp = null)
     {
@@ -137,5 +64,125 @@ class Status extends AbstractEntity
         $this->setCurrentStatusCode($statusCode);
         $this->setCurrentStatusDescription($statusDesc);
         $this->setCurrentStatusTimeStamp($timeStamp);
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getCurrentPhaseCode(): ?string
+    {
+        return $this->currentPhaseCode;
+    }
+
+    /**
+     * @param string|null $currentPhaseCode
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setCurrentPhaseCode(?string $currentPhaseCode): Status
+    {
+        $this->currentPhaseCode = $currentPhaseCode;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getCurrentPhaseDescription(): ?string
+    {
+        return $this->currentPhaseDescription;
+    }
+
+    /**
+     * @param string|null $currentPhaseDescription
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setCurrentPhaseDescription(?string $currentPhaseDescription): Status
+    {
+        $this->currentPhaseDescription = $currentPhaseDescription;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getCurrentStatusCode(): ?string
+    {
+        return $this->currentStatusCode;
+    }
+
+    /**
+     * @param string|null $currentStatusCode
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setCurrentStatusCode(?string $currentStatusCode): Status
+    {
+        $this->currentStatusCode = $currentStatusCode;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getCurrentStatusDescription(): ?string
+    {
+        return $this->currentStatusDescription;
+    }
+
+    /**
+     * @param string|null $currentStatusDescription
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setCurrentStatusDescription(?string $currentStatusDescription): Status
+    {
+        $this->currentStatusDescription = $currentStatusDescription;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getCurrentStatusTimeStamp(): ?string
+    {
+        return $this->currentStatusTimeStamp;
+    }
+
+    /**
+     * @param string|null $currentStatusTimeStamp
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setCurrentStatusTimeStamp(?string $currentStatusTimeStamp): Status
+    {
+        $this->currentStatusTimeStamp = $currentStatusTimeStamp;
+
+        return $this;
     }
 }

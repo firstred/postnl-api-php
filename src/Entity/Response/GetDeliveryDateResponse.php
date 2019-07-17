@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -30,67 +30,16 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity\Response;
 
 use Firstred\PostNL\Entity\AbstractEntity;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
-use Firstred\PostNL\Service\TimeframeService;
-use Sabre\Xml\Writer;
 
 /**
  * Class GetDeliveryDateResponse
- *
- * @method string|null   getDeliveryDate()
- * @method string[]|null getOptions()
- *
- * @method GetDeliveryDateResponse setDeliveryDate(string|null $date = null)
- * @method GetDeliveryDateResponse setOptions(string[]|null $options = null)
  */
 class GetDeliveryDateResponse extends AbstractEntity
 {
-    /**
-     * Default properties and namespaces for the SOAP API
-     *
-     * @var array $defaultProperties
-     */
-    public static $defaultProperties = [
-        'Barcode'        => [
-            'DeliveryDate' => BarcodeService::DOMAIN_NAMESPACE,
-            'Options'      => 'http://schemas.microsoft.com/2003/10/Serialization/Arrays',
-        ],
-        'Confirming'     => [
-            'DeliveryDate' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Options'      => 'http://schemas.microsoft.com/2003/10/Serialization/Arrays',
-        ],
-        'Labelling'      => [
-            'DeliveryDate' => LabellingService::DOMAIN_NAMESPACE,
-            'Options'      => 'http://schemas.microsoft.com/2003/10/Serialization/Arrays',
-        ],
-        'ShippingStatus' => [
-            'DeliveryDate' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Options'      => 'http://schemas.microsoft.com/2003/10/Serialization/Arrays',
-        ],
-        'DeliveryDate'   => [
-            'DeliveryDate' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Options'      => 'http://schemas.microsoft.com/2003/10/Serialization/Arrays',
-        ],
-        'Location'       => [
-            'DeliveryDate' => LocationService::DOMAIN_NAMESPACE,
-            'Options'      => 'http://schemas.microsoft.com/2003/10/Serialization/Arrays',
-        ],
-        'Timeframe'      => [
-            'DeliveryDate' => TimeframeService::DOMAIN_NAMESPACE,
-            'Options'      => 'http://schemas.microsoft.com/2003/10/Serialization/Arrays',
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null $DeliveryDate */
-    protected $DeliveryDate;
-    /** @var string[]|null $Options */
-    protected $Options;
-    // @codingStandardsIgnoreEnd
+    /** @var string|null $deliveryDate */
+    protected $deliveryDate;
+    /** @var string[]|null $options */
+    protected $options;
 
     /**
      * GetDeliveryDateResponse constructor.
@@ -99,6 +48,7 @@ class GetDeliveryDateResponse extends AbstractEntity
      * @param string[]|null $options Delivery options
      *
      * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function __construct($date = null, array $options = null)
     {
@@ -109,39 +59,50 @@ class GetDeliveryDateResponse extends AbstractEntity
     }
 
     /**
-     * Return a serializable array for the XMLWriter
+     * @return string|null
      *
-     * @param Writer $writer
-     *
-     * @return void
-     *
-     * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
-    public function xmlSerialize(Writer $writer): void
+    public function getDeliveryDate(): ?string
     {
-        $xml = [];
-        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
-            $writer->write($xml);
+        return $this->deliveryDate;
+    }
 
-            return;
-        }
+    /**
+     * @param string|null $deliveryDate
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setDeliveryDate(?string $deliveryDate): GetDeliveryDateResponse
+    {
+        $this->deliveryDate = $deliveryDate;
 
-        foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if ('Shipments' === $propertyName) {
-                $options = [];
-                // @codingStandardsIgnoreLine
-                if (is_array($this->Options)) {
-                    // @codingStandardsIgnoreLine
-                    foreach ($this->Options as $option) {
-                        $options[] = ["{{$namespace}}string" => $option];
-                    }
-                }
-                $xml["{{$namespace}}Options"] = $options;
-            } elseif (isset($this->{$propertyName})) {
-                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
-            }
-        }
-        // Auto extending this object with other properties is not supported with SOAP
-        $writer->write($xml);
+        return $this;
+    }
+
+    /**
+     * @return string[]|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getOptions(): ?array
+    {
+        return $this->options;
+    }
+
+    /**
+     * @param string[]|null $options
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setOptions(?array $options): GetDeliveryDateResponse
+    {
+        $this->options = $options;
+
+        return $this;
     }
 }

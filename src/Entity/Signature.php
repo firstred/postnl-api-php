@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -30,63 +30,16 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Entity\Response\GetSignatureResponseSignature;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
-use Firstred\PostNL\Service\TimeframeService;
 
 /**
  * Class Signature
- *
- * @method GetSignatureResponseSignature|null getGetSignatureResponseSignature()
- * @method Warning[]|null getWarnings()
- *
- * @method Signature setGetSignatureResponseSignature(GetSignatureResponseSignature|null $signature = null)
- * @method Signature setWarnings(Warning[]|null $warnings = null)
  */
 class Signature extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
-    public static $defaultProperties = [
-        'Barcode'           => [
-            'GetSignatureResponseSignature' => BarcodeService::DOMAIN_NAMESPACE,
-            'Warnings'                      => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming'        => [
-            'GetSignatureResponseSignature' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Warnings'                      => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling'         => [
-            'GetSignatureResponseSignature' => LabellingService::DOMAIN_NAMESPACE,
-            'Warnings'                      => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingSignature' => [
-            'GetSignatureResponseSignature' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Warnings'                      => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'      => [
-            'GetSignatureResponseSignature' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Warnings'                      => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location'          => [
-            'GetSignatureResponseSignature' => LocationService::DOMAIN_NAMESPACE,
-            'Warnings'                      => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe'         => [
-            'GetSignatureResponseSignature' => TimeframeService::DOMAIN_NAMESPACE,
-            'Warnings'                      => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var GetSignatureResponseSignature|null $GetSignatureResponseSignature */
-    protected $GetSignatureResponseSignature;
-    /** @var Warning[]|null $Warnings */
-    protected $Warnings;
-
-    // @codingStandardsIgnoreEnd
+    /** @var GetSignatureResponseSignature|null $getSignatureResponseSignature */
+    protected $getSignatureResponseSignature;
+    /** @var Warning[]|null $warnings */
+    protected $warnings;
 
     /**
      * Signature constructor.
@@ -102,5 +55,53 @@ class Signature extends AbstractEntity
 
         $this->setGetSignatureResponseSignature($signature);
         $this->setWarnings($warnings);
+    }
+
+    /**
+     * @return GetSignatureResponseSignature|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getGetSignatureResponseSignature(): ?GetSignatureResponseSignature
+    {
+        return $this->getSignatureResponseSignature;
+    }
+
+    /**
+     * @param GetSignatureResponseSignature|null $getSignatureResponseSignature
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setGetSignatureResponseSignature(?GetSignatureResponseSignature $getSignatureResponseSignature): Signature
+    {
+        $this->getSignatureResponseSignature = $getSignatureResponseSignature;
+
+        return $this;
+    }
+
+    /**
+     * @return Warning[]|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getWarnings(): ?array
+    {
+        return $this->warnings;
+    }
+
+    /**
+     * @param Warning[]|null $warnings
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setWarnings(?array $warnings): Signature
+    {
+        $this->warnings = $warnings;
+
+        return $this;
     }
 }

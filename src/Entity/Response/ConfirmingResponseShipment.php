@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -32,71 +32,18 @@ namespace Firstred\PostNL\Entity\Response;
 use Error;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Warning;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
-use Firstred\PostNL\Service\TimeframeService;
 
 /**
  * Class ConfirmingResponseShipment
- *
- * @method string|null    getBarcode()
- * @method Warning[]|null getWarnings()
- * @method Error[]|null   getErrors()
- *
- * @method ConfirmingResponseShipment setBarcode(string|null $barcode = null)
- * @method ConfirmingResponseShipment setWarnings(Warning[]|null $warnings = null)
- * @method ConfirmingResponseShipment setErrors(Error[]|null $warnings = null)
  */
 class ConfirmingResponseShipment extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
-    public static $defaultProperties = [
-        'Barcode'        => [
-            'Barcode'  => BarcodeService::DOMAIN_NAMESPACE,
-            'Warnings' => BarcodeService::DOMAIN_NAMESPACE,
-            'Errors'   => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming'     => [
-            'Barcode'  => ConfirmingService::DOMAIN_NAMESPACE,
-            'Warnings' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Errors'   => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling'      => [
-            'Barcode'  => LabellingService::DOMAIN_NAMESPACE,
-            'Warnings' => LabellingService::DOMAIN_NAMESPACE,
-            'Errors'   => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Barcode'  => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Warnings' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Errors'   => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
-            'Barcode'  => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Warnings' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Errors'   => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location'       => [
-            'Barcode'  => LocationService::DOMAIN_NAMESPACE,
-            'Warnings' => LocationService::DOMAIN_NAMESPACE,
-            'Errors'   => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe'      => [
-            'Barcode'  => TimeframeService::DOMAIN_NAMESPACE,
-            'Warnings' => TimeframeService::DOMAIN_NAMESPACE,
-            'Errors'   => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null $Barcode */
-    protected $Barcode;
+    /** @var string|null $barcode */
+    protected $barcode;
     /** @var Warning[]|null $warnings */
-    protected $Warnings;
-    // @codingStandardsIgnoreEnd
+    protected $warnings;
+    /** @var Error[]|null */
+    protected $errors;
 
     /**
      * @param string|null    $barcode
@@ -104,6 +51,7 @@ class ConfirmingResponseShipment extends AbstractEntity
      * @param Error[]|null   $errors
      *
      * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function __construct(?string $barcode = null, ?array $warnings = null, ?array $errors = null)
     {
@@ -112,5 +60,77 @@ class ConfirmingResponseShipment extends AbstractEntity
         $this->setBarcode($barcode);
         $this->setWarnings($warnings);
         $this->setErrors($errors);
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getBarcode(): ?string
+    {
+        return $this->barcode;
+    }
+
+    /**
+     * @param string|null $barcode
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setBarcode(?string $barcode): ConfirmingResponseShipment
+    {
+        $this->barcode = $barcode;
+
+        return $this;
+    }
+
+    /**
+     * @return Warning[]|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getWarnings(): ?array
+    {
+        return $this->warnings;
+    }
+
+    /**
+     * @param Warning[]|null $warnings
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setWarnings(?array $warnings): ConfirmingResponseShipment
+    {
+        $this->warnings = $warnings;
+
+        return $this;
+    }
+
+    /**
+     * @return Error[]|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getErrors(): ?array
+    {
+        return $this->errors;
+    }
+
+    /**
+     * @param Error[]|null $errors
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setErrors(?array $errors): ConfirmingResponseShipment
+    {
+        $this->errors = $errors;
+
+        return $this;
     }
 }

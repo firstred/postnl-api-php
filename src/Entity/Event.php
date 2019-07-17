@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -30,59 +30,46 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Entity\Response\CompleteStatusResponseEvent;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
-use Firstred\PostNL\Service\TimeframeService;
 
 /**
  * Class Event
- *
- * @method string|null getCompleteStatusResponseEvent()
- *
- * @method Event setCompleteStatusResponseEvent(CompleteStatusResponseEvent|null $event = null)
  */
 class Event extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
-    public static $defaultProperties = [
-        'Barcode'        => [
-            'CompleteStatusResponseEvent' => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming'     => [
-            'CompleteStatusResponseEvent' => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling'      => [
-            'CompleteStatusResponseEvent' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'CompleteStatusResponseEvent' => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
-            'CompleteStatusResponseEvent' => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location'       => [
-            'CompleteStatusResponseEvent' => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe'      => [
-            'CompleteStatusResponseEvent' => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
     /** @var CompleteStatusResponseEvent|null $completeStatusResponseEvent */
-    protected $CompleteStatusResponseEvent;
-    // @codingStandardsIgnoreEnd
+    protected $completeStatusResponseEvent;
 
     /**
      * @param CompleteStatusResponseEvent|null $completeStatusResponseEvent
      */
-    public function __construct($completeStatusResponseEvent = null)
+    public function __construct(?CompleteStatusResponseEvent $completeStatusResponseEvent = null)
     {
         parent::__construct();
 
         $this->setCompleteStatusResponseEvent($completeStatusResponseEvent);
+    }
+
+    /**
+     * @return CompleteStatusResponseEvent|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getCompleteStatusResponseEvent(): ?CompleteStatusResponseEvent
+    {
+        return $this->completeStatusResponseEvent;
+    }
+
+    /**
+     * @param CompleteStatusResponseEvent|null $completeStatusResponseEvent
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setCompleteStatusResponseEvent(?CompleteStatusResponseEvent $completeStatusResponseEvent): Event
+    {
+        $this->completeStatusResponseEvent = $completeStatusResponseEvent;
+
+        return $this;
     }
 }

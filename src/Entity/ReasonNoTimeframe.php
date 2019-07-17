@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -29,107 +29,23 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
-use Firstred\PostNL\Service\TimeframeService;
-use Sabre\Xml\Writer;
-
 /**
  * Class ReasonNoTimeframe
- *
- * @method string|null   getCode()
- * @method string|null   getDate()
- * @method string|null   getDescription()
- * @method string[]|null getOptions()
- * @method string|null   getFrom()
- * @method string|null   getTo()
- *
- * @method ReasonNoTimeframe setCode(string|null $code = null)
- * @method ReasonNoTimeframe setDate(string|null $date = null)
- * @method ReasonNoTimeframe setDescription(string|null $desc = null)
- * @method ReasonNoTimeframe setOptions(string[]|null $options = null)
- * @method ReasonNoTimeframe setFrom(string|null $from = null)
- * @method ReasonNoTimeframe setTo(string|null $to = null)
  */
 class ReasonNoTimeframe extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
-    public static $defaultProperties = [
-        'Barcode'        => [
-            'Code'        => BarcodeService::DOMAIN_NAMESPACE,
-            'Date'        => BarcodeService::DOMAIN_NAMESPACE,
-            'Description' => BarcodeService::DOMAIN_NAMESPACE,
-            'Options'     => BarcodeService::DOMAIN_NAMESPACE,
-            'From'        => BarcodeService::DOMAIN_NAMESPACE,
-            'To'          => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming'     => [
-            'Code'        => ConfirmingService::DOMAIN_NAMESPACE,
-            'Date'        => ConfirmingService::DOMAIN_NAMESPACE,
-            'Description' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Options'     => ConfirmingService::DOMAIN_NAMESPACE,
-            'From'        => ConfirmingService::DOMAIN_NAMESPACE,
-            'To'          => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling'      => [
-            'Code'        => LabellingService::DOMAIN_NAMESPACE,
-            'Date'        => LabellingService::DOMAIN_NAMESPACE,
-            'Description' => LabellingService::DOMAIN_NAMESPACE,
-            'Options'     => LabellingService::DOMAIN_NAMESPACE,
-            'From'        => LabellingService::DOMAIN_NAMESPACE,
-            'To'          => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Code'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Date'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Description' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Options'     => ShippingStatusService::DOMAIN_NAMESPACE,
-            'From'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'To'          => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
-            'Code'        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Date'        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Description' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Options'     => DeliveryDateService::DOMAIN_NAMESPACE,
-            'From'        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'To'          => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location'       => [
-            'Code'        => LocationService::DOMAIN_NAMESPACE,
-            'Date'        => LocationService::DOMAIN_NAMESPACE,
-            'Description' => LocationService::DOMAIN_NAMESPACE,
-            'Options'     => LocationService::DOMAIN_NAMESPACE,
-            'From'        => LocationService::DOMAIN_NAMESPACE,
-            'To'          => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe'      => [
-            'Code'        => TimeframeService::DOMAIN_NAMESPACE,
-            'Date'        => TimeframeService::DOMAIN_NAMESPACE,
-            'Description' => TimeframeService::DOMAIN_NAMESPACE,
-            'Options'     => TimeframeService::DOMAIN_NAMESPACE,
-            'From'        => TimeframeService::DOMAIN_NAMESPACE,
-            'To'          => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null $Code */
-    protected $Code;
-    /** @var string|null $Date */
-    protected $Date;
-    /** @var string|null $Description */
-    protected $Description;
-    /** @var string[]|null $Options */
-    protected $Options;
-    /** @var string|null $From */
-    protected $From;
-    /** @var string|null $To */
-    protected $To;
-    // @codingStandardsIgnoreEnd
+    /** @var string|null $code */
+    protected $code;
+    /** @var string|null $date */
+    protected $date;
+    /** @var string|null $description */
+    protected $description;
+    /** @var string[]|null $options */
+    protected $options;
+    /** @var string|null $from */
+    protected $from;
+    /** @var string|null $to */
+    protected $to;
 
     /**
      * @param string|null   $code
@@ -140,6 +56,7 @@ class ReasonNoTimeframe extends AbstractEntity
      * @param string|null   $to
      *
      * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function __construct(?string $code = null, ?string $date = null, ?string $desc = null, array $options = null, ?string $from = null, ?string $to = null)
     {
@@ -154,42 +71,146 @@ class ReasonNoTimeframe extends AbstractEntity
     }
 
     /**
-     * Return a serializable array for the XMLWriter
+     * @return string|null
      *
-     * @param Writer $writer
-     *
-     * @return void
-     *
-     * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
-    public function xmlSerialize(Writer $writer): void
+    public function getCode(): ?string
     {
-        $xml = [];
-        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
-            $writer->write($xml);
+        return $this->code;
+    }
 
-            return;
-        }
+    /**
+     * @param string|null $code
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setCode(?string $code): ReasonNoTimeframe
+    {
+        $this->code = $code;
 
-        foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if ('Options' === $propertyName) {
-                // @codingStandardsIgnoreLine
-                if (isset($this->Options)) {
-                    $options = [];
-                    // @codingStandardsIgnoreLine
-                    if (is_array($this->Options)) {
-                        // @codingStandardsIgnoreLine
-                        foreach ($this->Options as $option) {
-                            $options[] = ["{http://schemas.microsoft.com/2003/10/Serialization/Arrays}string" => $option];
-                        }
-                    }
-                    $xml["{{$namespace}}Options"] = $options;
-                }
-            } elseif (isset($this->{$propertyName})) {
-                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
-            }
-        }
-        // Auto extending this object with other properties is not supported with SOAP
-        $writer->write($xml);
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getDate(): ?string
+    {
+        return $this->date;
+    }
+
+    /**
+     * @param string|null $date
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setDate(?string $date): ReasonNoTimeframe
+    {
+        $this->date = $date;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string|null $description
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setDescription(?string $description): ReasonNoTimeframe
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return string[]|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getOptions(): ?array
+    {
+        return $this->options;
+    }
+
+    /**
+     * @param string[]|null $options
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setOptions(?array $options): ReasonNoTimeframe
+    {
+        $this->options = $options;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getFrom(): ?string
+    {
+        return $this->from;
+    }
+
+    /**
+     * @param string|null $from
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setFrom(?string $from): ReasonNoTimeframe
+    {
+        $this->from = $from;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getTo(): ?string
+    {
+        return $this->to;
+    }
+
+    /**
+     * @param string|null $to
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setTo(?string $to): ReasonNoTimeframe
+    {
+        $this->to = $to;
+
+        return $this;
     }
 }

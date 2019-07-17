@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -29,84 +29,19 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
-use Firstred\PostNL\Service\TimeframeService;
-
 /**
  * Class TimeframeTimeFrame
- *
- * @method string|null   getDate()
- * @method string|null   getFrom()
- * @method string|null   getTo()
- * @method string[]|null getOptions()
- *
- * @method TimeframeTimeFrame setDate(string|null $date = null)
- * @method TimeframeTimeFrame setFrom(string|null $from = null)
- * @method TimeframeTimeFrame setTo(string|null $to = null)
- * @method TimeframeTimeFrame setOptions(string[]|null $options = null)
  */
 class TimeframeTimeFrame extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
-    public static $defaultProperties = [
-        'Barcode'        => [
-            'Date'    => BarcodeService::DOMAIN_NAMESPACE,
-            'From'    => BarcodeService::DOMAIN_NAMESPACE,
-            'Options' => BarcodeService::DOMAIN_NAMESPACE,
-            'To'      => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming'     => [
-            'Date'    => ConfirmingService::DOMAIN_NAMESPACE,
-            'From'    => ConfirmingService::DOMAIN_NAMESPACE,
-            'Options' => ConfirmingService::DOMAIN_NAMESPACE,
-            'To'      => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling'      => [
-            'Date'    => LabellingService::DOMAIN_NAMESPACE,
-            'From'    => LabellingService::DOMAIN_NAMESPACE,
-            'Options' => LabellingService::DOMAIN_NAMESPACE,
-            'To'      => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Date'    => ShippingStatusService::DOMAIN_NAMESPACE,
-            'From'    => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Options' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'To'      => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
-            'Date'    => DeliveryDateService::DOMAIN_NAMESPACE,
-            'From'    => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Options' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'To'      => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location'       => [
-            'Date'    => LocationService::DOMAIN_NAMESPACE,
-            'From'    => LocationService::DOMAIN_NAMESPACE,
-            'Options' => LocationService::DOMAIN_NAMESPACE,
-            'To'      => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe'      => [
-            'Date'    => TimeframeService::DOMAIN_NAMESPACE,
-            'From'    => TimeframeService::DOMAIN_NAMESPACE,
-            'Options' => TimeframeService::DOMAIN_NAMESPACE,
-            'To'      => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null $Date */
-    protected $Date;
-    /** @var string|null $From */
-    protected $From;
-    /** @var string[]|null $Options */
-    protected $Options;
-    /** @var string|null $To */
-    protected $To;
-    // @codingStandardsIgnoreEnd
+    /** @var string|null $date */
+    protected $date;
+    /** @var string|null $from */
+    protected $from;
+    /** @var string[]|null $options */
+    protected $options;
+    /** @var string|null $to */
+    protected $to;
 
     /**
      * @param string|null   $date
@@ -122,5 +57,101 @@ class TimeframeTimeFrame extends AbstractEntity
         $this->setFrom($from);
         $this->setTo($to);
         $this->setOptions($options);
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getDate(): ?string
+    {
+        return $this->date;
+    }
+
+    /**
+     * @param string|null $date
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setDate(?string $date): TimeframeTimeFrame
+    {
+        $this->date = $date;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getFrom(): ?string
+    {
+        return $this->from;
+    }
+
+    /**
+     * @param string|null $from
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setFrom(?string $from): TimeframeTimeFrame
+    {
+        $this->from = $from;
+
+        return $this;
+    }
+
+    /**
+     * @return string[]|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getOptions(): ?array
+    {
+        return $this->options;
+    }
+
+    /**
+     * @param string[]|null $options
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setOptions(?array $options): TimeframeTimeFrame
+    {
+        $this->options = $options;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getTo(): ?string
+    {
+        return $this->to;
+    }
+
+    /**
+     * @param string|null $to
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setTo(?string $to): TimeframeTimeFrame
+    {
+        $this->to = $to;
+
+        return $this;
     }
 }

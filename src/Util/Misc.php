@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -29,14 +29,17 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Util;
 
+use DateInterval;
+use DateTime;
+use Exception;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use setasign\Fpdi\Fpdi;
 use setasign\Fpdi\PdfParser\StreamReader;
 
 /**
- * Class Util
+ * Class Misc
  */
-class Util
+class Misc
 {
     const ERROR_MARGIN = 2;
 
@@ -114,7 +117,7 @@ class Util
             } else {
                 $iso = 'A4';
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return false;
         }
 
@@ -135,7 +138,7 @@ class Util
      * @return string
      *
      * @throws InvalidArgumentException
-     * @throws \Exception
+     * @throws Exception
      *
      * @since 1.0.0
      */
@@ -145,14 +148,14 @@ class Util
             throw new InvalidArgumentException('There should be at least one shipping day');
         }
 
-        $deliveryDate = new \DateTime($deliveryDate);
+        $deliveryDate = new DateTime($deliveryDate);
 
         $holidays = static::getHolidaysForYear(date('Y', $deliveryDate->getTimestamp()));
 
         do {
             try {
-                $deliveryDate->sub(new \DateInterval('P1D'));
-            } catch (\Exception $e) {
+                $deliveryDate->sub(new DateInterval('P1D'));
+            } catch (Exception $e) {
                 throw new InvalidArgumentException('Invalid date provided');
             }
         } while (in_array($deliveryDate->format('Y-m-d'), $holidays)
@@ -177,7 +180,7 @@ class Util
      *
      * @return int
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @since 1.0.0
      */
@@ -190,8 +193,8 @@ class Util
         $nearestDeliveryDate = static::getDeliveryDate($shippingDate);
 
         // Calculate the interval
-        $nearestDeliveryDate = new \DateTime($nearestDeliveryDate);
-        $preferredDeliveryDate = new \DateTime(date('Y-m-d 00:00:00', strtotime($preferredDeliveryDate)));
+        $nearestDeliveryDate = new DateTime($nearestDeliveryDate);
+        $preferredDeliveryDate = new DateTime(date('Y-m-d 00:00:00', strtotime($preferredDeliveryDate)));
 
         $daysRemaining = (int) $nearestDeliveryDate->diff($preferredDeliveryDate)->format('%R%a');
 
@@ -217,18 +220,18 @@ class Util
      *
      * @return string (format: `Y-m-d H:i:s`)
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @since 1.0.0
      */
     public static function getDeliveryDate($deliveryDate, $mondayDelivery = false, $sundayDelivery = false): string
     {
-        $deliveryDate = new \DateTime($deliveryDate);
+        $deliveryDate = new DateTime($deliveryDate);
 
         $holidays = static::getHolidaysForYear(date('Y', $deliveryDate->getTimestamp()));
 
         do {
-            $deliveryDate->add(new \DateInterval('P1D'));
+            $deliveryDate->add(new DateInterval('P1D'));
         } while (in_array($deliveryDate->format('Y-m-d'), $holidays)
         || 0 === (int) (!$sundayDelivery && $deliveryDate->format('w'))
         || 1 === (!$mondayDelivery && $deliveryDate->format('w'))
@@ -246,7 +249,7 @@ class Util
      *
      * @return array
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @since 1.0.0
      */
@@ -254,32 +257,32 @@ class Util
     {
         // Avoid holidays
         // Fixed
-        $nieuwjaar = new \DateTime($year.'-01-01');
-        $eersteKerstDag = new \DateTime($year.'-12-25');
-        $tweedeKerstDag = new \DateTime($year.'-12-25');
-        $koningsdag = new \DateTime($year.'-04-27');
+        $nieuwjaar = new DateTime($year.'-01-01');
+        $eersteKerstDag = new DateTime($year.'-12-25');
+        $tweedeKerstDag = new DateTime($year.'-12-25');
+        $koningsdag = new DateTime($year.'-04-27');
         // Dynamic
-        $pasen = new \DateTime();
+        $pasen = new DateTime();
         $pasen->setTimestamp(easter_date($year)); // thanks PHP!
         $paasMaandag = clone $pasen;
         try {
-            $paasMaandag->add(new \DateInterVal('P1D'));
-        } catch (\Exception $e) {
+            $paasMaandag->add(new DateInterVal('P1D'));
+        } catch (Exception $e) {
         }
         $hemelvaart = clone $pasen;
         try {
-            $hemelvaart->add(new \DateInterVal('P39D'));
-        } catch (\Exception $e) {
+            $hemelvaart->add(new DateInterVal('P39D'));
+        } catch (Exception $e) {
         }
         $pinksteren = clone $hemelvaart;
         try {
-            $pinksteren->add(new \DateInterVal('P10D'));
-        } catch (\Exception $e) {
+            $pinksteren->add(new DateInterVal('P10D'));
+        } catch (Exception $e) {
         }
         $pinksterMaandag = clone $pinksteren;
         try {
-            $pinksterMaandag->add(new \DateInterVal('P1D'));
-        } catch (\Exception $e) {
+            $pinksterMaandag->add(new DateInterVal('P1D'));
+        } catch (Exception $e) {
         }
 
         $holidays = [

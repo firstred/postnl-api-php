@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -29,6 +29,7 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL;
 
+use Exception;
 use Firstred\PostNL\Entity\Barcode;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Label;
@@ -64,13 +65,16 @@ use Firstred\PostNL\Entity\Response\ResponseTimeframes;
 use Firstred\PostNL\Entity\Response\SignatureResponse;
 use Firstred\PostNL\Entity\Shipment;
 use Firstred\PostNL\Exception\AbstractException;
+use Firstred\PostNL\Exception\ApiException;
+use Firstred\PostNL\Exception\CifDownException;
+use Firstred\PostNL\Exception\CifException;
+use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\InvalidBarcodeException;
 use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\NotSupportedException;
-use Firstred\PostNL\HttpClient\ClientInterface;
-use Firstred\PostNL\HttpClient\CurlClient;
-use Firstred\PostNL\HttpClient\GuzzleClient;
+use Firstred\PostNL\Exception\ResponseException;
+use Firstred\PostNL\Http\Client;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
@@ -78,26 +82,25 @@ use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Util\Misc;
 use Firstred\PostNL\Util\RFPdi;
-use Firstred\PostNL\Util\Util;
-use GuzzleHttp\Psr7\Response;
 use Psr\Cache\CacheItemInterface;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
+use setasign\Fpdi\PdfParser\CrossReference\CrossReferenceException;
+use setasign\Fpdi\PdfParser\Filter\FilterException;
+use setasign\Fpdi\PdfParser\PdfParserException;
 use setasign\Fpdi\PdfParser\StreamReader;
+use setasign\Fpdi\PdfParser\Type\PdfTypeException;
+use setasign\Fpdi\PdfReader\PdfReaderException;
+use Firstred\PostNL\Util\Message as UtilMessage;
 
 /**
  * Class PostNL
  */
 class PostNL implements LoggerAwareInterface
 {
-    // REST API
-    const MODE_REST = 1;
-    // SOAP API
-    const MODE_SOAP = 2;
-    // AUTO - will try REST first, SOAP when REST is unavailable
-    const MODE_AUTO = 3;
-
     /**
      * 3S (or EU Pack Special) countries
      *
@@ -176,18 +179,11 @@ class PostNL implements LoggerAwareInterface
      */
     protected $sandbox = false;
 
-    /** @var ClientInterface $httpClient */
+    /** @var Client $httpClient */
     protected $httpClient;
 
     /** @var LoggerInterface $logger */
     protected $logger;
-
-    /**
-     * This is the current mode
-     *
-     * @var int $mode
-     */
-    protected $mode = self::MODE_REST;
 
     /** @var BarcodeService $barcodeService */
     protected $barcodeService;
@@ -216,20 +212,15 @@ class PostNL implements LoggerAwareInterface
      * @param Customer $customer Customer object
      * @param string   $apiKey   API key
      * @param bool     $sandbox  Sandbox mode
-     * @param int      $mode     Set the preferred connection strategy.
-     *                           Valid options are:
-     *                           - `MODE_REST`: REST API
-     *                           - `MODE_SOAP`: SOAP API
-     *                           - `MODE_AUTO`: Auto select
      *
-     * @throws InvalidArgumentException
+     * @since 1.0.0
+     * @since 2.0.0 Removed mode
      */
-    public function __construct(Customer $customer, string $apiKey, bool $sandbox, int $mode = self::MODE_AUTO)
+    public function __construct(Customer $customer, string $apiKey, bool $sandbox)
     {
         $this->setCustomer($customer);
         $this->setApiKey($apiKey);
         $this->setSandbox((bool) $sandbox);
-        $this->setMode((int) $mode);
     }
 
     /**
@@ -237,7 +228,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @return string REST API Key
      *
-     * @since 2.0.0
+     * @since 2.0.0 Strict typing
      */
     public function getApiKey(): ?string
     {
@@ -250,6 +241,7 @@ class PostNL implements LoggerAwareInterface
      * @return bool
      *
      * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function getSandbox(): bool
     {
@@ -274,53 +266,12 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Get the current mode
-     *
-     * @return int
-     *
-     * @since 1.0.0
-     */
-    public function getMode(): int
-    {
-        return $this->mode;
-    }
-
-    /**
-     * Set current mode
-     *
-     * @param int $mode
-     *
-     * @return self
-     *
-     * @throws InvalidArgumentException
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Return `self`
-     */
-    public function setMode(int $mode): self
-    {
-        if (!in_array(
-            $mode,
-            [
-                static::MODE_REST,
-                static::MODE_SOAP,
-                static::MODE_AUTO,
-            ]
-        )) {
-            throw new InvalidArgumentException('Mode not supported');
-        }
-
-        $this->mode = $mode;
-
-        return $this;
-    }
-
-    /**
      * Get the logger
      *
      * @return LoggerInterface
      *
      * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function getLogger(): ?LoggerInterface
     {
@@ -340,56 +291,7 @@ class PostNL implements LoggerAwareInterface
     public function setLogger(?LoggerInterface $logger = null): self
     {
         $this->logger = $logger;
-        if ($this->getHttpClient() instanceof ClientInterface) {
-            $this->getHttpClient()->setLogger($logger);
-        }
-
-        return $this;
-    }
-
-    /**
-     * HttpClient
-     *
-     * Automatically load Guzzle when available
-     *
-     * @return ClientInterface
-     *
-     * @since 1.0.0
-     */
-    public function getHttpClient(): ClientInterface
-    {
-        // @codeCoverageIgnoreStart
-        if (!$this->httpClient) {
-            if (interface_exists('\\GuzzleHttp\\ClientInterface')
-                && version_compare(
-                    \GuzzleHttp\ClientInterface::VERSION,
-                    '6.0.0',
-                    '>='
-                )) {
-                $this->httpClient = GuzzleClient::getInstance();
-            } else {
-                $this->httpClient = CurlClient::getInstance();
-            }
-        }
-
-        // @codeCoverageIgnoreEnd
-
-        return $this->httpClient;
-    }
-
-    /**
-     * Set the HttpClient
-     *
-     * @param ClientInterface $client
-     *
-     * @return self
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Return `self`
-     */
-    public function setHttpClient(ClientInterface $client): self
-    {
-        $this->httpClient = $client;
+        Client::getInstance()->setLogger($logger);
 
         return $this;
     }
@@ -405,9 +307,10 @@ class PostNL implements LoggerAwareInterface
      * @return string The barcode as a string
      *
      * @throws InvalidBarcodeException
-     * @throws \Exception
+     * @throws Exception
      *
      * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function generateBarcode($type = '3S', $range = null, $serie = null, $eps = false): string
     {
@@ -441,6 +344,7 @@ class PostNL implements LoggerAwareInterface
      * @return Customer
      *
      * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function getCustomer(): Customer
     {
@@ -577,11 +481,12 @@ class PostNL implements LoggerAwareInterface
      *
      * @throws InvalidConfigurationException
      * @throws InvalidBarcodeException
-     * @throws \Exception
+     * @throws Exception
      *
      * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
-    public function generateBarcodeByCountryCode($iso): string
+    public function generateBarcodeByCountryCode(string $iso): string
     {
         if (in_array(strtoupper($iso), static::$threeSCountries)) {
             $range = $this->getCustomer()->getCustomerCode();
@@ -622,9 +527,10 @@ class PostNL implements LoggerAwareInterface
      *
      * @throws InvalidConfigurationException
      * @throws InvalidBarcodeException
-     * @throws \Exception
+     * @throws Exception
      *
      * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function generateBarcodesByCountryCodes(array $isos): array
     {
@@ -689,9 +595,10 @@ class PostNL implements LoggerAwareInterface
      *
      * @return GenerateLabelResponse
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function generateLabel(Shipment $shipment, ?string $printerType = 'GraphicFile|PDF', ?bool $confirm = true): GenerateLabelResponse
     {
@@ -713,6 +620,7 @@ class PostNL implements LoggerAwareInterface
      * @return LabellingService
      *
      * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function getLabellingService(): LabellingService
     {
@@ -785,14 +693,15 @@ class PostNL implements LoggerAwareInterface
      *
      * @throws AbstractException
      * @throws NotSupportedException
-     * @throws \setasign\Fpdi\PdfParser\CrossReference\CrossReferenceException
-     * @throws \setasign\Fpdi\PdfParser\Filter\FilterException
-     * @throws \setasign\Fpdi\PdfParser\PdfParserException
-     * @throws \setasign\Fpdi\PdfParser\Type\PdfTypeException
-     * @throws \setasign\Fpdi\PdfReader\PdfReaderException
-     * @throws \Exception
+     * @throws CrossReferenceException
+     * @throws FilterException
+     * @throws PdfParserException
+     * @throws PdfTypeException
+     * @throws PdfReaderException
+     * @throws Exception
      *
      * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function generateLabels(array $shipments, ?string $printerType = 'GraphicFile|PDF', ?bool $confirm = true, ?bool $merge = false, ?int $format = Label::FORMAT_A4, ?array $positions = [1 => true, 2 => true, 3 => true, 4 => true], ?string $a6Orientation = 'P')
     {
@@ -818,7 +727,7 @@ class PostNL implements LoggerAwareInterface
                 $confirm,
             ];
         }
-        $labels = $this->getLabellingService()->generateLabels($generateLabels, $confirm);
+        $labels = $this->getLabellingService()->generateLabels($generateLabels);
 
         if (!$merge) {
             return $labels;
@@ -837,7 +746,7 @@ class PostNL implements LoggerAwareInterface
         if (Label::FORMAT_A6 === $format) {
             foreach ($labels as $label) {
                 $pdfContent = base64_decode($label->getResponseShipments()[0]->getLabels()[0]->getContent());
-                $sizes = Util::getPdfSizeAndOrientation($pdfContent);
+                $sizes = Misc::getPdfSizeAndOrientation($pdfContent);
                 if ($sizes['iso'] === 'A6') {
                     $pdf->addPage($a6Orientation);
                     $correction = [0, 0];
@@ -863,7 +772,7 @@ class PostNL implements LoggerAwareInterface
                     throw $label;
                 }
                 $pdfContent = base64_decode($label->getResponseShipments()[0]->getLabels()[0]->getContent());
-                $sizes = Util::getPdfSizeAndOrientation($pdfContent);
+                $sizes = Misc::getPdfSizeAndOrientation($pdfContent);
                 if ($sizes['iso'] === 'A6') {
                     if ($firstPage) {
                         $pdf->addPage('P', [297, 210], 90);
@@ -951,9 +860,10 @@ class PostNL implements LoggerAwareInterface
      *
      * @return ConfirmingResponseShipment
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function confirmShipment(Shipment $shipment): ConfirmingResponseShipment
     {
@@ -968,6 +878,7 @@ class PostNL implements LoggerAwareInterface
      * @return ConfirmingService
      *
      * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function getConfirmingService(): ConfirmingService
     {
@@ -1002,9 +913,10 @@ class PostNL implements LoggerAwareInterface
      *
      * @return ConfirmingResponseShipment[]
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function confirmShipments(array $shipments): array
     {
@@ -1034,9 +946,10 @@ class PostNL implements LoggerAwareInterface
      *
      * @return CurrentStatusResponse
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function getCurrentStatus($currentStatus): CurrentStatusResponse
     {
@@ -1061,6 +974,7 @@ class PostNL implements LoggerAwareInterface
      * @return ShippingStatusService
      *
      * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function getShippingStatusService(): ShippingStatusService
     {
@@ -1106,9 +1020,10 @@ class PostNL implements LoggerAwareInterface
      *
      * @return CompleteStatusResponse
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function getCompleteStatus($completeStatus): CompleteStatusResponse
     {
@@ -1133,9 +1048,10 @@ class PostNL implements LoggerAwareInterface
      *
      * @return SignatureResponse
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function getSignature(GetSignature $signature): SignatureResponse
     {
@@ -1153,6 +1069,12 @@ class PostNL implements LoggerAwareInterface
      * @param GetDeliveryDate $getDeliveryDate
      *
      * @return GetDeliveryDateResponse
+     *
+     * @throws ApiException
+     * @throws CifDownException
+     * @throws CifException
+     *
+     * @since 2.0.0 Strict typing
      */
     public function getDeliveryDate(GetDeliveryDate $getDeliveryDate): GetDeliveryDateResponse
     {
@@ -1167,6 +1089,7 @@ class PostNL implements LoggerAwareInterface
      * @return DeliveryDateService
      *
      * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function getDeliveryDateService(): DeliveryDateService
     {
@@ -1200,6 +1123,14 @@ class PostNL implements LoggerAwareInterface
      * @param GetSentDateRequest $getSentDate
      *
      * @return GetSentDateResponse
+     *
+     * @throws ApiException
+     * @throws CifDownException
+     * @throws CifException
+     * @throws HttpClientException
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function getSentDate(GetSentDateRequest $getSentDate): GetSentDateResponse
     {
@@ -1212,6 +1143,15 @@ class PostNL implements LoggerAwareInterface
      * @param GetTimeframes $getTimeframes
      *
      * @return ResponseTimeframes
+     *
+     * @throws ApiException
+     * @throws CifDownException
+     * @throws CifException
+     * @throws ResponseException
+     * @throws HttpClientException
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function getTimeframes(GetTimeframes $getTimeframes)
     {
@@ -1226,6 +1166,7 @@ class PostNL implements LoggerAwareInterface
      * @return TimeframeService
      *
      * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function getTimeframeService(): TimeframeService
     {
@@ -1241,7 +1182,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @param TimeframeService $service
      *
-     * @return self
+     * @return static
      *
      * @since 1.0.0
      * @since 2.0.0 Return `self`
@@ -1259,6 +1200,13 @@ class PostNL implements LoggerAwareInterface
      * @param GetNearestLocations $getNearestLocations
      *
      * @return GetNearestLocationsResponse
+     *
+     * @throws ApiException
+     * @throws CifDownException
+     * @throws CifException
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function getNearestLocations(GetNearestLocations $getNearestLocations)
     {
@@ -1273,6 +1221,7 @@ class PostNL implements LoggerAwareInterface
      * @return LocationService
      *
      * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function getLocationService(): LocationService
     {
@@ -1288,12 +1237,12 @@ class PostNL implements LoggerAwareInterface
      *
      * @param LocationService $service
      *
-     * @return self
+     * @return static
      *
      * @since 1.0.0
      * @since 2.0.0 Return `self`
      */
-    public function setLocationService(LocationService $service)
+    public function setLocationService(LocationService $service): PostNL
     {
         $this->locationService = $service;
 
@@ -1313,45 +1262,47 @@ class PostNL implements LoggerAwareInterface
      * @return array [uuid => ResponseTimeframes, uuid => GetNearestLocationsResponse, uuid => GetDeliveryDateResponse]
      *
      * @throws InvalidArgumentException
-     * @throws \Exception
+     * @throws Exception
      *
      * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function getTimeframesAndNearestLocations(GetTimeframes $getTimeframes, GetNearestLocations $getNearestLocations, GetDeliveryDate $getDeliveryDate)
     {
         $results = [];
         $itemTimeframe = $this->getTimeframeService()->retrieveCachedItem($getTimeframes->getId());
         if ($itemTimeframe instanceof CacheItemInterface && $itemTimeframe->get()) {
-            $results['timeframes'] = \GuzzleHttp\Psr7\parse_response($itemTimeframe->get());
+            $results['timeframes'] = UtilMessage::parseResponse($itemTimeframe->get());
         }
         $itemLocation = $this->getLocationService()->retrieveCachedItem($getNearestLocations->getId());
         if ($itemLocation instanceof CacheItemInterface && $itemLocation->get()) {
-            $results['locations'] = \GuzzleHttp\Psr7\parse_response($itemLocation->get());
+            $results['locations'] = UtilMessage::parseResponse($itemLocation->get());
         }
         $itemDeliveryDate = $this->getDeliveryDateService()->retrieveCachedItem($getDeliveryDate->getId());
         if ($itemDeliveryDate instanceof CacheItemInterface && $itemDeliveryDate->get()) {
-            $results['delivery_date'] = \GuzzleHttp\Psr7\parse_response($itemDeliveryDate->get());
+            $results['delivery_date'] = UtilMessage::parseResponse($itemDeliveryDate->get());
         }
 
-        $this->getHttpClient()->addOrUpdateRequest(
+        $client = Client::getInstance();
+        $client->addOrUpdateRequest(
             'timeframes',
             $this->getTimeframeService()->buildGetTimeframesRequest($getTimeframes)
         );
-        $this->getHttpClient()->addOrUpdateRequest(
+        $client->addOrUpdateRequest(
             'locations',
             $this->getLocationService()->buildGetNearestLocationsRequest($getNearestLocations)
         );
-        $this->getHttpClient()->addOrUpdateRequest(
+        $client->addOrUpdateRequest(
             'delivery_date',
             $this->getDeliveryDateService()->buildGetDeliveryDateRequest($getDeliveryDate)
         );
 
-        $responses = $this->getHttpClient()->doRequests();
+        $responses = $client->doRequests();
         foreach ($responses as $uuid => $response) {
-            if ($response instanceof Response) {
+            if ($response instanceof ResponseInterface) {
                 $results[$uuid] = $response;
             } else {
-                if ($response instanceof \Exception) {
+                if ($response instanceof Exception) {
                     throw $response;
                 }
                 throw new InvalidArgumentException('Invalid multi-request');
@@ -1359,8 +1310,8 @@ class PostNL implements LoggerAwareInterface
         }
 
         foreach ($responses as $type => $response) {
-            if (!$response instanceof Response) {
-                if ($response instanceof \Exception) {
+            if (!$response instanceof ResponseInterface) {
+                if ($response instanceof Exception) {
                     throw $response;
                 }
                 throw new InvalidArgumentException('Invalid multi-request');
@@ -1368,21 +1319,21 @@ class PostNL implements LoggerAwareInterface
                 switch ($type) {
                     case 'timeframes':
                         if ($itemTimeframe instanceof CacheItemInterface) {
-                            $itemTimeframe->set(\GuzzleHttp\Psr7\str($response));
+                            $itemTimeframe->set(UtilMessage::str($response));
                             $this->getTimeframeService()->cacheItem($itemTimeframe);
                         }
 
                         break;
                     case 'locations':
                         if ($itemTimeframe instanceof CacheItemInterface) {
-                            $itemLocation->set(\GuzzleHttp\Psr7\str($response));
+                            $itemLocation->set(UtilMessage::str($response));
                             $this->getLocationService()->cacheItem($itemLocation);
                         }
 
                         break;
                     case 'delivery_date':
                         if ($itemTimeframe instanceof CacheItemInterface) {
-                            $itemDeliveryDate->set(\GuzzleHttp\Psr7\str($response));
+                            $itemDeliveryDate->set(UtilMessage::str($response));
                             $this->getDeliveryDateService()->cacheItem($itemDeliveryDate);
                         }
 
@@ -1406,6 +1357,14 @@ class PostNL implements LoggerAwareInterface
      * @param GetLocationsInArea $getLocationsInArea
      *
      * @return GetLocationsInAreaResponse
+     *
+     * @throws ApiException
+     * @throws CifDownException
+     * @throws CifException
+     * @throws HttpClientException
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function getLocationsInArea(GetLocationsInArea $getLocationsInArea)
     {
@@ -1418,6 +1377,14 @@ class PostNL implements LoggerAwareInterface
      * @param GetLocation $getLocation
      *
      * @return GetLocationsInAreaResponse
+     *
+     * @throws ApiException
+     * @throws CifDownException
+     * @throws CifException
+     * @throws HttpClientException
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function getLocation(GetLocation $getLocation)
     {

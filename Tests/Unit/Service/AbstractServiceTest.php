@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -29,9 +29,10 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Tests\Unit\Service;
 
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
+use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Service\AbstractService;
+use Http\Discovery\Psr17FactoryDiscovery;
+use Http\Message\ResponseFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -48,7 +49,9 @@ class AbstractServiceTest extends TestCase
      */
     public function testGetResponseTextFromArray()
     {
-        $response = new Response(200, [], 'test');
+        /** @var ResponseFactory $factory */
+        $factory = Psr17FactoryDiscovery::findResponseFactory();
+        $response = $factory->createResponse(200, null, [], 'test');
 
         $result = AbstractService::getResponseText(['value' => $response]);
 
@@ -75,13 +78,16 @@ class AbstractServiceTest extends TestCase
      */
     public function testCifDownExceptionRest()
     {
-        $this->expectException('\\Firstred\\PostNL\\Exception\\CifDownException');
+        $this->expectException(CifDownException::class);
 
-        $response = new Response(500, [], json_encode([
+        /** @var ResponseFactory $factory */
+        $factory = Psr17FactoryDiscovery::findResponseFactory();
+
+        $response = $factory->createResponse(500, '', [], json_encode([
             'Envelope' => ['Body' => ['Fault' => ['Reason' => ['Text' => ['' => 'error']]]]],
         ]));
 
-        AbstractService::validateRESTResponse($response);
+        AbstractService::validateResponse($response);
     }
 
     /**
@@ -108,7 +114,7 @@ class AbstractServiceTest extends TestCase
             ],
         ]));
 
-        AbstractService::validateRESTResponse($response);
+        AbstractService::validateResponse($response);
     }
 
     /**

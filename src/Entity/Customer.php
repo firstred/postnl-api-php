@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
- * *Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -29,120 +29,29 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
-use Firstred\PostNL\Service\TimeframeService;
-
 /**
  * Class Customer
- *
- * @method string|null getCustomerNumber()
- * @method string|null getCustomerCode()
- * @method string|null getCollectionLocation()
- * @method string|null getContactPerson()
- * @method string|null getEmail()
- * @method string|null getName()
- * @method string|null getAddress()
- * @method string|null getGlobalPackCustomerCode()
- * @method string|null getGlobalPackBarcodeType()
- *
- * @method Customer setCustomerNumber(string|null $customerNr = null)
- * @method Customer setCustomerCode(string|null $customerCode = null)
- * @method Customer setCollectionLocation(string|null $collectionLocation = null)
- * @method Customer setContactPerson(string|null $contactPerson = null)
- * @method Customer setEmail(string|null $email = null)
- * @method Customer setName(string|null $name = null)
- * @method Customer setAddress(Address|null $address = null)
- * @method Customer setGlobalPackCustomerCode(string|null $code = null)
- * @method Customer setGlobalPackBarcodeType(string|null $type = null)
  */
 class Customer extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
-    public static $defaultProperties = [
-        'Barcode'        => [
-            'CustomerCode'   => BarcodeService::DOMAIN_NAMESPACE,
-            'CustomerNumber' => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming'     => [
-            'Address'            => ConfirmingService::DOMAIN_NAMESPACE,
-            'CollectionLocation' => ConfirmingService::DOMAIN_NAMESPACE,
-            'ContactPerson'      => ConfirmingService::DOMAIN_NAMESPACE,
-            'CustomerCode'       => ConfirmingService::DOMAIN_NAMESPACE,
-            'CustomerNumber'     => ConfirmingService::DOMAIN_NAMESPACE,
-            'Email'              => ConfirmingService::DOMAIN_NAMESPACE,
-            'Name'               => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling'      => [
-            'Address'            => LabellingService::DOMAIN_NAMESPACE,
-            'CollectionLocation' => LabellingService::DOMAIN_NAMESPACE,
-            'ContactPerson'      => LabellingService::DOMAIN_NAMESPACE,
-            'CustomerCode'       => LabellingService::DOMAIN_NAMESPACE,
-            'CustomerNumber'     => LabellingService::DOMAIN_NAMESPACE,
-            'Email'              => LabellingService::DOMAIN_NAMESPACE,
-            'Name'               => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Address'            => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CollectionLocation' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'ContactPerson'      => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CustomerCode'       => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CustomerNumber'     => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Email'              => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Name'               => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
-            'Address'            => DeliveryDateService::DOMAIN_NAMESPACE,
-            'CollectionLocation' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'ContactPerson'      => DeliveryDateService::DOMAIN_NAMESPACE,
-            'CustomerCode'       => DeliveryDateService::DOMAIN_NAMESPACE,
-            'CustomerNumber'     => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Email'              => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Name'               => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location'       => [
-            'Address'            => LocationService::DOMAIN_NAMESPACE,
-            'CollectionLocation' => LocationService::DOMAIN_NAMESPACE,
-            'ContactPerson'      => LocationService::DOMAIN_NAMESPACE,
-            'CustomerCode'       => LocationService::DOMAIN_NAMESPACE,
-            'CustomerNumber'     => LocationService::DOMAIN_NAMESPACE,
-            'Email'              => LocationService::DOMAIN_NAMESPACE,
-            'Name'               => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe'      => [
-            'Address'            => TimeframeService::DOMAIN_NAMESPACE,
-            'CollectionLocation' => TimeframeService::DOMAIN_NAMESPACE,
-            'ContactPerson'      => TimeframeService::DOMAIN_NAMESPACE,
-            'CustomerCode'       => TimeframeService::DOMAIN_NAMESPACE,
-            'CustomerNumber'     => TimeframeService::DOMAIN_NAMESPACE,
-            'Email'              => TimeframeService::DOMAIN_NAMESPACE,
-            'Name'               => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var Address|null $Address */
-    protected $Address;
-    /** @var string|null $CollectionLocation */
-    protected $CollectionLocation;
-    /** @var string|null $ContactPerson */
-    protected $ContactPerson;
-    /** @var int|null $CustomerCode */
-    protected $CustomerCode;
-    /** @var string|null $CustomerNumber */
-    protected $CustomerNumber;
-    /** @var null|string $GlobalPackCustomerCode */
-    protected $GlobalPackCustomerCode;
-    /** @var null|string $GlobalPackBarcodeType */
-    protected $GlobalPackBarcodeType;
-    /** @var string|null $Email */
-    protected $Email;
-    /** @var string|null $Name */
-    protected $Name;
-    // @codingStandardsIgnoreEnd
+    /** @var Address|null $address */
+    protected $address;
+    /** @var string|null $collectionLocation */
+    protected $collectionLocation;
+    /** @var string|null $contactPerson */
+    protected $contactPerson;
+    /** @var string|null $customerCode */
+    protected $customerCode;
+    /** @var string|null $customerNumber */
+    protected $customerNumber;
+    /** @var null|string $globalPackCustomerCode */
+    protected $globalPackCustomerCode;
+    /** @var null|string $globalPackBarcodeType */
+    protected $globalPackBarcodeType;
+    /** @var string|null $email */
+    protected $email;
+    /** @var string|null $name */
+    protected $name;
 
     /**
      * @param string  $customerNr
@@ -152,6 +61,9 @@ class Customer extends AbstractEntity
      * @param string  $email
      * @param string  $name
      * @param Address $address
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function __construct(?string $customerNr = null, ?string $customerCode = null, ?string $collectionLocation = null, ?string $contactPerson = null, ?string $email = null, ?string $name = null, ?Address $address = null)
     {
@@ -164,5 +76,221 @@ class Customer extends AbstractEntity
         $this->setEmail($email);
         $this->setName($name);
         $this->setAddress($address);
+    }
+
+    /**
+     * @return Address|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getAddress(): ?Address
+    {
+        return $this->address;
+    }
+
+    /**
+     * @param Address|null $address
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setAddress(?Address $address): Customer
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getCollectionLocation(): ?string
+    {
+        return $this->collectionLocation;
+    }
+
+    /**
+     * @param string|null $collectionLocation
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setCollectionLocation(?string $collectionLocation): Customer
+    {
+        $this->collectionLocation = $collectionLocation;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getContactPerson(): ?string
+    {
+        return $this->contactPerson;
+    }
+
+    /**
+     * @param string|null $contactPerson
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setContactPerson(?string $contactPerson): Customer
+    {
+        $this->contactPerson = $contactPerson;
+
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getCustomerCode(): ?int
+    {
+        return $this->customerCode;
+    }
+
+    /**
+     * @param string|null $customerCode
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setCustomerCode(?string $customerCode): Customer
+    {
+        $this->customerCode = $customerCode;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getCustomerNumber(): ?string
+    {
+        return $this->customerNumber;
+    }
+
+    /**
+     * @param string|null $customerNumber
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setCustomerNumber(?string $customerNumber): Customer
+    {
+        $this->customerNumber = $customerNumber;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getGlobalPackCustomerCode(): ?string
+    {
+        return $this->globalPackCustomerCode;
+    }
+
+    /**
+     * @param string|null $globalPackCustomerCode
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setGlobalPackCustomerCode(?string $globalPackCustomerCode): Customer
+    {
+        $this->globalPackCustomerCode = $globalPackCustomerCode;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getGlobalPackBarcodeType(): ?string
+    {
+        return $this->globalPackBarcodeType;
+    }
+
+    /**
+     * @param string|null $globalPackBarcodeType
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setGlobalPackBarcodeType(?string $globalPackBarcodeType): Customer
+    {
+        $this->globalPackBarcodeType = $globalPackBarcodeType;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    /**
+     * @param string|null $email
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setEmail(?string $email): Customer
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string|null $name
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setName(?string $name): Customer
+    {
+        $this->name = $name;
+
+        return $this;
     }
 }
