@@ -33,18 +33,39 @@ use Exception;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Barcode;
 use Firstred\PostNL\Entity\Customer;
-use Firstred\PostNL\Entity\Message\Message;
+use Firstred\PostNL\Entity\Message;
+use TypeError;
 
 /**
  * Class GenerateLabel
  */
 class GenerateBarcode extends AbstractEntity
 {
-    /** @var Message|null $message */
+    /**
+     * @var Message|null $message
+     *
+     * @since 1.0.0
+     *
+     * @see Message
+     */
     protected $message;
-    /** @var Customer|null $customer */
+
+    /**
+     * @var Customer|null $customer
+     *
+     * @since 1.0.0
+     *
+     * @see Customer
+     */
     protected $customer;
-    /** @var Barcode|null $barcode */
+
+    /**
+     * @var Barcode|null $barcode
+     *
+     * @since 1.0.0
+     *
+     * @see Barcode
+     */
     protected $barcode;
 
     /**
@@ -69,9 +90,14 @@ class GenerateBarcode extends AbstractEntity
     }
 
     /**
+     * Get message
+     *
      * @return Message|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see Message
      */
     public function getMessage(): ?Message
     {
@@ -79,11 +105,18 @@ class GenerateBarcode extends AbstractEntity
     }
 
     /**
+     * Set message
+     *
      * @param Message|null $message
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see Message
      */
     public function setMessage(?Message $message): GenerateBarcode
     {
@@ -93,9 +126,14 @@ class GenerateBarcode extends AbstractEntity
     }
 
     /**
+     * Get customer
+     *
      * @return Customer|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see Customer
      */
     public function getCustomer(): ?Customer
     {
@@ -103,11 +141,18 @@ class GenerateBarcode extends AbstractEntity
     }
 
     /**
+     * Set customer
+     *
      * @param Customer|null $customer
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see Customer
      */
     public function setCustomer(?Customer $customer): GenerateBarcode
     {
@@ -117,9 +162,14 @@ class GenerateBarcode extends AbstractEntity
     }
 
     /**
+     * Get barcode
+     *
      * @return Barcode|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see Barcode
      */
     public function getBarcode(): ?Barcode
     {
@@ -127,11 +177,18 @@ class GenerateBarcode extends AbstractEntity
     }
 
     /**
+     * Set barcode
+     *
      * @param Barcode|null $barcode
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see Barcode
      */
     public function setBarcode(?Barcode $barcode): GenerateBarcode
     {

@@ -30,19 +30,26 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity\Response;
 
 use Firstred\PostNL\Entity\AbstractEntity;
+use TypeError;
 
 /**
  * Class GenerateBarcodeResponse
  */
 class GenerateBarcodeResponse extends AbstractEntity
 {
-    /** @var string|null $barcode */
+    /**
+     * @var string|null $barcode
+     *
+     * @since 1.0.0
+     */
     protected $barcode;
 
     /**
      * GenerateBarcodeResponse constructor.
      *
      * @param string|null $barcode
+     *
+     * @throws TypeError
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -55,8 +62,11 @@ class GenerateBarcodeResponse extends AbstractEntity
     }
 
     /**
+     * Get barcodde
+     *
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getBarcode(): ?string
@@ -65,10 +75,15 @@ class GenerateBarcodeResponse extends AbstractEntity
     }
 
     /**
+     * Set barcode
+     *
      * @param string|null $barcode
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setBarcode(?string $barcode): GenerateBarcodeResponse

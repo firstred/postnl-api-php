@@ -32,23 +32,42 @@ namespace Firstred\PostNL\Entity\Response;
 use Error;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Warning;
+use TypeError;
 
 /**
  * Class ConfirmingResponseShipment
  */
 class ConfirmingResponseShipment extends AbstractEntity
 {
-    /** @var string|null $barcode */
+    /**
+     * @var string|null $barcode
+     *
+     * @since 1.0.0
+     */
     protected $barcode;
-    /** @var Warning[]|null $warnings */
+
+    /**
+     * @var Warning[]|null $warnings
+     *
+     * @since 1.0.0
+     */
     protected $warnings;
-    /** @var Error[]|null */
+
+    /**
+     * @var Error[]|null
+     *
+     * @since 1.0.0
+     */
     protected $errors;
 
     /**
+     * ConfirmingResponseShipment constructor.
+     *
      * @param string|null    $barcode
      * @param Warning[]|null $warnings
      * @param Error[]|null   $errors
+     *
+     * @throws TypeError
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -63,8 +82,11 @@ class ConfirmingResponseShipment extends AbstractEntity
     }
 
     /**
+     * Get barcode
+     *
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getBarcode(): ?string
@@ -73,10 +95,15 @@ class ConfirmingResponseShipment extends AbstractEntity
     }
 
     /**
+     * Set barcode
+     *
      * @param string|null $barcode
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setBarcode(?string $barcode): ConfirmingResponseShipment
@@ -87,8 +114,11 @@ class ConfirmingResponseShipment extends AbstractEntity
     }
 
     /**
+     * Get warnings
+     *
      * @return Warning[]|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getWarnings(): ?array
@@ -97,10 +127,15 @@ class ConfirmingResponseShipment extends AbstractEntity
     }
 
     /**
+     * Set warnings
+     *
      * @param Warning[]|null $warnings
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setWarnings(?array $warnings): ConfirmingResponseShipment
@@ -111,8 +146,11 @@ class ConfirmingResponseShipment extends AbstractEntity
     }
 
     /**
+     * Get errors
+     *
      * @return Error[]|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getErrors(): ?array
@@ -121,10 +159,15 @@ class ConfirmingResponseShipment extends AbstractEntity
     }
 
     /**
+     * Set errors
+     *
      * @param Error[]|null $errors
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setErrors(?array $errors): ConfirmingResponseShipment

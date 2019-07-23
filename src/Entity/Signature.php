@@ -30,15 +30,25 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Entity\Response\GetSignatureResponseSignature;
+use TypeError;
 
 /**
  * Class Signature
  */
 class Signature extends AbstractEntity
 {
-    /** @var GetSignatureResponseSignature|null $getSignatureResponseSignature */
+    /**
+     * @var GetSignatureResponseSignature|null $getSignatureResponseSignature
+     *
+     * @since 1.0.0
+     */
     protected $getSignatureResponseSignature;
-    /** @var Warning[]|null $warnings */
+
+    /**
+     * @var Warning[]|null $warnings
+     *
+     * @since 1.0.0
+     */
     protected $warnings;
 
     /**
@@ -47,7 +57,10 @@ class Signature extends AbstractEntity
      * @param GetSignatureResponseSignature|null $signature
      * @param array|null                         $warnings
      *
+     * @throws TypeError
+     *
      * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function __construct(?GetSignatureResponseSignature $signature = null, ?array $warnings = null)
     {
@@ -60,6 +73,7 @@ class Signature extends AbstractEntity
     /**
      * @return GetSignatureResponseSignature|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getGetSignatureResponseSignature(): ?GetSignatureResponseSignature
@@ -72,6 +86,9 @@ class Signature extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setGetSignatureResponseSignature(?GetSignatureResponseSignature $getSignatureResponseSignature): Signature
@@ -84,6 +101,7 @@ class Signature extends AbstractEntity
     /**
      * @return Warning[]|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getWarnings(): ?array
@@ -96,6 +114,9 @@ class Signature extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setWarnings(?array $warnings): Signature

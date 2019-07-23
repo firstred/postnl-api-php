@@ -29,16 +29,13 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Service;
 
+use Exception;
 use Firstred\PostNL\Entity\Request\GenerateBarcode;
-use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
-use Firstred\PostNL\Exception\CifException;
-use Firstred\PostNL\Exception\HttpClientException;
-use Firstred\PostNL\Exception\ResponseException;
+use Firstred\PostNL\Exception\ClientException;
 use Firstred\PostNL\Http\Client;
 use Firstred\PostNL\PostNL;
 use Http\Discovery\Psr17FactoryDiscovery;
-use Http\Message\RequestFactory;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -47,7 +44,10 @@ use Psr\Http\Message\ResponseInterface;
  */
 class BarcodeService extends AbstractService
 {
+    // API Version
     const VERSION = '1.1';
+
+    // Endpoints
     const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v1_1/barcode';
     const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v1_1/barcode';
 
@@ -61,11 +61,8 @@ class BarcodeService extends AbstractService
      *
      * @return string|null Barcode
      *
-     * @throws ApiException
      * @throws CifDownException
-     * @throws CifException
-     * @throws ResponseException
-     * @throws HttpClientException
+     * @throws ClientException
      */
     public function generateBarcode(GenerateBarcode $generateBarcode)
     {
@@ -86,10 +83,7 @@ class BarcodeService extends AbstractService
      */
     public function buildGenerateBarcodeRequest(GenerateBarcode $generateBarcode): RequestInterface
     {
-        /** @var RequestFactory $factory */
-        $factory = Psr17FactoryDiscovery::findRequestFactory();
-
-        return $factory->createRequest(
+        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
             'GET',
             ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).'?'.http_build_query(
                 [
@@ -98,12 +92,11 @@ class BarcodeService extends AbstractService
                     'Type'           => $generateBarcode->getBarcode()->getType(),
                     'Serie'          => $generateBarcode->getBarcode()->getSerie(),
                 ]
-            ),
-            [
-                'Accept' => 'application/json',
-                'apikey' => $this->postnl->getApiKey(),
-            ]
-        );
+            )
+        )
+            ->withHeader('Accept', 'application/json')
+            ->withHeader('apikey', $this->postnl->getApiKey())
+        ;
     }
 
     /**
@@ -113,19 +106,17 @@ class BarcodeService extends AbstractService
      *
      * @return array
      *
-     * @throws ApiException
      * @throws CifDownException
-     * @throws CifException
-     * @throws ResponseException
+     * @throws ClientException
      */
-    public function processGenerateBarcodeResponse($response)
+    public function processGenerateBarcodeResponse(ResponseInterface $response)
     {
         static::validateResponse($response);
 
-        $json = json_decode(static::getResponseText($response), true);
+        $json = json_decode((string) $response->getBody(), true);
 
         if (!isset($json['Barcode'])) {
-            throw new ResponseException('Invalid API Response', 0, null, $response);
+            throw new ClientException('Invalid API Response', 0, null, null, $response);
         }
 
         return $json;
@@ -136,7 +127,10 @@ class BarcodeService extends AbstractService
      *
      * @param GenerateBarcode[] $generateBarcodes
      *
-     * @return string[]|ResponseException[]|ApiException[]|CifDownException[]|CifException[] Barcodes
+     * @return string[]|CifDownException[] Barcodes
+     *
+     * @throws ClientException
+     * @throws Exception
      */
     public function generateBarcodes(array $generateBarcodes): array
     {
@@ -154,13 +148,7 @@ class BarcodeService extends AbstractService
             try {
                 $json = $this->processGenerateBarcodeResponse($response);
                 $barcode = $json['Barcode'];
-            } catch (ResponseException $e) {
-                $barcode = $e;
-            } catch (ApiException $e) {
-                $barcode = $e;
             } catch (CifDownException $e) {
-                $barcode = $e;
-            } catch (CifException $e) {
                 $barcode = $e;
             }
 

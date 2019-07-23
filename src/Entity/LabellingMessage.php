@@ -27,9 +27,12 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace Firstred\PostNL\Entity\Message;
+namespace Firstred\PostNL\Entity;
 
-use Exception;
+use Firstred\PostNL\Exception\InvalidTypeException;
+use ReflectionClass;
+use ReflectionException;
+use TypeError;
 
 /**
  * Class LabellingMessage
@@ -37,12 +40,17 @@ use Exception;
 class LabellingMessage extends Message
 {
     /**
+     * Printer type that will be used to process the label, e.g. Zebra printer or PDF See Guidelines for the available printer types.
+     *
+     * @pattern ^.{0,35}$
+     *
+     * @example GraphicFile|PDF
+     *
      * @var string|null $printerType
+     *
+     * @since   1.0.0
      */
     protected $printerType;
-    /**
-     * @var string|null $Printertype
-     */
 
     /**
      * LabellingMessage constructor
@@ -51,7 +59,8 @@ class LabellingMessage extends Message
      * @param string|null $mid         Message ID
      * @param string|null $timestamp   Timestamp
      *
-     * @throws Exception
+     * @throws TypeError
+     * @throws ReflectionException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -64,9 +73,14 @@ class LabellingMessage extends Message
     }
 
     /**
+     * Get printer type
+     *
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   LabellingMessage::$printerType
      */
     public function getPrinterType(): ?string
     {
@@ -74,14 +88,27 @@ class LabellingMessage extends Message
     }
 
     /**
+     * Set printer type
+     *
      * @param string|null $printertype
      *
      * @return static
      *
+     * @throws TypeError
+     * @throws ReflectionException
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   LabellingMessage::$printerType
      */
     public function setPrinterType(?string $printertype): LabellingMessage
     {
+        static $maxLength = 35;
+        if (is_string($printertype) && mb_strlen($printertype) > $maxLength) {
+            throw new InvalidTypeException(sprintf('%s::%s - Invalid printer type given, must be max 35 characters long', (new ReflectionClass($this))->getShortName(), __METHOD__));
+        }
+
         $this->printerType = $printertype;
 
         return $this;

@@ -29,22 +29,50 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use Firstred\PostNL\Exception\InvalidTypeException;
+use ReflectionClass;
+use ReflectionException;
+use TypeError;
+
 /**
  * Class Barcode
  */
 class Barcode extends AbstractEntity
 {
-    /** @var string|null $type */
+    /**
+     * Accepted values are: 2S, 3S, CC, CP, CD, CF, LA
+     *
+     * @var string|null $type
+     *
+     * @since 1.0.0
+     */
     protected $type;
-    /** @var string|null $range */
+
+    /**
+     * Range used when generating generic S10 barcodes (without a customer-specific component). If this is the case, please use ‘NL’ for this field in combination with Serie '00000000-99999999’. If you leave this field blank, the CustomerCode value will be used for the barcode.
+     *
+     * @var string|null $range
+     *
+     * @since 1.0.0
+     */
     protected $range;
-    /** @var string|null $serie */
+
+    /**
+     * Barcode serie in the format '###000000-###000000’, for example 100000000-500000000. The range must consist of a minimal difference of 100.000. Minimum length of the serie is 6 characters; maximum length is 9 characters. It is allowed to add extra leading zeros at the beginning of the serie. See Guidelines for more information.
+     *
+     * @var string|null $serie
+     *
+     * @since 1.0.0
+     */
     protected $serie;
 
     /**
      * @param string|null $type
      * @param string|null $range
      * @param string|null $serie
+     *
+     * @throws TypeError
+     * @throws ReflectionException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -59,9 +87,14 @@ class Barcode extends AbstractEntity
     }
 
     /**
+     * Get type
+     *
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   Barcode::$type
      */
     public function getType(): ?string
     {
@@ -69,23 +102,40 @@ class Barcode extends AbstractEntity
     }
 
     /**
+     * Set type
+     *
      * @param string|null $type
      *
      * @return static
      *
+     * @throws TypeError
+     * @throws ReflectionException
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   Barcode::$type
      */
     public function setType(?string $type): Barcode
     {
+        if (is_string($type) && !in_array($type, ['2S', '3S', 'CC', 'CP', 'CD', 'CF', 'LA', 'CX'])) {
+            throw new InvalidTypeException(sprintf('%s::%s - Invalid barcode type given, must be one of: 2S, 3S, CC, CP, CD, CF, LA', 'CX', (new ReflectionClass($this))->getShortName(), __METHOD__));
+        }
+
         $this->type = $type;
 
         return $this;
     }
 
     /**
+     * Get range
+     *
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   Barcode::$range
      */
     public function getRange(): ?string
     {
@@ -93,11 +143,18 @@ class Barcode extends AbstractEntity
     }
 
     /**
+     * Set range
+     *
      * @param string|null $range
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   Barcode::$range
      */
     public function setRange(?string $range): Barcode
     {
@@ -107,9 +164,14 @@ class Barcode extends AbstractEntity
     }
 
     /**
+     * Set serie
+     *
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   Barcode::$serie
      */
     public function getSerie(): ?string
     {
@@ -117,14 +179,26 @@ class Barcode extends AbstractEntity
     }
 
     /**
+     * Get serie
+     *
      * @param string|null $serie
      *
      * @return static
      *
+     * @throws TypeError
+     * @throws ReflectionException
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   Barcode::$serie
      */
     public function setSerie(?string $serie): Barcode
     {
+        if (!is_string($serie) && (!is_numeric($serie) || mb_strlen($serie) < 6 || mb_strlen($serie) > 9)) {
+            throw new InvalidTypeException(sprintf('%s::%s - Invalid range given, must be a numeric string of 6 to 9 characters', (new ReflectionClass($this))->getShortName(), __METHOD__));
+        }
+
         $this->serie = $serie;
 
         return $this;

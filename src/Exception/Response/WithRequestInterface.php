@@ -27,59 +27,29 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace Firstred\PostNL\Exception;
+namespace Firstred\PostNL\Exception\Request;
+
+use Firstred\PostNL\Exception\AbstractException;
+use Psr\Http\Message\RequestInterface;
 
 /**
- * Class ApiConnectionException
+ * Interface IWithRequest
  */
-class ApiConnectionException extends AbstractException
+interface WithRequestInterface
 {
-    /** @var string $body */
-    protected $body;
-    /** @var object $jsonBody */
-    protected $jsonBody;
-    /** @var array $headers */
-    protected $headers;
-
     /**
-     * ApiConnectionException constructor.
+     * @return RequestInterface|null
      *
-     * @param string      $message
-     * @param int         $code
-     * @param string|null $body
-     * @param object|null $jsonBody
-     * @param array|null  $headers
+     * @since 2.0.0
      */
-    public function __construct($message = "", $code = 0, $body = null, $jsonBody = null, $headers = null)
-    {
-        parent::__construct($message, $code, null);
-
-        $this->body = $body;
-        $this->jsonBody = $jsonBody;
-        $this->headers = $headers;
-    }
+    public function getRequest(): ?RequestInterface;
 
     /**
-     * @return string
+     * @param RequestInterface|null $request
+     *
+     * @return AbstractException
+     *
+     * @since 2.0.0
      */
-    public function getBody()
-    {
-        return $this->body;
-    }
-
-    /**
-     * @return object
-     */
-    public function getJsonBody()
-    {
-        return $this->jsonBody;
-    }
-
-    /**
-     * @return array
-     */
-    public function getHeaders()
-    {
-        return $this->headers;
-    }
+    public function setRequest(?RequestInterface $request): AbstractException;
 }

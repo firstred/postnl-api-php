@@ -30,31 +30,81 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity\Request;
 
 use Firstred\PostNL\Entity\AbstractEntity;
+use TypeError;
 
 /**
  * Class GetSentDate
  */
 class GetSentDate extends AbstractEntity
 {
-    /** @var bool|null $allowSundaySorting */
+    /**
+     * @var bool|null $allowSundaySorting
+     *
+     * @since 1.0.0
+     */
     protected $allowSundaySorting;
-    /** @var string|null $city */
+
+    /**
+     * @var string|null $city
+     *
+     * @since 1.0.0
+     */
     protected $city;
-    /** @var string|null $countryCode */
+
+    /**
+     * @var string|null $countryCode
+     *
+     * @since 1.0.0
+     */
     protected $countryCode;
-    /** @var string|null $deliveryDate */
+
+    /**
+     * @var string|null $deliveryDate
+     *
+     * @since 1.0.0
+     */
     protected $deliveryDate;
-    /** @var string|null $houseNr */
+
+    /**
+     * @var string|null $houseNr
+     *
+     * @since 1.0.0
+     */
     protected $houseNr;
-    /** @var string|null $houseNrExt */
+
+    /**
+     * @var string|null $houseNrExt
+     *
+     * @since 1.0.0
+     */
     protected $houseNrExt;
-    /** @var string[]|null $options */
+
+    /**
+     * @var string[]|null $options
+     *
+     * @since 1.0.0
+     */
     protected $options;
-    /** @var string|null $postalCode */
+
+    /**
+     * @var string|null $postalCode
+     *
+     * @since 1.0.0
+     */
     protected $postalCode;
-    /** @var string|null $shippingDuration */
+
+    /**
+     * @var string|null $shippingDuration
+     *
+     * @since 1.0.0
+     */
     protected $shippingDuration;
-    /** @var string|null $street */
+
+    /**
+     * @var string|null $street
+     *
+     * @since 1.0.0
+     */
     protected $street;
 
     /**
@@ -70,6 +120,8 @@ class GetSentDate extends AbstractEntity
      * @param string|null $deliveryDate
      * @param string|null $street
      * @param string|null $shippingDuration
+     *
+     * @throws TypeError
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -93,6 +145,7 @@ class GetSentDate extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getPostalCode(): ?string
@@ -107,6 +160,9 @@ class GetSentDate extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setPostalCode($postcode = null): GetSentDate
@@ -123,6 +179,7 @@ class GetSentDate extends AbstractEntity
     /**
      * @return bool|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getAllowSundaySorting(): ?bool
@@ -135,6 +192,9 @@ class GetSentDate extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setAllowSundaySorting(?bool $allowSundaySorting): GetSentDate
@@ -147,6 +207,7 @@ class GetSentDate extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getCity(): ?string
@@ -159,6 +220,9 @@ class GetSentDate extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setCity(?string $city): GetSentDate
@@ -169,8 +233,11 @@ class GetSentDate extends AbstractEntity
     }
 
     /**
+     * Get country code
+     *
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getCountryCode(): ?string
@@ -183,6 +250,9 @@ class GetSentDate extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setCountryCode(?string $countryCode): GetSentDate
@@ -195,6 +265,7 @@ class GetSentDate extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getDeliveryDate(): ?string
@@ -207,6 +278,9 @@ class GetSentDate extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setDeliveryDate(?string $deliveryDate): GetSentDate
@@ -219,6 +293,7 @@ class GetSentDate extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getHouseNr(): ?string
@@ -231,6 +306,9 @@ class GetSentDate extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setHouseNr(?string $houseNr): GetSentDate
@@ -243,6 +321,7 @@ class GetSentDate extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getHouseNrExt(): ?string
@@ -255,6 +334,9 @@ class GetSentDate extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setHouseNrExt(?string $houseNrExt): GetSentDate
@@ -267,6 +349,7 @@ class GetSentDate extends AbstractEntity
     /**
      * @return string[]|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getOptions(): ?array
@@ -279,6 +362,9 @@ class GetSentDate extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setOptions(?array $options): GetSentDate
@@ -291,6 +377,7 @@ class GetSentDate extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getShippingDuration(): ?string
@@ -303,6 +390,9 @@ class GetSentDate extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setShippingDuration(?string $shippingDuration): GetSentDate
@@ -315,6 +405,7 @@ class GetSentDate extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getStreet(): ?string
@@ -327,6 +418,9 @@ class GetSentDate extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setStreet(?string $street): GetSentDate

@@ -36,14 +36,11 @@ use Firstred\PostNL\Entity\Request\GetDeliveryDate;
 use Firstred\PostNL\Entity\Request\GetSentDateRequest;
 use Firstred\PostNL\Entity\Response\GetDeliveryDateResponse;
 use Firstred\PostNL\Entity\Response\GetSentDateResponse;
-use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
-use Firstred\PostNL\Exception\CifException;
-use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\ClientException;
 use Firstred\PostNL\Http\Client;
-use Firstred\PostNL\Util\Message;
+use Firstred\PostNL\Misc\Message;
 use Http\Discovery\Psr17FactoryDiscovery;
-use Http\Message\RequestFactory;
 use InvalidArgumentException;
 use Psr\Cache\CacheItemInterface;
 use Psr\Http\Message\RequestInterface;
@@ -68,9 +65,9 @@ class DeliveryDateService extends AbstractService
      *
      * @return GetDeliveryDateResponse
      *
-     * @throws ApiException
+     * @throws ClientException
      * @throws CifDownException
-     * @throws CifException
+     * @throws CifDownException
      * @throws Exception
      *
      * @since 1.0.0
@@ -88,9 +85,8 @@ class DeliveryDateService extends AbstractService
             }
         }
         if (!$response instanceof ResponseInterface) {
-            $response = Client::getInstance()->doRequest(
-                $this->buildGetDeliveryDateRequest($getDeliveryDate)
-            );
+            $request = $this->buildGetDeliveryDateRequest($getDeliveryDate);
+            $response = Client::getInstance()->doRequest($request);
             static::validateResponse($response);
         }
 
@@ -107,7 +103,7 @@ class DeliveryDateService extends AbstractService
             return $object;
         }
 
-        throw new ApiException('Unable to retrieve the delivery date');
+        throw new ClientException('Unable to retrieve the delivery date', 0, null, isset($request) && $request instanceof RequestInterface ? $request : null, $response);
     }
 
     /**
@@ -152,7 +148,7 @@ class DeliveryDateService extends AbstractService
             $query['CutOffTime'] = '15:30:00';
         }
 
-        // There need to be more cut off times besides the default 00 one in order to override
+        // There need to be more cut-off times besides the default 00 one in order to override
         if (count($times) > 1) {
             foreach (range(1, 7) as $day) {
                 $dayName = date('l', strtotime("Sunday +{$day} days"));
@@ -203,33 +199,31 @@ class DeliveryDateService extends AbstractService
 
         $endpoint = '/delivery?'.http_build_query($query);
 
-        /** @var RequestFactory $factory */
-        $factory = Psr17FactoryDiscovery::findRequestFactory();
-
-        return $factory->createRequest(
+        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
             'GET',
-            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint,
-            [
-                'Accept'       => 'application/json',
-                'Content-Type' => 'application/json;charset=UTF-8',
-                'apikey'       => $this->postnl->getApiKey(),
-            ]
-        );
+            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint
+        )
+            ->withHeader('Accept', 'application/json')
+            ->withHeader('Content-Type', 'application/json;charset=UTF-8')
+            ->withHeader('apikey', $this->postnl->getApiKey())
+        ;
     }
 
     /**
      * Process GetDeliveryDate REST Response
      *
-     * @param mixed $response
+     * @param ResponseInterface $response
      *
      * @return null|GetDeliveryDateResponse
      *
-     * @since 1.0.0
+     * @throws ClientException
+     *
      * @since 2.0.0 Strict typing
+     * @since 1.0.0
      */
-    public function processGetDeliveryDateResponse($response): ?GetDeliveryDateResponse
+    public function processGetDeliveryDateResponse(ResponseInterface $response): GetDeliveryDateResponse
     {
-        $body = json_decode(static::getResponseText($response), true);
+        $body = json_decode((string) $response->getBody(), true);
         if (isset($body['DeliveryDate'])) {
             /** @var GetDeliveryDateResponse $object */
             $object = AbstractEntity::jsonDeserialize(['GetDeliveryDateResponse' => $body]);
@@ -237,7 +231,7 @@ class DeliveryDateService extends AbstractService
             return $object;
         }
 
-        return null;
+        throw new ClientException('Unable to process get delivery date response', 0, null, null, $response);
     }
 
     /**
@@ -247,10 +241,8 @@ class DeliveryDateService extends AbstractService
      *
      * @return GetSentDateResponse
      *
-     * @throws ApiException
+     * @throws ClientException
      * @throws CifDownException
-     * @throws CifException
-     * @throws HttpClientException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -267,7 +259,8 @@ class DeliveryDateService extends AbstractService
             }
         }
         if (!$response instanceof ResponseInterface) {
-            $response = Client::getInstance()->doRequest($this->buildGetSentDateRequest($getSentDate));
+            $request = $this->buildGetSentDateRequest($getSentDate);
+            $response = Client::getInstance()->doRequest($request);
             static::validateResponse($response);
         }
 
@@ -284,7 +277,7 @@ class DeliveryDateService extends AbstractService
             return $object;
         }
 
-        throw new ApiException('Unable to retrieve shipping date');
+        throw new ClientException('Unable to retrieve shipping date', 0, null, isset($request) && $request instanceof RequestInterface ? $request : null, $response);
     }
 
     /**
@@ -319,33 +312,31 @@ class DeliveryDateService extends AbstractService
 
         $endpoint = '/shipping?'.http_build_query($query);
 
-        /** @var RequestFactory $factory */
-        $factory = Psr17FactoryDiscovery::findRequestFactory();
-
-        return $factory->createRequest(
+        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
             'POST',
-            $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT.$endpoint,
-            [
-                'Accept'       => 'application/json',
-                'Content-Type' => 'application/json;charset=UTF-8',
-                'apikey'       => $this->postnl->getApiKey(),
-            ]
-        );
+            $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT.$endpoint
+        )
+            ->withHeader('Accept', 'application/json')
+            ->withHeader('Content-Type', 'application/json;charset=UTF-8')
+            ->withHeader('apikey', $this->postnl->getApiKey())
+        ;
     }
 
     /**
      * Process GetSentDate REST Response
      *
-     * @param mixed $response
+     * @param ResponseInterface $response
      *
-     * @return null|GetSentDateResponse
+     * @return GetSentDateResponse
      *
-     * @since 1.0.0
+     * @throws ClientException
+     *
      * @since 2.0.0 Strict typing
+     * @since 1.0.0
      */
-    public function processGetSentDateResponse($response): ?GetSentDateResponse
+    public function processGetSentDateResponse(ResponseInterface $response): GetSentDateResponse
     {
-        $body = json_decode(static::getResponseText($response), true);
+        $body = json_decode((string) $response->getBody(), true);
         if (isset($body['SentDate'])) {
 
 
@@ -355,6 +346,6 @@ class DeliveryDateService extends AbstractService
             return $object;
         }
 
-        return null;
+        throw new ClientException('Unable to process get sent date response', 0, null, null, $response);
     }
 }

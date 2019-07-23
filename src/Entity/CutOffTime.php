@@ -29,22 +29,45 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use TypeError;
+
 /**
  * Class CutOffTime
  */
 class CutOffTime extends AbstractEntity
 {
-    /** @var string|null $day */
+    /**
+     * @var string|null $day
+     *
+     * @since 1.0.0
+     */
     protected $day;
-    /** @var string|null $time */
+
+    /**
+     * @var string|null $time
+     *
+     * @since 1.0.0
+     */
     protected $time;
-    /** @var bool|null $available */
+
+    /**
+     * @var bool|null $available
+     *
+     * @since 1.0.0
+     */
     protected $available;
 
     /**
+     * CutOffTime constructor.
+     *
      * @param string $day
      * @param string $time
      * @param bool   $available
+     *
+     * @throws TypeError
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function __construct($day = null, $time = null, $available = null)
     {
@@ -58,6 +81,7 @@ class CutOffTime extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getDay(): ?string
@@ -70,6 +94,7 @@ class CutOffTime extends AbstractEntity
      *
      * @return static
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setDay(?string $day): CutOffTime
@@ -82,6 +107,7 @@ class CutOffTime extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getTime(): ?string
@@ -94,6 +120,7 @@ class CutOffTime extends AbstractEntity
      *
      * @return static
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setTime(?string $time): CutOffTime
@@ -106,6 +133,7 @@ class CutOffTime extends AbstractEntity
     /**
      * @return bool|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getAvailable(): ?bool
@@ -118,6 +146,7 @@ class CutOffTime extends AbstractEntity
      *
      * @return static
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setAvailable(?bool $available): CutOffTime

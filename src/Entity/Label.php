@@ -29,6 +29,8 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use TypeError;
+
 /**
  * Class Label
  */
@@ -38,20 +40,41 @@ class Label extends AbstractEntity
     const FORMAT_A6 = 2;
 
     /**
+     * Base 64 encoded content
+     *
      * @var string|null $content
      *
-     * Base 64 encoded content
+     * @since 1.0.0
      */
     protected $content;
-    /** @var string|null $contenttype */
+
+    /**
+     * @var string|null $contenttype
+     *
+     * @since 1.0.0
+     */
     protected $contenttype;
-    /** @var string|null $labeltype */
+
+    /**
+     * Label type
+     *
+     * @var string|null $labeltype
+     *
+     * @since 1.0.0
+     */
     protected $labeltype;
 
     /**
+     * Label constructor.
+     *
      * @param string|null $content
      * @param string|null $contentType
      * @param string|null $labelType
+     *
+     * @throws TypeError
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function __construct($content = null, $contentType = null, $labelType = null)
     {
@@ -63,8 +86,11 @@ class Label extends AbstractEntity
     }
 
     /**
+     * Get content
+     *
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getContent(): ?string
@@ -73,10 +99,15 @@ class Label extends AbstractEntity
     }
 
     /**
+     * Set content
+     *
      * @param string|null $content
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setContent(?string $content): Label
@@ -87,8 +118,11 @@ class Label extends AbstractEntity
     }
 
     /**
+     * Get content type
+     *
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getContenttype(): ?string
@@ -97,10 +131,15 @@ class Label extends AbstractEntity
     }
 
     /**
+     * Set content type
+     *
      * @param string|null $contenttype
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setContenttype(?string $contenttype): Label
@@ -111,8 +150,11 @@ class Label extends AbstractEntity
     }
 
     /**
+     * Get label type
+     *
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getLabeltype(): ?string
@@ -121,10 +163,15 @@ class Label extends AbstractEntity
     }
 
     /**
+     * Set label type
+     *
      * @param string|null $labeltype
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setLabeltype(?string $labeltype): Label

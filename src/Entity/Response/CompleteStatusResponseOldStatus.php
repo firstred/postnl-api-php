@@ -30,21 +30,46 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity\Response;
 
 use Firstred\PostNL\Entity\AbstractEntity;
+use TypeError;
 
 /**
  * Class CompleteStatusResponseOldStatus
  */
 class CompleteStatusResponseOldStatus extends AbstractEntity
 {
-    /** @var string|null $statusCode */
+    /**
+     * @var string|null $statusCode
+     *
+     * @since 1.0.0
+     */
     protected $statusCode;
-    /** @var string|null $statusDescription */
+
+    /**
+     * @var string|null $statusDescription
+     *
+     * @since 1.0.0
+     */
     protected $statusDescription;
-    /** @var string|null $phaseCode */
+
+    /**
+     * @var string|null $phaseCode
+     *
+     * @since 1.0.0
+     */
     protected $phaseCode;
-    /** @var string|null $phaseDescription */
+
+    /**
+     * @var string|null $phaseDescription
+     *
+     * @since 1.0.0
+     */
     protected $phaseDescription;
-    /** @var string|null $timeStamp */
+
+    /**
+     * @var string|null $timeStamp
+     *
+     * @since 1.0.0
+     */
     protected $timeStamp;
 
     /**
@@ -56,7 +81,10 @@ class CompleteStatusResponseOldStatus extends AbstractEntity
      * @param string|null $phaseDescription
      * @param string|null $timeStamp
      *
+     * @throws TypeError
+     *
      * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function __construct(?string $code = null, ?string $description = null, ?string $phaseCode = null, ?string $phaseDescription = null, ?string $timeStamp = null)
     {
@@ -70,7 +98,12 @@ class CompleteStatusResponseOldStatus extends AbstractEntity
     }
 
     /**
+     * Get status code
+     *
      * @return string|null
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function getStatusCode(): ?string
     {
@@ -78,10 +111,15 @@ class CompleteStatusResponseOldStatus extends AbstractEntity
     }
 
     /**
+     * Set status code
+     *
      * @param string|null $statusCode
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setStatusCode(?string $statusCode): CompleteStatusResponseOldStatus
@@ -92,7 +130,12 @@ class CompleteStatusResponseOldStatus extends AbstractEntity
     }
 
     /**
+     * Get status description
+     *
      * @return string|null
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function getStatusDescription(): ?string
     {
@@ -100,10 +143,15 @@ class CompleteStatusResponseOldStatus extends AbstractEntity
     }
 
     /**
+     * Set status description
+     *
      * @param string|null $statusDescription
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setStatusDescription(?string $statusDescription): CompleteStatusResponseOldStatus
@@ -114,7 +162,12 @@ class CompleteStatusResponseOldStatus extends AbstractEntity
     }
 
     /**
+     * Get phase code
+     *
      * @return string|null
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function getPhaseCode(): ?string
     {
@@ -122,10 +175,15 @@ class CompleteStatusResponseOldStatus extends AbstractEntity
     }
 
     /**
+     * Set phase code
+     *
      * @param string|null $phaseCode
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setPhaseCode(?string $phaseCode): CompleteStatusResponseOldStatus
@@ -136,7 +194,12 @@ class CompleteStatusResponseOldStatus extends AbstractEntity
     }
 
     /**
+     * Get phase description
+     *
      * @return string|null
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function getPhaseDescription(): ?string
     {
@@ -148,6 +211,9 @@ class CompleteStatusResponseOldStatus extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setPhaseDescription(?string $phaseDescription): CompleteStatusResponseOldStatus
@@ -158,7 +224,12 @@ class CompleteStatusResponseOldStatus extends AbstractEntity
     }
 
     /**
+     * Get time stamp
+     *
      * @return string|null
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function getTimeStamp(): ?string
     {
@@ -170,6 +241,9 @@ class CompleteStatusResponseOldStatus extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setTimeStamp(?string $timeStamp): CompleteStatusResponseOldStatus

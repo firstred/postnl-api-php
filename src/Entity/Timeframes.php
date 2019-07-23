@@ -34,9 +34,18 @@ namespace Firstred\PostNL\Entity;
  */
 class Timeframes extends AbstractEntity
 {
-    /** @var Timeframe[]|null $timeframes */
+    /**
+     * @var Timeframe[]|null $timeframes
+     *
+     * @since 1.0.0
+     */
     protected $timeframes;
-    /** @var TimeframeTimeFrame[]|null $timeframeTimeFrames */
+
+    /**
+     * @var TimeframeTimeFrame[]|null $timeframeTimeFrames
+     *
+     * @since 1.0.0
+     */
     protected $timeframeTimeFrames;
 
     /**
@@ -64,6 +73,9 @@ class Timeframes extends AbstractEntity
     {
         $json = [];
         foreach (array_keys(get_class_vars(static::class)) as $propertyName) {
+            if (in_array(ucfirst($propertyName), ['Id'])) {
+                continue;
+            }
             if (isset($this->{$propertyName})) {
                 if ('Timeframes' === $propertyName) {
                     $timeframes = [];
@@ -76,9 +88,9 @@ class Timeframes extends AbstractEntity
                     foreach ($this->timeframeTimeFrames as $timeframe) {
                         $timeframes[] = $timeframe;
                     }
-                    $json[$propertyName] = ['TimeframeTimeFrame' => $timeframes];
+                    $json[ucfirst($propertyName)] = ['TimeframeTimeFrame' => $timeframes];
                 } else {
-                    $json[$propertyName] = $this->{$propertyName};
+                    $json[ucfirst($propertyName)] = $this->{$propertyName};
                 }
             }
         }

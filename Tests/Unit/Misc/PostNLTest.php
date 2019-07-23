@@ -31,8 +31,12 @@ namespace Firstred\PostNL\Tests\Unit\Misc;
 
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidBarcodeException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\PostNL;
 use PHPUnit\Framework\TestCase;
+use ReflectionException;
 
 /**
  * Class PostNLTest
@@ -47,7 +51,8 @@ class PostNLTest extends TestCase
     /**
      * @before
      *
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
      */
     public function setupPostNL()
     {
@@ -69,20 +74,19 @@ class PostNLTest extends TestCase
                 ->setGlobalPackBarcodeType('AB')
                 ->setGlobalPackCustomerCode('1234'),
             'test',
-            true,
-            PostNL::MODE_REST
+            true
         );
     }
 
     /**
      * @testdox Cannot generate an international barcode without a GlobalPack range
      *
-     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
-     * @throws \Firstred\PostNL\Exception\InvalidConfigurationException
+     * @throws InvalidBarcodeException
+     * @throws InvalidConfigurationException
      */
     public function testGlobalPackWithoutRange()
     {
-        $this->expectException('\\Firstred\\PostNL\\Exception\\InvalidConfigurationException');
+        $this->expectException(InvalidConfigurationException::class);
 
         $this->postnl->getCustomer()->setGlobalPackCustomerCode(null);
 
@@ -92,12 +96,12 @@ class PostNLTest extends TestCase
     /**
      * @testdox Cannot generate an international barcode without a GlobalPack type
      *
-     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
-     * @throws \Firstred\PostNL\Exception\InvalidConfigurationException
+     * @throws InvalidBarcodeException
+     * @throws InvalidConfigurationException
      */
     public function testGlobalPackWithoutType()
     {
-        $this->expectException('\\Firstred\\PostNL\\Exception\\InvalidConfigurationException');
+        $this->expectException(InvalidConfigurationException::class);
 
         $this->postnl->getCustomer()->setGlobalPackBarcodeType(null);
 

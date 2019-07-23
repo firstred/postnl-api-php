@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
@@ -26,56 +25,44 @@ declare(strict_types=1);
  *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
+namespace Firstred\PostNL\Exception\Request;
 
-namespace Firstred\PostNL\Exception;
-
-use Psr\Http\Message\ResponseInterface;
-use Throwable;
+use Firstred\PostNL\Exception\AbstractException;
+use Psr\Http\Message\RequestInterface;
 
 /**
- * Class ResponseException
+ * Trait WithRequestTrait
+ *
+ * @since 2.0.0
  */
-class ResponseException extends AbstractException
+trait WithRequestTrait
 {
-    /** @var ResponseInterface $response */
-    private $response;
+    /** @var RequestInterface|null $Request */
+    protected $request;
 
     /**
-     * ResponseException constructor.
+     * @return RequestInterface|null
      *
-     * @param string                 $message
-     * @param int                    $code
-     * @param Throwable|null         $previous
-     * @param ResponseInterface|null $response
-     *
-     * @since 1.0.0
+     * @since 2.0.0
      */
-    public function __construct(string $message = "", int $code = 0, ?Throwable $previous = null, ?ResponseInterface $response = null)
+    public function getRequest(): ?RequestInterface
     {
-        parent::__construct($message, $code, $previous);
-
-        $this->response = $response;
+        return $this->request;
     }
 
     /**
-     * @return ResponseInterface
+     * @param RequestInterface|null $request
      *
-     * @since 1.0.0
+     * @return AbstractException
+     *
+     * @since 2.0.0
      */
-    public function getResponse()
+    public function setRequest(?RequestInterface $request): AbstractException
     {
-        return $this->response;
-    }
+        $this->request = $request;
 
-    /**
-     * @param ResponseInterface $response
-     *
-     * @return void
-     *
-     * @since 1.0.0
-     */
-    public function setResponse(ResponseInterface $response): void
-    {
-        $this->response = $response;
+        /** @var AbstractException $this */
+
+        return $this;
     }
 }

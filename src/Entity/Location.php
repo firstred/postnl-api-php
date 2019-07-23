@@ -31,52 +31,150 @@ namespace Firstred\PostNL\Entity;
 
 use DateTime;
 use Exception;
+use Firstred\PostNL\Exception\InvalidTypeException;
+use TypeError;
 
 /**
  * Class Location
  */
 class Location extends AbstractEntity
 {
-    /** @var bool|null $allowSundaySorting */
+    /**
+     * @var bool|null $allowSundaySorting
+     *
+     * @since 1.0.0
+     */
     protected $allowSundaySorting;
-    /** @var string|null $deliveryDate */
+
+    /**
+     * @var string|null $deliveryDate
+     *
+     * @since 1.0.0
+     */
     protected $deliveryDate;
-    /** @var string[]|null $deliveryOptions */
+
+    /**
+     * @var string[]|null $deliveryOptions
+     *
+     * @since 1.0.0
+     */
     protected $deliveryOptions;
-    /** @var string|null $openingTime */
+
+    /**
+     * @var string|null $openingTime
+     *
+     * @since 1.0.0
+     */
     protected $openingTime;
-    /** @var string[]|null $options */
+
+    /**
+     * @var string[]|null $options
+     *
+     * @since 1.0.0
+     */
     protected $options;
-    /** @var string|null $city */
+
+    /**
+     * @var string|null $city
+     *
+     * @since 1.0.0
+     */
     protected $city;
-    /** @var string|null $houseNr */
+
+    /**
+     * @var string|null $houseNr
+     *
+     * @since 1.0.0
+     */
     protected $houseNr;
-    /** @var string|null $houseNrExt */
+
+    /**
+     * @var string|null $houseNrExt
+     *
+     * @since 1.0.0
+     */
     protected $houseNrExt;
-    /** @var string|null $postalcode */
-    protected $postalcode;
-    /** @var string|null $street */
+
+    /**
+     * @var string|null $postalCode
+     *
+     * @since 1.0.0
+     */
+    protected $postalCode;
+
+    /**
+     * @var string|null $street
+     *
+     * @since 1.0.0
+     */
     protected $street;
-    /** @var Coordinates|null $coordinates */
+
+    /**
+     * @var Coordinates|null $coordinates
+     *
+     * @since 1.0.0
+     */
     protected $coordinates;
-    /** @var CoordinatesNorthWest|null $coordinatesNorthWest */
+
+    /**
+     * @var CoordinatesNorthWest|null $coordinatesNorthWest
+     *
+     * @since 1.0.0
+     */
     protected $coordinatesNorthWest;
-    /** @var CoordinatesSouthEast|null $coordinatesSouthEast */
+
+    /**
+     * @var CoordinatesSouthEast|null $coordinatesSouthEast
+     *
+     * @since 1.0.0
+     */
     protected $coordinatesSouthEast;
-    /** @var string|null $locationCode */
+
+    /**
+     * @var string|null $locationCode
+     *
+     * @since 1.0.0
+     */
     protected $locationCode;
-    /** @var string|null $saleschannel */
+
+    /**
+     * @var string|null $saleschannel
+     *
+     * @since 1.0.0
+     */
     protected $saleschannel;
-    /** @var string|null $terminalType */
+
+    /**
+     * @var string|null $terminalType
+     *
+     * @since 1.0.0
+     */
     protected $terminalType;
-    /** @var string|null $retailNetworkID */
+
+    /**
+     * @var string|null $retailNetworkID
+     *
+     * @since 1.0.0
+     */
     protected $retailNetworkID;
-    /** @var string|null $downPartnerID */
+
+    /**
+     * @var string|null $downPartnerID
+     *
+     * @since 1.0.0
+     */
     protected $downPartnerID;
-    /** @var string|null $downPartnerLocation */
+
+    /**
+     * @var string|null $downPartnerLocation
+     *
+     * @since 1.0.0
+     */
     protected $downPartnerLocation;
 
     /**
+     * Location constructor.
+     *
      * @param string|null               $zipcode
      * @param bool|null                 $allowSundaySorting
      * @param string|null               $deliveryDate
@@ -97,6 +195,7 @@ class Location extends AbstractEntity
      * @param string|null               $downPartnerLocation
      *
      * @throws Exception
+     * @throws TypeError
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -109,7 +208,7 @@ class Location extends AbstractEntity
         $this->setDeliveryDate($deliveryDate ?: (new DateTime('next monday'))->format('d-m-Y'));
         $this->setDeliveryOptions($deliveryOptions);
         $this->setOptions($options);
-        $this->setPostalcode($zipcode);
+        $this->setPostalCode($zipcode);
         $this->setCoordinates($coordinates);
         $this->setCoordinatesNorthWest($coordinatesNW);
         $this->setCoordinatesSouthEast($coordinatesSE);
@@ -126,13 +225,18 @@ class Location extends AbstractEntity
     }
 
     /**
+     * Get zip / postal code
+     *
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see Location::$postalCode
      */
-    public function getPostalcode(): ?string
+    public function getPostalCode(): ?string
     {
-        return $this->postalcode;
+        return $this->postalCode;
     }
 
     /**
@@ -141,22 +245,35 @@ class Location extends AbstractEntity
      * @param string|null $postcode
      *
      * @return static
+     *
+     * @throws TypeError
+     * @throws InvalidTypeException
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Strict typing
+     *
+     * @see Location::$postalCode
      */
-    public function setPostalcode($postcode = null)
+    public function setPostalCode(?string $postcode = null)
     {
         if (is_null($postcode)) {
-            $this->postalcode = null;
+            $this->postalCode = null;
         } else {
-            $this->postalcode = strtoupper(str_replace(' ', '', $postcode));
+            $this->postalCode = strtoupper(str_replace(' ', '', $postcode));
         }
 
         return $this;
     }
 
     /**
+     * Get allow sunday sorting
+     *
      * @return bool|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see Location::$allowSundaySorting
      */
     public function getAllowSundaySorting(): ?bool
     {
@@ -164,10 +281,16 @@ class Location extends AbstractEntity
     }
 
     /**
+     * Set allow sunday sorting
+     *
      * @param bool|null $allowSundaySorting
      *
      * @return static
      *
+     * @throws TypeError
+     * @throws InvalidTypeException
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setAllowSundaySorting(?bool $allowSundaySorting): Location
@@ -178,9 +301,14 @@ class Location extends AbstractEntity
     }
 
     /**
+     * Get delivery date
+     *
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see Location::$deliveryDate
      */
     public function getDeliveryDate(): ?string
     {
@@ -188,11 +316,19 @@ class Location extends AbstractEntity
     }
 
     /**
+     * Set delivery date
+     *
      * @param string|null $deliveryDate
      *
      * @return static
      *
+     * @throws TypeError
+     * @throws InvalidTypeException
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see Location::$deliveryDate
      */
     public function setDeliveryDate(?string $deliveryDate): Location
     {
@@ -202,9 +338,14 @@ class Location extends AbstractEntity
     }
 
     /**
+     * Get delivery options
+     *
      * @return string[]|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see Location::$deliveryOptions
      */
     public function getDeliveryOptions(): ?array
     {

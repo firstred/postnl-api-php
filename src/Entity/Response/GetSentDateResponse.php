@@ -30,15 +30,25 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity\Response;
 
 use Firstred\PostNL\Entity\AbstractEntity;
+use TypeError;
 
 /**
  * Class GetSentDateResponse
  */
 class GetSentDateResponse extends AbstractEntity
 {
-    /** @var string|null $sentDate */
+    /**
+     * @var string|null $sentDate
+     *
+     * @since 1.0.0
+     */
     protected $sentDate;
-    /** @var string[]|null $options */
+
+    /**
+     * @var string[]|null $options
+     *
+     * @since 1.0.0
+     */
     protected $options;
 
     /**
@@ -46,6 +56,8 @@ class GetSentDateResponse extends AbstractEntity
      *
      * @param string|null   $date
      * @param string[]|null $options
+     *
+     * @throws TypeError
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -59,8 +71,11 @@ class GetSentDateResponse extends AbstractEntity
     }
 
     /**
+     * Get sent date
+     *
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getSentDate(): ?string
@@ -69,10 +84,15 @@ class GetSentDateResponse extends AbstractEntity
     }
 
     /**
+     * Set sent date
+     *
      * @param string|null $sentDate
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setSentDate(?string $sentDate): GetSentDateResponse
@@ -83,8 +103,11 @@ class GetSentDateResponse extends AbstractEntity
     }
 
     /**
+     * Get options
+     *
      * @return string[]|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getOptions(): ?array
@@ -93,10 +116,15 @@ class GetSentDateResponse extends AbstractEntity
     }
 
     /**
+     * Set options
+     *
      * @param string[]|null $options
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setOptions(?array $options): GetSentDateResponse

@@ -32,19 +32,58 @@ namespace Firstred\PostNL\Entity\Request;
 use Exception;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Customer;
-use Firstred\PostNL\Entity\Message\Message;
+use Firstred\PostNL\Entity\Message;
 use Firstred\PostNL\Entity\Shipment;
+use TypeError;
 
 /**
  * Class CompleteStatus
  */
 class CompleteStatus extends AbstractEntity
 {
-    /** @var Message|null $message */
+    /**
+     * Message
+     *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
+     * @var Message|null $message
+     *
+     * @since 1.0.0
+     *
+     * @see Message
+     */
     protected $message;
-    /** @var Customer|null $customer */
+
+    /**
+     * Customer
+     *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
+     * @var Customer|null $customer
+     *
+     * @since 1.0.0
+     *
+     * @see Customer
+     */
     protected $customer;
-    /** @var Shipment|null $shipment */
+
+    /**
+     * Shipment
+     *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
+     * @var Shipment|null $shipment
+     *
+     * @since 1.0.0
+     *
+     * @see Shipment
+     */
     protected $shipment;
 
     /**
@@ -55,6 +94,7 @@ class CompleteStatus extends AbstractEntity
      * @param Message|null  $message
      *
      * @throws Exception
+     * @throws TypeError
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -69,9 +109,14 @@ class CompleteStatus extends AbstractEntity
     }
 
     /**
+     * Get message
+     *
      * @return Message|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see Message
      */
     public function getMessage(): ?Message
     {
@@ -79,11 +124,18 @@ class CompleteStatus extends AbstractEntity
     }
 
     /**
+     * Set message
+     *
      * @param Message|null $message
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see Message
      */
     public function setMessage(?Message $message): CompleteStatus
     {
@@ -93,9 +145,14 @@ class CompleteStatus extends AbstractEntity
     }
 
     /**
+     * Get customer
+     *
      * @return Customer|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see Customer
      */
     public function getCustomer(): ?Customer
     {
@@ -103,11 +160,18 @@ class CompleteStatus extends AbstractEntity
     }
 
     /**
+     * Set customer
+     *
      * @param Customer|null $customer
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see Customer
      */
     public function setCustomer(?Customer $customer): CompleteStatus
     {
@@ -117,9 +181,14 @@ class CompleteStatus extends AbstractEntity
     }
 
     /**
+     * Get shipment
+     *
      * @return Shipment|null
      *
+     * @since 1.0.0
      * @since 2.0.0
+     *
+     * @see Shipment
      */
     public function getShipment(): ?Shipment
     {
@@ -127,11 +196,18 @@ class CompleteStatus extends AbstractEntity
     }
 
     /**
+     * Set shipment
+     *
      * @param Shipment|null $shipment
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0
+     *
+     * @see Shipment
      */
     public function setShipment(?Shipment $shipment): CompleteStatus
     {

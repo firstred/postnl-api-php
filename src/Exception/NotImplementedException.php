@@ -34,5 +34,4 @@ namespace Firstred\PostNL\Exception;
  */
 class NotImplementedException extends AbstractException
 {
-
 }

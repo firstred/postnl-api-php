@@ -30,9 +30,7 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Http;
 
 use Exception;
-use Firstred\PostNL\Exception\HttpClientException;
-use Firstred\PostNL\Exception\ResponseException;
-use GuzzleHttp\Promise\EachPromise;
+use Firstred\PostNL\Misc\EachPromise;
 use Http\Client\Common\Plugin\LoggerPlugin;
 use Http\Client\Common\Plugin\RetryPlugin;
 use Http\Client\Common\PluginClient;
@@ -223,7 +221,9 @@ class Client implements LoggerAwareInterface
      *
      * @param RequestInterface[] $requests
      *
-     * @return ResponseInterface|ResponseInterface[]|HttpClientException|HttpClientException[]
+     * @return ResponseInterface|ResponseInterface[]
+     *
+     * @throws Exception
      *
      * @since 2.0.0 Strict typing
      */
@@ -242,7 +242,7 @@ class Client implements LoggerAwareInterface
         $requests = $this->pendingRequests + $requests;
         $this->clearRequests();
 
-        $client = $this->getClient();
+        $client = $this->getAsyncClient();
         // Concurrent requests
         $promises = call_user_func(
             function () use ($requests, $client) {
@@ -314,7 +314,8 @@ class Client implements LoggerAwareInterface
      *
      * @return ResponseInterface
      *
-     * @throws Exception|HttpClientException
+     * @throws HttpClientException
+     * @throws Exception
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -323,7 +324,7 @@ class Client implements LoggerAwareInterface
     {
         // Initialize HttpAsyncClient, include the default options
         /** @var HttpAsyncClient $client */
-        $client = $this->getClient();
+        $client = $this->getAsyncClient();
 //        try {
             // FIXME: handle exceptions
             $response = $client->sendAsyncRequest($request)->wait();
@@ -335,13 +336,13 @@ class Client implements LoggerAwareInterface
     }
 
     /**
-     * Get the Guzzle client
+     * Get the HttpAsynClient
      *
      * @return HttpAsyncClient
      *
      * @since 1.0.0
      */
-    private function getClient(): HttpAsyncClient
+    public function getAsyncClient(): HttpAsyncClient
     {
         if (!$this->asyncClient) {
             $plugins = [new RetryPlugin(['retries' => $this->maxRetries])];
@@ -355,5 +356,29 @@ class Client implements LoggerAwareInterface
         }
 
         return $this->asyncClient;
+    }
+
+    /**
+     * Set the HttpAsyncClient
+     *
+     * @param HttpAsyncClient $client
+     *
+     * @return Client
+     */
+    public function setAsyncClient(HttpAsyncClient $client): Client
+    {
+        $this->asyncClient = $client;
+
+        return $this;
+    }
+
+    /**
+     * Reset HttpAsyncClient
+     *
+     * @return Client
+     */
+    public function resetAsyncClient(): Client
+    {
+        $this->asyncClient = null;
     }
 }

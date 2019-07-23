@@ -30,17 +30,29 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Entity\Response\CompleteStatusResponseEvent;
+use TypeError;
 
 /**
  * Class Event
  */
 class Event extends AbstractEntity
 {
-    /** @var CompleteStatusResponseEvent|null $completeStatusResponseEvent */
+    /**
+     * @var CompleteStatusResponseEvent|null $completeStatusResponseEvent
+     *
+     * @since 1.0.0
+     */
     protected $completeStatusResponseEvent;
 
     /**
+     * Event constructor.
+     *
      * @param CompleteStatusResponseEvent|null $completeStatusResponseEvent
+     *
+     * @throws TypeError
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function __construct(?CompleteStatusResponseEvent $completeStatusResponseEvent = null)
     {
@@ -50,8 +62,11 @@ class Event extends AbstractEntity
     }
 
     /**
+     * Get complete status response event
+     *
      * @return CompleteStatusResponseEvent|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getCompleteStatusResponseEvent(): ?CompleteStatusResponseEvent
@@ -60,10 +75,15 @@ class Event extends AbstractEntity
     }
 
     /**
+     * Set complete status response event
+     *
      * @param CompleteStatusResponseEvent|null $completeStatusResponseEvent
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setCompleteStatusResponseEvent(?CompleteStatusResponseEvent $completeStatusResponseEvent): Event

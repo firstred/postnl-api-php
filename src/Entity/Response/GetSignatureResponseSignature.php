@@ -30,17 +30,32 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity\Response;
 
 use Firstred\PostNL\Entity\AbstractEntity;
+use TypeError;
 
 /**
  * Class GetSignatureResponseSignature
  */
 class GetSignatureResponseSignature extends AbstractEntity
 {
-    /** @var string|null $barcode */
+    /**
+     * @var string|null $barcode
+     *
+     * @since 1.0.0
+     */
     protected $barcode;
-    /** @var string|null $signatureDate */
+
+    /**
+     * @var string|null $signatureDate
+     *
+     * @since 1.0.0
+     */
     protected $signatureDate;
-    /** @var string|null $signatureImage */
+
+    /**
+     * @var string|null $signatureImage
+     *
+     * @since 1.0.0
+     */
     protected $signatureImage;
 
     /**
@@ -49,6 +64,8 @@ class GetSignatureResponseSignature extends AbstractEntity
      * @param string|null $barcode
      * @param string|null $signatureDate
      * @param string|null $signatureImage
+     *
+     * @throws TypeError
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -63,8 +80,11 @@ class GetSignatureResponseSignature extends AbstractEntity
     }
 
     /**
+     * Get barcode
+     *
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getBarcode(): ?string
@@ -73,10 +93,15 @@ class GetSignatureResponseSignature extends AbstractEntity
     }
 
     /**
+     * Set barcode
+     *
      * @param string|null $barcode
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setBarcode(?string $barcode): GetSignatureResponseSignature
@@ -87,8 +112,11 @@ class GetSignatureResponseSignature extends AbstractEntity
     }
 
     /**
+     * Get signature date
+     *
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getSignatureDate(): ?string
@@ -97,10 +125,15 @@ class GetSignatureResponseSignature extends AbstractEntity
     }
 
     /**
+     * Set signature date
+     *
      * @param string|null $signatureDate
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setSignatureDate(?string $signatureDate): GetSignatureResponseSignature
@@ -111,8 +144,11 @@ class GetSignatureResponseSignature extends AbstractEntity
     }
 
     /**
+     * Get signature image
+     *
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getSignatureImage(): ?string
@@ -121,10 +157,15 @@ class GetSignatureResponseSignature extends AbstractEntity
     }
 
     /**
+     * Set signature image
+     *
      * @param string|null $signatureImage
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setSignatureImage(?string $signatureImage): GetSignatureResponseSignature

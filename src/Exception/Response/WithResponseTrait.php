@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
@@ -26,13 +25,44 @@ declare(strict_types=1);
  *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
+namespace Firstred\PostNL\Exception\Response;
 
-namespace Firstred\PostNL\Exception;
+use Firstred\PostNL\Exception\AbstractException;
+use Psr\Http\Message\ResponseInterface;
 
 /**
- * Class InvalidMethodException
+ * Trait WithResponseTrait
+ *
+ * @since 2.0.0
  */
-class InvalidMethodException extends AbstractException
+trait WithResponseTrait
 {
+    /** @var ResponseInterface|null $response */
+    protected $response;
 
+    /**
+     * @return ResponseInterface|null
+     *
+     * @since 2.0.0
+     */
+    public function getResponse(): ?ResponseInterface
+    {
+        return $this->response;
+    }
+
+    /**
+     * @param ResponseInterface|null $response
+     *
+     * @return AbstractException
+     *
+     * @since 2.0.0
+     */
+    public function setResponse(?ResponseInterface $response): AbstractException
+    {
+        $this->response = $response;
+
+        /** @var AbstractException $this */
+
+        return $this;
+    }
 }

@@ -32,19 +32,39 @@ namespace Firstred\PostNL\Entity\Response;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Label;
 use Firstred\PostNL\Entity\Warning;
+use TypeError;
 
 /**
  * Class MergedLabel
  */
 class MergedLabel extends AbstractEntity
 {
-    /** @var int $productCodeDelivery */
+    /**
+     * @var int $productCodeDelivery
+     *
+     * @since 1.0.0
+     */
     protected $productCodeDelivery;
-    /** @var string[]|null $barcodes */
+
+    /**
+     * @var string[]|null $barcodes
+     *
+     * @since 1.0.0
+     */
     protected $barcodes;
-    /** @var Warning[]|null */
+
+    /**
+     * @var Warning[]|null
+     *
+     * @since 1.0.0
+     */
     protected $warnings;
-    /** @var Label[]|null $labels */
+
+    /**
+     * @var Label[]|null $labels
+     *
+     * @since 1.0.0
+     */
     protected $labels;
 
     /**
@@ -52,6 +72,8 @@ class MergedLabel extends AbstractEntity
      * @param string[]|null  $barcodes
      * @param Warning[]|null $warnings
      * @param Label[]|null   $labels
+     *
+     * @throws TypeError
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -67,8 +89,11 @@ class MergedLabel extends AbstractEntity
     }
 
     /**
+     * Get product code delivery
+     *
      * @return int|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getProductCodeDelivery(): ?int
@@ -77,10 +102,15 @@ class MergedLabel extends AbstractEntity
     }
 
     /**
+     * Set product code delivery
+     *
      * @param int|null $productCodeDelivery
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setProductCodeDelivery(?int $productCodeDelivery): MergedLabel
@@ -91,8 +121,11 @@ class MergedLabel extends AbstractEntity
     }
 
     /**
+     * Get barcodes
+     *
      * @return string[]|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getBarcodes(): ?array
@@ -101,10 +134,15 @@ class MergedLabel extends AbstractEntity
     }
 
     /**
+     * Set barcodes
+     *
      * @param string[]|null $barcodes
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setBarcodes(?array $barcodes): MergedLabel
@@ -115,8 +153,11 @@ class MergedLabel extends AbstractEntity
     }
 
     /**
+     * Get warnings
+     *
      * @return Warning[]|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getWarnings(): ?array
@@ -125,10 +166,15 @@ class MergedLabel extends AbstractEntity
     }
 
     /**
+     * Set warnings
+     *
      * @param Warning[]|null $warnings
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setWarnings(?array $warnings): MergedLabel
@@ -139,8 +185,11 @@ class MergedLabel extends AbstractEntity
     }
 
     /**
+     * Get labels
+     *
      * @return Label[]|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getLabels(): ?array
@@ -149,10 +198,15 @@ class MergedLabel extends AbstractEntity
     }
 
     /**
+     * Set labels
+     *
      * @param Label[]|null $labels
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setLabels(?array $labels): MergedLabel

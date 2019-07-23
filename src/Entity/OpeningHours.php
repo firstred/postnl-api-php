@@ -29,24 +29,60 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use TypeError;
+
 /**
  * Class OpeningHours
  */
 class OpeningHours extends AbstractEntity
 {
-    /** @var string|null $monday */
+    /**
+     * @var string|null $monday
+     *
+     * @since 1.0.0
+     */
     protected $monday = '';
-    /** @var string|null $tuesday */
+
+    /**
+     * @var string|null $tuesday
+     *
+     * @since 1.0.0
+     */
     protected $tuesday = '';
-    /** @var string|null $wednesday */
+
+    /**
+     * @var string|null $wednesday
+     *
+     * @since 1.0.0
+     */
     protected $wednesday = '';
-    /** @var string|null $thursday */
+
+    /**
+     * @var string|null $thursday
+     *
+     * @since 1.0.0
+     */
     protected $thursday = '';
-    /** @var string|null $friday */
+
+    /**
+     * @var string|null $friday
+     *
+     * @since 1.0.0
+     */
     protected $friday = '';
-    /** @var string|null $saturday */
+
+    /**
+     * @var string|null $saturday
+     *
+     * @since 1.0.0
+     */
     protected $saturday = '';
-    /** @var string|null $sunday */
+
+    /**
+     * @var string|null $sunday
+     *
+     * @since 1.0.0
+     */
     protected $sunday = '';
 
     /**
@@ -60,7 +96,10 @@ class OpeningHours extends AbstractEntity
      * @param string|null $saturday
      * @param string|null $sunday
      *
+     * @throws TypeError
+     *
      * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function __construct(?string $monday = '', ?string $tuesday = '', ?string $wednesday = '', ?string $thursday = '', ?string $friday = '', ?string $saturday = '', ?string $sunday = '')
     {
@@ -78,6 +117,7 @@ class OpeningHours extends AbstractEntity
     /**
      * @return array
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function toArray(): array
@@ -95,6 +135,7 @@ class OpeningHours extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getMonday(): ?string
@@ -107,6 +148,7 @@ class OpeningHours extends AbstractEntity
      *
      * @return static
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setMonday(?string $monday): OpeningHours
@@ -119,6 +161,7 @@ class OpeningHours extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getTuesday(): ?string
@@ -131,6 +174,7 @@ class OpeningHours extends AbstractEntity
      *
      * @return static
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setTuesday(?string $tuesday): OpeningHours
@@ -143,6 +187,7 @@ class OpeningHours extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getWednesday(): ?string
@@ -155,6 +200,7 @@ class OpeningHours extends AbstractEntity
      *
      * @return static
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setWednesday(?string $wednesday): OpeningHours
@@ -167,6 +213,7 @@ class OpeningHours extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getThursday(): ?string
@@ -179,6 +226,9 @@ class OpeningHours extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setThursday(?string $thursday): OpeningHours
@@ -191,6 +241,7 @@ class OpeningHours extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getFriday(): ?string
@@ -203,6 +254,7 @@ class OpeningHours extends AbstractEntity
      *
      * @return static
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setFriday(?string $friday): OpeningHours
@@ -215,6 +267,7 @@ class OpeningHours extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getSaturday(): ?string
@@ -227,6 +280,7 @@ class OpeningHours extends AbstractEntity
      *
      * @return static
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setSaturday(?string $saturday): OpeningHours
@@ -239,6 +293,7 @@ class OpeningHours extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getSunday(): ?string
@@ -251,6 +306,7 @@ class OpeningHours extends AbstractEntity
      *
      * @return static
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setSunday(?string $sunday): OpeningHours

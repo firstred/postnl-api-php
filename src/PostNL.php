@@ -33,8 +33,8 @@ use Exception;
 use Firstred\PostNL\Entity\Barcode;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Label;
-use Firstred\PostNL\Entity\Message\LabellingMessage;
-use Firstred\PostNL\Entity\Message\Message;
+use Firstred\PostNL\Entity\LabellingMessage;
+use Firstred\PostNL\Entity\Message;
 use Firstred\PostNL\Entity\Request\CompleteStatus;
 use Firstred\PostNL\Entity\Request\CompleteStatusByPhase;
 use Firstred\PostNL\Entity\Request\CompleteStatusByReference;
@@ -65,16 +65,15 @@ use Firstred\PostNL\Entity\Response\ResponseTimeframes;
 use Firstred\PostNL\Entity\Response\SignatureResponse;
 use Firstred\PostNL\Entity\Shipment;
 use Firstred\PostNL\Exception\AbstractException;
-use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
-use Firstred\PostNL\Exception\CifException;
-use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\InvalidBarcodeException;
 use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\NotSupportedException;
-use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\Http\Client;
+use Firstred\PostNL\Misc\Message as UtilMessage;
+use Firstred\PostNL\Misc\Misc;
+use Firstred\PostNL\Misc\RFPdi;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
@@ -82,8 +81,6 @@ use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
-use Firstred\PostNL\Util\Misc;
-use Firstred\PostNL\Util\RFPdi;
 use Psr\Cache\CacheItemInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerAwareInterface;
@@ -94,7 +91,6 @@ use setasign\Fpdi\PdfParser\PdfParserException;
 use setasign\Fpdi\PdfParser\StreamReader;
 use setasign\Fpdi\PdfParser\Type\PdfTypeException;
 use setasign\Fpdi\PdfReader\PdfReaderException;
-use Firstred\PostNL\Util\Message as UtilMessage;
 
 /**
  * Class PostNL
@@ -179,9 +175,6 @@ class PostNL implements LoggerAwareInterface
      */
     protected $sandbox = false;
 
-    /** @var Client $httpClient */
-    protected $httpClient;
-
     /** @var LoggerInterface $logger */
     protected $logger;
 
@@ -258,7 +251,7 @@ class PostNL implements LoggerAwareInterface
      * @since 1.0.0
      * @since 2.0.0 Return `self`
      */
-    public function setSandbox(bool $sandbox): self
+    public function setSandbox(bool $sandbox): PostNL
     {
         $this->sandbox = $sandbox;
 
@@ -288,7 +281,7 @@ class PostNL implements LoggerAwareInterface
      * @since 1.0.0
      * @since 2.0.0 Return `self`
      */
-    public function setLogger(?LoggerInterface $logger = null): self
+    public function setLogger(?LoggerInterface $logger = null): PostNL
     {
         $this->logger = $logger;
         Client::getInstance()->setLogger($logger);
@@ -314,7 +307,7 @@ class PostNL implements LoggerAwareInterface
      */
     public function generateBarcode($type = '3S', $range = null, $serie = null, $eps = false): string
     {
-        if (!in_array($type, ['2S', '3S']) || strlen($type) !== 2) {
+        if (!in_array($type, ['2S', '3S']) || mb_strlen($type) !== 2) {
             throw new InvalidBarcodeException("Barcode type `$type` is invalid");
         }
 
@@ -361,7 +354,7 @@ class PostNL implements LoggerAwareInterface
      * @since 1.0.0
      * @since 2.0.0 Return `self`
      */
-    public function setCustomer(Customer $customer): self
+    public function setCustomer(Customer $customer): PostNL
     {
         $this->customer = $customer;
 
@@ -377,7 +370,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @since 2.0.0 Return `self`
      */
-    public function setApiKey(string $apiKey): self
+    public function setApiKey(string $apiKey): PostNL
     {
         $this->apiKey = $apiKey;
 
@@ -394,6 +387,9 @@ class PostNL implements LoggerAwareInterface
      * @return string
      *
      * @throws InvalidBarcodeException
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function findBarcodeSerie($type, $range, $eps)
     {
@@ -404,7 +400,7 @@ class PostNL implements LoggerAwareInterface
                 break;
             case '3S':
                 if ($eps) {
-                    switch (strlen($range)) {
+                    switch (mb_strlen($range)) {
                         case 4:
                             $serie = '0000000-9999999';
 
@@ -424,7 +420,7 @@ class PostNL implements LoggerAwareInterface
                     }
                 }
                 // Regular domestic codes
-                $serie = (strlen($range) === 4 ? '987000000-987600000' : '0000000-9999999');
+                $serie = (mb_strlen($range) === 4 ? '987000000-987600000' : '0000000-9999999');
 
                 break;
             default:
@@ -445,6 +441,7 @@ class PostNL implements LoggerAwareInterface
      * @return BarcodeService
      *
      * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function getBarcodeService(): BarcodeService
     {
@@ -463,9 +460,9 @@ class PostNL implements LoggerAwareInterface
      * @return self
      *
      * @since 1.0.0
-     * @since 2.0.0 Return `self`
+     * @since 2.0.0 Return `self` / strict typing
      */
-    public function setBarcodeService(BarcodeService $service): self
+    public function setBarcodeService(BarcodeService $service): PostNL
     {
         $this->barcodeService = $service;
 
@@ -641,7 +638,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @return self
      */
-    public function setLabellingService(LabellingService $service): self
+    public function setLabellingService(LabellingService $service): PostNL
     {
         $this->labellingService = $service;
 
@@ -899,7 +896,7 @@ class PostNL implements LoggerAwareInterface
      * @since 1.0.0
      * @since 2.0.0 Return `self`
      */
-    public function setConfirmingService(ConfirmingService $service): self
+    public function setConfirmingService(ConfirmingService $service): PostNL
     {
         $this->confirmingService = $service;
 
@@ -922,7 +919,7 @@ class PostNL implements LoggerAwareInterface
     {
         $confirmations = [];
         foreach ($shipments as $uuid => $shipment) {
-            $confirmations[$uuid] = (new Confirming([$shipment], $this->customer))->setId($uuid);
+            $confirmations[$uuid] = (new Confirming([$shipment], $this->customer))->setId((string) $uuid);
         }
 
         return $this->getConfirmingService()->confirmShipments($confirmations);
@@ -995,7 +992,7 @@ class PostNL implements LoggerAwareInterface
      * @since 1.0.0
      * @since 2.0.0 Return `self`
      */
-    public function setShippingStatusService(ShippingStatusService $service): self
+    public function setShippingStatusService(ShippingStatusService $service): PostNL
     {
         $this->shippingStatusService = $service;
 
@@ -1070,9 +1067,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @return GetDeliveryDateResponse
      *
-     * @throws ApiException
      * @throws CifDownException
-     * @throws CifException
      *
      * @since 2.0.0 Strict typing
      */
@@ -1110,7 +1105,7 @@ class PostNL implements LoggerAwareInterface
      * @since 1.0.0
      * @since 2.0.0 Return `self`
      */
-    public function setDeliveryDateService(DeliveryDateService $service): self
+    public function setDeliveryDateService(DeliveryDateService $service): PostNL
     {
         $this->deliveryDateService = $service;
 
@@ -1124,10 +1119,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @return GetSentDateResponse
      *
-     * @throws ApiException
      * @throws CifDownException
-     * @throws CifException
-     * @throws HttpClientException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -1144,11 +1136,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @return ResponseTimeframes
      *
-     * @throws ApiException
      * @throws CifDownException
-     * @throws CifException
-     * @throws ResponseException
-     * @throws HttpClientException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -1187,7 +1175,7 @@ class PostNL implements LoggerAwareInterface
      * @since 1.0.0
      * @since 2.0.0 Return `self`
      */
-    public function setTimeframeService(TimeframeService $service): self
+    public function setTimeframeService(TimeframeService $service): PostNL
     {
         $this->timeframeService = $service;
 
@@ -1201,9 +1189,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @return GetNearestLocationsResponse
      *
-     * @throws ApiException
      * @throws CifDownException
-     * @throws CifException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -1358,10 +1344,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @return GetLocationsInAreaResponse
      *
-     * @throws ApiException
      * @throws CifDownException
-     * @throws CifException
-     * @throws HttpClientException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -1378,10 +1361,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @return GetLocationsInAreaResponse
      *
-     * @throws ApiException
      * @throws CifDownException
-     * @throws CifException
-     * @throws HttpClientException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing

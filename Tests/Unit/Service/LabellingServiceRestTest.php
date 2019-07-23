@@ -30,20 +30,19 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Tests\Unit\Service;
 
 use Cache\Adapter\Void\VoidCachePool;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
+use Firstred\PostNL\Entity\Response\GenerateLabelResponse;
+use Firstred\PostNL\Exception\ClientException;
+use Firstred\PostNL\Misc\Message;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\RequestInterface;
 use Psr\Log\LoggerInterface;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Dimension;
 use Firstred\PostNL\Entity\Label;
-use Firstred\PostNL\Entity\Message\LabellingMessage;
+use Firstred\PostNL\Entity\LabellingMessage;
 use Firstred\PostNL\Entity\Request\GenerateLabel;
 use Firstred\PostNL\Entity\Shipment;
-use Firstred\PostNL\Http\MockClient;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\LabellingService;
 
@@ -103,13 +102,13 @@ class LabellingServiceRestTest extends TestCase
      */
     public function logPendingRequest()
     {
-        if (!$this->lastRequest instanceof Request) {
+        if (!$this->lastRequest instanceof RequestInterface) {
             return;
         }
 
         global $logger;
         if ($logger instanceof LoggerInterface) {
-            $logger->debug($this->getName()." Request\n".\GuzzleHttp\Psr7\str($this->lastRequest));
+            $logger->debug($this->getName()." Request\n".Message::str($this->lastRequest));
         }
         $this->lastRequest = null;
     }
@@ -119,7 +118,7 @@ class LabellingServiceRestTest extends TestCase
      */
     public function testHasValidLabellingService()
     {
-        $this->assertInstanceOf('\\Firstred\\PostNL\\Service\\LabellingService', $this->service);
+        $this->assertInstanceOf(LabellingService::class, $this->service);
     }
 
     /**
@@ -129,7 +128,7 @@ class LabellingServiceRestTest extends TestCase
     {
         $message = new LabellingMessage();
 
-        $this->lastRequest = $request = $this->service->buildGenerateLabelRequestREST(
+        $this->lastRequest = $request = $this->service->buildGenerateLabelRequest(
             GenerateLabel::create()
                 ->setShipments([
                     Shipment::create()
@@ -287,7 +286,7 @@ class LabellingServiceRestTest extends TestCase
                 ->setProductCodeDelivery('3085')
         );
 
-        $this->assertInstanceOf('\\Firstred\\PostNL\\Entity\\Response\\GenerateLabelResponse', $label);
+        $this->assertInstanceOf(GenerateLabelResponse::class, $label);
     }
 
     /**
@@ -634,7 +633,7 @@ class LabellingServiceRestTest extends TestCase
             ]
         );
 
-        $this->assertInstanceOf('\\Firstred\\PostNL\\Entity\\Response\\GenerateLabelResponse', $label[1]);
+        $this->assertInstanceOf(GenerateLabelResponse::class, $label[1]);
     }
 
     /**
@@ -642,7 +641,7 @@ class LabellingServiceRestTest extends TestCase
      */
     public function testNegativeGenerateLabelInvalidResponseRest()
     {
-        $this->expectException('Firstred\\PostNL\\Exception\\ResponseException');
+        $this->expectException(ClientException::class);
 
         $mock = new MockHandler([
             new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], 'asdfojasuidfo'),

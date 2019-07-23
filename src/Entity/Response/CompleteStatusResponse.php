@@ -30,19 +30,26 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity\Response;
 
 use Firstred\PostNL\Entity\AbstractEntity;
+use TypeError;
 
 /**
  * Class CompleteStatusResponse
  */
 class CompleteStatusResponse extends AbstractEntity
 {
-    /** @var array|null $shipments */
+    /**
+     * @var array|null $shipments
+     *
+     * @since 1.0.0
+     */
     protected $shipments;
 
     /**
      * CompleteStatusResponse constructor.
      *
      * @param array|null $shipments
+     *
+     * @throws TypeError
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -55,8 +62,11 @@ class CompleteStatusResponse extends AbstractEntity
     }
 
     /**
+     * Get shipments
+     *
      * @return array|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getShipments(): ?array
@@ -65,10 +75,15 @@ class CompleteStatusResponse extends AbstractEntity
     }
 
     /**
+     * Set shipments
+     *
      * @param array|null $shipments
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setShipments(?array $shipments): CompleteStatusResponse

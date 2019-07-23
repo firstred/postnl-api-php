@@ -57,17 +57,6 @@ class EntityTest extends TestCase
             $this->assertInstanceOf(AbstractEntity::class, $entity);
         }
 
-        foreach (scandir(__DIR__.'/../../../src/Entity/Message') as $entityName) {
-            if (in_array($entityName, ['.', '..']) || is_dir(__DIR__."/../../src/Entity/Message/$entityName")) {
-                continue;
-            }
-
-            $entityName = substr($entityName, 0, strlen($entityName) - 4);
-            $entityName = "\\Firstred\\PostNL\\Entity\\Message\\$entityName";
-            $entity = new $entityName();
-            $this->assertInstanceOf(AbstractEntity::class, $entity);
-        }
-
         foreach (scandir(__DIR__.'/../../../src/Entity/Request') as $entityName) {
             if (in_array($entityName, ['.', '..']) || is_dir(__DIR__."/../../src/Entity/Request/$entityName")) {
                 continue;
@@ -105,22 +94,6 @@ class EntityTest extends TestCase
 
             $entityName = substr($entityName, 0, strlen($entityName) - 4);
             $entityName = "\\Firstred\\PostNL\\Entity\\$entityName";
-            $entity = new $entityName();
-            $reflection = new ReflectionClass($entityName);
-            foreach (array_keys($reflection->getDefaultProperties()) as $var) {
-                $var = ucfirst($var);
-                $this->assertTrue(method_exists($entity, "get$var"));
-                $this->assertTrue(method_exists($entity, "set$var"));
-            }
-        }
-
-        foreach (scandir(__DIR__.'/../../../src/Entity/Message') as $entityName) {
-            if (in_array($entityName, ['.', '..']) || is_dir(__DIR__."/../../src/Entity/Message/$entityName")) {
-                continue;
-            }
-
-            $entityName = substr($entityName, 0, strlen($entityName) - 4);
-            $entityName = "\\Firstred\\PostNL\\Entity\\Message\\$entityName";
             $entity = new $entityName();
             $reflection = new ReflectionClass($entityName);
             foreach (array_keys($reflection->getDefaultProperties()) as $var) {

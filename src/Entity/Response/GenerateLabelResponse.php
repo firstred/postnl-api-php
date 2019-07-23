@@ -30,15 +30,25 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity\Response;
 
 use Firstred\PostNL\Entity\AbstractEntity;
+use TypeError;
 
 /**
  * Class GenerateLabelResponse
  */
 class GenerateLabelResponse extends AbstractEntity
 {
-    /** @var MergedLabel[]|null $mergedLabels */
+    /**
+     * @var MergedLabel[]|null $mergedLabels
+     *
+     * @since 1.0.0
+     */
     protected $mergedLabels;
-    /** @var ResponseShipment[]|null $responseShipments */
+
+    /**
+     * @var ResponseShipment[]|null $responseShipments
+     *
+     * @since 1.0.0
+     */
     protected $responseShipments;
 
     /**
@@ -46,6 +56,8 @@ class GenerateLabelResponse extends AbstractEntity
      *
      * @param MergedLabel[]|null      $mergedLabels
      * @param ResponseShipment[]|null $responseShipments
+     *
+     * @throws TypeError
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -59,8 +71,11 @@ class GenerateLabelResponse extends AbstractEntity
     }
 
     /**
+     * Get merged labels
+     *
      * @return MergedLabel[]|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getMergedlabels(): ?array
@@ -69,10 +84,15 @@ class GenerateLabelResponse extends AbstractEntity
     }
 
     /**
+     * Set merged labels
+     *
      * @param MergedLabel[]|null $mergedLabels
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setMergedlabels(?array $mergedLabels): GenerateLabelResponse
@@ -83,8 +103,11 @@ class GenerateLabelResponse extends AbstractEntity
     }
 
     /**
+     * Get response shipments
+     *
      * @return ResponseShipment[]|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getResponseShipments(): ?array
@@ -93,10 +116,15 @@ class GenerateLabelResponse extends AbstractEntity
     }
 
     /**
+     * Set response shipments
+     *
      * @param ResponseShipment[]|null $responseShipments
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setResponseShipments(?array $responseShipments): GenerateLabelResponse

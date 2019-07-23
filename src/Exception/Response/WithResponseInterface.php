@@ -27,13 +27,29 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace Firstred\PostNL\Exception;
+namespace Firstred\PostNL\Exception\Response;
 
-use Exception;
+use Firstred\PostNL\Exception\AbstractException;
+use Psr\Http\Message\ResponseInterface;
 
 /**
- * Class HttpClientException
+ * Interface IWithResponse
  */
-class HttpClientException extends Exception
+interface WithResponseInterface
 {
+    /**
+     * @return ResponseInterface|null
+     *
+     * @since 2.0.0
+     */
+    public function getResponse(): ?ResponseInterface;
+
+    /**
+     * @param ResponseInterface|null $response
+     *
+     * @return AbstractException
+     *
+     * @since 2.0.0
+     */
+    public function setResponse(?ResponseInterface $response): AbstractException;
 }

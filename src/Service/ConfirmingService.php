@@ -33,15 +33,12 @@ use Exception;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Request\Confirming;
 use Firstred\PostNL\Entity\Response\ConfirmingResponseShipment;
-use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
-use Firstred\PostNL\Exception\CifException;
-use Firstred\PostNL\Exception\HttpClientException;
-use Firstred\PostNL\Exception\ResponseException;
+use Firstred\PostNL\Exception\ClientException;
 use Firstred\PostNL\Http\Client;
 use Http\Discovery\Psr17FactoryDiscovery;
-use Http\Message\RequestFactory;
 use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Class ConfirmingService
@@ -62,18 +59,16 @@ class ConfirmingService extends AbstractService
      *
      * @return ConfirmingResponseShipment
      *
-     * @throws ApiException
+     * @throws ClientException
      * @throws CifDownException
-     * @throws CifException
-     * @throws ResponseException
-     * @throws HttpClientException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function confirmShipment(Confirming $confirming): ConfirmingResponseShipment
     {
-        $response = Client::getInstance()->doRequest($this->buildConfirmRequest($confirming));
+        $request = $this->buildConfirmRequest($confirming);
+        $response = Client::getInstance()->doRequest($request);
         $object = $this->processConfirmResponse($response);
 
         if ($object instanceof ConfirmingResponseShipment) {
@@ -81,10 +76,10 @@ class ConfirmingService extends AbstractService
         }
 
         if ($response->getStatusCode() === 200) {
-            throw new ResponseException('Invalid API Response', 0, null, $response);
+            throw new CifDownException('Invalid API Response', 0, null, $request, $response);
         }
 
-        throw new ApiException('Unable to confirm');
+        throw new ClientException('Unable to confirm', 0, null, $request, $response);
     }
 
     /**
@@ -96,39 +91,33 @@ class ConfirmingService extends AbstractService
      */
     public function buildConfirmRequest(Confirming $confirming): RequestInterface
     {
-        /** @var RequestFactory $factory */
-        $factory = Psr17FactoryDiscovery::findRequestFactory();
-
-        return $factory->createRequest(
+        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
             'POST',
-            $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT,
-            [
-                'Accept'       => 'application/json',
-                'Content-Type' => 'application/json;charset=UTF-8',
-                'apikey'       => $this->postnl->getApiKey(),
-            ],
-            json_encode($confirming)
-        );
+            $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT
+        )
+            ->withHeader('Accept', 'application/json')
+            ->withHeader('Content-Type', 'application/json;charset=UTF-8')
+            ->withHeader('apikey', $this->postnl->getApiKey())
+            ->withBody(Psr17FactoryDiscovery::findStreamFactory()->createStream(json_encode($confirming)))
+        ;
     }
 
     /**
      * Process Confirm REST Response
      *
-     * @param mixed $response
+     * @param ResponseInterface $response
      *
      * @return null|ConfirmingResponseShipment
      *
-     * @throws ApiException
      * @throws CifDownException
-     * @throws CifException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function processConfirmResponse($response): ?ConfirmingResponseShipment
+    public function processConfirmResponse(ResponseInterface $response): ?ConfirmingResponseShipment
     {
         static::validateResponse($response);
-        $body = json_decode(static::getResponseText($response), true);
+        $body = json_decode((string) $response->getBody(), true);
         if (isset($body['ConfirmingResponseShipments'])) {
             /** @var ConfirmingResponseShipment $object */
             $object = AbstractEntity::jsonDeserialize($body['ConfirmingResponseShipments']);
@@ -145,6 +134,8 @@ class ConfirmingService extends AbstractService
      * @param Confirming[] $confirms ['uuid' => Confirming, ...]
      *
      * @return ConfirmingResponseShipment[]
+     *
+     * @throws Exception
      *
      * @since 1.0.0
      */
@@ -164,7 +155,7 @@ class ConfirmingService extends AbstractService
             try {
                 $confirming = $this->processConfirmResponse($response);
                 if (!$confirming instanceof ConfirmingResponseShipment) {
-                    throw new ResponseException('Invalid API Response', 0, null, $response);
+                    throw new ClientException('Invalid API Response', 0, null, null, $response);
                 }
             } catch (Exception $e) {
                 $confirming = $e;

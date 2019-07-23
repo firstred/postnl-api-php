@@ -29,25 +29,53 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use TypeError;
+
 /**
  * Class TimeframeTimeFrame
  */
 class TimeframeTimeFrame extends AbstractEntity
 {
-    /** @var string|null $date */
+    /**
+     * @var string|null $date
+     *
+     * @since 1.0.0
+     */
     protected $date;
-    /** @var string|null $from */
+
+    /**
+     * @var string|null $from
+     *
+     * @since 1.0.0
+     */
     protected $from;
-    /** @var string[]|null $options */
+
+    /**
+     * @var string[]|null $options
+     *
+     * @since 1.0.0
+     */
     protected $options;
-    /** @var string|null $to */
+
+    /**
+     * @var string|null $to
+     *
+     * @since 1.0.0
+     */
     protected $to;
 
     /**
+     * TimeframeTimeFrame constructor.
+     *
      * @param string|null   $date
      * @param string|null   $from
      * @param string|null   $to
      * @param string[]|null $options
+     *
+     * @throws TypeError
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function __construct($date = null, $from = null, $to = null, array $options = null)
     {
@@ -62,6 +90,7 @@ class TimeframeTimeFrame extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getDate(): ?string
@@ -74,6 +103,9 @@ class TimeframeTimeFrame extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setDate(?string $date): TimeframeTimeFrame
@@ -86,6 +118,7 @@ class TimeframeTimeFrame extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getFrom(): ?string
@@ -98,6 +131,9 @@ class TimeframeTimeFrame extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setFrom(?string $from): TimeframeTimeFrame
@@ -110,6 +146,7 @@ class TimeframeTimeFrame extends AbstractEntity
     /**
      * @return string[]|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getOptions(): ?array
@@ -122,6 +159,9 @@ class TimeframeTimeFrame extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setOptions(?array $options): TimeframeTimeFrame
@@ -134,6 +174,7 @@ class TimeframeTimeFrame extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getTo(): ?string
@@ -146,6 +187,9 @@ class TimeframeTimeFrame extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setTo(?string $to): TimeframeTimeFrame

@@ -29,19 +29,37 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use TypeError;
+
 /**
  * Class ProductOption
  */
 class ProductOption extends AbstractEntity
 {
-    /** @var string|null $characteristic */
+    /**
+     * @var string|null $characteristic
+     *
+     * @since 1.0.0
+     */
     protected $characteristic;
-    /** @var string|null $option */
+
+    /**
+     * @var string|null $option
+     *
+     * @since 1.0.0
+     */
     protected $option;
 
     /**
+     * ProductOption constructor.
+     *
      * @param string|null $characteristic
      * @param string|null $option
+     *
+     * @throws TypeError
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function __construct($characteristic = null, $option = null)
     {
@@ -54,6 +72,7 @@ class ProductOption extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getCharacteristic(): ?string
@@ -66,6 +85,9 @@ class ProductOption extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setCharacteristic(?string $characteristic): ProductOption
@@ -78,6 +100,9 @@ class ProductOption extends AbstractEntity
     /**
      * @return string|null
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getOption(): ?string
@@ -90,6 +115,9 @@ class ProductOption extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setOption(?string $option): ProductOption

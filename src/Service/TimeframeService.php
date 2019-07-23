@@ -32,15 +32,11 @@ namespace Firstred\PostNL\Service;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Request\GetTimeframes;
 use Firstred\PostNL\Entity\Response\ResponseTimeframes;
-use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
-use Firstred\PostNL\Exception\CifException;
-use Firstred\PostNL\Exception\HttpClientException;
-use Firstred\PostNL\Exception\ResponseException;
+use Firstred\PostNL\Exception\ClientException;
 use Firstred\PostNL\Http\Client;
-use Firstred\PostNL\Util\Message;
+use Firstred\PostNL\Misc\Message;
 use Http\Discovery\Psr17FactoryDiscovery;
-use Http\Message\RequestFactory;
 use InvalidArgumentException;
 use Psr\Cache\CacheItemInterface;
 use Psr\Http\Message\RequestInterface;
@@ -67,10 +63,8 @@ class TimeframeService extends AbstractService
      *
      * @return ResponseTimeframes
      *
-     * @throws ApiException
      * @throws CifDownException
-     * @throws CifException
-     * @throws HttpClientException
+     * @throws ClientException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -87,7 +81,8 @@ class TimeframeService extends AbstractService
             }
         }
         if (!$response instanceof ResponseInterface) {
-            $response = Client::getInstance()->doRequest($this->buildGetTimeframesRequest($getTimeframes));
+            $request = $this->buildGetTimeframesRequest($getTimeframes);
+            $response = Client::getInstance()->doRequest($request);
             static::validateResponse($response);
         }
 
@@ -104,7 +99,7 @@ class TimeframeService extends AbstractService
             return $object;
         }
 
-        throw new ApiException('Unable to retrieve timeframes');
+        throw new ClientException('Unable to retrieve timeframes', 0, null, isset($request) && $request instanceof RequestInterface ? $request : null, $response);
     }
 
     /**
@@ -150,33 +145,33 @@ class TimeframeService extends AbstractService
         $query['Options'] = ltrim($query['Options'], ',');
         $endpoint = '?'.http_build_query($query);
 
-        /** @var RequestFactory $factory */
         $factory = Psr17FactoryDiscovery::findRequestFactory();
 
-        return $factory->createRequest(
+        /** @var RequestInterface $request */
+        $request = $factory->createRequest(
             'GET',
-            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint,
-            [
-                'Accept'       => 'application/json',
-                'Content-Type' => 'application/json;charset=UTF-8',
-                'apikey'       => $this->postnl->getApiKey(),
-            ]
+            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint
         );
+        $request = $request->withHeader('Accept', 'application/json');
+        $request = $request->withHeader('Content-Type', 'application/json;charset=UTF-8');
+        $request = $request->withHeader('apikey', $this->postnl->getApiKey());
+
+        return $request;
     }
 
     /**
      * Process GetTimeframes Response REST
      *
-     * @param mixed $response
+     * @param ResponseInterface $response
      *
      * @return null|ResponseTimeframes
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function processGetTimeframesResponse($response): ?ResponseTimeframes
+    public function processGetTimeframesResponse(ResponseInterface $response): ?ResponseTimeframes
     {
-        $body = json_decode(static::getResponseText($response), true);
+        $body = json_decode((string) $response->getBody(), true);
         if (isset($body['Timeframes'])) {
             // Standardize the object here
             if (isset($body['ReasonNotimeframes']['ReasonNoTimeframe'])) {

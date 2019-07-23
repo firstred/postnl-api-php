@@ -34,9 +34,18 @@ namespace Firstred\PostNL\Entity;
  */
 class CoordinatesSouthEast extends AbstractEntity
 {
-    /** @var string|null $latitude */
+    /**
+     * @var string|null $latitude
+     *
+     * @since 1.0.0
+     */
     protected $latitude;
-    /** @var string|null $longitude */
+
+    /**
+     * @var string|null $longitude
+     *
+     * @since 1.0.0
+     */
     protected $longitude;
 
     /**

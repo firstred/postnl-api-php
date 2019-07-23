@@ -32,19 +32,41 @@ namespace Firstred\PostNL\Entity\Request;
 use Exception;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Customer;
-use Firstred\PostNL\Entity\Message\LabellingMessage;
+use Firstred\PostNL\Entity\LabellingMessage;
+use Firstred\PostNL\Entity\Message;
 use Firstred\PostNL\Entity\Shipment;
+use TypeError;
 
 /**
  * Class GenerateLabel
  */
 class GenerateLabel extends AbstractEntity
 {
-    /** @var Customer|null $customer */
+    /**
+     * @var Customer|null $customer
+     *
+     * @since 1.0.0
+     *
+     * @see Customer
+     */
     protected $customer;
-    /** @var LabellingMessage|null $message */
+
+    /**
+     * @var LabellingMessage|null $message
+     *
+     * @since 1.0.0
+     *
+     * @see Message
+     */
     protected $message;
-    /** @var Shipment[]|null $shipments */
+
+    /**
+     * @var Shipment[]|null $shipments
+     *
+     * @since 1.0.0
+     *
+     * @see Shipment
+     */
     protected $shipments;
 
     /**
@@ -80,12 +102,15 @@ class GenerateLabel extends AbstractEntity
     {
         $json = [];
         foreach (array_keys(get_class_vars(static::class)) as $propertyName) {
+            if (in_array(ucfirst($propertyName), ['Id'])) {
+                continue;
+            }
             if (isset($this->{$propertyName})) {
                 // The REST API only seems to accept one shipment per request at the moment of writing (Sep. 24th, 2017)
                 if ('Shipments' === $propertyName && count($this->{$propertyName}) >= 1) {
-                    $json[$propertyName] = $this->{$propertyName}[0];
+                    $json[ucfirst($propertyName)] = $this->{$propertyName}[0];
                 } else {
-                    $json[$propertyName] = $this->{$propertyName};
+                    $json[ucfirst($propertyName)] = $this->{$propertyName};
                 }
             }
         }
@@ -94,9 +119,14 @@ class GenerateLabel extends AbstractEntity
     }
 
     /**
+     * Get customer
+     *
      * @return Customer|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see Customer
      */
     public function getCustomer(): ?Customer
     {
@@ -108,7 +138,12 @@ class GenerateLabel extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see Customer
      */
     public function setCustomer(?Customer $customer): GenerateLabel
     {
@@ -118,9 +153,14 @@ class GenerateLabel extends AbstractEntity
     }
 
     /**
+     * Get message
+     *
      * @return LabellingMessage|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see Message
      */
     public function getMessage(): ?LabellingMessage
     {
@@ -128,11 +168,18 @@ class GenerateLabel extends AbstractEntity
     }
 
     /**
+     * Set message
+     *
      * @param LabellingMessage|null $message
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see Message
      */
     public function setMessage(?LabellingMessage $message): GenerateLabel
     {
@@ -142,9 +189,14 @@ class GenerateLabel extends AbstractEntity
     }
 
     /**
+     * Get shipments
+     *
      * @return Shipment[]|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see Shipment
      */
     public function getShipments(): ?array
     {
@@ -152,11 +204,18 @@ class GenerateLabel extends AbstractEntity
     }
 
     /**
+     * Set shipments
+     *
      * @param Shipment[]|null $shipments
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see Shipment
      */
     public function setShipments(?array $shipments): GenerateLabel
     {

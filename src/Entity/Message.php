@@ -27,27 +27,54 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace Firstred\PostNL\Entity\Message;
+namespace Firstred\PostNL\Entity;
 
 use DateTime;
 use Exception;
-use Firstred\PostNL\Entity\AbstractEntity;
+use Firstred\PostNL\Exception\InvalidTypeException;
+use ReflectionClass;
+use ReflectionException;
+use TypeError;
 
 /**
  * Class Message
  */
 class Message extends AbstractEntity
 {
-    /** @var string|null $messageID */
+    /**
+     * ID of the message
+     *
+     * @pattern ^.{1,21}$
+     *
+     * @example 1
+     *
+     * @var string|null $messageID
+     *
+     * @since 1.0.0
+     */
     protected $messageID;
-    /** @var string|null $messageTimeStamp */
+
+    /**
+     * Date/time of sending the message. PHP Format: d-m-Y H:i:s
+     *
+     * @pattern d-m-Y H:i:s
+     *
+     * @example 01-01-2019 00:00:00
+     *
+     * @var string|null $messageTimeStamp
+     *
+     * @since 1.0.0
+     */
     protected $messageTimeStamp;
 
     /**
+     * Message constructor.
+     *
      * @param string|null $mid
      * @param string|null $timestamp
      *
-     * @throws Exception
+     * @throws TypeError
+     * @throws ReflectionException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -57,12 +84,19 @@ class Message extends AbstractEntity
         parent::__construct();
 
         $this->setMessageID($mid ?: substr(str_replace('-', '', $this->getid()), 0, 12));
-        $this->setMessageTimeStamp($timestamp ?: (new DateTime())->format('d-m-Y H:i:s'));
+        try {
+            $this->setMessageTimeStamp($timestamp ?: (new DateTime())->format('d-m-Y H:i:s'));
+        } catch (Exception $e) {
+            $this->setMessageTimeStamp('01-01-2019 00:00:00');
+        }
     }
 
     /**
+     * Get message ID
+     *
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getMessageID(): ?string
@@ -75,18 +109,31 @@ class Message extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     * @throws ReflectionException
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setMessageID(?string $messageID): Message
     {
+        static $minLength = 1;
+        static $maxLength = 21;
+        if (is_string($messageID) && (mb_strlen($messageID) < $minLength) || mb_strlen($messageID) > $maxLength) {
+            throw new InvalidTypeException(sprintf('%s::%s - Invalid message ID given, must be between 1 to 21 characters long', (new ReflectionClass($this))->getShortName(), __METHOD__));
+        }
+
         $this->messageID = $messageID;
 
         return $this;
     }
 
     /**
+     * Get message time stamp
+     *
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getMessageTimeStamp(): ?string
@@ -95,14 +142,29 @@ class Message extends AbstractEntity
     }
 
     /**
+     * Set message time stamp
+     *
      * @param string|null $messageTimeStamp
      *
      * @return static
      *
+     * @throws TypeError
+     * @throws ReflectionException
+     *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setMessageTimeStamp(?string $messageTimeStamp): Message
     {
+        if (is_string($messageTimeStamp)) {
+            $dt = DateTime::createFromFormat('d-m-Y H:i:s', $messageTimeStamp);
+            if (false === $dt || array_sum($dt::getLastErrors())) {
+                throw new InvalidTypeException(sprintf('%s::%s - Invalid message time stamp given, date format must be `d-m-Y H:i:s`', (new ReflectionClass($this))->getShortName(), __METHOD__));
+            }
+        }
+
         $this->messageTimeStamp = $messageTimeStamp;
 
         return $this;

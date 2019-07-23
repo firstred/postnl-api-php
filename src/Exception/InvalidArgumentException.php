@@ -34,5 +34,4 @@ namespace Firstred\PostNL\Exception;
  */
 class InvalidArgumentException extends AbstractException
 {
-
 }

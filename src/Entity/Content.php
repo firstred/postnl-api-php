@@ -29,27 +29,77 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use TypeError;
+
 /**
  * Class Content
  */
 class Content extends AbstractEntity
 {
-    /** @var string|null $countryOfOrigin */
+    /**
+     * Country code
+     *
+     * @pattern ^[A-Z]{2}$
+     *
+     * @example NL
+     *
+     * @var string|null $countryOfOrigin
+     *
+     * @since 1.0.0
+     */
     protected $countryOfOrigin;
-    /** @var string|null $description */
+
+    /**
+     * Description of the goods
+     *
+     * @pattern ^.{1,35}&
+     *
+     * @example Powdered milk
+     *
+     * @var string|null $description
+     *
+     * @since 1.0.0
+     */
     protected $description;
-    /** @var string|null $HSTariffNr */
+
+    /**
+     * @var string|null $HSTariffNr
+     *
+     * @since 1.0.0
+     */
     protected $HSTariffNr;
-    /** @var string|null $quantity */
+
+    /**
+     * @var string|null $quantity
+     *
+     * @since 1.0.0
+     */
     protected $quantity;
-    /** @var string|null $value */
+
+    /**
+     * @var string|null $value
+     *
+     * @since 1.0.0
+     */
     protected $value;
-    /** @var string|null $weight */
+
+    /**
+     * @var string|null $weight
+     *
+     * @since 1.0.0
+     */
     protected $weight;
-    /** @var Content[]|null $content */
+
+    /**
+     * @var Content[]|null $content
+     *
+     * @since 1.0.0
+     */
     protected $content;
 
     /**
+     * Content constructor.
+     *
      * @param string|null    $countryOfOrigin
      * @param string|null    $description
      * @param string|null    $hsTariffNr
@@ -57,6 +107,11 @@ class Content extends AbstractEntity
      * @param string|null    $val
      * @param string|null    $weight
      * @param Content[]|null $content
+     *
+     * @throws TypeError
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function __construct(?string $countryOfOrigin = null, ?string $description = null, ?string $hsTariffNr = null, ?string $qty = null, ?string $val = null, ?string $weight = null, ?array $content = null)
     {

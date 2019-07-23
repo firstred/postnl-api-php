@@ -33,15 +33,11 @@ use Exception;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Request\GenerateLabel;
 use Firstred\PostNL\Entity\Response\GenerateLabelResponse;
-use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
-use Firstred\PostNL\Exception\CifException;
-use Firstred\PostNL\Exception\HttpClientException;
-use Firstred\PostNL\Exception\ResponseException;
+use Firstred\PostNL\Exception\ClientException;
 use Firstred\PostNL\Http\Client;
-use Firstred\PostNL\Util\Message;
+use Firstred\PostNL\Misc\Message;
 use Http\Discovery\Psr17FactoryDiscovery;
-use Http\Message\RequestFactory;
 use InvalidArgumentException;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
@@ -68,9 +64,9 @@ class LabellingService extends AbstractService
      *
      * @return GenerateLabelResponse
      *
-     * @throws ApiException
+     * @throws ClientException
      * @throws CifDownException
-     * @throws CifException
+     * @throws CifDownException
      * @throws ResponseException
      * @throws HttpClientException
      */
@@ -106,10 +102,10 @@ class LabellingService extends AbstractService
         }
 
         if ($response->getStatusCode() === 200) {
-            throw new ResponseException('Invalid API response', 0, null, $response);
+            throw new ClientException('Invalid API response', 0, null, null, $response);
         }
 
-        throw new ApiException('Unable to generate label');
+        throw new ClientException('Unable to generate label', 0, null, null, $response);
     }
 
     /**
@@ -125,21 +121,17 @@ class LabellingService extends AbstractService
      */
     public function buildGenerateLabelRequest(GenerateLabel $generateLabel, bool $confirm = true): RequestInterface
     {
-        /** @var RequestFactory $factory */
-        $factory = Psr17FactoryDiscovery::findRequestFactory();
-
-        return $factory->createRequest(
+        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
             'POST',
             ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).'?'.http_build_query(
                 ['confirm' => $confirm]
-            ),
-            [
-                'Accept'       => 'application/json',
-                'Content-Type' => 'application/json;charset=UTF-8',
-                'apikey'       => $this->postnl->getApiKey(),
-            ],
-            json_encode($generateLabel, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES)
-        );
+            )
+        )
+            ->withHeader('Accept', 'application/json')
+            ->withHeader('Content-Type', 'application/json;charset=UTF-8')
+            ->withHeader('apikey', $this->postnl->getApiKey())
+            ->withBody(Psr17FactoryDiscovery::findStreamFactory()->createStream(json_encode($generateLabel)))
+        ;
     }
 
     /**
@@ -152,9 +144,9 @@ class LabellingService extends AbstractService
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function processGenerateLabelResponse($response): ?GenerateLabelResponse
+    public function processGenerateLabelResponse(ResponseInterface $response): ?GenerateLabelResponse
     {
-        $body = json_decode(static::getResponseText($response), true);
+        $body = json_decode((string) $response->getBody(), true);
         if (isset($body['ResponseShipments'])) {
             /** @var GenerateLabelResponse $object */
             $object = AbstractEntity::jsonDeserialize(['GenerateLabelResponse' => $body]);
@@ -171,6 +163,8 @@ class LabellingService extends AbstractService
      * @param array $generateLabels ['uuid' => [GenerateBarcode, confirm], ...]
      *
      * @return array
+     *
+     * @throws Exception
      */
     public function generateLabels(array $generateLabels): array
     {

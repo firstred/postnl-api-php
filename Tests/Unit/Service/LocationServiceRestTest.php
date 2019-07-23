@@ -35,17 +35,14 @@ use Firstred\PostNL\Entity\CoordinatesNorthWest;
 use Firstred\PostNL\Entity\CoordinatesSouthEast;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Location;
-use Firstred\PostNL\Entity\Message\Message;
+use Firstred\PostNL\Entity\Message;
 use Firstred\PostNL\Entity\Request\GetLocation;
 use Firstred\PostNL\Entity\Request\GetLocationsInArea;
 use Firstred\PostNL\Entity\Request\GetNearestLocations;
-use Firstred\PostNL\Http\MockClient;
+use Firstred\PostNL\Entity\Response\GetLocationsInAreaResponse;
+use Firstred\PostNL\Entity\Response\GetNearestLocationsResponse;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\LocationService;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
@@ -220,7 +217,7 @@ class LocationServiceRestTest extends TestCase
                 )
         );
 
-        $this->assertInstanceOf('\\Firstred\\PostNL\\Entity\\Response\\GetNearestLocationsResponse', $response);
+        $this->assertInstanceOf(GetNearestLocationsResponse::class, $response);
         $this->assertEquals(20, count((array) $response->getGetLocationsResult()));
     }
 
@@ -339,7 +336,7 @@ class LocationServiceRestTest extends TestCase
                 )
         );
 
-        $this->assertInstanceOf('\\Firstred\\PostNL\\Entity\\Response\\GetLocationsInAreaResponse', $response);
+        $this->assertInstanceOf(GetLocationsInAreaResponse::class, $response);
         $this->assertEquals(20, count((array) $response->getGetLocationsResult()));
     }
 
@@ -401,7 +398,7 @@ class LocationServiceRestTest extends TestCase
                 ->setRetailNetworkID('PNPNL-01')
         );
 
-        $this->assertInstanceOf('\\Firstred\\PostNL\\Entity\\Response\\GetLocationsInAreaResponse', $response);
+        $this->assertInstanceOf(GetLocationsInAreaResponse::class, $response);
         $this->assertEquals(1, count((array) $response->getGetLocationsResult()));
     }
 

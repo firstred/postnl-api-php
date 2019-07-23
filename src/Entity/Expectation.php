@@ -29,19 +29,37 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use TypeError;
+
 /**
  * Class Expectation
  */
 class Expectation extends AbstractEntity
 {
-    /** @var string|null $ETAFrom */
+    /**
+     * @var string|null $ETAFrom
+     *
+     * @since 1.0.0
+     */
     protected $ETAFrom;
-    /** @var string|null $ETATo */
+
+    /**
+     * @var string|null $ETATo
+     *
+     * @since 1.0.0
+     */
     protected $ETATo;
 
     /**
+     * Expectation constructor.
+     *
      * @param string $from
      * @param string $to
+     *
+     * @throws TypeError
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function __construct($from = null, $to = null)
     {
@@ -54,6 +72,7 @@ class Expectation extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getETAFrom(): ?string
@@ -66,6 +85,9 @@ class Expectation extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setETAFrom(?string $ETAFrom): Expectation
@@ -78,6 +100,7 @@ class Expectation extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getETATo(): ?string
@@ -90,6 +113,9 @@ class Expectation extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setETATo(?string $ETATo): Expectation

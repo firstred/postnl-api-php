@@ -31,19 +31,26 @@ namespace Firstred\PostNL\Entity\Response;
 
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Signature;
+use TypeError;
 
 /**
  * Class SignatureResponse
  */
 class SignatureResponse extends AbstractEntity
 {
-    /** @var Signature|null $signature */
+    /**
+     * @var Signature|null $signature
+     *
+     * @since 1.0.0
+     */
     protected $signature;
 
     /**
      * SignatureResponse constructor.
      *
      * @param Signature|null $signature
+     *
+     * @throws TypeError
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -56,8 +63,11 @@ class SignatureResponse extends AbstractEntity
     }
 
     /**
+     * Get signature
+     *
      * @return Signature|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getSignature(): ?Signature
@@ -66,10 +76,15 @@ class SignatureResponse extends AbstractEntity
     }
 
     /**
+     * Set signature
+     *
      * @param Signature|null $signature
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setSignature(?Signature $signature): SignatureResponse

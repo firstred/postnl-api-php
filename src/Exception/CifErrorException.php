@@ -27,38 +27,38 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace Firstred\PostNL\Util;
+namespace Firstred\PostNL\Exception;
+
+use Firstred\PostNL\Exception\Request\WithRequestInterface;
+use Firstred\PostNL\Exception\Request\WithRequestTrait;
+use Firstred\PostNL\Exception\Response\WithResponseInterface;
+use Firstred\PostNL\Exception\Response\WithResponseTrait;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
+use Throwable;
 
 /**
- * Class UUID
+ * Class CifErrorException
  */
-class UUID
+class CifErrorException extends AbstractException implements WithRequestInterface, WithResponseInterface
 {
+    use WithRequestTrait;
+    use WithResponseTrait;
+
     /**
-     * Generate a v4 UUID
+     * CifDownException constructor.
      *
-     * @return string
+     * @param string|string[]        $message  The fault string
+     * @param int|string             $code     The error code
+     * @param Throwable|null         $previous The previous exception
+     * @param RequestInterface|null  $request  PSR(1)7 request object
+     * @param ResponseInterface|null $response PSR(1)7 response object
      */
-    public static function generate()
+    public function __construct(string $message = '', $code = 0, ?Throwable $previous = null, ?RequestInterface $request = null, ?ResponseInterface $response = null)
     {
-        return sprintf(
-            '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
-            // 32 bits for "time_low"
-            mt_rand(0, 0xffff),
-            mt_rand(0, 0xffff),
-            // 16 bits for "time_mid"
-            mt_rand(0, 0xffff),
-            // 16 bits for "time_hi_and_version",
-            // four most significant bits holds version number 4
-            mt_rand(0, 0x0fff) | 0x4000,
-            // 16 bits, 8 bits for "clk_seq_hi_res",
-            // 8 bits for "clk_seq_low",
-            // two most significant bits holds zero and one for variant DCE1.1
-            mt_rand(0, 0x3fff) | 0x8000,
-            // 48 bits for "node"
-            mt_rand(0, 0xffff),
-            mt_rand(0, 0xffff),
-            mt_rand(0, 0xffff)
-        );
+        parent::__construct($message, $code, $previous);
+
+        $this->response = $response;
+        $this->request = $request;
     }
 }

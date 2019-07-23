@@ -29,86 +29,284 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use TypeError;
+
 /**
  * Class Shipment
  */
 class Shipment extends AbstractEntity
 {
-    /** @var Address[]|null $addresses */
+    /**
+     * @var Address[]|null $addresses
+     *
+     * @since 1.0.0
+     */
     protected $addresses;
-    /** @var Amount[]|null $amounts */
+
+    /**
+     * @var Amount[]|null $amounts
+     *
+     * @since 1.0.0
+     */
     protected $amounts;
-    /** @var string|null $barcode */
+
+    /**
+     * @var string|null $barcode
+     *
+     * @since 1.0.0
+     */
     protected $barcode;
-    /** @var string|null $collectionTimeStampEnd */
+
+    /**
+     * @var string|null $codingText
+     *
+     * @since 1.0.0
+     */
+    protected $codingText;
+
+    /**
+     * @var string|null $collectionTimeStampEnd
+     *
+     * @since 1.0.0
+     */
     protected $collectionTimeStampEnd;
-    /** @var string|null $collectionTimeStampStart */
+
+    /**
+     * @var string|null $collectionTimeStampStart
+     *
+     * @since 1.0.0
+     */
     protected $collectionTimeStampStart;
-    /** @var Contact[]|null $contacts */
+
+    /**
+     * @var Contact[]|null $contacts
+     *
+     * @since 1.0.0
+     */
     protected $contacts;
-    /** @var string|null $content */
+
+    /**
+     * @var string|null $content
+     *
+     * @since 1.0.0
+     */
     protected $content;
-    /** @var string|null $costCenter */
+
+    /**
+     * @var string|null $costCenter
+     *
+     * @since 1.0.0
+     */
     protected $costCenter;
-    /** @var string|null $customerOrderNumber */
+
+    /**
+     * @var string|null $customerOrderNumber
+     *
+     * @since 1.0.0
+     */
     protected $customerOrderNumber;
-    /** @var Customer|null $customer */
+
+    /**
+     * @var Customer|null $customer
+     *
+     * @since 1.0.0
+     */
     protected $customer;
-    /** @var Customs|null $customs */
+
+    /**
+     * @var Customs|null $customs
+     *
+     * @since 1.0.0
+     */
     protected $customs;
-    /** @var string|null $statusCode */
+
+    /**
+     * @var string|null $statusCode
+     *
+     * @since 1.0.0
+     */
     protected $statusCode;
-    /** @var string|null $phaseCode */
+
+    /**
+     * @var string|null $phaseCode
+     *
+     * @since 1.0.0
+     */
     protected $phaseCode;
-    /** @var string|null $dateFrom */
+
+    /**
+     * @var string|null $dateFrom
+     *
+     * @since 1.0.0
+     */
     protected $dateFrom;
-    /** @var string|null $dateTo */
+
+    /**
+     * @var string|null $dateTo
+     *
+     * @since 1.0.0
+     */
     protected $dateTo;
-    /** @var string|null $deliveryAddress */
+
+    /**
+     * @var string|null $deliveryAddress
+     *
+     * @since 1.0.0
+     */
     protected $deliveryAddress;
-    /** @var string|null $deliveryTimeStampStart */
+
+    /**
+     * @var string|null $deliveryTimeStampStart
+     *
+     * @since 1.0.0
+     */
     protected $deliveryTimeStampStart;
-    /** @var string|null $deliveryTimeStampEnd */
+
+    /**
+     * @var string|null $deliveryTimeStampEnd
+     *
+     * @since 1.0.0
+     */
     protected $deliveryTimeStampEnd;
-    /** @var string|null $deliveryDate */
+
+    /**
+     * @var string|null $deliveryDate
+     *
+     * @since 1.0.0
+     */
     protected $deliveryDate;
-    /** @var Dimension|null $dimension */
+
+    /**
+     * @var Dimension|null $dimension
+     *
+     * @since 1.0.0
+     */
     protected $dimension;
-    /** @var string|null $downPartnerBarcode */
+
+    /**
+     * @var string|null $downPartnerBarcode
+     *
+     * @since 1.0.0
+     */
     protected $downPartnerBarcode;
-    /** @var string|null $downPartnerID */
+
+    /**
+     * @var string|null $downPartnerID
+     *
+     * @since 1.0.0
+     */
     protected $downPartnerID;
-    /** @var string|null $downPartnerLocation */
+
+    /**
+     * @var string|null $downPartnerLocation
+     *
+     * @since 1.0.0
+     */
     protected $downPartnerLocation;
-    /** @var Event[]|null $events */
+
+    /**
+     * @var Event[]|null $events
+     *
+     * @since 1.0.0
+     */
     protected $events;
-    /** @var Group[]|null $groups */
+
+    /**
+     * @var Group[]|null $groups
+     *
+     * @since 1.0.0
+     */
     protected $groups;
-    /** @var string|null $IDExpiration */
+
+    /**
+     * @var string|null $IDExpiration
+     *
+     * @since 1.0.0
+     */
     protected $IDExpiration;
-    /** @var string|null $IDNumber */
+
+    /**
+     * @var string|null $IDNumber
+     *
+     * @since 1.0.0
+     */
     protected $IDNumber;
-    /** @var string|null $IDType */
+
+    /**
+     * @var string|null $IDType
+     *
+     * @since 1.0.0
+     */
     protected $IDType;
-    /** @var Status[]|null $oldStatuses */
+
+    /**
+     * @var Status[]|null $oldStatuses
+     *
+     * @since 1.0.0
+     */
     protected $oldStatuses;
-    /** @var string|null $productCodeCollect */
+
+    /**
+     * @var string|null $productCodeCollect
+     *
+     * @since 1.0.0
+     */
     protected $productCodeCollect;
-    /** @var string|null $productCodeDelivery */
+
+    /**
+     * @var string|null $productCodeDelivery
+     *
+     * @since 1.0.0
+     */
     protected $productCodeDelivery;
-    /** @var ProductOption[]|null $productOptions */
+
+    /**
+     * @var ProductOption[]|null $productOptions
+     *
+     * @since 1.0.0
+     */
     protected $productOptions;
-    /** @var string|null $receiverDateOfBirth */
+
+    /**
+     * @var string|null $receiverDateOfBirth
+     *
+     * @since 1.0.0
+     */
     protected $receiverDateOfBirth;
-    /** @var string|null $reference */
+
+    /**
+     * @var string|null $reference
+     *
+     * @since 1.0.0
+     */
     protected $reference;
-    /** @var string|null $referenceCollect */
+
+    /**
+     * @var string|null $referenceCollect
+     *
+     * @since 1.0.0
+     */
     protected $referenceCollect;
-    /** @var string|null $remark */
+
+    /**
+     * @var string|null $remark
+     *
+     * @since 1.0.0
+     */
     protected $remark;
-    /** @var string|null $returnBarcode */
+
+    /**
+     * @var string|null $returnBarcode
+     *
+     * @since 1.0.0
+     */
     protected $returnBarcode;
-    /** @var string|null $returnReference */
+
+    /**
+     * @var string|null $returnReference
+     *
+     * @since 1.0.0
+     */
     protected $returnReference;
 
     /**
@@ -150,6 +348,8 @@ class Shipment extends AbstractEntity
      * @param string|null          $phaseCode
      * @param string|null          $dateFrom
      * @param string|null          $dateTo
+     *
+     * @throws TypeError
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -264,6 +464,30 @@ class Shipment extends AbstractEntity
     public function setBarcode(?string $barcode): Shipment
     {
         $this->barcode = $barcode;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getCodingText(): ?string
+    {
+        return $this->codingText;
+    }
+
+    /**
+     * @param string|null $codingText
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setCodingText(?string $codingText): Shipment
+    {
+        $this->codingText = $codingText;
 
         return $this;
     }

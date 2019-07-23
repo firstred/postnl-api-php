@@ -31,9 +31,7 @@ namespace Firstred\PostNL\Service;
 
 use DateInterval;
 use DateTimeInterface;
-use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
-use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\PostNL;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
@@ -48,6 +46,7 @@ use ReflectionException;
 abstract class AbstractService
 {
     const COMMON_NAMESPACE = 'http://postnl.nl/cif/services/common/';
+
     /**
      * TTL for the cache
      *
@@ -57,8 +56,11 @@ abstract class AbstractService
      * A `DateInterval` can be used as well to set the TTL
      *
      * @var null|int|DateTimeInterface|DateInterval $ttl
+     *
+     * @since 1.0.0
      */
     public $ttl = null;
+
     /**
      * The [PSR-6](https://www.php-fig.org/psr/psr-6/) CacheItemPoolInterface
      *
@@ -66,9 +68,16 @@ abstract class AbstractService
      * `null` disables the cache
      *
      * @var null|CacheItemPoolInterface
+     *
+     * @since 1.0.0
      */
     public $cache = null;
-    /** @var PostNL $postnl */
+
+    /**
+     * @var PostNL $postnl
+     *
+     * @since 1.0.0
+     */
     protected $postnl;
 
     /**
@@ -90,50 +99,27 @@ abstract class AbstractService
      *
      * @return bool
      *
-     * @throws CifDownException
-     * @throws CifException
-     * @throws ApiException
-     *
      * @since 1.0.0
      */
-    public static function validateResponse(ResponseInterface $response)
+    public static function validateResponse(ResponseInterface $response): bool
     {
-        $body = json_decode(static::getResponseText($response), true);
+//        $body = json_decode((string) $response->getBody(), true);
 
-        if (!empty($body['fault']['faultstring']) && $body['fault']['faultstring'] === 'Invalid ApiKey') {
-            throw new ApiException('Invalid Api Key');
-        }
-        if (isset($body['Envelope']['Body']['Fault']['Reason']['Text'][''])) {
-            throw new CifDownException($body['Envelope']['Body']['Fault']['Reason']['Text']['']);
-        }
 
-        if (!empty($body['Errors']['Error'])) {
-            $exceptionData = [];
-            foreach ($body['Errors']['Error'] as $error) {
-                $exceptionData[] = [
-                    'description' => isset($error['Description']) ? (string) $error['Description'] : null,
-                    'message'     => isset($error['ErrorMsg']) ? (string) $error['ErrorMsg'] : null,
-                    'code'        => isset($error['ErrorNumber']) ? (int) $error['ErrorNumber'] : 0,
-                ];
-            }
-            throw new CifException($exceptionData);
-        }
+        // FIXME
+//        if (!empty($body['Errors']['Error'])) {
+//            $exceptionData = [];
+//            foreach ($body['Errors']['Error'] as $error) {
+//                $exceptionData[] = [
+//                    'description' => isset($error['Description']) ? (string) $error['Description'] : null,
+//                    'message'     => isset($error['ErrorMsg']) ? (string) $error['ErrorMsg'] : null,
+//                    'code'        => isset($error['ErrorNumber']) ? (int) $error['ErrorNumber'] : 0,
+//                ];
+//            }
+//            throw new CifDownException($exceptionData);
+//        }
 
         return true;
-    }
-
-    /**
-     * Get the response
-     *
-     * @param ResponseInterface $response
-     *
-     * @return string
-     *
-     * @since 1.0.0
-     */
-    public static function getResponseText(ResponseInterface $response)
-    {
-        return (string) $response->getBody();
     }
 
     /**
@@ -157,7 +143,7 @@ abstract class AbstractService
         } catch (ReflectionException $exception) {
             return null;
         }
-        $uuid .= strtolower(substr($reflection->getShortName(), 0, strlen($reflection->getShortName()) - 7));
+        $uuid .= strtolower(substr($reflection->getShortName(), 0, mb_strlen($reflection->getShortName()) - 7));
         $item = null;
         if ($this->cache instanceof CacheItemPoolInterface && !is_null($this->ttl)) {
             try {

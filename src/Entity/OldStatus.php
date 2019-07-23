@@ -29,30 +29,61 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use TypeError;
+
 /**
  * Class OldStatus
  */
 class OldStatus extends AbstractEntity
 {
-    /** @var string|null $currentPhaseCode */
+    /**
+     * @var string|null $currentPhaseCode
+     *
+     * @since 1.0.0
+     */
     protected $currentPhaseCode;
-    /** @var string|null $currentPhaseDescription */
+
+    /**
+     * @var string|null $currentPhaseDescription
+     *
+     * @since 1.0.0
+     */
     protected $currentPhaseDescription;
-    /** @var string|null $currentOldStatusCode */
+
+    /**
+     * @var string|null $currentOldStatusCode
+     *
+     * @since 1.0.0
+     */
     protected $currentOldStatusCode;
-    /** @var string|null $currentOldStatusDescription */
+
+    /**
+     * @var string|null $currentOldStatusDescription
+     *
+     * @since 1.0.0
+     */
     protected $currentOldStatusDescription;
-    /** @var string|null $currentOldStatusTimeStamp */
+
+    /**
+     * @var string|null $currentOldStatusTimeStamp
+     *
+     * @since 1.0.0
+     */
     protected $currentOldStatusTimeStamp;
 
     /**
+     * OldStatus constructor.
+     *
      * @param null|string $phaseCode
      * @param null|string $phaseDesc
      * @param null|string $oldStatusCode
      * @param null|string $oldStatusDesc
      * @param null|string $timeStamp
      *
+     * @throws TypeError
+     *
      * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function __construct(?string $phaseCode = null, ?string $phaseDesc = null, ?string $oldStatusCode = null, ?string $oldStatusDesc = null, ?string $timeStamp = null)
     {
@@ -66,8 +97,11 @@ class OldStatus extends AbstractEntity
     }
 
     /**
+     * Get current phase code
+     *
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getCurrentPhaseCode(): ?string
@@ -76,9 +110,13 @@ class OldStatus extends AbstractEntity
     }
 
     /**
+     * Set current phase code
+     *
      * @param string|null $currentPhaseCode
      *
      * @return static
+     *
+     * @throws TypeError
      *
      * @since 2.0.0 Strict typing
      */
@@ -90,8 +128,11 @@ class OldStatus extends AbstractEntity
     }
 
     /**
+     * Get current phase description
+     *
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getCurrentPhaseDescription(): ?string
@@ -100,10 +141,15 @@ class OldStatus extends AbstractEntity
     }
 
     /**
+     * Set current phase description
+     *
      * @param string|null $currentPhaseDescription
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setCurrentPhaseDescription(?string $currentPhaseDescription): OldStatus
@@ -114,8 +160,11 @@ class OldStatus extends AbstractEntity
     }
 
     /**
+     * Get current old status code
+     *
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getCurrentOldStatusCode(): ?string
@@ -124,10 +173,15 @@ class OldStatus extends AbstractEntity
     }
 
     /**
+     * Set current old status code
+     *
      * @param string|null $currentOldStatusCode
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setCurrentOldStatusCode(?string $currentOldStatusCode): OldStatus
@@ -138,8 +192,11 @@ class OldStatus extends AbstractEntity
     }
 
     /**
+     * Get currnet old status description
+     *
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getCurrentOldStatusDescription(): ?string
@@ -148,10 +205,15 @@ class OldStatus extends AbstractEntity
     }
 
     /**
+     * Set current old status description
+     *
      * @param string|null $currentOldStatusDescription
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setCurrentOldStatusDescription(?string $currentOldStatusDescription): OldStatus
@@ -162,8 +224,11 @@ class OldStatus extends AbstractEntity
     }
 
     /**
+     * Get current old status timestamp
+     *
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getCurrentOldStatusTimeStamp(): ?string
@@ -172,10 +237,15 @@ class OldStatus extends AbstractEntity
     }
 
     /**
+     * Set current old status timestamp
+     *
      * @param string|null $currentOldStatusTimeStamp
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setCurrentOldStatusTimeStamp(?string $currentOldStatusTimeStamp): OldStatus

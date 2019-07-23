@@ -31,16 +31,26 @@ namespace Firstred\PostNL\Entity\Request;
 
 use Exception;
 use Firstred\PostNL\Entity\AbstractEntity;
-use Firstred\PostNL\Entity\Message\Message;
+use Firstred\PostNL\Entity\Message;
+use TypeError;
 
 /**
  * Class GetSentDateRequest
  */
 class GetSentDateRequest extends AbstractEntity
 {
-    /** @var GetSentDate|null $getSentDate */
+    /**
+     * @var GetSentDate|null $getSentDate
+     *
+     * @since 1.0.0
+     */
     protected $getSentDate;
-    /** @var Message|null $message */
+
+    /**
+     * @var Message|null $message
+     *
+     * @since 1.0.0
+     */
     protected $message;
 
     /**
@@ -50,6 +60,7 @@ class GetSentDateRequest extends AbstractEntity
      * @param Message|null     $message
      *
      * @throws Exception
+     * @throws TypeError
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -65,6 +76,7 @@ class GetSentDateRequest extends AbstractEntity
     /**
      * @return GetSentDate|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getGetSentDate(): ?GetSentDate
@@ -77,6 +89,9 @@ class GetSentDateRequest extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setGetSentDate(?GetSentDate $getSentDate): GetSentDateRequest
@@ -89,6 +104,7 @@ class GetSentDateRequest extends AbstractEntity
     /**
      * @return Message|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getMessage(): ?Message
@@ -101,6 +117,9 @@ class GetSentDateRequest extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setMessage(?Message $message): GetSentDateRequest

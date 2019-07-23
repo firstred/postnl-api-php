@@ -22,10 +22,9 @@ declare(strict_types=1);
  * THE SOFTWARE.
  */
 
-namespace Firstred\PostNL\Util;
+namespace Firstred\PostNL\Misc;
 
 use Http\Discovery\Psr17FactoryDiscovery;
-use Http\Message\ResponseFactory;
 use InvalidArgumentException;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\RequestInterface;
@@ -87,16 +86,15 @@ class Message
         }
         $parts = explode(' ', $data['start-line'], 3);
 
-        /** @var ResponseFactory $factory */
-        $factory = Psr17FactoryDiscovery::findResponseFactory();
+        $response = Psr17FactoryDiscovery::findResponseFactory()->createResponse($parts[1], $parts[2]);
+        foreach ($data['headers'] as $header) {
+            list($name, $value) = array_map('trim', explode(':', $header));
+            $response = $response->withHeader($name, $value);
+        }
+        $response = $response->withBody($data['body']);
+        $response->withProtocolVersion(explode('/', $parts[0])[1]);
 
-        return $factory->createResponse(
-            $parts[1],
-            $data['headers'],
-            $data['body'],
-            explode('/', $parts[0])[1],
-            isset($parts[2]) ? $parts[2] : null
-        );
+        return $response;
     }
 
     /**

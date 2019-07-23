@@ -29,48 +29,36 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Exception;
 
+use Firstred\PostNL\Exception\Request\WithRequestInterface;
+use Firstred\PostNL\Exception\Request\WithRequestTrait;
+use Firstred\PostNL\Exception\Response\WithResponseInterface;
+use Firstred\PostNL\Exception\Response\WithResponseTrait;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
 /**
- * Class CifException
+ * Class ClientException
  */
-class CifException extends AbstractException
+class ClientException extends AbstractException implements WithRequestInterface, WithResponseInterface
 {
-    /** @var array $messages */
-    protected $messages;
+    use WithRequestTrait;
+    use WithResponseTrait;
 
     /**
-     * CifException constructor.
+     * ClientException constructor.
      *
-     * @param string|string[] $message  In case of multiple errors, the format looks like:
-     *                                  [
-     *                                  'description' => string <The description>,
-     *                                  'message'     => string <The error message>,
-     *                                  'code'        => int <The error code>
-     *                                  ]
-     *                                  The code param will be discarded if `$message` is an array
-     * @param int             $code
-     * @param Throwable|null  $previous
+     * @param string|string[]        $message  The fault string
+     * @param int|string             $code     The error code
+     * @param Throwable|null         $previous The previous exception
+     * @param RequestInterface|null  $request  PSR(1)7 request object
+     * @param ResponseInterface|null $response PSR(1)7 response object
      */
-    public function __construct($message = "", $code = 0, $previous = null)
+    public function __construct(string $message = '', $code = 0, ? Throwable $previous = null, ?RequestInterface $request = null, ?ResponseInterface $response = null)
     {
-        if (is_array($message)) {
-            $this->messages = $message;
-
-            $message = $this->messages[0]['message'];
-            $code = $this->messages[0]['code'];
-        }
-
         parent::__construct($message, $code, $previous);
-    }
 
-    /**
-     * Get error messages and codes
-     *
-     * @return array|string|string[]
-     */
-    public function getMessagesDescriptionsAndCodes()
-    {
-        return $this->messages;
+        $this->response = $response;
+        $this->request = $request;
     }
 }

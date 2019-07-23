@@ -30,19 +30,26 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity\Response;
 
 use Firstred\PostNL\Entity\AbstractEntity;
+use TypeError;
 
 /**
  * Class GetLocationsResult
  */
 class GetLocationsResult extends AbstractEntity
 {
-    /** @var ResponseLocation[]|null $responseLocation */
+    /**
+     * @var ResponseLocation[]|null $responseLocation
+     *
+     * @since 1.0.0
+     */
     protected $responseLocation;
 
     /**
      * GetLocationsResult constructor.
      *
      * @param ResponseLocation[]|null $locations
+     *
+     * @throws TypeError
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -55,8 +62,11 @@ class GetLocationsResult extends AbstractEntity
     }
 
     /**
+     * Get response location
+     *
      * @return ResponseLocation[]|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getResponseLocation(): ?array
@@ -65,10 +75,15 @@ class GetLocationsResult extends AbstractEntity
     }
 
     /**
+     * Set response location
+     *
      * @param ResponseLocation[]|null $responseLocation
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setResponseLocation(?array $responseLocation): GetLocationsResult

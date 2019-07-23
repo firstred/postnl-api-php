@@ -39,35 +39,95 @@ use Firstred\PostNL\Entity\Group;
 use Firstred\PostNL\Entity\ProductOption;
 use Firstred\PostNL\Entity\Status;
 use Firstred\PostNL\Entity\Warning;
+use TypeError;
 
 /**
  * Class CurrentStatusResponseShipment
  */
 class CurrentStatusResponseShipment extends AbstractEntity
 {
-    /** @var Address[]|null $addresses */
+    /**
+     * @var Address[]|null $addresses
+     *
+     * @since 1.0.0
+     */
     protected $addresses;
-    /** @var Amount[]|null $amounts */
+
+    /**
+     * @var Amount[]|null $amounts
+     *
+     * @since 1.0.0
+     */
     protected $amounts;
-    /** @var Barcode|null $barcode */
+
+    /**
+     * @var Barcode|null $barcode
+     *
+     * @since 1.0.0
+     */
     protected $barcode;
-    /** @var string|null $deliveryDate */
+
+    /**
+     * @var string|null $deliveryDate
+     *
+     * @since 1.0.0
+     */
     protected $deliveryDate;
-    /** @var Dimension|null Dimension */
+
+    /**
+     * @var Dimension|null Dimension
+     *
+     * @since 1.0.0
+     */
     protected $dimension;
-    /** @var Expectation|null $expectation */
+
+    /**
+     * @var Expectation|null $expectation
+     *
+     * @since 1.0.0
+     */
     protected $expectation;
-    /** @var Group[]|null $groups */
+
+    /**
+     * @var Group[]|null $groups
+     *
+     * @since 1.0.0
+     */
     protected $groups;
-    /** @var string|null $productCode */
+
+    /**
+     * @var string|null $productCode
+     *
+     * @since 1.0.0
+     */
     protected $productCode;
-    /** @var ProductOption[]|null $ProuctOptions */
+
+    /**
+     * @var ProductOption[]|null $ProuctOptions
+     *
+     * @since 1.0.0
+     */
     protected $productOptions;
-    /** @var string|null $reference */
+
+    /**
+     * @var string|null $reference
+     *
+     * @since 1.0.0
+     */
     protected $reference;
-    /** @var Status|null $status */
+
+    /**
+     * @var Status|null $status
+     *
+     * @since 1.0.0
+     */
     protected $status;
-    /** @var Warning[]|null $warnings */
+
+    /**
+     * @var Warning[]|null $warnings
+     *
+     * @since 1.0.0
+     */
     protected $warnings;
 
     /**
@@ -85,6 +145,8 @@ class CurrentStatusResponseShipment extends AbstractEntity
      * @param string|null          $reference
      * @param Status|null          $status
      * @param Warning[]|null       $warnings
+     *
+     * @throws TypeError
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -108,8 +170,11 @@ class CurrentStatusResponseShipment extends AbstractEntity
     }
 
     /**
+     * Get addresses
+     *
      * @return Address[]|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getAddresses(): ?array
@@ -118,10 +183,15 @@ class CurrentStatusResponseShipment extends AbstractEntity
     }
 
     /**
+     * Set addresses
+     *
      * @param Address[]|null $addresses
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setAddresses(?array $addresses): CurrentStatusResponseShipment
@@ -132,8 +202,11 @@ class CurrentStatusResponseShipment extends AbstractEntity
     }
 
     /**
+     * Get amounts
+     *
      * @return Amount[]|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getAmounts(): ?array
@@ -142,10 +215,15 @@ class CurrentStatusResponseShipment extends AbstractEntity
     }
 
     /**
+     * Set amounts
+     *
      * @param Amount[]|null $amounts
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setAmounts(?array $amounts): CurrentStatusResponseShipment
@@ -156,8 +234,11 @@ class CurrentStatusResponseShipment extends AbstractEntity
     }
 
     /**
+     * Get barcode
+     *
      * @return Barcode|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getBarcode(): ?Barcode
@@ -166,10 +247,15 @@ class CurrentStatusResponseShipment extends AbstractEntity
     }
 
     /**
+     * Set barcode
+     *
      * @param Barcode|null $barcode
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setBarcode(?Barcode $barcode): CurrentStatusResponseShipment
@@ -180,8 +266,11 @@ class CurrentStatusResponseShipment extends AbstractEntity
     }
 
     /**
+     * Get delivery date
+     *
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getDeliveryDate(): ?string
@@ -190,10 +279,15 @@ class CurrentStatusResponseShipment extends AbstractEntity
     }
 
     /**
+     * Set delivery date
+     *
      * @param string|null $deliveryDate
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setDeliveryDate(?string $deliveryDate): CurrentStatusResponseShipment
@@ -204,8 +298,11 @@ class CurrentStatusResponseShipment extends AbstractEntity
     }
 
     /**
+     * Get dimension
+     *
      * @return Dimension|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getDimension(): ?Dimension
@@ -214,10 +311,15 @@ class CurrentStatusResponseShipment extends AbstractEntity
     }
 
     /**
+     * Set dimension
+     *
      * @param Dimension|null $dimension
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setDimension(?Dimension $dimension): CurrentStatusResponseShipment
@@ -228,8 +330,11 @@ class CurrentStatusResponseShipment extends AbstractEntity
     }
 
     /**
+     * Get expectation
+     *
      * @return Expectation|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getExpectation(): ?Expectation
@@ -238,10 +343,15 @@ class CurrentStatusResponseShipment extends AbstractEntity
     }
 
     /**
+     * Set expectation
+     *
      * @param Expectation|null $expectation
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setExpectation(?Expectation $expectation): CurrentStatusResponseShipment
@@ -252,8 +362,11 @@ class CurrentStatusResponseShipment extends AbstractEntity
     }
 
     /**
+     * Get groups
+     *
      * @return Group[]|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getGroups(): ?array
@@ -262,10 +375,15 @@ class CurrentStatusResponseShipment extends AbstractEntity
     }
 
     /**
+     * Set groups
+     *
      * @param Group[]|null $groups
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setGroups(?array $groups): CurrentStatusResponseShipment
@@ -276,8 +394,11 @@ class CurrentStatusResponseShipment extends AbstractEntity
     }
 
     /**
+     * Get product code
+     *
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getProductCode(): ?string
@@ -286,10 +407,15 @@ class CurrentStatusResponseShipment extends AbstractEntity
     }
 
     /**
+     * Set product code
+     *
      * @param string|null $productCode
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setProductCode(?string $productCode): CurrentStatusResponseShipment
@@ -300,8 +426,11 @@ class CurrentStatusResponseShipment extends AbstractEntity
     }
 
     /**
+     * Get product options
+     *
      * @return ProductOption[]|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getProductOptions(): ?array
@@ -310,10 +439,15 @@ class CurrentStatusResponseShipment extends AbstractEntity
     }
 
     /**
+     * Set product options
+     *
      * @param ProductOption[]|null $productOptions
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setProductOptions(?array $productOptions): CurrentStatusResponseShipment
@@ -324,8 +458,11 @@ class CurrentStatusResponseShipment extends AbstractEntity
     }
 
     /**
+     * Get reference
+     *
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getReference(): ?string
@@ -334,10 +471,15 @@ class CurrentStatusResponseShipment extends AbstractEntity
     }
 
     /**
+     * Set reference
+     *
      * @param string|null $reference
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setReference(?string $reference): CurrentStatusResponseShipment
@@ -348,8 +490,11 @@ class CurrentStatusResponseShipment extends AbstractEntity
     }
 
     /**
+     * Get status
+     *
      * @return Status|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getStatus(): ?Status
@@ -358,10 +503,15 @@ class CurrentStatusResponseShipment extends AbstractEntity
     }
 
     /**
+     * Set status
+     *
      * @param Status|null $status
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setStatus(?Status $status): CurrentStatusResponseShipment
@@ -372,8 +522,11 @@ class CurrentStatusResponseShipment extends AbstractEntity
     }
 
     /**
+     * Get warnings
+     *
      * @return Warning[]|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getWarnings(): ?array
@@ -382,10 +535,15 @@ class CurrentStatusResponseShipment extends AbstractEntity
     }
 
     /**
+     * Set warnings
+     *
      * @param Warning[]|null $warnings
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setWarnings(?array $warnings): CurrentStatusResponseShipment

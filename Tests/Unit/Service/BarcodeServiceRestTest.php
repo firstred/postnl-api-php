@@ -29,20 +29,24 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Tests\Unit\Service;
 
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
-use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
+use Exception;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Barcode;
 use Firstred\PostNL\Entity\Customer;
-use Firstred\PostNL\Entity\Message\Message;
+use Firstred\PostNL\Entity\Message;
 use Firstred\PostNL\Entity\Request\GenerateBarcode;
-use Firstred\PostNL\Http\MockClient;
+use Firstred\PostNL\Exception\ClientException;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidBarcodeException;
+use Firstred\PostNL\Misc\Message as MiscMessage;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\BarcodeService;
+use Http\Discovery\Psr17FactoryDiscovery;
+use Http\Mock\Client;
+use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\RequestInterface;
+use Psr\Log\LoggerInterface;
+use ReflectionException;
 
 /**
  * Class BarcodeServiceRestTest
@@ -61,7 +65,8 @@ class BarcodeServiceRestTest extends TestCase
     /**
      * @before
      *
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
      */
     public function setupPostNL()
     {
@@ -83,8 +88,7 @@ class BarcodeServiceRestTest extends TestCase
                 ->setGlobalPackBarcodeType('AB')
                 ->setGlobalPackCustomerCode('1234'),
             'test',
-            true,
-            PostNL::MODE_REST
+            true
         );
 
         $this->service = $this->postnl->getBarcodeService();
@@ -95,13 +99,13 @@ class BarcodeServiceRestTest extends TestCase
      */
     public function logPendingRequest()
     {
-        if (!$this->lastRequest instanceof Request) {
+        if (!$this->lastRequest instanceof RequestInterface) {
             return;
         }
 
         global $logger;
         if ($logger instanceof LoggerInterface) {
-            $logger->debug($this->getName()." Request\n".\GuzzleHttp\Psr7\str($this->lastRequest));
+            $logger->debug($this->getName()." Request\n".MiscMessage::str($this->lastRequest));
         }
         $this->lastRequest = null;
     }
@@ -111,14 +115,14 @@ class BarcodeServiceRestTest extends TestCase
      */
     public function testHasValidBarcodeService()
     {
-        $this->assertInstanceOf('\\Firstred\\PostNL\\Service\\BarcodeService', $this->service);
+        $this->assertInstanceOf(BarcodeService::class, $this->service);
     }
 
     /**
      * @testdox Creates a valid 3S barcode request
      *
-     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
-     * @throws \Exception
+     * @throws InvalidBarcodeException
+     * @throws Exception
      */
     public function testCreatesAValid3SBarcodeRequest()
     {
@@ -126,7 +130,7 @@ class BarcodeServiceRestTest extends TestCase
         $range = $this->getRange('3S');
         $serie = $this->postnl->findBarcodeSerie('3S', $range, false);
 
-        $this->lastRequest = $request = $this->service->buildGenerateBarcodeRequestREST(
+        $this->lastRequest = $request = $this->service->buildGenerateBarcodeRequest(
             GenerateBarcode::create()
                 ->setBarcode(
                     Barcode::create()
@@ -137,8 +141,7 @@ class BarcodeServiceRestTest extends TestCase
                 ->setMessage(new Message())
                 ->setCustomer($this->postnl->getCustomer())
         );
-
-        $query = \GuzzleHttp\Psr7\parse_query($request->getUri()->getQuery());
+        parse_str($request->getUri()->getQuery(), $query);
 
         $this->assertEquals(
             [
@@ -162,19 +165,19 @@ class BarcodeServiceRestTest extends TestCase
     /**
      * @testdox Returns a valid single barcode
      *
-     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
+     * @throws InvalidBarcodeException
      */
     public function testSingleBarcodeRest()
     {
-        $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode([
-                'Barcode' => '3SDEVC816223392',
-            ])),
-        ]);
-        $handler = HandlerStack::create($mock);
-        $mockClient = new MockClient();
-        $mockClient->setHandler($handler);
-        $this->postnl->setHttpClient($mockClient);
+        $mockClient = new Client();
+        $responseFactory = Psr17FactoryDiscovery::findResponseFactory();
+        $streamFactory = Psr17FactoryDiscovery::findStreamFactory();
+        $response = $responseFactory->createResponse(200, 'OK')
+            ->withHeader('Content-Type', 'application/json;charset=UTF-8')
+            ->withBody($streamFactory->createStream(json_encode(['Barcode' => '3SDEVC816223392'])))
+        ;
+        $mockClient->addResponse($response);
+        \Firstred\PostNL\Http\Client::getInstance()->setAsyncClient($mockClient);
 
         $this->assertEquals('3SDEVC816223392', $this->postnl->generateBarcode('3S'));
     }
@@ -182,20 +185,20 @@ class BarcodeServiceRestTest extends TestCase
     /**
      * @testdox Returns a valid single barcode for a country
      *
-     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
+     * @throws InvalidBarcodeException
      * @throws \Firstred\PostNL\Exception\InvalidConfigurationException
      */
     public function testSingleBarCodeByCountryRest()
     {
-        $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode([
-                'Barcode' => '3SDEVC816223392',
-            ])),
-        ]);
-        $handler = HandlerStack::create($mock);
-        $mockClient = new MockClient();
-        $mockClient->setHandler($handler);
-        $this->postnl->setHttpClient($mockClient);
+        $mockClient = new Client();
+        $responseFactory = Psr17FactoryDiscovery::findResponseFactory();
+        $streamFactory = Psr17FactoryDiscovery::findStreamFactory();
+        $mockClient->addResponse(
+            $responseFactory->createResponse(200, 'OK')
+                ->withHeader('Content-Type', 'application/json;charset=UTF-8')
+                ->withBody($streamFactory->createStream(json_encode(['Barcode' => '3SDEVC816223392'])))
+        );
+        \Firstred\PostNL\Http\Client::getInstance()->setAsyncClient($mockClient);
 
         $this->assertEquals('3SDEVC816223392', $this->postnl->generateBarcodeByCountryCode('NL'));
     }
@@ -203,29 +206,36 @@ class BarcodeServiceRestTest extends TestCase
     /**
      * @testdox Returns several barcodes
      *
-     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
+     * @throws InvalidBarcodeException
      * @throws \Firstred\PostNL\Exception\InvalidConfigurationException
      */
     public function testMultipleNLBarcodesRest()
     {
-        $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode([
-                'Barcode' => '3SDEVC816223392',
-            ])),
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode([
-                'Barcode' => '3SDEVC816223393',
-            ])),
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode([
-                'Barcode' => '3SDEVC816223394',
-            ])),
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode([
-                'Barcode' => '3SDEVC816223395',
-            ])),
-        ]);
-        $handler = HandlerStack::create($mock);
-        $mockClient = new MockClient();
-        $mockClient->setHandler($handler);
-        $this->postnl->setHttpClient($mockClient);
+        $mockClient = new Client();
+        $responseFactory = Psr17FactoryDiscovery::findResponseFactory();
+        $streamFactory = Psr17FactoryDiscovery::findStreamFactory();
+
+        $mockClient->addResponse(
+            $responseFactory->createResponse(200, 'OK')
+                ->withHeader('Content-Type', 'application/json;charset=UTF-8')
+                ->withBody($streamFactory->createStream(json_encode(['Barcode' => '3SDEVC816223392'])))
+        );
+        $mockClient->addResponse(
+            $responseFactory->createResponse(200, 'OK')
+                ->withHeader('Content-Type', 'application/json;charset=UTF-8')
+                ->withBody($streamFactory->createStream(json_encode(['Barcode' => '3SDEVC816223393'])))
+        );
+        $mockClient->addResponse(
+            $responseFactory->createResponse(200, 'OK')
+                ->withHeader('Content-Type', 'application/json;charset=UTF-8')
+                ->withBody($streamFactory->createStream(json_encode(['Barcode' => '3SDEVC816223394'])))
+        );
+        $mockClient->addResponse(
+            $responseFactory->createResponse(200, 'OK')
+                ->withHeader('Content-Type', 'application/json;charset=UTF-8')
+                ->withBody($streamFactory->createStream(json_encode(['Barcode' => '3SDEVC816223395'])))
+        );
+        \Firstred\PostNL\Http\Client::getInstance()->setAsyncClient($mockClient);
 
         $barcodes = $this->postnl->generateBarcodesByCountryCodes(['NL' => 4]);
 
@@ -245,19 +255,21 @@ class BarcodeServiceRestTest extends TestCase
     /**
      * @testdox Returns a valid single barcode
      *
-     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
+     * @throws InvalidBarcodeException
      */
     public function testNegativeSingleBarcodeInvalidResponse()
     {
-        $this->expectException('Firstred\\PostNL\\Exception\\ResponseException');
+        $this->expectException(ClientException::class);
 
-        $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], 'asdfojasuidfo'),
-        ]);
-        $handler = HandlerStack::create($mock);
-        $mockClient = new MockClient();
-        $mockClient->setHandler($handler);
-        $this->postnl->setHttpClient($mockClient);
+        $responseFactory = Psr17FactoryDiscovery::findResponseFactory();
+        $streamFactory = Psr17FactoryDiscovery::findStreamFactory();
+        $mockClient = new Client();
+        $mockClient->addResponse(
+            $responseFactory->createResponse(200, 'OK')
+                ->withHeader('Content-Type', 'application/json;charset=UTF-8')
+                ->withBody($streamFactory->createStream('asdfojasuidfo'))
+        );
+        \Firstred\PostNL\Http\Client::getInstance()->setAsyncClient($mockClient);
 
         $this->postnl->generateBarcode('3S');
     }

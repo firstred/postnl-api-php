@@ -30,19 +30,26 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity\Response;
 
 use Firstred\PostNL\Entity\AbstractEntity;
+use TypeError;
 
 /**
  * Class GetLocationsInAreaResponse
  */
 class GetLocationsInAreaResponse extends AbstractEntity
 {
-    /** @var GetLocationsResult|null $getLocationsResult */
+    /**
+     * @var GetLocationsResult|null $getLocationsResult
+     *
+     * @since 1.0.0
+     */
     protected $getLocationsResult;
 
     /**
      * GetLocationsInAreaResponse constructor.
      *
      * @param GetLocationsResult|null $result
+     *
+     * @throws TypeError
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -66,15 +73,18 @@ class GetLocationsInAreaResponse extends AbstractEntity
     {
         $json = [];
         foreach (array_keys(get_class_vars(static::class)) as $propertyName) {
+            if (in_array(ucfirst($propertyName), ['Id'])) {
+                continue;
+            }
             if (isset($this->{$propertyName})) {
                 if ('GetLocationsResult' === $propertyName) {
                     $locations = [];
                     foreach ($this->getLocationsResult as $location) {
                         $locations[] = $location;
                     }
-                    $json[$propertyName] = ['ResponseLocation' => $locations];
+                    $json[ucfirst($propertyName)] = ['ResponseLocation' => $locations];
                 } else {
-                    $json[$propertyName] = $this->{$propertyName};
+                    $json[ucfirst($propertyName)] = $this->{$propertyName};
                 }
             }
         }
@@ -83,8 +93,11 @@ class GetLocationsInAreaResponse extends AbstractEntity
     }
 
     /**
+     * Get GetLocationsResult
+     *
      * @return GetLocationsResult|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getGetLocationsResult(): ?GetLocationsResult
@@ -93,10 +106,15 @@ class GetLocationsInAreaResponse extends AbstractEntity
     }
 
     /**
+     * Set GetLocationsResult
+     *
      * @param GetLocationsResult|null $getLocationsResult
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setGetLocationsResult(?GetLocationsResult $getLocationsResult): GetLocationsInAreaResponse

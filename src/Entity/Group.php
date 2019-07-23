@@ -29,6 +29,8 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use TypeError;
+
 /**
  * Class Group
  */
@@ -38,14 +40,20 @@ class Group extends AbstractEntity
      * Amount of shipments in the group.
      *
      * @var string|null $groupCount
+     *
+     * @since 1.0.0
      */
     protected $groupCount;
+
     /**
      * Sequence number.
      *
      * @var string|null $groupSequence
+     *
+     * @since 1.0.0
      */
     protected $groupSequence;
+
     /**
      * The type of group.
      *
@@ -56,12 +64,17 @@ class Group extends AbstractEntity
      * - `04`: Single parcel in one shipment
      *
      * @var string|null $groupType
+     *
+     * @since 1.0.0
      */
     protected $groupType;
+
     /**
      * Main barcode for the shipment.
      *
      * @var string|null $mainBarcode
+     *
+     * @since 1.0.0
      */
     protected $mainBarcode;
 
@@ -72,6 +85,11 @@ class Group extends AbstractEntity
      * @param string|null $groupSequence
      * @param string|null $groupType
      * @param string|null $mainBarcode
+     *
+     * @throws TypeError
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function __construct($groupCount = null, $groupSequence = null, $groupType = null, $mainBarcode = null)
     {
@@ -86,6 +104,7 @@ class Group extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getGroupCount(): ?string
@@ -98,6 +117,9 @@ class Group extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setGroupCount(?string $groupCount): Group
@@ -110,6 +132,7 @@ class Group extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getGroupSequence(): ?string
@@ -122,6 +145,7 @@ class Group extends AbstractEntity
      *
      * @return static
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setGroupSequence(?string $groupSequence): Group
@@ -134,6 +158,7 @@ class Group extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getGroupType(): ?string
@@ -146,6 +171,7 @@ class Group extends AbstractEntity
      *
      * @return static
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setGroupType(?string $groupType): Group
@@ -158,6 +184,7 @@ class Group extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getMainBarcode(): ?string
@@ -170,6 +197,7 @@ class Group extends AbstractEntity
      *
      * @return static
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setMainBarcode(?string $mainBarcode): Group

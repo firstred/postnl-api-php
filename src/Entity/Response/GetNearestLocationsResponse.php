@@ -30,24 +30,32 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity\Response;
 
 use Firstred\PostNL\Entity\AbstractEntity;
+use Firstred\PostNL\Exception\InvalidTypeException;
+use TypeError;
 
 /**
  * Class GetNearestLocationsResponse
  */
 class GetNearestLocationsResponse extends AbstractEntity
 {
-    /** @var GetLocationsResult|null $getLocationsResult */
+    /**
+     * @var ResponseLocation[]|null $getLocationsResult
+     *
+     * @since 1.0.0
+     */
     protected $getLocationsResult;
 
     /**
      * GetNearestLocationsResponse constructor.
      *
-     * @param GetLocationsResult|null $result
+     * @param ResponseLocation[]|null $result
      *
-     * @since 1.0.0
+     * @throws TypeError
+     *
      * @since 2.0.0 Strict typing
+     * @since 1.0.0
      */
-    public function __construct(GetLocationsResult $result = null)
+    public function __construct(array $result = null)
     {
         parent::__construct();
 
@@ -59,21 +67,21 @@ class GetNearestLocationsResponse extends AbstractEntity
      *
      * @return array
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function jsonSerialize(): array
     {
         $json = [];
         foreach (array_keys(get_class_vars(static::class)) as $propertyName) {
+            if (in_array(ucfirst($propertyName), ['Id'])) {
+                continue;
+            }
             if (isset($this->{$propertyName})) {
-                if ('GetLocationsResult' === $propertyName) {
-                    $locations = [];
-                    foreach ($this->getLocationsResult as $location) {
-                        $locations[] = $location;
-                    }
-                    $json[$propertyName] = ['ResponseLocation' => $locations];
+                if ('GetLocationsResult' === ucfirst($propertyName)) {
+                    $json[ucfirst($propertyName)] = ['ResponseLocation' => $this->{$prop}];
                 } else {
-                    $json[$propertyName] = $this->{$propertyName};
+                    $json[ucfirst($propertyName)] = $this->{$propertyName};
                 }
             }
         }
@@ -82,8 +90,11 @@ class GetNearestLocationsResponse extends AbstractEntity
     }
 
     /**
-     * @return GetLocationsResult|null
+     * Get GetLocationsResult
      *
+     * @return ResponseLocation[]|null
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getGetLocationsResult(): ?GetLocationsResult
@@ -92,15 +103,24 @@ class GetNearestLocationsResponse extends AbstractEntity
     }
 
     /**
-     * @param GetLocationsResult|null $getLocationsResult
+     * Set GetLocationsResult
+     *
+     * @param ResponseLocation[]|null $responseLocations
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function setGetLocationsResult(?GetLocationsResult $getLocationsResult): GetNearestLocationsResponse
+    public function setGetLocationsResult(?array $responseLocations = null): GetNearestLocationsResponse
     {
-        $this->getLocationsResult = $getLocationsResult;
+        if (!empty($responseLocations) && !array_values($responseLocations)[0] instanceof ResponseLocation) {
+            throw new InvalidTypeException(sprintf("%s::%s - Invalid ResponseLocation array given", __CLASS__, __METHOD__));
+        }
+
+        $this->getLocationsResult = $responseLocations;
 
         return $this;
     }

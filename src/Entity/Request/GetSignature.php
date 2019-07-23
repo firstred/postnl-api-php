@@ -32,19 +32,34 @@ namespace Firstred\PostNL\Entity\Request;
 use Exception;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Customer;
-use Firstred\PostNL\Entity\Message\Message;
+use Firstred\PostNL\Entity\Message;
 use Firstred\PostNL\Entity\Shipment;
+use TypeError;
 
 /**
  * Class GetSignature
  */
 class GetSignature extends AbstractEntity
 {
-    /** @var Message|null $message */
+    /**
+     * @var Message|null $message
+     *
+     * @since 1.0.0
+     */
     protected $message;
-    /** @var Customer|null $customer */
+
+    /**
+     * @var Customer|null $customer
+     *
+     * @since 1.0.0
+     */
     protected $customer;
-    /** @var Shipment|null $shipment */
+
+    /**
+     * @var Shipment|null $shipment
+     *
+     * @since 1.0.0
+     */
     protected $shipment;
 
     /**
@@ -55,6 +70,7 @@ class GetSignature extends AbstractEntity
      * @param Message|null  $message
      *
      * @throws Exception
+     * @throws TypeError
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -71,6 +87,7 @@ class GetSignature extends AbstractEntity
     /**
      * @return Message|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getMessage(): ?Message
@@ -83,6 +100,9 @@ class GetSignature extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setMessage(?Message $message): GetSignature
@@ -95,6 +115,7 @@ class GetSignature extends AbstractEntity
     /**
      * @return Customer|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getCustomer(): ?Customer
@@ -107,6 +128,9 @@ class GetSignature extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setCustomer(?Customer $customer): GetSignature
@@ -119,6 +143,7 @@ class GetSignature extends AbstractEntity
     /**
      * @return Shipment|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getShipment(): ?Shipment
@@ -131,6 +156,9 @@ class GetSignature extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setShipment(?Shipment $shipment): GetSignature

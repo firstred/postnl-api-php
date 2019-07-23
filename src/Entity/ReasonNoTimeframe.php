@@ -29,31 +29,66 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use TypeError;
+
 /**
  * Class ReasonNoTimeframe
  */
 class ReasonNoTimeframe extends AbstractEntity
 {
-    /** @var string|null $code */
+    /**
+     * @var string|null $code
+     *
+     * @since 1.0.0
+     */
     protected $code;
-    /** @var string|null $date */
+
+    /**
+     * @var string|null $date
+     *
+     * @since 1.0.0
+     */
     protected $date;
-    /** @var string|null $description */
+
+    /**
+     * @var string|null $description
+     *
+     * @since 1.0.0
+     */
     protected $description;
-    /** @var string[]|null $options */
+
+    /**
+     * @var string[]|null $options
+     *
+     * @since 1.0.0
+     */
     protected $options;
-    /** @var string|null $from */
+
+    /**
+     * @var string|null $from
+     *
+     * @since 1.0.0
+     */
     protected $from;
-    /** @var string|null $to */
+
+    /**
+     * @var string|null $to
+     *
+     * @since 1.0.0
+     */
     protected $to;
 
     /**
+     * ReasonNoTimeframe constructor.
+     *
      * @param string|null   $code
      * @param string|null   $date
      * @param string|null   $desc
      * @param string[]|null $options
      * @param string|null   $from
      * @param string|null   $to
+     *
+     * @throws TypeError
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -73,6 +108,7 @@ class ReasonNoTimeframe extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getCode(): ?string
@@ -85,6 +121,7 @@ class ReasonNoTimeframe extends AbstractEntity
      *
      * @return static
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setCode(?string $code): ReasonNoTimeframe
@@ -97,6 +134,7 @@ class ReasonNoTimeframe extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getDate(): ?string
@@ -109,6 +147,7 @@ class ReasonNoTimeframe extends AbstractEntity
      *
      * @return static
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setDate(?string $date): ReasonNoTimeframe
@@ -121,6 +160,7 @@ class ReasonNoTimeframe extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getDescription(): ?string
@@ -133,6 +173,9 @@ class ReasonNoTimeframe extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setDescription(?string $description): ReasonNoTimeframe
@@ -145,6 +188,7 @@ class ReasonNoTimeframe extends AbstractEntity
     /**
      * @return string[]|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getOptions(): ?array
@@ -157,6 +201,7 @@ class ReasonNoTimeframe extends AbstractEntity
      *
      * @return static
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setOptions(?array $options): ReasonNoTimeframe
@@ -169,6 +214,7 @@ class ReasonNoTimeframe extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getFrom(): ?string
@@ -181,6 +227,7 @@ class ReasonNoTimeframe extends AbstractEntity
      *
      * @return static
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setFrom(?string $from): ReasonNoTimeframe
@@ -193,6 +240,7 @@ class ReasonNoTimeframe extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getTo(): ?string
@@ -205,6 +253,9 @@ class ReasonNoTimeframe extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setTo(?string $to): ReasonNoTimeframe

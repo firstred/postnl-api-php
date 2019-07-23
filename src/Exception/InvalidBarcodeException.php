@@ -32,6 +32,6 @@ namespace Firstred\PostNL\Exception;
 /**
  * Class InvalidBarcodeException
  */
-class InvalidBarcodeException extends AbstractException
+class InvalidBarcodeException extends InvalidArgumentException
 {
 }

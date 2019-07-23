@@ -33,17 +33,14 @@ use Cache\Adapter\Void\VoidCachePool;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\CutOffTime;
-use Firstred\PostNL\Entity\Message\Message;
+use Firstred\PostNL\Entity\Message;
 use Firstred\PostNL\Entity\Request\GetDeliveryDate;
 use Firstred\PostNL\Entity\Request\GetSentDate;
 use Firstred\PostNL\Entity\Request\GetSentDateRequest;
-use Firstred\PostNL\Http\MockClient;
+use Firstred\PostNL\Entity\Response\GetDeliveryDateResponse;
+use Firstred\PostNL\Entity\Response\GetSentDateResponse;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\DeliveryDateService;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
@@ -224,10 +221,7 @@ class DeliveryDateRestTest extends TestCase
                 )
         );
 
-        $this->assertInstanceOf(
-            '\\Firstred\\PostNL\\Entity\\Response\\GetDeliveryDateResponse',
-            $response
-        );
+        $this->assertInstanceOf(GetDeliveryDateResponse::class, $response);
         $this->assertEquals('30-06-2016', $response->getDeliveryDate());
     }
 
@@ -240,7 +234,7 @@ class DeliveryDateRestTest extends TestCase
     {
         $message = new Message();
 
-        $this->lastRequest = $request = $this->service->buildGetSentDateRequestREST(
+        $this->lastRequest = $request = $this->service->buildGetSentDateRequest(
             (new GetSentDateRequest())
                 ->setGetSentDate(
                     (new GetSentDate())
@@ -313,10 +307,7 @@ class DeliveryDateRestTest extends TestCase
                 )
         );
 
-        $this->assertInstanceOf(
-            '\\Firstred\\PostNL\\Entity\\Response\\GetSentDateResponse',
-            $response
-        );
+        $this->assertInstanceOf(GetSentDateResponse::class, $response);
         $this->assertEquals('29-06-2016', $response->getSentDate());
     }
 }

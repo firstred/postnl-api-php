@@ -32,7 +32,8 @@ namespace Firstred\PostNL\Entity\Request;
 use Exception;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Location;
-use Firstred\PostNL\Entity\Message\Message;
+use Firstred\PostNL\Entity\Message;
+use TypeError;
 
 /**
  * Class GetNearestLocations
@@ -41,11 +42,25 @@ use Firstred\PostNL\Entity\Message\Message;
  */
 class GetNearestLocations extends AbstractEntity
 {
-    /** @var string|null $countrycode */
+    /**
+     * @var string|null $countrycode
+     *
+     * @since 1.0.0
+     */
     protected $countrycode;
-    /** @var Location|null $location */
+
+    /**
+     * @var Location|null $location
+     *
+     * @since 1.0.0
+     */
     protected $location;
-    /** @var Message|null $message */
+
+    /**
+     * @var Message|null $message
+     *
+     * @since 1.0.0
+     */
     protected $message;
 
     /**
@@ -71,6 +86,9 @@ class GetNearestLocations extends AbstractEntity
 
     /**
      * @return string|null
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function getCountrycode(): ?string
     {
@@ -82,6 +100,9 @@ class GetNearestLocations extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setCountrycode(?string $countrycode): GetNearestLocations
@@ -93,6 +114,9 @@ class GetNearestLocations extends AbstractEntity
 
     /**
      * @return Location|null
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function getLocation(): ?Location
     {
@@ -104,6 +128,9 @@ class GetNearestLocations extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setLocation(?Location $location): GetNearestLocations
@@ -115,6 +142,9 @@ class GetNearestLocations extends AbstractEntity
 
     /**
      * @return Message|null
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function getMessage(): ?Message
     {
@@ -126,6 +156,9 @@ class GetNearestLocations extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setMessage(?Message $message): GetNearestLocations

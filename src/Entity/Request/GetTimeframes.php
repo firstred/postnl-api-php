@@ -31,17 +31,27 @@ namespace Firstred\PostNL\Entity\Request;
 
 use Exception;
 use Firstred\PostNL\Entity\AbstractEntity;
-use Firstred\PostNL\Entity\Message\Message;
+use Firstred\PostNL\Entity\Message;
 use Firstred\PostNL\Entity\Timeframe;
+use TypeError;
 
 /**
  * Class GetTimeframes
  */
 class GetTimeframes extends AbstractEntity
 {
-    /** @var Message|null $message */
+    /**
+     * @var Message|null $message
+     *
+     * @since 1.0.0
+     */
     protected $message;
-    /** @var Timeframe[]|null $timeframe */
+
+    /**
+     * @var Timeframe[]|null $timeframe
+     *
+     * @since 1.0.0
+     */
     protected $timeframe;
 
     /**
@@ -51,6 +61,7 @@ class GetTimeframes extends AbstractEntity
      * @param Timeframe[]|null $timeframes
      *
      * @throws Exception
+     * @throws TypeError
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typingq
@@ -66,6 +77,7 @@ class GetTimeframes extends AbstractEntity
     /**
      * @return Message|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getMessage(): ?Message
@@ -78,6 +90,9 @@ class GetTimeframes extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setMessage(?Message $message): GetTimeframes
@@ -90,6 +105,7 @@ class GetTimeframes extends AbstractEntity
     /**
      * @return Timeframe[]|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getTimeframe(): ?array
@@ -102,6 +118,9 @@ class GetTimeframes extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setTimeframe(?array $timeframe): GetTimeframes

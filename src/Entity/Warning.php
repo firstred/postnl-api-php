@@ -29,19 +29,37 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use TypeError;
+
 /**
  * Class Warning
  */
 class Warning extends AbstractEntity
 {
-    /** @var string|null $code */
+    /**
+     * @var string|null $code
+     *
+     * @since 1.0.0
+     */
     protected $code;
-    /** @var string|null $description */
+
+    /**
+     * @var string|null $description
+     *
+     * @since 1.0.0
+     */
     protected $description;
 
     /**
+     * Warning constructor.
+     *
      * @param string|null $code
      * @param string|null $description
+     *
+     * @throws TypeError
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function __construct($code = null, $description = null)
     {
@@ -54,6 +72,7 @@ class Warning extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getCode(): ?string
@@ -66,6 +85,9 @@ class Warning extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setCode(?string $code): Warning
@@ -78,6 +100,7 @@ class Warning extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getDescription(): ?string
@@ -90,6 +113,9 @@ class Warning extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setDescription(?string $description): Warning

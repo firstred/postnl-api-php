@@ -29,20 +29,40 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use TypeError;
+
 /**
  * Class Area
  */
 class Area extends AbstractEntity
 {
-    /** @var Coordinates|null $coordinatesNorthWest */
+    /**
+     * North-west coordinates
+     *
+     * @var Coordinates|null $coordinatesNorthWest
+     *
+     * @since 1.0.0
+     */
     protected $coordinatesNorthWest;
-    /** @var Coordinates|null $coordinatesSouthEast */
+
+    /**
+     * South-east coordinates
+     *
+     * @var Coordinates|null $coordinatesSouthEast
+     *
+     * @since 1.0.0
+     */
     protected $coordinatesSouthEast;
 
     /**
+     * Area constructor.
+     *
      * @param Coordinates|null $NW
      * @param Coordinates|null $SE
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function __construct($NW = null, $SE = null)
@@ -54,8 +74,11 @@ class Area extends AbstractEntity
     }
 
     /**
+     * Set north-west coordinates
+     *
      * @return Coordinates|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getCoordinatesNorthWest(): ?Coordinates
@@ -64,10 +87,15 @@ class Area extends AbstractEntity
     }
 
     /**
+     * Set north-west coordinates
+     *
      * @param Coordinates|null $coordinatesNorthWest
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setCoordinatesNorthWest(?Coordinates $coordinatesNorthWest): Area
@@ -78,8 +106,11 @@ class Area extends AbstractEntity
     }
 
     /**
+     * Get south-east coordinates
+     *
      * @return Coordinates|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getCoordinatesSouthEast(): ?Coordinates
@@ -88,10 +119,15 @@ class Area extends AbstractEntity
     }
 
     /**
+     * Set south-east coordinates
+     *
      * @param Coordinates|null $coordinatesSouthEast
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setCoordinatesSouthEast(?Coordinates $coordinatesSouthEast): Area

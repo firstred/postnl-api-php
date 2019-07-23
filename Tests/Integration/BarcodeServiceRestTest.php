@@ -31,11 +31,16 @@ namespace Firstred\PostNL\Tests\Integration\Service;
 
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidBarcodeException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\BarcodeService;
-use GuzzleHttp\Psr7\Request;
+use Firstred\PostNL\Misc\Message;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\RequestInterface;
 use Psr\Log\LoggerInterface;
+use ReflectionException;
 
 /**
  * Class BarcodeServiceRestTest
@@ -54,7 +59,8 @@ class BarcodeServiceRestTest extends TestCase
     /**
      * @before
      *
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
      */
     public function setupPostNL()
     {
@@ -74,8 +80,7 @@ class BarcodeServiceRestTest extends TestCase
                     'Zipcode'     => '2132WT',
                 ])),
             getenv('POSTNL_API_KEY'),
-            true,
-            PostNL::MODE_REST
+            true
         );
 
         $this->service = $this->postnl->getBarcodeService();
@@ -86,13 +91,13 @@ class BarcodeServiceRestTest extends TestCase
      */
     public function logPendingRequest()
     {
-        if (!$this->lastRequest instanceof Request) {
+        if (!$this->lastRequest instanceof RequestInterface) {
             return;
         }
 
         global $logger;
         if ($logger instanceof LoggerInterface) {
-            $logger->debug($this->getName()." Request\n".\GuzzleHttp\Psr7\str($this->lastRequest));
+            $logger->debug($this->getName()." Request\n".Message::str($this->lastRequest));
         }
         $this->lastRequest = null;
     }
@@ -100,7 +105,7 @@ class BarcodeServiceRestTest extends TestCase
     /**
      * @testdox Returns a valid single barcode
      *
-     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
+     * @throws InvalidBarcodeException
      */
     public function testSingleBarcodeRest()
     {
@@ -110,8 +115,8 @@ class BarcodeServiceRestTest extends TestCase
     /**
      * @testdox Returns a valid single barcode for a country
      *
-     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
-     * @throws \Firstred\PostNL\Exception\InvalidConfigurationException
+     * @throws InvalidBarcodeException
+     * @throws InvalidConfigurationException
      */
     public function testSingleBarCodeByCountryRest()
     {
@@ -121,8 +126,8 @@ class BarcodeServiceRestTest extends TestCase
     /**
      * @testdox Returns several barcodes
      *
-     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
-     * @throws \Firstred\PostNL\Exception\InvalidConfigurationException
+     * @throws InvalidBarcodeException
+     * @throws InvalidConfigurationException
      */
     public function testMultipleNLBarcodesRest()
     {

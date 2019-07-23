@@ -4,6 +4,8 @@ require __DIR__.'/../vendor/autoload.php';
 
 use Dotenv\Dotenv;
 use Dotenv\Exception\InvalidPathException;
+use Http\Discovery\HttpAsyncClientDiscovery;
+use Http\Discovery\Strategy\MockClientStrategy;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
 use Psr\Log\LogLevel;
@@ -27,6 +29,7 @@ if (!getenv('TRAVIS_PULL_REQUEST')) {
     );
 }
 
+// Configure the filesystem adapter for logging
 $filesystemAdapter = new Local(__DIR__.'/');
 $filesystem = new Filesystem($filesystemAdapter);
 

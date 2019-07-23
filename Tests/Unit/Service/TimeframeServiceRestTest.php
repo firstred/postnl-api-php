@@ -30,18 +30,14 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Tests\Unit\Service;
 
 use Cache\Adapter\Void\VoidCachePool;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
+use Firstred\PostNL\Entity\Response\ResponseTimeframes;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Customer;
-use Firstred\PostNL\Entity\Message\Message;
+use Firstred\PostNL\Entity\Message;
 use Firstred\PostNL\Entity\Request\GetTimeframes;
 use Firstred\PostNL\Entity\Timeframe;
-use Firstred\PostNL\Http\MockClient;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\TimeframeService;
 
@@ -359,11 +355,11 @@ class TimeframeServiceRestTest extends TestCase
         );
 
         // Should be a ResponeTimeframes instance
-        $this->assertInstanceOf('\\Firstred\\PostNL\\Entity\\Response\\ResponseTimeframes', $responseTimeframes);
+        $this->assertInstanceOf(ResponseTimeframes::class, $responseTimeframes);
         // Check for data loss
         $this->assertEquals(5, count($responseTimeframes->getReasonNoTimeframes()));
         $this->assertEquals(6, count($responseTimeframes->getTimeframes()));
-        $this->assertInstanceOf('\\Firstred\\PostNL\\Entity\\Timeframe', $responseTimeframes->getTimeframes()[0]);
+        $this->assertInstanceOf(Timeframe::class, $responseTimeframes->getTimeframes()[0]);
         $this->assertEquals(json_encode($payload), json_encode($responseTimeframes));
     }
 }

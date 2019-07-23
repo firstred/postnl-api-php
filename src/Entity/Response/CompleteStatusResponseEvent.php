@@ -30,25 +30,60 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity\Response;
 
 use Firstred\PostNL\Entity\AbstractEntity;
+use TypeError;
 
 /**
  * Class CompleteStatusResponseEvent
  */
 class CompleteStatusResponseEvent extends AbstractEntity
 {
-    /** @var string|null $code */
+    /**
+     * @var string|null $code
+     *
+     * @since 1.0.0
+     */
     protected $code;
-    /** @var string|null $description */
+
+    /**
+     * @var string|null $description
+     *
+     * @since 1.0.0
+     */
     protected $description;
-    /** @var string|null $destinationLocationCode */
+
+    /**
+     * @var string|null $destinationLocationCode
+     *
+     * @since 1.0.0
+     */
     protected $destinationLocationCode;
-    /** @var string|null $locationCode */
+
+    /**
+     * @var string|null $locationCode
+     *
+     * @since 1.0.0
+     */
     protected $locationCode;
-    /** @var string|null $routeCode */
+
+    /**
+     * @var string|null $routeCode
+     *
+     * @since 1.0.0
+     */
     protected $routeCode;
-    /** @var string|null $routeName */
+
+    /**
+     * @var string|null $routeName
+     *
+     * @since 1.0.0
+     */
     protected $routeName;
-    /** @var string|null $timeStamp */
+
+    /**
+     * @var string|null $timeStamp
+     *
+     * @since 1.0.0
+     */
     protected $timeStamp;
 
     /**
@@ -61,6 +96,8 @@ class CompleteStatusResponseEvent extends AbstractEntity
      * @param string|null $routeCode
      * @param string|null $routeName
      * @param string|null $timeStamp
+     *
+     * @throws TypeError
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -79,8 +116,11 @@ class CompleteStatusResponseEvent extends AbstractEntity
     }
 
     /**
+     * Get code
+     *
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getCode(): ?string
@@ -89,10 +129,15 @@ class CompleteStatusResponseEvent extends AbstractEntity
     }
 
     /**
+     * Set code
+     *
      * @param string|null $code
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setCode(?string $code): CompleteStatusResponseEvent
@@ -103,8 +148,11 @@ class CompleteStatusResponseEvent extends AbstractEntity
     }
 
     /**
+     * Get description
+     *
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getDescription(): ?string
@@ -113,10 +161,15 @@ class CompleteStatusResponseEvent extends AbstractEntity
     }
 
     /**
+     * Set description
+     *
      * @param string|null $description
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setDescription(?string $description): CompleteStatusResponseEvent
@@ -127,8 +180,11 @@ class CompleteStatusResponseEvent extends AbstractEntity
     }
 
     /**
+     * Get destination location code
+     *
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getDestinationLocationCode(): ?string
@@ -137,10 +193,15 @@ class CompleteStatusResponseEvent extends AbstractEntity
     }
 
     /**
+     * Set destination location code
+     *
      * @param string|null $destinationLocationCode
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setDestinationLocationCode(?string $destinationLocationCode): CompleteStatusResponseEvent
@@ -151,8 +212,11 @@ class CompleteStatusResponseEvent extends AbstractEntity
     }
 
     /**
+     * Get location code
+     *
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getLocationCode(): ?string
@@ -161,10 +225,15 @@ class CompleteStatusResponseEvent extends AbstractEntity
     }
 
     /**
+     * Set location code
+     *
      * @param string|null $locationCode
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setLocationCode(?string $locationCode): CompleteStatusResponseEvent
@@ -175,8 +244,11 @@ class CompleteStatusResponseEvent extends AbstractEntity
     }
 
     /**
+     * Get route code
+     *
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getRouteCode(): ?string
@@ -185,10 +257,15 @@ class CompleteStatusResponseEvent extends AbstractEntity
     }
 
     /**
+     * Set route code
+     *
      * @param string|null $routeCode
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setRouteCode(?string $routeCode): CompleteStatusResponseEvent
@@ -199,8 +276,11 @@ class CompleteStatusResponseEvent extends AbstractEntity
     }
 
     /**
+     * Get route name
+     *
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getRouteName(): ?string
@@ -209,10 +289,15 @@ class CompleteStatusResponseEvent extends AbstractEntity
     }
 
     /**
+     * Set route name
+     *
      * @param string|null $routeName
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setRouteName(?string $routeName): CompleteStatusResponseEvent
@@ -223,8 +308,11 @@ class CompleteStatusResponseEvent extends AbstractEntity
     }
 
     /**
+     * Get timestamp
+     *
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getTimeStamp(): ?string
@@ -233,10 +321,15 @@ class CompleteStatusResponseEvent extends AbstractEntity
     }
 
     /**
+     * Set timestamp
+     *
      * @param string|null $timeStamp
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setTimeStamp(?string $timeStamp): CompleteStatusResponseEvent

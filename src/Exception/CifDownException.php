@@ -29,9 +29,36 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Exception;
 
+use Firstred\PostNL\Exception\Request\WithRequestInterface;
+use Firstred\PostNL\Exception\Request\WithRequestTrait;
+use Firstred\PostNL\Exception\Response\WithResponseInterface;
+use Firstred\PostNL\Exception\Response\WithResponseTrait;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
+use Throwable;
+
 /**
  * Class CifDownException
  */
-class CifDownException extends AbstractException
+class CifDownException extends AbstractException implements WithRequestInterface, WithResponseInterface
 {
+    use WithRequestTrait;
+    use WithResponseTrait;
+
+    /**
+     * CifDownException constructor.
+     *
+     * @param string|string[]        $message  The fault string
+     * @param string|int             $code     The error code
+     * @param Throwable|null         $previous The previous exception
+     * @param RequestInterface|null  $request  PSR(1)7 request object
+     * @param ResponseInterface|null $response PSR(1)7 response object
+     */
+    public function __construct(string $message = '', $code = 0, ? Throwable $previous = null, ?RequestInterface $request = null, ?ResponseInterface $response = null)
+    {
+        parent::__construct($message, $code, $previous);
+
+        $this->response = $response;
+        $this->request = $request;
+    }
 }

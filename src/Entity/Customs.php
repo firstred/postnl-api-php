@@ -29,43 +29,121 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use TypeError;
+
 /**
  * Class Customs
  */
 class Customs extends AbstractEntity
 {
-    /** @var bool|null $certificate */
+    /**
+     * @var bool|null $certificate
+     *
+     * @since 1.0.0
+     */
     protected $certificate;
-    /** @var string|null $certificateNr */
+
+    /**
+     * @var string|null $certificateNr
+     *
+     * @since 1.0.0
+     */
     protected $certificateNr;
-    /** @var Content[]|null $content */
+
+    /**
+     * @var Content[]|null $content
+     *
+     * @since 1.0.0
+     */
     protected $content;
-    /** @var string|null $currency */
+
+    /**
+     * @var string|null $currency
+     *
+     * @since 1.0.0
+     */
     protected $currency;
-    /** @var string|null EAN */
+
+    /**
+     * @var string|null EAN
+     *
+     * @since 1.0.0
+     */
     protected $EAN;
-    /** @var bool|null $handleAsNonDeliverable */
+
+    /**
+     * @var bool|null $handleAsNonDeliverable
+     *
+     * @since 1.0.0
+     */
     protected $handleAsNonDeliverable;
-    /** @var bool|null $invoice */
+
+    /**
+     * @var bool|null $invoice
+     *
+     * @since 1.0.0
+     */
     protected $invoice;
-    /** @var string|null $invoiceNr */
+
+    /**
+     * @var string|null $invoiceNr
+     *
+     * @since 1.0.0
+     */
     protected $invoiceNr;
-    /** @var string|null $license */
+
+    /**
+     * @var string|null $license
+     *
+     * @since 1.0.0
+     */
     protected $license;
-    /** @var string|null $licenseNr */
+
+    /**
+     * @var string|null $licenseNr
+     *
+     * @since 1.0.0
+     */
     protected $licenseNr;
-    /** @var string|null $shipmentType */
+
+    /**
+     * @var string|null $shipmentType
+     *
+     * @since 1.0.0
+     */
     protected $shipmentType;
-    /** @var string|null $trustedShipperID */
+
+    /**
+     * @var string|null $trustedShipperID
+     *
+     * @since 1.0.0
+     */
     protected $trustedShipperID;
-    /** @var string|null $importerReferenceCode */
+
+    /**
+     * @var string|null $importerReferenceCode
+     *
+     * @since 1.0.0
+     */
     protected $importerReferenceCode;
-    /** @var string|null $transactionCode */
+
+    /**
+     * @var string|null $transactionCode
+     *
+     * @since 1.0.0
+     */
     protected $transactionCode;
-    /** @var string|null $transactionDescription */
+
+    /**
+     * @var string|null $transactionDescription
+     *
+     * @since 1.0.0
+     */
     protected $transactionDescription;
 
     /**
+     * Customs constructor.
+     *
      * @param bool|null      $certificate
      * @param string|null    $certificateNr
      * @param Content[]|null $content
@@ -81,6 +159,8 @@ class Customs extends AbstractEntity
      * @param string|null    $importerReferenceCode
      * @param string|null    $transactionCode
      * @param string|null    $transactionDescription
+     *
+     * @throws TypeError
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -109,6 +189,7 @@ class Customs extends AbstractEntity
     /**
      * @return bool|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getCertificate(): ?bool
@@ -121,6 +202,7 @@ class Customs extends AbstractEntity
      *
      * @return static
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setCertificate(?bool $certificate): Customs
@@ -133,6 +215,7 @@ class Customs extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getCertificateNr(): ?string
@@ -145,6 +228,7 @@ class Customs extends AbstractEntity
      *
      * @return static
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setCertificateNr(?string $certificateNr): Customs
@@ -157,6 +241,7 @@ class Customs extends AbstractEntity
     /**
      * @return Content[]|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getContent(): ?array
@@ -169,6 +254,7 @@ class Customs extends AbstractEntity
      *
      * @return static
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setContent(?array $content): Customs
@@ -181,6 +267,7 @@ class Customs extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getCurrency(): ?string
@@ -193,6 +280,7 @@ class Customs extends AbstractEntity
      *
      * @return static
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setCurrency(?string $currency): Customs
@@ -205,6 +293,7 @@ class Customs extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getEAN(): ?string
@@ -217,6 +306,7 @@ class Customs extends AbstractEntity
      *
      * @return static
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setEAN(?string $EAN): Customs
@@ -229,6 +319,7 @@ class Customs extends AbstractEntity
     /**
      * @return bool|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getHandleAsNonDeliverable(): ?bool
@@ -241,6 +332,7 @@ class Customs extends AbstractEntity
      *
      * @return static
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setHandleAsNonDeliverable(?bool $handleAsNonDeliverable): Customs
@@ -253,6 +345,7 @@ class Customs extends AbstractEntity
     /**
      * @return bool|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getInvoice(): ?bool
@@ -265,6 +358,7 @@ class Customs extends AbstractEntity
      *
      * @return static
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setInvoice(?bool $invoice): Customs
@@ -277,6 +371,7 @@ class Customs extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getInvoiceNr(): ?string
@@ -289,6 +384,7 @@ class Customs extends AbstractEntity
      *
      * @return static
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setInvoiceNr(?string $invoiceNr): Customs
@@ -301,6 +397,7 @@ class Customs extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getLicense(): ?string
@@ -313,6 +410,7 @@ class Customs extends AbstractEntity
      *
      * @return static
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setLicense(?string $license): Customs
@@ -325,6 +423,7 @@ class Customs extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getLicenseNr(): ?string
@@ -337,6 +436,7 @@ class Customs extends AbstractEntity
      *
      * @return static
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setLicenseNr(?string $licenseNr): Customs
@@ -349,6 +449,7 @@ class Customs extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getShipmentType(): ?string
@@ -361,6 +462,7 @@ class Customs extends AbstractEntity
      *
      * @return static
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setShipmentType(?string $shipmentType): Customs
@@ -373,6 +475,7 @@ class Customs extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getTrustedShipperID(): ?string
@@ -385,6 +488,7 @@ class Customs extends AbstractEntity
      *
      * @return static
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setTrustedShipperID(?string $trustedShipperID): Customs
@@ -397,6 +501,7 @@ class Customs extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getImporterReferenceCode(): ?string
@@ -409,6 +514,7 @@ class Customs extends AbstractEntity
      *
      * @return static
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setImporterReferenceCode(?string $importerReferenceCode): Customs
@@ -421,6 +527,7 @@ class Customs extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getTransactionCode(): ?string
@@ -433,6 +540,7 @@ class Customs extends AbstractEntity
      *
      * @return static
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setTransactionCode(?string $transactionCode): Customs
@@ -445,6 +553,7 @@ class Customs extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getTransactionDescription(): ?string
@@ -457,6 +566,7 @@ class Customs extends AbstractEntity
      *
      * @return static
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setTransactionDescription(?string $transactionDescription): Customs

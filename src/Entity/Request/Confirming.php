@@ -32,19 +32,40 @@ namespace Firstred\PostNL\Entity\Request;
 use Exception;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Customer;
-use Firstred\PostNL\Entity\Message\Message;
+use Firstred\PostNL\Entity\Message;
 use Firstred\PostNL\Entity\Shipment;
+use TypeError;
 
 /**
  * Class Confirming
  */
 class Confirming extends AbstractEntity
 {
-    /** @var Customer|null $customer */
+    /**
+     * @var Customer|null $customer
+     *
+     * @since 1.0.0
+     *
+     * @see Customer
+     */
     protected $customer;
-    /** @var Message|null $message */
+
+    /**
+     * @var Message|null $message
+     *
+     * @since 1.0.0
+     *
+     * @see Message
+     */
     protected $message;
-    /** @var Shipment[]|null $shipments */
+
+    /**
+     * @var Shipment[]|null $shipments
+     *
+     * @since 1.0.0
+     *
+     * @see Shipment
+     */
     protected $shipments;
 
     /**
@@ -55,6 +76,7 @@ class Confirming extends AbstractEntity
      * @param Message|null    $message
      *
      * @throws Exception
+     * @throws TypeError
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -80,13 +102,16 @@ class Confirming extends AbstractEntity
     {
         $json = [];
         foreach (array_keys(get_class_vars(static::class)) as $propertyName) {
+            if (in_array(ucfirst($propertyName), ['Id'])) {
+                continue;
+            }
             if (isset($this->{$propertyName})) {
                 // The REST API only seems to accept one shipment per request at the moment of writing (Sep. 24th, 2017)
                 // TODO: check if this is still the case (Jul. 11th, 2019)
                 if ('Shipments' === $propertyName && count($this->{$propertyName}) >= 1) {
-                    $json[$propertyName] = $this->{$propertyName}[0];
+                    $json[ucfirst($propertyName)] = $this->{$propertyName}[0];
                 } else {
-                    $json[$propertyName] = $this->{$propertyName};
+                    $json[ucfirst($propertyName)] = $this->{$propertyName};
                 }
             }
         }
@@ -95,9 +120,14 @@ class Confirming extends AbstractEntity
     }
 
     /**
+     * Get customer
+     *
      * @return Customer|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see Customer
      */
     public function getCustomer(): ?Customer
     {
@@ -105,11 +135,18 @@ class Confirming extends AbstractEntity
     }
 
     /**
+     * Set customer
+     *
      * @param Customer|null $customer
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see Customer
      */
     public function setCustomer(?Customer $customer): Confirming
     {
@@ -119,9 +156,14 @@ class Confirming extends AbstractEntity
     }
 
     /**
+     * Get message
+     *
      * @return Message|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see Message
      */
     public function getMessage(): ?Message
     {
@@ -129,11 +171,18 @@ class Confirming extends AbstractEntity
     }
 
     /**
+     * Set message
+     *
      * @param Message|null $message
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see Message
      */
     public function setMessage(?Message $message): Confirming
     {
@@ -143,9 +192,14 @@ class Confirming extends AbstractEntity
     }
 
     /**
+     * Get shipments
+     *
      * @return Shipment[]|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see Shipment
      */
     public function getShipments(): ?array
     {
@@ -153,11 +207,18 @@ class Confirming extends AbstractEntity
     }
 
     /**
+     * Set shipments
+     *
      * @param Shipment[]|null $shipments
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see Shipment
      */
     public function setShipments(?array $shipments): Confirming
     {

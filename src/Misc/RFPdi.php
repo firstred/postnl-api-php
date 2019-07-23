@@ -27,7 +27,7 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace Firstred\PostNL\Util;
+namespace Firstred\PostNL\Misc;
 
 use setasign\Fpdi\Fpdi;
 

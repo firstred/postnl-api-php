@@ -29,31 +29,79 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use TypeError;
+
 /**
  * Class Customer
  */
 class Customer extends AbstractEntity
 {
-    /** @var Address|null $address */
+    /**
+     * @var Address|null $address
+     *
+     * @since 1.0.0
+     */
     protected $address;
-    /** @var string|null $collectionLocation */
+
+    /**
+     * @var string|null $collectionLocation
+     *
+     * @since 1.0.0
+     */
     protected $collectionLocation;
-    /** @var string|null $contactPerson */
+
+    /**
+     * @var string|null $contactPerson
+     *
+     * @since 1.0.0
+     */
     protected $contactPerson;
-    /** @var string|null $customerCode */
+
+    /**
+     * @var string|null $customerCode
+     *
+     * @since 1.0.0
+     */
     protected $customerCode;
-    /** @var string|null $customerNumber */
+
+    /**
+     * @var string|null $customerNumber
+     *
+     * @since 1.0.0
+     */
     protected $customerNumber;
-    /** @var null|string $globalPackCustomerCode */
+
+    /**
+     * @var null|string $globalPackCustomerCode
+     *
+     * @since 1.0.0
+     */
     protected $globalPackCustomerCode;
-    /** @var null|string $globalPackBarcodeType */
+
+    /**
+     * @var null|string $globalPackBarcodeType
+     *
+     * @since 1.0.0
+     */
     protected $globalPackBarcodeType;
-    /** @var string|null $email */
+
+    /**
+     * @var string|null $email
+     *
+     * @since 1.0.0
+     */
     protected $email;
-    /** @var string|null $name */
+
+    /**
+     * @var string|null $name
+     *
+     * @since 1.0.0
+     */
     protected $name;
 
     /**
+     * Customer constructor.
+     *
      * @param string  $customerNr
      * @param string  $customerCode
      * @param string  $collectionLocation
@@ -61,6 +109,8 @@ class Customer extends AbstractEntity
      * @param string  $email
      * @param string  $name
      * @param Address $address
+     *
+     * @throws TypeError
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -81,6 +131,7 @@ class Customer extends AbstractEntity
     /**
      * @return Address|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getAddress(): ?Address
@@ -93,6 +144,7 @@ class Customer extends AbstractEntity
      *
      * @return static
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setAddress(?Address $address): Customer
@@ -105,6 +157,7 @@ class Customer extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getCollectionLocation(): ?string
@@ -117,6 +170,7 @@ class Customer extends AbstractEntity
      *
      * @return static
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setCollectionLocation(?string $collectionLocation): Customer
@@ -129,6 +183,7 @@ class Customer extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getContactPerson(): ?string
@@ -141,6 +196,7 @@ class Customer extends AbstractEntity
      *
      * @return static
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setContactPerson(?string $contactPerson): Customer
@@ -151,11 +207,12 @@ class Customer extends AbstractEntity
     }
 
     /**
-     * @return int|null
+     * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function getCustomerCode(): ?int
+    public function getCustomerCode(): ?string
     {
         return $this->customerCode;
     }
@@ -165,6 +222,7 @@ class Customer extends AbstractEntity
      *
      * @return static
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setCustomerCode(?string $customerCode): Customer
@@ -177,6 +235,7 @@ class Customer extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getCustomerNumber(): ?string
@@ -189,6 +248,7 @@ class Customer extends AbstractEntity
      *
      * @return static
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setCustomerNumber(?string $customerNumber): Customer
@@ -201,6 +261,7 @@ class Customer extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getGlobalPackCustomerCode(): ?string
@@ -213,6 +274,7 @@ class Customer extends AbstractEntity
      *
      * @return static
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setGlobalPackCustomerCode(?string $globalPackCustomerCode): Customer
@@ -225,6 +287,7 @@ class Customer extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getGlobalPackBarcodeType(): ?string
@@ -237,6 +300,7 @@ class Customer extends AbstractEntity
      *
      * @return static
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setGlobalPackBarcodeType(?string $globalPackBarcodeType): Customer
@@ -249,6 +313,7 @@ class Customer extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getEmail(): ?string
@@ -261,6 +326,7 @@ class Customer extends AbstractEntity
      *
      * @return static
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setEmail(?string $email): Customer
@@ -273,6 +339,7 @@ class Customer extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getName(): ?string
@@ -285,6 +352,7 @@ class Customer extends AbstractEntity
      *
      * @return static
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setName(?string $name): Customer

@@ -29,30 +29,63 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use Firstred\PostNL\Exception\InvalidTypeException;
+
 /**
  * Class Dimension
  */
 class Dimension extends AbstractEntity
 {
-    /** @var string|null $height */
+    /**
+     * @var string|null $height
+     *
+     * @since 1.0.0
+     */
     protected $height;
-    /** @var string|null $length */
+
+    /**
+     * @var string|null $length
+     *
+     * @since 1.0.0
+     */
     protected $length;
-    /** @var string|null $volume */
+
+    /**
+     * @var string|null $volume
+     *
+     * @since 1.0.0
+     */
     protected $volume;
-    /** @var string|null $weight */
+
+    /**
+     * @var string|null $weight
+     *
+     * @since 1.0.0
+     */
     protected $weight;
-    /** @var string|null $width */
+
+    /**
+     * @var string|null $width
+     *
+     * @since 1.0.0
+     */
     protected $width;
 
     /**
-     * @param int $weight
-     * @param int $height
-     * @param int $length
-     * @param int $volume
-     * @param int $width
+     * Dimension constructor.
+     *
+     * @param string $weight
+     * @param string $height
+     * @param string $length
+     * @param string $volume
+     * @param string $width
+     *
+     * @throws InvalidTypeException
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
-    public function __construct(?int $weight = null, ?int $height = null, ?int $length = null, ?int $volume = null, ?int $width = null)
+    public function __construct(?string $weight = null, ?string $height = null, ?string $length = null, ?string $volume = null, ?string $width = null)
     {
         parent::__construct();
 
@@ -68,6 +101,7 @@ class Dimension extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getHeight(): ?string
@@ -80,10 +114,17 @@ class Dimension extends AbstractEntity
      *
      * @return static
      *
+     * @throws InvalidTypeException
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setHeight(?string $height): Dimension
     {
+        if (is_string($height) && !is_numeric($height)) {
+            throw new InvalidTypeException('Invalid height, must be a numeric string or null');
+        }
+
         $this->height = $height;
 
         return $this;
@@ -92,6 +133,7 @@ class Dimension extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getLength(): ?string
@@ -104,10 +146,17 @@ class Dimension extends AbstractEntity
      *
      * @return static
      *
+     * @throws InvalidTypeException
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setLength(?string $length): Dimension
     {
+        if (is_string($length) && !is_numeric($length)) {
+            throw new InvalidTypeException('Invalid length, must be numeric string or null');
+        }
+
         $this->length = $length;
 
         return $this;
@@ -116,6 +165,7 @@ class Dimension extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getVolume(): ?string
@@ -128,10 +178,17 @@ class Dimension extends AbstractEntity
      *
      * @return static
      *
+     * @throws InvalidTypeException
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setVolume(?string $volume): Dimension
     {
+        if (is_string($volume) && !is_numeric($volume)) {
+            throw new InvalidTypeException('Invalid volume, must be a numeric string or null');
+        }
+
         $this->volume = $volume;
 
         return $this;
@@ -140,6 +197,7 @@ class Dimension extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getWeight(): ?string
@@ -152,10 +210,17 @@ class Dimension extends AbstractEntity
      *
      * @return static
      *
+     * @throws InvalidTypeException
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setWeight(?string $weight): Dimension
     {
+        if (is_string($weight) && !is_numeric($weight)) {
+            throw new InvalidTypeException('Invalid weight, must be a numeric string or null');
+        }
+
         $this->weight = $weight;
 
         return $this;
@@ -164,6 +229,7 @@ class Dimension extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getWidth(): ?string
@@ -176,10 +242,17 @@ class Dimension extends AbstractEntity
      *
      * @return static
      *
+     * @throws InvalidTypeException
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setWidth(?string $width): Dimension
     {
+        if (is_string($width) && !is_numeric($width)) {
+            throw new InvalidTypeException('Invalid width, must be a numeric string or null');
+        }
+
         $this->width = $width;
 
         return $this;

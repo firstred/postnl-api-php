@@ -29,10 +29,11 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Exception;
 
-/**
- * Class ApiException
- */
-class ApiException extends AbstractException
-{
+use TypeError;
 
+/**
+ * Class InvalidTypeException
+ */
+class InvalidTypeException extends TypeError
+{
 }

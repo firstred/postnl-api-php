@@ -32,20 +32,32 @@ namespace Firstred\PostNL\Entity\Response;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\ReasonNoTimeframe;
 use Firstred\PostNL\Entity\Timeframe;
+use TypeError;
 
 /**
  * Class ResponseTimeframes
  */
 class ResponseTimeframes extends AbstractEntity
 {
-    /** @var ReasonNoTimeframe[]|null $reasonNoTimeframes */
+    /**
+     * @var ReasonNoTimeframe[]|null $reasonNoTimeframes
+     *
+     * @since 1.0.0
+     */
     protected $reasonNoTimeframes;
-    /** @var Timeframe[]|null $timeframes */
+
+    /**
+     * @var Timeframe[]|null $timeframes
+     *
+     * @since 1.0.0
+     */
     protected $timeframes;
 
     /**
      * @param ReasonNoTimeframe[]|null $noTimeframes
      * @param Timeframe[]|null         $timeframes
+     *
+     * @throws TypeError
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -70,6 +82,9 @@ class ResponseTimeframes extends AbstractEntity
     {
         $json = [];
         foreach (array_keys(get_class_vars(static::class)) as $propertyName) {
+            if (in_array(ucfirst($propertyName), ['Id'])) {
+                continue;
+            }
             if (isset($this->{$propertyName})) {
                 if ('ReasonNoTimeframes' === $propertyName) {
                     $noTimeframes = [];
@@ -82,9 +97,9 @@ class ResponseTimeframes extends AbstractEntity
                     foreach ($this->timeframes as $timeframe) {
                         $timeframes[] = $timeframe;
                     }
-                    $json[$propertyName] = ['Timeframe' => $timeframes];
+                    $json[ucfirst($propertyName)] = ['Timeframe' => $timeframes];
                 } else {
-                    $json[$propertyName] = $this->{$propertyName};
+                    $json[ucfirst($propertyName)] = $this->{$propertyName};
                 }
             }
         }
@@ -95,6 +110,7 @@ class ResponseTimeframes extends AbstractEntity
     /**
      * @return ReasonNoTimeframe[]|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getReasonNoTimeframes(): ?array
@@ -107,6 +123,9 @@ class ResponseTimeframes extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setReasonNoTimeframes(?array $reasonNoTimeframes): ResponseTimeframes
@@ -119,6 +138,7 @@ class ResponseTimeframes extends AbstractEntity
     /**
      * @return Timeframe[]|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getTimeframes(): ?array
@@ -131,6 +151,9 @@ class ResponseTimeframes extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setTimeframes(?array $timeframes): ResponseTimeframes

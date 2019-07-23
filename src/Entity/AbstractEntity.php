@@ -31,7 +31,7 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Util\UUID;
+use Firstred\PostNL\Misc\UUID;
 use JsonSerializable;
 use ReflectionClass;
 use ReflectionException;
@@ -123,8 +123,11 @@ abstract class AbstractEntity implements JsonSerializable
     {
         $json = [];
         foreach (array_keys(get_class_vars(static::class)) as $propertyName) {
+            if (in_array(ucfirst($propertyName), ['Id'])) {
+                continue;
+            }
             if (isset($this->{$propertyName})) {
-                $json[$propertyName] = $this->{$propertyName};
+                $json[ucfirst($propertyName)] = $this->{$propertyName};
             }
         }
 
@@ -140,7 +143,7 @@ abstract class AbstractEntity implements JsonSerializable
      *
      * @since 1.0.0
      */
-    public static function jsonDeserialize(array $json): self
+    public static function jsonDeserialize(array $json)
     {
         reset($json);
         $shortClassName = key($json);
@@ -155,25 +158,33 @@ abstract class AbstractEntity implements JsonSerializable
         }
 
         $object = call_user_func([$fullClassName, 'create']);
-        foreach ($json[$shortClassName] as $key => $value) {
-            $fullClassName = static::getFullEntityClassName($key);
-            $propertyName = $key;
+        if (count(array_filter(array_keys($json[$shortClassName]), 'is_string')) > 0) {
+            foreach ($json[$shortClassName] as $key => $value) {
+                $fullClassName = static::getFullEntityClassName($key);
+                $propertyName = $key;
 
-            // If key is plural, try the singular version, because this might be an array
-            if (!$fullClassName && substr($key, -1) === 's') {
-                $fullClassName = static::getFullEntityClassName(substr($key, 0, strlen($key) - 1));
-                $propertyName = substr($propertyName, 0, strlen($propertyName) - 1);
-            }
-
-            if (is_array($value) && is_subclass_of($fullClassName, AbstractEntity::class)) {
-                $entities = [];
-                foreach ($value as $name => $item) {
-                    $entities[] = static::jsonDeserialize([$propertyName => $item]);
+                // If key is plural, try the singular version, because this might be an array
+                if (!$fullClassName && substr($key, -1) === 's') {
+                    $fullClassName = static::getFullEntityClassName(substr($key, 0, mb_strlen($key) - 1));
+                    $propertyName = substr($propertyName, 0, mb_strlen($propertyName) - 1);
                 }
-                $object->{'set'.$key}($entities);
-            } else {
-                $object->{'set'.$key}(static::jsonDeserialize([$propertyName => $value]));
+
+                if (is_array($value) && is_subclass_of($fullClassName, AbstractEntity::class)) {
+                    $entities = [];
+                    foreach ($value as $item) {
+                        if (is_array($item) && count(array_filter(array_keys($item), 'is_int')) > 0) {
+                            $entities = static::jsonDeserialize([$propertyName => $item]);
+                            break;
+                        }
+                        $entities[] = static::jsonDeserialize([$propertyName => $item]);
+                    }
+                    $object->{"set$key"}($entities);
+                } else {
+                    $object->{"set$key"}(static::jsonDeserialize([$propertyName => $value]));
+                }
             }
+        } else {
+            return $json[$shortClassName];
         }
 
         return $object;

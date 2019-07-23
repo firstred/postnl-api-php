@@ -31,7 +31,8 @@ namespace Firstred\PostNL\Entity\Request;
 
 use Exception;
 use Firstred\PostNL\Entity\AbstractEntity;
-use Firstred\PostNL\Entity\Message\Message;
+use Firstred\PostNL\Entity\Message;
+use TypeError;
 
 /**
  * Class GetLocation
@@ -40,11 +41,25 @@ use Firstred\PostNL\Entity\Message\Message;
  */
 class GetLocation extends AbstractEntity
 {
-    /** @var string|null $locationCode */
+    /**
+     * @var string|null $locationCode
+     *
+     * @since 1.0.0
+     */
     protected $locationCode;
-    /** @var Message|null $message */
+
+    /**
+     * @var Message|null $message
+     *
+     * @since 1.0.0
+     */
     protected $message;
-    /** @var string|null $retailNetworkID */
+
+    /**
+     * @var string|null $retailNetworkID
+     *
+     * @since 1.0.0
+     */
     protected $retailNetworkID;
 
     /**
@@ -55,6 +70,7 @@ class GetLocation extends AbstractEntity
      * @param string|null  $networkId
      *
      * @throws Exception
+     * @throws TypeError
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -69,8 +85,11 @@ class GetLocation extends AbstractEntity
     }
 
     /**
+     * Get location code
+     *
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getLocationCode(): ?string
@@ -83,6 +102,9 @@ class GetLocation extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setLocationCode(?string $locationCode): GetLocation
@@ -95,6 +117,7 @@ class GetLocation extends AbstractEntity
     /**
      * @return Message|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getMessage(): ?Message
@@ -107,6 +130,9 @@ class GetLocation extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setMessage(?Message $message): GetLocation
@@ -119,6 +145,7 @@ class GetLocation extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getRetailNetworkID(): ?string
@@ -131,6 +158,9 @@ class GetLocation extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setRetailNetworkID(?string $retailNetworkID): GetLocation

@@ -29,28 +29,58 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use TypeError;
+
 /**
  * Class Status
  */
 class Status extends AbstractEntity
 {
-    /** @var string|null $currentPhaseCode */
+    /**
+     * @var string|null $currentPhaseCode
+     *
+     * @since 1.0.0
+     */
     protected $currentPhaseCode;
-    /** @var string|null $currentPhaseDescription */
+
+    /**
+     * @var string|null $currentPhaseDescription
+     *
+     * @since 1.0.0
+     */
     protected $currentPhaseDescription;
-    /** @var string|null $currentStatusCode */
+
+    /**
+     * @var string|null $currentStatusCode
+     *
+     * @since 1.0.0
+     */
     protected $currentStatusCode;
-    /** @var string|null $currentStatusDescription */
+
+    /**
+     * @var string|null $currentStatusDescription
+     *
+     * @since 1.0.0
+     */
     protected $currentStatusDescription;
-    /** @var string|null $currentStatusTimeStamp */
+
+    /**
+     * @var string|null $currentStatusTimeStamp
+     *
+     * @since 1.0.0
+     */
     protected $currentStatusTimeStamp;
 
     /**
+     * Status constructor.
+     *
      * @param null|string $phaseCode
      * @param null|string $phaseDesc
      * @param null|string $statusCode
      * @param null|string $statusDesc
      * @param null|string $timeStamp
+     *
+     * @throws TypeError
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -69,6 +99,7 @@ class Status extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getCurrentPhaseCode(): ?string
@@ -81,6 +112,9 @@ class Status extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setCurrentPhaseCode(?string $currentPhaseCode): Status
@@ -93,6 +127,7 @@ class Status extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getCurrentPhaseDescription(): ?string
@@ -105,6 +140,9 @@ class Status extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setCurrentPhaseDescription(?string $currentPhaseDescription): Status
@@ -117,6 +155,7 @@ class Status extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getCurrentStatusCode(): ?string
@@ -129,6 +168,9 @@ class Status extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setCurrentStatusCode(?string $currentStatusCode): Status
@@ -141,6 +183,7 @@ class Status extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getCurrentStatusDescription(): ?string
@@ -153,6 +196,9 @@ class Status extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setCurrentStatusDescription(?string $currentStatusDescription): Status
@@ -165,6 +211,7 @@ class Status extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getCurrentStatusTimeStamp(): ?string
@@ -177,6 +224,9 @@ class Status extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setCurrentStatusTimeStamp(?string $currentStatusTimeStamp): Status

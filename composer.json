@@ -24,18 +24,18 @@
   "require": {
     "php": "7.1 - 7.3",
     "ext-json": "*",
-    "setasign/fpdi": "^2.1.1",
-    "setasign/fpdf": "^1.8.1",
+    "ext-mbstring": "*",
     "psr/cache": "^1.0.1",
     "psr/log": "^1.1.0",
+    "psr/http-message-implementation": "^1.0",
     "php-http/async-client-implementation": "^1.0",
     "php-http/client-common": "^1.5|^2.0",
     "php-http/discovery": "^1.6.1",
     "php-http/httplug": "^1.1|^2.0",
     "php-http/message": "^1.5",
-    "psr/http-message-implementation": "^1.0",
     "php-http/logger-plugin": "^1.1",
-    "guzzlehttp/promises": "^1.3"
+    "setasign/fpdi-fpdf": "^2.2.0",
+    "giggsey/libphonenumber-for-php": "^8.10"
   },
   "require-dev": {
     "php-http/mock-client": "^1.3.0",
@@ -47,6 +47,9 @@
     "escapestudios/symfony2-coding-standard": "3.x-dev",
     "vlucas/phpdotenv": "^3.2"
   },
+  "suggest": {
+    "giggsey/libphonenumber-for-php": "Auto format phone numbers and increase acceptance by the PostNL API"
+  },
   "autoload": {
     "psr-4": {
       "Firstred\\PostNL\\": "src/"
@@ -54,7 +57,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Firstred\\PostNL\\": "Tests/"
+      "Firstred\\PostNL\\Tests\\": "Tests/"
     }
   },
   "extra": {

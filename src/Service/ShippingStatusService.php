@@ -39,14 +39,11 @@ use Firstred\PostNL\Entity\Request\GetSignature;
 use Firstred\PostNL\Entity\Response\CompleteStatusResponse;
 use Firstred\PostNL\Entity\Response\CurrentStatusResponse;
 use Firstred\PostNL\Entity\Response\SignatureResponse;
-use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
-use Firstred\PostNL\Exception\CifException;
-use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\ClientException;
 use Firstred\PostNL\Http\Client;
-use Firstred\PostNL\Util\Message;
+use Firstred\PostNL\Misc\Message;
 use Http\Discovery\Psr17FactoryDiscovery;
-use Http\Message\RequestFactory;
 use InvalidArgumentException;
 use Psr\Cache\CacheItemInterface;
 use Psr\Http\Message\RequestInterface;
@@ -82,10 +79,8 @@ class ShippingStatusService extends AbstractService
      *
      * @return CurrentStatusResponse
      *
-     * @throws ApiException
+     * @throws ClientException
      * @throws CifDownException
-     * @throws CifException
-     * @throws HttpClientException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -99,7 +94,8 @@ class ShippingStatusService extends AbstractService
             $response = Message::parseResponse($response);
         }
         if (!$response instanceof ResponseInterface) {
-            $response = Client::getInstance()->doRequest($this->buildCurrentStatusRequest($currentStatus));
+            $request = $this->buildCurrentStatusRequest($currentStatus);
+            $response = Client::getInstance()->doRequest($request);
             static::validateResponse($response);
         }
 
@@ -116,8 +112,7 @@ class ShippingStatusService extends AbstractService
             return $object;
         }
 
-
-        throw new ApiException('Unable to retrieve current status');
+        throw new ClientException('Unable to retrieve current status', 0, null, isset($request) && $request instanceof RequestInterface ? $request : null, $response);
     }
 
     /**
@@ -176,33 +171,33 @@ class ShippingStatusService extends AbstractService
         }
         $endpoint .= '?'.http_build_query($query);
 
-        /** @var RequestFactory $factory */
         $factory = Psr17FactoryDiscovery::findRequestFactory();
 
-        return $factory->createRequest(
+        /** @var RequestInterface $request */
+        $request = $factory->createRequest(
             'GET',
-            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint,
-            [
-                'Accept'       => 'application/json',
-                'Content-Type' => 'application/json;charset=UTF-8',
-                'apikey'       => $this->postnl->getApiKey(),
-            ]
+            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint
         );
+        $request = $request->withHeader('Accept', 'application/json');
+        $request = $request->withHeader('Content-Type', 'application/json;charset=UTF-8');
+        $request = $request->withHeader('apikey', $this->postnl->getApiKey());
+
+        return $request;
     }
 
     /**
      * Process CurrentStatus Response REST
      *
-     * @param mixed $response
+     * @param ResponseInterface $response
      *
      * @return CurrentStatusResponse
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function processCurrentStatusResponse($response): CurrentStatusResponse
+    public function processCurrentStatusResponse(ResponseInterface $response): CurrentStatusResponse
     {
-        $body = json_decode(static::getResponseText($response), true);
+        $body = json_decode((string) $response->getBody(), true);
         if (isset($body['CurrentStatus'])) {
             /** @var CurrentStatusResponse $object */
             $object = AbstractEntity::jsonDeserialize(['CurrentStatusResponse' => $body]);
@@ -231,10 +226,8 @@ class ShippingStatusService extends AbstractService
      *
      * @return CompleteStatusResponse
      *
-     * @throws ApiException
+     * @throws ClientException
      * @throws CifDownException
-     * @throws CifException
-     * @throws HttpClientException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -251,9 +244,8 @@ class ShippingStatusService extends AbstractService
             }
         }
         if (!$response instanceof ResponseInterface) {
-            $response = Client::getInstance()->doRequest(
-                $this->buildCompleteStatusRequest($completeStatus)
-            );
+            $request = $this->buildCompleteStatusRequest($completeStatus);
+            $response = Client::getInstance()->doRequest($request);
             static::validateResponse($response);
         }
 
@@ -270,7 +262,7 @@ class ShippingStatusService extends AbstractService
             return $object;
         }
 
-        throw new ApiException('Unable to retrieve complete status');
+        throw new ClientException('Unable to retrieve complete status', 0, null, isset($request) && $request instanceof RequestInterface ? $request : null, $response);
     }
 
     /**
@@ -333,33 +325,33 @@ class ShippingStatusService extends AbstractService
         }
         $endpoint .= '?'.http_build_query($query);
 
-        /** @var RequestFactory $factory */
         $factory = Psr17FactoryDiscovery::findRequestFactory();
 
-        return $factory->createRequest(
+        /** @var RequestInterface $request */
+        $request = $factory->createRequest(
             'POST',
-            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint,
-            [
-                'Accept'       => 'application/json',
-                'Content-Type' => 'application/json;charset=UTF-8',
-                'apikey'       => $this->postnl->getApiKey(),
-            ]
+            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint
         );
+        $request = $request->withHeader('Accept', 'application/json');
+        $request = $request->withHeader('Content-Type', 'application/json;charset=UTF-8');
+        $request = $request->withHeader('apikey', $this->postnl->getApiKey());
+
+        return $request;
     }
 
     /**
      * Process CompleteStatus Response REST
      *
-     * @param mixed $response
+     * @param ResponseInterface $response
      *
      * @return null|CompleteStatusResponse
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function processCompleteStatusResponse($response): ?CompleteStatusResponse
+    public function processCompleteStatusResponse(ResponseInterface $response): ?CompleteStatusResponse
     {
-        $body = json_decode(static::getResponseText($response), true);
+        $body = json_decode((string) $response->getBody(), true);
         if (isset($body['CompleteStatus'])) {
             if (isset($body['CompleteStatus']['Shipment']['MainBarcode'])) {
                 $body['CompleteStatus']['Shipments'] = [$body['CompleteStatus']['Shipment']];
@@ -418,10 +410,8 @@ class ShippingStatusService extends AbstractService
      *
      * @return SignatureResponse
      *
-     * @throws ApiException
+     * @throws ClientException
      * @throws CifDownException
-     * @throws CifException
-     * @throws HttpClientException
      *
      * @since 1.0.0
      */
@@ -437,7 +427,8 @@ class ShippingStatusService extends AbstractService
             }
         }
         if (!$response instanceof ResponseInterface) {
-            $response = Client::getInstance()->doRequest($this->buildGetSignatureRequest($getSignature));
+            $request = $this->buildGetSignatureRequest($getSignature);
+            $response = Client::getInstance()->doRequest($request);
             static::validateResponse($response);
         }
 
@@ -454,7 +445,7 @@ class ShippingStatusService extends AbstractService
             return $object;
         }
 
-        throw new ApiException('Unable to get signature');
+        throw new ClientException('Unable to get signature', 0, null, isset($request) && $request instanceof RequestInterface ? $request : null, $response);
     }
 
     /**
@@ -469,34 +460,33 @@ class ShippingStatusService extends AbstractService
      */
     public function buildGetSignatureRequest(GetSignature $getSignature): RequestInterface
     {
-        /** @var RequestFactory $factory */
         $factory = Psr17FactoryDiscovery::findRequestFactory();
 
-        return $factory->createRequest(
+        /** @var RequestInterface $request */
+        $request = $factory->createRequest(
             'POST',
-            ($this->postnl->getSandbox(
-            ) ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT)."/signature/{$getSignature->getShipment()->getBarcode()}",
-            [
-                'Accept'       => 'application/json',
-                'Content-Type' => 'application/json;charset=UTF-8',
-                'apikey'       => $this->postnl->getApiKey(),
-            ]
+            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT)."/signature/{$getSignature->getShipment()->getBarcode()}"
         );
+        $request = $request->withHeader('Accept', 'application/json');
+        $request = $request->withHeader('Content-Type', 'application/json;charset=UTF-8');
+        $request = $request->withHeader('apikey', $this->postnl->getApiKey());
+
+        return $request;
     }
 
     /**
      * Process GetSignature Response REST
      *
-     * @param mixed $response
+     * @param ResponseInterface $response
      *
      * @return null|SignatureResponse
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function processGetSignatureResponse($response): ?SignatureResponse
+    public function processGetSignatureResponse(ResponseInterface $response): ?SignatureResponse
     {
-        $body = json_decode(static::getResponseText($response), true);
+        $body = json_decode((string) $response->getBody(), true);
         if (!empty($body['Signature'])) {
             /** @var SignatureResponse $object */
             $object = AbstractEntity::jsonDeserialize(['SignatureResponse' => $body]);

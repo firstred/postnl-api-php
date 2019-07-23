@@ -29,38 +29,109 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use TypeError;
+
 /**
  * Class Timeframe
  */
 class Timeframe extends AbstractEntity
 {
-    /** @var string|null $city */
+    /**
+     * @var string|null $city
+     *
+     * @since 1.0.0
+     */
     protected $city;
-    /** @var string|null $countryCode */
+
+    /**
+     * @var string|null $countryCode
+     *
+     * @since 1.0.0
+     */
     protected $countryCode;
-    /** @var string|null $date */
+
+    /**
+     * @var string|null $date
+     *
+     * @since 1.0.0
+     */
     protected $date;
-    /** @var string|null $endDate */
+
+    /**
+     * @var string|null $endDate
+     *
+     * @since 1.0.0
+     */
     protected $endDate;
-    /** @var string|null $houseNr */
+
+    /**
+     * @var string|null $houseNr
+     *
+     * @since 1.0.0
+     */
     protected $houseNr;
-    /** @var string|null $houseNrExt */
+
+    /**
+     * @var string|null $houseNrExt
+     *
+     * @since 1.0.0
+     */
     protected $houseNrExt;
-    /** @var string[]|null $options */
+
+    /**
+     * @var string[]|null $options
+     *
+     * @since 1.0.0
+     */
     protected $options;
-    /** @var string|null $postalCode */
+
+    /**
+     * @var string|null $postalCode
+     *
+     * @since 1.0.0
+     */
     protected $postalCode;
-    /** @var string|null $startDate */
+
+    /**
+     * @var string|null $startDate
+     *
+     * @since 1.0.0
+     */
     protected $startDate;
-    /** @var string|null $street */
+
+    /**
+     * @var string|null $street
+     *
+     * @since 1.0.0
+     */
     protected $street;
-    /** @var string|null $sundaySorting */
+
+    /**
+     * @var string|null $sundaySorting
+     *
+     * @since 1.0.0
+     */
     protected $sundaySorting;
-    /** @var string|null $interval */
+
+    /**
+     * @var string|null $interval
+     *
+     * @since 1.0.0
+     */
     protected $interval;
-    /** @var string|null $timeframeRange */
+
+    /**
+     * @var string|null $timeframeRange
+     *
+     * @since 1.0.0
+     */
     protected $timeframeRange;
-    /** @var TimeframeTimeFrame[]|Timeframe[]|null $timeframes */
+
+    /**
+     * @var TimeframeTimeFrame[]|Timeframe[]|null $timeframes
+     *
+     * @since 1.0.0
+     */
     protected $timeframes;
 
     /**
@@ -79,6 +150,8 @@ class Timeframe extends AbstractEntity
      * @param string|null      $interval
      * @param string|null      $range
      * @param Timeframe[]|null $timeframes
+     *
+     * @throws TypeError
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -105,6 +178,7 @@ class Timeframe extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getPostalCode(): ?string
@@ -119,6 +193,9 @@ class Timeframe extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setPostalCode(?string $postcode = null): Timeframe
@@ -143,6 +220,9 @@ class Timeframe extends AbstractEntity
     {
         $json = [];
         foreach (array_keys(get_class_vars(static::class)) as $propertyName) {
+            if (in_array(ucfirst($propertyName), ['Id'])) {
+                continue;
+            }
             if (isset($this->{$propertyName})) {
                 if ('Options' === $propertyName) {
                     $json[$propertyName] = $this->{$propertyName};
@@ -160,10 +240,10 @@ class Timeframe extends AbstractEntity
                             $value = $this->{$propertyName};
                         }
 
-                        $json[$propertyName] = $value;
+                        $json[ucfirst($propertyName)] = $value;
                     }
                 } else {
-                    $json[$propertyName] = $this->{$propertyName};
+                    $json[ucfirst($propertyName)] = $this->{$propertyName};
                 }
             }
         }
@@ -174,6 +254,7 @@ class Timeframe extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getCity(): ?string
@@ -186,6 +267,9 @@ class Timeframe extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setCity(?string $city): Timeframe
@@ -198,6 +282,7 @@ class Timeframe extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getCountryCode(): ?string
@@ -210,6 +295,7 @@ class Timeframe extends AbstractEntity
      *
      * @return static
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setCountryCode(?string $countryCode): Timeframe
@@ -222,6 +308,7 @@ class Timeframe extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getDate(): ?string
@@ -234,6 +321,7 @@ class Timeframe extends AbstractEntity
      *
      * @return static
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setDate(?string $date): Timeframe
@@ -246,6 +334,7 @@ class Timeframe extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getEndDate(): ?string
@@ -258,6 +347,7 @@ class Timeframe extends AbstractEntity
      *
      * @return static
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setEndDate(?string $endDate): Timeframe
@@ -270,6 +360,7 @@ class Timeframe extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getHouseNr(): ?string
@@ -282,6 +373,7 @@ class Timeframe extends AbstractEntity
      *
      * @return static
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setHouseNr(?string $houseNr): Timeframe
@@ -294,6 +386,7 @@ class Timeframe extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getHouseNrExt(): ?string
@@ -306,6 +399,7 @@ class Timeframe extends AbstractEntity
      *
      * @return static
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setHouseNrExt(?string $houseNrExt): Timeframe
@@ -318,6 +412,7 @@ class Timeframe extends AbstractEntity
     /**
      * @return string[]|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getOptions(): ?array
@@ -330,6 +425,9 @@ class Timeframe extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setOptions(?array $options): Timeframe
@@ -342,6 +440,7 @@ class Timeframe extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getStartDate(): ?string
@@ -354,6 +453,9 @@ class Timeframe extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setStartDate(?string $startDate): Timeframe
@@ -366,6 +468,7 @@ class Timeframe extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getStreet(): ?string
@@ -378,6 +481,9 @@ class Timeframe extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setStreet(?string $street): Timeframe
@@ -388,11 +494,12 @@ class Timeframe extends AbstractEntity
     }
 
     /**
-     * @return string|null
+     * @return bool|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function getSundaySorting(): ?string
+    public function getSundaySorting(): ?bool
     {
         return $this->sundaySorting;
     }
@@ -402,6 +509,9 @@ class Timeframe extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setSundaySorting(?bool $sundaySorting): Timeframe
@@ -414,6 +524,7 @@ class Timeframe extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getInterval(): ?string
@@ -426,6 +537,9 @@ class Timeframe extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setInterval(?string $interval): Timeframe
@@ -438,6 +552,7 @@ class Timeframe extends AbstractEntity
     /**
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getTimeframeRange(): ?string
@@ -450,6 +565,9 @@ class Timeframe extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setTimeframeRange(?string $timeframeRange): Timeframe
@@ -462,6 +580,7 @@ class Timeframe extends AbstractEntity
     /**
      * @return Timeframe[]|TimeframeTimeFrame[]|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getTimeframes()
@@ -474,6 +593,9 @@ class Timeframe extends AbstractEntity
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function setTimeframes($timeframes): Timeframe
