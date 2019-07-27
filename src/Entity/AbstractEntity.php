@@ -98,10 +98,8 @@ abstract class AbstractEntity implements JsonSerializable
     {
         foreach ([
                      '\\Firstred\\PostNL\\Entity',
-                     '\\Firstred\\PostNL\\Entity\\Message',
                      '\\Firstred\\PostNL\\Entity\\Request',
                      '\\Firstred\\PostNL\\Entity\\Response',
-                     '\\Firstred\\PostNL\\Entity\\SOAP',
                  ] as $namespace) {
             if (class_exists("$namespace\\$shortName")) {
                 return "$namespace\\$shortName";

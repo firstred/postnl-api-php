@@ -30,7 +30,7 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Service;
 
 use Firstred\PostNL\Entity\AbstractEntity;
-use Firstred\PostNL\Entity\Request\GetTimeframes;
+use Firstred\PostNL\Entity\Request\CalculateTimeframes;
 use Firstred\PostNL\Entity\Response\ResponseTimeframes;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\ClientException;
@@ -53,23 +53,20 @@ class TimeframeService extends AbstractService
     // Endpoints
     const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v2_1/calculate/timeframes';
     const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2_1/calculate/timeframes';
-    const LEGACY_SANDBOX_ENDPOINT = 'https://testservice.postnl.com/CIF_SB/TimeframeWebService/2_0/TimeframeWebService.svc';
-    const LEGACY_LIVE_ENDPOINT = 'https://service.postnl.com/CIF/TimeframeWebService/2_0/TimeframeWebService.svc';
 
     /**
      * Get timeframes via REST
      *
-     * @param GetTimeframes $getTimeframes
+     * @param CalculateTimeframes $getTimeframes
      *
      * @return ResponseTimeframes
      *
-     * @throws CifDownException
      * @throws ClientException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function getTimeframes(GetTimeframes $getTimeframes)
+    public function getTimeframes(CalculateTimeframes $getTimeframes)
     {
         $item = $this->retrieveCachedItem($getTimeframes->getId());
         $response = null;
@@ -105,38 +102,37 @@ class TimeframeService extends AbstractService
     /**
      * Build the GetTimeframes request for the REST API
      *
-     * @param GetTimeframes $getTimeframes
+     * @param CalculateTimeframes $calculateTimeframes
      *
      * @return RequestInterface
      */
-    public function buildGetTimeframesRequest(GetTimeframes $getTimeframes): RequestInterface
+    public function buildGetTimeframesRequest(CalculateTimeframes $calculateTimeframes): RequestInterface
     {
-        $timeframe = $getTimeframes->getTimeframe()[0];
         $query = [
-            'AllowSundaySorting' => in_array($timeframe->getSundaySorting(), [true, 'true', 1], true),
-            'StartDate'          => $timeframe->getStartDate(),
-            'EndDate'            => $timeframe->getEndDate(),
-            'PostalCode'         => $timeframe->getPostalCode(),
-            'HouseNumber'        => $timeframe->getHouseNr(),
-            'CountryCode'        => $timeframe->getCountryCode(),
+            'AllowSundaySorting'        => $calculateTimeframes->getAllowSundaySorting() ? 'true' : 'false',
+            'CountryCode'        => $calculateTimeframes->getCountryCode(),
+            'StartDate'          => $calculateTimeframes->getStartDate(),
+            'EndDate'            => $calculateTimeframes->getEndDate(),
+            'PostalCode'         => $calculateTimeframes->getPostalCode(),
+            'HouseNumber'        => $calculateTimeframes->getHouseNr(),
             'Options'            => '',
         ];
-        if ($interval = $timeframe->getInterval()) {
+        if ($interval = $calculateTimeframes->getInterval()) {
             $query['Interval'] = $interval;
         }
-        if ($houseNrExt = $timeframe->getHouseNrExt()) {
+        if ($houseNrExt = $calculateTimeframes->getHouseNrExt()) {
             $query['HouseNrExt'] = $houseNrExt;
         }
-        if ($timeframeRange = $timeframe->getTimeframeRange()) {
+        if ($timeframeRange = $calculateTimeframes->getTimeframeRange()) {
             $query['TimeframeRange'] = $timeframeRange;
         }
-        if ($street = $timeframe->getStreet()) {
+        if ($street = $calculateTimeframes->getStreet()) {
             $query['Street'] = $street;
         }
-        if ($city = $timeframe->getCity()) {
+        if ($city = $calculateTimeframes->getCity()) {
             $query['City'] = $city;
         }
-        foreach ($timeframe->getOptions() as $option) {
+        foreach ($calculateTimeframes->getOptions() as $option) {
             if ('PG' === $option) {
                 continue;
             }

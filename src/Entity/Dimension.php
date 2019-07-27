@@ -30,6 +30,11 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Exception\InvalidTypeException;
+use Firstred\PostNL\Misc\ValidateAndFix;
+use libphonenumber\Leniency\Valid;
+use ReflectionClass;
+use ReflectionException;
+use TypeError;
 
 /**
  * Class Dimension
@@ -37,6 +42,12 @@ use Firstred\PostNL\Exception\InvalidTypeException;
 class Dimension extends AbstractEntity
 {
     /**
+     * Height of the shipment in millimeters (mm).
+     *
+     * @pattern ^\d{1,20}$
+     *
+     * @example 1400
+     *
      * @var string|null $height
      *
      * @since 1.0.0
@@ -44,6 +55,12 @@ class Dimension extends AbstractEntity
     protected $height;
 
     /**
+     * Length of the shipment in millimeters (mm).
+     *
+     * @pattern ^\d{1,20}$
+     *
+     * @example 2000
+     *
      * @var string|null $length
      *
      * @since 1.0.0
@@ -51,6 +68,13 @@ class Dimension extends AbstractEntity
     protected $length;
 
     /**
+     * Volume of the shipment in centimeters (cm3).
+     * Mandatory for E@H-products
+     *
+     * @pattern ^\d{1,20}$
+     *
+     * @example 30000
+     *
      * @var string|null $volume
      *
      * @since 1.0.0
@@ -58,6 +82,13 @@ class Dimension extends AbstractEntity
     protected $volume;
 
     /**
+     * Weight of the shipment in grams
+     * Approximate weight suffices
+     *
+     * @pattern ^\d{1,20}$
+     *
+     * @example 4300
+     *
      * @var string|null $weight
      *
      * @since 1.0.0
@@ -65,6 +96,12 @@ class Dimension extends AbstractEntity
     protected $weight;
 
     /**
+     * Width of the shipment in millimeters (mm).
+     *
+     * @pattern ^\d{1,20}$
+     *
+     * @example 1500
+     *
      * @var string|null $width
      *
      * @since 1.0.0
@@ -80,7 +117,8 @@ class Dimension extends AbstractEntity
      * @param string $volume
      * @param string $width
      *
-     * @throws InvalidTypeException
+     * @throws TypeError
+     * @throws ReflectionException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -99,10 +137,14 @@ class Dimension extends AbstractEntity
     }
 
     /**
+     * Get height
+     *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   Dimension::$height
      */
     public function getHeight(): ?string
     {
@@ -110,31 +152,40 @@ class Dimension extends AbstractEntity
     }
 
     /**
-     * @param string|null $height
+     * Set height
+     *
+     * @pattern ^\d{1,20}$
+     *
+     * @param string|int|float|null $height
      *
      * @return static
      *
-     * @throws InvalidTypeException
+     * @throws TypeError
+     * @throws ReflectionException
+     *
+     * @example 1400
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see     Dimension::$height
      */
-    public function setHeight(?string $height): Dimension
+    public function setHeight($height): Dimension
     {
-        if (is_string($height) && !is_numeric($height)) {
-            throw new InvalidTypeException('Invalid height, must be a numeric string or null');
-        }
-
-        $this->height = $height;
+        $this->height = ValidateAndFix::numericString($height);
 
         return $this;
     }
 
     /**
+     * Get length
+     *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   Dimension::$length
      */
     public function getLength(): ?string
     {
@@ -142,31 +193,40 @@ class Dimension extends AbstractEntity
     }
 
     /**
-     * @param string|null $length
+     * Set length
+     *
+     * @pattern ^\d{1,20}$
+     *
+     * @param string|float|int|null $length
      *
      * @return static
      *
-     * @throws InvalidTypeException
+     * @throws TypeError
+     * @throws ReflectionException
+     *
+     * @example 2000
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see     Dimension::$length
      */
-    public function setLength(?string $length): Dimension
+    public function setLength($length): Dimension
     {
-        if (is_string($length) && !is_numeric($length)) {
-            throw new InvalidTypeException('Invalid length, must be numeric string or null');
-        }
-
-        $this->length = $length;
+        $this->length = ValidateAndFix::numericString($length);
 
         return $this;
     }
 
     /**
+     * Get volume
+     *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   Dimension::$volume
      */
     public function getVolume(): ?string
     {
@@ -174,31 +234,40 @@ class Dimension extends AbstractEntity
     }
 
     /**
+     * Set volume
+     *
+     * @pattern ^\d{1,20}$
+     *
      * @param string|null $volume
      *
      * @return static
      *
-     * @throws InvalidTypeException
+     * @throws TypeError
+     * @throws ReflectionException
+     *
+     * @example 30000
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see     Dimension::$volume
      */
-    public function setVolume(?string $volume): Dimension
+    public function setVolume($volume): Dimension
     {
-        if (is_string($volume) && !is_numeric($volume)) {
-            throw new InvalidTypeException('Invalid volume, must be a numeric string or null');
-        }
-
-        $this->volume = $volume;
+        $this->volume = ValidateAndFix::numericString($volume);
 
         return $this;
     }
 
     /**
+     * Get weight
+     *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   Dimension::$weight
      */
     public function getWeight(): ?string
     {
@@ -206,31 +275,40 @@ class Dimension extends AbstractEntity
     }
 
     /**
-     * @param string|null $weight
+     * Set weight
+     *
+     * @pattern ^\d{1,20}$
+     *
+     * @param string|float|int|null $weight
      *
      * @return static
      *
-     * @throws InvalidTypeException
+     * @throws TypeError
+     * @throws ReflectionException
+     *
+     * @example 4300
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see     Dimension::$weight
      */
-    public function setWeight(?string $weight): Dimension
+    public function setWeight($weight): Dimension
     {
-        if (is_string($weight) && !is_numeric($weight)) {
-            throw new InvalidTypeException('Invalid weight, must be a numeric string or null');
-        }
-
-        $this->weight = $weight;
+        $this->weight = ValidateAndFix::numericString($weight);
 
         return $this;
     }
 
     /**
+     * Get weight
+     *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   Dimension::$width
      */
     public function getWidth(): ?string
     {
@@ -238,22 +316,27 @@ class Dimension extends AbstractEntity
     }
 
     /**
-     * @param string|null $width
+     * Get width
+     *
+     * @pattern ^\d{1,20}$
+     *
+     * @param string|int|float|null $width
      *
      * @return static
      *
-     * @throws InvalidTypeException
+     * @throws TypeError
+     * @throws ReflectionException
+     *
+     * @example 1500
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see     Dimension::$width
      */
-    public function setWidth(?string $width): Dimension
+    public function setWidth($width): Dimension
     {
-        if (is_string($width) && !is_numeric($width)) {
-            throw new InvalidTypeException('Invalid width, must be a numeric string or null');
-        }
-
-        $this->width = $width;
+        $this->width = ValidateAndFix::numericString($width);
 
         return $this;
     }

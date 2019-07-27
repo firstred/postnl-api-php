@@ -33,8 +33,8 @@ use Exception;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Coordinates;
 use Firstred\PostNL\Entity\Request\GetLocation;
-use Firstred\PostNL\Entity\Request\GetLocationsInArea;
 use Firstred\PostNL\Entity\Request\GetNearestLocations;
+use Firstred\PostNL\Entity\Request\GetNearestLocationsGeocode;
 use Firstred\PostNL\Entity\Response\GetLocationsInAreaResponse;
 use Firstred\PostNL\Entity\Response\GetNearestLocationsResponse;
 use Firstred\PostNL\Exception\CifDownException;
@@ -227,7 +227,7 @@ class LocationService extends AbstractService
     /**
      * Get the nearest locations via REST
      *
-     * @param GetLocationsInArea $getLocations
+     * @param GetNearestLocationsGeocode $getLocations
      *
      * @return GetLocationsInAreaResponse
      *
@@ -237,7 +237,7 @@ class LocationService extends AbstractService
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function getLocationsInArea(GetLocationsInArea $getLocations)
+    public function getLocationsInArea(GetNearestLocationsGeocode $getLocations)
     {
         $item = $this->retrieveCachedItem($getLocations->getId());
         $response = null;
@@ -460,11 +460,11 @@ class LocationService extends AbstractService
     /**
      * Build the GetLocationsInArea request for the REST API
      *
-     * @param GetLocationsInArea $getLocations
+     * @param GetNearestLocationsGeocode $getLocations
      *
      * @return RequestInterface
      */
-    public function buildGetLocationsInAreaRequest(GetLocationsInArea $getLocations): RequestInterface
+    public function buildGetLocationsInAreaRequest(GetNearestLocationsGeocode $getLocations): RequestInterface
     {
         $location = $getLocations->getLocation();
         $query = [

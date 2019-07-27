@@ -42,15 +42,10 @@ use TypeError;
 class CompleteStatusByReference extends AbstractEntity
 {
     /**
-     * @var Message|null $message
+     * @pattern N/A
      *
-     * @since 1.0.0
+     * @example N/A
      *
-     * @see Message
-     */
-    protected $message;
-
-    /**
      * @var Customer|null $customer
      *
      * @since 1.0.0
@@ -60,6 +55,10 @@ class CompleteStatusByReference extends AbstractEntity
     protected $customer;
 
     /**
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @var Shipment|null $shipment
      *
      * @since 1.0.0
@@ -74,7 +73,6 @@ class CompleteStatusByReference extends AbstractEntity
      *
      * @param Shipment|null $shipment
      * @param Customer|null $customer
-     * @param Message|null  $message
      *
      * @throws Exception
      * @throws TypeError
@@ -82,49 +80,12 @@ class CompleteStatusByReference extends AbstractEntity
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function __construct(Shipment $shipment = null, Customer $customer = null, Message $message = null)
+    public function __construct(Shipment $shipment = null, Customer $customer = null)
     {
         parent::__construct();
 
-        $this->setMessage($message ?: new Message());
         $this->setShipment($shipment);
         $this->setCustomer($customer);
-    }
-
-    /**
-     * Get message
-     *
-     * @return Message|null
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     *
-     * @see Message
-     */
-    public function getMessage(): ?Message
-    {
-        return $this->message;
-    }
-
-    /**
-     * Set message
-     *
-     * @param Message|null $message
-     *
-     * @return static
-     *
-     * @throws TypeError
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     *
-     * @see Message
-     */
-    public function setMessage(?Message $message): CompleteStatusByReference
-    {
-        $this->message = $message;
-
-        return $this;
     }
 
     /**
@@ -144,6 +105,10 @@ class CompleteStatusByReference extends AbstractEntity
 
     /**
      * Set customer
+     *
+     * @pattern N/A
+     *
+     * @example N/A
      *
      * @param Customer|null $customer
      *
@@ -180,6 +145,10 @@ class CompleteStatusByReference extends AbstractEntity
 
     /**
      * Set shipment
+     *
+     * @pattern N/A
+     *
+     * @example N/A
      *
      * @param Shipment|null $shipment
      *

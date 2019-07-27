@@ -42,21 +42,6 @@ use TypeError;
 class CompleteStatus extends AbstractEntity
 {
     /**
-     * Message
-     *
-     * @pattern N/A
-     *
-     * @example N/A
-     *
-     * @var Message|null $message
-     *
-     * @since 1.0.0
-     *
-     * @see Message
-     */
-    protected $message;
-
-    /**
      * Customer
      *
      * @pattern N/A
@@ -99,49 +84,12 @@ class CompleteStatus extends AbstractEntity
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function __construct(Shipment $shipment = null, Customer $customer = null, Message $message = null)
+    public function __construct(Shipment $shipment = null, Customer $customer = null)
     {
         parent::__construct();
 
-        $this->setMessage($message ?: new Message());
         $this->setShipment($shipment);
         $this->setCustomer($customer);
-    }
-
-    /**
-     * Get message
-     *
-     * @return Message|null
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     *
-     * @see Message
-     */
-    public function getMessage(): ?Message
-    {
-        return $this->message;
-    }
-
-    /**
-     * Set message
-     *
-     * @param Message|null $message
-     *
-     * @return static
-     *
-     * @throws TypeError
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     *
-     * @see Message
-     */
-    public function setMessage(?Message $message): CompleteStatus
-    {
-        $this->message = $message;
-
-        return $this;
     }
 
     /**
@@ -161,6 +109,10 @@ class CompleteStatus extends AbstractEntity
 
     /**
      * Set customer
+     *
+     * @pattern N/A
+     *
+     * @example N/A
      *
      * @param Customer|null $customer
      *
@@ -197,6 +149,10 @@ class CompleteStatus extends AbstractEntity
 
     /**
      * Set shipment
+     *
+     * @pattern N/A
+     *
+     * @example N/A
      *
      * @param Shipment|null $shipment
      *

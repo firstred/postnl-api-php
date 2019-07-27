@@ -38,6 +38,10 @@ use TypeError;
 class CompleteStatusResponseEvent extends AbstractEntity
 {
     /**
+     * @pattern ^\d{2}$
+     *
+     * @example 02
+     *
      * @var string|null $code
      *
      * @since 1.0.0
@@ -45,6 +49,10 @@ class CompleteStatusResponseEvent extends AbstractEntity
     protected $code;
 
     /**
+     * @pattern ^.{0,35}$
+     *
+     * @example N/A
+     *
      * @var string|null $description
      *
      * @since 1.0.0
@@ -52,6 +60,10 @@ class CompleteStatusResponseEvent extends AbstractEntity
     protected $description;
 
     /**
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @var string|null $destinationLocationCode
      *
      * @since 1.0.0
@@ -59,6 +71,10 @@ class CompleteStatusResponseEvent extends AbstractEntity
     protected $destinationLocationCode;
 
     /**
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @var string|null $locationCode
      *
      * @since 1.0.0
@@ -66,6 +82,10 @@ class CompleteStatusResponseEvent extends AbstractEntity
     protected $locationCode;
 
     /**
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @var string|null $routeCode
      *
      * @since 1.0.0
@@ -73,6 +93,10 @@ class CompleteStatusResponseEvent extends AbstractEntity
     protected $routeCode;
 
     /**
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @var string|null $routeName
      *
      * @since 1.0.0
@@ -122,6 +146,8 @@ class CompleteStatusResponseEvent extends AbstractEntity
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   CompleteStatusResponseEvent::$code
      */
     public function getCode(): ?string
     {
@@ -139,6 +165,8 @@ class CompleteStatusResponseEvent extends AbstractEntity
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   CompleteStatusResponseEvent::$code
      */
     public function setCode(?string $code): CompleteStatusResponseEvent
     {
@@ -154,6 +182,8 @@ class CompleteStatusResponseEvent extends AbstractEntity
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   CompleteStatusResponseEvent::$description
      */
     public function getDescription(): ?string
     {
@@ -171,6 +201,8 @@ class CompleteStatusResponseEvent extends AbstractEntity
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   CompleteStatusResponseEvent::$description
      */
     public function setDescription(?string $description): CompleteStatusResponseEvent
     {
@@ -186,6 +218,8 @@ class CompleteStatusResponseEvent extends AbstractEntity
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   CompleteStatusResponseEvent::$destinationLocationCode
      */
     public function getDestinationLocationCode(): ?string
     {
@@ -203,6 +237,8 @@ class CompleteStatusResponseEvent extends AbstractEntity
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   CompleteStatusResponseEvent::$destinationLocationCode
      */
     public function setDestinationLocationCode(?string $destinationLocationCode): CompleteStatusResponseEvent
     {
@@ -218,6 +254,8 @@ class CompleteStatusResponseEvent extends AbstractEntity
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   CompleteStatusResponseEvent::$locationCode
      */
     public function getLocationCode(): ?string
     {
@@ -235,6 +273,8 @@ class CompleteStatusResponseEvent extends AbstractEntity
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   CompleteStatusResponseEvent::$locationCode
      */
     public function setLocationCode(?string $locationCode): CompleteStatusResponseEvent
     {
@@ -250,6 +290,8 @@ class CompleteStatusResponseEvent extends AbstractEntity
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   CompleteStatusResponseEvent::$routeCode
      */
     public function getRouteCode(): ?string
     {
@@ -267,6 +309,8 @@ class CompleteStatusResponseEvent extends AbstractEntity
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   CompleteStatusResponseEvent::$routeCode
      */
     public function setRouteCode(?string $routeCode): CompleteStatusResponseEvent
     {
@@ -282,6 +326,8 @@ class CompleteStatusResponseEvent extends AbstractEntity
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   CompleteStatusResponseEvent::$routeName
      */
     public function getRouteName(): ?string
     {
@@ -299,6 +345,8 @@ class CompleteStatusResponseEvent extends AbstractEntity
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   CompleteStatusResponseEvent::$routeName
      */
     public function setRouteName(?string $routeName): CompleteStatusResponseEvent
     {
@@ -314,6 +362,8 @@ class CompleteStatusResponseEvent extends AbstractEntity
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   CompleteStatusResponseEvent::$timeStamp
      */
     public function getTimeStamp(): ?string
     {
@@ -331,6 +381,8 @@ class CompleteStatusResponseEvent extends AbstractEntity
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   CompleteStatusResponseEvent::$timeStamp
      */
     public function setTimeStamp(?string $timeStamp): CompleteStatusResponseEvent
     {

@@ -59,10 +59,11 @@ class BarcodeService extends AbstractService
      *
      * @param GenerateBarcode $generateBarcode
      *
-     * @return string|null Barcode
+     * @return string|null GenerateBarcode
      *
      * @throws CifDownException
      * @throws ClientException
+     * @throws Exception
      */
     public function generateBarcode(GenerateBarcode $generateBarcode)
     {
@@ -87,10 +88,10 @@ class BarcodeService extends AbstractService
             'GET',
             ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).'?'.http_build_query(
                 [
-                    'CustomerCode'   => $generateBarcode->getCustomer()->getCustomerCode(),
-                    'CustomerNumber' => $generateBarcode->getCustomer()->getCustomerNumber(),
-                    'Type'           => $generateBarcode->getBarcode()->getType(),
-                    'Serie'          => $generateBarcode->getBarcode()->getSerie(),
+                    'CustomerCode'   => $this->postnl->getCustomer()->getCustomerCode(),
+                    'CustomerNumber' => $this->postnl->getCustomer()->getCustomerNumber(),
+                    'Type'           => $generateBarcode->getType(),
+                    'Serie'          => $generateBarcode->getSerie(),
                 ]
             )
         )

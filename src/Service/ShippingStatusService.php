@@ -66,11 +66,11 @@ class ShippingStatusService extends AbstractService
      *
      * This is a combi-function, supporting the following:
      * - CurrentStatus (by barcode):
-     *   - Fill the Shipment->Barcode property. Leave the rest empty.
+     *   - Fill the Shipment->GenerateBarcode property. Leave the rest empty.
      * - CurrentStatusByReference:
      *   - Fill the Shipment->Reference property. Leave the rest empty.
      * - CurrentStatusByPhase:
-     *   - Fill the Shipment->PhaseCode property, do not pass Barcode or Reference.
+     *   - Fill the Shipment->PhaseCode property, do not pass GenerateBarcode or Reference.
      *     Optionally add DateFrom and/or DateTo.
      * - CurrentStatusByStatus:
      *   - Fill the Shipment->StatusCode property. Leave the rest empty.
@@ -213,11 +213,11 @@ class ShippingStatusService extends AbstractService
      *
      * This is a combi-function, supporting the following:
      * - CurrentStatus (by barcode):
-     *   - Fill the Shipment->Barcode property. Leave the rest empty.
+     *   - Fill the Shipment->GenerateBarcode property. Leave the rest empty.
      * - CurrentStatusByReference:
      *   - Fill the Shipment->Reference property. Leave the rest empty.
      * - CurrentStatusByPhase:
-     *   - Fill the Shipment->PhaseCode property, do not pass Barcode or Reference.
+     *   - Fill the Shipment->PhaseCode property, do not pass GenerateBarcode or Reference.
      *     Optionally add DateFrom and/or DateTo.
      * - CurrentStatusByStatus:
      *   - Fill the Shipment->StatusCode property. Leave the rest empty.
@@ -397,11 +397,11 @@ class ShippingStatusService extends AbstractService
      *
      * This is a combi-function, supporting the following:
      * - CurrentStatus (by barcode):
-     *   - Fill the Shipment->Barcode property. Leave the rest empty.
+     *   - Fill the Shipment->GenerateBarcode property. Leave the rest empty.
      * - CurrentStatusByReference:
      *   - Fill the Shipment->Reference property. Leave the rest empty.
      * - CurrentStatusByPhase:
-     *   - Fill the Shipment->PhaseCode property, do not pass Barcode or Reference.
+     *   - Fill the Shipment->PhaseCode property, do not pass GenerateBarcode or Reference.
      *     Optionally add DateFrom and/or DateTo.
      * - CurrentStatusByStatus:
      *   - Fill the Shipment->StatusCode property. Leave the rest empty.

@@ -32,7 +32,7 @@ namespace Firstred\PostNL\Entity\Response;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Amount;
-use Firstred\PostNL\Entity\Barcode;
+use Firstred\PostNL\Entity\GenerateBarcode;
 use Firstred\PostNL\Entity\Dimension;
 use Firstred\PostNL\Entity\Expectation;
 use Firstred\PostNL\Entity\Group;
@@ -61,7 +61,7 @@ class CurrentStatusResponseShipment extends AbstractEntity
     protected $amounts;
 
     /**
-     * @var Barcode|null $barcode
+     * @var GenerateBarcode|null $barcode
      *
      * @since 1.0.0
      */
@@ -135,7 +135,7 @@ class CurrentStatusResponseShipment extends AbstractEntity
      *
      * @param Address[]|null       $addresses
      * @param Amount[]|null        $amounts
-     * @param Barcode|null         $barcode
+     * @param GenerateBarcode|null $barcode
      * @param string|null          $deliveryDate
      * @param Dimension|null       $dimension
      * @param Expectation|null     $expectation
@@ -151,7 +151,7 @@ class CurrentStatusResponseShipment extends AbstractEntity
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function __construct(?array $addresses = null, ?array $amounts = null, ?Barcode $barcode = null, ?string $deliveryDate = null, ?Dimension $dimension = null, ?Expectation $expectation = null, ?array $groups = null, ?string $productCode = null, ?array $productOptions = null, ?string $reference = null, ?Status $status = null, ?array $warnings = null)
+    public function __construct(?array $addresses = null, ?array $amounts = null, ?GenerateBarcode $barcode = null, ?string $deliveryDate = null, ?Dimension $dimension = null, ?Expectation $expectation = null, ?array $groups = null, ?string $productCode = null, ?array $productOptions = null, ?string $reference = null, ?Status $status = null, ?array $warnings = null)
     {
         parent::__construct();
 
@@ -236,12 +236,12 @@ class CurrentStatusResponseShipment extends AbstractEntity
     /**
      * Get barcode
      *
-     * @return Barcode|null
+     * @return GenerateBarcode|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function getBarcode(): ?Barcode
+    public function getBarcode(): ?GenerateBarcode
     {
         return $this->barcode;
     }
@@ -249,7 +249,7 @@ class CurrentStatusResponseShipment extends AbstractEntity
     /**
      * Set barcode
      *
-     * @param Barcode|null $barcode
+     * @param GenerateBarcode|null $barcode
      *
      * @return static
      *
@@ -258,7 +258,7 @@ class CurrentStatusResponseShipment extends AbstractEntity
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function setBarcode(?Barcode $barcode): CurrentStatusResponseShipment
+    public function setBarcode(?GenerateBarcode $barcode): CurrentStatusResponseShipment
     {
         $this->barcode = $barcode;
 

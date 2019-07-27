@@ -31,9 +31,8 @@ namespace Firstred\PostNL\Service;
 
 use Exception;
 use Firstred\PostNL\Entity\AbstractEntity;
-use Firstred\PostNL\Entity\CutOffTime;
-use Firstred\PostNL\Entity\Request\GetDeliveryDate;
-use Firstred\PostNL\Entity\Request\GetSentDateRequest;
+use Firstred\PostNL\Entity\Request\CalculateDeliveryDate;
+use Firstred\PostNL\Entity\Request\CalculateShippingDate;
 use Firstred\PostNL\Entity\Response\GetDeliveryDateResponse;
 use Firstred\PostNL\Entity\Response\GetSentDateResponse;
 use Firstred\PostNL\Exception\CifDownException;
@@ -45,6 +44,7 @@ use InvalidArgumentException;
 use Psr\Cache\CacheItemInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use TypeError;
 
 /**
  * Class DeliveryDateService
@@ -61,19 +61,17 @@ class DeliveryDateService extends AbstractService
     /**
      * Get a delivery date via REST
      *
-     * @param GetDeliveryDate $getDeliveryDate
+     * @param CalculateDeliveryDate $getDeliveryDate
      *
      * @return GetDeliveryDateResponse
      *
      * @throws ClientException
-     * @throws CifDownException
-     * @throws CifDownException
      * @throws Exception
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function getDeliveryDate(GetDeliveryDate $getDeliveryDate): GetDeliveryDateResponse
+    public function getDeliveryDate(CalculateDeliveryDate $getDeliveryDate): GetDeliveryDateResponse
     {
         $item = $this->retrieveCachedItem($getDeliveryDate->getId());
         $response = null;
@@ -81,7 +79,7 @@ class DeliveryDateService extends AbstractService
             $response = $item->get();
             try {
                 $response = Message::parseResponse($response);
-            } catch (InvalidArgumentException $e) {
+            } catch (InvalidArgumentException | TypeError $e) {
             }
         }
         if (!$response instanceof ResponseInterface) {
@@ -107,88 +105,51 @@ class DeliveryDateService extends AbstractService
     }
 
     /**
-     * Build the GetDeliveryDate request for the REST API
+     * Build the CalculateDeliveryDate request for the REST API
      *
-     * @param GetDeliveryDate $getDeliveryDate
+     * @param CalculateDeliveryDate $calculateDeliveryDate
      *
      * @return RequestInterface
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function buildGetDeliveryDateRequest(GetDeliveryDate $getDeliveryDate): RequestInterface
+    public function buildGetDeliveryDateRequest(CalculateDeliveryDate $calculateDeliveryDate): RequestInterface
     {
-        $deliveryDate = $getDeliveryDate->getGetDeliveryDate();
-
         $query = [
-            'ShippingDate' => $deliveryDate->getShippingDate(),
+            'ShippingDate' => $calculateDeliveryDate->getShippingDate(),
+            'CutOffTime'   => $calculateDeliveryDate->getCutOffTime(),
             'Options'      => 'Daytime',
         ];
-        if ($shippingDuration = $deliveryDate->getShippingDuration()) {
+        if ($shippingDuration = $calculateDeliveryDate->getShippingDuration()) {
             $query['ShippingDuration'] = $shippingDuration;
         }
-
-        $times = $deliveryDate->getCutOffTimes();
-        if (!is_array($times)) {
-            $times = [];
-        }
-
-        $key = array_search(
-            '00',
-            array_map(
-                function (CutOffTime $time) {
-                    return $time->getDay();
-                },
-                $times
-            )
-        );
-        if (false !== $key) {
-            $query['CutOffTime'] = date('H:i:s', strtotime($times[$key]->getTime()));
-        } else {
-            $query['CutOffTime'] = '15:30:00';
-        }
-
-        // There need to be more cut-off times besides the default 00 one in order to override
-        if (count($times) > 1) {
-            foreach (range(1, 7) as $day) {
-                $dayName = date('l', strtotime("Sunday +{$day} days"));
-                $key = array_search(
-                    str_pad($day, 2, '0', STR_PAD_LEFT),
-                    array_map(
-                        function (CutOfftime $time) {
-                            return $time->getDay();
-                        },
-                        $times
-                    )
-                );
-                if (false !== $key) {
-                    $query["CutOffTime{$dayName}"] = date('H:i:s', strtotime($times[$key]->getTime()));
-                    $query["Available{$dayName}"] = 'true';
-                } else {
-                    $query["CutOffTime{$dayName}"] = '00:00:00';
-                    $query["Available{$dayName}"] = 'false';
-                }
+        foreach (['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] as $day) {
+            if (!is_null($calculateDeliveryDate->{"getAvailable{$day}"}())) {
+                $query["Available{$day}"] = $calculateDeliveryDate->{"getAvailable{$day}"}() ? 'true' : 'false';
+            }
+            if (!is_null($calculateDeliveryDate->{"getCutOffTime{$day}"}())) {
+                $query["CutOffTime{$day}"] = $calculateDeliveryDate->{"getCutOffTime{$day}"}();
             }
         }
-
-        if ($postcode = $deliveryDate->getPostalCode()) {
+        if ($postcode = $calculateDeliveryDate->getPostalCode()) {
             $query['PostalCode'] = $postcode;
         }
-        $query['CountryCode'] = $deliveryDate->getCountryCode();
-        if ($originCountryCode = $deliveryDate->getOriginCountryCode()) {
+        $query['CountryCode'] = $calculateDeliveryDate->getCountryCode();
+        if ($originCountryCode = $calculateDeliveryDate->getOriginCountryCode()) {
             $query['OriginCountryCode'] = $originCountryCode;
         }
-        if ($city = $deliveryDate->getCity()) {
+        if ($city = $calculateDeliveryDate->getCity()) {
             $query['City'] = $city;
         }
-        if ($houseNr = $deliveryDate->getHouseNr()) {
-            $query['HouseNr'] = $houseNr;
+        if ($houseNr = $calculateDeliveryDate->getHouseNumber()) {
+            $query['HouseNumber'] = $houseNr;
         }
-        if ($houseNrExt = $deliveryDate->getHouseNrExt()) {
+        if ($houseNrExt = $calculateDeliveryDate->getHouseNrExt()) {
             $query['HouseNrExt'] = $houseNrExt;
         }
-        if (is_array($deliveryDate->getOptions())) {
-            foreach ($deliveryDate->getOptions() as $option) {
+        if (is_array($calculateDeliveryDate->getOptions())) {
+            foreach ($calculateDeliveryDate->getOptions() as $option) {
                 if ('Daytime' === $option) {
                     continue;
                 }
@@ -210,7 +171,7 @@ class DeliveryDateService extends AbstractService
     }
 
     /**
-     * Process GetDeliveryDate REST Response
+     * Process CalculateDeliveryDate REST Response
      *
      * @param ResponseInterface $response
      *
@@ -237,34 +198,33 @@ class DeliveryDateService extends AbstractService
     /**
      * Get the sent date via REST
      *
-     * @param GetSentDateRequest $getSentDate
+     * @param CalculateShippingDate $calculateShippingDate
      *
      * @return GetSentDateResponse
      *
      * @throws ClientException
-     * @throws CifDownException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function getSentDate(GetSentDateRequest $getSentDate): GetSentDateResponse
+    public function getShippingDate(CalculateShippingDate $calculateShippingDate): GetSentDateResponse
     {
-        $item = $this->retrieveCachedItem($getSentDate->getId());
+        $item = $this->retrieveCachedItem($calculateShippingDate->getId());
         $response = null;
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
                 $response = Message::parseResponse($response);
-            } catch (InvalidArgumentException $e) {
+            } catch (InvalidArgumentException | TypeError $e) {
             }
         }
         if (!$response instanceof ResponseInterface) {
-            $request = $this->buildGetSentDateRequest($getSentDate);
+            $request = $this->buildGetShippingDateRequest($calculateShippingDate);
             $response = Client::getInstance()->doRequest($request);
             static::validateResponse($response);
         }
 
-        $object = $this->processGetSentDateResponse($response);
+        $object = $this->processGetShippingDateResponse($response);
         if ($object instanceof GetSentDateResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof ResponseInterface
@@ -281,32 +241,31 @@ class DeliveryDateService extends AbstractService
     }
 
     /**
-     * Build the GetSentDate request for the REST API
+     * Build the CalculateShippingDate request for the REST API
      *
-     * @param GetSentDateRequest $getSentDate
+     * @param CalculateShippingDate $calculateShippingDate
      *
      * @return RequestInterface
      */
-    public function buildGetSentDateRequest(GetSentDateRequest $getSentDate): RequestInterface
+    public function buildGetShippingDateRequest(CalculateShippingDate $calculateShippingDate): RequestInterface
     {
-        $sentDate = $getSentDate->getGetSentDate();
         $query = [
-            'ShippingDate' => $sentDate->getDeliveryDate(),
+            'ShippingDate' => $calculateShippingDate->getDeliveryDate(),
         ];
-        $query['CountryCode'] = $sentDate->getCountryCode();
-        if ($duration = $sentDate->getShippingDuration()) {
+        $query['CountryCode'] = $calculateShippingDate->getCountryCode();
+        if ($duration = $calculateShippingDate->getShippingDuration()) {
             $query['ShippingDuration'] = $duration;
         }
-        if ($postcode = $sentDate->getPostalCode()) {
+        if ($postcode = $calculateShippingDate->getPostalCode()) {
             $query['PostalCode'] = $postcode;
         }
-        if ($city = $sentDate->getCity()) {
+        if ($city = $calculateShippingDate->getCity()) {
             $query['City'] = $city;
         }
-        if ($houseNr = $sentDate->getHouseNr()) {
-            $query['HouseNr'] = $houseNr;
+        if ($houseNr = $calculateShippingDate->getHouseNumber()) {
+            $query['HouseNumber'] = $houseNr;
         }
-        if ($houseNrExt = $sentDate->getHouseNrExt()) {
+        if ($houseNrExt = $calculateShippingDate->getHouseNrExt()) {
             $query['HouseNrExt'] = $houseNrExt;
         }
 
@@ -323,7 +282,7 @@ class DeliveryDateService extends AbstractService
     }
 
     /**
-     * Process GetSentDate REST Response
+     * Process CalculateShippingDate REST Response
      *
      * @param ResponseInterface $response
      *
@@ -334,12 +293,10 @@ class DeliveryDateService extends AbstractService
      * @since 2.0.0 Strict typing
      * @since 1.0.0
      */
-    public function processGetSentDateResponse(ResponseInterface $response): GetSentDateResponse
+    public function processGetShippingDateResponse(ResponseInterface $response): GetSentDateResponse
     {
         $body = json_decode((string) $response->getBody(), true);
         if (isset($body['SentDate'])) {
-
-
             /** @var GetSentDateResponse $object */
             $object = AbstractEntity::jsonDeserialize(['GetSentDateResponse' => $body]);
 

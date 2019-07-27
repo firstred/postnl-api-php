@@ -29,170 +29,206 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity\Request;
 
-use Exception;
 use Firstred\PostNL\Entity\AbstractEntity;
-use Firstred\PostNL\Entity\Barcode;
-use Firstred\PostNL\Entity\Customer;
-use Firstred\PostNL\Entity\Message;
+use Firstred\PostNL\Misc\ValidateAndFix;
+use ReflectionException;
 use TypeError;
 
 /**
- * Class GenerateLabel
+ * Class GenerateBarcode
  */
 class GenerateBarcode extends AbstractEntity
 {
     /**
-     * @var Message|null $message
+     * GenerateBarcode type
+     *
+     * Accepted values are:
+     * - 2S
+     * - 3S
+     * - CC
+     * - CP
+     * - CD
+     * - CF
+     * - LA
+     * - CX
+     *
+     * @pattern ^(?:2S|3S|CC|CP|CD|CF|LA|CX)$
+     *
+     * @example 3S
+     *
+     * @var string|null $type
      *
      * @since 1.0.0
-     *
-     * @see Message
      */
-    protected $message;
+    protected $type;
 
     /**
-     * @var Customer|null $customer
+     * Range used when generating generic S10 barcodes (without a customer-specific component). If this is the case, please use ‘NL’ for this field in combination with Serie '00000000-99999999’. If you leave this field blank, the CustomerCode value will be used for the barcode.
+     *
+     * @pattern ^.{0,35}$
+     *
+     * @example NL
+     *
+     * @var string|null $range
      *
      * @since 1.0.0
-     *
-     * @see Customer
      */
-    protected $customer;
+    protected $range;
 
     /**
-     * @var Barcode|null $barcode
+     * GenerateBarcode serie in the format '###000000-###000000’, for example 100000000-500000000. The range must consist of a minimal difference of 100.000. Minimum length of the serie is 6 characters; maximum length is 9 characters. It is allowed to add extra leading zeros at the beginning of the serie. See Guidelines for more information.
+     *
+     * @pattern ^\d{0,3}\d{6}-\d{0,3}\d{6}$
+     *
+     * @example 100000000-500000000
+     *
+     * @var string|null $serie
      *
      * @since 1.0.0
-     *
-     * @see Barcode
      */
-    protected $barcode;
+    protected $serie;
 
     /**
      * GenerateBarcode constructor.
      *
-     * @param Barcode|null  $barcode
-     * @param Customer|null $customer
-     * @param Message|null  $message
+     * @param string|null $type
+     * @param string|null $range
+     * @param string|null $serie
      *
-     * @throws Exception
+     * @throws TypeError
+     * @throws ReflectionException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function __construct(Barcode $barcode = null, Customer $customer = null, Message $message = null)
+    public function __construct(?string $type = null, ?string $range = null, ?string $serie = '000000000-999999999')
     {
         parent::__construct();
 
-        $this->setBarcode($barcode);
-        $this->setCustomer($customer);
-        $this->setMessage($message ?: new Message());
+        $this->setType($type);
+        $this->setRange($range);
+        $this->setSerie($serie);
     }
 
     /**
-     * Get message
+     * Get type
      *
-     * @return Message|null
+     * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      *
-     * @see Message
+     * @see   GenerateBarcode::$type
      */
-    public function getMessage(): ?Message
+    public function getType(): ?string
     {
-        return $this->message;
+        return $this->type;
     }
 
     /**
-     * Set message
+     * Set type
      *
-     * @param Message|null $message
+     * @pattern ^(?:2S|3S|CC|CP|CD|CF|LA|CX)$
+     *
+     * @param string|null $type
      *
      * @return static
      *
      * @throws TypeError
+     * @throws ReflectionException
+     *
+     * @example 3S
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      *
-     * @see Message
+     * @see   GenerateBarcode::$type
      */
-    public function setMessage(?Message $message): GenerateBarcode
+    public function setType(?string $type): GenerateBarcode
     {
-        $this->message = $message;
+        $this->type = ValidateAndFix::barcodeType($type);
 
         return $this;
     }
 
     /**
-     * Get customer
+     * Get range
      *
-     * @return Customer|null
+     * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      *
-     * @see Customer
+     * @see   GenerateBarcode::$range
      */
-    public function getCustomer(): ?Customer
+    public function getRange(): ?string
     {
-        return $this->customer;
+        return $this->range;
     }
 
     /**
-     * Set customer
+     * Set range
      *
-     * @param Customer|null $customer
+     * @pattern ^[A-Z0-9]{1,4}$
+     *
+     * @param string|null $range
      *
      * @return static
      *
      * @throws TypeError
+     * @throws ReflectionException
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @example NL
      *
-     * @see Customer
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
+     *
+     * @see     GenerateBarcode::$range
      */
-    public function setCustomer(?Customer $customer): GenerateBarcode
+    public function setRange(?string $range): GenerateBarcode
     {
-        $this->customer = $customer;
+        $this->range = ValidateAndFix::barcodeRange($range);
 
         return $this;
     }
 
     /**
-     * Get barcode
+     * Set serie
      *
-     * @return Barcode|null
+     * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      *
-     * @see Barcode
+     * @see   GenerateBarcode::$serie
      */
-    public function getBarcode(): ?Barcode
+    public function getSerie(): ?string
     {
-        return $this->barcode;
+        return $this->serie;
     }
 
     /**
-     * Set barcode
+     * Set serie
      *
-     * @param Barcode|null $barcode
+     * @pattern ^\d{0,3}\d{6}-\d{0,3}\d{6}$
+     *
+     * @param string|null $serie
      *
      * @return static
      *
      * @throws TypeError
+     * @throws ReflectionException
+     *
+     * @example 100000000-500000000
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      *
-     * @see Barcode
+     * @see   GenerateBarcode::$serie
      */
-    public function setBarcode(?Barcode $barcode): GenerateBarcode
+    public function setSerie(?string $serie): GenerateBarcode
     {
-        $this->barcode = $barcode;
+        $this->serie = ValidateAndFix::barcodeSerie($serie);
 
         return $this;
     }

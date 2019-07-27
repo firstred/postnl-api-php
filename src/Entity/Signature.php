@@ -38,6 +38,12 @@ use TypeError;
 class Signature extends AbstractEntity
 {
     /**
+     * GetSignatureResponseSignature;
+     *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @var GetSignatureResponseSignature|null $getSignatureResponseSignature
      *
      * @since 1.0.0
@@ -45,6 +51,11 @@ class Signature extends AbstractEntity
     protected $getSignatureResponseSignature;
 
     /**
+     *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @var Warning[]|null $warnings
      *
      * @since 1.0.0
@@ -71,10 +82,16 @@ class Signature extends AbstractEntity
     }
 
     /**
+     * @pattern N/A
+     *
      * @return GetSignatureResponseSignature|null
+     *
+     * @example N/A
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see     GetSignatureResponseSignature
      */
     public function getGetSignatureResponseSignature(): ?GetSignatureResponseSignature
     {
@@ -82,14 +99,20 @@ class Signature extends AbstractEntity
     }
 
     /**
+     * @pattern N/A
+     *
      * @param GetSignatureResponseSignature|null $getSignatureResponseSignature
      *
      * @return static
      *
      * @throws TypeError
      *
+     * @example N/A
+     *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see     GetSignatureResponseSignature
      */
     public function setGetSignatureResponseSignature(?GetSignatureResponseSignature $getSignatureResponseSignature): Signature
     {
@@ -99,10 +122,18 @@ class Signature extends AbstractEntity
     }
 
     /**
+     * Get warnings
+     *
+     * @pattern N/A
+     *
      * @return Warning[]|null
+     *
+     * @example N/A
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see     Warning
      */
     public function getWarnings(): ?array
     {
@@ -110,14 +141,22 @@ class Signature extends AbstractEntity
     }
 
     /**
+     * Set warnings
+     *
+     * @pattern N/A
+     *
      * @param Warning[]|null $warnings
      *
      * @return static
      *
      * @throws TypeError
      *
+     * @example N/A
+     *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see     Warning
      */
     public function setWarnings(?array $warnings): Signature
     {

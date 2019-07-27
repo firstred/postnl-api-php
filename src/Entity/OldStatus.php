@@ -29,6 +29,8 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use Firstred\PostNL\Misc\ValidateAndFix;
+use ReflectionException;
 use TypeError;
 
 /**
@@ -37,6 +39,12 @@ use TypeError;
 class OldStatus extends AbstractEntity
 {
     /**
+     * Current phase code
+     *
+     * @pattern ^.{0,95}$
+     *
+     * @example N/A
+     *
      * @var string|null $currentPhaseCode
      *
      * @since 1.0.0
@@ -44,6 +52,12 @@ class OldStatus extends AbstractEntity
     protected $currentPhaseCode;
 
     /**
+     * Current phase description
+     *
+     * @pattern ^.{0,95}$
+     *
+     * @example N/A
+     *
      * @var string|null $currentPhaseDescription
      *
      * @since 1.0.0
@@ -51,6 +65,12 @@ class OldStatus extends AbstractEntity
     protected $currentPhaseDescription;
 
     /**
+     * Current old status code
+     *
+     * @pattern ^.{0,95}$
+     *
+     * @example N/A
+     *
      * @var string|null $currentOldStatusCode
      *
      * @since 1.0.0
@@ -58,6 +78,12 @@ class OldStatus extends AbstractEntity
     protected $currentOldStatusCode;
 
     /**
+     * Current old status description
+     *
+     * @pattern ^.{0,95}$
+     *
+     * @example N/A
+     *
      * @var string|null $currentOldStatusDescription
      *
      * @since 1.0.0
@@ -65,6 +91,12 @@ class OldStatus extends AbstractEntity
     protected $currentOldStatusDescription;
 
     /**
+     * Current old status timestamp
+     *
+     * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}\s(?:2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9]$
+     *
+     * @example 03-07-2019 14:00:00
+     *
      * @var string|null $currentOldStatusTimeStamp
      *
      * @since 1.0.0
@@ -81,6 +113,7 @@ class OldStatus extends AbstractEntity
      * @param null|string $timeStamp
      *
      * @throws TypeError
+     * @throws ReflectionException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -103,6 +136,8 @@ class OldStatus extends AbstractEntity
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   OldStatus::$currentPhaseCode
      */
     public function getCurrentPhaseCode(): ?string
     {
@@ -112,17 +147,24 @@ class OldStatus extends AbstractEntity
     /**
      * Set current phase code
      *
+     * @pattern ^.{0,95}$
+     *
      * @param string|null $currentPhaseCode
      *
      * @return static
      *
      * @throws TypeError
+     * @throws ReflectionException
      *
-     * @since 2.0.0 Strict typing
+     * @example N/A
+     *
+     * @since   2.0.0 Strict typing
+     *
+     * @see     OldStatus::$currentPhaseCode
      */
     public function setCurrentPhaseCode(?string $currentPhaseCode): OldStatus
     {
-        $this->currentPhaseCode = $currentPhaseCode;
+        $this->currentPhaseCode = ValidateAndFix::genericString($currentPhaseCode, 95);
 
         return $this;
     }
@@ -134,6 +176,8 @@ class OldStatus extends AbstractEntity
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   OldStatus::$currentPhaseDescription
      */
     public function getCurrentPhaseDescription(): ?string
     {
@@ -143,18 +187,25 @@ class OldStatus extends AbstractEntity
     /**
      * Set current phase description
      *
+     * @pattern ^.{0,95}$
+     *
      * @param string|null $currentPhaseDescription
      *
      * @return static
      *
      * @throws TypeError
+     * @throws ReflectionException
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @example N/A
+     *
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
+     *
+     * @see     OldStatus::$currentPhaseDescription
      */
     public function setCurrentPhaseDescription(?string $currentPhaseDescription): OldStatus
     {
-        $this->currentPhaseDescription = $currentPhaseDescription;
+        $this->currentPhaseDescription = ValidateAndFix::genericString($currentPhaseDescription, 95);
 
         return $this;
     }
@@ -166,6 +217,8 @@ class OldStatus extends AbstractEntity
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   OldStatus::$currentOldStatusCode
      */
     public function getCurrentOldStatusCode(): ?string
     {
@@ -175,29 +228,38 @@ class OldStatus extends AbstractEntity
     /**
      * Set current old status code
      *
+     * @pattern ^.{0,95}$
+     *
      * @param string|null $currentOldStatusCode
      *
      * @return static
      *
      * @throws TypeError
+     * @throws ReflectionException
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @example N/A
+     *
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
+     *
+     * @see     OldStatus::$currentOldStatusCode
      */
     public function setCurrentOldStatusCode(?string $currentOldStatusCode): OldStatus
     {
-        $this->currentOldStatusCode = $currentOldStatusCode;
+        $this->currentOldStatusCode = ValidateAndFix::genericString($currentOldStatusCode,95);
 
         return $this;
     }
 
     /**
-     * Get currnet old status description
+     * Get current old status description
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   OldStatus::$currentOldStatusDescription
      */
     public function getCurrentOldStatusDescription(): ?string
     {
@@ -207,18 +269,25 @@ class OldStatus extends AbstractEntity
     /**
      * Set current old status description
      *
+     * @pattern ^.{0,95}$
+     *
      * @param string|null $currentOldStatusDescription
      *
      * @return static
      *
      * @throws TypeError
+     * @throws ReflectionException
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @example N/A
+     *
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
+     *
+     * @see     OldStatus::$currentOldStatusDescription
      */
     public function setCurrentOldStatusDescription(?string $currentOldStatusDescription): OldStatus
     {
-        $this->currentOldStatusDescription = $currentOldStatusDescription;
+        $this->currentOldStatusDescription = ValidateAndFix::genericString($currentOldStatusDescription, 95);
 
         return $this;
     }
@@ -230,6 +299,8 @@ class OldStatus extends AbstractEntity
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   OldStatus::$currentOldStatusTimeStamp
      */
     public function getCurrentOldStatusTimeStamp(): ?string
     {
@@ -239,18 +310,25 @@ class OldStatus extends AbstractEntity
     /**
      * Set current old status timestamp
      *
+     * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}\s(?:2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9]$
+     *
      * @param string|null $currentOldStatusTimeStamp
      *
      * @return static
      *
      * @throws TypeError
+     * @throws ReflectionException
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @example 03-07-2019 14:00:00
+     *
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
+     *
+     * @see     OldStatus::$currentOldStatusTimeStamp
      */
     public function setCurrentOldStatusTimeStamp(?string $currentOldStatusTimeStamp): OldStatus
     {
-        $this->currentOldStatusTimeStamp = $currentOldStatusTimeStamp;
+        $this->currentOldStatusTimeStamp = ValidateAndFix::dateTime($currentOldStatusTimeStamp);
 
         return $this;
     }

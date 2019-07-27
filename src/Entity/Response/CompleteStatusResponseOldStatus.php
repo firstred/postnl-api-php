@@ -45,6 +45,10 @@ class CompleteStatusResponseOldStatus extends AbstractEntity
     protected $statusCode;
 
     /**
+     *  @pattern ^.{0,35}$
+     *
+     * @example N/A
+     *
      * @var string|null $statusDescription
      *
      * @since 1.0.0
@@ -59,6 +63,10 @@ class CompleteStatusResponseOldStatus extends AbstractEntity
     protected $phaseCode;
 
     /**
+     *  @pattern ^.{0,35}$
+     *
+     * @example N/A
+     *
      * @var string|null $phaseDescription
      *
      * @since 1.0.0

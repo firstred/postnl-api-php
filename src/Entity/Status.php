@@ -29,6 +29,9 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use Firstred\PostNL\Misc\ValidateAndFix;
+use libphonenumber\Leniency\Valid;
+use ReflectionException;
 use TypeError;
 
 /**
@@ -37,6 +40,12 @@ use TypeError;
 class Status extends AbstractEntity
 {
     /**
+     * Current phase code
+     *
+     * @pattern ^\d{2}$
+     *
+     * @example 02
+     *
      * @var string|null $currentPhaseCode
      *
      * @since 1.0.0
@@ -44,6 +53,12 @@ class Status extends AbstractEntity
     protected $currentPhaseCode;
 
     /**
+     * Current phase description
+     *
+     * @pattern ^.{0,35}$
+     *
+     * @example N/A
+     *
      * @var string|null $currentPhaseDescription
      *
      * @since 1.0.0
@@ -51,6 +66,12 @@ class Status extends AbstractEntity
     protected $currentPhaseDescription;
 
     /**
+     * Current status code
+     *
+     * @pattern ^\d{2}$
+     *
+     * @example 02
+     *
      * @var string|null $currentStatusCode
      *
      * @since 1.0.0
@@ -58,6 +79,12 @@ class Status extends AbstractEntity
     protected $currentStatusCode;
 
     /**
+     * Current status description
+     *
+     * @pattern ^.{0,35}$
+     *
+     * @example N/A
+     *
      * @var string|null $currentStatusDescription
      *
      * @since 1.0.0
@@ -65,6 +92,12 @@ class Status extends AbstractEntity
     protected $currentStatusDescription;
 
     /**
+     * Current status timestamp
+     *
+     * @pattern ^(?:[0-3]\d-[01]\d-[12]\d{3}\s+)[0-2]\d:[0-5]\d(?:[0-5]\d)$
+     *
+     * @example 03-07-2019 17:00:00
+     *
      * @var string|null $currentStatusTimeStamp
      *
      * @since 1.0.0
@@ -97,10 +130,14 @@ class Status extends AbstractEntity
     }
 
     /**
+     * Get current phase code
+     *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   Status::$currentPhaseCode
      */
     public function getCurrentPhaseCode(): ?string
     {
@@ -108,27 +145,40 @@ class Status extends AbstractEntity
     }
 
     /**
+     * Set current phase code
+     *
+     * @pattern ^\d{2}$
+     *
      * @param string|null $currentPhaseCode
      *
      * @return static
      *
      * @throws TypeError
+     * @throws ReflectionException
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @example 02
+     *
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
+     *
+     * @see     Status::$currentPhaseCode
      */
     public function setCurrentPhaseCode(?string $currentPhaseCode): Status
     {
-        $this->currentPhaseCode = $currentPhaseCode;
+        $this->currentPhaseCode = ValidateAndFix::numericType($currentPhaseCode);
 
         return $this;
     }
 
     /**
+     * Get current phase description
+     *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   Status::$currentPhaseDescription
      */
     public function getCurrentPhaseDescription(): ?string
     {
@@ -136,27 +186,40 @@ class Status extends AbstractEntity
     }
 
     /**
+     * Set current phase description
+     *
+     * @pattern ^.{0,35}$
+     *
      * @param string|null $currentPhaseDescription
      *
      * @return static
      *
      * @throws TypeError
+     * @throws ReflectionException
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @example N/A
+     *
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
+     *
+     * @see     Status::$currentPhaseDescription
      */
     public function setCurrentPhaseDescription(?string $currentPhaseDescription): Status
     {
-        $this->currentPhaseDescription = $currentPhaseDescription;
+        $this->currentPhaseDescription = ValidateAndFix::genericString($currentPhaseDescription);
 
         return $this;
     }
 
     /**
+     * Get current status code
+     *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   Status::$currentStatusCode
      */
     public function getCurrentStatusCode(): ?string
     {
@@ -164,27 +227,40 @@ class Status extends AbstractEntity
     }
 
     /**
+     * Set current status code
+     *
+     * @pattern ^\d{2}$
+     *
      * @param string|null $currentStatusCode
      *
      * @return static
      *
      * @throws TypeError
+     * @throws ReflectionException
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @example 02
+     *
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
+     *
+     * @see     Status::$currentStatusCode
      */
     public function setCurrentStatusCode(?string $currentStatusCode): Status
     {
-        $this->currentStatusCode = $currentStatusCode;
+        $this->currentStatusCode = ValidateAndFix::numericType($currentStatusCode);
 
         return $this;
     }
 
     /**
+     * Get current status description
+     *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   Status::$currentStatusDescription
      */
     public function getCurrentStatusDescription(): ?string
     {
@@ -192,27 +268,40 @@ class Status extends AbstractEntity
     }
 
     /**
+     * Set current status description
+     *
+     * @pattern ^.{0,35}$
+     *
      * @param string|null $currentStatusDescription
      *
      * @return static
      *
      * @throws TypeError
+     * @throws ReflectionException
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @example N/A
+     *
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
+     *
+     * @see     Status::$currentStatusDescription
      */
     public function setCurrentStatusDescription(?string $currentStatusDescription): Status
     {
-        $this->currentStatusDescription = $currentStatusDescription;
+        $this->currentStatusDescription = ValidateAndFix::genericString($currentStatusDescription);
 
         return $this;
     }
 
     /**
+     * Get current status timestamp
+     *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   Status::$currentStatusTimeStamp
      */
     public function getCurrentStatusTimeStamp(): ?string
     {
@@ -220,18 +309,27 @@ class Status extends AbstractEntity
     }
 
     /**
+     * Set current status timestamp
+     *
+     * @pattern ^(?:[0-3]\d-[01]\d-[12]\d{3}\s+)[0-2]\d:[0-5]\d(?:[0-5]\d)$
+     *
      * @param string|null $currentStatusTimeStamp
      *
      * @return static
      *
      * @throws TypeError
+     * @throws ReflectionException
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @example 03-07-2019 17:00:00
+     *
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
+     *
+     * @see     Status::$currentStatusTimeStamp
      */
     public function setCurrentStatusTimeStamp(?string $currentStatusTimeStamp): Status
     {
-        $this->currentStatusTimeStamp = $currentStatusTimeStamp;
+        $this->currentStatusTimeStamp = ValidateAndFix::dateTime($currentStatusTimeStamp);
 
         return $this;
     }

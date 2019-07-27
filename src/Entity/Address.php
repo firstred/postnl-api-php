@@ -30,6 +30,7 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Exception\InvalidTypeException;
+use Firstred\PostNL\Misc\ValidateAndFix;
 use ReflectionClass;
 use ReflectionException;
 use TypeError;
@@ -394,15 +395,7 @@ class Address extends AbstractEntity
      */
     public function setAddressType(?string $addressType = null): Address
     {
-        if (is_string($addressType) && (!is_numeric($addressType) || mb_strlen($addressType) > 2)) {
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid address type given, it has to be a numeric string (2 digits) or null', (new ReflectionClass($this))->getShortName(), __METHOD__));
-        }
-
-        if (is_null($addressType)) {
-            $this->addressType = null;
-        } else {
-            $this->addressType = str_pad($addressType, 2, '0', STR_PAD_LEFT);
-        }
+        $this->addressType = ValidateAndFix::addressType($addressType);
 
         return $this;
     }
@@ -450,32 +443,7 @@ class Address extends AbstractEntity
      */
     public function setZipcode(?string $zip = null): Address
     {
-        if (is_string($zip)) {
-            $zip = strtoupper(str_replace(' ', '', $zip));
-            if (!preg_match('^.{0,17}$', $zip)) {
-                throw new InvalidTypeException(sprintf('%s::%s - Invalid zip / postal code given, it can be max 17 characters long', (new ReflectionClass($this))->getShortName(), __METHOD__));
-            }
-            if (!empty($this->countrycode)) {
-                if ($this->countrycode === 'NL') {
-                    if (mb_strlen($zip) !== 6) {
-                        throw new InvalidTypeException(
-                            sprintf(
-                                '%s::%s - Invalid postal code given for NL. It has to consist of 4 numeric characters, followed by 2 letters.',
-                                (new ReflectionClass($this))->getShortName(),
-                                __METHOD__
-                            )
-                        );
-                    }
-                } elseif (in_array($this->countrycode, ['BE', 'LU'])) {
-                    if (!is_numeric($zip) || mb_strlen($zip) !== 4) {
-                        throw new InvalidTypeException(
-                            sprintf('%s::%s - Invalid postal code given for BE/LU. It has to consist of 4 numeric characters.', (new ReflectionClass($this))->getShortName(), __METHOD__)
-                        );
-                    }
-                }
-            }
-        }
-        $this->zipcode = $zip;
+        $this->zipcode = ValidateAndFix::postcode($zip);
 
         return $this;
     }
@@ -516,12 +484,7 @@ class Address extends AbstractEntity
      */
     public function setArea(?string $area): Address
     {
-        static $maxLength = 35;
-        if (is_string($area) && mb_strlen($area) > $maxLength) {
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid area given, must be max %d characters long', (new ReflectionClass($this))->getShortName(), __METHOD__, $maxLength));
-        }
-
-        $this->area = $area;
+        $this->area = ValidateAndFix::area($area);
 
         return $this;
     }
@@ -562,12 +525,7 @@ class Address extends AbstractEntity
      */
     public function setBuildingname(?string $buildingname): Address
     {
-        static $maxLength = 35;
-        if (is_string($buildingname) && mb_strlen($buildingname) > $maxLength) {
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid building name given, must be max %d characters long', (new ReflectionClass($this))->getShortName(), __METHOD__, $maxLength));
-        }
-
-        $this->buildingname = $buildingname;
+        $this->buildingname = ValidateAndFix::buildingName($buildingname);
 
         return $this;
     }
@@ -608,12 +566,7 @@ class Address extends AbstractEntity
      */
     public function setCity(?string $city): Address
     {
-        static $maxLength = 35;
-        if (is_string($city) && mb_strlen($city) > $maxLength) {
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid city given, must be max %d characters long', (new ReflectionClass($this))->getShortName(), __METHOD__, $maxLength));
-        }
-
-        $this->city = $city;
+        $this->city = ValidateAndFix::city($city);
 
         return $this;
     }
@@ -654,12 +607,7 @@ class Address extends AbstractEntity
      */
     public function setCompanyName(?string $companyName): Address
     {
-        static $maxLength = 35;
-        if (is_string($companyName) && mb_strlen($companyName) > $maxLength) {
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid company name given, must be max %d characters long', (new ReflectionClass($this))->getShortName(), __METHOD__, $maxLength));
-        }
-
-        $this->companyName = $companyName;
+        $this->companyName = ValidateAndFix::companyName($companyName);
 
         return $this;
     }
@@ -700,11 +648,7 @@ class Address extends AbstractEntity
      */
     public function setCountrycode(?string $countrycode): Address
     {
-        if (is_string($countrycode) && !preg_match('^[A-Z]{2}$', $countrycode)) {
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid country code given, must be uppercase ISO-2 code', (new ReflectionClass($this))->getShortName(), __METHOD__));
-        }
-
-        $this->countrycode = $countrycode;
+        $this->countrycode = ValidateAndFix::countryCode($countrycode);
 
         return $this;
     }
@@ -745,12 +689,7 @@ class Address extends AbstractEntity
      */
     public function setDepartment(?string $department): Address
     {
-        static $maxLength = 35;
-        if (is_string($department) && mb_strlen($department) > $maxLength) {
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid department given, must be max %d characters long', (new ReflectionClass($this))->getShortName(), __METHOD__, $maxLength));
-        }
-
-        $this->department = $department;
+        $this->department = ValidateAndFix::department($department);
 
         return $this;
     }
@@ -791,12 +730,7 @@ class Address extends AbstractEntity
      */
     public function setDoorcode(?string $doorcode): Address
     {
-        static $maxLength = 35;
-        if (is_string($doorcode) && mb_strlen($doorcode) > $maxLength) {
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid door code given, must be max %d characters long', (new ReflectionClass($this))->getShortName(), __METHOD__, $maxLength));
-        }
-
-        $this->doorcode = $doorcode;
+        $this->doorcode = ValidateAndFix::doorcode($doorcode);
 
         return $this;
     }
@@ -821,7 +755,7 @@ class Address extends AbstractEntity
      *
      * @pattern ^.{0,35}$
      *
-     * @param string|null $firstname
+     * @param string|null $firstName
      *
      * @return static
      *
@@ -835,14 +769,9 @@ class Address extends AbstractEntity
      *
      * @see     Address::$firstname
      */
-    public function setFirstname(?string $firstname): Address
+    public function setFirstname(?string $firstName): Address
     {
-        static $maxLength = 35;
-        if (is_string($firstname) && mb_strlen($firstname) > $maxLength) {
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid first name given, must be max %d characters long', (new ReflectionClass($this))->getShortName(), __METHOD__, $maxLength));
-        }
-
-        $this->firstname = $firstname;
+        $this->firstname = ValidateAndFix::firstName($firstName);
 
         return $this;
     }
@@ -1077,14 +1006,7 @@ class Address extends AbstractEntity
      */
     public function setStreetHouseNrExt(?string $streetHouseNrExt): Address
     {
-        static $maxLength = 95;
-        if (is_string($streetHouseNrExt) && mb_strlen($streetHouseNrExt) > $maxLength) {
-            throw new InvalidTypeException(
-                sprintf('%s::%s - Invalid street + house number + extension given, must be max %df characters long', (new ReflectionClass($this))->getShortName(), __METHOD__, $maxLength)
-            );
-        }
-
-        $this->streetHouseNrExt = $streetHouseNrExt;
+        $this->streetHouseNrExt = ValidateAndFix::streetHouseNumberExtension($streetHouseNrExt);
 
         return $this;
     }
@@ -1125,12 +1047,7 @@ class Address extends AbstractEntity
      */
     public function setName(?string $name): Address
     {
-        static $maxLength = 35;
-        if (is_string($name) && mb_strlen($name) > $maxLength) {
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid last name given, must be max %d characters long', (new ReflectionClass($this))->getShortName(), __METHOD__, $maxLength));
-        }
-
-        $this->name = $name;
+        $this->name = ValidateAndFix::lastName($name);
 
         return $this;
     }
@@ -1171,12 +1088,7 @@ class Address extends AbstractEntity
      */
     public function setRegion(?string $region): Address
     {
-        static $maxLength = 35;
-        if (is_string($region) && mb_strlen($region) > $maxLength) {
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid region given, must be max %d characters long', (new ReflectionClass($this))->getShortName(), __METHOD__, $maxLength));
-        }
-
-        $this->region = $region;
+        $this->region = ValidateAndFix::region($region);
 
         return $this;
     }
@@ -1217,12 +1129,7 @@ class Address extends AbstractEntity
      */
     public function setRemark(?string $remark): Address
     {
-        static $maxLength = 35;
-        if (is_string($remark) && mb_strlen($remark) > $maxLength) {
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid remark given, must be max %d characters long', (new ReflectionClass($this))->getShortName(), __METHOD__, $maxLength));
-        }
-
-        $this->remark = $remark;
+        $this->remark = ValidateAndFix::remark($remark);
 
         return $this;
     }
@@ -1263,12 +1170,7 @@ class Address extends AbstractEntity
      */
     public function setStreet(?string $street): Address
     {
-        static $maxLength = 95;
-        if (is_string($street) && mb_strlen($street) > $maxLength) {
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid street given, must be max %d characters long', (new ReflectionClass($this))->getShortName(), __METHOD__, $maxLength));
-        }
-
-        $this->street = $street;
+        $this->street = ValidateAndFix::street($street);
 
         return $this;
     }

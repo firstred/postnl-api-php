@@ -29,6 +29,8 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use Firstred\PostNL\Misc\ValidateAndFix;
+use ReflectionException;
 use TypeError;
 
 /**
@@ -37,6 +39,12 @@ use TypeError;
 class OpeningHours extends AbstractEntity
 {
     /**
+     * Monday
+     *
+     * @pattern ^[0-2][0-9]:[0-5][0-9]-$[0-2][0-9]:[0-5][0-9]$
+     *
+     * @example 08:00-17:00
+     *
      * @var string|null $monday
      *
      * @since 1.0.0
@@ -44,6 +52,12 @@ class OpeningHours extends AbstractEntity
     protected $monday = '';
 
     /**
+     * Tuesday
+     *
+     * @pattern ^[0-2][0-9]:[0-5][0-9]-$[0-2][0-9]:[0-5][0-9]$
+     *
+     * @example 08:00-17:00
+     *
      * @var string|null $tuesday
      *
      * @since 1.0.0
@@ -51,6 +65,12 @@ class OpeningHours extends AbstractEntity
     protected $tuesday = '';
 
     /**
+     * Wednesday
+     *
+     * @pattern ^[0-2][0-9]:[0-5][0-9]-$[0-2][0-9]:[0-5][0-9]$
+     *
+     * @example 08:00-17:00
+     *
      * @var string|null $wednesday
      *
      * @since 1.0.0
@@ -58,6 +78,12 @@ class OpeningHours extends AbstractEntity
     protected $wednesday = '';
 
     /**
+     * Thursday
+     *
+     * @pattern ^[0-2][0-9]:[0-5][0-9]-$[0-2][0-9]:[0-5][0-9]$
+     *
+     * @example 08:00-17:00
+     *
      * @var string|null $thursday
      *
      * @since 1.0.0
@@ -65,6 +91,12 @@ class OpeningHours extends AbstractEntity
     protected $thursday = '';
 
     /**
+     * Friday
+     *
+     * @pattern ^[0-2][0-9]:[0-5][0-9]-$[0-2][0-9]:[0-5][0-9]$
+     *
+     * @example 08:00-17:00
+     *
      * @var string|null $friday
      *
      * @since 1.0.0
@@ -72,6 +104,12 @@ class OpeningHours extends AbstractEntity
     protected $friday = '';
 
     /**
+     * Saturday
+     *
+     * @pattern ^[0-2][0-9]:[0-5][0-9]-$[0-2][0-9]:[0-5][0-9]$
+     *
+     * @example 08:00-17:00
+     *
      * @var string|null $saturday
      *
      * @since 1.0.0
@@ -79,6 +117,12 @@ class OpeningHours extends AbstractEntity
     protected $saturday = '';
 
     /**
+     * Sunday
+     *
+     * @pattern ^[0-2][0-9]:[0-5][0-9]-$[0-2][0-9]:[0-5][0-9]$
+     *
+     * @example 08:00-17:00
+     *
      * @var string|null $sunday
      *
      * @since 1.0.0
@@ -97,11 +141,12 @@ class OpeningHours extends AbstractEntity
      * @param string|null $sunday
      *
      * @throws TypeError
+     * @throws ReflectionException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function __construct(?string $monday = '', ?string $tuesday = '', ?string $wednesday = '', ?string $thursday = '', ?string $friday = '', ?string $saturday = '', ?string $sunday = '')
+    public function __construct(?string $monday = null, ?string $tuesday = null, ?string $wednesday = null, ?string $thursday = null, ?string $friday = null, ?string $saturday = null, ?string $sunday = null)
     {
         parent::__construct();
 
@@ -133,10 +178,14 @@ class OpeningHours extends AbstractEntity
     }
 
     /**
+     * Get Monday
+     *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   OpeningHours::$monday
      */
     public function getMonday(): ?string
     {
@@ -144,25 +193,40 @@ class OpeningHours extends AbstractEntity
     }
 
     /**
+     * Set Monday
+     *
+     * @pattern ^[0-2][0-9]:[0-5][0-9]-$[0-2][0-9]:[0-5][0-9]$
+     *
      * @param string|null $monday
      *
      * @return static
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @throws TypeError
+     * @throws ReflectionException
+     *
+     * @example 08:00-17:00
+     *
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
+     *
+     * @see     OpeningHours::$monday
      */
     public function setMonday(?string $monday): OpeningHours
     {
-        $this->monday = $monday;
+        $this->monday = ValidateAndFix::timeRangeShort($monday);
 
         return $this;
     }
 
     /**
+     * Get Tuesday
+     *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   OpeningHours::$tuesday
      */
     public function getTuesday(): ?string
     {
@@ -170,25 +234,40 @@ class OpeningHours extends AbstractEntity
     }
 
     /**
+     * Set Tuesday
+     *
+     * @pattern ^[0-2][0-9]:[0-5][0-9]-$[0-2][0-9]:[0-5][0-9]$
+     *
      * @param string|null $tuesday
      *
      * @return static
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @throws TypeError
+     * @throws ReflectionException
+     *
+     * @example 08:00-17:00
+     *
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
+     *
+     * @see     OpeningHours::$tuesday
      */
     public function setTuesday(?string $tuesday): OpeningHours
     {
-        $this->tuesday = $tuesday;
+        $this->tuesday = ValidateAndFix::timeRangeShort($tuesday);
 
         return $this;
     }
 
     /**
+     * Get Wednesday
+     *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   OpeningHours::$wednesday
      */
     public function getWednesday(): ?string
     {
@@ -196,25 +275,40 @@ class OpeningHours extends AbstractEntity
     }
 
     /**
+     * Set Wednesday
+     *
+     * @pattern ^[0-2][0-9]:[0-5][0-9]-$[0-2][0-9]:[0-5][0-9]$
+     *
      * @param string|null $wednesday
      *
      * @return static
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @throws TypeError
+     * @throws ReflectionException
+     *
+     * @example 08:00-17:00
+     *
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
+     *
+     * @see     OpeningHours::$wednesday
      */
     public function setWednesday(?string $wednesday): OpeningHours
     {
-        $this->wednesday = $wednesday;
+        $this->wednesday = ValidateAndFix::timeRangeShort($wednesday);
 
         return $this;
     }
 
     /**
+     * Get Thursday
+     *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   OpeningHours::$thursday
      */
     public function getThursday(): ?string
     {
@@ -222,27 +316,40 @@ class OpeningHours extends AbstractEntity
     }
 
     /**
+     * Set Thursday
+     *
+     * @pattern ^[0-2][0-9]:[0-5][0-9]-$[0-2][0-9]:[0-5][0-9]$
+     *
      * @param string|null $thursday
      *
      * @return static
      *
      * @throws TypeError
+     * @throws ReflectionException
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @example 08:00-17:00
+     *
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
+     *
+     * @see     OpeningHours::$thursday
      */
     public function setThursday(?string $thursday): OpeningHours
     {
-        $this->thursday = $thursday;
+        $this->thursday = ValidateAndFix::timeRangeShort($thursday);
 
         return $this;
     }
 
     /**
+     * Get Friday
+     *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   OpeningHours::$friday
      */
     public function getFriday(): ?string
     {
@@ -250,25 +357,40 @@ class OpeningHours extends AbstractEntity
     }
 
     /**
+     * Set Friday
+     *
+     * @pattern ^[0-2][0-9]:[0-5][0-9]-$[0-2][0-9]:[0-5][0-9]$
+     *
      * @param string|null $friday
      *
      * @return static
      *
+     * @throws TypeError
+     * @throws ReflectionException
+     *
+     * @example 08:00-17:00
+     *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see     OpeningHours::$friday
      */
     public function setFriday(?string $friday): OpeningHours
     {
-        $this->friday = $friday;
+        $this->friday = ValidateAndFix::timeRangeShort($friday);
 
         return $this;
     }
 
     /**
+     * Get Saturday
+     *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   OpeningHours::$saturday
      */
     public function getSaturday(): ?string
     {
@@ -276,25 +398,40 @@ class OpeningHours extends AbstractEntity
     }
 
     /**
+     * Set Saturday
+     *
+     * @pattern ^[0-2][0-9]:[0-5][0-9]-$[0-2][0-9]:[0-5][0-9]$
+     *
      * @param string|null $saturday
      *
      * @return static
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @throws TypeError
+     * @throws ReflectionException
+     *
+     * @example 08:00-17:00
+     *
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
+     *
+     * @see     OpeningHours::$saturday
      */
     public function setSaturday(?string $saturday): OpeningHours
     {
-        $this->saturday = $saturday;
+        $this->saturday = ValidateAndFix::timeRangeShort($saturday);
 
         return $this;
     }
 
     /**
+     * Get Sunday
+     *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   OpeningHours::$sunday
      */
     public function getSunday(): ?string
     {
@@ -302,16 +439,27 @@ class OpeningHours extends AbstractEntity
     }
 
     /**
+     * Set Sunday
+     *
+     * @pattern ^[0-2][0-9]:[0-5][0-9]-$[0-2][0-9]:[0-5][0-9]$
+     *
      * @param string|null $sunday
      *
      * @return static
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @throws TypeError
+     * @throws ReflectionException
+     *
+     * @example 08:00-17:00
+     *
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
+     *
+     * @see     OpeningHours::$sunday
      */
     public function setSunday(?string $sunday): OpeningHours
     {
-        $this->sunday = $sunday;
+        $this->sunday = ValidateAndFix::timeRangeShort($sunday);
 
         return $this;
     }

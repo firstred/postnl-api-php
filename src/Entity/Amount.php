@@ -29,8 +29,7 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
-use Firstred\PostNL\Exception\InvalidTypeException;
-use ReflectionClass;
+use Firstred\PostNL\Misc\ValidateAndFix;
 use ReflectionException;
 use TypeError;
 
@@ -60,6 +59,8 @@ class Amount extends AbstractEntity
      * - 12 mandatory for Inco terms DDP Commercial route China.
      *
      * @pattern ^\d{2}$
+     *
+     * @example 01
      *
      * @var string|null $amountType
      *
@@ -195,12 +196,16 @@ class Amount extends AbstractEntity
     /**
      * Set amount type
      *
+     * @pattern ^\d{2}$
+     *
      * @param string|int|null $type
      *
      * @return static
      *
      * @throws TypeError
      * @throws ReflectionException
+     *
+     * @example 01
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -209,17 +214,7 @@ class Amount extends AbstractEntity
      */
     public function setAmountType($type = null): Amount
     {
-        static $length = 2;
-        if (is_null($type)) {
-            $this->amountType = null;
-        } elseif (is_int($type) || is_string($type)) {
-            $this->amountType = str_pad($type, $length, '0', STR_PAD_LEFT);
-        } else {
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid amount type given, must be a string, integer or null', (new ReflectionClass($this))->getShortName(), __METHOD__, $length));
-        }
-        if (is_string($type) && mb_strlen($type) !== $length) {
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid amount type given, must be %d characters long', (new ReflectionClass($this))->getShortName(), __METHOD__, $length));
-        }
+        $this->amountType = ValidateAndFix::amountType($type);
 
         return $this;
     }
@@ -242,12 +237,16 @@ class Amount extends AbstractEntity
     /**
      * Set account name
      *
+     * @pattern ^.{0,35}$
+     *
      * @param string|null $accountName
      *
      * @return static
      *
      * @throws ReflectionException
      * @throws TypeError
+     *
+     * @example C. de Ruiter
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -256,12 +255,7 @@ class Amount extends AbstractEntity
      */
     public function setAccountName(?string $accountName): Amount
     {
-        static $maxLength = 35;
-        if (is_string($accountName) && mb_strlen($accountName) > $maxLength) {
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid account name given, must be max %d characters long', (new ReflectionClass($this))->getShortName(), __METHOD__, $maxLength));
-        }
-
-        $this->accountName = $accountName;
+        $this->accountName = ValidateAndFix::bankAccountName($accountName);
 
         return $this;
     }
@@ -284,12 +278,16 @@ class Amount extends AbstractEntity
     /**
      * Set BIC
      *
+     * @pattern ^.{8,11}$
+     *
      * @param string|null $bic
      *
      * @return static
      *
      * @throws ReflectionException
      * @throws TypeError
+     *
+     * @example INGBNL2A
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -298,13 +296,7 @@ class Amount extends AbstractEntity
      */
     public function setBIC(?string $bic): Amount
     {
-        static $minLength = 8;
-        static $maxLength = 11;
-        if (is_string($bic) && (mb_strlen($bic) < $minLength || mb_strlen($bic) > $maxLength)) {
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid BIC given, must be %d to %d characters long', (new ReflectionClass($this))->getShortName(), __METHOD__, $minLength, $maxLength));
-        }
-
-        $this->BIC = $bic;
+        $this->BIC = ValidateAndFix::bic($bic);
 
         return $this;
     }
@@ -327,12 +319,16 @@ class Amount extends AbstractEntity
     /**
      * Set currency code
      *
+     * @pattern ^[A-Z]{3}$
+     *
      * @param string|null $currency
      *
      * @return static
      *
      * @throws ReflectionException
      * @throws TypeError
+     *
+     * @example EUR
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -341,11 +337,7 @@ class Amount extends AbstractEntity
      */
     public function setCurrency(?string $currency): Amount
     {
-        if (is_string($currency) && !preg_match('/^[A-Z]{3}$/', $currency)) {
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid currency code given, must be three uppercase characters', (new ReflectionClass($this))->getShortName(), __METHOD__));
-        }
-
-        $this->currency = $currency;
+        $this->currency = ValidateAndFix::currency($currency);
 
         return $this;
     }
@@ -368,12 +360,16 @@ class Amount extends AbstractEntity
     /**
      * Set IBAN
      *
+     * @pattern ^.{15,31}$
+     *
      * @param string|null $iban
      *
      * @return static
      *
      * @throws ReflectionException
      * @throws TypeError
+     *
+     * @example NL00INGB1234567890
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -382,13 +378,7 @@ class Amount extends AbstractEntity
      */
     public function setIBAN(?string $iban): Amount
     {
-        static $minLength = 15;
-        static $maxLength = 31;
-        if (is_string($iban) && (mb_strlen($iban) < $minLength || mb_strlen($iban) > $maxLength)) {
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid IBAN given, must be %d to %d characters long', (new ReflectionClass($this))->getShortName(), __METHOD__, $minLength, $maxLength));
-        }
-
-        $this->IBAN = $iban;
+        $this->IBAN = ValidateAndFix::iban($iban);
 
         return $this;
     }
@@ -411,12 +401,16 @@ class Amount extends AbstractEntity
     /**
      * Set reference
      *
+     * @pattern ^.{0,35}$
+     *
      * @param string|null $reference
      *
      * @return static
      *
      * @throws ReflectionException
      * @throws TypeError
+     *
+     * @example 1234-5678
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -425,12 +419,7 @@ class Amount extends AbstractEntity
      */
     public function setReference(?string $reference): Amount
     {
-        static $maxLength = 35;
-        if (is_string($reference) && mb_strlen($reference) > $maxLength) {
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid reference given, must be max %d characters long', (new ReflectionClass($this))->getShortName(), __METHOD__, $maxLength));
-        }
-
-        $this->reference = $reference;
+        $this->reference = ValidateAndFix::reference($reference);
 
         return $this;
     }
@@ -453,12 +442,16 @@ class Amount extends AbstractEntity
     /**
      * Set transaction number
      *
+     * @pattern ^.{0,35}$
+     *
      * @param string|null $transactionNumber
      *
      * @return static
      *
      * @throws ReflectionException
      * @throws TypeError
+     *
+     * @example 1234
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -467,12 +460,7 @@ class Amount extends AbstractEntity
      */
     public function setTransactionNumber(?string $transactionNumber): Amount
     {
-        $maxLength = 35;
-        if (is_string($transactionNumber) && mb_strlen($transactionNumber) > $maxLength) {
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid transaction number given, must be max %d characters long', (new ReflectionClass($this))->getShortName(), __METHOD__, $maxLength));
-        }
-
-        $this->transactionNumber = $transactionNumber;
+        $this->transactionNumber = ValidateAndFix::transactionNumber($transactionNumber);
 
         return $this;
     }
@@ -497,10 +485,14 @@ class Amount extends AbstractEntity
      *
      * @param string|float|int|null $value
      *
+     * @pattern ^\d{1,6}\.\d{2}$
+     *
      * @return static
      *
      * @throws ReflectionException
      * @throws TypeError
+     *
+     * @example 10.00
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -509,17 +501,7 @@ class Amount extends AbstractEntity
      */
     public function setValue($value): Amount
     {
-        if (is_float($value) || is_int($value)) {
-            $value = number_format($value, 2, '.', '');
-        }
-        if (is_string($value) && !preg_match('/^\d{1,6}\.\d{2}$/', $value)) {
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid value given, must be a decimal with the format #####0.00', (new ReflectionClass($this))->getShortName(), __METHOD__));
-        }
-        if (!is_string($value) && !is_null($value)) {
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid value given, must be a string, float or null', (new ReflectionClass($this))->getShortName(), __METHOD__));
-        }
-
-        $this->value = $value;
+        $this->value = ValidateAndFix::amountValue($value);
 
         return $this;
     }

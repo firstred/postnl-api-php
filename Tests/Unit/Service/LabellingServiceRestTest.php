@@ -209,7 +209,7 @@ class LabellingServiceRestTest extends TestCase
                         'Zipcode'     => '2132WT',
                     ],
                 ],
-                'Barcode'             => '3S1234567890123',
+                'GenerateBarcode'             => '3S1234567890123',
                 'DeliveryAddress'     => '01',
                 'Dimension'           => [
                     'Weight' => '2000',
@@ -238,7 +238,7 @@ class LabellingServiceRestTest extends TestCase
                 'MergedLabels' => [],
                 'ResponseShipments' => [
                     [
-                        'Barcode' => '3SDEVC201611210',
+                        'GenerateBarcode' => '3SDEVC201611210',
                         'DownPartnerLocation' => [],
                         'ProductCodeDelivery' => '3085',
                         'Labels' => [
@@ -302,7 +302,7 @@ class LabellingServiceRestTest extends TestCase
                 'MergedLabels' => [],
                 'ResponseShipments' => [
                     [
-                        'Barcode' => '3SDEVC201611210',
+                        'GenerateBarcode' => '3SDEVC201611210',
                         'DownPartnerLocation' => [],
                         'ProductCodeDelivery' => '3085',
                         'Labels' => [
@@ -318,7 +318,7 @@ class LabellingServiceRestTest extends TestCase
                 'MergedLabels' => [],
                 'ResponseShipments' => [
                     [
-                        'Barcode' => '3SDEVC201611211',
+                        'GenerateBarcode' => '3SDEVC201611211',
                         'DownPartnerLocation' => [],
                         'ProductCodeDelivery' => '3085',
                         'Labels' => [
@@ -421,7 +421,7 @@ class LabellingServiceRestTest extends TestCase
                 'MergedLabels' => [],
                 'ResponseShipments' => [
                     [
-                        'Barcode' => '3SDEVC201611210',
+                        'GenerateBarcode' => '3SDEVC201611210',
                         'DownPartnerLocation' => [],
                         'ProductCodeDelivery' => '3085',
                         'Labels' => [
@@ -437,7 +437,7 @@ class LabellingServiceRestTest extends TestCase
                 'MergedLabels' => [],
                 'ResponseShipments' => [
                     [
-                        'Barcode' => '3SDEVC201611211',
+                        'GenerateBarcode' => '3SDEVC201611211',
                         'DownPartnerLocation' => [],
                         'ProductCodeDelivery' => '3085',
                         'Labels' => [
@@ -540,7 +540,7 @@ class LabellingServiceRestTest extends TestCase
                 'MergedLabels' => [],
                 'ResponseShipments' => [
                     [
-                        'Barcode' => '3SDEVC201611210',
+                        'GenerateBarcode' => '3SDEVC201611210',
                         'DownPartnerLocation' => [],
                         'ProductCodeDelivery' => '3085',
                         'Labels' => [
@@ -556,7 +556,7 @@ class LabellingServiceRestTest extends TestCase
                 'MergedLabels' => [],
                 'ResponseShipments' => [
                     [
-                        'Barcode' => '3SDEVC201611211',
+                        'GenerateBarcode' => '3SDEVC201611211',
                         'DownPartnerLocation' => [],
                         'ProductCodeDelivery' => '3085',
                         'Labels' => [

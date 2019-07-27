@@ -30,19 +30,22 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Tests\Unit\Service;
 
 use Cache\Adapter\Void\VoidCachePool;
+use Exception;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\CutOffTime;
-use Firstred\PostNL\Entity\Message;
-use Firstred\PostNL\Entity\Request\GetDeliveryDate;
-use Firstred\PostNL\Entity\Request\GetSentDate;
-use Firstred\PostNL\Entity\Request\GetSentDateRequest;
+use Firstred\PostNL\Entity\Request\CalculateDeliveryDate;
 use Firstred\PostNL\Entity\Response\GetDeliveryDateResponse;
-use Firstred\PostNL\Entity\Response\GetSentDateResponse;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Misc\Message;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\DeliveryDateService;
+use Http\Discovery\Psr17FactoryDiscovery;
+use Http\Mock\Client;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\RequestInterface;
 use Psr\Log\LoggerInterface;
+use ReflectionException;
 
 /**
  * Class DeliveryDateRestTest
@@ -61,7 +64,8 @@ class DeliveryDateRestTest extends TestCase
     /**
      * @before
      *
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
      */
     public function setupPostNL()
     {
@@ -87,8 +91,7 @@ class DeliveryDateRestTest extends TestCase
                 ->setGlobalPackBarcodeType('AB')
                 ->setGlobalPackCustomerCode('1234'),
             'test',
-            true,
-            PostNL::MODE_REST
+            true
         );
 
         $this->service = $this->postnl->getDeliveryDateService();
@@ -101,13 +104,13 @@ class DeliveryDateRestTest extends TestCase
      */
     public function logPendingRequest()
     {
-        if (!$this->lastRequest instanceof Request) {
+        if (!$this->lastRequest instanceof RequestInterface) {
             return;
         }
 
         global $logger;
         if ($logger instanceof LoggerInterface) {
-            $logger->debug($this->getName()." Request\n".\GuzzleHttp\Psr7\str($this->lastRequest));
+            $logger->debug($this->getName()." Request\n".Message::str($this->lastRequest));
         }
         $this->lastRequest = null;
     }
@@ -115,41 +118,28 @@ class DeliveryDateRestTest extends TestCase
     /**
      * @testdox Creates a valid delivery date request
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function testGetDeliveryDateRequestRest()
     {
-        $message = new Message();
-
-        $this->lastRequest = $request = $this->service->buildGetDeliveryDateRequestREST(
-            (new GetDeliveryDate())
-                ->setGetDeliveryDate(
-                    (new GetDeliveryDate())
-                        ->setAllowSundaySorting(false)
-                        ->setCity('Hoofddorp')
-                        ->setCountryCode('NL')
-                        ->setCutOffTimes(
-                            [
-                                new CutOffTime('00', '14:00:00'),
-                            ]
-                        )
-                        ->setHouseNr('42')
-                        ->setHouseNrExt('A')
-                        ->setOptions(
-                            [
-                                'Daytime',
-                            ]
-                        )
-                        ->setPostalCode('2132WT')
-                        ->setShippingDate('29-06-2016 14:00:00')
-                        ->setShippingDuration(1)
-                        ->setStreet('Siriusdreef')
-                )
-                ->setMessage($message)
+        /** @var RequestInterface $request */
+        $this->lastRequest = $request = $this->service->buildGetDeliveryDateRequest(
+            (new CalculateDeliveryDate())
+                ->setCity('Hoofddorp')
+                ->setCountryCode('NL')
+                ->setCutOffTime('14:00')
+                ->setAvailableMonday(true)
+                ->setCutOffTimeMonday('14:00')
+                ->setHouseNumber('42')
+                ->setHouseNrExt('A')
+                ->setOptions(['Daytime'])
+                ->setPostalCode('2132WT')
+                ->setShippingDate('29-06-2016 14:00:00')
+                ->setShippingDuration(1)
+                ->setStreet('Siriusdreef')
         );
 
-        $query = \GuzzleHttp\Psr7\parse_query($request->getUri()->getQuery());
-
+        parse_str($request->getUri()->getQuery(), $query);
         $this->assertEquals(
             [
                 'ShippingDate'     => '29-06-2016 14:00:00',
@@ -159,8 +149,10 @@ class DeliveryDateRestTest extends TestCase
                 'CutOffTime'       => '14:00:00',
                 'PostalCode'       => '2132WT',
                 'City'             => 'Hoofddorp',
-                'HouseNr'          => '42',
+                'HouseNumber'      => '42',
                 'HouseNrExt'       => 'A',
+                'AvailableMonday'  => 'true',
+                'CutOffTimeMonday' => '14:00:00',
             ],
             $query
         );
@@ -170,144 +162,48 @@ class DeliveryDateRestTest extends TestCase
 
     /**
      * @testdox Returns a valid delivery date
+     *
+     * @throws ReflectionException
      */
     public function testGetDeliveryDateRest()
     {
-        $mock = new MockHandler(
-            [
-                new Response(
-                    200,
-                    ['Content-Type' => 'text/xml;charset=UTF-8'],
-                    json_encode(
-                        [
-                            'DeliveryDate' => '30-06-2016',
-                            'Options'      => [
-                                'string' => 'Daytime',
-                            ],
-                        ]
-                    )
-                ),
-            ]
-        );
-
-        $handler = HandlerStack::create($mock);
-        $mockClient = new MockClient();
-        $mockClient->setHandler($handler);
-        $this->postnl->setHttpClient($mockClient);
+        $mockClient = new Client();
+        $responseFactory = Psr17FactoryDiscovery::findResponseFactory();
+        $streamFactory = Psr17FactoryDiscovery::findStreamFactory();
+        $response = $responseFactory->createResponse(200, 'OK')
+            ->withHeader('Content-Type', 'application/json;charset=UTF-8')
+            ->withBody($streamFactory->createStream(json_encode(
+                [
+                    'DeliveryDate' => '30-06-2016',
+                    'Options'      => [
+                        'string' => 'Daytime',
+                    ],
+                ]
+            )))
+        ;
+        $mockClient->addResponse($response);
+        \Firstred\PostNL\Http\Client::getInstance()->setAsyncClient($mockClient);
 
         $response = $this->postnl->getDeliveryDate(
-            (new GetDeliveryDate())
-                ->setGetDeliveryDate(
-                    (new GetDeliveryDate())
-                        ->setAllowSundaySorting(false)
-                        ->setCity('Hoofddorp')
-                        ->setCountryCode('NL')
-                        ->setCutOffTimes(
-                            [
-                                new CutOffTime('00', '14:00:00'),
-                            ]
-                        )
-                        ->setHouseNr('42')
-                        ->setHouseNrExt('A')
-                        ->setOptions(
-                            [
-                                'Daytime',
-                            ]
-                        )
-                        ->setPostalCode('2132WT')
-                        ->setShippingDate('29-06-2016 14:00:00')
-                        ->setShippingDuration(1)
-                        ->setStreet('Siriusdreef')
+            (new CalculateDeliveryDate())
+                ->setCity('Hoofddorp')
+                ->setCountryCode('NL')
+                ->setAvailableMonday(true)
+                ->setCutOffTimeMonday('14:00:00')
+                ->setHouseNumber('42')
+                ->setHouseNrExt('A')
+                ->setOptions(
+                    [
+                        'Daytime',
+                    ]
                 )
+                ->setPostalCode('2132WT')
+                ->setShippingDate('29-06-2016 14:00:00')
+                ->setShippingDuration(1)
+                ->setStreet('Siriusdreef')
         );
 
         $this->assertInstanceOf(GetDeliveryDateResponse::class, $response);
         $this->assertEquals('30-06-2016', $response->getDeliveryDate());
-    }
-
-    /**
-     * @testdox Creates a valid sent date request
-     *
-     * @throws \Exception
-     */
-    public function testGetSentDateRequestRest()
-    {
-        $message = new Message();
-
-        $this->lastRequest = $request = $this->service->buildGetSentDateRequest(
-            (new GetSentDateRequest())
-                ->setGetSentDate(
-                    (new GetSentDate())
-                        ->setAllowSundaySorting(true)
-                        ->setCity('Hoofddorp')
-                        ->setCountryCode('NL')
-                        ->setDeliveryDate('30-06-2016')
-                        ->setHouseNr('42')
-                        ->setHouseNrExt('A')
-                        ->setOptions(
-                            [
-                                'Daytime',
-                            ]
-                        )
-                        ->setPostalCode('2132WT')
-                        ->setShippingDuration('1')
-                        ->setStreet('Siriusdreef')
-                )
-                ->setMessage($message)
-        );
-
-        $this->assertEquals('test', $request->getHeaderLine('apikey'));
-        $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
-    }
-
-    /**
-     * @testdox Returns a valid sent date
-     *
-     * @throws \Exception
-     */
-    public function testGetSentDateRest()
-    {
-        $mock = new MockHandler(
-            [
-                new Response(
-                    200,
-                    ['Content-Type' => 'text/xml;charset=UTF-8'],
-                    json_encode(
-                        [
-                            'SentDate' => '29-06-2016',
-                        ]
-                    )
-                ),
-            ]
-        );
-
-        $handler = HandlerStack::create($mock);
-        $mockClient = new MockClient();
-        $mockClient->setHandler($handler);
-        $this->postnl->setHttpClient($mockClient);
-
-        $response = $this->postnl->getSentDate(
-            (new GetSentDateRequest())
-                ->setGetSentDate(
-                    (new GetSentDate())
-                        ->setAllowSundaySorting(true)
-                        ->setCity('Hoofddorp')
-                        ->setCountryCode('NL')
-                        ->setDeliveryDate('30-06-2016')
-                        ->setHouseNr('42')
-                        ->setHouseNrExt('A')
-                        ->setOptions(
-                            [
-                                'Daytime',
-                            ]
-                        )
-                        ->setPostalCode('2132WT')
-                        ->setShippingDuration('1')
-                        ->setStreet('Siriusdreef')
-                )
-        );
-
-        $this->assertInstanceOf(GetSentDateResponse::class, $response);
-        $this->assertEquals('29-06-2016', $response->getSentDate());
     }
 }

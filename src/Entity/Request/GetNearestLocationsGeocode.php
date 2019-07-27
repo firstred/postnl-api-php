@@ -27,89 +27,84 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace Firstred\PostNL\Entity;
+namespace Firstred\PostNL\Entity\Request;
 
-use Firstred\PostNL\Exception\InvalidTypeException;
-use ReflectionClass;
-use ReflectionException;
+use Exception;
+use Firstred\PostNL\Entity\AbstractEntity;
 use TypeError;
 
 /**
- * Class LabellingMessage
+ * Class GetNearestLocationsGeocode
+ *
+ * This class is both the container and can be the actual GetLocationsInArea object itself!
  */
-class LabellingMessage extends Message
+class GetNearestLocationsGeocode extends AbstractEntity
 {
     /**
-     * Printer type that will be used to process the label, e.g. Zebra printer or PDF See Guidelines for the available printer types.
+     * @pattern ^(?:NL|BE)$
      *
-     * @pattern ^.{0,35}$
+     * @example NL
      *
-     * @example GraphicFile|PDF
+     * @var string|null $countrycode
      *
-     * @var string|null $printerType
-     *
-     * @since   1.0.0
+     * @since 1.0.0
      */
-    protected $printerType;
+    protected $countrycode;
 
     /**
-     * LabellingMessage constructor
+     * GetLocationsInArea constructor.
      *
-     * @param string|null $printerType Printer type
-     * @param string|null $mid         Message ID
-     * @param string|null $timestamp   Timestamp
+     * @param string|null $countryCode
      *
+     * @throws Exception
      * @throws TypeError
-     * @throws ReflectionException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function __construct(?string $printerType = 'GraphicFile|PDF', ?string $mid = null, ?string $timestamp = null)
+    public function __construct($countryCode = null)
     {
-        parent::__construct($mid, $timestamp);
+        parent::__construct();
 
-        $this->setPrintertype($printerType);
+        $this->setCountrycode($countryCode);
     }
 
     /**
-     * Get printer type
+     * Get country code
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      *
-     * @see   LabellingMessage::$printerType
+     * @see   GetNearestLocationsGeocode::$countrycode
      */
-    public function getPrinterType(): ?string
+    public function getCountrycode(): ?string
     {
-        return $this->printerType;
+        return $this->countrycode;
     }
 
     /**
-     * Set printer type
+     * Set country code
      *
-     * @param string|null $printertype
+     * @pattern ^(?:NL|BE)$
+     *
+     * @param string|null $countrycode
      *
      * @return static
      *
      * @throws TypeError
-     * @throws ReflectionException
+     *
+     * @example NL
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      *
-     * @see   LabellingMessage::$printerType
+     * @see     GetNearestLocationsGeocode::$countrycode
      */
-    public function setPrinterType(?string $printertype): LabellingMessage
+    public function setCountrycode(?string $countrycode): GetNearestLocationsGeocode
     {
-        static $maxLength = 35;
-        if (is_string($printertype) && mb_strlen($printertype) > $maxLength) {
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid printer type given, must be max 35 characters long', (new ReflectionClass($this))->getShortName(), __METHOD__));
-        }
-
-        $this->printerType = $printertype;
+        $this->countrycode = $countrycode;
 
         return $this;
     }

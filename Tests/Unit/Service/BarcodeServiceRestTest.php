@@ -31,13 +31,12 @@ namespace Firstred\PostNL\Tests\Unit\Service;
 
 use Exception;
 use Firstred\PostNL\Entity\Address;
-use Firstred\PostNL\Entity\Barcode;
 use Firstred\PostNL\Entity\Customer;
-use Firstred\PostNL\Entity\Message;
 use Firstred\PostNL\Entity\Request\GenerateBarcode;
 use Firstred\PostNL\Exception\ClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\InvalidBarcodeException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Misc\Message as MiscMessage;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\BarcodeService;
@@ -131,15 +130,10 @@ class BarcodeServiceRestTest extends TestCase
         $serie = $this->postnl->findBarcodeSerie('3S', $range, false);
 
         $this->lastRequest = $request = $this->service->buildGenerateBarcodeRequest(
-            GenerateBarcode::create()
-                ->setBarcode(
-                    Barcode::create()
-                        ->setRange($range)
-                        ->setSerie($serie)
-                        ->setType($type)
-                )
-                ->setMessage(new Message())
-                ->setCustomer($this->postnl->getCustomer())
+            (new GenerateBarcode())
+                ->setRange($range)
+                ->setSerie($serie)
+                ->setType($type)
         );
         parse_str($request->getUri()->getQuery(), $query);
 
@@ -186,7 +180,7 @@ class BarcodeServiceRestTest extends TestCase
      * @testdox Returns a valid single barcode for a country
      *
      * @throws InvalidBarcodeException
-     * @throws \Firstred\PostNL\Exception\InvalidConfigurationException
+     * @throws InvalidConfigurationException
      */
     public function testSingleBarCodeByCountryRest()
     {
@@ -207,7 +201,7 @@ class BarcodeServiceRestTest extends TestCase
      * @testdox Returns several barcodes
      *
      * @throws InvalidBarcodeException
-     * @throws \Firstred\PostNL\Exception\InvalidConfigurationException
+     * @throws InvalidConfigurationException
      */
     public function testMultipleNLBarcodesRest()
     {

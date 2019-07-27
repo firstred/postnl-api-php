@@ -29,6 +29,8 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use Firstred\PostNL\Misc\ValidateAndFix;
+use ReflectionException;
 use TypeError;
 
 /**
@@ -37,6 +39,12 @@ use TypeError;
 class ReasonNoTimeframe extends AbstractEntity
 {
     /**
+     * Reason code
+     *
+     * @pattern ^\d{2}$
+     *
+     * @example 02
+     *
      * @var string|null $code
      *
      * @since 1.0.0
@@ -44,6 +52,12 @@ class ReasonNoTimeframe extends AbstractEntity
     protected $code;
 
     /**
+     * Timeframe date
+     *
+     * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}$
+     *
+     * @example 03-07-2019
+     *
      * @var string|null $date
      *
      * @since 1.0.0
@@ -51,6 +65,12 @@ class ReasonNoTimeframe extends AbstractEntity
     protected $date;
 
     /**
+     * Detailed reason
+     *
+     * @pattern ^.{0,95}$
+     *
+     * @example Dag uitgesloten van tijdvak
+     *
      * @var string|null $description
      *
      * @since 1.0.0
@@ -58,6 +78,12 @@ class ReasonNoTimeframe extends AbstractEntity
     protected $description;
 
     /**
+     * Timeframe options
+     *
+     * @pattern ^.{0,35}$
+     *
+     * @example Afternoon
+     *
      * @var string[]|null $options
      *
      * @since 1.0.0
@@ -65,6 +91,12 @@ class ReasonNoTimeframe extends AbstractEntity
     protected $options;
 
     /**
+     * From
+     *
+     * @pattern ^(2[0-3]|[01]?[0-9]):([0-5]?[0-9]):([0-5]?[0-9])$
+     *
+     * @example 14:00:00
+     *
      * @var string|null $from
      *
      * @since 1.0.0
@@ -72,6 +104,12 @@ class ReasonNoTimeframe extends AbstractEntity
     protected $from;
 
     /**
+     * To
+     *
+     * @pattern ^(2[0-3]|[01]?[0-9]):([0-5]?[0-9]):([0-5]?[0-9])$
+     *
+     * @example 16:30:00
+     *
      * @var string|null $to
      *
      * @since 1.0.0
@@ -89,6 +127,7 @@ class ReasonNoTimeframe extends AbstractEntity
      * @param string|null   $to
      *
      * @throws TypeError
+     * @throws ReflectionException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -106,10 +145,14 @@ class ReasonNoTimeframe extends AbstractEntity
     }
 
     /**
+     * Get code
+     *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   ReasonNoTimeframe::$code
      */
     public function getCode(): ?string
     {
@@ -117,25 +160,40 @@ class ReasonNoTimeframe extends AbstractEntity
     }
 
     /**
+     * Set code
+     *
+     * @pattern ^\d{2}$
+     *
      * @param string|null $code
      *
      * @return static
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @throws TypeError
+     * @throws ReflectionException
+     *
+     * @example 02
+     *
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
+     *
+     * @see     ReasonNoTimeframe::$code
      */
     public function setCode(?string $code): ReasonNoTimeframe
     {
-        $this->code = $code;
+        $this->code = ValidateAndFix::numericType($code);
 
         return $this;
     }
 
     /**
+     * Get date
+     *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   ReasonNoTimeframe::$date
      */
     public function getDate(): ?string
     {
@@ -143,25 +201,40 @@ class ReasonNoTimeframe extends AbstractEntity
     }
 
     /**
+     * Set date
+     *
+     * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}$
+     *
      * @param string|null $date
      *
      * @return static
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @throws TypeError
+     * @throws ReflectionException
+     *
+     * @example 03-07-2019
+     *
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
+     *
+     * @see     ReasonNoTimeframe::$date
      */
     public function setDate(?string $date): ReasonNoTimeframe
     {
-        $this->date = $date;
+        $this->date = ValidateAndFix::date($date);
 
         return $this;
     }
 
     /**
+     * Get description
+     *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   ReasonNoTimeframe::$description
      */
     public function getDescription(): ?string
     {
@@ -169,14 +242,22 @@ class ReasonNoTimeframe extends AbstractEntity
     }
 
     /**
+     * Set description
+     *
+     * @pattern ^.{0,95}$
+     *
      * @param string|null $description
      *
      * @return static
      *
      * @throws TypeError
      *
+     * @example Dag uitgesloten van tijdvak
+     *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see     ReasonNoTimeframe::$description
      */
     public function setDescription(?string $description): ReasonNoTimeframe
     {
@@ -186,10 +267,14 @@ class ReasonNoTimeframe extends AbstractEntity
     }
 
     /**
+     * Get options
+     *
      * @return string[]|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   ReasonNoTimeframe::$options
      */
     public function getOptions(): ?array
     {
@@ -197,12 +282,22 @@ class ReasonNoTimeframe extends AbstractEntity
     }
 
     /**
+     * Set options
+     *
+     * @pattern ^.{0,35}$
+     *
      * @param string[]|null $options
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @example Afternoon
+     *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see     ReasonNoTimeframe::$options
      */
     public function setOptions(?array $options): ReasonNoTimeframe
     {
@@ -212,10 +307,14 @@ class ReasonNoTimeframe extends AbstractEntity
     }
 
     /**
+     * Get from
+     *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   ReasonNoTimeframe::$from
      */
     public function getFrom(): ?string
     {
@@ -223,25 +322,40 @@ class ReasonNoTimeframe extends AbstractEntity
     }
 
     /**
+     * Set from
+     *
+     * @pattern ^(2[0-3]|[01]?[0-9]):([0-5]?[0-9]):([0-5]?[0-9])$
+     *
      * @param string|null $from
      *
      * @return static
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @throws ReflectionException
+     *
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
+     *
+     * @see     ReasonNoTimeframe::$from
+     *                                  .
+     * @example 16:30:00
+     *
      */
     public function setFrom(?string $from): ReasonNoTimeframe
     {
-        $this->from = $from;
+        $this->from = ValidateAndFix::time($from);
 
         return $this;
     }
 
     /**
+     * Get to
+     *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   ReasonNoTimeframe::$to
      */
     public function getTo(): ?string
     {
@@ -249,18 +363,27 @@ class ReasonNoTimeframe extends AbstractEntity
     }
 
     /**
+     * Set to
+     *
+     * @pattern ^(2[0-3]|[01]?[0-9]):([0-5]?[0-9]):([0-5]?[0-9])$
+     *
      * @param string|null $to
      *
      * @return static
      *
      * @throws TypeError
+     * @throws ReflectionException
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @example 16:30:00
+     *
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
+     *
+     * @see     ReasonNoTimeframe::$to
      */
     public function setTo(?string $to): ReasonNoTimeframe
     {
-        $this->to = $to;
+        $this->to = ValidateAndFix::time($to);
 
         return $this;
     }

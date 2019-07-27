@@ -29,6 +29,7 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Tests\Unit\Entity;
 
+use Firstred\PostNL\Entity\AbstractEntity;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionException;
@@ -170,10 +171,15 @@ class DocumentationTest extends TestCase
     public function testThrows()
     {
         foreach ($this->getEntities() as $entityName) {
+            if (in_array(ltrim($entityName, '\\'), [AbstractEntity::class])) {
+                continue;
+            }
             $reflector = new ReflectionClass($entityName);
             foreach ($reflector->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
                 /** @var ReflectionMethod $method */
-                if (!in_array(substr($method->getName(), 0, 3), ['set'])) {
+                if (!in_array(substr($method->getName(), 0, 3), ['set'])
+                    || in_array(ltrim($method->class, '\\'), [AbstractEntity::class])
+                ) {
                     continue;
                 }
 
@@ -210,16 +216,16 @@ class DocumentationTest extends TestCase
             $entityNames[] = $entityName;
         }
 
-        foreach (scandir(__DIR__.'/../../../src/Entity/Response') as $entityName) {
-            if (in_array($entityName, ['.', '..']) || is_dir(__DIR__."/../../src/Entity/Response/$entityName")) {
-                continue;
-            }
-
-            $entityName = substr($entityName, 0, strlen($entityName) - 4);
-            $entityName = "\\Firstred\\PostNL\\Entity\\Response\\$entityName";
-
-            $entityNames[] = $entityName;
-        }
+//        foreach (scandir(__DIR__.'/../../../src/Entity/Response') as $entityName) {
+//            if (in_array($entityName, ['.', '..']) || is_dir(__DIR__."/../../src/Entity/Response/$entityName")) {
+//                continue;
+//            }
+//
+//            $entityName = substr($entityName, 0, strlen($entityName) - 4);
+//            $entityName = "\\Firstred\\PostNL\\Entity\\Response\\$entityName";
+//
+//            $entityNames[] = $entityName;
+//        }
 
         return $entityNames;
     }

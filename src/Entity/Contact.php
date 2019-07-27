@@ -29,11 +29,8 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
-use Firstred\PostNL\Exception\InvalidTypeException;
+use Firstred\PostNL\Misc\ValidateAndFix;
 use libphonenumber\NumberParseException;
-use libphonenumber\PhoneNumberFormat;
-use libphonenumber\PhoneNumberUtil;
-use ReflectionClass;
 use ReflectionException;
 use TypeError;
 
@@ -139,12 +136,16 @@ class Contact extends AbstractEntity
     /**
      * Set contact type
      *
+     * @pattern ^\d{2}$
+     *
      * @param string|int|null $contactType
      *
      * @return static
      *
      * @throws TypeError
      * @throws ReflectionException
+     *
+     * @example 01
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -153,15 +154,7 @@ class Contact extends AbstractEntity
      */
     public function setContactType($contactType): Contact
     {
-        static $length = 2;
-        if (is_int($contactType) || is_string($contactType) && mb_strlen($contactType) === 1) {
-            $contactType = str_pad($contactType, 2, '0', STR_PAD_LEFT);
-        }
-        if (is_string($contactType) && mb_strlen($contactType) !== $length) {
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid contact type given, must be precisely %d characters long', (new ReflectionClass($this))->getShortName(), __METHOD__, $length));
-        }
-
-        $this->contactType = $contactType;
+        $this->contactType = ValidateAndFix::contactType($contactType);
 
         return $this;
     }
@@ -184,12 +177,16 @@ class Contact extends AbstractEntity
     /**
      * Set email
      *
+     * @pattern ^.{0,50}$
+     *
      * @param string|null $email
      *
      * @return static
      *
      * @throws TypeError
      * @throws ReflectionException
+     *
+     * @example receiver@gmail.com
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -198,18 +195,13 @@ class Contact extends AbstractEntity
      */
     public function setEmail(?string $email): Contact
     {
-        static $maxLength = 50;
-        if (is_string($email) && mb_strlen($email) > $maxLength) {
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid email given, must be max %d characters long', (new ReflectionClass($this))->getShortName(), __METHOD__, $maxLength));
-        }
-
-        $this->email = $email;
+        $this->email = ValidateAndFix::email($email);
 
         return $this;
     }
 
     /**
-     * Get SMS no.
+     * Get SMS number
      *
      * @return string|null
      *
@@ -226,6 +218,8 @@ class Contact extends AbstractEntity
     /**
      * Set SMS number
      *
+     * @pattern ^.{10,17}$
+     *
      * @param string|null $nr          A telephone number capable of receiving texts, preferably with country prefix
      * @param string      $countryCode 2-letter ISO country code, defaults to NL
      *
@@ -235,6 +229,8 @@ class Contact extends AbstractEntity
      * @throws ReflectionException
      * @throws NumberParseException
      *
+     * @example 0612345678
+     *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      *
@@ -242,22 +238,7 @@ class Contact extends AbstractEntity
      */
     public function setSMSNr(?string $nr, string $countryCode = 'NL'): Contact
     {
-        static $minLength = 10;
-        static $maxLength = 17;
-        if (is_string($nr)) {
-            if (mb_strlen($nr) < $minLength || mb_strlen($nr) > $maxLength) {
-                throw new InvalidTypeException(
-                    sprintf('%s::%s - Invalid SMS number given, must be between %d to %d characters', (new ReflectionClass($this))->getShortName(), __METHOD__, $minLength, $maxLength)
-                );
-            }
-            if (class_exists(PhoneNumberUtil::class)) {
-                $util = PhoneNumberUtil::getInstance();
-                $phoneNumber = $util->parse($nr, mb_strtoupper($countryCode));
-                $nr = $util->format($phoneNumber, PhoneNumberFormat::E164);
-            }
-        }
-
-        $this->SMSNr = $nr;
+        $this->SMSNr = ValidateAndFix::telephoneNumber($nr, $countryCode);
 
         return $this;
     }
@@ -278,6 +259,10 @@ class Contact extends AbstractEntity
     }
 
     /**
+     * Set the telephone number
+     *
+     * @pattern ^.{10,17}$
+     *
      * @param string|null $nr          Telephone number, preferably with country prefix
      * @param string      $countryCode 2-letter ISO country code, defaults to NL
      *
@@ -286,6 +271,8 @@ class Contact extends AbstractEntity
      * @throws ReflectionException
      * @throws NumberParseException
      *
+     * @example 0612345678
+     *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      *
@@ -293,22 +280,7 @@ class Contact extends AbstractEntity
      */
     public function setTelNr(?string $nr, string $countryCode = 'NL'): Contact
     {
-        static $minLength = 10;
-        static $maxLength = 17;
-        if (is_string($nr)) {
-            if ((mb_strlen($nr) < $minLength || mb_strlen($nr) > $maxLength)) {
-                throw new InvalidTypeException(
-                    sprintf('%s::%s - Invalid phone number given, must be between %d to %d characters', (new ReflectionClass($this))->getShortName(), __METHOD__, $minLength, $maxLength)
-                );
-            }
-            if (class_exists(PhoneNumberUtil::class)) {
-                $util = PhoneNumberUtil::getInstance();
-                $phoneNumber = $util->parse($nr, mb_strtoupper($countryCode));
-                $nr = $util->format($phoneNumber, PhoneNumberFormat::E164);
-            }
-        }
-
-        $this->telNr = $nr;
+        $this->telNr = ValidateAndFix::telephoneNumber($nr, $countryCode);
 
         return $this;
     }

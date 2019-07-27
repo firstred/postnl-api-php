@@ -37,6 +37,12 @@ use TypeError;
 class Warning extends AbstractEntity
 {
     /**
+     * Code
+     *
+     * @pattern ^.*$
+     *
+     * @example N/A
+     *
      * @var string|null $code
      *
      * @since 1.0.0
@@ -44,6 +50,12 @@ class Warning extends AbstractEntity
     protected $code;
 
     /**
+     * Description
+     *
+     * @pattern ^.*$
+     *
+     * @example N/A
+     *
      * @var string|null $description
      *
      * @since 1.0.0
@@ -70,10 +82,14 @@ class Warning extends AbstractEntity
     }
 
     /**
+     * Get code
+     *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   Warning::$code
      */
     public function getCode(): ?string
     {
@@ -81,14 +97,22 @@ class Warning extends AbstractEntity
     }
 
     /**
+     * Set code
+     *
+     * @pattern ^.*$
+     *
      * @param string|null $code
      *
      * @return static
      *
      * @throws TypeError
      *
+     * @example N/A
+     *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see     Warning::$code
      */
     public function setCode(?string $code): Warning
     {
@@ -98,10 +122,14 @@ class Warning extends AbstractEntity
     }
 
     /**
+     * Get description
+     *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   Warning::$description
      */
     public function getDescription(): ?string
     {
@@ -109,14 +137,22 @@ class Warning extends AbstractEntity
     }
 
     /**
+     * Set description
+     *
+     * @pattern ^.*$
+     *
      * @param string|null $description
      *
      * @return static
      *
      * @throws TypeError
      *
+     * @example N/A
+     *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see     Warning::$description
      */
     public function setDescription(?string $description): Warning
     {

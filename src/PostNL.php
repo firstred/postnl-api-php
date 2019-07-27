@@ -30,11 +30,10 @@ declare(strict_types=1);
 namespace Firstred\PostNL;
 
 use Exception;
-use Firstred\PostNL\Entity\Barcode;
+use Firstred\PostNL\Entity\Request\GenerateBarcode;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Label;
-use Firstred\PostNL\Entity\LabellingMessage;
-use Firstred\PostNL\Entity\Message;
+use Firstred\PostNL\Entity\Request\CalculateTimeframes;
 use Firstred\PostNL\Entity\Request\CompleteStatus;
 use Firstred\PostNL\Entity\Request\CompleteStatusByPhase;
 use Firstred\PostNL\Entity\Request\CompleteStatusByReference;
@@ -44,15 +43,13 @@ use Firstred\PostNL\Entity\Request\CurrentStatus;
 use Firstred\PostNL\Entity\Request\CurrentStatusByPhase;
 use Firstred\PostNL\Entity\Request\CurrentStatusByReference;
 use Firstred\PostNL\Entity\Request\CurrentStatusByStatus;
-use Firstred\PostNL\Entity\Request\GenerateBarcode;
 use Firstred\PostNL\Entity\Request\GenerateLabel;
-use Firstred\PostNL\Entity\Request\GetDeliveryDate;
+use Firstred\PostNL\Entity\Request\CalculateDeliveryDate;
 use Firstred\PostNL\Entity\Request\GetLocation;
-use Firstred\PostNL\Entity\Request\GetLocationsInArea;
 use Firstred\PostNL\Entity\Request\GetNearestLocations;
+use Firstred\PostNL\Entity\Request\GetNearestLocationsGeocode;
 use Firstred\PostNL\Entity\Request\GetSentDateRequest;
 use Firstred\PostNL\Entity\Request\GetSignature;
-use Firstred\PostNL\Entity\Request\GetTimeframes;
 use Firstred\PostNL\Entity\Response\CompleteStatusResponse;
 use Firstred\PostNL\Entity\Response\ConfirmingResponseShipment;
 use Firstred\PostNL\Entity\Response\CurrentStatusResponse;
@@ -290,48 +287,6 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Generate a single barcode
-     *
-     * @param string $type
-     * @param string $range
-     * @param string $serie
-     * @param bool   $eps
-     *
-     * @return string The barcode as a string
-     *
-     * @throws InvalidBarcodeException
-     * @throws Exception
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function generateBarcode($type = '3S', $range = null, $serie = null, $eps = false): string
-    {
-        if (!in_array($type, ['2S', '3S']) || mb_strlen($type) !== 2) {
-            throw new InvalidBarcodeException("Barcode type `$type` is invalid");
-        }
-
-        if (!$range) {
-            if (in_array($type, ['2S', '3S'])) {
-                $range = $this->getCustomer()->getCustomerCode();
-            } else {
-                $range = $this->getCustomer()->getGlobalPackCustomerCode();
-            }
-        }
-        if (!$range) {
-            throw new InvalidBarcodeException('Unable to find a valid range');
-        }
-
-        if (!$serie) {
-            $serie = $this->findBarcodeSerie($type, $range, $eps);
-        }
-
-        return $this->getBarcodeService()->generateBarcode(
-            new GenerateBarcode(new Barcode($type, $range, $serie), $this->customer)
-        );
-    }
-
-    /**
      * Get PostNL Customer
      *
      * @return Customer
@@ -375,6 +330,46 @@ class PostNL implements LoggerAwareInterface
         $this->apiKey = $apiKey;
 
         return $this;
+    }
+
+    /**
+     * Generate a single barcode
+     *
+     * @param string $type
+     * @param string $range
+     * @param string $serie
+     * @param bool   $eps
+     *
+     * @return string The barcode as a string
+     *
+     * @throws InvalidBarcodeException
+     * @throws Exception
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Strict typing
+     */
+    public function generateBarcode($type = '3S', $range = null, $serie = null, $eps = false): string
+    {
+        if (!in_array($type, ['2S', '3S']) || mb_strlen($type) !== 2) {
+            throw new InvalidBarcodeException("GenerateBarcode type `$type` is invalid");
+        }
+
+        if (!$range) {
+            if (in_array($type, ['2S', '3S'])) {
+                $range = $this->getCustomer()->getCustomerCode();
+            } else {
+                $range = $this->getCustomer()->getGlobalPackCustomerCode();
+            }
+        }
+        if (!$range) {
+            throw new InvalidBarcodeException('Unable to find a valid range');
+        }
+
+        if (!$serie) {
+            $serie = $this->findBarcodeSerie($type, $range, $eps);
+        }
+
+        return $this->getBarcodeService()->generateBarcode(new GenerateBarcode($type, $range, $serie));
     }
 
     /**
@@ -434,7 +429,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Barcode service
+     * GenerateBarcode service
      *
      * Automatically load the barcode service
      *
@@ -474,7 +469,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @param string $iso 2-letter Country ISO Code
      *
-     * @return string The Barcode as a string
+     * @return string The GenerateBarcode as a string
      *
      * @throws InvalidConfigurationException
      * @throws InvalidBarcodeException
@@ -510,9 +505,7 @@ class PostNL implements LoggerAwareInterface
             strtoupper($iso) !== 'NL' && in_array(strtoupper($iso), static::$threeSCountries)
         );
 
-        return $this->getBarcodeService()->generateBarcode(
-            new GenerateBarcode(new Barcode($type, $range, $serie), $this->customer)
-        );
+        return $this->getBarcodeService()->generateBarcode(new GenerateBarcode($type, $range, $serie));
     }
 
     /**
@@ -564,9 +557,7 @@ class PostNL implements LoggerAwareInterface
             );
 
             for ($i = 0; $i < $qty; $i++) {
-                $generateBarcodes[] = (new GenerateBarcode(new Barcode($type, $range, $serie), $this->customer))->setId(
-                    "$iso-$index"
-                );
+                $generateBarcodes[] = (new GenerateBarcode($type, $range, $serie))->setId("$iso-$index");
                 $index++;
             }
         }
@@ -930,11 +921,11 @@ class PostNL implements LoggerAwareInterface
      *
      * This is a combined function, supporting the following:
      * - CurrentStatus (by barcode):
-     *   - Fill the Shipment->Barcode property. Leave the rest empty.
+     *   - Fill the Shipment->GenerateBarcode property. Leave the rest empty.
      * - CurrentStatusByReference:
      *   - Fill the Shipment->Reference property. Leave the rest empty.
      * - CurrentStatusByPhase:
-     *   - Fill the Shipment->PhaseCode property, do not pass Barcode or Reference.
+     *   - Fill the Shipment->PhaseCode property, do not pass GenerateBarcode or Reference.
      *     Optionally add DateFrom and/or DateTo.
      * - CurrentStatusByStatus:
      *   - Fill the Shipment->StatusCode property. Leave the rest empty.
@@ -1004,11 +995,11 @@ class PostNL implements LoggerAwareInterface
      *
      * This is a combined function, supporting the following:
      * - CurrentStatus (by barcode):
-     *   - Fill the Shipment->Barcode property. Leave the rest empty.
+     *   - Fill the Shipment->GenerateBarcode property. Leave the rest empty.
      * - CurrentStatusByReference:
      *   - Fill the Shipment->Reference property. Leave the rest empty.
      * - CurrentStatusByPhase:
-     *   - Fill the Shipment->PhaseCode property, do not pass Barcode or Reference.
+     *   - Fill the Shipment->PhaseCode property, do not pass GenerateBarcode or Reference.
      *     Optionally add DateFrom and/or DateTo.
      * - CurrentStatusByStatus:
      *   - Fill the Shipment->StatusCode property. Leave the rest empty.
@@ -1031,9 +1022,6 @@ class PostNL implements LoggerAwareInterface
                 ->setCustomerCode($fullCustomer->getCustomerCode())
                 ->setCustomerNumber($fullCustomer->getCustomerNumber())
         );
-        if (!$completeStatus->getMessage()) {
-            $completeStatus->setMessage(new Message());
-        }
 
         return $this->getShippingStatusService()->completeStatus($completeStatus);
     }
@@ -1063,7 +1051,7 @@ class PostNL implements LoggerAwareInterface
     /**
      * Get a delivery date
      *
-     * @param GetDeliveryDate $getDeliveryDate
+     * @param CalculateDeliveryDate $getDeliveryDate
      *
      * @return GetDeliveryDateResponse
      *
@@ -1071,7 +1059,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @since 2.0.0 Strict typing
      */
-    public function getDeliveryDate(GetDeliveryDate $getDeliveryDate): GetDeliveryDateResponse
+    public function getDeliveryDate(CalculateDeliveryDate $getDeliveryDate): GetDeliveryDateResponse
     {
         return $this->getDeliveryDateService()->getDeliveryDate($getDeliveryDate);
     }
@@ -1126,7 +1114,7 @@ class PostNL implements LoggerAwareInterface
      */
     public function getSentDate(GetSentDateRequest $getSentDate): GetSentDateResponse
     {
-        return $this->getDeliveryDateService()->getSentDate($getSentDate);
+        return $this->getDeliveryDateService()->getShippingDate($getSentDate);
     }
 
     /**
@@ -1241,9 +1229,9 @@ class PostNL implements LoggerAwareInterface
      * - locations
      * - delivery date
      *
-     * @param GetTimeframes       $getTimeframes
-     * @param GetNearestLocations $getNearestLocations
-     * @param GetDeliveryDate     $getDeliveryDate
+     * @param CalculateTimeframes   $calculateTimeframes
+     * @param GetNearestLocations   $getNearestLocations
+     * @param CalculateDeliveryDate $getDeliveryDate
      *
      * @return array [uuid => ResponseTimeframes, uuid => GetNearestLocationsResponse, uuid => GetDeliveryDateResponse]
      *
@@ -1253,10 +1241,10 @@ class PostNL implements LoggerAwareInterface
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function getTimeframesAndNearestLocations(GetTimeframes $getTimeframes, GetNearestLocations $getNearestLocations, GetDeliveryDate $getDeliveryDate)
+    public function getTimeframesAndNearestLocations(CalculateTimeframes $calculateTimeframes, GetNearestLocations $getNearestLocations, CalculateDeliveryDate $getDeliveryDate)
     {
         $results = [];
-        $itemTimeframe = $this->getTimeframeService()->retrieveCachedItem($getTimeframes->getId());
+        $itemTimeframe = $this->getTimeframeService()->retrieveCachedItem($calculateTimeframes->getId());
         if ($itemTimeframe instanceof CacheItemInterface && $itemTimeframe->get()) {
             $results['timeframes'] = UtilMessage::parseResponse($itemTimeframe->get());
         }
@@ -1272,7 +1260,7 @@ class PostNL implements LoggerAwareInterface
         $client = Client::getInstance();
         $client->addOrUpdateRequest(
             'timeframes',
-            $this->getTimeframeService()->buildGetTimeframesRequest($getTimeframes)
+            $this->getTimeframeService()->buildGetTimeframesRequest($calculateTimeframes)
         );
         $client->addOrUpdateRequest(
             'locations',
@@ -1340,7 +1328,7 @@ class PostNL implements LoggerAwareInterface
     /**
      * Get locations in area
      *
-     * @param GetLocationsInArea $getLocationsInArea
+     * @param GetNearestLocationsGeocode $getLocationsInArea
      *
      * @return GetLocationsInAreaResponse
      *
@@ -1349,7 +1337,7 @@ class PostNL implements LoggerAwareInterface
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function getLocationsInArea(GetLocationsInArea $getLocationsInArea)
+    public function getLocationsInArea(GetNearestLocationsGeocode $getLocationsInArea)
     {
         return $this->getLocationService()->getLocationsInArea($getLocationsInArea);
     }

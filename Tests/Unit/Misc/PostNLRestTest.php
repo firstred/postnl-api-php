@@ -32,15 +32,12 @@ namespace Firstred\PostNL\Tests\Unit\Misc;
 use Exception;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Customer;
-use Firstred\PostNL\Entity\CutOffTime;
-use Firstred\PostNL\Entity\Location;
-use Firstred\PostNL\Entity\Request\GetDeliveryDate;
+use Firstred\PostNL\Entity\Request\CalculateDeliveryDate;
+use Firstred\PostNL\Entity\Request\CalculateTimeframes;
 use Firstred\PostNL\Entity\Request\GetNearestLocations;
-use Firstred\PostNL\Entity\Request\GetTimeframes;
 use Firstred\PostNL\Entity\Response\GetDeliveryDateResponse;
 use Firstred\PostNL\Entity\Response\GetNearestLocationsResponse;
 use Firstred\PostNL\Entity\Response\ResponseTimeframes;
-use Firstred\PostNL\Entity\Timeframe;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Http\Client as PostNLHttpClient;
 use Firstred\PostNL\PostNL;
@@ -74,15 +71,16 @@ class PostNLRestTest extends TestCase
                 ->setCustomerCode('DEVC')
                 ->setCustomerNumber('11223344')
                 ->setContactPerson('Test')
-                ->setAddress(Address::create([
-                    'AddressType' => '02',
-                    'City'        => 'Hoofddorp',
-                    'CompanyName' => 'PostNL',
-                    'Countrycode' => 'NL',
-                    'HouseNr'     => '42',
-                    'Street'      => 'Siriusdreef',
-                    'Zipcode'     => '2132WT',
-                ]))
+                ->setAddress(
+                    (new Address())
+                        ->setAddressType('02')
+                        ->setCity('Hoofddorp')
+                        ->setCompanyName('PostNL')
+                        ->setCountrycode('NL')
+                        ->setHouseNr('42')
+                        ->setStreet('Siriusdreef')
+                        ->setZipcode('2132WT')
+                )
                 ->setGlobalPackBarcodeType('AB')
                 ->setGlobalPackCustomerCode('1234'),
             'test',
@@ -307,59 +305,41 @@ class PostNLRestTest extends TestCase
         PostNLHttpClient::getInstance()->setAsyncClient($mockClient);
 
         $results = $this->postnl->getTimeframesAndNearestLocations(
-            (new GetTimeframes())
-                ->setTimeframe([
-                    (new Timeframe())
-                        ->setCity('Hoofddorp')
-                        ->setCountryCode('NL')
-                        ->setEndDate('02-07-2016')
-                        ->setHouseNr('42')
-                        ->setHouseNrExt('A')
-                        ->setOptions([
-                            'Evening',
-                        ])
-                        ->setPostalCode('2132WT')
-                        ->setStartDate('30-06-2016')
-                        ->setStreet('Siriusdreef')
-                        ->setSundaySorting(false),
-                ]),
+            (new CalculateTimeframes())
+                ->setCity('Hoofddorp')
+                ->setCountryCode('NL')
+                ->setEndDate('02-07-2016')
+                ->setHouseNumber('42')
+                ->setHouseNrExt('A')
+                ->setOptions([
+                    'Evening',
+                ])
+                ->setPostalCode('2132WT')
+                ->setStartDate('30-06-2016')
+                ->setStreet('Siriusdreef'),
             (new GetNearestLocations())
                 ->setCountrycode('NL')
-                ->setLocation(Location::create([
-                    'AllowSundaySorting' => true,
-                    'DeliveryDate'       => '29-06-2016',
-                    'DeliveryOptions'    => [
-                        'PGE',
-                    ],
-                    'OpeningTime'        => '09:00:00',
-                    'Options'    => [
-                        'Daytime',
-                    ],
-                    'City'               => 'Hoofddorp',
-                    'HouseNr'            => '42',
-                    'HouseNrExt'         => 'A',
-                    'Postalcode'         => '2132WT',
-                    'Street'             => 'Siriusdreef',
-                ])),
-            (new GetDeliveryDate())
-                ->setGetDeliveryDate(
-                    (new GetDeliveryDate())
-                        ->setAllowSundaySorting(false)
-                        ->setCity('Hoofddorp')
-                        ->setCountryCode('NL')
-                        ->setCutOffTimes([
-                            new CutOffTime('00', '14:00:00'),
-                        ])
-                        ->setHouseNr('42')
-                        ->setHouseNrExt('A')
-                        ->setOptions([
-                            'Daytime',
-                        ])
-                        ->setPostalCode('2132WT')
-                        ->setShippingDate('29-06-2016 14:00:00')
-                        ->setShippingDuration(1)
-                        ->setStreet('Siriusdreef')
-                )
+                ->setDeliveryDate('29-06-2016')
+                ->setDeliveryOptions(['PG', 'PGE'])
+                ->setOpeningTime('09:00:00')
+                ->setCity('Hoofddorp')
+                ->setHouseNumber('42')
+                ->setPostalCode('2132WT')
+                ->setStreet('Siriusdreef'),
+            (new CalculateDeliveryDate())
+                ->setCity('Hoofddorp')
+                ->setCountryCode('NL')
+                ->setAvailableMonday(true)
+                ->setCutOffTimeMonday('14:00:00')
+                ->setHouseNumber('42')
+                ->setHouseNrExt('A')
+                ->setOptions([
+                    'Daytime',
+                ])
+                ->setPostalCode('2132WT')
+                ->setShippingDate('29-06-2016 14:00:00')
+                ->setShippingDuration(1)
+                ->setStreet('Siriusdreef')
         );
 
         $this->assertTrue(is_array($results));

@@ -31,8 +31,8 @@ namespace Firstred\PostNL\Entity\Request;
 
 use Exception;
 use Firstred\PostNL\Entity\AbstractEntity;
-use Firstred\PostNL\Entity\Location;
-use Firstred\PostNL\Entity\Message;
+use Firstred\PostNL\Misc\ValidateAndFix;
+use ReflectionException;
 use TypeError;
 
 /**
@@ -43,6 +43,12 @@ use TypeError;
 class GetNearestLocations extends AbstractEntity
 {
     /**
+     * Country code
+     *
+     * @pattern ^(?:NL|BE)$
+     *
+     * @example NL
+     *
      * @var string|null $countrycode
      *
      * @since 1.0.0
@@ -50,45 +56,119 @@ class GetNearestLocations extends AbstractEntity
     protected $countrycode;
 
     /**
-     * @var Location|null $location
+     * Postal code
      *
-     * @since 1.0.0
+     * @pattern ^.{1,10}$
+     *
+     * @example 2132WT
+     *
+     * @var string|null $postalCode
+     *
+     * @since   2.0.0
      */
-    protected $location;
+    protected $postalCode;
 
     /**
-     * @var Message|null $message
+     * City
      *
-     * @since 1.0.0
+     * @pattern ^.{0,35}$
+     *
+     * @example Hoofddorp
+     *
+     * @var string|null $city
+     *
+     * @since   2.0.0
      */
-    protected $message;
+    protected $city;
+
+    /**
+     * Street
+     *
+     * @pattern ^.{0,95}$
+     *
+     * @example Siriusdreef
+     *
+     * @var string|null $street
+     *
+     * @since   2.0.0
+     */
+    protected $street;
+
+    /**
+     * House number
+     *
+     * @pattern ^\d{1,10}$
+     *
+     * @example 42
+     *
+     * @var int|null $houseNumber
+     *
+     * @since   2.0.0
+     */
+    protected $houseNumber;
+
+    /**
+     * Delivery date
+     *
+     * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}$
+     *
+     * @example 03-07-2019
+     *
+     * @var string|null
+     *
+     * @since   2.0.0
+     */
+    protected $deliveryDate;
+
+    /**
+     * Opening time
+     *
+     * @pattern ^(?:2[0-3]|[01]?[0-9]):(?:[0-5]?[0-9]):(?:[0-5]?[0-9])$
+     *
+     * @example 09:00:00
+     *
+     * @var string|null
+     *
+     * @since   2.0.0
+     */
+    protected $openingTime;
+
+    /**
+     * Delivery options
+     *
+     * @pattern ^(?:PG|PGE)$
+     *
+     * @example PGE
+     *
+     * @var array|null $deliveryOptions
+     *
+     * @since   2.0.0
+     */
+    protected $deliveryOptions;
 
     /**
      * GetNearestLocations constructor.
      *
-     * @param string|null   $countryCode
-     * @param Location|null $location
-     * @param Message|null  $message
-     *
+     * @throws TypeError
      * @throws Exception
      *
      * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since 2.0.0
      */
-    public function __construct($countryCode = null, Location $location = null, Message $message = null)
+    public function __construct()
     {
         parent::__construct();
-
-        $this->setCountrycode($countryCode);
-        $this->setLocation($location);
-        $this->setMessage($message ?: new Message());
     }
 
     /**
+     * Get country code
+     *
      * @return string|null
      *
      * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since 2.0.0
+     *
+     * @see   GetNearestLocations::$countrycode
      */
     public function getCountrycode(): ?string
     {
@@ -96,14 +176,22 @@ class GetNearestLocations extends AbstractEntity
     }
 
     /**
+     * Set country code
+     *
+     * @pattern ^(?:NL|BE)$
+     *
      * @param string|null $countrycode
      *
      * @return static
      *
      * @throws TypeError
      *
+     * @example NL
+     *
      * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since   2.0.0
+     *
+     * @see     GetNearestLocations::$countrycode
      */
     public function setCountrycode(?string $countrycode): GetNearestLocations
     {
@@ -113,57 +201,273 @@ class GetNearestLocations extends AbstractEntity
     }
 
     /**
-     * @return Location|null
+     * Get postal code
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @return string|null
+     *
+     * @since 2.0.0
+     *
+     * @see   GetNearestLocations::$postalCode
      */
-    public function getLocation(): ?Location
+    public function getPostalCode(): ?string
     {
-        return $this->location;
+        return $this->postalCode;
     }
 
     /**
-     * @param Location|null $location
+     * Set postal code
+     *
+     * @pattern ^.{1,10}$
+     *
+     * @param string|null $postalCode
      *
      * @return static
      *
      * @throws TypeError
+     * @throws ReflectionException
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @example 2132WT
+     *
+     * @since   2.0.0
+     *
+     * @see     GetNearestLocations::$postalCode
      */
-    public function setLocation(?Location $location): GetNearestLocations
+    public function setPostalCode(?string $postalCode): GetNearestLocations
     {
-        $this->location = $location;
+        $this->postalCode = ValidateAndFix::postcode($postalCode);
 
         return $this;
     }
 
     /**
-     * @return Message|null
+     * Get city
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @return string|null
+     *
+     * @since 2.0.0
+     *
+     * @see   GetNearestLocations::$city
      */
-    public function getMessage(): ?Message
+    public function getCity(): ?string
     {
-        return $this->message;
+        return $this->city;
     }
 
     /**
-     * @param Message|null $message
+     * Set city
+     *
+     * @pattern ^.{0,35}$
+     *
+     * @param string|null $city
+     *
+     * @return static
+     *
+     * @throws TypeError
+     * @throws ReflectionException
+     *
+     * @example Hoofddorp
+     *
+     * @since   2.0.0
+     *
+     * @see     GetNearestLocations::$city
+     */
+    public function setCity(?string $city): GetNearestLocations
+    {
+        $this->city = ValidateAndFix::city($city);
+
+        return $this;
+    }
+
+    /**
+     * Get street
+     *
+     * @return string|null
+     *
+     * @since 2.0.0
+     *
+     * @see   GetNearestLocations::$street
+     */
+    public function getStreet(): ?string
+    {
+        return $this->street;
+    }
+
+    /**
+     * Set street
+     *
+     * @pattern ^.{0,95}$
+     *
+     * @param string|null $street
+     *
+     * @return static
+     *
+     * @throws TypeError
+     * @throws ReflectionException
+     *
+     * @example Siriusdreef
+     *
+     * @since   2.0.0
+     *
+     * @see     GetNearestLocations::$street
+     */
+    public function setStreet(?string $street): GetNearestLocations
+    {
+        $this->street = ValidateAndFix::street($street);
+
+        return $this;
+    }
+
+    /**
+     * Get house number
+     *
+     * @return int|null
+     *
+     * @since 2.0.0
+     *
+     * @see   GetNearestLocations::$houseNumber
+     */
+    public function getHouseNumber(): ?int
+    {
+        return $this->houseNumber;
+    }
+
+    /**
+     * Set house number
+     *
+     * @pattern ^\d{1,10}$
+     *
+     * @param int|string|null $houseNumber
+     *
+     * @return static
+     *
+     * @throws TypeError
+     * @throws ReflectionException
+     *
+     * @example 42
+     *
+     * @since   2.0.0
+     *
+     * @see     GetNearestLocations::$houseNumber
+     */
+    public function setHouseNumber($houseNumber): GetNearestLocations
+    {
+        $this->houseNumber = ValidateAndFix::integer($houseNumber);
+
+        return $this;
+    }
+
+    /**
+     * Get delivery date
+     *
+     * @return string|null
+     *
+     * @since 2.0.0
+     *
+     * @see   GetNearestLocations::$deliveryDateq
+     */
+    public function getDeliveryDate(): ?string
+    {
+        return $this->deliveryDate;
+    }
+
+    /**
+     * Set delivery date
+     *
+     * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}$
+     *
+     * @param string|null $deliveryDate
+     *
+     * @return static
+     *
+     * @throws TypeError
+     * @throws ReflectionException
+     *
+     * @example 03-07-2019
+     *
+     * @since   2.0.0
+     *
+     * @see     GetNearestLocations::$deliveryDate
+     */
+    public function setDeliveryDate(?string $deliveryDate): GetNearestLocations
+    {
+        $this->deliveryDate = ValidateAndFix::date($deliveryDate);
+
+        return $this;
+    }
+
+    /**
+     * Get opening time
+     *
+     * @return string|null
+     *
+     * @since 2.0.0
+     *
+     * @see   GetNearestLocations::$openingTime
+     */
+    public function getOpeningTime(): ?string
+    {
+        return $this->openingTime;
+    }
+
+    /**
+     * Set opening time
+     *
+     * @pattern ^(?:2[0-3]|[01]?[0-9]):(?:[0-5]?[0-9]):(?:[0-5]?[0-9])$
+     *
+     * @example 09:00:00
+     *
+     * @param string|null $openingTime
+     *
+     * @return static
+     *
+     * @throws TypeError
+     * @throws ReflectionException
+     *
+     * @since   2.0.0
+     *
+     * @see     GetNearestLocations::$openingTime
+     */
+    public function setOpeningTime(?string $openingTime): GetNearestLocations
+    {
+        $this->openingTime = ValidateAndFix::time($openingTime);
+
+        return $this;
+    }
+
+    /**
+     * Get delivery options
+     *
+     * @return array|null
+     *
+     * @since 2.0.0
+     *
+     * @see   GetNearestLocations::$deliveryOptions
+     */
+    public function getDeliveryOptions(): ?array
+    {
+        return $this->deliveryOptions;
+    }
+
+    /**
+     * Set delivery options
+     *
+     * @pattern ^(?:PG|PGE)$
+     *
+     * @example PGE
+     *
+     * @param array|null $deliveryOptions
      *
      * @return static
      *
      * @throws TypeError
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since   2.0.0
+     *
+     * @see     GetNearestLocations::$deliveryOptions
      */
-    public function setMessage(?Message $message): GetNearestLocations
+    public function setDeliveryOptions(?array $deliveryOptions): GetNearestLocations
     {
-        $this->message = $message;
+        $this->deliveryOptions = $deliveryOptions;
 
         return $this;
     }

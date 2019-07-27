@@ -38,6 +38,12 @@ use TypeError;
 class Event extends AbstractEntity
 {
     /**
+     * Complete status response event
+     *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @var CompleteStatusResponseEvent|null $completeStatusResponseEvent
      *
      * @since 1.0.0
@@ -68,6 +74,8 @@ class Event extends AbstractEntity
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   Event::$completeStatusResponseEvent
      */
     public function getCompleteStatusResponseEvent(): ?CompleteStatusResponseEvent
     {
@@ -77,14 +85,20 @@ class Event extends AbstractEntity
     /**
      * Set complete status response event
      *
+     * @pattern N/A
+     *
      * @param CompleteStatusResponseEvent|null $completeStatusResponseEvent
      *
      * @return static
      *
      * @throws TypeError
      *
+     * @example N/A
+     *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see     Event::$completeStatusResponseEvent
      */
     public function setCompleteStatusResponseEvent(?CompleteStatusResponseEvent $completeStatusResponseEvent): Event
     {

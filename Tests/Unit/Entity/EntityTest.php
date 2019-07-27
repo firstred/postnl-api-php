@@ -29,6 +29,8 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Tests\Unit\Entity;
 
+use ArgumentCountError;
+use Error;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Exception\InvalidArgumentException;
@@ -114,8 +116,8 @@ class EntityTest extends TestCase
             $reflection = new ReflectionClass($entityName);
             foreach (array_keys($reflection->getDefaultProperties()) as $var) {
                 $var = ucfirst($var);
-                $this->assertTrue(method_exists($entity, "get$var"));
-                $this->assertTrue(method_exists($entity, "set$var"));
+                $this->assertTrue(method_exists($entity, "get$var"), "The method {$entityName}::get{$var} does not exist");
+                $this->assertTrue(method_exists($entity, "set$var"), "The method {$entityName}::set{$var} does not exist");
             }
         }
 
@@ -141,7 +143,7 @@ class EntityTest extends TestCase
      */
     public function testNegativeMissingValue()
     {
-        $this->expectException('\\ArgumentCountError');
+        $this->expectException(ArgumentCountError::class);
 
         (new Address())->setArea();
     }
@@ -161,7 +163,7 @@ class EntityTest extends TestCase
      */
     public function testNegativeReturnNullWhenPropertyDoesNotExist()
     {
-        $this->expectException('Error');
+        $this->expectException(Error::class);
 
         $this->assertNull((new Address())->getNothing());
     }
@@ -171,7 +173,7 @@ class EntityTest extends TestCase
      */
     public function testNegativeThrowExceptionWhenMethodDoesNotExist()
     {
-        $this->expectException('Error');
+        $this->expectException(Error::class);
 
         (new Address())->blab();
     }

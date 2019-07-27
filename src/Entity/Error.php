@@ -29,81 +29,134 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use TypeError;
+
 /**
- * Class CoordinatesSouthEast
+ * Class Error
  */
-class CoordinatesSouthEast extends AbstractEntity
+class Error extends AbstractEntity
 {
     /**
-     * @var string|null $latitude
+     * Code
+     *
+     * @pattern ^.*$
+     *
+     * @example N/A
+     *
+     * @var string|null $code
      *
      * @since 1.0.0
      */
-    protected $latitude;
+    protected $code;
 
     /**
-     * @var string|null $longitude
+     * Description
+     *
+     * @pattern ^.*$
+     *
+     * @example N/A
+     *
+     * @var string|null $description
      *
      * @since 1.0.0
      */
-    protected $longitude;
+    protected $description;
 
     /**
-     * @param string|null $lat
-     * @param string|null $long
+     * Error constructor.
+     *
+     * @param string|null $code
+     * @param string|null $description
+     *
+     * @throws TypeError
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
-    public function __construct($lat = null, $long = null)
+    public function __construct($code = null, $description = null)
     {
         parent::__construct();
 
-        $this->setLatitude($lat);
-        $this->setLongitude($long);
+        $this->setCode($code);
+        $this->setDescription($description);
     }
 
     /**
+     * Get code
+     *
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   Error::$code
      */
-    public function getLatitude(): ?string
+    public function getCode(): ?string
     {
-        return $this->latitude;
+        return $this->code;
     }
 
     /**
-     * @param string|null $latitude
+     * Set code
+     *
+     * @pattern ^.*$
+     *
+     * @param string|null $code
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @example N/A
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see     Error::$code
      */
-    public function setLatitude(?string $latitude): CoordinatesSouthEast
+    public function setCode(?string $code): Error
     {
-        $this->latitude = $latitude;
+        $this->code = $code;
 
         return $this;
     }
 
     /**
+     * Get description
+     *
      * @return string|null
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   Error::$description
      */
-    public function getLongitude(): ?string
+    public function getDescription(): ?string
     {
-        return $this->longitude;
+        return $this->description;
     }
 
     /**
-     * @param string|null $longitude
+     * Set description
+     *
+     * @pattern ^.*$
+     *
+     * @param string|null $description
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @example N/A
+     *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see     Error::$description
      */
-    public function setLongitude(?string $longitude): CoordinatesSouthEast
+    public function setDescription(?string $description): Error
     {
-        $this->longitude = $longitude;
+        $this->description = $description;
 
         return $this;
     }

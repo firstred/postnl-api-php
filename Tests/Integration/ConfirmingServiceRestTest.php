@@ -30,6 +30,7 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Tests\Integration\Service;
 
 use Cache\Adapter\Void\VoidCachePool;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
@@ -45,6 +46,7 @@ use Firstred\PostNL\Entity\Shipment;
 use Firstred\PostNL\Http\MockClient;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\ConfirmingService;
+use ReflectionException;
 
 /**
  * Class ConfirmingServiceRestTest
@@ -63,7 +65,8 @@ class ConfirmingServiceRestTest extends TestCase
     /**
      * @before
      *
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
      */
     public function setupPostNL()
     {
@@ -83,8 +86,7 @@ class ConfirmingServiceRestTest extends TestCase
                     'Zipcode'     => '2132WT',
                 ])),
             getenv('POSTNL_API_KEY'),
-            true,
-            PostNL::MODE_REST
+            true
         );
 
         $this->service = $this->postnl->getConfirmingService();

@@ -37,7 +37,7 @@ use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Location;
 use Firstred\PostNL\Entity\Message;
 use Firstred\PostNL\Entity\Request\GetLocation;
-use Firstred\PostNL\Entity\Request\GetLocationsInArea;
+use Firstred\PostNL\Entity\Request\GetNearestLocationsGeocode;
 use Firstred\PostNL\Entity\Request\GetNearestLocations;
 use Firstred\PostNL\Entity\Response\GetLocationsInAreaResponse;
 use Firstred\PostNL\Entity\Response\GetNearestLocationsResponse;
@@ -232,7 +232,7 @@ class LocationServiceRestTest extends TestCase
 
         /** @var Request $request */
         $this->lastRequest = $request = $this->service->buildGetLocationsInAreaRequest(
-            (new GetLocationsInArea())
+            (new GetNearestLocationsGeocode())
                 ->setMessage($message)
                 ->setCountrycode('NL')
                 ->setLocation(
@@ -305,7 +305,7 @@ class LocationServiceRestTest extends TestCase
         $this->postnl->setHttpClient($mockClient);
 
         $response = $this->postnl->getLocationsInArea(
-            (new GetLocationsInArea())
+            (new GetNearestLocationsGeocode())
                 ->setCountrycode('NL')
                 ->setLocation(
                     Location::create(

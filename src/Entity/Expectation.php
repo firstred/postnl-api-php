@@ -29,6 +29,8 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use Firstred\PostNL\Misc\ValidateAndFix;
+use ReflectionException;
 use TypeError;
 
 /**
@@ -37,6 +39,12 @@ use TypeError;
 class Expectation extends AbstractEntity
 {
     /**
+     * ETA from
+     *
+     * @pattern ^(2[0-3]|[01]?[0-9]):([0-5]?[0-9]):([0-5]?[0-9])$
+     *
+     * @example 14:00:00
+     *
      * @var string|null $ETAFrom
      *
      * @since 1.0.0
@@ -44,6 +52,12 @@ class Expectation extends AbstractEntity
     protected $ETAFrom;
 
     /**
+     * ETA to
+     *
+     * @pattern ^(2[0-3]|[01]?[0-9]):([0-5]?[0-9]):([0-5]?[0-9])$
+     *
+     * @example 16:30:00
+     *
      * @var string|null $ETATo
      *
      * @since 1.0.0
@@ -70,10 +84,14 @@ class Expectation extends AbstractEntity
     }
 
     /**
+     * Get ETA from
+     *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   Expectation::$ETAFrom
      */
     public function getETAFrom(): ?string
     {
@@ -81,27 +99,40 @@ class Expectation extends AbstractEntity
     }
 
     /**
+     * Set ETA from
+     *
+     * @pattern ^(2[0-3]|[01]?[0-9]):([0-5]?[0-9]):([0-5]?[0-9])$
+     *
      * @param string|null $ETAFrom
      *
      * @return static
      *
      * @throws TypeError
+     * @throws ReflectionException
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @example 14:00:00
+     *
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
+     *
+     * @see     Expectation::$ETAFrom
      */
     public function setETAFrom(?string $ETAFrom): Expectation
     {
-        $this->ETAFrom = $ETAFrom;
+        $this->ETAFrom = ValidateAndFix::time($ETAFrom);
 
         return $this;
     }
 
     /**
+     * Get ETA to
+     *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   Expectation::$ETATo
      */
     public function getETATo(): ?string
     {
@@ -109,18 +140,27 @@ class Expectation extends AbstractEntity
     }
 
     /**
+     * Set ETA to
+     *
+     * @pattern ^(2[0-3]|[01]?[0-9]):([0-5]?[0-9]):([0-5]?[0-9])$
+     *
      * @param string|null $ETATo
      *
      * @return static
      *
      * @throws TypeError
+     * @throws ReflectionException
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @example 16:30:00
+     *
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
+     *
+     * @see     Expectation::$ETATo
      */
     public function setETATo(?string $ETATo): Expectation
     {
-        $this->ETATo = $ETATo;
+        $this->ETATo = ValidateAndFix::time($ETATo);
 
         return $this;
     }

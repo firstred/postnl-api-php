@@ -31,7 +31,6 @@ namespace Firstred\PostNL\Service;
 
 use DateInterval;
 use DateTimeInterface;
-use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\PostNL;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
@@ -45,8 +44,6 @@ use ReflectionException;
  */
 abstract class AbstractService
 {
-    const COMMON_NAMESPACE = 'http://postnl.nl/cif/services/common/';
-
     /**
      * TTL for the cache
      *

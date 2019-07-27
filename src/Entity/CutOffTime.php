@@ -29,6 +29,8 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use Firstred\PostNL\Misc\ValidateAndFix;
+use ReflectionException;
 use TypeError;
 
 /**
@@ -37,6 +39,15 @@ use TypeError;
 class CutOffTime extends AbstractEntity
 {
     /**
+     * Day
+     *
+     * Number of the day of the week. 01 = Monday, 02 =
+     * Tuesday, …, 07 = Sunday. It is also possible to use value 00 to specify a generic cut off time for all days.
+     *
+     * @pattern ^\d{2}$
+     *
+     * @example 02
+     *
      * @var string|null $day
      *
      * @since 1.0.0
@@ -44,6 +55,15 @@ class CutOffTime extends AbstractEntity
     protected $day;
 
     /**
+     * Time
+     *
+     * The cut off time for this day of week.
+     * Format: H:i:s
+     *
+     * @pattern ^(?:2[0-3]|[01]?[0-9]):(?:[0-5]?[0-9]):(?:[0-5]?[0-9])$
+     *
+     * @example 14:00:00
+     *
      * @var string|null $time
      *
      * @since 1.0.0
@@ -51,6 +71,12 @@ class CutOffTime extends AbstractEntity
     protected $time;
 
     /**
+     * Available
+     *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @var bool|null $available
      *
      * @since 1.0.0
@@ -65,6 +91,7 @@ class CutOffTime extends AbstractEntity
      * @param bool   $available
      *
      * @throws TypeError
+     * @throws ReflectionException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -79,10 +106,14 @@ class CutOffTime extends AbstractEntity
     }
 
     /**
+     * Get the day of the week
+     *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   CutOffTime::$day
      */
     public function getDay(): ?string
     {
@@ -90,25 +121,39 @@ class CutOffTime extends AbstractEntity
     }
 
     /**
-     * @param string|null $day
+     * Set the day of the week
+     *
+     * @pattern ^\d{2}$
+     *
+     * @param string|int|float|null $dayOfTheWeek
      *
      * @return static
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @throws ReflectionException
+     *
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
+     *
+     * @example 02
+     *
+     * @see     CutOffTime::$day
      */
-    public function setDay(?string $day): CutOffTime
+    public function setDay($dayOfTheWeek): CutOffTime
     {
-        $this->day = $day;
+        $this->day = ValidateAndFix::dayOfTheWeek($dayOfTheWeek);
 
         return $this;
     }
 
     /**
+     * Get cut-off time
+     *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   CutOffTime::$time
      */
     public function getTime(): ?string
     {
@@ -116,25 +161,40 @@ class CutOffTime extends AbstractEntity
     }
 
     /**
+     * Set cut-off time
+     *
+     * @pattern ^(2[0-3]|[01]?[0-9]):([0-5]?[0-9]):([0-5]?[0-9])$
+     *
      * @param string|null $time
      *
      * @return static
      *
+     * @throws TypeError
+     * @throws ReflectionException
+     *
+     * @example 14:00:00
+     *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see     CutOffTime::$time
      */
     public function setTime(?string $time): CutOffTime
     {
-        $this->time = $time;
+        $this->time = ValidateAndFix::time($time);
 
         return $this;
     }
 
     /**
+     * Get availability status
+     *
      * @return bool|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   CutOffTime::$available
      */
     public function getAvailable(): ?bool
     {
@@ -142,12 +202,22 @@ class CutOffTime extends AbstractEntity
     }
 
     /**
+     * Set availability status
+     *
+     * @pattern N/A
+     *
      * @param bool|null $available
      *
      * @return static
      *
+     * @throws TypeError
+     *
+     * @example N/A
+     *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see     CutOffTime::$available
      */
     public function setAvailable(?bool $available): CutOffTime
     {

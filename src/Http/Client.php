@@ -314,7 +314,6 @@ class Client implements LoggerAwareInterface
      *
      * @return ResponseInterface
      *
-     * @throws HttpClientException
      * @throws Exception
      *
      * @since 1.0.0
@@ -380,5 +379,7 @@ class Client implements LoggerAwareInterface
     public function resetAsyncClient(): Client
     {
         $this->asyncClient = null;
+
+        return $this;
     }
 }

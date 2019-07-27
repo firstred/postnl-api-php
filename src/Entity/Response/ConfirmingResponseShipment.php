@@ -29,8 +29,8 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity\Response;
 
-use Error;
 use Firstred\PostNL\Entity\AbstractEntity;
+use Firstred\PostNL\Entity\Error;
 use Firstred\PostNL\Entity\Warning;
 use TypeError;
 
@@ -88,6 +88,8 @@ class ConfirmingResponseShipment extends AbstractEntity
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   GenerateBarcode
      */
     public function getBarcode(): ?string
     {
@@ -97,14 +99,20 @@ class ConfirmingResponseShipment extends AbstractEntity
     /**
      * Set barcode
      *
+     * @pattern N/A
+     *
      * @param string|null $barcode
      *
      * @return static
      *
      * @throws TypeError
      *
+     * @example N/A
+     *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see     GenerateBarcode
      */
     public function setBarcode(?string $barcode): ConfirmingResponseShipment
     {
@@ -120,6 +128,8 @@ class ConfirmingResponseShipment extends AbstractEntity
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see Warning
      */
     public function getWarnings(): ?array
     {
@@ -129,6 +139,10 @@ class ConfirmingResponseShipment extends AbstractEntity
     /**
      * Set warnings
      *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @param Warning[]|null $warnings
      *
      * @return static
@@ -137,6 +151,8 @@ class ConfirmingResponseShipment extends AbstractEntity
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see Warning
      */
     public function setWarnings(?array $warnings): ConfirmingResponseShipment
     {
@@ -152,6 +168,8 @@ class ConfirmingResponseShipment extends AbstractEntity
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see Error
      */
     public function getErrors(): ?array
     {
@@ -169,6 +187,8 @@ class ConfirmingResponseShipment extends AbstractEntity
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see Error
      */
     public function setErrors(?array $errors): ConfirmingResponseShipment
     {

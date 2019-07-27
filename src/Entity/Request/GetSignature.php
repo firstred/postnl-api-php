@@ -32,7 +32,6 @@ namespace Firstred\PostNL\Entity\Request;
 use Exception;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Customer;
-use Firstred\PostNL\Entity\Message;
 use Firstred\PostNL\Entity\Shipment;
 use TypeError;
 
@@ -42,13 +41,12 @@ use TypeError;
 class GetSignature extends AbstractEntity
 {
     /**
-     * @var Message|null $message
+     * Customer
      *
-     * @since 1.0.0
-     */
-    protected $message;
-
-    /**
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @var Customer|null $customer
      *
      * @since 1.0.0
@@ -56,6 +54,12 @@ class GetSignature extends AbstractEntity
     protected $customer;
 
     /**
+     * Shipment
+     *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @var Shipment|null $shipment
      *
      * @since 1.0.0
@@ -67,7 +71,6 @@ class GetSignature extends AbstractEntity
      *
      * @param Shipment|null $shipment
      * @param Customer|null $customer
-     * @param Message|null  $message
      *
      * @throws Exception
      * @throws TypeError
@@ -75,48 +78,23 @@ class GetSignature extends AbstractEntity
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function __construct(Shipment $shipment = null, Customer $customer = null, Message $message = null)
+    public function __construct(Shipment $shipment = null, Customer $customer = null)
     {
         parent::__construct();
 
-        $this->setMessage($message ?: new Message());
         $this->setShipment($shipment);
         $this->setCustomer($customer);
     }
 
     /**
-     * @return Message|null
+     * Get Customer
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function getMessage(): ?Message
-    {
-        return $this->message;
-    }
-
-    /**
-     * @param Message|null $message
-     *
-     * @return static
-     *
-     * @throws TypeError
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function setMessage(?Message $message): GetSignature
-    {
-        $this->message = $message;
-
-        return $this;
-    }
-
-    /**
      * @return Customer|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   Customer
      */
     public function getCustomer(): ?Customer
     {
@@ -124,14 +102,22 @@ class GetSignature extends AbstractEntity
     }
 
     /**
+     * Set Customer
+     *
+     * @pattern N/A
+     *
      * @param Customer|null $customer
      *
      * @return static
      *
      * @throws TypeError
      *
+     * @example N/A
+     *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see     Customer
      */
     public function setCustomer(?Customer $customer): GetSignature
     {
@@ -141,10 +127,14 @@ class GetSignature extends AbstractEntity
     }
 
     /**
+     * Get Shipment
+     *
      * @return Shipment|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   Shipment
      */
     public function getShipment(): ?Shipment
     {
@@ -152,14 +142,22 @@ class GetSignature extends AbstractEntity
     }
 
     /**
+     * Set Shipment
+     *
+     * @pattern N/A
+     *
      * @param Shipment|null $shipment
      *
      * @return static
      *
      * @throws TypeError
      *
+     * @example N/A
+     *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see     Shipment
      */
     public function setShipment(?Shipment $shipment): GetSignature
     {

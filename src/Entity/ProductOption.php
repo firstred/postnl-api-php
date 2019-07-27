@@ -29,6 +29,8 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use Firstred\PostNL\Misc\ValidateAndFix;
+use ReflectionException;
 use TypeError;
 
 /**
@@ -37,6 +39,12 @@ use TypeError;
 class ProductOption extends AbstractEntity
 {
     /**
+     * The characteristic of the ProductOption. Mandatory for some products.
+     *
+     * @pattern \d{3}$
+     *
+     * @example 118
+     *
      * @var string|null $characteristic
      *
      * @since 1.0.0
@@ -44,6 +52,12 @@ class ProductOption extends AbstractEntity
     protected $characteristic;
 
     /**
+     * The product option code for this ProductOption. Mandatory for some products.
+     *
+     * @pattern ^\d{3}$
+     *
+     * @example 006
+     *
      * @var string|null $option
      *
      * @since 1.0.0
@@ -70,10 +84,14 @@ class ProductOption extends AbstractEntity
     }
 
     /**
+     * Get characteristic
+     *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   ProductOption::$characteristic
      */
     public function getCharacteristic(): ?string
     {
@@ -81,29 +99,42 @@ class ProductOption extends AbstractEntity
     }
 
     /**
+     * Set characteristic
+     *
+     * @pattern \d{3}$
+     *
      * @param string|null $characteristic
      *
      * @return static
      *
      * @throws TypeError
+     * @throws ReflectionException
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @example 118
+     *
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
+     *
+     * @see     ProductOption::$characteristic
      */
     public function setCharacteristic(?string $characteristic): ProductOption
     {
-        $this->characteristic = $characteristic;
+        $this->characteristic = ValidateAndFix::productOption($characteristic);
 
         return $this;
     }
 
     /**
+     * Get option
+     *
      * @return string|null
      *
      * @throws TypeError
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   ProductOption::$option
      */
     public function getOption(): ?string
     {
@@ -111,18 +142,27 @@ class ProductOption extends AbstractEntity
     }
 
     /**
+     * Set option
+     *
+     * @pattern ^\d{3}$
+     *
      * @param string|null $option
      *
      * @return static
      *
      * @throws TypeError
+     * @throws ReflectionException
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @example 006
+     *
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
+     *
+     * @see     ProductOption::$option
      */
     public function setOption(?string $option): ProductOption
     {
-        $this->option = $option;
+        $this->option = ValidateAndFix::productOption($option);
 
         return $this;
     }

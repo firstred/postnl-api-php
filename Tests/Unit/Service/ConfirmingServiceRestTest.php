@@ -214,7 +214,7 @@ class ConfirmingServiceRestTest extends TestCase
                             'Zipcode'     => '2132WT',
                         ],
                     ],
-                    'Barcode'             => '3S1234567890123',
+                    'GenerateBarcode'             => '3S1234567890123',
                     'DeliveryAddress'     => '01',
                     'Dimension'           => [
                         'Weight' => '2000',
@@ -248,7 +248,7 @@ class ConfirmingServiceRestTest extends TestCase
                             [
                     'ConfirmingResponseShipments' => [
                         'ConfirmingResponseShipment' => [
-                            'Barcode' => '3SDEVC987119100',
+                            'GenerateBarcode' => '3SDEVC987119100',
                             'Warnings' => [],
                             'Errors' => [],
                         ],
@@ -312,7 +312,7 @@ class ConfirmingServiceRestTest extends TestCase
                             [
                                 'ConfirmingResponseShipments' => [
                                     'ConfirmingResponseShipment' => [
-                                        'Barcode'  => '3SDEVC201611210',
+                                        'GenerateBarcode'  => '3SDEVC201611210',
                                         'Warnings' => [],
                                         'Errors'   => [],
                                     ],
@@ -331,7 +331,7 @@ class ConfirmingServiceRestTest extends TestCase
                             [
                                 'ConfirmingResponseShipments' => [
                                     'ConfirmingResponseShipment' => [
-                                        'Barcode'  => '3SDEVC201611211',
+                                        'GenerateBarcode'  => '3SDEVC201611211',
                                         'Warnings' => [],
                                         'Errors'   => [],
                                     ],

@@ -32,7 +32,6 @@ namespace Firstred\PostNL\Entity\Request;
 use Exception;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Customer;
-use Firstred\PostNL\Entity\Message;
 use Firstred\PostNL\Entity\Shipment;
 use TypeError;
 
@@ -42,6 +41,10 @@ use TypeError;
 class Confirming extends AbstractEntity
 {
     /**
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @var Customer|null $customer
      *
      * @since 1.0.0
@@ -51,15 +54,10 @@ class Confirming extends AbstractEntity
     protected $customer;
 
     /**
-     * @var Message|null $message
+     * @pattern N/A
      *
-     * @since 1.0.0
+     * @example N/A
      *
-     * @see Message
-     */
-    protected $message;
-
-    /**
      * @var Shipment[]|null $shipments
      *
      * @since 1.0.0
@@ -73,7 +71,6 @@ class Confirming extends AbstractEntity
      *
      * @param Shipment[]|null $shipments
      * @param Customer|null   $customer
-     * @param Message|null    $message
      *
      * @throws Exception
      * @throws TypeError
@@ -81,12 +78,11 @@ class Confirming extends AbstractEntity
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function __construct(array $shipments = null, Customer $customer = null, Message $message = null)
+    public function __construct(array $shipments = null, Customer $customer = null)
     {
         parent::__construct();
 
         $this->setShipments($shipments);
-        $this->setMessage($message ?: new Message());
         $this->setCustomer($customer);
     }
 
@@ -137,11 +133,15 @@ class Confirming extends AbstractEntity
     /**
      * Set customer
      *
+     * @pattern N/A
+     *
      * @param Customer|null $customer
      *
      * @return static
      *
      * @throws TypeError
+     *
+     * @example N/A
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -151,42 +151,6 @@ class Confirming extends AbstractEntity
     public function setCustomer(?Customer $customer): Confirming
     {
         $this->customer = $customer;
-
-        return $this;
-    }
-
-    /**
-     * Get message
-     *
-     * @return Message|null
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     *
-     * @see Message
-     */
-    public function getMessage(): ?Message
-    {
-        return $this->message;
-    }
-
-    /**
-     * Set message
-     *
-     * @param Message|null $message
-     *
-     * @return static
-     *
-     * @throws TypeError
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     *
-     * @see Message
-     */
-    public function setMessage(?Message $message): Confirming
-    {
-        $this->message = $message;
 
         return $this;
     }
@@ -209,11 +173,15 @@ class Confirming extends AbstractEntity
     /**
      * Set shipments
      *
+     * @pattern N/A
+     *
      * @param Shipment[]|null $shipments
      *
      * @return static
      *
      * @throws TypeError
+     *
+     * @example N/A
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing

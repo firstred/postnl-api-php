@@ -29,6 +29,8 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use Firstred\PostNL\Misc\ValidateAndFix;
+use ReflectionException;
 use TypeError;
 
 /**
@@ -37,20 +39,12 @@ use TypeError;
 class Timeframe extends AbstractEntity
 {
     /**
-     * @var string|null $city
+     * Date
      *
-     * @since 1.0.0
-     */
-    protected $city;
-
-    /**
-     * @var string|null $countryCode
+     * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}$
      *
-     * @since 1.0.0
-     */
-    protected $countryCode;
-
-    /**
+     * @example 03-07-2019
+     *
      * @var string|null $date
      *
      * @since 1.0.0
@@ -58,27 +52,38 @@ class Timeframe extends AbstractEntity
     protected $date;
 
     /**
-     * @var string|null $endDate
+     * From
+     *
+     * @pattern ^(?:2[0-3]|[01]?[0-9]):(?:[0-5]?[0-9]):(?:[0-5]?[0-9])$
+     *
+     * @example 14:00:00
+     *
+     * @var string|null $from
      *
      * @since 1.0.0
      */
-    protected $endDate;
+    protected $from;
 
     /**
-     * @var string|null $houseNr
+     * To
+     *
+     * @pattern ^(?:2[0-3]|[01]?[0-9]):(?:[0-5]?[0-9]):(?:[0-5]?[0-9])$
+     *
+     * @example 16:30:00
+     *
+     * @var string|null $to
      *
      * @since 1.0.0
      */
-    protected $houseNr;
+    protected $to;
 
     /**
-     * @var string|null $houseNrExt
+     * Options
      *
-     * @since 1.0.0
-     */
-    protected $houseNrExt;
-
-    /**
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @var string[]|null $options
      *
      * @since 1.0.0
@@ -86,230 +91,68 @@ class Timeframe extends AbstractEntity
     protected $options;
 
     /**
-     * @var string|null $postalCode
+     * Code
+     *
+     * @pattern ^.{0,35}$
+     *
+     * @example 02
+     *
+     * @var string|null $code
      *
      * @since 1.0.0
      */
-    protected $postalCode;
+    protected $code;
 
     /**
-     * @var string|null $startDate
+     * Description
+     *
+     * @pattern ^.{0,35}$
+     *
+     * @example Middag
+     *
+     * @var string|null $description
      *
      * @since 1.0.0
      */
-    protected $startDate;
-
-    /**
-     * @var string|null $street
-     *
-     * @since 1.0.0
-     */
-    protected $street;
-
-    /**
-     * @var string|null $sundaySorting
-     *
-     * @since 1.0.0
-     */
-    protected $sundaySorting;
-
-    /**
-     * @var string|null $interval
-     *
-     * @since 1.0.0
-     */
-    protected $interval;
-
-    /**
-     * @var string|null $timeframeRange
-     *
-     * @since 1.0.0
-     */
-    protected $timeframeRange;
-
-    /**
-     * @var TimeframeTimeFrame[]|Timeframe[]|null $timeframes
-     *
-     * @since 1.0.0
-     */
-    protected $timeframes;
+    protected $description;
 
     /**
      * Timeframe constructor.
      *
-     * @param string|null      $city
-     * @param string|null      $countryCode
-     * @param string|null      $date
-     * @param string|null      $endDate
-     * @param string|null      $houseNr
-     * @param string|null      $houseNrExt
-     * @param array|null       $options
-     * @param string|null      $postalCode
-     * @param string|null      $street
-     * @param bool|null        $sundaySorting
-     * @param string|null      $interval
-     * @param string|null      $range
-     * @param Timeframe[]|null $timeframes
+     * @param string|null   $date
+     * @param string|null   $from
+     * @param string|null   $to
+     * @param string[]|null $options
+     * @param string|null   $code
+     * @param string|null   $description
      *
      * @throws TypeError
+     * @throws ReflectionException
      *
-     * @since 1.0.0
      * @since 2.0.0 Strict typing
+     * @since 1.0.0
      */
-    public function __construct(?string $city = null, ?string $countryCode = null, ?string $date = null, ?string $endDate = null, ?string $houseNr = null, ?string $houseNrExt = null, ?array $options = [], ?string $postalCode = null, ?string $street = null, ?bool $sundaySorting = false, ?string $interval = null, ?string $range = null, ?array $timeframes = null)
+    public function __construct(?string $date = null, ?string $from = null, ?string $to = null, array $options = null, ?string $code = null, ?string $description = null)
     {
         parent::__construct();
 
-        $this->setCity($city);
-        $this->setCountryCode($countryCode);
         $this->setDate($date);
-        $this->setEndDate($endDate);
-        $this->setHouseNr($houseNr);
-        $this->setHouseNrExt($houseNrExt);
+        $this->setFrom($from);
+        $this->setTo($to);
         $this->setOptions($options);
-        $this->setPostalCode($postalCode);
-        $this->setStreet($street);
-        $this->setSundaySorting($sundaySorting);
-        $this->setInterval($interval);
-        $this->setTimeframeRange($range);
-        $this->setTimeframes($timeframes);
+        $this->setCode($code);
+        $this->setDescription($description);
     }
 
     /**
+     * Get date
+     *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     */
-    public function getPostalCode(): ?string
-    {
-        return $this->postalCode;
-    }
-
-    /**
-     * Set the postcode
      *
-     * @param string|null $postcode
-     *
-     * @return static
-     *
-     * @throws TypeError
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function setPostalCode(?string $postcode = null): Timeframe
-    {
-        if (is_null($postcode)) {
-            $this->postalCode = null;
-        } else {
-            $this->postalCode = strtoupper(str_replace(' ', '', $postcode));
-        }
-
-        return $this;
-    }
-
-    /**
-     * Return a serializable array for `json_encode`
-     *
-     * @return array
-     *
-     * @since 1.0.0
-     */
-    public function jsonSerialize(): array
-    {
-        $json = [];
-        foreach (array_keys(get_class_vars(static::class)) as $propertyName) {
-            if (in_array(ucfirst($propertyName), ['Id'])) {
-                continue;
-            }
-            if (isset($this->{$propertyName})) {
-                if ('Options' === $propertyName) {
-                    $json[$propertyName] = $this->{$propertyName};
-                } elseif ('Timeframes' === $propertyName) {
-                    $timeframes = [];
-                    foreach ($this->timeframes as $timeframe) {
-                        $timeframes[] = $timeframe;
-                    }
-                    $json['Timeframes'] = ['TimeframeTimeFrame' => $timeframes];
-                } elseif ('SundaySorting' === $propertyName) {
-                    if (isset($this->{$propertyName})) {
-                        if (is_bool($this->{$propertyName})) {
-                            $value = $this->{$propertyName} ? 'true' : 'false';
-                        } else {
-                            $value = $this->{$propertyName};
-                        }
-
-                        $json[ucfirst($propertyName)] = $value;
-                    }
-                } else {
-                    $json[ucfirst($propertyName)] = $this->{$propertyName};
-                }
-            }
-        }
-
-        return $json;
-    }
-
-    /**
-     * @return string|null
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function getCity(): ?string
-    {
-        return $this->city;
-    }
-
-    /**
-     * @param string|null $city
-     *
-     * @return static
-     *
-     * @throws TypeError
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function setCity(?string $city): Timeframe
-    {
-        $this->city = $city;
-
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function getCountryCode(): ?string
-    {
-        return $this->countryCode;
-    }
-
-    /**
-     * @param string|null $countryCode
-     *
-     * @return static
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function setCountryCode(?string $countryCode): Timeframe
-    {
-        $this->countryCode = $countryCode;
-
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @see   Timeframe::$date
      */
     public function getDate(): ?string
     {
@@ -317,103 +160,122 @@ class Timeframe extends AbstractEntity
     }
 
     /**
+     * Set date
+     *
+     * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}$
+     *
      * @param string|null $date
      *
      * @return static
      *
+     * @throws TypeError
+     * @throws ReflectionException
+     *
+     * @example 03-07-2019
+     *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see     Timeframe::$date
      */
     public function setDate(?string $date): Timeframe
     {
-        $this->date = $date;
+        $this->date = ValidateAndFix::date($date);
 
         return $this;
     }
 
     /**
+     * Get from
+     *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   Timeframe::$from
      */
-    public function getEndDate(): ?string
+    public function getFrom(): ?string
     {
-        return $this->endDate;
+        return $this->from;
     }
 
     /**
-     * @param string|null $endDate
+     * Set from
+     *
+     * @pattern ^(?:2[0-3]|[01]?[0-9]):(?:[0-5]?[0-9]):(?:[0-5]?[0-9])$
+     *
+     * @param string|null $from
      *
      * @return static
      *
-     * @since 1.0.0
+     * @throws TypeError
+     * @throws ReflectionException
+     *
+     * @example 14:00:00
+     *
      * @since 2.0.0 Strict typing
+     * @since 1.0.0
+     *
+     * @see     Timeframe::$from
      */
-    public function setEndDate(?string $endDate): Timeframe
+    public function setFrom(?string $from): Timeframe
     {
-        $this->endDate = $endDate;
+        $this->from = ValidateAndFix::time($from);
 
         return $this;
     }
 
     /**
+     * Get to
+     *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   Timeframe::$to
      */
-    public function getHouseNr(): ?string
+    public function getTo(): ?string
     {
-        return $this->houseNr;
+        return $this->to;
     }
 
     /**
-     * @param string|null $houseNr
+     * Set to
+     *
+     * @pattern ^(?:2[0-3]|[01]?[0-9]):(?:[0-5]?[0-9]):(?:[0-5]?[0-9])$
+     *
+     * @param string|null $to
      *
      * @return static
      *
-     * @since 1.0.0
+     * @throws TypeError
+     * @throws ReflectionException
+     *
+     * @example 16:30:00
+     *
      * @since 2.0.0 Strict typing
+     * @since   1.0.0
+     *
+     * @see     Timeframe::$to
      */
-    public function setHouseNr(?string $houseNr): Timeframe
+    public function setTo(?string $to): Timeframe
     {
-        $this->houseNr = $houseNr;
+        $this->to = ValidateAndFix::time($to);
 
         return $this;
     }
 
     /**
-     * @return string|null
+     * Get options
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function getHouseNrExt(): ?string
-    {
-        return $this->houseNrExt;
-    }
-
-    /**
-     * @param string|null $houseNrExt
-     *
-     * @return static
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function setHouseNrExt(?string $houseNrExt): Timeframe
-    {
-        $this->houseNrExt = $houseNrExt;
-
-        return $this;
-    }
-
-    /**
      * @return string[]|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   Timeframe::$options
      */
     public function getOptions(): ?array
     {
@@ -421,14 +283,22 @@ class Timeframe extends AbstractEntity
     }
 
     /**
+     * Set options
+     *
+     * @pattern N/A
+     *
      * @param string[]|null $options
      *
      * @return static
      *
      * @throws TypeError
      *
+     * @example N/A
+     *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see     Timeframe::$options
      */
     public function setOptions(?array $options): Timeframe
     {
@@ -438,169 +308,83 @@ class Timeframe extends AbstractEntity
     }
 
     /**
+     * Get code
+     *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   Timeframe::$code
      */
-    public function getStartDate(): ?string
+    public function getCode(): ?string
     {
-        return $this->startDate;
+        return $this->code;
     }
 
     /**
-     * @param string|null $startDate
+     * Set code
+     *
+     * @pattern ^.{0,35}$
+     *
+     * @param string|null $code
      *
      * @return static
      *
      * @throws TypeError
+     * @throws ReflectionException
+     *
+     * @example 02
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see     Timeframe::$code
      */
-    public function setStartDate(?string $startDate): Timeframe
+    public function setCode(?string $code): Timeframe
     {
-        $this->startDate = $startDate;
+        $this->code = ValidateAndFix::genericString($code);
 
         return $this;
     }
 
     /**
+     * Get description
+     *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   Timeframe::$description
      */
-    public function getStreet(): ?string
+    public function getDescription(): ?string
     {
-        return $this->street;
+        return $this->description;
     }
 
     /**
-     * @param string|null $street
+     * Set description
+     *
+     * @pattern ^.{0,35}$
+     *
+     * @param string|null $description
      *
      * @return static
      *
      * @throws TypeError
+     * @throws ReflectionException
      *
-     * @since 1.0.0
+     * @example Middag
+     *
      * @since 2.0.0 Strict typing
-     */
-    public function setStreet(?string $street): Timeframe
-    {
-        $this->street = $street;
-
-        return $this;
-    }
-
-    /**
-     * @return bool|null
-     *
      * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     *
+     * @see     Timeframe::$description
      */
-    public function getSundaySorting(): ?bool
+    public function setDescription(?string $description): Timeframe
     {
-        return $this->sundaySorting;
-    }
-
-    /**
-     * @param bool|null $sundaySorting
-     *
-     * @return static
-     *
-     * @throws TypeError
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function setSundaySorting(?bool $sundaySorting): Timeframe
-    {
-        $this->sundaySorting = $sundaySorting;
-
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function getInterval(): ?string
-    {
-        return $this->interval;
-    }
-
-    /**
-     * @param string|null $interval
-     *
-     * @return static
-     *
-     * @throws TypeError
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function setInterval(?string $interval): Timeframe
-    {
-        $this->interval = $interval;
-
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function getTimeframeRange(): ?string
-    {
-        return $this->timeframeRange;
-    }
-
-    /**
-     * @param string|null $timeframeRange
-     *
-     * @return static
-     *
-     * @throws TypeError
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function setTimeframeRange(?string $timeframeRange): Timeframe
-    {
-        $this->timeframeRange = $timeframeRange;
-
-        return $this;
-    }
-
-    /**
-     * @return Timeframe[]|TimeframeTimeFrame[]|null
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function getTimeframes()
-    {
-        return $this->timeframes;
-    }
-
-    /**
-     * @param Timeframe[]|TimeframeTimeFrame[]|null $timeframes
-     *
-     * @return static
-     *
-     * @throws TypeError
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function setTimeframes($timeframes): Timeframe
-    {
-        $this->timeframes = $timeframes;
+        $this->description = ValidateAndFix::genericString($description);
 
         return $this;
     }

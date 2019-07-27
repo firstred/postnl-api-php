@@ -38,6 +38,10 @@ use TypeError;
 class CompleteStatusResponse extends AbstractEntity
 {
     /**
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @var array|null $shipments
      *
      * @since 1.0.0
@@ -68,6 +72,8 @@ class CompleteStatusResponse extends AbstractEntity
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see Shipment
      */
     public function getShipments(): ?array
     {
@@ -77,6 +83,10 @@ class CompleteStatusResponse extends AbstractEntity
     /**
      * Set shipments
      *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @param array|null $shipments
      *
      * @return static
@@ -85,6 +95,8 @@ class CompleteStatusResponse extends AbstractEntity
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see Shipment
      */
     public function setShipments(?array $shipments): CompleteStatusResponse
     {

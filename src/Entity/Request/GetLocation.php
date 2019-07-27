@@ -31,7 +31,6 @@ namespace Firstred\PostNL\Entity\Request;
 
 use Exception;
 use Firstred\PostNL\Entity\AbstractEntity;
-use Firstred\PostNL\Entity\Message;
 use TypeError;
 
 /**
@@ -42,6 +41,12 @@ use TypeError;
 class GetLocation extends AbstractEntity
 {
     /**
+     * Location code
+     *
+     * @pattern ^.{0,35}$
+     *
+     * @example 161503
+     *
      * @var string|null $locationCode
      *
      * @since 1.0.0
@@ -49,13 +54,12 @@ class GetLocation extends AbstractEntity
     protected $locationCode;
 
     /**
-     * @var Message|null $message
+     * RetailNetworkID information. Always PNPNL-01 for Dutch locations. For Belgium locations use LD-01.
      *
-     * @since 1.0.0
-     */
-    protected $message;
-
-    /**
+     * @pattern ^.{0,35}$
+     *
+     * @example PNPNL-01
+     *
      * @var string|null $retailNetworkID
      *
      * @since 1.0.0
@@ -65,9 +69,8 @@ class GetLocation extends AbstractEntity
     /**
      * GetLocation constructor.
      *
-     * @param string|null  $location
-     * @param Message|null $message
-     * @param string|null  $networkId
+     * @param string|null $location
+     * @param string|null $networkId
      *
      * @throws Exception
      * @throws TypeError
@@ -75,12 +78,11 @@ class GetLocation extends AbstractEntity
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function __construct(?string $location = null, ?Message $message = null, ?string $networkId = null)
+    public function __construct(?string $location = null, ?string $networkId = null)
     {
         parent::__construct();
 
         $this->setLocationCode($location);
-        $this->setMessage($message ?: new Message());
         $this->setRetailNetworkID($networkId);
     }
 
@@ -91,6 +93,8 @@ class GetLocation extends AbstractEntity
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   GetLocation::$locationCode
      */
     public function getLocationCode(): ?string
     {
@@ -98,14 +102,22 @@ class GetLocation extends AbstractEntity
     }
 
     /**
+     * Set location code
+     *
+     * @pattern ^.{0,35}$
+     *
      * @param string|null $locationCode
      *
      * @return static
      *
      * @throws TypeError
      *
+     * @example 161503
+     *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see     Location::$locationCode
      */
     public function setLocationCode(?string $locationCode): GetLocation
     {
@@ -115,38 +127,14 @@ class GetLocation extends AbstractEntity
     }
 
     /**
-     * @return Message|null
+     * Get retail network ID
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function getMessage(): ?Message
-    {
-        return $this->message;
-    }
-
-    /**
-     * @param Message|null $message
-     *
-     * @return static
-     *
-     * @throws TypeError
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function setMessage(?Message $message): GetLocation
-    {
-        $this->message = $message;
-
-        return $this;
-    }
-
-    /**
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   GetLocation::$retailNetworkID
      */
     public function getRetailNetworkID(): ?string
     {
@@ -154,14 +142,22 @@ class GetLocation extends AbstractEntity
     }
 
     /**
+     * Set retail network ID
+     *
+     * @pattern ^.{0,35}$
+     *
      * @param string|null $retailNetworkID
      *
      * @return static
      *
      * @throws TypeError
      *
+     * @example PNPNL-01
+     *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see     GetLocation::$retailNetworkID
      */
     public function setRetailNetworkID(?string $retailNetworkID): GetLocation
     {

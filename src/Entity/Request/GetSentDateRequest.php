@@ -31,7 +31,6 @@ namespace Firstred\PostNL\Entity\Request;
 
 use Exception;
 use Firstred\PostNL\Entity\AbstractEntity;
-use Firstred\PostNL\Entity\Message;
 use TypeError;
 
 /**
@@ -40,24 +39,22 @@ use TypeError;
 class GetSentDateRequest extends AbstractEntity
 {
     /**
-     * @var GetSentDate|null $getSentDate
+     * CalculateShippingDate
+     *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
+     * @var CalculateShippingDate|null $getSentDate
      *
      * @since 1.0.0
      */
     protected $getSentDate;
 
     /**
-     * @var Message|null $message
+     * CalculateShippingDate constructor.
      *
-     * @since 1.0.0
-     */
-    protected $message;
-
-    /**
-     * GetSentDate constructor.
-     *
-     * @param GetSentDate|null $date
-     * @param Message|null     $message
+     * @param CalculateShippingDate|null $date
      *
      * @throws Exception
      * @throws TypeError
@@ -65,66 +62,47 @@ class GetSentDateRequest extends AbstractEntity
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function __construct(GetSentDate $date = null, Message $message = null)
+    public function __construct(CalculateShippingDate $date = null)
     {
         parent::__construct();
 
         $this->setGetSentDate($date);
-        $this->setMessage($message ?: new Message());
     }
 
     /**
-     * @return GetSentDate|null
+     * Get CalculateShippingDate
+     *
+     * @return CalculateShippingDate|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   CalculateShippingDate
      */
-    public function getGetSentDate(): ?GetSentDate
+    public function getGetSentDate(): ?CalculateShippingDate
     {
         return $this->getSentDate;
     }
 
     /**
-     * @param GetSentDate|null $getSentDate
+     * @param CalculateShippingDate|null $getSentDate
+     *
+     * @pattern N/A
      *
      * @return static
      *
      * @throws TypeError
      *
+     * @example N/A
+     *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see     CalculateShippingDate
      */
-    public function setGetSentDate(?GetSentDate $getSentDate): GetSentDateRequest
+    public function setGetSentDate(?CalculateShippingDate $getSentDate): GetSentDateRequest
     {
         $this->getSentDate = $getSentDate;
-
-        return $this;
-    }
-
-    /**
-     * @return Message|null
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function getMessage(): ?Message
-    {
-        return $this->message;
-    }
-
-    /**
-     * @param Message|null $message
-     *
-     * @return static
-     *
-     * @throws TypeError
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function setMessage(?Message $message): GetSentDateRequest
-    {
-        $this->message = $message;
 
         return $this;
     }

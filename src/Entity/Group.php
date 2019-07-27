@@ -29,6 +29,10 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use Firstred\PostNL\Exception\InvalidTypeException;
+use Firstred\PostNL\Misc\ValidateAndFix;
+use ReflectionClass;
+use ReflectionException;
 use TypeError;
 
 /**
@@ -37,7 +41,12 @@ use TypeError;
 class Group extends AbstractEntity
 {
     /**
-     * Amount of shipments in the group.
+     * Total number of colli in the shipment (in case of multicolli shipments)
+     * Mandatory for multicollo shipments
+     *
+     * @pattern ^[1-4]$
+     *
+     * @example 2
      *
      * @var string|null $groupCount
      *
@@ -46,7 +55,12 @@ class Group extends AbstractEntity
     protected $groupCount;
 
     /**
-     * Sequence number.
+     * Sequence number of the collo within the complete shipment (e.g. collo 2 of 4)
+     * Mandatory for multicollo shipments
+     *
+     * @pattern ^[1-4]$
+     *
+     * @example 2
      *
      * @var string|null $groupSequence
      *
@@ -57,11 +71,17 @@ class Group extends AbstractEntity
     /**
      * The type of group.
      *
+     * Group sort that determines the type of group that is indicated. This is a code.
+     *
      * Possible values:
      *
      * - `01`: Collection request
-     * - `03`: Multiple parcels in one shipment (multi-colli)
+     * - `03`: Multiple parcels in one shipment (multicolli)
      * - `04`: Single parcel in one shipment
+     *
+     * @pattern ^\d{2}$
+     *
+     * @example 03
      *
      * @var string|null $groupType
      *
@@ -70,7 +90,12 @@ class Group extends AbstractEntity
     protected $groupType;
 
     /**
-     * Main barcode for the shipment.
+     * Main barcode for the shipment (in case of multicolli shipments)
+     * Mandatory for multicolli shipments
+     *
+     * @pattern ^{A-Z0-9}{11,15}$
+     *
+     * @example 3SABCD6659149
      *
      * @var string|null $mainBarcode
      *
@@ -87,6 +112,7 @@ class Group extends AbstractEntity
      * @param string|null $mainBarcode
      *
      * @throws TypeError
+     * @throws ReflectionException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -102,10 +128,14 @@ class Group extends AbstractEntity
     }
 
     /**
+     * Get group count
+     *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   Group::$groupCount
      */
     public function getGroupCount(): ?string
     {
@@ -113,27 +143,40 @@ class Group extends AbstractEntity
     }
 
     /**
-     * @param string|null $groupCount
+     * Set group count
+     *
+     * @pattern ^[1-4]$
+     *
+     * @param string|float|int|null $groupCount
      *
      * @return static
      *
      * @throws TypeError
+     * @throws ReflectionException
+     *
+     * @example 2
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see     Group::$groupCount
      */
-    public function setGroupCount(?string $groupCount): Group
+    public function setGroupCount($groupCount): Group
     {
-        $this->groupCount = $groupCount;
+        $this->groupCount = ValidateAndFix::groupCount($groupCount);
 
         return $this;
     }
 
     /**
+     * Get group sequence
+     *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see Group::$groupSequence
      */
     public function getGroupSequence(): ?string
     {
@@ -141,25 +184,40 @@ class Group extends AbstractEntity
     }
 
     /**
+     * Set group sequence
+     *
+     * @pattern ^[1-4]$
+     *
      * @param string|null $groupSequence
      *
      * @return static
      *
+     * @throws TypeError
+     * @throws ReflectionException
+     *
+     * @example 2
+     *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see     Group::$groupSequence
      */
     public function setGroupSequence(?string $groupSequence): Group
     {
-        $this->groupSequence = $groupSequence;
+        $this->groupSequence = ValidateAndFix::groupCount($groupSequence);
 
         return $this;
     }
 
     /**
+     * Get group type
+     *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   Group::$groupType
      */
     public function getGroupType(): ?string
     {
@@ -167,25 +225,40 @@ class Group extends AbstractEntity
     }
 
     /**
-     * @param string|null $groupType
+     * Set group type
+     *
+     * @pattern ^\d{2}$
+     *
+     * @param string|float|int|null $groupType
      *
      * @return static
      *
+     * @throws TypeError
+     * @throws ReflectionException
+     *
+     * @example 03
+     *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see     Group::$groupType
      */
-    public function setGroupType(?string $groupType): Group
+    public function setGroupType($groupType): Group
     {
-        $this->groupType = $groupType;
+        $this->groupType = ValidateAndFix::numericType($groupType);
 
         return $this;
     }
 
     /**
+     * Get main barcode
+     *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   Group::$mainBarcode
      */
     public function getMainBarcode(): ?string
     {
@@ -193,16 +266,27 @@ class Group extends AbstractEntity
     }
 
     /**
+     * Set main barcode
+     *
+     * @pattern ^{A-Z0-9}{11,15}$
+     *
      * @param string|null $mainBarcode
      *
      * @return static
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @throws TypeError
+     * @throws ReflectionException
+     *
+     * @example 3SABCD6659149
+     *
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
+     *
+     * @see     Group::$mainBarcode
      */
     public function setMainBarcode(?string $mainBarcode): Group
     {
-        $this->mainBarcode = $mainBarcode;
+        $this->mainBarcode = ValidateAndFix::barcode($mainBarcode);
 
         return $this;
     }
