@@ -87,7 +87,7 @@ class DocumentationTest extends TestCase
                 $this->assertTrue(strpos($method->getDocComment(), '* @pattern') !== false, "{$method->class}::{$method->name} does not have an @pattern comment");
             }
 
-            foreach ($reflector->getProperties(ReflectionProperty::IS_PROTECTED + ReflectionProperty::IS_PRIVATE) as $defaultProperty) {
+            foreach ($reflector->getProperties(ReflectionProperty::IS_PROTECTED) as $defaultProperty) {
                 /** @var ReflectionProperty $defaultProperty */
                 if ($defaultProperty->class !== ltrim($entityName, '\\')) {
                     continue;
@@ -120,7 +120,7 @@ class DocumentationTest extends TestCase
                 $this->assertTrue(strpos($method->getDocComment(), '* @since') !== false, "{$method->class}::{$method->name} does not have an @since comment");
             }
 
-            foreach ($reflector->getProperties(ReflectionProperty::IS_PROTECTED + ReflectionProperty::IS_PRIVATE) as $defaultProperty) {
+            foreach ($reflector->getProperties(ReflectionProperty::IS_PROTECTED) as $defaultProperty) {
                 /** @var ReflectionProperty $defaultProperty */
                 if ($defaultProperty->class !== ltrim($entityName, '\\')) {
                     continue;
@@ -153,7 +153,7 @@ class DocumentationTest extends TestCase
                 $this->assertTrue(strpos($method->getDocComment(), '* @example') !== false, "{$method->class}::{$method->name} does not have an @example comment");
             }
 
-            foreach ($reflector->getProperties(ReflectionProperty::IS_PROTECTED + ReflectionProperty::IS_PRIVATE) as $defaultProperty) {
+            foreach ($reflector->getProperties(ReflectionProperty::IS_PROTECTED) as $defaultProperty) {
                 /** @var ReflectionProperty $defaultProperty */
                 if ($defaultProperty->class !== ltrim($entityName, '\\')) {
                     continue;

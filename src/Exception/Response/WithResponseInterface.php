@@ -29,7 +29,7 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Exception\Response;
 
-use Firstred\PostNL\Exception\AbstractException;
+use Firstred\PostNL\Exception\PostNLClientException;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -47,9 +47,9 @@ interface WithResponseInterface
     /**
      * @param ResponseInterface|null $response
      *
-     * @return AbstractException
+     * @return PostNLClientException
      *
      * @since 2.0.0
      */
-    public function setResponse(?ResponseInterface $response): AbstractException;
+    public function setResponse(?ResponseInterface $response): PostNLClientException;
 }

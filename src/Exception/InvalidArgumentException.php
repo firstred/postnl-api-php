@@ -31,7 +31,9 @@ namespace Firstred\PostNL\Exception;
 
 /**
  * Class InvalidArgumentException
+ *
+ * Used when an invalid argument is given
  */
-class InvalidArgumentException extends AbstractException
+class InvalidArgumentException extends PostNLClientException
 {
 }

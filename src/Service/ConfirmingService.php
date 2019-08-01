@@ -31,10 +31,10 @@ namespace Firstred\PostNL\Service;
 
 use Exception;
 use Firstred\PostNL\Entity\AbstractEntity;
-use Firstred\PostNL\Entity\Request\Confirming;
+use Firstred\PostNL\Entity\Request\ConfirmShipmentRequest;
 use Firstred\PostNL\Entity\Response\ConfirmingResponseShipment;
 use Firstred\PostNL\Exception\CifDownException;
-use Firstred\PostNL\Exception\ClientException;
+use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Http\Client;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Psr\Http\Message\RequestInterface;
@@ -55,17 +55,18 @@ class ConfirmingService extends AbstractService
     /**
      * Generate a single barcode via REST
      *
-     * @param Confirming $confirming
+     * @param ConfirmShipmentRequest $confirming
      *
      * @return ConfirmingResponseShipment
      *
-     * @throws ClientException
+     * @throws HttpClientException
      * @throws CifDownException
+     * @throws Exception
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function confirmShipment(Confirming $confirming): ConfirmingResponseShipment
+    public function confirmShipment(ConfirmShipmentRequest $confirming): ConfirmingResponseShipment
     {
         $request = $this->buildConfirmRequest($confirming);
         $response = Client::getInstance()->doRequest($request);
@@ -79,18 +80,26 @@ class ConfirmingService extends AbstractService
             throw new CifDownException('Invalid API Response', 0, null, $request, $response);
         }
 
-        throw new ClientException('Unable to confirm', 0, null, $request, $response);
+        throw new HttpClientException('Unable to confirm', 0, null, $request, $response);
     }
 
     /**
-     * @param Confirming $confirming
+     * @param ConfirmShipmentRequest $confirming
      *
      * @return RequestInterface
      *
      * @since 1.0.0
      */
-    public function buildConfirmRequest(Confirming $confirming): RequestInterface
+    public function buildConfirmRequest(ConfirmShipmentRequest $confirming): RequestInterface
     {
+        $body = json_decode(json_encode($confirming), true);
+        $body['Message'] = [
+            'MessageID'        => '1',
+            'MessageTimeStamp' => date('d-m-Y 00:00:00'),
+            'Printertype'      => 'GraphicFile|PDF',
+        ];
+        $body['Customer'] = $this->postnl->getCustomer();
+
         return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
             'POST',
             $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT
@@ -98,7 +107,7 @@ class ConfirmingService extends AbstractService
             ->withHeader('Accept', 'application/json')
             ->withHeader('Content-Type', 'application/json;charset=UTF-8')
             ->withHeader('apikey', $this->postnl->getApiKey())
-            ->withBody(Psr17FactoryDiscovery::findStreamFactory()->createStream(json_encode($confirming)))
+            ->withBody(Psr17FactoryDiscovery::findStreamFactory()->createStream(json_encode($body)))
         ;
     }
 
@@ -109,7 +118,6 @@ class ConfirmingService extends AbstractService
      *
      * @return null|ConfirmingResponseShipment
      *
-     * @throws CifDownException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -131,7 +139,7 @@ class ConfirmingService extends AbstractService
     /**
      * Confirm multiple shipments
      *
-     * @param Confirming[] $confirms ['uuid' => Confirming, ...]
+     * @param ConfirmShipmentRequest[] $confirms ['uuid' => ConfirmShipmentRequest, ...]
      *
      * @return ConfirmingResponseShipment[]
      *
@@ -155,7 +163,7 @@ class ConfirmingService extends AbstractService
             try {
                 $confirming = $this->processConfirmResponse($response);
                 if (!$confirming instanceof ConfirmingResponseShipment) {
-                    throw new ClientException('Invalid API Response', 0, null, null, $response);
+                    throw new HttpClientException('Invalid API Response', 0, null, null, $response);
                 }
             } catch (Exception $e) {
                 $confirming = $e;

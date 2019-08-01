@@ -130,7 +130,8 @@ class CutOffTime extends AbstractEntity
      * @return static
      *
      * @throws ReflectionException
-     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @since   1.0.0
      * @since   2.0.0 Strict typing
      *
@@ -169,13 +170,13 @@ class CutOffTime extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
      * @throws ReflectionException
-     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @example 14:00:00
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
      *
      * @see     CutOffTime::$time
      */

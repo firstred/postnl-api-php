@@ -29,14 +29,12 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Service;
 
-use Exception;
 use Firstred\PostNL\Entity\AbstractEntity;
-use Firstred\PostNL\Entity\Request\CalculateDeliveryDate;
-use Firstred\PostNL\Entity\Request\CalculateShippingDate;
-use Firstred\PostNL\Entity\Response\GetDeliveryDateResponse;
-use Firstred\PostNL\Entity\Response\GetSentDateResponse;
-use Firstred\PostNL\Exception\CifDownException;
-use Firstred\PostNL\Exception\ClientException;
+use Firstred\PostNL\Entity\Request\CalculateDeliveryDateRequest;
+use Firstred\PostNL\Entity\Request\CalculateShippingDateRequest;
+use Firstred\PostNL\Entity\Response\CalculateDeliveryDateResponse;
+use Firstred\PostNL\Entity\Response\CalculateShippingDateResponse;
+use Firstred\PostNL\Exception\CifErrorException;
 use Firstred\PostNL\Http\Client;
 use Firstred\PostNL\Misc\Message;
 use Http\Discovery\Psr17FactoryDiscovery;
@@ -61,19 +59,19 @@ class DeliveryDateService extends AbstractService
     /**
      * Get a delivery date via REST
      *
-     * @param CalculateDeliveryDate $getDeliveryDate
+     * @param CalculateDeliveryDateRequest $calculateDeliveryDate
      *
-     * @return GetDeliveryDateResponse
+     * @return CalculateDeliveryDateResponse
      *
-     * @throws ClientException
-     * @throws Exception
+     * @throws CifErrorException
+     * @throws \Exception
      *
-     * @since 1.0.0
      * @since 2.0.0 Strict typing
+     * @since 1.0.0
      */
-    public function getDeliveryDate(CalculateDeliveryDate $getDeliveryDate): GetDeliveryDateResponse
+    public function calculateDeliveryDate(CalculateDeliveryDateRequest $calculateDeliveryDate): CalculateDeliveryDateResponse
     {
-        $item = $this->retrieveCachedItem($getDeliveryDate->getId());
+        $item = $this->retrieveCachedItem($calculateDeliveryDate->getId());
         $response = null;
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
@@ -83,13 +81,13 @@ class DeliveryDateService extends AbstractService
             }
         }
         if (!$response instanceof ResponseInterface) {
-            $request = $this->buildGetDeliveryDateRequest($getDeliveryDate);
+            $request = $this->buildCalculateDeliveryDateRequest($calculateDeliveryDate);
             $response = Client::getInstance()->doRequest($request);
             static::validateResponse($response);
         }
 
-        $object = $this->processGetDeliveryDateResponse($response);
-        if ($object instanceof GetDeliveryDateResponse) {
+        $object = $this->processCalculateDeliveryDateResponse($response);
+        if ($object instanceof CalculateDeliveryDateResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof ResponseInterface
                 && $response->getStatusCode() === 200
@@ -101,20 +99,20 @@ class DeliveryDateService extends AbstractService
             return $object;
         }
 
-        throw new ClientException('Unable to retrieve the delivery date', 0, null, isset($request) && $request instanceof RequestInterface ? $request : null, $response);
+        throw new CifErrorException('Unable to retrieve the delivery date', 0, null, isset($request) && $request instanceof RequestInterface ? $request : null, $response);
     }
 
     /**
-     * Build the CalculateDeliveryDate request for the REST API
+     * Build the CalculateDeliveryDateRequest request for the REST API
      *
-     * @param CalculateDeliveryDate $calculateDeliveryDate
+     * @param CalculateDeliveryDateRequest $calculateDeliveryDate
      *
      * @return RequestInterface
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function buildGetDeliveryDateRequest(CalculateDeliveryDate $calculateDeliveryDate): RequestInterface
+    public function buildCalculateDeliveryDateRequest(CalculateDeliveryDateRequest $calculateDeliveryDate): RequestInterface
     {
         $query = [
             'ShippingDate' => $calculateDeliveryDate->getShippingDate(),
@@ -171,43 +169,44 @@ class DeliveryDateService extends AbstractService
     }
 
     /**
-     * Process CalculateDeliveryDate REST Response
+     * Process CalculateDeliveryDateRequest REST Response
      *
      * @param ResponseInterface $response
      *
-     * @return null|GetDeliveryDateResponse
+     * @return null|CalculateDeliveryDateResponse
      *
-     * @throws ClientException
+     * @throws CifErrorException
      *
      * @since 2.0.0 Strict typing
      * @since 1.0.0
      */
-    public function processGetDeliveryDateResponse(ResponseInterface $response): GetDeliveryDateResponse
+    public function processCalculateDeliveryDateResponse(ResponseInterface $response): CalculateDeliveryDateResponse
     {
         $body = json_decode((string) $response->getBody(), true);
         if (isset($body['DeliveryDate'])) {
-            /** @var GetDeliveryDateResponse $object */
-            $object = AbstractEntity::jsonDeserialize(['GetDeliveryDateResponse' => $body]);
+            /** @var CalculateDeliveryDateResponse $object */
+            $object = AbstractEntity::jsonDeserialize(['CalculateDeliveryDateResponse' => $body]);
 
             return $object;
         }
 
-        throw new ClientException('Unable to process get delivery date response', 0, null, null, $response);
+        throw new CifErrorException('Unable to process get delivery date response', 0, null, null, $response);
     }
 
     /**
      * Get the sent date via REST
      *
-     * @param CalculateShippingDate $calculateShippingDate
+     * @param CalculateShippingDateRequest $calculateShippingDate
      *
-     * @return GetSentDateResponse
+     * @return CalculateShippingDateResponse
      *
-     * @throws ClientException
+     * @throws CifErrorException
+     * @throws \Exception
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function getShippingDate(CalculateShippingDate $calculateShippingDate): GetSentDateResponse
+    public function calculateShippingDate(CalculateShippingDateRequest $calculateShippingDate): CalculateShippingDateResponse
     {
         $item = $this->retrieveCachedItem($calculateShippingDate->getId());
         $response = null;
@@ -219,13 +218,13 @@ class DeliveryDateService extends AbstractService
             }
         }
         if (!$response instanceof ResponseInterface) {
-            $request = $this->buildGetShippingDateRequest($calculateShippingDate);
+            $request = $this->buildCalculateShippingDateRequest($calculateShippingDate);
             $response = Client::getInstance()->doRequest($request);
             static::validateResponse($response);
         }
 
-        $object = $this->processGetShippingDateResponse($response);
-        if ($object instanceof GetSentDateResponse) {
+        $object = $this->processCalculateShippingDateResponse($response);
+        if ($object instanceof CalculateShippingDateResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof ResponseInterface
                 && $response->getStatusCode() === 200
@@ -237,17 +236,17 @@ class DeliveryDateService extends AbstractService
             return $object;
         }
 
-        throw new ClientException('Unable to retrieve shipping date', 0, null, isset($request) && $request instanceof RequestInterface ? $request : null, $response);
+        throw new CifErrorException('Unable to retrieve shipping date', 0, null, isset($request) && $request instanceof RequestInterface ? $request : null, $response);
     }
 
     /**
-     * Build the CalculateShippingDate request for the REST API
+     * Build the CalculateShippingDateRequest request for the REST API
      *
-     * @param CalculateShippingDate $calculateShippingDate
+     * @param CalculateShippingDateRequest $calculateShippingDate
      *
      * @return RequestInterface
      */
-    public function buildGetShippingDateRequest(CalculateShippingDate $calculateShippingDate): RequestInterface
+    public function buildCalculateShippingDateRequest(CalculateShippingDateRequest $calculateShippingDate): RequestInterface
     {
         $query = [
             'ShippingDate' => $calculateShippingDate->getDeliveryDate(),
@@ -282,27 +281,27 @@ class DeliveryDateService extends AbstractService
     }
 
     /**
-     * Process CalculateShippingDate REST Response
+     * Process CalculateShippingDateRequest REST Response
      *
      * @param ResponseInterface $response
      *
-     * @return GetSentDateResponse
+     * @return CalculateShippingDateResponse
      *
-     * @throws ClientException
+     * @throws CifErrorException
      *
      * @since 2.0.0 Strict typing
      * @since 1.0.0
      */
-    public function processGetShippingDateResponse(ResponseInterface $response): GetSentDateResponse
+    public function processCalculateShippingDateResponse(ResponseInterface $response): CalculateShippingDateResponse
     {
         $body = json_decode((string) $response->getBody(), true);
         if (isset($body['SentDate'])) {
-            /** @var GetSentDateResponse $object */
-            $object = AbstractEntity::jsonDeserialize(['GetSentDateResponse' => $body]);
+            /** @var CalculateShippingDateResponse $object */
+            $object = AbstractEntity::jsonDeserialize(['CalculateShippingDateResponse' => $body]);
 
             return $object;
         }
 
-        throw new ClientException('Unable to process get sent date response', 0, null, null, $response);
+        throw new CifErrorException('Unable to process calculate shipping date response', 0, null, null, $response);
     }
 }

@@ -142,15 +142,15 @@ class Contact extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
      * @throws ReflectionException
-     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @example 01
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
      *
-     * @see   Contact::$contactType
+     * @see     Contact::$contactType
      */
     public function setContactType($contactType): Contact
     {
@@ -183,15 +183,15 @@ class Contact extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
      * @throws ReflectionException
-     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @example receiver@gmail.com
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
      *
-     * @see   Contact::$email
+     * @see     Contact::$email
      */
     public function setEmail(?string $email): Contact
     {
@@ -225,16 +225,16 @@ class Contact extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws NumberParseException
-     *
+     * @throws ReflectionException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @example 0612345678
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
      *
-     * @see   Contact::$SMSNr
+     * @see     Contact::$SMSNr
      */
     public function setSMSNr(?string $nr, string $countryCode = 'NL'): Contact
     {
@@ -268,15 +268,16 @@ class Contact extends AbstractEntity
      *
      * @return static
      *
-     * @throws ReflectionException
      * @throws NumberParseException
-     *
+     * @throws ReflectionException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @example 0612345678
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
      *
-     * @see   Contact::$telNr
+     * @see     Contact::$telNr
      */
     public function setTelNr(?string $nr, string $countryCode = 'NL'): Contact
     {

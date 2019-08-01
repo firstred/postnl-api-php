@@ -168,13 +168,13 @@ class Timeframe extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
      * @throws ReflectionException
-     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @example 03-07-2019
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
      *
      * @see     Timeframe::$date
      */
@@ -209,13 +209,13 @@ class Timeframe extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
      * @throws ReflectionException
-     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @example 14:00:00
      *
-     * @since 2.0.0 Strict typing
-     * @since 1.0.0
+     * @since   2.0.0 Strict typing
+     * @since   1.0.0
      *
      * @see     Timeframe::$from
      */
@@ -250,12 +250,12 @@ class Timeframe extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
      * @throws ReflectionException
-     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @example 16:30:00
      *
-     * @since 2.0.0 Strict typing
+     * @since   2.0.0 Strict typing
      * @since   1.0.0
      *
      * @see     Timeframe::$to
@@ -331,13 +331,13 @@ class Timeframe extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
      * @throws ReflectionException
-     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @example 02
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
      *
      * @see     Timeframe::$code
      */
@@ -372,13 +372,13 @@ class Timeframe extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
      * @throws ReflectionException
-     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @example Middag
      *
-     * @since 2.0.0 Strict typing
-     * @since 1.0.0
+     * @since   2.0.0 Strict typing
+     * @since   1.0.0
      *
      * @see     Timeframe::$description
      */

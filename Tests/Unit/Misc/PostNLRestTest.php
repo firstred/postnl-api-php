@@ -32,12 +32,12 @@ namespace Firstred\PostNL\Tests\Unit\Misc;
 use Exception;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Customer;
-use Firstred\PostNL\Entity\Request\CalculateDeliveryDate;
-use Firstred\PostNL\Entity\Request\CalculateTimeframes;
-use Firstred\PostNL\Entity\Request\GetNearestLocations;
-use Firstred\PostNL\Entity\Response\GetDeliveryDateResponse;
-use Firstred\PostNL\Entity\Response\GetNearestLocationsResponse;
-use Firstred\PostNL\Entity\Response\ResponseTimeframes;
+use Firstred\PostNL\Entity\Request\CalculateDeliveryDateRequest;
+use Firstred\PostNL\Entity\Request\CalculateTimeframesRequest;
+use Firstred\PostNL\Entity\Request\FindNearestLocationsRequest;
+use Firstred\PostNL\Entity\Response\CalculateDeliveryDateResponse;
+use Firstred\PostNL\Entity\Response\CalculateTimeframesResponse;
+use Firstred\PostNL\Entity\Response\FindNearestLocationsResponse;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Http\Client as PostNLHttpClient;
 use Firstred\PostNL\PostNL;
@@ -121,191 +121,23 @@ class PostNLRestTest extends TestCase
      */
     public function testGetTimeframesAndLocations()
     {
-        $timeframesPayload = [
-            'ReasonNotimeframes' => [
-                'ReasonNoTimeframe' => [
-                    [
-                        'Code'        => '05',
-                        'Date'        => '10-03-2018',
-                        'Description' => 'Geen avondbelevering mogelijk',
-                        'Options'     => [
-                            'string' => 'Evening',
-                        ],
-                    ],
-                    [
-                        'Code'        => '03',
-                        'Date'        => '11-03-2018',
-                        'Description' => 'Dag uitgesloten van tijdvak',
-                        'Options'     => [
-                            'string' => 'Daytime',
-                        ],
-                    ],
-                    [
-                        'Code'        => '03',
-                        'Date'        => '11-03-2018',
-                        'Description' => 'Dag uitgesloten van tijdvak',
-                        'Options'     => [
-                            'string' => 'Evening',
-                        ],
-                    ],
-                    [
-                        'Code'        => '01',
-                        'Date'        => '12-03-2018',
-                        'Description' => 'Geen routeplan tijdvak',
-                        'Options'     => [
-                            'string' => 'Daytime',
-                        ],
-                    ],
-                    [
-                        'Code'        => '05',
-                        'Date'        => '12-03-2018',
-                        'Description' => 'Geen avondbelevering mogelijk',
-                        'Options'     => [
-                            'string' => 'Evening',
-                        ],
-                    ],
-                ],
-            ],
-            'Timeframes' => [
-                'Timeframe' => [
-                    [
-                        'Date' => '07-03-2018',
-                        'Timeframes' => [
-                            'TimeframeTimeFrame' => [
-                                [
-                                    'From' => '16:00:00',
-                                    'Options' => [
-                                        'string' => 'Daytime',
-                                    ],
-                                    'To' => '18:30:00',
-                                ],
-                                [
-                                    'From' => '18:00:00',
-                                    'Options' => [
-                                        'string' => 'Evening',
-                                    ],
-                                    'To' => '22:00:00',
-                                ],
-                            ],
-                        ],
-                    ],
-                    [
-                        'Date' => '08-03-2018',
-                        'Timeframes' => [
-                            'TimeframeTimeFrame' => [
-                                [
-                                    'From' => '15:45:00',
-                                    'Options' => [
-                                        'string' => 'Daytime',
-                                    ],
-                                    'To' => '18:15:00',
-                                ],
-                                [
-                                    'From' => '18:00:00',
-                                    'Options' => [
-                                        'string' => 'Evening',
-                                    ],
-                                    'To' => '22:00:00',
-                                ],
-                            ],
-                        ],
-                    ],
-                    [
-                        'Date' => '09-03-2018',
-                        'Timeframes' => [
-                            'TimeframeTimeFrame' => [
-                                [
-                                    'From' => '15:30:00',
-                                    'Options' => [
-                                        'string' => 'Daytime',
-                                    ],
-                                    'To' => '18:00:00',
-                                ],
-                                [
-                                    'From' => '18:00:00',
-                                    'Options' => [
-                                        'string' => 'Evening',
-                                    ],
-                                    'To' => '22:00:00',
-                                ],
-                            ],
-                        ],
-                    ],
-                    [
-                        'Date' => '10-03-2018',
-                        'Timeframes' => [
-                            'TimeframeTimeFrame' => [
-                                [
-                                    'From' => '16:15:00',
-                                    'Options' => [
-                                        'string' => 'Daytime',
-                                    ],
-                                    'To' => '18:45:00',
-                                ],
-                            ],
-                        ],
-                    ],
-                    [
-                        'Date' => '13-03-2018',
-                        'Timeframes' => [
-                            'TimeframeTimeFrame' => [
-                                [
-                                    'From' => '16:00:00',
-                                    'Options' => [
-                                        'string' => 'Daytime',
-                                    ],
-                                    'To' => '18:30:00',
-                                ],
-                                [
-                                    'From' => '18:00:00',
-                                    'Options' => [
-                                        'string' => 'Evening',
-                                    ],
-                                    'To' => '22:00:00',
-                                ],
-                            ],
-                        ],
-                    ],
-                    [
-                        'Date'       => '14-03-2018',
-                        'Timeframes' => [
-                            'TimeframeTimeFrame' => [
-                                [
-                                    'From'    => '16:00:00',
-                                    'Options' => [
-                                        'string' => 'Daytime',
-                                    ],
-                                    'To'      => '18:30:00',
-                                ],
-                                [
-                                    'From'    => '18:00:00',
-                                    'Options' => [
-                                        'string' => 'Evening',
-                                    ],
-                                    'To'      => '20:00:00',
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-        ];
-        $locationsPayload = json_decode($this->getNearestLocationsMockResponse());
-        $deliveryDatePayload = [
-            'DeliveryDate' => '30-06-2016',
+        $timeframesPayload = file_get_contents(__DIR__.'/../../data/responses/timeframes.json');
+        $locationsPayload = file_get_contents(__DIR__.'/../../data/responses/nearestlocations.json');
+        $deliveryDatePayload = json_encode([
+            'DeliveryDate' => '03-07-2019',
             'Options' => [
                 'string' => 'Daytime',
             ],
-        ];
+        ]);
 
         $mockClient = new Client();
-        $mockClient->addResponse(new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode($timeframesPayload)));
-        $mockClient->addResponse(new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode($locationsPayload)));
-        $mockClient->addResponse(new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode($deliveryDatePayload)));
+        $mockClient->addResponse(new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], $timeframesPayload));
+        $mockClient->addResponse(new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], $locationsPayload));
+        $mockClient->addResponse(new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], $deliveryDatePayload));
         PostNLHttpClient::getInstance()->setAsyncClient($mockClient);
 
         $results = $this->postnl->getTimeframesAndNearestLocations(
-            (new CalculateTimeframes())
+            (new CalculateTimeframesRequest())
                 ->setCity('Hoofddorp')
                 ->setCountryCode('NL')
                 ->setEndDate('02-07-2016')
@@ -317,7 +149,7 @@ class PostNLRestTest extends TestCase
                 ->setPostalCode('2132WT')
                 ->setStartDate('30-06-2016')
                 ->setStreet('Siriusdreef'),
-            (new GetNearestLocations())
+            (new FindNearestLocationsRequest())
                 ->setCountrycode('NL')
                 ->setDeliveryDate('29-06-2016')
                 ->setDeliveryOptions(['PG', 'PGE'])
@@ -326,7 +158,7 @@ class PostNLRestTest extends TestCase
                 ->setHouseNumber('42')
                 ->setPostalCode('2132WT')
                 ->setStreet('Siriusdreef'),
-            (new CalculateDeliveryDate())
+            (new CalculateDeliveryDateRequest())
                 ->setCity('Hoofddorp')
                 ->setCountryCode('NL')
                 ->setAvailableMonday(true)
@@ -343,9 +175,9 @@ class PostNLRestTest extends TestCase
         );
 
         $this->assertTrue(is_array($results));
-        $this->assertInstanceOf(ResponseTimeframes::class, $results['timeframes']);
-        $this->assertInstanceOf(GetNearestLocationsResponse::class, $results['locations']);
-        $this->assertInstanceOf(GetDeliveryDateResponse::class, $results['delivery_date']);
+        $this->assertInstanceOf(CalculateTimeframesResponse::class, $results['timeframes']);
+        $this->assertInstanceOf(FindNearestLocationsResponse::class, $results['locations']);
+        $this->assertInstanceOf(CalculateDeliveryDateResponse::class, $results['delivery_date']);
     }
 
     /**
@@ -360,13 +192,5 @@ class PostNLRestTest extends TestCase
         $postnl = $reflection->newInstanceWithoutConstructor();
 
         $this->assertNull($postnl->getApiKey());
-    }
-
-    /**
-     * @return string
-     */
-    protected function getNearestLocationsMockResponse()
-    {
-        return $json = file_get_contents(__DIR__.'/../../data/responses/nearestlocations.json');
     }
 }

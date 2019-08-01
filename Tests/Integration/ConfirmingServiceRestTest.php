@@ -30,26 +30,22 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Tests\Integration\Service;
 
 use Cache\Adapter\Void\VoidCachePool;
+use Firstred\PostNL\Entity\Response\ConfirmingResponseShipment;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
+use Firstred\PostNL\Misc\Message;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\RequestInterface;
 use Psr\Log\LoggerInterface;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Dimension;
-use Firstred\PostNL\Entity\Message\LabellingMessage;
-use Firstred\PostNL\Entity\Request\Confirming;
 use Firstred\PostNL\Entity\Shipment;
-use Firstred\PostNL\Http\MockClient;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\ConfirmingService;
 use ReflectionException;
 
 /**
- * Class ConfirmingServiceRestTest
+ * Class ConfirmingServiceTest
  *
  * @testdox The ConfirmingService (REST)
  */
@@ -99,13 +95,13 @@ class ConfirmingServiceRestTest extends TestCase
      */
     public function logPendingRequest()
     {
-        if (!$this->lastRequest instanceof Request) {
+        if (!$this->lastRequest instanceof RequestInterface) {
             return;
         }
 
         global $logger;
         if ($logger instanceof LoggerInterface) {
-            $logger->debug($this->getName()." Request\n".\GuzzleHttp\Psr7\str($this->lastRequest));
+            $logger->debug($this->getName()." Request\n".Message::str($this->lastRequest));
         }
         $this->lastRequest = null;
     }
@@ -147,7 +143,7 @@ class ConfirmingServiceRestTest extends TestCase
                 ->setProductCodeDelivery('3085')
         );
 
-        $this->assertInstanceOf('\\Firstred\\PostNL\\Entity\\Response\\ConfirmingResponseShipment', $confirm);
+        $this->assertInstanceOf(ConfirmingResponseShipment::class, $confirm);
     }
 
     /**
@@ -214,6 +210,6 @@ class ConfirmingServiceRestTest extends TestCase
                     ->setProductCodeDelivery('3085'),
         ]);
 
-        $this->assertInstanceOf('\\Firstred\\PostNL\\Entity\\Response\\ConfirmingResponseShipment', $confirms[1]);
+        $this->assertInstanceOf(ConfirmingResponseShipment::class, $confirms[1]);
     }
 }

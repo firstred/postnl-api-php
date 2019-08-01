@@ -202,9 +202,9 @@ class Content extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
      * @throws ReflectionException
-     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @example NL
      *
      * @since   1.0.0
@@ -243,9 +243,9 @@ class Content extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
      * @throws ReflectionException
-     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @example Powdered milk
      *
      * @since   1.0.0
@@ -283,9 +283,9 @@ class Content extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
      * @throws ReflectionException
-     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @example 7501031311309
      *
      * @since   2.0.0 Strict typing
@@ -324,9 +324,9 @@ class Content extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
      * @throws ReflectionException
-     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @since   2.0.0 Strict typing
      *
      * @see     Content::$productUrl
@@ -362,9 +362,9 @@ class Content extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
      * @throws ReflectionException
-     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @example 950306
      *
      * @since   1.0.0
@@ -403,9 +403,9 @@ class Content extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
      * @throws ReflectionException
-     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @example 12
      *
      * @since   1.0.0

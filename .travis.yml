@@ -1,8 +1,8 @@
 language: php
 php:
-  - 7.1
-  - 7.2
-  - 7.3
+  - "7.1"
+  - "7.2"
+  - "7.3"
 
 directories:
   - $HOME/.composer/cache/files
@@ -12,10 +12,10 @@ before_script:
 
 script:
   - composer test:unit
-  - >
-    if [[ "${TRAVIS_PULL_REQUEST}" = "false" ]]; then
-      composer test:integration
-    fi
+#  - >
+#    if [[ "${TRAVIS_PULL_REQUEST}" = "false" ]]; then
+#      composer test:integration
+#    fi
 
 after_success:
 - bash <(curl -s https://codecov.io/bash)

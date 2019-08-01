@@ -1,0 +1,1714 @@
+{
+  "GetLocationsResult": {
+    "ResponseLocation": [
+      {
+        "Address": {
+          "City": "ANTWERPEN",
+          "Countrycode": "BE",
+          "HouseNr": 2,
+          "Street": "BEDDENSTRAAT",
+          "Zipcode": 2000
+        },
+        "DeliveryOptions": {
+          "string": [
+            "PU",
+            "DO",
+            "PG",
+            "PG_EX"
+          ]
+        },
+        "Distance": 561,
+        "Latitude": 51.21864,
+        "LocationCode": "BE0Q50",
+        "Longitude": 4.403236,
+        "Name": "PRESS SHOP SCHOENMARKT",
+        "OpeningHours": {
+          "Friday": {
+            "string": [
+              "09:30-12:00",
+              "12:00-18:30"
+            ]
+          },
+          "Monday": {
+            "string": [
+              "09:30-12:00",
+              "12:00-18:30"
+            ]
+          },
+          "Saturday": {
+            "string": [
+              "09:30-12:00",
+              "12:00-18:30"
+            ]
+          },
+          "Thursday": {
+            "string": [
+              "09:30-12:00",
+              "12:00-18:30"
+            ]
+          },
+          "Tuesday": {
+            "string": [
+              "09:30-12:00",
+              "12:00-18:30"
+            ]
+          },
+          "Wednesday": {
+            "string": [
+              "09:30-12:00",
+              "12:00-18:30"
+            ]
+          }
+        },
+        "PartnerLocationCodes": {
+          "PartnerLocationCode": [
+            {
+              "Key": "ShopLogisticId",
+              "Value": "Q50"
+            },
+            {
+              "Key": "ShopRouteId",
+              "Value": "09Y70"
+            },
+            {
+              "Key": "ShopSortId",
+              "Value": 109
+            },
+            {
+              "Key": "ShopWarehouseId",
+              "Value": 1009
+            },
+            {
+              "Key": "ShopWinkelId",
+              "Value": 5849
+            }
+          ]
+        },
+        "PartnerName": "Lagardere",
+        "RetailFormulaName": "PostNL - Kariboo",
+        "RetailNetworkID": "LD-01"
+      },
+      {
+        "Address": {
+          "City": "ANTWERPEN",
+          "Countrycode": "BE",
+          "HouseNr": 32,
+          "Street": "SINT-JORISPOORT",
+          "Zipcode": 2000
+        },
+        "DeliveryOptions": {
+          "string": [
+            "PU",
+            "DO",
+            "PG",
+            "PG_EX"
+          ]
+        },
+        "Distance": 668,
+        "Latitude": 51.21231,
+        "LocationCode": "BE0X24",
+        "Longitude": 4.407372,
+        "Name": "M-PRESS",
+        "OpeningHours": {
+          "Friday": {
+            "string": [
+              "10:30-12:00",
+              "12:00-21:00"
+            ]
+          },
+          "Monday": {
+            "string": [
+              "10:30-12:00",
+              "12:00-21:00"
+            ]
+          },
+          "Saturday": {
+            "string": [
+              "10:30-12:00",
+              "12:00-21:00"
+            ]
+          },
+          "Sunday": {
+            "string": [
+              "10:30-12:00",
+              "12:00-20:00"
+            ]
+          },
+          "Thursday": {
+            "string": [
+              "10:30-12:00",
+              "12:00-21:00"
+            ]
+          },
+          "Tuesday": {
+            "string": [
+              "10:30-12:00",
+              "12:00-21:00"
+            ]
+          },
+          "Wednesday": {
+            "string": [
+              "10:30-12:00",
+              "12:00-21:00"
+            ]
+          }
+        },
+        "PartnerLocationCodes": {
+          "PartnerLocationCode": [
+            {
+              "Key": "ShopLogisticId",
+              "Value": "X24"
+            },
+            {
+              "Key": "ShopRouteId",
+              "Value": "09Y70"
+            },
+            {
+              "Key": "ShopSortId",
+              "Value": 109
+            },
+            {
+              "Key": "ShopWarehouseId",
+              "Value": 1009
+            },
+            {
+              "Key": "ShopWinkelId",
+              "Value": 17258
+            }
+          ]
+        },
+        "PartnerName": "Lagardere",
+        "RetailFormulaName": "PostNL - Kariboo",
+        "RetailNetworkID": "LD-01"
+      },
+      {
+        "Address": {
+          "City": "ANTWERPEN",
+          "Countrycode": "BE",
+          "HouseNr": 19,
+          "Street": "BRESSTRAAT",
+          "Zipcode": 2018
+        },
+        "DeliveryOptions": {
+          "string": [
+            "PU",
+            "DO",
+            "PG",
+            "PG_EX"
+          ]
+        },
+        "Distance": 886,
+        "Latitude": 51.20659,
+        "LocationCode": "BE0Q23",
+        "Longitude": 4.398218,
+        "Name": "DBH DE STER",
+        "OpeningHours": {
+          "Friday": {
+            "string": [
+              "06:00-12:00",
+              "12:00-18:00"
+            ]
+          },
+          "Monday": {
+            "string": [
+              "06:00-12:00",
+              "12:00-18:00"
+            ]
+          },
+          "Saturday": {
+            "string": "08:00-13:00"
+          },
+          "Thursday": {
+            "string": [
+              "06:00-12:00",
+              "12:00-18:00"
+            ]
+          },
+          "Tuesday": {
+            "string": [
+              "06:00-12:00",
+              "12:00-18:00"
+            ]
+          },
+          "Wednesday": {
+            "string": [
+              "06:00-12:00",
+              "12:00-18:00"
+            ]
+          }
+        },
+        "PartnerLocationCodes": {
+          "PartnerLocationCode": [
+            {
+              "Key": "ShopLogisticId",
+              "Value": "Q23"
+            },
+            {
+              "Key": "ShopRouteId",
+              "Value": "09J70"
+            },
+            {
+              "Key": "ShopSortId",
+              "Value": 109
+            },
+            {
+              "Key": "ShopWarehouseId",
+              "Value": 1009
+            },
+            {
+              "Key": "ShopWinkelId",
+              "Value": 5692
+            }
+          ]
+        },
+        "PartnerName": "Lagardere",
+        "RetailFormulaName": "PostNL - Kariboo",
+        "RetailNetworkID": "LD-01"
+      },
+      {
+        "Address": {
+          "City": "ANTWERPEN",
+          "Countrycode": "BE",
+          "HouseNr": 42,
+          "Street": "ANSELMOSTRAAT",
+          "Zipcode": 2018
+        },
+        "DeliveryOptions": {
+          "string": [
+            "PU",
+            "DO",
+            "PG",
+            "PG_EX"
+          ]
+        },
+        "Distance": 903,
+        "Latitude": 51.20709,
+        "LocationCode": "BE0Q77",
+        "Longitude": 4.403574,
+        "Name": "PRESS SHOP ANSELMO",
+        "OpeningHours": {
+          "Friday": {
+            "string": [
+              "07:00-12:00",
+              "12:00-18:30"
+            ]
+          },
+          "Monday": {
+            "string": [
+              "07:00-12:00",
+              "12:00-18:30"
+            ]
+          },
+          "Saturday": {
+            "string": [
+              "07:30-12:00",
+              "12:00-16:00"
+            ]
+          },
+          "Thursday": {
+            "string": [
+              "07:00-12:00",
+              "12:00-18:30"
+            ]
+          },
+          "Tuesday": {
+            "string": [
+              "07:00-12:00",
+              "12:00-18:30"
+            ]
+          },
+          "Wednesday": {
+            "string": [
+              "07:00-12:00",
+              "12:00-18:30"
+            ]
+          }
+        },
+        "PartnerLocationCodes": {
+          "PartnerLocationCode": [
+            {
+              "Key": "ShopLogisticId",
+              "Value": "Q77"
+            },
+            {
+              "Key": "ShopRouteId",
+              "Value": "09W20"
+            },
+            {
+              "Key": "ShopSortId",
+              "Value": 109
+            },
+            {
+              "Key": "ShopWarehouseId",
+              "Value": 1009
+            },
+            {
+              "Key": "ShopWinkelId",
+              "Value": 5761
+            }
+          ]
+        },
+        "PartnerName": "Lagardere",
+        "RetailFormulaName": "PostNL - Kariboo",
+        "RetailNetworkID": "LD-01"
+      },
+      {
+        "Address": {
+          "City": "ANTWERPEN",
+          "Countrycode": "BE",
+          "HouseNr": 15,
+          "Street": "KLAPDORP",
+          "Zipcode": 2000
+        },
+        "DeliveryOptions": {
+          "string": [
+            "PU",
+            "DO",
+            "PG",
+            "PG_EX"
+          ]
+        },
+        "Distance": 1104,
+        "Latitude": 51.22397,
+        "LocationCode": "BE0Q82",
+        "Longitude": 4.403565,
+        "Name": "KLAPKRANT",
+        "OpeningHours": {
+          "Friday": {
+            "string": [
+              "06:00-12:00",
+              "12:00-18:00"
+            ]
+          },
+          "Monday": {
+            "string": [
+              "06:00-12:00",
+              "12:00-18:00"
+            ]
+          },
+          "Saturday": {
+            "string": "06:00-12:00"
+          },
+          "Thursday": {
+            "string": [
+              "06:00-12:00",
+              "12:00-18:00"
+            ]
+          },
+          "Tuesday": {
+            "string": [
+              "06:00-12:00",
+              "12:00-18:00"
+            ]
+          },
+          "Wednesday": {
+            "string": [
+              "06:00-12:00",
+              "12:00-18:00"
+            ]
+          }
+        },
+        "PartnerLocationCodes": {
+          "PartnerLocationCode": [
+            {
+              "Key": "ShopLogisticId",
+              "Value": "Q82"
+            },
+            {
+              "Key": "ShopRouteId",
+              "Value": "09W20"
+            },
+            {
+              "Key": "ShopSortId",
+              "Value": 109
+            },
+            {
+              "Key": "ShopWarehouseId",
+              "Value": 1009
+            },
+            {
+              "Key": "ShopWinkelId",
+              "Value": 5878
+            }
+          ]
+        },
+        "PartnerName": "Lagardere",
+        "RetailFormulaName": "PostNL - Kariboo",
+        "RetailNetworkID": "LD-01"
+      },
+      {
+        "Address": {
+          "City": "ANTWERPEN",
+          "Countrycode": "BE",
+          "HouseNr": 32,
+          "Street": "PAARDENMARKT",
+          "Zipcode": 2000
+        },
+        "DeliveryOptions": {
+          "string": [
+            "PU",
+            "DO",
+            "PG",
+            "PG_EX"
+          ]
+        },
+        "Distance": 1407,
+        "Latitude": 51.22509,
+        "LocationCode": "BE0X16",
+        "Longitude": 4.40969,
+        "Name": "DBH DE BOEVER",
+        "OpeningHours": {
+          "Friday": {
+            "string": [
+              "07:00-11:00",
+              "11:30-18:00"
+            ]
+          },
+          "Monday": {
+            "string": "07:00-14:00"
+          },
+          "Saturday": {
+            "string": [
+              "07:00-12:00",
+              "12:00-17:00"
+            ]
+          },
+          "Thursday": {
+            "string": [
+              "07:00-11:00",
+              "11:30-18:00"
+            ]
+          },
+          "Tuesday": {
+            "string": [
+              "07:00-11:00",
+              "11:30-18:00"
+            ]
+          },
+          "Wednesday": {
+            "string": [
+              "07:00-11:00",
+              "11:30-18:00"
+            ]
+          }
+        },
+        "PartnerLocationCodes": {
+          "PartnerLocationCode": [
+            {
+              "Key": "ShopLogisticId",
+              "Value": "X16"
+            },
+            {
+              "Key": "ShopRouteId",
+              "Value": "09W20"
+            },
+            {
+              "Key": "ShopSortId",
+              "Value": 109
+            },
+            {
+              "Key": "ShopWarehouseId",
+              "Value": 1009
+            },
+            {
+              "Key": "ShopWinkelId",
+              "Value": 5663
+            }
+          ]
+        },
+        "PartnerName": "Lagardere",
+        "RetailFormulaName": "PostNL - Kariboo",
+        "RetailNetworkID": "LD-01"
+      },
+      {
+        "Address": {
+          "City": "ANTWERPEN",
+          "Countrycode": "BE",
+          "HouseNr": "3-5",
+          "Street": "FALCONPLEIN",
+          "Zipcode": 2000
+        },
+        "DeliveryOptions": {
+          "string": [
+            "PU",
+            "DO",
+            "PG",
+            "PG_EX"
+          ]
+        },
+        "Distance": 1421,
+        "Latitude": 51.2266,
+        "LocationCode": "BE0Q79",
+        "Longitude": 4.405326,
+        "Name": "PRESS SHOP FALCONPLEIN",
+        "OpeningHours": {
+          "Friday": {
+            "string": [
+              "06:00-12:00",
+              "12:00-19:00"
+            ]
+          },
+          "Monday": {
+            "string": [
+              "06:00-12:00",
+              "12:00-19:00"
+            ]
+          },
+          "Saturday": {
+            "string": [
+              "06:00-12:00",
+              "12:00-19:00"
+            ]
+          },
+          "Thursday": {
+            "string": [
+              "06:00-12:00",
+              "12:00-19:00"
+            ]
+          },
+          "Tuesday": {
+            "string": [
+              "06:00-12:00",
+              "12:00-19:00"
+            ]
+          },
+          "Wednesday": {
+            "string": [
+              "06:00-12:00",
+              "12:00-19:00"
+            ]
+          }
+        },
+        "PartnerLocationCodes": {
+          "PartnerLocationCode": [
+            {
+              "Key": "ShopLogisticId",
+              "Value": "Q79"
+            },
+            {
+              "Key": "ShopRouteId",
+              "Value": "09W20"
+            },
+            {
+              "Key": "ShopSortId",
+              "Value": 109
+            },
+            {
+              "Key": "ShopWarehouseId",
+              "Value": 1009
+            },
+            {
+              "Key": "ShopWinkelId",
+              "Value": 5675
+            }
+          ]
+        },
+        "PartnerName": "Lagardere",
+        "RetailFormulaName": "PostNL - Kariboo",
+        "RetailNetworkID": "LD-01"
+      },
+      {
+        "Address": {
+          "City": "ANTWERPEN",
+          "Countrycode": "BE",
+          "HouseNr": 35,
+          "Street": "KONINGIN ASTRIDPLEIN",
+          "Zipcode": 2018
+        },
+        "DeliveryOptions": {
+          "string": [
+            "PU",
+            "DO",
+            "PG",
+            "PG_EX"
+          ]
+        },
+        "Distance": 1572,
+        "Latitude": 51.21813,
+        "LocationCode": "BE0X32",
+        "Longitude": 4.42033,
+        "Name": "M-PRESS ASTRIDPLEIN",
+        "OpeningHours": {
+          "Friday": {
+            "string": [
+              "08:00-12:00",
+              "12:00-23:59"
+            ]
+          },
+          "Monday": {
+            "string": [
+              "08:00-12:00",
+              "12:00-23:59"
+            ]
+          },
+          "Saturday": {
+            "string": [
+              "10:00-12:00",
+              "12:00-23:59"
+            ]
+          },
+          "Thursday": {
+            "string": [
+              "08:00-12:00",
+              "12:00-23:59"
+            ]
+          },
+          "Tuesday": {
+            "string": [
+              "08:00-12:00",
+              "12:00-23:59"
+            ]
+          },
+          "Wednesday": {
+            "string": [
+              "08:00-12:00",
+              "12:00-23:59"
+            ]
+          }
+        },
+        "PartnerLocationCodes": {
+          "PartnerLocationCode": [
+            {
+              "Key": "ShopLogisticId",
+              "Value": "X32"
+            },
+            {
+              "Key": "ShopRouteId",
+              "Value": "09N30"
+            },
+            {
+              "Key": "ShopSortId",
+              "Value": 109
+            },
+            {
+              "Key": "ShopWarehouseId",
+              "Value": 1009
+            },
+            {
+              "Key": "ShopWinkelId",
+              "Value": 3513
+            }
+          ]
+        },
+        "PartnerName": "Lagardere",
+        "RetailFormulaName": "PostNL - Kariboo",
+        "RetailNetworkID": "LD-01"
+      },
+      {
+        "Address": {
+          "City": "ANTWERPEN",
+          "Countrycode": "BE",
+          "HouseNr": 249,
+          "Street": "MECHELSESTEENWEG",
+          "Zipcode": 2018
+        },
+        "DeliveryOptions": {
+          "string": [
+            "PU",
+            "DO",
+            "PG",
+            "PG_EX"
+          ]
+        },
+        "Distance": 1813,
+        "Latitude": 51.20115,
+        "LocationCode": "BE0Q44",
+        "Longitude": 4.413302,
+        "Name": "DBH ALBERTPARK",
+        "OpeningHours": {
+          "Friday": {
+            "string": [
+              "07:00-13:30",
+              "14:30-18:00"
+            ]
+          },
+          "Monday": {
+            "string": "07:00-13:30"
+          },
+          "Saturday": {
+            "string": "08:00-12:30"
+          },
+          "Thursday": {
+            "string": [
+              "07:00-13:30",
+              "14:30-18:00"
+            ]
+          },
+          "Tuesday": {
+            "string": [
+              "07:00-13:30",
+              "14:30-18:00"
+            ]
+          },
+          "Wednesday": {
+            "string": [
+              "07:00-13:30",
+              "14:30-18:00"
+            ]
+          }
+        },
+        "PartnerLocationCodes": {
+          "PartnerLocationCode": [
+            {
+              "Key": "ShopLogisticId",
+              "Value": "Q44"
+            },
+            {
+              "Key": "ShopRouteId",
+              "Value": "09J70"
+            },
+            {
+              "Key": "ShopSortId",
+              "Value": 109
+            },
+            {
+              "Key": "ShopWarehouseId",
+              "Value": 1009
+            },
+            {
+              "Key": "ShopWinkelId",
+              "Value": 5806
+            }
+          ]
+        },
+        "PartnerName": "Lagardere",
+        "RetailFormulaName": "PostNL - Kariboo",
+        "RetailNetworkID": "LD-01"
+      },
+      {
+        "Address": {
+          "City": "ANTWERPEN",
+          "Countrycode": "BE",
+          "HouseNr": 2,
+          "Street": "KAREL OOMSSTRAAT",
+          "Zipcode": 2018
+        },
+        "DeliveryOptions": {
+          "string": [
+            "PU",
+            "DO",
+            "PG",
+            "PG_EX"
+          ]
+        },
+        "Distance": 2071,
+        "Latitude": 51.19747,
+        "LocationCode": "BE0Q24",
+        "Longitude": 4.4103,
+        "Name": "DBH TABACCHI",
+        "OpeningHours": {
+          "Friday": {
+            "string": [
+              "08:00-12:00",
+              "12:00-18:00"
+            ]
+          },
+          "Monday": {
+            "string": [
+              "08:00-12:00",
+              "12:00-18:00"
+            ]
+          },
+          "Saturday": {
+            "string": "08:00-13:00"
+          },
+          "Thursday": {
+            "string": [
+              "08:00-12:00",
+              "12:00-18:00"
+            ]
+          },
+          "Tuesday": {
+            "string": [
+              "08:00-12:00",
+              "12:00-18:00"
+            ]
+          },
+          "Wednesday": {
+            "string": [
+              "08:00-12:00",
+              "12:00-18:00"
+            ]
+          }
+        },
+        "PartnerLocationCodes": {
+          "PartnerLocationCode": [
+            {
+              "Key": "ShopLogisticId",
+              "Value": "Q24"
+            },
+            {
+              "Key": "ShopRouteId",
+              "Value": "09Y30"
+            },
+            {
+              "Key": "ShopSortId",
+              "Value": 109
+            },
+            {
+              "Key": "ShopWarehouseId",
+              "Value": 1009
+            },
+            {
+              "Key": "ShopWinkelId",
+              "Value": 5731
+            }
+          ]
+        },
+        "PartnerName": "Lagardere",
+        "RetailFormulaName": "PostNL - Kariboo",
+        "RetailNetworkID": "LD-01"
+      },
+      {
+        "Address": {
+          "City": "BORGERHOUT",
+          "Countrycode": "BE",
+          "HouseNr": 34,
+          "Street": "DRINK",
+          "Zipcode": 2140
+        },
+        "DeliveryOptions": {
+          "string": [
+            "PU",
+            "DO",
+            "PG",
+            "PG_EX"
+          ]
+        },
+        "Distance": 2597,
+        "Latitude": 51.21574,
+        "LocationCode": "BE0X18",
+        "Longitude": 4.43572,
+        "Name": "DBH TRAFIK BORGERHOUT",
+        "OpeningHours": {
+          "Friday": {
+            "string": [
+              "07:00-12:00",
+              "12:00-19:00"
+            ]
+          },
+          "Monday": {
+            "string": [
+              "07:00-12:00",
+              "12:00-19:00"
+            ]
+          },
+          "Saturday": {
+            "string": [
+              "07:00-12:00",
+              "12:00-19:00"
+            ]
+          },
+          "Thursday": {
+            "string": [
+              "07:00-12:00",
+              "12:00-19:00"
+            ]
+          },
+          "Tuesday": {
+            "string": [
+              "07:00-12:00",
+              "12:00-19:00"
+            ]
+          },
+          "Wednesday": {
+            "string": [
+              "07:00-12:00",
+              "12:00-19:00"
+            ]
+          }
+        },
+        "PartnerLocationCodes": {
+          "PartnerLocationCode": [
+            {
+              "Key": "ShopLogisticId",
+              "Value": "X18"
+            },
+            {
+              "Key": "ShopRouteId",
+              "Value": "09J60"
+            },
+            {
+              "Key": "ShopSortId",
+              "Value": 109
+            },
+            {
+              "Key": "ShopWarehouseId",
+              "Value": 1009
+            },
+            {
+              "Key": "ShopWinkelId",
+              "Value": 7436
+            }
+          ]
+        },
+        "PartnerName": "Lagardere",
+        "RetailFormulaName": "PostNL - Kariboo",
+        "RetailNetworkID": "LD-01"
+      },
+      {
+        "Address": {
+          "City": "ANTWERPEN",
+          "Countrycode": "BE",
+          "HouseNr": 113,
+          "Street": "CAMILLE HUYSMANSLAAN",
+          "Zipcode": 2020
+        },
+        "DeliveryOptions": {
+          "string": [
+            "PU",
+            "DO",
+            "PG",
+            "PG_EX"
+          ]
+        },
+        "Distance": 2756,
+        "Latitude": 51.19043,
+        "LocationCode": "BE0Q45",
+        "Longitude": 4.389373,
+        "Name": "PRESS SHOP HUYSMANS",
+        "OpeningHours": {
+          "Friday": {
+            "string": [
+              "07:00-12:30",
+              "13:30-18:00"
+            ]
+          },
+          "Monday": {
+            "string": [
+              "07:00-12:30",
+              "13:30-18:00"
+            ]
+          },
+          "Saturday": {
+            "string": [
+              "07:00-12:30",
+              "13:30-17:00"
+            ]
+          },
+          "Thursday": {
+            "string": [
+              "07:00-12:30",
+              "13:30-18:00"
+            ]
+          },
+          "Tuesday": {
+            "string": [
+              "07:00-12:30",
+              "13:30-18:00"
+            ]
+          },
+          "Wednesday": {
+            "string": [
+              "07:00-12:30",
+              "13:30-18:00"
+            ]
+          }
+        },
+        "PartnerLocationCodes": {
+          "PartnerLocationCode": [
+            {
+              "Key": "ShopLogisticId",
+              "Value": "Q45"
+            },
+            {
+              "Key": "ShopRouteId",
+              "Value": "09J70"
+            },
+            {
+              "Key": "ShopSortId",
+              "Value": 109
+            },
+            {
+              "Key": "ShopWarehouseId",
+              "Value": 1009
+            },
+            {
+              "Key": "ShopWinkelId",
+              "Value": 5763
+            }
+          ]
+        },
+        "PartnerName": "Lagardere",
+        "RetailFormulaName": "PostNL - Kariboo",
+        "RetailNetworkID": "LD-01"
+      },
+      {
+        "Address": {
+          "City": "ANTWERPEN",
+          "Countrycode": "BE",
+          "HouseNr": 103,
+          "Street": "GITSCHOTELLEI",
+          "Zipcode": 2600
+        },
+        "DeliveryOptions": {
+          "string": [
+            "PU",
+            "DO",
+            "PG",
+            "PG_EX"
+          ]
+        },
+        "Distance": 3368,
+        "Latitude": 51.20024,
+        "LocationCode": "BE0Q66",
+        "Longitude": 4.441084,
+        "Name": "DBH DEBRUYN",
+        "OpeningHours": {
+          "Friday": {
+            "string": [
+              "07:00-12:00",
+              "12:00-19:00"
+            ]
+          },
+          "Monday": {
+            "string": "07:00-13:00"
+          },
+          "Saturday": {
+            "string": [
+              "07:30-12:00",
+              "12:00-18:00"
+            ]
+          },
+          "Thursday": {
+            "string": [
+              "07:00-12:00",
+              "12:00-19:00"
+            ]
+          },
+          "Tuesday": {
+            "string": [
+              "07:00-12:00",
+              "12:00-19:00"
+            ]
+          },
+          "Wednesday": {
+            "string": [
+              "07:00-12:00",
+              "12:00-19:00"
+            ]
+          }
+        },
+        "PartnerLocationCodes": {
+          "PartnerLocationCode": [
+            {
+              "Key": "ShopLogisticId",
+              "Value": "Q66"
+            },
+            {
+              "Key": "ShopRouteId",
+              "Value": "09J60"
+            },
+            {
+              "Key": "ShopSortId",
+              "Value": 109
+            },
+            {
+              "Key": "ShopWarehouseId",
+              "Value": 1009
+            },
+            {
+              "Key": "ShopWinkelId",
+              "Value": 5802
+            }
+          ]
+        },
+        "PartnerName": "Lagardere",
+        "RetailFormulaName": "PostNL - Kariboo",
+        "RetailNetworkID": "LD-01"
+      },
+      {
+        "Address": {
+          "City": "BORGERHOUT",
+          "Countrycode": "BE",
+          "HouseNr": 3,
+          "Street": "VOSSTRAAT",
+          "Zipcode": 2140
+        },
+        "DeliveryOptions": {
+          "string": [
+            "PU",
+            "DO",
+            "PG",
+            "PG_EX"
+          ]
+        },
+        "Distance": 4272,
+        "Latitude": 51.19809,
+        "LocationCode": "BE0X21",
+        "Longitude": 4.453895,
+        "Name": "DBH OPINIE",
+        "OpeningHours": {
+          "Friday": {
+            "string": [
+              "06:00-12:00",
+              "12:00-18:00"
+            ]
+          },
+          "Monday": {
+            "string": [
+              "06:00-12:00",
+              "12:00-18:00"
+            ]
+          },
+          "Saturday": {
+            "string": [
+              "07:00-12:00",
+              "12:00-16:00"
+            ]
+          },
+          "Thursday": {
+            "string": [
+              "06:00-12:00",
+              "12:00-18:00"
+            ]
+          },
+          "Tuesday": {
+            "string": [
+              "06:00-12:00",
+              "12:00-18:00"
+            ]
+          },
+          "Wednesday": {
+            "string": [
+              "06:00-12:00",
+              "12:00-18:00"
+            ]
+          }
+        },
+        "PartnerLocationCodes": {
+          "PartnerLocationCode": [
+            {
+              "Key": "ShopLogisticId",
+              "Value": "X21"
+            },
+            {
+              "Key": "ShopRouteId",
+              "Value": "09Y60"
+            },
+            {
+              "Key": "ShopSortId",
+              "Value": 109
+            },
+            {
+              "Key": "ShopWarehouseId",
+              "Value": 1009
+            },
+            {
+              "Key": "ShopWinkelId",
+              "Value": 5978
+            }
+          ]
+        },
+        "PartnerName": "Lagardere",
+        "RetailFormulaName": "PostNL - Kariboo",
+        "RetailNetworkID": "LD-01"
+      },
+      {
+        "Address": {
+          "City": "DEURNE",
+          "Countrycode": "BE",
+          "HouseNr": 223,
+          "Street": "HERENTALSEBAAN",
+          "Zipcode": 2100
+        },
+        "DeliveryOptions": {
+          "string": [
+            "PU",
+            "DO",
+            "PG",
+            "PG_EX"
+          ]
+        },
+        "Distance": 4500,
+        "Latitude": 51.20869,
+        "LocationCode": "BE0X00",
+        "Longitude": 4.46241,
+        "Name": "DBH ELMI",
+        "OpeningHours": {
+          "Friday": {
+            "string": [
+              "06:00-12:30",
+              "13:30-18:00"
+            ]
+          },
+          "Monday": {
+            "string": [
+              "06:00-12:30",
+              "13:30-18:00"
+            ]
+          },
+          "Saturday": {
+            "string": "07:00-13:00"
+          },
+          "Thursday": {
+            "string": [
+              "06:00-12:30",
+              "13:30-18:00"
+            ]
+          },
+          "Tuesday": {
+            "string": [
+              "06:00-12:30",
+              "13:30-18:00"
+            ]
+          },
+          "Wednesday": {
+            "string": [
+              "06:00-12:30",
+              "13:30-18:00"
+            ]
+          }
+        },
+        "PartnerLocationCodes": {
+          "PartnerLocationCode": [
+            {
+              "Key": "ShopLogisticId",
+              "Value": "X00"
+            },
+            {
+              "Key": "ShopRouteId",
+              "Value": "09D70"
+            },
+            {
+              "Key": "ShopSortId",
+              "Value": 109
+            },
+            {
+              "Key": "ShopWarehouseId",
+              "Value": 1009
+            },
+            {
+              "Key": "ShopWinkelId",
+              "Value": 7481
+            }
+          ]
+        },
+        "PartnerName": "Lagardere",
+        "RetailFormulaName": "PostNL - Kariboo",
+        "RetailNetworkID": "LD-01"
+      },
+      {
+        "Address": {
+          "City": "ANTWERPEN",
+          "Countrycode": "BE",
+          "HouseNr": 35,
+          "Street": "GIJSBRECHT VAN DEURNELAAN",
+          "Zipcode": 2100
+        },
+        "DeliveryOptions": {
+          "string": [
+            "PU",
+            "DO",
+            "PG",
+            "PG_EX"
+          ]
+        },
+        "Distance": 4846,
+        "Latitude": 51.23228,
+        "LocationCode": "BE0Q25",
+        "Longitude": 4.462061,
+        "Name": "DBH GEYSBRECHTJE",
+        "OpeningHours": {
+          "Friday": {
+            "string": [
+              "06:00-12:00",
+              "13:30-17:00"
+            ]
+          },
+          "Monday": {
+            "string": "06:00-12:00"
+          },
+          "Saturday": {
+            "string": "06:00-12:00"
+          },
+          "Thursday": {
+            "string": [
+              "06:00-12:00",
+              "13:30-17:00"
+            ]
+          },
+          "Tuesday": {
+            "string": [
+              "06:00-12:00",
+              "13:30-17:00"
+            ]
+          },
+          "Wednesday": {
+            "string": [
+              "06:00-12:00",
+              "13:30-17:00"
+            ]
+          }
+        },
+        "PartnerLocationCodes": {
+          "PartnerLocationCode": [
+            {
+              "Key": "ShopLogisticId",
+              "Value": "Q25"
+            },
+            {
+              "Key": "ShopRouteId",
+              "Value": "09W10"
+            },
+            {
+              "Key": "ShopSortId",
+              "Value": 109
+            },
+            {
+              "Key": "ShopWarehouseId",
+              "Value": 1009
+            },
+            {
+              "Key": "ShopWinkelId",
+              "Value": 7443
+            }
+          ]
+        },
+        "PartnerName": "Lagardere",
+        "RetailFormulaName": "PostNL - Kariboo",
+        "RetailNetworkID": "LD-01"
+      },
+      {
+        "Address": {
+          "City": "WILRIJK",
+          "Countrycode": "BE",
+          "HouseNr": 6,
+          "Street": "BIST",
+          "Zipcode": 2610
+        },
+        "DeliveryOptions": {
+          "string": [
+            "PU",
+            "DO",
+            "PG",
+            "PG_EX"
+          ]
+        },
+        "Distance": 5010,
+        "Latitude": 51.16961,
+        "LocationCode": "BE0Q18",
+        "Longitude": 4.39344,
+        "Name": "DBH LUKIELUK",
+        "OpeningHours": {
+          "Friday": {
+            "string": [
+              "06:00-13:00",
+              "14:00-18:00"
+            ]
+          },
+          "Monday": {
+            "string": [
+              "06:00-13:00",
+              "14:00-18:00"
+            ]
+          },
+          "Saturday": {
+            "string": [
+              "07:00-13:00",
+              "14:00-18:00"
+            ]
+          },
+          "Thursday": {
+            "string": [
+              "06:00-13:00",
+              "14:00-18:00"
+            ]
+          },
+          "Tuesday": {
+            "string": [
+              "06:00-13:00",
+              "14:00-18:00"
+            ]
+          },
+          "Wednesday": {
+            "string": [
+              "06:00-13:00",
+              "14:00-18:00"
+            ]
+          }
+        },
+        "PartnerLocationCodes": {
+          "PartnerLocationCode": [
+            {
+              "Key": "ShopLogisticId",
+              "Value": "Q18"
+            },
+            {
+              "Key": "ShopRouteId",
+              "Value": "09AFL"
+            },
+            {
+              "Key": "ShopSortId",
+              "Value": 109
+            },
+            {
+              "Key": "ShopWarehouseId",
+              "Value": 1009
+            },
+            {
+              "Key": "ShopWinkelId",
+              "Value": 7386
+            }
+          ]
+        },
+        "PartnerName": "Lagardere",
+        "RetailFormulaName": "PostNL - Kariboo",
+        "RetailNetworkID": "LD-01"
+      },
+      {
+        "Address": {
+          "City": "ANTWERPEN",
+          "Countrycode": "BE",
+          "HouseNr": 156,
+          "Street": "MORTSELSESTEENWEG",
+          "Zipcode": 2100
+        },
+        "DeliveryOptions": {
+          "string": [
+            "PU",
+            "DO",
+            "PG",
+            "PG_EX"
+          ]
+        },
+        "Distance": 5246,
+        "Latitude": 51.19552,
+        "LocationCode": "BE0Q69",
+        "Longitude": 4.467384,
+        "Name": "DBH DRAKENHOF",
+        "OpeningHours": {
+          "Friday": {
+            "string": [
+              "06:30-12:30",
+              "13:30-18:00"
+            ]
+          },
+          "Monday": {
+            "string": "06:30-12:30"
+          },
+          "Saturday": {
+            "string": [
+              "07:30-12:30",
+              "13:30-16:00"
+            ]
+          },
+          "Thursday": {
+            "string": [
+              "06:30-12:30",
+              "13:30-18:00"
+            ]
+          },
+          "Tuesday": {
+            "string": [
+              "06:30-12:30",
+              "13:30-18:00"
+            ]
+          },
+          "Wednesday": {
+            "string": [
+              "06:30-12:30",
+              "13:30-18:00"
+            ]
+          }
+        },
+        "PartnerLocationCodes": {
+          "PartnerLocationCode": [
+            {
+              "Key": "ShopLogisticId",
+              "Value": "Q69"
+            },
+            {
+              "Key": "ShopRouteId",
+              "Value": "09Y60"
+            },
+            {
+              "Key": "ShopSortId",
+              "Value": 109
+            },
+            {
+              "Key": "ShopWarehouseId",
+              "Value": 1009
+            },
+            {
+              "Key": "ShopWinkelId",
+              "Value": 5797
+            }
+          ]
+        },
+        "PartnerName": "Lagardere",
+        "RetailFormulaName": "PostNL - Kariboo",
+        "RetailNetworkID": "LD-01"
+      },
+      {
+        "Address": {
+          "City": "ZWIJNDRECHT",
+          "Countrycode": "BE",
+          "HouseNr": 48,
+          "Street": "DORP WEST",
+          "Zipcode": 2070
+        },
+        "DeliveryOptions": {
+          "string": [
+            "PU",
+            "DO",
+            "PG",
+            "PG_EX"
+          ]
+        },
+        "Distance": 5262,
+        "Latitude": 51.21901,
+        "LocationCode": "BE0Q67",
+        "Longitude": 4.323246,
+        "Name": "DBH DE COCK",
+        "OpeningHours": {
+          "Friday": {
+            "string": [
+              "06:00-12:00",
+              "12:00-18:00"
+            ]
+          },
+          "Monday": {
+            "string": "06:00-15:00"
+          },
+          "Saturday": {
+            "string": [
+              "06:00-12:00",
+              "12:00-18:00"
+            ]
+          },
+          "Thursday": {
+            "string": [
+              "06:00-12:00",
+              "12:00-18:00"
+            ]
+          },
+          "Tuesday": {
+            "string": [
+              "06:00-12:00",
+              "12:00-18:00"
+            ]
+          },
+          "Wednesday": {
+            "string": [
+              "06:00-12:00",
+              "12:00-18:00"
+            ]
+          }
+        },
+        "PartnerLocationCodes": {
+          "PartnerLocationCode": [
+            {
+              "Key": "ShopLogisticId",
+              "Value": "Q67"
+            },
+            {
+              "Key": "ShopRouteId",
+              "Value": "09W60"
+            },
+            {
+              "Key": "ShopSortId",
+              "Value": 109
+            },
+            {
+              "Key": "ShopWarehouseId",
+              "Value": 1009
+            },
+            {
+              "Key": "ShopWinkelId",
+              "Value": 5425
+            }
+          ]
+        },
+        "PartnerName": "Lagardere",
+        "RetailFormulaName": "PostNL - Kariboo",
+        "RetailNetworkID": "LD-01"
+      },
+      {
+        "Address": {
+          "City": "ANTWERPEN",
+          "Countrycode": "BE",
+          "HouseNr": 56,
+          "Street": "BOSTONSTRAAT",
+          "Zipcode": 2030
+        },
+        "DeliveryOptions": {
+          "string": [
+            "PU",
+            "DO",
+            "PG",
+            "PG_EX"
+          ]
+        },
+        "Distance": 5393,
+        "Latitude": 51.26049,
+        "LocationCode": "BE0Q84",
+        "Longitude": 4.42339,
+        "Name": "DBH T PARKSKE LUCHTBAL",
+        "OpeningHours": {
+          "Friday": {
+            "string": [
+              "03:15-12:00",
+              "12:00-16:30"
+            ]
+          },
+          "Monday": {
+            "string": [
+              "03:15-12:00",
+              "12:00-16:30"
+            ]
+          },
+          "Saturday": {
+            "string": "03:15-14:30"
+          },
+          "Thursday": {
+            "string": [
+              "03:15-12:00",
+              "12:00-16:30"
+            ]
+          },
+          "Tuesday": {
+            "string": [
+              "03:15-12:00",
+              "12:00-16:30"
+            ]
+          },
+          "Wednesday": {
+            "string": [
+              "03:15-12:00",
+              "12:00-16:30"
+            ]
+          }
+        },
+        "PartnerLocationCodes": {
+          "PartnerLocationCode": [
+            {
+              "Key": "ShopLogisticId",
+              "Value": "Q84"
+            },
+            {
+              "Key": "ShopRouteId",
+              "Value": "09P10"
+            },
+            {
+              "Key": "ShopSortId",
+              "Value": 109
+            },
+            {
+              "Key": "ShopWarehouseId",
+              "Value": 1009
+            },
+            {
+              "Key": "ShopWinkelId",
+              "Value": 5947
+            }
+          ]
+        },
+        "PartnerName": "Lagardere",
+        "RetailFormulaName": "PostNL - Kariboo",
+        "RetailNetworkID": "LD-01"
+      }
+    ]
+  }
+}
+

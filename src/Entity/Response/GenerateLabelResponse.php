@@ -30,6 +30,8 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity\Response;
 
 use Firstred\PostNL\Entity\AbstractEntity;
+use Firstred\PostNL\Entity\MergedLabel;
+use Firstred\PostNL\Entity\Shipment;
 use TypeError;
 
 /**
@@ -38,31 +40,31 @@ use TypeError;
 class GenerateLabelResponse extends AbstractEntity
 {
     /**
-     * @var MergedLabel[]|null $mergedLabels
+     * @var MergedLabel[] $mergedLabels
      *
      * @since 1.0.0
      */
-    protected $mergedLabels;
+    protected $mergedLabels = [];
 
     /**
-     * @var ResponseShipment[]|null $responseShipments
+     * @var Shipment[] $responseShipments
      *
      * @since 1.0.0
      */
-    protected $responseShipments;
+    protected $responseShipments = [];
 
     /**
      * GenerateLabelResponse constructor.
      *
-     * @param MergedLabel[]|null      $mergedLabels
-     * @param ResponseShipment[]|null $responseShipments
+     * @param MergedLabel[] $mergedLabels
+     * @param Shipment[]    $responseShipments
      *
      * @throws TypeError
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function __construct(array $mergedLabels = null, array $responseShipments = null)
+    public function __construct(array $mergedLabels = [], array $responseShipments = [])
     {
         parent::__construct();
 
@@ -73,29 +75,51 @@ class GenerateLabelResponse extends AbstractEntity
     /**
      * Get merged labels
      *
-     * @return MergedLabel[]|null
+     * @return MergedLabel[]
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function getMergedlabels(): ?array
+    public function getMergedlabels(): array
     {
         return $this->mergedLabels;
     }
 
     /**
+     * Add merged label
+     *
+     * @param MergedLabel $mergedLabel
+     *
+     * @return GenerateLabelResponse
+     *
+     * @see MergedLabel
+     */
+    public function addMergedLabel(MergedLabel $mergedLabel): GenerateLabelResponse
+    {
+        $this->mergedLabels[] = $mergedLabel;
+
+        return $this;
+    }
+
+    /**
      * Set merged labels
      *
-     * @param MergedLabel[]|null $mergedLabels
+     * @pattern N/A
+     *
+     * @param MergedLabel[] $mergedLabels
      *
      * @return static
      *
      * @throws TypeError
      *
+     * @example N/A
+     *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see MergedLabel
      */
-    public function setMergedlabels(?array $mergedLabels): GenerateLabelResponse
+    public function setMergedlabels(array $mergedLabels): GenerateLabelResponse
     {
         $this->mergedLabels = $mergedLabels;
 
@@ -103,14 +127,32 @@ class GenerateLabelResponse extends AbstractEntity
     }
 
     /**
+     * Add response shipment
+     *
+     * @param Shipment $responseShipment
+     *
+     * @return GenerateLabelResponse
+     *
+     * @see Shipment
+     */
+    public function addResponseShipment(Shipment $responseShipment): GenerateLabelResponse
+    {
+        $this->responseShipments[] = $responseShipment;
+
+        return $this;
+    }
+
+    /**
      * Get response shipments
      *
-     * @return ResponseShipment[]|null
+     * @return Shipment[]
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see Shipment
      */
-    public function getResponseShipments(): ?array
+    public function getResponseShipments(): array
     {
         return $this->responseShipments;
     }
@@ -118,19 +160,59 @@ class GenerateLabelResponse extends AbstractEntity
     /**
      * Set response shipments
      *
-     * @param ResponseShipment[]|null $responseShipments
+     * @pattern N/A
+     *
+     * @param Shipment[] $responseShipments
      *
      * @return static
      *
      * @throws TypeError
      *
+     * @example N/A
+     *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see Shipment
      */
-    public function setResponseShipments(?array $responseShipments): GenerateLabelResponse
+    public function setResponseShipments(array $responseShipments): GenerateLabelResponse
     {
         $this->responseShipments = $responseShipments;
 
         return $this;
+    }
+
+    /**
+     * Deserialize JSON
+     *
+     * @param array $json
+     *
+     * @return GenerateLabelResponse
+     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \ReflectionException
+     * @since 2.0.0
+     */
+    public static function jsonDeserialize(array $json): GenerateLabelResponse
+    {
+        $object = new static();
+        if (isset($json['GenerateLabelResponse'])) {
+            if (isset($json['GenerateLabelResponse']['MergedLabels'])
+                && is_array($json['GenerateLabelResponse']['MergedLabels'])
+            ) {
+                foreach ($json['GenerateLabelResponse']['MergedLabels'] as $shipment) {
+                    $object->addMergedLabel(MergedLabel::jsonDeserialize(['MergedLabel' => $shipment]));
+                }
+            }
+            if (isset($json['GenerateLabelResponse']['ResponseShipments'])
+                && is_array($json['GenerateLabelResponse']['ResponseShipments'])
+            ) {
+                foreach ($json['GenerateLabelResponse']['ResponseShipments'] as $shipment) {
+                    $object->addResponseShipment(Shipment::jsonDeserialize(['Shipment' => $shipment]));
+                }
+            }
+        }
+
+        return $object;
     }
 }

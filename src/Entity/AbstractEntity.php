@@ -146,43 +146,30 @@ abstract class AbstractEntity implements JsonSerializable
         reset($json);
         $shortClassName = key($json);
         $fullClassName = static::getFullEntityClassName($shortClassName);
-
         // The only key in this associate array should be the object's name
         // The value should be the object itself
 
-        if (!$fullClassName || !class_exists($fullClassName) || !is_array($json[$shortClassName])) {
-            // If it's not a known object, just return the property
+        if (!$fullClassName
+            || !class_exists($fullClassName)
+            || !is_array($json[$shortClassName])
+            || count(array_filter(array_keys($json[$shortClassName]), 'is_int')) > 0
+        ) {
+            // If it's not a known object or a non-associative array, just return the direct property
             return $json[$shortClassName];
         }
 
         $object = call_user_func([$fullClassName, 'create']);
-        if (count(array_filter(array_keys($json[$shortClassName]), 'is_string')) > 0) {
-            foreach ($json[$shortClassName] as $key => $value) {
-                $fullClassName = static::getFullEntityClassName($key);
-                $propertyName = $key;
-
-                // If key is plural, try the singular version, because this might be an array
-                if (!$fullClassName && substr($key, -1) === 's') {
-                    $fullClassName = static::getFullEntityClassName(substr($key, 0, mb_strlen($key) - 1));
-                    $propertyName = substr($propertyName, 0, mb_strlen($propertyName) - 1);
+        foreach ($json[$shortClassName] as $key => $value) {
+            if (is_null(AbstractEntity::getFullEntityClassName($key))) {
+                if (!is_array($value) || !empty($value)) {
+                    $object->{"set$key"}($value);
                 }
-
-                if (is_array($value) && is_subclass_of($fullClassName, AbstractEntity::class)) {
-                    $entities = [];
-                    foreach ($value as $item) {
-                        if (is_array($item) && count(array_filter(array_keys($item), 'is_int')) > 0) {
-                            $entities = static::jsonDeserialize([$propertyName => $item]);
-                            break;
-                        }
-                        $entities[] = static::jsonDeserialize([$propertyName => $item]);
-                    }
-                    $object->{"set$key"}($entities);
-                } else {
-                    $object->{"set$key"}(static::jsonDeserialize([$propertyName => $value]));
-                }
+            } else {
+                $object->{"set$key"}(call_user_func(
+                    [static::getFullEntityClassName($key), 'jsonDeserialize'],
+                    [$key => $value]
+                ));
             }
-        } else {
-            return $json[$shortClassName];
         }
 
         return $object;

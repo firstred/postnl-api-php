@@ -29,12 +29,10 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Misc;
 
-use Firstred\PostNL\Exception\InvalidTypeException;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use libphonenumber\NumberParseException;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
-use PharIo\Manifest\InvalidApplicationNameException;
-use PHPUnit\Framework\InvalidCoversTargetException;
 use ReflectionClass;
 use ReflectionException;
 
@@ -52,6 +50,7 @@ class ValidateAndFix
      * @return mixed
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -61,18 +60,18 @@ class ValidateAndFix
             $postcode = strtoupper(str_replace(' ', '', $postcode));
             if (!preg_match('/^.{0,17}$/', $postcode)) {
                 list($class, $method) = static::getCaller();
-                throw new InvalidTypeException(sprintf('%s::%s - Invalid zip / postal code given, it can be max 17 characters long', $class, $method));
+                throw new InvalidArgumentException(sprintf('%s::%s - Invalid zip / postal code given, it can be max 17 characters long', $class, $method));
             }
             if (!empty($countryCode)) {
                 if ('NL' === $countryCode) {
                     if (mb_strlen($postcode) !== 6) {
                         list($class, $method) = static::getCaller();
-                        throw new InvalidTypeException(sprintf('%s::%s - Invalid postal code given for NL. It has to consist of 4 numeric characters, followed by 2 letters.', $class, $method));
+                        throw new InvalidArgumentException(sprintf('%s::%s - Invalid postal code given for NL. It has to consist of 4 numeric characters, followed by 2 letters.', $class, $method));
                     }
                 } elseif (in_array($countryCode, ['BE', 'LU'])) {
                     if (!is_numeric($postcode) || mb_strlen($postcode) !== 4) {
                         list($class, $method) = static::getCaller();
-                        throw new InvalidTypeException(sprintf('%s::%s - Invalid postal code given for BE/LU. It has to consist of 4 numeric characters.', $class, $method));
+                        throw new InvalidArgumentException(sprintf('%s::%s - Invalid postal code given for BE/LU. It has to consist of 4 numeric characters.', $class, $method));
                     }
                 }
             }
@@ -89,6 +88,7 @@ class ValidateAndFix
      * @return mixed
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -98,7 +98,7 @@ class ValidateAndFix
             $distance = (int) $distance;
         } elseif (!is_null($distance) && !is_int($distance)) {
             list($class, $method) = static::getCaller();
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid distance given, must be int, float, string or null', $class, $method));
+            throw new InvalidArgumentException(sprintf('%s::%s - Invalid distance given, must be int, float, string or null', $class, $method));
         }
 
         return $distance;
@@ -112,6 +112,7 @@ class ValidateAndFix
      * @return mixed
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -122,11 +123,11 @@ class ValidateAndFix
         } elseif (is_string($houseNumber)) {
             if (!is_numeric($houseNumber)) {
                 list($class, $method) = static::getCaller();
-                throw new InvalidTypeException(sprintf('%s::%s - Invalid house number given, must be numeric', $class, $method));
+                throw new InvalidArgumentException(sprintf('%s::%s - Invalid house number given, must be numeric', $class, $method));
             }
         } elseif (!is_null($houseNumber)) {
             list($class, $method) = static::getCaller();
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid house number given, must be int, float, string or null', $class, $method));
+            throw new InvalidArgumentException(sprintf('%s::%s - Invalid house number given, must be int, float, string or null', $class, $method));
         }
 
         return $houseNumber;
@@ -140,6 +141,7 @@ class ValidateAndFix
      * @return mixed
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -147,9 +149,9 @@ class ValidateAndFix
     {
         if (is_string($coordinate)) {
             $coordinate = (float) $coordinate;
-        } elseif (!is_null($coordinate) && !is_int($coordinate)) {
+        } elseif (!is_null($coordinate) && !is_int($coordinate) && !is_float($coordinate)) {
             list($class, $method) = static::getCaller();
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid coordinate given, must be float, string or null', $class, $method));
+            throw new InvalidArgumentException(sprintf('%s::%s - Invalid coordinate given, must be float, string or null', $class, $method));
         }
 
         return $coordinate;
@@ -163,6 +165,7 @@ class ValidateAndFix
      * @return mixed
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -170,7 +173,7 @@ class ValidateAndFix
     {
         if (is_string($addressType) && (!is_numeric($addressType) || mb_strlen($addressType) > 2)) {
             list($class, $method) = static::getCaller();
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid address type given, it has to be a numeric string (2 digits) or null', $class, $method));
+            throw new InvalidArgumentException(sprintf('%s::%s - Invalid address type given, it has to be a numeric string (2 digits) or null', $class, $method));
         }
 
         if (is_null($addressType)) {
@@ -190,6 +193,7 @@ class ValidateAndFix
      * @return mixed
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -198,7 +202,7 @@ class ValidateAndFix
         static $maxLength = 35;
         if (is_string($area) && mb_strlen($area) > $maxLength) {
             list($class, $method) = static::getCaller();
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid area given, must be max %d characters long', $class, $method, $maxLength));
+            throw new InvalidArgumentException(sprintf('%s::%s - Invalid area given, must be max %d characters long', $class, $method, $maxLength));
         }
 
         return $area;
@@ -212,6 +216,7 @@ class ValidateAndFix
      * @return mixed
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -220,7 +225,7 @@ class ValidateAndFix
         static $maxLength = 35;
         if (is_string($buildingName) && mb_strlen($buildingName) > $maxLength) {
             list($class, $method) = static::getCaller();
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid building name given, must be max %d characters long', $class, $method, $maxLength));
+            throw new InvalidArgumentException(sprintf('%s::%s - Invalid building name given, must be max %d characters long', $class, $method, $maxLength));
         }
 
         return $buildingName;
@@ -234,6 +239,7 @@ class ValidateAndFix
      * @return mixed
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -242,7 +248,7 @@ class ValidateAndFix
         static $maxLength = 35;
         if (is_string($city) && mb_strlen($city) > $maxLength) {
             list($class, $method) = static::getCaller();
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid city given, must be max %d characters long', $class, $method, $maxLength));
+            throw new InvalidArgumentException(sprintf('%s::%s - Invalid city given, must be max %d characters long', $class, $method, $maxLength));
         }
 
         return $city;
@@ -256,6 +262,7 @@ class ValidateAndFix
      * @return mixed
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -264,7 +271,7 @@ class ValidateAndFix
         static $maxLength = 35;
         if (is_string($companyName) && mb_strlen($companyName) > $maxLength) {
             list($class, $method) = static::getCaller();
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid company name given, must be max %d characters long', $class, $method, $maxLength));
+            throw new InvalidArgumentException(sprintf('%s::%s - Invalid company name given, must be max %d characters long', $class, $method, $maxLength));
         }
 
         return $companyName;
@@ -278,6 +285,7 @@ class ValidateAndFix
      * @return mixed
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -287,7 +295,7 @@ class ValidateAndFix
             $countryCode = strtoupper($countryCode);
             if (!preg_match('/^[A-Z]{2}$/', $countryCode)) {
                 list($class, $method) = static::getCaller();
-                throw new InvalidTypeException(sprintf('%s::%s - Invalid country code given, must be uppercase ISO-2 code', $class, $method));
+                throw new InvalidArgumentException(sprintf('%s::%s - Invalid country code given, must be uppercase ISO-2 code', $class, $method));
             }
         }
 
@@ -302,6 +310,7 @@ class ValidateAndFix
      * @return mixed
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -311,7 +320,7 @@ class ValidateAndFix
             $countryCode = strtoupper($countryCode);
             if (!preg_match('/^(?:NL|BE)$/', $countryCode)) {
                 list($class, $method) = static::getCaller();
-                throw new InvalidTypeException(sprintf('%s::%s - Invalid country code given, must be uppercase ISO-2 code', $class, $method));
+                throw new InvalidArgumentException(sprintf('%s::%s - Invalid country code given, must be uppercase ISO-2 code', $class, $method));
             }
         }
 
@@ -326,6 +335,7 @@ class ValidateAndFix
      * @return mixed
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -334,7 +344,7 @@ class ValidateAndFix
         static $maxLength = 35;
         if (is_string($department) && mb_strlen($department) > $maxLength) {
             list($class, $method) = static::getCaller();
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid department given, must be max %d characters long', $class, $method, $maxLength));
+            throw new InvalidArgumentException(sprintf('%s::%s - Invalid department given, must be max %d characters long', $class, $method, $maxLength));
         }
 
         return $department;
@@ -348,6 +358,7 @@ class ValidateAndFix
      * @return mixed
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -356,7 +367,7 @@ class ValidateAndFix
         static $maxLength = 35;
         if (is_string($doorcode) && mb_strlen($doorcode) > $maxLength) {
             list($class, $method) = static::getCaller();
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid door code given, must be max %d characters long', $class, $method, $maxLength));
+            throw new InvalidArgumentException(sprintf('%s::%s - Invalid door code given, must be max %d characters long', $class, $method, $maxLength));
         }
 
         return $doorcode;
@@ -370,6 +381,7 @@ class ValidateAndFix
      * @return mixed
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -378,7 +390,7 @@ class ValidateAndFix
         static $maxLength = 35;
         if (is_string($firstName) && mb_strlen($firstName) > $maxLength) {
             list($class, $method) = static::getCaller();
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid first name given, must be max %d characters long', $class, $method, $maxLength));
+            throw new InvalidArgumentException(sprintf('%s::%s - Invalid first name given, must be max %d characters long', $class, $method, $maxLength));
         }
 
         return $firstName;
@@ -392,6 +404,7 @@ class ValidateAndFix
      * @return mixed
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -400,7 +413,7 @@ class ValidateAndFix
         static $maxLength = 35;
         if (is_string($lastName) && mb_strlen($lastName) > $maxLength) {
             list($class, $method) = static::getCaller();
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid first name given, must be max %d characters long', $class, $method, $maxLength));
+            throw new InvalidArgumentException(sprintf('%s::%s - Invalid first name given, must be max %d characters long', $class, $method, $maxLength));
         }
 
         return $lastName;
@@ -414,6 +427,7 @@ class ValidateAndFix
      * @return mixed
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -422,7 +436,7 @@ class ValidateAndFix
         static $maxLength = 35;
         if (is_string($region) && mb_strlen($region) > $maxLength) {
             list($class, $method) = static::getCaller();
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid region given, must be max %d characters long', $class, $method, $maxLength));
+            throw new InvalidArgumentException(sprintf('%s::%s - Invalid region given, must be max %d characters long', $class, $method, $maxLength));
         }
 
         return $region;
@@ -436,15 +450,16 @@ class ValidateAndFix
      * @return mixed
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
     public static function remark($remark)
     {
-        static $maxLength = 35;
+        static $maxLength = 1000;
         if (is_string($remark) && mb_strlen($remark) > $maxLength) {
             list($class, $method) = static::getCaller();
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid remark given, must be max %d characters long', $class, $method, $maxLength));
+            throw new InvalidArgumentException(sprintf('%s::%s - Invalid remark given, must be max %d characters long', $class, $method, $maxLength));
         }
 
         return $remark;
@@ -458,6 +473,7 @@ class ValidateAndFix
      * @return mixed
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -466,7 +482,7 @@ class ValidateAndFix
         static $maxLength = 95;
         if (is_string($street) && mb_strlen($street) > $maxLength) {
             list($class, $method) = static::getCaller();
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid street given, must be max %d characters long', $class, $method, $maxLength));
+            throw new InvalidArgumentException(sprintf('%s::%s - Invalid street given, must be max %d characters long', $class, $method, $maxLength));
         }
 
         return $street;
@@ -480,6 +496,7 @@ class ValidateAndFix
      * @return mixed
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -488,7 +505,7 @@ class ValidateAndFix
         static $maxLength = 95;
         if (is_string($streetHouseNrExt) && mb_strlen($streetHouseNrExt) > $maxLength) {
             list($class, $method) = static::getCaller();
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid street + house number + extension given, must be max %df characters long', $class, $method, $maxLength));
+            throw new InvalidArgumentException(sprintf('%s::%s - Invalid street + house number + extension given, must be max %df characters long', $class, $method, $maxLength));
         }
 
         return $streetHouseNrExt;
@@ -502,6 +519,7 @@ class ValidateAndFix
      * @return mixed
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -511,7 +529,7 @@ class ValidateAndFix
             $iban = preg_replace('/\s/', '', $iban);
             if (!preg_match('/^[A-Z]{2}[0-9]{2}[A-Z0-9]{1,30}$/', $iban)) {
                 list($class, $method) = static::getCaller();
-                throw new InvalidTypeException(sprintf('%s::%s - Invalid IBAN given', $class, $method));
+                throw new InvalidArgumentException(sprintf('%s::%s - Invalid IBAN given', $class, $method));
             }
 
             $country = substr($iban, 0, 2);
@@ -533,7 +551,7 @@ class ValidateAndFix
 
             if ((98 - $checksum) !== $checkInt) {
                 list($class, $method) = static::getCaller();
-                throw new InvalidTypeException(sprintf('%s::%s - Invalid IBAN given', $class, $method));
+                throw new InvalidArgumentException(sprintf('%s::%s - Invalid IBAN given', $class, $method));
             }
         }
 
@@ -548,6 +566,7 @@ class ValidateAndFix
      * @return mixed
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -559,11 +578,11 @@ class ValidateAndFix
             $bic = preg_replace('/\s/', '', $bic);
             if (mb_strlen($bic) < $minLength || mb_strlen($bic) > $maxLength) {
                 list($class, $method) = static::getCaller();
-                throw new InvalidTypeException(sprintf('%s::%s - Invalid BIC given, must be %d to %d characters long', $class, $method, $minLength, $maxLength));
+                throw new InvalidArgumentException(sprintf('%s::%s - Invalid BIC given, must be %d to %d characters long', $class, $method, $minLength, $maxLength));
             }
             if (!preg_match('/^[a-z]{6}[0-9a-z]{2}([0-9a-z]{3})?\z/i', $bic)) {
                 list($class, $method) = static::getCaller();
-                throw new InvalidTypeException(sprintf('%s::%s - Invalid BIC given', $class, $method));
+                throw new InvalidArgumentException(sprintf('%s::%s - Invalid BIC given', $class, $method));
             }
         }
 
@@ -578,6 +597,7 @@ class ValidateAndFix
      * @return mixed
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -586,7 +606,7 @@ class ValidateAndFix
         static $maxLength = 35;
         if (is_string($accountName) && mb_strlen($accountName) > $maxLength) {
             list($class, $method) = static::getCaller();
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid account name given, must be max %d characters long', $class, $method, $maxLength));
+            throw new InvalidArgumentException(sprintf('%s::%s - Invalid account name given, must be max %d characters long', $class, $method, $maxLength));
         }
 
         return $accountName;
@@ -600,6 +620,7 @@ class ValidateAndFix
      * @return mixed
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -609,7 +630,7 @@ class ValidateAndFix
             $currency = strtoupper($currency);
             if (!preg_match('/^[A-Z]{3}$/', $currency)) {
                 list($class, $method) = static::getCaller();
-                throw new InvalidTypeException(sprintf('%s::%s - Invalid currency code given, must be three uppercase characters', $class, $method));
+                throw new InvalidArgumentException(sprintf('%s::%s - Invalid currency code given, must be three uppercase characters', $class, $method));
             }
         }
 
@@ -624,6 +645,7 @@ class ValidateAndFix
      * @return mixed
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -632,7 +654,7 @@ class ValidateAndFix
         static $maxLength = 35;
         if (is_string($reference) && mb_strlen($reference) > $maxLength) {
             list ($class, $method) = static::getCaller();
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid reference given, must be max %d characters long', $class, $method, $maxLength));
+            throw new InvalidArgumentException(sprintf('%s::%s - Invalid reference given, must be max %d characters long', $class, $method, $maxLength));
         }
 
         return $reference;
@@ -646,6 +668,7 @@ class ValidateAndFix
      * @return mixed
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -654,7 +677,7 @@ class ValidateAndFix
         $maxLength = 35;
         if (is_string($transactionNumber) && mb_strlen($transactionNumber) > $maxLength) {
             list($class, $method) = static::getCaller();
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid transaction number given, must be max %d characters long', $class, $method, $maxLength));
+            throw new InvalidArgumentException(sprintf('%s::%s - Invalid transaction number given, must be max %d characters long', $class, $method, $maxLength));
         }
 
         return $transactionNumber;
@@ -668,6 +691,7 @@ class ValidateAndFix
      * @return string
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -678,11 +702,11 @@ class ValidateAndFix
         }
         if (is_string($value) && !preg_match('/^\d{1,6}\.\d{2}$/', $value)) {
             list($class, $method) = static::getCaller();
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid value given, must be a decimal with the format #####0.00', $class, $method));
+            throw new InvalidArgumentException(sprintf('%s::%s - Invalid value given, must be a decimal with the format #####0.00', $class, $method));
         }
         if (!is_string($value) && !is_null($value)) {
             list($class, $method) = static::getCaller();
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid value given, must be a string, float or null', $class, $method));
+            throw new InvalidArgumentException(sprintf('%s::%s - Invalid value given, must be a string, float or null', $class, $method));
         }
 
         return $value;
@@ -696,6 +720,7 @@ class ValidateAndFix
      * @return mixed
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -708,11 +733,11 @@ class ValidateAndFix
             $amountType = str_pad($amountType, $length, '0', STR_PAD_LEFT);
         } else {
             list($class, $method) = static::getCaller();
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid amount type given, must be a string, integer or null', $class, $method));
+            throw new InvalidArgumentException(sprintf('%s::%s - Invalid amount type given, must be a string, integer or null', $class, $method));
         }
         if (is_string($amountType) && mb_strlen($amountType) !== $length) {
             list($class, $method) = static::getCaller();
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid amount type given, must be %d characters long', $class, $method, $length));
+            throw new InvalidArgumentException(sprintf('%s::%s - Invalid amount type given, must be %d characters long', $class, $method, $length));
         }
 
         return $amountType;
@@ -726,6 +751,7 @@ class ValidateAndFix
      * @return mixed
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -733,7 +759,7 @@ class ValidateAndFix
     {
         if (is_string($type) && !in_array($type, ['2S', '3S', 'CC', 'CP', 'CD', 'CF', 'LA', 'CX'])) {
             list($class, $method) = static::getCaller();
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid barcode type given, must be one of: 2S, 3S, CC, CP, CD, CF, LA, CX', $class, $method));
+            throw new InvalidArgumentException(sprintf('%s::%s - Invalid barcode type given, must be one of: 2S, 3S, CC, CP, CD, CF, LA, CX', $class, $method));
         }
 
         return $type;
@@ -747,6 +773,7 @@ class ValidateAndFix
      * @return mixed
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -756,7 +783,7 @@ class ValidateAndFix
             $serie = trim($serie);
             if (!preg_match('/^\d{0,3}\d{6}-\d{0,3}\d{6}$/', $serie)) {
                 list($class, $method) = static::getCaller();
-                throw new InvalidTypeException(sprintf('%s::%s - Invalid serie given, must have the format ###000000-###000000', $class, $method));
+                throw new InvalidArgumentException(sprintf('%s::%s - Invalid serie given, must have the format ###000000-###000000', $class, $method));
             }
         }
 
@@ -771,6 +798,7 @@ class ValidateAndFix
      * @return mixed
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -780,7 +808,7 @@ class ValidateAndFix
             $range = trim($range);
             if (!preg_match('/^[A-Z0-9]{1,4}$/', $range)) {
                 list($class, $method) = static::getCaller();
-                throw new InvalidTypeException(sprintf('%s::%s - Invalid barcode range given', $class, $method));
+                throw new InvalidArgumentException(sprintf('%s::%s - Invalid barcode range given', $class, $method));
             }
         }
 
@@ -795,6 +823,7 @@ class ValidateAndFix
      * @return mixed
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -804,12 +833,12 @@ class ValidateAndFix
         if (is_string($email)) {
             if (mb_strlen($email) > $maxLength) {
                 list($class, $method) = static::getCaller();
-                throw new InvalidTypeException(sprintf('%s::%s - Invalid email given, must be max %d characters long', $class, $method, $maxLength));
+                throw new InvalidArgumentException(sprintf('%s::%s - Invalid email given, must be max %d characters long', $class, $method, $maxLength));
             }
 
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 list($class, $method) = static::getCaller();
-                throw new InvalidTypeException(sprintf('%s::%s - Invalid email given', $class, $method));
+                throw new InvalidArgumentException(sprintf('%s::%s - Invalid email given', $class, $method));
             }
         }
 
@@ -826,6 +855,7 @@ class ValidateAndFix
      *
      * @throws ReflectionException
      * @throws NumberParseException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -836,7 +866,7 @@ class ValidateAndFix
         if (is_string($number)) {
             if (mb_strlen($number) < $minLength || mb_strlen($number) > $maxLength) {
                 list($class, $method) = static::getCaller();
-                throw new InvalidTypeException(
+                throw new InvalidArgumentException(
 
                     sprintf('%s::%s - Invalid SMS number given, must be between %d to %d characters', $class, $method, $minLength, $maxLength)
                 );
@@ -859,6 +889,7 @@ class ValidateAndFix
      * @return mixed
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -870,20 +901,21 @@ class ValidateAndFix
         }
         if (is_string($contactType) && mb_strlen($contactType) !== $length) {
             list($class, $method) = static::getCaller();
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid contact type given, must be precisely %d characters long', $class, $method, $length));
+            throw new InvalidArgumentException(sprintf('%s::%s - Invalid contact type given, must be precisely %d characters long', $class, $method, $length));
         }
 
         return $contactType;
     }
 
     /**
-     * Validate and fix harmized system tariff number
+     * Validate and fix harmonized system tariff number
      *
      * @param mixed $number
      *
      * @return mixed
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -896,7 +928,7 @@ class ValidateAndFix
             $number = substr($number, 0, 6);
             if (!preg_match('/^\d{6}$/', $number)) {
                 list($class, $method) = static::getCaller();
-                throw new InvalidTypeException(sprintf('%s::%s - Invalid HS tariff number, must be the first 6 digits', $class, $method));
+                throw new InvalidArgumentException(sprintf('%s::%s - Invalid HS tariff number, must be the first 6 digits', $class, $method));
             }
         }
 
@@ -911,6 +943,7 @@ class ValidateAndFix
      * @return mixed
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -922,7 +955,7 @@ class ValidateAndFix
             $number = number_format($number, 0, '', '');
         } elseif (!is_null($number) && !is_string($number)) {
             list($class, $method) = static::getCaller();
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid quantity given, must be an int, float, string or null', $class, $method));
+            throw new InvalidArgumentException(sprintf('%s::%s - Invalid quantity given, must be an int, float, string or null', $class, $method));
         }
 
         return $number;
@@ -936,6 +969,7 @@ class ValidateAndFix
      * @return mixed
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -948,7 +982,7 @@ class ValidateAndFix
             $integer = (int) round($integer, 0);
         } elseif (!is_null($integer) && !is_int($integer)) {
             list($class, $method) = static::getCaller();
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid quantity given, must be an int, float, string or null', $class, $method));
+            throw new InvalidArgumentException(sprintf('%s::%s - Invalid quantity given, must be an int, float, string or null', $class, $method));
         }
 
         return $integer;
@@ -962,6 +996,7 @@ class ValidateAndFix
      * @return mixed
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -973,7 +1008,7 @@ class ValidateAndFix
             $float = (float) $float;
         } elseif (!is_null($float) && !is_float($float)) {
             list($class, $method) = static::getCaller();
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid float given, must be an int, float, string or null', $class, $method));
+            throw new InvalidArgumentException(sprintf('%s::%s - Invalid float given, must be an int, float, string or null', $class, $method));
         }
 
         return $float;
@@ -988,6 +1023,7 @@ class ValidateAndFix
      * @return mixed
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -995,7 +1031,7 @@ class ValidateAndFix
     {
         if (is_string($description) && mb_strlen($description) > $maxLength) {
             list($class, $method) = static::getCaller();
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid string given, must be max %d characters long', $class, $method, $maxLength));
+            throw new InvalidArgumentException(sprintf('%s::%s - Invalid string given, must be max %d characters long', $class, $method, $maxLength));
         }
 
         return $description;
@@ -1009,6 +1045,7 @@ class ValidateAndFix
      * @return mixed
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -1033,11 +1070,11 @@ class ValidateAndFix
 
                 if ($rest !== $eanAsArray[12]) {
                     list($class, $method) = static::getCaller();
-                    throw new InvalidTypeException(sprintf('%s::%s - Invalid EAN-13 code given', $class, $method));
+                    throw new InvalidArgumentException(sprintf('%s::%s - Invalid EAN-13 code given', $class, $method));
                 }
             } elseif (strlen($ean) !== 8) {
                 list($class, $method) = static::getCaller();
-                throw new InvalidTypeException(sprintf('%s::%s - Invalid EAN given, only EAN-8 and EAN-13 are accepted', $class, $method));
+                throw new InvalidArgumentException(sprintf('%s::%s - Invalid EAN given, only EAN-8 and EAN-13 are accepted', $class, $method));
             }
         }
 
@@ -1052,6 +1089,7 @@ class ValidateAndFix
      * @return mixed
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -1060,7 +1098,7 @@ class ValidateAndFix
         if (is_string($url)) {
             if (!filter_var($url, FILTER_VALIDATE_URL)) {
                 list($class, $method) = static::getCaller();
-                throw new InvalidTypeException(sprintf('%s::%s - Invalid url  given', $class, $method));
+                throw new InvalidArgumentException(sprintf('%s::%s - Invalid url  given', $class, $method));
             }
         }
 
@@ -1075,6 +1113,7 @@ class ValidateAndFix
      * @return mixed
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -1084,7 +1123,7 @@ class ValidateAndFix
             $code = trim($code);
             if (!preg_match('/^[A-Z]{4}$/', $code)) {
                 list($class, $method) = static::getCaller();
-                throw new InvalidTypeException(sprintf('%s::%s - Invalid customer code given, must be 4 characters', $class, $method));
+                throw new InvalidArgumentException(sprintf('%s::%s - Invalid customer code given, must be 4 characters', $class, $method));
             }
         }
 
@@ -1099,6 +1138,7 @@ class ValidateAndFix
      * @return mixed
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -1107,7 +1147,7 @@ class ValidateAndFix
         static $length = 8;
         if (is_string($customerNumber) && mb_strlen($customerNumber) !== $length) {
             list($class, $method) = static::getCaller();
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid customer number given, must be 8 characters long', $class, $method));
+            throw new InvalidArgumentException(sprintf('%s::%s - Invalid customer number given, must be 8 characters long', $class, $method));
         }
 
         return $customerNumber;
@@ -1121,6 +1161,7 @@ class ValidateAndFix
      * @return mixed
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -1133,7 +1174,7 @@ class ValidateAndFix
             }
             if (!preg_match('/^(?:2[0-3]|[01]?[0-9]):(?:[0-5]?[0-9]):(?:[0-5]?[0-9])$/', $time)) {
                 list($class, $method) = static::getCaller();
-                throw new InvalidTypeException(sprintf('%s::%s - Invalid time given, format must be H:i:s', $class, $method));
+                throw new InvalidArgumentException(sprintf('%s::%s - Invalid time given, format must be H:i:s', $class, $method));
             }
         }
 
@@ -1148,6 +1189,7 @@ class ValidateAndFix
      * @return mixed
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -1155,9 +1197,9 @@ class ValidateAndFix
     {
         if (is_string($timeRange)) {
             $timeRange = trim($timeRange);
-            if (!preg_match('/^[0-2][0-9]:[0-5][0-9]-$[0-2][0-9]:[0-5][0-9]$/', $timeRange)) {
+            if (!preg_match('/^[0-2][0-9]:[0-5][0-9]-[0-2][0-9]:[0-5][0-9]$/', $timeRange)) {
                 list($class, $method) = static::getCaller();
-                throw new InvalidTypeException(sprintf('%s::%s - Invalid short time range given, format must be H:i:s', $class, $method));
+                throw new InvalidArgumentException(sprintf('%s::%s - Invalid short time range given, format must be H:i-H:i', $class, $method));
             }
         }
 
@@ -1172,6 +1214,7 @@ class ValidateAndFix
      * @return mixed
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -1181,7 +1224,7 @@ class ValidateAndFix
             $date = trim($date);
             if (date('d-m-Y', strtotime($date)) !== $date) {
                 list($class, $method) = static::getCaller();
-                throw new InvalidTypeException(sprintf('%s::%s - Invalid date given, format must be d-m-Y', $class, $method));
+                throw new InvalidArgumentException(sprintf('%s::%s - Invalid date given, format must be d-m-Y', $class, $method));
             }
         }
 
@@ -1196,6 +1239,7 @@ class ValidateAndFix
      * @return mixed
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -1205,7 +1249,7 @@ class ValidateAndFix
             $dateTime = trim($dateTime);
             if (date('d-m-Y H:i:s', strtotime($dateTime)) !== $dateTime) {
                 list($class, $method) = static::getCaller();
-                throw new InvalidTypeException(sprintf('%s::%s - Invalid datetime given, format must be d-m-Y H:i:s', $class, $method));
+                throw new InvalidArgumentException(sprintf('%s::%s - Invalid datetime given, format must be d-m-Y H:i:s', $class, $method));
             }
         }
 
@@ -1222,8 +1266,9 @@ class ValidateAndFix
      * @return string
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
-     * @since 2.0.0
+     * @since   2.0.0
      */
     public static function dayOfTheWeek($day)
     {
@@ -1233,7 +1278,7 @@ class ValidateAndFix
         }
         if (is_string($day) && mb_strlen($day) !== $length) {
             list($class, $method) = static::getCaller();
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid day given, must be exactly 2 characters long', $class, $method));
+            throw new InvalidArgumentException(sprintf('%s::%s - Invalid day given, must be exactly 2 characters long', $class, $method));
         }
 
         return $day;
@@ -1249,8 +1294,9 @@ class ValidateAndFix
      * @return string
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
-     * @since 2.0.0
+     * @since   2.0.0
      */
     public static function numericType($type)
     {
@@ -1260,7 +1306,7 @@ class ValidateAndFix
         }
         if (is_string($type) && mb_strlen($type) !== $length) {
             list($class, $method) = static::getCaller();
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid numeric type given, must be exactly 2 characters long', $class, $method));
+            throw new InvalidArgumentException(sprintf('%s::%s - Invalid numeric type given, must be exactly 2 characters long', $class, $method));
         }
 
         return $type;
@@ -1274,6 +1320,7 @@ class ValidateAndFix
      * @return mixed
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -1284,11 +1331,11 @@ class ValidateAndFix
         } elseif (is_string($groupCount)) {
             if (!is_numeric($groupCount)) {
                 list($class, $method) = static::getCaller();
-                throw new InvalidTypeException(sprintf('%s::%s - Invalid group count given, must be numeric', $class, $method));
+                throw new InvalidArgumentException(sprintf('%s::%s - Invalid group count given, must be numeric', $class, $method));
             }
         } elseif (!is_null($groupCount)) {
             list($class, $method) = static::getCaller();
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid group count given, must be int, float, string or null', $class, $method));
+            throw new InvalidArgumentException(sprintf('%s::%s - Invalid group count given, must be int, float, string or null', $class, $method));
         }
 
         return $groupCount;
@@ -1302,6 +1349,7 @@ class ValidateAndFix
      * @return mixed
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -1311,7 +1359,7 @@ class ValidateAndFix
             $barcode = trim($barcode);
             if (!preg_match('/^[A-Z0-9]{11,15}$/', $barcode)) {
                 list($class, $method) = static::getCaller();
-                throw new InvalidTypeException(sprintf('%s::%s - Invalid barcode given', $class, $method));
+                throw new InvalidArgumentException(sprintf('%s::%s - Invalid barcode given', $class, $method));
             }
         }
 
@@ -1326,6 +1374,7 @@ class ValidateAndFix
      * @return string
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -1337,11 +1386,11 @@ class ValidateAndFix
         if (is_string($productOption)) {
             if (3 !== strlen($productOption)) {
                 list($class, $method) = static::getCaller();
-                throw new InvalidTypeException(sprintf('%s::%s - Invalid product option given, must consist of 3 digits', $class, $method));
+                throw new InvalidArgumentException(sprintf('%s::%s - Invalid product option given, must consist of 3 digits', $class, $method));
             }
         } elseif (!is_null($productOption)) {
             list($class, $method) = static::getCaller();
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid product option given, must consist of 3 digits', $class, $method));
+            throw new InvalidArgumentException(sprintf('%s::%s - Invalid product option given, must consist of 3 digits', $class, $method));
         }
 
         return $productOption;
@@ -1355,6 +1404,7 @@ class ValidateAndFix
      * @return mixed
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -1366,11 +1416,11 @@ class ValidateAndFix
         if (is_string($productCode)) {
             if (4 !== strlen($productCode)) {
                 list($class, $method) = static::getCaller();
-                throw new InvalidTypeException(sprintf('%s::%s - Invalid product code given, must be 4 digits or null', $class, $method));
+                throw new InvalidArgumentException(sprintf('%s::%s - Invalid product code given, must be 4 digits or null', $class, $method));
             }
         } elseif (!is_null($productCode)) {
             list($class, $method) = static::getCaller();
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid product code given, must be 4 digits or null', $class, $method));
+            throw new InvalidArgumentException(sprintf('%s::%s - Invalid product code given, must be 4 digits or null', $class, $method));
         }
 
         return $productCode;
@@ -1384,6 +1434,7 @@ class ValidateAndFix
      * @return mixed
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -1392,7 +1443,7 @@ class ValidateAndFix
         if (is_int($interval)) {
             if (!in_array($interval, [30, 60])) {
                 list($class, $method) = static::getCaller();
-                throw new InvalidTypeException(sprintf('%s::%s - Invalid interval given, must be 30 or 60', $class, $method));
+                throw new InvalidArgumentException(sprintf('%s::%s - Invalid interval given, must be 30 or 60', $class, $method));
             }
         }
 

@@ -29,9 +29,7 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
-use Firstred\PostNL\Exception\InvalidTypeException;
 use Firstred\PostNL\Misc\ValidateAndFix;
-use ReflectionClass;
 use ReflectionException;
 use TypeError;
 
@@ -151,13 +149,13 @@ class Group extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
      * @throws ReflectionException
-     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @example 2
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
      *
      * @see     Group::$groupCount
      */
@@ -192,13 +190,13 @@ class Group extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
      * @throws ReflectionException
-     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @example 2
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
      *
      * @see     Group::$groupSequence
      */
@@ -233,13 +231,13 @@ class Group extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
      * @throws ReflectionException
-     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @example 03
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
      *
      * @see     Group::$groupType
      */
@@ -274,9 +272,9 @@ class Group extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
      * @throws ReflectionException
-     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @example 3SABCD6659149
      *
      * @since   1.0.0

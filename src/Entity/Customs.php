@@ -272,8 +272,11 @@ class Customs extends AbstractEntity
      * @param string|null    $transactionCode
      * @param string|null    $transactionDescription
      *
-     * @throws TypeError
-     *
+     * @throws ReflectionException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws ReflectionException
+     * @throws ReflectionException
+     * @throws ReflectionException
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
@@ -798,16 +801,15 @@ class Customs extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
      * @throws ReflectionException
-     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @since   1.0.0
      * @since   2.0.0 Strict typing
      *
      * @see     Customs::$importerReferenceCode
      *
      * @example 567
-     *
      */
     public function setImporterReferenceCode(?string $importerReferenceCode): Customs
     {
@@ -842,9 +844,9 @@ class Customs extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
      * @throws ReflectionException
-     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @since   1.0.0
      * @since   2.0.0 Strict typing
      *
@@ -881,10 +883,9 @@ class Customs extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     *
      * @throws ReflectionException
-     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @example Milk Powder
      *
      * @since   1.0.0

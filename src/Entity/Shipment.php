@@ -29,8 +29,8 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\ValidateAndFix;
-use libphonenumber\Leniency\Valid;
 use ReflectionException;
 use TypeError;
 
@@ -39,6 +39,19 @@ use TypeError;
  */
 class Shipment extends AbstractEntity
 {
+    /**
+     * Addresses
+     *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
+     * @var Address[]|null $address
+     *
+     * @since   1.0.0
+     */
+    protected $address;
+
     /**
      * Addresses
      *
@@ -66,7 +79,20 @@ class Shipment extends AbstractEntity
     protected $amounts;
 
     /**
-     * GenerateBarcode
+     * Main barcode
+     *
+     * @pattern ^.{1,35}$
+     *
+     * @example 3SDEVC2016112104
+     *
+     * @var string|null $barcode
+     *
+     * @since   1.0.0
+     */
+    protected $mainBarcode;
+
+    /**
+     * Barcode
      *
      * @pattern ^.{1,35}$
      *
@@ -107,7 +133,7 @@ class Shipment extends AbstractEntity
     /**
      * Starting date/time of the collection of the shipment. Format: d-m-Y H:i:s
      *
-     * @pattern ^(?:[0-3]\d-[01]\d-[12]\d{3}\s+)[0-2]\d:[0-5]\d(?:[0-5]\d)$
+     * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}\s(?:2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9]$
      *
      * @example 03-07-2019 16:00:00
      *
@@ -156,6 +182,19 @@ class Shipment extends AbstractEntity
      * @since 1.0.0
      */
     protected $costCenter;
+
+    /**
+     * Customer
+     *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
+     * @var Customer|null $customer
+     *
+     * @since 2.0.0
+     */
+    protected $customer;
 
     /**
      * Order number of the customer.
@@ -225,7 +264,7 @@ class Shipment extends AbstractEntity
     /**
      * The delivery date of the shipment. We strongly advice to use the DeliveryDate service to get this date when using delivery options like Evening/Morning/Sameday delivery etc. For those products, this field is mandatory (please regard the Guidelines section). Format: d-m-Y H:i:s
      *
-     * @pattern ^(?:[0-3]\d-[01]\d-[12]\d{3}\s+)[0-2]\d:[0-5]\d(?:[0-5]\d)$
+     * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}\s(?:2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9]$
      *
      * @example 03-07-2019 14:00:00
      *
@@ -249,7 +288,7 @@ class Shipment extends AbstractEntity
     protected $dimension;
 
     /**
-     * GenerateBarcode of the downstream network partner of PostNL Pakketten.
+     * GenerateBarcodeRequest of the downstream network partner of PostNL Pakketten.
      * Madatory for requesting GlobalPack combilabel product codes
      *
      * @pattern ^.{0,35}$
@@ -346,6 +385,21 @@ class Shipment extends AbstractEntity
     protected $IDType;
 
     /**
+     * Product code
+     *
+     * @pattern ^\d{4}$
+     *
+     * @example 3153
+     *
+     * @var string|null $productCodeCollect
+     *
+     * @var string|null $productCode
+     *
+     * @since 2.0.0
+     */
+    protected $productCode;
+
+    /**
      * Second product code of a shipment
      *
      * @pattern ^\d{4}$
@@ -370,6 +424,19 @@ class Shipment extends AbstractEntity
      * @since 1.0.0
      */
     protected $productCodeDelivery;
+
+    /**
+     * Product description
+     *
+     * @pattern ^.{0,1000}$
+     *
+     * @example Standaardzending
+     *
+     * @var string|null
+     *
+     * @since 2.0.0
+     */
+    protected $productDescription;
 
     /**
      * Product options for the shipment, mandatory for certain products, see the Products page of this webservice
@@ -466,6 +533,84 @@ class Shipment extends AbstractEntity
     protected $returnReference;
 
     /**
+     * Shipment amount
+     *
+     * @pattern ^\d{0,10}$
+     *
+     * @example 1
+     *
+     * @var int|null $shipmentAmount
+     *
+     * @since 2.0.0
+     */
+    protected $shipmentAmount;
+
+    /**
+     * Shipment counter
+     *
+     * @pattern ^\d{0,10}$
+     *
+     * @example 1
+     *
+     * @var int|null $shipmentCounter
+     *
+     * @since 2.0.0
+     */
+    protected $shipmentCounter;
+
+    /**
+     * Event
+     *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
+     * @var Event[]|null
+     *
+     * @since 2.0.0
+     */
+    protected $event;
+
+    /**
+     * Status
+     *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
+     * @var Status|null
+     *
+     * @since   2.0.0
+     */
+    protected $status;
+
+    /**
+     * Old status
+     *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
+     * @var OldStatus[]|null
+     *
+     * @since 2.0.0
+     */
+    protected $oldStatus;
+
+    /**
+     * Labels
+     *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
+     * @var Label[]|null $labels
+     *
+     * @since 2.0.0
+     */
+    protected $labels;
+
+    /**
      * Shipment constructor.
      *
      * @param Address[]|null       $addresses
@@ -498,7 +643,8 @@ class Shipment extends AbstractEntity
      * @param string|null          $returnBarcode
      * @param string|null          $returnReference
      *
-     * @throws TypeError
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -536,6 +682,60 @@ class Shipment extends AbstractEntity
         $this->setRemark($remark);
         $this->setReturnBarcode($returnBarcode);
         $this->setReturnReference($returnReference);
+    }
+
+    /**
+     * Deserialize JSON
+     *
+     * @param array $json
+     *
+     * @return Shipment
+     *
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
+     * @since 2.0.0
+     */
+    public static function jsonDeserialize(array $json): Shipment
+    {
+        reset($json);
+        $shortClassName = key($json);
+        $fullClassName = static::getFullEntityClassName($shortClassName);
+        // The only key in this associate array should be the object's name
+        // The value should be the object itself
+
+        if (!$fullClassName
+            || !class_exists($fullClassName)
+            || !is_array($json[$shortClassName])
+            || count(array_filter(array_keys($json[$shortClassName]), 'is_int')) > 0
+        ) {
+            // If it's not a known object or a non-associative array, just return the direct property
+            return $json[$shortClassName];
+        }
+
+        $object = new static();
+        foreach ($json[$shortClassName] as $key => $value) {
+            if ('Labels' === $key) {
+                if (isset($value['Content'])) {
+                    $value = [$value];
+                }
+                foreach ($value as $label) {
+                    $object->addLabel(Label::jsonDeserialize(['Label' => $label]));
+                }
+            } elseif (is_null(AbstractEntity::getFullEntityClassName($key))) {
+                if (!is_array($value) || !empty($value)) {
+                    $object->{"set$key"}($value);
+                }
+            } else {
+                $object->{"set$key"}(
+                    call_user_func(
+                        [static::getFullEntityClassName($key), 'jsonDeserialize'],
+                        [$key => $value]
+                    )
+                );
+            }
+        }
+
+        return $object;
     }
 
     /**
@@ -644,6 +844,7 @@ class Shipment extends AbstractEntity
      *
      * @throws TypeError
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @example 3SDEVC2016112104
      *
@@ -692,6 +893,7 @@ class Shipment extends AbstractEntity
      *
      * @throws TypeError
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      */
     public function setCodingText(?string $codingText): Shipment
     {
@@ -718,7 +920,7 @@ class Shipment extends AbstractEntity
     /**
      * Set collection timestamp end
      *
-     * @pattern ^(?:[0-3]\d-[01]\d-[12]\d{3}\s+)[0-2]\d:[0-5]\d(?:[0-5]\d)$
+     * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}\s(?:2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9]$
      *
      * @param string|null $collectionTimeStampEnd
      *
@@ -726,6 +928,7 @@ class Shipment extends AbstractEntity
      *
      * @throws TypeError
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @example 03-07-2019 17:00:00
      *
@@ -759,7 +962,7 @@ class Shipment extends AbstractEntity
     /**
      * Set collection timestamp start
      *
-     * @pattern ^(?:[0-3]\d-[01]\d-[12]\d{3}\s+)[0-2]\d:[0-5]\d(?:[0-5]\d)$
+     * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}\s(?:2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9]$
      *
      * @param string|null $collectionTimeStampStart
      *
@@ -767,6 +970,7 @@ class Shipment extends AbstractEntity
      *
      * @throws TypeError
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @example 03-07-2019 16:00:00
      *
@@ -896,6 +1100,7 @@ class Shipment extends AbstractEntity
      *
      * @throws TypeError
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @example SX-GT-66
      *
@@ -937,6 +1142,7 @@ class Shipment extends AbstractEntity
      *
      * @throws TypeError
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @example 8689242390
      *
@@ -1018,6 +1224,7 @@ class Shipment extends AbstractEntity
      *
      * @throws TypeError
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @example 09
      *
@@ -1059,6 +1266,7 @@ class Shipment extends AbstractEntity
      *
      * @throws TypeError
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @example 03-07-2019 14:30:00
      *
@@ -1100,6 +1308,7 @@ class Shipment extends AbstractEntity
      *
      * @throws TypeError
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @example 03-07-2019 16:30:00
      *
@@ -1133,7 +1342,7 @@ class Shipment extends AbstractEntity
     /**
      * Set delivery date
      *
-     * @pattern ^(?:[0-3]\d-[01]\d-[12]\d{3}\s+)[0-2]\d:[0-5]\d(?:[0-5]\d)$
+     * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}\s(?:2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9]$
      *
      * @param string|null $deliveryDate
      *
@@ -1141,6 +1350,7 @@ class Shipment extends AbstractEntity
      *
      * @throws TypeError
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @example 03-07-2019 14:00:00
      *
@@ -1222,6 +1432,7 @@ class Shipment extends AbstractEntity
      *
      * @throws TypeError
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @example CD123456785NL
      *
@@ -1263,6 +1474,7 @@ class Shipment extends AbstractEntity
      *
      * @throws TypeError
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @example LD-01
      *
@@ -1304,6 +1516,7 @@ class Shipment extends AbstractEntity
      *
      * @throws TypeError
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @example BE0Q82
      *
@@ -1385,6 +1598,7 @@ class Shipment extends AbstractEntity
      *
      * @throws TypeError
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @example  05-07-2019
      *
@@ -1426,6 +1640,7 @@ class Shipment extends AbstractEntity
      *
      * @throws TypeError
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @example 4261103214
      *
@@ -1467,6 +1682,7 @@ class Shipment extends AbstractEntity
      *
      * @throws TypeError
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @example 02
      *
@@ -1508,6 +1724,7 @@ class Shipment extends AbstractEntity
      *
      * @throws TypeError
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @example 3153
      *
@@ -1549,6 +1766,7 @@ class Shipment extends AbstractEntity
      *
      * @throws TypeError
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @example 3085
      *
@@ -1630,6 +1848,7 @@ class Shipment extends AbstractEntity
      *
      * @throws TypeError
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @example  01-01-1970
      *
@@ -1671,6 +1890,7 @@ class Shipment extends AbstractEntity
      *
      * @throws TypeError
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @example 2016014567
      *
@@ -1712,6 +1932,7 @@ class Shipment extends AbstractEntity
      *
      * @throws TypeError
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @example 6659150
      *
@@ -1753,6 +1974,7 @@ class Shipment extends AbstractEntity
      *
      * @throws TypeError
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @example Fragile
      *
@@ -1794,6 +2016,7 @@ class Shipment extends AbstractEntity
      *
      * @throws TypeError
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @example 3SABCD7762162
      *
@@ -1835,6 +2058,7 @@ class Shipment extends AbstractEntity
      *
      * @throws TypeError
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @example 112233
      *
@@ -1846,6 +2070,447 @@ class Shipment extends AbstractEntity
     public function setReturnReference(?string $returnReference): Shipment
     {
         $this->returnReference = ValidateAndFix::genericString($returnReference);
+
+        return $this;
+    }
+
+    /**
+     * Get main barcode
+     *
+     * @return string|null
+     *
+     * @since   2.0.0 Strict typing
+     *
+     * @see     Shipment::$barcode
+     */
+    public function getMainBarcode(): ?string
+    {
+        return $this->mainBarcode;
+    }
+
+    /**
+     * Set main barcode
+     *
+     * @pattern ^{0,95}$
+     *
+     * @param string|null $mainBarcode
+     *
+     * @return static
+     *
+     * @throws TypeError
+     *
+     * @example 3SDEVC2309482387
+     *
+     * @since   2.0.0 Strict typing
+     *
+     * @see     Shipment::$barcode
+     */
+    public function setMainBarcode(?string $mainBarcode): Shipment
+    {
+        $this->mainBarcode = $mainBarcode;
+
+        return $this;
+    }
+
+    /**
+     * Get shipment amount
+     *
+     * @return int|null
+     *
+     * @since 2.0.0 Strict typing
+     *
+     * @see   Shipment::$shipmentAmount
+     */
+    public function getShipmentAmount(): ?int
+    {
+        return $this->shipmentAmount;
+    }
+
+    /**
+     * Set shipment amount
+     *
+     * @pattern ^\d{0,10}$
+     *
+     * @param int|float|string|null $shipmentAmount
+     *
+     * @return static
+     *
+     * @throws TypeError
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
+     *
+     * @example 1
+     *
+     * @since   2.0.0 Strict typing
+     *
+     * @see     Shipment::$shipmentAmount
+     */
+    public function setShipmentAmount($shipmentAmount): Shipment
+    {
+        $this->shipmentAmount = ValidateAndFix::integer($shipmentAmount);
+
+        return $this;
+    }
+
+    /**
+     * Get shipment counter
+     *
+     * @return int|null
+     *
+     * @since 2.0.0 Strict typing
+     *
+     * @see   Shipment::$shipmentCounter
+     */
+    public function getShipmentCounter(): ?int
+    {
+        return $this->shipmentCounter;
+    }
+
+    /**
+     * Set shipment counter
+     *
+     * @pattern ^\d{0,10}$
+     *
+     * @param int|float|string|null $shipmentCounter
+     *
+     * @return static
+     *
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
+     *
+     * @example 1
+     *
+     * @since   2.0.0 Strict typing
+     *
+     * @see     Shipment::$shipmentCounter
+     */
+    public function setShipmentCounter($shipmentCounter): Shipment
+    {
+        $this->shipmentCounter = ValidateAndFix::integer($shipmentCounter);
+
+        return $this;
+    }
+
+    /**
+     * Get customer
+     *
+     * @return Customer|null
+     *
+     * @since 2.0.0 Strict typing
+     *
+     * @see   Customer
+     */
+    public function getCustomer(): ?Customer
+    {
+        return $this->customer;
+    }
+
+    /**
+     * Set customer
+     *
+     * @pattern N/A
+     *
+     * @param Customer|null $customer
+     *
+     * @return static
+     *
+     * @throws TypeError
+     *
+     * @example N/A
+     *
+     * @since   2.0.0 Strict typing
+     *
+     * @see     Customer
+     */
+    public function setCustomer(?Customer $customer): Shipment
+    {
+        $this->customer = $customer;
+
+        return $this;
+    }
+
+    /**
+     * Get product code
+     *
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     *
+     * @see   Shipment::$productCode
+     */
+    public function getProductCode(): ?string
+    {
+        return $this->productCode;
+    }
+
+    /**
+     * Set product code
+     *
+     * @pattern ^.{0,35}$
+     *
+     * @param string|null $productCode
+     *
+     * @return static
+     *
+     * @throws TypeError
+     *
+     * @example 003085
+     *
+     * @since   2.0.0 Strict typing
+     *
+     * @see     Shipment::$productCode
+     */
+    public function setProductCode(?string $productCode): Shipment
+    {
+        $this->productCode = $productCode;
+
+        return $this;
+    }
+
+    /**
+     * Get product description
+     *
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     *
+     * @see   Shipment::$productDescription
+     */
+    public function getProductDescription(): ?string
+    {
+        return $this->productDescription;
+    }
+
+    /**
+     * Set product description
+     *
+     * @pattern ^.{0,95}$
+     *
+     * @param string|null $productDescription
+     *
+     * @return static
+     *
+     * @throws TypeError
+     *
+     * @example Standaardzending
+     *
+     * @since   2.0.0 Strict typing
+     *
+     * @see     Shipment::$productDescription
+     */
+    public function setProductDescription(?string $productDescription): Shipment
+    {
+        $this->productDescription = $productDescription;
+
+        return $this;
+    }
+
+    /**
+     * Get addresses
+     *
+     * @return Address[]|null
+     *
+     * @since 2.0.0 Strict typing
+     *
+     * @see   Address
+     */
+    public function getAddress(): ?array
+    {
+        return $this->address;
+    }
+
+    /**
+     * Set addresses
+     *
+     * @pattern N/A
+     *
+     * @param Address[]|null $address
+     *
+     * @return static
+     *
+     * @throws TypeError
+     *
+     * @example N/A
+     *
+     * @since   2.0.0 Strict typing
+     *
+     * @see     Address
+     */
+    public function setAddress(?array $address): Shipment
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    /**
+     * Get events
+     *
+     * @return Event[]|null
+     *
+     * @since 2.0.0 Strict typing
+     *
+     * @see   Event
+     */
+    public function getEvent(): ?array
+    {
+        return $this->event;
+    }
+
+    /**
+     * Set events
+     *
+     * @pattern N/A
+     *
+     * @param Event[]|null $event
+     *
+     * @return static
+     *
+     * @throws TypeError
+     *
+     * @example N/A
+     *
+     * @since   2.0.0 Strict typing
+     *
+     * @see     Event
+     */
+    public function setEvent(?array $event): Shipment
+    {
+        $this->event = $event;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return Status|null
+     *
+     * @since 2.0.0 Strict typing
+     *
+     * @see   Status
+     */
+    public function getStatus(): ?Status
+    {
+        return $this->status;
+    }
+
+    /**
+     * Set status
+     *
+     * @pattern N/A
+     *
+     * @param Status|null $status
+     *
+     * @return static
+     *
+     * @throws TypeError
+     *
+     * @example N/A
+     *
+     * @since   2.0.0 Strict typing
+     *
+     * @see     Status
+     */
+    public function setStatus(?Status $status): Shipment
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get old statuses
+     *
+     * @return OldStatus[]|null
+     *
+     * @since 2.0.0 Strict typing
+     *
+     * @see   OldStatus
+     */
+    public function getOldStatus(): ?array
+    {
+        return $this->oldStatus;
+    }
+
+    /**
+     * Set old status
+     *
+     * @pattern N/A
+     *
+     * @param OldStatus[]|null $oldStatus
+     *
+     * @return static
+     *
+     * @throws TypeError
+     *
+     * @example N/A
+     *
+     * @since   2.0.0 Strict typing
+     *
+     * @see     OldStatus
+     */
+    public function setOldStatus(?array $oldStatus): Shipment
+    {
+        $this->oldStatus = $oldStatus;
+
+        return $this;
+    }
+
+    /**
+     * Get labels
+     *
+     * @return Label[]|null
+     *
+     * @since 2.0.0 Strict typing
+     *
+     * @see   Label
+     */
+    public function getLabels(): ?array
+    {
+        return $this->labels;
+    }
+
+    /**
+     * Add label
+     *
+     * @param Label $label
+     *
+     * @return Shipment
+     *
+     * @see   Label
+     *
+     * @since 2.0.0
+     *
+     * @see   Label
+     */
+    public function addLabel(Label $label): Shipment
+    {
+        $this->labels[] = $label;
+
+        return $this;
+    }
+
+    /**
+     * Set labels
+     *
+     * @pattern N/A
+     *
+     * @param Label[]|null $labels
+     *
+     * @return static
+     *
+     * @throws TypeError
+     *
+     * @example N/A
+     *
+     * @since   2.0.0 Strict typing
+     *
+     * @see     Label
+     */
+    public function setLabels(?array $labels): Shipment
+    {
+        $this->labels = $labels;
 
         return $this;
     }

@@ -29,8 +29,8 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\ValidateAndFix;
-use libphonenumber\Leniency\Valid;
 use ReflectionException;
 use TypeError;
 
@@ -40,296 +40,285 @@ use TypeError;
 class Status extends AbstractEntity
 {
     /**
-     * Current phase code
+     * Timestamp
      *
-     * @pattern ^\d{2}$
+     * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}\s(?:2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9]$
      *
-     * @example 02
+     * @example 03-07-2019 08:00:00
      *
-     * @var string|null $currentPhaseCode
+     * @var string|null $timeStamp
      *
-     * @since 1.0.0
+     * @since   2.0.0
      */
-    protected $currentPhaseCode;
+    protected $timeStamp;
 
     /**
-     * Current phase description
+     * Status code
      *
-     * @pattern ^.{0,35}$
+     * @pattern ^\d{1,10}$
      *
-     * @example N/A
+     * @example 7
      *
-     * @var string|null $currentPhaseDescription
+     * @var string|null $statusCode
      *
-     * @since 1.0.0
+     * @since   2.0.0
      */
-    protected $currentPhaseDescription;
+    protected $statusCode;
 
     /**
-     * Current status code
+     * Status description
      *
-     * @pattern ^\d{2}$
+     * @pattern ^.{0,1000}$
      *
-     * @example 02
+     * @example Zending afgeleverd
      *
-     * @var string|null $currentStatusCode
+     * @var string|null $statusDescription
      *
-     * @since 1.0.0
+     * @since   2.0.0
      */
-    protected $currentStatusCode;
+    protected $statusDescription;
 
     /**
-     * Current status description
+     * Phase code
      *
-     * @pattern ^.{0,35}$
+     * @pattern ^\d{1,10}$
      *
-     * @example N/A
+     * @example 4
      *
-     * @var string|null $currentStatusDescription
+     * @var string|null $phaseCode
      *
-     * @since 1.0.0
+     * @since   2.0.0
      */
-    protected $currentStatusDescription;
+    protected $phaseCode;
 
     /**
-     * Current status timestamp
+     * Phase description
      *
-     * @pattern ^(?:[0-3]\d-[01]\d-[12]\d{3}\s+)[0-2]\d:[0-5]\d(?:[0-5]\d)$
+     * @pattern ^.{0,1000}$
      *
-     * @example 03-07-2019 17:00:00
+     * @example Afgeleverd
      *
-     * @var string|null $currentStatusTimeStamp
+     * @var string|null $phaseDescription
      *
-     * @since 1.0.0
+     * @since   2.0.0
      */
-    protected $currentStatusTimeStamp;
+    protected $phaseDescription;
 
     /**
      * Status constructor.
      *
-     * @param null|string $phaseCode
-     * @param null|string $phaseDesc
-     * @param null|string $statusCode
-     * @param null|string $statusDesc
-     * @param null|string $timeStamp
+     * @param string|null $timeStamp
+     * @param string|null $statusCode
+     * @param string|null $statusDescription
+     * @param string|null $phaseCode
+     * @param string|null $phaseDescription
      *
      * @throws TypeError
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function __construct(?string $phaseCode = null, ?string $phaseDesc = null, ?string $statusCode = null, ?string $statusDesc = null, ?string $timeStamp = null)
+    public function __construct(?string $timeStamp = null, ?string $statusCode = null, ?string $statusDescription = null, ?string $phaseCode = null, ?string $phaseDescription = null)
     {
         parent::__construct();
 
-        $this->setCurrentPhaseCode($phaseCode);
-        $this->setCurrentPhaseDescription($phaseDesc);
-        $this->setCurrentStatusCode($statusCode);
-        $this->setCurrentStatusDescription($statusDesc);
-        $this->setCurrentStatusTimeStamp($timeStamp);
+        $this->setTimeStamp($timeStamp);
+        $this->setStatusCode($statusCode);
+        $this->setStatusDescription($statusDescription);
+        $this->setPhaseCode($phaseCode);
+        $this->setPhaseDescription($phaseDescription);
     }
 
     /**
-     * Get current phase code
+     * Get timestamp
      *
      * @return string|null
      *
-     * @since 1.0.0
      * @since 2.0.0 Strict typing
      *
-     * @see   Status::$currentPhaseCode
+     * @see   Status::$timeStamp
      */
-    public function getCurrentPhaseCode(): ?string
+    public function getTimeStamp(): ?string
     {
-        return $this->currentPhaseCode;
+        return $this->timeStamp;
     }
 
     /**
-     * Set current phase code
+     * Set timestamp
      *
-     * @pattern ^\d{2}$
+     * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}\s(?:2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9]$
      *
-     * @param string|null $currentPhaseCode
+     * @param string|null $timeStamp
      *
      * @return static
      *
      * @throws TypeError
+     * @throws InvalidArgumentException
      * @throws ReflectionException
      *
-     * @example 02
+     * @example 03-07-2019 08:00:00
      *
-     * @since   1.0.0
      * @since   2.0.0 Strict typing
      *
-     * @see     Status::$currentPhaseCode
+     * @see     Status::$timeStamp
      */
-    public function setCurrentPhaseCode(?string $currentPhaseCode): Status
+    public function setTimeStamp(?string $timeStamp): Status
     {
-        $this->currentPhaseCode = ValidateAndFix::numericType($currentPhaseCode);
+        $this->timeStamp = ValidateAndFix::dateTime($timeStamp);
 
         return $this;
     }
 
     /**
-     * Get current phase description
+     * Get status code
      *
      * @return string|null
      *
-     * @since 1.0.0
      * @since 2.0.0 Strict typing
      *
-     * @see   Status::$currentPhaseDescription
+     * @see   Status::$statusCode
      */
-    public function getCurrentPhaseDescription(): ?string
+    public function getStatusCode(): ?string
     {
-        return $this->currentPhaseDescription;
+        return $this->statusCode;
     }
 
     /**
-     * Set current phase description
+     * Set status code
      *
-     * @pattern ^.{0,35}$
+     * @pattern ^\d{1,10}$
      *
-     * @param string|null $currentPhaseDescription
+     * @param string|null $statusCode
      *
      * @return static
      *
      * @throws TypeError
-     * @throws ReflectionException
      *
-     * @example N/A
+     * @example 7
      *
-     * @since   1.0.0
      * @since   2.0.0 Strict typing
      *
-     * @see     Status::$currentPhaseDescription
+     * @see     Status::$statusCode
      */
-    public function setCurrentPhaseDescription(?string $currentPhaseDescription): Status
+    public function setStatusCode(?string $statusCode): Status
     {
-        $this->currentPhaseDescription = ValidateAndFix::genericString($currentPhaseDescription);
+        $this->statusCode = $statusCode;
 
         return $this;
     }
 
     /**
-     * Get current status code
+     * Get status description
      *
      * @return string|null
      *
-     * @since 1.0.0
      * @since 2.0.0 Strict typing
      *
-     * @see   Status::$currentStatusCode
+     * @see   Status::$statusDescription
      */
-    public function getCurrentStatusCode(): ?string
+    public function getStatusDescription(): ?string
     {
-        return $this->currentStatusCode;
+        return $this->statusDescription;
     }
 
     /**
-     * Set current status code
+     * Set status description
      *
-     * @pattern ^\d{2}$
+     * @pattern ^.{0,1000}$
      *
-     * @param string|null $currentStatusCode
+     * @param string|null $statusDescription
      *
      * @return static
      *
      * @throws TypeError
-     * @throws ReflectionException
      *
-     * @example 02
+     * @example Zending afgeleverd
      *
-     * @since   1.0.0
      * @since   2.0.0 Strict typing
      *
-     * @see     Status::$currentStatusCode
+     * @see     Status::$statusDescription
      */
-    public function setCurrentStatusCode(?string $currentStatusCode): Status
+    public function setStatusDescription(?string $statusDescription): Status
     {
-        $this->currentStatusCode = ValidateAndFix::numericType($currentStatusCode);
+        $this->statusDescription = $statusDescription;
 
         return $this;
     }
 
     /**
-     * Get current status description
+     * Get phase code
      *
      * @return string|null
      *
-     * @since 1.0.0
      * @since 2.0.0 Strict typing
      *
-     * @see   Status::$currentStatusDescription
+     * @see   Status::$phaseCode
      */
-    public function getCurrentStatusDescription(): ?string
+    public function getPhaseCode(): ?string
     {
-        return $this->currentStatusDescription;
+        return $this->phaseCode;
     }
 
     /**
-     * Set current status description
+     * Set phase code
      *
-     * @pattern ^.{0,35}$
+     * @pattern ^\d{1,10}$
      *
-     * @param string|null $currentStatusDescription
+     * @param string|null $phaseCode
      *
      * @return static
      *
      * @throws TypeError
-     * @throws ReflectionException
      *
-     * @example N/A
+     * @example 4
      *
-     * @since   1.0.0
      * @since   2.0.0 Strict typing
      *
-     * @see     Status::$currentStatusDescription
+     * @see     Status::$phaseCode
      */
-    public function setCurrentStatusDescription(?string $currentStatusDescription): Status
+    public function setPhaseCode(?string $phaseCode): Status
     {
-        $this->currentStatusDescription = ValidateAndFix::genericString($currentStatusDescription);
+        $this->phaseCode = $phaseCode;
 
         return $this;
     }
 
     /**
-     * Get current status timestamp
+     * Get phase description
      *
      * @return string|null
      *
-     * @since 1.0.0
      * @since 2.0.0 Strict typing
      *
-     * @see   Status::$currentStatusTimeStamp
+     * @see   Status::$phaseDescription
      */
-    public function getCurrentStatusTimeStamp(): ?string
+    public function getPhaseDescription(): ?string
     {
-        return $this->currentStatusTimeStamp;
+        return $this->phaseDescription;
     }
 
     /**
-     * Set current status timestamp
+     * Set phase description
      *
-     * @pattern ^(?:[0-3]\d-[01]\d-[12]\d{3}\s+)[0-2]\d:[0-5]\d(?:[0-5]\d)$
+     * @pattern ^.{0,1000}$
      *
-     * @param string|null $currentStatusTimeStamp
+     * @param string|null $phaseDescription
      *
      * @return static
      *
      * @throws TypeError
-     * @throws ReflectionException
      *
-     * @example 03-07-2019 17:00:00
+     * @example Afgeleverd
      *
-     * @since   1.0.0
      * @since   2.0.0 Strict typing
      *
-     * @see     Status::$currentStatusTimeStamp
+     * @see     Status::$phaseDescription
      */
-    public function setCurrentStatusTimeStamp(?string $currentStatusTimeStamp): Status
+    public function setPhaseDescription(?string $phaseDescription): Status
     {
-        $this->currentStatusTimeStamp = ValidateAndFix::dateTime($currentStatusTimeStamp);
+        $this->phaseDescription = $phaseDescription;
 
         return $this;
     }

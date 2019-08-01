@@ -70,8 +70,10 @@ class ProductOption extends AbstractEntity
      * @param string|null $characteristic
      * @param string|null $option
      *
-     * @throws TypeError
-     *
+     * @throws ReflectionException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws ReflectionException
+     * @throws ReflectionException
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
@@ -107,9 +109,9 @@ class ProductOption extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
      * @throws ReflectionException
-     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @example 118
      *
      * @since   1.0.0
@@ -150,9 +152,9 @@ class ProductOption extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
      * @throws ReflectionException
-     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @example 006
      *
      * @since   1.0.0

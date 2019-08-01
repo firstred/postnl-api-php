@@ -29,11 +29,10 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Service;
 
-use Firstred\PostNL\Entity\AbstractEntity;
-use Firstred\PostNL\Entity\Request\CalculateTimeframes;
-use Firstred\PostNL\Entity\Response\ResponseTimeframes;
-use Firstred\PostNL\Exception\CifDownException;
-use Firstred\PostNL\Exception\ClientException;
+use Exception;
+use Firstred\PostNL\Entity\Request\CalculateTimeframesRequest;
+use Firstred\PostNL\Entity\Response\CalculateTimeframesResponse;
+use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Http\Client;
 use Firstred\PostNL\Misc\Message;
 use Http\Discovery\Psr17FactoryDiscovery;
@@ -41,6 +40,7 @@ use InvalidArgumentException;
 use Psr\Cache\CacheItemInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use TypeError;
 
 /**
  * Class TimeframeService
@@ -57,16 +57,16 @@ class TimeframeService extends AbstractService
     /**
      * Get timeframes via REST
      *
-     * @param CalculateTimeframes $getTimeframes
+     * @param CalculateTimeframesRequest $getTimeframes
      *
-     * @return ResponseTimeframes
+     * @return CalculateTimeframesResponse
      *
-     * @throws ClientException
+     * @throws Exception
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function getTimeframes(CalculateTimeframes $getTimeframes)
+    public function getTimeframes(CalculateTimeframesRequest $getTimeframes)
     {
         $item = $this->retrieveCachedItem($getTimeframes->getId());
         $response = null;
@@ -74,17 +74,17 @@ class TimeframeService extends AbstractService
             $response = $item->get();
             try {
                 $response = Message::parseResponse($response);
-            } catch (InvalidArgumentException $e) {
+            } catch (InvalidArgumentException | TypeError $e) {
             }
         }
         if (!$response instanceof ResponseInterface) {
-            $request = $this->buildGetTimeframesRequest($getTimeframes);
+            $request = $this->buildCalculateTimeframesRequest($getTimeframes);
             $response = Client::getInstance()->doRequest($request);
             static::validateResponse($response);
         }
 
         $object = $this->processGetTimeframesResponse($response);
-        if ($object instanceof ResponseTimeframes) {
+        if ($object instanceof CalculateTimeframesResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof ResponseInterface
                 && $response->getStatusCode() === 200
@@ -96,25 +96,25 @@ class TimeframeService extends AbstractService
             return $object;
         }
 
-        throw new ClientException('Unable to retrieve timeframes', 0, null, isset($request) && $request instanceof RequestInterface ? $request : null, $response);
+        throw new HttpClientException('Unable to retrieve timeframes', 0, null, isset($request) && $request instanceof RequestInterface ? $request : null, $response);
     }
 
     /**
      * Build the GetTimeframes request for the REST API
      *
-     * @param CalculateTimeframes $calculateTimeframes
+     * @param CalculateTimeframesRequest $calculateTimeframes
      *
      * @return RequestInterface
      */
-    public function buildGetTimeframesRequest(CalculateTimeframes $calculateTimeframes): RequestInterface
+    public function buildCalculateTimeframesRequest(CalculateTimeframesRequest $calculateTimeframes): RequestInterface
     {
         $query = [
-            'AllowSundaySorting'        => $calculateTimeframes->getAllowSundaySorting() ? 'true' : 'false',
+            'AllowSundaySorting' => $calculateTimeframes->getAllowSundaySorting() ? 'true' : 'false',
             'CountryCode'        => $calculateTimeframes->getCountryCode(),
             'StartDate'          => $calculateTimeframes->getStartDate(),
             'EndDate'            => $calculateTimeframes->getEndDate(),
             'PostalCode'         => $calculateTimeframes->getPostalCode(),
-            'HouseNumber'        => $calculateTimeframes->getHouseNr(),
+            'HouseNumber'        => $calculateTimeframes->getHouseNumber(),
             'Options'            => '',
         ];
         if ($interval = $calculateTimeframes->getInterval()) {
@@ -160,57 +160,15 @@ class TimeframeService extends AbstractService
      *
      * @param ResponseInterface $response
      *
-     * @return null|ResponseTimeframes
+     * @return CalculateTimeframesResponse
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function processGetTimeframesResponse(ResponseInterface $response): ?ResponseTimeframes
+    public function processGetTimeframesResponse(ResponseInterface $response): CalculateTimeframesResponse
     {
         $body = json_decode((string) $response->getBody(), true);
-        if (isset($body['Timeframes'])) {
-            // Standardize the object here
-            if (isset($body['ReasonNotimeframes']['ReasonNoTimeframe'])) {
-                if (isset($body['ReasonNotimeframes']['ReasonNoTimeframe']['Code'])) {
-                    $body['ReasonNotimeframes']['ReasonNoTimeframe'] = [$body['ReasonNotimeframes']['ReasonNoTimeframe']];
-                }
 
-                $newNotimeframes = [];
-                foreach ($body['ReasonNotimeframes']['ReasonNoTimeframe'] as &$reasonNotimeframe) {
-                    $newNotimeframes[] = AbstractEntity::jsonDeserialize(['ReasonNoTimeFrame' => $reasonNotimeframe]);
-                }
-                $body['ReasonNotimeframes'] = $newNotimeframes;
-            }
-
-            if (isset($body['Timeframes']['Timeframe'])) {
-                if (isset($body['Timeframes']['Timeframe']['Date'])) {
-                    $body['Timeframes']['Timeframe'] = [$body['Timeframes']['Timeframe']];
-                }
-
-                $newTimeframes = [];
-                foreach ($body['Timeframes']['Timeframe'] as $timeframe) {
-                    $newTimeframeTimeframe = [];
-                    if (isset($timeframe['Timeframes']['TimeframeTimeFrame']['From'])) {
-                        $timeframe['Timeframes']['TimeframeTimeFrame'] = [$timeframe['Timeframes']['TimeframeTimeFrame']];
-                    }
-                    foreach ($timeframe['Timeframes']['TimeframeTimeFrame'] as $timeframetimeframe) {
-                        $newTimeframeTimeframe[] = AbstractEntity::jsonDeserialize(
-                            ['TimeframeTimeFrame' => $timeframetimeframe]
-                        );
-                    }
-                    $timeframe['Timeframes'] = $newTimeframeTimeframe;
-
-                    $newTimeframes[] = AbstractEntity::jsonDeserialize(['Timeframe' => $timeframe]);
-                }
-                $body['Timeframes'] = $newTimeframes;
-            }
-
-            /** @var ResponseTimeframes $object */
-            $object = AbstractEntity::jsonDeserialize(['ResponseTimeframes' => $body]);
-
-            return $object;
-        }
-
-        return null;
+        return CalculateTimeframesResponse::jsonDeserialize(['CalculateTimeframesResponse' => $body]);
     }
 }

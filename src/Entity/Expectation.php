@@ -29,6 +29,7 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\ValidateAndFix;
 use ReflectionException;
 use TypeError;
@@ -71,6 +72,8 @@ class Expectation extends AbstractEntity
      * @param string $to
      *
      * @throws TypeError
+     * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -109,6 +112,7 @@ class Expectation extends AbstractEntity
      *
      * @throws TypeError
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @example 14:00:00
      *
@@ -150,6 +154,7 @@ class Expectation extends AbstractEntity
      *
      * @throws TypeError
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @example 16:30:00
      *

@@ -29,8 +29,7 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
-use DateTime;
-use Firstred\PostNL\Exception\InvalidTypeException;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\ValidateAndFix;
 use ReflectionException;
 use TypeError;
@@ -41,45 +40,17 @@ use TypeError;
 class Location extends AbstractEntity
 {
     /**
-     * Country code of the location
+     * Address
      *
-     * Can be NL or BE
+     * @pattern N/A
      *
-     * @pattern ^(?:NL|BE)$
+     * @example N/A
      *
-     * @example NL
-     *
-     * @var string|null $countryCode
-     *
-     * @since 1.0.0
-     */
-    protected $countryCode;
-
-    /**
-     * Delivery Date
-     *
-     * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}$
-     *
-     * @example 04-06-2019
-     *
-     * @var string|null $deliveryDate
-     *
-     * @since 1.0.0
-     */
-    protected $deliveryDate;
-
-    /**
-     * Distance in meters
-     *
-     * @pattern ^\d{1,10}$
-     *
-     * @example 1200
-     *
-     * @var int|null $distance
+     * @var Address|null $address
      *
      * @since   2.0.0
      */
-    protected $distance;
+    protected $address;
 
     /**
      * Delivery Options
@@ -104,9 +75,22 @@ class Location extends AbstractEntity
      *
      * @var string[]|null $deliveryOptions
      *
-     * @since 1.0.0
+     * @since   2.0.0
      */
     protected $deliveryOptions;
+
+    /**
+     * Distance in meters
+     *
+     * @pattern ^\d{1,10}$
+     *
+     * @example 1200
+     *
+     * @var int|null $distance
+     *
+     * @since   2.0.0
+     */
+    protected $distance;
 
     /**
      * The latitude of the location
@@ -122,6 +106,19 @@ class Location extends AbstractEntity
     protected $latitude;
 
     /**
+     * Code of the location
+     *
+     * @pattern ^.{0,35}$
+     *
+     * @example 161503
+     *
+     * @var int|null $locationCode
+     *
+     * @since   2.0.0
+     */
+    protected $locationCode;
+
+    /**
      * The longitude of the location
      *
      * @pattern ^\d{1,2}\.\d{1,15}$
@@ -135,69 +132,17 @@ class Location extends AbstractEntity
     protected $longitude;
 
     /**
-     * The coordinates of the north point of the area.
+     * Location name
      *
-     * @pattern ^\d{1,2}\.\d{1,15}$
+     * @pattern ^.{0,35}$
      *
-     * @example 52.156439
+     * @example Primera Sanders
      *
-     * @var float|null $latitudeNorthq
+     * @var string|null $name
      *
-     * @since   1.0.0
+     * @since   2.0.0
      */
-    protected $latitudeNorth;
-
-    /**
-     * The coordinates of the west point of the area.
-     *
-     * @pattern ^\d{1,2}\.\d{1,15}$
-     *
-     * @example 5.015643
-     *
-     * @var float|null $longitudeWest
-     *
-     * @since   1.0.0
-     */
-    protected $longitudeWest;
-
-    /**
-     * The coordinates of the south point of the area.
-     *
-     * @pattern ^\d{1,2}\.\d{1,15}$
-     *
-     * @example 52.156439
-     *
-     * @var float|null $latitudeSouth
-     *
-     * @since   1.0.0
-     */
-    protected $latitudeSouth;
-
-    /**
-     * The coordinates of the east point of the area.
-     *
-     * @pattern ^\d{1,2}\.\d{1,15}$
-     *
-     * @example 5.015643
-     *
-     * @var float|null $longitudeEast
-     *
-     * @since   1.0.0
-     */
-    protected $longitudeEast;
-
-    /**
-     * Time of opening. This field will be used to filter the locations on opening hours.
-     *
-     * @pattern ^(2[0-3]|[01]?[0-9]):([0-5]?[0-9]):([0-5]?[0-9])$
-     *
-     * @example 09:00:00
-     *
-     * @var float|null $openingTime
-     *
-     * @since 1.0.0
-     */
-    protected $openingTime;
+    protected $name;
 
     /**
      * Opening hours
@@ -208,74 +153,48 @@ class Location extends AbstractEntity
      *
      * @var OpeningHours|null $openingHours
      *
-     * @since 1.0.0
+     * @since   2.0.0
      */
     protected $openingHours;
 
     /**
-     * City of the address
+     * Partner name of the location
+     *
+     * @pattern ^.{0,35}%
+     *
+     * @example PostNL
+     *
+     * @var string|null $partnerName
+     *
+     * @since   2.0.0
+     */
+    protected $partnerName;
+
+    /**
+     * Phone number of the location
      *
      * @pattern ^.{0,35}$
      *
-     * @example Hoofddorp
+     * @example 023-1234567
      *
-     * @var string|null $city
+     * @var string|null $phoneNumber
      *
-     * @since 1.0.0
+     * @since   2.0.0
      */
-    protected $city;
+    protected $phoneNumber;
 
     /**
-     * House number of the address (number only, no extension / box number)
-     *
-     * @pattern ^\d{0,10}$
-     *
-     * @example 12
-     *
-     * @var string|null $houseNr
-     *
-     * @since 1.0.0
-     */
-    protected $houseNr;
-
-    /**
-     * Zip / postal code of the location
-     *
-     * @pattern ^.{0,10}$
-     *
-     * @example 1234AB
-     *
-     * @var string|null $postalCode
-     *
-     * @since 1.0.0
-     */
-    protected $postalCode;
-
-    /**
-     * Street of the location
-     *
-     * @pattern ^.{0,95}$
-     *
-     * @example Siriusdreef
-     *
-     * @var string|null $street
-     *
-     * @since 1.0.0
-     */
-    protected $street;
-
-    /**
-     * Code of the location
+     * RetailNetworkID information. Always use PNPNL-01 for Dutch locations. For Belgium locations use LD-01.
      *
      * @pattern ^.{0,35}$
      *
-     * @example 161503
+     * @example PNPNL-01
      *
-     * @var int|null $locationCode
+     * @var string|null $retailNetworkID
      *
      * @since 1.0.0
      */
-    protected $locationCode;
+    protected $retailNetworkID;
 
     /**
      * Sales channel of the location
@@ -304,124 +223,14 @@ class Location extends AbstractEntity
     protected $terminalType;
 
     /**
-     * RetailNetworkID information. Always use PNPNL-01 for Dutch locations. For Belgium locations use LD-01.
-     *
-     * @pattern ^.{0,35}$
-     *
-     * @example PNPNL-01
-     *
-     * @var string|null $retailNetworkID
-     *
-     * @since 1.0.0
-     */
-    protected $retailNetworkID;
-
-    /**
-     * Partner name of the location
-     *
-     * @pattern ^.{0,35}%
-     *
-     * @example PostNL
-     *
-     * @var string|null $partnerName
-     *
-     * @since 1.0.0
-     */
-    protected $partnerName;
-
-    /**
      * Location constructor.
      *
-     * @param string|null           $zipcode
-     * @param string|null           $deliveryDate
-     * @param float|int|string|null $distance
-     * @param array|null            $deliveryOptions
-     * @param float|string|null     $latitude
-     * @param float|string|null     $longitude
-     * @param float|string|null     $latitudeNorth
-     * @param float|string|null     $latitudeSouth
-     * @param float|string|null     $longitudeWest
-     * @param float|string|null     $longitudeEast
-     * @param float|string|null     $countryCode
-     * @param string|null           $city
-     * @param string|null           $street
-     * @param string|null           $houseNr
-     * @param string|null           $locationCode
-     * @param string|null           $saleschannel
-     * @param string|null           $terminalType
-     * @param string|null           $retailNetworkId
-     * @param string|null           $downPartnerID
      *
-     * @throws ReflectionException
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since 2.0.0
      */
-    public function __construct(?string $zipcode = null, ?string $deliveryDate = null, $distance = null, ?array $deliveryOptions = null, $latitude = null, $longitude = null, $latitudeNorth = null, $latitudeSouth = null, ?string $longitudeWest = null, ?string $longitudeEast = null, ?string $countryCode = null, ?string $city = null, ?string $street = null, ?string $houseNr = null, ?string $locationCode = null, ?string $saleschannel = null, ?string $terminalType = null, ?string $retailNetworkId = null, ?string $downPartnerID = null)
+    public function __construct()
     {
         parent::__construct();
-
-        $this->setDeliveryDate($deliveryDate ?: (new DateTime('next monday'))->format('d-m-Y'));
-        $this->setDeliveryOptions($deliveryOptions);
-        $this->setDistance($distance);
-        $this->setPostalCode($zipcode);
-        $this->setCity($city);
-        $this->setStreet($street);
-        $this->setHouseNr($houseNr);
-        $this->setLocationCode($locationCode);
-        $this->setSaleschannel($saleschannel);
-        $this->setTerminalType($terminalType);
-        $this->setRetailNetworkID($retailNetworkId);
-        $this->setPartnerName($downPartnerID);
-        $this->setCountryCode($countryCode);
-        $this->setLatitude($latitude);
-        $this->setLatitudeNorth($latitudeNorth);
-        $this->setLatitudeSouth($latitudeSouth);
-        $this->setLongitude($longitude);
-        $this->setLongitudeWest($longitudeWest);
-        $this->setLongitudeEast($longitudeEast);
-    }
-
-    /**
-     * Get zip / postal code
-     *
-     * @return string|null
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     *
-     * @see Location::$postalCode
-     */
-    public function getPostalCode(): ?string
-    {
-        return $this->postalCode;
-    }
-
-    /**
-     * Set the postcode
-     *
-     * @pattern ^.{0,10}$
-     *
-     * @param string|null $postcode
-     *
-     * @return static
-     *
-     * @throws TypeError
-     * @throws InvalidTypeException
-     * @throws ReflectionException
-     *
-     * @example 1234AB
-     *
-     * @since   1.0.0
-     * @since   2.0.0 Strict typing
-     *
-     * @see     Location::$postalCode
-     */
-    public function setPostalCode(?string $postcode = null)
-    {
-        $this->postalCode = ValidateAndFix::postcode($postcode);
-
-        return $this;
     }
 
     /**
@@ -429,8 +238,7 @@ class Location extends AbstractEntity
      *
      * @return int|null
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since 2.0.0
      *
      * @see   Location::$distance
      */
@@ -450,6 +258,7 @@ class Location extends AbstractEntity
      *
      * @throws TypeError
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @example 1200
      *
@@ -465,53 +274,11 @@ class Location extends AbstractEntity
     }
 
     /**
-     * Get delivery date
-     *
-     * @return string|null
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     *
-     * @see Location::$deliveryDate
-     */
-    public function getDeliveryDate(): ?string
-    {
-        return $this->deliveryDate;
-    }
-
-    /**
-     * Set delivery date
-     *
-     * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}$
-     *
-     * @param string|null $deliveryDate
-     *
-     * @return static
-     *
-     * @throws TypeError
-     * @throws InvalidTypeException
-     *
-     * @example 04-06-2019
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     *
-     * @see Location::$deliveryDate
-     */
-    public function setDeliveryDate(?string $deliveryDate): Location
-    {
-        $this->deliveryDate = $deliveryDate;
-
-        return $this;
-    }
-
-    /**
      * Get delivery options
      *
      * @return string[]|null
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since 2.0.0
      *
      * @see Location::$deliveryOptions
      */
@@ -546,205 +313,6 @@ class Location extends AbstractEntity
     }
 
     /**
-     * Get opening time
-     *
-     * @return string|null
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     *
-     * @see   Location::$openingTime
-     */
-    public function getOpeningTime(): ?string
-    {
-        return $this->openingTime;
-    }
-
-    /**
-     * Set opening time
-     *
-     * @pattern ^(2[0-3]|[01]?[0-9]):([0-5]?[0-9]):([0-5]?[0-9])$
-     *
-     * @param string|null $openingTime
-     *
-     * @return static
-     *
-     * @throws TypeError
-     *
-     * @example 09:00:00
-     *
-     * @since   1.0.0
-     * @since   2.0.0 Strict typing
-     *
-     * @see     Location::$openingTime
-     */
-    public function setOpeningTime(?string $openingTime): Location
-    {
-        $this->openingTime = $openingTime;
-
-        return $this;
-    }
-
-    /**
-     * Get city
-     *
-     * @return string|null
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     *
-     * @see   Location::$city
-     */
-    public function getCity(): ?string
-    {
-        return $this->city;
-    }
-
-    /**
-     * Set city
-     *
-     * @pattern ^.0{0,35}$
-     *
-     * @param string|null $city
-     *
-     * @return static
-     *
-     * @throws TypeError
-     *
-     * @example Hoofddorp
-     *
-     * @since   1.0.0
-     * @since   2.0.0 Strict typing
-     *
-     * @see     Location::$city
-     */
-    public function setCity(?string $city): Location
-    {
-        $this->city = $city;
-
-        return $this;
-    }
-
-    /**
-     * Get house number
-     *
-     * @return string|null
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     *
-     * @see   Location::$houseNr
-     */
-    public function getHouseNr(): ?string
-    {
-        return $this->houseNr;
-    }
-
-    /**
-     * Set house number
-     *
-     * @pattern ^\d{0,10}$
-     *
-     * @param string|null $houseNr
-     *
-     * @return static
-     *
-     * @throws TypeError
-     * @throws ReflectionException
-     *
-     * @example 12
-     *
-     * @since   1.0.0
-     * @since   2.0.0 Strict typing
-     *
-     * @see     Location::$houseNr
-     */
-    public function setHouseNr(?string $houseNr): Location
-    {
-        $this->houseNr = ValidateAndFix::houseNumber($houseNr);
-
-        return $this;
-    }
-
-    /**
-     * Get street
-     *
-     * @return string|null
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     *
-     * @see   Location::$street
-     */
-    public function getStreet(): ?string
-    {
-        return $this->street;
-    }
-
-    /**
-     * Set street
-     *
-     * @pattern ^.{0,95}$
-     *
-     * @param string|null $street
-     *
-     * @return static
-     *
-     * @throws TypeError
-     *
-     * @example Siriusdreef
-     *
-     * @since 2.0.0 Strict typing
-     *
-     * @see     Location::$street
-     */
-    public function setStreet(?string $street): Location
-    {
-        $this->street = $street;
-
-        return $this;
-    }
-
-    /**
-     * Get country code
-     *
-     * @return string|null
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     *
-     * @see   Location::$countryCode
-     */
-    public function getCountryCode(): ?string
-    {
-        return $this->countryCode;
-    }
-
-    /**
-     * Set country code
-     *
-     * @pattern ^(?:NL|BE)$
-     *
-     * @param string|null $countryCode
-     *
-     * @return static
-     *
-     * @throws TypeError
-     *
-     * @example NL
-     *
-     * @since   2.0.0
-     *
-     * @see     Location::$countryCode
-     */
-    public function setCountryCode(?string $countryCode): Location
-    {
-        $this->countryCode = $countryCode;
-
-        return $this;
-    }
-
-    /**
      * Get latitude
      *
      * @return string|null
@@ -769,6 +337,7 @@ class Location extends AbstractEntity
      *
      * @throws TypeError
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @example 52.156439
      *
@@ -808,6 +377,7 @@ class Location extends AbstractEntity
      *
      * @throws TypeError
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @example 5.015643
      *
@@ -823,168 +393,11 @@ class Location extends AbstractEntity
     }
 
     /**
-     * Get latitude North
-     *
-     * @return string|null
-     *
-     * @since   2.0.0
-     *
-     * @see     Location::$latitudeNorth
-     */
-    public function getLatitudeNorth(): ?string
-    {
-        return $this->latitudeNorth;
-    }
-
-    /**
-     * Set latitude North
-     *
-     * @pattern ^\d{1,2}\.\d{1,15}$
-     *
-     * @param string|null $latitudeNorth
-     *
-     * @return static
-     *
-     * @throws TypeError
-     * @throws ReflectionException
-     *
-     * @example 52.156439
-     *
-     * @since   2.0.0
-     *
-     * @see     Location::$latitudeNorth
-     */
-    public function setLatitudeNorth($latitudeNorth): Location
-    {
-        $this->latitudeNorth = ValidateAndFix::coordinate($latitudeNorth);
-
-        return $this;
-    }
-
-    /**
-     * Get longitude West
-     *
-     * @return string|null
-     *
-     * @since 2.0.0
-     *
-     * @see   Location::$longitudeWest
-     */
-    public function getLongitudeWest(): ?string
-    {
-        return $this->longitudeWest;
-    }
-
-    /**
-     * Set longitude West
-     *
-     * @pattern ^\d{1,2}\.\d{1,15}$
-     *
-     * @param string|null $longitudeWest
-     *
-     * @return static
-     *
-     * @throws TypeError
-     * @throws ReflectionException
-     *
-     * @example 5.015643
-     *
-     * @since   2.0.0
-     *
-     * @see     Location::$longitudeWest
-     */
-    public function setLongitudeWest($longitudeWest): Location
-    {
-        $this->longitudeWest = ValidateAndFix::coordinate($longitudeWest);
-
-        return $this;
-    }
-
-    /**
-     * Get latitude South
-     *
-     * @return string|null
-     *
-     * @since   2.0.0
-     *
-     * @see     Location::$latitudeSouth
-     */
-    public function getLatitudeSouth(): ?string
-    {
-        return $this->latitudeSouth;
-    }
-
-    /**
-     * Set latitude South
-     *
-     * @pattern ^\d{1,2}\.\d{1,15}$
-     *
-     * @param string|null $latitudeSouth
-     *
-     * @return static
-     *
-     * @throws TypeError
-     * @throws ReflectionException
-     *
-     * @example 52.156439
-     *
-     * @since   2.0.0
-     *
-     * @see     Location::$latitudeSouth
-     */
-    public function setLatitudeSouth($latitudeSouth): Location
-    {
-        $this->latitudeSouth = ValidateAndFix::coordinate($latitudeSouth);
-
-        return $this;
-    }
-
-    /**
-     * Get longitude East
-     *
-     * @return float|null
-     *
-     * @since 2.0.0
-     *
-     * @see   Location::$longitudeEast
-     */
-    public function getLongitudeEast(): ?float
-    {
-        return $this->longitudeEast;
-    }
-
-    /**
-     * Set longitude East
-     *
-     * @pattern ^\d{1,2}\.\d{1,15}$
-     *
-     * @param string|float|null $longitudeEast
-     *
-     * @return static
-     *
-     * @throws TypeError
-     * @throws ReflectionException
-     *
-     * @example 5.015643
-     *
-     * @since   2.0.0 Strict typing
-     *
-     * @see     Location::$longitudeEast
-     */
-    public function setLongitudeEast($longitudeEast): Location
-    {
-        $this->longitudeEast = ValidateAndFix::coordinate($longitudeEast);
-
-        return $this;
-    }
-
-    /**
      * Get opening hours
      *
      * @return OpeningHours|null
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since 2.0.0
      *
      * @see   Location::$openingHours
      */
@@ -1023,7 +436,7 @@ class Location extends AbstractEntity
      *
      * @return int|null
      *
-     * @since 2.0.0 Strict typing
+     * @since 2.0.0
      *
      * @see   Location::$locationCode
      */
@@ -1043,6 +456,7 @@ class Location extends AbstractEntity
      *
      * @throws TypeError
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @example 161503
      *
@@ -1063,8 +477,7 @@ class Location extends AbstractEntity
      *
      * @return string|null
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since 2.0.0
      *
      * @see   Location::$saleschannel
      */
@@ -1084,6 +497,7 @@ class Location extends AbstractEntity
      *
      * @throws TypeError
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @example PKT XL
      *
@@ -1104,8 +518,7 @@ class Location extends AbstractEntity
      *
      * @return string|null
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since 2.0.0
      *
      * @see   Location::$terminalType
      */
@@ -1125,6 +538,7 @@ class Location extends AbstractEntity
      *
      * @throws TypeError
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @example NRS
      *
@@ -1145,8 +559,7 @@ class Location extends AbstractEntity
      *
      * @return string|null
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since 2.0.0
      *
      * @see   Location::$retailNetworkID
      */
@@ -1166,6 +579,7 @@ class Location extends AbstractEntity
      *
      * @throws TypeError
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @example PNPNL-01
      *
@@ -1206,6 +620,7 @@ class Location extends AbstractEntity
      *
      * @throws TypeError
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @example PostNL
      *
@@ -1216,6 +631,120 @@ class Location extends AbstractEntity
     public function setPartnerName(?string $partnerName): Location
     {
         $this->partnerName = ValidateAndFix::genericString($partnerName);
+
+        return $this;
+    }
+
+    /**
+     * Get address
+     *
+     * @return Address|null
+     *
+     * @since 2.0.0
+     *
+     * @see   Address
+     */
+    public function getAddress(): ?Address
+    {
+        return $this->address;
+    }
+
+    /**
+     * Set address
+     *
+     * @pattern N/A
+     *
+     * @param Address|null $address
+     *
+     * @return static
+     *
+     * @throws TypeError
+     *
+     * @example N/A
+     *
+     * @since   2.0.0
+     *
+     * @see     Address
+     */
+    public function setAddress(?Address $address): Location
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    /**
+     * Get location name
+     *
+     * @return string|null
+     *
+     * @since 2.0.0
+     *
+     * @see   Location::$name
+     */
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set location name
+     *
+     * @pattern ^.{0,35}$
+     *
+     * @param string|null $name
+     *
+     * @return static
+     *
+     * @throws TypeError
+     *
+     * @example Primera Sanders
+     *
+     * @since   2.0.0
+     *
+     * @see     Location::$name
+     */
+    public function setName(?string $name): Location
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get phone number
+     *
+     * @return string|null
+     *
+     * @since 2.0.0
+     *
+     * @see   Location::$phoneNumber
+     */
+    public function getPhoneNumber(): ?string
+    {
+        return $this->phoneNumber;
+    }
+
+    /**
+     * Set phone number
+     *
+     * @pattern ^.{0,35}$
+     *
+     * @param string|null $phoneNumber
+     *
+     * @return static
+     *
+     * @throws TypeError
+     *
+     * @example 023-1234567
+     *
+     * @since   2.0.0
+     *
+     * @see     Location::$phoneNumber
+     */
+    public function setPhoneNumber(?string $phoneNumber): Location
+    {
+        $this->phoneNumber = $phoneNumber;
 
         return $this;
     }

@@ -30,22 +30,23 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Service;
 
 use Exception;
-use Firstred\PostNL\Entity\AbstractEntity;
-use Firstred\PostNL\Entity\Coordinates;
-use Firstred\PostNL\Entity\Request\GetLocation;
-use Firstred\PostNL\Entity\Request\GetNearestLocations;
-use Firstred\PostNL\Entity\Request\GetNearestLocationsGeocode;
-use Firstred\PostNL\Entity\Response\GetLocationsInAreaResponse;
-use Firstred\PostNL\Entity\Response\GetNearestLocationsResponse;
-use Firstred\PostNL\Exception\CifDownException;
-use Firstred\PostNL\Exception\ClientException;
+use Firstred\PostNL\Entity\Location;
+use Firstred\PostNL\Entity\Request\FindLocationsInAreaRequest;
+use Firstred\PostNL\Entity\Request\FindNearestLocationsGeocodeRequest;
+use Firstred\PostNL\Entity\Request\FindNearestLocationsRequest;
+use Firstred\PostNL\Entity\Request\LookupLocationRequest;
+use Firstred\PostNL\Entity\Response\FindLocationsInAreaResponse;
+use Firstred\PostNL\Entity\Response\FindNearestLocationsGeocodeResponse;
+use Firstred\PostNL\Entity\Response\FindNearestLocationsResponse;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Http\Client;
 use Firstred\PostNL\Misc\Message;
 use Http\Discovery\Psr17FactoryDiscovery;
-use InvalidArgumentException;
 use Psr\Cache\CacheItemInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use ReflectionException;
+use TypeError;
 
 /**
  * Class LocationService
@@ -62,18 +63,16 @@ class LocationService extends AbstractService
     /**
      * Get the nearest locations via REST
      *
-     * @param GetNearestLocations $getNearestLocations
+     * @param FindNearestLocationsRequest $getNearestLocations
      *
-     * @return GetNearestLocationsResponse
+     * @return FindNearestLocationsResponse
      *
-     * @throws ClientException
-     * @throws CifDownException
      * @throws Exception
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function getNearestLocations(GetNearestLocations $getNearestLocations)
+    public function findNearestLocations(FindNearestLocationsRequest $getNearestLocations)
     {
         $item = $this->retrieveCachedItem($getNearestLocations->getId());
         $response = null;
@@ -81,17 +80,17 @@ class LocationService extends AbstractService
             $response = $item->get();
             try {
                 $response = Message::parseResponse($response);
-            } catch (InvalidArgumentException $e) {
+            } catch (InvalidArgumentException | TypeError $e) {
             }
         }
         if (!$response instanceof ResponseInterface) {
-            $request = $this->buildGetNearestLocationsRequest($getNearestLocations);
+            $request = $this->buildFindNearestLocationsRequest($getNearestLocations);
             $response = Client::getInstance()->doRequest($request);
             static::validateResponse($response);
         }
 
-        $object = $this->processGetNearestLocationsResponse($response);
-        if ($object instanceof GetNearestLocationsResponse) {
+        $object = $this->processFindNearestLocationsResponse($response);
+        if ($object instanceof FindNearestLocationsResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof ResponseInterface
                 && $response->getStatusCode() === 200
@@ -103,141 +102,86 @@ class LocationService extends AbstractService
             return $object;
         }
 
-        throw new ClientException('Unable to retrieve the nearest locations', 0, null, isset($request) && $request instanceof RequestInterface ? $request : null, $response);
+        throw new HttpClientException('Unable to retrieve the nearest locations', 0, null, isset($request) && $request instanceof RequestInterface ? $request : null, $response);
     }
 
     /**
-     * Build the GenerateLabel request for the REST API
+     * Build the GenerateShipmentLabelRequest request for the REST API
      *
-     * @param GetNearestLocations $getNearestLocations
+     * @param FindNearestLocationsRequest $findNearestLocations
      *
      * @return RequestInterface
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function buildGetNearestLocationsRequest(GetNearestLocations $getNearestLocations): RequestInterface
+    public function buildFindNearestLocationsRequest(FindNearestLocationsRequest $findNearestLocations): RequestInterface
     {
-        $endpoint = '/nearest';
-        $location = $getNearestLocations->getLocation();
         $query = [
-            'CountryCode'     => $getNearestLocations->getCountrycode(),
-            'PostalCode'      => $location->getPostalCode(),
-            'DeliveryOptions' => 'PG',
+            'CountryCode'     => $findNearestLocations->getCountrycode(),
+            'PostalCode'      => $findNearestLocations->getPostalCode(),
+            'DeliveryOptions' => implode(',', $findNearestLocations->getDeliveryOptions()),
         ];
-        if ($city = $location->getCity()) {
+        if ($city = $findNearestLocations->getCity()) {
             $query['City'] = $city;
         }
-        if ($street = $location->getStreet()) {
+        if ($street = $findNearestLocations->getStreet()) {
             $query['Street'] = $street;
         }
-        if ($houseNumber = $location->getHouseNr()) {
+        if ($houseNumber = $findNearestLocations->getHouseNumber()) {
             $query['HouseNumber'] = $houseNumber;
         }
-        if ($deliveryDate = $location->getDeliveryDate()) {
-            $query['DeliveryDate'] = date('d-m-Y', strtotime($deliveryDate));
+        if ($deliveryDate = $findNearestLocations->getDeliveryDate()) {
+            $query['DeliveryDate'] = $findNearestLocations->getDeliveryDate();
         }
-        if ($openingTime = $location->getOpeningTime()) {
-            $query['OpeningTime'] = date('H:i:00', strtotime($openingTime));
+        if ($openingTime = $findNearestLocations->getOpeningTime()) {
+            $query['OpeningTime'] = $findNearestLocations->getOpeningTime();
         }
-        if ($location->getCoordinates() instanceof Coordinates) {
-            $endpoint .= '/geocode';
-            unset($query['Street']);
-            unset($query['PostalCode']);
-            unset($query['City']);
-            unset($query['HouseNumber']);
-            $query['Latitude'] = $location->getCoordinates()->getLatitude();
-            $query['Longitude'] = $location->getCoordinates()->getLongitude();
-        }
-        foreach ($location->getDeliveryOptions() as $option) {
-            if ('PG' === $option) {
-                continue;
-            }
-            $query['DeliveryOptions'] .= ",$option";
-        }
-        $endpoint .= '?'.http_build_query($query);
 
         return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
             'GET',
-            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint
+            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).'/nearest?'.http_build_query($query)
         )
             ->withHeader('Accept', 'application/json')
             ->withHeader('Content-Type', 'application/json;charset=UTF-8')
-            ->withHeader('apikey', $this->postnl->getApiKey())
-        ;
+            ->withHeader('apikey', $this->postnl->getApiKey());
     }
 
     /**
-     * Process GetNearestLocations Response REST
+     * Process FindNearestLocationsRequest Response REST
      *
      * @param ResponseInterface $response
      *
-     * @return null|GetNearestLocationsResponse
+     * @return FindNearestLocationsResponse
      *
-     * @since 1.0.0
+     * @throws InvalidArgumentException
+     *
      * @since 2.0.0 Strict typing
+     * @since 1.0.0
      */
-    public function processGetNearestLocationsResponse(ResponseInterface $response): ?GetNearestLocationsResponse
+    public function processFindNearestLocationsResponse(ResponseInterface $response): FindNearestLocationsResponse
     {
         $body = json_decode((string) $response->getBody(), true);
-        if (is_array($body)) {
-            if (isset($body['GetLocationsResult']['ResponseLocation'])
-                && is_array($body['GetLocationsResult']['ResponseLocation'])
-            ) {
-//                if (isset($body['GetLocationsResult']['ResponseLocation']['Address'])) {
-//                    $body['GetLocationsResult']['ResponseLocation'] = [$body['GetLocationsResult']['ResponseLocation']];
-//                }
 
-                $newLocations = [];
-                foreach ($body['GetLocationsResult']['ResponseLocation'] as $location) {
-                    if (isset($location['Address'])) {
-                        $location['Address'] = AbstractEntity::jsonDeserialize(['Address' => $location['Address']]);
-                    }
+        /** @var FindNearestLocationsResponse $object */
+        $object = FindNearestLocationsResponse::jsonDeserialize(['FindNearestLocationsResponse' => $body]);
 
-                    if (isset($location['DeliveryOptions']['string'])) {
-                        $location['DeliveryOptions'] = $location['DeliveryOptions']['string'];
-                    }
-
-                    if (isset($location['OpeningHours'])) {
-                        foreach ($location['OpeningHours'] as $day => $hour) {
-                            if (isset($hour['string'])) {
-                                $location['OpeningHours'][$day] = $hour['string'];
-                            }
-                        }
-
-                        $location['OpeningHours'] = AbstractEntity::jsonDeserialize(
-                            ['OpeningHours' => $location['OpeningHours']]
-                        );
-                    }
-
-                    $newLocations[] = AbstractEntity::jsonDeserialize(['ResponseLocation' => $location]);
-                }
-                $body['GetLocationsResult'] = ['ResponseLocation' => $newLocations];
-            }
-
-            /** @var GetNearestLocationsResponse $object */
-            $object = AbstractEntity::jsonDeserialize(['GetNearestLocationsResponse' => $body]);
-
-            return $object;
-        }
-
-        return null;
+        return $object;
     }
 
     /**
      * Get the nearest locations via REST
      *
-     * @param GetNearestLocationsGeocode $getLocations
+     * @param FindNearestLocationsGeocodeRequest $getLocations
      *
-     * @return GetLocationsInAreaResponse
+     * @return FindNearestLocationsGeocodeResponse
      *
-     * @throws ClientException
-     * @throws CifDownException
+     * @throws Exception
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function getLocationsInArea(GetNearestLocationsGeocode $getLocations)
+    public function findNearestLocationsGeocode(FindNearestLocationsGeocodeRequest $getLocations): FindNearestLocationsGeocodeResponse
     {
         $item = $this->retrieveCachedItem($getLocations->getId());
         $response = null;
@@ -245,17 +189,17 @@ class LocationService extends AbstractService
             $response = $item->get();
             try {
                 $response = Message::parseResponse($response);
-            } catch (InvalidArgumentException $e) {
+            } catch (InvalidArgumentException | TypeError $e) {
             }
         }
         if (!$response instanceof ResponseInterface) {
-            $request = $this->buildGetLocationsInAreaRequest($getLocations);
+            $request = $this->buildFindNearestLocationsGeocodeRequest($getLocations);
             $response = Client::getInstance()->doRequest($request);
             static::validateResponse($response);
         }
 
-        $object = $this->processGetLocationsInAreaResponse($response);
-        if ($object instanceof GetLocationsInAreaResponse) {
+        $object = $this->processFindNearestLocationsGeocodeResponse($response);
+        if ($object instanceof FindNearestLocationsGeocodeResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof ResponseInterface
                 && $response->getStatusCode() === 200
@@ -267,80 +211,185 @@ class LocationService extends AbstractService
             return $object;
         }
 
-        throw new ClientException('Unable to retrieve the nearest locations', 0, null, isset($request) && $request instanceof RequestInterface ? $request : null, $response);
+        throw new PostNLCli('Unable to retrieve the nearest locations', 0, null, isset($request) && $request instanceof RequestInterface ? $request : null, $response);
     }
 
     /**
-     * Process GetLocationsInArea Response REST
+     * @param FindNearestLocationsGeocodeRequest $findNearestLocationsGeocodeRequest
+     *
+     * @return RequestInterface
+     *
+     * @since 2.0.0
+     */
+    public function buildFindNearestLocationsGeocodeRequest(FindNearestLocationsGeocodeRequest $findNearestLocationsGeocodeRequest): RequestInterface
+    {
+        $query = [
+            'Latitude'        => $findNearestLocationsGeocodeRequest->getLatitude(),
+            'Longitude'       => $findNearestLocationsGeocodeRequest->getLongitude(),
+            'CountryCode'     => $findNearestLocationsGeocodeRequest->getCountrycode(),
+            'DeliveryOptions' => 'PG',
+        ];
+        if ($deliveryDate = $findNearestLocationsGeocodeRequest->getDeliveryDate()) {
+            $query['DeliveryDate'] = $deliveryDate;
+        }
+        if ($openingTime = $findNearestLocationsGeocodeRequest->getOpeningTime()) {
+            $query['OpeningTime'] = $openingTime;
+        }
+        foreach ($findNearestLocationsGeocodeRequest->getDeliveryOptions() as $option) {
+            if ('PG' === $option) {
+                continue;
+            }
+            $query['DeliveryOptions'] .= ",$option";
+        }
+
+        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
+            'GET',
+            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).'/nearest/geocode/?'.http_build_query($query)
+        )
+            ->withHeader('Accept', 'application/json')
+            ->withHeader('Content-Type', 'application/json;charset=UTF-8')
+            ->withHeader('apikey', $this->postnl->getApiKey());
+    }
+
+    /**
+     * Process FindNearestLocationsGeocode Response REST
      *
      * @param ResponseInterface $response
      *
-     * @return null|GetLocationsInAreaResponse
+     * @return null|FindNearestLocationsGeocodeResponse
+     *
+     * @throws InvalidArgumentException
+     *
+     * @since 2.0.0
+     */
+    public function processFindNearestLocationsGeocodeResponse(ResponseInterface $response): FindNearestLocationsGeocodeResponse
+    {
+        $body = json_decode((string) $response->getBody(), true);
+
+        /** @var FindNearestLocationsGeocodeResponse $object */
+        $object = FindNearestLocationsGeocodeResponse::jsonDeserialize(['FindNearestLocationsGeocodeResponse' => $body]);
+
+        return $object;
+    }
+
+    /**
+     * Find locations in the area
+     *
+     * @param FindLocationsInAreaRequest $findLocations
+     *
+     * @return FindLocationsInAreaResponse
+     *
+     * @throws Exception
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function processGetLocationsInAreaResponse(ResponseInterface $response): ?GetLocationsInAreaResponse
+    public function findLocationsInArea(FindLocationsInAreaRequest $findLocations): FindLocationsInAreaResponse
     {
-        $body = json_decode((string) $response->getBody(), true);
-        if (is_array($body)) {
-            if (isset($body['GetLocationsResult']['ResponseLocation'])
-                && is_array($body['GetLocationsResult']['ResponseLocation'])
-            ) {
-                if (isset($body['GetLocationsResult']['ResponseLocation']['Address'])) {
-                    $body['GetLocationsResult']['ResponseLocation'] = [$body['GetLocationsResult']['ResponseLocation']];
-                }
-
-                $newLocations = [];
-                foreach ($body['GetLocationsResult']['ResponseLocation'] as $location) {
-                    if (isset($location['Address'])) {
-                        $location['Address'] = AbstractEntity::jsonDeserialize(['Address' => $location['Address']]);
-                    }
-
-                    if (isset($location['DeliveryOptions']['string'])) {
-                        $location['DeliveryOptions'] = $location['DeliveryOptions']['string'];
-                    }
-
-                    if (isset($location['OpeningHours'])) {
-                        foreach ($location['OpeningHours'] as $day => $hour) {
-                            if (isset($hour['string'])) {
-                                $location['OpeningHours'][$day] = $hour['string'];
-                            }
-                        }
-
-                        $location['OpeningHours'] = AbstractEntity::jsonDeserialize(
-                            ['OpeningHours' => $location['OpeningHours']]
-                        );
-                    }
-
-                    $newLocations[] = AbstractEntity::jsonDeserialize(['ResponseLocation' => $location]);
-                }
-                $body['GetLocationsResult'] = $newLocations;
+        $item = $this->retrieveCachedItem($findLocations->getId());
+        $response = null;
+        if ($item instanceof CacheItemInterface) {
+            $response = $item->get();
+            try {
+                $response = Message::parseResponse($response);
+            } catch (InvalidArgumentException | TypeError $e) {
             }
+        }
+        if (!$response instanceof ResponseInterface) {
+            $request = $this->buildFindLocationsInAreaRequest($findLocations);
+            $response = Client::getInstance()->doRequest($request);
+            static::validateResponse($response);
+        }
 
-            /** @var GetLocationsInAreaResponse $object */
-            $object = AbstractEntity::jsonDeserialize(['GetLocationsInAreaResponse' => $body]);
+        $object = $this->processFindLocationsInAreaResponse($response);
+        if ($object instanceof FindNearestLocationsGeocodeResponse) {
+            if ($item instanceof CacheItemInterface
+                && $response instanceof ResponseInterface
+                && $response->getStatusCode() === 200
+            ) {
+                $item->set(Message::str($response));
+                $this->cacheItem($item);
+            }
 
             return $object;
         }
 
-        return null;
+        throw new PostNLCli('Unable to retrieve the nearest locations', 0, null, isset($request) && $request instanceof RequestInterface ? $request : null, $response);
+    }
+
+    /**
+     * @param FindLocationsInAreaRequest $locationsInArea
+     *
+     * @return RequestInterface
+     *
+     * @since 2.0.0
+     */
+    public function buildFindLocationsInAreaRequest(FindLocationsInAreaRequest $locationsInArea): RequestInterface
+    {
+        $query = [
+            'LatitudeNorth'   => $locationsInArea->getLatitudeNorth(),
+            'LongitudeWest'   => $locationsInArea->getLongitudeWest(),
+            'LatitudeSouth'   => $locationsInArea->getLatitudeSouth(),
+            'LongitudeEast'   => $locationsInArea->getLongitudeEast(),
+            'CountryCode'     => $locationsInArea->getCountrycode(),
+            'DeliveryOptions' => 'PG',
+        ];
+        if ($deliveryDate = $locationsInArea->getDeliveryDate()) {
+            $query['DeliveryDate'] = $deliveryDate;
+        }
+        if ($openingTime = $locationsInArea->getOpeningTime()) {
+            $query['OpeningTime'] = $openingTime;
+        }
+        foreach ($locationsInArea->getDeliveryOptions() as $option) {
+            if ('PG' === $option) {
+                continue;
+            }
+            $query['DeliveryOptions'] .= ",$option";
+        }
+
+        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
+            'GET',
+            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).'/area/?'.http_build_query($query)
+        )
+            ->withHeader('Accept', 'application/json')
+            ->withHeader('Content-Type', 'application/json;charset=UTF-8')
+            ->withHeader('apikey', $this->postnl->getApiKey());
+    }
+
+    /**
+     * Process FindNearestLocationsGeocode Response REST
+     *
+     * @param ResponseInterface $response
+     *
+     * @return FindLocationsInAreaResponse
+     *
+     * @throws InvalidArgumentException
+     *
+     * @since 2.0.0
+     */
+    public function processFindLocationsInAreaResponse(ResponseInterface $response): FindLocationsInAreaResponse
+    {
+        $body = json_decode((string) $response->getBody(), true);
+
+        /** @var FindLocationsInAreaResponse $object */
+        $object = FindLocationsInAreaResponse::jsonDeserialize(['FindLocationsInAreaResponse' => $body]);
+
+        return $object;
     }
 
     /**
      * Get the location via REST
      *
-     * @param GetLocation $getLocation
+     * @param LookupLocationRequest $getLocation
      *
-     * @return GetLocationsInAreaResponse
+     * @return Location
      *
-     * @throws ClientException
-     * @throws CifDownException
+     * @throws Exception
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function getLocation(GetLocation $getLocation): GetLocationsInAreaResponse
+    public function lookupLocation(LookupLocationRequest $getLocation): Location
     {
         $item = $this->retrieveCachedItem($getLocation->getId());
         $response = null;
@@ -348,17 +397,17 @@ class LocationService extends AbstractService
             $response = $item->get();
             try {
                 $response = Message::parseResponse($response);
-            } catch (InvalidArgumentException $e) {
+            } catch (InvalidArgumentException | TypeError $e) {
             }
         }
         if (!$response instanceof ResponseInterface) {
-            $request = $this->buildGetLocationRequest($getLocation);
+            $request = $this->buildLookupLocationRequest($getLocation);
             $response = Client::getInstance()->doRequest($request);
             static::validateResponse($response);
         }
 
-        $object = $this->processGetLocationResponse($response);
-        if ($object instanceof GetLocationsInAreaResponse) {
+        $object = $this->processLookupLocationResponse($response);
+        if ($object instanceof Location) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof ResponseInterface
                 && $response->getStatusCode() === 200
@@ -370,20 +419,20 @@ class LocationService extends AbstractService
             return $object;
         }
 
-        throw new ClientException('Unable to retrieve the nearest locations', 0, null, isset($request) && $request instanceof RequestInterface ? $request : null, $response);
+        throw new HttpClientException('Unable to retrieve the nearest locations', 0, null, isset($request) && $request instanceof RequestInterface ? $request : null, $response);
     }
 
     /**
-     * Build the GetLocation request for the REST API
+     * Build the LookupLocationRequest request for the REST API
      *
-     * @param GetLocation $getLocation
+     * @param LookupLocationRequest $getLocation
      *
      * @return RequestInterface
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function buildGetLocationRequest(GetLocation $getLocation): RequestInterface
+    public function buildLookupLocationRequest(LookupLocationRequest $getLocation): RequestInterface
     {
         $query = [
             'LocationCode' => $getLocation->getLocationCode(),
@@ -404,100 +453,26 @@ class LocationService extends AbstractService
     }
 
     /**
-     * Process GetLocation Response REST
+     * Process LookupLocationRequest Response REST
      *
      * @param ResponseInterface $response
      *
-     * @return null|GetLocationsInAreaResponse
+     * @return Location
      *
-
-     * @since 1.0.0
+     * @throws ReflectionException
+     *
      * @since 2.0.0 Strict typing
+     * @since 1.0.0
      */
-    public function processGetLocationResponse(ResponseInterface $response): ?GetLocationsInAreaResponse
+    public function processLookupLocationResponse(ResponseInterface $response): Location
     {
         $body = json_decode((string) $response->getBody(), true);
         if (is_array($body)) {
-            if (isset($body['GetLocationsResult']['ResponseLocation']['Address'])) {
-                $body['GetLocationsResult']['ResponseLocation'] = [$body['GetLocationsResult']['ResponseLocation']];
+            if (isset($body['GetLocationsResult']['ResponseLocation'])) {
+                return Location::jsonDeserialize(['Location' => $body['GetLocationsResult']['ResponseLocation']]);
             }
-
-            $newLocations = [];
-            foreach ($body['GetLocationsResult']['ResponseLocation'] as $location) {
-                if (isset($location['Address'])) {
-                    $location['Address'] = AbstractEntity::jsonDeserialize(['Address' => $location['Address']]);
-                }
-
-                if (isset($location['DeliveryOptions']['string'])) {
-                    $location['DeliveryOptions'] = $location['DeliveryOptions']['string'];
-                }
-
-                if (isset($location['OpeningHours'])) {
-                    foreach ($location['OpeningHours'] as $day => $hour) {
-                        if (isset($hour['string'])) {
-                            $location['OpeningHours'][$day] = $hour['string'];
-                        }
-                    }
-
-                    $location['OpeningHours'] = AbstractEntity::jsonDeserialize(
-                        ['OpeningHours' => $location['OpeningHours']]
-                    );
-                }
-
-                $newLocations[] = AbstractEntity::jsonDeserialize(['ResponseLocation' => $location]);
-            }
-            $body['GetLocationsResult'] = $newLocations;
-
-            /** @var GetLocationsInAreaResponse $object */
-            $object = AbstractEntity::jsonDeserialize(['GetLocationsInAreaResponse' => $body]);
-
-            return $object;
         }
 
-        return null;
-    }
-
-    /**
-     * Build the GetLocationsInArea request for the REST API
-     *
-     * @param GetNearestLocationsGeocode $getLocations
-     *
-     * @return RequestInterface
-     */
-    public function buildGetLocationsInAreaRequest(GetNearestLocationsGeocode $getLocations): RequestInterface
-    {
-        $location = $getLocations->getLocation();
-        $query = [
-            'DeliveryOptions' => 'PG',
-            'LatitudeNorth'   => $location->getCoordinatesNorthWest()->getLatitude(),
-            'LongitudeWest'   => $location->getCoordinatesNorthWest()->getLongitude(),
-            'LatitudeSouth'   => $location->getCoordinatesSouthEast()->getLatitude(),
-            'LongitudeEast'   => $location->getCoordinatesSouthEast()->getLongitude(),
-        ];
-        if ($countryCode = $getLocations->getCountryCode()) {
-            $query['CountryCode'] = $countryCode;
-        }
-        if ($deliveryDate = $location->getDeliveryDate()) {
-            $query['DeliveryDate'] = date('d-m-Y', strtotime($deliveryDate));
-        }
-        if ($openingTime = $location->getOpeningTime()) {
-            $query['OpeningTime'] = date('H:i:00', strtotime($openingTime));
-        }
-        foreach ($location->getDeliveryOptions() as $option) {
-            if ('PG' === $option) {
-                continue;
-            }
-            $query['DeliveryOptions'] .= ",$option";
-        }
-        $endpoint = '/area?'.http_build_query($query);
-
-        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
-            'GET',
-            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint
-        )
-            ->withHeader('Accept', 'application/json')
-            ->withHeader('Content-Type', 'application/json;charset=UTF-8')
-            ->withHeader('apikey', $this->postnl->getApiKey())
-        ;
+        return new Location();
     }
 }

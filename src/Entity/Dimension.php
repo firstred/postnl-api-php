@@ -29,10 +29,7 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
-use Firstred\PostNL\Exception\InvalidTypeException;
 use Firstred\PostNL\Misc\ValidateAndFix;
-use libphonenumber\Leniency\Valid;
-use ReflectionClass;
 use ReflectionException;
 use TypeError;
 
@@ -111,11 +108,11 @@ class Dimension extends AbstractEntity
     /**
      * Dimension constructor.
      *
-     * @param string $weight
-     * @param string $height
-     * @param string $length
-     * @param string $volume
-     * @param string $width
+     * @param int|float|string|null $weight
+     * @param int|float|string|null $height
+     * @param int|float|string|null $length
+     * @param int|float|string|null $width
+     * @param int|float|string|null $volume
      *
      * @throws TypeError
      * @throws ReflectionException
@@ -123,7 +120,7 @@ class Dimension extends AbstractEntity
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function __construct(?string $weight = null, ?string $height = null, ?string $length = null, ?string $volume = null, ?string $width = null)
+    public function __construct($weight = null, $height = null, $length = null, $width = null, $volume = null)
     {
         parent::__construct();
 
@@ -132,8 +129,8 @@ class Dimension extends AbstractEntity
         // Optional parameters.
         $this->setHeight($height);
         $this->setLength($length);
-        $this->setVolume($volume);
         $this->setWidth($width);
+        $this->setVolume($volume);
     }
 
     /**
@@ -160,13 +157,13 @@ class Dimension extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
      * @throws ReflectionException
-     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @example 1400
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
      *
      * @see     Dimension::$height
      */
@@ -201,60 +198,19 @@ class Dimension extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
      * @throws ReflectionException
-     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @example 2000
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
      *
      * @see     Dimension::$length
      */
     public function setLength($length): Dimension
     {
         $this->length = ValidateAndFix::numericString($length);
-
-        return $this;
-    }
-
-    /**
-     * Get volume
-     *
-     * @return string|null
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     *
-     * @see   Dimension::$volume
-     */
-    public function getVolume(): ?string
-    {
-        return $this->volume;
-    }
-
-    /**
-     * Set volume
-     *
-     * @pattern ^\d{1,20}$
-     *
-     * @param string|null $volume
-     *
-     * @return static
-     *
-     * @throws TypeError
-     * @throws ReflectionException
-     *
-     * @example 30000
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     *
-     * @see     Dimension::$volume
-     */
-    public function setVolume($volume): Dimension
-    {
-        $this->volume = ValidateAndFix::numericString($volume);
 
         return $this;
     }
@@ -283,13 +239,13 @@ class Dimension extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
      * @throws ReflectionException
-     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @example 4300
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
      *
      * @see     Dimension::$weight
      */
@@ -324,19 +280,60 @@ class Dimension extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
      * @throws ReflectionException
-     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @example 1500
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
      *
      * @see     Dimension::$width
      */
     public function setWidth($width): Dimension
     {
         $this->width = ValidateAndFix::numericString($width);
+
+        return $this;
+    }
+
+    /**
+     * Get volume
+     *
+     * @return string|null
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Strict typing
+     *
+     * @see   Dimension::$volume
+     */
+    public function getVolume(): ?string
+    {
+        return $this->volume;
+    }
+
+    /**
+     * Set volume
+     *
+     * @pattern ^\d{1,20}$
+     *
+     * @param string|null $volume
+     *
+     * @return static
+     *
+     * @throws ReflectionException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @example 30000
+     *
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
+     *
+     * @see     Dimension::$volume
+     */
+    public function setVolume($volume): Dimension
+    {
+        $this->volume = ValidateAndFix::numericString($volume);
 
         return $this;
     }

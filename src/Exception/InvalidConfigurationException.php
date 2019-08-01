@@ -31,7 +31,9 @@ namespace Firstred\PostNL\Exception;
 
 /**
  * Class InvalidConfigurationException
+ *
+ * Exception is used when the PostNL client is configured incorrectly (e.g. missing api key)
  */
-class InvalidConfigurationException extends AbstractException
+class InvalidConfigurationException extends PostNLClientException
 {
 }

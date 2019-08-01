@@ -99,9 +99,13 @@ class EntityTest extends TestCase
             $entity = new $entityName();
             $reflection = new ReflectionClass($entityName);
             foreach (array_keys($reflection->getDefaultProperties()) as $var) {
+                $property = $reflection->getProperty($var);
+                if (!$property->isProtected()) {
+                    continue;
+                }
                 $var = ucfirst($var);
-                $this->assertTrue(method_exists($entity, "get$var"));
-                $this->assertTrue(method_exists($entity, "set$var"));
+                $this->assertTrue(method_exists($entity, "get$var"), $entityName);
+                $this->assertTrue(method_exists($entity, "set$var"), $entityName);
             }
         }
 
@@ -115,6 +119,10 @@ class EntityTest extends TestCase
             $entity = new $entityName();
             $reflection = new ReflectionClass($entityName);
             foreach (array_keys($reflection->getDefaultProperties()) as $var) {
+                $property = $reflection->getProperty($var);
+                if (!$property->isProtected()) {
+                    continue;
+                }
                 $var = ucfirst($var);
                 $this->assertTrue(method_exists($entity, "get$var"), "The method {$entityName}::get{$var} does not exist");
                 $this->assertTrue(method_exists($entity, "set$var"), "The method {$entityName}::set{$var} does not exist");
@@ -131,6 +139,10 @@ class EntityTest extends TestCase
             $entity = new $entityName();
             $reflection = new ReflectionClass($entityName);
             foreach (array_keys($reflection->getDefaultProperties()) as $var) {
+                $property = $reflection->getProperty($var);
+                if (!$property->isProtected()) {
+                    continue;
+                }
                 $var = ucfirst($var);
                 $this->assertTrue(method_exists($entity, "get$var"));
                 $this->assertTrue(method_exists($entity, "set$var"));

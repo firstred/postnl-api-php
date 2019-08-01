@@ -29,7 +29,9 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
-use Firstred\PostNL\Entity\Response\CompleteStatusResponseEvent;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Misc\ValidateAndFix;
+use ReflectionException;
 use TypeError;
 
 /**
@@ -38,71 +40,391 @@ use TypeError;
 class Event extends AbstractEntity
 {
     /**
-     * Complete status response event
+     * Event code
      *
-     * @pattern N/A
+     * @pattern ^.{0,35}$
      *
-     * @example N/A
+     * @example I01
      *
-     * @var CompleteStatusResponseEvent|null $completeStatusResponseEvent
+     * @var string|null $code
      *
-     * @since 1.0.0
+     * @since   2.0.0
      */
-    protected $completeStatusResponseEvent;
+    protected $code;
+
+    /**
+     * Event description
+     *
+     * @pattern ^.{0,1000}$
+     *
+     * @example Zending is bezorgd
+     *
+     * @var string|null $description
+     *
+     * @since   2.0.0
+     */
+    protected $description;
+
+    /**
+     * Destination location code
+     *
+     * @pattern ^.{0,35}$
+     *
+     * @example 981223
+     *
+     * @var string|null
+     *
+     * @since   2.0.0
+     */
+    protected $destinationLocationCode;
+
+    /**
+     * Location code
+     *
+     * @pattern ^.{0,95}$
+     *
+     * @example 2394082
+     *
+     * @var string|null $locationCode
+     *
+     * @since   2.0.0
+     */
+    protected $locationCode;
+
+    /**
+     * Route code
+     *
+     * @pattern ^.{0,1000}$
+     *
+     * @example 217 PostNL Spiegelstraat
+     *
+     * @var string|null $routeCode
+     *
+     * @since   2.0.0
+     */
+    protected $routeCode;
+
+    /**
+     * Route name
+     *
+     * @pattern ${0,1000}$
+     *
+     * @example 217 PostNL Spiegelstraat
+     *
+     * @var string|null $routeName
+     *
+     * @since   2.0.0
+     */
+    protected $routeName;
+
+    /**
+     * Timestamp
+     *
+     * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}\s(?:2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9]$
+     *
+     * @example 31-07-2019 09:36:42
+     *
+     * @var string|null
+     *
+     * @since   2.0.0
+     */
+    protected $timeStamp;
 
     /**
      * Event constructor.
      *
-     * @param CompleteStatusResponseEvent|null $completeStatusResponseEvent
+     * @param string|null $code
+     * @param string|null $description
+     * @param string|null $destinationLocationCode
+     * @param string|null $locationCode
+     * @param string|null $routeCode
+     * @param string|null $routeName
+     * @param string|null $timeStamp
      *
      * @throws TypeError
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
      *
      * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since 2.0.0
      */
-    public function __construct(?CompleteStatusResponseEvent $completeStatusResponseEvent = null)
+    public function __construct(?string $code = null, ?string $description = null, ?string $destinationLocationCode = null, ?string $locationCode = null, ?string $routeCode = null, ?string $routeName = null, ?string $timeStamp = null)
     {
         parent::__construct();
 
-        $this->setCompleteStatusResponseEvent($completeStatusResponseEvent);
+        $this->setCode($code);
+        $this->setDescription($description);
+        $this->setDestinationLocationCode($destinationLocationCode);
+        $this->setLocationCode($locationCode);
+        $this->setRouteCode($routeCode);
+        $this->setRouteName($routeName);
+        $this->setTimeStamp($timeStamp);
     }
 
     /**
-     * Get complete status response event
+     * Get code
      *
-     * @return CompleteStatusResponseEvent|null
+     * @return string|null
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since 2.0.0
      *
-     * @see   Event::$completeStatusResponseEvent
+     * @see   Event::$code
      */
-    public function getCompleteStatusResponseEvent(): ?CompleteStatusResponseEvent
+    public function getCode(): ?string
     {
-        return $this->completeStatusResponseEvent;
+        return $this->code;
     }
 
     /**
-     * Set complete status response event
+     * Set code
      *
-     * @pattern N/A
+     * @pattern ^.{0,35}$
      *
-     * @param CompleteStatusResponseEvent|null $completeStatusResponseEvent
+     * @param string|null $code
      *
      * @return static
      *
      * @throws TypeError
      *
-     * @example N/A
+     * @example I01
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since   2.0.0
      *
-     * @see     Event::$completeStatusResponseEvent
+     * @see     Event::$code
      */
-    public function setCompleteStatusResponseEvent(?CompleteStatusResponseEvent $completeStatusResponseEvent): Event
+    public function setCode(?string $code): Event
     {
-        $this->completeStatusResponseEvent = $completeStatusResponseEvent;
+        $this->code = $code;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string|null
+     *
+     * @since 2.0.0
+     *
+     * @see   Event::$description
+     */
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set description
+     *
+     * @pattern ^.{0,1000}$
+     *
+     * @param string|null $description
+     *
+     * @return static
+     *
+     * @throws TypeError
+     *
+     * @example Zending is bezorgd
+     *
+     * @since   2.0.0
+     *
+     * @see     Event::$description
+     */
+    public function setDescription(?string $description): Event
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get destination location code
+     *
+     * @return string|null
+     *
+     * @since 2.0.0
+     *
+     * @see   Event::$destinationLocationCode
+     */
+    public function getDestinationLocationCode(): ?string
+    {
+        return $this->destinationLocationCode;
+    }
+
+    /**
+     * Set destination location code
+     *
+     * @pattern ^.{0,35}$
+     *
+     * @param string|null $destinationLocationCode
+     *
+     * @return static
+     *
+     * @throws TypeError
+     *
+     * @example 981223
+     *
+     * @since   2.0.0
+     *
+     * @see     Event::$destinationLocationCode
+     */
+    public function setDestinationLocationCode(?string $destinationLocationCode): Event
+    {
+        $this->destinationLocationCode = $destinationLocationCode;
+
+        return $this;
+    }
+
+    /**
+     * Get route code
+     *
+     * @return string|null
+     *
+     * @since 2.0.0
+     *
+     * @see   Event::$routeCode
+     */
+    public function getRouteCode(): ?string
+    {
+        return $this->routeCode;
+    }
+
+    /**
+     * Set route code
+     *
+     * @pattern ^.{0,1000}$
+     *
+     * @param string|null $routeCode
+     *
+     * @return static
+     *
+     * @throws TypeError
+     *
+     * @example 217 PostNL Spiegelstraat
+     *
+     * @since   2.0.0
+     *
+     * @see     Event::$routeCode
+     */
+    public function setRouteCode(?string $routeCode): Event
+    {
+        $this->routeCode = $routeCode;
+
+        return $this;
+    }
+
+    /**
+     * Get route name
+     *
+     * @return string|null
+     *
+     * @since 2.0.0
+     *
+     * @see   Event::$routeName
+     */
+    public function getRouteName(): ?string
+    {
+        return $this->routeName;
+    }
+
+    /**
+     * Set route name
+     *
+     * @pattern ${0,1000}$
+     *
+     * @example 217 PostNL Spiegelstraat
+     *
+     * @param string|null $routeName
+     *
+     * @return static
+     *
+     * @throws TypeError
+     *
+     * @since   2.0.0
+     *
+     * @see     Event::$routeName
+     */
+    public function setRouteName(?string $routeName): Event
+    {
+        $this->routeName = $routeName;
+
+        return $this;
+    }
+
+    /**
+     * Get timestamp
+     *
+     * @return string|null
+     *
+     * @since 2.0.0
+     *
+     * @see   Event::$timeStamp
+     */
+    public function getTimeStamp(): ?string
+    {
+        return $this->timeStamp;
+    }
+
+    /**
+     * Set timestamp
+     *
+     * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}\s(?:2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9]$
+     *
+     * @param string|null $timeStamp
+     *
+     * @return static
+     *
+     * @throws TypeError
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
+     *
+     * @example 03-07-2019 08:00:00
+     *
+     * @since   2.0.0
+     *
+     * @see     Event::$timeStamp
+     */
+    public function setTimeStamp(?string $timeStamp): Event
+    {
+        $this->timeStamp = ValidateAndFix::dateTime($timeStamp);
+
+        return $this;
+    }
+
+    /**
+     * Get location code
+     *
+     * @return string|null
+     *
+     * @since 2.0.0
+     *
+     * @see   Event::$locationCode
+     */
+    public function getLocationCode(): ?string
+    {
+        return $this->locationCode;
+    }
+
+    /**
+     * Set location code
+     *
+     * @pattern ^.{0,95}$
+     *
+     * @param string|null $locationCode
+     *
+     * @return static
+     *
+     * @throws TypeError
+     *
+     * @example 2394082
+     *
+     * @since   2.0.0
+     *
+     * @see     Event::$locationCode
+     */
+    public function setLocationCode(?string $locationCode): Event
+    {
+        $this->locationCode = $locationCode;
 
         return $this;
     }

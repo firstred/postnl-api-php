@@ -31,7 +31,9 @@ namespace Firstred\PostNL\Exception;
 
 /**
  * Class NotSupportedException
+ *
+ * Is used when a feature/parameter is not supported.
  */
-class NotSupportedException extends AbstractException
+class NotSupportedException extends PostNLClientException
 {
 }

@@ -89,7 +89,7 @@ class ConfirmingResponseShipment extends AbstractEntity
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      *
-     * @see   GenerateBarcode
+     * @see   GenerateBarcodeRequest
      */
     public function getBarcode(): ?string
     {
@@ -112,7 +112,7 @@ class ConfirmingResponseShipment extends AbstractEntity
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      *
-     * @see     GenerateBarcode
+     * @see     GenerateBarcodeRequest
      */
     public function setBarcode(?string $barcode): ConfirmingResponseShipment
     {

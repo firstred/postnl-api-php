@@ -29,6 +29,7 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\ValidateAndFix;
 use ReflectionException;
 use TypeError;
@@ -100,6 +101,8 @@ class Label extends AbstractEntity
      * @param string|null $labelType
      *
      * @throws TypeError
+     * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -168,6 +171,7 @@ class Label extends AbstractEntity
         return $this->contenttype;
     }
 
+
     /**
      * Set content type
      *
@@ -179,6 +183,7 @@ class Label extends AbstractEntity
      *
      * @throws TypeError
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @example PDF
      *
@@ -220,6 +225,7 @@ class Label extends AbstractEntity
      *
      * @throws TypeError
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @example Label (A6)
      *

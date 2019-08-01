@@ -29,7 +29,7 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
-use Firstred\PostNL\Exception\InvalidTypeException;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\ValidateAndFix;
 use ReflectionClass;
 use ReflectionException;
@@ -269,7 +269,7 @@ class Address extends AbstractEntity
      *
      * @var string|null $remark
      *
-     * @pattern ^.{0,35}$
+     * @pattern ^.{0,1000}$
      *
      * @example Opmerking
      *
@@ -325,9 +325,10 @@ class Address extends AbstractEntity
      * @param string|null $remark
      * @param string|null $streetHouseNrExt
      *
-     * @throws TypeError
+     * @throws InvalidArgumentException
      * @throws ReflectionException
-     *
+     * @throws InvalidArgumentException
+     * @throws InvalidArgumentException
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
@@ -383,9 +384,9 @@ class Address extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
+     * @throws InvalidArgumentException
      * @throws ReflectionException
-     *
+     * @throws InvalidArgumentException
      * @example 02
      *
      * @since   1.0.0
@@ -431,13 +432,13 @@ class Address extends AbstractEntity
      *
      * @return static
      *
+     * @throws InvalidArgumentException
      * @throws ReflectionException
-     * @throws TypeError
-     *
+     * @throws InvalidArgumentException
      * @example 2132WT
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
      *
      * @see     Address::$zipcode
      */
@@ -472,13 +473,13 @@ class Address extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
+     * @throws InvalidArgumentException
      * @throws ReflectionException
-     *
+     * @throws InvalidArgumentException
      * @example Beukenhorst
      *
      * @since   1.0.0
-     * @since 2.0.0 Strict typing
+     * @since   2.0.0 Strict typing
      *
      * @see     Address::$area
      */
@@ -513,9 +514,9 @@ class Address extends AbstractEntity
      *
      * @return static
      *
+     * @throws InvalidArgumentException
      * @throws ReflectionException
-     * @throws TypeError
-     *
+     * @throws InvalidArgumentException
      * @example AA
      *
      * @since   1.0.0
@@ -554,9 +555,9 @@ class Address extends AbstractEntity
      *
      * @return static
      *
+     * @throws InvalidArgumentException
      * @throws ReflectionException
-     * @throws TypeError
-     *
+     * @throws InvalidArgumentException
      * @example Hoofddorp
      *
      * @since   1.0.0
@@ -595,9 +596,9 @@ class Address extends AbstractEntity
      *
      * @return static
      *
+     * @throws InvalidArgumentException
      * @throws ReflectionException
-     * @throws TypeError
-     *
+     * @throws InvalidArgumentException
      * @example PostNL
      *
      * @since   1.0.0
@@ -636,9 +637,9 @@ class Address extends AbstractEntity
      *
      * @return static
      *
+     * @throws InvalidArgumentException
      * @throws ReflectionException
-     * @throws TypeError
-     *
+     * @throws InvalidArgumentException
      * @example NL
      *
      * @since   1.0.0
@@ -677,9 +678,9 @@ class Address extends AbstractEntity
      *
      * @return static
      *
+     * @throws InvalidArgumentException
      * @throws ReflectionException
-     * @throws TypeError
-     *
+     * @throws InvalidArgumentException
      * @example IT
      *
      * @since   1.0.0
@@ -718,9 +719,9 @@ class Address extends AbstractEntity
      *
      * @return static
      *
+     * @throws InvalidArgumentException
      * @throws ReflectionException
-     * @throws TypeError
-     *
+     * @throws InvalidArgumentException
      * @example 123
      *
      * @since   1.0.0
@@ -759,9 +760,9 @@ class Address extends AbstractEntity
      *
      * @return static
      *
+     * @throws InvalidArgumentException
      * @throws ReflectionException
-     * @throws TypeError
-     *
+     * @throws InvalidArgumentException
      * @example Peter
      *
      * @since   1.0.0
@@ -839,9 +840,9 @@ class Address extends AbstractEntity
      *
      * @return static
      *
+     * @throws InvalidArgumentException
      * @throws ReflectionException
-     * @throws TypeError
-     *
+     * @throws InvalidArgumentException
      * @example 4
      *
      * @since   1.0.0
@@ -853,7 +854,7 @@ class Address extends AbstractEntity
     {
         static $maxLength = 35;
         if (is_string($floor) && mb_strlen($floor) > $maxLength) {
-            throw new InvalidTypeException(sprintf('%s::%s - Invalid floor given, must be max %d characters long', (new ReflectionClass($this))->getShortName(), __METHOD__, $maxLength));
+            throw new InvalidArgumentException(sprintf('%s::%s - Invalid floor given, must be max %d characters long', (new ReflectionClass($this))->getShortName(), __METHOD__, $maxLength));
         }
 
         $this->floor = $floor;
@@ -885,9 +886,10 @@ class Address extends AbstractEntity
      *
      * @return static
      *
+     * @throws InvalidArgumentException
      * @throws ReflectionException
-     * @throws TypeError
-     *
+     * @throws InvalidArgumentException
+     * @throws InvalidArgumentException
      * @example 42
      *
      * @since   1.0.0
@@ -903,12 +905,12 @@ class Address extends AbstractEntity
         if (is_string($houseNr)) {
             if ($this->countrycode && in_array($this->countrycode, ['NL', 'BE', 'LU'])) {
                 if (mb_strlen($houseNr) > 5) {
-                    throw new InvalidTypeException(
+                    throw new InvalidArgumentException(
                         sprintf('%s::%s - Invalid house number given, must be max 5 characters long for NL, BE & LU', (new ReflectionClass($this))->getShortName(), __METHOD__)
                     );
                 }
             } elseif (mb_strlen($houseNr) > 35) {
-                throw new InvalidTypeException(
+                throw new InvalidArgumentException(
                     sprintf('%s::%s - Invalid house number given, must be max 35 characters long outside NL, BE & LU', (new ReflectionClass($this))->getShortName(), __METHOD__)
                 );
             }
@@ -943,9 +945,9 @@ class Address extends AbstractEntity
      *
      * @return static
      *
+     * @throws InvalidArgumentException
      * @throws ReflectionException
-     * @throws TypeError
-     *
+     * @throws InvalidArgumentException
      * @example A
      *
      * @since   1.0.0
@@ -960,7 +962,7 @@ class Address extends AbstractEntity
             $houseNrExt = (string) $houseNrExt;
         }
         if (is_string($houseNrExt) && mb_strlen($houseNrExt) > $maxLength) {
-            throw new InvalidTypeException(
+            throw new InvalidArgumentException(
                 sprintf('%s::%s - Invalid house number extension given, must be max %d characters long', (new ReflectionClass($this))->getShortName(), __METHOD__, $maxLength)
             );
         }
@@ -995,12 +997,12 @@ class Address extends AbstractEntity
      *
      * @return static
      *
+     * @throws InvalidArgumentException
      * @throws ReflectionException
-     * @throws TypeError
-     *
+     * @throws InvalidArgumentException
      * @example Siriusdreef 42 A
      *
-     * @since 2.0.0 Strict typing
+     * @since   2.0.0 Strict typing
      *
      * @see     Address::$streetHouseNrExt
      */
@@ -1035,9 +1037,9 @@ class Address extends AbstractEntity
      *
      * @return static
      *
+     * @throws InvalidArgumentException
      * @throws ReflectionException
-     * @throws TypeError
-     *
+     * @throws InvalidArgumentException
      * @example de Ruiter
      *
      * @since   1.0.0
@@ -1078,6 +1080,7 @@ class Address extends AbstractEntity
      *
      * @throws ReflectionException
      * @throws TypeError
+     * @throws InvalidArgumentException
      *
      * @example Noord-Holland
      *
@@ -1111,7 +1114,7 @@ class Address extends AbstractEntity
     /**
      * Set remark
      *
-     * @pattern ^.{0,35}$
+     * @pattern ^.{0,1000}$
      *
      * @param string|null $remark
      *
@@ -1119,6 +1122,7 @@ class Address extends AbstractEntity
      *
      * @throws ReflectionException
      * @throws TypeError
+     * @throws InvalidArgumentException
      *
      * @example Opmerking
      *
@@ -1158,9 +1162,9 @@ class Address extends AbstractEntity
      *
      * @return static
      *
+     * @throws InvalidArgumentException
      * @throws ReflectionException
-     * @throws TypeError
-     *
+     * @throws InvalidArgumentException
      * @example Siriusdreef
      *
      * @since   1.0.0

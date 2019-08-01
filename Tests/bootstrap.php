@@ -4,8 +4,6 @@ require __DIR__.'/../vendor/autoload.php';
 
 use Dotenv\Dotenv;
 use Dotenv\Exception\InvalidPathException;
-use Http\Discovery\HttpAsyncClientDiscovery;
-use Http\Discovery\Strategy\MockClientStrategy;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
 use Psr\Log\LogLevel;

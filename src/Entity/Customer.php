@@ -29,9 +29,7 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
-use Firstred\PostNL\Exception\InvalidTypeException;
 use Firstred\PostNL\Misc\ValidateAndFix;
-use ReflectionClass;
 use ReflectionException;
 use TypeError;
 
@@ -251,9 +249,9 @@ class Customer extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
      * @throws ReflectionException
-     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @example 123456
      *
      * @since   1.0.0
@@ -292,9 +290,9 @@ class Customer extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
      * @throws ReflectionException
-     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @example Peter de Ruiter
      *
      * @since   1.0.0
@@ -333,9 +331,9 @@ class Customer extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
      * @throws ReflectionException
-     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @example AB
      *
      * @since   1.0.0
@@ -374,9 +372,9 @@ class Customer extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
      * @throws ReflectionException
-     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @example 1234
      *
      * @since   1.0.0
@@ -455,9 +453,9 @@ class Customer extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
      * @throws ReflectionException
-     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @example CD
      *
      * @since   1.0.0
@@ -497,7 +495,8 @@ class Customer extends AbstractEntity
      * @return static
      *
      * @throws ReflectionException
-     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @since    1.0.0
      * @since    2.0.0 Strict typing
      *
@@ -536,9 +535,9 @@ class Customer extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
      * @throws ReflectionException
-     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @example PostNL
      *
      * @since   1.0.0

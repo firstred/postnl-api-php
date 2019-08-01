@@ -39,8 +39,10 @@ use Throwable;
 
 /**
  * Class CifErrorException
+ *
+ * Exception for CIF HTTP 5XX responses with a clear error message. Optionally has an error code, request and response object.
  */
-class CifErrorException extends AbstractException implements WithRequestInterface, WithResponseInterface
+class CifErrorException extends PostNLClientException implements WithRequestInterface, WithResponseInterface
 {
     use WithRequestTrait;
     use WithResponseTrait;

@@ -30,43 +30,37 @@ declare(strict_types=1);
 namespace Firstred\PostNL;
 
 use Exception;
-use Firstred\PostNL\Entity\Request\GenerateBarcode;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Label;
-use Firstred\PostNL\Entity\Request\CalculateTimeframes;
-use Firstred\PostNL\Entity\Request\CompleteStatus;
-use Firstred\PostNL\Entity\Request\CompleteStatusByPhase;
-use Firstred\PostNL\Entity\Request\CompleteStatusByReference;
-use Firstred\PostNL\Entity\Request\CompleteStatusByStatus;
-use Firstred\PostNL\Entity\Request\Confirming;
-use Firstred\PostNL\Entity\Request\CurrentStatus;
-use Firstred\PostNL\Entity\Request\CurrentStatusByPhase;
-use Firstred\PostNL\Entity\Request\CurrentStatusByReference;
-use Firstred\PostNL\Entity\Request\CurrentStatusByStatus;
-use Firstred\PostNL\Entity\Request\GenerateLabel;
-use Firstred\PostNL\Entity\Request\CalculateDeliveryDate;
-use Firstred\PostNL\Entity\Request\GetLocation;
-use Firstred\PostNL\Entity\Request\GetNearestLocations;
-use Firstred\PostNL\Entity\Request\GetNearestLocationsGeocode;
-use Firstred\PostNL\Entity\Request\GetSentDateRequest;
-use Firstred\PostNL\Entity\Request\GetSignature;
-use Firstred\PostNL\Entity\Response\CompleteStatusResponse;
+use Firstred\PostNL\Entity\Request\CalculateDeliveryDateRequest;
+use Firstred\PostNL\Entity\Request\CalculateShippingDateRequest;
+use Firstred\PostNL\Entity\Request\CalculateTimeframesRequest;
+use Firstred\PostNL\Entity\Request\ConfirmShipmentRequest;
+use Firstred\PostNL\Entity\Request\FindNearestLocationsGeocodeRequest;
+use Firstred\PostNL\Entity\Request\FindNearestLocationsRequest;
+use Firstred\PostNL\Entity\Request\GenerateBarcodeRequest;
+use Firstred\PostNL\Entity\Request\GenerateShipmentLabelRequest;
+use Firstred\PostNL\Entity\Request\LookupLocationRequest;
+use Firstred\PostNL\Entity\Request\LookupShipmentByBarcodeRequest;
+use Firstred\PostNL\Entity\Request\RetrieveShipmentByBarcodeRequest;
+use Firstred\PostNL\Entity\Request\RetrieveSignatureByBarcodeRequest;
+use Firstred\PostNL\Entity\Response\CalculateDeliveryDateResponse;
+use Firstred\PostNL\Entity\Response\CalculateShippingDateResponse;
+use Firstred\PostNL\Entity\Response\CalculateTimeframesResponse;
 use Firstred\PostNL\Entity\Response\ConfirmingResponseShipment;
-use Firstred\PostNL\Entity\Response\CurrentStatusResponse;
+use Firstred\PostNL\Entity\Response\FindNearestLocationsGeocodeResponse;
+use Firstred\PostNL\Entity\Response\FindNearestLocationsResponse;
 use Firstred\PostNL\Entity\Response\GenerateLabelResponse;
-use Firstred\PostNL\Entity\Response\GetDeliveryDateResponse;
 use Firstred\PostNL\Entity\Response\GetLocationsInAreaResponse;
-use Firstred\PostNL\Entity\Response\GetNearestLocationsResponse;
-use Firstred\PostNL\Entity\Response\GetSentDateResponse;
-use Firstred\PostNL\Entity\Response\ResponseTimeframes;
-use Firstred\PostNL\Entity\Response\SignatureResponse;
 use Firstred\PostNL\Entity\Shipment;
-use Firstred\PostNL\Exception\AbstractException;
+use Firstred\PostNL\Entity\Signature;
 use Firstred\PostNL\Exception\CifDownException;
+use Firstred\PostNL\Exception\CifErrorException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\InvalidBarcodeException;
 use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\NotSupportedException;
+use Firstred\PostNL\Exception\PostNLClientException;
 use Firstred\PostNL\Http\Client;
 use Firstred\PostNL\Misc\Message as UtilMessage;
 use Firstred\PostNL\Misc\Misc;
@@ -82,6 +76,7 @@ use Psr\Cache\CacheItemInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
+use ReflectionException;
 use setasign\Fpdi\PdfParser\CrossReference\CrossReferenceException;
 use setasign\Fpdi\PdfParser\Filter\FilterException;
 use setasign\Fpdi\PdfParser\PdfParserException;
@@ -95,38 +90,11 @@ use setasign\Fpdi\PdfReader\PdfReaderException;
 class PostNL implements LoggerAwareInterface
 {
     /**
-     * 3S (or EU Pack Special) countries
+     * 3S (or EU Pack Special) countries + China
      *
      * @var array
      */
-    public static $threeSCountries = [
-        'AT',
-        'BE',
-        'BG',
-        'CZ',
-        'DK',
-        'EE',
-        'FI',
-        'FR',
-        'DE',
-        'GB',
-        'GR',
-        'HU',
-        'IE',
-        'IT',
-        'LV',
-        'LT',
-        'LU',
-        'NL',
-        'PL',
-        'PT',
-        'RO',
-        'SK',
-        'SI',
-        'ES',
-        'EE',
-        'CN',
-    ];
+    public static $threeSCountries = ['AT', 'BE', 'BG', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GB', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'EE', 'CN'];
 
     /**
      * Labels positions on an A4
@@ -333,12 +301,228 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
+     * GenerateBarcodeRequest service
+     *
+     * Automatically load the barcode service
+     *
+     * @return BarcodeService
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Strict typing
+     */
+    public function getBarcodeService(): BarcodeService
+    {
+        if (!$this->barcodeService) {
+            $this->setBarcodeService(new BarcodeService($this));
+        }
+
+        return $this->barcodeService;
+    }
+
+    /**
+     * Set the barcode service
+     *
+     * @param BarcodeService $service
+     *
+     * @return self
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Return `self` / strict typing
+     */
+    public function setBarcodeService(BarcodeService $service): PostNL
+    {
+        $this->barcodeService = $service;
+
+        return $this;
+    }
+
+    /**
+     * Labelling service
+     *
+     * Automatically load the labelling service
+     *
+     * @return LabellingService
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Strict typing
+     */
+    public function getLabellingService(): LabellingService
+    {
+        if (!$this->labellingService) {
+            $this->setLabellingService(new LabellingService($this));
+        }
+
+        return $this->labellingService;
+    }
+
+    /**
+     * Set the labelling service
+     *
+     * @param LabellingService $service
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Return `self`
+     *
+     * @return self
+     */
+    public function setLabellingService(LabellingService $service): PostNL
+    {
+        $this->labellingService = $service;
+
+        return $this;
+    }
+
+    /**
+     * ConfirmShipmentRequest service
+     *
+     * Automatically load the confirming service
+     *
+     * @return ConfirmingService
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Strict typing
+     */
+    public function getConfirmingService(): ConfirmingService
+    {
+        if (!$this->confirmingService) {
+            $this->setConfirmingService(new ConfirmingService($this));
+        }
+
+        return $this->confirmingService;
+    }
+
+    /**
+     * Set the confirming service
+     *
+     * @param ConfirmingService $service
+     *
+     * @return self
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Return `self`
+     */
+    public function setConfirmingService(ConfirmingService $service): PostNL
+    {
+        $this->confirmingService = $service;
+
+        return $this;
+    }
+
+    /**
+     * Shipping status service
+     *
+     * Automatically load the shipping status service
+     *
+     * @return ShippingStatusService
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Strict typing
+     */
+    public function getShippingStatusService(): ShippingStatusService
+    {
+        if (!$this->shippingStatusService) {
+            $this->setShippingStatusService(new ShippingStatusService($this));
+        }
+
+        return $this->shippingStatusService;
+    }
+
+    /**
+     * Set the shipping status service
+     *
+     * @param ShippingStatusService $service
+     *
+     * @return self
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Return `self`
+     */
+    public function setShippingStatusService(ShippingStatusService $service): PostNL
+    {
+        $this->shippingStatusService = $service;
+
+        return $this;
+    }
+
+    /**
+     * Delivery date service
+     *
+     * Automatically load the delivery date service
+     *
+     * @return DeliveryDateService
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Strict typing
+     */
+    public function getDeliveryDateService(): DeliveryDateService
+    {
+        if (!$this->deliveryDateService) {
+            $this->setDeliveryDateService(new DeliveryDateService($this));
+        }
+
+        return $this->deliveryDateService;
+    }
+
+    /**
+     * Set the delivery date service
+     *
+     * @param DeliveryDateService $service
+     *
+     * @return self
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Return `self`
+     */
+    public function setDeliveryDateService(DeliveryDateService $service): PostNL
+    {
+        $this->deliveryDateService = $service;
+
+        return $this;
+    }
+
+    /**
+     * Timeframe service
+     *
+     * Automatically load the timeframe service
+     *
+     * @return TimeframeService
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Strict typing
+     */
+    public function getTimeframeService(): TimeframeService
+    {
+        if (!$this->timeframeService) {
+            $this->setTimeframeService(new TimeframeService($this));
+        }
+
+        return $this->timeframeService;
+    }
+
+    /**
+     * Set the timeframe service
+     *
+     * @param TimeframeService $service
+     *
+     * @return static
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Return `self`
+     */
+    public function setTimeframeService(TimeframeService $service): PostNL
+    {
+        $this->timeframeService = $service;
+
+        return $this;
+    }
+
+    /**
      * Generate a single barcode
      *
-     * @param string $type
-     * @param string $range
-     * @param string $serie
-     * @param bool   $eps
+     * @param string      $type
+     * @param string|null $range
+     * @param string|null $serie
+     * @param bool        $eps
      *
      * @return string The barcode as a string
      *
@@ -348,10 +532,10 @@ class PostNL implements LoggerAwareInterface
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function generateBarcode($type = '3S', $range = null, $serie = null, $eps = false): string
+    public function generateBarcode(string $type = '3S', ?string $range = null, ?string $serie = null, bool $eps = false): string
     {
         if (!in_array($type, ['2S', '3S']) || mb_strlen($type) !== 2) {
-            throw new InvalidBarcodeException("GenerateBarcode type `$type` is invalid");
+            throw new InvalidBarcodeException("GenerateBarcodeRequest type `$type` is invalid");
         }
 
         if (!$range) {
@@ -369,7 +553,7 @@ class PostNL implements LoggerAwareInterface
             $serie = $this->findBarcodeSerie($type, $range, $eps);
         }
 
-        return $this->getBarcodeService()->generateBarcode(new GenerateBarcode($type, $range, $serie));
+        return $this->getBarcodeService()->generateBarcode(new GenerateBarcodeRequest($type, $range, $serie));
     }
 
     /**
@@ -386,7 +570,7 @@ class PostNL implements LoggerAwareInterface
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function findBarcodeSerie($type, $range, $eps)
+    public function findBarcodeSerie(string $type, string $range, bool $eps): string
     {
         switch ($type) {
             case '2S':
@@ -429,47 +613,11 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * GenerateBarcode service
-     *
-     * Automatically load the barcode service
-     *
-     * @return BarcodeService
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function getBarcodeService(): BarcodeService
-    {
-        if (!$this->barcodeService) {
-            $this->setBarcodeService(new BarcodeService($this));
-        }
-
-        return $this->barcodeService;
-    }
-
-    /**
-     * Set the barcode service
-     *
-     * @param BarcodeService $service
-     *
-     * @return self
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Return `self` / strict typing
-     */
-    public function setBarcodeService(BarcodeService $service): PostNL
-    {
-        $this->barcodeService = $service;
-
-        return $this;
-    }
-
-    /**
      * Generate a single barcode by country code
      *
      * @param string $iso 2-letter Country ISO Code
      *
-     * @return string The GenerateBarcode as a string
+     * @return string The GenerateBarcodeRequest as a string
      *
      * @throws InvalidConfigurationException
      * @throws InvalidBarcodeException
@@ -505,7 +653,7 @@ class PostNL implements LoggerAwareInterface
             strtoupper($iso) !== 'NL' && in_array(strtoupper($iso), static::$threeSCountries)
         );
 
-        return $this->getBarcodeService()->generateBarcode(new GenerateBarcode($type, $range, $serie));
+        return $this->getBarcodeService()->generateBarcode(new GenerateBarcodeRequest($type, $range, $serie));
     }
 
     /**
@@ -557,7 +705,7 @@ class PostNL implements LoggerAwareInterface
             );
 
             for ($i = 0; $i < $qty; $i++) {
-                $generateBarcodes[] = (new GenerateBarcode($type, $range, $serie))->setId("$iso-$index");
+                $generateBarcodes[] = (new GenerateBarcodeRequest($type, $range, $serie))->setId("$iso-$index");
                 $index++;
             }
         }
@@ -590,50 +738,7 @@ class PostNL implements LoggerAwareInterface
      */
     public function generateLabel(Shipment $shipment, ?string $printerType = 'GraphicFile|PDF', ?bool $confirm = true): GenerateLabelResponse
     {
-        return $this->getLabellingService()->generateLabel(
-            new GenerateLabel(
-                [$shipment],
-                new LabellingMessage($printerType),
-                $this->customer
-            ),
-            $confirm
-        );
-    }
-
-    /**
-     * Labelling service
-     *
-     * Automatically load the labelling service
-     *
-     * @return LabellingService
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function getLabellingService(): LabellingService
-    {
-        if (!$this->labellingService) {
-            $this->setLabellingService(new LabellingService($this));
-        }
-
-        return $this->labellingService;
-    }
-
-    /**
-     * Set the labelling service
-     *
-     * @param LabellingService $service
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Return `self`
-     *
-     * @return self
-     */
-    public function setLabellingService(LabellingService $service): PostNL
-    {
-        $this->labellingService = $service;
-
-        return $this;
+        return $this->getLabellingService()->generateLabel(new GenerateShipmentLabelRequest([$shipment]), $printerType, $confirm);
     }
 
     /**
@@ -679,7 +784,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @return GenerateLabelResponse[]|string
      *
-     * @throws AbstractException
+     * @throws PostNLClientException
      * @throws NotSupportedException
      * @throws CrossReferenceException
      * @throws FilterException
@@ -707,15 +812,11 @@ class PostNL implements LoggerAwareInterface
         $generateLabels = [];
         foreach ($shipments as $uuid => $shipment) {
             $generateLabels[(string) $uuid] = [
-                (new GenerateLabel(
-                    [$shipment],
-                    new LabellingMessage($printerType),
-                    $this->customer
-                ))->setId((string) $uuid),
+                (new GenerateShipmentLabelRequest([$shipment]))->setId((string) $uuid),
                 $confirm,
             ];
         }
-        $labels = $this->getLabellingService()->generateLabels($generateLabels);
+        $labels = $this->getLabellingService()->generateLabels($generateLabels, $printerType);
 
         if (!$merge) {
             return $labels;
@@ -756,7 +857,7 @@ class PostNL implements LoggerAwareInterface
         } else {
             $a6s = 4; // Amount of A6s available
             foreach ($labels as $label) {
-                if ($label instanceof AbstractException) {
+                if ($label instanceof PostNLClientException) {
                     throw $label;
                 }
                 $pdfContent = base64_decode($label->getResponseShipments()[0]->getLabels()[0]->getContent());
@@ -855,43 +956,7 @@ class PostNL implements LoggerAwareInterface
      */
     public function confirmShipment(Shipment $shipment): ConfirmingResponseShipment
     {
-        return $this->getConfirmingService()->confirmShipment(new Confirming([$shipment], $this->customer));
-    }
-
-    /**
-     * Confirming service
-     *
-     * Automatically load the confirming service
-     *
-     * @return ConfirmingService
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function getConfirmingService(): ConfirmingService
-    {
-        if (!$this->confirmingService) {
-            $this->setConfirmingService(new ConfirmingService($this));
-        }
-
-        return $this->confirmingService;
-    }
-
-    /**
-     * Set the confirming service
-     *
-     * @param ConfirmingService $service
-     *
-     * @return self
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Return `self`
-     */
-    public function setConfirmingService(ConfirmingService $service): PostNL
-    {
-        $this->confirmingService = $service;
-
-        return $this;
+        return $this->getConfirmingService()->confirmShipment(new ConfirmShipmentRequest([$shipment]));
     }
 
     /**
@@ -910,281 +975,256 @@ class PostNL implements LoggerAwareInterface
     {
         $confirmations = [];
         foreach ($shipments as $uuid => $shipment) {
-            $confirmations[$uuid] = (new Confirming([$shipment], $this->customer))->setId((string) $uuid);
+            $confirmations[$uuid] = (new ConfirmShipmentRequest([$shipment], $this->customer))->setId((string) $uuid);
         }
 
         return $this->getConfirmingService()->confirmShipments($confirmations);
     }
 
     /**
-     * Get the current status of a shipment
+     * Retrieves a shipment by barcode
      *
-     * This is a combined function, supporting the following:
-     * - CurrentStatus (by barcode):
-     *   - Fill the Shipment->GenerateBarcode property. Leave the rest empty.
-     * - CurrentStatusByReference:
-     *   - Fill the Shipment->Reference property. Leave the rest empty.
-     * - CurrentStatusByPhase:
-     *   - Fill the Shipment->PhaseCode property, do not pass GenerateBarcode or Reference.
-     *     Optionally add DateFrom and/or DateTo.
-     * - CurrentStatusByStatus:
-     *   - Fill the Shipment->StatusCode property. Leave the rest empty.
+     * @param string   $barcode
      *
-     * @param CurrentStatus|CurrentStatusByStatus|CurrentStatusByReference|CurrentStatusByPhase $currentStatus
+     * @param bool     $detail
+     * @param string   $language
+     * @param int|null $maxDays
      *
-     * @return CurrentStatusResponse
+     * @return Shipment
      *
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
      * @throws Exception
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since 2.0.0
      */
-    public function getCurrentStatus($currentStatus): CurrentStatusResponse
+    public function retrieveShipmentByBarcode(string $barcode, bool $detail = false, string $language = 'NL', ?int $maxDays = null): Shipment
     {
-        $fullCustomer = $this->getCustomer();
-        $currentStatus->setCustomer(
-            (new Customer())
-                ->setCustomerCode($fullCustomer->getCustomerCode())
-                ->setCustomerNumber($fullCustomer->getCustomerNumber())
+        return $this->getShippingStatusService()->retrieveShipmentByBarcode(
+            (new RetrieveShipmentByBarcodeRequest())
+                ->setBarcode($barcode)
+                ->setDetail($detail)
+                ->setLanguage($language)
+                ->setMaxDays($maxDays)
         );
-        if (!$currentStatus->getMessage()) {
-            $currentStatus->setMessage(new Message());
-        }
-
-        return $this->getShippingStatusService()->currentStatus($currentStatus);
     }
 
     /**
-     * Shipping status service
+     * Retrieve a signature by barcode
      *
-     * Automatically load the shipping status service
+     * @param string $barcode
      *
-     * @return ShippingStatusService
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function getShippingStatusService(): ShippingStatusService
-    {
-        if (!$this->shippingStatusService) {
-            $this->setShippingStatusService(new ShippingStatusService($this));
-        }
-
-        return $this->shippingStatusService;
-    }
-
-    /**
-     * Set the shipping status service
-     *
-     * @param ShippingStatusService $service
-     *
-     * @return self
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Return `self`
-     */
-    public function setShippingStatusService(ShippingStatusService $service): PostNL
-    {
-        $this->shippingStatusService = $service;
-
-        return $this;
-    }
-
-    /**
-     * Get the complete status of a shipment
-     *
-     * This is a combined function, supporting the following:
-     * - CurrentStatus (by barcode):
-     *   - Fill the Shipment->GenerateBarcode property. Leave the rest empty.
-     * - CurrentStatusByReference:
-     *   - Fill the Shipment->Reference property. Leave the rest empty.
-     * - CurrentStatusByPhase:
-     *   - Fill the Shipment->PhaseCode property, do not pass GenerateBarcode or Reference.
-     *     Optionally add DateFrom and/or DateTo.
-     * - CurrentStatusByStatus:
-     *   - Fill the Shipment->StatusCode property. Leave the rest empty.
-     *
-     * @param CompleteStatus|CompleteStatusByStatus|CompleteStatusByReference|CompleteStatusByPhase $completeStatus
-     *
-     * @return CompleteStatusResponse
+     * @return Signature
      *
      * @throws Exception
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since 2.0.0
      */
-    public function getCompleteStatus($completeStatus): CompleteStatusResponse
+    public function retrieveSignatureByBarcode(string $barcode): Signature
     {
-        $fullCustomer = $this->getCustomer();
-
-        $completeStatus->setCustomer(
-            (new Customer())
-                ->setCustomerCode($fullCustomer->getCustomerCode())
-                ->setCustomerNumber($fullCustomer->getCustomerNumber())
+        return $this->getShippingStatusService()->retrieveSignatureByBarcode(
+            (new RetrieveSignatureByBarcodeRequest())
+                ->setBarcode($barcode)
         );
-
-        return $this->getShippingStatusService()->completeStatus($completeStatus);
-    }
-
-    /**
-     * Get the signature of a shipment
-     *
-     * @param GetSignature $signature
-     *
-     * @return SignatureResponse
-     *
-     * @throws Exception
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function getSignature(GetSignature $signature): SignatureResponse
-    {
-        $signature->setCustomer($this->getCustomer());
-        if (!$signature->getMessage()) {
-            $signature->setMessage(new Message());
-        }
-
-        return $this->getShippingStatusService()->getSignature($signature);
     }
 
     /**
      * Get a delivery date
      *
-     * @param CalculateDeliveryDate $getDeliveryDate
+     * @param string      $shippingDate
+     * @param int         $shippingDuration
+     * @param string      $cutOffTime
+     * @param string      $postalCode
+     * @param string|null $countryCode
+     * @param string|null $originCountryCode
+     * @param string|null $city
+     * @param string|null $street
+     * @param array|null  $options
+     * @param array|null  $cutOffTimes
      *
-     * @return GetDeliveryDateResponse
+     * @return CalculateDeliveryDateResponse
      *
-     * @throws CifDownException
+     * @throws CifErrorException
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
      *
-     * @since 2.0.0 Strict typing
+     * @since 2.0.0
      */
-    public function getDeliveryDate(CalculateDeliveryDate $getDeliveryDate): GetDeliveryDateResponse
+    public function calculateDeliveryDate(string $shippingDate, int $shippingDuration, string $cutOffTime, string $postalCode, ?string $countryCode = null, ?string $originCountryCode = null, ?string $city = null, ?string $street = null, ?array $options = ['Daytime'], ?array $cutOffTimes = null): CalculateDeliveryDateResponse
     {
-        return $this->getDeliveryDateService()->getDeliveryDate($getDeliveryDate);
-    }
-
-    /**
-     * Delivery date service
-     *
-     * Automatically load the delivery date service
-     *
-     * @return DeliveryDateService
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function getDeliveryDateService(): DeliveryDateService
-    {
-        if (!$this->deliveryDateService) {
-            $this->setDeliveryDateService(new DeliveryDateService($this));
-        }
-
-        return $this->deliveryDateService;
-    }
-
-    /**
-     * Set the delivery date service
-     *
-     * @param DeliveryDateService $service
-     *
-     * @return self
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Return `self`
-     */
-    public function setDeliveryDateService(DeliveryDateService $service): PostNL
-    {
-        $this->deliveryDateService = $service;
-
-        return $this;
+        return $this->getDeliveryDateService()->calculateDeliveryDate(
+            (new CalculateDeliveryDateRequest())
+                ->setShippingDate($shippingDate)
+                ->setShippingDuration($shippingDuration)
+                ->setCutOffTime($cutOffTime)
+                ->setCountryCode($countryCode)
+                ->setOriginCountryCode($originCountryCode)
+                ->setPostalCode($postalCode)
+                ->setCity($city)
+                ->setStreet($street)
+                ->setOptions($options)
+                ->setAvailableMonday($cutOffTimes[1][0] ?: null)
+                ->setCutOffTimeMonday($cutOffTimes[1][1] ?: null)
+                ->setAvailableTuesday($cutOffTimes[2][0] ?: null)
+                ->setCutOffTimeTuesday($cutOffTimes[2][1] ?: null)
+                ->setAvailableWednesday($cutOffTimes[3][0] ?: null)
+                ->setCutOffTimeWednesday($cutOffTimes[3][1] ?: null)
+                ->setAvailableThursday($cutOffTimes[4][0] ?: null)
+                ->setCutOffTimeThursday($cutOffTimes[4][1] ?: null)
+                ->setAvailableFriday($cutOffTimes[5][0] ?: null)
+                ->setCutOffTimeFriday($cutOffTimes[5][1] ?: null)
+                ->setAvailableSaturday($cutOffTimes[6][0] ?: null)
+                ->setCutOffTimeSaturday($cutOffTimes[6][1] ?: null)
+                ->setAvailableSunday($cutOffTimes[0][0] ?: null)
+                ->setCutOffTimeSunday($cutOffTimes[0][1] ?: null)
+        );
     }
 
     /**
      * Get a shipping date
      *
-     * @param GetSentDateRequest $getSentDate
+     * @param string      $deliveryDate
+     * @param int         $shippingDuration
+     * @param string      $postalCode
+     * @param string|null $countryCode
+     * @param string|null $originCountryCode
+     * @param string|null $city
+     * @param string|null $street
+     * @param int|null    $houseNumber
+     * @param string|null $houseNumberExtension
      *
-     * @return GetSentDateResponse
+     * @return CalculateShippingDateResponse
      *
-     * @throws CifDownException
+     * @throws CifErrorException
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function getSentDate(GetSentDateRequest $getSentDate): GetSentDateResponse
+    public function calculateShippingDate(string $deliveryDate, int $shippingDuration, string $postalCode, ?string $countryCode = null, ?string $originCountryCode = null, ?string $city = null, ?string $street = null, ?int $houseNumber = null, ?string $houseNumberExtension = null): CalculateShippingDateResponse
     {
-        return $this->getDeliveryDateService()->getShippingDate($getSentDate);
+        return $this->getDeliveryDateService()->calculateShippingDate(
+            (new CalculateShippingDateRequest())
+                ->setDeliveryDate($deliveryDate)
+                ->setShippingDuration($shippingDuration)
+                ->setPostalCode($postalCode)
+                ->setCountryCode($countryCode)
+                ->setOriginCountryCode($originCountryCode)
+                ->setCity($city)
+                ->setStreet($street)
+                ->setHouseNumber($houseNumber)
+                ->setHouseNrExt($houseNumberExtension)
+        );
     }
 
     /**
      * Get timeframes
      *
-     * @param GetTimeframes $getTimeframes
+     * @param string      $startDate
+     * @param string      $endDate
+     * @param string      $postalCode
+     * @param int         $houseNumber
+     * @param string|null $houseNumberExtension
+     * @param string      $countryCode
+     * @param string|null $street
+     * @param string|null $city
+     * @param bool        $allowSundaySorting
+     * @param array       $options
+     * @param int|null    $interval
+     * @param string|null $timeframeRange
      *
-     * @return ResponseTimeframes
+     * @return CalculateTimeframesResponse
      *
-     * @throws CifDownException
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function getTimeframes(GetTimeframes $getTimeframes)
-    {
-        return $this->getTimeframeService()->getTimeframes($getTimeframes);
-    }
-
-    /**
-     * Timeframe service
-     *
-     * Automatically load the timeframe service
-     *
-     * @return TimeframeService
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
+     * @throws Exception
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function getTimeframeService(): TimeframeService
+    public function calculateTimeframes(string $startDate, string $endDate, string $postalCode, int $houseNumber, ?string $houseNumberExtension = null, string $countryCode = 'NL', ?string $street = null, ?string $city = null, bool $allowSundaySorting = false, array $options = ['Daytime'], ?int $interval = null, ?string $timeframeRange = null)
     {
-        if (!$this->timeframeService) {
-            $this->setTimeframeService(new TimeframeService($this));
-        }
-
-        return $this->timeframeService;
+        return $this->getTimeframeService()->getTimeframes(
+            (new CalculateTimeframesRequest())
+                ->setStartDate($startDate)
+                ->setEndDate($endDate)
+                ->setPostalCode($postalCode)
+                ->setHouseNumber($houseNumber)
+                ->setHouseNrExt($houseNumberExtension)
+                ->setStreet($street)
+                ->setCity($city)
+                ->setCountryCode($countryCode)
+                ->setAllowSundaySorting($allowSundaySorting)
+                ->setOptions($options)
+                ->setInterval($interval)
+                ->setTimeframeRange($timeframeRange)
+        );
     }
 
     /**
-     * Set the timeframe service
+     * Find nearest locations
      *
-     * @param TimeframeService $service
+     * @param string      $postalCode
+     * @param string      $countryCode
+     * @param array       $deliveryOptions
+     * @param string|null $city
+     * @param string|null $street
+     * @param int|null    $houseNumber
+     * @param string|null $deliveryDate
+     * @param string|null $openingTime
      *
-     * @return static
+     * @return FindNearestLocationsResponse
      *
-     * @since 1.0.0
-     * @since 2.0.0 Return `self`
+     * @throws ReflectionException
+     * @throws Exception
+     *
+     * @since 2.0.0
      */
-    public function setTimeframeService(TimeframeService $service): PostNL
+    public function findNearestLocations(string $postalCode, string $countryCode, array $deliveryOptions, ?string $city = null, ?string $street = null, ?int $houseNumber = null, ?string $deliveryDate = null, ?string $openingTime = null)
     {
-        $this->timeframeService = $service;
-
-        return $this;
+        return $this->getLocationService()->findNearestLocations(
+            (new FindNearestLocationsRequest())
+                ->setPostalCode($postalCode)
+                ->setCountrycode($countryCode)
+                ->setDeliveryOptions($deliveryOptions)
+                ->setCity($city)
+                ->setStreet($street)
+                ->setHouseNumber($houseNumber)
+                ->setDeliveryDate($deliveryDate)
+                ->setOpeningTime($openingTime)
+        );
     }
 
     /**
-     * Get nearest locations
+     * Find nearest locations by coordinates
      *
-     * @param GetNearestLocations $getNearestLocations
+     * @param float|string $latitude
+     * @param float|string $longitude
+     * @param string       $countryCode
+     * @param array        $deliveryOptions
+     * @param string|null  $deliveryDate
+     * @param string|null  $openingTime
      *
-     * @return GetNearestLocationsResponse
+     * @return FindNearestLocationsGeocodeResponse
      *
-     * @throws CifDownException
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
+     * @throws Exception
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since 2.0.0
      */
-    public function getNearestLocations(GetNearestLocations $getNearestLocations)
+    public function findNearestLocationsGeocode($latitude, $longitude, string $countryCode, array $deliveryOptions = ['PG'], ?string $deliveryDate = null, ?string $openingTime = null)
     {
-        return $this->getLocationService()->getNearestLocations($getNearestLocations);
+        return $this->getLocationService()->findNearestLocationsGeocode(
+            (new FindNearestLocationsGeocodeRequest())
+                ->setLatitude($latitude)
+                ->setLongitude($longitude)
+                ->setCountrycode($countryCode)
+                ->setDeliveryOptions($deliveryOptions)
+                ->setDeliveryDate($deliveryDate)
+                ->setOpeningTime($openingTime)
+        );
     }
 
     /**
@@ -1229,11 +1269,11 @@ class PostNL implements LoggerAwareInterface
      * - locations
      * - delivery date
      *
-     * @param CalculateTimeframes   $calculateTimeframes
-     * @param GetNearestLocations   $getNearestLocations
-     * @param CalculateDeliveryDate $getDeliveryDate
+     * @param CalculateTimeframesRequest   $calculateTimeframes
+     * @param FindNearestLocationsRequest  $getNearestLocations
+     * @param CalculateDeliveryDateRequest $getDeliveryDate
      *
-     * @return array [uuid => ResponseTimeframes, uuid => GetNearestLocationsResponse, uuid => GetDeliveryDateResponse]
+     * @return array [uuid => CalculateTimeframesResponse, uuid => FindNearestLocationsResponse, uuid => CalculateDeliveryDateResponse]
      *
      * @throws InvalidArgumentException
      * @throws Exception
@@ -1241,7 +1281,7 @@ class PostNL implements LoggerAwareInterface
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function getTimeframesAndNearestLocations(CalculateTimeframes $calculateTimeframes, GetNearestLocations $getNearestLocations, CalculateDeliveryDate $getDeliveryDate)
+    public function getTimeframesAndNearestLocations(CalculateTimeframesRequest $calculateTimeframes, FindNearestLocationsRequest $getNearestLocations, CalculateDeliveryDateRequest $getDeliveryDate)
     {
         $results = [];
         $itemTimeframe = $this->getTimeframeService()->retrieveCachedItem($calculateTimeframes->getId());
@@ -1260,15 +1300,15 @@ class PostNL implements LoggerAwareInterface
         $client = Client::getInstance();
         $client->addOrUpdateRequest(
             'timeframes',
-            $this->getTimeframeService()->buildGetTimeframesRequest($calculateTimeframes)
+            $this->getTimeframeService()->buildCalculateTimeframesRequest($calculateTimeframes)
         );
         $client->addOrUpdateRequest(
             'locations',
-            $this->getLocationService()->buildGetNearestLocationsRequest($getNearestLocations)
+            $this->getLocationService()->buildFindNearestLocationsRequest($getNearestLocations)
         );
         $client->addOrUpdateRequest(
             'delivery_date',
-            $this->getDeliveryDateService()->buildGetDeliveryDateRequest($getDeliveryDate)
+            $this->getDeliveryDateService()->buildCalculateDeliveryDateRequest($getDeliveryDate)
         );
 
         $responses = $client->doRequests();
@@ -1318,44 +1358,42 @@ class PostNL implements LoggerAwareInterface
 
         return [
             'timeframes'    => $this->getTimeframeService()->processGetTimeframesResponse($results['timeframes']),
-            'locations'     => $this->getLocationService()->processGetNearestLocationsResponse($results['locations']),
-            'delivery_date' => $this->getDeliveryDateService()->processGetDeliveryDateResponse(
-                $results['delivery_date']
-            ),
+            'locations'     => $this->getLocationService()->processFindNearestLocationsResponse($results['locations']),
+            'delivery_date' => $this->getDeliveryDateService()->processCalculateDeliveryDateResponse($results['delivery_date']),
         ];
     }
 
     /**
      * Get locations in area
      *
-     * @param GetNearestLocationsGeocode $getLocationsInArea
+     * @param FindNearestLocationsGeocodeRequest $getLocationsInArea
      *
-     * @return GetLocationsInAreaResponse
+     * @return FindNearestLocationsGeocodeResponse
      *
-     * @throws CifDownException
-     *
+     * @throws Exception
+     * @throws Exception
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function getLocationsInArea(GetNearestLocationsGeocode $getLocationsInArea)
+    public function getLocationsInArea(FindNearestLocationsGeocodeRequest $getLocationsInArea)
     {
-        return $this->getLocationService()->getLocationsInArea($getLocationsInArea);
+        return $this->getLocationService()->findNearestLocationsGeocode($getLocationsInArea);
     }
 
     /**
      * Get locations in area
      *
-     * @param GetLocation $getLocation
+     * @param LookupLocationRequest $getLocation
      *
-     * @return GetLocationsInAreaResponse
+     * @return Entity\Location
      *
-     * @throws CifDownException
-     *
+     * @throws Exception
+     * @throws Exception
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function getLocation(GetLocation $getLocation)
+    public function getLocation(LookupLocationRequest $getLocation)
     {
-        return $this->getLocationService()->getLocation($getLocation);
+        return $this->getLocationService()->lookupLocation($getLocation);
     }
 }

@@ -31,7 +31,9 @@ namespace Firstred\PostNL\Exception;
 
 /**
  * Class NotImplementedException
+ *
+ * Can be used when the implementation is missing in the library.
  */
-class NotImplementedException extends AbstractException
+class NotImplementedException extends PostNLClientException
 {
 }

@@ -1,0 +1,172 @@
+{
+  "CompleteStatus": {
+    "Shipment": {
+      "MainBarcode": "3SDEVC987021270",
+      "Barcode": "3SDEVC987021270",
+      "ShipmentAmount": "1",
+      "ShipmentCounter": "1",
+      "Customer": {
+        "CustomerCode": "DEVC",
+        "CustomerNumber": "11223344",
+        "Name": "PostNL"
+      },
+      "ProductCode": "003089",
+      "ProductDescription": "Handtek. voor Ontvangst/Alleen huisadres",
+      "Reference": {},
+      "Dimension": {
+        "Height": "105",
+        "Length": "260",
+        "Volume": "5051",
+        "Weight": "400",
+        "Width": "185"
+      },
+      "Address": [
+        {
+          "AddressType": "01",
+          "Building": {},
+          "City": "Hoofddorp",
+          "CompanyName": "PostNL",
+          "CountryCode": "NL",
+          "DepartmentName": {},
+          "District": {},
+          "FirstName": {},
+          "Floor": {},
+          "HouseNumber": "42",
+          "HouseNumberSuffix": {},
+          "LastName": {},
+          "Region": {},
+          "Remark": {},
+          "Street": "Siriusdreef",
+          "Zipcode": "2312WT"
+        },
+        {
+          "AddressType": "02",
+          "Building": {},
+          "City": "Hoofddorp",
+          "CompanyName": "PostNL",
+          "CountryCode": "NL",
+          "DepartmentName": {},
+          "District": {},
+          "FirstName": {},
+          "Floor": {},
+          "HouseNumber": "42",
+          "HouseNumberSuffix": {},
+          "LastName": {},
+          "Region": {},
+          "Remark": {},
+          "Street": "Siriusdreef",
+          "Zipcode": "2312WT"
+        }
+      ],
+      "Event": [
+        {
+          "Code": "I01",
+          "Description": "Zending is bezorgd",
+          "DestinationLocationCode": {},
+          "LocationCode": "208802",
+          "RouteCode": "217 PostNL Spiegelstraat",
+          "RouteName": "217 PostNL Spiegelstraat",
+          "TimeStamp": "31-07-2019 09:36:42"
+        },
+        {
+          "Code": "J05",
+          "Description": "Bezorger is onderweg",
+          "DestinationLocationCode": {},
+          "LocationCode": "208802",
+          "RouteCode": "217 PostNL Spiegelstraat",
+          "RouteName": "217 PostNL Spiegelstraat",
+          "TimeStamp": "31-07-2019 08:16:04"
+        },
+        {
+          "Code": "J01",
+          "Description": "Zending is gesorteerd",
+          "DestinationLocationCode": "208801",
+          "LocationCode": "208801",
+          "RouteCode": "217",
+          "RouteName": "217 PostNL Spiegelstraat",
+          "TimeStamp": "31-07-2019 07:59:56"
+        },
+        {
+          "Code": "B01",
+          "Description": "Zending is bij PostNL",
+          "DestinationLocationCode": "208801",
+          "LocationCode": "166241",
+          "RouteCode": "217",
+          "RouteName": "217 PostNL Spiegelstraat",
+          "TimeStamp": "30-07-2019 22:34:54"
+        },
+        {
+          "Code": "A01",
+          "Description": "Zending wordt verwacht, maar zit nog niet in sorteerproces",
+          "DestinationLocationCode": {},
+          "LocationCode": "888888",
+          "RouteCode": {},
+          "RouteName": {},
+          "TimeStamp": "30-07-2019 16:46:33"
+        }
+      ],
+      "Expectation": {
+        "ETAFrom": "2019-07-31T13:15:00",
+        "ETATo": "2019-07-31T15:15:00"
+      },
+      "Status": {
+        "TimeStamp": "31-07-2019 09:36:42",
+        "StatusCode": "11",
+        "StatusDescription": "Zending afgeleverd",
+        "PhaseCode": "4",
+        "PhaseDescription": "Afgeleverd"
+      },
+      "OldStatus": [
+        {
+          "TimeStamp": "31-07-2019 09:36:42",
+          "StatusCode": "11",
+          "StatusDescription": "Zending afgeleverd",
+          "PhaseCode": "4",
+          "PhaseDescription": "Afgeleverd"
+        },
+        {
+          "TimeStamp": "31-07-2019 08:16:04",
+          "StatusCode": "7",
+          "StatusDescription": "Zending in distributieproces",
+          "PhaseCode": "3",
+          "PhaseDescription": "Distributie"
+        },
+        {
+          "TimeStamp": "31-07-2019 07:59:57",
+          "StatusCode": "99",
+          "StatusDescription": "Niet van toepassing",
+          "PhaseCode": "99",
+          "PhaseDescription": "Niet van toepassing"
+        },
+        {
+          "TimeStamp": "31-07-2019 07:59:56",
+          "StatusCode": "5",
+          "StatusDescription": "Zending gesorteerd",
+          "PhaseCode": "2",
+          "PhaseDescription": "Sortering"
+        },
+        {
+          "TimeStamp": "30-07-2019 22:37:37.21",
+          "StatusCode": "99",
+          "StatusDescription": "Niet van toepassing",
+          "PhaseCode": "99",
+          "PhaseDescription": "Niet van toepassing"
+        },
+        {
+          "TimeStamp": "30-07-2019 22:34:54",
+          "StatusCode": "2",
+          "StatusDescription": "Zending in ontvangst genomen",
+          "PhaseCode": "1",
+          "PhaseDescription": "Collectie"
+        },
+        {
+          "TimeStamp": "30-07-2019 16:46:33",
+          "StatusCode": "1",
+          "StatusDescription": "Zending voorgemeld",
+          "PhaseCode": "1",
+          "PhaseDescription": "Collectie"
+        }
+      ]
+    }
+  }
+}

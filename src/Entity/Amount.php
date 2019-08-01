@@ -202,15 +202,15 @@ class Amount extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
      * @throws ReflectionException
-     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @example 01
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
      *
-     * @see   Amount::$amountType
+     * @see     Amount::$amountType
      */
     public function setAmountType($type = null): Amount
     {
@@ -244,14 +244,14 @@ class Amount extends AbstractEntity
      * @return static
      *
      * @throws ReflectionException
-     * @throws TypeError
-     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @example C. de Ruiter
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
      *
-     * @see   Amount::$accountName
+     * @see     Amount::$accountName
      */
     public function setAccountName(?string $accountName): Amount
     {
@@ -285,14 +285,14 @@ class Amount extends AbstractEntity
      * @return static
      *
      * @throws ReflectionException
-     * @throws TypeError
-     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @example INGBNL2A
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
      *
-     * @see   Amount::$BIC
+     * @see     Amount::$BIC
      */
     public function setBIC(?string $bic): Amount
     {
@@ -326,14 +326,14 @@ class Amount extends AbstractEntity
      * @return static
      *
      * @throws ReflectionException
-     * @throws TypeError
-     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @example EUR
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
      *
-     * @see   Amount::$currency
+     * @see     Amount::$currency
      */
     public function setCurrency(?string $currency): Amount
     {
@@ -367,14 +367,14 @@ class Amount extends AbstractEntity
      * @return static
      *
      * @throws ReflectionException
-     * @throws TypeError
-     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @example NL00INGB1234567890
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
      *
-     * @see   Amount::$IBAN
+     * @see     Amount::$IBAN
      */
     public function setIBAN(?string $iban): Amount
     {
@@ -408,14 +408,14 @@ class Amount extends AbstractEntity
      * @return static
      *
      * @throws ReflectionException
-     * @throws TypeError
-     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @example 1234-5678
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
      *
-     * @see   Amount::$reference
+     * @see     Amount::$reference
      */
     public function setReference(?string $reference): Amount
     {
@@ -449,14 +449,14 @@ class Amount extends AbstractEntity
      * @return static
      *
      * @throws ReflectionException
-     * @throws TypeError
-     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @example 1234
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
      *
-     * @see   Amount::$transactionNumber
+     * @see     Amount::$transactionNumber
      */
     public function setTransactionNumber(?string $transactionNumber): Amount
     {
@@ -485,19 +485,19 @@ class Amount extends AbstractEntity
      *
      * @param string|float|int|null $value
      *
-     * @pattern ^\d{1,6}\.\d{2}$
-     *
      * @return static
      *
      * @throws ReflectionException
-     * @throws TypeError
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @pattern ^\d{1,6}\.\d{2}$
      *
      * @example 10.00
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
      *
-     * @see   Amount::$value
+     * @see     Amount::$value
      */
     public function setValue($value): Amount
     {

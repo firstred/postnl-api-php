@@ -43,7 +43,7 @@ use Psr\Log\LoggerInterface;
 use ReflectionException;
 
 /**
- * Class BarcodeServiceRestTest
+ * Class BarcodeServiceTest
  *
  * @testdox The BarcodeService (REST)
  */
@@ -69,7 +69,7 @@ class BarcodeServiceRestTest extends TestCase
                 ->setCollectionLocation(getenv('POSTNL_COLLECTION_LOCATION'))
                 ->setCustomerCode(getenv('POSTNL_CUSTOMER_CODE'))
                 ->setCustomerNumber(getenv('POSTNL_CUSTOMER_NUMBER'))
-                ->setContactPerson(getenv('POSTNL_CONTACT_PERSION'))
+                ->setContactPerson(getenv('POSTNL_CONTACT_PERSON'))
                 ->setAddress(Address::create([
                     'AddressType' => '02',
                     'City'        => 'Hoofddorp',

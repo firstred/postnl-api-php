@@ -29,6 +29,7 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\ValidateAndFix;
 use ReflectionException;
 use TypeError;
@@ -128,6 +129,7 @@ class ReasonNoTimeframe extends AbstractEntity
      *
      * @throws TypeError
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -170,6 +172,7 @@ class ReasonNoTimeframe extends AbstractEntity
      *
      * @throws TypeError
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @example 02
      *
@@ -211,6 +214,7 @@ class ReasonNoTimeframe extends AbstractEntity
      *
      * @throws TypeError
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @example 03-07-2019
      *
@@ -331,6 +335,7 @@ class ReasonNoTimeframe extends AbstractEntity
      * @return static
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -373,6 +378,7 @@ class ReasonNoTimeframe extends AbstractEntity
      *
      * @throws TypeError
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @example 16:30:00
      *

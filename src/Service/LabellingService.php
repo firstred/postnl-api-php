@@ -30,11 +30,9 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Service;
 
 use Exception;
-use Firstred\PostNL\Entity\AbstractEntity;
-use Firstred\PostNL\Entity\Request\GenerateLabel;
+use Firstred\PostNL\Entity\Request\GenerateShipmentLabelRequest;
 use Firstred\PostNL\Entity\Response\GenerateLabelResponse;
-use Firstred\PostNL\Exception\CifDownException;
-use Firstred\PostNL\Exception\ClientException;
+use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Http\Client;
 use Firstred\PostNL\Misc\Message;
 use Http\Discovery\Psr17FactoryDiscovery;
@@ -43,6 +41,7 @@ use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use TypeError;
 
 /**
  * Class LabellingService
@@ -59,18 +58,15 @@ class LabellingService extends AbstractService
     /**
      * Generate a single barcode via REST
      *
-     * @param GenerateLabel $generateLabel
-     * @param bool          $confirm
+     * @param GenerateShipmentLabelRequest $generateLabel
+     * @param string                       $printerType
+     * @param bool                         $confirm
      *
      * @return GenerateLabelResponse
      *
-     * @throws ClientException
-     * @throws CifDownException
-     * @throws CifDownException
-     * @throws ResponseException
-     * @throws HttpClientException
+     * @throws Exception
      */
-    public function generateLabel(GenerateLabel $generateLabel, $confirm = true)
+    public function generateLabel(GenerateShipmentLabelRequest $generateLabel, string $printerType, bool $confirm = true)
     {
         $item = $this->retrieveCachedItem($generateLabel->getId());
         $response = null;
@@ -78,12 +74,12 @@ class LabellingService extends AbstractService
             $response = $item->get();
             try {
                 $response = Message::parseResponse($response);
-            } catch (InvalidArgumentException $e) {
+            } catch (InvalidArgumentException |TypeError $e) {
             }
         }
         if (!$response instanceof ResponseInterface) {
             $response = Client::getInstance()->doRequest(
-                $this->buildGenerateLabelRequest($generateLabel, $confirm)
+                $this->buildGenerateLabelRequest($generateLabel, $printerType, $confirm)
             );
             static::validateResponse($response);
         }
@@ -102,71 +98,76 @@ class LabellingService extends AbstractService
         }
 
         if ($response->getStatusCode() === 200) {
-            throw new ClientException('Invalid API response', 0, null, null, $response);
+            throw new HttpClientException('Invalid API response', 0, null, null, $response);
         }
 
-        throw new ClientException('Unable to generate label', 0, null, null, $response);
+        throw new HttpClientException('Unable to generate label', 0, null, null, $response);
     }
 
     /**
-     * Build the GenerateLabel request for the REST API
+     * Build the GenerateShipmentLabelRequest request for the REST API
      *
-     * @param GenerateLabel $generateLabel
-     * @param bool          $confirm
+     * @param GenerateShipmentLabelRequest $generateLabel
+     * @param string                       $printerType
+     * @param bool                         $confirm
      *
      * @return RequestInterface
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function buildGenerateLabelRequest(GenerateLabel $generateLabel, bool $confirm = true): RequestInterface
+    public function buildGenerateLabelRequest(GenerateShipmentLabelRequest $generateLabel, string $printerType, bool $confirm = true): RequestInterface
     {
+        $body = json_decode(json_encode($generateLabel), true);
+        $body['Message'] = [
+            'MessageID'        => '1',
+            'MessageTimeStamp' => date('d-m-Y 00:00:00'),
+            'PrinterType'      => $printerType,
+        ];
+        $body['Customer'] = $this->postnl->getCustomer();
+
         return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
             'POST',
             ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).'?'.http_build_query(
-                ['confirm' => $confirm]
+                ['confirm' => $confirm ? 'true' : 'false']
             )
         )
             ->withHeader('Accept', 'application/json')
             ->withHeader('Content-Type', 'application/json;charset=UTF-8')
             ->withHeader('apikey', $this->postnl->getApiKey())
-            ->withBody(Psr17FactoryDiscovery::findStreamFactory()->createStream(json_encode($generateLabel)))
+            ->withBody(Psr17FactoryDiscovery::findStreamFactory()->createStream(json_encode($body)))
         ;
     }
 
     /**
-     * Process the GenerateLabel REST Response
+     * Process the GenerateShipmentLabelRequest REST Response
      *
      * @param ResponseInterface $response
      *
-     * @return GenerateLabelResponse|null
+     * @return GenerateLabelResponse
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function processGenerateLabelResponse(ResponseInterface $response): ?GenerateLabelResponse
+    public function processGenerateLabelResponse(ResponseInterface $response): GenerateLabelResponse
     {
-        $body = json_decode((string) $response->getBody(), true);
-        if (isset($body['ResponseShipments'])) {
-            /** @var GenerateLabelResponse $object */
-            $object = AbstractEntity::jsonDeserialize(['GenerateLabelResponse' => $body]);
+        /** @var GenerateLabelResponse $object */
+        $object = GenerateLabelResponse::jsonDeserialize(['GenerateLabelResponse' => json_decode((string) $response->getBody(), true)]);
 
-            return $object;
-        }
-
-        return null;
+        return $object;
     }
 
     /**
      * Generate multiple labels at once
      *
-     * @param array $generateLabels ['uuid' => [GenerateBarcode, confirm], ...]
+     * @param array  $generateLabels ['uuid' => [GenerateBarcodeRequest, confirm], ...]
+     * @param string $printerType    Printer type, e.g. GraphicFile|PDF
      *
      * @return array
      *
      * @throws Exception
      */
-    public function generateLabels(array $generateLabels): array
+    public function generateLabels(array $generateLabels, string $printerType): array
     {
         $httpClient = Client::getInstance();
 
@@ -179,7 +180,7 @@ class LabellingService extends AbstractService
                 $response = $item->get();
                 try {
                     $response = Message::parseResponse($response);
-                } catch (InvalidArgumentException $e) {
+                } catch (InvalidArgumentException | TypeError $e) {
                 }
                 if ($response instanceof ResponseInterface) {
                     $responses[$uuid] = $response;
@@ -190,7 +191,7 @@ class LabellingService extends AbstractService
 
             $httpClient->addOrUpdateRequest(
                 (string) $uuid,
-                $this->buildGenerateLabelRequest($generateLabel[0], $generateLabel[1])
+                $this->buildGenerateLabelRequest($generateLabel[0], $printerType, $generateLabel[1])
             );
         }
         $newResponses = $httpClient->doRequests();
