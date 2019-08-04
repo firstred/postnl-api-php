@@ -31,6 +31,8 @@ namespace Firstred\PostNL\Service;
 
 use DateInterval;
 use DateTimeInterface;
+use Firstred\PostNL\Exception\CifDownException;
+use Firstred\PostNL\Exception\CifErrorException;
 use Firstred\PostNL\PostNL;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
@@ -96,25 +98,25 @@ abstract class AbstractService
      *
      * @return bool
      *
+     * @throws CifErrorException
+     * @throws CifDownException
+     *
      * @since 1.0.0
+     * @since 2.0.0 Introduce ResponseInterface, CifErrorException and CifDownException
      */
     public static function validateResponse(ResponseInterface $response): bool
     {
-//        $body = json_decode((string) $response->getBody(), true);
+        $body = json_decode((string) $response->getBody(), true);
 
-
-        // FIXME
-//        if (!empty($body['Errors']['Error'])) {
-//            $exceptionData = [];
-//            foreach ($body['Errors']['Error'] as $error) {
-//                $exceptionData[] = [
-//                    'description' => isset($error['Description']) ? (string) $error['Description'] : null,
-//                    'message'     => isset($error['ErrorMsg']) ? (string) $error['ErrorMsg'] : null,
-//                    'code'        => isset($error['ErrorNumber']) ? (int) $error['ErrorNumber'] : 0,
-//                ];
-//            }
-//            throw new CifDownException($exceptionData);
-//        }
+        if (!empty($body['Error']['ErrorMsg'])) {
+            throw new CifErrorException($body['Error']['ErrorMsg'], $body['Error']['ErrorNumber'] ?: 0, null, null, $response);
+        }
+        if (!empty($body['fault']['faultstring'])) {
+            throw new CifDownException($body['fault']['faultstring'], $body['fault']['detail']['errorcode'] ?: '', null, null, $response);
+        }
+        if (empty($body)) {
+            throw new CifDownException('Empty response body', 0, null, null, $response);
+        }
 
         return true;
     }

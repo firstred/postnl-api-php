@@ -31,8 +31,6 @@ namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\ValidateAndFix;
-use ReflectionException;
-use TypeError;
 
 /**
  * Class ReasonNoTimeframe
@@ -127,8 +125,6 @@ class ReasonNoTimeframe extends AbstractEntity
      * @param string|null   $from
      * @param string|null   $to
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 1.0.0
@@ -170,8 +166,6 @@ class ReasonNoTimeframe extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 02
@@ -212,8 +206,6 @@ class ReasonNoTimeframe extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 03-07-2019
@@ -254,8 +246,6 @@ class ReasonNoTimeframe extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     *
      * @example Dag uitgesloten van tijdvak
      *
      * @since 1.0.0
@@ -293,8 +283,6 @@ class ReasonNoTimeframe extends AbstractEntity
      * @param string[]|null $options
      *
      * @return static
-     *
-     * @throws TypeError
      *
      * @example Afternoon
      *
@@ -334,7 +322,6 @@ class ReasonNoTimeframe extends AbstractEntity
      *
      * @return static
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since   1.0.0
@@ -376,8 +363,6 @@ class ReasonNoTimeframe extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 16:30:00

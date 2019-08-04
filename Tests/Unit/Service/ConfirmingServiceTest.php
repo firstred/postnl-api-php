@@ -35,7 +35,7 @@ use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Dimension;
 use Firstred\PostNL\Entity\Request\ConfirmShipmentRequest;
-use Firstred\PostNL\Entity\Response\ConfirmingResponseShipment;
+use Firstred\PostNL\Entity\Response\ConfirmShipmentResponse;
 use Firstred\PostNL\Entity\Shipment;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
@@ -250,7 +250,7 @@ class ConfirmingServiceTest extends TestCase
                         json_encode(
                             [
                                 'ConfirmingResponseShipments' => [
-                                    'ConfirmingResponseShipment' => [
+                                    'ConfirmShipmentResponse' => [
                                         'Barcode'  => '3SDEVC987119100',
                                         'Warnings' => [],
                                         'Errors'   => [],
@@ -293,7 +293,7 @@ class ConfirmingServiceTest extends TestCase
                 ->setProductCodeDelivery('3085')
         );
 
-        $this->assertInstanceOf(ConfirmingResponseShipment::class, $confirm);
+        $this->assertInstanceOf(ConfirmShipmentResponse::class, $confirm);
     }
 
     /**
@@ -314,7 +314,7 @@ class ConfirmingServiceTest extends TestCase
                         json_encode(
                             [
                                 'ConfirmingResponseShipments' => [
-                                    'ConfirmingResponseShipment' => [
+                                    'ConfirmShipmentResponse' => [
                                         'Barcode'  => '3SDEVC201611210',
                                         'Warnings' => [],
                                         'Errors'   => [],
@@ -333,7 +333,7 @@ class ConfirmingServiceTest extends TestCase
                         json_encode(
                             [
                                 'ConfirmingResponseShipments' => [
-                                    'ConfirmingResponseShipment' => [
+                                    'ConfirmShipmentResponse' => [
                                         'Barcode'  => '3SDEVC201611211',
                                         'Warnings' => [],
                                         'Errors'   => [],
@@ -403,7 +403,7 @@ class ConfirmingServiceTest extends TestCase
                     ->setProductCodeDelivery('3085'),
         ]);
 
-        $this->assertInstanceOf(ConfirmingResponseShipment::class, $confirms[1]);
+        $this->assertInstanceOf(ConfirmShipmentResponse::class, $confirms[1]);
     }
 
     /**

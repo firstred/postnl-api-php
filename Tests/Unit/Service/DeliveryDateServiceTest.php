@@ -240,15 +240,7 @@ class DeliveryDateRestTest extends TestCase
         $streamFactory = Psr17FactoryDiscovery::findStreamFactory();
         $response = $responseFactory->createResponse(200, 'OK')
             ->withHeader('Content-Type', 'application/json;charset=UTF-8')
-            ->withBody(
-                $streamFactory->createStream(
-                    json_encode(
-                        [
-                            'SentDate' => '29-06-2016',
-                        ]
-                    )
-                )
-            );
+            ->withBody($streamFactory->createStream(json_encode(['SentDate' => '29-06-2016'])));
         $mockClient->addResponse($response);
         \Firstred\PostNL\Http\Client::getInstance()->setAsyncClient($mockClient);
 

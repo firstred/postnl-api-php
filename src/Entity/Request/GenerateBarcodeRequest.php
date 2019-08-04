@@ -30,9 +30,8 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity\Request;
 
 use Firstred\PostNL\Entity\AbstractEntity;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\ValidateAndFix;
-use ReflectionException;
-use TypeError;
 
 /**
  * Class GenerateBarcodeRequest
@@ -95,8 +94,7 @@ class GenerateBarcodeRequest extends AbstractEntity
      * @param string|null $range
      * @param string|null $serie
      *
-     * @throws TypeError
-     * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -134,9 +132,8 @@ class GenerateBarcodeRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws ReflectionException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     *
      * @example 3S
      *
      * @since   1.0.0
@@ -175,9 +172,8 @@ class GenerateBarcodeRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws ReflectionException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     *
      * @example NL
      *
      * @since   1.0.0
@@ -216,9 +212,8 @@ class GenerateBarcodeRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws ReflectionException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     *
      * @example 100000000-500000000
      *
      * @since   1.0.0

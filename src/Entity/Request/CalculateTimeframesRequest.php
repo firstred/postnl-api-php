@@ -32,8 +32,6 @@ namespace Firstred\PostNL\Entity\Request;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\ValidateAndFix;
-use ReflectionException;
-use TypeError;
 
 /**
  * Class CalculateTimeframesRequest
@@ -200,8 +198,6 @@ class CalculateTimeframesRequest extends AbstractEntity
     /**
      * Timeframe constructor.
      *
-     * @throws TypeError
-     *
      * @since 2.0.0
      */
     public function __construct()
@@ -231,8 +227,6 @@ class CalculateTimeframesRequest extends AbstractEntity
      * @param bool|null $allowSundaySorting
      *
      * @return static
-     *
-     * @throws TypeError
      *
      * @example N/A
      *
@@ -270,7 +264,6 @@ class CalculateTimeframesRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 03-07-2019
@@ -309,8 +302,6 @@ class CalculateTimeframesRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 03-07-2019
@@ -349,8 +340,6 @@ class CalculateTimeframesRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 2132WT
@@ -389,8 +378,6 @@ class CalculateTimeframesRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 30
@@ -429,8 +416,6 @@ class CalculateTimeframesRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 42
@@ -469,8 +454,6 @@ class CalculateTimeframesRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example A
@@ -509,8 +492,6 @@ class CalculateTimeframesRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @var string|null   $timeframeRange
@@ -551,8 +532,6 @@ class CalculateTimeframesRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
@@ -591,8 +570,6 @@ class CalculateTimeframesRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example Hoofddorp
@@ -631,8 +608,6 @@ class CalculateTimeframesRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
@@ -670,8 +645,6 @@ class CalculateTimeframesRequest extends AbstractEntity
      * @param string[]|null $options
      *
      * @return static
-     *
-     * @throws TypeError
      *
      * @example N/A
      *

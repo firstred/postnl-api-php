@@ -32,8 +32,6 @@ namespace Firstred\PostNL\Entity\Request;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\ValidateAndFix;
-use ReflectionException;
-use TypeError;
 
 /**
  * Class RetrieveUpdatedShipmentsRequest
@@ -72,9 +70,7 @@ class RetrieveUpdatedShipmentsRequest extends AbstractEntity
      * @param string|null $startDate
      * @param string|null $endDate
      *
-     * @throws TypeError
      * @throws InvalidArgumentException
-     * @throws ReflectionException
      *
      * @since 2.0.0
      */
@@ -107,9 +103,7 @@ class RetrieveUpdatedShipmentsRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
      * @throws InvalidArgumentException
-     * @throws ReflectionException
      *
      * @example 03-07-2019 08:00:00
      *
@@ -147,9 +141,7 @@ class RetrieveUpdatedShipmentsRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
      * @throws InvalidArgumentException
-     * @throws ReflectionException
      *
      * @example 04-07-2019 10:00:00
      *

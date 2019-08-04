@@ -39,6 +39,11 @@ class TaskQueue
 
     private $queue = [];
 
+    /**
+     * TaskQueue constructor.
+     *
+     * @param bool $withShutdown
+     */
     public function __construct($withShutdown = true)
     {
         if ($withShutdown) {
@@ -54,16 +59,25 @@ class TaskQueue
         }
     }
 
+    /**
+     * @return bool
+     */
     public function isEmpty()
     {
         return !$this->queue;
     }
 
+    /**
+     * @param callable $task
+     */
     public function add(callable $task)
     {
         $this->queue[] = $task;
     }
 
+    /**
+     * @return void
+     */
     public function run()
     {
         /** @var callable $task */

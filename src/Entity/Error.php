@@ -29,8 +29,6 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
-use TypeError;
-
 /**
  * Class Error
  */
@@ -68,8 +66,6 @@ class Error extends AbstractEntity
      * @param string|null $code
      * @param string|null $description
      *
-     * @throws TypeError
-     *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
@@ -104,8 +100,6 @@ class Error extends AbstractEntity
      * @param string|null $code
      *
      * @return static
-     *
-     * @throws TypeError
      *
      * @example N/A
      *
@@ -144,8 +138,6 @@ class Error extends AbstractEntity
      * @param string|null $description
      *
      * @return static
-     *
-     * @throws TypeError
      *
      * @example N/A
      *

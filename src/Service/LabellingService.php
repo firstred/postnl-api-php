@@ -29,14 +29,15 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Service;
 
-use Exception;
 use Firstred\PostNL\Entity\Request\GenerateShipmentLabelRequest;
 use Firstred\PostNL\Entity\Response\GenerateLabelResponse;
-use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\CifDownException;
+use Firstred\PostNL\Exception\CifErrorException;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Http\Client;
 use Firstred\PostNL\Misc\Message;
+use Http\Client\Exception as HttpClientException;
 use Http\Discovery\Psr17FactoryDiscovery;
-use InvalidArgumentException;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\RequestInterface;
@@ -64,7 +65,13 @@ class LabellingService extends AbstractService
      *
      * @return GenerateLabelResponse
      *
-     * @throws Exception
+     * @throws HttpClientException
+     * @throws CifDownException
+     * @throws CifErrorException
+     * @throws InvalidArgumentException
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function generateLabel(GenerateShipmentLabelRequest $generateLabel, string $printerType, bool $confirm = true)
     {
@@ -74,7 +81,7 @@ class LabellingService extends AbstractService
             $response = $item->get();
             try {
                 $response = Message::parseResponse($response);
-            } catch (InvalidArgumentException |TypeError $e) {
+            } catch (TypeError $e) {
             }
         }
         if (!$response instanceof ResponseInterface) {
@@ -85,23 +92,15 @@ class LabellingService extends AbstractService
         }
 
         $object = $this->processGenerateLabelResponse($response);
-        if ($object instanceof GenerateLabelResponse) {
-            if ($item instanceof CacheItemInterface
-                && $response instanceof ResponseInterface
-                && $response->getStatusCode() === 200
-            ) {
-                $item->set(Message::str($response));
-                $this->cacheItem($item);
-            }
-
-            return $object;
+        if ($item instanceof CacheItemInterface
+            && $response instanceof ResponseInterface
+            && $response->getStatusCode() === 200
+        ) {
+            $item->set(Message::str($response));
+            $this->cacheItem($item);
         }
 
-        if ($response->getStatusCode() === 200) {
-            throw new HttpClientException('Invalid API response', 0, null, null, $response);
-        }
-
-        throw new HttpClientException('Unable to generate label', 0, null, null, $response);
+        return $object;
     }
 
     /**
@@ -146,15 +145,16 @@ class LabellingService extends AbstractService
      *
      * @return GenerateLabelResponse
      *
-     * @since 1.0.0
+     * @throws InvalidArgumentException
+     *
      * @since 2.0.0 Strict typing
+     * @since 1.0.0
      */
     public function processGenerateLabelResponse(ResponseInterface $response): GenerateLabelResponse
     {
         /** @var GenerateLabelResponse $object */
-        $object = GenerateLabelResponse::jsonDeserialize(['GenerateLabelResponse' => json_decode((string) $response->getBody(), true)]);
 
-        return $object;
+        return GenerateLabelResponse::jsonDeserialize(['GenerateLabelResponse' => json_decode((string) $response->getBody(), true)]);
     }
 
     /**
@@ -165,7 +165,11 @@ class LabellingService extends AbstractService
      *
      * @return array
      *
-     * @throws Exception
+     * @throws HttpClientException
+     * @throws InvalidArgumentException
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function generateLabels(array $generateLabels, string $printerType): array
     {
@@ -180,7 +184,7 @@ class LabellingService extends AbstractService
                 $response = $item->get();
                 try {
                     $response = Message::parseResponse($response);
-                } catch (InvalidArgumentException | TypeError $e) {
+                } catch (TypeError $e) {
                 }
                 if ($response instanceof ResponseInterface) {
                     $responses[$uuid] = $response;
@@ -212,12 +216,7 @@ class LabellingService extends AbstractService
 
         $labels = [];
         foreach ($responses + $newResponses as $uuid => $response) {
-            try {
-                $generateLabelResponse = $this->processGenerateLabelResponse($response);
-            } catch (Exception $e) {
-                $generateLabelResponse = $e;
-            }
-
+            $generateLabelResponse = $this->processGenerateLabelResponse($response);
             $labels[$uuid] = $generateLabelResponse;
         }
 

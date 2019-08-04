@@ -32,8 +32,6 @@ namespace Firstred\PostNL\Entity\Request;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\ValidateAndFix;
-use ReflectionException;
-use TypeError;
 
 /**
  * Class FindNearestLocationsGeocodeRequest
@@ -135,7 +133,6 @@ class FindNearestLocationsGeocodeRequest extends AbstractEntity
      * @param string|null       $openingTime
      *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
      *
      * @since 2.0.0
      */
@@ -175,7 +172,6 @@ class FindNearestLocationsGeocodeRequest extends AbstractEntity
      * @return static
      *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
      *
      * @example NL
      *
@@ -213,9 +209,7 @@ class FindNearestLocationsGeocodeRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
      * @throws InvalidArgumentException
-     * @throws ReflectionException
      *
      * @example 52.156439
      *
@@ -253,9 +247,7 @@ class FindNearestLocationsGeocodeRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
      * @throws InvalidArgumentException
-     * @throws ReflectionException
      *
      * @example 52.156439
      *
@@ -292,8 +284,6 @@ class FindNearestLocationsGeocodeRequest extends AbstractEntity
      * @param array $deliveryOptions
      *
      * @return static
-     *
-     * @throws TypeError
      *
      * @example PG
      *
@@ -332,7 +322,6 @@ class FindNearestLocationsGeocodeRequest extends AbstractEntity
      * @return static
      *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
      *
      * @example 03-07-2019
      *
@@ -370,9 +359,7 @@ class FindNearestLocationsGeocodeRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
      * @throws InvalidArgumentException
-     * @throws ReflectionException
      *
      * @example 10:00:00
      *

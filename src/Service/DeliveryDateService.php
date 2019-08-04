@@ -34,11 +34,12 @@ use Firstred\PostNL\Entity\Request\CalculateDeliveryDateRequest;
 use Firstred\PostNL\Entity\Request\CalculateShippingDateRequest;
 use Firstred\PostNL\Entity\Response\CalculateDeliveryDateResponse;
 use Firstred\PostNL\Entity\Response\CalculateShippingDateResponse;
+use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifErrorException;
 use Firstred\PostNL\Http\Client;
 use Firstred\PostNL\Misc\Message;
+use Http\Client\Exception as HttpClientException;
 use Http\Discovery\Psr17FactoryDiscovery;
-use InvalidArgumentException;
 use Psr\Cache\CacheItemInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -64,7 +65,8 @@ class DeliveryDateService extends AbstractService
      * @return CalculateDeliveryDateResponse
      *
      * @throws CifErrorException
-     * @throws \Exception
+     * @throws CifDownException
+     * @throws HttpClientException
      *
      * @since 2.0.0 Strict typing
      * @since 1.0.0
@@ -77,7 +79,7 @@ class DeliveryDateService extends AbstractService
             $response = $item->get();
             try {
                 $response = Message::parseResponse($response);
-            } catch (InvalidArgumentException | TypeError $e) {
+            } catch (TypeError $e) {
             }
         }
         if (!$response instanceof ResponseInterface) {
@@ -87,19 +89,15 @@ class DeliveryDateService extends AbstractService
         }
 
         $object = $this->processCalculateDeliveryDateResponse($response);
-        if ($object instanceof CalculateDeliveryDateResponse) {
-            if ($item instanceof CacheItemInterface
-                && $response instanceof ResponseInterface
-                && $response->getStatusCode() === 200
-            ) {
-                $item->set(Message::str($response));
-                $this->cacheItem($item);
-            }
-
-            return $object;
+        if ($item instanceof CacheItemInterface
+            && $response instanceof ResponseInterface
+            && $response->getStatusCode() === 200
+        ) {
+            $item->set(Message::str($response));
+            $this->cacheItem($item);
         }
 
-        throw new CifErrorException('Unable to retrieve the delivery date', 0, null, isset($request) && $request instanceof RequestInterface ? $request : null, $response);
+        return $object;
     }
 
     /**
@@ -175,7 +173,7 @@ class DeliveryDateService extends AbstractService
      *
      * @return null|CalculateDeliveryDateResponse
      *
-     * @throws CifErrorException
+     * @throws CifDownException
      *
      * @since 2.0.0 Strict typing
      * @since 1.0.0
@@ -190,7 +188,7 @@ class DeliveryDateService extends AbstractService
             return $object;
         }
 
-        throw new CifErrorException('Unable to process get delivery date response', 0, null, null, $response);
+        throw new CifDownException('Unable to process get delivery date response', 0, null, null, $response);
     }
 
     /**
@@ -200,8 +198,9 @@ class DeliveryDateService extends AbstractService
      *
      * @return CalculateShippingDateResponse
      *
+     * @throws CifDownException
      * @throws CifErrorException
-     * @throws \Exception
+     * @throws HttpClientException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -214,7 +213,7 @@ class DeliveryDateService extends AbstractService
             $response = $item->get();
             try {
                 $response = Message::parseResponse($response);
-            } catch (InvalidArgumentException | TypeError $e) {
+            } catch (TypeError $e) {
             }
         }
         if (!$response instanceof ResponseInterface) {
@@ -236,7 +235,7 @@ class DeliveryDateService extends AbstractService
             return $object;
         }
 
-        throw new CifErrorException('Unable to retrieve shipping date', 0, null, isset($request) && $request instanceof RequestInterface ? $request : null, $response);
+        throw new CifDownException('Unable to retrieve shipping date', 0, null, isset($request) && $request instanceof RequestInterface ? $request : null, $response);
     }
 
     /**
@@ -287,7 +286,7 @@ class DeliveryDateService extends AbstractService
      *
      * @return CalculateShippingDateResponse
      *
-     * @throws CifErrorException
+     * @throws CifDownException
      *
      * @since 2.0.0 Strict typing
      * @since 1.0.0
@@ -302,6 +301,6 @@ class DeliveryDateService extends AbstractService
             return $object;
         }
 
-        throw new CifErrorException('Unable to process calculate shipping date response', 0, null, null, $response);
+        throw new CifDownException('Unable to process calculate shipping date response', 0, null, null, $response);
     }
 }

@@ -29,9 +29,8 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\ValidateAndFix;
-use ReflectionException;
-use TypeError;
 
 /**
  * Class ProductOption
@@ -70,10 +69,8 @@ class ProductOption extends AbstractEntity
      * @param string|null $characteristic
      * @param string|null $option
      *
-     * @throws ReflectionException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws ReflectionException
-     * @throws ReflectionException
+     * @throws InvalidArgumentException
+     *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
@@ -109,9 +106,8 @@ class ProductOption extends AbstractEntity
      *
      * @return static
      *
-     * @throws ReflectionException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     *
      * @example 118
      *
      * @since   1.0.0
@@ -130,8 +126,6 @@ class ProductOption extends AbstractEntity
      * Get option
      *
      * @return string|null
-     *
-     * @throws TypeError
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -152,9 +146,8 @@ class ProductOption extends AbstractEntity
      *
      * @return static
      *
-     * @throws ReflectionException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     *
      * @example 006
      *
      * @since   1.0.0

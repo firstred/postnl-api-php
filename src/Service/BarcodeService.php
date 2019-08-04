@@ -29,13 +29,12 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Service;
 
-use Exception;
 use Firstred\PostNL\Entity\Request\GenerateBarcodeRequest;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifErrorException;
-use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Http\Client;
 use Firstred\PostNL\PostNL;
+use Http\Client\Exception as HttpClientException;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -62,7 +61,9 @@ class BarcodeService extends AbstractService
      *
      * @return string|null GenerateBarcodeRequest
      *
-     * @throws Exception
+     * @throws CifErrorException
+     * @throws CifDownException
+     * @throws HttpClientException
      */
     public function generateBarcode(GenerateBarcodeRequest $generateBarcode)
     {
@@ -107,6 +108,7 @@ class BarcodeService extends AbstractService
      * @return array
      *
      * @throws CifErrorException
+     * @throws CifDownException
      */
     public function processGenerateBarcodeResponse(ResponseInterface $response)
     {
@@ -115,7 +117,7 @@ class BarcodeService extends AbstractService
         $json = json_decode((string) $response->getBody(), true);
 
         if (!isset($json['Barcode'])) {
-            throw new CifErrorException('Invalid API Response', 0, null, null, $response);
+            throw new CifDownException('Invalid API Response', 0, null, null, $response);
         }
 
         return $json;
@@ -126,9 +128,11 @@ class BarcodeService extends AbstractService
      *
      * @param GenerateBarcodeRequest[] $generateBarcodes
      *
-     * @return string[]|CifDownException[] Barcodes
+     * @return string[] Barcodes
      *
-     * @throws Exception
+     * @throws CifErrorException
+     * @throws HttpClientException
+     * @throws CifDownException
      */
     public function generateBarcodes(array $generateBarcodes): array
     {

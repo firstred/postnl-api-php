@@ -29,15 +29,10 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity\Response;
 
-use Firstred\PostNL\Entity\AbstractEntity;
-use Firstred\PostNL\Entity\Error;
-use Firstred\PostNL\Entity\Warning;
-use TypeError;
-
 /**
- * Class ConfirmingResponseShipment
+ * Class ConfirmShipmentResponse
  */
-class ConfirmingResponseShipment extends AbstractEntity
+class ConfirmShipmentResponse extends AbstractResponse
 {
     /**
      * @var string|null $barcode
@@ -47,38 +42,18 @@ class ConfirmingResponseShipment extends AbstractEntity
     protected $barcode;
 
     /**
-     * @var Warning[]|null $warnings
+     * ConfirmShipmentResponse constructor.
      *
-     * @since 1.0.0
-     */
-    protected $warnings;
-
-    /**
-     * @var Error[]|null
-     *
-     * @since 1.0.0
-     */
-    protected $errors;
-
-    /**
-     * ConfirmingResponseShipment constructor.
-     *
-     * @param string|null    $barcode
-     * @param Warning[]|null $warnings
-     * @param Error[]|null   $errors
-     *
-     * @throws TypeError
+     * @param string|null $barcode
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function __construct(?string $barcode = null, ?array $warnings = null, ?array $errors = null)
+    public function __construct(?string $barcode = null)
     {
         parent::__construct();
 
         $this->setBarcode($barcode);
-        $this->setWarnings($warnings);
-        $this->setErrors($errors);
     }
 
     /**
@@ -105,8 +80,6 @@ class ConfirmingResponseShipment extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     *
      * @example N/A
      *
      * @since 1.0.0
@@ -114,85 +87,9 @@ class ConfirmingResponseShipment extends AbstractEntity
      *
      * @see     GenerateBarcodeRequest
      */
-    public function setBarcode(?string $barcode): ConfirmingResponseShipment
+    public function setBarcode(?string $barcode): ConfirmShipmentResponse
     {
         $this->barcode = $barcode;
-
-        return $this;
-    }
-
-    /**
-     * Get warnings
-     *
-     * @return Warning[]|null
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     *
-     * @see Warning
-     */
-    public function getWarnings(): ?array
-    {
-        return $this->warnings;
-    }
-
-    /**
-     * Set warnings
-     *
-     * @pattern N/A
-     *
-     * @example N/A
-     *
-     * @param Warning[]|null $warnings
-     *
-     * @return static
-     *
-     * @throws TypeError
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     *
-     * @see Warning
-     */
-    public function setWarnings(?array $warnings): ConfirmingResponseShipment
-    {
-        $this->warnings = $warnings;
-
-        return $this;
-    }
-
-    /**
-     * Get errors
-     *
-     * @return Error[]|null
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     *
-     * @see Error
-     */
-    public function getErrors(): ?array
-    {
-        return $this->errors;
-    }
-
-    /**
-     * Set errors
-     *
-     * @param Error[]|null $errors
-     *
-     * @return static
-     *
-     * @throws TypeError
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     *
-     * @see Error
-     */
-    public function setErrors(?array $errors): ConfirmingResponseShipment
-    {
-        $this->errors = $errors;
 
         return $this;
     }

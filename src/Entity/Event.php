@@ -31,8 +31,6 @@ namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\ValidateAndFix;
-use ReflectionException;
-use TypeError;
 
 /**
  * Class Event
@@ -141,9 +139,7 @@ class Event extends AbstractEntity
      * @param string|null $routeName
      * @param string|null $timeStamp
      *
-     * @throws TypeError
      * @throws InvalidArgumentException
-     * @throws ReflectionException
      *
      * @since 1.0.0
      * @since 2.0.0
@@ -184,8 +180,6 @@ class Event extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     *
      * @example I01
      *
      * @since   2.0.0
@@ -221,8 +215,6 @@ class Event extends AbstractEntity
      * @param string|null $description
      *
      * @return static
-     *
-     * @throws TypeError
      *
      * @example Zending is bezorgd
      *
@@ -260,8 +252,6 @@ class Event extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     *
      * @example 981223
      *
      * @since   2.0.0
@@ -297,8 +287,6 @@ class Event extends AbstractEntity
      * @param string|null $routeCode
      *
      * @return static
-     *
-     * @throws TypeError
      *
      * @example 217 PostNL Spiegelstraat
      *
@@ -338,8 +326,6 @@ class Event extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     *
      * @since   2.0.0
      *
      * @see     Event::$routeName
@@ -374,9 +360,7 @@ class Event extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
      * @throws InvalidArgumentException
-     * @throws ReflectionException
      *
      * @example 03-07-2019 08:00:00
      *
@@ -413,8 +397,6 @@ class Event extends AbstractEntity
      * @param string|null $locationCode
      *
      * @return static
-     *
-     * @throws TypeError
      *
      * @example 2394082
      *

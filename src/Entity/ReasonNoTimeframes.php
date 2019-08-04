@@ -31,8 +31,8 @@ namespace Firstred\PostNL\Entity;
 
 use ArrayAccess;
 use Countable;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Iterator;
-use TypeError;
 
 /**
  * Class ReasonNoTimeframes
@@ -99,8 +99,6 @@ class ReasonNoTimeframes extends AbstractEntity implements Iterator, ArrayAccess
      *
      * @return static
      *
-     * @throws TypeError
-     *
      * @example N/A
      *
      * @since   2.0.0 Strict typing
@@ -129,13 +127,17 @@ class ReasonNoTimeframes extends AbstractEntity implements Iterator, ArrayAccess
     /**
      * Deserialize JSON
      *
+     * @noinspection PhpDocRedundantThrowsInspection
+     *
      * @param array $json JSON as associative array
      *
-     * @return ReasonNoTimeframes
+     * @return mixed
+     *
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
-    public static function jsonDeserialize(array $json): ReasonNoTimeframes
+    public static function jsonDeserialize(array $json)
     {
         $object = new static();
         if (isset($json['ReasonNoTimeframes']['ReasonNoTimeframe'])) {

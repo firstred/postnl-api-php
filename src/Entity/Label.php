@@ -31,8 +31,6 @@ namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\ValidateAndFix;
-use ReflectionException;
-use TypeError;
 
 /**
  * Class Label
@@ -100,8 +98,6 @@ class Label extends AbstractEntity
      * @param string|null $contentType
      * @param string|null $labelType
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 1.0.0
@@ -139,8 +135,6 @@ class Label extends AbstractEntity
      * @param string|null $content
      *
      * @return static
-     *
-     * @throws TypeError
      *
      * @example N/A
      *
@@ -181,8 +175,6 @@ class Label extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example PDF
@@ -223,8 +215,6 @@ class Label extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example Label (A6)

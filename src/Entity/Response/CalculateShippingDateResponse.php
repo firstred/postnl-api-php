@@ -29,13 +29,10 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity\Response;
 
-use Firstred\PostNL\Entity\AbstractEntity;
-use TypeError;
-
 /**
  * Class GetSentDateResponse
  */
-class CalculateShippingDateResponse extends AbstractEntity
+class CalculateShippingDateResponse extends AbstractResponse
 {
     /**
      * @var string|null $sentDate
@@ -56,8 +53,6 @@ class CalculateShippingDateResponse extends AbstractEntity
      *
      * @param string|null   $date
      * @param string[]|null $options
-     *
-     * @throws TypeError
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -90,8 +85,6 @@ class CalculateShippingDateResponse extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
@@ -121,8 +114,6 @@ class CalculateShippingDateResponse extends AbstractEntity
      * @param string[]|null $options
      *
      * @return static
-     *
-     * @throws TypeError
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing

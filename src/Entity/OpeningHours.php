@@ -31,8 +31,6 @@ namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\ValidateAndFix;
-use ReflectionException;
-use TypeError;
 
 /**
  * Class OpeningHours
@@ -141,8 +139,6 @@ class OpeningHours extends AbstractEntity
      * @param string[] $saturday
      * @param string[] $sunday
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 1.0.0
@@ -164,12 +160,13 @@ class OpeningHours extends AbstractEntity
     /**
      * Deserialize JSON
      *
-     * @param array $json
+     * @noinspection PhpDocRedundantThrowsInspection
      *
-     * @return OpeningHours
+     * @param array $json JSON as associative array
+     *
+     * @return mixed
      *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
      *
      * @since 2.0.0
      */
@@ -211,8 +208,6 @@ class OpeningHours extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 08:00-17:00
@@ -256,8 +251,6 @@ class OpeningHours extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 08:00-17:00
@@ -301,8 +294,6 @@ class OpeningHours extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 08:00-17:00
@@ -346,8 +337,6 @@ class OpeningHours extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 08:00-17:00
@@ -391,8 +380,6 @@ class OpeningHours extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 08:00-17:00
@@ -436,8 +423,6 @@ class OpeningHours extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 08:00-17:00
@@ -481,8 +466,6 @@ class OpeningHours extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 08:00-17:00

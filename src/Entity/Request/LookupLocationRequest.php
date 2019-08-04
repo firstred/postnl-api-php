@@ -29,9 +29,7 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity\Request;
 
-use Exception;
 use Firstred\PostNL\Entity\AbstractEntity;
-use TypeError;
 
 /**
  * Class LookupLocationRequest
@@ -72,8 +70,7 @@ class LookupLocationRequest extends AbstractEntity
      * @param string|null $location
      * @param string|null $networkId
      *
-     * @throws Exception
-     * @throws TypeError
+     *
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -109,8 +106,6 @@ class LookupLocationRequest extends AbstractEntity
      * @param string|null $locationCode
      *
      * @return static
-     *
-     * @throws TypeError
      *
      * @example 161503
      *
@@ -149,8 +144,6 @@ class LookupLocationRequest extends AbstractEntity
      * @param string|null $retailNetworkID
      *
      * @return static
-     *
-     * @throws TypeError
      *
      * @example PNPNL-01
      *

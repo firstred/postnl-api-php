@@ -29,13 +29,14 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Service;
 
-use Exception;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Request\ConfirmShipmentRequest;
-use Firstred\PostNL\Entity\Response\ConfirmingResponseShipment;
+use Firstred\PostNL\Entity\Response\ConfirmShipmentResponse;
 use Firstred\PostNL\Exception\CifDownException;
-use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\CifErrorException;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Http\Client;
+use Http\Client\Exception as HttpClientException;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -57,30 +58,21 @@ class ConfirmingService extends AbstractService
      *
      * @param ConfirmShipmentRequest $confirming
      *
-     * @return ConfirmingResponseShipment
+     * @return ConfirmShipmentResponse
      *
-     * @throws HttpClientException
      * @throws CifDownException
-     * @throws Exception
+     * @throws CifErrorException
+     * @throws HttpClientException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function confirmShipment(ConfirmShipmentRequest $confirming): ConfirmingResponseShipment
+    public function confirmShipment(ConfirmShipmentRequest $confirming): ConfirmShipmentResponse
     {
         $request = $this->buildConfirmRequest($confirming);
         $response = Client::getInstance()->doRequest($request);
-        $object = $this->processConfirmResponse($response);
 
-        if ($object instanceof ConfirmingResponseShipment) {
-            return $object;
-        }
-
-        if ($response->getStatusCode() === 200) {
-            throw new CifDownException('Invalid API Response', 0, null, $request, $response);
-        }
-
-        throw new HttpClientException('Unable to confirm', 0, null, $request, $response);
+        return $this->processConfirmResponse($response);
     }
 
     /**
@@ -116,24 +108,27 @@ class ConfirmingService extends AbstractService
      *
      * @param ResponseInterface $response
      *
-     * @return null|ConfirmingResponseShipment
+     * @return ConfirmShipmentResponse
      *
+     * @throws CifDownException
+     * @throws CifErrorException
+     * @throws InvalidArgumentException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function processConfirmResponse(ResponseInterface $response): ?ConfirmingResponseShipment
+    public function processConfirmResponse(ResponseInterface $response): ConfirmShipmentResponse
     {
         static::validateResponse($response);
         $body = json_decode((string) $response->getBody(), true);
         if (isset($body['ConfirmingResponseShipments'])) {
-            /** @var ConfirmingResponseShipment $object */
+            /** @var ConfirmShipmentResponse $object */
             $object = AbstractEntity::jsonDeserialize($body['ConfirmingResponseShipments']);
 
             return $object;
         }
 
-        return null;
+        throw new CifDownException('Unable to process confirm response', 0, null, null, $response);
     }
 
     /**
@@ -141,9 +136,11 @@ class ConfirmingService extends AbstractService
      *
      * @param ConfirmShipmentRequest[] $confirms ['uuid' => ConfirmShipmentRequest, ...]
      *
-     * @return ConfirmingResponseShipment[]
+     * @return ConfirmShipmentResponse[]
      *
-     * @throws Exception
+     * @throws CifDownException
+     * @throws CifErrorException
+     * @throws HttpClientException
      *
      * @since 1.0.0
      */
@@ -160,15 +157,7 @@ class ConfirmingService extends AbstractService
 
         $confirmingResponses = [];
         foreach ($httpClient->doRequests() as $uuid => $response) {
-            try {
-                $confirming = $this->processConfirmResponse($response);
-                if (!$confirming instanceof ConfirmingResponseShipment) {
-                    throw new HttpClientException('Invalid API Response', 0, null, null, $response);
-                }
-            } catch (Exception $e) {
-                $confirming = $e;
-            }
-
+            $confirming = $this->processConfirmResponse($response);
             $confirmingResponses[$uuid] = $confirming;
         }
 

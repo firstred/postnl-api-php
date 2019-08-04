@@ -34,22 +34,22 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\ValidateAndFix;
 
 /**
- * Class RetrieveShipmentByBarcodeRequest
+ * Class RetrieveShipmentByReferenceRequest
  */
-class RetrieveShipmentByBarcodeRequest extends AbstractEntity
+class RetrieveShipmentByReferenceRequest extends AbstractEntity
 {
     /**
-     * Barcode
+     * Reference
      *
      * @pattern ^.{0,35}$
      *
-     * @example 3SDEVC23423234
+     * @example 112233
      *
-     * @var string|null $barcode
+     * @var string|null $reference
      *
      * @since   2.0.0
      */
-    protected $barcode;
+    protected $reference;
 
     /**
      * Detail
@@ -91,9 +91,9 @@ class RetrieveShipmentByBarcodeRequest extends AbstractEntity
     protected $maxDays;
 
     /**
-     * RetrieveShipmentByBarcodeRequest constructor.
+     * RetrieveShipmentByReferenceRequest constructor.
      *
-     * @param string|null           $barcode
+     * @param string|null           $reference
      * @param bool|null             $detail
      * @param string|null           $language
      * @param int|string|float|null $maxDays
@@ -103,48 +103,48 @@ class RetrieveShipmentByBarcodeRequest extends AbstractEntity
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function __construct(?string $barcode = null, ?bool $detail = null, ?string $language = null, $maxDays = null)
+    public function __construct(?string $reference = null, ?bool $detail = null, ?string $language = null, $maxDays = null)
     {
         parent::__construct();
 
-        $this->setBarcode($barcode);
+        $this->setReference($reference);
         $this->setDetail($detail);
         $this->setLanguage($language);
         $this->setMaxDays($maxDays);
     }
 
     /**
-     * Get barcode
+     * Get reference
      *
      * @return string|null
      *
      * @since 2.0.0 Strict typing
      *
-     * @see   RetrieveShipmentByBarcodeRequest::$barcode
+     * @see   RetrieveShipmentByReferenceRequest::$kgid
      */
-    public function getBarcode(): ?string
+    public function getReference(): ?string
     {
-        return $this->barcode;
+        return $this->reference;
     }
 
     /**
-     * Set barcode
+     * Set reference
      *
      * @pattern ^.{0,35}$
      *
-     * @param string|null $barcode
+     * @param string|null $reference
      *
      * @return static
      *
-     * @example 3SDEVC23423234
+     * @example 112233
      *
      * @since   2.0.0 Strict typing
      *
-     * @see     RetrieveShipmentByBarcodeRequest::$barcode
+     * @see     RetrieveShipmentByReferenceRequest::$kgid
      */
-    public function setBarcode(?string $barcode): RetrieveShipmentByBarcodeRequest
+    public function setReference(?string $reference): RetrieveShipmentByReferenceRequest
     {
-        $this->barcode = $barcode;
+        $this->reference = $reference;
 
         return $this;
     }
@@ -156,7 +156,7 @@ class RetrieveShipmentByBarcodeRequest extends AbstractEntity
      *
      * @since 2.0.0 Strict typing
      *
-     * @see   RetrieveShipmentByBarcodeRequest::$detail
+     * @see   RetrieveShipmentByReferenceRequest::$detail
      */
     public function getDetail(): ?bool
     {
@@ -176,9 +176,9 @@ class RetrieveShipmentByBarcodeRequest extends AbstractEntity
      *
      * @since   2.0.0 Strict typing
      *
-     * @see     RetrieveShipmentByBarcodeRequest::$detail
+     * @see     RetrieveShipmentByReferenceRequest::$detail
      */
-    public function setDetail(?bool $detail): RetrieveShipmentByBarcodeRequest
+    public function setDetail(?bool $detail): RetrieveShipmentByReferenceRequest
     {
         $this->detail = $detail;
 
@@ -192,7 +192,7 @@ class RetrieveShipmentByBarcodeRequest extends AbstractEntity
      *
      * @since 2.0.0 Strict typing
      *
-     * @see   RetrieveShipmentByBarcodeRequest::$language
+     * @see   RetrieveShipmentByReferenceRequest::$language
      */
     public function getLanguage(): ?string
     {
@@ -212,9 +212,9 @@ class RetrieveShipmentByBarcodeRequest extends AbstractEntity
      *
      * @since 2.0.0 Strict typing
      *
-     * @see     RetrieveShipmentByBarcodeRequest::$language
+     * @see     RetrieveShipmentByReferenceRequest::$language
      */
-    public function setLanguage(?string $language): RetrieveShipmentByBarcodeRequest
+    public function setLanguage(?string $language): RetrieveShipmentByReferenceRequest
     {
         $this->language = $language;
 
@@ -228,7 +228,7 @@ class RetrieveShipmentByBarcodeRequest extends AbstractEntity
      *
      * @since 2.0.0 Strict typing
      *
-     * @see   RetrieveShipmentByBarcodeRequest::$maxDays
+     * @see   RetrieveShipmentByReferenceRequest::$maxDays
      */
     public function getMaxDays(): ?int
     {
@@ -250,9 +250,9 @@ class RetrieveShipmentByBarcodeRequest extends AbstractEntity
      *
      * @since 2.0.0 Strict typing
      *
-     * @see     RetrieveShipmentByBarcodeRequest::$maxDays
+     * @see     RetrieveShipmentByReferenceRequest::$maxDays
      */
-    public function setMaxDays($maxDays): RetrieveShipmentByBarcodeRequest
+    public function setMaxDays($maxDays): RetrieveShipmentByReferenceRequest
     {
         $this->maxDays = ValidateAndFix::integer($maxDays);
 

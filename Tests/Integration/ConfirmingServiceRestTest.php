@@ -30,7 +30,7 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Tests\Integration\Service;
 
 use Cache\Adapter\Void\VoidCachePool;
-use Firstred\PostNL\Entity\Response\ConfirmingResponseShipment;
+use Firstred\PostNL\Entity\Response\ConfirmShipmentResponse;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\Message;
 use PHPUnit\Framework\TestCase;
@@ -143,7 +143,7 @@ class ConfirmingServiceRestTest extends TestCase
                 ->setProductCodeDelivery('3085')
         );
 
-        $this->assertInstanceOf(ConfirmingResponseShipment::class, $confirm);
+        $this->assertInstanceOf(ConfirmShipmentResponse::class, $confirm);
     }
 
     /**
@@ -210,6 +210,6 @@ class ConfirmingServiceRestTest extends TestCase
                     ->setProductCodeDelivery('3085'),
         ]);
 
-        $this->assertInstanceOf(ConfirmingResponseShipment::class, $confirms[1]);
+        $this->assertInstanceOf(ConfirmShipmentResponse::class, $confirms[1]);
     }
 }

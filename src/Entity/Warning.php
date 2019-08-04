@@ -29,8 +29,6 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
-use TypeError;
-
 /**
  * Class Warning
  */
@@ -43,7 +41,7 @@ class Warning extends AbstractEntity
      *
      * @example N/A
      *
-     * @var string|null $code
+     * @var string|int|null $code
      *
      * @since 1.0.0
      */
@@ -68,8 +66,6 @@ class Warning extends AbstractEntity
      * @param string|null $code
      * @param string|null $description
      *
-     * @throws TypeError
-     *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
@@ -84,14 +80,14 @@ class Warning extends AbstractEntity
     /**
      * Get code
      *
-     * @return string|null
+     * @return string|int|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      *
      * @see   Warning::$code
      */
-    public function getCode(): ?string
+    public function getCode()
     {
         return $this->code;
     }
@@ -101,11 +97,9 @@ class Warning extends AbstractEntity
      *
      * @pattern ^.*$
      *
-     * @param string|null $code
+     * @param string|int|null $code
      *
      * @return static
-     *
-     * @throws TypeError
      *
      * @example N/A
      *
@@ -114,7 +108,7 @@ class Warning extends AbstractEntity
      *
      * @see     Warning::$code
      */
-    public function setCode(?string $code): Warning
+    public function setCode($code): Warning
     {
         $this->code = $code;
 
@@ -144,8 +138,6 @@ class Warning extends AbstractEntity
      * @param string|null $description
      *
      * @return static
-     *
-     * @throws TypeError
      *
      * @example N/A
      *

@@ -31,8 +31,6 @@ namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\ValidateAndFix;
-use ReflectionException;
-use TypeError;
 
 /**
  * Class Expectation
@@ -71,8 +69,6 @@ class Expectation extends AbstractEntity
      * @param string $from
      * @param string $to
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 1.0.0
@@ -110,8 +106,6 @@ class Expectation extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 14:00:00
@@ -152,8 +146,6 @@ class Expectation extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 16:30:00

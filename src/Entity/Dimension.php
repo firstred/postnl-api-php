@@ -29,9 +29,8 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\ValidateAndFix;
-use ReflectionException;
-use TypeError;
 
 /**
  * Class Dimension
@@ -114,8 +113,7 @@ class Dimension extends AbstractEntity
      * @param int|float|string|null $width
      * @param int|float|string|null $volume
      *
-     * @throws TypeError
-     * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -157,9 +155,8 @@ class Dimension extends AbstractEntity
      *
      * @return static
      *
-     * @throws ReflectionException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     *
      * @example 1400
      *
      * @since   1.0.0
@@ -198,9 +195,8 @@ class Dimension extends AbstractEntity
      *
      * @return static
      *
-     * @throws ReflectionException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     *
      * @example 2000
      *
      * @since   1.0.0
@@ -239,9 +235,8 @@ class Dimension extends AbstractEntity
      *
      * @return static
      *
-     * @throws ReflectionException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     *
      * @example 4300
      *
      * @since   1.0.0
@@ -280,9 +275,8 @@ class Dimension extends AbstractEntity
      *
      * @return static
      *
-     * @throws ReflectionException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     *
      * @example 1500
      *
      * @since   1.0.0
@@ -321,9 +315,8 @@ class Dimension extends AbstractEntity
      *
      * @return static
      *
-     * @throws ReflectionException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     *
      * @example 30000
      *
      * @since   1.0.0

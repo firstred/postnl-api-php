@@ -29,9 +29,8 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\ValidateAndFix;
-use ReflectionException;
-use TypeError;
 
 /**
  * Class Customer
@@ -166,8 +165,7 @@ class Customer extends AbstractEntity
      * @param string  $name
      * @param Address $address
      *
-     * @throws TypeError
-     * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -209,8 +207,6 @@ class Customer extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     *
      * @example N/A
      *
      * @since 1.0.0
@@ -249,9 +245,8 @@ class Customer extends AbstractEntity
      *
      * @return static
      *
-     * @throws ReflectionException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     *
      * @example 123456
      *
      * @since   1.0.0
@@ -290,9 +285,8 @@ class Customer extends AbstractEntity
      *
      * @return static
      *
-     * @throws ReflectionException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     *
      * @example Peter de Ruiter
      *
      * @since   1.0.0
@@ -331,9 +325,8 @@ class Customer extends AbstractEntity
      *
      * @return static
      *
-     * @throws ReflectionException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     *
      * @example AB
      *
      * @since   1.0.0
@@ -372,9 +365,8 @@ class Customer extends AbstractEntity
      *
      * @return static
      *
-     * @throws ReflectionException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     *
      * @example 1234
      *
      * @since   1.0.0
@@ -412,8 +404,6 @@ class Customer extends AbstractEntity
      * @param string|null $globalPackCustomerCode
      *
      * @return static
-     *
-     * @throws TypeError
      *
      * @example 1234
      *
@@ -453,9 +443,8 @@ class Customer extends AbstractEntity
      *
      * @return static
      *
-     * @throws ReflectionException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     *
      * @example CD
      *
      * @since   1.0.0
@@ -494,9 +483,8 @@ class Customer extends AbstractEntity
      *
      * @return static
      *
-     * @throws ReflectionException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     *
      * @since    1.0.0
      * @since    2.0.0 Strict typing
      *
@@ -535,9 +523,8 @@ class Customer extends AbstractEntity
      *
      * @return static
      *
-     * @throws ReflectionException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     *
      * @example PostNL
      *
      * @since   1.0.0

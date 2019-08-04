@@ -41,17 +41,17 @@ use Firstred\PostNL\Entity\Request\FindNearestLocationsRequest;
 use Firstred\PostNL\Entity\Request\GenerateBarcodeRequest;
 use Firstred\PostNL\Entity\Request\GenerateShipmentLabelRequest;
 use Firstred\PostNL\Entity\Request\LookupLocationRequest;
-use Firstred\PostNL\Entity\Request\LookupShipmentByBarcodeRequest;
 use Firstred\PostNL\Entity\Request\RetrieveShipmentByBarcodeRequest;
+use Firstred\PostNL\Entity\Request\RetrieveShipmentByKgidRequest;
+use Firstred\PostNL\Entity\Request\RetrieveShipmentByReferenceRequest;
 use Firstred\PostNL\Entity\Request\RetrieveSignatureByBarcodeRequest;
 use Firstred\PostNL\Entity\Response\CalculateDeliveryDateResponse;
 use Firstred\PostNL\Entity\Response\CalculateShippingDateResponse;
 use Firstred\PostNL\Entity\Response\CalculateTimeframesResponse;
-use Firstred\PostNL\Entity\Response\ConfirmingResponseShipment;
+use Firstred\PostNL\Entity\Response\ConfirmShipmentResponse;
 use Firstred\PostNL\Entity\Response\FindNearestLocationsGeocodeResponse;
 use Firstred\PostNL\Entity\Response\FindNearestLocationsResponse;
 use Firstred\PostNL\Entity\Response\GenerateLabelResponse;
-use Firstred\PostNL\Entity\Response\GetLocationsInAreaResponse;
 use Firstred\PostNL\Entity\Shipment;
 use Firstred\PostNL\Entity\Signature;
 use Firstred\PostNL\Exception\CifDownException;
@@ -72,17 +72,12 @@ use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
+use Http\Client\Exception as HttpClientException;
 use Psr\Cache\CacheItemInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
-use ReflectionException;
-use setasign\Fpdi\PdfParser\CrossReference\CrossReferenceException;
-use setasign\Fpdi\PdfParser\Filter\FilterException;
-use setasign\Fpdi\PdfParser\PdfParserException;
 use setasign\Fpdi\PdfParser\StreamReader;
-use setasign\Fpdi\PdfParser\Type\PdfTypeException;
-use setasign\Fpdi\PdfReader\PdfReaderException;
 
 /**
  * Class PostNL
@@ -111,13 +106,6 @@ class PostNL implements LoggerAwareInterface
         2 => [-276, 110],
         1 => [-132, 110],
     ];
-
-    /**
-     * Verify SSL certificate of the PostNL API
-     *
-     * @var bool $verifySslCerts
-     */
-    public $verifySslCerts = true;
 
     /**
      * The PostNL API key to be used for requests.
@@ -186,6 +174,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @return string REST API Key
      *
+     * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function getApiKey(): ?string
@@ -291,6 +280,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @return self
      *
+     * @since 1.0.0
      * @since 2.0.0 Return `self`
      */
     public function setApiKey(string $apiKey): PostNL
@@ -619,9 +609,12 @@ class PostNL implements LoggerAwareInterface
      *
      * @return string The GenerateBarcodeRequest as a string
      *
-     * @throws InvalidConfigurationException
+     * @throws CifErrorException
+     * @throws CifDownException
+     * @throws HttpClientException
+     * @throws InvalidArgumentException
      * @throws InvalidBarcodeException
-     * @throws Exception
+     * @throws InvalidConfigurationException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -659,13 +652,16 @@ class PostNL implements LoggerAwareInterface
     /**
      * Generate a single barcode by country code
      *
-     * @param  array $isos key = iso code, value = amount of barcodes requested
+     * @param array $isos key = iso code, value = amount of barcodes requested
      *
      * @return array Country isos with the barcode as string
      *
-     * @throws InvalidConfigurationException
+     * @throws CifDownException
+     * @throws CifErrorException
+     * @throws HttpClientException
+     * @throws InvalidArgumentException
      * @throws InvalidBarcodeException
-     * @throws Exception
+     * @throws InvalidConfigurationException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -731,7 +727,10 @@ class PostNL implements LoggerAwareInterface
      *
      * @return GenerateLabelResponse
      *
-     * @throws Exception
+     * @throws CifDownException
+     * @throws CifErrorException
+     * @throws HttpClientException
+     * @throws InvalidArgumentException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -784,14 +783,10 @@ class PostNL implements LoggerAwareInterface
      *
      * @return GenerateLabelResponse[]|string
      *
-     * @throws PostNLClientException
+     * @throws HttpClientException
+     * @throws InvalidArgumentException
      * @throws NotSupportedException
-     * @throws CrossReferenceException
-     * @throws FilterException
-     * @throws PdfParserException
-     * @throws PdfTypeException
-     * @throws PdfReaderException
-     * @throws Exception
+     * @throws PostNLClientException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -828,118 +823,122 @@ class PostNL implements LoggerAwareInterface
             }
         }
 
-        // Disable header and footer
-        $pdf = new RFPdi('P', 'mm', $format === Label::FORMAT_A4 ? [210, 297] : [105, 148]);
-        $deferred = [];
-        $firstPage = true;
-        if (Label::FORMAT_A6 === $format) {
-            foreach ($labels as $label) {
-                $pdfContent = base64_decode($label->getResponseShipments()[0]->getLabels()[0]->getContent());
-                $sizes = Misc::getPdfSizeAndOrientation($pdfContent);
-                if ($sizes['iso'] === 'A6') {
-                    $pdf->addPage($a6Orientation);
-                    $correction = [0, 0];
-                    if ('L' === $a6Orientation && 'P' === $sizes['orientation']) {
-                        $correction[0] = -84;
-                        $correction[1] = -0.5;
-                        $pdf->rotateCounterClockWise();
-                    } elseif ('P' === $a6Orientation && 'L' === $sizes['orientation']) {
-                        $pdf->rotateCounterClockWise();
-                    }
-                    $pdf->setSourceFile(StreamReader::createByString($pdfContent));
-                    $pdf->useTemplate($pdf->importPage(1), $correction[0], $correction[1]);
-                } else {
-                    // Assuming A4 here (could be multi-page) - defer to end
-                    $stream = StreamReader::createByString($pdfContent);
-                    $deferred[] = ['stream' => $stream, 'sizes' => $sizes];
-                }
-            }
-        } else {
-            $a6s = 4; // Amount of A6s available
-            foreach ($labels as $label) {
-                if ($label instanceof PostNLClientException) {
-                    throw $label;
-                }
-                $pdfContent = base64_decode($label->getResponseShipments()[0]->getLabels()[0]->getContent());
-                $sizes = Misc::getPdfSizeAndOrientation($pdfContent);
-                if ($sizes['iso'] === 'A6') {
-                    if ($firstPage) {
-                        $pdf->addPage('P', [297, 210], 90);
-                    }
-                    $firstPage = false;
-                    while (empty($positions[5 - $a6s]) && $a6s >= 1) {
-                        $positions[5 - $a6s] = true;
-                        $a6s--;
-                    }
-                    if ($a6s < 1) {
-                        $pdf->addPage('P', [297, 210], 90);
-                        $a6s = 4;
-                    }
-                    $pdf->rotateCounterClockWise();
-                    $pdf->setSourceFile(StreamReader::createByString($pdfContent));
-                    $pdf->useTemplate(
-                        $pdf->importPage(1),
-                        static::$labelPositions[$a6s][0],
-                        static::$labelPositions[$a6s][1]
-                    );
-                    $a6s--;
-                    if ($a6s < 1) {
-                        if (end($labels) !== $label) {
-                            $pdf->addPage('P', [297, 210], 90);
-                        }
-                        $a6s = 4;
-                    }
-                } else {
-                    // Assuming A4 here (could be multi-page) - defer to end
-                    if (count($label->getResponseShipments()[0]->getLabels()) > 1) {
-                        $stream = [];
-                        foreach ($label->getResponseShipments()[0]->getLabels() as $labelContent) {
-                            $stream[] = StreamReader::createByString(base64_decode($labelContent->getContent()));
-                        }
-                        $deferred[] = ['stream' => $stream, 'sizes' => $sizes];
-                    } else {
-                        $stream = StreamReader::createByString(base64_decode($pdfContent));
-                        $deferred[] = ['stream' => $stream, 'sizes' => $sizes];
-                    }
-                }
-            }
-        }
-        foreach ($deferred as $defer) {
-            $sizes = $defer['sizes'];
-            $pdf->addPage($sizes['orientation'], 'A4');
-            $pdf->rotateCounterClockWise();
-            if (is_array($defer['stream']) && count($defer['stream']) > 1) {
-                // Multi-label
-                if (count($deferred['stream']) === 2) {
-                    $pdf->setSourceFile($defer['stream'][0]);
-                    $pdf->useTemplate($pdf->importPage(1), -190, 0);
-                    $pdf->setSourceFile($defer['stream'][1]);
-                    $pdf->useTemplate($pdf->importPage(1), -190, 148);
-                } else {
-                    $pdf->setSourceFile($defer['stream'][0]);
-                    $pdf->useTemplate($pdf->importPage(1), -190, 0);
-                    $pdf->setSourceFile($defer['stream'][1]);
-                    $pdf->useTemplate($pdf->importPage(1), -190, 148);
-                    for ($i = 2; $i < count($defer['stream']); $i++) {
-                        $pages = $pdf->setSourceFile($defer['stream'][$i]);
-                        for ($j = 1; $j < $pages + 1; $j++) {
-                            $pdf->addPage($sizes['orientation'], 'A4');
+        try {
+            // Disable header and footer
+            $pdf = new RFPdi('P', 'mm', $format === Label::FORMAT_A4 ? [210, 297] : [105, 148]);
+            $deferred = [];
+            $firstPage = true;
+            if (Label::FORMAT_A6 === $format) {
+                foreach ($labels as $label) {
+                    $pdfContent = base64_decode($label->getResponseShipments()[0]->getLabels()[0]->getContent());
+                    $sizes = Misc::getPdfSizeAndOrientation($pdfContent);
+                    if ($sizes['iso'] === 'A6') {
+                        $pdf->addPage($a6Orientation);
+                        $correction = [0, 0];
+                        if ('L' === $a6Orientation && 'P' === $sizes['orientation']) {
+                            $correction[0] = -84;
+                            $correction[1] = -0.5;
                             $pdf->rotateCounterClockWise();
-                            $pdf->useTemplate($pdf->importPage(1), -190, 0);
+                        } elseif ('P' === $a6Orientation && 'L' === $sizes['orientation']) {
+                            $pdf->rotateCounterClockWise();
                         }
+                        $pdf->setSourceFile(StreamReader::createByString($pdfContent));
+                        $pdf->useTemplate($pdf->importPage(1), $correction[0], $correction[1]);
+                    } else {
+                        // Assuming A4 here (could be multi-page) - defer to end
+                        $stream = StreamReader::createByString($pdfContent);
+                        $deferred[] = ['stream' => $stream, 'sizes' => $sizes];
                     }
                 }
             } else {
-                if (is_resource($defer['stream'])) {
-                    $pdf->setSourceFile($defer['stream']);
-                } else {
-                    $pdf->setSourceFile($defer['stream'][0]);
+                $a6s = 4; // Amount of A6s available
+                foreach ($labels as $label) {
+                    if ($label instanceof PostNLClientException) {
+                        throw $label;
+                    }
+                    $pdfContent = base64_decode($label->getResponseShipments()[0]->getLabels()[0]->getContent());
+                    $sizes = Misc::getPdfSizeAndOrientation($pdfContent);
+                    if ($sizes['iso'] === 'A6') {
+                        if ($firstPage) {
+                            $pdf->addPage('P', [297, 210], 90);
+                        }
+                        $firstPage = false;
+                        while (empty($positions[5 - $a6s]) && $a6s >= 1) {
+                            $positions[5 - $a6s] = true;
+                            $a6s--;
+                        }
+                        if ($a6s < 1) {
+                            $pdf->addPage('P', [297, 210], 90);
+                            $a6s = 4;
+                        }
+                        $pdf->rotateCounterClockWise();
+                        $pdf->setSourceFile(StreamReader::createByString($pdfContent));
+                        $pdf->useTemplate(
+                            $pdf->importPage(1),
+                            static::$labelPositions[$a6s][0],
+                            static::$labelPositions[$a6s][1]
+                        );
+                        $a6s--;
+                        if ($a6s < 1) {
+                            if (end($labels) !== $label) {
+                                $pdf->addPage('P', [297, 210], 90);
+                            }
+                            $a6s = 4;
+                        }
+                    } else {
+                        // Assuming A4 here (could be multi-page) - defer to end
+                        if (count($label->getResponseShipments()[0]->getLabels()) > 1) {
+                            $stream = [];
+                            foreach ($label->getResponseShipments()[0]->getLabels() as $labelContent) {
+                                $stream[] = StreamReader::createByString(base64_decode($labelContent->getContent()));
+                            }
+                            $deferred[] = ['stream' => $stream, 'sizes' => $sizes];
+                        } else {
+                            $stream = StreamReader::createByString(base64_decode($pdfContent));
+                            $deferred[] = ['stream' => $stream, 'sizes' => $sizes];
+                        }
+                    }
                 }
-                $pdf->useTemplate($pdf->importPage(1), -190, 0);
             }
-        }
+            foreach ($deferred as $defer) {
+                $sizes = $defer['sizes'];
+                $pdf->addPage($sizes['orientation'], 'A4');
+                $pdf->rotateCounterClockWise();
+                if (is_array($defer['stream']) && count($defer['stream']) > 1) {
+                    // Multi-label
+                    if (count($deferred['stream']) === 2) {
+                        $pdf->setSourceFile($defer['stream'][0]);
+                        $pdf->useTemplate($pdf->importPage(1), -190, 0);
+                        $pdf->setSourceFile($defer['stream'][1]);
+                        $pdf->useTemplate($pdf->importPage(1), -190, 148);
+                    } else {
+                        $pdf->setSourceFile($defer['stream'][0]);
+                        $pdf->useTemplate($pdf->importPage(1), -190, 0);
+                        $pdf->setSourceFile($defer['stream'][1]);
+                        $pdf->useTemplate($pdf->importPage(1), -190, 148);
+                        for ($i = 2; $i < count($defer['stream']); $i++) {
+                            $pages = $pdf->setSourceFile($defer['stream'][$i]);
+                            for ($j = 1; $j < $pages + 1; $j++) {
+                                $pdf->addPage($sizes['orientation'], 'A4');
+                                $pdf->rotateCounterClockWise();
+                                $pdf->useTemplate($pdf->importPage(1), -190, 0);
+                            }
+                        }
+                    }
+                } else {
+                    if (is_resource($defer['stream'])) {
+                        $pdf->setSourceFile($defer['stream']);
+                    } else {
+                        $pdf->setSourceFile($defer['stream'][0]);
+                    }
+                    $pdf->useTemplate($pdf->importPage(1), -190, 0);
+                }
+            }
 
-        return $pdf->output('', 'S');
+            return $pdf->output('', 'S');
+        } catch (Exception $e) {
+            throw new PostNLClientException('Unable to generate PDF file', 0, $e);
+        }
     }
 
     /**
@@ -947,14 +946,16 @@ class PostNL implements LoggerAwareInterface
      *
      * @param Shipment $shipment
      *
-     * @return ConfirmingResponseShipment
+     * @return ConfirmShipmentResponse
      *
-     * @throws Exception
+     * @throws CifDownException
+     * @throws CifErrorException
+     * @throws HttpClientException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function confirmShipment(Shipment $shipment): ConfirmingResponseShipment
+    public function confirmShipment(Shipment $shipment): ConfirmShipmentResponse
     {
         return $this->getConfirmingService()->confirmShipment(new ConfirmShipmentRequest([$shipment]));
     }
@@ -964,9 +965,11 @@ class PostNL implements LoggerAwareInterface
      *
      * @param array $shipments
      *
-     * @return ConfirmingResponseShipment[]
+     * @return ConfirmShipmentResponse[]
      *
-     * @throws Exception
+     * @throws CifDownException
+     * @throws CifErrorException
+     * @throws HttpClientException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -975,7 +978,7 @@ class PostNL implements LoggerAwareInterface
     {
         $confirmations = [];
         foreach ($shipments as $uuid => $shipment) {
-            $confirmations[$uuid] = (new ConfirmShipmentRequest([$shipment], $this->customer))->setId((string) $uuid);
+            $confirmations[$uuid] = (new ConfirmShipmentRequest([$shipment]))->setId((string) $uuid);
         }
 
         return $this->getConfirmingService()->confirmShipments($confirmations);
@@ -992,17 +995,76 @@ class PostNL implements LoggerAwareInterface
      *
      * @return Shipment
      *
+     * @throws CifDownException
+     * @throws CifErrorException
+     * @throws HttpClientException
      * @throws InvalidArgumentException
-     * @throws ReflectionException
-     * @throws Exception
      *
      * @since 2.0.0
      */
     public function retrieveShipmentByBarcode(string $barcode, bool $detail = false, string $language = 'NL', ?int $maxDays = null): Shipment
     {
-        return $this->getShippingStatusService()->retrieveShipmentByBarcode(
+        return $this->getShippingStatusService()->retrieveShipment(
             (new RetrieveShipmentByBarcodeRequest())
                 ->setBarcode($barcode)
+                ->setDetail($detail)
+                ->setLanguage($language)
+                ->setMaxDays($maxDays)
+        );
+    }
+
+    /**
+     * Retrieves a shipment by reference
+     *
+     * @param string   $reference
+     *
+     * @param bool     $detail
+     * @param string   $language
+     * @param int|null $maxDays
+     *
+     * @return Shipment
+     *
+     * @throws CifDownException
+     * @throws CifErrorException
+     * @throws HttpClientException
+     * @throws InvalidArgumentException
+     *
+     * @since 2.0.0
+     */
+    public function retrieveShipmentByReference(string $reference, bool $detail = false, string $language = 'NL', ?int $maxDays = null): Shipment
+    {
+        return $this->getShippingStatusService()->retrieveShipment(
+            (new RetrieveShipmentByReferenceRequest())
+                ->setReference($reference)
+                ->setDetail($detail)
+                ->setLanguage($language)
+                ->setMaxDays($maxDays)
+        );
+    }
+
+    /**
+     * Retrieves a shipment by kennisgeving ID
+     *
+     * @param string   $kgid
+     *
+     * @param bool     $detail
+     * @param string   $language
+     * @param int|null $maxDays
+     *
+     * @return Shipment
+     *
+     * @throws CifDownException
+     * @throws CifErrorException
+     * @throws HttpClientException
+     * @throws InvalidArgumentException
+     *
+     * @since 2.0.0
+     */
+    public function retrieveShipmentByKgid(string $kgid, bool $detail = false, string $language = 'NL', ?int $maxDays = null): Shipment
+    {
+        return $this->getShippingStatusService()->retrieveShipment(
+            (new RetrieveShipmentByKgidRequest())
+                ->setKgid($kgid)
                 ->setDetail($detail)
                 ->setLanguage($language)
                 ->setMaxDays($maxDays)
@@ -1016,13 +1078,16 @@ class PostNL implements LoggerAwareInterface
      *
      * @return Signature
      *
-     * @throws Exception
+     * @throws CifDownException
+     * @throws CifErrorException
+     * @throws HttpClientException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
     public function retrieveSignatureByBarcode(string $barcode): Signature
     {
-        return $this->getShippingStatusService()->retrieveSignatureByBarcode(
+        return $this->getShippingStatusService()->retrieveSignature(
             (new RetrieveSignatureByBarcodeRequest())
                 ->setBarcode($barcode)
         );
@@ -1044,9 +1109,10 @@ class PostNL implements LoggerAwareInterface
      *
      * @return CalculateDeliveryDateResponse
      *
+     * @throws CifDownException
      * @throws CifErrorException
+     * @throws HttpClientException
      * @throws InvalidArgumentException
-     * @throws ReflectionException
      *
      * @since 2.0.0
      */
@@ -1095,9 +1161,10 @@ class PostNL implements LoggerAwareInterface
      *
      * @return CalculateShippingDateResponse
      *
+     * @throws CifDownException
      * @throws CifErrorException
+     * @throws HttpClientException
      * @throws InvalidArgumentException
-     * @throws ReflectionException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -1137,7 +1204,6 @@ class PostNL implements LoggerAwareInterface
      * @return CalculateTimeframesResponse
      *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
      * @throws Exception
      *
      * @since 1.0.0
@@ -1176,8 +1242,10 @@ class PostNL implements LoggerAwareInterface
      *
      * @return FindNearestLocationsResponse
      *
-     * @throws ReflectionException
-     * @throws Exception
+     * @throws CifDownException
+     * @throws CifErrorException
+     * @throws InvalidArgumentException
+     * @throws HttpClientException
      *
      * @since 2.0.0
      */
@@ -1209,7 +1277,6 @@ class PostNL implements LoggerAwareInterface
      * @return FindNearestLocationsGeocodeResponse
      *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
      * @throws Exception
      *
      * @since 2.0.0
@@ -1370,8 +1437,6 @@ class PostNL implements LoggerAwareInterface
      *
      * @return FindNearestLocationsGeocodeResponse
      *
-     * @throws Exception
-     * @throws Exception
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
@@ -1388,7 +1453,7 @@ class PostNL implements LoggerAwareInterface
      * @return Entity\Location
      *
      * @throws Exception
-     * @throws Exception
+     *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */

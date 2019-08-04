@@ -29,11 +29,9 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity\Request;
 
-use Exception;
 use Firstred\PostNL\Entity\AbstractEntity;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\ValidateAndFix;
-use ReflectionException;
-use TypeError;
 
 /**
  * Class FindNearestLocationsRequest
@@ -149,8 +147,7 @@ class FindNearestLocationsRequest extends AbstractEntity
     /**
      * FindNearestLocationsRequest constructor.
      *
-     * @throws TypeError
-     * @throws Exception
+     *
      *
      * @since 1.0.0
      * @since 2.0.0
@@ -183,8 +180,6 @@ class FindNearestLocationsRequest extends AbstractEntity
      * @param string|null $countrycode
      *
      * @return static
-     *
-     * @throws TypeError
      *
      * @example NL
      *
@@ -223,9 +218,8 @@ class FindNearestLocationsRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws ReflectionException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     *
      * @example 2132WT
      *
      * @since   2.0.0
@@ -262,9 +256,8 @@ class FindNearestLocationsRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws ReflectionException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     *
      * @example Hoofddorp
      *
      * @since   2.0.0
@@ -301,9 +294,8 @@ class FindNearestLocationsRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws ReflectionException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     *
      * @example Siriusdreef
      *
      * @since   2.0.0
@@ -340,9 +332,8 @@ class FindNearestLocationsRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws ReflectionException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     *
      * @example 42
      *
      * @since   2.0.0
@@ -379,9 +370,8 @@ class FindNearestLocationsRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws ReflectionException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     *
      * @example 03-07-2019
      *
      * @since   2.0.0
@@ -418,9 +408,8 @@ class FindNearestLocationsRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws ReflectionException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     *
      * @example 09:00:00
      *
      * @since   2.0.0
@@ -456,8 +445,6 @@ class FindNearestLocationsRequest extends AbstractEntity
      * @param array|null $deliveryOptions
      *
      * @return static
-     *
-     * @throws TypeError
      *
      * @example PGE
      *

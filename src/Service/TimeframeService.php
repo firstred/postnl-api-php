@@ -29,14 +29,14 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Service;
 
-use Exception;
 use Firstred\PostNL\Entity\Request\CalculateTimeframesRequest;
 use Firstred\PostNL\Entity\Response\CalculateTimeframesResponse;
-use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\CifDownException;
+use Firstred\PostNL\Exception\CifErrorException;
 use Firstred\PostNL\Http\Client;
 use Firstred\PostNL\Misc\Message;
+use Http\Client\Exception as HttpClientException;
 use Http\Discovery\Psr17FactoryDiscovery;
-use InvalidArgumentException;
 use Psr\Cache\CacheItemInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -61,7 +61,9 @@ class TimeframeService extends AbstractService
      *
      * @return CalculateTimeframesResponse
      *
-     * @throws Exception
+     * @throws CifDownException
+     * @throws CifErrorException
+     * @throws HttpClientException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -74,7 +76,7 @@ class TimeframeService extends AbstractService
             $response = $item->get();
             try {
                 $response = Message::parseResponse($response);
-            } catch (InvalidArgumentException | TypeError $e) {
+            } catch (TypeError $e) {
             }
         }
         if (!$response instanceof ResponseInterface) {
@@ -96,7 +98,7 @@ class TimeframeService extends AbstractService
             return $object;
         }
 
-        throw new HttpClientException('Unable to retrieve timeframes', 0, null, isset($request) && $request instanceof RequestInterface ? $request : null, $response);
+        throw new CifDownException('Unable to retrieve timeframes', 0, null, isset($request) && $request instanceof RequestInterface ? $request : null, $response);
     }
 
     /**

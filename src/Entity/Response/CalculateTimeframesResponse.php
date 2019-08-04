@@ -29,15 +29,13 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity\Response;
 
-use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\ReasonNoTimeframes;
 use Firstred\PostNL\Entity\Timeframes;
-use TypeError;
 
 /**
  * Class CalculateTimeframesResponse
  */
-class CalculateTimeframesResponse extends AbstractEntity
+class CalculateTimeframesResponse extends AbstractResponse
 {
     /**
      * ReasonNoTimeframes
@@ -71,8 +69,6 @@ class CalculateTimeframesResponse extends AbstractEntity
      * @param ReasonNoTimeframes|null $noTimeframes
      * @param Timeframes|null         $timeframes
      *
-     * @throws TypeError
-     *
      * @since 2.0.0
      */
     public function __construct(?ReasonNoTimeframes $noTimeframes = null, ?Timeframes $timeframes = null)
@@ -95,6 +91,9 @@ class CalculateTimeframesResponse extends AbstractEntity
         $json = [];
         foreach (array_keys(get_class_vars(static::class)) as $propertyName) {
             if (in_array(ucfirst($propertyName), ['Id'])) {
+                continue;
+            }
+            if (in_array(ucfirst($propertyName), ['Warnings', 'Errors'])) {
                 continue;
             }
             if (isset($this->{$propertyName})) {
@@ -142,8 +141,6 @@ class CalculateTimeframesResponse extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     *
      * @since 2.0.0
      */
     public function setReasonNoTimeframes(?ReasonNoTimeframes $reasonNoTimeframes): CalculateTimeframesResponse
@@ -175,8 +172,6 @@ class CalculateTimeframesResponse extends AbstractEntity
      * @param Timeframes|null $timeframes
      *
      * @return static
-     *
-     * @throws TypeError
      *
      * @since 2.0.0
      */

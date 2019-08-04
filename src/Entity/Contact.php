@@ -29,10 +29,9 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\ValidateAndFix;
 use libphonenumber\NumberParseException;
-use ReflectionException;
-use TypeError;
 
 /**
  * Class Contact
@@ -100,9 +99,8 @@ class Contact extends AbstractEntity
      * @param string|null $telNr       Telephone number (fixed line)
      * @param string      $countryCode 2-letter ISO country code for phone formatting
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws NumberParseException
+     * @throws InvalidArgumentException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -142,9 +140,9 @@ class Contact extends AbstractEntity
      *
      * @return static
      *
-     * @throws ReflectionException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     * @throws InvalidArgumentException
+     *
      * @example 01
      *
      * @since   1.0.0
@@ -183,9 +181,9 @@ class Contact extends AbstractEntity
      *
      * @return static
      *
-     * @throws ReflectionException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     * @throws InvalidArgumentException
+     *
      * @example receiver@gmail.com
      *
      * @since   1.0.0
@@ -226,9 +224,9 @@ class Contact extends AbstractEntity
      * @return static
      *
      * @throws NumberParseException
-     * @throws ReflectionException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     * @throws InvalidArgumentException
+     *
      * @example 0612345678
      *
      * @since   1.0.0
@@ -269,9 +267,9 @@ class Contact extends AbstractEntity
      * @return static
      *
      * @throws NumberParseException
-     * @throws ReflectionException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     * @throws InvalidArgumentException
+     *
      * @example 0612345678
      *
      * @since   1.0.0

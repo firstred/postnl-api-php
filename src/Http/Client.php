@@ -34,6 +34,9 @@ use Firstred\PostNL\Misc\EachPromise;
 use Http\Client\Common\Plugin\LoggerPlugin;
 use Http\Client\Common\Plugin\RetryPlugin;
 use Http\Client\Common\PluginClient;
+use Http\Client\Exception as HttpClientException;
+use Http\Client\Exception\HttpException;
+use Http\Client\Exception\TransferException;
 use Http\Client\HttpAsyncClient;
 use Http\Discovery\HttpAsyncClientDiscovery;
 use Psr\Http\Message\RequestInterface;
@@ -221,13 +224,13 @@ class Client implements LoggerAwareInterface
      *
      * @param RequestInterface[] $requests
      *
-     * @return ResponseInterface|ResponseInterface[]
+     * @return ResponseInterface[]
      *
-     * @throws Exception
+     * @throws HttpClientException
      *
      * @since 2.0.0 Strict typing
      */
-    public function doRequests(array $requests = [])
+    public function doRequests(array $requests = []): array
     {
         // If this is a single request, create the requests array
         if (!is_array($requests)) {
@@ -253,41 +256,26 @@ class Client implements LoggerAwareInterface
         );
 
         $responses = [];
-        (new EachPromise(
-            $promises,
-            [
-                'concurrency' => $this->concurrency,
-                'fulfilled'   => function ($response, $index) use (&$responses) {
-                    $responses[$index] = $response;
-                },
-                'rejected'    => function ($response, $index) use (&$responses) {
-                    $responses[$index] = $response;
-                },
-            ]
-        ))->promise()->wait();
-        foreach ($responses as &$response) {
-            if (is_array($response) && !empty($response['value'])) {
-                $response = $response['value'];
-            } elseif (is_array($response) && !empty($response['reason'])) {
-                // TODO: check
-//                if ($response['reason'] instanceof TransferException) {
-//                    if (method_exists($response['reason'], 'getMessage')
-//                        && method_exists($response['reason'], 'getCode')
-//                    ) {
-//                        $response = new HttpClientException(
-//                            $response['reason']->getMessage(),
-//                            $response['reason']->getCode(),
-//                            $response['reason']
-//                        );
-//                    } else {
-//                        $response = new HttpClientException(null, null, $response['reason']);
-//                    }
-//                } else {
-                    $response = $response['reason'];
-//                }
-            } elseif (!$response instanceof ResponseInterface) {
-                $response = new ResponseException('Unknown response type');
-            }
+        try {
+            (new EachPromise(
+                $promises,
+                [
+                    'concurrency' => $this->concurrency,
+                    'fulfilled'   => function ($response, $index) use (&$responses) {
+                        $responses[$index] = $response;
+                    },
+                    'rejected'    => function ($response, $index) use (&$responses) {
+                        $responses[$index] = $response;
+                    },
+                ]
+            ))->promise()->wait(true);
+        } catch (HttpException $e) {
+            // Ignore HttpExceptions, we are going to handle them in the response validator
+        } catch (TransferException $e) {
+            // Other transfer exceptions should be thrown
+            throw $e;
+        } catch (Exception $e) {
+            // Unreachable code, these kinds of exceptions should not be unwrapped
         }
 
         return $responses;
@@ -314,24 +302,20 @@ class Client implements LoggerAwareInterface
      *
      * @return ResponseInterface
      *
-     * @throws Exception
+     * @throws HttpClientException
      *
-     * @since 1.0.0
      * @since 2.0.0 Strict typing
+     * @since 1.0.0
      */
     public function doRequest(RequestInterface $request)
     {
         // Initialize HttpAsyncClient, include the default options
         /** @var HttpAsyncClient $client */
         $client = $this->getAsyncClient();
-//        try {
-            // FIXME: handle exceptions
-            $response = $client->sendAsyncRequest($request)->wait();
-//        } catch (TransferException $e) {
-//            throw new HttpClientException($e->getMessage(), $e->getCode(), $e);
-//        }
 
-        return $response;
+        /* @noinspection PhpUnhandledExceptionInspection */
+
+        return $client->sendAsyncRequest($request)->wait();
     }
 
     /**

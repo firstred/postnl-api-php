@@ -29,9 +29,8 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\ValidateAndFix;
-use ReflectionException;
-use TypeError;
 
 /**
  * Class Content
@@ -160,8 +159,7 @@ class Content extends AbstractEntity
      * @param string|null $val
      * @param string|null $weight
      *
-     * @throws TypeError
-     * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -202,9 +200,8 @@ class Content extends AbstractEntity
      *
      * @return static
      *
-     * @throws ReflectionException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     *
      * @example NL
      *
      * @since   1.0.0
@@ -243,9 +240,8 @@ class Content extends AbstractEntity
      *
      * @return static
      *
-     * @throws ReflectionException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     *
      * @example Powdered milk
      *
      * @since   1.0.0
@@ -283,9 +279,8 @@ class Content extends AbstractEntity
      *
      * @return static
      *
-     * @throws ReflectionException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     *
      * @example 7501031311309
      *
      * @since   2.0.0 Strict typing
@@ -324,9 +319,8 @@ class Content extends AbstractEntity
      *
      * @return static
      *
-     * @throws ReflectionException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     *
      * @since   2.0.0 Strict typing
      *
      * @see     Content::$productUrl
@@ -362,9 +356,9 @@ class Content extends AbstractEntity
      *
      * @return static
      *
-     * @throws ReflectionException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     * @throws InvalidArgumentException
+     *
      * @example 950306
      *
      * @since   1.0.0
@@ -403,9 +397,9 @@ class Content extends AbstractEntity
      *
      * @return static
      *
-     * @throws ReflectionException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     * @throws InvalidArgumentException
+     *
      * @example 12
      *
      * @since   1.0.0
@@ -443,8 +437,6 @@ class Content extends AbstractEntity
      * @param string|float|int|null $value
      *
      * @return static
-     *
-     * @throws TypeError
      *
      * @example 12.00
      *
@@ -487,8 +479,6 @@ class Content extends AbstractEntity
      * @param string|int|float|null $weight
      *
      * @return static
-     *
-     * @throws TypeError
      *
      * @example 2600
      *

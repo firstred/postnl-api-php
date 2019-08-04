@@ -29,8 +29,6 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
-use TypeError;
-
 /**
  * Class MergedLabel
  */
@@ -96,8 +94,6 @@ class MergedLabel extends AbstractEntity
      * @param Warning[]|null $warnings
      * @param Label[]|null   $labels
      *
-     * @throws TypeError
-     *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
@@ -113,6 +109,8 @@ class MergedLabel extends AbstractEntity
 
     /**
      * Get product code delivery
+     *
+     * @return int|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -132,8 +130,6 @@ class MergedLabel extends AbstractEntity
      * @param int|null $productCodeDelivery
      *
      * @return static
-     *
-     * @throws TypeError
      *
      * @example 003085
      *
@@ -170,8 +166,6 @@ class MergedLabel extends AbstractEntity
      * @param string[]|null $barcodes
      *
      * @return static
-     *
-     * @throws TypeError
      *
      * @example N/A
      *
@@ -213,8 +207,6 @@ class MergedLabel extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     *
      * @example N/A
      *
      * @since 1.0.0
@@ -252,8 +244,6 @@ class MergedLabel extends AbstractEntity
      * @param Label[]|null $labels
      *
      * @return static
-     *
-     * @throws TypeError
      *
      * @example N/A
      *

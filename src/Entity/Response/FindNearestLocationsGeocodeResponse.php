@@ -31,16 +31,14 @@ namespace Firstred\PostNL\Entity\Response;
 
 use ArrayAccess;
 use Countable;
-use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Location;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Iterator;
-use TypeError;
 
 /**
  * Class FindNearestLocationsGeocodeResponse
  */
-class FindNearestLocationsGeocodeResponse extends AbstractEntity implements Iterator, ArrayAccess, Countable
+class FindNearestLocationsGeocodeResponse extends AbstractResponse implements Iterator, ArrayAccess, Countable
 {
     /**
      * Iterator index
@@ -63,7 +61,6 @@ class FindNearestLocationsGeocodeResponse extends AbstractEntity implements Iter
      *
      * @param Location[] $locations
      *
-     * @throws TypeError
      * @throws InvalidArgumentException
      *
      * @since 2.0.0 Strict typing
@@ -86,31 +83,44 @@ class FindNearestLocationsGeocodeResponse extends AbstractEntity implements Iter
      */
     public function jsonSerialize(): array
     {
-        return [
+        $json = [
             'GetLocationsResult' => [
                 'ResponseLocation' => $this->locations,
             ],
         ];
+        if (!empty($this->warnings)) {
+            $json['Warnings'] = $this->warnings;
+        }
+        if (!empty($this->errors)) {
+            $json['Errors'] = $this->errors;
+        }
+
+        return $json;
     }
 
     /**
      * Deserialize JSON
      *
-     * @param array $json
+     * @noinspection PhpDocRedundantThrowsInspection
      *
-     * @return FindNearestLocationsGeocodeResponse
+     * @param array $json JSON as associative array
+     *
+     * @return mixed
      *
      * @throws InvalidArgumentException
      *
-     * @since 2.0.0
+     * @since 1.0.0
      */
     public static function jsonDeserialize(array $json)
     {
         $object = new static();
-        if (isset($json['FindNearestLocationsGeocodeResponse']['GetLocationsResult']['ResponseLocation'])) {
-            foreach ($json['FindNearestLocationsGeocodeResponse']['GetLocationsResult']['ResponseLocation'] as $location) {
-                $object[] = Location::jsonDeserialize(['Location' => $location]);
+        if (isset($json['FindNearestLocationsGeocodeResponse'])) {
+            if (isset($json['FindNearestLocationsGeocodeResponse']['GetLocationsResult']['ResponseLocation'])) {
+                foreach ($json['FindNearestLocationsGeocodeResponse']['GetLocationsResult']['ResponseLocation'] as $location) {
+                    $object[] = Location::jsonDeserialize(['Location' => $location]);
+                }
             }
+            static::processWarningsAndErrors($object, $json['FindNearestLocationsGeocodeResponse']);
         }
 
         return $object;
@@ -136,7 +146,6 @@ class FindNearestLocationsGeocodeResponse extends AbstractEntity implements Iter
      *
      * @return static
      *
-     * @throws TypeError
      * @throws InvalidArgumentException
      *
      * @since 1.0.0

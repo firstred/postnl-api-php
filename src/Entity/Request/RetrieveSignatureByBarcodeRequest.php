@@ -29,10 +29,8 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity\Request;
 
-use Exception;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Shipment;
-use TypeError;
 
 /**
  * Class LookupSignatureRequest
@@ -40,7 +38,7 @@ use TypeError;
 class RetrieveSignatureByBarcodeRequest extends AbstractEntity
 {
     /**
-     * Shipment
+     * Barcode
      *
      * @pattern N/A
      *
@@ -50,62 +48,57 @@ class RetrieveSignatureByBarcodeRequest extends AbstractEntity
      *
      * @since 1.0.0
      */
-    protected $shipment;
+    protected $barcode;
 
     /**
      * LookupSignatureRequest constructor.
      *
-     * @param Shipment|null $shipment
-     *
-     * @throws Exception
-     * @throws TypeError
+     * @param string|null $barcode
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function __construct(Shipment $shipment = null)
+    public function __construct(?string $barcode = null)
     {
         parent::__construct();
 
-        $this->setShipment($shipment);
+        $this->setBarcode($barcode);
     }
 
     /**
-     * Get Shipment
+     * Get barcode
      *
      * @return Shipment|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      *
-     * @see   Shipment
+     * @see     RetrieveSignatureByBarcodeRequest::$barcode
      */
-    public function getShipment(): ?Shipment
+    public function getBarcode(): ?string
     {
-        return $this->shipment;
+        return $this->barcode;
     }
 
     /**
-     * Set Shipment
+     * Set barcode
      *
      * @pattern N/A
      *
-     * @param Shipment|null $shipment
+     * @param string|null $barcode
      *
      * @return static
-     *
-     * @throws TypeError
      *
      * @example N/A
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      *
-     * @see     Shipment
+     * @see     RetrieveSignatureByBarcodeRequest::$barcode
      */
-    public function setShipment(?Shipment $shipment): RetrieveSignatureByBarcodeRequest
+    public function setBarcode(?string $barcode = null): RetrieveSignatureByBarcodeRequest
     {
-        $this->shipment = $shipment;
+        $this->barcode = $barcode;
 
         return $this;
     }

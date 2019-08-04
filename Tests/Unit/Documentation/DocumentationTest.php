@@ -164,31 +164,6 @@ class DocumentationTest extends TestCase
     }
 
     /**
-     * @testdox Has an @throws documentation block
-     *
-     * @throws ReflectionException
-     */
-    public function testThrows()
-    {
-        foreach ($this->getEntities() as $entityName) {
-            if (in_array(ltrim($entityName, '\\'), [AbstractEntity::class])) {
-                continue;
-            }
-            $reflector = new ReflectionClass($entityName);
-            foreach ($reflector->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
-                /** @var ReflectionMethod $method */
-                if (!in_array(substr($method->getName(), 0, 3), ['set'])
-                    || in_array(ltrim($method->class, '\\'), [AbstractEntity::class])
-                ) {
-                    continue;
-                }
-
-                $this->assertTrue(strpos($method->getDocComment(), '* @throws') !== false, "{$method->class}::{$method->name} does not have an @throws comment");
-            }
-        }
-    }
-
-    /**
      * @return array
      */
     private function getEntities()

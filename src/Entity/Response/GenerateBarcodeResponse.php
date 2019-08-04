@@ -29,13 +29,10 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity\Response;
 
-use Firstred\PostNL\Entity\AbstractEntity;
-use TypeError;
-
 /**
  * Class GenerateBarcodeResponse
  */
-class GenerateBarcodeResponse extends AbstractEntity
+class GenerateBarcodeResponse extends AbstractResponse
 {
     /**
      * @var string|null $barcode
@@ -48,8 +45,6 @@ class GenerateBarcodeResponse extends AbstractEntity
      * GenerateBarcodeResponse constructor.
      *
      * @param string|null $barcode
-     *
-     * @throws TypeError
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -80,8 +75,6 @@ class GenerateBarcodeResponse extends AbstractEntity
      * @param string|null $barcode
      *
      * @return static
-     *
-     * @throws TypeError
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing

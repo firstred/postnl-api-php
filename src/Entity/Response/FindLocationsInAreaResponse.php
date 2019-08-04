@@ -31,16 +31,14 @@ namespace Firstred\PostNL\Entity\Response;
 
 use ArrayAccess;
 use Countable;
-use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Location;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Iterator;
-use TypeError;
 
 /**
  * Class FindLocationsInAreaResponse
  */
-class FindLocationsInAreaResponse extends AbstractEntity implements Iterator, ArrayAccess, Countable
+class FindLocationsInAreaResponse extends AbstractResponse implements Iterator, ArrayAccess, Countable
 {
     /**
      * Iterator index
@@ -63,7 +61,6 @@ class FindLocationsInAreaResponse extends AbstractEntity implements Iterator, Ar
      *
      * @param Location[] $locations
      *
-     * @throws TypeError
      * @throws InvalidArgumentException
      *
      * @since 2.0.0 Strict typing
@@ -86,19 +83,29 @@ class FindLocationsInAreaResponse extends AbstractEntity implements Iterator, Ar
      */
     public function jsonSerialize(): array
     {
-        return [
+        $json = [
             'GetLocationsResult' => [
                 'ResponseLocation' => $this->locations,
             ],
         ];
+        if (!empty($this->warnings)) {
+            $json['Warnings'] = $this->warnings;
+        }
+        if (!empty($this->errors)) {
+            $json['Errors'] = $this->errors;
+        }
+
+        return $json;
     }
 
     /**
      * Deserialize JSON
      *
-     * @param array $json
+     * @noinspection PhpDocRedundantThrowsInspection
      *
-     * @return FindLocationsInAreaResponse
+     * @param array $json JSON as associative array
+     *
+     * @return mixed
      *
      * @throws InvalidArgumentException
      *
@@ -107,10 +114,13 @@ class FindLocationsInAreaResponse extends AbstractEntity implements Iterator, Ar
     public static function jsonDeserialize(array $json)
     {
         $object = new static();
-        if (isset($json['FindLocationsInAreaResponse']['GetLocationsResult']['ResponseLocation'])) {
-            foreach ($json['FindLocationsInAreaResponse']['GetLocationsResult']['ResponseLocation'] as $location) {
-                $object[] = Location::jsonDeserialize(['Location' => $location]);
+        if (isset($json['FindLocationsInAreaResponse'])) {
+            if (isset($json['FindLocationsInAreaResponse']['GetLocationsResult']['ResponseLocation'])) {
+                foreach ($json['FindLocationsInAreaResponse']['GetLocationsResult']['ResponseLocation'] as $location) {
+                    $object[] = Location::jsonDeserialize(['Location' => $location]);
+                }
             }
+            static::processWarningsAndErrors($object, $json['FindLocationsInAreaResponse']);
         }
 
         return $object;
@@ -136,7 +146,6 @@ class FindLocationsInAreaResponse extends AbstractEntity implements Iterator, Ar
      *
      * @return static
      *
-     * @throws TypeError
      * @throws InvalidArgumentException
      *
      * @since 1.0.0

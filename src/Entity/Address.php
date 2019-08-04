@@ -32,8 +32,6 @@ namespace Firstred\PostNL\Entity;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\ValidateAndFix;
 use ReflectionClass;
-use ReflectionException;
-use TypeError;
 
 /**
  * Class Address
@@ -326,9 +324,7 @@ class Address extends AbstractEntity
      * @param string|null $streetHouseNrExt
      *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
-     * @throws InvalidArgumentException
-     * @throws InvalidArgumentException
+     *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
@@ -385,8 +381,7 @@ class Address extends AbstractEntity
      * @return static
      *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
-     * @throws InvalidArgumentException
+     *
      * @example 02
      *
      * @since   1.0.0
@@ -433,8 +428,7 @@ class Address extends AbstractEntity
      * @return static
      *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
-     * @throws InvalidArgumentException
+     *
      * @example 2132WT
      *
      * @since   1.0.0
@@ -474,8 +468,7 @@ class Address extends AbstractEntity
      * @return static
      *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
-     * @throws InvalidArgumentException
+     *
      * @example Beukenhorst
      *
      * @since   1.0.0
@@ -515,8 +508,7 @@ class Address extends AbstractEntity
      * @return static
      *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
-     * @throws InvalidArgumentException
+     *
      * @example AA
      *
      * @since   1.0.0
@@ -556,8 +548,7 @@ class Address extends AbstractEntity
      * @return static
      *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
-     * @throws InvalidArgumentException
+     *
      * @example Hoofddorp
      *
      * @since   1.0.0
@@ -597,8 +588,7 @@ class Address extends AbstractEntity
      * @return static
      *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
-     * @throws InvalidArgumentException
+     *
      * @example PostNL
      *
      * @since   1.0.0
@@ -638,8 +628,7 @@ class Address extends AbstractEntity
      * @return static
      *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
-     * @throws InvalidArgumentException
+     *
      * @example NL
      *
      * @since   1.0.0
@@ -679,8 +668,7 @@ class Address extends AbstractEntity
      * @return static
      *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
-     * @throws InvalidArgumentException
+     *
      * @example IT
      *
      * @since   1.0.0
@@ -720,8 +708,7 @@ class Address extends AbstractEntity
      * @return static
      *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
-     * @throws InvalidArgumentException
+     *
      * @example 123
      *
      * @since   1.0.0
@@ -761,8 +748,7 @@ class Address extends AbstractEntity
      * @return static
      *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
-     * @throws InvalidArgumentException
+     *
      * @example Peter
      *
      * @since   1.0.0
@@ -801,8 +787,7 @@ class Address extends AbstractEntity
      *
      * @return Address
      *
-     * @throws ReflectionException
-     * @throws TypeError
+     * @throws InvalidArgumentException
      *
      * @example de Ruiter
      *
@@ -841,8 +826,7 @@ class Address extends AbstractEntity
      * @return static
      *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
-     * @throws InvalidArgumentException
+     *
      * @example 4
      *
      * @since   1.0.0
@@ -887,9 +871,7 @@ class Address extends AbstractEntity
      * @return static
      *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
-     * @throws InvalidArgumentException
-     * @throws InvalidArgumentException
+     *
      * @example 42
      *
      * @since   1.0.0
@@ -946,8 +928,7 @@ class Address extends AbstractEntity
      * @return static
      *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
-     * @throws InvalidArgumentException
+     *
      * @example A
      *
      * @since   1.0.0
@@ -976,8 +957,6 @@ class Address extends AbstractEntity
      *
      * @return string|null
      *
-     * @throws TypeError
-     *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
      *
@@ -998,8 +977,7 @@ class Address extends AbstractEntity
      * @return static
      *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
-     * @throws InvalidArgumentException
+     *
      * @example Siriusdreef 42 A
      *
      * @since   2.0.0 Strict typing
@@ -1038,8 +1016,7 @@ class Address extends AbstractEntity
      * @return static
      *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
-     * @throws InvalidArgumentException
+     *
      * @example de Ruiter
      *
      * @since   1.0.0
@@ -1078,8 +1055,6 @@ class Address extends AbstractEntity
      *
      * @return static
      *
-     * @throws ReflectionException
-     * @throws TypeError
      * @throws InvalidArgumentException
      *
      * @example Noord-Holland
@@ -1120,8 +1095,6 @@ class Address extends AbstractEntity
      *
      * @return static
      *
-     * @throws ReflectionException
-     * @throws TypeError
      * @throws InvalidArgumentException
      *
      * @example Opmerking
@@ -1163,8 +1136,7 @@ class Address extends AbstractEntity
      * @return static
      *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
-     * @throws InvalidArgumentException
+     *
      * @example Siriusdreef
      *
      * @since   1.0.0

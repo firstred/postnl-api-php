@@ -29,12 +29,18 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Service;
 
-use Exception;
 use Firstred\PostNL\Entity\Request\RetrieveShipmentByBarcodeRequest;
+use Firstred\PostNL\Entity\Request\RetrieveShipmentByKgidRequest;
+use Firstred\PostNL\Entity\Request\RetrieveShipmentByReferenceRequest;
+use Firstred\PostNL\Entity\Request\RetrieveSignatureByBarcodeRequest;
 use Firstred\PostNL\Entity\Shipment;
+use Firstred\PostNL\Entity\Signature;
+use Firstred\PostNL\Exception\CifDownException;
+use Firstred\PostNL\Exception\CifErrorException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Http\Client;
 use Firstred\PostNL\Misc\Message;
+use Http\Client\Exception as HttpClientException;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Psr\Cache\CacheItemInterface;
 use Psr\Http\Message\RequestInterface;
@@ -47,25 +53,27 @@ use TypeError;
 class ShippingStatusService extends AbstractService
 {
     // API Version
-    const VERSION = '1.6';
+    const VERSION = '2';
 
     // Endpoints
-    const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v1_6/status';
-    const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v1_6/status';
+    const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v2/status';
+    const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2/status';
 
     /**
      * Retrieve the shipment by barcode
      *
-     * @param RetrieveShipmentByBarcodeRequest $shipmentRequest
+     * @param RetrieveShipmentByBarcodeRequest|RetrieveShipmentByReferenceRequest|RetrieveShipmentByKgidRequest $shipmentRequest
      *
      * @return Shipment
      *
-     * @throws Exception
+     * @throws HttpClientException
+     * @throws CifDownException
+     * @throws CifErrorException
+     * @throws InvalidArgumentException
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since 2.0.0
      */
-    public function retrieveShipmentByBarcode(RetrieveShipmentByBarcodeRequest $shipmentRequest): Shipment
+    public function retrieveShipment($shipmentRequest): Shipment
     {
         $item = $this->retrieveCachedItem($shipmentRequest->getId());
         $response = null;
@@ -73,42 +81,39 @@ class ShippingStatusService extends AbstractService
             $response = $item->get();
             try {
                 $response = Message::parseResponse($response);
-            } catch (InvalidArgumentException | TypeError $e) {
+            } catch (TypeError $e) {
             }
         }
         if (!$response instanceof ResponseInterface) {
-            $request = $this->buildRetrieveShipmentByBarcodeRequest($shipmentRequest);
+            $request = $this->buildRetrieveShipmentRequest($shipmentRequest);
             $response = Client::getInstance()->doRequest($request);
             static::validateResponse($response);
         }
 
-        $object = $this->processRetrieveShipmentByBarcodeResponse($response);
-        if ($object instanceof Shipment) {
-            if ($item instanceof CacheItemInterface
-                && $response instanceof ResponseInterface
-                && $response->getStatusCode() === 200
-            ) {
-                $item->set(Message::str($response));
-                $this->cacheItem($item);
-            }
-
-            return $object;
+        $object = $this->processRetrieveShipmentResponse($response);
+        if ($item instanceof CacheItemInterface
+            && $response instanceof ResponseInterface
+            && $response->getStatusCode() === 200
+        ) {
+            $item->set(Message::str($response));
+            $this->cacheItem($item);
         }
 
-        throw new HttpClientException('Unable to retrieve current status', 0, null, isset($request) && $request instanceof RequestInterface ? $request : null, $response);
+        return $object;
     }
 
     /**
      * Build the RetrieveShipmentByBarcodeRequest request for the REST API
      *
-     * @param RetrieveShipmentByBarcodeRequest $shipmentRequest
+     * @param RetrieveShipmentByBarcodeRequest|RetrieveShipmentByReferenceRequest|RetrieveShipmentByKgidRequest $shipmentRequest
      *
      * @return RequestInterface
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @throws InvalidArgumentException
+     *
+     * @since 2.0.0
      */
-    public function buildRetrieveShipmentByBarcodeRequest(RetrieveShipmentByBarcodeRequest $shipmentRequest): RequestInterface
+    public function buildRetrieveShipmentRequest($shipmentRequest): RequestInterface
     {
         $query = [];
         if (!is_null($shipmentRequest->getDetail())) {
@@ -120,23 +125,31 @@ class ShippingStatusService extends AbstractService
         if ($maxDays = $shipmentRequest->getMaxDays()) {
             $query['maxDays'] = $maxDays;
         }
-        $endpoint = "/barcode/{$shipmentRequest->getBarcode()}";
+        if ($shipmentRequest instanceof RetrieveShipmentByBarcodeRequest) {
+            $endpoint = "/barcode/{$shipmentRequest->getBarcode()}";
+        } elseif ($shipmentRequest instanceof RetrieveShipmentByReferenceRequest) {
+            $query['customerCode'] = $this->postnl->getCustomer()->getCustomerCode();
+            $query['customerNumber'] = $this->postnl->getCustomer()->getCustomerNumber();
+            $endpoint = "/reference/{$shipmentRequest->getReference()}";
+        } elseif ($shipmentRequest instanceof RetrieveShipmentByKgidRequest) {
+            $endpoint = "/lookup/{$shipmentRequest->getKgid()}";
+        } else {
+            throw new InvalidArgumentException('Invalid request object given');
+        }
         if (!empty($query)) {
             $endpoint .= '?'.http_build_query($query);
         }
 
         $factory = Psr17FactoryDiscovery::findRequestFactory();
 
-        /** @var RequestInterface $request */
-        $request = $factory->createRequest(
+        return $factory->createRequest(
             'GET',
             ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint
-        );
-        $request = $request->withHeader('Accept', 'application/json');
-        $request = $request->withHeader('Content-Type', 'application/json;charset=UTF-8');
-        $request = $request->withHeader('apikey', $this->postnl->getApiKey());
-
-        return $request;
+        )
+            ->withHeader('Accept', 'application/json')
+            ->withHeader('Content-Type', 'application/json;charset=UTF-8')
+            ->withHeader('apikey', $this->postnl->getApiKey())
+        ;
     }
 
     /**
@@ -147,11 +160,11 @@ class ShippingStatusService extends AbstractService
      * @return Shipment
      *
      * @throws InvalidArgumentException
-     * @throws \ReflectionException
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @throws CifDownException
+     *
+     * @since 2.0.0
      */
-    public function processRetrieveShipmentByBarcodeResponse(ResponseInterface $response): Shipment
+    public function processRetrieveShipmentResponse(ResponseInterface $response): Shipment
     {
         $body = json_decode((string) $response->getBody(), true);
         if (isset($body['CurrentStatus']['Shipment'])) {
@@ -160,7 +173,113 @@ class ShippingStatusService extends AbstractService
 
             return $object;
         }
+        if (isset($body['CompleteStatus']['Shipment'])) {
+            /** @var Shipment $object */
+            $object = Shipment::jsonDeserialize(['Shipment' => $body['CompleteStatus']['Shipment']]);
 
-        return null;
+            return $object;
+        }
+
+        throw new CifDownException('Unable to process retrieve shipment response', 0, null, null, $response);
+    }
+
+
+    /**
+     * Gets the complete status
+     *
+     * This is a combi-function, supporting the following:
+     * - CurrentStatus (by barcode):
+     *   - Fill the Shipment->Barcode property. Leave the rest empty.
+     * - CurrentStatusByReference:
+     *   - Fill the Shipment->Reference property. Leave the rest empty.
+     * - CurrentStatusByPhase:
+     *   - Fill the Shipment->PhaseCode property, do not pass Barcode or Reference.
+     *     Optionally add DateFrom and/or DateTo.
+     * - CurrentStatusByStatus:
+     *   - Fill the Shipment->StatuCode property. Leave the rest empty.
+     *
+     * @param RetrieveSignatureByBarcodeRequest $getSignature
+     *
+     * @return Signature
+     *
+     * @throws CifDownException
+     * @throws CifErrorException
+     * @throws HttpClientException
+     * @throws InvalidArgumentException
+     *
+     * @since 2.0.0
+     */
+    public function retrieveSignature(RetrieveSignatureByBarcodeRequest $getSignature): Signature
+    {
+        $item = $this->retrieveCachedItem($getSignature->getId());
+        $response = null;
+        if ($item instanceof CacheItemInterface) {
+            $response = $item->get();
+            try {
+                $response = Message::parseResponse($response);
+            } catch (TypeError $e) {
+            }
+        }
+        if (!$response instanceof ResponseInterface) {
+            $request = $this->buildRetrieveSignatureRequest($getSignature);
+            $response = Client::getInstance()->doRequest($request);
+            static::validateResponse($response);
+        }
+        $object = $this->processRetrieveSignatureResponse($response);
+        if ($item instanceof CacheItemInterface
+            && $response instanceof ResponseInterface
+            && $response->getStatusCode() === 200
+        ) {
+            $item->set(Message::str($response));
+            $this->cacheItem($item);
+        }
+
+        return $object;
+    }
+
+    /**
+     * Build the GetSignature request for the REST API
+     *
+     * @param RetrieveSignatureByBarcodeRequest $getSignature
+     *
+     * @return RequestInterface
+     */
+    public function buildRetrieveSignatureRequest(RetrieveSignatureByBarcodeRequest $getSignature)
+    {
+        $factory = Psr17FactoryDiscovery::findRequestFactory();
+
+        return $factory->createRequest(
+            'POST',
+            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT)."/signature/{$getSignature->getBarcode()}"
+        )
+            ->withHeader('Accept', 'application/json')
+            ->withHeader('Content-Type', 'application/json;charset=UTF-8')
+            ->withHeader('apikey', $this->postnl->getApiKey())
+        ;
+    }
+
+    /**
+     * Process GetSignature Response REST
+     *
+     * @param mixed $response
+     *
+     * @return Signature
+     *
+     * @throws CifDownException
+     * @throws InvalidArgumentException
+     *
+     * @since 2.0.0
+     */
+    public function processRetrieveSignatureResponse(ResponseInterface $response): Signature
+    {
+        $body = json_decode((string) $response->getBody(), true);
+        if (isset($body['Signature']['Barcode'])) {
+            /** @var Signature $object */
+            $object = Signature::jsonDeserialize($body);
+
+            return $object;
+        }
+
+        throw new CifDownException('Unable to process signature response', 0, null, null, $response);
     }
 }

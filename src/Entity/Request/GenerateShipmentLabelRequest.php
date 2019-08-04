@@ -29,10 +29,8 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity\Request;
 
-use Exception;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Shipment;
-use TypeError;
 
 /**
  * Class GenerateShipmentLabelRequest
@@ -56,8 +54,6 @@ class GenerateShipmentLabelRequest extends AbstractEntity
      * GenerateShipmentLabelRequest constructor.
      *
      * @param Shipment[]|null $shipments
-     *
-     * @throws Exception
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -120,8 +116,6 @@ class GenerateShipmentLabelRequest extends AbstractEntity
      * @param Shipment[]|null $shipments
      *
      * @return static
-     *
-     * @throws TypeError
      *
      * @example N/A
      *

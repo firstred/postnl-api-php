@@ -29,7 +29,6 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Service;
 
-use Exception;
 use Firstred\PostNL\Entity\Location;
 use Firstred\PostNL\Entity\Request\FindLocationsInAreaRequest;
 use Firstred\PostNL\Entity\Request\FindNearestLocationsGeocodeRequest;
@@ -38,14 +37,16 @@ use Firstred\PostNL\Entity\Request\LookupLocationRequest;
 use Firstred\PostNL\Entity\Response\FindLocationsInAreaResponse;
 use Firstred\PostNL\Entity\Response\FindNearestLocationsGeocodeResponse;
 use Firstred\PostNL\Entity\Response\FindNearestLocationsResponse;
+use Firstred\PostNL\Exception\CifDownException;
+use Firstred\PostNL\Exception\CifErrorException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Http\Client;
 use Firstred\PostNL\Misc\Message;
+use Http\Client\Exception as HttpClientException;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Psr\Cache\CacheItemInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use ReflectionException;
 use TypeError;
 
 /**
@@ -67,10 +68,13 @@ class LocationService extends AbstractService
      *
      * @return FindNearestLocationsResponse
      *
-     * @throws Exception
+     * @throws InvalidArgumentException
+     * @throws CifDownException
+     * @throws CifErrorException
+     * @throws HttpClientException
      *
-     * @since 1.0.0
      * @since 2.0.0 Strict typing
+     * @since 1.0.0
      */
     public function findNearestLocations(FindNearestLocationsRequest $getNearestLocations)
     {
@@ -80,7 +84,8 @@ class LocationService extends AbstractService
             $response = $item->get();
             try {
                 $response = Message::parseResponse($response);
-            } catch (InvalidArgumentException | TypeError $e) {
+            } catch (TypeError $e) {
+                // Ignore cached item
             }
         }
         if (!$response instanceof ResponseInterface) {
@@ -90,19 +95,15 @@ class LocationService extends AbstractService
         }
 
         $object = $this->processFindNearestLocationsResponse($response);
-        if ($object instanceof FindNearestLocationsResponse) {
-            if ($item instanceof CacheItemInterface
-                && $response instanceof ResponseInterface
-                && $response->getStatusCode() === 200
-            ) {
-                $item->set(Message::str($response));
-                $this->cacheItem($item);
-            }
-
-            return $object;
+        if ($item instanceof CacheItemInterface
+            && $response instanceof ResponseInterface
+            && $response->getStatusCode() === 200
+        ) {
+            $item->set(Message::str($response));
+            $this->cacheItem($item);
         }
 
-        throw new HttpClientException('Unable to retrieve the nearest locations', 0, null, isset($request) && $request instanceof RequestInterface ? $request : null, $response);
+        return $object;
     }
 
     /**
@@ -176,7 +177,7 @@ class LocationService extends AbstractService
      *
      * @return FindNearestLocationsGeocodeResponse
      *
-     * @throws Exception
+     * @throws HttpClientException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -256,7 +257,7 @@ class LocationService extends AbstractService
      *
      * @param ResponseInterface $response
      *
-     * @return null|FindNearestLocationsGeocodeResponse
+     * @return FindNearestLocationsGeocodeResponse
      *
      * @throws InvalidArgumentException
      *
@@ -267,9 +268,8 @@ class LocationService extends AbstractService
         $body = json_decode((string) $response->getBody(), true);
 
         /** @var FindNearestLocationsGeocodeResponse $object */
-        $object = FindNearestLocationsGeocodeResponse::jsonDeserialize(['FindNearestLocationsGeocodeResponse' => $body]);
 
-        return $object;
+        return FindNearestLocationsGeocodeResponse::jsonDeserialize(['FindNearestLocationsGeocodeResponse' => $body]);
     }
 
     /**
@@ -279,7 +279,10 @@ class LocationService extends AbstractService
      *
      * @return FindLocationsInAreaResponse
      *
-     * @throws Exception
+     * @throws CifDownException
+     * @throws CifErrorException
+     * @throws HttpClientException
+     * @throws InvalidArgumentException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -314,7 +317,7 @@ class LocationService extends AbstractService
             return $object;
         }
 
-        throw new PostNLCli('Unable to retrieve the nearest locations', 0, null, isset($request) && $request instanceof RequestInterface ? $request : null, $response);
+        throw new CifDownException('Unable to retrieve the nearest locations', 0, null, isset($request) && $request instanceof RequestInterface ? $request : null, $response);
     }
 
     /**
@@ -384,7 +387,9 @@ class LocationService extends AbstractService
      *
      * @return Location
      *
-     * @throws Exception
+     * @throws CifDownException
+     * @throws CifErrorException
+     * @throws HttpClientException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -419,7 +424,7 @@ class LocationService extends AbstractService
             return $object;
         }
 
-        throw new HttpClientException('Unable to retrieve the nearest locations', 0, null, isset($request) && $request instanceof RequestInterface ? $request : null, $response);
+        throw new CifDownException('Unable to retrieve the nearest locations', 0, null, isset($request) && $request instanceof RequestInterface ? $request : null, $response);
     }
 
     /**
@@ -459,10 +464,10 @@ class LocationService extends AbstractService
      *
      * @return Location
      *
-     * @throws ReflectionException
+     * @throws CifDownException
      *
-     * @since 2.0.0 Strict typing
      * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function processLookupLocationResponse(ResponseInterface $response): Location
     {
@@ -473,6 +478,6 @@ class LocationService extends AbstractService
             }
         }
 
-        return new Location();
+        throw new CifDownException('Unable to process lookup location response', 0, null, null, $response);
     }
 }

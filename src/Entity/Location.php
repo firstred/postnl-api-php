@@ -31,8 +31,6 @@ namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\ValidateAndFix;
-use ReflectionException;
-use TypeError;
 
 /**
  * Class Location
@@ -225,7 +223,6 @@ class Location extends AbstractEntity
     /**
      * Location constructor.
      *
-     *
      * @since 2.0.0
      */
     public function __construct()
@@ -256,8 +253,6 @@ class Location extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 1200
@@ -296,8 +291,6 @@ class Location extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     *
      * @example PGE
      *
      * @since   1.0.0
@@ -335,8 +328,6 @@ class Location extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 52.156439
@@ -375,8 +366,6 @@ class Location extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 5.015643
@@ -415,8 +404,6 @@ class Location extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     *
      * @example N/A
      *
      * @since   1.0.0
@@ -454,8 +441,6 @@ class Location extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 161503
@@ -495,8 +480,6 @@ class Location extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example PKT XL
@@ -536,8 +519,6 @@ class Location extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example NRS
@@ -577,8 +558,6 @@ class Location extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example PNPNL-01
@@ -618,8 +597,6 @@ class Location extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example PostNL
@@ -658,8 +635,6 @@ class Location extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     *
      * @example N/A
      *
      * @since   2.0.0
@@ -696,8 +671,6 @@ class Location extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     *
      * @example Primera Sanders
      *
      * @since   2.0.0
@@ -733,8 +706,6 @@ class Location extends AbstractEntity
      * @param string|null $phoneNumber
      *
      * @return static
-     *
-     * @throws TypeError
      *
      * @example 023-1234567
      *

@@ -29,9 +29,8 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\ValidateAndFix;
-use ReflectionException;
-use TypeError;
 
 /**
  * Class Timeframe
@@ -126,8 +125,7 @@ class Timeframe extends AbstractEntity
      * @param string|null   $code
      * @param string|null   $description
      *
-     * @throws TypeError
-     * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0 Strict typing
      * @since 1.0.0
@@ -168,9 +166,8 @@ class Timeframe extends AbstractEntity
      *
      * @return static
      *
-     * @throws ReflectionException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     *
      * @example 03-07-2019
      *
      * @since   1.0.0
@@ -209,9 +206,8 @@ class Timeframe extends AbstractEntity
      *
      * @return static
      *
-     * @throws ReflectionException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     *
      * @example 14:00:00
      *
      * @since   2.0.0 Strict typing
@@ -250,9 +246,8 @@ class Timeframe extends AbstractEntity
      *
      * @return static
      *
-     * @throws ReflectionException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     *
      * @example 16:30:00
      *
      * @since   2.0.0 Strict typing
@@ -290,8 +285,6 @@ class Timeframe extends AbstractEntity
      * @param string[]|null $options
      *
      * @return static
-     *
-     * @throws TypeError
      *
      * @example N/A
      *
@@ -331,9 +324,8 @@ class Timeframe extends AbstractEntity
      *
      * @return static
      *
-     * @throws ReflectionException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     *
      * @example 02
      *
      * @since   1.0.0
@@ -372,9 +364,8 @@ class Timeframe extends AbstractEntity
      *
      * @return static
      *
-     * @throws ReflectionException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     *
      * @example Middag
      *
      * @since   2.0.0 Strict typing

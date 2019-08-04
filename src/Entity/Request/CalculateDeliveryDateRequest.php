@@ -32,8 +32,6 @@ namespace Firstred\PostNL\Entity\Request;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\ValidateAndFix;
-use ReflectionException;
-use TypeError;
 
 /**
  * Class CalculateDeliveryDateRequest
@@ -370,8 +368,6 @@ class CalculateDeliveryDateRequest extends AbstractEntity
     /**
      * CalculateDeliveryDateRequest constructor.
      *
-     * @throws TypeError
-     *
      * @since 2.0.0
      */
     public function __construct()
@@ -402,8 +398,6 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 2132WT
@@ -442,8 +436,6 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example Hoofddorp
@@ -482,8 +474,6 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example NL
@@ -522,8 +512,6 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 42
@@ -564,8 +552,6 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example A
@@ -604,8 +590,6 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     *
      * @example Daytime
      *
      * @since   2.0.0
@@ -642,8 +626,6 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example NL
@@ -682,8 +664,6 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 03-07-2019 17:00:00
@@ -723,7 +703,6 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      * @return static
      *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
      *
      * @example 2
      *
@@ -761,8 +740,6 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example Siriusdreef
@@ -801,8 +778,6 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 15:00:00
@@ -841,8 +816,6 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 15:00:00
@@ -881,8 +854,6 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     *
      * @example N/A
      *
      * @since   2.0.0
@@ -919,8 +890,6 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 15:00:00
@@ -959,8 +928,6 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     *
      * @example N/A
      *
      * @since   2.0.0
@@ -997,8 +964,6 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 15:00:00
@@ -1037,8 +1002,6 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     *
      * @example N/A
      *
      * @since   2.0.0
@@ -1075,8 +1038,6 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 15:00:00
@@ -1115,8 +1076,6 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example N/A
@@ -1155,8 +1114,6 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 15:00:00
@@ -1195,8 +1152,6 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     *
      * @example N/A
      *
      * @since   2.0.0
@@ -1233,8 +1188,6 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 15:00:00
@@ -1273,8 +1226,6 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     *
      * @example N/A
      *
      * @since   2.0.0
@@ -1311,8 +1262,6 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 15:00:00
@@ -1350,8 +1299,6 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      * @param bool|null $availableSunday
      *
      * @return static
-     *
-     * @throws TypeError
      *
      * @example N/A
      *

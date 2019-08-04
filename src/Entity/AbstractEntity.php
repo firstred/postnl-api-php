@@ -37,7 +37,7 @@ use ReflectionClass;
 use ReflectionException;
 
 /**
- * Class Entity
+ * Class AbstractEntity
  */
 abstract class AbstractEntity implements JsonSerializable
 {
@@ -61,7 +61,6 @@ abstract class AbstractEntity implements JsonSerializable
      * @return static
      *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
      *
      * @since 1.0.0
      * @since 2.0.0 Always returns an instance, throws Exceptions otherwise
@@ -72,9 +71,13 @@ abstract class AbstractEntity implements JsonSerializable
             throw new InvalidArgumentException('Cannot instantiate an AbstractEntity');
         }
 
-        $reflectionClass = new ReflectionClass(get_called_class());
-        /** @var AbstractEntity $instance */
-        $instance = $reflectionClass->newInstanceWithoutConstructor();
+        try {
+            $reflectionClass = new ReflectionClass(get_called_class());
+            /** @var AbstractEntity $instance */
+            $instance = $reflectionClass->newInstanceWithoutConstructor();
+        } catch (ReflectionException $e) {
+            $instance = new static();
+        }
 
         foreach ($properties as $name => $value) {
             $instance->{'set'.$name}($value);
@@ -130,14 +133,18 @@ abstract class AbstractEntity implements JsonSerializable
         }
 
         return $json;
-    }
+    }/**  */
 
     /**
      * Deserialize JSON
      *
+     * @noinspection PhpDocRedundantThrowsInspection
+     *
      * @param array $json JSON as associative array
      *
      * @return mixed
+     *
+     * @throws InvalidArgumentException
      *
      * @since 1.0.0
      */

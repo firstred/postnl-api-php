@@ -31,8 +31,6 @@ namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\ValidateAndFix;
-use ReflectionException;
-use TypeError;
 
 /**
  * Class Status
@@ -113,9 +111,7 @@ class Status extends AbstractEntity
      * @param string|null $phaseCode
      * @param string|null $phaseDescription
      *
-     * @throws TypeError
      * @throws InvalidArgumentException
-     * @throws ReflectionException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -154,9 +150,7 @@ class Status extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
      * @throws InvalidArgumentException
-     * @throws ReflectionException
      *
      * @example 03-07-2019 08:00:00
      *
@@ -194,8 +188,6 @@ class Status extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     *
      * @example 7
      *
      * @since   2.0.0 Strict typing
@@ -231,8 +223,6 @@ class Status extends AbstractEntity
      * @param string|null $statusDescription
      *
      * @return static
-     *
-     * @throws TypeError
      *
      * @example Zending afgeleverd
      *
@@ -270,8 +260,6 @@ class Status extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     *
      * @example 4
      *
      * @since   2.0.0 Strict typing
@@ -307,8 +295,6 @@ class Status extends AbstractEntity
      * @param string|null $phaseDescription
      *
      * @return static
-     *
-     * @throws TypeError
      *
      * @example Afgeleverd
      *

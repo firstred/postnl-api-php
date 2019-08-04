@@ -49,7 +49,6 @@ class ValidateAndFix
      *
      * @return mixed
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -87,7 +86,6 @@ class ValidateAndFix
      *
      * @return mixed
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -111,7 +109,6 @@ class ValidateAndFix
      *
      * @return mixed
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -140,7 +137,6 @@ class ValidateAndFix
      *
      * @return mixed
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -164,7 +160,6 @@ class ValidateAndFix
      *
      * @return mixed
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -192,7 +187,6 @@ class ValidateAndFix
      *
      * @return mixed
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -215,7 +209,6 @@ class ValidateAndFix
      *
      * @return mixed
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -238,7 +231,6 @@ class ValidateAndFix
      *
      * @return mixed
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -261,7 +253,6 @@ class ValidateAndFix
      *
      * @return mixed
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -284,7 +275,6 @@ class ValidateAndFix
      *
      * @return mixed
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -309,7 +299,6 @@ class ValidateAndFix
      *
      * @return mixed
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -334,7 +323,6 @@ class ValidateAndFix
      *
      * @return mixed
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -357,7 +345,6 @@ class ValidateAndFix
      *
      * @return mixed
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -380,7 +367,6 @@ class ValidateAndFix
      *
      * @return mixed
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -403,7 +389,6 @@ class ValidateAndFix
      *
      * @return mixed
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -426,7 +411,6 @@ class ValidateAndFix
      *
      * @return mixed
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -449,7 +433,6 @@ class ValidateAndFix
      *
      * @return mixed
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -472,7 +455,6 @@ class ValidateAndFix
      *
      * @return mixed
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -495,7 +477,6 @@ class ValidateAndFix
      *
      * @return mixed
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -518,7 +499,6 @@ class ValidateAndFix
      *
      * @return mixed
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -565,7 +545,6 @@ class ValidateAndFix
      *
      * @return mixed
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -596,7 +575,6 @@ class ValidateAndFix
      *
      * @return mixed
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -619,7 +597,6 @@ class ValidateAndFix
      *
      * @return mixed
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -644,7 +621,6 @@ class ValidateAndFix
      *
      * @return mixed
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -667,7 +643,6 @@ class ValidateAndFix
      *
      * @return mixed
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -690,7 +665,6 @@ class ValidateAndFix
      *
      * @return string
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -719,7 +693,6 @@ class ValidateAndFix
      *
      * @return mixed
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -750,7 +723,6 @@ class ValidateAndFix
      *
      * @return mixed
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -772,7 +744,6 @@ class ValidateAndFix
      *
      * @return mixed
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -797,7 +768,6 @@ class ValidateAndFix
      *
      * @return mixed
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -822,7 +792,6 @@ class ValidateAndFix
      *
      * @return mixed
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -853,7 +822,6 @@ class ValidateAndFix
      *
      * @return mixed
      *
-     * @throws ReflectionException
      * @throws NumberParseException
      * @throws InvalidArgumentException
      *
@@ -888,7 +856,6 @@ class ValidateAndFix
      *
      * @return mixed
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -914,7 +881,6 @@ class ValidateAndFix
      *
      * @return mixed
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -942,7 +908,6 @@ class ValidateAndFix
      *
      * @return mixed
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -968,7 +933,6 @@ class ValidateAndFix
      *
      * @return mixed
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -995,7 +959,6 @@ class ValidateAndFix
      *
      * @return mixed
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -1022,7 +985,6 @@ class ValidateAndFix
      *
      * @return mixed
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -1044,7 +1006,6 @@ class ValidateAndFix
      *
      * @return mixed
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -1088,7 +1049,6 @@ class ValidateAndFix
      *
      * @return mixed
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -1112,7 +1072,6 @@ class ValidateAndFix
      *
      * @return mixed
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -1137,7 +1096,6 @@ class ValidateAndFix
      *
      * @return mixed
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -1160,7 +1118,6 @@ class ValidateAndFix
      *
      * @return mixed
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -1188,7 +1145,6 @@ class ValidateAndFix
      *
      * @return mixed
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -1213,7 +1169,6 @@ class ValidateAndFix
      *
      * @return mixed
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -1238,7 +1193,6 @@ class ValidateAndFix
      *
      * @return mixed
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -1265,7 +1219,6 @@ class ValidateAndFix
      *
      * @return string
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
@@ -1293,7 +1246,6 @@ class ValidateAndFix
      *
      * @return string
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
@@ -1319,7 +1271,6 @@ class ValidateAndFix
      *
      * @return mixed
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -1348,7 +1299,6 @@ class ValidateAndFix
      *
      * @return mixed
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -1373,7 +1323,6 @@ class ValidateAndFix
      *
      * @return string
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -1403,7 +1352,6 @@ class ValidateAndFix
      *
      * @return mixed
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -1433,7 +1381,6 @@ class ValidateAndFix
      *
      * @return mixed
      *
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
@@ -1455,14 +1402,18 @@ class ValidateAndFix
      *
      * @return array
      *
-     * @throws ReflectionException
-     *
      * @since 2.0.0
      */
     private static function getCaller()
     {
         $trace = debug_backtrace()[2];
 
-        return [(new ReflectionClass($trace['class']))->getShortName(), $trace['function']];
+        try {
+            $class = (new ReflectionClass($trace['class']))->getShortName();
+        } catch (ReflectionException $e) {
+            $class = $trace['class'];
+        }
+
+        return [$class, $trace['function']];
     }
 }

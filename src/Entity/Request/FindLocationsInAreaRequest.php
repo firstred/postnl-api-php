@@ -32,8 +32,6 @@ namespace Firstred\PostNL\Entity\Request;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\ValidateAndFix;
-use ReflectionException;
-use TypeError;
 
 /**
  * Class FindLocationsInAreaRequest
@@ -159,7 +157,6 @@ class FindLocationsInAreaRequest extends AbstractEntity
      * @param array             $deliveryOptions
      *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
      *
      * @since 1.0.0
      * @since 2.0.0
@@ -203,7 +200,7 @@ class FindLocationsInAreaRequest extends AbstractEntity
      * @return static
      *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
+     *
      * @example NL
      *
      * @since   1.0.0
@@ -241,8 +238,6 @@ class FindLocationsInAreaRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 03-07-2019
@@ -281,8 +276,6 @@ class FindLocationsInAreaRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 09:00:00
@@ -320,8 +313,6 @@ class FindLocationsInAreaRequest extends AbstractEntity
      * @param array $deliveryOptions
      *
      * @return static
-     *
-     * @throws TypeError
      *
      * @example PGE
      *
@@ -362,7 +353,6 @@ class FindLocationsInAreaRequest extends AbstractEntity
      * @return static
      *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
      *
      * @since 2.0.0 Strict typing
      *
@@ -400,9 +390,7 @@ class FindLocationsInAreaRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
      * @throws InvalidArgumentException
-     * @throws ReflectionException
      *
      * @since 2.0.0 Strict typing
      *
@@ -440,9 +428,7 @@ class FindLocationsInAreaRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
      * @throws InvalidArgumentException
-     * @throws ReflectionException
      *
      * @since 2.0.0 Strict typing
      *
@@ -480,9 +466,7 @@ class FindLocationsInAreaRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
      * @throws InvalidArgumentException
-     * @throws ReflectionException
      *
      * @since 2.0.0 Strict typing
      *

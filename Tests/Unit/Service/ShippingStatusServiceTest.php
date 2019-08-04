@@ -34,17 +34,21 @@ use Exception;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Request\RetrieveShipmentByBarcodeRequest;
+use Firstred\PostNL\Entity\Request\RetrieveShipmentByKgidRequest;
+use Firstred\PostNL\Entity\Request\RetrieveShipmentByReferenceRequest;
+use Firstred\PostNL\Entity\Request\RetrieveSignatureByBarcodeRequest;
 use Firstred\PostNL\Entity\Shipment;
+use Firstred\PostNL\Entity\Signature;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\Message;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\ShippingStatusService;
+use Http\Client\Exception as HttpClientException;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Mock\Client;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 use Psr\Log\LoggerInterface;
-use ReflectionException;
 
 /**
  * Class ShippingStatusRestTest
@@ -64,7 +68,6 @@ class ShippingStatusRestTest extends TestCase
      * @before
      *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
      */
     public function setupPostNL()
     {
@@ -118,7 +121,7 @@ class ShippingStatusRestTest extends TestCase
     public function testRetrieveShipmentByBarcodeRequest()
     {
         $barcode = '3SDEVC987021270';
-        $this->lastRequest = $request = $this->service->buildRetrieveShipmentByBarcodeRequest(
+        $this->lastRequest = $request = $this->service->buildRetrieveShipmentRequest(
             (new RetrieveShipmentByBarcodeRequest())
                 ->setBarcode($barcode)
         );
@@ -128,13 +131,59 @@ class ShippingStatusRestTest extends TestCase
         $this->assertEmpty($query);
         $this->assertEquals('test', $request->getHeaderLine('apikey'));
         $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
-        $this->assertEquals("/shipment/v1_6/status/barcode/$barcode", $request->getUri()->getPath());
+        $this->assertEquals("/shipment/v2/status/barcode/$barcode", $request->getUri()->getPath());
+    }
+
+    /**
+     * @testdox Creates a valid LookupShipmentByBarcodeRequest request
+     *
+     * @throws Exception
+     */
+    public function testRetrieveShipmentByReferenceRequest()
+    {
+        $reference = '112233';
+        $this->lastRequest = $request = $this->service->buildRetrieveShipmentRequest(
+            (new RetrieveShipmentByReferenceRequest())
+                ->setReference($reference)
+        );
+
+        parse_str($request->getUri()->getQuery(), $query);
+
+        $this->assertEquals($query, [
+            'customerCode'   => $this->postnl->getCustomer()->getCustomerCode(),
+            'customerNumber' => $this->postnl->getCustomer()->getCustomerNumber(),
+        ]);
+        $this->assertEquals('test', $request->getHeaderLine('apikey'));
+        $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
+        $this->assertEquals("/shipment/v2/status/reference/$reference", $request->getUri()->getPath());
+    }
+
+    /**
+     * @testdox Creates a valid LookupShipmentByBarcodeRequest request
+     *
+     * @throws Exception
+     */
+    public function testRetrieveShipmentByKgidRequest()
+    {
+        $kgid = 'KG112233';
+        $this->lastRequest = $request = $this->service->buildRetrieveShipmentRequest(
+            (new RetrieveShipmentByKgidRequest())
+                ->setKgid($kgid)
+        );
+
+        parse_str($request->getUri()->getQuery(), $query);
+
+        $this->assertEmpty($query);
+        $this->assertEquals('test', $request->getHeaderLine('apikey'));
+        $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
+        $this->assertEquals("/shipment/v2/status/lookup/$kgid", $request->getUri()->getPath());
     }
 
     /**
      * @testdox Can get the current status
      *
      * @throws Exception
+     * @throws HttpClientException
      */
     public function testRetrieveShipmentByBarcode()
     {
@@ -151,5 +200,40 @@ class ShippingStatusRestTest extends TestCase
         $shipment = $this->postnl->retrieveShipmentByBarcode('3SDEVC987021270');
 
         $this->assertInstanceOf(Shipment::class, $shipment);
+    }
+
+    /**
+     * @testdox creates a valid GetSignature request
+     */
+    public function testGetSignatureRequestRest()
+    {
+        $barcode = '3S9283920398234';
+        $message = new Message();
+        $this->lastRequest = $request = $this->service->buildRetrieveSignatureRequest((new RetrieveSignatureByBarcodeRequest())->setBarcode($barcode));
+        parse_str($request->getUri()->getQuery(), $query);
+        $this->assertEmpty($query);
+        $this->assertEquals('test', $request->getHeaderLine('apikey'));
+        $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
+        $this->assertEquals("/shipment/v2/status/signature/$barcode", $request->getUri()->getPath());
+    }
+
+    /**
+     * @testdox can get the signature
+     */
+    public function testGetSignatures()
+    {
+        $payload = file_get_contents(__DIR__.'/../../data/responses/signature.json');
+        $mockClient = new Client();
+        $responseFactory = Psr17FactoryDiscovery::findResponseFactory();
+        $streamFactory = Psr17FactoryDiscovery::findStreamFactory();
+        $mockClient->addResponse(
+            $responseFactory->createResponse(200, 'OK')
+                ->withHeader('Content-Type', 'application/json;charset=UTF-8')
+                ->withBody($streamFactory->createStream($payload))
+        );
+        \Firstred\PostNL\Http\Client::getInstance()->setAsyncClient($mockClient);
+
+        $signatureResponse = $this->postnl->retrieveSignatureByBarcode('3SABCD6659149');
+        $this->assertInstanceOf(Signature::class, $signatureResponse);
     }
 }

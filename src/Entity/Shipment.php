@@ -31,8 +31,6 @@ namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\ValidateAndFix;
-use ReflectionException;
-use TypeError;
 
 /**
  * Class Shipment
@@ -644,7 +642,6 @@ class Shipment extends AbstractEntity
      * @param string|null          $returnReference
      *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -687,15 +684,17 @@ class Shipment extends AbstractEntity
     /**
      * Deserialize JSON
      *
-     * @param array $json
+     * @noinspection PhpDocRedundantThrowsInspection
      *
-     * @return Shipment
+     * @param array $json JSON as associative array
+     *
+     * @return mixed
      *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
+     *
      * @since 2.0.0
      */
-    public static function jsonDeserialize(array $json): Shipment
+    public static function jsonDeserialize(array $json)
     {
         reset($json);
         $shortClassName = key($json);
@@ -762,8 +761,6 @@ class Shipment extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     *
      * @example N/A
      *
      * @since   1.0.0
@@ -801,8 +798,6 @@ class Shipment extends AbstractEntity
      * @param Amount[]|null $amounts
      *
      * @return static
-     *
-     * @throws TypeError
      *
      * @example N/A
      *
@@ -842,8 +837,6 @@ class Shipment extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 3SDEVC2016112104
@@ -891,8 +884,6 @@ class Shipment extends AbstractEntity
      *
      * @see     Shipment::$codingText
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      */
     public function setCodingText(?string $codingText): Shipment
@@ -926,8 +917,6 @@ class Shipment extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 03-07-2019 17:00:00
@@ -968,8 +957,6 @@ class Shipment extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 03-07-2019 16:00:00
@@ -1014,8 +1001,6 @@ class Shipment extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     *
      * @example N/A
      *
      * @since   1.0.0
@@ -1058,8 +1043,6 @@ class Shipment extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     *
      * @example N/A
      *
      * @since   1.0.0
@@ -1098,8 +1081,6 @@ class Shipment extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example SX-GT-66
@@ -1140,8 +1121,6 @@ class Shipment extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 8689242390
@@ -1182,8 +1161,6 @@ class Shipment extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     *
      * @example N/A
      *
      * @since   1.0.0
@@ -1222,8 +1199,6 @@ class Shipment extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 09
@@ -1264,8 +1239,6 @@ class Shipment extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 03-07-2019 14:30:00
@@ -1306,8 +1279,6 @@ class Shipment extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 03-07-2019 16:30:00
@@ -1348,8 +1319,6 @@ class Shipment extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 03-07-2019 14:00:00
@@ -1390,8 +1359,6 @@ class Shipment extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     *
      * @example N/A
      *
      * @since   1.0.0
@@ -1430,8 +1397,6 @@ class Shipment extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example CD123456785NL
@@ -1472,8 +1437,6 @@ class Shipment extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example LD-01
@@ -1514,8 +1477,6 @@ class Shipment extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example BE0Q82
@@ -1556,8 +1517,6 @@ class Shipment extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     *
      * @example N/A
      *
      * @since   1.0.0
@@ -1596,8 +1555,6 @@ class Shipment extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example  05-07-2019
@@ -1638,8 +1595,6 @@ class Shipment extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 4261103214
@@ -1680,8 +1635,6 @@ class Shipment extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 02
@@ -1722,8 +1675,6 @@ class Shipment extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 3153
@@ -1764,8 +1715,6 @@ class Shipment extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 3085
@@ -1806,8 +1755,6 @@ class Shipment extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     *
      * @example N/A
      *
      * @since   1.0.0
@@ -1846,8 +1793,6 @@ class Shipment extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example  01-01-1970
@@ -1888,8 +1833,6 @@ class Shipment extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 2016014567
@@ -1930,8 +1873,6 @@ class Shipment extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 6659150
@@ -1972,8 +1913,6 @@ class Shipment extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example Fragile
@@ -2014,8 +1953,6 @@ class Shipment extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 3SABCD7762162
@@ -2056,8 +1993,6 @@ class Shipment extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 112233
@@ -2097,8 +2032,6 @@ class Shipment extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     *
      * @example 3SDEVC2309482387
      *
      * @since   2.0.0 Strict typing
@@ -2135,9 +2068,7 @@ class Shipment extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
      * @throws InvalidArgumentException
-     * @throws ReflectionException
      *
      * @example 1
      *
@@ -2176,7 +2107,6 @@ class Shipment extends AbstractEntity
      * @return static
      *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
      *
      * @example 1
      *
@@ -2214,8 +2144,6 @@ class Shipment extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     *
      * @example N/A
      *
      * @since   2.0.0 Strict typing
@@ -2251,8 +2179,6 @@ class Shipment extends AbstractEntity
      * @param string|null $productCode
      *
      * @return static
-     *
-     * @throws TypeError
      *
      * @example 003085
      *
@@ -2290,8 +2216,6 @@ class Shipment extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     *
      * @example Standaardzending
      *
      * @since   2.0.0 Strict typing
@@ -2327,8 +2251,6 @@ class Shipment extends AbstractEntity
      * @param Address[]|null $address
      *
      * @return static
-     *
-     * @throws TypeError
      *
      * @example N/A
      *
@@ -2366,8 +2288,6 @@ class Shipment extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     *
      * @example N/A
      *
      * @since   2.0.0 Strict typing
@@ -2404,8 +2324,6 @@ class Shipment extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     *
      * @example N/A
      *
      * @since   2.0.0 Strict typing
@@ -2441,8 +2359,6 @@ class Shipment extends AbstractEntity
      * @param OldStatus[]|null $oldStatus
      *
      * @return static
-     *
-     * @throws TypeError
      *
      * @example N/A
      *
@@ -2499,8 +2415,6 @@ class Shipment extends AbstractEntity
      * @param Label[]|null $labels
      *
      * @return static
-     *
-     * @throws TypeError
      *
      * @example N/A
      *

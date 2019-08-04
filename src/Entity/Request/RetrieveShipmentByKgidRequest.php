@@ -34,22 +34,22 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\ValidateAndFix;
 
 /**
- * Class RetrieveShipmentByBarcodeRequest
+ * Class RetrieveShipmentByKgidRequest
  */
-class RetrieveShipmentByBarcodeRequest extends AbstractEntity
+class RetrieveShipmentByKgidRequest extends AbstractEntity
 {
     /**
-     * Barcode
+     * Kennisgeving ID
      *
      * @pattern ^.{0,35}$
      *
-     * @example 3SDEVC23423234
+     * @example KG112233
      *
-     * @var string|null $barcode
+     * @var string|null $kgid
      *
      * @since   2.0.0
      */
-    protected $barcode;
+    protected $kgid;
 
     /**
      * Detail
@@ -91,9 +91,9 @@ class RetrieveShipmentByBarcodeRequest extends AbstractEntity
     protected $maxDays;
 
     /**
-     * RetrieveShipmentByBarcodeRequest constructor.
+     * RetrieveShipmentByKgidRequest constructor.
      *
-     * @param string|null           $barcode
+     * @param string|null           $kgid
      * @param bool|null             $detail
      * @param string|null           $language
      * @param int|string|float|null $maxDays
@@ -103,48 +103,48 @@ class RetrieveShipmentByBarcodeRequest extends AbstractEntity
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function __construct(?string $barcode = null, ?bool $detail = null, ?string $language = null, $maxDays = null)
+    public function __construct(?string $kgid = null, ?bool $detail = null, ?string $language = null, $maxDays = null)
     {
         parent::__construct();
 
-        $this->setBarcode($barcode);
+        $this->setKgid($kgid);
         $this->setDetail($detail);
         $this->setLanguage($language);
         $this->setMaxDays($maxDays);
     }
 
     /**
-     * Get barcode
+     * Get kennisgeving ID
      *
      * @return string|null
      *
      * @since 2.0.0 Strict typing
      *
-     * @see   RetrieveShipmentByBarcodeRequest::$barcode
+     * @see   RetrieveShipmentByKgidRequest::$kgid
      */
-    public function getBarcode(): ?string
+    public function getKgid(): ?string
     {
-        return $this->barcode;
+        return $this->kgid;
     }
 
     /**
-     * Set barcode
+     * Set kennisgeving ID
      *
      * @pattern ^.{0,35}$
      *
-     * @param string|null $barcode
+     * @param string|null $kgid
      *
      * @return static
      *
-     * @example 3SDEVC23423234
+     * @example 112233
      *
      * @since   2.0.0 Strict typing
      *
-     * @see     RetrieveShipmentByBarcodeRequest::$barcode
+     * @see     RetrieveShipmentByKgidRequest::$kgid
      */
-    public function setBarcode(?string $barcode): RetrieveShipmentByBarcodeRequest
+    public function setKgid(?string $kgid): RetrieveShipmentByKgidRequest
     {
-        $this->barcode = $barcode;
+        $this->kgid = $kgid;
 
         return $this;
     }
@@ -156,7 +156,7 @@ class RetrieveShipmentByBarcodeRequest extends AbstractEntity
      *
      * @since 2.0.0 Strict typing
      *
-     * @see   RetrieveShipmentByBarcodeRequest::$detail
+     * @see   RetrieveShipmentByKgidRequest::$detail
      */
     public function getDetail(): ?bool
     {
@@ -176,9 +176,9 @@ class RetrieveShipmentByBarcodeRequest extends AbstractEntity
      *
      * @since   2.0.0 Strict typing
      *
-     * @see     RetrieveShipmentByBarcodeRequest::$detail
+     * @see     RetrieveShipmentByKgidRequest::$detail
      */
-    public function setDetail(?bool $detail): RetrieveShipmentByBarcodeRequest
+    public function setDetail(?bool $detail): RetrieveShipmentByKgidRequest
     {
         $this->detail = $detail;
 
@@ -192,7 +192,7 @@ class RetrieveShipmentByBarcodeRequest extends AbstractEntity
      *
      * @since 2.0.0 Strict typing
      *
-     * @see   RetrieveShipmentByBarcodeRequest::$language
+     * @see   RetrieveShipmentByKgidRequest::$language
      */
     public function getLanguage(): ?string
     {
@@ -212,9 +212,9 @@ class RetrieveShipmentByBarcodeRequest extends AbstractEntity
      *
      * @since 2.0.0 Strict typing
      *
-     * @see     RetrieveShipmentByBarcodeRequest::$language
+     * @see     RetrieveShipmentByKgidRequest::$language
      */
-    public function setLanguage(?string $language): RetrieveShipmentByBarcodeRequest
+    public function setLanguage(?string $language): RetrieveShipmentByKgidRequest
     {
         $this->language = $language;
 
@@ -228,7 +228,7 @@ class RetrieveShipmentByBarcodeRequest extends AbstractEntity
      *
      * @since 2.0.0 Strict typing
      *
-     * @see   RetrieveShipmentByBarcodeRequest::$maxDays
+     * @see   RetrieveShipmentByKgidRequest::$maxDays
      */
     public function getMaxDays(): ?int
     {
@@ -250,9 +250,9 @@ class RetrieveShipmentByBarcodeRequest extends AbstractEntity
      *
      * @since 2.0.0 Strict typing
      *
-     * @see     RetrieveShipmentByBarcodeRequest::$maxDays
+     * @see     RetrieveShipmentByKgidRequest::$maxDays
      */
-    public function setMaxDays($maxDays): RetrieveShipmentByBarcodeRequest
+    public function setMaxDays($maxDays): RetrieveShipmentByKgidRequest
     {
         $this->maxDays = ValidateAndFix::integer($maxDays);
 

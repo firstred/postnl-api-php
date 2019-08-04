@@ -159,11 +159,12 @@ class PromiseTool
     {
         if ($value instanceof Iterator) {
             return $value;
-        } elseif (is_array($value)) {
-            return new ArrayIterator($value);
-        } else {
-            return new ArrayIterator([$value]);
         }
+        if (is_array($value)) {
+            return new ArrayIterator($value);
+        }
+
+        return new ArrayIterator([$value]);
     }
 
     /**
@@ -401,13 +402,11 @@ class PromiseTool
      *
      * @return Promise
      */
-    public static function each(
-        $iterable,
-        callable $onFulfilled = null,
-        callable $onRejected = null
-    ) {
+    public static function each($iterable, callable $onFulfilled = null, callable $onRejected = null)
+    {
         return (new EachPromise(
-            $iterable, [
+            $iterable,
+            [
                 'fulfilled' => $onFulfilled,
                 'rejected'  => $onRejected,
             ]
@@ -429,14 +428,11 @@ class PromiseTool
      *
      * @return Promise
      */
-    public static function eachLimit(
-        $iterable,
-        $concurrency,
-        callable $onFulfilled = null,
-        callable $onRejected = null
-    ) {
+    public static function eachLimit($iterable, $concurrency, callable $onFulfilled = null, callable $onRejected = null)
+    {
         return (new EachPromise(
-            $iterable, [
+            $iterable,
+            [
                 'fulfilled'   => $onFulfilled,
                 'rejected'    => $onRejected,
                 'concurrency' => $concurrency,
@@ -455,12 +451,9 @@ class PromiseTool
      *
      * @return Promise
      */
-    public static function eachLimitAll(
-        $iterable,
-        $concurrency,
-        callable $onFulfilled = null
-    ) {
-        return static::each_limit(
+    public static function eachLimitAll($iterable, $concurrency, callable $onFulfilled = null)
+    {
+        return static::eachLimit(
             $iterable,
             $concurrency,
             $onFulfilled,

@@ -29,9 +29,8 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\ValidateAndFix;
-use ReflectionException;
-use TypeError;
 
 /**
  * Class Customs
@@ -272,11 +271,8 @@ class Customs extends AbstractEntity
      * @param string|null    $transactionCode
      * @param string|null    $transactionDescription
      *
-     * @throws ReflectionException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws ReflectionException
-     * @throws ReflectionException
-     * @throws ReflectionException
+     * @throws InvalidArgumentException
+     *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
@@ -325,8 +321,6 @@ class Customs extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     *
      * @example N/A
      *
      * @since 1.0.0
@@ -364,8 +358,6 @@ class Customs extends AbstractEntity
      * @param string|null $certificateNr
      *
      * @return static
-     *
-     * @throws TypeError
      *
      * @example NR112233
      *
@@ -405,8 +397,6 @@ class Customs extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     *
      * @example N/A
      *
      * @since 1.0.0
@@ -444,8 +434,6 @@ class Customs extends AbstractEntity
      * @param string|null $currency
      *
      * @return static
-     *
-     * @throws TypeError
      *
      * @example EUR
      *
@@ -485,8 +473,6 @@ class Customs extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     *
      * @example 7501031311309
      *
      * @since 1.0.0
@@ -524,8 +510,6 @@ class Customs extends AbstractEntity
      * @param bool|null $handleAsNonDeliverable
      *
      * @return static
-     *
-     * @throws TypeError
      *
      * @example N/A
      *
@@ -565,8 +549,6 @@ class Customs extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     *
      * @example N/A
      *
      * @since 1.0.0
@@ -604,8 +586,6 @@ class Customs extends AbstractEntity
      * @param string|null $invoiceNr
      *
      * @return static
-     *
-     * @throws TypeError
      *
      * @example 22334455
      *
@@ -645,8 +625,6 @@ class Customs extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     *
      * @example N/A
      *
      * @since 1.0.0
@@ -682,8 +660,6 @@ class Customs extends AbstractEntity
      * @param string|null $licenseNr
      *
      * @return static
-     *
-     * @throws TypeError
      *
      * @example 11223344
      *
@@ -723,8 +699,6 @@ class Customs extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     *
      * @example Documents
      *
      * @since 1.0.0
@@ -763,8 +737,6 @@ class Customs extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     *
      * @example 1234
      *
      * @since 1.0.0
@@ -801,9 +773,8 @@ class Customs extends AbstractEntity
      *
      * @return static
      *
-     * @throws ReflectionException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
      *
@@ -844,9 +815,8 @@ class Customs extends AbstractEntity
      *
      * @return static
      *
-     * @throws ReflectionException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
      *
@@ -883,9 +853,8 @@ class Customs extends AbstractEntity
      *
      * @return static
      *
-     * @throws ReflectionException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     *
      * @example Milk Powder
      *
      * @since   1.0.0

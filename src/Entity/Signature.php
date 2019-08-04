@@ -29,138 +29,119 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
-use Firstred\PostNL\Entity\Response\GetSignatureResponseSignature;
-use TypeError;
+use Firstred\PostNL\Entity\Response\AbstractResponse;
 
 /**
  * Class Signature
  */
-class Signature extends AbstractEntity
+class Signature extends AbstractResponse
 {
     /**
-     * GetSignatureResponseSignature;
+     * Barcode
      *
-     * @pattern N/A
+     * @var string|null $barcode
      *
-     * @example N/A
-     *
-     * @var GetSignatureResponseSignature|null $getSignatureResponseSignature
-     *
-     * @since 1.0.0
+     * @since 2.0.0
      */
-    protected $getSignatureResponseSignature;
+    protected $barcode;
 
     /**
+     * Signature date/time
      *
-     * @pattern N/A
+     * @var string|null $signatureDate
      *
-     * @example N/A
-     *
-     * @var Warning[]|null $warnings
-     *
-     * @since 1.0.0
+     * @since 2.0.0
      */
-    protected $warnings;
+    protected $signatureDate;
+
+    /**
+     * Base64 encoded signature image
+     *
+     * @var string|null $signatureImage
+     *
+     * @since 2.0.0
+     */
+    protected $signatureImage;
 
     /**
      * Signature constructor.
      *
-     * @param GetSignatureResponseSignature|null $signature
-     * @param array|null                         $warnings
-     *
-     * @throws TypeError
-     *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function __construct(?GetSignatureResponseSignature $signature = null, ?array $warnings = null)
+    public function __construct()
     {
         parent::__construct();
-
-        $this->setGetSignatureResponseSignature($signature);
-        $this->setWarnings($warnings);
     }
 
     /**
-     * @pattern N/A
+     * @return string|null
      *
-     * @return GetSignatureResponseSignature|null
-     *
-     * @example N/A
-     *
-     * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
-     * @see     GetSignatureResponseSignature
      */
-    public function getGetSignatureResponseSignature(): ?GetSignatureResponseSignature
+    public function getBarcode(): ?string
     {
-        return $this->getSignatureResponseSignature;
+        return $this->barcode;
     }
 
     /**
-     * @pattern N/A
-     *
-     * @param GetSignatureResponseSignature|null $getSignatureResponseSignature
+     * @param string|null $barcode
      *
      * @return static
      *
-     * @throws TypeError
-     *
-     * @example N/A
-     *
-     * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
-     * @see     GetSignatureResponseSignature
      */
-    public function setGetSignatureResponseSignature(?GetSignatureResponseSignature $getSignatureResponseSignature): Signature
+    public function setBarcode(?string $barcode): Signature
     {
-        $this->getSignatureResponseSignature = $getSignatureResponseSignature;
+        $this->barcode = $barcode;
 
         return $this;
     }
 
     /**
-     * Get warnings
+     * @return string|null
      *
-     * @pattern N/A
-     *
-     * @return Warning[]|null
-     *
-     * @example N/A
-     *
-     * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
-     * @see     Warning
      */
-    public function getWarnings(): ?array
+    public function getSignatureDate(): ?string
     {
-        return $this->warnings;
+        return $this->signatureDate;
     }
 
     /**
-     * Set warnings
-     *
-     * @pattern N/A
-     *
-     * @param Warning[]|null $warnings
+     * @param string|null $signatureDate
      *
      * @return static
      *
-     * @throws TypeError
-     *
-     * @example N/A
-     *
-     * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
-     * @see     Warning
      */
-    public function setWarnings(?array $warnings): Signature
+    public function setSignatureDate(?string $signatureDate): Signature
     {
-        $this->warnings = $warnings;
+        $this->signatureDate = $signatureDate;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function getSignatureImage(): ?string
+    {
+        return $this->signatureImage;
+    }
+
+    /**
+     * @param string|null $signatureImage
+     *
+     * @return static
+     *
+     * @since 2.0.0 Strict typing
+     */
+    public function setSignatureImage(?string $signatureImage): Signature
+    {
+        $this->signatureImage = $signatureImage;
 
         return $this;
     }

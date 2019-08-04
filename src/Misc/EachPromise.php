@@ -116,6 +116,9 @@ class EachPromise
         return $this->aggregate;
     }
 
+    /**
+     * @return void
+     */
     private function createPromise()
     {
         $this->mutex = false;
@@ -149,6 +152,9 @@ class EachPromise
         $this->aggregate->then($clearFn, $clearFn);
     }
 
+    /**
+     * @return void
+     */
     private function refillPending()
     {
         if (!$this->concurrency) {
@@ -182,6 +188,9 @@ class EachPromise
         }
     }
 
+    /**
+     * @return bool
+     */
     private function addPending()
     {
         if (!$this->iterable || !$this->iterable->valid()) {
@@ -219,6 +228,9 @@ class EachPromise
         return true;
     }
 
+    /**
+     * @return bool
+     */
     private function advanceIterator()
     {
         // Place a lock on the iterator so that we ensure to not recurse,
@@ -242,6 +254,9 @@ class EachPromise
         }
     }
 
+    /**
+     * @param mixed $idx
+     */
     private function step($idx)
     {
         // If the promise was already resolved, then ignore this step.
@@ -260,6 +275,9 @@ class EachPromise
         }
     }
 
+    /**
+     * @return bool
+     */
     private function checkIfFinished()
     {
         if (!$this->pending && !$this->iterable->valid()) {

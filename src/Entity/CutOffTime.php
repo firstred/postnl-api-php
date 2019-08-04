@@ -29,9 +29,8 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\ValidateAndFix;
-use ReflectionException;
-use TypeError;
 
 /**
  * Class CutOffTime
@@ -90,8 +89,7 @@ class CutOffTime extends AbstractEntity
      * @param string $time
      * @param bool   $available
      *
-     * @throws TypeError
-     * @throws ReflectionException
+     * @throws InvalidArgumentException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -129,9 +127,8 @@ class CutOffTime extends AbstractEntity
      *
      * @return static
      *
-     * @throws ReflectionException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
      *
@@ -170,9 +167,8 @@ class CutOffTime extends AbstractEntity
      *
      * @return static
      *
-     * @throws ReflectionException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     *
      * @example 14:00:00
      *
      * @since   1.0.0
@@ -210,8 +206,6 @@ class CutOffTime extends AbstractEntity
      * @param bool|null $available
      *
      * @return static
-     *
-     * @throws TypeError
      *
      * @example N/A
      *

@@ -31,8 +31,8 @@ namespace Firstred\PostNL\Entity;
 
 use ArrayAccess;
 use Countable;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Iterator;
-use TypeError;
 
 /**
  * Class Timeframes
@@ -99,8 +99,6 @@ class Timeframes extends AbstractEntity implements Iterator, ArrayAccess, Counta
      *
      * @return static
      *
-     * @throws TypeError
-     *
      * @since 2.0.0 Strict typing
      *
      * @see Timeframe
@@ -158,13 +156,17 @@ class Timeframes extends AbstractEntity implements Iterator, ArrayAccess, Counta
     /**
      * Deserialize JSON
      *
+     * @noinspection PhpDocRedundantThrowsInspection
+     *
      * @param array $json JSON as associative array
      *
-     * @return Timeframes
+     * @return mixed
+     *
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
-    public static function jsonDeserialize(array $json): Timeframes
+    public static function jsonDeserialize(array $json)
     {
         $object = new static();
         if (isset($json['Timeframes']['Timeframe'])) {

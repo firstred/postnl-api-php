@@ -29,14 +29,12 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity\Response;
 
-use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Signature;
-use TypeError;
 
 /**
  * Class RetrieveSignatureByBarcodeResponse
  */
-class RetrieveSignatureByBarcodeResponse extends AbstractEntity
+class RetrieveSignatureByBarcodeResponse extends AbstractResponse
 {
     /**
      * @var Signature|null $signature
@@ -49,8 +47,6 @@ class RetrieveSignatureByBarcodeResponse extends AbstractEntity
      * RetrieveSignatureByBarcodeResponse constructor.
      *
      * @param Signature|null $signature
-     *
-     * @throws TypeError
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -81,8 +77,6 @@ class RetrieveSignatureByBarcodeResponse extends AbstractEntity
      * @param Signature|null $signature
      *
      * @return static
-     *
-     * @throws TypeError
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing

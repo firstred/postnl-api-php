@@ -29,10 +29,8 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity\Request;
 
-use Exception;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Shipment;
-use TypeError;
 
 /**
  * Class ConfirmShipmentRequest
@@ -56,9 +54,6 @@ class ConfirmShipmentRequest extends AbstractEntity
      * ConfirmShipmentRequest constructor.
      *
      * @param Shipment[]|null $shipments
-     *
-     * @throws Exception
-     * @throws TypeError
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -121,8 +116,6 @@ class ConfirmShipmentRequest extends AbstractEntity
      * @param Shipment[]|null $shipments
      *
      * @return static
-     *
-     * @throws TypeError
      *
      * @example N/A
      *

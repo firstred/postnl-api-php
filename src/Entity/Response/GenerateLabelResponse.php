@@ -29,15 +29,14 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity\Response;
 
-use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\MergedLabel;
 use Firstred\PostNL\Entity\Shipment;
-use TypeError;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 
 /**
  * Class GenerateLabelResponse
  */
-class GenerateLabelResponse extends AbstractEntity
+class GenerateLabelResponse extends AbstractResponse
 {
     /**
      * @var MergedLabel[] $mergedLabels
@@ -58,8 +57,6 @@ class GenerateLabelResponse extends AbstractEntity
      *
      * @param MergedLabel[] $mergedLabels
      * @param Shipment[]    $responseShipments
-     *
-     * @throws TypeError
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -109,8 +106,6 @@ class GenerateLabelResponse extends AbstractEntity
      * @param MergedLabel[] $mergedLabels
      *
      * @return static
-     *
-     * @throws TypeError
      *
      * @example N/A
      *
@@ -166,8 +161,6 @@ class GenerateLabelResponse extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     *
      * @example N/A
      *
      * @since 1.0.0
@@ -185,15 +178,17 @@ class GenerateLabelResponse extends AbstractEntity
     /**
      * Deserialize JSON
      *
-     * @param array $json
+     * @noinspection PhpDocRedundantThrowsInspection
      *
-     * @return GenerateLabelResponse
+     * @param array $json JSON as associative array
      *
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \ReflectionException
+     * @return mixed
+     *
+     * @throws InvalidArgumentException
+     *
      * @since 2.0.0
      */
-    public static function jsonDeserialize(array $json): GenerateLabelResponse
+    public static function jsonDeserialize(array $json)
     {
         $object = new static();
         if (isset($json['GenerateLabelResponse'])) {
@@ -211,6 +206,7 @@ class GenerateLabelResponse extends AbstractEntity
                     $object->addResponseShipment(Shipment::jsonDeserialize(['Shipment' => $shipment]));
                 }
             }
+            static::processWarningsAndErrors($object, $json['GenerateLabelResponse']);
         }
 
         return $object;

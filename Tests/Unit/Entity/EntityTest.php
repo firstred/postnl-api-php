@@ -71,7 +71,7 @@ class EntityTest extends TestCase
         }
 
         foreach (scandir(__DIR__.'/../../../src/Entity/Response') as $entityName) {
-            if (in_array($entityName, ['.', '..']) || is_dir(__DIR__."/../../src/Entity/Response/$entityName")) {
+            if (in_array($entityName, ['.', '..', 'AbstractResponse.php']) || is_dir(__DIR__."/../../src/Entity/Response/$entityName")) {
                 continue;
             }
 
@@ -130,7 +130,7 @@ class EntityTest extends TestCase
         }
 
         foreach (scandir(__DIR__.'/../../../src/Entity/Response') as $entityName) {
-            if (in_array($entityName, ['.', '..']) || is_dir(__DIR__."/../../src/Entity/Response/$entityName")) {
+            if (in_array($entityName, ['.', '..', 'AbstractResponse.php']) || is_dir(__DIR__."/../../src/Entity/Response/$entityName")) {
                 continue;
             }
 

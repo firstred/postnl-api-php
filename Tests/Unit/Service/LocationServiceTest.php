@@ -40,8 +40,6 @@ use Firstred\PostNL\Entity\Request\FindNearestLocationsRequest;
 use Firstred\PostNL\Entity\Request\LookupLocationRequest;
 use Firstred\PostNL\Entity\Response\FindNearestLocationsGeocodeResponse;
 use Firstred\PostNL\Entity\Response\FindNearestLocationsResponse;
-use Firstred\PostNL\Entity\Response\GetLocationsInAreaResponse;
-use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\Message;
 use Firstred\PostNL\PostNL;
@@ -125,6 +123,7 @@ class LocationServiceTest extends TestCase
      * @testdox Creates a valid NearestLocations request
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      */
     public function testFindNearestLocationsRequestRest()
     {
@@ -162,10 +161,35 @@ class LocationServiceTest extends TestCase
     }
 
     /**
+     * @testdox Can handle situations where no locations could be found
+     *
+     * @throws ReflectionException
+     * @throws InvalidArgumentException
+     */
+    public function testNoLocationsFound()
+    {
+        $mockClient = new Client();
+        $responseFactory = Psr17FactoryDiscovery::findResponseFactory();
+        $streamFactory = Psr17FactoryDiscovery::findStreamFactory();
+        $response = $responseFactory->createResponse(200, 'OK')
+            ->withHeader('Content-Type', 'application/json;charset=UTF-8')
+            ->withBody($streamFactory->createStream(file_get_contents(__DIR__.'/../../data/responses/nonearestlocations.json')))
+        ;
+        $mockClient->addResponse($response);
+        \Firstred\PostNL\Http\Client::getInstance()->setAsyncClient($mockClient);
+
+        $response = $this->postnl->findNearestLocations('2132WT', 'NL', ['PG', 'PGE'], 'Hoofddorp', 'Siriusdreef', 42, '30-07-2019', '09:00:00');
+
+        $this->assertInstanceOf(FindNearestLocationsResponse::class, $response);
+        $this->assertEquals(0, count($response));
+        $this->assertEquals(1, count($response->getWarnings()));
+    }
+
+    /**
      * @testdox Can request nearest locations
      *
      * @throws ReflectionException
-     * @throws CifDownException
+     * @throws InvalidArgumentException
      */
     public function testGetNearestLocationsRest()
     {

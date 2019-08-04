@@ -32,8 +32,6 @@ namespace Firstred\PostNL\Entity\Request;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\ValidateAndFix;
-use ReflectionException;
-use TypeError;
 
 /**
  * Class CalculateShippingDateRequest
@@ -174,7 +172,6 @@ class CalculateShippingDateRequest extends AbstractEntity
      * @param string|null           $houseNrExt
      *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
      *
      * @since 2.0.0
      */
@@ -216,8 +213,6 @@ class CalculateShippingDateRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 2132WT
@@ -256,8 +251,6 @@ class CalculateShippingDateRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example Hoofddorp
@@ -296,8 +289,6 @@ class CalculateShippingDateRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example NL
@@ -336,8 +327,6 @@ class CalculateShippingDateRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 42
@@ -378,8 +367,6 @@ class CalculateShippingDateRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example A
@@ -418,8 +405,6 @@ class CalculateShippingDateRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example NL
@@ -458,8 +443,6 @@ class CalculateShippingDateRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example 03-07-2019 17:00:00
@@ -499,7 +482,6 @@ class CalculateShippingDateRequest extends AbstractEntity
      * @return static
      *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
      *
      * @example 2
      *
@@ -537,8 +519,6 @@ class CalculateShippingDateRequest extends AbstractEntity
      *
      * @return static
      *
-     * @throws TypeError
-     * @throws ReflectionException
      * @throws InvalidArgumentException
      *
      * @example Siriusdreef
