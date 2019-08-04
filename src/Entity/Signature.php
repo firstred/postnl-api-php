@@ -39,6 +39,10 @@ class Signature extends AbstractResponse
     /**
      * Barcode
      *
+     * @pattern ^.{0,35}$
+     *
+     * @example 3SDEV2345234
+     *
      * @var string|null $barcode
      *
      * @since 2.0.0
@@ -48,6 +52,10 @@ class Signature extends AbstractResponse
     /**
      * Signature date/time
      *
+     * @example 2018-03-07T13:52:45.000+01:00
+     *
+     * @pattern N/A
+     *
      * @var string|null $signatureDate
      *
      * @since 2.0.0
@@ -56,6 +64,10 @@ class Signature extends AbstractResponse
 
     /**
      * Base64 encoded signature image
+     *
+     * @pattern N/A
+     *
+     * @example N/A
      *
      * @var string|null $signatureImage
      *
@@ -75,9 +87,13 @@ class Signature extends AbstractResponse
     }
 
     /**
+     * Get barcode
+     *
      * @return string|null
      *
      * @since 2.0.0 Strict typing
+     *
+     * @see Signature::$barcode
      */
     public function getBarcode(): ?string
     {
@@ -85,11 +101,19 @@ class Signature extends AbstractResponse
     }
 
     /**
+     * Set barcode
+     *
+     * @pattern ^.{0,35}$
+     *
+     * @example 3SDEV2345234
+     *
      * @param string|null $barcode
      *
      * @return static
      *
      * @since 2.0.0 Strict typing
+     *
+     * @see Signature::$barcode
      */
     public function setBarcode(?string $barcode): Signature
     {
@@ -99,9 +123,13 @@ class Signature extends AbstractResponse
     }
 
     /**
+     * Get signature date
+     *
      * @return string|null
      *
      * @since 2.0.0 Strict typing
+     *
+     * @see Signature::$signatureDate
      */
     public function getSignatureDate(): ?string
     {
@@ -109,11 +137,19 @@ class Signature extends AbstractResponse
     }
 
     /**
+     * Set signature date
+     *
      * @param string|null $signatureDate
      *
      * @return static
      *
+     * @example 2018-03-07T13:52:45.000+01:00
+     *
+     * @pattern N/A
+     *
      * @since 2.0.0 Strict typing
+     *
+     * @see Signature::$signatureDate
      */
     public function setSignatureDate(?string $signatureDate): Signature
     {
@@ -123,9 +159,13 @@ class Signature extends AbstractResponse
     }
 
     /**
+     * Get signature image
+     *
      * @return string|null
      *
      * @since 2.0.0 Strict typing
+     *
+     * @see Signature::$signatureImage
      */
     public function getSignatureImage(): ?string
     {
@@ -133,11 +173,19 @@ class Signature extends AbstractResponse
     }
 
     /**
+     * Set signature image
+     *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @param string|null $signatureImage
      *
      * @return static
      *
      * @since 2.0.0 Strict typing
+     *
+     * @see Signature::$signatureImage
      */
     public function setSignatureImage(?string $signatureImage): Signature
     {
