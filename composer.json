@@ -34,8 +34,7 @@
     "php-http/httplug": "^1.1|^2.0",
     "php-http/message": "^1.5",
     "php-http/logger-plugin": "^1.1",
-    "setasign/fpdi-fpdf": "^2.2.0",
-    "giggsey/libphonenumber-for-php": "^8.10"
+    "setasign/fpdi-fpdf": "^2.2.0"
   },
   "require-dev": {
     "php-http/mock-client": "^1.3.0",
@@ -48,7 +47,8 @@
     "vlucas/phpdotenv": "^3.2"
   },
   "suggest": {
-    "giggsey/libphonenumber-for-php": "Auto format phone numbers and increase acceptance by the PostNL API"
+    "giggsey/libphonenumber-for-php": "Automatically format phone numbers and increase acceptance by the PostNL API",
+    "league/iso3166": "Automatically convert between ISO 3166-1 alpha-2 (2 letter) and ISO 3166-1 alpha-3 (3 letter) country codes"
   },
   "autoload": {
     "psr-4": {
