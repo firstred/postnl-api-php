@@ -29,77 +29,9 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity\Request;
 
-use Firstred\PostNL\Entity\AbstractEntity;
-use Firstred\PostNL\Entity\Shipment;
-
 /**
- * Class RetrieveSignatureByBarcodeRequest
+ * Class NationalGeoAddressCheckRequest
  */
-class RetrieveSignatureByBarcodeRequest extends AbstractEntity
+class NationalGeoAddressCheckRequest extends NationalAddressCheckRequest
 {
-    /**
-     * Barcode
-     *
-     * @pattern N/A
-     *
-     * @example N/A
-     *
-     * @var Shipment|null $shipment
-     *
-     * @since 1.0.0
-     */
-    protected $barcode;
-
-    /**
-     * RetrieveSignatureByBarcodeRequest constructor.
-     *
-     * @param string|null $barcode
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function __construct(?string $barcode = null)
-    {
-        parent::__construct();
-
-        $this->setBarcode($barcode);
-    }
-
-    /**
-     * Get barcode
-     *
-     * @return Shipment|null
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     *
-     * @see     RetrieveSignatureByBarcodeRequest::$barcode
-     */
-    public function getBarcode(): ?string
-    {
-        return $this->barcode;
-    }
-
-    /**
-     * Set barcode
-     *
-     * @pattern N/A
-     *
-     * @param string|null $barcode
-     *
-     * @return static
-     *
-     * @example N/A
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     *
-     * @see     RetrieveSignatureByBarcodeRequest::$barcode
-     */
-    public function setBarcode(?string $barcode = null): RetrieveSignatureByBarcodeRequest
-    {
-        $this->barcode = $barcode;
-
-        return $this;
-    }
 }

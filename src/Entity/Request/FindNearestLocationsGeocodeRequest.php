@@ -181,7 +181,7 @@ class FindNearestLocationsGeocodeRequest extends AbstractEntity
      */
     public function setCountrycode(?string $countrycode): FindNearestLocationsGeocodeRequest
     {
-        $this->countrycode = ValidateAndFix::countryCodeNlBe($countrycode);
+        $this->countrycode = ValidateAndFix::isoAlpha2CountryCodeNlBe($countrycode);
 
         return $this;
     }

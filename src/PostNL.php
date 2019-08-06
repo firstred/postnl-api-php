@@ -32,6 +32,8 @@ namespace Firstred\PostNL;
 use Exception;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Label;
+use Firstred\PostNL\Entity\Location;
+use Firstred\PostNL\Entity\Request\BasicNationalAddressCheckRequest;
 use Firstred\PostNL\Entity\Request\CalculateDeliveryDateRequest;
 use Firstred\PostNL\Entity\Request\CalculateShippingDateRequest;
 use Firstred\PostNL\Entity\Request\CalculateTimeframesRequest;
@@ -40,11 +42,15 @@ use Firstred\PostNL\Entity\Request\FindNearestLocationsGeocodeRequest;
 use Firstred\PostNL\Entity\Request\FindNearestLocationsRequest;
 use Firstred\PostNL\Entity\Request\GenerateBarcodeRequest;
 use Firstred\PostNL\Entity\Request\GenerateShipmentLabelRequest;
+use Firstred\PostNL\Entity\Request\InternationalAddressCheckRequest;
 use Firstred\PostNL\Entity\Request\LookupLocationRequest;
+use Firstred\PostNL\Entity\Request\NationalAddressCheckRequest;
+use Firstred\PostNL\Entity\Request\NationalGeoAddressCheckRequest;
 use Firstred\PostNL\Entity\Request\RetrieveShipmentByBarcodeRequest;
 use Firstred\PostNL\Entity\Request\RetrieveShipmentByKgidRequest;
 use Firstred\PostNL\Entity\Request\RetrieveShipmentByReferenceRequest;
 use Firstred\PostNL\Entity\Request\RetrieveSignatureByBarcodeRequest;
+use Firstred\PostNL\Entity\Response\BasicNationalAddressCheckResponse;
 use Firstred\PostNL\Entity\Response\CalculateDeliveryDateResponse;
 use Firstred\PostNL\Entity\Response\CalculateShippingDateResponse;
 use Firstred\PostNL\Entity\Response\CalculateTimeframesResponse;
@@ -54,6 +60,7 @@ use Firstred\PostNL\Entity\Response\FindNearestLocationsResponse;
 use Firstred\PostNL\Entity\Response\GenerateLabelResponse;
 use Firstred\PostNL\Entity\Shipment;
 use Firstred\PostNL\Entity\Signature;
+use Firstred\PostNL\Entity\ValidatedAddress;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifErrorException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
@@ -66,10 +73,14 @@ use Firstred\PostNL\Misc\Message as UtilMessage;
 use Firstred\PostNL\Misc\Misc;
 use Firstred\PostNL\Misc\RFPdi;
 use Firstred\PostNL\Service\BarcodeService;
+use Firstred\PostNL\Service\BasicNationalAddressCheckService;
 use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
+use Firstred\PostNL\Service\InternationalAddressCheckService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
+use Firstred\PostNL\Service\NationalAddressCheckService;
+use Firstred\PostNL\Service\NationalGeoAddressCheckService;
 use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
 use Http\Client\Exception as HttpClientException;
@@ -151,6 +162,18 @@ class PostNL implements LoggerAwareInterface
 
     /** @var LocationService $locationService */
     protected $locationService;
+
+    /** @var BasicNationalAddressCheckService $basicNationalAddressCheckService */
+    protected $basicNationalAddressCheckService;
+
+    /** @var NationalAddressCheckService $nationalAddressCheckService */
+    protected $nationalAddressCheckService;
+
+    /** @var NationalGeoAddressCheckService $nationalGeoAddressCheckService */
+    protected $nationalGeoAddressCheckService;
+
+    /** @var InternationalAddressCheckService $internationalAddressCheckService */
+    protected $internationalAddressCheckService;
 
     /**
      * PostNL constructor.
@@ -507,6 +530,162 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
+     * Location service
+     *
+     * Automatically load the location service
+     *
+     * @return LocationService
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Strict typing
+     */
+    public function getLocationService(): LocationService
+    {
+        if (!$this->locationService) {
+            $this->setLocationService(new LocationService($this));
+        }
+
+        return $this->locationService;
+    }
+
+    /**
+     * Set the location service
+     *
+     * @param LocationService $service
+     *
+     * @return static
+     *
+     * @since 1.0.0
+     * @since 2.0.0 Return `self`
+     */
+    public function setLocationService(LocationService $service): PostNL
+    {
+        $this->locationService = $service;
+
+        return $this;
+    }
+
+    /**
+     * Get Basic National Address Check service
+     *
+     * @return BasicNationalAddressCheckService
+     *
+     * @since 2.0.0
+     */
+    public function getBasicNationalAddressCheckService(): BasicNationalAddressCheckService
+    {
+        if (!$this->basicNationalAddressCheckService) {
+            $this->setBasicNationalAddressCheckService(new BasicNationalAddressCheckService($this));
+        }
+
+        return $this->basicNationalAddressCheckService;
+    }
+
+    /**
+     * Set Basic National Address Check service
+     *
+     * @param BasicNationalAddressCheckService $basicNationalAddressCheckService
+     *
+     * @return static
+     *
+     * @since 2.0.0
+     */
+    public function setBasicNationalAddressCheckService(BasicNationalAddressCheckService $basicNationalAddressCheckService): PostNL
+    {
+        $this->basicNationalAddressCheckService = $basicNationalAddressCheckService;
+
+        return $this;
+    }
+
+    /**
+     * Get National Address Check service
+     *
+     * @return NationalAddressCheckService
+     *
+     * @since 2.0.0
+     */
+    public function getNationalAddressCheckService(): NationalAddressCheckService
+    {
+        if (!$this->nationalAddressCheckService) {
+            $this->setNationalAddressCheckService(new NationalAddressCheckService($this));
+        }
+
+        return $this->nationalAddressCheckService;
+    }
+
+    /**
+     * Set National Address Check service
+     *
+     * @param NationalAddressCheckService $nationalAddressCheckService
+     *
+     * @return static
+     *
+     * @since 2.0.0
+     */
+    public function setNationalAddressCheckService(NationalAddressCheckService $nationalAddressCheckService): PostNL
+    {
+        $this->nationalAddressCheckService = $nationalAddressCheckService;
+
+        return $this;
+    }
+
+    /**
+     * Get National Geo Address Check service
+     *
+     * @return NationalGeoAddressCheckService
+     *
+     * @since 2.0.0
+     */
+    public function getNationalGeoAddressCheckService(): NationalGeoAddressCheckService
+    {
+        return $this->nationalGeoAddressCheckService;
+    }
+
+    /**
+     * Set National Geo Address Check service
+     *
+     * @param NationalGeoAddressCheckService $nationalGeoAddressCheckService
+     *
+     * @return static
+     *
+     * @since 2.0.0
+     */
+    public function setNationalGeoAddressCheckService(NationalGeoAddressCheckService $nationalGeoAddressCheckService): PostNL
+    {
+        $this->nationalGeoAddressCheckService = $nationalGeoAddressCheckService;
+
+        return $this;
+    }
+
+    /**
+     * Set International Address Check service
+     *
+     * @return InternationalAddressCheckService
+     *
+     * @since 2.0.0
+     */
+    public function getInternationalAddressCheckService(): InternationalAddressCheckService
+    {
+        return $this->internationalAddressCheckService;
+    }
+
+    /**
+     * Get International Address Check service
+     *
+     * @param InternationalAddressCheckService $internationalAddressCheckService
+     *
+     * @return static
+     *
+     * @since 2.0.0
+     */
+    public function setInternationalAddressCheckService(InternationalAddressCheckService $internationalAddressCheckService): PostNL
+    {
+        $this->internationalAddressCheckService = $internationalAddressCheckService;
+
+        return $this;
+    }
+
+    /**
      * Generate a single barcode
      *
      * @param string      $type
@@ -518,6 +697,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @throws InvalidBarcodeException
      * @throws Exception
+     * @throws HttpClientException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -1166,8 +1346,7 @@ class PostNL implements LoggerAwareInterface
      * @throws HttpClientException
      * @throws InvalidArgumentException
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since 2.0.0
      */
     public function calculateShippingDate(string $deliveryDate, int $shippingDuration, string $postalCode, ?string $countryCode = null, ?string $originCountryCode = null, ?string $city = null, ?string $street = null, ?int $houseNumber = null, ?string $houseNumberExtension = null): CalculateShippingDateResponse
     {
@@ -1205,9 +1384,9 @@ class PostNL implements LoggerAwareInterface
      *
      * @throws InvalidArgumentException
      * @throws Exception
+     * @throws HttpClientException
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since 2.0.0
      */
     public function calculateTimeframes(string $startDate, string $endDate, string $postalCode, int $houseNumber, ?string $houseNumberExtension = null, string $countryCode = 'NL', ?string $street = null, ?string $city = null, bool $allowSundaySorting = false, array $options = ['Daytime'], ?int $interval = null, ?string $timeframeRange = null)
     {
@@ -1278,6 +1457,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @throws InvalidArgumentException
      * @throws Exception
+     * @throws HttpClientException
      *
      * @since 2.0.0
      */
@@ -1295,42 +1475,6 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Location service
-     *
-     * Automatically load the location service
-     *
-     * @return LocationService
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function getLocationService(): LocationService
-    {
-        if (!$this->locationService) {
-            $this->setLocationService(new LocationService($this));
-        }
-
-        return $this->locationService;
-    }
-
-    /**
-     * Set the location service
-     *
-     * @param LocationService $service
-     *
-     * @return static
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Return `self`
-     */
-    public function setLocationService(LocationService $service): PostNL
-    {
-        $this->locationService = $service;
-
-        return $this;
-    }
-
-    /**
      * All-in-one function for checkout widgets. It retrieves and returns the
      * - timeframes
      * - locations
@@ -1344,6 +1488,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @throws InvalidArgumentException
      * @throws Exception
+     * @throws HttpClientException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -1437,6 +1582,11 @@ class PostNL implements LoggerAwareInterface
      *
      * @return FindNearestLocationsGeocodeResponse
      *
+     * @throws CifDownException
+     * @throws CifErrorException
+     * @throws HttpClientException
+     * @throws InvalidArgumentException
+     *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
@@ -1450,9 +1600,10 @@ class PostNL implements LoggerAwareInterface
      *
      * @param LookupLocationRequest $getLocation
      *
-     * @return Entity\Location
+     * @return Location
      *
      * @throws Exception
+     * @throws HttpClientException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -1460,5 +1611,127 @@ class PostNL implements LoggerAwareInterface
     public function getLocation(LookupLocationRequest $getLocation)
     {
         return $this->getLocationService()->lookupLocation($getLocation);
+    }
+
+    /**
+     * Basic national address check
+     *
+     * @param string      $postalCode  Must be 6P format, e.g. 1234AB
+     * @param string|null $houseNumber House number is optional
+     *
+     * @return BasicNationalAddressCheckResponse
+     *
+     * @throws CifDownException
+     * @throws HttpClientException
+     * @throws InvalidArgumentException
+     *
+     * @since 2.0.0
+     */
+    public function basicNationalAddressCheck(string $postalCode, ?string $houseNumber = null): BasicNationalAddressCheckResponse
+    {
+        return $this->getBasicNationalAddressCheckService()->checkAddress(
+            (new BasicNationalAddressCheckRequest())
+                ->setPostalCode($postalCode)
+                ->setHouseNumber($houseNumber)
+        );
+    }
+
+    /**
+     * Check national address
+     *
+     * @param string|null $country
+     * @param string|null $street
+     * @param string|null $houseNumber
+     * @param string|null $addition
+     * @param string|null $postalCode
+     * @param string|null $city
+     *
+     * @return ValidatedAddress
+     *
+     * @throws CifDownException
+     * @throws HttpClientException
+     * @throws InvalidArgumentException
+     *
+     * @since 2.0.0
+     */
+    public function nationalAddressCheck(?string $country = null, ?string $street = null, ?string $houseNumber = null, ?string $addition = null, ?string $postalCode = null, ?string $city = null): ValidatedAddress
+    {
+        return $this->getNationalAddressCheckService()->checkAddress(
+            (new NationalAddressCheckRequest())
+                ->setCountry($country)
+                ->setStreet($street)
+                ->setHouseNumber($houseNumber)
+                ->setAddition($addition)
+                ->setPostalCode($postalCode)
+                ->setCity($city)
+        );
+    }
+
+    /**
+     * Geo check national address
+     *
+     * @param string|null $country
+     * @param string|null $street
+     * @param string|null $houseNumber
+     * @param string|null $addition
+     * @param string|null $postalCode
+     * @param string|null $city
+     *
+     * @return ValidatedAddress
+     *
+     * @throws CifDownException
+     * @throws HttpClientException
+     * @throws InvalidArgumentException
+     *
+     * @since 2.0.0
+     */
+    public function nationalGeoAddressCheck(?string $country = null, ?string $street = null, ?string $houseNumber = null, ?string $addition = null, ?string $postalCode = null, ?string $city = null): ValidatedAddress
+    {
+        return $this->getNationalGeoAddressCheckService()->checkAddress(
+            (new NationalGeoAddressCheckRequest())
+                ->setCountry($country)
+                ->setStreet($street)
+                ->setHouseNumber($houseNumber)
+                ->setAddition($addition)
+                ->setPostalCode($postalCode)
+                ->setCity($city)
+        );
+    }
+
+    /**
+     * Check international address
+     *
+     * @param string|null       $country              ISO 3166-1 alpha 3 country code
+     * @param string|array|null $streetOrAddressLines Street name or full address lines
+     * @param string|null       $houseNumber
+     * @param string|null       $postalCode
+     * @param string|null       $city
+     * @param string|null       $building
+     * @param string|null       $subBuilding
+     *
+     * @return ValidatedAddress
+     *
+     * @throws CifDownException
+     * @throws HttpClientException
+     * @throws InvalidArgumentException
+     *
+     * @since 2.0.0
+     */
+    public function internationalAddressCheck($country = null, ?string $streetOrAddressLines = null, ?string $houseNumber = null, ?string $postalCode = null, ?string $city = null, ?string $building = null, ?string $subBuilding = null): ValidatedAddress
+    {
+        if (is_array($streetOrAddressLines)) {
+            return $this->getInternationalAddressCheckService()->checkAddress((new InternationalAddressCheckRequest($country, $streetOrAddressLines)));
+        }
+
+        return $this->getInternationalAddressCheckService()->checkAddress(
+            (new InternationalAddressCheckRequest())
+                ->setCountry($country)
+                ->setStreet($streetOrAddressLines)
+                ->setHouseNumber($houseNumber)
+                ->setPostalCode($postalCode)
+                ->setCity($city)
+                ->setBuilding($building)
+                ->setSubBuilding($subBuilding)
+        );
     }
 }

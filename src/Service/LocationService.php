@@ -177,7 +177,10 @@ class LocationService extends AbstractService
      *
      * @return FindNearestLocationsGeocodeResponse
      *
+     * @throws CifDownException
+     * @throws CifErrorException
      * @throws HttpClientException
+     * @throws InvalidArgumentException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -190,7 +193,7 @@ class LocationService extends AbstractService
             $response = $item->get();
             try {
                 $response = Message::parseResponse($response);
-            } catch (InvalidArgumentException | TypeError $e) {
+            } catch (TypeError $e) {
             }
         }
         if (!$response instanceof ResponseInterface) {
@@ -212,7 +215,7 @@ class LocationService extends AbstractService
             return $object;
         }
 
-        throw new PostNLCli('Unable to retrieve the nearest locations', 0, null, isset($request) && $request instanceof RequestInterface ? $request : null, $response);
+        throw new CifDownException('Unable to retrieve the nearest locations', 0, null, isset($request) && $request instanceof RequestInterface ? $request : null, $response);
     }
 
     /**
@@ -295,7 +298,7 @@ class LocationService extends AbstractService
             $response = $item->get();
             try {
                 $response = Message::parseResponse($response);
-            } catch (InvalidArgumentException | TypeError $e) {
+            } catch (TypeError $e) {
             }
         }
         if (!$response instanceof ResponseInterface) {
@@ -390,6 +393,7 @@ class LocationService extends AbstractService
      * @throws CifDownException
      * @throws CifErrorException
      * @throws HttpClientException
+     * @throws InvalidArgumentException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -402,7 +406,7 @@ class LocationService extends AbstractService
             $response = $item->get();
             try {
                 $response = Message::parseResponse($response);
-            } catch (InvalidArgumentException | TypeError $e) {
+            } catch (TypeError $e) {
             }
         }
         if (!$response instanceof ResponseInterface) {
@@ -465,12 +469,15 @@ class LocationService extends AbstractService
      * @return Location
      *
      * @throws CifDownException
+     * @throws CifErrorException
+     * @throws InvalidArgumentException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function processLookupLocationResponse(ResponseInterface $response): Location
     {
+        static::validateResponse($response);
         $body = json_decode((string) $response->getBody(), true);
         if (is_array($body)) {
             if (isset($body['GetLocationsResult']['ResponseLocation'])) {

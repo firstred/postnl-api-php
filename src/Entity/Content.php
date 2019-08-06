@@ -211,7 +211,7 @@ class Content extends AbstractEntity
      */
     public function setCountryOfOrigin(?string $countryOfOrigin): Content
     {
-        $this->countryOfOrigin = ValidateAndFix::countryCode($countryOfOrigin);
+        $this->countryOfOrigin = ValidateAndFix::isoAlpha2CountryCode($countryOfOrigin);
 
         return $this;
     }

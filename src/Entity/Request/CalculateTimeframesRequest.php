@@ -618,7 +618,7 @@ class CalculateTimeframesRequest extends AbstractEntity
      */
     public function setCountryCode(?string $countryCode): CalculateTimeframesRequest
     {
-        $this->countryCode = ValidateAndFix::countryCodeNlBe($countryCode);
+        $this->countryCode = ValidateAndFix::isoAlpha2CountryCodeNlBe($countryCode);
 
         return $this;
     }

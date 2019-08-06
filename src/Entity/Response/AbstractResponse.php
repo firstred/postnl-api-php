@@ -253,6 +253,8 @@ abstract class AbstractResponse extends AbstractEntity
      * @param array            $json
      *
      * @return void
+     *
+     * @throws InvalidArgumentException
      */
     protected static function processWarningsAndErrors(AbstractResponse &$object, $json): void
     {

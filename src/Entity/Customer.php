@@ -454,7 +454,7 @@ class Customer extends AbstractEntity
      */
     public function setGlobalPackBarcodeType(?string $globalPackBarcodeType): Customer
     {
-        $this->globalPackBarcodeType = ValidateAndFix::countryCode($globalPackBarcodeType);
+        $this->globalPackBarcodeType = ValidateAndFix::isoAlpha2CountryCode($globalPackBarcodeType);
 
         return $this;
     }

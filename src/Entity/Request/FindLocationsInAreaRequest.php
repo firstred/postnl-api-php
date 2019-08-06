@@ -210,7 +210,7 @@ class FindLocationsInAreaRequest extends AbstractEntity
      */
     public function setCountryCode(?string $countrycode): FindLocationsInAreaRequest
     {
-        $this->countryCode = ValidateAndFix::countryCodeNlBe($countrycode);
+        $this->countryCode = ValidateAndFix::isoAlpha2CountryCodeNlBe($countrycode);
 
         return $this;
     }

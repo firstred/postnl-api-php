@@ -299,7 +299,7 @@ class CalculateShippingDateRequest extends AbstractEntity
      */
     public function setCountryCode(?string $countryCode): CalculateShippingDateRequest
     {
-        $this->countryCode = ValidateAndFix::countryCodeNlBe($countryCode);
+        $this->countryCode = ValidateAndFix::isoAlpha2CountryCodeNlBe($countryCode);
 
         return $this;
     }
@@ -415,7 +415,7 @@ class CalculateShippingDateRequest extends AbstractEntity
      */
     public function setOriginCountryCode(?string $originCountryCode): CalculateShippingDateRequest
     {
-        $this->originCountryCode = ValidateAndFix::countryCodeNlBe($originCountryCode);
+        $this->originCountryCode = ValidateAndFix::isoAlpha2CountryCodeNlBe($originCountryCode);
 
         return $this;
     }

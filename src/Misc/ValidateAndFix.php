@@ -30,6 +30,7 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Misc;
 
 use Firstred\PostNL\Exception\InvalidArgumentException;
+use League\ISO3166\ISO3166;
 use libphonenumber\NumberParseException;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
@@ -279,13 +280,55 @@ class ValidateAndFix
      *
      * @since 2.0.0
      */
-    public static function countryCode($countryCode)
+    public static function isoAlpha2CountryCode($countryCode)
     {
         if (is_string($countryCode)) {
             $countryCode = strtoupper($countryCode);
+            if (class_exists(ISO3166::class) && preg_match('/^[A-Z]{3}$/', $countryCode)) {
+                $data = (new ISO3166())->alpha3($countryCode);
+                if (isset($data['alpha2'])) {
+                    $countryCode = $data['alpha2'];
+                } else {
+                    list($class, $method) = static::getCaller();
+                    throw new InvalidArgumentException(sprintf('%s::%s - Invalid country code given, must be a valid uppercase ISO 3166-1 alpha-2 code', $class, $method));
+                }
+            }
             if (!preg_match('/^[A-Z]{2}$/', $countryCode)) {
                 list($class, $method) = static::getCaller();
-                throw new InvalidArgumentException(sprintf('%s::%s - Invalid country code given, must be uppercase ISO-2 code', $class, $method));
+                throw new InvalidArgumentException(sprintf('%s::%s - Invalid country code given, must be a valid uppercase ISO 3166-1 alpha-2 code', $class, $method));
+            }
+        }
+
+        return $countryCode;
+    }
+
+    /**
+     * Validate and fix 3 letter ISO country code
+     *
+     * @param mixed $countryCode
+     *
+     * @return mixed
+     *
+     * @throws InvalidArgumentException
+     *
+     * @since 2.0.0
+     */
+    public static function isoAlpha3CountryCode($countryCode)
+    {
+        if (is_string($countryCode)) {
+            $countryCode = strtoupper($countryCode);
+            if (class_exists(ISO3166::class) && preg_match('/^[A-Z]{2}$/', $countryCode)) {
+                $data = (new ISO3166())->alpha2($countryCode);
+                if (isset($data['alpha3'])) {
+                    $countryCode = $data['alpha3'];
+                } else {
+                    list($class, $method) = static::getCaller();
+                    throw new InvalidArgumentException(sprintf('%s::%s - Invalid country code given, must be a valid uppercase ISO 3166-1 alpha-3 code', $class, $method));
+                }
+            }
+            if (!preg_match('/^[A-Z]{3}$/', $countryCode)) {
+                list($class, $method) = static::getCaller();
+                throw new InvalidArgumentException(sprintf('%s::%s - Invalid country code given, must be a valid uppercase ISO 3166-1 alpha-3 code', $class, $method));
             }
         }
 
@@ -303,7 +346,7 @@ class ValidateAndFix
      *
      * @since 2.0.0
      */
-    public static function countryCodeNlBe($countryCode)
+    public static function isoAlpha2CountryCodeNlBe($countryCode)
     {
         if (is_string($countryCode)) {
             $countryCode = strtoupper($countryCode);

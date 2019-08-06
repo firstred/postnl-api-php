@@ -638,7 +638,7 @@ class Address extends AbstractEntity
      */
     public function setCountrycode(?string $countrycode): Address
     {
-        $this->countrycode = ValidateAndFix::countryCode($countrycode);
+        $this->countrycode = ValidateAndFix::isoAlpha2CountryCode($countrycode);
 
         return $this;
     }
