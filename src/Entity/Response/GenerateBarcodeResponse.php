@@ -35,6 +35,12 @@ namespace Firstred\PostNL\Entity\Response;
 class GenerateBarcodeResponse extends AbstractResponse
 {
     /**
+     * Barcode
+     *
+     * @pattern ^.{11,15}$
+     *
+     * @example 3SDEVC2016112104
+     *
      * @var string|null $barcode
      *
      * @since 1.0.0
@@ -57,12 +63,14 @@ class GenerateBarcodeResponse extends AbstractResponse
     }
 
     /**
-     * Get barcodde
+     * Get barcode
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   GenerateBarcodeResponse::$barcode
      */
     public function getBarcode(): ?string
     {
@@ -72,12 +80,18 @@ class GenerateBarcodeResponse extends AbstractResponse
     /**
      * Set barcode
      *
+     * @pattern ^.{11,15}$
+     *
      * @param string|null $barcode
      *
      * @return static
      *
+     * @example 3SABCD7762162
+     *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see     GenerateBarcodeResponse::$barcode
      */
     public function setBarcode(?string $barcode): GenerateBarcodeResponse
     {

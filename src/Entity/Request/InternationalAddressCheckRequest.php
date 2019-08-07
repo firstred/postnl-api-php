@@ -53,6 +53,12 @@ class InternationalAddressCheckRequest extends AbstractEntity
 
     // @codingStandardsIgnoreStart
     /**
+     * 1st string
+     *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @var string|null $q1
      *
      * @since 2.0.0
@@ -60,6 +66,12 @@ class InternationalAddressCheckRequest extends AbstractEntity
     protected $q1;
 
     /**
+     * 2nd string
+     *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @var string|null $q2
      *
      * @since 2.0.0
@@ -67,6 +79,12 @@ class InternationalAddressCheckRequest extends AbstractEntity
     protected $q2;
 
     /**
+     * 3rd string
+     *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @var string|null $q3
      *
      * @since 2.0.0
@@ -236,23 +254,38 @@ class InternationalAddressCheckRequest extends AbstractEntity
     }
 
     /**
+     * Set street
+     *
+     * @pattern ^.{0,95}$
+     *
      * @param string|null $street
      *
      * @return static
      *
+     * @throws InvalidArgumentException
+     *
+     * @example Siriusdreef
+     *
+     * @see     InternationalAddressCheckRequest::$street
+     *
      * @since 2.0.0
+     *
      */
     public function setStreet(?string $street): InternationalAddressCheckRequest
     {
-        $this->street = $street;
+        $this->street = ValidateAndFix::street($street);
 
         return $this;
     }
 
     /**
+     * Get house number
+     *
      * @return string|null
      *
      * @since 2.0.0
+     *
+     * @see   InternationalAddressCheckRequest::$houseNumber
      */
     public function getHouseNumber(): ?string
     {
@@ -260,23 +293,37 @@ class InternationalAddressCheckRequest extends AbstractEntity
     }
 
     /**
+     * Set house number
+     *
+     * @pattern ^.{0,35}$
+     *
      * @param string|null $houseNumber
      *
      * @return static
+     *
+     * @throws InvalidArgumentException
+     *
+     * @example 42
+     *
+     * @see     InternationalAddressCheckRequest::$houseNumber
      *
      * @since 2.0.0
      */
     public function setHouseNumber(?string $houseNumber): InternationalAddressCheckRequest
     {
-        $this->houseNumber = $houseNumber;
+        $this->houseNumber = ValidateAndFix::houseNumber($houseNumber);
 
         return $this;
     }
 
     /**
+     * Get postal code
+     *
      * @return string|null
      *
      * @since 2.0.0
+     *
+     * @see   InternationalAddressCheckRequest::$postalCode
      */
     public function getPostalCode(): ?string
     {
@@ -284,23 +331,37 @@ class InternationalAddressCheckRequest extends AbstractEntity
     }
 
     /**
+     * Set postal code
+     *
+     * @pattern ^{0,10}$
+     *
      * @param string|null $postalCode
      *
      * @return static
+     *
+     * @throws InvalidArgumentException
+     *
+     * @example 2132WT
+     *
+     * @see     InternationalAddressCheckRequest::$postalCode
      *
      * @since 2.0.0
      */
     public function setPostalCode(?string $postalCode): InternationalAddressCheckRequest
     {
-        $this->postalCode = $postalCode;
+        $this->postalCode = ValidateAndFix::postcode($postalCode);
 
         return $this;
     }
 
     /**
+     * Get city
+     *
      * @return string|null
      *
      * @since 2.0.0
+     *
+     * @see   InternationalAddressCheckRequest::$city
      */
     public function getCity(): ?string
     {
@@ -308,11 +369,19 @@ class InternationalAddressCheckRequest extends AbstractEntity
     }
 
     /**
+     * Set city
+     *
+     * @pattern ^.{0,35}$
+     *
      * @param string|null $city
      *
      * @return static
      *
+     * @example Hoofddorp
+     *
      * @since 2.0.0
+     *
+     * @see     InternationalAddressCheckRequest::$city
      */
     public function setCity(?string $city): InternationalAddressCheckRequest
     {
@@ -327,6 +396,8 @@ class InternationalAddressCheckRequest extends AbstractEntity
      * @return string|null
      *
      * @since 2.0.0
+     *
+     * @see   InternationalAddressCheckRequest::$building
      */
     public function getBuilding(): ?string
     {
@@ -334,11 +405,19 @@ class InternationalAddressCheckRequest extends AbstractEntity
     }
 
     /**
+     * Set building
+     *
+     * @pattern ^.{0,95}$
+     *
      * @param string|null $building
      *
      * @return static
      *
+     * @example N/A
+     *
      * @since 2.0.0
+     *
+     * @see     InternationalAddressCheckRequest::$building
      */
     public function setBuilding(?string $building): InternationalAddressCheckRequest
     {
@@ -348,9 +427,13 @@ class InternationalAddressCheckRequest extends AbstractEntity
     }
 
     /**
+     * Get sub building
+     *
      * @return string|null
      *
      * @since 2.0.0
+     *
+     * @see   InternationalAddressCheckRequest::$subBuilding
      */
     public function getSubBuilding(): ?string
     {
@@ -358,11 +441,19 @@ class InternationalAddressCheckRequest extends AbstractEntity
     }
 
     /**
+     * Set sub building
+     *
+     * @pattern ^.{0,95}$
+     *
      * @param string|null $subBuilding
      *
      * @return static
      *
+     * @example N/A
+     *
      * @since 2.0.0
+     *
+     * @see     InternationalAddressCheckRequest::$subBuilding
      */
     public function setSubBuilding(?string $subBuilding): InternationalAddressCheckRequest
     {
@@ -372,9 +463,13 @@ class InternationalAddressCheckRequest extends AbstractEntity
     }
 
     /**
+     * Get 1st string
+     *
      * @return string|null
      *
      * @since 2.0.0 Strict typing
+     *
+     * @see   InternationalAddressCheckRequest::$q1
      */
     public function getQ1(): ?string
     {
@@ -382,11 +477,19 @@ class InternationalAddressCheckRequest extends AbstractEntity
     }
 
     /**
+     * Set 1st string
+     *
+     * @pattern N/A
+     *
      * @param string|null $q1
      *
      * @return static
      *
+     * @example N/A
+     *
      * @since 2.0.0 Strict typing
+     *
+     * @see     InternationalAddressCheckRequest::$q1
      */
     public function setQ1(?string $q1): InternationalAddressCheckRequest
     {
@@ -396,9 +499,13 @@ class InternationalAddressCheckRequest extends AbstractEntity
     }
 
     /**
+     * Get 2nd string
+     *
      * @return string|null
      *
      * @since 2.0.0 Strict typing
+     *
+     * @see   InternationalAddressCheckRequest::$q2
      */
     public function getQ2(): ?string
     {
@@ -406,11 +513,19 @@ class InternationalAddressCheckRequest extends AbstractEntity
     }
 
     /**
+     * Set 2nd string
+     *
+     * @pattern N/A
+     *
      * @param string|null $q2
      *
      * @return static
      *
+     * @example N/A
+     *
      * @since 2.0.0 Strict typing
+     *
+     * @see     InternationalAddressCheckRequest::$q2
      */
     public function setQ2(?string $q2): InternationalAddressCheckRequest
     {
@@ -420,9 +535,13 @@ class InternationalAddressCheckRequest extends AbstractEntity
     }
 
     /**
+     * Get third string
+     *
      * @return string|null
      *
      * @since 2.0.0 Strict typing
+     *
+     * @see   InternationalAddressCheckRequest::$q3
      */
     public function getQ3(): ?string
     {
@@ -430,11 +549,19 @@ class InternationalAddressCheckRequest extends AbstractEntity
     }
 
     /**
+     * Set 3rd string
+     *
+     * @pattern N/A
+     *
      * @param string|null $q3
      *
      * @return static
      *
+     * @example N/A
+     *
      * @since 2.0.0 Strict typing
+     *
+     * @see     InternationalAddressCheckRequest::$q3
      */
     public function setQ3(?string $q3): InternationalAddressCheckRequest
     {

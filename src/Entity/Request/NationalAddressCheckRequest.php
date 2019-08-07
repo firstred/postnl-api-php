@@ -30,6 +30,8 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity\Request;
 
 use Firstred\PostNL\Entity\AbstractEntity;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Misc\ValidateAndFix;
 
 /**
  * Class NationalAddressCheckRequest
@@ -37,16 +39,11 @@ use Firstred\PostNL\Entity\AbstractEntity;
 class NationalAddressCheckRequest extends AbstractEntity
 {
     /**
-     * Country
-     *
-     * @var string|null $country
-     *
-     * @since 2.0.0
-     */
-    protected $country;
-
-    /**
      * Street
+     *
+     * @pattern ^.{0,95}$
+     *
+     * @example Siriusdreef
      *
      * @var string|null $street
      *
@@ -57,6 +54,10 @@ class NationalAddressCheckRequest extends AbstractEntity
     /**
      * House number
      *
+     * @pattern ^.{0,35}$
+     *
+     * @example 42
+     *
      * @var string|null $houseNumber
      *
      * @since 2.0.0
@@ -65,6 +66,10 @@ class NationalAddressCheckRequest extends AbstractEntity
 
     /**
      * House number addition
+     *
+     * @pattern ^.{0,35}$
+     *
+     * @example A
      *
      * @var string|null $addition
      *
@@ -101,7 +106,6 @@ class NationalAddressCheckRequest extends AbstractEntity
     /**
      * NationalAddressCheckRequest constructor.
      *
-     * @param string|null $country
      * @param string|null $street
      * @param string|null $houseNumber
      * @param string|null $addition
@@ -110,11 +114,10 @@ class NationalAddressCheckRequest extends AbstractEntity
      *
      * @since 2.0.0
      */
-    public function __construct(?string $country = null, ?string $street = null, ?string $houseNumber = null, ?string $addition = null, ?string $postalCode = null, ?string $city = null)
+    public function __construct(?string $street = null, ?string $houseNumber = null, ?string $addition = null, ?string $postalCode = null, ?string $city = null)
     {
         parent::__construct();
 
-        $this->setCountry($country);
         $this->setStreet($street);
         $this->setHouseNumber($houseNumber);
         $this->setAddition($addition);
@@ -123,33 +126,13 @@ class NationalAddressCheckRequest extends AbstractEntity
     }
 
     /**
+     * Get street
+     *
      * @return string|null
      *
-     * @since 2.0.0 Strict typing
-     */
-    public function getCountry(): ?string
-    {
-        return $this->country;
-    }
-
-    /**
-     * @param string|null $country
+     * @since 2.0.0
      *
-     * @return static
-     *
-     * @since 2.0.0 Strict typing
-     */
-    public function setCountry(?string $country): NationalAddressCheckRequest
-    {
-        $this->country = $country;
-
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     *
-     * @since 2.0.0 Strict typing
+     * @see   NationalAddressCheckRequest::$street
      */
     public function getStreet(): ?string
     {
@@ -157,23 +140,37 @@ class NationalAddressCheckRequest extends AbstractEntity
     }
 
     /**
+     * Set street
+     *
+     * @pattern ^.{0,95}$
+     *
      * @param string|null $street
      *
      * @return static
      *
-     * @since 2.0.0 Strict typing
+     * @throws InvalidArgumentException
+     *
+     * @since   2.0.0
+     *
+     * @example Siriusdreef
+     *
+     * @see     NationalAddressCheckRequest::$street
      */
     public function setStreet(?string $street): NationalAddressCheckRequest
     {
-        $this->street = $street;
+        $this->street = ValidateAndFix::street($street);
 
         return $this;
     }
 
     /**
+     * Get house number
+     *
      * @return string|null
      *
-     * @since 2.0.0 Strict typing
+     * @since 2.0.0
+     *
+     * @see   NationalAddressCheckRequest::$houseNumber
      */
     public function getHouseNumber(): ?string
     {
@@ -181,23 +178,37 @@ class NationalAddressCheckRequest extends AbstractEntity
     }
 
     /**
+     * Set house number
+     *
+     * @pattern ^.{0,35}$
+     *
      * @param string|null $houseNumber
      *
      * @return static
      *
-     * @since 2.0.0 Strict typing
+     * @throws InvalidArgumentException
+     *
+     * @since   2.0.0
+     *
+     * @example 42
+     *
+     * @see     NationalAddressCheckRequest::$houseNumber
      */
     public function setHouseNumber(?string $houseNumber): NationalAddressCheckRequest
     {
-        $this->houseNumber = $houseNumber;
+        $this->houseNumber = ValidateAndFix::houseNumber($houseNumber);
 
         return $this;
     }
 
     /**
+     * Get house number addition
+     *
      * @return string|null
      *
-     * @since 2.0.0 Strict typing
+     * @since 2.0.0
+     *
+     * @see   NationalAddressCheckRequest::$addition
      */
     public function getAddition(): ?string
     {
@@ -205,11 +216,19 @@ class NationalAddressCheckRequest extends AbstractEntity
     }
 
     /**
+     * Set house number addition
+     *
+     * @pattern ^.{0,35}$
+     *
      * @param string|null $addition
      *
      * @return static
      *
-     * @since 2.0.0 Strict typing
+     * @example A
+     *
+     * @since   2.0.0
+     *
+     * @see     NationalAddressCheckRequest::$addition
      */
     public function setAddition(?string $addition): NationalAddressCheckRequest
     {
@@ -219,9 +238,13 @@ class NationalAddressCheckRequest extends AbstractEntity
     }
 
     /**
+     * Get postal code
+     *
      * @return string|null
      *
-     * @since 2.0.0 Strict typing
+     * @since 2.0.0
+     *
+     * @see   NationalAddressCheckRequest::$postalCode
      */
     public function getPostalCode(): ?string
     {
@@ -229,23 +252,37 @@ class NationalAddressCheckRequest extends AbstractEntity
     }
 
     /**
+     * Set postal code
+     *
+     * @pattern ^.{0,10}$
+     *
      * @param string|null $postalCode
      *
      * @return static
      *
-     * @since 2.0.0 Strict typing
+     * @throws InvalidArgumentException
+     *
+     * @example 2132WT
+     *
+     * @see     NationalAddressCheckRequest::$postalCode
+     *
+     * @since   2.0.0
      */
     public function setPostalCode(?string $postalCode): NationalAddressCheckRequest
     {
-        $this->postalCode = $postalCode;
+        $this->postalCode = ValidateAndFix::postcode($postalCode);
 
         return $this;
     }
 
     /**
+     * Get city
+     *
      * @return string|null
      *
-     * @since 2.0.0 Strict typing
+     * @since 2.0.0
+     *
+     * @see   NationalAddressCheckRequest::$city
      */
     public function getCity(): ?string
     {
@@ -253,15 +290,25 @@ class NationalAddressCheckRequest extends AbstractEntity
     }
 
     /**
+     * Set city
+     *
+     * @pattern ^.{0,35}$
+     *
      * @param string|null $city
      *
      * @return static
      *
-     * @since 2.0.0 Strict typing
+     * @throws InvalidArgumentException
+     *
+     * @since   2.0.0
+     *
+     * @example Hoofddorp
+     *
+     * @see     NationalAddressCheckRequest::$city
      */
     public function setCity(?string $city): NationalAddressCheckRequest
     {
-        $this->city = $city;
+        $this->city = ValidateAndFix::city($city);
 
         return $this;
     }

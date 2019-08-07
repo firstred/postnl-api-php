@@ -30,6 +30,7 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity\Response;
 
 use Firstred\PostNL\Entity\ReasonNoTimeframes;
+use Firstred\PostNL\Entity\Timeframe;
 use Firstred\PostNL\Entity\Timeframes;
 
 /**
@@ -124,6 +125,9 @@ class CalculateTimeframesResponse extends AbstractResponse
      * @return ReasonNoTimeframes|null
      *
      * @since 2.0.0
+     *
+     * @see ReasonNoTimeframe
+     * @see ReasonNoTimeframes
      */
     public function getReasonNoTimeframes(): ?ReasonNoTimeframes
     {
@@ -142,6 +146,9 @@ class CalculateTimeframesResponse extends AbstractResponse
      * @return static
      *
      * @since 2.0.0
+     *
+     * @see ReasonNoTimeframe
+     * @see ReasonNoTimeframes
      */
     public function setReasonNoTimeframes(?ReasonNoTimeframes $reasonNoTimeframes): CalculateTimeframesResponse
     {
@@ -156,6 +163,9 @@ class CalculateTimeframesResponse extends AbstractResponse
      * @return Timeframes|null
      *
      * @since 2.0.0
+     *
+     * @see Timeframe
+     * @see Timeframes
      */
     public function getTimeframes(): ?Timeframes
     {
@@ -174,6 +184,9 @@ class CalculateTimeframesResponse extends AbstractResponse
      * @return static
      *
      * @since 2.0.0
+     *
+     * @see Timeframe
+     * @see Timeframes
      */
     public function setTimeframes(?Timeframes $timeframes): CalculateTimeframesResponse
     {

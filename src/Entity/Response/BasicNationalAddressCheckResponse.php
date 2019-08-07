@@ -31,6 +31,7 @@ namespace Firstred\PostNL\Entity\Response;
 
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Misc\ValidateAndFix;
 
 /**
  * Class BasicNationalAddressCheckResponse
@@ -59,6 +60,8 @@ class BasicNationalAddressCheckResponse extends AbstractEntity
      * @example Prinses Beatrixlaan
      *
      * @var string|null $streetName
+     *
+     * @since   2.0.0
      */
     protected $streetName;
 
@@ -124,7 +127,7 @@ class BasicNationalAddressCheckResponse extends AbstractEntity
      * @param string|null $areaCode
      * @param int|null    $status
      *
-     * @since 2.0.0 Strict typing
+     * @since 2.0.0
      * @since 1.0.0
      */
     public function __construct(?string $streetName = null, ?string $city = null, ?string $houseNumber = null, ?string $postalCode = null, ?string $areaCode = null, ?int $status = null)
@@ -189,9 +192,13 @@ class BasicNationalAddressCheckResponse extends AbstractEntity
     }
 
     /**
+     * Get status
+     *
      * @return int|null
      *
-     * @since 2.0.0 Strict typing
+     * @since 2.0.0
+     *
+     * @see   BasicNationalAddressCheckResponse::$status
      */
     public function getStatus(): ?int
     {
@@ -199,11 +206,19 @@ class BasicNationalAddressCheckResponse extends AbstractEntity
     }
 
     /**
+     * Set status
+     *
+     * @pattern ^(?:0|1)$
+     *
      * @param int|null $status
      *
      * @return static
      *
-     * @since 2.0.0 Strict typing
+     * @example 1
+     *
+     * @since   2.0.0
+     *
+     * @see     BasicNationalAddressCheckResponse::$status
      */
     public function setStatus(?int $status): BasicNationalAddressCheckResponse
     {
@@ -213,9 +228,13 @@ class BasicNationalAddressCheckResponse extends AbstractEntity
     }
 
     /**
+     * Get street name
+     *
      * @return string|null
      *
-     * @since 2.0.0 Strict typing
+     * @since 2.0.0
+     *
+     * @see   BasicNationalAddressCheckResponse::$streetName
      */
     public function getStreetName(): ?string
     {
@@ -223,23 +242,39 @@ class BasicNationalAddressCheckResponse extends AbstractEntity
     }
 
     /**
+     * Set street name
+     *
+     * @pattern ^.{0,95}$
+     *
      * @param string|null $streetName
      *
      * @return static
      *
-     * @since 2.0.0 Strict typing
+     * @throws InvalidArgumentException
+     *
+     * @example Prinses Beatrixlaan
+     *
+     * @since   2.0.0
+     *
+     * @see     BasicNationalAddressCheckResponse::$streetName
+     *
+     *
      */
     public function setStreetName(?string $streetName): BasicNationalAddressCheckResponse
     {
-        $this->streetName = $streetName;
+        $this->streetName = ValidateAndFix::street($streetName);
 
         return $this;
     }
 
     /**
+     * Get house number
+     *
      * @return string|null
      *
-     * @since 2.0.0 Strict typing
+     * @since 2.0.0
+     *
+     * @see   BasicNationalAddressCheckResponse::$houseNumber
      */
     public function getHouseNumber(): ?string
     {
@@ -247,23 +282,37 @@ class BasicNationalAddressCheckResponse extends AbstractEntity
     }
 
     /**
+     * Set house number
+     *
+     * @pattern ^.{0,35}$
+     *
      * @param string|null $houseNumber
      *
      * @return static
      *
-     * @since 2.0.0 Strict typing
+     * @throws InvalidArgumentException
+     *
+     * @example 23
+     *
+     * @since   2.0.0
+     *
+     * @see     BasicNationalAddressCheckResponse::$houseNumber
      */
     public function setHouseNumber(?string $houseNumber): BasicNationalAddressCheckResponse
     {
-        $this->houseNumber = $houseNumber;
+        $this->houseNumber = ValidateAndFix::houseNumber($houseNumber);
 
         return $this;
     }
 
     /**
+     * Get postal code
+     *
      * @return string|null
      *
-     * @since 2.0.0 Strict typing
+     * @since 2.0.0
+     *
+     * @see   BasicNationalAddressCheckResponse::$postalCode
      */
     public function getPostalCode(): ?string
     {
@@ -271,23 +320,37 @@ class BasicNationalAddressCheckResponse extends AbstractEntity
     }
 
     /**
+     * Set postal code
+     *
+     * @pattern ^.{0,10}$
+     *
      * @param string|null $postalCode
      *
      * @return static
      *
-     * @since 2.0.0 Strict typing
+     * @throws InvalidArgumentException
+     *
+     * @example 2595AK
+     *
+     * @see     BasicNationalAddressCheckResponse::$postalCode
+     *
+     * @since   2.0.0
      */
     public function setPostalCode(?string $postalCode): BasicNationalAddressCheckResponse
     {
-        $this->postalCode = $postalCode;
+        $this->postalCode = ValidateAndFix::postcode($postalCode);
 
         return $this;
     }
 
     /**
+     * Get city
+     *
      * @return string|null
      *
-     * @since 2.0.0 Strict typing
+     * @since 2.0.0
+     *
+     * @see   BasicNationalAddressCheckResponse::$city
      */
     public function getCity(): ?string
     {
@@ -295,23 +358,37 @@ class BasicNationalAddressCheckResponse extends AbstractEntity
     }
 
     /**
+     * Set city
+     *
+     * @pattern {0,35}$
+     *
      * @param string|null $city
      *
      * @return static
      *
-     * @since 2.0.0 Strict typing
+     * @throws InvalidArgumentException
+     *
+     * @since   2.0.0
+     *
+     * @example Hoofddorp
+     *
+     * @see     BasicNationalAddressCheckResponse::$city
      */
     public function setCity(?string $city): BasicNationalAddressCheckResponse
     {
-        $this->city = $city;
+        $this->city = ValidateAndFix::city($city);
 
         return $this;
     }
 
     /**
+     * Get telephone area code
+     *
      * @return string|null
      *
-     * @since 2.0.0 Strict typing
+     * @since 2.0.0
+     *
+     * @see   BasicNationalAddressCheckResponse::$areaCode
      */
     public function getAreaCode(): ?string
     {
@@ -319,11 +396,19 @@ class BasicNationalAddressCheckResponse extends AbstractEntity
     }
 
     /**
+     * Set telephone area code
+     *
+     * @pattern {0,35}$
+     *
      * @param string|null $areaCode
      *
      * @return static
      *
-     * @since 2.0.0 Strict typing
+     * @example 070
+     *
+     * @since   2.0.0
+     *
+     * @see     BasicNationalAddressCheckResponse::$areaCode
      */
     public function setAreaCode(?string $areaCode): BasicNationalAddressCheckResponse
     {

@@ -35,6 +35,12 @@ namespace Firstred\PostNL\Entity\Response;
 class ConfirmShipmentResponse extends AbstractResponse
 {
     /**
+     * Barcode
+     *
+     * @pattern ^.{1,35}$
+     *
+     * @example 3SDEVC2016112104
+     *
      * @var string|null $barcode
      *
      * @since 1.0.0
@@ -74,13 +80,13 @@ class ConfirmShipmentResponse extends AbstractResponse
     /**
      * Set barcode
      *
-     * @pattern N/A
+     * @pattern ^.{1,35}$
      *
      * @param string|null $barcode
      *
      * @return static
      *
-     * @example N/A
+     * @example 3SDEVC2016112104
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing

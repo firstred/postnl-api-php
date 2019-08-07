@@ -54,6 +54,10 @@ class BasicNationalAddressCheckRequest extends AbstractEntity
     /**
      * House number
      *
+     * @pattern {0,35}$
+     *
+     * @example 42
+     *
      * @var string|null $houseNumber
      *
      * @since 2.0.0

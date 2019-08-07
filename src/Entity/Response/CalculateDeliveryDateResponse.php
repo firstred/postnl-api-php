@@ -35,6 +35,12 @@ namespace Firstred\PostNL\Entity\Response;
 class CalculateDeliveryDateResponse extends AbstractResponse
 {
     /**
+     * Delivery date
+     *
+     * @pattern ^(([0-3]\d-[0-1]\d-[1-2]\d{3})|([1-2]\d{3}-[0-1]\d-[0-3]\d))$
+     *
+     * @example 02-01-2019
+     *
      * @var string|null $deliveryDate
      *
      * @since 1.0.0
@@ -42,6 +48,12 @@ class CalculateDeliveryDateResponse extends AbstractResponse
     protected $deliveryDate;
 
     /**
+     * Options
+     *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @var string[]|null $options
      *
      * @since 1.0.0
@@ -72,6 +84,8 @@ class CalculateDeliveryDateResponse extends AbstractResponse
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   CalculateDeliveryDateResponse::$deliveryDate
      */
     public function getDeliveryDate(): ?string
     {
@@ -81,12 +95,18 @@ class CalculateDeliveryDateResponse extends AbstractResponse
     /**
      * Set delivery date
      *
+     * @pattern ^(([0-3]\d-[0-1]\d-[1-2]\d{3})|([1-2]\d{3}-[0-1]\d-[0-3]\d))$
+     *
+     * @example 02-01-2019
+     *
      * @param string|null $deliveryDate
      *
      * @return static
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   CalculateDeliveryDateResponse::$deliveryDate
      */
     public function setDeliveryDate(?string $deliveryDate): CalculateDeliveryDateResponse
     {
@@ -102,6 +122,8 @@ class CalculateDeliveryDateResponse extends AbstractResponse
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   CalculateDeliveryDateResponse::$options
      */
     public function getOptions(): ?array
     {
@@ -111,12 +133,18 @@ class CalculateDeliveryDateResponse extends AbstractResponse
     /**
      * Set options
      *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @param string[]|null $options
      *
      * @return static
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   CalculateDeliveryDateResponse::$options
      */
     public function setOptions(?array $options): CalculateDeliveryDateResponse
     {

@@ -50,6 +50,12 @@ class FindNearestLocationsResponse extends AbstractResponse implements Iterator,
     private $index = 0;
 
     /**
+     * Locations
+     *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @var Location[] $locations
      *
      * @since 1.0.0
@@ -127,12 +133,14 @@ class FindNearestLocationsResponse extends AbstractResponse implements Iterator,
     }
 
     /**
-     * Get GetLocationsResult
+     * Get locations
      *
      * @return Location[]|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see Location
      */
     public function getLocations(): array
     {
@@ -140,7 +148,11 @@ class FindNearestLocationsResponse extends AbstractResponse implements Iterator,
     }
 
     /**
-     * Set GetLocationsResult
+     * Set locations
+     *
+     * @pattern N/A
+     *
+     * @example N/A
      *
      * @param Location[]|null $responseLocations
      *
@@ -150,6 +162,8 @@ class FindNearestLocationsResponse extends AbstractResponse implements Iterator,
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see Location
      */
     public function setLocations(?array $responseLocations = null): FindNearestLocationsResponse
     {

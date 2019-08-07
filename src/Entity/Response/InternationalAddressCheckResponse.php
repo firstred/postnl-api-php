@@ -29,7 +29,6 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity\Response;
 
-use Firstred\PostNL\Entity\Location;
 use Firstred\PostNL\Entity\ValidatedAddress;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 
@@ -48,6 +47,12 @@ class InternationalAddressCheckResponse extends AbstractResponse
     private $index = 0;
 
     /**
+     * Validated addresses
+     *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @var ValidatedAddress[] $addresses
      *
      * @since 1.0.0
@@ -81,19 +86,7 @@ class InternationalAddressCheckResponse extends AbstractResponse
      */
     public function jsonSerialize(): array
     {
-        $json = [
-            'GetLocationsResult' => [
-                'ResponseLocation' => $this->addresses,
-            ],
-        ];
-        if (!empty($this->warnings)) {
-            $json['Warnings'] = $this->warnings;
-        }
-        if (!empty($this->errors)) {
-            $json['Errors'] = $this->errors;
-        }
-
-        return $json;
+        return $this->addresses;
     }
 
     /**
@@ -125,12 +118,14 @@ class InternationalAddressCheckResponse extends AbstractResponse
     }
 
     /**
-     * Get GetLocationsResult
+     * Get addresses
      *
-     * @return Location[]|null
+     * @return ValidatedAddress[]|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see ValidatedAddress
      */
     public function getAddresses(): array
     {
@@ -138,24 +133,30 @@ class InternationalAddressCheckResponse extends AbstractResponse
     }
 
     /**
-     * Set GetLocationsResult
+     * Set validated addresses
      *
-     * @param Location[]|null $responseLocations
+     * @pattern N/A
+     *
+     * @param ValidatedAddress[]|null $addresses
      *
      * @return static
      *
      * @throws InvalidArgumentException
      *
+     * @example N/A
+     *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see ValidatedAddress
      */
-    public function setAddresses(?array $responseLocations = null): FindNearestLocationsResponse
+    public function setAddresses(?array $addresses = null): InternationalAddressCheckResponse
     {
-        if (!empty($responseLocations) && !array_values($responseLocations)[0] instanceof Location) {
-            throw new InvalidArgumentException(sprintf("%s::%s - Invalid Location array given", __CLASS__, __METHOD__));
+        if (!empty($addresses) && !array_values($addresses)[0] instanceof ValidatedAddress) {
+            throw new InvalidArgumentException(sprintf("%s::%s - Invalid ValidatedAddress array given", __CLASS__, __METHOD__));
         }
 
-        $this->addresses = $responseLocations;
+        $this->addresses = $addresses;
 
         return $this;
     }
@@ -165,11 +166,11 @@ class InternationalAddressCheckResponse extends AbstractResponse
      *
      * @link  https://php.net/manual/en/iterator.current.php
      *
-     * @return Location
+     * @return ValidatedAddress
      *
      * @since 2.0.0
      */
-    public function current(): Location
+    public function current(): ValidatedAddress
     {
         return $this->addresses[$this->index];
     }

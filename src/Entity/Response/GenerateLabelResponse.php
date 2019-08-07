@@ -39,6 +39,12 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
 class GenerateLabelResponse extends AbstractResponse
 {
     /**
+     * Merged labels
+     *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @var MergedLabel[] $mergedLabels
      *
      * @since 1.0.0
@@ -46,6 +52,12 @@ class GenerateLabelResponse extends AbstractResponse
     protected $mergedLabels = [];
 
     /**
+     * Shipments
+     *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @var Shipment[] $responseShipments
      *
      * @since 1.0.0
@@ -76,6 +88,8 @@ class GenerateLabelResponse extends AbstractResponse
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see MergedLabel
      */
     public function getMergedlabels(): array
     {

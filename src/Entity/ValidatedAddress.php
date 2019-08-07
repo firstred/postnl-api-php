@@ -168,6 +168,12 @@ class ValidatedAddress extends AbstractEntity
     protected $formattedAddress;
 
     /**
+     * Geocode
+     *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @var Geocode|null $geocode
      *
      * @since 2.0.0
@@ -219,11 +225,15 @@ class ValidatedAddress extends AbstractEntity
     /**
      * Set postal code
      *
+     * @pattern ^.{0,10}$
+     *
      * @param string|null $postalCode
      *
      * @return static
      *
      * @throws InvalidArgumentException
+     *
+     * @example 3123WT
      *
      * @since 2.0.0
      *
@@ -253,11 +263,15 @@ class ValidatedAddress extends AbstractEntity
     /**
      * Set city
      *
+     * @pattern ^.{0,35}$
+     *
      * @param string|null $city
      *
      * @return static
      *
      * @throws InvalidArgumentException
+     *
+     * @example Hoofddorp
      *
      * @since 2.0.0
      *
@@ -285,11 +299,17 @@ class ValidatedAddress extends AbstractEntity
     }
 
     /**
+     * Set street
+     *
+     * @pattern ^.{0,95}$
+     *
      * @param string|null $street
      *
      * @return static
      *
      * @throws InvalidArgumentException
+     *
+     * @example Siriusdreef
      *
      * @see   ValidatedAddress::$street
      *
@@ -319,9 +339,13 @@ class ValidatedAddress extends AbstractEntity
     /**
      * Set house number
      *
+     * @pattern ^.{0,35}$
+     *
      * @param string|null $houseNumber
      *
      * @return static
+     *
+     * @example 42
      *
      * @since 2.0.0
      *
@@ -389,9 +413,13 @@ class ValidatedAddress extends AbstractEntity
     /**
      * Set formatted address
      *
+     * @pattern N/A
+     *
      * @param string[]|null $formattedAddress
      *
      * @return static
+     *
+     * @example N/A
      *
      * @since 2.0.0
      *

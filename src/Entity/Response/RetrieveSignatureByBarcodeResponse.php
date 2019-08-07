@@ -37,6 +37,12 @@ use Firstred\PostNL\Entity\Signature;
 class RetrieveSignatureByBarcodeResponse extends AbstractResponse
 {
     /**
+     * Signature
+     *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @var Signature|null $signature
      *
      * @since 1.0.0
@@ -65,6 +71,8 @@ class RetrieveSignatureByBarcodeResponse extends AbstractResponse
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see Signature
      */
     public function getSignature(): ?Signature
     {
@@ -74,12 +82,18 @@ class RetrieveSignatureByBarcodeResponse extends AbstractResponse
     /**
      * Set signature
      *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @param Signature|null $signature
      *
      * @return static
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see Signature
      */
     public function setSignature(?Signature $signature): RetrieveSignatureByBarcodeResponse
     {

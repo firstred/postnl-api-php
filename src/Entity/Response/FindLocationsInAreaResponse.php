@@ -50,6 +50,12 @@ class FindLocationsInAreaResponse extends AbstractResponse implements Iterator, 
     private $index = 0;
 
     /**
+     * Locations
+     *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @var Location[] $locations
      *
      * @since 1.0.0
@@ -133,6 +139,8 @@ class FindLocationsInAreaResponse extends AbstractResponse implements Iterator, 
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see Location
      */
     public function getLocations(): array
     {
@@ -142,6 +150,10 @@ class FindLocationsInAreaResponse extends AbstractResponse implements Iterator, 
     /**
      * Set GetLocationsResult
      *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @param Location[]|null $responseLocations
      *
      * @return static
@@ -150,6 +162,8 @@ class FindLocationsInAreaResponse extends AbstractResponse implements Iterator, 
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see Location
      */
     public function setLocations(?array $responseLocations = null): FindLocationsInAreaResponse
     {

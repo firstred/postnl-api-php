@@ -35,6 +35,12 @@ namespace Firstred\PostNL\Entity\Response;
 class CalculateShippingDateResponse extends AbstractResponse
 {
     /**
+     * Sent date
+     *
+     * @pattern ^(([0-3]\d-[0-1]\d-[1-2]\d{3})|([1-2]\d{3}-[0-1]\d-[0-3]\d))$
+     *
+     * @example 31-07-2019
+     *
      * @var string|null $sentDate
      *
      * @since 1.0.0
@@ -42,27 +48,18 @@ class CalculateShippingDateResponse extends AbstractResponse
     protected $sentDate;
 
     /**
-     * @var string[]|null $options
-     *
-     * @since 1.0.0
-     */
-    protected $options;
-
-    /**
      * GetSentDateResponse constructor.
      *
-     * @param string|null   $date
-     * @param string[]|null $options
+     * @param string|null $sentDate
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function __construct($date = null, array $options = null)
+    public function __construct(?string $sentDate = null)
     {
         parent::__construct();
 
-        $this->setSentDate($date);
-        $this->setOptions($options);
+        $this->setSentDate($sentDate);
     }
 
     /**
@@ -72,6 +69,8 @@ class CalculateShippingDateResponse extends AbstractResponse
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   CalculateShippingDateResponse::$sentDate
      */
     public function getSentDate(): ?string
     {
@@ -81,46 +80,22 @@ class CalculateShippingDateResponse extends AbstractResponse
     /**
      * Set sent date
      *
+     * @pattern ^(([0-3]\d-[0-1]\d-[1-2]\d{3})|([1-2]\d{3}-[0-1]\d-[0-3]\d))$
+     *
      * @param string|null $sentDate
      *
      * @return static
      *
+     * @example 31-12-2018
+     *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see     CalculateShippingDateResponse::$sentDate
      */
     public function setSentDate(?string $sentDate): CalculateShippingDateResponse
     {
         $this->sentDate = $sentDate;
-
-        return $this;
-    }
-
-    /**
-     * Get options
-     *
-     * @return string[]|null
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function getOptions(): ?array
-    {
-        return $this->options;
-    }
-
-    /**
-     * Set options
-     *
-     * @param string[]|null $options
-     *
-     * @return static
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function setOptions(?array $options): CalculateShippingDateResponse
-    {
-        $this->options = $options;
 
         return $this;
     }

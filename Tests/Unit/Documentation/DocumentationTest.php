@@ -29,7 +29,6 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Tests\Unit\Entity;
 
-use Firstred\PostNL\Entity\AbstractEntity;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionException;
@@ -42,7 +41,7 @@ use ReflectionProperty;
 class DocumentationTest extends TestCase
 {
     /**
-     * @testdox Has an @see documentation block
+     * @testdox have an @see documentation block
      *
      * @throws ReflectionException
      */
@@ -66,7 +65,7 @@ class DocumentationTest extends TestCase
     }
 
     /**
-     * @testdox Has an @pattern documentation block
+     * @testdox have an @pattern documentation block
      *
      * @throws ReflectionException
      */
@@ -99,7 +98,7 @@ class DocumentationTest extends TestCase
     }
 
     /**
-     * @testdox Has at least one @since documentation block
+     * @testdox have at least one @since documentation block
      *
      * @throws ReflectionException
      */
@@ -132,7 +131,7 @@ class DocumentationTest extends TestCase
     }
 
     /**
-     * @testdox Has an @example documentation block
+     * @testdox have an @example documentation block
      *
      * @throws ReflectionException
      */
@@ -191,16 +190,16 @@ class DocumentationTest extends TestCase
             $entityNames[] = $entityName;
         }
 
-//        foreach (scandir(__DIR__.'/../../../src/Entity/Response') as $entityName) {
-//            if (in_array($entityName, ['.', '..']) || is_dir(__DIR__."/../../src/Entity/Response/$entityName")) {
-//                continue;
-//            }
-//
-//            $entityName = substr($entityName, 0, strlen($entityName) - 4);
-//            $entityName = "\\Firstred\\PostNL\\Entity\\Response\\$entityName";
-//
-//            $entityNames[] = $entityName;
-//        }
+        foreach (scandir(__DIR__.'/../../../src/Entity/Response') as $entityName) {
+            if (in_array($entityName, ['.', '..']) || is_dir(__DIR__."/../../src/Entity/Response/$entityName")) {
+                continue;
+            }
+
+            $entityName = substr($entityName, 0, strlen($entityName) - 4);
+            $entityName = "\\Firstred\\PostNL\\Entity\\Response\\$entityName";
+
+            $entityNames[] = $entityName;
+        }
 
         return $entityNames;
     }

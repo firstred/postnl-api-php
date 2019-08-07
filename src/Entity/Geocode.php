@@ -29,6 +29,9 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Misc\ValidateAndFix;
+
 /**
  * Class Geocode
  */
@@ -36,6 +39,10 @@ class Geocode extends AbstractEntity
 {
     /**
      * Latitude
+     *
+     * @pattern ^\d{1,2}\.\d{1,15}$
+     *
+     * @example 52.156439
      *
      * @var float|null $latitude
      *
@@ -46,6 +53,10 @@ class Geocode extends AbstractEntity
     /**
      * Longitude
      *
+     * @pattern ^\d{1,2}\.\d{1,15}$
+     *
+     * @example 52.156439
+     *
      * @var float|null $longitude
      *
      * @since 2.0.0
@@ -55,6 +66,10 @@ class Geocode extends AbstractEntity
     /**
      * Rijksdriehoek X coordinate
      *
+     * @pattern ^\d{1,10}\.\d{1,15}$
+     *
+     * @example 199735.12
+     *
      * @var float|null $rdxCoordinate
      *
      * @since 2.0.0
@@ -63,6 +78,10 @@ class Geocode extends AbstractEntity
 
     /**
      * Rijksdriehoek Y coordinate
+     *
+     * @pattern ^\d{1,10}\.\d{1,15}$
+     *
+     * @example 199735.12
      *
      * @var float|null $rdyCoordinate
      *
@@ -81,9 +100,13 @@ class Geocode extends AbstractEntity
     }
 
     /**
+     * Get latitude
+     *
      * @return float|null
      *
-     * @since 2.0.0 Strict typing
+     * @since 2.0.0
+     *
+     * @see   Geocode::$latitude
      */
     public function getLatitude(): ?float
     {
@@ -91,23 +114,37 @@ class Geocode extends AbstractEntity
     }
 
     /**
-     * @param float|null $latitude
+     * Set latitude
+     *
+     * @pattern ^\d{1,2}\.\d{1,15}$
+     *
+     * @param float|string|null $latitude
      *
      * @return static
      *
-     * @since 2.0.0 Strict typing
+     * @throws InvalidArgumentException
+     *
+     * @example 52.156439
+     *
+     * @since   2.0.0
+     *
+     * @see     Geocode::$latitude
      */
-    public function setLatitude(?float $latitude): Geocode
+    public function setLatitude($latitude): Geocode
     {
-        $this->latitude = $latitude;
+        $this->latitude = ValidateAndFix::float($latitude);
 
         return $this;
     }
 
     /**
+     * Get longitude
+     *
      * @return float|null
      *
-     * @since 2.0.0 Strict typing
+     * @since 2.0.0
+     *
+     * @see   Geocode::$longitude
      */
     public function getLongitude(): ?float
     {
@@ -115,11 +152,19 @@ class Geocode extends AbstractEntity
     }
 
     /**
+     * Set longitude
+     *
+     * @pattern ^\d{1,2}\.\d{1,15}$
+     *
      * @param float|null $longitude
      *
      * @return static
      *
-     * @since 2.0.0 Strict typing
+     * @example 52.156439
+     *
+     * @since   2.0.0
+     *
+     * @see     Geocode::$longitude
      */
     public function setLongitude(?float $longitude): Geocode
     {
@@ -129,9 +174,13 @@ class Geocode extends AbstractEntity
     }
 
     /**
+     * Get Rijksdriehoek X-coordinate
+     *
      * @return float|null
      *
-     * @since 2.0.0 Strict typing
+     * @since 2.0.0
+     *
+     * @see   Geocode::$rdxCoordinate
      */
     public function getRdxCoordinate(): ?float
     {
@@ -139,11 +188,19 @@ class Geocode extends AbstractEntity
     }
 
     /**
+     * Set Rijksdriehoek X-coordinate
+     *
+     * @pattern ^\d{1,10}\.\d{1,15}$
+     *
      * @param float|null $rdxCoordinate
      *
      * @return static
      *
-     * @since 2.0.0 Strict typing
+     * @example 199735.12
+     *
+     * @since   2.0.0
+     *
+     * @see     Geocode::$rdxCoordinate
      */
     public function setRdxCoordinate(?float $rdxCoordinate): Geocode
     {
@@ -153,9 +210,13 @@ class Geocode extends AbstractEntity
     }
 
     /**
+     * Get Rijksdriehoek Y-coordinate
+     *
      * @return float|null
      *
-     * @since 2.0.0 Strict typing
+     * @since 2.0.0
+     *
+     * @see   Geocode::$rdyCoordinate
      */
     public function getRdyCoordinate(): ?float
     {
@@ -163,11 +224,19 @@ class Geocode extends AbstractEntity
     }
 
     /**
+     * Set Rijksdriehoek Y-coordinate
+     *
+     * @pattern ^\d{1,10}\.\d{1,15}$
+     *
      * @param float|null $rdyCoordinate
      *
      * @return static
      *
-     * @since 2.0.0 Strict typing
+     * @example 199735.12
+     *
+     * @since   2.0.0
+     *
+     * @see     Geocode::$rdyCoordinate
      */
     public function setRdyCoordinate(?float $rdyCoordinate): Geocode
     {

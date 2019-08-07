@@ -43,6 +43,10 @@ abstract class AbstractResponse extends AbstractEntity
     /**
      * Warnings
      *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @var Warning[] $warnings
      *
      * @since 2.0.0
@@ -51,6 +55,10 @@ abstract class AbstractResponse extends AbstractEntity
 
     /**
      * Errors
+     *
+     * @pattern N/A
+     *
+     * @example N/A
      *
      * @var Error[] $errors
      *
@@ -92,6 +100,10 @@ abstract class AbstractResponse extends AbstractEntity
 
     /**
      * Set warnings
+     *
+     * @pattern N/A
+     *
+     * @example N/A
      *
      * @param array $warnings
      *
@@ -142,6 +154,10 @@ abstract class AbstractResponse extends AbstractEntity
 
     /**
      * Set errors
+     *
+     * @pattern N/A
+     *
+     * @example N/A
      *
      * @param array $errors
      *
