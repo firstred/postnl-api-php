@@ -33,6 +33,8 @@ use Firstred\PostNL\Entity\Request\RetrieveShipmentByBarcodeRequest;
 use Firstred\PostNL\Entity\Request\RetrieveShipmentByKgidRequest;
 use Firstred\PostNL\Entity\Request\RetrieveShipmentByReferenceRequest;
 use Firstred\PostNL\Entity\Request\RetrieveSignatureByBarcodeRequest;
+use Firstred\PostNL\Entity\Request\RetrieveUpdatedShipmentsRequest;
+use Firstred\PostNL\Entity\Response\RetrieveUpdatedShipmentsResponse;
 use Firstred\PostNL\Entity\Shipment;
 use Firstred\PostNL\Entity\Signature;
 use Firstred\PostNL\Exception\CifDownException;
@@ -147,7 +149,6 @@ class ShippingStatusService extends AbstractService
             ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint
         )
             ->withHeader('Accept', 'application/json')
-            ->withHeader('Content-Type', 'application/json;charset=UTF-8')
             ->withHeader('apikey', $this->postnl->getApiKey())
         ;
     }
@@ -183,20 +184,101 @@ class ShippingStatusService extends AbstractService
         throw new CifDownException('Unable to process retrieve shipment response', 0, null, null, $response);
     }
 
+    /**
+     * Retrieve updated shipments
+     *
+     * @param RetrieveUpdatedShipmentsRequest $updatedShipmentsRequest
+     *
+     * @return RetrieveUpdatedShipmentsResponse
+     *
+     * @throws HttpClientException
+     * @throws CifDownException
+     * @throws CifErrorException
+     * @throws InvalidArgumentException
+     *
+     * @since 2.0.0
+     */
+    public function retrieveUpdatedShipments(RetrieveUpdatedShipmentsRequest $updatedShipmentsRequest): RetrieveUpdatedShipmentsResponse
+    {
+        $item = $this->retrieveCachedItem($updatedShipmentsRequest->getId());
+        $response = null;
+        if ($item instanceof CacheItemInterface) {
+            $response = $item->get();
+            try {
+                $response = Message::parseResponse($response);
+            } catch (TypeError $e) {
+            }
+        }
+        if (!$response instanceof ResponseInterface) {
+            $request = $this->buildRetrieveUpdatedShipmentsRequest($updatedShipmentsRequest);
+            $response = Client::getInstance()->doRequest($request);
+            static::validateResponse($response);
+        }
+
+        $object = $this->processRetrieveUpdatedShipmentsResponse($response);
+        if ($item instanceof CacheItemInterface
+            && $response instanceof ResponseInterface
+            && $response->getStatusCode() === 200
+        ) {
+            $item->set(Message::str($response));
+            $this->cacheItem($item);
+        }
+
+        return $object;
+    }
 
     /**
-     * Gets the complete status
+     * Build the RetrieveUpdatedShipmentsRequest request for the REST API
      *
-     * This is a combi-function, supporting the following:
-     * - CurrentStatus (by barcode):
-     *   - Fill the Shipment->Barcode property. Leave the rest empty.
-     * - CurrentStatusByReference:
-     *   - Fill the Shipment->Reference property. Leave the rest empty.
-     * - CurrentStatusByPhase:
-     *   - Fill the Shipment->PhaseCode property, do not pass Barcode or Reference.
-     *     Optionally add DateFrom and/or DateTo.
-     * - CurrentStatusByStatus:
-     *   - Fill the Shipment->StatuCode property. Leave the rest empty.
+     * @param RetrieveUpdatedShipmentsRequest $shipmentRequest
+     *
+     * @return RequestInterface
+     *
+     * @since 2.0.0
+     */
+    public function buildRetrieveUpdatedShipmentsRequest(RetrieveUpdatedShipmentsRequest $shipmentRequest): RequestInterface
+    {
+        $customerNumber = $this->postnl->getCustomer()->getCustomerNumber();
+        $endpoint = "/$customerNumber/updatedshipments";
+        if ($shipmentRequest->getStartDate() && $shipmentRequest->getEndDate()) {
+            $endpoint .= "?period={$shipmentRequest->getStartDate()}&period={$shipmentRequest->getEndDate()}";
+        }
+
+        $factory = Psr17FactoryDiscovery::findRequestFactory();
+
+        return $factory->createRequest(
+            'GET',
+            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint
+        )
+            ->withHeader('Accept', 'application/json')
+            ->withHeader('apikey', $this->postnl->getApiKey())
+            ;
+    }
+
+    /**
+     * Process RetrieveUpdatedShipments Response REST
+     *
+     * @param ResponseInterface $response
+     *
+     * @return RetrieveUpdatedShipmentsResponse
+     *
+     * @throws InvalidArgumentException
+     * @throws CifDownException
+     *
+     * @since 2.0.0
+     */
+    public function processRetrieveUpdatedShipmentsResponse(ResponseInterface $response): RetrieveUpdatedShipmentsResponse
+    {
+        $body = json_decode((string) $response->getBody(), true);
+        if (isset($body[0]['Barcode'])) {
+            return RetrieveUpdatedShipmentsResponse::jsonDeserialize(['RetrieveUpdatedShipmentsResponse' => $body]);
+        }
+
+        throw new CifDownException('Unable to process retrieve updated shipments response', 0, null, null, $response);
+    }
+
+    /**
+     * Retrieve the signature
      *
      * @param RetrieveSignatureByBarcodeRequest $getSignature
      *

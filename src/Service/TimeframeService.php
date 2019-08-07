@@ -33,6 +33,7 @@ use Firstred\PostNL\Entity\Request\CalculateTimeframesRequest;
 use Firstred\PostNL\Entity\Response\CalculateTimeframesResponse;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifErrorException;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Http\Client;
 use Firstred\PostNL\Misc\Message;
 use Http\Client\Exception as HttpClientException;
@@ -151,7 +152,6 @@ class TimeframeService extends AbstractService
             ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint
         );
         $request = $request->withHeader('Accept', 'application/json');
-        $request = $request->withHeader('Content-Type', 'application/json;charset=UTF-8');
         $request = $request->withHeader('apikey', $this->postnl->getApiKey());
 
         return $request;
@@ -164,8 +164,10 @@ class TimeframeService extends AbstractService
      *
      * @return CalculateTimeframesResponse
      *
-     * @since 1.0.0
+     * @throws InvalidArgumentException
+     *
      * @since 2.0.0 Strict typing
+     * @since 1.0.0
      */
     public function processGetTimeframesResponse(ResponseInterface $response): CalculateTimeframesResponse
     {
