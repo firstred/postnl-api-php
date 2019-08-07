@@ -127,8 +127,10 @@ class BasicNationalAddressCheckResponse extends AbstractEntity
      * @param string|null $areaCode
      * @param int|null    $status
      *
-     * @since 2.0.0
+     * @throws InvalidArgumentException
+     *
      * @since 1.0.0
+     * @since 2.0.0
      */
     public function __construct(?string $streetName = null, ?string $city = null, ?string $houseNumber = null, ?string $postalCode = null, ?string $areaCode = null, ?int $status = null)
     {
@@ -210,19 +212,21 @@ class BasicNationalAddressCheckResponse extends AbstractEntity
      *
      * @pattern ^(?:0|1)$
      *
-     * @param int|null $status
+     * @param int|string|float|null $status
      *
      * @return static
      *
-     * @example 1
+     * @throws InvalidArgumentException
      *
      * @since   2.0.0
      *
+     * @example 1
+     *
      * @see     BasicNationalAddressCheckResponse::$status
      */
-    public function setStatus(?int $status): BasicNationalAddressCheckResponse
+    public function setStatus($status): BasicNationalAddressCheckResponse
     {
-        $this->status = $status;
+        $this->status = ValidateAndFix::integer($status);
 
         return $this;
     }
