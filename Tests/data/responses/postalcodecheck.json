@@ -1,0 +1,11 @@
+{
+  "city": "string",
+  "postalCode": "string",
+  "streetName": "string",
+  "houseNumber": 0,
+  "houseNumberAddition": "string",
+  "formattedAddress": [
+    "string",
+    "string"
+  ]
+}
