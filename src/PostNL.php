@@ -1639,7 +1639,6 @@ class PostNL implements LoggerAwareInterface
     /**
      * Check national address
      *
-     * @param string|null $country
      * @param string|null $street
      * @param string|null $houseNumber
      * @param string|null $addition
@@ -1654,11 +1653,10 @@ class PostNL implements LoggerAwareInterface
      *
      * @since 2.0.0
      */
-    public function nationalAddressCheck(?string $country = null, ?string $street = null, ?string $houseNumber = null, ?string $addition = null, ?string $postalCode = null, ?string $city = null): ValidatedAddress
+    public function nationalAddressCheck(?string $street = null, ?string $houseNumber = null, ?string $addition = null, ?string $postalCode = null, ?string $city = null): ValidatedAddress
     {
         return $this->getNationalAddressCheckService()->checkAddress(
             (new NationalAddressCheckRequest())
-                ->setCountry($country)
                 ->setStreet($street)
                 ->setHouseNumber($houseNumber)
                 ->setAddition($addition)
@@ -1670,7 +1668,6 @@ class PostNL implements LoggerAwareInterface
     /**
      * Geo check national address
      *
-     * @param string|null $country
      * @param string|null $street
      * @param string|null $houseNumber
      * @param string|null $addition
@@ -1685,11 +1682,10 @@ class PostNL implements LoggerAwareInterface
      *
      * @since 2.0.0
      */
-    public function nationalGeoAddressCheck(?string $country = null, ?string $street = null, ?string $houseNumber = null, ?string $addition = null, ?string $postalCode = null, ?string $city = null): ValidatedAddress
+    public function nationalGeoAddressCheck(?string $street = null, ?string $houseNumber = null, ?string $addition = null, ?string $postalCode = null, ?string $city = null): ValidatedAddress
     {
         return $this->getNationalGeoAddressCheckService()->checkAddress(
             (new NationalGeoAddressCheckRequest())
-                ->setCountry($country)
                 ->setStreet($street)
                 ->setHouseNumber($houseNumber)
                 ->setAddition($addition)
