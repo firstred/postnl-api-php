@@ -38,7 +38,7 @@ use Firstred\PostNL\Misc\ValidateAndFix;
 class Timeframe extends AbstractEntity
 {
     /**
-     * Date
+     * Timeframe date
      *
      * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}$
      *
@@ -114,6 +114,19 @@ class Timeframe extends AbstractEntity
      * @since 1.0.0
      */
     protected $description;
+
+    /**
+     * Shipping date property as returned by the Checkout API
+     *
+     * @pattern ^(?:[0-3]\d-[01]\d-[12]\d{3})$
+     *
+     * @example 03-07-2019
+     *
+     * @var string|null $shippingDate
+     *
+     * @since   2.0.0
+     */
+    protected $shippingDate;
 
     /**
      * Timeframe constructor.
@@ -376,6 +389,42 @@ class Timeframe extends AbstractEntity
     public function setDescription(?string $description): Timeframe
     {
         $this->description = ValidateAndFix::genericString($description);
+
+        return $this;
+    }
+
+    /**
+     * Get shipping date
+     *
+     * @return string|null
+     *
+     * @since 2.0.0
+     *
+     * @see   Timeframe::$shippingDate
+     */
+    public function getShippingDate(): ?string
+    {
+        return $this->shippingDate;
+    }
+
+    /**
+     * Set shipping date
+     *
+     * @param string|null $shippingDate
+     *
+     * @pattern ^(?:[0-3]\d-[01]\d-[12]\d{3})$
+     *
+     * @return static
+     *
+     * @example 03-07-2019
+     *
+     * @since   2.0.0
+     *
+     * @see     Timeframe::$shippingDate
+     */
+    public function setShippingDate(?string $shippingDate): Timeframe
+    {
+        $this->shippingDate = $shippingDate;
 
         return $this;
     }

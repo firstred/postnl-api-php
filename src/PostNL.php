@@ -46,6 +46,7 @@ use Firstred\PostNL\Entity\Request\InternationalAddressCheckRequest;
 use Firstred\PostNL\Entity\Request\LookupLocationRequest;
 use Firstred\PostNL\Entity\Request\NationalAddressCheckRequest;
 use Firstred\PostNL\Entity\Request\NationalGeoAddressCheckRequest;
+use Firstred\PostNL\Entity\Request\PostalCodeCheckRequest;
 use Firstred\PostNL\Entity\Request\RetrieveShipmentByBarcodeRequest;
 use Firstred\PostNL\Entity\Request\RetrieveShipmentByKgidRequest;
 use Firstred\PostNL\Entity\Request\RetrieveShipmentByReferenceRequest;
@@ -81,6 +82,7 @@ use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\NationalAddressCheckService;
 use Firstred\PostNL\Service\NationalGeoAddressCheckService;
+use Firstred\PostNL\Service\PostalCodeCheckService;
 use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
 use Http\Client\Exception as HttpClientException;
@@ -174,6 +176,9 @@ class PostNL implements LoggerAwareInterface
 
     /** @var InternationalAddressCheckService $internationalAddressCheckService */
     protected $internationalAddressCheckService;
+
+    /** @var PostalCodeCheckService $postalCodeCheckService */
+    protected $postalCodeCheckService;
 
     /**
      * PostNL constructor.
@@ -638,6 +643,10 @@ class PostNL implements LoggerAwareInterface
      */
     public function getNationalGeoAddressCheckService(): NationalGeoAddressCheckService
     {
+        if (!$this->nationalGeoAddressCheckService) {
+            $this->setNationalGeoAddressCheckService(new NationalGeoAddressCheckService($this));
+        }
+
         return $this->nationalGeoAddressCheckService;
     }
 
@@ -666,6 +675,10 @@ class PostNL implements LoggerAwareInterface
      */
     public function getInternationalAddressCheckService(): InternationalAddressCheckService
     {
+        if (!$this->internationalAddressCheckService) {
+            $this->setInternationalAddressCheckService(new InternationalAddressCheckService($this));
+        }
+
         return $this->internationalAddressCheckService;
     }
 
@@ -681,6 +694,38 @@ class PostNL implements LoggerAwareInterface
     public function setInternationalAddressCheckService(InternationalAddressCheckService $internationalAddressCheckService): PostNL
     {
         $this->internationalAddressCheckService = $internationalAddressCheckService;
+
+        return $this;
+    }
+
+    /**
+     * Set Postal Code Check service
+     *
+     * @return PostalCodeCheckService
+     *
+     * @since 2.0.0
+     */
+    public function getPostalCodeCheckService(): PostalCodeCheckService
+    {
+        if (!$this->postalCodeCheckService) {
+            $this->setPostalCodeCheckService(new PostalCodeCheckService($this));
+        }
+
+        return $this->postalCodeCheckService;
+    }
+
+    /**
+     * Get International Address Check service
+     *
+     * @param PostalCodeCheckService $postalCodeCheckService
+     *
+     * @return static
+     *
+     * @since 2.0.0
+     */
+    public function setPostalCodeCheckService(PostalCodeCheckService $postalCodeCheckService): PostNL
+    {
+        $this->postalCodeCheckService = $postalCodeCheckService;
 
         return $this;
     }
@@ -1728,6 +1773,33 @@ class PostNL implements LoggerAwareInterface
                 ->setCity($city)
                 ->setBuilding($building)
                 ->setSubBuilding($subBuilding)
+        );
+    }
+
+    /**
+     * Check a Dutch postal code and retrieve address information when found
+     *
+     * @param string      $postalCode          Postal code
+     * @param int         $houseNumber         House number
+     * @param string|null $houseNumberAddition House number addition
+     *
+     * @return ValidatedAddress
+     *
+     * @throws CifDownException
+     * @throws HttpClientException
+     * @throws InvalidArgumentException
+     *
+     * @since 2.0.0
+     *
+     * @see   https://developer.postnl.nl/browse-apis/checkout/checkout-postalcode-check/
+     */
+    public function checkPostalCode(string $postalCode, int $houseNumber, ?string $houseNumberAddition)
+    {
+        return $this->getPostalCodeCheckService()->checkPostalCode(
+            (new PostalCodeCheckRequest())
+                ->setPostalCode($postalCode)
+                ->setHouseNumber($houseNumber)
+                ->setHouseNumberAddition($houseNumberAddition)
         );
     }
 }

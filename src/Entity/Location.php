@@ -221,6 +221,17 @@ class Location extends AbstractEntity
     protected $terminalType;
 
     /**
+     * The pickup date from when the parcel can be picked up, as returned by the Checkout API
+     *
+     * @pattern ^(?:[0-3]\d-[01]\d-[12]\d{3})$
+     *
+     * @example 03-08-2019
+     *
+     * @var string|null $pickupDate
+     */
+    protected $pickupDate;
+
+    /**
      * Location constructor.
      *
      * @since 2.0.0
@@ -716,6 +727,42 @@ class Location extends AbstractEntity
     public function setPhoneNumber(?string $phoneNumber): Location
     {
         $this->phoneNumber = $phoneNumber;
+
+        return $this;
+    }
+
+    /**
+     * Get pick up date
+     *
+     * @return string|null
+     *
+     * @since 2.0.0
+     *
+     * @see   Location::$pickupDate
+     */
+    public function getPickupDate(): ?string
+    {
+        return $this->pickupDate;
+    }
+
+    /**
+     * Set pickup date
+     *
+     * @pattern ^(?:[0-3]\d-[01]\d-[12]\d{3})$
+     *
+     * @param string|null $pickupDate
+     *
+     * @return static
+     *
+     * @example 03-08-2019
+     *
+     * @since   2.0.0
+     *
+     * @see     Location::$pickupDate
+     */
+    public function setPickupDate(?string $pickupDate): Location
+    {
+        $this->pickupDate = $pickupDate;
 
         return $this;
     }
