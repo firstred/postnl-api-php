@@ -129,7 +129,6 @@ class BasicNationalAddressCheckResponse extends AbstractEntity
      *
      * @throws InvalidArgumentException
      *
-     * @since 1.0.0
      * @since 2.0.0
      */
     public function __construct(?string $streetName = null, ?string $city = null, ?string $houseNumber = null, ?string $postalCode = null, ?string $areaCode = null, ?int $status = null)

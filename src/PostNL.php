@@ -30,7 +30,9 @@ declare(strict_types=1);
 namespace Firstred\PostNL;
 
 use Exception;
+use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Entity\CutOffTime;
 use Firstred\PostNL\Entity\Label;
 use Firstred\PostNL\Entity\Location;
 use Firstred\PostNL\Entity\Request\BasicNationalAddressCheckRequest;
@@ -38,6 +40,8 @@ use Firstred\PostNL\Entity\Request\CalculateDeliveryDateRequest;
 use Firstred\PostNL\Entity\Request\CalculateShippingDateRequest;
 use Firstred\PostNL\Entity\Request\CalculateTimeframesRequest;
 use Firstred\PostNL\Entity\Request\ConfirmShipmentRequest;
+use Firstred\PostNL\Entity\Request\FindDeliveryInfoRequest;
+use Firstred\PostNL\Entity\Request\FindLocationsInAreaRequest;
 use Firstred\PostNL\Entity\Request\FindNearestLocationsGeocodeRequest;
 use Firstred\PostNL\Entity\Request\FindNearestLocationsRequest;
 use Firstred\PostNL\Entity\Request\GenerateBarcodeRequest;
@@ -56,6 +60,8 @@ use Firstred\PostNL\Entity\Response\CalculateDeliveryDateResponse;
 use Firstred\PostNL\Entity\Response\CalculateShippingDateResponse;
 use Firstred\PostNL\Entity\Response\CalculateTimeframesResponse;
 use Firstred\PostNL\Entity\Response\ConfirmShipmentResponse;
+use Firstred\PostNL\Entity\Response\FindDeliveryInfoResponse;
+use Firstred\PostNL\Entity\Response\FindLocationsInAreaResponse;
 use Firstred\PostNL\Entity\Response\FindNearestLocationsGeocodeResponse;
 use Firstred\PostNL\Entity\Response\FindNearestLocationsResponse;
 use Firstred\PostNL\Entity\Response\GenerateLabelResponse;
@@ -75,6 +81,7 @@ use Firstred\PostNL\Misc\Misc;
 use Firstred\PostNL\Misc\RFPdi;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\BasicNationalAddressCheckService;
+use Firstred\PostNL\Service\CheckoutService;
 use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\InternationalAddressCheckService;
@@ -144,41 +151,96 @@ class PostNL implements LoggerAwareInterface
     /** @var LoggerInterface $logger */
     protected $logger;
 
-    /** @var BarcodeService $barcodeService */
+    /**
+     * @var BarcodeService $barcodeService
+     *
+     * @since 1.0.0
+     */
     protected $barcodeService;
 
-    /** @var LabellingService $labellingService */
+    /**
+     * @var LabellingService $labellingService
+     *
+     * @since 1.0.0
+     */
     protected $labellingService;
 
-    /** @var ConfirmingService $confirmingService */
+    /**
+     * @var ConfirmingService $confirmingService
+     *
+     * @since 1.0.0
+     */
     protected $confirmingService;
 
-    /** @var ShippingStatusService $shippingStatusService */
+    /**
+     * @var ShippingStatusService $shippingStatusService
+     *
+     * @since 1.0.0
+     */
     protected $shippingStatusService;
 
-    /** @var DeliveryDateService $deliveryDateService */
+    /**
+     * @var DeliveryDateService $deliveryDateService
+     *
+     * @since 1.0.0
+     */
     protected $deliveryDateService;
 
-    /** @var TimeframeService $timeframeService */
+    /**
+     * @var TimeframeService $timeframeService
+     *
+     * @since 1.0.0
+     */
     protected $timeframeService;
 
-    /** @var LocationService $locationService */
+    /**
+     * @var LocationService $locationService
+     *
+     * @since 1.0.0
+     */
     protected $locationService;
 
-    /** @var BasicNationalAddressCheckService $basicNationalAddressCheckService */
+    /**
+     * @var BasicNationalAddressCheckService $basicNationalAddressCheckService
+     *
+     * @since 2.0.0
+     */
     protected $basicNationalAddressCheckService;
 
-    /** @var NationalAddressCheckService $nationalAddressCheckService */
+    /**
+     * @var NationalAddressCheckService $nationalAddressCheckService
+     *
+     * @since 2.0.0
+     */
     protected $nationalAddressCheckService;
 
-    /** @var NationalGeoAddressCheckService $nationalGeoAddressCheckService */
+    /**
+     * @var NationalGeoAddressCheckService $nationalGeoAddressCheckService
+     *
+     * @since 2.0.0
+     */
     protected $nationalGeoAddressCheckService;
 
-    /** @var InternationalAddressCheckService $internationalAddressCheckService */
+    /**
+     * @var InternationalAddressCheckService $internationalAddressCheckService
+     *
+     * @since 2.0.0
+     */
     protected $internationalAddressCheckService;
 
-    /** @var PostalCodeCheckService $postalCodeCheckService */
+    /**
+     * @var PostalCodeCheckService $postalCodeCheckService
+     *
+     * @since 2.0.0
+     */
     protected $postalCodeCheckService;
+
+    /**
+     * @var CheckoutService $checkoutService
+     *
+     * @since 2.0.0
+     */
+    protected $checkoutService;
 
     /**
      * PostNL constructor.
@@ -699,7 +761,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Set Postal Code Check service
+     * Get Postal Code Check service
      *
      * @return PostalCodeCheckService
      *
@@ -715,7 +777,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Get International Address Check service
+     * Set Postal Code Check service
      *
      * @param PostalCodeCheckService $postalCodeCheckService
      *
@@ -726,6 +788,38 @@ class PostNL implements LoggerAwareInterface
     public function setPostalCodeCheckService(PostalCodeCheckService $postalCodeCheckService): PostNL
     {
         $this->postalCodeCheckService = $postalCodeCheckService;
+
+        return $this;
+    }
+
+    /**
+     * Get Checkout service
+     *
+     * @return CheckoutService
+     *
+     * @since 2.0.0
+     */
+    public function getCheckoutService(): CheckoutService
+    {
+        if (!$this->checkoutService) {
+            $this->setCheckoutService(new CheckoutService($this));
+        }
+
+        return $this->checkoutService;
+    }
+
+    /**
+     * Set Checkout service
+     *
+     * @param CheckoutService $checkoutService
+     *
+     * @return static
+     *
+     * @since 2.0.0
+     */
+    public function setCheckoutService(CheckoutService $checkoutService): PostNL
+    {
+        $this->checkoutService = $checkoutService;
 
         return $this;
     }
@@ -1226,6 +1320,8 @@ class PostNL implements LoggerAwareInterface
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
+     *
+     * @see   https://developer.postnl.nl/browse-apis/send-and-track/shippingstatus-webservice/testtool-rest/#/default/get_v2_status_barcode__barcode_
      */
     public function retrieveShipmentByBarcode(string $barcode, bool $detail = false, string $language = 'NL', ?int $maxDays = null): Shipment
     {
@@ -1255,6 +1351,8 @@ class PostNL implements LoggerAwareInterface
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
+     *
+     * @see   https://developer.postnl.nl/browse-apis/send-and-track/shippingstatus-webservice/testtool-rest/#/default/get_v2_status_reference__referenceId_
      */
     public function retrieveShipmentByReference(string $reference, bool $detail = false, string $language = 'NL', ?int $maxDays = null): Shipment
     {
@@ -1284,6 +1382,8 @@ class PostNL implements LoggerAwareInterface
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
+     *
+     * @see   https://developer.postnl.nl/browse-apis/send-and-track/shippingstatus-webservice/testtool-rest/#/default/get_v2_status_lookup__kgid_
      */
     public function retrieveShipmentByKgid(string $kgid, bool $detail = false, string $language = 'NL', ?int $maxDays = null): Shipment
     {
@@ -1309,6 +1409,8 @@ class PostNL implements LoggerAwareInterface
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
+     *
+     * @see   https://developer.postnl.nl/browse-apis/send-and-track/shippingstatus-webservice/testtool-rest/#/default/get_v2_status_signature__barcode_
      */
     public function retrieveSignatureByBarcode(string $barcode): Signature
     {
@@ -1321,16 +1423,16 @@ class PostNL implements LoggerAwareInterface
     /**
      * Get a delivery date
      *
-     * @param string      $shippingDate
-     * @param int         $shippingDuration
-     * @param string      $cutOffTime
-     * @param string      $postalCode
-     * @param string|null $countryCode
-     * @param string|null $originCountryCode
-     * @param string|null $city
-     * @param string|null $street
-     * @param array|null  $options
-     * @param array|null  $cutOffTimes
+     * @param string       $shippingDate
+     * @param int          $shippingDuration
+     * @param string       $cutOffTime
+     * @param string       $postalCode
+     * @param string|null  $countryCode
+     * @param string|null  $originCountryCode
+     * @param string|null  $city
+     * @param string|null  $street
+     * @param array|null   $options
+     * @param CutOffTime[] $cutOffTimes
      *
      * @return CalculateDeliveryDateResponse
      *
@@ -1340,35 +1442,62 @@ class PostNL implements LoggerAwareInterface
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
+     *
+     * @see   https://developer.postnl.nl/browse-apis/delivery-options/deliverydate-webservice/testtool-rest/#/DeliveryDate/get_v2_2_calculate_date_delivery
      */
-    public function calculateDeliveryDate(string $shippingDate, int $shippingDuration, string $cutOffTime, string $postalCode, ?string $countryCode = null, ?string $originCountryCode = null, ?string $city = null, ?string $street = null, ?array $options = ['Daytime'], ?array $cutOffTimes = null): CalculateDeliveryDateResponse
+    public function calculateDeliveryDate(string $shippingDate, int $shippingDuration, string $cutOffTime, string $postalCode, ?string $countryCode = null, ?string $originCountryCode = null, ?string $city = null, ?string $street = null, ?array $options = ['Daytime'], ?array $cutOffTimes = []): CalculateDeliveryDateResponse
     {
-        return $this->getDeliveryDateService()->calculateDeliveryDate(
-            (new CalculateDeliveryDateRequest())
-                ->setShippingDate($shippingDate)
-                ->setShippingDuration($shippingDuration)
-                ->setCutOffTime($cutOffTime)
-                ->setCountryCode($countryCode)
-                ->setOriginCountryCode($originCountryCode)
-                ->setPostalCode($postalCode)
-                ->setCity($city)
-                ->setStreet($street)
-                ->setOptions($options)
-                ->setAvailableMonday($cutOffTimes[1][0] ?: null)
-                ->setCutOffTimeMonday($cutOffTimes[1][1] ?: null)
-                ->setAvailableTuesday($cutOffTimes[2][0] ?: null)
-                ->setCutOffTimeTuesday($cutOffTimes[2][1] ?: null)
-                ->setAvailableWednesday($cutOffTimes[3][0] ?: null)
-                ->setCutOffTimeWednesday($cutOffTimes[3][1] ?: null)
-                ->setAvailableThursday($cutOffTimes[4][0] ?: null)
-                ->setCutOffTimeThursday($cutOffTimes[4][1] ?: null)
-                ->setAvailableFriday($cutOffTimes[5][0] ?: null)
-                ->setCutOffTimeFriday($cutOffTimes[5][1] ?: null)
-                ->setAvailableSaturday($cutOffTimes[6][0] ?: null)
-                ->setCutOffTimeSaturday($cutOffTimes[6][1] ?: null)
-                ->setAvailableSunday($cutOffTimes[0][0] ?: null)
-                ->setCutOffTimeSunday($cutOffTimes[0][1] ?: null)
-        );
+        $deliveryDateRequest = (new CalculateDeliveryDateRequest())
+            ->setShippingDate($shippingDate)
+            ->setShippingDuration($shippingDuration)
+            ->setCutOffTime($cutOffTime)
+            ->setCountryCode($countryCode)
+            ->setOriginCountryCode($originCountryCode)
+            ->setPostalCode($postalCode)
+            ->setCity($city)
+            ->setStreet($street)
+            ->setOptions($options);
+        foreach ($cutOffTimes as $cutOffTime) {
+            switch ($cutOffTime->getDay()) {
+                case CutOffTime::MONDAY:
+                    $deliveryDateRequest
+                        ->setAvailableMonday($cutOffTime->getAvailable())
+                        ->setCutOffTimeMonday($cutOffTime->getTime());
+                    break;
+                case CutOffTime::TUESDAY:
+                    $deliveryDateRequest
+                        ->setAvailableTuesday($cutOffTime->getAvailable())
+                        ->setCutOffTimeTuesday($cutOffTime->getTime());
+                    break;
+                case CutOffTime::WEDNESDAY:
+                    $deliveryDateRequest
+                        ->setAvailableWednesday($cutOffTime->getAvailable())
+                        ->setCutOffTimeWednesday($cutOffTime->getTime());
+                    break;
+                case CutOffTime::THURSDAY:
+                    $deliveryDateRequest
+                        ->setAvailableThursday($cutOffTime->getAvailable())
+                        ->setCutOffTimeThursday($cutOffTime->getTime());
+                    break;
+                case CutOffTime::FRIDAY:
+                    $deliveryDateRequest
+                        ->setAvailableFriday($cutOffTime->getAvailable())
+                        ->setCutOffTimeFriday($cutOffTime->getTime());
+                    break;
+                case CutOffTime::SATURDAY:
+                    $deliveryDateRequest
+                        ->setAvailableSaturday($cutOffTime->getAvailable())
+                        ->setCutOffTimeSaturday($cutOffTime->getTime());
+                    break;
+                case CutOffTime::SUNDAY:
+                    $deliveryDateRequest
+                        ->setAvailableSunday($cutOffTime->getAvailable())
+                        ->setCutOffTimeSunday($cutOffTime->getTime());
+                    break;
+            }
+        }
+
+        return $this->getDeliveryDateService()->calculateDeliveryDate($deliveryDateRequest);
     }
 
     /**
@@ -1392,6 +1521,8 @@ class PostNL implements LoggerAwareInterface
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
+     *
+     * @see   https://developer.postnl.nl/browse-apis/delivery-options/deliverydate-webservice/testtool-rest/#/ShippingDate/get_v2_2_calculate_date_shipping
      */
     public function calculateShippingDate(string $deliveryDate, int $shippingDuration, string $postalCode, ?string $countryCode = null, ?string $originCountryCode = null, ?string $city = null, ?string $street = null, ?int $houseNumber = null, ?string $houseNumberExtension = null): CalculateShippingDateResponse
     {
@@ -1432,6 +1563,8 @@ class PostNL implements LoggerAwareInterface
      * @throws HttpClientException
      *
      * @since 2.0.0
+     *
+     * @see   https://developer.postnl.nl/browse-apis/delivery-options/timeframe-webservice/
      */
     public function calculateTimeframes(string $startDate, string $endDate, string $postalCode, int $houseNumber, ?string $houseNumberExtension = null, string $countryCode = 'NL', ?string $street = null, ?string $city = null, bool $allowSundaySorting = false, array $options = ['Daytime'], ?int $interval = null, ?string $timeframeRange = null)
     {
@@ -1472,6 +1605,8 @@ class PostNL implements LoggerAwareInterface
      * @throws HttpClientException
      *
      * @since 2.0.0
+     *
+     * @see   https://developer.postnl.nl/browse-apis/delivery-options/location-webservice/testtool-rest/#/default/get_v2_1_locations_nearest
      */
     public function findNearestLocations(string $postalCode, string $countryCode, array $deliveryOptions, ?string $city = null, ?string $street = null, ?int $houseNumber = null, ?string $deliveryDate = null, ?string $openingTime = null)
     {
@@ -1505,8 +1640,10 @@ class PostNL implements LoggerAwareInterface
      * @throws HttpClientException
      *
      * @since 2.0.0
+     *
+     * @see   https://developer.postnl.nl/browse-apis/delivery-options/location-webservice/testtool-rest/#/default/get_v2_1_locations_nearest_geocode
      */
-    public function findNearestLocationsGeocode($latitude, $longitude, string $countryCode, array $deliveryOptions = ['PG'], ?string $deliveryDate = null, ?string $openingTime = null)
+    public function findNearestLocationsGeocode($latitude, $longitude, string $countryCode, array $deliveryOptions = ['PG'], ?string $deliveryDate = null, ?string $openingTime = null): FindNearestLocationsGeocodeResponse
     {
         return $this->getLocationService()->findNearestLocationsGeocode(
             (new FindNearestLocationsGeocodeRequest())
@@ -1537,8 +1674,10 @@ class PostNL implements LoggerAwareInterface
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   https://developer.postnl.nl/browse-apis/delivery-options/
      */
-    public function getTimeframesAndNearestLocations(CalculateTimeframesRequest $calculateTimeframes, FindNearestLocationsRequest $getNearestLocations, CalculateDeliveryDateRequest $getDeliveryDate)
+    public function getTimeframesAndNearestLocations(CalculateTimeframesRequest $calculateTimeframes, FindNearestLocationsRequest $getNearestLocations, CalculateDeliveryDateRequest $getDeliveryDate): array
     {
         $results = [];
         $itemTimeframe = $this->getTimeframeService()->retrieveCachedItem($calculateTimeframes->getId());
@@ -1623,9 +1762,9 @@ class PostNL implements LoggerAwareInterface
     /**
      * Get locations in area
      *
-     * @param FindNearestLocationsGeocodeRequest $getLocationsInArea
+     * @param FindLocationsInAreaRequest $findLocations
      *
-     * @return FindNearestLocationsGeocodeResponse
+     * @return FindLocationsInAreaResponse
      *
      * @throws CifDownException
      * @throws CifErrorException
@@ -1634,10 +1773,12 @@ class PostNL implements LoggerAwareInterface
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   https://developer.postnl.nl/browse-apis/delivery-options/location-webservice/testtool-rest/#/default/get_v2_1_locations_area
      */
-    public function getLocationsInArea(FindNearestLocationsGeocodeRequest $getLocationsInArea)
+    public function getLocationsInArea(FindLocationsInAreaRequest $findLocations): FindLocationsInAreaResponse
     {
-        return $this->getLocationService()->findNearestLocationsGeocode($getLocationsInArea);
+        return $this->getLocationService()->findLocationsInArea($findLocations);
     }
 
     /**
@@ -1652,8 +1793,10 @@ class PostNL implements LoggerAwareInterface
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
+     *
+     * @see   https://developer.postnl.nl/browse-apis/delivery-options/location-webservice/testtool-rest/#/default/get_v2_1_locations_lookup
      */
-    public function getLocation(LookupLocationRequest $getLocation)
+    public function getLocation(LookupLocationRequest $getLocation): Location
     {
         return $this->getLocationService()->lookupLocation($getLocation);
     }
@@ -1671,6 +1814,8 @@ class PostNL implements LoggerAwareInterface
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
+     *
+     * @see   https://developer.postnl.nl/browse-apis/addresses/adrescheck-basis-nationaal/
      */
     public function basicNationalAddressCheck(string $postalCode, ?string $houseNumber = null): BasicNationalAddressCheckResponse
     {
@@ -1697,6 +1842,8 @@ class PostNL implements LoggerAwareInterface
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
+     *
+     * @see   https://developer.postnl.nl/browse-apis/addresses/adrescheck-nationaal/
      */
     public function nationalAddressCheck(?string $street = null, ?string $houseNumber = null, ?string $addition = null, ?string $postalCode = null, ?string $city = null): ValidatedAddress
     {
@@ -1726,6 +1873,8 @@ class PostNL implements LoggerAwareInterface
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
+     *
+     * @see   https://developer.postnl.nl/browse-apis/addresses/geo-adrescheck-nationaal/
      */
     public function nationalGeoAddressCheck(?string $street = null, ?string $houseNumber = null, ?string $addition = null, ?string $postalCode = null, ?string $city = null): ValidatedAddress
     {
@@ -1757,6 +1906,8 @@ class PostNL implements LoggerAwareInterface
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
+     *
+     * @see   https://developer.postnl.nl/browse-apis/addresses/adrescheck-internationaal/
      */
     public function internationalAddressCheck($country = null, ?string $streetOrAddressLines = null, ?string $houseNumber = null, ?string $postalCode = null, ?string $city = null, ?string $building = null, ?string $subBuilding = null): ValidatedAddress
     {
@@ -1793,13 +1944,53 @@ class PostNL implements LoggerAwareInterface
      *
      * @see   https://developer.postnl.nl/browse-apis/checkout/checkout-postalcode-check/
      */
-    public function checkPostalCode(string $postalCode, int $houseNumber, ?string $houseNumberAddition)
+    public function checkPostalCode(string $postalCode, int $houseNumber, ?string $houseNumberAddition): ValidatedAddress
     {
         return $this->getPostalCodeCheckService()->checkPostalCode(
             (new PostalCodeCheckRequest())
                 ->setPostalCode($postalCode)
                 ->setHouseNumber($houseNumber)
                 ->setHouseNumberAddition($houseNumberAddition)
+        );
+    }
+
+    /**
+     * Find delivery information (experimental)
+     *
+     * This is part of the new Checkout API which, at the time of writing, is in BETA
+     *
+     * @param string  $orderDate
+     * @param Address $shippingAddress
+     * @param Address $deliveryAddress
+     * @param array   $cutOffTimes
+     * @param int     $shippingDuration
+     * @param bool    $holidaySorting
+     * @param array   $options
+     * @param int     $days
+     * @param int     $locations
+     *
+     * @return FindDeliveryInfoResponse
+     *
+     * @throws CifDownException
+     * @throws HttpClientException
+     * @throws InvalidArgumentException
+     *
+     * @since 2.0.0
+     *
+     * @see https://developer.postnl.nl/browse-apis/checkout/checkout-api/
+     */
+    public function findDeliveryInformation(string $orderDate, Address $shippingAddress, Address $deliveryAddress, array $cutOffTimes, int $shippingDuration = 1, bool $holidaySorting = false, array $options = ['Daytime'], int $days = 9, int $locations = 3): FindDeliveryInfoResponse
+    {
+        return $this->getCheckoutService()->findDeliveryInformation(
+            (new FindDeliveryInfoRequest())
+                ->setOrderDate($orderDate)
+                ->setCutOffTimes($cutOffTimes)
+                ->setHolidaySorting($holidaySorting)
+                ->setShippingDuration($shippingDuration)
+                ->setOptions($options)
+                ->setDays($days)
+                ->setLocations($locations)
+                ->setAddresses([$shippingAddress, $deliveryAddress])
         );
     }
 }

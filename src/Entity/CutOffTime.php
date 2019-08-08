@@ -31,12 +31,21 @@ namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\ValidateAndFix;
+use setasign\Fpdi\PdfParser\Type\PdfNull;
 
 /**
  * Class CutOffTime
  */
 class CutOffTime extends AbstractEntity
 {
+    const MONDAY = '01';
+    const TUESDAY = '02';
+    const WEDNESDAY = '03';
+    const THURSDAY = '04';
+    const FRIDAY = '05';
+    const SATURDAY = '06';
+    const SUNDAY = '07';
+
     /**
      * Day
      *
@@ -81,6 +90,21 @@ class CutOffTime extends AbstractEntity
      * @since 1.0.0
      */
     protected $available;
+
+    /**
+     * CutOffTime type
+     *
+     * Specifies the type belonging to the cutoff time. Multiple types can be used in one call.
+     *
+     * @pattern ^(?:Regular|Sameday)$
+     *
+     * @example Sameday
+     *
+     * @var string|null
+     *
+     * @since 2.0.0
+     */
+    protected $type;
 
     /**
      * CutOffTime constructor.
@@ -217,6 +241,42 @@ class CutOffTime extends AbstractEntity
     public function setAvailable(?bool $available): CutOffTime
     {
         $this->available = $available;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string|null
+     *
+     * @since 2.0.0
+     *
+     * @see CutOffTime::$type
+     */
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    /**
+     * Set type
+     *
+     * @pattern ^?(?:Regular|Sameday)$
+     *
+     * @example Sameday
+     *
+     * @param string|null $type
+     *
+     * @return static
+     *
+     * @since 2.0.0
+     *
+     * @see CutOffTime::$type
+     */
+    public function setType(?string $type): CutOffTime
+    {
+        $this->type = $type;
 
         return $this;
     }

@@ -29,9 +29,10 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Service;
 
-use Firstred\PostNL\Entity\Request\PostalCodeCheckRequest;
-use Firstred\PostNL\Entity\ValidatedAddress;
+use Firstred\PostNL\Entity\Request\FindDeliveryInfoRequest;
+use Firstred\PostNL\Entity\Response\FindDeliveryInfoResponse;
 use Firstred\PostNL\Exception\CifDownException;
+use Firstred\PostNL\Exception\CifErrorException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Http\Client;
 use Firstred\PostNL\PostNL;
@@ -56,11 +57,11 @@ class CheckoutService extends AbstractService
     protected $postnl;
 
     /**
-     * Validate an international address
+     * Find delivery information
      *
-     * @param PostalCodeCheckRequest $checkPostalCode
+     * @param FindDeliveryInfoRequest $deliveryInfoRequest
      *
-     * @return ValidatedAddress
+     * @return FindDeliveryInfoResponse
      *
      * @throws CifDownException
      * @throws HttpClientException
@@ -68,24 +69,24 @@ class CheckoutService extends AbstractService
      *
      * @since 2.0.0
      */
-    public function checkPostalCode(PostalCodeCheckRequest $checkPostalCode): ValidatedAddress
+    public function findDeliveryInformation(FindDeliveryInfoRequest $deliveryInfoRequest): FindDeliveryInfoResponse
     {
         /** @var ResponseInterface $response */
-        $response = Client::getInstance()->doRequest($this->buildPostalCodeCheckRequest($checkPostalCode));
+        $response = Client::getInstance()->doRequest($this->buildFindDeliveryInformationRequest($deliveryInfoRequest));
 
-        return $this->processPostalCodeCheckResponse($response);
+        return $this->processFindDeliveryInformationResponse($response);
     }
 
     /**
      * Build the `postalCodeCheck` HTTP request for the REST API
      *
-     * @param PostalCodeCheckRequest $postalCodeCheck
+     * @param FindDeliveryInfoRequest $deliveryInfoRequest
      *
      * @return RequestInterface
      *
      * @since 2.0.0
      */
-    public function buildPostalCodeCheckRequest(PostalCodeCheckRequest $postalCodeCheck): RequestInterface
+    public function buildFindDeliveryInformationRequest(FindDeliveryInfoRequest $deliveryInfoRequest): RequestInterface
     {
         $streamFactory = Psr17FactoryDiscovery::findStreamFactory();
 
@@ -93,8 +94,9 @@ class CheckoutService extends AbstractService
 
         return Psr17FactoryDiscovery::findRequestFactory()->createRequest('POST', $endpoint)
             ->withHeader('Accept', 'application/json')
+            ->withHeader('Content-Type', 'application/json;charset=UTF-8')
             ->withHeader('apikey', $this->postnl->getApiKey())
-            ->withBody($streamFactory->createStream(json_encode($postalCodeCheck)))
+            ->withBody($streamFactory->createStream(json_encode($deliveryInfoRequest)))
         ;
     }
 
@@ -103,20 +105,22 @@ class CheckoutService extends AbstractService
      *
      * @param mixed $response
      *
-     * @return ValidatedAddress
+     * @return FindDeliveryInfoResponse
      *
      * @throws CifDownException
+     * @throws CifErrorException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
-    public function processPostalCodeCheckResponse(ResponseInterface $response): ValidatedAddress
+    public function processFindDeliveryInformationResponse(ResponseInterface $response): FindDeliveryInfoResponse
     {
+        static::validateResponse($response);
         $body = json_decode((string) $response->getBody(), true);
         if (is_array($body)) {
-            return ValidatedAddress::jsonDeserialize(['ValidatedAddress' => $body]);
+            return FindDeliveryInfoResponse::jsonDeserialize(['FindDeliveryInfoResponse' => $body]);
         }
 
-        throw new CifDownException('Unable to process postal code check response', 0, null, null, $response);
+        throw new CifDownException('Unable to process delivery options response', 0, null, null, $response);
     }
 }

@@ -27,61 +27,90 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace Firstred\PostNL\Entity\Response;
+namespace Firstred\PostNL\Entity;
 
 use ArrayAccess;
 use Countable;
-use Firstred\PostNL\Entity\Location;
-use Firstred\PostNL\Entity\Shipment;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Iterator;
 
 /**
- * Class RetrieveUpdatedShipmentsResponse
+ * Class PickupOptions
  */
-class RetrieveUpdatedShipmentsResponse extends AbstractResponse implements Iterator, ArrayAccess, Countable
+class PickupOptions extends AbstractEntity implements Iterator, ArrayAccess, Countable
 {
     /**
-     * Iterator index
-     *
      * @var int $index
      *
      * @since 2.0.0
      */
-    private $index = 0;
+    private $index;
 
     /**
-     * Shipments
+     * List of PickupOptions
      *
      * @pattern N/A
      *
      * @example N/A
      *
-     * @var Shipment[] $shipments
+     * @var PickupOption[] $pickupOptions
      *
-     * @since 2.0.0
+     * @since   2.0.0
      */
-    protected $shipments = [];
+    protected $pickupOptions = [];
 
     /**
-     * RetrieveUpdatedShipmentsResponse constructor.
+     * PickupOptions constructor.
      *
-     * @param Shipment[] $shipments
+     * @param array $options
      *
-     * @throws InvalidArgumentException
-     *
-     * @since 2.0.0 Strict typing
      * @since 2.0.0
      */
-    public function __construct(array $shipments = [])
+    public function __construct(array $options = [])
     {
         parent::__construct();
 
-        $this->setShipments($shipments);
+        $this->setPickupOptions($options);
     }
 
     /**
-     * Return a serializable array for `json_encode`
+     * Get PickupOptions
+     *
+     * @return PickupOption[]|null
+     *
+     * @since 2.0.0
+     *
+     * @see PickupOption
+     */
+    public function getPickupOptions(): ?array
+    {
+        return $this->pickupOptions;
+    }
+
+    /**
+     * Set PickupOptions
+     *
+     * @pattern N/A
+     *
+     * @param PickupOption[]|null $pickupOptions
+     *
+     * @return static
+     *
+     * @example N/A
+     *
+     * @since 2.0.0
+     *
+     * @see PickupOption
+     */
+    public function setPickupOptions(?array $pickupOptions): PickupOptions
+    {
+        $this->pickupOptions = $pickupOptions;
+
+        return $this;
+    }
+
+    /**
+     * Serialize JSON
      *
      * @return array
      *
@@ -89,7 +118,7 @@ class RetrieveUpdatedShipmentsResponse extends AbstractResponse implements Itera
      */
     public function jsonSerialize(): array
     {
-        return $this->shipments;
+        return $this->pickupOptions;
     }
 
     /**
@@ -108,11 +137,9 @@ class RetrieveUpdatedShipmentsResponse extends AbstractResponse implements Itera
     public static function jsonDeserialize(array $json)
     {
         $object = new static();
-        if (isset($json['RetrieveUpdatedShipmentsResponse'])) {
-            if (isset($json['RetrieveUpdatedShipmentsResponse'][0]['Barcode'])) {
-                foreach ($json['RetrieveUpdatedShipmentsResponse'] as $shipment) {
-                    $object[] = Shipment::jsonDeserialize(['Shipment' => $shipment]);
-                }
+        if (isset($json['PickupOptions'])) {
+            foreach ($json['PickupOptions'] as $option) {
+                $object[] = PickupOption::jsonDeserialize(['PickupOption' => $option]);
             }
         }
 
@@ -120,59 +147,17 @@ class RetrieveUpdatedShipmentsResponse extends AbstractResponse implements Itera
     }
 
     /**
-     * Get shipments
-     *
-     * @return Shipment[]|null
-     *
-     * @since 2.0.0
-     *
-     * @see Shipment
-     */
-    public function getShipments(): array
-    {
-        return $this->shipments;
-    }
-
-    /**
-     * Set shipments
-     *
-     * @pattern N/A
-     *
-     * @param Shipment[]|null $shipments
-     *
-     * @return static
-     *
-     * @throws InvalidArgumentException
-     *
-     * @example N/A
-     *
-     * @since 2.0.0
-     *
-     * @see Shipment
-     */
-    public function setShipments(?array $shipments = null): RetrieveUpdatedShipmentsResponse
-    {
-        if (!empty($shipments) && !array_values($shipments)[0] instanceof Location) {
-            throw new InvalidArgumentException(sprintf("%s::%s - Invalid Location array given", __CLASS__, __METHOD__));
-        }
-
-        $this->shipments = $shipments;
-
-        return $this;
-    }
-
-    /**
      * Return the current element
      *
      * @link  https://php.net/manual/en/iterator.current.php
      *
-     * @return Location
+     * @return mixed Can return any type.
      *
      * @since 2.0.0
      */
-    public function current(): Location
+    public function current(): PickupOptions
     {
-        return $this->shipments[$this->index];
+        return $this->pickupOptions[$this->index];
     }
 
     /**
@@ -184,9 +169,9 @@ class RetrieveUpdatedShipmentsResponse extends AbstractResponse implements Itera
      *
      * @since 2.0.0
      */
-    public function next()
+    public function next(): void
     {
-        if ($this->offsetExists($this->index + 1)) {
+        if (isset($this->pickupOptions[$this->index + 1])) {
             $this->index++;
         }
     }
@@ -200,7 +185,7 @@ class RetrieveUpdatedShipmentsResponse extends AbstractResponse implements Itera
      *
      * @since 2.0.0
      */
-    public function key()
+    public function key(): ?int
     {
         if (!$this->valid()) {
             return null;
@@ -221,7 +206,7 @@ class RetrieveUpdatedShipmentsResponse extends AbstractResponse implements Itera
      */
     public function valid(): bool
     {
-        return isset($this->shipments[$this->index]);
+        return isset($this->pickupOptions[$this->index]);
     }
 
     /**
@@ -233,7 +218,7 @@ class RetrieveUpdatedShipmentsResponse extends AbstractResponse implements Itera
      *
      * @since 2.0.0
      */
-    public function rewind(): void
+    public function rewind()
     {
         $this->index = 0;
     }
@@ -248,14 +233,15 @@ class RetrieveUpdatedShipmentsResponse extends AbstractResponse implements Itera
      *                      </p>
      *
      * @return boolean true on success or false on failure.
-     * </p>
-     * <p>
-     * The return value will be casted to boolean if non-boolean was returned.
+     *                      </p>
+     *                      <p>
+     *                      The return value will be casted to boolean if non-boolean was returned.
+     *
      * @since 2.0.0
      */
     public function offsetExists($offset): bool
     {
-        return isset($this->shipments[$offset]);
+        return isset($this->pickupOptions[$offset]);
     }
 
     /**
@@ -267,14 +253,14 @@ class RetrieveUpdatedShipmentsResponse extends AbstractResponse implements Itera
      *                      The offset to retrieve.
      *                      </p>
      *
-     * @return mixed Can return all value types.
+     * @return PickupOptions|null
      *
      * @since 2.0.0
      */
-    public function offsetGet($offset)
+    public function offsetGet($offset): ?PickupOptions
     {
         if ($this->offsetExists($offset)) {
-            return $this->shipments[$offset];
+            return $this->pickupOptions[$offset];
         }
 
         return null;
@@ -299,9 +285,9 @@ class RetrieveUpdatedShipmentsResponse extends AbstractResponse implements Itera
     public function offsetSet($offset, $value): void
     {
         if (!is_null($offset)) {
-            $this->shipments[$offset] = $value;
+            $this->pickupOptions[$offset] = $value;
         } else {
-            $this->shipments[] = $value;
+            $this->pickupOptions[] = $value;
         }
     }
 
@@ -320,7 +306,7 @@ class RetrieveUpdatedShipmentsResponse extends AbstractResponse implements Itera
      */
     public function offsetUnset($offset): void
     {
-        unset($this->shipments[$offset]);
+        unset($this->pickupOptions[$offset]);
     }
 
     /**
@@ -335,8 +321,8 @@ class RetrieveUpdatedShipmentsResponse extends AbstractResponse implements Itera
      *
      * @since 2.0.0
      */
-    public function count(): int
+    public function count()
     {
-        return count($this->shipments);
+        return count($this->pickupOptions);
     }
 }
