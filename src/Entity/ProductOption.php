@@ -46,7 +46,7 @@ class ProductOption extends AbstractEntity
      *
      * @var string|null $characteristic
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $characteristic;
 
@@ -59,7 +59,7 @@ class ProductOption extends AbstractEntity
      *
      * @var string|null $option
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $option;
 
@@ -102,13 +102,13 @@ class ProductOption extends AbstractEntity
      *
      * @pattern \d{3}$
      *
+     * @example 118
+     *
      * @param string|null $characteristic
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 118
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -142,13 +142,13 @@ class ProductOption extends AbstractEntity
      *
      * @pattern ^\d{3}$
      *
+     * @example 006
+     *
      * @param string|null $option
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 006
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing

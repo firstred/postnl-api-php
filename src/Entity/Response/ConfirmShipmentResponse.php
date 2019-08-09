@@ -43,7 +43,7 @@ class ConfirmShipmentResponse extends AbstractResponse
      *
      * @var string|null $barcode
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $barcode;
 
@@ -82,14 +82,14 @@ class ConfirmShipmentResponse extends AbstractResponse
      *
      * @pattern ^.{1,35}$
      *
+     * @example 3SDEVC2016112104
+     *
      * @param string|null $barcode
      *
      * @return static
      *
-     * @example 3SDEVC2016112104
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
      *
      * @see     GenerateBarcodeRequest
      */

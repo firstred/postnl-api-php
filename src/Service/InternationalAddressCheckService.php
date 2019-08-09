@@ -33,6 +33,7 @@ use Firstred\PostNL\Entity\Request\InternationalAddressCheckRequest;
 use Firstred\PostNL\Entity\Response\InternationalAddressCheckResponse;
 use Firstred\PostNL\Entity\ValidatedAddress;
 use Firstred\PostNL\Exception\CifDownException;
+use Firstred\PostNL\Exception\CifErrorException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Http\Client;
 use Firstred\PostNL\PostNL;
@@ -113,12 +114,14 @@ class InternationalAddressCheckService extends AbstractService
      *
      * @throws CifDownException
      * @throws InvalidArgumentException
+     * @throws CifErrorException
      *
      * @since 2.0.0
      */
     public function processValidateInternationalAddressResponse(ResponseInterface $response): ValidatedAddress
     {
-        $body = json_decode((string) $response->getBody(), true);
+        static::validateResponse($response);
+        $body = @json_decode((string) $response->getBody(), true);
         if (is_array($body)) {
             return InternationalAddressCheckResponse::jsonDeserialize(['InternationalAddressCheckResponse' => $body]);
         }

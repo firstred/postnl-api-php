@@ -46,7 +46,7 @@ class Timeframe extends AbstractEntity
      *
      * @var string|null $date
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $date;
 
@@ -59,7 +59,7 @@ class Timeframe extends AbstractEntity
      *
      * @var string|null $from
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $from;
 
@@ -72,7 +72,7 @@ class Timeframe extends AbstractEntity
      *
      * @var string|null $to
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $to;
 
@@ -85,7 +85,7 @@ class Timeframe extends AbstractEntity
      *
      * @var string[]|null $options
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $options;
 
@@ -98,7 +98,7 @@ class Timeframe extends AbstractEntity
      *
      * @var string|null $code
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $code;
 
@@ -111,7 +111,7 @@ class Timeframe extends AbstractEntity
      *
      * @var string|null $description
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $description;
 
@@ -175,13 +175,13 @@ class Timeframe extends AbstractEntity
      *
      * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}$
      *
+     * @example 03-07-2019
+     *
      * @param string|null $date
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 03-07-2019
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -215,13 +215,13 @@ class Timeframe extends AbstractEntity
      *
      * @pattern ^(?:2[0-3]|[01]?[0-9]):(?:[0-5]?[0-9]):(?:[0-5]?[0-9])$
      *
+     * @example 14:00:00
+     *
      * @param string|null $from
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 14:00:00
      *
      * @since   2.0.0 Strict typing
      * @since   1.0.0
@@ -255,13 +255,13 @@ class Timeframe extends AbstractEntity
      *
      * @pattern ^(?:2[0-3]|[01]?[0-9]):(?:[0-5]?[0-9]):(?:[0-5]?[0-9])$
      *
+     * @example 16:30:00
+     *
      * @param string|null $to
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 16:30:00
      *
      * @since   2.0.0 Strict typing
      * @since   1.0.0
@@ -295,14 +295,14 @@ class Timeframe extends AbstractEntity
      *
      * @pattern N/A
      *
+     * @example N/A
+     *
      * @param string[]|null $options
      *
      * @return static
      *
-     * @example N/A
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
      *
      * @see     Timeframe::$options
      */
@@ -333,13 +333,13 @@ class Timeframe extends AbstractEntity
      *
      * @pattern ^.{0,35}$
      *
+     * @example 02
+     *
      * @param string|null $code
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 02
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -373,13 +373,13 @@ class Timeframe extends AbstractEntity
      *
      * @pattern ^.{0,35}$
      *
+     * @example Middag
+     *
      * @param string|null $description
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example Middag
      *
      * @since   2.0.0 Strict typing
      * @since   1.0.0
@@ -410,13 +410,13 @@ class Timeframe extends AbstractEntity
     /**
      * Set shipping date
      *
+     * @example 03-07-2019
+     *
      * @param string|null $shippingDate
      *
      * @pattern ^(?:[0-3]\d-[01]\d-[12]\d{3})$
      *
      * @return static
-     *
-     * @example 03-07-2019
      *
      * @since   2.0.0
      *

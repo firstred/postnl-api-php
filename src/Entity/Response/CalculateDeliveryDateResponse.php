@@ -43,7 +43,7 @@ class CalculateDeliveryDateResponse extends AbstractResponse
      *
      * @var string|null $deliveryDate
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $deliveryDate;
 
@@ -56,7 +56,7 @@ class CalculateDeliveryDateResponse extends AbstractResponse
      *
      * @var string[]|null $options
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $options;
 
@@ -103,10 +103,10 @@ class CalculateDeliveryDateResponse extends AbstractResponse
      *
      * @return static
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
      *
-     * @see   CalculateDeliveryDateResponse::$deliveryDate
+     * @see     CalculateDeliveryDateResponse::$deliveryDate
      */
     public function setDeliveryDate(?string $deliveryDate): CalculateDeliveryDateResponse
     {
@@ -141,10 +141,10 @@ class CalculateDeliveryDateResponse extends AbstractResponse
      *
      * @return static
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
      *
-     * @see   CalculateDeliveryDateResponse::$options
+     * @see     CalculateDeliveryDateResponse::$options
      */
     public function setOptions(?array $options): CalculateDeliveryDateResponse
     {

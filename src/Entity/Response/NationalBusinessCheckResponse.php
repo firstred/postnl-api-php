@@ -58,12 +58,16 @@ class NationalBusinessCheckResponse extends AbstractResponse implements Iterator
      *
      * @var NationalBusinessCheckResult[] $results
      *
-     * @since 2.0.0
+     * @since   2.0.0
      */
     protected $results = [];
 
     /**
      * Total amount of pages
+     *
+     * @pattern N/A
+     *
+     * @example N/A
      *
      * @var string|null $totalPages
      *
@@ -72,6 +76,12 @@ class NationalBusinessCheckResponse extends AbstractResponse implements Iterator
     protected $totalPages;
 
     /**
+     * Requested page
+     *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @var string|null $requestedPage
      *
      * @since 2.0.0
@@ -79,6 +89,10 @@ class NationalBusinessCheckResponse extends AbstractResponse implements Iterator
     protected $requestedPage;
 
     /**
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @var string|null $resultCount
      *
      * @since 2.0.0
@@ -86,139 +100,31 @@ class NationalBusinessCheckResponse extends AbstractResponse implements Iterator
     protected $resultCount;
 
     /**
-     * @var string|null $postnlKey
-     *
-     * @since 2.0.0
-     */
-    protected $postnlKey;
-
-    /**
      * NationalBusinessCheckResponse constructor.
      *
-     * @param NationalBusinessCheckResult[] $results
-     *
-     * @param string|null                   $totalPages
-     * @param string|null                   $requestedPage
-     * @param string|null                   $postnlKey
-     *
-     * @throws InvalidArgumentException
+     * @param array       $results
+     * @param string|null $totalPages
+     * @param string|null $requestedPage
      *
      * @since 2.0.0
      */
-    public function __construct(array $results = [], ?string $totalPages = null, ?string $requestedPage = null, ?string $postnlKey = null)
+    public function __construct(array $results = [], ?string $totalPages = null, ?string $requestedPage = null)
     {
         parent::__construct();
 
         $this->setResults($results);
         $this->setTotalPages($totalPages);
         $this->setRequestedPage($requestedPage);
-        $this->setPostnlKey($postnlKey);
-    }
-
-    /**
-     * @return string|null
-     *
-     * @since 2.0.0
-     */
-    public function getTotalPages(): ?string
-    {
-        return $this->totalPages;
-    }
-
-    /**
-     * @param string|null $totalPages
-     *
-     * @return static
-     *
-     * @since 2.0.0
-     */
-    public function setTotalPages(?string $totalPages): NationalBusinessCheckResponse
-    {
-        $this->totalPages = $totalPages;
-
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     *
-     * @since 2.0.0
-     */
-    public function getRequestedPage(): ?string
-    {
-        return $this->requestedPage;
-    }
-
-    /**
-     * @param string|null $requestedPage
-     *
-     * @return static
-     *
-     * @since 2.0.0
-     */
-    public function setRequestedPage(?string $requestedPage): NationalBusinessCheckResponse
-    {
-        $this->requestedPage = $requestedPage;
-
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     *
-     * @since 2.0.0
-     */
-    public function getPostnlKey(): ?string
-    {
-        return $this->postnlKey;
-    }
-
-    /**
-     * @param string|null $postnlKey
-     *
-     * @return static
-     *
-     * @since 2.0.0
-     */
-    public function setPostnlKey(?string $postnlKey): NationalBusinessCheckResponse
-    {
-        $this->postnlKey = $postnlKey;
-
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     *
-     * @since 2.0.0
-     */
-    public function getResultCount(): ?string
-    {
-        return $this->resultCount;
-    }
-
-    /**
-     * @param string|null $resultCount
-     *
-     * @return static
-     *
-     * @since 2.0.0
-     */
-    public function setResultCount(?string $resultCount): NationalBusinessCheckResponse
-    {
-        $this->resultCount = $resultCount;
-
-        return $this;
     }
 
     /**
      * Get results
      *
-     * @return NationalBusinessCheckResult[]|null
+     * @return NationalBusinessCheckResult[]
      *
      * @since 2.0.0
      *
-     * @see NationalBusinessCheckResult
+     * @see   NationalBusinessCheckResponse::$results
      */
     public function getResults(): array
     {
@@ -230,25 +136,127 @@ class NationalBusinessCheckResponse extends AbstractResponse implements Iterator
      *
      * @pattern N/A
      *
-     * @param NationalBusinessCheckResult[]|null $results
+     * @example N/A
+     *
+     * @param NationalBusinessCheckResult[] $results
      *
      * @return static
      *
-     * @throws InvalidArgumentException
+     * @since   2.0.0
      *
-     * @example N/A
+     * @see     NationalBusinessCheckResponse::$results
+     */
+    public function setResults(array $results): NationalBusinessCheckResponse
+    {
+        $this->results = $results;
+
+        return $this;
+    }
+
+    /**
+     * Get totalPages
+     *
+     * @return string|null
      *
      * @since 2.0.0
      *
-     * @see NationalBusinessCheckResult
+     * @see   NationalBusinessCheckResponse::$totalPages
      */
-    public function setResults(?array $results = null): NationalBusinessCheckResponse
+    public function getTotalPages(): ?string
     {
-        if (!empty($results) && !array_values($results)[0] instanceof NationalBusinessCheckResult) {
-            throw new InvalidArgumentException(sprintf("%s::%s - Invalid NationalBusinessCheckResults array given", __CLASS__, __METHOD__));
-        }
+        return $this->totalPages;
+    }
 
-        $this->results = $results;
+    /**
+     * Set totalPages
+     *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
+     * @param string|null $totalPages
+     *
+     * @return static
+     *
+     * @since   2.0.0
+     *
+     * @see     NationalBusinessCheckResponse::$totalPages
+     */
+    public function setTotalPages(?string $totalPages): NationalBusinessCheckResponse
+    {
+        $this->totalPages = $totalPages;
+
+        return $this;
+    }
+
+    /**
+     * Get requestedPage
+     *
+     * @return string|null
+     *
+     * @since 2.0.0
+     *
+     * @see   NationalBusinessCheckResponse::$requestedPage
+     */
+    public function getRequestedPage(): ?string
+    {
+        return $this->requestedPage;
+    }
+
+    /**
+     * Set requestedPage
+     *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
+     * @param string|null $requestedPage
+     *
+     * @return static
+     *
+     * @since   2.0.0
+     *
+     * @see     NationalBusinessCheckResponse::$requestedPage
+     */
+    public function setRequestedPage(?string $requestedPage): NationalBusinessCheckResponse
+    {
+        $this->requestedPage = $requestedPage;
+
+        return $this;
+    }
+
+    /**
+     * Get resultCount
+     *
+     * @return string|null
+     *
+     * @since 2.0.0
+     *
+     * @see   NationalBusinessCheckResponse::$resultCount
+     */
+    public function getResultCount(): ?string
+    {
+        return $this->resultCount;
+    }
+
+    /**
+     * Set resultCount
+     *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
+     * @param string|null $resultCount
+     *
+     * @return static
+     *
+     * @since   2.0.0
+     *
+     * @see     NationalBusinessCheckResponse::$resultCount
+     */
+    public function setResultCount(?string $resultCount): NationalBusinessCheckResponse
+    {
+        $this->resultCount = $resultCount;
 
         return $this;
     }
@@ -272,7 +280,6 @@ class NationalBusinessCheckResponse extends AbstractResponse implements Iterator
             $object->setTotalPages($value['totalPages'] ?? null);
             $object->setRequestedPage($value['requestedPage'] ?? null);
             $object->setResultCount($value['resultCount'] ?? null);
-            $object->setPostnlKey($value['postnlKey'] ?? null);
             foreach ($value['result(s)'] as $result) {
                 $object->results[] = NationalBusinessCheckResult::jsonDeserialize(['NationalBusinessCheckResult' => $result]);
             }

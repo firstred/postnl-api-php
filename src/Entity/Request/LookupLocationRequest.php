@@ -47,7 +47,7 @@ class LookupLocationRequest extends AbstractEntity
      *
      * @var string|null $locationCode
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $locationCode;
 
@@ -60,7 +60,7 @@ class LookupLocationRequest extends AbstractEntity
      *
      * @var string|null $retailNetworkID
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $retailNetworkID;
 
@@ -103,14 +103,14 @@ class LookupLocationRequest extends AbstractEntity
      *
      * @pattern ^.{0,35}$
      *
+     * @example 161503
+     *
      * @param string|null $locationCode
      *
      * @return static
      *
-     * @example 161503
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
      *
      * @see     Location::$locationCode
      */
@@ -141,14 +141,14 @@ class LookupLocationRequest extends AbstractEntity
      *
      * @pattern ^.{0,35}$
      *
+     * @example PNPNL-01
+     *
      * @param string|null $retailNetworkID
      *
      * @return static
      *
-     * @example PNPNL-01
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
      *
      * @see     LookupLocationRequest::$retailNetworkID
      */

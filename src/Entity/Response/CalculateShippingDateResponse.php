@@ -43,7 +43,7 @@ class CalculateShippingDateResponse extends AbstractResponse
      *
      * @var string|null $sentDate
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $sentDate;
 
@@ -82,14 +82,14 @@ class CalculateShippingDateResponse extends AbstractResponse
      *
      * @pattern ^(([0-3]\d-[0-1]\d-[1-2]\d{3})|([1-2]\d{3}-[0-1]\d-[0-3]\d))$
      *
+     * @example 31-12-2018
+     *
      * @param string|null $sentDate
      *
      * @return static
      *
-     * @example 31-12-2018
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
      *
      * @see     CalculateShippingDateResponse::$sentDate
      */

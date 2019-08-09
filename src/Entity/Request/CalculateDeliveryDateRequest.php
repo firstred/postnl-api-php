@@ -54,7 +54,8 @@ class CalculateDeliveryDateRequest extends AbstractEntity
     protected $shippingDate;
 
     /**
-     * The duration it takes for the shipment to be delivered to PostNL in days. A value of 1 means that the parcel will be delivered to PostNL on the same day as the date specified in ShippingDate. A value of 2 means the parcel will arrive at PostNL a day later etc
+     * The duration it takes for the shipment to be delivered to PostNL in days. A value of 1 means that the parcel will be delivered to PostNL on the same day as the date specified in ShippingDate.
+     * A value of 2 means the parcel will arrive at PostNL a day later etc
      *
      * @pattern ^\d{1,10}$
      *
@@ -82,11 +83,11 @@ class CalculateDeliveryDateRequest extends AbstractEntity
     /**
      * Zip / postal code
      *
+     * @example 2132WT
+     *
      * @var string|null $postalCode
      *
      * @pattern ^.{0,10}$
-     *
-     * @example 2132WT
      *
      * @since   2.0.0
      */
@@ -160,11 +161,11 @@ class CalculateDeliveryDateRequest extends AbstractEntity
     /**
      * House number extension
      *
+     * @example A
+     *
      * @var string|null $houseNrExt
      *
      * @pattern ^.{0,35}$
-     *
-     * @example A
      *
      * @since   2.0.0
      */
@@ -192,7 +193,7 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @var string|null $cutOffTimeMonday
      *
-     * @since 2.0.0
+     * @since   2.0.0
      */
     protected $cutOffTimeMonday;
 
@@ -218,7 +219,7 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @var string|null $cutOffTimeTuesday
      *
-     * @since 2.0.0
+     * @since   2.0.0
      */
     protected $cutOffTimeTuesday;
 
@@ -244,7 +245,7 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @var string|null $cutOffTimeWednesday
      *
-     * @since 2.0.0
+     * @since   2.0.0
      */
     protected $cutOffTimeWednesday;
 
@@ -270,7 +271,7 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @var string|null $cutOffTimeThursday
      *
-     * @since 2.0.0
+     * @since   2.0.0
      */
     protected $cutOffTimeThursday;
 
@@ -296,7 +297,7 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @var string|null $cutOffTimeFriday
      *
-     * @since 2.0.0
+     * @since   2.0.0
      */
     protected $cutOffTimeFriday;
 
@@ -322,7 +323,7 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @var string|null $cutOffTimeSaturday
      *
-     * @since 2.0.0
+     * @since   2.0.0
      */
     protected $cutOffTimeSaturday;
 
@@ -348,7 +349,7 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @var string|null $cutOffTimeSunday
      *
-     * @since 2.0.0
+     * @since   2.0.0
      */
     protected $cutOffTimeSunday;
 
@@ -394,13 +395,13 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @pattern ^.{0,10}$
      *
+     * @example 2132WT
+     *
      * @param string|null $postcode
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 2132WT
      *
      * @since   2.0.0
      *
@@ -432,13 +433,13 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @pattern ^.{0,35}$
      *
+     * @example Hoofddorp
+     *
      * @param string|null $city
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example Hoofddorp
      *
      * @since   2.0.0
      *
@@ -470,13 +471,13 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @pattern ^(?:NL|BE)$
      *
+     * @example NL
+     *
      * @param string|null $countryCode
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example NL
      *
      * @since   2.0.0
      *
@@ -508,13 +509,13 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @pattern ^\d{1,10}$
      *
+     * @example 42
+     *
      * @param string|int|float|null $houseNumber
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 42
      *
      * @since   2.0.0
      *
@@ -548,13 +549,13 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @pattern ^.{0,35}$
      *
+     * @example A
+     *
      * @param string|null $houseNrExt
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example A
      *
      * @since   2.0.0
      *
@@ -586,11 +587,11 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @pattern ^(?:Daytime|Evening|Morning|Noon|Sunday|Sameday|Afternoon|MyTime|Pickup)$
      *
+     * @example Daytime
+     *
      * @param string[]|null $options
      *
      * @return static
-     *
-     * @example Daytime
      *
      * @since   2.0.0
      *
@@ -622,13 +623,13 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @pattern ^(?:NL|BE)$
      *
+     * @example NL
+     *
      * @param string|null $originCountryCode
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example NL
      *
      * @since   2.0.0
      *
@@ -660,13 +661,13 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}\s(?:2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9]$
      *
+     * @example 03-07-2019 17:00:00
+     *
      * @param string|null $shippingDate
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 03-07-2019 17:00:00
      *
      * @since   2.0.0
      *
@@ -698,13 +699,13 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @pattern ^\d{1,10}$
      *
+     * @example 2
+     *
      * @param int|float|string|null $shippingDuration
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 2
      *
      * @since   2.0.0
      *
@@ -736,13 +737,13 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @pattern ^.{0,95}$
      *
+     * @example Siriusdreef
+     *
      * @param string|null $street
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example Siriusdreef
      *
      * @since   2.0.0
      *
@@ -774,13 +775,13 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @pattern ^(?:2[0-3]|[01]?[0-9]):(?:[0-5]?[0-9]):(?:[0-5]?[0-9])$
      *
+     * @example 15:00:00
+     *
      * @param mixed $cutOffTime
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 15:00:00
      *
      * @since   2.0.0
      *
@@ -812,13 +813,13 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @pattern ^(?:2[0-3]|[01]?[0-9]):(?:[0-5]?[0-9]):(?:[0-5]?[0-9])$
      *
+     * @example 15:00:00
+     *
      * @param string|null $cutOffTimeMonday
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 15:00:00
      *
      * @since   2.0.0
      *
@@ -850,11 +851,11 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @pattern N/A
      *
+     * @example N/A
+     *
      * @param bool|null $availableMonday
      *
      * @return static
-     *
-     * @example N/A
      *
      * @since   2.0.0
      *
@@ -886,13 +887,13 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @pattern ^(?:2[0-3]|[01]?[0-9]):(?:[0-5]?[0-9]):(?:[0-5]?[0-9])$
      *
+     * @example 15:00:00
+     *
      * @param string|null $cutOffTimeTuesday
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 15:00:00
      *
      * @since   2.0.0
      *
@@ -924,11 +925,11 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @pattern N/A
      *
+     * @example N/A
+     *
      * @param bool|null $availableTuesday
      *
      * @return static
-     *
-     * @example N/A
      *
      * @since   2.0.0
      *
@@ -960,13 +961,13 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @pattern ^(?:2[0-3]|[01]?[0-9]):(?:[0-5]?[0-9]):(?:[0-5]?[0-9])$
      *
+     * @example 15:00:00
+     *
      * @param string|null $cutOffTimeWednesday
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 15:00:00
      *
      * @since   2.0.0
      *
@@ -998,11 +999,11 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @pattern N/A
      *
+     * @example N/A
+     *
      * @param bool|null $availableWednesday
      *
      * @return static
-     *
-     * @example N/A
      *
      * @since   2.0.0
      *
@@ -1034,13 +1035,13 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @pattern ^(?:2[0-3]|[01]?[0-9]):(?:[0-5]?[0-9]):(?:[0-5]?[0-9])$
      *
+     * @example 15:00:00
+     *
      * @param string|null $cutOffTimeThursday
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 15:00:00
      *
      * @since   2.0.0
      *
@@ -1072,13 +1073,13 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @pattern N/A
      *
+     * @example N/A
+     *
      * @param bool|null $availableThursday
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example N/A
      *
      * @since   2.0.0
      *
@@ -1110,13 +1111,13 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @pattern ^(?:2[0-3]|[01]?[0-9]):(?:[0-5]?[0-9]):(?:[0-5]?[0-9])$
      *
+     * @example 15:00:00
+     *
      * @param string|null $cutOffTimeFriday
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 15:00:00
      *
      * @since   2.0.0
      *
@@ -1148,11 +1149,11 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @pattern N/A
      *
+     * @example N/A
+     *
      * @param bool|null $availableFriday
      *
      * @return static
-     *
-     * @example N/A
      *
      * @since   2.0.0
      *
@@ -1184,13 +1185,13 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @pattern ^(?:2[0-3]|[01]?[0-9]):(?:[0-5]?[0-9]):(?:[0-5]?[0-9])$
      *
+     * @example 15:00:00
+     *
      * @param string|null $cutOffTimeSaturday
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 15:00:00
      *
      * @since   2.0.0
      *
@@ -1222,11 +1223,11 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @pattern N/A
      *
+     * @example N/A
+     *
      * @param bool|null $availableSaturday
      *
      * @return static
-     *
-     * @example N/A
      *
      * @since   2.0.0
      *
@@ -1258,13 +1259,13 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @pattern ^(?:2[0-3]|[01]?[0-9]):(?:[0-5]?[0-9]):(?:[0-5]?[0-9])$
      *
+     * @example 15:00:00
+     *
      * @param string|null $cutOffTimeSunday
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 15:00:00
      *
      * @since   2.0.0
      *
@@ -1296,11 +1297,11 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @pattern N/A
      *
+     * @example N/A
+     *
      * @param bool|null $availableSunday
      *
      * @return static
-     *
-     * @example N/A
      *
      * @since   2.0.0
      *

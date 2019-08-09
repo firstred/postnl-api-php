@@ -176,7 +176,7 @@ class ValidatedAddress extends AbstractEntity
      *
      * @var Geocode|null $geocode
      *
-     * @since 2.0.0
+     * @since   2.0.0
      */
     protected $geocode;
 
@@ -227,17 +227,17 @@ class ValidatedAddress extends AbstractEntity
      *
      * @pattern ^.{0,10}$
      *
+     * @example 3123WT
+     *
      * @param string|null $postalCode
      *
      * @return static
      *
      * @throws InvalidArgumentException
      *
-     * @example 3123WT
+     * @since   2.0.0
      *
-     * @since 2.0.0
-     *
-     * @see   ValidatedAddress::$postalCode
+     * @see     ValidatedAddress::$postalCode
      */
     public function setPostalCode(?string $postalCode): ValidatedAddress
     {
@@ -265,17 +265,17 @@ class ValidatedAddress extends AbstractEntity
      *
      * @pattern ^.{0,35}$
      *
+     * @example Hoofddorp
+     *
      * @param string|null $city
      *
      * @return static
      *
      * @throws InvalidArgumentException
      *
-     * @example Hoofddorp
+     * @since   2.0.0
      *
-     * @since 2.0.0
-     *
-     * @see   ValidatedAddress::$city
+     * @see     ValidatedAddress::$city
      */
     public function setCity(?string $city): ValidatedAddress
     {
@@ -303,17 +303,17 @@ class ValidatedAddress extends AbstractEntity
      *
      * @pattern ^.{0,95}$
      *
+     * @example Siriusdreef
+     *
      * @param string|null $street
      *
      * @return static
      *
      * @throws InvalidArgumentException
      *
-     * @example Siriusdreef
+     * @since   2.0.0
+     * @see     ValidatedAddress::$street
      *
-     * @see   ValidatedAddress::$street
-     *
-     * @since 2.0.0
      */
     public function setStreet(?string $street): ValidatedAddress
     {
@@ -341,15 +341,15 @@ class ValidatedAddress extends AbstractEntity
      *
      * @pattern ^.{0,35}$
      *
+     * @example 42
+     *
      * @param string|null $houseNumber
      *
      * @return static
      *
-     * @example 42
+     * @since   2.0.0
      *
-     * @since 2.0.0
-     *
-     * @see   ValidatedAddress::$houseNumber
+     * @see     ValidatedAddress::$houseNumber
      */
     public function setHouseNumber(?string $houseNumber): ValidatedAddress
     {
@@ -377,17 +377,17 @@ class ValidatedAddress extends AbstractEntity
      *
      * @pattern ^.{0,35}$
      *
+     * @example A
+     *
      * @param string|null $addition
      *
      * @return static
      *
      * @throws InvalidArgumentException
      *
-     * @example A
-     *
+     * @since   2.0.0
      * @see     ValidatedAddress::$addition
      *
-     * @since   2.0.0
      */
     public function setAddition(?string $addition): ValidatedAddress
     {
@@ -415,15 +415,15 @@ class ValidatedAddress extends AbstractEntity
      *
      * @pattern N/A
      *
+     * @example N/A
+     *
      * @param string[]|null $formattedAddress
      *
      * @return static
      *
-     * @example N/A
+     * @since   2.0.0
      *
-     * @since 2.0.0
-     *
-     * @see   ValidatedAddress::$formattedAddress
+     * @see     ValidatedAddress::$formattedAddress
      */
     public function setFormattedAddress(?array $formattedAddress): ValidatedAddress
     {
@@ -451,11 +451,11 @@ class ValidatedAddress extends AbstractEntity
      *
      * @pattern N/A
      *
+     * @example N/A
+     *
      * @param Geocode|null $geocode
      *
      * @return static
-     *
-     * @example N/A
      *
      * @since   2.0.0
      *
@@ -487,6 +487,8 @@ class ValidatedAddress extends AbstractEntity
      *
      * @pattern ^\d{1,10}$
      *
+     * @example 13
+     *
      * @param string|float|int|null $resultNumber
      *
      * @return static
@@ -494,8 +496,6 @@ class ValidatedAddress extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
-     * @example 13
      *
      * @see     ValidatedAddress::$resultNumber
      */
@@ -525,13 +525,13 @@ class ValidatedAddress extends AbstractEntity
      *
      * @pattern \d{1,3}$
      *
+     * @example 50
+     *
      * @param int|float|string|null $mailabilityScore
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 50
      *
      * @since   2.0.0
      *
@@ -563,6 +563,8 @@ class ValidatedAddress extends AbstractEntity
      *
      * @pattern ^\d{1,3}$
      *
+     * @example 60
+     *
      * @param int|string|float|null $resultPercentage
      *
      * @return static
@@ -570,8 +572,6 @@ class ValidatedAddress extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
-     * @example 60
      *
      * @see     ValidatedAddress::$resultPercentage
      */
@@ -601,11 +601,11 @@ class ValidatedAddress extends AbstractEntity
      *
      * @pattern ^.{0,35}$
      *
+     * @example Zuid-Holland
+     *
      * @param string|null $province
      *
      * @return static
-     *
-     * @example Zuid-Holland
      *
      * @since   2.0.0
      *

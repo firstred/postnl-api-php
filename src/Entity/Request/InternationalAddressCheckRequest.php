@@ -61,7 +61,7 @@ class InternationalAddressCheckRequest extends AbstractEntity
      *
      * @var string|null $q1
      *
-     * @since 2.0.0
+     * @since   2.0.0
      */
     protected $q1;
 
@@ -74,7 +74,7 @@ class InternationalAddressCheckRequest extends AbstractEntity
      *
      * @var string|null $q2
      *
-     * @since 2.0.0
+     * @since   2.0.0
      */
     protected $q2;
 
@@ -87,7 +87,7 @@ class InternationalAddressCheckRequest extends AbstractEntity
      *
      * @var string|null $q3
      *
-     * @since 2.0.0
+     * @since   2.0.0
      */
     protected $q3;
     // @codingStandardsIgnoreEnd
@@ -220,13 +220,13 @@ class InternationalAddressCheckRequest extends AbstractEntity
      *
      * @pattern ^[A-Z]{3}$
      *
+     * @example ITA
+     *
      * @param string|null $country
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example ITA
      *
      * @since   2.0.0
      *
@@ -258,17 +258,17 @@ class InternationalAddressCheckRequest extends AbstractEntity
      *
      * @pattern ^.{0,95}$
      *
+     * @example Siriusdreef
+     *
      * @param string|null $street
      *
      * @return static
      *
      * @throws InvalidArgumentException
      *
-     * @example Siriusdreef
+     * @since   2.0.0
      *
      * @see     InternationalAddressCheckRequest::$street
-     *
-     * @since 2.0.0
      *
      */
     public function setStreet(?string $street): InternationalAddressCheckRequest
@@ -297,17 +297,17 @@ class InternationalAddressCheckRequest extends AbstractEntity
      *
      * @pattern ^.{0,35}$
      *
+     * @example 42
+     *
      * @param string|null $houseNumber
      *
      * @return static
      *
      * @throws InvalidArgumentException
      *
-     * @example 42
-     *
+     * @since   2.0.0
      * @see     InternationalAddressCheckRequest::$houseNumber
      *
-     * @since 2.0.0
      */
     public function setHouseNumber(?string $houseNumber): InternationalAddressCheckRequest
     {
@@ -335,17 +335,17 @@ class InternationalAddressCheckRequest extends AbstractEntity
      *
      * @pattern ^{0,10}$
      *
+     * @example 2132WT
+     *
      * @param string|null $postalCode
      *
      * @return static
      *
      * @throws InvalidArgumentException
      *
-     * @example 2132WT
-     *
+     * @since   2.0.0
      * @see     InternationalAddressCheckRequest::$postalCode
      *
-     * @since 2.0.0
      */
     public function setPostalCode(?string $postalCode): InternationalAddressCheckRequest
     {
@@ -373,13 +373,13 @@ class InternationalAddressCheckRequest extends AbstractEntity
      *
      * @pattern ^.{0,35}$
      *
+     * @example Hoofddorp
+     *
      * @param string|null $city
      *
      * @return static
      *
-     * @example Hoofddorp
-     *
-     * @since 2.0.0
+     * @since   2.0.0
      *
      * @see     InternationalAddressCheckRequest::$city
      */
@@ -409,13 +409,13 @@ class InternationalAddressCheckRequest extends AbstractEntity
      *
      * @pattern ^.{0,95}$
      *
+     * @example N/A
+     *
      * @param string|null $building
      *
      * @return static
      *
-     * @example N/A
-     *
-     * @since 2.0.0
+     * @since   2.0.0
      *
      * @see     InternationalAddressCheckRequest::$building
      */
@@ -445,13 +445,13 @@ class InternationalAddressCheckRequest extends AbstractEntity
      *
      * @pattern ^.{0,95}$
      *
+     * @example N/A
+     *
      * @param string|null $subBuilding
      *
      * @return static
      *
-     * @example N/A
-     *
-     * @since 2.0.0
+     * @since   2.0.0
      *
      * @see     InternationalAddressCheckRequest::$subBuilding
      */
@@ -481,13 +481,13 @@ class InternationalAddressCheckRequest extends AbstractEntity
      *
      * @pattern N/A
      *
+     * @example N/A
+     *
      * @param string|null $q1
      *
      * @return static
      *
-     * @example N/A
-     *
-     * @since 2.0.0 Strict typing
+     * @since   2.0.0 Strict typing
      *
      * @see     InternationalAddressCheckRequest::$q1
      */
@@ -517,13 +517,13 @@ class InternationalAddressCheckRequest extends AbstractEntity
      *
      * @pattern N/A
      *
+     * @example N/A
+     *
      * @param string|null $q2
      *
      * @return static
      *
-     * @example N/A
-     *
-     * @since 2.0.0 Strict typing
+     * @since   2.0.0 Strict typing
      *
      * @see     InternationalAddressCheckRequest::$q2
      */
@@ -553,13 +553,13 @@ class InternationalAddressCheckRequest extends AbstractEntity
      *
      * @pattern N/A
      *
+     * @example N/A
+     *
      * @param string|null $q3
      *
      * @return static
      *
-     * @example N/A
-     *
-     * @since 2.0.0 Strict typing
+     * @since   2.0.0 Strict typing
      *
      * @see     InternationalAddressCheckRequest::$q3
      */
@@ -582,9 +582,9 @@ class InternationalAddressCheckRequest extends AbstractEntity
         if ($this->getQ1()) {
             return [
                 'Country' => $this->getCountry(),
-                'q1' => $this->getQ1(),
-                'q2' => $this->getQ2(),
-                'q3' => $this->getQ3(),
+                'q1'      => $this->getQ1(),
+                'q2'      => $this->getQ2(),
+                'q3'      => $this->getQ3(),
             ];
         }
 

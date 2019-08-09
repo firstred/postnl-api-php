@@ -116,7 +116,7 @@ class CheckoutService extends AbstractService
     public function processFindDeliveryInformationResponse(ResponseInterface $response): FindDeliveryInfoResponse
     {
         static::validateResponse($response);
-        $body = json_decode((string) $response->getBody(), true);
+        $body = @json_decode((string) $response->getBody(), true);
         if (is_array($body)) {
             return FindDeliveryInfoResponse::jsonDeserialize(['FindDeliveryInfoResponse' => $body]);
         }

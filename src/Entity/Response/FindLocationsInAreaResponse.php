@@ -58,7 +58,7 @@ class FindLocationsInAreaResponse extends AbstractResponse implements Iterator, 
      *
      * @var Location[] $locations
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $locations = [];
 
@@ -115,7 +115,7 @@ class FindLocationsInAreaResponse extends AbstractResponse implements Iterator, 
      *
      * @throws InvalidArgumentException
      *
-     * @since 2.0.0
+     * @since        2.0.0
      */
     public static function jsonDeserialize(array $json)
     {
@@ -140,7 +140,7 @@ class FindLocationsInAreaResponse extends AbstractResponse implements Iterator, 
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      *
-     * @see Location
+     * @see   Location
      */
     public function getLocations(): array
     {
@@ -160,10 +160,10 @@ class FindLocationsInAreaResponse extends AbstractResponse implements Iterator, 
      *
      * @throws InvalidArgumentException
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
      *
-     * @see Location
+     * @see     Location
      */
     public function setLocations(?array $responseLocations = null): FindLocationsInAreaResponse
     {

@@ -60,7 +60,7 @@ class BasicNationalAddressCheckRequest extends AbstractEntity
      *
      * @var string|null $houseNumber
      *
-     * @since 2.0.0
+     * @since   2.0.0
      */
     protected $houseNumber;
 
@@ -101,13 +101,13 @@ class BasicNationalAddressCheckRequest extends AbstractEntity
      *
      * @pattern ^.{0,10}$
      *
+     * @example 2132WT
+     *
      * @param string|null $postalCode
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 2132WT
      *
      * @since   2.0.0
      *
@@ -139,11 +139,11 @@ class BasicNationalAddressCheckRequest extends AbstractEntity
      *
      * @pattern ^.{0,35}$
      *
+     * @example 42
+     *
      * @param string|int|null $houseNumber
      *
      * @return static
-     *
-     * @example 42
      *
      * @since   2.0.0
      *

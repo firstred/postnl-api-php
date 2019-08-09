@@ -106,8 +106,7 @@ abstract class AbstractService
      */
     public static function validateResponse(ResponseInterface $response): bool
     {
-        $body = json_decode((string) $response->getBody(), true);
-
+        $body = @json_decode((string) $response->getBody(), true);
         if (!empty($body['Error']['ErrorMsg'])) {
             throw new CifErrorException($body['Error']['ErrorMsg'], $body['Error']['ErrorNumber'] ?: 0, null, null, $response);
         }

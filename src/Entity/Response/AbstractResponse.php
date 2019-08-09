@@ -49,7 +49,7 @@ abstract class AbstractResponse extends AbstractEntity
      *
      * @var Warning[] $warnings
      *
-     * @since 2.0.0
+     * @since   2.0.0
      */
     protected $warnings = [];
 
@@ -62,7 +62,7 @@ abstract class AbstractResponse extends AbstractEntity
      *
      * @var Error[] $errors
      *
-     * @since 2.0.0
+     * @since   2.0.0
      */
     protected $errors = [];
 
@@ -73,7 +73,7 @@ abstract class AbstractResponse extends AbstractEntity
      *
      * @since 2.0.0
      *
-     * @see Warning
+     * @see   Warning
      */
     public function getWarnings(): array
     {
@@ -89,7 +89,7 @@ abstract class AbstractResponse extends AbstractEntity
      *
      * @since 2.0.0
      *
-     * @see Warning
+     * @see   Warning
      */
     public function addWarning(Warning $w): AbstractResponse
     {
@@ -109,9 +109,9 @@ abstract class AbstractResponse extends AbstractEntity
      *
      * @return static
      *
-     * @since 2.0.0
+     * @since   2.0.0
      *
-     * @see Warning
+     * @see     Warning
      */
     public function setWarnings(array $warnings): AbstractResponse
     {
@@ -127,7 +127,7 @@ abstract class AbstractResponse extends AbstractEntity
      *
      * @since 2.0.0
      *
-     * @see Error
+     * @see   Error
      */
     public function getErrors(): array
     {
@@ -143,7 +143,7 @@ abstract class AbstractResponse extends AbstractEntity
      *
      * @since 2.0.0
      *
-     * @see Error
+     * @see   Error
      */
     public function addError(Error $e): AbstractResponse
     {
@@ -163,9 +163,9 @@ abstract class AbstractResponse extends AbstractEntity
      *
      * @return static
      *
-     * @since 2.0.0
+     * @since   2.0.0
      *
-     * @see Error
+     * @see     Error
      */
     public function setErrors(array $errors): AbstractResponse
     {
@@ -185,7 +185,7 @@ abstract class AbstractResponse extends AbstractEntity
      *
      * @throws InvalidArgumentException
      *
-     * @since 1.0.0
+     * @since        1.0.0
      */
     public static function jsonDeserialize(array $json)
     {
@@ -226,10 +226,12 @@ abstract class AbstractResponse extends AbstractEntity
                     $object->{"set$key"}($value);
                 }
             } else {
-                $object->{"set$key"}(call_user_func(
-                    [static::getFullEntityClassName($key), 'jsonDeserialize'],
-                    [$key => $value]
-                ));
+                $object->{"set$key"}(
+                    call_user_func(
+                        [static::getFullEntityClassName($key), 'jsonDeserialize'],
+                        [$key => $value]
+                    )
+                );
             }
         }
 

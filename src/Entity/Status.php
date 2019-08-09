@@ -146,13 +146,13 @@ class Status extends AbstractEntity
      *
      * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}\s(?:2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9]$
      *
+     * @example 03-07-2019 08:00:00
+     *
      * @param string|null $timeStamp
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 03-07-2019 08:00:00
      *
      * @since   2.0.0 Strict typing
      *
@@ -184,11 +184,11 @@ class Status extends AbstractEntity
      *
      * @pattern ^\d{1,10}$
      *
+     * @example 7
+     *
      * @param string|null $statusCode
      *
      * @return static
-     *
-     * @example 7
      *
      * @since   2.0.0 Strict typing
      *
@@ -220,11 +220,11 @@ class Status extends AbstractEntity
      *
      * @pattern ^.{0,1000}$
      *
+     * @example Zending afgeleverd
+     *
      * @param string|null $statusDescription
      *
      * @return static
-     *
-     * @example Zending afgeleverd
      *
      * @since   2.0.0 Strict typing
      *
@@ -256,11 +256,11 @@ class Status extends AbstractEntity
      *
      * @pattern ^\d{1,10}$
      *
+     * @example 4
+     *
      * @param string|null $phaseCode
      *
      * @return static
-     *
-     * @example 4
      *
      * @since   2.0.0 Strict typing
      *
@@ -292,11 +292,11 @@ class Status extends AbstractEntity
      *
      * @pattern ^.{0,1000}$
      *
+     * @example Afgeleverd
+     *
      * @param string|null $phaseDescription
      *
      * @return static
-     *
-     * @example Afgeleverd
      *
      * @since   2.0.0 Strict typing
      *

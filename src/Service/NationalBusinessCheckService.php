@@ -591,7 +591,7 @@ class NationalBusinessCheckService extends AbstractService
     public function processNationalBusinessCheckResponse(ResponseInterface $response): NationalBusinessCheckResponse
     {
         static::validateResponse($response);
-        $body = json_decode((string) $response->getBody(), true);
+        $body = @json_decode((string) $response->getBody(), true);
         $object = NationalBusinessCheckResponse::jsonDeserialize(['NationalBusinessCheckResponse' => $body]);
         if ($object instanceof NationalBusinessCheckResponse) {
             return $object;

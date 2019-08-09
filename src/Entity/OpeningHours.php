@@ -46,7 +46,7 @@ class OpeningHours extends AbstractEntity
      *
      * @var array $monday
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $monday = [];
 
@@ -59,7 +59,7 @@ class OpeningHours extends AbstractEntity
      *
      * @var array $tuesday
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $tuesday = [];
 
@@ -72,7 +72,7 @@ class OpeningHours extends AbstractEntity
      *
      * @var array $wednesday
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $wednesday = [];
 
@@ -85,7 +85,7 @@ class OpeningHours extends AbstractEntity
      *
      * @var array $thursday
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $thursday = [];
 
@@ -98,7 +98,7 @@ class OpeningHours extends AbstractEntity
      *
      * @var array $friday
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $friday = [];
 
@@ -111,7 +111,7 @@ class OpeningHours extends AbstractEntity
      *
      * @var array $saturday
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $saturday = [];
 
@@ -124,7 +124,7 @@ class OpeningHours extends AbstractEntity
      *
      * @var array $sunday
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $sunday = [];
 
@@ -168,7 +168,7 @@ class OpeningHours extends AbstractEntity
      *
      * @throws InvalidArgumentException
      *
-     * @since 2.0.0
+     * @since        2.0.0
      */
     public static function jsonDeserialize(array $json)
     {
@@ -204,13 +204,13 @@ class OpeningHours extends AbstractEntity
      *
      * @pattern ^[0-2][0-9]:[0-5][0-9]-$[0-2][0-9]:[0-5][0-9]$
      *
+     * @example 08:00-17:00
+     *
      * @param string[] $monday
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 08:00-17:00
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -247,13 +247,13 @@ class OpeningHours extends AbstractEntity
      *
      * @pattern ^[0-2][0-9]:[0-5][0-9]-$[0-2][0-9]:[0-5][0-9]$
      *
+     * @example 08:00-17:00
+     *
      * @param string[] $tuesday
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 08:00-17:00
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -290,13 +290,13 @@ class OpeningHours extends AbstractEntity
      *
      * @pattern ^[0-2][0-9]:[0-5][0-9]-$[0-2][0-9]:[0-5][0-9]$
      *
+     * @example 08:00-17:00
+     *
      * @param string[] $wednesday
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 08:00-17:00
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -333,13 +333,13 @@ class OpeningHours extends AbstractEntity
      *
      * @pattern ^[0-2][0-9]:[0-5][0-9]-$[0-2][0-9]:[0-5][0-9]$
      *
+     * @example 08:00-17:00
+     *
      * @param string[] $thursday
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 08:00-17:00
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -376,13 +376,13 @@ class OpeningHours extends AbstractEntity
      *
      * @pattern ^[0-2][0-9]:[0-5][0-9]-$[0-2][0-9]:[0-5][0-9]$
      *
+     * @example 08:00-17:00
+     *
      * @param string[] $friday
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 08:00-17:00
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -419,13 +419,13 @@ class OpeningHours extends AbstractEntity
      *
      * @pattern ^[0-2][0-9]:[0-5][0-9]-$[0-2][0-9]:[0-5][0-9]$
      *
+     * @example 08:00-17:00
+     *
      * @param string[] $saturday
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 08:00-17:00
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -462,13 +462,13 @@ class OpeningHours extends AbstractEntity
      *
      * @pattern ^[0-2][0-9]:[0-5][0-9]-$[0-2][0-9]:[0-5][0-9]$
      *
+     * @example 08:00-17:00
+     *
      * @param string[] $sunday
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 08:00-17:00
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing

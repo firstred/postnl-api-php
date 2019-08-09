@@ -70,11 +70,11 @@ class CalculateShippingDateRequest extends AbstractEntity
     /**
      * Zip / postal code
      *
+     * @example 2132WT
+     *
      * @var string|null $postalCode
      *
      * @pattern ^.{0,10}$
-     *
-     * @example 2132WT
      *
      * @since   2.0.0
      */
@@ -148,11 +148,11 @@ class CalculateShippingDateRequest extends AbstractEntity
     /**
      * House number extension
      *
+     * @example A
+     *
      * @var string|null $houseNrExt
      *
      * @pattern ^.{0,35}$
-     *
-     * @example A
      *
      * @since   2.0.0
      */
@@ -209,13 +209,13 @@ class CalculateShippingDateRequest extends AbstractEntity
      *
      * @pattern ^.{0,10}$
      *
+     * @example 2132WT
+     *
      * @param string|null $postcode
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 2132WT
      *
      * @since   2.0.0
      *
@@ -247,13 +247,13 @@ class CalculateShippingDateRequest extends AbstractEntity
      *
      * @pattern ^.{0,35}$
      *
+     * @example Hoofddorp
+     *
      * @param string|null $city
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example Hoofddorp
      *
      * @since   2.0.0
      *
@@ -285,13 +285,13 @@ class CalculateShippingDateRequest extends AbstractEntity
      *
      * @pattern ^(?:NL|BE)$
      *
+     * @example NL
+     *
      * @param string|null $countryCode
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example NL
      *
      * @since   2.0.0
      *
@@ -323,13 +323,13 @@ class CalculateShippingDateRequest extends AbstractEntity
      *
      * @pattern ^\d{1,10}$
      *
+     * @example 42
+     *
      * @param string|int|float|null $houseNumber
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 42
      *
      * @since   2.0.0
      *
@@ -363,13 +363,13 @@ class CalculateShippingDateRequest extends AbstractEntity
      *
      * @pattern ^.{0,35}$
      *
+     * @example A
+     *
      * @param string|null $houseNrExt
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example A
      *
      * @since   2.0.0
      *
@@ -401,13 +401,13 @@ class CalculateShippingDateRequest extends AbstractEntity
      *
      * @pattern ^(?:NL|BE)$
      *
+     * @example NL
+     *
      * @param string|null $originCountryCode
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example NL
      *
      * @since   2.0.0
      *
@@ -439,13 +439,13 @@ class CalculateShippingDateRequest extends AbstractEntity
      *
      * @pattern ^(?:[0-3]\d-[01]\d-[12]\d{3}\s+)[0-2]\d:[0-5]\d(?:[0-5]\d)$
      *
+     * @example 03-07-2019 17:00:00
+     *
      * @param string|null $deliveryDate
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 03-07-2019 17:00:00
      *
      * @since   2.0.0
      *
@@ -477,13 +477,13 @@ class CalculateShippingDateRequest extends AbstractEntity
      *
      * @pattern ^\d{1,10}$
      *
+     * @example 2
+     *
      * @param int|float|string|null $shippingDuration
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 2
      *
      * @since   2.0.0
      *
@@ -515,13 +515,13 @@ class CalculateShippingDateRequest extends AbstractEntity
      *
      * @pattern ^.{0,95}$
      *
+     * @example Siriusdreef
+     *
      * @param string|null $street
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example Siriusdreef
      *
      * @since   2.0.0
      *

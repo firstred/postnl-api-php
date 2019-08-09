@@ -41,11 +41,11 @@ class CalculateTimeframesRequest extends AbstractEntity
     /**
      * Allow Sunday sorting
      *
+     * @example N/A
+     *
      * @var bool|null $allowSundaySorting
      *
      * @pattern N/A
-     *
-     * @example N/A
      *
      * @since   2.0.0
      */
@@ -132,11 +132,11 @@ class CalculateTimeframesRequest extends AbstractEntity
     /**
      * Filter for MyTime shipments; format H:i-H:i. Specifies which timeframes you want returned in the response.
      *
+     * @example 14:00-15:00
+     *
      * @var string|null $timeframeRange
      *
      * @pattern ^[0-2][0-9]:[0-5][0-9]-$[0-2][0-9]:[0-5][0-9]$
-     *
-     * @example 14:00-15:00
      *
      * @since   2.0.0
      */
@@ -224,11 +224,11 @@ class CalculateTimeframesRequest extends AbstractEntity
      *
      * @pattern N/A
      *
+     * @example N/A
+     *
      * @param bool|null $allowSundaySorting
      *
      * @return static
-     *
-     * @example N/A
      *
      * @since   2.0.0
      *
@@ -260,13 +260,13 @@ class CalculateTimeframesRequest extends AbstractEntity
      *
      * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}$
      *
+     * @example 03-07-2019
+     *
      * @param string|null $startDate
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 03-07-2019
      *
      * @since   2.0.0
      *
@@ -298,13 +298,13 @@ class CalculateTimeframesRequest extends AbstractEntity
      *
      * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}$
      *
+     * @example 03-07-2019
+     *
      * @param string|null $endDate
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 03-07-2019
      *
      * @since   2.0.0
      *
@@ -336,17 +336,17 @@ class CalculateTimeframesRequest extends AbstractEntity
      *
      * @pattern ^.{1,10}$
      *
+     * @example 2132WT
+     *
      * @param string|null $postalCode
      *
      * @return static
      *
      * @throws InvalidArgumentException
      *
-     * @example 2132WT
-     *
+     * @since   2.0.0
      * @see     CalculateTimeframesRequest::$postalCode
      *
-     * @since   2.0.0
      */
     public function setPostalCode(?string $postalCode): CalculateTimeframesRequest
     {
@@ -374,13 +374,13 @@ class CalculateTimeframesRequest extends AbstractEntity
      *
      * @pattern ^(?:30|60)$
      *
+     * @example 30
+     *
      * @param int|null $interval
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 30
      *
      * @since   2.0.0
      *
@@ -412,13 +412,13 @@ class CalculateTimeframesRequest extends AbstractEntity
      *
      * @pattern ^\d{1,10}$
      *
+     * @example 42
+     *
      * @param int|string|null $houseNumber
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 42
      *
      * @since   2.0.0
      *
@@ -450,13 +450,13 @@ class CalculateTimeframesRequest extends AbstractEntity
      *
      * @pattern ^.{0,35}$
      *
+     * @example A
+     *
      * @param string|null $houseNrExt
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example A
      *
      * @since   2.0.0
      *
@@ -488,15 +488,15 @@ class CalculateTimeframesRequest extends AbstractEntity
      *
      * @pattern ^[0-2][0-9]:[0-5][0-9]-$[0-2][0-9]:[0-5][0-9]$
      *
+     * @example 14:00-15:00
+     *
+     * @var string|null   $timeframeRange
+     *
      * @param string|null $timeframeRange
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @var string|null   $timeframeRange
-     *
-     * @example 14:00-15:00
      *
      * @since   2.0.0
      *
@@ -528,6 +528,8 @@ class CalculateTimeframesRequest extends AbstractEntity
      *
      * @pattern ^.{0,95}$
      *
+     * @example Siriusdreef
+     *
      * @param string|null $street
      *
      * @return static
@@ -538,7 +540,6 @@ class CalculateTimeframesRequest extends AbstractEntity
      *
      * @see     CalculateTimeframesRequest::$street
      *
-     * @example Siriusdreef
      */
     public function setStreet(?string $street): CalculateTimeframesRequest
     {
@@ -566,13 +567,13 @@ class CalculateTimeframesRequest extends AbstractEntity
      *
      * @pattern ^.{0,35}$
      *
+     * @example Hoofddorp
+     *
      * @param string|null $city
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example Hoofddorp
      *
      * @since   2.0.0
      *
@@ -604,6 +605,8 @@ class CalculateTimeframesRequest extends AbstractEntity
      *
      * @pattern ^(?:NL|BE)$
      *
+     * @example NL
+     *
      * @param string|null $countryCode
      *
      * @return static
@@ -611,8 +614,6 @@ class CalculateTimeframesRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
-     * @example NL
      *
      * @see     CalculateTimeframesRequest::$countryCode
      */
@@ -642,11 +643,11 @@ class CalculateTimeframesRequest extends AbstractEntity
      *
      * @pattern N/A
      *
+     * @example N/A
+     *
      * @param string[]|null $options
      *
      * @return static
-     *
-     * @example N/A
      *
      * @since   2.0.0
      *

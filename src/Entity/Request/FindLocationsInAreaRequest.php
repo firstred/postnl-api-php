@@ -49,7 +49,7 @@ class FindLocationsInAreaRequest extends AbstractEntity
      *
      * @var float|null $latitudeNorth
      *
-     * @since 2.0.0
+     * @since   2.0.0
      */
     protected $latitudeNorth;
 
@@ -62,7 +62,7 @@ class FindLocationsInAreaRequest extends AbstractEntity
      *
      * @var float|null $longitudeWest
      *
-     * @since 2.0.0
+     * @since   2.0.0
      */
     protected $longitudeWest;
 
@@ -75,7 +75,7 @@ class FindLocationsInAreaRequest extends AbstractEntity
      *
      * @var float|null $latitudeSouth
      *
-     * @since 2.0.0
+     * @since   2.0.0
      */
     protected $latitudeSouth;
 
@@ -88,7 +88,7 @@ class FindLocationsInAreaRequest extends AbstractEntity
      *
      * @var float|null $longitudeEast
      *
-     * @since 2.0.0
+     * @since   2.0.0
      */
     protected $longitudeEast;
 
@@ -101,7 +101,7 @@ class FindLocationsInAreaRequest extends AbstractEntity
      *
      * @var string|null $countryCode
      *
-     * @since 2.0.0
+     * @since   2.0.0
      */
     protected $countryCode;
 
@@ -195,13 +195,13 @@ class FindLocationsInAreaRequest extends AbstractEntity
      *
      * @pattern ^(?:NL|BE)$
      *
+     * @example NL
+     *
      * @param string|null $countrycode
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example NL
      *
      * @since   1.0.0
      * @since   2.0.0
@@ -234,13 +234,13 @@ class FindLocationsInAreaRequest extends AbstractEntity
      *
      * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}$
      *
+     * @example 03-07-2019
+     *
      * @param string|null $deliveryDate
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 03-07-2019
      *
      * @since   2.0.0
      *
@@ -272,13 +272,13 @@ class FindLocationsInAreaRequest extends AbstractEntity
      *
      * @pattern ^(?:2[0-3]|[01]?[0-9]):(?:[0-5]?[0-9]):(?:[0-5]?[0-9])$
      *
+     * @example 09:00:00
+     *
      * @param string|null $openingTime
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 09:00:00
      *
      * @since   2.0.0
      *
@@ -310,11 +310,11 @@ class FindLocationsInAreaRequest extends AbstractEntity
      *
      * @pattern ^(?:PG|PGE)$
      *
+     * @example PGE
+     *
      * @param array $deliveryOptions
      *
      * @return static
-     *
-     * @example PGE
      *
      * @since   2.0.0
      *
@@ -354,9 +354,9 @@ class FindLocationsInAreaRequest extends AbstractEntity
      *
      * @throws InvalidArgumentException
      *
-     * @since 2.0.0 Strict typing
+     * @since   2.0.0 Strict typing
      *
-     * @see   FindLocationsInAreaRequest::$latitudeNorth
+     * @see     FindLocationsInAreaRequest::$latitudeNorth
      */
     public function setLatitudeNorth($latitudeNorth): FindLocationsInAreaRequest
     {
@@ -392,9 +392,9 @@ class FindLocationsInAreaRequest extends AbstractEntity
      *
      * @throws InvalidArgumentException
      *
-     * @since 2.0.0 Strict typing
+     * @since   2.0.0 Strict typing
      *
-     * @see   FindLocationsInAreaRequest::$longitudeWest
+     * @see     FindLocationsInAreaRequest::$longitudeWest
      */
     public function setLongitudeWest($longitudeWest): FindLocationsInAreaRequest
     {
@@ -430,9 +430,9 @@ class FindLocationsInAreaRequest extends AbstractEntity
      *
      * @throws InvalidArgumentException
      *
-     * @since 2.0.0 Strict typing
+     * @since   2.0.0 Strict typing
      *
-     * @see   FindLocationsInAreaRequest::$latitudeSouth
+     * @see     FindLocationsInAreaRequest::$latitudeSouth
      */
     public function setLatitudeSouth($latitudeSouth): FindLocationsInAreaRequest
     {
@@ -468,9 +468,9 @@ class FindLocationsInAreaRequest extends AbstractEntity
      *
      * @throws InvalidArgumentException
      *
-     * @since 2.0.0 Strict typing
+     * @since   2.0.0 Strict typing
      *
-     * @see   FindLocationsInAreaRequest::$longitudeEast
+     * @see     FindLocationsInAreaRequest::$longitudeEast
      */
     public function setLongitudeEast($longitudeEast): FindLocationsInAreaRequest
     {

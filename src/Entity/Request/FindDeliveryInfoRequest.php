@@ -41,6 +41,10 @@ class FindDeliveryInfoRequest extends AbstractEntity
     /**
      * The order date of the shipment
      *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @var string|null $orderDate
      *
      * @since 2.0.0
@@ -51,6 +55,10 @@ class FindDeliveryInfoRequest extends AbstractEntity
      * The amount of days it takes for a parcel to be received by PostN. If you delivery the parcel the same day as the order is placed on the webshop, please use the value of 1. A value of 2 means
      * the parcel will arrive at PostNL a day later etc.
      *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @var int|null $shippingDuration
      *
      * @since 2.0.0
@@ -59,6 +67,10 @@ class FindDeliveryInfoRequest extends AbstractEntity
 
     /**
      * Array of CutOffTimes Type
+     *
+     * @pattern N/A
+     *
+     * @example N/A
      *
      * @var CutOffTime[]|null $cutOffTimes
      *
@@ -69,6 +81,10 @@ class FindDeliveryInfoRequest extends AbstractEntity
     /**
      * Specifies whether you are available during holidays
      *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @var bool|null $holidaySorting
      *
      * @since 2.0.0
@@ -78,6 +94,10 @@ class FindDeliveryInfoRequest extends AbstractEntity
     /**
      * Specifies the delivery and pickup options. For a list of possible values please refer to the guidelines
      *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @var string[]|null $options
      *
      * @since 2.0.0
@@ -86,6 +106,10 @@ class FindDeliveryInfoRequest extends AbstractEntity
 
     /**
      * Specifies the number of locations you want returned. This can be a value of 1-3
+     *
+     * @pattern N/A
+     *
+     * @example N/A
      *
      * @pattern ^[1-3]$
      *
@@ -112,6 +136,10 @@ class FindDeliveryInfoRequest extends AbstractEntity
 
     /**
      * Array of Address type
+     *
+     * @pattern N/A
+     *
+     * @example N/A
      *
      * @var Address[]|null $addresses
      *
@@ -146,6 +174,10 @@ class FindDeliveryInfoRequest extends AbstractEntity
     /**
      * Set order date
      *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @param string|null $orderDate
      *
      * @return static
@@ -177,6 +209,10 @@ class FindDeliveryInfoRequest extends AbstractEntity
 
     /**
      * Set shipping duration
+     *
+     * @pattern N/A
+     *
+     * @example N/A
      *
      * @param int|null $shippingDuration
      *
@@ -212,11 +248,11 @@ class FindDeliveryInfoRequest extends AbstractEntity
      *
      * @pattern N/A
      *
+     * @example N/A
+     *
      * @param CutOffTime[]|null $cutOffTimes
      *
      * @return static
-     *
-     * @example N/A
      *
      * @since   2.0.0
      *
@@ -245,6 +281,10 @@ class FindDeliveryInfoRequest extends AbstractEntity
 
     /**
      * Set holiday sorting setting
+     *
+     * @pattern N/A
+     *
+     * @example N/A
      *
      * @param bool|null $holidaySorting
      *
@@ -278,6 +318,10 @@ class FindDeliveryInfoRequest extends AbstractEntity
     /**
      * Set options
      *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @param string[]|null $options
      *
      * @return static
@@ -310,6 +354,10 @@ class FindDeliveryInfoRequest extends AbstractEntity
     /**
      * Set locations
      *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @param int|null $locations
      *
      * @return static
@@ -341,6 +389,10 @@ class FindDeliveryInfoRequest extends AbstractEntity
 
     /**
      * Set days
+     *
+     * @pattern N/A
+     *
+     * @example N/A
      *
      * @param int|null $days
      *
@@ -376,11 +428,11 @@ class FindDeliveryInfoRequest extends AbstractEntity
      *
      * @pattern N/A
      *
+     * @example N/A
+     *
      * @param Address[]|null $addresses
      *
      * @return static
-     *
-     * @example N/A
      *
      * @since   2.0.0
      *

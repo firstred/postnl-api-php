@@ -132,11 +132,11 @@ class RetrieveShipmentByBarcodeRequest extends AbstractEntity
      *
      * @pattern ^.{0,35}$
      *
+     * @example 3SDEVC23423234
+     *
      * @param string|null $barcode
      *
      * @return static
-     *
-     * @example 3SDEVC23423234
      *
      * @since   2.0.0 Strict typing
      *
@@ -168,11 +168,11 @@ class RetrieveShipmentByBarcodeRequest extends AbstractEntity
      *
      * @pattern N/A
      *
+     * @example N/A
+     *
      * @param bool|null $detail
      *
      * @return static
-     *
-     * @example N/A
      *
      * @since   2.0.0 Strict typing
      *
@@ -204,13 +204,13 @@ class RetrieveShipmentByBarcodeRequest extends AbstractEntity
      *
      * @pattern ^[A-Z]{2}$
      *
+     * @example NL
+     *
      * @param string|null $language
      *
      * @return static
      *
-     * @example NL
-     *
-     * @since 2.0.0 Strict typing
+     * @since   2.0.0 Strict typing
      *
      * @see     RetrieveShipmentByBarcodeRequest::$language
      */
@@ -240,15 +240,15 @@ class RetrieveShipmentByBarcodeRequest extends AbstractEntity
      *
      * @pattern ^\d{1,10}$
      *
+     * @example 1
+     *
      * @param int|string|float|null $maxDays
      *
      * @return static
      *
      * @throws InvalidArgumentException
      *
-     * @example 1
-     *
-     * @since 2.0.0 Strict typing
+     * @since   2.0.0 Strict typing
      *
      * @see     RetrieveShipmentByBarcodeRequest::$maxDays
      */

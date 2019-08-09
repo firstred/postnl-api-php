@@ -80,7 +80,7 @@ class PickupOptions extends AbstractEntity implements Iterator, ArrayAccess, Cou
      *
      * @since 2.0.0
      *
-     * @see PickupOption
+     * @see   PickupOption
      */
     public function getPickupOptions(): ?array
     {
@@ -92,15 +92,15 @@ class PickupOptions extends AbstractEntity implements Iterator, ArrayAccess, Cou
      *
      * @pattern N/A
      *
+     * @example N/A
+     *
      * @param PickupOption[]|null $pickupOptions
      *
      * @return static
      *
-     * @example N/A
+     * @since   2.0.0
      *
-     * @since 2.0.0
-     *
-     * @see PickupOption
+     * @see     PickupOption
      */
     public function setPickupOptions(?array $pickupOptions): PickupOptions
     {
@@ -132,7 +132,7 @@ class PickupOptions extends AbstractEntity implements Iterator, ArrayAccess, Cou
      *
      * @throws InvalidArgumentException
      *
-     * @since 2.0.0
+     * @since        2.0.0
      */
     public static function jsonDeserialize(array $json)
     {

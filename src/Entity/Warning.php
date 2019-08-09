@@ -43,7 +43,7 @@ class Warning extends AbstractEntity
      *
      * @var string|int|null $code
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $code;
 
@@ -56,7 +56,7 @@ class Warning extends AbstractEntity
      *
      * @var string|null $description
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $description;
 
@@ -97,14 +97,14 @@ class Warning extends AbstractEntity
      *
      * @pattern ^.*$
      *
+     * @example N/A
+     *
      * @param string|int|null $code
      *
      * @return static
      *
-     * @example N/A
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
      *
      * @see     Warning::$code
      */
@@ -135,14 +135,14 @@ class Warning extends AbstractEntity
      *
      * @pattern ^.*$
      *
+     * @example N/A
+     *
      * @param string|null $description
      *
      * @return static
      *
-     * @example N/A
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
      *
      * @see     Warning::$description
      */

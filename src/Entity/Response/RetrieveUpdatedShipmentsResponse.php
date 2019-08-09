@@ -59,7 +59,7 @@ class RetrieveUpdatedShipmentsResponse extends AbstractResponse implements Itera
      *
      * @var Shipment[] $shipments
      *
-     * @since 2.0.0
+     * @since   2.0.0
      */
     protected $shipments = [];
 
@@ -103,7 +103,7 @@ class RetrieveUpdatedShipmentsResponse extends AbstractResponse implements Itera
      *
      * @throws InvalidArgumentException
      *
-     * @since 2.0.0
+     * @since        2.0.0
      */
     public static function jsonDeserialize(array $json)
     {
@@ -126,7 +126,7 @@ class RetrieveUpdatedShipmentsResponse extends AbstractResponse implements Itera
      *
      * @since 2.0.0
      *
-     * @see Shipment
+     * @see   Shipment
      */
     public function getShipments(): array
     {
@@ -138,17 +138,17 @@ class RetrieveUpdatedShipmentsResponse extends AbstractResponse implements Itera
      *
      * @pattern N/A
      *
+     * @example N/A
+     *
      * @param Shipment[]|null $shipments
      *
      * @return static
      *
      * @throws InvalidArgumentException
      *
-     * @example N/A
+     * @since   2.0.0
      *
-     * @since 2.0.0
-     *
-     * @see Shipment
+     * @see     Shipment
      */
     public function setShipments(?array $shipments = null): RetrieveUpdatedShipmentsResponse
     {

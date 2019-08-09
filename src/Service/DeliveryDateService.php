@@ -36,6 +36,7 @@ use Firstred\PostNL\Entity\Response\CalculateDeliveryDateResponse;
 use Firstred\PostNL\Entity\Response\CalculateShippingDateResponse;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifErrorException;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Http\Client;
 use Firstred\PostNL\Misc\Message;
 use Http\Client\Exception as HttpClientException;
@@ -173,13 +174,16 @@ class DeliveryDateService extends AbstractService
      * @return null|CalculateDeliveryDateResponse
      *
      * @throws CifDownException
+     * @throws CifErrorException
+     * @throws InvalidArgumentException
      *
-     * @since 2.0.0 Strict typing
      * @since 1.0.0
+     * @since 2.0.0 Strict typing
      */
     public function processCalculateDeliveryDateResponse(ResponseInterface $response): CalculateDeliveryDateResponse
     {
-        $body = json_decode((string) $response->getBody(), true);
+        static::validateResponse($response);
+        $body = @json_decode((string) $response->getBody(), true);
         if (isset($body['DeliveryDate'])) {
             /** @var CalculateDeliveryDateResponse $object */
             $object = AbstractEntity::jsonDeserialize(['CalculateDeliveryDateResponse' => $body]);
@@ -286,13 +290,16 @@ class DeliveryDateService extends AbstractService
      * @return CalculateShippingDateResponse
      *
      * @throws CifDownException
+     * @throws CifErrorException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0 Strict typing
      * @since 1.0.0
      */
     public function processCalculateShippingDateResponse(ResponseInterface $response): CalculateShippingDateResponse
     {
-        $body = json_decode((string) $response->getBody(), true);
+        static::validateResponse($response);
+        $body = @json_decode((string) $response->getBody(), true);
         if (isset($body['SentDate'])) {
             /** @var CalculateShippingDateResponse $object */
             $object = AbstractEntity::jsonDeserialize(['CalculateShippingDateResponse' => $body]);

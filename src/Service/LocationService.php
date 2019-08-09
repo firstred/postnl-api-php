@@ -154,6 +154,8 @@ class LocationService extends AbstractService
      *
      * @return FindNearestLocationsResponse
      *
+     * @throws CifDownException
+     * @throws CifErrorException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0 Strict typing
@@ -161,7 +163,8 @@ class LocationService extends AbstractService
      */
     public function processFindNearestLocationsResponse(ResponseInterface $response): FindNearestLocationsResponse
     {
-        $body = json_decode((string) $response->getBody(), true);
+        static::validateResponse($response);
+        $body = @json_decode((string) $response->getBody(), true);
 
         /** @var FindNearestLocationsResponse $object */
         $object = FindNearestLocationsResponse::jsonDeserialize(['FindNearestLocationsResponse' => $body]);
@@ -260,13 +263,16 @@ class LocationService extends AbstractService
      *
      * @return FindNearestLocationsGeocodeResponse
      *
+     * @throws CifDownException
+     * @throws CifErrorException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
     public function processFindNearestLocationsGeocodeResponse(ResponseInterface $response): FindNearestLocationsGeocodeResponse
     {
-        $body = json_decode((string) $response->getBody(), true);
+        static::validateResponse($response);
+        $body = @json_decode((string) $response->getBody(), true);
 
         /** @var FindNearestLocationsGeocodeResponse $object */
 
@@ -366,13 +372,16 @@ class LocationService extends AbstractService
      *
      * @return FindLocationsInAreaResponse
      *
+     * @throws CifDownException
+     * @throws CifErrorException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
     public function processFindLocationsInAreaResponse(ResponseInterface $response): FindLocationsInAreaResponse
     {
-        $body = json_decode((string) $response->getBody(), true);
+        static::validateResponse($response);
+        $body = @json_decode((string) $response->getBody(), true);
 
         /** @var FindLocationsInAreaResponse $object */
         $object = FindLocationsInAreaResponse::jsonDeserialize(['FindLocationsInAreaResponse' => $body]);
@@ -474,7 +483,7 @@ class LocationService extends AbstractService
     public function processLookupLocationResponse(ResponseInterface $response): Location
     {
         static::validateResponse($response);
-        $body = json_decode((string) $response->getBody(), true);
+        $body = @json_decode((string) $response->getBody(), true);
         if (is_array($body)) {
             if (isset($body['GetLocationsResult']['ResponseLocation'])) {
                 return Location::jsonDeserialize(['Location' => $body['GetLocationsResult']['ResponseLocation']]);

@@ -85,7 +85,7 @@ class Content extends AbstractEntity
      *
      * @var string|null $countryOfOrigin
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $countryOfOrigin;
 
@@ -100,7 +100,7 @@ class Content extends AbstractEntity
      *
      * @var string|null $HSTariffNr
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $HSTariffNr;
 
@@ -115,7 +115,7 @@ class Content extends AbstractEntity
      *
      * @var string|null $quantity
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $quantity;
 
@@ -130,7 +130,7 @@ class Content extends AbstractEntity
      *
      * @var string|null $value
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $value;
 
@@ -145,7 +145,7 @@ class Content extends AbstractEntity
      *
      * @var string|null $weight
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $weight;
 
@@ -196,13 +196,13 @@ class Content extends AbstractEntity
      *
      * @pattern ^[A-Z]{2}$
      *
+     * @example NL
+     *
      * @param string|null $countryOfOrigin
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example NL
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -236,13 +236,13 @@ class Content extends AbstractEntity
      *
      * @pattern ^.{1,35}$
      *
+     * @example Powdered milk
+     *
      * @param string|null $description
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example Powdered milk
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -275,13 +275,13 @@ class Content extends AbstractEntity
      *
      * @pattern ^\d{8}\d{5}?$
      *
+     * @example 7501031311309
+     *
      * @param string|null $ean
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 7501031311309
      *
      * @since   2.0.0 Strict typing
      *
@@ -352,14 +352,13 @@ class Content extends AbstractEntity
      *
      * @pattern ^\d{6}$
      *
+     * @example 950306
+     *
      * @param string|null $HSTariffNr
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     * @throws InvalidArgumentException
-     *
-     * @example 950306
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -393,15 +392,15 @@ class Content extends AbstractEntity
      *
      * @pattern ^\d{1,10}$
      *
+     * @example 12
+     *
      * @param string|int|float|null $quantity
      *
      * @return static
      *
      * @throws InvalidArgumentException
+     *
      * @throws InvalidArgumentException
-     *
-     * @example 12
-     *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
      *
@@ -434,11 +433,11 @@ class Content extends AbstractEntity
      *
      * @pattern ^\d{1,9}\.\d{2}$
      *
+     * @example 12.00
+     *
      * @param string|float|int|null $value
      *
      * @return static
-     *
-     * @example 12.00
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -476,11 +475,11 @@ class Content extends AbstractEntity
      *
      * @pattern ^\d{1,20}$
      *
+     * @example 2600
+     *
      * @param string|int|float|null $weight
      *
      * @return static
-     *
-     * @example 2600
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing

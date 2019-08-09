@@ -145,6 +145,8 @@ class LabellingService extends AbstractService
      *
      * @return GenerateLabelResponse
      *
+     * @throws CifDownException
+     * @throws CifErrorException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0 Strict typing
@@ -152,9 +154,9 @@ class LabellingService extends AbstractService
      */
     public function processGenerateLabelResponse(ResponseInterface $response): GenerateLabelResponse
     {
-        /** @var GenerateLabelResponse $object */
+        static::validateResponse($response);
 
-        return GenerateLabelResponse::jsonDeserialize(['GenerateLabelResponse' => json_decode((string) $response->getBody(), true)]);
+        return GenerateLabelResponse::jsonDeserialize(['GenerateLabelResponse' => @json_decode((string) $response->getBody(), true)]);
     }
 
     /**
@@ -165,6 +167,8 @@ class LabellingService extends AbstractService
      *
      * @return array
      *
+     * @throws CifDownException
+     * @throws CifErrorException
      * @throws HttpClientException
      * @throws InvalidArgumentException
      *

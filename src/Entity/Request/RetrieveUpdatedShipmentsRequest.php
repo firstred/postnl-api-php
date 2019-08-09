@@ -99,15 +99,15 @@ class RetrieveUpdatedShipmentsRequest extends AbstractEntity
      *
      * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}\s(?:2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9]$
      *
+     * @example 03-07-2019 08:00:00
+     *
      * @param string|null $startDate
      *
      * @return static
      *
      * @throws InvalidArgumentException
      *
-     * @example 03-07-2019 08:00:00
-     *
-     * @since 2.0.0 Strict typing
+     * @since   2.0.0 Strict typing
      *
      * @see     RetrieveUpdatedShipmentsRequest::$startDate
      */
@@ -137,15 +137,15 @@ class RetrieveUpdatedShipmentsRequest extends AbstractEntity
      *
      * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}\s(?:2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9]$
      *
+     * @example 04-07-2019 10:00:00
+     *
      * @param string|null $endDate
      *
      * @return static
      *
      * @throws InvalidArgumentException
      *
-     * @example 04-07-2019 10:00:00
-     *
-     * @since 2.0.0 Strict typing
+     * @since   2.0.0 Strict typing
      *
      * @see     RetrieveUpdatedShipmentsRequest::$endDate
      */

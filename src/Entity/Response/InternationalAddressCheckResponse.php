@@ -55,7 +55,7 @@ class InternationalAddressCheckResponse extends AbstractResponse
      *
      * @var ValidatedAddress[] $addresses
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $addresses = [];
 
@@ -100,7 +100,7 @@ class InternationalAddressCheckResponse extends AbstractResponse
      *
      * @throws InvalidArgumentException
      *
-     * @since 2.0.0
+     * @since        2.0.0
      */
     public static function jsonDeserialize(array $json)
     {
@@ -125,7 +125,7 @@ class InternationalAddressCheckResponse extends AbstractResponse
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      *
-     * @see ValidatedAddress
+     * @see   ValidatedAddress
      */
     public function getAddresses(): array
     {
@@ -137,18 +137,18 @@ class InternationalAddressCheckResponse extends AbstractResponse
      *
      * @pattern N/A
      *
+     * @example N/A
+     *
      * @param ValidatedAddress[]|null $addresses
      *
      * @return static
      *
      * @throws InvalidArgumentException
      *
-     * @example N/A
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     *
-     * @see ValidatedAddress
+     * @see     ValidatedAddress
      */
     public function setAddresses(?array $addresses = null): InternationalAddressCheckResponse
     {

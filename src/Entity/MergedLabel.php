@@ -43,7 +43,7 @@ class MergedLabel extends AbstractEntity
      *
      * @var int $productCodeDelivery
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $productCodeDelivery;
 
@@ -56,7 +56,7 @@ class MergedLabel extends AbstractEntity
      *
      * @var string[]|null $barcodes
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $barcodes;
 
@@ -69,7 +69,7 @@ class MergedLabel extends AbstractEntity
      *
      * @var Warning[]|null
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $warnings;
 
@@ -82,7 +82,7 @@ class MergedLabel extends AbstractEntity
      *
      * @var Label[]|null $labels
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $labels;
 
@@ -127,14 +127,14 @@ class MergedLabel extends AbstractEntity
      *
      * @pattern ^.{0,35}$
      *
+     * @example 003085
+     *
      * @param int|null $productCodeDelivery
      *
      * @return static
      *
-     * @example 003085
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
      *
      * @see     MergedLabel::$productCodeDelivery
      */
@@ -163,16 +163,16 @@ class MergedLabel extends AbstractEntity
     /**
      * Set barcodes
      *
-     * @param string[]|null $barcodes
-     *
-     * @return static
-     *
      * @example N/A
      *
      * @pattern N/A
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @param string[]|null $barcodes
+     *
+     * @return static
+     *
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
      *
      * @see     MergedLabel::$barcodes
      */
@@ -203,14 +203,14 @@ class MergedLabel extends AbstractEntity
      *
      * @pattern N/A
      *
+     * @example N/A
+     *
      * @param Warning[]|null $warnings
      *
      * @return static
      *
-     * @example N/A
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
      *
      * @see     Warning
      */
@@ -241,14 +241,14 @@ class MergedLabel extends AbstractEntity
      *
      * @pattern N/A
      *
+     * @example N/A
+     *
      * @param Label[]|null $labels
      *
      * @return static
      *
-     * @example N/A
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
      *
      * @see     Label
      */

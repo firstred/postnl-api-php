@@ -46,7 +46,7 @@ class RetrieveSignatureByBarcodeRequest extends AbstractEntity
      *
      * @var Shipment|null $shipment
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $barcode;
 
@@ -70,8 +70,8 @@ class RetrieveSignatureByBarcodeRequest extends AbstractEntity
      *
      * @return Shipment|null
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
      *
      * @see     RetrieveSignatureByBarcodeRequest::$barcode
      */
@@ -85,14 +85,14 @@ class RetrieveSignatureByBarcodeRequest extends AbstractEntity
      *
      * @pattern N/A
      *
+     * @example N/A
+     *
      * @param string|null $barcode
      *
      * @return static
      *
-     * @example N/A
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
      *
      * @see     RetrieveSignatureByBarcodeRequest::$barcode
      */

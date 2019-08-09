@@ -47,7 +47,7 @@ class CalculateTimeframesResponse extends AbstractResponse
      *
      * @var ReasonNoTimeframes|null $reasonNoTimeframes
      *
-     * @since 2.0.0
+     * @since   2.0.0
      */
     protected $reasonNoTimeframes;
 
@@ -60,7 +60,7 @@ class CalculateTimeframesResponse extends AbstractResponse
      *
      * @var Timeframes|null $timeframes
      *
-     * @since 2.0.0
+     * @since   2.0.0
      */
     protected $timeframes;
 
@@ -126,8 +126,8 @@ class CalculateTimeframesResponse extends AbstractResponse
      *
      * @since 2.0.0
      *
-     * @see ReasonNoTimeframe
-     * @see ReasonNoTimeframes
+     * @see   ReasonNoTimeframe
+     * @see   ReasonNoTimeframes
      */
     public function getReasonNoTimeframes(): ?ReasonNoTimeframes
     {
@@ -145,10 +145,10 @@ class CalculateTimeframesResponse extends AbstractResponse
      *
      * @return static
      *
-     * @since 2.0.0
+     * @since   2.0.0
      *
-     * @see ReasonNoTimeframe
-     * @see ReasonNoTimeframes
+     * @see     ReasonNoTimeframe
+     * @see     ReasonNoTimeframes
      */
     public function setReasonNoTimeframes(?ReasonNoTimeframes $reasonNoTimeframes): CalculateTimeframesResponse
     {
@@ -164,8 +164,8 @@ class CalculateTimeframesResponse extends AbstractResponse
      *
      * @since 2.0.0
      *
-     * @see Timeframe
-     * @see Timeframes
+     * @see   Timeframe
+     * @see   Timeframes
      */
     public function getTimeframes(): ?Timeframes
     {
@@ -183,10 +183,10 @@ class CalculateTimeframesResponse extends AbstractResponse
      *
      * @return static
      *
-     * @since 2.0.0
+     * @since   2.0.0
      *
-     * @see Timeframe
-     * @see Timeframes
+     * @see     Timeframe
+     * @see     Timeframes
      */
     public function setTimeframes(?Timeframes $timeframes): CalculateTimeframesResponse
     {

@@ -44,9 +44,9 @@ class ConfirmShipmentRequest extends AbstractEntity
      *
      * @var Shipment[]|null $shipments
      *
-     * @since 1.0.0
+     * @since   1.0.0
      *
-     * @see Shipment
+     * @see     Shipment
      */
     protected $shipments;
 
@@ -101,7 +101,7 @@ class ConfirmShipmentRequest extends AbstractEntity
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      *
-     * @see Shipment
+     * @see   Shipment
      */
     public function getShipments(): ?array
     {
@@ -113,16 +113,16 @@ class ConfirmShipmentRequest extends AbstractEntity
      *
      * @pattern N/A
      *
+     * @example N/A
+     *
      * @param Shipment[]|null $shipments
      *
      * @return static
      *
-     * @example N/A
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     *
-     * @see Shipment
+     * @see     Shipment
      */
     public function setShipments(?array $shipments): ConfirmShipmentRequest
     {

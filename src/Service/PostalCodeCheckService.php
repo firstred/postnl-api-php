@@ -32,6 +32,7 @@ namespace Firstred\PostNL\Service;
 use Firstred\PostNL\Entity\Request\PostalCodeCheckRequest;
 use Firstred\PostNL\Entity\ValidatedAddress;
 use Firstred\PostNL\Exception\CifDownException;
+use Firstred\PostNL\Exception\CifErrorException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Http\Client;
 use Firstred\PostNL\PostNL;
@@ -94,8 +95,7 @@ class PostalCodeCheckService extends AbstractService
         return Psr17FactoryDiscovery::findRequestFactory()->createRequest('POST', $endpoint)
             ->withHeader('Accept', 'application/json')
             ->withHeader('apikey', $this->postnl->getApiKey())
-            ->withBody($streamFactory->createStream(json_encode($postalCodeCheck)))
-        ;
+            ->withBody($streamFactory->createStream(json_encode($postalCodeCheck)));
     }
 
     /**
@@ -107,12 +107,14 @@ class PostalCodeCheckService extends AbstractService
      *
      * @throws CifDownException
      * @throws InvalidArgumentException
+     * @throws CifErrorException
      *
      * @since 2.0.0
      */
     public function processPostalCodeCheckResponse(ResponseInterface $response): ValidatedAddress
     {
-        $body = json_decode((string) $response->getBody(), true);
+        static::validateResponse($response);
+        $body = @json_decode((string) $response->getBody(), true);
         if (is_array($body)) {
             return ValidatedAddress::jsonDeserialize(['ValidatedAddress' => $body]);
         }

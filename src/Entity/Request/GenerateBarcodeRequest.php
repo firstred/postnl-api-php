@@ -57,12 +57,13 @@ class GenerateBarcodeRequest extends AbstractEntity
      *
      * @var string|null $type
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $type;
 
     /**
-     * Range used when generating generic S10 barcodes (without a customer-specific component). If this is the case, please use ‘NL’ for this field in combination with Serie '00000000-99999999’. If you leave this field blank, the CustomerCode value will be used for the barcode.
+     * Range used when generating generic S10 barcodes (without a customer-specific component). If this is the case, please use ‘NL’ for this field in combination with Serie '00000000-99999999’. If
+     * you leave this field blank, the CustomerCode value will be used for the barcode.
      *
      * @pattern ^.{0,35}$
      *
@@ -70,12 +71,13 @@ class GenerateBarcodeRequest extends AbstractEntity
      *
      * @var string|null $range
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $range;
 
     /**
-     * GenerateBarcodeRequest serie in the format '###000000-###000000’, for example 100000000-500000000. The range must consist of a minimal difference of 100.000. Minimum length of the serie is 6 characters; maximum length is 9 characters. It is allowed to add extra leading zeros at the beginning of the serie. See Guidelines for more information.
+     * GenerateBarcodeRequest serie in the format '###000000-###000000’, for example 100000000-500000000. The range must consist of a minimal difference of 100.000. Minimum length of the serie is 6
+     * characters; maximum length is 9 characters. It is allowed to add extra leading zeros at the beginning of the serie. See Guidelines for more information.
      *
      * @pattern ^\d{0,3}\d{6}-\d{0,3}\d{6}$
      *
@@ -83,7 +85,7 @@ class GenerateBarcodeRequest extends AbstractEntity
      *
      * @var string|null $serie
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $serie;
 
@@ -128,13 +130,13 @@ class GenerateBarcodeRequest extends AbstractEntity
      *
      * @pattern ^(?:2S|3S|CC|CP|CD|CF|LA|CX)$
      *
+     * @example 3S
+     *
      * @param string|null $type
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 3S
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -168,13 +170,13 @@ class GenerateBarcodeRequest extends AbstractEntity
      *
      * @pattern ^[A-Z0-9]{1,4}$
      *
+     * @example NL
+     *
      * @param string|null $range
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example NL
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -208,13 +210,13 @@ class GenerateBarcodeRequest extends AbstractEntity
      *
      * @pattern ^\d{0,3}\d{6}-\d{0,3}\d{6}$
      *
+     * @example 100000000-500000000
+     *
      * @param string|null $serie
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 100000000-500000000
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing

@@ -49,7 +49,7 @@ class FindNearestLocationsRequest extends AbstractEntity
      *
      * @var string|null $countrycode
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $countrycode;
 
@@ -177,13 +177,13 @@ class FindNearestLocationsRequest extends AbstractEntity
      *
      * @pattern ^(?:NL|BE)$
      *
+     * @example NL
+     *
      * @param string|null $countrycode
      *
      * @return static
      *
-     * @example NL
-     *
-     * @since 1.0.0
+     * @since   1.0.0
      * @since   2.0.0
      *
      * @see     FindNearestLocationsRequest::$countrycode
@@ -214,13 +214,13 @@ class FindNearestLocationsRequest extends AbstractEntity
      *
      * @pattern ^.{1,10}$
      *
+     * @example 2132WT
+     *
      * @param string|null $postalCode
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 2132WT
      *
      * @since   2.0.0
      *
@@ -252,13 +252,13 @@ class FindNearestLocationsRequest extends AbstractEntity
      *
      * @pattern ^.{0,35}$
      *
+     * @example Hoofddorp
+     *
      * @param string|null $city
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example Hoofddorp
      *
      * @since   2.0.0
      *
@@ -290,13 +290,13 @@ class FindNearestLocationsRequest extends AbstractEntity
      *
      * @pattern ^.{0,95}$
      *
+     * @example Siriusdreef
+     *
      * @param string|null $street
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example Siriusdreef
      *
      * @since   2.0.0
      *
@@ -328,13 +328,13 @@ class FindNearestLocationsRequest extends AbstractEntity
      *
      * @pattern ^\d{1,10}$
      *
+     * @example 42
+     *
      * @param int|string|null $houseNumber
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 42
      *
      * @since   2.0.0
      *
@@ -366,13 +366,13 @@ class FindNearestLocationsRequest extends AbstractEntity
      *
      * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}$
      *
+     * @example 03-07-2019
+     *
      * @param string|null $deliveryDate
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 03-07-2019
      *
      * @since   2.0.0
      *
@@ -404,13 +404,13 @@ class FindNearestLocationsRequest extends AbstractEntity
      *
      * @pattern ^(?:2[0-3]|[01]?[0-9]):(?:[0-5]?[0-9]):(?:[0-5]?[0-9])$
      *
+     * @example 09:00:00
+     *
      * @param string|null $openingTime
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 09:00:00
      *
      * @since   2.0.0
      *
@@ -442,11 +442,11 @@ class FindNearestLocationsRequest extends AbstractEntity
      *
      * @pattern ^(?:PG|PGE)$
      *
+     * @example PGE
+     *
      * @param array|null $deliveryOptions
      *
      * @return static
-     *
-     * @example PGE
      *
      * @since   2.0.0
      *

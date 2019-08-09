@@ -32,6 +32,7 @@ namespace Firstred\PostNL\Entity\Response;
 use Firstred\PostNL\Entity\Error;
 use Firstred\PostNL\Entity\Location;
 use Firstred\PostNL\Entity\Locations;
+use Firstred\PostNL\Entity\PickupOption;
 use Firstred\PostNL\Entity\PickupOptions;
 use Firstred\PostNL\Entity\Timeframe;
 use Firstred\PostNL\Entity\Timeframes;
@@ -52,7 +53,7 @@ class FindDeliveryInfoResponse extends AbstractResponse
      *
      * @var Timeframes $deliveryOptions
      *
-     * @since 2.0.0
+     * @since   2.0.0
      */
     protected $deliveryOptions;
 
@@ -65,7 +66,7 @@ class FindDeliveryInfoResponse extends AbstractResponse
      *
      * @var PickupOptions $pickupOptions
      *
-     * @since 2.0.0
+     * @since   2.0.0
      */
     protected $pickupOptions;
 
@@ -86,9 +87,14 @@ class FindDeliveryInfoResponse extends AbstractResponse
     }
 
     /**
+     * Get delivery options
+     *
      * @return Timeframes|null
      *
      * @since 2.0.0 Strict typing
+     *
+     * @see Timeframe
+     * @see Timeframes
      */
     public function getDeliveryOptions(): ?Timeframes
     {
@@ -117,11 +123,20 @@ class FindDeliveryInfoResponse extends AbstractResponse
     }
 
     /**
+     * Set delivery options
+     *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @param Timeframes|null $deliveryOptions
      *
      * @return static
      *
      * @since 2.0.0 Strict typing
+     *
+     * @see Timeframe
+     * @see Timeframes
      */
     public function setDeliveryOptions(?Timeframes $deliveryOptions): FindDeliveryInfoResponse
     {
@@ -131,9 +146,14 @@ class FindDeliveryInfoResponse extends AbstractResponse
     }
 
     /**
+     * Get pickup options
+     *
      * @return PickupOptions|null
      *
      * @since 2.0.0 Strict typing
+     *
+     * @see PickupOption
+     * @see PickupOptions
      */
     public function getPickupOptions(): ?PickupOptions
     {
@@ -143,17 +163,21 @@ class FindDeliveryInfoResponse extends AbstractResponse
     /**
      * Add a pickup option
      *
-     * @param Location $pickupOption
+     * @pattern N/A
+     *
+     * @example N/A
+     *
+     * @param PickupOption $pickupOption
      *
      * @return FindDeliveryInfoResponse
      *
      * @see Location
      * @see Locations
      */
-    public function addPickupOption(Location $pickupOption): FindDeliveryInfoResponse
+    public function addPickupOption(PickupOption $pickupOption): FindDeliveryInfoResponse
     {
-        if (!$this->pickupOptions instanceof Locations) {
-            $this->pickupOptions = new Locations();
+        if (!$this->pickupOptions instanceof PickupOptions) {
+            $this->pickupOptions = new PickupOption();
         }
 
         $this->pickupOptions[] = $pickupOption;
@@ -162,11 +186,20 @@ class FindDeliveryInfoResponse extends AbstractResponse
     }
 
     /**
+     * Set pickup options
+     *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @param PickupOptions|null $pickupOptions
      *
      * @return static
      *
      * @since 2.0.0 Strict typing
+     *
+     * @see PickupOption
+     * @see PickupOptions
      */
     public function setPickupOptions(?PickupOptions $pickupOptions): FindDeliveryInfoResponse
     {
@@ -186,7 +219,7 @@ class FindDeliveryInfoResponse extends AbstractResponse
      *
      * @throws InvalidArgumentException
      *
-     * @since 1.0.0
+     * @since        1.0.0
      */
     public static function jsonDeserialize(array $json)
     {

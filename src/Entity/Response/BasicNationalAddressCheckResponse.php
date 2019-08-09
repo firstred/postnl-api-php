@@ -48,7 +48,7 @@ class BasicNationalAddressCheckResponse extends AbstractEntity
      *
      * @var int|null $status
      *
-     * @since 2.0.0
+     * @since   2.0.0
      */
     protected $status;
 
@@ -74,7 +74,7 @@ class BasicNationalAddressCheckResponse extends AbstractEntity
      *
      * @var string|null $houseNumber
      *
-     * @since 2.0.0
+     * @since   2.0.0
      */
     protected $houseNumber;
 
@@ -87,7 +87,7 @@ class BasicNationalAddressCheckResponse extends AbstractEntity
      *
      * @var string|null $postalCode
      *
-     * @since 2.0.0
+     * @since   2.0.0
      */
     protected $postalCode;
 
@@ -100,7 +100,7 @@ class BasicNationalAddressCheckResponse extends AbstractEntity
      *
      * @var string|null $city
      *
-     * @since 2.0.0
+     * @since   2.0.0
      */
     protected $city;
 
@@ -113,7 +113,7 @@ class BasicNationalAddressCheckResponse extends AbstractEntity
      *
      * @var string|null $areaCode
      *
-     * @since 2.0.0
+     * @since   2.0.0
      */
     protected $areaCode;
 
@@ -154,7 +154,7 @@ class BasicNationalAddressCheckResponse extends AbstractEntity
      *
      * @throws InvalidArgumentException
      *
-     * @since 2.0.0
+     * @since        2.0.0
      */
     public static function jsonDeserialize(array $json)
     {
@@ -211,6 +211,8 @@ class BasicNationalAddressCheckResponse extends AbstractEntity
      *
      * @pattern ^(?:0|1)$
      *
+     * @example 1
+     *
      * @param int|string|float|null $status
      *
      * @return static
@@ -218,8 +220,6 @@ class BasicNationalAddressCheckResponse extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
-     * @example 1
      *
      * @see     BasicNationalAddressCheckResponse::$status
      */
@@ -249,13 +249,13 @@ class BasicNationalAddressCheckResponse extends AbstractEntity
      *
      * @pattern ^.{0,95}$
      *
+     * @example Prinses Beatrixlaan
+     *
      * @param string|null $streetName
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example Prinses Beatrixlaan
      *
      * @since   2.0.0
      *
@@ -289,13 +289,13 @@ class BasicNationalAddressCheckResponse extends AbstractEntity
      *
      * @pattern ^.{0,35}$
      *
+     * @example 23
+     *
      * @param string|null $houseNumber
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 23
      *
      * @since   2.0.0
      *
@@ -327,17 +327,17 @@ class BasicNationalAddressCheckResponse extends AbstractEntity
      *
      * @pattern ^.{0,10}$
      *
+     * @example 2595AK
+     *
      * @param string|null $postalCode
      *
      * @return static
      *
      * @throws InvalidArgumentException
      *
-     * @example 2595AK
+     * @since   2.0.0
      *
      * @see     BasicNationalAddressCheckResponse::$postalCode
-     *
-     * @since   2.0.0
      */
     public function setPostalCode(?string $postalCode): BasicNationalAddressCheckResponse
     {
@@ -365,6 +365,8 @@ class BasicNationalAddressCheckResponse extends AbstractEntity
      *
      * @pattern {0,35}$
      *
+     * @example Hoofddorp
+     *
      * @param string|null $city
      *
      * @return static
@@ -372,8 +374,6 @@ class BasicNationalAddressCheckResponse extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
-     * @example Hoofddorp
      *
      * @see     BasicNationalAddressCheckResponse::$city
      */
@@ -403,11 +403,11 @@ class BasicNationalAddressCheckResponse extends AbstractEntity
      *
      * @pattern {0,35}$
      *
+     * @example 070
+     *
      * @param string|null $areaCode
      *
      * @return static
-     *
-     * @example 070
      *
      * @since   2.0.0
      *

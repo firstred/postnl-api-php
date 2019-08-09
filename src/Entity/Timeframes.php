@@ -81,7 +81,7 @@ class Timeframes extends AbstractEntity implements Iterator, ArrayAccess, Counta
      *
      * @since 2.0.0 Strict typing
      *
-     * @see Timeframe
+     * @see   Timeframe
      */
     public function getTimeframes(): ?array
     {
@@ -99,9 +99,9 @@ class Timeframes extends AbstractEntity implements Iterator, ArrayAccess, Counta
      *
      * @return static
      *
-     * @since 2.0.0 Strict typing
+     * @since   2.0.0 Strict typing
      *
-     * @see Timeframe
+     * @see     Timeframe
      */
     public function setTimeframes(?array $timeframes): Timeframes
     {
@@ -164,7 +164,7 @@ class Timeframes extends AbstractEntity implements Iterator, ArrayAccess, Counta
      *
      * @throws InvalidArgumentException
      *
-     * @since 2.0.0
+     * @since        2.0.0
      */
     public static function jsonDeserialize(array $json)
     {

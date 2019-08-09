@@ -43,7 +43,7 @@ class GenerateBarcodeResponse extends AbstractResponse
      *
      * @var string|null $barcode
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $barcode;
 
@@ -82,14 +82,14 @@ class GenerateBarcodeResponse extends AbstractResponse
      *
      * @pattern ^.{11,15}$
      *
+     * @example 3SABCD7762162
+     *
      * @param string|null $barcode
      *
      * @return static
      *
-     * @example 3SABCD7762162
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
      *
      * @see     GenerateBarcodeResponse::$barcode
      */

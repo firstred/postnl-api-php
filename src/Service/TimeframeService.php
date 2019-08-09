@@ -65,6 +65,7 @@ class TimeframeService extends AbstractService
      * @throws CifDownException
      * @throws CifErrorException
      * @throws HttpClientException
+     * @throws InvalidArgumentException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -164,6 +165,8 @@ class TimeframeService extends AbstractService
      *
      * @return CalculateTimeframesResponse
      *
+     * @throws CifDownException
+     * @throws CifErrorException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0 Strict typing
@@ -171,7 +174,8 @@ class TimeframeService extends AbstractService
      */
     public function processGetTimeframesResponse(ResponseInterface $response): CalculateTimeframesResponse
     {
-        $body = json_decode((string) $response->getBody(), true);
+        static::validateResponse($response);
+        $body = @json_decode((string) $response->getBody(), true);
 
         return CalculateTimeframesResponse::jsonDeserialize(['CalculateTimeframesResponse' => $body]);
     }

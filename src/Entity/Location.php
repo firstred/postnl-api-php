@@ -228,6 +228,8 @@ class Location extends AbstractEntity
      * @example 03-08-2019
      *
      * @var string|null $pickupDate
+     *
+     * @since 2.0.0
      */
     protected $pickupDate;
 

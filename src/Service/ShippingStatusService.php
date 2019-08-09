@@ -149,8 +149,7 @@ class ShippingStatusService extends AbstractService
             ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint
         )
             ->withHeader('Accept', 'application/json')
-            ->withHeader('apikey', $this->postnl->getApiKey())
-        ;
+            ->withHeader('apikey', $this->postnl->getApiKey());
     }
 
     /**
@@ -162,12 +161,14 @@ class ShippingStatusService extends AbstractService
      *
      * @throws InvalidArgumentException
      * @throws CifDownException
+     * @throws CifErrorException
      *
      * @since 2.0.0
      */
     public function processRetrieveShipmentResponse(ResponseInterface $response): Shipment
     {
-        $body = json_decode((string) $response->getBody(), true);
+        static::validateResponse($response);
+        $body = @json_decode((string) $response->getBody(), true);
         if (isset($body['CurrentStatus']['Shipment'])) {
             /** @var Shipment $object */
             $object = Shipment::jsonDeserialize(['Shipment' => $body['CurrentStatus']['Shipment']]);
@@ -251,8 +252,7 @@ class ShippingStatusService extends AbstractService
             ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint
         )
             ->withHeader('Accept', 'application/json')
-            ->withHeader('apikey', $this->postnl->getApiKey())
-            ;
+            ->withHeader('apikey', $this->postnl->getApiKey());
     }
 
     /**
@@ -264,12 +264,14 @@ class ShippingStatusService extends AbstractService
      *
      * @throws InvalidArgumentException
      * @throws CifDownException
+     * @throws CifErrorException
      *
      * @since 2.0.0
      */
     public function processRetrieveUpdatedShipmentsResponse(ResponseInterface $response): RetrieveUpdatedShipmentsResponse
     {
-        $body = json_decode((string) $response->getBody(), true);
+        static::validateResponse($response);
+        $body = @json_decode((string) $response->getBody(), true);
         if (isset($body[0]['Barcode'])) {
             return RetrieveUpdatedShipmentsResponse::jsonDeserialize(['RetrieveUpdatedShipmentsResponse' => $body]);
         }
@@ -336,8 +338,7 @@ class ShippingStatusService extends AbstractService
         )
             ->withHeader('Accept', 'application/json')
             ->withHeader('Content-Type', 'application/json;charset=UTF-8')
-            ->withHeader('apikey', $this->postnl->getApiKey())
-        ;
+            ->withHeader('apikey', $this->postnl->getApiKey());
     }
 
     /**
@@ -349,12 +350,14 @@ class ShippingStatusService extends AbstractService
      *
      * @throws CifDownException
      * @throws InvalidArgumentException
+     * @throws CifErrorException
      *
      * @since 2.0.0
      */
     public function processRetrieveSignatureResponse(ResponseInterface $response): Signature
     {
-        $body = json_decode((string) $response->getBody(), true);
+        static::validateResponse($response);
+        $body = @json_decode((string) $response->getBody(), true);
         if (isset($body['Signature']['Barcode'])) {
             /** @var Signature $object */
             $object = Signature::jsonDeserialize($body);

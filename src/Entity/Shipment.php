@@ -59,7 +59,7 @@ class Shipment extends AbstractEntity
      *
      * @var Address[]|null $addresses
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $addresses;
 
@@ -72,7 +72,7 @@ class Shipment extends AbstractEntity
      *
      * @var Amount[]|null $amounts
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $amounts;
 
@@ -98,7 +98,7 @@ class Shipment extends AbstractEntity
      *
      * @var string|null $barcode
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $barcode;
 
@@ -111,7 +111,7 @@ class Shipment extends AbstractEntity
      *
      * @var string|null $codingText
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $codingText;
 
@@ -124,7 +124,7 @@ class Shipment extends AbstractEntity
      *
      * @var string|null $collectionTimeStampEnd
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $collectionTimeStampEnd;
 
@@ -137,7 +137,7 @@ class Shipment extends AbstractEntity
      *
      * @var string|null $collectionTimeStampStart
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $collectionTimeStampStart;
 
@@ -150,7 +150,7 @@ class Shipment extends AbstractEntity
      *
      * @var Contact[]|null $contacts
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $contacts;
 
@@ -163,7 +163,7 @@ class Shipment extends AbstractEntity
      *
      * @var string|null $content
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $content;
 
@@ -177,7 +177,7 @@ class Shipment extends AbstractEntity
      *
      * @var string|null $costCenter
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $costCenter;
 
@@ -190,7 +190,7 @@ class Shipment extends AbstractEntity
      *
      * @var Customer|null $customer
      *
-     * @since 2.0.0
+     * @since   2.0.0
      */
     protected $customer;
 
@@ -203,7 +203,7 @@ class Shipment extends AbstractEntity
      *
      * @var string|null $customerOrderNumber
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $customerOrderNumber;
 
@@ -216,7 +216,7 @@ class Shipment extends AbstractEntity
      *
      * @var Customs|null $customs
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $customs;
 
@@ -229,7 +229,7 @@ class Shipment extends AbstractEntity
      *
      * @var string|null $deliveryAddress
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $deliveryAddress;
 
@@ -242,7 +242,7 @@ class Shipment extends AbstractEntity
      *
      * @var string|null $deliveryTimeStampStart
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $deliveryTimeStampStart;
 
@@ -255,12 +255,13 @@ class Shipment extends AbstractEntity
      *
      * @var string|null $deliveryTimeStampEnd
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $deliveryTimeStampEnd;
 
     /**
-     * The delivery date of the shipment. We strongly advice to use the DeliveryDate service to get this date when using delivery options like Evening/Morning/Sameday delivery etc. For those products, this field is mandatory (please regard the Guidelines section). Format: d-m-Y H:i:s
+     * The delivery date of the shipment. We strongly advice to use the DeliveryDate service to get this date when using delivery options like Evening/Morning/Sameday delivery etc. For those
+     * products, this field is mandatory (please regard the Guidelines section). Format: d-m-Y H:i:s
      *
      * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}\s(?:2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9]$
      *
@@ -268,7 +269,7 @@ class Shipment extends AbstractEntity
      *
      * @var string|null $deliveryDate
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $deliveryDate;
 
@@ -281,7 +282,7 @@ class Shipment extends AbstractEntity
      *
      * @var Dimension|null $dimension
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $dimension;
 
@@ -295,7 +296,7 @@ class Shipment extends AbstractEntity
      *
      * @var string|null $downPartnerBarcode
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $downPartnerBarcode;
 
@@ -309,7 +310,7 @@ class Shipment extends AbstractEntity
      *
      * @var string|null $downPartnerID
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $downPartnerID;
 
@@ -322,7 +323,7 @@ class Shipment extends AbstractEntity
      *
      * @var string|null $downPartnerLocation
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $downPartnerLocation;
 
@@ -336,7 +337,7 @@ class Shipment extends AbstractEntity
      *
      * @var Group[]|null $groups
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $groups;
 
@@ -350,7 +351,7 @@ class Shipment extends AbstractEntity
      *
      * @var string|null $IDExpiration
      *
-     * @since 1.0.0
+     * @since    1.0.0
      */
     protected $IDExpiration;
 
@@ -364,7 +365,7 @@ class Shipment extends AbstractEntity
      *
      * @var string|null $IDNumber
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $IDNumber;
 
@@ -378,7 +379,7 @@ class Shipment extends AbstractEntity
      *
      * @var string|null $IDType
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $IDType;
 
@@ -393,7 +394,7 @@ class Shipment extends AbstractEntity
      *
      * @var string|null $productCode
      *
-     * @since 2.0.0
+     * @since   2.0.0
      */
     protected $productCode;
 
@@ -406,7 +407,7 @@ class Shipment extends AbstractEntity
      *
      * @var string|null $productCodeCollect
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $productCodeCollect;
 
@@ -419,7 +420,7 @@ class Shipment extends AbstractEntity
      *
      * @var string|null $productCodeDelivery
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $productCodeDelivery;
 
@@ -432,7 +433,7 @@ class Shipment extends AbstractEntity
      *
      * @var string|null
      *
-     * @since 2.0.0
+     * @since   2.0.0
      */
     protected $productDescription;
 
@@ -445,7 +446,7 @@ class Shipment extends AbstractEntity
      *
      * @var ProductOption[]|null $productOptions
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $productOptions;
 
@@ -459,7 +460,7 @@ class Shipment extends AbstractEntity
      *
      * @var string|null $receiverDateOfBirth
      *
-     * @since 1.0.0
+     * @since    1.0.0
      */
     protected $receiverDateOfBirth;
 
@@ -472,7 +473,7 @@ class Shipment extends AbstractEntity
      *
      * @var string|null $reference
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $reference;
 
@@ -485,7 +486,7 @@ class Shipment extends AbstractEntity
      *
      * @var string|null $referenceCollect
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $referenceCollect;
 
@@ -498,7 +499,7 @@ class Shipment extends AbstractEntity
      *
      * @var string|null $remark
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $remark;
 
@@ -513,7 +514,7 @@ class Shipment extends AbstractEntity
      *
      * @var string|null $returnBarcode
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $returnBarcode;
 
@@ -526,7 +527,7 @@ class Shipment extends AbstractEntity
      *
      * @var string|null $returnReference
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $returnReference;
 
@@ -539,7 +540,7 @@ class Shipment extends AbstractEntity
      *
      * @var int|null $shipmentAmount
      *
-     * @since 2.0.0
+     * @since   2.0.0
      */
     protected $shipmentAmount;
 
@@ -552,7 +553,7 @@ class Shipment extends AbstractEntity
      *
      * @var int|null $shipmentCounter
      *
-     * @since 2.0.0
+     * @since   2.0.0
      */
     protected $shipmentCounter;
 
@@ -565,7 +566,7 @@ class Shipment extends AbstractEntity
      *
      * @var Event[]|null
      *
-     * @since 2.0.0
+     * @since   2.0.0
      */
     protected $event;
 
@@ -591,7 +592,7 @@ class Shipment extends AbstractEntity
      *
      * @var OldStatus[]|null
      *
-     * @since 2.0.0
+     * @since   2.0.0
      */
     protected $oldStatus;
 
@@ -604,7 +605,7 @@ class Shipment extends AbstractEntity
      *
      * @var Label[]|null $labels
      *
-     * @since 2.0.0
+     * @since   2.0.0
      */
     protected $labels;
 
@@ -692,7 +693,7 @@ class Shipment extends AbstractEntity
      *
      * @throws InvalidArgumentException
      *
-     * @since 2.0.0
+     * @since        2.0.0
      */
     public static function jsonDeserialize(array $json)
     {
@@ -757,11 +758,11 @@ class Shipment extends AbstractEntity
      *
      * @pattern N/A
      *
+     * @example N/A
+     *
      * @param Address[]|null $addresses
      *
      * @return static
-     *
-     * @example N/A
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -795,11 +796,11 @@ class Shipment extends AbstractEntity
      *
      * @pattern N/A
      *
+     * @example N/A
+     *
      * @param Amount[]|null $amounts
      *
      * @return static
-     *
-     * @example N/A
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -833,13 +834,13 @@ class Shipment extends AbstractEntity
      *
      * @pattern ^.{1,35}$
      *
+     * @example 3SDEVC2016112104
+     *
      * @param string|null $barcode
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 3SDEVC2016112104
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -913,13 +914,13 @@ class Shipment extends AbstractEntity
      *
      * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}\s(?:2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9]$
      *
+     * @example 03-07-2019 17:00:00
+     *
      * @param string|null $collectionTimeStampEnd
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 03-07-2019 17:00:00
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -953,13 +954,13 @@ class Shipment extends AbstractEntity
      *
      * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}\s(?:2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9]$
      *
+     * @example 03-07-2019 16:00:00
+     *
      * @param string|null $collectionTimeStampStart
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 03-07-2019 16:00:00
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -978,9 +979,9 @@ class Shipment extends AbstractEntity
      *
      * @pattern N/A
      *
-     * @return Contact[]|null
-     *
      * @example N/A
+     *
+     * @return Contact[]|null
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -997,11 +998,11 @@ class Shipment extends AbstractEntity
      *
      * @pattern N/A
      *
+     * @example N/A
+     *
      * @param Contact[]|null $contacts
      *
      * @return static
-     *
-     * @example N/A
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -1020,9 +1021,9 @@ class Shipment extends AbstractEntity
      *
      * @pattern N/A
      *
-     * @return string|null
-     *
      * @example N/A
+     *
+     * @return string|null
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -1039,11 +1040,11 @@ class Shipment extends AbstractEntity
      *
      * @pattern N/A
      *
+     * @example N/A
+     *
      * @param string|null $content
      *
      * @return static
-     *
-     * @example N/A
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -1077,13 +1078,13 @@ class Shipment extends AbstractEntity
      *
      * @pattern ^.{0,35}$
      *
+     * @example SX-GT-66
+     *
      * @param string|null $costCenter
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example SX-GT-66
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -1117,13 +1118,13 @@ class Shipment extends AbstractEntity
      *
      * @pattern ^.{0,35}$
      *
+     * @example 8689242390
+     *
      * @param string|null $customerOrderNumber
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 8689242390
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -1157,11 +1158,11 @@ class Shipment extends AbstractEntity
      *
      * @pattern N/A
      *
+     * @example N/A
+     *
      * @param Customs|null $customs
      *
      * @return static
-     *
-     * @example N/A
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -1195,13 +1196,13 @@ class Shipment extends AbstractEntity
      *
      * @pattern pattern: ^\d{2}$
      *
+     * @example 09
+     *
      * @param string|null $deliveryAddress
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 09
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -1235,13 +1236,13 @@ class Shipment extends AbstractEntity
      *
      * @pattern ^(?:[0-3]\d-[01]\d-[12]\d{3}\s+)[0-2]\d:[0-5]\d(?:[0-5]\d)$
      *
+     * @example 03-07-2019 14:30:00
+     *
      * @param string|null $deliveryTimeStampStart
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 03-07-2019 14:30:00
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -1275,13 +1276,13 @@ class Shipment extends AbstractEntity
      *
      * @pattern ^(?:[0-3]\d-[01]\d-[12]\d{3}\s+)[0-2]\d:[0-5]\d(?:[0-5]\d)$
      *
+     * @example 03-07-2019 16:30:00
+     *
      * @param string|null $deliveryTimeStampEnd
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 03-07-2019 16:30:00
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -1315,13 +1316,13 @@ class Shipment extends AbstractEntity
      *
      * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}\s(?:2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9]$
      *
+     * @example 03-07-2019 14:00:00
+     *
      * @param string|null $deliveryDate
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 03-07-2019 14:00:00
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -1355,11 +1356,11 @@ class Shipment extends AbstractEntity
      *
      * @pattern N/A
      *
+     * @example N/A
+     *
      * @param Dimension|null $dimension
      *
      * @return static
-     *
-     * @example N/A
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -1393,13 +1394,13 @@ class Shipment extends AbstractEntity
      *
      * @pattern ^.{0,35}$
      *
+     * @example CD123456785NL
+     *
      * @param string|null $downPartnerBarcode
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example CD123456785NL
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -1433,13 +1434,13 @@ class Shipment extends AbstractEntity
      *
      * @pattern ^.{0,35}$
      *
+     * @example LD-01
+     *
      * @param string|null $downPartnerID
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example LD-01
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -1473,13 +1474,13 @@ class Shipment extends AbstractEntity
      *
      * @pattern ^.{0,10}$
      *
+     * @example BE0Q82
+     *
      * @param string|null $downPartnerLocation
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example BE0Q82
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -1513,11 +1514,11 @@ class Shipment extends AbstractEntity
      *
      * @pattern N/A
      *
+     * @example N/A
+     *
      * @param Group[]|null $groups
      *
      * @return static
-     *
-     * @example N/A
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -1551,13 +1552,13 @@ class Shipment extends AbstractEntity
      *
      * @pattern  ^(?:[0-3]\d-[01]\d-[12]\d{3})$
      *
+     * @example  05-07-2019
+     *
      * @param string|null $IDExpiration
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example  05-07-2019
      *
      * @since    1.0.0
      * @since    2.0.0 Strict typing
@@ -1591,13 +1592,13 @@ class Shipment extends AbstractEntity
      *
      * @pattern ^.{0,20}$
      *
+     * @example 4261103214
+     *
      * @param string|null $IDNumber
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 4261103214
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -1631,13 +1632,13 @@ class Shipment extends AbstractEntity
      *
      * @pattern ^\d{2}$
      *
+     * @example 02
+     *
      * @param string|null $IDType
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 02
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -1671,13 +1672,13 @@ class Shipment extends AbstractEntity
      *
      * @pattern ^\d{4}$
      *
+     * @example 3153
+     *
      * @param string|null $productCodeCollect
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 3153
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -1711,13 +1712,13 @@ class Shipment extends AbstractEntity
      *
      * @pattern ^\d{4}$
      *
+     * @example 3085
+     *
      * @param string|null $productCodeDelivery
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 3085
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -1751,11 +1752,11 @@ class Shipment extends AbstractEntity
      *
      * @pattern N/A
      *
+     * @example N/A
+     *
      * @param ProductOption[]|null $productOptions
      *
      * @return static
-     *
-     * @example N/A
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -1789,13 +1790,13 @@ class Shipment extends AbstractEntity
      *
      * @pattern  ^(?:[0-3]\d-[01]\d-[12]\d{3})$
      *
+     * @example  01-01-1970
+     *
      * @param string|null $receiverDateOfBirth
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example  01-01-1970
      *
      * @since    1.0.0
      * @since    2.0.0 Strict typing
@@ -1829,13 +1830,13 @@ class Shipment extends AbstractEntity
      *
      * @pattern ^.{0,35}$
      *
+     * @example 2016014567
+     *
      * @param string|null $reference
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 2016014567
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -1869,13 +1870,13 @@ class Shipment extends AbstractEntity
      *
      * @pattern ^.{0,35}$
      *
+     * @example 6659150
+     *
      * @param string|null $referenceCollect
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 6659150
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -1909,13 +1910,13 @@ class Shipment extends AbstractEntity
      *
      * @pattern ^.{0,35}$
      *
+     * @example Fragile
+     *
      * @param string|null $remark
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example Fragile
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -1949,13 +1950,13 @@ class Shipment extends AbstractEntity
      *
      * @pattern ^.{11,15}$
      *
+     * @example 3SABCD7762162
+     *
      * @param string|null $returnBarcode
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 3SABCD7762162
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -1989,13 +1990,13 @@ class Shipment extends AbstractEntity
      *
      * @pattern ^.{0,35}$
      *
+     * @example 112233
+     *
      * @param string|null $returnReference
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 112233
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -2028,11 +2029,11 @@ class Shipment extends AbstractEntity
      *
      * @pattern ^{0,95}$
      *
+     * @example 3SDEVC2309482387
+     *
      * @param string|null $mainBarcode
      *
      * @return static
-     *
-     * @example 3SDEVC2309482387
      *
      * @since   2.0.0 Strict typing
      *
@@ -2064,13 +2065,13 @@ class Shipment extends AbstractEntity
      *
      * @pattern ^\d{0,10}$
      *
+     * @example 1
+     *
      * @param int|float|string|null $shipmentAmount
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 1
      *
      * @since   2.0.0 Strict typing
      *
@@ -2102,13 +2103,13 @@ class Shipment extends AbstractEntity
      *
      * @pattern ^\d{0,10}$
      *
+     * @example 1
+     *
      * @param int|float|string|null $shipmentCounter
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 1
      *
      * @since   2.0.0 Strict typing
      *
@@ -2140,11 +2141,11 @@ class Shipment extends AbstractEntity
      *
      * @pattern N/A
      *
+     * @example N/A
+     *
      * @param Customer|null $customer
      *
      * @return static
-     *
-     * @example N/A
      *
      * @since   2.0.0 Strict typing
      *
@@ -2176,11 +2177,11 @@ class Shipment extends AbstractEntity
      *
      * @pattern ^.{0,35}$
      *
+     * @example 003085
+     *
      * @param string|null $productCode
      *
      * @return static
-     *
-     * @example 003085
      *
      * @since   2.0.0 Strict typing
      *
@@ -2212,11 +2213,11 @@ class Shipment extends AbstractEntity
      *
      * @pattern ^.{0,95}$
      *
+     * @example Standaardzending
+     *
      * @param string|null $productDescription
      *
      * @return static
-     *
-     * @example Standaardzending
      *
      * @since   2.0.0 Strict typing
      *
@@ -2248,11 +2249,11 @@ class Shipment extends AbstractEntity
      *
      * @pattern N/A
      *
+     * @example N/A
+     *
      * @param Address[]|null $address
      *
      * @return static
-     *
-     * @example N/A
      *
      * @since   2.0.0 Strict typing
      *
@@ -2284,11 +2285,11 @@ class Shipment extends AbstractEntity
      *
      * @pattern N/A
      *
+     * @example N/A
+     *
      * @param Event[]|null $event
      *
      * @return static
-     *
-     * @example N/A
      *
      * @since   2.0.0 Strict typing
      *
@@ -2320,11 +2321,11 @@ class Shipment extends AbstractEntity
      *
      * @pattern N/A
      *
+     * @example N/A
+     *
      * @param Status|null $status
      *
      * @return static
-     *
-     * @example N/A
      *
      * @since   2.0.0 Strict typing
      *
@@ -2356,11 +2357,11 @@ class Shipment extends AbstractEntity
      *
      * @pattern N/A
      *
+     * @example N/A
+     *
      * @param OldStatus[]|null $oldStatus
      *
      * @return static
-     *
-     * @example N/A
      *
      * @since   2.0.0 Strict typing
      *
@@ -2394,9 +2395,9 @@ class Shipment extends AbstractEntity
      *
      * @return Shipment
      *
-     * @see   Label
-     *
      * @since 2.0.0
+     *
+     * @see   Label
      *
      * @see   Label
      */
@@ -2412,11 +2413,11 @@ class Shipment extends AbstractEntity
      *
      * @pattern N/A
      *
+     * @example N/A
+     *
      * @param Label[]|null $labels
      *
      * @return static
-     *
-     * @example N/A
      *
      * @since   2.0.0 Strict typing
      *

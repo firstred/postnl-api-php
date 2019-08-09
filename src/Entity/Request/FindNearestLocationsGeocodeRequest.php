@@ -167,13 +167,13 @@ class FindNearestLocationsGeocodeRequest extends AbstractEntity
      *
      * @pattern ^(?:NL|BE)$
      *
+     * @example NL
+     *
      * @param string|null $countrycode
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example NL
      *
      * @since   2.0.0
      *
@@ -205,13 +205,13 @@ class FindNearestLocationsGeocodeRequest extends AbstractEntity
      *
      * @pattern ^\d{1,2}\.\d{1,15}$
      *
+     * @example 52.156439
+     *
      * @param float|string|null $latitude
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 52.156439
      *
      * @since   2.0.0 Strict typing
      *
@@ -243,15 +243,15 @@ class FindNearestLocationsGeocodeRequest extends AbstractEntity
      *
      * @pattern ^\d{1,2}\.\d{1,15}$
      *
+     * @example 52.156439
+     *
      * @param float|string|null $longitude
      *
      * @return static
      *
      * @throws InvalidArgumentException
      *
-     * @example 52.156439
-     *
-     * @since 2.0.0 Strict typing
+     * @since   2.0.0 Strict typing
      *
      * @see     FindNearestLocationsGeocodeRequest::$longitude
      */
@@ -281,11 +281,11 @@ class FindNearestLocationsGeocodeRequest extends AbstractEntity
      *
      * @pattern ^(?:PG|PGE)$
      *
+     * @example PG
+     *
      * @param array $deliveryOptions
      *
      * @return static
-     *
-     * @example PG
      *
      * @since   2.0.0 Strict typing
      *
@@ -317,13 +317,13 @@ class FindNearestLocationsGeocodeRequest extends AbstractEntity
      *
      * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}$
      *
+     * @example 03-07-2019
+     *
      * @param string|null $deliveryDate
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 03-07-2019
      *
      * @since   2.0.0 Strict typing
      *
@@ -355,13 +355,13 @@ class FindNearestLocationsGeocodeRequest extends AbstractEntity
      *
      * @pattern ^(?:[0-3]\d-[01]\d-[12]\d{3}\s+)[0-2]\d:[0-5]\d(?:[0-5]\d)$
      *
+     * @example 10:00:00
+     *
      * @param string|null $openingTime
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 10:00:00
      *
      * @since   2.0.0 Strict typing
      *

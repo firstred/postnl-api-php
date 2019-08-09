@@ -47,7 +47,7 @@ class NationalAddressCheckRequest extends AbstractEntity
      *
      * @var string|null $street
      *
-     * @since 2.0.0
+     * @since   2.0.0
      */
     protected $street;
 
@@ -60,7 +60,7 @@ class NationalAddressCheckRequest extends AbstractEntity
      *
      * @var string|null $houseNumber
      *
-     * @since 2.0.0
+     * @since   2.0.0
      */
     protected $houseNumber;
 
@@ -73,7 +73,7 @@ class NationalAddressCheckRequest extends AbstractEntity
      *
      * @var string|null $addition
      *
-     * @since 2.0.0
+     * @since   2.0.0
      */
     protected $addition;
 
@@ -144,6 +144,8 @@ class NationalAddressCheckRequest extends AbstractEntity
      *
      * @pattern ^.{0,95}$
      *
+     * @example Siriusdreef
+     *
      * @param string|null $street
      *
      * @return static
@@ -151,8 +153,6 @@ class NationalAddressCheckRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
-     * @example Siriusdreef
      *
      * @see     NationalAddressCheckRequest::$street
      */
@@ -182,6 +182,8 @@ class NationalAddressCheckRequest extends AbstractEntity
      *
      * @pattern ^.{0,35}$
      *
+     * @example 42
+     *
      * @param string|null $houseNumber
      *
      * @return static
@@ -189,8 +191,6 @@ class NationalAddressCheckRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
-     * @example 42
      *
      * @see     NationalAddressCheckRequest::$houseNumber
      */
@@ -220,11 +220,11 @@ class NationalAddressCheckRequest extends AbstractEntity
      *
      * @pattern ^.{0,35}$
      *
+     * @example A
+     *
      * @param string|null $addition
      *
      * @return static
-     *
-     * @example A
      *
      * @since   2.0.0
      *
@@ -256,17 +256,17 @@ class NationalAddressCheckRequest extends AbstractEntity
      *
      * @pattern ^.{0,10}$
      *
+     * @example 2132WT
+     *
      * @param string|null $postalCode
      *
      * @return static
      *
      * @throws InvalidArgumentException
      *
-     * @example 2132WT
-     *
+     * @since   2.0.0
      * @see     NationalAddressCheckRequest::$postalCode
      *
-     * @since   2.0.0
      */
     public function setPostalCode(?string $postalCode): NationalAddressCheckRequest
     {
@@ -294,6 +294,8 @@ class NationalAddressCheckRequest extends AbstractEntity
      *
      * @pattern ^.{0,35}$
      *
+     * @example Hoofddorp
+     *
      * @param string|null $city
      *
      * @return static
@@ -301,8 +303,6 @@ class NationalAddressCheckRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
-     * @example Hoofddorp
      *
      * @see     NationalAddressCheckRequest::$city
      */

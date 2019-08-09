@@ -35,6 +35,12 @@ namespace Firstred\PostNL\Entity;
 class PickupOption extends AbstractEntity
 {
     /**
+     * Pickup date
+     *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @var string|null $pickupDate
      *
      * @since 2.0.0
@@ -42,6 +48,12 @@ class PickupOption extends AbstractEntity
     protected $pickupDate;
 
     /**
+     * Shipping date
+     *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @var string|null $shippingDate
      *
      * @since 2.0.0
@@ -49,13 +61,25 @@ class PickupOption extends AbstractEntity
     protected $shippingDate;
 
     /**
+     * Options
+     *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @var string|null $option
      *
      * @since 2.0.0
      */
-    protected $options;
+    protected $option;
 
     /**
+     * Locations
+     *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @var Locations|null $locations
      *
      * @since 2.0.0
@@ -83,9 +107,13 @@ class PickupOption extends AbstractEntity
     }
 
     /**
+     * Get pickupDate
+     *
      * @return string|null
      *
      * @since 2.0.0
+     *
+     * @see   PickupOption::$pickupDate
      */
     public function getPickupDate(): ?string
     {
@@ -93,11 +121,19 @@ class PickupOption extends AbstractEntity
     }
 
     /**
+     * Set pickupDate
+     *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @param string|null $pickupDate
      *
      * @return static
      *
-     * @since 2.0.0
+     * @since   2.0.0
+     *
+     * @see     PickupOption::$pickupDate
      */
     public function setPickupDate(?string $pickupDate): PickupOption
     {
@@ -107,9 +143,13 @@ class PickupOption extends AbstractEntity
     }
 
     /**
+     * Get shippingDate
+     *
      * @return string|null
      *
      * @since 2.0.0
+     *
+     * @see   PickupOption::$shippingDate
      */
     public function getShippingDate(): ?string
     {
@@ -117,11 +157,19 @@ class PickupOption extends AbstractEntity
     }
 
     /**
+     * Set shippingDate
+     *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @param string|null $shippingDate
      *
      * @return static
      *
-     * @since 2.0.0
+     * @since   2.0.0
+     *
+     * @see     PickupOption::$shippingDate
      */
     public function setShippingDate(?string $shippingDate): PickupOption
     {
@@ -131,33 +179,49 @@ class PickupOption extends AbstractEntity
     }
 
     /**
+     * Get option
+     *
      * @return string|null
      *
      * @since 2.0.0
+     *
+     * @see   PickupOption::$option
      */
-    public function getOptions(): ?string
+    public function getOption(): ?string
     {
-        return $this->options;
+        return $this->option;
     }
 
     /**
-     * @param string|null $options
+     * Set option
+     *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
+     * @param string|null $option
      *
      * @return static
      *
-     * @since 2.0.0
+     * @since   2.0.0
+     *
+     * @see     PickupOption::$option
      */
-    public function setOption(?string $options): PickupOption
+    public function setOption(?string $option): PickupOption
     {
-        $this->options = $options;
+        $this->option = $option;
 
         return $this;
     }
 
     /**
+     * Get locations
+     *
      * @return Locations|null
      *
      * @since 2.0.0
+     *
+     * @see   PickupOption::$locations
      */
     public function getLocations(): ?Locations
     {
@@ -165,11 +229,19 @@ class PickupOption extends AbstractEntity
     }
 
     /**
+     * Set locations
+     *
+     * @pattern N/A
+     *
+     * @example N/A
+     *
      * @param Locations|null $locations
      *
      * @return static
      *
-     * @since 2.0.0
+     * @since   2.0.0
+     *
+     * @see     PickupOption::$locations
      */
     public function setLocations(?Locations $locations): PickupOption
     {

@@ -46,7 +46,7 @@ class ReasonNoTimeframe extends AbstractEntity
      *
      * @var string|null $code
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $code;
 
@@ -59,7 +59,7 @@ class ReasonNoTimeframe extends AbstractEntity
      *
      * @var string|null $date
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $date;
 
@@ -72,7 +72,7 @@ class ReasonNoTimeframe extends AbstractEntity
      *
      * @var string|null $description
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $description;
 
@@ -85,7 +85,7 @@ class ReasonNoTimeframe extends AbstractEntity
      *
      * @var string[]|null $options
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $options;
 
@@ -98,7 +98,7 @@ class ReasonNoTimeframe extends AbstractEntity
      *
      * @var string|null $from
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $from;
 
@@ -111,7 +111,7 @@ class ReasonNoTimeframe extends AbstractEntity
      *
      * @var string|null $to
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $to;
 
@@ -162,13 +162,13 @@ class ReasonNoTimeframe extends AbstractEntity
      *
      * @pattern ^\d{2}$
      *
+     * @example 02
+     *
      * @param string|null $code
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 02
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -202,13 +202,13 @@ class ReasonNoTimeframe extends AbstractEntity
      *
      * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}$
      *
+     * @example 03-07-2019
+     *
      * @param string|null $date
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 03-07-2019
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -242,14 +242,14 @@ class ReasonNoTimeframe extends AbstractEntity
      *
      * @pattern ^.{0,95}$
      *
+     * @example Dag uitgesloten van tijdvak
+     *
      * @param string|null $description
      *
      * @return static
      *
-     * @example Dag uitgesloten van tijdvak
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
      *
      * @see     ReasonNoTimeframe::$description
      */
@@ -280,14 +280,14 @@ class ReasonNoTimeframe extends AbstractEntity
      *
      * @pattern ^.{0,35}$
      *
+     * @example Afternoon
+     *
      * @param string[]|null $options
      *
      * @return static
      *
-     * @example Afternoon
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
      *
      * @see     ReasonNoTimeframe::$options
      */
@@ -318,19 +318,19 @@ class ReasonNoTimeframe extends AbstractEntity
      *
      * @pattern ^(2[0-3]|[01]?[0-9]):([0-5]?[0-9]):([0-5]?[0-9])$
      *
+     * @example 16:30:00
+     *
      * @param string|null $from
      *
      * @return static
      *
      * @throws InvalidArgumentException
      *
-     * @since   1.0.0
      * @since   2.0.0 Strict typing
      *
+     * @since   1.0.0
      * @see     ReasonNoTimeframe::$from
      *                                  .
-     * @example 16:30:00
-     *
      */
     public function setFrom(?string $from): ReasonNoTimeframe
     {
@@ -359,13 +359,13 @@ class ReasonNoTimeframe extends AbstractEntity
      *
      * @pattern ^(2[0-3]|[01]?[0-9]):([0-5]?[0-9]):([0-5]?[0-9])$
      *
+     * @example 16:30:00
+     *
      * @param string|null $to
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 16:30:00
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing

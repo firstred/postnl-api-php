@@ -32,6 +32,7 @@ namespace Firstred\PostNL\Service;
 use Firstred\PostNL\Entity\Request\NationalGeoAddressCheckRequest;
 use Firstred\PostNL\Entity\ValidatedAddress;
 use Firstred\PostNL\Exception\CifDownException;
+use Firstred\PostNL\Exception\CifErrorException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Http\Client;
 use Firstred\PostNL\PostNL;
@@ -65,6 +66,7 @@ class NationalGeoAddressCheckService extends AbstractService
      * @throws CifDownException
      * @throws HttpClientException
      * @throws InvalidArgumentException
+     * @throws CifErrorException
      *
      * @since 2.0.0
      */
@@ -95,8 +97,7 @@ class NationalGeoAddressCheckService extends AbstractService
         )
             ->withHeader('Accept', 'application/json')
             ->withHeader('apikey', $this->postnl->getApiKey())
-            ->withBody($streamFactory->createStream(json_encode($validateAddress)))
-        ;
+            ->withBody($streamFactory->createStream(json_encode($validateAddress)));
     }
 
     /**
@@ -108,12 +109,14 @@ class NationalGeoAddressCheckService extends AbstractService
      *
      * @throws CifDownException
      * @throws InvalidArgumentException
+     * @throws CifErrorException
      *
      * @since 2.0.0
      */
     public function processNationalGeoAddressCheckResponse(ResponseInterface $response): ValidatedAddress
     {
-        $body = json_decode((string) $response->getBody(), true);
+        static::validateResponse($response);
+        $body = @json_decode((string) $response->getBody(), true);
         if (is_array($body)) {
             if (isset($body[0]['Street'])) {
                 return ValidatedAddress::jsonDeserialize(['ValidatedAddress' => $body[0]]);

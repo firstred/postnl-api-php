@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * The MIT License (MIT)
  *
@@ -27,78 +26,45 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace Firstred\PostNL\Entity\Response;
+namespace Firstred\PostNL\Misc;
 
-use Firstred\PostNL\Entity\Signature;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 
 /**
- * Class RetrieveSignatureByBarcodeResponse
+ * Trait FlexibleEntityTrait
  */
-class RetrieveSignatureByBarcodeResponse extends AbstractResponse
+trait FlexibleEntityTrait
 {
     /**
-     * Signature
+     * Add additional properties
      *
-     * @pattern N/A
+     * @param string $name
+     * @param mixed  $value
      *
-     * @example N/A
+     * @return object|null
      *
-     * @var Signature|null $signature
-     *
-     * @since   1.0.0
+     * @throws InvalidArgumentException
      */
-    protected $signature;
-
-    /**
-     * RetrieveSignatureByBarcodeResponse constructor.
-     *
-     * @param Signature|null $signature
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function __construct(Signature $signature = null)
+    public function __call($name, $value)
     {
-        parent::__construct();
+        $methodName = substr($name, 0, 3);
+        $propertyName = lcfirst(substr($name, 3, strlen($name)));
+        if ('get' === $methodName) {
+            if (property_exists($this, $propertyName)) {
+                return $this->{$propertyName};
+            }
 
-        $this->setSignature($signature);
-    }
+            return null;
+        } elseif ('set' === $methodName) {
+            if (!is_array($value) || count($value) < 1) {
+                throw new InvalidArgumentException('Value is missing');
+            }
+            if (property_exists($this, $propertyName)) {
+                $this->{$propertyName} = $value[0];
+            }
 
-    /**
-     * Get signature
-     *
-     * @return Signature|null
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     *
-     * @see   Signature
-     */
-    public function getSignature(): ?Signature
-    {
-        return $this->signature;
-    }
-
-    /**
-     * Set signature
-     *
-     * @pattern N/A
-     *
-     * @example N/A
-     *
-     * @param Signature|null $signature
-     *
-     * @return static
-     *
-     * @since   1.0.0
-     * @since   2.0.0 Strict typing
-     *
-     * @see     Signature
-     */
-    public function setSignature(?Signature $signature): RetrieveSignatureByBarcodeResponse
-    {
-        $this->signature = $signature;
-
-        return $this;
+            return $this;
+        }
+        throw new InvalidArgumentException('Not a valid `get` or `set` method');
     }
 }

@@ -95,11 +95,11 @@ class ReasonNoTimeframes extends AbstractEntity implements Iterator, ArrayAccess
      *
      * @pattern N/a
      *
+     * @example N/A
+     *
      * @param ReasonNoTimeframe[]|null $reasonNoTimeframes
      *
      * @return static
-     *
-     * @example N/A
      *
      * @since   2.0.0 Strict typing
      *
@@ -135,7 +135,7 @@ class ReasonNoTimeframes extends AbstractEntity implements Iterator, ArrayAccess
      *
      * @throws InvalidArgumentException
      *
-     * @since 2.0.0
+     * @since        2.0.0
      */
     public static function jsonDeserialize(array $json)
     {

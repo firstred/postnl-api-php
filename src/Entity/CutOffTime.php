@@ -31,7 +31,6 @@ namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\ValidateAndFix;
-use setasign\Fpdi\PdfParser\Type\PdfNull;
 
 /**
  * Class CutOffTime
@@ -58,7 +57,7 @@ class CutOffTime extends AbstractEntity
      *
      * @var string|null $day
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $day;
 
@@ -74,7 +73,7 @@ class CutOffTime extends AbstractEntity
      *
      * @var string|null $time
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $time;
 
@@ -87,7 +86,7 @@ class CutOffTime extends AbstractEntity
      *
      * @var bool|null $available
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $available;
 
@@ -102,7 +101,7 @@ class CutOffTime extends AbstractEntity
      *
      * @var string|null
      *
-     * @since 2.0.0
+     * @since   2.0.0
      */
     protected $type;
 
@@ -147,17 +146,17 @@ class CutOffTime extends AbstractEntity
      *
      * @pattern ^\d{2}$
      *
+     * @example 02
+     *
      * @param string|int|float|null $dayOfTheWeek
      *
      * @return static
      *
      * @throws InvalidArgumentException
      *
-     * @since   1.0.0
      * @since   2.0.0 Strict typing
      *
-     * @example 02
-     *
+     * @since   1.0.0
      * @see     CutOffTime::$day
      */
     public function setDay($dayOfTheWeek): CutOffTime
@@ -187,13 +186,13 @@ class CutOffTime extends AbstractEntity
      *
      * @pattern ^(2[0-3]|[01]?[0-9]):([0-5]?[0-9]):([0-5]?[0-9])$
      *
+     * @example 14:00:00
+     *
      * @param string|null $time
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 14:00:00
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
@@ -227,14 +226,14 @@ class CutOffTime extends AbstractEntity
      *
      * @pattern N/A
      *
+     * @example N/A
+     *
      * @param bool|null $available
      *
      * @return static
      *
-     * @example N/A
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
      *
      * @see     CutOffTime::$available
      */
@@ -252,7 +251,7 @@ class CutOffTime extends AbstractEntity
      *
      * @since 2.0.0
      *
-     * @see CutOffTime::$type
+     * @see   CutOffTime::$type
      */
     public function getType(): ?string
     {
@@ -270,9 +269,9 @@ class CutOffTime extends AbstractEntity
      *
      * @return static
      *
-     * @since 2.0.0
+     * @since   2.0.0
      *
-     * @see CutOffTime::$type
+     * @see     CutOffTime::$type
      */
     public function setType(?string $type): CutOffTime
     {

@@ -32,6 +32,7 @@ namespace Firstred\PostNL\Service;
 use Firstred\PostNL\Entity\Request\BasicNationalAddressCheckRequest;
 use Firstred\PostNL\Entity\Response\BasicNationalAddressCheckResponse;
 use Firstred\PostNL\Exception\CifDownException;
+use Firstred\PostNL\Exception\CifErrorException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Http\Client;
 use Firstred\PostNL\PostNL;
@@ -118,12 +119,14 @@ class BasicNationalAddressCheckService extends AbstractService
      *
      * @throws CifDownException
      * @throws InvalidArgumentException
+     * @throws CifErrorException
      *
      * @since 2.0.0
      */
     public function processBasicNationalAddressCheckResponse(ResponseInterface $response): BasicNationalAddressCheckResponse
     {
-        $body = json_decode((string) $response->getBody(), true);
+        static::validateResponse($response);
+        $body = @json_decode((string) $response->getBody(), true);
         if (isset($body['streetName'])) {
             BasicNationalAddressCheckResponse::jsonDeserialize(['BasicNationalAddressCheckResponse' => $body]);
         }

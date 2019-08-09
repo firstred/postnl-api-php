@@ -132,13 +132,13 @@ class PostalCodeCheckRequest extends AbstractEntity
      *
      * @pattern ^.{0,10}$
      *
+     * @example 3123WT
+     *
      * @param string|null $postalCode
      *
      * @return static
      *
      * @throws InvalidArgumentException
-     *
-     * @example 3123WT
      *
      * @since   2.0.0
      *
@@ -170,17 +170,17 @@ class PostalCodeCheckRequest extends AbstractEntity
      *
      * @pattern ^\d{1,10}$
      *
+     * @example 42
+     *
      * @param int|float|string|null $houseNumber
      *
      * @return static
      *
      * @throws InvalidArgumentException
      *
-     * @example 42
-     *
+     * @since   2.0.0
      * @see     PostalCodeCheckRequest::$houseNumber
      *
-     * @since   2.0.0
      */
     public function setHouseNumber($houseNumber): PostalCodeCheckRequest
     {
@@ -208,11 +208,11 @@ class PostalCodeCheckRequest extends AbstractEntity
      *
      * @pattern ^.{0,35}$
      *
+     * @example A
+     *
      * @param string|null $houseNumberAddition
      *
      * @return static
-     *
-     * @example A
      *
      * @since   2.0.0
      *

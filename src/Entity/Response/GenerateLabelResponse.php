@@ -47,7 +47,7 @@ class GenerateLabelResponse extends AbstractResponse
      *
      * @var MergedLabel[] $mergedLabels
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $mergedLabels = [];
 
@@ -60,7 +60,7 @@ class GenerateLabelResponse extends AbstractResponse
      *
      * @var Shipment[] $responseShipments
      *
-     * @since 1.0.0
+     * @since   1.0.0
      */
     protected $responseShipments = [];
 
@@ -89,7 +89,7 @@ class GenerateLabelResponse extends AbstractResponse
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      *
-     * @see MergedLabel
+     * @see   MergedLabel
      */
     public function getMergedlabels(): array
     {
@@ -117,16 +117,16 @@ class GenerateLabelResponse extends AbstractResponse
      *
      * @pattern N/A
      *
+     * @example N/A
+     *
      * @param MergedLabel[] $mergedLabels
      *
      * @return static
      *
-     * @example N/A
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     *
-     * @see MergedLabel
+     * @see     MergedLabel
      */
     public function setMergedlabels(array $mergedLabels): GenerateLabelResponse
     {
@@ -159,7 +159,7 @@ class GenerateLabelResponse extends AbstractResponse
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      *
-     * @see Shipment
+     * @see   Shipment
      */
     public function getResponseShipments(): array
     {
@@ -171,16 +171,16 @@ class GenerateLabelResponse extends AbstractResponse
      *
      * @pattern N/A
      *
+     * @example N/A
+     *
      * @param Shipment[] $responseShipments
      *
      * @return static
      *
-     * @example N/A
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     *
-     * @see Shipment
+     * @see     Shipment
      */
     public function setResponseShipments(array $responseShipments): GenerateLabelResponse
     {
@@ -200,7 +200,7 @@ class GenerateLabelResponse extends AbstractResponse
      *
      * @throws InvalidArgumentException
      *
-     * @since 2.0.0
+     * @since        2.0.0
      */
     public static function jsonDeserialize(array $json)
     {

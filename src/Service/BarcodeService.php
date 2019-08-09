@@ -113,9 +113,7 @@ class BarcodeService extends AbstractService
     public function processGenerateBarcodeResponse(ResponseInterface $response)
     {
         static::validateResponse($response);
-
-        $json = json_decode((string) $response->getBody(), true);
-
+        $json = @json_decode((string) $response->getBody(), true);
         if (!isset($json['Barcode'])) {
             throw new CifDownException('Invalid API Response', 0, null, null, $response);
         }
