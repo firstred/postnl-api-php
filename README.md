@@ -26,14 +26,9 @@ The PHP bindings can connect to both PostNL's SOAP and REST API.
 | Adrescheck Nationaal                        | N/A                       | N/A                       | N/A     |
 | Adrescheck Basis Nationaal                  | N/A                       | N/A                       | N/A     |
 | Adrescheck Internationaal                   | N/A                       | N/A                       | N/A     |
-| Persoon op AdresCheck Basis                 | N/A                       | N/A                       | N/A     |
 | Geo Adrescheck Nationaal                    | N/A                       | N/A                       | N/A     |
 | **Creditworthiness & Business information** |                           |                           |         |
 | Bedrijfscheck Nationaal                     | N/A                       | N/A                       | N/A     |
-| IBANcheck Nationaal                         | N/A                       | N/A                       | N/A     |
-| Kredietcheck Consument Basis                | N/A                       | N/A                       | N/A     |
-| Kredietcheck Consument Premium              | N/A                       | N/A                       | N/A     |
-| Fraudepreventie Check Basis                 | N/A                       | N/A                       | N/A     |
 | Kredietcheck Zakelijk                       | N/A                       | N/A                       | N/A     |
 | **Send & Track**                            |                           |                           |         |
 | Barcode webservice                          | ✓                         | ✓                         | 1.1     |
