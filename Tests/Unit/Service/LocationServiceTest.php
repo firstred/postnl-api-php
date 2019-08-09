@@ -40,10 +40,13 @@ use Firstred\PostNL\Entity\Request\FindNearestLocationsRequest;
 use Firstred\PostNL\Entity\Request\LookupLocationRequest;
 use Firstred\PostNL\Entity\Response\FindNearestLocationsGeocodeResponse;
 use Firstred\PostNL\Entity\Response\FindNearestLocationsResponse;
+use Firstred\PostNL\Exception\CifDownException;
+use Firstred\PostNL\Exception\CifErrorException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\Message;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\LocationService;
+use Http\Client\Exception as HttpClientException;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Mock\Client;
 use PHPUnit\Framework\TestCase;
@@ -157,14 +160,15 @@ class LocationServiceTest extends TestCase
         );
         $this->assertEquals('test', $request->getHeaderLine('apikey'));
         $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
-        $this->assertEquals('application/json;charset=UTF-8', $request->getHeaderLine('Content-Type'));
     }
 
     /**
      * @testdox Can handle situations where no locations could be found
      *
-     * @throws ReflectionException
+     * @throws HttpClientException
      * @throws InvalidArgumentException
+     * @throws CifDownException
+     * @throws CifErrorException
      */
     public function testNoLocationsFound()
     {
@@ -188,8 +192,10 @@ class LocationServiceTest extends TestCase
     /**
      * @testdox Can request nearest locations
      *
-     * @throws ReflectionException
+     * @throws HttpClientException
      * @throws InvalidArgumentException
+     * @throws CifDownException
+     * @throws CifErrorException
      */
     public function testGetNearestLocationsRest()
     {
@@ -213,7 +219,6 @@ class LocationServiceTest extends TestCase
      * @testdox Can create a  nearest locations by coordinates request
      *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
      */
     public function testFindNearestLocationsGeocodeRequest()
     {
@@ -243,13 +248,13 @@ class LocationServiceTest extends TestCase
         );
         $this->assertEquals('test', $request->getHeaderLine('apikey'));
         $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
-        $this->assertEquals('application/json;charset=UTF-8', $request->getHeaderLine('Content-Type'));
     }
 
     /**
      * @testdox Can request locations in area
      *
      * @throws Exception
+     * @throws HttpClientException
      */
     public function testFindNearestLocationsGeocode()
     {
@@ -314,13 +319,13 @@ class LocationServiceTest extends TestCase
         );
         $this->assertEquals('test', $request->getHeaderLine('apikey'));
         $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
-        $this->assertEquals('application/json;charset=UTF-8', $request->getHeaderLine('Content-Type'));
     }
 
     /**
      * @testdox Can request locations in area
      *
      * @throws Exception
+     * @throws HttpClientException
      */
     public function testFindLocationsInArea()
     {
@@ -372,13 +377,13 @@ class LocationServiceTest extends TestCase
         );
         $this->assertEquals('test', $request->getHeaderLine('apikey'));
         $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
-        $this->assertEquals('application/json;charset=UTF-8', $request->getHeaderLine('Content-Type'));
     }
 
     /**
      * @testdox Can request locations in area
      *
      * @throws Exception
+     * @throws HttpClientException
      */
     public function testGetLocationRest()
     {
