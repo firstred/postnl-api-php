@@ -1,0 +1,27 @@
+{
+  "totalPages": "1",
+  "requestedPage": "1",
+  "resultCount": "1",
+  "result(s)": [
+    {
+      "companyName": "string",
+      "kvkNumber": "string",
+      "postnlKey": "string",
+      "branchNumber": "string",
+      "companyPhoneNumber": "string",
+      "companyMobilePhoneNumber": "string",
+      "branchStreetName": "string",
+      "branchHouseNumber": "string",
+      "branchHouseNumberAddition": "string",
+      "branchPostalCode": "string",
+      "branchCity": "string",
+      "mailingStreetName": "string",
+      "mailingHouseNumber": "string",
+      "mailingHouseNumberAddition": "string",
+      "mailingPostalCode": "string",
+      "mailingCity": "string",
+      "legalName": "string",
+      "tradeNames": "string"
+    }
+  ]
+}

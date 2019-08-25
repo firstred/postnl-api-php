@@ -391,13 +391,7 @@ class NationalBusinessCheckService extends AbstractService
      *
      *  Returns basic information about organizations, based on a general telephone number
      *
-     * @param string $branchStreetName
-     * @param string $branchHouseNumber
-     * @param string $branchHouseNumberAddition
-     * @param string $branchPostalCode
-     * @param string $branchCity
-     * @param bool   $includeBranchAddress
-     * @param bool   $includeMailingAddress
+     * @param string $phoneNumber
      * @param bool   $includeInactive
      * @param bool   $mainBranch
      * @param bool   $branch
@@ -414,18 +408,12 @@ class NationalBusinessCheckService extends AbstractService
      *
      * @since 2.0.0
      */
-    public function searchCompanyByPhone(string $branchStreetName = '', string $branchHouseNumber = '', string $branchHouseNumberAddition = '', string $branchPostalCode = '', string $branchCity = '', bool $includeBranchAddress = true, bool $includeMailingAddress = true, bool $includeInactive = false, bool $mainBranch = true, bool $branch = true, int $maxResultsPerPage = 50, int $requestedPage = 1): NationalBusinessCheckResponse
+    public function searchCompanyByPhone(string $phoneNumber, bool $includeInactive = false, bool $mainBranch = true, bool $branch = true, int $maxResultsPerPage = 50, int $requestedPage = 1): NationalBusinessCheckResponse
     {
         /** @var ResponseInterface $response */
         $response = Client::getInstance()->doRequest(
-            $this->buildSearchCompanyByNameAndAddressRequest(
-                $branchStreetName,
-                $branchHouseNumber,
-                $branchHouseNumberAddition,
-                $branchPostalCode,
-                $branchCity,
-                $includeBranchAddress,
-                $includeMailingAddress,
+            $this->buildSearchCompanyByPhoneRequest(
+                $phoneNumber,
                 $includeInactive,
                 $mainBranch,
                 $branch,
@@ -461,7 +449,7 @@ class NationalBusinessCheckService extends AbstractService
         $streamFactory = Psr17FactoryDiscovery::findStreamFactory();
 
         /** @var RequestInterface $request */
-        $request = Psr17FactoryDiscovery::findRequestFactory()->createRequest('POST', static::COMPANY_ADDRESS_LIVE_ENDPOINT)
+        $request = Psr17FactoryDiscovery::findRequestFactory()->createRequest('POST', static::COMPANY_PHONE_LIVE_ENDPOINT)
             ->withHeader('Accept', 'application/json')
             ->withHeader('Content-Type', 'application/json;charset=UTF-8')
             ->withHeader('apikey', $this->postnl->getApiKey())

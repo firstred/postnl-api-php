@@ -65,6 +65,7 @@ use Firstred\PostNL\Entity\Response\FindLocationsInAreaResponse;
 use Firstred\PostNL\Entity\Response\FindNearestLocationsGeocodeResponse;
 use Firstred\PostNL\Entity\Response\FindNearestLocationsResponse;
 use Firstred\PostNL\Entity\Response\GenerateLabelResponse;
+use Firstred\PostNL\Entity\Response\NationalBusinessCheckResponse;
 use Firstred\PostNL\Entity\Shipment;
 use Firstred\PostNL\Entity\Signature;
 use Firstred\PostNL\Entity\ValidatedAddress;
@@ -81,6 +82,7 @@ use Firstred\PostNL\Misc\Misc;
 use Firstred\PostNL\Misc\RFPdi;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\BasicNationalAddressCheckService;
+use Firstred\PostNL\Service\BusinessCreditCheckService;
 use Firstred\PostNL\Service\CheckoutService;
 use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
@@ -88,6 +90,7 @@ use Firstred\PostNL\Service\InternationalAddressCheckService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\NationalAddressCheckService;
+use Firstred\PostNL\Service\NationalBusinessCheckService;
 use Firstred\PostNL\Service\NationalGeoAddressCheckService;
 use Firstred\PostNL\Service\PostalCodeCheckService;
 use Firstred\PostNL\Service\ShippingStatusService;
@@ -227,6 +230,20 @@ class PostNL implements LoggerAwareInterface
      * @since 2.0.0
      */
     protected $internationalAddressCheckService;
+
+    /**
+     * @var NationalBusinessCheckService $nationalBusinessCheckService
+     *
+     * @since 2.0.00
+     */
+    protected $nationalBusinessCheckService;
+
+    /**
+     * @var BusinessCreditCheckService $businessCreditCheckService
+     *
+     * @since 2.0.0
+     */
+    protected $businessCreditCheckService;
 
     /**
      * @var PostalCodeCheckService $postalCodeCheckService
@@ -756,6 +773,74 @@ class PostNL implements LoggerAwareInterface
     public function setInternationalAddressCheckService(InternationalAddressCheckService $internationalAddressCheckService): PostNL
     {
         $this->internationalAddressCheckService = $internationalAddressCheckService;
+
+        return $this;
+    }
+
+    /**
+     * National Business Check service
+     *
+     * Automatically load the business check service
+     *
+     * @return NationalBusinessCheckService
+     *
+     * @since 2.0.0
+     */
+    public function getNationalBusinessCheckService(): NationalBusinessCheckService
+    {
+        if (!$this->nationalBusinessCheckService) {
+            $this->setNationalBusinessCheckService(new NationalBusinessCheckService($this));
+        }
+
+        return $this->nationalBusinessCheckService;
+    }
+
+    /**
+     * Set the national business check service
+     *
+     * @param NationalBusinessCheckService $service
+     *
+     * @return static
+     *
+     * @since 2.0.0
+     */
+    public function setNationalBusinessCheckService(NationalBusinessCheckService $service): PostNL
+    {
+        $this->nationalBusinessCheckService = $service;
+
+        return $this;
+    }
+
+    /**
+     * National Company Credit Check service
+     *
+     * Automatically load the company credit check service
+     *
+     * @return BusinessCreditCheckService
+     *
+     * @since 2.0.0
+     */
+    public function getBusinessCreditCheckService(): BusinessCreditCheckService
+    {
+        if (!$this->businessCreditCheckService) {
+            $this->setBusinessCreditCheckService(new BusinessCreditCheckService($this));
+        }
+
+        return $this->businessCreditCheckService;
+    }
+
+    /**
+     * Set the company credit check service
+     *
+     * @param BusinessCreditCheckService $service
+     *
+     * @return static
+     *
+     * @since 2.0.0
+     */
+    public function setBusinessCreditCheckService(BusinessCreditCheckService $service): PostNL
+    {
+        $this->businessCreditCheckService = $service;
 
         return $this;
     }
@@ -1812,12 +1897,13 @@ class PostNL implements LoggerAwareInterface
      * @throws CifDownException
      * @throws HttpClientException
      * @throws InvalidArgumentException
+     * @throws CifErrorException
      *
      * @since 2.0.0
      *
      * @see   https://developer.postnl.nl/browse-apis/addresses/adrescheck-basis-nationaal/
      */
-    public function basicNationalAddressCheck(string $postalCode, ?string $houseNumber = null): BasicNationalAddressCheckResponse
+    public function basicNationalAddressCheck(string $postalCode, $houseNumber = null): BasicNationalAddressCheckResponse
     {
         return $this->getBasicNationalAddressCheckService()->checkAddress(
             (new BasicNationalAddressCheckRequest())
@@ -1871,6 +1957,7 @@ class PostNL implements LoggerAwareInterface
      * @throws CifDownException
      * @throws HttpClientException
      * @throws InvalidArgumentException
+     * @throws CifErrorException
      *
      * @since 2.0.0
      *
@@ -1957,7 +2044,7 @@ class PostNL implements LoggerAwareInterface
     /**
      * Find delivery information (experimental)
      *
-     * This is part of the new Checkout API which, at the time of writing, is in BETA
+     * This is part of the new Checkout API which, at the time of writing, is in the BETA phase
      *
      * @param string  $orderDate
      * @param Address $shippingAddress
@@ -1979,7 +2066,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @see https://developer.postnl.nl/browse-apis/checkout/checkout-api/
      */
-    public function findDeliveryInformation(string $orderDate, Address $shippingAddress, Address $deliveryAddress, array $cutOffTimes, int $shippingDuration = 1, bool $holidaySorting = false, array $options = ['Daytime'], int $days = 9, int $locations = 3): FindDeliveryInfoResponse
+    public function findDeliveryInfo(string $orderDate, Address $shippingAddress, Address $deliveryAddress, array $cutOffTimes, int $shippingDuration = 1, bool $holidaySorting = false, array $options = ['Daytime'], int $days = 9, int $locations = 3): FindDeliveryInfoResponse
     {
         return $this->getCheckoutService()->findDeliveryInformation(
             (new FindDeliveryInfoRequest())
@@ -1992,5 +2079,252 @@ class PostNL implements LoggerAwareInterface
                 ->setLocations($locations)
                 ->setAddresses([$shippingAddress, $deliveryAddress])
         );
+    }
+
+    /**
+     * Search for company information
+     *
+     * METHOD 1
+     *
+     * @param string $kvkNumber         KvK Number
+     *                                  10 digits and tolerating additional brackets, a hyphen and a minus sign.
+     * @param string $branchNumber      Branch number
+     * @param string $rsin              RSIN
+     * @param bool   $includeInactive   Include inactive organizations
+     * @param bool   $mainBranch        Include main branches
+     * @param bool   $branch            Include branches
+     * @param int    $maxResultsPerPage Max results per page (between 1 - 50)
+     * @param int    $requestedPage     Request a certain page, used for pagination
+     *
+     * @return NationalBusinessCheckResponse
+     *
+     * @throws CifDownException
+     * @throws CifErrorException
+     * @throws HttpClientException
+     * @throws InvalidArgumentException
+     * @throws NotSupportedException
+     *
+     * @see https://developer.postnl.nl/browse-apis/customer-overview/bedrijfscheck-nationaal/documentation/
+     */
+    public function checkCompany(string $kvkNumber = '', string $branchNumber = '', string $rsin = '', bool $includeInactive = false, bool $mainBranch = true, bool $branch = true, int $maxResultsPerPage = 50, int $requestedPage = 1): NationalBusinessCheckResponse
+    {
+        return $this->getNationalBusinessCheckService()->searchCompany(
+            $kvkNumber,
+            $branchNumber,
+            $rsin,
+            $includeInactive,
+            $mainBranch,
+            $branch,
+            $maxResultsPerPage,
+            $requestedPage
+        );
+    }
+
+    /**
+     * Search for a company by name and address
+     *
+     * METHOD 2
+     *
+     * @param string $companyName
+     * @param string $branchStreetName
+     * @param string $branchHouseNumber
+     * @param string $branchHouseNumberAddition
+     * @param string $branchPostalCode
+     * @param string $branchCity
+     * @param bool   $includeBranchAddress
+     * @param bool   $includeMailingAddress
+     * @param bool   $includeActive
+     * @param bool   $mainBranch
+     * @param bool   $branch
+     * @param int    $maxResultsPerPage
+     * @param int    $requestedPage
+     *
+     * @return NationalBusinessCheckResponse
+     *
+     * @throws CifDownException
+     * @throws CifErrorException
+     * @throws HttpClientException
+     * @throws InvalidArgumentException
+     * @throws NotSupportedException
+     *
+     * @see https://developer.postnl.nl/browse-apis/customer-overview/bedrijfscheck-nationaal/documentation/
+     */
+    public function checkCompanyByCompanyNameAndAddress(string $companyName = '', string $branchStreetName = '', string $branchHouseNumber = '', string $branchHouseNumberAddition = '', string $branchPostalCode = '', string $branchCity = '', bool $includeBranchAddress = true, bool $includeMailingAddress = true, bool $includeActive = false, bool $mainBranch = true, bool $branch = true, int $maxResultsPerPage = 50, int $requestedPage = 1): NationalBusinessCheckResponse
+    {
+        return $this->getNationalBusinessCheckService()->searchCompanyByNameAndAddress(
+            $companyName,
+            $branchStreetName,
+            $branchHouseNumber,
+            $branchHouseNumberAddition,
+            $branchPostalCode,
+            $branchCity,
+            $includeBranchAddress,
+            $includeMailingAddress,
+            $includeActive,
+            $mainBranch,
+            $branch,
+            $maxResultsPerPage,
+            $requestedPage
+        );
+    }
+
+    /**
+     * Search for a company by address
+     *
+     * METHOD 3
+     *
+     * @param string $branchStreetName
+     * @param string $branchHouseNumber
+     * @param string $branchHouseNumberAddition
+     * @param string $branchPostalCode
+     * @param string $branchCity
+     * @param bool   $includeBranchAddress
+     * @param bool   $includeMailingAddress
+     * @param bool   $includeInactive
+     * @param bool   $mainBranch
+     * @param bool   $branch
+     * @param int    $maxResultsPerPage
+     * @param int    $requestedPage
+     *
+     * @return NationalBusinessCheckResponse
+     *
+     * @throws CifDownException
+     * @throws CifErrorException
+     * @throws HttpClientException
+     * @throws InvalidArgumentException
+     * @throws NotSupportedException
+     *
+     * @see https://developer.postnl.nl/browse-apis/customer-overview/bedrijfscheck-nationaal/documentation/
+     */
+    public function checkCompanyByAddress(string $branchStreetName = '', string $branchHouseNumber = '', string $branchHouseNumberAddition = '', string $branchPostalCode = '', string $branchCity = '', bool $includeBranchAddress = true, bool $includeMailingAddress = true, bool $includeInactive = false, bool $mainBranch = true, bool $branch = true, int $maxResultsPerPage = 50, int $requestedPage = 1): NationalBusinessCheckResponse
+    {
+        return $this->getNationalBusinessCheckService()->searchCompanyByAddress(
+            $branchStreetName,
+            $branchHouseNumber,
+            $branchHouseNumberAddition,
+            $branchPostalCode,
+            $branchCity,
+            $includeBranchAddress,
+            $includeMailingAddress,
+            $includeInactive,
+            $mainBranch,
+            $branch,
+            $maxResultsPerPage,
+            $requestedPage
+        );
+    }
+
+    /**
+     * Search for a company by phone number
+     *
+     * METHOD 4
+     *
+     * @param string $phoneNumber
+     * @param bool   $includeInactive
+     * @param bool   $mainBranch
+     * @param bool   $branch
+     * @param int    $maxResultsPerPage
+     * @param int    $requestedPage
+     *
+     * @return NationalBusinessCheckResponse
+     *
+     * @throws CifDownException
+     * @throws CifErrorException
+     * @throws HttpClientException
+     * @throws InvalidArgumentException
+     * @throws NotSupportedException
+     *
+     * @see https://developer.postnl.nl/browse-apis/customer-overview/bedrijfscheck-nationaal/documentation/
+     */
+    public function checkCompanyByPhone(string $phoneNumber, bool $includeInactive = false, bool $mainBranch = true, bool $branch = true, int $maxResultsPerPage = 50, int $requestedPage = 1): NationalBusinessCheckResponse
+    {
+        return $this->getNationalBusinessCheckService()->searchCompanyByPhone(
+            $phoneNumber,
+            $includeInactive,
+            $mainBranch,
+            $branch,
+            $maxResultsPerPage,
+            $requestedPage
+        );
+    }
+
+    /**
+     * Check for a company by providing some company details
+     *
+     * METHOD 5&6
+     *
+     * @param string $kvkNumber    KvK number
+     * @param string $branchNumber Branch number
+     * @param string $postnlKey    PostNL number
+     * @param bool   $detailed     Return detailed information
+     *
+     * @return NationalBusinessCheckResponse
+     *
+     * @throws CifDownException
+     * @throws CifErrorException
+     * @throws HttpClientException
+     * @throws InvalidArgumentException
+     * @throws NotSupportedException
+     *
+     * @see https://developer.postnl.nl/browse-apis/customer-overview/bedrijfscheck-nationaal/documentation/
+     */
+    public function checkCompanyByDetails(string $kvkNumber = '', string $branchNumber = '', string $postnlKey = '', bool $detailed = false): NationalBusinessCheckResponse
+    {
+        return $this->getNationalBusinessCheckService()->getCompanyDetails(
+            $kvkNumber,
+            $branchNumber,
+            $postnlKey,
+            $detailed ? NationalBusinessCheckService::METHOD_COMPANY_DETAILS_EXTRA : NationalBusinessCheckService::METHOD_COMPANY_DETAILS
+        );
+    }
+
+    /**
+     * Check business authorized signatory
+     *
+     * METHOD 7
+     *
+     * @param string $kvkNumber
+     * @param string $branchNumber
+     * @param string $postnlKey
+     *
+     * @return NationalBusinessCheckResponse
+     *
+     * @throws CifDownException
+     * @throws CifErrorException
+     * @throws HttpClientException
+     * @throws InvalidArgumentException
+     * @throws NotSupportedException
+     *
+     * @see https://developer.postnl.nl/browse-apis/customer-overview/bedrijfscheck-nationaal/documentation/
+     */
+    public function checkCompanyAuthorizedSignatory(string $kvkNumber, string $branchNumber, string $postnlKey)
+    {
+        return $this->getNationalBusinessCheckService()->getCompanyDetails(
+            $kvkNumber,
+            $branchNumber,
+            $postnlKey,
+            NationalBusinessCheckService::METHOD_COMPANY_AUTHORIZED_SIGNATORY
+        );
+    }
+
+    /**
+     * Retrieve a company extract
+     *
+     * METHOD 8
+     *
+     * @return void
+     *
+     * @throws NotSupportedException
+     *
+     * @see https://developer.postnl.nl/browse-apis/customer-overview/bedrijfscheck-nationaal/documentation/
+     */
+    public function checkCompanyExtract(): void
+    {
+        throw new NotSupportedException('Not available, yet');
+    }
+
+    public function companySearch()
+    {
+
     }
 }

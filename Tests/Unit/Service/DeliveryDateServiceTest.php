@@ -166,7 +166,6 @@ class DeliveryDateRestTest extends TestCase
      * @testdox Returns a valid delivery date
      *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
      * @throws CifErrorException
      */
     public function testGetDeliveryDate()

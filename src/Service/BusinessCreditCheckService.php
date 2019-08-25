@@ -43,9 +43,9 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * Class CompanyCreditCheckService
+ * Class BusinessCreditCheckService
  */
-class CompanyCreditCheckService extends AbstractService
+class BusinessCreditCheckService extends AbstractService
 {
     // API Version
     const VERSION = '3';

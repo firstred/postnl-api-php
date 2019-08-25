@@ -291,7 +291,7 @@ class BasicNationalAddressCheckResponse extends AbstractEntity
      *
      * @example 23
      *
-     * @param string|null $houseNumber
+     * @param string|int|null $houseNumber
      *
      * @return static
      *
@@ -301,7 +301,7 @@ class BasicNationalAddressCheckResponse extends AbstractEntity
      *
      * @see     BasicNationalAddressCheckResponse::$houseNumber
      */
-    public function setHouseNumber(?string $houseNumber): BasicNationalAddressCheckResponse
+    public function setHouseNumber($houseNumber): BasicNationalAddressCheckResponse
     {
         $this->houseNumber = ValidateAndFix::houseNumber($houseNumber);
 

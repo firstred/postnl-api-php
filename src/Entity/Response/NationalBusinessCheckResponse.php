@@ -102,9 +102,9 @@ class NationalBusinessCheckResponse extends AbstractResponse implements Iterator
     /**
      * NationalBusinessCheckResponse constructor.
      *
-     * @param array       $results
-     * @param string|null $totalPages
-     * @param string|null $requestedPage
+     * @param NationalBusinessCheckResult[] $results
+     * @param string|null                   $totalPages
+     * @param string|null                   $requestedPage
      *
      * @since 2.0.0
      */

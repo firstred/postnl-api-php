@@ -66,6 +66,7 @@ class BasicNationalAddressCheckService extends AbstractService
      * @return BasicNationalAddressCheckResponse
      *
      * @throws CifDownException
+     * @throws CifErrorException
      * @throws HttpClientException
      * @throws InvalidArgumentException
      *
@@ -118,8 +119,8 @@ class BasicNationalAddressCheckService extends AbstractService
      * @return BasicNationalAddressCheckResponse
      *
      * @throws CifDownException
-     * @throws InvalidArgumentException
      * @throws CifErrorException
+     * @throws InvalidArgumentException
      *
      * @since 2.0.0
      */
@@ -128,7 +129,7 @@ class BasicNationalAddressCheckService extends AbstractService
         static::validateResponse($response);
         $body = @json_decode((string) $response->getBody(), true);
         if (isset($body['streetName'])) {
-            BasicNationalAddressCheckResponse::jsonDeserialize(['BasicNationalAddressCheckResponse' => $body]);
+            return BasicNationalAddressCheckResponse::jsonDeserialize(['BasicNationalAddressCheckResponse' => $body]);
         }
 
         throw new CifDownException('Unable to process basic national address check response', 0, null, null, $response);
