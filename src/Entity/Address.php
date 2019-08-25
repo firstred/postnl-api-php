@@ -32,6 +32,7 @@ namespace Firstred\PostNL\Entity;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\ValidateAndFix;
 use ReflectionClass;
+use ReflectionException;
 
 /**
  * Class Address
@@ -324,6 +325,7 @@ class Address extends AbstractEntity
      * @param string|null $streetHouseNrExt
      *
      * @throws InvalidArgumentException
+     * @throws ReflectionException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
@@ -826,6 +828,7 @@ class Address extends AbstractEntity
      * @return static
      *
      * @throws InvalidArgumentException
+     * @throws ReflectionException
      *
      * @example 4
      *
@@ -871,6 +874,7 @@ class Address extends AbstractEntity
      * @return static
      *
      * @throws InvalidArgumentException
+     * @throws ReflectionException
      *
      * @example 42
      *
@@ -928,6 +932,7 @@ class Address extends AbstractEntity
      * @return static
      *
      * @throws InvalidArgumentException
+     * @throws ReflectionException
      *
      * @example A
      *
