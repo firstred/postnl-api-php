@@ -131,13 +131,13 @@ class BusinessCreditCheckService extends AbstractService
                 $streamFactory->createStream(
                     json_encode(
                         [
-                            'kvkNumber'       => $kvkNumber,
-                            'postalCode'      => $postalCode,
-                            'houseNumber'     => $houseNumber,
-                            'city'            => $city,
-                            'searchKeyWords'  => $searchKeyWords,
+                            'kvkNumber' => $kvkNumber,
+                            'postalCode' => $postalCode,
+                            'houseNumber' => $houseNumber,
+                            'city' => $city,
+                            'searchKeyWords' => $searchKeyWords,
                             'telephoneNumber' => $telephoneNumber,
-                            'keyNextSearch'   => $keyNextSearch,
+                            'keyNextSearch' => $keyNextSearch,
                         ]
                     )
                 )
@@ -217,7 +217,7 @@ class BusinessCreditCheckService extends AbstractService
     public function processRetrieveCreditFlagResponse(ResponseInterface $response): CreditWorthiness
     {
         static::validateResponse($response);
-        $body = @json_decode((string) $response->getBody(), true);
+        $body = @json_decode((string)$response->getBody(), true);
         if (isset($body['mainMessage'])) {
             /** @var CreditWorthiness $object */
             $object = CreditWorthiness::jsonDeserialize(['CreditWorthiness' => $body]);
