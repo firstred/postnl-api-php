@@ -115,6 +115,9 @@ $label = $postnl->generateLabel($shipment, 'GraphicFile|PDF', true);
 die(var_dump($label));
 ```
 
+**Note:** For the sandbox enviroment, please use CustomerCode='DEVC' and CustomerNumber='11223344' with your own SandBox API Key (found at *apimanager.developer.postnl.nl*).
+
+
 ### Full documentation
 
 The full documentation can be found on this page: [https://postnl-php.readthedocs.io/](https://postnl-php.readthedocs.io/)
