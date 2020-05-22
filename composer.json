@@ -22,7 +22,7 @@
     "test:integration": "vendor/bin/phpunit --testdox --testsuite integration"
   },
   "require": {
-    "php": "7.1 - 7.3",
+    "php": "^7.1",
     "ext-json": "*",
     "ext-mbstring": "*",
     "psr/cache": "^1.0.1",

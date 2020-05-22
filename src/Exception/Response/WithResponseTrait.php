@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2019 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -21,7 +21,7 @@
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
  *
- * @copyright 2017-2019 Michael Dekker
+ * @copyright 2017-2020 Michael Dekker
  *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
