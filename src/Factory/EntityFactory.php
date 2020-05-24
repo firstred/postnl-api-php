@@ -30,6 +30,7 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Factory;
 
 use Firstred\PostNL\Entity\AbstractEntity;
+use Firstred\PostNL\Entity\EntityInterface;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Validate\ValidateInterface;
 use Psr\Container\ContainerInterface;
@@ -68,6 +69,9 @@ class EntityFactory implements EntityFactoryInterface
     public function create(string $className, array $properties = []): AbstractEntity
     {
         $instance = $this->container->get($className);
+        if (!$instance instanceof EntityInterface) {
+            throw new InvalidArgumentException('Invalid classname passed to the EntityFactory');
+        }
 
         foreach ($properties as $name => $value) {
             $instance->{'set'.$name}($value);
