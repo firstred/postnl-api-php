@@ -35,7 +35,6 @@ use Firstred\PostNL\Entity\CustomerInterface;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifErrorException;
 use Firstred\PostNL\Http\HttpClientInterface;
-use Http\Discovery\Psr17FactoryDiscovery;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Cache\InvalidArgumentException;

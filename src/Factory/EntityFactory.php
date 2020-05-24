@@ -32,7 +32,6 @@ namespace Firstred\PostNL\Factory;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\EntityInterface;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Validate\ValidateInterface;
 use Psr\Container\ContainerInterface;
 
 /**

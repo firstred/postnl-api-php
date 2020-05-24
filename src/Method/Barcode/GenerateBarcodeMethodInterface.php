@@ -29,7 +29,6 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Method\Barcode;
 
-use Firstred\PostNL\Entity\Request\GenerateBarcodeRequestEntity;
 use Firstred\PostNL\Entity\Request\GenerateBarcodeRequestEntityInterface;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Method\MethodInterface;
