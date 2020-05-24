@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,9 +23,7 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -38,7 +38,7 @@ use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
 /**
- * Class CifDownException
+ * Class CifDownException.
  *
  * This is a catch-all exception for any CIF HTTP 5XX response that does not provide a clear error message
  */

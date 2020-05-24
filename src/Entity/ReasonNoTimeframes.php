@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,9 +23,7 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -35,54 +35,38 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
 use Iterator;
 
 /**
- * Class ReasonNoTimeframes
+ * Class ReasonNoTimeframes.
  */
-class ReasonNoTimeframes extends AbstractEntity implements Iterator, ArrayAccess, Countable
+final class ReasonNoTimeframes extends AbstractEntity implements Iterator, ArrayAccess, Countable, ReasonNoTimeframesInterface
 {
     /**
-     * Iterator index
+     * Iterator index.
      *
-     * @var int $index
+     * @var int
      *
      * @since 2.0.0
      */
     private $index = 0;
 
     /**
-     * List of ReasonNoTimeframes
+     * List of ReasonNoTimeframes.
      *
      * @pattern N/A
      *
      * @example N/A
      *
-     * @var ReasonNoTimeframe[] $reasonNoTimeframes
+     * @var ReasonNoTimeframeInterface[]
      *
      * @since   2.0.0
      */
-    protected $reasonNoTimeframes = [];
+    private $reasonNoTimeframes = [];
 
     /**
-     * ReasonNoTimeframes constructor.
+     * Get ReasonNoTimeFrames.
      *
-     * @param array $reasonNoTimeframes
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function __construct(array $reasonNoTimeframes = [])
-    {
-        parent::__construct();
-
-        $this->setReasonNoTimeframes($reasonNoTimeframes);
-    }
-
-    /**
-     * Get ReasonNoTimeFrames
-     *
-     * @return ReasonNoTimeframe[]|null
+     * @return ReasonNoTimeframeInterface[]|null
      *
      * @since 2.0.0 Strict typing
-     *
      * @see   ReasonNoTimeframe
      */
     public function getReasonNoTimeframes(): ?array
@@ -91,21 +75,20 @@ class ReasonNoTimeframes extends AbstractEntity implements Iterator, ArrayAccess
     }
 
     /**
-     * Set ReasonNoTimeFrames
+     * Set ReasonNoTimeFrames.
      *
      * @pattern N/a
      *
+     * @param ReasonNoTimeframeInterface[]|null $reasonNoTimeframes
+     *
+     * @return ReasonNoTimeframesInterface
+     *
      * @example N/A
      *
-     * @param ReasonNoTimeframe[]|null $reasonNoTimeframes
-     *
-     * @return static
-     *
      * @since   2.0.0 Strict typing
-     *
      * @see     ReasonNoTimeframe
      */
-    public function setReasonNoTimeframes(?array $reasonNoTimeframes): ReasonNoTimeframes
+    public function setReasonNoTimeframes(?array $reasonNoTimeframes): ReasonNoTimeframesInterface
     {
         $this->reasonNoTimeframes = $reasonNoTimeframes;
 
@@ -113,7 +96,7 @@ class ReasonNoTimeframes extends AbstractEntity implements Iterator, ArrayAccess
     }
 
     /**
-     * Serialize JSON
+     * Serialize JSON.
      *
      * @return array
      *
@@ -125,7 +108,7 @@ class ReasonNoTimeframes extends AbstractEntity implements Iterator, ArrayAccess
     }
 
     /**
-     * Deserialize JSON
+     * Deserialize JSON.
      *
      * @noinspection PhpDocRedundantThrowsInspection
      *
@@ -154,41 +137,41 @@ class ReasonNoTimeframes extends AbstractEntity implements Iterator, ArrayAccess
     }
 
     /**
-     * Return the current element
+     * Return the current element.
      *
-     * @link  https://php.net/manual/en/iterator.current.php
+     * @see  https://php.net/manual/en/iterator.current.php
      *
-     * @return ReasonNoTimeframe
+     * @return ReasonNoTimeframeInterface
      *
      * @since 2.0.0
      */
-    public function current(): ReasonNoTimeframe
+    public function current(): ReasonNoTimeframeInterface
     {
         return $this->reasonNoTimeframes[$this->index];
     }
 
     /**
-     * Move forward to next element
+     * Move forward to next element.
      *
-     * @link  https://php.net/manual/en/iterator.next.php
+     * @see  https://php.net/manual/en/iterator.next.php
      *
-     * @return void Any returned value is ignored.
+     * @return void any returned value is ignored
      *
      * @since 2.0.0
      */
     public function next(): void
     {
         if ($this->offsetExists($this->index + 1)) {
-            $this->index++;
+            ++$this->index;
         }
     }
 
     /**
-     * Return the key of the current element
+     * Return the key of the current element.
      *
-     * @link  https://php.net/manual/en/iterator.key.php
+     * @see  https://php.net/manual/en/iterator.key.php
      *
-     * @return mixed scalar on success, or null on failure.
+     * @return mixed scalar on success, or null on failure
      *
      * @since 2.0.0
      */
@@ -202,12 +185,12 @@ class ReasonNoTimeframes extends AbstractEntity implements Iterator, ArrayAccess
     }
 
     /**
-     * Checks if current position is valid
+     * Checks if current position is valid.
      *
-     * @link  https://php.net/manual/en/iterator.valid.php
+     * @see  https://php.net/manual/en/iterator.valid.php
      *
      * @return bool The return value will be casted to boolean and then evaluated.
-     * Returns true on success or false on failure.
+     *              Returns true on success or false on failure.
      *
      * @since 2.0.0
      */
@@ -217,11 +200,11 @@ class ReasonNoTimeframes extends AbstractEntity implements Iterator, ArrayAccess
     }
 
     /**
-     * Rewind the Iterator to the first element
+     * Rewind the Iterator to the first element.
      *
-     * @link  https://php.net/manual/en/iterator.rewind.php
+     * @see  https://php.net/manual/en/iterator.rewind.php
      *
-     * @return void Any returned value is ignored.
+     * @return void any returned value is ignored
      *
      * @since 2.0.0
      */
@@ -231,16 +214,16 @@ class ReasonNoTimeframes extends AbstractEntity implements Iterator, ArrayAccess
     }
 
     /**
-     * Whether a offset exists
+     * Whether a offset exists.
      *
-     * @link  https://php.net/manual/en/arrayaccess.offsetexists.php
+     * @see  https://php.net/manual/en/arrayaccess.offsetexists.php
      *
      * @param mixed $offset <p>
      *                      An offset to check for.
      *                      </p>
      *
-     * @return boolean true on success or false on failure.
-     * The return value will be casted to boolean if non-boolean was returned.
+     * @return bool true on success or false on failure.
+     *              The return value will be casted to boolean if non-boolean was returned.
      *
      * @since 2.0.0
      */
@@ -250,19 +233,19 @@ class ReasonNoTimeframes extends AbstractEntity implements Iterator, ArrayAccess
     }
 
     /**
-     * Offset to retrieve
+     * Offset to retrieve.
      *
-     * @link  https://php.net/manual/en/arrayaccess.offsetget.php
+     * @see  https://php.net/manual/en/arrayaccess.offsetget.php
      *
      * @param mixed $offset <p>
      *                      The offset to retrieve.
      *                      </p>
      *
-     * @return ReasonNoTimeframe|null
+     * @return ReasonNoTimeframeInterface|null
      *
      * @since 2.0.0
      */
-    public function offsetGet($offset): ?ReasonNoTimeframe
+    public function offsetGet($offset): ?ReasonNoTimeframeInterface
     {
         if ($this->offsetExists($offset)) {
             return $this->reasonNoTimeframes[$offset];
@@ -272,9 +255,9 @@ class ReasonNoTimeframes extends AbstractEntity implements Iterator, ArrayAccess
     }
 
     /**
-     * Offset to set
+     * Offset to set.
      *
-     * @link  https://php.net/manual/en/arrayaccess.offsetset.php
+     * @see  https://php.net/manual/en/arrayaccess.offsetset.php
      *
      * @param mixed $offset <p>
      *                      The offset to assign the value to.
@@ -297,9 +280,9 @@ class ReasonNoTimeframes extends AbstractEntity implements Iterator, ArrayAccess
     }
 
     /**
-     * Offset to unset
+     * Offset to unset.
      *
-     * @link  https://php.net/manual/en/arrayaccess.offsetunset.php
+     * @see  https://php.net/manual/en/arrayaccess.offsetunset.php
      *
      * @param mixed $offset <p>
      *                      The offset to unset.
@@ -315,14 +298,14 @@ class ReasonNoTimeframes extends AbstractEntity implements Iterator, ArrayAccess
     }
 
     /**
-     * Count elements of an object
+     * Count elements of an object.
      *
-     * @link  https://php.net/manual/en/countable.count.php
+     * @see  https://php.net/manual/en/countable.count.php
      *
      * @return int The custom count as an integer.
-     * </p>
-     * <p>
-     * The return value is cast to an integer.
+     *             </p>
+     *             <p>
+     *             The return value is cast to an integer.
      *
      * @since 2.0.0
      */

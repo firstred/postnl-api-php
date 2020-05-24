@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,41 +23,35 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL;
 
 use Exception;
-use Firstred\PostNL\Entity\Address;
-use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Entity\AddressInterface;
+use Firstred\PostNL\Entity\CustomerInterface;
 use Firstred\PostNL\Entity\CutOffTime;
+use Firstred\PostNL\Entity\CutOffTimeInterface;
 use Firstred\PostNL\Entity\Label;
-use Firstred\PostNL\Entity\Location;
-use Firstred\PostNL\Entity\Request\BasicNationalAddressCheckRequest;
+use Firstred\PostNL\Entity\LocationInterface;
 use Firstred\PostNL\Entity\Request\CalculateDeliveryDateRequest;
 use Firstred\PostNL\Entity\Request\CalculateShippingDateRequest;
 use Firstred\PostNL\Entity\Request\CalculateTimeframesRequest;
+use Firstred\PostNL\Entity\Request\CalculateTimeframesRequestInterface;
 use Firstred\PostNL\Entity\Request\ConfirmShipmentRequest;
 use Firstred\PostNL\Entity\Request\FindDeliveryInfoRequest;
 use Firstred\PostNL\Entity\Request\FindLocationsInAreaRequest;
 use Firstred\PostNL\Entity\Request\FindNearestLocationsGeocodeRequest;
 use Firstred\PostNL\Entity\Request\FindNearestLocationsRequest;
-use Firstred\PostNL\Entity\Request\GenerateBarcodeRequest;
+use Firstred\PostNL\Entity\Request\GenerateBarcodeRequestEntityInterface;
 use Firstred\PostNL\Entity\Request\GenerateShipmentLabelRequest;
-use Firstred\PostNL\Entity\Request\InternationalAddressCheckRequest;
 use Firstred\PostNL\Entity\Request\LookupLocationRequest;
-use Firstred\PostNL\Entity\Request\NationalAddressCheckRequest;
-use Firstred\PostNL\Entity\Request\NationalGeoAddressCheckRequest;
 use Firstred\PostNL\Entity\Request\PostalCodeCheckRequest;
 use Firstred\PostNL\Entity\Request\RetrieveShipmentByBarcodeRequest;
-use Firstred\PostNL\Entity\Request\RetrieveShipmentByKgidRequest;
 use Firstred\PostNL\Entity\Request\RetrieveShipmentByReferenceRequest;
 use Firstred\PostNL\Entity\Request\RetrieveSignatureByBarcodeRequest;
-use Firstred\PostNL\Entity\Response\BasicNationalAddressCheckResponse;
 use Firstred\PostNL\Entity\Response\CalculateDeliveryDateResponse;
 use Firstred\PostNL\Entity\Response\CalculateShippingDateResponse;
 use Firstred\PostNL\Entity\Response\CalculateTimeframesResponse;
@@ -65,10 +61,9 @@ use Firstred\PostNL\Entity\Response\FindLocationsInAreaResponse;
 use Firstred\PostNL\Entity\Response\FindNearestLocationsGeocodeResponse;
 use Firstred\PostNL\Entity\Response\FindNearestLocationsResponse;
 use Firstred\PostNL\Entity\Response\GenerateLabelResponse;
-use Firstred\PostNL\Entity\Response\NationalBusinessCheckResponse;
-use Firstred\PostNL\Entity\Shipment;
-use Firstred\PostNL\Entity\Signature;
-use Firstred\PostNL\Entity\ValidatedAddress;
+use Firstred\PostNL\Entity\ShipmentInterface;
+use Firstred\PostNL\Entity\SignatureInterface;
+use Firstred\PostNL\Entity\ValidatedAddressInterface;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifErrorException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
@@ -76,841 +71,84 @@ use Firstred\PostNL\Exception\InvalidBarcodeException;
 use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\PostNLClientException;
-use Firstred\PostNL\Http\Client;
+use Firstred\PostNL\Factory\EntityFactoryInterface;
 use Firstred\PostNL\Misc\Message as UtilMessage;
 use Firstred\PostNL\Misc\Misc;
 use Firstred\PostNL\Misc\RFPdi;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\BasicNationalAddressCheckService;
-use Firstred\PostNL\Service\BusinessCreditCheckService;
-use Firstred\PostNL\Service\CheckoutService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\InternationalAddressCheckService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\NationalAddressCheckService;
-use Firstred\PostNL\Service\NationalBusinessCheckService;
-use Firstred\PostNL\Service\NationalGeoAddressCheckService;
-use Firstred\PostNL\Service\PostalCodeCheckService;
-use Firstred\PostNL\Service\ShippingStatusService;
-use Firstred\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Service\BarcodeServiceInterface;
 use Http\Client\Exception as HttpClientException;
 use Psr\Cache\CacheItemInterface;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use setasign\Fpdi\PdfParser\StreamReader;
 
 /**
- * Class PostNL
+ * Class PostNL.
  */
-class PostNL implements LoggerAwareInterface
+class PostNL
 {
-    /**
-     * 3S (or EU Pack Special) countries + China
-     *
-     * @var array
-     */
-    public static $threeSCountries = ['AT', 'BE', 'BG', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GB', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'EE', 'CN'];
-
-    /**
-     * Labels positions on an A4
-     * (index = amount of a6 left on the page)
-     *
-     * @var array
-     *
-     * @since 1.0.0 Named `$a6Positions`
-     * @since 2.0.0 Renamed to `$labelPositions`
-     */
-    public static $labelPositions = [
-        4 => [-276, 2],
-        3 => [-132, 2],
-        2 => [-276, 110],
-        1 => [-132, 110],
-    ];
-
     /**
      * The PostNL API key to be used for requests.
      *
-     * @var string $apiKey
+     * @var string
      */
-    protected $apiKey;
+    private $apiKey;
 
     /**
      * The PostNL Customer to be used for requests.
      *
-     * @var Customer $customer
+     * @var CustomerInterface
      */
-    protected $customer;
+    private $customer;
 
     /**
-     * Sandbox mode
+     * Sandbox mode.
      *
-     * @var bool $sandbox
+     * @var bool
      */
-    protected $sandbox = false;
-
-    /** @var LoggerInterface $logger */
-    protected $logger;
+    private $sandbox;
 
     /**
-     * @var BarcodeService $barcodeService
+     * Entity factory
      *
-     * @since 1.0.0
+     * @var EntityFactoryInterface
      */
-    protected $barcodeService;
+    private $entityFactory;
 
     /**
-     * @var LabellingService $labellingService
+     * Barcode service.
      *
-     * @since 1.0.0
+     * @var BarcodeServiceInterface
      */
-    protected $labellingService;
+    private $barcodeService;
 
-    /**
-     * @var ConfirmingService $confirmingService
-     *
-     * @since 1.0.0
-     */
-    protected $confirmingService;
-
-    /**
-     * @var ShippingStatusService $shippingStatusService
-     *
-     * @since 1.0.0
-     */
-    protected $shippingStatusService;
-
-    /**
-     * @var DeliveryDateService $deliveryDateService
-     *
-     * @since 1.0.0
-     */
-    protected $deliveryDateService;
-
-    /**
-     * @var TimeframeService $timeframeService
-     *
-     * @since 1.0.0
-     */
-    protected $timeframeService;
-
-    /**
-     * @var LocationService $locationService
-     *
-     * @since 1.0.0
-     */
-    protected $locationService;
-
-    /**
-     * @var BasicNationalAddressCheckService $basicNationalAddressCheckService
-     *
-     * @since 2.0.0
-     */
-    protected $basicNationalAddressCheckService;
-
-    /**
-     * @var NationalAddressCheckService $nationalAddressCheckService
-     *
-     * @since 2.0.0
-     */
-    protected $nationalAddressCheckService;
-
-    /**
-     * @var NationalGeoAddressCheckService $nationalGeoAddressCheckService
-     *
-     * @since 2.0.0
-     */
-    protected $nationalGeoAddressCheckService;
-
-    /**
-     * @var InternationalAddressCheckService $internationalAddressCheckService
-     *
-     * @since 2.0.0
-     */
-    protected $internationalAddressCheckService;
-
-    /**
-     * @var NationalBusinessCheckService $nationalBusinessCheckService
-     *
-     * @since 2.0.00
-     */
-    protected $nationalBusinessCheckService;
-
-    /**
-     * @var BusinessCreditCheckService $businessCreditCheckService
-     *
-     * @since 2.0.0
-     */
-    protected $businessCreditCheckService;
-
-    /**
-     * @var PostalCodeCheckService $postalCodeCheckService
-     *
-     * @since 2.0.0
-     */
-    protected $postalCodeCheckService;
-
-    /**
-     * @var CheckoutService $checkoutService
-     *
-     * @since 2.0.0
-     */
-    protected $checkoutService;
+    /** @var LoggerInterface */
+    private $logger;
 
     /**
      * PostNL constructor.
-     *
-     * @param Customer $customer Customer object
-     * @param string   $apiKey   API key
-     * @param bool     $sandbox  Sandbox mode
-     *
+
      * @since 1.0.0
      * @since 2.0.0 Removed mode
      */
-    public function __construct(Customer $customer, string $apiKey, bool $sandbox)
-    {
-        $this->setCustomer($customer);
-        $this->setApiKey($apiKey);
-        $this->setSandbox((bool) $sandbox);
-    }
-
-    /**
-     * Get REST API Key
-     *
-     * @return string REST API Key
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function getApiKey(): ?string
-    {
-        return $this->apiKey;
-    }
-
-    /**
-     * Get sandbox mode
-     *
-     * @return bool
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function getSandbox(): bool
-    {
-        return $this->sandbox;
-    }
-
-    /**
-     * Set sandbox mode
-     *
-     * @param bool $sandbox
-     *
-     * @return PostNL
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Return `self`
-     */
-    public function setSandbox(bool $sandbox): PostNL
-    {
-        $this->sandbox = $sandbox;
-
-        return $this;
-    }
-
-    /**
-     * Get the logger
-     *
-     * @return LoggerInterface
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function getLogger(): ?LoggerInterface
-    {
-        return $this->logger;
-    }
-
-    /**
-     * Set the logger
-     *
-     * @param LoggerInterface $logger
-     *
-     * @return self
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Return `self`
-     */
-    public function setLogger(?LoggerInterface $logger = null): PostNL
-    {
-        $this->logger = $logger;
-        Client::getInstance()->setLogger($logger);
-
-        return $this;
-    }
-
-    /**
-     * Get PostNL Customer
-     *
-     * @return Customer
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function getCustomer(): Customer
-    {
-        return $this->customer;
-    }
-
-    /**
-     * Set PostNL Customer
-     *
-     * @param Customer $customer
-     *
-     * @return PostNL
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Return `self`
-     */
-    public function setCustomer(Customer $customer): PostNL
-    {
+    public function __construct(
+        CustomerInterface $customer,
+        string $apiKey,
+        bool $sandbox,
+        EntityFactoryInterface $entityFactory,
+        BarcodeServiceInterface $barcodeService,
+        LoggerInterface $logger = null
+    ) {
         $this->customer = $customer;
-
-        return $this;
-    }
-
-    /**
-     * Set PostNL Customer
-     *
-     * @param string $apiKey
-     *
-     * @return self
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Return `self`
-     */
-    public function setApiKey(string $apiKey): PostNL
-    {
         $this->apiKey = $apiKey;
-
-        return $this;
+        $this->sandbox = $sandbox;
+        $this->entityFactory = $entityFactory;
+        $this->barcodeService = $barcodeService;
+        $this->logger = $logger;
     }
 
     /**
-     * GenerateBarcodeRequest service
-     *
-     * Automatically load the barcode service
-     *
-     * @return BarcodeService
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function getBarcodeService(): BarcodeService
-    {
-        if (!$this->barcodeService) {
-            $this->setBarcodeService(new BarcodeService($this));
-        }
-
-        return $this->barcodeService;
-    }
-
-    /**
-     * Set the barcode service
-     *
-     * @param BarcodeService $service
-     *
-     * @return self
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Return `self` / strict typing
-     */
-    public function setBarcodeService(BarcodeService $service): PostNL
-    {
-        $this->barcodeService = $service;
-
-        return $this;
-    }
-
-    /**
-     * Labelling service
-     *
-     * Automatically load the labelling service
-     *
-     * @return LabellingService
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function getLabellingService(): LabellingService
-    {
-        if (!$this->labellingService) {
-            $this->setLabellingService(new LabellingService($this));
-        }
-
-        return $this->labellingService;
-    }
-
-    /**
-     * Set the labelling service
-     *
-     * @param LabellingService $service
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Return `self`
-     *
-     * @return self
-     */
-    public function setLabellingService(LabellingService $service): PostNL
-    {
-        $this->labellingService = $service;
-
-        return $this;
-    }
-
-    /**
-     * ConfirmShipmentRequest service
-     *
-     * Automatically load the confirming service
-     *
-     * @return ConfirmingService
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function getConfirmingService(): ConfirmingService
-    {
-        if (!$this->confirmingService) {
-            $this->setConfirmingService(new ConfirmingService($this));
-        }
-
-        return $this->confirmingService;
-    }
-
-    /**
-     * Set the confirming service
-     *
-     * @param ConfirmingService $service
-     *
-     * @return self
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Return `self`
-     */
-    public function setConfirmingService(ConfirmingService $service): PostNL
-    {
-        $this->confirmingService = $service;
-
-        return $this;
-    }
-
-    /**
-     * Shipping status service
-     *
-     * Automatically load the shipping status service
-     *
-     * @return ShippingStatusService
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function getShippingStatusService(): ShippingStatusService
-    {
-        if (!$this->shippingStatusService) {
-            $this->setShippingStatusService(new ShippingStatusService($this));
-        }
-
-        return $this->shippingStatusService;
-    }
-
-    /**
-     * Set the shipping status service
-     *
-     * @param ShippingStatusService $service
-     *
-     * @return self
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Return `self`
-     */
-    public function setShippingStatusService(ShippingStatusService $service): PostNL
-    {
-        $this->shippingStatusService = $service;
-
-        return $this;
-    }
-
-    /**
-     * Delivery date service
-     *
-     * Automatically load the delivery date service
-     *
-     * @return DeliveryDateService
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function getDeliveryDateService(): DeliveryDateService
-    {
-        if (!$this->deliveryDateService) {
-            $this->setDeliveryDateService(new DeliveryDateService($this));
-        }
-
-        return $this->deliveryDateService;
-    }
-
-    /**
-     * Set the delivery date service
-     *
-     * @param DeliveryDateService $service
-     *
-     * @return self
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Return `self`
-     */
-    public function setDeliveryDateService(DeliveryDateService $service): PostNL
-    {
-        $this->deliveryDateService = $service;
-
-        return $this;
-    }
-
-    /**
-     * Timeframe service
-     *
-     * Automatically load the timeframe service
-     *
-     * @return TimeframeService
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function getTimeframeService(): TimeframeService
-    {
-        if (!$this->timeframeService) {
-            $this->setTimeframeService(new TimeframeService($this));
-        }
-
-        return $this->timeframeService;
-    }
-
-    /**
-     * Set the timeframe service
-     *
-     * @param TimeframeService $service
-     *
-     * @return static
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Return `self`
-     */
-    public function setTimeframeService(TimeframeService $service): PostNL
-    {
-        $this->timeframeService = $service;
-
-        return $this;
-    }
-
-    /**
-     * Location service
-     *
-     * Automatically load the location service
-     *
-     * @return LocationService
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function getLocationService(): LocationService
-    {
-        if (!$this->locationService) {
-            $this->setLocationService(new LocationService($this));
-        }
-
-        return $this->locationService;
-    }
-
-    /**
-     * Set the location service
-     *
-     * @param LocationService $service
-     *
-     * @return static
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Return `self`
-     */
-    public function setLocationService(LocationService $service): PostNL
-    {
-        $this->locationService = $service;
-
-        return $this;
-    }
-
-    /**
-     * Get Basic National Address Check service
-     *
-     * @return BasicNationalAddressCheckService
-     *
-     * @since 2.0.0
-     */
-    public function getBasicNationalAddressCheckService(): BasicNationalAddressCheckService
-    {
-        if (!$this->basicNationalAddressCheckService) {
-            $this->setBasicNationalAddressCheckService(new BasicNationalAddressCheckService($this));
-        }
-
-        return $this->basicNationalAddressCheckService;
-    }
-
-    /**
-     * Set Basic National Address Check service
-     *
-     * @param BasicNationalAddressCheckService $basicNationalAddressCheckService
-     *
-     * @return static
-     *
-     * @since 2.0.0
-     */
-    public function setBasicNationalAddressCheckService(BasicNationalAddressCheckService $basicNationalAddressCheckService): PostNL
-    {
-        $this->basicNationalAddressCheckService = $basicNationalAddressCheckService;
-
-        return $this;
-    }
-
-    /**
-     * Get National Address Check service
-     *
-     * @return NationalAddressCheckService
-     *
-     * @since 2.0.0
-     */
-    public function getNationalAddressCheckService(): NationalAddressCheckService
-    {
-        if (!$this->nationalAddressCheckService) {
-            $this->setNationalAddressCheckService(new NationalAddressCheckService($this));
-        }
-
-        return $this->nationalAddressCheckService;
-    }
-
-    /**
-     * Set National Address Check service
-     *
-     * @param NationalAddressCheckService $nationalAddressCheckService
-     *
-     * @return static
-     *
-     * @since 2.0.0
-     */
-    public function setNationalAddressCheckService(NationalAddressCheckService $nationalAddressCheckService): PostNL
-    {
-        $this->nationalAddressCheckService = $nationalAddressCheckService;
-
-        return $this;
-    }
-
-    /**
-     * Get National Geo Address Check service
-     *
-     * @return NationalGeoAddressCheckService
-     *
-     * @since 2.0.0
-     */
-    public function getNationalGeoAddressCheckService(): NationalGeoAddressCheckService
-    {
-        if (!$this->nationalGeoAddressCheckService) {
-            $this->setNationalGeoAddressCheckService(new NationalGeoAddressCheckService($this));
-        }
-
-        return $this->nationalGeoAddressCheckService;
-    }
-
-    /**
-     * Set National Geo Address Check service
-     *
-     * @param NationalGeoAddressCheckService $nationalGeoAddressCheckService
-     *
-     * @return static
-     *
-     * @since 2.0.0
-     */
-    public function setNationalGeoAddressCheckService(NationalGeoAddressCheckService $nationalGeoAddressCheckService): PostNL
-    {
-        $this->nationalGeoAddressCheckService = $nationalGeoAddressCheckService;
-
-        return $this;
-    }
-
-    /**
-     * Set International Address Check service
-     *
-     * @return InternationalAddressCheckService
-     *
-     * @since 2.0.0
-     */
-    public function getInternationalAddressCheckService(): InternationalAddressCheckService
-    {
-        if (!$this->internationalAddressCheckService) {
-            $this->setInternationalAddressCheckService(new InternationalAddressCheckService($this));
-        }
-
-        return $this->internationalAddressCheckService;
-    }
-
-    /**
-     * Get International Address Check service
-     *
-     * @param InternationalAddressCheckService $internationalAddressCheckService
-     *
-     * @return static
-     *
-     * @since 2.0.0
-     */
-    public function setInternationalAddressCheckService(InternationalAddressCheckService $internationalAddressCheckService): PostNL
-    {
-        $this->internationalAddressCheckService = $internationalAddressCheckService;
-
-        return $this;
-    }
-
-    /**
-     * National Business Check service
-     *
-     * Automatically load the business check service
-     *
-     * @return NationalBusinessCheckService
-     *
-     * @since 2.0.0
-     */
-    public function getNationalBusinessCheckService(): NationalBusinessCheckService
-    {
-        if (!$this->nationalBusinessCheckService) {
-            $this->setNationalBusinessCheckService(new NationalBusinessCheckService($this));
-        }
-
-        return $this->nationalBusinessCheckService;
-    }
-
-    /**
-     * Set the national business check service
-     *
-     * @param NationalBusinessCheckService $service
-     *
-     * @return static
-     *
-     * @since 2.0.0
-     */
-    public function setNationalBusinessCheckService(NationalBusinessCheckService $service): PostNL
-    {
-        $this->nationalBusinessCheckService = $service;
-
-        return $this;
-    }
-
-    /**
-     * National Company Credit Check service
-     *
-     * Automatically load the company credit check service
-     *
-     * @return BusinessCreditCheckService
-     *
-     * @since 2.0.0
-     */
-    public function getBusinessCreditCheckService(): BusinessCreditCheckService
-    {
-        if (!$this->businessCreditCheckService) {
-            $this->setBusinessCreditCheckService(new BusinessCreditCheckService($this));
-        }
-
-        return $this->businessCreditCheckService;
-    }
-
-    /**
-     * Set the company credit check service
-     *
-     * @param BusinessCreditCheckService $service
-     *
-     * @return static
-     *
-     * @since 2.0.0
-     */
-    public function setBusinessCreditCheckService(BusinessCreditCheckService $service): PostNL
-    {
-        $this->businessCreditCheckService = $service;
-
-        return $this;
-    }
-
-    /**
-     * Get Postal Code Check service
-     *
-     * @return PostalCodeCheckService
-     *
-     * @since 2.0.0
-     */
-    public function getPostalCodeCheckService(): PostalCodeCheckService
-    {
-        if (!$this->postalCodeCheckService) {
-            $this->setPostalCodeCheckService(new PostalCodeCheckService($this));
-        }
-
-        return $this->postalCodeCheckService;
-    }
-
-    /**
-     * Set Postal Code Check service
-     *
-     * @param PostalCodeCheckService $postalCodeCheckService
-     *
-     * @return static
-     *
-     * @since 2.0.0
-     */
-    public function setPostalCodeCheckService(PostalCodeCheckService $postalCodeCheckService): PostNL
-    {
-        $this->postalCodeCheckService = $postalCodeCheckService;
-
-        return $this;
-    }
-
-    /**
-     * Get Checkout service
-     *
-     * @return CheckoutService
-     *
-     * @since 2.0.0
-     */
-    public function getCheckoutService(): CheckoutService
-    {
-        if (!$this->checkoutService) {
-            $this->setCheckoutService(new CheckoutService($this));
-        }
-
-        return $this->checkoutService;
-    }
-
-    /**
-     * Set Checkout service
-     *
-     * @param CheckoutService $checkoutService
-     *
-     * @return static
-     *
-     * @since 2.0.0
-     */
-    public function setCheckoutService(CheckoutService $checkoutService): PostNL
-    {
-        $this->checkoutService = $checkoutService;
-
-        return $this;
-    }
-
-    /**
-     * Generate a single barcode
+     * Generate a single barcode.
      *
      * @param string      $type
      * @param string|null $range
@@ -920,23 +158,21 @@ class PostNL implements LoggerAwareInterface
      * @return string The barcode as a string
      *
      * @throws InvalidBarcodeException
-     * @throws Exception
-     * @throws HttpClientException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
     public function generateBarcode(string $type = '3S', ?string $range = null, ?string $serie = null, bool $eps = false): string
     {
-        if (!in_array($type, ['2S', '3S']) || mb_strlen($type) !== 2) {
+        if (!in_array($type, ['2S', '3S']) || 2 !== mb_strlen($type)) {
             throw new InvalidBarcodeException("GenerateBarcodeRequest type `$type` is invalid");
         }
 
         if (!$range) {
             if (in_array($type, ['2S', '3S'])) {
-                $range = $this->getCustomer()->getCustomerCode();
+                $range = $this->customer->getCustomerCode();
             } else {
-                $range = $this->getCustomer()->getGlobalPackCustomerCode();
+                $range = $this->customer->getGlobalPackCustomerCode();
             }
         }
         if (!$range) {
@@ -947,11 +183,21 @@ class PostNL implements LoggerAwareInterface
             $serie = $this->findBarcodeSerie($type, $range, $eps);
         }
 
-        return $this->getBarcodeService()->generateBarcode(new GenerateBarcodeRequest($type, $range, $serie));
+        /** @var GenerateBarcodeRequestEntityInterface $generateBarcodeRequest */
+        $generateBarcodeRequest = $this->entityFactory->create(
+            GenerateBarcodeRequestEntityInterface::class,
+            [
+                'Type'  => $type,
+                'Range' => $range,
+                'Serie' => $serie,
+            ]
+        );
+
+        return $this->barcodeService->generateBarcode($generateBarcodeRequest);
     }
 
     /**
-     * Find a suitable serie for the barcode
+     * Find a suitable serie for the barcode.
      *
      * @param string $type
      * @param string $range
@@ -988,12 +234,11 @@ class PostNL implements LoggerAwareInterface
                             break 2;
                         default:
                             throw new InvalidBarcodeException('Invalid range');
-
                             break;
                     }
                 }
                 // Regular domestic codes
-                $serie = (mb_strlen($range) === 4 ? '987000000-987600000' : '0000000-9999999');
+                $serie = (4 === mb_strlen($range) ? '987000000-987600000' : '0000000-9999999');
 
                 break;
             default:
@@ -1007,7 +252,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Generate a single barcode by country code
+     * Generate a single barcode by country code.
      *
      * @param string $iso 2-letter Country ISO Code
      *
@@ -1033,28 +278,24 @@ class PostNL implements LoggerAwareInterface
             $type = $this->getCustomer()->getGlobalPackBarcodeType();
 
             if (!$range) {
-                throw new InvalidConfigurationException(
-                    'GlobalPack customer code has not been set for the current customer'
-                );
+                throw new InvalidConfigurationException('GlobalPack customer code has not been set for the current customer');
             }
             if (!$type) {
-                throw new InvalidConfigurationException(
-                    'GlobalPack barcode type has not been set for the current customer'
-                );
+                throw new InvalidConfigurationException('GlobalPack barcode type has not been set for the current customer');
             }
         }
 
         $serie = $this->findBarcodeSerie(
             $type,
             $range,
-            strtoupper($iso) !== 'NL' && in_array(strtoupper($iso), static::$threeSCountries)
+            'NL' !== strtoupper($iso) && in_array(strtoupper($iso), static::$threeSCountries)
         );
 
         return $this->getBarcodeService()->generateBarcode(new GenerateBarcodeRequest($type, $range, $serie));
     }
 
     /**
-     * Generate a single barcode by country code
+     * Generate a single barcode by country code.
      *
      * @param array $isos key = iso code, value = amount of barcodes requested
      *
@@ -1087,26 +328,22 @@ class PostNL implements LoggerAwareInterface
                 $type = $globalPackType;
 
                 if (!$range) {
-                    throw new InvalidConfigurationException(
-                        'GlobalPack customer code has not been set for the current customer'
-                    );
+                    throw new InvalidConfigurationException('GlobalPack customer code has not been set for the current customer');
                 }
                 if (!$type) {
-                    throw new InvalidConfigurationException(
-                        'GlobalPack barcode type has not been set for the current customer'
-                    );
+                    throw new InvalidConfigurationException('GlobalPack barcode type has not been set for the current customer');
                 }
             }
 
             $serie = $this->findBarcodeSerie(
                 $type,
                 $range,
-                strtoupper($iso) !== 'NL' && in_array(strtoupper($iso), static::$threeSCountries)
+                'NL' !== strtoupper($iso) && in_array(strtoupper($iso), static::$threeSCountries)
             );
 
-            for ($i = 0; $i < $qty; $i++) {
+            for ($i = 0; $i < $qty; ++$i) {
                 $generateBarcodes[] = (new GenerateBarcodeRequest($type, $range, $serie))->setId("$iso-$index");
-                $index++;
+                ++$index;
             }
         }
 
@@ -1125,9 +362,9 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * @param Shipment $shipment
-     * @param string   $printerType
-     * @param bool     $confirm
+     * @param ShipmentInterface $shipment
+     * @param string            $printerType
+     * @param bool              $confirm
      *
      * @return GenerateLabelResponse
      *
@@ -1139,51 +376,50 @@ class PostNL implements LoggerAwareInterface
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function generateLabel(Shipment $shipment, ?string $printerType = 'GraphicFile|PDF', ?bool $confirm = true): GenerateLabelResponse
+    public function generateLabel(ShipmentInterface $shipment, ?string $printerType = 'GraphicFile|PDF', ?bool $confirm = true): GenerateLabelResponse
     {
         return $this->getLabellingService()->generateLabel(new GenerateShipmentLabelRequest([$shipment]), $printerType, $confirm);
     }
 
     /**
-     * Generate or retrieve multiple labels
+     * Generate or retrieve multiple labels.
      *
      * Note that instead of returning a GenerateLabelResponse this function can merge the labels and return a
      * string which contains the PDF with the merged pages as well.
      *
-     * @param Shipment[] $shipments     (key = ID) Shipments
-     * @param string     $printerType   Printer type, see PostNL dev docs for available types
-     * @param bool       $confirm       Immediately confirm the shipments
-     * @param bool       $merge         Merge the PDFs and return them in a MyParcel way
-     * @param int        $format        A4 or A6
-     * @param array      $positions     Set the positions of the A6s on the first A4
-     *                                  The indices should be the position number, marked with `true` or `false`
-     *                                  These are the position numbers:
-     *                                  ```
-     *                                  +-+-+
-     *                                  |2|4|
-     *                                  +-+-+
-     *                                  |1|3|
-     *                                  +-+-+
-     *                                  ```
-     *                                  So, for
-     *                                  ```
-     *                                  +-+-+
-     *                                  |x|✔|
-     *                                  +-+-+
-     *                                  |✔|x|
-     *                                  +-+-+
-     *                                  ```
-     *                                  you would have to pass:
-     *                                  ```php
-     *                                  [
-     *                                  1 => true,
-     *                                  2 => false,
-     *                                  3 => false,
-     *                                  4 => true,
-     *                                  ]
-     *                                  ```
-     *
-     * @param string     $a6Orientation A6 orientation (P or L)
+     * @param ShipmentInterface[] $shipments     (key = ID) Shipments
+     * @param string              $printerType   Printer type, see PostNL dev docs for available types
+     * @param bool                $confirm       Immediately confirm the shipments
+     * @param bool                $merge         Merge the PDFs and return them in a MyParcel way
+     * @param int                 $format        A4 or A6
+     * @param array               $positions     Set the positions of the A6s on the first A4
+     *                                           The indices should be the position number, marked with `true` or `false`
+     *                                           These are the position numbers:
+     *                                           ```
+     *                                           +-+-+
+     *                                           |2|4|
+     *                                           +-+-+
+     *                                           |1|3|
+     *                                           +-+-+
+     *                                           ```
+     *                                           So, for
+     *                                           ```
+     *                                           +-+-+
+     *                                           |x|✔|
+     *                                           +-+-+
+     *                                           |✔|x|
+     *                                           +-+-+
+     *                                           ```
+     *                                           you would have to pass:
+     *                                           ```php
+     *                                           [
+     *                                           1 => true,
+     *                                           2 => false,
+     *                                           3 => false,
+     *                                           4 => true,
+     *                                           ]
+     *                                           ```
+     * @param string              $a6Orientation A6 orientation (P or L)
      *
      * @return GenerateLabelResponse[]|string
      *
@@ -1229,14 +465,14 @@ class PostNL implements LoggerAwareInterface
 
         try {
             // Disable header and footer
-            $pdf = new RFPdi('P', 'mm', $format === Label::FORMAT_A4 ? [210, 297] : [105, 148]);
+            $pdf = new RFPdi('P', 'mm', Label::FORMAT_A4 === $format ? [210, 297] : [105, 148]);
             $deferred = [];
             $firstPage = true;
             if (Label::FORMAT_A6 === $format) {
                 foreach ($labels as $label) {
                     $pdfContent = base64_decode($label->getResponseShipments()[0]->getLabels()[0]->getContent());
                     $sizes = Misc::getPdfSizeAndOrientation($pdfContent);
-                    if ($sizes['iso'] === 'A6') {
+                    if ('A6' === $sizes['iso']) {
                         $pdf->addPage($a6Orientation);
                         $correction = [0, 0];
                         if ('L' === $a6Orientation && 'P' === $sizes['orientation']) {
@@ -1262,14 +498,14 @@ class PostNL implements LoggerAwareInterface
                     }
                     $pdfContent = base64_decode($label->getResponseShipments()[0]->getLabels()[0]->getContent());
                     $sizes = Misc::getPdfSizeAndOrientation($pdfContent);
-                    if ($sizes['iso'] === 'A6') {
+                    if ('A6' === $sizes['iso']) {
                         if ($firstPage) {
                             $pdf->addPage('P', [297, 210], 90);
                         }
                         $firstPage = false;
                         while (empty($positions[5 - $a6s]) && $a6s >= 1) {
                             $positions[5 - $a6s] = true;
-                            $a6s--;
+                            --$a6s;
                         }
                         if ($a6s < 1) {
                             $pdf->addPage('P', [297, 210], 90);
@@ -1282,7 +518,7 @@ class PostNL implements LoggerAwareInterface
                             static::$labelPositions[$a6s][0],
                             static::$labelPositions[$a6s][1]
                         );
-                        $a6s--;
+                        --$a6s;
                         if ($a6s < 1) {
                             if (end($labels) !== $label) {
                                 $pdf->addPage('P', [297, 210], 90);
@@ -1310,7 +546,7 @@ class PostNL implements LoggerAwareInterface
                 $pdf->rotateCounterClockWise();
                 if (is_array($defer['stream']) && count($defer['stream']) > 1) {
                     // Multi-label
-                    if (count($deferred['stream']) === 2) {
+                    if (2 === count($deferred['stream'])) {
                         $pdf->setSourceFile($defer['stream'][0]);
                         $pdf->useTemplate($pdf->importPage(1), -190, 0);
                         $pdf->setSourceFile($defer['stream'][1]);
@@ -1320,9 +556,9 @@ class PostNL implements LoggerAwareInterface
                         $pdf->useTemplate($pdf->importPage(1), -190, 0);
                         $pdf->setSourceFile($defer['stream'][1]);
                         $pdf->useTemplate($pdf->importPage(1), -190, 148);
-                        for ($i = 2; $i < count($defer['stream']); $i++) {
+                        for ($i = 2; $i < count($defer['stream']); ++$i) {
                             $pages = $pdf->setSourceFile($defer['stream'][$i]);
-                            for ($j = 1; $j < $pages + 1; $j++) {
+                            for ($j = 1; $j < $pages + 1; ++$j) {
                                 $pdf->addPage($sizes['orientation'], 'A4');
                                 $pdf->rotateCounterClockWise();
                                 $pdf->useTemplate($pdf->importPage(1), -190, 0);
@@ -1346,9 +582,9 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Confirm a single shipment
+     * Confirm a single shipment.
      *
-     * @param Shipment $shipment
+     * @param ShipmentInterface $shipment
      *
      * @return ConfirmShipmentResponse
      *
@@ -1359,13 +595,13 @@ class PostNL implements LoggerAwareInterface
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function confirmShipment(Shipment $shipment): ConfirmShipmentResponse
+    public function confirmShipment(ShipmentInterface $shipment): ConfirmShipmentResponse
     {
         return $this->getConfirmingService()->confirmShipment(new ConfirmShipmentRequest([$shipment]));
     }
 
     /**
-     * Confirm multiple shipments
+     * Confirm multiple shipments.
      *
      * @param array $shipments
      *
@@ -1389,15 +625,14 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Retrieves a shipment by barcode
+     * Retrieves a shipment by barcode.
      *
      * @param string   $barcode
-     *
      * @param bool     $detail
      * @param string   $language
      * @param int|null $maxDays
      *
-     * @return Shipment
+     * @return ShipmentInterface
      *
      * @throws CifDownException
      * @throws CifErrorException
@@ -1405,10 +640,9 @@ class PostNL implements LoggerAwareInterface
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
-     *
      * @see   https://developer.postnl.nl/browse-apis/send-and-track/shippingstatus-webservice/testtool-rest/#/default/get_v2_status_barcode__barcode_
      */
-    public function retrieveShipmentByBarcode(string $barcode, bool $detail = false, string $language = 'NL', ?int $maxDays = null): Shipment
+    public function retrieveShipmentByBarcode(string $barcode, bool $detail = false, string $language = 'NL', ?int $maxDays = null): ShipmentInterface
     {
         return $this->getShippingStatusService()->retrieveShipment(
             (new RetrieveShipmentByBarcodeRequest())
@@ -1420,15 +654,14 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Retrieves a shipment by reference
+     * Retrieves a shipment by reference.
      *
      * @param string   $reference
-     *
      * @param bool     $detail
      * @param string   $language
      * @param int|null $maxDays
      *
-     * @return Shipment
+     * @return ShipmentInterface
      *
      * @throws CifDownException
      * @throws CifErrorException
@@ -1436,10 +669,9 @@ class PostNL implements LoggerAwareInterface
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
-     *
      * @see   https://developer.postnl.nl/browse-apis/send-and-track/shippingstatus-webservice/testtool-rest/#/default/get_v2_status_reference__referenceId_
      */
-    public function retrieveShipmentByReference(string $reference, bool $detail = false, string $language = 'NL', ?int $maxDays = null): Shipment
+    public function retrieveShipmentByReference(string $reference, bool $detail = false, string $language = 'NL', ?int $maxDays = null): ShipmentInterface
     {
         return $this->getShippingStatusService()->retrieveShipment(
             (new RetrieveShipmentByReferenceRequest())
@@ -1451,15 +683,14 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Retrieves a shipment by kennisgeving ID
+     * Retrieves a shipment by kennisgeving ID.
      *
      * @param string   $kgid
-     *
      * @param bool     $detail
      * @param string   $language
      * @param int|null $maxDays
      *
-     * @return Shipment
+     * @return ShipmentInterface
      *
      * @throws CifDownException
      * @throws CifErrorException
@@ -1467,10 +698,9 @@ class PostNL implements LoggerAwareInterface
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
-     *
      * @see   https://developer.postnl.nl/browse-apis/send-and-track/shippingstatus-webservice/testtool-rest/#/default/get_v2_status_lookup__kgid_
      */
-    public function retrieveShipmentByKgid(string $kgid, bool $detail = false, string $language = 'NL', ?int $maxDays = null): Shipment
+    public function retrieveShipmentByKgid(string $kgid, bool $detail = false, string $language = 'NL', ?int $maxDays = null): ShipmentInterface
     {
         return $this->getShippingStatusService()->retrieveShipment(
             (new RetrieveShipmentByKgidRequest())
@@ -1482,11 +712,11 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Retrieve a signature by barcode
+     * Retrieve a signature by barcode.
      *
      * @param string $barcode
      *
-     * @return Signature
+     * @return SignatureInterface
      *
      * @throws CifDownException
      * @throws CifErrorException
@@ -1494,10 +724,9 @@ class PostNL implements LoggerAwareInterface
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
-     *
      * @see   https://developer.postnl.nl/browse-apis/send-and-track/shippingstatus-webservice/testtool-rest/#/default/get_v2_status_signature__barcode_
      */
-    public function retrieveSignatureByBarcode(string $barcode): Signature
+    public function retrieveSignatureByBarcode(string $barcode): SignatureInterface
     {
         return $this->getShippingStatusService()->retrieveSignature(
             (new RetrieveSignatureByBarcodeRequest())
@@ -1506,18 +735,18 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Get a delivery date
+     * Get a delivery date.
      *
-     * @param string       $shippingDate
-     * @param int          $shippingDuration
-     * @param string       $cutOffTime
-     * @param string       $postalCode
-     * @param string|null  $countryCode
-     * @param string|null  $originCountryCode
-     * @param string|null  $city
-     * @param string|null  $street
-     * @param array|null   $options
-     * @param CutOffTime[] $cutOffTimes
+     * @param string                $shippingDate
+     * @param int                   $shippingDuration
+     * @param string                $cutOffTime
+     * @param string                $postalCode
+     * @param string|null           $countryCode
+     * @param string|null           $originCountryCode
+     * @param string|null           $city
+     * @param string|null           $street
+     * @param array|null            $options
+     * @param CutOffTimeInterface[] $cutOffTimes
      *
      * @return CalculateDeliveryDateResponse
      *
@@ -1527,7 +756,6 @@ class PostNL implements LoggerAwareInterface
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
-     *
      * @see   https://developer.postnl.nl/browse-apis/delivery-options/deliverydate-webservice/testtool-rest/#/DeliveryDate/get_v2_2_calculate_date_delivery
      */
     public function calculateDeliveryDate(string $shippingDate, int $shippingDuration, string $cutOffTime, string $postalCode, ?string $countryCode = null, ?string $originCountryCode = null, ?string $city = null, ?string $street = null, ?array $options = ['Daytime'], ?array $cutOffTimes = []): CalculateDeliveryDateResponse
@@ -1586,7 +814,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Get a shipping date
+     * Get a shipping date.
      *
      * @param string      $deliveryDate
      * @param int         $shippingDuration
@@ -1606,7 +834,6 @@ class PostNL implements LoggerAwareInterface
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
-     *
      * @see   https://developer.postnl.nl/browse-apis/delivery-options/deliverydate-webservice/testtool-rest/#/ShippingDate/get_v2_2_calculate_date_shipping
      */
     public function calculateShippingDate(string $deliveryDate, int $shippingDuration, string $postalCode, ?string $countryCode = null, ?string $originCountryCode = null, ?string $city = null, ?string $street = null, ?int $houseNumber = null, ?string $houseNumberExtension = null): CalculateShippingDateResponse
@@ -1626,7 +853,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Get timeframes
+     * Get timeframes.
      *
      * @param string      $startDate
      * @param string      $endDate
@@ -1648,7 +875,6 @@ class PostNL implements LoggerAwareInterface
      * @throws HttpClientException
      *
      * @since 2.0.0
-     *
      * @see   https://developer.postnl.nl/browse-apis/delivery-options/timeframe-webservice/
      */
     public function calculateTimeframes(string $startDate, string $endDate, string $postalCode, int $houseNumber, ?string $houseNumberExtension = null, string $countryCode = 'NL', ?string $street = null, ?string $city = null, bool $allowSundaySorting = false, array $options = ['Daytime'], ?int $interval = null, ?string $timeframeRange = null)
@@ -1671,7 +897,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Find nearest locations
+     * Find nearest locations.
      *
      * @param string      $postalCode
      * @param string      $countryCode
@@ -1690,7 +916,6 @@ class PostNL implements LoggerAwareInterface
      * @throws HttpClientException
      *
      * @since 2.0.0
-     *
      * @see   https://developer.postnl.nl/browse-apis/delivery-options/location-webservice/testtool-rest/#/default/get_v2_1_locations_nearest
      */
     public function findNearestLocations(string $postalCode, string $countryCode, array $deliveryOptions, ?string $city = null, ?string $street = null, ?int $houseNumber = null, ?string $deliveryDate = null, ?string $openingTime = null)
@@ -1709,7 +934,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Find nearest locations by coordinates
+     * Find nearest locations by coordinates.
      *
      * @param float|string $latitude
      * @param float|string $longitude
@@ -1725,7 +950,6 @@ class PostNL implements LoggerAwareInterface
      * @throws HttpClientException
      *
      * @since 2.0.0
-     *
      * @see   https://developer.postnl.nl/browse-apis/delivery-options/location-webservice/testtool-rest/#/default/get_v2_1_locations_nearest_geocode
      */
     public function findNearestLocationsGeocode($latitude, $longitude, string $countryCode, array $deliveryOptions = ['PG'], ?string $deliveryDate = null, ?string $openingTime = null): FindNearestLocationsGeocodeResponse
@@ -1745,11 +969,11 @@ class PostNL implements LoggerAwareInterface
      * All-in-one function for checkout widgets. It retrieves and returns the
      * - timeframes
      * - locations
-     * - delivery date
+     * - delivery date.
      *
-     * @param CalculateTimeframesRequest   $calculateTimeframes
-     * @param FindNearestLocationsRequest  $getNearestLocations
-     * @param CalculateDeliveryDateRequest $getDeliveryDate
+     * @param CalculateTimeframesRequestInterface $calculateTimeframes
+     * @param FindNearestLocationsRequest         $getNearestLocations
+     * @param CalculateDeliveryDateRequest        $getDeliveryDate
      *
      * @return array [uuid => CalculateTimeframesResponse, uuid => FindNearestLocationsResponse, uuid => CalculateDeliveryDateResponse]
      *
@@ -1759,10 +983,9 @@ class PostNL implements LoggerAwareInterface
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   https://developer.postnl.nl/browse-apis/delivery-options/
      */
-    public function getTimeframesAndNearestLocations(CalculateTimeframesRequest $calculateTimeframes, FindNearestLocationsRequest $getNearestLocations, CalculateDeliveryDateRequest $getDeliveryDate): array
+    public function getTimeframesAndNearestLocations(CalculateTimeframesRequestInterface $calculateTimeframes, FindNearestLocationsRequest $getNearestLocations, CalculateDeliveryDateRequest $getDeliveryDate): array
     {
         $results = [];
         $itemTimeframe = $this->getTimeframeService()->retrieveCachedItem($calculateTimeframes->getId());
@@ -1810,7 +1033,7 @@ class PostNL implements LoggerAwareInterface
                     throw $response;
                 }
                 throw new InvalidArgumentException('Invalid multi-request');
-            } elseif ($response->getStatusCode() === 200) {
+            } elseif (200 === $response->getStatusCode()) {
                 switch ($type) {
                     case 'timeframes':
                         if ($itemTimeframe instanceof CacheItemInterface) {
@@ -1845,7 +1068,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Get locations in area
+     * Get locations in area.
      *
      * @param FindLocationsInAreaRequest $findLocations
      *
@@ -1858,7 +1081,6 @@ class PostNL implements LoggerAwareInterface
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   https://developer.postnl.nl/browse-apis/delivery-options/location-webservice/testtool-rest/#/default/get_v2_1_locations_area
      */
     public function getLocationsInArea(FindLocationsInAreaRequest $findLocations): FindLocationsInAreaResponse
@@ -1867,27 +1089,26 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Get locations in area
+     * Get locations in area.
      *
      * @param LookupLocationRequest $getLocation
      *
-     * @return Location
+     * @return LocationInterface
      *
      * @throws Exception
      * @throws HttpClientException
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   https://developer.postnl.nl/browse-apis/delivery-options/location-webservice/testtool-rest/#/default/get_v2_1_locations_lookup
      */
-    public function getLocation(LookupLocationRequest $getLocation): Location
+    public function getLocation(LookupLocationRequest $getLocation): LocationInterface
     {
         return $this->getLocationService()->lookupLocation($getLocation);
     }
 
     /**
-     * Basic national address check
+     * Basic national address check.
      *
      * @param string      $postalCode  Must be 6P format, e.g. 1234AB
      * @param string|null $houseNumber House number is optional
@@ -1900,7 +1121,6 @@ class PostNL implements LoggerAwareInterface
      * @throws CifErrorException
      *
      * @since 2.0.0
-     *
      * @see   https://developer.postnl.nl/browse-apis/addresses/adrescheck-basis-nationaal/
      */
     public function basicNationalAddressCheck(string $postalCode, $houseNumber = null): BasicNationalAddressCheckResponse
@@ -1913,7 +1133,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Check national address
+     * Check national address.
      *
      * @param string|null $street
      * @param string|null $houseNumber
@@ -1921,17 +1141,16 @@ class PostNL implements LoggerAwareInterface
      * @param string|null $postalCode
      * @param string|null $city
      *
-     * @return ValidatedAddress
+     * @return ValidatedAddressInterface
      *
      * @throws CifDownException
      * @throws HttpClientException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
-     *
      * @see   https://developer.postnl.nl/browse-apis/addresses/adrescheck-nationaal/
      */
-    public function nationalAddressCheck(?string $street = null, ?string $houseNumber = null, ?string $addition = null, ?string $postalCode = null, ?string $city = null): ValidatedAddress
+    public function nationalAddressCheck(?string $street = null, ?string $houseNumber = null, ?string $addition = null, ?string $postalCode = null, ?string $city = null): ValidatedAddressInterface
     {
         return $this->getNationalAddressCheckService()->checkAddress(
             (new NationalAddressCheckRequest())
@@ -1944,7 +1163,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Geo check national address
+     * Geo check national address.
      *
      * @param string|null $street
      * @param string|null $houseNumber
@@ -1952,7 +1171,7 @@ class PostNL implements LoggerAwareInterface
      * @param string|null $postalCode
      * @param string|null $city
      *
-     * @return ValidatedAddress
+     * @return ValidatedAddressInterface
      *
      * @throws CifDownException
      * @throws HttpClientException
@@ -1960,10 +1179,9 @@ class PostNL implements LoggerAwareInterface
      * @throws CifErrorException
      *
      * @since 2.0.0
-     *
      * @see   https://developer.postnl.nl/browse-apis/addresses/geo-adrescheck-nationaal/
      */
-    public function nationalGeoAddressCheck(?string $street = null, ?string $houseNumber = null, ?string $addition = null, ?string $postalCode = null, ?string $city = null): ValidatedAddress
+    public function nationalGeoAddressCheck(?string $street = null, ?string $houseNumber = null, ?string $addition = null, ?string $postalCode = null, ?string $city = null): ValidatedAddressInterface
     {
         return $this->getNationalGeoAddressCheckService()->checkAddress(
             (new NationalGeoAddressCheckRequest())
@@ -1976,7 +1194,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Check international address
+     * Check international address.
      *
      * @param string|null       $country              ISO 3166-1 alpha 3 country code
      * @param string|array|null $streetOrAddressLines Street name or full address lines
@@ -1986,17 +1204,16 @@ class PostNL implements LoggerAwareInterface
      * @param string|null       $building
      * @param string|null       $subBuilding
      *
-     * @return ValidatedAddress
+     * @return ValidatedAddressInterface
      *
      * @throws CifDownException
      * @throws HttpClientException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
-     *
      * @see   https://developer.postnl.nl/browse-apis/addresses/adrescheck-internationaal/
      */
-    public function internationalAddressCheck($country = null, ?string $streetOrAddressLines = null, ?string $houseNumber = null, ?string $postalCode = null, ?string $city = null, ?string $building = null, ?string $subBuilding = null): ValidatedAddress
+    public function internationalAddressCheck($country = null, ?string $streetOrAddressLines = null, ?string $houseNumber = null, ?string $postalCode = null, ?string $city = null, ?string $building = null, ?string $subBuilding = null): ValidatedAddressInterface
     {
         if (is_array($streetOrAddressLines)) {
             return $this->getInternationalAddressCheckService()->checkAddress((new InternationalAddressCheckRequest($country, $streetOrAddressLines)));
@@ -2015,23 +1232,22 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Check a Dutch postal code and retrieve address information when found
+     * Check a Dutch postal code and retrieve address information when found.
      *
      * @param string      $postalCode          Postal code
      * @param int         $houseNumber         House number
      * @param string|null $houseNumberAddition House number addition
      *
-     * @return ValidatedAddress
+     * @return ValidatedAddressInterface
      *
      * @throws CifDownException
      * @throws HttpClientException
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
-     *
      * @see   https://developer.postnl.nl/browse-apis/checkout/checkout-postalcode-check/
      */
-    public function checkPostalCode(string $postalCode, int $houseNumber, ?string $houseNumberAddition): ValidatedAddress
+    public function checkPostalCode(string $postalCode, int $houseNumber, ?string $houseNumberAddition): ValidatedAddressInterface
     {
         return $this->getPostalCodeCheckService()->checkPostalCode(
             (new PostalCodeCheckRequest())
@@ -2042,19 +1258,19 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Find delivery information (experimental)
+     * Find delivery information (experimental).
      *
      * This is part of the new Checkout API which, at the time of writing, is in the BETA phase
      *
-     * @param string  $orderDate
-     * @param Address $shippingAddress
-     * @param Address $deliveryAddress
-     * @param array   $cutOffTimes
-     * @param int     $shippingDuration
-     * @param bool    $holidaySorting
-     * @param array   $options
-     * @param int     $days
-     * @param int     $locations
+     * @param string           $orderDate
+     * @param AddressInterface $shippingAddress
+     * @param AddressInterface $deliveryAddress
+     * @param array            $cutOffTimes
+     * @param int              $shippingDuration
+     * @param bool             $holidaySorting
+     * @param array            $options
+     * @param int              $days
+     * @param int              $locations
      *
      * @return FindDeliveryInfoResponse
      *
@@ -2063,10 +1279,9 @@ class PostNL implements LoggerAwareInterface
      * @throws InvalidArgumentException
      *
      * @since 2.0.0
-     *
-     * @see https://developer.postnl.nl/browse-apis/checkout/checkout-api/
+     * @see   https://developer.postnl.nl/browse-apis/checkout/checkout-api/
      */
-    public function findDeliveryInfo(string $orderDate, Address $shippingAddress, Address $deliveryAddress, array $cutOffTimes, int $shippingDuration = 1, bool $holidaySorting = false, array $options = ['Daytime'], int $days = 9, int $locations = 3): FindDeliveryInfoResponse
+    public function findDeliveryInfo(string $orderDate, AddressInterface $shippingAddress, AddressInterface $deliveryAddress, array $cutOffTimes, int $shippingDuration = 1, bool $holidaySorting = false, array $options = ['Daytime'], int $days = 9, int $locations = 3): FindDeliveryInfoResponse
     {
         return $this->getCheckoutService()->findDeliveryInformation(
             (new FindDeliveryInfoRequest())
@@ -2082,12 +1297,12 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Search for company information
+     * Search for company information.
      *
      * METHOD 1
      *
-     * @param string $kvkNumber         KvK Number
-     *                                  10 digits and tolerating additional brackets, a hyphen and a minus sign.
+     * @param string $kvkNumber         kvK Number
+     *                                  10 digits and tolerating additional brackets, a hyphen and a minus sign
      * @param string $branchNumber      Branch number
      * @param string $rsin              RSIN
      * @param bool   $includeInactive   Include inactive organizations
@@ -2121,7 +1336,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Search for a company by name and address
+     * Search for a company by name and address.
      *
      * METHOD 2
      *
@@ -2169,7 +1384,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Search for a company by address
+     * Search for a company by address.
      *
      * METHOD 3
      *
@@ -2215,7 +1430,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Search for a company by phone number
+     * Search for a company by phone number.
      *
      * METHOD 4
      *
@@ -2249,7 +1464,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Check for a company by providing some company details
+     * Check for a company by providing some company details.
      *
      * METHOD 5&6
      *
@@ -2279,7 +1494,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Check business authorized signatory
+     * Check business authorized signatory.
      *
      * METHOD 7
      *
@@ -2308,7 +1523,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Retrieve a company extract
+     * Retrieve a company extract.
      *
      * METHOD 8
      *
@@ -2325,6 +1540,5 @@ class PostNL implements LoggerAwareInterface
 
     public function companySearch()
     {
-
     }
 }

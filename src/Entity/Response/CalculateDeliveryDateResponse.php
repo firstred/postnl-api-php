@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,70 +23,50 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Entity\Response;
 
 /**
- * Class CalculateDeliveryDateResponse
+ * Class CalculateDeliveryDateResponse.
  */
-class CalculateDeliveryDateResponse extends AbstractResponse
+final class CalculateDeliveryDateResponse extends AbstractResponse
 {
     /**
-     * Delivery date
+     * Delivery date.
      *
      * @pattern ^(([0-3]\d-[0-1]\d-[1-2]\d{3})|([1-2]\d{3}-[0-1]\d-[0-3]\d))$
      *
      * @example 02-01-2019
      *
-     * @var string|null $deliveryDate
+     * @var string|null
      *
      * @since   1.0.0
      */
-    protected $deliveryDate;
+    private $deliveryDate;
 
     /**
-     * Options
+     * Options.
      *
      * @pattern N/A
      *
      * @example N/A
      *
-     * @var string[]|null $options
+     * @var string[]|null
      *
      * @since   1.0.0
      */
-    protected $options;
+    private $options;
 
     /**
-     * CalculateDeliveryDateResponse constructor.
-     *
-     * @param string|null   $date    Delivery date
-     * @param string[]|null $options Delivery options
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function __construct($date = null, array $options = null)
-    {
-        parent::__construct();
-
-        $this->setDeliveryDate($date);
-        $this->setOptions($options);
-    }
-
-    /**
-     * Get delivery date
+     * Get delivery date.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   CalculateDeliveryDateResponse::$deliveryDate
      */
     public function getDeliveryDate(): ?string
@@ -93,7 +75,7 @@ class CalculateDeliveryDateResponse extends AbstractResponse
     }
 
     /**
-     * Set delivery date
+     * Set delivery date.
      *
      * @pattern ^(([0-3]\d-[0-1]\d-[1-2]\d{3})|([1-2]\d{3}-[0-1]\d-[0-3]\d))$
      *
@@ -105,7 +87,6 @@ class CalculateDeliveryDateResponse extends AbstractResponse
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     CalculateDeliveryDateResponse::$deliveryDate
      */
     public function setDeliveryDate(?string $deliveryDate): CalculateDeliveryDateResponse
@@ -116,13 +97,12 @@ class CalculateDeliveryDateResponse extends AbstractResponse
     }
 
     /**
-     * Get options
+     * Get options.
      *
      * @return string[]|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   CalculateDeliveryDateResponse::$options
      */
     public function getOptions(): ?array
@@ -131,7 +111,7 @@ class CalculateDeliveryDateResponse extends AbstractResponse
     }
 
     /**
-     * Set options
+     * Set options.
      *
      * @pattern N/A
      *
@@ -143,7 +123,6 @@ class CalculateDeliveryDateResponse extends AbstractResponse
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     CalculateDeliveryDateResponse::$options
      */
     public function setOptions(?array $options): CalculateDeliveryDateResponse

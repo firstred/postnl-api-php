@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,9 +23,7 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -31,106 +31,105 @@ namespace Firstred\PostNL\Entity\Request;
 
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Misc\ValidateAndFix;
 
 /**
- * Class CalculateDeliveryDateRequest
+ * Class CalculateDeliveryDateRequest.
  *
  * This class is both the container and can be the actual CalculateDeliveryDateRequest object itself!
  */
-class CalculateDeliveryDateRequest extends AbstractEntity
+final class CalculateDeliveryDateRequest extends AbstractEntity
 {
     /**
-     * Date/time of preparing the shipment for sending
+     * Date/time of preparing the shipment for sending.
      *
      * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}\s(?:2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9]$
      *
      * @example 03-07-2019 17:00:00
      *
-     * @var string|null $ShippingDate
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $shippingDate;
+    private $shippingDate;
 
     /**
      * The duration it takes for the shipment to be delivered to PostNL in days. A value of 1 means that the parcel will be delivered to PostNL on the same day as the date specified in ShippingDate.
-     * A value of 2 means the parcel will arrive at PostNL a day later etc
+     * A value of 2 means the parcel will arrive at PostNL a day later etc.
      *
      * @pattern ^\d{1,10}$
      *
      * @example 2
      *
-     * @var int|null $shippingDuration
+     * @var int|null
      *
      * @since   2.0.0
      */
-    protected $shippingDuration;
+    private $shippingDuration;
 
     /**
-     * Cut-off time
+     * Cut-off time.
      *
      * @pattern ^(?:2[0-3]|[01]?[0-9]):(?:[0-5]?[0-9]):(?:[0-5]?[0-9])$
      *
      * @example 15:00:00
      *
-     * @var string|null $cutOffTime
+     * @var string|null
      *
      * @since   2.00
      */
-    protected $cutOffTime;
+    private $cutOffTime;
 
     /**
-     * Zip / postal code
+     * Zip / postal code.
      *
      * @example 2132WT
      *
-     * @var string|null $postalCode
+     * @var string|null
      *
      * @pattern ^.{0,10}$
      *
      * @since   2.0.0
      */
-    protected $postalCode;
+    private $postalCode;
 
     /**
-     * Country code
+     * Country code.
      *
      * @pattern ^(?:NL|BE))$
      *
      * @example NL
      *
-     * @var string|null $countryCode
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $countryCode;
+    private $countryCode;
 
     /**
-     * Origin country code
+     * Origin country code.
      *
      * @pattern ^(?:NL|BE))$
      *
      * @example NL
      *
-     * @var string|null $originCountryCode
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $originCountryCode;
+    private $originCountryCode;
 
     /**
-     * City
+     * City.
      *
      * @pattern ^.{0,35}$
      *
      * @example Hoofddorp
      *
-     * @var string|null $city
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $city;
+    private $city;
 
     /**
      * The street name of the delivery address.
@@ -139,250 +138,239 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      *
      * @example Siriusdreef
      *
-     * @var string|null $street
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $street;
+    private $street;
 
     /**
-     * House number
+     * House number.
      *
      * @pattern ^\d{1,10}$
      *
      * @example 42
      *
-     * @var int|null $houseNumber
+     * @var int|null
      *
      * @since   2.0.0
      */
-    protected $houseNumber;
+    private $houseNumber;
 
     /**
-     * House number extension
+     * House number extension.
      *
      * @example A
      *
-     * @var string|null $houseNrExt
+     * @var string|null
      *
      * @pattern ^.{0,35}$
      *
      * @since   2.0.0
      */
-    protected $houseNrExt;
+    private $houseNrExt;
 
     /**
-     * Available options: Daytime, Evening, Morning, Noon, Sunday, Sameday, Afternoon, MyTime, Pickup
+     * Available options: Daytime, Evening, Morning, Noon, Sunday, Sameday, Afternoon, MyTime, Pickup.
      *
      * @pattern ^(?:Daytime|Evening|Morning|Noon|Sunday|Sameday|Afternoon|MyTime|Pickup)$
      *
      * @example Daytime
      *
-     * @var string[]|null $options
+     * @var string[]|null
      *
      * @since   2.0.0
      */
-    protected $options;
+    private $options;
 
     /**
-     * Cut-off time Monday
+     * Cut-off time Monday.
      *
      * @pattern ^(?:2[0-3]|[01]?[0-9]):(?:[0-5]?[0-9]):(?:[0-5]?[0-9])$
      *
      * @example 15:00:00
      *
-     * @var string|null $cutOffTimeMonday
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $cutOffTimeMonday;
+    private $cutOffTimeMonday;
 
     /**
-     * Available on Monday
+     * Available on Monday.
      *
      * @pattern N/A
      *
      * @example N/A
      *
-     * @var bool|null $availableMonday
+     * @var bool|null
      *
      * @since   2.0.0
      */
-    protected $availableMonday;
+    private $availableMonday;
 
     /**
-     * Cut-off time Tuesday
+     * Cut-off time Tuesday.
      *
      * @pattern ^(?:2[0-3]|[01]?[0-9]):(?:[0-5]?[0-9]):(?:[0-5]?[0-9])$
      *
      * @example 15:00:00
      *
-     * @var string|null $cutOffTimeTuesday
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $cutOffTimeTuesday;
+    private $cutOffTimeTuesday;
 
     /**
-     * Available on Tuesday
+     * Available on Tuesday.
      *
      * @pattern N/A
      *
      * @example N/A
      *
-     * @var bool|null $availableTuesday
+     * @var bool|null
      *
      * @since   2.0.0
      */
-    protected $availableTuesday;
+    private $availableTuesday;
 
     /**
-     * Cut-off time Wednesday
+     * Cut-off time Wednesday.
      *
      * @pattern ^(?:2[0-3]|[01]?[0-9]):(?:[0-5]?[0-9]):(?:[0-5]?[0-9])$
      *
      * @example 15:00:00
      *
-     * @var string|null $cutOffTimeWednesday
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $cutOffTimeWednesday;
+    private $cutOffTimeWednesday;
 
     /**
-     * Available on Wednesday
+     * Available on Wednesday.
      *
      * @pattern N/A
      *
      * @example N/A
      *
-     * @var bool|null $availableWednesday
+     * @var bool|null
      *
      * @since   2.0.0
      */
-    protected $availableWednesday;
+    private $availableWednesday;
 
     /**
-     * Cut-off time Thursday
+     * Cut-off time Thursday.
      *
      * @pattern ^(?:2[0-3]|[01]?[0-9]):(?:[0-5]?[0-9]):(?:[0-5]?[0-9])$
      *
      * @example 15:00:00
      *
-     * @var string|null $cutOffTimeThursday
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $cutOffTimeThursday;
+    private $cutOffTimeThursday;
 
     /**
-     * Available on Thursday
+     * Available on Thursday.
      *
      * @pattern N/A
      *
      * @example N/A
      *
-     * @var bool|null $availableThursday
+     * @var bool|null
      *
      * @since   2.0.0
      */
-    protected $availableThursday;
+    private $availableThursday;
 
     /**
-     * Cut-off time Friday
+     * Cut-off time Friday.
      *
      * @pattern ^(?:2[0-3]|[01]?[0-9]):(?:[0-5]?[0-9]):(?:[0-5]?[0-9])$
      *
      * @example 15:00:00
      *
-     * @var string|null $cutOffTimeFriday
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $cutOffTimeFriday;
+    private $cutOffTimeFriday;
 
     /**
-     * Available on Friday
+     * Available on Friday.
      *
      * @pattern N/A
      *
      * @example N/A
      *
-     * @var bool|null $availableFriday
+     * @var bool|null
      *
      * @since   2.0.0
      */
-    protected $availableFriday;
+    private $availableFriday;
 
     /**
-     * Cut-off time Saturday
+     * Cut-off time Saturday.
      *
      * @pattern ^(?:2[0-3]|[01]?[0-9]):(?:[0-5]?[0-9]):(?:[0-5]?[0-9])$
      *
      * @example 15:00:00
      *
-     * @var string|null $cutOffTimeSaturday
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $cutOffTimeSaturday;
+    private $cutOffTimeSaturday;
 
     /**
-     * Available on Saturday
+     * Available on Saturday.
      *
      * @pattern N/A
      *
      * @example N/A
      *
-     * @var bool|null $availableSaturday
+     * @var bool|null
      *
      * @since   2.0.0
      */
-    protected $availableSaturday;
+    private $availableSaturday;
 
     /**
-     * Cut-off time Sunday
+     * Cut-off time Sunday.
      *
      * @pattern ^(?:2[0-3]|[01]?[0-9]):(?:[0-5]?[0-9]):(?:[0-5]?[0-9])$
      *
      * @example 15:00:00
      *
-     * @var string|null $cutOffTimeSunday
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $cutOffTimeSunday;
+    private $cutOffTimeSunday;
 
     /**
-     * Available on Sunday
+     * Available on Sunday.
      *
      * @pattern N/A
      *
      * @example N/A
      *
-     * @var bool|null $availableSunday
+     * @var bool|null
      *
      * @since   2.0.0
      */
-    protected $availableSunday;
+    private $availableSunday;
 
     /**
-     * CalculateDeliveryDateRequest constructor.
-     *
-     * @since 2.0.0
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
-     * Get zip / postal code
+     * Get zip / postal code.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   CalculateDeliveryDateRequest::$postalCode
      */
     public function getPostalCode(): ?string
@@ -391,7 +379,7 @@ class CalculateDeliveryDateRequest extends AbstractEntity
     }
 
     /**
-     * Set the zip / postcode
+     * Set the zip / postcode.
      *
      * @pattern ^.{0,10}$
      *
@@ -404,23 +392,21 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     CalculateDeliveryDateRequest::$postalCode
      */
     public function setPostalCode(?string $postcode = null): CalculateDeliveryDateRequest
     {
-        $this->postalCode = ValidateAndFix::postcode($postcode);
+        $this->postalCode = $this->validate->postcode($postcode);
 
         return $this;
     }
 
     /**
-     * Get city
+     * Get city.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   CalculateDeliveryDateRequest::$city
      */
     public function getCity(): ?string
@@ -429,7 +415,7 @@ class CalculateDeliveryDateRequest extends AbstractEntity
     }
 
     /**
-     * Set city
+     * Set city.
      *
      * @pattern ^.{0,35}$
      *
@@ -442,23 +428,21 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     CalculateDeliveryDateRequest::$city
      */
     public function setCity(?string $city): CalculateDeliveryDateRequest
     {
-        $this->city = ValidateAndFix::city($city);
+        $this->city = $this->validate->city($city);
 
         return $this;
     }
 
     /**
-     * Get country code
+     * Get country code.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   CalculateDeliveryDateRequest::$countryCode
      */
     public function getCountryCode(): ?string
@@ -467,7 +451,7 @@ class CalculateDeliveryDateRequest extends AbstractEntity
     }
 
     /**
-     * Set country code
+     * Set country code.
      *
      * @pattern ^(?:NL|BE)$
      *
@@ -480,23 +464,21 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     CalculateDeliveryDateRequest::$countryCode
      */
     public function setCountryCode(?string $countryCode): CalculateDeliveryDateRequest
     {
-        $this->countryCode = ValidateAndFix::isoAlpha2CountryCodeNlBe($countryCode);
+        $this->countryCode = $this->validate->isoAlpha2CountryCodeNlBe($countryCode);
 
         return $this;
     }
 
     /**
-     * Get house number
+     * Get house number.
      *
      * @return int|null
      *
      * @since 2.0.0
-     *
      * @see   CalculateDeliveryDateRequest::$houseNumber
      */
     public function getHouseNumber(): ?int
@@ -505,7 +487,7 @@ class CalculateDeliveryDateRequest extends AbstractEntity
     }
 
     /**
-     * Set house number
+     * Set house number.
      *
      * @pattern ^\d{1,10}$
      *
@@ -518,25 +500,23 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     CalculateDeliveryDateRequest::$houseNumber
      */
     public function setHouseNumber($houseNumber): CalculateDeliveryDateRequest
     {
-        $this->houseNumber = ValidateAndFix::integer($houseNumber);
+        $this->houseNumber = $this->validate->integer($houseNumber);
 
         return $this;
     }
 
     /**
-     * Get house number extension
+     * Get house number extension.
      *
      * Get house number extension
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   CalculateDeliveryDateRequest::$houseNrExt
      */
     public function getHouseNrExt(): ?string
@@ -545,7 +525,7 @@ class CalculateDeliveryDateRequest extends AbstractEntity
     }
 
     /**
-     * Set house number extension
+     * Set house number extension.
      *
      * @pattern ^.{0,35}$
      *
@@ -558,23 +538,21 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     CalculateDeliveryDateRequest::$houseNrExt
      */
     public function setHouseNrExt(?string $houseNrExt): CalculateDeliveryDateRequest
     {
-        $this->houseNrExt = ValidateAndFix::genericString($houseNrExt);
+        $this->houseNrExt = $this->validate->genericString($houseNrExt);
 
         return $this;
     }
 
     /**
-     * Get options
+     * Get options.
      *
      * @return string[]|null
      *
      * @since 2.0.0
-     *
      * @see   CalculateDeliveryDateRequest::$options
      */
     public function getOptions(): ?array
@@ -583,7 +561,7 @@ class CalculateDeliveryDateRequest extends AbstractEntity
     }
 
     /**
-     * Set options
+     * Set options.
      *
      * @pattern ^(?:Daytime|Evening|Morning|Noon|Sunday|Sameday|Afternoon|MyTime|Pickup)$
      *
@@ -594,7 +572,6 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      * @return static
      *
      * @since   2.0.0
-     *
      * @see     CalculateDeliveryDateRequest::$options
      */
     public function setOptions(?array $options): CalculateDeliveryDateRequest
@@ -605,12 +582,11 @@ class CalculateDeliveryDateRequest extends AbstractEntity
     }
 
     /**
-     * Get origin country code
+     * Get origin country code.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   CalculateDeliveryDateRequest::$originCountryCode
      */
     public function getOriginCountryCode(): ?string
@@ -619,7 +595,7 @@ class CalculateDeliveryDateRequest extends AbstractEntity
     }
 
     /**
-     * Set origin country code
+     * Set origin country code.
      *
      * @pattern ^(?:NL|BE)$
      *
@@ -632,23 +608,21 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     CalculateDeliveryDateRequest::$originCountryCode
      */
     public function setOriginCountryCode(?string $originCountryCode): CalculateDeliveryDateRequest
     {
-        $this->originCountryCode = ValidateAndFix::isoAlpha2CountryCodeNlBe($originCountryCode);
+        $this->originCountryCode = $this->validate->isoAlpha2CountryCodeNlBe($originCountryCode);
 
         return $this;
     }
 
     /**
-     * Get shipping date
+     * Get shipping date.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   CalculateDeliveryDateRequest::$shippingDate
      */
     public function getShippingDate(): ?string
@@ -657,7 +631,7 @@ class CalculateDeliveryDateRequest extends AbstractEntity
     }
 
     /**
-     * Set shipping date
+     * Set shipping date.
      *
      * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}\s(?:2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9]$
      *
@@ -670,23 +644,21 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     CalculateDeliveryDateRequest::$shippingDate
      */
     public function setShippingDate(?string $shippingDate): CalculateDeliveryDateRequest
     {
-        $this->shippingDate = ValidateAndFix::dateTime($shippingDate);
+        $this->shippingDate = $this->validate->dateTime($shippingDate);
 
         return $this;
     }
 
     /**
-     * Get shipping duration
+     * Get shipping duration.
      *
      * @return int|null
      *
      * @since 2.0.0
-     *
      * @see   CalculateDeliveryDateRequest::$shippingDuration
      */
     public function getShippingDuration(): ?int
@@ -695,7 +667,7 @@ class CalculateDeliveryDateRequest extends AbstractEntity
     }
 
     /**
-     * Set shipping duration
+     * Set shipping duration.
      *
      * @pattern ^\d{1,10}$
      *
@@ -708,23 +680,21 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     CalculateDeliveryDateRequest::$shippingDuration
      */
     public function setShippingDuration($shippingDuration): CalculateDeliveryDateRequest
     {
-        $this->shippingDuration = ValidateAndFix::integer($shippingDuration);
+        $this->shippingDuration = $this->validate->integer($shippingDuration);
 
         return $this;
     }
 
     /**
-     * Get street
+     * Get street.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   CalculateDeliveryDateRequest::$street
      */
     public function getStreet(): ?string
@@ -733,7 +703,7 @@ class CalculateDeliveryDateRequest extends AbstractEntity
     }
 
     /**
-     * Set street
+     * Set street.
      *
      * @pattern ^.{0,95}$
      *
@@ -746,23 +716,21 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     CalculateDeliveryDateRequest::$street
      */
     public function setStreet(?string $street): CalculateDeliveryDateRequest
     {
-        $this->street = ValidateAndFix::street($street);
+        $this->street = $this->validate->street($street);
 
         return $this;
     }
 
     /**
-     * Get cut-off time
+     * Get cut-off time.
      *
      * @return mixed
      *
      * @since 2.0.0
-     *
      * @see   CalculateDeliveryDateRequest::$cutOffTime
      */
     public function getCutOffTime()
@@ -771,7 +739,7 @@ class CalculateDeliveryDateRequest extends AbstractEntity
     }
 
     /**
-     * Set cut-off time
+     * Set cut-off time.
      *
      * @pattern ^(?:2[0-3]|[01]?[0-9]):(?:[0-5]?[0-9]):(?:[0-5]?[0-9])$
      *
@@ -784,23 +752,21 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     CalculateDeliveryDateRequest::$cutOffTime
      */
     public function setCutOffTime($cutOffTime): CalculateDeliveryDateRequest
     {
-        $this->cutOffTime = ValidateAndFix::time($cutOffTime);
+        $this->cutOffTime = $this->validate->time($cutOffTime);
 
         return $this;
     }
 
     /**
-     * Get cut-off time Monday
+     * Get cut-off time Monday.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   CalculateDeliveryDateRequest::$cutOffTimeMonday
      */
     public function getCutOffTimeMonday(): ?string
@@ -809,7 +775,7 @@ class CalculateDeliveryDateRequest extends AbstractEntity
     }
 
     /**
-     * Set cut-off time Monday
+     * Set cut-off time Monday.
      *
      * @pattern ^(?:2[0-3]|[01]?[0-9]):(?:[0-5]?[0-9]):(?:[0-5]?[0-9])$
      *
@@ -822,23 +788,21 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     CalculateDeliveryDateRequest::$cutOffTimeMonday
      */
     public function setCutOffTimeMonday(?string $cutOffTimeMonday): CalculateDeliveryDateRequest
     {
-        $this->cutOffTimeMonday = ValidateAndFix::time($cutOffTimeMonday);
+        $this->cutOffTimeMonday = $this->validate->time($cutOffTimeMonday);
 
         return $this;
     }
 
     /**
-     * Get available Monday
+     * Get available Monday.
      *
      * @return bool|null
      *
      * @since 2.0.0
-     *
      * @see   CalculateDeliveryDateRequest::$availableMonday
      */
     public function getAvailableMonday(): ?bool
@@ -847,7 +811,7 @@ class CalculateDeliveryDateRequest extends AbstractEntity
     }
 
     /**
-     * Set available Monday
+     * Set available Monday.
      *
      * @pattern N/A
      *
@@ -858,7 +822,6 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      * @return static
      *
      * @since   2.0.0
-     *
      * @see     CalculateDeliveryDateRequest::$availableMonday
      */
     public function setAvailableMonday(?bool $availableMonday): CalculateDeliveryDateRequest
@@ -869,12 +832,11 @@ class CalculateDeliveryDateRequest extends AbstractEntity
     }
 
     /**
-     * Get cut-off time Tuesday
+     * Get cut-off time Tuesday.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   CalculateDeliveryDateRequest::$cutOffTimeTuesday
      */
     public function getCutOffTimeTuesday(): ?string
@@ -883,7 +845,7 @@ class CalculateDeliveryDateRequest extends AbstractEntity
     }
 
     /**
-     * Set cut-off time Tuesday
+     * Set cut-off time Tuesday.
      *
      * @pattern ^(?:2[0-3]|[01]?[0-9]):(?:[0-5]?[0-9]):(?:[0-5]?[0-9])$
      *
@@ -896,23 +858,21 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     CalculateDeliveryDateRequest::$cutOffTimeTuesday
      */
     public function setCutOffTimeTuesday(?string $cutOffTimeTuesday): CalculateDeliveryDateRequest
     {
-        $this->cutOffTimeTuesday = ValidateAndFix::time($cutOffTimeTuesday);
+        $this->cutOffTimeTuesday = $this->validate->time($cutOffTimeTuesday);
 
         return $this;
     }
 
     /**
-     * Get available Tuesday
+     * Get available Tuesday.
      *
      * @return bool|null
      *
      * @since 2.0.0
-     *
      * @see   CalculateDeliveryDateRequest::$availableTuesday
      */
     public function getAvailableTuesday(): ?bool
@@ -921,7 +881,7 @@ class CalculateDeliveryDateRequest extends AbstractEntity
     }
 
     /**
-     * Set available Tuesday
+     * Set available Tuesday.
      *
      * @pattern N/A
      *
@@ -932,7 +892,6 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      * @return static
      *
      * @since   2.0.0
-     *
      * @see     CalculateDeliveryDateRequest::$availableTuesday
      */
     public function setAvailableTuesday(?bool $availableTuesday): CalculateDeliveryDateRequest
@@ -943,12 +902,11 @@ class CalculateDeliveryDateRequest extends AbstractEntity
     }
 
     /**
-     * Get cut-off time Wednesday
+     * Get cut-off time Wednesday.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   CalculateDeliveryDateRequest::$cutOffTimeWednesday
      */
     public function getCutOffTimeWednesday(): ?string
@@ -957,7 +915,7 @@ class CalculateDeliveryDateRequest extends AbstractEntity
     }
 
     /**
-     * Set cut-off time Wednesday
+     * Set cut-off time Wednesday.
      *
      * @pattern ^(?:2[0-3]|[01]?[0-9]):(?:[0-5]?[0-9]):(?:[0-5]?[0-9])$
      *
@@ -970,23 +928,21 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     CalculateDeliveryDateRequest::$cutOffTimeWednesday
      */
     public function setCutOffTimeWednesday(?string $cutOffTimeWednesday): CalculateDeliveryDateRequest
     {
-        $this->cutOffTimeWednesday = ValidateAndFix::time($cutOffTimeWednesday);
+        $this->cutOffTimeWednesday = $this->validate->time($cutOffTimeWednesday);
 
         return $this;
     }
 
     /**
-     * Get available Wednesday
+     * Get available Wednesday.
      *
      * @return bool|null
      *
      * @since 2.0.0
-     *
      * @see   CalculateDeliveryDateRequest::$availableWednesday
      */
     public function getAvailableWednesday(): ?bool
@@ -995,7 +951,7 @@ class CalculateDeliveryDateRequest extends AbstractEntity
     }
 
     /**
-     * Set available Wednesday
+     * Set available Wednesday.
      *
      * @pattern N/A
      *
@@ -1006,7 +962,6 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      * @return static
      *
      * @since   2.0.0
-     *
      * @see     CalculateDeliveryDateRequest::$availableWednesday
      */
     public function setAvailableWednesday(?bool $availableWednesday): CalculateDeliveryDateRequest
@@ -1017,12 +972,11 @@ class CalculateDeliveryDateRequest extends AbstractEntity
     }
 
     /**
-     * Get cut-off time Thursday
+     * Get cut-off time Thursday.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   CalculateDeliveryDateRequest::$cutOffTimeThursday
      */
     public function getCutOffTimeThursday(): ?string
@@ -1031,7 +985,7 @@ class CalculateDeliveryDateRequest extends AbstractEntity
     }
 
     /**
-     * Set cut-off time Thursday
+     * Set cut-off time Thursday.
      *
      * @pattern ^(?:2[0-3]|[01]?[0-9]):(?:[0-5]?[0-9]):(?:[0-5]?[0-9])$
      *
@@ -1044,23 +998,21 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     CalculateDeliveryDateRequest::$cutOffTimeThursday
      */
     public function setCutOffTimeThursday(?string $cutOffTimeThursday): CalculateDeliveryDateRequest
     {
-        $this->cutOffTimeThursday = ValidateAndFix::time($cutOffTimeThursday);
+        $this->cutOffTimeThursday = $this->validate->time($cutOffTimeThursday);
 
         return $this;
     }
 
     /**
-     * Get available Thursday
+     * Get available Thursday.
      *
      * @return bool|null
      *
      * @since 2.0.0
-     *
      * @see   CalculateDeliveryDateRequest::$availableThursday
      */
     public function getAvailableThursday(): ?bool
@@ -1069,7 +1021,7 @@ class CalculateDeliveryDateRequest extends AbstractEntity
     }
 
     /**
-     * Set available Thursday
+     * Set available Thursday.
      *
      * @pattern N/A
      *
@@ -1082,23 +1034,21 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     CalculateDeliveryDateRequest::$availableThursday
      */
     public function setAvailableThursday(?bool $availableThursday): CalculateDeliveryDateRequest
     {
-        $this->availableThursday = ValidateAndFix::time($availableThursday);
+        $this->availableThursday = $this->validate->time($availableThursday);
 
         return $this;
     }
 
     /**
-     * Get cut-off time Friday
+     * Get cut-off time Friday.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   CalculateDeliveryDateRequest::$cutOffTimeFriday
      */
     public function getCutOffTimeFriday(): ?string
@@ -1107,7 +1057,7 @@ class CalculateDeliveryDateRequest extends AbstractEntity
     }
 
     /**
-     * Set cut-off time Friday
+     * Set cut-off time Friday.
      *
      * @pattern ^(?:2[0-3]|[01]?[0-9]):(?:[0-5]?[0-9]):(?:[0-5]?[0-9])$
      *
@@ -1120,23 +1070,21 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     CalculateDeliveryDateRequest::$cutOffTimeFriday
      */
     public function setCutOffTimeFriday(?string $cutOffTimeFriday): CalculateDeliveryDateRequest
     {
-        $this->cutOffTimeFriday = ValidateAndFix::time($cutOffTimeFriday);
+        $this->cutOffTimeFriday = $this->validate->time($cutOffTimeFriday);
 
         return $this;
     }
 
     /**
-     * Get available Friday
+     * Get available Friday.
      *
      * @return bool|null
      *
      * @since 2.0.0
-     *
      * @see   CalculateDeliveryDateRequest::$availableFriday
      */
     public function getAvailableFriday(): ?bool
@@ -1145,7 +1093,7 @@ class CalculateDeliveryDateRequest extends AbstractEntity
     }
 
     /**
-     * Set available Friday
+     * Set available Friday.
      *
      * @pattern N/A
      *
@@ -1156,7 +1104,6 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      * @return static
      *
      * @since   2.0.0
-     *
      * @see     CalculateDeliveryDateRequest::$availableFriday
      */
     public function setAvailableFriday(?bool $availableFriday): CalculateDeliveryDateRequest
@@ -1167,12 +1114,11 @@ class CalculateDeliveryDateRequest extends AbstractEntity
     }
 
     /**
-     * Get cut-off time Saturday
+     * Get cut-off time Saturday.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   CalculateDeliveryDateRequest::$cutOffTimeSaturday
      */
     public function getCutOffTimeSaturday(): ?string
@@ -1181,7 +1127,7 @@ class CalculateDeliveryDateRequest extends AbstractEntity
     }
 
     /**
-     * Set cut-off time Saturday
+     * Set cut-off time Saturday.
      *
      * @pattern ^(?:2[0-3]|[01]?[0-9]):(?:[0-5]?[0-9]):(?:[0-5]?[0-9])$
      *
@@ -1194,23 +1140,21 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     CalculateDeliveryDateRequest::$cutOffTimeSaturday
      */
     public function setCutOffTimeSaturday(?string $cutOffTimeSaturday): CalculateDeliveryDateRequest
     {
-        $this->cutOffTimeSaturday = ValidateAndFix::time($cutOffTimeSaturday);
+        $this->cutOffTimeSaturday = $this->validate->time($cutOffTimeSaturday);
 
         return $this;
     }
 
     /**
-     * Get available Saturday
+     * Get available Saturday.
      *
      * @return bool|null
      *
      * @since 2.0.0
-     *
      * @see   CalculateDeliveryDateRequest::$availableSaturday
      */
     public function getAvailableSaturday(): ?bool
@@ -1219,7 +1163,7 @@ class CalculateDeliveryDateRequest extends AbstractEntity
     }
 
     /**
-     * Set available Saturday
+     * Set available Saturday.
      *
      * @pattern N/A
      *
@@ -1230,7 +1174,6 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      * @return static
      *
      * @since   2.0.0
-     *
      * @see     CalculateDeliveryDateRequest::$availableSaturday
      */
     public function setAvailableSaturday(?bool $availableSaturday): CalculateDeliveryDateRequest
@@ -1241,12 +1184,11 @@ class CalculateDeliveryDateRequest extends AbstractEntity
     }
 
     /**
-     * Get cut-off time Sunday
+     * Get cut-off time Sunday.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   CalculateDeliveryDateRequest::$cutOffTimeSunday
      */
     public function getCutOffTimeSunday(): ?string
@@ -1255,7 +1197,7 @@ class CalculateDeliveryDateRequest extends AbstractEntity
     }
 
     /**
-     * Set cut-off time Sunday
+     * Set cut-off time Sunday.
      *
      * @pattern ^(?:2[0-3]|[01]?[0-9]):(?:[0-5]?[0-9]):(?:[0-5]?[0-9])$
      *
@@ -1268,23 +1210,21 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     CalculateDeliveryDateRequest::$cutOffTimeSunday
      */
     public function setCutOffTimeSunday(?string $cutOffTimeSunday): CalculateDeliveryDateRequest
     {
-        $this->cutOffTimeSunday = ValidateAndFix::time($cutOffTimeSunday);
+        $this->cutOffTimeSunday = $this->validate->time($cutOffTimeSunday);
 
         return $this;
     }
 
     /**
-     * Get available Sunday
+     * Get available Sunday.
      *
      * @return bool|null
      *
      * @since 2.0.0
-     *
      * @see   CalculateDeliveryDateRequest::$availableSunday
      */
     public function getAvailableSunday(): ?bool
@@ -1293,7 +1233,7 @@ class CalculateDeliveryDateRequest extends AbstractEntity
     }
 
     /**
-     * Set available Sunday
+     * Set available Sunday.
      *
      * @pattern N/A
      *
@@ -1304,7 +1244,6 @@ class CalculateDeliveryDateRequest extends AbstractEntity
      * @return static
      *
      * @since   2.0.0
-     *
      * @see     CalculateDeliveryDateRequest::$availableSunday
      */
     public function setAvailableSunday(?bool $availableSunday): CalculateDeliveryDateRequest

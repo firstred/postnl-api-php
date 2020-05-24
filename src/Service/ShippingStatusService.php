@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,9 +23,7 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -36,7 +36,9 @@ use Firstred\PostNL\Entity\Request\RetrieveSignatureByBarcodeRequest;
 use Firstred\PostNL\Entity\Request\RetrieveUpdatedShipmentsRequest;
 use Firstred\PostNL\Entity\Response\RetrieveUpdatedShipmentsResponse;
 use Firstred\PostNL\Entity\Shipment;
+use Firstred\PostNL\Entity\ShipmentInterface;
 use Firstred\PostNL\Entity\Signature;
+use Firstred\PostNL\Entity\SignatureInterface;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifErrorException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
@@ -50,7 +52,7 @@ use Psr\Http\Message\ResponseInterface;
 use TypeError;
 
 /**
- * Class ShippingStatusService
+ * Class ShippingStatusService.
  */
 class ShippingStatusService extends AbstractService
 {
@@ -62,11 +64,11 @@ class ShippingStatusService extends AbstractService
     const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2/status';
 
     /**
-     * Retrieve the shipment by barcode
+     * Retrieve the shipment by barcode.
      *
      * @param RetrieveShipmentByBarcodeRequest|RetrieveShipmentByReferenceRequest|RetrieveShipmentByKgidRequest $shipmentRequest
      *
-     * @return Shipment
+     * @return ShipmentInterface
      *
      * @throws HttpClientException
      * @throws CifDownException
@@ -75,7 +77,7 @@ class ShippingStatusService extends AbstractService
      *
      * @since 2.0.0
      */
-    public function retrieveShipment($shipmentRequest): Shipment
+    public function retrieveShipment($shipmentRequest): ShipmentInterface
     {
         $item = $this->retrieveCachedItem($shipmentRequest->getId());
         $response = null;
@@ -95,7 +97,7 @@ class ShippingStatusService extends AbstractService
         $object = $this->processRetrieveShipmentResponse($response);
         if ($item instanceof CacheItemInterface
             && $response instanceof ResponseInterface
-            && $response->getStatusCode() === 200
+            && 200 === $response->getStatusCode()
         ) {
             $item->set(Message::str($response));
             $this->cacheItem($item);
@@ -105,7 +107,7 @@ class ShippingStatusService extends AbstractService
     }
 
     /**
-     * Build the RetrieveShipmentByBarcodeRequest request for the REST API
+     * Build the RetrieveShipmentByBarcodeRequest request for the REST API.
      *
      * @param RetrieveShipmentByBarcodeRequest|RetrieveShipmentByReferenceRequest|RetrieveShipmentByKgidRequest $shipmentRequest
      *
@@ -153,11 +155,11 @@ class ShippingStatusService extends AbstractService
     }
 
     /**
-     * Process RetrieveShipmentByBarcode Response REST
+     * Process RetrieveShipmentByBarcode Response REST.
      *
      * @param ResponseInterface $response
      *
-     * @return Shipment
+     * @return ShipmentInterface
      *
      * @throws InvalidArgumentException
      * @throws CifDownException
@@ -165,18 +167,18 @@ class ShippingStatusService extends AbstractService
      *
      * @since 2.0.0
      */
-    public function processRetrieveShipmentResponse(ResponseInterface $response): Shipment
+    public function processRetrieveShipmentResponse(ResponseInterface $response): ShipmentInterface
     {
         static::validateResponse($response);
         $body = @json_decode((string) $response->getBody(), true);
         if (isset($body['CurrentStatus']['Shipment'])) {
-            /** @var Shipment $object */
+            /** @var ShipmentInterface $object */
             $object = Shipment::jsonDeserialize(['Shipment' => $body['CurrentStatus']['Shipment']]);
 
             return $object;
         }
         if (isset($body['CompleteStatus']['Shipment'])) {
-            /** @var Shipment $object */
+            /** @var ShipmentInterface $object */
             $object = Shipment::jsonDeserialize(['Shipment' => $body['CompleteStatus']['Shipment']]);
 
             return $object;
@@ -186,7 +188,7 @@ class ShippingStatusService extends AbstractService
     }
 
     /**
-     * Retrieve updated shipments
+     * Retrieve updated shipments.
      *
      * @param RetrieveUpdatedShipmentsRequest $updatedShipmentsRequest
      *
@@ -219,7 +221,7 @@ class ShippingStatusService extends AbstractService
         $object = $this->processRetrieveUpdatedShipmentsResponse($response);
         if ($item instanceof CacheItemInterface
             && $response instanceof ResponseInterface
-            && $response->getStatusCode() === 200
+            && 200 === $response->getStatusCode()
         ) {
             $item->set(Message::str($response));
             $this->cacheItem($item);
@@ -229,7 +231,7 @@ class ShippingStatusService extends AbstractService
     }
 
     /**
-     * Build the RetrieveUpdatedShipmentsRequest request for the REST API
+     * Build the RetrieveUpdatedShipmentsRequest request for the REST API.
      *
      * @param RetrieveUpdatedShipmentsRequest $shipmentRequest
      *
@@ -256,7 +258,7 @@ class ShippingStatusService extends AbstractService
     }
 
     /**
-     * Process RetrieveUpdatedShipments Response REST
+     * Process RetrieveUpdatedShipments Response REST.
      *
      * @param ResponseInterface $response
      *
@@ -280,11 +282,11 @@ class ShippingStatusService extends AbstractService
     }
 
     /**
-     * Retrieve the signature
+     * Retrieve the signature.
      *
      * @param RetrieveSignatureByBarcodeRequest $getSignature
      *
-     * @return Signature
+     * @return SignatureInterface
      *
      * @throws CifDownException
      * @throws CifErrorException
@@ -293,7 +295,7 @@ class ShippingStatusService extends AbstractService
      *
      * @since 2.0.0
      */
-    public function retrieveSignature(RetrieveSignatureByBarcodeRequest $getSignature): Signature
+    public function retrieveSignature(RetrieveSignatureByBarcodeRequest $getSignature): SignatureInterface
     {
         $item = $this->retrieveCachedItem($getSignature->getId());
         $response = null;
@@ -312,7 +314,7 @@ class ShippingStatusService extends AbstractService
         $object = $this->processRetrieveSignatureResponse($response);
         if ($item instanceof CacheItemInterface
             && $response instanceof ResponseInterface
-            && $response->getStatusCode() === 200
+            && 200 === $response->getStatusCode()
         ) {
             $item->set(Message::str($response));
             $this->cacheItem($item);
@@ -322,7 +324,7 @@ class ShippingStatusService extends AbstractService
     }
 
     /**
-     * Build the GetSignature request for the REST API
+     * Build the GetSignature request for the REST API.
      *
      * @param RetrieveSignatureByBarcodeRequest $getSignature
      *
@@ -342,11 +344,11 @@ class ShippingStatusService extends AbstractService
     }
 
     /**
-     * Process GetSignature Response REST
+     * Process GetSignature Response REST.
      *
      * @param mixed $response
      *
-     * @return Signature
+     * @return SignatureInterface
      *
      * @throws CifDownException
      * @throws InvalidArgumentException
@@ -354,12 +356,12 @@ class ShippingStatusService extends AbstractService
      *
      * @since 2.0.0
      */
-    public function processRetrieveSignatureResponse(ResponseInterface $response): Signature
+    public function processRetrieveSignatureResponse(ResponseInterface $response): SignatureInterface
     {
         static::validateResponse($response);
         $body = @json_decode((string) $response->getBody(), true);
         if (isset($body['Signature']['Barcode'])) {
-            /** @var Signature $object */
+            /** @var SignatureInterface $object */
             $object = Signature::jsonDeserialize($body);
 
             return $object;

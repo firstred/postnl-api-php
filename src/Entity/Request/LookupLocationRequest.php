@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,9 +23,7 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -32,24 +32,24 @@ namespace Firstred\PostNL\Entity\Request;
 use Firstred\PostNL\Entity\AbstractEntity;
 
 /**
- * Class LookupLocationRequest
+ * Class LookupLocationRequest.
  *
  * This class is both the container and can be the actual LookupLocationRequest object itself!
  */
-class LookupLocationRequest extends AbstractEntity
+final class LookupLocationRequest extends AbstractEntity
 {
     /**
-     * Location code
+     * Location code.
      *
      * @pattern ^.{0,35}$
      *
      * @example 161503
      *
-     * @var string|null $locationCode
+     * @var string|null
      *
      * @since   1.0.0
      */
-    protected $locationCode;
+    private $locationCode;
 
     /**
      * RetailNetworkID information. Always PNPNL-01 for Dutch locations. For Belgium locations use LD-01.
@@ -58,39 +58,19 @@ class LookupLocationRequest extends AbstractEntity
      *
      * @example PNPNL-01
      *
-     * @var string|null $retailNetworkID
+     * @var string|null
      *
      * @since   1.0.0
      */
-    protected $retailNetworkID;
+    private $retailNetworkID;
 
     /**
-     * LookupLocationRequest constructor.
-     *
-     * @param string|null $location
-     * @param string|null $networkId
-     *
-     *
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function __construct(?string $location = null, ?string $networkId = null)
-    {
-        parent::__construct();
-
-        $this->setLocationCode($location);
-        $this->setRetailNetworkID($networkId);
-    }
-
-    /**
-     * Get location code
+     * Get location code.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   LookupLocationRequest::$locationCode
      */
     public function getLocationCode(): ?string
@@ -99,7 +79,7 @@ class LookupLocationRequest extends AbstractEntity
     }
 
     /**
-     * Set location code
+     * Set location code.
      *
      * @pattern ^.{0,35}$
      *
@@ -111,7 +91,6 @@ class LookupLocationRequest extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Location::$locationCode
      */
     public function setLocationCode(?string $locationCode): LookupLocationRequest
@@ -122,13 +101,12 @@ class LookupLocationRequest extends AbstractEntity
     }
 
     /**
-     * Get retail network ID
+     * Get retail network ID.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   LookupLocationRequest::$retailNetworkID
      */
     public function getRetailNetworkID(): ?string
@@ -137,7 +115,7 @@ class LookupLocationRequest extends AbstractEntity
     }
 
     /**
-     * Set retail network ID
+     * Set retail network ID.
      *
      * @pattern ^.{0,35}$
      *
@@ -149,7 +127,6 @@ class LookupLocationRequest extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     LookupLocationRequest::$retailNetworkID
      */
     public function setRetailNetworkID(?string $retailNetworkID): LookupLocationRequest

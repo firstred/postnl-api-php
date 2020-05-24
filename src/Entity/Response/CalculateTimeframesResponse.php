@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,67 +23,51 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Entity\Response;
 
 use Firstred\PostNL\Entity\ReasonNoTimeframes;
+use Firstred\PostNL\Entity\ReasonNoTimeframesInterface;
 use Firstred\PostNL\Entity\Timeframe;
 use Firstred\PostNL\Entity\Timeframes;
+use Firstred\PostNL\Entity\TimeframesInterface;
 
 /**
- * Class CalculateTimeframesResponse
+ * Class CalculateTimeframesResponse.
  */
-class CalculateTimeframesResponse extends AbstractResponse
+final class CalculateTimeframesResponse extends AbstractResponse
 {
     /**
-     * ReasonNoTimeframes
+     * ReasonNoTimeframes.
      *
      * @pattern N/A
      *
      * @example N/A
      *
-     * @var ReasonNoTimeframes|null $reasonNoTimeframes
+     * @var ReasonNoTimeframesInterface|null
      *
      * @since   2.0.0
      */
-    protected $reasonNoTimeframes;
+    private $reasonNoTimeframes;
 
     /**
-     * Timeframes
+     * Timeframes.
      *
      * @pattern N/A
      *
      * @example N/A
      *
-     * @var Timeframes|null $timeframes
+     * @var TimeframesInterface|null
      *
      * @since   2.0.0
      */
-    protected $timeframes;
+    private $timeframes;
 
     /**
-     * CalculateTimeframesResponse constructor.
-     *
-     * @param ReasonNoTimeframes|null $noTimeframes
-     * @param Timeframes|null         $timeframes
-     *
-     * @since 2.0.0
-     */
-    public function __construct(?ReasonNoTimeframes $noTimeframes = null, ?Timeframes $timeframes = null)
-    {
-        parent::__construct();
-
-        $this->setReasonNoTimeframes($noTimeframes);
-        $this->setTimeframes($timeframes);
-    }
-
-    /**
-     * Return a serializable array for `json_encode`
+     * Return a serializable array for `json_encode`.
      *
      * @return array
      *
@@ -120,37 +106,35 @@ class CalculateTimeframesResponse extends AbstractResponse
     }
 
     /**
-     * Get ReasonNoTimeframes
+     * Get ReasonNoTimeframes.
      *
-     * @return ReasonNoTimeframes|null
+     * @return ReasonNoTimeframesInterface|null
      *
      * @since 2.0.0
-     *
      * @see   ReasonNoTimeframe
      * @see   ReasonNoTimeframes
      */
-    public function getReasonNoTimeframes(): ?ReasonNoTimeframes
+    public function getReasonNoTimeframes(): ?ReasonNoTimeframesInterface
     {
         return $this->reasonNoTimeframes;
     }
 
     /**
-     * Set ReasonNoTimeframes
+     * Set ReasonNoTimeframes.
      *
      * @pattern N/A
      *
-     * @example N/A
-     *
-     * @param ReasonNoTimeframes|null $reasonNoTimeframes
+     * @param ReasonNoTimeframesInterface|null $reasonNoTimeframes
      *
      * @return static
      *
-     * @since   2.0.0
+     * @example N/A
      *
+     * @since   2.0.0
      * @see     ReasonNoTimeframe
      * @see     ReasonNoTimeframes
      */
-    public function setReasonNoTimeframes(?ReasonNoTimeframes $reasonNoTimeframes): CalculateTimeframesResponse
+    public function setReasonNoTimeframes(?ReasonNoTimeframesInterface $reasonNoTimeframes): CalculateTimeframesResponse
     {
         $this->reasonNoTimeframes = $reasonNoTimeframes;
 
@@ -158,37 +142,35 @@ class CalculateTimeframesResponse extends AbstractResponse
     }
 
     /**
-     * Get timeframes
+     * Get timeframes.
      *
-     * @return Timeframes|null
+     * @return TimeframesInterface|null
      *
      * @since 2.0.0
-     *
      * @see   Timeframe
      * @see   Timeframes
      */
-    public function getTimeframes(): ?Timeframes
+    public function getTimeframes(): ?TimeframesInterface
     {
         return $this->timeframes;
     }
 
     /**
-     * Set timeframes
+     * Set timeframes.
      *
      * @pattern N/A
      *
-     * @example N/A
-     *
-     * @param Timeframes|null $timeframes
+     * @param TimeframesInterface|null $timeframes
      *
      * @return static
      *
-     * @since   2.0.0
+     * @example N/A
      *
+     * @since   2.0.0
      * @see     Timeframe
      * @see     Timeframes
      */
-    public function setTimeframes(?Timeframes $timeframes): CalculateTimeframesResponse
+    public function setTimeframes(?TimeframesInterface $timeframes): CalculateTimeframesResponse
     {
         $this->timeframes = $timeframes;
 

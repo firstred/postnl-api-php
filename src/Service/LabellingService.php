@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,9 +23,7 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -45,7 +45,7 @@ use Psr\Http\Message\ResponseInterface;
 use TypeError;
 
 /**
- * Class LabellingService
+ * Class LabellingService.
  */
 class LabellingService extends AbstractService
 {
@@ -57,7 +57,7 @@ class LabellingService extends AbstractService
     const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2_2/label';
 
     /**
-     * Generate a single barcode via REST
+     * Generate a single barcode via REST.
      *
      * @param GenerateShipmentLabelRequest $generateLabel
      * @param string                       $printerType
@@ -94,7 +94,7 @@ class LabellingService extends AbstractService
         $object = $this->processGenerateLabelResponse($response);
         if ($item instanceof CacheItemInterface
             && $response instanceof ResponseInterface
-            && $response->getStatusCode() === 200
+            && 200 === $response->getStatusCode()
         ) {
             $item->set(Message::str($response));
             $this->cacheItem($item);
@@ -104,7 +104,7 @@ class LabellingService extends AbstractService
     }
 
     /**
-     * Build the GenerateShipmentLabelRequest request for the REST API
+     * Build the GenerateShipmentLabelRequest request for the REST API.
      *
      * @param GenerateShipmentLabelRequest $generateLabel
      * @param string                       $printerType
@@ -139,7 +139,7 @@ class LabellingService extends AbstractService
     }
 
     /**
-     * Process the GenerateShipmentLabelRequest REST Response
+     * Process the GenerateShipmentLabelRequest REST Response.
      *
      * @param ResponseInterface $response
      *
@@ -160,7 +160,7 @@ class LabellingService extends AbstractService
     }
 
     /**
-     * Generate multiple labels at once
+     * Generate multiple labels at once.
      *
      * @param array  $generateLabels ['uuid' => [GenerateBarcodeRequest, confirm], ...]
      * @param string $printerType    Printer type, e.g. GraphicFile|PDF
@@ -205,7 +205,7 @@ class LabellingService extends AbstractService
         $newResponses = $httpClient->doRequests();
         foreach ($newResponses as $uuid => $newResponse) {
             if ($newResponse instanceof ResponseInterface
-                && $newResponse->getStatusCode() === 200
+                && 200 === $newResponse->getStatusCode()
             ) {
                 $item = $this->retrieveCachedItem($uuid);
                 if ($item instanceof CacheItemInterface) {

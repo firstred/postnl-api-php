@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,9 +23,7 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -31,25 +31,27 @@ namespace Firstred\PostNL\Entity\Request;
 
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Address;
+use Firstred\PostNL\Entity\AddressInterface;
 use Firstred\PostNL\Entity\CutOffTime;
+use Firstred\PostNL\Entity\CutOffTimeInterface;
 
 /**
- * Class FindDeliveryInfoRequest
+ * Class FindDeliveryInfoRequest.
  */
-class FindDeliveryInfoRequest extends AbstractEntity
+final class FindDeliveryInfoRequest extends AbstractEntity implements FindDeliveryInfoRequestInterface
 {
     /**
-     * The order date of the shipment
+     * The order date of the shipment.
      *
      * @pattern N/A
      *
      * @example N/A
      *
-     * @var string|null $orderDate
+     * @var string|null
      *
      * @since 2.0.0
      */
-    protected $orderDate;
+    private $orderDate;
 
     /**
      * The amount of days it takes for a parcel to be received by PostN. If you delivery the parcel the same day as the order is placed on the webshop, please use the value of 1. A value of 2 means
@@ -59,53 +61,53 @@ class FindDeliveryInfoRequest extends AbstractEntity
      *
      * @example N/A
      *
-     * @var int|null $shippingDuration
+     * @var int|null
      *
      * @since 2.0.0
      */
-    protected $shippingDuration;
+    private $shippingDuration;
 
     /**
-     * Array of CutOffTimes Type
+     * Array of CutOffTimes Type.
      *
      * @pattern N/A
      *
      * @example N/A
      *
-     * @var CutOffTime[]|null $cutOffTimes
+     * @var CutOffTimeInterface[]|null
      *
-     * @since 2.0.0
+     * @since   2.0.0
      */
-    protected $cutOffTimes;
+    private $cutOffTimes;
 
     /**
-     * Specifies whether you are available during holidays
+     * Specifies whether you are available during holidays.
      *
      * @pattern N/A
      *
      * @example N/A
      *
-     * @var bool|null $holidaySorting
+     * @var bool|null
      *
      * @since 2.0.0
      */
-    protected $holidaySorting;
+    private $holidaySorting;
 
     /**
-     * Specifies the delivery and pickup options. For a list of possible values please refer to the guidelines
+     * Specifies the delivery and pickup options. For a list of possible values please refer to the guidelines.
      *
      * @pattern N/A
      *
      * @example N/A
      *
-     * @var string[]|null $options
+     * @var string[]|null
      *
      * @since 2.0.0
      */
-    protected $options;
+    private $options;
 
     /**
-     * Specifies the number of locations you want returned. This can be a value of 1-3
+     * Specifies the number of locations you want returned. This can be a value of 1-3.
      *
      * @pattern N/A
      *
@@ -115,55 +117,44 @@ class FindDeliveryInfoRequest extends AbstractEntity
      *
      * @example 3
      *
-     * @var int|null $locations
+     * @var int|null
      *
      * @since   2.0.0
      */
-    protected $locations;
+    private $locations;
 
     /**
-     * Specifies the number of days for which the timeframes are returned. This can be a value of 1-9
+     * Specifies the number of days for which the timeframes are returned. This can be a value of 1-9.
      *
      * @pattern ^\d[1-9]$
      *
      * @example 9
      *
-     * @var int|null $days
+     * @var int|null
      *
      * @since   2.0.0
      */
-    protected $days;
+    private $days;
 
     /**
-     * Array of Address type
+     * Array of Address type.
      *
      * @pattern N/A
      *
      * @example N/A
      *
-     * @var Address[]|null $addresses
+     * @var AddressInterface[]|null
      *
-     * @since 2.0.0
+     * @since   2.0.0
      */
-    protected $addresses;
+    private $addresses;
 
     /**
-     * FindDeliveryInfoRequest constructor.
-     *
-     * @since 2.0.0
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
-     * Get order date
+     * Get order date.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   FindDeliveryInfoRequest::$orderDate
      */
     public function getOrderDate(): ?string
@@ -172,7 +163,7 @@ class FindDeliveryInfoRequest extends AbstractEntity
     }
 
     /**
-     * Set order date
+     * Set order date.
      *
      * @pattern N/A
      *
@@ -183,10 +174,9 @@ class FindDeliveryInfoRequest extends AbstractEntity
      * @return static
      *
      * @since 2.0.0
-     *
      * @see   FindDeliveryInfoRequest::$orderDate
      */
-    public function setOrderDate(?string $orderDate): FindDeliveryInfoRequest
+    public function setOrderDate(?string $orderDate): FindDeliveryInfoRequestInterface
     {
         $this->orderDate = $orderDate;
 
@@ -194,12 +184,11 @@ class FindDeliveryInfoRequest extends AbstractEntity
     }
 
     /**
-     * Get shipping duration
+     * Get shipping duration.
      *
      * @return int|null
      *
      * @since 2.0.0
-     *
      * @see   FindDeliveryInfoRequest::$shippingDuration
      */
     public function getShippingDuration(): ?int
@@ -208,7 +197,7 @@ class FindDeliveryInfoRequest extends AbstractEntity
     }
 
     /**
-     * Set shipping duration
+     * Set shipping duration.
      *
      * @pattern N/A
      *
@@ -219,10 +208,9 @@ class FindDeliveryInfoRequest extends AbstractEntity
      * @return static
      *
      * @since 2.0.0
-     *
      * @see   FindDeliveryInfoRequest::$shippingDuration
      */
-    public function setShippingDuration(?int $shippingDuration): FindDeliveryInfoRequest
+    public function setShippingDuration(?int $shippingDuration): FindDeliveryInfoRequestInterface
     {
         $this->shippingDuration = $shippingDuration;
 
@@ -230,12 +218,11 @@ class FindDeliveryInfoRequest extends AbstractEntity
     }
 
     /**
-     * Get cut-off time
+     * Get cut-off time.
      *
-     * @return CutOffTime[]|null
+     * @return CutOffTimeInterface[]|null
      *
      * @since 2.0.0
-     *
      * @see   CutOffTime
      */
     public function getCutOffTimes(): ?array
@@ -244,21 +231,20 @@ class FindDeliveryInfoRequest extends AbstractEntity
     }
 
     /**
-     * Set cut-off time
+     * Set cut-off time.
      *
      * @pattern N/A
      *
-     * @example N/A
-     *
-     * @param CutOffTime[]|null $cutOffTimes
+     * @param CutOffTimeInterface[]|null $cutOffTimes
      *
      * @return static
      *
-     * @since   2.0.0
+     * @example N/A
      *
+     * @since   2.0.0
      * @see     CutOffTime
      */
-    public function setCutOffTimes(?array $cutOffTimes): FindDeliveryInfoRequest
+    public function setCutOffTimes(?array $cutOffTimes): FindDeliveryInfoRequestInterface
     {
         $this->cutOffTimes = $cutOffTimes;
 
@@ -266,12 +252,11 @@ class FindDeliveryInfoRequest extends AbstractEntity
     }
 
     /**
-     * Get holiday sorting setting
+     * Get holiday sorting setting.
      *
      * @return bool|null
      *
      * @since 2.0.0
-     *
      * @see   FindDeliveryInfoRequest::$holidaySorting
      */
     public function getHolidaySorting(): ?bool
@@ -280,7 +265,7 @@ class FindDeliveryInfoRequest extends AbstractEntity
     }
 
     /**
-     * Set holiday sorting setting
+     * Set holiday sorting setting.
      *
      * @pattern N/A
      *
@@ -291,10 +276,9 @@ class FindDeliveryInfoRequest extends AbstractEntity
      * @return static
      *
      * @since 2.0.0
-     *
      * @see   FindDeliveryInfoRequest::$holidaySorting
      */
-    public function setHolidaySorting(?bool $holidaySorting): FindDeliveryInfoRequest
+    public function setHolidaySorting(?bool $holidaySorting): FindDeliveryInfoRequestInterface
     {
         $this->holidaySorting = $holidaySorting;
 
@@ -302,12 +286,11 @@ class FindDeliveryInfoRequest extends AbstractEntity
     }
 
     /**
-     * Get options
+     * Get options.
      *
      * @return string[]|null
      *
      * @since 2.0.0
-     *
      * @see   FindDeliveryInfoRequest::$options
      */
     public function getOptions(): ?array
@@ -316,7 +299,7 @@ class FindDeliveryInfoRequest extends AbstractEntity
     }
 
     /**
-     * Set options
+     * Set options.
      *
      * @pattern N/A
      *
@@ -327,10 +310,9 @@ class FindDeliveryInfoRequest extends AbstractEntity
      * @return static
      *
      * @since 2.0.0
-     *
      * @see   FindDeliveryInfoRequest::$holidaySorting
      */
-    public function setOptions(?array $options): FindDeliveryInfoRequest
+    public function setOptions(?array $options): FindDeliveryInfoRequestInterface
     {
         $this->options = $options;
 
@@ -338,12 +320,11 @@ class FindDeliveryInfoRequest extends AbstractEntity
     }
 
     /**
-     * Get locations
+     * Get locations.
      *
      * @return int|null
      *
      * @since 2.0.0
-     *
      * @see   FindDeliveryInfoRequest::$locations
      */
     public function getLocations(): ?int
@@ -352,7 +333,7 @@ class FindDeliveryInfoRequest extends AbstractEntity
     }
 
     /**
-     * Set locations
+     * Set locations.
      *
      * @pattern N/A
      *
@@ -363,10 +344,9 @@ class FindDeliveryInfoRequest extends AbstractEntity
      * @return static
      *
      * @since 2.0.0
-     *
      * @see   FindDeliveryInfoRequest::$locations
      */
-    public function setLocations(?int $locations): FindDeliveryInfoRequest
+    public function setLocations(?int $locations): FindDeliveryInfoRequestInterface
     {
         $this->locations = $locations;
 
@@ -374,12 +354,11 @@ class FindDeliveryInfoRequest extends AbstractEntity
     }
 
     /**
-     * Get days
+     * Get days.
      *
      * @return int|null
      *
      * @since 2.0.0
-     *
      * @see   FindDeliveryInfoRequest::$days
      */
     public function getDays(): ?int
@@ -388,7 +367,7 @@ class FindDeliveryInfoRequest extends AbstractEntity
     }
 
     /**
-     * Set days
+     * Set days.
      *
      * @pattern N/A
      *
@@ -399,10 +378,9 @@ class FindDeliveryInfoRequest extends AbstractEntity
      * @return static
      *
      * @since 2.0.0
-     *
      * @see   FindDeliveryInfoRequest::$days
      */
-    public function setDays(?int $days): FindDeliveryInfoRequest
+    public function setDays(?int $days): FindDeliveryInfoRequestInterface
     {
         $this->days = $days;
 
@@ -410,12 +388,11 @@ class FindDeliveryInfoRequest extends AbstractEntity
     }
 
     /**
-     * Get addresses
+     * Get addresses.
      *
-     * @return Address[]|null
+     * @return AddressInterface[]|null
      *
      * @since 2.0.0
-     *
      * @see   Address
      */
     public function getAddresses(): ?array
@@ -424,21 +401,20 @@ class FindDeliveryInfoRequest extends AbstractEntity
     }
 
     /**
-     * Set addresses
+     * Set addresses.
      *
      * @pattern N/A
      *
-     * @example N/A
-     *
-     * @param Address[]|null $addresses
+     * @param AddressInterface[]|null $addresses
      *
      * @return static
      *
-     * @since   2.0.0
+     * @example N/A
      *
+     * @since   2.0.0
      * @see     Address
      */
-    public function setAddresses(?array $addresses): FindDeliveryInfoRequest
+    public function setAddresses(?array $addresses): FindDeliveryInfoRequestInterface
     {
         $this->addresses = $addresses;
 

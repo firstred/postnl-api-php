@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,24 +23,28 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Misc\ValidateAndFix;
 use ReflectionClass;
 use ReflectionException;
 
 /**
- * Class Address
+ * Class Address.
  */
-class Address extends AbstractEntity
+final class Address extends AbstractEntity implements AddressInterface
 {
+    const TYPE_RECEIVER = '01';
+    const TYPE_SENDER = '02';
+    const TYPE_ALTERNATIVE_SENDER = '03';
+    const TYPE_COLLECTION_ADDRESS = '04';
+    const TYPE_RETURN_ADDRESS = '08';
+    const DROP_OFF_LOCATION = '09';
+
     /**
      * PostNL internal applications validate the receiver address. In case the spelling of
      * addresses should be different according to our PostNL information, the address details will
@@ -69,7 +75,7 @@ class Address extends AbstractEntity
      * At least one other AddressType must be specified, other than AddressType 02
      * In most cases this will be AddressType 01, the receiver address.
      *
-     * @var string|null $addressType
+     * @var string|null
      *
      * @pattern ^\d{2}$
      *
@@ -77,12 +83,12 @@ class Address extends AbstractEntity
      *
      * @since   1.0.0
      */
-    protected $addressType;
+    private $addressType;
 
     /**
-     * Area of the address
+     * Area of the address.
      *
-     * @var string|null $area
+     * @var string|null
      *
      * @pattern ^.{0,35}$
      *
@@ -90,12 +96,12 @@ class Address extends AbstractEntity
      *
      * @since   1.0.0
      */
-    protected $area;
+    private $area;
 
     /**
-     * Building name of the address
+     * Building name of the address.
      *
-     * @var string|null $buildingname
+     * @var string|null
      *
      * @pattern ^.{0,35}$
      *
@@ -103,12 +109,12 @@ class Address extends AbstractEntity
      *
      * @since   1.0.0
      */
-    protected $buildingname;
+    private $buildingname;
 
     /**
-     * City of the address
+     * City of the address.
      *
-     * @var string|null $city
+     * @var string|null
      *
      * @pattern ^.{0,35}$
      *
@@ -116,12 +122,12 @@ class Address extends AbstractEntity
      *
      * @since   1.0.0
      */
-    protected $city;
+    private $city;
 
     /**
      * This field has a dependency with the field Name. One of both fields must be filled mandatory; using both fields is also allowed. Mandatory when AddressType is 09.
      *
-     * @var string|null $companyName
+     * @var string|null
      *
      * @pattern ^.{0,35}$
      *
@@ -129,12 +135,12 @@ class Address extends AbstractEntity
      *
      * @since   1.0.0
      */
-    protected $companyName;
+    private $companyName;
 
     /**
-     * The ISO-2 country code
+     * The ISO-2 country code.
      *
-     * @var string|null $countrycode
+     * @var string|null
      *
      * @pattern ^[A-Z]{2}$
      *
@@ -142,12 +148,12 @@ class Address extends AbstractEntity
      *
      * @since   1.0.0
      */
-    protected $countrycode;
+    private $countrycode;
 
     /**
      * Send to specific department of a company.
      *
-     * @var string|null $department
+     * @var string|null
      *
      * @pattern ^.{0,35}$
      *
@@ -155,12 +161,12 @@ class Address extends AbstractEntity
      *
      * @since   1.0.0
      */
-    protected $department;
+    private $department;
 
     /**
      * Door code of address. Mandatory for some international shipments.
      *
-     * @var string|null $doorcode
+     * @var string|null
      *
      * @pattern ^.{0,35}$
      *
@@ -168,12 +174,12 @@ class Address extends AbstractEntity
      *
      * @since   1.0.0
      */
-    protected $doorcode;
+    private $doorcode;
 
     /**
      * Remark: please add FirstName and Name (lastname) of the receiver to improve the parcel tracking experience of your customer.
      *
-     * @var string|null $firstname
+     * @var string|null
      *
      * @pattern ^.{0,35}$
      *
@@ -181,12 +187,12 @@ class Address extends AbstractEntity
      *
      * @since   1.0.0
      */
-    protected $firstname;
+    private $firstname;
 
     /**
-     * Send to specific floor of a company
+     * Send to specific floor of a company.
      *
-     * @var string|null $floor
+     * @var string|null
      *
      * @pattern ^.{0,35}$
      *
@@ -194,12 +200,12 @@ class Address extends AbstractEntity
      *
      * @since   1.0.0
      */
-    protected $floor;
+    private $floor;
 
     /**
      * Mandatory for shipments to Benelux. Max. length is 5 characters (only for Benelux addresses). For Benelux addresses,this field should always be numeric.
      *
-     * @var string|int|null $houseNr
+     * @var string|int|null
      *
      * @pattern ^.{0,35}$
      *
@@ -207,12 +213,12 @@ class Address extends AbstractEntity
      *
      * @since   1.0.0
      */
-    protected $houseNr;
+    private $houseNr;
 
     /**
-     * House number extension
+     * House number extension.
      *
-     * @var string|null $houseNrExt
+     * @var string|null
      *
      * @pattern ^.{0,35}$
      *
@@ -220,13 +226,13 @@ class Address extends AbstractEntity
      *
      * @since   1.0.0
      */
-    protected $houseNrExt;
+    private $houseNrExt;
 
     /**
      * Combination of Street, HouseNr and HouseNrExt. Please see Guidelines for the explanation.
      * The field StreetHouseNrExt is only usable for locations in NL, BE and DE.
      *
-     * @var string|null $streetHouseNrExt
+     * @var string|null
      *
      * @pattern ^.{0,95}$
      *
@@ -234,13 +240,13 @@ class Address extends AbstractEntity
      *
      * @since   2.0.0
      */
-    protected $streetHouseNrExt;
+    private $streetHouseNrExt;
 
     /**
      * Last name of person. This field has a dependency with the field CompanyName. One of both fields must be filled mandatory; using both fields is also allowed. Remark: please add FirstName and
      * Name (lastname) of the receiver to improve the parcel tracking experience of your customer.
      *
-     * @var string|null $name
+     * @var string|null
      *
      * @pattern ^.{0,35}$
      *
@@ -248,12 +254,12 @@ class Address extends AbstractEntity
      *
      * @since   1.0.0
      */
-    protected $name;
+    private $name;
 
     /**
-     * Region
+     * Region.
      *
-     * @var string|null $region
+     * @var string|null
      *
      * @pattern ^.{0,35}$
      *
@@ -261,12 +267,12 @@ class Address extends AbstractEntity
      *
      * @since   1.0.0
      */
-    protected $region;
+    private $region;
 
     /**
-     * Remark of the shipment
+     * Remark of the shipment.
      *
-     * @var string|null $remark
+     * @var string|null
      *
      * @pattern ^.{0,1000}$
      *
@@ -274,12 +280,12 @@ class Address extends AbstractEntity
      *
      * @since   1.0.0
      */
-    protected $remark;
+    private $remark;
 
     /**
      * This field has a dependency with the field StreetHouseNrExt. One of both fields must be filled mandatory; using both fields is also allowed.
      *
-     * @var string|null $street
+     * @var string|null
      *
      * @pattern ^.{0,95}$
      *
@@ -287,12 +293,12 @@ class Address extends AbstractEntity
      *
      * @since   1.0.0
      */
-    protected $street;
+    private $street;
 
     /**
-     * Zip / postal code
+     * Zip / postal code.
      *
-     * @var string|null $zipcode
+     * @var string|null
      *
      * @pattern ^.{0,10}$
      *
@@ -300,70 +306,15 @@ class Address extends AbstractEntity
      *
      * @since   1.0.0
      */
-    protected $zipcode;
+    private $zipcode;
 
     /**
-     * Address constructor.
-     *
-     * @param string|null $addressType
-     * @param string|null $firstName
-     * @param string|null $name
-     * @param string|null $companyName
-     * @param string|null $street
-     * @param string|null $houseNr
-     * @param string|null $houseNrExt
-     * @param string|null $zipcode
-     * @param string|null $city
-     * @param string|null $countryCode
-     * @param string|null $area
-     * @param string|null $buildingName
-     * @param string|null $department
-     * @param string|null $doorcode
-     * @param string|null $floor
-     * @param string|null $region
-     * @param string|null $remark
-     * @param string|null $streetHouseNrExt
-     *
-     * @throws InvalidArgumentException
-     * @throws ReflectionException
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function __construct(?string $addressType = null, ?string $firstName = null, ?string $name = null, ?string $companyName = null, ?string $street = null, ?string $houseNr = null, ?string $houseNrExt = null, ?string $zipcode = null, ?string $city = null, ?string $countryCode = null, ?string $area = null, ?string $buildingName = null, ?string $department = null, ?string $doorcode = null, ?string $floor = null, ?string $region = null, ?string $remark = null, ?string $streetHouseNrExt = null)
-    {
-        parent::__construct();
-
-        $this->setAddressType($addressType);
-        $this->setFirstname($firstName);
-        $this->setName($name);
-        $this->setCompanyName($companyName);
-        $this->setStreet($street);
-        $this->setHouseNr($houseNr);
-        $this->setHouseNrExt($houseNrExt);
-        $this->setZipcode($zipcode);
-        $this->setCity($city);
-        $this->setCountrycode($countryCode);
-
-        // Optional parameters.
-        $this->setArea($area);
-        $this->setBuildingname($buildingName);
-        $this->setDepartment($department);
-        $this->setDoorcode($doorcode);
-        $this->setFloor($floor);
-        $this->setRegion($region);
-        $this->setRemark($remark);
-        $this->setStreetHouseNrExt($streetHouseNrExt);
-    }
-
-    /**
-     * Get address type
+     * Get address type.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Address::$addressType
      */
     public function getAddressType(): ?string
@@ -372,7 +323,7 @@ class Address extends AbstractEntity
     }
 
     /**
-     * Set the AddressType
+     * Set the AddressType.
      *
      * Type of the address. This is a code.
      *
@@ -380,7 +331,7 @@ class Address extends AbstractEntity
      *
      * @param string|null $addressType
      *
-     * @return static
+     * @return AddressInterface
      *
      * @throws InvalidArgumentException
      *
@@ -388,24 +339,22 @@ class Address extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Address::$addressType
      */
-    public function setAddressType(?string $addressType = null): Address
+    public function setAddressType(?string $addressType = null): AddressInterface
     {
-        $this->addressType = ValidateAndFix::addressType($addressType);
+        $this->addressType = $this->validate->addressType($addressType);
 
         return $this;
     }
 
     /**
-     * Get zip / postal code
+     * Get zip / postal code.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Address::$zipcode
      */
     public function getZipcode(): ?string
@@ -414,7 +363,7 @@ class Address extends AbstractEntity
     }
 
     /**
-     * Set zip / postal code
+     * Set zip / postal code.
      *
      * Zipcode of the address.
      * Mandatory for shipments to Benelux.
@@ -427,7 +376,7 @@ class Address extends AbstractEntity
      *
      * @param string|null $zip
      *
-     * @return static
+     * @return AddressInterface
      *
      * @throws InvalidArgumentException
      *
@@ -435,24 +384,22 @@ class Address extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Address::$zipcode
      */
-    public function setZipcode(?string $zip = null): Address
+    public function setZipcode(?string $zip = null): AddressInterface
     {
-        $this->zipcode = ValidateAndFix::postcode($zip);
+        $this->zipcode = $this->validate->postcode($zip);
 
         return $this;
     }
 
     /**
-     * Get area
+     * Get area.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see Address::$area
      */
     public function getArea(): ?string
@@ -461,13 +408,13 @@ class Address extends AbstractEntity
     }
 
     /**
-     * Set area
+     * Set area.
      *
      * @pattern ^.{0,35}$
      *
      * @param string|null $area
      *
-     * @return static
+     * @return AddressInterface
      *
      * @throws InvalidArgumentException
      *
@@ -475,24 +422,22 @@ class Address extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Address::$area
      */
-    public function setArea(?string $area): Address
+    public function setArea(?string $area): AddressInterface
     {
-        $this->area = ValidateAndFix::area($area);
+        $this->area = $this->validate->area($area);
 
         return $this;
     }
 
     /**
-     * Get building name
+     * Get building name.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Address::$buildingname
      */
     public function getBuildingname(): ?string
@@ -501,13 +446,13 @@ class Address extends AbstractEntity
     }
 
     /**
-     * Set building name
+     * Set building name.
      *
      * @pattern ^.{0,35}$
      *
      * @param string|null $buildingname
      *
-     * @return static
+     * @return AddressInterface
      *
      * @throws InvalidArgumentException
      *
@@ -515,24 +460,22 @@ class Address extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Address::$buildingname
      */
-    public function setBuildingname(?string $buildingname): Address
+    public function setBuildingname(?string $buildingname): AddressInterface
     {
-        $this->buildingname = ValidateAndFix::buildingName($buildingname);
+        $this->buildingname = $this->validate->buildingName($buildingname);
 
         return $this;
     }
 
     /**
-     * Get city
+     * Get city.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Address::$city
      */
     public function getCity(): ?string
@@ -541,13 +484,13 @@ class Address extends AbstractEntity
     }
 
     /**
-     * Set city
+     * Set city.
      *
      * @pattern ^.{0,35}$
      *
      * @param string|null $city
      *
-     * @return static
+     * @return AddressInterface
      *
      * @throws InvalidArgumentException
      *
@@ -555,24 +498,22 @@ class Address extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Address::$city
      */
-    public function setCity(?string $city): Address
+    public function setCity(?string $city): AddressInterface
     {
-        $this->city = ValidateAndFix::city($city);
+        $this->city = $this->validate->city($city);
 
         return $this;
     }
 
     /**
-     * Get company name
+     * Get company name.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Address::$companyName
      */
     public function getCompanyName(): ?string
@@ -581,13 +522,13 @@ class Address extends AbstractEntity
     }
 
     /**
-     * Set company name
+     * Set company name.
      *
      * @pattern ^.{0,35}$
      *
      * @param string|null $companyName
      *
-     * @return static
+     * @return AddressInterface
      *
      * @throws InvalidArgumentException
      *
@@ -595,24 +536,22 @@ class Address extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Address::$companyName
      */
-    public function setCompanyName(?string $companyName): Address
+    public function setCompanyName(?string $companyName): AddressInterface
     {
-        $this->companyName = ValidateAndFix::companyName($companyName);
+        $this->companyName = $this->validate->companyName($companyName);
 
         return $this;
     }
 
     /**
-     * Get country code
+     * Get country code.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Address::$countrycode
      */
     public function getCountrycode(): ?string
@@ -621,13 +560,13 @@ class Address extends AbstractEntity
     }
 
     /**
-     * Set country code
+     * Set country code.
      *
      * @pattern ^[A-Z]{2}$
      *
      * @param string|null $countrycode
      *
-     * @return static
+     * @return AddressInterface
      *
      * @throws InvalidArgumentException
      *
@@ -635,24 +574,22 @@ class Address extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Address::$countrycode
      */
-    public function setCountrycode(?string $countrycode): Address
+    public function setCountrycode(?string $countrycode): AddressInterface
     {
-        $this->countrycode = ValidateAndFix::isoAlpha2CountryCode($countrycode);
+        $this->countrycode = $this->validate->isoAlpha2CountryCode($countrycode);
 
         return $this;
     }
 
     /**
-     * Get department
+     * Get department.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Address::$department
      */
     public function getDepartment(): ?string
@@ -661,13 +598,13 @@ class Address extends AbstractEntity
     }
 
     /**
-     * Set department
+     * Set department.
      *
      * @pattern ^.{0,35}$
      *
      * @param string|null $department
      *
-     * @return static
+     * @return AddressInterface
      *
      * @throws InvalidArgumentException
      *
@@ -675,24 +612,22 @@ class Address extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Address::$department
      */
-    public function setDepartment(?string $department): Address
+    public function setDepartment(?string $department): AddressInterface
     {
-        $this->department = ValidateAndFix::department($department);
+        $this->department = $this->validate->department($department);
 
         return $this;
     }
 
     /**
-     * Get door code
+     * Get door code.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Address::$doorcode
      */
     public function getDoorcode(): ?string
@@ -701,13 +636,13 @@ class Address extends AbstractEntity
     }
 
     /**
-     * Set door code
+     * Set door code.
      *
      * @pattern ^.{0,35}$
      *
      * @param string|null $doorcode
      *
-     * @return static
+     * @return AddressInterface
      *
      * @throws InvalidArgumentException
      *
@@ -715,24 +650,22 @@ class Address extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Address::$doorcode
      */
-    public function setDoorcode(?string $doorcode): Address
+    public function setDoorcode(?string $doorcode): AddressInterface
     {
-        $this->doorcode = ValidateAndFix::doorcode($doorcode);
+        $this->doorcode = $this->validate->doorcode($doorcode);
 
         return $this;
     }
 
     /**
-     * Get first name
+     * Get first name.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Address::$firstname
      */
     public function getFirstname(): ?string
@@ -741,13 +674,13 @@ class Address extends AbstractEntity
     }
 
     /**
-     * Set first name
+     * Set first name.
      *
      * @pattern ^.{0,35}$
      *
      * @param string|null $firstName
      *
-     * @return static
+     * @return AddressInterface
      *
      * @throws InvalidArgumentException
      *
@@ -755,24 +688,22 @@ class Address extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Address::$firstname
      */
-    public function setFirstname(?string $firstName): Address
+    public function setFirstname(?string $firstName): AddressInterface
     {
-        $this->firstname = ValidateAndFix::firstName($firstName);
+        $this->firstname = $this->validate->firstName($firstName);
 
         return $this;
     }
 
     /**
-     * Get last name
+     * Get last name.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Address::getName()
      */
     public function getLastname(): ?string
@@ -781,13 +712,13 @@ class Address extends AbstractEntity
     }
 
     /**
-     * Set last name
+     * Set last name.
      *
      * @pattern ^.{0,35}$
      *
      * @param string|null $lastname
      *
-     * @return Address
+     * @return AddressInterface
      *
      * @throws InvalidArgumentException
      *
@@ -795,22 +726,20 @@ class Address extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Address::setName()
      */
-    public function setLastname(?string $lastname): Address
+    public function setLastname(?string $lastname): AddressInterface
     {
         return $this->setName($lastname);
     }
 
     /**
-     * Get floor
+     * Get floor.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Address::$floor
      */
     public function getFloor(): ?string
@@ -819,13 +748,13 @@ class Address extends AbstractEntity
     }
 
     /**
-     * Set floor
+     * Set floor.
      *
      * @pattern ^.{0,35}$
      *
      * @param string|null $floor
      *
-     * @return static
+     * @return AddressInterface
      *
      * @throws InvalidArgumentException
      * @throws ReflectionException
@@ -834,10 +763,9 @@ class Address extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Address::$floor
      */
-    public function setFloor(?string $floor): Address
+    public function setFloor(?string $floor): AddressInterface
     {
         static $maxLength = 35;
         if (is_string($floor) && mb_strlen($floor) > $maxLength) {
@@ -850,13 +778,12 @@ class Address extends AbstractEntity
     }
 
     /**
-     * Get house number
+     * Get house number.
      *
      * @return string|int|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Address::$houseNr
      */
     public function getHouseNr()
@@ -865,13 +792,13 @@ class Address extends AbstractEntity
     }
 
     /**
-     * Set house number
+     * Set house number.
      *
      * @pattern ^.{0,35}$
      *
      * @param string|int|null $houseNr
      *
-     * @return static
+     * @return AddressInterface
      *
      * @throws InvalidArgumentException
      * @throws ReflectionException
@@ -880,10 +807,9 @@ class Address extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Address::$houseNr
      */
-    public function setHouseNr($houseNr): Address
+    public function setHouseNr($houseNr): AddressInterface
     {
         if (is_int($houseNr)) {
             $houseNr = (string) $houseNr;
@@ -891,14 +817,10 @@ class Address extends AbstractEntity
         if (is_string($houseNr)) {
             if ($this->countrycode && in_array($this->countrycode, ['NL', 'BE', 'LU'])) {
                 if (mb_strlen($houseNr) > 5) {
-                    throw new InvalidArgumentException(
-                        sprintf('%s::%s - Invalid house number given, must be max 5 characters long for NL, BE & LU', (new ReflectionClass($this))->getShortName(), __METHOD__)
-                    );
+                    throw new InvalidArgumentException(sprintf('%s::%s - Invalid house number given, must be max 5 characters long for NL, BE & LU', (new ReflectionClass($this))->getShortName(), __METHOD__));
                 }
             } elseif (mb_strlen($houseNr) > 35) {
-                throw new InvalidArgumentException(
-                    sprintf('%s::%s - Invalid house number given, must be max 35 characters long outside NL, BE & LU', (new ReflectionClass($this))->getShortName(), __METHOD__)
-                );
+                throw new InvalidArgumentException(sprintf('%s::%s - Invalid house number given, must be max 35 characters long outside NL, BE & LU', (new ReflectionClass($this))->getShortName(), __METHOD__));
             }
         }
 
@@ -908,13 +830,12 @@ class Address extends AbstractEntity
     }
 
     /**
-     * Get house number extension
+     * Get house number extension.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Address::$houseNrExt
      */
     public function getHouseNrExt(): ?string
@@ -923,13 +844,13 @@ class Address extends AbstractEntity
     }
 
     /**
-     * Set house number extension
+     * Set house number extension.
      *
      * @pattern ^.{0,35}$
      *
      * @param string|int|null $houseNrExt
      *
-     * @return static
+     * @return AddressInterface
      *
      * @throws InvalidArgumentException
      * @throws ReflectionException
@@ -938,19 +859,16 @@ class Address extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Address::$houseNrExt
      */
-    public function setHouseNrExt($houseNrExt): Address
+    public function setHouseNrExt($houseNrExt): AddressInterface
     {
         static $maxLength = 35;
         if (is_int($houseNrExt)) {
             $houseNrExt = (string) $houseNrExt;
         }
         if (is_string($houseNrExt) && mb_strlen($houseNrExt) > $maxLength) {
-            throw new InvalidArgumentException(
-                sprintf('%s::%s - Invalid house number extension given, must be max %d characters long', (new ReflectionClass($this))->getShortName(), __METHOD__, $maxLength)
-            );
+            throw new InvalidArgumentException(sprintf('%s::%s - Invalid house number extension given, must be max %d characters long', (new ReflectionClass($this))->getShortName(), __METHOD__, $maxLength));
         }
         $this->houseNrExt = $houseNrExt;
 
@@ -958,13 +876,12 @@ class Address extends AbstractEntity
     }
 
     /**
-     * Get street + house number + extension
+     * Get street + house number + extension.
      *
      * @return string|null
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Address::$streetHouseNrExt
      */
     public function getStreetHouseNrExt(): ?string
@@ -973,37 +890,35 @@ class Address extends AbstractEntity
     }
 
     /**
-     * Set street + house number + extension
+     * Set street + house number + extension.
      *
      * @pattern ^.{0,95}$
      *
      * @param string|null $streetHouseNrExt
      *
-     * @return static
+     * @return AddressInterface
      *
      * @throws InvalidArgumentException
      *
      * @example Siriusdreef 42 A
      *
      * @since   2.0.0 Strict typing
-     *
      * @see     Address::$streetHouseNrExt
      */
-    public function setStreetHouseNrExt(?string $streetHouseNrExt): Address
+    public function setStreetHouseNrExt(?string $streetHouseNrExt): AddressInterface
     {
-        $this->streetHouseNrExt = ValidateAndFix::streetHouseNumberExtension($streetHouseNrExt);
+        $this->streetHouseNrExt = $this->validate->streetHouseNumberExtension($streetHouseNrExt);
 
         return $this;
     }
 
     /**
-     * Get last name
+     * Get last name.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Address::$name
      */
     public function getName(): ?string
@@ -1012,13 +927,13 @@ class Address extends AbstractEntity
     }
 
     /**
-     * Set last name
+     * Set last name.
      *
      * @pattern ^.{0,35}$
      *
      * @param string|null $name
      *
-     * @return static
+     * @return AddressInterface
      *
      * @throws InvalidArgumentException
      *
@@ -1026,24 +941,22 @@ class Address extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Address::$name
      */
-    public function setName(?string $name): Address
+    public function setName(?string $name): AddressInterface
     {
-        $this->name = ValidateAndFix::lastName($name);
+        $this->name = $this->validate->lastName($name);
 
         return $this;
     }
 
     /**
-     * Get region
+     * Get region.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Address::$region
      */
     public function getRegion(): ?string
@@ -1052,13 +965,13 @@ class Address extends AbstractEntity
     }
 
     /**
-     * Set region
+     * Set region.
      *
      * @pattern ^.{0,35}$
      *
      * @param string|null $region
      *
-     * @return static
+     * @return AddressInterface
      *
      * @throws InvalidArgumentException
      *
@@ -1066,24 +979,22 @@ class Address extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Address::$region
      */
-    public function setRegion(?string $region): Address
+    public function setRegion(?string $region): AddressInterface
     {
-        $this->region = ValidateAndFix::region($region);
+        $this->region = $this->validate->region($region);
 
         return $this;
     }
 
     /**
-     * Get remark
+     * Get remark.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Address::$remark
      */
     public function getRemark(): ?string
@@ -1092,13 +1003,13 @@ class Address extends AbstractEntity
     }
 
     /**
-     * Set remark
+     * Set remark.
      *
      * @pattern ^.{0,1000}$
      *
      * @param string|null $remark
      *
-     * @return static
+     * @return AddressInterface
      *
      * @throws InvalidArgumentException
      *
@@ -1106,24 +1017,22 @@ class Address extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Address::$remark
      */
-    public function setRemark(?string $remark): Address
+    public function setRemark(?string $remark): AddressInterface
     {
-        $this->remark = ValidateAndFix::remark($remark);
+        $this->remark = $this->validate->remark($remark);
 
         return $this;
     }
 
     /**
-     * Get street
+     * Get street.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Address::$street
      */
     public function getStreet(): ?string
@@ -1132,13 +1041,13 @@ class Address extends AbstractEntity
     }
 
     /**
-     * Set street
+     * Set street.
      *
      * @pattern ^.{0,95}$
      *
      * @param string|null $street
      *
-     * @return static
+     * @return AddressInterface
      *
      * @throws InvalidArgumentException
      *
@@ -1146,12 +1055,11 @@ class Address extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Address::$street
      */
-    public function setStreet(?string $street): Address
+    public function setStreet(?string $street): AddressInterface
     {
-        $this->street = ValidateAndFix::street($street);
+        $this->street = $this->validate->street($street);
 
         return $this;
     }

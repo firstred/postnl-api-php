@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,9 +23,7 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -31,56 +31,55 @@ namespace Firstred\PostNL\Entity\Request;
 
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Misc\ValidateAndFix;
 
 /**
- * Class FindNearestLocationsGeocodeRequest
+ * Class FindNearestLocationsGeocodeRequest.
  *
  * This class is both the container and can be the actual GetLocationsInArea object itself!
  */
-class FindNearestLocationsGeocodeRequest extends AbstractEntity
+final class FindNearestLocationsGeocodeRequest extends AbstractEntity
 {
     /**
-     * Latitude
+     * Latitude.
      *
      * @pattern ^\d{1,2}\.\d{1,15}$
      *
      * @example 52.156439
      *
-     * @var float|null $latitude
+     * @var float|null
      *
      * @since   2.0.0
      */
-    protected $latitude;
+    private $latitude;
 
     /**
-     * Longitude
+     * Longitude.
      *
      * @pattern ^\d{1,2}\.\d{1,15}$
      *
      * @example 52.156439
      *
-     * @var float|null $longitude
+     * @var float|null
      *
      * @since   2.0.0
      */
-    protected $longitude;
+    private $longitude;
 
     /**
-     * Country code
+     * Country code.
      *
      * @pattern ^(?:NL|BE)$
      *
      * @example NL
      *
-     * @var string|null $countrycode
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $countrycode;
+    private $countrycode;
 
     /**
-     * Delivery options
+     * Delivery options.
      *
      * Available values are:
      * - PG: pickup from 3PM
@@ -90,71 +89,44 @@ class FindNearestLocationsGeocodeRequest extends AbstractEntity
      *
      * @example PG
      *
-     * @var array $deliveryOptions
+     * @var array
      *
      * @since   2.0.0
      */
-    protected $deliveryOptions = [];
+    private $deliveryOptions = [];
 
     /**
-     * Delivery date
+     * Delivery date.
      *
      * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}$
      *
      * @example 03-07-2019
      *
-     * @var string|null $deliveryDate
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $deliveryDate;
+    private $deliveryDate;
 
     /**
-     * Opening time
+     * Opening time.
      *
      * @pattern ^(?:[0-3]\d-[01]\d-[12]\d{3}\s+)[0-2]\d:[0-5]\d(?:[0-5]\d)$
      *
      * @example 10:00:00
      *
-     * @var string|null $openingTime
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $openingTime;
+    private $openingTime;
 
     /**
-     * GetLocationsInArea constructor.
-     *
-     * @param float|string|null $longitude
-     * @param float|string|null $latitude
-     * @param string|null       $countryCode
-     * @param array             $deliveryOptions
-     * @param string|null       $deliveryDate
-     * @param string|null       $openingTime
-     *
-     * @throws InvalidArgumentException
-     *
-     * @since 2.0.0
-     */
-    public function __construct($longitude = null, $latitude = null, ?string $countryCode = null, array $deliveryOptions = ['PG'], ?string $deliveryDate = null, ?string $openingTime = null)
-    {
-        parent::__construct();
-
-        $this->setLongitude($longitude);
-        $this->setLatitude($latitude);
-        $this->setCountrycode($countryCode);
-        $this->setDeliveryOptions($deliveryOptions);
-        $this->setDeliveryDate($deliveryDate);
-        $this->setOpeningTime($openingTime);
-    }
-
-    /**
-     * Get country code
+     * Get country code.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   FindNearestLocationsGeocodeRequest::$countrycode
      */
     public function getCountrycode(): ?string
@@ -163,7 +135,7 @@ class FindNearestLocationsGeocodeRequest extends AbstractEntity
     }
 
     /**
-     * Set country code
+     * Set country code.
      *
      * @pattern ^(?:NL|BE)$
      *
@@ -176,23 +148,21 @@ class FindNearestLocationsGeocodeRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     FindNearestLocationsGeocodeRequest::$countrycode
      */
     public function setCountrycode(?string $countrycode): FindNearestLocationsGeocodeRequest
     {
-        $this->countrycode = ValidateAndFix::isoAlpha2CountryCodeNlBe($countrycode);
+        $this->countrycode = $this->validate->isoAlpha2CountryCodeNlBe($countrycode);
 
         return $this;
     }
 
     /**
-     * Get latitude
+     * Get latitude.
      *
      * @return float|null
      *
      * @since 2.0.0 Strict typing
-     *
      * @see   FindNearestLocationsGeocodeRequest::$latitude
      */
     public function getLatitude(): ?float
@@ -201,7 +171,7 @@ class FindNearestLocationsGeocodeRequest extends AbstractEntity
     }
 
     /**
-     * Set latitude
+     * Set latitude.
      *
      * @pattern ^\d{1,2}\.\d{1,15}$
      *
@@ -214,23 +184,21 @@ class FindNearestLocationsGeocodeRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0 Strict typing
-     *
      * @see     FindNearestLocationsGeocodeRequest::$latitude
      */
     public function setLatitude($latitude): FindNearestLocationsGeocodeRequest
     {
-        $this->latitude = ValidateAndFix::coordinate($latitude);
+        $this->latitude = $this->validate->coordinate($latitude);
 
         return $this;
     }
 
     /**
-     * Get longitude
+     * Get longitude.
      *
      * @return float|null
      *
      * @since 2.0.0 Strict typing
-     *
      * @see   FindNearestLocationsGeocodeRequest::$longitude
      */
     public function getLongitude(): ?float
@@ -239,7 +207,7 @@ class FindNearestLocationsGeocodeRequest extends AbstractEntity
     }
 
     /**
-     * Set longitude
+     * Set longitude.
      *
      * @pattern ^\d{1,2}\.\d{1,15}$
      *
@@ -252,23 +220,21 @@ class FindNearestLocationsGeocodeRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0 Strict typing
-     *
      * @see     FindNearestLocationsGeocodeRequest::$longitude
      */
     public function setLongitude($longitude): FindNearestLocationsGeocodeRequest
     {
-        $this->longitude = ValidateAndFix::coordinate($longitude);
+        $this->longitude = $this->validate->coordinate($longitude);
 
         return $this;
     }
 
     /**
-     * Get delivery options
+     * Get delivery options.
      *
      * @return array
      *
      * @since 2.0.0 Strict typing
-     *
      * @see   FindNearestLocationsGeocodeRequest::$deliveryOptions
      */
     public function getDeliveryOptions(): array
@@ -277,7 +243,7 @@ class FindNearestLocationsGeocodeRequest extends AbstractEntity
     }
 
     /**
-     * Set delivery options
+     * Set delivery options.
      *
      * @pattern ^(?:PG|PGE)$
      *
@@ -288,7 +254,6 @@ class FindNearestLocationsGeocodeRequest extends AbstractEntity
      * @return static
      *
      * @since   2.0.0 Strict typing
-     *
      * @see     FindNearestLocationsGeocodeRequest::$deliveryOptions
      */
     public function setDeliveryOptions(array $deliveryOptions): FindNearestLocationsGeocodeRequest
@@ -299,12 +264,11 @@ class FindNearestLocationsGeocodeRequest extends AbstractEntity
     }
 
     /**
-     * Get delivery date
+     * Get delivery date.
      *
      * @return string|null
      *
      * @since 2.0.0 Strict typing
-     *
      * @see   FindNearestLocationsGeocodeRequest::$deliveryDate
      */
     public function getDeliveryDate(): ?string
@@ -313,7 +277,7 @@ class FindNearestLocationsGeocodeRequest extends AbstractEntity
     }
 
     /**
-     * Set delivery date
+     * Set delivery date.
      *
      * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}$
      *
@@ -326,23 +290,21 @@ class FindNearestLocationsGeocodeRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0 Strict typing
-     *
      * @see     FindNearestLocationsGeocodeRequest::$deliveryDate
      */
     public function setDeliveryDate(?string $deliveryDate): FindNearestLocationsGeocodeRequest
     {
-        $this->deliveryDate = ValidateAndFix::date($deliveryDate);
+        $this->deliveryDate = $this->validate->date($deliveryDate);
 
         return $this;
     }
 
     /**
-     * Get opening time
+     * Get opening time.
      *
      * @return string|null
      *
      * @since 2.0.0 Strict typing
-     *
      * @see   FindNearestLocationsGeocodeRequest::$openingTime
      */
     public function getOpeningTime(): ?string
@@ -351,7 +313,7 @@ class FindNearestLocationsGeocodeRequest extends AbstractEntity
     }
 
     /**
-     * Set opening time
+     * Set opening time.
      *
      * @pattern ^(?:[0-3]\d-[01]\d-[12]\d{3}\s+)[0-2]\d:[0-5]\d(?:[0-5]\d)$
      *
@@ -364,12 +326,11 @@ class FindNearestLocationsGeocodeRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0 Strict typing
-     *
      * @see     FindNearestLocationsGeocodeRequest::$openingTime
      */
     public function setOpeningTime(?string $openingTime): FindNearestLocationsGeocodeRequest
     {
-        $this->openingTime = ValidateAndFix::time($openingTime);
+        $this->openingTime = $this->validate->time($openingTime);
 
         return $this;
     }

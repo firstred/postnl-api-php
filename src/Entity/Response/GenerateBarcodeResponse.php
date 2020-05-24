@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,55 +23,37 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Entity\Response;
 
 /**
- * Class GenerateBarcodeResponse
+ * Class GenerateBarcodeResponse.
  */
-class GenerateBarcodeResponse extends AbstractResponse
+final class GenerateBarcodeResponse extends AbstractResponse
 {
     /**
-     * Barcode
+     * Barcode.
      *
      * @pattern ^.{11,15}$
      *
      * @example 3SDEVC2016112104
      *
-     * @var string|null $barcode
+     * @var string|null
      *
      * @since   1.0.0
      */
-    protected $barcode;
+    private $barcode;
 
     /**
-     * GenerateBarcodeResponse constructor.
-     *
-     * @param string|null $barcode
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function __construct($barcode = null)
-    {
-        parent::__construct();
-
-        $this->setBarcode($barcode);
-    }
-
-    /**
-     * Get barcode
+     * Get barcode.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   GenerateBarcodeResponse::$barcode
      */
     public function getBarcode(): ?string
@@ -78,7 +62,7 @@ class GenerateBarcodeResponse extends AbstractResponse
     }
 
     /**
-     * Set barcode
+     * Set barcode.
      *
      * @pattern ^.{11,15}$
      *
@@ -90,7 +74,6 @@ class GenerateBarcodeResponse extends AbstractResponse
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     GenerateBarcodeResponse::$barcode
      */
     public function setBarcode(?string $barcode): GenerateBarcodeResponse

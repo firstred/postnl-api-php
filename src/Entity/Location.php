@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,37 +23,34 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Misc\ValidateAndFix;
 
 /**
- * Class Location
+ * Class Location.
  */
-class Location extends AbstractEntity
+final class Location extends AbstractEntity implements LocationInterface
 {
     /**
-     * Address
+     * Address.
      *
      * @pattern N/A
      *
      * @example N/A
      *
-     * @var Address|null $address
+     * @var AddressInterface|null
      *
      * @since   2.0.0
      */
-    protected $address;
+    private $address;
 
     /**
-     * Delivery Options
+     * Delivery Options.
      *
      * Available values:
      *
@@ -71,115 +70,115 @@ class Location extends AbstractEntity
      *
      * @example PGE
      *
-     * @var string[]|null $deliveryOptions
+     * @var string[]|null
      *
      * @since   2.0.0
      */
-    protected $deliveryOptions;
+    private $deliveryOptions;
 
     /**
-     * Distance in meters
+     * Distance in meters.
      *
      * @pattern ^\d{1,10}$
      *
      * @example 1200
      *
-     * @var int|null $distance
+     * @var int|null
      *
      * @since   2.0.0
      */
-    protected $distance;
+    private $distance;
 
     /**
-     * The latitude of the location
+     * The latitude of the location.
      *
      * @pattern ^\d{1,2}\.\d{1,15}$
      *
      * @example 52.156439
      *
-     * @var float|null $latitude
+     * @var float|null
      *
      * @since   1.0.0
      */
-    protected $latitude;
+    private $latitude;
 
     /**
-     * Code of the location
+     * Code of the location.
      *
      * @pattern ^.{0,35}$
      *
      * @example 161503
      *
-     * @var int|null $locationCode
+     * @var int|null
      *
      * @since   2.0.0
      */
-    protected $locationCode;
+    private $locationCode;
 
     /**
-     * The longitude of the location
+     * The longitude of the location.
      *
      * @pattern ^\d{1,2}\.\d{1,15}$
      *
      * @example 5.015643
      *
-     * @var float|null $longitude
+     * @var float|null
      *
      * @since   1.0.0
      */
-    protected $longitude;
+    private $longitude;
 
     /**
-     * Location name
+     * Location name.
      *
      * @pattern ^.{0,35}$
      *
      * @example Primera Sanders
      *
-     * @var string|null $name
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $name;
+    private $name;
 
     /**
-     * Opening hours
+     * Opening hours.
      *
      * @pattern N/A
      *
      * @example N/A
      *
-     * @var OpeningHours|null $openingHours
+     * @var OpeningHoursInterface|null
      *
      * @since   2.0.0
      */
-    protected $openingHours;
+    private $openingHours;
 
     /**
-     * Partner name of the location
+     * Partner name of the location.
      *
      * @pattern ^.{0,35}%
      *
      * @example PostNL
      *
-     * @var string|null $partnerName
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $partnerName;
+    private $partnerName;
 
     /**
-     * Phone number of the location
+     * Phone number of the location.
      *
      * @pattern ^.{0,35}$
      *
      * @example 023-1234567
      *
-     * @var string|null $phoneNumber
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $phoneNumber;
+    private $phoneNumber;
 
     /**
      * RetailNetworkID information. Always use PNPNL-01 for Dutch locations. For Belgium locations use LD-01.
@@ -188,68 +187,57 @@ class Location extends AbstractEntity
      *
      * @example PNPNL-01
      *
-     * @var string|null $retailNetworkID
+     * @var string|null
      *
      * @since 1.0.0
      */
-    protected $retailNetworkID;
+    private $retailNetworkID;
 
     /**
-     * Sales channel of the location
+     * Sales channel of the location.
      *
      * @pattern ^.{0,35}$
      *
      * @example PKT XL
      *
-     * @var string|null $saleschannel
+     * @var string|null
      *
      * @since 1.0.0
      */
-    protected $saleschannel;
+    private $saleschannel;
 
     /**
-     * Terminal Type
+     * Terminal Type.
      *
      * @pattern ^.{0,35}$
      *
      * @example NRS
      *
-     * @var string|null $terminalType
+     * @var string|null
      *
      * @since 1.0.0
      */
-    protected $terminalType;
+    private $terminalType;
 
     /**
-     * The pickup date from when the parcel can be picked up, as returned by the Checkout API
+     * The pickup date from when the parcel can be picked up, as returned by the Checkout API.
      *
      * @pattern ^(?:[0-3]\d-[01]\d-[12]\d{3})$
      *
      * @example 03-08-2019
      *
-     * @var string|null $pickupDate
+     * @var string|null
      *
      * @since 2.0.0
      */
-    protected $pickupDate;
+    private $pickupDate;
 
     /**
-     * Location constructor.
-     *
-     * @since 2.0.0
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
-     * Get distance
+     * Get distance.
      *
      * @return int|null
      *
      * @since 2.0.0
-     *
      * @see   Location::$distance
      */
     public function getDistance(): ?int
@@ -258,7 +246,7 @@ class Location extends AbstractEntity
     }
 
     /**
-     * Set distance
+     * Set distance.
      *
      * @pattern ^\d{1,10}$
      *
@@ -271,23 +259,21 @@ class Location extends AbstractEntity
      * @example 1200
      *
      * @since   2.0.0
-     *
      * @see     Location::$distance
      */
-    public function setDistance($distance): Location
+    public function setDistance($distance): LocationInterface
     {
-        $this->distance = ValidateAndFix::distance($distance);
+        $this->distance = $this->validate->distance($distance);
 
         return $this;
     }
 
     /**
-     * Get delivery options
+     * Get delivery options.
      *
      * @return string[]|null
      *
      * @since 2.0.0
-     *
      * @see Location::$deliveryOptions
      */
     public function getDeliveryOptions(): ?array
@@ -296,7 +282,7 @@ class Location extends AbstractEntity
     }
 
     /**
-     * Set delivery options
+     * Set delivery options.
      *
      * @pattern ^.{0,35}$
      *
@@ -308,10 +294,9 @@ class Location extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Location::$deliveryOptions
      */
-    public function setDeliveryOptions(?array $deliveryOptions): Location
+    public function setDeliveryOptions(?array $deliveryOptions): LocationInterface
     {
         $this->deliveryOptions = $deliveryOptions;
 
@@ -319,12 +304,11 @@ class Location extends AbstractEntity
     }
 
     /**
-     * Get latitude
+     * Get latitude.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   Location::$latitude
      */
     public function getLatitude(): ?string
@@ -333,7 +317,7 @@ class Location extends AbstractEntity
     }
 
     /**
-     * Set latitude
+     * Set latitude.
      *
      * @pattern ^\d{1,2}\.\d{1,15}$
      *
@@ -346,23 +330,21 @@ class Location extends AbstractEntity
      * @example 52.156439
      *
      * @since   2.0.0
-     *
      * @see     Location::$latitude
      */
-    public function setLatitude($latitude): Location
+    public function setLatitude($latitude): LocationInterface
     {
-        $this->latitude = ValidateAndFix::coordinate($latitude);
+        $this->latitude = $this->validate->coordinate($latitude);
 
         return $this;
     }
 
     /**
-     * Get longitude
+     * Get longitude.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   Location::$longitude
      */
     public function getLongitude(): ?string
@@ -371,7 +353,7 @@ class Location extends AbstractEntity
     }
 
     /**
-     * Set longitude
+     * Set longitude.
      *
      * @pattern ^\d{1,2}\.\d{1,15}$
      *
@@ -384,36 +366,34 @@ class Location extends AbstractEntity
      * @example 5.015643
      *
      * @since   2.0.0
-     *
      * @see     Location::$longitude
      */
-    public function setLongitude($longitude): Location
+    public function setLongitude($longitude): LocationInterface
     {
-        $this->longitude = ValidateAndFix::coordinate($longitude);
+        $this->longitude = $this->validate->coordinate($longitude);
 
         return $this;
     }
 
     /**
-     * Get opening hours
+     * Get opening hours.
      *
-     * @return OpeningHours|null
+     * @return OpeningHoursInterface|null
      *
      * @since 2.0.0
-     *
      * @see   Location::$openingHours
      */
-    public function getOpeningHours(): ?OpeningHours
+    public function getOpeningHours(): ?OpeningHoursInterface
     {
         return $this->openingHours;
     }
 
     /**
-     * Set opening hours
+     * Set opening hours.
      *
      * @pattern N/A
      *
-     * @param OpeningHours|null $openingHours
+     * @param OpeningHoursInterface|null $openingHours
      *
      * @return static
      *
@@ -421,10 +401,9 @@ class Location extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Location::$openingHours
      */
-    public function setOpeningHours(?OpeningHours $openingHours): Location
+    public function setOpeningHours(?OpeningHoursInterface $openingHours): LocationInterface
     {
         $this->openingHours = $openingHours;
 
@@ -432,12 +411,11 @@ class Location extends AbstractEntity
     }
 
     /**
-     * Get location code
+     * Get location code.
      *
      * @return int|null
      *
      * @since 2.0.0
-     *
      * @see   Location::$locationCode
      */
     public function getLocationCode(): ?int
@@ -446,7 +424,7 @@ class Location extends AbstractEntity
     }
 
     /**
-     * Set location code
+     * Set location code.
      *
      * @pattern ^.{0,35}$
      *
@@ -460,23 +438,21 @@ class Location extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Location::$locationCode
      */
-    public function setLocationCode($locationCode): Location
+    public function setLocationCode($locationCode): LocationInterface
     {
-        $this->locationCode = ValidateAndFix::integer($locationCode);
+        $this->locationCode = $this->validate->integer($locationCode);
 
         return $this;
     }
 
     /**
-     * Get sales channel
+     * Get sales channel.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   Location::$saleschannel
      */
     public function getSaleschannel(): ?string
@@ -485,7 +461,7 @@ class Location extends AbstractEntity
     }
 
     /**
-     * Set sales channel
+     * Set sales channel.
      *
      * @pattern ^.{0,35}$
      *
@@ -499,23 +475,21 @@ class Location extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Location::$saleschannel
      */
-    public function setSaleschannel(?string $saleschannel): Location
+    public function setSaleschannel(?string $saleschannel): LocationInterface
     {
-        $this->saleschannel = ValidateAndFix::genericString($saleschannel);
+        $this->saleschannel = $this->validate->genericString($saleschannel);
 
         return $this;
     }
 
     /**
-     * Get terminal type
+     * Get terminal type.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   Location::$terminalType
      */
     public function getTerminalType(): ?string
@@ -524,7 +498,7 @@ class Location extends AbstractEntity
     }
 
     /**
-     * Set terminal type
+     * Set terminal type.
      *
      * @pattern ^.{0,35}$
      *
@@ -538,23 +512,21 @@ class Location extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Location::$terminalType
      */
-    public function setTerminalType(?string $terminalType): Location
+    public function setTerminalType(?string $terminalType): LocationInterface
     {
-        $this->terminalType = ValidateAndFix::genericString($terminalType);
+        $this->terminalType = $this->validate->genericString($terminalType);
 
         return $this;
     }
 
     /**
-     * Get retail network ID
+     * Get retail network ID.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   Location::$retailNetworkID
      */
     public function getRetailNetworkID(): ?string
@@ -563,7 +535,7 @@ class Location extends AbstractEntity
     }
 
     /**
-     * Set retail network ID
+     * Set retail network ID.
      *
      * @pattern ^.{0,35}$
      *
@@ -577,23 +549,21 @@ class Location extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Location::$retailNetworkID
      */
-    public function setRetailNetworkID(?string $retailNetworkID): Location
+    public function setRetailNetworkID(?string $retailNetworkID): LocationInterface
     {
-        $this->retailNetworkID = ValidateAndFix::genericString($retailNetworkID);
+        $this->retailNetworkID = $this->validate->genericString($retailNetworkID);
 
         return $this;
     }
 
     /**
-     * Get partner name
+     * Get partner name.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   Location::$partnerName
      */
     public function getPartnerName(): ?string
@@ -602,7 +572,7 @@ class Location extends AbstractEntity
     }
 
     /**
-     * Set partner name
+     * Set partner name.
      *
      * @pattern ^.{0,35}%
      *
@@ -615,46 +585,43 @@ class Location extends AbstractEntity
      * @example PostNL
      *
      * @since   2.0.0
-     *
      * @see     Location::$partnerName
      */
-    public function setPartnerName(?string $partnerName): Location
+    public function setPartnerName(?string $partnerName): LocationInterface
     {
-        $this->partnerName = ValidateAndFix::genericString($partnerName);
+        $this->partnerName = $this->validate->genericString($partnerName);
 
         return $this;
     }
 
     /**
-     * Get address
+     * Get address.
      *
-     * @return Address|null
+     * @return AddressInterface|null
      *
      * @since 2.0.0
-     *
      * @see   Address
      */
-    public function getAddress(): ?Address
+    public function getAddress(): ?AddressInterface
     {
         return $this->address;
     }
 
     /**
-     * Set address
+     * Set address.
      *
      * @pattern N/A
      *
-     * @param Address|null $address
+     * @param AddressInterface|null $address
      *
      * @return static
      *
      * @example N/A
      *
      * @since   2.0.0
-     *
      * @see     Address
      */
-    public function setAddress(?Address $address): Location
+    public function setAddress(?AddressInterface $address): LocationInterface
     {
         $this->address = $address;
 
@@ -662,12 +629,11 @@ class Location extends AbstractEntity
     }
 
     /**
-     * Get location name
+     * Get location name.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   Location::$name
      */
     public function getName(): ?string
@@ -676,7 +642,7 @@ class Location extends AbstractEntity
     }
 
     /**
-     * Set location name
+     * Set location name.
      *
      * @pattern ^.{0,35}$
      *
@@ -687,10 +653,9 @@ class Location extends AbstractEntity
      * @example Primera Sanders
      *
      * @since   2.0.0
-     *
      * @see     Location::$name
      */
-    public function setName(?string $name): Location
+    public function setName(?string $name): LocationInterface
     {
         $this->name = $name;
 
@@ -698,12 +663,11 @@ class Location extends AbstractEntity
     }
 
     /**
-     * Get phone number
+     * Get phone number.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   Location::$phoneNumber
      */
     public function getPhoneNumber(): ?string
@@ -712,7 +676,7 @@ class Location extends AbstractEntity
     }
 
     /**
-     * Set phone number
+     * Set phone number.
      *
      * @pattern ^.{0,35}$
      *
@@ -723,10 +687,9 @@ class Location extends AbstractEntity
      * @example 023-1234567
      *
      * @since   2.0.0
-     *
      * @see     Location::$phoneNumber
      */
-    public function setPhoneNumber(?string $phoneNumber): Location
+    public function setPhoneNumber(?string $phoneNumber): LocationInterface
     {
         $this->phoneNumber = $phoneNumber;
 
@@ -734,12 +697,11 @@ class Location extends AbstractEntity
     }
 
     /**
-     * Get pick up date
+     * Get pick up date.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   Location::$pickupDate
      */
     public function getPickupDate(): ?string
@@ -748,7 +710,7 @@ class Location extends AbstractEntity
     }
 
     /**
-     * Set pickup date
+     * Set pickup date.
      *
      * @pattern ^(?:[0-3]\d-[01]\d-[12]\d{3})$
      *
@@ -759,10 +721,9 @@ class Location extends AbstractEntity
      * @example 03-08-2019
      *
      * @since   2.0.0
-     *
      * @see     Location::$pickupDate
      */
-    public function setPickupDate(?string $pickupDate): Location
+    public function setPickupDate(?string $pickupDate): LocationInterface
     {
         $this->pickupDate = $pickupDate;
 

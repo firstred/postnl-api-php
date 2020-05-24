@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -20,9 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -31,12 +29,12 @@ namespace Firstred\PostNL\Misc;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 
 /**
- * Trait FlexibleEntityTrait
+ * Trait FlexibleEntityTrait.
  */
 trait FlexibleEntityTrait
 {
     /**
-     * Add additional properties
+     * Add additional properties.
      *
      * @param string $name
      * @param mixed  $value

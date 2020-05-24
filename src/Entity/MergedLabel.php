@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,100 +23,76 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Entity;
 
 /**
- * Class MergedLabel
+ * Class MergedLabel.
  */
-class MergedLabel extends AbstractEntity
+final class MergedLabel extends AbstractEntity implements MergedLabelInterface
 {
     /**
-     * Product code delivery
+     * Product code delivery.
      *
      * @pattern ^.{0,35}$
      *
      * @example 003085
      *
-     * @var int $productCodeDelivery
+     * @var int
      *
      * @since   1.0.0
      */
-    protected $productCodeDelivery;
+    private $productCodeDelivery;
 
     /**
-     * Barcodes
+     * Barcodes.
      *
      * @pattern N/A
      *
      * @example N/A
      *
-     * @var string[]|null $barcodes
+     * @var string[]|null
      *
      * @since   1.0.0
      */
-    protected $barcodes;
+    private $barcodes;
 
     /**
-     * Warnings
+     * Warnings.
      *
      * @pattern N/A
      *
      * @example N/A
      *
-     * @var Warning[]|null
+     * @var WarningInterface[]|null
      *
      * @since   1.0.0
      */
-    protected $warnings;
+    private $warnings;
 
     /**
-     * Labels
+     * Labels.
      *
      * @pattern N/A
      *
      * @example N/A
      *
-     * @var Label[]|null $labels
+     * @var LabelInterface[]|null
      *
      * @since   1.0.0
      */
-    protected $labels;
+    private $labels;
 
     /**
-     * MergedLabel constructor.
-     *
-     * @param int|null       $productCodeDelivery
-     * @param string[]|null  $barcodes
-     * @param Warning[]|null $warnings
-     * @param Label[]|null   $labels
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function __construct(?int $productCodeDelivery = null, array $barcodes = null, array $warnings = null, array $labels = null)
-    {
-        parent::__construct();
-
-        $this->setProductCodeDelivery($productCodeDelivery);
-        $this->setBarcodes($barcodes);
-        $this->setWarnings($warnings);
-        $this->setLabels($labels);
-    }
-
-    /**
-     * Get product code delivery
+     * Get product code delivery.
      *
      * @return int|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   MergedLabel::$productCodeDelivery
      */
     public function getProductCodeDelivery(): ?int
@@ -123,7 +101,7 @@ class MergedLabel extends AbstractEntity
     }
 
     /**
-     * Set product code delivery
+     * Set product code delivery.
      *
      * @pattern ^.{0,35}$
      *
@@ -135,10 +113,9 @@ class MergedLabel extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     MergedLabel::$productCodeDelivery
      */
-    public function setProductCodeDelivery(?int $productCodeDelivery): MergedLabel
+    public function setProductCodeDelivery(?int $productCodeDelivery): MergedLabelInterface
     {
         $this->productCodeDelivery = $productCodeDelivery;
 
@@ -146,13 +123,12 @@ class MergedLabel extends AbstractEntity
     }
 
     /**
-     * Get barcodes
+     * Get barcodes.
      *
      * @return string[]|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   MergedLabel::$barcodes
      */
     public function getBarcodes(): ?array
@@ -161,7 +137,7 @@ class MergedLabel extends AbstractEntity
     }
 
     /**
-     * Set barcodes
+     * Set barcodes.
      *
      * @example N/A
      *
@@ -173,10 +149,9 @@ class MergedLabel extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     MergedLabel::$barcodes
      */
-    public function setBarcodes(?array $barcodes): MergedLabel
+    public function setBarcodes(?array $barcodes): MergedLabelInterface
     {
         $this->barcodes = $barcodes;
 
@@ -184,13 +159,12 @@ class MergedLabel extends AbstractEntity
     }
 
     /**
-     * Get warnings
+     * Get warnings.
      *
-     * @return Warning[]|null
+     * @return WarningInterface[]|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Warning
      */
     public function getWarnings(): ?array
@@ -199,22 +173,21 @@ class MergedLabel extends AbstractEntity
     }
 
     /**
-     * Set warnings
+     * Set warnings.
      *
      * @pattern N/A
      *
-     * @example N/A
-     *
-     * @param Warning[]|null $warnings
+     * @param WarningInterface[]|null $warnings
      *
      * @return static
      *
+     * @example N/A
+     *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Warning
      */
-    public function setWarnings(?array $warnings): MergedLabel
+    public function setWarnings(?array $warnings): MergedLabelInterface
     {
         $this->warnings = $warnings;
 
@@ -222,13 +195,12 @@ class MergedLabel extends AbstractEntity
     }
 
     /**
-     * Get labels
+     * Get labels.
      *
-     * @return Label[]|null
+     * @return LabelInterface[]|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Label
      */
     public function getLabels(): ?array
@@ -237,22 +209,21 @@ class MergedLabel extends AbstractEntity
     }
 
     /**
-     * Set labels
+     * Set labels.
      *
      * @pattern N/A
      *
-     * @example N/A
-     *
-     * @param Label[]|null $labels
+     * @param LabelInterface[]|null $labels
      *
      * @return static
      *
+     * @example N/A
+     *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Label
      */
-    public function setLabels(?array $labels): MergedLabel
+    public function setLabels(?array $labels): MergedLabelInterface
     {
         $this->labels = $labels;
 

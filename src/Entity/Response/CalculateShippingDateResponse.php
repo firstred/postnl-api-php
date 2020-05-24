@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,55 +23,37 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Entity\Response;
 
 /**
- * Class GetSentDateResponse
+ * Class GetSentDateResponse.
  */
-class CalculateShippingDateResponse extends AbstractResponse
+final class CalculateShippingDateResponse extends AbstractResponse
 {
     /**
-     * Sent date
+     * Sent date.
      *
      * @pattern ^(([0-3]\d-[0-1]\d-[1-2]\d{3})|([1-2]\d{3}-[0-1]\d-[0-3]\d))$
      *
      * @example 31-07-2019
      *
-     * @var string|null $sentDate
+     * @var string|null
      *
      * @since   1.0.0
      */
-    protected $sentDate;
+    private $sentDate;
 
     /**
-     * GetSentDateResponse constructor.
-     *
-     * @param string|null $sentDate
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function __construct(?string $sentDate = null)
-    {
-        parent::__construct();
-
-        $this->setSentDate($sentDate);
-    }
-
-    /**
-     * Get sent date
+     * Get sent date.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   CalculateShippingDateResponse::$sentDate
      */
     public function getSentDate(): ?string
@@ -78,7 +62,7 @@ class CalculateShippingDateResponse extends AbstractResponse
     }
 
     /**
-     * Set sent date
+     * Set sent date.
      *
      * @pattern ^(([0-3]\d-[0-1]\d-[1-2]\d{3})|([1-2]\d{3}-[0-1]\d-[0-3]\d))$
      *
@@ -90,7 +74,6 @@ class CalculateShippingDateResponse extends AbstractResponse
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     CalculateShippingDateResponse::$sentDate
      */
     public function setSentDate(?string $sentDate): CalculateShippingDateResponse

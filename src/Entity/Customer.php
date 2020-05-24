@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,200 +23,175 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Misc\ValidateAndFix;
 
 /**
- * Class Customer
+ * Class Customer.
  */
-class Customer extends AbstractEntity
+final class Customer extends AbstractEntity implements CustomerInterface
 {
     /**
-     * Address
+     * Address.
      *
      * @pattern N/A
      *
      * @example N/A
      *
-     * @var Address|null $address
+     * @var AddressInterface|null
      *
-     * @since 1.0.0
+     * @since   1.0.0
+     * @since   3.0.0 Private
      */
-    protected $address;
+    private $address;
 
     /**
-     * Collection location
+     * Collection location.
      *
      * @pattern ^.{0,35}$
      *
      * @example 11223344
      *
-     * @var string|null $collectionLocation
+     * @var string|null
      *
      * @since 1.0.0
+     * @since 3.0.0 Private
      */
-    protected $collectionLocation;
+    private $collectionLocation;
 
     /**
-     * Contact person
+     * Contact person.
      *
      * @pattern ^.{0,35}$
      *
      * @example Peter de Ruiter
      *
-     * @var string|null $contactPerson
+     * @var string|null
      *
      * @since 1.0.0
+     * @since 3.0.0 Private
      */
-    protected $contactPerson;
+    private $contactPerson;
 
     /**
-     * Customer code
+     * Customer code.
      *
      * @pattern ^[A-Z]{4}$
      *
      * @example DEVC
      *
-     * @var string|null $customerCode
+     * @var string|null
      *
      * @since 1.0.0
+     * @since 3.0.0 Private
      */
-    protected $customerCode;
+    private $customerCode;
 
     /**
-     * Customer number
+     * Customer number.
      *
      * @pattern ^\d{8}$
      *
      * @example 11223344
      *
-     * @var string|null $customerNumber
+     * @var string|null
      *
      * @since 1.0.0
+     * @since 3.0.0 Private
      */
-    protected $customerNumber;
+    private $customerNumber;
 
     /**
-     * Global pack customer code
+     * Global pack customer code.
      *
      * @pattern ^\d{4}$
      *
      * @example 1234
      *
-     * @var null|string $globalPackCustomerCode
+     * @var string|null
      *
      * @since 1.0.0
+     * @since 3.0.0 Private
      */
-    protected $globalPackCustomerCode;
+    private $globalPackCustomerCode;
 
     /**
-     * Global pack barcode type
+     * Global pack barcode type.
      *
      * @pattern ^[A-Z]{2}$
      *
      * @example CD
      *
-     * @var null|string $globalPackBarcodeType
+     * @var string|null
      *
      * @since 1.0.0
+     * @since 3.0.0 Private
      */
-    protected $globalPackBarcodeType;
+    private $globalPackBarcodeType;
 
     /**
-     * Email address
+     * Email address.
      *
      * @pattern ^.{0,50}$
      *
      * @example receiver@gmail.com
      *
-     * @var string|null $email
+     * @var string|null
      *
      * @since 1.0.0
+     * @since 3.0.0 Private
      */
-    protected $email;
+    private $email;
 
     /**
-     * Full name
+     * Full name.
      *
      * @pattern ^{0,35}$
      *
      * @example PostNL
      *
-     * @var string|null $name
+     * @var string|null
      *
      * @since 1.0.0
+     * @since 3.0.0 Private
      */
-    protected $name;
+    private $name;
 
     /**
-     * Customer constructor.
+     * Get address.
      *
-     * @param string  $customerNr
-     * @param string  $customerCode
-     * @param string  $collectionLocation
-     * @param string  $contactPerson
-     * @param string  $email
-     * @param string  $name
-     * @param Address $address
-     *
-     * @throws InvalidArgumentException
+     * @return AddressInterface|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     */
-    public function __construct(?string $customerNr = null, ?string $customerCode = null, ?string $collectionLocation = null, ?string $contactPerson = null, ?string $email = null, ?string $name = null, ?Address $address = null)
-    {
-        parent::__construct();
-
-        $this->setCustomerNumber($customerNr);
-        $this->setCustomerCode($customerCode);
-        $this->setCollectionLocation($collectionLocation);
-        $this->setContactPerson($contactPerson);
-        $this->setEmail($email);
-        $this->setName($name);
-        $this->setAddress($address);
-    }
-
-    /**
-     * Get address
-     *
-     * @return Address|null
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     *
      * @see   Customer::$address
      */
-    public function getAddress(): ?Address
+    public function getAddress(): ?AddressInterface
     {
         return $this->address;
     }
 
     /**
-     * Set address
+     * Set address.
      *
      * @pattern N/A
      *
-     * @param Address|null $address
+     * @param AddressInterface|null $address
      *
      * @return static
      *
      * @example N/A
      *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     *
+     * @since   1.0.0
+     * @since   2.0.0 Strict typing
      * @see     Customer::$address
      */
-    public function setAddress(?Address $address): Customer
+    public function setAddress(?AddressInterface $address): CustomerInterface
     {
         $this->address = $address;
 
@@ -222,13 +199,12 @@ class Customer extends AbstractEntity
     }
 
     /**
-     * Get collection location
+     * Get collection location.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Customer::$collectionLocation
      */
     public function getCollectionLocation(): ?string
@@ -237,7 +213,7 @@ class Customer extends AbstractEntity
     }
 
     /**
-     * Set collection location
+     * Set collection location.
      *
      * @pattern ^.{0,35}$
      *
@@ -251,24 +227,22 @@ class Customer extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Customer::$collectionLocation
      */
-    public function setCollectionLocation(?string $collectionLocation): Customer
+    public function setCollectionLocation(?string $collectionLocation): CustomerInterface
     {
-        $this->collectionLocation = ValidateAndFix::genericString($collectionLocation);
+        $this->collectionLocation = $this->validate->genericString($collectionLocation);
 
         return $this;
     }
 
     /**
-     * Get contact person
+     * Get contact person.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Customer::$contactPerson
      */
     public function getContactPerson(): ?string
@@ -277,7 +251,7 @@ class Customer extends AbstractEntity
     }
 
     /**
-     * Set contact person
+     * Set contact person.
      *
      * @pattern ^.{0,35}$
      *
@@ -291,24 +265,22 @@ class Customer extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Customer::$contactPerson
      */
-    public function setContactPerson(?string $contactPerson): Customer
+    public function setContactPerson(?string $contactPerson): CustomerInterface
     {
-        $this->contactPerson = ValidateAndFix::genericString($contactPerson);
+        $this->contactPerson = $this->validate->genericString($contactPerson);
 
         return $this;
     }
 
     /**
-     * Get customer code
+     * Get customer code.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Customer::$customerCode
      */
     public function getCustomerCode(): ?string
@@ -317,7 +289,7 @@ class Customer extends AbstractEntity
     }
 
     /**
-     * Set customer code
+     * Set customer code.
      *
      * @pattern ^[A-Z]{2}$
      *
@@ -331,24 +303,22 @@ class Customer extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Customer::$customerCode
      */
-    public function setCustomerCode(?string $customerCode): Customer
+    public function setCustomerCode(?string $customerCode): CustomerInterface
     {
-        $this->customerCode = ValidateAndFix::customerCode($customerCode);
+        $this->customerCode = $this->validate->customerCode($customerCode);
 
         return $this;
     }
 
     /**
-     * Get customer number
+     * Get customer number.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Customer::$customerNumber
      */
     public function getCustomerNumber(): ?string
@@ -357,7 +327,7 @@ class Customer extends AbstractEntity
     }
 
     /**
-     * Set customer number
+     * Set customer number.
      *
      * @pattern ^\d{4}$
      *
@@ -371,24 +341,22 @@ class Customer extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Customer::$customerNumber
      */
-    public function setCustomerNumber(?string $customerNumber): Customer
+    public function setCustomerNumber(?string $customerNumber): CustomerInterface
     {
-        $this->customerNumber = ValidateAndFix::customerNumber($customerNumber);
+        $this->customerNumber = $this->validate->customerNumber($customerNumber);
 
         return $this;
     }
 
     /**
-     * Get global pack customer code
+     * Get global pack customer code.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Customer::$globalPackCustomerCode
      */
     public function getGlobalPackCustomerCode(): ?string
@@ -397,7 +365,7 @@ class Customer extends AbstractEntity
     }
 
     /**
-     * Set global pack customer code
+     * Set global pack customer code.
      *
      * @pattern ^\d{4}$
      *
@@ -409,10 +377,9 @@ class Customer extends AbstractEntity
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see     Customer::$globalPackCustomerCode
      */
-    public function setGlobalPackCustomerCode(?string $globalPackCustomerCode): Customer
+    public function setGlobalPackCustomerCode(?string $globalPackCustomerCode): CustomerInterface
     {
         $this->globalPackCustomerCode = $globalPackCustomerCode;
 
@@ -420,13 +387,12 @@ class Customer extends AbstractEntity
     }
 
     /**
-     * Get global pack barcode type
+     * Get global pack barcode type.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Customer::$globalPackBarcodeType
      */
     public function getGlobalPackBarcodeType(): ?string
@@ -435,7 +401,7 @@ class Customer extends AbstractEntity
     }
 
     /**
-     * Set global pack barcode type
+     * Set global pack barcode type.
      *
      * @pattern ^[A-Z]{2}$
      *
@@ -449,24 +415,22 @@ class Customer extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Customer::$globalPackBarcodeType
      */
-    public function setGlobalPackBarcodeType(?string $globalPackBarcodeType): Customer
+    public function setGlobalPackBarcodeType(?string $globalPackBarcodeType): CustomerInterface
     {
-        $this->globalPackBarcodeType = ValidateAndFix::isoAlpha2CountryCode($globalPackBarcodeType);
+        $this->globalPackBarcodeType = $this->validate->isoAlpha2CountryCode($globalPackBarcodeType);
 
         return $this;
     }
 
     /**
-     * Get email address
+     * Get email address.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Customer::$email
      */
     public function getEmail(): ?string
@@ -475,7 +439,7 @@ class Customer extends AbstractEntity
     }
 
     /**
-     * Set email address
+     * Set email address.
      *
      * @pattern  ^.{0,50}$
      *
@@ -487,26 +451,24 @@ class Customer extends AbstractEntity
      *
      * @since    1.0.0
      * @since    2.0.0 Strict typing
-     *
      * @see      Customer::$email
      *
      * @example  receiver@gmail.com
      */
-    public function setEmail(?string $email): Customer
+    public function setEmail(?string $email): CustomerInterface
     {
-        $this->email = ValidateAndFix::email($email);
+        $this->email = $this->validate->email($email);
 
         return $this;
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Customer::$name
      */
     public function getName(): ?string
@@ -515,7 +477,7 @@ class Customer extends AbstractEntity
     }
 
     /**
-     * Set name
+     * Set name.
      *
      * @pattern ^{0,35}$
      *
@@ -529,12 +491,11 @@ class Customer extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Customer::$name
      */
-    public function setName(?string $name): Customer
+    public function setName(?string $name): CustomerInterface
     {
-        $this->name = ValidateAndFix::genericString($name);
+        $this->name = $this->validate->genericString($name);
 
         return $this;
     }

@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,9 +23,7 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -37,17 +37,17 @@ use setasign\Fpdi\Fpdi;
 use setasign\Fpdi\PdfParser\StreamReader;
 
 /**
- * Class Misc
+ * Class Misc.
  */
 class Misc
 {
     const ERROR_MARGIN = 2;
 
     /**
-     * @param array       $arr    A map of param keys to values.
+     * @param array       $arr    a map of param keys to values
      * @param string|null $prefix
      *
-     * @return string A querystring, essentially.
+     * @return string a querystring, essentially
      *
      * @codeCoverageIgnore
      */
@@ -65,9 +65,9 @@ class Misc
 
             if ($prefix) {
                 if (null !== $k && (!is_int($k) || is_array($v))) {
-                    $k = $prefix."[".$k."]";
+                    $k = $prefix.'['.$k.']';
                 } else {
-                    $k = $prefix."[]";
+                    $k = $prefix.'[]';
                 }
             }
 
@@ -77,11 +77,11 @@ class Misc
                     $r[] = $enc;
                 }
             } else {
-                $r[] = urlencode($k)."=".urlencode($v);
+                $r[] = urlencode($k).'='.urlencode($v);
             }
         }
 
-        return implode("&", $r);
+        return implode('&', $r);
     }
 
     /**
@@ -103,7 +103,7 @@ class Misc
             $height = $size['height'];
             $orientation = $size['orientation'];
 
-            $length = $orientation === 'P' ? $height : $width;
+            $length = 'P' === $orientation ? $height : $width;
             if ($length >= (148 - static::ERROR_MARGIN) && $length <= (148 + static::ERROR_MARGIN)) {
                 $iso = 'A6';
             } elseif ($length >= (210 - static::ERROR_MARGIN) && $length <= (210 + static::ERROR_MARGIN)) {
@@ -130,7 +130,7 @@ class Misc
     }
 
     /**
-     * Offline shipping date calculation
+     * Offline shipping date calculation.
      *
      * @param string $deliveryDate
      * @param array  $days
@@ -169,7 +169,7 @@ class Misc
      * Calculates amount of days remaining
      * i.e. preferred delivery date the day tomorrow => today = 0
      * i.e. preferred delivery date the day after tomorrow => today + tomorrow = 1
-     * i.e. preferred delivery date the day after tomorrow, but one holiday => today + holiday = 0
+     * i.e. preferred delivery date the day after tomorrow, but one holiday => today + holiday = 0.
      *
      * 0 means: should ship today
      * < 0 means: should've shipped in the past
@@ -205,14 +205,14 @@ class Misc
                 static::getHolidaysForYear(date('Y', strtotime($shippingDate)))
             )
         ) {
-            $daysRemaining--;
+            --$daysRemaining;
         }
 
         return $daysRemaining;
     }
 
     /**
-     * Offline delivery date calculation
+     * Offline delivery date calculation.
      *
      * @param string $deliveryDate   Delivery date in any format accepted by DateTime
      * @param bool   $mondayDelivery Sunday sorting/Monday delivery enabled
@@ -241,7 +241,7 @@ class Misc
     }
 
     /**
-     * Get an array with all Dutch holidays for the given year
+     * Get an array with all Dutch holidays for the given year.
      *
      * Credits to tvlooy (https://gist.github.com/tvlooy/1894247)
      *

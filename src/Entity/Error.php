@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,70 +23,50 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Entity;
 
 /**
- * Class Error
+ * Class Error.
  */
-class Error extends AbstractEntity
+final class Error extends AbstractEntity implements ErrorInterface
 {
     /**
-     * Code
+     * Code.
      *
      * @pattern ^.*$
      *
      * @example N/A
      *
-     * @var string|null $code
+     * @var string|null
      *
      * @since   1.0.0
      */
-    protected $code;
+    private $code;
 
     /**
-     * Description
+     * Description.
      *
      * @pattern ^.*$
      *
      * @example N/A
      *
-     * @var string|null $description
+     * @var string|null
      *
      * @since   1.0.0
      */
-    protected $description;
+    private $description;
 
     /**
-     * Error constructor.
-     *
-     * @param string|null $code
-     * @param string|null $description
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function __construct($code = null, $description = null)
-    {
-        parent::__construct();
-
-        $this->setCode($code);
-        $this->setDescription($description);
-    }
-
-    /**
-     * Get code
+     * Get code.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Error::$code
      */
     public function getCode(): ?string
@@ -93,7 +75,7 @@ class Error extends AbstractEntity
     }
 
     /**
-     * Set code
+     * Set code.
      *
      * @pattern ^.*$
      *
@@ -105,10 +87,9 @@ class Error extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Error::$code
      */
-    public function setCode(?string $code): Error
+    public function setCode(?string $code): ErrorInterface
     {
         $this->code = $code;
 
@@ -116,13 +97,12 @@ class Error extends AbstractEntity
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Error::$description
      */
     public function getDescription(): ?string
@@ -131,7 +111,7 @@ class Error extends AbstractEntity
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @pattern ^.*$
      *
@@ -143,10 +123,9 @@ class Error extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Error::$description
      */
-    public function setDescription(?string $description): Error
+    public function setDescription(?string $description): ErrorInterface
     {
         $this->description = $description;
 

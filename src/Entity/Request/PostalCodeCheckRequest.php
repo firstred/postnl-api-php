@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,9 +23,7 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -31,74 +31,53 @@ namespace Firstred\PostNL\Entity\Request;
 
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Misc\ValidateAndFix;
 
 /**
- * Class PostalCodeCheckRequest
+ * Class PostalCodeCheckRequest.
  */
-class PostalCodeCheckRequest extends AbstractEntity
+final class PostalCodeCheckRequest extends AbstractEntity
 {
     /**
-     * Postal code
+     * Postal code.
      *
      * @pattern ^.{0,10}$
      *
      * @example 3123WT
      *
-     * @var string|null $postalCode
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $postalCode;
+    private $postalCode;
 
     /**
-     * House number
+     * House number.
      *
      * @pattern ^\d{1,10}$
      *
      * @example 42
      *
-     * @var int|null $houseNumber
+     * @var int|null
      *
      * @since   2.0.0
      */
-    protected $houseNumber;
+    private $houseNumber;
 
     /**
-     * House number addition
+     * House number addition.
      *
      * @pattern ^.{0,35}$
      *
      * @example A
      *
-     * @var string|null $houseNumberAddition
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $houseNumberAddition;
+    private $houseNumberAddition;
 
     /**
-     * PostalCodeCheckRequest constructor.
-     *
-     * @param string|null $postalCode
-     * @param null        $houseNumber
-     * @param string|null $houseNumberAddition
-     *
-     * @throws InvalidArgumentException
-     *
-     * @since 2.0.0
-     */
-    public function __construct(?string $postalCode = null, $houseNumber = null, ?string $houseNumberAddition = null)
-    {
-        $this->setPostalCode($postalCode);
-        $this->setHouseNumber($houseNumber);
-        $this->setHouseNumberAddition($houseNumberAddition);
-
-        parent::__construct();
-    }
-
-    /**
-     * Serialize JSON
+     * Serialize JSON.
      *
      * @return array
      *
@@ -114,12 +93,11 @@ class PostalCodeCheckRequest extends AbstractEntity
     }
 
     /**
-     * Get postal code
+     * Get postal code.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   PostalCodeCheckRequest::$postalCode
      */
     public function getPostalCode(): ?string
@@ -128,7 +106,7 @@ class PostalCodeCheckRequest extends AbstractEntity
     }
 
     /**
-     * Set postal code
+     * Set postal code.
      *
      * @pattern ^.{0,10}$
      *
@@ -141,23 +119,21 @@ class PostalCodeCheckRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     PostalCodeCheckRequest::$postalCode
      */
     public function setPostalCode(?string $postalCode): PostalCodeCheckRequest
     {
-        $this->postalCode = ValidateAndFix::postcode($postalCode);
+        $this->postalCode = $this->validate->postcode($postalCode);
 
         return $this;
     }
 
     /**
-     * Get house number
+     * Get house number.
      *
      * @return int|null
      *
      * @since 2.0.0
-     *
      * @see   PostalCodeCheckRequest::$houseNumber
      */
     public function getHouseNumber(): ?int
@@ -166,7 +142,7 @@ class PostalCodeCheckRequest extends AbstractEntity
     }
 
     /**
-     * Set house number
+     * Set house number.
      *
      * @pattern ^\d{1,10}$
      *
@@ -180,22 +156,20 @@ class PostalCodeCheckRequest extends AbstractEntity
      *
      * @since   2.0.0
      * @see     PostalCodeCheckRequest::$houseNumber
-     *
      */
     public function setHouseNumber($houseNumber): PostalCodeCheckRequest
     {
-        $this->houseNumber = ValidateAndFix::integer($houseNumber);
+        $this->houseNumber = $this->validate->integer($houseNumber);
 
         return $this;
     }
 
     /**
-     * Get house number addition
+     * Get house number addition.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   PostalCodeCheckRequest::$houseNumberAddition
      */
     public function getHouseNumberAddition(): ?string
@@ -204,7 +178,7 @@ class PostalCodeCheckRequest extends AbstractEntity
     }
 
     /**
-     * Set house number addition
+     * Set house number addition.
      *
      * @pattern ^.{0,35}$
      *
@@ -215,7 +189,6 @@ class PostalCodeCheckRequest extends AbstractEntity
      * @return static
      *
      * @since   2.0.0
-     *
      * @see     PostalCodeCheckRequest::$houseNumberAddition
      */
     public function setHouseNumberAddition(?string $houseNumberAddition): PostalCodeCheckRequest

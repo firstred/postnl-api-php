@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,9 +23,7 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -31,95 +31,94 @@ namespace Firstred\PostNL\Entity\Request;
 
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Misc\ValidateAndFix;
 
 /**
- * Class FindLocationsInAreaRequest
+ * Class FindLocationsInAreaRequest.
  *
  * This class is both the container and can be the actual FindLocationsInAreaRequest object itself!
  */
-class FindLocationsInAreaRequest extends AbstractEntity
+final class FindLocationsInAreaRequest extends AbstractEntity
 {
     /**
-     * Latitude north
+     * Latitude north.
      *
      * @pattern ^\d{1,2}\.\d{1,15}$
      *
      * @example 52.156439
      *
-     * @var float|null $latitudeNorth
+     * @var float|null
      *
      * @since   2.0.0
      */
-    protected $latitudeNorth;
+    private $latitudeNorth;
 
     /**
-     * Longitude west
+     * Longitude west.
      *
      * @pattern ^\d{1,2}\.\d{1,15}$
      *
      * @example 52.156439
      *
-     * @var float|null $longitudeWest
+     * @var float|null
      *
      * @since   2.0.0
      */
-    protected $longitudeWest;
+    private $longitudeWest;
 
     /**
-     * Latitude south
+     * Latitude south.
      *
      * @pattern ^\d{1,2}\.\d{1,15}$
      *
      * @example 52.156439
      *
-     * @var float|null $latitudeSouth
+     * @var float|null
      *
      * @since   2.0.0
      */
-    protected $latitudeSouth;
+    private $latitudeSouth;
 
     /**
-     * Longitude east
+     * Longitude east.
      *
      * @pattern ^\d{1,2}\.\d{1,15}$
      *
      * @example 52.156439
      *
-     * @var float|null $longitudeEast
+     * @var float|null
      *
      * @since   2.0.0
      */
-    protected $longitudeEast;
+    private $longitudeEast;
 
     /**
-     * Country code
+     * Country code.
      *
      * @pattern ^(?:NL|BE)$
      *
      * @example NL
      *
-     * @var string|null $countryCode
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $countryCode;
+    private $countryCode;
 
     /**
-     * Delivery options
+     * Delivery options.
      *
      * @pattern ^(?:PG|PGE)$
      *
      * @example PGE
      *
-     * @var array|null $deliveryOptions
+     * @var array|null
      *
      * @since   2.0.0
      */
-    protected $deliveryOptions;
+    private $deliveryOptions;
 
     /**
-     * Delivery date
+     * Delivery date.
      *
      * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}$
      *
@@ -129,10 +128,10 @@ class FindLocationsInAreaRequest extends AbstractEntity
      *
      * @since   2.0.0
      */
-    protected $deliveryDate;
+    private $deliveryDate;
 
     /**
-     * Opening time
+     * Opening time.
      *
      * @pattern ^(?:2[0-3]|[01]?[0-9]):(?:[0-5]?[0-9]):(?:[0-5]?[0-9])$
      *
@@ -142,47 +141,15 @@ class FindLocationsInAreaRequest extends AbstractEntity
      *
      * @since   2.0.0
      */
-    protected $openingTime;
+    private $openingTime;
 
     /**
-     * FindLocationsInAreaRequest constructor.
-     *
-     * @param float|string|null $latitudeNorth
-     * @param float|string|null $longitudeWest
-     * @param float|string|null $latitudeSouth
-     * @param float|string|null $longitudeEast
-     * @param string            $countryCode
-     * @param string|null       $deliveryDate
-     * @param string|null       $openingTime
-     * @param array             $deliveryOptions
-     *
-     * @throws InvalidArgumentException
-     *
-     * @since 1.0.0
-     * @since 2.0.0
-     */
-    public function __construct($latitudeNorth = null, $longitudeWest = null, $latitudeSouth = null, $longitudeEast = null, string $countryCode = 'NL', ?string $deliveryDate = null, ?string $openingTime = null, array $deliveryOptions = ['PG'])
-    {
-        parent::__construct();
-
-        $this->setLatitudeNorth($latitudeNorth);
-        $this->setLongitudeWest($longitudeWest);
-        $this->setLatitudeSouth($latitudeSouth);
-        $this->setLongitudeEast($longitudeEast);
-        $this->setCountryCode($countryCode);
-        $this->setDeliveryDate($deliveryDate);
-        $this->setOpeningTime($openingTime);
-        $this->setDeliveryOptions($deliveryOptions);
-    }
-
-    /**
-     * Get country code
+     * Get country code.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0
-     *
      * @see   FindLocationsInAreaRequest::$countrycode
      */
     public function getCountryCode(): ?string
@@ -191,7 +158,7 @@ class FindLocationsInAreaRequest extends AbstractEntity
     }
 
     /**
-     * Set country code
+     * Set country code.
      *
      * @pattern ^(?:NL|BE)$
      *
@@ -205,23 +172,21 @@ class FindLocationsInAreaRequest extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0
-     *
      * @see     FindLocationsInAreaRequest::$countrycode
      */
     public function setCountryCode(?string $countrycode): FindLocationsInAreaRequest
     {
-        $this->countryCode = ValidateAndFix::isoAlpha2CountryCodeNlBe($countrycode);
+        $this->countryCode = $this->validate->isoAlpha2CountryCodeNlBe($countrycode);
 
         return $this;
     }
 
     /**
-     * Get delivery date
+     * Get delivery date.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   FindLocationsInAreaRequest::$deliveryDateq
      */
     public function getDeliveryDate(): ?string
@@ -230,7 +195,7 @@ class FindLocationsInAreaRequest extends AbstractEntity
     }
 
     /**
-     * Set delivery date
+     * Set delivery date.
      *
      * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}$
      *
@@ -243,23 +208,21 @@ class FindLocationsInAreaRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     FindLocationsInAreaRequest::$deliveryDate
      */
     public function setDeliveryDate(?string $deliveryDate): FindLocationsInAreaRequest
     {
-        $this->deliveryDate = ValidateAndFix::date($deliveryDate);
+        $this->deliveryDate = $this->validate->date($deliveryDate);
 
         return $this;
     }
 
     /**
-     * Get opening time
+     * Get opening time.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   FindLocationsInAreaRequest::$openingTime
      */
     public function getOpeningTime(): ?string
@@ -268,7 +231,7 @@ class FindLocationsInAreaRequest extends AbstractEntity
     }
 
     /**
-     * Set opening time
+     * Set opening time.
      *
      * @pattern ^(?:2[0-3]|[01]?[0-9]):(?:[0-5]?[0-9]):(?:[0-5]?[0-9])$
      *
@@ -281,23 +244,21 @@ class FindLocationsInAreaRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     FindLocationsInAreaRequest::$openingTime
      */
     public function setOpeningTime(?string $openingTime): FindLocationsInAreaRequest
     {
-        $this->openingTime = ValidateAndFix::time($openingTime);
+        $this->openingTime = $this->validate->time($openingTime);
 
         return $this;
     }
 
     /**
-     * Get delivery options
+     * Get delivery options.
      *
      * @return array|null
      *
      * @since 2.0.0
-     *
      * @see   FindLocationsInAreaRequest::$deliveryOptions
      */
     public function getDeliveryOptions(): ?array
@@ -306,7 +267,7 @@ class FindLocationsInAreaRequest extends AbstractEntity
     }
 
     /**
-     * Set delivery options
+     * Set delivery options.
      *
      * @pattern ^(?:PG|PGE)$
      *
@@ -317,7 +278,6 @@ class FindLocationsInAreaRequest extends AbstractEntity
      * @return static
      *
      * @since   2.0.0
-     *
      * @see     FindLocationsInAreaRequest::$deliveryOptions
      */
     public function setDeliveryOptions(array $deliveryOptions): FindLocationsInAreaRequest
@@ -328,12 +288,11 @@ class FindLocationsInAreaRequest extends AbstractEntity
     }
 
     /**
-     * Get latitude north
+     * Get latitude north.
      *
      * @return float|null
      *
      * @since 2.0.0 Strict typing
-     *
      * @see   FindLocationsInAreaRequest::$latitudeNorth
      */
     public function getLatitudeNorth(): ?float
@@ -342,7 +301,7 @@ class FindLocationsInAreaRequest extends AbstractEntity
     }
 
     /**
-     * Set latitude north
+     * Set latitude north.
      *
      * @pattern ^\d{1,2}\.\d{1,15}$
      *
@@ -355,23 +314,21 @@ class FindLocationsInAreaRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0 Strict typing
-     *
      * @see     FindLocationsInAreaRequest::$latitudeNorth
      */
     public function setLatitudeNorth($latitudeNorth): FindLocationsInAreaRequest
     {
-        $this->latitudeNorth = ValidateAndFix::coordinate($latitudeNorth);
+        $this->latitudeNorth = $this->validate->coordinate($latitudeNorth);
 
         return $this;
     }
 
     /**
-     * Get longitude west
+     * Get longitude west.
      *
      * @return float|null
      *
      * @since 2.0.0 Strict typing
-     *
      * @see   FindLocationsInAreaRequest::$longitudeWest
      */
     public function getLongitudeWest(): ?float
@@ -380,7 +337,7 @@ class FindLocationsInAreaRequest extends AbstractEntity
     }
 
     /**
-     * Set longitude west
+     * Set longitude west.
      *
      * @pattern ^\d{1,2}\.\d{1,15}$
      *
@@ -393,23 +350,21 @@ class FindLocationsInAreaRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0 Strict typing
-     *
      * @see     FindLocationsInAreaRequest::$longitudeWest
      */
     public function setLongitudeWest($longitudeWest): FindLocationsInAreaRequest
     {
-        $this->longitudeWest = ValidateAndFix::coordinate($longitudeWest);
+        $this->longitudeWest = $this->validate->coordinate($longitudeWest);
 
         return $this;
     }
 
     /**
-     * Get latitude south
+     * Get latitude south.
      *
      * @return float|null
      *
      * @since 2.0.0 Strict typing
-     *
      * @see   FindLocationsInAreaRequest::$latitudeSouth
      */
     public function getLatitudeSouth(): ?float
@@ -418,7 +373,7 @@ class FindLocationsInAreaRequest extends AbstractEntity
     }
 
     /**
-     * Set latitude south
+     * Set latitude south.
      *
      * @pattern ^\d{1,2}\.\d{1,15}$
      *
@@ -431,23 +386,21 @@ class FindLocationsInAreaRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0 Strict typing
-     *
      * @see     FindLocationsInAreaRequest::$latitudeSouth
      */
     public function setLatitudeSouth($latitudeSouth): FindLocationsInAreaRequest
     {
-        $this->latitudeSouth = ValidateAndFix::coordinate($latitudeSouth);
+        $this->latitudeSouth = $this->validate->coordinate($latitudeSouth);
 
         return $this;
     }
 
     /**
-     * Get longitude east
+     * Get longitude east.
      *
      * @return float|null
      *
      * @since 2.0.0 Strict typing
-     *
      * @see   FindLocationsInAreaRequest::$longitudeEast
      */
     public function getLongitudeEast(): ?float
@@ -456,7 +409,7 @@ class FindLocationsInAreaRequest extends AbstractEntity
     }
 
     /**
-     * Set longitude east
+     * Set longitude east.
      *
      * @pattern ^\d{1,2}\.\d{1,15}$
      *
@@ -469,12 +422,11 @@ class FindLocationsInAreaRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0 Strict typing
-     *
      * @see     FindLocationsInAreaRequest::$longitudeEast
      */
     public function setLongitudeEast($longitudeEast): FindLocationsInAreaRequest
     {
-        $this->longitudeEast = ValidateAndFix::coordinate($longitudeEast);
+        $this->longitudeEast = $this->validate->coordinate($longitudeEast);
 
         return $this;
     }

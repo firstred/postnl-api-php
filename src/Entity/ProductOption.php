@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,21 +23,18 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Misc\ValidateAndFix;
 
 /**
- * Class ProductOption
+ * Class ProductOption.
  */
-class ProductOption extends AbstractEntity
+final class ProductOption extends AbstractEntity implements ProductOptionInterface
 {
     /**
      * The characteristic of the ProductOption. Mandatory for some products.
@@ -44,11 +43,11 @@ class ProductOption extends AbstractEntity
      *
      * @example 118
      *
-     * @var string|null $characteristic
+     * @var string|null
      *
      * @since   1.0.0
      */
-    protected $characteristic;
+    private $characteristic;
 
     /**
      * The product option code for this ProductOption. Mandatory for some products.
@@ -57,39 +56,19 @@ class ProductOption extends AbstractEntity
      *
      * @example 006
      *
-     * @var string|null $option
+     * @var string|null
      *
      * @since   1.0.0
      */
-    protected $option;
+    private $option;
 
     /**
-     * ProductOption constructor.
-     *
-     * @param string|null $characteristic
-     * @param string|null $option
-     *
-     * @throws InvalidArgumentException
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function __construct($characteristic = null, $option = null)
-    {
-        parent::__construct();
-
-        $this->setCharacteristic($characteristic);
-        $this->setOption($option);
-    }
-
-    /**
-     * Get characteristic
+     * Get characteristic.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   ProductOption::$characteristic
      */
     public function getCharacteristic(): ?string
@@ -98,7 +77,7 @@ class ProductOption extends AbstractEntity
     }
 
     /**
-     * Set characteristic
+     * Set characteristic.
      *
      * @pattern \d{3}$
      *
@@ -112,24 +91,22 @@ class ProductOption extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     ProductOption::$characteristic
      */
-    public function setCharacteristic(?string $characteristic): ProductOption
+    public function setCharacteristic(?string $characteristic): ProductOptionInterface
     {
-        $this->characteristic = ValidateAndFix::productOption($characteristic);
+        $this->characteristic = $this->validate->productOption($characteristic);
 
         return $this;
     }
 
     /**
-     * Get option
+     * Get option.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   ProductOption::$option
      */
     public function getOption(): ?string
@@ -138,7 +115,7 @@ class ProductOption extends AbstractEntity
     }
 
     /**
-     * Set option
+     * Set option.
      *
      * @pattern ^\d{3}$
      *
@@ -152,12 +129,11 @@ class ProductOption extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     ProductOption::$option
      */
-    public function setOption(?string $option): ProductOption
+    public function setOption(?string $option): ProductOptionInterface
     {
-        $this->option = ValidateAndFix::productOption($option);
+        $this->option = $this->validate->productOption($option);
 
         return $this;
     }

@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,21 +23,18 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Misc\ValidateAndFix;
 
 /**
- * Class CutOffTime
+ * Class CutOffTime.
  */
-class CutOffTime extends AbstractEntity
+final class CutOffTime extends AbstractEntity implements CutOffTimeInterface
 {
     const MONDAY = '01';
     const TUESDAY = '02';
@@ -46,7 +45,7 @@ class CutOffTime extends AbstractEntity
     const SUNDAY = '07';
 
     /**
-     * Day
+     * Day.
      *
      * Number of the day of the week. 01 = Monday, 02 =
      * Tuesday, …, 07 = Sunday. It is also possible to use value 00 to specify a generic cut off time for all days.
@@ -55,14 +54,14 @@ class CutOffTime extends AbstractEntity
      *
      * @example 02
      *
-     * @var string|null $day
+     * @var string|null
      *
      * @since   1.0.0
      */
-    protected $day;
+    private $day;
 
     /**
-     * Time
+     * Time.
      *
      * The cut off time for this day of week.
      * Format: H:i:s
@@ -71,27 +70,27 @@ class CutOffTime extends AbstractEntity
      *
      * @example 14:00:00
      *
-     * @var string|null $time
+     * @var string|null
      *
      * @since   1.0.0
      */
-    protected $time;
+    private $time;
 
     /**
-     * Available
+     * Available.
      *
      * @pattern N/A
      *
      * @example N/A
      *
-     * @var bool|null $available
+     * @var bool|null
      *
      * @since   1.0.0
      */
-    protected $available;
+    private $available;
 
     /**
-     * CutOffTime type
+     * CutOffTime type.
      *
      * Specifies the type belonging to the cutoff time. Multiple types can be used in one call.
      *
@@ -103,37 +102,15 @@ class CutOffTime extends AbstractEntity
      *
      * @since   2.0.0
      */
-    protected $type;
+    private $type;
 
     /**
-     * CutOffTime constructor.
-     *
-     * @param string $day
-     * @param string $time
-     * @param bool   $available
-     *
-     * @throws InvalidArgumentException
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function __construct($day = null, $time = null, $available = null)
-    {
-        parent::__construct();
-
-        $this->setDay($day);
-        $this->setTime($time);
-        $this->setAvailable($available);
-    }
-
-    /**
-     * Get the day of the week
+     * Get the day of the week.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   CutOffTime::$day
      */
     public function getDay(): ?string
@@ -142,7 +119,7 @@ class CutOffTime extends AbstractEntity
     }
 
     /**
-     * Set the day of the week
+     * Set the day of the week.
      *
      * @pattern ^\d{2}$
      *
@@ -155,25 +132,23 @@ class CutOffTime extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0 Strict typing
-     *
      * @since   1.0.0
      * @see     CutOffTime::$day
      */
-    public function setDay($dayOfTheWeek): CutOffTime
+    public function setDay($dayOfTheWeek): CutOffTimeInterface
     {
-        $this->day = ValidateAndFix::dayOfTheWeek($dayOfTheWeek);
+        $this->day = $this->validate->dayOfTheWeek($dayOfTheWeek);
 
         return $this;
     }
 
     /**
-     * Get cut-off time
+     * Get cut-off time.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   CutOffTime::$time
      */
     public function getTime(): ?string
@@ -182,7 +157,7 @@ class CutOffTime extends AbstractEntity
     }
 
     /**
-     * Set cut-off time
+     * Set cut-off time.
      *
      * @pattern ^(2[0-3]|[01]?[0-9]):([0-5]?[0-9]):([0-5]?[0-9])$
      *
@@ -196,24 +171,22 @@ class CutOffTime extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     CutOffTime::$time
      */
-    public function setTime(?string $time): CutOffTime
+    public function setTime(?string $time): CutOffTimeInterface
     {
-        $this->time = ValidateAndFix::time($time);
+        $this->time = $this->validate->time($time);
 
         return $this;
     }
 
     /**
-     * Get availability status
+     * Get availability status.
      *
      * @return bool|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   CutOffTime::$available
      */
     public function getAvailable(): ?bool
@@ -222,7 +195,7 @@ class CutOffTime extends AbstractEntity
     }
 
     /**
-     * Set availability status
+     * Set availability status.
      *
      * @pattern N/A
      *
@@ -234,10 +207,9 @@ class CutOffTime extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     CutOffTime::$available
      */
-    public function setAvailable(?bool $available): CutOffTime
+    public function setAvailable(?bool $available): CutOffTimeInterface
     {
         $this->available = $available;
 
@@ -245,12 +217,11 @@ class CutOffTime extends AbstractEntity
     }
 
     /**
-     * Get type
+     * Get type.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   CutOffTime::$type
      */
     public function getType(): ?string
@@ -259,7 +230,7 @@ class CutOffTime extends AbstractEntity
     }
 
     /**
-     * Set type
+     * Set type.
      *
      * @pattern ^?(?:Regular|Sameday)$
      *
@@ -270,10 +241,9 @@ class CutOffTime extends AbstractEntity
      * @return static
      *
      * @since   2.0.0
-     *
      * @see     CutOffTime::$type
      */
-    public function setType(?string $type): CutOffTime
+    public function setType(?string $type): CutOffTimeInterface
     {
         $this->type = $type;
 

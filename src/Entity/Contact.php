@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,22 +23,19 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Misc\ValidateAndFix;
 use libphonenumber\NumberParseException;
 
 /**
- * Class Contact
+ * Class Contact.
  */
-class Contact extends AbstractEntity
+final class Contact extends AbstractEntity implements ContactInterface
 {
     /**
      * Type of the contact. This is a code.
@@ -45,11 +44,11 @@ class Contact extends AbstractEntity
      *
      * @example 01
      *
-     * @var string|null $contactType
+     * @var string|null
      *
      * @since   1.0.0
      */
-    protected $contactType;
+    private $contactType;
 
     /**
      * Email address of the contact. Mandatory in some cases.
@@ -58,11 +57,11 @@ class Contact extends AbstractEntity
      *
      * @example receiver@gmail.com
      *
-     * @var string|null $email
+     * @var string|null
      *
      * @since   1.0.0
      */
-    protected $email;
+    private $email;
 
     /**
      * Mobile phone number of the contact. Mandatory in some cases.
@@ -71,59 +70,32 @@ class Contact extends AbstractEntity
      *
      * @example 0612345678
      *
-     * @var string|null $SMSNr
+     * @var string|null
      *
      * @since   1.0.0
      */
-    protected $SMSNr;
+    private $SMSNr;
 
     /**
-     * Phone number of the contact
+     * Phone number of the contact.
      *
      * @pattern ^.{10,17}$
      *
      * @example 0612345678
      *
-     * @var string|null $telNr
+     * @var string|null
      *
      * @since   1.0.0
      */
-    protected $telNr;
+    private $telNr;
 
     /**
-     * Contact constructor.
-     *
-     * @param string|null $contactType Contact type
-     * @param string|null $email       Email address
-     * @param string|null $smsNr       Telephone number (mobile)
-     * @param string|null $telNr       Telephone number (fixed line)
-     * @param string      $countryCode 2-letter ISO country code for phone formatting
-     *
-     * @throws NumberParseException
-     * @throws InvalidArgumentException
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     *
-     */
-    public function __construct(?string $contactType = null, ?string $email = null, ?string $smsNr = null, ?string $telNr = null, string $countryCode = 'NL')
-    {
-        parent::__construct();
-
-        $this->setContactType($contactType);
-        $this->setEmail($email);
-        $this->setSMSNr($smsNr, $countryCode);
-        $this->setTelNr($telNr, $countryCode);
-    }
-
-    /**
-     * Get contact type
+     * Get contact type.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Contact::$contactType
      */
     public function getContactType(): ?string
@@ -132,7 +104,7 @@ class Contact extends AbstractEntity
     }
 
     /**
-     * Set contact type
+     * Set contact type.
      *
      * @pattern ^\d{2}$
      *
@@ -147,24 +119,22 @@ class Contact extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Contact::$contactType
      */
-    public function setContactType($contactType): Contact
+    public function setContactType($contactType): ContactInterface
     {
-        $this->contactType = ValidateAndFix::contactType($contactType);
+        $this->contactType = $this->validate->contactType($contactType);
 
         return $this;
     }
 
     /**
-     * Get email
+     * Get email.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Contact::$email
      */
     public function getEmail(): ?string
@@ -173,7 +143,7 @@ class Contact extends AbstractEntity
     }
 
     /**
-     * Set email
+     * Set email.
      *
      * @pattern ^.{0,50}$
      *
@@ -188,24 +158,22 @@ class Contact extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Contact::$email
      */
-    public function setEmail(?string $email): Contact
+    public function setEmail(?string $email): ContactInterface
     {
-        $this->email = ValidateAndFix::email($email);
+        $this->email = $this->validate->email($email);
 
         return $this;
     }
 
     /**
-     * Get SMS number
+     * Get SMS number.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Contact::$SMSNr
      */
     public function getSMSNr(): ?string
@@ -214,7 +182,7 @@ class Contact extends AbstractEntity
     }
 
     /**
-     * Set SMS number
+     * Set SMS number.
      *
      * @pattern ^.{10,17}$
      *
@@ -231,24 +199,22 @@ class Contact extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Contact::$SMSNr
      */
-    public function setSMSNr(?string $nr, string $countryCode = 'NL'): Contact
+    public function setSMSNr(?string $nr, string $countryCode = 'NL'): ContactInterface
     {
-        $this->SMSNr = ValidateAndFix::telephoneNumber($nr, $countryCode);
+        $this->SMSNr = $this->validate->telephoneNumber($nr, $countryCode);
 
         return $this;
     }
 
     /**
-     * Get the telephone number
+     * Get the telephone number.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Contact::$telNr
      */
     public function getTelNr(): ?string
@@ -257,7 +223,7 @@ class Contact extends AbstractEntity
     }
 
     /**
-     * Set the telephone number
+     * Set the telephone number.
      *
      * @pattern ^.{10,17}$
      *
@@ -274,12 +240,11 @@ class Contact extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Contact::$telNr
      */
-    public function setTelNr(?string $nr, string $countryCode = 'NL'): Contact
+    public function setTelNr(?string $nr, string $countryCode = 'NL'): ContactInterface
     {
-        $this->telNr = ValidateAndFix::telephoneNumber($nr, $countryCode);
+        $this->telNr = $this->validate->telephoneNumber($nr, $countryCode);
 
         return $this;
     }

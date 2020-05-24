@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,9 +23,7 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -47,7 +47,7 @@ use Psr\Http\Message\ResponseInterface;
 use TypeError;
 
 /**
- * Class DeliveryDateService
+ * Class DeliveryDateService.
  */
 class DeliveryDateService extends AbstractService
 {
@@ -59,7 +59,7 @@ class DeliveryDateService extends AbstractService
     const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2_2/calculate/date';
 
     /**
-     * Get a delivery date via REST
+     * Get a delivery date via REST.
      *
      * @param CalculateDeliveryDateRequest $calculateDeliveryDate
      *
@@ -92,7 +92,7 @@ class DeliveryDateService extends AbstractService
         $object = $this->processCalculateDeliveryDateResponse($response);
         if ($item instanceof CacheItemInterface
             && $response instanceof ResponseInterface
-            && $response->getStatusCode() === 200
+            && 200 === $response->getStatusCode()
         ) {
             $item->set(Message::str($response));
             $this->cacheItem($item);
@@ -102,7 +102,7 @@ class DeliveryDateService extends AbstractService
     }
 
     /**
-     * Build the CalculateDeliveryDateRequest request for the REST API
+     * Build the CalculateDeliveryDateRequest request for the REST API.
      *
      * @param CalculateDeliveryDateRequest $calculateDeliveryDate
      *
@@ -167,11 +167,11 @@ class DeliveryDateService extends AbstractService
     }
 
     /**
-     * Process CalculateDeliveryDateRequest REST Response
+     * Process CalculateDeliveryDateRequest REST Response.
      *
      * @param ResponseInterface $response
      *
-     * @return null|CalculateDeliveryDateResponse
+     * @return CalculateDeliveryDateResponse|null
      *
      * @throws CifDownException
      * @throws CifErrorException
@@ -195,7 +195,7 @@ class DeliveryDateService extends AbstractService
     }
 
     /**
-     * Get the sent date via REST
+     * Get the sent date via REST.
      *
      * @param CalculateShippingDateRequest $calculateShippingDate
      *
@@ -229,7 +229,7 @@ class DeliveryDateService extends AbstractService
         if ($object instanceof CalculateShippingDateResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof ResponseInterface
-                && $response->getStatusCode() === 200
+                && 200 === $response->getStatusCode()
             ) {
                 $item->set(Message::str($response));
                 $this->cacheItem($item);
@@ -242,7 +242,7 @@ class DeliveryDateService extends AbstractService
     }
 
     /**
-     * Build the CalculateShippingDateRequest request for the REST API
+     * Build the CalculateShippingDateRequest request for the REST API.
      *
      * @param CalculateShippingDateRequest $calculateShippingDate
      *
@@ -283,7 +283,7 @@ class DeliveryDateService extends AbstractService
     }
 
     /**
-     * Process CalculateShippingDateRequest REST Response
+     * Process CalculateShippingDateRequest REST Response.
      *
      * @param ResponseInterface $response
      *

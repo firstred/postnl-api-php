@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,9 +23,7 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -31,95 +31,70 @@ namespace Firstred\PostNL\Entity\Request;
 
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Misc\ValidateAndFix;
 
 /**
- * Class RetrieveShipmentByBarcodeRequest
+ * Class RetrieveShipmentByBarcodeRequest.
  */
-class RetrieveShipmentByBarcodeRequest extends AbstractEntity
+final class RetrieveShipmentByBarcodeRequest extends AbstractEntity
 {
     /**
-     * Barcode
+     * Barcode.
      *
      * @pattern ^.{0,35}$
      *
      * @example 3SDEVC23423234
      *
-     * @var string|null $barcode
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $barcode;
+    private $barcode;
 
     /**
-     * Detail
+     * Detail.
      *
      * @pattern N/A
      *
      * @example N/A
      *
-     * @var bool|null $detail
+     * @var bool|null
      *
      * @since   2.0.0
      */
-    protected $detail;
+    private $detail;
 
     /**
-     * Language
+     * Language.
      *
      * @pattern ^[A-Z]{2}$
      *
      * @example NL
      *
-     * @var string|null $language
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $language;
+    private $language;
 
     /**
-     * Max amount of days
+     * Max amount of days.
      *
      * @pattern ^\d{1,10}$
      *
      * @example 1
      *
-     * @var int|null $maxDays
+     * @var int|null
      *
      * @since   2.0.0
      */
-    protected $maxDays;
+    private $maxDays;
 
     /**
-     * RetrieveShipmentByBarcodeRequest constructor.
-     *
-     * @param string|null           $barcode
-     * @param bool|null             $detail
-     * @param string|null           $language
-     * @param int|string|float|null $maxDays
-     *
-     * @throws InvalidArgumentException
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function __construct(?string $barcode = null, ?bool $detail = null, ?string $language = null, $maxDays = null)
-    {
-        parent::__construct();
-
-        $this->setBarcode($barcode);
-        $this->setDetail($detail);
-        $this->setLanguage($language);
-        $this->setMaxDays($maxDays);
-    }
-
-    /**
-     * Get barcode
+     * Get barcode.
      *
      * @return string|null
      *
      * @since 2.0.0 Strict typing
-     *
      * @see   RetrieveShipmentByBarcodeRequest::$barcode
      */
     public function getBarcode(): ?string
@@ -128,7 +103,7 @@ class RetrieveShipmentByBarcodeRequest extends AbstractEntity
     }
 
     /**
-     * Set barcode
+     * Set barcode.
      *
      * @pattern ^.{0,35}$
      *
@@ -139,7 +114,6 @@ class RetrieveShipmentByBarcodeRequest extends AbstractEntity
      * @return static
      *
      * @since   2.0.0 Strict typing
-     *
      * @see     RetrieveShipmentByBarcodeRequest::$barcode
      */
     public function setBarcode(?string $barcode): RetrieveShipmentByBarcodeRequest
@@ -150,12 +124,11 @@ class RetrieveShipmentByBarcodeRequest extends AbstractEntity
     }
 
     /**
-     * Get detail
+     * Get detail.
      *
      * @return bool|null
      *
      * @since 2.0.0 Strict typing
-     *
      * @see   RetrieveShipmentByBarcodeRequest::$detail
      */
     public function getDetail(): ?bool
@@ -164,7 +137,7 @@ class RetrieveShipmentByBarcodeRequest extends AbstractEntity
     }
 
     /**
-     * Set detail
+     * Set detail.
      *
      * @pattern N/A
      *
@@ -175,7 +148,6 @@ class RetrieveShipmentByBarcodeRequest extends AbstractEntity
      * @return static
      *
      * @since   2.0.0 Strict typing
-     *
      * @see     RetrieveShipmentByBarcodeRequest::$detail
      */
     public function setDetail(?bool $detail): RetrieveShipmentByBarcodeRequest
@@ -186,12 +158,11 @@ class RetrieveShipmentByBarcodeRequest extends AbstractEntity
     }
 
     /**
-     * Get language
+     * Get language.
      *
      * @return string|null
      *
      * @since 2.0.0 Strict typing
-     *
      * @see   RetrieveShipmentByBarcodeRequest::$language
      */
     public function getLanguage(): ?string
@@ -200,7 +171,7 @@ class RetrieveShipmentByBarcodeRequest extends AbstractEntity
     }
 
     /**
-     * Set language
+     * Set language.
      *
      * @pattern ^[A-Z]{2}$
      *
@@ -211,7 +182,6 @@ class RetrieveShipmentByBarcodeRequest extends AbstractEntity
      * @return static
      *
      * @since   2.0.0 Strict typing
-     *
      * @see     RetrieveShipmentByBarcodeRequest::$language
      */
     public function setLanguage(?string $language): RetrieveShipmentByBarcodeRequest
@@ -222,12 +192,11 @@ class RetrieveShipmentByBarcodeRequest extends AbstractEntity
     }
 
     /**
-     * Get max days
+     * Get max days.
      *
      * @return int|null
      *
      * @since 2.0.0 Strict typing
-     *
      * @see   RetrieveShipmentByBarcodeRequest::$maxDays
      */
     public function getMaxDays(): ?int
@@ -236,7 +205,7 @@ class RetrieveShipmentByBarcodeRequest extends AbstractEntity
     }
 
     /**
-     * Set max days
+     * Set max days.
      *
      * @pattern ^\d{1,10}$
      *
@@ -249,12 +218,11 @@ class RetrieveShipmentByBarcodeRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0 Strict typing
-     *
      * @see     RetrieveShipmentByBarcodeRequest::$maxDays
      */
     public function setMaxDays($maxDays): RetrieveShipmentByBarcodeRequest
     {
-        $this->maxDays = ValidateAndFix::integer($maxDays);
+        $this->maxDays = $this->validate->integer($maxDays);
 
         return $this;
     }

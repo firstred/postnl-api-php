@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,9 +23,7 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -35,52 +35,36 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
 use Iterator;
 
 /**
- * Class Timeframes
+ * Class Timeframes.
  */
-class Timeframes extends AbstractEntity implements Iterator, ArrayAccess, Countable
+final class Timeframes extends AbstractEntity implements Iterator, ArrayAccess, Countable, TimeframesInterface
 {
     /**
-     * @var int $index
+     * @var int
      *
      * @since 2.0.0
      */
     private $index;
 
     /**
-     * List of Timeframes
+     * List of Timeframes.
      *
      * @pattern N/A
      *
      * @example N/A
      *
-     * @var Timeframe[] $timeframes
+     * @var TimeframeInterface[]
      *
      * @since   2.0.0
      */
-    protected $timeframes = [];
+    private $timeframes = [];
 
     /**
-     * Timeframes constructor.
+     * Get Timeframes.
      *
-     * @param array $timeframes
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function __construct(array $timeframes = [])
-    {
-        parent::__construct();
-
-        $this->setTimeframes($timeframes);
-    }
-
-    /**
-     * Get Timeframes
-     *
-     * @return Timeframe[]|null
+     * @return TimeframeInterface[]|null
      *
      * @since 2.0.0 Strict typing
-     *
      * @see   Timeframe
      */
     public function getTimeframes(): ?array
@@ -89,21 +73,20 @@ class Timeframes extends AbstractEntity implements Iterator, ArrayAccess, Counta
     }
 
     /**
-     * Set Timeframes
+     * Set Timeframes.
      *
      * @pattern N/A
      *
+     * @param TimeframeInterface[]|null $timeframes
+     *
+     * @return TimeframesInterface
+     *
      * @example N/A
      *
-     * @param Timeframe[]|null $timeframes
-     *
-     * @return static
-     *
      * @since   2.0.0 Strict typing
-     *
      * @see     Timeframe
      */
-    public function setTimeframes(?array $timeframes): Timeframes
+    public function setTimeframes(?array $timeframes): TimeframesInterface
     {
         $this->timeframes = $timeframes;
 
@@ -111,7 +94,7 @@ class Timeframes extends AbstractEntity implements Iterator, ArrayAccess, Counta
     }
 
     /**
-     * Serialize JSON
+     * Serialize JSON.
      *
      * @return array
      *
@@ -143,7 +126,7 @@ class Timeframes extends AbstractEntity implements Iterator, ArrayAccess, Counta
         }
         $array['Timeframe'] = array_values($array['Timeframe']);
         foreach ($array['Timeframe'] as &$timeframe) {
-            if (count($timeframe['Timeframes']) === 1) {
+            if (1 === count($timeframe['Timeframes'])) {
                 $timeframe['Timeframes'] = ['TimeframeTimeFrame' => $timeframe['Timeframes'][0]];
             } else {
                 $timeframe['Timeframes'] = ['TimeframeTimeFrame' => $timeframe['Timeframes']];
@@ -154,7 +137,7 @@ class Timeframes extends AbstractEntity implements Iterator, ArrayAccess, Counta
     }
 
     /**
-     * Deserialize JSON
+     * Deserialize JSON.
      *
      * @noinspection PhpDocRedundantThrowsInspection
      *
@@ -193,41 +176,41 @@ class Timeframes extends AbstractEntity implements Iterator, ArrayAccess, Counta
     }
 
     /**
-     * Return the current element
+     * Return the current element.
      *
-     * @link  https://php.net/manual/en/iterator.current.php
+     * @see  https://php.net/manual/en/iterator.current.php
      *
-     * @return mixed Can return any type.
+     * @return mixed can return any type
      *
      * @since 2.0.0
      */
-    public function current(): Timeframe
+    public function current(): TimeframeInterface
     {
         return $this->timeframes[$this->index];
     }
 
     /**
-     * Move forward to next element
+     * Move forward to next element.
      *
-     * @link  https://php.net/manual/en/iterator.next.php
+     * @see  https://php.net/manual/en/iterator.next.php
      *
-     * @return void Any returned value is ignored.
+     * @return void any returned value is ignored
      *
      * @since 2.0.0
      */
     public function next(): void
     {
         if (isset($this->timeframes[$this->index + 1])) {
-            $this->index++;
+            ++$this->index;
         }
     }
 
     /**
-     * Return the key of the current element
+     * Return the key of the current element.
      *
-     * @link  https://php.net/manual/en/iterator.key.php
+     * @see  https://php.net/manual/en/iterator.key.php
      *
-     * @return mixed scalar on success, or null on failure.
+     * @return mixed scalar on success, or null on failure
      *
      * @since 2.0.0
      */
@@ -241,12 +224,12 @@ class Timeframes extends AbstractEntity implements Iterator, ArrayAccess, Counta
     }
 
     /**
-     * Checks if current position is valid
+     * Checks if current position is valid.
      *
-     * @link  https://php.net/manual/en/iterator.valid.php
+     * @see  https://php.net/manual/en/iterator.valid.php
      *
-     * @return boolean The return value will be casted to boolean and then evaluated.
-     * Returns true on success or false on failure.
+     * @return bool The return value will be casted to boolean and then evaluated.
+     *              Returns true on success or false on failure.
      *
      * @since 2.0.0
      */
@@ -256,11 +239,11 @@ class Timeframes extends AbstractEntity implements Iterator, ArrayAccess, Counta
     }
 
     /**
-     * Rewind the Iterator to the first element
+     * Rewind the Iterator to the first element.
      *
-     * @link  https://php.net/manual/en/iterator.rewind.php
+     * @see  https://php.net/manual/en/iterator.rewind.php
      *
-     * @return void Any returned value is ignored.
+     * @return void any returned value is ignored
      *
      * @since 2.0.0
      */
@@ -270,18 +253,18 @@ class Timeframes extends AbstractEntity implements Iterator, ArrayAccess, Counta
     }
 
     /**
-     * Whether a offset exists
+     * Whether a offset exists.
      *
-     * @link  https://php.net/manual/en/arrayaccess.offsetexists.php
+     * @see  https://php.net/manual/en/arrayaccess.offsetexists.php
      *
      * @param mixed $offset <p>
      *                      An offset to check for.
      *                      </p>
      *
-     * @return boolean true on success or false on failure.
-     *                      </p>
-     *                      <p>
-     *                      The return value will be casted to boolean if non-boolean was returned.
+     * @return bool true on success or false on failure.
+     *              </p>
+     *              <p>
+     *              The return value will be casted to boolean if non-boolean was returned.
      *
      * @since 2.0.0
      */
@@ -291,19 +274,19 @@ class Timeframes extends AbstractEntity implements Iterator, ArrayAccess, Counta
     }
 
     /**
-     * Offset to retrieve
+     * Offset to retrieve.
      *
-     * @link  https://php.net/manual/en/arrayaccess.offsetget.php
+     * @see  https://php.net/manual/en/arrayaccess.offsetget.php
      *
      * @param mixed $offset <p>
      *                      The offset to retrieve.
      *                      </p>
      *
-     * @return Timeframe|null
+     * @return TimeframeInterface|null
      *
      * @since 2.0.0
      */
-    public function offsetGet($offset): ?Timeframe
+    public function offsetGet($offset): ?TimeframeInterface
     {
         if ($this->offsetExists($offset)) {
             return $this->timeframes[$offset];
@@ -313,9 +296,9 @@ class Timeframes extends AbstractEntity implements Iterator, ArrayAccess, Counta
     }
 
     /**
-     * Offset to set
+     * Offset to set.
      *
-     * @link  https://php.net/manual/en/arrayaccess.offsetset.php
+     * @see  https://php.net/manual/en/arrayaccess.offsetset.php
      *
      * @param mixed $offset <p>
      *                      The offset to assign the value to.
@@ -338,9 +321,9 @@ class Timeframes extends AbstractEntity implements Iterator, ArrayAccess, Counta
     }
 
     /**
-     * Offset to unset
+     * Offset to unset.
      *
-     * @link  https://php.net/manual/en/arrayaccess.offsetunset.php
+     * @see  https://php.net/manual/en/arrayaccess.offsetunset.php
      *
      * @param mixed $offset <p>
      *                      The offset to unset.
@@ -356,14 +339,14 @@ class Timeframes extends AbstractEntity implements Iterator, ArrayAccess, Counta
     }
 
     /**
-     * Count elements of an object
+     * Count elements of an object.
      *
-     * @link  https://php.net/manual/en/countable.count.php
+     * @see  https://php.net/manual/en/countable.count.php
      *
      * @return int The custom count as an integer.
-     * </p>
-     * <p>
-     * The return value is cast to an integer.
+     *             </p>
+     *             <p>
+     *             The return value is cast to an integer.
      *
      * @since 2.0.0
      */

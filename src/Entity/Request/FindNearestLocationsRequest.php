@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,9 +23,7 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -31,82 +31,81 @@ namespace Firstred\PostNL\Entity\Request;
 
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Misc\ValidateAndFix;
 
 /**
- * Class FindNearestLocationsRequest
+ * Class FindNearestLocationsRequest.
  *
  * This class is both the container and can be the actual FindNearestLocationsRequest object itself!
  */
-class FindNearestLocationsRequest extends AbstractEntity
+final class FindNearestLocationsRequest extends AbstractEntity
 {
     /**
-     * Country code
+     * Country code.
      *
      * @pattern ^(?:NL|BE)$
      *
      * @example NL
      *
-     * @var string|null $countrycode
+     * @var string|null
      *
      * @since   1.0.0
      */
-    protected $countrycode;
+    private $countrycode;
 
     /**
-     * Postal code
+     * Postal code.
      *
      * @pattern ^.{1,10}$
      *
      * @example 2132WT
      *
-     * @var string|null $postalCode
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $postalCode;
+    private $postalCode;
 
     /**
-     * City
+     * City.
      *
      * @pattern ^.{0,35}$
      *
      * @example Hoofddorp
      *
-     * @var string|null $city
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $city;
+    private $city;
 
     /**
-     * Street
+     * Street.
      *
      * @pattern ^.{0,95}$
      *
      * @example Siriusdreef
      *
-     * @var string|null $street
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $street;
+    private $street;
 
     /**
-     * House number
+     * House number.
      *
      * @pattern ^\d{1,10}$
      *
      * @example 42
      *
-     * @var int|null $houseNumber
+     * @var int|null
      *
      * @since   2.0.0
      */
-    protected $houseNumber;
+    private $houseNumber;
 
     /**
-     * Delivery date
+     * Delivery date.
      *
      * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}$
      *
@@ -116,10 +115,10 @@ class FindNearestLocationsRequest extends AbstractEntity
      *
      * @since   2.0.0
      */
-    protected $deliveryDate;
+    private $deliveryDate;
 
     /**
-     * Opening time
+     * Opening time.
      *
      * @pattern ^(?:2[0-3]|[01]?[0-9]):(?:[0-5]?[0-9]):(?:[0-5]?[0-9])$
      *
@@ -129,42 +128,28 @@ class FindNearestLocationsRequest extends AbstractEntity
      *
      * @since   2.0.0
      */
-    protected $openingTime;
+    private $openingTime;
 
     /**
-     * Delivery options
+     * Delivery options.
      *
      * @pattern ^(?:PG|PGE)$
      *
      * @example PGE
      *
-     * @var array|null $deliveryOptions
+     * @var array|null
      *
      * @since   2.0.0
      */
-    protected $deliveryOptions;
+    private $deliveryOptions;
 
     /**
-     * FindNearestLocationsRequest constructor.
-     *
-     *
-     *
-     * @since 1.0.0
-     * @since 2.0.0
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
-     * Get country code
+     * Get country code.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0
-     *
      * @see   FindNearestLocationsRequest::$countrycode
      */
     public function getCountrycode(): ?string
@@ -173,7 +158,7 @@ class FindNearestLocationsRequest extends AbstractEntity
     }
 
     /**
-     * Set country code
+     * Set country code.
      *
      * @pattern ^(?:NL|BE)$
      *
@@ -185,7 +170,6 @@ class FindNearestLocationsRequest extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0
-     *
      * @see     FindNearestLocationsRequest::$countrycode
      */
     public function setCountrycode(?string $countrycode): FindNearestLocationsRequest
@@ -196,12 +180,11 @@ class FindNearestLocationsRequest extends AbstractEntity
     }
 
     /**
-     * Get postal code
+     * Get postal code.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   FindNearestLocationsRequest::$postalCode
      */
     public function getPostalCode(): ?string
@@ -210,7 +193,7 @@ class FindNearestLocationsRequest extends AbstractEntity
     }
 
     /**
-     * Set postal code
+     * Set postal code.
      *
      * @pattern ^.{1,10}$
      *
@@ -223,23 +206,21 @@ class FindNearestLocationsRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     FindNearestLocationsRequest::$postalCode
      */
     public function setPostalCode(?string $postalCode): FindNearestLocationsRequest
     {
-        $this->postalCode = ValidateAndFix::postcode($postalCode);
+        $this->postalCode = $this->validate->postcode($postalCode);
 
         return $this;
     }
 
     /**
-     * Get city
+     * Get city.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   FindNearestLocationsRequest::$city
      */
     public function getCity(): ?string
@@ -248,7 +229,7 @@ class FindNearestLocationsRequest extends AbstractEntity
     }
 
     /**
-     * Set city
+     * Set city.
      *
      * @pattern ^.{0,35}$
      *
@@ -261,23 +242,21 @@ class FindNearestLocationsRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     FindNearestLocationsRequest::$city
      */
     public function setCity(?string $city): FindNearestLocationsRequest
     {
-        $this->city = ValidateAndFix::city($city);
+        $this->city = $this->validate->city($city);
 
         return $this;
     }
 
     /**
-     * Get street
+     * Get street.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   FindNearestLocationsRequest::$street
      */
     public function getStreet(): ?string
@@ -286,7 +265,7 @@ class FindNearestLocationsRequest extends AbstractEntity
     }
 
     /**
-     * Set street
+     * Set street.
      *
      * @pattern ^.{0,95}$
      *
@@ -299,23 +278,21 @@ class FindNearestLocationsRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     FindNearestLocationsRequest::$street
      */
     public function setStreet(?string $street): FindNearestLocationsRequest
     {
-        $this->street = ValidateAndFix::street($street);
+        $this->street = $this->validate->street($street);
 
         return $this;
     }
 
     /**
-     * Get house number
+     * Get house number.
      *
      * @return int|null
      *
      * @since 2.0.0
-     *
      * @see   FindNearestLocationsRequest::$houseNumber
      */
     public function getHouseNumber(): ?int
@@ -324,7 +301,7 @@ class FindNearestLocationsRequest extends AbstractEntity
     }
 
     /**
-     * Set house number
+     * Set house number.
      *
      * @pattern ^\d{1,10}$
      *
@@ -337,23 +314,21 @@ class FindNearestLocationsRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     FindNearestLocationsRequest::$houseNumber
      */
     public function setHouseNumber($houseNumber): FindNearestLocationsRequest
     {
-        $this->houseNumber = ValidateAndFix::integer($houseNumber);
+        $this->houseNumber = $this->validate->integer($houseNumber);
 
         return $this;
     }
 
     /**
-     * Get delivery date
+     * Get delivery date.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   FindNearestLocationsRequest::$deliveryDateq
      */
     public function getDeliveryDate(): ?string
@@ -362,7 +337,7 @@ class FindNearestLocationsRequest extends AbstractEntity
     }
 
     /**
-     * Set delivery date
+     * Set delivery date.
      *
      * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}$
      *
@@ -375,23 +350,21 @@ class FindNearestLocationsRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     FindNearestLocationsRequest::$deliveryDate
      */
     public function setDeliveryDate(?string $deliveryDate): FindNearestLocationsRequest
     {
-        $this->deliveryDate = ValidateAndFix::date($deliveryDate);
+        $this->deliveryDate = $this->validate->date($deliveryDate);
 
         return $this;
     }
 
     /**
-     * Get opening time
+     * Get opening time.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   FindNearestLocationsRequest::$openingTime
      */
     public function getOpeningTime(): ?string
@@ -400,7 +373,7 @@ class FindNearestLocationsRequest extends AbstractEntity
     }
 
     /**
-     * Set opening time
+     * Set opening time.
      *
      * @pattern ^(?:2[0-3]|[01]?[0-9]):(?:[0-5]?[0-9]):(?:[0-5]?[0-9])$
      *
@@ -413,23 +386,21 @@ class FindNearestLocationsRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     FindNearestLocationsRequest::$openingTime
      */
     public function setOpeningTime(?string $openingTime): FindNearestLocationsRequest
     {
-        $this->openingTime = ValidateAndFix::time($openingTime);
+        $this->openingTime = $this->validate->time($openingTime);
 
         return $this;
     }
 
     /**
-     * Get delivery options
+     * Get delivery options.
      *
      * @return array|null
      *
      * @since 2.0.0
-     *
      * @see   FindNearestLocationsRequest::$deliveryOptions
      */
     public function getDeliveryOptions(): ?array
@@ -438,7 +409,7 @@ class FindNearestLocationsRequest extends AbstractEntity
     }
 
     /**
-     * Set delivery options
+     * Set delivery options.
      *
      * @pattern ^(?:PG|PGE)$
      *
@@ -449,7 +420,6 @@ class FindNearestLocationsRequest extends AbstractEntity
      * @return static
      *
      * @since   2.0.0
-     *
      * @see     FindNearestLocationsRequest::$deliveryOptions
      */
     public function setDeliveryOptions(?array $deliveryOptions): FindNearestLocationsRequest

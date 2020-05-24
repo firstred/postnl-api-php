@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * Copyright (c) 2015 Michael Dowling, https://github.com/mtdowling <mtdowling@gmail.com>
+ * Copyright (c) 2015 Michael Dowling, https://github.com/mtdowling <mtdowling@gmail.com>.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,7 +33,7 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * Class Message
+ * Class Message.
  */
 class Message
 {
@@ -41,7 +43,7 @@ class Message
     /**
      * Returns the string representation of an HTTP message.
      *
-     * @param MessageInterface $message Message to convert to a string.
+     * @param MessageInterface $message message to convert to a string
      *
      * @return string
      */
@@ -71,7 +73,7 @@ class Message
     /**
      * Parses a response message string into a response object.
      *
-     * @param string $message Response message string.
+     * @param string $message response message string
      *
      * @return ResponseInterface
      */
@@ -82,7 +84,7 @@ class Message
         // between status-code and reason-phrase is required. But browsers accept
         // responses without space and reason as well.
         if (!preg_match('/^HTTP\/.* [0-9]{3}( .*|$)/', $data['start-line'])) {
-            throw new InvalidArgumentException(sprintf("Invalid response string: %s", $data['start-line']));
+            throw new InvalidArgumentException(sprintf('Invalid response string: %s', $data['start-line']));
         }
         $parts = explode(' ', $data['start-line'], 3);
 
@@ -104,7 +106,7 @@ class Message
      * the message, "headers" key containing an associative array of header
      * array values, and a "body" key containing the body of the message.
      *
-     * @param string $message HTTP request or response to parse.
+     * @param string $message HTTP request or response to parse
      *
      * @return array
      *
@@ -127,7 +129,7 @@ class Message
             throw new InvalidArgumentException('Invalid message: Missing status line');
         }
         list($startLine, $rawHeaders) = $headerParts;
-        if (preg_match("/(?:^HTTP\/|^[A-Z]+ \S+ HTTP\/)(\d+(?:\.\d+)?)/i", $startLine, $matches) && $matches[1] === '1.0') {
+        if (preg_match("/(?:^HTTP\/|^[A-Z]+ \S+ HTTP\/)(\d+(?:\.\d+)?)/i", $startLine, $matches) && '1.0' === $matches[1]) {
             // Header folding is deprecated for HTTP/1.1, but allowed in HTTP/1.0
             $rawHeaders = preg_replace(self::RFC7230_HEADER_FOLD_REGEX, ' ', $rawHeaders);
         }

@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,148 +23,117 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Misc\ValidateAndFix;
 
 /**
- * Class Timeframe
+ * Class Timeframe.
  */
-class Timeframe extends AbstractEntity
+final class Timeframe extends AbstractEntity implements TimeframeInterface
 {
     /**
-     * Timeframe date
+     * Timeframe date.
      *
      * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}$
      *
      * @example 03-07-2019
      *
-     * @var string|null $date
+     * @var string|null
      *
      * @since   1.0.0
      */
-    protected $date;
+    private $date;
 
     /**
-     * From
+     * From.
      *
      * @pattern ^(?:2[0-3]|[01]?[0-9]):(?:[0-5]?[0-9]):(?:[0-5]?[0-9])$
      *
      * @example 14:00:00
      *
-     * @var string|null $from
+     * @var string|null
      *
      * @since   1.0.0
      */
-    protected $from;
+    private $from;
 
     /**
-     * To
+     * To.
      *
      * @pattern ^(?:2[0-3]|[01]?[0-9]):(?:[0-5]?[0-9]):(?:[0-5]?[0-9])$
      *
      * @example 16:30:00
      *
-     * @var string|null $to
+     * @var string|null
      *
      * @since   1.0.0
      */
-    protected $to;
+    private $to;
 
     /**
-     * Options
+     * Options.
      *
      * @pattern N/A
      *
      * @example N/A
      *
-     * @var string[]|null $options
+     * @var string[]|null
      *
      * @since   1.0.0
      */
-    protected $options;
+    private $options;
 
     /**
-     * Code
+     * Code.
      *
      * @pattern ^.{0,35}$
      *
      * @example 02
      *
-     * @var string|null $code
+     * @var string|null
      *
      * @since   1.0.0
      */
-    protected $code;
+    private $code;
 
     /**
-     * Description
+     * Description.
      *
      * @pattern ^.{0,35}$
      *
      * @example Middag
      *
-     * @var string|null $description
+     * @var string|null
      *
      * @since   1.0.0
      */
-    protected $description;
+    private $description;
 
     /**
-     * Shipping date property as returned by the Checkout API
+     * Shipping date property as returned by the Checkout API.
      *
      * @pattern ^(?:[0-3]\d-[01]\d-[12]\d{3})$
      *
      * @example 03-07-2019
      *
-     * @var string|null $shippingDate
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $shippingDate;
+    private $shippingDate;
 
     /**
-     * Timeframe constructor.
-     *
-     * @param string|null   $date
-     * @param string|null   $from
-     * @param string|null   $to
-     * @param string[]|null $options
-     * @param string|null   $code
-     * @param string|null   $description
-     *
-     * @throws InvalidArgumentException
-     *
-     * @since 2.0.0 Strict typing
-     * @since 1.0.0
-     */
-    public function __construct(?string $date = null, ?string $from = null, ?string $to = null, array $options = null, ?string $code = null, ?string $description = null)
-    {
-        parent::__construct();
-
-        $this->setDate($date);
-        $this->setFrom($from);
-        $this->setTo($to);
-        $this->setOptions($options);
-        $this->setCode($code);
-        $this->setDescription($description);
-    }
-
-    /**
-     * Get date
+     * Get date.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Timeframe::$date
      */
     public function getDate(): ?string
@@ -171,7 +142,7 @@ class Timeframe extends AbstractEntity
     }
 
     /**
-     * Set date
+     * Set date.
      *
      * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}$
      *
@@ -185,24 +156,22 @@ class Timeframe extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Timeframe::$date
      */
-    public function setDate(?string $date): Timeframe
+    public function setDate(?string $date): TimeframeInterface
     {
-        $this->date = ValidateAndFix::date($date);
+        $this->date = $this->validate->date($date);
 
         return $this;
     }
 
     /**
-     * Get from
+     * Get from.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Timeframe::$from
      */
     public function getFrom(): ?string
@@ -211,7 +180,7 @@ class Timeframe extends AbstractEntity
     }
 
     /**
-     * Set from
+     * Set from.
      *
      * @pattern ^(?:2[0-3]|[01]?[0-9]):(?:[0-5]?[0-9]):(?:[0-5]?[0-9])$
      *
@@ -225,24 +194,22 @@ class Timeframe extends AbstractEntity
      *
      * @since   2.0.0 Strict typing
      * @since   1.0.0
-     *
      * @see     Timeframe::$from
      */
-    public function setFrom(?string $from): Timeframe
+    public function setFrom(?string $from): TimeframeInterface
     {
-        $this->from = ValidateAndFix::time($from);
+        $this->from = $this->validate->time($from);
 
         return $this;
     }
 
     /**
-     * Get to
+     * Get to.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Timeframe::$to
      */
     public function getTo(): ?string
@@ -251,7 +218,7 @@ class Timeframe extends AbstractEntity
     }
 
     /**
-     * Set to
+     * Set to.
      *
      * @pattern ^(?:2[0-3]|[01]?[0-9]):(?:[0-5]?[0-9]):(?:[0-5]?[0-9])$
      *
@@ -265,24 +232,22 @@ class Timeframe extends AbstractEntity
      *
      * @since   2.0.0 Strict typing
      * @since   1.0.0
-     *
      * @see     Timeframe::$to
      */
-    public function setTo(?string $to): Timeframe
+    public function setTo(?string $to): TimeframeInterface
     {
-        $this->to = ValidateAndFix::time($to);
+        $this->to = $this->validate->time($to);
 
         return $this;
     }
 
     /**
-     * Get options
+     * Get options.
      *
      * @return string[]|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Timeframe::$options
      */
     public function getOptions(): ?array
@@ -291,7 +256,7 @@ class Timeframe extends AbstractEntity
     }
 
     /**
-     * Set options
+     * Set options.
      *
      * @pattern N/A
      *
@@ -303,10 +268,9 @@ class Timeframe extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Timeframe::$options
      */
-    public function setOptions(?array $options): Timeframe
+    public function setOptions(?array $options): TimeframeInterface
     {
         $this->options = $options;
 
@@ -314,13 +278,12 @@ class Timeframe extends AbstractEntity
     }
 
     /**
-     * Get code
+     * Get code.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Timeframe::$code
      */
     public function getCode(): ?string
@@ -329,7 +292,7 @@ class Timeframe extends AbstractEntity
     }
 
     /**
-     * Set code
+     * Set code.
      *
      * @pattern ^.{0,35}$
      *
@@ -343,24 +306,22 @@ class Timeframe extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Timeframe::$code
      */
-    public function setCode(?string $code): Timeframe
+    public function setCode(?string $code): TimeframeInterface
     {
-        $this->code = ValidateAndFix::genericString($code);
+        $this->code = $this->validate->genericString($code);
 
         return $this;
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Timeframe::$description
      */
     public function getDescription(): ?string
@@ -369,7 +330,7 @@ class Timeframe extends AbstractEntity
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @pattern ^.{0,35}$
      *
@@ -383,23 +344,21 @@ class Timeframe extends AbstractEntity
      *
      * @since   2.0.0 Strict typing
      * @since   1.0.0
-     *
      * @see     Timeframe::$description
      */
-    public function setDescription(?string $description): Timeframe
+    public function setDescription(?string $description): TimeframeInterface
     {
-        $this->description = ValidateAndFix::genericString($description);
+        $this->description = $this->validate->genericString($description);
 
         return $this;
     }
 
     /**
-     * Get shipping date
+     * Get shipping date.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   Timeframe::$shippingDate
      */
     public function getShippingDate(): ?string
@@ -408,7 +367,7 @@ class Timeframe extends AbstractEntity
     }
 
     /**
-     * Set shipping date
+     * Set shipping date.
      *
      * @example 03-07-2019
      *
@@ -419,10 +378,9 @@ class Timeframe extends AbstractEntity
      * @return static
      *
      * @since   2.0.0
-     *
      * @see     Timeframe::$shippingDate
      */
-    public function setShippingDate(?string $shippingDate): Timeframe
+    public function setShippingDate(?string $shippingDate): TimeframeInterface
     {
         $this->shippingDate = $shippingDate;
 

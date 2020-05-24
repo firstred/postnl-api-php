@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,58 +23,40 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Entity\Request;
 
 use Firstred\PostNL\Entity\AbstractEntity;
-use Firstred\PostNL\Entity\Shipment;
+use Firstred\PostNL\Entity\ShipmentInterface;
 
 /**
- * Class RetrieveSignatureByBarcodeRequest
+ * Class RetrieveSignatureByBarcodeRequest.
  */
-class RetrieveSignatureByBarcodeRequest extends AbstractEntity
+final class RetrieveSignatureByBarcodeRequest extends AbstractEntity
 {
     /**
-     * Barcode
+     * Barcode.
      *
      * @pattern N/A
      *
      * @example N/A
      *
-     * @var Shipment|null $shipment
+     * @var ShipmentInterface|null
      *
      * @since   1.0.0
      */
-    protected $barcode;
+    private $barcode;
 
     /**
-     * RetrieveSignatureByBarcodeRequest constructor.
+     * Get barcode.
      *
-     * @param string|null $barcode
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function __construct(?string $barcode = null)
-    {
-        parent::__construct();
-
-        $this->setBarcode($barcode);
-    }
-
-    /**
-     * Get barcode
-     *
-     * @return Shipment|null
+     * @return ShipmentInterface|null
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     RetrieveSignatureByBarcodeRequest::$barcode
      */
     public function getBarcode(): ?string
@@ -81,7 +65,7 @@ class RetrieveSignatureByBarcodeRequest extends AbstractEntity
     }
 
     /**
-     * Set barcode
+     * Set barcode.
      *
      * @pattern N/A
      *
@@ -93,7 +77,6 @@ class RetrieveSignatureByBarcodeRequest extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     RetrieveSignatureByBarcodeRequest::$barcode
      */
     public function setBarcode(?string $barcode = null): RetrieveSignatureByBarcodeRequest

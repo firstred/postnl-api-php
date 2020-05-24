@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,9 +23,7 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -31,42 +31,27 @@ namespace Firstred\PostNL\Entity\Request;
 
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Shipment;
+use Firstred\PostNL\Entity\ShipmentInterface;
 
 /**
- * Class ConfirmShipmentRequest
+ * Class ConfirmShipmentRequest.
  */
-class ConfirmShipmentRequest extends AbstractEntity
+final class ConfirmShipmentRequest extends AbstractEntity implements ConfirmShipmentRequestInterface
 {
     /**
      * @pattern N/A
      *
      * @example N/A
      *
-     * @var Shipment[]|null $shipments
+     * @var ShipmentInterface[]|null
      *
      * @since   1.0.0
-     *
      * @see     Shipment
      */
-    protected $shipments;
+    private $shipments;
 
     /**
-     * ConfirmShipmentRequest constructor.
-     *
-     * @param Shipment[]|null $shipments
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function __construct(array $shipments = null)
-    {
-        parent::__construct();
-
-        $this->setShipments($shipments);
-    }
-
-    /**
-     * Return a serializable array for `json_encode`
+     * Return a serializable array for `json_encode`.
      *
      * @return array
      *
@@ -94,13 +79,12 @@ class ConfirmShipmentRequest extends AbstractEntity
     }
 
     /**
-     * Get shipments
+     * Get shipments.
      *
-     * @return Shipment[]|null
+     * @return ShipmentInterface[]|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Shipment
      */
     public function getShipments(): ?array
@@ -109,19 +93,18 @@ class ConfirmShipmentRequest extends AbstractEntity
     }
 
     /**
-     * Set shipments
+     * Set shipments.
      *
      * @pattern N/A
      *
-     * @example N/A
-     *
-     * @param Shipment[]|null $shipments
+     * @param ShipmentInterface[]|null $shipments
      *
      * @return static
      *
+     * @example N/A
+     *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Shipment
      */
     public function setShipments(?array $shipments): ConfirmShipmentRequest

@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,135 +23,104 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Misc\ValidateAndFix;
 
 /**
- * Class ReasonNoTimeframe
+ * Class ReasonNoTimeframe.
  */
-class ReasonNoTimeframe extends AbstractEntity
+final class ReasonNoTimeframe extends AbstractEntity implements ReasonNoTimeframeInterface
 {
     /**
-     * Reason code
+     * Reason code.
      *
      * @pattern ^\d{2}$
      *
      * @example 02
      *
-     * @var string|null $code
+     * @var string|null
      *
      * @since   1.0.0
      */
-    protected $code;
+    private $code;
 
     /**
-     * Timeframe date
+     * Timeframe date.
      *
      * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}$
      *
      * @example 03-07-2019
      *
-     * @var string|null $date
+     * @var string|null
      *
      * @since   1.0.0
      */
-    protected $date;
+    private $date;
 
     /**
-     * Detailed reason
+     * Detailed reason.
      *
      * @pattern ^.{0,95}$
      *
      * @example Dag uitgesloten van tijdvak
      *
-     * @var string|null $description
+     * @var string|null
      *
      * @since   1.0.0
      */
-    protected $description;
+    private $description;
 
     /**
-     * Timeframe options
+     * Timeframe options.
      *
      * @pattern ^.{0,35}$
      *
      * @example Afternoon
      *
-     * @var string[]|null $options
+     * @var string[]|null
      *
      * @since   1.0.0
      */
-    protected $options;
+    private $options;
 
     /**
-     * From
+     * From.
      *
      * @pattern ^(2[0-3]|[01]?[0-9]):([0-5]?[0-9]):([0-5]?[0-9])$
      *
      * @example 14:00:00
      *
-     * @var string|null $from
+     * @var string|null
      *
      * @since   1.0.0
      */
-    protected $from;
+    private $from;
 
     /**
-     * To
+     * To.
      *
      * @pattern ^(2[0-3]|[01]?[0-9]):([0-5]?[0-9]):([0-5]?[0-9])$
      *
      * @example 16:30:00
      *
-     * @var string|null $to
+     * @var string|null
      *
      * @since   1.0.0
      */
-    protected $to;
+    private $to;
 
     /**
-     * ReasonNoTimeframe constructor.
-     *
-     * @param string|null   $code
-     * @param string|null   $date
-     * @param string|null   $desc
-     * @param string[]|null $options
-     * @param string|null   $from
-     * @param string|null   $to
-     *
-     * @throws InvalidArgumentException
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function __construct(?string $code = null, ?string $date = null, ?string $desc = null, array $options = null, ?string $from = null, ?string $to = null)
-    {
-        parent::__construct();
-
-        $this->setCode($code);
-        $this->setDate($date);
-        $this->setDescription($desc);
-        $this->setOptions($options);
-        $this->setFrom($from);
-        $this->setTo($to);
-    }
-
-    /**
-     * Get code
+     * Get code.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   ReasonNoTimeframe::$code
      */
     public function getCode(): ?string
@@ -158,7 +129,7 @@ class ReasonNoTimeframe extends AbstractEntity
     }
 
     /**
-     * Set code
+     * Set code.
      *
      * @pattern ^\d{2}$
      *
@@ -172,24 +143,22 @@ class ReasonNoTimeframe extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     ReasonNoTimeframe::$code
      */
-    public function setCode(?string $code): ReasonNoTimeframe
+    public function setCode(?string $code): ReasonNoTimeframeInterface
     {
-        $this->code = ValidateAndFix::numericType($code);
+        $this->code = $this->validate->numericType($code);
 
         return $this;
     }
 
     /**
-     * Get date
+     * Get date.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   ReasonNoTimeframe::$date
      */
     public function getDate(): ?string
@@ -198,7 +167,7 @@ class ReasonNoTimeframe extends AbstractEntity
     }
 
     /**
-     * Set date
+     * Set date.
      *
      * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}$
      *
@@ -212,24 +181,22 @@ class ReasonNoTimeframe extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     ReasonNoTimeframe::$date
      */
-    public function setDate(?string $date): ReasonNoTimeframe
+    public function setDate(?string $date): ReasonNoTimeframeInterface
     {
-        $this->date = ValidateAndFix::date($date);
+        $this->date = $this->validate->date($date);
 
         return $this;
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   ReasonNoTimeframe::$description
      */
     public function getDescription(): ?string
@@ -238,7 +205,7 @@ class ReasonNoTimeframe extends AbstractEntity
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @pattern ^.{0,95}$
      *
@@ -250,10 +217,9 @@ class ReasonNoTimeframe extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     ReasonNoTimeframe::$description
      */
-    public function setDescription(?string $description): ReasonNoTimeframe
+    public function setDescription(?string $description): ReasonNoTimeframeInterface
     {
         $this->description = $description;
 
@@ -261,13 +227,12 @@ class ReasonNoTimeframe extends AbstractEntity
     }
 
     /**
-     * Get options
+     * Get options.
      *
      * @return string[]|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   ReasonNoTimeframe::$options
      */
     public function getOptions(): ?array
@@ -276,7 +241,7 @@ class ReasonNoTimeframe extends AbstractEntity
     }
 
     /**
-     * Set options
+     * Set options.
      *
      * @pattern ^.{0,35}$
      *
@@ -288,10 +253,9 @@ class ReasonNoTimeframe extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     ReasonNoTimeframe::$options
      */
-    public function setOptions(?array $options): ReasonNoTimeframe
+    public function setOptions(?array $options): ReasonNoTimeframeInterface
     {
         $this->options = $options;
 
@@ -299,13 +263,12 @@ class ReasonNoTimeframe extends AbstractEntity
     }
 
     /**
-     * Get from
+     * Get from.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   ReasonNoTimeframe::$from
      */
     public function getFrom(): ?string
@@ -314,7 +277,7 @@ class ReasonNoTimeframe extends AbstractEntity
     }
 
     /**
-     * Set from
+     * Set from.
      *
      * @pattern ^(2[0-3]|[01]?[0-9]):([0-5]?[0-9]):([0-5]?[0-9])$
      *
@@ -327,26 +290,24 @@ class ReasonNoTimeframe extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0 Strict typing
-     *
      * @since   1.0.0
      * @see     ReasonNoTimeframe::$from
      *                                  .
      */
-    public function setFrom(?string $from): ReasonNoTimeframe
+    public function setFrom(?string $from): ReasonNoTimeframeInterface
     {
-        $this->from = ValidateAndFix::time($from);
+        $this->from = $this->validate->time($from);
 
         return $this;
     }
 
     /**
-     * Get to
+     * Get to.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   ReasonNoTimeframe::$to
      */
     public function getTo(): ?string
@@ -355,7 +316,7 @@ class ReasonNoTimeframe extends AbstractEntity
     }
 
     /**
-     * Set to
+     * Set to.
      *
      * @pattern ^(2[0-3]|[01]?[0-9]):([0-5]?[0-9]):([0-5]?[0-9])$
      *
@@ -369,12 +330,11 @@ class ReasonNoTimeframe extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     ReasonNoTimeframe::$to
      */
-    public function setTo(?string $to): ReasonNoTimeframe
+    public function setTo(?string $to): ReasonNoTimeframeInterface
     {
-        $this->to = ValidateAndFix::time($to);
+        $this->to = $this->validate->time($to);
 
         return $this;
     }

@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,75 +23,52 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Misc\ValidateAndFix;
 
 /**
- * Class Expectation
+ * Class Expectation.
  */
-class Expectation extends AbstractEntity
+final class Expectation extends AbstractEntity implements ExpectationInterface
 {
     /**
-     * ETA from
+     * ETA from.
      *
      * @pattern ^(2[0-3]|[01]?[0-9]):([0-5]?[0-9]):([0-5]?[0-9])$
      *
      * @example 14:00:00
      *
-     * @var string|null $ETAFrom
+     * @var string|null
      *
      * @since 1.0.0
      */
-    protected $ETAFrom;
+    private $ETAFrom;
 
     /**
-     * ETA to
+     * ETA to.
      *
      * @pattern ^(2[0-3]|[01]?[0-9]):([0-5]?[0-9]):([0-5]?[0-9])$
      *
      * @example 16:30:00
      *
-     * @var string|null $ETATo
+     * @var string|null
      *
      * @since 1.0.0
      */
-    protected $ETATo;
+    private $ETATo;
 
     /**
-     * Expectation constructor.
-     *
-     * @param string $from
-     * @param string $to
-     *
-     * @throws InvalidArgumentException
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function __construct($from = null, $to = null)
-    {
-        parent::__construct();
-
-        $this->setETAFrom($from);
-        $this->setETATo($to);
-    }
-
-    /**
-     * Get ETA from
+     * Get ETA from.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Expectation::$ETAFrom
      */
     public function getETAFrom(): ?string
@@ -98,7 +77,7 @@ class Expectation extends AbstractEntity
     }
 
     /**
-     * Set ETA from
+     * Set ETA from.
      *
      * @pattern ^(2[0-3]|[01]?[0-9]):([0-5]?[0-9]):([0-5]?[0-9])$
      *
@@ -112,24 +91,22 @@ class Expectation extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Expectation::$ETAFrom
      */
-    public function setETAFrom(?string $ETAFrom): Expectation
+    public function setETAFrom(?string $ETAFrom): ExpectationInterface
     {
-        $this->ETAFrom = ValidateAndFix::time($ETAFrom);
+        $this->ETAFrom = $this->validate->time($ETAFrom);
 
         return $this;
     }
 
     /**
-     * Get ETA to
+     * Get ETA to.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Expectation::$ETATo
      */
     public function getETATo(): ?string
@@ -138,7 +115,7 @@ class Expectation extends AbstractEntity
     }
 
     /**
-     * Set ETA to
+     * Set ETA to.
      *
      * @pattern ^(2[0-3]|[01]?[0-9]):([0-5]?[0-9]):([0-5]?[0-9])$
      *
@@ -152,12 +129,11 @@ class Expectation extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Expectation::$ETATo
      */
-    public function setETATo(?string $ETATo): Expectation
+    public function setETATo(?string $ETATo): ExpectationInterface
     {
-        $this->ETATo = ValidateAndFix::time($ETATo);
+        $this->ETATo = $this->validate->time($ETATo);
 
         return $this;
     }

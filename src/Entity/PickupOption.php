@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,98 +23,75 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Entity;
 
 /**
- * Class PickupOption
+ * Class PickupOption.
  */
-class PickupOption extends AbstractEntity
+final class PickupOption extends AbstractEntity implements PickupOptionInterface
 {
     /**
-     * Pickup date
+     * Pickup date.
      *
      * @pattern N/A
      *
      * @example N/A
      *
-     * @var string|null $pickupDate
+     * @var string|null
      *
      * @since 2.0.0
      */
-    protected $pickupDate;
+    private $pickupDate;
 
     /**
-     * Shipping date
+     * Shipping date.
      *
      * @pattern N/A
      *
      * @example N/A
      *
-     * @var string|null $shippingDate
+     * @var string|null
      *
      * @since 2.0.0
      */
-    protected $shippingDate;
+    private $shippingDate;
 
     /**
-     * Options
+     * Options.
      *
      * @pattern N/A
      *
      * @example N/A
      *
-     * @var string|null $option
+     * @var string|null
      *
      * @since 2.0.0
      */
-    protected $option;
+    private $option;
 
     /**
-     * Locations
+     * Locations.
      *
      * @pattern N/A
      *
      * @example N/A
      *
-     * @var Locations|null $locations
+     * @var LocationsInterface|null
      *
-     * @since 2.0.0
+     * @since   2.0.0
      */
-    protected $locations;
+    private $locations;
 
     /**
-     * PickupOption constructor.
-     *
-     * @param string|null    $pickupDate
-     * @param string|null    $shippingDate
-     * @param string|null    $option
-     * @param Locations|null $locations
-     *
-     * @since 2.0.0
-     */
-    public function __construct(?string $pickupDate = null, ?string $shippingDate = null, ?string $option = null, ?Locations $locations = null)
-    {
-        parent::__construct();
-
-        $this->setPickupDate($pickupDate);
-        $this->setShippingDate($shippingDate);
-        $this->setOption($option);
-        $this->setLocations($locations);
-    }
-
-    /**
-     * Get pickupDate
+     * Get pickupDate.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   PickupOption::$pickupDate
      */
     public function getPickupDate(): ?string
@@ -121,7 +100,7 @@ class PickupOption extends AbstractEntity
     }
 
     /**
-     * Set pickupDate
+     * Set pickupDate.
      *
      * @pattern N/A
      *
@@ -132,10 +111,9 @@ class PickupOption extends AbstractEntity
      * @return static
      *
      * @since   2.0.0
-     *
      * @see     PickupOption::$pickupDate
      */
-    public function setPickupDate(?string $pickupDate): PickupOption
+    public function setPickupDate(?string $pickupDate): PickupOptionInterface
     {
         $this->pickupDate = $pickupDate;
 
@@ -143,12 +121,11 @@ class PickupOption extends AbstractEntity
     }
 
     /**
-     * Get shippingDate
+     * Get shippingDate.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   PickupOption::$shippingDate
      */
     public function getShippingDate(): ?string
@@ -157,7 +134,7 @@ class PickupOption extends AbstractEntity
     }
 
     /**
-     * Set shippingDate
+     * Set shippingDate.
      *
      * @pattern N/A
      *
@@ -168,10 +145,9 @@ class PickupOption extends AbstractEntity
      * @return static
      *
      * @since   2.0.0
-     *
      * @see     PickupOption::$shippingDate
      */
-    public function setShippingDate(?string $shippingDate): PickupOption
+    public function setShippingDate(?string $shippingDate): PickupOptionInterface
     {
         $this->shippingDate = $shippingDate;
 
@@ -179,12 +155,11 @@ class PickupOption extends AbstractEntity
     }
 
     /**
-     * Get option
+     * Get option.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   PickupOption::$option
      */
     public function getOption(): ?string
@@ -193,7 +168,7 @@ class PickupOption extends AbstractEntity
     }
 
     /**
-     * Set option
+     * Set option.
      *
      * @pattern N/A
      *
@@ -204,10 +179,9 @@ class PickupOption extends AbstractEntity
      * @return static
      *
      * @since   2.0.0
-     *
      * @see     PickupOption::$option
      */
-    public function setOption(?string $option): PickupOption
+    public function setOption(?string $option): PickupOptionInterface
     {
         $this->option = $option;
 
@@ -215,35 +189,33 @@ class PickupOption extends AbstractEntity
     }
 
     /**
-     * Get locations
+     * Get locations.
      *
-     * @return Locations|null
+     * @return LocationsInterface|null
      *
      * @since 2.0.0
-     *
      * @see   PickupOption::$locations
      */
-    public function getLocations(): ?Locations
+    public function getLocations(): ?LocationsInterface
     {
         return $this->locations;
     }
 
     /**
-     * Set locations
+     * Set locations.
      *
      * @pattern N/A
      *
-     * @example N/A
-     *
-     * @param Locations|null $locations
+     * @param LocationsInterface|null $locations
      *
      * @return static
      *
-     * @since   2.0.0
+     * @example N/A
      *
+     * @since   2.0.0
      * @see     PickupOption::$locations
      */
-    public function setLocations(?Locations $locations): PickupOption
+    public function setLocations(?LocationsInterface $locations): PickupOptionInterface
     {
         $this->locations = $locations;
 

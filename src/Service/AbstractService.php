@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,9 +23,7 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -31,65 +31,82 @@ namespace Firstred\PostNL\Service;
 
 use DateInterval;
 use DateTimeInterface;
+use Firstred\PostNL\Entity\CustomerInterface;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifErrorException;
-use Firstred\PostNL\PostNL;
+use Firstred\PostNL\Http\HttpClientInterface;
+use Http\Discovery\Psr17FactoryDiscovery;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Cache\InvalidArgumentException;
+use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use ReflectionClass;
 use ReflectionException;
 
 /**
- * Class AbstractService
+ * Class AbstractService.
  */
 abstract class AbstractService
 {
+    /** @var HttpClientInterface */
+    protected $httpClient;
+
+    /** @var CustomerInterface */
+    protected $customer;
+
+    /** @var string */
+    protected $apiKey;
+
+    /** @var bool */
+    protected $sandbox;
+
     /**
-     * TTL for the cache
+     * TTL for the cache.
      *
      * `null` disables the cache
      * `int` is the TTL in seconds
      * Any `DateTime` will be used as the exact date/time at which to expire the data (auto calculate TTL)
      * A `DateInterval` can be used as well to set the TTL
      *
-     * @var null|int|DateTimeInterface|DateInterval $ttl
+     * @var int|DateTimeInterface|DateInterval|null
      *
      * @since 1.0.0
      */
     public $ttl = null;
 
     /**
-     * The [PSR-6](https://www.php-fig.org/psr/psr-6/) CacheItemPoolInterface
+     * The [PSR-6](https://www.php-fig.org/psr/psr-6/) CacheItemPoolInterface.
      *
      * Use a caching library that implements [PSR-6](https://www.php-fig.org/psr/psr-6/) and you'll be good to go
      * `null` disables the cache
      *
-     * @var null|CacheItemPoolInterface
+     * @var CacheItemPoolInterface|null
      *
      * @since 1.0.0
      */
     public $cache = null;
 
     /**
-     * @var PostNL $postnl
-     *
-     * @since 1.0.0
-     */
-    protected $postnl;
-
-    /**
      * AbstractService constructor.
      *
-     * @param PostNL                                  $postnl PostNL instance
-     * @param null|CacheItemPoolInterface             $cache
-     * @param null|int|DateTimeInterface|DateInterval $ttl
+     * @param CustomerInterface                       $customer
+     * @param string                                  $apiKey
+     * @param bool                                    $sandbox
+     * @param HttpClientInterface                     $httpClient
+     * @param RequestFactoryInterface|null            $requestFactory
+     * @param CacheItemPoolInterface|null             $cache
+     * @param int|DateTimeInterface|DateInterval|null $ttl
+     *
+     * @since 3.0.0
      */
-    public function __construct($postnl, $cache = null, $ttl = null)
+    public function __construct(CustomerInterface $customer, string $apiKey, bool $sandbox, HttpClientInterface $httpClient, CacheItemPoolInterface $cache = null, $ttl = null)
     {
-        $this->postnl = $postnl;
+        $this->customer = $customer;
+        $this->apiKey = $apiKey;
+        $this->sandbox = $sandbox;
         $this->cache = $cache;
+        $this->httpClient = $httpClient;
         $this->ttl = $ttl;
     }
 
@@ -121,11 +138,11 @@ abstract class AbstractService
     }
 
     /**
-     * Retrieve a cached item
+     * Retrieve a cached item.
      *
      * @param string $uuid
      *
-     * @return null|CacheItemInterface
+     * @return CacheItemInterface|null
      *
      * @since 1.0.0
      */

@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,34 +23,31 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Misc\ValidateAndFix;
 
 /**
- * Class Content
+ * Class Content.
  */
-class Content extends AbstractEntity
+final class Content extends AbstractEntity implements ContentInterface
 {
     /**
-     * Description of the goods
+     * Description of the goods.
      *
      * @pattern ^.{1,35}$
      *
      * @example Powdered milk
      *
-     * @var string|null $description
+     * @var string|null
      *
      * @since   1.0.0
      */
-    protected $description;
+    private $description;
 
     /**
      * A unique code for a product. Together with HS number this is mandatory for product code 4992.
@@ -57,40 +56,40 @@ class Content extends AbstractEntity
      *
      * @example 7501031311309
      *
-     * @var string|null $EAN
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $EAN;
+    private $EAN;
 
     /**
-     * Webshop URL of the product which is being shipped. Mandatory for product code 4992
+     * Webshop URL of the product which is being shipped. Mandatory for product code 4992.
      *
      * @pattern N/A
      *
      * @example https://www.example.com/product
      *
-     * @var string|null $productUrl
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $productUrl;
+    private $productUrl;
 
     /**
-     * Country code
+     * Country code.
      *
      * @pattern ^[A-Z]{2}$
      *
      * @example NL
      *
-     * @var string|null $countryOfOrigin
+     * @var string|null
      *
      * @since   1.0.0
      */
-    protected $countryOfOrigin;
+    private $countryOfOrigin;
 
     /**
-     * Harmonized System Tariff Number
+     * Harmonized System Tariff Number.
      *
      * First 6 digits of Harmonized System Code
      *
@@ -98,14 +97,14 @@ class Content extends AbstractEntity
      *
      * @example 950306
      *
-     * @var string|null $HSTariffNr
+     * @var string|null
      *
      * @since   1.0.0
      */
-    protected $HSTariffNr;
+    private $HSTariffNr;
 
     /**
-     * Quantity
+     * Quantity.
      *
      * Quantity of items in description
      *
@@ -113,14 +112,14 @@ class Content extends AbstractEntity
      *
      * @example 12
      *
-     * @var string|null $quantity
+     * @var string|null
      *
      * @since   1.0.0
      */
-    protected $quantity;
+    private $quantity;
 
     /**
-     * Value
+     * Value.
      *
      * Commercial (customs) value of goods.
      *
@@ -128,14 +127,14 @@ class Content extends AbstractEntity
      *
      * @example 12.00
      *
-     * @var string|null $value
+     * @var string|null
      *
      * @since   1.0.0
      */
-    protected $value;
+    private $value;
 
     /**
-     * Weight
+     * Weight.
      *
      * Net weight of goods in gram (gr)
      *
@@ -143,47 +142,19 @@ class Content extends AbstractEntity
      *
      * @example 2600
      *
-     * @var string|null $weight
+     * @var string|null
      *
      * @since   1.0.0
      */
-    protected $weight;
+    private $weight;
 
     /**
-     * Content constructor.
-     *
-     * @param string|null $countryOfOrigin
-     * @param string|null $description
-     * @param string|null $hsTariffNr
-     * @param string|null $qty
-     * @param string|null $val
-     * @param string|null $weight
-     *
-     * @throws InvalidArgumentException
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function __construct(?string $countryOfOrigin = null, ?string $description = null, ?string $hsTariffNr = null, ?string $qty = null, ?string $val = null, ?string $weight = null)
-    {
-        parent::__construct();
-
-        $this->setCountryOfOrigin($countryOfOrigin);
-        $this->setDescription($description);
-        $this->setHSTariffNr($hsTariffNr);
-        $this->setQuantity($qty);
-        $this->setValue($val);
-        $this->setWeight($weight);
-    }
-
-    /**
-     * Get country of origin
+     * Get country of origin.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Content::$countryOfOrigin
      */
     public function getCountryOfOrigin(): ?string
@@ -192,7 +163,7 @@ class Content extends AbstractEntity
     }
 
     /**
-     * Set country of origin
+     * Set country of origin.
      *
      * @pattern ^[A-Z]{2}$
      *
@@ -206,24 +177,22 @@ class Content extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Content::$countryOfOrigin
      */
-    public function setCountryOfOrigin(?string $countryOfOrigin): Content
+    public function setCountryOfOrigin(?string $countryOfOrigin): ContentInterface
     {
-        $this->countryOfOrigin = ValidateAndFix::isoAlpha2CountryCode($countryOfOrigin);
+        $this->countryOfOrigin = $this->validate->isoAlpha2CountryCode($countryOfOrigin);
 
         return $this;
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Content::$description
      */
     public function getDescription(): ?string
@@ -232,7 +201,7 @@ class Content extends AbstractEntity
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @pattern ^.{1,35}$
      *
@@ -246,23 +215,21 @@ class Content extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Content::$description
      */
-    public function setDescription(?string $description): Content
+    public function setDescription(?string $description): ContentInterface
     {
-        $this->description = ValidateAndFix::genericString($description);
+        $this->description = $this->validate->genericString($description);
 
         return $this;
     }
 
     /**
-     * Get EAN
+     * Get EAN.
      *
      * @return string|null
      *
      * @since 2.0.0 Strict typing
-     *
      * @see   Content::$EAN
      */
     public function getEAN(): ?string
@@ -271,7 +238,7 @@ class Content extends AbstractEntity
     }
 
     /**
-     * Set EAN
+     * Set EAN.
      *
      * @pattern ^\d{8}\d{5}?$
      *
@@ -284,23 +251,21 @@ class Content extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0 Strict typing
-     *
      * @see     Content::$EAN
      */
-    public function setEAN(?string $ean): Content
+    public function setEAN(?string $ean): ContentInterface
     {
-        $this->EAN = ValidateAndFix::ean($ean);
+        $this->EAN = $this->validate->ean($ean);
 
         return $this;
     }
 
     /**
-     * Get product URL
+     * Get product URL.
      *
      * @return string|null
      *
      * @since 2.0.0 Strict typing
-     *
      * @see   Content::$productUrl
      */
     public function getProductUrl(): ?string
@@ -309,7 +274,7 @@ class Content extends AbstractEntity
     }
 
     /**
-     * Set product URL
+     * Set product URL.
      *
      * @pattern N/A
      *
@@ -322,24 +287,22 @@ class Content extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0 Strict typing
-     *
      * @see     Content::$productUrl
      */
-    public function setProductUrl(?string $productUrl): Content
+    public function setProductUrl(?string $productUrl): ContentInterface
     {
-        $this->productUrl = ValidateAndFix::url($productUrl);
+        $this->productUrl = $this->validate->url($productUrl);
 
         return $this;
     }
 
     /**
-     * Get the Harmonized System Tariff Number
+     * Get the Harmonized System Tariff Number.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Content::$HSTariffNr
      */
     public function getHSTariffNr(): ?string
@@ -348,7 +311,7 @@ class Content extends AbstractEntity
     }
 
     /**
-     * Set the Harmonized System Tariff Number
+     * Set the Harmonized System Tariff Number.
      *
      * @pattern ^\d{6}$
      *
@@ -362,24 +325,22 @@ class Content extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Content::$HSTariffNr
      */
-    public function setHSTariffNr(?string $HSTariffNr): Content
+    public function setHSTariffNr(?string $HSTariffNr): ContentInterface
     {
-        $this->HSTariffNr = ValidateAndFix::harmonizedSystemTariffNumber($HSTariffNr);
+        $this->HSTariffNr = $this->validate->harmonizedSystemTariffNumber($HSTariffNr);
 
         return $this;
     }
 
     /**
-     * Get quantity
+     * Get quantity.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Content::$quantity
      */
     public function getQuantity(): ?string
@@ -388,7 +349,7 @@ class Content extends AbstractEntity
     }
 
     /**
-     * Set quantity
+     * Set quantity.
      *
      * @pattern ^\d{1,10}$
      *
@@ -399,28 +360,26 @@ class Content extends AbstractEntity
      * @return static
      *
      * @throws InvalidArgumentException
-     *
      * @throws InvalidArgumentException
+     *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Content::$quantity
      */
-    public function setQuantity($quantity): Content
+    public function setQuantity($quantity): ContentInterface
     {
-        $this->quantity = ValidateAndFix::numericString($quantity);
+        $this->quantity = $this->validate->numericString($quantity);
 
         return $this;
     }
 
     /**
-     * Get value
+     * Get value.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Content::$value
      */
     public function getValue(): ?string
@@ -429,7 +388,7 @@ class Content extends AbstractEntity
     }
 
     /**
-     * Set value
+     * Set value.
      *
      * @pattern ^\d{1,9}\.\d{2}$
      *
@@ -441,10 +400,9 @@ class Content extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Content::$value
      */
-    public function setValue($value): Content
+    public function setValue($value): ContentInterface
     {
         if (is_int($value) || is_float($value)) {
             $value = number_format($value, 2);
@@ -456,13 +414,12 @@ class Content extends AbstractEntity
     }
 
     /**
-     * Get weight
+     * Get weight.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Content::$weight
      */
     public function getWeight(): ?string
@@ -471,7 +428,7 @@ class Content extends AbstractEntity
     }
 
     /**
-     * Set weight
+     * Set weight.
      *
      * @pattern ^\d{1,20}$
      *
@@ -483,10 +440,9 @@ class Content extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Content::$weight
      */
-    public function setWeight(?string $weight): Content
+    public function setWeight(?string $weight): ContentInterface
     {
         if (is_int($weight) || is_float($weight)) {
             $weight = number_format($weight, 0);

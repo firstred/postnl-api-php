@@ -1,8 +1,9 @@
 <?php
+
 declare(strict_types=1);
 
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -22,9 +23,7 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -32,47 +31,48 @@ namespace Firstred\PostNL\Entity\Response;
 
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Error;
+use Firstred\PostNL\Entity\ErrorInterface;
 use Firstred\PostNL\Entity\Warning;
+use Firstred\PostNL\Entity\WarningInterface;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 
 /**
- * Class AbstractResponse
+ * Class AbstractResponse.
  */
 abstract class AbstractResponse extends AbstractEntity
 {
     /**
-     * Warnings
+     * Warnings.
      *
      * @pattern N/A
      *
      * @example N/A
      *
-     * @var Warning[] $warnings
+     * @var WarningInterface[]
      *
      * @since   2.0.0
      */
     protected $warnings = [];
 
     /**
-     * Errors
+     * Errors.
      *
      * @pattern N/A
      *
      * @example N/A
      *
-     * @var Error[] $errors
+     * @var ErrorInterface[]
      *
      * @since   2.0.0
      */
     protected $errors = [];
 
     /**
-     * Get warnings
+     * Get warnings.
      *
      * @return array
      *
      * @since 2.0.0
-     *
      * @see   Warning
      */
     public function getWarnings(): array
@@ -81,17 +81,16 @@ abstract class AbstractResponse extends AbstractEntity
     }
 
     /**
-     * Add warning
+     * Add warning.
      *
-     * @param Warning $w
+     * @param WarningInterface $w
      *
      * @return static
      *
      * @since 2.0.0
-     *
      * @see   Warning
      */
-    public function addWarning(Warning $w): AbstractResponse
+    public function addWarning(WarningInterface $w): AbstractResponse
     {
         $this->warnings[] = $w;
 
@@ -99,7 +98,7 @@ abstract class AbstractResponse extends AbstractEntity
     }
 
     /**
-     * Set warnings
+     * Set warnings.
      *
      * @pattern N/A
      *
@@ -110,7 +109,6 @@ abstract class AbstractResponse extends AbstractEntity
      * @return static
      *
      * @since   2.0.0
-     *
      * @see     Warning
      */
     public function setWarnings(array $warnings): AbstractResponse
@@ -121,12 +119,11 @@ abstract class AbstractResponse extends AbstractEntity
     }
 
     /**
-     * Get errors
+     * Get errors.
      *
      * @return array
      *
      * @since 2.0.0
-     *
      * @see   Error
      */
     public function getErrors(): array
@@ -135,17 +132,16 @@ abstract class AbstractResponse extends AbstractEntity
     }
 
     /**
-     * Add error
+     * Add error.
      *
-     * @param Error $e
+     * @param ErrorInterface $e
      *
      * @return static
      *
      * @since 2.0.0
-     *
      * @see   Error
      */
-    public function addError(Error $e): AbstractResponse
+    public function addError(ErrorInterface $e): AbstractResponse
     {
         $this->errors[] = $e;
 
@@ -153,7 +149,7 @@ abstract class AbstractResponse extends AbstractEntity
     }
 
     /**
-     * Set errors
+     * Set errors.
      *
      * @pattern N/A
      *
@@ -164,7 +160,6 @@ abstract class AbstractResponse extends AbstractEntity
      * @return static
      *
      * @since   2.0.0
-     *
      * @see     Error
      */
     public function setErrors(array $errors): AbstractResponse
@@ -175,7 +170,7 @@ abstract class AbstractResponse extends AbstractEntity
     }
 
     /**
-     * Deserialize JSON
+     * Deserialize JSON.
      *
      * @noinspection PhpDocRedundantThrowsInspection
      *
@@ -239,7 +234,7 @@ abstract class AbstractResponse extends AbstractEntity
     }
 
     /**
-     * Return a serializable array for `json_encode`
+     * Return a serializable array for `json_encode`.
      *
      * @return array
      *
@@ -265,7 +260,7 @@ abstract class AbstractResponse extends AbstractEntity
     }
 
     /**
-     * Process warnings and errors during deserialization
+     * Process warnings and errors during deserialization.
      *
      * @param AbstractResponse $object
      * @param array            $json

@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,9 +23,7 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -31,6 +31,7 @@ namespace Firstred\PostNL\Service;
 
 use Firstred\PostNL\Entity\Request\PostalCodeCheckRequest;
 use Firstred\PostNL\Entity\ValidatedAddress;
+use Firstred\PostNL\Entity\ValidatedAddressInterface;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifErrorException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
@@ -42,7 +43,7 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * Class PostalCodeCheckService
+ * Class PostalCodeCheckService.
  */
 class PostalCodeCheckService extends AbstractService
 {
@@ -53,15 +54,15 @@ class PostalCodeCheckService extends AbstractService
     const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/checkout/v1/postalcodecheck';
     const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/checkout/v1/postalcodecheck';
 
-    /** @var PostNL $postnl */
+    /** @var PostNL */
     protected $postnl;
 
     /**
-     * Validate an international address
+     * Validate an international address.
      *
      * @param PostalCodeCheckRequest $checkPostalCode
      *
-     * @return ValidatedAddress
+     * @return ValidatedAddressInterface
      *
      * @throws CifDownException
      * @throws HttpClientException
@@ -69,7 +70,7 @@ class PostalCodeCheckService extends AbstractService
      *
      * @since 2.0.0
      */
-    public function checkPostalCode(PostalCodeCheckRequest $checkPostalCode): ValidatedAddress
+    public function checkPostalCode(PostalCodeCheckRequest $checkPostalCode): ValidatedAddressInterface
     {
         /** @var ResponseInterface $response */
         $response = Client::getInstance()->doRequest($this->buildPostalCodeCheckRequest($checkPostalCode));
@@ -78,7 +79,7 @@ class PostalCodeCheckService extends AbstractService
     }
 
     /**
-     * Build the `postalCodeCheck` HTTP request for the REST API
+     * Build the `postalCodeCheck` HTTP request for the REST API.
      *
      * @param PostalCodeCheckRequest $postalCodeCheck
      *
@@ -99,11 +100,11 @@ class PostalCodeCheckService extends AbstractService
     }
 
     /**
-     * Process postal code check REST response
+     * Process postal code check REST response.
      *
      * @param mixed $response
      *
-     * @return ValidatedAddress
+     * @return ValidatedAddressInterface
      *
      * @throws CifDownException
      * @throws InvalidArgumentException
@@ -111,7 +112,7 @@ class PostalCodeCheckService extends AbstractService
      *
      * @since 2.0.0
      */
-    public function processPostalCodeCheckResponse(ResponseInterface $response): ValidatedAddress
+    public function processPostalCodeCheckResponse(ResponseInterface $response): ValidatedAddressInterface
     {
         static::validateResponse($response);
         $body = @json_decode((string) $response->getBody(), true);

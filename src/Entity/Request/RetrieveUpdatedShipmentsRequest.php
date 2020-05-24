@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,9 +23,7 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -31,28 +31,27 @@ namespace Firstred\PostNL\Entity\Request;
 
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Misc\ValidateAndFix;
 
 /**
- * Class RetrieveUpdatedShipmentsRequest
+ * Class RetrieveUpdatedShipmentsRequest.
  */
-class RetrieveUpdatedShipmentsRequest extends AbstractEntity
+final class RetrieveUpdatedShipmentsRequest extends AbstractEntity
 {
     /**
-     * Start date
+     * Start date.
      *
      * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}\s(?:2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9]$
      *
      * @example 03-07-2019 08:00:00
      *
-     * @var string|null $startDate
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $startDate;
+    private $startDate;
 
     /**
-     * End date
+     * End date.
      *
      * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}\s(?:2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9]$
      *
@@ -62,31 +61,12 @@ class RetrieveUpdatedShipmentsRequest extends AbstractEntity
      *
      * @since   2.0.0
      */
-    protected $endDate;
-
-    /**
-     * RetrieveUpdatedShipmentsRequest constructor.
-     *
-     * @param string|null $startDate
-     * @param string|null $endDate
-     *
-     * @throws InvalidArgumentException
-     *
-     * @since 2.0.0
-     */
-    public function __construct(?string $startDate = null, ?string $endDate = null)
-    {
-        parent::__construct();
-
-        $this->setStartDate($startDate);
-        $this->setEndDate($endDate);
-    }
+    private $endDate;
 
     /**
      * @return string|null
      *
      * @since 2.0.0 Strict typing
-     *
      * @see   RetrieveUpdatedShipmentsRequest::$startDate
      */
     public function getStartDate(): ?string
@@ -95,7 +75,7 @@ class RetrieveUpdatedShipmentsRequest extends AbstractEntity
     }
 
     /**
-     * Set start date
+     * Set start date.
      *
      * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}\s(?:2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9]$
      *
@@ -108,23 +88,21 @@ class RetrieveUpdatedShipmentsRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0 Strict typing
-     *
      * @see     RetrieveUpdatedShipmentsRequest::$startDate
      */
     public function setStartDate(?string $startDate): RetrieveUpdatedShipmentsRequest
     {
-        $this->startDate = ValidateAndFix::dateTime($startDate);
+        $this->startDate = $this->validate->dateTime($startDate);
 
         return $this;
     }
 
     /**
-     * Get end date
+     * Get end date.
      *
      * @return string|null
      *
      * @since 2.0.0 Strict typing
-     *
      * @see   RetrieveUpdatedShipmentsRequest::$endDate
      */
     public function getEndDate(): ?string
@@ -133,7 +111,7 @@ class RetrieveUpdatedShipmentsRequest extends AbstractEntity
     }
 
     /**
-     * Set end date
+     * Set end date.
      *
      * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}\s(?:2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9]$
      *
@@ -146,12 +124,11 @@ class RetrieveUpdatedShipmentsRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0 Strict typing
-     *
      * @see     RetrieveUpdatedShipmentsRequest::$endDate
      */
     public function setEndDate(?string $endDate): RetrieveUpdatedShipmentsRequest
     {
-        $this->endDate = ValidateAndFix::dateTime($endDate);
+        $this->endDate = $this->validate->dateTime($endDate);
 
         return $this;
     }

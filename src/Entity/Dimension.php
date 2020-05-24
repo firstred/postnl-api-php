@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,21 +23,18 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Misc\ValidateAndFix;
 
 /**
- * Class Dimension
+ * Class Dimension.
  */
-class Dimension extends AbstractEntity
+final class Dimension extends AbstractEntity implements DimensionInterface
 {
     /**
      * Height of the shipment in millimeters (mm).
@@ -44,11 +43,11 @@ class Dimension extends AbstractEntity
      *
      * @example 1400
      *
-     * @var string|null $height
+     * @var string|null
      *
      * @since 1.0.0
      */
-    protected $height;
+    private $height;
 
     /**
      * Length of the shipment in millimeters (mm).
@@ -57,39 +56,39 @@ class Dimension extends AbstractEntity
      *
      * @example 2000
      *
-     * @var string|null $length
+     * @var string|null
      *
      * @since 1.0.0
      */
-    protected $length;
+    private $length;
 
     /**
      * Volume of the shipment in centimeters (cm3).
-     * Mandatory for E@H-products
+     * Mandatory for E@H-products.
      *
      * @pattern ^\d{1,20}$
      *
      * @example 30000
      *
-     * @var string|null $volume
+     * @var string|null
      *
      * @since 1.0.0
      */
-    protected $volume;
+    private $volume;
 
     /**
      * Weight of the shipment in grams
-     * Approximate weight suffices
+     * Approximate weight suffices.
      *
      * @pattern ^\d{1,20}$
      *
      * @example 4300
      *
-     * @var string|null $weight
+     * @var string|null
      *
      * @since 1.0.0
      */
-    protected $weight;
+    private $weight;
 
     /**
      * Width of the shipment in millimeters (mm).
@@ -98,47 +97,19 @@ class Dimension extends AbstractEntity
      *
      * @example 1500
      *
-     * @var string|null $width
+     * @var string|null
      *
      * @since 1.0.0
      */
-    protected $width;
+    private $width;
 
     /**
-     * Dimension constructor.
-     *
-     * @param int|float|string|null $weight
-     * @param int|float|string|null $height
-     * @param int|float|string|null $length
-     * @param int|float|string|null $width
-     * @param int|float|string|null $volume
-     *
-     * @throws InvalidArgumentException
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function __construct($weight = null, $height = null, $length = null, $width = null, $volume = null)
-    {
-        parent::__construct();
-
-        $this->setWeight($weight);
-
-        // Optional parameters.
-        $this->setHeight($height);
-        $this->setLength($length);
-        $this->setWidth($width);
-        $this->setVolume($volume);
-    }
-
-    /**
-     * Get height
+     * Get height.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Dimension::$height
      */
     public function getHeight(): ?string
@@ -147,7 +118,7 @@ class Dimension extends AbstractEntity
     }
 
     /**
-     * Set height
+     * Set height.
      *
      * @pattern ^\d{1,20}$
      *
@@ -161,24 +132,22 @@ class Dimension extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Dimension::$height
      */
-    public function setHeight($height): Dimension
+    public function setHeight($height): DimensionInterface
     {
-        $this->height = ValidateAndFix::numericString($height);
+        $this->height = $this->validate->numericString($height);
 
         return $this;
     }
 
     /**
-     * Get length
+     * Get length.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Dimension::$length
      */
     public function getLength(): ?string
@@ -187,7 +156,7 @@ class Dimension extends AbstractEntity
     }
 
     /**
-     * Set length
+     * Set length.
      *
      * @pattern ^\d{1,20}$
      *
@@ -201,24 +170,22 @@ class Dimension extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Dimension::$length
      */
-    public function setLength($length): Dimension
+    public function setLength($length): DimensionInterface
     {
-        $this->length = ValidateAndFix::numericString($length);
+        $this->length = $this->validate->numericString($length);
 
         return $this;
     }
 
     /**
-     * Get weight
+     * Get weight.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Dimension::$weight
      */
     public function getWeight(): ?string
@@ -227,7 +194,7 @@ class Dimension extends AbstractEntity
     }
 
     /**
-     * Set weight
+     * Set weight.
      *
      * @pattern ^\d{1,20}$
      *
@@ -241,24 +208,22 @@ class Dimension extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Dimension::$weight
      */
-    public function setWeight($weight): Dimension
+    public function setWeight($weight): DimensionInterface
     {
-        $this->weight = ValidateAndFix::numericString($weight);
+        $this->weight = $this->validate->numericString($weight);
 
         return $this;
     }
 
     /**
-     * Get weight
+     * Get weight.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Dimension::$width
      */
     public function getWidth(): ?string
@@ -267,7 +232,7 @@ class Dimension extends AbstractEntity
     }
 
     /**
-     * Get width
+     * Get width.
      *
      * @pattern ^\d{1,20}$
      *
@@ -281,24 +246,22 @@ class Dimension extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Dimension::$width
      */
-    public function setWidth($width): Dimension
+    public function setWidth($width): DimensionInterface
     {
-        $this->width = ValidateAndFix::numericString($width);
+        $this->width = $this->validate->numericString($width);
 
         return $this;
     }
 
     /**
-     * Get volume
+     * Get volume.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Dimension::$volume
      */
     public function getVolume(): ?string
@@ -307,7 +270,7 @@ class Dimension extends AbstractEntity
     }
 
     /**
-     * Set volume
+     * Set volume.
      *
      * @pattern ^\d{1,20}$
      *
@@ -321,12 +284,11 @@ class Dimension extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Dimension::$volume
      */
-    public function setVolume($volume): Dimension
+    public function setVolume($volume): DimensionInterface
     {
-        $this->volume = ValidateAndFix::numericString($volume);
+        $this->volume = $this->validate->numericString($volume);
 
         return $this;
     }

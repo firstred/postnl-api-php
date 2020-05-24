@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,74 +23,56 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Entity\Response;
 
 use Firstred\PostNL\Entity\MergedLabel;
+use Firstred\PostNL\Entity\MergedLabelInterface;
 use Firstred\PostNL\Entity\Shipment;
+use Firstred\PostNL\Entity\ShipmentInterface;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 
 /**
- * Class GenerateLabelResponse
+ * Class GenerateLabelResponse.
  */
-class GenerateLabelResponse extends AbstractResponse
+final class GenerateLabelResponse extends AbstractResponse
 {
     /**
-     * Merged labels
+     * Merged labels.
      *
      * @pattern N/A
      *
      * @example N/A
      *
-     * @var MergedLabel[] $mergedLabels
+     * @var MergedLabelInterface[]
      *
      * @since   1.0.0
      */
-    protected $mergedLabels = [];
+    private $mergedLabels = [];
 
     /**
-     * Shipments
+     * Shipments.
      *
      * @pattern N/A
      *
      * @example N/A
      *
-     * @var Shipment[] $responseShipments
+     * @var ShipmentInterface[]
      *
      * @since   1.0.0
      */
-    protected $responseShipments = [];
+    private $responseShipments = [];
 
     /**
-     * GenerateLabelResponse constructor.
+     * Get merged labels.
      *
-     * @param MergedLabel[] $mergedLabels
-     * @param Shipment[]    $responseShipments
+     * @return MergedLabelInterface[]
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     */
-    public function __construct(array $mergedLabels = [], array $responseShipments = [])
-    {
-        parent::__construct();
-
-        $this->setMergedlabels($mergedLabels);
-        $this->setResponseShipments($responseShipments);
-    }
-
-    /**
-     * Get merged labels
-     *
-     * @return MergedLabel[]
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     *
      * @see   MergedLabel
      */
     public function getMergedlabels(): array
@@ -97,15 +81,15 @@ class GenerateLabelResponse extends AbstractResponse
     }
 
     /**
-     * Add merged label
+     * Add merged label.
      *
-     * @param MergedLabel $mergedLabel
+     * @param MergedLabelInterface $mergedLabel
      *
      * @return GenerateLabelResponse
      *
      * @see MergedLabel
      */
-    public function addMergedLabel(MergedLabel $mergedLabel): GenerateLabelResponse
+    public function addMergedLabel(MergedLabelInterface $mergedLabel): GenerateLabelResponse
     {
         $this->mergedLabels[] = $mergedLabel;
 
@@ -113,19 +97,18 @@ class GenerateLabelResponse extends AbstractResponse
     }
 
     /**
-     * Set merged labels
+     * Set merged labels.
      *
      * @pattern N/A
      *
-     * @example N/A
-     *
-     * @param MergedLabel[] $mergedLabels
+     * @param MergedLabelInterface[] $mergedLabels
      *
      * @return static
      *
+     * @example N/A
+     *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     MergedLabel
      */
     public function setMergedlabels(array $mergedLabels): GenerateLabelResponse
@@ -136,15 +119,15 @@ class GenerateLabelResponse extends AbstractResponse
     }
 
     /**
-     * Add response shipment
+     * Add response shipment.
      *
-     * @param Shipment $responseShipment
+     * @param ShipmentInterface $responseShipment
      *
      * @return GenerateLabelResponse
      *
      * @see Shipment
      */
-    public function addResponseShipment(Shipment $responseShipment): GenerateLabelResponse
+    public function addResponseShipment(ShipmentInterface $responseShipment): GenerateLabelResponse
     {
         $this->responseShipments[] = $responseShipment;
 
@@ -152,13 +135,12 @@ class GenerateLabelResponse extends AbstractResponse
     }
 
     /**
-     * Get response shipments
+     * Get response shipments.
      *
-     * @return Shipment[]
+     * @return ShipmentInterface[]
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Shipment
      */
     public function getResponseShipments(): array
@@ -167,19 +149,18 @@ class GenerateLabelResponse extends AbstractResponse
     }
 
     /**
-     * Set response shipments
+     * Set response shipments.
      *
      * @pattern N/A
      *
-     * @example N/A
-     *
-     * @param Shipment[] $responseShipments
+     * @param ShipmentInterface[] $responseShipments
      *
      * @return static
      *
+     * @example N/A
+     *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Shipment
      */
     public function setResponseShipments(array $responseShipments): GenerateLabelResponse
@@ -190,7 +171,7 @@ class GenerateLabelResponse extends AbstractResponse
     }
 
     /**
-     * Deserialize JSON
+     * Deserialize JSON.
      *
      * @noinspection PhpDocRedundantThrowsInspection
      *

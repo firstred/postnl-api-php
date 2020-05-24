@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,200 +23,168 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Misc\ValidateAndFix;
 
 /**
- * Class ValidatedAddress
+ * Class ValidatedAddress.
  */
-class ValidatedAddress extends AbstractEntity
+final class ValidatedAddress extends AbstractEntity implements ValidatedAddressInterface
 {
     /**
-     * Result number
+     * Result number.
      *
      * @pattern ^\d{1,10}$
      *
      * @example 13
      *
-     * @var string|null $resultNumber
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $resultNumber;
+    private $resultNumber;
 
     /**
-     * Mailability score
+     * Mailability score.
      *
      * @pattern ^\d{1,3}$
      *
      * @example 50
      *
-     * @var int|null $mailabilityScore
+     * @var int|null
      *
      * @since   2.0.0
      */
-    protected $mailabilityScore;
+    private $mailabilityScore;
 
     /**
-     * Result percentage
+     * Result percentage.
      *
      * @pattern ^\d{1,3}$
      *
      * @example 50
      *
-     * @var int|null $resultPercentage
+     * @var int|null
      *
      * @since   2.0.0
      */
-    protected $resultPercentage;
+    private $resultPercentage;
 
     /**
-     * Postal code
+     * Postal code.
      *
      * @pattern ^.{0,10}$
      *
      * @example 3123WT
      *
-     * @var string|null $postalCode
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $postalCode;
+    private $postalCode;
 
     /**
-     * City
+     * City.
      *
      * @pattern ^.{0,35}$
      *
      * @example Hoofddorp
      *
-     * @var string|null $city
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $city;
+    private $city;
 
     /**
-     * Street
+     * Street.
      *
      * @pattern ^.{0,95}$
      *
      * @example Siriusdreef
      *
-     * @var string|null $street
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $street;
+    private $street;
 
     /**
-     * House number
+     * House number.
      *
      * @pattern ^.{0,35}$
      *
      * @example 42
      *
-     * @var string|null $houseNumber
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $houseNumber;
+    private $houseNumber;
 
     /**
-     * Province
+     * Province.
      *
      * @pattern ^.{0,35}$
      *
      * @example Zuid-Holland
      *
-     * @var string|null $province
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $province;
+    private $province;
 
     /**
-     * House number addition
+     * House number addition.
      *
      * @pattern ^.{0,35}$
      *
      * @example A
      *
-     * @var string|null $addition
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $addition;
+    private $addition;
 
     /**
-     * Formatted address
+     * Formatted address.
      *
      * @pattern N/A
      *
      * @example N/A
      *
-     * @var string[]|null $formattedAddress
+     * @var string[]|null
      *
      * @since   2.0.0
      */
-    protected $formattedAddress;
+    private $formattedAddress;
 
     /**
-     * Geocode
+     * Geocode.
      *
      * @pattern N/A
      *
      * @example N/A
      *
-     * @var Geocode|null $geocode
+     * @var GeocodeInterface|null
      *
      * @since   2.0.0
      */
-    protected $geocode;
+    private $geocode;
 
     /**
-     * ValidatedAddress constructor.
-     *
-     * @param string|null  $city
-     * @param string|null  $postalCode
-     * @param string|null  $street
-     * @param string|null  $houseNumber
-     * @param string|null  $addition
-     * @param array|null   $formattedAddress
-     * @param Geocode|null $geocode
-     *
-     * @throws InvalidArgumentException
-     *
-     * @since 2.0.0
-     */
-    public function __construct(?string $city = null, ?string $postalCode = null, ?string $street = null, ?string $houseNumber = null, ?string $addition = null, ?array $formattedAddress = null, ?Geocode $geocode = null)
-    {
-        parent::__construct();
-
-        $this->setCity($city);
-        $this->setPostalCode($postalCode);
-        $this->setStreet($street);
-        $this->setHouseNumber($houseNumber);
-        $this->setAddition($addition);
-        $this->setFormattedAddress($formattedAddress);
-        $this->setGeocode($geocode);
-    }
-
-    /**
-     * Get postal code
+     * Get postal code.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   ValidatedAddress::$postalCode
      */
     public function getPostalCode(): ?string
@@ -223,7 +193,7 @@ class ValidatedAddress extends AbstractEntity
     }
 
     /**
-     * Set postal code
+     * Set postal code.
      *
      * @pattern ^.{0,10}$
      *
@@ -236,23 +206,21 @@ class ValidatedAddress extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     ValidatedAddress::$postalCode
      */
-    public function setPostalCode(?string $postalCode): ValidatedAddress
+    public function setPostalCode(?string $postalCode): ValidatedAddressInterface
     {
-        $this->postalCode = ValidateAndFix::postcode($postalCode);
+        $this->postalCode = $this->validate->postcode($postalCode);
 
         return $this;
     }
 
     /**
-     * Get city
+     * Get city.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   ValidatedAddress::$city
      */
     public function getCity(): ?string
@@ -261,7 +229,7 @@ class ValidatedAddress extends AbstractEntity
     }
 
     /**
-     * Set city
+     * Set city.
      *
      * @pattern ^.{0,35}$
      *
@@ -274,23 +242,21 @@ class ValidatedAddress extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     ValidatedAddress::$city
      */
-    public function setCity(?string $city): ValidatedAddress
+    public function setCity(?string $city): ValidatedAddressInterface
     {
-        $this->city = ValidateAndFix::city($city);
+        $this->city = $this->validate->city($city);
 
         return $this;
     }
 
     /**
-     * Get street
+     * Get street.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   ValidatedAddress::$street
      */
     public function getStreet(): ?string
@@ -299,7 +265,7 @@ class ValidatedAddress extends AbstractEntity
     }
 
     /**
-     * Set street
+     * Set street.
      *
      * @pattern ^.{0,95}$
      *
@@ -313,22 +279,20 @@ class ValidatedAddress extends AbstractEntity
      *
      * @since   2.0.0
      * @see     ValidatedAddress::$street
-     *
      */
-    public function setStreet(?string $street): ValidatedAddress
+    public function setStreet(?string $street): ValidatedAddressInterface
     {
-        $this->street = ValidateAndFix::street($street);
+        $this->street = $this->validate->street($street);
 
         return $this;
     }
 
     /**
-     * Get house number
+     * Get house number.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   ValidatedAddress::$houseNumber
      */
     public function getHouseNumber(): ?string
@@ -337,7 +301,7 @@ class ValidatedAddress extends AbstractEntity
     }
 
     /**
-     * Set house number
+     * Set house number.
      *
      * @pattern ^.{0,35}$
      *
@@ -348,10 +312,9 @@ class ValidatedAddress extends AbstractEntity
      * @return static
      *
      * @since   2.0.0
-     *
      * @see     ValidatedAddress::$houseNumber
      */
-    public function setHouseNumber(?string $houseNumber): ValidatedAddress
+    public function setHouseNumber(?string $houseNumber): ValidatedAddressInterface
     {
         $this->houseNumber = $houseNumber;
 
@@ -359,12 +322,11 @@ class ValidatedAddress extends AbstractEntity
     }
 
     /**
-     * Get house number addition
+     * Get house number addition.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   ValidatedAddress::$addition
      */
     public function getAddition(): ?string
@@ -373,7 +335,7 @@ class ValidatedAddress extends AbstractEntity
     }
 
     /**
-     * Set house number addition
+     * Set house number addition.
      *
      * @pattern ^.{0,35}$
      *
@@ -387,22 +349,20 @@ class ValidatedAddress extends AbstractEntity
      *
      * @since   2.0.0
      * @see     ValidatedAddress::$addition
-     *
      */
-    public function setAddition(?string $addition): ValidatedAddress
+    public function setAddition(?string $addition): ValidatedAddressInterface
     {
-        $this->addition = ValidateAndFix::genericString($addition);
+        $this->addition = $this->validate->genericString($addition);
 
         return $this;
     }
 
     /**
-     * Get formatted address
+     * Get formatted address.
      *
      * @return string[]|null
      *
      * @since 2.0.0
-     *
      * @see   ValidatedAddress::$formattedAddress
      */
     public function getFormattedAddress(): ?array
@@ -411,7 +371,7 @@ class ValidatedAddress extends AbstractEntity
     }
 
     /**
-     * Set formatted address
+     * Set formatted address.
      *
      * @pattern N/A
      *
@@ -422,10 +382,9 @@ class ValidatedAddress extends AbstractEntity
      * @return static
      *
      * @since   2.0.0
-     *
      * @see     ValidatedAddress::$formattedAddress
      */
-    public function setFormattedAddress(?array $formattedAddress): ValidatedAddress
+    public function setFormattedAddress(?array $formattedAddress): ValidatedAddressInterface
     {
         $this->formattedAddress = $formattedAddress;
 
@@ -433,35 +392,33 @@ class ValidatedAddress extends AbstractEntity
     }
 
     /**
-     * Get Geocode
+     * Get Geocode.
      *
-     * @return Geocode|null
+     * @return GeocodeInterface|null
      *
      * @since 2.0.0
-     *
      * @see   Geocode
      */
-    public function getGeocode(): ?Geocode
+    public function getGeocode(): ?GeocodeInterface
     {
         return $this->geocode;
     }
 
     /**
-     * Set Geocode
+     * Set Geocode.
      *
      * @pattern N/A
      *
-     * @example N/A
-     *
-     * @param Geocode|null $geocode
+     * @param GeocodeInterface|null $geocode
      *
      * @return static
      *
-     * @since   2.0.0
+     * @example N/A
      *
+     * @since   2.0.0
      * @see     Geocode
      */
-    public function setGeocode(?Geocode $geocode): ValidatedAddress
+    public function setGeocode(?GeocodeInterface $geocode): ValidatedAddressInterface
     {
         $this->geocode = $geocode;
 
@@ -469,12 +426,11 @@ class ValidatedAddress extends AbstractEntity
     }
 
     /**
-     * Get result number
+     * Get result number.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   ValidatedAddress::$resultNumber
      */
     public function getResultNumber(): ?string
@@ -483,7 +439,7 @@ class ValidatedAddress extends AbstractEntity
     }
 
     /**
-     * Set result number
+     * Set result number.
      *
      * @pattern ^\d{1,10}$
      *
@@ -496,23 +452,21 @@ class ValidatedAddress extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     ValidatedAddress::$resultNumber
      */
-    public function setResultNumber($resultNumber): ValidatedAddress
+    public function setResultNumber($resultNumber): ValidatedAddressInterface
     {
-        $this->resultNumber = ValidateAndFix::integer($resultNumber);
+        $this->resultNumber = $this->validate->integer($resultNumber);
 
         return $this;
     }
 
     /**
-     * Get mailability score
+     * Get mailability score.
      *
      * @return int|null
      *
      * @since 2.0.0
-     *
      * @see   ValidatedAddress::$mailabilityScore
      */
     public function getMailabilityScore(): ?int
@@ -521,7 +475,7 @@ class ValidatedAddress extends AbstractEntity
     }
 
     /**
-     * Set mailability score
+     * Set mailability score.
      *
      * @pattern \d{1,3}$
      *
@@ -534,23 +488,21 @@ class ValidatedAddress extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     ValidatedAddress::$mailabilityScore
      */
-    public function setMailabilityScore($mailabilityScore): ValidatedAddress
+    public function setMailabilityScore($mailabilityScore): ValidatedAddressInterface
     {
-        $this->mailabilityScore = ValidateAndFix::integer($mailabilityScore);
+        $this->mailabilityScore = $this->validate->integer($mailabilityScore);
 
         return $this;
     }
 
     /**
-     * Get result percentage
+     * Get result percentage.
      *
      * @return int|null
      *
      * @since 2.0.0
-     *
      * @see   ValidatedAddress::$resultPercentage
      */
     public function getResultPercentage(): ?int
@@ -559,7 +511,7 @@ class ValidatedAddress extends AbstractEntity
     }
 
     /**
-     * Set result percentage
+     * Set result percentage.
      *
      * @pattern ^\d{1,3}$
      *
@@ -572,23 +524,21 @@ class ValidatedAddress extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     ValidatedAddress::$resultPercentage
      */
-    public function setResultPercentage($resultPercentage): ValidatedAddress
+    public function setResultPercentage($resultPercentage): ValidatedAddressInterface
     {
-        $this->resultPercentage = ValidateAndFix::integer($resultPercentage);
+        $this->resultPercentage = $this->validate->integer($resultPercentage);
 
         return $this;
     }
 
     /**
-     * Get province
+     * Get province.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   ValidatedAddress::$province
      */
     public function getProvince(): ?string
@@ -597,7 +547,7 @@ class ValidatedAddress extends AbstractEntity
     }
 
     /**
-     * Set province
+     * Set province.
      *
      * @pattern ^.{0,35}$
      *
@@ -608,10 +558,9 @@ class ValidatedAddress extends AbstractEntity
      * @return static
      *
      * @since   2.0.0
-     *
      * @see     ValidatedAddress::$province
      */
-    public function setProvince(?string $province): ValidatedAddress
+    public function setProvince(?string $province): ValidatedAddressInterface
     {
         $this->province = $province;
 

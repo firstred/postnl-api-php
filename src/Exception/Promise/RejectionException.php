@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * Copyright (c) 2015 Michael Dowling, https://github.com/mtdowling <mtdowling@gmail.com>
+ * Copyright (c) 2015 Michael Dowling, https://github.com/mtdowling <mtdowling@gmail.com>.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -38,7 +40,7 @@ class RejectionException extends RuntimeException
     private $reason;
 
     /**
-     * @param mixed  $reason      Rejection reason.
+     * @param mixed  $reason      rejection reason
      * @param string $description Optional description
      */
     public function __construct($reason, string $description = null)

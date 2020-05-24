@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,20 +23,17 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Service;
 
-use Firstred\PostNL\Entity\Request\FindDeliveryInfoRequest;
+use Firstred\PostNL\Entity\Request\FindDeliveryInfoRequestInterface;
 use Firstred\PostNL\Entity\Response\FindDeliveryInfoResponse;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifErrorException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Http\Client;
 use Firstred\PostNL\PostNL;
 use Http\Client\Exception as HttpClientException;
 use Http\Discovery\Psr17FactoryDiscovery;
@@ -42,7 +41,7 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * Class CheckoutService
+ * Class CheckoutService.
  */
 class CheckoutService extends AbstractService
 {
@@ -53,13 +52,13 @@ class CheckoutService extends AbstractService
     const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v1/checkout';
     const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v1/checkout';
 
-    /** @var PostNL $postnl */
+    /** @var PostNL */
     protected $postnl;
 
     /**
-     * Find delivery information
+     * Find delivery information.
      *
-     * @param FindDeliveryInfoRequest $deliveryInfoRequest
+     * @param FindDeliveryInfoRequestInterface $deliveryInfoRequest
      *
      * @return FindDeliveryInfoResponse
      *
@@ -69,7 +68,7 @@ class CheckoutService extends AbstractService
      *
      * @since 2.0.0
      */
-    public function findDeliveryInformation(FindDeliveryInfoRequest $deliveryInfoRequest): FindDeliveryInfoResponse
+    public function findDeliveryInformation(FindDeliveryInfoRequestInterface $deliveryInfoRequest): FindDeliveryInfoResponse
     {
         /** @var ResponseInterface $response */
         $response = Client::getInstance()->doRequest($this->buildFindDeliveryInformationRequest($deliveryInfoRequest));
@@ -78,15 +77,15 @@ class CheckoutService extends AbstractService
     }
 
     /**
-     * Build the `postalCodeCheck` HTTP request for the REST API
+     * Build the `postalCodeCheck` HTTP request for the REST API.
      *
-     * @param FindDeliveryInfoRequest $deliveryInfoRequest
+     * @param FindDeliveryInfoRequestInterface $deliveryInfoRequest
      *
      * @return RequestInterface
      *
      * @since 2.0.0
      */
-    public function buildFindDeliveryInformationRequest(FindDeliveryInfoRequest $deliveryInfoRequest): RequestInterface
+    public function buildFindDeliveryInformationRequest(FindDeliveryInfoRequestInterface $deliveryInfoRequest): RequestInterface
     {
         $streamFactory = Psr17FactoryDiscovery::findStreamFactory();
 
@@ -101,7 +100,7 @@ class CheckoutService extends AbstractService
     }
 
     /**
-     * Process postal code check REST response
+     * Process postal code check REST response.
      *
      * @param mixed $response
      *

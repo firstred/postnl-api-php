@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,119 +23,90 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Misc\ValidateAndFix;
 
 /**
- * Class Status
+ * Class Status.
  */
-class Status extends AbstractEntity
+final class Status extends AbstractEntity implements StatusInterface
 {
     /**
-     * Timestamp
+     * Timestamp.
      *
      * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}\s(?:2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9]$
      *
      * @example 03-07-2019 08:00:00
      *
-     * @var string|null $timeStamp
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $timeStamp;
+    private $timeStamp;
 
     /**
-     * Status code
+     * Status code.
      *
      * @pattern ^\d{1,10}$
      *
      * @example 7
      *
-     * @var string|null $statusCode
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $statusCode;
+    private $statusCode;
 
     /**
-     * Status description
+     * Status description.
      *
      * @pattern ^.{0,1000}$
      *
      * @example Zending afgeleverd
      *
-     * @var string|null $statusDescription
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $statusDescription;
+    private $statusDescription;
 
     /**
-     * Phase code
+     * Phase code.
      *
      * @pattern ^\d{1,10}$
      *
      * @example 4
      *
-     * @var string|null $phaseCode
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $phaseCode;
+    private $phaseCode;
 
     /**
-     * Phase description
+     * Phase description.
      *
      * @pattern ^.{0,1000}$
      *
      * @example Afgeleverd
      *
-     * @var string|null $phaseDescription
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $phaseDescription;
+    private $phaseDescription;
 
     /**
-     * Status constructor.
-     *
-     * @param string|null $timeStamp
-     * @param string|null $statusCode
-     * @param string|null $statusDescription
-     * @param string|null $phaseCode
-     * @param string|null $phaseDescription
-     *
-     * @throws InvalidArgumentException
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function __construct(?string $timeStamp = null, ?string $statusCode = null, ?string $statusDescription = null, ?string $phaseCode = null, ?string $phaseDescription = null)
-    {
-        parent::__construct();
-
-        $this->setTimeStamp($timeStamp);
-        $this->setStatusCode($statusCode);
-        $this->setStatusDescription($statusDescription);
-        $this->setPhaseCode($phaseCode);
-        $this->setPhaseDescription($phaseDescription);
-    }
-
-    /**
-     * Get timestamp
+     * Get timestamp.
      *
      * @return string|null
      *
      * @since 2.0.0 Strict typing
-     *
      * @see   Status::$timeStamp
      */
     public function getTimeStamp(): ?string
@@ -142,7 +115,7 @@ class Status extends AbstractEntity
     }
 
     /**
-     * Set timestamp
+     * Set timestamp.
      *
      * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}\s(?:2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9]$
      *
@@ -155,23 +128,21 @@ class Status extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0 Strict typing
-     *
      * @see     Status::$timeStamp
      */
-    public function setTimeStamp(?string $timeStamp): Status
+    public function setTimeStamp(?string $timeStamp): StatusInterface
     {
-        $this->timeStamp = ValidateAndFix::dateTime($timeStamp);
+        $this->timeStamp = $this->validate->dateTime($timeStamp);
 
         return $this;
     }
 
     /**
-     * Get status code
+     * Get status code.
      *
      * @return string|null
      *
      * @since 2.0.0 Strict typing
-     *
      * @see   Status::$statusCode
      */
     public function getStatusCode(): ?string
@@ -180,7 +151,7 @@ class Status extends AbstractEntity
     }
 
     /**
-     * Set status code
+     * Set status code.
      *
      * @pattern ^\d{1,10}$
      *
@@ -191,10 +162,9 @@ class Status extends AbstractEntity
      * @return static
      *
      * @since   2.0.0 Strict typing
-     *
      * @see     Status::$statusCode
      */
-    public function setStatusCode(?string $statusCode): Status
+    public function setStatusCode(?string $statusCode): StatusInterface
     {
         $this->statusCode = $statusCode;
 
@@ -202,12 +172,11 @@ class Status extends AbstractEntity
     }
 
     /**
-     * Get status description
+     * Get status description.
      *
      * @return string|null
      *
      * @since 2.0.0 Strict typing
-     *
      * @see   Status::$statusDescription
      */
     public function getStatusDescription(): ?string
@@ -216,7 +185,7 @@ class Status extends AbstractEntity
     }
 
     /**
-     * Set status description
+     * Set status description.
      *
      * @pattern ^.{0,1000}$
      *
@@ -227,10 +196,9 @@ class Status extends AbstractEntity
      * @return static
      *
      * @since   2.0.0 Strict typing
-     *
      * @see     Status::$statusDescription
      */
-    public function setStatusDescription(?string $statusDescription): Status
+    public function setStatusDescription(?string $statusDescription): StatusInterface
     {
         $this->statusDescription = $statusDescription;
 
@@ -238,12 +206,11 @@ class Status extends AbstractEntity
     }
 
     /**
-     * Get phase code
+     * Get phase code.
      *
      * @return string|null
      *
      * @since 2.0.0 Strict typing
-     *
      * @see   Status::$phaseCode
      */
     public function getPhaseCode(): ?string
@@ -252,7 +219,7 @@ class Status extends AbstractEntity
     }
 
     /**
-     * Set phase code
+     * Set phase code.
      *
      * @pattern ^\d{1,10}$
      *
@@ -263,10 +230,9 @@ class Status extends AbstractEntity
      * @return static
      *
      * @since   2.0.0 Strict typing
-     *
      * @see     Status::$phaseCode
      */
-    public function setPhaseCode(?string $phaseCode): Status
+    public function setPhaseCode(?string $phaseCode): StatusInterface
     {
         $this->phaseCode = $phaseCode;
 
@@ -274,12 +240,11 @@ class Status extends AbstractEntity
     }
 
     /**
-     * Get phase description
+     * Get phase description.
      *
      * @return string|null
      *
      * @since 2.0.0 Strict typing
-     *
      * @see   Status::$phaseDescription
      */
     public function getPhaseDescription(): ?string
@@ -288,7 +253,7 @@ class Status extends AbstractEntity
     }
 
     /**
-     * Set phase description
+     * Set phase description.
      *
      * @pattern ^.{0,1000}$
      *
@@ -299,10 +264,9 @@ class Status extends AbstractEntity
      * @return static
      *
      * @since   2.0.0 Strict typing
-     *
      * @see     Status::$phaseDescription
      */
-    public function setPhaseDescription(?string $phaseDescription): Status
+    public function setPhaseDescription(?string $phaseDescription): StatusInterface
     {
         $this->phaseDescription = $phaseDescription;
 

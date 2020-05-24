@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,91 +23,77 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Misc\ValidateAndFix;
 
 /**
- * Class Geocode
+ * Class Geocode.
  */
-class Geocode extends AbstractEntity
+final class Geocode extends AbstractEntity implements GeocodeInterface
 {
     /**
-     * Latitude
+     * Latitude.
      *
      * @pattern ^\d{1,2}\.\d{1,15}$
      *
      * @example 52.156439
      *
-     * @var float|null $latitude
+     * @var float|null
      *
      * @since 2.0.0
      */
-    protected $latitude;
+    private $latitude;
 
     /**
-     * Longitude
+     * Longitude.
      *
      * @pattern ^\d{1,2}\.\d{1,15}$
      *
      * @example 52.156439
      *
-     * @var float|null $longitude
+     * @var float|null
      *
      * @since 2.0.0
      */
-    protected $longitude;
+    private $longitude;
 
     /**
-     * Rijksdriehoek X coordinate
+     * Rijksdriehoek X coordinate.
      *
      * @pattern ^\d{1,10}\.\d{1,15}$
      *
      * @example 199735.12
      *
-     * @var float|null $rdxCoordinate
+     * @var float|null
      *
      * @since 2.0.0
      */
-    protected $rdxCoordinate;
+    private $rdxCoordinate;
 
     /**
-     * Rijksdriehoek Y coordinate
+     * Rijksdriehoek Y coordinate.
      *
      * @pattern ^\d{1,10}\.\d{1,15}$
      *
      * @example 199735.12
      *
-     * @var float|null $rdyCoordinate
+     * @var float|null
      *
      * @since 2.0.0
      */
-    protected $rdyCoordinate;
+    private $rdyCoordinate;
 
     /**
-     * Geocode constructor.
-     *
-     * @since 2.0.0
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
-     * Get latitude
+     * Get latitude.
      *
      * @return float|null
      *
      * @since 2.0.0
-     *
      * @see   Geocode::$latitude
      */
     public function getLatitude(): ?float
@@ -114,7 +102,7 @@ class Geocode extends AbstractEntity
     }
 
     /**
-     * Set latitude
+     * Set latitude.
      *
      * @pattern ^\d{1,2}\.\d{1,15}$
      *
@@ -127,23 +115,21 @@ class Geocode extends AbstractEntity
      * @example 52.156439
      *
      * @since   2.0.0
-     *
      * @see     Geocode::$latitude
      */
-    public function setLatitude($latitude): Geocode
+    public function setLatitude($latitude): GeocodeInterface
     {
-        $this->latitude = ValidateAndFix::float($latitude);
+        $this->latitude = $this->validate->float($latitude);
 
         return $this;
     }
 
     /**
-     * Get longitude
+     * Get longitude.
      *
      * @return float|null
      *
      * @since 2.0.0
-     *
      * @see   Geocode::$longitude
      */
     public function getLongitude(): ?float
@@ -152,7 +138,7 @@ class Geocode extends AbstractEntity
     }
 
     /**
-     * Set longitude
+     * Set longitude.
      *
      * @pattern ^\d{1,2}\.\d{1,15}$
      *
@@ -163,10 +149,9 @@ class Geocode extends AbstractEntity
      * @example 52.156439
      *
      * @since   2.0.0
-     *
      * @see     Geocode::$longitude
      */
-    public function setLongitude(?float $longitude): Geocode
+    public function setLongitude(?float $longitude): GeocodeInterface
     {
         $this->longitude = $longitude;
 
@@ -174,12 +159,11 @@ class Geocode extends AbstractEntity
     }
 
     /**
-     * Get Rijksdriehoek X-coordinate
+     * Get Rijksdriehoek X-coordinate.
      *
      * @return float|null
      *
      * @since 2.0.0
-     *
      * @see   Geocode::$rdxCoordinate
      */
     public function getRdxCoordinate(): ?float
@@ -188,7 +172,7 @@ class Geocode extends AbstractEntity
     }
 
     /**
-     * Set Rijksdriehoek X-coordinate
+     * Set Rijksdriehoek X-coordinate.
      *
      * @pattern ^\d{1,10}\.\d{1,15}$
      *
@@ -199,10 +183,9 @@ class Geocode extends AbstractEntity
      * @example 199735.12
      *
      * @since   2.0.0
-     *
      * @see     Geocode::$rdxCoordinate
      */
-    public function setRdxCoordinate(?float $rdxCoordinate): Geocode
+    public function setRdxCoordinate(?float $rdxCoordinate): GeocodeInterface
     {
         $this->rdxCoordinate = $rdxCoordinate;
 
@@ -210,12 +193,11 @@ class Geocode extends AbstractEntity
     }
 
     /**
-     * Get Rijksdriehoek Y-coordinate
+     * Get Rijksdriehoek Y-coordinate.
      *
      * @return float|null
      *
      * @since 2.0.0
-     *
      * @see   Geocode::$rdyCoordinate
      */
     public function getRdyCoordinate(): ?float
@@ -224,7 +206,7 @@ class Geocode extends AbstractEntity
     }
 
     /**
-     * Set Rijksdriehoek Y-coordinate
+     * Set Rijksdriehoek Y-coordinate.
      *
      * @pattern ^\d{1,10}\.\d{1,15}$
      *
@@ -235,10 +217,9 @@ class Geocode extends AbstractEntity
      * @example 199735.12
      *
      * @since   2.0.0
-     *
      * @see     Geocode::$rdyCoordinate
      */
-    public function setRdyCoordinate(?float $rdyCoordinate): Geocode
+    public function setRdyCoordinate(?float $rdyCoordinate): GeocodeInterface
     {
         $this->rdyCoordinate = $rdyCoordinate;
 

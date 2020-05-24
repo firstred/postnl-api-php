@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,9 +23,7 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -33,85 +33,72 @@ use Firstred\PostNL\Entity\Error;
 use Firstred\PostNL\Entity\Location;
 use Firstred\PostNL\Entity\Locations;
 use Firstred\PostNL\Entity\PickupOption;
+use Firstred\PostNL\Entity\PickupOptionInterface;
 use Firstred\PostNL\Entity\PickupOptions;
+use Firstred\PostNL\Entity\PickupOptionsInterface;
 use Firstred\PostNL\Entity\Timeframe;
+use Firstred\PostNL\Entity\TimeframeInterface;
 use Firstred\PostNL\Entity\Timeframes;
+use Firstred\PostNL\Entity\TimeframesInterface;
 use Firstred\PostNL\Entity\Warning;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 
 /**
- * Class FindDeliveryInfoResponse
+ * Class FindDeliveryInfoResponse.
  */
-class FindDeliveryInfoResponse extends AbstractResponse
+final class FindDeliveryInfoResponse extends AbstractResponse
 {
     /**
-     * Delivery options (timeframes)
+     * Delivery options (timeframes).
      *
      * @pattern N/A
      *
      * @example N/A
      *
-     * @var Timeframes $deliveryOptions
+     * @var TimeframesInterface
      *
      * @since   2.0.0
      */
-    protected $deliveryOptions;
+    private $deliveryOptions;
 
     /**
-     * Pickup options
+     * Pickup options.
      *
      * @pattern N/A
      *
      * @example N/A
      *
-     * @var PickupOptions $pickupOptions
+     * @var PickupOptionsInterface
      *
      * @since   2.0.0
      */
-    protected $pickupOptions;
+    private $pickupOptions;
 
     /**
-     * FindDeliveryInfoResponse constructor.
+     * Get delivery options.
      *
-     * @param Timeframes|null    $deliveryOptions
-     * @param PickupOptions|null $pickupOptions
-     *
-     * @since 2.0.0
-     */
-    public function __construct(?Timeframes $deliveryOptions = null, ?PickupOptions $pickupOptions = null)
-    {
-        parent::__construct();
-
-        $this->setDeliveryOptions($deliveryOptions ?: new Timeframes());
-        $this->setPickupOptions($pickupOptions ?: new PickupOptions());
-    }
-
-    /**
-     * Get delivery options
-     *
-     * @return Timeframes|null
+     * @return TimeframesInterface|null
      *
      * @since 2.0.0 Strict typing
-     *
-     * @see Timeframe
-     * @see Timeframes
+     * @see   Timeframe
+     * @see   Timeframes
      */
-    public function getDeliveryOptions(): ?Timeframes
+    public function getDeliveryOptions(): ?TimeframesInterface
     {
         return $this->deliveryOptions;
     }
 
     /**
-     * Add delivery option
+     * Add delivery option.
      *
-     * @param Timeframe $deliveryOption
+     * @param TimeframeInterface $deliveryOption
      *
      * @return FindDeliveryInfoResponse
      *
      * @see Timeframe
      * @see Timeframes
      */
-    public function addDeliveryOption(Timeframe $deliveryOption): FindDeliveryInfoResponse
+    public function addDeliveryOption(TimeframeInterface $deliveryOption): FindDeliveryInfoResponse
     {
         if (!$this->deliveryOptions instanceof Timeframes) {
             $this->deliveryOptions = new Timeframes();
@@ -123,22 +110,21 @@ class FindDeliveryInfoResponse extends AbstractResponse
     }
 
     /**
-     * Set delivery options
+     * Set delivery options.
      *
      * @pattern N/A
      *
-     * @example N/A
-     *
-     * @param Timeframes|null $deliveryOptions
+     * @param TimeframesInterface|null $deliveryOptions
      *
      * @return static
      *
-     * @since 2.0.0 Strict typing
+     * @example N/A
      *
-     * @see Timeframe
-     * @see Timeframes
+     * @since   2.0.0 Strict typing
+     * @see     Timeframe
+     * @see     Timeframes
      */
-    public function setDeliveryOptions(?Timeframes $deliveryOptions): FindDeliveryInfoResponse
+    public function setDeliveryOptions(?TimeframesInterface $deliveryOptions): FindDeliveryInfoResponse
     {
         $this->deliveryOptions = $deliveryOptions;
 
@@ -146,35 +132,34 @@ class FindDeliveryInfoResponse extends AbstractResponse
     }
 
     /**
-     * Get pickup options
+     * Get pickup options.
      *
-     * @return PickupOptions|null
+     * @return PickupOptionsInterface|null
      *
      * @since 2.0.0 Strict typing
-     *
-     * @see PickupOption
-     * @see PickupOptions
+     * @see   PickupOption
+     * @see   PickupOptions
      */
-    public function getPickupOptions(): ?PickupOptions
+    public function getPickupOptions(): ?PickupOptionsInterface
     {
         return $this->pickupOptions;
     }
 
     /**
-     * Add a pickup option
+     * Add a pickup option.
      *
      * @pattern N/A
      *
-     * @example N/A
-     *
-     * @param PickupOption $pickupOption
+     * @param PickupOptionInterface $pickupOption
      *
      * @return FindDeliveryInfoResponse
      *
-     * @see Location
-     * @see Locations
+     * @example N/A
+     *
+     * @see     Location
+     * @see     Locations
      */
-    public function addPickupOption(PickupOption $pickupOption): FindDeliveryInfoResponse
+    public function addPickupOption(PickupOptionInterface $pickupOption): FindDeliveryInfoResponse
     {
         if (!$this->pickupOptions instanceof PickupOptions) {
             $this->pickupOptions = new PickupOption();
@@ -186,22 +171,21 @@ class FindDeliveryInfoResponse extends AbstractResponse
     }
 
     /**
-     * Set pickup options
+     * Set pickup options.
      *
      * @pattern N/A
      *
-     * @example N/A
-     *
-     * @param PickupOptions|null $pickupOptions
+     * @param PickupOptionsInterface|null $pickupOptions
      *
      * @return static
      *
-     * @since 2.0.0 Strict typing
+     * @example N/A
      *
-     * @see PickupOption
-     * @see PickupOptions
+     * @since   2.0.0 Strict typing
+     * @see     PickupOption
+     * @see     PickupOptions
      */
-    public function setPickupOptions(?PickupOptions $pickupOptions): FindDeliveryInfoResponse
+    public function setPickupOptions(?PickupOptionsInterface $pickupOptions): FindDeliveryInfoResponse
     {
         $this->pickupOptions = $pickupOptions;
 
@@ -209,7 +193,7 @@ class FindDeliveryInfoResponse extends AbstractResponse
     }
 
     /**
-     * Deserialize JSON
+     * Deserialize JSON.
      *
      * @noinspection PhpDocRedundantThrowsInspection
      *

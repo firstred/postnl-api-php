@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,9 +23,7 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -35,52 +35,37 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
 use Iterator;
 
 /**
- * Class Locations
+ * Class Locations.
  */
-class Locations extends AbstractEntity implements Iterator, ArrayAccess, Countable
+final class Locations extends AbstractEntity implements Iterator, ArrayAccess, Countable, LocationsInterface
 {
     /**
-     * @var int $index
+     * @var int
      *
      * @since 2.0.0
      */
     private $index;
 
     /**
-     * List of Locations
+     * List of Locations.
      *
      * @pattern N/A
      *
      * @example N/A
      *
-     * @var Location[] $locations
+     * @var LocationInterface[]
      *
      * @since   2.0.0
      */
-    protected $locations = [];
+    private $locations = [];
 
     /**
-     * Locations constructor.
+     * Get Locations.
      *
-     * @param array $locations
-     *
-     * @since 2.0.0
-     */
-    public function __construct(array $locations = [])
-    {
-        parent::__construct();
-
-        $this->setLocations($locations);
-    }
-
-    /**
-     * Get Locations
-     *
-     * @return Location[]|null
+     * @return LocationInterface[]|null
      *
      * @since 2.0.0
-     *
-     * @see Location
+     * @see   Location
      */
     public function getLocations(): ?array
     {
@@ -88,21 +73,20 @@ class Locations extends AbstractEntity implements Iterator, ArrayAccess, Countab
     }
 
     /**
-     * Set Locations
+     * Set Locations.
      *
      * @pattern N/A
      *
-     * @param Location[]|null $locations
+     * @param LocationInterface[]|null $locations
      *
-     * @return static
+     * @return LocationsInterface
      *
      * @example N/A
      *
-     * @since 2.0.0
-     *
-     * @see Location
+     * @since   2.0.0
+     * @see     Location
      */
-    public function setLocations(?array $locations): Locations
+    public function setLocations(?array $locations): LocationsInterface
     {
         $this->locations = $locations;
 
@@ -110,7 +94,7 @@ class Locations extends AbstractEntity implements Iterator, ArrayAccess, Countab
     }
 
     /**
-     * Serialize JSON
+     * Serialize JSON.
      *
      * @return array
      *
@@ -122,7 +106,7 @@ class Locations extends AbstractEntity implements Iterator, ArrayAccess, Countab
     }
 
     /**
-     * Deserialize JSON
+     * Deserialize JSON.
      *
      * @noinspection PhpDocRedundantThrowsInspection
      *
@@ -147,41 +131,41 @@ class Locations extends AbstractEntity implements Iterator, ArrayAccess, Countab
     }
 
     /**
-     * Return the current element
+     * Return the current element.
      *
-     * @link  https://php.net/manual/en/iterator.current.php
+     * @see  https://php.net/manual/en/iterator.current.php
      *
-     * @return mixed Can return any type.
+     * @return mixed can return any type
      *
      * @since 2.0.0
      */
-    public function current(): Location
+    public function current(): LocationInterface
     {
         return $this->locations[$this->index];
     }
 
     /**
-     * Move forward to next element
+     * Move forward to next element.
      *
-     * @link  https://php.net/manual/en/iterator.next.php
+     * @see  https://php.net/manual/en/iterator.next.php
      *
-     * @return void Any returned value is ignored.
+     * @return void any returned value is ignored
      *
      * @since 2.0.0
      */
     public function next(): void
     {
         if (isset($this->locations[$this->index + 1])) {
-            $this->index++;
+            ++$this->index;
         }
     }
 
     /**
-     * Return the key of the current element
+     * Return the key of the current element.
      *
-     * @link  https://php.net/manual/en/iterator.key.php
+     * @see  https://php.net/manual/en/iterator.key.php
      *
-     * @return mixed scalar on success, or null on failure.
+     * @return mixed scalar on success, or null on failure
      *
      * @since 2.0.0
      */
@@ -195,12 +179,12 @@ class Locations extends AbstractEntity implements Iterator, ArrayAccess, Countab
     }
 
     /**
-     * Checks if current position is valid
+     * Checks if current position is valid.
      *
-     * @link  https://php.net/manual/en/iterator.valid.php
+     * @see  https://php.net/manual/en/iterator.valid.php
      *
-     * @return boolean The return value will be casted to boolean and then evaluated.
-     * Returns true on success or false on failure.
+     * @return bool The return value will be casted to boolean and then evaluated.
+     *              Returns true on success or false on failure.
      *
      * @since 2.0.0
      */
@@ -210,11 +194,11 @@ class Locations extends AbstractEntity implements Iterator, ArrayAccess, Countab
     }
 
     /**
-     * Rewind the Iterator to the first element
+     * Rewind the Iterator to the first element.
      *
-     * @link  https://php.net/manual/en/iterator.rewind.php
+     * @see  https://php.net/manual/en/iterator.rewind.php
      *
-     * @return void Any returned value is ignored.
+     * @return void any returned value is ignored
      *
      * @since 2.0.0
      */
@@ -224,18 +208,18 @@ class Locations extends AbstractEntity implements Iterator, ArrayAccess, Countab
     }
 
     /**
-     * Whether a offset exists
+     * Whether a offset exists.
      *
-     * @link  https://php.net/manual/en/arrayaccess.offsetexists.php
+     * @see  https://php.net/manual/en/arrayaccess.offsetexists.php
      *
      * @param mixed $offset <p>
      *                      An offset to check for.
      *                      </p>
      *
-     * @return boolean true on success or false on failure.
-     *                      </p>
-     *                      <p>
-     *                      The return value will be casted to boolean if non-boolean was returned.
+     * @return bool true on success or false on failure.
+     *              </p>
+     *              <p>
+     *              The return value will be casted to boolean if non-boolean was returned.
      *
      * @since 2.0.0
      */
@@ -245,19 +229,19 @@ class Locations extends AbstractEntity implements Iterator, ArrayAccess, Countab
     }
 
     /**
-     * Offset to retrieve
+     * Offset to retrieve.
      *
-     * @link  https://php.net/manual/en/arrayaccess.offsetget.php
+     * @see  https://php.net/manual/en/arrayaccess.offsetget.php
      *
      * @param mixed $offset <p>
      *                      The offset to retrieve.
      *                      </p>
      *
-     * @return Location|null
+     * @return LocationInterface|null
      *
      * @since 2.0.0
      */
-    public function offsetGet($offset): ?Location
+    public function offsetGet($offset): ?LocationInterface
     {
         if ($this->offsetExists($offset)) {
             return $this->locations[$offset];
@@ -267,9 +251,9 @@ class Locations extends AbstractEntity implements Iterator, ArrayAccess, Countab
     }
 
     /**
-     * Offset to set
+     * Offset to set.
      *
-     * @link  https://php.net/manual/en/arrayaccess.offsetset.php
+     * @see  https://php.net/manual/en/arrayaccess.offsetset.php
      *
      * @param mixed $offset <p>
      *                      The offset to assign the value to.
@@ -292,9 +276,9 @@ class Locations extends AbstractEntity implements Iterator, ArrayAccess, Countab
     }
 
     /**
-     * Offset to unset
+     * Offset to unset.
      *
-     * @link  https://php.net/manual/en/arrayaccess.offsetunset.php
+     * @see  https://php.net/manual/en/arrayaccess.offsetunset.php
      *
      * @param mixed $offset <p>
      *                      The offset to unset.
@@ -310,14 +294,14 @@ class Locations extends AbstractEntity implements Iterator, ArrayAccess, Countab
     }
 
     /**
-     * Count elements of an object
+     * Count elements of an object.
      *
-     * @link  https://php.net/manual/en/countable.count.php
+     * @see  https://php.net/manual/en/countable.count.php
      *
      * @return int The custom count as an integer.
-     * </p>
-     * <p>
-     * The return value is cast to an integer.
+     *             </p>
+     *             <p>
+     *             The return value is cast to an integer.
      *
      * @since 2.0.0
      */

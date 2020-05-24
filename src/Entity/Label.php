@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,54 +23,51 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Misc\ValidateAndFix;
 
 /**
- * Class Label
+ * Class Label.
  */
-class Label extends AbstractEntity
+final class Label extends AbstractEntity implements LabelInterface
 {
     const FORMAT_A4 = 1;
     const FORMAT_A6 = 2;
 
     /**
-     * Base 64 encoded content
+     * Base 64 encoded content.
      *
      * @pattern N/A
      *
      * @example N/A
      *
-     * @var string|null $content
+     * @var string|null
      *
      * @since 1.0.0
      */
-    protected $content;
+    private $content;
 
     /**
      * Content type of the label, e.g. zebra of pdf. See Guidelines
-     * Note: It is not recommended to send .PDF files/labels directly to a Zebra printer. See Guidelines
+     * Note: It is not recommended to send .PDF files/labels directly to a Zebra printer. See Guidelines.
      *
      * @pattern ^.{0,35}$
      *
      * @example PDF
      *
-     * @var string|null $contenttype
+     * @var string|null
      *
      * @since 1.0.0
      */
-    protected $contenttype;
+    private $contenttype;
 
     /**
-     * Label type
+     * Label type.
      *
      * The Label type helps you to determine what document is returned. In most cases, only a Label is returned. The following label types are possible:
      * | Labeltype                        | Description                                                   |
@@ -85,41 +84,19 @@ class Label extends AbstractEntity
      *
      * @example Label (A6)
      *
-     * @var string|null $labeltype
+     * @var string|null
      *
      * @since 1.0.0
      */
-    protected $labeltype;
+    private $labeltype;
 
     /**
-     * Label constructor.
-     *
-     * @param string|null $content
-     * @param string|null $contentType
-     * @param string|null $labelType
-     *
-     * @throws InvalidArgumentException
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function __construct($content = null, $contentType = null, $labelType = null)
-    {
-        parent::__construct();
-
-        $this->setContent($content);
-        $this->setContenttype($contentType);
-        $this->setLabeltype($labelType);
-    }
-
-    /**
-     * Get content
+     * Get content.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Label::$content
      */
     public function getContent(): ?string
@@ -128,7 +105,7 @@ class Label extends AbstractEntity
     }
 
     /**
-     * Set content
+     * Set content.
      *
      * @pattern N/A
      *
@@ -140,10 +117,9 @@ class Label extends AbstractEntity
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see     Label::$content
      */
-    public function setContent(?string $content): Label
+    public function setContent(?string $content): LabelInterface
     {
         $this->content = $content;
 
@@ -151,13 +127,12 @@ class Label extends AbstractEntity
     }
 
     /**
-     * Get content type
+     * Get content type.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Label::$contenttype
      */
     public function getContenttype(): ?string
@@ -165,9 +140,8 @@ class Label extends AbstractEntity
         return $this->contenttype;
     }
 
-
     /**
-     * Set content type
+     * Set content type.
      *
      * @pattern ^.{0,35}$
      *
@@ -181,24 +155,22 @@ class Label extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Label::$contenttype
      */
-    public function setContenttype(?string $contenttype): Label
+    public function setContenttype(?string $contenttype): LabelInterface
     {
-        $this->contenttype = ValidateAndFix::genericString($contenttype);
+        $this->contenttype = $this->validate->genericString($contenttype);
 
         return $this;
     }
 
     /**
-     * Get label type
+     * Get label type.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Label::$labeltype
      */
     public function getLabeltype(): ?string
@@ -207,7 +179,7 @@ class Label extends AbstractEntity
     }
 
     /**
-     * Set label type
+     * Set label type.
      *
      * @pattern ^.{0,35}$
      *
@@ -221,12 +193,11 @@ class Label extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Label::$labeltype
      */
-    public function setLabeltype(?string $labeltype): Label
+    public function setLabeltype(?string $labeltype): LabelInterface
     {
-        $this->labeltype = ValidateAndFix::genericString($labeltype);
+        $this->labeltype = $this->validate->genericString($labeltype);
 
         return $this;
     }

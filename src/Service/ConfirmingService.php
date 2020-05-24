@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,9 +23,7 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -42,7 +42,7 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * Class ConfirmingService
+ * Class ConfirmingService.
  */
 class ConfirmingService extends AbstractService
 {
@@ -54,7 +54,7 @@ class ConfirmingService extends AbstractService
     const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v1_10/confirm';
 
     /**
-     * Generate a single barcode via REST
+     * Generate a single barcode via REST.
      *
      * @param ConfirmShipmentRequest $confirming
      *
@@ -104,7 +104,7 @@ class ConfirmingService extends AbstractService
     }
 
     /**
-     * Process Confirm REST Response
+     * Process Confirm REST Response.
      *
      * @param ResponseInterface $response
      *
@@ -132,7 +132,7 @@ class ConfirmingService extends AbstractService
     }
 
     /**
-     * Confirm multiple shipments
+     * Confirm multiple shipments.
      *
      * @param ConfirmShipmentRequest[] $confirms ['uuid' => ConfirmShipmentRequest, ...]
      *

@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,56 +23,38 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Entity\Response;
 
 /**
- * Class ConfirmShipmentResponse
+ * Class ConfirmShipmentResponse.
  */
-class ConfirmShipmentResponse extends AbstractResponse
+final class ConfirmShipmentResponse extends AbstractResponse
 {
     /**
-     * Barcode
+     * Barcode.
      *
      * @pattern ^.{1,35}$
      *
      * @example 3SDEVC2016112104
      *
-     * @var string|null $barcode
+     * @var string|null
      *
      * @since   1.0.0
      */
-    protected $barcode;
+    private $barcode;
 
     /**
-     * ConfirmShipmentResponse constructor.
-     *
-     * @param string|null $barcode
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function __construct(?string $barcode = null)
-    {
-        parent::__construct();
-
-        $this->setBarcode($barcode);
-    }
-
-    /**
-     * Get barcode
+     * Get barcode.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
-     * @see   GenerateBarcodeRequest
+     * @see   GenerateBarcodeRequestEntity
      */
     public function getBarcode(): ?string
     {
@@ -78,20 +62,19 @@ class ConfirmShipmentResponse extends AbstractResponse
     }
 
     /**
-     * Set barcode
+     * Set barcode.
      *
      * @pattern ^.{1,35}$
-     *
-     * @example 3SDEVC2016112104
      *
      * @param string|null $barcode
      *
      * @return static
      *
+     * @example 3SDEVC2016112104
+     *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
-     * @see     GenerateBarcodeRequest
+     * @see     GenerateBarcodeRequestEntity
      */
     public function setBarcode(?string $barcode): ConfirmShipmentResponse
     {

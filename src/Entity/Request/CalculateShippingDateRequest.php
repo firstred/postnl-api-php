@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,9 +23,7 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -31,93 +31,92 @@ namespace Firstred\PostNL\Entity\Request;
 
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Misc\ValidateAndFix;
 
 /**
- * Class CalculateShippingDateRequest
+ * Class CalculateShippingDateRequest.
  *
  * This class is both the container and can be the actual CalculateShippingDateRequest object itself!
  */
-class CalculateShippingDateRequest extends AbstractEntity
+final class CalculateShippingDateRequest extends AbstractEntity implements CalculateShippingDateRequestInterface
 {
     /**
-     * Delivery date
+     * Delivery date.
      *
      * @pattern ^(?:[0-3]\d-[01]\d-[12]\d{3})$
      *
      * @example 03-07-2019
      *
-     * @var string|null $deliveryDate
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $deliveryDate;
+    private $deliveryDate;
 
     /**
      * The duration it takes for the shipment to be delivered to PostNL in days. A value of 1 means that the parcel will be delivered to PostNL on the same day as the date specified in ShippingDate.
-     * A value of 2 means the parcel will arrive at PostNL a day later etc
+     * A value of 2 means the parcel will arrive at PostNL a day later etc.
      *
      * @pattern ^\d{1,10}$
      *
      * @example 2
      *
-     * @var int|null $shippingDuration
+     * @var int|null
      *
      * @since   2.0.0
      */
-    protected $shippingDuration;
+    private $shippingDuration;
 
     /**
-     * Zip / postal code
+     * Zip / postal code.
      *
      * @example 2132WT
      *
-     * @var string|null $postalCode
+     * @var string|null
      *
      * @pattern ^.{0,10}$
      *
      * @since   2.0.0
      */
-    protected $postalCode;
+    private $postalCode;
 
     /**
-     * Country code
+     * Country code.
      *
      * @pattern ^(?:NL|BE))$
      *
      * @example NL
      *
-     * @var string|null $countryCode
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $countryCode;
+    private $countryCode;
 
     /**
-     * Origin country code
+     * Origin country code.
      *
      * @pattern ^(?:NL|BE))$
      *
      * @example NL
      *
-     * @var string|null $originCountryCode
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $originCountryCode;
+    private $originCountryCode;
 
     /**
-     * City
+     * City.
      *
      * @pattern ^.{0,35}$
      *
      * @example Hoofddorp
      *
-     * @var string|null $city
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $city;
+    private $city;
 
     /**
      * The street name of the delivery address.
@@ -126,77 +125,44 @@ class CalculateShippingDateRequest extends AbstractEntity
      *
      * @example Siriusdreef
      *
-     * @var string|null $street
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $street;
+    private $street;
 
     /**
-     * House number
+     * House number.
      *
      * @pattern ^\d{1,10}$
      *
      * @example 42
      *
-     * @var int|null $houseNumber
+     * @var int|null
      *
      * @since   2.0.0
      */
-    protected $houseNumber;
+    private $houseNumber;
 
     /**
-     * House number extension
+     * House number extension.
      *
      * @example A
      *
-     * @var string|null $houseNrExt
+     * @var string|null
      *
      * @pattern ^.{0,35}$
      *
      * @since   2.0.0
      */
-    protected $houseNrExt;
+    private $houseNrExt;
 
     /**
-     * CalculateShippingDateRequest constructor.
-     *
-     * @param string|null           $deliveryDate
-     * @param int|float|string|null $shippingDuration
-     * @param string|null           $postalCode
-     * @param string|null           $countryCode
-     * @param string|null           $originCountryCode
-     * @param string|null           $city
-     * @param string|null           $street
-     * @param int|float|string|null $houseNumber
-     * @param string|null           $houseNrExt
-     *
-     * @throws InvalidArgumentException
-     *
-     * @since 2.0.0
-     */
-    public function __construct(?string $deliveryDate = null, $shippingDuration = null, ?string $postalCode = null, ?string $countryCode = null, ?string $originCountryCode = null, ?string $city = null, ?string $street = null, $houseNumber = null, ?string $houseNrExt = null)
-    {
-        parent::__construct();
-
-        $this->setDeliveryDate($deliveryDate);
-        $this->setShippingDuration($shippingDuration);
-        $this->setPostalCode($postalCode);
-        $this->setCountryCode($countryCode);
-        $this->setOriginCountryCode($originCountryCode);
-        $this->setCity($city);
-        $this->setStreet($street);
-        $this->setHouseNumber($houseNumber);
-        $this->setHouseNrExt($houseNrExt);
-    }
-
-    /**
-     * Get zip / postal code
+     * Get zip / postal code.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   CalculateShippingDateRequest::$postalCode
      */
     public function getPostalCode(): ?string
@@ -205,7 +171,7 @@ class CalculateShippingDateRequest extends AbstractEntity
     }
 
     /**
-     * Set the zip / postcode
+     * Set the zip / postcode.
      *
      * @pattern ^.{0,10}$
      *
@@ -218,23 +184,21 @@ class CalculateShippingDateRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     CalculateShippingDateRequest::$postalCode
      */
     public function setPostalCode(?string $postcode = null): CalculateShippingDateRequest
     {
-        $this->postalCode = ValidateAndFix::postcode($postcode);
+        $this->postalCode = $this->validate->postcode($postcode);
 
         return $this;
     }
 
     /**
-     * Get city
+     * Get city.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   CalculateShippingDateRequest::$city
      */
     public function getCity(): ?string
@@ -243,7 +207,7 @@ class CalculateShippingDateRequest extends AbstractEntity
     }
 
     /**
-     * Set city
+     * Set city.
      *
      * @pattern ^.{0,35}$
      *
@@ -256,23 +220,21 @@ class CalculateShippingDateRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     CalculateShippingDateRequest::$city
      */
     public function setCity(?string $city): CalculateShippingDateRequest
     {
-        $this->city = ValidateAndFix::city($city);
+        $this->city = $this->validate->city($city);
 
         return $this;
     }
 
     /**
-     * Get country code
+     * Get country code.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   CalculateShippingDateRequest::$countryCode
      */
     public function getCountryCode(): ?string
@@ -281,7 +243,7 @@ class CalculateShippingDateRequest extends AbstractEntity
     }
 
     /**
-     * Set country code
+     * Set country code.
      *
      * @pattern ^(?:NL|BE)$
      *
@@ -294,23 +256,21 @@ class CalculateShippingDateRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     CalculateShippingDateRequest::$countryCode
      */
     public function setCountryCode(?string $countryCode): CalculateShippingDateRequest
     {
-        $this->countryCode = ValidateAndFix::isoAlpha2CountryCodeNlBe($countryCode);
+        $this->countryCode = $this->validate->isoAlpha2CountryCodeNlBe($countryCode);
 
         return $this;
     }
 
     /**
-     * Get house number
+     * Get house number.
      *
      * @return int|null
      *
      * @since 2.0.0
-     *
      * @see   CalculateShippingDateRequest::$houseNumber
      */
     public function getHouseNumber(): ?int
@@ -319,7 +279,7 @@ class CalculateShippingDateRequest extends AbstractEntity
     }
 
     /**
-     * Set house number
+     * Set house number.
      *
      * @pattern ^\d{1,10}$
      *
@@ -332,25 +292,23 @@ class CalculateShippingDateRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     CalculateShippingDateRequest::$houseNumber
      */
     public function setHouseNumber($houseNumber): CalculateShippingDateRequest
     {
-        $this->houseNumber = ValidateAndFix::integer($houseNumber);
+        $this->houseNumber = $this->validate->integer($houseNumber);
 
         return $this;
     }
 
     /**
-     * Get house number extension
+     * Get house number extension.
      *
      * Get house number extension
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   CalculateShippingDateRequest::$houseNrExt
      */
     public function getHouseNrExt(): ?string
@@ -359,7 +317,7 @@ class CalculateShippingDateRequest extends AbstractEntity
     }
 
     /**
-     * Set house number extension
+     * Set house number extension.
      *
      * @pattern ^.{0,35}$
      *
@@ -372,23 +330,21 @@ class CalculateShippingDateRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     CalculateShippingDateRequest::$houseNrExt
      */
     public function setHouseNrExt(?string $houseNrExt): CalculateShippingDateRequest
     {
-        $this->houseNrExt = ValidateAndFix::genericString($houseNrExt);
+        $this->houseNrExt = $this->validate->genericString($houseNrExt);
 
         return $this;
     }
 
     /**
-     * Get origin country code
+     * Get origin country code.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   CalculateShippingDateRequest::$originCountryCode
      */
     public function getOriginCountryCode(): ?string
@@ -397,7 +353,7 @@ class CalculateShippingDateRequest extends AbstractEntity
     }
 
     /**
-     * Set origin country code
+     * Set origin country code.
      *
      * @pattern ^(?:NL|BE)$
      *
@@ -410,23 +366,21 @@ class CalculateShippingDateRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     CalculateShippingDateRequest::$originCountryCode
      */
     public function setOriginCountryCode(?string $originCountryCode): CalculateShippingDateRequest
     {
-        $this->originCountryCode = ValidateAndFix::isoAlpha2CountryCodeNlBe($originCountryCode);
+        $this->originCountryCode = $this->validate->isoAlpha2CountryCodeNlBe($originCountryCode);
 
         return $this;
     }
 
     /**
-     * Get shipping date
+     * Get shipping date.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   CalculateShippingDateRequest::$deliveryDate
      */
     public function getDeliveryDate(): ?string
@@ -435,7 +389,7 @@ class CalculateShippingDateRequest extends AbstractEntity
     }
 
     /**
-     * Set shipping date
+     * Set shipping date.
      *
      * @pattern ^(?:[0-3]\d-[01]\d-[12]\d{3}\s+)[0-2]\d:[0-5]\d(?:[0-5]\d)$
      *
@@ -448,23 +402,21 @@ class CalculateShippingDateRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     CalculateShippingDateRequest::$deliveryDate
      */
     public function setDeliveryDate(?string $deliveryDate): CalculateShippingDateRequest
     {
-        $this->deliveryDate = ValidateAndFix::date($deliveryDate);
+        $this->deliveryDate = $this->validate->date($deliveryDate);
 
         return $this;
     }
 
     /**
-     * Get shipping duration
+     * Get shipping duration.
      *
      * @return int|null
      *
      * @since 2.0.0
-     *
      * @see   CalculateShippingDateRequest::$shippingDuration
      */
     public function getShippingDuration(): ?int
@@ -473,7 +425,7 @@ class CalculateShippingDateRequest extends AbstractEntity
     }
 
     /**
-     * Set shipping duration
+     * Set shipping duration.
      *
      * @pattern ^\d{1,10}$
      *
@@ -486,23 +438,21 @@ class CalculateShippingDateRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     CalculateShippingDateRequest::$shippingDuration
      */
     public function setShippingDuration($shippingDuration): CalculateShippingDateRequest
     {
-        $this->shippingDuration = ValidateAndFix::integer($shippingDuration);
+        $this->shippingDuration = $this->validate->integer($shippingDuration);
 
         return $this;
     }
 
     /**
-     * Get street
+     * Get street.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   CalculateShippingDateRequest::$street
      */
     public function getStreet(): ?string
@@ -511,7 +461,7 @@ class CalculateShippingDateRequest extends AbstractEntity
     }
 
     /**
-     * Set street
+     * Set street.
      *
      * @pattern ^.{0,95}$
      *
@@ -524,12 +474,11 @@ class CalculateShippingDateRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     CalculateShippingDateRequest::$street
      */
     public function setStreet(?string $street): CalculateShippingDateRequest
     {
-        $this->street = ValidateAndFix::street($street);
+        $this->street = $this->validate->street($street);
 
         return $this;
     }

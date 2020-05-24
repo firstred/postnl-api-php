@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,15 +23,14 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Service;
 
 use Firstred\PostNL\Entity\Location;
+use Firstred\PostNL\Entity\LocationInterface;
 use Firstred\PostNL\Entity\Request\FindLocationsInAreaRequest;
 use Firstred\PostNL\Entity\Request\FindNearestLocationsGeocodeRequest;
 use Firstred\PostNL\Entity\Request\FindNearestLocationsRequest;
@@ -50,7 +51,7 @@ use Psr\Http\Message\ResponseInterface;
 use TypeError;
 
 /**
- * Class LocationService
+ * Class LocationService.
  */
 class LocationService extends AbstractService
 {
@@ -62,7 +63,7 @@ class LocationService extends AbstractService
     const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2_1/locations';
 
     /**
-     * Get the nearest locations via REST
+     * Get the nearest locations via REST.
      *
      * @param FindNearestLocationsRequest $getNearestLocations
      *
@@ -97,7 +98,7 @@ class LocationService extends AbstractService
         $object = $this->processFindNearestLocationsResponse($response);
         if ($item instanceof CacheItemInterface
             && $response instanceof ResponseInterface
-            && $response->getStatusCode() === 200
+            && 200 === $response->getStatusCode()
         ) {
             $item->set(Message::str($response));
             $this->cacheItem($item);
@@ -107,7 +108,7 @@ class LocationService extends AbstractService
     }
 
     /**
-     * Build the GenerateShipmentLabelRequest request for the REST API
+     * Build the GenerateShipmentLabelRequest request for the REST API.
      *
      * @param FindNearestLocationsRequest $findNearestLocations
      *
@@ -148,7 +149,7 @@ class LocationService extends AbstractService
     }
 
     /**
-     * Process FindNearestLocationsRequest Response REST
+     * Process FindNearestLocationsRequest Response REST.
      *
      * @param ResponseInterface $response
      *
@@ -173,7 +174,7 @@ class LocationService extends AbstractService
     }
 
     /**
-     * Get the nearest locations via REST
+     * Get the nearest locations via REST.
      *
      * @param FindNearestLocationsGeocodeRequest $getLocations
      *
@@ -208,7 +209,7 @@ class LocationService extends AbstractService
         if ($object instanceof FindNearestLocationsGeocodeResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof ResponseInterface
-                && $response->getStatusCode() === 200
+                && 200 === $response->getStatusCode()
             ) {
                 $item->set(Message::str($response));
                 $this->cacheItem($item);
@@ -257,7 +258,7 @@ class LocationService extends AbstractService
     }
 
     /**
-     * Process FindNearestLocationsGeocode Response REST
+     * Process FindNearestLocationsGeocode Response REST.
      *
      * @param ResponseInterface $response
      *
@@ -274,13 +275,13 @@ class LocationService extends AbstractService
         static::validateResponse($response);
         $body = @json_decode((string) $response->getBody(), true);
 
-        /** @var FindNearestLocationsGeocodeResponse $object */
+        /* @var FindNearestLocationsGeocodeResponse $object */
 
         return FindNearestLocationsGeocodeResponse::jsonDeserialize(['FindNearestLocationsGeocodeResponse' => $body]);
     }
 
     /**
-     * Find locations in the area
+     * Find locations in the area.
      *
      * @param FindLocationsInAreaRequest $findLocations
      *
@@ -315,7 +316,7 @@ class LocationService extends AbstractService
         if ($object instanceof FindNearestLocationsGeocodeResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof ResponseInterface
-                && $response->getStatusCode() === 200
+                && 200 === $response->getStatusCode()
             ) {
                 $item->set(Message::str($response));
                 $this->cacheItem($item);
@@ -366,7 +367,7 @@ class LocationService extends AbstractService
     }
 
     /**
-     * Process FindNearestLocationsGeocode Response REST
+     * Process FindNearestLocationsGeocode Response REST.
      *
      * @param ResponseInterface $response
      *
@@ -390,11 +391,11 @@ class LocationService extends AbstractService
     }
 
     /**
-     * Get the location via REST
+     * Get the location via REST.
      *
      * @param LookupLocationRequest $getLocation
      *
-     * @return Location
+     * @return LocationInterface
      *
      * @throws CifDownException
      * @throws CifErrorException
@@ -404,7 +405,7 @@ class LocationService extends AbstractService
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function lookupLocation(LookupLocationRequest $getLocation): Location
+    public function lookupLocation(LookupLocationRequest $getLocation): LocationInterface
     {
         $item = $this->retrieveCachedItem($getLocation->getId());
         $response = null;
@@ -425,7 +426,7 @@ class LocationService extends AbstractService
         if ($object instanceof Location) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof ResponseInterface
-                && $response->getStatusCode() === 200
+                && 200 === $response->getStatusCode()
             ) {
                 $item->set(Message::str($response));
                 $this->cacheItem($item);
@@ -438,7 +439,7 @@ class LocationService extends AbstractService
     }
 
     /**
-     * Build the LookupLocationRequest request for the REST API
+     * Build the LookupLocationRequest request for the REST API.
      *
      * @param LookupLocationRequest $getLocation
      *
@@ -467,11 +468,11 @@ class LocationService extends AbstractService
     }
 
     /**
-     * Process LookupLocationRequest Response REST
+     * Process LookupLocationRequest Response REST.
      *
      * @param ResponseInterface $response
      *
-     * @return Location
+     * @return LocationInterface
      *
      * @throws CifDownException
      * @throws CifErrorException
@@ -480,7 +481,7 @@ class LocationService extends AbstractService
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function processLookupLocationResponse(ResponseInterface $response): Location
+    public function processLookupLocationResponse(ResponseInterface $response): LocationInterface
     {
         static::validateResponse($response);
         $body = @json_decode((string) $response->getBody(), true);

@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * Copyright (c) 2015 Michael Dowling, https://github.com/mtdowling <mtdowling@gmail.com>
+ * Copyright (c) 2015 Michael Dowling, https://github.com/mtdowling <mtdowling@gmail.com>.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -59,7 +61,7 @@ class EachPromise
     private $mutex;
 
     /**
-     * Configuration hash can include the following key value pairs:
+     * Configuration hash can include the following key value pairs:.
      *
      * - fulfilled: (callable) Invoked when a promise fulfills. The function
      *   is invoked with three arguments: the fulfillment value, the index
@@ -76,7 +78,7 @@ class EachPromise
      *   allowed number of outstanding concurrently executing promises,
      *   creating a capped pool of promises. There is no limit by default.
      *
-     * @param mixed $iterable Promises or values to iterate.
+     * @param mixed $iterable promises or values to iterate
      * @param array $config   Configuration options
      */
     public function __construct($iterable, array $config = [])
@@ -160,7 +162,6 @@ class EachPromise
         if (!$this->concurrency) {
             // Add all pending promises.
             while ($this->addPending() && $this->advanceIterator()) {
-                ;
             }
 
             return;
@@ -184,7 +185,6 @@ class EachPromise
         while (--$concurrency
             && $this->advanceIterator()
             && $this->addPending()) {
-            ;
         }
     }
 

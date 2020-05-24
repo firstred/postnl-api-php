@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,9 +23,7 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -32,67 +32,55 @@ namespace Firstred\PostNL\Entity;
 use Firstred\PostNL\Entity\Response\AbstractResponse;
 
 /**
- * Class Signature
+ * Class Signature.
  */
-class Signature extends AbstractResponse
+final class Signature extends AbstractResponse implements SignatureInterface
 {
     /**
-     * Barcode
+     * Barcode.
      *
      * @pattern ^.{0,35}$
      *
      * @example 3SDEV2345234
      *
-     * @var string|null $barcode
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $barcode;
+    private $barcode;
 
     /**
-     * Signature date/time
+     * Signature date/time.
      *
      * @example 2018-03-07T13:52:45.000+01:00
      *
      * @pattern N/A
      *
-     * @var string|null $signatureDate
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $signatureDate;
+    private $signatureDate;
 
     /**
-     * Base64 encoded signature image
+     * Base64 encoded signature image.
      *
      * @pattern N/A
      *
      * @example N/A
      *
-     * @var string|null $signatureImage
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $signatureImage;
+    private $signatureImage;
 
     /**
-     * Signature constructor.
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
-     * Get barcode
+     * Get barcode.
      *
      * @return string|null
      *
      * @since 2.0.0 Strict typing
-     *
      * @see   Signature::$barcode
      */
     public function getBarcode(): ?string
@@ -101,7 +89,7 @@ class Signature extends AbstractResponse
     }
 
     /**
-     * Set barcode
+     * Set barcode.
      *
      * @pattern ^.{0,35}$
      *
@@ -112,10 +100,9 @@ class Signature extends AbstractResponse
      * @return static
      *
      * @since   2.0.0 Strict typing
-     *
      * @see     Signature::$barcode
      */
-    public function setBarcode(?string $barcode): Signature
+    public function setBarcode(?string $barcode): SignatureInterface
     {
         $this->barcode = $barcode;
 
@@ -123,12 +110,11 @@ class Signature extends AbstractResponse
     }
 
     /**
-     * Get signature date
+     * Get signature date.
      *
      * @return string|null
      *
      * @since 2.0.0 Strict typing
-     *
      * @see   Signature::$signatureDate
      */
     public function getSignatureDate(): ?string
@@ -137,7 +123,7 @@ class Signature extends AbstractResponse
     }
 
     /**
-     * Set signature date
+     * Set signature date.
      *
      * @example 2018-03-07T13:52:45.000+01:00
      *
@@ -148,10 +134,9 @@ class Signature extends AbstractResponse
      * @return static
      *
      * @since   2.0.0 Strict typing
-     *
      * @see     Signature::$signatureDate
      */
-    public function setSignatureDate(?string $signatureDate): Signature
+    public function setSignatureDate(?string $signatureDate): SignatureInterface
     {
         $this->signatureDate = $signatureDate;
 
@@ -159,12 +144,11 @@ class Signature extends AbstractResponse
     }
 
     /**
-     * Get signature image
+     * Get signature image.
      *
      * @return string|null
      *
      * @since 2.0.0 Strict typing
-     *
      * @see   Signature::$signatureImage
      */
     public function getSignatureImage(): ?string
@@ -173,7 +157,7 @@ class Signature extends AbstractResponse
     }
 
     /**
-     * Set signature image
+     * Set signature image.
      *
      * @pattern N/A
      *
@@ -184,10 +168,9 @@ class Signature extends AbstractResponse
      * @return static
      *
      * @since   2.0.0 Strict typing
-     *
      * @see     Signature::$signatureImage
      */
-    public function setSignatureImage(?string $signatureImage): Signature
+    public function setSignatureImage(?string $signatureImage): SignatureInterface
     {
         $this->signatureImage = $signatureImage;
 

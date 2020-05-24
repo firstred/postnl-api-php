@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,144 +23,112 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Misc\ValidateAndFix;
 
 /**
- * Class OpeningHours
+ * Class OpeningHours.
  */
-class OpeningHours extends AbstractEntity
+final class OpeningHours extends AbstractEntity implements OpeningHoursInterface
 {
     /**
-     * Monday
+     * Monday.
      *
      * @pattern ^[0-2][0-9]:[0-5][0-9]-$[0-2][0-9]:[0-5][0-9]$
      *
      * @example 08:00-17:00
      *
-     * @var array $monday
+     * @var array
      *
      * @since   1.0.0
      */
-    protected $monday = [];
+    private $monday = [];
 
     /**
-     * Tuesday
+     * Tuesday.
      *
      * @pattern ^[0-2][0-9]:[0-5][0-9]-$[0-2][0-9]:[0-5][0-9]$
      *
      * @example 08:00-17:00
      *
-     * @var array $tuesday
+     * @var array
      *
      * @since   1.0.0
      */
-    protected $tuesday = [];
+    private $tuesday = [];
 
     /**
-     * Wednesday
+     * Wednesday.
      *
      * @pattern ^[0-2][0-9]:[0-5][0-9]-$[0-2][0-9]:[0-5][0-9]$
      *
      * @example 08:00-17:00
      *
-     * @var array $wednesday
+     * @var array
      *
      * @since   1.0.0
      */
-    protected $wednesday = [];
+    private $wednesday = [];
 
     /**
-     * Thursday
+     * Thursday.
      *
      * @pattern ^[0-2][0-9]:[0-5][0-9]-$[0-2][0-9]:[0-5][0-9]$
      *
      * @example 08:00-17:00
      *
-     * @var array $thursday
+     * @var array
      *
      * @since   1.0.0
      */
-    protected $thursday = [];
+    private $thursday = [];
 
     /**
-     * Friday
+     * Friday.
      *
      * @pattern ^[0-2][0-9]:[0-5][0-9]-$[0-2][0-9]:[0-5][0-9]$
      *
      * @example 08:00-17:00
      *
-     * @var array $friday
+     * @var array
      *
      * @since   1.0.0
      */
-    protected $friday = [];
+    private $friday = [];
 
     /**
-     * Saturday
+     * Saturday.
      *
      * @pattern ^[0-2][0-9]:[0-5][0-9]-$[0-2][0-9]:[0-5][0-9]$
      *
      * @example 08:00-17:00
      *
-     * @var array $saturday
+     * @var array
      *
      * @since   1.0.0
      */
-    protected $saturday = [];
+    private $saturday = [];
 
     /**
-     * Sunday
+     * Sunday.
      *
      * @pattern ^[0-2][0-9]:[0-5][0-9]-$[0-2][0-9]:[0-5][0-9]$
      *
      * @example 08:00-17:00
      *
-     * @var array $sunday
+     * @var array
      *
      * @since   1.0.0
      */
-    protected $sunday = [];
+    private $sunday = [];
 
     /**
-     * OpeningHours constructor.
-     *
-     * @param string[] $monday
-     * @param string[] $tuesday
-     * @param string[] $wednesday
-     * @param string[] $thursday
-     * @param string[] $friday
-     * @param string[] $saturday
-     * @param string[] $sunday
-     *
-     * @throws InvalidArgumentException
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function __construct(array $monday = [], array $tuesday = [], array $wednesday = [], array $thursday = [], array $friday = [], array $saturday = [], array $sunday = [])
-    {
-        parent::__construct();
-
-        $this->setMonday($monday);
-        $this->setTuesday($tuesday);
-        $this->setWednesday($wednesday);
-        $this->setThursday($thursday);
-        $this->setFriday($friday);
-        $this->setSaturday($saturday);
-        $this->setSunday($sunday);
-    }
-
-    /**
-     * Deserialize JSON
+     * Deserialize JSON.
      *
      * @noinspection PhpDocRedundantThrowsInspection
      *
@@ -185,13 +155,12 @@ class OpeningHours extends AbstractEntity
     }
 
     /**
-     * Get Monday
+     * Get Monday.
      *
      * @return string[]
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   OpeningHours::$monday
      */
     public function getMonday(): array
@@ -200,41 +169,39 @@ class OpeningHours extends AbstractEntity
     }
 
     /**
-     * Set Monday
+     * Set Monday.
      *
      * @pattern ^[0-2][0-9]:[0-5][0-9]-$[0-2][0-9]:[0-5][0-9]$
      *
-     * @example 08:00-17:00
-     *
      * @param string[] $monday
      *
-     * @return static
+     * @return OpeningHoursInterface
      *
      * @throws InvalidArgumentException
      *
+     * @example 08:00-17:00
+     *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     OpeningHours::$monday
      */
-    public function setMonday(array $monday): OpeningHours
+    public function setMonday(array $monday): OpeningHoursInterface
     {
         $this->monday = [];
         foreach ($monday as $openingHour) {
-            $this->monday[] = ValidateAndFix::timeRangeShort($openingHour);
+            $this->monday[] = $this->validate->timeRangeShort($openingHour);
         }
 
         return $this;
     }
 
     /**
-     * Get Tuesday
+     * Get Tuesday.
      *
      * @return string[]
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   OpeningHours::$tuesday
      */
     public function getTuesday(): array
@@ -243,41 +210,39 @@ class OpeningHours extends AbstractEntity
     }
 
     /**
-     * Set Tuesday
+     * Set Tuesday.
      *
      * @pattern ^[0-2][0-9]:[0-5][0-9]-$[0-2][0-9]:[0-5][0-9]$
      *
-     * @example 08:00-17:00
-     *
      * @param string[] $tuesday
      *
-     * @return static
+     * @return OpeningHoursInterface
      *
      * @throws InvalidArgumentException
      *
+     * @example 08:00-17:00
+     *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     OpeningHours::$tuesday
      */
-    public function setTuesday(array $tuesday): OpeningHours
+    public function setTuesday(array $tuesday): OpeningHoursInterface
     {
         $this->tuesday = [];
         foreach ($tuesday as $openingHour) {
-            $this->tuesday[] = ValidateAndFix::timeRangeShort($openingHour);
+            $this->tuesday[] = $this->validate->timeRangeShort($openingHour);
         }
 
         return $this;
     }
 
     /**
-     * Get Wednesday
+     * Get Wednesday.
      *
      * @return string[]
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   OpeningHours::$wednesday
      */
     public function getWednesday(): array
@@ -286,41 +251,39 @@ class OpeningHours extends AbstractEntity
     }
 
     /**
-     * Set Wednesday
+     * Set Wednesday.
      *
      * @pattern ^[0-2][0-9]:[0-5][0-9]-$[0-2][0-9]:[0-5][0-9]$
      *
-     * @example 08:00-17:00
-     *
      * @param string[] $wednesday
      *
-     * @return static
+     * @return OpeningHoursInterface
      *
      * @throws InvalidArgumentException
      *
+     * @example 08:00-17:00
+     *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     OpeningHours::$wednesday
      */
-    public function setWednesday(array $wednesday): OpeningHours
+    public function setWednesday(array $wednesday): OpeningHoursInterface
     {
         $this->wednesday = [];
         foreach ($wednesday as $openingHour) {
-            $this->wednesday[] = ValidateAndFix::timeRangeShort($openingHour);
+            $this->wednesday[] = $this->validate->timeRangeShort($openingHour);
         }
 
         return $this;
     }
 
     /**
-     * Get Thursday
+     * Get Thursday.
      *
      * @return string[]
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   OpeningHours::$thursday
      */
     public function getThursday(): array
@@ -329,41 +292,39 @@ class OpeningHours extends AbstractEntity
     }
 
     /**
-     * Set Thursday
+     * Set Thursday.
      *
      * @pattern ^[0-2][0-9]:[0-5][0-9]-$[0-2][0-9]:[0-5][0-9]$
      *
-     * @example 08:00-17:00
-     *
      * @param string[] $thursday
      *
-     * @return static
+     * @return OpeningHoursInterface
      *
      * @throws InvalidArgumentException
      *
+     * @example 08:00-17:00
+     *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     OpeningHours::$thursday
      */
-    public function setThursday(array $thursday): OpeningHours
+    public function setThursday(array $thursday): OpeningHoursInterface
     {
         $this->thursday = [];
         foreach ($thursday as $openingHour) {
-            $this->thursday[] = ValidateAndFix::timeRangeShort($openingHour);
+            $this->thursday[] = $this->validate->timeRangeShort($openingHour);
         }
 
         return $this;
     }
 
     /**
-     * Get Friday
+     * Get Friday.
      *
      * @return string[]
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   OpeningHours::$friday
      */
     public function getFriday(): array
@@ -372,41 +333,39 @@ class OpeningHours extends AbstractEntity
     }
 
     /**
-     * Set Friday
+     * Set Friday.
      *
      * @pattern ^[0-2][0-9]:[0-5][0-9]-$[0-2][0-9]:[0-5][0-9]$
      *
-     * @example 08:00-17:00
-     *
      * @param string[] $friday
      *
-     * @return static
+     * @return OpeningHoursInterface
      *
      * @throws InvalidArgumentException
      *
+     * @example 08:00-17:00
+     *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     OpeningHours::$friday
      */
-    public function setFriday(array $friday): OpeningHours
+    public function setFriday(array $friday): OpeningHoursInterface
     {
         $this->friday = [];
         foreach ($friday as $openingHour) {
-            $this->friday[] = ValidateAndFix::timeRangeShort($openingHour);
+            $this->friday[] = $this->validate->timeRangeShort($openingHour);
         }
 
         return $this;
     }
 
     /**
-     * Get Saturday
+     * Get Saturday.
      *
      * @return string[]
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   OpeningHours::$saturday
      */
     public function getSaturday(): array
@@ -415,41 +374,39 @@ class OpeningHours extends AbstractEntity
     }
 
     /**
-     * Set Saturday
+     * Set Saturday.
      *
      * @pattern ^[0-2][0-9]:[0-5][0-9]-$[0-2][0-9]:[0-5][0-9]$
      *
-     * @example 08:00-17:00
-     *
      * @param string[] $saturday
      *
-     * @return static
+     * @return OpeningHoursInterface
      *
      * @throws InvalidArgumentException
      *
+     * @example 08:00-17:00
+     *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     OpeningHours::$saturday
      */
-    public function setSaturday(array $saturday): OpeningHours
+    public function setSaturday(array $saturday): OpeningHoursInterface
     {
         $this->saturday = [];
         foreach ($saturday as $openingHour) {
-            $this->saturday[] = ValidateAndFix::timeRangeShort($openingHour);
+            $this->saturday[] = $this->validate->timeRangeShort($openingHour);
         }
 
         return $this;
     }
 
     /**
-     * Get Sunday
+     * Get Sunday.
      *
      * @return string[]
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   OpeningHours::$sunday
      */
     public function getSunday(): array
@@ -458,28 +415,27 @@ class OpeningHours extends AbstractEntity
     }
 
     /**
-     * Set Sunday
+     * Set Sunday.
      *
      * @pattern ^[0-2][0-9]:[0-5][0-9]-$[0-2][0-9]:[0-5][0-9]$
      *
-     * @example 08:00-17:00
-     *
      * @param string[] $sunday
      *
-     * @return static
+     * @return OpeningHoursInterface
      *
      * @throws InvalidArgumentException
      *
+     * @example 08:00-17:00
+     *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     OpeningHours::$sunday
      */
-    public function setSunday(array $sunday): OpeningHours
+    public function setSunday(array $sunday): OpeningHoursInterface
     {
         $this->sunday = [];
         foreach ($sunday as $openingHour) {
-            $this->sunday[] = ValidateAndFix::timeRangeShort($openingHour);
+            $this->sunday[] = $this->validate->timeRangeShort($openingHour);
         }
 
         return $this;

@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -20,24 +20,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
+
 namespace Firstred\PostNL\Exception\Response;
 
 use Firstred\PostNL\Exception\PostNLClientException;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * Trait WithResponseTrait
+ * Trait WithResponseTrait.
  *
  * @since 2.0.0
  */
 trait WithResponseTrait
 {
-    /** @var ResponseInterface|null $response */
+    /** @var ResponseInterface|null */
     protected $response;
 
     /**
@@ -61,7 +60,7 @@ trait WithResponseTrait
     {
         $this->response = $response;
 
-        /** @var PostNLClientException $this */
+        /* @var PostNLClientException $this */
 
         return $this;
     }

@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,50 +23,47 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Misc\ValidateAndFix;
 
 /**
- * Class Event
+ * Class Event.
  */
-class Event extends AbstractEntity
+final class Event extends AbstractEntity implements EventInterface
 {
     /**
-     * Event code
+     * Event code.
      *
      * @pattern ^.{0,35}$
      *
      * @example I01
      *
-     * @var string|null $code
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $code;
+    private $code;
 
     /**
-     * Event description
+     * Event description.
      *
      * @pattern ^.{0,1000}$
      *
      * @example Zending is bezorgd
      *
-     * @var string|null $description
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $description;
+    private $description;
 
     /**
-     * Destination location code
+     * Destination location code.
      *
      * @pattern ^.{0,35}$
      *
@@ -74,49 +73,49 @@ class Event extends AbstractEntity
      *
      * @since   2.0.0
      */
-    protected $destinationLocationCode;
+    private $destinationLocationCode;
 
     /**
-     * Location code
+     * Location code.
      *
      * @pattern ^.{0,95}$
      *
      * @example 2394082
      *
-     * @var string|null $locationCode
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $locationCode;
+    private $locationCode;
 
     /**
-     * Route code
+     * Route code.
      *
      * @pattern ^.{0,1000}$
      *
      * @example 217 PostNL Spiegelstraat
      *
-     * @var string|null $routeCode
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $routeCode;
+    private $routeCode;
 
     /**
-     * Route name
+     * Route name.
      *
      * @pattern ${0,1000}$
      *
      * @example 217 PostNL Spiegelstraat
      *
-     * @var string|null $routeName
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $routeName;
+    private $routeName;
 
     /**
-     * Timestamp
+     * Timestamp.
      *
      * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}\s(?:2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9]$
      *
@@ -126,44 +125,14 @@ class Event extends AbstractEntity
      *
      * @since   2.0.0
      */
-    protected $timeStamp;
+    private $timeStamp;
 
     /**
-     * Event constructor.
-     *
-     * @param string|null $code
-     * @param string|null $description
-     * @param string|null $destinationLocationCode
-     * @param string|null $locationCode
-     * @param string|null $routeCode
-     * @param string|null $routeName
-     * @param string|null $timeStamp
-     *
-     * @throws InvalidArgumentException
-     *
-     * @since 1.0.0
-     * @since 2.0.0
-     */
-    public function __construct(?string $code = null, ?string $description = null, ?string $destinationLocationCode = null, ?string $locationCode = null, ?string $routeCode = null, ?string $routeName = null, ?string $timeStamp = null)
-    {
-        parent::__construct();
-
-        $this->setCode($code);
-        $this->setDescription($description);
-        $this->setDestinationLocationCode($destinationLocationCode);
-        $this->setLocationCode($locationCode);
-        $this->setRouteCode($routeCode);
-        $this->setRouteName($routeName);
-        $this->setTimeStamp($timeStamp);
-    }
-
-    /**
-     * Get code
+     * Get code.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   Event::$code
      */
     public function getCode(): ?string
@@ -172,7 +141,7 @@ class Event extends AbstractEntity
     }
 
     /**
-     * Set code
+     * Set code.
      *
      * @pattern ^.{0,35}$
      *
@@ -183,10 +152,9 @@ class Event extends AbstractEntity
      * @example I01
      *
      * @since   2.0.0
-     *
      * @see     Event::$code
      */
-    public function setCode(?string $code): Event
+    public function setCode(?string $code): EventInterface
     {
         $this->code = $code;
 
@@ -194,12 +162,11 @@ class Event extends AbstractEntity
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   Event::$description
      */
     public function getDescription(): ?string
@@ -208,7 +175,7 @@ class Event extends AbstractEntity
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @pattern ^.{0,1000}$
      *
@@ -219,10 +186,9 @@ class Event extends AbstractEntity
      * @example Zending is bezorgd
      *
      * @since   2.0.0
-     *
      * @see     Event::$description
      */
-    public function setDescription(?string $description): Event
+    public function setDescription(?string $description): EventInterface
     {
         $this->description = $description;
 
@@ -230,12 +196,11 @@ class Event extends AbstractEntity
     }
 
     /**
-     * Get destination location code
+     * Get destination location code.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   Event::$destinationLocationCode
      */
     public function getDestinationLocationCode(): ?string
@@ -244,7 +209,7 @@ class Event extends AbstractEntity
     }
 
     /**
-     * Set destination location code
+     * Set destination location code.
      *
      * @pattern ^.{0,35}$
      *
@@ -255,10 +220,9 @@ class Event extends AbstractEntity
      * @example 981223
      *
      * @since   2.0.0
-     *
      * @see     Event::$destinationLocationCode
      */
-    public function setDestinationLocationCode(?string $destinationLocationCode): Event
+    public function setDestinationLocationCode(?string $destinationLocationCode): EventInterface
     {
         $this->destinationLocationCode = $destinationLocationCode;
 
@@ -266,12 +230,11 @@ class Event extends AbstractEntity
     }
 
     /**
-     * Get route code
+     * Get route code.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   Event::$routeCode
      */
     public function getRouteCode(): ?string
@@ -280,7 +243,7 @@ class Event extends AbstractEntity
     }
 
     /**
-     * Set route code
+     * Set route code.
      *
      * @pattern ^.{0,1000}$
      *
@@ -291,10 +254,9 @@ class Event extends AbstractEntity
      * @example 217 PostNL Spiegelstraat
      *
      * @since   2.0.0
-     *
      * @see     Event::$routeCode
      */
-    public function setRouteCode(?string $routeCode): Event
+    public function setRouteCode(?string $routeCode): EventInterface
     {
         $this->routeCode = $routeCode;
 
@@ -302,12 +264,11 @@ class Event extends AbstractEntity
     }
 
     /**
-     * Get route name
+     * Get route name.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   Event::$routeName
      */
     public function getRouteName(): ?string
@@ -316,7 +277,7 @@ class Event extends AbstractEntity
     }
 
     /**
-     * Set route name
+     * Set route name.
      *
      * @pattern ${0,1000}$
      *
@@ -327,10 +288,9 @@ class Event extends AbstractEntity
      * @return static
      *
      * @since   2.0.0
-     *
      * @see     Event::$routeName
      */
-    public function setRouteName(?string $routeName): Event
+    public function setRouteName(?string $routeName): EventInterface
     {
         $this->routeName = $routeName;
 
@@ -338,12 +298,11 @@ class Event extends AbstractEntity
     }
 
     /**
-     * Get timestamp
+     * Get timestamp.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   Event::$timeStamp
      */
     public function getTimeStamp(): ?string
@@ -352,7 +311,7 @@ class Event extends AbstractEntity
     }
 
     /**
-     * Set timestamp
+     * Set timestamp.
      *
      * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}\s(?:2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9]$
      *
@@ -365,23 +324,21 @@ class Event extends AbstractEntity
      * @example 03-07-2019 08:00:00
      *
      * @since   2.0.0
-     *
      * @see     Event::$timeStamp
      */
-    public function setTimeStamp(?string $timeStamp): Event
+    public function setTimeStamp(?string $timeStamp): EventInterface
     {
-        $this->timeStamp = ValidateAndFix::dateTime($timeStamp);
+        $this->timeStamp = $this->validate->dateTime($timeStamp);
 
         return $this;
     }
 
     /**
-     * Get location code
+     * Get location code.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   Event::$locationCode
      */
     public function getLocationCode(): ?string
@@ -390,7 +347,7 @@ class Event extends AbstractEntity
     }
 
     /**
-     * Set location code
+     * Set location code.
      *
      * @pattern ^.{0,95}$
      *
@@ -401,10 +358,9 @@ class Event extends AbstractEntity
      * @example 2394082
      *
      * @since   2.0.0
-     *
      * @see     Event::$locationCode
      */
-    public function setLocationCode(?string $locationCode): Event
+    public function setLocationCode(?string $locationCode): EventInterface
     {
         $this->locationCode = $locationCode;
 

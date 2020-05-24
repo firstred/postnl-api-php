@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,34 +23,31 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Misc\ValidateAndFix;
 
 /**
- * Class Amount
+ * Class Amount.
  */
-class Amount extends AbstractEntity
+final class Amount extends AbstractEntity implements AmountInterface
 {
     /**
-     * Name of bank account owner
+     * Name of bank account owner.
      *
      * @pattern ^.{0,35}$
      *
      * @example C. de Ruiter
      *
-     * @var string|null $accountName
+     * @var string|null
      *
      * @since   1.0.0
      */
-    protected $accountName;
+    private $accountName;
 
     /**
      * Amount type. This is a code. Possible values are:
@@ -61,76 +60,76 @@ class Amount extends AbstractEntity
      *
      * @example 01
      *
-     * @var string|null $amountType
+     * @var string|null
      *
      * @since   1.0.0
      */
-    protected $amountType;
+    private $amountType;
 
     /**
-     * BIC number, optional for COD shipments (mandatory for bank account number other than originating in The Netherlands)
+     * BIC number, optional for COD shipments (mandatory for bank account number other than originating in The Netherlands).
      *
      * @pattern ^.{8,11}$
      *
      * @example INGBNL2A
      *
-     * @var string|null $BIC
+     * @var string|null
      *
      * @since   1.0.0
      */
-    protected $BIC;
+    private $BIC;
 
     /**
-     * Currency code according ISO 4217. E.g. EUR
+     * Currency code according ISO 4217. E.g. EUR.
      *
      * @pattern ^[A-Z]{3}$
      *
      * @example EUR
      *
-     * @var string|null $currency
+     * @var string|null
      *
      * @since 1.0.0
      */
-    protected $currency;
+    private $currency;
 
     /**
-     * IBAN bank account number, mandatory for COD shipments. Dutch IBAN numbers are 18 characters
+     * IBAN bank account number, mandatory for COD shipments. Dutch IBAN numbers are 18 characters.
      *
      * @pattern ^.{15,31}$
      *
      * @example NL00INGB1234567890
      *
-     * @var string|null $IBAN
+     * @var string|null
      *
      * @since 1.0.0
      */
-    protected $IBAN;
+    private $IBAN;
 
     /**
-     * Personal payment reference
+     * Personal payment reference.
      *
      * @pattern ^.{0,35}$
      *
      * @example 1234-5678
      *
-     * @var string|null $reference
+     * @var string|null
      *
      * @since 1.0.0
      */
-    protected $reference;
+    private $reference;
 
     /**
-     * Transaction number
+     * Transaction number.
      *
      * @pattern ^.{0,35}$
      *
      * @example 1234
      *
-     * @var string|null $transactionNumber
+     * @var string|null
      *
      * @since 1.0.0
      */
-    protected $transactionNumber;
+    private $transactionNumber;
 
     /**
      * Money value in EUR (unless value Currency is specified for another currency). Value format (N6.2): ######0.00 (2 digits behind decimal dot)
@@ -140,51 +139,19 @@ class Amount extends AbstractEntity
      *
      * @example 10.00
      *
-     * @var string|null $value
+     * @var string|null
      *
      * @since 1.0.0
      */
-    protected $value;
+    private $value;
 
     /**
-     * Amount constructor.
-     *
-     * @param string|null $accountName
-     * @param string|null $amountType
-     * @param string|null $bic
-     * @param string|null $currency
-     * @param string|null $iban
-     * @param string|null $reference
-     * @param string|null $transactionNumber
-     * @param string|null $value
-     *
-     * @throws InvalidArgumentException
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Strict typing
-     */
-    public function __construct(?string $accountName = null, ?string $amountType = null, ?string $bic = null, ?string $currency = null, ?string $iban = null, ?string $reference = null, ?string $transactionNumber = null, ?string $value = null)
-    {
-        parent::__construct();
-
-        $this->setAccountName($accountName);
-        $this->setAmountType($amountType);
-        $this->setBIC($bic);
-        $this->setCurrency($currency);
-        $this->setIBAN($iban);
-        $this->setReference($reference);
-        $this->setTransactionNumber($transactionNumber);
-        $this->setValue($value);
-    }
-
-    /**
-     * Get amount type
+     * Get amount type.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Amount::$amountType
      */
     public function getAmountType(): ?string
@@ -193,7 +160,7 @@ class Amount extends AbstractEntity
     }
 
     /**
-     * Set amount type
+     * Set amount type.
      *
      * @pattern ^\d{2}$
      *
@@ -207,24 +174,22 @@ class Amount extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Amount::$amountType
      */
-    public function setAmountType($type = null): Amount
+    public function setAmountType($type = null): AmountInterface
     {
-        $this->amountType = ValidateAndFix::amountType($type);
+        $this->amountType = $this->validate->amountType($type);
 
         return $this;
     }
 
     /**
-     * Get account name
+     * Get account name.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Amount::$accountName
      */
     public function getAccountName(): ?string
@@ -233,7 +198,7 @@ class Amount extends AbstractEntity
     }
 
     /**
-     * Set account name
+     * Set account name.
      *
      * @pattern ^.{0,35}$
      *
@@ -247,24 +212,22 @@ class Amount extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Amount::$accountName
      */
-    public function setAccountName(?string $accountName): Amount
+    public function setAccountName(?string $accountName): AmountInterface
     {
-        $this->accountName = ValidateAndFix::bankAccountName($accountName);
+        $this->accountName = $this->validate->bankAccountName($accountName);
 
         return $this;
     }
 
     /**
-     * Get BIC
+     * Get BIC.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Amount::$BIC
      */
     public function getBIC(): ?string
@@ -273,7 +236,7 @@ class Amount extends AbstractEntity
     }
 
     /**
-     * Set BIC
+     * Set BIC.
      *
      * @pattern ^.{8,11}$
      *
@@ -287,24 +250,22 @@ class Amount extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Amount::$BIC
      */
-    public function setBIC(?string $bic): Amount
+    public function setBIC(?string $bic): AmountInterface
     {
-        $this->BIC = ValidateAndFix::bic($bic);
+        $this->BIC = $this->validate->bic($bic);
 
         return $this;
     }
 
     /**
-     * Get currency code
+     * Get currency code.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Amount::$currency
      */
     public function getCurrency(): ?string
@@ -313,7 +274,7 @@ class Amount extends AbstractEntity
     }
 
     /**
-     * Set currency code
+     * Set currency code.
      *
      * @pattern ^[A-Z]{3}$
      *
@@ -327,24 +288,22 @@ class Amount extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Amount::$currency
      */
-    public function setCurrency(?string $currency): Amount
+    public function setCurrency(?string $currency): AmountInterface
     {
-        $this->currency = ValidateAndFix::currency($currency);
+        $this->currency = $this->validate->currency($currency);
 
         return $this;
     }
 
     /**
-     * Get IBAN
+     * Get IBAN.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Amount::$IBAN
      */
     public function getIBAN(): ?string
@@ -353,7 +312,7 @@ class Amount extends AbstractEntity
     }
 
     /**
-     * Set IBAN
+     * Set IBAN.
      *
      * @pattern ^.{15,31}$
      *
@@ -367,24 +326,22 @@ class Amount extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Amount::$IBAN
      */
-    public function setIBAN(?string $iban): Amount
+    public function setIBAN(?string $iban): AmountInterface
     {
-        $this->IBAN = ValidateAndFix::iban($iban);
+        $this->IBAN = $this->validate->iban($iban);
 
         return $this;
     }
 
     /**
-     * Get reference
+     * Get reference.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Amount::$reference
      */
     public function getReference(): ?string
@@ -393,7 +350,7 @@ class Amount extends AbstractEntity
     }
 
     /**
-     * Set reference
+     * Set reference.
      *
      * @pattern ^.{0,35}$
      *
@@ -407,24 +364,22 @@ class Amount extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Amount::$reference
      */
-    public function setReference(?string $reference): Amount
+    public function setReference(?string $reference): AmountInterface
     {
-        $this->reference = ValidateAndFix::reference($reference);
+        $this->reference = $this->validate->reference($reference);
 
         return $this;
     }
 
     /**
-     * Get transaction number
+     * Get transaction number.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Amount::$transactionNumber
      */
     public function getTransactionNumber(): ?string
@@ -433,7 +388,7 @@ class Amount extends AbstractEntity
     }
 
     /**
-     * Set transaction number
+     * Set transaction number.
      *
      * @pattern ^.{0,35}$
      *
@@ -447,24 +402,22 @@ class Amount extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Amount::$transactionNumber
      */
-    public function setTransactionNumber(?string $transactionNumber): Amount
+    public function setTransactionNumber(?string $transactionNumber): AmountInterface
     {
-        $this->transactionNumber = ValidateAndFix::transactionNumber($transactionNumber);
+        $this->transactionNumber = $this->validate->transactionNumber($transactionNumber);
 
         return $this;
     }
 
     /**
-     * Get value
+     * Get value.
      *
      * @return string|null
      *
      * @since 1.0.0
      * @since 2.0.0 Strict typing
-     *
      * @see   Amount::$value
      */
     public function getValue(): ?string
@@ -473,7 +426,7 @@ class Amount extends AbstractEntity
     }
 
     /**
-     * Set value
+     * Set value.
      *
      * @param string|float|int|null $value
      *
@@ -487,12 +440,11 @@ class Amount extends AbstractEntity
      *
      * @since   1.0.0
      * @since   2.0.0 Strict typing
-     *
      * @see     Amount::$value
      */
-    public function setValue($value): Amount
+    public function setValue($value): AmountInterface
     {
-        $this->value = ValidateAndFix::amountValue($value);
+        $this->value = $this->validate->amountValue($value);
 
         return $this;
     }

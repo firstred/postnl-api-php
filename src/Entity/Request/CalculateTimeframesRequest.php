@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
  *
@@ -21,9 +23,7 @@ declare(strict_types=1);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- *
  * @copyright 2017-2020 Michael Dekker
- *
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -31,187 +31,175 @@ namespace Firstred\PostNL\Entity\Request;
 
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Misc\ValidateAndFix;
 
 /**
- * Class CalculateTimeframesRequest
+ * Class CalculateTimeframesRequest.
  */
-class CalculateTimeframesRequest extends AbstractEntity
+final class CalculateTimeframesRequest extends AbstractEntity implements CalculateTimeframesRequestInterface
 {
     /**
-     * Allow Sunday sorting
+     * Allow Sunday sorting.
      *
      * @example N/A
      *
-     * @var bool|null $allowSundaySorting
+     * @var bool|null
      *
      * @pattern N/A
      *
      * @since   2.0.0
      */
-    protected $allowSundaySorting;
+    private $allowSundaySorting;
 
     /**
-     * Start date
+     * Start date.
      *
      * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}$
      *
      * @example 03-07-2019
      *
-     * @var string|null $startDate
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $startDate;
+    private $startDate;
 
     /**
-     * End date
+     * End date.
      *
      * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}$
      *
      * @example 03-07-2019
      *
-     * @var string|null $endDate
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $endDate;
+    private $endDate;
 
     /**
-     * Postal code
+     * Postal code.
      *
      * @pattern ^.{1,10}$
      *
      * @example 2132WT
      *
-     * @var string|null $postalCode
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $postalCode;
+    private $postalCode;
 
     /**
-     * Filter for MyTime shipments (possible: 60/30); choose 60 if you only want ‘whole hour’ timeframes returned
+     * Filter for MyTime shipments (possible: 60/30); choose 60 if you only want ‘whole hour’ timeframes returned.
      *
      * @pattern ^(?:30|60)$
      *
      * @example 30
      *
-     * @var int|null $interval
+     * @var int|null
      *
      * @since   2.0.0
      */
-    protected $interval;
+    private $interval;
 
     /**
-     * House number
+     * House number.
      *
      * @pattern ^\d{1,10}$
      *
      * @example 42
      *
-     * @var int|null $houseNumber
+     * @var int|null
      *
      * @since   2.0.0
      */
-    protected $houseNumber;
+    private $houseNumber;
 
     /**
-     * House number extension
+     * House number extension.
      *
      * @pattern ^.{0,35}$
      *
      * @example A
      *
-     * @var string|null $houseNrExt
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $houseNrExt;
+    private $houseNrExt;
 
     /**
      * Filter for MyTime shipments; format H:i-H:i. Specifies which timeframes you want returned in the response.
      *
      * @example 14:00-15:00
      *
-     * @var string|null $timeframeRange
+     * @var string|null
      *
      * @pattern ^[0-2][0-9]:[0-5][0-9]-$[0-2][0-9]:[0-5][0-9]$
      *
      * @since   2.0.0
      */
-    protected $timeframeRange;
+    private $timeframeRange;
 
     /**
-     * Street
+     * Street.
      *
      * @pattern ^.{0,95}$
      *
      * @example Siriusdreef
      *
-     * @var string|null $street
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $street;
+    private $street;
 
     /**
-     * City
+     * City.
      *
      * @pattern ^.{0,35}$
      *
      * @example Hoofddorp
      *
-     * @var string|null $city
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $city;
+    private $city;
 
     /**
-     * Country code
+     * Country code.
      *
      * @pattern ^[A-Z]{2}$
      *
      * @example NL
      *
-     * @var string|null $countryCode
+     * @var string|null
      *
      * @since   2.0.0
      */
-    protected $countryCode;
+    private $countryCode;
 
     /**
      * The delivery options for which timeframes should be returned. At least one delivery option must be specified. See Guidelines for possible values.
-     * Available values: Daytime, Sameday, Evening, Morning, Noon, Sunday, Afternoon, MyTime
+     * Available values: Daytime, Sameday, Evening, Morning, Noon, Sunday, Afternoon, MyTime.
      *
      * @pattern ^(?:Daytime|Sameday|Evening|Morning| Noon|Sunday|Afternoon|MyTime)$
      *
      * @example Daytime
      *
-     * @var string[]|null $options
+     * @var string[]|null
      *
      * @since   2.0.0
      */
-    protected $options;
+    private $options;
 
     /**
-     * Timeframe constructor.
-     *
-     * @since 2.0.0
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
-     * Get allow Sunday sorting
+     * Get allow Sunday sorting.
      *
      * @return bool|null
      *
      * @since 2.0.0
-     *
      * @see   CalculateTimeframesRequest::$allowSundaySorting
      */
     public function getAllowSundaySorting(): ?bool
@@ -220,7 +208,7 @@ class CalculateTimeframesRequest extends AbstractEntity
     }
 
     /**
-     * Set allow sunday sorting
+     * Set allow sunday sorting.
      *
      * @pattern N/A
      *
@@ -231,10 +219,9 @@ class CalculateTimeframesRequest extends AbstractEntity
      * @return static
      *
      * @since   2.0.0
-     *
      * @see     CalculateTimeframesRequest::$allowSundaySorting
      */
-    public function setAllowSundaySorting(?bool $allowSundaySorting): CalculateTimeframesRequest
+    public function setAllowSundaySorting(?bool $allowSundaySorting): CalculateTimeframesRequestInterface
     {
         $this->allowSundaySorting = $allowSundaySorting;
 
@@ -242,12 +229,11 @@ class CalculateTimeframesRequest extends AbstractEntity
     }
 
     /**
-     * Get start date
+     * Get start date.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   CalculateTimeframesRequest::$startDate
      */
     public function getStartDate(): ?string
@@ -256,7 +242,7 @@ class CalculateTimeframesRequest extends AbstractEntity
     }
 
     /**
-     * Set start date
+     * Set start date.
      *
      * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}$
      *
@@ -269,23 +255,21 @@ class CalculateTimeframesRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     CalculateTimeframesRequest::$startDate
      */
-    public function setStartDate(?string $startDate): CalculateTimeframesRequest
+    public function setStartDate(?string $startDate): CalculateTimeframesRequestInterface
     {
-        $this->startDate = ValidateAndFix::date($startDate);
+        $this->startDate = $this->validate->date($startDate);
 
         return $this;
     }
 
     /**
-     * Get end date
+     * Get end date.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   CalculateTimeframesRequest::$endDate
      */
     public function getEndDate(): ?string
@@ -294,7 +278,7 @@ class CalculateTimeframesRequest extends AbstractEntity
     }
 
     /**
-     * Set end date
+     * Set end date.
      *
      * @pattern ^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-[0-9]{4}$
      *
@@ -307,23 +291,21 @@ class CalculateTimeframesRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     CalculateTimeframesRequest::$endDate
      */
-    public function setEndDate(?string $endDate): CalculateTimeframesRequest
+    public function setEndDate(?string $endDate): CalculateTimeframesRequestInterface
     {
-        $this->endDate = ValidateAndFix::date($endDate);
+        $this->endDate = $this->validate->date($endDate);
 
         return $this;
     }
 
     /**
-     * Get postal code
+     * Get postal code.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   CalculateTimeframesRequest::$postalCode
      */
     public function getPostalCode(): ?string
@@ -332,7 +314,7 @@ class CalculateTimeframesRequest extends AbstractEntity
     }
 
     /**
-     * Set postal code
+     * Set postal code.
      *
      * @pattern ^.{1,10}$
      *
@@ -346,22 +328,20 @@ class CalculateTimeframesRequest extends AbstractEntity
      *
      * @since   2.0.0
      * @see     CalculateTimeframesRequest::$postalCode
-     *
      */
-    public function setPostalCode(?string $postalCode): CalculateTimeframesRequest
+    public function setPostalCode(?string $postalCode): CalculateTimeframesRequestInterface
     {
-        $this->postalCode = ValidateAndFix::postcode($postalCode);
+        $this->postalCode = $this->validate->postcode($postalCode);
 
         return $this;
     }
 
     /**
-     * Get interval
+     * Get interval.
      *
      * @return int|null
      *
      * @since 2.0.0
-     *
      * @see   CalculateTimeframesRequest::$interval
      */
     public function getInterval(): ?int
@@ -370,7 +350,7 @@ class CalculateTimeframesRequest extends AbstractEntity
     }
 
     /**
-     * Set interval
+     * Set interval.
      *
      * @pattern ^(?:30|60)$
      *
@@ -383,23 +363,21 @@ class CalculateTimeframesRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     CalculateTimeframesRequest::$interval
      */
-    public function setInterval(?int $interval): CalculateTimeframesRequest
+    public function setInterval(?int $interval): CalculateTimeframesRequestInterface
     {
-        $this->interval = ValidateAndFix::interval(ValidateAndFix::integer($interval));
+        $this->interval = $this->validate->interval($this->validate->integer($interval));
 
         return $this;
     }
 
     /**
-     * Get house number
+     * Get house number.
      *
      * @return int|null
      *
      * @since 2.0.0
-     *
      * @see   CalculateTimeframesRequest::$houseNumber
      */
     public function getHouseNumber(): ?int
@@ -408,7 +386,7 @@ class CalculateTimeframesRequest extends AbstractEntity
     }
 
     /**
-     * Set house number
+     * Set house number.
      *
      * @pattern ^\d{1,10}$
      *
@@ -421,23 +399,21 @@ class CalculateTimeframesRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     CalculateTimeframesRequest::$houseNumber
      */
-    public function setHouseNumber($houseNumber): CalculateTimeframesRequest
+    public function setHouseNumber($houseNumber): CalculateTimeframesRequestInterface
     {
-        $this->houseNumber = ValidateAndFix::integer($houseNumber);
+        $this->houseNumber = $this->validate->integer($houseNumber);
 
         return $this;
     }
 
     /**
-     * Get house number extension
+     * Get house number extension.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   CalculateTimeframesRequest::$houseNrExt
      */
     public function getHouseNrExt(): ?string
@@ -446,7 +422,7 @@ class CalculateTimeframesRequest extends AbstractEntity
     }
 
     /**
-     * Set house number extension
+     * Set house number extension.
      *
      * @pattern ^.{0,35}$
      *
@@ -459,23 +435,21 @@ class CalculateTimeframesRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     CalculateTimeframesRequest::$houseNrExt
      */
-    public function setHouseNrExt(?string $houseNrExt): CalculateTimeframesRequest
+    public function setHouseNrExt(?string $houseNrExt): CalculateTimeframesRequestInterface
     {
-        $this->houseNrExt = ValidateAndFix::genericString($houseNrExt);
+        $this->houseNrExt = $this->validate->genericString($houseNrExt);
 
         return $this;
     }
 
     /**
-     * Get timeframe range
+     * Get timeframe range.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   CalculateTimeframesRequest::$timeframeRange
      */
     public function getTimeframeRange(): ?string
@@ -484,13 +458,13 @@ class CalculateTimeframesRequest extends AbstractEntity
     }
 
     /**
-     * Set timeframe range
+     * Set timeframe range.
      *
      * @pattern ^[0-2][0-9]:[0-5][0-9]-$[0-2][0-9]:[0-5][0-9]$
      *
      * @example 14:00-15:00
      *
-     * @var string|null   $timeframeRange
+     * @var string|null
      *
      * @param string|null $timeframeRange
      *
@@ -499,23 +473,21 @@ class CalculateTimeframesRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     CalculateTimeframesRequest::$timeframeRange
      */
-    public function setTimeframeRange(?string $timeframeRange): CalculateTimeframesRequest
+    public function setTimeframeRange(?string $timeframeRange): CalculateTimeframesRequestInterface
     {
-        $this->timeframeRange = ValidateAndFix::timeRangeShort($timeframeRange);
+        $this->timeframeRange = $this->validate->timeRangeShort($timeframeRange);
 
         return $this;
     }
 
     /**
-     * Get street
+     * Get street.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   CalculateTimeframesRequest::$street
      */
     public function getStreet(): ?string
@@ -524,7 +496,7 @@ class CalculateTimeframesRequest extends AbstractEntity
     }
 
     /**
-     * Set street
+     * Set street.
      *
      * @pattern ^.{0,95}$
      *
@@ -537,24 +509,21 @@ class CalculateTimeframesRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     CalculateTimeframesRequest::$street
-     *
      */
-    public function setStreet(?string $street): CalculateTimeframesRequest
+    public function setStreet(?string $street): CalculateTimeframesRequestInterface
     {
-        $this->street = ValidateAndFix::street($street);
+        $this->street = $this->validate->street($street);
 
         return $this;
     }
 
     /**
-     * Get city
+     * Get city.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   CalculateTimeframesRequest::$city
      */
     public function getCity(): ?string
@@ -563,7 +532,7 @@ class CalculateTimeframesRequest extends AbstractEntity
     }
 
     /**
-     * Set city
+     * Set city.
      *
      * @pattern ^.{0,35}$
      *
@@ -576,23 +545,21 @@ class CalculateTimeframesRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     CalculateTimeframesRequest::$city
      */
-    public function setCity(?string $city): CalculateTimeframesRequest
+    public function setCity(?string $city): CalculateTimeframesRequestInterface
     {
-        $this->city = ValidateAndFix::genericString($city);
+        $this->city = $this->validate->genericString($city);
 
         return $this;
     }
 
     /**
-     * Get country code
+     * Get country code.
      *
      * @return string|null
      *
      * @since 2.0.0
-     *
      * @see   CalculateTimeframesRequest::$countryCode
      */
     public function getCountryCode(): ?string
@@ -601,7 +568,7 @@ class CalculateTimeframesRequest extends AbstractEntity
     }
 
     /**
-     * Set country code
+     * Set country code.
      *
      * @pattern ^(?:NL|BE)$
      *
@@ -614,23 +581,21 @@ class CalculateTimeframesRequest extends AbstractEntity
      * @throws InvalidArgumentException
      *
      * @since   2.0.0
-     *
      * @see     CalculateTimeframesRequest::$countryCode
      */
-    public function setCountryCode(?string $countryCode): CalculateTimeframesRequest
+    public function setCountryCode(?string $countryCode): CalculateTimeframesRequestInterface
     {
-        $this->countryCode = ValidateAndFix::isoAlpha2CountryCodeNlBe($countryCode);
+        $this->countryCode = $this->validate->isoAlpha2CountryCodeNlBe($countryCode);
 
         return $this;
     }
 
     /**
-     * Get options
+     * Get options.
      *
      * @return string[]|null
      *
      * @since 2.0.0
-     *
      * @see   CalculateTimeframesRequest::$options
      */
     public function getOptions(): ?array
@@ -639,7 +604,7 @@ class CalculateTimeframesRequest extends AbstractEntity
     }
 
     /**
-     * Set options
+     * Set options.
      *
      * @pattern N/A
      *
@@ -650,10 +615,9 @@ class CalculateTimeframesRequest extends AbstractEntity
      * @return static
      *
      * @since   2.0.0
-     *
      * @see     CalculateTimeframesRequest::$options
      */
-    public function setOptions(?array $options): CalculateTimeframesRequest
+    public function setOptions(?array $options): CalculateTimeframesRequestInterface
     {
         $this->options = $options;
 

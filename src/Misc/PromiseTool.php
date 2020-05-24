@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 /**
- * Copyright (c) 2015 Michael Dowling, https://github.com/mtdowling <mtdowling@gmail.com>
+ * Copyright (c) 2015 Michael Dowling, https://github.com/mtdowling <mtdowling@gmail.com>.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +37,7 @@ use Iterator;
 use Throwable;
 
 /**
- * Class PromiseTool
+ * Class PromiseTool.
  */
 class PromiseTool
 {
@@ -52,7 +54,7 @@ class PromiseTool
      * }
      * </code>
      *
-     * @param TaskQueue $assign Optionally specify a new queue instance.
+     * @param TaskQueue $assign optionally specify a new queue instance
      *
      * @return TaskQueue
      */
@@ -73,7 +75,7 @@ class PromiseTool
      * Adds a function to run in the task queue when it is next `run()` and returns
      * a promise that is fulfilled or rejected with the result.
      *
-     * @param callable $task Task function to run.
+     * @param callable $task task function to run
      *
      * @return Promise
      */
@@ -97,7 +99,7 @@ class PromiseTool
     /**
      * Creates a promise for a value if the value is not a promise.
      *
-     * @param mixed $value Promise or value.
+     * @param mixed $value promise or value
      *
      * @return Promise
      */
@@ -123,7 +125,7 @@ class PromiseTool
      * Creates a rejected promise for a reason if the reason is not a promise. If
      * the provided reason is a promise, then it is returned as-is.
      *
-     * @param mixed $reason Promise or reason.
+     * @param mixed $reason promise or reason
      *
      * @return Promise
      */
@@ -177,7 +179,7 @@ class PromiseTool
      * the promise is rejected, the array will contain a "reason" key mapping to
      * the rejection reason of the promise.
      *
-     * @param Promise $promise Promise or value.
+     * @param Promise $promise promise or value
      *
      * @return array
      */
@@ -201,7 +203,7 @@ class PromiseTool
      *
      * Returns an array of inspection state arrays.
      *
-     * @param Promise[] $promises Traversable of promises to wait upon.
+     * @param Promise[] $promises traversable of promises to wait upon
      *
      * @return array
      */
@@ -222,7 +224,7 @@ class PromiseTool
      * the promises were provided). An exception is thrown if any of the promises
      * are rejected.
      *
-     * @param mixed $promises Iterable of Promise objects to wait on.
+     * @param mixed $promises iterable of Promise objects to wait on
      *
      * @return array
      *
@@ -247,8 +249,8 @@ class PromiseTool
      * respective positions to the original array. If any promise in the array
      * rejects, the returned promise is rejected with the rejection reason.
      *
-     * @param mixed $promises  Promises or values.
-     * @param bool  $recursive - If true, resolves new promises that might have been added to the stack during its own resolution.
+     * @param mixed $promises  promises or values
+     * @param bool  $recursive - If true, resolves new promises that might have been added to the stack during its own resolution
      *
      * @return Promise
      */
@@ -296,8 +298,8 @@ class PromiseTool
      * fulfilled with an array that contains the fulfillment values of the winners
      * in order of resolution.
      *
-     * @param int   $count    Total number of promises.
-     * @param mixed $promises Promises or values.
+     * @param int   $count    total number of promises
+     * @param mixed $promises promises or values
      *
      * @return Promise
      */
@@ -309,7 +311,7 @@ class PromiseTool
         return static::each(
             $promises,
             function ($value, $idx, Promise $p) use (&$results, $count) {
-                if ($p->getState() !== Promise::PENDING) {
+                if (Promise::PENDING !== $p->getState()) {
                     return;
                 }
                 $results[$idx] = $value;
@@ -323,10 +325,7 @@ class PromiseTool
         )->then(
             function () use (&$results, &$rejections, $count) {
                 if (count($results) !== $count) {
-                    throw new AggregateException(
-                        'Not enough promises to fulfill count',
-                        $rejections
-                    );
+                    throw new AggregateException('Not enough promises to fulfill count', $rejections);
                 }
                 ksort($results);
 
@@ -339,7 +338,7 @@ class PromiseTool
      * Like some(), with 1 as count. However, if the promise fulfills, the
      * fulfillment value is not an array of 1 but the value directly.
      *
-     * @param mixed $promises Promises or values.
+     * @param mixed $promises promises or values
      *
      * @return Promise
      */
@@ -358,7 +357,7 @@ class PromiseTool
      *
      * The returned promise is fulfilled with an array of inspection state arrays.
      *
-     * @param mixed $promises Promises or values.
+     * @param mixed $promises promises or values
      *
      * @return Promise
      */
@@ -396,7 +395,7 @@ class PromiseTool
      * index, and the aggregate promise. The callback can invoke any necessary side
      * effects and choose to resolve or reject the aggregate promise if needed.
      *
-     * @param mixed    $iterable    Iterator or array to iterate over.
+     * @param mixed    $iterable    iterator or array to iterate over
      * @param callable $onFulfilled
      * @param callable $onRejected
      *
@@ -472,7 +471,7 @@ class PromiseTool
      */
     public static function isFulfilled(Promise $promise)
     {
-        return $promise->getState() === Promise::FULFILLED;
+        return Promise::FULFILLED === $promise->getState();
     }
 
     /**
@@ -484,7 +483,7 @@ class PromiseTool
      */
     public static function isRejected(Promise $promise)
     {
-        return $promise->getState() === Promise::REJECTED;
+        return Promise::REJECTED === $promise->getState();
     }
 
     /**
@@ -496,6 +495,6 @@ class PromiseTool
      */
     public static function isSettled(Promise $promise)
     {
-        return $promise->getState() !== Promise::PENDING;
+        return Promise::PENDING !== $promise->getState();
     }
 }
