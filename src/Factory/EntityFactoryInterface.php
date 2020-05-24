@@ -47,7 +47,7 @@ interface EntityFactoryInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function create(string $className, array $properties): AbstractEntity;
 }

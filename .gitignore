@@ -6,3 +6,5 @@ Tests/logs
 Tests/clover.xml
 .env
 .php_cs.cache
+tmp/*
+!tmp/.gitkeep

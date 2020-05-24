@@ -27,12 +27,6 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-use DI\ContainerBuilder;
-use Firstred\PostNL\Factory\EntityFactory;
-use Firstred\PostNL\Factory\EntityFactoryInterface;
-use Firstred\PostNL\Factory\HttpClientFactory;
-use Firstred\PostNL\Factory\HttpClientFactoryInterface;
-use Firstred\PostNL\Method\AbstractMethod;
 use function DI\autowire;
 use function Di\create;
 use function DI\factory;
@@ -108,86 +102,30 @@ use Firstred\PostNL\Entity\ValidatedAddress;
 use Firstred\PostNL\Entity\ValidatedAddressInterface;
 use Firstred\PostNL\Entity\Warning;
 use Firstred\PostNL\Entity\WarningInterface;
-use Firstred\PostNL\Http\HttpClient;
+use Firstred\PostNL\Factory\BarcodeServiceFactory;
+use Firstred\PostNL\Factory\BarcodeServiceFactoryInterface;
+use Firstred\PostNL\Factory\CustomerFactory;
+use Firstred\PostNL\Factory\CustomerFactoryInterface;
+use Firstred\PostNL\Factory\EntityFactory;
+use Firstred\PostNL\Factory\EntityFactoryInterface;
+use Firstred\PostNL\Factory\HttpClientFactory;
+use Firstred\PostNL\Factory\HttpClientFactoryInterface;
+use Firstred\PostNL\Method\AbstractMethod;
 use Firstred\PostNL\Method\Barcode\GenerateBarcodeMethod;
 use Firstred\PostNL\Method\Barcode\GenerateBarcodeMethodInterface;
 use Firstred\PostNL\Misc\DummyLogger;
 use Firstred\PostNL\PostNL;
-use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\BarcodeServiceInterface;
 use Firstred\PostNL\Validate\Validate;
 use Firstred\PostNL\Validate\ValidateInterface;
-use Http\Client\Common\Plugin\LoggerPlugin;
-use Http\Client\Common\Plugin\RetryPlugin;
-use Http\Client\Common\PluginClient;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpClient\HttplugClient;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
 
 return [
-    // Configured PostNL customer
-    'postnl.customer' => factory(function (ContainerInterface $c) {
-        $address = $c->get(AddressInterface::class);
-        if (getenv('POSTNL_CONTACT_NAME')) {
-            $address->setName(getenv('POSTNL_CONTACT_NAME'));
-        }
-        if (getenv('POSTNL_CONTACT_COMPANY_NAME')) {
-            $address->setCompanyName(getenv('POSTNL_CONTACT_COMPANY_NAME'));
-        }
-        $address->setAddressType(Address::TYPE_SENDER);
-        $address->setStreet(getenv('POSTNL_CONTACT_STREET'));
-        $address->setHouseNr(getenv('POSTNL_CONTACT_HOUSE_NR'));
-        $address->setHouseNrExt(getenv('POSTNL_CONTACT_HOUSE_NR_EXT'));
-        $address->setZipcode(getenv('POSTNL_CONTACT_ZIPCODE'));
-        $address->setCountrycode(getenv('POSTNL_CONTACT_COUNTRY_CODE'));
-
-        $customer = $c->get(CustomerInterface::class);
-        $customer->setEmail(getenv('POSTNL_CONTACT_EMAIL'));
-        $customer->setCustomerCode(getenv('POSTNL_CUSTOMER_CODE'));
-        $customer->setCustomerNumber(getenv('POSTNL_CUSTOMER_NUMBER'));
-        $customer->setCollectionLocation(getenv('POSTNL_CUSTOMER_NUMBER'));
-        $customer->setGlobalPackBarcodeType(getenv('POSTNL_GLOBALPACK_BARCODE_TYPE'));
-        $customer->setGlobalPackCustomerCode(getenv('POSTNL_GLOBALPACK_CUSTOMER_CODE'));
-
-        return $customer;
-    }),
-
     // Library configuration
-    'postnl.logger'      => get(LoggerInterface::class),
-    'postnl.max_retries' => 3,
-    'postnl.concurrency' => 5,
-    'postnl.http_client' => factory(function (ContainerInterface $c) {
-        $httpClient = new HttpClient();
-        $plugins = [new RetryPlugin(['retries' => $c->get('postnl.max_retries')])];
-        $logger = $c->get('postnl.logger');
-        if ($logger) {
-            $plugins[] = new LoggerPlugin($logger);
-        }
-
-        // Temporary extra check, due to auto-discovery failing atm
-        if (class_exists(HttplugClient::class)) {
-            $pluginClient = new PluginClient($c->get(HttplugClient::class), $plugins);
-        } else {
-            $pluginClient = new PluginClient(Http\Discovery\HttpAsyncClientDiscovery::find(), $plugins);
-        }
-        $httpClient->setConcurrency((int) ($c->get('postnl.concurrency') ?: 5));
-        $httpClient->setHttpAsyncClient($pluginClient);
-
-        return $httpClient;
-    }),
-    'postnl.request_factory' => factory(function () {
-        return Psr17FactoryDiscovery::findRequestFactory();
-    }),
-    'postnl.serializer' => factory(function () {
-        $encoders = [new JsonEncoder()];
-        $normalizers = [new ObjectNormalizer()];
-
-        return new Serializer($normalizers, $encoders);
-    }),
+    'postnl.max_retries'     => 3,
+    'postnl.concurrency'     => 5,
     'postnl.api_key'         => (string) getenv('POSTNL_API_KEY'),
     'postnl.sandbox'         => (bool) getenv('POSTNL_SANDBOX_MODE'),
     'postnl.3s_countries'    => ['AT', 'BE', 'BG', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GB', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'EE', 'CN'],
@@ -211,7 +149,37 @@ return [
         'LU'       => '/^\d{4}$/',
     ],
 
+    // Service aliases
+    'postnl.logger'   => get(LoggerInterface::class),
+    'postnl.customer' => function (ContainerInterface $c): CustomerInterface {
+        /** @var CustomerFactoryInterface $factory */
+        $factory = $c->get(CustomerFactoryInterface::class);
+
+        return $factory->create();
+    },
+    'postnl.http_client' => factory(function (ContainerInterface $c) {
+        $factory = $c->get(HttpClientFactoryInterface::class)
+            ->setMaxRetries($c->get('postnl.max_retries'))
+            ->setConcurrency($c->get('postnl.concurrency'));
+
+        return $factory->create();
+    }),
+    'postnl.request_factory' => function () {
+        return Psr17FactoryDiscovery::findRequestFactory();
+    },
+    //    'postnl.serializer' => factory(function () {
+    //        $encoders = [new JsonEncoder()];
+    //        $normalizers = [new ObjectNormalizer()];
+    //
+    //        return new Serializer($normalizers, $encoders);
+    //    }),
+
     // Factories
+    BarcodeServiceFactoryInterface::class => autowire(BarcodeServiceFactory::class)
+        ->constructorParameter('apiKey', get('postnl.api_key'))
+        ->constructorParameter('sandbox', get('postnl.sandbox'))
+        ->constructorParameter('httpClient', get('postnl.http_client')),
+    CustomerFactoryInterface::class   => autowire(CustomerFactory::class),
     EntityFactoryInterface::class     => autowire(EntityFactory::class),
     HttpClientFactoryInterface::class => autowire(HttpClientFactory::class),
 
@@ -226,17 +194,11 @@ return [
     ),
 
     // Services
-    BarcodeServiceInterface::class => factory(function (ContainerInterface $c) {
-        $service = new BarcodeService(
-            $c->get('postnl.customer'),
-            $c->get('postnl.api_key'),
-            $c->get('postnl.sandbox'),
-            $c->get('postnl.http_client')
-        );
-        $service->setGenerateBarcodeMethod($c->get(GenerateBarcodeMethodInterface::class));
+    BarcodeServiceInterface::class => function (ContainerInterface $c) {
+        $factory = $c->get(BarcodeServiceFactoryInterface::class);
 
-        return $service;
-    }),
+        return $factory->create();
+    },
 
     // Request entities
     CalculateDeliveryDateRequestInterface::class => autowire(CalculateDeliveryDateRequest::class),

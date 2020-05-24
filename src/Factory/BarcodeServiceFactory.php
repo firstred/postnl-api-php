@@ -27,60 +27,44 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace Firstred\PostNL\Method;
+namespace Firstred\PostNL\Factory;
 
 use Firstred\PostNL\Entity\CustomerInterface;
-use Psr\Http\Message\RequestFactoryInterface;
-use Symfony\Component\Serializer\SerializerInterface;
+use Firstred\PostNL\Http\HttpClientInterface;
+use Firstred\PostNL\Method\Barcode\GenerateBarcodeMethodInterface;
+use Firstred\PostNL\Service\BarcodeService;
+use Firstred\PostNL\Service\BarcodeServiceInterface;
 
 /**
- * Class AbstractMethod.
+ * Class BarcodeServiceFactory.
  */
-abstract class AbstractMethod
+final class BarcodeServiceFactory implements BarcodeServiceFactoryInterface
 {
-    /** @var RequestFactoryInterface */
-    protected $requestFactory;
+    private $generateBarcodeMethod;
+    private $customer;
+    private $apiKey;
+    private $sandbox;
+    private $httpClient;
 
-    /** @var SerializerInterface */
-    protected $serializer;
-
-    /** @var CustomerInterface */
-    protected $customer;
-
-    /** @var string */
-    protected $endpoint;
-
-    /** @var string */
-    protected $apiKey;
-
-    public function __construct(RequestFactoryInterface $requestFactory, SerializerInterface $serializer = null)
+    public function __construct(GenerateBarcodeMethodInterface $generateBarcodeMethod, CustomerInterface $customer, string $apiKey, bool $sandbox, HttpClientInterface $httpClient)
     {
-        $this->requestFactory = $requestFactory;
-        $this->serializer = $serializer;
-    }
-
-    public function setRequestFactory(RequestFactoryInterface $requestFactory)
-    {
-        $this->requestFactory = $requestFactory;
-    }
-
-    public function setSerializer(SerializerInterface $serializer)
-    {
-        $this->serializer = $serializer;
-    }
-
-    public function setCustomer(CustomerInterface $customer)
-    {
+        $this->generateBarcodeMethod = $generateBarcodeMethod;
         $this->customer = $customer;
-    }
-
-    public function setEndpoint(string $endpoint): void
-    {
-        $this->endpoint = $endpoint;
-    }
-
-    public function setApiKey(string $apiKey): void
-    {
         $this->apiKey = $apiKey;
+        $this->sandbox = $sandbox;
+        $this->httpClient = $httpClient;
+    }
+
+    public function create(): BarcodeServiceInterface
+    {
+        $service = new BarcodeService(
+            $this->customer,
+            $this->apiKey,
+            $this->sandbox,
+            $this->httpClient
+        );
+        $service->setGenerateBarcodeMethod($this->generateBarcodeMethod);
+
+        return $service;
     }
 }

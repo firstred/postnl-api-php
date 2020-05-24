@@ -29,6 +29,9 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL;
 
+use DI\ContainerBuilder as DIContainerBuilder;
+use DI\DependencyException;
+use DI\NotFoundException;
 use Exception;
 use Firstred\PostNL\Entity\AddressInterface;
 use Firstred\PostNL\Entity\CustomerInterface;
@@ -81,12 +84,20 @@ use Psr\Cache\CacheItemInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use setasign\Fpdi\PdfParser\StreamReader;
+use Symfony\Component\Config\ConfigCache;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerBuilder as SymfonyContainerBuilder;
+use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
+use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * Class PostNL.
  */
 class PostNL
 {
+    const VERSION = '2.0.0';
+
     /**
      * The PostNL API key to be used for requests.
      *
@@ -109,7 +120,7 @@ class PostNL
     private $sandbox;
 
     /**
-     * Entity factory
+     * Entity factory.
      *
      * @var EntityFactoryInterface
      */
@@ -127,7 +138,7 @@ class PostNL
 
     /**
      * PostNL constructor.
-
+     *
      * @since 1.0.0
      * @since 2.0.0 Removed mode
      */

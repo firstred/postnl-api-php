@@ -47,7 +47,7 @@ class GenerateBarcodeMethod extends AbstractMethod implements GenerateBarcodeMet
      *
      * @return RequestInterface
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function buildRequest(GenerateBarcodeRequestEntityInterface $generateBarcodeRequestEntity): RequestInterface
     {
@@ -76,7 +76,7 @@ class GenerateBarcodeMethod extends AbstractMethod implements GenerateBarcodeMet
      *
      * @throws CifDownException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function processResponse(ResponseInterface $response): array
     {

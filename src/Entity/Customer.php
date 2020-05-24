@@ -46,7 +46,7 @@ final class Customer extends AbstractEntity implements CustomerInterface
      * @var AddressInterface|null
      *
      * @since   1.0.0
-     * @since   3.0.0 Private
+     * @since   2.0.0 Private
      */
     private $address;
 
@@ -60,7 +60,7 @@ final class Customer extends AbstractEntity implements CustomerInterface
      * @var string|null
      *
      * @since 1.0.0
-     * @since 3.0.0 Private
+     * @since 2.0.0 Private
      */
     private $collectionLocation;
 
@@ -74,7 +74,7 @@ final class Customer extends AbstractEntity implements CustomerInterface
      * @var string|null
      *
      * @since 1.0.0
-     * @since 3.0.0 Private
+     * @since 2.0.0 Private
      */
     private $contactPerson;
 
@@ -88,7 +88,7 @@ final class Customer extends AbstractEntity implements CustomerInterface
      * @var string|null
      *
      * @since 1.0.0
-     * @since 3.0.0 Private
+     * @since 2.0.0 Private
      */
     private $customerCode;
 
@@ -102,7 +102,7 @@ final class Customer extends AbstractEntity implements CustomerInterface
      * @var string|null
      *
      * @since 1.0.0
-     * @since 3.0.0 Private
+     * @since 2.0.0 Private
      */
     private $customerNumber;
 
@@ -116,7 +116,7 @@ final class Customer extends AbstractEntity implements CustomerInterface
      * @var string|null
      *
      * @since 1.0.0
-     * @since 3.0.0 Private
+     * @since 2.0.0 Private
      */
     private $globalPackCustomerCode;
 
@@ -130,7 +130,7 @@ final class Customer extends AbstractEntity implements CustomerInterface
      * @var string|null
      *
      * @since 1.0.0
-     * @since 3.0.0 Private
+     * @since 2.0.0 Private
      */
     private $globalPackBarcodeType;
 
@@ -144,7 +144,7 @@ final class Customer extends AbstractEntity implements CustomerInterface
      * @var string|null
      *
      * @since 1.0.0
-     * @since 3.0.0 Private
+     * @since 2.0.0 Private
      */
     private $email;
 
@@ -158,7 +158,7 @@ final class Customer extends AbstractEntity implements CustomerInterface
      * @var string|null
      *
      * @since 1.0.0
-     * @since 3.0.0 Private
+     * @since 2.0.0 Private
      */
     private $name;
 

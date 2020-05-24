@@ -46,7 +46,7 @@ interface BarcodeServiceInterface
      *
      * @param GenerateBarcodeMethodInterface $generateBarcodeMethod
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function setGenerateBarcodeMethod(GenerateBarcodeMethodInterface $generateBarcodeMethod);
 
@@ -61,7 +61,7 @@ interface BarcodeServiceInterface
      * @throws CifErrorException
      * @throws HttpClientException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function generateBarcode(GenerateBarcodeRequestEntityInterface $generateBarcodeRequest): string;
 
@@ -76,7 +76,7 @@ interface BarcodeServiceInterface
      * @throws HttpClientException
      * @throws CifDownException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function generateBarcodes(array $generateBarcodes): array;
 }

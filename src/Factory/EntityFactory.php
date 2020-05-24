@@ -37,7 +37,7 @@ use Psr\Container\ContainerInterface;
 /**
  * Class EntityFactory.
  */
-class EntityFactory implements EntityFactoryInterface
+final class EntityFactory implements EntityFactoryInterface
 {
     private $container;
 
@@ -46,7 +46,7 @@ class EntityFactory implements EntityFactoryInterface
      *
      * @param ContainerInterface $container
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function __construct(ContainerInterface $container)
     {
@@ -63,7 +63,7 @@ class EntityFactory implements EntityFactoryInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function create(string $className, array $properties = []): AbstractEntity
     {

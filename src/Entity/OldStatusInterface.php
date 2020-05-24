@@ -41,7 +41,7 @@ interface OldStatusInterface extends EntityInterface
      *
      * @return string|null
      *
-     * @since 3.0.0
+     * @since 2.0.0
      * @see   Status::$timeStamp
      */
     public function getTimeStamp(): ?string;
@@ -59,7 +59,7 @@ interface OldStatusInterface extends EntityInterface
      *
      * @example 03-07-2019 08:00:00
      *
-     * @since   3.0.0
+     * @since   2.0.0
      * @see     Status::$timeStamp
      */
     public function setTimeStamp(?string $timeStamp): StatusInterface;
@@ -69,7 +69,7 @@ interface OldStatusInterface extends EntityInterface
      *
      * @return string|null
      *
-     * @since 3.0.0
+     * @since 2.0.0
      * @see   Status::$statusCode
      */
     public function getStatusCode(): ?string;
@@ -85,7 +85,7 @@ interface OldStatusInterface extends EntityInterface
      *
      * @example 7
      *
-     * @since   3.0.0
+     * @since   2.0.0
      * @see     Status::$statusCode
      */
     public function setStatusCode(?string $statusCode): StatusInterface;
@@ -95,7 +95,7 @@ interface OldStatusInterface extends EntityInterface
      *
      * @return string|null
      *
-     * @since 3.0.0
+     * @since 2.0.0
      * @see   Status::$statusDescription
      */
     public function getStatusDescription(): ?string;
@@ -111,7 +111,7 @@ interface OldStatusInterface extends EntityInterface
      *
      * @example Zending afgeleverd
      *
-     * @since   3.0.0
+     * @since   2.0.0
      * @see     Status::$statusDescription
      */
     public function setStatusDescription(?string $statusDescription): StatusInterface;
@@ -121,7 +121,7 @@ interface OldStatusInterface extends EntityInterface
      *
      * @return string|null
      *
-     * @since 3.0.0
+     * @since 2.0.0
      * @see   Status::$phaseCode
      */
     public function getPhaseCode(): ?string;
@@ -137,7 +137,7 @@ interface OldStatusInterface extends EntityInterface
      *
      * @example 4
      *
-     * @since   3.0.0
+     * @since   2.0.0
      * @see     Status::$phaseCode
      */
     public function setPhaseCode(?string $phaseCode): StatusInterface;
@@ -147,7 +147,7 @@ interface OldStatusInterface extends EntityInterface
      *
      * @return string|null
      *
-     * @since 3.0.0
+     * @since 2.0.0
      * @see   Status::$phaseDescription
      */
     public function getPhaseDescription(): ?string;
@@ -163,7 +163,7 @@ interface OldStatusInterface extends EntityInterface
      *
      * @example Afgeleverd
      *
-     * @since   3.0.0
+     * @since   2.0.0
      * @see     Status::$phaseDescription
      */
     public function setPhaseDescription(?string $phaseDescription): StatusInterface;

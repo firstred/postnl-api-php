@@ -97,7 +97,7 @@ abstract class AbstractService
      * @param CacheItemPoolInterface|null             $cache
      * @param int|DateTimeInterface|DateInterval|null $ttl
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function __construct(CustomerInterface $customer, string $apiKey, bool $sandbox, HttpClientInterface $httpClient, CacheItemPoolInterface $cache = null, $ttl = null)
     {

@@ -45,7 +45,7 @@ final class OldStatus extends AbstractEntity implements OldStatusInterface
      *
      * @var string|null
      *
-     * @since   3.0.0
+     * @since   2.0.0
      */
     private $timeStamp;
 
@@ -58,7 +58,7 @@ final class OldStatus extends AbstractEntity implements OldStatusInterface
      *
      * @var string|null
      *
-     * @since   3.0.0
+     * @since   2.0.0
      */
     private $statusCode;
 
@@ -71,7 +71,7 @@ final class OldStatus extends AbstractEntity implements OldStatusInterface
      *
      * @var string|null
      *
-     * @since   3.0.0
+     * @since   2.0.0
      */
     private $statusDescription;
 
@@ -84,7 +84,7 @@ final class OldStatus extends AbstractEntity implements OldStatusInterface
      *
      * @var string|null
      *
-     * @since   3.0.0
+     * @since   2.0.0
      */
     private $phaseCode;
 
@@ -97,7 +97,7 @@ final class OldStatus extends AbstractEntity implements OldStatusInterface
      *
      * @var string|null
      *
-     * @since   3.0.0
+     * @since   2.0.0
      */
     private $phaseDescription;
 
@@ -106,7 +106,7 @@ final class OldStatus extends AbstractEntity implements OldStatusInterface
      *
      * @return string|null
      *
-     * @since 3.0.0
+     * @since 2.0.0
      * @see   Status::$timeStamp
      */
     public function getTimeStamp(): ?string
@@ -127,7 +127,7 @@ final class OldStatus extends AbstractEntity implements OldStatusInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since   3.0.0
+     * @since   2.0.0
      * @see     Status::$timeStamp
      */
     public function setTimeStamp(?string $timeStamp): StatusInterface
@@ -142,7 +142,7 @@ final class OldStatus extends AbstractEntity implements OldStatusInterface
      *
      * @return string|null
      *
-     * @since 3.0.0
+     * @since 2.0.0
      * @see   Status::$statusCode
      */
     public function getStatusCode(): ?string
@@ -161,7 +161,7 @@ final class OldStatus extends AbstractEntity implements OldStatusInterface
      *
      * @return static
      *
-     * @since   3.0.0
+     * @since   2.0.0
      * @see     Status::$statusCode
      */
     public function setStatusCode(?string $statusCode): StatusInterface
@@ -176,7 +176,7 @@ final class OldStatus extends AbstractEntity implements OldStatusInterface
      *
      * @return string|null
      *
-     * @since 3.0.0
+     * @since 2.0.0
      * @see   Status::$statusDescription
      */
     public function getStatusDescription(): ?string
@@ -195,7 +195,7 @@ final class OldStatus extends AbstractEntity implements OldStatusInterface
      *
      * @return static
      *
-     * @since   3.0.0
+     * @since   2.0.0
      * @see     Status::$statusDescription
      */
     public function setStatusDescription(?string $statusDescription): StatusInterface
@@ -210,7 +210,7 @@ final class OldStatus extends AbstractEntity implements OldStatusInterface
      *
      * @return string|null
      *
-     * @since 3.0.0
+     * @since 2.0.0
      * @see   Status::$phaseCode
      */
     public function getPhaseCode(): ?string
@@ -229,7 +229,7 @@ final class OldStatus extends AbstractEntity implements OldStatusInterface
      *
      * @return static
      *
-     * @since   3.0.0
+     * @since   2.0.0
      * @see     Status::$phaseCode
      */
     public function setPhaseCode(?string $phaseCode): StatusInterface
@@ -244,7 +244,7 @@ final class OldStatus extends AbstractEntity implements OldStatusInterface
      *
      * @return string|null
      *
-     * @since 3.0.0
+     * @since 2.0.0
      * @see   Status::$phaseDescription
      */
     public function getPhaseDescription(): ?string
@@ -263,7 +263,7 @@ final class OldStatus extends AbstractEntity implements OldStatusInterface
      *
      * @return static
      *
-     * @since   3.0.0
+     * @since   2.0.0
      * @see     Status::$phaseDescription
      */
     public function setPhaseDescription(?string $phaseDescription): StatusInterface

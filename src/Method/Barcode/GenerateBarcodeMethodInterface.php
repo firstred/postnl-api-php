@@ -47,7 +47,7 @@ interface GenerateBarcodeMethodInterface extends MethodInterface
      *
      * @return RequestInterface
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function buildRequest(GenerateBarcodeRequestEntityInterface $generateBarcodeRequestEntity): RequestInterface;
 
@@ -60,7 +60,7 @@ interface GenerateBarcodeMethodInterface extends MethodInterface
      *
      * @throws CifDownException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function processResponse(ResponseInterface $response): array;
 }

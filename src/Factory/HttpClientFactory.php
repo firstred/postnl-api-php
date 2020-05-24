@@ -29,27 +29,67 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Factory;
 
+use Firstred\PostNL\Http\HttpClient;
 use Firstred\PostNL\Http\HttpClientInterface;
 use Http\Client\Common\Plugin\LoggerPlugin;
 use Http\Client\Common\Plugin\RetryPlugin;
 use Http\Client\Common\PluginClient;
-use Http\Client\HttpAsyncClient;
+use Http\Discovery\HttpAsyncClientDiscovery;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpClient\HttplugClient;
 
 /**
  * Class HttpClientFactory.
  */
-class HttpClientFactory implements HttpClientFactoryInterface
+final class HttpClientFactory implements HttpClientFactoryInterface
 {
-    public function create(HttpClientInterface $httpClient, HttpAsyncClient $httpAsyncClient, int $maxRetries = 3, int $concurrency = 5, LoggerInterface $logger = null): HttpClientInterface
+    /** @var HttplugClient */
+    private $symfonyHttplugClient = null;
+
+    /** @var LoggerInterface */
+    private $logger = null;
+
+    /** @var int */
+    private $maxRetries = 3;
+
+    /** @var int */
+    private $concurrency = 5;
+
+    public function __construct(LoggerInterface $logger, HttplugClient $symfonyHttplugClient = null)
     {
-        $plugins = [new RetryPlugin(['retries' => $maxRetries])];
-        if ($logger) {
-            $plugins[] = new LoggerPlugin($logger);
+        $this->logger = $logger;
+        $this->symfonyHttplugClient = $symfonyHttplugClient;
+    }
+
+    public function setMaxRetries(int $maxRetries = 3): HttpClientFactoryInterface
+    {
+        $this->maxRetries = $maxRetries;
+
+        return $this;
+    }
+
+    public function setConcurrency(int $concurrency = 5): HttpClientFactoryInterface
+    {
+        $this->concurrency = $concurrency;
+
+        return $this;
+    }
+
+    public function create(): HttpClientInterface
+    {
+        $httpClient = new HttpClient();
+        $plugins = [new RetryPlugin(['retries' => $this->maxRetries])];
+        if ($this->logger) {
+            $plugins[] = new LoggerPlugin($this->logger);
         }
 
-        $pluginClient = new PluginClient($httpAsyncClient, $plugins);
-        $httpClient->setConcurrency(5);
+        // Temporary extra check, due to auto-discovery failing atm
+        if ($this->symfonyHttplugClient) {
+            $pluginClient = new PluginClient($this->symfonyHttplugClient, $plugins);
+        } else {
+            $pluginClient = new PluginClient(HttpAsyncClientDiscovery::find(), $plugins);
+        }
+        $httpClient->setConcurrency($this->concurrency);
         $httpClient->setHttpAsyncClient($pluginClient);
 
         return $httpClient;

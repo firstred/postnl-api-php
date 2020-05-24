@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services
+        http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+  <parameters>
+    <!-- Library configuration -->
+    <parameter key="postnl.max_retries">3</parameter>
+    <parameter key="postnl.concurrency">5</parameter>
+    <parameter key="postnl.api_key">%env(string:POSTNL_API_KEY)%</parameter>
+    <parameter key="postnl.sandbox">%env(bool:POSTNL_SANDBOX_MODE)%</parameter>
+    <parameter key="postnl.3s_countries" type="collection">
+      <parameter>AT</parameter>
+      <parameter>BE</parameter>
+      <parameter>BG</parameter>
+      <parameter>CZ</parameter>
+      <parameter>DK</parameter>
+      <parameter>EE</parameter>
+      <parameter>FI</parameter>
+      <parameter>FR</parameter>
+      <parameter>DE</parameter>
+      <parameter>GB</parameter>
+      <parameter>GR</parameter>
+      <parameter>HU</parameter>
+      <parameter>IE</parameter>
+      <parameter>IT</parameter>
+      <parameter>LV</parameter>
+      <parameter>LT</parameter>
+      <parameter>LU</parameter>
+      <parameter>NL</parameter>
+      <parameter>PL</parameter>
+      <parameter>PT</parameter>
+      <parameter>RO</parameter>
+      <parameter>SK</parameter>
+      <parameter>SI</parameter>
+      <parameter>ES</parameter>
+      <parameter>EE</parameter>
+      <parameter>CN</parameter>
+    </parameter>
+    <parameter key="postnl.label_positions" type="collection">
+      <parameter key="4" type="collection">
+        <parameter>-276</parameter>
+        <parameter>2</parameter>
+      </parameter>
+      <parameter key="3" type="collection">
+        <parameter>-132</parameter>
+        <parameter>2</parameter>
+      </parameter>
+      <parameter key="2" type="collection">
+        <parameter>-276</parameter>
+        <parameter>110</parameter>
+      </parameter>
+      <parameter key="1" type="collection">
+        <parameter>-132</parameter>
+        <parameter>110</parameter>
+      </parameter>
+    </parameter>
+
+    <!-- Library validation formats -->
+    <parameter key="postnl.format.barcode.full">/^[A-Z0-9]{11,15}$/</parameter>
+    <parameter key="postnl.format.barcode.types" type="collection">
+      <parameter>2S</parameter>
+      <parameter>3S</parameter>
+      <parameter>CC</parameter>
+      <parameter>CP</parameter>
+      <parameter>CD</parameter>
+      <parameter>CF</parameter>
+      <parameter>LA</parameter>
+      <parameter>CX</parameter>
+    </parameter>
+    <parameter key="postnl.format.barcode.serie">/^\d{0,3}\d{6}-\d{0,3}\d{6}$/</parameter>
+    <parameter key="postnl.format.barcode.range">/^[A-Z0-9]{1,4}$/</parameter>
+    <parameter key="postnl.format.hs_tariff">/^\d{6}$/</parameter>
+    <parameter key="postnl.format.postcode" type="collection">
+      <parameter key="_default">/^.{0,17}$/</parameter>
+      <parameter key="NL">/^\d{4}\[A-Za-z]{2}$/</parameter>
+      <parameter key="BE">/^\d{4}$/</parameter>
+      <parameter key="LU">/^\d{4}$/</parameter>
+    </parameter>
+  </parameters>
+
+  <services>
+    <defaults autowire="true" autoconfigure="true" public="true"/>
+
+    <prototype namespace="Firstred\PostNL\" resource="../src/*" exclude="../src/{Exception,Misc,Service}"/>
+
+    <service id="postnl.logger" class="Firstred\PostNL\Misc\DummyLogger"/>
+    <service id="postnl.customer" class="Firstred\PostNL\Entity\CustomerInterface">
+      <factory service="Firstred\PostNL\Factory\CustomerFactoryInterface" method="create"/>
+    </service>
+    <service id="Firstred\PostNL\Factory\HttpClientFactory">
+      <argument key="$logger" type="service" id="postnl.logger"/>
+      <argument key="$symfonyHttplugClient" type="service" id="Symfony\Component\HttpClient\HttplugClient" on-invalid="null"/>
+      <call method="setMaxRetries">
+        <argument>%postnl.max_retries%</argument>
+      </call>
+      <call method="setConcurrency">
+        <argument>%postnl.concurrency%</argument>
+      </call>
+    </service>
+    <service id="postnl.http_client" class="Firstred\PostNL\Http\HttpClientInterface">
+      <factory service="Firstred\PostNL\Factory\HttpClientFactoryInterface" method="create"/>
+    </service>
+    <service id="postnl.request_factory" class="Psr\Http\Message\RequestFactoryInterface">
+      <factory class="Http\Discovery\Psr17FactoryDiscovery" method="findRequestFactory"/>
+    </service>
+
+    <!-- Factories -->
+    <service id="Firstred\PostNL\Factory\BarcodeServiceFactory">
+      <argument key="$customer" type="service" id="postnl.customer"/>
+      <argument key="$apiKey">%postnl.api_key%</argument>
+      <argument key="$sandbox">%postnl.sandbox%</argument>
+      <argument key="$httpClient" type="service" id="postnl.http_client"/>
+    </service>
+
+    <!-- Methods -->
+    <service id="Firstred\PostNL\Method\AbstractMethod">
+      <argument key="$requestFactory" type="service" id="postnl.request_factory"/>
+      <argument key="$serializer" type="service" id="postnl.serializer" on-invalid="null"/>
+    </service>
+    <service id="Firstred\PostNL\Method\Barcode\GenerateBarcodeMethod">
+      <argument key="$requestFactory" type="service" id="postnl.request_factory"/>
+      <argument key="$serializer" type="service" id="postnl.serializer" on-invalid="null"/>
+    </service>
+
+    <!-- Services -->
+    <service id="Firstred\PostNL\Service\BarcodeServiceInterface">
+      <factory service="Firstred\PostNL\Factory\BarcodeServiceFactoryInterface" method="create"/>
+    </service>
+
+    <!-- Request entities -->
+    <service
+        id="Firstred\PostNL\Entity\Request\CalculateDeliveryDateRequestInterface"
+        class="Firstred\PostNL\Entity\Request\CalculateDeliveryDateRequest"
+    />
+    <service
+        id="Firstred\PostNL\Entity\Request\CalculateShippingDateRequestInterface"
+        class="Firstred\PostNL\Entity\Request\CalculateShippingDateRequest"
+    />
+    <service
+        id="Firstred\PostNL\Entity\Request\CalculateTimeframesRequestInterface"
+        class="Firstred\PostNL\Entity\Request\CalculateTimeframesRequest"
+    />
+    <service
+        id="Firstred\PostNL\Entity\Request\ConfirmShipmentRequestInterface"
+        class="Firstred\PostNL\Entity\Request\ConfirmShipmentRequest"
+    />
+    <service
+        id="Firstred\PostNL\Entity\Request\FindDeliveryInfoRequestInterface"
+        class="Firstred\PostNL\Entity\Request\FindDeliveryInfoRequest"
+    />
+    <service
+        id="Firstred\PostNL\Entity\Request\GenerateBarcodeRequestEntityInterface"
+        class="Firstred\PostNL\Entity\Request\GenerateBarcodeRequestEntity"
+    />
+
+    <!-- Response entities -->
+
+    <!-- Entities -->
+<!--    AddressInterface::class            => autowire(Address::class),-->
+<!--    AmountInterface::class             => autowire(Amount::class),-->
+<!--    ContactInterface::class            => autowire(Contact::class),-->
+<!--    ContentInterface::class            => autowire(Content::class),-->
+<!--    CustomerInterface::class           => autowire(Customer::class),-->
+<!--    CustomsInterface::class            => autowire(Customs::class),-->
+<!--    CutOffTimeInterface::class         => autowire(CutOffTime::class),-->
+<!--    DimensionInterface::class          => autowire(Dimension::class),-->
+<!--    ErrorInterface::class              => autowire(\Firstred\PostNL\Entity\Error::class),-->
+<!--    EventInterface::class              => autowire(Event::class),-->
+<!--    ExpectationInterface::class        => autowire(Expectation::class),-->
+<!--    GeocodeInterface::class            => autowire(Geocode::class),-->
+<!--    GroupInterface::class              => autowire(Group::class),-->
+<!--    LabelInterface::class              => autowire(Label::class),-->
+<!--    LocationInterface::class           => autowire(Location::class),-->
+<!--    LocationsInterface::class          => autowire(Locations::class),-->
+<!--    MergedLabelInterface::class        => autowire(MergedLabel::class),-->
+<!--    OldStatusInterface::class          => autowire(OldStatus::class),-->
+<!--    OpeningHoursInterface::class       => autowire(OpeningHours::class),-->
+<!--    PickupOptionInterface::class       => autowire(PickupOption::class),-->
+<!--    ProductOptionInterface::class      => autowire(ProductOption::class),-->
+<!--    ReasonNoTimeframeInterface::class  => autowire(ReasonNoTimeframe::class),-->
+<!--    ReasonNoTimeframesInterface::class => autowire(ReasonNoTimeframes::class),-->
+<!--    ShipmentInterface::class           => autowire(Shipment::class),-->
+<!--    SignatureInterface::class          => autowire(Signature::class),-->
+<!--    StatusInterface::class             => autowire(Status::class),-->
+<!--    TimeframeInterface::class          => autowire(Timeframe::class),-->
+<!--    TimeframesInterface::class         => autowire(Timeframes::class),-->
+<!--    ValidatedAddressInterface::class   => autowire(ValidatedAddress::class),-->
+<!--    WarningInterface::class            => autowire(Warning::class),-->
+
+    <!-- Misc -->
+    <service id="Firstred\PostNL\Validate\Validate">
+      <argument>%postnl.format.postcode%</argument>
+      <argument>%postnl.format.barcode.types%</argument>
+      <argument>%postnl.format.barcode.full%</argument>
+      <argument>%postnl.format.barcode.range%</argument>
+      <argument>%postnl.format.barcode.serie%</argument>
+    </service>
+
+    <!-- Library main file -->
+    <service id="Firstred\PostNL\PostNL">
+      <argument type="service" id="postnl.customer"/>
+      <argument>%postnl.api_key%</argument>
+      <argument>%postnl.sandbox%</argument>
+      <argument type="service" id="Firstred\PostNL\Factory\EntityFactoryInterface"/>
+      <argument type="service" id="Firstred\PostNL\Service\BarcodeServiceInterface"/>
+      <argument type="service" id="postnl.logger"/>
+    </service>
+  </services>
+</container>

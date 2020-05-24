@@ -27,60 +27,14 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace Firstred\PostNL\Method;
+namespace Firstred\PostNL\Factory;
 
-use Firstred\PostNL\Entity\CustomerInterface;
-use Psr\Http\Message\RequestFactoryInterface;
-use Symfony\Component\Serializer\SerializerInterface;
+use Firstred\PostNL\Service\BarcodeServiceInterface;
 
 /**
- * Class AbstractMethod.
+ * Interface BarcodeServiceFactoryInterface.
  */
-abstract class AbstractMethod
+interface BarcodeServiceFactoryInterface
 {
-    /** @var RequestFactoryInterface */
-    protected $requestFactory;
-
-    /** @var SerializerInterface */
-    protected $serializer;
-
-    /** @var CustomerInterface */
-    protected $customer;
-
-    /** @var string */
-    protected $endpoint;
-
-    /** @var string */
-    protected $apiKey;
-
-    public function __construct(RequestFactoryInterface $requestFactory, SerializerInterface $serializer = null)
-    {
-        $this->requestFactory = $requestFactory;
-        $this->serializer = $serializer;
-    }
-
-    public function setRequestFactory(RequestFactoryInterface $requestFactory)
-    {
-        $this->requestFactory = $requestFactory;
-    }
-
-    public function setSerializer(SerializerInterface $serializer)
-    {
-        $this->serializer = $serializer;
-    }
-
-    public function setCustomer(CustomerInterface $customer)
-    {
-        $this->customer = $customer;
-    }
-
-    public function setEndpoint(string $endpoint): void
-    {
-        $this->endpoint = $endpoint;
-    }
-
-    public function setApiKey(string $apiKey): void
-    {
-        $this->apiKey = $apiKey;
-    }
+    public function create(): BarcodeServiceInterface;
 }

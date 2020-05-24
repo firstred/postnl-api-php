@@ -56,7 +56,7 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
      *
      * @param GenerateBarcodeMethodInterface $generateBarcodeMethod
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function setGenerateBarcodeMethod(GenerateBarcodeMethodInterface $generateBarcodeMethod)
     {
@@ -78,7 +78,7 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
      * @throws CifErrorException
      * @throws HttpClientException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function generateBarcode(GenerateBarcodeRequestEntityInterface $generateBarcodeRequest): string
     {

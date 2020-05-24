@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -46,7 +47,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function postcode($postcode, $countryCode = null);
 
@@ -59,7 +60,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function distance($distance);
 
@@ -72,7 +73,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function houseNumber($houseNumber);
 
@@ -85,7 +86,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function coordinate($coordinate);
 
@@ -98,7 +99,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function addressType($addressType);
 
@@ -111,7 +112,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function area($area);
 
@@ -124,7 +125,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function buildingName($buildingName);
 
@@ -137,7 +138,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function city($city);
 
@@ -150,7 +151,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function companyName($companyName);
 
@@ -163,7 +164,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function isoAlpha2CountryCode($countryCode);
 
@@ -176,7 +177,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function isoAlpha3CountryCode($countryCode);
 
@@ -189,7 +190,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function isoAlpha2CountryCodeNlBe($countryCode);
 
@@ -202,7 +203,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function department($department);
 
@@ -215,7 +216,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function doorcode($doorcode);
 
@@ -228,7 +229,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function firstName($firstName);
 
@@ -241,7 +242,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function lastName($lastName);
 
@@ -254,7 +255,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function region($region);
 
@@ -267,7 +268,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function remark($remark);
 
@@ -280,7 +281,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function street($street);
 
@@ -293,7 +294,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function streetHouseNumberExtension($streetHouseNrExt);
 
@@ -306,7 +307,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function iban($iban);
 
@@ -319,7 +320,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function bic($bic);
 
@@ -332,7 +333,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function bankAccountName($accountName);
 
@@ -345,7 +346,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function currency($currency);
 
@@ -358,7 +359,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function reference($reference);
 
@@ -371,7 +372,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function transactionNumber($transactionNumber);
 
@@ -384,7 +385,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function amountValue($value);
 
@@ -397,7 +398,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function amountType($amountType);
 
@@ -410,7 +411,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function email($email);
 
@@ -425,7 +426,7 @@ interface ValidateInterface
      * @throws NumberParseException
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function telephoneNumber($number, string $countryCode);
 
@@ -438,7 +439,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function contactType($contactType);
 
@@ -451,7 +452,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function harmonizedSystemTariffNumber($number);
 
@@ -464,7 +465,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function numericString($number);
 
@@ -477,7 +478,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function integer($integer);
 
@@ -490,7 +491,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function float($float);
 
@@ -503,7 +504,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function ean($ean);
 
@@ -516,7 +517,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function url($url);
 
@@ -529,7 +530,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function time($time);
 
@@ -542,7 +543,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function timeRangeShort($timeRange);
 
@@ -555,7 +556,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function date($date);
 
@@ -568,7 +569,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function dateTime($dateTime);
 
@@ -611,7 +612,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function groupCount($groupCount);
 
@@ -624,7 +625,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function productOption($productOption);
 
@@ -637,7 +638,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function productCode($productCode);
 
@@ -650,7 +651,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function interval($interval);
 
@@ -664,7 +665,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function genericString($description, int $maxLength = 35);
 
@@ -677,7 +678,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function barcode($barcode);
 
@@ -690,7 +691,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function barcodeType($type);
 
@@ -703,7 +704,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function barcodeSerie($serie);
 
@@ -716,7 +717,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function barcodeRange($range);
 
@@ -729,7 +730,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function customerCode($code);
 
@@ -742,7 +743,7 @@ interface ValidateInterface
      *
      * @throws InvalidArgumentException
      *
-     * @since 3.0.0
+     * @since 2.0.0
      */
     public function customerNumber($customerNumber);
 }

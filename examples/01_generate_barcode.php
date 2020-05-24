@@ -27,8 +27,7 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-use DI\ContainerBuilder;
-use Firstred\PostNL\PostNL;
+use Firstred\PostNL\PostNLFactory;
 use Symfony\Component\Dotenv\Dotenv;
 
 // Autoloader
@@ -42,18 +41,7 @@ if (file_exists('./.env')) {
     $dotenv->load('../.env.example');
 }
 
-// Build the dependency injection container
-$containerBuilder = new ContainerBuilder();
-if (file_exists('./di.config.php')) {
-    $containerBuilder->addDefinitions('./di.config.php');
-} else {
-    $containerBuilder->addDefinitions('../di.config.example.php');
-}
-
-$container = $containerBuilder->build();
-
-// Get a wired and configured instance of the PostNL client via the DI container
-$postnl = $container->get(PostNL::class);
+$postnl = PostNLFactory::create(false);
 
 $barcode = $postnl->generateBarcode('3S');
 
