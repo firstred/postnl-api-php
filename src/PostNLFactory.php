@@ -33,10 +33,8 @@ use function class_exists;
 use DI\ContainerBuilder as DIContainerBuilder;
 use DI\DependencyException;
 use DI\NotFoundException;
-use const DIRECTORY_SEPARATOR;
+use Exception;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use function rtrim;
-use function str_replace;
 use Symfony\Component\Config\ConfigCache;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder as SymfonyContainerBuilder;
@@ -63,23 +61,25 @@ class PostNLFactory
     /**
      * Create a new PostNL client instance with Symfony's Dependency Injection Component.
      *
-     * @param string $tempFolder Production mode
-     * @param bool   $production
+     * @param bool   $production Production mode
+     * @param string $diBaseDir  Set a different location for the compiled DI containers
      *
      * @return PostNL|mixed
      *
      * @throws InvalidArgumentException
      * @throws DependencyException
      * @throws NotFoundException
+     * @throws Exception
      *
      * @since 2.0.0
      */
-    public static function create(bool $production = true, string $tempFolder = ''): PostNL
+    public static function create(bool $production = true, string $diBaseDir = ''): PostNL
     {
+        $diBaseDir = $diBaseDir ?: __DIR__.'/../.di';
+        $containerClass = 'Firstred_PostNL_Misc_CompiledContainer';
         if (class_exists(SymfonyContainerBuilder::class)) {
-            $file = ($tempFolder ? rtrim($tempFolder, DIRECTORY_SEPARATOR) : __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'tmp').DIRECTORY_SEPARATOR.'PostNLCachedContainer'.str_replace('.', '_', PostNL::VERSION).'.php';
-            $containerClass = 'Firstred\\PostNL\\Misc\\CachedContainer';
-            $containerConfigCache = new ConfigCache($file, !$production);
+            $file = "$diBaseDir/symfony/$containerClass.php";
+            $containerConfigCache = new ConfigCache($file, false);
 
             if (!$containerConfigCache->isFresh()) {
                 $containerBuilder = new SymfonyContainerBuilder();
@@ -89,10 +89,7 @@ class PostNLFactory
 
                 $dumper = new PhpDumper($containerBuilder);
                 $containerConfigCache->write(
-                    $dumper->dump([
-                        'namespace' => 'Firstred\\PostNL\\Misc',
-                        'class'     => 'CachedContainer',
-                    ]),
+                    $dumper->dump(['class' => $containerClass]),
                     $containerBuilder->getResources()
                 );
             }
@@ -106,8 +103,7 @@ class PostNLFactory
             $containerBuilder = new DIContainerBuilder();
             $containerBuilder->addDefinitions(static::getConfigFolder().'/php-di.config.php');
             if ($production) {
-                $containerBuilder->enableCompilation(__DIR__.'/../tmp');
-                $containerBuilder->writeProxiesToFile(true, __DIR__.'/../tmp/proxies');
+                $containerBuilder->enableCompilation("$diBaseDir/phpdi", $containerClass);
             }
             $container = $containerBuilder->build();
         } else {

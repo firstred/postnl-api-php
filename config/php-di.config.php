@@ -111,7 +111,6 @@ use Firstred\PostNL\Factory\EntityFactory;
 use Firstred\PostNL\Factory\EntityFactoryInterface;
 use Firstred\PostNL\Factory\HttpClientFactory;
 use Firstred\PostNL\Factory\HttpClientFactoryInterface;
-use Firstred\PostNL\Method\AbstractMethod;
 use Firstred\PostNL\Method\Barcode\GenerateBarcodeMethod;
 use Firstred\PostNL\Method\Barcode\GenerateBarcodeMethodInterface;
 use Firstred\PostNL\Misc\DummyLogger;
@@ -185,13 +184,9 @@ return [
     HttpClientFactoryInterface::class => autowire(HttpClientFactory::class),
 
     // Methods
-    AbstractMethod::class => autowire()->constructor(
-        get('postnl.request_factory'),
-        get('postnl.serializer')
-    ),
     GenerateBarcodeMethodInterface::class => autowire(GenerateBarcodeMethod::class)->constructor(
         get('postnl.request_factory'),
-        get('postnl.serializer')
+        null
     ),
 
     // Services
