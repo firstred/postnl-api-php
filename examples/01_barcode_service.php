@@ -74,32 +74,33 @@ The <info>generate:barcode</info> command will generate a barcode.
         $output->writeln("The generated $type barcode is: <info>$barcode</info>");
     });
 
-//$console
-//    ->register('generate:barcodes')
-//    ->setDefinition([
-//        new InputOption('country', 'c', InputOption::VALUE_OPTIONAL, 'Country code (NL, DE, US, etc.)', 'NL'),
-//        new InputOption('amount', 'a', InputOption::VALUE_OPTIONAL, 'Amount of barcodes', '1'),
-//    ])
-//    ->setDescription('Generate multiple barcodes.')
-//    ->setHelp('
-//The <info>generate:barcodes</info> command will generate multiple barcodes.
-//
-//<comment>Samples:</comment>
-//  To run with default options:
-//    <info>php 01_barcode_service.php generate:barcodes</info>
-//  To generate barcodes for a specific country
-//    <info>php console.php generate:barcodes --country=NL</info>
-//  To generate multiple barcodes for a specific country
-//    <info>php console.php generate:barcodes --country=NL --amount=3</info>
-//  To generate multiple barcodes for multiple countries (with amounts 3 & 5 resp.)
-//    <info>php console.php generate:barcodes --country=NL,DE --amount=3,5</info>
-//')
-//    ->setCode(function (InputInterface $input, OutputInterface $output) use ($postnl) {
+$console
+    ->register('generate:barcodes')
+    ->setDefinition([
+        new InputOption('country', 'c', InputOption::VALUE_OPTIONAL, 'Country code (NL, DE, US, etc.)', 'NL'),
+        new InputOption('amount', 'a', InputOption::VALUE_OPTIONAL, 'Amount of barcodes', '1'),
+    ])
+    ->setDescription('Generate multiple barcodes.')
+    ->setHelp('
+The <info>generate:barcodes</info> command will generate multiple barcodes.
+
+<comment>Samples:</comment>
+  To run with default options:
+    <info>php 01_barcode_service.php generate:barcodes</info>
+  To generate barcodes for a specific country
+    <info>php console.php generate:barcodes --country=NL</info>
+  To generate multiple barcodes for a specific country
+    <info>php console.php generate:barcodes --country=NL --amount=3</info>
+  To generate multiple barcodes for multiple countries (with amounts 3 & 5 resp.)
+    <info>php console.php generate:barcodes --country=NL,DE --amount=3,5</info>
+')
+    ->setCode(function (InputInterface $input, OutputInterface $output) use ($postnl) {
 //        $countries = explode(',', (string) $input->getOption('country'));
 //        $amount = explode(',', (string) $input->getOption('amount'));
 //        $postcodes = $postnl->generateBarcodesByCountryCodes(array_combine($countries, $amount));
-//        dump($postcodes);
-//        $output->writeln("The generated $countries is <info>$amount</info>");
-//    });
+        $country = (string) $input->getOption('country');
+        $barcode = $postnl->generateBarcodeByCountryCode($country);
+        $output->writeln("The generated barcode for $country is <info>$barcode</info>");
+    });
 
 $console->run();

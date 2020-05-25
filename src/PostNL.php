@@ -305,7 +305,17 @@ class PostNL
             'NL' !== strtoupper($iso) && in_array(strtoupper($iso), $this->threeSCountries)
         );
 
-        return $this->getBarcodeService()->generateBarcode(new GenerateBarcodeRequest($type, $range, $serie));
+        /** @var GenerateBarcodeRequestEntityInterface $generateBarcodeRequest */
+        $generateBarcodeRequest = $this->entityFactory->create(
+            GenerateBarcodeRequestEntityInterface::class,
+            [
+                'Type'  => $type,
+                'Range' => $range,
+                'Serie' => $serie,
+            ]
+        );
+
+        return $this->barcodeService->generateBarcode($generateBarcodeRequest);
     }
 
     /**

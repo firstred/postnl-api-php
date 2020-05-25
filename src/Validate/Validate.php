@@ -1296,7 +1296,7 @@ class Validate implements ValidateInterface
     public function barcodeType($type)
     {
         if (is_string($type) && !in_array($type, $this->barcodeTypes)) {
-            throw new InvalidArgumentException(sprintf('Invalid barcode type given, must be one of: %s', implode(', ', $this->barcodeTypes)));
+            throw new InvalidArgumentException(sprintf('Invalid barcode type given (%s), must be one of: %s', $type, implode(', ', $this->barcodeTypes)));
         }
 
         return $type;

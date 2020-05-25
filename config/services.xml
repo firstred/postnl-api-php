@@ -63,11 +63,12 @@
       <parameter>2S</parameter>
       <parameter>3S</parameter>
       <parameter>CC</parameter>
-      <parameter>CP</parameter>
       <parameter>CD</parameter>
       <parameter>CF</parameter>
-      <parameter>LA</parameter>
+      <parameter>CG</parameter>
+      <parameter>CP</parameter>
       <parameter>CX</parameter>
+      <parameter>LA</parameter>
     </parameter>
     <parameter key="postnl.format.barcode.serie">/^\d{0,5}\d{4}-\d{0,5}\d{4}$/</parameter>
     <parameter key="postnl.format.barcode.range">/^[A-Z0-9]{1,4}$/</parameter>
