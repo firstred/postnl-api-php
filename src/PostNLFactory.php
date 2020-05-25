@@ -79,7 +79,7 @@ class PostNLFactory
         $containerClass = 'Firstred_PostNL_Misc_CompiledContainer';
         if (class_exists(SymfonyContainerBuilder::class)) {
             $file = "$diBaseDir/symfony/$containerClass.php";
-            $containerConfigCache = new ConfigCache($file, false);
+            $containerConfigCache = new ConfigCache($file, !$production);
 
             if (!$containerConfigCache->isFresh()) {
                 $containerBuilder = new SymfonyContainerBuilder();
@@ -104,6 +104,8 @@ class PostNLFactory
             $containerBuilder->addDefinitions(static::getConfigFolder().'/php-di.config.php');
             if ($production) {
                 $containerBuilder->enableCompilation("$diBaseDir/phpdi", $containerClass);
+            } else {
+                @unlink("$diBaseDir/phpdi/$containerClass.php");
             }
             $container = $containerBuilder->build();
         } else {
