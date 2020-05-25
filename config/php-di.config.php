@@ -27,6 +27,7 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
+use DI\Container;
 use function DI\autowire;
 use function Di\create;
 use function DI\factory;
@@ -201,46 +202,118 @@ return [
     },
 
     // Request entities
-    CalculateDeliveryDateRequestInterface::class => autowire(CalculateDeliveryDateRequest::class),
-    CalculateShippingDateRequestInterface::class => autowire(CalculateShippingDateRequest::class),
-    CalculateTimeframesRequestInterface::class   => autowire(CalculateTimeframesRequest::class),
-    ConfirmShipmentRequestInterface::class       => autowire(ConfirmShipmentRequest::class),
-    FindDeliveryInfoRequestInterface::class      => autowire(FindDeliveryInfoRequest::class),
-    GenerateBarcodeRequestEntityInterface::class => autowire(GenerateBarcodeRequestEntity::class),
+    CalculateDeliveryDateRequestInterface::class => function (Container $c) {
+        return $c->make(CalculateDeliveryDateRequest::class);
+    },
+    CalculateShippingDateRequestInterface::class => function (Container $c) {
+        return $c->make(CalculateShippingDateRequest::class);
+    },
+    CalculateTimeframesRequestInterface::class => function (Container $c) {
+        return $c->make(CalculateTimeframesRequest::class);
+    },
+    ConfirmShipmentRequestInterface::class => function (Container $c) {
+        return $c->make(ConfirmShipmentRequest::class);
+    },
+    FindDeliveryInfoRequestInterface::class => function (Container $c) {
+        return $c->make(FindDeliveryInfoRequest::class);
+    },
+    GenerateBarcodeRequestEntityInterface::class => function (Container $c) {
+        return $c->make(GenerateBarcodeRequestEntity::class);
+    },
 
     // Response entities
 
     // Entities
-    AddressInterface::class            => autowire(Address::class),
-    AmountInterface::class             => autowire(Amount::class),
-    ContactInterface::class            => autowire(Contact::class),
-    ContentInterface::class            => autowire(Content::class),
-    CustomerInterface::class           => autowire(Customer::class),
-    CustomsInterface::class            => autowire(Customs::class),
-    CutOffTimeInterface::class         => autowire(CutOffTime::class),
-    DimensionInterface::class          => autowire(Dimension::class),
-    ErrorInterface::class              => autowire(\Firstred\PostNL\Entity\Error::class),
-    EventInterface::class              => autowire(Event::class),
-    ExpectationInterface::class        => autowire(Expectation::class),
-    GeocodeInterface::class            => autowire(Geocode::class),
-    GroupInterface::class              => autowire(Group::class),
-    LabelInterface::class              => autowire(Label::class),
-    LocationInterface::class           => autowire(Location::class),
-    LocationsInterface::class          => autowire(Locations::class),
-    MergedLabelInterface::class        => autowire(MergedLabel::class),
-    OldStatusInterface::class          => autowire(OldStatus::class),
-    OpeningHoursInterface::class       => autowire(OpeningHours::class),
-    PickupOptionInterface::class       => autowire(PickupOption::class),
-    ProductOptionInterface::class      => autowire(ProductOption::class),
-    ReasonNoTimeframeInterface::class  => autowire(ReasonNoTimeframe::class),
-    ReasonNoTimeframesInterface::class => autowire(ReasonNoTimeframes::class),
-    ShipmentInterface::class           => autowire(Shipment::class),
-    SignatureInterface::class          => autowire(Signature::class),
-    StatusInterface::class             => autowire(Status::class),
-    TimeframeInterface::class          => autowire(Timeframe::class),
-    TimeframesInterface::class         => autowire(Timeframes::class),
-    ValidatedAddressInterface::class   => autowire(ValidatedAddress::class),
-    WarningInterface::class            => autowire(Warning::class),
+    AddressInterface::class => function (Container $c) {
+        return $c->make(Address::class);
+    },
+    AmountInterface::class => function (Container $c) {
+        return $c->make(Amount::class);
+    },
+    ContactInterface::class => function (Container $c) {
+        return $c->make(Contact::class);
+    },
+    ContentInterface::class => function (Container $c) {
+        return $c->make(Content::class);
+    },
+    CustomerInterface::class => function (Container $c) {
+        return $c->make(Customer::class);
+    },
+    CustomsInterface::class => function (Container $c) {
+        return $c->make(Customs::class);
+    },
+    CutOffTimeInterface::class => function (Container $c) {
+        return $c->make(CutOffTime::class);
+    },
+    DimensionInterface::class => function (Container $c) {
+        return $c->make(Dimension::class);
+    },
+    ErrorInterface::class => function (Container $c) {
+        return $c->make(\Firstred\PostNL\Entity\Error::class);
+    },
+    EventInterface::class => function (Container $c) {
+        return $c->make(Event::class);
+    },
+    ExpectationInterface::class => function (Container $c) {
+        return $c->make(Expectation::class);
+    },
+    GeocodeInterface::class => function (Container $c) {
+        return $c->make(Geocode::class);
+    },
+    GroupInterface::class => function (Container $c) {
+        return $c->make(Group::class);
+    },
+    LabelInterface::class => function (Container $c) {
+        return $c->make(Label::class);
+    },
+    LocationInterface::class => function (Container $c) {
+        return $c->make(Location::class);
+    },
+    LocationsInterface::class => function (Container $c) {
+        return $c->make(Locations::class);
+    },
+    MergedLabelInterface::class => function (Container $c) {
+        return $c->make(MergedLabel::class);
+    },
+    OldStatusInterface::class => function (Container $c) {
+        return $c->make(OldStatus::class);
+    },
+    OpeningHoursInterface::class => function (Container $c) {
+        return $c->make(OpeningHours::class);
+    },
+    PickupOptionInterface::class => function (Container $c) {
+        return $c->make(PickupOption::class);
+    },
+    ProductOptionInterface::class => function (Container $c) {
+        return $c->make(ProductOption::class);
+    },
+    ReasonNoTimeframeInterface::class => function (Container $c) {
+        return $c->make(ReasonNoTimeframe::class);
+    },
+    ReasonNoTimeframesInterface::class => function (Container $c) {
+        return $c->make(ReasonNoTimeframes::class);
+    },
+    ShipmentInterface::class => function (Container $c) {
+        return $c->make(Shipment::class);
+    },
+    SignatureInterface::class => function (Container $c) {
+        return $c->make(Signature::class);
+    },
+    StatusInterface::class => function (Container $c) {
+        return $c->make(Status::class);
+    },
+    TimeframeInterface::class => function (Container $c) {
+        return $c->make(Timeframe::class);
+    },
+    TimeframesInterface::class => function (Container $c) {
+        return $c->make(Timeframes::class);
+    },
+    ValidatedAddressInterface::class => function (Container $c) {
+        return $c->make(ValidatedAddress::class);
+    },
+    WarningInterface::class => function (Container $c) {
+        return $c->make(Warning::class);
+    },
 
     // Misc
     LoggerInterface::class   => autowire(DummyLogger::class),

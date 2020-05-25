@@ -115,11 +115,11 @@
     </service>
 
     <!-- Methods -->
-    <service id="Firstred\PostNL\Method\AbstractMethod">
+    <service id="Firstred\PostNL\Method\AbstractMethod" shared="false">
       <argument key="$requestFactory" type="service" id="postnl.request_factory"/>
       <argument key="$serializer" type="service" id="postnl.serializer" on-invalid="null"/>
     </service>
-    <service id="Firstred\PostNL\Method\Barcode\GenerateBarcodeMethod">
+    <service id="Firstred\PostNL\Method\Barcode\GenerateBarcodeMethod" shared="false">
       <argument key="$requestFactory" type="service" id="postnl.request_factory"/>
       <argument key="$serializer" type="service" id="postnl.serializer" on-invalid="null"/>
     </service>
@@ -133,14 +133,17 @@
     <service
         id="Firstred\PostNL\Entity\Request\CalculateDeliveryDateRequestInterface"
         class="Firstred\PostNL\Entity\Request\CalculateDeliveryDateRequest"
+        shared="false"
     />
     <service
         id="Firstred\PostNL\Entity\Request\CalculateShippingDateRequestInterface"
         class="Firstred\PostNL\Entity\Request\CalculateShippingDateRequest"
+        shared="false"
     />
     <service
         id="Firstred\PostNL\Entity\Request\CalculateTimeframesRequestInterface"
         class="Firstred\PostNL\Entity\Request\CalculateTimeframesRequest"
+        shared="false"
     />
     <service
         id="Firstred\PostNL\Entity\Request\ConfirmShipmentRequestInterface"
@@ -149,10 +152,12 @@
     <service
         id="Firstred\PostNL\Entity\Request\FindDeliveryInfoRequestInterface"
         class="Firstred\PostNL\Entity\Request\FindDeliveryInfoRequest"
+        shared="false"
     />
     <service
         id="Firstred\PostNL\Entity\Request\GenerateBarcodeRequestEntityInterface"
         class="Firstred\PostNL\Entity\Request\GenerateBarcodeRequestEntity"
+        shared="false"
     />
 
     <!-- Response entities -->
