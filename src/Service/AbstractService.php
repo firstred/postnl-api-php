@@ -34,6 +34,7 @@ use DateTimeInterface;
 use Firstred\PostNL\Entity\CustomerInterface;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifErrorException;
+use Firstred\PostNL\Exception\CifUnauthorizedException;
 use Firstred\PostNL\Http\HttpClientInterface;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
@@ -125,6 +126,9 @@ abstract class AbstractService
         $body = @json_decode((string) $response->getBody(), true);
         if (!empty($body['Error']['ErrorMsg'])) {
             throw new CifErrorException($body['Error']['ErrorMsg'], $body['Error']['ErrorNumber'] ?: 0, null, null, $response);
+        }
+        if (!empty($body['errors'][0]['ErrorMsg'])) {
+            throw new CifErrorException($body['errors'][0]['ErrorMsg'], $body['errors'][0]['ErrorNumber'] ?: 0, null, null, $response);
         }
         if (!empty($body['fault']['faultstring'])) {
             throw new CifDownException($body['fault']['faultstring'], $body['fault']['detail']['errorcode'] ?: '', null, null, $response);
