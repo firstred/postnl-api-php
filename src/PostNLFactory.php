@@ -69,7 +69,7 @@ class PostNLFactory
         $containerClass = 'Firstred_PostNL_Misc_CompiledContainer';
         $configFolder = $configPathOverride ? dirname($configPathOverride) : __DIR__.'/../config';
         $configFile = basename($configPathOverride);
-        if (false && class_exists(SymfonyContainerBuilder::class)) {
+        if (class_exists(SymfonyContainerBuilder::class)) {
             $file = "$diBaseDir/symfony/$containerClass.php";
             $containerConfigCache = new ConfigCache($file, !$production);
 
