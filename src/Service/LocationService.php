@@ -355,7 +355,8 @@ class LocationService extends AbstractService
             if ('PG' === $option) {
                 continue;
             }
-            $query['DeliveryOptions'] .= ",$option";
+        } else {
+            $query['DeliveryOptions'] = 'PG';
         }
 
         return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
