@@ -171,6 +171,10 @@ class PostNL
      *
      * @return string The barcode as a string
      *
+     * @throws CifDownException
+     * @throws CifErrorException
+     * @throws HttpClientException
+     * @throws InvalidArgumentException
      * @throws InvalidBarcodeException
      *
      * @since 1.0.0
