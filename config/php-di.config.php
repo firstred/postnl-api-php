@@ -128,7 +128,7 @@ return [
     'postnl.concurrency'     => 5,
     'postnl.api_key'         => (string) getenv('POSTNL_API_KEY'),
     'postnl.sandbox'         => (bool) getenv('POSTNL_SANDBOX_MODE'),
-    'postnl.3s_countries'    => ['AT', 'BE', 'BG', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GB', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'EE', 'CN'],
+    'postnl.3s_countries'    => ['AT', 'BE', 'BG', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GB', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'EE'],
     'postnl.label_positions' => [
         4 => [-276, 2],
         3 => [-132, 2],

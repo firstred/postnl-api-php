@@ -36,7 +36,6 @@
       <parameter>SI</parameter>
       <parameter>ES</parameter>
       <parameter>EE</parameter>
-      <parameter>CN</parameter>
     </parameter>
     <parameter key="postnl.label_positions" type="collection">
       <parameter key="4" type="collection">
