@@ -33,6 +33,7 @@ use function class_exists;
 use DI\ContainerBuilder as DIContainerBuilder;
 use DI\DependencyException;
 use DI\NotFoundException;
+use const DIRECTORY_SEPARATOR;
 use Exception;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Symfony\Component\Config\ConfigCache;
@@ -47,22 +48,11 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 class PostNLFactory
 {
     /**
-     * Get the config folder (without trailing directory separator).
-     *
-     * @return string
-     *
-     * @since 2.0.0
-     */
-    public static function getConfigFolder(): string
-    {
-        return __DIR__.'/../config';
-    }
-
-    /**
      * Create a new PostNL client instance with Symfony's Dependency Injection Component.
      *
-     * @param bool   $production Production mode
-     * @param string $diBaseDir  Set a different location for the compiled DI containers
+     * @param bool   $production         Production mode
+     * @param string $diBaseDir          Set a different location for the compiled DI containers
+     * @param string $configPathOverride Set a different DI configuration file (services.xml, php-di.config.php)
      *
      * @return PostNL|mixed
      *
@@ -73,18 +63,21 @@ class PostNLFactory
      *
      * @since 2.0.0
      */
-    public static function create(bool $production = true, string $diBaseDir = ''): PostNL
+    public static function create(bool $production = true, string $diBaseDir = '', string $configPathOverride = ''): PostNL
     {
         $diBaseDir = $diBaseDir ?: __DIR__.'/../.di';
         $containerClass = 'Firstred_PostNL_Misc_CompiledContainer';
+        $configPath = $configPathOverride ?: __DIR__.'/../config';
+        $configFolder = dirname($configPath);
+        $configFile = basename($configPathOverride);
         if (class_exists(SymfonyContainerBuilder::class)) {
             $file = "$diBaseDir/symfony/$containerClass.php";
             $containerConfigCache = new ConfigCache($file, !$production);
 
             if (!$containerConfigCache->isFresh()) {
                 $containerBuilder = new SymfonyContainerBuilder();
-                $loader = new XmlFileLoader($containerBuilder, new FileLocator(static::getConfigFolder()));
-                $loader->load('services.xml');
+                $loader = new XmlFileLoader($containerBuilder, new FileLocator($configFolder));
+                $loader->load($configFile ?: 'services.xml');
                 $containerBuilder->compile();
 
                 $dumper = new PhpDumper($containerBuilder);
@@ -101,7 +94,7 @@ class PostNLFactory
         } elseif (class_exists(DIContainerBuilder::class)) {
             // Build the dependency injection container
             $containerBuilder = new DIContainerBuilder();
-            $containerBuilder->addDefinitions(static::getConfigFolder().'/php-di.config.php');
+            $containerBuilder->addDefinitions($configFolder.DIRECTORY_SEPARATOR.$configFile ?: 'php-di.config.php');
             if ($production) {
                 $containerBuilder->enableCompilation("$diBaseDir/phpdi", $containerClass);
             } else {

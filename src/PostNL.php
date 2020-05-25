@@ -29,9 +29,6 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL;
 
-use DI\ContainerBuilder as DIContainerBuilder;
-use DI\DependencyException;
-use DI\NotFoundException;
 use Exception;
 use Firstred\PostNL\Entity\AddressInterface;
 use Firstred\PostNL\Entity\CustomerInterface;
@@ -84,12 +81,6 @@ use Psr\Cache\CacheItemInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use setasign\Fpdi\PdfParser\StreamReader;
-use Symfony\Component\Config\ConfigCache;
-use Symfony\Component\Config\FileLocator;
-use Symfony\Component\DependencyInjection\ContainerBuilder as SymfonyContainerBuilder;
-use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * Class PostNL.
@@ -99,25 +90,11 @@ class PostNL
     const VERSION = '2.0.0';
 
     /**
-     * The PostNL API key to be used for requests.
-     *
-     * @var string
-     */
-    private $apiKey;
-
-    /**
      * The PostNL Customer to be used for requests.
      *
      * @var CustomerInterface
      */
     private $customer;
-
-    /**
-     * Sandbox mode.
-     *
-     * @var bool
-     */
-    private $sandbox;
 
     /**
      * Entity factory.
@@ -137,25 +114,47 @@ class PostNL
     private $logger;
 
     /**
+     * The PostNL API key to be used for requests.
+     *
+     * @var string
+     */
+    private $apiKey;
+
+    /**
+     * Sandbox mode.
+     *
+     * @var bool
+     */
+    private $sandbox;
+
+    /**
+     * 3S countries.
+     *
+     * @var array
+     */
+    private $threeSCountries;
+
+    /**
      * PostNL constructor.
      *
      * @since 1.0.0
-     * @since 2.0.0 Removed mode
      */
     public function __construct(
         CustomerInterface $customer,
-        string $apiKey,
-        bool $sandbox,
         EntityFactoryInterface $entityFactory,
         BarcodeServiceInterface $barcodeService,
-        LoggerInterface $logger = null
+        LoggerInterface $logger,
+        string $apiKey,
+        bool $sandbox,
+        array $threeSCountries
     ) {
         $this->customer = $customer;
-        $this->apiKey = $apiKey;
-        $this->sandbox = $sandbox;
         $this->entityFactory = $entityFactory;
         $this->barcodeService = $barcodeService;
         $this->logger = $logger;
+        $this->apiKey = $apiKey;
+        $this->sandbox = $sandbox;
+        $this->threeSCountries = $threeSCountries;
     }
 
     /**
@@ -281,12 +280,12 @@ class PostNL
      */
     public function generateBarcodeByCountryCode(string $iso): string
     {
-        if (in_array(strtoupper($iso), static::$threeSCountries)) {
-            $range = $this->getCustomer()->getCustomerCode();
+        if (in_array(strtoupper($iso), $this->threeSCountries)) {
+            $range = $this->customer->getCustomerCode();
             $type = '3S';
         } else {
-            $range = $this->getCustomer()->getGlobalPackCustomerCode();
-            $type = $this->getCustomer()->getGlobalPackBarcodeType();
+            $range = $this->customer->getGlobalPackCustomerCode();
+            $type = $this->customer->getGlobalPackBarcodeType();
 
             if (!$range) {
                 throw new InvalidConfigurationException('GlobalPack customer code has not been set for the current customer');
