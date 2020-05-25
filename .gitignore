@@ -8,3 +8,4 @@ Tests/clover.xml
 .php_cs.cache
 tmp/*
 !tmp/.gitkeep
+.di/
