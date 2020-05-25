@@ -20,27 +20,39 @@ The PHP bindings can connect to both PostNL's SOAP and REST API.
 
 ### Status
 
-| Service                                     | Status REST               | Status SOAP               | Version |
-| ------------------------------------------- | ------------------------- | ------------------------- | ------- |
-| **Addresses**                               |                           |                           |         |
-| Adrescheck Nationaal                        | N/A                       | N/A                       | N/A     |
-| Adrescheck Basis Nationaal                  | N/A                       | N/A                       | N/A     |
-| Adrescheck Internationaal                   | N/A                       | N/A                       | N/A     |
-| Geo Adrescheck Nationaal                    | N/A                       | N/A                       | N/A     |
-| **Creditworthiness & Business information** |                           |                           |         |
-| Bedrijfscheck Nationaal                     | N/A                       | N/A                       | N/A     |
-| Kredietcheck Zakelijk                       | N/A                       | N/A                       | N/A     |
-| **Send & Track**                            |                           |                           |         |
-| Barcode webservice                          | ✓                         | ✓                         | 1.1     |
-| Labelling webservice                        | ✓                         | ✓                         | 2.2     |
-| Confirming webservice                       | ✓                         | ✓                         | 2.0    |
-| Shippingstatus webservice                   | ✓                         | ✓                         | 1.6     |
-| **Delivery Options**                        |                           |                           |         |
-| Deliverydate webservice                     | ✓                         | ✓                         | 2.2     |
-| Location webservice                         | ✓                         | ✓                         | 2.1     |
-| Timeframe webservice                        | ✓                         | ✓                         | 2.1     |
-| **Mail**                                    |                           |                           |         |
-| Bulkmail webservice                         | N/A                       | N/A                       | N/A     |
+| Service                                     | Status REST               | Version |
+| ------------------------------------------- | ------------------------- | ------- |
+| **Addresses**                               |                           |         |
+| Adrescheck Nationaal                        | N/A                       | N/A     |
+| Adrescheck Basis Nationaal                  | N/A                       | N/A     |
+| Adrescheck Internationaal                   | N/A                       | N/A     |
+| Persoon op AdresCheck Basis                 | N/A                       | N/A     |
+| Geo Adrescheck Nationaal                    | N/A                       | N/A     |
+| **Creditworthiness & Business information** |                           |         |
+| Bedrijfscheck Nationaal                     | N/A                       | N/A     |
+| IBANcheck Nationaal                         | N/A                       | N/A     |
+| Kredietcheck Consument Basis                | N/A                       | N/A     |
+| Kredietcheck Consument Premium              | N/A                       | N/A     |
+| Fraudepreventie Check Basis                 | N/A                       | N/A     |
+| Kredietcheck Zakelijk                       | N/A                       | N/A     |
+| **Send & Track**                            |                           |         |
+| Shipping webservice                         | N/A*                      | N/A*    |
+| Barcode webservice                          | ✓                         | 1.1     |
+| Labelling webservice                        | ✓                         | 2.2     |
+| Confirming webservice                       | ✓                         | 2.0     |
+| Shippingstatus webservice                   | ✓                         | 2.0     |
+| Return on Demand webservice                 | N/A                       | N/A     |
+| **Delivery Options**                        |                           |         |
+| Deliverydate webservice                     | ✓                         | 2.2     |
+| Location webservice                         | ✓                         | 2.1     |
+| Timeframe webservice                        | ✓                         | 2.1     |
+| **Checkout**                                |                           |         |
+| Checkout webservice                         | N/A*                      | N/A*    |
+| Postalcode check                            | ✓                         | 1.0     |
+| **Mail**                                    |                           |         |
+| Bulkmail webservice                         | N/A                       | N/A     |
+
+* These are all-in-one services, already providing the services
 
 ## Instructions
 
