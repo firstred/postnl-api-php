@@ -27,8 +27,8 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-use DI\Container;
 use function DI\autowire;
+use DI\Container;
 use function Di\create;
 use function DI\factory;
 use function Di\get;
@@ -312,21 +312,20 @@ return [
 
     // Misc
     LoggerInterface::class   => autowire(DummyLogger::class),
-    ValidateInterface::class => create(Validate::class)->constructor(
-        get('postnl.format.postcode'),
-        get('postnl.format.barcode.types'),
-        get('postnl.format.barcode.full'),
-        get('postnl.format.barcode.range'),
-        get('postnl.format.barcode.serie')
-    ),
+    ValidateInterface::class => autowire(Validate::class)
+        ->constructorParameter('postcodeFormats', get('postnl.format.postcode'))
+        ->constructorParameter('barcodeTypes', get('postnl.format.barcode.types'))
+        ->constructorParameter('barcodeFullFormat', get('postnl.format.barcode.full'))
+        ->constructorParameter('barcodeRangeFormat', get('postnl.format.barcode.range'))
+        ->constructorParameter('barcodeSerieFormat', get('postnl.format.barcode.serie')),
 
     // Library main file
-    PostNL::class => create()->constructor(
-        get('postnl.customer'),
-        get('postnl.api_key'),
-        get('postnl.sandbox'),
-        get(EntityFactoryInterface::class),
-        get(BarcodeServiceInterface::class),
-        get(LoggerInterface::class)
-    ),
+    PostNL::class => autowire(PostNL::class)
+        ->constructorParameter('customer', get('postnl.customer'))
+        ->constructorParameter('apiKey', get('postnl.api_key'))
+        ->constructorParameter('sandbox', get('postnl.sandbox'))
+        ->constructorParameter('entityFactory', get(EntityFactoryInterface::class))
+        ->constructorParameter('barcodeService', get(BarcodeServiceInterface::class))
+        ->constructorParameter('threeSCountries', get('postnl.3s_countries'))
+        ->constructorParameter('logger', get('postnl.logger')),
 ];

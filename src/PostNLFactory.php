@@ -67,10 +67,9 @@ class PostNLFactory
     {
         $diBaseDir = $diBaseDir ?: __DIR__.'/../.di';
         $containerClass = 'Firstred_PostNL_Misc_CompiledContainer';
-        $configPath = $configPathOverride ?: __DIR__.'/../config';
-        $configFolder = dirname($configPath);
+        $configFolder = $configPathOverride ? dirname($configPathOverride) : __DIR__.'/../config';
         $configFile = basename($configPathOverride);
-        if (class_exists(SymfonyContainerBuilder::class)) {
+        if (false && class_exists(SymfonyContainerBuilder::class)) {
             $file = "$diBaseDir/symfony/$containerClass.php";
             $containerConfigCache = new ConfigCache($file, !$production);
 
@@ -94,7 +93,7 @@ class PostNLFactory
         } elseif (class_exists(DIContainerBuilder::class)) {
             // Build the dependency injection container
             $containerBuilder = new DIContainerBuilder();
-            $containerBuilder->addDefinitions($configFolder.DIRECTORY_SEPARATOR.$configFile ?: 'php-di.config.php');
+            $containerBuilder->addDefinitions($configFolder.DIRECTORY_SEPARATOR.($configFile ?: 'php-di.config.php'));
             if ($production) {
                 $containerBuilder->enableCompilation("$diBaseDir/phpdi", $containerClass);
             } else {

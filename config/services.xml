@@ -196,21 +196,22 @@
 
     <!-- Misc -->
     <service id="Firstred\PostNL\Validate\Validate">
-      <argument>%postnl.format.postcode%</argument>
-      <argument>%postnl.format.barcode.types%</argument>
-      <argument>%postnl.format.barcode.full%</argument>
-      <argument>%postnl.format.barcode.range%</argument>
-      <argument>%postnl.format.barcode.serie%</argument>
+      <argument key="$postcodeFormats">%postnl.format.postcode%</argument>
+      <argument key="$barcodeTypes">%postnl.format.barcode.types%</argument>
+      <argument key="$barcodeFullFormat">%postnl.format.barcode.full%</argument>
+      <argument key="$barcodeRangeFormat">%postnl.format.barcode.range%</argument>
+      <argument key="$barcodeSerieFormat">%postnl.format.barcode.serie%</argument>
     </service>
 
     <!-- Library main file -->
     <service id="Firstred\PostNL\PostNL">
-      <argument type="service" id="postnl.customer"/>
-      <argument>%postnl.api_key%</argument>
-      <argument>%postnl.sandbox%</argument>
-      <argument type="service" id="Firstred\PostNL\Factory\EntityFactoryInterface"/>
-      <argument type="service" id="Firstred\PostNL\Service\BarcodeServiceInterface"/>
-      <argument type="service" id="postnl.logger"/>
+      <argument key="$customer" type="service" id="postnl.customer"/>
+      <argument key="$apiKey">%postnl.api_key%</argument>
+      <argument key="$sandbox">%postnl.sandbox%</argument>
+      <argument key="$entityFactory" type="service" id="Firstred\PostNL\Factory\EntityFactoryInterface"/>
+      <argument key="$barcodeService" type="service" id="Firstred\PostNL\Service\BarcodeServiceInterface"/>
+      <argument key="$logger" type="service" id="postnl.logger"/>
+      <argument key="$threeSCountries">%postnl.3s_countries%</argument>
     </service>
   </services>
 </container>
