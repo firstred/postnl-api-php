@@ -69,7 +69,7 @@
       <parameter>LA</parameter>
       <parameter>CX</parameter>
     </parameter>
-    <parameter key="postnl.format.barcode.serie">/^\d{0,3}\d{6}-\d{0,3}\d{6}$/</parameter>
+    <parameter key="postnl.format.barcode.serie">/^\d{0,5}\d{4}-\d{0,5}\d{4}$/</parameter>
     <parameter key="postnl.format.barcode.range">/^[A-Z0-9]{1,4}$/</parameter>
     <parameter key="postnl.format.hs_tariff">/^\d{6}$/</parameter>
     <parameter key="postnl.format.postcode" type="collection">

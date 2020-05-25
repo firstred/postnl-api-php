@@ -194,7 +194,7 @@ class PostNL
         }
 
         if (!$serie) {
-            $serie = $this->findBarcodeSerie($type, $range, $eps);
+            $serie = static::findBarcodeSerie($type, $range, $eps);
         }
 
         /** @var GenerateBarcodeRequestEntityInterface $generateBarcodeRequest */
@@ -224,7 +224,7 @@ class PostNL
      * @since 1.0.0
      * @since 2.0.0 Strict typing
      */
-    public function findBarcodeSerie(string $type, string $range, bool $eps): string
+    public static function findBarcodeSerie(string $type, string $range, bool $eps): string
     {
         switch ($type) {
             case '2S':

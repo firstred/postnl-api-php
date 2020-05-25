@@ -139,7 +139,7 @@ return [
     // Library validation formats
     'postnl.format.barcode.full'  => '/^[A-Z0-9]{11,15}$/',
     'postnl.format.barcode.types' => ['2S', '3S', 'CC', 'CP', 'CD', 'CF', 'LA', 'CX'],
-    'postnl.format.barcode.serie' => '/^\d{0,3}\d{6}-\d{0,3}\d{6}$/',
+    'postnl.format.barcode.serie' => '/^\d{0,5}\d{4}-\d{0,5}\d{4}$/',
     'postnl.format.barcode.range' => '/^[A-Z0-9]{1,4}$/',
     'postnl.format.hs_tariff'     => '/^\d{6}$/',
     'postnl.format.postcode'      => [

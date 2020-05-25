@@ -1318,6 +1318,7 @@ class Validate implements ValidateInterface
         if (is_string($serie)) {
             $serie = trim($serie);
             if (!preg_match($this->barcodeSerieFormat, $serie)) {
+                dump($this->barcodeSerieFormat);
                 throw new InvalidArgumentException('Invalid serie given, must have the format ###000000-###000000');
             }
         }

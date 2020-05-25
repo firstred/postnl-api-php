@@ -50,8 +50,6 @@ if (file_exists('./.env')) {
 /** @var PostNL $postnl */
 $postnl = PostNLFactory::create(false);
 
-$barcode = $postnl->generateBarcode('3S');
-
 $console = new Application();
 
 $console
