@@ -52,7 +52,7 @@ The PHP bindings can connect to both PostNL's SOAP and REST API.
 | **Mail**                                    |                           |         |
 | Bulkmail webservice                         | N/A                       | N/A     |
 
-* These are all-in-one services, already providing the services
+* These are all-in-one services, redundant and sometimes providing less functionality, thus are not used by this library.
 
 ## Instructions
 
