@@ -212,6 +212,7 @@
       <argument key="$barcodeService" type="service" id="Firstred\PostNL\Service\BarcodeServiceInterface"/>
       <argument key="$logger" type="service" id="postnl.logger"/>
       <argument key="$threeSCountries">%postnl.3s_countries%</argument>
+      <argument key="$barcodeTypes">%postnl.format.barcode.types%</argument>
     </service>
   </services>
 </container>

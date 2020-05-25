@@ -134,6 +134,8 @@ class PostNL
      */
     private $threeSCountries;
 
+    private $barcodeTypes;
+
     /**
      * PostNL constructor.
      *
@@ -146,7 +148,8 @@ class PostNL
         LoggerInterface $logger,
         string $apiKey,
         bool $sandbox,
-        array $threeSCountries
+        array $threeSCountries,
+        array $barcodeTypes
     ) {
         $this->customer = $customer;
         $this->entityFactory = $entityFactory;
@@ -155,6 +158,7 @@ class PostNL
         $this->apiKey = $apiKey;
         $this->sandbox = $sandbox;
         $this->threeSCountries = $threeSCountries;
+        $this->barcodeTypes = $barcodeTypes;
     }
 
     /**
@@ -174,7 +178,7 @@ class PostNL
      */
     public function generateBarcode(string $type = '3S', ?string $range = null, ?string $serie = null, bool $eps = false): string
     {
-        if (!in_array($type, ['2S', '3S']) || 2 !== mb_strlen($type)) {
+        if (!in_array($type, $this->barcodeTypes)) {
             throw new InvalidBarcodeException("GenerateBarcodeRequest type `$type` is invalid");
         }
 
@@ -298,7 +302,7 @@ class PostNL
         $serie = $this->findBarcodeSerie(
             $type,
             $range,
-            'NL' !== strtoupper($iso) && in_array(strtoupper($iso), static::$threeSCountries)
+            'NL' !== strtoupper($iso) && in_array(strtoupper($iso), $this->threeSCountries)
         );
 
         return $this->getBarcodeService()->generateBarcode(new GenerateBarcodeRequest($type, $range, $serie));
