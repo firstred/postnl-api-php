@@ -30,6 +30,8 @@ declare(strict_types=1);
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\PostNLFactory;
 use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Helper\Table;
+use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -75,6 +77,25 @@ The <info>generate:barcode</info> command will generate a barcode.
     });
 
 $console
+    ->register('generate:barcode:country')
+    ->setDefinition([
+        new InputArgument('country', InputArgument::REQUIRED, 'Country code (NL, DE, etc.)'),
+    ])
+    ->setDescription('Generate a barcode for a specific country.')
+    ->setHelp('
+The <info>generate:barcode</info> command will generate a barcode for a specific country.
+ 
+<comment>Samples:</comment>
+  To generate a barcode for a domestic shipment:
+    <info>php 01_barcode_service.php generate:barcode NL</info>
+')
+    ->setCode(function (InputInterface $input, OutputInterface $output) use ($postnl) {
+        $country = strtoupper((string) $input->getArgument('country'));
+        $barcode = $postnl->generateBarcodeByCountryCode($country);
+        $output->writeln("The generated barcode for $country: <info>$barcode</info>");
+    });
+
+$console
     ->register('generate:barcodes')
     ->setDefinition([
         new InputOption('country', 'c', InputOption::VALUE_OPTIONAL, 'Country code (NL, DE, US, etc.)', 'NL'),
@@ -95,12 +116,25 @@ The <info>generate:barcodes</info> command will generate multiple barcodes.
     <info>php console.php generate:barcodes --country=NL,DE --amount=3,5</info>
 ')
     ->setCode(function (InputInterface $input, OutputInterface $output) use ($postnl) {
-//        $countries = explode(',', (string) $input->getOption('country'));
-//        $amount = explode(',', (string) $input->getOption('amount'));
-//        $postcodes = $postnl->generateBarcodesByCountryCodes(array_combine($countries, $amount));
-        $country = (string) $input->getOption('country');
-        $barcode = $postnl->generateBarcodeByCountryCode($country);
-        $output->writeln("The generated barcode for $country is <info>$barcode</info>");
+        $countries = explode(',', (string) $input->getOption('country'));
+        $amount = explode(',', (string) $input->getOption('amount'));
+        $tableBarcodes = [];
+        $first = true;
+        foreach ($postnl->generateBarcodesByCountryCodes(array_combine($countries, $amount)) as $country => $barcodes) {
+            if (!$first) {
+                $tableBarcodes[] = new TableSeparator();
+            }
+            $first = false;
+            $tableBarcodes[] = [$country, implode("\n", $barcodes)];
+        }
+        $output->writeln('These are the generated barcodes:');
+        $table = new Table($output);
+        $table->setStyle('borderless');
+        $table
+            ->setHeaders(['Country', 'Barcode(s)'])
+            ->setRows($tableBarcodes)
+        ;
+        $table->render();
     });
 
 $console->run();

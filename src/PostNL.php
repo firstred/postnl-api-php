@@ -341,14 +341,14 @@ class PostNL
      */
     public function generateBarcodesByCountryCodes(array $isos): array
     {
-        $customerCode = $this->getCustomer()->getCustomerCode();
-        $globalPackRange = $this->getCustomer()->getGlobalPackCustomerCode();
-        $globalPackType = $this->getCustomer()->getGlobalPackBarcodeType();
+        $customerCode = $this->customer->getCustomerCode();
+        $globalPackRange = $this->customer->getGlobalPackCustomerCode();
+        $globalPackType = $this->customer->getGlobalPackBarcodeType();
 
         $generateBarcodes = [];
         $index = 0;
         foreach ($isos as $iso => $qty) {
-            if (in_array(strtoupper($iso), static::$threeSCountries)) {
+            if (in_array(strtoupper($iso), $this->threeSCountries)) {
                 $range = $customerCode;
                 $type = '3S';
             } else {
@@ -366,16 +366,25 @@ class PostNL
             $serie = $this->findBarcodeSerie(
                 $type,
                 $range,
-                'NL' !== strtoupper($iso) && in_array(strtoupper($iso), static::$threeSCountries)
+                'NL' !== strtoupper($iso) && in_array(strtoupper($iso), $this->threeSCountries)
             );
 
             for ($i = 0; $i < $qty; ++$i) {
-                $generateBarcodes[] = (new GenerateBarcodeRequest($type, $range, $serie))->setId("$iso-$index");
+                /** @var GenerateBarcodeRequestEntityInterface $generateBarcodeRequest */
+                $generateBarcodes[] = $this->entityFactory->create(
+                    GenerateBarcodeRequestEntityInterface::class,
+                    [
+                        'Id'    => "$iso-$index",
+                        'Type'  => $type,
+                        'Range' => $range,
+                        'Serie' => $serie,
+                    ]
+                );
                 ++$index;
             }
         }
 
-        $results = $this->getBarcodeService()->generateBarcodes($generateBarcodes);
+        $results = $this->barcodeService->generateBarcodes($generateBarcodes);
 
         $barcodes = [];
         foreach ($results as $id => $barcode) {
