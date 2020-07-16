@@ -31,6 +31,7 @@ use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
 use ThirtyBees\PostNL\Service\LabellingService;
 use ThirtyBees\PostNL\Service\LocationService;
+use ThirtyBees\PostNL\Service\ShippingService;
 use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
@@ -85,6 +86,11 @@ class Barcode extends AbstractEntity
             'Type'  => TimeframeService::DOMAIN_NAMESPACE,
             'Range' => TimeframeService::DOMAIN_NAMESPACE,
             'Serie' => TimeframeService::DOMAIN_NAMESPACE,
+        ],
+        'Shipping'      => [
+            'Type'  => ShippingService::DOMAIN_NAMESPACE,
+            'Range' => ShippingService::DOMAIN_NAMESPACE,
+            'Serie' => ShippingService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart

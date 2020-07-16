@@ -41,6 +41,7 @@ use ThirtyBees\PostNL\Entity\Request\Confirming;
 use ThirtyBees\PostNL\Entity\Request\CurrentStatus;
 use ThirtyBees\PostNL\Entity\Request\GenerateBarcode;
 use ThirtyBees\PostNL\Entity\Request\GenerateLabel;
+use ThirtyBees\PostNL\Entity\Request\GenerateShipping;
 use ThirtyBees\PostNL\Entity\Request\GetDeliveryDate;
 use ThirtyBees\PostNL\Entity\Request\GetLocation;
 use ThirtyBees\PostNL\Entity\Request\GetLocationsInArea;
@@ -73,6 +74,7 @@ use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
 use ThirtyBees\PostNL\Service\LabellingService;
 use ThirtyBees\PostNL\Service\LocationService;
+use ThirtyBees\PostNL\Service\ShippingService;
 use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 use ThirtyBees\PostNL\Util\RFPdi;
@@ -206,6 +208,9 @@ class PostNL implements LoggerAwareInterface
 
     /** @var LocationService $locationService */
     protected $locationService;
+
+    /** @var ShippingService $shippingService */
+    protected  $shippingService;
 
     /**
      * PostNL constructor.
@@ -612,6 +617,53 @@ class PostNL implements LoggerAwareInterface
     public function setLocationService(LocationService $service)
     {
         $this->locationService = $service;
+    }
+
+    /**
+     * Shipping service
+     *
+     * Automatically load the shipping service
+     *
+     * @return mixed
+     */
+    public function getShippingService()
+    {
+        if (!$this->shippingService) {
+            $this->setShippingService(new ShippingService($this));
+        }
+
+        return $this->shippingService;
+    }
+
+    /**
+     * Set the shipping service
+     *
+     * @param ShippingService $service
+     */
+    public function setShippingService(ShippingService $service)
+    {
+        $this->shippingService = $service;
+    }
+
+    /**
+     * @param Shipment $shipment
+     * @param string $printertype
+     * @param bool $confirm
+     *
+     * @return Entity\Response\GenerateShippingResponse
+     */
+    public function generateShipping(
+        Shipment $shipment,
+        $printertype = 'GraphicFile|PDF',
+        $confirm = true
+    ) {
+        return $this->getShippingService()->generateShipping(
+            new GenerateShipping(
+                [$shipment],
+                new LabellingMessage($printertype),
+                $this->customer
+            ),
+            $confirm);
     }
 
     /**

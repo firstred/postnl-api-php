@@ -32,6 +32,7 @@ use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
 use ThirtyBees\PostNL\Service\LabellingService;
 use ThirtyBees\PostNL\Service\LocationService;
+use ThirtyBees\PostNL\Service\ShippingService;
 use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
@@ -397,6 +398,46 @@ class Shipment extends AbstractEntity
             'StatusCode'               => TimeframeService::DOMAIN_NAMESPACE,
             'DateFrom'                 => TimeframeService::DOMAIN_NAMESPACE,
             'DateTo'                   => TimeframeService::DOMAIN_NAMESPACE,
+        ],
+        'Shipping'      => [
+            'Addresses'                => ShippingService::DOMAIN_NAMESPACE,
+            'Amounts'                  => ShippingService::DOMAIN_NAMESPACE,
+            'Barcode'                  => ShippingService::DOMAIN_NAMESPACE,
+            'CollectionTimeStampEnd'   => ShippingService::DOMAIN_NAMESPACE,
+            'CollectionTimeStampStart' => ShippingService::DOMAIN_NAMESPACE,
+            'Contacts'                 => ShippingService::DOMAIN_NAMESPACE,
+            'Content'                  => ShippingService::DOMAIN_NAMESPACE,
+            'CostCenter'               => ShippingService::DOMAIN_NAMESPACE,
+            'Customer'                 => ShippingService::DOMAIN_NAMESPACE,
+            'CustomerOrderNumber'      => ShippingService::DOMAIN_NAMESPACE,
+            'Customs'                  => ShippingService::DOMAIN_NAMESPACE,
+            'DeliveryAddress'          => ShippingService::DOMAIN_NAMESPACE,
+            'DeliveryTimestampStart'   => ShippingService::DOMAIN_NAMESPACE,
+            'DeliveryTimestampEnd'     => ShippingService::DOMAIN_NAMESPACE,
+            'DeliveryDate'             => ShippingService::DOMAIN_NAMESPACE,
+            'Dimension'                => ShippingService::DOMAIN_NAMESPACE,
+            'DownPartnerBarcode'       => ShippingService::DOMAIN_NAMESPACE,
+            'DownPartnerID'            => ShippingService::DOMAIN_NAMESPACE,
+            'DownPartnerLocation'      => ShippingService::DOMAIN_NAMESPACE,
+            'Events'                   => ShippingService::DOMAIN_NAMESPACE,
+            'Groups'                   => ShippingService::DOMAIN_NAMESPACE,
+            'IDExpiration'             => ShippingService::DOMAIN_NAMESPACE,
+            'IDNumber'                 => ShippingService::DOMAIN_NAMESPACE,
+            'IDType'                   => ShippingService::DOMAIN_NAMESPACE,
+            'OldStatuses'              => ShippingService::DOMAIN_NAMESPACE,
+            'PhaseCode'                => ShippingService::DOMAIN_NAMESPACE,
+            'ProductCodeCollect'       => ShippingService::DOMAIN_NAMESPACE,
+            'ProductCodeDelivery'      => ShippingService::DOMAIN_NAMESPACE,
+            'ProductOptions'           => ShippingService::DOMAIN_NAMESPACE,
+            'ReceiverDateOfBirth'      => ShippingService::DOMAIN_NAMESPACE,
+            'Reference'                => ShippingService::DOMAIN_NAMESPACE,
+            'ReferenceCollect'         => ShippingService::DOMAIN_NAMESPACE,
+            'Remark'                   => ShippingService::DOMAIN_NAMESPACE,
+            'ReturnBarcode'            => ShippingService::DOMAIN_NAMESPACE,
+            'ReturnReference'          => ShippingService::DOMAIN_NAMESPACE,
+            'StatusCode'               => ShippingService::DOMAIN_NAMESPACE,
+            'DateFrom'                 => ShippingService::DOMAIN_NAMESPACE,
+            'DateTo'                   => ShippingService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart

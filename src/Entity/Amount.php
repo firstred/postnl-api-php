@@ -33,6 +33,7 @@ use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
 use ThirtyBees\PostNL\Service\LabellingService;
 use ThirtyBees\PostNL\Service\LocationService;
+use ThirtyBees\PostNL\Service\ShippingService;
 use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
@@ -131,6 +132,16 @@ class Amount extends AbstractEntity
             'Reference'         => TimeframeService::DOMAIN_NAMESPACE,
             'TransactionNumber' => TimeframeService::DOMAIN_NAMESPACE,
             'Value'             => TimeframeService::DOMAIN_NAMESPACE,
+        ],
+        'Shipping'  => [
+            'AccountName'       => ShippingService::DOMAIN_NAMESPACE,
+            'AmountType'        => ShippingService::DOMAIN_NAMESPACE,
+            'BIC'               => ShippingService::DOMAIN_NAMESPACE,
+            'Currency'          => ShippingService::DOMAIN_NAMESPACE,
+            'IBAN'              => ShippingService::DOMAIN_NAMESPACE,
+            'Reference'         => ShippingService::DOMAIN_NAMESPACE,
+            'TransactionNumber' => ShippingService::DOMAIN_NAMESPACE,
+            'Value'             => ShippingService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart

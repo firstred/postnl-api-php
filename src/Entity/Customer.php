@@ -31,6 +31,7 @@ use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
 use ThirtyBees\PostNL\Service\LabellingService;
 use ThirtyBees\PostNL\Service\LocationService;
+use ThirtyBees\PostNL\Service\ShippingService;
 use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
@@ -121,6 +122,15 @@ class Customer extends AbstractEntity
             'Email'              => TimeframeService::DOMAIN_NAMESPACE,
             'Name'               => TimeframeService::DOMAIN_NAMESPACE,
         ],
+        'Shipping'       => [
+            'Address'            => ShippingService::DOMAIN_NAMESPACE,
+            'CollectionLocation' => ShippingService::DOMAIN_NAMESPACE,
+            'ContactPerson'      => ShippingService::DOMAIN_NAMESPACE,
+            'CustomerCode'       => ShippingService::DOMAIN_NAMESPACE,
+            'CustomerNumber'     => ShippingService::DOMAIN_NAMESPACE,
+            'Email'              => ShippingService::DOMAIN_NAMESPACE,
+            'Name'               => ShippingService::DOMAIN_NAMESPACE,
+        ]
     ];
     // @codingStandardsIgnoreStart
     /** @var Address|null $Address */

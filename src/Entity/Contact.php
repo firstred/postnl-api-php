@@ -31,6 +31,7 @@ use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
 use ThirtyBees\PostNL\Service\LabellingService;
 use ThirtyBees\PostNL\Service\LocationService;
+use ThirtyBees\PostNL\Service\ShippingService;
 use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
@@ -94,6 +95,12 @@ class Contact extends AbstractEntity
             'Email'       => TimeframeService::DOMAIN_NAMESPACE,
             'SMSNr'       => TimeframeService::DOMAIN_NAMESPACE,
             'TelNr'       => TimeframeService::DOMAIN_NAMESPACE,
+        ],
+        'Shipping'      => [
+            'ContactType' => ShippingService::DOMAIN_NAMESPACE,
+            'Email'       => ShippingService::DOMAIN_NAMESPACE,
+            'SMSNr'       => ShippingService::DOMAIN_NAMESPACE,
+            'TelNr'       => ShippingService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart

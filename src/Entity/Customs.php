@@ -31,6 +31,7 @@ use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
 use ThirtyBees\PostNL\Service\LabellingService;
 use ThirtyBees\PostNL\Service\LocationService;
+use ThirtyBees\PostNL\Service\ShippingService;
 use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
@@ -148,6 +149,18 @@ class Customs extends AbstractEntity
             'License'                => TimeframeService::DOMAIN_NAMESPACE,
             'LicenseNr'              => TimeframeService::DOMAIN_NAMESPACE,
             'ShipmentType'           => TimeframeService::DOMAIN_NAMESPACE,
+        ],
+        'Shipping'       => [
+            'Certificate'            => ShippingService::DOMAIN_NAMESPACE,
+            'CertificateNr'          => ShippingService::DOMAIN_NAMESPACE,
+            'Content'                => ShippingService::DOMAIN_NAMESPACE,
+            'Currency'               => ShippingService::DOMAIN_NAMESPACE,
+            'HandleAsNonDeliverable' => ShippingService::DOMAIN_NAMESPACE,
+            'Invoice'                => ShippingService::DOMAIN_NAMESPACE,
+            'InvoiceNr'              => ShippingService::DOMAIN_NAMESPACE,
+            'License'                => ShippingService::DOMAIN_NAMESPACE,
+            'LicenseNr'              => ShippingService::DOMAIN_NAMESPACE,
+            'ShipmentType'           => ShippingService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart

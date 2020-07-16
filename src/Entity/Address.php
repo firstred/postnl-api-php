@@ -31,6 +31,7 @@ use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
 use ThirtyBees\PostNL\Service\LabellingService;
 use ThirtyBees\PostNL\Service\LocationService;
+use ThirtyBees\PostNL\Service\ShippingService;
 use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
@@ -218,6 +219,26 @@ class Address extends AbstractEntity
             'Remark'       => TimeframeService::DOMAIN_NAMESPACE,
             'Street'       => TimeframeService::DOMAIN_NAMESPACE,
             'Zipcode'      => TimeframeService::DOMAIN_NAMESPACE,
+        ],
+        'Shipping' => [
+            'AddressType'  => ShippingService::DOMAIN_NAMESPACE,
+            'Area'         => ShippingService::DOMAIN_NAMESPACE,
+            'Buildingname' => ShippingService::DOMAIN_NAMESPACE,
+            'City'         => ShippingService::DOMAIN_NAMESPACE,
+            'CompanyName'  => ShippingService::DOMAIN_NAMESPACE,
+            'Countrycode'  => ShippingService::DOMAIN_NAMESPACE,
+            'Department'   => ShippingService::DOMAIN_NAMESPACE,
+            'Doorcode'     => ShippingService::DOMAIN_NAMESPACE,
+            'FirstName'    => ShippingService::DOMAIN_NAMESPACE,
+            'Floor'        => ShippingService::DOMAIN_NAMESPACE,
+            'HouseNr'      => ShippingService::DOMAIN_NAMESPACE,
+            'HouseNrExt'   => ShippingService::DOMAIN_NAMESPACE,
+            'StreetHouseNrExt'   => ShippingService::DOMAIN_NAMESPACE,
+            'Name'         => ShippingService::DOMAIN_NAMESPACE,
+            'Region'       => ShippingService::DOMAIN_NAMESPACE,
+            'Remark'       => ShippingService::DOMAIN_NAMESPACE,
+            'Street'       => ShippingService::DOMAIN_NAMESPACE,
+            'Zipcode'      => ShippingService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart

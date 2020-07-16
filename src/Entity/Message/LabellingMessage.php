@@ -31,6 +31,7 @@ use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
 use ThirtyBees\PostNL\Service\LabellingService;
 use ThirtyBees\PostNL\Service\LocationService;
+use ThirtyBees\PostNL\Service\ShippingService;
 use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
@@ -86,6 +87,11 @@ class LabellingMessage extends Message
             'MessageTimeStamp' => TimeframeService::DOMAIN_NAMESPACE,
             'Printertype'      => TimeframeService::DOMAIN_NAMESPACE,
         ],
+        'Shipping'       => [
+            'MessageID'        => ShippingService::DOMAIN_NAMESPACE,
+            'MessageTimeStamp' => ShippingService::DOMAIN_NAMESPACE,
+            'Printertype'      => ShippingService::DOMAIN_NAMESPACE,
+        ] ,
     ];
     /**
      * @var string|null $Printertype
