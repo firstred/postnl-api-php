@@ -713,3 +713,78 @@ locationsinarea
     ``GetLocationsInArea`` - `required`
 
     The `GetLocationsInArea` request object. See the API documentation for more details.
+
+Shipping service
+----------------
+
+.. note::
+
+    | PostNL API documentation for this service:
+    | https://developer.postnl.nl/browse-apis/send-and-track/shipping-webservice/
+
+The shipping service combines all the functionality of the labeling, confirming, barcode and easy return service.
+The service is only available as REST.
+
+Generate a single shipping
+~~~~~~~~~~~~~~~~~~~~~
+
+The following example generates a single shipment for a domestic shipment:
+
+.. code-block:: php
+
+    <?php
+    $postnl = new PostNL(...);
+    $postnl->generateShipping(
+        Shipment::create()
+            ->setAddresses([
+                Address::create([
+                    'AddressType' => '01',
+                    'City'        => 'Utrecht',
+                    'Countrycode' => 'NL',
+                    'FirstName'   => 'Peter',
+                    'HouseNr'     => '9',
+                    'HouseNrExt'  => 'a bis',
+                    'Name'        => 'de Ruijter',
+                    'Street'      => 'Bilderdijkstraat',
+                    'Zipcode'     => '3521VA',
+                ]),
+                Address::create([
+                    'AddressType' => '02',
+                    'City'        => 'Hoofddorp',
+                    'CompanyName' => 'PostNL',
+                    'Countrycode' => 'NL',
+                    'HouseNr'     => '42',
+                    'Street'      => 'Siriusdreef',
+                    'Zipcode'     => '2132WT',
+                ]),
+            ])
+            ->setDeliveryAddress('01')
+            ->setDimension(new Dimension('2000'))
+            ->setProductCodeDelivery('3085'),
+        'GraphicFile|PDF',
+        false
+    );
+
+This will create a standard shipment (product code 3085). You can access the label (base64 encoded PDF) this way:
+
+.. code-block:: php
+
+    <?php
+    $pdf = base64_decode($shipping->getResponseShipments()[0]->getLabels()[0]->getContent());
+
+This function accepts the following arguments:
+
+shipment
+    ``Shipment`` - `required`
+
+    The Shipment object. Visit the PostNL API documentation to find out what a Shipment object consists of.
+
+printertype
+    ``string`` - `optional, defaults to GraphicFile|PDF`
+
+    The list of supported printer types can be found on this page: https://developer.postnl.nl/browse-apis/send-and-track/shipping-webservice/documentation/
+
+confirm
+    ``string`` - `optional, defaults to true`
+
+    Indicates whether the shipment should immediately be confirmed.
