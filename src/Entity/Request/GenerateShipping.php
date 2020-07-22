@@ -107,7 +107,6 @@ class GenerateShipping extends AbstractEntity
         foreach (array_keys(static::$defaultProperties[$this->currentService]) as $propertyName) {
             if (isset($this->{$propertyName})) {
                 if ($propertyName === 'Shipments' && count($this->{$propertyName}) >= 1) {
-//                    $json[$propertyName] = $this->{$propertyName}[0];
                     $properties = [];
                     foreach ($this->{$propertyName} as $property) {
                         $properties[] = $property;
