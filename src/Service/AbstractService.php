@@ -198,6 +198,18 @@ abstract class AbstractService
             throw new CifException($exceptionData);
         }
 
+        if (!empty($body['Errors'])) {
+            $exceptionData = [];
+            foreach ($body['Errors'] as $error) {
+                $exceptionData[] = [
+                    'description' => isset($error['Description']) ? (string) $error['Description'] : null,
+                    'message'     => isset($error['Error']) ? (string) $error['Error'] : null,
+                    'code'        => isset($error['Code']) ? (int) $error['Code'] : 0,
+                ];
+            }
+            throw new CifException($exceptionData);
+        }
+
         return true;
     }
 
