@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -38,16 +38,14 @@ use ThirtyBees\PostNL\Exception\ResponseException;
 use ThirtyBees\PostNL\PostNL;
 
 /**
- * Class AbstractService
- *
- * @package ThirtyBees\PostNL\Service
+ * Class AbstractService.
  */
 abstract class AbstractService
 {
-    /** @var array $namespaces */
+    /** @var array */
     public static $namespaces = [];
 
-    /** @var PostNL $postnl */
+    /** @var PostNL */
     protected $postnl;
 
     const COMMON_NAMESPACE = 'http://postnl.nl/cif/services/common/';
@@ -55,26 +53,25 @@ abstract class AbstractService
     const ENVELOPE_NAMESPACE = 'http://schemas.xmlsoap.org/soap/envelope/';
     const OLD_ENVELOPE_NAMESPACE = 'http://www.w3.org/2003/05/soap-envelope';
 
-
     /**
-     * TTL for the cache
+     * TTL for the cache.
      *
      * `null` disables the cache
      * `int` is the TTL in seconds
      * Any `DateTime` will be used as the exact date/time at which to expire the data (auto calculate TTL)
      * A `DateInterval` can be used as well to set the TTL
      *
-     * @var null|int|\DateTimeInterface|\DateInterval $ttl
+     * @var int|\DateTimeInterface|\DateInterval|null
      */
     public $ttl = null;
 
     /**
-     * The [PSR-6](https://www.php-fig.org/psr/psr-6/) CacheItemPoolInterface
+     * The [PSR-6](https://www.php-fig.org/psr/psr-6/) CacheItemPoolInterface.
      *
      * Use a caching library that implements [PSR-6](https://www.php-fig.org/psr/psr-6/) and you'll be good to go
      * `null` disables the cache
      *
-     * @var null|CacheItemPoolInterface
+     * @var CacheItemPoolInterface|null
      */
     public $cache = null;
 
@@ -82,8 +79,8 @@ abstract class AbstractService
      * AbstractService constructor.
      *
      * @param PostNL                                    $postnl PostNL instance
-     * @param null|CacheItemPoolInterface               $cache
-     * @param null|int|\DateTimeInterface|\DateInterval $ttl
+     * @param CacheItemPoolInterface|null               $cache
+     * @param int|\DateTimeInterface|\DateInterval|null $ttl
      */
     public function __construct($postnl, $cache = null, $ttl = null)
     {
@@ -102,7 +99,7 @@ abstract class AbstractService
      */
     public function __call($name, $args)
     {
-        $mode = $this->postnl->getMode() === PostNL::MODE_REST ? 'Rest' : 'Soap';
+        $mode = PostNL::MODE_REST === $this->postnl->getMode() ? 'Rest' : 'Soap';
 
         if (method_exists($this, "{$name}{$mode}")) {
             return call_user_func_array([$this, "{$name}{$mode}"], $args);
@@ -115,7 +112,7 @@ abstract class AbstractService
     }
 
     /**
-     * Set the webservice on the object
+     * Set the webservice on the object.
      *
      * This lets the object know for which service it should serialize
      *
@@ -154,7 +151,7 @@ abstract class AbstractService
     }
 
     /**
-     * Register namespaces
+     * Register namespaces.
      *
      * @param \SimpleXMLElement $element
      */
@@ -179,7 +176,7 @@ abstract class AbstractService
     {
         $body = json_decode(static::getResponseText($response), true);
 
-        if (!empty($body['fault']['faultstring']) && $body['fault']['faultstring'] === 'Invalid ApiKey') {
+        if (!empty($body['fault']['faultstring']) && 'Invalid ApiKey' === $body['fault']['faultstring']) {
             throw new ApiException('Invalid Api Key');
         }
         if (isset($body['Envelope']['Body']['Fault']['Reason']['Text'][''])) {
@@ -217,6 +214,7 @@ abstract class AbstractService
      * @param \SimpleXMLElement $xml
      *
      * @return bool
+     *
      * @throws CifDownException
      * @throws CifException
      */
@@ -246,11 +244,12 @@ abstract class AbstractService
     }
 
     /**
-     * Get the response
+     * Get the response.
      *
      * @param $response
      *
      * @return string
+     *
      * @throws ResponseException
      */
     public static function getResponseText($response)
@@ -277,7 +276,7 @@ abstract class AbstractService
                 throw $exception;
             }
 
-            /** @var Response $response */
+            /* @var Response $response */
             return (string) $response->getBody();
         } else {
             throw new ResponseException('Unknown response type');
@@ -285,11 +284,11 @@ abstract class AbstractService
     }
 
     /**
-     * Retrieve a cached item
+     * Retrieve a cached item.
      *
      * @param string $uuid
      *
-     * @return null|CacheItemInterface
+     * @return CacheItemInterface|null
      */
     public function retrieveCachedItem($uuid)
     {
@@ -303,7 +302,7 @@ abstract class AbstractService
         } catch (\ReflectionException $exception) {
             return null;
         }
-        $uuid .= $this->postnl->getMode() === PostNL::MODE_REST ? 'rest' : 'soap';
+        $uuid .= PostNL::MODE_REST === $this->postnl->getMode() ? 'rest' : 'soap';
         $uuid .= strtolower(substr($reflection->getShortName(), 0, strlen($reflection->getShortName()) - 7));
         $item = null;
         if ($this->cache instanceof CacheItemPoolInterface && !is_null($this->ttl)) {

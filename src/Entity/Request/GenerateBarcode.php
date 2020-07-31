@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -39,14 +39,11 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class GenerateLabel
+ * Class GenerateLabel.
  *
- * @package ThirtyBees\PostNL\Entity
- *
- * @method Customer|null getCustomer()
- * @method Message|null  getMessage()
- * @method Barcode|null  getBarcode()
- *
+ * @method Customer|null   getCustomer()
+ * @method Message|null    getMessage()
+ * @method Barcode|null    getBarcode()
  * @method GenerateBarcode setCustomer(Customer|null $customer = null)
  * @method GenerateBarcode setMessage(Message|null $message = null)
  * @method GenerateBarcode setBarcode(Barcode|null $shipments = null)
@@ -54,22 +51,22 @@ use ThirtyBees\PostNL\Service\TimeframeService;
 class GenerateBarcode extends AbstractEntity
 {
     /**
-     * Default properties and namespaces for the SOAP API
+     * Default properties and namespaces for the SOAP API.
      *
-     * @var array $defaultProperties
+     * @var array
      */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'Message'  => BarcodeService::DOMAIN_NAMESPACE,
             'Customer' => BarcodeService::DOMAIN_NAMESPACE,
             'Barcode'  => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'Message'  => ConfirmingService::DOMAIN_NAMESPACE,
             'Customer' => ConfirmingService::DOMAIN_NAMESPACE,
             'Barcode'  => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'Message'  => LabellingService::DOMAIN_NAMESPACE,
             'Customer' => LabellingService::DOMAIN_NAMESPACE,
             'Barcode'  => LabellingService::DOMAIN_NAMESPACE,
@@ -79,28 +76,28 @@ class GenerateBarcode extends AbstractEntity
             'Customer'  => ShippingStatusService::DOMAIN_NAMESPACE,
             'Shipments' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'Message'   => DeliveryDateService::DOMAIN_NAMESPACE,
             'Customer'  => DeliveryDateService::DOMAIN_NAMESPACE,
             'Shipments' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'Message'   => LocationService::DOMAIN_NAMESPACE,
             'Customer'  => LocationService::DOMAIN_NAMESPACE,
             'Shipments' => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'Message'   => TimeframeService::DOMAIN_NAMESPACE,
             'Customer'  => TimeframeService::DOMAIN_NAMESPACE,
             'Shipments' => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var Message|null $Message */
+    /** @var Message|null */
     protected $Message;
-    /** @var Customer|null $Customer */
+    /** @var Customer|null */
     protected $Customer;
-    /** @var Barcode|null $Barcode */
+    /** @var Barcode|null */
     protected $Barcode;
     // @codingStandardsIgnoreEnd
 

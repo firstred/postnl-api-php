@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -27,8 +27,8 @@
 namespace ThirtyBees\PostNL\Entity\Response;
 
 use Sabre\Xml\Writer;
-use ThirtyBees\PostNL\Entity\Address;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
+use ThirtyBees\PostNL\Entity\Address;
 use ThirtyBees\PostNL\Entity\Amount;
 use ThirtyBees\PostNL\Entity\Barcode;
 use ThirtyBees\PostNL\Entity\Dimension;
@@ -46,23 +46,20 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class CurrentStatusResponseShipment
+ * Class CurrentStatusResponseShipment.
  *
- * @package ThirtyBees\PostNL\Entity
- *
- * @method Address[]|null       getAddresses()
- * @method Amount[]|null        getAmounts()
- * @method Barcode|null         getBarcode()
- * @method string|null          getDeliveryDate()
- * @method Dimension|null       getDimension()
- * @method Expectation|null     getExpectation()
- * @method Group[]|null         getGroups()
- * @method string|null          getProductCode()
- * @method ProductOption[]|null getProductOptions()
- * @method string|null          getReference()
- * @method Status|null          getStatus()
- * @method Warning[]|null       getWarnings()
- *
+ * @method Address[]|null                getAddresses()
+ * @method Amount[]|null                 getAmounts()
+ * @method Barcode|null                  getBarcode()
+ * @method string|null                   getDeliveryDate()
+ * @method Dimension|null                getDimension()
+ * @method Expectation|null              getExpectation()
+ * @method Group[]|null                  getGroups()
+ * @method string|null                   getProductCode()
+ * @method ProductOption[]|null          getProductOptions()
+ * @method string|null                   getReference()
+ * @method Status|null                   getStatus()
+ * @method Warning[]|null                getWarnings()
  * @method CurrentStatusResponseShipment setAddresses(Address[]|null $addresses = null)
  * @method CurrentStatusResponseShipment setAmounts(Amount[]|null $amounts = null)
  * @method CurrentStatusResponseShipment setBarcode(string|null $barcode = null)
@@ -78,9 +75,9 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  */
 class CurrentStatusResponseShipment extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
+    /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'Addresses'      => BarcodeService::DOMAIN_NAMESPACE,
             'Amounts'        => BarcodeService::DOMAIN_NAMESPACE,
             'Barcode'        => BarcodeService::DOMAIN_NAMESPACE,
@@ -94,7 +91,7 @@ class CurrentStatusResponseShipment extends AbstractEntity
             'Status'         => BarcodeService::DOMAIN_NAMESPACE,
             'Warnings'       => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'Addresses'      => ConfirmingService::DOMAIN_NAMESPACE,
             'Amounts'        => ConfirmingService::DOMAIN_NAMESPACE,
             'Barcode'        => ConfirmingService::DOMAIN_NAMESPACE,
@@ -108,7 +105,7 @@ class CurrentStatusResponseShipment extends AbstractEntity
             'Status'         => ConfirmingService::DOMAIN_NAMESPACE,
             'Warnings'       => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'Addresses'      => LabellingService::DOMAIN_NAMESPACE,
             'Amounts'        => LabellingService::DOMAIN_NAMESPACE,
             'Barcode'        => LabellingService::DOMAIN_NAMESPACE,
@@ -136,7 +133,7 @@ class CurrentStatusResponseShipment extends AbstractEntity
             'Status'         => ShippingStatusService::DOMAIN_NAMESPACE,
             'Warnings'       => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'Addresses'      => DeliveryDateService::DOMAIN_NAMESPACE,
             'Amounts'        => DeliveryDateService::DOMAIN_NAMESPACE,
             'Barcode'        => DeliveryDateService::DOMAIN_NAMESPACE,
@@ -150,7 +147,7 @@ class CurrentStatusResponseShipment extends AbstractEntity
             'Status'         => DeliveryDateService::DOMAIN_NAMESPACE,
             'Warnings'       => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'Addresses'      => LocationService::DOMAIN_NAMESPACE,
             'Amounts'        => LocationService::DOMAIN_NAMESPACE,
             'Barcode'        => LocationService::DOMAIN_NAMESPACE,
@@ -164,7 +161,7 @@ class CurrentStatusResponseShipment extends AbstractEntity
             'Status'         => LocationService::DOMAIN_NAMESPACE,
             'Warnings'       => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'Addresses'      => TimeframeService::DOMAIN_NAMESPACE,
             'Amounts'        => TimeframeService::DOMAIN_NAMESPACE,
             'Barcode'        => TimeframeService::DOMAIN_NAMESPACE,
@@ -180,29 +177,29 @@ class CurrentStatusResponseShipment extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var Address[]|null $Addresses */
+    /** @var Address[]|null */
     protected $Addresses;
-    /** @var Amount[]|null $Amounts */
+    /** @var Amount[]|null */
     protected $Amounts;
-    /** @var Barcode|null $Barcode */
+    /** @var Barcode|null */
     protected $Barcode;
-    /** @var string|null $DeliveryDate */
+    /** @var string|null */
     protected $DeliveryDate;
     /** @var Dimension|null Dimension */
     protected $Dimension;
-    /** @var Expectation|null $Expectation */
+    /** @var Expectation|null */
     protected $Expectation;
-    /** @var Group[]|null $Groups */
+    /** @var Group[]|null */
     protected $Groups;
-    /** @var string|null $ProductCode */
+    /** @var string|null */
     protected $ProductCode;
-    /** @var ProductOption[]|null $ProuctOptions */
+    /** @var ProductOption[]|null */
     protected $ProductOptions;
-    /** @var string|null $Reference */
+    /** @var string|null */
     protected $Reference;
-    /** @var Status|null $Status */
+    /** @var Status|null */
     protected $Status;
-    /** @var Warning[]|null $Warnings */
+    /** @var Warning[]|null */
     protected $Warnings;
     // @codingStandardsIgnoreEnd
 
@@ -253,7 +250,7 @@ class CurrentStatusResponseShipment extends AbstractEntity
     }
 
     /**
-     * Return a serializable array for the XMLWriter
+     * Return a serializable array for the XMLWriter.
      *
      * @param Writer $writer
      *
@@ -269,31 +266,31 @@ class CurrentStatusResponseShipment extends AbstractEntity
         }
 
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if ($propertyName === 'Addresses') {
+            if ('Addresses' === $propertyName) {
                 $addresses = [];
                 foreach ($this->Addresses as $address) {
                     $addresses[] = ["{{$namespace}}Address" => $address];
                 }
                 $xml["{{$namespace}}Addresses"] = $addresses;
-            } elseif ($propertyName === 'Amounts') {
+            } elseif ('Amounts' === $propertyName) {
                 $amounts = [];
                 foreach ($this->Amounts as $amount) {
                     $amounts[] = ["{{$namespace}}Amount" => $amount];
                 }
                 $xml["{{$namespace}}Amounts"] = $amounts;
-            } elseif ($propertyName === 'Groups') {
+            } elseif ('Groups' === $propertyName) {
                 $groups = [];
                 foreach ($this->Groups as $group) {
                     $groups[] = ["{{$namespace}}Group" => $group];
                 }
                 $xml["{{$namespace}}Groups"] = $groups;
-            } elseif ($propertyName === 'ProductOption') {
+            } elseif ('ProductOption' === $propertyName) {
                 $productOptions = [];
                 foreach ($this->ProductOptions as $productOption) {
                     $productOptions[] = ["{{$namespace}}ProductOptions" => $productOption];
                 }
                 $xml["{{$namespace}}ProductOptions"] = $productOptions;
-            } elseif ($propertyName === 'Warnings') {
+            } elseif ('Warnings' === $propertyName) {
                 $warnings = [];
                 foreach ($this->Warnings as $warning) {
                     $warnings[] = ["{{$namespace}}Warning" => $warning];

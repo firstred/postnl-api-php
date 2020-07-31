@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -35,29 +35,26 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class Expectation
- *
- * @package ThirtyBees\PostNL\Entity
+ * Class Expectation.
  *
  * @method string|null getETAFrom()
  * @method string|null getETATo()
- *
  * @method Expectation setETAFrom(string|null $dateTime = null)
  * @method Expectation setETATo(string|null $dateTime = null)
  */
 class Expectation extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
+    /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'ETAFrom' => BarcodeService::DOMAIN_NAMESPACE,
             'ETATo'   => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'ETAFrom' => ConfirmingService::DOMAIN_NAMESPACE,
             'ETATo'   => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'ETAFrom' => LabellingService::DOMAIN_NAMESPACE,
             'ETATo'   => LabellingService::DOMAIN_NAMESPACE,
         ],
@@ -65,23 +62,23 @@ class Expectation extends AbstractEntity
             'ETAFrom' => ShippingStatusService::DOMAIN_NAMESPACE,
             'ETATo'   => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'ETAFrom' => DeliveryDateService::DOMAIN_NAMESPACE,
             'ETATo'   => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'ETAFrom' => LocationService::DOMAIN_NAMESPACE,
             'ETATo'   => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'ETAFrom' => TimeframeService::DOMAIN_NAMESPACE,
             'ETATo'   => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string|null $ETAFrom */
+    /** @var string|null */
     protected $ETAFrom;
-    /** @var string|null $ETATo */
+    /** @var string|null */
     protected $ETATo;
     // @codingStandardsIgnoreEnd
 

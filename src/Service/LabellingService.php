@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -43,9 +43,7 @@ use ThirtyBees\PostNL\Exception\ResponseException;
 use ThirtyBees\PostNL\PostNL;
 
 /**
- * Class LabellingService
- *
- * @package ThirtyBees\PostNL\Service
+ * Class LabellingService.
  *
  * @method GenerateLabelResponse   generateLabel(GenerateLabel $generateLabel, bool $confirm)
  * @method Request                 buildGenerateLabelRequest(GenerateLabel $generateLabel, bool $confirm)
@@ -70,9 +68,9 @@ class LabellingService extends AbstractService
     const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/LabellingWebService/';
 
     /**
-     * Namespaces uses for the SOAP version of this service
+     * Namespaces uses for the SOAP version of this service.
      *
-     * @var array $namespaces
+     * @var array
      */
     public static $namespaces = [
         self::ENVELOPE_NAMESPACE     => 'soap',
@@ -85,7 +83,7 @@ class LabellingService extends AbstractService
     ];
 
     /**
-     * Generate a single barcode via REST
+     * Generate a single barcode via REST.
      *
      * @param GenerateLabel $generateLabel
      * @param bool          $confirm
@@ -117,7 +115,7 @@ class LabellingService extends AbstractService
         if ($object instanceof GenerateLabelResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof Response
-                && $response->getStatusCode() === 200
+                && 200 === $response->getStatusCode()
             ) {
                 $item->set(\GuzzleHttp\Psr7\str($response));
                 $this->cacheItem($item);
@@ -126,7 +124,7 @@ class LabellingService extends AbstractService
             return $object;
         }
 
-        if ($response->getStatusCode() === 200) {
+        if (200 === $response->getStatusCode()) {
             throw new ResponseException('Invalid API response', null, null, $response);
         }
 
@@ -134,7 +132,7 @@ class LabellingService extends AbstractService
     }
 
     /**
-     * Generate multiple labels at once
+     * Generate multiple labels at once.
      *
      * @param array $generateLabels ['uuid' => [GenerateBarcode, confirm], ...]
      *
@@ -169,7 +167,7 @@ class LabellingService extends AbstractService
         $newResponses = $httpClient->doRequests();
         foreach ($newResponses as $uuid => $newResponse) {
             if ($newResponse instanceof Response
-                && $newResponse->getStatusCode() === 200
+                && 200 === $newResponse->getStatusCode()
             ) {
                 $item = $this->retrieveCachedItem($uuid);
                 if ($item instanceof CacheItemInterface) {
@@ -197,12 +195,13 @@ class LabellingService extends AbstractService
     }
 
     /**
-     * Generate a single label via SOAP
+     * Generate a single label via SOAP.
      *
      * @param GenerateLabel $generateLabel
      * @param bool          $confirm
      *
      * @return GenerateLabelResponse
+     *
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
@@ -229,7 +228,7 @@ class LabellingService extends AbstractService
         if ($object instanceof GenerateLabelResponse
             && $item instanceof CacheItemInterface
             && $response instanceof Response
-            && $response->getStatusCode() === 200
+            && 200 === $response->getStatusCode()
         ) {
             $item->set(\GuzzleHttp\Psr7\str($response));
             $this->cacheItem($item);
@@ -239,7 +238,7 @@ class LabellingService extends AbstractService
     }
 
     /**
-     * Generate multiple labels at once via SOAP
+     * Generate multiple labels at once via SOAP.
      *
      * @param array $generateLabels ['uuid' => [GenerateBarcode, confirm], ...]
      *
@@ -275,7 +274,7 @@ class LabellingService extends AbstractService
         $newResponses = $httpClient->doRequests();
         foreach ($newResponses as $uuid => $newResponse) {
             if ($newResponse instanceof Response
-                && $newResponse->getStatusCode() === 200
+                && 200 === $newResponse->getStatusCode()
             ) {
                 $item = $this->retrieveCachedItem($uuid);
                 if ($item instanceof CacheItemInterface) {
@@ -290,12 +289,11 @@ class LabellingService extends AbstractService
 
         $generateLabelResponses = [];
         foreach ($responses + $newResponses as $uuid => $response) {
-                try {
-                    $generateLabelResponse = $this->processGenerateLabelResponseSOAP($response);
-                } catch (\Exception $e) {
-                    $generateLabelResponse = $e;
-                }
-
+            try {
+                $generateLabelResponse = $this->processGenerateLabelResponseSOAP($response);
+            } catch (\Exception $e) {
+                $generateLabelResponse = $e;
+            }
 
             $generateLabelResponses[$uuid] = $generateLabelResponse;
         }
@@ -304,7 +302,7 @@ class LabellingService extends AbstractService
     }
 
     /**
-     * Build the GenerateLabel request for the REST API
+     * Build the GenerateLabel request for the REST API.
      *
      * @param GenerateLabel $generateLabel
      * @param               $confirm
@@ -319,7 +317,7 @@ class LabellingService extends AbstractService
         return new Request(
             'POST',
             ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).'?'.\GuzzleHttp\Psr7\build_query([
-                'confirm' => $confirm
+                'confirm' => $confirm,
             ]),
             [
                 'apikey'       => $apiKey,
@@ -331,11 +329,12 @@ class LabellingService extends AbstractService
     }
 
     /**
-     * Process the GenerateLabel REST Response
+     * Process the GenerateLabel REST Response.
      *
      * @param Response $response
      *
      * @return GenerateLabelResponse|null
+     *
      * @throws ResponseException
      */
     public function processGenerateLabelResponseREST($response)
@@ -353,7 +352,7 @@ class LabellingService extends AbstractService
     }
 
     /**
-     * Build the GenerateLabel request for the SOAP API
+     * Build the GenerateLabel request for the SOAP API.
      *
      * @param GenerateLabel $generateLabel
      * @param               $confirm
@@ -378,15 +377,15 @@ class LabellingService extends AbstractService
                 '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
                     ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
                 ],
-                '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
+                '{'.static::ENVELOPE_NAMESPACE.'}Body' => [
                     '{'.static::SERVICES_NAMESPACE.'}GenerateLabel' => $generateLabel,
                 ],
             ]
         );
 
         $endpoint = $this->postnl->getSandbox()
-            ? ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT)
-            : ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT);
+            ? (PostNL::MODE_LEGACY === $this->postnl->getMode() ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT)
+            : (PostNL::MODE_LEGACY === $this->postnl->getMode() ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT);
 
         return new Request(
             'POST',
@@ -404,6 +403,7 @@ class LabellingService extends AbstractService
      * @param Response $response
      *
      * @return GenerateLabelResponse
+     *
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
@@ -413,8 +413,8 @@ class LabellingService extends AbstractService
     public function processGenerateLabelResponseSOAP($response)
     {
         $xml = @simplexml_load_string(static::getResponseText($response));
-        if ($xml === false) {
-            if ($response->getStatusCode() === 200) {
+        if (false === $xml) {
+            if (200 === $response->getStatusCode()) {
                 throw new ResponseException('Invalid API Response', null, null, $response);
             } else {
                 throw new ApiException('Invalid API Response');
@@ -423,7 +423,6 @@ class LabellingService extends AbstractService
 
         static::registerNamespaces($xml);
         static::validateSOAPResponse($xml);
-
 
         $reader = new Reader();
         $reader->xml(static::getResponseText($response));

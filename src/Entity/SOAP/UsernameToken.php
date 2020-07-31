@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -30,29 +30,26 @@ use Sabre\Xml\Writer;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
 
 /**
- * Class UsernameToken
+ * Class UsernameToken.
  *
- * @package ThirtyBees\PostNL\Entity\SOAP
- *
- * @method string|null getUsername()
- * @method string|null getPassword()
- *
+ * @method string|null   getUsername()
+ * @method string|null   getPassword()
  * @method UsernameToken setUsername(string|null $username = null)
  * @method UsernameToken setPassword(string|null $password = null)
  */
 class UsernameToken extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
+    /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'Username' => Security::SECURITY_NAMESPACE,
             'Password' => Security::SECURITY_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'Username' => Security::SECURITY_NAMESPACE,
             'Password' => Security::SECURITY_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'Username' => Security::SECURITY_NAMESPACE,
             'Password' => Security::SECURITY_NAMESPACE,
         ],
@@ -60,23 +57,23 @@ class UsernameToken extends AbstractEntity
             'Username' => Security::SECURITY_NAMESPACE,
             'Password' => Security::SECURITY_NAMESPACE,
         ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'Username' => Security::SECURITY_NAMESPACE,
             'Password' => Security::SECURITY_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'Username' => Security::SECURITY_NAMESPACE,
             'Password' => Security::SECURITY_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'Username' => Security::SECURITY_NAMESPACE,
             'Password' => Security::SECURITY_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string|null $Username */
+    /** @var string|null */
     protected $Username;
-    /** @var string|null $Password */
+    /** @var string|null */
     protected $Password;
     // @codingStandardsIgnoreEnd
 
@@ -95,7 +92,7 @@ class UsernameToken extends AbstractEntity
     }
 
     /**
-     * Return a serializable array for the XMLWriter
+     * Return a serializable array for the XMLWriter.
      *
      * @param Writer $writer
      *
@@ -107,7 +104,7 @@ class UsernameToken extends AbstractEntity
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
             if (isset($this->{$propertyName})) {
                 // Lack of username means new API and no hash needed
-                if ($this->Username && $propertyName === 'Password') {
+                if ($this->Username && 'Password' === $propertyName) {
                     $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = sha1($this->{$propertyName});
                 } else {
                     $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};

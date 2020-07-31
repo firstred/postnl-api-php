@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -37,33 +37,30 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class GetSentDateRequest
+ * Class GetSentDateRequest.
  *
- * @package ThirtyBees\PostNL\Entity
- *
- * @method GetSentDate|null getGetSentDate()
- * @method Message|null     getMessage()
- *
+ * @method GetSentDate|null   getGetSentDate()
+ * @method Message|null       getMessage()
  * @method GetSentDateRequest setGetSentDate(GetSentDate|null $date = null)
  * @method GetSentDateRequest setMessage(Message|null $message = null)
  */
 class GetSentDateRequest extends AbstractEntity
 {
     /**
-     * Default properties and namespaces for the SOAP API
+     * Default properties and namespaces for the SOAP API.
      *
-     * @var array $defaultProperties
+     * @var array
      */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'GetSentDate' => BarcodeService::DOMAIN_NAMESPACE,
             'Message'     => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'GetSentDate' => ConfirmingService::DOMAIN_NAMESPACE,
             'Message'     => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'GetSentDate' => LabellingService::DOMAIN_NAMESPACE,
             'Message'     => LabellingService::DOMAIN_NAMESPACE,
         ],
@@ -71,23 +68,23 @@ class GetSentDateRequest extends AbstractEntity
             'GetSentDate' => ShippingStatusService::DOMAIN_NAMESPACE,
             'Message'     => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'GetSentDate' => DeliveryDateService::DOMAIN_NAMESPACE,
             'Message'     => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'GetSentDate' => LocationService::DOMAIN_NAMESPACE,
             'Message'     => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'GetSentDate' => TimeframeService::DOMAIN_NAMESPACE,
             'Message'     => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var GetSentDate|null $GetSentDate */
+    /** @var GetSentDate|null */
     protected $GetSentDate;
-    /** @var Message|null $Message */
+    /** @var Message|null */
     protected $Message;
     // @codingStandardsIgnoreEnd
 

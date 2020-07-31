@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -36,33 +36,30 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class LabellingMessage
- *
- * @package ThirtyBees\PostNL\Entity\Message
+ * Class LabellingMessage.
  *
  * @method string|null getMessageID()
  * @method string|null getMessageTimeStamp()
  * @method string|null getPrinterType()
- *
- * @method Message setMessageID(string|null $mid = null)
- * @method Message setMessageTimeStamp(string|null $timestamp = null)
- * @method Message setPrinterType(string|null $printerType = null)
+ * @method Message     setMessageID(string|null $mid = null)
+ * @method Message     setMessageTimeStamp(string|null $timestamp = null)
+ * @method Message     setPrinterType(string|null $printerType = null)
  */
 class LabellingMessage extends Message
 {
-    /** @var string[][] $defaultProperties */
+    /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'MessageID'        => BarcodeService::DOMAIN_NAMESPACE,
             'MessageTimeStamp' => BarcodeService::DOMAIN_NAMESPACE,
             'Printertype'      => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'MessageID'        => ConfirmingService::DOMAIN_NAMESPACE,
             'MessageTimeStamp' => ConfirmingService::DOMAIN_NAMESPACE,
             'Printertype'      => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'MessageID'        => LabellingService::DOMAIN_NAMESPACE,
             'MessageTimeStamp' => LabellingService::DOMAIN_NAMESPACE,
             'Printertype'      => LabellingService::DOMAIN_NAMESPACE,
@@ -72,29 +69,29 @@ class LabellingMessage extends Message
             'MessageTimeStamp' => ShippingStatusService::DOMAIN_NAMESPACE,
             'Printertype'      => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'MessageID'        => DeliveryDateService::DOMAIN_NAMESPACE,
             'MessageTimeStamp' => DeliveryDateService::DOMAIN_NAMESPACE,
             'Printertype'      => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'MessageID'        => LocationService::DOMAIN_NAMESPACE,
             'MessageTimeStamp' => LocationService::DOMAIN_NAMESPACE,
             'Printertype'      => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'MessageID'        => TimeframeService::DOMAIN_NAMESPACE,
             'MessageTimeStamp' => TimeframeService::DOMAIN_NAMESPACE,
             'Printertype'      => TimeframeService::DOMAIN_NAMESPACE,
         ],
-        'Shipping'       => [
+        'Shipping' => [
             'MessageID'        => ShippingService::DOMAIN_NAMESPACE,
             'MessageTimeStamp' => ShippingService::DOMAIN_NAMESPACE,
             'Printertype'      => ShippingService::DOMAIN_NAMESPACE,
-        ] ,
+        ],
     ];
     /**
-     * @var string|null $Printertype
+     * @var string|null
      */
     protected $Printertype;
 

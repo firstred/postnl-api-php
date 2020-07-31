@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -44,23 +44,22 @@ use ThirtyBees\PostNL\PostNL;
 use ThirtyBees\PostNL\Service\ConfirmingService;
 
 /**
- * Class ConfirmingServiceSoapTest
- *
- * @package ThirtyBees\PostNL\Tests\Service
+ * Class ConfirmingServiceSoapTest.
  *
  * @testdox The ConfirmingService (SOAP)
  */
 class ConfirmingServiceSoapTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var PostNL $postnl */
+    /** @var PostNL */
     protected $postnl;
-    /** @var ConfirmingService $service */
+    /** @var ConfirmingService */
     protected $service;
-    /** @var $lastRequest */
+    /** @var */
     protected $lastRequest;
 
     /**
      * @before
+     *
      * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
      */
     public function setupPostNL()
@@ -81,8 +80,7 @@ class ConfirmingServiceSoapTest extends \PHPUnit_Framework_TestCase
                     'Zipcode'     => '2132WT',
                 ]))
                 ->setGlobalPackBarcodeType('AB')
-                ->setGlobalPackCustomerCode('1234')
-            , new UsernameToken(null, 'test'),
+                ->setGlobalPackCustomerCode('1234'), new UsernameToken(null, 'test'),
             true,
             PostNL::MODE_SOAP
         );
@@ -152,7 +150,7 @@ class ConfirmingServiceSoapTest extends \PHPUnit_Framework_TestCase
                         ->setBarcode('3S1234567890123')
                         ->setDeliveryAddress('01')
                         ->setDimension(new Dimension('2000'))
-                        ->setProductCodeDelivery('3085')
+                        ->setProductCodeDelivery('3085'),
                 ])
                 ->setMessage($message)
                 ->setCustomer($this->postnl->getCustomer())
@@ -237,20 +235,20 @@ class ConfirmingServiceSoapTest extends \PHPUnit_Framework_TestCase
     public function testGenerateSingleLabelSoap()
     {
         $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], "<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\">
+            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
   <s:Body>
     <ConfirmingResponseShipments
-xmlns=\"http://postnl.nl/cif/services/ConfirmingWebService/\"
-xmlns:a=\"http://postnl.nl/cif/domain/ConfirmingWebService/\"
-xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">
+xmlns="http://postnl.nl/cif/services/ConfirmingWebService/"
+xmlns:a="http://postnl.nl/cif/domain/ConfirmingWebService/"
+xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
       <a:ConfirmingResponseShipment>
         <a:Barcode>3S1234567890123</a:Barcode>
-        <a:Warnings i:nil= \"true\"/>
+        <a:Warnings i:nil= "true"/>
       </a:ConfirmingResponseShipment>
     </ConfirmingResponseShipments>
   </s:Body>
 </s:Envelope>
-"),
+'),
         ]);
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();
@@ -298,33 +296,33 @@ xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">
     public function testGenerateMultipleLabelsSoap()
     {
         $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], "<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\">
+            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
   <s:Body>
     <ConfirmingResponseShipments
-xmlns=\"http://postnl.nl/cif/services/ConfirmingWebService/\"
-xmlns:a=\"http://postnl.nl/cif/domain/ConfirmingWebService/\"
-xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">
+xmlns="http://postnl.nl/cif/services/ConfirmingWebService/"
+xmlns:a="http://postnl.nl/cif/domain/ConfirmingWebService/"
+xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
       <a:ConfirmingResponseShipment>
         <a:Barcode>3SDEVC201611210</a:Barcode>
-        <a:Warnings i:nil= \"true\"/>
+        <a:Warnings i:nil= "true"/>
       </a:ConfirmingResponseShipment>
     </ConfirmingResponseShipments>
   </s:Body>
 </s:Envelope>
-"),new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], "<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\">
+'), new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
   <s:Body>
     <ConfirmingResponseShipments
-xmlns=\"http://postnl.nl/cif/services/ConfirmingWebService/\"
-xmlns:a=\"http://postnl.nl/cif/domain/ConfirmingWebService/\"
-xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">
+xmlns="http://postnl.nl/cif/services/ConfirmingWebService/"
+xmlns:a="http://postnl.nl/cif/domain/ConfirmingWebService/"
+xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
       <a:ConfirmingResponseShipment>
         <a:Barcode>3SDEVC201611211</a:Barcode>
-        <a:Warnings i:nil= \"true\"/>
+        <a:Warnings i:nil= "true"/>
       </a:ConfirmingResponseShipment>
     </ConfirmingResponseShipments>
   </s:Body>
 </s:Envelope>
-"),
+'),
         ]);
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();

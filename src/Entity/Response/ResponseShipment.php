@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -39,9 +39,7 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class ResponseShipment
- *
- * @package ThirtyBees\PostNL\Entity
+ * Class ResponseShipment.
  *
  * @method string|null    getBarcode()
  * @method string|null    getProductCodeDelivery()
@@ -50,20 +48,19 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method string|null    getDownPartnerLocation()
  * @method Label[]|null   getLabels()
  * @method Warning[]|null getWarnings()
- *
- * @method MergedLabel setBarcode(string|null $barcode = null)
- * @method MergedLabel setProductCodeDelivery(string|null $productCodeDelivery = null)
- * @method MergedLabel setDownPartnerBarcode(string|null $downPartnerCode = null)
- * @method MergedLabel setDownPartnerId(string|null $downPartnerId = null)
- * @method MergedLabel setDownPartnerLocation(string|null $downPartnerLocation = null)
- * @method MergedLabel setLabels(Label[]|null $labels = null)
- * @method MergedLabel setWarnings(Warning[]|null $warnings = null)
+ * @method MergedLabel    setBarcode(string|null $barcode = null)
+ * @method MergedLabel    setProductCodeDelivery(string|null $productCodeDelivery = null)
+ * @method MergedLabel    setDownPartnerBarcode(string|null $downPartnerCode = null)
+ * @method MergedLabel    setDownPartnerId(string|null $downPartnerId = null)
+ * @method MergedLabel    setDownPartnerLocation(string|null $downPartnerLocation = null)
+ * @method MergedLabel    setLabels(Label[]|null $labels = null)
+ * @method MergedLabel    setWarnings(Warning[]|null $warnings = null)
  */
 class ResponseShipment extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
+    /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'Barcode'             => BarcodeService::DOMAIN_NAMESPACE,
             'DownPartnerBarcode'  => BarcodeService::DOMAIN_NAMESPACE,
             'DownPartnerID'       => BarcodeService::DOMAIN_NAMESPACE,
@@ -72,7 +69,7 @@ class ResponseShipment extends AbstractEntity
             'ProductCodeDelivery' => BarcodeService::DOMAIN_NAMESPACE,
             'Warnings'            => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'Barcode'             => ConfirmingService::DOMAIN_NAMESPACE,
             'DownPartnerBarcode'  => ConfirmingService::DOMAIN_NAMESPACE,
             'DownPartnerID'       => ConfirmingService::DOMAIN_NAMESPACE,
@@ -81,7 +78,7 @@ class ResponseShipment extends AbstractEntity
             'ProductCodeDelivery' => ConfirmingService::DOMAIN_NAMESPACE,
             'Warnings'            => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'Barcode'             => LabellingService::DOMAIN_NAMESPACE,
             'DownPartnerBarcode'  => LabellingService::DOMAIN_NAMESPACE,
             'DownPartnerID'       => LabellingService::DOMAIN_NAMESPACE,
@@ -99,7 +96,7 @@ class ResponseShipment extends AbstractEntity
             'ProductCodeDelivery' => ShippingStatusService::DOMAIN_NAMESPACE,
             'Warnings'            => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'Barcode'             => DeliveryDateService::DOMAIN_NAMESPACE,
             'DownPartnerBarcode'  => DeliveryDateService::DOMAIN_NAMESPACE,
             'DownPartnerID'       => DeliveryDateService::DOMAIN_NAMESPACE,
@@ -108,7 +105,7 @@ class ResponseShipment extends AbstractEntity
             'ProductCodeDelivery' => DeliveryDateService::DOMAIN_NAMESPACE,
             'Warnings'            => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'Barcode'             => LocationService::DOMAIN_NAMESPACE,
             'DownPartnerBarcode'  => LocationService::DOMAIN_NAMESPACE,
             'DownPartnerID'       => LocationService::DOMAIN_NAMESPACE,
@@ -117,7 +114,7 @@ class ResponseShipment extends AbstractEntity
             'ProductCodeDelivery' => LocationService::DOMAIN_NAMESPACE,
             'Warnings'            => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'Barcode'             => TimeframeService::DOMAIN_NAMESPACE,
             'DownPartnerBarcode'  => TimeframeService::DOMAIN_NAMESPACE,
             'DownPartnerID'       => TimeframeService::DOMAIN_NAMESPACE,
@@ -126,7 +123,7 @@ class ResponseShipment extends AbstractEntity
             'ProductCodeDelivery' => TimeframeService::DOMAIN_NAMESPACE,
             'Warnings'            => TimeframeService::DOMAIN_NAMESPACE,
         ],
-        'Shipping'      => [
+        'Shipping' => [
             'Barcode'             => ShippingService::DOMAIN_NAMESPACE,
             'DownPartnerBarcode'  => ShippingService::DOMAIN_NAMESPACE,
             'DownPartnerID'       => ShippingService::DOMAIN_NAMESPACE,
@@ -137,19 +134,19 @@ class ResponseShipment extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string|null $Barcode */
+    /** @var string|null */
     protected $Barcode;
-    /** @var string|null $DownPartnerBarcode */
+    /** @var string|null */
     protected $DownPartnerBarcode;
-    /** @var string|null $DownPartnerID */
+    /** @var string|null */
     protected $DownPartnerID;
-    /** @var string|null $DownPartnerLocation */
+    /** @var string|null */
     protected $DownPartnerLocation;
-    /** @var Label[]|null $Labels */
+    /** @var Label[]|null */
     protected $Labels;
-    /** @var string|null $ProductCodeDelivery */
+    /** @var string|null */
     protected $ProductCodeDelivery;
-    /** @var Warning[]|null $Warnings */
+    /** @var Warning[]|null */
     protected $Warnings;
     // @codingStandardsIgnoreEnd
 

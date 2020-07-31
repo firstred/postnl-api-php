@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -35,41 +35,38 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class Status
- *
- * @package ThirtyBees\PostNL\Entity
+ * Class Status.
  *
  * @method string|null getCurrentPhaseCode()
  * @method string|null getCurrentPhaseDescription()
  * @method string|null getCurrentStatusCode()
  * @method string|null getCurrentStatusDescription()
  * @method string|null getCurrentStatusTimeStamp()
- *
- * @method Status setCurrentPhaseCode(string|null $code = null)
- * @method Status setCurrentPhaseDescription(string|null $desc = null)
- * @method Status setCurrentStatusCode(string|null $code = null)
- * @method Status setCurrentStatusDescription(string|null $desc = null)
- * @method Status setCurrentStatusTimeStamp(string|null $dateTime = null)
+ * @method Status      setCurrentPhaseCode(string|null $code = null)
+ * @method Status      setCurrentPhaseDescription(string|null $desc = null)
+ * @method Status      setCurrentStatusCode(string|null $code = null)
+ * @method Status      setCurrentStatusDescription(string|null $desc = null)
+ * @method Status      setCurrentStatusTimeStamp(string|null $dateTime = null)
  */
 class Status extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
+    /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'CurrentPhaseCode'         => BarcodeService::DOMAIN_NAMESPACE,
             'CurrentPhaseDescription'  => BarcodeService::DOMAIN_NAMESPACE,
             'CurrentStatusCode'        => BarcodeService::DOMAIN_NAMESPACE,
             'CurrentStatusDescription' => BarcodeService::DOMAIN_NAMESPACE,
             'CurrentStatusTimeStamp'   => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'CurrentPhaseCode'         => ConfirmingService::DOMAIN_NAMESPACE,
             'CurrentPhaseDescription'  => ConfirmingService::DOMAIN_NAMESPACE,
             'CurrentStatusCode'        => ConfirmingService::DOMAIN_NAMESPACE,
             'CurrentStatusDescription' => ConfirmingService::DOMAIN_NAMESPACE,
             'CurrentStatusTimeStamp'   => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'CurrentPhaseCode'         => LabellingService::DOMAIN_NAMESPACE,
             'CurrentPhaseDescription'  => LabellingService::DOMAIN_NAMESPACE,
             'CurrentStatusCode'        => LabellingService::DOMAIN_NAMESPACE,
@@ -83,21 +80,21 @@ class Status extends AbstractEntity
             'CurrentStatusDescription' => ShippingStatusService::DOMAIN_NAMESPACE,
             'CurrentStatusTimeStamp'   => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'CurrentPhaseCode'         => DeliveryDateService::DOMAIN_NAMESPACE,
             'CurrentPhaseDescription'  => DeliveryDateService::DOMAIN_NAMESPACE,
             'CurrentStatusCode'        => DeliveryDateService::DOMAIN_NAMESPACE,
             'CurrentStatusDescription' => DeliveryDateService::DOMAIN_NAMESPACE,
             'CurrentStatusTimeStamp'   => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'CurrentPhaseCode'         => LocationService::DOMAIN_NAMESPACE,
             'CurrentPhaseDescription'  => LocationService::DOMAIN_NAMESPACE,
             'CurrentStatusCode'        => LocationService::DOMAIN_NAMESPACE,
             'CurrentStatusDescription' => LocationService::DOMAIN_NAMESPACE,
             'CurrentStatusTimeStamp'   => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'CurrentPhaseCode'         => TimeframeService::DOMAIN_NAMESPACE,
             'CurrentPhaseDescription'  => TimeframeService::DOMAIN_NAMESPACE,
             'CurrentStatusCode'        => TimeframeService::DOMAIN_NAMESPACE,
@@ -106,24 +103,24 @@ class Status extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string|null $CurrentPhaseCode */
+    /** @var string|null */
     protected $CurrentPhaseCode;
-    /** @var string|null $CurrentPhaseDescription */
+    /** @var string|null */
     protected $CurrentPhaseDescription;
-    /** @var string|null $CurrentStatusCode */
+    /** @var string|null */
     protected $CurrentStatusCode;
-    /** @var string|null $CurrentStatusDescription */
+    /** @var string|null */
     protected $CurrentStatusDescription;
-    /** @var string|null $CurrentStatusTimeStamp */
+    /** @var string|null */
     protected $CurrentStatusTimeStamp;
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param null|string $phaseCode
-     * @param null|string $phaseDesc
-     * @param null|string $statusCode
-     * @param null|string $statusDesc
-     * @param null|string $timeStamp
+     * @param string|null $phaseCode
+     * @param string|null $phaseDesc
+     * @param string|null $statusCode
+     * @param string|null $statusDesc
+     * @param string|null $timeStamp
      */
     public function __construct(
         $phaseCode = null,

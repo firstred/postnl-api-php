@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -36,17 +36,14 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class ReasonNoTimeframe
+ * Class ReasonNoTimeframe.
  *
- * @package ThirtyBees\PostNL\Entity
- *
- * @method string|null   getCode()
- * @method string|null   getDate()
- * @method string|null   getDescription()
- * @method string[]|null getOptions()
- * @method string|null   getFrom()
- * @method string|null   getTo()
- *
+ * @method string|null       getCode()
+ * @method string|null       getDate()
+ * @method string|null       getDescription()
+ * @method string[]|null     getOptions()
+ * @method string|null       getFrom()
+ * @method string|null       getTo()
  * @method ReasonNoTimeframe setCode(string|null $code = null)
  * @method ReasonNoTimeframe setDate(string|null $date = null)
  * @method ReasonNoTimeframe setDescription(string|null $desc = null)
@@ -56,9 +53,9 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  */
 class ReasonNoTimeframe extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
+    /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'Code'        => BarcodeService::DOMAIN_NAMESPACE,
             'Date'        => BarcodeService::DOMAIN_NAMESPACE,
             'Description' => BarcodeService::DOMAIN_NAMESPACE,
@@ -66,7 +63,7 @@ class ReasonNoTimeframe extends AbstractEntity
             'From'        => BarcodeService::DOMAIN_NAMESPACE,
             'To'          => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'Code'        => ConfirmingService::DOMAIN_NAMESPACE,
             'Date'        => ConfirmingService::DOMAIN_NAMESPACE,
             'Description' => ConfirmingService::DOMAIN_NAMESPACE,
@@ -74,7 +71,7 @@ class ReasonNoTimeframe extends AbstractEntity
             'From'        => ConfirmingService::DOMAIN_NAMESPACE,
             'To'          => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'Code'        => LabellingService::DOMAIN_NAMESPACE,
             'Date'        => LabellingService::DOMAIN_NAMESPACE,
             'Description' => LabellingService::DOMAIN_NAMESPACE,
@@ -90,7 +87,7 @@ class ReasonNoTimeframe extends AbstractEntity
             'From'        => ShippingStatusService::DOMAIN_NAMESPACE,
             'To'          => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'Code'        => DeliveryDateService::DOMAIN_NAMESPACE,
             'Date'        => DeliveryDateService::DOMAIN_NAMESPACE,
             'Description' => DeliveryDateService::DOMAIN_NAMESPACE,
@@ -98,7 +95,7 @@ class ReasonNoTimeframe extends AbstractEntity
             'From'        => DeliveryDateService::DOMAIN_NAMESPACE,
             'To'          => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'Code'        => LocationService::DOMAIN_NAMESPACE,
             'Date'        => LocationService::DOMAIN_NAMESPACE,
             'Description' => LocationService::DOMAIN_NAMESPACE,
@@ -106,7 +103,7 @@ class ReasonNoTimeframe extends AbstractEntity
             'From'        => LocationService::DOMAIN_NAMESPACE,
             'To'          => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'Code'        => TimeframeService::DOMAIN_NAMESPACE,
             'Date'        => TimeframeService::DOMAIN_NAMESPACE,
             'Description' => TimeframeService::DOMAIN_NAMESPACE,
@@ -116,17 +113,17 @@ class ReasonNoTimeframe extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string|null $Code */
+    /** @var string|null */
     protected $Code;
-    /** @var string|null $Date */
+    /** @var string|null */
     protected $Date;
-    /** @var string|null $Description */
+    /** @var string|null */
     protected $Description;
-    /** @var string[]|null $Options */
+    /** @var string[]|null */
     protected $Options;
-    /** @var string|null $From */
+    /** @var string|null */
     protected $From;
-    /** @var string|null $To */
+    /** @var string|null */
     protected $To;
     // @codingStandardsIgnoreEnd
 
@@ -157,7 +154,7 @@ class ReasonNoTimeframe extends AbstractEntity
     }
 
     /**
-     * Return a serializable array for the XMLWriter
+     * Return a serializable array for the XMLWriter.
      *
      * @param Writer $writer
      *
@@ -173,12 +170,12 @@ class ReasonNoTimeframe extends AbstractEntity
         }
 
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if ($propertyName === 'Options') {
+            if ('Options' === $propertyName) {
                 if (isset($this->Options)) {
                     $options = [];
                     if (is_array($this->Options)) {
                         foreach ($this->Options as $option) {
-                            $options[] = ["{http://schemas.microsoft.com/2003/10/Serialization/Arrays}string" => $option];
+                            $options[] = ['{http://schemas.microsoft.com/2003/10/Serialization/Arrays}string' => $option];
                         }
                     }
                     $xml["{{$namespace}}Options"] = $options;

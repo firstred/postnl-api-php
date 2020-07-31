@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -37,33 +37,30 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class GetDeliveryDateResponse
+ * Class GetDeliveryDateResponse.
  *
- * @package ThirtyBees\PostNL\Entity
- *
- * @method string|null   getDeliveryDate()
- * @method string[]|null getOptions()
- *
+ * @method string|null             getDeliveryDate()
+ * @method string[]|null           getOptions()
  * @method GetDeliveryDateResponse setDeliveryDate(string|null $date = null)
  * @method GetDeliveryDateResponse setOptions(string[]|null $options = null)
  */
 class GetDeliveryDateResponse extends AbstractEntity
 {
     /**
-     * Default properties and namespaces for the SOAP API
+     * Default properties and namespaces for the SOAP API.
      *
-     * @var array $defaultProperties
+     * @var array
      */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'DeliveryDate' => BarcodeService::DOMAIN_NAMESPACE,
             'Options'      => 'http://schemas.microsoft.com/2003/10/Serialization/Arrays',
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'DeliveryDate' => ConfirmingService::DOMAIN_NAMESPACE,
             'Options'      => 'http://schemas.microsoft.com/2003/10/Serialization/Arrays',
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'DeliveryDate' => LabellingService::DOMAIN_NAMESPACE,
             'Options'      => 'http://schemas.microsoft.com/2003/10/Serialization/Arrays',
         ],
@@ -71,30 +68,30 @@ class GetDeliveryDateResponse extends AbstractEntity
             'DeliveryDate' => ShippingStatusService::DOMAIN_NAMESPACE,
             'Options'      => 'http://schemas.microsoft.com/2003/10/Serialization/Arrays',
         ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'DeliveryDate' => DeliveryDateService::DOMAIN_NAMESPACE,
             'Options'      => 'http://schemas.microsoft.com/2003/10/Serialization/Arrays',
         ],
-        'Location'       => [
+        'Location' => [
             'DeliveryDate' => LocationService::DOMAIN_NAMESPACE,
             'Options'      => 'http://schemas.microsoft.com/2003/10/Serialization/Arrays',
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'DeliveryDate' => TimeframeService::DOMAIN_NAMESPACE,
             'Options'      => 'http://schemas.microsoft.com/2003/10/Serialization/Arrays',
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string|null $DeliveryDate */
+    /** @var string|null */
     protected $DeliveryDate;
-    /** @var string[]|null $Options */
+    /** @var string[]|null */
     protected $Options;
     // @codingStandardsIgnoreEnd
 
     /**
      * GetDeliveryDateResponse constructor.
      *
-     * @param string|null      $date
+     * @param string|null   $date
      * @param string[]|null $options
      */
     public function __construct($date = null, array $options = null)
@@ -106,7 +103,7 @@ class GetDeliveryDateResponse extends AbstractEntity
     }
 
     /**
-     * Return a serializable array for the XMLWriter
+     * Return a serializable array for the XMLWriter.
      *
      * @param Writer $writer
      *
@@ -122,7 +119,7 @@ class GetDeliveryDateResponse extends AbstractEntity
         }
 
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if ($propertyName === 'Shipments') {
+            if ('Shipments' === $propertyName) {
                 $options = [];
                 if (is_array($this->Options)) {
                     foreach ($this->Options as $option) {

@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -33,40 +33,38 @@ use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\LabellingService;
 
 /**
- * Class Body
+ * Class Body.
  *
  * NOTE: this class has been introduced for deserializing
- *
- * @package ThirtyBees\PostNL\Entity
  */
 class Body extends AbstractEntity
 {
-    /** @var array $defaultProperties */
+    /** @var array */
     public static $defaultProperties = [
-        'Barcode'    => [
+        'Barcode' => [
             'GenerateBarcodeResponse' => BarcodeService::ENVELOPE_NAMESPACE,
         ],
         'Confirming' => [
             'GenerateBarcodeResponse' => ConfirmingService::ENVELOPE_NAMESPACE,
         ],
-        'Labelling'  => [
+        'Labelling' => [
             'GenerateBarcodeResponse' => LabellingService::ENVELOPE_NAMESPACE,
         ],
-        'ShippingStatus'  => [
+        'ShippingStatus' => [
             'GenerateBarcodeResponse' => LabellingService::ENVELOPE_NAMESPACE,
         ],
-        'DeliveryDate'  => [
+        'DeliveryDate' => [
             'GenerateBarcodeResponse' => LabellingService::ENVELOPE_NAMESPACE,
         ],
-        'Location'  => [
+        'Location' => [
             'GenerateBarcodeResponse' => LabellingService::ENVELOPE_NAMESPACE,
         ],
-        'Timeframe'  => [
+        'Timeframe' => [
             'GenerateBarcodeResponse' => LabellingService::ENVELOPE_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var GenerateBarcodeResponse|null $GenerateBarcodeResponse */
+    /** @var GenerateBarcodeResponse|null */
     protected $GenerateBarcodeResponse;
     // @codingStandardsIgnoreEnd
 }

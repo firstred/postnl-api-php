@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -25,27 +25,26 @@
  */
 
 namespace ThirtyBees\PostNL\HttpClient;
+
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Psr\Log\LoggerInterface;
 use ThirtyBees\PostNL\Exception\HttpClientException;
 
 /**
- * Interface ClientInterface
- *
- * @package ThirtyBees\PostNL\HttpClient
+ * Interface ClientInterface.
  */
 interface ClientInterface
 {
     /**
-     * Set the logger
+     * Set the logger.
      *
      * @param LoggerInterface $logger
      */
     public function setLogger(LoggerInterface $logger);
 
     /**
-     * Get the HTTP Client instance
+     * Get the HTTP Client instance.
      *
      * @return static
      */
@@ -53,7 +52,7 @@ interface ClientInterface
 
     /**
      * Adds a request to the list of pending requests
-     * Using the ID you can replace a request
+     * Using the ID you can replace a request.
      *
      * @param string $id      Request ID
      * @param string $request PSR-7 request
@@ -63,7 +62,7 @@ interface ClientInterface
     public function addOrUpdateRequest($id, $request);
 
     /**
-     * Set the verify setting
+     * Set the verify setting.
      *
      * @param bool|string $verify
      *
@@ -72,26 +71,26 @@ interface ClientInterface
     public function setVerify($verify);
 
     /**
-     * Return verify setting
+     * Return verify setting.
      *
      * @return bool|string
      */
     public function getVerify();
 
     /**
-     * Remove a request from the list of pending requests
+     * Remove a request from the list of pending requests.
      *
      * @param string $id
      */
     public function removeRequest($id);
 
     /**
-     * Clear all requests
+     * Clear all requests.
      */
     public function clearRequests();
 
     /**
-     * Do a single request
+     * Do a single request.
      *
      * Exceptions are captured into the result array
      *
@@ -102,7 +101,7 @@ interface ClientInterface
     public function doRequest(Request $request);
 
     /**
-     * Do all async requests
+     * Do all async requests.
      *
      * Exceptions are captured into the result array
      *

@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -43,23 +43,22 @@ use ThirtyBees\PostNL\PostNL;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class TimeframeServiceRestTest
- *
- * @package ThirtyBees\PostNL\Tests\Service
+ * Class TimeframeServiceRestTest.
  *
  * @testdox The TimeframeService (REST)
  */
 class TimeframeServiceRestTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var PostNL $postnl */
+    /** @var PostNL */
     protected $postnl;
-    /** @var TimeframeService $service */
+    /** @var TimeframeService */
     protected $service;
-    /** @var $lastRequest */
+    /** @var */
     protected $lastRequest;
 
     /**
      * @before
+     *
      * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
      */
     public function setupPostNL()
@@ -80,8 +79,7 @@ class TimeframeServiceRestTest extends \PHPUnit_Framework_TestCase
                     'Zipcode'     => '2132WT',
                 ]))
                 ->setGlobalPackBarcodeType('AB')
-                ->setGlobalPackCustomerCode('1234')
-            , new UsernameToken(null, 'test'),
+                ->setGlobalPackCustomerCode('1234'), new UsernameToken(null, 'test'),
             false,
             PostNL::MODE_REST
         );
@@ -125,12 +123,12 @@ class TimeframeServiceRestTest extends \PHPUnit_Framework_TestCase
                         ->setHouseNr('42')
                         ->setHouseNrExt('A')
                         ->setOptions([
-                            'Evening'
+                            'Evening',
                         ])
                         ->setPostalCode('2132WT')
                         ->setStartDate('30-06-2016')
                         ->setStreet('Siriusdreef')
-                        ->setSundaySorting(true)
+                        ->setSundaySorting(true),
                 ])
         );
 
@@ -205,102 +203,102 @@ class TimeframeServiceRestTest extends \PHPUnit_Framework_TestCase
             'Timeframes' => [
                 'Timeframe' => [
                     [
-                        'Date' => '07-03-2018',
+                        'Date'       => '07-03-2018',
                         'Timeframes' => [
                             'TimeframeTimeFrame' => [
                                 [
-                                    'From' => '16:00:00',
+                                    'From'    => '16:00:00',
                                     'Options' => [
                                         'string' => 'Daytime',
                                     ],
                                     'To' => '18:30:00',
                                 ],
                                 [
-                                    'From' => '18:00:00',
+                                    'From'    => '18:00:00',
                                     'Options' => [
                                         'string' => 'Evening',
                                     ],
                                     'To' => '22:00:00',
                                 ],
-                            ]
-                        ]
+                            ],
+                        ],
                     ],
                     [
-                        'Date' => '08-03-2018',
+                        'Date'       => '08-03-2018',
                         'Timeframes' => [
                             'TimeframeTimeFrame' => [
                                 [
-                                    'From' => '15:45:00',
+                                    'From'    => '15:45:00',
                                     'Options' => [
                                         'string' => 'Daytime',
                                     ],
                                     'To' => '18:15:00',
                                 ],
                                 [
-                                    'From' => '18:00:00',
+                                    'From'    => '18:00:00',
                                     'Options' => [
                                         'string' => 'Evening',
                                     ],
                                     'To' => '22:00:00',
                                 ],
-                            ]
-                        ]
+                            ],
+                        ],
                     ],
                     [
-                        'Date' => '09-03-2018',
+                        'Date'       => '09-03-2018',
                         'Timeframes' => [
                             'TimeframeTimeFrame' => [
                                 [
-                                    'From' => '15:30:00',
+                                    'From'    => '15:30:00',
                                     'Options' => [
                                         'string' => 'Daytime',
                                     ],
                                     'To' => '18:00:00',
                                 ],
                                 [
-                                    'From' => '18:00:00',
+                                    'From'    => '18:00:00',
                                     'Options' => [
                                         'string' => 'Evening',
                                     ],
                                     'To' => '22:00:00',
                                 ],
-                            ]
-                        ]
+                            ],
+                        ],
                     ],
                     [
-                        'Date' => '10-03-2018',
+                        'Date'       => '10-03-2018',
                         'Timeframes' => [
                             'TimeframeTimeFrame' => [
                                 [
-                                    'From' => '16:15:00',
+                                    'From'    => '16:15:00',
                                     'Options' => [
                                         'string' => 'Daytime',
                                     ],
                                     'To' => '18:45:00',
                                 ],
-                            ]
-                        ]
+                            ],
+                        ],
                     ],
                     [
-                        'Date' => '13-03-2018',
+                        'Date'       => '13-03-2018',
                         'Timeframes' => [
                             'TimeframeTimeFrame' => [
                                 [
-                                    'From' => '16:00:00',
+                                    'From'    => '16:00:00',
                                     'Options' => [
                                         'string' => 'Daytime',
                                     ],
                                     'To' => '18:30:00',
                                 ],
                                 [
-                                    'From' => '18:00:00',
+                                    'From'    => '18:00:00',
                                     'Options' => [
                                         'string' => 'Evening',
                                     ],
                                     'To' => '22:00:00',
                                 ],
-                            ]
-                        ]
+                            ],
+                        ],
                     ],
                     [
                         'Date'       => '14-03-2018',
@@ -311,20 +309,20 @@ class TimeframeServiceRestTest extends \PHPUnit_Framework_TestCase
                                     'Options' => [
                                         'string' => 'Daytime',
                                     ],
-                                    'To'      => '18:30:00',
+                                    'To' => '18:30:00',
                                 ],
                                 [
                                     'From'    => '18:00:00',
                                     'Options' => [
                                         'string' => 'Evening',
                                     ],
-                                    'To'      => '20:00:00',
+                                    'To' => '20:00:00',
                                 ],
                             ],
                         ],
                     ],
-                ]
-            ]
+                ],
+            ],
         ];
         $mock = new MockHandler([
             new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode($payload)),
@@ -348,7 +346,7 @@ class TimeframeServiceRestTest extends \PHPUnit_Framework_TestCase
                     ->setPostalCode('2132WT')
                     ->setStartDate('30-06-2016')
                     ->setStreet('Siriusdreef')
-                    ->setSundaySorting(false)
+                    ->setSundaySorting(false),
                 ])
         );
 

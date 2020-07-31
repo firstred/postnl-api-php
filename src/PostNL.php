@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -81,9 +81,7 @@ use ThirtyBees\PostNL\Util\RFPdi;
 use ThirtyBees\PostNL\Util\Util;
 
 /**
- * Class PostNL
- *
- * @package ThirtyBees\PostNL
+ * Class PostNL.
  */
 class PostNL implements LoggerAwareInterface
 {
@@ -95,7 +93,7 @@ class PostNL implements LoggerAwareInterface
     const MODE_LEGACY = 5;
 
     /**
-     * 3S (or EU Pack Special) countries
+     * 3S (or EU Pack Special) countries.
      *
      * @var array
      */
@@ -129,21 +127,21 @@ class PostNL implements LoggerAwareInterface
 
     /**
      * A6 positions
-     * (index = amount of a6 left on the page)
+     * (index = amount of a6 left on the page).
      *
      * @var array
      */
     public static $a6positions = [
-        4 => [-276, 2  ],
-        3 => [-132, 2  ],
+        4 => [-276, 2],
+        3 => [-132, 2],
         2 => [-276, 110],
         1 => [-132, 110],
     ];
 
     /**
-     * Verify SSL certificate of the PostNL REST API
+     * Verify SSL certificate of the PostNL REST API.
      *
-     * @var bool $verifySslCerts
+     * @var bool
      */
     public $verifySslCerts = true;
 
@@ -157,60 +155,60 @@ class PostNL implements LoggerAwareInterface
      *   - When using the newer API (launched August 2017), do not pass a username (`null`)
      *     And pass the plaintext password.
      *
-     * @var string $apiKey
+     * @var string
      */
     protected $token;
 
     /**
      * The PostNL Customer to be used for requests.
      *
-     * @var Customer $customer
+     * @var Customer
      */
     protected $customer;
 
     /**
-     * Sandbox mode
+     * Sandbox mode.
      *
-     * @var bool $sandbox
+     * @var bool
      */
     protected $sandbox = false;
 
-    /** @var ClientInterface $httpClient */
+    /** @var ClientInterface */
     protected $httpClient;
 
-    /** @var LoggerInterface $logger */
+    /** @var LoggerInterface */
     protected $logger;
 
     /**
-     * This is the current mode
+     * This is the current mode.
      *
-     * @var int $mode
+     * @var int
      */
     protected $mode;
 
-    /** @var BarcodeService $barcodeService */
+    /** @var BarcodeService */
     protected $barcodeService;
 
-    /** @var LabellingService $labellingService */
+    /** @var LabellingService */
     protected $labellingService;
 
-    /** @var ConfirmingService $confirmingService */
+    /** @var ConfirmingService */
     protected $confirmingService;
 
-    /** @var ShippingStatusService $shippingStatusService */
+    /** @var ShippingStatusService */
     protected $shippingStatusService;
 
-    /** @var DeliveryDateService $deliveryDateService */
+    /** @var DeliveryDateService */
     protected $deliveryDateService;
 
-    /** @var TimeframeService $timeframeService */
+    /** @var TimeframeService */
     protected $timeframeService;
 
-    /** @var LocationService $locationService */
+    /** @var LocationService */
     protected $locationService;
 
-    /** @var ShippingService $shippingService */
-    protected  $shippingService;
+    /** @var ShippingService */
+    protected $shippingService;
 
     /**
      * PostNL constructor.
@@ -220,10 +218,10 @@ class PostNL implements LoggerAwareInterface
      * @param bool                 $sandbox
      * @param int                  $mode     Set the preferred connection strategy.
      *                                       Valid options are:
-     *                                         - `MODE_REST`: New REST API
-     *                                         - `MODE_SOAP`: New SOAP API
-     *                                         - `MODE_LEGACY`: Use the legacy API (the plug can
-     *                                            be pulled at any time)
+     *                                       - `MODE_REST`: New REST API
+     *                                       - `MODE_SOAP`: New SOAP API
+     *                                       - `MODE_LEGACY`: Use the legacy API (the plug can
+     *                                       be pulled at any time)
      *
      * @throws InvalidArgumentException
      */
@@ -240,11 +238,12 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Set the token
+     * Set the token.
      *
      * @param string|UsernameToken $token
      *
      * @return PostNL
+     *
      * @throws InvalidArgumentException
      */
     public function setToken($token)
@@ -263,7 +262,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Get REST API Key
+     * Get REST API Key.
      *
      * @return bool|string
      */
@@ -277,7 +276,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Get UsernameToken object (for SOAP)
+     * Get UsernameToken object (for SOAP).
      *
      * @return bool|UsernameToken
      */
@@ -291,7 +290,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Get PostNL Customer
+     * Get PostNL Customer.
      *
      * @return Customer
      */
@@ -301,7 +300,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Set PostNL Customer
+     * Set PostNL Customer.
      *
      * @param Customer $customer
      *
@@ -315,7 +314,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Get sandbox mode
+     * Get sandbox mode.
      *
      * @return bool
      */
@@ -325,7 +324,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Set sandbox mode
+     * Set sandbox mode.
      *
      * @param bool $sandbox
      *
@@ -339,7 +338,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Get the current mode
+     * Get the current mode.
      *
      * @return int
      */
@@ -349,7 +348,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Set current mode
+     * Set current mode.
      *
      * @param int $mode
      *
@@ -373,7 +372,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * HttpClient
+     * HttpClient.
      *
      * Automatically load Guzzle when available
      *
@@ -400,7 +399,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Set the HttpClient
+     * Set the HttpClient.
      *
      * @param ClientInterface $client
      */
@@ -410,7 +409,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Get the logger
+     * Get the logger.
      *
      * @return LoggerInterface
      */
@@ -420,7 +419,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Set the logger
+     * Set the logger.
      *
      * @param LoggerInterface $logger
      *
@@ -437,7 +436,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Barcode service
+     * Barcode service.
      *
      * Automatically load the barcode service
      *
@@ -453,7 +452,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Set the barcode service
+     * Set the barcode service.
      *
      * @param BarcodeService $service
      */
@@ -463,7 +462,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Labelling service
+     * Labelling service.
      *
      * Automatically load the labelling service
      *
@@ -479,7 +478,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Set the labelling service
+     * Set the labelling service.
      *
      * @param LabellingService $service
      */
@@ -489,7 +488,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Confirming service
+     * Confirming service.
      *
      * Automatically load the confirming service
      *
@@ -505,7 +504,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Set the confirming service
+     * Set the confirming service.
      *
      * @param ConfirmingService $service
      */
@@ -515,7 +514,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Shipping status service
+     * Shipping status service.
      *
      * Automatically load the shipping status service
      *
@@ -531,7 +530,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Set the shipping status service
+     * Set the shipping status service.
      *
      * @param ShippingStatusService $service
      */
@@ -541,7 +540,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Delivery date service
+     * Delivery date service.
      *
      * Automatically load the delivery date service
      *
@@ -557,10 +556,9 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Set the delivery date service
+     * Set the delivery date service.
      *
      * @param DeliveryDateService $service
-     *
      */
     public function setDeliveryDateService(DeliveryDateService $service)
     {
@@ -568,7 +566,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Timeframe service
+     * Timeframe service.
      *
      * Automatically load the timeframe service
      *
@@ -584,7 +582,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Set the timeframe service
+     * Set the timeframe service.
      *
      * @param TimeframeService $service
      */
@@ -594,7 +592,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Location service
+     * Location service.
      *
      * Automatically load the location service
      *
@@ -610,7 +608,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Set the location service
+     * Set the location service.
      *
      * @param LocationService $service
      */
@@ -620,7 +618,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Shipping service
+     * Shipping service.
      *
      * Automatically load the shipping service
      *
@@ -636,7 +634,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Set the shipping service
+     * Set the shipping service.
      *
      * @param ShippingService $service
      */
@@ -647,8 +645,8 @@ class PostNL implements LoggerAwareInterface
 
     /**
      * @param Shipment $shipment
-     * @param string $printertype
-     * @param bool $confirm
+     * @param string   $printertype
+     * @param bool     $confirm
      *
      * @return Entity\Response\GenerateShippingResponse
      */
@@ -699,10 +697,10 @@ class PostNL implements LoggerAwareInterface
      *                                  4 => true,
      *                                  ]
      *                                  ```
-     *
      * @param string     $a6Orientation A6 orientation (P or L)
      *
      * @return GenerateShippingResponse|string
+     *
      * @throws AbstractException
      * @throws NotSupportedException
      * @throws \setasign\Fpdi\PdfReader\PdfReaderException
@@ -722,7 +720,7 @@ class PostNL implements LoggerAwareInterface
         $a6Orientation = 'P'
     ) {
         if ($merge) {
-            if ($printertype !== 'GraphicFile|PDF') {
+            if ('GraphicFile|PDF' !== $printertype) {
                 throw new NotSupportedException('Labels with the chosen printer type cannot be merged');
             }
             foreach ([1, 2, 3, 4] as $i) {
@@ -746,21 +744,21 @@ class PostNL implements LoggerAwareInterface
         }
 
         // Disable header and footer
-        $pdf = new RFPdi('P', 'mm', $format === Label::FORMAT_A4 ? [210, 297] : [105, 148]);
+        $pdf = new RFPdi('P', 'mm', Label::FORMAT_A4 === $format ? [210, 297] : [105, 148]);
         $deferred = [];
         $firstPage = true;
-        if ($format === Label::FORMAT_A6) {
+        if (Label::FORMAT_A6 === $format) {
             foreach ($labels->getResponseShipments() as $label) {
                 $pdfContent = base64_decode($label->getLabels()[0]->getContent());
                 $sizes = Util::getPdfSizeAndOrientation($pdfContent);
-                if ($sizes['iso'] === 'A6') {
+                if ('A6' === $sizes['iso']) {
                     $pdf->addPage($a6Orientation);
                     $correction = [0, 0];
-                    if ($a6Orientation === 'L' && $sizes['orientation'] === 'P') {
+                    if ('L' === $a6Orientation && 'P' === $sizes['orientation']) {
                         $correction[0] = -84;
                         $correction[1] = -0.5;
                         $pdf->rotateCounterClockWise();
-                    } elseif ($a6Orientation === 'P' && $sizes['orientation'] === 'L') {
+                    } elseif ('P' === $a6Orientation && 'L' === $sizes['orientation']) {
                         $pdf->rotateCounterClockWise();
                     }
                     $pdf->setSourceFile(StreamReader::createByString($pdfContent));
@@ -776,14 +774,14 @@ class PostNL implements LoggerAwareInterface
             foreach ($labels->getResponseShipments() as $label) {
                 $pdfContent = base64_decode($label->getLabels()[0]->getContent());
                 $sizes = Util::getPdfSizeAndOrientation($pdfContent);
-                if ($sizes['iso'] === 'A6') {
+                if ('A6' === $sizes['iso']) {
                     if ($firstPage) {
                         $pdf->addPage('P', [297, 210], 90);
                     }
                     $firstPage = false;
                     while (empty($positions[5 - $a6s]) && $a6s >= 1) {
                         $positions[5 - $a6s] = true;
-                        $a6s--;
+                        --$a6s;
                     }
                     if ($a6s < 1) {
                         $pdf->addPage('P', [297, 210], 90);
@@ -792,7 +790,7 @@ class PostNL implements LoggerAwareInterface
                     $pdf->rotateCounterClockWise();
                     $pdf->setSourceFile(StreamReader::createByString($pdfContent));
                     $pdf->useTemplate($pdf->importPage(1), static::$a6positions[$a6s][0], static::$a6positions[$a6s][1]);
-                    $a6s--;
+                    --$a6s;
                     if ($a6s < 1) {
                         if ($label !== end($labels)) {
                             $pdf->addPage('P', [297, 210], 90);
@@ -820,7 +818,7 @@ class PostNL implements LoggerAwareInterface
             $pdf->rotateCounterClockWise();
             if (is_array($defer['stream']) && count($defer['stream']) > 1) {
                 // Multilabel
-                if (count($deferred['stream']) === 2) {
+                if (2 === count($deferred['stream'])) {
                     $pdf->setSourceFile($defer['stream'][0]);
                     $pdf->useTemplate($pdf->importPage(1), -190, 0);
                     $pdf->setSourceFile($defer['stream'][1]);
@@ -830,9 +828,9 @@ class PostNL implements LoggerAwareInterface
                     $pdf->useTemplate($pdf->importPage(1), -190, 0);
                     $pdf->setSourceFile($defer['stream'][1]);
                     $pdf->useTemplate($pdf->importPage(1), -190, 148);
-                    for ($i = 2; $i < count($defer['stream']); $i++) {
+                    for ($i = 2; $i < count($defer['stream']); ++$i) {
                         $pages = $pdf->setSourceFile($defer['stream'][$i]);
-                        for ($j = 1; $j < $pages + 1; $j++) {
+                        for ($j = 1; $j < $pages + 1; ++$j) {
                             $pdf->addPage($sizes['orientation'], 'A4');
                             $pdf->rotateCounterClockWise();
                             $pdf->useTemplate($pdf->importPage(1), -190, 0);
@@ -853,7 +851,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Generate a single barcode
+     * Generate a single barcode.
      *
      * @param string $type
      * @param string $range
@@ -861,11 +859,12 @@ class PostNL implements LoggerAwareInterface
      * @param bool   $eps
      *
      * @return string The barcode as a string
+     *
      * @throws InvalidBarcodeException
      */
     public function generateBarcode($type = '3S', $range = null, $serie = null, $eps = false)
     {
-        if (!in_array($type, ['2S', '3S']) || strlen($type) !== 2) {
+        if (!in_array($type, ['2S', '3S']) || 2 !== strlen($type)) {
             throw new InvalidBarcodeException("Barcode type `$type` is invalid");
         }
 
@@ -888,11 +887,12 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Generate a single barcode by country code
+     * Generate a single barcode by country code.
      *
      * @param string $iso 2-letter Country ISO Code
      *
      * @return string The Barcode as a string
+     *
      * @throws InvalidConfigurationException
      * @throws InvalidBarcodeException
      */
@@ -916,18 +916,19 @@ class PostNL implements LoggerAwareInterface
         $serie = $this->findBarcodeSerie(
             $type,
             $range,
-            strtoupper($iso) !== 'NL' && in_array(strtoupper($iso), static::$threeSCountries)
+            'NL' !== strtoupper($iso) && in_array(strtoupper($iso), static::$threeSCountries)
         );
 
         return $this->getBarcodeService()->generateBarcode(new GenerateBarcode(new Barcode($type, $range, $serie), $this->customer));
     }
 
     /**
-     * Generate a single barcode by country code
+     * Generate a single barcode by country code.
      *
-     * @param  array $isos key = iso code, value = amount of barcodes requested
+     * @param array $isos key = iso code, value = amount of barcodes requested
      *
      * @return array Country isos with the barcode as string
+     *
      * @throws InvalidConfigurationException
      * @throws InvalidBarcodeException
      */
@@ -958,12 +959,12 @@ class PostNL implements LoggerAwareInterface
             $serie = $this->findBarcodeSerie(
                 $type,
                 $range,
-                strtoupper($iso) !== 'NL' && in_array(strtoupper($iso), static::$threeSCountries)
+                'NL' !== strtoupper($iso) && in_array(strtoupper($iso), static::$threeSCountries)
             );
 
-            for ($i = 0; $i < $qty; $i++) {
+            for ($i = 0; $i < $qty; ++$i) {
                 $generateBarcodes[] = (new GenerateBarcode(new Barcode($type, $range, $serie), $this->customer))->setId("$iso-$index");
-                $index++;
+                ++$index;
             }
         }
 
@@ -1004,7 +1005,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Generate or retrieve multiple labels
+     * Generate or retrieve multiple labels.
      *
      * Note that instead of returning a GenerateLabelResponse this function can merge the labels and return a
      * string which contains the PDF with the merged pages as well.
@@ -1041,10 +1042,10 @@ class PostNL implements LoggerAwareInterface
      *                                  4 => true,
      *                                  ]
      *                                  ```
-     *
      * @param string     $a6Orientation A6 orientation (P or L)
      *
      * @return GenerateLabelResponse[]|string
+     *
      * @throws AbstractException
      * @throws NotSupportedException
      * @throws \setasign\Fpdi\PdfReader\PdfReaderException
@@ -1064,7 +1065,7 @@ class PostNL implements LoggerAwareInterface
         $a6Orientation = 'P'
     ) {
         if ($merge) {
-            if ($printertype !== 'GraphicFile|PDF') {
+            if ('GraphicFile|PDF' !== $printertype) {
                 throw new NotSupportedException('Labels with the chosen printer type cannot be merged');
             }
             foreach ([1, 2, 3, 4] as $i) {
@@ -1091,21 +1092,21 @@ class PostNL implements LoggerAwareInterface
         }
 
         // Disable header and footer
-        $pdf = new RFPdi('P', 'mm', $format === Label::FORMAT_A4 ? [210, 297] : [105, 148]);
+        $pdf = new RFPdi('P', 'mm', Label::FORMAT_A4 === $format ? [210, 297] : [105, 148]);
         $deferred = [];
         $firstPage = true;
-        if ($format === Label::FORMAT_A6) {
+        if (Label::FORMAT_A6 === $format) {
             foreach ($labels as $label) {
                 $pdfContent = base64_decode($label->getResponseShipments()[0]->getLabels()[0]->getContent());
                 $sizes = Util::getPdfSizeAndOrientation($pdfContent);
-                if ($sizes['iso'] === 'A6') {
+                if ('A6' === $sizes['iso']) {
                     $pdf->addPage($a6Orientation);
                     $correction = [0, 0];
-                    if ($a6Orientation === 'L' && $sizes['orientation'] === 'P') {
+                    if ('L' === $a6Orientation && 'P' === $sizes['orientation']) {
                         $correction[0] = -84;
                         $correction[1] = -0.5;
                         $pdf->rotateCounterClockWise();
-                    } elseif ($a6Orientation === 'P' && $sizes['orientation'] === 'L') {
+                    } elseif ('P' === $a6Orientation && 'L' === $sizes['orientation']) {
                         $pdf->rotateCounterClockWise();
                     }
                     $pdf->setSourceFile(StreamReader::createByString($pdfContent));
@@ -1124,14 +1125,14 @@ class PostNL implements LoggerAwareInterface
                 }
                 $pdfContent = base64_decode($label->getResponseShipments()[0]->getLabels()[0]->getContent());
                 $sizes = Util::getPdfSizeAndOrientation($pdfContent);
-                if ($sizes['iso'] === 'A6') {
+                if ('A6' === $sizes['iso']) {
                     if ($firstPage) {
                         $pdf->addPage('P', [297, 210], 90);
                     }
                     $firstPage = false;
                     while (empty($positions[5 - $a6s]) && $a6s >= 1) {
                         $positions[5 - $a6s] = true;
-                        $a6s--;
+                        --$a6s;
                     }
                     if ($a6s < 1) {
                         $pdf->addPage('P', [297, 210], 90);
@@ -1140,7 +1141,7 @@ class PostNL implements LoggerAwareInterface
                     $pdf->rotateCounterClockWise();
                     $pdf->setSourceFile(StreamReader::createByString($pdfContent));
                     $pdf->useTemplate($pdf->importPage(1), static::$a6positions[$a6s][0], static::$a6positions[$a6s][1]);
-                    $a6s--;
+                    --$a6s;
                     if ($a6s < 1) {
                         if ($label !== end($labels)) {
                             $pdf->addPage('P', [297, 210], 90);
@@ -1168,7 +1169,7 @@ class PostNL implements LoggerAwareInterface
             $pdf->rotateCounterClockWise();
             if (is_array($defer['stream']) && count($defer['stream']) > 1) {
                 // Multilabel
-                if (count($deferred['stream']) === 2) {
+                if (2 === count($deferred['stream'])) {
                     $pdf->setSourceFile($defer['stream'][0]);
                     $pdf->useTemplate($pdf->importPage(1), -190, 0);
                     $pdf->setSourceFile($defer['stream'][1]);
@@ -1178,9 +1179,9 @@ class PostNL implements LoggerAwareInterface
                     $pdf->useTemplate($pdf->importPage(1), -190, 0);
                     $pdf->setSourceFile($defer['stream'][1]);
                     $pdf->useTemplate($pdf->importPage(1), -190, 148);
-                    for ($i = 2; $i < count($defer['stream']); $i++) {
+                    for ($i = 2; $i < count($defer['stream']); ++$i) {
                         $pages = $pdf->setSourceFile($defer['stream'][$i]);
-                        for ($j = 1; $j < $pages + 1; $j++) {
+                        for ($j = 1; $j < $pages + 1; ++$j) {
                             $pdf->addPage($sizes['orientation'], 'A4');
                             $pdf->rotateCounterClockWise();
                             $pdf->useTemplate($pdf->importPage(1), -190, 0);
@@ -1201,7 +1202,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Confirm a single shipment
+     * Confirm a single shipment.
      *
      * @param Shipment $shipment
      *
@@ -1213,7 +1214,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Confirm multiple shipments
+     * Confirm multiple shipments.
      *
      * @param array $shipments
      *
@@ -1230,7 +1231,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Get the current status of a shipment
+     * Get the current status of a shipment.
      *
      * This is a combi-function, supporting the following:
      * - CurrentStatus (by barcode):
@@ -1262,7 +1263,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Get the complete status of a shipment
+     * Get the complete status of a shipment.
      *
      * This is a combi-function, supporting the following:
      * - CurrentStatus (by barcode):
@@ -1283,7 +1284,7 @@ class PostNL implements LoggerAwareInterface
     {
         $fullCustomer = $this->getCustomer();
 
-        $completeStatus->setCustomer((new Customer)
+        $completeStatus->setCustomer((new Customer())
             ->setCustomerCode($fullCustomer->getCustomerCode())
             ->setCustomerNumber($fullCustomer->getCustomerNumber())
         );
@@ -1295,7 +1296,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Get the signature of a shipment
+     * Get the signature of a shipment.
      *
      * @param GetSignature $signature
      *
@@ -1312,7 +1313,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Get a delivery date
+     * Get a delivery date.
      *
      * @param GetDeliveryDate $getDeliveryDate
      *
@@ -1324,7 +1325,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Get a shipping date
+     * Get a shipping date.
      *
      * @param GetSentDateRequest $getSentDate
      *
@@ -1336,7 +1337,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Get timeframes
+     * Get timeframes.
      *
      * @param GetTimeframes $getTimeframes
      *
@@ -1348,7 +1349,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Get nearest locations
+     * Get nearest locations.
      *
      * @param GetNearestLocations $getNearestLocations
      *
@@ -1363,7 +1364,7 @@ class PostNL implements LoggerAwareInterface
      * All-in-one function for checkout widgets. It retrieves and returns the
      * - timeframes
      * - locations
-     * - delivery date
+     * - delivery date.
      *
      * @param GetTimeframes       $getTimeframes
      * @param GetNearestLocations $getNearestLocations
@@ -1424,7 +1425,7 @@ class PostNL implements LoggerAwareInterface
                     throw $response;
                 }
                 throw new InvalidArgumentException('Invalid multi-request');
-            } elseif ($response->getStatusCode() === 200) {
+            } elseif (200 === $response->getStatusCode()) {
                 switch ($type) {
                     case 'timeframes':
                         if ($itemTimeframe instanceof CacheItemInterface) {
@@ -1459,7 +1460,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Get locations in area
+     * Get locations in area.
      *
      * @param GetLocationsInArea $getLocationsInArea
      *
@@ -1471,7 +1472,7 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Get locations in area
+     * Get locations in area.
      *
      * @param GetLocation $getLocation
      *
@@ -1483,13 +1484,14 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Find a suitable serie for the barcode
+     * Find a suitable serie for the barcode.
      *
      * @param string $type
      * @param string $range
      * @param bool   $eps   Indicates whether it is an EPS Shipment
      *
      * @return string
+     *
      * @throws InvalidBarcodeException
      */
     public function findBarcodeSerie($type, $range, $eps)
@@ -1516,12 +1518,11 @@ class PostNL implements LoggerAwareInterface
                             break 2;
                         default:
                             throw new InvalidBarcodeException('Invalid range');
-
                             break;
                     }
                 }
                 // Regular domestic codes
-                $serie = (strlen($range) === 4 ? '987000000-987600000' : '0000000-9999999');
+                $serie = (4 === strlen($range) ? '987000000-987600000' : '0000000-9999999');
 
                 break;
             default:

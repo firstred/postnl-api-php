@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -29,11 +29,9 @@ namespace ThirtyBees\PostNL\Entity\SOAP;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
 
 /**
- * Class Header
+ * Class Header.
  *
  * NOTE: this class has been introduced for deserializing
- *
- * @package ThirtyBees\PostNL\Entity
  */
 class Header extends AbstractEntity
 {

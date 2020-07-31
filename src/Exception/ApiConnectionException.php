@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -27,17 +27,15 @@
 namespace ThirtyBees\PostNL\Exception;
 
 /**
- * Class ApiConnectionException
- *
- * @package ThirtyBees\PostNL\Exception
+ * Class ApiConnectionException.
  */
 class ApiConnectionException extends AbstractException
 {
-    /** @var string $body */
+    /** @var string */
     protected $body;
-    /** @var object $jsonBody */
+    /** @var object */
     protected $jsonBody;
-    /** @var array $headers */
+    /** @var array */
     protected $headers;
 
     /**
@@ -49,7 +47,7 @@ class ApiConnectionException extends AbstractException
      * @param object|null $jsonBody
      * @param array|null  $headers
      */
-    public function __construct($message = "", $code = 0, $body = null, $jsonBody = null, $headers = null)
+    public function __construct($message = '', $code = 0, $body = null, $jsonBody = null, $headers = null)
     {
         parent::__construct($message, $code, null);
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -40,37 +40,34 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class GenerateLabel
- *
- * @package ThirtyBees\PostNL\Entity
+ * Class GenerateLabel.
  *
  * @method Customer|null         getCustomer()
  * @method LabellingMessage|null getMessage()
  * @method Shipment[]|null       getShipments()
- *
- * @method GenerateLabel setCustomer(Customer|null $customer = null)
- * @method GenerateLabel setMessage(LabellingMessage|null $message = null)
- * @method GenerateLabel setShipments(Shipment[]|null $shipments = null)
+ * @method GenerateLabel         setCustomer(Customer|null $customer = null)
+ * @method GenerateLabel         setMessage(LabellingMessage|null $message = null)
+ * @method GenerateLabel         setShipments(Shipment[]|null $shipments = null)
  */
 class GenerateLabel extends AbstractEntity
 {
     /**
-     * Default properties and namespaces for the SOAP API
+     * Default properties and namespaces for the SOAP API.
      *
-     * @var array $defaultProperties
+     * @var array
      */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'Customer'  => BarcodeService::DOMAIN_NAMESPACE,
             'Message'   => BarcodeService::DOMAIN_NAMESPACE,
             'Shipments' => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'Customer'  => ConfirmingService::DOMAIN_NAMESPACE,
             'Message'   => ConfirmingService::DOMAIN_NAMESPACE,
             'Shipments' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'Customer'  => LabellingService::DOMAIN_NAMESPACE,
             'Message'   => LabellingService::DOMAIN_NAMESPACE,
             'Shipments' => LabellingService::DOMAIN_NAMESPACE,
@@ -80,28 +77,28 @@ class GenerateLabel extends AbstractEntity
             'Customer'  => ShippingStatusService::DOMAIN_NAMESPACE,
             'Shipments' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'Message'   => DeliveryDateService::DOMAIN_NAMESPACE,
             'Customer'  => DeliveryDateService::DOMAIN_NAMESPACE,
             'Shipments' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'Message'   => LocationService::DOMAIN_NAMESPACE,
             'Customer'  => LocationService::DOMAIN_NAMESPACE,
             'Shipments' => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'Message'   => TimeframeService::DOMAIN_NAMESPACE,
             'Customer'  => TimeframeService::DOMAIN_NAMESPACE,
             'Shipments' => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var Customer|null $Customer */
+    /** @var Customer|null */
     protected $Customer;
-    /** @var LabellingMessage|null $Message */
+    /** @var LabellingMessage|null */
     protected $Message;
-    /** @var Shipment[]|null $Shipments */
+    /** @var Shipment[]|null */
     protected $Shipments;
     // @codingStandardsIgnoreEnd
 
@@ -122,7 +119,7 @@ class GenerateLabel extends AbstractEntity
     }
 
     /**
-     * Return a serializable array for `json_encode`
+     * Return a serializable array for `json_encode`.
      *
      * @return array
      */
@@ -136,7 +133,7 @@ class GenerateLabel extends AbstractEntity
         foreach (array_keys(static::$defaultProperties[$this->currentService]) as $propertyName) {
             if (isset($this->{$propertyName})) {
                 // The REST API only seems to accept one shipment per request at the moment of writing (Sep. 24th, 2017)
-                if ($propertyName === 'Shipments' && count($this->{$propertyName}) >= 1) {
+                if ('Shipments' === $propertyName && count($this->{$propertyName}) >= 1) {
                     $json[$propertyName] = $this->{$propertyName}[0];
                 } else {
                     $json[$propertyName] = $this->{$propertyName};
@@ -148,7 +145,7 @@ class GenerateLabel extends AbstractEntity
     }
 
     /**
-     * Return a serializable array for the XMLWriter
+     * Return a serializable array for the XMLWriter.
      *
      * @param Writer $writer
      *
@@ -164,7 +161,7 @@ class GenerateLabel extends AbstractEntity
         }
 
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if ($propertyName === 'Shipments') {
+            if ('Shipments' === $propertyName) {
                 $shipments = [];
                 foreach ($this->Shipments as $shipment) {
                     $shipments[] = ["{{$namespace}}Shipment" => $shipment];

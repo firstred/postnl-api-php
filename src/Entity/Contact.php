@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -36,37 +36,34 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class Contact
- *
- * @package ThirtyBees\PostNL\Entity
+ * Class Contact.
  *
  * @method string|null getContactType()
  * @method string|null getEmail()
  * @method string|null getSMSNr()
  * @method string|null getTelNr()
- *
- * @method Contact setContactType(string|null $contactType = null)
- * @method Contact setEmail(string|null $email = null)
- * @method Contact setSMSNr(string|null $smsNr = null)
- * @method Contact setTelNr(string|null $telNr = null)
+ * @method Contact     setContactType(string|null $contactType = null)
+ * @method Contact     setEmail(string|null $email = null)
+ * @method Contact     setSMSNr(string|null $smsNr = null)
+ * @method Contact     setTelNr(string|null $telNr = null)
  */
 class Contact extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
+    /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'ContactType' => BarcodeService::DOMAIN_NAMESPACE,
             'Email'       => BarcodeService::DOMAIN_NAMESPACE,
             'SMSNr'       => BarcodeService::DOMAIN_NAMESPACE,
             'TelNr'       => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'ContactType' => ConfirmingService::DOMAIN_NAMESPACE,
             'Email'       => ConfirmingService::DOMAIN_NAMESPACE,
             'SMSNr'       => ConfirmingService::DOMAIN_NAMESPACE,
             'TelNr'       => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'ContactType' => LabellingService::DOMAIN_NAMESPACE,
             'Email'       => LabellingService::DOMAIN_NAMESPACE,
             'SMSNr'       => LabellingService::DOMAIN_NAMESPACE,
@@ -78,25 +75,25 @@ class Contact extends AbstractEntity
             'SMSNr'       => ShippingStatusService::DOMAIN_NAMESPACE,
             'TelNr'       => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'ContactType' => DeliveryDateService::DOMAIN_NAMESPACE,
             'Email'       => DeliveryDateService::DOMAIN_NAMESPACE,
             'SMSNr'       => DeliveryDateService::DOMAIN_NAMESPACE,
             'TelNr'       => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'ContactType' => LocationService::DOMAIN_NAMESPACE,
             'Email'       => LocationService::DOMAIN_NAMESPACE,
             'SMSNr'       => LocationService::DOMAIN_NAMESPACE,
             'TelNr'       => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'ContactType' => TimeframeService::DOMAIN_NAMESPACE,
             'Email'       => TimeframeService::DOMAIN_NAMESPACE,
             'SMSNr'       => TimeframeService::DOMAIN_NAMESPACE,
             'TelNr'       => TimeframeService::DOMAIN_NAMESPACE,
         ],
-        'Shipping'      => [
+        'Shipping' => [
             'ContactType' => ShippingService::DOMAIN_NAMESPACE,
             'Email'       => ShippingService::DOMAIN_NAMESPACE,
             'SMSNr'       => ShippingService::DOMAIN_NAMESPACE,
@@ -104,13 +101,13 @@ class Contact extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string|null $ContactType */
+    /** @var string|null */
     protected $ContactType;
-    /** @var string|null $Email */
+    /** @var string|null */
     protected $Email;
-    /** @var string|null $SMSNr */
+    /** @var string|null */
     protected $SMSNr;
-    /** @var string|null $TelNr */
+    /** @var string|null */
     protected $TelNr;
     // @codingStandardsIgnoreEnd
 

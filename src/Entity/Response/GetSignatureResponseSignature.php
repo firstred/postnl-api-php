@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -36,14 +36,11 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class GetSignatureResponseSignature
+ * Class GetSignatureResponseSignature.
  *
- * @package ThirtyBees\PostNL\Entity
- *
- * @method string|null getBarcode()
- * @method string|null getSignatureDate()
- * @method string|null getSignatureImage()
- *
+ * @method string|null       getBarcode()
+ * @method string|null       getSignatureDate()
+ * @method string|null       getSignatureImage()
  * @method SignatureResponse setBarcode(string|null $barcode = null)
  * @method SignatureResponse setSignatureDate(string|null $signatureDate = null)
  * @method SignatureResponse setSignatureImage(string|null $signatureImage = null)
@@ -51,22 +48,22 @@ use ThirtyBees\PostNL\Service\TimeframeService;
 class GetSignatureResponseSignature extends AbstractEntity
 {
     /**
-     * Default properties and namespaces for the SOAP API
+     * Default properties and namespaces for the SOAP API.
      *
-     * @var array $defaultProperties
+     * @var array
      */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'Barcode'        => BarcodeService::DOMAIN_NAMESPACE,
             'SignatureDate'  => BarcodeService::DOMAIN_NAMESPACE,
             'SignatureImage' => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'Barcode'        => ConfirmingService::DOMAIN_NAMESPACE,
             'SignatureDate'  => ConfirmingService::DOMAIN_NAMESPACE,
             'SignatureImage' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'Barcode'        => LabellingService::DOMAIN_NAMESPACE,
             'SignatureDate'  => LabellingService::DOMAIN_NAMESPACE,
             'SignatureImage' => LabellingService::DOMAIN_NAMESPACE,
@@ -76,28 +73,28 @@ class GetSignatureResponseSignature extends AbstractEntity
             'SignatureDate'  => ShippingStatusService::DOMAIN_NAMESPACE,
             'SignatureImage' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'Barcode'        => DeliveryDateService::DOMAIN_NAMESPACE,
             'SignatureDate'  => DeliveryDateService::DOMAIN_NAMESPACE,
             'SignatureImage' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'Barcode'        => LocationService::DOMAIN_NAMESPACE,
             'SignatureDate'  => LocationService::DOMAIN_NAMESPACE,
             'SignatureImage' => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'Barcode'        => TimeframeService::DOMAIN_NAMESPACE,
             'SignatureDate'  => TimeframeService::DOMAIN_NAMESPACE,
             'SignatureImage' => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string|null $Barcode */
+    /** @var string|null */
     protected $Barcode;
-    /** @var string|null $SignatureDate */
+    /** @var string|null */
     protected $SignatureDate;
-    /** @var string|null $SignatureImage */
+    /** @var string|null */
     protected $SignatureImage;
     // @codingStandardsIgnoreEnd
 

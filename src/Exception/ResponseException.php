@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -31,7 +31,7 @@ use Throwable;
 
 class ResponseException extends AbstractException
 {
-    /** @var Response $response */
+    /** @var Response */
     private $response;
 
     /**
@@ -42,7 +42,7 @@ class ResponseException extends AbstractException
      * @param Throwable|null $previous
      * @param Response|null  $response
      */
-    public function __construct($message = "", $code = 0, $previous = null, Response $response = null)
+    public function __construct($message = '', $code = 0, $previous = null, Response $response = null)
     {
         parent::__construct($message, $code, $previous);
 

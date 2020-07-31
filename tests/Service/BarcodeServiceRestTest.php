@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -42,23 +42,22 @@ use ThirtyBees\PostNL\PostNL;
 use ThirtyBees\PostNL\Service\BarcodeService;
 
 /**
- * Class BarcodeServiceRestTest
- *
- * @package ThirtyBees\PostNL\Tests\Service
+ * Class BarcodeServiceRestTest.
  *
  * @testdox The BarcodeService (REST)
  */
 class BarcodeServiceRestTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var PostNL $postnl */
+    /** @var PostNL */
     protected $postnl;
-    /** @var BarcodeService $service */
+    /** @var BarcodeService */
     protected $service;
-    /** @var $lastRequest */
+    /** @var */
     protected $lastRequest;
 
     /**
      * @before
+     *
      * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
      */
     public function setupPostNL()
@@ -79,12 +78,11 @@ class BarcodeServiceRestTest extends \PHPUnit_Framework_TestCase
                     'Zipcode'     => '2132WT',
                 ]))
                 ->setGlobalPackBarcodeType('AB')
-                ->setGlobalPackCustomerCode('1234')
-            , new UsernameToken(null, 'test'),
+                ->setGlobalPackCustomerCode('1234'), new UsernameToken(null, 'test'),
             true,
             PostNL::MODE_REST
         );
-        
+
         $this->service = $this->postnl->getBarcodeService();
     }
 
@@ -253,6 +251,7 @@ class BarcodeServiceRestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox return a valid single barcode
+     *
      * @throws \ThirtyBees\PostNL\Exception\InvalidBarcodeException
      */
     public function testNegativeSingleBarcodeInvalidResponse()

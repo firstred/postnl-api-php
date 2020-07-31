@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -26,7 +26,6 @@
 
 namespace ThirtyBees\PostNL\Entity;
 
-use Sabre\Xml\Writer;
 use ThirtyBees\PostNL\Entity\Response\CompleteStatusResponseEvent;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
@@ -37,42 +36,39 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class Event
- *
- * @package ThirtyBees\PostNL\Entity
+ * Class Event.
  *
  * @method string|null getCompleteStatusResponseEvent()
- *
- * @method Event setCompleteStatusResponseEvent(CompleteStatusResponseEvent|null $event = null)
+ * @method Event       setCompleteStatusResponseEvent(CompleteStatusResponseEvent|null $event = null)
  */
 class Event extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
+    /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'CompleteStatusResponseEvent' => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'CompleteStatusResponseEvent' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'CompleteStatusResponseEvent' => LabellingService::DOMAIN_NAMESPACE,
         ],
         'ShippingStatus' => [
             'CompleteStatusResponseEvent' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'CompleteStatusResponseEvent' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'CompleteStatusResponseEvent' => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'CompleteStatusResponseEvent' => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var CompleteStatusResponseEvent|null $completeStatusResponseEvent */
+    /** @var CompleteStatusResponseEvent|null */
     protected $CompleteStatusResponseEvent;
     // @codingStandardsIgnoreEnd
 

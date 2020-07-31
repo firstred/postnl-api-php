@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -37,9 +37,7 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class Timeframe
- *
- * @package ThirtyBees\PostNL\Entity
+ * Class Timeframe.
  *
  * @method string|null      getCity()
  * @method string|null      getCountryCode()
@@ -55,26 +53,25 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method string|null      getInterval()
  * @method string|null      getTimeframeRange()
  * @method Timeframe[]|null getTimeframes()
- *
- * @method Timeframe setCity(string|null $city = null)
- * @method Timeframe setCountryCode(string|null $code = null)
- * @method Timeframe setDate(string|null $date = null)
- * @method Timeframe setEndDate(string|null $date = null)
- * @method Timeframe setHouseNr(string|null $houseNr = null)
- * @method Timeframe setHouseNrExt(string|null $houseNrExt = null)
- * @method Timeframe setOptions(string[]|null $options = null)
- * @method Timeframe setStartDate(string|null $date = null)
- * @method Timeframe setStreet(string|null $street = null)
- * @method Timeframe setSundaySorting(string|null $sunday = null)
- * @method Timeframe setInterval(string|null $interval = null)
- * @method Timeframe setTimeframeRange(string|null $range = null)
- * @method Timeframe setTimeframes(Timeframe[]|null $timeframes = null)
+ * @method Timeframe        setCity(string|null $city = null)
+ * @method Timeframe        setCountryCode(string|null $code = null)
+ * @method Timeframe        setDate(string|null $date = null)
+ * @method Timeframe        setEndDate(string|null $date = null)
+ * @method Timeframe        setHouseNr(string|null $houseNr = null)
+ * @method Timeframe        setHouseNrExt(string|null $houseNrExt = null)
+ * @method Timeframe        setOptions(string[]|null $options = null)
+ * @method Timeframe        setStartDate(string|null $date = null)
+ * @method Timeframe        setStreet(string|null $street = null)
+ * @method Timeframe        setSundaySorting(string|null $sunday = null)
+ * @method Timeframe        setInterval(string|null $interval = null)
+ * @method Timeframe        setTimeframeRange(string|null $range = null)
+ * @method Timeframe        setTimeframes(Timeframe[]|null $timeframes = null)
  */
 class Timeframe extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
+    /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'City'           => BarcodeService::DOMAIN_NAMESPACE,
             'CountryCode'    => BarcodeService::DOMAIN_NAMESPACE,
             'Date'           => BarcodeService::DOMAIN_NAMESPACE,
@@ -90,7 +87,7 @@ class Timeframe extends AbstractEntity
             'TimeframeRange' => BarcodeService::DOMAIN_NAMESPACE,
             'Timeframes'     => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'City'           => ConfirmingService::DOMAIN_NAMESPACE,
             'CountryCode'    => ConfirmingService::DOMAIN_NAMESPACE,
             'Date'           => ConfirmingService::DOMAIN_NAMESPACE,
@@ -106,7 +103,7 @@ class Timeframe extends AbstractEntity
             'TimeframeRange' => ConfirmingService::DOMAIN_NAMESPACE,
             'Timeframes'     => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'City'           => LabellingService::DOMAIN_NAMESPACE,
             'CountryCode'    => LabellingService::DOMAIN_NAMESPACE,
             'Date'           => LabellingService::DOMAIN_NAMESPACE,
@@ -138,7 +135,7 @@ class Timeframe extends AbstractEntity
             'TimeframeRange' => ShippingStatusService::DOMAIN_NAMESPACE,
             'Timeframes'     => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'City'           => DeliveryDateService::DOMAIN_NAMESPACE,
             'CountryCode'    => DeliveryDateService::DOMAIN_NAMESPACE,
             'Date'           => DeliveryDateService::DOMAIN_NAMESPACE,
@@ -154,7 +151,7 @@ class Timeframe extends AbstractEntity
             'TimeframeRange' => DeliveryDateService::DOMAIN_NAMESPACE,
             'Timeframes'     => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'City'           => LocationService::DOMAIN_NAMESPACE,
             'CountryCode'    => LocationService::DOMAIN_NAMESPACE,
             'Date'           => LocationService::DOMAIN_NAMESPACE,
@@ -170,7 +167,7 @@ class Timeframe extends AbstractEntity
             'TimeframeRange' => LocationService::DOMAIN_NAMESPACE,
             'Timeframes'     => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'City'           => TimeframeService::DOMAIN_NAMESPACE,
             'CountryCode'    => TimeframeService::DOMAIN_NAMESPACE,
             'Date'           => TimeframeService::DOMAIN_NAMESPACE,
@@ -188,33 +185,33 @@ class Timeframe extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string|null $City */
+    /** @var string|null */
     protected $City;
-    /** @var string|null $CountryCode */
+    /** @var string|null */
     protected $CountryCode;
-    /** @var string|null $Date */
+    /** @var string|null */
     protected $Date;
-    /** @var string|null $EndDate */
+    /** @var string|null */
     protected $EndDate;
-    /** @var string|null $HouseNr */
+    /** @var string|null */
     protected $HouseNr;
-    /** @var string|null $HouseNrExt */
+    /** @var string|null */
     protected $HouseNrExt;
-    /** @var string[]|null $Options */
+    /** @var string[]|null */
     protected $Options;
-    /** @var string|null $PostalCode */
+    /** @var string|null */
     protected $PostalCode;
-    /** @var string|null $StartDate */
+    /** @var string|null */
     protected $StartDate;
-    /** @var string|null $Street */
+    /** @var string|null */
     protected $Street;
-    /** @var string|null $SundaySorting */
+    /** @var string|null */
     protected $SundaySorting;
-    /** @var string|null $Interval */
+    /** @var string|null */
     protected $Interval;
-    /** @var string|null $TimeframeRange */
+    /** @var string|null */
     protected $TimeframeRange;
-    /** @var TimeframeTimeFrame[]|Timeframe[]|null $Timeframes */
+    /** @var TimeframeTimeFrame[]|Timeframe[]|null */
     protected $Timeframes;
     // @codingStandardsIgnoreEnd
 
@@ -268,7 +265,7 @@ class Timeframe extends AbstractEntity
     }
 
     /**
-     * Set the postcode
+     * Set the postcode.
      *
      * @param string|null $postcode
      *
@@ -286,7 +283,7 @@ class Timeframe extends AbstractEntity
     }
 
     /**
-     * Return a serializable array for `json_encode`
+     * Return a serializable array for `json_encode`.
      *
      * @return array
      */
@@ -299,15 +296,15 @@ class Timeframe extends AbstractEntity
 
         foreach (array_keys(static::$defaultProperties[$this->currentService]) as $propertyName) {
             if (isset($this->{$propertyName})) {
-                if ($propertyName === 'Options') {
+                if ('Options' === $propertyName) {
                     $json[$propertyName] = $this->{$propertyName};
-                } elseif ($propertyName === 'Timeframes') {
+                } elseif ('Timeframes' === $propertyName) {
                     $timeframes = [];
                     foreach ($this->Timeframes as $timeframe) {
                         $timeframes[] = $timeframe;
                     }
                     $json['Timeframes'] = ['TimeframeTimeFrame' => $timeframes];
-                } elseif ($propertyName === 'SundaySorting') {
+                } elseif ('SundaySorting' === $propertyName) {
                     if (isset($this->{$propertyName})) {
                         if (is_bool($this->{$propertyName})) {
                             $value = $this->{$propertyName} ? 'true' : 'false';
@@ -327,11 +324,12 @@ class Timeframe extends AbstractEntity
     }
 
     /**
-     * Return a serializable array for the XMLWriter
+     * Return a serializable array for the XMLWriter.
      *
      * @param Writer $writer
      *
      * @return void
+     *
      * @throws InvalidArgumentException
      */
     public function xmlSerialize(Writer $writer)
@@ -342,7 +340,7 @@ class Timeframe extends AbstractEntity
         }
 
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if ($propertyName === 'SundaySorting') {
+            if ('SundaySorting' === $propertyName) {
                 if (isset($this->SundaySorting)) {
                     if (is_bool($this->SundaySorting)) {
                         $xml["{{$namespace}}SundaySorting"] = $this->SundaySorting ? 'true' : 'false';
@@ -350,11 +348,11 @@ class Timeframe extends AbstractEntity
                         $xml["{{$namespace}}SundaySorting"] = $this->SundaySorting;
                     }
                 }
-            } elseif ($propertyName === 'Options') {
+            } elseif ('Options' === $propertyName) {
                 if (isset($this->Options)) {
                     $options = [];
                     foreach ($this->Options as $option) {
-                        $options[] = ["{http://schemas.microsoft.com/2003/10/Serialization/Arrays}string" => $option];
+                        $options[] = ['{http://schemas.microsoft.com/2003/10/Serialization/Arrays}string' => $option];
                     }
                     $xml["{{$namespace}}Options"] = $options;
                 }

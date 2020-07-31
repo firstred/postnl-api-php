@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -37,29 +37,26 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class ConfirmingResponseShipment
+ * Class ConfirmingResponseShipment.
  *
- * @package ThirtyBees\PostNL\Entity
- *
- * @method string|null    getBarcode()
- * @method Warning[]|null getWarnings()
- *
+ * @method string|null                getBarcode()
+ * @method Warning[]|null             getWarnings()
  * @method ConfirmingResponseShipment setBarcode(string|null $barcode = null)
  * @method ConfirmingResponseShipment setWarnings(Warning[]|null $warnings = null)
  */
 class ConfirmingResponseShipment extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
+    /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'Barcode'  => BarcodeService::DOMAIN_NAMESPACE,
             'Warnings' => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'Barcode'  => ConfirmingService::DOMAIN_NAMESPACE,
             'Warnings' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'Barcode'  => LabellingService::DOMAIN_NAMESPACE,
             'Warnings' => LabellingService::DOMAIN_NAMESPACE,
         ],
@@ -67,23 +64,23 @@ class ConfirmingResponseShipment extends AbstractEntity
             'Barcode'  => ShippingStatusService::DOMAIN_NAMESPACE,
             'Warnings' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'Barcode'  => DeliveryDateService::DOMAIN_NAMESPACE,
             'Warnings' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'Barcode'  => LocationService::DOMAIN_NAMESPACE,
             'Warnings' => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'Barcode'  => TimeframeService::DOMAIN_NAMESPACE,
             'Warnings' => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string|null $Barcode */
+    /** @var string|null */
     protected $Barcode;
-    /** @var Warning[]|null $warnings */
+    /** @var Warning[]|null */
     protected $Warnings;
     // @codingStandardsIgnoreEnd
 

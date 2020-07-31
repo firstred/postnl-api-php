@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -45,23 +45,22 @@ use ThirtyBees\PostNL\PostNL;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
 
 /**
- * Class DeliveryDateRestTest
- *
- * @package ThirtyBees\PostNL\Tests\Service
+ * Class DeliveryDateRestTest.
  *
  * @testdox The DeliveryDateService (REST)
  */
 class DeliveryDateRestTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var PostNL $postnl */
+    /** @var PostNL */
     protected $postnl;
-    /** @var DeliveryDateService $service */
+    /** @var DeliveryDateService */
     protected $service;
-    /** @var $lastRequest */
+    /** @var */
     protected $lastRequest;
 
     /**
      * @before
+     *
      * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
      */
     public function setupPostNL()
@@ -82,8 +81,7 @@ class DeliveryDateRestTest extends \PHPUnit_Framework_TestCase
                     'Zipcode'     => '2132WT',
                 ]))
                 ->setGlobalPackBarcodeType('AB')
-                ->setGlobalPackCustomerCode('1234')
-            , new UsernameToken(null, 'test'),
+                ->setGlobalPackCustomerCode('1234'), new UsernameToken(null, 'test'),
             true,
             PostNL::MODE_REST
         );
@@ -124,7 +122,7 @@ class DeliveryDateRestTest extends \PHPUnit_Framework_TestCase
                         ->setCity('Hoofddorp')
                         ->setCountryCode('NL')
                         ->setCutOffTimes([
-                            new CutOffTime('00', '14:00:00')
+                            new CutOffTime('00', '14:00:00'),
                         ])
                         ->setHouseNr('42')
                         ->setHouseNrExt('A')
@@ -166,7 +164,7 @@ class DeliveryDateRestTest extends \PHPUnit_Framework_TestCase
         $mock = new MockHandler([
             new Response(200, ['Content-Type' => 'text/xml;charset=UTF-8'], json_encode([
                 'DeliveryDate' => '30-06-2016',
-                'Options' => [
+                'Options'      => [
                     'string' => 'Daytime',
                 ],
             ])),
@@ -184,7 +182,7 @@ class DeliveryDateRestTest extends \PHPUnit_Framework_TestCase
                     ->setCity('Hoofddorp')
                     ->setCountryCode('NL')
                     ->setCutOffTimes([
-                        new CutOffTime('00', '14:00:00')
+                        new CutOffTime('00', '14:00:00'),
                     ])
                     ->setHouseNr('42')
                     ->setHouseNrExt('A')

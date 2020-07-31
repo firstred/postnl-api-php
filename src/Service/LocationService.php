@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -45,9 +45,7 @@ use ThirtyBees\PostNL\Exception\CifException;
 use ThirtyBees\PostNL\PostNL;
 
 /**
- * Class LocationService
- *
- * @package ThirtyBees\PostNL\Service
+ * Class LocationService.
  *
  * @method GetNearestLocationsResponse getNearestLocations(GetNearestLocations $getNearestLocations)
  * @method Request                     buildGetNearestLocationsRequest(GetNearestLocations $getNearestLocations)
@@ -78,9 +76,9 @@ class LocationService extends AbstractService
     const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/LocationWebService/';
 
     /**
-     * Namespaces uses for the SOAP version of this service
+     * Namespaces uses for the SOAP version of this service.
      *
-     * @var array $namespaces
+     * @var array
      */
     public static $namespaces = [
         self::ENVELOPE_NAMESPACE                                    => 'soap',
@@ -94,7 +92,7 @@ class LocationService extends AbstractService
     ];
 
     /**
-     * Get the nearest locations via REST
+     * Get the nearest locations via REST.
      *
      * @param GetNearestLocations $getNearestLocations
      *
@@ -126,7 +124,7 @@ class LocationService extends AbstractService
         if ($object instanceof GetNearestLocationsResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof Response
-                && $response->getStatusCode() === 200
+                && 200 === $response->getStatusCode()
             ) {
                 $item->set(\GuzzleHttp\Psr7\str($response));
                 $this->cacheItem($item);
@@ -139,7 +137,7 @@ class LocationService extends AbstractService
     }
 
     /**
-     * Get the nearest locations via SOAP
+     * Get the nearest locations via SOAP.
      *
      * @param GetNearestLocations $getNearestLocations
      *
@@ -170,7 +168,7 @@ class LocationService extends AbstractService
         if ($object instanceof GetNearestLocationsResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof Response
-                && $response->getStatusCode() === 200
+                && 200 === $response->getStatusCode()
             ) {
                 $item->set(\GuzzleHttp\Psr7\str($response));
                 $this->cacheItem($item);
@@ -183,7 +181,7 @@ class LocationService extends AbstractService
     }
 
     /**
-     * Get the nearest locations via REST
+     * Get the nearest locations via REST.
      *
      * @param GetLocationsInArea $getLocations
      *
@@ -214,7 +212,7 @@ class LocationService extends AbstractService
         if ($object instanceof GetLocationsInAreaResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof Response
-                && $response->getStatusCode() === 200
+                && 200 === $response->getStatusCode()
             ) {
                 $item->set(\GuzzleHttp\Psr7\str($response));
                 $this->cacheItem($item);
@@ -227,7 +225,7 @@ class LocationService extends AbstractService
     }
 
     /**
-     * Get the nearest locations via SOAP
+     * Get the nearest locations via SOAP.
      *
      * @param GetLocationsInArea $getNearestLocations
      *
@@ -259,7 +257,7 @@ class LocationService extends AbstractService
         if ($object instanceof GetLocationsInAreaResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof Response
-                && $response->getStatusCode() === 200
+                && 200 === $response->getStatusCode()
             ) {
                 $item->set(\GuzzleHttp\Psr7\str($response));
                 $this->cacheItem($item);
@@ -272,7 +270,7 @@ class LocationService extends AbstractService
     }
 
     /**
-     * Get the location via REST
+     * Get the location via REST.
      *
      * @param GetLocation $getLocation
      *
@@ -303,7 +301,7 @@ class LocationService extends AbstractService
         if ($object instanceof GetLocationsInAreaResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof Response
-                && $response->getStatusCode() === 200
+                && 200 === $response->getStatusCode()
             ) {
                 $item->set(\GuzzleHttp\Psr7\str($response));
                 $this->cacheItem($item);
@@ -316,7 +314,7 @@ class LocationService extends AbstractService
     }
 
     /**
-     * Get the nearest locations via SOAP
+     * Get the nearest locations via SOAP.
      *
      * @param GetLocation $getLocation
      *
@@ -347,21 +345,20 @@ class LocationService extends AbstractService
         if ($object instanceof GetLocationsInAreaResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof Response
-                && $response->getStatusCode() === 200
+                && 200 === $response->getStatusCode()
             ) {
                 $item->set(\GuzzleHttp\Psr7\str($response));
                 $this->cacheItem($item);
             }
 
             return $object;
-
         }
 
         throw new ApiException('Unable to retrieve locations in area');
     }
 
     /**
-     * Build the GenerateLabel request for the REST API
+     * Build the GenerateLabel request for the REST API.
      *
      * @param GetNearestLocations $getNearestLocations
      *
@@ -374,8 +371,8 @@ class LocationService extends AbstractService
         $apiKey = $this->postnl->getRestApiKey();
         $this->setService($getNearestLocations);
         $query = [
-            'CountryCode'     => $getNearestLocations->getCountrycode(),
-            'PostalCode'      => $location->getPostalcode(),
+            'CountryCode' => $getNearestLocations->getCountrycode(),
+            'PostalCode'  => $location->getPostalcode(),
         ];
         if ($city = $location->getCity()) {
             $query['City'] = $city;
@@ -406,7 +403,7 @@ class LocationService extends AbstractService
                 if (!array_key_exists('DeliveryOptions', $query)) {
                     $query['DeliveryOptions'] = $option;
                 } else {
-                    $query['DeliveryOptions'] .= ',' . $option;
+                    $query['DeliveryOptions'] .= ','.$option;
                 }
             }
         } else {
@@ -427,11 +424,12 @@ class LocationService extends AbstractService
     }
 
     /**
-     * Process GetNearestLocations Response REST
+     * Process GetNearestLocations Response REST.
      *
      * @param mixed $response
      *
-     * @return null|GetNearestLocationsResponse
+     * @return GetNearestLocationsResponse|null
+     *
      * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
     public function processGetNearestLocationsResponseREST($response)
@@ -481,7 +479,7 @@ class LocationService extends AbstractService
     }
 
     /**
-     * Build the GenerateLabel request for the SOAP API
+     * Build the GenerateLabel request for the SOAP API.
      *
      * @param GetNearestLocations $getLocations
      *
@@ -505,15 +503,15 @@ class LocationService extends AbstractService
                 '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
                     ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
                 ],
-                '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
+                '{'.static::ENVELOPE_NAMESPACE.'}Body' => [
                     '{'.static::SERVICES_NAMESPACE.'}GetNearestLocations' => $getLocations,
                 ],
             ]
         );
 
         $endpoint = $this->postnl->getSandbox()
-            ? ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT)
-            : ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT);
+            ? (PostNL::MODE_LEGACY === $this->postnl->getMode() ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT)
+            : (PostNL::MODE_LEGACY === $this->postnl->getMode() ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT);
 
         return new Request(
             'POST',
@@ -528,7 +526,7 @@ class LocationService extends AbstractService
     }
 
     /**
-     * Process GetNearestLocations Response SOAP
+     * Process GetNearestLocations Response SOAP.
      *
      * @param mixed $response
      *
@@ -546,20 +544,19 @@ class LocationService extends AbstractService
         static::registerNamespaces($xml);
         static::validateSOAPResponse($xml);
 
-
         $reader = new Reader();
         $reader->xml(static::getResponseText($response));
         $array = array_values($reader->parse()['value'][0]['value']);
         foreach ($array[0]['value'][0]['value'] as &$responseLocation) {
             foreach ($responseLocation['value'] as &$item) {
-                if (strpos($item['name'], 'DeliveryOptions') !== false) {
+                if (false !== strpos($item['name'], 'DeliveryOptions')) {
                     $newDeliveryOptions = [];
                     foreach ($item['value'] as $option) {
                         $newDeliveryOptions[] = $option['value'];
                     }
 
                     $item['value'] = $newDeliveryOptions;
-                } elseif (strpos($item['name'], 'OpeningHours') !== false) {
+                } elseif (false !== strpos($item['name'], 'OpeningHours')) {
                     foreach ($item['value'] as &$openingHour) {
                         $openingHour['value'] = $openingHour['value'][0]['value'];
                     }
@@ -576,7 +573,7 @@ class LocationService extends AbstractService
     }
 
     /**
-     * Build the GetLocationsInArea request for the REST API
+     * Build the GetLocationsInArea request for the REST API.
      *
      * @param GetLocationsInArea $getLocations
      *
@@ -607,7 +604,7 @@ class LocationService extends AbstractService
                 if (!array_key_exists('DeliveryOptions', $query)) {
                     $query['DeliveryOptions'] = $option;
                 } else {
-                    $query['DeliveryOptions'] .= ',' . $option;
+                    $query['DeliveryOptions'] .= ','.$option;
                 }
             }
         } else {
@@ -627,11 +624,12 @@ class LocationService extends AbstractService
     }
 
     /**
-     * Proess GetLocationsInArea Response REST
+     * Proess GetLocationsInArea Response REST.
      *
      * @param mixed $response
      *
-     * @return null|GetLocationsInAreaResponse
+     * @return GetLocationsInAreaResponse|null
+     *
      * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
     public function processGetLocationsInAreaResponseREST($response)
@@ -681,7 +679,7 @@ class LocationService extends AbstractService
     }
 
     /**
-     * Build the GetLocationsInArea request for the SOAP API
+     * Build the GetLocationsInArea request for the SOAP API.
      *
      * @param GetLocationsInArea $getLocations
      *
@@ -705,15 +703,15 @@ class LocationService extends AbstractService
                 '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
                     ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
                 ],
-                '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
+                '{'.static::ENVELOPE_NAMESPACE.'}Body' => [
                     '{'.static::SERVICES_NAMESPACE.'}GetLocationsInArea' => $getLocations,
                 ],
             ]
         );
 
         $endpoint = $this->postnl->getSandbox()
-            ? ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT)
-            : ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT);
+            ? (PostNL::MODE_LEGACY === $this->postnl->getMode() ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT)
+            : (PostNL::MODE_LEGACY === $this->postnl->getMode() ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT);
 
         return new Request(
             'POST',
@@ -731,6 +729,7 @@ class LocationService extends AbstractService
      * @param mixed $response
      *
      * @return GetLocationsInAreaResponse
+     *
      * @throws CifDownException
      * @throws CifException
      * @throws \Sabre\Xml\LibXMLException
@@ -743,20 +742,19 @@ class LocationService extends AbstractService
         static::registerNamespaces($xml);
         static::validateSOAPResponse($xml);
 
-
         $reader = new Reader();
         $reader->xml(static::getResponseText($response));
         $array = array_values($reader->parse()['value'][0]['value']);
         foreach ($array[0]['value'][0]['value'] as &$responseLocation) {
             foreach ($responseLocation['value'] as &$item) {
-                if (strpos($item['name'], 'DeliveryOptions') !== false) {
+                if (false !== strpos($item['name'], 'DeliveryOptions')) {
                     $newDeliveryOptions = [];
                     foreach ($item['value'] as $option) {
                         $newDeliveryOptions[] = $option['value'];
                     }
 
                     $item['value'] = $newDeliveryOptions;
-                } elseif (strpos($item['name'], 'OpeningHours') !== false) {
+                } elseif (false !== strpos($item['name'], 'OpeningHours')) {
                     foreach ($item['value'] as &$openingHour) {
                         $openingHour['value'] = $openingHour['value'][0]['value'];
                     }
@@ -773,7 +771,7 @@ class LocationService extends AbstractService
     }
 
     /**
-     * Build the GetLocation request for the REST API
+     * Build the GetLocation request for the REST API.
      *
      * @param GetLocation $getLocation
      *
@@ -803,11 +801,12 @@ class LocationService extends AbstractService
     }
 
     /**
-     * Process GetLocation Response REST
+     * Process GetLocation Response REST.
      *
      * @param mixed $response
      *
-     * @return null|GetLocationsInAreaResponse
+     * @return GetLocationsInAreaResponse|null
+     *
      * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
     public function processGetLocationResponseREST($response)
@@ -853,7 +852,7 @@ class LocationService extends AbstractService
     }
 
     /**
-     * Build the GetLocation request for the SOAP API
+     * Build the GetLocation request for the SOAP API.
      *
      * @param GetLocation $getLocations
      *
@@ -877,15 +876,15 @@ class LocationService extends AbstractService
                 '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
                     ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
                 ],
-                '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
+                '{'.static::ENVELOPE_NAMESPACE.'}Body' => [
                     '{'.static::SERVICES_NAMESPACE.'}GetLocation' => $getLocations,
                 ],
             ]
         );
 
         $endpoint = $this->postnl->getSandbox()
-            ? ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT)
-            : ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT);
+            ? (PostNL::MODE_LEGACY === $this->postnl->getMode() ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT)
+            : (PostNL::MODE_LEGACY === $this->postnl->getMode() ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT);
 
         return new Request(
             'POST',
@@ -900,11 +899,12 @@ class LocationService extends AbstractService
     }
 
     /**
-     * Process GetLocation Response SOAP
+     * Process GetLocation Response SOAP.
      *
      * @param mixed $response
      *
      * @return GetLocationsInAreaResponse
+     *
      * @throws CifDownException
      * @throws CifException
      * @throws \Sabre\Xml\LibXMLException
@@ -916,7 +916,6 @@ class LocationService extends AbstractService
 
         static::registerNamespaces($xml);
         static::validateSOAPResponse($xml);
-
 
         $reader = new Reader();
         $reader->xml(static::getResponseText($response));

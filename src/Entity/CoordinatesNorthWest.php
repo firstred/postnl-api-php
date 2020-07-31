@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -35,29 +35,26 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class CoordinatesNorthWest
+ * Class CoordinatesNorthWest.
  *
- * @package ThirtyBees\PostNL\Entity
- *
- * @method string|null getLatitude()
- * @method string|null getLongitude()
- *
+ * @method string|null          getLatitude()
+ * @method string|null          getLongitude()
  * @method CoordinatesNorthWest setLatitude(string|null $lat = null)
  * @method CoordinatesNorthWest setLongitude(string|null $long = null)
  */
 class CoordinatesNorthWest extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
+    /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'Latitude'  => BarcodeService::DOMAIN_NAMESPACE,
             'Longitude' => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'Latitude'  => ConfirmingService::DOMAIN_NAMESPACE,
             'Longitude' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'Latitude'  => LabellingService::DOMAIN_NAMESPACE,
             'Longitude' => LabellingService::DOMAIN_NAMESPACE,
         ],
@@ -65,23 +62,23 @@ class CoordinatesNorthWest extends AbstractEntity
             'Latitude'  => ShippingStatusService::DOMAIN_NAMESPACE,
             'Longitude' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'Latitude'  => DeliveryDateService::DOMAIN_NAMESPACE,
             'Longitude' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'Latitude'  => LocationService::DOMAIN_NAMESPACE,
             'Longitude' => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'Latitude'  => TimeframeService::DOMAIN_NAMESPACE,
             'Longitude' => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string|null $Latitude */
+    /** @var string|null */
     protected $Latitude;
-    /** @var string|null $Longitude */
+    /** @var string|null */
     protected $Longitude;
     // @codingStandardsIgnoreEnd
 

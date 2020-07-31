@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -36,46 +36,43 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class GetNearestLocationsResponse
+ * Class GetNearestLocationsResponse.
  *
- * @package ThirtyBees\PostNL\Entity
- *
- * @method GetLocationsResult|null getGetLocationsResult()
- *
+ * @method GetLocationsResult|null     getGetLocationsResult()
  * @method GetNearestLocationsResponse setGetLocationsResult(GetLocationsResult|null $result = null)
  */
 class GetNearestLocationsResponse extends AbstractEntity
 {
     /**
-     * Default properties and namespaces for the SOAP API
+     * Default properties and namespaces for the SOAP API.
      *
-     * @var array $defaultProperties
+     * @var array
      */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'GetLocationsResult' => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'GetLocationsResult' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'GetLocationsResult' => LabellingService::DOMAIN_NAMESPACE,
         ],
         'ShippingStatus' => [
             'GetLocationsResult' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'GetLocationsResult' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'GetLocationsResult' => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'GetLocationsResult' => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var GetLocationsResult|null $GetLocationsResult */
+    /** @var GetLocationsResult|null */
     protected $GetLocationsResult;
     // @codingStandardsIgnoreEnd
 
@@ -92,7 +89,7 @@ class GetNearestLocationsResponse extends AbstractEntity
     }
 
     /**
-     * Return a serializable array for `json_encode`
+     * Return a serializable array for `json_encode`.
      *
      * @return array
      */
@@ -105,7 +102,7 @@ class GetNearestLocationsResponse extends AbstractEntity
 
         foreach (array_keys(static::$defaultProperties[$this->currentService]) as $propertyName) {
             if (isset($this->{$propertyName})) {
-                if ($propertyName === 'GetLocationsResult') {
+                if ('GetLocationsResult' === $propertyName) {
                     $locations = [];
                     foreach ($this->GetLocationsResult as $location) {
                         $locations[] = $location;

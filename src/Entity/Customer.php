@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -36,9 +36,7 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class Customer
- *
- * @package ThirtyBees\PostNL\Entity
+ * Class Customer.
  *
  * @method string|null getCustomerNumber()
  * @method string|null getCustomerCode()
@@ -49,26 +47,25 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method string|null getAddress()
  * @method string|null getGlobalPackCustomerCode()
  * @method string|null getGlobalPackBarcodeType()
- *
- * @method Customer setCustomerNumber(string|null $customerNr = null)
- * @method Customer setCustomerCode(string|null $customerCode = null)
- * @method Customer setCollectionLocation(string|null $collectionLocation = null)
- * @method Customer setContactPerson(string|null $contactPerson = null)
- * @method Customer setEmail(string|null $email = null)
- * @method Customer setName(string|null $name = null)
- * @method Customer setAddress(Address|null $address = null)
- * @method Customer setGlobalPackCustomerCode(string|null $code = null)
- * @method Customer setGlobalPackBarcodeType(string|null $type = null)
+ * @method Customer    setCustomerNumber(string|null $customerNr = null)
+ * @method Customer    setCustomerCode(string|null $customerCode = null)
+ * @method Customer    setCollectionLocation(string|null $collectionLocation = null)
+ * @method Customer    setContactPerson(string|null $contactPerson = null)
+ * @method Customer    setEmail(string|null $email = null)
+ * @method Customer    setName(string|null $name = null)
+ * @method Customer    setAddress(Address|null $address = null)
+ * @method Customer    setGlobalPackCustomerCode(string|null $code = null)
+ * @method Customer    setGlobalPackBarcodeType(string|null $type = null)
  */
 class Customer extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
+    /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'CustomerCode'   => BarcodeService::DOMAIN_NAMESPACE,
             'CustomerNumber' => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'Address'            => ConfirmingService::DOMAIN_NAMESPACE,
             'CollectionLocation' => ConfirmingService::DOMAIN_NAMESPACE,
             'ContactPerson'      => ConfirmingService::DOMAIN_NAMESPACE,
@@ -77,7 +74,7 @@ class Customer extends AbstractEntity
             'Email'              => ConfirmingService::DOMAIN_NAMESPACE,
             'Name'               => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'Address'            => LabellingService::DOMAIN_NAMESPACE,
             'CollectionLocation' => LabellingService::DOMAIN_NAMESPACE,
             'ContactPerson'      => LabellingService::DOMAIN_NAMESPACE,
@@ -95,7 +92,7 @@ class Customer extends AbstractEntity
             'Email'              => ShippingStatusService::DOMAIN_NAMESPACE,
             'Name'               => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'Address'            => DeliveryDateService::DOMAIN_NAMESPACE,
             'CollectionLocation' => DeliveryDateService::DOMAIN_NAMESPACE,
             'ContactPerson'      => DeliveryDateService::DOMAIN_NAMESPACE,
@@ -104,7 +101,7 @@ class Customer extends AbstractEntity
             'Email'              => DeliveryDateService::DOMAIN_NAMESPACE,
             'Name'               => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'Address'            => LocationService::DOMAIN_NAMESPACE,
             'CollectionLocation' => LocationService::DOMAIN_NAMESPACE,
             'ContactPerson'      => LocationService::DOMAIN_NAMESPACE,
@@ -113,7 +110,7 @@ class Customer extends AbstractEntity
             'Email'              => LocationService::DOMAIN_NAMESPACE,
             'Name'               => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'Address'            => TimeframeService::DOMAIN_NAMESPACE,
             'CollectionLocation' => TimeframeService::DOMAIN_NAMESPACE,
             'ContactPerson'      => TimeframeService::DOMAIN_NAMESPACE,
@@ -122,7 +119,7 @@ class Customer extends AbstractEntity
             'Email'              => TimeframeService::DOMAIN_NAMESPACE,
             'Name'               => TimeframeService::DOMAIN_NAMESPACE,
         ],
-        'Shipping'       => [
+        'Shipping' => [
             'Address'            => ShippingService::DOMAIN_NAMESPACE,
             'CollectionLocation' => ShippingService::DOMAIN_NAMESPACE,
             'ContactPerson'      => ShippingService::DOMAIN_NAMESPACE,
@@ -130,26 +127,26 @@ class Customer extends AbstractEntity
             'CustomerNumber'     => ShippingService::DOMAIN_NAMESPACE,
             'Email'              => ShippingService::DOMAIN_NAMESPACE,
             'Name'               => ShippingService::DOMAIN_NAMESPACE,
-        ]
+        ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var Address|null $Address */
+    /** @var Address|null */
     protected $Address;
-    /** @var string|null $CollectionLocation */
+    /** @var string|null */
     protected $CollectionLocation;
-    /** @var string|null $ContactPerson */
+    /** @var string|null */
     protected $ContactPerson;
-    /** @var string|null $CustomerCode */
+    /** @var string|null */
     protected $CustomerCode;
-    /** @var string|null $CustomerNumber */
+    /** @var string|null */
     protected $CustomerNumber;
-    /** @var null|string $GlobalPackCustomerCode */
+    /** @var string|null */
     protected $GlobalPackCustomerCode;
-    /** @var null|string $GlobalPackBarcodeType */
+    /** @var string|null */
     protected $GlobalPackBarcodeType;
-    /** @var string|null $Email */
+    /** @var string|null */
     protected $Email;
-    /** @var string|null $Name */
+    /** @var string|null */
     protected $Name;
     // @codingStandardsIgnoreEnd
 

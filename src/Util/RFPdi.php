@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -29,9 +29,7 @@ namespace ThirtyBees\PostNL\Util;
 use setasign\Fpdi\Fpdi;
 
 /**
- * Class RFPdi
- *
- * @package ThirtyBees\PostNL\Util
+ * Class RFPdi.
  *
  * @credits to haakym on Stack Overflow: https://stackoverflow.com/a/40526456
  *
@@ -43,25 +41,25 @@ class RFPdi extends Fpdi
 
     public function rotate($angle, $x = -1, $y = -1)
     {
-        if ($x == -1) {
+        if (-1 == $x) {
             $x = $this->x;
         }
 
-        if ($y == -1){
+        if (-1 == $y) {
             $y = $this->y;
         }
 
-        if ($this->angle != 0){
+        if (0 != $this->angle) {
             $this->_out('Q');
         }
 
         $this->angle = $angle;
 
-        if ($angle != 0) {
+        if (0 != $angle) {
             $angle *= M_PI / 180;
             $c = cos($angle);
             $s = sin($angle);
-            $cx = $x*$this->k;
+            $cx = $x              *$this->k;
             $cy = ($this->h - $y) * $this->k;
             $this->_out(
                 sprintf('q %.5F %.5F %.5F %.5F %.2F %.2F cm 1 0 0 1 %.2F %.2F cm', $c, $s, -$s, $c, $cx, $cy, -$cx, -$cy)
@@ -81,7 +79,7 @@ class RFPdi extends Fpdi
 
     public function _endpage()
     {
-        if ($this->angle != 0) {
+        if (0 != $this->angle) {
             $this->angle = 0;
             $this->_out('Q');
         }

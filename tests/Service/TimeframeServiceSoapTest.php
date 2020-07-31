@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -43,23 +43,22 @@ use ThirtyBees\PostNL\PostNL;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class TimeframeServiceSoapTest
- *
- * @package ThirtyBees\PostNL\Tests\Service
+ * Class TimeframeServiceSoapTest.
  *
  * @testdox The TimeframeService (SOAP)
  */
 class TimeframeServiceSoapTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var PostNL $postnl */
+    /** @var PostNL */
     protected $postnl;
-    /** @var TimeframeService $service */
+    /** @var TimeframeService */
     protected $service;
-    /** @var $lastRequest */
+    /** @var */
     protected $lastRequest;
 
     /**
      * @before
+     *
      * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
      */
     public function setupPostNL()
@@ -80,8 +79,7 @@ class TimeframeServiceSoapTest extends \PHPUnit_Framework_TestCase
                     'Zipcode'     => '2132WT',
                 ]))
                 ->setGlobalPackBarcodeType('AB')
-                ->setGlobalPackCustomerCode('1234')
-            , new UsernameToken(null, 'test'),
+                ->setGlobalPackCustomerCode('1234'), new UsernameToken(null, 'test'),
             false,
             PostNL::MODE_SOAP
         );
@@ -125,12 +123,12 @@ class TimeframeServiceSoapTest extends \PHPUnit_Framework_TestCase
                         ->setHouseNr('42')
                         ->setHouseNrExt('A')
                         ->setOptions([
-                            'Evening'
+                            'Evening',
                         ])
                         ->setPostalCode('2132WT')
                         ->setStartDate('30-06-2016')
                         ->setStreet('Siriusdreef')
-                        ->setSundaySorting(true)
+                        ->setSundaySorting(true),
                 ])
         );
 
@@ -250,7 +248,7 @@ class TimeframeServiceSoapTest extends \PHPUnit_Framework_TestCase
                                     ->setPostalCode('2132WT')
                                     ->setStartDate('30-06-2016')
                                     ->setStreet('Siriusdreef')
-                                    ->setSundaySorting(false)
+                                    ->setSundaySorting(false),
                 ])
         );
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -38,46 +38,43 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class CurrentStatusResponse
+ * Class CurrentStatusResponse.
  *
- * @package ThirtyBees\PostNL\Entity
- *
- * @method string|null getShipments()
- *
+ * @method string|null           getShipments()
  * @method CurrentStatusResponse setShipments(Shipment[]|null $shipments = null)
  */
 class CurrentStatusResponse extends AbstractEntity
 {
     /**
-     * Default properties and namespaces for the SOAP API
+     * Default properties and namespaces for the SOAP API.
      *
-     * @var array $defaultProperties
+     * @var array
      */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'Shipments' => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'Shipments' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'Shipments' => LabellingService::DOMAIN_NAMESPACE,
         ],
         'ShippingStatus' => [
             'Shipments' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'Shipments' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'Shipments' => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'Shipments' => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var array|null $Shipments */
+    /** @var array|null */
     protected $Shipments;
     // @codingStandardsIgnoreEnd
 
@@ -94,7 +91,7 @@ class CurrentStatusResponse extends AbstractEntity
     }
 
     /**
-     * Return a serializable array for the XMLWriter
+     * Return a serializable array for the XMLWriter.
      *
      * @param Writer $writer
      *
@@ -110,7 +107,7 @@ class CurrentStatusResponse extends AbstractEntity
         }
 
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if ($propertyName === 'Shipments') {
+            if ('Shipments' === $propertyName) {
                 $shipments = [];
                 foreach ($this->Shipments as $shipment) {
                     $shipments[] = ["{{$namespace}}Shipment" => $shipment];

@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 KeenDelivery, LLC
  *
@@ -27,29 +27,18 @@
 namespace ThirtyBees\PostNL\Entity\Request;
 
 use ThirtyBees\PostNL\Entity\AbstractEntity;
-use ThirtyBees\PostNL\Entity\Barcode;
 use ThirtyBees\PostNL\Entity\Customer;
 use ThirtyBees\PostNL\Entity\Message\LabellingMessage;
 use ThirtyBees\PostNL\Entity\Message\Message;
 use ThirtyBees\PostNL\Entity\Shipment;
-use ThirtyBees\PostNL\Service\BarcodeService;
-use ThirtyBees\PostNL\Service\ConfirmingService;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
-use ThirtyBees\PostNL\Service\LabellingService;
-use ThirtyBees\PostNL\Service\LocationService;
 use ThirtyBees\PostNL\Service\ShippingService;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
-use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class GenerateShipping
- *
- * @package ThirtyBees\PostNL\Entity
+ * Class GenerateShipping.
  *
  * @method Customer|null    getCustomer()
  * @method Message|null     getMessage()
  * @method Shipment[]|null  getShipments()
- *
  * @method GenerateShipping setCustomer(Customer|null $customer = null)
  * @method GenerateShipping setMessage(Message|null $message = null)
  * @method GenerateShipping setShipments(Shipment[]|null $shipments = null)
@@ -57,10 +46,10 @@ use ThirtyBees\PostNL\Service\TimeframeService;
 class GenerateShipping extends AbstractEntity
 {
     /**
-     * @var array $defaultProperties
+     * @var array
      */
     public static $defaultProperties = [
-        'Shipping'      => [
+        'Shipping' => [
             'Customer'  => ShippingService::DOMAIN_NAMESPACE,
             'Message'   => ShippingService::DOMAIN_NAMESPACE,
             'Shipments' => ShippingService::DOMAIN_NAMESPACE,
@@ -68,11 +57,11 @@ class GenerateShipping extends AbstractEntity
     ];
 
     // @codingStandardsIgnoreStart
-    /** @var Customer|null $Customer */
+    /** @var Customer|null */
     protected $Customer;
-    /** @var LabellingMessage|null $Message */
+    /** @var LabellingMessage|null */
     protected $Message;
-    /** @var Shipment[]|null $Shipments */
+    /** @var Shipment[]|null */
     protected $Shipments;
     // @codingStandardsIgnoreEnd
 
@@ -93,7 +82,7 @@ class GenerateShipping extends AbstractEntity
     }
 
     /**
-     * Return a serializable array for `json_encode`
+     * Return a serializable array for `json_encode`.
      *
      * @return array
      */
@@ -106,7 +95,7 @@ class GenerateShipping extends AbstractEntity
 
         foreach (array_keys(static::$defaultProperties[$this->currentService]) as $propertyName) {
             if (isset($this->{$propertyName})) {
-                if ($propertyName === 'Shipments' && count($this->{$propertyName}) >= 1) {
+                if ('Shipments' === $propertyName && count($this->{$propertyName}) >= 1) {
                     $properties = [];
                     foreach ($this->{$propertyName} as $property) {
                         $properties[] = $property;

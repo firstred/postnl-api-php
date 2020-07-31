@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -45,9 +45,7 @@ use ThirtyBees\PostNL\Exception\ResponseException;
 use ThirtyBees\PostNL\PostNL;
 
 /**
- * Class DeliveryDateService
- *
- * @package ThirtyBees\PostNL\Service
+ * Class DeliveryDateService.
  *
  * @method GetDeliveryDateResponse getDeliveryDate(GetDeliveryDate $getDeliveryDate)
  * @method Request                 buildGetDeliveryDateRequest(GetDeliveryDate $getDeliveryDate)
@@ -74,9 +72,9 @@ class DeliveryDateService extends AbstractService
     const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/DeliveryDateWebService/';
 
     /**
-     * Namespaces uses for the SOAP version of this service
+     * Namespaces uses for the SOAP version of this service.
      *
-     * @var array $namespaces
+     * @var array
      */
     public static $namespaces = [
         self::ENVELOPE_NAMESPACE                                    => 'soap',
@@ -90,7 +88,7 @@ class DeliveryDateService extends AbstractService
     ];
 
     /**
-     * Get a delivery date via REST
+     * Get a delivery date via REST.
      *
      * @param GetDeliveryDate $getDeliveryDate
      *
@@ -122,7 +120,7 @@ class DeliveryDateService extends AbstractService
         if ($object instanceof GetDeliveryDateResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof Response
-                && $response->getStatusCode() === 200
+                && 200 === $response->getStatusCode()
             ) {
                 $item->set(\GuzzleHttp\Psr7\str($response));
                 $this->cacheItem($item);
@@ -135,7 +133,7 @@ class DeliveryDateService extends AbstractService
     }
 
     /**
-     * Get a delivery date via SOAP
+     * Get a delivery date via SOAP.
      *
      * @param GetDeliveryDate $getDeliveryDate
      *
@@ -166,21 +164,20 @@ class DeliveryDateService extends AbstractService
         if ($object instanceof GetDeliveryDateResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof Response
-                && $response->getStatusCode() === 200
+                && 200 === $response->getStatusCode()
             ) {
                 $item->set(\GuzzleHttp\Psr7\str($response));
                 $this->cacheItem($item);
             }
 
             return $object;
-
         }
 
         throw new ApiException('Unable to retrieve delivery date');
     }
 
     /**
-     * Get the sent date via REST
+     * Get the sent date via REST.
      *
      * @param GetSentDateRequest $getSentDate
      *
@@ -211,7 +208,7 @@ class DeliveryDateService extends AbstractService
         if ($object instanceof GetSentDateResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof Response
-                && $response->getStatusCode() === 200
+                && 200 === $response->getStatusCode()
             ) {
                 $item->set(\GuzzleHttp\Psr7\str($response));
                 $this->cacheItem($item);
@@ -224,11 +221,12 @@ class DeliveryDateService extends AbstractService
     }
 
     /**
-     * Generate a single label via SOAP
+     * Generate a single label via SOAP.
      *
      * @param GetSentDateRequest $getSentDate
      *
      * @return GetSentDateResponse
+     *
      * @throws CifDownException
      * @throws CifException
      * @throws \Exception
@@ -254,7 +252,7 @@ class DeliveryDateService extends AbstractService
         if ($object instanceof GetSentDateResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof Response
-                && $response->getStatusCode() === 200
+                && 200 === $response->getStatusCode()
             ) {
                 $item->set(\GuzzleHttp\Psr7\str($response));
                 $this->cacheItem($item);
@@ -267,7 +265,7 @@ class DeliveryDateService extends AbstractService
     }
 
     /**
-     * Build the GetDeliveryDate request for the REST API
+     * Build the GetDeliveryDate request for the REST API.
      *
      * @param GetDeliveryDate $getDeliveryDate
      *
@@ -293,10 +291,10 @@ class DeliveryDateService extends AbstractService
         }
 
         $key = array_search('00', array_map(function ($time) {
-            /** @var CutOffTime $time */
+            /* @var CutOffTime $time */
             return $time->getDay();
         }, $times));
-        if ($key !== false) {
+        if (false !== $key) {
             $query['CutOffTime'] = date('H:i:s', strtotime($times[$key]->getTime()));
         } else {
             $query['CutOffTime'] = '15:30:00';
@@ -307,10 +305,10 @@ class DeliveryDateService extends AbstractService
             foreach (range(1, 7) as $day) {
                 $dayName = date('l', strtotime("Sunday +{$day} days"));
                 $key = array_search(str_pad($day, 2, '0', STR_PAD_LEFT), array_map(function ($time) {
-                    /** @var CutOffTime $time */
+                    /* @var CutOffTime $time */
                     return $time->getDay();
                 }, $times));
-                if ($key !== false) {
+                if (false !== $key) {
                     $query["CutOffTime{$dayName}"] = date('H:i:s', strtotime($times[$key]->getTime()));
                     $query["Available{$dayName}"] = 'true';
                 } else {
@@ -338,7 +336,7 @@ class DeliveryDateService extends AbstractService
         }
         if (is_array($deliveryDate->getOptions())) {
             foreach ($deliveryDate->getOptions() as $option) {
-                if ($option === 'Daytime') {
+                if ('Daytime' === $option) {
                     continue;
                 }
 
@@ -360,11 +358,12 @@ class DeliveryDateService extends AbstractService
     }
 
     /**
-     * Process GetDeliveryDate REST Response
+     * Process GetDeliveryDate REST Response.
      *
      * @param mixed $response
      *
-     * @return null|GetDeliveryDateResponse
+     * @return GetDeliveryDateResponse|null
+     *
      * @throws ResponseException
      */
     public function processGetDeliveryDateResponseREST($response)
@@ -382,7 +381,7 @@ class DeliveryDateService extends AbstractService
     }
 
     /**
-     * Build the GetDeliveryDate request for the SOAP API
+     * Build the GetDeliveryDate request for the SOAP API.
      *
      * @param GetDeliveryDate $getDeliveryDate
      *
@@ -406,15 +405,15 @@ class DeliveryDateService extends AbstractService
                 '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
                     ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
                 ],
-                '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
+                '{'.static::ENVELOPE_NAMESPACE.'}Body' => [
                     '{'.static::SERVICES_NAMESPACE.'}GetDeliveryDate' => $getDeliveryDate,
                 ],
             ]
         );
 
         $endpoint = $this->postnl->getSandbox()
-            ? ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT)
-            : ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT);
+            ? (PostNL::MODE_LEGACY === $this->postnl->getMode() ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT)
+            : (PostNL::MODE_LEGACY === $this->postnl->getMode() ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT);
 
         return new Request(
             'POST',
@@ -458,7 +457,7 @@ class DeliveryDateService extends AbstractService
     }
 
     /**
-     * Build the GetSentDate request for the REST API
+     * Build the GetSentDate request for the REST API.
      *
      * @param GetSentDateRequest $getSentDate
      *
@@ -504,19 +503,18 @@ class DeliveryDateService extends AbstractService
     }
 
     /**
-     * Process GetSentDate REST Response
+     * Process GetSentDate REST Response.
      *
      * @param mixed $response
      *
-     * @return null|GetSentDateResponse
+     * @return GetSentDateResponse|null
+     *
      * @throws ResponseException
      */
     public function processGetSentDateResponseREST($response)
     {
         $body = json_decode(static::getResponseText($response), true);
         if (isset($body['SentDate'])) {
-
-
             /** @var GetSentDateResponse $object */
             $object = AbstractEntity::jsonDeserialize(['GetSentDateResponse' => $body]);
             $this->setService($object);
@@ -528,7 +526,7 @@ class DeliveryDateService extends AbstractService
     }
 
     /**
-     * Build the GetSentDate request for the SOAP API
+     * Build the GetSentDate request for the SOAP API.
      *
      * @param GetSentDateRequest $getSentDate
      *
@@ -552,15 +550,15 @@ class DeliveryDateService extends AbstractService
                 '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
                     ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
                 ],
-                '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
+                '{'.static::ENVELOPE_NAMESPACE.'}Body' => [
                     '{'.static::SERVICES_NAMESPACE.'}GetSentDateRequest' => $getSentDate,
                 ],
             ]
         );
 
         $endpoint = $this->postnl->getSandbox()
-            ? ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT)
-            : ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT);
+            ? (PostNL::MODE_LEGACY === $this->postnl->getMode() ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT)
+            : (PostNL::MODE_LEGACY === $this->postnl->getMode() ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT);
 
         return new Request(
             'POST',
@@ -575,11 +573,12 @@ class DeliveryDateService extends AbstractService
     }
 
     /**
-     * Process GetSentDate SOAP Response
+     * Process GetSentDate SOAP Response.
      *
      * @param mixed $response
      *
      * @return GetSentDateResponse
+     *
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
@@ -591,8 +590,6 @@ class DeliveryDateService extends AbstractService
 
         static::registerNamespaces($xml);
         static::validateSOAPResponse($xml);
-
-
 
         $reader = new Reader();
         $reader->xml(static::getResponseText($response));

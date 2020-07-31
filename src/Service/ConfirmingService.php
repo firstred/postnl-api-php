@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -38,9 +38,7 @@ use ThirtyBees\PostNL\Exception\ResponseException;
 use ThirtyBees\PostNL\PostNL;
 
 /**
- * Class ConfirmingService
- *
- * @package ThirtyBees\PostNL\Service
+ * Class ConfirmingService.
  *
  * @method ConfirmingResponseShipment   confirmShipment(Confirming $shipment)
  * @method Request                      buildConfirmShipmentRequest(Confirming $shipment)
@@ -65,9 +63,9 @@ class ConfirmingService extends AbstractService
     const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/ConfirmingWebService/';
 
     /**
-     * Namespaces uses for the SOAP version of this service
+     * Namespaces uses for the SOAP version of this service.
      *
-     * @var array $namespaces
+     * @var array
      */
     public static $namespaces = [
         self::ENVELOPE_NAMESPACE     => 'soap',
@@ -80,11 +78,12 @@ class ConfirmingService extends AbstractService
     ];
 
     /**
-     * Generate a single barcode via REST
+     * Generate a single barcode via REST.
      *
      * @param Confirming $confirming
      *
      * @return ConfirmingResponseShipment
+     *
      * @throws ApiException
      * @throws \ThirtyBees\PostNL\Exception\CifDownException
      * @throws \ThirtyBees\PostNL\Exception\CifException
@@ -99,7 +98,7 @@ class ConfirmingService extends AbstractService
             return $object;
         }
 
-        if ($response->getStatusCode() === 200) {
+        if (200 === $response->getStatusCode()) {
             throw new ResponseException('Invalid API Response', null, null, $response);
         }
 
@@ -107,7 +106,7 @@ class ConfirmingService extends AbstractService
     }
 
     /**
-     * Confirm multiple shipments
+     * Confirm multiple shipments.
      *
      * @param Confirming[] $confirms ['uuid' => Confirming, ...]
      *
@@ -118,7 +117,6 @@ class ConfirmingService extends AbstractService
         $httpClient = $this->postnl->getHttpClient();
 
         foreach ($confirms as $confirm) {
-
             $httpClient->addOrUpdateRequest(
                 $confirm->getId(),
                 $this->buildConfirmRequestREST($confirm)
@@ -143,7 +141,7 @@ class ConfirmingService extends AbstractService
     }
 
     /**
-     * Generate a single label via SOAP
+     * Generate a single label via SOAP.
      *
      * @param Confirming $confirming
      *
@@ -163,7 +161,7 @@ class ConfirmingService extends AbstractService
     }
 
     /**
-     * Generate multiple labels at once
+     * Generate multiple labels at once.
      *
      * @param array $confirmings ['uuid' => Confirming, ...]
      *
@@ -208,8 +206,8 @@ class ConfirmingService extends AbstractService
         return new Request(
             'POST',
             $this->postnl->getSandbox()
-                ? ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT)
-                : ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT),
+                ? (PostNL::MODE_LEGACY === $this->postnl->getMode() ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT)
+                : (PostNL::MODE_LEGACY === $this->postnl->getMode() ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT),
             [
                 'apikey'       => $apiKey,
                 'Accept'       => 'application/json',
@@ -220,11 +218,12 @@ class ConfirmingService extends AbstractService
     }
 
     /**
-     * Proces Confirm REST Response
+     * Proces Confirm REST Response.
      *
      * @param mixed $response
      *
-     * @return null|ConfirmingResponseShipment
+     * @return ConfirmingResponseShipment|null
+     *
      * @throws ApiException
      * @throws ResponseException
      * @throws \ThirtyBees\PostNL\Exception\CifDownException
@@ -268,34 +267,35 @@ class ConfirmingService extends AbstractService
                 '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
                     ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
                 ],
-                '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
+                '{'.static::ENVELOPE_NAMESPACE.'}Body' => [
                     '{'.static::SERVICES_NAMESPACE.'}Confirming' => $confirming,
                 ],
             ]
         );
 
         $endpoint = $this->postnl->getSandbox()
-            ? ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT)
-            : ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT);
+            ? (PostNL::MODE_LEGACY === $this->postnl->getMode() ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT)
+            : (PostNL::MODE_LEGACY === $this->postnl->getMode() ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT);
 
         return new Request(
             'POST',
             $endpoint,
             [
-                'SOAPAction'  => "\"$soapAction\"",
-                'Accept'      => 'text/xml',
-                'Content-Type'=> 'text/xml;charset=UTF-8',
+                'SOAPAction'   => "\"$soapAction\"",
+                'Accept'       => 'text/xml',
+                'Content-Type' => 'text/xml;charset=UTF-8',
             ],
             $body
         );
     }
 
     /**
-     * Process Confirm SOAP response
+     * Process Confirm SOAP response.
      *
      * @param mixed $response
      *
      * @return ConfirmingResponseShipment
+     *
      * @throws ResponseException
      * @throws \Sabre\Xml\LibXMLException
      * @throws \ThirtyBees\PostNL\Exception\CifDownException
@@ -318,5 +318,4 @@ class ConfirmingService extends AbstractService
 
         return $object;
     }
-
 }

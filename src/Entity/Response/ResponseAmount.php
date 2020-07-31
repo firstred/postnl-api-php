@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -36,19 +36,16 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class ResponseAmount
+ * Class ResponseAmount.
  *
- * @package ThirtyBees\PostNL\Entity\Response
- *
- * @method string|null getAccountName()
- * @method string|null getResponseAmountType()
- * @method string|null getBIC()
- * @method string|null getCurrency()
- * @method string|null getIBAN()
- * @method string|null getReference()
- * @method string|null getTransactionNumber()
- * @method string|null getValue()
- *
+ * @method string|null    getAccountName()
+ * @method string|null    getResponseAmountType()
+ * @method string|null    getBIC()
+ * @method string|null    getCurrency()
+ * @method string|null    getIBAN()
+ * @method string|null    getReference()
+ * @method string|null    getTransactionNumber()
+ * @method string|null    getValue()
  * @method ResponseAmount setAccountName(string|null $accountName = null)
  * @method ResponseAmount setResponseAmountType(string|null $ResponseAmountType = null)
  * @method ResponseAmount setBIC(string|null $bic = null)
@@ -60,9 +57,9 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  */
 class ResponseAmount extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
+    /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'AccountName'        => BarcodeService::DOMAIN_NAMESPACE,
             'ResponseAmountType' => BarcodeService::DOMAIN_NAMESPACE,
             'BIC'                => BarcodeService::DOMAIN_NAMESPACE,
@@ -72,7 +69,7 @@ class ResponseAmount extends AbstractEntity
             'TransactionNumber'  => BarcodeService::DOMAIN_NAMESPACE,
             'Value'              => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'AccountName'        => ConfirmingService::DOMAIN_NAMESPACE,
             'ResponseAmountType' => ConfirmingService::DOMAIN_NAMESPACE,
             'BIC'                => ConfirmingService::DOMAIN_NAMESPACE,
@@ -82,7 +79,7 @@ class ResponseAmount extends AbstractEntity
             'TransactionNumber'  => ConfirmingService::DOMAIN_NAMESPACE,
             'Value'              => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'AccountName'        => LabellingService::DOMAIN_NAMESPACE,
             'ResponseAmountType' => LabellingService::DOMAIN_NAMESPACE,
             'BIC'                => LabellingService::DOMAIN_NAMESPACE,
@@ -102,7 +99,7 @@ class ResponseAmount extends AbstractEntity
             'TransactionNumber'  => ShippingStatusService::DOMAIN_NAMESPACE,
             'Value'              => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'AccountName'        => DeliveryDateService::DOMAIN_NAMESPACE,
             'ResponseAmountType' => DeliveryDateService::DOMAIN_NAMESPACE,
             'BIC'                => DeliveryDateService::DOMAIN_NAMESPACE,
@@ -112,7 +109,7 @@ class ResponseAmount extends AbstractEntity
             'TransactionNumber'  => DeliveryDateService::DOMAIN_NAMESPACE,
             'Value'              => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'AccountName'        => LocationService::DOMAIN_NAMESPACE,
             'ResponseAmountType' => LocationService::DOMAIN_NAMESPACE,
             'BIC'                => LocationService::DOMAIN_NAMESPACE,
@@ -122,7 +119,7 @@ class ResponseAmount extends AbstractEntity
             'TransactionNumber'  => LocationService::DOMAIN_NAMESPACE,
             'Value'              => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'AccountName'        => TimeframeService::DOMAIN_NAMESPACE,
             'ResponseAmountType' => TimeframeService::DOMAIN_NAMESPACE,
             'BIC'                => TimeframeService::DOMAIN_NAMESPACE,
@@ -134,21 +131,21 @@ class ResponseAmount extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string|null $AccountName */
+    /** @var string|null */
     protected $AccountName;
-    /** @var string|null $ResponseAmountType */
+    /** @var string|null */
     protected $ResponseAmountType;
-    /** @var string|null $BIC */
+    /** @var string|null */
     protected $BIC;
-    /** @var string|null $Currency */
+    /** @var string|null */
     protected $Currency;
-    /** @var string|null $IBAN */
+    /** @var string|null */
     protected $IBAN;
-    /** @var string|null $Reference */
+    /** @var string|null */
     protected $Reference;
-    /** @var string|null $TransactionNumber */
+    /** @var string|null */
     protected $TransactionNumber;
-    /** @var string|null $Value */
+    /** @var string|null */
     protected $Value;
     // @codingStandardsIgnoreEnd
 

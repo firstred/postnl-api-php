@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -32,27 +32,24 @@ use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\LabellingService;
 
 /**
- * Class Envelope
- *
- * @package ThirtyBees\PostNL\Entity
+ * Class Envelope.
  *
  * @method Header|null getHeader()
  * @method Body|null   getBody()
- *
- * @method Envelope setHeader(Header|null $header = null)
- * @method Envelope setBody(Body|null $body = null)
+ * @method Envelope    setHeader(Header|null $header = null)
+ * @method Envelope    setBody(Body|null $body = null)
  *
  * NOTE: this class has been introduced for deserializing
  */
 class Envelope extends AbstractEntity
 {
     /**
-     * Default properties and namespaces for the SOAP API
+     * Default properties and namespaces for the SOAP API.
      *
-     * @var array $defaultProperties
+     * @var array
      */
     public static $defaultProperties = [
-        'Barcode'    => [
+        'Barcode' => [
             'Header' => BarcodeService::ENVELOPE_NAMESPACE,
             'Body'   => BarcodeService::ENVELOPE_NAMESPACE,
         ],
@@ -60,31 +57,31 @@ class Envelope extends AbstractEntity
             'Header' => ConfirmingService::ENVELOPE_NAMESPACE,
             'Body'   => ConfirmingService::ENVELOPE_NAMESPACE,
         ],
-        'Labelling'  => [
+        'Labelling' => [
             'Header' => LabellingService::ENVELOPE_NAMESPACE,
             'Body'   => LabellingService::ENVELOPE_NAMESPACE,
         ],
-        'ShippingStatus'  => [
+        'ShippingStatus' => [
             'Header' => LabellingService::ENVELOPE_NAMESPACE,
             'Body'   => LabellingService::ENVELOPE_NAMESPACE,
         ],
-        'DeliveryDate'  => [
+        'DeliveryDate' => [
             'Header' => LabellingService::ENVELOPE_NAMESPACE,
             'Body'   => LabellingService::ENVELOPE_NAMESPACE,
         ],
-        'Location'  => [
+        'Location' => [
             'Header' => LabellingService::ENVELOPE_NAMESPACE,
             'Body'   => LabellingService::ENVELOPE_NAMESPACE,
         ],
-        'Timeframe'  => [
+        'Timeframe' => [
             'Header' => LabellingService::ENVELOPE_NAMESPACE,
             'Body'   => LabellingService::ENVELOPE_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var Header|null $Header */
+    /** @var Header|null */
     protected $Header;
-    /** @var Body|null $Body */
+    /** @var Body|null */
     protected $Body;
     // @codingStandardsIgnoreEnd
 

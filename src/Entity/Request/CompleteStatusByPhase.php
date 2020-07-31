@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -40,14 +40,11 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class CompleteStatusByPhase
+ * Class CompleteStatusByPhase.
  *
- * @package ThirtyBees\PostNL\Entity
- *
- * @method Message|null    getMessage()
- * @method Customer|null   getCustomer()
- * @method Shipment|null   getShipment()
- *
+ * @method Message|null          getMessage()
+ * @method Customer|null         getCustomer()
+ * @method Shipment|null         getShipment()
  * @method CompleteStatusByPhase setMessage(Message|null $message = null)
  * @method CompleteStatusByPhase setCustomer(Customer|null $customer = null)
  * @method CompleteStatusByPhase setShipment(Shipment|null $shipment = null)
@@ -55,22 +52,22 @@ use ThirtyBees\PostNL\Service\TimeframeService;
 class CompleteStatusByPhase extends AbstractEntity
 {
     /**
-     * Default properties and namespaces for the SOAP API
+     * Default properties and namespaces for the SOAP API.
      *
-     * @var array $defaultProperties
+     * @var array
      */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'Message'  => BarcodeService::DOMAIN_NAMESPACE,
             'Customer' => BarcodeService::DOMAIN_NAMESPACE,
             'Shipment' => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'Message'  => ConfirmingService::DOMAIN_NAMESPACE,
             'Customer' => ConfirmingService::DOMAIN_NAMESPACE,
             'Shipment' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'Message'  => LabellingService::DOMAIN_NAMESPACE,
             'Customer' => LabellingService::DOMAIN_NAMESPACE,
             'Shipment' => LabellingService::DOMAIN_NAMESPACE,
@@ -80,28 +77,28 @@ class CompleteStatusByPhase extends AbstractEntity
             'Customer' => ShippingStatusService::DOMAIN_NAMESPACE,
             'Shipment' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'Message'  => DeliveryDateService::DOMAIN_NAMESPACE,
             'Customer' => DeliveryDateService::DOMAIN_NAMESPACE,
             'Shipment' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'Message'  => LocationService::DOMAIN_NAMESPACE,
             'Customer' => LocationService::DOMAIN_NAMESPACE,
             'Shipment' => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'Message'  => TimeframeService::DOMAIN_NAMESPACE,
             'Customer' => TimeframeService::DOMAIN_NAMESPACE,
             'Shipment' => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var Message|null $Message */
+    /** @var Message|null */
     protected $Message;
-    /** @var Customer|null $Customer */
+    /** @var Customer|null */
     protected $Customer;
-    /** @var Shipment|null $Shipment */
+    /** @var Shipment|null */
     protected $Shipment;
     // @codingStandardsIgnoreEnd
 
@@ -122,7 +119,7 @@ class CompleteStatusByPhase extends AbstractEntity
     }
 
     /**
-     * Return a serializable array for the XMLWriter
+     * Return a serializable array for the XMLWriter.
      *
      * @param Writer $writer
      *

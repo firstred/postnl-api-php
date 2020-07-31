@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2017 thirty bees
+ * Copyright (C) 2017 thirty bees.
  *
  * NOTICE OF LICENSE
  *
@@ -33,40 +33,38 @@ use Psr\Log\LoggerInterface;
 use ThirtyBees\PostNL\Exception\HttpClientException;
 
 /**
- * Class GuzzleClient
- *
- * @package ThirtyBees\PostNL\HttpClient
+ * Class GuzzleClient.
  */
 class GuzzleClient implements ClientInterface, LoggerAwareInterface
 {
     const DEFAULT_TIMEOUT = 60;
     const DEFAULT_CONNECT_TIMEOUT = 20;
 
-    /** @var static $instance */
+    /** @var static */
     protected static $instance;
-    /** @var array $defaultOptions */
+    /** @var array */
     protected $defaultOptions = [];
     /**
-     * List of pending PSR-7 requests
+     * List of pending PSR-7 requests.
      *
      * @var Request[]
      */
     protected $pendingRequests = [];
-    /** @var LoggerInterface $logger */
+    /** @var LoggerInterface */
     protected $logger;
-    /** @var int $timeout */
+    /** @var int */
     private $timeout = self::DEFAULT_TIMEOUT;
-    /** @var int $connectTimeout */
+    /** @var int */
     private $connectTimeout = self::DEFAULT_CONNECT_TIMEOUT;
-    /** @var int $maxRetries */
+    /** @var int */
     private $maxRetries = 5;
-    /** @var int $concurrency */
+    /** @var int */
     private $concurrency = 5;
-    /** @var Client $client */
+    /** @var Client */
     private $client;
 
     /**
-     * Get the Guzzle client
+     * Get the Guzzle client.
      *
      * @return Client
      */
@@ -131,14 +129,15 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
-     * Set Guzzle option
+     * Set Guzzle option.
      *
      * @param string $name
      * @param mixed  $value
      *
      * @return GuzzleClient
      */
-    public function setOption($name, $value) {
+    public function setOption($name, $value)
+    {
         // Set the default option
         $this->defaultOptions[$name] = $value;
         // Reset the non-mutable Guzzle client
@@ -148,7 +147,7 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
-     * Get Guzzle option
+     * Get Guzzle option.
      *
      * @param string $name
      *
@@ -164,7 +163,7 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
-     * Set the verify setting
+     * Set the verify setting.
      *
      * @param bool|string $verify
      *
@@ -181,7 +180,7 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
-     * Return verify setting
+     * Return verify setting.
      *
      * @return bool|string
      */
@@ -195,7 +194,7 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
-     * Set the amount of retries
+     * Set the amount of retries.
      *
      * @param int $maxRetries
      *
@@ -209,7 +208,7 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
-     * Return max retries
+     * Return max retries.
      *
      * @return int
      */
@@ -219,7 +218,7 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
-     * Set the concurrency
+     * Set the concurrency.
      *
      * @param int $concurrency
      *
@@ -233,7 +232,7 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
-     * Return concurrency
+     * Return concurrency.
      *
      * @return int
      */
@@ -243,7 +242,7 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
-     * Set the logger
+     * Set the logger.
      *
      * @param LoggerInterface $logger
      *
@@ -257,7 +256,7 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
-     * Get the logger
+     * Get the logger.
      *
      * @return LoggerInterface
      */
@@ -268,7 +267,7 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
 
     /**
      * Adds a request to the list of pending requests
-     * Using the ID you can replace a request
+     * Using the ID you can replace a request.
      *
      * @param string $id      Request ID
      * @param string $request PSR-7 request
@@ -287,7 +286,7 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
-     * Remove a request from the list of pending requests
+     * Remove a request from the list of pending requests.
      *
      * @param string $id
      */
@@ -297,7 +296,7 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
-     * Clear all pending requests
+     * Clear all pending requests.
      */
     public function clearRequests()
     {
@@ -305,7 +304,7 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
-     * Do a single request
+     * Do a single request.
      *
      * Exceptions are captured into the result array
      *
@@ -332,7 +331,7 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
-     * Do all async requests
+     * Do all async requests.
      *
      * Exceptions are captured into the result array
      *
@@ -369,7 +368,7 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
         $responses = [];
         (new EachPromise($promises, [
             'concurrency' => $this->concurrency,
-            'fulfilled' => function ($response, $index) use (&$responses) {
+            'fulfilled'   => function ($response, $index) use (&$responses) {
                 $responses[$index] = $response;
             },
             'rejected' => function ($response, $index) use (&$responses) {
@@ -392,7 +391,7 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
                     } else {
                         $response = new HttpClientException(null, null, $response['reason']);
                     }
-                 } else {
+                } else {
                     $response = $response['reason'];
                 }
             } elseif (!$response instanceof Response) {

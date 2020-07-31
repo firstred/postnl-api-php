@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -37,37 +37,34 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class GetSentDate
+ * Class GetSentDate.
  *
- * @package ThirtyBees\PostNL\Entity
- *
- * @method bool|null         getAllowSundaySorting()
- * @method string|null       getCity()
- * @method string|null       getCountryCode()
- * @method string|null       getHouseNr()
- * @method string|null       getHouseNrExt()
- * @method string[]|null     getOptions()
- * @method string|null       getPostalCode()
- * @method string|null       getDeliveryDate()
- * @method string|null       getShippingDuration()
- * @method string|null       getStreet()
- *
- * @method GetSentDate setAllowSundaySorting(bool|null $allowSundaySorting = null)
- * @method GetSentDate setCity(string|null $city = null)
- * @method GetSentDate setCountryCode(string|null $code = null)
- * @method GetSentDate setHouseNr(string|null $houseNr = null)
- * @method GetSentDate setHouseNrExt(string|null $houseNrExt = null)
- * @method GetSentDate setOptions(array|null $options = null)
- * @method GetSentDate setDeliveryDate(string|null $date = null)
- * @method GetSentDate setShippingDuration(string|null $duration = null)
- * @method GetSentDate setStreet(string|null $street = null)
+ * @method bool|null     getAllowSundaySorting()
+ * @method string|null   getCity()
+ * @method string|null   getCountryCode()
+ * @method string|null   getHouseNr()
+ * @method string|null   getHouseNrExt()
+ * @method string[]|null getOptions()
+ * @method string|null   getPostalCode()
+ * @method string|null   getDeliveryDate()
+ * @method string|null   getShippingDuration()
+ * @method string|null   getStreet()
+ * @method GetSentDate   setAllowSundaySorting(bool|null $allowSundaySorting = null)
+ * @method GetSentDate   setCity(string|null $city = null)
+ * @method GetSentDate   setCountryCode(string|null $code = null)
+ * @method GetSentDate   setHouseNr(string|null $houseNr = null)
+ * @method GetSentDate   setHouseNrExt(string|null $houseNrExt = null)
+ * @method GetSentDate   setOptions(array|null $options = null)
+ * @method GetSentDate   setDeliveryDate(string|null $date = null)
+ * @method GetSentDate   setShippingDuration(string|null $duration = null)
+ * @method GetSentDate   setStreet(string|null $street = null)
  */
 class GetSentDate extends AbstractEntity
 {
     /**
-     * Default properties and namespaces for the SOAP API
+     * Default properties and namespaces for the SOAP API.
      *
-     * @var array $defaultProperties
+     * @var array
      */
     public static $defaultProperties = [
         'Barcode' => [
@@ -82,7 +79,7 @@ class GetSentDate extends AbstractEntity
             'ShippingDuration'   => BarcodeService::DOMAIN_NAMESPACE,
             'Street'             => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'AllowSundaySorting' => ConfirmingService::DOMAIN_NAMESPACE,
             'City'               => ConfirmingService::DOMAIN_NAMESPACE,
             'CountryCode'        => ConfirmingService::DOMAIN_NAMESPACE,
@@ -94,7 +91,7 @@ class GetSentDate extends AbstractEntity
             'ShippingDuration'   => ConfirmingService::DOMAIN_NAMESPACE,
             'Street'             => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'AllowSundaySorting' => LabellingService::DOMAIN_NAMESPACE,
             'City'               => LabellingService::DOMAIN_NAMESPACE,
             'CountryCode'        => LabellingService::DOMAIN_NAMESPACE,
@@ -118,7 +115,7 @@ class GetSentDate extends AbstractEntity
             'ShippingDuration'   => ShippingStatusService::DOMAIN_NAMESPACE,
             'Street'             => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'AllowSundaySorting' => DeliveryDateService::DOMAIN_NAMESPACE,
             'City'               => DeliveryDateService::DOMAIN_NAMESPACE,
             'CountryCode'        => DeliveryDateService::DOMAIN_NAMESPACE,
@@ -130,7 +127,7 @@ class GetSentDate extends AbstractEntity
             'ShippingDuration'   => DeliveryDateService::DOMAIN_NAMESPACE,
             'Street'             => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'AllowSundaySorting' => LocationService::DOMAIN_NAMESPACE,
             'City'               => LocationService::DOMAIN_NAMESPACE,
             'CountryCode'        => LocationService::DOMAIN_NAMESPACE,
@@ -142,7 +139,7 @@ class GetSentDate extends AbstractEntity
             'ShippingDuration'   => LocationService::DOMAIN_NAMESPACE,
             'Street'             => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'AllowSundaySorting' => TimeframeService::DOMAIN_NAMESPACE,
             'City'               => TimeframeService::DOMAIN_NAMESPACE,
             'CountryCode'        => TimeframeService::DOMAIN_NAMESPACE,
@@ -156,25 +153,25 @@ class GetSentDate extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var bool|null $AllowSundaySorting */
+    /** @var bool|null */
     protected $AllowSundaySorting;
-    /** @var string|null $City */
+    /** @var string|null */
     protected $City;
-    /** @var string|null $CountryCode */
+    /** @var string|null */
     protected $CountryCode;
-    /** @var string|null $DeliveryDate */
+    /** @var string|null */
     protected $DeliveryDate;
-    /** @var string|null $HouseNr */
+    /** @var string|null */
     protected $HouseNr;
-    /** @var string|null $HouseNrExt */
+    /** @var string|null */
     protected $HouseNrExt;
-    /** @var string[]|null $Options */
+    /** @var string[]|null */
     protected $Options;
-    /** @var string|null $PostalCode */
+    /** @var string|null */
     protected $PostalCode;
-    /** @var string|null $ShippingDuration */
+    /** @var string|null */
     protected $ShippingDuration;
-    /** @var string|null $Street */
+    /** @var string|null */
     protected $Street;
     // @codingStandardsIgnoreEnd
 
@@ -219,7 +216,7 @@ class GetSentDate extends AbstractEntity
     }
 
     /**
-     * Set the postcode
+     * Set the postcode.
      *
      * @param string|null $postcode
      *
@@ -237,7 +234,7 @@ class GetSentDate extends AbstractEntity
     }
 
     /**
-     * Return a serializable array for the XMLWriter
+     * Return a serializable array for the XMLWriter.
      *
      * @param Writer $writer
      *
@@ -253,15 +250,15 @@ class GetSentDate extends AbstractEntity
         }
 
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if ($propertyName === 'Options') {
+            if ('Options' === $propertyName) {
                 if (isset($this->Options)) {
                     $options = [];
                     foreach ($this->Options as $option) {
-                        $options[] = ["{http://schemas.microsoft.com/2003/10/Serialization/Arrays}string" => $option];
+                        $options[] = ['{http://schemas.microsoft.com/2003/10/Serialization/Arrays}string' => $option];
                     }
                     $xml["{{$namespace}}Options"] = $options;
                 }
-            } elseif ($propertyName === 'AllowSundaySorting') {
+            } elseif ('AllowSundaySorting' === $propertyName) {
                 $xml["{{$namespace}}AllowSundaySorting"] = $this->AllowSundaySorting ? 'true' : 'false';
             } elseif (isset($this->{$propertyName})) {
                 $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};

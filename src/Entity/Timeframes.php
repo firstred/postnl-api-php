@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -35,53 +35,50 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class Timeframes
+ * Class Timeframes.
  *
- * @package ThirtyBees\PostNL\Entity
- *
- * @method Timeframe[]|null getTimeframess()
+ * @method Timeframe[]|null          getTimeframess()
  * @method TimeframeTimeFrame[]|null getTimeframeTimeFrame()
- *
- * @method Timeframes setTimeframes(Timeframe[]|null $timeframes = null)
- * @method Timeframes setTimeframeTimeFrames(TimeframeTimeFrame[]|null $timeframes = null)
+ * @method Timeframes                setTimeframes(Timeframe[]|null $timeframes = null)
+ * @method Timeframes                setTimeframeTimeFrames(TimeframeTimeFrame[]|null $timeframes = null)
  */
 class Timeframes extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
+    /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode'        => [
-            'Timeframes'         => BarcodeService::DOMAIN_NAMESPACE,
+        'Barcode' => [
+            'Timeframes'          => BarcodeService::DOMAIN_NAMESPACE,
             'TimeframeTimeFrames' => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
-            'Timeframes'         => ConfirmingService::DOMAIN_NAMESPACE,
+        'Confirming' => [
+            'Timeframes'          => ConfirmingService::DOMAIN_NAMESPACE,
             'TimeframeTimeFrames' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
-            'Timeframes'         => LabellingService::DOMAIN_NAMESPACE,
+        'Labelling' => [
+            'Timeframes'          => LabellingService::DOMAIN_NAMESPACE,
             'TimeframeTimeFrames' => LabellingService::DOMAIN_NAMESPACE,
         ],
         'ShippingStatus' => [
-            'Timeframes'         => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Timeframes'          => ShippingStatusService::DOMAIN_NAMESPACE,
             'TimeframeTimeFrames' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'   => [
-            'Timeframes'         => DeliveryDateService::DOMAIN_NAMESPACE,
+        'DeliveryDate' => [
+            'Timeframes'          => DeliveryDateService::DOMAIN_NAMESPACE,
             'TimeframeTimeFrames' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
-            'Timeframes'         => LocationService::DOMAIN_NAMESPACE,
+        'Location' => [
+            'Timeframes'          => LocationService::DOMAIN_NAMESPACE,
             'TimeframeTimeFrames' => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
-            'Timeframes'         => TimeframeService::DOMAIN_NAMESPACE,
+        'Timeframe' => [
+            'Timeframes'          => TimeframeService::DOMAIN_NAMESPACE,
             'TimeframeTimeFrames' => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var Timeframe[]|null $Timeframes */
+    /** @var Timeframe[]|null */
     protected $Timeframes;
-    /** @var TimeframeTimeFrame[]|null $TimeframeTimeFrames */
+    /** @var TimeframeTimeFrame[]|null */
     protected $TimeframeTimeFrames;
     // @codingStandardsIgnoreEnd
 
@@ -102,7 +99,7 @@ class Timeframes extends AbstractEntity
     }
 
     /**
-     * Return a serializable array for `json_encode`
+     * Return a serializable array for `json_encode`.
      *
      * @return array
      */
@@ -115,13 +112,13 @@ class Timeframes extends AbstractEntity
 
         foreach (array_keys(static::$defaultProperties[$this->currentService]) as $propertyName) {
             if (isset($this->{$propertyName})) {
-                if ($propertyName === 'Timeframes') {
+                if ('Timeframes' === $propertyName) {
                     $timeframes = [];
                     foreach ($this->Timeframes as $timeframe) {
                         $timeframes[] = $timeframe;
                     }
                     $json[$propertyName] = ['TimeframeTimeFrame' => $timeframes];
-                } elseif ($propertyName === 'TimeframeTimeFrames') {
+                } elseif ('TimeframeTimeFrames' === $propertyName) {
                     $timeframes = [];
                     foreach ($this->TimeframeTimeFrames as $timeframe) {
                         $timeframes[] = $timeframe;

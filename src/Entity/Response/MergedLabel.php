@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -38,29 +38,26 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class MergedLabel
- *
- * @package ThirtyBees\PostNL\Entity
+ * Class MergedLabel.
  *
  * @method string[]|null getBarcodes()
  * @method Label[]|null  getLabels()
- *
- * @method MergedLabel setBarcodes(string[]|null $barcodes = null)
- * @method MergedLabel setLabels(Label[]|null $labels = null)
+ * @method MergedLabel   setBarcodes(string[]|null $barcodes = null)
+ * @method MergedLabel   setLabels(Label[]|null $labels = null)
  */
 class MergedLabel extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
+    /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'Barcodes' => BarcodeService::DOMAIN_NAMESPACE,
             'Labels'   => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'Barcodes' => ConfirmingService::DOMAIN_NAMESPACE,
             'Labels'   => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'Barcodes' => LabellingService::DOMAIN_NAMESPACE,
             'Labels'   => LabellingService::DOMAIN_NAMESPACE,
         ],
@@ -68,27 +65,27 @@ class MergedLabel extends AbstractEntity
             'Barcodes' => ShippingStatusService::DOMAIN_NAMESPACE,
             'Labels'   => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'Barcodes' => DeliveryDateService::DOMAIN_NAMESPACE,
             'Labels'   => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'Barcodes' => LocationService::DOMAIN_NAMESPACE,
             'Labels'   => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'Barcodes' => TimeframeService::DOMAIN_NAMESPACE,
             'Labels'   => TimeframeService::DOMAIN_NAMESPACE,
         ],
-        'Shipping'      => [
+        'Shipping' => [
             'Barcodes' => ShippingService::DOMAIN_NAMESPACE,
             'Labels'   => ShippingService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string[]|null $Barcodes */
+    /** @var string[]|null */
     protected $Barcodes;
-    /** @var Label[]|null $Labels */
+    /** @var Label[]|null */
     protected $Labels;
     // @codingStandardsIgnoreEnd
 

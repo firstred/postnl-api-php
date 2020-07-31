@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -55,9 +55,7 @@ use ThirtyBees\PostNL\Exception\ResponseException;
 use ThirtyBees\PostNL\PostNL;
 
 /**
- * Class ShippingStatusService
- *
- * @package ThirtyBees\PostNL\Service
+ * Class ShippingStatusService.
  *
  * @method CurrentStatusResponse  currentStatus(CurrentStatus|CurrentStatusByReference|CurrentStatusByPhase|CurrentStatusByStatus $currentStatus)
  * @method Request                buildCurrentStatusRequest(CurrentStatus|CurrentStatusByReference|CurrentStatusByPhase|CurrentStatusByStatus $currentStatus)
@@ -94,9 +92,9 @@ class ShippingStatusService extends AbstractService
     const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/ShippingStatusWebService/';
 
     /**
-     * Namespaces uses for the SOAP version of this service
+     * Namespaces uses for the SOAP version of this service.
      *
-     * @var array $namespaces
+     * @var array
      */
     public static $namespaces = [
         self::ENVELOPE_NAMESPACE     => 'soap',
@@ -109,7 +107,7 @@ class ShippingStatusService extends AbstractService
     ];
 
     /**
-     * Gets the current status
+     * Gets the current status.
      *
      * This is a combi-function, supporting the following:
      * - CurrentStatus (by barcode):
@@ -151,7 +149,7 @@ class ShippingStatusService extends AbstractService
         if ($object instanceof CurrentStatusResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof Response
-                && $response->getStatusCode() === 200
+                && 200 === $response->getStatusCode()
             ) {
                 $item->set(\GuzzleHttp\Psr7\str($response));
                 $this->cacheItem($item);
@@ -160,12 +158,11 @@ class ShippingStatusService extends AbstractService
             return $object;
         }
 
-
         throw new ApiException('Unable to retrieve current status');
     }
 
     /**
-     * Gets the current status
+     * Gets the current status.
      *
      * This is a combi-function, supporting the following:
      * - CurrentStatus (by barcode):
@@ -208,7 +205,7 @@ class ShippingStatusService extends AbstractService
         if ($object instanceof CurrentStatusResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof Response
-                && $response->getStatusCode() === 200
+                && 200 === $response->getStatusCode()
             ) {
                 $item->set(\GuzzleHttp\Psr7\str($response));
                 $this->cacheItem($item);
@@ -221,7 +218,7 @@ class ShippingStatusService extends AbstractService
     }
 
     /**
-     * Gets the complete status
+     * Gets the complete status.
      *
      * This is a combi-function, supporting the following:
      * - CurrentStatus (by barcode):
@@ -263,7 +260,7 @@ class ShippingStatusService extends AbstractService
         if ($object instanceof CompleteStatusResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof Response
-                && $response->getStatusCode() === 200
+                && 200 === $response->getStatusCode()
             ) {
                 $item->set(\GuzzleHttp\Psr7\str($response));
                 $this->cacheItem($item);
@@ -276,7 +273,7 @@ class ShippingStatusService extends AbstractService
     }
 
     /**
-     * Gets the complete status
+     * Gets the complete status.
      *
      * This is a combi-function, supporting the following:
      * - CurrentStatus (by barcode):
@@ -319,7 +316,7 @@ class ShippingStatusService extends AbstractService
         if ($object instanceof CompleteStatusResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof Response
-                && $response->getStatusCode() === 200
+                && 200 === $response->getStatusCode()
             ) {
                 $item->set(\GuzzleHttp\Psr7\str($response));
                 $this->cacheItem($item);
@@ -332,7 +329,7 @@ class ShippingStatusService extends AbstractService
     }
 
     /**
-     * Gets the complete status
+     * Gets the complete status.
      *
      * This is a combi-function, supporting the following:
      * - CurrentStatus (by barcode):
@@ -374,7 +371,7 @@ class ShippingStatusService extends AbstractService
         if ($object instanceof GetSignatureResponseSignature) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof Response
-                && $response->getStatusCode() === 200
+                && 200 === $response->getStatusCode()
             ) {
                 $item->set(\GuzzleHttp\Psr7\str($response));
                 $this->cacheItem($item);
@@ -387,7 +384,7 @@ class ShippingStatusService extends AbstractService
     }
 
     /**
-     * Gets the complete status
+     * Gets the complete status.
      *
      * This is a combi-function, supporting the following:
      * - CurrentStatus (by barcode):
@@ -425,7 +422,7 @@ class ShippingStatusService extends AbstractService
         if ($object instanceof SignatureResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof Response
-                && $response->getStatusCode() === 200
+                && 200 === $response->getStatusCode()
             ) {
                 $item->set(\GuzzleHttp\Psr7\str($response));
                 $this->cacheItem($item);
@@ -438,7 +435,7 @@ class ShippingStatusService extends AbstractService
     }
 
     /**
-     * Build the CurrentStatus request for the REST API
+     * Build the CurrentStatus request for the REST API.
      *
      * This function auto-detects and adjusts the following requests:
      * - CurrentStatus
@@ -466,7 +463,7 @@ class ShippingStatusService extends AbstractService
                 'customerCode'   => $this->postnl->getCustomer()->getCustomerCode(),
                 'customerNumber' => $this->postnl->getCustomer()->getCustomerNumber(),
             ];
-            $endpoint = "/search";
+            $endpoint = '/search';
             $query['status'] = $currentStatus->getShipment()->getStatusCode();
             if ($startDate = $currentStatus->getShipment()->getDateFrom()) {
                 $query['startDate'] = date('d-m-Y', strtotime($startDate));
@@ -479,7 +476,7 @@ class ShippingStatusService extends AbstractService
                 'customerCode'   => $this->postnl->getCustomer()->getCustomerCode(),
                 'customerNumber' => $this->postnl->getCustomer()->getCustomerNumber(),
             ];
-            $endpoint = "/search";
+            $endpoint = '/search';
             $query['phase'] = $currentStatus->getShipment()->getPhaseCode();
             if ($startDate = $currentStatus->getShipment()->getDateFrom()) {
                 $query['startDate'] = date('d-m-Y', strtotime($startDate));
@@ -505,11 +502,12 @@ class ShippingStatusService extends AbstractService
     }
 
     /**
-     * Process CurrentStatus Response REST
+     * Process CurrentStatus Response REST.
      *
      * @param mixed $response
      *
      * @return CurrentStatusResponse
+     *
      * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
     public function processCurrentStatusResponseREST($response)
@@ -527,7 +525,7 @@ class ShippingStatusService extends AbstractService
     }
 
     /**
-     * Build the CurrentStatus request for the SOAP API
+     * Build the CurrentStatus request for the SOAP API.
      *
      * @param CurrentStatus|CurrentStatusByReference|CurrentStatusByPhase|CurrentStatusByStatus $currentStatus
      *
@@ -550,10 +548,10 @@ class ShippingStatusService extends AbstractService
         } elseif ($currentStatus instanceof CurrentStatusByReference) {
             $soapAction = static::SOAP_ACTION_REFERENCE;
             $item = 'CurrentStatusByReference';
-        } elseif($currentStatus instanceof CurrentStatusByPhase) {
+        } elseif ($currentStatus instanceof CurrentStatusByPhase) {
             $soapAction = static::SOAP_ACTION_PHASE;
             $item = 'CurrentStatusByPhase';
-        } elseif($currentStatus instanceof CurrentStatusByStatus) {
+        } elseif ($currentStatus instanceof CurrentStatusByStatus) {
             $soapAction = static::SOAP_ACTION_STATUS;
             $item = 'CurrentStatusByStatus';
         } else {
@@ -575,14 +573,14 @@ class ShippingStatusService extends AbstractService
                 '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
                     ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
                 ],
-                '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
+                '{'.static::ENVELOPE_NAMESPACE.'}Body' => [
                     '{'.static::SERVICES_NAMESPACE.'}'.$item => $currentStatus,
                 ],
             ]
         );
         $endpoint = $this->postnl->getSandbox()
-            ? ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT)
-            : ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT);
+            ? (PostNL::MODE_LEGACY === $this->postnl->getMode() ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT)
+            : (PostNL::MODE_LEGACY === $this->postnl->getMode() ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT);
 
         return new Request(
             'POST',
@@ -597,11 +595,12 @@ class ShippingStatusService extends AbstractService
     }
 
     /**
-     * Process CurrentStatus Response SOAP
+     * Process CurrentStatus Response SOAP.
      *
      * @param mixed $response
      *
      * @return CurrentStatusResponse
+     *
      * @throws CifDownException
      * @throws CifException
      * @throws \Sabre\Xml\LibXMLException
@@ -628,7 +627,7 @@ class ShippingStatusService extends AbstractService
     }
 
     /**
-     * Build the CompleteStatus request for the REST API
+     * Build the CompleteStatus request for the REST API.
      *
      * This function auto-detects and adjusts the following requests:
      * - CompleteStatus
@@ -658,7 +657,7 @@ class ShippingStatusService extends AbstractService
                 'customerNumber' => $this->postnl->getCustomer()->getCustomerNumber(),
                 'detail'         => 'true',
             ];
-            $endpoint = "/search";
+            $endpoint = '/search';
             $query['status'] = $completeStatus->getShipment()->getStatusCode();
             if ($startDate = $completeStatus->getShipment()->getDateFrom()) {
                 $query['startDate'] = date('d-m-Y', strtotime($startDate));
@@ -672,7 +671,7 @@ class ShippingStatusService extends AbstractService
                 'customerNumber' => $this->postnl->getCustomer()->getCustomerNumber(),
                 'detail'         => 'true',
             ];
-            $endpoint = "/search";
+            $endpoint = '/search';
             $query['phase'] = $completeStatus->getShipment()->getPhaseCode();
             if ($startDate = $completeStatus->getShipment()->getDateFrom()) {
                 $query['startDate'] = date('d-m-Y', strtotime($startDate));
@@ -700,11 +699,12 @@ class ShippingStatusService extends AbstractService
     }
 
     /**
-     * Process CompleteStatus Response REST
+     * Process CompleteStatus Response REST.
      *
      * @param mixed $response
      *
-     * @return null|CompleteStatusResponse
+     * @return CompleteStatusResponse|null
+     *
      * @throws ResponseException
      */
     public function processCompleteStatusResponseREST($response)
@@ -730,7 +730,7 @@ class ShippingStatusService extends AbstractService
                 $shipment['Events'] = $shipment['Event'];
                 unset($shipment['Event']);
                 foreach ($shipment['Events'] as &$event) {
-                    $event  = AbstractEntity::jsonDeserialize(['CompleteStatusResponseEvent' => $event]);
+                    $event = AbstractEntity::jsonDeserialize(['CompleteStatusResponseEvent' => $event]);
                     //$event = ['CompleteStatusResponseEvent' => $event];
                 }
             }
@@ -750,11 +750,10 @@ class ShippingStatusService extends AbstractService
         }
 
         return null;
-
     }
 
     /**
-     * Build the CompleteStatus request for the SOAP API
+     * Build the CompleteStatus request for the SOAP API.
      *
      * This function handles following requests:
      * - CompleteStatus
@@ -765,6 +764,7 @@ class ShippingStatusService extends AbstractService
      * @param CompleteStatus|CompleteStatusByReference|CompleteStatusByPhase|CompleteStatusByStatus $completeStatus
      *
      * @return Request
+     *
      * @throws InvalidArgumentException
      */
     public function buildCompleteStatusRequestSOAP($completeStatus)
@@ -807,15 +807,15 @@ class ShippingStatusService extends AbstractService
                 '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
                     ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
                 ],
-                '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
+                '{'.static::ENVELOPE_NAMESPACE.'}Body' => [
                     '{'.static::SERVICES_NAMESPACE.'}'.$item => $completeStatus,
                 ],
             ]
         );
 
         $endpoint = $this->postnl->getSandbox()
-            ? ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT)
-            : ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT);
+            ? (PostNL::MODE_LEGACY === $this->postnl->getMode() ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT)
+            : (PostNL::MODE_LEGACY === $this->postnl->getMode() ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT);
 
         return new Request(
             'POST',
@@ -830,7 +830,7 @@ class ShippingStatusService extends AbstractService
     }
 
     /**
-     * Process CompleteStatus Response SOAP
+     * Process CompleteStatus Response SOAP.
      *
      * @param mixed $response
      *
@@ -854,14 +854,14 @@ class ShippingStatusService extends AbstractService
         $array = $array[0];
 
         /** @var CompleteStatusResponse $object */
-        $object = AbstractEntity::xmlDeserialize($array);;
+        $object = AbstractEntity::xmlDeserialize($array);
         $this->setService($object);
 
         return $object;
     }
 
     /**
-     * Build the GetSignature request for the REST API
+     * Build the GetSignature request for the REST API.
      *
      * @param GetSignature $getSignature
      *
@@ -884,11 +884,12 @@ class ShippingStatusService extends AbstractService
     }
 
     /**
-     * Process GetSignature Response REST
+     * Process GetSignature Response REST.
      *
      * @param mixed $response
      *
-     * @return null|GetSignatureResponseSignature
+     * @return GetSignatureResponseSignature|null
+     *
      * @throws ResponseException
      */
     public function processGetSignatureResponseREST($response)
@@ -906,7 +907,7 @@ class ShippingStatusService extends AbstractService
     }
 
     /**
-     * Build the GetSignature request for the SOAP API
+     * Build the GetSignature request for the SOAP API.
      *
      * @param GetSignature $getSignature
      *
@@ -937,15 +938,15 @@ class ShippingStatusService extends AbstractService
                 '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
                     ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
                 ],
-                '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
+                '{'.static::ENVELOPE_NAMESPACE.'}Body' => [
                     '{'.static::SERVICES_NAMESPACE.'}GetSignature' => $getSignature,
                 ],
             ]
         );
 
         $endpoint = $this->postnl->getSandbox()
-            ? ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT)
-            : ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT);
+            ? (PostNL::MODE_LEGACY === $this->postnl->getMode() ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT)
+            : (PostNL::MODE_LEGACY === $this->postnl->getMode() ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT);
 
         return new Request(
             'POST',
@@ -960,11 +961,12 @@ class ShippingStatusService extends AbstractService
     }
 
     /**
-     * Process GetSignature Response SOAP
+     * Process GetSignature Response SOAP.
      *
      * @param mixed $response
      *
      * @return GetSignatureResponseSignature
+     *
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException

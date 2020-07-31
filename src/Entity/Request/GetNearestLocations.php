@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -38,16 +38,13 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class GetNearestLocations
+ * Class GetNearestLocations.
  *
  * This class is both the container and can be the actual GetNearestLocations object itself!
  *
- * @package ThirtyBees\PostNL\Entity
- *
- * @method string|null   getCountrycode()
- * @method Location|null getLocation()
- * @method Message|null  getMessage()
- *
+ * @method string|null         getCountrycode()
+ * @method Location|null       getLocation()
+ * @method Message|null        getMessage()
  * @method GetNearestLocations setCountrycode(string|null $countrycode = null)
  * @method GetNearestLocations setLocation(Location|null $location = null)
  * @method GetNearestLocations setMessage(Message|null $message = null)
@@ -55,22 +52,22 @@ use ThirtyBees\PostNL\Service\TimeframeService;
 class GetNearestLocations extends AbstractEntity
 {
     /**
-     * Default properties and namespaces for the SOAP API
+     * Default properties and namespaces for the SOAP API.
      *
-     * @var array $defaultProperties
+     * @var array
      */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'Countrycode' => BarcodeService::DOMAIN_NAMESPACE,
             'Location'    => BarcodeService::DOMAIN_NAMESPACE,
             'Message'     => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'Countrycode' => ConfirmingService::DOMAIN_NAMESPACE,
             'Location'    => ConfirmingService::DOMAIN_NAMESPACE,
             'Message'     => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'Countrycode' => LabellingService::DOMAIN_NAMESPACE,
             'Location'    => LabellingService::DOMAIN_NAMESPACE,
             'Message'     => LabellingService::DOMAIN_NAMESPACE,
@@ -80,28 +77,28 @@ class GetNearestLocations extends AbstractEntity
             'Location'    => ShippingStatusService::DOMAIN_NAMESPACE,
             'Message'     => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'Countrycode' => DeliveryDateService::DOMAIN_NAMESPACE,
             'Location'    => DeliveryDateService::DOMAIN_NAMESPACE,
             'Message'     => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'Countrycode' => LocationService::DOMAIN_NAMESPACE,
             'Location'    => LocationService::DOMAIN_NAMESPACE,
             'Message'     => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'Countrycode' => TimeframeService::DOMAIN_NAMESPACE,
             'Location'    => TimeframeService::DOMAIN_NAMESPACE,
             'Message'     => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string|null $Countrycode */
+    /** @var string|null */
     protected $Countrycode;
-    /** @var Location|null $Location */
+    /** @var Location|null */
     protected $Location;
-    /** @var Message|null $Message */
+    /** @var Message|null */
     protected $Message;
     // @codingStandardsIgnoreEnd
 

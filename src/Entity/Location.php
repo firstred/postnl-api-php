@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -36,9 +36,7 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class Location
- *
- * @package ThirtyBees\PostNL\Entity
+ * Class Location.
  *
  * @method string|null               getPostalcode()
  * @method Coordinates|null          getCoordinates()
@@ -59,31 +57,30 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method string|null               getRetailNetworkID()
  * @method string|null               getDownPartnerID()
  * @method string|null               getDownPartnerLocation()
- *
- * @method Location setCoordinates(Coordinates|null $coordinates = null)
- * @method Location setCoordinatesNorthWest(CoordinatesNorthWest|null $coordinates = null)
- * @method Location setCoordinatesSouthEast(CoordinatesSouthEast|null $coordinates = null)
- * @method Location setCity(string|null $city = null)
- * @method Location setStreet(string|null $street = null)
- * @method Location setHouseNr(string|null $houseNr = null)
- * @method Location setHouseNrExt(string|null $houseNrExt = null)
- * @method Location setAllowSundaySorting(string|null $sundaySorting = null)
- * @method Location setDeliveryDate(string|null $deliveryDate = null)
- * @method Location setDeliveryOptions(string[]|null $deliveryOptions = null)
- * @method Location setOpeningTime(string|null $openingTime = null)
- * @method Location setOptions(string[]|null $options = null)
- * @method Location setLocationCode(string|null $code = null)
- * @method Location setSaleschannel(string|null $channel = null)
- * @method Location setTerminalType(string|null $type = null)
- * @method Location setRetailNetworkID(string|null $id = null)
- * @method Location setDownPartnerID(string|null $id = null)
- * @method Location setDownPartnerLocation(string|null $location = null)
+ * @method Location                  setCoordinates(Coordinates|null $coordinates = null)
+ * @method Location                  setCoordinatesNorthWest(CoordinatesNorthWest|null $coordinates = null)
+ * @method Location                  setCoordinatesSouthEast(CoordinatesSouthEast|null $coordinates = null)
+ * @method Location                  setCity(string|null $city = null)
+ * @method Location                  setStreet(string|null $street = null)
+ * @method Location                  setHouseNr(string|null $houseNr = null)
+ * @method Location                  setHouseNrExt(string|null $houseNrExt = null)
+ * @method Location                  setAllowSundaySorting(string|null $sundaySorting = null)
+ * @method Location                  setDeliveryDate(string|null $deliveryDate = null)
+ * @method Location                  setDeliveryOptions(string[]|null $deliveryOptions = null)
+ * @method Location                  setOpeningTime(string|null $openingTime = null)
+ * @method Location                  setOptions(string[]|null $options = null)
+ * @method Location                  setLocationCode(string|null $code = null)
+ * @method Location                  setSaleschannel(string|null $channel = null)
+ * @method Location                  setTerminalType(string|null $type = null)
+ * @method Location                  setRetailNetworkID(string|null $id = null)
+ * @method Location                  setDownPartnerID(string|null $id = null)
+ * @method Location                  setDownPartnerLocation(string|null $location = null)
  */
 class Location extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
+    /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'AllowSundaySorting'   => BarcodeService::DOMAIN_NAMESPACE,
             'DeliveryDate'         => BarcodeService::DOMAIN_NAMESPACE,
             'DeliveryOptions'      => BarcodeService::DOMAIN_NAMESPACE,
@@ -104,7 +101,7 @@ class Location extends AbstractEntity
             'DownPartnerID'        => BarcodeService::DOMAIN_NAMESPACE,
             'DownPartnerLocation'  => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'AllowSundaySorting'   => ConfirmingService::DOMAIN_NAMESPACE,
             'DeliveryDate'         => ConfirmingService::DOMAIN_NAMESPACE,
             'DeliveryOptions'      => ConfirmingService::DOMAIN_NAMESPACE,
@@ -125,7 +122,7 @@ class Location extends AbstractEntity
             'DownPartnerID'        => ConfirmingService::DOMAIN_NAMESPACE,
             'DownPartnerLocation'  => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'AllowSundaySorting'   => LabellingService::DOMAIN_NAMESPACE,
             'DeliveryDate'         => LabellingService::DOMAIN_NAMESPACE,
             'DeliveryOptions'      => LabellingService::DOMAIN_NAMESPACE,
@@ -167,7 +164,7 @@ class Location extends AbstractEntity
             'DownPartnerID'        => ShippingStatusService::DOMAIN_NAMESPACE,
             'DownPartnerLocation'  => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'AllowSundaySorting'   => DeliveryDateService::DOMAIN_NAMESPACE,
             'DeliveryDate'         => DeliveryDateService::DOMAIN_NAMESPACE,
             'DeliveryOptions'      => DeliveryDateService::DOMAIN_NAMESPACE,
@@ -188,7 +185,7 @@ class Location extends AbstractEntity
             'DownPartnerID'        => DeliveryDateService::DOMAIN_NAMESPACE,
             'DownPartnerLocation'  => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'AllowSundaySorting'   => LocationService::DOMAIN_NAMESPACE,
             'DeliveryDate'         => LocationService::DOMAIN_NAMESPACE,
             'DeliveryOptions'      => LocationService::DOMAIN_NAMESPACE,
@@ -209,7 +206,7 @@ class Location extends AbstractEntity
             'DownPartnerID'        => LocationService::DOMAIN_NAMESPACE,
             'DownPartnerLocation'  => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'AllowSundaySorting'   => TimeframeService::DOMAIN_NAMESPACE,
             'DeliveryDate'         => TimeframeService::DOMAIN_NAMESPACE,
             'DeliveryOptions'      => TimeframeService::DOMAIN_NAMESPACE,
@@ -232,43 +229,43 @@ class Location extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string|null $AllowSundaySorting */
+    /** @var string|null */
     protected $AllowSundaySorting;
-    /** @var string|null $DeliveryDate */
+    /** @var string|null */
     protected $DeliveryDate;
-    /** @var string[]|null $DeliveryOptions */
+    /** @var string[]|null */
     protected $DeliveryOptions;
-    /** @var string|null $OpeningTime */
+    /** @var string|null */
     protected $OpeningTime;
-    /** @var string[]|null $Options */
+    /** @var string[]|null */
     protected $Options;
-    /** @var string|null $City */
+    /** @var string|null */
     protected $City;
-    /** @var string|null $HouseNr */
+    /** @var string|null */
     protected $HouseNr;
-    /** @var string|null $HouseNrExt */
+    /** @var string|null */
     protected $HouseNrExt;
-    /** @var string|null $Postalcode */
+    /** @var string|null */
     protected $Postalcode;
-    /** @var string|null $Street */
+    /** @var string|null */
     protected $Street;
-    /** @var Coordinates|null $Coordinates */
+    /** @var Coordinates|null */
     protected $Coordinates;
-    /** @var CoordinatesNorthWest|null $CoordinatesNorthWest */
+    /** @var CoordinatesNorthWest|null */
     protected $CoordinatesNorthWest;
-    /** @var CoordinatesSouthEast|null $CoordinatesSouthEast */
+    /** @var CoordinatesSouthEast|null */
     protected $CoordinatesSouthEast;
-    /** @var string|null $LocationCode */
+    /** @var string|null */
     protected $LocationCode;
-    /** @var string|null $Saleschannel */
+    /** @var string|null */
     protected $Saleschannel;
-    /** @var string|null $TerminalType */
+    /** @var string|null */
     protected $TerminalType;
-    /** @var string|null $RetailNetworkID */
+    /** @var string|null */
     protected $RetailNetworkID;
-    /** @var string|null $DownPartnerID */
+    /** @var string|null */
     protected $DownPartnerID;
-    /** @var string|null $DownPartnerLocation */
+    /** @var string|null */
     protected $DownPartnerLocation;
     // @codingStandardsIgnoreEnd
 
@@ -335,7 +332,7 @@ class Location extends AbstractEntity
     }
 
     /**
-     * Set the postcode
+     * Set the postcode.
      *
      * @param string|null $postcode
      *
@@ -353,7 +350,7 @@ class Location extends AbstractEntity
     }
 
     /**
-     * Return a serializable array for the XMLWriter
+     * Return a serializable array for the XMLWriter.
      *
      * @param Writer $writer
      *
@@ -369,25 +366,23 @@ class Location extends AbstractEntity
         }
 
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if ($propertyName === 'Options') {
+            if ('Options' === $propertyName) {
                 if (is_array($this->Options)) {
                     $options = [];
                     foreach ($this->Options as $option) {
-                        $options[] = ["{http://schemas.microsoft.com/2003/10/Serialization/Arrays}string" => $option];
+                        $options[] = ['{http://schemas.microsoft.com/2003/10/Serialization/Arrays}string' => $option];
                     }
                     $xml["{{$namespace}}Options"] = $options;
                 }
-
-            } elseif ($propertyName === 'DeliveryOptions') {
+            } elseif ('DeliveryOptions' === $propertyName) {
                 if (is_array($this->DeliveryOptions)) {
                     $options = [];
                     foreach ($this->DeliveryOptions as $option) {
-                        $options[] = ["{http://schemas.microsoft.com/2003/10/Serialization/Arrays}string" => $option];
+                        $options[] = ['{http://schemas.microsoft.com/2003/10/Serialization/Arrays}string' => $option];
                     }
                     $xml["{{$namespace}}DeliveryOptions"] = $options;
                 }
-
-            } elseif ($propertyName === 'AllowSundaySorting') {
+            } elseif ('AllowSundaySorting' === $propertyName) {
                 if (isset($this->AllowSundaySorting)) {
                     if (is_bool($this->AllowSundaySorting)) {
                         $xml["{{$namespace}}AllowSundaySorting"] = $this->AllowSundaySorting ? 'true' : 'false';

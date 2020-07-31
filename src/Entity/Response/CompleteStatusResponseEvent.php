@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -36,18 +36,15 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class CompleteStatusResponseEvent
+ * Class CompleteStatusResponseEvent.
  *
- * @package ThirtyBees\PostNL\Entity
- *
- * @method string|null getCode()
- * @method string|null getDescription()
- * @method string|null getDestinationLocationCode()
- * @method string|null getLocationCode()
- * @method string|null getRouteCode()
- * @method string|null getRouteName()
- * @method string|null getTimeStamp()
- *
+ * @method string|null                 getCode()
+ * @method string|null                 getDescription()
+ * @method string|null                 getDestinationLocationCode()
+ * @method string|null                 getLocationCode()
+ * @method string|null                 getRouteCode()
+ * @method string|null                 getRouteName()
+ * @method string|null                 getTimeStamp()
  * @method CompleteStatusResponseEvent setCode(string|null $code = null)
  * @method CompleteStatusResponseEvent setDescription(string|null $description = null)
  * @method CompleteStatusResponseEvent setDestinationLocationCode(string|null $code = null)
@@ -59,12 +56,12 @@ use ThirtyBees\PostNL\Service\TimeframeService;
 class CompleteStatusResponseEvent extends AbstractEntity
 {
     /**
-     * Default properties and namespaces for the SOAP API
+     * Default properties and namespaces for the SOAP API.
      *
-     * @var array $defaultProperties
+     * @var array
      */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'Code'                    => BarcodeService::DOMAIN_NAMESPACE,
             'Description'             => BarcodeService::DOMAIN_NAMESPACE,
             'DestinationLocationCode' => BarcodeService::DOMAIN_NAMESPACE,
@@ -73,7 +70,7 @@ class CompleteStatusResponseEvent extends AbstractEntity
             'RouteName'               => BarcodeService::DOMAIN_NAMESPACE,
             'TimeStamp'               => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'Code'                    => ConfirmingService::DOMAIN_NAMESPACE,
             'Description'             => ConfirmingService::DOMAIN_NAMESPACE,
             'DestinationLocationCode' => ConfirmingService::DOMAIN_NAMESPACE,
@@ -82,7 +79,7 @@ class CompleteStatusResponseEvent extends AbstractEntity
             'RouteName'               => ConfirmingService::DOMAIN_NAMESPACE,
             'TimeStamp'               => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'Code'                    => LabellingService::DOMAIN_NAMESPACE,
             'Description'             => LabellingService::DOMAIN_NAMESPACE,
             'DestinationLocationCode' => LabellingService::DOMAIN_NAMESPACE,
@@ -100,7 +97,7 @@ class CompleteStatusResponseEvent extends AbstractEntity
             'RouteName'               => ShippingStatusService::DOMAIN_NAMESPACE,
             'TimeStamp'               => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'Code'                    => DeliveryDateService::DOMAIN_NAMESPACE,
             'Description'             => DeliveryDateService::DOMAIN_NAMESPACE,
             'DestinationLocationCode' => DeliveryDateService::DOMAIN_NAMESPACE,
@@ -109,7 +106,7 @@ class CompleteStatusResponseEvent extends AbstractEntity
             'RouteName'               => DeliveryDateService::DOMAIN_NAMESPACE,
             'TimeStamp'               => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'Code'                    => LocationService::DOMAIN_NAMESPACE,
             'Description'             => LocationService::DOMAIN_NAMESPACE,
             'DestinationLocationCode' => LocationService::DOMAIN_NAMESPACE,
@@ -118,7 +115,7 @@ class CompleteStatusResponseEvent extends AbstractEntity
             'RouteName'               => LocationService::DOMAIN_NAMESPACE,
             'TimeStamp'               => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'Code'                    => TimeframeService::DOMAIN_NAMESPACE,
             'Description'             => TimeframeService::DOMAIN_NAMESPACE,
             'DestinationLocationCode' => TimeframeService::DOMAIN_NAMESPACE,
@@ -129,19 +126,19 @@ class CompleteStatusResponseEvent extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string|null $Code */
+    /** @var string|null */
     protected $Code;
-    /** @var string|null $Description */
+    /** @var string|null */
     protected $Description;
-    /** @var string|null $DestinationLocationCode */
+    /** @var string|null */
     protected $DestinationLocationCode;
-    /** @var string|null $LocationCode */
+    /** @var string|null */
     protected $LocationCode;
-    /** @var string|null $RouteCode */
+    /** @var string|null */
     protected $RouteCode;
-    /** @var string|null $RouteName */
+    /** @var string|null */
     protected $RouteName;
-    /** @var string|null $TimeStamp */
+    /** @var string|null */
     protected $TimeStamp;
     // @codingStandardsIgnoreEnd
 

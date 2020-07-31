@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -36,28 +36,25 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class ResponseAddress
+ * Class ResponseAddress.
  *
- * @package ThirtyBees\PostNL\Entity\Response
- *
- * @method string|null getAddressType()
- * @method string|null getFirstName()
- * @method string|null getName()
- * @method string|null getCompanyName()
- * @method string|null getStreet()
- * @method string|null getHouseNr()
- * @method string|null getHouseNrExt()
- * @method string|null getZipcode()
- * @method string|null getCity()
- * @method string|null getCountrycode()
- * @method string|null getArea()
- * @method string|null getBuildingname()
- * @method string|null getDepartment()
- * @method string|null getDoorcode()
- * @method string|null getFloor()
- * @method string|null getRegion()
- * @method string|null getRemark()
- *
+ * @method string|null     getAddressType()
+ * @method string|null     getFirstName()
+ * @method string|null     getName()
+ * @method string|null     getCompanyName()
+ * @method string|null     getStreet()
+ * @method string|null     getHouseNr()
+ * @method string|null     getHouseNrExt()
+ * @method string|null     getZipcode()
+ * @method string|null     getCity()
+ * @method string|null     getCountrycode()
+ * @method string|null     getArea()
+ * @method string|null     getBuildingname()
+ * @method string|null     getDepartment()
+ * @method string|null     getDoorcode()
+ * @method string|null     getFloor()
+ * @method string|null     getRegion()
+ * @method string|null     getRemark()
  * @method ResponseAddress setAddressType(string|null $AddressType = null)
  * @method ResponseAddress setFirstName(string|null $firstName = null)
  * @method ResponseAddress setName(string|null $name = null)
@@ -77,9 +74,9 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  */
 class ResponseAddress extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
+    /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'AddressType'  => BarcodeService::DOMAIN_NAMESPACE,
             'Area'         => BarcodeService::DOMAIN_NAMESPACE,
             'Buildingname' => BarcodeService::DOMAIN_NAMESPACE,
@@ -98,7 +95,7 @@ class ResponseAddress extends AbstractEntity
             'Street'       => BarcodeService::DOMAIN_NAMESPACE,
             'Zipcode'      => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'AddressType'  => ConfirmingService::DOMAIN_NAMESPACE,
             'Area'         => ConfirmingService::DOMAIN_NAMESPACE,
             'Buildingname' => ConfirmingService::DOMAIN_NAMESPACE,
@@ -117,7 +114,7 @@ class ResponseAddress extends AbstractEntity
             'Street'       => ConfirmingService::DOMAIN_NAMESPACE,
             'Zipcode'      => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'AddressType'  => LabellingService::DOMAIN_NAMESPACE,
             'Area'         => LabellingService::DOMAIN_NAMESPACE,
             'Buildingname' => LabellingService::DOMAIN_NAMESPACE,
@@ -155,7 +152,7 @@ class ResponseAddress extends AbstractEntity
             'Street'       => ShippingStatusService::DOMAIN_NAMESPACE,
             'Zipcode'      => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'AddressType'  => DeliveryDateService::DOMAIN_NAMESPACE,
             'Area'         => DeliveryDateService::DOMAIN_NAMESPACE,
             'Buildingname' => DeliveryDateService::DOMAIN_NAMESPACE,
@@ -174,7 +171,7 @@ class ResponseAddress extends AbstractEntity
             'Street'       => DeliveryDateService::DOMAIN_NAMESPACE,
             'Zipcode'      => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'AddressType'  => LocationService::DOMAIN_NAMESPACE,
             'Area'         => LocationService::DOMAIN_NAMESPACE,
             'Buildingname' => LocationService::DOMAIN_NAMESPACE,
@@ -193,7 +190,7 @@ class ResponseAddress extends AbstractEntity
             'Street'       => LocationService::DOMAIN_NAMESPACE,
             'Zipcode'      => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'AddressType'  => TimeframeService::DOMAIN_NAMESPACE,
             'Area'         => TimeframeService::DOMAIN_NAMESPACE,
             'Buildingname' => TimeframeService::DOMAIN_NAMESPACE,
@@ -215,7 +212,7 @@ class ResponseAddress extends AbstractEntity
     ];
     // @codingStandardsIgnoreStart
     /**
-     * @var string|null $AddressType
+     * @var string|null
      *
      * PostNL internal applications validate the receiver ResponseAddress. In case the spelling of
      * ResponseAddresses should be different according to our PostNL information, the ResponseAddress details will
@@ -247,37 +244,37 @@ class ResponseAddress extends AbstractEntity
      * In most cases this will be AddressType 01, the receiver ResponseAddress.
      */
     protected $AddressType;
-    /** @var string|null $Area */
+    /** @var string|null */
     protected $Area;
-    /** @var string|null $Buildingname */
+    /** @var string|null */
     protected $Buildingname;
-    /** @var string|null $City */
+    /** @var string|null */
     protected $City;
-    /** @var string|null $CompanyName */
+    /** @var string|null */
     protected $CompanyName;
-    /** @var string|null $Countrycode */
+    /** @var string|null */
     protected $Countrycode;
-    /** @var string|null $Department */
+    /** @var string|null */
     protected $Department;
-    /** @var string|null $Doorcode */
+    /** @var string|null */
     protected $Doorcode;
-    /** @var string|null $FirstName */
+    /** @var string|null */
     protected $FirstName;
-    /** @var string|null $Floor */
+    /** @var string|null */
     protected $Floor;
-    /** @var string|null $HouseNr */
+    /** @var string|null */
     protected $HouseNr;
-    /** @var string|null $HouseNrExt */
+    /** @var string|null */
     protected $HouseNrExt;
-    /** @var string|null $Name */
+    /** @var string|null */
     protected $Name;
-    /** @var string|null $Region */
+    /** @var string|null */
     protected $Region;
-    /** @var string|null $Remark */
+    /** @var string|null */
     protected $Remark;
-    /** @var string|null $Street */
+    /** @var string|null */
     protected $Street;
-    /** @var string|null $Zipcode */
+    /** @var string|null */
     protected $Zipcode;
     /** @var array|null Array with optional properties */
     protected $other = [];
@@ -345,7 +342,7 @@ class ResponseAddress extends AbstractEntity
     }
 
     /**
-     * Set postcode
+     * Set postcode.
      *
      * @param string|null $zip
      *

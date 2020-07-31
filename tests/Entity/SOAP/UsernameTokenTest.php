@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -25,13 +25,12 @@
  */
 
 namespace ThirtyBees\PostNL\Tests\Entity\SOAP;
+
 use Sabre\Xml\Service as XmlService;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
 
 /**
- * Class UsernameTokenTest
- *
- * @package ThirtyBees\PostNL\Tests\Entity\SOAP
+ * Class UsernameTokenTest.
  *
  * @testdox The UsernameToken class
  */

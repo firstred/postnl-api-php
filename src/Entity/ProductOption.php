@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -36,21 +36,18 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class ProductOption
+ * Class ProductOption.
  *
- * @package ThirtyBees\PostNL\Entity
- *
- * @method string|null getCharacteristic()
- * @method string|null getOption()
- *
+ * @method string|null   getCharacteristic()
+ * @method string|null   getOption()
  * @method ProductOption setCharacteristic(string|null $characteristic = null)
  * @method ProductOption setOption(string|null $option = null)
  */
 class ProductOption extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
+    /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode'    => [
+        'Barcode' => [
             'Characteristic' => BarcodeService::DOMAIN_NAMESPACE,
             'Option'         => BarcodeService::DOMAIN_NAMESPACE,
         ],
@@ -58,35 +55,35 @@ class ProductOption extends AbstractEntity
             'Characteristic' => ConfirmingService::DOMAIN_NAMESPACE,
             'Option'         => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'  => [
+        'Labelling' => [
             'Characteristic' => LabellingService::DOMAIN_NAMESPACE,
             'Option'         => LabellingService::DOMAIN_NAMESPACE,
         ],
-        'ShippingStatus'  => [
+        'ShippingStatus' => [
             'Characteristic' => ShippingStatusService::DOMAIN_NAMESPACE,
             'Option'         => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'  => [
+        'DeliveryDate' => [
             'Characteristic' => DeliveryDateService::DOMAIN_NAMESPACE,
             'Option'         => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'  => [
+        'Location' => [
             'Characteristic' => LocationService::DOMAIN_NAMESPACE,
             'Option'         => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'  => [
+        'Timeframe' => [
             'Characteristic' => TimeframeService::DOMAIN_NAMESPACE,
             'Option'         => TimeframeService::DOMAIN_NAMESPACE,
         ],
-        'Shipping'  => [
+        'Shipping' => [
             'Characteristic' => ShippingService::DOMAIN_NAMESPACE,
             'Option'         => ShippingService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string|null $Characteristic */
+    /** @var string|null */
     protected $Characteristic;
-    /** @var string|null $Option */
+    /** @var string|null */
     protected $Option;
     // @codingStandardsIgnoreEnd
 

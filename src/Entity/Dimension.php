@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -36,41 +36,38 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class Dimension
- *
- * @package ThirtyBees\PostNL\Entity
+ * Class Dimension.
  *
  * @method string|null getHeight()
  * @method string|null getLength()
  * @method string|null getVolume()
  * @method string|null getWeight()
  * @method string|null getWidth()
- *
- * @method Dimension setHeight(string|null $height = null)
- * @method Dimension setLength(string|null $length = null)
- * @method Dimension setVolume(string|null $volume = null)
- * @method Dimension setWeight(string|null $weight = null)
- * @method Dimension setWidth(string|null $width = null)
+ * @method Dimension   setHeight(string|null $height = null)
+ * @method Dimension   setLength(string|null $length = null)
+ * @method Dimension   setVolume(string|null $volume = null)
+ * @method Dimension   setWeight(string|null $weight = null)
+ * @method Dimension   setWidth(string|null $width = null)
  */
 class Dimension extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
+    /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'Height' => BarcodeService::DOMAIN_NAMESPACE,
             'Length' => BarcodeService::DOMAIN_NAMESPACE,
             'Volume' => BarcodeService::DOMAIN_NAMESPACE,
             'Weight' => BarcodeService::DOMAIN_NAMESPACE,
             'Width'  => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'Height' => ConfirmingService::DOMAIN_NAMESPACE,
             'Length' => ConfirmingService::DOMAIN_NAMESPACE,
             'Volume' => ConfirmingService::DOMAIN_NAMESPACE,
             'Weight' => ConfirmingService::DOMAIN_NAMESPACE,
             'Width'  => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'Height' => LabellingService::DOMAIN_NAMESPACE,
             'Length' => LabellingService::DOMAIN_NAMESPACE,
             'Volume' => LabellingService::DOMAIN_NAMESPACE,
@@ -84,28 +81,28 @@ class Dimension extends AbstractEntity
             'Weight' => ShippingStatusService::DOMAIN_NAMESPACE,
             'Width'  => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'Height' => DeliveryDateService::DOMAIN_NAMESPACE,
             'Length' => DeliveryDateService::DOMAIN_NAMESPACE,
             'Volume' => DeliveryDateService::DOMAIN_NAMESPACE,
             'Weight' => DeliveryDateService::DOMAIN_NAMESPACE,
             'Width'  => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'Height' => LocationService::DOMAIN_NAMESPACE,
             'Length' => LocationService::DOMAIN_NAMESPACE,
             'Volume' => LocationService::DOMAIN_NAMESPACE,
             'Weight' => LocationService::DOMAIN_NAMESPACE,
             'Width'  => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'Height' => TimeframeService::DOMAIN_NAMESPACE,
             'Length' => TimeframeService::DOMAIN_NAMESPACE,
             'Volume' => TimeframeService::DOMAIN_NAMESPACE,
             'Weight' => TimeframeService::DOMAIN_NAMESPACE,
             'Width'  => TimeframeService::DOMAIN_NAMESPACE,
         ],
-        'Shipping'      => [
+        'Shipping' => [
             'Height' => ShippingService::DOMAIN_NAMESPACE,
             'Length' => ShippingService::DOMAIN_NAMESPACE,
             'Volume' => ShippingService::DOMAIN_NAMESPACE,
@@ -114,15 +111,15 @@ class Dimension extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string|null $Height */
+    /** @var string|null */
     protected $Height;
-    /** @var string|null $Length */
+    /** @var string|null */
     protected $Length;
-    /** @var string|null $Volume */
+    /** @var string|null */
     protected $Volume;
-    /** @var string|null $Weight */
+    /** @var string|null */
     protected $Weight;
-    /** @var string|null $Width */
+    /** @var string|null */
     protected $Width;
     // @codingStandardsIgnoreEnd
 

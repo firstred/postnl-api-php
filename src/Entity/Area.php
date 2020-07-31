@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -35,19 +35,16 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class Area
- *
- * @package ThirtyBees\PostNL\Entity
+ * Class Area.
  *
  * @method Coordinates|null getCoordinatesNorthWest()
  * @method Coordinates|null getCoordinatesSouthEast()
- *
- * @method Area setCoordinatesNorthWest(Coordinates|null $NW = null)
- * @method Area setCoordinatesSouthEast(Coordinates|null $SE = null)
+ * @method Area             setCoordinatesNorthWest(Coordinates|null $NW = null)
+ * @method Area             setCoordinatesSouthEast(Coordinates|null $SE = null)
  */
 class Area extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
+    /** @var string[][] */
     public static $defaultProperties = [
         'Barcode' => [
             'CoordinatesNorthWest' => BarcodeService::DOMAIN_NAMESPACE,
@@ -79,9 +76,9 @@ class Area extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var Coordinates|null $CoordinatesNorthWest */
+    /** @var Coordinates|null */
     protected $CoordinatesNorthWest;
-    /** @var Coordinates|null $CoordinatesSouthEast */
+    /** @var Coordinates|null */
     protected $CoordinatesSouthEast;
     // @codingStandardsIgnoreEnd
 

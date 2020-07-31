@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -29,7 +29,6 @@ namespace ThirtyBees\PostNL\Entity\Request;
 use Sabre\Xml\Writer;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
 use ThirtyBees\PostNL\Entity\Message\Message;
-use ThirtyBees\PostNL\Entity\Shipment;
 use ThirtyBees\PostNL\Entity\Timeframe;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
@@ -40,33 +39,30 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class GetTimeframes
- *
- * @package ThirtyBees\PostNL\Entity
+ * Class GetTimeframes.
  *
  * @method Message|null     getMessage()
  * @method Timeframe[]|null getTimeframe()
- *
- * @method GetTimeframes setMessage(Message|null $message = null)
- * @method GetTimeframes setTimeframe(Timeframe[]|null $timeframes = null)
+ * @method GetTimeframes    setMessage(Message|null $message = null)
+ * @method GetTimeframes    setTimeframe(Timeframe[]|null $timeframes = null)
  */
 class GetTimeframes extends AbstractEntity
 {
     /**
-     * Default properties and namespaces for the SOAP API
+     * Default properties and namespaces for the SOAP API.
      *
-     * @var array $defaultProperties
+     * @var array
      */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'Message'   => BarcodeService::DOMAIN_NAMESPACE,
             'Timeframe' => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'Message'   => ConfirmingService::DOMAIN_NAMESPACE,
             'Timeframe' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'Message'   => LabellingService::DOMAIN_NAMESPACE,
             'Timeframe' => LabellingService::DOMAIN_NAMESPACE,
         ],
@@ -74,23 +70,23 @@ class GetTimeframes extends AbstractEntity
             'Message'   => ShippingStatusService::DOMAIN_NAMESPACE,
             'Timeframe' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'Message'   => DeliveryDateService::DOMAIN_NAMESPACE,
             'Timeframe' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'Message'   => LocationService::DOMAIN_NAMESPACE,
             'Timeframe' => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'Message'   => TimeframeService::DOMAIN_NAMESPACE,
             'Timeframe' => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var Message|null $Message */
+    /** @var Message|null */
     protected $Message;
-    /** @var Timeframe[]|null $Timeframe */
+    /** @var Timeframe[]|null */
     protected $Timeframe;
     // @codingStandardsIgnoreEnd
 
@@ -109,7 +105,7 @@ class GetTimeframes extends AbstractEntity
     }
 
     /**
-     * Return a serializable array for the XMLWriter
+     * Return a serializable array for the XMLWriter.
      *
      * @param Writer $writer
      *
@@ -125,7 +121,7 @@ class GetTimeframes extends AbstractEntity
         }
 
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if ($propertyName === 'Timeframe') {
+            if ('Timeframe' === $propertyName) {
                 $timeframes = [];
                 foreach ($this->Timeframe as $timeframe) {
                     $timeframes[] = $timeframe;

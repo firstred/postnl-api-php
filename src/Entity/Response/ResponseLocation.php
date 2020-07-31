@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -28,7 +28,6 @@ namespace ThirtyBees\PostNL\Entity\Response;
 
 use ThirtyBees\PostNL\Entity\AbstractEntity;
 use ThirtyBees\PostNL\Entity\Address;
-use ThirtyBees\PostNL\Entity\Location;
 use ThirtyBees\PostNL\Entity\Warning;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
@@ -39,27 +38,24 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class ResponseLocation
+ * Class ResponseLocation.
  *
- * @package ThirtyBees\PostNL\Entity
- *
- * @method Address|null    getAddress()
- * @method string[]|null   getDeliveryOptions()
- * @method string|null     getDistance()
- * @method string|null     getLatitude()
- * @method string|null     getLongitude()
- * @method string|null     getName()
- * @method string[][]|null getOpeningHours()
- * @method string|null     getPartnerName()
- * @method string|null     getPhoneNumber()
- * @method string|null     getRetailNetworkID()
- * @method string|null     getLocationCode()
- * @method string|null     getSaleschannel()
- * @method string|null     getTerminalType()
- * @method Warning[]|null  getWarnings()
- * @method string|null     getDownPartnerID()
- * @method string|null     getDownPartnerLocation()
- *
+ * @method Address|null     getAddress()
+ * @method string[]|null    getDeliveryOptions()
+ * @method string|null      getDistance()
+ * @method string|null      getLatitude()
+ * @method string|null      getLongitude()
+ * @method string|null      getName()
+ * @method string[][]|null  getOpeningHours()
+ * @method string|null      getPartnerName()
+ * @method string|null      getPhoneNumber()
+ * @method string|null      getRetailNetworkID()
+ * @method string|null      getLocationCode()
+ * @method string|null      getSaleschannel()
+ * @method string|null      getTerminalType()
+ * @method Warning[]|null   getWarnings()
+ * @method string|null      getDownPartnerID()
+ * @method string|null      getDownPartnerLocation()
  * @method ResponseLocation setAddress(Address|null $address = null)
  * @method ResponseLocation setDeliveryOptions(string[]|null $options)
  * @method ResponseLocation setDistance(string|null $dist = null)
@@ -80,12 +76,12 @@ use ThirtyBees\PostNL\Service\TimeframeService;
 class ResponseLocation extends AbstractEntity
 {
     /**
-     * Default properties and namespaces for the SOAP API
+     * Default properties and namespaces for the SOAP API.
      *
-     * @var array $defaultProperties
+     * @var array
      */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'Address'             => BarcodeService::DOMAIN_NAMESPACE,
             'DeliveryOptions'     => BarcodeService::DOMAIN_NAMESPACE,
             'Distance'            => BarcodeService::DOMAIN_NAMESPACE,
@@ -103,7 +99,7 @@ class ResponseLocation extends AbstractEntity
             'DownPartnerID'       => BarcodeService::DOMAIN_NAMESPACE,
             'DownPartnerLocation' => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'Address'             => ConfirmingService::DOMAIN_NAMESPACE,
             'DeliveryOptions'     => ConfirmingService::DOMAIN_NAMESPACE,
             'Distance'            => ConfirmingService::DOMAIN_NAMESPACE,
@@ -121,7 +117,7 @@ class ResponseLocation extends AbstractEntity
             'DownPartnerID'       => ConfirmingService::DOMAIN_NAMESPACE,
             'DownPartnerLocation' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'Address'             => LabellingService::DOMAIN_NAMESPACE,
             'DeliveryOptions'     => LabellingService::DOMAIN_NAMESPACE,
             'Distance'            => LabellingService::DOMAIN_NAMESPACE,
@@ -157,7 +153,7 @@ class ResponseLocation extends AbstractEntity
             'DownPartnerID'       => ShippingStatusService::DOMAIN_NAMESPACE,
             'DownPartnerLocation' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'Address'             => DeliveryDateService::DOMAIN_NAMESPACE,
             'DeliveryOptions'     => DeliveryDateService::DOMAIN_NAMESPACE,
             'Distance'            => DeliveryDateService::DOMAIN_NAMESPACE,
@@ -175,7 +171,7 @@ class ResponseLocation extends AbstractEntity
             'DownPartnerID'       => DeliveryDateService::DOMAIN_NAMESPACE,
             'DownPartnerLocation' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'Address'             => LocationService::DOMAIN_NAMESPACE,
             'DeliveryOptions'     => LocationService::DOMAIN_NAMESPACE,
             'Distance'            => LocationService::DOMAIN_NAMESPACE,
@@ -193,7 +189,7 @@ class ResponseLocation extends AbstractEntity
             'DownPartnerID'       => LocationService::DOMAIN_NAMESPACE,
             'DownPartnerLocation' => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'Address'             => TimeframeService::DOMAIN_NAMESPACE,
             'DeliveryOptions'     => TimeframeService::DOMAIN_NAMESPACE,
             'Distance'            => TimeframeService::DOMAIN_NAMESPACE,
@@ -214,37 +210,37 @@ class ResponseLocation extends AbstractEntity
     ];
 
     // @codingStandardsIgnoreStart
-    /** @var Address|null $Address */
+    /** @var Address|null */
     protected $Address;
-    /** @var string[]|null $DeliveryOptions */
+    /** @var string[]|null */
     protected $DeliveryOptions;
-    /** @var string|null $Distance */
+    /** @var string|null */
     protected $Distance;
-    /** @var string|null $Latitude */
+    /** @var string|null */
     protected $Latitude;
-    /** @var string|null $Longitude */
+    /** @var string|null */
     protected $Longitude;
-    /** @var string|null $Name */
+    /** @var string|null */
     protected $Name;
-    /** @var string[]|null $OpeningHours */
+    /** @var string[]|null */
     protected $OpeningHours;
-    /** @var string|null $PartnerName */
+    /** @var string|null */
     protected $PartnerName;
-    /** @var string|null $PhoneNumber */
+    /** @var string|null */
     protected $PhoneNumber;
-    /** @var string|null $LocationCode */
+    /** @var string|null */
     protected $LocationCode;
-    /** @var string|null $RetailNetworkID */
+    /** @var string|null */
     protected $RetailNetworkID;
-    /** @var string|null $Saleschannel */
+    /** @var string|null */
     protected $Saleschannel;
-    /** @var string|null $TerminalType */
+    /** @var string|null */
     protected $TerminalType;
-    /** @var Warning[]|null $Warnings */
+    /** @var Warning[]|null */
     protected $Warnings;
-    /** @var string|null $DownPartnerID */
+    /** @var string|null */
     protected $DownPartnerID;
-    /** @var string|null $DownPartnerLocation */
+    /** @var string|null */
     protected $DownPartnerLocation;
     // @codingStandardsIgnoreEnd
 

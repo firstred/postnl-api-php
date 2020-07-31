@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -35,15 +35,12 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class TimeframeTimeFrame
+ * Class TimeframeTimeFrame.
  *
- * @package ThirtyBees\PostNL\Entity
- *
- * @method string|null   getDate()
- * @method string|null   getFrom()
- * @method string|null   getTo()
- * @method string[]|null getOptions()
- *
+ * @method string|null        getDate()
+ * @method string|null        getFrom()
+ * @method string|null        getTo()
+ * @method string[]|null      getOptions()
  * @method TimeframeTimeFrame setDate(string|null $date = null)
  * @method TimeframeTimeFrame setFrom(string|null $from = null)
  * @method TimeframeTimeFrame setTo(string|null $to = null)
@@ -51,21 +48,21 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  */
 class TimeframeTimeFrame extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
+    /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'Date'    => BarcodeService::DOMAIN_NAMESPACE,
             'From'    => BarcodeService::DOMAIN_NAMESPACE,
             'Options' => BarcodeService::DOMAIN_NAMESPACE,
             'To'      => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'Date'    => ConfirmingService::DOMAIN_NAMESPACE,
             'From'    => ConfirmingService::DOMAIN_NAMESPACE,
             'Options' => ConfirmingService::DOMAIN_NAMESPACE,
             'To'      => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'Date'    => LabellingService::DOMAIN_NAMESPACE,
             'From'    => LabellingService::DOMAIN_NAMESPACE,
             'Options' => LabellingService::DOMAIN_NAMESPACE,
@@ -77,19 +74,19 @@ class TimeframeTimeFrame extends AbstractEntity
             'Options' => ShippingStatusService::DOMAIN_NAMESPACE,
             'To'      => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'Date'    => DeliveryDateService::DOMAIN_NAMESPACE,
             'From'    => DeliveryDateService::DOMAIN_NAMESPACE,
             'Options' => DeliveryDateService::DOMAIN_NAMESPACE,
             'To'      => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'Date'    => LocationService::DOMAIN_NAMESPACE,
             'From'    => LocationService::DOMAIN_NAMESPACE,
             'Options' => LocationService::DOMAIN_NAMESPACE,
             'To'      => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'Date'    => TimeframeService::DOMAIN_NAMESPACE,
             'From'    => TimeframeService::DOMAIN_NAMESPACE,
             'Options' => TimeframeService::DOMAIN_NAMESPACE,
@@ -97,13 +94,13 @@ class TimeframeTimeFrame extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string|null $Date */
+    /** @var string|null */
     protected $Date;
-    /** @var string|null $From */
+    /** @var string|null */
     protected $From;
-    /** @var string[]|null $Options */
+    /** @var string[]|null */
     protected $Options;
-    /** @var string|null $To */
+    /** @var string|null */
     protected $To;
     // @codingStandardsIgnoreEnd
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -38,30 +38,26 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class Message
- *
- * @package ThirtyBees\PostNL\Entity\Message
+ * Class Message.
  *
  * @method string|null getMessageID()
  * @method string|null getMessageTimeStamp()
- *
- * @method Message setMessageID(string|null $mid = null)
- * @method Message setMessageTimeStamp(string|null $timestamp = null)
- *
+ * @method Message     setMessageID(string|null $mid = null)
+ * @method Message     setMessageTimeStamp(string|null $timestamp = null)
  */
 class Message extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
+    /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'MessageID'        => BarcodeService::DOMAIN_NAMESPACE,
             'MessageTimeStamp' => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'MessageID'        => ConfirmingService::DOMAIN_NAMESPACE,
             'MessageTimeStamp' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'MessageID'        => LabellingService::DOMAIN_NAMESPACE,
             'MessageTimeStamp' => LabellingService::DOMAIN_NAMESPACE,
         ],
@@ -69,27 +65,27 @@ class Message extends AbstractEntity
             'MessageID'        => ShippingStatusService::DOMAIN_NAMESPACE,
             'MessageTimeStamp' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'MessageID'        => DeliveryDateService::DOMAIN_NAMESPACE,
             'MessageTimeStamp' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'MessageID'        => LocationService::DOMAIN_NAMESPACE,
             'MessageTimeStamp' => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'MessageID'        => TimeframeService::DOMAIN_NAMESPACE,
             'MessageTimeStamp' => TimeframeService::DOMAIN_NAMESPACE,
         ],
-        'Shipping'      => [
+        'Shipping' => [
             'MessageID'        => ShippingService::DOMAIN_NAMESPACE,
             'MessageTimeStamp' => ShippingService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string|null $MessageID */
+    /** @var string|null */
     protected $MessageID;
-    /** @var string|null $MessageTimeStamp */
+    /** @var string|null */
     protected $MessageTimeStamp;
     // @codingStandardsIgnoreEnd
 

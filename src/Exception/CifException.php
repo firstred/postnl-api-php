@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -27,13 +27,11 @@
 namespace ThirtyBees\PostNL\Exception;
 
 /**
- * Class CifException
- *
- * @package ThirtyBees\PostNL\Exception
+ * Class CifException.
  */
 class CifException extends AbstractException
 {
-    /** @var array $messages */
+    /** @var array */
     protected $messages;
 
     /**
@@ -41,15 +39,15 @@ class CifException extends AbstractException
      *
      * @param string|string[] $message  In case of multiple errors, the format looks like:
      *                                  [
-     *                                    'description' => string <The description>,
-     *                                    'message'     => string <The error message>,
-     *                                    'code'        => int <The error code>
+     *                                  'description' => string <The description>,
+     *                                  'message'     => string <The error message>,
+     *                                  'code'        => int <The error code>
      *                                  ]
      *                                  The code param will be discarded if `$message` is an array
      * @param int             $code
      * @param \Throwable|null $previous
      */
-    public function __construct($message = "", $code = 0, $previous = null)
+    public function __construct($message = '', $code = 0, $previous = null)
     {
         if (is_array($message)) {
             $this->messages = $message;
@@ -62,7 +60,7 @@ class CifException extends AbstractException
     }
 
     /**
-     * Get error messages and codes
+     * Get error messages and codes.
      *
      * @return array|string|string[]
      */

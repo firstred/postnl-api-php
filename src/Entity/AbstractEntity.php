@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -32,24 +32,21 @@ use ThirtyBees\PostNL\Exception\InvalidArgumentException;
 use ThirtyBees\PostNL\Util\UUID;
 
 /**
- * Class Entity
+ * Class Entity.
  *
- * @package ThirtyBees\PostNL\Entity
- *
- * @method string getId()
- * @method string getCurrentService()
- *
+ * @method string         getId()
+ * @method string         getCurrentService()
  * @method AbstractEntity setId(string $id)
  * @method AbstractEntity setCurrentService(string $service)
  */
 abstract class AbstractEntity implements \JsonSerializable, XmlSerializable
 {
     // @codingStandardsIgnoreStart
-    /** @var array $defaultProperties */
+    /** @var array */
     public static $defaultProperties = [];
-    /** @var string $id */
+    /** @var string */
     protected $id;
-    /** @var string $currentService */
+    /** @var string */
     protected $currentService;
     // @codingStandardsIgnoreEnd
 
@@ -63,15 +60,15 @@ abstract class AbstractEntity implements \JsonSerializable, XmlSerializable
     }
 
     /**
-     * Create an instance of this class without touching the constructor
+     * Create an instance of this class without touching the constructor.
      *
      * @param array $properties
      *
-     * @return static|null|object
+     * @return static|object|null
      */
     public static function create(array $properties = [])
     {
-        if (get_called_class() === __CLASS__) {
+        if (__CLASS__ === get_called_class()) {
             return null;
         }
 
@@ -103,21 +100,21 @@ abstract class AbstractEntity implements \JsonSerializable, XmlSerializable
     {
         $methodName = substr($name, 0, 3);
         $propertyName = substr($name, 3, strlen($name));
-        if ($propertyName === 'Id') {
+        if ('Id' === $propertyName) {
             $propertyName = 'id';
-        } elseif ($propertyName === 'CurrentService') {
+        } elseif ('CurrentService' === $propertyName) {
             $propertyName = 'currentService';
-        } elseif ($propertyName === 'ReasonNotimeframes') {
+        } elseif ('ReasonNotimeframes' === $propertyName) {
             $propertyName = 'ReasonNoTimeframes';
         }
 
-        if ($methodName === 'get') {
+        if ('get' === $methodName) {
             if (property_exists($this, $propertyName)) {
                 return $this->{$propertyName};
             } else {
                 return null;
             }
-        } elseif ($methodName === 'set') {
+        } elseif ('set' === $methodName) {
             if (!is_array($value) || count($value) < 1) {
                 throw new InvalidArgumentException('Value is missing');
             }
@@ -133,9 +130,10 @@ abstract class AbstractEntity implements \JsonSerializable, XmlSerializable
     }
 
     /**
-     * Return a serializable array for `json_encode`
+     * Return a serializable array for `json_encode`.
      *
      * @return array
+     *
      * @throws InvalidArgumentException
      */
     public function jsonSerialize()
@@ -155,11 +153,12 @@ abstract class AbstractEntity implements \JsonSerializable, XmlSerializable
     }
 
     /**
-     * Return a serializable array for the XMLWriter
+     * Return a serializable array for the XMLWriter.
      *
      * @param Writer $writer
      *
      * @return void
+     *
      * @throws InvalidArgumentException
      */
     public function xmlSerialize(Writer $writer)
@@ -179,7 +178,7 @@ abstract class AbstractEntity implements \JsonSerializable, XmlSerializable
     }
 
     /**
-     * Deserialize JSON
+     * Deserialize JSON.
      *
      * @param array $json JSON as associative array
      *
@@ -205,7 +204,7 @@ abstract class AbstractEntity implements \JsonSerializable, XmlSerializable
             $propertyName = $key;
 
             // If key is plural, try the singular version, because this might be an array
-            if (!$fullClassName && substr($key, -1) === 's') {
+            if (!$fullClassName && 's' === substr($key, -1)) {
                 $fullClassName = static::getFullEntityClassName(substr($key, 0, strlen($key) - 1));
                 $propertyName = substr($propertyName, 0, strlen($propertyName) - 1);
             }
@@ -225,7 +224,7 @@ abstract class AbstractEntity implements \JsonSerializable, XmlSerializable
     }
 
     /**
-     * Deserialize XML
+     * Deserialize XML.
      *
      * @param array $xml Associative array representation of XML response, using Clark notation for namespaces
      *
@@ -256,7 +255,7 @@ abstract class AbstractEntity implements \JsonSerializable, XmlSerializable
             // If key is plural, try the singular version, because this might be an array
             if (in_array($shortClassName, ['OldStatuses', 'Statuses', 'Addresses'])) {
                 $fullClassName = static::getFullEntityClassName(substr($shortClassName, 0, strlen($shortClassName) - 2));
-            } elseif (!$fullClassName && substr($shortClassName, -1) === 's') {
+            } elseif (!$fullClassName && 's' === substr($shortClassName, -1)) {
                 $fullClassName = static::getFullEntityClassName(substr($shortClassName, 0, strlen($shortClassName) - 1));
             }
 
@@ -290,7 +289,7 @@ abstract class AbstractEntity implements \JsonSerializable, XmlSerializable
     }
 
     /**
-     * Get the full class (incl. namespace) for the given short class name
+     * Get the full class (incl. namespace) for the given short class name.
      *
      * @param string $shortName
      *
@@ -314,7 +313,7 @@ abstract class AbstractEntity implements \JsonSerializable, XmlSerializable
     }
 
     /**
-     * Determine if the array is associative
+     * Determine if the array is associative.
      *
      * @param array $array
      *

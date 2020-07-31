@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -41,9 +41,7 @@ use ThirtyBees\PostNL\Exception\CifException;
 use ThirtyBees\PostNL\PostNL;
 
 /**
- * Class TimeframeService
- *
- * @package ThirtyBees\PostNL\Service
+ * Class TimeframeService.
  *
  * @method ResponseTimeframes getTimeframes(GetTimeframes $getTimeframes)
  * @method Request            buildGetTimeframesRequest(GetTimeframes $getTimeframes)
@@ -66,9 +64,9 @@ class TimeframeService extends AbstractService
     const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/TimeframeWebService/';
 
     /**
-     * Namespaces uses for the SOAP version of this service
+     * Namespaces uses for the SOAP version of this service.
      *
-     * @var array $namespaces
+     * @var array
      */
     public static $namespaces = [
         self::ENVELOPE_NAMESPACE                                    => 'soap',
@@ -82,7 +80,7 @@ class TimeframeService extends AbstractService
     ];
 
     /**
-     * Get timeframes via REST
+     * Get timeframes via REST.
      *
      * @param GetTimeframes $getTimeframes
      *
@@ -113,7 +111,7 @@ class TimeframeService extends AbstractService
         if ($object instanceof ResponseTimeframes) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof Response
-                && $response->getStatusCode() === 200
+                && 200 === $response->getStatusCode()
             ) {
                 $item->set(\GuzzleHttp\Psr7\str($response));
                 $this->cacheItem($item);
@@ -126,7 +124,7 @@ class TimeframeService extends AbstractService
     }
 
     /**
-     * Get timeframes via SOAP
+     * Get timeframes via SOAP.
      *
      * @param GetTimeframes $getTimeframes
      *
@@ -157,7 +155,7 @@ class TimeframeService extends AbstractService
         if ($object instanceof ResponseTimeframes) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof Response
-                && $response->getStatusCode() === 200
+                && 200 === $response->getStatusCode()
             ) {
                 $item->set(\GuzzleHttp\Psr7\str($response));
                 $this->cacheItem($item);
@@ -170,7 +168,7 @@ class TimeframeService extends AbstractService
     }
 
     /**
-     * Build the GetTimeframes request for the REST API
+     * Build the GetTimeframes request for the REST API.
      *
      * @param GetTimeframes $getTimeframes
      *
@@ -182,7 +180,7 @@ class TimeframeService extends AbstractService
         $this->setService($getTimeframes);
         $timeframe = $getTimeframes->getTimeframe()[0];
         $query = [
-            'AllowSundaySorting' => in_array($timeframe->getSundaySorting(), [true, 'true', 1], 1) ? '1' : '0' ,
+            'AllowSundaySorting' => in_array($timeframe->getSundaySorting(), [true, 'true', 1], 1) ? '1' : '0',
             'StartDate'          => $timeframe->getStartDate(),
             'EndDate'            => $timeframe->getEndDate(),
             'PostalCode'         => $timeframe->getPostalCode(),
@@ -206,7 +204,7 @@ class TimeframeService extends AbstractService
             $query['City'] = $city;
         }
         foreach ($timeframe->getOptions() as $option) {
-            if ($option === 'PG') {
+            if ('PG' === $option) {
                 continue;
             }
             $query['Options'] .= ",$option";
@@ -226,11 +224,12 @@ class TimeframeService extends AbstractService
     }
 
     /**
-     * Process GetTimeframes Response REST
+     * Process GetTimeframes Response REST.
      *
      * @param mixed $response
      *
-     * @return null|ResponseTimeframes
+     * @return ResponseTimeframes|null
+     *
      * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
     public function processGetTimeframesResponseREST($response)
@@ -282,7 +281,7 @@ class TimeframeService extends AbstractService
     }
 
     /**
-     * Build the GetTimeframes request for the SOAP API
+     * Build the GetTimeframes request for the SOAP API.
      *
      * @param GetTimeframes $getTimeframes
      *
@@ -306,15 +305,15 @@ class TimeframeService extends AbstractService
                 '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
                     ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
                 ],
-                '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
+                '{'.static::ENVELOPE_NAMESPACE.'}Body' => [
                     '{'.static::SERVICES_NAMESPACE.'}GetTimeframes' => $getTimeframes,
                 ],
             ]
         );
 
         $endpoint = $this->postnl->getSandbox()
-            ? ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT)
-            : ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT);
+            ? (PostNL::MODE_LEGACY === $this->postnl->getMode() ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT)
+            : (PostNL::MODE_LEGACY === $this->postnl->getMode() ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT);
 
         return new Request(
             'POST',
@@ -329,11 +328,12 @@ class TimeframeService extends AbstractService
     }
 
     /**
-     * Process GetTimeframes Response SOAP
+     * Process GetTimeframes Response SOAP.
      *
      * @param mixed $response
      *
      * @return ResponseTimeframes
+     *
      * @throws CifDownException
      * @throws CifException
      * @throws \Sabre\Xml\LibXMLException
@@ -351,10 +351,10 @@ class TimeframeService extends AbstractService
         $array = array_values($reader->parse()['value'][0]['value']);
         foreach ($array[0]['value'][1]['value'] as &$timeframes) {
             foreach ($timeframes['value'] as &$item) {
-                if (strpos($item['name'], 'Timeframes') !== false) {
+                if (false !== strpos($item['name'], 'Timeframes')) {
                     foreach ($item['value'] as &$timeframeTimeframe) {
                         foreach ($timeframeTimeframe['value'] as &$thing) {
-                            if (strpos($thing['name'], 'Options') !== false) {
+                            if (false !== strpos($thing['name'], 'Options')) {
                                 $thing['value'] = [$thing['value'][0]['value']];
                             }
                         }

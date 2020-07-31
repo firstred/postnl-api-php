@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -25,19 +25,13 @@
  */
 
 namespace ThirtyBees\PostNL\Tests\Service;
+
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use ThirtyBees\PostNL\Entity\Address;
-use ThirtyBees\PostNL\Entity\Customer;
-use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
-use ThirtyBees\PostNL\PostNL;
 use ThirtyBees\PostNL\Service\AbstractService;
-use ThirtyBees\PostNL\Service\LabellingService;
 
 /**
- * Class AbstractServiceTest
- *
- * @package ThirtyBees\PostNL\Tests\Service
+ * Class AbstractServiceTest.
  *
  * @testdox The AbstractService class
  */

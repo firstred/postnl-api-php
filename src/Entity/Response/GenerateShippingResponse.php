@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 keenDelivery, LLC
  *
@@ -37,31 +37,28 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class GenerateLabelResponse
+ * Class GenerateLabelResponse.
  *
- * @package ThirtyBees\PostNL\Entity
- *
- * @method MergedLabel[]|null      getMergedLabels()
- * @method ResponseShipment[]|null getResponseShipments()
- *
+ * @method MergedLabel[]|null       getMergedLabels()
+ * @method ResponseShipment[]|null  getResponseShipments()
  * @method GenerateShippingResponse setMergedLabels(MergedLabel[]|null $mergedLabels = null)
  * @method GenerateShippingResponse setResponseShipments(ResponseShipment[]|null $responseShipment = null)
  */
 class GenerateShippingResponse extends AbstractEntity
 {
     /**
-     * @var array|null $defaultProperties
+     * @var array|null
      */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'MergedLabels'      => BarcodeService::DOMAIN_NAMESPACE,
             'ResponseShipments' => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'MergedLabels'      => ConfirmingService::DOMAIN_NAMESPACE,
             'ResponseShipments' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'MergedLabels'      => LabellingService::DOMAIN_NAMESPACE,
             'ResponseShipments' => LabellingService::DOMAIN_NAMESPACE,
         ],
@@ -69,27 +66,27 @@ class GenerateShippingResponse extends AbstractEntity
             'MergedLabels'      => ShippingStatusService::DOMAIN_NAMESPACE,
             'ResponseShipments' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'MergedLabels'      => DeliveryDateService::DOMAIN_NAMESPACE,
             'ResponseShipments' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'MergedLabels'      => LocationService::DOMAIN_NAMESPACE,
             'ResponseShipments' => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'MergedLabels'      => TimeframeService::DOMAIN_NAMESPACE,
             'ResponseShipments' => TimeframeService::DOMAIN_NAMESPACE,
         ],
-        'Shipping'       => [
+        'Shipping' => [
             'MergedLabels'      => ShippingService::DOMAIN_NAMESPACE,
             'ResponseShipments' => ShippingService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var MergedLabel[]|null $MergedLabels */
+    /** @var MergedLabel[]|null */
     protected $MergedLabels;
-    /** @var ResponseShipment[]|null $ResponseShipments */
+    /** @var ResponseShipment[]|null */
     protected $ResponseShipments;
     // @codingStandardsIgnoreEnd
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -36,9 +36,7 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class Content
- *
- * @package ThirtyBees\PostNL\Entity
+ * Class Content.
  *
  * @method string|null    getCountryOfOrigin()
  * @method string|null    getDescription()
@@ -47,20 +45,19 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method string|null    getValue()
  * @method string|null    getWeight()
  * @method Content[]|null getContent()
- *
- * @method Content setCountryOfOrigin(string|null $countryOfOrigin = null)
- * @method Content setDescription(string|null $description = null)
- * @method Content setHSTariffNr(string|null $hsTariffNr = null)
- * @method Content setQuantity(string|null $qty = null)
- * @method Content setValue(string|null $val = null)
- * @method Content setWeight(string|null $weight = null)
- * @method Content setContent(Content[]|null $content = null)
+ * @method Content        setCountryOfOrigin(string|null $countryOfOrigin = null)
+ * @method Content        setDescription(string|null $description = null)
+ * @method Content        setHSTariffNr(string|null $hsTariffNr = null)
+ * @method Content        setQuantity(string|null $qty = null)
+ * @method Content        setValue(string|null $val = null)
+ * @method Content        setWeight(string|null $weight = null)
+ * @method Content        setContent(Content[]|null $content = null)
  */
 class Content extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
+    /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'CountryOfOrigin' => BarcodeService::DOMAIN_NAMESPACE,
             'Description'     => BarcodeService::DOMAIN_NAMESPACE,
             'HSTariffNr'      => BarcodeService::DOMAIN_NAMESPACE,
@@ -69,7 +66,7 @@ class Content extends AbstractEntity
             'Weight'          => BarcodeService::DOMAIN_NAMESPACE,
             'Content'         => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'CountryOfOrigin' => ConfirmingService::DOMAIN_NAMESPACE,
             'Description'     => ConfirmingService::DOMAIN_NAMESPACE,
             'HSTariffNr'      => ConfirmingService::DOMAIN_NAMESPACE,
@@ -78,7 +75,7 @@ class Content extends AbstractEntity
             'Weight'          => ConfirmingService::DOMAIN_NAMESPACE,
             'Content'         => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'CountryOfOrigin' => LabellingService::DOMAIN_NAMESPACE,
             'Description'     => LabellingService::DOMAIN_NAMESPACE,
             'HSTariffNr'      => LabellingService::DOMAIN_NAMESPACE,
@@ -96,7 +93,7 @@ class Content extends AbstractEntity
             'Weight'          => ShippingStatusService::DOMAIN_NAMESPACE,
             'Content'         => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'CountryOfOrigin' => DeliveryDateService::DOMAIN_NAMESPACE,
             'Description'     => DeliveryDateService::DOMAIN_NAMESPACE,
             'HSTariffNr'      => DeliveryDateService::DOMAIN_NAMESPACE,
@@ -105,7 +102,7 @@ class Content extends AbstractEntity
             'Weight'          => DeliveryDateService::DOMAIN_NAMESPACE,
             'Content'         => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'CountryOfOrigin' => LocationService::DOMAIN_NAMESPACE,
             'Description'     => LocationService::DOMAIN_NAMESPACE,
             'HSTariffNr'      => LocationService::DOMAIN_NAMESPACE,
@@ -114,7 +111,7 @@ class Content extends AbstractEntity
             'Weight'          => LocationService::DOMAIN_NAMESPACE,
             'Content'         => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'CountryOfOrigin' => TimeframeService::DOMAIN_NAMESPACE,
             'Description'     => TimeframeService::DOMAIN_NAMESPACE,
             'HSTariffNr'      => TimeframeService::DOMAIN_NAMESPACE,
@@ -123,7 +120,7 @@ class Content extends AbstractEntity
             'Weight'          => TimeframeService::DOMAIN_NAMESPACE,
             'Content'         => TimeframeService::DOMAIN_NAMESPACE,
         ],
-        'Shipping'      => [
+        'Shipping' => [
             'CountryOfOrigin' => ShippingService::DOMAIN_NAMESPACE,
             'Description'     => ShippingService::DOMAIN_NAMESPACE,
             'HSTariffNr'      => ShippingService::DOMAIN_NAMESPACE,
@@ -134,19 +131,19 @@ class Content extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string|null $CountryOfOrigin */
+    /** @var string|null */
     protected $CountryOfOrigin;
-    /** @var string|null $Description */
+    /** @var string|null */
     protected $Description;
-    /** @var string|null $HSTariffNr */
+    /** @var string|null */
     protected $HSTariffNr;
-    /** @var string|null $Quantity */
+    /** @var string|null */
     protected $Quantity;
-    /** @var string|null $Value */
+    /** @var string|null */
     protected $Value;
-    /** @var string|null $Weight */
+    /** @var string|null */
     protected $Weight;
-    /** @var Content[]|null $content */
+    /** @var Content[]|null */
     protected $Content;
     // @codingStandardsIgnoreEnd
 

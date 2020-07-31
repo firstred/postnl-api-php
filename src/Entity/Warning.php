@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -35,29 +35,26 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class Warning
- *
- * @package ThirtyBees\PostNL\Entity
+ * Class Warning.
  *
  * @method string|null getCode()
  * @method string|null getDescription()
- *
- * @method Warning setCode(string|null $code = null)
- * @method Warning setDescription(string|null $description = null)
+ * @method Warning     setCode(string|null $code = null)
+ * @method Warning     setDescription(string|null $description = null)
  */
 class Warning extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
+    /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'Code'        => BarcodeService::DOMAIN_NAMESPACE,
             'Description' => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'Code'        => ConfirmingService::DOMAIN_NAMESPACE,
             'Description' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'Code'        => LabellingService::DOMAIN_NAMESPACE,
             'Description' => LabellingService::DOMAIN_NAMESPACE,
         ],
@@ -65,23 +62,23 @@ class Warning extends AbstractEntity
             'Code'        => ShippingStatusService::DOMAIN_NAMESPACE,
             'Description' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'Code'        => DeliveryDateService::DOMAIN_NAMESPACE,
             'Description' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'Code'        => LocationService::DOMAIN_NAMESPACE,
             'Description' => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'Code'        => TimeframeService::DOMAIN_NAMESPACE,
             'Description' => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string|null $Code */
+    /** @var string|null */
     protected $Code;
-    /** @var string|null $Description */
+    /** @var string|null */
     protected $Description;
     // @codingStandardsIgnoreEnd
 

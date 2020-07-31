@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -25,24 +25,23 @@
  */
 
 namespace ThirtyBees\PostNL\Util;
+
 use setasign\Fpdi\Fpdi;
 use setasign\Fpdi\PdfParser\StreamReader;
 use ThirtyBees\PostNL\Exception\InvalidArgumentException;
 
 /**
- * Class Util
- *
- * @package ThirtyBees\PostNL\Util
+ * Class Util.
  */
 class Util
 {
     const ERROR_MARGIN = 2;
 
     /**
-     * @param array       $arr    A map of param keys to values.
+     * @param array       $arr    a map of param keys to values
      * @param string|null $prefix
      *
-     * @return string A querystring, essentially.
+     * @return string a querystring, essentially
      *
      * @codeCoverageIgnore
      */
@@ -59,10 +58,10 @@ class Util
             }
 
             if ($prefix) {
-                if ($k !== null && (!is_int($k) || is_array($v))) {
-                    $k = $prefix."[".$k."]";
+                if (null !== $k && (!is_int($k) || is_array($v))) {
+                    $k = $prefix.'['.$k.']';
                 } else {
-                    $k = $prefix."[]";
+                    $k = $prefix.'[]';
                 }
             }
 
@@ -72,15 +71,15 @@ class Util
                     $r[] = $enc;
                 }
             } else {
-                $r[] = urlencode($k)."=".urlencode($v);
+                $r[] = urlencode($k).'='.urlencode($v);
             }
         }
 
-        return implode("&", $r);
+        return implode('&', $r);
     }
 
     /**
-     * @param string $pdf     Raw PDF string
+     * @param string $pdf Raw PDF string
      *
      * @return array|false|string Returns an array with the dimensions or ISO size and orientation
      *                            The orientation is in FPDF format, so L for Landscape and P for Portrait
@@ -98,7 +97,7 @@ class Util
             $height = $size['height'];
             $orientation = $size['orientation'];
 
-            $length = $orientation === 'P' ? $height : $width;
+            $length = 'P' === $orientation ? $height : $width;
             if ($length >= (148 - static::ERROR_MARGIN) && $length <= (148 + static::ERROR_MARGIN)) {
                 $iso = 'A6';
             } elseif ($length >= (210 - static::ERROR_MARGIN) && $length <= (210 + static::ERROR_MARGIN)) {
@@ -125,13 +124,14 @@ class Util
     }
 
     /**
-     * Offline delivery date calculation
+     * Offline delivery date calculation.
      *
      * @param string $deliveryDate   Delivery date in any format accepted by DateTime
      * @param bool   $mondayDelivery Sunday sorting/Monday delivery enabled
      * @param bool   $sundayDelivery Sunday delivery enabled
      *
      * @return string (format: `Y-m-d H:i:s`)
+     *
      * @throws \Exception
      */
     public static function getDeliveryDate($deliveryDate, $mondayDelivery = false, $sundayDelivery = false)
@@ -143,20 +143,21 @@ class Util
         do {
             $deliveryDate->add(new \DateInterval('P1D'));
         } while (in_array($deliveryDate->format('Y-m-d'), $holidays)
-            || (!$sundayDelivery && $deliveryDate->format('w') == 0)
-            || (!$mondayDelivery && $deliveryDate->format('w') == 1)
+            || (!$sundayDelivery && 0 == $deliveryDate->format('w'))
+            || (!$mondayDelivery && 1 == $deliveryDate->format('w'))
         );
 
         return $deliveryDate->format('Y-m-d H:i:s');
     }
 
     /**
-     * Offline shipping date calculation
+     * Offline shipping date calculation.
      *
      * @param string $deliveryDate
      * @param array  $days
      *
      * @return string
+     *
      * @throws InvalidArgumentException
      */
     public static function getShippingDate(
@@ -188,16 +189,17 @@ class Util
      * Calculates amount of days remaining
      * i.e. preferred delivery date the day tomorrow => today = 0
      * i.e. preferred delivery date the day after tomorrow => today + tomorrow = 1
-     * i.e. preferred delivery date the day after tomorrow, but one holiday => today + holiday = 0
+     * i.e. preferred delivery date the day after tomorrow, but one holiday => today + holiday = 0.
      *
      * 0 means: should ship today
      * < 0 means: should've shipped in the past
      * anything higher means: you've got some more time
      *
-     * @param string $shippingDate Shipping date (format: `Y-m-d H:i:s`)
+     * @param string $shippingDate          Shipping date (format: `Y-m-d H:i:s`)
      * @param string $preferredDeliveryDate Customer preference
      *
      * @return int
+     *
      * @throws \Exception
      */
     public static function getShippingDaysRemaining($shippingDate, $preferredDeliveryDate)
@@ -215,26 +217,27 @@ class Util
         $daysRemaining = (int) $nearestDeliveryDate->diff($preferredDeliveryDate)->format('%R%a');
 
         // Subtract an additional day if we cannot ship today (Sunday or holiday)
-        if (date('w', strtotime($shippingDate)) == 0 ||
+        if (0 == date('w', strtotime($shippingDate)) ||
             in_array(
                 date('Y-m-d', strtotime($shippingDate)),
                 static::getHolidaysForYear(date('Y', strtotime($shippingDate)))
             )
         ) {
-            $daysRemaining--;
+            --$daysRemaining;
         }
 
         return $daysRemaining;
     }
 
     /**
-     * Get an array with all Dutch holidays for the given year
+     * Get an array with all Dutch holidays for the given year.
      *
      * @param string $year
      *
      * @return array
      *
      * Credits to @tvlooy (https://gist.github.com/tvlooy/1894247)
+     *
      * @throws \Exception
      */
     protected static function getHolidaysForYear($year)
@@ -269,7 +272,7 @@ class Util
         } catch (\Exception $e) {
         }
 
-        $holidays = array(
+        $holidays = [
             $nieuwjaar->format('Y-m-d'),
             $pasen->format('Y-m-d'),
             $koningsdag->format('Y-m-d'),
@@ -279,9 +282,8 @@ class Util
             $pinksterMaandag->format('Y-m-d'),
             $eersteKerstDag->format('Y-m-d'),
             $tweedeKerstDag->format('Y-m-d'),
-        );
+        ];
 
         return $holidays;
     }
-
 }

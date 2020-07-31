@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -35,18 +35,15 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class OpeningHours
+ * Class OpeningHours.
  *
- * @package MijnPostNLExportModule\Postnl\ComplexTypes
- *
- * @method string|null getMonday()
- * @method string|null getTuesday()
- * @method string|null getWednesday()
- * @method string|null getThursday()
- * @method string|null getFriday()
- * @method string|null getSaturday()
- * @method string|null getSunday()
- *
+ * @method string|null  getMonday()
+ * @method string|null  getTuesday()
+ * @method string|null  getWednesday()
+ * @method string|null  getThursday()
+ * @method string|null  getFriday()
+ * @method string|null  getSaturday()
+ * @method string|null  getSunday()
  * @method OpeningHours setMonday(string|null $monday = null)
  * @method OpeningHours setTuesday(string|null $tuesday = null)
  * @method OpeningHours setWednesday(string|null $wednesday = null)
@@ -57,9 +54,9 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  */
 class OpeningHours extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
+    /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'Monday'    => BarcodeService::DOMAIN_NAMESPACE,
             'Tuesday'   => BarcodeService::DOMAIN_NAMESPACE,
             'Wednesday' => BarcodeService::DOMAIN_NAMESPACE,
@@ -68,7 +65,7 @@ class OpeningHours extends AbstractEntity
             'Saturday'  => BarcodeService::DOMAIN_NAMESPACE,
             'Sunday'    => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'Monday'    => ConfirmingService::DOMAIN_NAMESPACE,
             'Tuesday'   => ConfirmingService::DOMAIN_NAMESPACE,
             'Wednesday' => ConfirmingService::DOMAIN_NAMESPACE,
@@ -77,7 +74,7 @@ class OpeningHours extends AbstractEntity
             'Saturday'  => ConfirmingService::DOMAIN_NAMESPACE,
             'Sunday'    => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'Monday'    => LabellingService::DOMAIN_NAMESPACE,
             'Tuesday'   => LabellingService::DOMAIN_NAMESPACE,
             'Wednesday' => LabellingService::DOMAIN_NAMESPACE,
@@ -95,7 +92,7 @@ class OpeningHours extends AbstractEntity
             'Saturday'  => ShippingStatusService::DOMAIN_NAMESPACE,
             'Sunday'    => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'Monday'    => DeliveryDateService::DOMAIN_NAMESPACE,
             'Tuesday'   => DeliveryDateService::DOMAIN_NAMESPACE,
             'Wednesday' => DeliveryDateService::DOMAIN_NAMESPACE,
@@ -104,7 +101,7 @@ class OpeningHours extends AbstractEntity
             'Saturday'  => DeliveryDateService::DOMAIN_NAMESPACE,
             'Sunday'    => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'Monday'    => LocationService::DOMAIN_NAMESPACE,
             'Tuesday'   => LocationService::DOMAIN_NAMESPACE,
             'Wednesday' => LocationService::DOMAIN_NAMESPACE,
@@ -113,7 +110,7 @@ class OpeningHours extends AbstractEntity
             'Saturday'  => LocationService::DOMAIN_NAMESPACE,
             'Sunday'    => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'Monday'    => TimeframeService::DOMAIN_NAMESPACE,
             'Tuesday'   => TimeframeService::DOMAIN_NAMESPACE,
             'Wednesday' => TimeframeService::DOMAIN_NAMESPACE,
@@ -124,19 +121,19 @@ class OpeningHours extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string|null $Monday */
+    /** @var string|null */
     protected $Monday = '';
-    /** @var string|null $Tuesday */
+    /** @var string|null */
     protected $Tuesday = '';
-    /** @var string|null $Wednesday */
+    /** @var string|null */
     protected $Wednesday = '';
-    /** @var string|null $Thursday */
+    /** @var string|null */
     protected $Thursday = '';
-    /** @var string|null $Friday */
+    /** @var string|null */
     protected $Friday = '';
-    /** @var string|null $Saturday */
+    /** @var string|null */
     protected $Saturday = '';
-    /** @var string|null $Sunday */
+    /** @var string|null */
     protected $Sunday = '';
     // @codingStandardsIgnoreEnd
 

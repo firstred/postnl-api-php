@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -47,23 +47,22 @@ use ThirtyBees\PostNL\PostNL;
 use ThirtyBees\PostNL\Service\LocationService;
 
 /**
- * Class LocationServiceRestTest
- *
- * @package ThirtyBees\PostNL\Tests\Service
+ * Class LocationServiceRestTest.
  *
  * @testdox The LocationService (REST)
  */
 class LocationServiceRestTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var PostNL $postnl */
+    /** @var PostNL */
     protected $postnl;
-    /** @var LocationService $service */
+    /** @var LocationService */
     protected $service;
-    /** @var $lastRequest */
+    /** @var */
     protected $lastRequest;
 
     /**
      * @before
+     *
      * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
      */
     public function setupPostNL()
@@ -84,8 +83,7 @@ class LocationServiceRestTest extends \PHPUnit_Framework_TestCase
                     'Zipcode'     => '2132WT',
                 ]))
                 ->setGlobalPackBarcodeType('AB')
-                ->setGlobalPackCustomerCode('1234')
-            , new UsernameToken(null, 'test'),
+                ->setGlobalPackCustomerCode('1234'), new UsernameToken(null, 'test'),
             false,
             PostNL::MODE_REST
         );
@@ -118,7 +116,7 @@ class LocationServiceRestTest extends \PHPUnit_Framework_TestCase
     {
         $message = new Message();
 
-        /** @var Request $request */
+        /* @var Request $request */
         $this->lastRequest = $request = $this->service->buildGetNearestLocationsRequestREST(
             (new GetNearestLocations())
                 ->setMessage($message)
@@ -129,15 +127,15 @@ class LocationServiceRestTest extends \PHPUnit_Framework_TestCase
                     'DeliveryOptions'    => [
                         'PGE',
                     ],
-                    'OpeningTime'        => '09:00:00',
-                    'Options'    => [
-                        'Daytime'
+                    'OpeningTime' => '09:00:00',
+                    'Options'     => [
+                        'Daytime',
                     ],
-                    'City'               => 'Hoofddorp',
-                    'HouseNr'            => '42',
-                    'HouseNrExt'         => 'A',
-                    'Postalcode'         => '2132WT',
-                    'Street'             => 'Siriusdreef',
+                    'City'       => 'Hoofddorp',
+                    'HouseNr'    => '42',
+                    'HouseNrExt' => 'A',
+                    'Postalcode' => '2132WT',
+                    'Street'     => 'Siriusdreef',
                 ]))
         );
 
@@ -180,15 +178,15 @@ class LocationServiceRestTest extends \PHPUnit_Framework_TestCase
                     'PG',
                     'PGE',
                 ],
-                'OpeningTime'        => '09:00:00',
-                'Options'    => [
-                    'Daytime'
+                'OpeningTime' => '09:00:00',
+                'Options'     => [
+                    'Daytime',
                 ],
-                'City'               => 'Hoofddorp',
-                'HouseNr'            => '42',
-                'HouseNrExt'         => 'A',
-                'Postalcode'         => '2132WT',
-                'Street'             => 'Siriusdreef',
+                'City'       => 'Hoofddorp',
+                'HouseNr'    => '42',
+                'HouseNrExt' => 'A',
+                'Postalcode' => '2132WT',
+                'Street'     => 'Siriusdreef',
             ])));
 
         $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\GetNearestLocationsResponse', $response);
@@ -202,19 +200,19 @@ class LocationServiceRestTest extends \PHPUnit_Framework_TestCase
     {
         $message = new Message();
 
-        /** @var Request $request */
+        /* @var Request $request */
         $this->lastRequest = $request = $this->service->buildGetLocationsInAreaRequest(
             (new GetLocationsInArea())
                 ->setMessage($message)
                 ->setCountrycode('NL')
                 ->setLocation(Location::create([
-                    'AllowSundaySorting'   => true,
-                    'DeliveryDate'         => '29-06-2016',
-                    'DeliveryOptions'      => [
+                    'AllowSundaySorting' => true,
+                    'DeliveryDate'       => '29-06-2016',
+                    'DeliveryOptions'    => [
                         'PG',
                     ],
-                    'OpeningTime'          => '09:00:00',
-                    'Options'              => [
+                    'OpeningTime' => '09:00:00',
+                    'Options'     => [
                         'Daytime',
                     ],
                     'CoordinatesNorthWest' => CoordinatesNorthWest::create([
@@ -260,13 +258,13 @@ class LocationServiceRestTest extends \PHPUnit_Framework_TestCase
         $response = $this->postnl->getLocationsInArea((new GetLocationsInArea())
             ->setCountrycode('NL')
             ->setLocation(Location::create([
-                'AllowSundaySorting'   => true,
-                'DeliveryDate'         => '29-06-2016',
-                'DeliveryOptions'      => [
+                'AllowSundaySorting' => true,
+                'DeliveryDate'       => '29-06-2016',
+                'DeliveryOptions'    => [
                     'PG',
                 ],
-                'OpeningTime'          => '09:00:00',
-                'Options'              => [
+                'OpeningTime' => '09:00:00',
+                'Options'     => [
                     'Daytime',
                 ],
                 'CoordinatesNorthWest' => CoordinatesNorthWest::create([
@@ -290,7 +288,7 @@ class LocationServiceRestTest extends \PHPUnit_Framework_TestCase
     {
         $message = new Message();
 
-        /** @var Request $request */
+        /* @var Request $request */
         $this->lastRequest = $request = $this->service->buildGetLocationRequest(
             (new GetLocation())
                 ->setLocationCode('161503')

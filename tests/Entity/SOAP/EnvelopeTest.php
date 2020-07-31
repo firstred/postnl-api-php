@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -25,14 +25,13 @@
  */
 
 namespace ThirtyBees\PostNL\Tests\Entity\SOAP;
+
 use ThirtyBees\PostNL\Entity\SOAP\Body;
 use ThirtyBees\PostNL\Entity\SOAP\Envelope;
 use ThirtyBees\PostNL\Entity\SOAP\Header;
 
 /**
- * Class EnvelopeTest
- *
- * @package ThirtyBees\PostNL\Tests\Entity\SOAP
+ * Class EnvelopeTest.
  *
  * @testdox The Envelope class
  */

@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -29,44 +29,41 @@ namespace ThirtyBees\PostNL\Entity\SOAP;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
 
 /**
- * Class Security
- *
- * @package ThirtyBees\PostNL\Entity\SOAP
+ * Class Security.
  *
  * @method UsernameToken getUsernameToken()
- *
- * @method Security setUserNameToken(UsernameToken $token)
+ * @method Security      setUserNameToken(UsernameToken $token)
  */
 class Security extends AbstractEntity
 {
     const SECURITY_NAMESPACE = 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd';
 
-    /** @var string[][] $defaultProperties */
+    /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'UsernameToken' => self::SECURITY_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'UsernameToken' => self::SECURITY_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'UsernameToken' => self::SECURITY_NAMESPACE,
         ],
         'ShippingStatus' => [
             'UsernameToken' => self::SECURITY_NAMESPACE,
         ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'UsernameToken' => self::SECURITY_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'UsernameToken' => self::SECURITY_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'UsernameToken' => self::SECURITY_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var UsernameToken $UsernameToken */
+    /** @var UsernameToken */
     protected $UsernameToken;
     // @codingStandardsIgnoreEnd
 

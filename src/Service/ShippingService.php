@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2020 KeenDelivery, LLC
  *
@@ -28,8 +28,6 @@ namespace ThirtyBees\PostNL\Service;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use Psr\Cache\CacheItemInterface;
-use Psr\Cache\CacheItemPoolInterface;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
 use ThirtyBees\PostNL\Entity\Request\GenerateShipping;
 use ThirtyBees\PostNL\Entity\Response\GenerateShippingResponse;
@@ -39,13 +37,11 @@ use ThirtyBees\PostNL\Exception\CifException;
 use ThirtyBees\PostNL\Exception\ResponseException;
 
 /**
- * Class ShippingService
+ * Class ShippingService.
  *
- * @package ThirtyBees\PostNL\Service
- *
- * @method GenerateShippingResponse   generateShipping(GenerateShipping $generateShipping, bool $confirm)
- * @method Request                    buildGenerateShippingRequest(GenerateShipping $generateShipping, bool $confirm)
- * @method GenerateShippingResponse   processGenerateShippingResponse(mixed $response)
+ * @method GenerateShippingResponse generateShipping(GenerateShipping $generateShipping, bool $confirm)
+ * @method Request                  buildGenerateShippingRequest(GenerateShipping $generateShipping, bool $confirm)
+ * @method GenerateShippingResponse processGenerateShippingResponse(mixed $response)
  */
 class ShippingService extends AbstractService
 {
@@ -59,10 +55,10 @@ class ShippingService extends AbstractService
     const DOMAIN_NAMESPACE = 'http://postnl.nl/';
 
     /**
-     * Generate a single Shipping vai REST
+     * Generate a single Shipping vai REST.
      *
      * @param GenerateShipping $generateShipping
-     * @param bool $confirm
+     * @param bool             $confirm
      *
      * @return GenerateShippingResponse|null
      *
@@ -80,7 +76,7 @@ class ShippingService extends AbstractService
             $response = $item->get();
             try {
                 $response = \GuzzleHttp\Psr7\parse_response($response);
-            }catch(\InvalidArgumentException $e) {
+            } catch (\InvalidArgumentException $e) {
             }
         }
         if (!$response instanceof Response) {
@@ -93,7 +89,7 @@ class ShippingService extends AbstractService
         if ($object instanceof GenerateShippingResponse) {
             if ($item instanceof CachedItemInterface
                 && $response instanceof Response
-                && $response->getStatusCode() === 200
+                && 200 === $response->getStatusCode()
             ) {
                 $item->set(\GuzzleHttp\Psr7\str($response));
                 $this->cacheItem($item);
@@ -102,7 +98,7 @@ class ShippingService extends AbstractService
             return $object;
         }
 
-        if ($response->getStatusCode() === 200) {
+        if (200 === $response->getStatusCode()) {
             throw new ResponseException('Invalid API response', null, null, $response);
         }
 
@@ -117,11 +113,11 @@ class ShippingService extends AbstractService
         return new Request(
             'POST',
             ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).'?'.\GuzzleHttp\Psr7\build_query([
-                'confirm' => $confirm
+                'confirm' => $confirm,
             ]),
             [
-                'apikey' => $apiKey,
-                'Accept' => 'application/json',
+                'apikey'       => $apiKey,
+                'Accept'       => 'application/json',
                 'Content-type' => 'application/json;charset=UTF-8',
             ],
             json_encode($generateShipping, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES)
@@ -129,11 +125,12 @@ class ShippingService extends AbstractService
     }
 
     /**
-     * Process the GenerateShipping REST Response
+     * Process the GenerateShipping REST Response.
      *
      * @param Response $response
      *
      * @return GenerateShippingResponse|null
+     *
      * @throws ResponseException
      */
     public function processGenerateShippingResponseREST($response): ?GenerateShippingResponse

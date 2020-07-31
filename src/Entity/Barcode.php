@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -36,33 +36,30 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class Barcode
- *
- * @package ThirtyBees\PostNL\Entity
+ * Class Barcode.
  *
  * @method string|null getType()
  * @method string|null getRange()
  * @method string|null getSerie()
- *
- * @method Barcode setType(string|null $type = null)
- * @method Barcode setRange(string|null $range = null)
- * @method Barcode setSerie(string|null $serie = null)
+ * @method Barcode     setType(string|null $type = null)
+ * @method Barcode     setRange(string|null $range = null)
+ * @method Barcode     setSerie(string|null $serie = null)
  */
 class Barcode extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
+    /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'Type'  => BarcodeService::DOMAIN_NAMESPACE,
             'Range' => BarcodeService::DOMAIN_NAMESPACE,
             'Serie' => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'Type'  => ConfirmingService::DOMAIN_NAMESPACE,
             'Range' => ConfirmingService::DOMAIN_NAMESPACE,
             'Serie' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'Type'  => LabellingService::DOMAIN_NAMESPACE,
             'Range' => LabellingService::DOMAIN_NAMESPACE,
             'Serie' => LabellingService::DOMAIN_NAMESPACE,
@@ -72,33 +69,33 @@ class Barcode extends AbstractEntity
             'Range' => ShippingStatusService::DOMAIN_NAMESPACE,
             'Serie' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'Type'  => DeliveryDateService::DOMAIN_NAMESPACE,
             'Range' => DeliveryDateService::DOMAIN_NAMESPACE,
             'Serie' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'Type'  => LocationService::DOMAIN_NAMESPACE,
             'Range' => LocationService::DOMAIN_NAMESPACE,
             'Serie' => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'Type'  => TimeframeService::DOMAIN_NAMESPACE,
             'Range' => TimeframeService::DOMAIN_NAMESPACE,
             'Serie' => TimeframeService::DOMAIN_NAMESPACE,
         ],
-        'Shipping'      => [
+        'Shipping' => [
             'Type'  => ShippingService::DOMAIN_NAMESPACE,
             'Range' => ShippingService::DOMAIN_NAMESPACE,
             'Serie' => ShippingService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string|null $Type */
+    /** @var string|null */
     protected $Type;
-    /** @var string|null $Range */
+    /** @var string|null */
     protected $Range;
-    /** @var string|null $Serie */
+    /** @var string|null */
     protected $Serie;
     // @codingStandardsIgnoreEnd
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -36,9 +36,7 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class Customs
- *
- * @package ThirtyBees\PostNL\Entity
+ * Class Customs.
  *
  * @method string|null    getCertificate()
  * @method string|null    getCertificateNr()
@@ -50,23 +48,22 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method string|null    getLicense()
  * @method string|null    getLicenseNr()
  * @method string|null    getShipmentType()
- *
- * @method Customs setCertificate(string|null $certificate = null)
- * @method Customs setCertificateNr(string|null $certificateNr = null)
- * @method Customs setContent(Content[]|null $content = null)
- * @method Customs setCurrency(string|null $currency = null)
- * @method Customs setHandleAsNonDeliverable(string|null $nonDeliverable = null)
- * @method Customs setInvoice(string|null $invoice = null)
- * @method Customs setInvoiceNr(string|null $invoiceNr = null)
- * @method Customs setLicense(string|null $license = null)
- * @method Customs setLicenseNr(string|null $licenseNr = null)
- * @method Customs setShipmentType(string|null $shipmentType = null)
+ * @method Customs        setCertificate(string|null $certificate = null)
+ * @method Customs        setCertificateNr(string|null $certificateNr = null)
+ * @method Customs        setContent(Content[]|null $content = null)
+ * @method Customs        setCurrency(string|null $currency = null)
+ * @method Customs        setHandleAsNonDeliverable(string|null $nonDeliverable = null)
+ * @method Customs        setInvoice(string|null $invoice = null)
+ * @method Customs        setInvoiceNr(string|null $invoiceNr = null)
+ * @method Customs        setLicense(string|null $license = null)
+ * @method Customs        setLicenseNr(string|null $licenseNr = null)
+ * @method Customs        setShipmentType(string|null $shipmentType = null)
  */
 class Customs extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
+    /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'Certificate'            => BarcodeService::DOMAIN_NAMESPACE,
             'CertificateNr'          => BarcodeService::DOMAIN_NAMESPACE,
             'Content'                => BarcodeService::DOMAIN_NAMESPACE,
@@ -78,7 +75,7 @@ class Customs extends AbstractEntity
             'LicenseNr'              => BarcodeService::DOMAIN_NAMESPACE,
             'ShipmentType'           => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'Certificate'            => ConfirmingService::DOMAIN_NAMESPACE,
             'CertificateNr'          => ConfirmingService::DOMAIN_NAMESPACE,
             'Content'                => ConfirmingService::DOMAIN_NAMESPACE,
@@ -90,7 +87,7 @@ class Customs extends AbstractEntity
             'LicenseNr'              => ConfirmingService::DOMAIN_NAMESPACE,
             'ShipmentType'           => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'Certificate'            => LabellingService::DOMAIN_NAMESPACE,
             'CertificateNr'          => LabellingService::DOMAIN_NAMESPACE,
             'Content'                => LabellingService::DOMAIN_NAMESPACE,
@@ -114,7 +111,7 @@ class Customs extends AbstractEntity
             'LicenseNr'              => ShippingStatusService::DOMAIN_NAMESPACE,
             'ShipmentType'           => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'Certificate'            => DeliveryDateService::DOMAIN_NAMESPACE,
             'CertificateNr'          => DeliveryDateService::DOMAIN_NAMESPACE,
             'Content'                => DeliveryDateService::DOMAIN_NAMESPACE,
@@ -126,7 +123,7 @@ class Customs extends AbstractEntity
             'LicenseNr'              => DeliveryDateService::DOMAIN_NAMESPACE,
             'ShipmentType'           => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'Certificate'            => LocationService::DOMAIN_NAMESPACE,
             'CertificateNr'          => LocationService::DOMAIN_NAMESPACE,
             'Content'                => LocationService::DOMAIN_NAMESPACE,
@@ -138,7 +135,7 @@ class Customs extends AbstractEntity
             'LicenseNr'              => LocationService::DOMAIN_NAMESPACE,
             'ShipmentType'           => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'Certificate'            => TimeframeService::DOMAIN_NAMESPACE,
             'CertificateNr'          => TimeframeService::DOMAIN_NAMESPACE,
             'Content'                => TimeframeService::DOMAIN_NAMESPACE,
@@ -150,7 +147,7 @@ class Customs extends AbstractEntity
             'LicenseNr'              => TimeframeService::DOMAIN_NAMESPACE,
             'ShipmentType'           => TimeframeService::DOMAIN_NAMESPACE,
         ],
-        'Shipping'       => [
+        'Shipping' => [
             'Certificate'            => ShippingService::DOMAIN_NAMESPACE,
             'CertificateNr'          => ShippingService::DOMAIN_NAMESPACE,
             'Content'                => ShippingService::DOMAIN_NAMESPACE,
@@ -164,25 +161,25 @@ class Customs extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string|null $Certificate */
+    /** @var string|null */
     protected $Certificate;
-    /** @var string|null $CertificateNr */
+    /** @var string|null */
     protected $CertificateNr;
-    /** @var Content[]|null $Content */
+    /** @var Content[]|null */
     protected $Content;
-    /** @var string|null $Currency */
+    /** @var string|null */
     protected $Currency;
-    /** @var string|null $HandleAsNonDeliverable */
+    /** @var string|null */
     protected $HandleAsNonDeliverable;
-    /** @var string|null $Invoice */
+    /** @var string|null */
     protected $Invoice;
-    /** @var string|null $InvoiceNr */
+    /** @var string|null */
     protected $InvoiceNr;
-    /** @var string|null $License */
+    /** @var string|null */
     protected $License;
-    /** @var string|null $LicenseNr */
+    /** @var string|null */
     protected $LicenseNr;
-    /** @var string|null $ShipmentType */
+    /** @var string|null */
     protected $ShipmentType;
     // @codingStandardsIgnoreEnd
 

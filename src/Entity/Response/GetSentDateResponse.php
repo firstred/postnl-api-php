@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -37,33 +37,30 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class GetSentDateResponse
+ * Class GetSentDateResponse.
  *
- * @package ThirtyBees\PostNL\Entity
- *
- * @method string|null   getSentDate()
- * @method string[]|null getOptions()
- *
+ * @method string|null         getSentDate()
+ * @method string[]|null       getOptions()
  * @method GetSentDateResponse setSentDate(string|null $date = null)
  * @method GetSentDateResponse setOptions(string[]|null $options = null)
  */
 class GetSentDateResponse extends AbstractEntity
 {
     /**
-     * Default properties and namespaces for the SOAP API
+     * Default properties and namespaces for the SOAP API.
      *
-     * @var array $defaultProperties
+     * @var array
      */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'SentDate' => BarcodeService::DOMAIN_NAMESPACE,
             'Options'  => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'SentDate' => ConfirmingService::DOMAIN_NAMESPACE,
             'Options'  => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'SentDate' => LabellingService::DOMAIN_NAMESPACE,
             'Options'  => LabellingService::DOMAIN_NAMESPACE,
         ],
@@ -71,30 +68,30 @@ class GetSentDateResponse extends AbstractEntity
             'SentDate' => ShippingStatusService::DOMAIN_NAMESPACE,
             'Options'  => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'SentDate' => DeliveryDateService::DOMAIN_NAMESPACE,
             'Options'  => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'SentDate' => LocationService::DOMAIN_NAMESPACE,
             'Options'  => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'SentDate' => TimeframeService::DOMAIN_NAMESPACE,
             'Options'  => timeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string|null $SentDate */
+    /** @var string|null */
     protected $SentDate;
-    /** @var string[]|null $Options */
+    /** @var string[]|null */
     protected $Options;
     // @codingStandardsIgnoreEnd
 
     /**
      * GetSentDateResponse constructor.
      *
-     * @param string|null      $date
+     * @param string|null   $date
      * @param string[]|null $options
      */
     public function __construct($date = null, array $options = null)
@@ -106,7 +103,7 @@ class GetSentDateResponse extends AbstractEntity
     }
 
     /**
-     * Return a serializable array for the XMLWriter
+     * Return a serializable array for the XMLWriter.
      *
      * @param Writer $writer
      *
@@ -122,12 +119,12 @@ class GetSentDateResponse extends AbstractEntity
         }
 
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if ($propertyName === 'Options') {
+            if ('Options' === $propertyName) {
                 if (isset($this->Options)) {
                     $options = [];
                     if (is_array($this->Options)) {
                         foreach ($this->Options as $option) {
-                            $options[] = ["{http://schemas.microsoft.com/2003/10/Serialization/Arrays}string" => $option];
+                            $options[] = ['{http://schemas.microsoft.com/2003/10/Serialization/Arrays}string' => $option];
                         }
                     }
                     $xml["{{$namespace}}Options"] = $options;

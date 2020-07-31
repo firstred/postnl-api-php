@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -42,19 +42,18 @@ use ThirtyBees\PostNL\HttpClient\MockClient;
 use ThirtyBees\PostNL\PostNL;
 
 /**
- * Class PostNLRestTest
- *
- * @package ThirtyBees\PostNL\Tests\Misc
+ * Class PostNLRestTest.
  *
  * @testdox The PostNL object
  */
 class PostNLRestTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var PostNL $postnl */
+    /** @var PostNL */
     protected $postnl;
 
     /**
      * @before
+     *
      * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
      */
     public function setupPostNL()
@@ -75,8 +74,7 @@ class PostNLRestTest extends \PHPUnit_Framework_TestCase
                     'Zipcode'     => '2132WT',
                 ]))
                 ->setGlobalPackBarcodeType('AB')
-                ->setGlobalPackCustomerCode('1234')
-            , new UsernameToken(null, 'test'),
+                ->setGlobalPackCustomerCode('1234'), new UsernameToken(null, 'test'),
             true,
             PostNL::MODE_REST
         );
@@ -132,6 +130,7 @@ class PostNLRestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox returns a combinations of timeframes, locations and the delivery date
+     *
      * @throws \ThirtyBees\PostNL\Exception\ResponseException
      * @throws \ThirtyBees\PostNL\Exception\ApiException
      */
@@ -185,102 +184,102 @@ class PostNLRestTest extends \PHPUnit_Framework_TestCase
             'Timeframes' => [
                 'Timeframe' => [
                     [
-                        'Date' => '07-03-2018',
+                        'Date'       => '07-03-2018',
                         'Timeframes' => [
                             'TimeframeTimeFrame' => [
                                 [
-                                    'From' => '16:00:00',
+                                    'From'    => '16:00:00',
                                     'Options' => [
                                         'string' => 'Daytime',
                                     ],
                                     'To' => '18:30:00',
                                 ],
                                 [
-                                    'From' => '18:00:00',
+                                    'From'    => '18:00:00',
                                     'Options' => [
                                         'string' => 'Evening',
                                     ],
                                     'To' => '22:00:00',
                                 ],
-                            ]
-                        ]
+                            ],
+                        ],
                     ],
                     [
-                        'Date' => '08-03-2018',
+                        'Date'       => '08-03-2018',
                         'Timeframes' => [
                             'TimeframeTimeFrame' => [
                                 [
-                                    'From' => '15:45:00',
+                                    'From'    => '15:45:00',
                                     'Options' => [
                                         'string' => 'Daytime',
                                     ],
                                     'To' => '18:15:00',
                                 ],
                                 [
-                                    'From' => '18:00:00',
+                                    'From'    => '18:00:00',
                                     'Options' => [
                                         'string' => 'Evening',
                                     ],
                                     'To' => '22:00:00',
                                 ],
-                            ]
-                        ]
+                            ],
+                        ],
                     ],
                     [
-                        'Date' => '09-03-2018',
+                        'Date'       => '09-03-2018',
                         'Timeframes' => [
                             'TimeframeTimeFrame' => [
                                 [
-                                    'From' => '15:30:00',
+                                    'From'    => '15:30:00',
                                     'Options' => [
                                         'string' => 'Daytime',
                                     ],
                                     'To' => '18:00:00',
                                 ],
                                 [
-                                    'From' => '18:00:00',
+                                    'From'    => '18:00:00',
                                     'Options' => [
                                         'string' => 'Evening',
                                     ],
                                     'To' => '22:00:00',
                                 ],
-                            ]
-                        ]
+                            ],
+                        ],
                     ],
                     [
-                        'Date' => '10-03-2018',
+                        'Date'       => '10-03-2018',
                         'Timeframes' => [
                             'TimeframeTimeFrame' => [
                                 [
-                                    'From' => '16:15:00',
+                                    'From'    => '16:15:00',
                                     'Options' => [
                                         'string' => 'Daytime',
                                     ],
                                     'To' => '18:45:00',
                                 ],
-                            ]
-                        ]
+                            ],
+                        ],
                     ],
                     [
-                        'Date' => '13-03-2018',
+                        'Date'       => '13-03-2018',
                         'Timeframes' => [
                             'TimeframeTimeFrame' => [
                                 [
-                                    'From' => '16:00:00',
+                                    'From'    => '16:00:00',
                                     'Options' => [
                                         'string' => 'Daytime',
                                     ],
                                     'To' => '18:30:00',
                                 ],
                                 [
-                                    'From' => '18:00:00',
+                                    'From'    => '18:00:00',
                                     'Options' => [
                                         'string' => 'Evening',
                                     ],
                                     'To' => '22:00:00',
                                 ],
-                            ]
-                        ]
+                            ],
+                        ],
                     ],
                     [
                         'Date'       => '14-03-2018',
@@ -291,25 +290,25 @@ class PostNLRestTest extends \PHPUnit_Framework_TestCase
                                     'Options' => [
                                         'string' => 'Daytime',
                                     ],
-                                    'To'      => '18:30:00',
+                                    'To' => '18:30:00',
                                 ],
                                 [
                                     'From'    => '18:00:00',
                                     'Options' => [
                                         'string' => 'Evening',
                                     ],
-                                    'To'      => '20:00:00',
+                                    'To' => '20:00:00',
                                 ],
                             ],
                         ],
                     ],
-                ]
-            ]
+                ],
+            ],
         ];
         $locationsPayload = json_decode($this->getNearestLocationsMockResponse());
         $deliveryDatePayload = [
             'DeliveryDate' => '30-06-2016',
-            'Options' => [
+            'Options'      => [
                 'string' => 'Daytime',
             ],
         ];
@@ -339,7 +338,7 @@ class PostNLRestTest extends \PHPUnit_Framework_TestCase
                         ->setPostalCode('2132WT')
                         ->setStartDate('30-06-2016')
                         ->setStreet('Siriusdreef')
-                        ->setSundaySorting(false)
+                        ->setSundaySorting(false),
                 ]),
             (new GetNearestLocations())
                 ->setCountrycode('NL')
@@ -349,15 +348,15 @@ class PostNLRestTest extends \PHPUnit_Framework_TestCase
                     'DeliveryOptions'    => [
                         'PGE',
                     ],
-                    'OpeningTime'        => '09:00:00',
-                    'Options'    => [
-                        'Daytime'
+                    'OpeningTime' => '09:00:00',
+                    'Options'     => [
+                        'Daytime',
                     ],
-                    'City'               => 'Hoofddorp',
-                    'HouseNr'            => '42',
-                    'HouseNrExt'         => 'A',
-                    'Postalcode'         => '2132WT',
-                    'Street'             => 'Siriusdreef',
+                    'City'       => 'Hoofddorp',
+                    'HouseNr'    => '42',
+                    'HouseNrExt' => 'A',
+                    'Postalcode' => '2132WT',
+                    'Street'     => 'Siriusdreef',
                 ])),
             (new GetDeliveryDate())
                 ->setGetDeliveryDate(
@@ -366,7 +365,7 @@ class PostNLRestTest extends \PHPUnit_Framework_TestCase
                         ->setCity('Hoofddorp')
                         ->setCountryCode('NL')
                         ->setCutOffTimes([
-                            new CutOffTime('00', '14:00:00')
+                            new CutOffTime('00', '14:00:00'),
                         ])
                         ->setHouseNr('42')
                         ->setHouseNrExt('A')

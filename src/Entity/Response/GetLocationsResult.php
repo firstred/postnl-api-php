@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -37,46 +37,43 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class GetLocationsResult
- *
- * @package ThirtyBees\PostNL\Entity
+ * Class GetLocationsResult.
  *
  * @method ResponseLocation[]|null getResponseLocation()
- *
- * @method GetLocationsResult setResponseLocation(ResponseLocation|null $location = null)
+ * @method GetLocationsResult      setResponseLocation(ResponseLocation|null $location = null)
  */
 class GetLocationsResult extends AbstractEntity
 {
     /**
-     * Default properties and namespaces for the SOAP API
+     * Default properties and namespaces for the SOAP API.
      *
-     * @var array $defaultProperties
+     * @var array
      */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'ResponseLocation' => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'ResponseLocation' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'ResponseLocation' => LabellingService::DOMAIN_NAMESPACE,
         ],
         'ShippingStatus' => [
             'ResponseLocation' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'ResponseLocation' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'ResponseLocation' => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'ResponseLocation' => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var ResponseLocation[]|null $ResponseLocation */
+    /** @var ResponseLocation[]|null */
     protected $ResponseLocation;
     // @codingStandardsIgnoreEnd
 
@@ -93,7 +90,7 @@ class GetLocationsResult extends AbstractEntity
     }
 
     /**
-     * Return a serializable array for the XMLWriter
+     * Return a serializable array for the XMLWriter.
      *
      * @param Writer $writer
      *
@@ -109,7 +106,7 @@ class GetLocationsResult extends AbstractEntity
         }
 
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if ($propertyName === 'ResponseLocation') {
+            if ('ResponseLocation' === $propertyName) {
                 $locations = [];
                 foreach ($this->ResponseLocation as $location) {
                     $locations[] = $location;

@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -36,36 +36,33 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class Label
- *
- * @package ThirtyBees\PostNL\Entity
+ * Class Label.
  *
  * @method string|null getContent()
  * @method string|null getContentType()
  * @method string|null getLabelType()
- *
- * @method Label setContent(string|null $content = null)
- * @method Label setContentType(string|null $contentType = null)
- * @method Label setLabelType(string|null $labelType = null)
+ * @method Label       setContent(string|null $content = null)
+ * @method Label       setContentType(string|null $contentType = null)
+ * @method Label       setLabelType(string|null $labelType = null)
  */
 class Label extends AbstractEntity
 {
     const FORMAT_A4 = 1;
     const FORMAT_A6 = 2;
 
-    /** @var string[][] $defaultProperties */
+    /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'Content'     => BarcodeService::DOMAIN_NAMESPACE,
             'ContentType' => BarcodeService::DOMAIN_NAMESPACE,
             'Labeltype'   => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'Content'     => ConfirmingService::DOMAIN_NAMESPACE,
             'ContentType' => ConfirmingService::DOMAIN_NAMESPACE,
             'Labeltype'   => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'Content'     => LabellingService::DOMAIN_NAMESPACE,
             'ContentType' => LabellingService::DOMAIN_NAMESPACE,
             'Labeltype'   => LabellingService::DOMAIN_NAMESPACE,
@@ -75,22 +72,22 @@ class Label extends AbstractEntity
             'ContentType' => ShippingStatusService::DOMAIN_NAMESPACE,
             'Labeltype'   => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'Content'     => DeliveryDateService::DOMAIN_NAMESPACE,
             'ContentType' => DeliveryDateService::DOMAIN_NAMESPACE,
             'Labeltype'   => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'Content'     => LocationService::DOMAIN_NAMESPACE,
             'ContentType' => LocationService::DOMAIN_NAMESPACE,
             'Labeltype'   => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'Content'     => TimeframeService::DOMAIN_NAMESPACE,
             'ContentType' => TimeframeService::DOMAIN_NAMESPACE,
             'Labeltype'   => TimeframeService::DOMAIN_NAMESPACE,
         ],
-        'Shipping'      => [
+        'Shipping' => [
             'Content'     => ShippingService::DOMAIN_NAMESPACE,
             'ContentType' => ShippingService::DOMAIN_NAMESPACE,
             'Labeltype'   => ShippingService::DOMAIN_NAMESPACE,
@@ -98,14 +95,14 @@ class Label extends AbstractEntity
     ];
     // @codingStandardsIgnoreStart
     /**
-     * @var string|null $Content
+     * @var string|null
      *
      * Base 64 encoded content
      */
     protected $Content;
-    /** @var string|null $Contenttype */
+    /** @var string|null */
     protected $Contenttype;
-    /** @var string|null $Labeltype */
+    /** @var string|null */
     protected $Labeltype;
     // @codingStandardsIgnoreEnd
 

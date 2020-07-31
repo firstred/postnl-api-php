@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -38,18 +38,16 @@ use ThirtyBees\PostNL\Exception\ResponseException;
 use ThirtyBees\PostNL\PostNL;
 
 /**
- * Class BarcodeService
+ * Class BarcodeService.
  *
- * @package ThirtyBees\PostNL\Service
- *
- * @method string  generateBarcode(GenerateBarcode $generateBarcode)
- * @method Request buildGenerateBarcodeRequest(GenerateBarcode $generateBarcode)
- * @method string  processGenerateBarcodeResponse(mixed $response)
+ * @method string   generateBarcode(GenerateBarcode $generateBarcode)
+ * @method Request  buildGenerateBarcodeRequest(GenerateBarcode $generateBarcode)
+ * @method string   processGenerateBarcodeResponse(mixed $response)
  * @method string[] generateBarcodes(GenerateBarcode[] $generateBarcode)
  */
 class BarcodeService extends AbstractService
 {
-    /** @var PostNL $postnl */
+    /** @var PostNL */
     protected $postnl;
 
     const VERSION = '1.1';
@@ -64,9 +62,9 @@ class BarcodeService extends AbstractService
     const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/BarcodeWebService/';
 
     /**
-     * Namespaces uses for the SOAP version of this service
+     * Namespaces uses for the SOAP version of this service.
      *
-     * @var array $namespaces
+     * @var array
      */
     public static $namespaces = [
         self::ENVELOPE_NAMESPACE     => 'soap',
@@ -79,7 +77,7 @@ class BarcodeService extends AbstractService
     ];
 
     /**
-     * Generate a single barcode
+     * Generate a single barcode.
      *
      * @param GenerateBarcode $generateBarcode
      *
@@ -103,7 +101,7 @@ class BarcodeService extends AbstractService
     }
 
     /**
-     * Generate multiple barcodes at once
+     * Generate multiple barcodes at once.
      *
      * @param GenerateBarcode[] $generateBarcodes
      *
@@ -142,11 +140,12 @@ class BarcodeService extends AbstractService
     }
 
     /**
-     * Generate a single barcode
+     * Generate a single barcode.
      *
      * @param GenerateBarcode $generateBarcode
      *
      * @return string Barcode
+     *
      * @throws ResponseException
      * @throws \ThirtyBees\PostNL\Exception\CifDownException
      * @throws \ThirtyBees\PostNL\Exception\CifException
@@ -159,7 +158,7 @@ class BarcodeService extends AbstractService
     }
 
     /**
-     * Generate multiple barcodes at once
+     * Generate multiple barcodes at once.
      *
      * @param GenerateBarcode[] $generateBarcodes
      *
@@ -191,7 +190,7 @@ class BarcodeService extends AbstractService
     }
 
     /**
-     * Build the `generateBarcode` HTTP request for the REST API
+     * Build the `generateBarcode` HTTP request for the REST API.
      *
      * @param GenerateBarcode $generateBarcode
      *
@@ -205,8 +204,8 @@ class BarcodeService extends AbstractService
         return new Request(
             'GET',
             ($this->postnl->getSandbox()
-                ? ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT)
-                : ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT))
+                ? (PostNL::MODE_LEGACY === $this->postnl->getMode() ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT)
+                : (PostNL::MODE_LEGACY === $this->postnl->getMode() ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT))
                 .'?'.\GuzzleHttp\Psr7\build_query([
                      'CustomerCode'   => $generateBarcode->getCustomer()->getCustomerCode(),
                      'CustomerNumber' => $generateBarcode->getCustomer()->getCustomerNumber(),
@@ -214,14 +213,14 @@ class BarcodeService extends AbstractService
                      'Serie'          => $generateBarcode->getBarcode()->getSerie(),
             ]),
             [
-                'Accept'       => 'application/json',
-                'apikey'       => $apiKey,
+                'Accept' => 'application/json',
+                'apikey' => $apiKey,
             ]
         );
     }
 
     /**
-     * Process GenerateBarcode REST response
+     * Process GenerateBarcode REST response.
      *
      * @param mixed $response
      *
@@ -246,7 +245,7 @@ class BarcodeService extends AbstractService
     }
 
     /**
-     * Build the `generateBarcode` HTTP request for the SOAP API
+     * Build the `generateBarcode` HTTP request for the SOAP API.
      *
      * @param GenerateBarcode $generateBarcode
      *
@@ -271,7 +270,7 @@ class BarcodeService extends AbstractService
                 '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
                     ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
                 ],
-                '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
+                '{'.static::ENVELOPE_NAMESPACE.'}Body' => [
                     '{'.static::SERVICES_NAMESPACE.'}GenerateBarcode' => $generateBarcode,
                 ],
             ]
@@ -280,8 +279,8 @@ class BarcodeService extends AbstractService
         return new Request(
             'POST',
             $this->postnl->getSandbox()
-                ? ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT)
-                : ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT),
+                ? (PostNL::MODE_LEGACY === $this->postnl->getMode() ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT)
+                : (PostNL::MODE_LEGACY === $this->postnl->getMode() ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT),
             [
                 'SOAPAction'   => "\"$soapAction\"",
                 'Accept'       => 'text/xml',
@@ -292,7 +291,7 @@ class BarcodeService extends AbstractService
     }
 
     /**
-     * Process GenerateBarcode SOAP response
+     * Process GenerateBarcode SOAP response.
      *
      * @param mixed $response
      *

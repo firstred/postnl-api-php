@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -37,9 +37,7 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class Shipment
- *
- * @package ThirtyBees\PostNL\Entity
+ * Class Shipment.
  *
  * @method Address[]|null       getAddresses()
  * @method string|null          getBarcode()
@@ -77,49 +75,48 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method string|null          getReturnBarcode()
  * @method string|null          getReturnReference()
  * @method string|null          getStatusCode()
- *
- * @method Shipment setAddresses(Address[]|null $addresses = null)
- * @method Shipment setBarcode(string|null $barcode = null)
- * @method Shipment setDimension(string|null $dimension = null)
- * @method Shipment setProductCodeDelivery(string|null $productCodeDelivery = null)
- * @method Shipment setAmounts(Amount[]|null $amounts = null)
- * @method Shipment setCollectionTimeStampEnd(string|null $value = null)
- * @method Shipment setCollectionTimeStampStart(string|null $value = null)
- * @method Shipment setContacts(Contact[]|null $contact = null)
- * @method Shipment setContent(string|null $content = null)
- * @method Shipment setCostCenter(string|null $costCenter = null)
- * @method Shipment setCustomer(Customer|null $customer = null)
- * @method Shipment setCustomerOrderNumber(string|null $customerOrderNumber = null)
- * @method Shipment setCustoms(Customs|null $customs = null)
- * @method Shipment setPhaseCode(int|null $phaseCode = null)
- * @method Shipment setDateFrom(string|null $date = null)
- * @method Shipment setDateTo(string $date = null)
- * @method Shipment setDeliveryAddress(string|null $deliveryAddress = null)
- * @method Shipment setDeliveryDate(string|null $deliveryDate = null)
- * @method Shipment setDownPartnerBarcode(string|null $downPartnerBarcode = null)
- * @method Shipment setDownPartnerID(string|null $downPartnerID = null)
- * @method Shipment setDownPartnerLocation(string|null $downPartnerLocation = null)
- * @method Shipment setEvents(Event[]|null $events = null)
- * @method Shipment setGroups(Group[]|null $groups = null)
- * @method Shipment setIDExpiration(string|null $idExpiration = null)
- * @method Shipment setIDNumber(string|null $idNumber = null)
- * @method Shipment setIDType(string|null $idType = null)
- * @method Shipment setOldStatuses(OldStatus[]|null $oldStatuses = null)
- * @method Shipment setProductCodeCollect(string|null $productCodeCollect = null)
- * @method Shipment setProductOptions(ProductOption[]|null $productOptions = null)
- * @method Shipment setReceiverDateOfBirth(string|null $receiverDateOfBirth = null)
- * @method Shipment setReference(string|null $reference = null)
- * @method Shipment setReferenceCollect(string|null $referenceCollect = null)
- * @method Shipment setRemark(string|null $remark = null)
- * @method Shipment setReturnBarcode(string|null $returnBarcode = null)
- * @method Shipment setReturnReference(string|null $returnReference = null)
- * @method Shipment setStatusCode(string|null $statusCode = null)
+ * @method Shipment             setAddresses(Address[]|null $addresses = null)
+ * @method Shipment             setBarcode(string|null $barcode = null)
+ * @method Shipment             setDimension(string|null $dimension = null)
+ * @method Shipment             setProductCodeDelivery(string|null $productCodeDelivery = null)
+ * @method Shipment             setAmounts(Amount[]|null $amounts = null)
+ * @method Shipment             setCollectionTimeStampEnd(string|null $value = null)
+ * @method Shipment             setCollectionTimeStampStart(string|null $value = null)
+ * @method Shipment             setContacts(Contact[]|null $contact = null)
+ * @method Shipment             setContent(string|null $content = null)
+ * @method Shipment             setCostCenter(string|null $costCenter = null)
+ * @method Shipment             setCustomer(Customer|null $customer = null)
+ * @method Shipment             setCustomerOrderNumber(string|null $customerOrderNumber = null)
+ * @method Shipment             setCustoms(Customs|null $customs = null)
+ * @method Shipment             setPhaseCode(int|null $phaseCode = null)
+ * @method Shipment             setDateFrom(string|null $date = null)
+ * @method Shipment             setDateTo(string $date = null)
+ * @method Shipment             setDeliveryAddress(string|null $deliveryAddress = null)
+ * @method Shipment             setDeliveryDate(string|null $deliveryDate = null)
+ * @method Shipment             setDownPartnerBarcode(string|null $downPartnerBarcode = null)
+ * @method Shipment             setDownPartnerID(string|null $downPartnerID = null)
+ * @method Shipment             setDownPartnerLocation(string|null $downPartnerLocation = null)
+ * @method Shipment             setEvents(Event[]|null $events = null)
+ * @method Shipment             setGroups(Group[]|null $groups = null)
+ * @method Shipment             setIDExpiration(string|null $idExpiration = null)
+ * @method Shipment             setIDNumber(string|null $idNumber = null)
+ * @method Shipment             setIDType(string|null $idType = null)
+ * @method Shipment             setOldStatuses(OldStatus[]|null $oldStatuses = null)
+ * @method Shipment             setProductCodeCollect(string|null $productCodeCollect = null)
+ * @method Shipment             setProductOptions(ProductOption[]|null $productOptions = null)
+ * @method Shipment             setReceiverDateOfBirth(string|null $receiverDateOfBirth = null)
+ * @method Shipment             setReference(string|null $reference = null)
+ * @method Shipment             setReferenceCollect(string|null $referenceCollect = null)
+ * @method Shipment             setRemark(string|null $remark = null)
+ * @method Shipment             setReturnBarcode(string|null $returnBarcode = null)
+ * @method Shipment             setReturnReference(string|null $returnReference = null)
+ * @method Shipment             setStatusCode(string|null $statusCode = null)
  */
 class Shipment extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
+    /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'Addresses'                => BarcodeService::DOMAIN_NAMESPACE,
             'Amounts'                  => BarcodeService::DOMAIN_NAMESPACE,
             'Barcode'                  => BarcodeService::DOMAIN_NAMESPACE,
@@ -159,7 +156,7 @@ class Shipment extends AbstractEntity
             'DateFrom'                 => BarcodeService::DOMAIN_NAMESPACE,
             'DateTo'                   => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'Addresses'                => ConfirmingService::DOMAIN_NAMESPACE,
             'Amounts'                  => ConfirmingService::DOMAIN_NAMESPACE,
             'Barcode'                  => ConfirmingService::DOMAIN_NAMESPACE,
@@ -199,7 +196,7 @@ class Shipment extends AbstractEntity
             'DateFrom'                 => ConfirmingService::DOMAIN_NAMESPACE,
             'DateTo'                   => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'Addresses'                => LabellingService::DOMAIN_NAMESPACE,
             'Amounts'                  => LabellingService::DOMAIN_NAMESPACE,
             'Barcode'                  => LabellingService::DOMAIN_NAMESPACE,
@@ -279,7 +276,7 @@ class Shipment extends AbstractEntity
             'DateFrom'                 => ShippingStatusService::DOMAIN_NAMESPACE,
             'DateTo'                   => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'Addresses'                => DeliveryDateService::DOMAIN_NAMESPACE,
             'Amounts'                  => DeliveryDateService::DOMAIN_NAMESPACE,
             'Barcode'                  => DeliveryDateService::DOMAIN_NAMESPACE,
@@ -319,7 +316,7 @@ class Shipment extends AbstractEntity
             'DateFrom'                 => DeliveryDateService::DOMAIN_NAMESPACE,
             'DateTo'                   => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'Addresses'                => LocationService::DOMAIN_NAMESPACE,
             'Amounts'                  => LocationService::DOMAIN_NAMESPACE,
             'Barcode'                  => LocationService::DOMAIN_NAMESPACE,
@@ -359,7 +356,7 @@ class Shipment extends AbstractEntity
             'DateFrom'                 => LocationService::DOMAIN_NAMESPACE,
             'DateTo'                   => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'Addresses'                => TimeframeService::DOMAIN_NAMESPACE,
             'Amounts'                  => TimeframeService::DOMAIN_NAMESPACE,
             'Barcode'                  => TimeframeService::DOMAIN_NAMESPACE,
@@ -399,7 +396,7 @@ class Shipment extends AbstractEntity
             'DateFrom'                 => TimeframeService::DOMAIN_NAMESPACE,
             'DateTo'                   => TimeframeService::DOMAIN_NAMESPACE,
         ],
-        'Shipping'      => [
+        'Shipping' => [
             'Addresses'                => ShippingService::DOMAIN_NAMESPACE,
             'Amounts'                  => ShippingService::DOMAIN_NAMESPACE,
             'Barcode'                  => ShippingService::DOMAIN_NAMESPACE,
@@ -441,81 +438,81 @@ class Shipment extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var Address[]|null $Addresses */
+    /** @var Address[]|null */
     protected $Addresses;
-    /** @var Amount[]|null $Amounts */
+    /** @var Amount[]|null */
     protected $Amounts;
-    /** @var string|null $Barcode */
+    /** @var string|null */
     protected $Barcode;
-    /** @var string|null $CollectionTimeStampEnd */
+    /** @var string|null */
     protected $CollectionTimeStampEnd;
-    /** @var string|null $CollectionTimeStampStart */
+    /** @var string|null */
     protected $CollectionTimeStampStart;
-    /** @var Contact[]|null $Contacts */
+    /** @var Contact[]|null */
     protected $Contacts;
-    /** @var string|null $Content */
+    /** @var string|null */
     protected $Content;
-    /** @var string|null $CostCenter */
+    /** @var string|null */
     protected $CostCenter;
-    /** @var string|null $CustomerOrderNumber */
+    /** @var string|null */
     protected $CustomerOrderNumber;
-    /** @var Customer|null $Customer */
+    /** @var Customer|null */
     protected $Customer;
-    /** @var Customs|null $Customs */
+    /** @var Customs|null */
     protected $Customs;
     /** @var string |null$StatusCode */
     protected $StatusCode;
-    /** @var int|null $PhaseCode */
+    /** @var int|null */
     protected $PhaseCode;
-    /** @var string|null $DateFrom */
+    /** @var string|null */
     protected $DateFrom;
-    /** @var string|null $DateTo */
+    /** @var string|null */
     protected $DateTo;
-    /** @var string|null $DeliveryAddress */
+    /** @var string|null */
     protected $DeliveryAddress;
-    /** @var string|null $DeliveryTimeStampStart */
+    /** @var string|null */
     protected $DeliveryTimeStampStart;
-    /** @var string|null $DeliveryTimeStampEnd */
+    /** @var string|null */
     protected $DeliveryTimeStampEnd;
-    /** @var string|null $DeliveryDate */
+    /** @var string|null */
     protected $DeliveryDate;
-    /** @var Dimension|null $Dimension */
+    /** @var Dimension|null */
     protected $Dimension;
-    /** @var string|null $DownPartnerBarcode */
+    /** @var string|null */
     protected $DownPartnerBarcode;
-    /** @var string|null $DownPartnerID */
+    /** @var string|null */
     protected $DownPartnerID;
-    /** @var string|null $DownPartnerLocation */
+    /** @var string|null */
     protected $DownPartnerLocation;
-    /** @var Event[]|null $Events */
+    /** @var Event[]|null */
     protected $Events;
-    /** @var Group[]|null $Groups */
+    /** @var Group[]|null */
     protected $Groups;
-    /** @var string|null $IDExpiration */
+    /** @var string|null */
     protected $IDExpiration;
-    /** @var string|null $IDNumber */
+    /** @var string|null */
     protected $IDNumber;
-    /** @var string|null $IDType */
+    /** @var string|null */
     protected $IDType;
-    /** @var string|null $OldStatuses */
+    /** @var string|null */
     protected $OldStatuses;
-    /** @var string|null $ProductCodeCollect */
+    /** @var string|null */
     protected $ProductCodeCollect;
-    /** @var string|null $ProductCodeDelivery */
+    /** @var string|null */
     protected $ProductCodeDelivery;
-    /** @var ProductOption[]|null $ProductOptions */
+    /** @var ProductOption[]|null */
     protected $ProductOptions;
-    /** @var string|null $ReceiverDateOfBirth */
+    /** @var string|null */
     protected $ReceiverDateOfBirth;
-    /** @var string|null $Reference */
+    /** @var string|null */
     protected $Reference;
-    /** @var string|null $ReferenceCollect */
+    /** @var string|null */
     protected $ReferenceCollect;
-    /** @var string|null $Remark */
+    /** @var string|null */
     protected $Remark;
-    /** @var string|null $ReturnBarcode */
+    /** @var string|null */
     protected $ReturnBarcode;
-    /** @var string|null $ReturnReference */
+    /** @var string|null */
     protected $ReturnReference;
     // @codingStandardsIgnoreEnd
 
@@ -638,7 +635,7 @@ class Shipment extends AbstractEntity
     }
 
     /**
-     * Return a serializable array for the XMLWriter
+     * Return a serializable array for the XMLWriter.
      *
      * @param Writer $writer
      *
@@ -648,7 +645,7 @@ class Shipment extends AbstractEntity
     {
         $xml = [];
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if ($propertyName === 'Addresses') {
+            if ('Addresses' === $propertyName) {
                 if (is_array($this->Addresses)) {
                     $items = [];
                     foreach ($this->Addresses as $address) {
@@ -656,7 +653,7 @@ class Shipment extends AbstractEntity
                     }
                     $xml["{{$namespace}}Addresses"] = $items;
                 }
-            } elseif ($propertyName === 'Amounts') {
+            } elseif ('Amounts' === $propertyName) {
                 if (is_array($this->Amounts)) {
                     $items = [];
                     foreach ($this->Amounts as $amount) {
@@ -664,7 +661,7 @@ class Shipment extends AbstractEntity
                     }
                     $xml["{{$namespace}}Amounts"] = $items;
                 }
-            } elseif ($propertyName === 'Contacts') {
+            } elseif ('Contacts' === $propertyName) {
                 if (is_array($this->Contacts)) {
                     $items = [];
                     foreach ($this->Contacts as $contact) {
@@ -672,7 +669,7 @@ class Shipment extends AbstractEntity
                     }
                     $xml["{{$namespace}}Contacts"] = $items;
                 }
-            } elseif ($propertyName === 'Events') {
+            } elseif ('Events' === $propertyName) {
                 if (is_array($this->Events)) {
                     $items = [];
                     foreach ($this->Events as $event) {
@@ -680,7 +677,7 @@ class Shipment extends AbstractEntity
                     }
                     $xml["{{$namespace}}Events"] = $items;
                 }
-            } elseif ($propertyName === 'Groups') {
+            } elseif ('Groups' === $propertyName) {
                 if (is_array($this->Groups)) {
                     $items = [];
                     foreach ($this->Groups as $group) {
@@ -698,7 +695,7 @@ class Shipment extends AbstractEntity
 //                    $xml["{{$namespace}}OldStatuses"] = $items;
 //                }
 //            }
-            elseif ($propertyName === 'ProductOptions') {
+            elseif ('ProductOptions' === $propertyName) {
                 if (is_array($this->ProductOptions)) {
                     $items = [];
                     foreach ($this->ProductOptions as $option) {

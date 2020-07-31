@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -36,29 +36,26 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class Signature
- *
- * @package ThirtyBees\PostNL\Entity
+ * Class Signature.
  *
  * @method GetSignatureResponseSignature|null getGetSignatureResponseSignature()
- * @method Warning[]|null getWarnings()
- *
- * @method Signature setGetSignatureResponseSignature(GetSignatureResponseSignature|null $signature = null)
- * @method Signature setWarnings(Warning[]|null $warnings = null)
+ * @method Warning[]|null                     getWarnings()
+ * @method Signature                          setGetSignatureResponseSignature(GetSignatureResponseSignature|null $signature = null)
+ * @method Signature                          setWarnings(Warning[]|null $warnings = null)
  */
 class Signature extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
+    /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode'           => [
+        'Barcode' => [
             'GetSignatureResponseSignature' => BarcodeService::DOMAIN_NAMESPACE,
             'Warnings'                      => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'        => [
+        'Confirming' => [
             'GetSignatureResponseSignature' => ConfirmingService::DOMAIN_NAMESPACE,
             'Warnings'                      => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'         => [
+        'Labelling' => [
             'GetSignatureResponseSignature' => LabellingService::DOMAIN_NAMESPACE,
             'Warnings'                      => LabellingService::DOMAIN_NAMESPACE,
         ],
@@ -66,23 +63,23 @@ class Signature extends AbstractEntity
             'GetSignatureResponseSignature' => ShippingStatusService::DOMAIN_NAMESPACE,
             'Warnings'                      => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'      => [
+        'DeliveryDate' => [
             'GetSignatureResponseSignature' => DeliveryDateService::DOMAIN_NAMESPACE,
             'Warnings'                      => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'          => [
+        'Location' => [
             'GetSignatureResponseSignature' => LocationService::DOMAIN_NAMESPACE,
             'Warnings'                      => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'         => [
+        'Timeframe' => [
             'GetSignatureResponseSignature' => TimeframeService::DOMAIN_NAMESPACE,
             'Warnings'                      => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var GetSignatureResponseSignature|null $GetSignatureResponseSignature */
+    /** @var GetSignatureResponseSignature|null */
     protected $GetSignatureResponseSignature;
-    /** @var Warning[]|null $Warnings */
+    /** @var Warning[]|null */
     protected $Warnings;
     // @codingStandardsIgnoreEnd
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -27,14 +27,12 @@
 namespace ThirtyBees\PostNL\Util;
 
 /**
- * Class UUID
- *
- * @package ThirtyBees\PostNL\Util
+ * Class UUID.
  */
 class UUID
 {
     /**
-     * Generate a v4 UUID
+     * Generate a v4 UUID.
      *
      * @return string
      */

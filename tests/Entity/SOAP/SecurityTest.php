@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -30,9 +30,7 @@ use ThirtyBees\PostNL\Entity\SOAP\Security;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
 
 /**
- * Class SecurityTest
- *
- * @package ThirtyBees\PostNL\Tests\Entity\SOAP
+ * Class SecurityTest.
  *
  * @testdox The Envelope class
  */

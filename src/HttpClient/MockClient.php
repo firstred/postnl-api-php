@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2017 thirty bees
+ * Copyright (C) 2017 thirty bees.
  *
  * NOTICE OF LICENSE
  *
@@ -29,35 +29,33 @@ use Psr\Log\LoggerInterface;
 use ThirtyBees\PostNL\Exception\HttpClientException;
 
 /**
- * Class MockClient
- *
- * @package ThirtyBees\PostNL\HttpClient
+ * Class MockClient.
  */
 class MockClient implements ClientInterface, LoggerAwareInterface
 {
     const DEFAULT_TIMEOUT = 60;
     const DEFAULT_CONNECT_TIMEOUT = 20;
 
-    /** @var static $instance */
+    /** @var static */
     protected static $instance;
-    /** @var array $defaultOptions */
+    /** @var array */
     protected $defaultOptions = [];
     /**
-     * List of pending PSR-7 requests
+     * List of pending PSR-7 requests.
      *
      * @var Request[]
      */
     protected $pendingRequests = [];
-    /** @var LoggerInterface $logger */
+    /** @var LoggerInterface */
     protected $logger;
-    /** @var int $timeout */
+    /** @var int */
     private $timeout = self::DEFAULT_TIMEOUT;
-    /** @var int $connectTimeout */
+    /** @var int */
     private $connectTimeout = self::DEFAULT_CONNECT_TIMEOUT;
-    /** @var HandlerStack $handler */
+    /** @var HandlerStack */
     private $handler;
 
-    /** @var int $maxRetries */
+    /** @var int */
     private $maxRetries = 1;
 
     /**
@@ -73,21 +71,22 @@ class MockClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
-     * Set Guzzle option
+     * Set Guzzle option.
      *
      * @param string $name
      * @param mixed  $value
      *
      * @return MockClient
      */
-    public function setOption($name, $value) {
+    public function setOption($name, $value)
+    {
         $this->defaultOptions[$name] = $value;
 
         return $this;
     }
 
     /**
-     * Get Guzzle option
+     * Get Guzzle option.
      *
      * @param string $name
      *
@@ -103,7 +102,7 @@ class MockClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
-     * Set the verify setting
+     * Set the verify setting.
      *
      * @param bool|string $verify
      *
@@ -117,7 +116,7 @@ class MockClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
-     * Return verify setting
+     * Return verify setting.
      *
      * @return bool|string
      */
@@ -131,7 +130,7 @@ class MockClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
-     * Set the amount of retries
+     * Set the amount of retries.
      *
      * @param int $maxRetries
      *
@@ -145,7 +144,7 @@ class MockClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
-     * Return max retries
+     * Return max retries.
      *
      * @return int
      */
@@ -155,7 +154,7 @@ class MockClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
-     * Set the logger
+     * Set the logger.
      *
      * @param LoggerInterface $logger
      *
@@ -169,7 +168,7 @@ class MockClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
-     * Get the logger
+     * Get the logger.
      *
      * @return LoggerInterface
      */
@@ -180,7 +179,7 @@ class MockClient implements ClientInterface, LoggerAwareInterface
 
     /**
      * Adds a request to the list of pending requests
-     * Using the ID you can replace a request
+     * Using the ID you can replace a request.
      *
      * @param string $id      Request ID
      * @param string $request PSR-7 request
@@ -199,7 +198,7 @@ class MockClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
-     * Remove a request from the list of pending requests
+     * Remove a request from the list of pending requests.
      *
      * @param string $id
      */
@@ -209,7 +208,7 @@ class MockClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
-     * Clear all pending requests
+     * Clear all pending requests.
      */
     public function clearRequests()
     {
@@ -235,7 +234,7 @@ class MockClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
-     * Do a single request
+     * Do a single request.
      *
      * Exceptions are captured into the result array
      *
@@ -266,7 +265,7 @@ class MockClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
-     * Do all async requests
+     * Do all async requests.
      *
      * Exceptions are captured into the result array
      *

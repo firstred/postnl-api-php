@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -44,38 +44,36 @@ if (!defined('CURLE_SSL_CACERT_BADFILE')) {
 }
 
 /**
- * Class CurlClient
- *
- * @package ThirtyBees\PostNL\HttpClient
+ * Class CurlClient.
  */
 class CurlClient implements ClientInterface, LoggerAwareInterface
 {
     const DEFAULT_TIMEOUT = 80;
     const DEFAULT_CONNECT_TIMEOUT = 30;
 
-    /** @var int $timeout */
+    /** @var int */
     private $timeout = self::DEFAULT_TIMEOUT;
-    /** @var int $connectTimeout */
+    /** @var int */
     private $connectTimeout = self::DEFAULT_CONNECT_TIMEOUT;
     /**
-     * Verify the server SSL certificate
+     * Verify the server SSL certificate.
      *
-     * @var bool|string $verify
+     * @var bool|string
      */
     private $verify = true;
-    /** @var static $instance */
+    /** @var static */
     private static $instance;
-    /** @var array|callable|null $defaultOptions */
+    /** @var array|callable|null */
     protected $defaultOptions;
-    /** @var array $userAgentInfo */
+    /** @var array */
     protected $userAgentInfo;
-    /** @var array $pendingRequests */
+    /** @var array */
     protected $pendingRequests = [];
-    /** @var LoggerInterface $logger */
+    /** @var LoggerInterface */
     protected $logger;
 
     /**
-     * CurlClient Singleton
+     * CurlClient Singleton.
      *
      * @return CurlClient
      */
@@ -89,7 +87,7 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
-     * Set timeout
+     * Set timeout.
      *
      * @param int $seconds
      *
@@ -103,7 +101,7 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
-     * Set connection timeout
+     * Set connection timeout.
      *
      * @param int $seconds
      *
@@ -117,7 +115,7 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
-     * Set the verify setting
+     * Set the verify setting.
      *
      * @param bool|string $verify
      *
@@ -131,7 +129,7 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
-     * Set the logger
+     * Set the logger.
      *
      * @param LoggerInterface $logger
      *
@@ -145,7 +143,7 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
-     * Get timeout
+     * Get timeout.
      *
      * @return int
      */
@@ -155,7 +153,7 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
-     * Get connection timeout
+     * Get connection timeout.
      *
      * @return int
      */
@@ -165,7 +163,7 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
-     * Return verify setting
+     * Return verify setting.
      *
      * @return bool|string
      */
@@ -175,7 +173,7 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
-     * Get logger
+     * Get logger.
      *
      * @return LoggerInterface
      */
@@ -186,7 +184,7 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
 
     /**
      * Adds a request to the list of pending requests
-     * Using the ID you can replace a request
+     * Using the ID you can replace a request.
      *
      * @param string $id      Request ID
      * @param string $request PSR-7 request
@@ -205,7 +203,7 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
-     * Remove a request from the list of pending requests
+     * Remove a request from the list of pending requests.
      *
      * @param string $id
      */
@@ -215,7 +213,7 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
-     * Clear all pending requests
+     * Clear all pending requests.
      */
     public function clearRequests()
     {
@@ -223,7 +221,7 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
-     * Do a single request
+     * Do a single request.
      *
      * Exceptions are captured into the result array
      *
@@ -243,7 +241,7 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
         // Create a callback to capture HTTP headers for the response
         $this->prepareRequest($curl, $request);
         $rbody = curl_exec($curl);
-        if ($rbody === false) {
+        if (false === $rbody) {
             $errno = curl_errno($curl);
             $message = curl_error($curl);
             curl_close($curl);
@@ -259,13 +257,14 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
-     * Do all async requests
+     * Do all async requests.
      *
      * Exceptions are captured into the result array
      *
      * @param Request[] $requests
      *
      * @return Response|Response[]|\Exception|\Exception[]
+     *
      * @throws ApiException
      */
     public function doRequests($requests = [])
@@ -296,7 +295,7 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
             $responseCodes[$id] = curl_getinfo($c, CURLINFO_HTTP_CODE);
         }
         // all done
-        if (isset($this->multiCurlHandle) && get_resource_type($this->multiCurlHandle) === 'curl_multi') {
+        if (isset($this->multiCurlHandle) && 'curl_multi' === get_resource_type($this->multiCurlHandle)) {
             curl_multi_close($this->multiCurlHandle);
         }
         $responses = [];
@@ -312,9 +311,10 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
 
         return $responses;
     }
+
     /**
      * @param resource $curl
-     * @param Request   $request
+     * @param Request  $request
      *
      * @throws ApiException
      */
@@ -332,19 +332,19 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
         if (is_callable($this->defaultOptions)) { // call defaultOptions callback, set options to return value
             $opts = call_user_func_array($this->defaultOptions, func_get_args());
             if (!is_array($opts)) {
-                throw new ApiException("Non-array value returned by defaultOptions CurlClient callback");
+                throw new ApiException('Non-array value returned by defaultOptions CurlClient callback');
             }
         } elseif (is_array($this->defaultOptions)) { // set default curlopts from array
             $opts = $this->defaultOptions;
         }
-        if ($method == 'get') {
+        if ('get' == $method) {
             $opts[CURLOPT_HTTPGET] = 1;
-        } elseif ($method == 'post') {
+        } elseif ('post' == $method) {
             $opts[CURLOPT_POST] = 1;
             if ($body) {
                 $opts[CURLOPT_POSTFIELDS] = $body;
             }
-        } elseif ($method == 'delete') {
+        } elseif ('delete' == $method) {
             $opts[CURLOPT_CUSTOMREQUEST] = 'DELETE';
         } else {
             throw new ApiException("Unrecognized method $method");
@@ -369,6 +369,7 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
         }
         curl_setopt_array($curl, $opts);
     }
+
     /**
      * @param number $errno
      * @param string $message
@@ -382,22 +383,22 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
             case CURLE_COULDNT_RESOLVE_HOST:
             case CURLE_OPERATION_TIMEOUTED:
                 $msg = "Could not connect to PostNL ($url).  Please check your "
-                    ."internet connection and try again.  If this problem persists, "
+                    .'internet connection and try again.  If this problem persists, '
                     ."you should check PostNL's service status at "
-                    ."https://developer.postnl.nl, or";
+                    .'https://developer.postnl.nl, or';
                 break;
             case CURLE_SSL_CACERT:
             case CURLE_SSL_PEER_CERTIFICATE:
                 $msg = "Could not verify PostNL's SSL certificate.  Please make sure "
-                    ."that your network is not intercepting certificates.  "
+                    .'that your network is not intercepting certificates.  '
                     ."(Try going to $url in your browser.)  "
-                    ."If this problem persists,";
+                    .'If this problem persists,';
                 break;
             default:
-                $msg = "Unexpected error communicating with PostNL.  "
-                    ."If this problem persists,";
+                $msg = 'Unexpected error communicating with PostNL.  '
+                    .'If this problem persists,';
         }
-        $msg .= " contact developer@postnl.nl";
+        $msg .= ' contact developer@postnl.nl';
         $msg .= "\n\n(Network error [errno $errno]: $message)";
         throw new ApiConnectionException($msg);
     }

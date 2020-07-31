@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -42,29 +42,27 @@ use ThirtyBees\PostNL\Entity\Request\GetLocation;
 use ThirtyBees\PostNL\Entity\Request\GetLocationsInArea;
 use ThirtyBees\PostNL\Entity\Request\GetNearestLocations;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
-use ThirtyBees\PostNL\Exception\ResponseException;
 use ThirtyBees\PostNL\HttpClient\MockClient;
 use ThirtyBees\PostNL\PostNL;
 use ThirtyBees\PostNL\Service\LocationService;
 
 /**
- * Class LocationServiceSoapTest
- *
- * @package ThirtyBees\PostNL\Tests\Service
+ * Class LocationServiceSoapTest.
  *
  * @testdox The LocationService (SOAP)
  */
 class LocationServiceSoapTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var PostNL $postnl */
+    /** @var PostNL */
     protected $postnl;
-    /** @var LocationService $service */
+    /** @var LocationService */
     protected $service;
-    /** @var $lastRequest */
+    /** @var */
     protected $lastRequest;
 
     /**
      * @before
+     *
      * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
      */
     public function setupPostNL()
@@ -85,8 +83,7 @@ class LocationServiceSoapTest extends \PHPUnit_Framework_TestCase
                     'Zipcode'     => '2132WT',
                 ]))
                 ->setGlobalPackBarcodeType('AB')
-                ->setGlobalPackCustomerCode('1234')
-            , new UsernameToken(null, 'test'),
+                ->setGlobalPackCustomerCode('1234'), new UsernameToken(null, 'test'),
             false,
             PostNL::MODE_SOAP
         );
@@ -119,7 +116,7 @@ class LocationServiceSoapTest extends \PHPUnit_Framework_TestCase
     {
         $message = new Message();
 
-        /** @var Request $request */
+        /* @var Request $request */
         $this->lastRequest = $request = $this->service->buildGetNearestLocationsRequest(
             (new GetNearestLocations())
                 ->setMessage($message)
@@ -130,18 +127,17 @@ class LocationServiceSoapTest extends \PHPUnit_Framework_TestCase
                     'DeliveryOptions'    => [
                         'PGE',
                     ],
-                    'OpeningTime'        => '09:00:00',
-                    'Options'    => [
-                        'Daytime'
+                    'OpeningTime' => '09:00:00',
+                    'Options'     => [
+                        'Daytime',
                     ],
-                    'City'               => 'Hoofddorp',
-                    'HouseNr'            => '42',
-                    'HouseNrExt'         => 'A',
-                    'Postalcode'         => '2132WT',
-                    'Street'             => 'Siriusdreef',
+                    'City'       => 'Hoofddorp',
+                    'HouseNr'    => '42',
+                    'HouseNrExt' => 'A',
+                    'Postalcode' => '2132WT',
+                    'Street'     => 'Siriusdreef',
                 ]))
         );
-
 
         $this->assertEquals("<?xml version=\"1.0\"?>
 <soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:services=\"http://postnl.nl/cif/services/LocationWebService/\" xmlns:domain=\"http://postnl.nl/cif/domain/LocationWebService/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\" xmlns:schema=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:common=\"http://postnl.nl/cif/services/common/\" xmlns:arr=\"http://schemas.microsoft.com/2003/10/Serialization/Arrays\">
@@ -205,15 +201,15 @@ class LocationServiceSoapTest extends \PHPUnit_Framework_TestCase
                     'PG',
                     'PGE',
                 ],
-                'OpeningTime'        => '09:00:00',
-                'Options'    => [
-                    'Daytime'
+                'OpeningTime' => '09:00:00',
+                'Options'     => [
+                    'Daytime',
                 ],
-                'City'               => 'Hoofddorp',
-                'HouseNr'            => '42',
-                'HouseNrExt'         => 'A',
-                'Postalcode'         => '2132WT',
-                'Street'             => 'Siriusdreef',
+                'City'       => 'Hoofddorp',
+                'HouseNr'    => '42',
+                'HouseNrExt' => 'A',
+                'Postalcode' => '2132WT',
+                'Street'     => 'Siriusdreef',
             ])));
 
         $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\GetNearestLocationsResponse', $response);
@@ -227,19 +223,19 @@ class LocationServiceSoapTest extends \PHPUnit_Framework_TestCase
     {
         $message = new Message();
 
-        /** @var Request $request */
+        /* @var Request $request */
         $this->lastRequest = $request = $this->service->buildGetLocationsInAreaRequest(
             (new GetLocationsInArea())
                 ->setMessage($message)
                 ->setCountrycode('NL')
                 ->setLocation(Location::create([
-                    'AllowSundaySorting'   => true,
-                    'DeliveryDate'         => '29-06-2016',
-                    'DeliveryOptions'      => [
+                    'AllowSundaySorting' => true,
+                    'DeliveryDate'       => '29-06-2016',
+                    'DeliveryOptions'    => [
                         'PG',
                     ],
-                    'OpeningTime'          => '09:00:00',
-                    'Options'              => [
+                    'OpeningTime' => '09:00:00',
+                    'Options'     => [
                         'Daytime',
                     ],
                     'CoordinatesNorthWest' => CoordinatesNorthWest::create([
@@ -252,7 +248,6 @@ class LocationServiceSoapTest extends \PHPUnit_Framework_TestCase
                     ]),
                 ]))
         );
-
 
         $this->assertEquals("<?xml version=\"1.0\"?>
 <soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:services=\"http://postnl.nl/cif/services/LocationWebService/\" xmlns:domain=\"http://postnl.nl/cif/domain/LocationWebService/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\" xmlns:schema=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:common=\"http://postnl.nl/cif/services/common/\" xmlns:arr=\"http://schemas.microsoft.com/2003/10/Serialization/Arrays\">
@@ -313,13 +308,13 @@ class LocationServiceSoapTest extends \PHPUnit_Framework_TestCase
         $response = $this->postnl->getLocationsInArea((new GetLocationsInArea())
             ->setCountrycode('NL')
             ->setLocation(Location::create([
-                'AllowSundaySorting'   => true,
-                'DeliveryDate'         => '29-06-2016',
-                'DeliveryOptions'      => [
+                'AllowSundaySorting' => true,
+                'DeliveryDate'       => '29-06-2016',
+                'DeliveryOptions'    => [
                     'PG',
                 ],
-                'OpeningTime'          => '09:00:00',
-                'Options'              => [
+                'OpeningTime' => '09:00:00',
+                'Options'     => [
                     'Daytime',
                 ],
                 'CoordinatesNorthWest' => CoordinatesNorthWest::create([
@@ -343,14 +338,13 @@ class LocationServiceSoapTest extends \PHPUnit_Framework_TestCase
     {
         $message = new Message();
 
-        /** @var Request $request */
+        /* @var Request $request */
         $this->lastRequest = $request = $this->service->buildGetLocationRequest(
             (new GetLocation())
                 ->setLocationCode('161503')
                 ->setMessage($message)
                 ->setRetailNetworkID('PNPNL-01')
         );
-
 
         $this->assertEquals("<?xml version=\"1.0\"?>
 <soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:services=\"http://postnl.nl/cif/services/LocationWebService/\" xmlns:domain=\"http://postnl.nl/cif/domain/LocationWebService/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\" xmlns:schema=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:common=\"http://postnl.nl/cif/services/common/\" xmlns:arr=\"http://schemas.microsoft.com/2003/10/Serialization/Arrays\">

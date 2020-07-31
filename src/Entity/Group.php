@@ -1,6 +1,6 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
  * Copyright (c) 2017-2018 Thirty Development, LLC
  *
@@ -36,37 +36,34 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class Group
- *
- * @package ThirtyBees\PostNL\Entity
+ * Class Group.
  *
  * @method string|null getGroupCount()
  * @method string|null getGroupSequence()
  * @method string|null getGroupType()
  * @method string|null getMainBarcode()
- *
- * @method Group setGroupCount(string|null $groupCount = null)
- * @method Group setGroupSequence(string|null $groupSequence = null)
- * @method Group setGroupType(string|null $groupType = null)
- * @method Group setMainBarcode(string|null $mainBarcode = null)
+ * @method Group       setGroupCount(string|null $groupCount = null)
+ * @method Group       setGroupSequence(string|null $groupSequence = null)
+ * @method Group       setGroupType(string|null $groupType = null)
+ * @method Group       setMainBarcode(string|null $mainBarcode = null)
  */
 class Group extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
+    /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'GroupCount'    => BarcodeService::DOMAIN_NAMESPACE,
             'GroupSequence' => BarcodeService::DOMAIN_NAMESPACE,
             'GroupType'     => BarcodeService::DOMAIN_NAMESPACE,
             'MainBarcode'   => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'GroupCount'    => ConfirmingService::DOMAIN_NAMESPACE,
             'GroupSequence' => ConfirmingService::DOMAIN_NAMESPACE,
             'GroupType'     => ConfirmingService::DOMAIN_NAMESPACE,
             'MainBarcode'   => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'GroupCount'    => LabellingService::DOMAIN_NAMESPACE,
             'GroupSequence' => LabellingService::DOMAIN_NAMESPACE,
             'GroupType'     => LabellingService::DOMAIN_NAMESPACE,
@@ -78,25 +75,25 @@ class Group extends AbstractEntity
             'GroupType'     => ShippingStatusService::DOMAIN_NAMESPACE,
             'MainBarcode'   => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'GroupCount'    => DeliveryDateService::DOMAIN_NAMESPACE,
             'GroupSequence' => DeliveryDateService::DOMAIN_NAMESPACE,
             'GroupType'     => DeliveryDateService::DOMAIN_NAMESPACE,
             'MainBarcode'   => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'GroupCount'    => LocationService::DOMAIN_NAMESPACE,
             'GroupSequence' => LocationService::DOMAIN_NAMESPACE,
             'GroupType'     => LocationService::DOMAIN_NAMESPACE,
             'MainBarcode'   => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'GroupCount'    => TimeframeService::DOMAIN_NAMESPACE,
             'GroupSequence' => TimeframeService::DOMAIN_NAMESPACE,
             'GroupType'     => TimeframeService::DOMAIN_NAMESPACE,
             'MainBarcode'   => TimeframeService::DOMAIN_NAMESPACE,
         ],
-        'Shipping'       => [
+        'Shipping' => [
             'GroupCount'    => ShippingService::DOMAIN_NAMESPACE,
             'GroupSequence' => ShippingService::DOMAIN_NAMESPACE,
             'GroupType'     => ShippingService::DOMAIN_NAMESPACE,
@@ -107,13 +104,13 @@ class Group extends AbstractEntity
     /**
      * Amount of shipments in the group.
      *
-     * @var string|null $GroupCount
+     * @var string|null
      */
     protected $GroupCount;
     /**
      * Sequence number.
      *
-     * @var string|null $GroupSequence
+     * @var string|null
      */
     protected $GroupSequence;
     /**
@@ -125,13 +122,13 @@ class Group extends AbstractEntity
      * - `03`: Multiple parcels in one shipment (multi-colli)
      * - `04`: Single parcel in one shipment
      *
-     * @var string|null $GroupType
+     * @var string|null
      */
     protected $GroupType;
     /**
      * Main barcode for the shipment.
      *
-     * @var string|null $MainBarcode
+     * @var string|null
      */
     protected $MainBarcode;
     // @codingStandardsIgnoreEnd
