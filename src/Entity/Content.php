@@ -31,6 +31,7 @@ use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
 use ThirtyBees\PostNL\Service\LabellingService;
 use ThirtyBees\PostNL\Service\LocationService;
+use ThirtyBees\PostNL\Service\ShippingService;
 use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
@@ -121,6 +122,15 @@ class Content extends AbstractEntity
             'Value'           => TimeframeService::DOMAIN_NAMESPACE,
             'Weight'          => TimeframeService::DOMAIN_NAMESPACE,
             'Content'         => TimeframeService::DOMAIN_NAMESPACE,
+        ],
+        'Shipping'      => [
+            'CountryOfOrigin' => ShippingService::DOMAIN_NAMESPACE,
+            'Description'     => ShippingService::DOMAIN_NAMESPACE,
+            'HSTariffNr'      => ShippingService::DOMAIN_NAMESPACE,
+            'Quantity'        => ShippingService::DOMAIN_NAMESPACE,
+            'Value'           => ShippingService::DOMAIN_NAMESPACE,
+            'Weight'          => ShippingService::DOMAIN_NAMESPACE,
+            'Content'         => ShippingService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart

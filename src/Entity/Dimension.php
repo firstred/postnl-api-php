@@ -31,6 +31,7 @@ use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
 use ThirtyBees\PostNL\Service\LabellingService;
 use ThirtyBees\PostNL\Service\LocationService;
+use ThirtyBees\PostNL\Service\ShippingService;
 use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
@@ -103,6 +104,13 @@ class Dimension extends AbstractEntity
             'Volume' => TimeframeService::DOMAIN_NAMESPACE,
             'Weight' => TimeframeService::DOMAIN_NAMESPACE,
             'Width'  => TimeframeService::DOMAIN_NAMESPACE,
+        ],
+        'Shipping'      => [
+            'Height' => ShippingService::DOMAIN_NAMESPACE,
+            'Length' => ShippingService::DOMAIN_NAMESPACE,
+            'Volume' => ShippingService::DOMAIN_NAMESPACE,
+            'Weight' => ShippingService::DOMAIN_NAMESPACE,
+            'Width'  => ShippingService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart

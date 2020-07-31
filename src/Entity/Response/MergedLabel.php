@@ -33,6 +33,7 @@ use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
 use ThirtyBees\PostNL\Service\LabellingService;
 use ThirtyBees\PostNL\Service\LocationService;
+use ThirtyBees\PostNL\Service\ShippingService;
 use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
@@ -78,6 +79,10 @@ class MergedLabel extends AbstractEntity
         'Timeframe'      => [
             'Barcodes' => TimeframeService::DOMAIN_NAMESPACE,
             'Labels'   => TimeframeService::DOMAIN_NAMESPACE,
+        ],
+        'Shipping'      => [
+            'Barcodes' => ShippingService::DOMAIN_NAMESPACE,
+            'Labels'   => ShippingService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart

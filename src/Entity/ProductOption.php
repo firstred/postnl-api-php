@@ -31,6 +31,7 @@ use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
 use ThirtyBees\PostNL\Service\LabellingService;
 use ThirtyBees\PostNL\Service\LocationService;
+use ThirtyBees\PostNL\Service\ShippingService;
 use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
@@ -76,6 +77,10 @@ class ProductOption extends AbstractEntity
         'Timeframe'  => [
             'Characteristic' => TimeframeService::DOMAIN_NAMESPACE,
             'Option'         => TimeframeService::DOMAIN_NAMESPACE,
+        ],
+        'Shipping'  => [
+            'Characteristic' => ShippingService::DOMAIN_NAMESPACE,
+            'Option'         => ShippingService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart

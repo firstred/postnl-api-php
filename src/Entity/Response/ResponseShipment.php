@@ -34,6 +34,7 @@ use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
 use ThirtyBees\PostNL\Service\LabellingService;
 use ThirtyBees\PostNL\Service\LocationService;
+use ThirtyBees\PostNL\Service\ShippingService;
 use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
@@ -124,6 +125,15 @@ class ResponseShipment extends AbstractEntity
             'Labels'              => TimeframeService::DOMAIN_NAMESPACE,
             'ProductCodeDelivery' => TimeframeService::DOMAIN_NAMESPACE,
             'Warnings'            => TimeframeService::DOMAIN_NAMESPACE,
+        ],
+        'Shipping'      => [
+            'Barcode'             => ShippingService::DOMAIN_NAMESPACE,
+            'DownPartnerBarcode'  => ShippingService::DOMAIN_NAMESPACE,
+            'DownPartnerID'       => ShippingService::DOMAIN_NAMESPACE,
+            'DownPartnerLocation' => ShippingService::DOMAIN_NAMESPACE,
+            'Labels'              => ShippingService::DOMAIN_NAMESPACE,
+            'ProductCodeDelivery' => ShippingService::DOMAIN_NAMESPACE,
+            'Warnings'            => ShippingService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart

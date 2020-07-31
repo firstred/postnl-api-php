@@ -31,6 +31,7 @@ use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
 use ThirtyBees\PostNL\Service\LabellingService;
 use ThirtyBees\PostNL\Service\LocationService;
+use ThirtyBees\PostNL\Service\ShippingService;
 use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
@@ -94,6 +95,12 @@ class Group extends AbstractEntity
             'GroupSequence' => TimeframeService::DOMAIN_NAMESPACE,
             'GroupType'     => TimeframeService::DOMAIN_NAMESPACE,
             'MainBarcode'   => TimeframeService::DOMAIN_NAMESPACE,
+        ],
+        'Shipping'       => [
+            'GroupCount'    => ShippingService::DOMAIN_NAMESPACE,
+            'GroupSequence' => ShippingService::DOMAIN_NAMESPACE,
+            'GroupType'     => ShippingService::DOMAIN_NAMESPACE,
+            'MainBarcode'   => ShippingService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart

@@ -31,6 +31,7 @@ use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
 use ThirtyBees\PostNL\Service\LabellingService;
 use ThirtyBees\PostNL\Service\LocationService;
+use ThirtyBees\PostNL\Service\ShippingService;
 use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 
@@ -88,6 +89,11 @@ class Label extends AbstractEntity
             'Content'     => TimeframeService::DOMAIN_NAMESPACE,
             'ContentType' => TimeframeService::DOMAIN_NAMESPACE,
             'Labeltype'   => TimeframeService::DOMAIN_NAMESPACE,
+        ],
+        'Shipping'      => [
+            'Content'     => ShippingService::DOMAIN_NAMESPACE,
+            'ContentType' => ShippingService::DOMAIN_NAMESPACE,
+            'Labeltype'   => ShippingService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
