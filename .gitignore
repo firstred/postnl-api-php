@@ -2,3 +2,6 @@ vendor/
 composer.lock
 tests/logs
 tests/clover.xml
+
+# PHP CS fixer
+.php_cs.cache

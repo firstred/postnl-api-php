@@ -17,11 +17,12 @@
         "setasign/fpdi": "^2.0",
         "setasign/fpdf": "^1.8",
         "psr/cache": "^1.0",
-        "psr/log": "^1.0"
+        "psr/log": "^1.0",
+        "friendsofphp/php-cs-fixer": "^2.16"
     },
     "require-dev": {
         "php": "^5.6 || ^7.0",
-        "phpunit/phpunit": "^5.0",
+        "phpunit/phpunit": "^7.5",
         "wappr/logger": "^1.2",
         "guzzlehttp/guzzle": "^6.3",
         "cache/void-adapter": "^1.0"
