@@ -29,7 +29,7 @@ namespace ThirtyBees\PostNL\Entity;
 use Sabre\Xml\Writer;
 use Sabre\Xml\XmlSerializable;
 use ThirtyBees\PostNL\Exception\InvalidArgumentException;
-use ThirtyBees\PostNL\Util\UUID;
+use ThirtyBees\PostNL\Misc\UUID;
 
 /**
  * Class Entity.

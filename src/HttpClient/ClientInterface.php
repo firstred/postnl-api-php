@@ -26,8 +26,8 @@
 
 namespace ThirtyBees\PostNL\HttpClient;
 
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use ThirtyBees\PostNL\Exception\HttpClientException;
 
@@ -54,12 +54,12 @@ interface ClientInterface
      * Adds a request to the list of pending requests
      * Using the ID you can replace a request.
      *
-     * @param string $id      Request ID
-     * @param string $request PSR-7 request
+     * @param string           $id      Request ID
+     * @param RequestInterface $request PSR-7 request
      *
      * @return int|string
      */
-    public function addOrUpdateRequest($id, $request);
+    public function addOrUpdateRequest($id, RequestInterface $request);
 
     /**
      * Set the verify setting.
@@ -94,20 +94,20 @@ interface ClientInterface
      *
      * Exceptions are captured into the result array
      *
-     * @param Request $request
+     * @param RequestInterface $request
      *
-     * @return Response
+     * @return ResponseInterface
      */
-    public function doRequest(Request $request);
+    public function doRequest(RequestInterface $request);
 
     /**
      * Do all async requests.
      *
      * Exceptions are captured into the result array
      *
-     * @param Request[] $requests
+     * @param RequestInterface[] $requests
      *
-     * @return Response|Response[]|HttpClientException|HttpClientException[]
+     * @return ResponseInterface|ResponseInterface[]|HttpClientException|HttpClientException[]
      */
     public function doRequests($requests = []);
 }

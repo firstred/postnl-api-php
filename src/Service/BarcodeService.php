@@ -203,9 +203,9 @@ class BarcodeService extends AbstractService
 
         return new Request(
             'GET',
-            ($this->postnl->getSandbox()
-                ? (PostNL::MODE_LEGACY === $this->postnl->getMode() ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT)
-                : (PostNL::MODE_LEGACY === $this->postnl->getMode() ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT))
+            $this->postnl->getSandbox()
+                ? static::SANDBOX_ENDPOINT
+                : static::LIVE_ENDPOINT
                 .'?'.\GuzzleHttp\Psr7\build_query([
                      'CustomerCode'   => $generateBarcode->getCustomer()->getCustomerCode(),
                      'CustomerNumber' => $generateBarcode->getCustomer()->getCustomerNumber(),
@@ -279,8 +279,8 @@ class BarcodeService extends AbstractService
         return new Request(
             'POST',
             $this->postnl->getSandbox()
-                ? (PostNL::MODE_LEGACY === $this->postnl->getMode() ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT)
-                : (PostNL::MODE_LEGACY === $this->postnl->getMode() ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT),
+                ? static::SANDBOX_ENDPOINT
+                : static::LIVE_ENDPOINT,
             [
                 'SOAPAction'   => "\"$soapAction\"",
                 'Accept'       => 'text/xml',

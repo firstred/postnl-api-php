@@ -77,8 +77,8 @@ use ThirtyBees\PostNL\Service\LocationService;
 use ThirtyBees\PostNL\Service\ShippingService;
 use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
-use ThirtyBees\PostNL\Util\RFPdi;
-use ThirtyBees\PostNL\Util\Util;
+use ThirtyBees\PostNL\Misc\RFPdi;
+use ThirtyBees\PostNL\Misc\Util;
 
 /**
  * Class PostNL.
@@ -90,7 +90,7 @@ class PostNL implements LoggerAwareInterface
     // New SOAP API
     const MODE_SOAP = 2;
     // Old SOAP API
-    const MODE_LEGACY = 5;
+    const MODE_LEGACY = 2;
 
     /**
      * 3S (or EU Pack Special) countries.
@@ -150,9 +150,7 @@ class PostNL implements LoggerAwareInterface
      *
      * In case of REST the API key is the `Password` property of the `UsernameToken`
      * In case of SOAP this has to be a `UsernameToken` object, with the following requirements:
-     *   - When using the legacy API, the username has to be given.
-     *     The password has to be plain text.
-     *   - When using the newer API (launched August 2017), do not pass a username (`null`)
+     *   - Do not pass a username (`null`)
      *     And pass the plaintext password.
      *
      * @var string

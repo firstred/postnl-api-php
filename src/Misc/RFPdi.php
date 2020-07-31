@@ -24,7 +24,7 @@
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Util;
+namespace ThirtyBees\PostNL\Misc;
 
 use setasign\Fpdi\Fpdi;
 

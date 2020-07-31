@@ -206,8 +206,8 @@ class ConfirmingService extends AbstractService
         return new Request(
             'POST',
             $this->postnl->getSandbox()
-                ? (PostNL::MODE_LEGACY === $this->postnl->getMode() ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT)
-                : (PostNL::MODE_LEGACY === $this->postnl->getMode() ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT),
+                ? static::SANDBOX_ENDPOINT
+                : static::LIVE_ENDPOINT,
             [
                 'apikey'       => $apiKey,
                 'Accept'       => 'application/json',
@@ -274,8 +274,8 @@ class ConfirmingService extends AbstractService
         );
 
         $endpoint = $this->postnl->getSandbox()
-            ? (PostNL::MODE_LEGACY === $this->postnl->getMode() ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT)
-            : (PostNL::MODE_LEGACY === $this->postnl->getMode() ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT);
+            ? static::SANDBOX_ENDPOINT
+            : static::LIVE_ENDPOINT;
 
         return new Request(
             'POST',

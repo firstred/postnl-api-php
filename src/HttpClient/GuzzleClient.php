@@ -34,6 +34,8 @@ use ThirtyBees\PostNL\Exception\HttpClientException;
 
 /**
  * Class GuzzleClient.
+ *
+ * @deprecated 2.0.0 Please use HTTPlug
  */
 class GuzzleClient implements ClientInterface, LoggerAwareInterface
 {
