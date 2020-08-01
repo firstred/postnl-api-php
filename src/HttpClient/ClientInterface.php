@@ -37,9 +37,20 @@ use ThirtyBees\PostNL\Exception\HttpClientException;
 interface ClientInterface
 {
     /**
+     * Get the logger.
+     *
+     * @return LoggerInterface
+     *
+     * @deprecated 1.2.0 Configure the HTTPlug HTTP client implementation instead
+     */
+    public function getLogger();
+
+    /**
      * Set the logger.
      *
      * @param LoggerInterface $logger
+     *
+     * @deprecated 1.2.0 Configure the HTTPlug HTTP client implementation instead
      */
     public function setLogger(LoggerInterface $logger);
 
@@ -67,6 +78,8 @@ interface ClientInterface
      * @param bool|string $verify
      *
      * @return $this
+     *
+     * @deprecated 1.2.0 Configure the HTTPlug HTTP client implementation instead
      */
     public function setVerify($verify);
 
@@ -74,6 +87,8 @@ interface ClientInterface
      * Return verify setting.
      *
      * @return bool|string
+     *
+     * @deprecated 1.2.0 Configure the HTTPlug HTTP client implementation instead
      */
     public function getVerify();
 

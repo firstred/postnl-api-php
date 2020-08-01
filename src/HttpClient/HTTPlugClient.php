@@ -200,21 +200,43 @@ class HTTPlugClient implements ClientInterface
         return $this;
     }
 
+    /**
+     * @param LoggerInterface $logger
+     *
+     * @deprecated 1.2.0 Configure the HTTPlug HTTP client implementation instead
+     */
     public function setLogger(LoggerInterface $logger)
     {
         // TODO: Implement setLogger() method.
     }
 
+    /**
+     * @return HTTPlugClient|void
+     *
+     * @deprecated 1.2.0 Configure the HTTPlug HTTP client implementation instead
+     */
     public static function getInstance()
     {
         // TODO: Implement getInstance() method.
     }
 
+    /**
+     * @param bool|string $verify
+     *
+     * @return HTTPlugClient|void
+     *
+     * @deprecated 1.2.0 Configure the HTTPlug HTTP client implementation instead
+     */
     public function setVerify($verify)
     {
         // TODO: Implement setVerify() method.
     }
 
+    /**
+     * @return bool|string|void
+     *
+     * @deprecated 1.2.0 Configure the HTTPlug HTTP client implementation instead
+     */
     public function getVerify()
     {
         // TODO: Implement getVerify() method.
