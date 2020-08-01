@@ -28,8 +28,14 @@ class HTTPlugClient implements ClientInterface
     /** @var int */
     private $concurrency = 5;
 
+    /** @var LoggerInterface */
+    private $logger;
+
     /** @var HttpAsyncClient */
     private $asyncClient;
+
+    /** @var static */
+    private static $instance;
 
     /**
      * HTTPlugClient constructor.
@@ -210,21 +216,39 @@ class HTTPlugClient implements ClientInterface
     }
 
     /**
-     * @param LoggerInterface $logger
-     *
-     * @deprecated 1.2.0 Configure the HTTPlug HTTP client implementation instead
+     * @return HTTPlugClient|void
      */
-    public function setLogger(LoggerInterface $logger)
+    public static function getInstance(HttpAsyncClient $client = null)
     {
-        // TODO: Implement setLogger() method.
+        if (!static::$instance) {
+            static::$instance = new static($client);
+        }
+
+        return static::$instance;
     }
 
     /**
-     * @return HTTPlugClient|void
+     * Set the logger.
+     *
+     * @param LoggerInterface $logger
+     *
+     * @return HTTPlugClient
      */
-    public static function getInstance()
+    public function setLogger(LoggerInterface $logger = null)
     {
-        // TODO: Implement getInstance() method.
+        $this->logger = $logger;
+
+        return $this;
+    }
+
+    /**
+     * Get the logger.
+     *
+     * @return LoggerInterface
+     */
+    public function getLogger()
+    {
+        return $this->logger;
     }
 
     /**
@@ -236,7 +260,7 @@ class HTTPlugClient implements ClientInterface
      */
     public function setVerify($verify)
     {
-        // TODO: Implement setVerify() method.
+        // Not supported by the HTTPlug client
     }
 
     /**
@@ -246,11 +270,6 @@ class HTTPlugClient implements ClientInterface
      */
     public function getVerify()
     {
-        // TODO: Implement getVerify() method.
-    }
-
-    public function getLogger()
-    {
-        // TODO: Implement getLogger() method.
+        // Not supported by the HTTPlug client
     }
 }
