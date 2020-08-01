@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The MIT License (MIT).
  *
@@ -38,7 +36,7 @@ return PhpCsFixer\Config::create()
         'binary_operator_spaces'     => [
             'default'   => 'align',
             'operators' => [
-                '=>' => 'align_single_space_minimal',
+                '=>' => 'align',
                 '='  => 'single_space',
             ],
         ],
