@@ -26,11 +26,11 @@
 
 namespace ThirtyBees\PostNL\Service;
 
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Psr\Cache\CacheItemInterface;
 use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
+use Sabre\Xml\LibXMLException;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Service as XmlService;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
@@ -44,6 +44,7 @@ use ThirtyBees\PostNL\Entity\SOAP\Security;
 use ThirtyBees\PostNL\Exception\ApiException;
 use ThirtyBees\PostNL\Exception\CifDownException;
 use ThirtyBees\PostNL\Exception\CifException;
+use ThirtyBees\PostNL\Exception\ResponseException;
 
 /**
  * Class LocationService.
@@ -103,7 +104,7 @@ class LocationService extends AbstractService
      * @throws CifDownException
      * @throws CifException
      * @throws \Exception
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws ResponseException
      */
     public function getNearestLocationsREST(GetNearestLocations $getNearestLocations)
     {
@@ -116,7 +117,7 @@ class LocationService extends AbstractService
             } catch (\InvalidArgumentException $e) {
             }
         }
-        if (!$response instanceof Response) {
+        if (!$response instanceof ResponseInterface) {
             $response = $this->postnl->getHttpClient()->doRequest($this->buildGetNearestLocationsRequestREST($getNearestLocations));
             static::validateRESTResponse($response);
         }
@@ -124,7 +125,7 @@ class LocationService extends AbstractService
         $object = $this->processGetNearestLocationsResponseREST($response);
         if ($object instanceof GetNearestLocationsResponse) {
             if ($item instanceof CacheItemInterface
-                && $response instanceof Response
+                && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
                 $item->set(\GuzzleHttp\Psr7\str($response));
@@ -147,8 +148,8 @@ class LocationService extends AbstractService
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
-     * @throws \Sabre\Xml\LibXMLException
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws LibXMLException
+     * @throws ResponseException
      */
     public function getNearestLocationsSOAP(GetNearestLocations $getNearestLocations)
     {
@@ -161,14 +162,14 @@ class LocationService extends AbstractService
             } catch (\InvalidArgumentException $e) {
             }
         }
-        if (!$response instanceof Response) {
+        if (!$response instanceof ResponseInterface) {
             $response = $this->postnl->getHttpClient()->doRequest($this->buildGetNearestLocationsRequestSOAP($getNearestLocations));
         }
 
         $object = $this->processGetNearestLocationsResponseSOAP($response);
         if ($object instanceof GetNearestLocationsResponse) {
             if ($item instanceof CacheItemInterface
-                && $response instanceof Response
+                && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
                 $item->set(\GuzzleHttp\Psr7\str($response));
@@ -191,7 +192,7 @@ class LocationService extends AbstractService
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws ResponseException
      */
     public function getLocationsInAreaREST(GetLocationsInArea $getLocations)
     {
@@ -204,7 +205,7 @@ class LocationService extends AbstractService
             } catch (\InvalidArgumentException $e) {
             }
         }
-        if (!$response instanceof Response) {
+        if (!$response instanceof ResponseInterface) {
             $response = $this->postnl->getHttpClient()->doRequest($this->buildGetLocationsInAreaRequest($getLocations));
             static::validateRESTResponse($response);
         }
@@ -212,7 +213,7 @@ class LocationService extends AbstractService
         $object = $this->processGetLocationsInAreaResponseREST($response);
         if ($object instanceof GetLocationsInAreaResponse) {
             if ($item instanceof CacheItemInterface
-                && $response instanceof Response
+                && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
                 $item->set(\GuzzleHttp\Psr7\str($response));
@@ -235,8 +236,8 @@ class LocationService extends AbstractService
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
-     * @throws \Sabre\Xml\LibXMLException
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws LibXMLException
+     * @throws ResponseException
      */
     public function getLocationsInAreaSOAP(GetLocationsInArea $getNearestLocations)
     {
@@ -250,14 +251,14 @@ class LocationService extends AbstractService
             }
         }
 
-        if (!$response instanceof Response) {
+        if (!$response instanceof ResponseInterface) {
             $response = $this->postnl->getHttpClient()->doRequest($this->buildGetLocationsInAreaRequestSOAP($getNearestLocations));
         }
 
         $object = $this->processGetLocationsInAreaResponseSOAP($response);
         if ($object instanceof GetLocationsInAreaResponse) {
             if ($item instanceof CacheItemInterface
-                && $response instanceof Response
+                && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
                 $item->set(\GuzzleHttp\Psr7\str($response));
@@ -280,7 +281,7 @@ class LocationService extends AbstractService
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws ResponseException
      */
     public function getLocationREST(GetLocation $getLocation)
     {
@@ -293,7 +294,7 @@ class LocationService extends AbstractService
             } catch (\InvalidArgumentException $e) {
             }
         }
-        if (!$response instanceof Response) {
+        if (!$response instanceof ResponseInterface) {
             $response = $this->postnl->getHttpClient()->doRequest($this->buildGetLocationRequestREST($getLocation));
             static::validateRESTResponse($response);
         }
@@ -301,7 +302,7 @@ class LocationService extends AbstractService
         $object = $this->processGetLocationResponseREST($response);
         if ($object instanceof GetLocationsInAreaResponse) {
             if ($item instanceof CacheItemInterface
-                && $response instanceof Response
+                && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
                 $item->set(\GuzzleHttp\Psr7\str($response));
@@ -324,8 +325,8 @@ class LocationService extends AbstractService
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
-     * @throws \Sabre\Xml\LibXMLException
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws LibXMLException
+     * @throws ResponseException
      */
     public function getLocationSOAP(GetLocation $getLocation)
     {
@@ -338,14 +339,14 @@ class LocationService extends AbstractService
             } catch (\InvalidArgumentException $e) {
             }
         }
-        if (!$response instanceof Response) {
+        if (!$response instanceof ResponseInterface) {
             $response = $this->postnl->getHttpClient()->doRequest($this->buildGetLocationRequestSOAP($getLocation));
         }
 
         $object = $this->processGetLocationResponseSOAP($response);
         if ($object instanceof GetLocationsInAreaResponse) {
             if ($item instanceof CacheItemInterface
-                && $response instanceof Response
+                && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
                 $item->set(\GuzzleHttp\Psr7\str($response));
@@ -428,7 +429,7 @@ class LocationService extends AbstractService
      *
      * @return GetNearestLocationsResponse|null
      *
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws ResponseException
      */
     public function processGetNearestLocationsResponseREST($response)
     {
@@ -526,8 +527,8 @@ class LocationService extends AbstractService
      *
      * @throws CifDownException
      * @throws CifException
-     * @throws \Sabre\Xml\LibXMLException
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws LibXMLException
+     * @throws ResponseException
      */
     public function processGetNearestLocationsResponseSOAP($response)
     {
@@ -619,7 +620,7 @@ class LocationService extends AbstractService
      *
      * @return GetLocationsInAreaResponse|null
      *
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws ResponseException
      */
     public function processGetLocationsInAreaResponseREST($response)
     {
@@ -715,8 +716,8 @@ class LocationService extends AbstractService
      *
      * @throws CifDownException
      * @throws CifException
-     * @throws \Sabre\Xml\LibXMLException
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws LibXMLException
+     * @throws ResponseException
      */
     public function processGetLocationsInAreaResponseSOAP($response)
     {
@@ -787,7 +788,7 @@ class LocationService extends AbstractService
      *
      * @return GetLocationsInAreaResponse|null
      *
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws ResponseException
      */
     public function processGetLocationResponseREST($response)
     {
@@ -881,8 +882,8 @@ class LocationService extends AbstractService
      *
      * @throws CifDownException
      * @throws CifException
-     * @throws \Sabre\Xml\LibXMLException
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws LibXMLException
+     * @throws ResponseException
      */
     public function processGetLocationResponseSOAP($response)
     {

@@ -26,10 +26,9 @@
 
 namespace ThirtyBees\PostNL\Service;
 
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use Sabre\Xml\Service as XmlService;
 use ThirtyBees\PostNL\Entity\Request\GenerateBarcode;
 use ThirtyBees\PostNL\Entity\SOAP\Security;
@@ -92,7 +91,7 @@ class BarcodeService extends AbstractService
      */
     public function generateBarcodeREST(GenerateBarcode $generateBarcode)
     {
-        /** @var Response $response */
+        /** @var ResponseInterface $response */
         $response = $this->postnl
             ->getHttpClient()
             ->doRequest($this->buildGenerateBarcodeRequestREST($generateBarcode));

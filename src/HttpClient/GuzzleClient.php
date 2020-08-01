@@ -26,8 +26,8 @@ use GuzzleHttp\Exception\TransferException;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\Promise\EachPromise;
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use ThirtyBees\PostNL\Exception\HttpClientException;
@@ -77,8 +77,8 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
             $stack = HandlerStack::create(\GuzzleHttp\choose_handler());
             $stack->push(Middleware::retry(function (
                 $retries,
-                Request $request,
-                Response $response = null,
+                RequestInterface $request,
+                ResponseInterface $response = null,
                 RequestException $exception = null
             ) {
                 // Limit the number of retries to 5
@@ -271,12 +271,12 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
      * Adds a request to the list of pending requests
      * Using the ID you can replace a request.
      *
-     * @param string $id      Request ID
-     * @param string $request PSR-7 request
+     * @param string           $id      Request ID
+     * @param RequestInterface $request PSR-7 request
      *
      * @return int|string
      */
-    public function addOrUpdateRequest($id, $request)
+    public function addOrUpdateRequest($id, RequestInterface $request)
     {
         if (is_null($id)) {
             return array_push($this->pendingRequests, $request);
@@ -310,13 +310,13 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
      *
      * Exceptions are captured into the result array
      *
-     * @param Request $request
+     * @param RequestInterface $request
      *
-     * @return Response
+     * @return ResponseInterface
      *
      * @throws \Exception|HttpClientException
      */
-    public function doRequest(Request $request)
+    public function doRequest(RequestInterface $request)
     {
         // Initialize Guzzle, include the default options
         $guzzle = $this->getClient();
@@ -325,7 +325,7 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
         } catch (TransferException $e) {
             throw new HttpClientException($e->getMessage(), $e->getCode(), $e);
         }
-        if ($response instanceof Response && $this->logger instanceof LoggerInterface) {
+        if ($response instanceof ResponseInterface && $this->logger instanceof LoggerInterface) {
             $this->logger->debug(\GuzzleHttp\Psr7\str($response));
         }
 
@@ -337,15 +337,15 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
      *
      * Exceptions are captured into the result array
      *
-     * @param Request[] $requests
+     * @param RequestInterface[] $requests
      *
-     * @return Response|Response[]|HttpClientException|HttpClientException[]
+     * @return ResponseInterface|ResponseInterface[]|HttpClientException|HttpClientException[]
      */
     public function doRequests($requests = [])
     {
         // If this is a single request, create the requests array
         if (!is_array($requests)) {
-            if (!$requests instanceof Request) {
+            if (!$requests instanceof RequestInterface) {
                 return [];
             }
 
@@ -360,7 +360,7 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
         // Concurrent requests
         $promises = call_user_func(function () use ($requests, $guzzle) {
             foreach ($requests as $index => $request) {
-                if ($request instanceof Request && $this->logger instanceof LoggerInterface) {
+                if ($request instanceof RequestInterface && $this->logger instanceof LoggerInterface) {
                     $this->logger->debug(\GuzzleHttp\Psr7\str($request));
                 }
                 yield $index => $guzzle->sendAsync($request);
@@ -396,10 +396,10 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
                 } else {
                     $response = $response['reason'];
                 }
-            } elseif (!$response instanceof Response) {
+            } elseif (!$response instanceof ResponseInterface) {
                 $response = new \ThirtyBees\PostNL\Exception\ResponseException('Unknown response type');
             }
-            if ($response instanceof Response && $this->logger instanceof LoggerInterface) {
+            if ($response instanceof ResponseInterface && $this->logger instanceof LoggerInterface) {
                 $this->logger->debug(\GuzzleHttp\Psr7\str($response));
             }
         }

@@ -26,11 +26,11 @@
 
 namespace ThirtyBees\PostNL\Service;
 
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Psr\Cache\CacheItemInterface;
 use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
+use Sabre\Xml\LibXMLException;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Service as XmlService;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
@@ -128,7 +128,7 @@ class ShippingStatusService extends AbstractService
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws ResponseException
      */
     public function currentStatusREST($currentStatus)
     {
@@ -141,7 +141,7 @@ class ShippingStatusService extends AbstractService
             } catch (\InvalidArgumentException $e) {
             }
         }
-        if (!$response instanceof Response) {
+        if (!$response instanceof ResponseInterface) {
             $response = $this->postnl->getHttpClient()->doRequest($this->buildCurrentStatusRequestREST($currentStatus));
             static::validateRESTResponse($response);
         }
@@ -149,7 +149,7 @@ class ShippingStatusService extends AbstractService
         $object = $this->processCurrentStatusResponseREST($response);
         if ($object instanceof CurrentStatusResponse) {
             if ($item instanceof CacheItemInterface
-                && $response instanceof Response
+                && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
                 $item->set(\GuzzleHttp\Psr7\str($response));
@@ -185,7 +185,7 @@ class ShippingStatusService extends AbstractService
      * @throws CifException
      * @throws InvalidArgumentException
      * @throws ResponseException
-     * @throws \Sabre\Xml\LibXMLException
+     * @throws LibXMLException
      */
     public function currentStatusSOAP($currentStatus)
     {
@@ -198,14 +198,14 @@ class ShippingStatusService extends AbstractService
             } catch (\InvalidArgumentException $e) {
             }
         }
-        if (!$response instanceof Response) {
+        if (!$response instanceof ResponseInterface) {
             $response = $this->postnl->getHttpClient()->doRequest($this->buildCurrentStatusRequestSOAP($currentStatus));
         }
 
         $object = $this->processCurrentStatusResponseSOAP($response);
         if ($object instanceof CurrentStatusResponse) {
             if ($item instanceof CacheItemInterface
-                && $response instanceof Response
+                && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
                 $item->set(\GuzzleHttp\Psr7\str($response));
@@ -252,7 +252,7 @@ class ShippingStatusService extends AbstractService
             } catch (\InvalidArgumentException $e) {
             }
         }
-        if (!$response instanceof Response) {
+        if (!$response instanceof ResponseInterface) {
             $response = $this->postnl->getHttpClient()->doRequest($this->buildCompleteStatusRequestREST($completeStatus));
             static::validateRESTResponse($response);
         }
@@ -260,7 +260,7 @@ class ShippingStatusService extends AbstractService
         $object = $this->processCompleteStatusResponseREST($response);
         if ($object instanceof CompleteStatusResponse) {
             if ($item instanceof CacheItemInterface
-                && $response instanceof Response
+                && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
                 $item->set(\GuzzleHttp\Psr7\str($response));
@@ -295,7 +295,7 @@ class ShippingStatusService extends AbstractService
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
-     * @throws \Sabre\Xml\LibXMLException
+     * @throws LibXMLException
      * @throws InvalidArgumentException
      */
     public function completeStatusSOAP($completeStatus)
@@ -309,14 +309,14 @@ class ShippingStatusService extends AbstractService
             } catch (\InvalidArgumentException $e) {
             }
         }
-        if (!$response instanceof Response) {
+        if (!$response instanceof ResponseInterface) {
             $response = $this->postnl->getHttpClient()->doRequest($this->buildCompleteStatusRequestSOAP($completeStatus));
         }
 
         $object = $this->processCompleteStatusResponseSOAP($response);
         if ($object instanceof CompleteStatusResponse) {
             if ($item instanceof CacheItemInterface
-                && $response instanceof Response
+                && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
                 $item->set(\GuzzleHttp\Psr7\str($response));
@@ -363,7 +363,7 @@ class ShippingStatusService extends AbstractService
             } catch (\InvalidArgumentException $e) {
             }
         }
-        if (!$response instanceof Response) {
+        if (!$response instanceof ResponseInterface) {
             $response = $this->postnl->getHttpClient()->doRequest($this->buildGetSignatureRequestREST($getSignature));
             static::validateRESTResponse($response);
         }
@@ -371,7 +371,7 @@ class ShippingStatusService extends AbstractService
         $object = $this->processGetSignatureResponseREST($response);
         if ($object instanceof GetSignatureResponseSignature) {
             if ($item instanceof CacheItemInterface
-                && $response instanceof Response
+                && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
                 $item->set(\GuzzleHttp\Psr7\str($response));
@@ -415,14 +415,14 @@ class ShippingStatusService extends AbstractService
             } catch (\InvalidArgumentException $e) {
             }
         }
-        if (!$response instanceof Response) {
+        if (!$response instanceof ResponseInterface) {
             $response = $this->postnl->getHttpClient()->doRequest($this->buildGetSignatureRequestSOAP($getSignature));
         }
 
         $object = $this->processGetSignatureResponse($response);
         if ($object instanceof SignatureResponse) {
             if ($item instanceof CacheItemInterface
-                && $response instanceof Response
+                && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
                 $item->set(\GuzzleHttp\Psr7\str($response));
@@ -506,7 +506,7 @@ class ShippingStatusService extends AbstractService
      *
      * @return CurrentStatusResponse
      *
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws ResponseException
      */
     public function processCurrentStatusResponseREST($response)
     {
@@ -571,25 +571,20 @@ class ShippingStatusService extends AbstractService
                 '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
                     ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
                 ],
-                '{'.static::ENVELOPE_NAMESPACE.'}Body' => [
+                '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
                     '{'.static::SERVICES_NAMESPACE.'}'.$item => $currentStatus,
                 ],
             ]
         );
-        $endpoint = $this->postnl->getSandbox()
-            ? static::SANDBOX_ENDPOINT
-            : static::LIVE_ENDPOINT;
 
-        return new Request(
+        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
             'POST',
-            $endpoint,
-            [
-                'SOAPAction'   => "\"$soapAction\"",
-                'Accept'       => 'text/xml',
-                'Content-Type' => 'text/xml;charset=UTF-8',
-            ],
-            $request
-        );
+            $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT
+        )
+            ->withHeader('SOAPAction', "\"$soapAction\"")
+            ->withHeader('Accept', 'text/xml')
+            ->withHeader('Content-Type', 'text/xml;charset=UTF-8')
+            ->withBody(Psr17FactoryDiscovery::findStreamFactory()->createStream($request));
     }
 
     /**
@@ -601,8 +596,8 @@ class ShippingStatusService extends AbstractService
      *
      * @throws CifDownException
      * @throws CifException
-     * @throws \Sabre\Xml\LibXMLException
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws LibXMLException
+     * @throws ResponseException
      */
     public function processCurrentStatusResponseSOAP($response)
     {
@@ -685,15 +680,13 @@ class ShippingStatusService extends AbstractService
         }
         $endpoint .= '?'.http_build_query($query);
 
-        return new Request(
-            'POST',
-            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint,
-            [
-                'apikey'       => $apiKey,
-                'Accept'       => 'application/json',
-                'Content-Type' => 'application/json;charset=UTF-8',
-            ]
-        );
+        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
+            'GET',
+            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint
+        )
+            ->withHeader('apikey', $apiKey)
+            ->withHeader('Accept', 'application/json')
+            ->withHeader('Content-Type', 'application/json;charset=UTF-8');
     }
 
     /**
@@ -805,26 +798,20 @@ class ShippingStatusService extends AbstractService
                 '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
                     ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
                 ],
-                '{'.static::ENVELOPE_NAMESPACE.'}Body' => [
+                '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
                     '{'.static::SERVICES_NAMESPACE.'}'.$item => $completeStatus,
                 ],
             ]
         );
 
-        $endpoint = $this->postnl->getSandbox()
-            ? static::SANDBOX_ENDPOINT
-            : static::LIVE_ENDPOINT;
-
-        return new Request(
+        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
             'POST',
-            $endpoint,
-            [
-                'SOAPAction'   => "\"$soapAction\"",
-                'Accept'       => 'text/xml',
-                'Content-Type' => 'text/xml;charset=UTF-8',
-            ],
-            $request
-        );
+            $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT
+        )
+            ->withHeader('SOAPAction', "\"$soapAction\"")
+            ->withHeader('Accept', 'text/xml')
+            ->withHeader('Content-Type', 'text/xml;charset=UTF-8')
+            ->withBody(Psr17FactoryDiscovery::findStreamFactory()->createStream($request));
     }
 
     /**
@@ -837,7 +824,7 @@ class ShippingStatusService extends AbstractService
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
-     * @throws \Sabre\Xml\LibXMLException
+     * @throws LibXMLException
      */
     public function processCompleteStatusResponseSOAP($response)
     {
@@ -870,15 +857,12 @@ class ShippingStatusService extends AbstractService
         $apiKey = $this->postnl->getRestApiKey();
         $this->setService($getSignature);
 
-        return new Request(
-            'POST',
-            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT)."/signature/{$getSignature->getShipment()->getBarcode()}",
-            [
-                'apikey'       => $apiKey,
-                'Accept'       => 'application/json',
-                'Content-Type' => 'application/json;charset=UTF-8',
-            ]
-        );
+        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
+            'GET',
+            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT)."/signature/{$getSignature->getShipment()->getBarcode()}"
+        )
+            ->withHeader('apikey', $apiKey)
+            ->withHeader('Accept', 'application/json');
     }
 
     /**
@@ -936,26 +920,22 @@ class ShippingStatusService extends AbstractService
                 '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
                     ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
                 ],
-                '{'.static::ENVELOPE_NAMESPACE.'}Body' => [
+                '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
                     '{'.static::SERVICES_NAMESPACE.'}GetSignature' => $getSignature,
                 ],
             ]
         );
 
-        $endpoint = $this->postnl->getSandbox()
-            ? static::SANDBOX_ENDPOINT
-            : static::LIVE_ENDPOINT;
-
-        return new Request(
+        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
             'POST',
-            $endpoint,
-            [
-                'SOAPAction'   => "\"$soapAction\"",
-                'Accept'       => 'text/xml',
-                'Content-Type' => 'text/xml;charset=UTF-8',
-            ],
-            $request
-        );
+            $this->postnl->getSandbox()
+                ? static::SANDBOX_ENDPOINT
+                : static::LIVE_ENDPOINT
+        )
+            ->withHeader('SOAPAction', "\"$soapAction\"")
+            ->withHeader('Accept', 'text/xml')
+            ->withHeader('Content-Type', 'text/xml;charset=UTF-8')
+            ->withBody(Psr17FactoryDiscovery::findStreamFactory()->createStream($request));
     }
 
     /**
@@ -968,7 +948,7 @@ class ShippingStatusService extends AbstractService
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
-     * @throws \Sabre\Xml\LibXMLException
+     * @throws LibXMLException
      */
     public function processGetSignatureResponseSOAP($response)
     {

@@ -22,8 +22,8 @@ namespace ThirtyBees\PostNL\HttpClient;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use ThirtyBees\PostNL\Exception\HttpClientException;
@@ -183,12 +183,12 @@ class MockClient implements ClientInterface, LoggerAwareInterface
      * Adds a request to the list of pending requests
      * Using the ID you can replace a request.
      *
-     * @param string $id      Request ID
-     * @param string $request PSR-7 request
+     * @param string           $id      Request ID
+     * @param RequestInterface $request PSR-7 request
      *
      * @return int|string
      */
-    public function addOrUpdateRequest($id, $request)
+    public function addOrUpdateRequest($id, RequestInterface $request)
     {
         if (is_null($id)) {
             return array_push($this->pendingRequests, $request);
@@ -240,13 +240,13 @@ class MockClient implements ClientInterface, LoggerAwareInterface
      *
      * Exceptions are captured into the result array
      *
-     * @param Request $request
+     * @param RequestInterface $request
      *
-     * @return Response
+     * @return ResponseInterface
      *
      * @throws HttpClientException
      */
-    public function doRequest(Request $request)
+    public function doRequest(RequestInterface $request)
     {
         // Initialize Guzzle, include the default options
         $guzzle = new Client(array_merge(
@@ -271,15 +271,15 @@ class MockClient implements ClientInterface, LoggerAwareInterface
      *
      * Exceptions are captured into the result array
      *
-     * @param Request[] $requests
+     * @param RequestInterface[] $requests
      *
-     * @return Response|Response[]|HttpClientException|HttpClientException[]
+     * @return ResponseInterface|ResponseInterface[]|HttpClientException|HttpClientException[]
      */
     public function doRequests($requests = [])
     {
         // If this is a single request, create the requests array
         if (!is_array($requests)) {
-            if (!$requests instanceof Request) {
+            if (!$requests instanceof RequestInterface) {
                 return [];
             }
 
@@ -313,9 +313,9 @@ class MockClient implements ClientInterface, LoggerAwareInterface
             } elseif (isset($response['reason'])) {
                 $response = $response['reason'];
             } else {
-                $response = \ThirtyBees\PostNL\Exception\ResponseException('Unknown reponse type');
+                $response = ThirtyBees\PostNL\Exception\ResponseException('Unknown reponse type');
             }
-            if ($response instanceof Response && $this->logger instanceof LoggerInterface) {
+            if ($response instanceof ResponseInterface && $this->logger instanceof LoggerInterface) {
                 $this->logger->debug(\GuzzleHttp\Psr7\str($response));
             }
         }

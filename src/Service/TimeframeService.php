@@ -26,11 +26,10 @@
 
 namespace ThirtyBees\PostNL\Service;
 
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Psr\Cache\CacheItemInterface;
 use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Service as XmlService;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
@@ -104,7 +103,7 @@ class TimeframeService extends AbstractService
             } catch (\InvalidArgumentException $e) {
             }
         }
-        if (!$response instanceof Response) {
+        if (!$response instanceof ResponseInterface) {
             $response = $this->postnl->getHttpClient()->doRequest($this->buildGetTimeframesRequestREST($getTimeframes));
             static::validateRESTResponse($response);
         }
@@ -112,7 +111,7 @@ class TimeframeService extends AbstractService
         $object = $this->processGetTimeframesResponseREST($response);
         if ($object instanceof ResponseTimeframes) {
             if ($item instanceof CacheItemInterface
-                && $response instanceof Response
+                && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
                 $item->set(\GuzzleHttp\Psr7\str($response));
@@ -149,14 +148,14 @@ class TimeframeService extends AbstractService
             } catch (\InvalidArgumentException $e) {
             }
         }
-        if (!$response instanceof Response) {
+        if (!$response instanceof ResponseInterface) {
             $response = $this->postnl->getHttpClient()->doRequest($this->buildGetTimeframesRequestSOAP($getTimeframes));
         }
 
         $object = $this->processGetTimeframesResponseSOAP($response);
         if ($object instanceof ResponseTimeframes) {
             if ($item instanceof CacheItemInterface
-                && $response instanceof Response
+                && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
                 $item->set(str($response));
@@ -310,18 +309,14 @@ class TimeframeService extends AbstractService
             ]
         );
 
-        $endpoint = $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT;
-
-        return new Request(
+        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
             'POST',
-            $endpoint,
-            [
-                'SOAPAction'   => "\"$soapAction\"",
-                'Accept'       => 'text/xml',
-                'Content-Type' => 'text/xml;charset=UTF-8',
-            ],
-            $request
-        );
+            $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT
+        )
+            ->withHeader('SOAPAction', "\"$soapAction\"")
+            ->withHeader('Accept', 'text/xml')
+            ->withHeader('Content-Type', 'text/xml;charset=UTF-8')
+            ->withBody(Psr17FactoryDiscovery::findStreamFactory()->createStream($request));
     }
 
     /**

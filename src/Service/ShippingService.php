@@ -26,10 +26,10 @@
 
 namespace ThirtyBees\PostNL\Service;
 
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
 use Http\Discovery\Psr17FactoryDiscovery;
+use Psr\Cache\CacheItemInterface;
 use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
 use ThirtyBees\PostNL\Entity\Request\GenerateShipping;
 use ThirtyBees\PostNL\Entity\Response\GenerateShippingResponse;
@@ -73,19 +73,19 @@ class ShippingService extends AbstractService
      * @throws CifException
      * @throws ResponseException
      */
-    public function generateShippingREST(GenerateShipping $generateShipping, $confirm = true): ?GenerateShippingResponse
+    public function generateShippingREST(GenerateShipping $generateShipping, $confirm = true)
     {
         $item = $this->retrieveCachedItem($generateShipping->getId());
         $response = null;
 
-        if ($item instanceof CachedItemInterface) {
+        if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
                 $response = \GuzzleHttp\Psr7\parse_response($response);
             } catch (\InvalidArgumentException $e) {
             }
         }
-        if (!$response instanceof Response) {
+        if (!$response instanceof ResponseInterface) {
             $response = $this->postnl->getHttpClient()->doRequest($this->buildGenerateShippingRequestREST($generateShipping, $confirm));
 
             static::validateRESTResponse($response);
@@ -93,8 +93,8 @@ class ShippingService extends AbstractService
 
         $object = $this->processGenerateShippingResponseREST($response);
         if ($object instanceof GenerateShippingResponse) {
-            if ($item instanceof CachedItemInterface
-                && $response instanceof Response
+            if ($item instanceof CacheItemInterface
+                && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
                 $item->set(\GuzzleHttp\Psr7\str($response));
@@ -137,13 +137,13 @@ class ShippingService extends AbstractService
     /**
      * Process the GenerateShipping REST Response.
      *
-     * @param Response $response
+     * @param ResponseInterface $response
      *
      * @return GenerateShippingResponse|null
      *
      * @throws ResponseException
      */
-    public function processGenerateShippingResponseREST($response): ?GenerateShippingResponse
+    public function processGenerateShippingResponseREST($response)
     {
         $body = json_decode(static::getResponseText($response), true);
         if (isset($body['ResponseShipments'])) {

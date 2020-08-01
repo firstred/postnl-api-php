@@ -26,12 +26,11 @@
 
 namespace ThirtyBees\PostNL\Service;
 
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Service as XmlService;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
@@ -111,7 +110,7 @@ class LabellingService extends AbstractService
             } catch (\InvalidArgumentException $e) {
             }
         }
-        if (!$response instanceof Response) {
+        if (!$response instanceof ResponseInterface) {
             $response = $this->postnl->getHttpClient()->doRequest($this->buildGenerateLabelRequestREST($generateLabel, $confirm));
             static::validateRESTResponse($response);
         }
@@ -119,7 +118,7 @@ class LabellingService extends AbstractService
         $object = $this->processGenerateLabelResponseREST($response);
         if ($object instanceof GenerateLabelResponse) {
             if ($item instanceof CacheItemInterface
-                && $response instanceof Response
+                && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
                 $item->set(\GuzzleHttp\Psr7\str($response));
@@ -157,7 +156,7 @@ class LabellingService extends AbstractService
                     $response = \GuzzleHttp\Psr7\parse_response($response);
                 } catch (\InvalidArgumentException $e) {
                 }
-                if ($response instanceof Response) {
+                if ($response instanceof ResponseInterface) {
                     $responses[$uuid] = $response;
 
                     continue;
@@ -171,7 +170,7 @@ class LabellingService extends AbstractService
         }
         $newResponses = $httpClient->doRequests();
         foreach ($newResponses as $uuid => $newResponse) {
-            if ($newResponse instanceof Response
+            if ($newResponse instanceof ResponseInterface
                 && 200 === $newResponse->getStatusCode()
             ) {
                 $item = $this->retrieveCachedItem($uuid);
@@ -224,7 +223,7 @@ class LabellingService extends AbstractService
             } catch (\InvalidArgumentException $e) {
             }
         }
-        if (!$response instanceof Response) {
+        if (!$response instanceof ResponseInterface) {
             $response = $this->postnl->getHttpClient()->doRequest($this->buildGenerateLabelRequestSOAP($generateLabel, $confirm));
         }
 
@@ -232,7 +231,7 @@ class LabellingService extends AbstractService
 
         if ($object instanceof GenerateLabelResponse
             && $item instanceof CacheItemInterface
-            && $response instanceof Response
+            && $response instanceof ResponseInterface
             && 200 === $response->getStatusCode()
         ) {
             $item->set(\GuzzleHttp\Psr7\str($response));
@@ -263,7 +262,7 @@ class LabellingService extends AbstractService
                     $response = \GuzzleHttp\Psr7\parse_response($response);
                 } catch (\InvalidArgumentException $e) {
                 }
-                if ($response instanceof Response) {
+                if ($response instanceof ResponseInterface) {
                     $responses[$uuid] = $response;
 
                     continue;
@@ -278,7 +277,7 @@ class LabellingService extends AbstractService
 
         $newResponses = $httpClient->doRequests();
         foreach ($newResponses as $uuid => $newResponse) {
-            if ($newResponse instanceof Response
+            if ($newResponse instanceof ResponseInterface
                 && 200 === $newResponse->getStatusCode()
             ) {
                 $item = $this->retrieveCachedItem($uuid);
@@ -333,7 +332,7 @@ class LabellingService extends AbstractService
     /**
      * Process the GenerateLabel REST Response.
      *
-     * @param Response $response
+     * @param ResponseInterface $response
      *
      * @return GenerateLabelResponse|null
      *
@@ -396,7 +395,7 @@ class LabellingService extends AbstractService
     }
 
     /**
-     * @param Response $response
+     * @param ResponseInterface $response
      *
      * @return GenerateLabelResponse
      *

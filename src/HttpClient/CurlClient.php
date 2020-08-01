@@ -26,8 +26,8 @@
 
 namespace ThirtyBees\PostNL\HttpClient;
 
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use ThirtyBees\PostNL\Exception\ApiConnectionException;
@@ -193,7 +193,7 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
      *
      * @return int|string
      */
-    public function addOrUpdateRequest($id, $request)
+    public function addOrUpdateRequest($id, RequestInterface $request)
     {
         if (is_null($id)) {
             return array_push($this->pendingRequests, $request);
@@ -227,13 +227,13 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
      *
      * Exceptions are captured into the result array
      *
-     * @param Request $request
+     * @param RequestInterface $request
      *
-     * @return Response
+     * @return ResponseInterface
      *
      * @throws \Exception
      */
-    public function doRequest(Request $request)
+    public function doRequest(RequestInterface $request)
     {
         if ($this->logger instanceof LoggerInterface) {
             $this->logger->debug(\GuzzleHttp\Psr7\str($request));
@@ -263,9 +263,9 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
      *
      * Exceptions are captured into the result array
      *
-     * @param Request[] $requests
+     * @param RequestInterface[] $requests
      *
-     * @return Response|Response[]|\Exception|\Exception[]
+     * @return ResponseInterface|ResponseInterface[]|\Exception|\Exception[]
      *
      * @throws ApiException
      */
@@ -275,7 +275,7 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
         $curlHandles = [];
         $mh = curl_multi_init();
         foreach ($this->pendingRequests + $requests as $uuid => $request) {
-            if ($request instanceof Request && $this->logger instanceof LoggerInterface) {
+            if ($request instanceof RequestInterface && $this->logger instanceof LoggerInterface) {
                 $this->logger->debug(\GuzzleHttp\Psr7\str($request));
             }
 
@@ -315,12 +315,12 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
-     * @param resource $curl
-     * @param Request  $request
+     * @param resource         $curl
+     * @param RequestInterface $request
      *
      * @throws ApiException
      */
-    protected function prepareRequest($curl, Request $request)
+    protected function prepareRequest($curl, RequestInterface $request)
     {
         $method = strtolower($request->getMethod());
         $body = (string) $request->getBody();
@@ -360,13 +360,13 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
         $opts[CURLOPT_HTTPHEADER] = $headers;
         $opts[CURLOPT_FAILONERROR] = false;
         if ($this->verify) {
-            $opts[CURLOPT_SSL_VERIFYPEER] = 1;
+            $opts[64] = 1;
             $opts[CURLOPT_SSL_VERIFYHOST] = 2;
             if (is_string($this->verify)) {
                 $opts[CURLOPT_CAINFO] = $this->verify;
             }
         } else {
-            $opts[CURLOPT_SSL_VERIFYPEER] = 0;
+            $opts[64] = 0;
             $opts[CURLOPT_SSL_VERIFYHOST] = 0;
         }
         curl_setopt_array($curl, $opts);

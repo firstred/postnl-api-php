@@ -26,11 +26,10 @@
 
 namespace ThirtyBees\PostNL\Service;
 
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Psr\Cache\CacheItemInterface;
 use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use Sabre\Xml\LibXMLException;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Service as XmlService;
@@ -113,7 +112,7 @@ class DeliveryDateService extends AbstractService
             } catch (\InvalidArgumentException $e) {
             }
         }
-        if (!$response instanceof Response) {
+        if (!$response instanceof ResponseInterface) {
             $response = $this->postnl->getHttpClient()->doRequest($this->buildGetDeliveryDateRequestREST($getDeliveryDate));
             static::validateRESTResponse($response);
         }
@@ -121,7 +120,7 @@ class DeliveryDateService extends AbstractService
         $object = $this->processGetDeliveryDateResponseREST($response);
         if ($object instanceof GetDeliveryDateResponse) {
             if ($item instanceof CacheItemInterface
-                && $response instanceof Response
+                && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
                 $item->set(\GuzzleHttp\Psr7\str($response));
@@ -158,14 +157,14 @@ class DeliveryDateService extends AbstractService
             } catch (\InvalidArgumentException $e) {
             }
         }
-        if (!$response instanceof Response) {
+        if (!$response instanceof ResponseInterface) {
             $response = $this->postnl->getHttpClient()->doRequest($this->buildGetDeliveryDateRequestSOAP($getDeliveryDate));
         }
 
         $object = $this->processGetDeliveryDateResponseSOAP($response);
         if ($object instanceof GetDeliveryDateResponse) {
             if ($item instanceof CacheItemInterface
-                && $response instanceof Response
+                && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
                 $item->set(\GuzzleHttp\Psr7\str($response));
@@ -201,7 +200,7 @@ class DeliveryDateService extends AbstractService
             } catch (\InvalidArgumentException $e) {
             }
         }
-        if (!$response instanceof Response) {
+        if (!$response instanceof ResponseInterface) {
             $response = $this->postnl->getHttpClient()->doRequest($this->buildGetSentDateRequestREST($getSentDate));
             static::validateRESTResponse($response);
         }
@@ -209,7 +208,7 @@ class DeliveryDateService extends AbstractService
         $object = $this->processGetSentDateResponseREST($response);
         if ($object instanceof GetSentDateResponse) {
             if ($item instanceof CacheItemInterface
-                && $response instanceof Response
+                && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
                 $item->set(\GuzzleHttp\Psr7\str($response));
@@ -246,14 +245,14 @@ class DeliveryDateService extends AbstractService
             } catch (\InvalidArgumentException $e) {
             }
         }
-        if (!$response instanceof Response) {
+        if (!$response instanceof ResponseInterface) {
             $response = $this->postnl->getHttpClient()->doRequest($this->buildGetSentDateRequestSOAP($getSentDate));
         }
 
         $object = $this->processGetSentDateResponseSOAP($response);
         if ($object instanceof GetSentDateResponse) {
             if ($item instanceof CacheItemInterface
-                && $response instanceof Response
+                && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
                 $item->set(\GuzzleHttp\Psr7\str($response));
