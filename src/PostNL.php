@@ -79,6 +79,7 @@ use ThirtyBees\PostNL\Service\LocationService;
 use ThirtyBees\PostNL\Service\ShippingService;
 use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
+use function base64_decode;
 
 /**
  * Class PostNL.
@@ -728,7 +729,7 @@ class PostNL implements LoggerAwareInterface
             }
         }
 
-        $labels = $this->getShippingService()->generateShipping(
+        $responseShipments = $this->getShippingService()->generateShipping(
             new GenerateShipping(
                 $shipments,
                 new LabellingMessage($printertype),
@@ -738,7 +739,7 @@ class PostNL implements LoggerAwareInterface
         );
 
         if (!$merge) {
-            return $labels;
+            return $responseShipments;
         }
 
         // Disable header and footer
@@ -746,30 +747,32 @@ class PostNL implements LoggerAwareInterface
         $deferred = [];
         $firstPage = true;
         if (Label::FORMAT_A6 === $format) {
-            foreach ($labels->getResponseShipments() as $label) {
-                $pdfContent = base64_decode($label->getLabels()[0]->getContent());
-                $sizes = Util::getPdfSizeAndOrientation($pdfContent);
-                if ('A6' === $sizes['iso']) {
-                    $pdf->addPage($a6Orientation);
-                    $correction = [0, 0];
-                    if ('L' === $a6Orientation && 'P' === $sizes['orientation']) {
-                        $correction[0] = -84;
-                        $correction[1] = -0.5;
-                        $pdf->rotateCounterClockWise();
-                    } elseif ('P' === $a6Orientation && 'L' === $sizes['orientation']) {
-                        $pdf->rotateCounterClockWise();
+            foreach ($responseShipments->getResponseShipments() as $responseShipment) {
+                foreach ($responseShipment->getLabels() as $label) {
+                    $pdfContent = base64_decode($label->getContent());
+                    $sizes = Util::getPdfSizeAndOrientation($pdfContent);
+                    if ('A6' === $sizes['iso']) {
+                        $pdf->addPage($a6Orientation);
+                        $correction = [0, 0];
+                        if ('L' === $a6Orientation && 'P' === $sizes['orientation']) {
+                            $correction[0] = -84;
+                            $correction[1] = -0.5;
+                            $pdf->rotateCounterClockWise();
+                        } elseif ('P' === $a6Orientation && 'L' === $sizes['orientation']) {
+                            $pdf->rotateCounterClockWise();
+                        }
+                        $pdf->setSourceFile(StreamReader::createByString($pdfContent));
+                        $pdf->useTemplate($pdf->importPage(1), $correction[0], $correction[1]);
+                    } else {
+                        // Assuming A4 here (could be multi-page) - defer to end
+                        $stream = StreamReader::createByString($pdfContent);
+                        $deferred[] = ['stream' => $stream, 'sizes' => $sizes];
                     }
-                    $pdf->setSourceFile(StreamReader::createByString($pdfContent));
-                    $pdf->useTemplate($pdf->importPage(1), $correction[0], $correction[1]);
-                } else {
-                    // Assuming A4 here (could be multi-page) - defer to end
-                    $stream = StreamReader::createByString($pdfContent);
-                    $deferred[] = ['stream' => $stream, 'sizes' => $sizes];
                 }
             }
         } else {
             $a6s = 4; // Amount of A6s available
-            foreach ($labels->getResponseShipments() as $label) {
+            foreach ($responseShipments->getResponseShipments() as $label) {
                 $pdfContent = base64_decode($label->getLabels()[0]->getContent());
                 $sizes = Util::getPdfSizeAndOrientation($pdfContent);
                 if ('A6' === $sizes['iso']) {
@@ -790,7 +793,7 @@ class PostNL implements LoggerAwareInterface
                     $pdf->useTemplate($pdf->importPage(1), static::$a6positions[$a6s][0], static::$a6positions[$a6s][1]);
                     --$a6s;
                     if ($a6s < 1) {
-                        if ($label !== end($labels)) {
+                        if ($label !== end($responseShipments)) {
                             $pdf->addPage('P', [297, 210], 90);
                         }
                         $a6s = 4;
@@ -1077,14 +1080,14 @@ class PostNL implements LoggerAwareInterface
         foreach ($shipments as $uuid => $shipment) {
             $generateLabels[$uuid] = [(new GenerateLabel([$shipment], new LabellingMessage($printertype), $this->customer))->setId($uuid), $confirm];
         }
-        $labels = $this->getLabellingService()->generateLabels($generateLabels, $confirm);
+        $responseShipments = $this->getLabellingService()->generateLabels($generateLabels, $confirm);
 
         if (!$merge) {
-            return $labels;
+            return $responseShipments;
         } else {
-            foreach ($labels as $label) {
-                if (!$label instanceof GenerateLabelResponse) {
-                    return $labels;
+            foreach ($responseShipments as $responseShipment) {
+                if (!$responseShipment instanceof GenerateLabelResponse) {
+                    return $responseShipments;
                 }
             }
         }
@@ -1094,34 +1097,36 @@ class PostNL implements LoggerAwareInterface
         $deferred = [];
         $firstPage = true;
         if (Label::FORMAT_A6 === $format) {
-            foreach ($labels as $label) {
-                $pdfContent = base64_decode($label->getResponseShipments()[0]->getLabels()[0]->getContent());
-                $sizes = Util::getPdfSizeAndOrientation($pdfContent);
-                if ('A6' === $sizes['iso']) {
-                    $pdf->addPage($a6Orientation);
-                    $correction = [0, 0];
-                    if ('L' === $a6Orientation && 'P' === $sizes['orientation']) {
-                        $correction[0] = -84;
-                        $correction[1] = -0.5;
-                        $pdf->rotateCounterClockWise();
-                    } elseif ('P' === $a6Orientation && 'L' === $sizes['orientation']) {
-                        $pdf->rotateCounterClockWise();
+            foreach ($responseShipments as $responseShipment) {
+                foreach ($responseShipment->getResponseShipments()[0]->getLabels() as $label) {
+                    $pdfContent = base64_decode($label->getContent());
+                    $sizes = Util::getPdfSizeAndOrientation($pdfContent);
+                    if ('A6' === $sizes['iso']) {
+                        $pdf->addPage($a6Orientation);
+                        $correction = [0, 0];
+                        if ('L' === $a6Orientation && 'P' === $sizes['orientation']) {
+                            $correction[0] = -84;
+                            $correction[1] = -0.5;
+                            $pdf->rotateCounterClockWise();
+                        } elseif ('P' === $a6Orientation && 'L' === $sizes['orientation']) {
+                            $pdf->rotateCounterClockWise();
+                        }
+                        $pdf->setSourceFile(StreamReader::createByString($pdfContent));
+                        $pdf->useTemplate($pdf->importPage(1), $correction[0], $correction[1]);
+                    } else {
+                        // Assuming A4 here (could be multi-page) - defer to end
+                        $stream = StreamReader::createByString($pdfContent);
+                        $deferred[] = ['stream' => $stream, 'sizes' => $sizes];
                     }
-                    $pdf->setSourceFile(StreamReader::createByString($pdfContent));
-                    $pdf->useTemplate($pdf->importPage(1), $correction[0], $correction[1]);
-                } else {
-                    // Assuming A4 here (could be multi-page) - defer to end
-                    $stream = StreamReader::createByString($pdfContent);
-                    $deferred[] = ['stream' => $stream, 'sizes' => $sizes];
                 }
             }
         } else {
             $a6s = 4; // Amount of A6s available
-            foreach ($labels as $label) {
-                if ($label instanceof AbstractException) {
-                    throw $label;
+            foreach ($responseShipments as $responseShipment) {
+                if ($responseShipment instanceof AbstractException) {
+                    throw $responseShipment;
                 }
-                $pdfContent = base64_decode($label->getResponseShipments()[0]->getLabels()[0]->getContent());
+                $pdfContent = base64_decode($responseShipment->getResponseShipments()[0]->getLabels()[0]->getContent());
                 $sizes = Util::getPdfSizeAndOrientation($pdfContent);
                 if ('A6' === $sizes['iso']) {
                     if ($firstPage) {
@@ -1141,16 +1146,16 @@ class PostNL implements LoggerAwareInterface
                     $pdf->useTemplate($pdf->importPage(1), static::$a6positions[$a6s][0], static::$a6positions[$a6s][1]);
                     --$a6s;
                     if ($a6s < 1) {
-                        if ($label !== end($labels)) {
+                        if ($responseShipment !== end($responseShipments)) {
                             $pdf->addPage('P', [297, 210], 90);
                         }
                         $a6s = 4;
                     }
                 } else {
                     // Assuming A4 here (could be multi-page) - defer to end
-                    if (count($label->getResponseShipments()[0]->getLabels()) > 1) {
+                    if (count($responseShipment->getResponseShipments()[0]->getLabels()) > 1) {
                         $stream = [];
-                        foreach ($label->getResponseShipments()[0]->getLabels() as $labelContent) {
+                        foreach ($responseShipment->getResponseShipments()[0]->getLabels() as $labelContent) {
                             $stream[] = StreamReader::createByString(base64_decode($labelContent->getContent()));
                         }
                         $deferred[] = ['stream' => $stream, 'sizes' => $sizes];
