@@ -510,7 +510,7 @@ class ShippingStatusService extends AbstractService
      */
     public function processCurrentStatusResponseREST($response)
     {
-        $body = json_decode(static::getResponseText($response), true);
+        $body = @json_decode(static::getResponseText($response), true);
         if (isset($body['CurrentStatus'])) {
             /** @var CurrentStatusResponse $object */
             $object = AbstractEntity::jsonDeserialize(['CurrentStatusResponse' => $body]);
@@ -590,7 +590,7 @@ class ShippingStatusService extends AbstractService
     /**
      * Process CurrentStatus Response SOAP.
      *
-     * @param mixed $response
+     * @param ResponseInterface $response
      *
      * @return CurrentStatusResponse
      *
@@ -599,9 +599,9 @@ class ShippingStatusService extends AbstractService
      * @throws LibXMLException
      * @throws ResponseException
      */
-    public function processCurrentStatusResponseSOAP($response)
+    public function processCurrentStatusResponseSOAP(ResponseInterface $response)
     {
-        $xml = simplexml_load_string(static::getResponseText($response));
+        $xml = @simplexml_load_string(static::getResponseText($response));
 
         static::registerNamespaces($xml);
         static::validateSOAPResponse($xml);
@@ -700,7 +700,7 @@ class ShippingStatusService extends AbstractService
      */
     public function processCompleteStatusResponseREST($response)
     {
-        $body = json_decode(static::getResponseText($response), true);
+        $body = @json_decode(static::getResponseText($response), true);
         if (isset($body['CompleteStatus'])) {
             if (isset($body['CompleteStatus']['Shipment']['MainBarcode'])) {
                 $body['CompleteStatus']['Shipments'] = [$body['CompleteStatus']['Shipment']];
@@ -817,7 +817,7 @@ class ShippingStatusService extends AbstractService
     /**
      * Process CompleteStatus Response SOAP.
      *
-     * @param mixed $response
+     * @param ResponseInterface $response
      *
      * @return CompleteStatusResponse
      *
@@ -826,9 +826,9 @@ class ShippingStatusService extends AbstractService
      * @throws ResponseException
      * @throws LibXMLException
      */
-    public function processCompleteStatusResponseSOAP($response)
+    public function processCompleteStatusResponseSOAP(ResponseInterface $response)
     {
-        $xml = simplexml_load_string(static::getResponseText($response));
+        $xml = @simplexml_load_string(static::getResponseText($response));
 
         static::registerNamespaces($xml);
         static::validateSOAPResponse($xml);
@@ -876,7 +876,7 @@ class ShippingStatusService extends AbstractService
      */
     public function processGetSignatureResponseREST($response)
     {
-        $body = json_decode(static::getResponseText($response), true);
+        $body = @json_decode(static::getResponseText($response), true);
         if (!empty($body['Signature'])) {
             /** @var GetSignatureResponseSignature $object */
             $object = AbstractEntity::jsonDeserialize(['GetSignatureResponseSignature' => $body]);
@@ -941,7 +941,7 @@ class ShippingStatusService extends AbstractService
     /**
      * Process GetSignature Response SOAP.
      *
-     * @param mixed $response
+     * @param ResponseInterface $response
      *
      * @return GetSignatureResponseSignature
      *
@@ -950,9 +950,9 @@ class ShippingStatusService extends AbstractService
      * @throws ResponseException
      * @throws LibXMLException
      */
-    public function processGetSignatureResponseSOAP($response)
+    public function processGetSignatureResponseSOAP(ResponseInterface $response)
     {
-        $xml = simplexml_load_string(static::getResponseText($response));
+        $xml = @simplexml_load_string(static::getResponseText($response));
 
         static::registerNamespaces($xml);
         static::validateSOAPResponse($xml);

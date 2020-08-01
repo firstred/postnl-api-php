@@ -232,7 +232,7 @@ class TimeframeService extends AbstractService
      */
     public function processGetTimeframesResponseREST($response)
     {
-        $body = json_decode(static::getResponseText($response), true);
+        $body = @json_decode(static::getResponseText($response), true);
         if (isset($body['Timeframes'])) {
             // Standardize the object here
             if (isset($body['ReasonNotimeframes']['ReasonNoTimeframe'])) {
@@ -322,7 +322,7 @@ class TimeframeService extends AbstractService
     /**
      * Process GetTimeframes Response SOAP.
      *
-     * @param mixed $response
+     * @param ResponseInterface $response
      *
      * @return ResponseTimeframes
      *
@@ -331,9 +331,9 @@ class TimeframeService extends AbstractService
      * @throws \Sabre\Xml\LibXMLException
      * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
-    public function processGetTimeframesResponseSOAP($response)
+    public function processGetTimeframesResponseSOAP(ResponseInterface $response)
     {
-        $xml = simplexml_load_string(static::getResponseText($response));
+        $xml = @simplexml_load_string(static::getResponseText($response));
 
         static::registerNamespaces($xml);
         static::validateSOAPResponse($xml);

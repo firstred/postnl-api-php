@@ -340,7 +340,7 @@ class LabellingService extends AbstractService
      */
     public function processGenerateLabelResponseREST($response)
     {
-        $body = json_decode(static::getResponseText($response), true);
+        $body = @json_decode(static::getResponseText($response), true);
         if (isset($body['ResponseShipments'])) {
             /** @var GenerateLabelResponse $object */
             $object = AbstractEntity::jsonDeserialize(['GenerateLabelResponse' => $body]);
@@ -405,7 +405,7 @@ class LabellingService extends AbstractService
      * @throws ResponseException
      * @throws \Sabre\Xml\LibXMLException
      */
-    public function processGenerateLabelResponseSOAP($response)
+    public function processGenerateLabelResponseSOAP(ResponseInterface $response)
     {
         $xml = @simplexml_load_string(static::getResponseText($response));
         if (false === $xml) {

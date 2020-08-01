@@ -366,7 +366,7 @@ class DeliveryDateService extends AbstractService
      */
     public function processGetDeliveryDateResponseREST($response)
     {
-        $body = json_decode(static::getResponseText($response), true);
+        $body = @json_decode(static::getResponseText($response), true);
         if (isset($body['DeliveryDate'])) {
             /** @var GetDeliveryDateResponse $object */
             $object = AbstractEntity::jsonDeserialize(['GetDeliveryDateResponse' => $body]);
@@ -420,7 +420,7 @@ class DeliveryDateService extends AbstractService
     }
 
     /**
-     * @param mixed $response
+     * @param ResponseInterface $response
      *
      * @return GetDeliveryDateResponse
      *
@@ -429,9 +429,9 @@ class DeliveryDateService extends AbstractService
      * @throws ResponseException
      * @throws LibXMLException
      */
-    public function processGetDeliveryDateResponseSOAP($response)
+    public function processGetDeliveryDateResponseSOAP(ResponseInterface $response)
     {
-        $xml = simplexml_load_string(static::getResponseText($response));
+        $xml = @simplexml_load_string(static::getResponseText($response));
 
         static::registerNamespaces($xml);
         static::validateSOAPResponse($xml);
@@ -502,7 +502,7 @@ class DeliveryDateService extends AbstractService
      */
     public function processGetSentDateResponseREST($response)
     {
-        $body = json_decode(static::getResponseText($response), true);
+        $body = @json_decode(static::getResponseText($response), true);
         if (isset($body['SentDate'])) {
             /** @var GetSentDateResponse $object */
             $object = AbstractEntity::jsonDeserialize(['GetSentDateResponse' => $body]);
@@ -558,7 +558,7 @@ class DeliveryDateService extends AbstractService
     /**
      * Process GetSentDate SOAP Response.
      *
-     * @param mixed $response
+     * @param ResponseInterface $response
      *
      * @return GetSentDateResponse
      *
@@ -567,9 +567,9 @@ class DeliveryDateService extends AbstractService
      * @throws ResponseException
      * @throws LibXMLException
      */
-    public function processGetSentDateResponseSOAP($response)
+    public function processGetSentDateResponseSOAP(ResponseInterface $response)
     {
-        $xml = simplexml_load_string(static::getResponseText($response));
+        $xml = @simplexml_load_string(static::getResponseText($response));
 
         static::registerNamespaces($xml);
         static::validateSOAPResponse($xml);

@@ -433,7 +433,7 @@ class LocationService extends AbstractService
      */
     public function processGetNearestLocationsResponseREST($response)
     {
-        $body = json_decode(static::getResponseText($response), true);
+        $body = @json_decode(static::getResponseText($response), true);
         if (is_array($body)) {
             if (isset($body['GetLocationsResult']['ResponseLocation'])
                 && is_array($body['GetLocationsResult']['ResponseLocation'])
@@ -521,7 +521,7 @@ class LocationService extends AbstractService
     /**
      * Process GetNearestLocations Response SOAP.
      *
-     * @param mixed $response
+     * @param ResponseInterface $response
      *
      * @return GetNearestLocationsResponse
      *
@@ -530,9 +530,9 @@ class LocationService extends AbstractService
      * @throws LibXMLException
      * @throws ResponseException
      */
-    public function processGetNearestLocationsResponseSOAP($response)
+    public function processGetNearestLocationsResponseSOAP(ResponseInterface $response)
     {
-        $xml = simplexml_load_string(static::getResponseText($response));
+        $xml = @simplexml_load_string(static::getResponseText($response));
 
         static::registerNamespaces($xml);
         static::validateSOAPResponse($xml);
@@ -624,7 +624,7 @@ class LocationService extends AbstractService
      */
     public function processGetLocationsInAreaResponseREST($response)
     {
-        $body = json_decode(static::getResponseText($response), true);
+        $body = @json_decode(static::getResponseText($response), true);
         if (is_array($body)) {
             if (isset($body['GetLocationsResult']['ResponseLocation'])
                 && is_array($body['GetLocationsResult']['ResponseLocation'])
@@ -710,7 +710,7 @@ class LocationService extends AbstractService
     }
 
     /**
-     * @param mixed $response
+     * @param ResponseInterface $response
      *
      * @return GetLocationsInAreaResponse
      *
@@ -719,9 +719,9 @@ class LocationService extends AbstractService
      * @throws LibXMLException
      * @throws ResponseException
      */
-    public function processGetLocationsInAreaResponseSOAP($response)
+    public function processGetLocationsInAreaResponseSOAP(ResponseInterface $response)
     {
-        $xml = simplexml_load_string(static::getResponseText($response));
+        $xml = @simplexml_load_string(static::getResponseText($response));
 
         static::registerNamespaces($xml);
         static::validateSOAPResponse($xml);
@@ -792,7 +792,7 @@ class LocationService extends AbstractService
      */
     public function processGetLocationResponseREST($response)
     {
-        $body = json_decode(static::getResponseText($response), true);
+        $body = @json_decode(static::getResponseText($response), true);
         if (is_array($body)) {
             if (isset($body['GetLocationsResult']['ResponseLocation']['Address'])) {
                 $body['GetLocationsResult']['ResponseLocation'] = [$body['GetLocationsResult']['ResponseLocation']];
@@ -876,7 +876,7 @@ class LocationService extends AbstractService
     /**
      * Process GetLocation Response SOAP.
      *
-     * @param mixed $response
+     * @param ResponseInterface $response
      *
      * @return GetLocationsInAreaResponse
      *
@@ -885,9 +885,9 @@ class LocationService extends AbstractService
      * @throws LibXMLException
      * @throws ResponseException
      */
-    public function processGetLocationResponseSOAP($response)
+    public function processGetLocationResponseSOAP(ResponseInterface $response)
     {
-        $xml = simplexml_load_string(static::getResponseText($response));
+        $xml = @simplexml_load_string(static::getResponseText($response));
 
         static::registerNamespaces($xml);
         static::validateSOAPResponse($xml);

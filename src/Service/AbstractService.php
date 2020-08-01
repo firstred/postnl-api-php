@@ -174,7 +174,7 @@ abstract class AbstractService
      */
     public static function validateRESTResponse($response)
     {
-        $body = json_decode(static::getResponseText($response), true);
+        $body = @json_decode(static::getResponseText($response), true);
 
         if (!empty($body['fault']['faultstring']) && 'Invalid ApiKey' === $body['fault']['faultstring']) {
             throw new ApiException('Invalid Api Key');

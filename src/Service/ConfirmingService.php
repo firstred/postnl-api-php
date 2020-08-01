@@ -28,6 +28,7 @@ namespace ThirtyBees\PostNL\Service;
 
 use Http\Discovery\Psr17FactoryDiscovery;
 use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use Sabre\Xml\LibXMLException;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Service as XmlService;
@@ -232,7 +233,7 @@ class ConfirmingService extends AbstractService
     public function processConfirmResponseREST($response)
     {
         static::validateRESTResponse($response);
-        $body = json_decode(static::getResponseText($response), true);
+        $body = @json_decode(static::getResponseText($response), true);
         if (isset($body['ConfirmingResponseShipments'])) {
             /** @var ConfirmingResponseShipment $object */
             $object = AbstractEntity::jsonDeserialize(['ConfirmingResponseShipment' => $body['ConfirmingResponseShipments']['ConfirmingResponseShipment']]);
@@ -287,7 +288,7 @@ class ConfirmingService extends AbstractService
     /**
      * Process Confirm SOAP response.
      *
-     * @param mixed $response
+     * @param ResponseInterface $response
      *
      * @return ConfirmingResponseShipment
      *
@@ -296,9 +297,10 @@ class ConfirmingService extends AbstractService
      * @throws CifDownException
      * @throws CifException
      */
-    public function processConfirmResponseSOAP($response)
+    public function processConfirmResponseSOAP(ResponseInterface $response)
     {
-        $xml = simplexml_load_string(static::getResponseText($response));
+        $xml = @simplexml_load_string(static::getResponseText($response));
+
         static::registerNamespaces($xml);
         static::validateSOAPResponse($xml);
 

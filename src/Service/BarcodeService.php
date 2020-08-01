@@ -220,7 +220,7 @@ class BarcodeService extends AbstractService
     /**
      * Process GenerateBarcode REST response.
      *
-     * @param mixed $response
+     * @param ResponseInterface $response
      *
      * @return array
      *
@@ -229,11 +229,11 @@ class BarcodeService extends AbstractService
      * @throws CifException
      * @throws ResponseException
      */
-    public function processGenerateBarcodeResponseREST($response)
+    public function processGenerateBarcodeResponseREST(ResponseInterface $response)
     {
         static::validateRESTResponse($response);
 
-        $json = json_decode(static::getResponseText($response), true);
+        $json = @json_decode(static::getResponseText($response), true);
 
         if (!isset($json['Barcode'])) {
             throw new ResponseException('Invalid API Response', null, null, $response);
@@ -290,7 +290,7 @@ class BarcodeService extends AbstractService
     /**
      * Process GenerateBarcode SOAP response.
      *
-     * @param mixed $response
+     * @param ResponseInterface $response
      *
      * @return string
      *
@@ -298,9 +298,9 @@ class BarcodeService extends AbstractService
      * @throws CifException
      * @throws ResponseException
      */
-    public function processGenerateBarcodeResponseSOAP($response)
+    public function processGenerateBarcodeResponseSOAP(ResponseInterface $response)
     {
-        $xml = simplexml_load_string(static::getResponseText($response));
+        $xml = @simplexml_load_string(static::getResponseText($response));
 
         static::registerNamespaces($xml);
         static::validateSOAPResponse($xml);
