@@ -26,7 +26,9 @@
 
 namespace ThirtyBees\PostNL\Service;
 
-use GuzzleHttp\Psr7\Request;
+use Http\Discovery\Psr17FactoryDiscovery;
+use Psr\Http\Message\RequestInterface;
+use Sabre\Xml\LibXMLException;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Service as XmlService;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
@@ -34,27 +36,28 @@ use ThirtyBees\PostNL\Entity\Request\Confirming;
 use ThirtyBees\PostNL\Entity\Response\ConfirmingResponseShipment;
 use ThirtyBees\PostNL\Entity\SOAP\Security;
 use ThirtyBees\PostNL\Exception\ApiException;
+use ThirtyBees\PostNL\Exception\CifDownException;
+use ThirtyBees\PostNL\Exception\CifException;
 use ThirtyBees\PostNL\Exception\ResponseException;
-use ThirtyBees\PostNL\PostNL;
 
 /**
  * Class ConfirmingService.
  *
  * @method ConfirmingResponseShipment   confirmShipment(Confirming $shipment)
- * @method Request                      buildConfirmShipmentRequest(Confirming $shipment)
+ * @method RequestInterface             buildConfirmShipmentRequest(Confirming $shipment)
  * @method ConfirmingResponseShipment   processConfirmShipmentResponse(mixed $response)
  * @method ConfirmingResponseShipment[] confirmShipments(Confirming[] $shipments)
  */
 class ConfirmingService extends AbstractService
 {
     // API Version
-    const VERSION = '2.1';
+    const VERSION = '2.0';
 
     // Endpoints
-    const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v1_10/confirm';
-    const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v1_10/confirm';
+    const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v2/confirm';
+    const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2/confirm';
     const LEGACY_SANDBOX_ENDPOINT = 'https://testservice.postnl.com/CIF_SB/ConfirmingWebService/1_10/ConfirmingWebService.svc';
-    const LEGACY_LIVE_ENDPOINT = 'https://service.postnl.com/CIF/ConfirmingWebService/1_9/ConfirmingWebService.svc';
+    const LEGACY_LIVE_ENDPOINT = 'https://service.postnl.com/CIF/ConfirmingWebService/1_10/ConfirmingWebService.svc';
 
     // SOAP API
     const SOAP_ACTION = 'http://postnl.nl/cif/services/ConfirmingWebService/IConfirmingWebService/Confirming';
@@ -85,9 +88,9 @@ class ConfirmingService extends AbstractService
      * @return ConfirmingResponseShipment
      *
      * @throws ApiException
-     * @throws \ThirtyBees\PostNL\Exception\CifDownException
-     * @throws \ThirtyBees\PostNL\Exception\CifException
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws CifDownException
+     * @throws CifException
+     * @throws ResponseException
      */
     public function confirmShipmentREST(Confirming $confirming)
     {
@@ -147,9 +150,9 @@ class ConfirmingService extends AbstractService
      *
      * @return ConfirmingResponseShipment
      *
-     * @throws \Sabre\Xml\LibXMLException
-     * @throws \ThirtyBees\PostNL\Exception\CifDownException
-     * @throws \ThirtyBees\PostNL\Exception\CifException
+     * @throws LibXMLException
+     * @throws CifDownException
+     * @throws CifException
      * @throws ResponseException
      */
     public function confirmShipmentSOAP(Confirming $confirming)
@@ -195,7 +198,7 @@ class ConfirmingService extends AbstractService
     /**
      * @param Confirming $confirming
      *
-     * @return Request
+     * @return RequestInterface
      */
     public function buildConfirmRequestREST(Confirming $confirming)
     {
@@ -203,18 +206,15 @@ class ConfirmingService extends AbstractService
 
         $this->setService($confirming);
 
-        return new Request(
+        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
             'POST',
-            $this->postnl->getSandbox()
-                ? static::SANDBOX_ENDPOINT
-                : static::LIVE_ENDPOINT,
-            [
-                'apikey'       => $apiKey,
-                'Accept'       => 'application/json',
-                'Content-Type' => 'application/json;charset=UTF-8',
-            ],
-            json_encode($confirming)
-        );
+            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT)
+        )
+            ->withHeader('apikey', $apiKey)
+            ->withHeader('Accept', 'application/json')
+            ->withHeader('Content-Type', 'application/json;charset=UTF-8')
+            ->withBody(Psr17FactoryDiscovery::findStreamFactory()->createStream(json_encode($confirming)))
+        ;
     }
 
     /**
@@ -226,8 +226,8 @@ class ConfirmingService extends AbstractService
      *
      * @throws ApiException
      * @throws ResponseException
-     * @throws \ThirtyBees\PostNL\Exception\CifDownException
-     * @throws \ThirtyBees\PostNL\Exception\CifException
+     * @throws CifDownException
+     * @throws CifException
      */
     public function processConfirmResponseREST($response)
     {
@@ -247,7 +247,7 @@ class ConfirmingService extends AbstractService
     /**
      * @param Confirming $confirming
      *
-     * @return Request
+     * @return RequestInterface
      */
     public function buildConfirmRequestSOAP(Confirming $confirming)
     {
@@ -273,20 +273,15 @@ class ConfirmingService extends AbstractService
             ]
         );
 
-        $endpoint = $this->postnl->getSandbox()
-            ? static::SANDBOX_ENDPOINT
-            : static::LIVE_ENDPOINT;
-
-        return new Request(
+        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
             'POST',
-            $endpoint,
-            [
-                'SOAPAction'   => "\"$soapAction\"",
-                'Accept'       => 'text/xml',
-                'Content-Type' => 'text/xml;charset=UTF-8',
-            ],
-            $body
-        );
+            $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT
+        )
+            ->withHeader('SOAPAction', "\"$soapAction\"")
+            ->withHeader('Accept', 'text/xml')
+            ->withHeader('Content-Type', 'text/xml;charset=UTF-8')
+            ->withBody(Psr17FactoryDiscovery::findStreamFactory()->createStream($body))
+        ;
     }
 
     /**
@@ -297,9 +292,9 @@ class ConfirmingService extends AbstractService
      * @return ConfirmingResponseShipment
      *
      * @throws ResponseException
-     * @throws \Sabre\Xml\LibXMLException
-     * @throws \ThirtyBees\PostNL\Exception\CifDownException
-     * @throws \ThirtyBees\PostNL\Exception\CifException
+     * @throws LibXMLException
+     * @throws CifDownException
+     * @throws CifException
      */
     public function processConfirmResponseSOAP($response)
     {

@@ -28,8 +28,10 @@ namespace ThirtyBees\PostNL\Service;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use Http\Discovery\Psr17FactoryDiscovery;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
+use Psr\Http\Message\RequestInterface;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Service as XmlService;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
@@ -40,26 +42,29 @@ use ThirtyBees\PostNL\Exception\ApiException;
 use ThirtyBees\PostNL\Exception\CifDownException;
 use ThirtyBees\PostNL\Exception\CifException;
 use ThirtyBees\PostNL\Exception\ResponseException;
-use ThirtyBees\PostNL\PostNL;
+use function http_build_query;
+use function json_encode;
+use const JSON_PRETTY_PRINT;
+use const JSON_UNESCAPED_SLASHES;
 
 /**
  * Class LabellingService.
  *
  * @method GenerateLabelResponse   generateLabel(GenerateLabel $generateLabel, bool $confirm)
- * @method Request                 buildGenerateLabelRequest(GenerateLabel $generateLabel, bool $confirm)
+ * @method RequestInterface        buildGenerateLabelRequest(GenerateLabel $generateLabel, bool $confirm)
  * @method GenerateLabelResponse   processGenerateLabelResponse(mixed $response)
  * @method GenerateLabelResponse[] generateLabels(GenerateLabel[] $generateLabel, bool $confirm)
  */
 class LabellingService extends AbstractService
 {
     // API Version
-    const VERSION = '2.1';
+    const VERSION = '2.2';
 
     // Endpoints
-    const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v2_1/label';
-    const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2_1/label';
-    const LEGACY_SANDBOX_ENDPOINT = 'https://testservice.postnl.com/CIF_SB/LabellingWebService/2_1/LabellingWebService.svc';
-    const LEGACY_LIVE_ENDPOINT = 'https://service.postnl.com/CIF/LabellingWebService/2_1/LabellingWebService.svc';
+    const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v2_2/label';
+    const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2_2/label';
+    const LEGACY_SANDBOX_ENDPOINT = 'https://testservice.postnl.com/CIF_SB/LabellingWebService/2_2/LabellingWebService.svc';
+    const LEGACY_LIVE_ENDPOINT = 'https://service.postnl.com/CIF/LabellingWebService/2_2/LabellingWebService.svc';
 
     // SOAP API
     const SOAP_ACTION = 'http://postnl.nl/cif/services/LabellingWebService/ILabellingWebService/GenerateLabel';
@@ -307,25 +312,22 @@ class LabellingService extends AbstractService
      * @param GenerateLabel $generateLabel
      * @param               $confirm
      *
-     * @return Request
+     * @return RequestInterface
      */
     public function buildGenerateLabelRequestREST(GenerateLabel $generateLabel, $confirm = true)
     {
         $apiKey = $this->postnl->getRestApiKey();
         $this->setService($generateLabel);
 
-        return new Request(
+        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
             'POST',
-            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).'?'.\GuzzleHttp\Psr7\build_query([
+            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).'?'.http_build_query([
                 'confirm' => $confirm,
-            ]),
-            [
-                'apikey'       => $apiKey,
-                'Accept'       => 'application/json',
-                'Content-Type' => 'application/json;charset=UTF-8',
-            ],
-            json_encode($generateLabel, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES)
-        );
+            ]))
+            ->withHeader('apikey', $apiKey)
+            ->withHeader('Accept', 'application/json')
+            ->withHeader('Content-Type', 'application/json;charset=UTF-8')
+            ->withBody(Psr17FactoryDiscovery::findStreamFactory()->createStream(json_encode($generateLabel, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES)));
     }
 
     /**
@@ -357,7 +359,7 @@ class LabellingService extends AbstractService
      * @param GenerateLabel $generateLabel
      * @param               $confirm
      *
-     * @return Request
+     * @return RequestInterface
      */
     public function buildGenerateLabelRequestSOAP(GenerateLabel $generateLabel, $confirm = true)
     {
@@ -377,26 +379,20 @@ class LabellingService extends AbstractService
                 '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
                     ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
                 ],
-                '{'.static::ENVELOPE_NAMESPACE.'}Body' => [
+                '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
                     '{'.static::SERVICES_NAMESPACE.'}GenerateLabel' => $generateLabel,
                 ],
             ]
         );
 
-        $endpoint = $this->postnl->getSandbox()
-            ? static::SANDBOX_ENDPOINT
-            : static::LIVE_ENDPOINT;
-
-        return new Request(
+        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
             'POST',
-            $endpoint,
-            [
-                'SOAPAction'   => "\"$soapAction\"",
-                'Accept'       => 'text/xml',
-                'Content-Type' => 'text/xml;charset=UTF-8',
-            ],
-            $request
-        );
+            $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT
+        )
+            ->withHeader('SOAPAction', "\"$soapAction\"")
+            ->withHeader('Accept', 'text/xml')
+            ->withHeader('Content-Type', 'text/xml;charset=UTF-8')
+            ->withBody(Psr17FactoryDiscovery::findStreamFactory()->createStream($request));
     }
 
     /**

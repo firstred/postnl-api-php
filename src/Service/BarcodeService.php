@@ -28,6 +28,8 @@ namespace ThirtyBees\PostNL\Service;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use Http\Discovery\Psr17FactoryDiscovery;
+use Psr\Http\Message\RequestInterface;
 use Sabre\Xml\Service as XmlService;
 use ThirtyBees\PostNL\Entity\Request\GenerateBarcode;
 use ThirtyBees\PostNL\Entity\SOAP\Security;
@@ -40,10 +42,10 @@ use ThirtyBees\PostNL\PostNL;
 /**
  * Class BarcodeService.
  *
- * @method string   generateBarcode(GenerateBarcode $generateBarcode)
- * @method Request  buildGenerateBarcodeRequest(GenerateBarcode $generateBarcode)
- * @method string   processGenerateBarcodeResponse(mixed $response)
- * @method string[] generateBarcodes(GenerateBarcode[] $generateBarcode)
+ * @method string           generateBarcode(GenerateBarcode $generateBarcode)
+ * @method RequestInterface buildGenerateBarcodeRequest(GenerateBarcode $generateBarcode)
+ * @method string           processGenerateBarcodeResponse(mixed $response)
+ * @method string[]         generateBarcodes(GenerateBarcode[] $generateBarcode)
  */
 class BarcodeService extends AbstractService
 {
@@ -194,29 +196,26 @@ class BarcodeService extends AbstractService
      *
      * @param GenerateBarcode $generateBarcode
      *
-     * @return Request
+     * @return RequestInterface
      */
     public function buildGenerateBarcodeRequestREST(GenerateBarcode $generateBarcode)
     {
         $apiKey = $this->postnl->getRestApiKey();
         $this->setService($generateBarcode);
 
-        return new Request(
+        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
             'GET',
-            $this->postnl->getSandbox()
-                ? static::SANDBOX_ENDPOINT
-                : static::LIVE_ENDPOINT
-                .'?'.\GuzzleHttp\Psr7\build_query([
-                     'CustomerCode'   => $generateBarcode->getCustomer()->getCustomerCode(),
-                     'CustomerNumber' => $generateBarcode->getCustomer()->getCustomerNumber(),
-                     'Type'           => $generateBarcode->getBarcode()->getType(),
-                     'Serie'          => $generateBarcode->getBarcode()->getSerie(),
-            ]),
-            [
-                'Accept' => 'application/json',
-                'apikey' => $apiKey,
-            ]
-        );
+            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT)
+                .'?'.http_build_query([
+                    'CustomerCode'   => $generateBarcode->getCustomer()->getCustomerCode(),
+                    'CustomerNumber' => $generateBarcode->getCustomer()->getCustomerNumber(),
+                    'Type'           => $generateBarcode->getBarcode()->getType(),
+                    'Serie'          => $generateBarcode->getBarcode()->getSerie(),
+                ])
+        )
+            ->withHeader('Accept', 'application/json')
+            ->withHeader('apikey', $apiKey)
+        ;
     }
 
     /**
@@ -249,7 +248,7 @@ class BarcodeService extends AbstractService
      *
      * @param GenerateBarcode $generateBarcode
      *
-     * @return Request
+     * @return RequestInterface
      */
     public function buildGenerateBarcodeRequestSOAP(GenerateBarcode $generateBarcode)
     {
@@ -276,18 +275,17 @@ class BarcodeService extends AbstractService
             ]
         );
 
-        return new Request(
+        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
             'POST',
             $this->postnl->getSandbox()
                 ? static::SANDBOX_ENDPOINT
-                : static::LIVE_ENDPOINT,
-            [
-                'SOAPAction'   => "\"$soapAction\"",
-                'Accept'       => 'text/xml',
-                'Content-Type' => 'text/xml;charset=UTF-8',
-            ],
-            $request
-        );
+                : static::LIVE_ENDPOINT
+        )
+            ->withHeader('SOAPAction', "\"$soapAction\"")
+            ->withHeader('Accept', 'text/xml')
+            ->withHeader('Content-Type', 'text/xml;charset=UTF-8')
+            ->withBody(Psr17FactoryDiscovery::findStreamFactory()->createStream($request))
+        ;
     }
 
     /**

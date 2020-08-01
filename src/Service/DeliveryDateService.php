@@ -28,7 +28,10 @@ namespace ThirtyBees\PostNL\Service;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use Http\Discovery\Psr17FactoryDiscovery;
 use Psr\Cache\CacheItemInterface;
+use Psr\Http\Message\RequestInterface;
+use Sabre\Xml\LibXMLException;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Service as XmlService;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
@@ -42,16 +45,15 @@ use ThirtyBees\PostNL\Exception\ApiException;
 use ThirtyBees\PostNL\Exception\CifDownException;
 use ThirtyBees\PostNL\Exception\CifException;
 use ThirtyBees\PostNL\Exception\ResponseException;
-use ThirtyBees\PostNL\PostNL;
 
 /**
  * Class DeliveryDateService.
  *
  * @method GetDeliveryDateResponse getDeliveryDate(GetDeliveryDate $getDeliveryDate)
- * @method Request                 buildGetDeliveryDateRequest(GetDeliveryDate $getDeliveryDate)
+ * @method RequestInterface        buildGetDeliveryDateRequest(GetDeliveryDate $getDeliveryDate)
  * @method GetDeliveryDateResponse processGetDeliveryDateResponse(mixed $response)
  * @method GetSentDateResponse     getSentDate(GetSentDateRequest $getSentDate)
- * @method Request                 buildGetSentDateRequest(GetSentDateRequest $getSentDate)
+ * @method RequestInterface        buildGetSentDateRequest(GetSentDateRequest $getSentDate)
  * @method GetSentDateResponse     processGetSentDateResponse(mixed $response)
  */
 class DeliveryDateService extends AbstractService
@@ -141,7 +143,7 @@ class DeliveryDateService extends AbstractService
      *
      * @throws CifDownException
      * @throws CifException
-     * @throws \Sabre\Xml\LibXMLException
+     * @throws LibXMLException
      * @throws ResponseException
      * @throws ApiException
      */
@@ -230,7 +232,7 @@ class DeliveryDateService extends AbstractService
      * @throws CifDownException
      * @throws CifException
      * @throws \Exception
-     * @throws \Sabre\Xml\LibXMLException
+     * @throws LibXMLException
      * @throws ResponseException
      */
     public function getSentDateSOAP(GetSentDateRequest $getSentDate)
@@ -269,7 +271,7 @@ class DeliveryDateService extends AbstractService
      *
      * @param GetDeliveryDate $getDeliveryDate
      *
-     * @return Request
+     * @return RequestInterface
      */
     public function buildGetDeliveryDateRequestREST(GetDeliveryDate $getDeliveryDate)
     {
@@ -344,17 +346,14 @@ class DeliveryDateService extends AbstractService
             }
         }
 
-        $endpoint = '/delivery?'.\GuzzleHttp\Psr7\build_query($query);
+        $endpoint = '/delivery?'.http_build_query($query);
 
-        return new Request(
+        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
             'GET',
-            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint,
-            [
-                'apikey'       => $apiKey,
-                'Accept'       => 'application/json',
-                'Content-Type' => 'application/json;charset=UTF-8',
-            ]
-        );
+            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint
+        )
+            ->withHeader('apikey', $apiKey)
+            ->withHeader('Accept', 'application/json');
     }
 
     /**
@@ -385,7 +384,7 @@ class DeliveryDateService extends AbstractService
      *
      * @param GetDeliveryDate $getDeliveryDate
      *
-     * @return Request
+     * @return RequestInterface
      */
     public function buildGetDeliveryDateRequestSOAP(GetDeliveryDate $getDeliveryDate)
     {
@@ -405,26 +404,20 @@ class DeliveryDateService extends AbstractService
                 '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
                     ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
                 ],
-                '{'.static::ENVELOPE_NAMESPACE.'}Body' => [
+                '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
                     '{'.static::SERVICES_NAMESPACE.'}GetDeliveryDate' => $getDeliveryDate,
                 ],
             ]
         );
 
-        $endpoint = $this->postnl->getSandbox()
-            ? static::SANDBOX_ENDPOINT
-            : static::LIVE_ENDPOINT;
-
-        return new Request(
+        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
             'POST',
-            $endpoint,
-            [
-                'SOAPAction'   => "\"$soapAction\"",
-                'Accept'       => 'text/xml',
-                'Content-Type' => 'text/xml;charset=UTF-8',
-            ],
-            $request
-        );
+            $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT
+        )
+            ->withHeader('SOAPAction', "\"$soapAction\"")
+            ->withHeader('Accept', 'text/xml')
+            ->withHeader('Content-Type', 'text/xml;charset=UTF-8')
+            ->withBody(Psr17FactoryDiscovery::findStreamFactory()->createStream($request));
     }
 
     /**
@@ -435,7 +428,7 @@ class DeliveryDateService extends AbstractService
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
-     * @throws \Sabre\Xml\LibXMLException
+     * @throws LibXMLException
      */
     public function processGetDeliveryDateResponseSOAP($response)
     {
@@ -461,7 +454,7 @@ class DeliveryDateService extends AbstractService
      *
      * @param GetSentDateRequest $getSentDate
      *
-     * @return Request
+     * @return RequestInterface
      */
     public function buildGetSentDateRequestREST(GetSentDateRequest $getSentDate)
     {
@@ -489,17 +482,14 @@ class DeliveryDateService extends AbstractService
             $query['HouseNrExt'] = $houseNrExt;
         }
 
-        $endpoint = '/shipping?'.\GuzzleHttp\Psr7\build_query($query);
+        $endpoint = '/shipping?'.http_build_query($query);
 
-        return new Request(
-            'POST',
-            $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT.$endpoint,
-            [
-                'apikey'       => $apiKey,
-                'Accept'       => 'application/json',
-                'Content-Type' => 'application/json;charset=UTF-8',
-            ]
-        );
+        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
+            'GET',
+            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint
+        )
+            ->withHeader('apikey', $apiKey)
+            ->withHeader('Accept', 'application/json');
     }
 
     /**
@@ -530,7 +520,7 @@ class DeliveryDateService extends AbstractService
      *
      * @param GetSentDateRequest $getSentDate
      *
-     * @return Request
+     * @return RequestInterface
      */
     public function buildGetSentDateRequestSOAP(GetSentDateRequest $getSentDate)
     {
@@ -550,26 +540,20 @@ class DeliveryDateService extends AbstractService
                 '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
                     ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
                 ],
-                '{'.static::ENVELOPE_NAMESPACE.'}Body' => [
+                '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
                     '{'.static::SERVICES_NAMESPACE.'}GetSentDateRequest' => $getSentDate,
                 ],
             ]
         );
 
-        $endpoint = $this->postnl->getSandbox()
-            ? static::SANDBOX_ENDPOINT
-            : static::LIVE_ENDPOINT;
-
-        return new Request(
+        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
             'POST',
-            $endpoint,
-            [
-                'SOAPAction'   => "\"$soapAction\"",
-                'Accept'       => 'text/xml',
-                'Content-Type' => 'text/xml;charset=UTF-8',
-            ],
-            $request
-        );
+            $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT
+        )
+            ->withHeader('SOAPAction', "\"$soapAction\"")
+            ->withHeader('Accept', 'text/xml')
+            ->withHeader('Content-Type', 'text/xml;charset=UTF-8')
+            ->withBody(Psr17FactoryDiscovery::findStreamFactory()->createStream($request));
     }
 
     /**
@@ -582,7 +566,7 @@ class DeliveryDateService extends AbstractService
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
-     * @throws \Sabre\Xml\LibXMLException
+     * @throws LibXMLException
      */
     public function processGetSentDateResponseSOAP($response)
     {

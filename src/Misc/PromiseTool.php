@@ -28,12 +28,12 @@ namespace ThirtyBees\PostNL\Misc;
 
 use ArrayIterator;
 use Exception;
-use ThirtyBees\PostNL\Exception\Promise\AggregateException;
-use ThirtyBees\PostNL\Exception\Promise\RejectionException;
 use Http\Promise\FulfilledPromise;
 use Http\Promise\Promise;
 use Http\Promise\RejectedPromise;
 use Iterator;
+use ThirtyBees\PostNL\Exception\Promise\AggregateException;
+use ThirtyBees\PostNL\Exception\Promise\RejectionException;
 use Throwable;
 
 /**

@@ -69,6 +69,8 @@ use ThirtyBees\PostNL\Exception\NotSupportedException;
 use ThirtyBees\PostNL\HttpClient\ClientInterface;
 use ThirtyBees\PostNL\HttpClient\CurlClient;
 use ThirtyBees\PostNL\HttpClient\GuzzleClient;
+use ThirtyBees\PostNL\Misc\RFPdi;
+use ThirtyBees\PostNL\Misc\Util;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
@@ -77,8 +79,6 @@ use ThirtyBees\PostNL\Service\LocationService;
 use ThirtyBees\PostNL\Service\ShippingService;
 use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
-use ThirtyBees\PostNL\Misc\RFPdi;
-use ThirtyBees\PostNL\Misc\Util;
 
 /**
  * Class PostNL.

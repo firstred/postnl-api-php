@@ -26,8 +26,9 @@
 
 namespace ThirtyBees\PostNL\Exception;
 
+use Exception;
 use GuzzleHttp\Psr7\Response;
-use Throwable;
+use Psr\Http\Message\ResponseInterface;
 
 class ResponseException extends AbstractException
 {
@@ -39,10 +40,10 @@ class ResponseException extends AbstractException
      *
      * @param string         $message
      * @param int            $code
-     * @param Throwable|null $previous
+     * @param Exception|null $previous
      * @param Response|null  $response
      */
-    public function __construct($message = '', $code = 0, $previous = null, Response $response = null)
+    public function __construct($message = '', $code = 0, $previous = null, ResponseInterface $response = null)
     {
         parent::__construct($message, $code, $previous);
 

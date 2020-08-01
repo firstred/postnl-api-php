@@ -28,6 +28,8 @@ namespace ThirtyBees\PostNL\Service;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use Http\Discovery\Psr17FactoryDiscovery;
+use Psr\Http\Message\RequestInterface;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
 use ThirtyBees\PostNL\Entity\Request\GenerateShipping;
 use ThirtyBees\PostNL\Entity\Response\GenerateShippingResponse;
@@ -35,12 +37,16 @@ use ThirtyBees\PostNL\Exception\ApiException;
 use ThirtyBees\PostNL\Exception\CifDownException;
 use ThirtyBees\PostNL\Exception\CifException;
 use ThirtyBees\PostNL\Exception\ResponseException;
+use function http_build_query;
+use function json_encode;
+use const JSON_PRETTY_PRINT;
+use const JSON_UNESCAPED_SLASHES;
 
 /**
  * Class ShippingService.
  *
  * @method GenerateShippingResponse generateShipping(GenerateShipping $generateShipping, bool $confirm)
- * @method Request                  buildGenerateShippingRequest(GenerateShipping $generateShipping, bool $confirm)
+ * @method RequestInterface                  buildGenerateShippingRequest(GenerateShipping $generateShipping, bool $confirm)
  * @method GenerateShippingResponse processGenerateShippingResponse(mixed $response)
  */
 class ShippingService extends AbstractService
@@ -105,23 +111,27 @@ class ShippingService extends AbstractService
         throw new ApiException('Unable to ship order');
     }
 
-    public function buildGenerateShippingRequestREST(GenerateShipping $generateShipping, $confirm = true): Request
+    /**
+     * @param GenerateShipping $generateShipping
+     * @param bool             $confirm
+     *
+     * @return RequestInterface
+     */
+    public function buildGenerateShippingRequestREST(GenerateShipping $generateShipping, $confirm = true)
     {
         $apiKey = $this->postnl->getRestApiKey();
         $this->setService($generateShipping);
 
-        return new Request(
+        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
             'POST',
-            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).'?'.\GuzzleHttp\Psr7\build_query([
+            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).'?'.http_build_query([
                 'confirm' => $confirm,
-            ]),
-            [
-                'apikey'       => $apiKey,
-                'Accept'       => 'application/json',
-                'Content-type' => 'application/json;charset=UTF-8',
-            ],
-            json_encode($generateShipping, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES)
-        );
+            ])
+        )
+            ->withHeader('apikey', $apiKey)
+            ->withHeader('Accept', 'application/json')
+            ->withHeader('Accept', 'application/json;charset=UTF-8')
+            ->withBody(Psr17FactoryDiscovery::findStreamFactory()->createStream(json_encode($generateShipping, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES)));
     }
 
     /**

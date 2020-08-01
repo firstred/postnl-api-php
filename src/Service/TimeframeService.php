@@ -28,7 +28,9 @@ namespace ThirtyBees\PostNL\Service;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use Http\Discovery\Psr17FactoryDiscovery;
 use Psr\Cache\CacheItemInterface;
+use Psr\Http\Message\RequestInterface;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Service as XmlService;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
@@ -38,13 +40,13 @@ use ThirtyBees\PostNL\Entity\SOAP\Security;
 use ThirtyBees\PostNL\Exception\ApiException;
 use ThirtyBees\PostNL\Exception\CifDownException;
 use ThirtyBees\PostNL\Exception\CifException;
-use ThirtyBees\PostNL\PostNL;
+use function GuzzleHttp\Psr7\str;
 
 /**
  * Class TimeframeService.
  *
  * @method ResponseTimeframes getTimeframes(GetTimeframes $getTimeframes)
- * @method Request            buildGetTimeframesRequest(GetTimeframes $getTimeframes)
+ * @method RequestInterface   buildGetTimeframesRequest(GetTimeframes $getTimeframes)
  * @method ResponseTimeframes processGetTimeframesResponse(mixed $response)
  */
 class TimeframeService extends AbstractService
@@ -157,7 +159,7 @@ class TimeframeService extends AbstractService
                 && $response instanceof Response
                 && 200 === $response->getStatusCode()
             ) {
-                $item->set(\GuzzleHttp\Psr7\str($response));
+                $item->set(str($response));
                 $this->cacheItem($item);
             }
 
@@ -172,7 +174,7 @@ class TimeframeService extends AbstractService
      *
      * @param GetTimeframes $getTimeframes
      *
-     * @return Request
+     * @return RequestInterface
      */
     public function buildGetTimeframesRequestREST(GetTimeframes $getTimeframes)
     {
@@ -210,17 +212,14 @@ class TimeframeService extends AbstractService
             $query['Options'] .= ",$option";
         }
         $query['Options'] = ltrim($query['Options'], ',');
-        $endpoint = '?'.\GuzzleHttp\Psr7\build_query($query);
+        $endpoint = '?'.http_build_query($query);
 
-        return new Request(
+        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
             'GET',
-            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint,
-            [
-                'apikey'       => $apiKey,
-                'Accept'       => 'application/json',
-                'Content-Type' => 'application/json;charset=UTF-8',
-            ]
-        );
+            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint
+        )
+            ->withHeader('apikey', $apiKey)
+            ->withHeader('Accept', 'application/json');
     }
 
     /**
@@ -285,7 +284,7 @@ class TimeframeService extends AbstractService
      *
      * @param GetTimeframes $getTimeframes
      *
-     * @return Request
+     * @return RequestInterface
      */
     public function buildGetTimeframesRequestSOAP(GetTimeframes $getTimeframes)
     {
@@ -305,15 +304,13 @@ class TimeframeService extends AbstractService
                 '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
                     ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
                 ],
-                '{'.static::ENVELOPE_NAMESPACE.'}Body' => [
+                '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
                     '{'.static::SERVICES_NAMESPACE.'}GetTimeframes' => $getTimeframes,
                 ],
             ]
         );
 
-        $endpoint = $this->postnl->getSandbox()
-            ? static::SANDBOX_ENDPOINT
-            : static::LIVE_ENDPOINT;
+        $endpoint = $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT;
 
         return new Request(
             'POST',

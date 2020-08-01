@@ -28,7 +28,9 @@ namespace ThirtyBees\PostNL\Service;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use Http\Discovery\Psr17FactoryDiscovery;
 use Psr\Cache\CacheItemInterface;
+use Psr\Http\Message\RequestInterface;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Service as XmlService;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
@@ -52,19 +54,18 @@ use ThirtyBees\PostNL\Exception\CifDownException;
 use ThirtyBees\PostNL\Exception\CifException;
 use ThirtyBees\PostNL\Exception\InvalidArgumentException;
 use ThirtyBees\PostNL\Exception\ResponseException;
-use ThirtyBees\PostNL\PostNL;
 
 /**
  * Class ShippingStatusService.
  *
  * @method CurrentStatusResponse  currentStatus(CurrentStatus|CurrentStatusByReference|CurrentStatusByPhase|CurrentStatusByStatus $currentStatus)
- * @method Request                buildCurrentStatusRequest(CurrentStatus|CurrentStatusByReference|CurrentStatusByPhase|CurrentStatusByStatus $currentStatus)
+ * @method RequestInterface                buildCurrentStatusRequest(CurrentStatus|CurrentStatusByReference|CurrentStatusByPhase|CurrentStatusByStatus $currentStatus)
  * @method CurrentStatusResponse  processCurrentStatusResponse(mixed $response)
  * @method CompleteStatusResponse completeStatus(CompleteStatus|CompleteStatusByReference|CompleteStatusByPhase|CompleteStatusByStatus $completeStatus)
- * @method Request                buildCompleteStatusRequest(CompleteStatus|CompleteStatusByReference|CompleteStatusByPhase|CompleteStatusByStatus $completeStatus)
+ * @method RequestInterface                buildCompleteStatusRequest(CompleteStatus|CompleteStatusByReference|CompleteStatusByPhase|CompleteStatusByStatus $completeStatus)
  * @method CompleteStatusResponse processCompleteStatusResponse(mixed $response)
  * @method GetSignature           getSignature(GetSignature $getSignature)
- * @method Request                buildGetSignatureRequest(GetSignature $getSignature)
+ * @method RequestInterface                buildGetSignatureRequest(GetSignature $getSignature)
  * @method GetSignature           processGetSignatureResponse(mixed $response)
  */
 class ShippingStatusService extends AbstractService
@@ -445,7 +446,7 @@ class ShippingStatusService extends AbstractService
      *
      * @param CurrentStatus|CurrentStatusByReference|CurrentStatusByPhase|CurrentStatusByStatus $currentStatus
      *
-     * @return Request
+     * @return RequestInterface
      */
     public function buildCurrentStatusRequestREST($currentStatus)
     {
@@ -488,17 +489,14 @@ class ShippingStatusService extends AbstractService
             $query = [];
             $endpoint = "/barcode/{$currentStatus->getShipment()->getBarcode()}";
         }
-        $endpoint .= '?'.\GuzzleHttp\Psr7\build_query($query);
+        $endpoint .= '?'.http_build_query($query);
 
-        return new Request(
+        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
             'GET',
-            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint,
-            [
-                'apikey'       => $apiKey,
-                'Accept'       => 'application/json',
-                'Content-Type' => 'application/json;charset=UTF-8',
-            ]
-        );
+            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint
+        )
+            ->withHeader('apikey', $apiKey)
+            ->withHeader('Accept', 'application/json');
     }
 
     /**
@@ -529,7 +527,7 @@ class ShippingStatusService extends AbstractService
      *
      * @param CurrentStatus|CurrentStatusByReference|CurrentStatusByPhase|CurrentStatusByStatus $currentStatus
      *
-     * @return Request
+     * @return RequestInterface
      *
      * @throws InvalidArgumentException
      */
@@ -637,7 +635,7 @@ class ShippingStatusService extends AbstractService
      *
      * @param CompleteStatus $completeStatus
      *
-     * @return Request
+     * @return RequestInterface
      */
     public function buildCompleteStatusRequestREST(CompleteStatus $completeStatus)
     {
@@ -685,7 +683,7 @@ class ShippingStatusService extends AbstractService
             ];
             $endpoint = "/barcode/{$completeStatus->getShipment()->getBarcode()}";
         }
-        $endpoint .= '?'.\GuzzleHttp\Psr7\build_query($query);
+        $endpoint .= '?'.http_build_query($query);
 
         return new Request(
             'POST',
@@ -763,7 +761,7 @@ class ShippingStatusService extends AbstractService
      *
      * @param CompleteStatus|CompleteStatusByReference|CompleteStatusByPhase|CompleteStatusByStatus $completeStatus
      *
-     * @return Request
+     * @return RequestInterface
      *
      * @throws InvalidArgumentException
      */
@@ -865,7 +863,7 @@ class ShippingStatusService extends AbstractService
      *
      * @param GetSignature $getSignature
      *
-     * @return Request
+     * @return RequestInterface
      */
     public function buildGetSignatureRequestREST(GetSignature $getSignature)
     {
@@ -911,7 +909,7 @@ class ShippingStatusService extends AbstractService
      *
      * @param GetSignature $getSignature
      *
-     * @return Request
+     * @return RequestInterface
      */
     public function buildGetSignatureRequestSOAP(GetSignature $getSignature)
     {

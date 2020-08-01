@@ -28,7 +28,9 @@ namespace ThirtyBees\PostNL\Service;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use Http\Discovery\Psr17FactoryDiscovery;
 use Psr\Cache\CacheItemInterface;
+use Psr\Http\Message\RequestInterface;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Service as XmlService;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
@@ -42,19 +44,18 @@ use ThirtyBees\PostNL\Entity\SOAP\Security;
 use ThirtyBees\PostNL\Exception\ApiException;
 use ThirtyBees\PostNL\Exception\CifDownException;
 use ThirtyBees\PostNL\Exception\CifException;
-use ThirtyBees\PostNL\PostNL;
 
 /**
  * Class LocationService.
  *
  * @method GetNearestLocationsResponse getNearestLocations(GetNearestLocations $getNearestLocations)
- * @method Request                     buildGetNearestLocationsRequest(GetNearestLocations $getNearestLocations)
+ * @method RequestInterface                     buildGetNearestLocationsRequest(GetNearestLocations $getNearestLocations)
  * @method GetNearestLocationsResponse processGetNearestLocationsResponse(mixed $response)
  * @method GetLocationsInAreaResponse  getLocationsInArea(GetLocationsInArea $getLocationsInArea)
- * @method Request                     buildGetLocationsInAreaRequest(GetLocationsInArea $getLocationsInArea)
+ * @method RequestInterface                     buildGetLocationsInAreaRequest(GetLocationsInArea $getLocationsInArea)
  * @method GetLocationsInAreaResponse  processGetLocationsInAreaResponse(mixed $response)
  * @method GetLocationsInAreaResponse  getLocation(GetLocation $getLocation)
- * @method Request                     buildGetLocationRequest(GetLocation $getLocation)
+ * @method RequestInterface                     buildGetLocationRequest(GetLocation $getLocation)
  * @method GetLocationsInAreaResponse  processGetLocationResponse(mixed $response)
  */
 class LocationService extends AbstractService
@@ -362,7 +363,7 @@ class LocationService extends AbstractService
      *
      * @param GetNearestLocations $getNearestLocations
      *
-     * @return Request
+     * @return RequestInterface
      */
     public function buildGetNearestLocationsRequestREST(GetNearestLocations $getNearestLocations)
     {
@@ -410,17 +411,14 @@ class LocationService extends AbstractService
             $query['DeliveryOptions'] = 'PG';
         }
 
-        $endpoint .= '?'.\GuzzleHttp\Psr7\build_query($query, PHP_QUERY_RFC1738);
+        $endpoint .= '?'.http_build_query($query);
 
-        return new Request(
+        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
             'GET',
-            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint,
-            [
-                'apikey'       => $apiKey,
-                'Accept'       => 'application/json',
-                'Content-Type' => 'application/json;charset=UTF-8',
-            ]
-        );
+            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint
+        )
+            ->withHeader('apikey', $apiKey)
+            ->withHeader('Accept', 'application/json');
     }
 
     /**
@@ -437,7 +435,7 @@ class LocationService extends AbstractService
         $body = json_decode(static::getResponseText($response), true);
         if (is_array($body)) {
             if (isset($body['GetLocationsResult']['ResponseLocation'])
-            && is_array($body['GetLocationsResult']['ResponseLocation'])
+                && is_array($body['GetLocationsResult']['ResponseLocation'])
             ) {
                 if (isset($body['GetLocationsResult']['ResponseLocation']['Address'])) {
                     $body['GetLocationsResult']['ResponseLocation'] = [$body['GetLocationsResult']['ResponseLocation']];
@@ -483,7 +481,7 @@ class LocationService extends AbstractService
      *
      * @param GetNearestLocations $getLocations
      *
-     * @return Request
+     * @return RequestInterface
      */
     public function buildGetNearestLocationsRequestSOAP(GetNearestLocations $getLocations)
     {
@@ -503,26 +501,20 @@ class LocationService extends AbstractService
                 '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
                     ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
                 ],
-                '{'.static::ENVELOPE_NAMESPACE.'}Body' => [
+                '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
                     '{'.static::SERVICES_NAMESPACE.'}GetNearestLocations' => $getLocations,
                 ],
             ]
         );
 
-        $endpoint = $this->postnl->getSandbox()
-            ? static::SANDBOX_ENDPOINT
-            : static::LIVE_ENDPOINT;
-
-        return new Request(
+        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
             'POST',
-            $endpoint,
-            [
-                'SOAPAction'   => "\"$soapAction\"",
-                'Accept'       => 'text/xml',
-                'Content-Type' => 'text/xml;charset=UTF-8',
-            ],
-            $request
-        );
+            $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT
+        )
+            ->withHeader('SOAPAction', "\"$soapAction\"")
+            ->withHeader('Accept', 'text/xml')
+            ->withHeader('Content-Type', 'text/xml;charset=UTF-8')
+            ->withBody(Psr17FactoryDiscovery::findStreamFactory()->createStream($request));
     }
 
     /**
@@ -577,7 +569,7 @@ class LocationService extends AbstractService
      *
      * @param GetLocationsInArea $getLocations
      *
-     * @return Request
+     * @return RequestInterface
      */
     public function buildGetLocationsInAreaRequestREST(GetLocationsInArea $getLocations)
     {
@@ -610,17 +602,14 @@ class LocationService extends AbstractService
         } else {
             $query['DeliveryOptions'] = 'PG';
         }
-        $endpoint = '/area?'.\GuzzleHttp\Psr7\build_query($query, PHP_QUERY_RFC1738);
+        $endpoint = '/area?'.http_build_query($query);
 
-        return new Request(
+        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
             'GET',
-            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint,
-            [
-                'apikey'       => $apiKey,
-                'Accept'       => 'application/json',
-                'Content-Type' => 'application/json;charset=UTF-8',
-            ]
-        );
+            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint
+        )
+            ->withHeader('apikey', $apiKey)
+            ->withHeader('Accept', 'application/json');
     }
 
     /**
@@ -683,7 +672,7 @@ class LocationService extends AbstractService
      *
      * @param GetLocationsInArea $getLocations
      *
-     * @return Request
+     * @return RequestInterface
      */
     public function buildGetLocationsInAreaRequestSOAP(GetLocationsInArea $getLocations)
     {
@@ -703,26 +692,20 @@ class LocationService extends AbstractService
                 '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
                     ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
                 ],
-                '{'.static::ENVELOPE_NAMESPACE.'}Body' => [
+                '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
                     '{'.static::SERVICES_NAMESPACE.'}GetLocationsInArea' => $getLocations,
                 ],
             ]
         );
 
-        $endpoint = $this->postnl->getSandbox()
-            ? static::SANDBOX_ENDPOINT
-            : static::LIVE_ENDPOINT;
-
-        return new Request(
+        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
             'POST',
-            $endpoint,
-            [
-                'SOAPAction'   => "\"$soapAction\"",
-                'Accept'       => 'text/xml',
-                'Content-Type' => 'text/xml;charset=UTF-8',
-            ],
-            $request
-        );
+            $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT
+        )
+            ->withHeader('SOAPAction', "\"$soapAction\"")
+            ->withHeader('Accept', 'text/xml')
+            ->withHeader('Content-Type', 'text/xml;charset=UTF-8')
+            ->withBody(Psr17FactoryDiscovery::findStreamFactory()->createStream($request));
     }
 
     /**
@@ -775,7 +758,7 @@ class LocationService extends AbstractService
      *
      * @param GetLocation $getLocation
      *
-     * @return Request
+     * @return RequestInterface
      */
     public function buildGetLocationRequestREST(GetLocation $getLocation)
     {
@@ -787,17 +770,14 @@ class LocationService extends AbstractService
         if ($id = $getLocation->getRetailNetworkID()) {
             $query['RetailNetworkID'] = $id;
         }
-        $endpoint = '/lookup?'.\GuzzleHttp\Psr7\build_query($query);
+        $endpoint = '/lookup?'.http_build_query($query);
 
-        return new Request(
+        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
             'GET',
-            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint,
-            [
-                'apikey'       => $apiKey,
-                'Accept'       => 'application/json',
-                'Content-Type' => 'application/json;charset=UTF-8',
-            ]
-        );
+            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint
+        )
+            ->withHeader('apikey', $apiKey)
+            ->withHeader('Accept', 'application/json');
     }
 
     /**
@@ -856,7 +836,7 @@ class LocationService extends AbstractService
      *
      * @param GetLocation $getLocations
      *
-     * @return Request
+     * @return RequestInterface
      */
     public function buildGetLocationRequestSOAP(GetLocation $getLocations)
     {
@@ -876,26 +856,20 @@ class LocationService extends AbstractService
                 '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
                     ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
                 ],
-                '{'.static::ENVELOPE_NAMESPACE.'}Body' => [
+                '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
                     '{'.static::SERVICES_NAMESPACE.'}GetLocation' => $getLocations,
                 ],
             ]
         );
 
-        $endpoint = $this->postnl->getSandbox()
-            ? static::SANDBOX_ENDPOINT
-            : static::LIVE_ENDPOINT;
-
-        return new Request(
+        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
             'POST',
-            $endpoint,
-            [
-                'SOAPAction'   => "\"$soapAction\"",
-                'Accept'       => 'text/xml',
-                'Content-Type' => 'text/xml;charset=UTF-8',
-            ],
-            $request
-        );
+            $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT
+        )
+            ->withHeader('SOAPAction', "\"$soapAction\"")
+            ->withHeader('Accept', 'text/xml')
+            ->withHeader('Content-Type', 'text/xml;charset=UTF-8')
+            ->withBody(Psr17FactoryDiscovery::findStreamFactory()->createStream($request));
     }
 
     /**
