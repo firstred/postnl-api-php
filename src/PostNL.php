@@ -836,7 +836,7 @@ class PostNL implements LoggerAwareInterface
                     }
                 }
             } else {
-                if (is_resource($defer['stream'])) {
+                if (is_resource($defer['stream']) || $defer['stream'] instanceof StreamReader) {
                     $pdf->setSourceFile($defer['stream']);
                 } else {
                     $pdf->setSourceFile($defer['stream'][0]);
@@ -1187,7 +1187,7 @@ class PostNL implements LoggerAwareInterface
                     }
                 }
             } else {
-                if (is_resource($defer['stream'])) {
+                if (is_resource($defer['stream']) || $defer['stream'] instanceof StreamReader) {
                     $pdf->setSourceFile($defer['stream']);
                 } else {
                     $pdf->setSourceFile($defer['stream'][0]);
