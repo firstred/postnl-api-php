@@ -7,6 +7,7 @@ use Http\Client\Exception as HttpClientException;
 use Http\Client\Exception\HttpException;
 use Http\Client\Exception\TransferException;
 use Http\Client\HttpAsyncClient;
+use Http\Discovery\HttpAsyncClientDiscovery;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
@@ -29,6 +30,14 @@ class HTTPlugClient implements ClientInterface
 
     /** @var HttpAsyncClient */
     private $asyncClient;
+
+    /**
+     * HTTPlugClient constructor.
+     */
+    public function __construct(HttpAsyncClient $client = null)
+    {
+        $this->setHttpAsyncClient($client ?: HttpAsyncClientDiscovery::find());
+    }
 
     /**
      * Adds a request to the list of pending requests
@@ -212,8 +221,6 @@ class HTTPlugClient implements ClientInterface
 
     /**
      * @return HTTPlugClient|void
-     *
-     * @deprecated 1.2.0 Configure the HTTPlug HTTP client implementation instead
      */
     public static function getInstance()
     {
@@ -240,5 +247,10 @@ class HTTPlugClient implements ClientInterface
     public function getVerify()
     {
         // TODO: Implement getVerify() method.
+    }
+
+    public function getLogger()
+    {
+        // TODO: Implement getLogger() method.
     }
 }

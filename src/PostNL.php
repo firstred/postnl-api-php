@@ -27,6 +27,7 @@
 namespace ThirtyBees\PostNL;
 
 use GuzzleHttp\Psr7\Response;
+use Http\Discovery\HttpAsyncClientDiscovery;
 use Psr\Cache\CacheItemInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
@@ -70,6 +71,7 @@ use ThirtyBees\PostNL\Exception\NotSupportedException;
 use ThirtyBees\PostNL\HttpClient\ClientInterface;
 use ThirtyBees\PostNL\HttpClient\CurlClient;
 use ThirtyBees\PostNL\HttpClient\GuzzleClient;
+use ThirtyBees\PostNL\HttpClient\HTTPlugClient;
 use ThirtyBees\PostNL\Util\RFPdi;
 use ThirtyBees\PostNL\Util\Util;
 use ThirtyBees\PostNL\Service\BarcodeService;
@@ -387,7 +389,11 @@ class PostNL implements LoggerAwareInterface
     {
         // @codeCoverageIgnoreStart
         if (!$this->httpClient) {
-            if (interface_exists('\\GuzzleHttp\\ClientInterface')
+            // Detect PHP HTTPlug async HTTP client support
+            $client = HttpAsyncClientDiscovery::find();
+            if ($client) {
+                $this->httpClient = HTTPlugClient::getInstance();
+            } elseif (interface_exists('\\GuzzleHttp\\ClientInterface')
                 && version_compare(
                     \GuzzleHttp\ClientInterface::VERSION,
                     '6.0.0',
