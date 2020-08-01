@@ -30,6 +30,7 @@ use GuzzleHttp\Psr7\Response;
 use Psr\Cache\CacheItemInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
+use Sabre\Xml\Element;
 use setasign\Fpdi\PdfParser\StreamReader;
 use ThirtyBees\PostNL\Entity\Barcode;
 use ThirtyBees\PostNL\Entity\Customer;
@@ -80,6 +81,7 @@ use ThirtyBees\PostNL\Service\ShippingService;
 use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 use function base64_decode;
+use function class_exists;
 
 /**
  * Class PostNL.
@@ -363,6 +365,10 @@ class PostNL implements LoggerAwareInterface
             static::MODE_LEGACY,
         ])) {
             throw new InvalidArgumentException('Mode not supported');
+        }
+
+        if (in_array($mode, [static::MODE_SOAP, static::MODE_LEGACY]) && !class_exists(Element::class)) {
+            throw new InvalidArgumentException('Mode not supported. Please install sabre/xml to connect with the SOAP API');
         }
 
         $this->mode = (int) $mode;
