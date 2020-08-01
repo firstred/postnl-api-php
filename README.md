@@ -32,9 +32,9 @@ The PHP bindings can connect to both PostNL's SOAP and REST API.
 | Kredietcheck Zakelijk                       | N/A                       | N/A                       | N/A     |
 | **Send & Track**                            |                           |                           |         |
 | Barcode webservice                          | ✓                         | ✓                         | 1.1     |
-| Labelling webservice                        | ✓                         | ✓                         | 2.1     |
-| Confirming webservice                       | ✓                         | ✓                         | 1.10    |
-| Shippingstatus webservice                   | ✓                         | ✓                         | 1.6     |
+| Labelling webservice                        | ✓                         | ✓                         | 2.2     |
+| Confirming webservice                       | ✓                         | ✓                         | 2.0    |
+| Shippingstatus webservice                   | ✓                         | ✓                         | 2.0     |
 | **Delivery Options**                        |                           |                           |         |
 | Deliverydate webservice                     | ✓                         | ✓                         | 2.2     |
 | Location webservice                         | ✓                         | ✓                         | 2.1     |
