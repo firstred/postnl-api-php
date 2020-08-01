@@ -49,7 +49,7 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
     /**
      * List of pending PSR-7 requests.
      *
-     * @var Request[]
+     * @var RequestInterface[]
      */
     protected $pendingRequests = [];
     /** @var LoggerInterface */
