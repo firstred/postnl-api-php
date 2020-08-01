@@ -22,11 +22,11 @@
  * THE SOFTWARE.
  */
 
-namespace ThirtyBees\PostNL\Misc;
+namespace ThirtyBees\PostNL\Util;
 
+use Exception;
 use Http\Promise\Promise;
 use Iterator;
-use Throwable;
 
 /**
  * Represents a promise that iterates over many promises and invokes
@@ -109,7 +109,7 @@ class EachPromise
             $this->createPromise();
             $this->iterable->rewind();
             $this->refillPending();
-        } catch (Throwable $e) {
+        } catch (Exception $e) {
             $this->aggregate->reject($e);
         }
 

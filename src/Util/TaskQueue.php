@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Copyright (c) 2015 Michael Dowling, https://github.com/mtdowling <mtdowling@gmail.com>.
  *
@@ -24,7 +22,7 @@ declare(strict_types=1);
  * THE SOFTWARE.
  */
 
-namespace ThirtyBees\PostNL\Misc;
+namespace ThirtyBees\PostNL\Util;
 
 /**
  * A task queue that executes tasks in a FIFO order.

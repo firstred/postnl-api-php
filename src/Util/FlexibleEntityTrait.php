@@ -24,34 +24,45 @@
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Misc;
+namespace ThirtyBees\PostNL\Util;
+
+use ThirtyBees\PostNL\Exception\InvalidArgumentException;
 
 /**
- * Class UUID.
+ * Trait FlexibleEntityTrait.
  */
-class UUID
+trait FlexibleEntityTrait
 {
     /**
-     * Generate a v4 UUID.
+     * Add additional properties.
      *
-     * @return string
+     * @param string $name
+     * @param mixed  $value
+     *
+     * @return object|null
+     *
+     * @throws InvalidArgumentException
      */
-    public static function generate()
+    public function __call($name, $value)
     {
-        return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
-            // 32 bits for "time_low"
-            mt_rand(0, 0xffff), mt_rand(0, 0xffff),
-            // 16 bits for "time_mid"
-            mt_rand(0, 0xffff),
-            // 16 bits for "time_hi_and_version",
-            // four most significant bits holds version number 4
-            mt_rand(0, 0x0fff) | 0x4000,
-            // 16 bits, 8 bits for "clk_seq_hi_res",
-            // 8 bits for "clk_seq_low",
-            // two most significant bits holds zero and one for variant DCE1.1
-            mt_rand(0, 0x3fff) | 0x8000,
-            // 48 bits for "node"
-            mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
-        );
+        $methodName = substr($name, 0, 3);
+        $propertyName = lcfirst(substr($name, 3, strlen($name)));
+        if ('get' === $methodName) {
+            if (property_exists($this, $propertyName)) {
+                return $this->{$propertyName};
+            }
+
+            return null;
+        } elseif ('set' === $methodName) {
+            if (!is_array($value) || count($value) < 1) {
+                throw new InvalidArgumentException('Value is missing');
+            }
+            if (property_exists($this, $propertyName)) {
+                $this->{$propertyName} = $value[0];
+            }
+
+            return $this;
+        }
+        throw new InvalidArgumentException('Not a valid `get` or `set` method');
     }
 }

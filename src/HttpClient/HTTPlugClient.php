@@ -10,7 +10,7 @@ use Http\Client\HttpAsyncClient;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
-use ThirtyBees\PostNL\Misc\EachPromise;
+use ThirtyBees\PostNL\Util\EachPromise;
 
 /**
  * Class HTTPlugClient.

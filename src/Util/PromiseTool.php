@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Copyright (c) 2015 Michael Dowling, https://github.com/mtdowling <mtdowling@gmail.com>.
  *
@@ -24,7 +22,7 @@ declare(strict_types=1);
  * THE SOFTWARE.
  */
 
-namespace ThirtyBees\PostNL\Misc;
+namespace ThirtyBees\PostNL\Util;
 
 use ArrayIterator;
 use Exception;
@@ -34,7 +32,6 @@ use Http\Promise\RejectedPromise;
 use Iterator;
 use ThirtyBees\PostNL\Exception\Promise\AggregateException;
 use ThirtyBees\PostNL\Exception\Promise\RejectionException;
-use Throwable;
 
 /**
  * Class PromiseTool.

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Copyright (c) 2015 Michael Dowling, https://github.com/mtdowling <mtdowling@gmail.com>.
  *
@@ -24,12 +22,11 @@ declare(strict_types=1);
  * THE SOFTWARE.
  */
 
-namespace ThirtyBees\PostNL\Misc;
+namespace ThirtyBees\PostNL\Util;
 
 use Exception;
 use Http\Promise\Promise;
 use LogicException;
-use Throwable;
 
 /**
  * Promises/A+ implementation that avoids recursion when possible.
@@ -102,7 +99,6 @@ class PendingPromise implements Promise
      * @return mixed|void
      *
      * @throws Exception
-     * @throws Throwable
      */
     public function wait($unwrap = true)
     {
@@ -149,7 +145,7 @@ class PendingPromise implements Promise
             $this->cancelFn = null;
             try {
                 $fn();
-            } catch (Throwable $e) {
+            } catch (Exception $e) {
                 $this->reject($e);
             }
         }
@@ -180,7 +176,7 @@ class PendingPromise implements Promise
      * @param string $state
      * @param mixed  $value
      */
-    private function settle(string $state, $value)
+    private function settle($state, $value)
     {
         if (self::PENDING !== $this->state) {
             // Ignore calls with the same resolution.
@@ -250,7 +246,7 @@ class PendingPromise implements Promise
      *
      * @return void returns the next group to resolve
      */
-    private static function callHandler(int $index, $value, array $handler)
+    private static function callHandler($index, $value, array $handler)
     {
         /** @var PendingPromise $promise */
         $promise = $handler[0];
@@ -271,7 +267,7 @@ class PendingPromise implements Promise
                 // Forward rejections down the chain.
                 $promise->reject($value);
             }
-        } catch (Throwable $reason) {
+        } catch (Exception $reason) {
             $promise->reject($reason);
         }
     }

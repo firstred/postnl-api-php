@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-namespace ThirtyBees\PostNL\Misc;
+namespace ThirtyBees\PostNL\Util;
 
 use Http\Discovery\Psr17FactoryDiscovery;
 use InvalidArgumentException;
@@ -75,7 +75,7 @@ class Message
      *
      * @return ResponseInterface
      */
-    public static function parseResponse(string $message): ResponseInterface
+    public static function parseResponse($message)
     {
         $data = static::parseMessage($message);
         // According to https://tools.ietf.org/html/rfc7230#section-3.1.2 the space
@@ -110,7 +110,7 @@ class Message
      *
      * @internal
      */
-    private static function parseMessage($message): array
+    private static function parseMessage($message)
     {
         if (!$message) {
             throw new InvalidArgumentException('Invalid message');

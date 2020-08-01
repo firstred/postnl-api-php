@@ -24,7 +24,7 @@
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Misc;
+namespace ThirtyBees\PostNL\Util;
 
 use setasign\Fpdi\Fpdi;
 use setasign\Fpdi\PdfParser\StreamReader;
