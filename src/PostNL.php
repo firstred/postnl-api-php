@@ -369,7 +369,7 @@ class PostNL implements LoggerAwareInterface
             throw new InvalidArgumentException('Mode not supported');
         }
 
-        if (in_array($mode, [static::MODE_SOAP, static::MODE_LEGACY]) && !class_exists(Element::class)) {
+        if (in_array($mode, [static::MODE_SOAP, static::MODE_LEGACY]) && !interface_exists(Element::class)) {
             throw new InvalidArgumentException('Mode not supported. Please install sabre/xml to connect with the SOAP API');
         }
 
@@ -393,7 +393,7 @@ class PostNL implements LoggerAwareInterface
             $client = HttpAsyncClientDiscovery::find();
             if ($client) {
                 $this->httpClient = HTTPlugClient::getInstance();
-            } elseif (interface_exists('\\GuzzleHttp\\ClientInterface')
+            } elseif (interface_exists(ClientInterface::class)
                 && version_compare(
                     \GuzzleHttp\ClientInterface::VERSION,
                     '6.0.0',
