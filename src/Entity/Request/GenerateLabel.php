@@ -31,6 +31,7 @@ use ThirtyBees\PostNL\Entity\AbstractEntity;
 use ThirtyBees\PostNL\Entity\Customer;
 use ThirtyBees\PostNL\Entity\Message\LabellingMessage;
 use ThirtyBees\PostNL\Entity\Shipment;
+use ThirtyBees\PostNL\Entity\Signature;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
@@ -47,10 +48,12 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method Customer|null         getCustomer()
  * @method LabellingMessage|null getMessage()
  * @method Shipment[]|null       getShipments()
+ * @method Signature|null       getLabelSignature()
  *
  * @method GenerateLabel setCustomer(Customer|null $customer = null)
  * @method GenerateLabel setMessage(LabellingMessage|null $message = null)
  * @method GenerateLabel setShipments(Shipment[]|null $shipments = null)
+ * @method GenerateLabel setLabelSignature(Signature|null $signature = null)
  */
 class GenerateLabel extends AbstractEntity
 {
@@ -74,6 +77,7 @@ class GenerateLabel extends AbstractEntity
             'Customer'  => LabellingService::DOMAIN_NAMESPACE,
             'Message'   => LabellingService::DOMAIN_NAMESPACE,
             'Shipments' => LabellingService::DOMAIN_NAMESPACE,
+            'LabelSignature' => LabellingService::DOMAIN_NAMESPACE,
         ],
         'ShippingStatus' => [
             'Message'   => ShippingStatusService::DOMAIN_NAMESPACE,
@@ -103,22 +107,28 @@ class GenerateLabel extends AbstractEntity
     protected $Message;
     /** @var Shipment[]|null $Shipments */
     protected $Shipments;
+    /** @var Signature|null $LabelSignature */
+    protected $LabelSignature;
     // @codingStandardsIgnoreEnd
 
     /**
      * GenerateLabel constructor.
      *
-     * @param Shipment[]|null       $shipments
+     * @param Shipment[]|null $shipments
      * @param LabellingMessage|null $message
-     * @param Customer|null         $customer
+     * @param Customer|null $customer
+     * @param Signature|null $labelSignature
      */
-    public function __construct(array $shipments = null, LabellingMessage $message = null, Customer $customer = null)
+    public function __construct(array $shipments = null, LabellingMessage $message = null, Customer $customer = null, Signature $labelSignature = null)
     {
         parent::__construct();
 
         $this->setShipments($shipments);
         $this->setMessage($message ?: new LabellingMessage());
         $this->setCustomer($customer);
+        if ($labelSignature) {
+            $this->setLabelSignature($labelSignature);
+        }
     }
 
     /**
@@ -129,7 +139,7 @@ class GenerateLabel extends AbstractEntity
     public function jsonSerialize()
     {
         $json = [];
-        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
+        if (!$this->currentService || !array_key_exists($this->currentService, static::$defaultProperties)) {
             return $json;
         }
 
