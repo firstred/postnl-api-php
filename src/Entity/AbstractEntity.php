@@ -26,10 +26,27 @@
 
 namespace ThirtyBees\PostNL\Entity;
 
+use Exception;
+use JsonSerializable;
+use ReflectionClass;
 use Sabre\Xml\Writer;
 use Sabre\Xml\XmlSerializable;
 use ThirtyBees\PostNL\Exception\InvalidArgumentException;
 use ThirtyBees\PostNL\Util\UUID;
+use function array_key_exists;
+use function array_keys;
+use function call_user_func;
+use function class_exists;
+use function count;
+use function is_array;
+use function is_subclass_of;
+use function key;
+use function preg_replace;
+use function property_exists;
+use function range;
+use function reset;
+use function strlen;
+use function substr;
 
 /**
  * Class Entity
@@ -42,7 +59,7 @@ use ThirtyBees\PostNL\Util\UUID;
  * @method AbstractEntity setId(string $id)
  * @method AbstractEntity setCurrentService(string $service)
  */
-abstract class AbstractEntity implements \JsonSerializable, XmlSerializable
+abstract class AbstractEntity implements JsonSerializable, XmlSerializable
 {
     // @codingStandardsIgnoreStart
     /** @var array $defaultProperties */
@@ -71,13 +88,13 @@ abstract class AbstractEntity implements \JsonSerializable, XmlSerializable
      */
     public static function create(array $properties = [])
     {
-        if (get_called_class() === __CLASS__) {
+        if (static::class === __CLASS__) {
             return null;
         }
 
         try {
-            $reflectionClass = new \ReflectionClass(get_called_class());
-        } catch (\Exception $e) {
+            $reflectionClass = new ReflectionClass(static::class);
+        } catch (Exception $e) {
             return null;
         }
 
@@ -114,10 +131,12 @@ abstract class AbstractEntity implements \JsonSerializable, XmlSerializable
         if ($methodName === 'get') {
             if (property_exists($this, $propertyName)) {
                 return $this->{$propertyName};
-            } else {
-                return null;
             }
-        } elseif ($methodName === 'set') {
+
+            return null;
+        }
+
+        if ($methodName === 'set') {
             if (!is_array($value) || count($value) < 1) {
                 throw new InvalidArgumentException('Value is missing');
             }
@@ -141,7 +160,7 @@ abstract class AbstractEntity implements \JsonSerializable, XmlSerializable
     public function jsonSerialize()
     {
         $json = [];
-        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
+        if (!$this->currentService || !array_key_exists($this->currentService, static::$defaultProperties)) {
             throw new InvalidArgumentException('Service not set before serialization');
         }
 
@@ -165,7 +184,7 @@ abstract class AbstractEntity implements \JsonSerializable, XmlSerializable
     public function xmlSerialize(Writer $writer)
     {
         $xml = [];
-        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
+        if (!$this->currentService || !array_key_exists($this->currentService, static::$defaultProperties)) {
             throw new InvalidArgumentException('Service not set before serialization');
         }
 

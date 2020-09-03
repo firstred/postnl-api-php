@@ -663,7 +663,7 @@ class PostNL implements LoggerAwareInterface
             if (in_array($type, ['2S', '3S'])) {
                 $range = $this->getCustomer()->getCustomerCode();
             } elseif (in_array($type, ['LA', 'UE', 'RI'])) {
-                $range = '00000000-99999999';
+                $range = 'NL';
             } else {
                 $range = $this->getCustomer()->getGlobalPackCustomerCode();
             }

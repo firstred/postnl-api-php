@@ -55,11 +55,11 @@ use ThirtyBees\PostNL\PostNL;
 class LabellingService extends AbstractService
 {
     // API Version
-    const VERSION = '2.1';
+    const VERSION = '2.2';
 
     // Endpoints
-    const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v2_1/label';
-    const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2_1/label';
+    const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v2_2/label';
+    const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2_2/label';
     const LEGACY_SANDBOX_ENDPOINT = 'https://testservice.postnl.com/CIF_SB/LabellingWebService/2_1/LabellingWebService.svc';
     const LEGACY_LIVE_ENDPOINT = 'https://service.postnl.com/CIF/LabellingWebService/2_1/LabellingWebService.svc';
 
