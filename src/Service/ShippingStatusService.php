@@ -487,7 +487,7 @@ class ShippingStatusService extends AbstractService
             if ($endDate = $currentStatus->getShipment()->getDateTo()) {
                 $query['endDate'] = date('d-m-Y', strtotime($endDate));
             }
-          } else {
+        } else {
             $query = [];
             $endpoint = "/barcode/{$currentStatus->getShipment()->getBarcode()}";
         }
@@ -711,10 +711,14 @@ class ShippingStatusService extends AbstractService
     {
         $body = json_decode(static::getResponseText($response), true);
         if (isset($body['CompleteStatus'])) {
-            if (isset($body['CompleteStatus']['Shipment'])) {
+            if (isset($body['CompleteStatus']['Shipment']['MainBarcode'])) {
                 $body['CompleteStatus']['Shipments'] = [$body['CompleteStatus']['Shipment']];
-                unset($body['CompleteStatus']['Shipment']);
+            } else {
+                $body['CompleteStatus']['Shipments'] = $body['CompleteStatus']['Shipment'];
             }
+
+            unset($body['CompleteStatus']['Shipment']);
+
             foreach ($body['CompleteStatus']['Shipments'] as &$shipment) {
                 $shipment['Customer'] = AbstractEntity::jsonDeserialize(['Customer' => $shipment['Customer']]);
             }
@@ -726,7 +730,8 @@ class ShippingStatusService extends AbstractService
                 $shipment['Events'] = $shipment['Event'];
                 unset($shipment['Event']);
                 foreach ($shipment['Events'] as &$event) {
-                    $event = ['CompleteStatusResponseEvent' => $event];
+                    $event  = AbstractEntity::jsonDeserialize(['CompleteStatusResponseEvent' => $event]);
+                    //$event = ['CompleteStatusResponseEvent' => $event];
                 }
             }
             foreach ($body['CompleteStatus']['Shipments'] as &$shipment) {

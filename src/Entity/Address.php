@@ -56,6 +56,7 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method string|null getFloor()
  * @method string|null getRegion()
  * @method string|null getRemark()
+ * @method string|null getStreetHouseNrExt()
  *
  * @method Address setFirstName(string|null $firstName = null)
  * @method Address setName(string|null $name = null)
@@ -72,6 +73,7 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method Address setFloor(string|null $floor = null)
  * @method Address setRegion(string|null $region = null)
  * @method Address setRemark(string|null $remark = null)
+ * @method Address setStreetHouseNrExt(string|null $streetHouseNrExt = null)
  */
 class Address extends AbstractEntity
 {
@@ -90,6 +92,7 @@ class Address extends AbstractEntity
             'Floor'        => BarcodeService::DOMAIN_NAMESPACE,
             'HouseNr'      => BarcodeService::DOMAIN_NAMESPACE,
             'HouseNrExt'   => BarcodeService::DOMAIN_NAMESPACE,
+            'StreetHouseNrExt'   => BarcodeService::DOMAIN_NAMESPACE,
             'Name'         => BarcodeService::DOMAIN_NAMESPACE,
             'Region'       => BarcodeService::DOMAIN_NAMESPACE,
             'Remark'       => BarcodeService::DOMAIN_NAMESPACE,
@@ -109,6 +112,7 @@ class Address extends AbstractEntity
             'Floor'        => ConfirmingService::DOMAIN_NAMESPACE,
             'HouseNr'      => ConfirmingService::DOMAIN_NAMESPACE,
             'HouseNrExt'   => ConfirmingService::DOMAIN_NAMESPACE,
+            'StreetHouseNrExt'   => ConfirmingService::DOMAIN_NAMESPACE,
             'Name'         => ConfirmingService::DOMAIN_NAMESPACE,
             'Region'       => ConfirmingService::DOMAIN_NAMESPACE,
             'Remark'       => ConfirmingService::DOMAIN_NAMESPACE,
@@ -128,6 +132,7 @@ class Address extends AbstractEntity
             'Floor'        => LabellingService::DOMAIN_NAMESPACE,
             'HouseNr'      => LabellingService::DOMAIN_NAMESPACE,
             'HouseNrExt'   => LabellingService::DOMAIN_NAMESPACE,
+            'StreetHouseNrExt'   => LabellingService::DOMAIN_NAMESPACE,
             'Name'         => LabellingService::DOMAIN_NAMESPACE,
             'Region'       => LabellingService::DOMAIN_NAMESPACE,
             'Remark'       => LabellingService::DOMAIN_NAMESPACE,
@@ -147,6 +152,7 @@ class Address extends AbstractEntity
             'Floor'        => ShippingStatusService::DOMAIN_NAMESPACE,
             'HouseNr'      => ShippingStatusService::DOMAIN_NAMESPACE,
             'HouseNrExt'   => ShippingStatusService::DOMAIN_NAMESPACE,
+            'StreetHouseNrExt'   => ShippingStatusService::DOMAIN_NAMESPACE,
             'Name'         => ShippingStatusService::DOMAIN_NAMESPACE,
             'Region'       => ShippingStatusService::DOMAIN_NAMESPACE,
             'Remark'       => ShippingStatusService::DOMAIN_NAMESPACE,
@@ -166,6 +172,7 @@ class Address extends AbstractEntity
             'Floor'        => DeliveryDateService::DOMAIN_NAMESPACE,
             'HouseNr'      => DeliveryDateService::DOMAIN_NAMESPACE,
             'HouseNrExt'   => DeliveryDateService::DOMAIN_NAMESPACE,
+            'StreetHouseNrExt'   => DeliveryDateService::DOMAIN_NAMESPACE,
             'Name'         => DeliveryDateService::DOMAIN_NAMESPACE,
             'Region'       => DeliveryDateService::DOMAIN_NAMESPACE,
             'Remark'       => DeliveryDateService::DOMAIN_NAMESPACE,
@@ -185,6 +192,7 @@ class Address extends AbstractEntity
             'Floor'        => LocationService::DOMAIN_NAMESPACE,
             'HouseNr'      => LocationService::DOMAIN_NAMESPACE,
             'HouseNrExt'   => LocationService::DOMAIN_NAMESPACE,
+            'StreetHouseNrExt'   => LocationService::DOMAIN_NAMESPACE,
             'Name'         => LocationService::DOMAIN_NAMESPACE,
             'Region'       => LocationService::DOMAIN_NAMESPACE,
             'Remark'       => LocationService::DOMAIN_NAMESPACE,
@@ -204,6 +212,7 @@ class Address extends AbstractEntity
             'Floor'        => TimeframeService::DOMAIN_NAMESPACE,
             'HouseNr'      => TimeframeService::DOMAIN_NAMESPACE,
             'HouseNrExt'   => TimeframeService::DOMAIN_NAMESPACE,
+            'StreetHouseNrExt'   => TimeframeService::DOMAIN_NAMESPACE,
             'Name'         => TimeframeService::DOMAIN_NAMESPACE,
             'Region'       => TimeframeService::DOMAIN_NAMESPACE,
             'Remark'       => TimeframeService::DOMAIN_NAMESPACE,
@@ -267,6 +276,8 @@ class Address extends AbstractEntity
     protected $HouseNr;
     /** @var string|null $HouseNrExt */
     protected $HouseNrExt;
+    /** @var string|null $HouseNrExt */
+    protected $StreetHouseNrExt;
     /** @var string|null $Name */
     protected $Name;
     /** @var string|null $Region */
@@ -299,6 +310,7 @@ class Address extends AbstractEntity
      * @param string|null $floor
      * @param string|null $region
      * @param string|null $remark
+     * @param string|null $streetHouseNrExt
      */
     public function __construct(
         $addressType = null,
@@ -317,7 +329,8 @@ class Address extends AbstractEntity
         $doorcode = null,
         $floor = null,
         $region = null,
-        $remark = null
+        $remark = null,
+        $streetHouseNrExt = null
     ) {
         parent::__construct();
 
@@ -340,6 +353,7 @@ class Address extends AbstractEntity
         $this->setFloor($floor);
         $this->setRegion($region);
         $this->setRemark($remark);
+        $this->setStreetHouseNrExt($streetHouseNrExt);
     }
 
     /**
