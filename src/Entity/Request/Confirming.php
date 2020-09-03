@@ -31,6 +31,7 @@ use ThirtyBees\PostNL\Entity\AbstractEntity;
 use ThirtyBees\PostNL\Entity\Customer;
 use ThirtyBees\PostNL\Entity\Message\Message;
 use ThirtyBees\PostNL\Entity\Shipment;
+use ThirtyBees\PostNL\Entity\Signature;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
@@ -38,6 +39,9 @@ use ThirtyBees\PostNL\Service\LabellingService;
 use ThirtyBees\PostNL\Service\LocationService;
 use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
+use function array_key_exists;
+use function array_keys;
+use function count;
 
 /**
  * Class Confirming
@@ -47,10 +51,12 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method Customer|null   getCustomer()
  * @method Message|null    getMessage()
  * @method Shipment[]|null getShipments()
+ * @method Signature|null getSignature()
  *
  * @method Confirming setCustomer(Customer|null $customer = null)
  * @method Confirming setMessage(Message|null $message = null)
  * @method Confirming setShipments(Shipment[]|null $shipments = null)
+ * @method Confirming setLabelSignature(Signature|null $labelSignature = null)
  */
 class Confirming extends AbstractEntity
 {
@@ -66,9 +72,10 @@ class Confirming extends AbstractEntity
             'Shipments' => BarcodeService::DOMAIN_NAMESPACE,
         ],
         'Confirming'     => [
-            'Customer'  => ConfirmingService::DOMAIN_NAMESPACE,
-            'Message'   => ConfirmingService::DOMAIN_NAMESPACE,
-            'Shipments' => ConfirmingService::DOMAIN_NAMESPACE,
+            'Customer'       => ConfirmingService::DOMAIN_NAMESPACE,
+            'Message'        => ConfirmingService::DOMAIN_NAMESPACE,
+            'Shipments'      => ConfirmingService::DOMAIN_NAMESPACE,
+            'LabelSignature' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
         'Labelling'      => [
             'Customer'  => LabellingService::DOMAIN_NAMESPACE,
@@ -96,29 +103,45 @@ class Confirming extends AbstractEntity
             'Shipments' => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
+
     // @codingStandardsIgnoreStart
+
     /** @var Customer|null $Customer */
     protected $Customer;
+
     /** @var Message|null $Message */
     protected $Message;
+
     /** @var Shipment[]|null $Shipments */
     protected $Shipments;
+
+    /** @var Signature|null $LabelSignature */
+    protected $LabelSignature;
+
     // @codingStandardsIgnoreEnd
 
     /**
      * Confirming constructor.
      *
      * @param Shipment[]|null $shipments
-     * @param Customer|null   $customer
-     * @param Message|null    $message
+     * @param Customer|null $customer
+     * @param Message|null $message
+     * @param Signature|null $labelSignature
      */
-    public function __construct(array $shipments = null, Customer $customer = null, Message $message = null)
-    {
+    public function __construct(
+        array $shipments = null,
+        Customer $customer = null,
+        Message $message = null,
+        Signature $labelSignature = null
+    ) {
         parent::__construct();
 
         $this->setShipments($shipments);
         $this->setMessage($message ?: new Message());
         $this->setCustomer($customer);
+        if ($labelSignature) {
+            $this->setLabelSignature($labelSignature);
+        }
     }
 
     /**
@@ -131,7 +154,7 @@ class Confirming extends AbstractEntity
     public function xmlSerialize(Writer $writer)
     {
         $xml = [];
-        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
+        if (!$this->currentService || !array_key_exists($this->currentService, static::$defaultProperties)) {
             $writer->write($xml);
 
             return;
@@ -160,7 +183,7 @@ class Confirming extends AbstractEntity
     public function jsonSerialize()
     {
         $json = [];
-        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
+        if (!$this->currentService || !array_key_exists($this->currentService, static::$defaultProperties)) {
             return $json;
         }
 

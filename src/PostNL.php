@@ -26,19 +26,31 @@
 
 namespace ThirtyBees\PostNL;
 
+use Exception;
 use GuzzleHttp\Psr7\Response;
 use Psr\Cache\CacheItemInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
+use setasign\Fpdi\PdfParser\CrossReference\CrossReferenceException;
+use setasign\Fpdi\PdfParser\Filter\FilterException;
+use setasign\Fpdi\PdfParser\PdfParserException;
 use setasign\Fpdi\PdfParser\StreamReader;
+use setasign\Fpdi\PdfParser\Type\PdfTypeException;
+use setasign\Fpdi\PdfReader\PdfReaderException;
 use ThirtyBees\PostNL\Entity\Barcode;
 use ThirtyBees\PostNL\Entity\Customer;
 use ThirtyBees\PostNL\Entity\Label;
 use ThirtyBees\PostNL\Entity\Message\LabellingMessage;
 use ThirtyBees\PostNL\Entity\Message\Message;
 use ThirtyBees\PostNL\Entity\Request\CompleteStatus;
+use ThirtyBees\PostNL\Entity\Request\CompleteStatusByPhase;
+use ThirtyBees\PostNL\Entity\Request\CompleteStatusByReference;
+use ThirtyBees\PostNL\Entity\Request\CompleteStatusByStatus;
 use ThirtyBees\PostNL\Entity\Request\Confirming;
 use ThirtyBees\PostNL\Entity\Request\CurrentStatus;
+use ThirtyBees\PostNL\Entity\Request\CurrentStatusByPhase;
+use ThirtyBees\PostNL\Entity\Request\CurrentStatusByReference;
+use ThirtyBees\PostNL\Entity\Request\CurrentStatusByStatus;
 use ThirtyBees\PostNL\Entity\Request\GenerateBarcode;
 use ThirtyBees\PostNL\Entity\Request\GenerateLabel;
 use ThirtyBees\PostNL\Entity\Request\GetDeliveryDate;
@@ -77,6 +89,20 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 use ThirtyBees\PostNL\Util\RFPdi;
 use ThirtyBees\PostNL\Util\Util;
+use function array_key_exists;
+use function base64_decode;
+use function count;
+use function explode;
+use function GuzzleHttp\Psr7\parse_response;
+use function GuzzleHttp\Psr7\str;
+use function in_array;
+use function interface_exists;
+use function is_array;
+use function is_resource;
+use function is_string;
+use function strlen;
+use function strtoupper;
+use function version_compare;
 
 /**
  * Class PostNL
@@ -248,7 +274,9 @@ class PostNL implements LoggerAwareInterface
             $this->token = $token;
 
             return $this;
-        } elseif (is_string($token)) {
+        }
+
+        if (is_string($token)) {
             $this->token = new UsernameToken(null, $token);
 
             return $this;
@@ -378,7 +406,7 @@ class PostNL implements LoggerAwareInterface
     {
         // @codeCoverageIgnoreStart
         if (!$this->httpClient) {
-            if (interface_exists('\\GuzzleHttp\\ClientInterface')
+            if (interface_exists(\GuzzleHttp\ClientInterface::class)
                 && version_compare(
                     \GuzzleHttp\ClientInterface::VERSION,
                     '6.0.0',
@@ -627,13 +655,15 @@ class PostNL implements LoggerAwareInterface
      */
     public function generateBarcode($type = '3S', $range = null, $serie = null, $eps = false)
     {
-        if (!in_array($type, ['2S', '3S']) || strlen($type) !== 2) {
+        if (!in_array($type, ['2S', '3S','LA', 'UE', 'RI']) || strlen($type) !== 2) {
             throw new InvalidBarcodeException("Barcode type `$type` is invalid");
         }
 
         if (!$range) {
             if (in_array($type, ['2S', '3S'])) {
                 $range = $this->getCustomer()->getCustomerCode();
+            } elseif (in_array($type, ['LA', 'UE', 'RI'])) {
+                $range = '00000000-99999999';
             } else {
                 $range = $this->getCustomer()->getGlobalPackCustomerCode();
             }
@@ -652,15 +682,15 @@ class PostNL implements LoggerAwareInterface
     /**
      * Generate a single barcode by country code
      *
-     * @param string $iso 2-letter Country ISO Code
+     * @param string $countryCode 2-letter Country ISO Code
      *
      * @return string The Barcode as a string
      * @throws InvalidConfigurationException
      * @throws InvalidBarcodeException
      */
-    public function generateBarcodeByCountryCode($iso)
+    public function generateBarcodeByCountryCode($countryCode)
     {
-        if (in_array(strtoupper($iso), static::$threeSCountries)) {
+        if ($this->is3SCountry($countryCode)) {
             $range = $this->getCustomer()->getCustomerCode();
             $type = '3S';
         } else {
@@ -678,7 +708,7 @@ class PostNL implements LoggerAwareInterface
         $serie = $this->findBarcodeSerie(
             $type,
             $range,
-            strtoupper($iso) !== 'NL' && in_array(strtoupper($iso), static::$threeSCountries)
+            strtoupper($countryCode) !== 'NL' && $this->is3SCountry($countryCode)
         );
 
         return $this->getBarcodeService()->generateBarcode(new GenerateBarcode(new Barcode($type, $range, $serie), $this->customer));
@@ -687,13 +717,13 @@ class PostNL implements LoggerAwareInterface
     /**
      * Generate a single barcode by country code
      *
-     * @param  array $isos key = iso code, value = amount of barcodes requested
+     * @param  array $countryCodes key = iso code, value = amount of barcodes requested
      *
      * @return array Country isos with the barcode as string
      * @throws InvalidConfigurationException
      * @throws InvalidBarcodeException
      */
-    public function generateBarcodesByCountryCodes(array $isos)
+    public function generateBarcodesByCountryCodes(array $countryCodes)
     {
         $customerCode = $this->getCustomer()->getCustomerCode();
         $globalPackRange = $this->getCustomer()->getGlobalPackCustomerCode();
@@ -701,8 +731,8 @@ class PostNL implements LoggerAwareInterface
 
         $generateBarcodes = [];
         $index = 0;
-        foreach ($isos as $iso => $qty) {
-            if (in_array(strtoupper($iso), static::$threeSCountries)) {
+        foreach ($countryCodes as $countryCode => $qty) {
+            if ($this->is3SCountry($countryCode)) {
                 $range = $customerCode;
                 $type = '3S';
             } else {
@@ -720,11 +750,11 @@ class PostNL implements LoggerAwareInterface
             $serie = $this->findBarcodeSerie(
                 $type,
                 $range,
-                strtoupper($iso) !== 'NL' && in_array(strtoupper($iso), static::$threeSCountries)
+                strtoupper($countryCode) !== 'NL' && $this->is3SCountry($countryCode)
             );
 
             for ($i = 0; $i < $qty; $i++) {
-                $generateBarcodes[] = (new GenerateBarcode(new Barcode($type, $range, $serie), $this->customer))->setId("$iso-$index");
+                $generateBarcodes[] = (new GenerateBarcode(new Barcode($type, $range, $serie), $this->customer))->setId("$countryCode-$index");
                 $index++;
             }
         }
@@ -733,11 +763,11 @@ class PostNL implements LoggerAwareInterface
 
         $barcodes = [];
         foreach ($results as $id => $barcode) {
-            list($iso) = explode('-', $id);
-            if (!isset($barcodes[$iso])) {
-                $barcodes[$iso] = [];
+            list($countryCode) = explode('-', $id);
+            if (!isset($barcodes[$countryCode])) {
+                $barcodes[$countryCode] = [];
             }
-            $barcodes[$iso][] = $barcode;
+            $barcodes[$countryCode][] = $barcode;
         }
 
         return $barcodes;
@@ -745,20 +775,20 @@ class PostNL implements LoggerAwareInterface
 
     /**
      * @param Shipment $shipment
-     * @param string   $printertype
+     * @param string   $printerType
      * @param bool     $confirm
      *
      * @return GenerateLabelResponse
      */
     public function generateLabel(
         Shipment $shipment,
-        $printertype = 'GraphicFile|PDF',
+        $printerType = 'GraphicFile|PDF',
         $confirm = true
     ) {
         return $this->getLabellingService()->generateLabel(
             new GenerateLabel(
                 [$shipment],
-                new LabellingMessage($printertype),
+                new LabellingMessage($printerType),
                 $this->customer
             ),
             $confirm
@@ -771,12 +801,12 @@ class PostNL implements LoggerAwareInterface
      * Note that instead of returning a GenerateLabelResponse this function can merge the labels and return a
      * string which contains the PDF with the merged pages as well.
      *
-     * @param Shipment[] $shipments     (key = ID) Shipments
-     * @param string     $printertype   Printer type, see PostNL dev docs for available types
-     * @param bool       $confirm       Immediately confirm the shipments
-     * @param bool       $merge         Merge the PDFs and return them in a MyParcel way
-     * @param int        $format        A4 or A6
-     * @param array      $positions     Set the positions of the A6s on the first A4
+     * @param Shipment[] $shipments (key = ID) Shipments
+     * @param string $printerType Printer type, see PostNL dev docs for available types
+     * @param bool $confirm Immediately confirm the shipments
+     * @param bool $merge Merge the PDFs and return them in a MyParcel way
+     * @param int $format A4 or A6
+     * @param array $positions Set the positions of the A6s on the first A4
      *                                  The indices should be the position number, marked with `true` or `false`
      *                                  These are the position numbers:
      *                                  ```
@@ -804,16 +834,20 @@ class PostNL implements LoggerAwareInterface
      *                                  ]
      *                                  ```
      *
-     * @param string     $a6Orientation A6 orientation (P or L)
+     * @param string $a6Orientation A6 orientation (P or L)
      *
      * @return GenerateLabelResponse[]|string
      * @throws AbstractException
      * @throws NotSupportedException
-     * @throws \setasign\Fpdi\PdfReader\PdfReaderException
+     * @throws PdfReaderException
+     * @throws CrossReferenceException
+     * @throws FilterException
+     * @throws PdfParserException
+     * @throws PdfTypeException
      */
     public function generateLabels(
         array $shipments,
-        $printertype = 'GraphicFile|PDF',
+        $printerType = 'GraphicFile|PDF',
         $confirm = true,
         $merge = false,
         $format = Label::FORMAT_A4,
@@ -826,7 +860,7 @@ class PostNL implements LoggerAwareInterface
         $a6Orientation = 'P'
     ) {
         if ($merge) {
-            if ($printertype !== 'GraphicFile|PDF') {
+            if ($printerType !== 'GraphicFile|PDF') {
                 throw new NotSupportedException('Labels with the chosen printer type cannot be merged');
             }
             foreach ([1, 2, 3, 4] as $i) {
@@ -838,17 +872,17 @@ class PostNL implements LoggerAwareInterface
 
         $generateLabels = [];
         foreach ($shipments as $uuid => $shipment) {
-            $generateLabels[$uuid] = [(new GenerateLabel([$shipment], new LabellingMessage($printertype), $this->customer))->setId($uuid), $confirm];
+            $generateLabels[$uuid] = [(new GenerateLabel([$shipment], new LabellingMessage($printerType), $this->customer))->setId($uuid), $confirm];
         }
         $labels = $this->getLabellingService()->generateLabels($generateLabels, $confirm);
 
         if (!$merge) {
             return $labels;
-        } else {
-            foreach ($labels as $label) {
-                if (!$label instanceof GenerateLabelResponse) {
-                    return $labels;
-                }
+        }
+
+        foreach ($labels as $label) {
+            if (!$label instanceof GenerateLabelResponse) {
+                return $labels;
             }
         }
 
@@ -870,11 +904,11 @@ class PostNL implements LoggerAwareInterface
                     } elseif ($a6Orientation === 'P' && $sizes['orientation'] === 'L') {
                         $pdf->rotateCounterClockWise();
                     }
-                    $pdf->setSourceFile(\ThirtyBeesPostNL\setasign\Fpdi\PdfParser\StreamReader::createByString($pdfContent));
+                    $pdf->setSourceFile(StreamReader::createByString($pdfContent));
                     $pdf->useTemplate($pdf->importPage(1), $correction[0], $correction[1]);
                 } else {
                     // Assuming A4 here (could be multi-page) - defer to end
-                    $stream = \ThirtyBeesPostNL\setasign\Fpdi\PdfParser\StreamReader::createByString($pdfContent);
+                    $stream = StreamReader::createByString($pdfContent);
                     $deferred[] = ['stream' => $stream, 'sizes' => $sizes];
                 }
             }
@@ -940,8 +974,10 @@ class PostNL implements LoggerAwareInterface
                     $pdf->useTemplate($pdf->importPage(1), -190, 0);
                     $pdf->setSourceFile($defer['stream'][1]);
                     $pdf->useTemplate($pdf->importPage(1), -190, 148);
-                    for ($i = 2; $i < count($defer['stream']); $i++) {
-                        $pages = $pdf->setSourceFile($defer['stream'][$i]);
+                    $pageStreams = $defer['stream'];
+                    $pageCount = count($pageStreams);
+                    for ($i = 2; $i < $pageCount; $i++) {
+                        $pages = $pdf->setSourceFile($pageStreams[$i]);
                         for ($j = 1; $j < $pages + 1; $j++) {
                             $pdf->addPage($sizes['orientation'], 'A4');
                             $pdf->rotateCounterClockWise();
@@ -983,12 +1019,12 @@ class PostNL implements LoggerAwareInterface
      */
     public function confirmShipments(array $shipments)
     {
-        $confirmings = [];
+        $confirmableShipments = [];
         foreach ($shipments as $uuid => $shipment) {
-            $confirmings[$uuid] = (new Confirming([$shipment], $this->customer))->setId($uuid);
+            $confirmableShipments[$uuid] = (new Confirming([$shipment], $this->customer))->setId($uuid);
         }
 
-        return $this->getConfirmingService()->confirmShipments($confirmings);
+        return $this->getConfirmingService()->confirmShipments($confirmableShipments);
     }
 
     /**
@@ -1144,15 +1180,15 @@ class PostNL implements LoggerAwareInterface
         $results = [];
         $itemTimeframe = $this->getTimeframeService()->retrieveCachedItem($getTimeframes->getId());
         if ($itemTimeframe instanceof CacheItemInterface && $itemTimeframe->get()) {
-            $results['timeframes'] = \GuzzleHttp\Psr7\parse_response($itemTimeframe->get());
+            $results['timeframes'] = parse_response($itemTimeframe->get());
         }
         $itemLocation = $this->getLocationService()->retrieveCachedItem($getNearestLocations->getId());
         if ($itemLocation instanceof CacheItemInterface && $itemLocation->get()) {
-            $results['locations'] = \GuzzleHttp\Psr7\parse_response($itemLocation->get());
+            $results['locations'] = parse_response($itemLocation->get());
         }
         $itemDeliveryDate = $this->getDeliveryDateService()->retrieveCachedItem($getDeliveryDate->getId());
         if ($itemDeliveryDate instanceof CacheItemInterface && $itemDeliveryDate->get()) {
-            $results['delivery_date'] = \GuzzleHttp\Psr7\parse_response($itemDeliveryDate->get());
+            $results['delivery_date'] = parse_response($itemDeliveryDate->get());
         }
 
         $this->getHttpClient()->addOrUpdateRequest(
@@ -1173,7 +1209,7 @@ class PostNL implements LoggerAwareInterface
             if ($response instanceof Response) {
                 $results[$uuid] = $response;
             } else {
-                if ($response instanceof \Exception) {
+                if ($response instanceof Exception) {
                     throw $response;
                 }
                 throw new InvalidArgumentException('Invalid multi-request');
@@ -1182,29 +1218,31 @@ class PostNL implements LoggerAwareInterface
 
         foreach ($responses as $type => $response) {
             if (!$response instanceof Response) {
-                if ($response instanceof \Exception) {
+                if ($response instanceof Exception) {
                     throw $response;
                 }
                 throw new InvalidArgumentException('Invalid multi-request');
-            } elseif ($response->getStatusCode() === 200) {
+            }
+
+            if ($response->getStatusCode() === 200) {
                 switch ($type) {
                     case 'timeframes':
                         if ($itemTimeframe instanceof CacheItemInterface) {
-                            $itemTimeframe->set(\GuzzleHttp\Psr7\str($response));
+                            $itemTimeframe->set(str($response));
                             $this->getTimeframeService()->cacheItem($itemTimeframe);
                         }
 
                         break;
                     case 'locations':
                         if ($itemTimeframe instanceof CacheItemInterface) {
-                            $itemLocation->set(\GuzzleHttp\Psr7\str($response));
+                            $itemLocation->set(str($response));
                             $this->getLocationService()->cacheItem($itemLocation);
                         }
 
                         break;
                     case 'delivery_date':
                         if ($itemTimeframe instanceof CacheItemInterface) {
-                            $itemDeliveryDate->set(\GuzzleHttp\Psr7\str($response));
+                            $itemDeliveryDate->set(str($response));
                             $this->getDeliveryDateService()->cacheItem($itemDeliveryDate);
                         }
 
@@ -1258,41 +1296,39 @@ class PostNL implements LoggerAwareInterface
     {
         switch ($type) {
             case '2S':
-                $serie = '0000000-9999999';
-
-                break;
+                return '0000000-9999999';
             case '3S':
                 if ($eps) {
                     switch (strlen($range)) {
                         case 4:
-                            $serie = '0000000-9999999';
-
-                            break 2;
+                            return '0000000-9999999';
                         case 3:
-                            $serie = '10000000-20000000';
-
-                            break 2;
+                            return '10000000-20000000';
                         case 1:
-                            $serie = '5210500000-5210600000';
-
-                            break 2;
+                            return '5210500000-5210600000';
                         default:
                             throw new InvalidBarcodeException('Invalid range');
-
-                            break;
                     }
                 }
                 // Regular domestic codes
-                $serie = (strlen($range) === 4 ? '987000000-987600000' : '0000000-9999999');
-
-                break;
+                return (strlen($range) === 4 ? '987000000-987600000' : '0000000-9999999');
+            case 'LA':
+            case 'UE':
+            case 'RI':
+                return '00000000-99999999';
             default:
                 // GlobalPack
-                $serie = '0000-9999';
-
-                break;
+                return '0000-9999';
         }
-
-        return $serie;
     }
+
+    /**
+     * @param string $countryCode
+     *
+     * @return bool
+     */
+    private function is3SCountry($countryCode)
+    {
+        return in_array(strtoupper($countryCode), static::$threeSCountries, false);
+}
 }
