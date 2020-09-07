@@ -26,6 +26,7 @@
 
 namespace ThirtyBees\PostNL\Service;
 
+use Exception;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Sabre\Xml\Service as XmlService;
@@ -36,6 +37,7 @@ use ThirtyBees\PostNL\Exception\CifDownException;
 use ThirtyBees\PostNL\Exception\CifException;
 use ThirtyBees\PostNL\Exception\ResponseException;
 use ThirtyBees\PostNL\PostNL;
+use function GuzzleHttp\Psr7\build_query;
 
 /**
  * Class BarcodeService
@@ -52,16 +54,16 @@ class BarcodeService extends AbstractService
     /** @var PostNL $postnl */
     protected $postnl;
 
-    const VERSION = '1.1';
-    const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v1_1/barcode';
-    const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v1_1/barcode';
+    const VERSION                 = '1.1';
+    const SANDBOX_ENDPOINT        = 'https://api-sandbox.postnl.nl/shipment/v1_1/barcode';
+    const LIVE_ENDPOINT           = 'https://api.postnl.nl/shipment/v1_1/barcode';
     const LEGACY_SANDBOX_ENDPOINT = 'https://testservice.postnl.com/CIF_SB/BarcodeWebService/1_1/BarcodeWebService.svc';
-    const LEGACY_LIVE_ENDPOINT = 'https://service.postnl.com/CIF/BarcodeWebService/1_1/BarcodeWebService.svc';
+    const LEGACY_LIVE_ENDPOINT    = 'https://service.postnl.com/CIF/BarcodeWebService/1_1/BarcodeWebService.svc';
 
-    const SOAP_ACTION = 'http://postnl.nl/cif/services/BarcodeWebService/IBarcodeWebService/GenerateBarcode';
+    const SOAP_ACTION        = 'http://postnl.nl/cif/services/BarcodeWebService/IBarcodeWebService/GenerateBarcode';
     const ENVELOPE_NAMESPACE = 'http://schemas.xmlsoap.org/soap/envelope/';
     const SERVICES_NAMESPACE = 'http://postnl.nl/cif/services/BarcodeWebService/';
-    const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/BarcodeWebService/';
+    const DOMAIN_NAMESPACE   = 'http://postnl.nl/cif/domain/BarcodeWebService/';
 
     /**
      * Namespaces uses for the SOAP version of this service
@@ -148,8 +150,8 @@ class BarcodeService extends AbstractService
      *
      * @return string Barcode
      * @throws ResponseException
-     * @throws \ThirtyBees\PostNL\Exception\CifDownException
-     * @throws \ThirtyBees\PostNL\Exception\CifException
+     * @throws CifDownException
+     * @throws CifException
      */
     public function generateBarcodeSOAP(GenerateBarcode $generateBarcode)
     {
@@ -180,7 +182,7 @@ class BarcodeService extends AbstractService
         foreach ($httpClient->doRequests() as $uuid => $response) {
             try {
                 $barcode = $this->processGenerateBarcodeResponseSOAP($response);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $barcode = new ResponseException($e->getMessage(), $e->getCode(), $e, $response);
             }
 
@@ -202,20 +204,22 @@ class BarcodeService extends AbstractService
         $apiKey = $this->postnl->getRestApiKey();
         $this->setService($generateBarcode);
 
+        $uriQuery = build_query(
+            [
+                'CustomerCode'   => $generateBarcode->getCustomer()->getCustomerCode(),
+                'CustomerNumber' => $generateBarcode->getCustomer()->getCustomerNumber(),
+                'Type'           => $generateBarcode->getBarcode()->getType(),
+                'Serie'          => $generateBarcode->getBarcode()->getSerie(),
+                'Range'          => $generateBarcode->getBarcode()->getRange(),
+            ]
+        );
+
         return new Request(
             'GET',
-            ($this->postnl->getSandbox()
-                ? ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT)
-                : ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT))
-                .'?'.\GuzzleHttp\Psr7\build_query([
-                     'CustomerCode'   => $generateBarcode->getCustomer()->getCustomerCode(),
-                     'CustomerNumber' => $generateBarcode->getCustomer()->getCustomerNumber(),
-                     'Type'           => $generateBarcode->getBarcode()->getType(),
-                     'Serie'          => $generateBarcode->getBarcode()->getSerie(),
-            ]),
+            $this->getEndpointUri() . '?' . $uriQuery,
             [
-                'Accept'       => 'application/json',
-                'apikey'       => $apiKey,
+                'Accept' => 'application/json',
+                'apikey' => $apiKey,
             ]
         );
     }
@@ -266,22 +270,20 @@ class BarcodeService extends AbstractService
         $this->setService($generateBarcode);
 
         $request = $xmlService->write(
-            '{'.static::ENVELOPE_NAMESPACE.'}Envelope',
+            '{' . static::ENVELOPE_NAMESPACE . '}Envelope',
             [
-                '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
-                    ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
+                '{' . static::ENVELOPE_NAMESPACE . '}Header' => [
+                    ['{' . Security::SECURITY_NAMESPACE . '}Security' => $security],
                 ],
-                '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
-                    '{'.static::SERVICES_NAMESPACE.'}GenerateBarcode' => $generateBarcode,
+                '{' . static::ENVELOPE_NAMESPACE . '}Body'   => [
+                    '{' . static::SERVICES_NAMESPACE . '}GenerateBarcode' => $generateBarcode,
                 ],
             ]
         );
 
         return new Request(
             'POST',
-            $this->postnl->getSandbox()
-                ? ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT)
-                : ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT),
+            $this->getEndpointUri(),
             [
                 'SOAPAction'   => "\"$soapAction\"",
                 'Accept'       => 'text/xml',
@@ -309,6 +311,18 @@ class BarcodeService extends AbstractService
         static::registerNamespaces($xml);
         static::validateSOAPResponse($xml);
 
-        return (string) $xml->xpath('//services:GenerateBarcodeResponse/domain:Barcode')[0][0];
+        return (string)$xml->xpath('//services:GenerateBarcodeResponse/domain:Barcode')[0][0];
+    }
+
+    /**
+     * @return string
+     */
+    private function getEndpointUri()
+    {
+        if ($this->postnl->getSandbox()) {
+            return $this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT;
+        }
+
+        return $this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT;
     }
 }
