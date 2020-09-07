@@ -29,6 +29,7 @@ namespace ThirtyBees\PostNL\Service;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Psr\Cache\CacheItemInterface;
+use Sabre\Xml\LibXMLException;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Service as XmlService;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
@@ -53,6 +54,9 @@ use ThirtyBees\PostNL\Exception\CifException;
 use ThirtyBees\PostNL\Exception\InvalidArgumentException;
 use ThirtyBees\PostNL\Exception\ResponseException;
 use ThirtyBees\PostNL\PostNL;
+use function GuzzleHttp\Psr7\build_query;
+use function GuzzleHttp\Psr7\parse_response;
+use function GuzzleHttp\Psr7\str;
 
 /**
  * Class ShippingStatusService
@@ -129,7 +133,7 @@ class ShippingStatusService extends AbstractService
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws ResponseException
      */
     public function currentStatusREST($currentStatus)
     {
@@ -138,7 +142,7 @@ class ShippingStatusService extends AbstractService
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\parse_response($response);
+                $response = parse_response($response);
             } catch (\InvalidArgumentException $e) {
             }
         }
@@ -153,7 +157,7 @@ class ShippingStatusService extends AbstractService
                 && $response instanceof Response
                 && $response->getStatusCode() === 200
             ) {
-                $item->set(\GuzzleHttp\Psr7\str($response));
+                $item->set(str($response));
                 $this->cacheItem($item);
             }
 
@@ -187,7 +191,7 @@ class ShippingStatusService extends AbstractService
      * @throws CifException
      * @throws InvalidArgumentException
      * @throws ResponseException
-     * @throws \Sabre\Xml\LibXMLException
+     * @throws LibXMLException
      */
     public function currentStatusSOAP($currentStatus)
     {
@@ -196,7 +200,7 @@ class ShippingStatusService extends AbstractService
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\parse_response($response);
+                $response = parse_response($response);
             } catch (\InvalidArgumentException $e) {
             }
         }
@@ -210,7 +214,7 @@ class ShippingStatusService extends AbstractService
                 && $response instanceof Response
                 && $response->getStatusCode() === 200
             ) {
-                $item->set(\GuzzleHttp\Psr7\str($response));
+                $item->set(str($response));
                 $this->cacheItem($item);
             }
 
@@ -250,7 +254,7 @@ class ShippingStatusService extends AbstractService
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\parse_response($response);
+                $response = parse_response($response);
             } catch (\InvalidArgumentException $e) {
             }
         }
@@ -265,7 +269,7 @@ class ShippingStatusService extends AbstractService
                 && $response instanceof Response
                 && $response->getStatusCode() === 200
             ) {
-                $item->set(\GuzzleHttp\Psr7\str($response));
+                $item->set(str($response));
                 $this->cacheItem($item);
             }
 
@@ -297,7 +301,7 @@ class ShippingStatusService extends AbstractService
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
-     * @throws \Sabre\Xml\LibXMLException
+     * @throws LibXMLException
      * @throws InvalidArgumentException
      */
     public function completeStatusSOAP($completeStatus)
@@ -307,7 +311,7 @@ class ShippingStatusService extends AbstractService
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\parse_response($response);
+                $response = parse_response($response);
             } catch (\InvalidArgumentException $e) {
             }
         }
@@ -321,7 +325,7 @@ class ShippingStatusService extends AbstractService
                 && $response instanceof Response
                 && $response->getStatusCode() === 200
             ) {
-                $item->set(\GuzzleHttp\Psr7\str($response));
+                $item->set(str($response));
                 $this->cacheItem($item);
             }
 
@@ -361,7 +365,7 @@ class ShippingStatusService extends AbstractService
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\parse_response($response);
+                $response = parse_response($response);
             } catch (\InvalidArgumentException $e) {
             }
         }
@@ -376,7 +380,7 @@ class ShippingStatusService extends AbstractService
                 && $response instanceof Response
                 && $response->getStatusCode() === 200
             ) {
-                $item->set(\GuzzleHttp\Psr7\str($response));
+                $item->set(str($response));
                 $this->cacheItem($item);
             }
 
@@ -413,7 +417,7 @@ class ShippingStatusService extends AbstractService
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\parse_response($response);
+                $response = parse_response($response);
             } catch (\InvalidArgumentException $e) {
             }
         }
@@ -427,7 +431,7 @@ class ShippingStatusService extends AbstractService
                 && $response instanceof Response
                 && $response->getStatusCode() === 200
             ) {
-                $item->set(\GuzzleHttp\Psr7\str($response));
+                $item->set(str($response));
                 $this->cacheItem($item);
             }
 
@@ -491,7 +495,7 @@ class ShippingStatusService extends AbstractService
             $query = [];
             $endpoint = "/barcode/{$currentStatus->getShipment()->getBarcode()}";
         }
-        $endpoint .= '?'.\GuzzleHttp\Psr7\build_query($query);
+        $endpoint .= '?' . build_query($query);
 
         return new Request(
             'GET',
@@ -510,7 +514,7 @@ class ShippingStatusService extends AbstractService
      * @param mixed $response
      *
      * @return CurrentStatusResponse
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws ResponseException
      */
     public function processCurrentStatusResponseREST($response)
     {
@@ -604,8 +608,8 @@ class ShippingStatusService extends AbstractService
      * @return CurrentStatusResponse
      * @throws CifDownException
      * @throws CifException
-     * @throws \Sabre\Xml\LibXMLException
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws LibXMLException
+     * @throws ResponseException
      */
     public function processCurrentStatusResponseSOAP($response)
     {
@@ -686,7 +690,7 @@ class ShippingStatusService extends AbstractService
             ];
             $endpoint = "/barcode/{$completeStatus->getShipment()->getBarcode()}";
         }
-        $endpoint .= '?'.\GuzzleHttp\Psr7\build_query($query);
+        $endpoint .= '?' . build_query($query);
 
         return new Request(
             'POST',
@@ -710,7 +714,7 @@ class ShippingStatusService extends AbstractService
     public function processCompleteStatusResponseREST($response)
     {
         $body = json_decode(static::getResponseText($response), true);
-        if (isset($body['CompleteStatus'])) {
+        if (isset($body['CompleteStatus']) && count($body['CompleteStatus']) > 0) {
             if (isset($body['CompleteStatus']['Shipment']['MainBarcode'])) {
                 $body['CompleteStatus']['Shipments'] = [$body['CompleteStatus']['Shipment']];
             } else {
@@ -747,6 +751,12 @@ class ShippingStatusService extends AbstractService
             $this->setService($object);
 
             return $object;
+        }
+
+        if (isset($body['Warnings']) && count($body['Warnings']) > 0) {
+            throw new ResponseException(
+                $body['Warnings'][0]['Code'] . ' - ' . $body['Warnings'][0]['Message'], 0,null, $response
+            );
         }
 
         return null;
@@ -839,7 +849,7 @@ class ShippingStatusService extends AbstractService
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
-     * @throws \Sabre\Xml\LibXMLException
+     * @throws LibXMLException
      */
     public function processCompleteStatusResponseSOAP($response)
     {
@@ -854,7 +864,7 @@ class ShippingStatusService extends AbstractService
         $array = $array[0];
 
         /** @var CompleteStatusResponse $object */
-        $object = AbstractEntity::xmlDeserialize($array);;
+        $object = AbstractEntity::xmlDeserialize($array);
         $this->setService($object);
 
         return $object;
@@ -968,7 +978,7 @@ class ShippingStatusService extends AbstractService
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
-     * @throws \Sabre\Xml\LibXMLException
+     * @throws LibXMLException
      */
     public function processGetSignatureResponseSOAP($response)
     {
