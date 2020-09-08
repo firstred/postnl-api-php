@@ -775,8 +775,9 @@ class PostNL implements LoggerAwareInterface
 
     /**
      * @param Shipment $shipment
-     * @param string   $printerType
-     * @param bool     $confirm
+     * @param string $printerType
+     * @param bool $confirm
+     * @param string|null $signature
      *
      * @return GenerateLabelResponse
      */
