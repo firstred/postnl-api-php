@@ -783,13 +783,15 @@ class PostNL implements LoggerAwareInterface
     public function generateLabel(
         Shipment $shipment,
         $printerType = 'GraphicFile|PDF',
-        $confirm = true
+        $confirm = true,
+        $signature = null
     ) {
         return $this->getLabellingService()->generateLabel(
             new GenerateLabel(
                 [$shipment],
                 new LabellingMessage($printerType),
-                $this->customer
+                $this->customer,
+                $signature
             ),
             $confirm
         );
