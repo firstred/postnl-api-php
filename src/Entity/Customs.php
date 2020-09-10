@@ -49,6 +49,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method string|null    getLicense()
  * @method string|null    getLicenseNr()
  * @method string|null    getShipmentType()
+ * @method string|null    getTransactionCode()
+ * @method string|null    getTransactionDescription()
  *
  * @method Customs setCertificate(string|null $certificate = null)
  * @method Customs setCertificateNr(string|null $certificateNr = null)
@@ -60,6 +62,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method Customs setLicense(string|null $license = null)
  * @method Customs setLicenseNr(string|null $licenseNr = null)
  * @method Customs setShipmentType(string|null $shipmentType = null)
+ * @method Customs setTransactionCode(string|null $transactionCode = null)
+ * @method Customs setTransactionDescription(string|null $transactionDescription = null)
  */
 class Customs extends AbstractEntity
 {
@@ -171,6 +175,10 @@ class Customs extends AbstractEntity
     protected $LicenseNr;
     /** @var string|null $ShipmentType */
     protected $ShipmentType;
+    /** @var bool $TransactionCode */
+    protected $TransactionCode;
+    /** @var bool $TransactionDescription */
+    protected $TransactionDescription;
     // @codingStandardsIgnoreEnd
 
     /**
@@ -184,6 +192,8 @@ class Customs extends AbstractEntity
      * @param string|null    $license
      * @param string|null    $licenseNr
      * @param string|null    $shipmentType
+     * @param string|null    $transactionCode
+     * @param string|null    $transactionDescription
      */
     public function __construct(
         $certificate = null,
@@ -195,7 +205,9 @@ class Customs extends AbstractEntity
         $invoiceNr = null,
         $license = null,
         $licenseNr = null,
-        $shipmentType = null
+        $shipmentType = null,
+        $transactionCode = null,
+        $transactionDescription = null
     ) {
         parent::__construct();
 
@@ -209,5 +221,7 @@ class Customs extends AbstractEntity
         $this->setLicense($license);
         $this->setLicenseNr($licenseNr);
         $this->setShipmentType($shipmentType);
+        $this->setTransactionCode($transactionCode);
+        $this->setTransactionDescription($transactionDescription);
     }
 }
