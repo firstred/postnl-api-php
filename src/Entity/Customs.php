@@ -104,6 +104,8 @@ class Customs extends AbstractEntity
             'License'                => LabellingService::DOMAIN_NAMESPACE,
             'LicenseNr'              => LabellingService::DOMAIN_NAMESPACE,
             'ShipmentType'           => LabellingService::DOMAIN_NAMESPACE,
+            'TransactionCode'        => LabellingService::DOMAIN_NAMESPACE,
+            'TransactionDescription' => LabellingService::DOMAIN_NAMESPACE,
         ],
         'ShippingStatus' => [
             'Certificate'            => ShippingStatusService::DOMAIN_NAMESPACE,

@@ -79,7 +79,7 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @method Shipment setAddresses(Address[]|null $addresses = null)
  * @method Shipment setBarcode(string|null $barcode = null)
- * @method Shipment setDimension(string|null $dimension = null)
+ * @method Shipment setDimension(Dimension|null $dimension = null)
  * @method Shipment setProductCodeDelivery(string|null $productCodeDelivery = null)
  * @method Shipment setAmounts(Amount[]|null $amounts = null)
  * @method Shipment setCollectionTimeStampEnd(string|null $value = null)
