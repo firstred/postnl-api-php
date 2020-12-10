@@ -106,6 +106,7 @@ class PostNL implements LoggerAwareInterface
         'AT',
         'BE',
         'BG',
+        'CY',
         'CZ',
         'DK',
         'EE',
@@ -114,6 +115,7 @@ class PostNL implements LoggerAwareInterface
         'DE',
         'GB',
         'GR',
+        'HR',
         'HU',
         'IE',
         'IT',
@@ -126,8 +128,8 @@ class PostNL implements LoggerAwareInterface
         'RO',
         'SK',
         'SI',
+        'SE',
         'ES',
-        'EE',
     ];
 
     /**
