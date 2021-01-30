@@ -1,0 +1,109 @@
+{
+  "DeliveryOptions": [
+    {
+      "DeliveryDate": "09-07-2019",
+      "Timeframe": [
+        {
+          "From": "13:00:00",
+          "To": "15:30:00",
+          "Options": [
+            "Daytime"
+          ],
+          "ShippingDate": null
+        },
+        {
+          "From": "18:00:00",
+          "To": "22:00:00",
+          "Options": [
+            "Evening"
+          ],
+          "ShippingDate": null
+        }
+      ]
+    },
+    {
+      "DeliveryDate": "10-07-2019",
+      "Timeframe": [
+        {
+          "From": "12:30:00",
+          "To": "15:00:00",
+          "Options": [
+            "Daytime"
+          ],
+          "ShippingDate": null
+        },
+        {
+          "From": "18:00:00",
+          "To": "22:00:00",
+          "Options": [
+            "Evening"
+          ],
+          "ShippingDate": null
+        }
+      ]
+    },
+    {
+      "DeliveryDate": "11-07-2019",
+      "Timeframe": [
+        {
+          "From": "12:15:00",
+          "To": "14:45:00",
+          "Options": [
+            "Daytime"
+          ],
+          "ShippingDate": null
+        },
+        {
+          "From": "18:00:00",
+          "To": "22:00:00",
+          "Options": [
+            "Evening"
+          ],
+          "ShippingDate": null
+        }
+      ]
+    }
+  ],
+  "PickupOptions": [
+    {
+      "PickupDate": "09-07-2019",
+      "ShippingDate": null,
+      "Option": "Pickup",
+      "Locations": []
+    }
+  ],
+  "Warnings": [
+    {
+      "DeliveryDate": "07-07-2019",
+      "Code": "03",
+      "Description": "Dag uitgesloten van tijdvak",
+      "Options": [
+        "Daytime"
+      ]
+    },
+    {
+      "DeliveryDate": "07-07-2019",
+      "Code": "03",
+      "Description": "Dag uitgesloten van tijdvak",
+      "Options": [
+        "Evening"
+      ]
+    },
+    {
+      "DeliveryDate": "08-07-2019",
+      "Code": "08",
+      "Description": "Geen bezorgopties gevonden op datum.",
+      "Options": [
+        "Daytime"
+      ]
+    },
+    {
+      "DeliveryDate": "08-07-2019",
+      "Code": "08",
+      "Description": "Geen bezorgopties gevonden op datum.",
+      "Options": [
+        "Evening"
+      ]
+    }
+  ]
+}

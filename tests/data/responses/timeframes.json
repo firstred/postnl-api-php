@@ -1,0 +1,119 @@
+{
+  "ReasonNoTimeframes": {
+    "ReasonNoTimeframe": [
+      {
+        "Code": "05",
+        "Date": "30-07-2019",
+        "Description": "Geen avondbelevering mogelijk",
+        "Options": {
+          "string": "Evening"
+        }
+      },
+      {
+        "Code": "05",
+        "Date": "31-07-2019",
+        "Description": "Geen avondbelevering mogelijk",
+        "Options": {
+          "string": "Evening"
+        }
+      },
+      {
+        "Code": "05",
+        "Date": "01-08-2019",
+        "Description": "Geen avondbelevering mogelijk",
+        "Options": {
+          "string": "Evening"
+        }
+      },
+      {
+        "Code": "05",
+        "Date": "02-08-2019",
+        "Description": "Geen avondbelevering mogelijk",
+        "Options": {
+          "string": "Evening"
+        }
+      },
+      {
+        "Code": "05",
+        "Date": "03-08-2019",
+        "Description": "Geen avondbelevering mogelijk",
+        "Options": {
+          "string": "Evening"
+        }
+      }
+    ]
+  },
+  "Timeframes": {
+    "Timeframe": [
+      {
+        "Date": "30-07-2019",
+        "Timeframes": {
+          "TimeframeTimeFrame": {
+            "From": "10:15:00",
+            "Options": {
+              "string": "Daytime"
+            },
+            "To": "12:45:00"
+          }
+        }
+      },
+      {
+        "Date": "31-07-2019",
+        "Timeframes": {
+          "TimeframeTimeFrame": {
+            "From": "10:00:00",
+            "Options": {
+              "string": "Daytime"
+            },
+            "To": "12:30:00"
+          }
+        }
+      },
+      {
+        "Date": "01-08-2019",
+        "Timeframes": {
+          "TimeframeTimeFrame": [
+            {
+              "From": "10:00:00",
+              "Options": {
+                "string": "Daytime"
+              },
+              "To": "12:30:00"
+            },
+            {
+              "From": "18:00:00",
+              "Options": {
+                "string": "Evening"
+              },
+              "To": "20:00:00"
+            }
+          ]
+        }
+      },
+      {
+        "Date": "02-08-2019",
+        "Timeframes": {
+          "TimeframeTimeFrame": {
+            "From": "09:45:00",
+            "Options": {
+              "string": "Daytime"
+            },
+            "To": "12:15:00"
+          }
+        }
+      },
+      {
+        "Date": "03-08-2019",
+        "Timeframes": {
+          "TimeframeTimeFrame": {
+            "From": "08:30:00",
+            "Options": {
+              "string": "Daytime"
+            },
+            "To": "21:30:00"
+          }
+        }
+      }
+    ]
+  }
+}

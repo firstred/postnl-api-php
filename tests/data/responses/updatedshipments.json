@@ -1,0 +1,1120 @@
+[
+  {
+    "Barcode": "3SDEVC987086790",
+    "CreationDate": "2019-06-28",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-01T17:31:10",
+      "StatusCode": "22",
+      "StatusDescription": "Zending afgehaald van Postkantoor",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987421435",
+    "CreationDate": "2019-06-28",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-03T13:02:11",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987018521",
+    "CreationDate": "2019-06-24",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-04T03:30:00",
+      "StatusCode": "14",
+      "StatusDescription": "Voorgemeld: definitief niet aangenomen",
+      "PhaseCode": "1",
+      "PhaseDescription": "Collectie"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987267340",
+    "CreationDate": "2019-06-28",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-06-28T15:14:02",
+      "StatusCode": "1",
+      "StatusDescription": "Zending voorgemeld",
+      "PhaseCode": "1",
+      "PhaseDescription": "Collectie"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987051397",
+    "CreationDate": "2019-06-24",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-04T03:30:00",
+      "StatusCode": "14",
+      "StatusDescription": "Voorgemeld: definitief niet aangenomen",
+      "PhaseCode": "1",
+      "PhaseDescription": "Collectie"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987326633",
+    "CreationDate": "2019-06-24",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-04T03:30:00",
+      "StatusCode": "14",
+      "StatusDescription": "Voorgemeld: definitief niet aangenomen",
+      "PhaseCode": "1",
+      "PhaseDescription": "Collectie"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987088533",
+    "CreationDate": "2019-06-24",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-06-25T11:10:00",
+      "StatusCode": "12",
+      "StatusDescription": "Zending beschikbaar op afhaallocatie",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987578855",
+    "CreationDate": "2019-06-28",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-01T13:06:20",
+      "StatusCode": "22",
+      "StatusDescription": "Zending afgehaald van Postkantoor",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987172897",
+    "CreationDate": "2019-06-26",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-01T17:03:18",
+      "StatusCode": "22",
+      "StatusDescription": "Zending afgehaald van Postkantoor",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987262617",
+    "CreationDate": "2019-06-28",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-01T16:59:41",
+      "StatusCode": "22",
+      "StatusDescription": "Zending afgehaald van Postkantoor",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987545339",
+    "CreationDate": "2019-06-28",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-01T11:23:47",
+      "StatusCode": "22",
+      "StatusDescription": "Zending afgehaald van Postkantoor",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987073416",
+    "CreationDate": "2019-06-27",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-01T11:11:31",
+      "StatusCode": "22",
+      "StatusDescription": "Zending afgehaald van Postkantoor",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987472842",
+    "CreationDate": "2019-06-24",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-01T17:18:27",
+      "StatusCode": "22",
+      "StatusDescription": "Zending afgehaald van Postkantoor",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987560514",
+    "CreationDate": "2019-06-28",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-01T12:49:23",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987355184",
+    "CreationDate": "2019-06-28",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-02T16:33:10",
+      "StatusCode": "22",
+      "StatusDescription": "Zending afgehaald van Postkantoor",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987222325",
+    "CreationDate": "2019-06-24",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-02T12:57:27",
+      "StatusCode": "22",
+      "StatusDescription": "Zending afgehaald van Postkantoor",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987116446",
+    "CreationDate": "2019-07-01",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-02T14:55:29",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SYRSH8859712",
+    "CreationDate": "2019-07-01",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "YRSH",
+    "Status": {
+      "Timestamp": "2019-07-01T16:59:54",
+      "StatusCode": "1",
+      "StatusDescription": "Zending voorgemeld",
+      "PhaseCode": "1",
+      "PhaseDescription": "Collectie"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987520019",
+    "CreationDate": "2019-07-01",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-02T15:15:48",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987292391",
+    "CreationDate": "2019-07-01",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-02T16:20:19",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987249592",
+    "CreationDate": "2019-07-01",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-02T19:04:58",
+      "StatusCode": "22",
+      "StatusDescription": "Zending afgehaald van Postkantoor",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987288287",
+    "CreationDate": "2019-07-01",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-02T10:44:10",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987028409",
+    "CreationDate": "2019-07-01",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-02T17:49:25",
+      "StatusCode": "22",
+      "StatusDescription": "Zending afgehaald van Postkantoor",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987494328",
+    "CreationDate": "2019-07-01",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-02T15:25:30",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987209167",
+    "CreationDate": "2019-07-01",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-02T12:33:36",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987438059",
+    "CreationDate": "2019-07-01",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-02T18:33:56",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987409313",
+    "CreationDate": "2019-07-01",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-02T16:16:00",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987082432",
+    "CreationDate": "2019-07-01",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-02T18:13:50",
+      "StatusCode": "22",
+      "StatusDescription": "Zending afgehaald van Postkantoor",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987346239",
+    "CreationDate": "2019-07-01",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-02T11:00:41",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987211062",
+    "CreationDate": "2019-07-01",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-02T17:17:32",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987115838",
+    "CreationDate": "2019-07-01",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-02T13:46:16",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987106408",
+    "CreationDate": "2019-07-01",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-02T13:08:39",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987180916",
+    "CreationDate": "2019-07-01",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-02T10:33:07",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987220180",
+    "CreationDate": "2019-07-01",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-02T17:15:52",
+      "StatusCode": "22",
+      "StatusDescription": "Zending afgehaald van Postkantoor",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987381437",
+    "CreationDate": "2019-07-01",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-02T17:14:07",
+      "StatusCode": "22",
+      "StatusDescription": "Zending afgehaald van Postkantoor",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987192484",
+    "CreationDate": "2019-07-01",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-02T17:47:49",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987053845",
+    "CreationDate": "2019-07-01",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-02T16:01:35",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987370257",
+    "CreationDate": "2019-07-01",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-02T17:10:46",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987216566",
+    "CreationDate": "2019-07-01",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-02T15:08:01",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987228952",
+    "CreationDate": "2019-07-01",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-02T16:50:57",
+      "StatusCode": "22",
+      "StatusDescription": "Zending afgehaald van Postkantoor",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987169950",
+    "CreationDate": "2019-07-01",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-02T12:41:57",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987229009",
+    "CreationDate": "2019-07-01",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-03T13:24:08",
+      "StatusCode": "22",
+      "StatusDescription": "Zending afgehaald van Postkantoor",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987375882",
+    "CreationDate": "2019-07-01",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-02T16:16:49",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987328727",
+    "CreationDate": "2019-07-01",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-02T16:21:18",
+      "StatusCode": "22",
+      "StatusDescription": "Zending afgehaald van Postkantoor",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987452802",
+    "CreationDate": "2019-07-01",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-02T17:44:07",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987354605",
+    "CreationDate": "2019-07-01",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-02T14:56:08",
+      "StatusCode": "22",
+      "StatusDescription": "Zending afgehaald van Postkantoor",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987393036",
+    "CreationDate": "2019-07-01",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-02T16:05:58",
+      "StatusCode": "22",
+      "StatusDescription": "Zending afgehaald van Postkantoor",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987487576",
+    "CreationDate": "2019-07-01",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-02T17:20:34",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987512354",
+    "CreationDate": "2019-07-01",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-02T14:20:20",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987150533",
+    "CreationDate": "2019-07-01",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-03T13:03:03",
+      "StatusCode": "22",
+      "StatusDescription": "Zending afgehaald van Postkantoor",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987542670",
+    "CreationDate": "2019-07-01",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-03T16:07:17",
+      "StatusCode": "22",
+      "StatusDescription": "Zending afgehaald van Postkantoor",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987530178",
+    "CreationDate": "2019-07-01",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-03T14:58:12",
+      "StatusCode": "22",
+      "StatusDescription": "Zending afgehaald van Postkantoor",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987411106",
+    "CreationDate": "2019-07-01",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-02T11:42:50",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987329930",
+    "CreationDate": "2019-07-01",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-03T13:31:50",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987528747",
+    "CreationDate": "2019-07-01",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-03T13:52:50",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987579378",
+    "CreationDate": "2019-07-01",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-02T18:24:56",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987593164",
+    "CreationDate": "2019-07-01",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-02T16:32:15",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987158701",
+    "CreationDate": "2019-07-02",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-03T09:03:20",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987307617",
+    "CreationDate": "2019-07-02",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-03T11:37:13",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987192629",
+    "CreationDate": "2019-07-02",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-03T17:17:48",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987299185",
+    "CreationDate": "2019-07-02",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-03T09:33:45",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987155975",
+    "CreationDate": "2019-07-02",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-03T14:15:35",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987249273",
+    "CreationDate": "2019-07-02",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-03T10:37:32",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987337790",
+    "CreationDate": "2019-07-02",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-03T15:53:44",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987464903",
+    "CreationDate": "2019-07-02",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-03T15:55:47",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987042862",
+    "CreationDate": "2019-07-02",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-03T14:59:50",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987454375",
+    "CreationDate": "2019-07-02",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-03T13:50:22",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987449328",
+    "CreationDate": "2019-07-02",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-03T14:01:55",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987530851",
+    "CreationDate": "2019-07-02",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-03T17:28:14",
+      "StatusCode": "22",
+      "StatusDescription": "Zending afgehaald van Postkantoor",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987479094",
+    "CreationDate": "2019-07-02",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-03T11:35:05",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987248246",
+    "CreationDate": "2019-07-01",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-03T15:54:46",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SYRSH007606667",
+    "CreationDate": "2019-07-01",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "YRSH",
+    "Status": {
+      "Timestamp": "2019-07-02T11:39:37",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987498082",
+    "CreationDate": "2019-07-01",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-03T20:32:23",
+      "StatusCode": "22",
+      "StatusDescription": "Zending afgehaald van Postkantoor",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SYRSH006384389",
+    "CreationDate": "2019-07-02",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "YRSH",
+    "Status": {
+      "Timestamp": "2019-07-03T11:13:45",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987319960",
+    "CreationDate": "2019-07-01",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-03T14:38:41",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987001405",
+    "CreationDate": "2019-07-01",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-03T16:25:10",
+      "StatusCode": "22",
+      "StatusDescription": "Zending afgehaald van Postkantoor",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987353663",
+    "CreationDate": "2019-07-02",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-03T13:27:11",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987475520",
+    "CreationDate": "2019-07-02",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-03T15:53:13",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987544235",
+    "CreationDate": "2019-07-02",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-03T12:31:30",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987056734",
+    "CreationDate": "2019-07-02",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-03T13:17:07",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987196018",
+    "CreationDate": "2019-07-02",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-03T17:37:27",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987529869",
+    "CreationDate": "2019-07-02",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-03T13:34:49",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987107756",
+    "CreationDate": "2019-07-02",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-03T15:02:30",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987265556",
+    "CreationDate": "2019-07-02",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-03T12:43:32",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987224655",
+    "CreationDate": "2019-07-02",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-03T11:04:22",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SDEVC987151378",
+    "CreationDate": "2019-07-02",
+    "CustomerNumber": "11223344",
+    "CustomerCode": "DEVC",
+    "Status": {
+      "Timestamp": "2019-07-03T21:08:03",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  }
+]

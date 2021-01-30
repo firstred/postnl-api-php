@@ -1,0 +1,70 @@
+{
+  "CurrentStatus": {
+    "Shipment": {
+      "MainBarcode": "3SDEVC987021270",
+      "Barcode": "3SDEVC987021270",
+      "ShipmentAmount": "1",
+      "ShipmentCounter": "1",
+      "Customer": {
+        "CustomerCode": "DEVC",
+        "CustomerNumber": "11223344",
+        "Name": "PostNL"
+      },
+      "ProductCode": "003089",
+      "ProductDescription": "Handtek. voor Ontvangst/Alleen huisadres",
+      "Reference": {},
+      "Dimension": {
+        "Height": "105",
+        "Length": "260",
+        "Volume": "5051",
+        "Weight": "400",
+        "Width": "185"
+      },
+      "Address": [
+        {
+          "AddressType": "01",
+          "Building": {},
+          "City": "Hoofddorp",
+          "CompanyName": "PostNL",
+          "CountryCode": "NL",
+          "DepartmentName": {},
+          "District": {},
+          "FirstName": {},
+          "Floor": {},
+          "HouseNumber": "42",
+          "HouseNumberSuffix": {},
+          "LastName": {},
+          "Region": {},
+          "Remark": {},
+          "Street": "Siriusdreef",
+          "Zipcode": "2312WT"
+        },
+        {
+          "AddressType": "02",
+          "Building": {},
+          "City": "Hoofddorp",
+          "CompanyName": "PostNL",
+          "CountryCode": "NL",
+          "DepartmentName": {},
+          "District": {},
+          "FirstName": {},
+          "Floor": {},
+          "HouseNumber": "42",
+          "HouseNumberSuffix": {},
+          "LastName": {},
+          "Region": {},
+          "Remark": {},
+          "Street": "Siriusdreef",
+          "Zipcode": "2312WT"
+        }
+      ],
+      "Status": {
+        "TimeStamp": "31-07-2019 09:36:42",
+        "StatusCode": "11",
+        "StatusDescription": "Zending afgeleverd",
+        "PhaseCode": "4",
+        "PhaseDescription": "Afgeleverd"
+      }
+    }
+  }
+}
