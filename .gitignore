@@ -5,3 +5,6 @@ tests/clover.xml
 
 # PHP CS fixer
 .php_cs.cache
+
+# PHPENV
+.php-version
