@@ -33,99 +33,121 @@ use Firstred\PostNL\Attribute\RequestProp;
 use Firstred\PostNL\Misc\SerializableObject;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\ServiceInterface;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use JetBrains\PhpStorm\ExpectedValues;
+use function is_numeric;
 
 class Address extends SerializableObject
 {
+    /*
+     * PostNL internal applications validate the receiver address. In case the spelling of
+     * addresses should be different according to our PostNL information, the address details will
+     * be corrected. This can be noticed in Track & Trace.
+     *
+     * Please note that the webservice will not add address details. Street and City fields will
+     * only be printed when they are in the call towards the labeling webservice.
+     *
+     * The element Address type is a code in the request. Possible values are:
+     *
+     * Code Description
+     * 01   Receiver
+     * 02   Sender
+     * 03   Alternative sender address
+     * 04   Collection address (In the orders need to be collected first)
+     * 08   Return address*
+     * 09   Drop off location (for use with Pick up at PostNL location)
+     *
+     * > * When using the ‘label in the box return label’, it is mandatory to use an
+     * >   `Antwoordnummer` in AddressType 08.
+     * >   This cannot be a regular address
+     *
+     * The following rules apply:
+     * If there is no Address specified with AddressType = 02, the data from Customer/Address
+     * will be added to the list as AddressType 02.
+     * If there is no Customer/Address, the message will be rejected.
+     * At least one other AddressType must be specified, other than AddressType 02
+     * In most cases this will be AddressType 01, the receiver address.
+     */
+    #[RequestProp(requiredFor: [LabellingService::class])]
+    protected string|null $AddressType = null;
+
+    #[RequestProp(optionalFor: [LabellingService::class])]
+    protected string|null $Area = null;
+
+    #[RequestProp(optionalFor: [LabellingService::class])]
+    protected string|null $Buildingname = null;
+
+    #[RequestProp(optionalFor: [LabellingService::class])]
+    protected string|null $City = null;
+
+    #[RequestProp(optionalFor: [LabellingService::class])]
+    protected string|null $CompanyName = null;
+
+    #[RequestProp(requiredFor: [LabellingService::class])]
+    protected string|null $Countrycode = null;
+
+    #[RequestProp(optionalFor: [LabellingService::class])]
+    protected string|null $Department = null;
+    #[RequestProp(optionalFor: [LabellingService::class])]
+    protected string|null $Doorcode = null;
+
+    #[RequestProp(optionalFor: [LabellingService::class])]
+    protected string|null $FirstName = null;
+
+    #[RequestProp(optionalFor: [LabellingService::class])]
+    protected string|null $Floor = null;
+
+    #[RequestProp(optionalFor: [LabellingService::class])]
+    protected int|null $HouseNr = null;
+
+    #[RequestProp(optionalFor: [LabellingService::class])]
+    protected string|null $HouseNrExt = null;
+
+    #[RequestProp(optionalFor: [LabellingService::class])]
+    protected string|null $StreetHouseNrExt = null;
+
+    #[RequestProp(optionalFor: [LabellingService::class])]
+    protected string|null $Name = null;
+
+    #[RequestProp(optionalFor: [LabellingService::class])]
+    protected string|null $Region = null;
+
+    protected string|null $Remark = null;
+
+    #[RequestProp(optionalFor: [LabellingService::class])]
+    protected string|null $Street = null;
+
+    #[RequestProp(optionalFor: [LabellingService::class])]
+    protected string|null $Zipcode = null;
+
+    /** @var array|null Array with optional properties */
+    protected array|null $other = null;
+
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
         string $service = '',
         #[ExpectedValues(values: PropInterface::PROP_TYPES + [''])]
         string $propType = '',
 
-        /*
-         * PostNL internal applications validate the receiver address. In case the spelling of
-         * addresses should be different according to our PostNL information, the address details will
-         * be corrected. This can be noticed in Track & Trace.
-         *
-         * Please note that the webservice will not add address details. Street and City fields will
-         * only be printed when they are in the call towards the labeling webservice.
-         *
-         * The element Address type is a code in the request. Possible values are:
-         *
-         * Code Description
-         * 01   Receiver
-         * 02   Sender
-         * 03   Alternative sender address
-         * 04   Collection address (In the orders need to be collected first)
-         * 08   Return address*
-         * 09   Drop off location (for use with Pick up at PostNL location)
-         *
-         * > * When using the ‘label in the box return label’, it is mandatory to use an
-         * >   `Antwoordnummer` in AddressType 08.
-         * >   This cannot be a regular address
-         *
-         * The following rules apply:
-         * If there is no Address specified with AddressType = 02, the data from Customer/Address
-         * will be added to the list as AddressType 02.
-         * If there is no Customer/Address, the message will be rejected.
-         * At least one other AddressType must be specified, other than AddressType 02
-         * In most cases this will be AddressType 01, the receiver address.
-         */
-        #[RequestProp(requiredFor: [LabellingService::class])]
-        protected string|null $AddressType = null,
-
-        #[RequestProp(optionalFor: [LabellingService::class])]
-        protected string|null $Area = null,
-
-        #[RequestProp(optionalFor: [LabellingService::class])]
-        protected string|null $Buildingname = null,
-
-        #[RequestProp(optionalFor: [LabellingService::class])]
-        protected string|null $City = null,
-
-        #[RequestProp(optionalFor: [LabellingService::class])]
-        protected string|null $CompanyName = null,
-
-        #[RequestProp(requiredFor: [LabellingService::class])]
-        protected string|null $Countrycode = null,
-
-        #[RequestProp(optionalFor: [LabellingService::class])]
-        protected string|null $Department = null,
-        #[RequestProp(optionalFor: [LabellingService::class])]
-        protected string|null $Doorcode = null,
-
-        #[RequestProp(optionalFor: [LabellingService::class])]
-        protected string|null $FirstName = null,
-
-        #[RequestProp(optionalFor: [LabellingService::class])]
-        protected string|null $Floor = null,
-
-        #[RequestProp(optionalFor: [LabellingService::class])]
-        protected string|null $HouseNr = null,
-
-        #[RequestProp(optionalFor: [LabellingService::class])]
-        protected string|null $HouseNrExt = null,
-
-        #[RequestProp(optionalFor: [LabellingService::class])]
-        protected string|null $StreetHouseNrExt = null,
-
-        #[RequestProp(optionalFor: [LabellingService::class])]
-        protected string|null $Name = null,
-
-        #[RequestProp(optionalFor: [LabellingService::class])]
-        protected string|null $Region = null,
-
-        protected string|null $Remark = null,
-
-        #[RequestProp(optionalFor: [LabellingService::class])]
-        protected string|null $Street = null,
-
-        #[RequestProp(optionalFor: [LabellingService::class])]
-        protected string|null $Zipcode = null,
-
-        /** @var array|null Array with optional properties */
-        protected array|null $other = null,
+        string|null $AddressType = null,
+        string|null $Area = null,
+        string|null $Buildingname = null,
+        string|null $City = null,
+        string|null $CompanyName = null,
+        string|null $Countrycode = null,
+        string|null $Department = null,
+        string|null $Doorcode = null,
+        string|null $FirstName = null,
+        string|null $Floor = null,
+        int|string|null $HouseNr = null,
+        int|string|null $HouseNrExt = null,
+        string|null $StreetHouseNrExt = null,
+        string|null $Name = null,
+        string|null $Region = null,
+        string|null $Remark = null,
+        string|null $Street = null,
+        string|null $Zipcode = null,
+        array|null $other = null,
     ) {
         parent::__construct(service: $service, propType: $propType);
 
@@ -149,6 +171,8 @@ class Address extends SerializableObject
         $this->setRegion(Region: $Region);
         $this->setRemark(Remark: $Remark);
         $this->setStreetHouseNrExt(StreetHouseNrExt: $StreetHouseNrExt);
+
+        $this->setOther(other: $other);
     }
 
     public function getZipcode(): string|null
@@ -291,13 +315,21 @@ class Address extends SerializableObject
         return $this;
     }
 
-    public function getHouseNr(): string|null
+    public function getHouseNr(): int|null
     {
         return $this->HouseNr;
     }
 
-    public function setHouseNr(string|null $HouseNr = null): static
+    public function setHouseNr(int|string|null $HouseNr = null): static
     {
+        if (is_string(value: $HouseNr)) {
+            if (!is_numeric(value: $HouseNr)) {
+                throw new InvalidArgumentException(message: "Invalid `HouseNr` value passed: $HouseNr");
+            }
+
+            $HouseNr = (int) $HouseNr;
+        }
+
         $this->HouseNr = $HouseNr;
 
         return $this;
@@ -308,8 +340,12 @@ class Address extends SerializableObject
         return $this->HouseNrExt;
     }
 
-    public function setHouseNrExt(string|null $HouseNrExt = null): static
+    public function setHouseNrExt(int|string|null $HouseNrExt = null): static
     {
+        if (is_int(value: $HouseNrExt)) {
+            $HouseNrExt = (string) $HouseNrExt;
+        }
+
         $this->HouseNrExt = $HouseNrExt;
 
         return $this;

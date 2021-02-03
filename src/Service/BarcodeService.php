@@ -28,6 +28,8 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Service;
 
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use JetBrains\PhpStorm\Pure;
 use function explode;
 use Firstred\PostNL\Attribute\RequestProp;
 use Firstred\PostNL\DTO\Request\GenerateBarcodeRequestDTO;
@@ -46,6 +48,7 @@ use function strtoupper;
 
 class BarcodeService extends ServiceBase implements BarcodeServiceInterface
 {
+    #[Pure]
     public function __construct(
         protected Customer $customer,
         protected string $apiKey,
@@ -55,6 +58,10 @@ class BarcodeService extends ServiceBase implements BarcodeServiceInterface
         parent::__construct(customer: $customer, apiKey: $apiKey, sandbox: $sandbox);
     }
 
+    /**
+     * @throws InvalidBarcodeException
+     * @throws InvalidArgumentException
+     */
     public function generateBarcode(
         string $type = '3S',
         string|null $range = null,
@@ -62,7 +69,7 @@ class BarcodeService extends ServiceBase implements BarcodeServiceInterface
         bool $eps = false,
     ): GenerateBarcodeResponseDTO {
         if (!in_array(needle: $type, haystack: ['2S', '3S']) || 2 !== strlen(string: $type)) {
-            throw new InvalidBarcodeException("Barcode type `$type` is invalid");
+            throw new InvalidBarcodeException(mesage: "Barcode type `$type` is invalid");
         }
 
         if (!$range) {
@@ -73,7 +80,7 @@ class BarcodeService extends ServiceBase implements BarcodeServiceInterface
             }
         }
         if (!$range) {
-            throw new InvalidBarcodeException('Unable to find a valid range');
+            throw new InvalidBarcodeException(message: 'Unable to find a valid range');
         }
 
         if (!$serie) {
@@ -83,6 +90,7 @@ class BarcodeService extends ServiceBase implements BarcodeServiceInterface
         return $this->getGateway()->doGenerateBarcodeRequest(generateBarcodeRequestDTO: new GenerateBarcodeRequestDTO(
             service: BarcodeServiceInterface::class,
             propType: RequestProp::class,
+
             Type: $type,
             Serie: $serie,
             Range: $range,
@@ -104,10 +112,10 @@ class BarcodeService extends ServiceBase implements BarcodeServiceInterface
             $type = $this->getCustomer()->getGlobalPackBarcodeType();
 
             if (!$range) {
-                throw new InvalidConfigurationException('GlobalPack customer code has not been set for the current customer');
+                throw new InvalidConfigurationException(message: 'GlobalPack customer code has not been set for the current customer');
             }
             if (!$type) {
-                throw new InvalidConfigurationException('GlobalPack barcode type has not been set for the current customer');
+                throw new InvalidConfigurationException(message: 'GlobalPack barcode type has not been set for the current customer');
             }
         }
 
@@ -143,10 +151,10 @@ class BarcodeService extends ServiceBase implements BarcodeServiceInterface
                 $type = $globalPackType;
 
                 if (!$range) {
-                    throw new InvalidConfigurationException('GlobalPack customer code has not been set for the current customer');
+                    throw new InvalidConfigurationException(message: 'GlobalPack customer code has not been set for the current customer');
                 }
                 if (!$type) {
-                    throw new InvalidConfigurationException('GlobalPack barcode type has not been set for the current customer');
+                    throw new InvalidConfigurationException(message: 'GlobalPack barcode type has not been set for the current customer');
                 }
             }
 
@@ -216,7 +224,7 @@ class BarcodeService extends ServiceBase implements BarcodeServiceInterface
 
                             break 2;
                         default:
-                            throw new InvalidBarcodeException('Invalid range');
+                            throw new InvalidBarcodeException(message: 'Invalid range');
                     }
                 }
                 // Regular domestic codes

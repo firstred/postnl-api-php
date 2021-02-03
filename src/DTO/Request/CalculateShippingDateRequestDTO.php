@@ -122,7 +122,7 @@ class CalculateShippingDateRequestDTO extends SerializableObject
     {
         if (is_string(value: $ShippingDuration)) {
             if (!is_numeric(value: $ShippingDuration)) {
-                throw new InvalidArgumentException("Invalid `ShippingDuration` value passed: $ShippingDuration");
+                throw new InvalidArgumentException(message: "Invalid `ShippingDuration` value passed: $ShippingDuration");
             }
 
             $ShippingDuration = (int) $ShippingDuration;
@@ -205,7 +205,7 @@ class CalculateShippingDateRequestDTO extends SerializableObject
     {
         if (is_string(value: $HouseNumber)) {
             if (!is_numeric(value: $HouseNumber)) {
-                throw new InvalidArgumentException("Invalid `HouseNumber` value passed: $HouseNumber");
+                throw new InvalidArgumentException(message: "Invalid `HouseNumber` value passed: $HouseNumber");
             }
 
             $HouseNumber = (int) $HouseNumber;

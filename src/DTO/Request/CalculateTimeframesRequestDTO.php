@@ -215,7 +215,7 @@ class CalculateTimeframesRequestDTO extends SerializableObject
     {
         if (is_string(value: $HouseNumber)) {
             if (!is_numeric(value: $HouseNumber)) {
-                throw new InvalidArgumentException("Invalid `Housenumber` value passed: $HouseNumber");
+                throw new InvalidArgumentException(message: "Invalid `Housenumber` value passed: $HouseNumber");
             }
 
             $HouseNumber = (int) $HouseNumber;
@@ -249,7 +249,7 @@ class CalculateTimeframesRequestDTO extends SerializableObject
     {
         if (is_string(value: $Interval)) {
             if (!is_numeric(value: $Interval)) {
-                throw new InvalidArgumentException("Invalid `Interval` value passed: $Interval");
+                throw new InvalidArgumentException(message: "Invalid `Interval` value passed: $Interval");
             }
 
             $Interval = (int) $Interval;

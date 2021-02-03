@@ -26,49 +26,29 @@
 
 declare(strict_types=1);
 
-namespace Firstred\PostNL\DTO\Response;
+namespace Firstred\PostNL\RequestBuilder;
 
-use Firstred\PostNL\Attribute\PropInterface;
-use Firstred\PostNL\Attribute\ResponseProp;
-use Firstred\PostNL\Misc\SerializableObject;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\BarcodeServiceInterface;
-use Firstred\PostNL\Service\ServiceInterface;
-use JetBrains\PhpStorm\ExpectedValues;
-use Stringable;
+use Firstred\PostNL\DTO\Request\GetLocationsInAreaRequestDTO;
+use Firstred\PostNL\DTO\Request\GetNearestLocationsGeocodeRequestDTO;
+use Firstred\PostNL\DTO\Request\GetNearestLocationsRequestDTO;
+use Firstred\PostNL\DTO\Request\LookupLocationRequestDTO;
+use Psr\Http\Message\RequestInterface;
 
-class GenerateBarcodeResponseDTO extends SerializableObject implements Stringable
+interface LocationServiceRequestBuilderInterface extends RequestBuilderInterface
 {
-    #[ResponseProp(requiredFor: [BarcodeServiceInterface::class])]
-    protected string|null $Barcode = null;
+    public function buildLookupLocationRequest(
+        LookupLocationRequestDTO $lookupLocationRequestDTO,
+    ): RequestInterface;
 
-    public function __construct(
-        #[ExpectedValues(values: ServiceInterface::SERVICES)]
-        string $service,
-        #[ExpectedValues(values: PropInterface::PROP_TYPES)]
-        string $propType,
+    public function buildGetNearestLocationsRequest(
+        GetNearestLocationsRequestDTO $getNearestLocationsRequestDTO,
+    ): RequestInterface;
 
-        string|null $Barcode = null,
-    ) {
-        parent::__construct(service: $service, propType: $propType);
+    public function buildGetNearestLocationsGeocodeRequest(
+        GetNearestLocationsGeocodeRequestDTO $getNearestLocationsGeocodeRequestDTO,
+    ): RequestInterface;
 
-        $this->setBarcode(Barcode: $Barcode);
-    }
-
-    public function getBarcode(): string|null
-    {
-        return $this->Barcode;
-    }
-
-    public function setBarcode(string|null $Barcode = null): static
-    {
-        $this->Barcode = $Barcode;
-
-        return $this;
-    }
-
-    public function __toString(): string
-    {
-        return (string) $this->getBarcode();
-    }
+    public function buildGetLocationsInAreaRequest(
+        GetLocationsInAreaRequestDTO $getLocationsInAreaRequestDTO,
+    ): RequestInterface;
 }

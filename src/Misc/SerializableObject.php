@@ -122,7 +122,7 @@ abstract class SerializableObject implements JsonSerializable
             throw new InvalidArgumentException(message: 'Invalid prop type given');
         }
         if ($this->service && !is_a(object_or_class: $this->service, class: ServiceInterface::class, allow_string: true)) {
-            throw new InvalidArgumentException('Invalid service given');
+            throw new InvalidArgumentException(message: 'Invalid service given');
         }
 
         $reflectionClass = new ReflectionClass(objectOrClass: $this);
@@ -164,7 +164,7 @@ abstract class SerializableObject implements JsonSerializable
 
                 foreach ($services as $service) {
                     if (!in_array(needle: $service, haystack: ServiceInterface::SERVICES)) {
-                        throw new InvalidArgumentException("Invalid service class: $service");
+                        throw new InvalidArgumentException(message: "Invalid service class: $service");
                     }
                 }
 

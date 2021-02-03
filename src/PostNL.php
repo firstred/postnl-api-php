@@ -32,22 +32,32 @@ use Firstred\PostNL\Attribute\RequestProp;
 use Firstred\PostNL\DTO\Request\CalculateDeliveryDateRequestDTO;
 use Firstred\PostNL\DTO\Request\CalculateShippingDateRequestDTO;
 use Firstred\PostNL\DTO\Request\CalculateTimeframesRequestDTO;
+use Firstred\PostNL\DTO\Request\GetLocationsInAreaRequestDTO;
+use Firstred\PostNL\DTO\Request\GetNearestLocationsGeocodeRequestDTO;
+use Firstred\PostNL\DTO\Request\GetNearestLocationsRequestDTO;
+use Firstred\PostNL\DTO\Request\LookupLocationRequestDTO;
 use Firstred\PostNL\DTO\Response\CalculateDeliveryDateResponseDTO;
 use Firstred\PostNL\DTO\Response\CalculateShippingDateResponseDTO;
 use Firstred\PostNL\DTO\Response\CalculateTimeframesResponseDTO;
 use Firstred\PostNL\DTO\Response\GenerateBarcodeResponseDTO;
 use Firstred\PostNL\DTO\Response\GenerateBarcodesByCountryCodesResponseDTO;
+use Firstred\PostNL\DTO\Response\GetLocationResponseDTO;
+use Firstred\PostNL\DTO\Response\GetLocationsResponseDTO;
 use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Entity\Location;
 use Firstred\PostNL\Gateway\BarcodeServiceGateway;
 use Firstred\PostNL\Gateway\DeliveryDateServiceGateway;
+use Firstred\PostNL\Gateway\LocationServiceGateway;
 use Firstred\PostNL\Gateway\TimeframeServiceGateway;
 use Firstred\PostNL\HttpClient\HTTPClientInterface;
 use Firstred\PostNL\HttpClient\HTTPlugHTTPClient;
 use Firstred\PostNL\RequestBuilder\BarcodeServiceRequestBuilder;
 use Firstred\PostNL\RequestBuilder\DeliveryDateServiceRequestBuilder;
+use Firstred\PostNL\RequestBuilder\LocationServiceRequestBuilder;
 use Firstred\PostNL\RequestBuilder\TimeframeServiceRequestBuilder;
 use Firstred\PostNL\ResponseProcessor\BarcodeServiceResponseProcessor;
 use Firstred\PostNL\ResponseProcessor\DeliveryDateServiceResponseProcessor;
+use Firstred\PostNL\ResponseProcessor\LocationServiceResponseProcessor;
 use Firstred\PostNL\ResponseProcessor\TimeframeServiceResponseProcessor;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\BarcodeServiceInterface;
@@ -65,6 +75,7 @@ use Firstred\PostNL\Service\ShippingStatusServiceInterface;
 use Firstred\PostNL\Service\TimeframeService;
 use Firstred\PostNL\Service\TimeframeServiceInterface;
 use JetBrains\PhpStorm\ArrayShape;
+use JetBrains\PhpStorm\ExpectedValues;
 use Psr\Log\LoggerInterface;
 
 class PostNL
@@ -722,6 +733,7 @@ class PostNL
      * @param bool|null   $availableSunday
      *
      * @return CalculateDeliveryDateResponseDTO
+     *
      * @throws Exception\InvalidArgumentException
      */
     public function calculateDeliveryDate(
@@ -887,17 +899,143 @@ class PostNL
         ));
     }
 
-//    /**
-//     * Get nearest locations.
-//     *
-//     * @param GetNearestLocations $getNearestLocations
-//     *
-//     * @return GetNearestLocationsResponse
-//     */
-//    public function getNearestLocations(GetNearestLocations $getNearestLocations): GetNearestLocationsResponse
-//    {
-//        return $this->getLocationService()->getNearestLocations(getNearestLocations: $getNearestLocations);
-//    }
+    /**
+     * Lookup a single location.
+     *
+     * @param int|string $LocationCode
+     * @param string     $RetailNetworkID
+     *
+     * @return GetLocationResponseDTO
+     * @throws Exception\InvalidArgumentException
+     */
+    public function lookupLocation(
+        int|string $LocationCode,
+        #[ExpectedValues(values: Location::AVAILABLE_NETWORKS)]
+        string $RetailNetworkID,
+    ): GetLocationResponseDTO {
+        return $this->getLocationService()->lookupLocation(lookupLocationRequestDTO: new LookupLocationRequestDTO(
+            service: LocationServiceInterface::class,
+            propType: RequestProp::class,
+
+            LocationCode: $LocationCode,
+            RetailNetworkID: $RetailNetworkID,
+        ));
+    }
+
+    /**
+     * Get nearest location by postcode.
+     *
+     * @param string          $CountryCode
+     * @param string|null     $PostalCode
+     * @param array|null      $DeliveryOptions
+     * @param string|null     $City
+     * @param string|null     $Street
+     * @param int|string|null $HouseNumber
+     * @param string|null     $DeliveryDate
+     * @param string|null     $OpeningTime
+     *
+     * @return GetLocationsResponseDTO
+     *
+     * @throws Exception\InvalidArgumentException
+     */
+    public function getNearestLocations(
+        string $CountryCode = 'NL',
+        string $PostalCode = null,
+        array $DeliveryOptions = null,
+        string|null $City = null,
+        string|null $Street = null,
+        int|string|null $HouseNumber = null,
+        string|null $DeliveryDate = null,
+        string|null $OpeningTime = null,
+    ): GetLocationsResponseDTO {
+        return $this->getLocationService()->getNearestLocations(getNearestLocationsRequestDTO: new GetNearestLocationsRequestDTO(
+            service: LocationServiceInterface::class,
+            propType: RequestProp::class,
+
+            CountryCode: $CountryCode,
+            PostalCode: $PostalCode,
+            City: $City,
+            Street: $Street,
+            HouseNumber: $HouseNumber,
+            DeliveryDate: $DeliveryDate,
+            OpeningTime: $OpeningTime,
+            DeliveryOptions: $DeliveryOptions,
+        ));
+    }
+
+    /**
+     * Get nearest locations near the given coordinates.
+     *
+     * @param string      $CountryCode
+     * @param string|null $Latitude
+     * @param string|null $Longitude
+     * @param array|null  $DeliveryOptions
+     * @param string|null $DeliveryDate
+     * @param string|null $OpeningTime
+     *
+     * @return GetLocationsResponseDTO
+     *
+     * @throws Exception\InvalidArgumentException
+     */
+    public function getNearestLocationsByGeolocation(
+        string $CountryCode = 'NL',
+        float|null $Latitude = null,
+        float|null $Longitude = null,
+        array $DeliveryOptions = null,
+        string|null $DeliveryDate = null,
+        string|null $OpeningTime = null,
+    ): GetLocationsResponseDTO {
+        return $this->getLocationService()->getNearestLocationsGeocode(getNearestLocationsGeocodeRequestDTO: new GetNearestLocationsGeocodeRequestDTO(
+            service: LocationServiceInterface::class,
+            propType: RequestProp::class,
+
+            Latitude: $Latitude,
+            Longitude: $Longitude,
+            CountryCode: $CountryCode,
+            DeliveryDate: $DeliveryDate,
+            OpeningTime: $OpeningTime,
+            DeliveryOptions: $DeliveryOptions,
+        ));
+    }
+
+    /**
+     * Get locations in area.
+     *
+     * @param float|null  $LatitudeNorth
+     * @param float|null  $LongitudeWest
+     * @param float|null  $LatitudeSouth
+     * @param float|null  $LongitudeEast
+     * @param string|null $CountryCode
+     * @param string|null $DeliveryDate
+     * @param string|null $OpeningTime
+     * @param array|null  $DeliveryOptions
+     *
+     * @return GetLocationsResponseDTO
+     * @throws Exception\ApiException
+     * @throws Exception\InvalidArgumentException
+     */
+    public function getLocationsInArea(
+        float|null $LatitudeNorth = null,
+        float|null $LongitudeWest = null,
+        float|null $LatitudeSouth = null,
+        float|null $LongitudeEast = null,
+        string|null $CountryCode = null,
+        string|null $DeliveryDate = null,
+        string|null $OpeningTime = null,
+        array|null $DeliveryOptions = null,
+    ): GetLocationsResponseDTO {
+        return $this->getLocationService()->getLocationsInArea(getLocationsInAreaRequestDTO: new GetLocationsInAreaRequestDTO(
+            LatitudeNorth: $LatitudeNorth,
+            LongitudeWest: $LongitudeWest,
+            LatitudeSouth: $LatitudeSouth,
+            LongitudeEast: $LongitudeEast,
+            CountryCode: $CountryCode,
+            DeliveryDate: $DeliveryDate,
+            OpeningTime: $OpeningTime,
+            DeliveryOptions: $DeliveryOptions,
+        ));
+    }
+
 //
 //    /**
 //     * All-in-one function for checkout widgets. It retrieves and returns the
@@ -1232,7 +1370,21 @@ class PostNL
     public function getLocationService(): LocationServiceInterface
     {
         if (!$this->locationService) {
-            $this->setLocationService(service: new LocationService($this));
+            $this->setLocationService(service: new LocationService(
+                customer: $this->getCustomer(),
+                apiKey: $this->getApiKey(),
+                sandbox: $this->getSandbox(),
+                gateway: new LocationServiceGateway(httpClient: $this->getDefaultHttpClient(),
+                    cache: null,
+                    ttl: null,
+                    requestBuilder: new LocationServiceRequestBuilder(
+                        customer: $this->getCustomer(),
+                        apiKey: $this->getApiKey(),
+                        sandbox: $this->getSandbox(),
+                    ),
+                    responseProcessor: new LocationServiceResponseProcessor(),
+                ),
+            ));
         }
 
         return $this->locationService;

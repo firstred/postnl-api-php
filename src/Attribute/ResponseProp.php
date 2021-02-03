@@ -30,7 +30,7 @@ namespace Firstred\PostNL\Attribute;
 
 use Attribute;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Service\AbstractService;
+use Firstred\PostNL\Service\ServiceInterface;
 use function is_a;
 
 #[Attribute(Attribute::TARGET_PROPERTY)]
@@ -49,8 +49,8 @@ final class ResponseProp implements PropInterface
     {
         function checkService(string $service): void
         {
-            if (!is_a(object_or_class: $service = '', class: AbstractService::class)) {
-                throw new InvalidArgumentException("$service is not a valid service");
+            if (!is_a(object_or_class: $service = '', class: ServiceInterface::class)) {
+                throw new InvalidArgumentException(message: "$service is not a valid service");
             }
         }
 

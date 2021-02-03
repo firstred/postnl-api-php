@@ -577,7 +577,7 @@ class CalculateDeliveryDateRequestDTO extends SerializableObject
     {
         foreach ($cutOffTimes as $dayOfWeek => $cutOffTime) {
             if (!$cutOffTime instanceof CutOffTime) {
-                throw new InvalidArgumentException('Invalid CutOffTime passed');
+                throw new InvalidArgumentException(message: 'Invalid CutOffTime passed');
             }
 
             switch ($dayOfWeek) {

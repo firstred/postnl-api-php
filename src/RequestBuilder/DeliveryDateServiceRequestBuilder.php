@@ -67,7 +67,7 @@ class DeliveryDateServiceRequestBuilder extends RequestBuilderBase implements De
     public function buildCalculateShippingDateRequest(CalculateShippingDateRequestDTO $calculateShippingDateRequestDTO): RequestInterface
     {
         if (!$calculateShippingDateRequestDTO->isValid()) {
-            throw new InvalidArgumentException('Invalid calculate shipping date request');
+            throw new InvalidArgumentException(message: 'Invalid calculate shipping date request');
         }
 
         /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */

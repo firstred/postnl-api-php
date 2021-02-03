@@ -30,6 +30,7 @@ namespace Firstred\PostNL\ResponseProcessor;
 
 use Firstred\PostNL\Attribute\ResponseProp;
 use Firstred\PostNL\DTO\Response\GenerateBarcodeResponseDTO;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\Service\BarcodeServiceInterface;
 use function json_decode;
@@ -37,6 +38,10 @@ use Psr\Http\Message\ResponseInterface;
 
 class BarcodeServiceResponseProcessor extends ResponseProcessorBase implements BarcodeServiceResponseProcessorInterface
 {
+    /**
+     * @throws ResponseException
+     * @throws InvalidArgumentException
+     */
     public function processGenerateBarcodeResponse(ResponseInterface $response): GenerateBarcodeResponseDTO
     {
         $json = @json_decode(json: (string) $response->getBody(), associative: true);

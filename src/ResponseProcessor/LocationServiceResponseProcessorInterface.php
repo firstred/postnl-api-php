@@ -26,49 +26,15 @@
 
 declare(strict_types=1);
 
-namespace Firstred\PostNL\DTO\Response;
+namespace Firstred\PostNL\ResponseProcessor;
 
-use Firstred\PostNL\Attribute\PropInterface;
-use Firstred\PostNL\Attribute\ResponseProp;
-use Firstred\PostNL\Misc\SerializableObject;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\BarcodeServiceInterface;
-use Firstred\PostNL\Service\ServiceInterface;
-use JetBrains\PhpStorm\ExpectedValues;
-use Stringable;
+use Firstred\PostNL\DTO\Response\GetLocationResponseDTO;
+use Firstred\PostNL\DTO\Response\GetLocationsResponseDTO;
+use Psr\Http\Message\ResponseInterface;
 
-class GenerateBarcodeResponseDTO extends SerializableObject implements Stringable
+interface LocationServiceResponseProcessorInterface extends ResponseProcessorInterface
 {
-    #[ResponseProp(requiredFor: [BarcodeServiceInterface::class])]
-    protected string|null $Barcode = null;
+    public function processGetLocationResponse(ResponseInterface $response): GetLocationResponseDTO;
 
-    public function __construct(
-        #[ExpectedValues(values: ServiceInterface::SERVICES)]
-        string $service,
-        #[ExpectedValues(values: PropInterface::PROP_TYPES)]
-        string $propType,
-
-        string|null $Barcode = null,
-    ) {
-        parent::__construct(service: $service, propType: $propType);
-
-        $this->setBarcode(Barcode: $Barcode);
-    }
-
-    public function getBarcode(): string|null
-    {
-        return $this->Barcode;
-    }
-
-    public function setBarcode(string|null $Barcode = null): static
-    {
-        $this->Barcode = $Barcode;
-
-        return $this;
-    }
-
-    public function __toString(): string
-    {
-        return (string) $this->getBarcode();
-    }
+    public function processGetLocationsResponse(ResponseInterface $response): GetLocationsResponseDTO;
 }

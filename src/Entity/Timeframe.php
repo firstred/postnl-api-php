@@ -111,7 +111,7 @@ class Timeframe extends SerializableObject
         $this->setPostalCode(PostalCode: $PostalCode);
         $this->setStreet(Street: $Street);
         $this->setSundaySorting(SundaySorting: $SundaySorting);
-        $this->setInterval(interaval: $Interval);
+        $this->setInterval(Interval: $Interval);
         $this->setRange(Range: $Range);
         $this->setTimeframes(Timeframes: $Timeframes);
     }
@@ -253,9 +253,9 @@ class Timeframe extends SerializableObject
         return $this->Interval;
     }
 
-    public function setInterval(string|null $interaval = null): static
+    public function setInterval(string|null $Interval = null): static
     {
-        $this->Interval = $interaval;
+        $this->Interval = $Interval;
 
         return $this;
     }

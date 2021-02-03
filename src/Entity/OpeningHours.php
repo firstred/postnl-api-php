@@ -29,24 +29,50 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Attribute\PropInterface;
+use Firstred\PostNL\Attribute\ResponseProp;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Misc\SerializableObject;
+use Firstred\PostNL\Service\LocationServiceInterface;
 use Firstred\PostNL\Service\ServiceInterface;
+use function is_array;
 use JetBrains\PhpStorm\ExpectedValues;
 
-class OpeningHours extends JsonSerializableObject
+class OpeningHours extends SerializableObject
 {
+    #[ResponseProp(requiredFor: [LocationServiceInterface::class])]
+    protected array $Monday = [];
+
+    #[ResponseProp(requiredFor: [LocationServiceInterface::class])]
+    protected array $Tuesday = [];
+
+    #[ResponseProp(requiredFor: [LocationServiceInterface::class])]
+    protected array $Wednesday = [];
+
+    #[ResponseProp(requiredFor: [LocationServiceInterface::class])]
+    protected array $Thursday = [];
+
+    #[ResponseProp(requiredFor: [LocationServiceInterface::class])]
+    protected array $Friday = [];
+
+    #[ResponseProp(requiredFor: [LocationServiceInterface::class])]
+    protected array $Saturday = [];
+
+    #[ResponseProp(requiredFor: [LocationServiceInterface::class])]
+    protected array $Sunday = [];
+
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
         string $service = '',
         #[ExpectedValues(values: PropInterface::PROP_TYPES + [''])]
         string $propType = '',
 
-        protected string|null $Monday = '',
-        protected string|null $Tuesday = '',
-        protected string|null $Wednesday = '',
-        protected string|null $Thursday = '',
-        protected string|null $Friday = '',
-        protected string|null $Saturday = '',
-        protected string|null $Sunday = '',
+        string|array $Monday = ['string' => []],
+        string|array $Tuesday = ['string' => []],
+        string|array $Wednesday = ['string' => []],
+        string|array $Thursday = ['string' => []],
+        string|array $Friday = ['string' => []],
+        string|array $Saturday = ['string' => []],
+        string|array $Sunday = ['string' => []],
     ) {
         parent::__construct(service: $service, propType: $propType);
 
@@ -59,99 +85,179 @@ class OpeningHours extends JsonSerializableObject
         $this->setSunday(Sunday: $Sunday);
     }
 
-    public function getMonday(): string
+    public function getMonday(): array
     {
         return $this->Monday;
     }
 
-    public function setMonday(string $Monday = null): static
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function setMonday(array|string $Monday): static
     {
+        if (is_array(value: $Monday)) {
+            if (isset($Monday['string'])) {
+                $Monday = is_string(value: $Monday['string']) ? [$Monday['string']] : $Monday['string'];
+            } else {
+                throw new InvalidArgumentException(message: 'Invalid `Monday` value passed');
+            }
+        }
+
         $this->Monday = $Monday;
 
         return $this;
     }
 
-    public function getTuesday(): string
+    public function getTuesday(): array
     {
         return $this->Tuesday;
     }
 
-    public function setTuesday(string $Tuesday = null): static
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function setTuesday(array|string $Tuesday): static
     {
+        if (is_array(value: $Tuesday)) {
+            if (isset($Tuesday['string'])) {
+                $Tuesday = is_string(value: $Tuesday['string']) ? [$Tuesday['string']] : $Tuesday['string'];
+            } else {
+                throw new InvalidArgumentException(message: 'Invalid `Tuesday` value passed');
+            }
+        }
+
         $this->Tuesday = $Tuesday;
 
         return $this;
     }
 
-    public function getWednesday(): string
+    public function getWednesday(): array
     {
         return $this->Wednesday;
     }
 
-    public function setWednesday(string $Wednesday = null): static
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function setWednesday(array|string $Wednesday): static
     {
+        if (is_array(value: $Wednesday)) {
+            if (isset($Wednesday['string'])) {
+                $Wednesday = is_string(value: $Wednesday['string']) ? [$Wednesday['string']] : $Wednesday['string'];
+            } else {
+                throw new InvalidArgumentException(message: 'Invalid `Wednesday` value passed');
+            }
+        }
+
         $this->Wednesday = $Wednesday;
 
         return $this;
     }
 
-    public function getThursday(): string
+    public function getThursday(): array
     {
         return $this->Thursday;
     }
 
-    public function setThursday(string $Thursday = null): static
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function setThursday(array|string $Thursday): static
     {
+        if (is_array(value: $Thursday)) {
+            if (isset($Thursday['string'])) {
+                $Thursday = is_string(value: $Thursday['string']) ? [$Thursday['string']] : $Thursday['string'];
+            } else {
+                throw new InvalidArgumentException(message: 'Invalid `Thursday` value passed');
+            }
+        }
+
         $this->Thursday = $Thursday;
 
         return $this;
     }
 
-    public function getFriday(): string
+    public function getFriday(): array
     {
         return $this->Friday;
     }
 
-    public function setFriday(string $Friday = null): static
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function setFriday(array|string $Friday): static
     {
+        if (is_array(value: $Friday)) {
+            if (isset($Friday['string'])) {
+                $Friday = is_string(value: $Friday['string']) ? [$Friday['string']] : $Friday['string'];
+            } else {
+                throw new InvalidArgumentException(message: 'Invalid `Friday` value passed');
+            }
+        }
+
         $this->Friday = $Friday;
 
         return $this;
     }
 
-    public function getSaturday(): string
+    public function getSaturday(): array
     {
         return $this->Saturday;
     }
 
-    public function setSaturday(string $Saturday = null): static
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function setSaturday(array|string $Saturday): static
     {
+        if (is_array(value: $Saturday)) {
+            if (isset($Saturday['string'])) {
+                $Saturday = is_string(value: $Saturday['string']) ? [$Saturday['string']] : $Saturday['string'];
+            } else {
+                throw new InvalidArgumentException(message: 'Invalid `Saturday` value passed');
+            }
+        }
+
         $this->Saturday = $Saturday;
 
         return $this;
     }
 
-    public function getSunday(): string
+    public function getSunday(): array
     {
         return $this->Sunday;
     }
 
-    public function setSunday(string $Sunday = null): static
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function setSunday(array|string $Sunday): static
     {
+        if (is_array(value: $Sunday)) {
+            if (isset($Sunday['string'])) {
+                $Sunday = is_string(value: $Sunday['string']) ? [$Sunday['string']] : $Sunday['string'];
+            } else {
+                throw new InvalidArgumentException(message: 'Invalid `Sunday` value passed');
+            }
+        }
+
         $this->Sunday = $Sunday;
 
         return $this;
     }
 
-    public function toArray(): array
+    public function jsonSerialize(): array
     {
-        $array = [];
-//        foreach (array_keys(array: static::$defaultProperties['Barcode']) as $property) {
-//            if (isset($this->{$property})) {
-//                $array[$property] = $this->{$property};
-//            }
-//        }
+        $json = parent::jsonSerialize();
 
-        return $array;
+        $json['Monday'] = ['string' => 1 === count(value: $this->getMonday()) ? $this->getMonday()[0] : $this->getMonday()];
+        $json['Tuesday'] = ['string' => 1 === count(value: $this->getTuesday()) ? $this->getTuesday()[0] : $this->getTuesday()];
+        $json['Wednesday'] = ['string' => 1 === count(value: $this->getWednesday()) ? $this->getWednesday()[0] : $this->getWednesday()];
+        $json['Thursday'] = ['string' => 1 === count(value: $this->getThursday()) ? $this->getThursday()[0] : $this->getThursday()];
+        $json['Friday'] = ['string' => 1 === count(value: $this->getFriday()) ? $this->getFriday()[0] : $this->getFriday()];
+        $json['Saturday'] = ['string' => 1 === count(value: $this->getSaturday()) ? $this->getSaturday()[0] : $this->getSaturday()];
+        $json['Sunday'] = ['string' => 1 === count(value: $this->getSunday()) ? $this->getSunday()[0] : $this->getSunday()];
+
+        return $json;
     }
 }

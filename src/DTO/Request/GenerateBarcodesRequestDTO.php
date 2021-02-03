@@ -106,7 +106,7 @@ class GenerateBarcodesRequestDTO implements ArrayAccess, Countable, Iterator
     public function offsetSet(mixed $offset, mixed $value): void
     {
         if (!is_string(value: $offset)) {
-            throw new InvalidArgumentException('Invalid offset given');
+            throw new InvalidArgumentException(message: 'Invalid offset given');
         }
 
         if (is_array(value: $value)
@@ -123,7 +123,7 @@ class GenerateBarcodesRequestDTO implements ArrayAccess, Countable, Iterator
                 Range: $value['range'],
             );
         } elseif (!$value instanceof GenerateBarcodeRequestDTO) {
-            throw new InvalidArgumentException('Invalid `GenerateBarcodeRequest` given');
+            throw new InvalidArgumentException(message: 'Invalid `GenerateBarcodeRequest` given');
         }
 
         $this->requests[$offset] = $value;

@@ -36,6 +36,8 @@ use JetBrains\PhpStorm\ExpectedValues;
 
 class Location extends SerializableObject
 {
+    public const AVAILABLE_NETWORKS = ['PNPNL-01', 'LD-01'];
+
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
         string $service = '',
@@ -52,12 +54,13 @@ class Location extends SerializableObject
         protected string|null $HouseNrExt = null,
         protected string|null $Postalcode = null,
         protected string|null $Street = null,
-        protected ?Coordinates $Coordinates = null,
-        protected ?CoordinatesNorthWest $CoordinatesNorthWest = null,
-        protected ?CoordinatesSouthEast $CoordinatesSouthEast = null,
+        protected Coordinates|null $Coordinates = null,
+        protected CoordinatesNorthWest|null $CoordinatesNorthWest = null,
+        protected CoordinatesSouthEast|null $CoordinatesSouthEast = null,
         protected string|null $LocationCode = null,
         protected string|null $Saleschannel = null,
         protected string|null $TerminalType = null,
+        #[ExpectedValues(values: self::AVAILABLE_NETWORKS)]
         protected string|null $RetailNetworkID = null,
         protected string|null $DownPartnerID = null,
         protected string|null $DownPartnerLocation = null,

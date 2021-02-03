@@ -26,43 +26,42 @@
 
 declare(strict_types=1);
 
-namespace Firstred\PostNL\RequestBuilder;
+namespace Firstred\PostNL\ResponseProcessor;
 
-use Firstred\PostNL\DTO\Request\CalculateTimeframesRequestDTO;
+use Firstred\PostNL\Attribute\ResponseProp;
+use Firstred\PostNL\DTO\Response\GetLocationResponseDTO;
+use Firstred\PostNL\DTO\Response\GetLocationsResponseDTO;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Http\Discovery\Psr17FactoryDiscovery;
-use function http_build_query;
-use function ltrim;
-use Psr\Http\Message\RequestInterface;
+use Firstred\PostNL\Service\LocationServiceInterface;
+use Psr\Http\Message\ResponseInterface;
+use function json_decode;
 
-class TimeframeServiceRequestBuilder extends RequestBuilderBase implements TimeframeServiceRequestBuilderInterface
+class LocationServiceResponseProcessor extends ResponseProcessorBase implements LocationServiceResponseProcessorInterface
 {
-    public const DEFAULT_VERSION = '2.1';
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function processGetLocationResponse(ResponseInterface $response): GetLocationResponseDTO
+    {
+        $args = @json_decode(json: (string) $response->getBody(), associative: true);
 
-    public const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v2_1/calculate/timeframes';
-    public const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2_1/calculate/timeframes';
+        $args = $args['GetLocationsResult']['ResponseLocation'] ?? [];
+        $args['service'] = LocationServiceInterface::class;
+        $args['propType'] = ResponseProp::class;
+
+        return new GetLocationResponseDTO(...$args);
+    }
 
     /**
      * @throws InvalidArgumentException
      */
-    public function buildCalculateTimeframesRequest(CalculateTimeframesRequestDTO $calculateTimeframesRequestDTO): RequestInterface
+    public function processGetLocationsResponse(ResponseInterface $response): GetLocationsResponseDTO
     {
-        if (!$calculateTimeframesRequestDTO->isValid()) {
-            throw new InvalidArgumentException(message: 'Invalid calculate timeframes request');
-        }
+        $args = @json_decode(json: (string) $response->getBody(), associative: true);
+        $args['service'] = LocationServiceInterface::class;
+        $args['propType'] = ResponseProp::class;
 
         /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
-        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
-            'GET',
-            str_replace(
-                search: '{{version}}',
-                replace: 'v'.str_replace(search: '.', replace: '_', subject: $this->getVersion()),
-                subject: $this->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT,
-            )
-            .'?'.http_build_query(data: $calculateTimeframesRequestDTO->jsonSerialize())
-        )
-            ->withHeader('Accept', 'application/json')
-            ->withHeader('apikey', $this->getApiKey())
-            ;
+        return new GetLocationsResponseDTO(...$args);
     }
 }

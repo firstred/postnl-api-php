@@ -129,7 +129,7 @@ class Timeframes extends SerializableObject implements ArrayAccess, Countable, I
     public function offsetExists(mixed $offset): bool
     {
         if (!is_int(value: $offset)) {
-            throw new InvalidArgumentException('Invalid offset passed, should be int');
+            throw new InvalidArgumentException(message: 'Invalid offset passed, should be int');
         }
 
         return (bool) ($this->getTimeframes()[$offset] ?? false);

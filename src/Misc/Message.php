@@ -63,7 +63,7 @@ class Message
                 .$message->getStatusCode().' '
                 .$message->getReasonPhrase();
         } else {
-            throw new InvalidArgumentException('Unknown message type');
+            throw new InvalidArgumentException(message: 'Unknown message type');
         }
 
         foreach ($message->getHeaders() as $name => $values) {
@@ -87,7 +87,7 @@ class Message
         // between status-code and reason-phrase is required. But browsers accept
         // responses without space and reason as well.
         if (!preg_match(pattern: '/^HTTP\/.* [0-9]{3}( .*|$)/', subject: $data['start-line'])) {
-            throw new InvalidArgumentException(sprintf('Invalid response string: %s', $data['start-line']));
+            throw new InvalidArgumentException(message: sprintf('Invalid response string: %s', $data['start-line']));
         }
         $parts = explode(separator: ' ', string: $data['start-line'], limit: 3);
 
@@ -118,18 +118,18 @@ class Message
     private static function parseMessage($message)
     {
         if (!$message) {
-            throw new InvalidArgumentException('Invalid message');
+            throw new InvalidArgumentException(message: 'Invalid message');
         }
         $message = ltrim(string: $message, characters: "\r\n");
         $messageParts = preg_split(pattern: "/\r?\n\r?\n/", subject: $message, limit: 2);
         if (false === $messageParts || 2 !== count(value: $messageParts)) {
-            throw new InvalidArgumentException('Invalid message: Missing header delimiter');
+            throw new InvalidArgumentException(message: 'Invalid message: Missing header delimiter');
         }
         list($rawHeaders, $body) = $messageParts;
         $rawHeaders .= "\r\n"; // Put back the delimiter we split previously
         $headerParts = preg_split(pattern: "/\r?\n/", subject: $rawHeaders, limit: 2);
         if (false === $headerParts || 2 !== count(value: $headerParts)) {
-            throw new InvalidArgumentException('Invalid message: Missing status line');
+            throw new InvalidArgumentException(message: 'Invalid message: Missing status line');
         }
         list($startLine, $rawHeaders) = $headerParts;
         if (preg_match(pattern: "/(?:^HTTP\/|^[A-Z]+ \S+ HTTP\/)(\d+(?:\.\d+)?)/i", subject: $startLine, matches: $matches) && '1.0' === $matches[1]) {
@@ -142,9 +142,9 @@ class Message
         if (substr_count(haystack: $rawHeaders, needle: "\n") !== $count) {
             // Folding is deprecated, see https://tools.ietf.org/html/rfc7230#section-3.2.4
             if (preg_match(pattern: self::RFC7230_HEADER_FOLD_REGEX, subject: $rawHeaders)) {
-                throw new InvalidArgumentException('Invalid header syntax: Obsolete line folding');
+                throw new InvalidArgumentException(message: 'Invalid header syntax: Obsolete line folding');
             }
-            throw new InvalidArgumentException('Invalid header syntax');
+            throw new InvalidArgumentException(message: 'Invalid header syntax');
         }
         $headers = [];
         foreach ($headerLines as $headerLine) {

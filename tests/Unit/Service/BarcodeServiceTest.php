@@ -32,6 +32,7 @@ use Exception;
 use Firstred\PostNL\Attribute\RequestProp;
 use Firstred\PostNL\DTO\Request\GenerateBarcodeRequestDTO;
 use Firstred\PostNL\DTO\Response\GenerateBarcodesByCountryCodesResponseDTO;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\InvalidBarcodeException;
 use Firstred\PostNL\HttpClient\HTTPlugHTTPClient;
 use Firstred\PostNL\Service\BarcodeServiceInterface;
@@ -93,6 +94,8 @@ class BarcodeServiceTest extends ServiceTestBase
 
     /**
      * @testdox Returns a valid single barcode
+     *
+     * @throws InvalidArgumentException
      */
     public function testSingleBarcodeRest()
     {

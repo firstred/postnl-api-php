@@ -31,7 +31,7 @@ namespace Firstred\PostNL\RequestBuilder;
 use Firstred\PostNL\DTO\Request\CalculateTimeframesRequestDTO;
 use Psr\Http\Message\RequestInterface;
 
-interface TimeframeServiceRequestBuilderInterface
+interface TimeframeServiceRequestBuilderInterface extends RequestBuilderInterface
 {
     public function buildCalculateTimeframesRequest(CalculateTimeframesRequestDTO $calculateTimeframesRequestDTO): RequestInterface;
 }

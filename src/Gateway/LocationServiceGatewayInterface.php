@@ -26,7 +26,7 @@
 
 declare(strict_types=1);
 
-namespace Firstred\PostNL\Service;
+namespace Firstred\PostNL\Gateway;
 
 use Firstred\PostNL\DTO\Request\GetLocationsInAreaRequestDTO;
 use Firstred\PostNL\DTO\Request\GetNearestLocationsGeocodeRequestDTO;
@@ -34,27 +34,32 @@ use Firstred\PostNL\DTO\Request\GetNearestLocationsRequestDTO;
 use Firstred\PostNL\DTO\Request\LookupLocationRequestDTO;
 use Firstred\PostNL\DTO\Response\GetLocationResponseDTO;
 use Firstred\PostNL\DTO\Response\GetLocationsResponseDTO;
-use Firstred\PostNL\Gateway\LocationServiceGatewayInterface;
+use Firstred\PostNL\RequestBuilder\LocationServiceRequestBuilderInterface;
+use Firstred\PostNL\ResponseProcessor\LocationServiceResponseProcessorInterface;
 
-interface LocationServiceInterface extends ServiceInterface
+interface LocationServiceGatewayInterface extends GatewayInterface
 {
-    public function lookupLocation(
+    public function doLookupLocationRequest(
         LookupLocationRequestDTO $lookupLocationRequestDTO,
     ): GetLocationResponseDTO;
 
-    public function getNearestLocations(
+    public function doGetNearestLocationsRequest(
         GetNearestLocationsRequestDTO $getNearestLocationsRequestDTO,
     ): GetLocationsResponseDTO;
 
-    public function getNearestLocationsGeocode(
+    public function doGetNearestLocationsGeocodeRequest(
         GetNearestLocationsGeocodeRequestDTO $getNearestLocationsGeocodeRequestDTO,
     ): GetLocationsResponseDTO;
 
-    public function getLocationsInArea(
+    public function doGetLocationsInAreaRequest(
         GetLocationsInAreaRequestDTO $getLocationsInAreaRequestDTO,
     ): GetLocationsResponseDTO;
 
-    public function setGateway(LocationServiceGatewayInterface $gateway): static;
+    public function getRequestBuilder(): LocationServiceRequestBuilderInterface;
 
-    public function getGateway(): LocationServiceGatewayInterface;
+    public function setRequestBuilder(LocationServiceRequestBuilderInterface $requestBuilder): static;
+
+    public function getResponseProcessor(): LocationServiceResponseProcessorInterface;
+
+    public function setResponseProcessor(LocationServiceResponseProcessorInterface $responseProcessor): static;
 }

@@ -46,7 +46,7 @@ class BarcodeServiceRequestBuilder extends RequestBuilderBase implements Barcode
     public function buildGenerateBarcodeRequest(GenerateBarcodeRequestDTO $generateBarcodeRequestDTO): RequestInterface
     {
         if (!$generateBarcodeRequestDTO->isValid()) {
-            throw new InvalidArgumentException('Invalid generate barcode request');
+            throw new InvalidArgumentException(message: 'Invalid generate barcode request');
         }
 
         /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */

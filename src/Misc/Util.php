@@ -190,7 +190,7 @@ class Util
         $days = [0 => false, 1 => true, 2 => true, 3 => true, 4 => true, 5 => true, 6 => true]
     ) {
         if (array_sum(array: $days) < 1) {
-            throw new InvalidArgumentException('There should be at least one shipping day');
+            throw new InvalidArgumentException(message: 'There should be at least one shipping day');
         }
 
         $deliveryDate = new DateTime(datetime: $deliveryDate);
@@ -201,7 +201,7 @@ class Util
             try {
                 $deliveryDate->sub(interval: new DateInterval(duration: 'P1D'));
             } catch (Exception) {
-                throw new InvalidArgumentException('Invalid date provided');
+                throw new InvalidArgumentException(message: 'Invalid date provided');
             }
         } while (in_array(needle: $deliveryDate->format(format: 'Y-m-d'), haystack: $holidays)
             || empty($days[$deliveryDate->format(format: 'w')])
