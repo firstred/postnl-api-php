@@ -10,6 +10,7 @@
     }
   ],
   "scripts": {
+    "psalm": "vendor/bin/psalm",
     "phpcs": "vendor/bin/php-cs-fixer fix --config=.php_cs.dist --dry-run src tests",
     "phpcs:src": "vendor/bin/php-cs-fixer fix --config=.php_cs.dist --dry-run src",
     "phpcs:tests": "vendor/bin/php-cs-fixer fix --config=.php_cs.dist --dry-run tests",
@@ -30,17 +31,15 @@
     "psr/http-client": "^1.0.1",
     "psr/http-factory": "^1.0.1",
     "psr/http-message-implementation": "^1.0",
-    "php-http/async-client-implementation": "^1.0",
     "php-http/client-common": "^2.3.0",
-    "php-http/discovery": "^1.9.1",
+    "php-http/discovery": "^1.13.0",
     "php-http/httplug": "^2.2.0",
-    "php-http/message": "^1.8.0",
-    "ext-calendar": "*"
+    "php-http/message": "^1.8.0"
   },
   "require-dev": {
     "phpunit/phpunit": "^9.5.1",
     "wappr/logger": "^1.2.0",
-    "guzzlehttp/guzzle": "^7.0.1",
+    "guzzlehttp/guzzle": "^7.2.0",
     "cache/void-adapter": "^1.1.0",
     "guzzlehttp/promises": "^1.4.0",
     "league/iso3166": "^3.0.0",
@@ -49,12 +48,13 @@
     "friendsofphp/php-cs-fixer": "^2.16.4",
     "symfony/dotenv": "^5.1.3",
     "rector/rector": "0.9.16",
-    "sabre/xml": "^2.2.3"
+    "php-http/guzzle7-adapter": "^0.1.1",
+    "vimeo/psalm": "^4.4",
+    "jetbrains/phpstorm-attributes": "^1.0"
   },
   "suggest": {
-    "guzzlehttp/guzzle": "One of the most popular HTTP client available",
-    "nyholm/psr7": "A very fast PSR-7 implementation",
-    "sabre/xml": "Necessary if you want to use the SOAP API"
+    "guzzlehttp/guzzle": "One of the most popular HTTP clients available",
+    "nyholm/psr7": "A very fast PSR-7 implementation"
   },
   "autoload": {
     "psr-4": {

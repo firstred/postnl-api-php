@@ -1,9 +1,8 @@
 <?php
-
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -21,100 +20,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- * @copyright 2017-2020 Michael Dekker
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Tests\Unit\Service;
+declare(strict_types=1);
 
-use Cache\Adapter\Void\VoidCachePool;
+namespace Firstred\PostNL\Tests\Unit\Service;
+
 use Exception;
+use Firstred\PostNL\Attribute\RequestProp;
+use Firstred\PostNL\DTO\Request\CalculateDeliveryDateRequestDTO;
+use Firstred\PostNL\DTO\Request\CalculateShippingDateRequestDTO;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\HttpClient\HTTPlugHTTPClient;
+use Firstred\PostNL\Service\DeliveryDateServiceInterface;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Mock\Client;
-use PHPUnit\Framework\TestCase;
-use Psr\Http\Message\RequestInterface;
-use Psr\Log\LoggerInterface;
-use ReflectionException;
-use ThirtyBees\PostNL\Entity\Address;
-use ThirtyBees\PostNL\Entity\Customer;
-use ThirtyBees\PostNL\Entity\Request\CalculateDeliveryDateRequest;
-use ThirtyBees\PostNL\Entity\Request\CalculateShippingDateRequest;
-use ThirtyBees\PostNL\Entity\Response\CalculateDeliveryDateResponse;
-use ThirtyBees\PostNL\Entity\Response\CalculateShippingDateResponse;
-use ThirtyBees\PostNL\Exception\CifErrorException;
-use ThirtyBees\PostNL\Exception\InvalidArgumentException;
-use ThirtyBees\PostNL\Util\Message;
-use ThirtyBees\PostNL\PostNL;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
+use function json_encode;
 
 /**
  * Class DeliveryDateRestTest.
  *
  * @testdox The DeliveryDateService (REST)
  */
-class DeliveryDateRestTest extends TestCase
+class DeliveryDateServiceTest extends ServiceTestBase
 {
-    /** @var PostNL */
-    protected $postnl;
-    /** @var DeliveryDateService */
-    protected $service;
-    /** @var */
-    protected $lastRequest;
-
-    /**
-     * @before
-     *
-     * @throws InvalidArgumentException
-     * @throws ReflectionException
-     */
-    public function setupPostNL()
-    {
-        $this->postnl = new PostNL(
-            Customer::create()
-                ->setCollectionLocation('123456')
-                ->setCustomerCode('DEVC')
-                ->setCustomerNumber('11223344')
-                ->setContactPerson('Test')
-                ->setAddress(
-                    Address::create(
-                        [
-                            'AddressType' => '02',
-                            'City'        => 'Hoofddorp',
-                            'CompanyName' => 'PostNL',
-                            'Countrycode' => 'NL',
-                            'HouseNr'     => '42',
-                            'Street'      => 'Siriusdreef',
-                            'Zipcode'     => '2132WT',
-                        ]
-                    )
-                )
-                ->setGlobalPackBarcodeType('AB')
-                ->setGlobalPackCustomerCode('1234'),
-            'test',
-            true
-        );
-
-        $this->service = $this->postnl->getDeliveryDateService();
-        $this->service->cache = new VoidCachePool();
-        $this->service->ttl = 1;
-    }
-
-    /**
-     * @after
-     */
-    public function logPendingRequest()
-    {
-        if (!$this->lastRequest instanceof RequestInterface) {
-            return;
-        }
-
-        global $logger;
-        if ($logger instanceof LoggerInterface) {
-            $logger->debug($this->getName()." Request\n".Message::str($this->lastRequest));
-        }
-        $this->lastRequest = null;
-    }
-
     /**
      * @testdox Creates a valid calculate delivery date request
      *
@@ -122,106 +53,121 @@ class DeliveryDateRestTest extends TestCase
      */
     public function testCalculateDeliveryDateRequest()
     {
-        /* @var RequestInterface $request */
-        $this->lastRequest = $request = $this->service->buildCalculateDeliveryDateRequest(
-            (new CalculateDeliveryDateRequest())
-                ->setCity('Hoofddorp')
-                ->setCountryCode('NL')
-                ->setCutOffTime('14:00')
-                ->setAvailableMonday(true)
-                ->setCutOffTimeMonday('14:00')
-                ->setHouseNumber('42')
-                ->setHouseNrExt('A')
-                ->setOptions(['Daytime'])
-                ->setPostalCode('2132WT')
-                ->setShippingDate('29-06-2016 14:00:00')
-                ->setShippingDuration(1)
-                ->setStreet('Siriusdreef')
+        $this->lastRequest = $request = $this->postnl->getDeliveryDateService()->getGateway()->getRequestBuilder()->buildCalculateDeliveryDateRequest(
+            calculateDeliveryDateRequestDTO: new CalculateDeliveryDateRequestDTO(
+                service: DeliveryDateServiceInterface::class,
+                propType: RequestProp::class,
+
+                ShippingDate: '29-06-2016 14:00:00',
+                ShippingDuration: 1,
+                CutOffTime: '14:00',
+                PostalCode: '2132WT',
+                CountryCode: 'NL',
+                City: 'Hoofddorp',
+                Street: 'Siriusdreef',
+                HouseNumber: 42,
+                HouseNrExt: 'A',
+                Options: ['Daytime'],
+                CutOffTimeMonday: '14:00',
+                AvailableMonday: true,
+            )
         );
 
-        parse_str($request->getUri()->getQuery(), $query);
+        $query = [];
+        parse_str(string: $request->getUri()->getQuery(), result: $query);
+
         $this->assertEquals(
-            [
-                'ShippingDate'     => '29-06-2016 14:00:00',
-                'ShippingDuration' => '1',
-                'CountryCode'      => 'NL',
-                'Options'          => 'Daytime',
-                'CutOffTime'       => '14:00:00',
-                'PostalCode'       => '2132WT',
-                'City'             => 'Hoofddorp',
-                'HouseNumber'      => '42',
-                'HouseNrExt'       => 'A',
-                'AvailableMonday'  => 'true',
-                'CutOffTimeMonday' => '14:00:00',
-            ],
-            $query
+            expected: [
+            'ShippingDate'     => '29-06-2016 14:00:00',
+            'ShippingDuration' => '1',
+            'CountryCode'      => 'NL',
+            'Options'          => 'Daytime',
+            'CutOffTime'       => '14:00:00',
+            'PostalCode'       => '2132WT',
+            'City'             => 'Hoofddorp',
+            'HouseNumber'      => '42',
+            'HouseNrExt'       => 'A',
+            'AvailableMonday'  => 'true',
+            'CutOffTimeMonday' => '14:00:00',
+            'Street'           => 'Siriusdreef',
+        ],
+            actual: $query
         );
-        $this->assertEquals('test', $request->getHeaderLine('apikey'));
-        $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
+
+        /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+        $this->assertEquals(expected: 'test', actual: $request->getHeaderLine('apikey'));
+        /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+        $this->assertEquals(expected: 'application/json', actual: $request->getHeaderLine('Accept'));
     }
 
     /**
      * @testdox Returns a valid delivery date
-     *
-     * @throws InvalidArgumentException
-     * @throws CifErrorException
      */
-    public function testGetDeliveryDate()
+    public function testCalculateDeliveryDate()
     {
         $mockClient = new Client();
         $responseFactory = Psr17FactoryDiscovery::findResponseFactory();
         $streamFactory = Psr17FactoryDiscovery::findStreamFactory();
+        /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
         $response = $responseFactory->createResponse(200, 'OK')
             ->withHeader('Content-Type', 'application/json;charset=UTF-8')
             ->withBody($streamFactory->createStream(json_encode(
-                [
+                value: [
                     'DeliveryDate' => '30-06-2016',
                     'Options'      => [
-                        'string' => 'Daytime',
+                        'Daytime',
                     ],
                 ]
-            )))
-        ;
-        $mockClient->addResponse($response);
-        \ThirtyBees\PostNL\Http\Client::getInstance()->setAsyncClient($mockClient);
-
-        $response = $this->postnl->calculateDeliveryDate(
-            '29-06-2016 14:00:00',
-            1,
-            '15:00:00',
-            '2132WT',
-            'NL',
-            'NL',
-            'Hoofddorp',
-            'Siriusdreef',
-            ['Daytime']
+            )));
+        $mockClient->addResponse(response: $response);
+        $this->postnl->getDeliveryDateService()->getGateway()->setHttpClient(
+            httpClient: new HTTPlugHTTPClient(asyncClient: $mockClient),
         );
 
-        $this->assertInstanceOf(CalculateDeliveryDateResponse::class, $response);
-        $this->assertEquals('30-06-2016', $response->getDeliveryDate());
+        $response = $this->postnl->calculateDeliveryDate(
+            shippingDate: '29-06-2016 14:00:00',
+            shippingDuration: 1,
+            cutOffTime: '15:00:00',
+            postalCode: '2132WT',
+            countryCode: 'NL',
+            originCountryCode: 'NL',
+            city: 'Hoofddorp',
+            street: 'Siriusdreef',
+            options: ['Daytime'],
+        );
+
+        $this->assertEquals(expected: '30-06-2016', actual: $response->getDeliveryDate());
+        $this->assertEquals(expected: '30-06-2016', actual: (string) $response);
+        $this->assertEquals(expected: ['Daytime'], actual: $response->getOptions());
     }
 
     /**
      * @testdox Creates a valid calculate shipping date request
      *
-     * @throws Exception
+     * @throws InvalidArgumentException
      */
     public function testCalculateShippingDateRequest()
     {
-        $this->lastRequest = $request = $this->service->buildCalculateShippingDateRequest(
-            (new CalculateShippingDateRequest())
-                ->setCity('Hoofddorp')
-                ->setCountryCode('NL')
-                ->setDeliveryDate('30-06-2016')
-                ->setHouseNumber('42')
-                ->setHouseNrExt('A')
-                ->setPostalCode('2132WT')
-                ->setShippingDuration('1')
-                ->setStreet('Siriusdreef')
+        $this->lastRequest = $request = $this->postnl->getDeliveryDateService()->getGateway()->getRequestBuilder()->buildCalculateShippingDateRequest(
+            calculateShippingDateRequestDTO: new CalculateShippingDateRequestDTO(
+                service: DeliveryDateServiceInterface::class,
+                propType: RequestProp::class,
+
+                DeliveryDate: '30-06-2016',
+                ShippingDuration: 1,
+                PostalCode: '2132WT',
+                CountryCode: 'NL',
+                City: 'Hoofddorp',
+                Street: 'Siriusdreef',
+                HouseNumber: 42,
+                HouseNrExt: 'A',
+            ),
         );
 
-        $this->assertEquals('test', $request->getHeaderLine('apikey'));
-        $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
+        /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+        $this->assertEquals(expected: 'test', actual: $request->getHeaderLine('apikey'));
+        /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+        $this->assertEquals(expected: 'application/json', actual: $request->getHeaderLine('Accept'));
     }
 
     /**
@@ -234,25 +180,30 @@ class DeliveryDateRestTest extends TestCase
         $mockClient = new Client();
         $responseFactory = Psr17FactoryDiscovery::findResponseFactory();
         $streamFactory = Psr17FactoryDiscovery::findStreamFactory();
+        /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
         $response = $responseFactory->createResponse(200, 'OK')
             ->withHeader('Content-Type', 'application/json;charset=UTF-8')
-            ->withBody($streamFactory->createStream(json_encode(['SentDate' => '29-06-2016'])));
-        $mockClient->addResponse($response);
-        \ThirtyBees\PostNL\Http\Client::getInstance()->setAsyncClient($mockClient);
-
-        $response = $this->postnl->calculateShippingDate(
-            '30-06-2016',
-            1,
-            '2132WT',
-            'NL',
-            'NL',
-            'Hoofddorp',
-            'Siriusdreef',
-            42,
-            'A'
+            ->withBody($streamFactory->createStream(json_encode(
+                value: ['SentDate' => '29-06-2016'],
+            )));
+        $mockClient->addResponse(response: $response);
+        $this->postnl->getDeliveryDateService()->getGateway()->setHttpClient(
+            httpClient: new HTTPlugHTTPClient(asyncClient: $mockClient),
         );
 
-        $this->assertInstanceOf(CalculateShippingDateResponse::class, $response);
-        $this->assertEquals('29-06-2016', $response->getSentDate());
+        $response = $this->postnl->calculateShippingDate(
+            deliveryDate: '30-06-2016',
+            shippingDuration: 1,
+            postalCode: '2132WT',
+            countryCode: 'NL',
+            originCountryCode: 'NL',
+            city: 'Hoofddorp',
+            street: 'Siriusdreef',
+            houseNumber: 42,
+            houseNrExt: 'A'
+        );
+
+        $this->assertEquals(expected: '29-06-2016', actual: $response->getSentDate());
+        $this->assertEquals(expected: '29-06-2016', actual: (string) $response);
     }
 }

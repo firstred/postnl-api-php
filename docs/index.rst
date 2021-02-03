@@ -3,9 +3,9 @@ Welcome to the unofficial PostNL PHP library documentation!
 
 These API bindings make it easy to connect to PostNL's CIF API, used for retrieving delivery options, printing shipment labels and finding shipment statuses.
 
-- It has a simple interface for connecting with either the legacy, SOAP or REST API.
+- It has a simple interface for connecting with the REST API.
 
-- Abstracts away direct requests to the API, allowing you to focus on the code itself. The object structure is based on the SOAP API.
+- Abstracts away direct requests to the API, allowing you to focus on the code itself. The object structure is based on the REST API.
 
 - Can merge PDF labels (both A6 and A4) and automatically sends concurrent requests when necessary, making batch processing a lot easier easier.
 

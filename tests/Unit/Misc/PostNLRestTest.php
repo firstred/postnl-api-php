@@ -1,9 +1,8 @@
 <?php
-
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -21,29 +20,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- * @copyright 2017-2020 Michael Dekker
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Tests\Unit\Misc;
+declare(strict_types=1);
+
+namespace Firstred\PostNL\Tests\Unit\Misc;
 
 use Exception;
+use Firstred\PostNL\Entity\Address;
+use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\HttpClient\HTTPlugHTTPClient as PostNLHttpClient;
+use Firstred\PostNL\PostNL;
 use Http\Mock\Client;
 use Nyholm\Psr7\Response;
 use PHPUnit\Framework\TestCase;
-use ReflectionClass;
 use ReflectionException;
-use ThirtyBees\PostNL\Entity\Address;
-use ThirtyBees\PostNL\Entity\Customer;
-use ThirtyBees\PostNL\Entity\Request\CalculateDeliveryDateRequest;
-use ThirtyBees\PostNL\Entity\Request\CalculateTimeframesRequest;
-use ThirtyBees\PostNL\Entity\Request\FindNearestLocationsRequest;
-use ThirtyBees\PostNL\Entity\Response\CalculateDeliveryDateResponse;
-use ThirtyBees\PostNL\Entity\Response\CalculateTimeframesResponse;
-use ThirtyBees\PostNL\Entity\Response\FindNearestLocationsResponse;
-use ThirtyBees\PostNL\Exception\InvalidArgumentException;
-use ThirtyBees\PostNL\Http\Client as PostNLHttpClient;
-use ThirtyBees\PostNL\PostNL;
 
 /**
  * Class PostNLRestTest.
@@ -64,25 +58,25 @@ class PostNLRestTest extends TestCase
     public function setupPostNL()
     {
         $this->postnl = new PostNL(
-            Customer::create()
-                ->setCollectionLocation('123456')
-                ->setCustomerCode('DEVC')
-                ->setCustomerNumber('11223344')
-                ->setContactPerson('Test')
+            customer: Customer::create()
+                ->setCollectionLocation(collectionLocation: '123456')
+                ->setCustomerCode(customerCode: 'DEVC')
+                ->setCustomerNumber(customerNumber: '11223344')
+                ->setContactPerson(contactPerson: 'Test')
                 ->setAddress(
-                    (new Address())
-                        ->setAddressType('02')
-                        ->setCity('Hoofddorp')
-                        ->setCompanyName('PostNL')
-                        ->setCountrycode('NL')
-                        ->setHouseNr('42')
-                        ->setStreet('Siriusdreef')
-                        ->setZipcode('2132WT')
+                    address: (new Address())
+                        ->setAddressType(AddressType: '02')
+                        ->setCity(City: 'Hoofddorp')
+                        ->setCompanyName(CompanyName: 'PostNL')
+                        ->setCountrycode(Countrycode: 'NL')
+                        ->setHouseNr(HouseNr: '42')
+                        ->setStreet(Street: 'Siriusdreef')
+                        ->setZipcode(Zipcode: '2132WT')
                 )
-                ->setGlobalPackBarcodeType('AB')
-                ->setGlobalPackCustomerCode('1234'),
-            'test',
-            true
+                ->setGlobalPackBarcodeType(GlobalPackBarcodeType: 'AB')
+                ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'),
+            apiKey: 'test',
+            sandbox: true
         );
     }
 
@@ -91,7 +85,7 @@ class PostNLRestTest extends TestCase
      */
     public function testPostNLRest()
     {
-        $this->assertEquals('DEVC', $this->postnl->getCustomer()->getCustomerCode());
+        $this->assertEquals(expected: 'DEVC', actual: $this->postnl->getCustomer()->getCustomerCode());
     }
 
     /**
@@ -99,7 +93,7 @@ class PostNLRestTest extends TestCase
      */
     public function testCustomer()
     {
-        $this->assertInstanceOf(Customer::class, $this->postnl->getCustomer());
+        $this->assertInstanceOf(expected: Customer::class, actual: $this->postnl->getCustomer());
     }
 
     /**
@@ -109,7 +103,7 @@ class PostNLRestTest extends TestCase
     {
         $this->postnl->setLogger();
 
-        $this->assertNull($this->postnl->getLogger());
+        $this->assertNull(actual: $this->postnl->getLogger());
     }
 
     /**
@@ -119,9 +113,9 @@ class PostNLRestTest extends TestCase
      */
     public function testGetTimeframesAndLocations()
     {
-        $timeframesPayload = file_get_contents(__DIR__.'/../../data/responses/timeframes.json');
-        $locationsPayload = file_get_contents(__DIR__.'/../../data/responses/nearestlocations.json');
-        $deliveryDatePayload = json_encode([
+        $timeframesPayload = file_get_contents(filename: __DIR__.'/../../data/responses/timeframes.json');
+        $locationsPayload = file_get_contents(filename: __DIR__.'/../../data/responses/nearestlocations.json');
+        $deliveryDatePayload = json_encode(value: [
             'DeliveryDate' => '03-07-2019',
             'Options'      => [
                 'string' => 'Daytime',
@@ -129,13 +123,13 @@ class PostNLRestTest extends TestCase
         ]);
 
         $mockClient = new Client();
-        $mockClient->addResponse(new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], $timeframesPayload));
-        $mockClient->addResponse(new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], $locationsPayload));
-        $mockClient->addResponse(new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], $deliveryDatePayload));
+        $mockClient->addResponse(response: new Response(status: 200, headers: ['Content-Type' => 'application/json;charset=UTF-8'], body: $timeframesPayload));
+        $mockClient->addResponse(response: new Response(status: 200, headers: ['Content-Type' => 'application/json;charset=UTF-8'], body: $locationsPayload));
+        $mockClient->addResponse(response: new Response(status: 200, headers: ['Content-Type' => 'application/json;charset=UTF-8'], body: $deliveryDatePayload));
         PostNLHttpClient::getInstance()->setAsyncClient($mockClient);
 
         $results = $this->postnl->getTimeframesAndNearestLocations(
-            (new CalculateTimeframesRequest())
+            getTimeframes: (new CalculateTimeframesRequest())
                 ->setCity('Hoofddorp')
                 ->setCountryCode('NL')
                 ->setEndDate('02-07-2016')
@@ -147,7 +141,7 @@ class PostNLRestTest extends TestCase
                 ->setPostalCode('2132WT')
                 ->setStartDate('30-06-2016')
                 ->setStreet('Siriusdreef'),
-            (new FindNearestLocationsRequest())
+            getNearestLocations: (new FindNearestLocationsRequest())
                 ->setCountrycode('NL')
                 ->setDeliveryDate('29-06-2016')
                 ->setDeliveryOptions(['PG', 'PGE'])
@@ -156,7 +150,7 @@ class PostNLRestTest extends TestCase
                 ->setHouseNumber('42')
                 ->setPostalCode('2132WT')
                 ->setStreet('Siriusdreef'),
-            (new CalculateDeliveryDateRequest())
+            calculateDeliveryDate: (new CalculateDeliveryDateRequest())
                 ->setCity('Hoofddorp')
                 ->setCountryCode('NL')
                 ->setAvailableMonday(true)
@@ -172,23 +166,9 @@ class PostNLRestTest extends TestCase
                 ->setStreet('Siriusdreef')
         );
 
-        $this->assertTrue(is_array($results));
-        $this->assertInstanceOf(CalculateTimeframesResponse::class, $results['timeframes']);
-        $this->assertInstanceOf(FindNearestLocationsResponse::class, $results['locations']);
-        $this->assertInstanceOf(CalculateDeliveryDateResponse::class, $results['delivery_date']);
-    }
-
-    /**
-     * @testdox Returns `false` when the API key is missing
-     *
-     * @throws ReflectionException
-     */
-    public function testNegativeKeyMissing()
-    {
-        $reflection = new ReflectionClass(PostNL::class);
-        /** @var PostNL $postnl */
-        $postnl = $reflection->newInstanceWithoutConstructor();
-
-        $this->assertNull($postnl->getApiKey());
+        $this->assertTrue(condition: is_array(value: $results));
+        $this->assertInstanceOf(expected: CalculateTimeframesResponse::class, actual: $results['timeframes']);
+        $this->assertInstanceOf(expected: FindNearestLocationsResponse::class, actual: $results['locations']);
+        $this->assertInstanceOf(expected: CalculateDeliveryDateResponse::class, actual: $results['delivery_date']);
     }
 }

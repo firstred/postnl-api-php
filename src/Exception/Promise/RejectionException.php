@@ -1,28 +1,32 @@
 <?php
-
 /**
- * Copyright (c) 2015 Michael Dowling, https://github.com/mtdowling <mtdowling@gmail.com>.
+ * The MIT License (MIT).
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
+ * associated documentation files (the "Software"), to deal in the Software without restriction,
+ * including without limitation the rights to use, copy, modify, merge, publish, distribute,
+ * sublicense, and/or sell copies of the Software, and to permit persons to whom the Software
+ * is furnished to do so, subject to the following conditions:
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ * The above copyright notice and this permission notice shall be included in all copies or
+ * substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT
+ * NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
+ * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Exception\Promise;
+declare(strict_types=1);
+
+namespace Firstred\PostNL\Exception\Promise;
 
 use JsonSerializable;
 use RuntimeException;
@@ -49,16 +53,16 @@ class RejectionException extends RuntimeException
 
         if ($description) {
             $message .= ' with reason: '.$description;
-        } elseif (is_string($reason)
-            || (is_object($reason) && method_exists($reason, '__toString'))
+        } elseif (is_string(value: $reason)
+            || (is_object(value: $reason) && method_exists(object_or_class: $reason, method: '__toString'))
         ) {
             $message .= ' with reason: '.$this->reason;
         } elseif ($reason instanceof JsonSerializable) {
             $message .= ' with reason: '
-                .json_encode($this->reason, JSON_PRETTY_PRINT);
+                .json_encode(value: $this->reason, flags: JSON_PRETTY_PRINT);
         }
 
-        parent::__construct($message);
+        parent::__construct(message: $message);
     }
 
     /**

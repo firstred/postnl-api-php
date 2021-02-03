@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,103 +20,77 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- * @copyright 2017-2020 Michael Dekker
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity;
+declare(strict_types=1);
 
-use ThirtyBees\PostNL\Service\BarcodeService;
-use ThirtyBees\PostNL\Service\ConfirmingService;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
-use ThirtyBees\PostNL\Service\LabellingService;
-use ThirtyBees\PostNL\Service\LocationService;
-use ThirtyBees\PostNL\Service\ShippingService;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
-use ThirtyBees\PostNL\Service\TimeframeService;
+namespace Firstred\PostNL\Entity;
 
-/**
- * Class Label.
- *
- * @method string|null getContent()
- * @method string|null getContentType()
- * @method string|null getLabelType()
- * @method Label       setContent(string|null $content = null)
- * @method Label       setContentType(string|null $contentType = null)
- * @method Label       setLabelType(string|null $labelType = null)
- */
-class Label extends AbstractEntity
+use Firstred\PostNL\Attribute\PropInterface;
+use Firstred\PostNL\Misc\SerializableObject;
+use Firstred\PostNL\Service\ServiceInterface;
+use JetBrains\PhpStorm\ExpectedValues;
+
+class Label extends SerializableObject
 {
     const FORMAT_A4 = 1;
     const FORMAT_A6 = 2;
 
-    /** @var string[][] */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'Content'     => BarcodeService::DOMAIN_NAMESPACE,
-            'ContentType' => BarcodeService::DOMAIN_NAMESPACE,
-            'Labeltype'   => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'Content'     => ConfirmingService::DOMAIN_NAMESPACE,
-            'ContentType' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Labeltype'   => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'Content'     => LabellingService::DOMAIN_NAMESPACE,
-            'ContentType' => LabellingService::DOMAIN_NAMESPACE,
-            'Labeltype'   => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Content'     => ShippingStatusService::DOMAIN_NAMESPACE,
-            'ContentType' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Labeltype'   => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'Content'     => DeliveryDateService::DOMAIN_NAMESPACE,
-            'ContentType' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Labeltype'   => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'Content'     => LocationService::DOMAIN_NAMESPACE,
-            'ContentType' => LocationService::DOMAIN_NAMESPACE,
-            'Labeltype'   => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'Content'     => TimeframeService::DOMAIN_NAMESPACE,
-            'ContentType' => TimeframeService::DOMAIN_NAMESPACE,
-            'Labeltype'   => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-        'Shipping' => [
-            'Content'     => ShippingService::DOMAIN_NAMESPACE,
-            'ContentType' => ShippingService::DOMAIN_NAMESPACE,
-            'Labeltype'   => ShippingService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /**
-     * @var string|null
-     *
-     * Base 64 encoded content
-     */
-    protected $Content;
-    /** @var string|null */
-    protected $Contenttype;
-    /** @var string|null */
-    protected $Labeltype;
-    // @codingStandardsIgnoreEnd
+    public function __construct(
+        #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
+        string $service = '',
+        #[ExpectedValues(values: PropInterface::PROP_TYPES + [''])]
+        string $propType = '',
 
-    /**
-     * @param string|null $content
-     * @param string|null $contentType
-     * @param string|null $labelType
-     */
-    public function __construct($content = null, $contentType = null, $labelType = null)
+        /*
+         * Base 64 encoded content.
+         */
+        protected string|null $Content = null,
+    protected string|null $Contenttype = null,
+    protected string|null $Labeltype = null,
+    ) {
+        parent::__construct(service: $service, propType: $propType);
+
+        $this->setContent(Content: $Content);
+        $this->setContenttype(Contenttype: $ContentType);
+        $this->setLabeltype(Labeltype: $LabelType);
+    }
+
+    public function getContent(): string|null
     {
-        parent::__construct();
+        return $this->Content;
+    }
 
-        $this->setContent($content);
-        $this->setContenttype($contentType);
-        $this->setLabeltype($labelType);
+    public function setContent(string|null $Content = null): static
+    {
+        $this->Content = $Content;
+
+        return $this;
+    }
+
+    public function getContenttype(): string|null
+    {
+        return $this->Contenttype;
+    }
+
+    public function setContenttype(string|null $Contenttype = null): static
+    {
+        $this->Contenttype = $Contenttype;
+
+        return $this;
+    }
+
+    public function getLabeltype(): string|null
+    {
+        return $this->Labeltype;
+    }
+
+    public function setLabeltype(string|null $Labeltype = null): static
+    {
+        $this->Labeltype = $Labeltype;
+
+        return $this;
     }
 }

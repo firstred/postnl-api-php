@@ -1,9 +1,8 @@
 <?php
-
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -21,103 +20,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- * @copyright 2017-2020 Michael Dekker
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Tests\Unit\Service;
+declare(strict_types=1);
 
-use Cache\Adapter\Void\VoidCachePool;
+namespace Firstred\PostNL\Tests\Unit\Service;
+
 use Exception;
+use Firstred\PostNL\Entity\Address;
+use Firstred\PostNL\Entity\Dimension;
+use Firstred\PostNL\Entity\Shipment;
+use Firstred\PostNL\Exception\CifDownException;
+use Firstred\PostNL\Service\ConfirmingService;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Mock\Client;
-use PHPUnit\Framework\TestCase;
-use Psr\Http\Message\RequestInterface;
-use Psr\Log\LoggerInterface;
-use ReflectionException;
-use ThirtyBees\PostNL\Entity\Address;
-use ThirtyBees\PostNL\Entity\Customer;
-use ThirtyBees\PostNL\Entity\Dimension;
-use ThirtyBees\PostNL\Entity\Request\ConfirmShipmentRequest;
-use ThirtyBees\PostNL\Entity\Response\ConfirmShipmentResponse;
-use ThirtyBees\PostNL\Entity\Shipment;
-use ThirtyBees\PostNL\Exception\CifDownException;
-use ThirtyBees\PostNL\Exception\InvalidArgumentException;
-use ThirtyBees\PostNL\Util\Message;
-use ThirtyBees\PostNL\PostNL;
-use ThirtyBees\PostNL\Service\ConfirmingService;
 
 /**
  * Class ConfirmingServiceTest.
  *
  * @testdox The ConfirmingService (REST)
  */
-class ConfirmingServiceTest extends TestCase
+class ConfirmingServiceTest extends ServiceTestBase
 {
-    /** @var PostNL */
-    protected $postnl;
-    /** @var ConfirmingService */
-    protected $service;
-    /** @var */
-    protected $lastRequest;
-
-    /**
-     * @before
-     *
-     * @throws InvalidArgumentException
-     * @throws ReflectionException
-     */
-    public function setupPostNL()
-    {
-        $this->postnl = new PostNL(
-            Customer::create()
-                ->setCollectionLocation('123456')
-                ->setCustomerCode('DEVC')
-                ->setCustomerNumber('11223344')
-                ->setContactPerson('Test')
-                ->setAddress(
-                    (new Address())
-                        ->setAddressType('02')
-                        ->setCity('Hoofddorp')
-                        ->setCompanyName('PostNL')
-                        ->setCountrycode('NL')
-                        ->setHouseNr('42')
-                        ->setStreet('Siriusdreef')
-                        ->setZipcode('2132WT')
-                )
-                ->setGlobalPackBarcodeType('AB')
-                ->setGlobalPackCustomerCode('1234'),
-            'test',
-            true
-        );
-
-        $this->service = $this->postnl->getConfirmingService();
-        $this->service->cache = new VoidCachePool();
-        $this->service->ttl = 1;
-    }
-
-    /**
-     * @after
-     */
-    public function logPendingRequest()
-    {
-        if (!$this->lastRequest instanceof RequestInterface) {
-            return;
-        }
-
-        global $logger;
-        if ($logger instanceof LoggerInterface) {
-            $logger->debug($this->getName()." Request\n".Message::str($this->lastRequest));
-        }
-        $this->lastRequest = null;
-    }
-
     /**
      * @testdox Returns a valid service object
      */
     public function testHasValidConfirmingService()
     {
-        $this->assertInstanceOf(ConfirmingService::class, $this->service);
+        $this->assertInstanceOf(expected: ConfirmingService::class, actual: $this->postnl->getConfirmingService());
     }
 
     /**
@@ -135,7 +67,7 @@ class ConfirmingServiceTest extends TestCase
                             ->setAddresses(
                                 [
                                     Address::create(
-                                        [
+                                        properties: [
                                             'AddressType' => '01',
                                             'City'        => 'Utrecht',
                                             'Countrycode' => 'NL',
@@ -148,7 +80,7 @@ class ConfirmingServiceTest extends TestCase
                                         ]
                                     ),
                                     Address::create(
-                                        [
+                                        properties: [
                                             'AddressType' => '02',
                                             'City'        => 'Hoofddorp',
                                             'CompanyName' => 'PostNL',
@@ -162,14 +94,14 @@ class ConfirmingServiceTest extends TestCase
                             )
                             ->setBarcode('3S1234567890123')
                             ->setDeliveryAddress('01')
-                            ->setDimension(new Dimension('2000'))
+                            ->setDimension(new Dimension(weight: '2000'))
                             ->setProductCodeDelivery('3085'),
                     ]
                 )
         );
 
         $this->assertEquals(
-            [
+            expected: [
                 'Customer' => [
                     'Address' => [
                         'AddressType' => '02',
@@ -189,7 +121,7 @@ class ConfirmingServiceTest extends TestCase
                 ],
                 'Message' => [
                     'MessageID'        => '1',
-                    'MessageTimeStamp' => date('d-m-Y 00:00:00'),
+                    'MessageTimeStamp' => date(format: 'd-m-Y 00:00:00'),
                     'Printertype'      => 'GraphicFile|PDF',
                 ],
                 'Shipments' => [
@@ -223,11 +155,11 @@ class ConfirmingServiceTest extends TestCase
                     'ProductCodeDelivery' => '3085',
                 ],
             ],
-            json_decode((string) $request->getBody(), true)
+            actual: json_decode(json: (string) $request->getBody(), associative: true)
         );
-        $this->assertEquals('test', $request->getHeaderLine('apikey'));
-        $this->assertEquals('application/json;charset=UTF-8', $request->getHeaderLine('Content-Type'));
-        $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
+        $this->assertEquals(expected: 'test', actual: $request->getHeaderLine('apikey'));
+        $this->assertEquals(expected: 'application/json;charset=UTF-8', actual: $request->getHeaderLine('Content-Type'));
+        $this->assertEquals(expected: 'application/json', actual: $request->getHeaderLine('Accept'));
     }
 
     /**
@@ -241,12 +173,12 @@ class ConfirmingServiceTest extends TestCase
         $streamFactory = Psr17FactoryDiscovery::findStreamFactory();
         $mockClient = new Client();
         $mockClient->addResponse(
-            $responseFactory->createResponse(200, 'OK')
-                ->withHeader('Content-Type', 'application/json;charset=UTF-8')
+            response: $responseFactory->createResponse(code: 200, reasonPhrase: 'OK')
+                ->withHeader(name: 'Content-Type', value: 'application/json;charset=UTF-8')
                 ->withBody(
-                    $streamFactory->createStream(
-                        json_encode(
-                            [
+                    body: $streamFactory->createStream(
+                        content: json_encode(
+                            value: [
                                 'ConfirmingResponseShipments' => [
                                     'ConfirmShipmentResponse' => [
                                         'Barcode'  => '3SDEVC987119100',
@@ -259,12 +191,12 @@ class ConfirmingServiceTest extends TestCase
                     )
                 )
         );
-        \ThirtyBees\PostNL\Http\Client::getInstance()->setAsyncClient($mockClient);
+        \Firstred\PostNL\Http\Client::getInstance()->setAsyncClient($mockClient);
 
         $confirm = $this->postnl->confirmShipment(
-            (new Shipment())
+            shipment: (new Shipment())
                 ->setAddresses([
-                    Address::create([
+                    Address::create(properties: [
                         'AddressType' => '01',
                         'City'        => 'Utrecht',
                         'Countrycode' => 'NL',
@@ -275,7 +207,7 @@ class ConfirmingServiceTest extends TestCase
                         'Street'      => 'Bilderdijkstraat',
                         'Zipcode'     => '3521VA',
                     ]),
-                    Address::create([
+                    Address::create(properties: [
                         'AddressType' => '02',
                         'City'        => 'Hoofddorp',
                         'CompanyName' => 'PostNL',
@@ -287,11 +219,11 @@ class ConfirmingServiceTest extends TestCase
                 ])
                 ->setBarcode('3S1234567890123')
                 ->setDeliveryAddress('01')
-                ->setDimension(new Dimension('2000'))
+                ->setDimension(new Dimension(weight: '2000'))
                 ->setProductCodeDelivery('3085')
         );
 
-        $this->assertInstanceOf(ConfirmShipmentResponse::class, $confirm);
+        $this->assertInstanceOf(expected: ConfirmShipmentResponse::class, actual: $confirm);
     }
 
     /**
@@ -305,12 +237,12 @@ class ConfirmingServiceTest extends TestCase
         $streamFactory = Psr17FactoryDiscovery::findStreamFactory();
         $mockClient = new Client();
         $mockClient->addResponse(
-            $responseFactory->createResponse(200, 'OK')
-                ->withHeader('Content-Type', 'application/json;charset=UTF-8')
+            response: $responseFactory->createResponse(code: 200, reasonPhrase: 'OK')
+                ->withHeader(name: 'Content-Type', value: 'application/json;charset=UTF-8')
                 ->withBody(
-                    $streamFactory->createStream(
-                        json_encode(
-                            [
+                    body: $streamFactory->createStream(
+                        content: json_encode(
+                            value: [
                                 'ConfirmingResponseShipments' => [
                                     'ConfirmShipmentResponse' => [
                                         'Barcode'  => '3SDEVC201611210',
@@ -324,12 +256,12 @@ class ConfirmingServiceTest extends TestCase
                 )
         );
         $mockClient->addResponse(
-            $responseFactory->createResponse(200, 'OK')
-                ->withHeader('Content-Type', 'application/json;charset=UTF-8')
+            response: $responseFactory->createResponse(code: 200, reasonPhrase: 'OK')
+                ->withHeader(name: 'Content-Type', value: 'application/json;charset=UTF-8')
                 ->withBody(
-                    $streamFactory->createStream(
-                        json_encode(
-                            [
+                    body: $streamFactory->createStream(
+                        content: json_encode(
+                            value: [
                                 'ConfirmingResponseShipments' => [
                                     'ConfirmShipmentResponse' => [
                                         'Barcode'  => '3SDEVC201611211',
@@ -342,12 +274,12 @@ class ConfirmingServiceTest extends TestCase
                     )
                 )
         );
-        \ThirtyBees\PostNL\Http\Client::getInstance()->setAsyncClient($mockClient);
+        \Firstred\PostNL\Http\Client::getInstance()->setAsyncClient($mockClient);
 
-        $confirms = $this->postnl->confirmShipments([
+        $confirms = $this->postnl->confirmShipments(shipments: [
                 (new Shipment())
                     ->setAddresses([
-                        Address::create([
+                        Address::create(properties: [
                             'AddressType' => '01',
                             'City'        => 'Utrecht',
                             'Countrycode' => 'NL',
@@ -358,7 +290,7 @@ class ConfirmingServiceTest extends TestCase
                             'Street'      => 'Bilderdijkstraat',
                             'Zipcode'     => '3521VA',
                         ]),
-                        Address::create([
+                        Address::create(properties: [
                             'AddressType' => '02',
                             'City'        => 'Hoofddorp',
                             'CompanyName' => 'PostNL',
@@ -370,11 +302,11 @@ class ConfirmingServiceTest extends TestCase
                     ])
                     ->setBarcode('3SDEVC201611210')
                     ->setDeliveryAddress('01')
-                    ->setDimension(new Dimension('2000'))
+                    ->setDimension(new Dimension(weight: '2000'))
                     ->setProductCodeDelivery('3085'),
                 (new Shipment())
                     ->setAddresses([
-                        Address::create([
+                        Address::create(properties: [
                             'AddressType' => '01',
                             'City'        => 'Utrecht',
                             'Countrycode' => 'NL',
@@ -385,7 +317,7 @@ class ConfirmingServiceTest extends TestCase
                             'Street'      => 'Bilderdijkstraat',
                             'Zipcode'     => '3521VA',
                         ]),
-                        Address::create([
+                        Address::create(properties: [
                             'AddressType' => '02',
                             'City'        => 'Hoofddorp',
                             'CompanyName' => 'PostNL',
@@ -397,11 +329,11 @@ class ConfirmingServiceTest extends TestCase
                     ])
                     ->setBarcode('3SDEVC201611211')
                     ->setDeliveryAddress('01')
-                    ->setDimension(new Dimension('2000'))
+                    ->setDimension(new Dimension(weight: '2000'))
                     ->setProductCodeDelivery('3085'),
         ]);
 
-        $this->assertInstanceOf(ConfirmShipmentResponse::class, $confirms[1]);
+        $this->assertInstanceOf(expected: ConfirmShipmentResponse::class, actual: $confirms[1]);
     }
 
     /**
@@ -411,22 +343,22 @@ class ConfirmingServiceTest extends TestCase
      */
     public function testNegativeGenerateLabelInvalidResponseRest()
     {
-        $this->expectException(CifDownException::class);
+        $this->expectException(exception: CifDownException::class);
 
         $responseFactory = Psr17FactoryDiscovery::findResponseFactory();
         $streamFactory = Psr17FactoryDiscovery::findStreamFactory();
         $mockClient = new Client();
         $mockClient->addResponse(
-            $responseFactory->createResponse(200, 'OK')
-                ->withHeader('Content-Type', 'application/json;charset=UTF-8')
-                ->withBody($streamFactory->createStream('asdfojasuidfo'))
+            response: $responseFactory->createResponse(code: 200, reasonPhrase: 'OK')
+                ->withHeader(name: 'Content-Type', value: 'application/json;charset=UTF-8')
+                ->withBody(body: $streamFactory->createStream(content: 'asdfojasuidfo'))
         );
-        \ThirtyBees\PostNL\Http\Client::getInstance()->setAsyncClient($mockClient);
+        \Firstred\PostNL\Http\Client::getInstance()->setAsyncClient($mockClient);
 
         $this->postnl->confirmShipment(
-            (new Shipment())
+            shipment: (new Shipment())
                 ->setAddresses([
-                    Address::create([
+                    Address::create(properties: [
                         'AddressType' => '01',
                         'City'        => 'Utrecht',
                         'Countrycode' => 'NL',
@@ -437,7 +369,7 @@ class ConfirmingServiceTest extends TestCase
                         'Street'      => 'Bilderdijkstraat',
                         'Zipcode'     => '3521VA',
                     ]),
-                    Address::create([
+                    Address::create(properties: [
                         'AddressType' => '02',
                         'City'        => 'Hoofddorp',
                         'CompanyName' => 'PostNL',
@@ -449,7 +381,7 @@ class ConfirmingServiceTest extends TestCase
                 ])
                 ->setBarcode('3S1234567890123')
                 ->setDeliveryAddress('01')
-                ->setDimension(new Dimension('2000'))
+                ->setDimension(new Dimension(weight: '2000'))
                 ->setProductCodeDelivery('3085')
         );
     }

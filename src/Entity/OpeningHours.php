@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,165 +20,137 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- * @copyright 2017-2020 Michael Dekker
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity;
+declare(strict_types=1);
 
-use ThirtyBees\PostNL\Service\BarcodeService;
-use ThirtyBees\PostNL\Service\ConfirmingService;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
-use ThirtyBees\PostNL\Service\LabellingService;
-use ThirtyBees\PostNL\Service\LocationService;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
-use ThirtyBees\PostNL\Service\TimeframeService;
+namespace Firstred\PostNL\Entity;
 
-/**
- * Class OpeningHours.
- *
- * @method string|null  getMonday()
- * @method string|null  getTuesday()
- * @method string|null  getWednesday()
- * @method string|null  getThursday()
- * @method string|null  getFriday()
- * @method string|null  getSaturday()
- * @method string|null  getSunday()
- * @method OpeningHours setMonday(string|null $monday = null)
- * @method OpeningHours setTuesday(string|null $tuesday = null)
- * @method OpeningHours setWednesday(string|null $wednesday = null)
- * @method OpeningHours setThursday(string|null $thursday = null)
- * @method OpeningHours setFriday(string|null $friday = null)
- * @method OpeningHours setSaturday(string|null $saturday = null)
- * @method OpeningHours setSunday(string|null $sunday = null)
- */
-class OpeningHours extends AbstractEntity
+use Firstred\PostNL\Attribute\PropInterface;
+use Firstred\PostNL\Service\ServiceInterface;
+use JetBrains\PhpStorm\ExpectedValues;
+
+class OpeningHours extends JsonSerializableObject
 {
-    /** @var string[][] */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'Monday'    => BarcodeService::DOMAIN_NAMESPACE,
-            'Tuesday'   => BarcodeService::DOMAIN_NAMESPACE,
-            'Wednesday' => BarcodeService::DOMAIN_NAMESPACE,
-            'Thursday'  => BarcodeService::DOMAIN_NAMESPACE,
-            'Friday'    => BarcodeService::DOMAIN_NAMESPACE,
-            'Saturday'  => BarcodeService::DOMAIN_NAMESPACE,
-            'Sunday'    => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'Monday'    => ConfirmingService::DOMAIN_NAMESPACE,
-            'Tuesday'   => ConfirmingService::DOMAIN_NAMESPACE,
-            'Wednesday' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Thursday'  => ConfirmingService::DOMAIN_NAMESPACE,
-            'Friday'    => ConfirmingService::DOMAIN_NAMESPACE,
-            'Saturday'  => ConfirmingService::DOMAIN_NAMESPACE,
-            'Sunday'    => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'Monday'    => LabellingService::DOMAIN_NAMESPACE,
-            'Tuesday'   => LabellingService::DOMAIN_NAMESPACE,
-            'Wednesday' => LabellingService::DOMAIN_NAMESPACE,
-            'Thursday'  => LabellingService::DOMAIN_NAMESPACE,
-            'Friday'    => LabellingService::DOMAIN_NAMESPACE,
-            'Saturday'  => LabellingService::DOMAIN_NAMESPACE,
-            'Sunday'    => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Monday'    => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Tuesday'   => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Wednesday' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Thursday'  => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Friday'    => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Saturday'  => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Sunday'    => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'Monday'    => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Tuesday'   => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Wednesday' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Thursday'  => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Friday'    => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Saturday'  => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Sunday'    => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'Monday'    => LocationService::DOMAIN_NAMESPACE,
-            'Tuesday'   => LocationService::DOMAIN_NAMESPACE,
-            'Wednesday' => LocationService::DOMAIN_NAMESPACE,
-            'Thursday'  => LocationService::DOMAIN_NAMESPACE,
-            'Friday'    => LocationService::DOMAIN_NAMESPACE,
-            'Saturday'  => LocationService::DOMAIN_NAMESPACE,
-            'Sunday'    => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'Monday'    => TimeframeService::DOMAIN_NAMESPACE,
-            'Tuesday'   => TimeframeService::DOMAIN_NAMESPACE,
-            'Wednesday' => TimeframeService::DOMAIN_NAMESPACE,
-            'Thursday'  => TimeframeService::DOMAIN_NAMESPACE,
-            'Friday'    => TimeframeService::DOMAIN_NAMESPACE,
-            'Saturday'  => TimeframeService::DOMAIN_NAMESPACE,
-            'Sunday'    => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null */
-    protected $Monday = '';
-    /** @var string|null */
-    protected $Tuesday = '';
-    /** @var string|null */
-    protected $Wednesday = '';
-    /** @var string|null */
-    protected $Thursday = '';
-    /** @var string|null */
-    protected $Friday = '';
-    /** @var string|null */
-    protected $Saturday = '';
-    /** @var string|null */
-    protected $Sunday = '';
-    // @codingStandardsIgnoreEnd
-
-    /**
-     * OpeningHours constructor.
-     *
-     * @param string|null $monday
-     * @param string|null $tuesday
-     * @param string|null $wednesday
-     * @param string|null $thursday
-     * @param string|null $friday
-     * @param string|null $saturday
-     * @param string|null $sunday
-     */
     public function __construct(
-        $monday = '',
-        $tuesday = '',
-        $wednesday = '',
-        $thursday = '',
-        $friday = '',
-        $saturday = '',
-        $sunday = ''
-    ) {
-        parent::__construct();
+        #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
+        string $service = '',
+        #[ExpectedValues(values: PropInterface::PROP_TYPES + [''])]
+        string $propType = '',
 
-        $this->setMonday($monday);
-        $this->setTuesday($tuesday);
-        $this->setWednesday($wednesday);
-        $this->setThursday($thursday);
-        $this->setFriday($friday);
-        $this->setSaturday($saturday);
-        $this->setSunday($sunday);
+        protected string|null $Monday = '',
+        protected string|null $Tuesday = '',
+        protected string|null $Wednesday = '',
+        protected string|null $Thursday = '',
+        protected string|null $Friday = '',
+        protected string|null $Saturday = '',
+        protected string|null $Sunday = '',
+    ) {
+        parent::__construct(service: $service, propType: $propType);
+
+        $this->setMonday(Monday: $Monday);
+        $this->setTuesday(Tuesday: $Tuesday);
+        $this->setWednesday(Wednesday: $Wednesday);
+        $this->setThursday(Thursday: $Thursday);
+        $this->setFriday(Friday: $Friday);
+        $this->setSaturday(Saturday: $Saturday);
+        $this->setSunday(Sunday: $Sunday);
     }
 
-    /**
-     * @return array
-     */
-    public function toArray()
+    public function getMonday(): string
+    {
+        return $this->Monday;
+    }
+
+    public function setMonday(string $Monday = null): static
+    {
+        $this->Monday = $Monday;
+
+        return $this;
+    }
+
+    public function getTuesday(): string
+    {
+        return $this->Tuesday;
+    }
+
+    public function setTuesday(string $Tuesday = null): static
+    {
+        $this->Tuesday = $Tuesday;
+
+        return $this;
+    }
+
+    public function getWednesday(): string
+    {
+        return $this->Wednesday;
+    }
+
+    public function setWednesday(string $Wednesday = null): static
+    {
+        $this->Wednesday = $Wednesday;
+
+        return $this;
+    }
+
+    public function getThursday(): string
+    {
+        return $this->Thursday;
+    }
+
+    public function setThursday(string $Thursday = null): static
+    {
+        $this->Thursday = $Thursday;
+
+        return $this;
+    }
+
+    public function getFriday(): string
+    {
+        return $this->Friday;
+    }
+
+    public function setFriday(string $Friday = null): static
+    {
+        $this->Friday = $Friday;
+
+        return $this;
+    }
+
+    public function getSaturday(): string
+    {
+        return $this->Saturday;
+    }
+
+    public function setSaturday(string $Saturday = null): static
+    {
+        $this->Saturday = $Saturday;
+
+        return $this;
+    }
+
+    public function getSunday(): string
+    {
+        return $this->Sunday;
+    }
+
+    public function setSunday(string $Sunday = null): static
+    {
+        $this->Sunday = $Sunday;
+
+        return $this;
+    }
+
+    public function toArray(): array
     {
         $array = [];
-        foreach (array_keys(static::$defaultProperties['Barcode']) as $property) {
-            if (isset($this->{$property})) {
-                $array[$property] = $this->{$property};
-            }
-        }
+//        foreach (array_keys(array: static::$defaultProperties['Barcode']) as $property) {
+//            if (isset($this->{$property})) {
+//                $array[$property] = $this->{$property};
+//            }
+//        }
 
         return $array;
     }

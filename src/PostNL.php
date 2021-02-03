@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,443 +20,1034 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- * @copyright 2017-2020 Michael Dekker
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL;
+declare(strict_types=1);
 
-use GuzzleHttp\Psr7\Response;
-use Http\Discovery\HttpAsyncClientDiscovery;
-use Psr\Cache\CacheItemInterface;
-use Psr\Log\LoggerAwareInterface;
+namespace Firstred\PostNL;
+
+use Firstred\PostNL\Attribute\RequestProp;
+use Firstred\PostNL\DTO\Request\CalculateDeliveryDateRequestDTO;
+use Firstred\PostNL\DTO\Request\CalculateShippingDateRequestDTO;
+use Firstred\PostNL\DTO\Request\CalculateTimeframesRequestDTO;
+use Firstred\PostNL\DTO\Response\CalculateDeliveryDateResponseDTO;
+use Firstred\PostNL\DTO\Response\CalculateShippingDateResponseDTO;
+use Firstred\PostNL\DTO\Response\CalculateTimeframesResponseDTO;
+use Firstred\PostNL\DTO\Response\GenerateBarcodeResponseDTO;
+use Firstred\PostNL\DTO\Response\GenerateBarcodesByCountryCodesResponseDTO;
+use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Gateway\BarcodeServiceGateway;
+use Firstred\PostNL\Gateway\DeliveryDateServiceGateway;
+use Firstred\PostNL\Gateway\TimeframeServiceGateway;
+use Firstred\PostNL\HttpClient\HTTPClientInterface;
+use Firstred\PostNL\HttpClient\HTTPlugHTTPClient;
+use Firstred\PostNL\RequestBuilder\BarcodeServiceRequestBuilder;
+use Firstred\PostNL\RequestBuilder\DeliveryDateServiceRequestBuilder;
+use Firstred\PostNL\RequestBuilder\TimeframeServiceRequestBuilder;
+use Firstred\PostNL\ResponseProcessor\BarcodeServiceResponseProcessor;
+use Firstred\PostNL\ResponseProcessor\DeliveryDateServiceResponseProcessor;
+use Firstred\PostNL\ResponseProcessor\TimeframeServiceResponseProcessor;
+use Firstred\PostNL\Service\BarcodeService;
+use Firstred\PostNL\Service\BarcodeServiceInterface;
+use Firstred\PostNL\Service\ConfirmingService;
+use Firstred\PostNL\Service\ConfirmingServiceInterface;
+use Firstred\PostNL\Service\DeliveryDateService;
+use Firstred\PostNL\Service\DeliveryDateServiceInterface;
+use Firstred\PostNL\Service\LabellingServiceInterface;
+use Firstred\PostNL\Service\LocationService;
+use Firstred\PostNL\Service\LocationServiceInterface;
+use Firstred\PostNL\Service\ShippingService;
+use Firstred\PostNL\Service\ShippingServiceInterface;
+use Firstred\PostNL\Service\ShippingStatusService;
+use Firstred\PostNL\Service\ShippingStatusServiceInterface;
+use Firstred\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Service\TimeframeServiceInterface;
+use JetBrains\PhpStorm\ArrayShape;
 use Psr\Log\LoggerInterface;
-use Sabre\Xml\Element;
-use setasign\Fpdi\PdfParser\StreamReader;
-use ThirtyBees\PostNL\Entity\Barcode;
-use ThirtyBees\PostNL\Entity\Customer;
-use ThirtyBees\PostNL\Entity\Label;
-use ThirtyBees\PostNL\Entity\Message\LabellingMessage;
-use ThirtyBees\PostNL\Entity\Message\Message;
-use ThirtyBees\PostNL\Entity\Request\CompleteStatus;
-use ThirtyBees\PostNL\Entity\Request\Confirming;
-use ThirtyBees\PostNL\Entity\Request\CurrentStatus;
-use ThirtyBees\PostNL\Entity\Request\GenerateBarcode;
-use ThirtyBees\PostNL\Entity\Request\GenerateLabel;
-use ThirtyBees\PostNL\Entity\Request\GenerateShipping;
-use ThirtyBees\PostNL\Entity\Request\GetDeliveryDate;
-use ThirtyBees\PostNL\Entity\Request\GetLocation;
-use ThirtyBees\PostNL\Entity\Request\GetLocationsInArea;
-use ThirtyBees\PostNL\Entity\Request\GetNearestLocations;
-use ThirtyBees\PostNL\Entity\Request\GetSentDateRequest;
-use ThirtyBees\PostNL\Entity\Request\GetSignature;
-use ThirtyBees\PostNL\Entity\Request\GetTimeframes;
-use ThirtyBees\PostNL\Entity\Response\CompleteStatusResponse;
-use ThirtyBees\PostNL\Entity\Response\ConfirmingResponseShipment;
-use ThirtyBees\PostNL\Entity\Response\CurrentStatusResponse;
-use ThirtyBees\PostNL\Entity\Response\GenerateLabelResponse;
-use ThirtyBees\PostNL\Entity\Response\GetDeliveryDateResponse;
-use ThirtyBees\PostNL\Entity\Response\GetLocationsInAreaResponse;
-use ThirtyBees\PostNL\Entity\Response\GetNearestLocationsResponse;
-use ThirtyBees\PostNL\Entity\Response\GetSentDateResponse;
-use ThirtyBees\PostNL\Entity\Response\ResponseTimeframes;
-use ThirtyBees\PostNL\Entity\Shipment;
-use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
-use ThirtyBees\PostNL\Exception\AbstractException;
-use ThirtyBees\PostNL\Exception\HttpClientException;
-use ThirtyBees\PostNL\Exception\InvalidArgumentException;
-use ThirtyBees\PostNL\Exception\InvalidBarcodeException;
-use ThirtyBees\PostNL\Exception\InvalidConfigurationException;
-use ThirtyBees\PostNL\Exception\NotSupportedException;
-use ThirtyBees\PostNL\HttpClient\ClientInterface;
-use ThirtyBees\PostNL\HttpClient\CurlClient;
-use ThirtyBees\PostNL\HttpClient\GuzzleClient;
-use ThirtyBees\PostNL\HttpClient\HTTPlugClient;
-use ThirtyBees\PostNL\Util\RFPdi;
-use ThirtyBees\PostNL\Util\Util;
-use ThirtyBees\PostNL\Service\BarcodeService;
-use ThirtyBees\PostNL\Service\ConfirmingService;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
-use ThirtyBees\PostNL\Service\LabellingService;
-use ThirtyBees\PostNL\Service\LocationService;
-use ThirtyBees\PostNL\Service\ShippingService;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
-use ThirtyBees\PostNL\Service\TimeframeService;
-use function base64_decode;
-use function class_exists;
 
-/**
- * Class PostNL.
- */
-class PostNL implements LoggerAwareInterface
+class PostNL
 {
-    // New REST API
-    const MODE_REST = 1;
-    // New SOAP API
-    const MODE_SOAP = 2;
-    // Old SOAP API
-    const MODE_LEGACY = 2;
-
-    /**
-     * 3S (or EU Pack Special) countries.
-     *
-     * @var array
-     */
-    public static $threeSCountries = [
-        'AT',
-        'BE',
-        'BG',
-        'CZ',
-        'DK',
-        'EE',
-        'FI',
-        'FR',
-        'DE',
-        'GB',
-        'GR',
-        'HU',
-        'IE',
-        'IT',
-        'LV',
-        'LT',
-        'LU',
-        'NL',
-        'PL',
-        'PT',
-        'RO',
-        'SK',
-        'SI',
-        'ES',
-        'EE',
-    ];
-
-    /**
-     * A6 positions
-     * (index = amount of a6 left on the page).
-     *
-     * @var array
-     */
-    public static $a6positions = [
-        4 => [-276, 2],
-        3 => [-132, 2],
-        2 => [-276, 110],
-        1 => [-132, 110],
-    ];
-
-    /**
-     * Verify SSL certificate of the PostNL REST API.
-     *
-     * @var bool
-     */
-    public $verifySslCerts = true;
-
-    /**
-     * The PostNL REST API key or SOAP username/password to be used for requests.
-     *
-     * In case of REST the API key is the `Password` property of the `UsernameToken`
-     * In case of SOAP this has to be a `UsernameToken` object, with the following requirements:
-     *   - Do not pass a username (`null`)
-     *     And pass the plaintext password.
-     *
-     * @var string
-     */
-    protected $token;
-
-    /**
-     * The PostNL Customer to be used for requests.
-     *
-     * @var Customer
-     */
-    protected $customer;
-
-    /**
-     * Sandbox mode.
-     *
-     * @var bool
-     */
-    protected $sandbox = false;
-
-    /** @var ClientInterface */
-    protected $httpClient;
-
-    /** @var LoggerInterface */
-    protected $logger;
-
-    /**
-     * This is the current mode.
-     *
-     * @var int
-     */
-    protected $mode;
-
-    /** @var BarcodeService */
-    protected $barcodeService;
-
-    /** @var LabellingService */
-    protected $labellingService;
-
-    /** @var ConfirmingService */
-    protected $confirmingService;
-
-    /** @var ShippingStatusService */
-    protected $shippingStatusService;
-
-    /** @var DeliveryDateService */
-    protected $deliveryDateService;
-
-    /** @var TimeframeService */
-    protected $timeframeService;
-
-    /** @var LocationService */
-    protected $locationService;
-
-    /** @var ShippingService */
-    protected $shippingService;
-
     /**
      * PostNL constructor.
      *
-     * @param Customer             $customer
-     * @param UsernameToken|string $token
-     * @param bool                 $sandbox
-     * @param int                  $mode     Set the preferred connection strategy.
-     *                                       Valid options are:
-     *                                       - `MODE_REST`: New REST API
-     *                                       - `MODE_SOAP`: New SOAP API
-     *                                       - `MODE_LEGACY`: Use the legacy API (the plug can
-     *                                       be pulled at any time)
-     *
-     * @throws InvalidArgumentException
+     * @param Customer                            $customer
+     * @param string                              $apiKey
+     * @param bool                                $sandbox
+     * @param LoggerInterface|null                $logger
+     * @param BarcodeServiceInterface|null        $barcodeService
+     * @param LabellingServiceInterface|null      $labellingService
+     * @param ConfirmingServiceInterface|null     $confirmingService
+     * @param ShippingStatusServiceInterface|null $shippingStatusService
+     * @param DeliveryDateServiceInterface|null   $deliveryDateService
+     * @param TimeframeServiceInterface|null      $timeframeService
+     * @param LocationServiceInterface|null       $locationService
+     * @param ShippingServiceInterface|null       $shippingService
      */
     public function __construct(
-        Customer $customer,
-        $token,
-        $sandbox,
-        $mode = self::MODE_REST
+        protected Customer $customer,
+        protected string $apiKey,
+        protected bool $sandbox,
+        protected BarcodeServiceInterface|null $barcodeService = null,
+        protected LabellingServiceInterface|null $labellingService = null,
+        protected ConfirmingServiceInterface|null $confirmingService = null,
+        protected ShippingStatusServiceInterface|null $shippingStatusService = null,
+        protected DeliveryDateServiceInterface|null $deliveryDateService = null,
+        protected TimeframeServiceInterface|null $timeframeService = null,
+        protected LocationServiceInterface|null $locationService = null,
+        protected ShippingServiceInterface|null $shippingService = null,
+        protected HTTPClientInterface|null $defaultHttpClient = null,
+        protected LoggerInterface|null $defaultLogger = null,
     ) {
-        $this->setCustomer($customer);
-        $this->setToken($token);
-        $this->setSandbox((bool) $sandbox);
-        $this->setMode((int) $mode);
+    }
+
+//    /**
+//     * @param Shipment $shipment
+//     * @param string   $printertype
+//     * @param bool     $confirm
+//     *
+//     * @return GenerateShippingResponse
+//     */
+//    public function generateShipping(
+//        Shipment $shipment,
+//        string $printertype = 'GraphicFile|PDF',
+//        bool $confirm = true
+//    ): GenerateShippingResponse {
+//        return $this->getShippingService()->generateShipping(
+//            generateShipping: new Shipping(
+//            shipments: [$shipment],
+//            message: new LabellingMessage(printerType: $printertype),
+//            customer: $this->customer
+//        ),
+//            confirm: $confirm);
+//    }
+
+//    /**
+//     * @param Shipment[] $shipments     Array of shipments
+//     * @param string     $printertype   Printer type, see PostNL dev docs for available types
+//     * @param bool       $confirm       Immediately confirm the shipments
+//     * @param bool       $merge         Merge the PDFs and return them in a MyParcel way
+//     * @param int        $format        A4 or A6
+//     * @param array      $positions     Set the positions of the A6s on the first A4
+//     *                                  The indices should be the position number, marked with `true` or `false`
+//     *                                  These are the position numbers:
+//     *                                  ```
+//     *                                  +-+-+
+//     *                                  |2|4|
+//     *                                  +-+-+
+//     *                                  |1|3|
+//     *                                  +-+-+
+//     *                                  ```
+//     *                                  So, for
+//     *                                  ```
+//     *                                  +-+-+
+//     *                                  |x|✔|
+//     *                                  +-+-+
+//     *                                  |✔|x|
+//     *                                  +-+-+
+//     *                                  ```
+//     *                                  you would have to pass:
+//     *                                  ```php
+//     *                                  [
+//     *                                  1 => true,
+//     *                                  2 => false,
+//     *                                  3 => false,
+//     *                                  4 => true,
+//     *                                  ]
+//     *                                  ```
+//     * @param string     $a6Orientation A6 orientation (P or L)
+//     *
+//     * @return GenerateShippingResponse|string
+//     *
+//     * @throws AbstractException
+//     * @throws NotSupportedException
+//     * @throws PdfReaderException
+//     * @throws \setasign\Fpdi\PdfParser\PdfParserException
+//     */
+//    public function generateShippings(
+//        array $shipments,
+//        string $printertype = 'GraphicFile|PDF',
+//        bool $confirm = true,
+//        bool $merge = false,
+//        int $format = Label::FORMAT_A4,
+//        array $positions = [
+//            1 => true,
+//            2 => true,
+//            3 => true,
+//            4 => true,
+//        ],
+//        string $a6Orientation = 'P'
+//    ): GenerateShippingResponse {
+//        if ($merge) {
+//            if ('GraphicFile|PDF' !== $printertype) {
+//                throw new NotSupportedException('Labels with the chosen printer type cannot be merged');
+//            }
+//            foreach ([1, 2, 3, 4] as $i) {
+//                if (!array_key_exists(key: $i, array: $positions)) {
+//                    throw new NotSupportedException('All label positions need to be passed for merge mode');
+//                }
+//            }
+//        }
+//
+//        $responseShipments = $this->getShippingService()->generateShipping(
+//            generateShipping: new Shipping(
+//            shipments: $shipments,
+//            message: new LabellingMessage(printerType: $printertype),
+//            customer: $this->customer
+//        ),
+//            confirm: $confirm
+//        );
+//
+//        if (!$merge) {
+//            return $responseShipments;
+//        }
+//
+//        // Disable header and footer
+//        $pdf = new RFPdi('P', 'mm', Label::FORMAT_A4 === $format ? [210, 297] : [105, 148]);
+//        $deferred = [];
+//        $firstPage = true;
+//        if (Label::FORMAT_A6 === $format) {
+//            foreach ($responseShipments->getResponseShipments() as $responseShipment) {
+//                foreach ($responseShipment->getLabels() as $label) {
+//                    $pdfContent = base64_decode(string: $label->getContent());
+//                    $sizes = Util::getPdfSizeAndOrientation(pdf: $pdfContent);
+//                    if ('A6' === $sizes['iso']) {
+//                        $pdf->addPage(orientation: $a6Orientation);
+//                        $correction = [0, 0];
+//                        if ('L' === $a6Orientation && 'P' === $sizes['orientation']) {
+//                            $correction[0] = -84;
+//                            $correction[1] = -0.5;
+//                            $pdf->rotateCounterClockWise();
+//                        } elseif ('P' === $a6Orientation && 'L' === $sizes['orientation']) {
+//                            $pdf->rotateCounterClockWise();
+//                        }
+//                        $pdf->setSourceFile(file: StreamReader::createByString(content: $pdfContent));
+//                        $pdf->useTemplate(tpl: $pdf->importPage(pageNumber: 1), x: $correction[0], y: $correction[1]);
+//                    } else {
+//                        // Assuming A4 here (could be multi-page) - defer to end
+//                        $stream = StreamReader::createByString(content: $pdfContent);
+//                        $deferred[] = ['stream' => $stream, 'sizes' => $sizes];
+//                    }
+//                }
+//            }
+//        } else {
+//            $a6s = 4; // Amount of A6s available
+//            foreach ($responseShipments->getResponseShipments() as $label) {
+//                $pdfContent = base64_decode(string: $label->getLabels()[0]->getContent());
+//                $sizes = Util::getPdfSizeAndOrientation(pdf: $pdfContent);
+//                if ('A6' === $sizes['iso']) {
+//                    if ($firstPage) {
+//                        $pdf->addPage(orientation: 'P', size: [297, 210], rotation: 90);
+//                    }
+//                    $firstPage = false;
+//                    while (empty($positions[5 - $a6s]) && $a6s >= 1) {
+//                        $positions[5 - $a6s] = true;
+//                        --$a6s;
+//                    }
+//                    if ($a6s < 1) {
+//                        $pdf->addPage(orientation: 'P', size: [297, 210], rotation: 90);
+//                        $a6s = 4;
+//                    }
+//                    $pdf->rotateCounterClockWise();
+//                    $pdf->setSourceFile(file: StreamReader::createByString(content: $pdfContent));
+//                    $pdf->useTemplate(tpl: $pdf->importPage(pageNumber: 1), x: static::$a6positions[$a6s][0], y: static::$a6positions[$a6s][1]);
+//                    --$a6s;
+//                    if ($a6s < 1) {
+//                        if ($label !== end(array: $responseShipments)) {
+//                            $pdf->addPage(orientation: 'P', size: [297, 210], rotation: 90);
+//                        }
+//                        $a6s = 4;
+//                    }
+//                } else {
+//                    // Assuming A4 here (could be multi-page) - defer to end
+//                    if (count(value: $label->getLabels()) > 1) {
+//                        $stream = [];
+//                        foreach ($label->getResponseShipments()[0]->getLabels() as $labelContent) {
+//                            $stream[] = StreamReader::createByString(content: base64_decode(string: $labelContent->getContent()));
+//                        }
+//                        $deferred[] = ['stream' => $stream, 'sizes' => $sizes];
+//                    } else {
+//                        $stream = StreamReader::createByString(content: base64_decode(string: $pdfContent));
+//                        $deferred[] = ['stream' => $stream, 'sizes' => $sizes];
+//                    }
+//                }
+//            }
+//        }
+//        foreach ($deferred as $defer) {
+//            $sizes = $defer['sizes'];
+//            $pdf->addPage(orientation: $sizes['orientation'], size: 'A4');
+//            $pdf->rotateCounterClockWise();
+//            if (is_array(value: $defer['stream']) && count(value: $defer['stream']) > 1) {
+//                // Multilabel
+//                if (2 === count(value: $deferred['stream'])) {
+//                    $pdf->setSourceFile(file: $defer['stream'][0]);
+//                    $pdf->useTemplate(tpl: $pdf->importPage(pageNumber: 1), x: -190);
+//                    $pdf->setSourceFile(file: $defer['stream'][1]);
+//                    $pdf->useTemplate(tpl: $pdf->importPage(pageNumber: 1), x: -190, y: 148);
+//                } else {
+//                    $pdf->setSourceFile(file: $defer['stream'][0]);
+//                    $pdf->useTemplate(tpl: $pdf->importPage(pageNumber: 1), x: -190);
+//                    $pdf->setSourceFile(file: $defer['stream'][1]);
+//                    $pdf->useTemplate(tpl: $pdf->importPage(pageNumber: 1), x: -190, y: 148);
+//                    for ($i = 2; $i < count(value: $defer['stream']); ++$i) {
+//                        $pages = $pdf->setSourceFile(file: $defer['stream'][$i]);
+//                        for ($j = 1; $j < $pages + 1; ++$j) {
+//                            $pdf->addPage(orientation: $sizes['orientation'], size: 'A4');
+//                            $pdf->rotateCounterClockWise();
+//                            $pdf->useTemplate(tpl: $pdf->importPage(pageNumber: 1), x: -190);
+//                        }
+//                    }
+//                }
+//            } else {
+//                if (is_resource(value: $defer['stream']) || $defer['stream'] instanceof StreamReader) {
+//                    $pdf->setSourceFile(file: $defer['stream']);
+//                } else {
+//                    $pdf->setSourceFile(file: $defer['stream'][0]);
+//                }
+//                $pdf->useTemplate(tpl: $pdf->importPage(pageNumber: 1), x: -190);
+//            }
+//        }
+//
+//        return $pdf->output(name: 'S');
+//    }
+
+    /**
+     * Generate a single barcode.
+     *
+     * @param string $type
+     * @param string $range
+     * @param string $serie
+     * @param bool   $eps
+     *
+     * @return GenerateBarcodeResponseDTO The barcode as a stringable response object
+     */
+    public function generateBarcode(
+        string $type = '3S',
+        string|null $range = null,
+        string|null $serie = null,
+        bool $eps = false,
+    ): GenerateBarcodeResponseDTO {
+        return $this->getBarcodeService()->generateBarcode(
+            type: $type,
+            range: $range,
+            serie: $serie,
+            eps: $eps,
+        );
     }
 
     /**
-     * Set the token.
+     * Generate a single barcode by country code.
      *
-     * @param string|UsernameToken $token
+     * @param string $iso 2-letter Country ISO Code
      *
-     * @return PostNL
-     *
-     * @throws InvalidArgumentException
+     * @return GenerateBarcodeResponseDTO The Barcode as a stringable response object
      */
-    public function setToken($token)
+    public function generateBarcodeByCountryCode(string $iso): GenerateBarcodeResponseDTO
     {
-        if ($token instanceof UsernameToken) {
-            $this->token = $token;
-
-            return $this;
-        } elseif (is_string($token)) {
-            $this->token = new UsernameToken(null, $token);
-
-            return $this;
-        }
-
-        throw new InvalidArgumentException('Invalid username/token');
+        return $this->getBarcodeService()->generateBarcodeByCountryCode(iso: $iso);
     }
 
     /**
-     * Get REST API Key.
+     * Generate a single barcode by country code.
      *
-     * @return bool|string
+     * @param array $isos key = iso code, value = amount of barcodes requested
+     *
+     * @return GenerateBarcodesByCountryCodesResponseDTO Country isos with stringable barcode response objects
      */
-    public function getRestApiKey()
+    public function generateBarcodesByCountryCodes(array $isos): GenerateBarcodesByCountryCodesResponseDTO
     {
-        if ($this->token instanceof UsernameToken) {
-            return $this->token->getPassword();
-        }
+        return $this->getBarcodeService()->generateBarcodesByCountryCodes(isos: $isos);
+    }
 
-        return false;
+//    /**
+//     * @param Shipment $shipment
+//     * @param string   $printertype
+//     * @param bool     $confirm
+//     *
+//     * @return GenerateLabelResponse
+//     */
+//    public function generateLabel(
+//        Shipment $shipment,
+//        $printertype = 'GraphicFile|PDF',
+//        $confirm = true
+//    ): GenerateLabelResponse {
+//        return $this->getLabellingService()->generateLabel(
+//            generateLabel: new LabellingResponseDto(
+//            shipments: [$shipment],
+//            message: new LabellingMessage(printerType: $printertype),
+//            customer: $this->customer
+//        ),
+//            confirm: $confirm
+//        );
+//    }
+//
+//    /**
+//     * Generate or retrieve multiple labels.
+//     *
+//     * Note that instead of returning a GenerateLabelResponse this function can merge the labels and return a
+//     * string which contains the PDF with the merged pages as well.
+//     *
+//     * @param Shipment[] $shipments     (key = ID) Shipments
+//     * @param string     $printertype   Printer type, see PostNL dev docs for available types
+//     * @param bool       $confirm       Immediately confirm the shipments
+//     * @param bool       $merge         Merge the PDFs and return them in a MyParcel way
+//     * @param int        $format        A4 or A6
+//     * @param array      $positions     Set the positions of the A6s on the first A4
+//     *                                  The indices should be the position number, marked with `true` or `false`
+//     *                                  These are the position numbers:
+//     *                                  ```
+//     *                                  +-+-+
+//     *                                  |2|4|
+//     *                                  +-+-+
+//     *                                  |1|3|
+//     *                                  +-+-+
+//     *                                  ```
+//     *                                  So, for
+//     *                                  ```
+//     *                                  +-+-+
+//     *                                  |x|✔|
+//     *                                  +-+-+
+//     *                                  |✔|x|
+//     *                                  +-+-+
+//     *                                  ```
+//     *                                  you would have to pass:
+//     *                                  ```php
+//     *                                  [
+//     *                                  1 => true,
+//     *                                  2 => false,
+//     *                                  3 => false,
+//     *                                  4 => true,
+//     *                                  ]
+//     *                                  ```
+//     * @param string     $a6Orientation A6 orientation (P or L)
+//     *
+//     * @return GenerateLabelResponse[]|string
+//     *
+//     * @throws AbstractException
+//     * @throws NotSupportedException
+//     * @throws PdfReaderException
+//     */
+//    public function generateLabels(
+//        array $shipments,
+//        $printertype = 'GraphicFile|PDF',
+//        $confirm = true,
+//        $merge = false,
+//        $format = Label::FORMAT_A4,
+//        $positions = [
+//            1 => true,
+//            2 => true,
+//            3 => true,
+//            4 => true,
+//        ],
+//        $a6Orientation = 'P'
+//    ): array|string {
+//        if ($merge) {
+//            if ('GraphicFile|PDF' !== $printertype) {
+//                throw new NotSupportedException('Labels with the chosen printer type cannot be merged');
+//            }
+//            foreach ([1, 2, 3, 4] as $i) {
+//                if (!array_key_exists(key: $i, array: $positions)) {
+//                    throw new NotSupportedException('All label positions need to be passed for merge mode');
+//                }
+//            }
+//        }
+//
+//        $generateLabels = [];
+//        foreach ($shipments as $uuid => $shipment) {
+//            $generateLabels[$uuid] = [(new LabellingResponseDto(shipments: [$shipment], message: new LabellingMessage(printerType: $printertype), customer: $this->customer))->setId(id: $uuid), $confirm];
+//        }
+//        $responseShipments = $this->getLabellingService()->generateLabels($generateLabels, $confirm);
+//
+//        if (!$merge) {
+//            return $responseShipments;
+//        } else {
+//            foreach ($responseShipments as $responseShipment) {
+//                if (!$responseShipment instanceof GenerateLabelResponse) {
+//                    return $responseShipments;
+//                }
+//            }
+//        }
+//
+//        // Disable header and footer
+//        $pdf = new RFPdi('P', 'mm', Label::FORMAT_A4 === $format ? [210, 297] : [105, 148]);
+//        $deferred = [];
+//        $firstPage = true;
+//        if (Label::FORMAT_A6 === $format) {
+//            foreach ($responseShipments as $responseShipment) {
+//                foreach ($responseShipment->getResponseShipments()[0]->getLabels() as $label) {
+//                    $pdfContent = base64_decode(string: $label->getContent());
+//                    $sizes = Util::getPdfSizeAndOrientation(pdf: $pdfContent);
+//                    if ('A6' === $sizes['iso']) {
+//                        $pdf->addPage(orientation: $a6Orientation);
+//                        $correction = [0, 0];
+//                        if ('L' === $a6Orientation && 'P' === $sizes['orientation']) {
+//                            $correction[0] = -84;
+//                            $correction[1] = -0.5;
+//                            $pdf->rotateCounterClockWise();
+//                        } elseif ('P' === $a6Orientation && 'L' === $sizes['orientation']) {
+//                            $pdf->rotateCounterClockWise();
+//                        }
+//                        $pdf->setSourceFile(file: StreamReader::createByString(content: $pdfContent));
+//                        $pdf->useTemplate(tpl: $pdf->importPage(pageNumber: 1), x: $correction[0], y: $correction[1]);
+//                    } else {
+//                        // Assuming A4 here (could be multi-page) - defer to end
+//                        $stream = StreamReader::createByString(content: $pdfContent);
+//                        $deferred[] = ['stream' => $stream, 'sizes' => $sizes];
+//                    }
+//                }
+//            }
+//        } else {
+//            $a6s = 4; // Amount of A6s available
+//            foreach ($responseShipments as $responseShipment) {
+//                if ($responseShipment instanceof AbstractException) {
+//                    throw $responseShipment;
+//                }
+//                $pdfContent = base64_decode(string: $responseShipment->getResponseShipments()[0]->getLabels()[0]->getContent());
+//                $sizes = Util::getPdfSizeAndOrientation(pdf: $pdfContent);
+//                if ('A6' === $sizes['iso']) {
+//                    if ($firstPage) {
+//                        $pdf->addPage(orientation: 'P', size: [297, 210], rotation: 90);
+//                    }
+//                    $firstPage = false;
+//                    while (empty($positions[5 - $a6s]) && $a6s >= 1) {
+//                        $positions[5 - $a6s] = true;
+//                        --$a6s;
+//                    }
+//                    if ($a6s < 1) {
+//                        $pdf->addPage(orientation: 'P', size: [297, 210], rotation: 90);
+//                        $a6s = 4;
+//                    }
+//                    $pdf->rotateCounterClockWise();
+//                    $pdf->setSourceFile(file: StreamReader::createByString(content: $pdfContent));
+//                    $pdf->useTemplate(tpl: $pdf->importPage(pageNumber: 1), x: static::$a6positions[$a6s][0], y: static::$a6positions[$a6s][1]);
+//                    --$a6s;
+//                    if ($a6s < 1) {
+//                        if ($responseShipment !== end(array: $responseShipments)) {
+//                            $pdf->addPage(orientation: 'P', size: [297, 210], rotation: 90);
+//                        }
+//                        $a6s = 4;
+//                    }
+//                } else {
+//                    // Assuming A4 here (could be multi-page) - defer to end
+//                    if (count(value: $responseShipment->getResponseShipments()[0]->getLabels()) > 1) {
+//                        $stream = [];
+//                        foreach ($responseShipment->getResponseShipments()[0]->getLabels() as $labelContent) {
+//                            $stream[] = StreamReader::createByString(content: base64_decode(string: $labelContent->getContent()));
+//                        }
+//                        $deferred[] = ['stream' => $stream, 'sizes' => $sizes];
+//                    } else {
+//                        $stream = StreamReader::createByString(content: base64_decode(string: $pdfContent));
+//                        $deferred[] = ['stream' => $stream, 'sizes' => $sizes];
+//                    }
+//                }
+//            }
+//        }
+//        foreach ($deferred as $defer) {
+//            $sizes = $defer['sizes'];
+//            $pdf->addPage(orientation: $sizes['orientation'], size: 'A4');
+//            $pdf->rotateCounterClockWise();
+//            if (is_array(value: $defer['stream']) && count(value: $defer['stream']) > 1) {
+//                // Multilabel
+//                if (2 === count(value: $deferred['stream'])) {
+//                    $pdf->setSourceFile(file: $defer['stream'][0]);
+//                    $pdf->useTemplate(tpl: $pdf->importPage(pageNumber: 1), x: -190, y: 0);
+//                    $pdf->setSourceFile(file: $defer['stream'][1]);
+//                    $pdf->useTemplate(tpl: $pdf->importPage(pageNumber: 1), x: -190, y: 148);
+//                } else {
+//                    $pdf->setSourceFile(file: $defer['stream'][0]);
+//                    $pdf->useTemplate(tpl: $pdf->importPage(pageNumber: 1), x: -190, y: 0);
+//                    $pdf->setSourceFile(file: $defer['stream'][1]);
+//                    $pdf->useTemplate(tpl: $pdf->importPage(pageNumber: 1), x: -190, y: 148);
+//                    for ($i = 2; $i < count(value: $defer['stream']); ++$i) {
+//                        $pages = $pdf->setSourceFile(file: $defer['stream'][$i]);
+//                        for ($j = 1; $j < $pages + 1; ++$j) {
+//                            $pdf->addPage(orientation: $sizes['orientation'], size: 'A4');
+//                            $pdf->rotateCounterClockWise();
+//                            $pdf->useTemplate(tpl: $pdf->importPage(pageNumber: 1), x: -190, y: 0);
+//                        }
+//                    }
+//                }
+//            } else {
+//                if (is_resource(value: $defer['stream']) || $defer['stream'] instanceof StreamReader) {
+//                    $pdf->setSourceFile(file: $defer['stream']);
+//                } else {
+//                    $pdf->setSourceFile(file: $defer['stream'][0]);
+//                }
+//                $pdf->useTemplate(tpl: $pdf->importPage(pageNumber: 1), x: -190, y: 0);
+//            }
+//        }
+//
+//        return $pdf->output(dest: '', name: 'S');
+//    }
+//
+//    /**
+//     * Confirm a single shipment.
+//     *
+//     * @param Shipment $shipment
+//     *
+//     * @return ConfirmingResponseShipment
+//     */
+//    public function confirmShipment(Shipment $shipment): ConfirmingResponseShipment
+//    {
+//        return $this->getConfirmingService()->confirmShipment(confirming: new ConfirmingResponseDto(shipments: [$shipment], customer: $this->customer));
+//    }
+//
+//    /**
+//     * Confirm multiple shipments.
+//     *
+//     * @param array $shipments
+//     *
+//     * @return ConfirmingResponseShipment[]
+//     */
+//    public function confirmShipments(array $shipments): array
+//    {
+//        $confirmings = [];
+//        foreach ($shipments as $uuid => $shipment) {
+//            $confirmings[$uuid] = (new ConfirmingResponseDto(shipments: [$shipment], customer: $this->customer))->setId(id: $uuid);
+//        }
+//
+//        return $this->getConfirmingService()->confirmShipments(confirms: $confirmings);
+//    }
+//
+//    /**
+//     * Get the current status of a shipment.
+//     *
+//     * This is a combi-function, supporting the following:
+//     * - CurrentStatus (by barcode):
+//     *   - Fill the Shipment->Barcode property. Leave the rest empty.
+//     * - CurrentStatusByReference:
+//     *   - Fill the Shipment->Reference property. Leave the rest empty.
+//     * - CurrentStatusByPhase:
+//     *   - Fill the Shipment->PhaseCode property, do not pass Barcode or Reference.
+//     *     Optionally add DateFrom and/or DateTo.
+//     * - CurrentStatusByStatus:
+//     *   - Fill the Shipment->StatuCode property. Leave the rest empty.
+//     *
+//     * @param CurrentStatus|CurrentStatusByStatus|CurrentStatusByReference|CurrentStatusByPhase $currentStatus
+//     *
+//     * @return CurrentStatusResponse
+//     */
+//    public function getCurrentStatus(CurrentStatus|CurrentStatusByStatus|CurrentStatusByReference|CurrentStatusByPhase $currentStatus): CurrentStatusResponse
+//    {
+//        $fullCustomer = $this->getCustomer();
+//        $currentStatus->setCustomer((new Customer())
+//            ->setCustomerCode(CustomerCode: $fullCustomer->getCustomerCode())
+//            ->setCustomerNumber(CustomerNumber: $fullCustomer->getCustomerNumber())
+//        );
+//        if (!$currentStatus->getMessage()) {
+//            $currentStatus->setMessage(new Message());
+//        }
+//
+//        return $this->getShippingStatusService()->currentStatus(currentStatus: $currentStatus);
+//    }
+//
+//    /**
+//     * Get the complete status of a shipment.
+//     *
+//     * This is a combi-function, supporting the following:
+//     * - CurrentStatus (by barcode):
+//     *   - Fill the Shipment->Barcode property. Leave the rest empty.
+//     * - CurrentStatusByReference:
+//     *   - Fill the Shipment->Reference property. Leave the rest empty.
+//     * - CurrentStatusByPhase:
+//     *   - Fill the Shipment->PhaseCode property, do not pass Barcode or Reference.
+//     *     Optionally add DateFrom and/or DateTo.
+//     * - CurrentStatusByStatus:
+//     *   - Fill the Shipment->StatuCode property. Leave the rest empty.
+//     *
+//     * @param CompleteStatus|CompleteStatusByStatus|CompleteStatusByReference|CompleteStatusByPhase $completeStatus
+//     *
+//     * @return CompleteStatusResponse
+//     */
+//    public function getCompleteStatus(CompleteStatus|CompleteStatusByStatus|CompleteStatusByReference|CompleteStatusByPhase $completeStatus): CompleteStatusResponse
+//    {
+//        $fullCustomer = $this->getCustomer();
+//
+//        $completeStatus->setCustomer((new Customer())
+//            ->setCustomerCode(CustomerCode: $fullCustomer->getCustomerCode())
+//            ->setCustomerNumber(CustomerNumber: $fullCustomer->getCustomerNumber())
+//        );
+//        if (!$completeStatus->getMessage()) {
+//            $completeStatus->setMessage(new Message());
+//        }
+//
+//        return $this->getShippingStatusService()->completeStatus(completeStatus: $completeStatus);
+//    }
+//
+//    /**
+//     * Get the signature of a shipment.
+//     *
+//     * @param GetSignature $signature
+//     *
+//     * @return GetSignature
+//     */
+//    public function getSignature(GetSignature $signature): GetSignature
+//    {
+//        $signature->setCustomer($this->getCustomer());
+//        if (!$signature->getMessage()) {
+//            $signature->setMessage(new Message());
+//        }
+//
+//        return $this->getShippingStatusService()->getSignature(getSignature: $signature);
+//    }
+
+    /**
+     * Calculate the delivery date.
+     *
+     * @param string      $shippingDate
+     * @param int         $shippingDuration
+     * @param string      $cutOffTime
+     * @param string      $postalCode
+     * @param string|null $countryCode
+     * @param string|null $originCountryCode
+     * @param string|null $city
+     * @param string|null $street
+     * @param int|null    $houseNumber
+     * @param string|null $houseNrExt
+     * @param array|null  $options
+     * @param string|null $cutOffTimeMonday
+     * @param bool|null   $availableMonday
+     * @param string|null $cutOffTimeTuesday
+     * @param bool|null   $availableTuesday
+     * @param string|null $cutOffTimeWednesday
+     * @param bool|null   $availableWednesday
+     * @param string|null $cutOffTimeThursday
+     * @param bool|null   $availableThursday
+     * @param string|null $cutOffTimeFriday
+     * @param bool|null   $availableFriday
+     * @param string|null $cutOffTimeSaturday
+     * @param bool|null   $availableSaturday
+     * @param string|null $cutOffTimeSunday
+     * @param bool|null   $availableSunday
+     *
+     * @return CalculateDeliveryDateResponseDTO
+     * @throws Exception\InvalidArgumentException
+     */
+    public function calculateDeliveryDate(
+        string $shippingDate,
+        int $shippingDuration,
+        string $cutOffTime,
+        string $postalCode,
+        string|null $countryCode = null,
+        string|null $originCountryCode = null,
+        string|null $city = null,
+        string|null $street = null,
+        int|null $houseNumber = null,
+        string|null $houseNrExt = null,
+        array|null $options = null,
+        string|null $cutOffTimeMonday = null,
+        bool|null $availableMonday = null,
+        string|null $cutOffTimeTuesday = null,
+        bool|null $availableTuesday = null,
+        string|null $cutOffTimeWednesday = null,
+        bool|null $availableWednesday = null,
+        string|null $cutOffTimeThursday = null,
+        bool|null $availableThursday = null,
+        string|null $cutOffTimeFriday = null,
+        bool|null $availableFriday = null,
+        string|null $cutOffTimeSaturday = null,
+        bool|null $availableSaturday = null,
+        string|null $cutOffTimeSunday = null,
+        bool|null $availableSunday = null,
+        #[ArrayShape(shape: CalculateDeliveryDateRequestDTO::CUTOFF_TIME_ARRAY_SHAPE)]
+        array|null $cutOffTimes = null,
+    ): CalculateDeliveryDateResponseDTO {
+        return $this->getDeliveryDateService()->calculateDeliveryDate(
+            calculateDeliveryDateRequestDTO: new CalculateDeliveryDateRequestDTO(
+                service: DeliveryDateServiceInterface::class,
+                propType: RequestProp::class,
+
+                ShippingDate: $shippingDate,
+                ShippingDuration: $shippingDuration,
+                CutOffTime: $cutOffTime,
+                PostalCode: $postalCode,
+                CountryCode: $countryCode,
+                OriginCountryCode: $originCountryCode,
+                City: $city,
+                Street: $street,
+                HouseNumber: $houseNumber,
+                HouseNrExt: $houseNrExt,
+                Options: $options,
+                CutOffTimeMonday: $cutOffTimeMonday,
+                AvailableMonday: $availableMonday,
+                CutOffTimeTuesday: $cutOffTimeTuesday,
+                AvailableTuesday: $availableTuesday,
+                CutOffTimeWednesday: $cutOffTimeWednesday,
+                AvailableWednesday: $availableWednesday,
+                CutOffTimeThursday: $cutOffTimeThursday,
+                AvailableThursday: $availableThursday,
+                CutOffTimeFriday: $cutOffTimeFriday,
+                AvailableFriday: $availableFriday,
+                CutOffTimeSaturday: $cutOffTimeSaturday,
+                AvailableSaturday: $availableSaturday,
+                CutOffTimeSunday: $cutOffTimeSunday,
+                AvailableSunday: $availableSunday,
+                cutOffTimes: $cutOffTimes,
+            )
+        );
     }
 
     /**
-     * Get UsernameToken object (for SOAP).
+     * Calculate the shipping date.
      *
-     * @return bool|UsernameToken
+     * @param string|null $deliveryDate
+     * @param int|null    $shippingDuration
+     * @param string|null $postalCode
+     * @param string|null $countryCode
+     * @param string|null $originCountryCode
+     * @param string|null $city
+     * @param string|null $street
+     * @param int|null    $houseNumber
+     * @param string|null $houseNrExt
+     *
+     * @return CalculateShippingDateResponseDTO
+     *
+     * @throws Exception\InvalidArgumentException
      */
-    public function getToken()
-    {
-        if ($this->token instanceof UsernameToken) {
-            return $this->token;
-        }
+    public function calculateShippingDate(
+        string|null $deliveryDate,
+        int|null $shippingDuration,
+        string|null $postalCode,
+        string|null $countryCode = null,
+        string|null $originCountryCode = null,
+        string|null $city = null,
+        string|null $street = null,
+        int|null $houseNumber = null,
+        string|null $houseNrExt = null,
+    ): CalculateShippingDateResponseDTO {
+        return $this->getDeliveryDateService()->getShippingDate(
+            getShippingDateRequestDTO: new CalculateShippingDateRequestDTO(
+                service: DeliveryDateServiceInterface::class,
+                propType: RequestProp::class,
 
-        return false;
+                DeliveryDate: $deliveryDate,
+                ShippingDuration: $shippingDuration,
+                PostalCode: $postalCode,
+                CountryCode: $countryCode,
+                OriginCountryCode: $originCountryCode,
+                City: $city,
+                Street: $street,
+                HouseNumber: $houseNumber,
+                HouseNrExt: $houseNrExt
+            ),
+        );
     }
 
     /**
-     * Get PostNL Customer.
+     * Calculate timeframes.
      *
-     * @return Customer
+     * @param string      $startDate
+     * @param string      $endDate
+     * @param array       $options
+     * @param string      $postalCode
+     * @param int         $houseNumber
+     * @param string      $countryCode
+     * @param bool        $allowSundaySorting
+     * @param string|null $city
+     * @param string|null $street
+     * @param string|null $houseNrExt
+     * @param int|null    $interval
+     * @param string|null $timeframeRange
+     *
+     * @return CalculateTimeframesResponseDTO
+     *
+     * @throws Exception\InvalidArgumentException
      */
-    public function getCustomer()
-    {
-        return $this->customer;
+    public function calculateTimeframes(
+        string $startDate,
+        string $endDate,
+        array $options,
+        string $postalCode,
+        int $houseNumber,
+        string $countryCode = 'NL',
+        bool $allowSundaySorting = false,
+        string|null $city = null,
+        string|null $street = null,
+        string|null $houseNrExt = null,
+        int|null $interval = null,
+        string|null $timeframeRange = null,
+    ): CalculateTimeframesResponseDTO {
+        return $this->getTimeframeService()->calculateTimeframes(calculateTimeframesRequestDTO: new CalculateTimeframesRequestDTO(
+            service: TimeframeServiceInterface::class,
+            propType: RequestProp::class,
+
+            StartDate: $startDate,
+            EndDate: $endDate,
+            Options: $options,
+            AllowSundaySorting: $allowSundaySorting,
+            CountryCode: $countryCode,
+            City: $city,
+            PostalCode: $postalCode,
+            Street: $street,
+            HouseNumber: $houseNumber,
+            HouseNrExt: $houseNrExt,
+            Interval: $interval,
+            TimeframeRange: $timeframeRange,
+        ));
     }
 
-    /**
-     * Set PostNL Customer.
-     *
-     * @param Customer $customer
-     *
-     * @return PostNL
-     */
-    public function setCustomer(Customer $customer)
-    {
-        $this->customer = $customer;
-
-        return $this;
-    }
-
-    /**
-     * Get sandbox mode.
-     *
-     * @return bool
-     */
-    public function getSandbox()
-    {
-        return $this->sandbox;
-    }
-
-    /**
-     * Set sandbox mode.
-     *
-     * @param bool $sandbox
-     *
-     * @return PostNL
-     */
-    public function setSandbox($sandbox)
-    {
-        $this->sandbox = (bool) $sandbox;
-
-        return $this;
-    }
-
-    /**
-     * Get the current mode.
-     *
-     * @return int
-     */
-    public function getMode()
-    {
-        return $this->mode;
-    }
-
-    /**
-     * Set current mode.
-     *
-     * @param int $mode
-     *
-     * @return PostNL
-     *
-     * @throws InvalidArgumentException
-     */
-    public function setMode($mode)
-    {
-        if (!in_array($mode, [
-            static::MODE_REST,
-            static::MODE_SOAP,
-            static::MODE_LEGACY,
-        ])) {
-            throw new InvalidArgumentException('Mode not supported');
-        }
-
-        if (in_array($mode, [static::MODE_SOAP, static::MODE_LEGACY]) && !interface_exists(Element::class)) {
-            throw new InvalidArgumentException('Mode not supported. Please install sabre/xml to connect with the SOAP API');
-        }
-
-        $this->mode = (int) $mode;
-
-        return $this;
-    }
-
-    /**
-     * HttpClient.
-     *
-     * Automatically load Guzzle when available
-     *
-     * @return ClientInterface
-     */
-    public function getHttpClient()
-    {
-        // @codeCoverageIgnoreStart
-        if (!$this->httpClient) {
-            // Detect PHP HTTPlug async HTTP client support
-            $client = HttpAsyncClientDiscovery::find();
-            if ($client) {
-                $this->httpClient = HTTPlugClient::getInstance();
-            } elseif (interface_exists(ClientInterface::class)
-                && version_compare(
-                    \GuzzleHttp\ClientInterface::VERSION,
-                    '6.0.0',
-                    '>='
-                )) {
-                $this->httpClient = GuzzleClient::getInstance();
-            } else {
-                $this->httpClient = CurlClient::getInstance();
-            }
-        }
-        // @codeCoverageIgnoreEnd
-
-        return $this->httpClient;
-    }
-
-    /**
-     * Set the HttpClient.
-     *
-     * @param ClientInterface $client
-     */
-    public function setHttpClient(ClientInterface $client)
-    {
-        $this->httpClient = $client;
-    }
-
-    /**
-     * Get the logger.
-     *
-     * @return LoggerInterface
-     */
-    public function getLogger()
-    {
-        return $this->logger;
-    }
-
-    /**
-     * Set the logger.
-     *
-     * @param LoggerInterface $logger
-     *
-     * @return PostNL
-     */
-    public function setLogger(LoggerInterface $logger = null)
-    {
-        $this->logger = $logger;
-        if ($this->getHttpClient() instanceof ClientInterface) {
-            $this->getHttpClient()->setLogger($logger);
-        }
-
-        return $this;
-    }
+//    /**
+//     * Get nearest locations.
+//     *
+//     * @param GetNearestLocations $getNearestLocations
+//     *
+//     * @return GetNearestLocationsResponse
+//     */
+//    public function getNearestLocations(GetNearestLocations $getNearestLocations): GetNearestLocationsResponse
+//    {
+//        return $this->getLocationService()->getNearestLocations(getNearestLocations: $getNearestLocations);
+//    }
+//
+//    /**
+//     * All-in-one function for checkout widgets. It retrieves and returns the
+//     * - timeframes
+//     * - locations
+//     * - delivery date.
+//     *
+//     * @param GetTimeframes       $getTimeframes
+//     * @param GetNearestLocations $getNearestLocations
+//     * @param CalculateDeliveryDate     $calculateDeliveryDate
+//     *
+//     * @return array [uuid => ResponseTimeframes, uuid => GetNearestLocationsResponse, uuid => CalculateDeliveryDateResponse]
+//     *
+//     * @throws HttpClientException
+//     * @throws InvalidArgumentException
+//     */
+//    public function getTimeframesAndNearestLocations(
+//        GetTimeframes $getTimeframes,
+//        GetNearestLocations $getNearestLocations,
+//        CalculateDeliveryDate $calculateDeliveryDate
+//    ): array {
+//        $results = [];
+//        $itemTimeframe = $this->getTimeframeService()->retrieveCachedItem(uuid: $getTimeframes->getId());
+//        if ($itemTimeframe instanceof CacheItemInterface && $itemTimeframe->get()) {
+//            $results['timeframes'] = parse_response(message: $itemTimeframe->get());
+//        }
+//        $itemLocation = $this->getLocationService()->retrieveCachedItem(uuid: $getNearestLocations->getId());
+//        if ($itemLocation instanceof CacheItemInterface && $itemLocation->get()) {
+//            $results['locations'] = parse_response(message: $itemLocation->get());
+//        }
+//        $itemDeliveryDate = $this->getDeliveryDateService()->retrieveCachedItem(uuid: $calculateDeliveryDate->getId());
+//        if ($itemDeliveryDate instanceof CacheItemInterface && $itemDeliveryDate->get()) {
+//            $results['delivery_date'] = parse_response(message: $itemDeliveryDate->get());
+//        }
+//
+//        $this->getHttpClient()->addOrUpdateRequest(
+//            id: 'timeframes',
+//            request: $this->getTimeframeService()->buildGetTimeframesRequest($getTimeframes)
+//        );
+//        $this->getHttpClient()->addOrUpdateRequest(
+//            id: 'locations',
+//            request: $this->getLocationService()->buildGetNearestLocationsRequest(getNearestLocations: $getNearestLocations)
+//        );
+//        $this->getHttpClient()->addOrUpdateRequest(
+//            id: 'delivery_date',
+//            request: $this->getDeliveryDateService()->buildCalculateDeliveryDateRequest(calculateDeliveryDate: $calculateDeliveryDate)
+//        );
+//
+//        $responses = $this->getHttpClient()->doRequests();
+//        foreach ($responses as $uuid => $response) {
+//            if ($response instanceof Response) {
+//                $results[$uuid] = $response;
+//            } else {
+//                if ($response instanceof Exception) {
+//                    throw $response;
+//                }
+//                throw new InvalidArgumentException('Invalid multi-request');
+//            }
+//        }
+//
+//        foreach ($responses as $type => $response) {
+//            if (!$response instanceof Response) {
+//                if ($response instanceof Exception) {
+//                    throw $response;
+//                }
+//                throw new InvalidArgumentException('Invalid multi-request');
+//            } elseif (200 === $response->getStatusCode()) {
+//                switch ($type) {
+//                    case 'timeframes':
+//                        if ($itemTimeframe instanceof CacheItemInterface) {
+//                            $itemTimeframe->set(value: str(message: $response));
+//                            $this->getTimeframeService()->cacheItem(item: $itemTimeframe);
+//                        }
+//
+//                        break;
+//                    case 'locations':
+//                        if ($itemTimeframe instanceof CacheItemInterface) {
+//                            $itemLocation->set(value: str(message: $response));
+//                            $this->getLocationService()->cacheItem(item: $itemLocation);
+//                        }
+//
+//                        break;
+//                    case 'delivery_date':
+//                        if ($itemTimeframe instanceof CacheItemInterface) {
+//                            $itemDeliveryDate->set(value: str(message: $response));
+//                            $this->getDeliveryDateService()->cacheItem(item: $itemDeliveryDate);
+//                        }
+//
+//                        break;
+//                }
+//            }
+//        }
+//
+//        return [
+//            'timeframes'    => $this->getTimeframeService()->processGetTimeframesResponse(response: $results['timeframes']),
+//            'locations'     => $this->getLocationService()->processGetNearestLocationsResponse(response: $results['locations']),
+//            'delivery_date' => $this->getDeliveryDateService()->processCalculateDeliveryDateResponse(response: $results['delivery_date']),
+//        ];
+//    }
+//
+//    /**
+//     * Get locations in area.
+//     *
+//     * @param GetLocationsInArea $getLocationsInArea
+//     *
+//     * @return GetLocationsInAreaResponse
+//     */
+//    public function getLocationsInArea(GetLocationsInArea $getLocationsInArea): GetLocationsInAreaResponse
+//    {
+//        return $this->getLocationService()->getLocationsInArea(getLocations: $getLocationsInArea);
+//    }
+//
+//    /**
+//     * Get locations in area.
+//     *
+//     * @param GetLocation $getLocation
+//     *
+//     * @return GetLocationsInAreaResponse
+//     */
+//    public function getLocation(GetLocation $getLocation): GetLocationsInAreaResponse
+//    {
+//        return $this->getLocationService()->getLocation(getLocation: $getLocation);
+//    }
 
     /**
      * Barcode service.
      *
      * Automatically load the barcode service
      *
-     * @return BarcodeService
+     * @return BarcodeServiceInterface
      */
-    public function getBarcodeService()
+    public function getBarcodeService(): BarcodeServiceInterface
     {
         if (!$this->barcodeService) {
-            $this->setBarcodeService(new BarcodeService($this));
+            $this->setBarcodeService(service: new BarcodeService(
+                customer: $this->getCustomer(),
+                apiKey: $this->getApiKey(),
+                sandbox: $this->getSandbox(),
+                gateway: new BarcodeServiceGateway(
+                    httpClient: $this->getDefaultHttpClient(),
+                    cache: null,
+                    ttl: null,
+                    requestBuilder: new BarcodeServiceRequestBuilder(
+                        customer: $this->getCustomer(),
+                        apiKey: $this->getApiKey(),
+                        sandbox: $this->getSandbox(),
+                    ),
+                    responseProcessor: new BarcodeServiceResponseProcessor(),
+                ),
+            ));
         }
 
         return $this->barcodeService;
@@ -465,9 +1056,9 @@ class PostNL implements LoggerAwareInterface
     /**
      * Set the barcode service.
      *
-     * @param BarcodeService $service
+     * @param BarcodeServiceInterface $service
      */
-    public function setBarcodeService(BarcodeService $service)
+    public function setBarcodeService(BarcodeServiceInterface $service): void
     {
         $this->barcodeService = $service;
     }
@@ -477,12 +1068,11 @@ class PostNL implements LoggerAwareInterface
      *
      * Automatically load the labelling service
      *
-     * @return LabellingService
+     * @return LabellingServiceInterface
      */
-    public function getLabellingService()
+    public function getLabellingService(): LabellingServiceInterface
     {
         if (!$this->labellingService) {
-            $this->setLabellingService(new LabellingService($this));
         }
 
         return $this->labellingService;
@@ -491,9 +1081,9 @@ class PostNL implements LoggerAwareInterface
     /**
      * Set the labelling service.
      *
-     * @param LabellingService $service
+     * @param LabellingServiceInterface $service
      */
-    public function setLabellingService(LabellingService $service)
+    public function setLabellingService(LabellingServiceInterface $service): void
     {
         $this->labellingService = $service;
     }
@@ -503,12 +1093,12 @@ class PostNL implements LoggerAwareInterface
      *
      * Automatically load the confirming service
      *
-     * @return ConfirmingService
+     * @return ConfirmingServiceInterface
      */
-    public function getConfirmingService()
+    public function getConfirmingService(): ConfirmingServiceInterface
     {
         if (!$this->confirmingService) {
-            $this->setConfirmingService(new ConfirmingService($this));
+            $this->setConfirmingService(service: new ConfirmingService($this));
         }
 
         return $this->confirmingService;
@@ -517,9 +1107,9 @@ class PostNL implements LoggerAwareInterface
     /**
      * Set the confirming service.
      *
-     * @param ConfirmingService $service
+     * @param ConfirmingServiceInterface $service
      */
-    public function setConfirmingService(ConfirmingService $service)
+    public function setConfirmingService(ConfirmingServiceInterface $service): void
     {
         $this->confirmingService = $service;
     }
@@ -529,12 +1119,14 @@ class PostNL implements LoggerAwareInterface
      *
      * Automatically load the shipping status service
      *
-     * @return ShippingStatusService
+     * @return ShippingStatusServiceInterface
      */
-    public function getShippingStatusService()
+    public function getShippingStatusService(): ShippingStatusServiceInterface
     {
         if (!$this->shippingStatusService) {
-            $this->setShippingStatusService(new ShippingStatusService($this));
+            $this->setShippingStatusService(service: new ShippingStatusService(
+                customer: $this->getCustomer,
+            ));
         }
 
         return $this->shippingStatusService;
@@ -543,9 +1135,9 @@ class PostNL implements LoggerAwareInterface
     /**
      * Set the shipping status service.
      *
-     * @param ShippingStatusService $service
+     * @param ShippingStatusServiceInterface $service
      */
-    public function setShippingStatusService(ShippingStatusService $service)
+    public function setShippingStatusService(ShippingStatusServiceInterface $service): void
     {
         $this->shippingStatusService = $service;
     }
@@ -555,12 +1147,26 @@ class PostNL implements LoggerAwareInterface
      *
      * Automatically load the delivery date service
      *
-     * @return DeliveryDateService
+     * @return DeliveryDateServiceInterface
      */
-    public function getDeliveryDateService()
+    public function getDeliveryDateService(): DeliveryDateServiceInterface
     {
         if (!$this->deliveryDateService) {
-            $this->setDeliveryDateService(new DeliveryDateService($this));
+            $this->setDeliveryDateService(service: new DeliveryDateService(
+                customer: $this->getCustomer(),
+                apiKey: $this->getApiKey(),
+                sandbox: $this->getSandbox(),
+                gateway: new DeliveryDateServiceGateway(httpClient: $this->getDefaultHttpClient(),
+                    cache: null,
+                    ttl: null,
+                    requestBuilder: new DeliveryDateServiceRequestBuilder(
+                        customer: $this->getCustomer(),
+                        apiKey: $this->getApiKey(),
+                        sandbox: $this->getSandbox(),
+                    ),
+                    responseProcessor: new DeliveryDateServiceResponseProcessor(),
+                ),
+            ));
         }
 
         return $this->deliveryDateService;
@@ -569,9 +1175,9 @@ class PostNL implements LoggerAwareInterface
     /**
      * Set the delivery date service.
      *
-     * @param DeliveryDateService $service
+     * @param DeliveryDateServiceInterface $service
      */
-    public function setDeliveryDateService(DeliveryDateService $service)
+    public function setDeliveryDateService(DeliveryDateServiceInterface $service): void
     {
         $this->deliveryDateService = $service;
     }
@@ -581,12 +1187,26 @@ class PostNL implements LoggerAwareInterface
      *
      * Automatically load the timeframe service
      *
-     * @return TimeframeService
+     * @return TimeframeServiceInterface
      */
-    public function getTimeframeService()
+    public function getTimeframeService(): TimeframeServiceInterface
     {
         if (!$this->timeframeService) {
-            $this->setTimeframeService(new TimeframeService($this));
+            $this->setTimeframeService(service: new TimeframeService(
+                customer: $this->getCustomer(),
+                apiKey: $this->getApiKey(),
+                sandbox: $this->getSandbox(),
+                gateway: new TimeframeServiceGateway(httpClient: $this->getDefaultHttpClient(),
+                cache: null,
+                ttl: null,
+                    requestBuilder: new TimeframeServiceRequestBuilder(
+                        customer: $this->getCustomer(),
+                        apiKey: $this->getApiKey(),
+                        sandbox: $this->getSandbox(),
+                    ),
+                    responseProcessor: new TimeframeServiceResponseProcessor(),
+                ),
+            ));
         }
 
         return $this->timeframeService;
@@ -595,9 +1215,9 @@ class PostNL implements LoggerAwareInterface
     /**
      * Set the timeframe service.
      *
-     * @param TimeframeService $service
+     * @param TimeframeServiceInterface $service
      */
-    public function setTimeframeService(TimeframeService $service)
+    public function setTimeframeService(TimeframeServiceInterface $service): void
     {
         $this->timeframeService = $service;
     }
@@ -607,12 +1227,12 @@ class PostNL implements LoggerAwareInterface
      *
      * Automatically load the location service
      *
-     * @return LocationService
+     * @return LocationServiceInterface
      */
-    public function getLocationService()
+    public function getLocationService(): LocationServiceInterface
     {
         if (!$this->locationService) {
-            $this->setLocationService(new LocationService($this));
+            $this->setLocationService(service: new LocationService($this));
         }
 
         return $this->locationService;
@@ -623,7 +1243,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @param LocationService $service
      */
-    public function setLocationService(LocationService $service)
+    public function setLocationService(LocationServiceInterface $service): void
     {
         $this->locationService = $service;
     }
@@ -633,12 +1253,12 @@ class PostNL implements LoggerAwareInterface
      *
      * Automatically load the shipping service
      *
-     * @return mixed
+     * @return ShippingServiceInterface
      */
-    public function getShippingService()
+    public function getShippingService(): ShippingServiceInterface
     {
         if (!$this->shippingService) {
-            $this->setShippingService(new ShippingService($this));
+            $this->setShippingService(service: new ShippingService($this));
         }
 
         return $this->shippingService;
@@ -649,904 +1269,86 @@ class PostNL implements LoggerAwareInterface
      *
      * @param ShippingService $service
      */
-    public function setShippingService(ShippingService $service)
+    public function setShippingService(ShippingService $service): void
     {
         $this->shippingService = $service;
     }
 
-    /**
-     * @param Shipment $shipment
-     * @param string   $printertype
-     * @param bool     $confirm
-     *
-     * @return Entity\Response\GenerateShippingResponse
-     */
-    public function generateShipping(
-        Shipment $shipment,
-        $printertype = 'GraphicFile|PDF',
-        $confirm = true
-    ) {
-        return $this->getShippingService()->generateShipping(
-            new GenerateShipping(
-                [$shipment],
-                new LabellingMessage($printertype),
-                $this->customer
-            ),
-            $confirm);
-    }
-
-    /**
-     * @param Shipment[] $shipments     Array of shipments
-     * @param string     $printertype   Printer type, see PostNL dev docs for available types
-     * @param bool       $confirm       Immediately confirm the shipments
-     * @param bool       $merge         Merge the PDFs and return them in a MyParcel way
-     * @param int        $format        A4 or A6
-     * @param array      $positions     Set the positions of the A6s on the first A4
-     *                                  The indices should be the position number, marked with `true` or `false`
-     *                                  These are the position numbers:
-     *                                  ```
-     *                                  +-+-+
-     *                                  |2|4|
-     *                                  +-+-+
-     *                                  |1|3|
-     *                                  +-+-+
-     *                                  ```
-     *                                  So, for
-     *                                  ```
-     *                                  +-+-+
-     *                                  |x|✔|
-     *                                  +-+-+
-     *                                  |✔|x|
-     *                                  +-+-+
-     *                                  ```
-     *                                  you would have to pass:
-     *                                  ```php
-     *                                  [
-     *                                  1 => true,
-     *                                  2 => false,
-     *                                  3 => false,
-     *                                  4 => true,
-     *                                  ]
-     *                                  ```
-     * @param string     $a6Orientation A6 orientation (P or L)
-     *
-     * @return GenerateShippingResponse|string
-     *
-     * @throws AbstractException
-     * @throws NotSupportedException
-     * @throws \setasign\Fpdi\PdfReader\PdfReaderException
-     */
-    public function generateShippings(
-        array $shipments,
-        $printertype = 'GraphicFile|PDF',
-        $confirm = true,
-        $merge = false,
-        $format = Label::FORMAT_A4,
-        $positions = [
-            1 => true,
-            2 => true,
-            3 => true,
-            4 => true,
-        ],
-        $a6Orientation = 'P'
-    ) {
-        if ($merge) {
-            if ('GraphicFile|PDF' !== $printertype) {
-                throw new NotSupportedException('Labels with the chosen printer type cannot be merged');
-            }
-            foreach ([1, 2, 3, 4] as $i) {
-                if (!array_key_exists($i, $positions)) {
-                    throw new NotSupportedException('All label positions need to be passed for merge mode');
-                }
-            }
-        }
-
-        $responseShipments = $this->getShippingService()->generateShipping(
-            new GenerateShipping(
-                $shipments,
-                new LabellingMessage($printertype),
-                $this->customer
-            ),
-            $confirm
-        );
-
-        if (!$merge) {
-            return $responseShipments;
-        }
-
-        // Disable header and footer
-        $pdf = new RFPdi('P', 'mm', Label::FORMAT_A4 === $format ? [210, 297] : [105, 148]);
-        $deferred = [];
-        $firstPage = true;
-        if (Label::FORMAT_A6 === $format) {
-            foreach ($responseShipments->getResponseShipments() as $responseShipment) {
-                foreach ($responseShipment->getLabels() as $label) {
-                    $pdfContent = base64_decode($label->getContent());
-                    $sizes = Util::getPdfSizeAndOrientation($pdfContent);
-                    if ('A6' === $sizes['iso']) {
-                        $pdf->addPage($a6Orientation);
-                        $correction = [0, 0];
-                        if ('L' === $a6Orientation && 'P' === $sizes['orientation']) {
-                            $correction[0] = -84;
-                            $correction[1] = -0.5;
-                            $pdf->rotateCounterClockWise();
-                        } elseif ('P' === $a6Orientation && 'L' === $sizes['orientation']) {
-                            $pdf->rotateCounterClockWise();
-                        }
-                        $pdf->setSourceFile(StreamReader::createByString($pdfContent));
-                        $pdf->useTemplate($pdf->importPage(1), $correction[0], $correction[1]);
-                    } else {
-                        // Assuming A4 here (could be multi-page) - defer to end
-                        $stream = StreamReader::createByString($pdfContent);
-                        $deferred[] = ['stream' => $stream, 'sizes' => $sizes];
-                    }
-                }
-            }
-        } else {
-            $a6s = 4; // Amount of A6s available
-            foreach ($responseShipments->getResponseShipments() as $label) {
-                $pdfContent = base64_decode($label->getLabels()[0]->getContent());
-                $sizes = Util::getPdfSizeAndOrientation($pdfContent);
-                if ('A6' === $sizes['iso']) {
-                    if ($firstPage) {
-                        $pdf->addPage('P', [297, 210], 90);
-                    }
-                    $firstPage = false;
-                    while (empty($positions[5 - $a6s]) && $a6s >= 1) {
-                        $positions[5 - $a6s] = true;
-                        --$a6s;
-                    }
-                    if ($a6s < 1) {
-                        $pdf->addPage('P', [297, 210], 90);
-                        $a6s = 4;
-                    }
-                    $pdf->rotateCounterClockWise();
-                    $pdf->setSourceFile(StreamReader::createByString($pdfContent));
-                    $pdf->useTemplate($pdf->importPage(1), static::$a6positions[$a6s][0], static::$a6positions[$a6s][1]);
-                    --$a6s;
-                    if ($a6s < 1) {
-                        if ($label !== end($responseShipments)) {
-                            $pdf->addPage('P', [297, 210], 90);
-                        }
-                        $a6s = 4;
-                    }
-                } else {
-                    // Assuming A4 here (could be multi-page) - defer to end
-                    if (count($label->getLabels()) > 1) {
-                        $stream = [];
-                        foreach ($label->getResponseShipments()[0]->getLabels() as $labelContent) {
-                            $stream[] = StreamReader::createByString(base64_decode($labelContent->getContent()));
-                        }
-                        $deferred[] = ['stream' => $stream, 'sizes' => $sizes];
-                    } else {
-                        $stream = StreamReader::createByString(base64_decode($pdfContent));
-                        $deferred[] = ['stream' => $stream, 'sizes' => $sizes];
-                    }
-                }
-            }
-        }
-        foreach ($deferred as $defer) {
-            $sizes = $defer['sizes'];
-            $pdf->addPage($sizes['orientation'], 'A4');
-            $pdf->rotateCounterClockWise();
-            if (is_array($defer['stream']) && count($defer['stream']) > 1) {
-                // Multilabel
-                if (2 === count($deferred['stream'])) {
-                    $pdf->setSourceFile($defer['stream'][0]);
-                    $pdf->useTemplate($pdf->importPage(1), -190, 0);
-                    $pdf->setSourceFile($defer['stream'][1]);
-                    $pdf->useTemplate($pdf->importPage(1), -190, 148);
-                } else {
-                    $pdf->setSourceFile($defer['stream'][0]);
-                    $pdf->useTemplate($pdf->importPage(1), -190, 0);
-                    $pdf->setSourceFile($defer['stream'][1]);
-                    $pdf->useTemplate($pdf->importPage(1), -190, 148);
-                    for ($i = 2; $i < count($defer['stream']); ++$i) {
-                        $pages = $pdf->setSourceFile($defer['stream'][$i]);
-                        for ($j = 1; $j < $pages + 1; ++$j) {
-                            $pdf->addPage($sizes['orientation'], 'A4');
-                            $pdf->rotateCounterClockWise();
-                            $pdf->useTemplate($pdf->importPage(1), -190, 0);
-                        }
-                    }
-                }
-            } else {
-                if (is_resource($defer['stream']) || $defer['stream'] instanceof StreamReader) {
-                    $pdf->setSourceFile($defer['stream']);
-                } else {
-                    $pdf->setSourceFile($defer['stream'][0]);
-                }
-                $pdf->useTemplate($pdf->importPage(1), -190, 0);
-            }
-        }
-
-        return $pdf->output('', 'S');
-    }
-
-    /**
-     * Generate a single barcode.
-     *
-     * @param string $type
-     * @param string $range
-     * @param string $serie
-     * @param bool   $eps
-     *
-     * @return string The barcode as a string
-     *
-     * @throws InvalidBarcodeException
-     */
-    public function generateBarcode($type = '3S', $range = null, $serie = null, $eps = false)
+    public function getAllServices(): array
     {
-        if (!in_array($type, ['2S', '3S']) || 2 !== strlen($type)) {
-            throw new InvalidBarcodeException("Barcode type `$type` is invalid");
-        }
-
-        if (!$range) {
-            if (in_array($type, ['2S', '3S'])) {
-                $range = $this->getCustomer()->getCustomerCode();
-            } else {
-                $range = $this->getCustomer()->getGlobalPackCustomerCode();
-            }
-        }
-        if (!$range) {
-            throw new InvalidBarcodeException('Unable to find a valid range');
-        }
-
-        if (!$serie) {
-            $serie = $this->findBarcodeSerie($type, $range, $eps);
-        }
-
-        return $this->getBarcodeService()->generateBarcode(new GenerateBarcode(new Barcode($type, $range, $serie), $this->customer));
-    }
-
-    /**
-     * Generate a single barcode by country code.
-     *
-     * @param string $iso 2-letter Country ISO Code
-     *
-     * @return string The Barcode as a string
-     *
-     * @throws InvalidConfigurationException
-     * @throws InvalidBarcodeException
-     */
-    public function generateBarcodeByCountryCode($iso)
-    {
-        if (in_array(strtoupper($iso), static::$threeSCountries)) {
-            $range = $this->getCustomer()->getCustomerCode();
-            $type = '3S';
-        } else {
-            $range = $this->getCustomer()->getGlobalPackCustomerCode();
-            $type = $this->getCustomer()->getGlobalPackBarcodeType();
-
-            if (!$range) {
-                throw new InvalidConfigurationException('GlobalPack customer code has not been set for the current customer');
-            }
-            if (!$type) {
-                throw new InvalidConfigurationException('GlobalPack barcode type has not been set for the current customer');
-            }
-        }
-
-        $serie = $this->findBarcodeSerie(
-            $type,
-            $range,
-            'NL' !== strtoupper($iso) && in_array(strtoupper($iso), static::$threeSCountries)
-        );
-
-        return $this->getBarcodeService()->generateBarcode(new GenerateBarcode(new Barcode($type, $range, $serie), $this->customer));
-    }
-
-    /**
-     * Generate a single barcode by country code.
-     *
-     * @param array $isos key = iso code, value = amount of barcodes requested
-     *
-     * @return array Country isos with the barcode as string
-     *
-     * @throws InvalidConfigurationException
-     * @throws InvalidBarcodeException
-     */
-    public function generateBarcodesByCountryCodes(array $isos)
-    {
-        $customerCode = $this->getCustomer()->getCustomerCode();
-        $globalPackRange = $this->getCustomer()->getGlobalPackCustomerCode();
-        $globalPackType = $this->getCustomer()->getGlobalPackBarcodeType();
-
-        $generateBarcodes = [];
-        $index = 0;
-        foreach ($isos as $iso => $qty) {
-            if (in_array(strtoupper($iso), static::$threeSCountries)) {
-                $range = $customerCode;
-                $type = '3S';
-            } else {
-                $range = $globalPackRange;
-                $type = $globalPackType;
-
-                if (!$range) {
-                    throw new InvalidConfigurationException('GlobalPack customer code has not been set for the current customer');
-                }
-                if (!$type) {
-                    throw new InvalidConfigurationException('GlobalPack barcode type has not been set for the current customer');
-                }
-            }
-
-            $serie = $this->findBarcodeSerie(
-                $type,
-                $range,
-                'NL' !== strtoupper($iso) && in_array(strtoupper($iso), static::$threeSCountries)
-            );
-
-            for ($i = 0; $i < $qty; ++$i) {
-                $generateBarcodes[] = (new GenerateBarcode(new Barcode($type, $range, $serie), $this->customer))->setId("$iso-$index");
-                ++$index;
-            }
-        }
-
-        $results = $this->getBarcodeService()->generateBarcodes($generateBarcodes);
-
-        $barcodes = [];
-        foreach ($results as $id => $barcode) {
-            list($iso) = explode('-', $id);
-            if (!isset($barcodes[$iso])) {
-                $barcodes[$iso] = [];
-            }
-            $barcodes[$iso][] = $barcode;
-        }
-
-        return $barcodes;
-    }
-
-    /**
-     * @param Shipment $shipment
-     * @param string   $printertype
-     * @param bool     $confirm
-     *
-     * @return GenerateLabelResponse
-     */
-    public function generateLabel(
-        Shipment $shipment,
-        $printertype = 'GraphicFile|PDF',
-        $confirm = true
-    ) {
-        return $this->getLabellingService()->generateLabel(
-            new GenerateLabel(
-                [$shipment],
-                new LabellingMessage($printertype),
-                $this->customer
-            ),
-            $confirm
-        );
-    }
-
-    /**
-     * Generate or retrieve multiple labels.
-     *
-     * Note that instead of returning a GenerateLabelResponse this function can merge the labels and return a
-     * string which contains the PDF with the merged pages as well.
-     *
-     * @param Shipment[] $shipments     (key = ID) Shipments
-     * @param string     $printertype   Printer type, see PostNL dev docs for available types
-     * @param bool       $confirm       Immediately confirm the shipments
-     * @param bool       $merge         Merge the PDFs and return them in a MyParcel way
-     * @param int        $format        A4 or A6
-     * @param array      $positions     Set the positions of the A6s on the first A4
-     *                                  The indices should be the position number, marked with `true` or `false`
-     *                                  These are the position numbers:
-     *                                  ```
-     *                                  +-+-+
-     *                                  |2|4|
-     *                                  +-+-+
-     *                                  |1|3|
-     *                                  +-+-+
-     *                                  ```
-     *                                  So, for
-     *                                  ```
-     *                                  +-+-+
-     *                                  |x|✔|
-     *                                  +-+-+
-     *                                  |✔|x|
-     *                                  +-+-+
-     *                                  ```
-     *                                  you would have to pass:
-     *                                  ```php
-     *                                  [
-     *                                  1 => true,
-     *                                  2 => false,
-     *                                  3 => false,
-     *                                  4 => true,
-     *                                  ]
-     *                                  ```
-     * @param string     $a6Orientation A6 orientation (P or L)
-     *
-     * @return GenerateLabelResponse[]|string
-     *
-     * @throws AbstractException
-     * @throws NotSupportedException
-     * @throws \setasign\Fpdi\PdfReader\PdfReaderException
-     */
-    public function generateLabels(
-        array $shipments,
-        $printertype = 'GraphicFile|PDF',
-        $confirm = true,
-        $merge = false,
-        $format = Label::FORMAT_A4,
-        $positions = [
-            1 => true,
-            2 => true,
-            3 => true,
-            4 => true,
-        ],
-        $a6Orientation = 'P'
-    ) {
-        if ($merge) {
-            if ('GraphicFile|PDF' !== $printertype) {
-                throw new NotSupportedException('Labels with the chosen printer type cannot be merged');
-            }
-            foreach ([1, 2, 3, 4] as $i) {
-                if (!array_key_exists($i, $positions)) {
-                    throw new NotSupportedException('All label positions need to be passed for merge mode');
-                }
-            }
-        }
-
-        $generateLabels = [];
-        foreach ($shipments as $uuid => $shipment) {
-            $generateLabels[$uuid] = [(new GenerateLabel([$shipment], new LabellingMessage($printertype), $this->customer))->setId($uuid), $confirm];
-        }
-        $responseShipments = $this->getLabellingService()->generateLabels($generateLabels, $confirm);
-
-        if (!$merge) {
-            return $responseShipments;
-        } else {
-            foreach ($responseShipments as $responseShipment) {
-                if (!$responseShipment instanceof GenerateLabelResponse) {
-                    return $responseShipments;
-                }
-            }
-        }
-
-        // Disable header and footer
-        $pdf = new RFPdi('P', 'mm', Label::FORMAT_A4 === $format ? [210, 297] : [105, 148]);
-        $deferred = [];
-        $firstPage = true;
-        if (Label::FORMAT_A6 === $format) {
-            foreach ($responseShipments as $responseShipment) {
-                foreach ($responseShipment->getResponseShipments()[0]->getLabels() as $label) {
-                    $pdfContent = base64_decode($label->getContent());
-                    $sizes = Util::getPdfSizeAndOrientation($pdfContent);
-                    if ('A6' === $sizes['iso']) {
-                        $pdf->addPage($a6Orientation);
-                        $correction = [0, 0];
-                        if ('L' === $a6Orientation && 'P' === $sizes['orientation']) {
-                            $correction[0] = -84;
-                            $correction[1] = -0.5;
-                            $pdf->rotateCounterClockWise();
-                        } elseif ('P' === $a6Orientation && 'L' === $sizes['orientation']) {
-                            $pdf->rotateCounterClockWise();
-                        }
-                        $pdf->setSourceFile(StreamReader::createByString($pdfContent));
-                        $pdf->useTemplate($pdf->importPage(1), $correction[0], $correction[1]);
-                    } else {
-                        // Assuming A4 here (could be multi-page) - defer to end
-                        $stream = StreamReader::createByString($pdfContent);
-                        $deferred[] = ['stream' => $stream, 'sizes' => $sizes];
-                    }
-                }
-            }
-        } else {
-            $a6s = 4; // Amount of A6s available
-            foreach ($responseShipments as $responseShipment) {
-                if ($responseShipment instanceof AbstractException) {
-                    throw $responseShipment;
-                }
-                $pdfContent = base64_decode($responseShipment->getResponseShipments()[0]->getLabels()[0]->getContent());
-                $sizes = Util::getPdfSizeAndOrientation($pdfContent);
-                if ('A6' === $sizes['iso']) {
-                    if ($firstPage) {
-                        $pdf->addPage('P', [297, 210], 90);
-                    }
-                    $firstPage = false;
-                    while (empty($positions[5 - $a6s]) && $a6s >= 1) {
-                        $positions[5 - $a6s] = true;
-                        --$a6s;
-                    }
-                    if ($a6s < 1) {
-                        $pdf->addPage('P', [297, 210], 90);
-                        $a6s = 4;
-                    }
-                    $pdf->rotateCounterClockWise();
-                    $pdf->setSourceFile(StreamReader::createByString($pdfContent));
-                    $pdf->useTemplate($pdf->importPage(1), static::$a6positions[$a6s][0], static::$a6positions[$a6s][1]);
-                    --$a6s;
-                    if ($a6s < 1) {
-                        if ($responseShipment !== end($responseShipments)) {
-                            $pdf->addPage('P', [297, 210], 90);
-                        }
-                        $a6s = 4;
-                    }
-                } else {
-                    // Assuming A4 here (could be multi-page) - defer to end
-                    if (count($responseShipment->getResponseShipments()[0]->getLabels()) > 1) {
-                        $stream = [];
-                        foreach ($responseShipment->getResponseShipments()[0]->getLabels() as $labelContent) {
-                            $stream[] = StreamReader::createByString(base64_decode($labelContent->getContent()));
-                        }
-                        $deferred[] = ['stream' => $stream, 'sizes' => $sizes];
-                    } else {
-                        $stream = StreamReader::createByString(base64_decode($pdfContent));
-                        $deferred[] = ['stream' => $stream, 'sizes' => $sizes];
-                    }
-                }
-            }
-        }
-        foreach ($deferred as $defer) {
-            $sizes = $defer['sizes'];
-            $pdf->addPage($sizes['orientation'], 'A4');
-            $pdf->rotateCounterClockWise();
-            if (is_array($defer['stream']) && count($defer['stream']) > 1) {
-                // Multilabel
-                if (2 === count($deferred['stream'])) {
-                    $pdf->setSourceFile($defer['stream'][0]);
-                    $pdf->useTemplate($pdf->importPage(1), -190, 0);
-                    $pdf->setSourceFile($defer['stream'][1]);
-                    $pdf->useTemplate($pdf->importPage(1), -190, 148);
-                } else {
-                    $pdf->setSourceFile($defer['stream'][0]);
-                    $pdf->useTemplate($pdf->importPage(1), -190, 0);
-                    $pdf->setSourceFile($defer['stream'][1]);
-                    $pdf->useTemplate($pdf->importPage(1), -190, 148);
-                    for ($i = 2; $i < count($defer['stream']); ++$i) {
-                        $pages = $pdf->setSourceFile($defer['stream'][$i]);
-                        for ($j = 1; $j < $pages + 1; ++$j) {
-                            $pdf->addPage($sizes['orientation'], 'A4');
-                            $pdf->rotateCounterClockWise();
-                            $pdf->useTemplate($pdf->importPage(1), -190, 0);
-                        }
-                    }
-                }
-            } else {
-                if (is_resource($defer['stream']) || $defer['stream'] instanceof StreamReader) {
-                    $pdf->setSourceFile($defer['stream']);
-                } else {
-                    $pdf->setSourceFile($defer['stream'][0]);
-                }
-                $pdf->useTemplate($pdf->importPage(1), -190, 0);
-            }
-        }
-
-        return $pdf->output('', 'S');
-    }
-
-    /**
-     * Confirm a single shipment.
-     *
-     * @param Shipment $shipment
-     *
-     * @return ConfirmingResponseShipment
-     */
-    public function confirmShipment(Shipment $shipment)
-    {
-        return $this->getConfirmingService()->confirmShipment(new Confirming([$shipment], $this->customer));
-    }
-
-    /**
-     * Confirm multiple shipments.
-     *
-     * @param array $shipments
-     *
-     * @return ConfirmingResponseShipment[]
-     */
-    public function confirmShipments(array $shipments)
-    {
-        $confirmings = [];
-        foreach ($shipments as $uuid => $shipment) {
-            $confirmings[$uuid] = (new Confirming([$shipment], $this->customer))->setId($uuid);
-        }
-
-        return $this->getConfirmingService()->confirmShipments($confirmings);
-    }
-
-    /**
-     * Get the current status of a shipment.
-     *
-     * This is a combi-function, supporting the following:
-     * - CurrentStatus (by barcode):
-     *   - Fill the Shipment->Barcode property. Leave the rest empty.
-     * - CurrentStatusByReference:
-     *   - Fill the Shipment->Reference property. Leave the rest empty.
-     * - CurrentStatusByPhase:
-     *   - Fill the Shipment->PhaseCode property, do not pass Barcode or Reference.
-     *     Optionally add DateFrom and/or DateTo.
-     * - CurrentStatusByStatus:
-     *   - Fill the Shipment->StatuCode property. Leave the rest empty.
-     *
-     * @param CurrentStatus|CurrentStatusByStatus|CurrentStatusByReference|CurrentStatusByPhase $currentStatus
-     *
-     * @return CurrentStatusResponse
-     */
-    public function getCurrentStatus($currentStatus)
-    {
-        $fullCustomer = $this->getCustomer();
-        $currentStatus->setCustomer((new Customer())
-            ->setCustomerCode($fullCustomer->getCustomerCode())
-            ->setCustomerNumber($fullCustomer->getCustomerNumber())
-        );
-        if (!$currentStatus->getMessage()) {
-            $currentStatus->setMessage(new Message());
-        }
-
-        return $this->getShippingStatusService()->currentStatus($currentStatus);
-    }
-
-    /**
-     * Get the complete status of a shipment.
-     *
-     * This is a combi-function, supporting the following:
-     * - CurrentStatus (by barcode):
-     *   - Fill the Shipment->Barcode property. Leave the rest empty.
-     * - CurrentStatusByReference:
-     *   - Fill the Shipment->Reference property. Leave the rest empty.
-     * - CurrentStatusByPhase:
-     *   - Fill the Shipment->PhaseCode property, do not pass Barcode or Reference.
-     *     Optionally add DateFrom and/or DateTo.
-     * - CurrentStatusByStatus:
-     *   - Fill the Shipment->StatuCode property. Leave the rest empty.
-     *
-     * @param CompleteStatus|CompleteStatusByStatus|CompleteStatusByReference|CompleteStatusByPhase $completeStatus
-     *
-     * @return CompleteStatusResponse
-     */
-    public function getCompleteStatus($completeStatus)
-    {
-        $fullCustomer = $this->getCustomer();
-
-        $completeStatus->setCustomer((new Customer())
-            ->setCustomerCode($fullCustomer->getCustomerCode())
-            ->setCustomerNumber($fullCustomer->getCustomerNumber())
-        );
-        if (!$completeStatus->getMessage()) {
-            $completeStatus->setMessage(new Message());
-        }
-
-        return $this->getShippingStatusService()->completeStatus($completeStatus);
-    }
-
-    /**
-     * Get the signature of a shipment.
-     *
-     * @param GetSignature $signature
-     *
-     * @return GetSignature
-     */
-    public function getSignature(GetSignature $signature)
-    {
-        $signature->setCustomer($this->getCustomer());
-        if (!$signature->getMessage()) {
-            $signature->setMessage(new Message());
-        }
-
-        return $this->getShippingStatusService()->getSignature($signature);
-    }
-
-    /**
-     * Get a delivery date.
-     *
-     * @param GetDeliveryDate $getDeliveryDate
-     *
-     * @return GetDeliveryDateResponse
-     */
-    public function getDeliveryDate(GetDeliveryDate $getDeliveryDate)
-    {
-        return $this->getDeliveryDateService()->getDeliveryDate($getDeliveryDate);
-    }
-
-    /**
-     * Get a shipping date.
-     *
-     * @param GetSentDateRequest $getSentDate
-     *
-     * @return GetSentDateResponse
-     */
-    public function getSentDate(GetSentDateRequest $getSentDate)
-    {
-        return $this->getDeliveryDateService()->getSentDate($getSentDate);
-    }
-
-    /**
-     * Get timeframes.
-     *
-     * @param GetTimeframes $getTimeframes
-     *
-     * @return ResponseTimeframes
-     */
-    public function getTimeframes(GetTimeframes $getTimeframes)
-    {
-        return $this->getTimeframeService()->getTimeframes($getTimeframes);
-    }
-
-    /**
-     * Get nearest locations.
-     *
-     * @param GetNearestLocations $getNearestLocations
-     *
-     * @return GetNearestLocationsResponse
-     */
-    public function getNearestLocations(GetNearestLocations $getNearestLocations)
-    {
-        return $this->getLocationService()->getNearestLocations($getNearestLocations);
-    }
-
-    /**
-     * All-in-one function for checkout widgets. It retrieves and returns the
-     * - timeframes
-     * - locations
-     * - delivery date.
-     *
-     * @param GetTimeframes       $getTimeframes
-     * @param GetNearestLocations $getNearestLocations
-     * @param GetDeliveryDate     $getDeliveryDate
-     *
-     * @return array [uuid => ResponseTimeframes, uuid => GetNearestLocationsResponse, uuid => GetDeliveryDateResponse]
-     *
-     * @throws HttpClientException
-     * @throws InvalidArgumentException
-     */
-    public function getTimeframesAndNearestLocations(
-        GetTimeframes $getTimeframes,
-        GetNearestLocations $getNearestLocations,
-        GetDeliveryDate $getDeliveryDate
-    ) {
-        $results = [];
-        $itemTimeframe = $this->getTimeframeService()->retrieveCachedItem($getTimeframes->getId());
-        if ($itemTimeframe instanceof CacheItemInterface && $itemTimeframe->get()) {
-            $results['timeframes'] = \GuzzleHttp\Psr7\parse_response($itemTimeframe->get());
-        }
-        $itemLocation = $this->getLocationService()->retrieveCachedItem($getNearestLocations->getId());
-        if ($itemLocation instanceof CacheItemInterface && $itemLocation->get()) {
-            $results['locations'] = \GuzzleHttp\Psr7\parse_response($itemLocation->get());
-        }
-        $itemDeliveryDate = $this->getDeliveryDateService()->retrieveCachedItem($getDeliveryDate->getId());
-        if ($itemDeliveryDate instanceof CacheItemInterface && $itemDeliveryDate->get()) {
-            $results['delivery_date'] = \GuzzleHttp\Psr7\parse_response($itemDeliveryDate->get());
-        }
-
-        $this->getHttpClient()->addOrUpdateRequest(
-            'timeframes',
-            $this->getTimeframeService()->buildGetTimeframesRequest($getTimeframes)
-        );
-        $this->getHttpClient()->addOrUpdateRequest(
-            'locations',
-            $this->getLocationService()->buildGetNearestLocationsRequest($getNearestLocations)
-        );
-        $this->getHttpClient()->addOrUpdateRequest(
-            'delivery_date',
-            $this->getDeliveryDateService()->buildGetDeliveryDateRequest($getDeliveryDate)
-        );
-
-        $responses = $this->getHttpClient()->doRequests();
-        foreach ($responses as $uuid => $response) {
-            if ($response instanceof Response) {
-                $results[$uuid] = $response;
-            } else {
-                if ($response instanceof \Exception) {
-                    throw $response;
-                }
-                throw new InvalidArgumentException('Invalid multi-request');
-            }
-        }
-
-        foreach ($responses as $type => $response) {
-            if (!$response instanceof Response) {
-                if ($response instanceof \Exception) {
-                    throw $response;
-                }
-                throw new InvalidArgumentException('Invalid multi-request');
-            } elseif (200 === $response->getStatusCode()) {
-                switch ($type) {
-                    case 'timeframes':
-                        if ($itemTimeframe instanceof CacheItemInterface) {
-                            $itemTimeframe->set(\GuzzleHttp\Psr7\str($response));
-                            $this->getTimeframeService()->cacheItem($itemTimeframe);
-                        }
-
-                        break;
-                    case 'locations':
-                        if ($itemTimeframe instanceof CacheItemInterface) {
-                            $itemLocation->set(\GuzzleHttp\Psr7\str($response));
-                            $this->getLocationService()->cacheItem($itemLocation);
-                        }
-
-                        break;
-                    case 'delivery_date':
-                        if ($itemTimeframe instanceof CacheItemInterface) {
-                            $itemDeliveryDate->set(\GuzzleHttp\Psr7\str($response));
-                            $this->getDeliveryDateService()->cacheItem($itemDeliveryDate);
-                        }
-
-                        break;
-                }
-            }
-        }
-
         return [
-            'timeframes'    => $this->getTimeframeService()->processGetTimeframesResponse($results['timeframes']),
-            'locations'     => $this->getLocationService()->processGetNearestLocationsResponse($results['locations']),
-            'delivery_date' => $this->getDeliveryDateService()->processGetDeliveryDateResponse($results['delivery_date']),
+            BarcodeServiceInterface::class        => $this->getBarcodeService(),
+            ConfirmingServiceInterface::class     => $this->getConfirmingService(),
+            DeliveryDateServiceInterface::class   => $this->getDeliveryDateService(),
+            LabellingServiceInterface::class      => $this->getLabellingService(),
+            LocationServiceInterface::class       => $this->getLocationService(),
+            ShippingServiceInterface::class       => $this->getShippingService(),
+            ShippingStatusServiceInterface::class => $this->getShippingStatusService(),
+            TimeframeServiceInterface::class      => $this->getTimeframeService(),
         ];
     }
 
-    /**
-     * Get locations in area.
-     *
-     * @param GetLocationsInArea $getLocationsInArea
-     *
-     * @return GetLocationsInAreaResponse
-     */
-    public function getLocationsInArea(GetLocationsInArea $getLocationsInArea)
+    public function getCustomer(): Customer
     {
-        return $this->getLocationService()->getLocationsInArea($getLocationsInArea);
+        return $this->customer;
     }
 
-    /**
-     * Get locations in area.
-     *
-     * @param GetLocation $getLocation
-     *
-     * @return GetLocationsInAreaResponse
-     */
-    public function getLocation(GetLocation $getLocation)
+    public function setCustomer(Customer $customer): static
     {
-        return $this->getLocationService()->getLocation($getLocation);
+        $this->customer = $customer;
+
+        return $this;
     }
 
-    /**
-     * Find a suitable serie for the barcode.
-     *
-     * @param string $type
-     * @param string $range
-     * @param bool   $eps   Indicates whether it is an EPS Shipment
-     *
-     * @return string
-     *
-     * @throws InvalidBarcodeException
-     */
-    public function findBarcodeSerie($type, $range, $eps)
+    public function getApiKey(): string
     {
-        switch ($type) {
-            case '2S':
-                $serie = '0000000-9999999';
+        return $this->apiKey;
+    }
 
-                break;
-            case '3S':
-                if ($eps) {
-                    switch (strlen($range)) {
-                        case 4:
-                            $serie = '0000000-9999999';
+    public function setApiKey(string $apiKey): static
+    {
+        $this->apiKey = $apiKey;
 
-                            break 2;
-                        case 3:
-                            $serie = '10000000-20000000';
+        return $this;
+    }
 
-                            break 2;
-                        case 1:
-                            $serie = '5210500000-5210600000';
+    public function getSandbox(): bool
+    {
+        return $this->sandbox;
+    }
 
-                            break 2;
-                        default:
-                            throw new InvalidBarcodeException('Invalid range');
-                            break;
-                    }
-                }
-                // Regular domestic codes
-                $serie = (4 === strlen($range) ? '987000000-987600000' : '0000000-9999999');
+    public function setSandbox(bool $sandbox): static
+    {
+        $this->sandbox = $sandbox;
 
-                break;
-            default:
-                // GlobalPack
-                $serie = '0000-9999';
+        return $this;
+    }
 
-                break;
+    public function getDefaultHttpClient(): HTTPClientInterface
+    {
+        if (!$this->defaultHttpClient) {
+            $this->defaultHttpClient = new HTTPlugHTTPClient(logger: $this->getDefaultLogger());
         }
 
-        return $serie;
+        return $this->defaultHttpClient;
+    }
+
+    public function setDefaultHttpClient(?HTTPClientInterface $defaultHttpClient = null): static
+    {
+        $this->defaultHttpClient = $defaultHttpClient;
+
+        return $this;
+    }
+
+    public function getDefaultLogger(): ?LoggerInterface
+    {
+        return $this->defaultLogger;
+    }
+
+    public function setDefaultLogger(?LoggerInterface $defaultLogger = null): static
+    {
+        $this->defaultLogger = $defaultLogger;
+
+        return $this;
     }
 }

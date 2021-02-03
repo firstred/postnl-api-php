@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,126 +20,83 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- * @copyright 2017-2020 Michael Dekker
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity;
+declare(strict_types=1);
 
-use Sabre\Xml\Writer;
-use ThirtyBees\PostNL\Service\BarcodeService;
-use ThirtyBees\PostNL\Service\ConfirmingService;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
-use ThirtyBees\PostNL\Service\LabellingService;
-use ThirtyBees\PostNL\Service\LocationService;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
-use ThirtyBees\PostNL\Service\TimeframeService;
+namespace Firstred\PostNL\Entity;
 
-/**
- * Class CutOffTime.
- *
- * @method string|null getDay()
- * @method string|null getTime()
- * @method bool|null   getAvailable()
- * @method CutOffTime  setDay(string|null $day = null)
- * @method CutOffTime  setTime(string|null $time = null)
- * @method CutOffTime  setAvailable(bool|null $available = null)
- */
-class CutOffTime extends AbstractEntity
+use Firstred\PostNL\Attribute\PropInterface;
+use Firstred\PostNL\Misc\SerializableObject;
+use Firstred\PostNL\Service\ServiceInterface;
+use JetBrains\PhpStorm\ExpectedValues;
+
+class CutOffTime extends SerializableObject
 {
-    /** @var string[][] */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'Day'       => BarcodeService::DOMAIN_NAMESPACE,
-            'Time'      => BarcodeService::DOMAIN_NAMESPACE,
-            'Available' => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'Day'       => ConfirmingService::DOMAIN_NAMESPACE,
-            'Time'      => ConfirmingService::DOMAIN_NAMESPACE,
-            'Available' => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'Day'       => LabellingService::DOMAIN_NAMESPACE,
-            'Time'      => LabellingService::DOMAIN_NAMESPACE,
-            'Available' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Day'       => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Time'      => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Available' => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'Day'       => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Time'      => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Available' => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'Day'       => LocationService::DOMAIN_NAMESPACE,
-            'Time'      => LocationService::DOMAIN_NAMESPACE,
-            'Available' => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'Day'       => TimeframeService::DOMAIN_NAMESPACE,
-            'Time'      => TimeframeService::DOMAIN_NAMESPACE,
-            'Available' => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null */
-    protected $Day;
-    /** @var string|null */
-    protected $Time;
-    /** @var bool|null */
-    protected $Available;
-    // @codingStandardsIgnoreEnd
+    public const MONDAY = 0;
+    public const TUESDAY = 1;
+    public const WEDNESDAY = 2;
+    public const THURSDAY = 3;
+    public const FRIDAY = 4;
+    public const SATURDAY = 5;
+    public const SUNDAY = 6;
 
-    /**
-     * @param string $day
-     * @param string $time
-     * @param bool   $available
-     */
-    public function __construct($day = null, $time = null, $available = null)
-    {
-        parent::__construct();
+    public function __construct(
+        #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
+        string $service = '',
+        #[ExpectedValues(values: PropInterface::PROP_TYPES + [''])]
+        string $propType = '',
 
-        $this->setDay($day);
-        $this->setTime($time);
-        $this->setAvailable($available);
+        #[ExpectedValues(values: [self::MONDAY, self::TUESDAY, self::WEDNESDAY, self::THURSDAY, self::FRIDAY, self::SATURDAY, self::SUNDAY, null])]
+        protected int|null $Day = null,
+        protected string|null $Time = null,
+        protected bool|null $Available = null,
+    ) {
+        parent::__construct(service: $service, propType: $propType);
+
+        $this->setDay(Day: $Day);
+        $this->setTime(Time: $Time);
+        $this->setAvailable(Available: $Available);
     }
 
-    /**
-     * Return a serializable array for the XMLWriter.
-     *
-     * @param Writer $writer
-     *
-     * @return void
-     */
-    public function xmlSerialize(Writer $writer)
+    #[ExpectedValues(values: [self::MONDAY, self::TUESDAY, self::WEDNESDAY, self::THURSDAY, self::FRIDAY, self::SATURDAY, self::SUNDAY, null])]
+    public function getDay(): int|null
     {
-        $xml = [];
-        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
-            $writer->write($xml);
+        return $this->Day;
+    }
 
-            return;
-        }
+    public function setDay(
+        #[ExpectedValues(values: [self::MONDAY, self::TUESDAY, self::WEDNESDAY, self::THURSDAY, self::FRIDAY, self::SATURDAY, self::SUNDAY, null])]
+        int|null $Day = null,
+    ): static {
+        $this->Day = $Day;
 
-        foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if (isset($this->{$propertyName})) {
-                if ('Available' === $propertyName) {
-                    if (is_bool($this->{$propertyName})) {
-                        $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName} ? 'true' : 'false';
-                    } elseif (is_int($this->{$propertyName})) {
-                        $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = 1 === $this->{$propertyName} ? 'true' : 'false';
-                    } else {
-                        $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
-                    }
-                } else {
-                    $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
-                }
-            }
-        }
-        // Auto extending this object with other properties is not supported with SOAP
-        $writer->write($xml);
+        return $this;
+    }
+
+    public function getTime(): string|null
+    {
+        return $this->Time;
+    }
+
+    public function setTime(string|null $Time = null): static
+    {
+        $this->Time = $Time;
+
+        return $this;
+    }
+
+    public function getAvailable(): bool|null
+    {
+        return $this->Available;
+    }
+
+    public function setAvailable(bool|null $Available = null): static
+    {
+        $this->Available = $Available;
+
+        return $this;
     }
 }

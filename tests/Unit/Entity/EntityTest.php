@@ -1,9 +1,8 @@
 <?php
-
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -21,19 +20,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- * @copyright 2017-2020 Michael Dekker
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Tests\Unit\Entity;
+declare(strict_types=1);
 
+namespace Firstred\PostNL\Tests\Unit\Entity;
+
+use function array_keys;
 use Error;
+use Firstred\PostNL\Attribute\RequestProp;
+use Firstred\PostNL\Attribute\ResponseProp;
+use Firstred\PostNL\DTO\Request\GenerateBarcodeRequestDTO;
+use Firstred\PostNL\DTO\Response\GenerateBarcodeResponseDTO;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Misc\SerializableObject;
+use Firstred\PostNL\Service\BarcodeServiceInterface;
+use function is_a;
+use LogicException;
+use function method_exists;
 use PHPUnit\Framework\TestCase;
+use ReflectionAttribute;
 use ReflectionClass;
 use ReflectionException;
-use ThirtyBees\PostNL\Entity\AbstractEntity;
-use ThirtyBees\PostNL\Entity\Address;
-use ThirtyBees\PostNL\Exception\InvalidArgumentException;
 
 /**
  * @testdox The Entities
@@ -41,149 +51,154 @@ use ThirtyBees\PostNL\Exception\InvalidArgumentException;
 class EntityTest extends TestCase
 {
     /**
-     * @testdox Have a working constructor
+     * @testdox Should be able to find serializable properties
+     *
+     * @throws InvalidArgumentException
      */
-    public function testConstructors()
+    public function testCanFindAllSerializableProperties()
     {
-        foreach (scandir(__DIR__.'/../../../src/Entity') as $entityName) {
-            if (in_array($entityName, ['.', '..', 'AbstractEntity.php']) || is_dir(__DIR__."/../../../src/Entity/$entityName")) {
-                continue;
-            }
+        $generateBarcode = new GenerateBarcodeRequestDTO(
+            service: BarcodeServiceInterface::class,
+            propType: RequestProp::class,
 
-            $entityName = substr($entityName, 0, strlen($entityName) - 4);
-            $entityName = "\\ThirtyBees\\PostNL\\Entity\\$entityName";
-            $entity = new $entityName();
-            $this->assertInstanceOf(AbstractEntity::class, $entity);
-        }
+            Type: 'test',
+            Serie: 'test',
+            Range: 'test',
+        );
 
-        foreach (scandir(__DIR__.'/../../../src/Entity/Request') as $entityName) {
-            if (in_array($entityName, ['.', '..']) || is_dir(__DIR__."/../../src/Entity/Request/$entityName")) {
-                continue;
-            }
-
-            $entityName = substr($entityName, 0, strlen($entityName) - 4);
-            $entityName = "\\ThirtyBees\\PostNL\\Entity\\Request\\$entityName";
-            $entity = new $entityName();
-            $this->assertInstanceOf(AbstractEntity::class, $entity);
-        }
-
-        foreach (scandir(__DIR__.'/../../../src/Entity/Response') as $entityName) {
-            if (in_array($entityName, ['.', '..', 'AbstractResponse.php']) || is_dir(__DIR__."/../../src/Entity/Response/$entityName")) {
-                continue;
-            }
-
-            $entityName = substr($entityName, 0, strlen($entityName) - 4);
-            $entityName = "\\ThirtyBees\\PostNL\\Entity\\Response\\$entityName";
-            $entity = new $entityName();
-            $this->assertInstanceOf(AbstractEntity::class, $entity);
-        }
+        $this->assertEqualsCanonicalizing(
+            expected: ['Type', 'Serie', 'Range'],
+            actual: $generateBarcode->getSerializableProps(asStrings: true),
+        );
     }
 
     /**
-     * @testdox Properties should be readable and writable
+     * @testdox Should be able to find serializable properties
+     *
+     * @throws InvalidArgumentException
+     */
+    public function testCanFindRequiredSerializableProperties()
+    {
+        $generateBarcode = new GenerateBarcodeRequestDTO(
+            service: BarcodeServiceInterface::class,
+            propType: RequestProp::class,
+
+            Type: 'test',
+            Serie: 'test',
+            Range: 'test',
+        );
+
+        $this->assertEqualsCanonicalizing(
+            expected: ['Type', 'Serie'],
+            actual: $generateBarcode->getSerializableProps(asStrings: true, required: true),
+        );
+    }
+
+    /**
+     * @testdox Properties should have dedicated getters and setters
      *
      * @throws ReflectionException
      */
-    public function testProperties()
+    public function testPropsHaveGettersAndSetters()
     {
-        foreach (scandir(__DIR__.'/../../../src/Entity') as $entityName) {
-            if (in_array($entityName, ['.', '..', 'AbstractEntity.php']) || is_dir(__DIR__."/../../../src/Entity/$entityName")) {
-                continue;
-            }
-
-            $entityName = substr($entityName, 0, strlen($entityName) - 4);
-            $entityName = "\\ThirtyBees\\PostNL\\Entity\\$entityName";
-            $entity = new $entityName();
-            $reflection = new ReflectionClass($entityName);
-            foreach (array_keys($reflection->getDefaultProperties()) as $var) {
-                $property = $reflection->getProperty($var);
-                if (!$property->isProtected()) {
-                    continue;
+        $classmap = array_keys(array: include __DIR__.'/../../../vendor/composer/autoload_classmap.php');
+        foreach ($classmap as $class) {
+            try {
+                if (is_a(object_or_class: $class, class: SerializableObject::class, allow_string: true)
+                    && SerializableObject::class !== $class
+                ) {
+                    $reflectionClass = new ReflectionClass(objectOrClass: $class);
+                    foreach ($reflectionClass->getProperties() as $reflectionProperty) {
+                        $requestPropReflectionAttribute = $reflectionProperty->getAttributes(name: RequestProp::class)[0]   ?? null;
+                        $responsePropReflectionAttribute = $reflectionProperty->getAttributes(name: ResponseProp::class)[0] ?? null;
+                        if (!$requestPropReflectionAttribute instanceof ReflectionAttribute
+                            && !$responsePropReflectionAttribute instanceof ReflectionAttribute
+                        ) {
+                            continue;
+                        }
+                        $this->assertTrue(
+                            condition: method_exists(object_or_class: $class, method: "get{$reflectionProperty->getName()}"),
+                            message: "Class `$class` does not have required the method `get{$reflectionProperty->getName()}`",
+                        );
+                        $this->assertTrue(
+                            condition: method_exists(object_or_class: $class, method: "set{$reflectionProperty->getName()}"),
+                            message: "Class `$class` does not have required the method `set{$reflectionProperty->getName()}`",
+                        );
+                    }
                 }
-                $var = ucfirst($var);
-                $this->assertTrue(method_exists($entity, "get$var"), $entityName);
-                $this->assertTrue(method_exists($entity, "set$var"), $entityName);
-            }
-        }
-
-        foreach (scandir(__DIR__.'/../../../src/Entity/Request') as $entityName) {
-            if (in_array($entityName, ['.', '..']) || is_dir(__DIR__."/../../src/Entity/Request/$entityName")) {
-                continue;
-            }
-
-            $entityName = substr($entityName, 0, strlen($entityName) - 4);
-            $entityName = "\\ThirtyBees\\PostNL\\Entity\\Request\\$entityName";
-            $entity = new $entityName();
-            $reflection = new ReflectionClass($entityName);
-            foreach (array_keys($reflection->getDefaultProperties()) as $var) {
-                $property = $reflection->getProperty($var);
-                if (!$property->isProtected()) {
-                    continue;
-                }
-                $var = ucfirst($var);
-                $this->assertTrue(method_exists($entity, "get$var"), "The method {$entityName}::get{$var} does not exist");
-                $this->assertTrue(method_exists($entity, "set$var"), "The method {$entityName}::set{$var} does not exist");
-            }
-        }
-
-        foreach (scandir(__DIR__.'/../../../src/Entity/Response') as $entityName) {
-            if (in_array($entityName, ['.', '..', 'AbstractResponse.php']) || is_dir(__DIR__."/../../src/Entity/Response/$entityName")) {
-                continue;
-            }
-
-            $entityName = substr($entityName, 0, strlen($entityName) - 4);
-            $entityName = "\\ThirtyBees\\PostNL\\Entity\\Response\\$entityName";
-            $entity = new $entityName();
-            $reflection = new ReflectionClass($entityName);
-            foreach (array_keys($reflection->getDefaultProperties()) as $var) {
-                $property = $reflection->getProperty($var);
-                if (!$property->isProtected()) {
-                    continue;
-                }
-                $var = ucfirst($var);
-                $this->assertTrue(method_exists($entity, "get$var"));
-                $this->assertTrue(method_exists($entity, "set$var"));
+            } catch (Error | LogicException) {
             }
         }
     }
 
     /**
-     * @testdox Should throw an exception when the value to set is missing
+     * @testdox Setters should accept the property as first parameter
+     *
+     * @throws ReflectionException
      */
-    public function testNegativeMissingValue()
+    public function testFirstSetterParameterIsProp()
     {
-        $this->expectException(ArgumentCountError::class);
+        $classmap = array_keys(array: include __DIR__.'/../../../vendor/composer/autoload_classmap.php');
+        foreach ($classmap as $class) {
+            try {
+                if (is_a(object_or_class: $class, class: SerializableObject::class, allow_string: true)
+                    && SerializableObject::class !== $class
+                ) {
+                    $reflectionClass = new ReflectionClass(objectOrClass: $class);
+                    foreach ($reflectionClass->getProperties() as $reflectionProperty) {
+                        $requestPropReflectionAttribute = $reflectionProperty->getAttributes(name: RequestProp::class)[0]   ?? null;
+                        $responsePropReflectionAttribute = $reflectionProperty->getAttributes(name: ResponseProp::class)[0] ?? null;
+                        if (!$requestPropReflectionAttribute instanceof ReflectionAttribute
+                            && !$responsePropReflectionAttribute instanceof ReflectionAttribute
+                        ) {
+                            continue;
+                        }
 
-        (new Address())->setArea();
+                        $reflectionSetterMethod = $reflectionClass->getMethod(name: "set{$reflectionProperty->getName()}");
+                        $this->assertTrue(
+                            condition: $reflectionSetterMethod->getParameters()[0]->getName() === $reflectionProperty->getName(),
+                            message: "Method `$class::{$reflectionSetterMethod->getName()}()` does not accept the property as a first named argument, the parameter is called `{$reflectionSetterMethod->getParameters()[0]->getName()}`",
+                        );
+                    }
+                }
+            } catch (Error | LogicException) {
+            }
+        }
     }
 
     /**
-     * @testdox Should be `null` when instantiating the AbstractEntity
+     * @testdox Should be able to create a valid serializable object
+     *
+     * @throws InvalidArgumentException
      */
-    public function testNegativeCannotInstantiateAbstract()
+    public function testCanCreateValidSerializableObject()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $generateBarcodeResponseDTO = new GenerateBarcodeResponseDTO(
+            service: BarcodeServiceInterface::class,
+            propType: ResponseProp::class,
 
-        AbstractEntity::create();
+            Barcode: 'test',
+        );
+
+        $this->assertTrue(condition: $generateBarcodeResponseDTO->isValid());
     }
 
-    /**
-     * @testdox Should return `null` when the property does not exist
-     */
-    public function testNegativeReturnNullWhenPropertyDoesNotExist()
+    public function testCanJsonSerializeObject()
     {
-        $this->expectException(Error::class);
+        $generateBarcode = new GenerateBarcodeRequestDTO(
+            service: BarcodeServiceInterface::class,
+            propType: RequestProp::class,
 
-        $this->assertNull((new Address())->getNothing());
-    }
+            Type: 'test',
+            Serie: 'test',
+        );
 
-    /**
-     * @testdox Should throw an exception when the method does not exist
-     */
-    public function testNegativeThrowExceptionWhenMethodDoesNotExist()
-    {
-        $this->expectException(Error::class);
-
-        (new Address())->blab();
+        $this->assertEqualsCanonicalizing(
+            expected: [
+                'Type'  => 'test',
+                'Serie' => 'test',
+            ],
+            actual: $generateBarcode->jsonSerialize(),
+        );
     }
 }

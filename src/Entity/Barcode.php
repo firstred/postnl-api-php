@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,96 +20,71 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- * @copyright 2017-2020 Michael Dekker
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity;
+declare(strict_types=1);
 
-use ThirtyBees\PostNL\Service\BarcodeService;
-use ThirtyBees\PostNL\Service\ConfirmingService;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
-use ThirtyBees\PostNL\Service\LabellingService;
-use ThirtyBees\PostNL\Service\LocationService;
-use ThirtyBees\PostNL\Service\ShippingService;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
-use ThirtyBees\PostNL\Service\TimeframeService;
+namespace Firstred\PostNL\Entity;
 
-/**
- * Class Barcode.
- *
- * @method string|null getType()
- * @method string|null getRange()
- * @method string|null getSerie()
- * @method Barcode     setType(string|null $type = null)
- * @method Barcode     setRange(string|null $range = null)
- * @method Barcode     setSerie(string|null $serie = null)
- */
-class Barcode extends AbstractEntity
+use Firstred\PostNL\Attribute\PropInterface;
+use Firstred\PostNL\Misc\SerializableObject;
+use Firstred\PostNL\Service\ServiceInterface;
+use JetBrains\PhpStorm\ExpectedValues;
+
+class Barcode extends SerializableObject
 {
-    /** @var string[][] */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'Type'  => BarcodeService::DOMAIN_NAMESPACE,
-            'Range' => BarcodeService::DOMAIN_NAMESPACE,
-            'Serie' => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'Type'  => ConfirmingService::DOMAIN_NAMESPACE,
-            'Range' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Serie' => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'Type'  => LabellingService::DOMAIN_NAMESPACE,
-            'Range' => LabellingService::DOMAIN_NAMESPACE,
-            'Serie' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Type'  => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Range' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Serie' => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'Type'  => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Range' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Serie' => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'Type'  => LocationService::DOMAIN_NAMESPACE,
-            'Range' => LocationService::DOMAIN_NAMESPACE,
-            'Serie' => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'Type'  => TimeframeService::DOMAIN_NAMESPACE,
-            'Range' => TimeframeService::DOMAIN_NAMESPACE,
-            'Serie' => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-        'Shipping' => [
-            'Type'  => ShippingService::DOMAIN_NAMESPACE,
-            'Range' => ShippingService::DOMAIN_NAMESPACE,
-            'Serie' => ShippingService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null */
-    protected $Type;
-    /** @var string|null */
-    protected $Range;
-    /** @var string|null */
-    protected $Serie;
-    // @codingStandardsIgnoreEnd
+    public function __construct(
+        #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
+        string $service = '',
+        #[ExpectedValues(values: PropInterface::PROP_TYPES + [''])]
+        string $propType = '',
 
-    /**
-     * @param string|null $type
-     * @param string|null $range
-     * @param string|null $serie
-     */
-    public function __construct($type = null, $range = null, $serie = '000000000-999999999')
+        protected string|null $Type = null,
+        protected string|null $Range = null,
+        protected string|null $Serie = '000000000-999999999',
+    ) {
+        parent::__construct(service: $service, propType: $propType);
+
+        $this->setType(Type: $Type);
+        $this->setRange(Range: $Range);
+        $this->setSerie(Serie: $Serie);
+    }
+
+    public function getType(): string|null
     {
-        parent::__construct();
+        return $this->Type;
+    }
 
-        $this->setType($type);
-        $this->setRange($range);
-        $this->setSerie($serie);
+    public function setType(string|null $Type = null): static
+    {
+        $this->Type = $Type;
+
+        return $this;
+    }
+
+    public function getRange(): string|null
+    {
+        return $this->Range;
+    }
+
+    public function setRange(string|null $Range = null): static
+    {
+        $this->Range = $Range;
+
+        return $this;
+    }
+
+    public function getSerie(): string|null
+    {
+        return $this->Serie;
+    }
+
+    public function setSerie(string|null $Serie = null): static
+    {
+        $this->Serie = $Serie;
+
+        return $this;
     }
 }

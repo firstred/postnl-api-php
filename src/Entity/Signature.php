@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,76 +20,58 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- * @copyright 2017-2020 Michael Dekker
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity;
+declare(strict_types=1);
 
-use ThirtyBees\PostNL\Entity\Response\GetSignatureResponseSignature;
-use ThirtyBees\PostNL\Service\BarcodeService;
-use ThirtyBees\PostNL\Service\ConfirmingService;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
-use ThirtyBees\PostNL\Service\LabellingService;
-use ThirtyBees\PostNL\Service\LocationService;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
-use ThirtyBees\PostNL\Service\TimeframeService;
+namespace Firstred\PostNL\Entity;
 
-/**
- * Class Signature.
- *
- * @method GetSignatureResponseSignature|null getGetSignatureResponseSignature()
- * @method Warning[]|null                     getWarnings()
- * @method Signature                          setGetSignatureResponseSignature(GetSignatureResponseSignature|null $signature = null)
- * @method Signature                          setWarnings(Warning[]|null $warnings = null)
- */
-class Signature extends AbstractEntity
+use Firstred\PostNL\Attribute\PropInterface;
+use Firstred\PostNL\Entity\Response\GetSignatureResponseSignature;
+use Firstred\PostNL\Misc\SerializableObject;
+use Firstred\PostNL\Service\ServiceInterface;
+use JetBrains\PhpStorm\ExpectedValues;
+
+class Signature extends SerializableObject
 {
-    /** @var string[][] */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'GetSignatureResponseSignature' => BarcodeService::DOMAIN_NAMESPACE,
-            'Warnings'                      => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'GetSignatureResponseSignature' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Warnings'                      => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'GetSignatureResponseSignature' => LabellingService::DOMAIN_NAMESPACE,
-            'Warnings'                      => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingSignature' => [
-            'GetSignatureResponseSignature' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Warnings'                      => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'GetSignatureResponseSignature' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Warnings'                      => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'GetSignatureResponseSignature' => LocationService::DOMAIN_NAMESPACE,
-            'Warnings'                      => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'GetSignatureResponseSignature' => TimeframeService::DOMAIN_NAMESPACE,
-            'Warnings'                      => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var GetSignatureResponseSignature|null */
-    protected $GetSignatureResponseSignature;
-    /** @var Warning[]|null */
-    protected $Warnings;
-    // @codingStandardsIgnoreEnd
-
     public function __construct(
-        GetSignatureResponseSignature $signature = null,
-        array $warnings = null
-    ) {
-        parent::__construct();
+        #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
+        string $service = '',
+        #[ExpectedValues(values: PropInterface::PROP_TYPES + [''])]
+        string $propType = '',
 
-        $this->setGetSignatureResponseSignature($signature);
-        $this->setWarnings($warnings);
+        protected ?GetSignatureResponseSignature $GetSignatureResponseSignature = null,
+        protected array|null $Warnings = null,
+    ) {
+        parent::__construct(service: $service, propType: $propType);
+
+        $this->setGetSignatureResponseSignature(GetSignatureResponseSignature: $GetSignatureResponseSignature);
+        $this->setWarnings(Warnings: $Warnings);
+    }
+
+    public function getGetSignatureResponseSignature(): ?GetSignatureResponseSignature
+    {
+        return $this->GetSignatureResponseSignature;
+    }
+
+    public function setGetSignatureResponseSignature(?GetSignatureResponseSignature $GetSignatureResponseSignature = null): static
+    {
+        $this->GetSignatureResponseSignature = $GetSignatureResponseSignature;
+
+        return $this;
+    }
+
+    public function getWarnings(): array|null
+    {
+        return $this->Warnings;
+    }
+
+    public function setWarnings(array|null $Warnings = null): static
+    {
+        $this->Warnings = $Warnings;
+
+        return $this;
     }
 }

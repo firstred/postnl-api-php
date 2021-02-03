@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,116 +20,157 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- * @copyright 2017-2020 Michael Dekker
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity;
+declare(strict_types=1);
 
-use ThirtyBees\PostNL\Service\BarcodeService;
-use ThirtyBees\PostNL\Service\ConfirmingService;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
-use ThirtyBees\PostNL\Service\LabellingService;
-use ThirtyBees\PostNL\Service\LocationService;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
-use ThirtyBees\PostNL\Service\TimeframeService;
+namespace Firstred\PostNL\Entity;
 
-/**
- * Class Timeframes.
- *
- * @method Timeframe[]|null          getTimeframess()
- * @method TimeframeTimeFrame[]|null getTimeframeTimeFrame()
- * @method Timeframes                setTimeframes(Timeframe[]|null $timeframes = null)
- * @method Timeframes                setTimeframeTimeFrames(TimeframeTimeFrame[]|null $timeframes = null)
- */
-class Timeframes extends AbstractEntity
+use ArrayAccess;
+use Countable;
+use Firstred\PostNL\Attribute\PropInterface;
+use Firstred\PostNL\Attribute\ResponseProp;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Misc\SerializableObject;
+use Firstred\PostNL\Service\ServiceInterface;
+use Firstred\PostNL\Service\TimeframeServiceInterface;
+use Iterator;
+use JetBrains\PhpStorm\ArrayShape;
+use JetBrains\PhpStorm\ExpectedValues;
+use JetBrains\PhpStorm\Pure;
+use function count;
+
+class Timeframes extends SerializableObject implements ArrayAccess, Countable, Iterator
 {
-    /** @var string[][] */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'Timeframes'          => BarcodeService::DOMAIN_NAMESPACE,
-            'TimeframeTimeFrames' => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'Timeframes'          => ConfirmingService::DOMAIN_NAMESPACE,
-            'TimeframeTimeFrames' => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'Timeframes'          => LabellingService::DOMAIN_NAMESPACE,
-            'TimeframeTimeFrames' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Timeframes'          => ShippingStatusService::DOMAIN_NAMESPACE,
-            'TimeframeTimeFrames' => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'Timeframes'          => DeliveryDateService::DOMAIN_NAMESPACE,
-            'TimeframeTimeFrames' => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'Timeframes'          => LocationService::DOMAIN_NAMESPACE,
-            'TimeframeTimeFrames' => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'Timeframes'          => TimeframeService::DOMAIN_NAMESPACE,
-            'TimeframeTimeFrames' => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var Timeframe[]|null */
-    protected $Timeframes;
-    /** @var TimeframeTimeFrame[]|null */
-    protected $TimeframeTimeFrames;
-    // @codingStandardsIgnoreEnd
+    protected int $idx = 0;
+
+    /** @psalm-var list<Timeframe|TimeframeTimeFrame>|null */
+    #[ResponseProp(requiredFor: [TimeframeServiceInterface::class])]
+    protected array|null $Timeframes = null;
 
     /**
-     * Timeframes constructor.
-     *
-     * @param array|null                $timeframes
-     * @param TimeframeTimeFrame[]|null $timeframetimeframes
+     * @throws InvalidArgumentException
      */
     public function __construct(
-        array $timeframes = null,
-        array $timeframetimeframes = null
-    ) {
-        parent::__construct();
+        #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
+        string $service = '',
+        #[ExpectedValues(values: PropInterface::PROP_TYPES + [''])]
+        string $propType = '',
 
-        $this->setTimeframes($timeframes);
-        $this->setTimeframeTimeFrames($timeframetimeframes);
+        array|null $Timeframes = null,
+    ) {
+        parent::__construct(service: $service, propType: $propType);
+
+        $this->setTimeframes(Timeframes: $Timeframes);
+    }
+
+    public function getTimeframes(): array|null
+    {
+        return $this->Timeframes;
+    }
+
+    public function setTimeframes(array|null $Timeframes = null): static
+    {
+        if (!empty($Timeframes['Timeframe'])) {
+            $newTimeframes = [];
+            foreach ($Timeframes['Timeframe'] ?? [] as $idx => $timeframe) {
+                if (!$timeframe instanceof Timeframe && isset($timeframe['From'])) {
+                    $timeframe['service'] = $this->service;
+                    $timeframe['propType'] = $this->propType;
+
+                    /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+                    $newTimeframes[$idx] = new TimeframeTimeFrame(...$timeframe);
+                } elseif (isset($timeframe['Date'])) {
+                    $timeframe['service'] = $this->service;
+                    $timeframe['propType'] = $this->propType;
+
+                    /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+                    $newTimeframes[$idx] = new Timeframe(...$timeframe);
+                }
+            }
+            $Timeframes = $newTimeframes;
+        }
+
+        $this->Timeframes = $Timeframes;
+
+        return $this;
+    }
+
+    public function current(): Timeframe|null
+    {
+        return $this->getTimeframes()[$this->idx] ?? null;
+    }
+
+    public function next(): void
+    {
+        ++$this->idx;
+    }
+
+    public function key(): int
+    {
+        return $this->idx;
+    }
+
+    public function valid(): bool
+    {
+        return null !== $this->current();
+    }
+
+    public function rewind(): void
+    {
+        $this->idx = 0;
     }
 
     /**
-     * Return a serializable array for `json_encode`.
-     *
-     * @return array
+     * @throws InvalidArgumentException
      */
-    public function jsonSerialize()
+    public function offsetExists(mixed $offset): bool
     {
-        $json = [];
-        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
-            return $json;
+        if (!is_int(value: $offset)) {
+            throw new InvalidArgumentException('Invalid offset passed, should be int');
         }
 
-        foreach (array_keys(static::$defaultProperties[$this->currentService]) as $propertyName) {
-            if (isset($this->{$propertyName})) {
-                if ('Timeframes' === $propertyName) {
-                    $timeframes = [];
-                    foreach ($this->Timeframes as $timeframe) {
-                        $timeframes[] = $timeframe;
-                    }
-                    $json[$propertyName] = ['TimeframeTimeFrame' => $timeframes];
-                } elseif ('TimeframeTimeFrames' === $propertyName) {
-                    $timeframes = [];
-                    foreach ($this->TimeframeTimeFrames as $timeframe) {
-                        $timeframes[] = $timeframe;
-                    }
-                    $json[$propertyName] = ['TimeframeTimeFrame' => $timeframes];
-                } else {
-                    $json[$propertyName] = $this->{$propertyName};
-                }
-            }
-        }
+        return (bool) ($this->getTimeframes()[$offset] ?? false);
+    }
 
-        return $json;
+    public function offsetGet($offset): Timeframe|null
+    {
+        return $this->getTimeframes()[$offset] ?? null;
+    }
+
+    public function offsetSet($offset, $value): void
+    {
+        $this->Timeframes[$offset] = $value;
+    }
+
+    public function offsetUnset($offset): void
+    {
+        if (isset($this->Timeframes[$offset])) {
+            unset($this->Timeframes[$offset]);
+        }
+    }
+
+    #[Pure]
+    public function count(): int
+    {
+        return count(value: $this->Timeframes ?? []);
+    }
+
+    #[ArrayShape(shape: ['Timeframe' => "array[]|null"])]
+    public function jsonSerialize(): array
+    {
+        $json = parent::jsonSerialize();
+        unset($json['Timeframes']);
+
+        $timeframes = $this->getTimeframes();
+
+        return $json + [
+            'Timeframe' => is_null(value: $timeframes) ? null : array_map(
+                callback: fn(SerializableObject $item) => $item->jsonSerialize(),
+                array: $timeframes,
+            ),
+        ];
     }
 }

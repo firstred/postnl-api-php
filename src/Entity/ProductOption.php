@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,82 +20,57 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- * @copyright 2017-2020 Michael Dekker
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity;
+declare(strict_types=1);
 
-use ThirtyBees\PostNL\Service\BarcodeService;
-use ThirtyBees\PostNL\Service\ConfirmingService;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
-use ThirtyBees\PostNL\Service\LabellingService;
-use ThirtyBees\PostNL\Service\LocationService;
-use ThirtyBees\PostNL\Service\ShippingService;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
-use ThirtyBees\PostNL\Service\TimeframeService;
+namespace Firstred\PostNL\Entity;
 
-/**
- * Class ProductOption.
- *
- * @method string|null   getCharacteristic()
- * @method string|null   getOption()
- * @method ProductOption setCharacteristic(string|null $characteristic = null)
- * @method ProductOption setOption(string|null $option = null)
- */
-class ProductOption extends AbstractEntity
+use Firstred\PostNL\Attribute\PropInterface;
+use Firstred\PostNL\Misc\SerializableObject;
+use Firstred\PostNL\Service\ServiceInterface;
+use JetBrains\PhpStorm\ExpectedValues;
+
+class ProductOption extends SerializableObject
 {
-    /** @var string[][] */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'Characteristic' => BarcodeService::DOMAIN_NAMESPACE,
-            'Option'         => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'Characteristic' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Option'         => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'Characteristic' => LabellingService::DOMAIN_NAMESPACE,
-            'Option'         => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Characteristic' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Option'         => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'Characteristic' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Option'         => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'Characteristic' => LocationService::DOMAIN_NAMESPACE,
-            'Option'         => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'Characteristic' => TimeframeService::DOMAIN_NAMESPACE,
-            'Option'         => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-        'Shipping' => [
-            'Characteristic' => ShippingService::DOMAIN_NAMESPACE,
-            'Option'         => ShippingService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null */
-    protected $Characteristic;
-    /** @var string|null */
-    protected $Option;
-    // @codingStandardsIgnoreEnd
+    public function __construct(
+        #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
+        string $service = '',
+        #[ExpectedValues(values: PropInterface::PROP_TYPES + [''])]
+        string $propType = '',
 
-    /**
-     * @param string|null $characteristic
-     * @param string|null $option
-     */
-    public function __construct($characteristic = null, $option = null)
+        protected string|null $Characteristic = null,
+        protected string|null $Option = null,
+    ) {
+        parent::__construct(service: $service, propType: $propType);
+
+        $this->setCharacteristic(Characteristic: $Characteristic);
+        $this->setOption(Option: $Option);
+    }
+
+    public function getCharacteristic(): string|null
     {
-        parent::__construct();
+        return $this->Characteristic;
+    }
 
-        $this->setCharacteristic($characteristic);
-        $this->setOption($option);
+    public function setCharacteristic(string|null $Characteristic = null): static
+    {
+        $this->Characteristic = $Characteristic;
+
+        return $this;
+    }
+
+    public function getOption(): string|null
+    {
+        return $this->Option;
+    }
+
+    public function setOption(string|null $Option = null): static
+    {
+        $this->Option = $Option;
+
+        return $this;
     }
 }

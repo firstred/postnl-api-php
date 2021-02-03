@@ -8,3 +8,7 @@ tests/clover.xml
 
 # PHPENV
 .php-version
+
+# phpunit
+phpunit.xml.bak
+.phpunit.result.cache

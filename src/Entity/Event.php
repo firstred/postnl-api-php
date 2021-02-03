@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,65 +20,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- * @copyright 2017-2020 Michael Dekker
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity;
+declare(strict_types=1);
 
-use ThirtyBees\PostNL\Entity\Response\CompleteStatusResponseEvent;
-use ThirtyBees\PostNL\Service\BarcodeService;
-use ThirtyBees\PostNL\Service\ConfirmingService;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
-use ThirtyBees\PostNL\Service\LabellingService;
-use ThirtyBees\PostNL\Service\LocationService;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
-use ThirtyBees\PostNL\Service\TimeframeService;
+namespace Firstred\PostNL\Entity;
 
-/**
- * Class Event.
- *
- * @method string|null getCompleteStatusResponseEvent()
- * @method Event       setCompleteStatusResponseEvent(CompleteStatusResponseEvent|null $event = null)
- */
-class Event extends AbstractEntity
+use Firstred\PostNL\Attribute\PropInterface;
+use Firstred\PostNL\Entity\Response\CompleteStatusResponseEvent;
+use Firstred\PostNL\Misc\SerializableObject;
+use Firstred\PostNL\Service\ServiceInterface;
+use JetBrains\PhpStorm\ExpectedValues;
+
+class Event extends SerializableObject
 {
-    /** @var string[][] */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'CompleteStatusResponseEvent' => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'CompleteStatusResponseEvent' => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'CompleteStatusResponseEvent' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'CompleteStatusResponseEvent' => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'CompleteStatusResponseEvent' => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'CompleteStatusResponseEvent' => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'CompleteStatusResponseEvent' => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var CompleteStatusResponseEvent|null */
-    protected $CompleteStatusResponseEvent;
-    // @codingStandardsIgnoreEnd
+    public function __construct(
+        #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
+        string $service = '',
+        #[ExpectedValues(values: PropInterface::PROP_TYPES + [''])]
+        string $propType = '',
 
-    /**
-     * @param CompleteStatusResponseEvent|null $completeStatusResponseEvent
-     */
-    public function __construct($completeStatusResponseEvent = null)
+        protected ?CompleteStatusResponseEvent $CompleteStatusResponseEvent = null,
+    ) {
+        parent::__construct(service: $service, propType: $propType);
+
+        $this->setCompleteStatusResponseEvent(CompleteStatusResponseEvent: $CompleteStatusResponseEvent);
+    }
+
+    public function getCompleteStatusResponseEvent(): ?CompleteStatusResponseEvent
     {
-        parent::__construct();
+        return $this->CompleteStatusResponseEvent;
+    }
 
-        $this->setCompleteStatusResponseEvent($completeStatusResponseEvent);
+    public function setCompleteStatusResponseEvent(?CompleteStatusResponseEvent $CompleteStatusResponseEvent = null): static
+    {
+        $this->CompleteStatusResponseEvent = $CompleteStatusResponseEvent;
+
+        return $this;
     }
 }

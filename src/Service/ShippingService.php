@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2020 KeenDelivery, LLC
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,37 +19,32 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Jan-Wilco peters <info@keendelivery.com>
- * @copyright 2017-2020 KeenDelivery, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Service;
+declare(strict_types=1);
 
+namespace Firstred\PostNL\Service;
+
+use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Entity\Request\Shipping;
+use Firstred\PostNL\Entity\Response\GenerateShippingResponse;
+use Firstred\PostNL\Exception\ApiException;
+use Firstred\PostNL\Exception\CifDownException;
+use Firstred\PostNL\Exception\CifException;
+use Firstred\PostNL\Exception\ResponseException;
 use Http\Discovery\Psr17FactoryDiscovery;
-use Psr\Cache\CacheItemInterface;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
-use ThirtyBees\PostNL\Entity\AbstractEntity;
-use ThirtyBees\PostNL\Entity\Request\GenerateShipping;
-use ThirtyBees\PostNL\Entity\Response\GenerateShippingResponse;
-use ThirtyBees\PostNL\Exception\ApiException;
-use ThirtyBees\PostNL\Exception\CifDownException;
-use ThirtyBees\PostNL\Exception\CifException;
-use ThirtyBees\PostNL\Exception\ResponseException;
 use function http_build_query;
 use function json_encode;
 use const JSON_PRETTY_PRINT;
 use const JSON_UNESCAPED_SLASHES;
+use Psr\Cache\CacheItemInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
-/**
- * Class ShippingService.
- *
- * @method GenerateShippingResponse generateShipping(GenerateShipping $generateShipping, bool $confirm)
- * @method RequestInterface                  buildGenerateShippingRequest(GenerateShipping $generateShipping, bool $confirm)
- * @method GenerateShippingResponse processGenerateShippingResponse(mixed $response)
- */
-class ShippingService extends AbstractService
+class ShippingService implements ShippingServiceInterface
 {
     // API Version
     const VERSION = '1';
@@ -58,13 +53,11 @@ class ShippingService extends AbstractService
     const LIVE_ENDPOINT = 'https://api.postnl.nl/v1/shipment';
     const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/v1/shipment';
 
-    const DOMAIN_NAMESPACE = 'http://postnl.nl/';
-
     /**
      * Generate a single Shipping vai REST.
      *
-     * @param GenerateShipping $generateShipping
-     * @param bool             $confirm
+     * @param Shipping $generateShipping
+     * @param bool     $confirm
      *
      * @return GenerateShippingResponse|null
      *
@@ -73,65 +66,65 @@ class ShippingService extends AbstractService
      * @throws CifException
      * @throws ResponseException
      */
-    public function generateShippingREST(GenerateShipping $generateShipping, $confirm = true)
+    public function generateShipping(Shipping $generateShipping, $confirm = true)
     {
-        $item = $this->retrieveCachedItem($generateShipping->getId());
+        $item = $this->retrieveCachedItem(uuid: $generateShipping->getId());
         $response = null;
 
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\parse_response($response);
+                $response = \GuzzleHttp\Psr7\parse_response(message: $response);
             } catch (\InvalidArgumentException $e) {
             }
         }
         if (!$response instanceof ResponseInterface) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildGenerateShippingRequestREST($generateShipping, $confirm));
+            $response = $this->postnl->getHttpClient()->doRequest(request: $this->buildGenerateShippingRequestREST(generateShipping: $generateShipping, confirm: $confirm));
 
-            static::validateRESTResponse($response);
+            static::validateRESTResponse(response: $response);
         }
 
-        $object = $this->processGenerateShippingResponseREST($response);
+        $object = $this->processGenerateShippingResponseREST(response: $response);
         if ($object instanceof GenerateShippingResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
-                $item->set(\GuzzleHttp\Psr7\str($response));
-                $this->cacheItem($item);
+                $item->set(value: \GuzzleHttp\Psr7\str(message: $response));
+                $this->cacheItem(item: $item);
             }
 
             return $object;
         }
 
         if (200 === $response->getStatusCode()) {
-            throw new ResponseException('Invalid API response', null, null, $response);
+            throw new ResponseException(message: 'Invalid API response', code: null, previous: null, response: $response);
         }
 
         throw new ApiException('Unable to ship order');
     }
 
     /**
-     * @param GenerateShipping $generateShipping
-     * @param bool             $confirm
+     * @param Shipping $generateShipping
+     * @param bool     $confirm
      *
      * @return RequestInterface
      */
-    public function buildGenerateShippingRequestREST(GenerateShipping $generateShipping, $confirm = true)
+    public function buildGenerateShippingRequest(Shipping $generateShipping, $confirm = true)
     {
         $apiKey = $this->postnl->getRestApiKey();
-        $this->setService($generateShipping);
+        $this->setService(object: $generateShipping);
 
         return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
-            'POST',
-            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).'?'.http_build_query([
+            method: 'POST',
+            uri: ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).'?'.http_build_query(data: [
                 'confirm' => $confirm,
             ])
         )
-            ->withHeader('apikey', $apiKey)
-            ->withHeader('Accept', 'application/json')
-            ->withHeader('Accept', 'application/json;charset=UTF-8')
-            ->withBody(Psr17FactoryDiscovery::findStreamFactory()->createStream(json_encode($generateShipping, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES)));
+            ->withHeader(name: 'apikey', value: $apiKey)
+            ->withHeader(name: 'Accept', value: 'application/json')
+            ->withHeader(name: 'Accept', value: 'application/json;charset=UTF-8')
+            ->withBody(body: Psr17FactoryDiscovery::findStreamFactory()->createStream(content: json_encode(value: $generateShipping, flags: JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES)));
     }
 
     /**
@@ -143,17 +136,47 @@ class ShippingService extends AbstractService
      *
      * @throws ResponseException
      */
-    public function processGenerateShippingResponseREST($response)
+    public function processGenerateShippingResponse($response)
     {
-        $body = @json_decode(static::getResponseText($response), true);
+        $body = @json_decode(json: static::getResponseText(response: $response), associative: true);
         if (isset($body['ResponseShipments'])) {
             /** @var GenerateShippingResponse $object */
-            $object = AbstractEntity::JsonDeserialize(['GenerateShippingResponse' => $body]);
-            $this->setService($object);
+            $object = JsonSerializableObject::JsonDeserialize(json: ['GenerateShippingResponse' => $body]);
+            $this->setService(object: $object);
 
             return $object;
         }
 
         return null;
+    }
+
+    public function getCustomer(): Customer
+    {
+        // TODO: Implement getCustomer() method.
+    }
+
+    public function setCustomer(Customer $customer): static
+    {
+        // TODO: Implement setCustomer() method.
+    }
+
+    public function getApiKey(): string
+    {
+        // TODO: Implement getApiKey() method.
+    }
+
+    public function setApiKey(string $apiKey): static
+    {
+        // TODO: Implement setApiKey() method.
+    }
+
+    public function isSandbox(): bool
+    {
+        // TODO: Implement isSandbox() method.
+    }
+
+    public function setSandbox(bool $sandbox): static
+    {
+        // TODO: Implement setSandbox() method.
     }
 }

@@ -22,12 +22,12 @@ Here's how it is done:
 .. code-block:: php
 
     <?php
-    use ThirtyBees\PostNL\Entity\Label;
-    use ThirtyBees\PostNL\PostNL;
-    use ThirtyBees\PostNL\Entity\Customer;
-    use ThirtyBees\PostNL\Entity\Address;
-    use ThirtyBees\PostNL\Entity\Shipment;
-    use ThirtyBees\PostNL\Entity\Dimension;
+    use Firstred\PostNL\Entity\Label;
+    use Firstred\PostNL\PostNL;
+    use Firstred\PostNL\Entity\Customer;
+    use Firstred\PostNL\Entity\Address;
+    use Firstred\PostNL\Entity\Shipment;
+    use Firstred\PostNL\Entity\Dimension;
 
     require_once __DIR__.'/vendor/autoload.php';
 
@@ -46,14 +46,14 @@ Here's how it is done:
             'Street'      => 'Siriusdreef',
             'Zipcode'     => '2132WT',
         ]),
-        'Email'              => 'michael@thirtybees.com',
+        'Email'              => 'test@example.com',
         'Name'               => 'Michael',
     ]);
 
     $apikey = 'YOUR_API_KEY_HERE';
     $sandbox = true;
 
-    $postnl = new PostNL($customer, $apikey, $sandbox, PostNL::MODE_SOAP);
+    $postnl = new PostNL($customer, $apikey, $sandbox);
 
     $mondayDelivery = true;
     $deliveryDaysWindow = 7; // Amount of days to show ahead
@@ -119,12 +119,12 @@ Here is how you can request two labels and have them merged into a single PDF au
 .. code-block:: php
 
     <?php
-    use ThirtyBees\PostNL\Entity\Label;
-    use ThirtyBees\PostNL\PostNL;
-    use ThirtyBees\PostNL\Entity\Customer;
-    use ThirtyBees\PostNL\Entity\Address;
-    use ThirtyBees\PostNL\Entity\Shipment;
-    use ThirtyBees\PostNL\Entity\Dimension;
+    use Firstred\PostNL\Entity\Label;
+    use Firstred\PostNL\PostNL;
+    use Firstred\PostNL\Entity\Customer;
+    use Firstred\PostNL\Entity\Address;
+    use Firstred\PostNL\Entity\Shipment;
+    use Firstred\PostNL\Entity\Dimension;
 
     require_once __DIR__.'/vendor/autoload.php';
 
@@ -143,14 +143,14 @@ Here is how you can request two labels and have them merged into a single PDF au
             'Street'      => 'Siriusdreef',
             'Zipcode'     => '2132WT',
         ]),
-        'Email'              => 'michael@thirtybees.com',
+        'Email'              => 'test@example.com',
         'Name'               => 'Michael',
     ]);
 
     $apikey = 'YOUR_API_KEY_HERE';
     $sandbox = true;
 
-    $postnl = new PostNL($customer, $apikey, $sandbox, PostNL::MODE_SOAP);
+    $postnl = new PostNL($customer, $apikey, $sandbox);
 
     $barcodes = $postnl->generateBarcodesByCountryCodes(['NL' => 2]);
 
@@ -241,7 +241,7 @@ customer
               'Street'      => 'Siriusdreef',
               'Zipcode'     => '2132WT',
           ]),
-          'Email'              => 'michael@thirtybees.com',
+          'Email'              => 'test@example.com',
           'Name'               => 'Michael',
       ]);
 
@@ -249,7 +249,7 @@ apikey
     ``string``|``UsernameToken`` - `required`
 
     The ``apikey`` to use for the API. Note that if you want to switch from the legacy API to
-    the new SOAP and REST API you will have to request a new key. The username can be omitted.
+    the new REST API you will have to request a new key. The username can be omitted.
     If you want to connect to the legacy API you should pass a ``UsernameToken`` with your username and token set:
 
     .. code-block:: php
@@ -264,16 +264,6 @@ sandbox
     ``bool`` - `required`
 
     Indicate whether you'd like to connect to the sandbox environment. When `false` the library uses the live endpoints.
-
-mode
-    ``int`` - `optional, defaults to REST`
-
-    This library provides three ways to connect to the API:
-
-    - 1: REST mode
-    - 2: SOAP mode
-    - 5: Legacy mode -- This is the previous SOAP API, which at the moment of writing is still in operation.
-
 
 Building Requests
 =================
@@ -302,7 +292,7 @@ Service class of your choice and call the ```buildXXXXXXRequest()``` functions m
 used by this library you can use the ``Request`` object that is returned to access the full request that would otherwise
 be sent directly. To pick up where you left off you can then grab the response and pass it to one of the ``processXXXXXXXResponse()```
 functions of the Service class. The easiest method is to grab the raw HTTP message and parse it with the included PSR-7 library.
-An example can be found in the `cURL client <https://github.com/thirtybees/postnl-api-php/blob/b3837cec23e1b8e806c5ea29d79d0fae82a0e956/src/HttpClient/CurlClient.php#L258>`_.
+An example can be found in the `cURL client <https://github.com/firstred/postnl-api-php/blob/b3837cec23e1b8e806c5ea29d79d0fae82a0e956/src/HttpClient/CurlClient.php#L258>`_.
 
 Using Response objects
 ======================

@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,19 +20,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- * @copyright 2017-2020 Michael Dekker
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Exception;
+declare(strict_types=1);
+
+namespace Firstred\PostNL\Exception;
 
 /**
  * Class CifException.
  */
 class CifException extends AbstractException
 {
-    /** @var array */
-    protected $messages;
+    protected array|null $messages = null;
 
     /**
      * CifException constructor.
@@ -49,14 +50,14 @@ class CifException extends AbstractException
      */
     public function __construct($message = '', $code = 0, $previous = null)
     {
-        if (is_array($message)) {
+        if (is_array(value: $message)) {
             $this->messages = $message;
 
             $message = $this->messages[0]['message'];
             $code = $this->messages[0]['code'];
         }
 
-        parent::__construct($message, $code, $previous);
+        parent::__construct(message: $message, code: $code, previous: $previous);
     }
 
     /**

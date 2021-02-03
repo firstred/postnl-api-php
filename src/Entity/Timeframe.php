@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,347 +20,283 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- * @copyright 2017-2020 Michael Dekker
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity;
+declare(strict_types=1);
 
-use InvalidArgumentException;
-use Sabre\Xml\Writer;
-use ThirtyBees\PostNL\Service\BarcodeService;
-use ThirtyBees\PostNL\Service\ConfirmingService;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
-use ThirtyBees\PostNL\Service\LabellingService;
-use ThirtyBees\PostNL\Service\LocationService;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
-use ThirtyBees\PostNL\Service\TimeframeService;
+namespace Firstred\PostNL\Entity;
 
-/**
- * Class Timeframe.
- *
- * @method string|null      getCity()
- * @method string|null      getCountryCode()
- * @method string|null      getDate()
- * @method string|null      getEndDate()
- * @method string|null      getHouseNr()
- * @method string|null      getHouseNrExt()
- * @method string[]|null    getOptions()
- * @method string|null      getPostalCode()
- * @method string|null      getStartDate()
- * @method string|null      getStreet()
- * @method string|null      getSundaySorting()
- * @method string|null      getInterval()
- * @method string|null      getTimeframeRange()
- * @method Timeframe[]|null getTimeframes()
- * @method Timeframe        setCity(string|null $city = null)
- * @method Timeframe        setCountryCode(string|null $code = null)
- * @method Timeframe        setDate(string|null $date = null)
- * @method Timeframe        setEndDate(string|null $date = null)
- * @method Timeframe        setHouseNr(string|null $houseNr = null)
- * @method Timeframe        setHouseNrExt(string|null $houseNrExt = null)
- * @method Timeframe        setOptions(string[]|null $options = null)
- * @method Timeframe        setStartDate(string|null $date = null)
- * @method Timeframe        setStreet(string|null $street = null)
- * @method Timeframe        setSundaySorting(string|null $sunday = null)
- * @method Timeframe        setInterval(string|null $interval = null)
- * @method Timeframe        setTimeframeRange(string|null $range = null)
- * @method Timeframe        setTimeframes(Timeframe[]|null $timeframes = null)
- */
-class Timeframe extends AbstractEntity
+use Firstred\PostNL\Attribute\PropInterface;
+use Firstred\PostNL\Attribute\ResponseProp;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Misc\SerializableObject;
+use Firstred\PostNL\Service\ServiceInterface;
+use Firstred\PostNL\Service\TimeframeServiceInterface;
+use JetBrains\PhpStorm\ExpectedValues;
+
+class Timeframe extends SerializableObject
 {
-    /** @var string[][] */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'City'           => BarcodeService::DOMAIN_NAMESPACE,
-            'CountryCode'    => BarcodeService::DOMAIN_NAMESPACE,
-            'Date'           => BarcodeService::DOMAIN_NAMESPACE,
-            'EndDate'        => BarcodeService::DOMAIN_NAMESPACE,
-            'HouseNr'        => BarcodeService::DOMAIN_NAMESPACE,
-            'HouseNrExt'     => BarcodeService::DOMAIN_NAMESPACE,
-            'Options'        => BarcodeService::DOMAIN_NAMESPACE,
-            'PostalCode'     => BarcodeService::DOMAIN_NAMESPACE,
-            'StartDate'      => BarcodeService::DOMAIN_NAMESPACE,
-            'Street'         => BarcodeService::DOMAIN_NAMESPACE,
-            'SundaySorting'  => BarcodeService::DOMAIN_NAMESPACE,
-            'Interval'       => BarcodeService::DOMAIN_NAMESPACE,
-            'TimeframeRange' => BarcodeService::DOMAIN_NAMESPACE,
-            'Timeframes'     => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'City'           => ConfirmingService::DOMAIN_NAMESPACE,
-            'CountryCode'    => ConfirmingService::DOMAIN_NAMESPACE,
-            'Date'           => ConfirmingService::DOMAIN_NAMESPACE,
-            'EndDate'        => ConfirmingService::DOMAIN_NAMESPACE,
-            'HouseNr'        => ConfirmingService::DOMAIN_NAMESPACE,
-            'HouseNrExt'     => ConfirmingService::DOMAIN_NAMESPACE,
-            'Options'        => ConfirmingService::DOMAIN_NAMESPACE,
-            'PostalCode'     => ConfirmingService::DOMAIN_NAMESPACE,
-            'StartDate'      => ConfirmingService::DOMAIN_NAMESPACE,
-            'Street'         => ConfirmingService::DOMAIN_NAMESPACE,
-            'SundaySorting'  => ConfirmingService::DOMAIN_NAMESPACE,
-            'Interval'       => ConfirmingService::DOMAIN_NAMESPACE,
-            'TimeframeRange' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Timeframes'     => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'City'           => LabellingService::DOMAIN_NAMESPACE,
-            'CountryCode'    => LabellingService::DOMAIN_NAMESPACE,
-            'Date'           => LabellingService::DOMAIN_NAMESPACE,
-            'EndDate'        => LabellingService::DOMAIN_NAMESPACE,
-            'HouseNr'        => LabellingService::DOMAIN_NAMESPACE,
-            'HouseNrExt'     => LabellingService::DOMAIN_NAMESPACE,
-            'Options'        => LabellingService::DOMAIN_NAMESPACE,
-            'PostalCode'     => LabellingService::DOMAIN_NAMESPACE,
-            'StartDate'      => LabellingService::DOMAIN_NAMESPACE,
-            'Street'         => LabellingService::DOMAIN_NAMESPACE,
-            'SundaySorting'  => LabellingService::DOMAIN_NAMESPACE,
-            'Interval'       => LabellingService::DOMAIN_NAMESPACE,
-            'TimeframeRange' => LabellingService::DOMAIN_NAMESPACE,
-            'Timeframes'     => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'City'           => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CountryCode'    => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Date'           => ShippingStatusService::DOMAIN_NAMESPACE,
-            'EndDate'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'HouseNr'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'HouseNrExt'     => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Options'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'PostalCode'     => ShippingStatusService::DOMAIN_NAMESPACE,
-            'StartDate'      => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Street'         => ShippingStatusService::DOMAIN_NAMESPACE,
-            'SundaySorting'  => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Interval'       => ShippingStatusService::DOMAIN_NAMESPACE,
-            'TimeframeRange' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Timeframes'     => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'City'           => DeliveryDateService::DOMAIN_NAMESPACE,
-            'CountryCode'    => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Date'           => DeliveryDateService::DOMAIN_NAMESPACE,
-            'EndDate'        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'HouseNr'        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'HouseNrExt'     => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Options'        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'PostalCode'     => DeliveryDateService::DOMAIN_NAMESPACE,
-            'StartDate'      => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Street'         => DeliveryDateService::DOMAIN_NAMESPACE,
-            'SundaySorting'  => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Interval'       => DeliveryDateService::DOMAIN_NAMESPACE,
-            'TimeframeRange' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Timeframes'     => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'City'           => LocationService::DOMAIN_NAMESPACE,
-            'CountryCode'    => LocationService::DOMAIN_NAMESPACE,
-            'Date'           => LocationService::DOMAIN_NAMESPACE,
-            'EndDate'        => LocationService::DOMAIN_NAMESPACE,
-            'HouseNr'        => LocationService::DOMAIN_NAMESPACE,
-            'HouseNrExt'     => LocationService::DOMAIN_NAMESPACE,
-            'Options'        => LocationService::DOMAIN_NAMESPACE,
-            'PostalCode'     => LocationService::DOMAIN_NAMESPACE,
-            'StartDate'      => LocationService::DOMAIN_NAMESPACE,
-            'Street'         => LocationService::DOMAIN_NAMESPACE,
-            'SundaySorting'  => LocationService::DOMAIN_NAMESPACE,
-            'Interval'       => LocationService::DOMAIN_NAMESPACE,
-            'TimeframeRange' => LocationService::DOMAIN_NAMESPACE,
-            'Timeframes'     => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'City'           => TimeframeService::DOMAIN_NAMESPACE,
-            'CountryCode'    => TimeframeService::DOMAIN_NAMESPACE,
-            'Date'           => TimeframeService::DOMAIN_NAMESPACE,
-            'EndDate'        => TimeframeService::DOMAIN_NAMESPACE,
-            'HouseNr'        => TimeframeService::DOMAIN_NAMESPACE,
-            'HouseNrExt'     => TimeframeService::DOMAIN_NAMESPACE,
-            'Options'        => TimeframeService::DOMAIN_NAMESPACE,
-            'PostalCode'     => TimeframeService::DOMAIN_NAMESPACE,
-            'StartDate'      => TimeframeService::DOMAIN_NAMESPACE,
-            'Street'         => TimeframeService::DOMAIN_NAMESPACE,
-            'SundaySorting'  => TimeframeService::DOMAIN_NAMESPACE,
-            'Interval'       => TimeframeService::DOMAIN_NAMESPACE,
-            'TimeframeRange' => TimeframeService::DOMAIN_NAMESPACE,
-            'Timeframes'     => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null */
-    protected $City;
-    /** @var string|null */
-    protected $CountryCode;
-    /** @var string|null */
-    protected $Date;
-    /** @var string|null */
-    protected $EndDate;
-    /** @var string|null */
-    protected $HouseNr;
-    /** @var string|null */
-    protected $HouseNrExt;
-    /** @var string[]|null */
-    protected $Options;
-    /** @var string|null */
-    protected $PostalCode;
-    /** @var string|null */
-    protected $StartDate;
-    /** @var string|null */
-    protected $Street;
-    /** @var string|null */
-    protected $SundaySorting;
-    /** @var string|null */
-    protected $Interval;
-    /** @var string|null */
-    protected $TimeframeRange;
-    /** @var TimeframeTimeFrame[]|Timeframe[]|null */
-    protected $Timeframes;
-    // @codingStandardsIgnoreEnd
+    #[ResponseProp(optionalFor: [TimeframeServiceInterface::class])]
+    protected string|null $City = null;
 
-    /**
-     * Timeframe constructor.
-     *
-     * @param string|null      $city
-     * @param string|null      $countryCode
-     * @param string|null      $date
-     * @param string|null      $endDate
-     * @param string|null      $houseNr
-     * @param string|null      $houseNrExt
-     * @param array|null       $options
-     * @param string|null      $postalCode
-     * @param string|null      $street
-     * @param string|null      $sundaySorting
-     * @param string|null      $interval
-     * @param string|null      $range
-     * @param Timeframe[]|null $timeframes
-     */
+    #[ResponseProp(optionalFor: [TimeframeServiceInterface::class])]
+    protected string|null $CountryCode = null;
+
+    #[ResponseProp(requiredFor: [TimeframeServiceInterface::class])]
+    protected string|null $Date = null;
+
+    #[ResponseProp(optionalFor: [TimeframeServiceInterface::class])]
+    protected string|null $EndDate = null;
+
+    #[ResponseProp(optionalFor: [TimeframeServiceInterface::class])]
+    protected string|null $HouseNr = null;
+
+    #[ResponseProp(optionalFor: [TimeframeServiceInterface::class])]
+    protected string|null $HouseNrExt = null;
+
+    #[ResponseProp(optionalFor: [TimeframeServiceInterface::class])]
+    protected array|null $Options = null;
+
+    #[ResponseProp(optionalFor: [TimeframeServiceInterface::class])]
+    protected string|null $PostalCode = null;
+
+    #[ResponseProp(optionalFor: [TimeframeServiceInterface::class])]
+    protected string|null $Street = null;
+
+    #[ResponseProp(optionalFor: [TimeframeServiceInterface::class])]
+    protected bool|null $SundaySorting = false;
+
+    #[ResponseProp(optionalFor: [TimeframeServiceInterface::class])]
+    protected string|null $Interval = null;
+
+    #[ResponseProp(optionalFor: [TimeframeServiceInterface::class])]
+    protected string|null $Range = null;
+
+    /** @psalm-var list<TimeframeTimeFrame>|null  */
+    #[ResponseProp(requiredFor: [TimeframeServiceInterface::class])]
+    protected array|null $Timeframes = null;
+
     public function __construct(
-        $city = null,
-        $countryCode = null,
-        $date = null,
-        $endDate = null,
-        $houseNr = null,
-        $houseNrExt = null,
-        array $options = [],
-        $postalCode = null,
-        $street = null,
-        $sundaySorting = 'false',
-        $interval = null,
-        $range = null,
-        array $timeframes = null
-    ) {
-        parent::__construct();
+        #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
+        string $service = '',
+        #[ExpectedValues(values: PropInterface::PROP_TYPES + [''])]
+        string $propType = '',
 
-        $this->setCity($city);
-        $this->setCountryCode($countryCode);
-        $this->setDate($date);
-        $this->setEndDate($endDate);
-        $this->setHouseNr($houseNr);
-        $this->setHouseNrExt($houseNrExt);
-        $this->setOptions($options);
-        $this->setPostalCode($postalCode);
-        $this->setStreet($street);
-        $this->setSundaySorting($sundaySorting);
-        $this->setInterval($interval);
-        $this->setTimeframeRange($range);
-        $this->setTimeframes($timeframes);
+        string|null $City = null,
+        string|null $CountryCode = null,
+        string|null $Date = null,
+        string|null $EndDate = null,
+        string|null $HouseNr = null,
+        string|null $HouseNrExt = null,
+        array|null $Options = null,
+        string|null $PostalCode = null,
+        string|null $Street = null,
+        bool|string|null $SundaySorting = null,
+        string|null $Interval = null,
+        string|null $Range = null,
+        /** @psalm-param list<TimeframeTimeFrame>|array|null */
+        array|null $Timeframes = null,
+    ) {
+        parent::__construct(service: $service, propType: $propType);
+
+        $this->setCity(City: $City);
+        $this->setCountryCode(CountryCode: $CountryCode);
+        $this->setDate(Date: $Date);
+        $this->setEndDate(EndDate: $EndDate);
+        $this->setHouseNr(HouseNr: $HouseNr);
+        $this->setHouseNrExt(HouseNrExt: $HouseNrExt);
+        $this->setOptions(Options: $Options);
+        $this->setPostalCode(PostalCode: $PostalCode);
+        $this->setStreet(Street: $Street);
+        $this->setSundaySorting(SundaySorting: $SundaySorting);
+        $this->setInterval(interaval: $Interval);
+        $this->setRange(Range: $Range);
+        $this->setTimeframes(Timeframes: $Timeframes);
     }
 
-    /**
-     * Set the postcode.
-     *
-     * @param string|null $postcode
-     *
-     * @return $this
-     */
-    public function setPostalCode($postcode = null)
+    public function getPostalCode(): string|null
     {
-        if (is_null($postcode)) {
+        return $this->PostalCode;
+    }
+
+    public function setPostalCode(string|null $PostalCode = null): static
+    {
+        if (is_null(value: $PostalCode)) {
             $this->PostalCode = null;
         } else {
-            $this->PostalCode = strtoupper(str_replace(' ', '', $postcode));
+            $this->PostalCode = strtoupper(string: str_replace(search: ' ', replace: '', subject: $PostalCode));
         }
 
         return $this;
     }
 
-    /**
-     * Return a serializable array for `json_encode`.
-     *
-     * @return array
-     */
-    public function jsonSerialize()
+    public function getCity(): string|null
     {
-        $json = [];
-        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
-            return $json;
+        return $this->City;
+    }
+
+    public function setCity(string|null $City = null): static
+    {
+        $this->City = $City;
+
+        return $this;
+    }
+
+    public function getCountryCode(): string|null
+    {
+        return $this->CountryCode;
+    }
+
+    public function setCountryCode(string|null $CountryCode = null): static
+    {
+        $this->CountryCode = $CountryCode;
+
+        return $this;
+    }
+
+    public function getDate(): string|null
+    {
+        return $this->Date;
+    }
+
+    public function setDate(string|null $Date = null): static
+    {
+        $this->Date = $Date;
+
+        return $this;
+    }
+
+    public function getEndDate(): string|null
+    {
+        return $this->EndDate;
+    }
+
+    public function setEndDate(string|null $EndDate = null): static
+    {
+        $this->EndDate = $EndDate;
+
+        return $this;
+    }
+
+    public function getHouseNr(): string|null
+    {
+        return $this->HouseNr;
+    }
+
+    public function setHouseNr(string|null $HouseNr = null): static
+    {
+        $this->HouseNr = $HouseNr;
+
+        return $this;
+    }
+
+    public function getHouseNrExt(): string|null
+    {
+        return $this->HouseNrExt;
+    }
+
+    public function setHouseNrExt(string|null $HouseNrExt = null): static
+    {
+        $this->HouseNrExt = $HouseNrExt;
+
+        return $this;
+    }
+
+    public function getOptions(): array|null
+    {
+        return $this->Options;
+    }
+
+    public function setOptions(array|null $Options = null): static
+    {
+        $this->Options = $Options;
+
+        return $this;
+    }
+
+    public function getStreet(): string|null
+    {
+        return $this->Street;
+    }
+
+    public function setStreet(string|null $Street = null): static
+    {
+        $this->Street = $Street;
+
+        return $this;
+    }
+
+    public function getSundaySorting(): bool|null
+    {
+        return $this->SundaySorting;
+    }
+
+    public function setSundaySorting(bool|string|null $SundaySorting = null): static
+    {
+        if (is_string(value: $SundaySorting)) {
+            $SundaySorting = match ($SundaySorting) {
+                'true'  => true,
+                'false' => false,
+                default => null,
+            };
         }
 
-        foreach (array_keys(static::$defaultProperties[$this->currentService]) as $propertyName) {
-            if (isset($this->{$propertyName})) {
-                if ('Options' === $propertyName) {
-                    $json[$propertyName] = $this->{$propertyName};
-                } elseif ('Timeframes' === $propertyName) {
-                    $timeframes = [];
-                    foreach ($this->Timeframes as $timeframe) {
-                        $timeframes[] = $timeframe;
-                    }
-                    $json['Timeframes'] = ['TimeframeTimeFrame' => $timeframes];
-                } elseif ('SundaySorting' === $propertyName) {
-                    if (isset($this->{$propertyName})) {
-                        if (is_bool($this->{$propertyName})) {
-                            $value = $this->{$propertyName} ? 'true' : 'false';
-                        } else {
-                            $value = $this->{$propertyName};
-                        }
+        $this->SundaySorting = $SundaySorting;
 
-                        $json[$propertyName] = $value;
-                    }
-                } else {
-                    $json[$propertyName] = $this->{$propertyName};
-                }
-            }
-        }
+        return $this;
+    }
 
-        return $json;
+    public function getInterval(): string|null
+    {
+        return $this->Interval;
+    }
+
+    public function setInterval(string|null $interaval = null): static
+    {
+        $this->Interval = $interaval;
+
+        return $this;
+    }
+
+    public function getRange(): string|null
+    {
+        return $this->Range;
+    }
+
+    public function setRange(string|null $Range = null): static
+    {
+        $this->Range = $Range;
+
+        return $this;
+    }
+
+    public function getTimeframes(): array|null
+    {
+        return $this->Timeframes;
     }
 
     /**
-     * Return a serializable array for the XMLWriter.
-     *
-     * @param Writer $writer
-     *
-     * @return void
+     * @psalm-param list<TimeframeTimeFrame>|array{Timeframes: array<array-key, array>}|null $Timeframes
      *
      * @throws InvalidArgumentException
      */
-    public function xmlSerialize(Writer $writer)
+    public function setTimeframes(array|null $Timeframes = null): static
     {
-        $xml = [];
-        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
-            throw new InvalidArgumentException('Service not set before serialization');
-        }
-
-        foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if ('SundaySorting' === $propertyName) {
-                if (isset($this->SundaySorting)) {
-                    if (is_bool($this->SundaySorting)) {
-                        $xml["{{$namespace}}SundaySorting"] = $this->SundaySorting ? 'true' : 'false';
-                    } else {
-                        $xml["{{$namespace}}SundaySorting"] = $this->SundaySorting;
-                    }
-                }
-            } elseif ('Options' === $propertyName) {
-                if (isset($this->Options)) {
-                    $options = [];
-                    foreach ($this->Options as $option) {
-                        $options[] = ['{http://schemas.microsoft.com/2003/10/Serialization/Arrays}string' => $option];
-                    }
-                    $xml["{{$namespace}}Options"] = $options;
-                }
-            } elseif (isset($this->{$propertyName})) {
-                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
+        if (!empty($Timeframes['Timeframes']) && !$Timeframes['Timeframes'] instanceof TimeframeTimeFrame) {
+            $newTimeframes = [];
+            foreach ($Timeframes['Timeframes'] as $idx => $timeframeTimeFrame) {
+                $timeframeTimeFrame['service'] = $this->service;
+                $timeframeTimeFrame['propType'] = $this->propType;
+                /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+                $timeframeTimeFrame['Timeframes'][$idx] = new TimeframeTimeFrame(...$timeframeTimeFrame);
             }
+            $Timeframes = $newTimeframes;
         }
 
-        $writer->write($xml);
+        $this->Timeframes = $Timeframes;
+
+        return $this;
     }
 }

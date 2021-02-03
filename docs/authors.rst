@@ -1,5 +1,5 @@
 Authors
 -----------
 
-* `Michael Dekker <https://github.com/firstred>`_ <michael@thirtybees.com> (maintainer)
+* `Michael Dekker <https://github.com/firstred>`_ <git@michaeldekker.nl> (maintainer)
 * `niccifor <https://github.com/niccifor>`_ (contributor)

@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,77 +20,57 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- * @copyright 2017-2020 Michael Dekker
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity;
+declare(strict_types=1);
 
-use ThirtyBees\PostNL\Service\BarcodeService;
-use ThirtyBees\PostNL\Service\ConfirmingService;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
-use ThirtyBees\PostNL\Service\LabellingService;
-use ThirtyBees\PostNL\Service\LocationService;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
-use ThirtyBees\PostNL\Service\TimeframeService;
+namespace Firstred\PostNL\Entity;
 
-/**
- * Class Expectation.
- *
- * @method string|null getETAFrom()
- * @method string|null getETATo()
- * @method Expectation setETAFrom(string|null $dateTime = null)
- * @method Expectation setETATo(string|null $dateTime = null)
- */
-class Expectation extends AbstractEntity
+use Firstred\PostNL\Attribute\PropInterface;
+use Firstred\PostNL\Misc\SerializableObject;
+use Firstred\PostNL\Service\ServiceInterface;
+use JetBrains\PhpStorm\ExpectedValues;
+
+class Expectation extends SerializableObject
 {
-    /** @var string[][] */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'ETAFrom' => BarcodeService::DOMAIN_NAMESPACE,
-            'ETATo'   => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'ETAFrom' => ConfirmingService::DOMAIN_NAMESPACE,
-            'ETATo'   => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'ETAFrom' => LabellingService::DOMAIN_NAMESPACE,
-            'ETATo'   => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'ETAFrom' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'ETATo'   => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'ETAFrom' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'ETATo'   => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'ETAFrom' => LocationService::DOMAIN_NAMESPACE,
-            'ETATo'   => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'ETAFrom' => TimeframeService::DOMAIN_NAMESPACE,
-            'ETATo'   => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null */
-    protected $ETAFrom;
-    /** @var string|null */
-    protected $ETATo;
-    // @codingStandardsIgnoreEnd
+    public function __construct(
+        #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
+        string $service = '',
+        #[ExpectedValues(values: PropInterface::PROP_TYPES + [''])]
+        string $propType = '',
 
-    /**
-     * @param string $from
-     * @param string $to
-     */
-    public function __construct($from = null, $to = null)
+        protected string|null $ETAFrom = null,
+        protected string|null $ETATo = null,
+    ) {
+        parent::__construct(service: $service, propType: $propType);
+
+        $this->setETAFrom(ETAFrom: $ETAFrom);
+        $this->setETATo(ETATo: $ETATo);
+    }
+
+    public function getETAFrom(): string|null
     {
-        parent::__construct();
+        return $this->ETAFrom;
+    }
 
-        $this->setETAFrom($from);
-        $this->setETATo($to);
+    public function setETAFrom(string|null $ETAFrom = null): static
+    {
+        $this->ETAFrom = $ETAFrom;
+
+        return $this;
+    }
+
+    public function getETATo(): string|null
+    {
+        return $this->ETATo;
+    }
+
+    public function setETATo(string|null $ETATo = null): static
+    {
+        $this->ETATo = $ETATo;
+
+        return $this;
     }
 }

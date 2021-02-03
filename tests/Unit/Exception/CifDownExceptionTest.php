@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -21,16 +22,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- * @copyright 2017-2020 Michael Dekker
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Tests\Unit\Exception;
+namespace Firstred\PostNL\Tests\Unit\Exception;
 
+use Firstred\PostNL\Exception\CifDownException;
+use Firstred\PostNL\Service\AbstractService;
 use Http\Discovery\Psr17FactoryDiscovery;
 use PHPUnit\Framework\TestCase;
-use ThirtyBees\PostNL\Exception\CifDownException;
-use ThirtyBees\PostNL\Service\AbstractService;
 
 /**
  * Class CifDownExceptionTest.
@@ -49,11 +50,11 @@ class CifDownExceptionTest extends TestCase
         $responseFactory = Psr17FactoryDiscovery::findResponseFactory();
         $streamFactory = Psr17FactoryDiscovery::findStreamFactory();
 
-        $response = $responseFactory->createResponse(500, 'Internal Server Error')
+        $response = $responseFactory->createResponse(code: 500, reasonPhrase: 'Internal Server Error')
             ->withBody(
-                $streamFactory->createStream(
-                    json_encode(
-                        [
+                body: $streamFactory->createStream(
+                    content: json_encode(
+                        value: [
                             'Envelope' => ['Body' => ['Fault' => ['Reason' => ['Text' => ['' => 'error']]]]],
                         ]
                     )
@@ -72,16 +73,16 @@ class CifDownExceptionTest extends TestCase
     {
         $this->markTestSkipped();
 
-        $this->expectException(CifDownException::class);
+        $this->expectException(exception: CifDownException::class);
 
         $responseFactory = Psr17FactoryDiscovery::findResponseFactory();
         $streamFactory = Psr17FactoryDiscovery::findStreamFactory();
 
-        $response = $responseFactory->createResponse(500, 'Internal Server Error')
+        $response = $responseFactory->createResponse(code: 500, reasonPhrase: 'Internal Server Error')
             ->withBody(
-                $streamFactory->createStream(
-                    json_encode(
-                        [
+                body: $streamFactory->createStream(
+                    content: json_encode(
+                        value: [
                             'Errors' => [
                                 'Error' => [
                                     [

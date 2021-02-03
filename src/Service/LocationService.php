@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,46 +20,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- * @copyright 2017-2020 Michael Dekker
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Service;
+declare(strict_types=1);
 
+namespace Firstred\PostNL\Service;
+
+use Firstred\PostNL\Entity\Coordinates;
+use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Entity\JsonSerializableObject;
+use Firstred\PostNL\Entity\Request\GetLocation;
+use Firstred\PostNL\Entity\Request\GetLocationsInArea;
+use Firstred\PostNL\Entity\Request\GetNearestLocations;
+use Firstred\PostNL\Entity\Response\GetLocationsInAreaResponse;
+use Firstred\PostNL\Entity\Response\GetNearestLocationsResponse;
+use Firstred\PostNL\Exception\ApiException;
+use Firstred\PostNL\Exception\CifDownException;
+use Firstred\PostNL\Exception\CifException;
+use Firstred\PostNL\Exception\ResponseException;
+use function GuzzleHttp\Psr7\parse_response;
+use function GuzzleHttp\Psr7\str;
 use Http\Discovery\Psr17FactoryDiscovery;
+use InvalidArgumentException;
 use Psr\Cache\CacheItemInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Sabre\Xml\LibXMLException;
-use Sabre\Xml\Reader;
-use Sabre\Xml\Service as XmlService;
-use ThirtyBees\PostNL\Entity\AbstractEntity;
-use ThirtyBees\PostNL\Entity\Coordinates;
-use ThirtyBees\PostNL\Entity\Request\GetLocation;
-use ThirtyBees\PostNL\Entity\Request\GetLocationsInArea;
-use ThirtyBees\PostNL\Entity\Request\GetNearestLocations;
-use ThirtyBees\PostNL\Entity\Response\GetLocationsInAreaResponse;
-use ThirtyBees\PostNL\Entity\Response\GetNearestLocationsResponse;
-use ThirtyBees\PostNL\Entity\SOAP\Security;
-use ThirtyBees\PostNL\Exception\ApiException;
-use ThirtyBees\PostNL\Exception\CifDownException;
-use ThirtyBees\PostNL\Exception\CifException;
-use ThirtyBees\PostNL\Exception\ResponseException;
 
-/**
- * Class LocationService.
- *
- * @method GetNearestLocationsResponse getNearestLocations(GetNearestLocations $getNearestLocations)
- * @method RequestInterface                     buildGetNearestLocationsRequest(GetNearestLocations $getNearestLocations)
- * @method GetNearestLocationsResponse processGetNearestLocationsResponse(mixed $response)
- * @method GetLocationsInAreaResponse  getLocationsInArea(GetLocationsInArea $getLocationsInArea)
- * @method RequestInterface                     buildGetLocationsInAreaRequest(GetLocationsInArea $getLocationsInArea)
- * @method GetLocationsInAreaResponse  processGetLocationsInAreaResponse(mixed $response)
- * @method GetLocationsInAreaResponse  getLocation(GetLocation $getLocation)
- * @method RequestInterface                     buildGetLocationRequest(GetLocation $getLocation)
- * @method GetLocationsInAreaResponse  processGetLocationResponse(mixed $response)
- */
-class LocationService extends AbstractService
+class LocationService implements LocationServiceInterface
 {
     // API Version
     const VERSION = '2.1';
@@ -67,31 +56,6 @@ class LocationService extends AbstractService
     // Endpoints
     const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v2_1/locations';
     const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2_1/locations';
-    const LEGACY_SANDBOX_ENDPOINT = 'https://testservice.postnl.com/CIF_SB/LocationWebService/2_1/LocationWebService.svc';
-    const LEGACY_LIVE_ENDPOINT = 'https://service.postnl.com/CIF/LocationWebService/2_1/LocationWebService.svc';
-
-    // SOAP API
-    const SOAP_ACTION = 'http://postnl.nl/cif/services/LocationWebService/ILocationWebService/GetNearestLocations';
-    const SOAP_ACTION_LOCATIONS_IN_AREA = 'http://postnl.nl/cif/services/LocationWebService/ILocationWebService/GetLocationsInArea';
-    const SOAP_ACTION_LOCATION = 'http://postnl.nl/cif/services/LocationWebService/ILocationWebService/GetLocation';
-    const SERVICES_NAMESPACE = 'http://postnl.nl/cif/services/LocationWebService/';
-    const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/LocationWebService/';
-
-    /**
-     * Namespaces uses for the SOAP version of this service.
-     *
-     * @var array
-     */
-    public static $namespaces = [
-        self::ENVELOPE_NAMESPACE                                    => 'soap',
-        self::OLD_ENVELOPE_NAMESPACE                                => 'env',
-        self::SERVICES_NAMESPACE                                    => 'services',
-        self::DOMAIN_NAMESPACE                                      => 'domain',
-        Security::SECURITY_NAMESPACE                                => 'wsse',
-        self::XML_SCHEMA_NAMESPACE                                  => 'schema',
-        self::COMMON_NAMESPACE                                      => 'common',
-        'http://schemas.microsoft.com/2003/10/Serialization/Arrays' => 'arr',
-    ];
 
     /**
      * Get the nearest locations via REST.
@@ -106,80 +70,36 @@ class LocationService extends AbstractService
      * @throws \Exception
      * @throws ResponseException
      */
-    public function getNearestLocationsREST(GetNearestLocations $getNearestLocations)
+    public function getNearestLocations(GetNearestLocations $getNearestLocations)
     {
-        $item = $this->retrieveCachedItem($getNearestLocations->getId());
+        $item = $this->retrieveCachedItem(uuid: $getNearestLocations->getId());
         $response = null;
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\parse_response($response);
-            } catch (\InvalidArgumentException $e) {
+                $response = parse_response(message: $response);
+            } catch (InvalidArgumentException) {
             }
         }
         if (!$response instanceof ResponseInterface) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetNearestLocationsRequestREST($getNearestLocations));
-            static::validateRESTResponse($response);
+            $response = $this->postnl->getHttpClient()->doRequest(request: $this->buildGetNearestLocationsRequestREST(getNearestLocations: $getNearestLocations));
+            static::validateRESTResponse(response: $response);
         }
 
-        $object = $this->processGetNearestLocationsResponseREST($response);
+        $object = $this->processGetNearestLocationsResponseREST(response: $response);
         if ($object instanceof GetNearestLocationsResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
-                $item->set(\GuzzleHttp\Psr7\str($response));
-                $this->cacheItem($item);
+                $item->set(value: str(message: $response));
+                $this->cacheItem(item: $item);
             }
 
             return $object;
         }
 
         throw new ApiException('Unable to retrieve the nearest locations');
-    }
-
-    /**
-     * Get the nearest locations via SOAP.
-     *
-     * @param GetNearestLocations $getNearestLocations
-     *
-     * @return GetNearestLocationsResponse
-     *
-     * @throws ApiException
-     * @throws CifDownException
-     * @throws CifException
-     * @throws LibXMLException
-     * @throws ResponseException
-     */
-    public function getNearestLocationsSOAP(GetNearestLocations $getNearestLocations)
-    {
-        $item = $this->retrieveCachedItem($getNearestLocations->getId());
-        $response = null;
-        if ($item instanceof CacheItemInterface) {
-            $response = $item->get();
-            try {
-                $response = \GuzzleHttp\Psr7\parse_response($response);
-            } catch (\InvalidArgumentException $e) {
-            }
-        }
-        if (!$response instanceof ResponseInterface) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetNearestLocationsRequestSOAP($getNearestLocations));
-        }
-
-        $object = $this->processGetNearestLocationsResponseSOAP($response);
-        if ($object instanceof GetNearestLocationsResponse) {
-            if ($item instanceof CacheItemInterface
-                && $response instanceof ResponseInterface
-                && 200 === $response->getStatusCode()
-            ) {
-                $item->set(\GuzzleHttp\Psr7\str($response));
-                $this->cacheItem($item);
-            }
-
-            return $object;
-        }
-
-        throw new ApiException('Unable to retrieve nearest locations');
     }
 
     /**
@@ -194,81 +114,36 @@ class LocationService extends AbstractService
      * @throws CifException
      * @throws ResponseException
      */
-    public function getLocationsInAreaREST(GetLocationsInArea $getLocations)
+    public function getLocationsInArea(GetLocationsInArea $getLocations)
     {
-        $item = $this->retrieveCachedItem($getLocations->getId());
+        $item = $this->retrieveCachedItem(uuid: $getLocations->getId());
         $response = null;
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\parse_response($response);
-            } catch (\InvalidArgumentException $e) {
+                $response = parse_response(message: $response);
+            } catch (InvalidArgumentException $e) {
             }
         }
         if (!$response instanceof ResponseInterface) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetLocationsInAreaRequest($getLocations));
-            static::validateRESTResponse($response);
+            $response = $this->postnl->getHttpClient()->doRequest(request: $this->buildGetLocationsInAreaRequest(getLocations: $getLocations));
+            static::validateRESTResponse(response: $response);
         }
 
-        $object = $this->processGetLocationsInAreaResponseREST($response);
+        $object = $this->processGetLocationsInAreaResponseREST(response: $response);
         if ($object instanceof GetLocationsInAreaResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
-                $item->set(\GuzzleHttp\Psr7\str($response));
-                $this->cacheItem($item);
+                $item->set(value: str(message: $response));
+                $this->cacheItem(item: $item);
             }
 
             return $object;
         }
 
         throw new ApiException('Unable to retrieve the nearest locations');
-    }
-
-    /**
-     * Get the nearest locations via SOAP.
-     *
-     * @param GetLocationsInArea $getNearestLocations
-     *
-     * @return GetLocationsInAreaResponse
-     *
-     * @throws ApiException
-     * @throws CifDownException
-     * @throws CifException
-     * @throws LibXMLException
-     * @throws ResponseException
-     */
-    public function getLocationsInAreaSOAP(GetLocationsInArea $getNearestLocations)
-    {
-        $item = $this->retrieveCachedItem($getNearestLocations->getId());
-        $response = null;
-        if ($item instanceof CacheItemInterface) {
-            $response = $item->get();
-            try {
-                $response = \GuzzleHttp\Psr7\parse_response($response);
-            } catch (\InvalidArgumentException $e) {
-            }
-        }
-
-        if (!$response instanceof ResponseInterface) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetLocationsInAreaRequestSOAP($getNearestLocations));
-        }
-
-        $object = $this->processGetLocationsInAreaResponseSOAP($response);
-        if ($object instanceof GetLocationsInAreaResponse) {
-            if ($item instanceof CacheItemInterface
-                && $response instanceof ResponseInterface
-                && 200 === $response->getStatusCode()
-            ) {
-                $item->set(\GuzzleHttp\Psr7\str($response));
-                $this->cacheItem($item);
-            }
-
-            return $object;
-        }
-
-        throw new ApiException('Unable to retrieve locations in area');
     }
 
     /**
@@ -283,30 +158,30 @@ class LocationService extends AbstractService
      * @throws CifException
      * @throws ResponseException
      */
-    public function getLocationREST(GetLocation $getLocation)
+    public function getLocation(GetLocation $getLocation)
     {
-        $item = $this->retrieveCachedItem($getLocation->getId());
+        $item = $this->retrieveCachedItem(uuid: $getLocation->getId());
         $response = null;
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\parse_response($response);
-            } catch (\InvalidArgumentException $e) {
+                $response = parse_response(message: $response);
+            } catch (InvalidArgumentException $e) {
             }
         }
         if (!$response instanceof ResponseInterface) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetLocationRequestREST($getLocation));
-            static::validateRESTResponse($response);
+            $response = $this->postnl->getHttpClient()->doRequest(request: $this->buildGetLocationRequestREST(getLocation: $getLocation));
+            static::validateRESTResponse(response: $response);
         }
 
-        $object = $this->processGetLocationResponseREST($response);
+        $object = $this->processGetLocationResponseREST(response: $response);
         if ($object instanceof GetLocationsInAreaResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
-                $item->set(\GuzzleHttp\Psr7\str($response));
-                $this->cacheItem($item);
+                $item->set(value: str(message: $response));
+                $this->cacheItem(item: $item);
             }
 
             return $object;
@@ -316,62 +191,18 @@ class LocationService extends AbstractService
     }
 
     /**
-     * Get the nearest locations via SOAP.
-     *
-     * @param GetLocation $getLocation
-     *
-     * @return GetLocationsInAreaResponse
-     *
-     * @throws ApiException
-     * @throws CifDownException
-     * @throws CifException
-     * @throws LibXMLException
-     * @throws ResponseException
-     */
-    public function getLocationSOAP(GetLocation $getLocation)
-    {
-        $item = $this->retrieveCachedItem($getLocation->getId());
-        $response = null;
-        if ($item instanceof CacheItemInterface) {
-            $response = $item->get();
-            try {
-                $response = \GuzzleHttp\Psr7\parse_response($response);
-            } catch (\InvalidArgumentException $e) {
-            }
-        }
-        if (!$response instanceof ResponseInterface) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetLocationRequestSOAP($getLocation));
-        }
-
-        $object = $this->processGetLocationResponseSOAP($response);
-        if ($object instanceof GetLocationsInAreaResponse) {
-            if ($item instanceof CacheItemInterface
-                && $response instanceof ResponseInterface
-                && 200 === $response->getStatusCode()
-            ) {
-                $item->set(\GuzzleHttp\Psr7\str($response));
-                $this->cacheItem($item);
-            }
-
-            return $object;
-        }
-
-        throw new ApiException('Unable to retrieve locations in area');
-    }
-
-    /**
      * Build the GenerateLabel request for the REST API.
      *
      * @param GetNearestLocations $getNearestLocations
      *
      * @return RequestInterface
      */
-    public function buildGetNearestLocationsRequestREST(GetNearestLocations $getNearestLocations)
+    public function buildGetNearestLocationsRequest(GetNearestLocations $getNearestLocations)
     {
         $endpoint = '/nearest';
         $location = $getNearestLocations->getLocation();
         $apiKey = $this->postnl->getRestApiKey();
-        $this->setService($getNearestLocations);
+        $this->setService(object: $getNearestLocations);
         $query = [
             'CountryCode' => $getNearestLocations->getCountrycode(),
             'PostalCode'  => $location->getPostalcode(),
@@ -385,11 +216,11 @@ class LocationService extends AbstractService
         if ($houseNumber = $location->getHouseNr()) {
             $query['HouseNumber'] = $houseNumber;
         }
-        if ($deliveryDate = $location->getDeliveryDate()) {
-            $query['DeliveryDate'] = date('d-m-Y', strtotime($deliveryDate));
+        if ($deliveryDate = $location->calculateDeliveryDate()) {
+            $query['DeliveryDate'] = date(format: 'd-m-Y', timestamp: strtotime(datetime: $deliveryDate));
         }
         if ($openingTime = $location->getOpeningTime()) {
-            $query['OpeningTime'] = date('H:i:00', strtotime($openingTime));
+            $query['OpeningTime'] = date(format: 'H:i:00', timestamp: strtotime(datetime: $openingTime));
         }
         if ($location->getCoordinates() instanceof Coordinates) {
             $endpoint .= '/geocode';
@@ -402,7 +233,7 @@ class LocationService extends AbstractService
         }
         if ($deliveryOptions = $location->getDeliveryOptions()) {
             foreach ($deliveryOptions as $option) {
-                if (!array_key_exists('DeliveryOptions', $query)) {
+                if (!array_key_exists(key: 'DeliveryOptions', array: $query)) {
                     $query['DeliveryOptions'] = $option;
                 } else {
                     $query['DeliveryOptions'] .= ','.$option;
@@ -412,14 +243,14 @@ class LocationService extends AbstractService
             $query['DeliveryOptions'] = 'PG';
         }
 
-        $endpoint .= '?'.http_build_query($query);
+        $endpoint .= '?'.http_build_query(data: $query);
 
         return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
-            'GET',
-            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint
+            method: 'GET',
+            uri: ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint
         )
-            ->withHeader('apikey', $apiKey)
-            ->withHeader('Accept', 'application/json');
+            ->withHeader(name: 'apikey', value: $apiKey)
+            ->withHeader(name: 'Accept', value: 'application/json');
     }
 
     /**
@@ -431,12 +262,12 @@ class LocationService extends AbstractService
      *
      * @throws ResponseException
      */
-    public function processGetNearestLocationsResponseREST($response)
+    public function processGetNearestLocationsResponse($response)
     {
-        $body = @json_decode(static::getResponseText($response), true);
-        if (is_array($body)) {
+        $body = @json_decode(json: static::getResponseText(response: $response), associative: true);
+        if (is_array(value: $body)) {
             if (isset($body['GetLocationsResult']['ResponseLocation'])
-                && is_array($body['GetLocationsResult']['ResponseLocation'])
+                && is_array(value: $body['GetLocationsResult']['ResponseLocation'])
             ) {
                 if (isset($body['GetLocationsResult']['ResponseLocation']['Address'])) {
                     $body['GetLocationsResult']['ResponseLocation'] = [$body['GetLocationsResult']['ResponseLocation']];
@@ -445,7 +276,7 @@ class LocationService extends AbstractService
                 $newLocations = [];
                 foreach ($body['GetLocationsResult']['ResponseLocation'] as $location) {
                     if (isset($location['Address'])) {
-                        $location['Address'] = AbstractEntity::jsonDeserialize(['Address' => $location['Address']]);
+                        $location['Address'] = JsonSerializableObject::jsonDeserialize(json: ['Address' => $location['Address']]);
                     }
 
                     if (isset($location['DeliveryOptions']['string'])) {
@@ -459,110 +290,22 @@ class LocationService extends AbstractService
                             }
                         }
 
-                        $location['OpeningHours'] = AbstractEntity::jsonDeserialize(['OpeningHours' => $location['OpeningHours']]);
+                        $location['OpeningHours'] = JsonSerializableObject::jsonDeserialize(json: ['OpeningHours' => $location['OpeningHours']]);
                     }
 
-                    $newLocations[] = AbstractEntity::jsonDeserialize(['ResponseLocation' => $location]);
+                    $newLocations[] = JsonSerializableObject::jsonDeserialize(json: ['ResponseLocation' => $location]);
                 }
                 $body['GetLocationsResult'] = $newLocations;
             }
 
             /** @var GetNearestLocationsResponse $object */
-            $object = AbstractEntity::jsonDeserialize(['GetNearestLocationsResponse' => $body]);
-            $this->setService($object);
+            $object = JsonSerializableObject::jsonDeserialize(json: ['GetNearestLocationsResponse' => $body]);
+            $this->setService(object: $object);
 
             return $object;
         }
 
         return null;
-    }
-
-    /**
-     * Build the GenerateLabel request for the SOAP API.
-     *
-     * @param GetNearestLocations $getLocations
-     *
-     * @return RequestInterface
-     */
-    public function buildGetNearestLocationsRequestSOAP(GetNearestLocations $getLocations)
-    {
-        $soapAction = static::SOAP_ACTION;
-        $xmlService = new XmlService();
-        foreach (static::$namespaces as $namespace => $prefix) {
-            $xmlService->namespaceMap[$namespace] = $prefix;
-        }
-        $security = new Security($this->postnl->getToken());
-
-        $this->setService($security);
-        $this->setService($getLocations);
-
-        $request = $xmlService->write(
-            '{'.static::ENVELOPE_NAMESPACE.'}Envelope',
-            [
-                '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
-                    ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
-                ],
-                '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
-                    '{'.static::SERVICES_NAMESPACE.'}GetNearestLocations' => $getLocations,
-                ],
-            ]
-        );
-
-        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
-            'POST',
-            $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT
-        )
-            ->withHeader('SOAPAction', "\"$soapAction\"")
-            ->withHeader('Accept', 'text/xml')
-            ->withHeader('Content-Type', 'text/xml;charset=UTF-8')
-            ->withBody(Psr17FactoryDiscovery::findStreamFactory()->createStream($request));
-    }
-
-    /**
-     * Process GetNearestLocations Response SOAP.
-     *
-     * @param ResponseInterface $response
-     *
-     * @return GetNearestLocationsResponse
-     *
-     * @throws CifDownException
-     * @throws CifException
-     * @throws LibXMLException
-     * @throws ResponseException
-     */
-    public function processGetNearestLocationsResponseSOAP(ResponseInterface $response)
-    {
-        $xml = @simplexml_load_string(static::getResponseText($response));
-
-        static::registerNamespaces($xml);
-        static::validateSOAPResponse($xml);
-
-        $reader = new Reader();
-        $reader->xml(static::getResponseText($response));
-        $array = array_values($reader->parse()['value'][0]['value']);
-        foreach ($array[0]['value'][0]['value'] as &$responseLocation) {
-            foreach ($responseLocation['value'] as &$item) {
-                if (false !== strpos($item['name'], 'DeliveryOptions')) {
-                    $newDeliveryOptions = [];
-                    foreach ($item['value'] as $option) {
-                        $newDeliveryOptions[] = $option['value'];
-                    }
-
-                    $item['value'] = $newDeliveryOptions;
-                } elseif (false !== strpos($item['name'], 'OpeningHours')) {
-                    foreach ($item['value'] as &$openingHour) {
-                        $openingHour['value'] = $openingHour['value'][0]['value'];
-                    }
-                }
-            }
-        }
-        $array = $array[0];
-
-        /** @var GetNearestLocationsResponse $object */
-        $object = AbstractEntity::xmlDeserialize($array);
-        $this->setService($object);
-
-        return $object;
     }
 
     /**
@@ -572,11 +315,11 @@ class LocationService extends AbstractService
      *
      * @return RequestInterface
      */
-    public function buildGetLocationsInAreaRequestREST(GetLocationsInArea $getLocations)
+    public function buildGetLocationsInAreaRequest(GetLocationsInArea $getLocations)
     {
         $location = $getLocations->getLocation();
         $apiKey = $this->postnl->getRestApiKey();
-        $this->setService($getLocations);
+        $this->setService(object: $getLocations);
         $query = [
             'LatitudeNorth' => $location->getCoordinatesNorthWest()->getLatitude(),
             'LongitudeWest' => $location->getCoordinatesNorthWest()->getLongitude(),
@@ -586,15 +329,15 @@ class LocationService extends AbstractService
         if ($countryCode = $getLocations->getCountryCode()) {
             $query['CountryCode'] = $countryCode;
         }
-        if ($deliveryDate = $location->getDeliveryDate()) {
-            $query['DeliveryDate'] = date('d-m-Y', strtotime($deliveryDate));
+        if ($deliveryDate = $location->calculateDeliveryDate()) {
+            $query['DeliveryDate'] = date(format: 'd-m-Y', timestamp: strtotime(datetime: $deliveryDate));
         }
         if ($openingTime = $location->getOpeningTime()) {
-            $query['OpeningTime'] = date('H:i:00', strtotime($openingTime));
+            $query['OpeningTime'] = date(format: 'H:i:00', timestamp: strtotime(datetime: $openingTime));
         }
         if ($deliveryOptions = $location->getDeliveryOptions()) {
             foreach ($deliveryOptions as $option) {
-                if (!array_key_exists('DeliveryOptions', $query)) {
+                if (!array_key_exists(key: 'DeliveryOptions', array: $query)) {
                     $query['DeliveryOptions'] = $option;
                 } else {
                     $query['DeliveryOptions'] .= ','.$option;
@@ -603,14 +346,14 @@ class LocationService extends AbstractService
         } else {
             $query['DeliveryOptions'] = 'PG';
         }
-        $endpoint = '/area?'.http_build_query($query);
+        $endpoint = '/area?'.http_build_query(data: $query);
 
         return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
-            'GET',
-            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint
+            method: 'GET',
+            uri: ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint
         )
-            ->withHeader('apikey', $apiKey)
-            ->withHeader('Accept', 'application/json');
+            ->withHeader(name: 'apikey', value: $apiKey)
+            ->withHeader(name: 'Accept', value: 'application/json');
     }
 
     /**
@@ -622,12 +365,12 @@ class LocationService extends AbstractService
      *
      * @throws ResponseException
      */
-    public function processGetLocationsInAreaResponseREST($response)
+    public function processGetLocationsInAreaResponse($response)
     {
-        $body = @json_decode(static::getResponseText($response), true);
-        if (is_array($body)) {
+        $body = @json_decode(json: static::getResponseText(response: $response), associative: true);
+        if (is_array(value: $body)) {
             if (isset($body['GetLocationsResult']['ResponseLocation'])
-                && is_array($body['GetLocationsResult']['ResponseLocation'])
+                && is_array(value: $body['GetLocationsResult']['ResponseLocation'])
             ) {
                 if (isset($body['GetLocationsResult']['ResponseLocation']['Address'])) {
                     $body['GetLocationsResult']['ResponseLocation'] = [$body['GetLocationsResult']['ResponseLocation']];
@@ -636,7 +379,7 @@ class LocationService extends AbstractService
                 $newLocations = [];
                 foreach ($body['GetLocationsResult']['ResponseLocation'] as $location) {
                     if (isset($location['Address'])) {
-                        $location['Address'] = AbstractEntity::jsonDeserialize(['Address' => $location['Address']]);
+                        $location['Address'] = JsonSerializableObject::jsonDeserialize(json: ['Address' => $location['Address']]);
                     }
 
                     if (isset($location['DeliveryOptions']['string'])) {
@@ -650,108 +393,22 @@ class LocationService extends AbstractService
                             }
                         }
 
-                        $location['OpeningHours'] = AbstractEntity::jsonDeserialize(['OpeningHours' => $location['OpeningHours']]);
+                        $location['OpeningHours'] = JsonSerializableObject::jsonDeserialize(json: ['OpeningHours' => $location['OpeningHours']]);
                     }
 
-                    $newLocations[] = AbstractEntity::jsonDeserialize(['ResponseLocation' => $location]);
+                    $newLocations[] = JsonSerializableObject::jsonDeserialize(json: ['ResponseLocation' => $location]);
                 }
                 $body['GetLocationsResult'] = $newLocations;
             }
 
             /** @var GetLocationsInAreaResponse $object */
-            $object = AbstractEntity::jsonDeserialize(['GetLocationsInAreaResponse' => $body]);
-            $this->setService($object);
+            $object = JsonSerializableObject::jsonDeserialize(json: ['GetLocationsInAreaResponse' => $body]);
+            $this->setService(object: $object);
 
             return $object;
         }
 
         return null;
-    }
-
-    /**
-     * Build the GetLocationsInArea request for the SOAP API.
-     *
-     * @param GetLocationsInArea $getLocations
-     *
-     * @return RequestInterface
-     */
-    public function buildGetLocationsInAreaRequestSOAP(GetLocationsInArea $getLocations)
-    {
-        $soapAction = static::SOAP_ACTION_LOCATIONS_IN_AREA;
-        $xmlService = new XmlService();
-        foreach (static::$namespaces as $namespace => $prefix) {
-            $xmlService->namespaceMap[$namespace] = $prefix;
-        }
-        $security = new Security($this->postnl->getToken());
-
-        $this->setService($security);
-        $this->setService($getLocations);
-
-        $request = $xmlService->write(
-            '{'.static::ENVELOPE_NAMESPACE.'}Envelope',
-            [
-                '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
-                    ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
-                ],
-                '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
-                    '{'.static::SERVICES_NAMESPACE.'}GetLocationsInArea' => $getLocations,
-                ],
-            ]
-        );
-
-        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
-            'POST',
-            $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT
-        )
-            ->withHeader('SOAPAction', "\"$soapAction\"")
-            ->withHeader('Accept', 'text/xml')
-            ->withHeader('Content-Type', 'text/xml;charset=UTF-8')
-            ->withBody(Psr17FactoryDiscovery::findStreamFactory()->createStream($request));
-    }
-
-    /**
-     * @param ResponseInterface $response
-     *
-     * @return GetLocationsInAreaResponse
-     *
-     * @throws CifDownException
-     * @throws CifException
-     * @throws LibXMLException
-     * @throws ResponseException
-     */
-    public function processGetLocationsInAreaResponseSOAP(ResponseInterface $response)
-    {
-        $xml = @simplexml_load_string(static::getResponseText($response));
-
-        static::registerNamespaces($xml);
-        static::validateSOAPResponse($xml);
-
-        $reader = new Reader();
-        $reader->xml(static::getResponseText($response));
-        $array = array_values($reader->parse()['value'][0]['value']);
-        foreach ($array[0]['value'][0]['value'] as &$responseLocation) {
-            foreach ($responseLocation['value'] as &$item) {
-                if (false !== strpos($item['name'], 'DeliveryOptions')) {
-                    $newDeliveryOptions = [];
-                    foreach ($item['value'] as $option) {
-                        $newDeliveryOptions[] = $option['value'];
-                    }
-
-                    $item['value'] = $newDeliveryOptions;
-                } elseif (false !== strpos($item['name'], 'OpeningHours')) {
-                    foreach ($item['value'] as &$openingHour) {
-                        $openingHour['value'] = $openingHour['value'][0]['value'];
-                    }
-                }
-            }
-        }
-        $array = $array[0];
-
-        /** @var GetLocationsInAreaResponse $object */
-        $object = AbstractEntity::xmlDeserialize($array);
-        $this->setService($object);
-
-        return $object;
     }
 
     /**
@@ -761,24 +418,24 @@ class LocationService extends AbstractService
      *
      * @return RequestInterface
      */
-    public function buildGetLocationRequestREST(GetLocation $getLocation)
+    public function buildGetLocationRequest(GetLocation $getLocation)
     {
         $apiKey = $this->postnl->getRestApiKey();
-        $this->setService($getLocation);
+        $this->setService(object: $getLocation);
         $query = [
             'LocationCode' => $getLocation->getLocationCode(),
         ];
         if ($id = $getLocation->getRetailNetworkID()) {
             $query['RetailNetworkID'] = $id;
         }
-        $endpoint = '/lookup?'.http_build_query($query);
+        $endpoint = '/lookup?'.http_build_query(data: $query);
 
         return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
-            'GET',
-            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint
+            method: 'GET',
+            uri: ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint
         )
-            ->withHeader('apikey', $apiKey)
-            ->withHeader('Accept', 'application/json');
+            ->withHeader(name: 'apikey', value: $apiKey)
+            ->withHeader(name: 'Accept', value: 'application/json');
     }
 
     /**
@@ -790,10 +447,10 @@ class LocationService extends AbstractService
      *
      * @throws ResponseException
      */
-    public function processGetLocationResponseREST($response)
+    public function processGetLocationResponse($response)
     {
-        $body = @json_decode(static::getResponseText($response), true);
-        if (is_array($body)) {
+        $body = @json_decode(json: static::getResponseText(response: $response), associative: true);
+        if (is_array(value: $body)) {
             if (isset($body['GetLocationsResult']['ResponseLocation']['Address'])) {
                 $body['GetLocationsResult']['ResponseLocation'] = [$body['GetLocationsResult']['ResponseLocation']];
             }
@@ -801,7 +458,7 @@ class LocationService extends AbstractService
             $newLocations = [];
             foreach ($body['GetLocationsResult']['ResponseLocation'] as $location) {
                 if (isset($location['Address'])) {
-                    $location['Address'] = AbstractEntity::jsonDeserialize(['Address' => $location['Address']]);
+                    $location['Address'] = JsonSerializableObject::jsonDeserialize(json: ['Address' => $location['Address']]);
                 }
 
                 if (isset($location['DeliveryOptions']['string'])) {
@@ -815,16 +472,16 @@ class LocationService extends AbstractService
                         }
                     }
 
-                    $location['OpeningHours'] = AbstractEntity::jsonDeserialize(['OpeningHours' => $location['OpeningHours']]);
+                    $location['OpeningHours'] = JsonSerializableObject::jsonDeserialize(json: ['OpeningHours' => $location['OpeningHours']]);
                 }
 
-                $newLocations[] = AbstractEntity::jsonDeserialize(['ResponseLocation' => $location]);
+                $newLocations[] = JsonSerializableObject::jsonDeserialize(json: ['ResponseLocation' => $location]);
             }
             $body['GetLocationsResult'] = $newLocations;
 
             /** @var GetLocationsInAreaResponse $object */
-            $object = AbstractEntity::jsonDeserialize(['GetLocationsInAreaResponse' => $body]);
-            $this->setService($object);
+            $object = JsonSerializableObject::jsonDeserialize(json: ['GetLocationsInAreaResponse' => $body]);
+            $this->setService(object: $object);
 
             return $object;
         }
@@ -832,75 +489,33 @@ class LocationService extends AbstractService
         return null;
     }
 
-    /**
-     * Build the GetLocation request for the SOAP API.
-     *
-     * @param GetLocation $getLocations
-     *
-     * @return RequestInterface
-     */
-    public function buildGetLocationRequestSOAP(GetLocation $getLocations)
+    public function getCustomer(): Customer
     {
-        $soapAction = static::SOAP_ACTION_LOCATIONS_IN_AREA;
-        $xmlService = new XmlService();
-        foreach (static::$namespaces as $namespace => $prefix) {
-            $xmlService->namespaceMap[$namespace] = $prefix;
-        }
-        $security = new Security($this->postnl->getToken());
-
-        $this->setService($security);
-        $this->setService($getLocations);
-
-        $request = $xmlService->write(
-            '{'.static::ENVELOPE_NAMESPACE.'}Envelope',
-            [
-                '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
-                    ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
-                ],
-                '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
-                    '{'.static::SERVICES_NAMESPACE.'}GetLocation' => $getLocations,
-                ],
-            ]
-        );
-
-        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
-            'POST',
-            $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT
-        )
-            ->withHeader('SOAPAction', "\"$soapAction\"")
-            ->withHeader('Accept', 'text/xml')
-            ->withHeader('Content-Type', 'text/xml;charset=UTF-8')
-            ->withBody(Psr17FactoryDiscovery::findStreamFactory()->createStream($request));
+        // TODO: Implement getCustomer() method.
     }
 
-    /**
-     * Process GetLocation Response SOAP.
-     *
-     * @param ResponseInterface $response
-     *
-     * @return GetLocationsInAreaResponse
-     *
-     * @throws CifDownException
-     * @throws CifException
-     * @throws LibXMLException
-     * @throws ResponseException
-     */
-    public function processGetLocationResponseSOAP(ResponseInterface $response)
+    public function setCustomer(Customer $customer): static
     {
-        $xml = @simplexml_load_string(static::getResponseText($response));
+        // TODO: Implement setCustomer() method.
+    }
 
-        static::registerNamespaces($xml);
-        static::validateSOAPResponse($xml);
+    public function getApiKey(): string
+    {
+        // TODO: Implement getApiKey() method.
+    }
 
-        $reader = new Reader();
-        $reader->xml(static::getResponseText($response));
-        $array = array_values($reader->parse()['value'][0]['value']);
-        $array = $array[0];
+    public function setApiKey(string $apiKey): static
+    {
+        // TODO: Implement setApiKey() method.
+    }
 
-        /** @var GetLocationsInAreaResponse $object */
-        $object = AbstractEntity::xmlDeserialize($array);
-        $this->setService($object);
+    public function isSandbox(): bool
+    {
+        // TODO: Implement isSandbox() method.
+    }
 
-        return $object;
+    public function setSandbox(bool $sandbox): static
+    {
+        // TODO: Implement setSandbox() method.
     }
 }

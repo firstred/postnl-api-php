@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,48 +20,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- * @copyright 2017-2020 Michael Dekker
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Exception;
+declare(strict_types=1);
 
-use Exception;
-use GuzzleHttp\Psr7\Response;
+namespace Firstred\PostNL\Exception;
+
 use Psr\Http\Message\ResponseInterface;
 
 class ResponseException extends AbstractException
 {
-    /** @var Response */
-    private $response;
+    private ?ResponseInterface $response;
 
-    /**
-     * ResponseException constructor.
-     *
-     * @param string         $message
-     * @param int            $code
-     * @param Exception|null $previous
-     * @param Response|null  $response
-     */
-    public function __construct($message = '', $code = 0, $previous = null, ResponseInterface $response = null)
+    public function __construct(string $message = '', int $code = 0, mixed $previous = null, ResponseInterface $response = null)
     {
-        parent::__construct($message, $code, $previous);
+        parent::__construct(message: $message, code: $code, previous: $previous);
 
         $this->response = $response;
     }
 
-    /**
-     * @param Response $response
-     */
-    public function setResponse(Response $response)
+    public function setResponse(ResponseInterface $response): void
     {
         $this->response = $response;
     }
 
-    /**
-     * @return Response
-     */
-    public function getResponse()
+    public function getResponse(): ?ResponseInterface
     {
         return $this->response;
     }

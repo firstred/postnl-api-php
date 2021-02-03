@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -21,23 +22,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- * @copyright 2017-2020 Michael Dekker
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Tests\Integration\Service;
+namespace Firstred\PostNL\Tests\Integration\Service;
 
+use Firstred\PostNL\Entity\Address;
+use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidBarcodeException;
+use Firstred\PostNL\Misc\Message;
+use Firstred\PostNL\PostNL;
+use Firstred\PostNL\Service\BarcodeService;
+use Firstred\PostNL\Service\BarcodeServiceInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 use Psr\Log\LoggerInterface;
 use ReflectionException;
-use ThirtyBees\PostNL\Entity\Address;
-use ThirtyBees\PostNL\Entity\Customer;
-use ThirtyBees\PostNL\Exception\InvalidArgumentException;
-use ThirtyBees\PostNL\Exception\InvalidBarcodeException;
-use ThirtyBees\PostNL\Exception\InvalidConfigurationException;
-use ThirtyBees\PostNL\PostNL;
-use ThirtyBees\PostNL\Service\BarcodeService;
 
 /**
  * Class BarcodeServiceTest.
@@ -46,11 +48,10 @@ use ThirtyBees\PostNL\Service\BarcodeService;
  */
 class BarcodeServiceRestTest extends TestCase
 {
-    /** @var PostNL */
-    protected $postnl;
-    /** @var BarcodeService */
-    protected $service;
-    /** @var */
+    protected PostNL $postnl;
+
+    protected BarcodeServiceInterface $service;
+
     protected $lastRequest;
 
     /**
@@ -61,13 +62,14 @@ class BarcodeServiceRestTest extends TestCase
      */
     public function setupPostNL()
     {
+        /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
         $this->postnl = new PostNL(
-            Customer::create()
-                ->setCollectionLocation(getenv('POSTNL_COLLECTION_LOCATION'))
-                ->setCustomerCode(getenv('POSTNL_CUSTOMER_CODE'))
-                ->setCustomerNumber(getenv('POSTNL_CUSTOMER_NUMBER'))
-                ->setContactPerson(getenv('POSTNL_CONTACT_PERSON'))
-                ->setAddress(Address::create([
+            customer: (new Customer())
+                ->setCollectionLocation(getenv(name: 'POSTNL_COLLECTION_LOCATION'))
+                ->setCustomerCode(getenv(name: 'POSTNL_CUSTOMER_CODE'))
+                ->setCustomerNumber(getenv(name: 'POSTNL_CUSTOMER_NUMBER'))
+                ->setContactPerson(getenv(name: 'POSTNL_CONTACT_PERSON'))
+                ->setAddress(new Address(...[
                     'AddressType' => '02',
                     'City'        => 'Hoofddorp',
                     'CompanyName' => 'PostNL',
@@ -76,8 +78,8 @@ class BarcodeServiceRestTest extends TestCase
                     'Street'      => 'Siriusdreef',
                     'Zipcode'     => '2132WT',
                 ])),
-            getenv('POSTNL_API_KEY'),
-            true
+            apiKey: getenv(name: 'POSTNL_API_KEY'),
+            sandbox: true
         );
 
         $this->service = $this->postnl->getBarcodeService();
@@ -94,7 +96,7 @@ class BarcodeServiceRestTest extends TestCase
 
         global $logger;
         if ($logger instanceof LoggerInterface) {
-            $logger->debug($this->getName()." Request\n".Message::str($this->lastRequest));
+            $logger->debug($this->getName()." Request\n".Message::str(message: $this->lastRequest));
         }
         $this->lastRequest = null;
     }
@@ -106,31 +108,31 @@ class BarcodeServiceRestTest extends TestCase
      */
     public function testSingleBarcodeRest()
     {
-        $this->assertStringContainsString('3SDEVC', $this->postnl->generateBarcode('3S'));
+        $this->assertStringContainsString(needle: '3SDEVC', haystack: $this->postnl->generateBarcode());
     }
 
-    /**
-     * @testdox Returns a valid single barcode for a country
-     *
-     * @throws InvalidBarcodeException
-     * @throws InvalidConfigurationException
-     */
-    public function testSingleBarCodeByCountryRest()
-    {
-        $this->assertStringContainsString('3SDEVC', $this->postnl->generateBarcodeByCountryCode('NL'));
-    }
-
-    /**
-     * @testdox Returns several barcodes
-     *
-     * @throws InvalidBarcodeException
-     * @throws InvalidConfigurationException
-     */
-    public function testMultipleNLBarcodesRest()
-    {
-        $barcodes = $this->postnl->generateBarcodesByCountryCodes(['NL' => 4]);
-
-        $this->assertIsArray($barcodes);
-        $this->assertStringContainsString('3SDEVC', $barcodes['NL'][0]);
-    }
+//    /**
+//     * @testdox Returns a valid single barcode for a country
+//     *
+//     * @throws InvalidBarcodeException
+//     * @throws InvalidConfigurationException
+//     */
+//    public function testSingleBarCodeByCountryRest()
+//    {
+//        $this->assertStringContainsString(needle: '3SDEVC', haystack: $this->postnl->generateBarcodeByCountryCode(iso: 'NL'));
+//    }
+//
+//    /**
+//     * @testdox Returns several barcodes
+//     *
+//     * @throws InvalidBarcodeException
+//     * @throws InvalidConfigurationException
+//     */
+//    public function testMultipleNLBarcodesRest()
+//    {
+//        $barcodes = $this->postnl->generateBarcodesByCountryCodes(isos: ['NL' => 4]);
+//
+//        $this->assertIsArray(actual: $barcodes);
+//        $this->assertStringContainsString(needle: '3SDEVC', haystack: $barcodes['NL'][0]);
+//    }
 }

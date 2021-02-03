@@ -1,46 +1,42 @@
-# PostNL REST/SOAP API PHP Bindings
+# PostNL REST API PHP Bindings
 
 [![Build Status](https://travis-ci.org/firstred/postnl-api-php.svg?branch=master)](https://travis-ci.org/firstred/postnl-api-php)
 [![Documentation Status](https://readthedocs.org/projects/postnl-php/badge/?version=latest)](https://postnl-php.readthedocs.io/en/latest/?badge=latest)
 [![codecov](https://codecov.io/gh/firstred/postnl-api-php/branch/master/graph/badge.svg)](https://codecov.io/gh/firstred/postnl-api-php)
-[![latest stable version](https://poser.pugx.org/firstred/postnl-api-php/v/stable.svg)](https://packagist.org/packages/thirtybees/postnl-api-php)
-[![license mit](https://poser.pugx.org/thirtybees/postnl-api-php/license.svg)](https://packagist.org/packages/thirtybees/postnl-api-php)
+[![latest stable version](https://poser.pugx.org/firstred/postnl-api-php/v/stable.svg)](https://packagist.org/packages/firstred/postnl-api-php)
+[![license mit](https://poser.pugx.org/firstred/postnl-api-php/license.svg)](https://packagist.org/packages/firstred/postnl-api-php)
 
 ## About
 
-This PHP library for both PostNL's REST and SOAP API aims to provide a simple way to connect your 
+This PHP library for the REST API aims to provide a simple way to connect your 
 application with PostNL. By abstracting away needless complexity when processing shipment 
 information and increased fault-tolerance, you can get up and running with PostNL in minutes.  
 At the lower level this library uses asynchronous communication and payload splitting for 
 improved performance.
 
-## Important notice
-
-The PHP bindings can connect to both PostNL's SOAP and REST API.  
-
 ### Status
 
-| Service                                     | Status REST               | Status SOAP               | Version |
-| ------------------------------------------- | ------------------------- | ------------------------- | ------- |
-| **Addresses**                               |                           |                           |         |
-| Adrescheck Nationaal                        | N/A                       | N/A                       | N/A     |
-| Adrescheck Basis Nationaal                  | N/A                       | N/A                       | N/A     |
-| Adrescheck Internationaal                   | N/A                       | N/A                       | N/A     |
-| Geo Adrescheck Nationaal                    | N/A                       | N/A                       | N/A     |
-| **Creditworthiness & Business information** |                           |                           |         |
-| Bedrijfscheck Nationaal                     | N/A                       | N/A                       | N/A     |
-| Kredietcheck Zakelijk                       | N/A                       | N/A                       | N/A     |
-| **Send & Track**                            |                           |                           |         |
-| Barcode webservice                          | ✓                         | ✓                         | 1.1     |
-| Labelling webservice                        | ✓                         | ✓                         | 2.2     |
-| Confirming webservice                       | ✓                         | ✓                         | 2.0    |
-| Shippingstatus webservice                   | ✓                         | ✓                         | 2.0     |
-| **Delivery Options**                        |                           |                           |         |
-| Deliverydate webservice                     | ✓                         | ✓                         | 2.2     |
-| Location webservice                         | ✓                         | ✓                         | 2.1     |
-| Timeframe webservice                        | ✓                         | ✓                         | 2.1     |
-| **Mail**                                    |                           |                           |         |
-| Bulkmail webservice                         | N/A                       | N/A                       | N/A     |
+| Service                                     | Status                    | Version |
+| ------------------------------------------- | ------------------------- | ------- |
+| **Addresses**                               |                           |         |
+| Adrescheck Nationaal                        | N/A                       | N/A     |
+| Adrescheck Basis Nationaal                  | N/A                       | N/A     |
+| Adrescheck Internationaal                   | N/A                       | N/A     |
+| Geo Adrescheck Nationaal                    | N/A                       | N/A     |
+| **Creditworthiness & Business information** |                           |         |
+| Bedrijfscheck Nationaal                     | N/A                       | N/A     |
+| Kredietcheck Zakelijk                       | N/A                       | N/A     |
+| **Send & Track**                            |                           |         |
+| Barcode webservice                          | ✓                         | 1.1     |
+| Labelling webservice                        | ✓                         | 2.2     |
+| Confirming webservice                       | ✓                         | 2.0    |
+| Shippingstatus webservice                   | ✓                         | 2.0     |
+| **Delivery Options**                        |                           |         |
+| Deliverydate webservice                     | ✓                         | 2.2     |
+| Location webservice                         | ✓                         | 2.1     |
+| Timeframe webservice                        | ✓                         | 2.1     |
+| **Mail**                                    |                           |         |
+| Bulkmail webservice                         | N/A                       | N/A     |
 
 ## Instructions
 
@@ -58,11 +54,11 @@ Creating a label using the default REST API
 ```php
 <?php
 
-use ThirtyBees\PostNL\PostNL;
-use ThirtyBees\PostNL\Entity\Customer;
-use ThirtyBees\PostNL\Entity\Address;
-use ThirtyBees\PostNL\Entity\Shipment;
-use ThirtyBees\PostNL\Entity\Dimension;
+use Firstred\PostNL\PostNL;
+use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Entity\Address;
+use Firstred\PostNL\Entity\Shipment;
+use Firstred\PostNL\Entity\Dimension;
 
 require_once __DIR__.'/vendor/autoload.php';
 
@@ -80,7 +76,7 @@ $customer = Customer::create([
         'Street'      => 'Siriusdreef',
         'Zipcode'     => '2132WT',
     ]),
-    'Email'              => 'michael@thirtybees.com',
+    'Email'              => 'test@example.com',
     'Name'               => 'Michael',
 ]);
 
@@ -124,7 +120,7 @@ The full documentation can be found on this page: [https://postnl-php.readthedoc
 This library has been licensed with the MIT license.
 
 ```
-Copyright (c) 2017-2018 thirty bees <https://github.com/thirtybees>
+Copyright (c) 2017-2021 Michael Dekker <https://github.com/firstred>
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal

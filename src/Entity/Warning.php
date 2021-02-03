@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,77 +20,57 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- * @copyright 2017-2020 Michael Dekker
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity;
+declare(strict_types=1);
 
-use ThirtyBees\PostNL\Service\BarcodeService;
-use ThirtyBees\PostNL\Service\ConfirmingService;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
-use ThirtyBees\PostNL\Service\LabellingService;
-use ThirtyBees\PostNL\Service\LocationService;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
-use ThirtyBees\PostNL\Service\TimeframeService;
+namespace Firstred\PostNL\Entity;
 
-/**
- * Class Warning.
- *
- * @method string|null getCode()
- * @method string|null getDescription()
- * @method Warning     setCode(string|null $code = null)
- * @method Warning     setDescription(string|null $description = null)
- */
-class Warning extends AbstractEntity
+use Firstred\PostNL\Attribute\PropInterface;
+use Firstred\PostNL\Misc\SerializableObject;
+use Firstred\PostNL\Service\ServiceInterface;
+use JetBrains\PhpStorm\ExpectedValues;
+
+class Warning extends SerializableObject
 {
-    /** @var string[][] */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'Code'        => BarcodeService::DOMAIN_NAMESPACE,
-            'Description' => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'Code'        => ConfirmingService::DOMAIN_NAMESPACE,
-            'Description' => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'Code'        => LabellingService::DOMAIN_NAMESPACE,
-            'Description' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Code'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Description' => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'Code'        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Description' => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'Code'        => LocationService::DOMAIN_NAMESPACE,
-            'Description' => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'Code'        => TimeframeService::DOMAIN_NAMESPACE,
-            'Description' => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null */
-    protected $Code;
-    /** @var string|null */
-    protected $Description;
-    // @codingStandardsIgnoreEnd
+    public function __construct(
+        #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
+        string $service = '',
+        #[ExpectedValues(values: PropInterface::PROP_TYPES + [''])]
+        string $propType = '',
 
-    /**
-     * @param string|null $code
-     * @param string|null $description
-     */
-    public function __construct($code = null, $description = null)
+        protected string|null $Code = null,
+        protected string|null $Description = null,
+    ) {
+        parent::__construct(service: $service, propType: $propType);
+
+        $this->setCode(code: $Code);
+        $this->setDescription(description: $Description);
+    }
+
+    public function getCode(): string|null
     {
-        parent::__construct();
+        return $this->Code;
+    }
 
-        $this->setCode($code);
-        $this->setDescription($description);
+    public function setCode(string|null $code = null): static
+    {
+        $this->Code = $code;
+
+        return $this;
+    }
+
+    public function getDescription(): string|null
+    {
+        return $this->Description;
+    }
+
+    public function setDescription(string|null $description = null): static
+    {
+        $this->Description = $description;
+
+        return $this;
     }
 }

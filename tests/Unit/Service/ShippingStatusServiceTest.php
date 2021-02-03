@@ -1,9 +1,8 @@
 <?php
-
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -21,96 +20,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- * @copyright 2017-2020 Michael Dekker
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Tests\Unit\Service;
+declare(strict_types=1);
 
-use Cache\Adapter\Void\VoidCachePool;
+namespace Firstred\PostNL\Tests\Unit\Service;
+
 use Exception;
+use Firstred\PostNL\Entity\Request\RetrieveShipmentByBarcodeRequest;
+use Firstred\PostNL\Entity\Request\RetrieveShipmentByKgidRequest;
+use Firstred\PostNL\Entity\Request\RetrieveShipmentByReferenceRequest;
+use Firstred\PostNL\Entity\Request\RetrieveSignatureByBarcodeRequest;
+use Firstred\PostNL\Entity\Shipment;
+use Firstred\PostNL\Entity\Signature;
+use Firstred\PostNL\Misc\Message;
 use Http\Client\Exception as HttpClientException;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Mock\Client;
-use PHPUnit\Framework\TestCase;
-use Psr\Http\Message\RequestInterface;
-use Psr\Log\LoggerInterface;
-use ThirtyBees\PostNL\Entity\Address;
-use ThirtyBees\PostNL\Entity\Customer;
-use ThirtyBees\PostNL\Entity\Request\RetrieveShipmentByBarcodeRequest;
-use ThirtyBees\PostNL\Entity\Request\RetrieveShipmentByKgidRequest;
-use ThirtyBees\PostNL\Entity\Request\RetrieveShipmentByReferenceRequest;
-use ThirtyBees\PostNL\Entity\Request\RetrieveSignatureByBarcodeRequest;
-use ThirtyBees\PostNL\Entity\Shipment;
-use ThirtyBees\PostNL\Entity\Signature;
-use ThirtyBees\PostNL\Exception\InvalidArgumentException;
-use ThirtyBees\PostNL\Util\Message;
-use ThirtyBees\PostNL\PostNL;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
 
 /**
  * Class ShippingStatusRestTest.
  *
  * @testdox The ShippingStatusService (REST)
  */
-class ShippingStatusRestTest extends TestCase
+class ShippingStatusServiceTest extends ServiceTestBase
 {
-    /** @var PostNL */
-    protected $postnl;
-    /** @var ShippingStatusService */
-    protected $service;
-    /** @var */
-    protected $lastRequest;
-
-    /**
-     * @before
-     *
-     * @throws InvalidArgumentException
-     */
-    public function setupPostNL()
-    {
-        $this->postnl = new PostNL(
-            Customer::create()
-                ->setCollectionLocation('123456')
-                ->setCustomerCode('DEVC')
-                ->setCustomerNumber('11223344')
-                ->setContactPerson('Test')
-                ->setAddress(Address::create([
-                    'AddressType' => '02',
-                    'City'        => 'Hoofddorp',
-                    'CompanyName' => 'PostNL',
-                    'Countrycode' => 'NL',
-                    'HouseNr'     => '42',
-                    'Street'      => 'Siriusdreef',
-                    'Zipcode'     => '2132WT',
-                ]))
-                ->setGlobalPackBarcodeType('AB')
-                ->setGlobalPackCustomerCode('1234'),
-            'test',
-            true
-        );
-
-        $this->service = $this->postnl->getShippingStatusService();
-        $this->service->cache = new VoidCachePool();
-        $this->service->ttl = 1;
-    }
-
-    /**
-     * @after
-     */
-    public function logPendingRequest()
-    {
-        if (!$this->lastRequest instanceof RequestInterface) {
-            return;
-        }
-
-        global $logger;
-        if ($logger instanceof LoggerInterface) {
-            $logger->debug($this->getName()." Request\n".Message::str($this->lastRequest));
-        }
-        $this->lastRequest = null;
-    }
-
     /**
      * @testdox Creates a valid LookupShipmentByBarcodeRequest request
      *
@@ -124,12 +60,12 @@ class ShippingStatusRestTest extends TestCase
                 ->setBarcode($barcode)
         );
 
-        parse_str($request->getUri()->getQuery(), $query);
+        parse_str(string: $request->getUri()->getQuery(), result: $query);
 
-        $this->assertEmpty($query);
-        $this->assertEquals('test', $request->getHeaderLine('apikey'));
-        $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
-        $this->assertEquals("/shipment/v2/status/barcode/$barcode", $request->getUri()->getPath());
+        $this->assertEmpty(actual: $query);
+        $this->assertEquals(expected: 'test', actual: $request->getHeaderLine('apikey'));
+        $this->assertEquals(expected: 'application/json', actual: $request->getHeaderLine('Accept'));
+        $this->assertEquals(expected: "/shipment/v2/status/barcode/$barcode", actual: $request->getUri()->getPath());
     }
 
     /**
@@ -145,15 +81,15 @@ class ShippingStatusRestTest extends TestCase
                 ->setReference($reference)
         );
 
-        parse_str($request->getUri()->getQuery(), $query);
+        parse_str(string: $request->getUri()->getQuery(), result: $query);
 
-        $this->assertEquals($query, [
+        $this->assertEquals(expected: $query, actual: [
             'customerCode'   => $this->postnl->getCustomer()->getCustomerCode(),
             'customerNumber' => $this->postnl->getCustomer()->getCustomerNumber(),
         ]);
-        $this->assertEquals('test', $request->getHeaderLine('apikey'));
-        $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
-        $this->assertEquals("/shipment/v2/status/reference/$reference", $request->getUri()->getPath());
+        $this->assertEquals(expected: 'test', actual: $request->getHeaderLine('apikey'));
+        $this->assertEquals(expected: 'application/json', actual: $request->getHeaderLine('Accept'));
+        $this->assertEquals(expected: "/shipment/v2/status/reference/$reference", actual: $request->getUri()->getPath());
     }
 
     /**
@@ -169,12 +105,12 @@ class ShippingStatusRestTest extends TestCase
                 ->setKgid($kgid)
         );
 
-        parse_str($request->getUri()->getQuery(), $query);
+        parse_str(string: $request->getUri()->getQuery(), result: $query);
 
-        $this->assertEmpty($query);
-        $this->assertEquals('test', $request->getHeaderLine('apikey'));
-        $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
-        $this->assertEquals("/shipment/v2/status/lookup/$kgid", $request->getUri()->getPath());
+        $this->assertEmpty(actual: $query);
+        $this->assertEquals(expected: 'test', actual: $request->getHeaderLine('apikey'));
+        $this->assertEquals(expected: 'application/json', actual: $request->getHeaderLine('Accept'));
+        $this->assertEquals(expected: "/shipment/v2/status/lookup/$kgid", actual: $request->getUri()->getPath());
     }
 
     /**
@@ -188,16 +124,16 @@ class ShippingStatusRestTest extends TestCase
         $mockClient = new Client();
         $responseFactory = Psr17FactoryDiscovery::findResponseFactory();
         $streamFactory = Psr17FactoryDiscovery::findStreamFactory();
-        $response = $responseFactory->createResponse(200, 'OK')
-            ->withHeader('Content-Type', 'application/json;charset=UTF-8')
-            ->withBody($streamFactory->createStream(file_get_contents(__DIR__.'/../../data/responses/shipment.json')))
+        $response = $responseFactory->createResponse(code: 200, reasonPhrase: 'OK')
+            ->withHeader(name: 'Content-Type', value: 'application/json;charset=UTF-8')
+            ->withBody(body: $streamFactory->createStream(content: file_get_contents(filename: __DIR__.'/../../data/responses/shipment.json')))
         ;
-        $mockClient->addResponse($response);
-        \ThirtyBees\PostNL\Http\Client::getInstance()->setAsyncClient($mockClient);
+        $mockClient->addResponse(response: $response);
+        \Firstred\PostNL\Http\Client::getInstance()->setAsyncClient($mockClient);
 
         $shipment = $this->postnl->retrieveShipmentByBarcode('3SDEVC987021270');
 
-        $this->assertInstanceOf(Shipment::class, $shipment);
+        $this->assertInstanceOf(expected: Shipment::class, actual: $shipment);
     }
 
     /**
@@ -208,11 +144,11 @@ class ShippingStatusRestTest extends TestCase
         $barcode = '3S9283920398234';
         $message = new Message();
         $this->lastRequest = $request = $this->service->buildRetrieveSignatureRequest((new RetrieveSignatureByBarcodeRequest())->setBarcode($barcode));
-        parse_str($request->getUri()->getQuery(), $query);
-        $this->assertEmpty($query);
-        $this->assertEquals('test', $request->getHeaderLine('apikey'));
-        $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
-        $this->assertEquals("/shipment/v2/status/signature/$barcode", $request->getUri()->getPath());
+        parse_str(string: $request->getUri()->getQuery(), result: $query);
+        $this->assertEmpty(actual: $query);
+        $this->assertEquals(expected: 'test', actual: $request->getHeaderLine('apikey'));
+        $this->assertEquals(expected: 'application/json', actual: $request->getHeaderLine('Accept'));
+        $this->assertEquals(expected: "/shipment/v2/status/signature/$barcode", actual: $request->getUri()->getPath());
     }
 
     /**
@@ -220,18 +156,18 @@ class ShippingStatusRestTest extends TestCase
      */
     public function testGetSignatures()
     {
-        $payload = file_get_contents(__DIR__.'/../../data/responses/signature.json');
+        $payload = file_get_contents(filename: __DIR__.'/../../data/responses/signature.json');
         $mockClient = new Client();
         $responseFactory = Psr17FactoryDiscovery::findResponseFactory();
         $streamFactory = Psr17FactoryDiscovery::findStreamFactory();
         $mockClient->addResponse(
-            $responseFactory->createResponse(200, 'OK')
-                ->withHeader('Content-Type', 'application/json;charset=UTF-8')
-                ->withBody($streamFactory->createStream($payload))
+            response: $responseFactory->createResponse(code: 200, reasonPhrase: 'OK')
+                ->withHeader(name: 'Content-Type', value: 'application/json;charset=UTF-8')
+                ->withBody(body: $streamFactory->createStream(content: $payload))
         );
-        \ThirtyBees\PostNL\Http\Client::getInstance()->setAsyncClient($mockClient);
+        \Firstred\PostNL\Http\Client::getInstance()->setAsyncClient($mockClient);
 
         $signatureResponse = $this->postnl->retrieveSignatureByBarcode('3SABCD6659149');
-        $this->assertInstanceOf(Signature::class, $signatureResponse);
+        $this->assertInstanceOf(expected: Signature::class, actual: $signatureResponse);
     }
 }

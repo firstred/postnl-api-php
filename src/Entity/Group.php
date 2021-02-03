@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,134 +20,103 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- * @copyright 2017-2020 Michael Dekker
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity;
+declare(strict_types=1);
 
-use ThirtyBees\PostNL\Service\BarcodeService;
-use ThirtyBees\PostNL\Service\ConfirmingService;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
-use ThirtyBees\PostNL\Service\LabellingService;
-use ThirtyBees\PostNL\Service\LocationService;
-use ThirtyBees\PostNL\Service\ShippingService;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
-use ThirtyBees\PostNL\Service\TimeframeService;
+namespace Firstred\PostNL\Entity;
 
-/**
- * Class Group.
- *
- * @method string|null getGroupCount()
- * @method string|null getGroupSequence()
- * @method string|null getGroupType()
- * @method string|null getMainBarcode()
- * @method Group       setGroupCount(string|null $groupCount = null)
- * @method Group       setGroupSequence(string|null $groupSequence = null)
- * @method Group       setGroupType(string|null $groupType = null)
- * @method Group       setMainBarcode(string|null $mainBarcode = null)
- */
-class Group extends AbstractEntity
+use Firstred\PostNL\Attribute\PropInterface;
+use Firstred\PostNL\Misc\SerializableObject;
+use Firstred\PostNL\Service\ServiceInterface;
+use JetBrains\PhpStorm\ExpectedValues;
+
+class Group extends SerializableObject
 {
-    /** @var string[][] */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'GroupCount'    => BarcodeService::DOMAIN_NAMESPACE,
-            'GroupSequence' => BarcodeService::DOMAIN_NAMESPACE,
-            'GroupType'     => BarcodeService::DOMAIN_NAMESPACE,
-            'MainBarcode'   => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'GroupCount'    => ConfirmingService::DOMAIN_NAMESPACE,
-            'GroupSequence' => ConfirmingService::DOMAIN_NAMESPACE,
-            'GroupType'     => ConfirmingService::DOMAIN_NAMESPACE,
-            'MainBarcode'   => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'GroupCount'    => LabellingService::DOMAIN_NAMESPACE,
-            'GroupSequence' => LabellingService::DOMAIN_NAMESPACE,
-            'GroupType'     => LabellingService::DOMAIN_NAMESPACE,
-            'MainBarcode'   => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'GroupCount'    => ShippingStatusService::DOMAIN_NAMESPACE,
-            'GroupSequence' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'GroupType'     => ShippingStatusService::DOMAIN_NAMESPACE,
-            'MainBarcode'   => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'GroupCount'    => DeliveryDateService::DOMAIN_NAMESPACE,
-            'GroupSequence' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'GroupType'     => DeliveryDateService::DOMAIN_NAMESPACE,
-            'MainBarcode'   => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'GroupCount'    => LocationService::DOMAIN_NAMESPACE,
-            'GroupSequence' => LocationService::DOMAIN_NAMESPACE,
-            'GroupType'     => LocationService::DOMAIN_NAMESPACE,
-            'MainBarcode'   => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'GroupCount'    => TimeframeService::DOMAIN_NAMESPACE,
-            'GroupSequence' => TimeframeService::DOMAIN_NAMESPACE,
-            'GroupType'     => TimeframeService::DOMAIN_NAMESPACE,
-            'MainBarcode'   => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-        'Shipping' => [
-            'GroupCount'    => ShippingService::DOMAIN_NAMESPACE,
-            'GroupSequence' => ShippingService::DOMAIN_NAMESPACE,
-            'GroupType'     => ShippingService::DOMAIN_NAMESPACE,
-            'MainBarcode'   => ShippingService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /**
-     * Amount of shipments in the group.
-     *
-     * @var string|null
-     */
-    protected $GroupCount;
-    /**
-     * Sequence number.
-     *
-     * @var string|null
-     */
-    protected $GroupSequence;
-    /**
-     * The type of group.
-     *
-     * Possible values:
-     *
-     * - `01`: Collection request
-     * - `03`: Multiple parcels in one shipment (multi-colli)
-     * - `04`: Single parcel in one shipment
-     *
-     * @var string|null
-     */
-    protected $GroupType;
-    /**
-     * Main barcode for the shipment.
-     *
-     * @var string|null
-     */
-    protected $MainBarcode;
-    // @codingStandardsIgnoreEnd
+    public function __construct(
+        #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
+        string $service = '',
+        #[ExpectedValues(values: PropInterface::PROP_TYPES + [''])]
+        string $propType = '',
 
-    /**
-     * Group Constructor.
-     *
-     * @param string|null $groupCount
-     * @param string|null $groupSequence
-     * @param string|null $groupType
-     * @param string|null $mainBarcode
-     */
-    public function __construct($groupCount = null, $groupSequence = null, $groupType = null, $mainBarcode = null)
+        /*
+         * Amount of shipments in the group.
+         */
+        protected string|null $GroupCount = null,
+        /*
+         * Sequence number.
+         */
+        protected string|null $GroupSequence = null,
+        /*
+         * The type of group.
+         *
+         * Possible values:
+         *
+         * - `01`: Collection request
+         * - `03`: Multiple parcels in one shipment (multi-colli)
+         * - `04`: Single parcel in one shipment
+         */
+        protected string|null $GroupType = null,
+        /*
+         * Main barcode for the shipment.
+         */
+        protected string|null $MainBarcode = null,
+    ) {
+        parent::__construct(service: $service, propType: $propType);
+
+        $this->setGroupCount(GroupCount: $GroupCount);
+        $this->setGroupSequence(GroupSequence: $GroupSequence);
+        $this->setGroupType(GroupType: $GroupType);
+        $this->setMainBarcode(MainBarcode: $MainBarcode);
+    }
+
+    public function getGroupCount(): string|null
     {
-        parent::__construct();
+        return $this->GroupCount;
+    }
 
-        $this->setGroupCount($groupCount);
-        $this->setGroupSequence($groupSequence);
-        $this->setGroupType($groupType);
-        $this->setMainBarcode($mainBarcode);
+    public function setGroupCount(string|null $GroupCount = null): static
+    {
+        $this->GroupCount = $GroupCount;
+
+        return $this;
+    }
+
+    public function getGroupSequence(): string|null
+    {
+        return $this->GroupSequence;
+    }
+
+    public function setGroupSequence(string|null $GroupSequence = null): static
+    {
+        $this->GroupSequence = $GroupSequence;
+
+        return $this;
+    }
+
+    public function getGroupType(): string|null
+    {
+        return $this->GroupType;
+    }
+
+    public function setGroupType(string|null $GroupType = null): static
+    {
+        $this->GroupType = $GroupType;
+
+        return $this;
+    }
+
+    public function getMainBarcode(): string|null
+    {
+        return $this->MainBarcode;
+    }
+
+    public function setMainBarcode(string|null $MainBarcode = null): static
+    {
+        $this->MainBarcode = $MainBarcode;
+
+        return $this;
     }
 }

@@ -1,9 +1,8 @@
 <?php
-
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -21,99 +20,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- * @copyright 2017-2020 Michael Dekker
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Tests\Unit\Service;
+declare(strict_types=1);
+
+namespace Firstred\PostNL\Tests\Unit\Service;
 
 use Exception;
+use Firstred\PostNL\Attribute\RequestProp;
+use Firstred\PostNL\DTO\Request\GenerateBarcodeRequestDTO;
+use Firstred\PostNL\DTO\Response\GenerateBarcodesByCountryCodesResponseDTO;
+use Firstred\PostNL\Exception\InvalidBarcodeException;
+use Firstred\PostNL\HttpClient\HTTPlugHTTPClient;
+use Firstred\PostNL\Service\BarcodeServiceInterface;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Mock\Client;
-use PHPUnit\Framework\TestCase;
-use Psr\Http\Message\RequestInterface;
-use Psr\Log\LoggerInterface;
-use ReflectionException;
-use ThirtyBees\PostNL\Entity\Address;
-use ThirtyBees\PostNL\Entity\Customer;
-use ThirtyBees\PostNL\Entity\Request\GenerateBarcodeRequestEntity;
-use ThirtyBees\PostNL\Exception\InvalidArgumentException;
-use ThirtyBees\PostNL\Exception\InvalidBarcodeException;
-use ThirtyBees\PostNL\Exception\InvalidConfigurationException;
-use ThirtyBees\PostNL\Util\Message as MiscMessage;
-use ThirtyBees\PostNL\PostNL;
-use ThirtyBees\PostNL\Service\BarcodeService;
+use JetBrains\PhpStorm\Pure;
+use function json_encode;
 
 /**
  * Class BarcodeServiceTest.
  *
  * @testdox The BarcodeService (REST)
  */
-class BarcodeServiceTest extends TestCase
+class BarcodeServiceTest extends ServiceTestBase
 {
-    /** @var PostNL */
-    protected $postnl;
-    /** @var BarcodeService */
-    protected $service;
-    /** @var */
-    protected $lastRequest;
-
-    /**
-     * @before
-     *
-     * @throws InvalidArgumentException
-     * @throws ReflectionException
-     */
-    public function setupPostNL()
-    {
-        $this->postnl = new PostNL(
-            Customer::create()
-                ->setCollectionLocation('123456')
-                ->setCustomerCode('DEVC')
-                ->setCustomerNumber('11223344')
-                ->setContactPerson('Test')
-                ->setAddress(Address::create([
-                    'AddressType' => '02',
-                    'City'        => 'Hoofddorp',
-                    'CompanyName' => 'PostNL',
-                    'Countrycode' => 'NL',
-                    'HouseNr'     => '42',
-                    'Street'      => 'Siriusdreef',
-                    'Zipcode'     => '2132WT',
-                ]))
-                ->setGlobalPackBarcodeType('AB')
-                ->setGlobalPackCustomerCode('1234'),
-            'test',
-            true
-        );
-
-        $this->service = $this->postnl->getBarcodeService();
-    }
-
-    /**
-     * @after
-     */
-    public function logPendingRequest()
-    {
-        if (!$this->lastRequest instanceof RequestInterface) {
-            return;
-        }
-
-        global $logger;
-        if ($logger instanceof LoggerInterface) {
-            $logger->debug($this->getName()." Request\n".MiscMessage::str($this->lastRequest));
-        }
-        $this->lastRequest = null;
-    }
-
-    /**
-     * @testdox Returns a valid service object
-     */
-    public function testHasValidBarcodeService()
-    {
-        $this->assertInstanceOf(BarcodeService::class, $this->service);
-    }
-
     /**
      * @testdox Creates a valid 3S barcode request
      *
@@ -123,156 +56,145 @@ class BarcodeServiceTest extends TestCase
     public function testCreatesAValid3SBarcodeRequest()
     {
         $type = '3S';
-        $range = $this->getRange('3S');
-        $serie = $this->postnl->findBarcodeSerie('3S', $range, false);
+        $range = $this->getRange(type: '3S');
+        $serie = $this->postnl->getBarcodeService()->findBarcodeSerie(type: '3S', range: $range, eps: false);
 
-        $this->lastRequest = $request = $this->service->buildGenerateBarcodeRequest(
-            (new GenerateBarcodeRequestEntity())
-                ->setRange($range)
-                ->setSerie($serie)
-                ->setType($type)
+        $this->lastRequest = $request = $this->postnl->getBarcodeService()->getGateway()->getRequestBuilder()->buildGenerateBarcodeRequest(
+            generateBarcodeRequestDTO: new GenerateBarcodeRequestDTO(
+                service: BarcodeServiceInterface::class,
+                propType: RequestProp::class,
+
+                Type: $type,
+                Serie: $serie,
+                Range: $range,
+            ),
         );
-        parse_str($request->getUri()->getQuery(), $query);
 
-        $this->assertEquals(
-            [
+        parse_str(string: $request->getUri()->getQuery(), result: $query);
+
+        $this->assertEqualsCanonicalizing(
+            expected: [
                 'CustomerCode'   => 'DEVC',
                 'CustomerNumber' => '11223344',
-                'Type'           => '3S',
-                'Serie'          => '987000000-987600000',
+                'Type'           => $type,
+                'Serie'          => $serie,
+                'Range'          => $range,
             ],
-            $query,
-            '',
-            0,
-            10,
-            true
+            actual: $query,
         );
-        $this->assertEmpty((string) $request->getBody());
-        $this->assertEquals('test', $request->getHeaderLine('apikey'));
-        $this->assertEquals('', $request->getHeaderLine('Content-Type'));
-        $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
+        $this->assertEmpty(actual: (string) $request->getBody());
+        /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+        $this->assertEquals(expected: 'test', actual: $request->getHeaderLine('apikey'));
+        /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+        $this->assertEquals(expected: '', actual: $request->getHeaderLine('Content-Type'));
+        /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+        $this->assertEquals(expected: 'application/json', actual: $request->getHeaderLine('Accept'));
     }
 
     /**
      * @testdox Returns a valid single barcode
-     *
-     * @throws InvalidBarcodeException
      */
     public function testSingleBarcodeRest()
     {
         $mockClient = new Client();
         $responseFactory = Psr17FactoryDiscovery::findResponseFactory();
         $streamFactory = Psr17FactoryDiscovery::findStreamFactory();
+        /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
         $response = $responseFactory->createResponse(200, 'OK')
             ->withHeader('Content-Type', 'application/json;charset=UTF-8')
-            ->withBody($streamFactory->createStream(json_encode(['Barcode' => '3SDEVC816223392'])))
-        ;
+            ->withBody($streamFactory->createStream(json_encode(value: ['Barcode' => '3SDEVC816223392'])));
+        /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
         $mockClient->addResponse($response);
-        \ThirtyBees\PostNL\Http\Client::getInstance()->setAsyncClient($mockClient);
+        $this->postnl->getBarcodeService()->getGateway()->setHttpClient(
+            httpClient: new HTTPlugHTTPClient(asyncClient: $mockClient),
+        );
 
-        $this->assertEquals('3SDEVC816223392', $this->postnl->generateBarcode('3S'));
+        $response = $this->postnl->generateBarcode();
+        $this->assertTrue(condition: $response->isValid());
+        $this->assertEquals(expected: '3SDEVC816223392', actual: $response->getBarcode());
+        $this->assertEquals(expected: '3SDEVC816223392', actual: (string) $response);
     }
 
     /**
      * @testdox Returns a valid single barcode for a country
-     *
-     * @throws InvalidBarcodeException
-     * @throws InvalidConfigurationException
      */
     public function testSingleBarCodeByCountryRest()
     {
         $mockClient = new Client();
         $responseFactory = Psr17FactoryDiscovery::findResponseFactory();
         $streamFactory = Psr17FactoryDiscovery::findStreamFactory();
-        $mockClient->addResponse(
-            $responseFactory->createResponse(200, 'OK')
-                ->withHeader('Content-Type', 'application/json;charset=UTF-8')
-                ->withBody($streamFactory->createStream(json_encode(['Barcode' => '3SDEVC816223392'])))
+        /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+        $response = $responseFactory->createResponse(200, 'OK')
+            ->withHeader('Content-Type', 'application/json;charset=UTF-8')
+            ->withBody($streamFactory->createStream(json_encode(value: ['Barcode' => '3SDEVC816223392'])));
+        /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+        $mockClient->addResponse($response);
+        $this->postnl->getBarcodeService()->getGateway()->setHttpClient(
+            httpClient: new HTTPlugHTTPClient(asyncClient: $mockClient),
         );
-        \ThirtyBees\PostNL\Http\Client::getInstance()->setAsyncClient($mockClient);
 
-        $this->assertEquals('3SDEVC816223392', $this->postnl->generateBarcodeByCountryCode('NL'));
+        $response = $this->postnl->generateBarcodeByCountryCode(iso: 'NL');
+        $this->assertEquals(expected: '3SDEVC816223392', actual: $response->getBarcode());
+        $this->assertEquals(expected: '3SDEVC816223392', actual: (string) $response);
     }
 
     /**
      * @testdox Returns several barcodes
-     *
-     * @throws InvalidBarcodeException
-     * @throws InvalidConfigurationException
      */
     public function testMultipleNLBarcodesRest()
     {
         $mockClient = new Client();
+
         $responseFactory = Psr17FactoryDiscovery::findResponseFactory();
         $streamFactory = Psr17FactoryDiscovery::findStreamFactory();
 
+        /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
         $mockClient->addResponse(
             $responseFactory->createResponse(200, 'OK')
                 ->withHeader('Content-Type', 'application/json;charset=UTF-8')
-                ->withBody($streamFactory->createStream(json_encode(['Barcode' => '3SDEVC816223392'])))
+                ->withBody($streamFactory->createStream(json_encode(value: ['Barcode' => '3SDEVC816223392'])))
         );
+        /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
         $mockClient->addResponse(
             $responseFactory->createResponse(200, 'OK')
                 ->withHeader('Content-Type', 'application/json;charset=UTF-8')
-                ->withBody($streamFactory->createStream(json_encode(['Barcode' => '3SDEVC816223393'])))
+                ->withBody($streamFactory->createStream(json_encode(value: ['Barcode' => '3SDEVC816223393'])))
         );
+        /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
         $mockClient->addResponse(
             $responseFactory->createResponse(200, 'OK')
                 ->withHeader('Content-Type', 'application/json;charset=UTF-8')
-                ->withBody($streamFactory->createStream(json_encode(['Barcode' => '3SDEVC816223394'])))
+                ->withBody($streamFactory->createStream(json_encode(value: ['Barcode' => '3SDEVC816223394'])))
         );
+        /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
         $mockClient->addResponse(
             $responseFactory->createResponse(200, 'OK')
                 ->withHeader('Content-Type', 'application/json;charset=UTF-8')
-                ->withBody($streamFactory->createStream(json_encode(['Barcode' => '3SDEVC816223395'])))
+                ->withBody($streamFactory->createStream(json_encode(value: ['Barcode' => '3SDEVC816223395'])))
         );
-        \ThirtyBees\PostNL\Http\Client::getInstance()->setAsyncClient($mockClient);
+        $this->postnl->getBarcodeService()->getGateway()->setHttpClient(
+            httpClient: new HTTPlugHTTPClient(asyncClient: $mockClient),
+        );
 
-        $barcodes = $this->postnl->generateBarcodesByCountryCodes(['NL' => 4]);
+        $barcodes = $this->postnl->generateBarcodesByCountryCodes(isos: ['NL' => 4]);
 
         $this->assertEquals(
-            [
+            expected: new GenerateBarcodesByCountryCodesResponseDTO(countries: [
                 'NL' => [
                     '3SDEVC816223392',
                     '3SDEVC816223393',
                     '3SDEVC816223394',
                     '3SDEVC816223395',
                 ],
-            ],
-            $barcodes
+            ]),
+            actual: $barcodes
         );
     }
 
-//    /**
-//     * @testdox Returns a valid single barcode
-//     *
-//     * @throws InvalidBarcodeException
-//     */
-//    public function testNegativeSingleBarcodeInvalidResponse()
-//    {
-//        $this->expectException(HttpClientException::class);
-//
-//        $responseFactory = Psr17FactoryDiscovery::findResponseFactory();
-//        $streamFactory = Psr17FactoryDiscovery::findStreamFactory();
-//        $mockClient = new Client();
-//        $mockClient->addResponse(
-//            $responseFactory->createResponse(200, 'OK')
-//                ->withHeader('Content-Type', 'application/json;charset=UTF-8')
-//                ->withBody($streamFactory->createStream('asdfojasuidfo'))
-//        );
-//        \ThirtyBees\PostNL\Http\Client::getInstance()->setAsyncClient($mockClient);
-//
-//        $this->postnl->generateBarcode('3S');
-//    }
-
-    /**
-     * @param string $type
-     *
-     * @return string
-     */
-    protected function getRange($type)
+    #[Pure]
+    protected function getRange(string $type): string
     {
-        if (in_array($type, ['2S', '3S'])) {
+        if (in_array(needle: $type, haystack: ['2S', '3S'])) {
             return $this->postnl->getCustomer()->getCustomerCode();
         }
 

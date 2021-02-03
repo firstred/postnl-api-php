@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,121 +20,99 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- * @copyright 2017-2020 Michael Dekker
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity;
+declare(strict_types=1);
 
-use ThirtyBees\PostNL\Service\BarcodeService;
-use ThirtyBees\PostNL\Service\ConfirmingService;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
-use ThirtyBees\PostNL\Service\LabellingService;
-use ThirtyBees\PostNL\Service\LocationService;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
-use ThirtyBees\PostNL\Service\TimeframeService;
+namespace Firstred\PostNL\Entity;
 
-/**
- * Class Status.
- *
- * @method string|null getCurrentPhaseCode()
- * @method string|null getCurrentPhaseDescription()
- * @method string|null getCurrentStatusCode()
- * @method string|null getCurrentStatusDescription()
- * @method string|null getCurrentStatusTimeStamp()
- * @method Status      setCurrentPhaseCode(string|null $code = null)
- * @method Status      setCurrentPhaseDescription(string|null $desc = null)
- * @method Status      setCurrentStatusCode(string|null $code = null)
- * @method Status      setCurrentStatusDescription(string|null $desc = null)
- * @method Status      setCurrentStatusTimeStamp(string|null $dateTime = null)
- */
-class Status extends AbstractEntity
+use Firstred\PostNL\Attribute\PropInterface;
+use Firstred\PostNL\Misc\SerializableObject;
+use Firstred\PostNL\Service\ServiceInterface;
+use JetBrains\PhpStorm\ExpectedValues;
+
+class Status extends SerializableObject
 {
-    /** @var string[][] */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'CurrentPhaseCode'         => BarcodeService::DOMAIN_NAMESPACE,
-            'CurrentPhaseDescription'  => BarcodeService::DOMAIN_NAMESPACE,
-            'CurrentStatusCode'        => BarcodeService::DOMAIN_NAMESPACE,
-            'CurrentStatusDescription' => BarcodeService::DOMAIN_NAMESPACE,
-            'CurrentStatusTimeStamp'   => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'CurrentPhaseCode'         => ConfirmingService::DOMAIN_NAMESPACE,
-            'CurrentPhaseDescription'  => ConfirmingService::DOMAIN_NAMESPACE,
-            'CurrentStatusCode'        => ConfirmingService::DOMAIN_NAMESPACE,
-            'CurrentStatusDescription' => ConfirmingService::DOMAIN_NAMESPACE,
-            'CurrentStatusTimeStamp'   => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'CurrentPhaseCode'         => LabellingService::DOMAIN_NAMESPACE,
-            'CurrentPhaseDescription'  => LabellingService::DOMAIN_NAMESPACE,
-            'CurrentStatusCode'        => LabellingService::DOMAIN_NAMESPACE,
-            'CurrentStatusDescription' => LabellingService::DOMAIN_NAMESPACE,
-            'CurrentStatusTimeStamp'   => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'CurrentPhaseCode'         => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CurrentPhaseDescription'  => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CurrentStatusCode'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CurrentStatusDescription' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CurrentStatusTimeStamp'   => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'CurrentPhaseCode'         => DeliveryDateService::DOMAIN_NAMESPACE,
-            'CurrentPhaseDescription'  => DeliveryDateService::DOMAIN_NAMESPACE,
-            'CurrentStatusCode'        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'CurrentStatusDescription' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'CurrentStatusTimeStamp'   => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'CurrentPhaseCode'         => LocationService::DOMAIN_NAMESPACE,
-            'CurrentPhaseDescription'  => LocationService::DOMAIN_NAMESPACE,
-            'CurrentStatusCode'        => LocationService::DOMAIN_NAMESPACE,
-            'CurrentStatusDescription' => LocationService::DOMAIN_NAMESPACE,
-            'CurrentStatusTimeStamp'   => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'CurrentPhaseCode'         => TimeframeService::DOMAIN_NAMESPACE,
-            'CurrentPhaseDescription'  => TimeframeService::DOMAIN_NAMESPACE,
-            'CurrentStatusCode'        => TimeframeService::DOMAIN_NAMESPACE,
-            'CurrentStatusDescription' => TimeframeService::DOMAIN_NAMESPACE,
-            'CurrentStatusTimeStamp'   => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null */
-    protected $CurrentPhaseCode;
-    /** @var string|null */
-    protected $CurrentPhaseDescription;
-    /** @var string|null */
-    protected $CurrentStatusCode;
-    /** @var string|null */
-    protected $CurrentStatusDescription;
-    /** @var string|null */
-    protected $CurrentStatusTimeStamp;
-    // @codingStandardsIgnoreEnd
-
-    /**
-     * @param string|null $phaseCode
-     * @param string|null $phaseDesc
-     * @param string|null $statusCode
-     * @param string|null $statusDesc
-     * @param string|null $timeStamp
-     */
     public function __construct(
-        $phaseCode = null,
-        $phaseDesc = null,
-        $statusCode = null,
-        $statusDesc = null,
-        $timeStamp = null
-    ) {
-        parent::__construct();
+        #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
+        string $service = '',
+        #[ExpectedValues(values: PropInterface::PROP_TYPES + [''])]
+        string $propType = '',
 
-        $this->setCurrentPhaseCode($phaseCode);
-        $this->setCurrentPhaseDescription($phaseDesc);
-        $this->setCurrentStatusCode($statusCode);
-        $this->setCurrentStatusDescription($statusDesc);
-        $this->setCurrentStatusTimeStamp($timeStamp);
+        protected string|null $CurrentPhaseCode = null,
+        protected string|null $CurrentPhaseDescription = null,
+        protected string|null $CurrentStatusCode = null,
+        protected string|null $CurrentStatusDescription = null,
+        protected string|null $CurrentStatusTimeStamp = null,
+    ) {
+        parent::__construct(service: $service, propType: $propType);
+
+        $this->setCurrentPhaseCode(CurrentPhaseCode: $CurrentPhaseCode);
+        $this->setCurrentPhaseDescription(CurrentPhaseDescription: $CurrentPhaseDescription);
+        $this->setCurrentStatusCode(CurrentStatusCode: $CurrentStatusCode);
+        $this->setCurrentStatusDescription(CurrentStatusDescription: $CurrentStatusDescription);
+        $this->setCurrentStatusTimeStamp(CurrentStatusTimeStamp: $CurrentStatusTimeStamp);
+    }
+
+    public function getCurrentPhaseCode(): string|null
+    {
+        return $this->CurrentPhaseCode;
+    }
+
+    public function setCurrentPhaseCode(string|null $CurrentPhaseCode = null): static
+    {
+        $this->CurrentPhaseCode = $CurrentPhaseCode;
+
+        return $this;
+    }
+
+    public function getCurrentPhaseDescription(): string|null
+    {
+        return $this->CurrentPhaseDescription;
+    }
+
+    public function setCurrentPhaseDescription(string|null $CurrentPhaseDescription = null): static
+    {
+        $this->CurrentPhaseDescription = $CurrentPhaseDescription;
+
+        return $this;
+    }
+
+    public function getCurrentStatusCode(): string|null
+    {
+        return $this->CurrentStatusCode;
+    }
+
+    public function setCurrentStatusCode(string|null $CurrentStatusCode = null): static
+    {
+        $this->CurrentStatusCode = $CurrentStatusCode;
+
+        return $this;
+    }
+
+    public function getCurrentStatusDescription(): string|null
+    {
+        return $this->CurrentStatusDescription;
+    }
+
+    public function setCurrentStatusDescription(string|null $CurrentStatusDescription = null): static
+    {
+        $this->CurrentStatusDescription = $CurrentStatusDescription;
+
+        return $this;
+    }
+
+    public function getCurrentStatusTimeStamp(): string|null
+    {
+        return $this->CurrentStatusTimeStamp;
+    }
+
+    public function setCurrentStatusTimeStamp(string|null $CurrentStatusTimeStamp = null): static
+    {
+        $this->CurrentStatusTimeStamp = $CurrentStatusTimeStamp;
+
+        return $this;
     }
 }

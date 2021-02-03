@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,103 +20,85 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- * @copyright 2017-2020 Michael Dekker
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity;
+declare(strict_types=1);
 
-use ThirtyBees\PostNL\Service\BarcodeService;
-use ThirtyBees\PostNL\Service\ConfirmingService;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
-use ThirtyBees\PostNL\Service\LabellingService;
-use ThirtyBees\PostNL\Service\LocationService;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
-use ThirtyBees\PostNL\Service\TimeframeService;
+namespace Firstred\PostNL\Entity;
 
-/**
- * Class TimeframeTimeFrame.
- *
- * @method string|null        getDate()
- * @method string|null        getFrom()
- * @method string|null        getTo()
- * @method string[]|null      getOptions()
- * @method TimeframeTimeFrame setDate(string|null $date = null)
- * @method TimeframeTimeFrame setFrom(string|null $from = null)
- * @method TimeframeTimeFrame setTo(string|null $to = null)
- * @method TimeframeTimeFrame setOptions(string[]|null $options = null)
- */
-class TimeframeTimeFrame extends AbstractEntity
+use Firstred\PostNL\Attribute\PropInterface;
+use Firstred\PostNL\Misc\SerializableObject;
+use Firstred\PostNL\Service\ServiceInterface;
+use JetBrains\PhpStorm\ExpectedValues;
+
+class TimeframeTimeFrame extends SerializableObject
 {
-    /** @var string[][] */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'Date'    => BarcodeService::DOMAIN_NAMESPACE,
-            'From'    => BarcodeService::DOMAIN_NAMESPACE,
-            'Options' => BarcodeService::DOMAIN_NAMESPACE,
-            'To'      => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'Date'    => ConfirmingService::DOMAIN_NAMESPACE,
-            'From'    => ConfirmingService::DOMAIN_NAMESPACE,
-            'Options' => ConfirmingService::DOMAIN_NAMESPACE,
-            'To'      => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'Date'    => LabellingService::DOMAIN_NAMESPACE,
-            'From'    => LabellingService::DOMAIN_NAMESPACE,
-            'Options' => LabellingService::DOMAIN_NAMESPACE,
-            'To'      => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Date'    => ShippingStatusService::DOMAIN_NAMESPACE,
-            'From'    => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Options' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'To'      => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'Date'    => DeliveryDateService::DOMAIN_NAMESPACE,
-            'From'    => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Options' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'To'      => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'Date'    => LocationService::DOMAIN_NAMESPACE,
-            'From'    => LocationService::DOMAIN_NAMESPACE,
-            'Options' => LocationService::DOMAIN_NAMESPACE,
-            'To'      => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'Date'    => TimeframeService::DOMAIN_NAMESPACE,
-            'From'    => TimeframeService::DOMAIN_NAMESPACE,
-            'Options' => TimeframeService::DOMAIN_NAMESPACE,
-            'To'      => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null */
-    protected $Date;
-    /** @var string|null */
-    protected $From;
-    /** @var string[]|null */
-    protected $Options;
-    /** @var string|null */
-    protected $To;
-    // @codingStandardsIgnoreEnd
+    public function __construct(
+        #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
+        string $service = '',
+        #[ExpectedValues(values: PropInterface::PROP_TYPES + [''])]
+        string $propType = '',
 
-    /**
-     * @param string|null   $date
-     * @param string|null   $from
-     * @param string|null   $to
-     * @param string[]|null $options
-     */
-    public function __construct($date = null, $from = null, $to = null, array $options = null)
+        protected string|null $Date = null,
+        protected string|null $From = null,
+        protected array|null $Options = null,
+        protected string|null $To = null,
+    ) {
+        parent::__construct(service: $service, propType: $propType);
+
+        $this->setDate(Date: $Date);
+        $this->setFrom(From: $From);
+        $this->setTo(To: $To);
+        $this->setOptions(Options: $Options);
+    }
+
+    public function getDate(): string|null
     {
-        parent::__construct();
+        return $this->Date;
+    }
 
-        $this->setDate($date);
-        $this->setFrom($from);
-        $this->setTo($to);
-        $this->setOptions($options);
+    public function setDate(string|null $Date = null): static
+    {
+        $this->Date = $Date;
+
+        return $this;
+    }
+
+    public function getFrom(): string|null
+    {
+        return $this->From;
+    }
+
+    public function setFrom(string|null $From = null): static
+    {
+        $this->From = $From;
+
+        return $this;
+    }
+
+    public function getOptions(): array|null
+    {
+        return $this->Options;
+    }
+
+    public function setOptions(array|null $Options = null): static
+    {
+        $this->Options = $Options;
+
+        return $this;
+    }
+
+    public function getTo(): string|null
+    {
+        return $this->To;
+    }
+
+    public function setTo(string|null $To = null): static
+    {
+        $this->To = $To;
+
+        return $this;
     }
 }

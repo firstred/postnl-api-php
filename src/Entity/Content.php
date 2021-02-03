@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,159 +20,127 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- * @copyright 2017-2020 Michael Dekker
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity;
+declare(strict_types=1);
 
-use ThirtyBees\PostNL\Service\BarcodeService;
-use ThirtyBees\PostNL\Service\ConfirmingService;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
-use ThirtyBees\PostNL\Service\LabellingService;
-use ThirtyBees\PostNL\Service\LocationService;
-use ThirtyBees\PostNL\Service\ShippingService;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
-use ThirtyBees\PostNL\Service\TimeframeService;
+namespace Firstred\PostNL\Entity;
 
-/**
- * Class Content.
- *
- * @method string|null    getCountryOfOrigin()
- * @method string|null    getDescription()
- * @method string|null    getHSTariffNr()
- * @method string|null    getQuantity()
- * @method string|null    getValue()
- * @method string|null    getWeight()
- * @method Content[]|null getContent()
- * @method Content        setCountryOfOrigin(string|null $countryOfOrigin = null)
- * @method Content        setDescription(string|null $description = null)
- * @method Content        setHSTariffNr(string|null $hsTariffNr = null)
- * @method Content        setQuantity(string|null $qty = null)
- * @method Content        setValue(string|null $val = null)
- * @method Content        setWeight(string|null $weight = null)
- * @method Content        setContent(Content[]|null $content = null)
- */
-class Content extends AbstractEntity
+use Firstred\PostNL\Attribute\PropInterface;
+use Firstred\PostNL\Misc\SerializableObject;
+use Firstred\PostNL\Service\ServiceInterface;
+use JetBrains\PhpStorm\ExpectedValues;
+
+class Content extends SerializableObject
 {
-    /** @var string[][] */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'CountryOfOrigin' => BarcodeService::DOMAIN_NAMESPACE,
-            'Description'     => BarcodeService::DOMAIN_NAMESPACE,
-            'HSTariffNr'      => BarcodeService::DOMAIN_NAMESPACE,
-            'Quantity'        => BarcodeService::DOMAIN_NAMESPACE,
-            'Value'           => BarcodeService::DOMAIN_NAMESPACE,
-            'Weight'          => BarcodeService::DOMAIN_NAMESPACE,
-            'Content'         => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'CountryOfOrigin' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Description'     => ConfirmingService::DOMAIN_NAMESPACE,
-            'HSTariffNr'      => ConfirmingService::DOMAIN_NAMESPACE,
-            'Quantity'        => ConfirmingService::DOMAIN_NAMESPACE,
-            'Value'           => ConfirmingService::DOMAIN_NAMESPACE,
-            'Weight'          => ConfirmingService::DOMAIN_NAMESPACE,
-            'Content'         => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'CountryOfOrigin' => LabellingService::DOMAIN_NAMESPACE,
-            'Description'     => LabellingService::DOMAIN_NAMESPACE,
-            'HSTariffNr'      => LabellingService::DOMAIN_NAMESPACE,
-            'Quantity'        => LabellingService::DOMAIN_NAMESPACE,
-            'Value'           => LabellingService::DOMAIN_NAMESPACE,
-            'Weight'          => LabellingService::DOMAIN_NAMESPACE,
-            'Content'         => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'CountryOfOrigin' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Description'     => ShippingStatusService::DOMAIN_NAMESPACE,
-            'HSTariffNr'      => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Quantity'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Value'           => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Weight'          => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Content'         => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'CountryOfOrigin' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Description'     => DeliveryDateService::DOMAIN_NAMESPACE,
-            'HSTariffNr'      => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Quantity'        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Value'           => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Weight'          => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Content'         => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'CountryOfOrigin' => LocationService::DOMAIN_NAMESPACE,
-            'Description'     => LocationService::DOMAIN_NAMESPACE,
-            'HSTariffNr'      => LocationService::DOMAIN_NAMESPACE,
-            'Quantity'        => LocationService::DOMAIN_NAMESPACE,
-            'Value'           => LocationService::DOMAIN_NAMESPACE,
-            'Weight'          => LocationService::DOMAIN_NAMESPACE,
-            'Content'         => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'CountryOfOrigin' => TimeframeService::DOMAIN_NAMESPACE,
-            'Description'     => TimeframeService::DOMAIN_NAMESPACE,
-            'HSTariffNr'      => TimeframeService::DOMAIN_NAMESPACE,
-            'Quantity'        => TimeframeService::DOMAIN_NAMESPACE,
-            'Value'           => TimeframeService::DOMAIN_NAMESPACE,
-            'Weight'          => TimeframeService::DOMAIN_NAMESPACE,
-            'Content'         => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-        'Shipping' => [
-            'CountryOfOrigin' => ShippingService::DOMAIN_NAMESPACE,
-            'Description'     => ShippingService::DOMAIN_NAMESPACE,
-            'HSTariffNr'      => ShippingService::DOMAIN_NAMESPACE,
-            'Quantity'        => ShippingService::DOMAIN_NAMESPACE,
-            'Value'           => ShippingService::DOMAIN_NAMESPACE,
-            'Weight'          => ShippingService::DOMAIN_NAMESPACE,
-            'Content'         => ShippingService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null */
-    protected $CountryOfOrigin;
-    /** @var string|null */
-    protected $Description;
-    /** @var string|null */
-    protected $HSTariffNr;
-    /** @var string|null */
-    protected $Quantity;
-    /** @var string|null */
-    protected $Value;
-    /** @var string|null */
-    protected $Weight;
-    /** @var Content[]|null */
-    protected $Content;
-    // @codingStandardsIgnoreEnd
-
-    /**
-     * @param string|null    $countryOfOrigin
-     * @param string|null    $description
-     * @param string|null    $hsTariffNr
-     * @param string|null    $qty
-     * @param string|null    $val
-     * @param string|null    $weight
-     * @param Content[]|null $content
-     */
     public function __construct(
-        $countryOfOrigin = null,
-        $description = null,
-        $hsTariffNr = null,
-        $qty = null,
-        $val = null,
-        $weight = null,
-        $content = null
-    ) {
-        parent::__construct();
+        #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
+        string $service = '',
+        #[ExpectedValues(values: PropInterface::PROP_TYPES + [''])]
+        string $propType = '',
 
-        $this->setCountryOfOrigin($countryOfOrigin);
-        $this->setDescription($description);
-        $this->setHSTariffNr($hsTariffNr);
-        $this->setQuantity($qty);
-        $this->setValue($val);
-        $this->setWeight($weight);
-        $this->setContent($content);
+        protected string|null $CountryOfOrigin = null,
+        protected string|null $Description = null,
+        protected string|null $HSTariffNr = null,
+        protected string|null $Quantity = null,
+        protected string|null $Value = null,
+        protected string|null $Weight = null,
+        protected array|null $Content = null,
+    ) {
+        parent::__construct(service: $service, propType: $propType);
+
+        $this->setCountryOfOrigin(CountryOfOrigin: $CountryOfOrigin);
+        $this->setDescription(Description: $Description);
+        $this->setHSTariffNr(HSTariffNr: $HSTariffNr);
+        $this->setQuantity(Quantity: $Quantity);
+        $this->setValue(Value: $Value);
+        $this->setWeight(Weight: $Weight);
+        $this->setContent(Content: $Content);
+    }
+
+    public function getCountryOfOrigin(): string|null
+    {
+        return $this->CountryOfOrigin;
+    }
+
+    public function setCountryOfOrigin(string|null $CountryOfOrigin = null): static
+    {
+        $this->CountryOfOrigin = $CountryOfOrigin;
+
+        return $this;
+    }
+
+    public function getDescription(): string|null
+    {
+        return $this->Description;
+    }
+
+    public function setDescription(string|null $Description = null): static
+    {
+        $this->Description = $Description;
+
+        return $this;
+    }
+
+    public function getHSTariffNr(): string|null
+    {
+        return $this->HSTariffNr;
+    }
+
+    public function setHSTariffNr(string|null $HSTariffNr = null): static
+    {
+        $this->HSTariffNr = $HSTariffNr;
+
+        return $this;
+    }
+
+    public function getQuantity(): string|null
+    {
+        return $this->Quantity;
+    }
+
+    public function setQuantity(string|null $Quantity = null): static
+    {
+        $this->Quantity = $Quantity;
+
+        return $this;
+    }
+
+    public function getValue(): string|null
+    {
+        return $this->Value;
+    }
+
+    public function setValue(string|null $Value = null): static
+    {
+        $this->Value = $Value;
+
+        return $this;
+    }
+
+    public function getWeight(): string|null
+    {
+        return $this->Weight;
+    }
+
+    public function setWeight(string|null $Weight = null): static
+    {
+        $this->Weight = $Weight;
+
+        return $this;
+    }
+
+    public function getContent(): array|null
+    {
+        return $this->Content;
+    }
+
+    public function setContent(array|null $Content = null): static
+    {
+        $this->Content = $Content;
+
+        return $this;
     }
 }

@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,162 +20,153 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- * @copyright 2017-2020 Michael Dekker
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity;
+declare(strict_types=1);
 
-use ThirtyBees\PostNL\Service\BarcodeService;
-use ThirtyBees\PostNL\Service\ConfirmingService;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
-use ThirtyBees\PostNL\Service\LabellingService;
-use ThirtyBees\PostNL\Service\LocationService;
-use ThirtyBees\PostNL\Service\ShippingService;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
-use ThirtyBees\PostNL\Service\TimeframeService;
+namespace Firstred\PostNL\Entity;
 
-/**
- * Class Customer.
- *
- * @method string|null getCustomerNumber()
- * @method string|null getCustomerCode()
- * @method string|null getCollectionLocation()
- * @method string|null getContactPerson()
- * @method string|null getEmail()
- * @method string|null getName()
- * @method string|null getAddress()
- * @method string|null getGlobalPackCustomerCode()
- * @method string|null getGlobalPackBarcodeType()
- * @method Customer    setCustomerNumber(string|null $customerNr = null)
- * @method Customer    setCustomerCode(string|null $customerCode = null)
- * @method Customer    setCollectionLocation(string|null $collectionLocation = null)
- * @method Customer    setContactPerson(string|null $contactPerson = null)
- * @method Customer    setEmail(string|null $email = null)
- * @method Customer    setName(string|null $name = null)
- * @method Customer    setAddress(Address|null $address = null)
- * @method Customer    setGlobalPackCustomerCode(string|null $code = null)
- * @method Customer    setGlobalPackBarcodeType(string|null $type = null)
- */
-class Customer extends AbstractEntity
+use Firstred\PostNL\Attribute\PropInterface;
+use Firstred\PostNL\Misc\SerializableObject;
+use Firstred\PostNL\Service\ServiceInterface;
+use JetBrains\PhpStorm\ExpectedValues;
+
+class Customer extends SerializableObject
 {
-    /** @var string[][] */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'CustomerCode'   => BarcodeService::DOMAIN_NAMESPACE,
-            'CustomerNumber' => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'Address'            => ConfirmingService::DOMAIN_NAMESPACE,
-            'CollectionLocation' => ConfirmingService::DOMAIN_NAMESPACE,
-            'ContactPerson'      => ConfirmingService::DOMAIN_NAMESPACE,
-            'CustomerCode'       => ConfirmingService::DOMAIN_NAMESPACE,
-            'CustomerNumber'     => ConfirmingService::DOMAIN_NAMESPACE,
-            'Email'              => ConfirmingService::DOMAIN_NAMESPACE,
-            'Name'               => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'Address'            => LabellingService::DOMAIN_NAMESPACE,
-            'CollectionLocation' => LabellingService::DOMAIN_NAMESPACE,
-            'ContactPerson'      => LabellingService::DOMAIN_NAMESPACE,
-            'CustomerCode'       => LabellingService::DOMAIN_NAMESPACE,
-            'CustomerNumber'     => LabellingService::DOMAIN_NAMESPACE,
-            'Email'              => LabellingService::DOMAIN_NAMESPACE,
-            'Name'               => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Address'            => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CollectionLocation' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'ContactPerson'      => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CustomerCode'       => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CustomerNumber'     => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Email'              => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Name'               => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'Address'            => DeliveryDateService::DOMAIN_NAMESPACE,
-            'CollectionLocation' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'ContactPerson'      => DeliveryDateService::DOMAIN_NAMESPACE,
-            'CustomerCode'       => DeliveryDateService::DOMAIN_NAMESPACE,
-            'CustomerNumber'     => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Email'              => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Name'               => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'Address'            => LocationService::DOMAIN_NAMESPACE,
-            'CollectionLocation' => LocationService::DOMAIN_NAMESPACE,
-            'ContactPerson'      => LocationService::DOMAIN_NAMESPACE,
-            'CustomerCode'       => LocationService::DOMAIN_NAMESPACE,
-            'CustomerNumber'     => LocationService::DOMAIN_NAMESPACE,
-            'Email'              => LocationService::DOMAIN_NAMESPACE,
-            'Name'               => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'Address'            => TimeframeService::DOMAIN_NAMESPACE,
-            'CollectionLocation' => TimeframeService::DOMAIN_NAMESPACE,
-            'ContactPerson'      => TimeframeService::DOMAIN_NAMESPACE,
-            'CustomerCode'       => TimeframeService::DOMAIN_NAMESPACE,
-            'CustomerNumber'     => TimeframeService::DOMAIN_NAMESPACE,
-            'Email'              => TimeframeService::DOMAIN_NAMESPACE,
-            'Name'               => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-        'Shipping' => [
-            'Address'            => ShippingService::DOMAIN_NAMESPACE,
-            'CollectionLocation' => ShippingService::DOMAIN_NAMESPACE,
-            'ContactPerson'      => ShippingService::DOMAIN_NAMESPACE,
-            'CustomerCode'       => ShippingService::DOMAIN_NAMESPACE,
-            'CustomerNumber'     => ShippingService::DOMAIN_NAMESPACE,
-            'Email'              => ShippingService::DOMAIN_NAMESPACE,
-            'Name'               => ShippingService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var Address|null */
-    protected $Address;
-    /** @var string|null */
-    protected $CollectionLocation;
-    /** @var string|null */
-    protected $ContactPerson;
-    /** @var string|null */
-    protected $CustomerCode;
-    /** @var string|null */
-    protected $CustomerNumber;
-    /** @var string|null */
-    protected $GlobalPackCustomerCode;
-    /** @var string|null */
-    protected $GlobalPackBarcodeType;
-    /** @var string|null */
-    protected $Email;
-    /** @var string|null */
-    protected $Name;
-    // @codingStandardsIgnoreEnd
-
-    /**
-     * @param string  $customerNr
-     * @param string  $customerCode
-     * @param string  $collectionLocation
-     * @param string  $contactPerson
-     * @param string  $email
-     * @param string  $name
-     * @param Address $address
-     */
     public function __construct(
-        $customerNr = null,
-        $customerCode = null,
-        $collectionLocation = null,
-        $contactPerson = null,
-        $email = null,
-        $name = null,
-        Address $address = null
-    ) {
-        parent::__construct();
+        #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
+        string $service = '',
+        #[ExpectedValues(values: PropInterface::PROP_TYPES + [''])]
+        string $propType = '',
 
-        $this->setCustomerNumber($customerNr);
-        $this->setCustomerCode($customerCode);
-        $this->setCollectionLocation($collectionLocation);
-        $this->setContactPerson($contactPerson);
-        $this->setEmail($email);
-        $this->setName($name);
-        $this->setAddress($address);
+        protected ?Address $Address = null,
+        protected string|null $CollectionLocation = null,
+        protected string|null $ContactPerson = null,
+        protected string|null $CustomerCode = null,
+        protected string|null $CustomerNumber = null,
+        protected string|null $GlobalPackCustomerCode = null,
+        protected string|null $GlobalPackBarcodeType = null,
+        protected string|null $Email = null,
+        protected string|null $Name = null,
+    ) {
+        parent::__construct(service: $service, propType: $propType);
+
+        $this->setCustomerNumber(CustomerNumber: $CustomerNumber);
+        $this->setCustomerCode(CustomerCode: $CustomerCode);
+        $this->setCollectionLocation(CollectionLocation: $CollectionLocation);
+        $this->setContactPerson(ContactPerson: $ContactPerson);
+        $this->setEmail(Email: $Email);
+        $this->setName(Name: $Name);
+        $this->setAddress(Address: $Address);
+    }
+
+    public function getAddress(): ?Address
+    {
+        return $this->Address;
+    }
+
+    public function setAddress(?Address $Address = null): static
+    {
+        $this->Address = $Address;
+
+        return $this;
+    }
+
+    public function getCollectionLocation(): string|null
+    {
+        return $this->CollectionLocation;
+    }
+
+    public function setCollectionLocation(string|null $CollectionLocation = null): static
+    {
+        $this->CollectionLocation = $CollectionLocation;
+
+        return $this;
+    }
+
+    public function getContactPerson(): string|null
+    {
+        return $this->ContactPerson;
+    }
+
+    public function setContactPerson(string|null $ContactPerson = null): static
+    {
+        $this->ContactPerson = $ContactPerson;
+
+        return $this;
+    }
+
+    public function getCustomerCode(): string|null
+    {
+        return $this->CustomerCode;
+    }
+
+    public function setCustomerCode(string|null $CustomerCode = null): static
+    {
+        $this->CustomerCode = $CustomerCode;
+
+        return $this;
+    }
+
+    public function getCustomerNumber(): string|null
+    {
+        return $this->CustomerNumber;
+    }
+
+    public function setCustomerNumber(string|null $CustomerNumber = null): static
+    {
+        $this->CustomerNumber = $CustomerNumber;
+
+        return $this;
+    }
+
+    public function getGlobalPackCustomerCode(): string|null
+    {
+        return $this->GlobalPackCustomerCode;
+    }
+
+    public function setGlobalPackCustomerCode(string|null $GlobalPackCustomerCode = null): static
+    {
+        $this->GlobalPackCustomerCode = $GlobalPackCustomerCode;
+
+        return $this;
+    }
+
+    public function getGlobalPackBarcodeType(): string|null
+    {
+        return $this->GlobalPackBarcodeType;
+    }
+
+    public function setGlobalPackBarcodeType(string|null $GlobalPackBarcodeType = null): static
+    {
+        $this->GlobalPackBarcodeType = $GlobalPackBarcodeType;
+
+        return $this;
+    }
+
+    public function getEmail(): string|null
+    {
+        return $this->Email;
+    }
+
+    public function setEmail(string|null $Email = null): static
+    {
+        $this->Email = $Email;
+
+        return $this;
+    }
+
+    public function getName(): string|null
+    {
+        return $this->Name;
+    }
+
+    public function setName(string|null $Name = null): static
+    {
+        $this->Name = $Name;
+
+        return $this;
     }
 }
