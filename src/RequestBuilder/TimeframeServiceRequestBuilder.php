@@ -31,9 +31,8 @@ namespace Firstred\PostNL\RequestBuilder;
 use Firstred\PostNL\DTO\Request\CalculateTimeframesRequestDTO;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Http\Discovery\Psr17FactoryDiscovery;
-use function http_build_query;
-use function ltrim;
 use Psr\Http\Message\RequestInterface;
+use function http_build_query;
 
 class TimeframeServiceRequestBuilder extends RequestBuilderBase implements TimeframeServiceRequestBuilderInterface
 {

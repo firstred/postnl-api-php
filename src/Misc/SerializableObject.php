@@ -28,15 +28,17 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Misc;
 
+use Firstred\PostNL\Attribute\PropInterface;
 use Firstred\PostNL\Attribute\RequestProp;
 use Firstred\PostNL\Attribute\ResponseProp;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\ServiceInterface;
-use function in_array;
+use JetBrains\PhpStorm\ExpectedValues;
 use JsonSerializable;
 use ReflectionAttribute;
 use ReflectionClass;
 use ReflectionProperty;
+use function in_array;
 
 abstract class SerializableObject implements JsonSerializable
 {
@@ -88,6 +90,7 @@ abstract class SerializableObject implements JsonSerializable
         return new static(...$json);
     }
 
+    #[ExpectedValues(values: ServiceInterface::SERVICES)]
     public function getService(): string
     {
         return $this->service;
@@ -96,11 +99,37 @@ abstract class SerializableObject implements JsonSerializable
     /**
      * @throws InvalidArgumentException
      */
-    public function setService(string $service): static
-    {
+    public function setService(
+        #[ExpectedValues(values: ServiceInterface::SERVICES)]
+        string $service,
+    ): static {
         foreach ($this->getSerializableProps(asStrings: true) as $serializableProp) {
-            if ($this->{"get$serializableProp"} instanceof SerializableObject) {
-                $this->{"get$serializableProp"}->setService(service: $service);
+            $object = $this->{"get$serializableProp"}();
+            if ($object instanceof SerializableObject) {
+                $object->setService(service: $service);
+            }
+        }
+
+        return $this;
+    }
+
+    #[ExpectedValues(values: PropInterface::PROP_TYPES)]
+    public function getPropType(): string
+    {
+        return $this->service;
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function setPropType(
+        #[ExpectedValues(values: PropInterface::PROP_TYPES)]
+        string $propType,
+    ): static {
+        foreach ($this->getSerializableProps(asStrings: true) as $serializableProp) {
+            $object = $this->{"get$serializableProp"}();
+            if ($object instanceof SerializableObject) {
+                $object->setPropType(propType: $propType);
             }
         }
 

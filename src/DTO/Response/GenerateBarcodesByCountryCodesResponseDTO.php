@@ -30,22 +30,45 @@ namespace Firstred\PostNL\DTO\Response;
 
 use ArrayAccess;
 use Countable;
+use Firstred\PostNL\Attribute\PropInterface;
+use Firstred\PostNL\DTO\CacheableDTO;
 use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Service\ServiceInterface;
 use Iterator;
+use JetBrains\PhpStorm\ExpectedValues;
 use JetBrains\PhpStorm\Pure;
 
-class GenerateBarcodesByCountryCodesResponseDTO implements ArrayAccess, Countable, Iterator
+class GenerateBarcodesByCountryCodesResponseDTO extends CacheableDTO implements ArrayAccess, Countable, Iterator
 {
-    private int $idx;
+    private int $idx = 0;
+
+    protected array $countries = [];
 
     public function __construct(
-        private array $countries = [],
+        #[ExpectedValues(values: ServiceInterface::SERVICES)]
+        string $service,
+        #[ExpectedValues(values: PropInterface::PROP_TYPES)]
+        string $propType,
+        string $cacheKey = '',
+
+        array $countries = [],
     ) {
+        parent::__construct(service: $service, propType: $propType, cacheKey: $cacheKey);
+
         foreach ($this->countries as $iso => $barcodes) {
-            $this->countries[$iso] = new GenerateBarcodesResponseDTO(responses: $barcodes);
+            $this->countries[$iso] = new GenerateBarcodesResponseDTO(
+                service: $this->getService(),
+                propType: $this->getPropType(),
+                cacheKey: $this->getCacheKey(),
+
+                responses: $barcodes,
+            );
         }
+
+        $this->setCountries(countries: $countries);
     }
 
+    #[Pure]
     public function offsetExists(mixed $offset): bool
     {
         if (!static::isCountryIso(countryIso: $offset)) {
@@ -55,6 +78,7 @@ class GenerateBarcodesByCountryCodesResponseDTO implements ArrayAccess, Countabl
         return isset($this->countries[$offset]);
     }
 
+    #[Pure]
     public function offsetGet(mixed $offset): ?GenerateBarcodesResponseDTO
     {
         if (!$this->offsetExists(offset: $offset)) {
@@ -64,6 +88,9 @@ class GenerateBarcodesByCountryCodesResponseDTO implements ArrayAccess, Countabl
         return $this->countries[$offset] ?? null;
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function offsetSet(mixed $offset, mixed $value): void
     {
         if (!static::isCountryIso(countryIso: $offset)) {
@@ -86,11 +113,13 @@ class GenerateBarcodesByCountryCodesResponseDTO implements ArrayAccess, Countabl
         unset($this->countries[$offset]);
     }
 
+    #[Pure]
     private static function isCountryIso(string $countryIso): bool
     {
-        return is_string(value: $countryIso) && 2 === strlen(string: $countryIso);
+        return 2 === strlen(string: $countryIso);
     }
 
+    #[Pure]
     public function current(): array|null
     {
         $currentIso = array_keys(array: $this->countries)[$this->idx] ?? null;
@@ -106,11 +135,13 @@ class GenerateBarcodesByCountryCodesResponseDTO implements ArrayAccess, Countabl
         ++$this->idx;
     }
 
+    #[Pure]
     public function key(): string|null
     {
         return array_keys(array: $this->countries)[$this->idx] ?? null;
     }
 
+    #[Pure]
     public function valid(): bool
     {
         return (bool) $this->key();
@@ -125,5 +156,31 @@ class GenerateBarcodesByCountryCodesResponseDTO implements ArrayAccess, Countabl
     public function count(): int
     {
         return count(value: $this->countries);
+    }
+
+    public function getCountries(): array
+    {
+        return $this->countries;
+    }
+
+    /**
+     * @psalm-param array<int|string, GenerateBarcodesResponseDTO> $countries
+     */
+    public function setCountries(array $countries): static
+    {
+        $this->countries = $countries;
+
+        return $this;
+    }
+
+    public function jsonSerialize(): array
+    {
+        $json = [];
+        foreach ($this->countries as $iso => $generateBarcodesResponseDto) {
+            /** @var GenerateBarcodesResponseDTO $generateBarcodesResponseDto */
+            $json[$iso] = $generateBarcodesResponseDto->jsonSerialize();
+        }
+
+        return $json;
     }
 }

@@ -36,6 +36,8 @@ use JetBrains\PhpStorm\Pure;
 
 class TimeframeService extends ServiceBase implements TimeframeServiceInterface
 {
+    use ServiceLoggerTrait;
+
     #[Pure]
     public function __construct(
         protected Customer $customer,

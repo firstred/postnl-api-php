@@ -28,40 +28,42 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\ResponseProcessor;
 
-use Firstred\PostNL\Attribute\ResponseProp;
 use Firstred\PostNL\DTO\Response\GetLocationResponseDTO;
 use Firstred\PostNL\DTO\Response\GetLocationsResponseDTO;
+use Firstred\PostNL\Exception\ApiException;
+use Firstred\PostNL\Exception\InvalidApiKeyException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Service\LocationServiceInterface;
+use Firstred\PostNL\Exception\NotAvailableException;
+use Firstred\PostNL\Exception\ParseError;
 use Psr\Http\Message\ResponseInterface;
-use function json_decode;
 
 class LocationServiceResponseProcessor extends ResponseProcessorBase implements LocationServiceResponseProcessorInterface
 {
     /**
-     * @throws InvalidArgumentException
+     * @throws InvalidArgumentException|ParseError|ApiException|InvalidApiKeyException|NotAvailableException
      */
     public function processGetLocationResponse(ResponseInterface $response): GetLocationResponseDTO
     {
-        $args = @json_decode(json: (string) $response->getBody(), associative: true);
+        /** @var GetLocationResponseDTO $dto */
+        $dto = $this->fullyProcessResponse(
+            className: GetLocationResponseDTO::class,
+            response: $response,
+        );
 
-        $args = $args['GetLocationsResult']['ResponseLocation'] ?? [];
-        $args['service'] = LocationServiceInterface::class;
-        $args['propType'] = ResponseProp::class;
-
-        return new GetLocationResponseDTO(...$args);
+        return $dto;
     }
 
     /**
-     * @throws InvalidArgumentException
+     * @throws InvalidArgumentException|ParseError|ApiException|InvalidApiKeyException|NotAvailableException
      */
     public function processGetLocationsResponse(ResponseInterface $response): GetLocationsResponseDTO
     {
-        $args = @json_decode(json: (string) $response->getBody(), associative: true);
-        $args['service'] = LocationServiceInterface::class;
-        $args['propType'] = ResponseProp::class;
+        /** @var GetLocationsResponseDTO $dto */
+        $dto = $this->fullyProcessResponse(
+            className: GetLocationsResponseDTO::class,
+            response: $response,
+        );
 
-        /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
-        return new GetLocationsResponseDTO(...$args);
+        return $dto;
     }
 }

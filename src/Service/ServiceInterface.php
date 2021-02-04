@@ -29,6 +29,7 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Service;
 
 use Firstred\PostNL\Entity\Customer;
+use Psr\Log\LoggerInterface;
 
 interface ServiceInterface
 {
@@ -54,4 +55,8 @@ interface ServiceInterface
     public function isSandbox(): bool;
 
     public function setSandbox(bool $sandbox): static;
+
+    public function getLogger(): LoggerInterface|null;
+
+    public function setLogger(LoggerInterface|null $logger): static;
 }

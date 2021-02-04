@@ -26,39 +26,39 @@
 
 declare(strict_types=1);
 
-namespace Firstred\PostNL\DTO\Response;
+namespace Firstred\PostNL\Entity;
 
-class GenerateLabelResponse
+class MergedLabel
 {
-    protected array|null $MergedLabels = null;
-    protected array|null $ResponseShipments = null;
+    protected array|null $Barcodes = null;
+    protected array|null $Labels = null;
 
-    public function __construct(array|null $mergedLabels = null, array|null $responseShipments = null)
+    public function __construct(array|null $barcodes = null, array|null $labels = null)
     {
-        $this->setMergedLabels(mergedLabels: $mergedLabels);
-        $this->setResponseShipments(responseShipments: $responseShipments);
+        $this->setBarcodes(barcodes: $barcodes);
+        $this->setLabels(labels: $labels);
     }
 
-    public function getMergedLabels(): array|null
+    public function getBarcodes(): array|null
     {
-        return $this->MergedLabels;
+        return $this->Barcodes;
     }
 
-    public function setMergedLabels(array|null $mergedLabels = null): static
+    public function setBarcodes(array|null $barcodes = null): static
     {
-        $this->MergedLabels = $mergedLabels;
+        $this->Barcodes = $barcodes;
 
         return $this;
     }
 
-    public function getResponseShipments(): array|null
+    public function getLabels(): array|null
     {
-        return $this->ResponseShipments;
+        return $this->Labels;
     }
 
-    public function setResponseShipments(array|null $responseShipments = null): static
+    public function setLabels(array|null $labels = null): static
     {
-        $this->ResponseShipments = $responseShipments;
+        $this->Labels = $labels;
 
         return $this;
     }

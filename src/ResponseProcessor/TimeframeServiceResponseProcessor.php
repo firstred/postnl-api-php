@@ -28,25 +28,27 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\ResponseProcessor;
 
-use Firstred\PostNL\Attribute\ResponseProp;
 use Firstred\PostNL\DTO\Response\CalculateTimeframesResponseDTO;
+use Firstred\PostNL\Exception\ApiException;
+use Firstred\PostNL\Exception\InvalidApiKeyException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Service\TimeframeServiceInterface;
-use function json_decode;
+use Firstred\PostNL\Exception\NotAvailableException;
+use Firstred\PostNL\Exception\ParseError;
 use Psr\Http\Message\ResponseInterface;
 
 class TimeframeServiceResponseProcessor extends ResponseProcessorBase implements TimeframeServiceResponseProcessorInterface
 {
     /**
-     * @throws InvalidArgumentException
+     * @throws InvalidArgumentException|ParseError|ApiException|InvalidApiKeyException|NotAvailableException
      */
     public function processCalculateTimeframesResponse(ResponseInterface $response): CalculateTimeframesResponseDTO
     {
-        $args = @json_decode(json: (string) $response->getBody(), associative: true);
-        $args['service'] = TimeframeServiceInterface::class;
-        $args['propType'] = ResponseProp::class;
+        /** @var CalculateTimeframesResponseDTO $dto */
+        $dto = $this->fullyProcessResponse(
+            className: CalculateTimeframesResponseDTO::class,
+            response: $response,
+        );
 
-        /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
-        return new CalculateTimeframesResponseDTO(...$args);
+        return $dto;
     }
 }

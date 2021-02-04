@@ -28,32 +28,36 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\ResponseProcessor;
 
-use Firstred\PostNL\Attribute\ResponseProp;
 use Firstred\PostNL\DTO\Response\CalculateDeliveryDateResponseDTO;
 use Firstred\PostNL\DTO\Response\CalculateShippingDateResponseDTO;
-use Firstred\PostNL\Service\DeliveryDateServiceInterface;
-use function json_decode;
+use Firstred\PostNL\Exception\ApiException;
+use Firstred\PostNL\Exception\InvalidApiKeyException;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\NotAvailableException;
+use Firstred\PostNL\Exception\ParseError;
 use Psr\Http\Message\ResponseInterface;
 
 class DeliveryDateServiceResponseProcessor extends ResponseProcessorBase implements DeliveryDateServiceResponseProcessorInterface
 {
+    /**
+     * @throws ApiException|InvalidApiKeyException|InvalidArgumentException|NotAvailableException|ParseError
+     */
     public function processCalculateDeliveryDateResponse(ResponseInterface $response): CalculateDeliveryDateResponseDTO
     {
-        $args = @json_decode(json: (string) $response->getBody(), associative: true);
-        $args['service'] = DeliveryDateServiceInterface::class;
-        $args['propType'] = ResponseProp::class;
+        /** @var CalculateDeliveryDateResponseDTO $dto */
+        $dto = $this->fullyProcessResponse(className: CalculateDeliveryDateResponseDTO::class, response: $response);
 
-        /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
-        return new CalculateDeliveryDateResponseDTO(...$args);
+        return $dto;
     }
 
+    /**
+     * @throws ApiException|InvalidApiKeyException|InvalidArgumentException|NotAvailableException|ParseError
+     */
     public function processGetShippingDateResponse(ResponseInterface $response): CalculateShippingDateResponseDTO
     {
-        $args = @json_decode(json: (string) $response->getBody(), associative: true);
-        $args['service'] = DeliveryDateServiceInterface::class;
-        $args['propType'] = ResponseProp::class;
+        /** @var CalculateShippingDateResponseDTO $dto */
+        $dto = $this->fullyProcessResponse(className: CalculateShippingDateResponseDTO::class, response: $response);
 
-        /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
-        return new CalculateShippingDateResponseDTO(...$args);
+        return $dto;
     }
 }

@@ -37,6 +37,8 @@ use Firstred\PostNL\Gateway\DeliveryDateServiceGatewayInterface;
 
 class DeliveryDateService extends ServiceBase implements DeliveryDateServiceInterface
 {
+    use ServiceLoggerTrait;
+
     public function __construct(
         protected Customer $customer,
         protected string $apiKey,

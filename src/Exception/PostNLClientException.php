@@ -28,6 +28,16 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Exception;
 
-class NotSupportedException extends AbstractException
+use Exception;
+use JetBrains\PhpStorm\Pure;
+use Throwable;
+
+abstract class PostNLClientException extends Exception
 {
+    #[Pure]
+    public function __construct(mixed $message = '', mixed $code = 0, Throwable $previous = null)
+    {
+        /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+        parent::__construct($message, $code, $previous);
+    }
 }

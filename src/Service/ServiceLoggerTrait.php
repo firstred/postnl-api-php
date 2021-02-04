@@ -26,39 +26,20 @@
 
 declare(strict_types=1);
 
-namespace Firstred\PostNL\Entity\Response;
+namespace Firstred\PostNL\Service;
 
-class MergedLabel
+use Psr\Log\LoggerInterface;
+
+trait ServiceLoggerTrait
 {
-    protected array|null $Barcodes = null;
-    protected array|null $Labels = null;
-
-    public function __construct(array|null $barcodes = null, array|null $labels = null)
+    public function getLogger(): LoggerInterface|null
     {
-        $this->setBarcodes(barcodes: $barcodes);
-        $this->setLabels(labels: $labels);
+        return $this->getGateway()->getLogger();
     }
 
-    public function getBarcodes(): array|null
+    public function setLogger(?LoggerInterface $logger): static
     {
-        return $this->Barcodes;
-    }
-
-    public function setBarcodes(array|null $barcodes = null): static
-    {
-        $this->Barcodes = $barcodes;
-
-        return $this;
-    }
-
-    public function getLabels(): array|null
-    {
-        return $this->Labels;
-    }
-
-    public function setLabels(array|null $labels = null): static
-    {
-        $this->Labels = $labels;
+        $this->getGateway()->setLogger(logger: $logger);
 
         return $this;
     }

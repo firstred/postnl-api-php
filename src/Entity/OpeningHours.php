@@ -34,8 +34,8 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\SerializableObject;
 use Firstred\PostNL\Service\LocationServiceInterface;
 use Firstred\PostNL\Service\ServiceInterface;
-use function is_array;
 use JetBrains\PhpStorm\ExpectedValues;
+use function is_array;
 
 class OpeningHours extends SerializableObject
 {

@@ -26,7 +26,7 @@
 
 declare(strict_types=1);
 
-namespace Firstred\PostNL\DTO\Response;
+namespace Firstred\PostNL\Entity;
 
 class ResponseAddress
 {

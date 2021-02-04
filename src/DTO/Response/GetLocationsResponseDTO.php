@@ -32,10 +32,10 @@ use ArrayAccess;
 use Countable;
 use Firstred\PostNL\Attribute\PropInterface;
 use Firstred\PostNL\Attribute\ResponseProp;
+use Firstred\PostNL\DTO\CacheableDTO;
 use Firstred\PostNL\Entity\ResponseLocation;
 use Firstred\PostNL\Entity\Warning;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Misc\SerializableObject;
 use Firstred\PostNL\Service\LocationServiceInterface;
 use Firstred\PostNL\Service\ServiceInterface;
 use Iterator;
@@ -44,7 +44,7 @@ use JetBrains\PhpStorm\Pure;
 use function is_int;
 use function is_string;
 
-class GetLocationsResponseDTO extends SerializableObject implements ArrayAccess, Countable, Iterator
+class GetLocationsResponseDTO extends CacheableDTO implements ArrayAccess, Countable, Iterator
 {
     protected int $idx = 0;
 
@@ -58,9 +58,10 @@ class GetLocationsResponseDTO extends SerializableObject implements ArrayAccess,
 
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
-        string $service = '',
+        string $service,
         #[ExpectedValues(values: PropInterface::PROP_TYPES + [''])]
-        string $propType = '',
+        string $propType,
+        string $cacheKey = '',
 
         /** @psalm-var list<GetLocationResponseDTO>|array */
         array $GetLocationsResult = [],
@@ -68,7 +69,7 @@ class GetLocationsResponseDTO extends SerializableObject implements ArrayAccess,
         /** @psalm-var list<Warning>|array */
         array|null $Warnings = null,
     ) {
-        parent::__construct(service: $service, propType: $propType);
+        parent::__construct(service: $service, propType: $propType, cacheKey: $cacheKey);
 
         $this->setGetLocationsResult(GetLocationsResult: $GetLocationsResult);
         $this->setWarnings(Warnings: $Warnings);

@@ -30,15 +30,17 @@ namespace Firstred\PostNL\Service;
 
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Response\ConfirmingResponseShipment;
+use Firstred\PostNL\Exception\ApiDownException;
 use Firstred\PostNL\Exception\ApiException;
-use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
-use Firstred\PostNL\Exception\ResponseException;
+use Firstred\PostNL\Exception\WithResponse;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Psr\Http\Message\RequestInterface;
 
-class ConfirmingService implements ConfirmingServiceInterface
+class ConfirmingService extends ServiceBase implements ConfirmingServiceInterface
 {
+    use ServiceLoggerTrait;
+
     // API Version
     const VERSION = '2.0';
 
@@ -54,9 +56,9 @@ class ConfirmingService implements ConfirmingServiceInterface
      * @return ConfirmingResponseShipment
      *
      * @throws ApiException
-     * @throws CifDownException
+     * @throws ApiDownException
      * @throws CifException
-     * @throws ResponseException
+     * @throws WithResponse
      */
     public function confirmShipment(ConfirmingResponseDto $confirming)
     {
@@ -68,7 +70,7 @@ class ConfirmingService implements ConfirmingServiceInterface
         }
 
         if (200 === $response->getStatusCode()) {
-            throw new ResponseException(message: 'Invalid API Response', code: null, previous: null, response: $response);
+            throw new WithResponse(message: 'Invalid API Response', code: null, previous: null, response: $response);
         }
 
         throw new ApiException('Unable to confirm');
@@ -97,7 +99,7 @@ class ConfirmingService implements ConfirmingServiceInterface
             try {
                 $confirming = $this->processConfirmResponseREST(response: $response);
                 if (!$confirming instanceof ConfirmingResponseShipment) {
-                    throw new ResponseException(message: 'Invalid API Response', code: null, previous: null, response: $response);
+                    throw new WithResponse(message: 'Invalid API Response', code: null, previous: null, response: $response);
                 }
             } catch (\Exception $e) {
                 $confirming = $e;
@@ -139,8 +141,8 @@ class ConfirmingService implements ConfirmingServiceInterface
      * @return ConfirmingResponseShipment|null
      *
      * @throws ApiException
-     * @throws ResponseException
-     * @throws CifDownException
+     * @throws WithResponse
+     * @throws ApiDownException
      * @throws CifException
      */
     public function processConfirmResponse($response)

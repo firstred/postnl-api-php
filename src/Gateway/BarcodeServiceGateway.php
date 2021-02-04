@@ -30,6 +30,7 @@ namespace Firstred\PostNL\Gateway;
 
 use DateInterval;
 use DateTimeInterface;
+use Firstred\PostNL\Attribute\ResponseProp;
 use Firstred\PostNL\DTO\Request\GenerateBarcodeRequestDTO;
 use Firstred\PostNL\DTO\Request\GenerateBarcodesRequestDTO;
 use Firstred\PostNL\DTO\Response\GenerateBarcodeResponseDTO;
@@ -37,6 +38,7 @@ use Firstred\PostNL\DTO\Response\GenerateBarcodesResponseDTO;
 use Firstred\PostNL\HttpClient\HTTPClientInterface;
 use Firstred\PostNL\RequestBuilder\BarcodeServiceRequestBuilderInterface;
 use Firstred\PostNL\ResponseProcessor\BarcodeServiceResponseProcessorInterface;
+use Firstred\PostNL\Service\BarcodeServiceInterface;
 use JetBrains\PhpStorm\Pure;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -77,7 +79,7 @@ class BarcodeServiceGateway extends GatewayBase implements BarcodeServiceGateway
         }
         unset($id);
 
-        $barcodes = new GenerateBarcodesResponseDTO();
+        $barcodes = new GenerateBarcodesResponseDTO(service: BarcodeServiceInterface::class, propType: ResponseProp::class);
         foreach ($this->httpClient->doRequests() as $id => $response) {
             if ($response instanceof ResponseInterface) {
                 $barcodes[$id] = $this->getResponseProcessor()->processGenerateBarcodeResponse(response: $response);

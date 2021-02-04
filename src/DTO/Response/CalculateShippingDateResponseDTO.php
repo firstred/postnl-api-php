@@ -30,13 +30,14 @@ namespace Firstred\PostNL\DTO\Response;
 
 use Firstred\PostNL\Attribute\PropInterface;
 use Firstred\PostNL\Attribute\ResponseProp;
-use Firstred\PostNL\Misc\SerializableObject;
+use Firstred\PostNL\DTO\CacheableDTO;
 use Firstred\PostNL\Service\DeliveryDateServiceInterface;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
+use JetBrains\PhpStorm\Pure;
 use Stringable;
 
-class CalculateShippingDateResponseDTO extends SerializableObject implements Stringable
+class CalculateShippingDateResponseDTO extends CacheableDTO implements Stringable
 {
     #[ResponseProp(requiredFor: [DeliveryDateServiceInterface::class])]
     protected string|null $SentDate = null;
@@ -46,10 +47,11 @@ class CalculateShippingDateResponseDTO extends SerializableObject implements Str
         string $service,
         #[ExpectedValues(values: PropInterface::PROP_TYPES)]
         string $propType,
+        string $cacheKey = '',
 
         string|null $SentDate = null,
     ) {
-        parent::__construct(service: $service, propType: $propType);
+        parent::__construct(service: $service, propType: $propType, cacheKey: $cacheKey);
 
         $this->setSentDate(SentDate: $SentDate);
     }
@@ -66,6 +68,7 @@ class CalculateShippingDateResponseDTO extends SerializableObject implements Str
         return $this;
     }
 
+    #[Pure]
     public function __toString(): string
     {
         return (string) $this->getSentDate();

@@ -30,19 +30,19 @@ namespace Firstred\PostNL\DTO\Request;
 
 use Firstred\PostNL\Attribute\PropInterface;
 use Firstred\PostNL\Attribute\RequestProp;
+use Firstred\PostNL\DTO\CacheableDTO;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Misc\SerializableObject;
 use Firstred\PostNL\Service\BarcodeServiceInterface;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
 
-class GenerateBarcodeRequestDTO extends SerializableObject
+class GenerateBarcodeRequestDTO extends CacheableDTO
 {
     #[RequestProp(requiredFor: [BarcodeServiceInterface::class])]
-    protected string $Type;
+    protected string|null $Type = null;
 
     #[RequestProp(requiredFor: [BarcodeServiceInterface::class])]
-    protected string $Serie = '000000000-999999999';
+    protected string|null $Serie = null;
 
     #[RequestProp(optionalFor: [BarcodeServiceInterface::class])]
     protected string|null $Range = null;
@@ -52,39 +52,40 @@ class GenerateBarcodeRequestDTO extends SerializableObject
      */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES)]
-        string $service,
+        string $service = BarcodeServiceInterface::class,
         #[ExpectedValues(values: PropInterface::PROP_TYPES)]
-        string $propType,
+        string $propType = RequestProp::class,
+        string $cacheKey = '',
 
-        string $Type,
-        string $Serie = '000000000-999999999',
+        string|null $Type = null,
+        string|null $Serie = null,
         string|null $Range = null,
     ) {
-        parent::__construct(service: $service, propType: $propType);
+        parent::__construct(service: $service, propType: $propType, cacheKey: $cacheKey);
 
         $this->setType(Type: $Type);
         $this->setSerie(Serie: $Serie);
         $this->setRange(Range: $Range);
     }
 
-    public function getType(): string
+    public function getType(): string|null
     {
         return $this->Type;
     }
 
-    public function setType(string $Type): static
+    public function setType(string|null $Type): static
     {
         $this->Type = $Type;
 
         return $this;
     }
 
-    public function getSerie(): string
+    public function getSerie(): string|null
     {
         return $this->Serie;
     }
 
-    public function setSerie(string $Serie): static
+    public function setSerie(string|null $Serie): static
     {
         $this->Serie = $Serie;
 

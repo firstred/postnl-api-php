@@ -32,6 +32,7 @@ use DateInterval;
 use DateTimeInterface;
 use Firstred\PostNL\HttpClient\HTTPClientInterface;
 use Psr\Cache\CacheItemPoolInterface;
+use Psr\Log\LoggerInterface;
 
 abstract class GatewayBase implements GatewayInterface
 {
@@ -54,12 +55,12 @@ abstract class GatewayBase implements GatewayInterface
         return $this;
     }
 
-    public function getCache(): ?CacheItemPoolInterface
+    public function getCache(): CacheItemPoolInterface|null
     {
         return $this->cache;
     }
 
-    public function setCache(?CacheItemPoolInterface $cache = null): static
+    public function setCache(CacheItemPoolInterface|null $cache = null): static
     {
         $this->cache = $cache;
 
@@ -74,6 +75,18 @@ abstract class GatewayBase implements GatewayInterface
     public function setTtl(DateInterval|DateTimeInterface|int|null $ttl = null): static
     {
         $this->ttl = $ttl;
+
+        return $this;
+    }
+
+    public function getLogger(): LoggerInterface|null
+    {
+        return $this->getHttpClient()->getLogger();
+    }
+
+    public function setLogger(?LoggerInterface $logger = null): static
+    {
+        $this->getHttpClient()->setLogger();
 
         return $this;
     }

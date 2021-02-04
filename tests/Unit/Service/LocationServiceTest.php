@@ -36,7 +36,7 @@ use Firstred\PostNL\DTO\Request\GetNearestLocationsRequestDTO;
 use Firstred\PostNL\DTO\Request\LookupLocationRequestDTO;
 use Firstred\PostNL\DTO\Response\GetLocationResponseDTO;
 use Firstred\PostNL\DTO\Response\GetLocationsResponseDTO;
-use Firstred\PostNL\Exception\CifDownException;
+use Firstred\PostNL\Exception\ApiDownException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\HttpClient\HTTPlugHTTPClient;
 use Firstred\PostNL\Service\LocationServiceInterface;
@@ -101,9 +101,7 @@ class LocationServiceTest extends ServiceTestBase
     /**
      * @testdox Can handle situations where no locations could be found
      *
-     * @throws HttpClientException
      * @throws InvalidArgumentException
-     * @throws CifDownException
      */
     public function testNoNearestLocationsFound()
     {

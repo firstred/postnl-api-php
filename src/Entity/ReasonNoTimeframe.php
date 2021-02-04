@@ -32,7 +32,6 @@ use Firstred\PostNL\Attribute\PropInterface;
 use Firstred\PostNL\Attribute\ResponseProp;
 use Firstred\PostNL\Misc\SerializableObject;
 use Firstred\PostNL\Service\ServiceInterface;
-use Firstred\PostNL\Service\TimeframeService;
 use Firstred\PostNL\Service\TimeframeServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
 

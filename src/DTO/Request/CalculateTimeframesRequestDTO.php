@@ -30,15 +30,15 @@ namespace Firstred\PostNL\DTO\Request;
 
 use Firstred\PostNL\Attribute\PropInterface;
 use Firstred\PostNL\Attribute\RequestProp;
+use Firstred\PostNL\DTO\CacheableDTO;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Misc\SerializableObject;
 use Firstred\PostNL\Service\ServiceInterface;
 use Firstred\PostNL\Service\TimeframeServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
 use function is_numeric;
 use function ltrim;
 
-class CalculateTimeframesRequestDTO extends SerializableObject
+class CalculateTimeframesRequestDTO extends CacheableDTO
 {
     #[RequestProp(requiredFor: ([TimeframeServiceInterface::class]))]
     protected string|null $StartDate = null;
@@ -81,9 +81,10 @@ class CalculateTimeframesRequestDTO extends SerializableObject
      */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES)]
-        string $service,
+        string $service = TimeframeServiceInterface::class,
         #[ExpectedValues(values: PropInterface::PROP_TYPES)]
-        string $propType,
+        string $propType = RequestProp::class,
+        string $cacheKey = '',
 
         string|null $StartDate = null,
         string|null $EndDate = null,
@@ -98,7 +99,7 @@ class CalculateTimeframesRequestDTO extends SerializableObject
         int|string|null $Interval = null,
         string|null $TimeframeRange = null,
     ) {
-        parent::__construct(service: $service, propType: $propType);
+        parent::__construct(service: $service, propType: $propType, cacheKey: $cacheKey);
 
         $this->setStartDate(StartDate: $StartDate);
         $this->setEndDate(EndDate: $EndDate);

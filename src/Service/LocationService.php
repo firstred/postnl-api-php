@@ -40,6 +40,8 @@ use JetBrains\PhpStorm\Pure;
 
 class LocationService extends ServiceBase implements LocationServiceInterface
 {
+    use ServiceLoggerTrait;
+
     #[Pure]
     public function __construct(
         protected Customer $customer,

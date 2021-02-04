@@ -28,9 +28,6 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Exception;
 
-/**
- * Class InvalidConfigurationException.
- */
-class InvalidConfigurationException extends AbstractException
+class InvalidConfigurationException extends PostNLClientException
 {
 }

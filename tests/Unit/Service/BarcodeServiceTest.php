@@ -30,8 +30,12 @@ namespace Firstred\PostNL\Tests\Unit\Service;
 
 use Exception;
 use Firstred\PostNL\Attribute\RequestProp;
+use Firstred\PostNL\Attribute\ResponseProp;
 use Firstred\PostNL\DTO\Request\GenerateBarcodeRequestDTO;
+use Firstred\PostNL\DTO\Response\GenerateBarcodeResponseDTO;
 use Firstred\PostNL\DTO\Response\GenerateBarcodesByCountryCodesResponseDTO;
+use Firstred\PostNL\DTO\Response\GenerateBarcodesResponseDTO;
+use Firstred\PostNL\Exception\InvalidApiKeyException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\InvalidBarcodeException;
 use Firstred\PostNL\HttpClient\HTTPlugHTTPClient;
@@ -143,6 +147,8 @@ class BarcodeServiceTest extends ServiceTestBase
 
     /**
      * @testdox Returns several barcodes
+     *
+     * @throws InvalidArgumentException
      */
     public function testMultipleNLBarcodesRest()
     {
@@ -182,13 +188,16 @@ class BarcodeServiceTest extends ServiceTestBase
         $barcodes = $this->postnl->generateBarcodesByCountryCodes(isos: ['NL' => 4]);
 
         $this->assertEquals(
-            expected: new GenerateBarcodesByCountryCodesResponseDTO(countries: [
-                'NL' => [
-                    '3SDEVC816223392',
-                    '3SDEVC816223393',
-                    '3SDEVC816223394',
-                    '3SDEVC816223395',
-                ],
+            expected: new GenerateBarcodesByCountryCodesResponseDTO(
+                service: BarcodeServiceInterface::class,
+                propType: ResponseProp::class,
+                countries: [
+                'NL' => new GenerateBarcodesResponseDTO(responses: [
+                    new GenerateBarcodeResponseDTO(Barcode: '3SDEVC816223392'),
+                    new GenerateBarcodeResponseDTO(Barcode: '3SDEVC816223393'),
+                    new GenerateBarcodeResponseDTO(Barcode: '3SDEVC816223394'),
+                    new GenerateBarcodeResponseDTO(Barcode: '3SDEVC816223395'),
+                ]),
             ]),
             actual: $barcodes
         );

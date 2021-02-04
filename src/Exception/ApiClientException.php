@@ -26,54 +26,8 @@
 
 declare(strict_types=1);
 
-namespace Firstred\PostNL\DTO\Response;
+namespace Firstred\PostNL\Exception;
 
-class GetSignatureResponseSignature
+class ApiClientException extends ApiException implements HasResponse
 {
-    protected string|null $Barcode = null;
-    protected string|null $SignatureDate = null;
-    protected string|null $SignatureImage = null;
-
-    public function __construct(string|null $barcode = null, string|null $signatureDate = null, string|null $signatureImage = null)
-    {
-        $this->setBarcode(barcode: $barcode);
-        $this->setSignatureDate(signatureDate: $signatureDate);
-        $this->setSignatureImage(signatureImage: $signatureImage);
-    }
-
-    public function getBarcode(): string|null
-    {
-        return $this->Barcode;
-    }
-
-    public function setBarcode(string|null $barcode = null): static
-    {
-        $this->Barcode = $barcode;
-
-        return $this;
-    }
-
-    public function getSignatureDate(): string|null
-    {
-        return $this->SignatureDate;
-    }
-
-    public function setSignatureDate(string|null $signatureDate = null): static
-    {
-        $this->SignatureDate = $signatureDate;
-
-        return $this;
-    }
-
-    public function getSignatureImage(): string|null
-    {
-        return $this->SignatureImage;
-    }
-
-    public function setSignatureImage(string|null $signatureImage = null): static
-    {
-        $this->SignatureImage = $signatureImage;
-
-        return $this;
-    }
 }

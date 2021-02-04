@@ -37,10 +37,12 @@ use Firstred\PostNL\DTO\Response\CalculateShippingDateResponseDTO;
 use Firstred\PostNL\HttpClient\HTTPClientInterface;
 use Firstred\PostNL\RequestBuilder\DeliveryDateServiceRequestBuilderInterface;
 use Firstred\PostNL\ResponseProcessor\DeliveryDateServiceResponseProcessorInterface;
+use JetBrains\PhpStorm\Pure;
 use Psr\Cache\CacheItemPoolInterface;
 
 class DeliveryDateServiceGateway extends GatewayBase implements DeliveryDateServiceGatewayInterface
 {
+    #[Pure]
     public function __construct(
         protected HTTPClientInterface $httpClient,
         protected CacheItemPoolInterface|null $cache,

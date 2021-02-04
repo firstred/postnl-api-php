@@ -28,26 +28,29 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Service;
 
-use Firstred\PostNL\Exception\InvalidArgumentException;
-use JetBrains\PhpStorm\Pure;
-use function explode;
 use Firstred\PostNL\Attribute\RequestProp;
+use Firstred\PostNL\Attribute\ResponseProp;
 use Firstred\PostNL\DTO\Request\GenerateBarcodeRequestDTO;
 use Firstred\PostNL\DTO\Request\GenerateBarcodesRequestDTO;
 use Firstred\PostNL\DTO\Response\GenerateBarcodeResponseDTO;
 use Firstred\PostNL\DTO\Response\GenerateBarcodesByCountryCodesResponseDTO;
 use Firstred\PostNL\DTO\Response\GenerateBarcodesResponseDTO;
 use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\InvalidBarcodeException;
 use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Gateway\BarcodeServiceGatewayInterface;
 use Firstred\PostNL\Misc\Util;
+use JetBrains\PhpStorm\Pure;
+use function explode;
 use function in_array;
 use function strlen;
 use function strtoupper;
 
 class BarcodeService extends ServiceBase implements BarcodeServiceInterface
 {
+    use ServiceLoggerTrait;
+
     #[Pure]
     public function __construct(
         protected Customer $customer,
@@ -102,6 +105,11 @@ class BarcodeService extends ServiceBase implements BarcodeServiceInterface
         return $this->gateway->doGenerateBarcodesRequest(generateBarcodesRequestDTO: $generateBarcodesRequestDTO);
     }
 
+    /**
+     * @throws InvalidArgumentException
+     * @throws InvalidBarcodeException
+     * @throws InvalidConfigurationException
+     */
     public function generateBarcodeByCountryCode(string $iso): GenerateBarcodeResponseDTO
     {
         if (in_array(needle: strtoupper(string: $iso), haystack: Util::$threeSCountries)) {
@@ -134,6 +142,11 @@ class BarcodeService extends ServiceBase implements BarcodeServiceInterface
         ));
     }
 
+    /**
+     * @throws InvalidArgumentException
+     * @throws InvalidBarcodeException
+     * @throws InvalidConfigurationException
+     */
     public function generateBarcodesByCountryCodes(array $isos): GenerateBarcodesByCountryCodesResponseDTO
     {
         $customerCode = $this->getCustomer()->getCustomerCode();
@@ -178,11 +191,17 @@ class BarcodeService extends ServiceBase implements BarcodeServiceInterface
 
         $results = $this->getGateway()->doGenerateBarcodesRequest(generateBarcodesRequestDTO: $generateBarcodes);
 
-        $barcodes = new GenerateBarcodesByCountryCodesResponseDTO();
+        $barcodes = new GenerateBarcodesByCountryCodesResponseDTO(
+            service: BarcodeServiceInterface::class,
+            propType: ResponseProp::class,
+        );
         foreach ($results as $id => $barcode) {
             list($iso) = explode(separator: '-', string: $id);
             if (!isset($barcodes[$iso])) {
-                $barcodes[$iso] = new GenerateBarcodesResponseDTO();
+                $barcodes[$iso] = new GenerateBarcodesResponseDTO(
+                    service: BarcodeServiceInterface::class,
+                    propType: ResponseProp::class,
+                );
             }
             $barcodes[$iso]->add(generateBarcodeResponseDTO: $barcode);
         }

@@ -28,11 +28,11 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\DTO\Request;
 
-use Firstred\PostNL\Attribute\RequestProp;
 use Firstred\PostNL\Attribute\PropInterface;
+use Firstred\PostNL\Attribute\RequestProp;
+use Firstred\PostNL\DTO\CacheableDTO;
 use Firstred\PostNL\Entity\CutOffTime;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Misc\SerializableObject;
 use Firstred\PostNL\Service\DeliveryDateServiceInterface;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ArrayShape;
@@ -44,7 +44,7 @@ use function is_numeric;
 use function is_string;
 use function strtotime;
 
-class CalculateDeliveryDateRequestDTO extends SerializableObject
+class CalculateDeliveryDateRequestDTO extends CacheableDTO
 {
     public const CUTOFF_TIME_ARRAY_SHAPE = [
         CutOffTime::MONDAY    => CutOffTime::class,
@@ -133,9 +133,10 @@ class CalculateDeliveryDateRequestDTO extends SerializableObject
 
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES)]
-        string $service,
+        string $service = DeliveryDateServiceInterface::class,
         #[ExpectedValues(values: PropInterface::PROP_TYPES)]
-        string $propType,
+        string $propType = RequestProp::class,
+        string $cacheKey = '',
 
         string|null $ShippingDate = null,
         int|string|null $ShippingDuration = null,
@@ -164,7 +165,7 @@ class CalculateDeliveryDateRequestDTO extends SerializableObject
         bool|null $AvailableSunday = null,
         array|null $cutOffTimes = null,
     ) {
-        parent::__construct(service: $service, propType: $propType);
+        parent::__construct(service: $service, propType: $propType, cacheKey: $cacheKey);
 
         $this->setShippingDate(ShippingDate: $ShippingDate);
         $this->setShippingDuration(ShippingDuration: $ShippingDuration);

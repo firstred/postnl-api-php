@@ -28,16 +28,16 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Misc;
 
-use function array_keys;
-use function count;
 use DateInterval;
 use DateTime;
 use Exception;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use function is_array;
-use function range;
 use setasign\Fpdi\Fpdi;
 use setasign\Fpdi\PdfParser\StreamReader;
+use function array_keys;
+use function count;
+use function is_array;
+use function range;
 
 /**
  * Class Util.

@@ -28,9 +28,6 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Exception;
 
-/**
- * Class InvalidArgumentException.
- */
-class InvalidArgumentException extends AbstractException
+class InvalidArgumentException extends PostNLClientException
 {
 }

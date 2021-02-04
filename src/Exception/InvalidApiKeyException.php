@@ -28,54 +28,6 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Exception;
 
-/**
- * Class ApiConnectionException.
- */
-class ApiConnectionException extends AbstractException
+class InvalidApiKeyException extends PostNLClientException
 {
-    protected string|null $body = null;
-    protected ?object $jsonBody = null;
-    protected array|null $headers = null;
-
-    /**
-     * ApiConnectionException constructor.
-     *
-     * @param string      $message
-     * @param int         $code
-     * @param string|null $body
-     * @param object|null $jsonBody
-     * @param array|null  $headers
-     */
-    public function __construct($message = '', $code = 0, $body = null, $jsonBody = null, $headers = null)
-    {
-        parent::__construct(message: $message, code: $code, previous: null);
-
-        $this->body = $body;
-        $this->jsonBody = $jsonBody;
-        $this->headers = $headers;
-    }
-
-    /**
-     * @return string
-     */
-    public function getBody()
-    {
-        return $this->body;
-    }
-
-    /**
-     * @return object
-     */
-    public function getJsonBody()
-    {
-        return $this->jsonBody;
-    }
-
-    /**
-     * @return array
-     */
-    public function getHeaders()
-    {
-        return $this->headers;
-    }
 }

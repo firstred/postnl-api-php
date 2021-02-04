@@ -6,14 +6,16 @@ namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Attribute\PropInterface;
 use Firstred\PostNL\Attribute\ResponseProp;
+use Firstred\PostNL\DTO\CacheableDTO;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Misc\SerializableObject;
 use Firstred\PostNL\Service\LocationServiceInterface;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
+use function is_array;
 use function is_numeric;
+use function is_string;
 
-class ResponseLocation extends SerializableObject
+class ResponseLocation extends CacheableDTO
 {
     #[ResponseProp(requiredFor: [LocationServiceInterface::class])]
     protected int|null $LocationCode = null;
@@ -21,13 +23,13 @@ class ResponseLocation extends SerializableObject
     #[ResponseProp(requiredFor: [LocationServiceInterface::class])]
     protected string|null $Name = null;
 
-    #[ResponseProp(requiredFor: [LocationServiceInterface::class])]
+    #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected int|null $Distance = null;
 
-    #[ResponseProp(requiredFor: [LocationServiceInterface::class])]
+    #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected float|null $Latitude = null;
 
-    #[ResponseProp(requiredFor: [LocationServiceInterface::class])]
+    #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected float|null $Longitude = null;
 
     #[ResponseProp(requiredFor: [LocationServiceInterface::class])]
@@ -45,13 +47,13 @@ class ResponseLocation extends SerializableObject
     #[ResponseProp(requiredFor: [LocationServiceInterface::class])]
     protected string|null $PhoneNumber = null;
 
-    #[ResponseProp(requiredFor: [LocationServiceInterface::class])]
+    #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $RetailNetworkID = null;
 
-    #[ResponseProp(requiredFor: [LocationServiceInterface::class])]
+    #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $Saleschannel = null;
 
-    #[ResponseProp(requiredFor: [LocationServiceInterface::class])]
+    #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $TerminalType = null;
 
     #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
@@ -62,6 +64,7 @@ class ResponseLocation extends SerializableObject
         string $service = '',
         #[ExpectedValues(values: PropInterface::PROP_TYPES + [''])]
         string $propType = '',
+        string $cacheKey = '',
 
         int|string|null $LocationCode = null,
         string|null $Name = null,
@@ -78,7 +81,7 @@ class ResponseLocation extends SerializableObject
         string|null $TerminalType = null,
         array|null $Warnings = null,
     ) {
-        parent::__construct(service: $service, propType: $propType);
+        parent::__construct(service: $service, propType: $propType, cacheKey: $cacheKey);
 
         $this->setLocationCode(LocationCode: $LocationCode);
         $this->setName(Name: $Name);
@@ -97,7 +100,7 @@ class ResponseLocation extends SerializableObject
         $this->setWarnings(Warnings: $Warnings);
     }
 
-    public function getLocationCode(): ?int
+    public function getLocationCode(): int|null
     {
         return $this->LocationCode;
     }
@@ -220,19 +223,27 @@ class ResponseLocation extends SerializableObject
         return $this;
     }
 
-    public function getDeliveryOptions(): ?array
+    public function getDeliveryOptions(): array|null
     {
         return $this->DeliveryOptions;
     }
 
-    public function setDeliveryOptions(?array $DeliveryOptions = null): static
+    public function setDeliveryOptions(array|null $DeliveryOptions = null): static
     {
+        if (isset($DeliveryOptions['string'])) {
+            if (is_array(value: $DeliveryOptions['string'])) {
+                $DeliveryOptions = $DeliveryOptions['string'];
+            } elseif (is_string(value: $DeliveryOptions['string'])) {
+                $DeliveryOptions = [$DeliveryOptions['string']];
+            }
+        }
+
         $this->DeliveryOptions = $DeliveryOptions;
 
         return $this;
     }
 
-    public function getOpeningHours(): ?OpeningHours
+    public function getOpeningHours(): OpeningHours|null
     {
         return $this->OpeningHours;
     }

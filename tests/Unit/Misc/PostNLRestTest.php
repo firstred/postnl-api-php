@@ -57,6 +57,8 @@ class PostNLRestTest extends TestCase
      */
     public function setupPostNL()
     {
+        $this->markTestIncomplete();
+
         $this->postnl = new PostNL(
             customer: Customer::create()
                 ->setCollectionLocation(collectionLocation: '123456')
@@ -81,26 +83,12 @@ class PostNLRestTest extends TestCase
     }
 
     /**
-     * @testdox Returns a valid customer code in REST mode
-     */
-    public function testPostNLRest()
-    {
-        $this->assertEquals(expected: 'DEVC', actual: $this->postnl->getCustomer()->getCustomerCode());
-    }
-
-    /**
-     * @testdox Returns a valid customer
-     */
-    public function testCustomer()
-    {
-        $this->assertInstanceOf(expected: Customer::class, actual: $this->postnl->getCustomer());
-    }
-
-    /**
      * @testdox Accepts a `null` logger
      */
     public function testSetNullLogger()
     {
+        $this->markTestIncomplete();
+
         $this->postnl->setLogger();
 
         $this->assertNull(actual: $this->postnl->getLogger());
@@ -113,6 +101,8 @@ class PostNLRestTest extends TestCase
      */
     public function testGetTimeframesAndLocations()
     {
+        $this->markTestIncomplete();
+
         $timeframesPayload = file_get_contents(filename: __DIR__.'/../../data/responses/timeframes.json');
         $locationsPayload = file_get_contents(filename: __DIR__.'/../../data/responses/nearestlocations.json');
         $deliveryDatePayload = json_encode(value: [

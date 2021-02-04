@@ -33,17 +33,19 @@ use Firstred\PostNL\Entity\JsonSerializableObject;
 use Firstred\PostNL\Entity\Response\CompleteStatusResponse;
 use Firstred\PostNL\Entity\Response\CurrentStatusResponse;
 use Firstred\PostNL\Entity\Response\GetSignatureResponseSignature;
+use Firstred\PostNL\Exception\ApiDownException;
 use Firstred\PostNL\Exception\ApiException;
-use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
-use Firstred\PostNL\Exception\ResponseException;
+use Firstred\PostNL\Exception\WithResponse;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Psr\Cache\CacheItemInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-class ShippingStatusService implements ShippingStatusServiceInterface
+class ShippingStatusService extends ServiceBase implements ShippingStatusServiceInterface
 {
+    use ServiceLoggerTrait;
+
     // API Version
     const VERSION = '1.6';
 
@@ -70,9 +72,9 @@ class ShippingStatusService implements ShippingStatusServiceInterface
      * @return CurrentStatusResponse
      *
      * @throws ApiException
-     * @throws CifDownException
+     * @throws ApiDownException
      * @throws CifException
-     * @throws ResponseException
+     * @throws WithResponse
      */
     public function currentStatus($currentStatus)
     {
@@ -125,9 +127,9 @@ class ShippingStatusService implements ShippingStatusServiceInterface
      * @return CompleteStatusResponse
      *
      * @throws ApiException
-     * @throws CifDownException
+     * @throws ApiDownException
      * @throws CifException
-     * @throws ResponseException
+     * @throws WithResponse
      */
     public function completeStatus(CompleteStatus $completeStatus)
     {
@@ -180,9 +182,9 @@ class ShippingStatusService implements ShippingStatusServiceInterface
      * @return GetSignatureResponseSignature
      *
      * @throws ApiException
-     * @throws CifDownException
+     * @throws ApiDownException
      * @throws CifException
-     * @throws ResponseException
+     * @throws WithResponse
      */
     public function getSignature(GetSignature $getSignature)
     {
@@ -287,7 +289,7 @@ class ShippingStatusService implements ShippingStatusServiceInterface
      *
      * @return CurrentStatusResponse
      *
-     * @throws ResponseException
+     * @throws WithResponse
      */
     public function processCurrentStatusResponse($response)
     {
@@ -380,7 +382,7 @@ class ShippingStatusService implements ShippingStatusServiceInterface
      *
      * @return CompleteStatusResponse|null
      *
-     * @throws ResponseException
+     * @throws WithResponse
      */
     public function processCompleteStatusResponse($response)
     {
@@ -454,7 +456,7 @@ class ShippingStatusService implements ShippingStatusServiceInterface
      *
      * @return GetSignatureResponseSignature|null
      *
-     * @throws ResponseException
+     * @throws WithResponse
      */
     public function processGetSignatureResponse($response)
     {

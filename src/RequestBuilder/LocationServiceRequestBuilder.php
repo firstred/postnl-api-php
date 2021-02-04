@@ -34,8 +34,8 @@ use Firstred\PostNL\DTO\Request\GetNearestLocationsRequestDTO;
 use Firstred\PostNL\DTO\Request\LookupLocationRequestDTO;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Http\Discovery\Psr17FactoryDiscovery;
-use function http_build_query;
 use Psr\Http\Message\RequestInterface;
+use function http_build_query;
 use function str_replace;
 
 class LocationServiceRequestBuilder extends RequestBuilderBase implements LocationServiceRequestBuilderInterface

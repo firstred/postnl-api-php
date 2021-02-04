@@ -54,6 +54,8 @@ class ShippingStatusServiceTest extends ServiceTestBase
      */
     public function testRetrieveShipmentByBarcodeRequest()
     {
+        $this->markTestIncomplete();
+
         $barcode = '3SDEVC987021270';
         $this->lastRequest = $request = $this->service->buildRetrieveShipmentRequest(
             (new RetrieveShipmentByBarcodeRequest())
@@ -75,6 +77,8 @@ class ShippingStatusServiceTest extends ServiceTestBase
      */
     public function testRetrieveShipmentByReferenceRequest()
     {
+        $this->markTestIncomplete();
+
         $reference = '112233';
         $this->lastRequest = $request = $this->service->buildRetrieveShipmentRequest(
             (new RetrieveShipmentByReferenceRequest())
@@ -99,6 +103,8 @@ class ShippingStatusServiceTest extends ServiceTestBase
      */
     public function testRetrieveShipmentByKgidRequest()
     {
+        $this->markTestIncomplete();
+
         $kgid = 'KG112233';
         $this->lastRequest = $request = $this->service->buildRetrieveShipmentRequest(
             (new RetrieveShipmentByKgidRequest())
@@ -121,6 +127,8 @@ class ShippingStatusServiceTest extends ServiceTestBase
      */
     public function testRetrieveShipmentByBarcode()
     {
+        $this->markTestIncomplete();
+
         $mockClient = new Client();
         $responseFactory = Psr17FactoryDiscovery::findResponseFactory();
         $streamFactory = Psr17FactoryDiscovery::findStreamFactory();
@@ -141,6 +149,8 @@ class ShippingStatusServiceTest extends ServiceTestBase
      */
     public function testGetSignatureRequestRest()
     {
+        $this->markTestIncomplete();
+
         $barcode = '3S9283920398234';
         $message = new Message();
         $this->lastRequest = $request = $this->service->buildRetrieveSignatureRequest((new RetrieveSignatureByBarcodeRequest())->setBarcode($barcode));
@@ -156,6 +166,8 @@ class ShippingStatusServiceTest extends ServiceTestBase
      */
     public function testGetSignatures()
     {
+        $this->markTestIncomplete();
+
         $payload = file_get_contents(filename: __DIR__.'/../../data/responses/signature.json');
         $mockClient = new Client();
         $responseFactory = Psr17FactoryDiscovery::findResponseFactory();

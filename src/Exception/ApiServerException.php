@@ -28,45 +28,6 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Exception;
 
-/**
- * Class CifException.
- */
-class CifException extends AbstractException
+class ApiServerException extends ApiException implements HasResponse
 {
-    protected array|null $messages = null;
-
-    /**
-     * CifException constructor.
-     *
-     * @param string|string[] $message  In case of multiple errors, the format looks like:
-     *                                  [
-     *                                  'description' => string <The description>,
-     *                                  'message'     => string <The error message>,
-     *                                  'code'        => int <The error code>
-     *                                  ]
-     *                                  The code param will be discarded if `$message` is an array
-     * @param int             $code
-     * @param \Throwable|null $previous
-     */
-    public function __construct($message = '', $code = 0, $previous = null)
-    {
-        if (is_array(value: $message)) {
-            $this->messages = $message;
-
-            $message = $this->messages[0]['message'];
-            $code = $this->messages[0]['code'];
-        }
-
-        parent::__construct(message: $message, code: $code, previous: $previous);
-    }
-
-    /**
-     * Get error messages and codes.
-     *
-     * @return array|string|string[]
-     */
-    public function getMessagesDescriptionsAndCodes()
-    {
-        return $this->messages;
-    }
 }

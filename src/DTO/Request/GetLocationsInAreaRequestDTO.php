@@ -6,8 +6,8 @@ namespace Firstred\PostNL\DTO\Request;
 
 use Firstred\PostNL\Attribute\PropInterface;
 use Firstred\PostNL\Attribute\RequestProp;
+use Firstred\PostNL\DTO\CacheableDTO;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Misc\SerializableObject;
 use Firstred\PostNL\Service\LocationServiceInterface;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
@@ -18,7 +18,7 @@ use function is_string;
 use function str_replace;
 use function strtotime;
 
-class GetLocationsInAreaRequestDTO extends SerializableObject
+class GetLocationsInAreaRequestDTO extends CacheableDTO
 {
     #[RequestProp(requiredFor: [LocationServiceInterface::class])]
     protected float|null $LatitudeNorth = null;
@@ -46,9 +46,10 @@ class GetLocationsInAreaRequestDTO extends SerializableObject
 
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
-        string $service = '',
+        string $service = LocationServiceInterface::class,
         #[ExpectedValues(values: PropInterface::PROP_TYPES + [''])]
-        string $propType = '',
+        string $propType = RequestProp::class,
+        string $cacheKey = '',
 
         float|string|null $LatitudeNorth = null,
         float|string|null $LongitudeWest = null,
@@ -59,7 +60,7 @@ class GetLocationsInAreaRequestDTO extends SerializableObject
         string|null $OpeningTime = null,
         array|null $DeliveryOptions = null,
     ) {
-        parent::__construct(service: $service, propType: $propType);
+        parent::__construct(service: $service, propType: $propType, cacheKey: $cacheKey);
 
         $this->setLatitudeNorth(LatitudeNorth: $LatitudeNorth);
         $this->setLongitudeWest(LongitudeWest: $LongitudeWest);

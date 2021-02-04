@@ -30,15 +30,15 @@ namespace Firstred\PostNL\DTO\Response;
 
 use Firstred\PostNL\Attribute\PropInterface;
 use Firstred\PostNL\Attribute\ResponseProp;
+use Firstred\PostNL\DTO\CacheableDTO;
 use Firstred\PostNL\Entity\ReasonNoTimeframes;
 use Firstred\PostNL\Entity\Timeframes;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Misc\SerializableObject;
 use Firstred\PostNL\Service\ServiceInterface;
 use Firstred\PostNL\Service\TimeframeServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
 
-class CalculateTimeframesResponseDTO extends SerializableObject
+class CalculateTimeframesResponseDTO extends CacheableDTO
 {
     #[ResponseProp(requiredFor: [TimeframeServiceInterface::class])]
     protected Timeframes|null $Timeframes = null;
@@ -54,11 +54,12 @@ class CalculateTimeframesResponseDTO extends SerializableObject
         string $service,
         #[ExpectedValues(values: PropInterface::PROP_TYPES)]
         string $propType,
+        string $cacheKey = '',
 
         Timeframes|array|null $Timeframes = null,
         ReasonNoTimeframes|array|null $ReasonNoTimeframes = null,
     ) {
-        parent::__construct(service: $service, propType: $propType);
+        parent::__construct(service: $service, propType: $propType, cacheKey: $cacheKey);
 
         $this->setTimeframes(Timeframes: $Timeframes);
         $this->setReasonNoTimeframes(ReasonNoTimeframes: $ReasonNoTimeframes);

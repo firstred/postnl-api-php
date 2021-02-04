@@ -26,34 +26,60 @@
 
 declare(strict_types=1);
 
-namespace Firstred\PostNL\DTO\Response;
+namespace Firstred\PostNL\Entity;
 
-class GetLocationsInAreaResponse
+class Shipping
 {
-    protected ?GetLocationsResult $GetLocationsResult = null;
+    protected ?Customer $Customer = null;
+    protected LabellingMessage|null $Message = null;
+    protected array|null $Shipments = null;
 
-    public function __construct(?GetLocationsResult $result = null)
-    {
-        $this->setGetLocationsResult(getLocationsResult: $result);
+    public function __construct(
+        array|null $shipments = null,
+        LabellingMessage|null $message = null,
+        Customer|null $customer = null,
+    ) {
+        $this->setShipments(shipments: $shipments);
+        $this->setMessage(message: $message ?: new LabellingMessage());
+        $this->setCustomer(customer: $customer);
     }
 
-    public function getGetLocationsResult(): ?GetLocationsResult
+    public function getCustomer(): Customer|null
     {
-        return $this->GetLocationsResult;
+        return $this->Customer;
     }
 
-    public function setGetLocationsResult(?GetLocationsResult $getLocationsResult = null): static
+    public function setCustomer(Customer|null $customer = null): static
     {
-        $this->GetLocationsResult = $getLocationsResult;
+        $this->Customer = $customer;
 
         return $this;
     }
 
-    /**
-     * Return a serializable array for `json_encode`.
-     *
-     * @return array
-     */
+    public function getMessage(): LabellingMessage|null
+    {
+        return $this->Message;
+    }
+
+    public function setMessage(LabellingMessage|null $message = null): static
+    {
+        $this->Message = $message;
+
+        return $this;
+    }
+
+    public function getShipments(): array|null
+    {
+        return $this->Shipments;
+    }
+
+    public function setShipments(array|null $shipments = null): static
+    {
+        $this->Shipments = $shipments;
+
+        return $this;
+    }
+
     public function jsonSerialize(): array
     {
         $json = [];
@@ -63,12 +89,12 @@ class GetLocationsInAreaResponse
 
         foreach (array_keys(array: static::$defaultProperties[$this->currentService]) as $propertyName) {
             if (isset($this->{$propertyName})) {
-                if ('GetLocationsResult' === $propertyName) {
-                    $locations = [];
-                    foreach ($this->GetLocationsResult as $location) {
-                        $locations[] = $location;
+                if ('Shipments' === $propertyName && count(value: $this->{$propertyName}) >= 1) {
+                    $properties = [];
+                    foreach ($this->{$propertyName} as $property) {
+                        $properties[] = $property;
                     }
-                    $json[$propertyName] = ['ResponseLocation' => $locations];
+                    $json[$propertyName] = $properties;
                 } else {
                     $json[$propertyName] = $this->{$propertyName};
                 }

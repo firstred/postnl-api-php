@@ -31,21 +31,23 @@ namespace Firstred\PostNL\Service;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Request\Shipping;
 use Firstred\PostNL\Entity\Response\GenerateShippingResponse;
+use Firstred\PostNL\Exception\ApiDownException;
 use Firstred\PostNL\Exception\ApiException;
-use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
-use Firstred\PostNL\Exception\ResponseException;
+use Firstred\PostNL\Exception\WithResponse;
 use Http\Discovery\Psr17FactoryDiscovery;
+use Psr\Cache\CacheItemInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use function http_build_query;
 use function json_encode;
 use const JSON_PRETTY_PRINT;
 use const JSON_UNESCAPED_SLASHES;
-use Psr\Cache\CacheItemInterface;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
 
-class ShippingService implements ShippingServiceInterface
+class ShippingService extends ServiceBase implements ShippingServiceInterface
 {
+    use ServiceLoggerTrait;
+
     // API Version
     const VERSION = '1';
 
@@ -62,9 +64,9 @@ class ShippingService implements ShippingServiceInterface
      * @return GenerateShippingResponse|null
      *
      * @throws ApiException
-     * @throws CifDownException
+     * @throws ApiDownException
      * @throws CifException
-     * @throws ResponseException
+     * @throws WithResponse
      */
     public function generateShipping(Shipping $generateShipping, $confirm = true)
     {
@@ -98,7 +100,7 @@ class ShippingService implements ShippingServiceInterface
         }
 
         if (200 === $response->getStatusCode()) {
-            throw new ResponseException(message: 'Invalid API response', code: null, previous: null, response: $response);
+            throw new WithResponse(message: 'Invalid API response', code: null, previous: null, response: $response);
         }
 
         throw new ApiException('Unable to ship order');
@@ -134,7 +136,7 @@ class ShippingService implements ShippingServiceInterface
      *
      * @return GenerateShippingResponse|null
      *
-     * @throws ResponseException
+     * @throws WithResponse
      */
     public function processGenerateShippingResponse($response)
     {

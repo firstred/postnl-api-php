@@ -35,10 +35,12 @@ use Firstred\PostNL\DTO\Response\CalculateTimeframesResponseDTO;
 use Firstred\PostNL\HttpClient\HTTPClientInterface;
 use Firstred\PostNL\RequestBuilder\TimeframeServiceRequestBuilderInterface;
 use Firstred\PostNL\ResponseProcessor\TimeframeServiceResponseProcessorInterface;
+use JetBrains\PhpStorm\Pure;
 use Psr\Cache\CacheItemPoolInterface;
 
 class TimeframeServiceGateway extends GatewayBase implements TimeframeServiceGatewayInterface
 {
+    #[Pure]
     public function __construct(
         protected HTTPClientInterface $httpClient,
         protected CacheItemPoolInterface|null $cache,

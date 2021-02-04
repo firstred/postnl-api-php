@@ -26,11 +26,11 @@
 
 declare(strict_types=1);
 
-namespace Firstred\PostNL\Exception;
+namespace Firstred\PostNL\DTO;
 
-/**
- * Class CifDownException.
- */
-class CifDownException extends AbstractException
+interface CacheableDTOInterface
 {
+    public function getCacheKey(): string;
+
+    public function setCacheKey(string $cacheKey): static;
 }

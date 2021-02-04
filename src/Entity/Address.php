@@ -30,10 +30,10 @@ namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Attribute\PropInterface;
 use Firstred\PostNL\Attribute\RequestProp;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\SerializableObject;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\ServiceInterface;
-use Firstred\PostNL\Exception\InvalidArgumentException;
 use JetBrains\PhpStorm\ExpectedValues;
 use function is_numeric;
 

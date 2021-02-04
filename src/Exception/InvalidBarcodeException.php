@@ -28,9 +28,6 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Exception;
 
-/**
- * Class InvalidBarcodeException.
- */
-class InvalidBarcodeException extends AbstractException
+class InvalidBarcodeException extends PostNLClientException
 {
 }

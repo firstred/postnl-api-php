@@ -26,41 +26,30 @@
 
 declare(strict_types=1);
 
-namespace Firstred\PostNL\DTO\Response;
+namespace Firstred\PostNL\DTO;
 
-class ConfirmingResponseShipment
+use Firstred\PostNL\Misc\SerializableObject;
+
+abstract class CacheableDTO extends SerializableObject implements CacheableDTOInterface
 {
-    protected string|null $Barcode = null;
-    protected array|null $Warnings = null;
-
     public function __construct(
-        string|null $barcode = null,
-        string|null $warnings = null
+        string $service,
+        string $propType,
+        protected string $cacheKey = '',
     ) {
-        $this->setBarcode(barcode: $barcode);
-        $this->setWarnings(warnings: $warnings);
+        parent::__construct(service: $service, propType: $propType);
+
+        $this->setCacheKey(cacheKey: $this->cacheKey);
     }
 
-    public function getBarcode(): string|null
+    public function getCacheKey(): string
     {
-        return $this->Barcode;
+        return $this->cacheKey;
     }
 
-    public function setBarcode(string|null $barcode = null): static
+    public function setCacheKey(string $cacheKey): static
     {
-        $this->Barcode = $barcode;
-
-        return $this;
-    }
-
-    public function getWarnings(): array|null
-    {
-        return $this->Warnings;
-    }
-
-    public function setWarnings(array|null $warnings = null): static
-    {
-        $this->Warnings = $warnings;
+        $this->cacheKey = $cacheKey;
 
         return $this;
     }

@@ -28,32 +28,27 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\ResponseProcessor;
 
-use Firstred\PostNL\Attribute\ResponseProp;
 use Firstred\PostNL\DTO\Response\GenerateBarcodeResponseDTO;
+use Firstred\PostNL\Exception\ApiException;
+use Firstred\PostNL\Exception\InvalidApiKeyException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Exception\ResponseException;
-use Firstred\PostNL\Service\BarcodeServiceInterface;
-use function json_decode;
+use Firstred\PostNL\Exception\NotAvailableException;
+use Firstred\PostNL\Exception\ParseError;
 use Psr\Http\Message\ResponseInterface;
 
 class BarcodeServiceResponseProcessor extends ResponseProcessorBase implements BarcodeServiceResponseProcessorInterface
 {
     /**
-     * @throws ResponseException
-     * @throws InvalidArgumentException
+     * @throws InvalidArgumentException|ParseError|ApiException|InvalidApiKeyException|NotAvailableException
      */
     public function processGenerateBarcodeResponse(ResponseInterface $response): GenerateBarcodeResponseDTO
     {
-        $json = @json_decode(json: (string) $response->getBody(), associative: true);
+        /** @var GenerateBarcodeResponseDTO $dto */
+        $dto = $this->fullyProcessResponse(
+            className: GenerateBarcodeResponseDTO::class,
+            response: $response,
+        );
 
-        if (!isset($json['Barcode'])) {
-            throw new ResponseException(message: 'Invalid API Response', response: $response);
-        }
-
-        $json['service'] = BarcodeServiceInterface::class;
-        $json['propType'] = ResponseProp::class;
-
-        /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
-        return new GenerateBarcodeResponseDTO(...$json);
+        return $dto;
     }
 }

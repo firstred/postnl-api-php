@@ -158,6 +158,14 @@ class Location extends SerializableObject
 
     public function setOptions(array|null $Options = null): static
     {
+        if (isset($Options['string'])) {
+            if (is_array(value: $Options['string'])) {
+                $Options = $Options['string'];
+            } elseif (is_string(value: $Options['string'])) {
+                $Options = [$Options['string']];
+            }
+        }
+
         $this->Options = $Options;
 
         return $this;

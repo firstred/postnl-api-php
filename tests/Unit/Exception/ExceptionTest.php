@@ -1,6 +1,4 @@
 <?php
-
-declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -26,26 +24,28 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
+declare(strict_types=1);
+
+
 namespace Firstred\PostNL\Tests\Unit\Exception;
 
-use Firstred\PostNL\Exception\CifDownException;
-use Firstred\PostNL\Service\AbstractService;
+use Firstred\PostNL\Exception\ApiDownException;
 use Http\Discovery\Psr17FactoryDiscovery;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class CifDownExceptionTest.
+ * Class ExceptionTest.
  */
-class CifDownExceptionTest extends TestCase
+class ExceptionTest extends TestCase
 {
     /**
      * @testdox Can detect and throw a CifDownException (REST)
      *
-     * @throws CifDownException
+     * @throws ApiDownException
      */
     public function testCifDownExceptionRest()
     {
-        $this->markTestSkipped();
+        $this->markTestIncomplete();
 
         $responseFactory = Psr17FactoryDiscovery::findResponseFactory();
         $streamFactory = Psr17FactoryDiscovery::findStreamFactory();
@@ -67,13 +67,13 @@ class CifDownExceptionTest extends TestCase
     /**
      * @testdox Can detect and throw a CifDownException (REST)
      *
-     * @throws CifDownException
+     * @throws ApiDownException
      */
     public function testCifExceptionRest()
     {
-        $this->markTestSkipped();
+        $this->markTestIncomplete();
 
-        $this->expectException(exception: CifDownException::class);
+        $this->expectException(exception: ApiDownException::class);
 
         $responseFactory = Psr17FactoryDiscovery::findResponseFactory();
         $streamFactory = Psr17FactoryDiscovery::findStreamFactory();

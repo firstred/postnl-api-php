@@ -108,8 +108,8 @@ class PostNL
         protected TimeframeServiceInterface|null $timeframeService = null,
         protected LocationServiceInterface|null $locationService = null,
         protected ShippingServiceInterface|null $shippingService = null,
-        protected HTTPClientInterface|null $defaultHttpClient = null,
-        protected LoggerInterface|null $defaultLogger = null,
+        protected HTTPClientInterface|null $httpClient = null,
+        protected LoggerInterface|null $logger = null,
     ) {
     }
 
@@ -967,8 +967,8 @@ class PostNL
      * Get nearest locations near the given coordinates.
      *
      * @param string      $CountryCode
-     * @param string|null $Latitude
-     * @param string|null $Longitude
+     * @param float|null  $Latitude
+     * @param float|null  $Longitude
      * @param array|null  $DeliveryOptions
      * @param string|null $DeliveryDate
      * @param string|null $OpeningTime
@@ -1011,7 +1011,6 @@ class PostNL
      * @param array|null  $DeliveryOptions
      *
      * @return GetLocationsResponseDTO
-     * @throws Exception\ApiException
      * @throws Exception\InvalidArgumentException
      */
     public function getLocationsInArea(
@@ -1049,7 +1048,6 @@ class PostNL
 //     *
 //     * @return array [uuid => ResponseTimeframes, uuid => GetNearestLocationsResponse, uuid => CalculateDeliveryDateResponse]
 //     *
-//     * @throws HttpClientException
 //     * @throws InvalidArgumentException
 //     */
 //    public function getTimeframesAndNearestLocations(
@@ -1175,7 +1173,7 @@ class PostNL
                 apiKey: $this->getApiKey(),
                 sandbox: $this->getSandbox(),
                 gateway: new BarcodeServiceGateway(
-                    httpClient: $this->getDefaultHttpClient(),
+                    httpClient: $this->getHttpClient(),
                     cache: null,
                     ttl: null,
                     requestBuilder: new BarcodeServiceRequestBuilder(
@@ -1294,7 +1292,7 @@ class PostNL
                 customer: $this->getCustomer(),
                 apiKey: $this->getApiKey(),
                 sandbox: $this->getSandbox(),
-                gateway: new DeliveryDateServiceGateway(httpClient: $this->getDefaultHttpClient(),
+                gateway: new DeliveryDateServiceGateway(httpClient: $this->getHttpClient(),
                     cache: null,
                     ttl: null,
                     requestBuilder: new DeliveryDateServiceRequestBuilder(
@@ -1334,7 +1332,7 @@ class PostNL
                 customer: $this->getCustomer(),
                 apiKey: $this->getApiKey(),
                 sandbox: $this->getSandbox(),
-                gateway: new TimeframeServiceGateway(httpClient: $this->getDefaultHttpClient(),
+                gateway: new TimeframeServiceGateway(httpClient: $this->getHttpClient(),
                 cache: null,
                 ttl: null,
                     requestBuilder: new TimeframeServiceRequestBuilder(
@@ -1374,7 +1372,7 @@ class PostNL
                 customer: $this->getCustomer(),
                 apiKey: $this->getApiKey(),
                 sandbox: $this->getSandbox(),
-                gateway: new LocationServiceGateway(httpClient: $this->getDefaultHttpClient(),
+                gateway: new LocationServiceGateway(httpClient: $this->getHttpClient(),
                     cache: null,
                     ttl: null,
                     requestBuilder: new LocationServiceRequestBuilder(
@@ -1426,6 +1424,16 @@ class PostNL
         $this->shippingService = $service;
     }
 
+    #[ArrayShape(shape: [
+        BarcodeServiceInterface::class        => BarcodeServiceInterface::class,
+        ConfirmingServiceInterface::class     => ConfirmingServiceInterface::class,
+        DeliveryDateServiceInterface::class   => DeliveryDateServiceInterface::class,
+        LabellingServiceInterface::class      => LabellingServiceInterface::class,
+        LocationServiceInterface::class       => LocationServiceInterface::class,
+        ShippingServiceInterface::class       => ShippingServiceInterface::class,
+        ShippingStatusServiceInterface::class => ShippingStatusServiceInterface::class,
+        TimeframeServiceInterface::class      => TimeframeServiceInterface::class,
+    ])]
     public function getAllServices(): array
     {
         return [
@@ -1476,30 +1484,48 @@ class PostNL
         return $this;
     }
 
-    public function getDefaultHttpClient(): HTTPClientInterface
+    public function getHttpClient(): HTTPClientInterface
     {
-        if (!$this->defaultHttpClient) {
-            $this->defaultHttpClient = new HTTPlugHTTPClient(logger: $this->getDefaultLogger());
+        if (!$this->httpClient) {
+            $this->httpClient = new HTTPlugHTTPClient(logger: $this->getLogger());
         }
 
-        return $this->defaultHttpClient;
+        return $this->httpClient;
     }
 
-    public function setDefaultHttpClient(?HTTPClientInterface $defaultHttpClient = null): static
+    public function setHttpClient(HTTPClientInterface $httpClient): static
     {
-        $this->defaultHttpClient = $defaultHttpClient;
+        $this->httpClient = $httpClient;
+
+        $this->getBarcodeService()->getGateway()->setHttpClient(httpClient: $httpClient);
+        $this->getConfirmingService()->getGateway()->setHttpClient(httpClient: $httpClient);
+        $this->getDeliveryDateService()->getGateway()->setHttpClient(httpClient: $httpClient);
+        $this->getLabellingService()->getGateway()->setHttpClient(httpClient: $httpClient);
+        $this->getLocationService()->getGateway()->setHttpClient(httpClient: $httpClient);
+        $this->getShippingService()->getGateway()->setHttpClient(httpClient: $httpClient);
+        $this->getShippingStatusService()->getGateway()->setHttpClient(httpClient: $httpClient);
+        $this->getTimeframeService()->getGateway()->setHttpClient(httpClient: $httpClient);
 
         return $this;
     }
 
-    public function getDefaultLogger(): ?LoggerInterface
+    public function getLogger(): LoggerInterface|null
     {
-        return $this->defaultLogger;
+        return $this->logger;
     }
 
-    public function setDefaultLogger(?LoggerInterface $defaultLogger = null): static
+    public function setLogger(LoggerInterface|null $logger = null): static
     {
-        $this->defaultLogger = $defaultLogger;
+        $this->logger = $logger;
+
+        $this->getBarcodeService()->getGateway()->getRequestBuilder()(httpClient: $httpClient);
+        $this->getConfirmingService()->getGateway()->setHttpClient(httpClient: $httpClient);
+        $this->getDeliveryDateService()->getGateway()->setHttpClient(httpClient: $httpClient);
+        $this->getLabellingService()->getGateway()->setHttpClient(httpClient: $httpClient);
+        $this->getLocationService()->getGateway()->setHttpClient(httpClient: $httpClient);
+        $this->getShippingService()->getGateway()->setHttpClient(httpClient: $httpClient);
+        $this->getShippingStatusService()->getGateway()->setHttpClient(httpClient: $httpClient);
+        $this->getTimeframeService()->getGateway()->setHttpClient(httpClient: $httpClient);
 
         return $this;
     }

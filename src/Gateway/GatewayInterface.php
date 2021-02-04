@@ -32,6 +32,7 @@ use DateInterval;
 use DateTimeInterface;
 use Firstred\PostNL\HttpClient\HTTPClientInterface;
 use Psr\Cache\CacheItemPoolInterface;
+use Psr\Log\LoggerInterface;
 
 interface GatewayInterface
 {
@@ -46,4 +47,8 @@ interface GatewayInterface
     public function getTtl(): DateInterval|DateTimeInterface|int|null;
 
     public function setTtl(DateInterval|DateTimeInterface|int|null $ttl = null): static;
+
+    public function getLogger(): LoggerInterface|null;
+
+    public function setLogger(LoggerInterface|null $logger = null): static;
 }

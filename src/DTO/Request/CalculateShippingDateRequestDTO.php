@@ -30,14 +30,14 @@ namespace Firstred\PostNL\DTO\Request;
 
 use Firstred\PostNL\Attribute\PropInterface;
 use Firstred\PostNL\Attribute\RequestProp;
+use Firstred\PostNL\DTO\CacheableDTO;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Misc\SerializableObject;
 use Firstred\PostNL\Service\DeliveryDateServiceInterface;
 use Firstred\PostNL\Service\ServiceInterface;
-use function is_numeric;
 use JetBrains\PhpStorm\ExpectedValues;
+use function is_numeric;
 
-class CalculateShippingDateRequestDTO extends SerializableObject
+class CalculateShippingDateRequestDTO extends CacheableDTO
 {
     #[RequestProp(requiredFor: [DeliveryDateServiceInterface::class])]
     protected string|null $DeliveryDate = null;
@@ -71,9 +71,10 @@ class CalculateShippingDateRequestDTO extends SerializableObject
      */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES)]
-        string $service,
+        string $service = DeliveryDateServiceInterface::class,
         #[ExpectedValues(values: PropInterface::PROP_TYPES)]
-        string $propType,
+        string $propType = RequestProp::class,
+        string $cacheKey = '',
 
         string|null $DeliveryDate = null,
         int|string|null $ShippingDuration = null,
@@ -85,7 +86,7 @@ class CalculateShippingDateRequestDTO extends SerializableObject
         int|string|null $HouseNumber = null,
         string|null $HouseNrExt = null,
     ) {
-        parent::__construct(service: $service, propType: $propType);
+        parent::__construct(service: $service, propType: $propType, cacheKey: $cacheKey);
 
         $this->setDeliveryDate(DeliveryDate: $DeliveryDate);
         $this->setShippingDuration(ShippingDuration: $ShippingDuration);

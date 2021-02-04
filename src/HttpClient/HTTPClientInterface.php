@@ -31,24 +31,18 @@ namespace Firstred\PostNL\HttpClient;
 use Firstred\PostNL\Exception\HttpClientException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Log\LoggerInterface;
 
 interface HTTPClientInterface
 {
     /**
      * Adds a request to the list of pending requests
      * Using the ID you can replace a request.
-     *
-     * @param string           $id      Request ID
-     * @param RequestInterface $request PSR-7 request
-     *
-     * @return string
      */
     public function addOrUpdateRequest(string $id, RequestInterface $request): string;
 
     /**
      * Remove a request from the list of pending requests.
-     *
-     * @param string $id
      */
     public function removeRequest(string $id): void;
 
@@ -61,10 +55,6 @@ interface HTTPClientInterface
      * Do a single request.
      *
      * Exceptions are captured into the result array
-     *
-     * @param RequestInterface $request
-     *
-     * @return ResponseInterface
      */
     public function doRequest(RequestInterface $request): ResponseInterface;
 
@@ -73,9 +63,17 @@ interface HTTPClientInterface
      *
      * Exceptions are captured into the result array
      *
-     * @param RequestInterface[] $requests
+     * @psalm-param array<string, RequestInterface> $requests
      *
-     * @return ResponseInterface[]|HttpClientException[]
+     * @psalm-return array<string, ResponseInterface|HttpClientException>
      */
-    public function doRequests($requests = []): array;
+    public function doRequests(array $requests = []): array;
+
+    public function getConcurrency(): int;
+
+    public function setConcurrency(int $concurrency): static;
+
+    public function getLogger(): ?LoggerInterface;
+
+    public function setLogger(?LoggerInterface $logger = null): static;
 }

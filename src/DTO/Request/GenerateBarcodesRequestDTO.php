@@ -28,28 +28,43 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\DTO\Request;
 
-use Countable;
-use function array_key_exists;
-use function array_keys;
 use ArrayAccess;
+use Countable;
+use Firstred\PostNL\Attribute\PropInterface;
 use Firstred\PostNL\Attribute\RequestProp;
+use Firstred\PostNL\DTO\CacheableDTO;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\BarcodeServiceInterface;
+use Firstred\PostNL\Service\ServiceInterface;
 use Iterator;
+use JetBrains\PhpStorm\ExpectedValues;
 use JetBrains\PhpStorm\Pure;
+use function array_key_exists;
+use function array_keys;
 
-class GenerateBarcodesRequestDTO implements ArrayAccess, Countable, Iterator
+class GenerateBarcodesRequestDTO extends CacheableDTO implements ArrayAccess, Countable, Iterator
 {
     private int $idx = 0;
 
+    /** @psalm-var array<int|string, GenerateBarcodeRequestDTO> */
+    protected array $requests = [];
+
     /**
-     * GenerateBarcodesRequestDTO constructor.
-     *
-     * @param array $requests
+     * @throws InvalidArgumentException
      */
     public function __construct(
-        private array $requests = [],
+        #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
+        string $service = BarcodeServiceInterface::class,
+        #[ExpectedValues(values: PropInterface::PROP_TYPES + [''])]
+        string $propType = RequestProp::class,
+        string $cacheKey = '',
+
+        /** @psalm-param array<int|string, GenerateBarcodeRequestDTO> */
+        array $requests = [],
     ) {
+        parent::__construct(service: $service, propType: $propType, cacheKey: $cacheKey);
+
+        $this->setRequests(requests: $requests);
     }
 
     #[Pure]
@@ -142,5 +157,28 @@ class GenerateBarcodesRequestDTO implements ArrayAccess, Countable, Iterator
     public function count(): int
     {
         return count(value: $this->requests);
+    }
+
+    public function getRequests(): array
+    {
+        return $this->requests;
+    }
+
+    /**
+     * @psalm-param array<int|string, GenerateBarcodeRequestDTO> $requests
+     */
+    public function setRequests(array $requests): static
+    {
+        $this->requests = $requests;
+
+        return $this;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return array_map(
+            callback: fn (GenerateBarcodeRequestDTO $dto) => $dto->jsonSerialize(),
+            array: $this->requests,
+        );
     }
 }

@@ -33,24 +33,26 @@ use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\JsonSerializableObject;
 use Firstred\PostNL\Entity\Request\LabellingResponseDto;
 use Firstred\PostNL\Entity\Response\GenerateLabelResponse;
+use Firstred\PostNL\Exception\ApiDownException;
 use Firstred\PostNL\Exception\ApiException;
-use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
-use Firstred\PostNL\Exception\ResponseException;
-use function GuzzleHttp\Psr7\parse_response;
-use function GuzzleHttp\Psr7\str;
+use Firstred\PostNL\Exception\WithResponse;
 use Http\Discovery\Psr17FactoryDiscovery;
-use function http_build_query;
-use function json_encode;
-use const JSON_PRETTY_PRINT;
-use const JSON_UNESCAPED_SLASHES;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use function GuzzleHttp\Psr7\parse_response;
+use function GuzzleHttp\Psr7\str;
+use function http_build_query;
+use function json_encode;
+use const JSON_PRETTY_PRINT;
+use const JSON_UNESCAPED_SLASHES;
 
-class LabellingService implements LabellingServiceInterface
+class LabellingService extends ServiceBase implements LabellingServiceInterface
 {
+    use ServiceLoggerTrait;
+
     // API Version
     const VERSION = '2.1';
 
@@ -67,9 +69,9 @@ class LabellingService implements LabellingServiceInterface
      * @return GenerateLabelResponse
      *
      * @throws ApiException
-     * @throws CifDownException
+     * @throws ApiDownException
      * @throws CifException
-     * @throws \Firstred\PostNL\Exception\ResponseException
+     * @throws \Firstred\PostNL\Exception\WithResponse
      */
     public function generateLabel(LabellingResponseDto $generateLabel, $confirm = true)
     {
@@ -101,7 +103,7 @@ class LabellingService implements LabellingServiceInterface
         }
 
         if (200 === $response->getStatusCode()) {
-            throw new ResponseException(message: 'Invalid API response', code: null, previous: null, response: $response);
+            throw new WithResponse(message: 'Invalid API response', response: $response);
         }
 
         throw new ApiException('Unable to generate label');
@@ -201,7 +203,7 @@ class LabellingService implements LabellingServiceInterface
      *
      * @return GenerateLabelResponse|null
      *
-     * @throws ResponseException
+     * @throws WithResponse
      */
     public function processGenerateLabelResponse($response)
     {

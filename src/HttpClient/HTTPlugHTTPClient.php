@@ -29,6 +29,7 @@ declare(strict_types=1);
 namespace Firstred\PostNL\HttpClient;
 
 use Exception;
+use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Misc\EachPromise;
 use Http\Client\Exception\HttpException;
 use Http\Client\Exception\TransferException;
@@ -43,10 +44,10 @@ use Psr\Log\LoggerInterface;
  */
 class HTTPlugHTTPClient implements HTTPClientInterface
 {
+    protected HttpAsyncClient $asyncClient;
+
     /**
      * List of pending PSR-7 requests.
-     *
-     * @var RequestInterface[]
      */
     protected array $pendingRequests = [];
 
@@ -54,28 +55,19 @@ class HTTPlugHTTPClient implements HTTPClientInterface
      * HTTPlugClient constructor.
      */
     public function __construct(
-        protected ?HttpAsyncClient $asyncClient = null,
-        protected ?LoggerInterface $logger = null,
+        HttpAsyncClient|null $asyncClient = null,
+        protected LoggerInterface|null $logger = null,
         protected int $concurrency = 5,
     ) {
-        $this->setHttpAsyncClient(client: $this->asyncClient ?: HttpAsyncClientDiscovery::find());
+        $this->setHttpAsyncClient(client: $asyncClient ?: HttpAsyncClientDiscovery::find());
     }
 
     /**
      * Adds a request to the list of pending requests
      * Using the ID you can replace a request.
-     *
-     * @param string           $id      Request ID
-     * @param RequestInterface $request PSR-7 request
-     *
-     * @return string
      */
     public function addOrUpdateRequest(string $id, RequestInterface $request): string
     {
-        if (is_null(value: $id)) {
-            return (string) array_push($this->pendingRequests, $request);
-        }
-
         $this->pendingRequests[$id] = $request;
 
         return $id;
@@ -84,7 +76,7 @@ class HTTPlugHTTPClient implements HTTPClientInterface
     /**
      * Remove a request from the list of pending requests.
      */
-    public function removeRequest($id): void
+    public function removeRequest(string $id): void
     {
         unset($this->pendingRequests[$id]);
     }
@@ -94,23 +86,12 @@ class HTTPlugHTTPClient implements HTTPClientInterface
      *
      * Exceptions are captured into the result array
      *
-     * @param RequestInterface[] $requests
+     * @psalm-param array<string, RequestInterface> $requests
      *
-     * @return ResponseInterface[]
-     *
-     * @throws Exception
+     * @psalm-return array<string, ResponseInterface|HttpClientException>
      */
-    public function doRequests($requests = []): array
+    public function doRequests(array $requests = []): array
     {
-        // If this is a single request, create the requests array
-        if (!is_array(value: $requests)) {
-            if (!$requests instanceof RequestInterface) {
-                return [];
-            }
-
-            $requests = [$requests];
-        }
-
         // Handle pending requests
         $requests = $this->pendingRequests + $requests;
         $this->clearRequests();
@@ -119,7 +100,10 @@ class HTTPlugHTTPClient implements HTTPClientInterface
         // Concurrent requests
         $promises = call_user_func(callback: function () use ($requests, $client) {
             foreach ($requests as $index => $request) {
-                yield $index             => $client->sendAsyncRequest(request: $request);
+                try {
+                    yield $index => $client->sendAsyncRequest(request: $request);
+                } catch (Exception) {
+                }
             }
         });
 
@@ -129,10 +113,10 @@ class HTTPlugHTTPClient implements HTTPClientInterface
                 iterable: $promises,
                 config: [
                     'concurrency' => $this->concurrency,
-                    'fulfilled'   => function ($response, $index) use (&$responses) {
+                    'fulfilled'   => function (ResponseInterface $response, string $index) use (&$responses): void {
                         $responses[$index] = $response;
                     },
-                    'rejected'    => function ($response, $index) use (&$responses) {
+                    'rejected'    => function (ResponseInterface $response, string $index) use (&$responses): void {
                         $responses[$index] = $response;
                     },
                 ]
@@ -162,8 +146,6 @@ class HTTPlugHTTPClient implements HTTPClientInterface
      *
      * Exceptions are captured into the result array
      *
-     * @return ResponseInterface
-     *
      * @throws Exception
      */
     public function doRequest(RequestInterface $request): ResponseInterface
@@ -174,19 +156,11 @@ class HTTPlugHTTPClient implements HTTPClientInterface
         return $client->sendAsyncRequest(request: $request)->wait();
     }
 
-    /**
-     * Return concurrency.
-     *
-     * @return int
-     */
     public function getConcurrency(): int
     {
         return $this->concurrency;
     }
 
-    /**
-     * Set the concurrency.
-     */
     public function setConcurrency(int $concurrency): static
     {
         $this->concurrency = $concurrency;
@@ -194,17 +168,22 @@ class HTTPlugHTTPClient implements HTTPClientInterface
         return $this;
     }
 
-    /**
-     * Get the HttpAsyncClient.
-     */
+    public function getLogger(): ?LoggerInterface
+    {
+        return $this->logger;
+    }
+
+    public function setLogger(?LoggerInterface $logger = null): static
+    {
+        $this->logger = $logger;
+        return $this;
+    }
+
     public function getHttpAsyncClient(): HttpAsyncClient
     {
         return $this->asyncClient;
     }
 
-    /**
-     * Set the HttpAsyncClient.
-     */
     public function setHttpAsyncClient(HttpAsyncClient $client): static
     {
         $this->asyncClient = $client;
