@@ -28,6 +28,7 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Service;
 
+use function explode;
 use Firstred\PostNL\Attribute\RequestProp;
 use Firstred\PostNL\Attribute\ResponseProp;
 use Firstred\PostNL\DTO\Request\GenerateBarcodeRequestDTO;
@@ -40,10 +41,10 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\InvalidBarcodeException;
 use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Gateway\BarcodeServiceGatewayInterface;
+use Firstred\PostNL\HttpClient\HttpClientInterface;
 use Firstred\PostNL\Misc\Util;
-use JetBrains\PhpStorm\Pure;
-use function explode;
 use function in_array;
+use JetBrains\PhpStorm\Pure;
 use function strlen;
 use function strtoupper;
 
@@ -113,11 +114,11 @@ class BarcodeService extends ServiceBase implements BarcodeServiceInterface
     public function generateBarcodeByCountryCode(string $iso): GenerateBarcodeResponseDTO
     {
         if (in_array(needle: strtoupper(string: $iso), haystack: Util::$threeSCountries)) {
-            $range = $this->getCustomer()->getCustomerCode();
+            $range = (string) $this->getCustomer()->getCustomerCode();
             $type = '3S';
         } else {
-            $range = $this->getCustomer()->getGlobalPackCustomerCode();
-            $type = $this->getCustomer()->getGlobalPackBarcodeType();
+            $range = (string) $this->getCustomer()->getGlobalPackCustomerCode();
+            $type = (string) $this->getCustomer()->getGlobalPackBarcodeType();
 
             if (!$range) {
                 throw new InvalidConfigurationException(message: 'GlobalPack customer code has not been set for the current customer');
@@ -149,9 +150,9 @@ class BarcodeService extends ServiceBase implements BarcodeServiceInterface
      */
     public function generateBarcodesByCountryCodes(array $isos): GenerateBarcodesByCountryCodesResponseDTO
     {
-        $customerCode = $this->getCustomer()->getCustomerCode();
-        $globalPackRange = $this->getCustomer()->getGlobalPackCustomerCode();
-        $globalPackType = $this->getCustomer()->getGlobalPackBarcodeType();
+        $customerCode = (string) $this->getCustomer()->getCustomerCode();
+        $globalPackRange = (string) $this->getCustomer()->getGlobalPackCustomerCode();
+        $globalPackType = (string) $this->getCustomer()->getGlobalPackBarcodeType();
 
         $generateBarcodes = new GenerateBarcodesRequestDTO();
         $index = 0;
@@ -196,6 +197,9 @@ class BarcodeService extends ServiceBase implements BarcodeServiceInterface
             propType: ResponseProp::class,
         );
         foreach ($results as $id => $barcode) {
+            if (!$id) {
+                continue;
+            }
             list($iso) = explode(separator: '-', string: $id);
             if (!isset($barcodes[$iso])) {
                 $barcodes[$iso] = new GenerateBarcodesResponseDTO(
@@ -211,12 +215,6 @@ class BarcodeService extends ServiceBase implements BarcodeServiceInterface
 
     /**
      * Find a suitable serie for the barcode.
-     *
-     * @param string $type
-     * @param string $range
-     * @param bool   $eps   Indicates whether it is an EPS Shipment
-     *
-     * @return string
      *
      * @throws InvalidBarcodeException
      */
@@ -268,6 +266,18 @@ class BarcodeService extends ServiceBase implements BarcodeServiceInterface
     public function setGateway(BarcodeServiceGatewayInterface $gateway): static
     {
         $this->gateway = $gateway;
+
+        return $this;
+    }
+
+    public function getHttpClient(): HttpClientInterface
+    {
+        return $this->getGateway()->getHttpClient();
+    }
+
+    public function setHttpClient(HttpClientInterface $httpClient): static
+    {
+        $this->getGateway()->setHttpClient(httpClient: $httpClient);
 
         return $this;
     }

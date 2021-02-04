@@ -37,6 +37,7 @@ use Firstred\PostNL\Exception\ApiDownException;
 use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\WithResponse;
+use Firstred\PostNL\HttpClient\HttpClientInterface;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
@@ -219,33 +220,15 @@ class LabellingService extends ServiceBase implements LabellingServiceInterface
         return null;
     }
 
-    public function getCustomer(): Customer
+    public function getHttpClient(): HttpClientInterface
     {
-        // TODO: Implement getCustomer() method.
+        return $this->getGateway()->getHttpClient();
     }
 
-    public function setCustomer(Customer $customer): static
+    public function setHttpClient(HttpClientInterface $httpClient): static
     {
-        // TODO: Implement setCustomer() method.
-    }
+        $this->getGateway()->setHttpClient(httpClient: $httpClient);
 
-    public function getApiKey(): string
-    {
-        // TODO: Implement getApiKey() method.
-    }
-
-    public function setApiKey(string $apiKey): static
-    {
-        // TODO: Implement setApiKey() method.
-    }
-
-    public function isSandbox(): bool
-    {
-        // TODO: Implement isSandbox() method.
-    }
-
-    public function setSandbox(bool $sandbox): static
-    {
-        // TODO: Implement setSandbox() method.
+        return $this;
     }
 }

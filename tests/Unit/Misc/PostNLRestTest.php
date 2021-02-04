@@ -32,7 +32,7 @@ use Exception;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\HttpClient\HTTPlugHTTPClient as PostNLHttpClient;
+use Firstred\PostNL\HttpClient\HTTPlugHttpClient as PostNLHttpClient;
 use Firstred\PostNL\PostNL;
 use Http\Mock\Client;
 use Nyholm\Psr7\Response;

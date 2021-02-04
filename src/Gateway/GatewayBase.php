@@ -30,25 +30,25 @@ namespace Firstred\PostNL\Gateway;
 
 use DateInterval;
 use DateTimeInterface;
-use Firstred\PostNL\HttpClient\HTTPClientInterface;
+use Firstred\PostNL\HttpClient\HttpClientInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Log\LoggerInterface;
 
 abstract class GatewayBase implements GatewayInterface
 {
     public function __construct(
-        protected HTTPClientInterface $httpClient,
+        protected HttpClientInterface $httpClient,
         protected CacheItemPoolInterface|null $cache,
         protected int|DateTimeInterface|DateInterval|null $ttl,
     ) {
     }
 
-    public function getHttpClient(): HTTPClientInterface
+    public function getHttpClient(): HttpClientInterface
     {
         return $this->httpClient;
     }
 
-    public function setHttpClient(HTTPClientInterface $httpClient): static
+    public function setHttpClient(HttpClientInterface $httpClient): static
     {
         $this->httpClient = $httpClient;
 

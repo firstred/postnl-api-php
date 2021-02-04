@@ -42,7 +42,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Class HTTPlugClient.
  */
-class HTTPlugHTTPClient implements HTTPClientInterface
+class HTTPlugHttpClient implements HttpClientInterface
 {
     protected HttpAsyncClient $asyncClient;
 
@@ -146,14 +146,18 @@ class HTTPlugHTTPClient implements HTTPClientInterface
      *
      * Exceptions are captured into the result array
      *
-     * @throws Exception
+     * @throws HttpClientException
      */
     public function doRequest(RequestInterface $request): ResponseInterface
     {
         // Initialize HttpAsyncClient, include the default options
         $client = $this->getHttpAsyncClient();
 
-        return $client->sendAsyncRequest(request: $request)->wait();
+        try {
+            return $client->sendAsyncRequest(request: $request)->wait();
+        } catch (Exception $e) {
+            throw new HttpClientException(message: $e->getMessage(), code: $e->getCode(), previous: $e);
+        }
     }
 
     public function getConcurrency(): int

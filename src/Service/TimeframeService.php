@@ -32,6 +32,7 @@ use Firstred\PostNL\DTO\Request\CalculateTimeframesRequestDTO;
 use Firstred\PostNL\DTO\Response\CalculateTimeframesResponseDTO;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Gateway\TimeframeServiceGatewayInterface;
+use Firstred\PostNL\HttpClient\HttpClientInterface;
 use JetBrains\PhpStorm\Pure;
 
 class TimeframeService extends ServiceBase implements TimeframeServiceInterface
@@ -61,6 +62,18 @@ class TimeframeService extends ServiceBase implements TimeframeServiceInterface
     public function setGateway(TimeframeServiceGatewayInterface $gateway): static
     {
         $this->gateway = $gateway;
+
+        return $this;
+    }
+
+    public function getHttpClient(): HttpClientInterface
+    {
+        return $this->getGateway()->getHttpClient();
+    }
+
+    public function setHttpClient(HttpClientInterface $httpClient): static
+    {
+        $this->getGateway()->setHttpClient(httpClient: $httpClient);
 
         return $this;
     }

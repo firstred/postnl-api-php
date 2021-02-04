@@ -49,8 +49,8 @@ use Firstred\PostNL\Gateway\BarcodeServiceGateway;
 use Firstred\PostNL\Gateway\DeliveryDateServiceGateway;
 use Firstred\PostNL\Gateway\LocationServiceGateway;
 use Firstred\PostNL\Gateway\TimeframeServiceGateway;
-use Firstred\PostNL\HttpClient\HTTPClientInterface;
-use Firstred\PostNL\HttpClient\HTTPlugHTTPClient;
+use Firstred\PostNL\HttpClient\HttpClientInterface;
+use Firstred\PostNL\HttpClient\HTTPlugHttpClient;
 use Firstred\PostNL\RequestBuilder\BarcodeServiceRequestBuilder;
 use Firstred\PostNL\RequestBuilder\DeliveryDateServiceRequestBuilder;
 use Firstred\PostNL\RequestBuilder\LocationServiceRequestBuilder;
@@ -108,7 +108,7 @@ class PostNL
         protected TimeframeServiceInterface|null $timeframeService = null,
         protected LocationServiceInterface|null $locationService = null,
         protected ShippingServiceInterface|null $shippingService = null,
-        protected HTTPClientInterface|null $httpClient = null,
+        protected HttpClientInterface|null $httpClient = null,
         protected LoggerInterface|null $logger = null,
     ) {
     }
@@ -1162,8 +1162,6 @@ class PostNL
      * Barcode service.
      *
      * Automatically load the barcode service
-     *
-     * @return BarcodeServiceInterface
      */
     public function getBarcodeService(): BarcodeServiceInterface
     {
@@ -1484,27 +1482,27 @@ class PostNL
         return $this;
     }
 
-    public function getHttpClient(): HTTPClientInterface
+    public function getHttpClient(): HttpClientInterface
     {
         if (!$this->httpClient) {
-            $this->httpClient = new HTTPlugHTTPClient(logger: $this->getLogger());
+            $this->httpClient = new HTTPlugHttpClient(logger: $this->getLogger());
         }
 
         return $this->httpClient;
     }
 
-    public function setHttpClient(HTTPClientInterface $httpClient): static
+    public function setHttpClient(HttpClientInterface $httpClient): static
     {
         $this->httpClient = $httpClient;
 
-        $this->getBarcodeService()->getGateway()->setHttpClient(httpClient: $httpClient);
-        $this->getConfirmingService()->getGateway()->setHttpClient(httpClient: $httpClient);
-        $this->getDeliveryDateService()->getGateway()->setHttpClient(httpClient: $httpClient);
-        $this->getLabellingService()->getGateway()->setHttpClient(httpClient: $httpClient);
-        $this->getLocationService()->getGateway()->setHttpClient(httpClient: $httpClient);
-        $this->getShippingService()->getGateway()->setHttpClient(httpClient: $httpClient);
-        $this->getShippingStatusService()->getGateway()->setHttpClient(httpClient: $httpClient);
-        $this->getTimeframeService()->getGateway()->setHttpClient(httpClient: $httpClient);
+        $this->getBarcodeService()->setHttpClient(httpClient: $httpClient);
+        $this->getConfirmingService()->setHttpClient(httpClient: $httpClient);
+        $this->getDeliveryDateService()->setHttpClient(httpClient: $httpClient);
+        $this->getLabellingService()->setHttpClient(httpClient: $httpClient);
+        $this->getLocationService()->setHttpClient(httpClient: $httpClient);
+        $this->getShippingService()->setHttpClient(httpClient: $httpClient);
+        $this->getShippingStatusService()->setHttpClient(httpClient: $httpClient);
+        $this->getTimeframeService()->setHttpClient(httpClient: $httpClient);
 
         return $this;
     }
@@ -1518,8 +1516,8 @@ class PostNL
     {
         $this->logger = $logger;
 
-        $this->getBarcodeService()->getGateway()->getRequestBuilder()(httpClient: $httpClient);
-        $this->getConfirmingService()->getGateway()->setHttpClient(httpClient: $httpClient);
+        $this->getBarcodeService()->setLogger(httpClient: $logger);
+        $this->getConfirmingService()->setLogger(httpClient: $httpClient);
         $this->getDeliveryDateService()->getGateway()->setHttpClient(httpClient: $httpClient);
         $this->getLabellingService()->getGateway()->setHttpClient(httpClient: $httpClient);
         $this->getLocationService()->getGateway()->setHttpClient(httpClient: $httpClient);

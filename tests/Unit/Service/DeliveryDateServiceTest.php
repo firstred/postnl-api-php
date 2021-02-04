@@ -33,7 +33,7 @@ use Firstred\PostNL\Attribute\RequestProp;
 use Firstred\PostNL\DTO\Request\CalculateDeliveryDateRequestDTO;
 use Firstred\PostNL\DTO\Request\CalculateShippingDateRequestDTO;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\HttpClient\HTTPlugHTTPClient;
+use Firstred\PostNL\HttpClient\HTTPlugHttpClient;
 use Firstred\PostNL\Service\DeliveryDateServiceInterface;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Mock\Client;
@@ -121,7 +121,7 @@ class DeliveryDateServiceTest extends ServiceTestBase
             )));
         $mockClient->addResponse(response: $response);
         $this->postnl->getDeliveryDateService()->getGateway()->setHttpClient(
-            httpClient: new HTTPlugHTTPClient(asyncClient: $mockClient),
+            httpClient: new HTTPlugHttpClient(asyncClient: $mockClient),
         );
 
         $response = $this->postnl->calculateDeliveryDate(
@@ -188,7 +188,7 @@ class DeliveryDateServiceTest extends ServiceTestBase
             )));
         $mockClient->addResponse(response: $response);
         $this->postnl->getDeliveryDateService()->getGateway()->setHttpClient(
-            httpClient: new HTTPlugHTTPClient(asyncClient: $mockClient),
+            httpClient: new HTTPlugHttpClient(asyncClient: $mockClient),
         );
 
         $response = $this->postnl->calculateShippingDate(

@@ -29,6 +29,14 @@ declare(strict_types=1);
 namespace Firstred\PostNL\RequestBuilder;
 
 use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Exception\ApiException;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\NotAvailableException;
+use Firstred\PostNL\Exception\ParseError;
+use Firstred\PostNL\Misc\Message;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Log\LoggerInterface;
 
 abstract class RequestBuilderBase implements RequestBuilderInterface
 {

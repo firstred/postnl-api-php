@@ -38,7 +38,7 @@ use Firstred\PostNL\DTO\Response\GenerateBarcodesResponseDTO;
 use Firstred\PostNL\Exception\InvalidApiKeyException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\InvalidBarcodeException;
-use Firstred\PostNL\HttpClient\HTTPlugHTTPClient;
+use Firstred\PostNL\HttpClient\HTTPlugHttpClient;
 use Firstred\PostNL\Service\BarcodeServiceInterface;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Mock\Client;
@@ -113,7 +113,7 @@ class BarcodeServiceTest extends ServiceTestBase
         /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
         $mockClient->addResponse($response);
         $this->postnl->getBarcodeService()->getGateway()->setHttpClient(
-            httpClient: new HTTPlugHTTPClient(asyncClient: $mockClient),
+            httpClient: new HTTPlugHttpClient(asyncClient: $mockClient),
         );
 
         $response = $this->postnl->generateBarcode();
@@ -137,7 +137,7 @@ class BarcodeServiceTest extends ServiceTestBase
         /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
         $mockClient->addResponse($response);
         $this->postnl->getBarcodeService()->getGateway()->setHttpClient(
-            httpClient: new HTTPlugHTTPClient(asyncClient: $mockClient),
+            httpClient: new HTTPlugHttpClient(asyncClient: $mockClient),
         );
 
         $response = $this->postnl->generateBarcodeByCountryCode(iso: 'NL');
@@ -182,7 +182,7 @@ class BarcodeServiceTest extends ServiceTestBase
                 ->withBody($streamFactory->createStream(json_encode(value: ['Barcode' => '3SDEVC816223395'])))
         );
         $this->postnl->getBarcodeService()->getGateway()->setHttpClient(
-            httpClient: new HTTPlugHTTPClient(asyncClient: $mockClient),
+            httpClient: new HTTPlugHttpClient(asyncClient: $mockClient),
         );
 
         $barcodes = $this->postnl->generateBarcodesByCountryCodes(isos: ['NL' => 4]);

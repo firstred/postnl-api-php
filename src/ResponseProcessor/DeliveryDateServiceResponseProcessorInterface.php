@@ -30,11 +30,22 @@ namespace Firstred\PostNL\ResponseProcessor;
 
 use Firstred\PostNL\DTO\Response\CalculateDeliveryDateResponseDTO;
 use Firstred\PostNL\DTO\Response\CalculateShippingDateResponseDTO;
+use Firstred\PostNL\Exception\ApiException;
+use Firstred\PostNL\Exception\InvalidApiKeyException;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\NotAvailableException;
+use Firstred\PostNL\Exception\ParseError;
 use Psr\Http\Message\ResponseInterface;
 
 interface DeliveryDateServiceResponseProcessorInterface extends ResponseProcessorInterface
 {
+    /**
+     * @throws ApiException|InvalidApiKeyException|InvalidArgumentException|NotAvailableException|ParseError
+     */
     public function processCalculateDeliveryDateResponse(ResponseInterface $response): CalculateDeliveryDateResponseDTO;
 
+    /**
+     * @throws ApiException|InvalidApiKeyException|InvalidArgumentException|NotAvailableException|ParseError
+     */
     public function processGetShippingDateResponse(ResponseInterface $response): CalculateShippingDateResponseDTO;
 }

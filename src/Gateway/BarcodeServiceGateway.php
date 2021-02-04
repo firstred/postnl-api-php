@@ -35,7 +35,15 @@ use Firstred\PostNL\DTO\Request\GenerateBarcodeRequestDTO;
 use Firstred\PostNL\DTO\Request\GenerateBarcodesRequestDTO;
 use Firstred\PostNL\DTO\Response\GenerateBarcodeResponseDTO;
 use Firstred\PostNL\DTO\Response\GenerateBarcodesResponseDTO;
-use Firstred\PostNL\HttpClient\HTTPClientInterface;
+use Firstred\PostNL\Exception\ApiClientException;
+use Firstred\PostNL\Exception\ApiException;
+use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\InvalidApiKeyException;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\NotAvailableException;
+use Firstred\PostNL\Exception\ParseError;
+use Firstred\PostNL\HttpClient\HttpClientInterface;
+use Firstred\PostNL\Misc\Message;
 use Firstred\PostNL\RequestBuilder\BarcodeServiceRequestBuilderInterface;
 use Firstred\PostNL\ResponseProcessor\BarcodeServiceResponseProcessorInterface;
 use Firstred\PostNL\Service\BarcodeServiceInterface;
@@ -47,7 +55,7 @@ class BarcodeServiceGateway extends GatewayBase implements BarcodeServiceGateway
 {
     #[Pure]
     public function __construct(
-        protected HTTPClientInterface $httpClient,
+        protected HttpClientInterface $httpClient,
         protected CacheItemPoolInterface|null $cache,
         protected int|DateTimeInterface|DateInterval|null $ttl,
         protected BarcodeServiceRequestBuilderInterface $requestBuilder,
@@ -56,15 +64,62 @@ class BarcodeServiceGateway extends GatewayBase implements BarcodeServiceGateway
         parent::__construct(httpClient: $this->httpClient, cache: $cache, ttl: $ttl);
     }
 
+    /**
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws InvalidArgumentException
+     * @throws NotAvailableException
+     * @throws ParseError
+     */
     public function doGenerateBarcodeRequest(GenerateBarcodeRequestDTO $generateBarcodeRequestDTO): GenerateBarcodeResponseDTO
     {
-        $response = $this->httpClient->doRequest(
-            request: $this->requestBuilder->buildGenerateBarcodeRequest(
-                generateBarcodeRequestDTO: $generateBarcodeRequestDTO,
-            ),
-        );
+        $logger = $this->getLogger();
+        $request = null;
 
-        return $this->responseProcessor->processGenerateBarcodeResponse(response: $response);
+        try {
+            $request = $this->requestBuilder->buildGenerateBarcodeRequest(generateBarcodeRequestDTO: $generateBarcodeRequestDTO);
+        } catch (InvalidArgumentException $e) {
+            if ($request) {
+                /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+                $logger?->debug("PostNL API - critical - REQUEST:\n".Message::str(message: $request));
+            }
+
+            throw $e;
+        }
+
+        try {
+            $response = $this->getHttpClient()->doRequest(request: $request);
+
+            /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+            $logger?->debug("PostNL API - debug - REQUEST:\n".Message::str(message: $request));
+
+            $dto = $this->responseProcessor->processGenerateBarcodeResponse(response: $response);
+
+            /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+            $logger?->debug("PostNL API - debug - RESPONSE:\n".Message::str(message: $response));
+
+            return $dto;
+        } catch (HttpClientException $e) {
+            /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+            $logger?->debug("PostNL API - critical/unhandled by HTTP client - REQUEST:\n".Message::str(message: $request));
+
+            throw new ApiClientException(message: $e->getMessage(), code: $e->getCode(), previous: $e);
+        } catch (ApiException | ParseError $e) {
+            /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+            $logger?->critical("PostNL API - critical - RESPONSE:\n".Message::str(message: $request));
+            $response = $e->getResponse();
+            if ($response instanceof ResponseInterface) {
+                /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+                $this->getLogger()?->critical("PostNL API - critical - REQUEST:\n".Message::str(message: $response));
+            }
+
+            throw $e;
+        } catch (NotAvailableException | InvalidArgumentException $e) {
+            /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+            $logger?->error("PostNL API - error - REQUEST:\n".Message::str(message: $request));
+
+            throw $e;
+        }
     }
 
     public function doGenerateBarcodesRequest(GenerateBarcodesRequestDTO $generateBarcodesRequestDTO): GenerateBarcodesResponseDTO

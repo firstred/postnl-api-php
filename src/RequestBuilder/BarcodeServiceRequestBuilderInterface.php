@@ -29,9 +29,13 @@ declare(strict_types=1);
 namespace Firstred\PostNL\RequestBuilder;
 
 use Firstred\PostNL\DTO\Request\GenerateBarcodeRequestDTO;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 
 interface BarcodeServiceRequestBuilderInterface extends RequestBuilderInterface
 {
+    /**
+     * @throws InvalidArgumentException
+     */
     public function buildGenerateBarcodeRequest(GenerateBarcodeRequestDTO $generateBarcodeRequestDTO): RequestInterface;
 }

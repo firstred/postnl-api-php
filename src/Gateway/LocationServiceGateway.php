@@ -36,7 +36,7 @@ use Firstred\PostNL\DTO\Request\GetNearestLocationsRequestDTO;
 use Firstred\PostNL\DTO\Request\LookupLocationRequestDTO;
 use Firstred\PostNL\DTO\Response\GetLocationResponseDTO;
 use Firstred\PostNL\DTO\Response\GetLocationsResponseDTO;
-use Firstred\PostNL\HttpClient\HTTPClientInterface;
+use Firstred\PostNL\HttpClient\HttpClientInterface;
 use Firstred\PostNL\RequestBuilder\LocationServiceRequestBuilderInterface;
 use Firstred\PostNL\ResponseProcessor\LocationServiceResponseProcessorInterface;
 use JetBrains\PhpStorm\Pure;
@@ -46,7 +46,7 @@ class LocationServiceGateway extends GatewayBase implements LocationServiceGatew
 {
     #[Pure]
     public function __construct(
-        protected HTTPClientInterface $httpClient,
+        protected HttpClientInterface $httpClient,
         protected CacheItemPoolInterface|null $cache,
         protected int|DateTimeInterface|DateInterval|null $ttl,
         protected LocationServiceRequestBuilderInterface $requestBuilder,

@@ -36,6 +36,7 @@ use Firstred\PostNL\DTO\Response\GetLocationResponseDTO;
 use Firstred\PostNL\DTO\Response\GetLocationsResponseDTO;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Gateway\LocationServiceGatewayInterface;
+use Firstred\PostNL\HttpClient\HttpClientInterface;
 use JetBrains\PhpStorm\Pure;
 
 class LocationService extends ServiceBase implements LocationServiceInterface
@@ -88,5 +89,17 @@ class LocationService extends ServiceBase implements LocationServiceInterface
     public function getGateway(): LocationServiceGatewayInterface
     {
         return $this->gateway;
+    }
+
+    public function getHttpClient(): HttpClientInterface
+    {
+        return $this->getGateway()->getHttpClient();
+    }
+
+    public function setHttpClient(HttpClientInterface $httpClient): static
+    {
+        $this->getGateway()->setHttpClient(httpClient: $httpClient);
+
+        return $this;
     }
 }

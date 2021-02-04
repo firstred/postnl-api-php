@@ -30,11 +30,22 @@ namespace Firstred\PostNL\ResponseProcessor;
 
 use Firstred\PostNL\DTO\Response\GetLocationResponseDTO;
 use Firstred\PostNL\DTO\Response\GetLocationsResponseDTO;
+use Firstred\PostNL\Exception\ApiException;
+use Firstred\PostNL\Exception\InvalidApiKeyException;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\NotAvailableException;
+use Firstred\PostNL\Exception\ParseError;
 use Psr\Http\Message\ResponseInterface;
 
 interface LocationServiceResponseProcessorInterface extends ResponseProcessorInterface
 {
+    /**
+     * @throws InvalidArgumentException|ParseError|ApiException|InvalidApiKeyException|NotAvailableException
+     */
     public function processGetLocationResponse(ResponseInterface $response): GetLocationResponseDTO;
 
+    /**
+     * @throws InvalidArgumentException|ParseError|ApiException|InvalidApiKeyException|NotAvailableException
+     */
     public function processGetLocationsResponse(ResponseInterface $response): GetLocationsResponseDTO;
 }

@@ -38,7 +38,7 @@ use Firstred\PostNL\DTO\Response\GetLocationResponseDTO;
 use Firstred\PostNL\DTO\Response\GetLocationsResponseDTO;
 use Firstred\PostNL\Exception\ApiDownException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\HttpClient\HTTPlugHTTPClient;
+use Firstred\PostNL\HttpClient\HTTPlugHttpClient;
 use Firstred\PostNL\Service\LocationServiceInterface;
 use Http\Client\Exception as HttpClientException;
 use Http\Discovery\Psr17FactoryDiscovery;
@@ -116,7 +116,7 @@ class LocationServiceTest extends ServiceTestBase
         /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
         $mockClient->addResponse($response);
         $this->postnl->getLocationService()->getGateway()->setHttpClient(
-            httpClient: new HTTPlugHTTPClient(asyncClient: $mockClient),
+            httpClient: new HTTPlugHttpClient(asyncClient: $mockClient),
         );
 
         $response = $this->postnl->getNearestLocations(
@@ -150,7 +150,7 @@ class LocationServiceTest extends ServiceTestBase
         /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
         $mockClient->addResponse($response);
         $this->postnl->getLocationService()->getGateway()->setHttpClient(
-            httpClient: new HTTPlugHTTPClient(asyncClient: $mockClient),
+            httpClient: new HTTPlugHttpClient(asyncClient: $mockClient),
         );
 
         $response = $this->postnl->getNearestLocations(
@@ -228,7 +228,7 @@ class LocationServiceTest extends ServiceTestBase
         /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
         $mockClient->addResponse($response);
         $this->postnl->getLocationService()->getGateway()->setHttpClient(
-            httpClient: new HTTPlugHTTPClient(asyncClient: $mockClient),
+            httpClient: new HTTPlugHttpClient(asyncClient: $mockClient),
         );
 
         $response = $this->postnl->getNearestLocationsByGeolocation(
@@ -304,7 +304,7 @@ class LocationServiceTest extends ServiceTestBase
         /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
         $mockClient->addResponse($response);
         $this->postnl->getLocationService()->getGateway()->setHttpClient(
-            httpClient: new HTTPlugHTTPClient(asyncClient: $mockClient),
+            httpClient: new HTTPlugHttpClient(asyncClient: $mockClient),
         );
 
         $response = $this->postnl->getNearestLocationsByGeolocation(
@@ -366,7 +366,7 @@ class LocationServiceTest extends ServiceTestBase
         /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
         $mockClient->addResponse($response);
         $this->postnl->getLocationService()->getGateway()->setHttpClient(
-            httpClient: new HTTPlugHTTPClient(asyncClient: $mockClient),
+            httpClient: new HTTPlugHttpClient(asyncClient: $mockClient),
         );
 
         $response = $this->postnl->lookupLocation(

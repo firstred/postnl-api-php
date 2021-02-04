@@ -33,7 +33,7 @@ use Firstred\PostNL\DTO\Request\CalculateTimeframesRequestDTO;
 use Firstred\PostNL\Entity\ReasonNoTimeframe;
 use Firstred\PostNL\Entity\Timeframe;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\HttpClient\HTTPlugHTTPClient;
+use Firstred\PostNL\HttpClient\HTTPlugHttpClient;
 use Firstred\PostNL\Service\TimeframeServiceInterface;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Mock\Client;
@@ -108,7 +108,7 @@ class TimeframeServiceTest extends ServiceTestBase
             ->withBody($streamFactory->createStream($payload));
         $mockClient->addResponse(response: $response);
         $this->postnl->getTimeframeService()->getGateway()->setHttpClient(
-            httpClient: new HTTPlugHTTPClient(asyncClient: $mockClient),
+            httpClient: new HTTPlugHttpClient(asyncClient: $mockClient),
         );
 
         $responseTimeframes = $this->postnl->calculateTimeframes(

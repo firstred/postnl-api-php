@@ -32,7 +32,7 @@ use DateInterval;
 use DateTimeInterface;
 use Firstred\PostNL\DTO\Request\CalculateTimeframesRequestDTO;
 use Firstred\PostNL\DTO\Response\CalculateTimeframesResponseDTO;
-use Firstred\PostNL\HttpClient\HTTPClientInterface;
+use Firstred\PostNL\HttpClient\HttpClientInterface;
 use Firstred\PostNL\RequestBuilder\TimeframeServiceRequestBuilderInterface;
 use Firstred\PostNL\ResponseProcessor\TimeframeServiceResponseProcessorInterface;
 use JetBrains\PhpStorm\Pure;
@@ -42,7 +42,7 @@ class TimeframeServiceGateway extends GatewayBase implements TimeframeServiceGat
 {
     #[Pure]
     public function __construct(
-        protected HTTPClientInterface $httpClient,
+        protected HttpClientInterface $httpClient,
         protected CacheItemPoolInterface|null $cache,
         protected int|DateTimeInterface|DateInterval|null $ttl,
         protected TimeframeServiceRequestBuilderInterface $requestBuilder,

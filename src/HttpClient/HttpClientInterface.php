@@ -33,7 +33,7 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 
-interface HTTPClientInterface
+interface HttpClientInterface
 {
     /**
      * Adds a request to the list of pending requests
@@ -55,6 +55,8 @@ interface HTTPClientInterface
      * Do a single request.
      *
      * Exceptions are captured into the result array
+     *
+     * @throws HttpClientException
      */
     public function doRequest(RequestInterface $request): ResponseInterface;
 
@@ -73,7 +75,7 @@ interface HTTPClientInterface
 
     public function setConcurrency(int $concurrency): static;
 
-    public function getLogger(): ?LoggerInterface;
+    public function getLogger(): LoggerInterface|null;
 
-    public function setLogger(?LoggerInterface $logger = null): static;
+    public function setLogger(LoggerInterface|null $logger = null): static;
 }

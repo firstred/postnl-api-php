@@ -34,11 +34,14 @@ use Firstred\PostNL\DTO\Response\CalculateDeliveryDateResponseDTO;
 use Firstred\PostNL\DTO\Response\CalculateShippingDateResponseDTO;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Gateway\DeliveryDateServiceGatewayInterface;
+use Firstred\PostNL\HttpClient\HttpClientInterface;
+use JetBrains\PhpStorm\Pure;
 
 class DeliveryDateService extends ServiceBase implements DeliveryDateServiceInterface
 {
     use ServiceLoggerTrait;
 
+    #[Pure]
     public function __construct(
         protected Customer $customer,
         protected string $apiKey,
@@ -68,6 +71,18 @@ class DeliveryDateService extends ServiceBase implements DeliveryDateServiceInte
     public function setGateway(DeliveryDateServiceGatewayInterface $gateway): static
     {
         $this->gateway = $gateway;
+
+        return $this;
+    }
+
+    public function getHttpClient(): HttpClientInterface
+    {
+        return $this->getGateway()->getHttpClient();
+    }
+
+    public function setHttpClient(HttpClientInterface $httpClient): static
+    {
+        $this->getGateway()->setHttpClient(httpClient: $httpClient);
 
         return $this;
     }

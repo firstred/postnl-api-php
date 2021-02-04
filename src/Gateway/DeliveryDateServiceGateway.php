@@ -34,7 +34,7 @@ use Firstred\PostNL\DTO\Request\CalculateDeliveryDateRequestDTO;
 use Firstred\PostNL\DTO\Request\CalculateShippingDateRequestDTO;
 use Firstred\PostNL\DTO\Response\CalculateDeliveryDateResponseDTO;
 use Firstred\PostNL\DTO\Response\CalculateShippingDateResponseDTO;
-use Firstred\PostNL\HttpClient\HTTPClientInterface;
+use Firstred\PostNL\HttpClient\HttpClientInterface;
 use Firstred\PostNL\RequestBuilder\DeliveryDateServiceRequestBuilderInterface;
 use Firstred\PostNL\ResponseProcessor\DeliveryDateServiceResponseProcessorInterface;
 use JetBrains\PhpStorm\Pure;
@@ -44,7 +44,7 @@ class DeliveryDateServiceGateway extends GatewayBase implements DeliveryDateServ
 {
     #[Pure]
     public function __construct(
-        protected HTTPClientInterface $httpClient,
+        protected HttpClientInterface $httpClient,
         protected CacheItemPoolInterface|null $cache,
         protected int|DateTimeInterface|DateInterval|null $ttl,
         protected DeliveryDateServiceRequestBuilderInterface $requestBuilder,
