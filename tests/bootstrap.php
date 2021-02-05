@@ -35,7 +35,7 @@ use wappr\Logger;
 require __DIR__.'/../vendor/autoload.php';
 
 $dotenv = new Dotenv();
-$dotenv->load(path: __DIR__.'/../.env');
+$dotenv->loadEnv(path: __DIR__.'/../.env');
 
 $filesystemAdapter = new Local(root: __DIR__.'/');
 $filesystem = new Filesystem(adapter: $filesystemAdapter);
