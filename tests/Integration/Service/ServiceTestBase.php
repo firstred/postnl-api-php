@@ -30,57 +30,61 @@ namespace Firstred\PostNL\Tests\Integration\Service;
 
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Customer;
-use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Exception\InvalidBarcodeException;
 use Firstred\PostNL\Misc\Message;
 use Firstred\PostNL\PostNL;
-use Firstred\PostNL\Service\BarcodeServiceInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 use Psr\Log\LoggerInterface;
-use ReflectionException;
 
-/**
- * Class BarcodeServiceTest.
- *
- * @testdox The BarcodeService (REST)
- */
-class BarcodeServiceRestTest extends ServiceTestBase
+abstract class ServiceTestBase extends TestCase
 {
-    protected BarcodeServiceInterface $service;
+    protected PostNL $postnl;
+
+    protected ?RequestInterface $lastRequest = null;
 
     /**
-     * @testdox Returns a valid single barcode
-     *
-     * @throws InvalidBarcodeException
+     * @before
      */
-    public function testSingleBarcodeRest()
+    public function setupPostNL()
     {
-        $this->assertStringContainsString(needle: '3SDEVC', haystack: (string) $this->postnl->generateBarcode());
+        /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+        $customer = (new Customer())
+            ->setCollectionLocation(CollectionLocation: getenv(name: 'POSTNL_COLLECTION_LOCATION'))
+            ->setCustomerCode(CustomerCode: getenv(name: 'POSTNL_CUSTOMER_CODE'))
+            ->setCustomerNumber(CustomerNumber: getenv(name: 'POSTNL_CUSTOMER_NUMBER'))
+            ->setContactPerson(ContactPerson: getenv(name: 'POSTNL_CONTACT_PERSION'))
+            ->setAddress(Address: new Address(
+                AddressType: '02',
+                City: 'Hoofddorp',
+                CompanyName: 'PostNL',
+                Countrycode: 'NL',
+                HouseNr: '42',
+                Street: 'Siriusdreef',
+                Zipcode: '2132WT',
+            ))
+            ->setGlobalPackBarcodeType(getenv(name: 'POSTNL_GLOBAL_PACK_BARCODE_TYPE'))
+            ->setGlobalPackCustomerCode(getenv(name: 'POSTNL_GLOBAL_PACK_RANGE'));
+
+        $this->postnl = new PostNL(
+            customer: $customer,
+            apiKey: getenv(name: 'POSTNL_API_KEY'),
+            sandbox: false,
+        );
     }
 
-//    /**
-//     * @testdox Returns a valid single barcode for a country
-//     *
-//     * @throws InvalidBarcodeException
-//     * @throws InvalidConfigurationException
-//     */
-//    public function testSingleBarCodeByCountryRest()
-//    {
-//        $this->assertStringContainsString(needle: '3SDEVC', haystack: $this->postnl->generateBarcodeByCountryCode(iso: 'NL'));
-//    }
-//
-//    /**
-//     * @testdox Returns several barcodes
-//     *
-//     * @throws InvalidBarcodeException
-//     * @throws InvalidConfigurationException
-//     */
-//    public function testMultipleNLBarcodesRest()
-//    {
-//        $barcodes = $this->postnl->generateBarcodesByCountryCodes(isos: ['NL' => 4]);
-//
-//        $this->assertIsArray(actual: $barcodes);
-//        $this->assertStringContainsString(needle: '3SDEVC', haystack: $barcodes['NL'][0]);
-//    }
+    /**
+     * @after
+     */
+    public function logPendingRequest()
+    {
+        if (!$this->lastRequest instanceof RequestInterface) {
+            return;
+        }
+
+        global $logger;
+        if ($logger instanceof LoggerInterface) {
+            $logger->debug($this->getName()." Request\n".Message::str(message: $this->lastRequest));
+        }
+        $this->lastRequest = null;
+    }
 }
