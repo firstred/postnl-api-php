@@ -12,3 +12,4 @@ tests/clover.xml
 # phpunit
 phpunit.xml.bak
 .phpunit.result.cache
+/.phpunit.cache
