@@ -39,7 +39,11 @@ use Psr\Http\Message\ResponseInterface;
 class TimeframeServiceResponseProcessor extends ResponseProcessorBase implements TimeframeServiceResponseProcessorInterface
 {
     /**
-     * @throws InvalidArgumentException|ParseError|ApiException|InvalidApiKeyException|NotAvailableException
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws InvalidArgumentException
+     * @throws NotAvailableException
+     * @throws ParseError
      */
     public function processCalculateTimeframesResponse(ResponseInterface $response): CalculateTimeframesResponseDTO
     {

@@ -40,12 +40,20 @@ use Psr\Http\Message\ResponseInterface;
 interface DeliveryDateServiceResponseProcessorInterface extends ResponseProcessorInterface
 {
     /**
-     * @throws ApiException|InvalidApiKeyException|InvalidArgumentException|NotAvailableException|ParseError
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws InvalidArgumentException
+     * @throws NotAvailableException
+     * @throws ParseError
      */
     public function processCalculateDeliveryDateResponse(ResponseInterface $response): CalculateDeliveryDateResponseDTO;
 
     /**
-     * @throws ApiException|InvalidApiKeyException|InvalidArgumentException|NotAvailableException|ParseError
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws InvalidArgumentException
+     * @throws NotAvailableException
+     * @throws ParseError
      */
     public function processGetShippingDateResponse(ResponseInterface $response): CalculateShippingDateResponseDTO;
 }

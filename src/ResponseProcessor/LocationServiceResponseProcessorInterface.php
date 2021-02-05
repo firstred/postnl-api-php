@@ -40,12 +40,20 @@ use Psr\Http\Message\ResponseInterface;
 interface LocationServiceResponseProcessorInterface extends ResponseProcessorInterface
 {
     /**
-     * @throws InvalidArgumentException|ParseError|ApiException|InvalidApiKeyException|NotAvailableException
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws InvalidArgumentException
+     * @throws NotAvailableException
+     * @throws ParseError
      */
     public function processGetLocationResponse(ResponseInterface $response): GetLocationResponseDTO;
 
     /**
-     * @throws InvalidArgumentException|ParseError|ApiException|InvalidApiKeyException|NotAvailableException
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws InvalidArgumentException
+     * @throws NotAvailableException
+     * @throws ParseError
      */
     public function processGetLocationsResponse(ResponseInterface $response): GetLocationsResponseDTO;
 }

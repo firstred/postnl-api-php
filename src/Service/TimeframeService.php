@@ -31,6 +31,12 @@ namespace Firstred\PostNL\Service;
 use Firstred\PostNL\DTO\Request\CalculateTimeframesRequestDTO;
 use Firstred\PostNL\DTO\Response\CalculateTimeframesResponseDTO;
 use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Exception\ApiClientException;
+use Firstred\PostNL\Exception\ApiException;
+use Firstred\PostNL\Exception\InvalidApiKeyException;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\NotAvailableException;
+use Firstred\PostNL\Exception\ParseError;
 use Firstred\PostNL\Gateway\TimeframeServiceGatewayInterface;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
 use JetBrains\PhpStorm\Pure;
@@ -49,6 +55,14 @@ class TimeframeService extends ServiceBase implements TimeframeServiceInterface
         parent::__construct(customer: $customer, apiKey: $apiKey, sandbox: $sandbox);
     }
 
+    /**
+     * @throws ApiClientException
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws InvalidArgumentException
+     * @throws NotAvailableException
+     * @throws ParseError
+     */
     public function calculateTimeframes(CalculateTimeframesRequestDTO $calculateTimeframesRequestDTO): CalculateTimeframesResponseDTO
     {
         return $this->getGateway()->doCalculateTimeframesRequest(calculateTimeframesRequestDTO: $calculateTimeframesRequestDTO);

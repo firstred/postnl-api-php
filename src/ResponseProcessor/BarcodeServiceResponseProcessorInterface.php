@@ -39,7 +39,11 @@ use Psr\Http\Message\ResponseInterface;
 interface BarcodeServiceResponseProcessorInterface extends ResponseProcessorInterface
 {
     /**
-     * @throws InvalidArgumentException|ParseError|ApiException|InvalidApiKeyException|NotAvailableException
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws InvalidArgumentException
+     * @throws NotAvailableException
+     * @throws ParseError
      */
     public function processGenerateBarcodeResponse(ResponseInterface $response): GenerateBarcodeResponseDTO;
 }

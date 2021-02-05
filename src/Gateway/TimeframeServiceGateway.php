@@ -32,11 +32,21 @@ use DateInterval;
 use DateTimeInterface;
 use Firstred\PostNL\DTO\Request\CalculateTimeframesRequestDTO;
 use Firstred\PostNL\DTO\Response\CalculateTimeframesResponseDTO;
+use Firstred\PostNL\Exception\ApiClientException;
+use Firstred\PostNL\Exception\ApiException;
+use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\InvalidApiKeyException;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\NotAvailableException;
+use Firstred\PostNL\Exception\ParseError;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
+use Firstred\PostNL\Misc\Message;
 use Firstred\PostNL\RequestBuilder\TimeframeServiceRequestBuilderInterface;
 use Firstred\PostNL\ResponseProcessor\TimeframeServiceResponseProcessorInterface;
 use JetBrains\PhpStorm\Pure;
 use Psr\Cache\CacheItemPoolInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 class TimeframeServiceGateway extends GatewayBase implements TimeframeServiceGatewayInterface
 {
@@ -51,16 +61,77 @@ class TimeframeServiceGateway extends GatewayBase implements TimeframeServiceGat
         parent::__construct(httpClient: $this->httpClient, cache: $cache, ttl: $ttl);
     }
 
+    /**
+     * @throws ApiClientException
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws InvalidArgumentException
+     * @throws NotAvailableException
+     * @throws ParseError
+     */
     public function doCalculateTimeframesRequest(
         CalculateTimeframesRequestDTO $calculateTimeframesRequestDTO,
     ): CalculateTimeframesResponseDTO {
-        $response = $this->getHttpClient()->doRequest(
-                request: $this->getRequestBuilder()->buildCalculateTimeframesRequest(
-                    calculateTimeframesRequestDTO: $calculateTimeframesRequestDTO,
-            ),
-        );
+        $logger = $this->getLogger();
+        $request = null;
 
-        return $this->getResponseProcessor()->processCalculateTimeframesResponse(response: $response);
+        $response = $this->retrieveCachedItem(cacheKey: $calculateTimeframesRequestDTO->getCacheKey());
+        if (!$response instanceof ResponseInterface) {
+            try {
+                $request = $this->getRequestBuilder()->buildCalculateTimeframesRequest(
+                    calculateTimeframesRequestDTO: $calculateTimeframesRequestDTO,
+                );
+
+            } catch (InvalidArgumentException $e) {
+                if ($request) {
+                    /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+                    $logger?->debug("PostNL API - critical - REQUEST:\n".Message::str(message: $request));
+                }
+
+                throw $e;
+            }
+
+            try {
+                $response = $this->getHttpClient()->doRequest(request: $request);
+
+                /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+                $logger?->debug("PostNL API - debug - REQUEST:\n".Message::str(message: $request));
+            } catch (HttpClientException $e) {
+                /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+                $logger?->debug("PostNL API - critical/unhandled by HTTP client - REQUEST:\n".Message::str(message: $request));
+
+                throw new ApiClientException(message: $e->getMessage(), code: $e->getCode(), previous: $e);
+            }
+        }
+
+        try {
+            $dto = $this->getResponseProcessor()->processCalculateTimeframesResponse(response: $response);
+
+            /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+            $logger?->debug("PostNL API - debug - RESPONSE:\n".Message::str(message: $response));
+
+            return $dto;
+        } catch (ApiException | ParseError $e) {
+            if ($request instanceof RequestInterface) {
+                /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+                $logger?->critical("PostNL API - critical - RESPONSE:\n".Message::str(message: $request));
+            }
+
+            $response = $e->getResponse();
+            if ($response instanceof ResponseInterface) {
+                /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+                $this->getLogger()?->critical("PostNL API - critical - REQUEST:\n".Message::str(message: $response));
+            }
+
+            throw $e;
+        } catch (NotAvailableException | InvalidArgumentException | InvalidApiKeyException $e) {
+            if ($request instanceof RequestInterface) {
+                /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+                $logger?->error("PostNL API - error - REQUEST:\n".Message::str(message: $request));
+            }
+
+            throw $e;
+        }
     }
 
     public function getRequestBuilder(): TimeframeServiceRequestBuilderInterface

@@ -29,9 +29,21 @@ declare(strict_types=1);
 namespace Firstred\PostNL\ResponseProcessor;
 
 use Firstred\PostNL\DTO\Response\CalculateTimeframesResponseDTO;
+use Firstred\PostNL\Exception\ApiException;
+use Firstred\PostNL\Exception\InvalidApiKeyException;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\NotAvailableException;
+use Firstred\PostNL\Exception\ParseError;
 use Psr\Http\Message\ResponseInterface;
 
 interface TimeframeServiceResponseProcessorInterface extends ResponseProcessorInterface
 {
+    /**
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws InvalidArgumentException
+     * @throws NotAvailableException
+     * @throws ParseError
+     */
     public function processCalculateTimeframesResponse(ResponseInterface $response): CalculateTimeframesResponseDTO;
 }

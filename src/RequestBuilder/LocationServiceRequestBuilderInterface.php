@@ -32,22 +32,35 @@ use Firstred\PostNL\DTO\Request\GetLocationsInAreaRequestDTO;
 use Firstred\PostNL\DTO\Request\GetNearestLocationsGeocodeRequestDTO;
 use Firstred\PostNL\DTO\Request\GetNearestLocationsRequestDTO;
 use Firstred\PostNL\DTO\Request\LookupLocationRequestDTO;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 
 interface LocationServiceRequestBuilderInterface extends RequestBuilderInterface
 {
+    /**
+     * @throws InvalidArgumentException
+     */
     public function buildLookupLocationRequest(
         LookupLocationRequestDTO $lookupLocationRequestDTO,
     ): RequestInterface;
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function buildGetNearestLocationsRequest(
         GetNearestLocationsRequestDTO $getNearestLocationsRequestDTO,
     ): RequestInterface;
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function buildGetNearestLocationsGeocodeRequest(
         GetNearestLocationsGeocodeRequestDTO $getNearestLocationsGeocodeRequestDTO,
     ): RequestInterface;
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function buildGetLocationsInAreaRequest(
         GetLocationsInAreaRequestDTO $getLocationsInAreaRequestDTO,
     ): RequestInterface;

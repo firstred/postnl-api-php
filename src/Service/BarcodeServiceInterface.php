@@ -32,10 +32,27 @@ use Firstred\PostNL\DTO\Request\GenerateBarcodesRequestDTO;
 use Firstred\PostNL\DTO\Response\GenerateBarcodeResponseDTO;
 use Firstred\PostNL\DTO\Response\GenerateBarcodesByCountryCodesResponseDTO;
 use Firstred\PostNL\DTO\Response\GenerateBarcodesResponseDTO;
+use Firstred\PostNL\Exception\ApiClientException;
+use Firstred\PostNL\Exception\ApiException;
+use Firstred\PostNL\Exception\InvalidApiKeyException;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidBarcodeException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
+use Firstred\PostNL\Exception\NotAvailableException;
+use Firstred\PostNL\Exception\ParseError;
 use Firstred\PostNL\Gateway\BarcodeServiceGatewayInterface;
 
 interface BarcodeServiceInterface extends ServiceInterface
 {
+    /**
+     * @throws InvalidArgumentException
+     * @throws InvalidBarcodeException
+     * @throws ApiClientException
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws NotAvailableException
+     * @throws ParseError
+     */
     public function generateBarcode(
         string $type = '3S',
         string|null $range = null,
@@ -43,10 +60,38 @@ interface BarcodeServiceInterface extends ServiceInterface
         bool $eps = false,
     ): GenerateBarcodeResponseDTO;
 
+    /**
+     * @throws ApiClientException
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws InvalidArgumentException
+     * @throws NotAvailableException
+     * @throws ParseError
+     */
     public function generateBarcodes(GenerateBarcodesRequestDTO $generateBarcodesRequestDTO): GenerateBarcodesResponseDTO;
 
+    /**
+     * @throws ApiClientException
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws InvalidArgumentException
+     * @throws InvalidBarcodeException
+     * @throws InvalidConfigurationException
+     * @throws NotAvailableException
+     * @throws ParseError
+     */
     public function generateBarcodeByCountryCode(string $iso): GenerateBarcodeResponseDTO;
 
+    /**
+     * @throws ApiClientException
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws InvalidArgumentException
+     * @throws InvalidBarcodeException
+     * @throws InvalidConfigurationException
+     * @throws NotAvailableException
+     * @throws ParseError
+     */
     public function generateBarcodesByCountryCodes(array $isos): GenerateBarcodesByCountryCodesResponseDTO;
 
     public function setGateway(BarcodeServiceGatewayInterface $gateway): static;

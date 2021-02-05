@@ -29,9 +29,13 @@ declare(strict_types=1);
 namespace Firstred\PostNL\RequestBuilder;
 
 use Firstred\PostNL\DTO\Request\CalculateTimeframesRequestDTO;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 
 interface TimeframeServiceRequestBuilderInterface extends RequestBuilderInterface
 {
+    /**
+     * @throws InvalidArgumentException
+     */
     public function buildCalculateTimeframesRequest(CalculateTimeframesRequestDTO $calculateTimeframesRequestDTO): RequestInterface;
 }

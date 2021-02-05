@@ -33,6 +33,12 @@ use Firstred\PostNL\DTO\Request\CalculateShippingDateRequestDTO;
 use Firstred\PostNL\DTO\Response\CalculateDeliveryDateResponseDTO;
 use Firstred\PostNL\DTO\Response\CalculateShippingDateResponseDTO;
 use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Exception\ApiClientException;
+use Firstred\PostNL\Exception\ApiException;
+use Firstred\PostNL\Exception\InvalidApiKeyException;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\NotAvailableException;
+use Firstred\PostNL\Exception\ParseError;
 use Firstred\PostNL\Gateway\DeliveryDateServiceGatewayInterface;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
 use JetBrains\PhpStorm\Pure;
@@ -51,12 +57,28 @@ class DeliveryDateService extends ServiceBase implements DeliveryDateServiceInte
         parent::__construct(customer: $customer, apiKey: $apiKey, sandbox: $sandbox);
     }
 
+    /**
+     * @throws ApiClientException
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws InvalidArgumentException
+     * @throws NotAvailableException
+     * @throws ParseError
+     */
     public function calculateDeliveryDate(
         CalculateDeliveryDateRequestDTO $calculateDeliveryDateRequestDTO,
     ): CalculateDeliveryDateResponseDTO {
         return $this->getGateway()->doCalculateDeliveryDateRequest(calculateDeliveryDateRequestDTO: $calculateDeliveryDateRequestDTO);
     }
 
+    /**
+     * @throws ApiClientException
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws InvalidArgumentException
+     * @throws NotAvailableException
+     * @throws ParseError
+     */
     public function getShippingDate(
         CalculateShippingDateRequestDTO $getShippingDateRequestDTO,
     ): CalculateShippingDateResponseDTO {

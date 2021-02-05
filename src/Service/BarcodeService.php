@@ -37,9 +37,14 @@ use Firstred\PostNL\DTO\Response\GenerateBarcodeResponseDTO;
 use Firstred\PostNL\DTO\Response\GenerateBarcodesByCountryCodesResponseDTO;
 use Firstred\PostNL\DTO\Response\GenerateBarcodesResponseDTO;
 use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Exception\ApiClientException;
+use Firstred\PostNL\Exception\ApiException;
+use Firstred\PostNL\Exception\InvalidApiKeyException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\InvalidBarcodeException;
 use Firstred\PostNL\Exception\InvalidConfigurationException;
+use Firstred\PostNL\Exception\NotAvailableException;
+use Firstred\PostNL\Exception\ParseError;
 use Firstred\PostNL\Gateway\BarcodeServiceGatewayInterface;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
 use Firstred\PostNL\Misc\Util;
@@ -63,8 +68,13 @@ class BarcodeService extends ServiceBase implements BarcodeServiceInterface
     }
 
     /**
-     * @throws InvalidBarcodeException
      * @throws InvalidArgumentException
+     * @throws InvalidBarcodeException
+     * @throws ApiClientException
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws NotAvailableException
+     * @throws ParseError
      */
     public function generateBarcode(
         string $type = '3S',
@@ -101,15 +111,28 @@ class BarcodeService extends ServiceBase implements BarcodeServiceInterface
         ));
     }
 
+    /**
+     * @throws ApiClientException
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws InvalidArgumentException
+     * @throws NotAvailableException
+     * @throws ParseError
+     */
     public function generateBarcodes(GenerateBarcodesRequestDTO $generateBarcodesRequestDTO): GenerateBarcodesResponseDTO
     {
         return $this->gateway->doGenerateBarcodesRequest(generateBarcodesRequestDTO: $generateBarcodesRequestDTO);
     }
 
     /**
+     * @throws ApiClientException
+     * @throws ApiException
+     * @throws InvalidApiKeyException
      * @throws InvalidArgumentException
      * @throws InvalidBarcodeException
      * @throws InvalidConfigurationException
+     * @throws NotAvailableException
+     * @throws ParseError
      */
     public function generateBarcodeByCountryCode(string $iso): GenerateBarcodeResponseDTO
     {
@@ -144,9 +167,14 @@ class BarcodeService extends ServiceBase implements BarcodeServiceInterface
     }
 
     /**
+     * @throws ApiClientException
+     * @throws ApiException
+     * @throws InvalidApiKeyException
      * @throws InvalidArgumentException
      * @throws InvalidBarcodeException
      * @throws InvalidConfigurationException
+     * @throws NotAvailableException
+     * @throws ParseError
      */
     public function generateBarcodesByCountryCodes(array $isos): GenerateBarcodesByCountryCodesResponseDTO
     {

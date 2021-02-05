@@ -104,7 +104,6 @@ class DeliveryDateServiceGateway extends GatewayBase implements DeliveryDateServ
             }
         }
 
-
         try {
             $dto = $this->responseProcessor->processCalculateDeliveryDateResponse(response: $response);
 
@@ -135,20 +134,75 @@ class DeliveryDateServiceGateway extends GatewayBase implements DeliveryDateServ
         }
     }
 
+    /**
+     * @throws ApiClientException
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws InvalidArgumentException
+     * @throws NotAvailableException
+     * @throws ParseError
+     */
     public function doCalculateShippingDateRequest(CalculateShippingDateRequestDTO $calculateShippingDateRequestDTO): CalculateShippingDateResponseDTO
     {
         $logger = $this->getLogger();
         $request = null;
 
         $response = $this->retrieveCachedItem(cacheKey: $calculateShippingDateRequestDTO->getCacheKey());
+        if (!$response instanceof ResponseInterface) {
+            try {
+                $request = $this->requestBuilder->buildCalculateShippingDateRequest(
+                    calculateShippingDateRequestDTO: $calculateShippingDateRequestDTO,
+                );
+            } catch (InvalidArgumentException $e) {
+                if ($request) {
+                    /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+                    $logger?->debug("PostNL API - critical - REQUEST:\n".Message::str(message: $request));
+                }
 
-        $request = $this->requestBuilder->buildCalculateShippingDateRequest(
-            calculateShippingDateRequestDTO: $calculateShippingDateRequestDTO,
-        );
+                throw $e;
+            }
 
-        $response = $this->httpClient->doRequest(request: $request);
+            try {
+                $response = $this->getHttpClient()->doRequest(request: $request);
 
-        return $this->responseProcessor->processGetShippingDateResponse(response: $response);
+                /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+                $logger?->debug("PostNL API - debug - REQUEST:\n".Message::str(message: $request));
+            } catch (HttpClientException $e) {
+                /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+                $logger?->debug("PostNL API - critical/unhandled by HTTP client - REQUEST:\n".Message::str(message: $request));
+
+                throw new ApiClientException(message: $e->getMessage(), code: $e->getCode(), previous: $e);
+            }
+        }
+
+        try {
+            $dto = $this->responseProcessor->processGetShippingDateResponse(response: $response);
+
+            /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+            $logger?->debug("PostNL API - debug - RESPONSE:\n".Message::str(message: $response));
+
+            return $dto;
+        } catch (ApiException | ParseError $e) {
+            if ($request instanceof RequestInterface) {
+                /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+                $logger?->critical("PostNL API - critical - RESPONSE:\n".Message::str(message: $request));
+            }
+
+            $response = $e->getResponse();
+            if ($response instanceof ResponseInterface) {
+                /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+                $this->getLogger()?->critical("PostNL API - critical - REQUEST:\n".Message::str(message: $response));
+            }
+
+            throw $e;
+        } catch (NotAvailableException | InvalidArgumentException | InvalidApiKeyException $e) {
+            if ($request instanceof RequestInterface) {
+                /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+                $logger?->error("PostNL API - error - REQUEST:\n".Message::str(message: $request));
+            }
+
+            throw $e;
+        }
     }
 
     public function getRequestBuilder(): DeliveryDateServiceRequestBuilderInterface

@@ -32,13 +32,35 @@ use Firstred\PostNL\DTO\Request\CalculateDeliveryDateRequestDTO;
 use Firstred\PostNL\DTO\Request\CalculateShippingDateRequestDTO;
 use Firstred\PostNL\DTO\Response\CalculateDeliveryDateResponseDTO;
 use Firstred\PostNL\DTO\Response\CalculateShippingDateResponseDTO;
+use Firstred\PostNL\Exception\ApiClientException;
+use Firstred\PostNL\Exception\ApiException;
+use Firstred\PostNL\Exception\InvalidApiKeyException;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\NotAvailableException;
+use Firstred\PostNL\Exception\ParseError;
 use Firstred\PostNL\RequestBuilder\DeliveryDateServiceRequestBuilderInterface;
 use Firstred\PostNL\ResponseProcessor\DeliveryDateServiceResponseProcessorInterface;
 
 interface DeliveryDateServiceGatewayInterface extends GatewayInterface
 {
+    /**
+     * @throws ApiClientException
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws InvalidArgumentException
+     * @throws NotAvailableException
+     * @throws ParseError
+     */
     public function doCalculateDeliveryDateRequest(CalculateDeliveryDateRequestDTO $calculateDeliveryDateRequestDTO): CalculateDeliveryDateResponseDTO;
 
+    /**
+     * @throws ApiClientException
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws InvalidArgumentException
+     * @throws NotAvailableException
+     * @throws ParseError
+     */
     public function doCalculateShippingDateRequest(CalculateShippingDateRequestDTO $calculateShippingDateRequestDTO): CalculateShippingDateResponseDTO;
 
     public function getRequestBuilder(): DeliveryDateServiceRequestBuilderInterface;

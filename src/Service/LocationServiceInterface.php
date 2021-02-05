@@ -34,22 +34,60 @@ use Firstred\PostNL\DTO\Request\GetNearestLocationsRequestDTO;
 use Firstred\PostNL\DTO\Request\LookupLocationRequestDTO;
 use Firstred\PostNL\DTO\Response\GetLocationResponseDTO;
 use Firstred\PostNL\DTO\Response\GetLocationsResponseDTO;
+use Firstred\PostNL\Exception\ApiClientException;
+use Firstred\PostNL\Exception\ApiException;
+use Firstred\PostNL\Exception\InvalidApiKeyException;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\NotAvailableException;
+use Firstred\PostNL\Exception\ParseError;
 use Firstred\PostNL\Gateway\LocationServiceGatewayInterface;
 
 interface LocationServiceInterface extends ServiceInterface
 {
+    /**
+     * @throws ApiClientException
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws InvalidArgumentException
+     * @throws NotAvailableException
+     * @throws ParseError
+     */
     public function lookupLocation(
         LookupLocationRequestDTO $lookupLocationRequestDTO,
     ): GetLocationResponseDTO;
 
+    /**
+     * @throws ApiClientException
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws InvalidArgumentException
+     * @throws NotAvailableException
+     * @throws ParseError
+     */
     public function getNearestLocations(
         GetNearestLocationsRequestDTO $getNearestLocationsRequestDTO,
     ): GetLocationsResponseDTO;
 
+    /**
+     * @throws ApiClientException
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws InvalidArgumentException
+     * @throws NotAvailableException
+     * @throws ParseError
+     */
     public function getNearestLocationsGeocode(
         GetNearestLocationsGeocodeRequestDTO $getNearestLocationsGeocodeRequestDTO,
     ): GetLocationsResponseDTO;
 
+    /**
+     * @throws ApiClientException
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws InvalidArgumentException
+     * @throws NotAvailableException
+     * @throws ParseError
+     */
     public function getLocationsInArea(
         GetLocationsInAreaRequestDTO $getLocationsInAreaRequestDTO,
     ): GetLocationsResponseDTO;

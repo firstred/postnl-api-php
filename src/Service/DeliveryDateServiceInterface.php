@@ -32,16 +32,38 @@ use Firstred\PostNL\DTO\Request\CalculateDeliveryDateRequestDTO;
 use Firstred\PostNL\DTO\Request\CalculateShippingDateRequestDTO;
 use Firstred\PostNL\DTO\Response\CalculateDeliveryDateResponseDTO;
 use Firstred\PostNL\DTO\Response\CalculateShippingDateResponseDTO;
+use Firstred\PostNL\Exception\ApiClientException;
+use Firstred\PostNL\Exception\ApiException;
+use Firstred\PostNL\Exception\InvalidApiKeyException;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\NotAvailableException;
+use Firstred\PostNL\Exception\ParseError;
 use Firstred\PostNL\Gateway\DeliveryDateServiceGatewayInterface;
 
 interface DeliveryDateServiceInterface extends ServiceInterface
 {
     public const DELIVERY_OPTION_VALUES = ['Daytime', 'Evening', 'Morning', 'Noon', 'Sunday', 'Sameday', 'Afternoon', 'MyTime', 'Pickup'];
 
+    /**
+     * @throws ApiClientException
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws InvalidArgumentException
+     * @throws NotAvailableException
+     * @throws ParseError
+     */
     public function calculateDeliveryDate(
         CalculateDeliveryDateRequestDTO $calculateDeliveryDateRequestDTO,
     ): CalculateDeliveryDateResponseDTO;
 
+    /**
+     * @throws ApiClientException
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws InvalidArgumentException
+     * @throws NotAvailableException
+     * @throws ParseError
+     */
     public function getShippingDate(
         CalculateShippingDateRequestDTO $getShippingDateRequestDTO,
     ): CalculateShippingDateResponseDTO;

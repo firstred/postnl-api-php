@@ -30,10 +30,24 @@ namespace Firstred\PostNL\Service;
 
 use Firstred\PostNL\DTO\Request\CalculateTimeframesRequestDTO;
 use Firstred\PostNL\DTO\Response\CalculateTimeframesResponseDTO;
+use Firstred\PostNL\Exception\ApiClientException;
+use Firstred\PostNL\Exception\ApiException;
+use Firstred\PostNL\Exception\InvalidApiKeyException;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\NotAvailableException;
+use Firstred\PostNL\Exception\ParseError;
 use Firstred\PostNL\Gateway\TimeframeServiceGatewayInterface;
 
 interface TimeframeServiceInterface extends ServiceInterface
 {
+    /**
+     * @throws ApiClientException
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws InvalidArgumentException
+     * @throws NotAvailableException
+     * @throws ParseError
+     */
     public function calculateTimeframes(CalculateTimeframesRequestDTO $calculateTimeframesRequestDTO): CalculateTimeframesResponseDTO;
 
     public function setGateway(TimeframeServiceGatewayInterface $gateway): static;

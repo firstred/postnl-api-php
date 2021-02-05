@@ -36,11 +36,21 @@ use Firstred\PostNL\DTO\Request\GetNearestLocationsRequestDTO;
 use Firstred\PostNL\DTO\Request\LookupLocationRequestDTO;
 use Firstred\PostNL\DTO\Response\GetLocationResponseDTO;
 use Firstred\PostNL\DTO\Response\GetLocationsResponseDTO;
+use Firstred\PostNL\Exception\ApiClientException;
+use Firstred\PostNL\Exception\ApiException;
+use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\InvalidApiKeyException;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\NotAvailableException;
+use Firstred\PostNL\Exception\ParseError;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
+use Firstred\PostNL\Misc\Message;
 use Firstred\PostNL\RequestBuilder\LocationServiceRequestBuilderInterface;
 use Firstred\PostNL\ResponseProcessor\LocationServiceResponseProcessorInterface;
 use JetBrains\PhpStorm\Pure;
 use Psr\Cache\CacheItemPoolInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 class LocationServiceGateway extends GatewayBase implements LocationServiceGatewayInterface
 {
@@ -55,51 +65,295 @@ class LocationServiceGateway extends GatewayBase implements LocationServiceGatew
         parent::__construct(httpClient: $this->httpClient, cache: $cache, ttl: $ttl);
     }
 
+    /**
+     * @throws ApiClientException
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws InvalidArgumentException
+     * @throws NotAvailableException
+     * @throws ParseError
+     */
     public function doLookupLocationRequest(LookupLocationRequestDTO $lookupLocationRequestDTO): GetLocationResponseDTO
     {
-        $response = $this->getHttpClient()->doRequest(
-            request: $this->getRequestBuilder()->buildLookupLocationRequest(
-                lookupLocationRequestDTO: $lookupLocationRequestDTO,
-            ),
-        );
+        $logger = $this->getLogger();
+        $request = null;
 
-        return $this->getResponseProcessor()->processGetLocationResponse(response: $response);
+        $response = $this->retrieveCachedItem(cacheKey: $lookupLocationRequestDTO->getCacheKey());
+        if (!$response instanceof ResponseInterface) {
+            try {
+                $request = $this->getRequestBuilder()->buildLookupLocationRequest(
+                    lookupLocationRequestDTO: $lookupLocationRequestDTO,
+                );
+
+            } catch (InvalidArgumentException $e) {
+                if ($request) {
+                    /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+                    $logger?->debug("PostNL API - critical - REQUEST:\n".Message::str(message: $request));
+                }
+
+                throw $e;
+            }
+
+            try {
+                $response = $this->getHttpClient()->doRequest(request: $request);
+
+                /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+                $logger?->debug("PostNL API - debug - REQUEST:\n".Message::str(message: $request));
+            } catch (HttpClientException $e) {
+                /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+                $logger?->debug("PostNL API - critical/unhandled by HTTP client - REQUEST:\n".Message::str(message: $request));
+
+                throw new ApiClientException(message: $e->getMessage(), code: $e->getCode(), previous: $e);
+            }
+        }
+
+        try {
+            $dto = $this->getResponseProcessor()->processGetLocationResponse(response: $response);
+
+            /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+            $logger?->debug("PostNL API - debug - RESPONSE:\n".Message::str(message: $response));
+
+            return $dto;
+        } catch (ApiException | ParseError $e) {
+            if ($request instanceof RequestInterface) {
+                /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+                $logger?->critical("PostNL API - critical - RESPONSE:\n".Message::str(message: $request));
+            }
+
+            $response = $e->getResponse();
+            if ($response instanceof ResponseInterface) {
+                /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+                $this->getLogger()?->critical("PostNL API - critical - REQUEST:\n".Message::str(message: $response));
+            }
+
+            throw $e;
+        } catch (NotAvailableException | InvalidArgumentException | InvalidApiKeyException $e) {
+            if ($request instanceof RequestInterface) {
+                /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+                $logger?->error("PostNL API - error - REQUEST:\n".Message::str(message: $request));
+            }
+
+            throw $e;
+        }
     }
 
+    /**
+     * @throws ApiClientException
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws InvalidArgumentException
+     * @throws NotAvailableException
+     * @throws ParseError
+     */
     public function doGetNearestLocationsRequest(
         GetNearestLocationsRequestDTO $getNearestLocationsRequestDTO,
     ): GetLocationsResponseDTO {
-        $response = $this->getHttpClient()->doRequest(
-                request: $this->getRequestBuilder()->buildGetNearestLocationsRequest(
-                    getNearestLocationsRequestDTO: $getNearestLocationsRequestDTO,
-            ),
-        );
+        $logger = $this->getLogger();
+        $request = null;
 
-        return $this->getResponseProcessor()->processGetLocationsResponse(response: $response);
+        $response = $this->retrieveCachedItem(cacheKey: $getNearestLocationsRequestDTO->getCacheKey());
+        if (!$response instanceof ResponseInterface) {
+            try {
+                $request = $this->getRequestBuilder()->buildGetNearestLocationsRequest(
+                    getNearestLocationsRequestDTO: $getNearestLocationsRequestDTO,
+                );
+
+            } catch (InvalidArgumentException $e) {
+                if ($request) {
+                    /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+                    $logger?->debug("PostNL API - critical - REQUEST:\n".Message::str(message: $request));
+                }
+
+                throw $e;
+            }
+
+            try {
+                $response = $this->getHttpClient()->doRequest(request: $request);
+
+                /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+                $logger?->debug("PostNL API - debug - REQUEST:\n".Message::str(message: $request));
+            } catch (HttpClientException $e) {
+                /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+                $logger?->debug("PostNL API - critical/unhandled by HTTP client - REQUEST:\n".Message::str(message: $request));
+
+                throw new ApiClientException(message: $e->getMessage(), code: $e->getCode(), previous: $e);
+            }
+        }
+
+        try {
+            $dto = $this->getResponseProcessor()->processGetLocationsResponse(response: $response);
+
+            /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+            $logger?->debug("PostNL API - debug - RESPONSE:\n".Message::str(message: $response));
+
+            return $dto;
+        } catch (ApiException | ParseError $e) {
+            if ($request instanceof RequestInterface) {
+                /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+                $logger?->critical("PostNL API - critical - RESPONSE:\n".Message::str(message: $request));
+            }
+
+            $response = $e->getResponse();
+            if ($response instanceof ResponseInterface) {
+                /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+                $this->getLogger()?->critical("PostNL API - critical - REQUEST:\n".Message::str(message: $response));
+            }
+
+            throw $e;
+        } catch (NotAvailableException | InvalidArgumentException | InvalidApiKeyException $e) {
+            if ($request instanceof RequestInterface) {
+                /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+                $logger?->error("PostNL API - error - REQUEST:\n".Message::str(message: $request));
+            }
+
+            throw $e;
+        }
     }
 
+    /**
+     * @throws ApiClientException
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws InvalidArgumentException
+     * @throws NotAvailableException
+     * @throws ParseError
+     */
     public function doGetNearestLocationsGeocodeRequest(
         GetNearestLocationsGeocodeRequestDTO $getNearestLocationsGeocodeRequestDTO,
     ): GetLocationsResponseDTO {
-        $response = $this->getHttpClient()->doRequest(
-            request: $this->getRequestBuilder()->buildGetNearestLocationsGeocodeRequest(
-                getNearestLocationsGeocodeRequestDTO: $getNearestLocationsGeocodeRequestDTO,
-            ),
-        );
+        $logger = $this->getLogger();
+        $request = null;
 
-        return $this->getResponseProcessor()->processGetLocationsResponse(response: $response);
+        $response = $this->retrieveCachedItem(cacheKey: $getNearestLocationsGeocodeRequestDTO->getCacheKey());
+        if (!$response instanceof ResponseInterface) {
+            try {
+                $request = $this->getRequestBuilder()->buildGetNearestLocationsGeocodeRequest(
+                    getNearestLocationsGeocodeRequestDTO: $getNearestLocationsGeocodeRequestDTO,
+                );
+
+            } catch (InvalidArgumentException $e) {
+                if ($request) {
+                    /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+                    $logger?->debug("PostNL API - critical - REQUEST:\n".Message::str(message: $request));
+                }
+
+                throw $e;
+            }
+
+            try {
+                $response = $this->getHttpClient()->doRequest(request: $request);
+
+                /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+                $logger?->debug("PostNL API - debug - REQUEST:\n".Message::str(message: $request));
+            } catch (HttpClientException $e) {
+                /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+                $logger?->debug("PostNL API - critical/unhandled by HTTP client - REQUEST:\n".Message::str(message: $request));
+
+                throw new ApiClientException(message: $e->getMessage(), code: $e->getCode(), previous: $e);
+            }
+        }
+
+        try {
+            $dto = $this->getResponseProcessor()->processGetLocationsResponse(response: $response);
+
+            /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+            $logger?->debug("PostNL API - debug - RESPONSE:\n".Message::str(message: $response));
+
+            return $dto;
+        } catch (ApiException | ParseError $e) {
+            if ($request instanceof RequestInterface) {
+                /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+                $logger?->critical("PostNL API - critical - RESPONSE:\n".Message::str(message: $request));
+            }
+
+            $response = $e->getResponse();
+            if ($response instanceof ResponseInterface) {
+                /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+                $this->getLogger()?->critical("PostNL API - critical - REQUEST:\n".Message::str(message: $response));
+            }
+
+            throw $e;
+        } catch (NotAvailableException | InvalidArgumentException | InvalidApiKeyException $e) {
+            if ($request instanceof RequestInterface) {
+                /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+                $logger?->error("PostNL API - error - REQUEST:\n".Message::str(message: $request));
+            }
+
+            throw $e;
+        }
     }
 
+    /**
+     * @throws ApiClientException
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws InvalidArgumentException
+     * @throws NotAvailableException
+     * @throws ParseError
+     */
     public function doGetLocationsInAreaRequest(
         GetLocationsInAreaRequestDTO $getLocationsInAreaRequestDTO,
     ): GetLocationsResponseDTO {
-        $response = $this->getHttpClient()->doRequest(
-            request: $this->getRequestBuilder()->buildGetLocationsInAreaRequest(
-                    getLocationsInAreaRequestDTO: $getLocationsInAreaRequestDTO,
-            ),
-        );
+        $logger = $this->getLogger();
+        $request = null;
 
-        return $this->getResponseProcessor()->processGetLocationsResponse(response: $response);
+        $response = $this->retrieveCachedItem(cacheKey: $getLocationsInAreaRequestDTO->getCacheKey());
+        if (!$response instanceof ResponseInterface) {
+            try {
+                $request = $this->getRequestBuilder()->buildGetLocationsInAreaRequest(
+                    getLocationsInAreaRequestDTO: $getLocationsInAreaRequestDTO,
+                );
+
+            } catch (InvalidArgumentException $e) {
+                if ($request) {
+                    /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+                    $logger?->debug("PostNL API - critical - REQUEST:\n".Message::str(message: $request));
+                }
+
+                throw $e;
+            }
+
+            try {
+                $response = $this->getHttpClient()->doRequest(request: $request);
+
+                /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+                $logger?->debug("PostNL API - debug - REQUEST:\n".Message::str(message: $request));
+            } catch (HttpClientException $e) {
+                /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+                $logger?->debug("PostNL API - critical/unhandled by HTTP client - REQUEST:\n".Message::str(message: $request));
+
+                throw new ApiClientException(message: $e->getMessage(), code: $e->getCode(), previous: $e);
+            }
+        }
+
+        try {
+            $dto = $this->getResponseProcessor()->processGetLocationsResponse(response: $response);
+
+            /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+            $logger?->debug("PostNL API - debug - RESPONSE:\n".Message::str(message: $response));
+
+            return $dto;
+        } catch (ApiException | ParseError $e) {
+            if ($request instanceof RequestInterface) {
+                /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+                $logger?->critical("PostNL API - critical - RESPONSE:\n".Message::str(message: $request));
+            }
+
+            $response = $e->getResponse();
+            if ($response instanceof ResponseInterface) {
+                /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+                $this->getLogger()?->critical("PostNL API - critical - REQUEST:\n".Message::str(message: $response));
+            }
+
+            throw $e;
+        } catch (NotAvailableException | InvalidArgumentException | InvalidApiKeyException $e) {
+            if ($request instanceof RequestInterface) {
+                /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+                $logger?->error("PostNL API - error - REQUEST:\n".Message::str(message: $request));
+            }
+
+            throw $e;
+        }
     }
 
     public function getRequestBuilder(): LocationServiceRequestBuilderInterface

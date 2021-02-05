@@ -35,6 +35,12 @@ use Firstred\PostNL\DTO\Request\LookupLocationRequestDTO;
 use Firstred\PostNL\DTO\Response\GetLocationResponseDTO;
 use Firstred\PostNL\DTO\Response\GetLocationsResponseDTO;
 use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Exception\ApiClientException;
+use Firstred\PostNL\Exception\ApiException;
+use Firstred\PostNL\Exception\InvalidApiKeyException;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\NotAvailableException;
+use Firstred\PostNL\Exception\ParseError;
 use Firstred\PostNL\Gateway\LocationServiceGatewayInterface;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
 use JetBrains\PhpStorm\Pure;
@@ -53,17 +59,40 @@ class LocationService extends ServiceBase implements LocationServiceInterface
         parent::__construct(customer: $customer, apiKey: $apiKey, sandbox: $sandbox);
     }
 
+    /**
+     * @throws ApiClientException
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws InvalidArgumentException
+     * @throws NotAvailableException
+     * @throws ParseError
+     */
     public function lookupLocation(LookupLocationRequestDTO $lookupLocationRequestDTO): GetLocationResponseDTO
     {
         return $this->getGateway()->doLookupLocationRequest(lookupLocationRequestDTO: $lookupLocationRequestDTO);
     }
 
+    /**
+     * @throws ApiClientException
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws InvalidArgumentException
+     * @throws NotAvailableException
+     * @throws ParseError
+     */
     public function getNearestLocations(GetNearestLocationsRequestDTO $getNearestLocationsRequestDTO): GetLocationsResponseDTO
     {
         return $this->getGateway()->doGetNearestLocationsRequest(getNearestLocationsRequestDTO: $getNearestLocationsRequestDTO);
     }
 
-
+    /**
+     * @throws ApiClientException
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws InvalidArgumentException
+     * @throws NotAvailableException
+     * @throws ParseError
+     */
     public function getNearestLocationsGeocode(
         GetNearestLocationsGeocodeRequestDTO $getNearestLocationsGeocodeRequestDTO,
     ): GetLocationsResponseDTO {
@@ -72,6 +101,14 @@ class LocationService extends ServiceBase implements LocationServiceInterface
         );
     }
 
+    /**
+     * @throws ApiClientException
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws InvalidArgumentException
+     * @throws NotAvailableException
+     * @throws ParseError
+     */
     public function getLocationsInArea(GetLocationsInAreaRequestDTO $getLocationsInAreaRequestDTO): GetLocationsResponseDTO
     {
         return $this->getGateway()->doGetLocationsInAreaRequest(

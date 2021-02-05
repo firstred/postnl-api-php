@@ -32,13 +32,35 @@ use Firstred\PostNL\DTO\Request\GenerateBarcodeRequestDTO;
 use Firstred\PostNL\DTO\Request\GenerateBarcodesRequestDTO;
 use Firstred\PostNL\DTO\Response\GenerateBarcodeResponseDTO;
 use Firstred\PostNL\DTO\Response\GenerateBarcodesResponseDTO;
+use Firstred\PostNL\Exception\ApiClientException;
+use Firstred\PostNL\Exception\ApiException;
+use Firstred\PostNL\Exception\InvalidApiKeyException;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\NotAvailableException;
+use Firstred\PostNL\Exception\ParseError;
 use Firstred\PostNL\RequestBuilder\BarcodeServiceRequestBuilderInterface;
 use Firstred\PostNL\ResponseProcessor\BarcodeServiceResponseProcessorInterface;
 
 interface BarcodeServiceGatewayInterface extends GatewayInterface
 {
+    /**
+     * @throws ApiClientException
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws InvalidArgumentException
+     * @throws NotAvailableException
+     * @throws ParseError
+     */
     public function doGenerateBarcodeRequest(GenerateBarcodeRequestDTO $generateBarcodeRequestDTO): GenerateBarcodeResponseDTO;
 
+    /**
+     * @throws ApiClientException
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws InvalidArgumentException
+     * @throws NotAvailableException
+     * @throws ParseError
+     */
     public function doGenerateBarcodesRequest(GenerateBarcodesRequestDTO $generateBarcodesRequestDTO): GenerateBarcodesResponseDTO;
 
     public function getRequestBuilder(): BarcodeServiceRequestBuilderInterface;

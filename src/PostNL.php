@@ -326,12 +326,20 @@ class PostNL
     /**
      * Generate a single barcode.
      *
-     * @param string $type
-     * @param string $range
-     * @param string $serie
-     * @param bool   $eps
+     * @param string      $type
+     * @param string|null $range
+     * @param string|null $serie
+     * @param bool        $eps
      *
      * @return GenerateBarcodeResponseDTO The barcode as a stringable response object
+     *
+     * @throws Exception\ApiClientException
+     * @throws Exception\ApiException
+     * @throws Exception\InvalidApiKeyException
+     * @throws Exception\InvalidArgumentException
+     * @throws Exception\InvalidBarcodeException
+     * @throws Exception\NotAvailableException
+     * @throws Exception\ParseError
      */
     public function generateBarcode(
         string $type = '3S',
@@ -353,6 +361,15 @@ class PostNL
      * @param string $iso 2-letter Country ISO Code
      *
      * @return GenerateBarcodeResponseDTO The Barcode as a stringable response object
+     *
+     * @throws Exception\ApiClientException
+     * @throws Exception\ApiException
+     * @throws Exception\InvalidApiKeyException
+     * @throws Exception\InvalidArgumentException
+     * @throws Exception\InvalidBarcodeException
+     * @throws Exception\InvalidConfigurationException
+     * @throws Exception\NotAvailableException
+     * @throws Exception\ParseError
      */
     public function generateBarcodeByCountryCode(string $iso): GenerateBarcodeResponseDTO
     {
@@ -365,6 +382,14 @@ class PostNL
      * @param array $isos key = iso code, value = amount of barcodes requested
      *
      * @return GenerateBarcodesByCountryCodesResponseDTO Country isos with stringable barcode response objects
+     * @throws Exception\ApiClientException
+     * @throws Exception\ApiException
+     * @throws Exception\InvalidApiKeyException
+     * @throws Exception\InvalidArgumentException
+     * @throws Exception\InvalidBarcodeException
+     * @throws Exception\InvalidConfigurationException
+     * @throws Exception\NotAvailableException
+     * @throws Exception\ParseError
      */
     public function generateBarcodesByCountryCodes(array $isos): GenerateBarcodesByCountryCodesResponseDTO
     {
@@ -731,10 +756,16 @@ class PostNL
      * @param bool|null   $availableSaturday
      * @param string|null $cutOffTimeSunday
      * @param bool|null   $availableSunday
+     * @param array|null  $cutOffTimes
      *
      * @return CalculateDeliveryDateResponseDTO
      *
+     * @throws Exception\ApiClientException
+     * @throws Exception\ApiException
+     * @throws Exception\InvalidApiKeyException
      * @throws Exception\InvalidArgumentException
+     * @throws Exception\NotAvailableException
+     * @throws Exception\ParseError
      */
     public function calculateDeliveryDate(
         string $shippingDate,
@@ -815,7 +846,12 @@ class PostNL
      *
      * @return CalculateShippingDateResponseDTO
      *
+     * @throws Exception\ApiClientException
+     * @throws Exception\ApiException
+     * @throws Exception\InvalidApiKeyException
      * @throws Exception\InvalidArgumentException
+     * @throws Exception\NotAvailableException
+     * @throws Exception\ParseError
      */
     public function calculateShippingDate(
         string|null $deliveryDate,
@@ -864,7 +900,12 @@ class PostNL
      *
      * @return CalculateTimeframesResponseDTO
      *
+     * @throws Exception\ApiClientException
+     * @throws Exception\ApiException
+     * @throws Exception\InvalidApiKeyException
      * @throws Exception\InvalidArgumentException
+     * @throws Exception\NotAvailableException
+     * @throws Exception\ParseError
      */
     public function calculateTimeframes(
         string $startDate,
@@ -906,7 +947,13 @@ class PostNL
      * @param string     $RetailNetworkID
      *
      * @return GetLocationResponseDTO
+     *
+     * @throws Exception\ApiClientException
+     * @throws Exception\ApiException
+     * @throws Exception\InvalidApiKeyException
      * @throws Exception\InvalidArgumentException
+     * @throws Exception\NotAvailableException
+     * @throws Exception\ParseError
      */
     public function lookupLocation(
         int|string $LocationCode,
@@ -936,7 +983,12 @@ class PostNL
      *
      * @return GetLocationsResponseDTO
      *
+     * @throws Exception\ApiClientException
+     * @throws Exception\ApiException
+     * @throws Exception\InvalidApiKeyException
      * @throws Exception\InvalidArgumentException
+     * @throws Exception\NotAvailableException
+     * @throws Exception\ParseError
      */
     public function getNearestLocations(
         string $CountryCode = 'NL',
@@ -975,7 +1027,12 @@ class PostNL
      *
      * @return GetLocationsResponseDTO
      *
+     * @throws Exception\ApiClientException
+     * @throws Exception\ApiException
+     * @throws Exception\InvalidApiKeyException
      * @throws Exception\InvalidArgumentException
+     * @throws Exception\NotAvailableException
+     * @throws Exception\ParseError
      */
     public function getNearestLocationsByGeolocation(
         string $CountryCode = 'NL',
@@ -1011,7 +1068,13 @@ class PostNL
      * @param array|null  $DeliveryOptions
      *
      * @return GetLocationsResponseDTO
+     *
+     * @throws Exception\ApiClientException
+     * @throws Exception\ApiException
+     * @throws Exception\InvalidApiKeyException
      * @throws Exception\InvalidArgumentException
+     * @throws Exception\NotAvailableException
+     * @throws Exception\ParseError
      */
     public function getLocationsInArea(
         float|null $LatitudeNorth = null,
