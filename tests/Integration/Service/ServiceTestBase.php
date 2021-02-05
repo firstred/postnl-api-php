@@ -49,10 +49,10 @@ abstract class ServiceTestBase extends TestCase
     {
         /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
         $customer = (new Customer())
-            ->setCollectionLocation(CollectionLocation: getenv(name: 'POSTNL_COLLECTION_LOCATION'))
-            ->setCustomerCode(CustomerCode: getenv(name: 'POSTNL_CUSTOMER_CODE'))
-            ->setCustomerNumber(CustomerNumber: getenv(name: 'POSTNL_CUSTOMER_NUMBER'))
-            ->setContactPerson(ContactPerson: getenv(name: 'POSTNL_CONTACT_PERSION'))
+            ->setCollectionLocation(CollectionLocation: $_ENV['POSTNL_COLLECTION_LOCATION'])
+            ->setCustomerCode(CustomerCode: $_ENV['POSTNL_CUSTOMER_CODE'])
+            ->setCustomerNumber(CustomerNumber: $_ENV['POSTNL_CUSTOMER_NUMBER'])
+            ->setContactPerson(ContactPerson: $_ENV['POSTNL_CONTACT_PERSION'])
             ->setAddress(Address: new Address(
                 AddressType: '02',
                 City: 'Hoofddorp',
@@ -62,12 +62,13 @@ abstract class ServiceTestBase extends TestCase
                 Street: 'Siriusdreef',
                 Zipcode: '2132WT',
             ))
-            ->setGlobalPackBarcodeType(getenv(name: 'POSTNL_GLOBAL_PACK_BARCODE_TYPE'))
-            ->setGlobalPackCustomerCode(getenv(name: 'POSTNL_GLOBAL_PACK_RANGE'));
+            ->setGlobalPackBarcodeType($_ENV['POSTNL_GLOBAL_PACK_BARCODE_TYPE'])
+            ->setGlobalPackCustomerCode($_ENV['POSTNL_GLOBAL_PACK_RANGE'])
+        ;
 
         $this->postnl = new PostNL(
             customer: $customer,
-            apiKey: getenv(name: 'POSTNL_API_KEY'),
+            apiKey: $_ENV['POSTNL_API_KEY'],
             sandbox: false,
         );
     }

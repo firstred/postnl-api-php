@@ -28,17 +28,15 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Tests\Integration\Service;
 
-use Firstred\PostNL\Entity\Address;
-use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Exception\ApiClientException;
+use Firstred\PostNL\Exception\ApiException;
+use Firstred\PostNL\Exception\InvalidApiKeyException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\InvalidBarcodeException;
-use Firstred\PostNL\Misc\Message;
-use Firstred\PostNL\PostNL;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
+use Firstred\PostNL\Exception\NotAvailableException;
+use Firstred\PostNL\Exception\ParseError;
 use Firstred\PostNL\Service\BarcodeServiceInterface;
-use PHPUnit\Framework\TestCase;
-use Psr\Http\Message\RequestInterface;
-use Psr\Log\LoggerInterface;
-use ReflectionException;
 
 /**
  * Class BarcodeServiceTest.
@@ -52,35 +50,52 @@ class BarcodeServiceRestTest extends ServiceTestBase
     /**
      * @testdox Returns a valid single barcode
      *
+     * @throws ApiClientException
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws InvalidArgumentException
      * @throws InvalidBarcodeException
+     * @throws NotAvailableException
+     * @throws ParseError
      */
     public function testSingleBarcodeRest()
     {
-        $this->assertStringContainsString(needle: '3SDEVC', haystack: (string) $this->postnl->generateBarcode());
+        $this->assertStringStartsWith(prefix: '3S', string: (string) $this->postnl->generateBarcode());
     }
 
-//    /**
-//     * @testdox Returns a valid single barcode for a country
-//     *
-//     * @throws InvalidBarcodeException
-//     * @throws InvalidConfigurationException
-//     */
-//    public function testSingleBarCodeByCountryRest()
-//    {
-//        $this->assertStringContainsString(needle: '3SDEVC', haystack: $this->postnl->generateBarcodeByCountryCode(iso: 'NL'));
-//    }
-//
-//    /**
-//     * @testdox Returns several barcodes
-//     *
-//     * @throws InvalidBarcodeException
-//     * @throws InvalidConfigurationException
-//     */
-//    public function testMultipleNLBarcodesRest()
-//    {
-//        $barcodes = $this->postnl->generateBarcodesByCountryCodes(isos: ['NL' => 4]);
-//
-//        $this->assertIsArray(actual: $barcodes);
-//        $this->assertStringContainsString(needle: '3SDEVC', haystack: $barcodes['NL'][0]);
-//    }
+    /**
+     * @testdox Returns a valid single barcode for a country
+     *
+     * @throws ApiClientException
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws InvalidArgumentException
+     * @throws InvalidBarcodeException
+     * @throws InvalidConfigurationException
+     * @throws NotAvailableException
+     * @throws ParseError
+     */
+    public function testSingleBarCodeByCountryRest()
+    {
+        $this->assertStringStartsWith(prefix: '3S', string: (string) $this->postnl->generateBarcodeByCountryCode(iso: 'NL'));
+    }
+
+    /**
+     * @testdox Returns several barcodes
+     *
+     * @throws InvalidBarcodeException
+     * @throws ApiClientException
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws InvalidArgumentException
+     * @throws InvalidConfigurationException
+     * @throws NotAvailableException
+     * @throws ParseError
+     */
+    public function testMultipleNLBarcodesRest()
+    {
+        $barcodes = $this->postnl->generateBarcodesByCountryCodes(isos: ['NL' => 2]);
+
+        $this->assertStringStartsWith(prefix: '3S', string: (string) $barcodes['NL'][1]);
+    }
 }
