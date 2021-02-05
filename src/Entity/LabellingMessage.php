@@ -34,13 +34,15 @@ use JetBrains\PhpStorm\ExpectedValues;
 
 class LabellingMessage extends Message
 {
+    protected string|null $PrinterType = null;
+
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
         string $service = '',
         #[ExpectedValues(values: PropInterface::PROP_TYPES + [''])]
         string $propType = '',
 
-        protected string|null $PrinterType = 'GraphicFile|PDF',
+        string|null $PrinterType = 'GraphicFile|PDF',
         string|null $MessageID = null,
         string|null $MessageTimeStamp = null
     ) {
@@ -54,13 +56,13 @@ class LabellingMessage extends Message
         $this->setPrintertype(PrinterType: $PrinterType);
     }
 
-    public function getPrintertype(): string|null
+    public function getPrinterType(): string|null
     {
-        return $this->Printertype;
+        return $this->PrinterType;
     }
 
-    public function setPrintertype(string|null $PrinterType = null): void
+    public function setPrinterType(string|null $PrinterType = null): void
     {
-        $this->Printertype = $PrinterType;
+        $this->PrinterType = $PrinterType;
     }
 }

@@ -41,7 +41,10 @@ class RFPdi extends Fpdi
 {
     public int $angle = 0;
 
-    public function rotate($angle, $x = -1, $y = -1)
+    /**
+     * @param int $angle
+     */
+    public function rotate(int $angle, mixed $x = -1, mixed $y = -1): void
     {
         if (-1 == $x) {
             $x = $this->x;
@@ -69,17 +72,17 @@ class RFPdi extends Fpdi
         }
     }
 
-    public function rotateClockWise()
+    public function rotateClockWise(): void
     {
         $this->rotate(angle: 270);
     }
 
-    public function rotateCounterClockWise()
+    public function rotateCounterClockWise(): void
     {
         $this->rotate(angle: 90);
     }
 
-    public function _endpage()
+    public function _endpage(): void
     {
         if (0 != $this->angle) {
             $this->angle = 0;

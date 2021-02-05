@@ -35,8 +35,8 @@ use JetBrains\PhpStorm\ExpectedValues;
 
 class Label extends SerializableObject
 {
-    const FORMAT_A4 = 1;
-    const FORMAT_A6 = 2;
+    public const FORMAT_A4 = 1;
+    public const FORMAT_A6 = 2;
 
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
@@ -48,14 +48,14 @@ class Label extends SerializableObject
          * Base 64 encoded content.
          */
         protected string|null $Content = null,
-    protected string|null $Contenttype = null,
-    protected string|null $Labeltype = null,
+        protected string|null $Contenttype = null,
+        protected string|null $Labeltype = null,
     ) {
         parent::__construct(service: $service, propType: $propType);
 
         $this->setContent(Content: $Content);
-        $this->setContenttype(Contenttype: $ContentType);
-        $this->setLabeltype(Labeltype: $LabelType);
+        $this->setContenttype(Contenttype: $Contenttype);
+        $this->setLabeltype(Labeltype: $Labeltype);
     }
 
     public function getContent(): string|null

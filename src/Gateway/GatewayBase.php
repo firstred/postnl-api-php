@@ -31,8 +31,11 @@ namespace Firstred\PostNL\Gateway;
 use DateInterval;
 use DateTimeInterface;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
+use Firstred\PostNL\Misc\SerializableObject;
 use Psr\Cache\CacheItemPoolInterface;
+use Psr\Cache\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
+use ReflectionClass;
 
 abstract class GatewayBase implements GatewayInterface
 {
@@ -89,5 +92,31 @@ abstract class GatewayBase implements GatewayInterface
         $this->getHttpClient()->setLogger();
 
         return $this;
+    }
+
+    protected function cacheItem(SerializableObject $object, string $cacheKey): void
+    {
+
+    }
+
+    protected function retrieveCachedItem(string $cacheKey): SerializableObject|null
+    {
+        // An empty cache key means it should not be cached
+        if (!$cacheKey) {
+            return null;
+        }
+
+        $item = null;
+        $cache = $this->getCache();
+        if ($cache instanceof CacheItemPoolInterface && !is_null(value: $this->getTtl())) {
+            /** @psalm-suppress InvalidCatch */
+            try {
+                /** @var SerializableObject $item */
+                $item = $cache->getItem(key: $cacheKey);
+            } catch (InvalidArgumentException) {
+            }
+        }
+
+        return $item;
     }
 }

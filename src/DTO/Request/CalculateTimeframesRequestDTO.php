@@ -35,6 +35,8 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\ServiceInterface;
 use Firstred\PostNL\Service\TimeframeServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
+use JetBrains\PhpStorm\Pure;
+use function implode;
 use function is_numeric;
 use function ltrim;
 
@@ -271,6 +273,13 @@ class CalculateTimeframesRequestDTO extends CacheableDTO
     {
         $this->TimeframeRange = $TimeframeRange;
         return $this;
+    }
+
+    public function getUniqueId(): string
+    {
+        $options = implode(separator: '+', array: $this->getOptions());
+
+        return "{$this->getShortClassName()}-{$this->getStartDate()}|{$this->getEndDate()}|{$options}|{$this->getAllowSundaySorting()}|{$this->getCountryCode()}|{$this->getCity()}|{$this->getPostalCode()}|{$this->getStreet()}|{$this->getHouseNumber()}|{$this->getHouseNrExt()}|{$this->getInterval()}|{$this->getTimeframeRange()}";
     }
 
     public function jsonSerialize(): array

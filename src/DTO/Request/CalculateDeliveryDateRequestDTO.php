@@ -37,6 +37,8 @@ use Firstred\PostNL\Service\DeliveryDateServiceInterface;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ArrayShape;
 use JetBrains\PhpStorm\ExpectedValues;
+use JetBrains\PhpStorm\Pure;
+use ReflectionClass;
 use TypeError;
 use function date;
 use function is_array;
@@ -516,6 +518,9 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
     }
 
     #[ArrayShape(shape: self::CUTOFF_TIME_ARRAY_SHAPE)]
+    /**
+     * @throws InvalidArgumentException
+     */
     public function getCutOffTimes(): array
     {
         $service = DeliveryDateServiceInterface::class;
@@ -574,6 +579,9 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
         ];
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function setCutOffTimes(array $cutOffTimes): static
     {
         foreach ($cutOffTimes as $dayOfWeek => $cutOffTime) {
@@ -633,6 +641,13 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
         $this->setCutOffTimeSunday();
 
         return $this;
+    }
+
+    public function getUniqueId(): string
+    {
+        $optionsArray = implode(separator: '+', array: $this->getOptions() ?? []);
+
+        return "{$this->getShortClassName()}-{$this->getShippingDate()}|{$this->getShippingDuration()}|{$this->getCutOffTime()}|{$this->getPostalCode()}|{$this->getCountryCode()}|{$this->getOriginCountryCode()}|{$this->getCity()}|{$this->getStreet()}|{$this->getHouseNumber()}|{$this->getHouseNrExt()}|{$optionsArray}|{$this->getAvailableMonday()}|{$this->getCutOffTimeMonday()}|{$this->getAvailableTuesday()}|{$this->getCutOffTimeTuesday()}|{$this->getAvailableWednesday()}|{$this->getCutOffTimeWednesday()}|{$this->getAvailableThursday()}|{$this->getCutOffTimeThursday()}|{$this->getAvailableFriday()}|{$this->getCutOffTimeFriday()}|{$this->getAvailableSaturday()}|{$this->getCutOffTimeSaturday()}|{$this->getAvailableSunday()}|{$this->getCutOffTimeSunday()}";
     }
 
     public function jsonSerialize(): array

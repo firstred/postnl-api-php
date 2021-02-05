@@ -1206,9 +1206,6 @@ class PostNL
      */
     public function getLabellingService(): LabellingServiceInterface
     {
-        if (!$this->labellingService) {
-        }
-
         return $this->labellingService;
     }
 
@@ -1516,14 +1513,14 @@ class PostNL
     {
         $this->logger = $logger;
 
-        $this->getBarcodeService()->setLogger(httpClient: $logger);
-        $this->getConfirmingService()->setLogger(httpClient: $httpClient);
-        $this->getDeliveryDateService()->getGateway()->setHttpClient(httpClient: $httpClient);
-        $this->getLabellingService()->getGateway()->setHttpClient(httpClient: $httpClient);
-        $this->getLocationService()->getGateway()->setHttpClient(httpClient: $httpClient);
-        $this->getShippingService()->getGateway()->setHttpClient(httpClient: $httpClient);
-        $this->getShippingStatusService()->getGateway()->setHttpClient(httpClient: $httpClient);
-        $this->getTimeframeService()->getGateway()->setHttpClient(httpClient: $httpClient);
+        $this->getBarcodeService()->setLogger(logger: $logger);
+        $this->getConfirmingService()->setLogger(logger: $logger);
+        $this->getDeliveryDateService()->setLogger(logger: $logger);
+        $this->getLabellingService()->setLogger(logger: $logger);
+        $this->getLocationService()->setLogger(logger: $logger);
+        $this->getShippingService()->setLogger(logger: $logger);
+        $this->getShippingStatusService()->setLogger(logger: $logger);
+        $this->getTimeframeService()->setLogger(logger: $logger);
 
         return $this;
     }

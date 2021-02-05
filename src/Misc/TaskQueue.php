@@ -63,23 +63,17 @@ class TaskQueue
         }
     }
 
-    /**
-     * @return bool
-     */
-    public function isEmpty()
+    public function isEmpty(): bool
     {
         return !$this->queue;
     }
 
-    /**
-     * @param callable $task
-     */
-    public function add(callable $task)
+    public function add(callable $task): void
     {
         $this->queue[] = $task;
     }
 
-    public function run()
+    public function run(): void
     {
         /** @var callable $task */
         while ($task = array_shift(array: $this->queue)) {
@@ -98,7 +92,7 @@ class TaskQueue
      *
      * Note: This shutdown will occur before any destructors are triggered.
      */
-    public function disableShutdown()
+    public function disableShutdown(): void
     {
         $this->enableShutdown = false;
     }

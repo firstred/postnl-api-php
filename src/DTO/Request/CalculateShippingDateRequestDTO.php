@@ -35,6 +35,7 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\DeliveryDateServiceInterface;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
+use JetBrains\PhpStorm\Pure;
 use function is_numeric;
 
 class CalculateShippingDateRequestDTO extends CacheableDTO
@@ -227,5 +228,10 @@ class CalculateShippingDateRequestDTO extends CacheableDTO
         $this->HouseNrExt = $HouseNrExt;
 
         return $this;
+    }
+
+    public function getUniqueId(): string
+    {
+        return "{$this->getShortClassName()}-{$this->getDeliveryDate()}|{$this->getShippingDuration()}|{$this->getPostalCode()}|{$this->getCountryCode()}|{$this->getOriginCountryCode()}|{$this->getCity()}|{$this->getStreet()}|{$this->getHouseNumber()}|{$this->getHouseNrExt()}";
     }
 }

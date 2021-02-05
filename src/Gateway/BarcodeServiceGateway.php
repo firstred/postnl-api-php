@@ -65,6 +65,7 @@ class BarcodeServiceGateway extends GatewayBase implements BarcodeServiceGateway
     }
 
     /**
+     * @throws ApiClientException
      * @throws ApiException
      * @throws InvalidApiKeyException
      * @throws InvalidArgumentException
@@ -114,7 +115,7 @@ class BarcodeServiceGateway extends GatewayBase implements BarcodeServiceGateway
             }
 
             throw $e;
-        } catch (NotAvailableException | InvalidArgumentException $e) {
+        } catch (NotAvailableException | InvalidArgumentException | InvalidApiKeyException $e) {
             /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
             $logger?->error("PostNL API - error - REQUEST:\n".Message::str(message: $request));
 
@@ -122,24 +123,69 @@ class BarcodeServiceGateway extends GatewayBase implements BarcodeServiceGateway
         }
     }
 
+    /**
+     * @throws ApiClientException
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws InvalidArgumentException
+     * @throws NotAvailableException
+     * @throws ParseError
+     */
     public function doGenerateBarcodesRequest(GenerateBarcodesRequestDTO $generateBarcodesRequestDTO): GenerateBarcodesResponseDTO
     {
+        $logger = $this->getLogger();
+        $requests = [];
+
         foreach ($generateBarcodesRequestDTO as $id => $generateBarcodeRequestDTO) {
-            $this->getHttpClient()->addOrUpdateRequest(
-                id: $id,
-                request: $this->getRequestBuilder()->buildGenerateBarcodeRequest(
+            $request = null;
+            try {
+                $request = $this->getRequestBuilder()->buildGenerateBarcodeRequest(
                     generateBarcodeRequestDTO: $generateBarcodeRequestDTO,
-                ),
-            );
+                );
+            } catch (InvalidArgumentException $e) {
+                if ($request) {
+                    /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+                    $logger?->debug("PostNL API - critical - REQUEST:\n".Message::str(message: $request));
+                }
+
+                throw $e;
+            }
+
+            $requests[$id] = $request;
+            $this->getHttpClient()->addOrUpdateRequest(id: $id, request: $request);
         }
         unset($id);
 
         $barcodes = new GenerateBarcodesResponseDTO(service: BarcodeServiceInterface::class, propType: ResponseProp::class);
-        foreach ($this->httpClient->doRequests() as $id => $response) {
+
+        $responses = $this->getHttpClient()->doRequests();
+        foreach ($responses as $id => $response) {
             if ($response instanceof ResponseInterface) {
-                $barcodes[$id] = $this->getResponseProcessor()->processGenerateBarcodeResponse(response: $response);
+                try {
+                    $barcodes[$id] = $this->getResponseProcessor()->processGenerateBarcodeResponse(response: $response);
+                    /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+                    $logger?->debug("PostNL API - debug - REQUEST:\n".Message::str(message: $requests[$id]));
+                } catch (ApiException | ParseError $e) {
+                    /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+                    $logger?->critical("PostNL API - critical - RESPONSE:\n".Message::str(message: $requests[$id]));
+                    $response = $e->getResponse();
+                    if ($response instanceof ResponseInterface) {
+                        /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+                        $this->getLogger()?->critical("PostNL API - critical - REQUEST:\n".Message::str(message: $response));
+                    }
+
+                    throw $e;
+                } catch (NotAvailableException | InvalidArgumentException | InvalidApiKeyException $e) {
+                    /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+                    $logger?->error("PostNL API - error - REQUEST:\n".Message::str(message: $requests[$id]));
+
+                    throw $e;
+                }
             } else {
-                $barcodes[$id] = $response;
+                /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+                $logger?->debug("PostNL API - critical/unhandled by HTTP client - REQUEST:\n".Message::str(message: $requests[$id]));
+
+                throw new ApiClientException(message: $response->getMessage(), code: $response->getCode(), previous: $response);
             }
         }
 

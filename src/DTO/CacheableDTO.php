@@ -29,6 +29,8 @@ declare(strict_types=1);
 namespace Firstred\PostNL\DTO;
 
 use Firstred\PostNL\Misc\SerializableObject;
+use JetBrains\PhpStorm\Pure;
+use ReflectionClass;
 
 abstract class CacheableDTO extends SerializableObject implements CacheableDTOInterface
 {
@@ -42,8 +44,17 @@ abstract class CacheableDTO extends SerializableObject implements CacheableDTOIn
         $this->setCacheKey(cacheKey: $this->cacheKey);
     }
 
+    public function getUniqueId(): string
+    {
+        return '';
+    }
+
     public function getCacheKey(): string
     {
+        if (!$this->cacheKey) {
+            return $this->getUniqueId();
+        }
+
         return $this->cacheKey;
     }
 
@@ -52,5 +63,10 @@ abstract class CacheableDTO extends SerializableObject implements CacheableDTOIn
         $this->cacheKey = $cacheKey;
 
         return $this;
+    }
+
+    protected function getShortClassName(): string
+    {
+        return (new ReflectionClass(objectOrClass: $this))->getShortName();
     }
 }

@@ -29,28 +29,39 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Attribute\PropInterface;
+use Firstred\PostNL\Attribute\RequestProp;
 use Firstred\PostNL\Misc\SerializableObject;
+use Firstred\PostNL\Service\LabellingServiceInterface;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
 
 class Contact extends SerializableObject
 {
+    #[RequestProp(optionalFor: [LabellingServiceInterface::class])]
+    protected string|null $ContactType = null;
+    #[RequestProp(optionalFor: [LabellingServiceInterface::class])]
+    protected string|null $Email = null;
+    #[RequestProp(optionalFor: [LabellingServiceInterface::class])]
+    protected string|null $SMSNr = null;
+    #[RequestProp(optionalFor: [LabellingServiceInterface::class])]
+    protected string|null $TelNr = null;
+
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
         string $service = '',
         #[ExpectedValues(values: PropInterface::PROP_TYPES + [''])]
         string $propType = '',
 
-        protected string|null $ContactType = null,
-        protected string|null $Email = null,
-        protected string|null $SmsNr = null,
-        protected string|null $TelNr = null,
+        string|null $ContactType = null,
+        string|null $Email = null,
+        string|null $SMSNr = null,
+        string|null $TelNr = null,
     ) {
         parent::__construct(service: $service, propType: $propType);
 
         $this->setContactType(ContactType: $ContactType);
         $this->setEmail(Email: $Email);
-        $this->setSMSNr(SMSNr: $SmsNr);
+        $this->setSMSNr(SMSNr: $SMSNr);
         $this->setTelNr(TelNr: $TelNr);
     }
 

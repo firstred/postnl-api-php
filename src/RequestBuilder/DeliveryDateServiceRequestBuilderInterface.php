@@ -30,11 +30,18 @@ namespace Firstred\PostNL\RequestBuilder;
 
 use Firstred\PostNL\DTO\Request\CalculateDeliveryDateRequestDTO;
 use Firstred\PostNL\DTO\Request\CalculateShippingDateRequestDTO;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 
 interface DeliveryDateServiceRequestBuilderInterface extends RequestBuilderInterface
 {
+    /**
+     * @throws InvalidArgumentException
+     */
     public function buildCalculateDeliveryDateRequest(CalculateDeliveryDateRequestDTO $calculateDeliveryDateRequestDTO): RequestInterface;
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function buildCalculateShippingDateRequest(CalculateShippingDateRequestDTO $calculateShippingDateRequestDTO): RequestInterface;
 }

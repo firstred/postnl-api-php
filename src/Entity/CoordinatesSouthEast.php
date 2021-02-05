@@ -41,13 +41,13 @@ class CoordinatesSouthEast extends SerializableObject
         #[ExpectedValues(values: PropInterface::PROP_TYPES + [''])]
         string $propType = '',
 
-        protected string|null $latitude = null,
-        protected string|null $longitude = null,
+        protected string|null $Latitude = null,
+        protected string|null $Longitude = null,
     ) {
         parent::__construct(service: $service, propType: $propType);
 
-        $this->setLatitude(Latitude: $latitude);
-        $this->setLongitude(Longitude: $longitude);
+        $this->setLatitude(Latitude: $Latitude);
+        $this->setLongitude(Longitude: $Longitude);
     }
 
     public function getLatitude(): string|null

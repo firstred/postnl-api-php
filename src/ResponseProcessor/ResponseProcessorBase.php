@@ -114,12 +114,12 @@ abstract class ResponseProcessorBase implements ResponseProcessorInterface
         $interfaces = class_implements(object_or_class: $this);
         $json['service'] = match (end(array: $interfaces)) {
             BarcodeServiceResponseProcessorInterface::class        => BarcodeServiceInterface::class,
-            ConfirmingServiceResponseProcessorInterface::class     => ConfirmingServiceInterface::class,
+//            ConfirmingServiceResponseProcessorInterface::class     => ConfirmingServiceInterface::class,
             DeliveryDateServiceResponseProcessorInterface::class   => DeliveryDateServiceInterface::class,
-            LabellingServiceResponseProcessorInterface::class      => LabellingServiceInterface::class,
+//            LabellingServiceResponseProcessorInterface::class      => LabellingServiceInterface::class,
             LocationServiceResponseProcessorInterface::class       => LocationServiceInterface::class,
-            ShippingServiceResponseProcessorInterface::class       => ShippingServiceInterface::class,
-            ShippingStatusServiceResponseProcessorInterface::class => ShippingStatusServiceInterface::class,
+//            ShippingServiceResponseProcessorInterface::class       => ShippingServiceInterface::class,
+//            ShippingStatusServiceResponseProcessorInterface::class => ShippingStatusServiceInterface::class,
             TimeframeServiceResponseProcessorInterface::class      => TimeframeServiceInterface::class,
             default                                                => throw new ParseError(message: "Unable to find service for `$className` object"),
         };

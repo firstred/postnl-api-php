@@ -53,6 +53,7 @@ namespace Firstred\PostNL\Misc;
 use Exception;
 use Http\Promise\Promise;
 use LogicException;
+use Throwable;
 
 /**
  * Promises/A+ implementation that avoids recursion when possible.
@@ -62,9 +63,9 @@ use LogicException;
 class PendingPromise implements Promise
 {
     private string $state = self::PENDING;
-    private $result;
-    private $cancelFn;
-    private $waitFn;
+    private mixed $result;
+    private mixed $cancelFn;
+    private mixed $waitFn;
     private array|null $waitList = null;
     private array|null $handlers = [];
 
@@ -78,15 +79,10 @@ class PendingPromise implements Promise
         $this->cancelFn = $cancelFn;
     }
 
-    /**
-     * @param callable|null $onFulfilled
-     * @param callable|null $onRejected
-     *
-     * @return PendingPromise|Promise
-     */
-    public function then(callable $onFulfilled = null, callable $onRejected = null)
+    public function then(callable $onFulfilled = null, callable $onRejected = null): Promise|PendingPromise
     {
         if (self::PENDING === $this->state) {
+            /** @psalm-suppress UnsafeInstantiation */
             $p = new static(waitFn: null, cancelFn: [$this, 'cancel']);
             $this->handlers[] = [$p, $onFulfilled, $onRejected];
             $p->waitList = $this->waitList;
@@ -106,27 +102,18 @@ class PendingPromise implements Promise
         // and immediately invoke any callbacks.
         $rejection = PromiseTool::rejectionFor(reason: $this->result);
 
-        return $onRejected ? $rejection->then(null, $onRejected) : $rejection;
+        return $onRejected ? $rejection->then(onRejected: $onRejected) : $rejection;
     }
 
-    /**
-     * @param callable $onRejected
-     *
-     * @return PendingPromise|Promise
-     */
-    public function otherwise(callable $onRejected)
+    public function otherwise(callable $onRejected): PendingPromise|Promise
     {
-        return $this->then(onFulfilled: null, onRejected: $onRejected);
+        return $this->then(onRejected: $onRejected);
     }
 
     /**
-     * @param bool $unwrap
-     *
-     * @return mixed|void
-     *
-     * @throws Exception
+     * @throws Exception|Throwable
      */
-    public function wait($unwrap = true)
+    public function wait($unwrap = true): mixed
     {
         $this->waitIfPending();
 
@@ -141,24 +128,19 @@ class PendingPromise implements Promise
                 return $inner;
             }
             // It's rejected so "unwrap" and throw an exception.
+            /** @psalm-suppress InvalidThrow */
             throw PromiseTool::exceptionFor(reason: $inner);
         }
 
-        return;
+        return null;
     }
 
-    /**
-     * @return string
-     */
-    public function getState()
+    public function getState(): string
     {
         return $this->state;
     }
 
-    /**
-     * @return void
-     */
-    public function cancel()
+    public function cancel(): void
     {
         if (self::PENDING !== $this->state) {
             return;
@@ -177,6 +159,7 @@ class PendingPromise implements Promise
         }
 
         // Reject the promise only if it wasn't rejected in a then callback.
+        /** @psalm-suppress RedundantCondition */
         if (self::PENDING === $this->state) {
             $this->reject(reason: new Exception(message: 'Promise has been cancelled'));
         }
@@ -185,24 +168,20 @@ class PendingPromise implements Promise
     /**
      * @param mixed $value
      */
-    public function resolve($value)
+    public function resolve(mixed $value): void
     {
         $this->settle(state: self::FULFILLED, value: $value);
     }
 
-    /**
-     * @param mixed $reason
-     */
-    public function reject($reason)
+    public function reject(string|Throwable $reason): void
     {
         $this->settle(state: self::REJECTED, value: $reason);
     }
 
     /**
-     * @param string $state
-     * @param mixed  $value
+     * @psalm-param string|Throwable|null $value
      */
-    private function settle($state, $value)
+    private function settle(string $state, string|Throwable|null $value): void
     {
         if (self::PENDING !== $this->state || !$value) {
             // Ignore calls with the same resolution.
@@ -218,6 +197,7 @@ class PendingPromise implements Promise
         }
 
         // Clear out the state of the promise but stash the handlers.
+        /** @var string $state */
         $this->state = $state;
         $this->result = $value;
         $handlers = $this->handlers;
@@ -231,6 +211,7 @@ class PendingPromise implements Promise
 
         // If the value was not a settled promise or a thenable, then resolve
         // it in the task queue using the correct ID.
+        /** @psalm-var class-string|object $value */
         if (!method_exists(object_or_class: $value, method: 'then')) {
             $id = self::FULFILLED === $state ? 1 : 2;
             // It's a success, so resolve the handlers in the queue.
@@ -245,16 +226,20 @@ class PendingPromise implements Promise
             && self::PENDING === $value->getState()
         ) {
             // We can just merge our handlers onto the next promise.
+            /**
+             * @noinspection PhpPossiblePolymorphicInvocationInspection
+             * @psalm-suppress NoInterfaceProperties
+             */
             $value->handlers = array_merge($value->handlers, $handlers);
-        } else {
+        } elseif (!is_string(value: $value)) {
             // Resolve the handlers when the forwarded promise is resolved.
             $value->then(
-                static function ($value) use ($handlers) {
+                static function (mixed $value) use ($handlers): void {
                     foreach ($handlers as $handler) {
                         self::callHandler(index: 1, value: $value, handler: $handler);
                     }
                 },
-                static function ($reason) use ($handlers) {
+                static function (mixed $reason) use ($handlers): void {
                     foreach ($handlers as $handler) {
                         self::callHandler(index: 2, value: $reason, handler: $handler);
                     }
@@ -272,7 +257,7 @@ class PendingPromise implements Promise
      *
      * @return void returns the next group to resolve
      */
-    private static function callHandler($index, $value, array $handler)
+    private static function callHandler(int $index, mixed $value, array $handler): void
     {
         /** @var PendingPromise $promise */
         $promise = $handler[0];
@@ -324,6 +309,7 @@ class PendingPromise implements Promise
 
         PromiseTool::queue()->run();
 
+        /** @psalm-suppress RedundantCondition */
         if (self::PENDING === $this->state) {
             $this->reject(reason: 'Invoking the wait callback did not resolve the promise');
         }
@@ -332,7 +318,7 @@ class PendingPromise implements Promise
     /**
      * @throws Exception
      */
-    private function invokeWaitFn()
+    private function invokeWaitFn(): void
     {
         try {
             $wfn = $this->waitFn;
@@ -354,12 +340,12 @@ class PendingPromise implements Promise
     /**
      * @throws Exception
      */
-    private function invokeWaitList()
+    private function invokeWaitList(): void
     {
         $waitList = $this->waitList;
         $this->waitList = null;
 
-        foreach ($waitList as $result) {
+        foreach ($waitList ?? [] as $result) {
             /** @var PendingPromise $result */
             while (true) {
                 $result->waitIfPending();

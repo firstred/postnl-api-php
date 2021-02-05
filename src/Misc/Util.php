@@ -28,23 +28,24 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Misc;
 
+use function array_keys;
+use function count;
 use DateInterval;
 use DateTime;
 use Exception;
 use Firstred\PostNL\Exception\InvalidArgumentException;
+use function is_array;
+use JetBrains\PhpStorm\Pure;
+use function range;
 use setasign\Fpdi\Fpdi;
 use setasign\Fpdi\PdfParser\StreamReader;
-use function array_keys;
-use function count;
-use function is_array;
-use function range;
 
 /**
  * Class Util.
  */
 class Util
 {
-    const ERROR_MARGIN = 2;
+    public const ERROR_MARGIN = 2;
 
     /**
      * 3S (or EU Pack Special) countries.
@@ -72,10 +73,6 @@ class Util
      */
     public static function urlEncode(array $arr, string|null $prefix = null): string
     {
-        if (!is_array(value: $arr)) {
-            return (string) $arr;
-        }
-
         $r = [];
         foreach ($arr as $k => $v) {
             if (is_null(value: $v)) {
@@ -83,7 +80,7 @@ class Util
             }
 
             if ($prefix) {
-                if (null !== $k && (!is_int(value: $k) || is_array(value: $v))) {
+                if (!is_int(value: $k) || is_array(value: $v)) {
                     $k = $prefix.'['.$k.']';
                 } else {
                     $k = $prefix.'[]';
@@ -110,7 +107,7 @@ class Util
      *                            The orientation is in FPDF format, so L for Landscape and P for Portrait
      *                            Sizes are in mm
      */
-    public static function getPdfSizeAndOrientation($pdf)
+    public static function getPdfSizeAndOrientation(string $pdf): array|false|string
     {
         try {
             $fpdi = new Fpdi('P', 'mm');
@@ -118,9 +115,9 @@ class Util
             // import page 1
             $tplIdx1 = $fpdi->importPage(pageNumber: 1);
             $size = $fpdi->getTemplateSize(tpl: $tplIdx1);
-            $width = $size['width'];
-            $height = $size['height'];
-            $orientation = $size['orientation'];
+            $width = $size['width']             ?? 0;
+            $height = $size['height']           ?? 0;
+            $orientation = $size['orientation'] ?? 'P';
 
             $length = 'P' === $orientation ? $height : $width;
             if ($length >= (148 - static::ERROR_MARGIN) && $length <= (148 + static::ERROR_MARGIN)) {
@@ -159,8 +156,11 @@ class Util
      *
      * @throws Exception
      */
-    public static function calculateDeliveryDate($deliveryDate, $mondayDelivery = false, $sundayDelivery = false)
-    {
+    public static function calculateDeliveryDate(
+        string $deliveryDate,
+        bool $mondayDelivery = false,
+        bool $sundayDelivery = false,
+    ): string {
         $deliveryDate = new DateTime(datetime: $deliveryDate);
 
         $holidays = static::getHolidaysForYear(year: date(format: 'Y', timestamp: $deliveryDate->getTimestamp()));
@@ -178,17 +178,13 @@ class Util
     /**
      * Offline shipping date calculation.
      *
-     * @param string $deliveryDate
-     * @param array  $days
-     *
-     * @return string
-     *
      * @throws InvalidArgumentException
+     * @throws Exception
      */
     public static function getShippingDate(
-        $deliveryDate,
-        $days = [0 => false, 1 => true, 2 => true, 3 => true, 4 => true, 5 => true, 6 => true]
-    ) {
+        string $deliveryDate,
+        array $days = [0 => false, 1 => true, 2 => true, 3 => true, 4 => true, 5 => true, 6 => true]
+    ): string {
         if (array_sum(array: $days) < 1) {
             throw new InvalidArgumentException(message: 'There should be at least one shipping day');
         }
@@ -227,7 +223,7 @@ class Util
      *
      * @throws Exception
      */
-    public static function getShippingDaysRemaining($shippingDate, $preferredDeliveryDate)
+    public static function getShippingDaysRemaining(string $shippingDate, string $preferredDeliveryDate): int
     {
         // Remove the hours/minutes/seconds
         $shippingDate = date(format: 'Y-m-d 00:00:00', timestamp: strtotime(datetime: $shippingDate));
@@ -263,39 +259,36 @@ class Util
      *
      * Credits to @tvlooy (https://gist.github.com/tvlooy/1894247)
      *
-     * @throws \Exception
+     * @throws Exception
+     *
+     * @noinspection PhpDocMissingThrowsInspection
      */
-    protected static function getHolidaysForYear($year)
+    protected static function getHolidaysForYear(int|string $year): array
     {
+        $year = (int) $year;
+
         // Avoid holidays
         // Fixed
+        /** @noinspection PhpUnhandledExceptionInspection */
         $nieuwjaar = new DateTime(datetime: $year.'-01-01');
+        /** @noinspection PhpUnhandledExceptionInspection */
         $eersteKerstDag = new DateTime(datetime: $year.'-12-25');
+        /** @noinspection PhpUnhandledExceptionInspection */
         $tweedeKerstDag = new DateTime(datetime: $year.'-12-25');
+        /** @noinspection PhpUnhandledExceptionInspection */
         $koningsdag = new DateTime(datetime: $year.'-04-27');
         // Dynamic
         $pasen = new DateTime();
+        /** @noinspection PhpComposerExtensionStubsInspection */
         $pasen->setTimestamp(timestamp: easter_date(year: $year)); // thanks PHP!
         $paasMaandag = clone $pasen;
-        try {
-            $paasMaandag->add(interval: new DateInterVal(duration: 'P1D'));
-        } catch (Exception) {
-        }
+        $paasMaandag->add(interval: new DateInterVal(duration: 'P1D'));
         $hemelvaart = clone $pasen;
-        try {
-            $hemelvaart->add(interval: new DateInterVal(duration: 'P39D'));
-        } catch (Exception) {
-        }
+        $hemelvaart->add(interval: new DateInterVal(duration: 'P39D'));
         $pinksteren = clone $hemelvaart;
-        try {
-            $pinksteren->add(interval: new DateInterVal(duration: 'P10D'));
-        } catch (Exception) {
-        }
+        $pinksteren->add(interval: new DateInterVal(duration: 'P10D'));
         $pinksterMaandag = clone $pinksteren;
-        try {
-            $pinksterMaandag->add(interval: new DateInterVal(duration: 'P1D'));
-        } catch (Exception) {
-        }
+        $pinksterMaandag->add(interval: new DateInterVal(duration: 'P1D'));
 
         return [
             $nieuwjaar->format(format: 'Y-m-d'),
@@ -317,9 +310,10 @@ class Util
      *
      * @return bool
      */
+    #[Pure]
     protected static function isAssociativeArray(array $array): bool
     {
-        if ([] === $array || !is_array(value: $array)) {
+        if ([] === $array) {
             return false;
         }
 

@@ -30,7 +30,7 @@ namespace Firstred\PostNL\Entity;
 
 class Shipping
 {
-    protected ?Customer $Customer = null;
+    protected Customer|null $Customer = null;
     protected LabellingMessage|null $Message = null;
     protected array|null $Shipments = null;
 
@@ -80,27 +80,28 @@ class Shipping
         return $this;
     }
 
-    public function jsonSerialize(): array
-    {
-        $json = [];
-        if (!$this->currentService || !in_array(needle: $this->currentService, haystack: array_keys(array: static::$defaultProperties))) {
-            return $json;
-        }
-
-        foreach (array_keys(array: static::$defaultProperties[$this->currentService]) as $propertyName) {
-            if (isset($this->{$propertyName})) {
-                if ('Shipments' === $propertyName && count(value: $this->{$propertyName}) >= 1) {
-                    $properties = [];
-                    foreach ($this->{$propertyName} as $property) {
-                        $properties[] = $property;
-                    }
-                    $json[$propertyName] = $properties;
-                } else {
-                    $json[$propertyName] = $this->{$propertyName};
-                }
-            }
-        }
-
-        return $json;
-    }
+    // TODO: check serializing
+//    public function jsonSerialize(): array
+//    {
+//        $json = [];
+//        if (!$this->currentService || !in_array(needle: $this->currentService, haystack: array_keys(array: static::$defaultProperties))) {
+//            return $json;
+//        }
+//
+//        foreach (array_keys(array: static::$defaultProperties[$this->currentService]) as $propertyName) {
+//            if (isset($this->{$propertyName})) {
+//                if ('Shipments' === $propertyName && count(value: $this->{$propertyName}) >= 1) {
+//                    $properties = [];
+//                    foreach ($this->{$propertyName} as $property) {
+//                        $properties[] = $property;
+//                    }
+//                    $json[$propertyName] = $properties;
+//                } else {
+//                    $json[$propertyName] = $this->{$propertyName};
+//                }
+//            }
+//        }
+//
+//        return $json;
+//    }
 }

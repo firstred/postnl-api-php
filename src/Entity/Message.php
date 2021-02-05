@@ -31,6 +31,7 @@ namespace Firstred\PostNL\Entity;
 use DateTime;
 use Firstred\PostNL\Attribute\PropInterface;
 use Firstred\PostNL\Misc\SerializableObject;
+use Firstred\PostNL\Misc\UUID;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
 
@@ -47,7 +48,7 @@ class Message extends SerializableObject
     ) {
         parent::__construct(service: $service, propType: $propType);
 
-        $this->setMessageID(messageID: $MessageID ?: substr(string: str_replace(search: '-', replace: '', subject: $this->getid()), offset: 0, length: 12));
+        $this->setMessageID(messageID: $MessageID ?: substr(string: str_replace(search: '-', replace: '', subject : UUID::generate()), offset: 0, length: 12));
         $this->setMessageTimeStamp(messageTimeStamp: $MessageTimeStamp ?: (new DateTime())->format(format: 'd-m-Y H:i:s'));
     }
 

@@ -38,7 +38,7 @@ class UUID
      *
      * @return string
      */
-    public static function generate()
+    public static function generate(): string
     {
         return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
             // 32 bits for "time_low"

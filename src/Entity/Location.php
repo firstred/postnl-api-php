@@ -92,7 +92,7 @@ class Location extends SerializableObject
         return $this->Postalcode;
     }
 
-    public function setPostalcode($Postalcode = null): static
+    public function setPostalcode(string|null $Postalcode = null): static
     {
         if (is_null(value: $Postalcode)) {
             $this->Postalcode = null;

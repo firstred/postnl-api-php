@@ -30,6 +30,7 @@ namespace Firstred\PostNL\Misc;
 
 use Http\Discovery\Psr17FactoryDiscovery;
 use InvalidArgumentException;
+use JetBrains\PhpStorm\ArrayShape;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -39,8 +40,8 @@ use Psr\Http\Message\ResponseInterface;
  */
 class Message
 {
-    const RFC7230_HEADER_REGEX = "(^([^()<>@,;:\\\"/[\]?={}\x01-\x20\x7F]++):[ \t]*+((?:[ \t]*+[\x21-\x7E\x80-\xFF]++)*+)[ \t]*+\r?\n)m";
-    const RFC7230_HEADER_FOLD_REGEX = "(\r?\n[ \t]++)";
+    public const RFC7230_HEADER_REGEX = "(^([^()<>@,;:\\\"/[\]?={}\x01-\x20\x7F]++):[ \t]*+((?:[ \t]*+[\x21-\x7E\x80-\xFF]++)*+)[ \t]*+\r?\n)m";
+    public const RFC7230_HEADER_FOLD_REGEX = "(\r?\n[ \t]++)";
 
     /**
      * Returns the string representation of an HTTP message.
@@ -49,7 +50,7 @@ class Message
      *
      * @return string
      */
-    public static function str(MessageInterface $message)
+    public static function str(MessageInterface $message): string
     {
         if ($message instanceof RequestInterface) {
             $msg = trim(string: $message->getMethod().' '.$message->getRequestTarget())
@@ -80,7 +81,7 @@ class Message
      *
      * @return ResponseInterface
      */
-    public static function parseResponse($message)
+    public static function parseResponse(string $message): ResponseInterface
     {
         $data = static::parseMessage(message: $message);
         // According to https://tools.ietf.org/html/rfc7230#section-3.1.2 the space
@@ -91,13 +92,17 @@ class Message
         }
         $parts = explode(separator: ' ', string: $data['start-line'], limit: 3);
 
-        $response = Psr17FactoryDiscovery::findResponseFactory()->createResponse(code: $parts[1], reasonPhrase: $parts[2]);
+        /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+        $response = Psr17FactoryDiscovery::findResponseFactory()->createResponse((int) $parts[1], $parts[2]);
         foreach ($data['headers'] as $header) {
             list($name, $value) = array_map(callback: 'trim', array: explode(separator: ':', string: $header));
-            $response = $response->withHeader(name: $name, value: $value);
+            /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+            $response = $response->withHeader($name, $value);
         }
-        $response = $response->withBody(body: $data['body']);
-        $response->withProtocolVersion(version: explode(separator: '/', string: $parts[0])[1]);
+        /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+        $response = $response->withBody($data['body']);
+        /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+        $response->withProtocolVersion(explode(separator: '/', string: $parts[0])[1]);
 
         return $response;
     }
@@ -115,7 +120,8 @@ class Message
      *
      * @internal
      */
-    private static function parseMessage($message)
+    #[ArrayShape(shape: ['start-line' => 'mixed|string', 'headers' => 'array', 'body' => 'mixed|string'])]
+    private static function parseMessage(string $message): array
     {
         if (!$message) {
             throw new InvalidArgumentException(message: 'Invalid message');
@@ -132,6 +138,7 @@ class Message
             throw new InvalidArgumentException(message: 'Invalid message: Missing status line');
         }
         list($startLine, $rawHeaders) = $headerParts;
+        $matches = [];
         if (preg_match(pattern: "/(?:^HTTP\/|^[A-Z]+ \S+ HTTP\/)(\d+(?:\.\d+)?)/i", subject: $startLine, matches: $matches) && '1.0' === $matches[1]) {
             // Header folding is deprecated for HTTP/1.1, but allowed in HTTP/1.0
             $rawHeaders = preg_replace(pattern: self::RFC7230_HEADER_FOLD_REGEX, replacement: ' ', subject: $rawHeaders);

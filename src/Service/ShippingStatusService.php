@@ -456,8 +456,6 @@ class ShippingStatusService extends ServiceBase implements ShippingStatusService
      * @param mixed $response
      *
      * @return GetSignatureResponseSignature|null
-     *
-     * @throws WithResponse
      */
     public function processGetSignatureResponse($response)
     {

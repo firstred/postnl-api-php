@@ -9,6 +9,12 @@
         <ignoreFiles>
             <directory name="vendor" />
             <directory name="tests" />
+            <file name="src/Service/ConfirmingService.php"/>
+            <file name="src/Service/LabellingService.php"/>
+            <file name="src/Service/ShippingService.php"/>
+            <file name="src/Service/ShippingStatusService.php"/>
+            <file name="src/Entity/Signature.php"/>
+            <file name="src/PostNL.php"/>
         </ignoreFiles>
     </projectFiles>
     <issueHandlers>

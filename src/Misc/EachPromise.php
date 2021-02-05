@@ -50,9 +50,11 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Misc;
 
+use ArrayIterator;
 use Exception;
 use Http\Promise\Promise;
 use Iterator;
+use function reset;
 use Throwable;
 
 /**
@@ -61,24 +63,24 @@ use Throwable;
  */
 class EachPromise
 {
-    const PENDING = 'pending';
-    const FULFILLED = 'fulfilled';
-    const REJECTED = 'rejected';
+    public const PENDING = 'pending';
+    public const FULFILLED = 'fulfilled';
+    public const REJECTED = 'rejected';
 
-    private array|null $pending = [];
+    private array $pending = [];
 
-    private ?Iterator $iterable;
+    private Iterator $iterable;
 
-    /** @var int */
-    private $concurrency;
+    /** @var mixed */
+    private mixed $concurrency;
 
-    /** @var callable */
-    private $onFulfilled;
+    /** @var callable|null */
+    private mixed $onFulfilled;
 
-    /** @var callable */
-    private $onRejected;
+    /** @var callable|null */
+    private mixed $onRejected;
 
-    private ?PendingPromise $aggregate = null;
+    private PendingPromise|null $aggregate = null;
 
     private bool|null $mutex = null;
 
@@ -103,27 +105,16 @@ class EachPromise
      * @param mixed $iterable promises or values to iterate
      * @param array $config   Configuration options
      */
-    public function __construct($iterable, array $config = [])
+    public function __construct(mixed $iterable, array $config = [])
     {
         $this->iterable = PromiseTool::iterFor(value: $iterable);
 
-        if (isset($config['concurrency'])) {
-            $this->concurrency = $config['concurrency'];
-        }
-
-        if (isset($config['fulfilled'])) {
-            $this->onFulfilled = $config['fulfilled'];
-        }
-
-        if (isset($config['rejected'])) {
-            $this->onRejected = $config['rejected'];
-        }
+        $this->concurrency = $config['concurrency'] ?? 5;
+        $this->onFulfilled = $config['fulfilled']   ?? null;
+        $this->onRejected = $config['rejected']     ?? null;
     }
 
-    /**
-     * @return Promise
-     */
-    public function promise(): Promise
+    public function promise(): Promise|null
     {
         if ($this->aggregate) {
             return $this->aggregate;
@@ -134,23 +125,21 @@ class EachPromise
             $this->iterable->rewind();
             $this->refillPending();
         } catch (Exception $e) {
-            $this->aggregate->reject(reason: $e);
+            $this->aggregate?->reject(reason: $e);
         }
 
         return $this->aggregate;
     }
 
-    /**
-     * @return void
-     */
-    private function createPromise()
+    private function createPromise(): void
     {
         $this->mutex = false;
         $this->aggregate = new PendingPromise(
-            waitFn: function () {
+            waitFn: function (): void {
                 reset(array: $this->pending);
+
                 if (empty($this->pending) && !$this->iterable->valid()) {
-                    $this->aggregate->resolve(value: null);
+                    $this->aggregate?->resolve(value: null);
 
                     return;
                 }
@@ -160,7 +149,7 @@ class EachPromise
                 while ($promise = current(array: $this->pending)) {
                     next(array: $this->pending);
                     $promise->wait();
-                    if ($this->aggregate->getState() !== static::PENDING) {
+                    if ($this->aggregate?->getState() !== static::PENDING) {
                         return;
                     }
                 }
@@ -168,21 +157,21 @@ class EachPromise
         );
 
         // Clear the references when the promise is resolved.
-        $clearFn = function () {
-            $this->iterable = $this->concurrency = $this->pending = null;
-            $this->onFulfilled = $this->onRejected = null;
+        $clearFn = function (): void {
+            $this->iterable = new ArrayIterator();
+            $this->pending = [];
+            $this->onFulfilled = null;
+            $this->onRejected = null;
         };
 
         $this->aggregate->then(onFulfilled: $clearFn, onRejected: $clearFn);
     }
 
-    /**
-     * @return void
-     */
-    private function refillPending()
+    private function refillPending(): void
     {
         if (!$this->concurrency) {
             // Add all pending promises.
+            /** @noinspection PhpStatementHasEmptyBodyInspection */
             while ($this->addPending() && $this->advanceIterator()) {
             }
 
@@ -204,6 +193,7 @@ class EachPromise
         // not advance the iterator after adding the first promise. This
         // helps work around issues with generators that might not have the
         // next value to yield until promise callbacks are called.
+        /** @noinspection PhpStatementHasEmptyBodyInspection */
         while (--$concurrency
             && $this->advanceIterator()
             && $this->addPending()) {
@@ -213,9 +203,9 @@ class EachPromise
     /**
      * @return bool
      */
-    private function addPending()
+    private function addPending(): bool
     {
-        if (!$this->iterable || !$this->iterable->valid()) {
+        if (!$this->iterable->valid()) {
             return false;
         }
 
@@ -223,7 +213,7 @@ class EachPromise
         $idx = $this->iterable->key();
 
         $this->pending[$idx] = $promise->then(
-            onFulfilled: function ($value) use ($idx) {
+            onFulfilled: function (mixed $value) use ($idx): mixed {
                 if ($this->onFulfilled) {
                     call_user_func(
                         $this->onFulfilled,
@@ -236,7 +226,7 @@ class EachPromise
 
                 return $value;
             },
-            onRejected: function ($reason) use ($idx) {
+            onRejected: function (mixed $reason) use ($idx): mixed {
                 if ($this->onRejected) {
                     call_user_func(
                         $this->onRejected,
@@ -256,10 +246,7 @@ class EachPromise
         return true;
     }
 
-    /**
-     * @return bool
-     */
-    private function advanceIterator()
+    private function advanceIterator(): bool
     {
         // Place a lock on the iterator so that we ensure to not recurse,
         // preventing fatal generator errors.
@@ -275,20 +262,17 @@ class EachPromise
 
             return true;
         } catch (Throwable $e) {
-            $this->aggregate->reject(reason: $e);
+            $this->aggregate?->reject(reason: $e);
             $this->mutex = false;
 
             return false;
         }
     }
 
-    /**
-     * @param mixed $idx
-     */
-    private function step($idx)
+    private function step(mixed $idx): void
     {
         // If the promise was already resolved, then ignore this step.
-        if ($this->aggregate->getState() !== static::PENDING) {
+        if ($this->aggregate?->getState() !== static::PENDING) {
             return;
         }
 
@@ -303,14 +287,11 @@ class EachPromise
         }
     }
 
-    /**
-     * @return bool
-     */
-    private function checkIfFinished()
+    private function checkIfFinished(): bool
     {
         if (!$this->pending && !$this->iterable->valid()) {
             // Resolve the promise if there's nothing left to do.
-            $this->aggregate->resolve(value: null);
+            $this->aggregate?->resolve(value: null);
 
             return true;
         }

@@ -120,7 +120,7 @@ class HTTPlugHttpClient implements HttpClientInterface
                         $responses[$index] = $response;
                     },
                 ]
-            ))->promise()->wait(unwrap: true);
+            ))->promise()?->wait(unwrap: true);
         } catch (HttpException) {
             // Ignore HttpExceptions, we are going to handle them in the response validator
         } catch (TransferException $e) {

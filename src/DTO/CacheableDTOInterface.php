@@ -30,6 +30,8 @@ namespace Firstred\PostNL\DTO;
 
 interface CacheableDTOInterface
 {
+    public function getUniqueId(): string;
+
     public function getCacheKey(): string;
 
     public function setCacheKey(string $cacheKey): static;

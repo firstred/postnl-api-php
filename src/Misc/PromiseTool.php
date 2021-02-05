@@ -58,6 +58,8 @@ use Http\Promise\FulfilledPromise;
 use Http\Promise\Promise;
 use Http\Promise\RejectedPromise;
 use Iterator;
+use JetBrains\PhpStorm\Pure;
+use Throwable;
 
 /**
  * Class PromiseTool.
@@ -76,12 +78,8 @@ class PromiseTool
      *     queue()->run();
      * }
      * </code>
-     *
-     * @param TaskQueue $assign optionally specify a new queue instance
-     *
-     * @return TaskQueue
      */
-    public static function queue(TaskQueue $assign = null)
+    public static function queue(TaskQueue $assign = null): TaskQueue
     {
         static $queue;
 
@@ -102,7 +100,7 @@ class PromiseTool
      *
      * @return Promise
      */
-    public static function task(callable $task)
+    public static function task(callable $task): Promise
     {
         $queue = static::queue();
         $promise = new PendingPromise(waitFn: [$queue, 'run']);
@@ -121,12 +119,8 @@ class PromiseTool
 
     /**
      * Creates a promise for a value if the value is not a promise.
-     *
-     * @param mixed $value promise or value
-     *
-     * @return Promise
      */
-    public static function promiseFor($value)
+    public static function promiseFor(mixed $value): Promise
     {
         if ($value instanceof Promise) {
             return $value;
@@ -147,12 +141,9 @@ class PromiseTool
     /**
      * Creates a rejected promise for a reason if the reason is not a promise. If
      * the provided reason is a promise, then it is returned as-is.
-     *
-     * @param mixed $reason promise or reason
-     *
-     * @return Promise
      */
-    public static function rejectionFor($reason)
+    #[Pure]
+    public static function rejectionFor(mixed $reason): Promise
     {
         if ($reason instanceof Promise) {
             return $reason;
@@ -163,24 +154,16 @@ class PromiseTool
 
     /**
      * Create an exception for a rejected promise value.
-     *
-     * @param mixed $reason
-     *
-     * @return Throwable
      */
-    public static function exceptionFor($reason)
+    public static function exceptionFor(mixed $reason): Throwable
     {
         return $reason instanceof Throwable ? $reason : new RejectionException(reason: $reason);
     }
 
     /**
      * Returns an iterator for the given value.
-     *
-     * @param mixed $value
-     *
-     * @return Iterator
      */
-    public static function iterFor($value)
+    public static function iterFor(mixed $value): Iterator
     {
         if ($value instanceof Iterator) {
             return $value;
@@ -201,12 +184,8 @@ class PromiseTool
      * will contain a "value" key mapping to the fulfilled value of the promise. If
      * the promise is rejected, the array will contain a "reason" key mapping to
      * the rejection reason of the promise.
-     *
-     * @param Promise $promise promise or value
-     *
-     * @return array
      */
-    public static function inspect(Promise $promise)
+    public static function inspect(Promise $promise): array
     {
         try {
             return [
@@ -225,12 +204,8 @@ class PromiseTool
      * as thrown exception.
      *
      * Returns an array of inspection state arrays.
-     *
-     * @param Promise[] $promises traversable of promises to wait upon
-     *
-     * @return array
      */
-    public static function inspectAll($promises)
+    public static function inspectAll(array $promises): array
     {
         $results = [];
         foreach ($promises as $key => $promise) {
@@ -247,14 +222,10 @@ class PromiseTool
      * the promises were provided). An exception is thrown if any of the promises
      * are rejected.
      *
-     * @param mixed $promises iterable of Promise objects to wait on
-     *
-     * @return array
-     *
      * @throws Exception on error
      * @throws Throwable on error in PHP >=7
      */
-    public static function unwrap($promises)
+    public static function unwrap(mixed $promises): array
     {
         $results = [];
         foreach ($promises as $key => $promise) {
@@ -275,21 +246,21 @@ class PromiseTool
      * @param mixed $promises  promises or values
      * @param bool  $recursive - If true, resolves new promises that might have been added to the stack during its own resolution
      *
-     * @return Promise
-     */
-    public static function all($promises, $recursive = false)
+     * @noinspection PhpUnusedParameterInspection*/
+    public static function all(mixed $promises, bool $recursive = false): Promise|null
     {
         $results = [];
         $promise = static::each(
             iterable: $promises,
-            onFulfilled: function ($value, $idx) use (&$results) {
+            onFulfilled: function (mixed $value, mixed $idx) use (&$results): void {
                 $results[$idx] = $value;
             },
-            onRejected: function ($reason, $idx, Promise $aggregate) {
+            onRejected: function (mixed $reason, mixed $idx, Promise $aggregate): void {
+                /** @var PendingPromise $aggregate */
                 $aggregate->reject(reason: $reason);
             }
-        )->then(
-            onFulfilled: function () use (&$results) {
+        )?->then(
+            onFulfilled: function () use (&$results): array {
                 ksort(array: $results);
 
                 return $results;
@@ -297,8 +268,8 @@ class PromiseTool
         );
 
         if (true === $recursive) {
-            $promise = $promise->then(
-                onFulfilled: function ($results) use ($recursive, &$promises) {
+            $promise = $promise?->then(
+                onFulfilled: function (mixed $results) use ($recursive, &$promises): mixed {
                     foreach ($promises as $promise) {
                         if (Promise::PENDING === $promise->getState()) {
                             return static::all(promises: $promises, recursive: $recursive);
@@ -320,32 +291,28 @@ class PromiseTool
      * When count amount of promises have been fulfilled, the returned promise is
      * fulfilled with an array that contains the fulfillment values of the winners
      * in order of resolution.
-     *
-     * @param int   $count    total number of promises
-     * @param mixed $promises promises or values
-     *
-     * @return Promise
      */
-    public static function some($count, $promises)
+    public static function some(int $count, array $promises): Promise|null
     {
         $results = [];
         $rejections = [];
 
         return static::each(
             iterable: $promises,
-            onFulfilled: function ($value, $idx, Promise $p) use (&$results, $count) {
+            onFulfilled: function (mixed $value, mixed $idx, Promise $p) use (&$results, $count): void {
                 if (Promise::PENDING !== $p->getState()) {
                     return;
                 }
                 $results[$idx] = $value;
                 if (count(value: $results) >= $count) {
+                    /** @var PendingPromise $p */
                     $p->resolve(value: null);
                 }
             },
-            onRejected: function ($reason) use (&$rejections) {
+            onRejected: function (mixed $reason) use (&$rejections): void {
                 $rejections[] = $reason;
             }
-        )->then(
+        )?->then(
             onFulfilled: function () use (&$results, &$rejections, $count) {
                 if (count(value: $results) !== $count) {
                     throw new AggregateException(msg: 'Not enough promises to fulfill count', reasons: $rejections);
@@ -360,15 +327,11 @@ class PromiseTool
     /**
      * Like some(), with 1 as count. However, if the promise fulfills, the
      * fulfillment value is not an array of 1 but the value directly.
-     *
-     * @param mixed $promises promises or values
-     *
-     * @return Promise
      */
-    public static function any($promises)
+    public static function any(array $promises): Promise|null
     {
-        return static::some(count: 1, promises: $promises)->then(
-            onFulfilled: function ($values) {
+        return static::some(count: 1, promises: $promises)?->then(
+            onFulfilled: function (array $values): Promise {
                 return $values[0];
             }
         );
@@ -379,25 +342,21 @@ class PromiseTool
      * been fulfilled or rejected.
      *
      * The returned promise is fulfilled with an array of inspection state arrays.
-     *
-     * @param mixed $promises promises or values
-     *
-     * @return Promise
      */
-    public static function settle($promises)
+    public static function settle(mixed $promises): Promise|null
     {
         $results = [];
 
         return static::each(
             iterable: $promises,
-            onFulfilled: function ($value, $idx) use (&$results) {
+            onFulfilled: function (mixed $value, mixed $idx) use (&$results): void {
                 $results[$idx] = ['state' => Promise::FULFILLED, 'value' => $value];
             },
-            onRejected: function ($reason, $idx) use (&$results) {
+            onRejected: function (mixed $reason, mixed $idx) use (&$results): void {
                 $results[$idx] = ['state' => Promise::REJECTED, 'reason' => $reason];
             }
-        )->then(
-            onFulfilled: function () use (&$results) {
+        )?->then(
+            onFulfilled: function () use (&$results): array {
                 ksort(array: $results);
 
                 return $results;
@@ -417,14 +376,8 @@ class PromiseTool
      * $onRejected is a function that accepts the rejection reason, iterator
      * index, and the aggregate promise. The callback can invoke any necessary side
      * effects and choose to resolve or reject the aggregate promise if needed.
-     *
-     * @param mixed    $iterable    iterator or array to iterate over
-     * @param callable $onFulfilled
-     * @param callable $onRejected
-     *
-     * @return Promise
      */
-    public static function each($iterable, callable $onFulfilled = null, callable $onRejected = null)
+    public static function each(array $iterable, callable $onFulfilled = null, callable $onRejected = null): Promise|null
     {
         return (new EachPromise(
             iterable: $iterable,
@@ -442,15 +395,8 @@ class PromiseTool
      * $concurrency may be an integer or a function that accepts the number of
      * pending promises and returns a numeric concurrency limit value to allow for
      * dynamic a concurrency size.
-     *
-     * @param mixed        $iterable
-     * @param int|callable $concurrency
-     * @param callable     $onFulfilled
-     * @param callable     $onRejected
-     *
-     * @return Promise
      */
-    public static function eachLimit($iterable, $concurrency, callable $onFulfilled = null, callable $onRejected = null)
+    public static function eachLimit(mixed $iterable, int|callable $concurrency, callable $onFulfilled = null, callable $onRejected = null): Promise|null
     {
         return (new EachPromise(
             iterable: $iterable,
@@ -467,19 +413,15 @@ class PromiseTool
      * is rejected. If any promise is rejected, then the aggregate promise is
      * rejected with the encountered rejection.
      *
-     * @param mixed        $iterable
-     * @param int|callable $concurrency
-     * @param callable     $onFulfilled
-     *
-     * @return Promise
+     * @noinspection PhpUnusedParameterInspection
      */
-    public static function eachLimitAll($iterable, $concurrency, callable $onFulfilled = null)
+    public static function eachLimitAll(mixed $iterable, int|callable $concurrency, callable $onFulfilled = null): Promise|null
     {
         return static::eachLimit(
             iterable: $iterable,
             concurrency: $concurrency,
             onFulfilled: $onFulfilled,
-            onRejected: function ($reason, $idx, Promise $aggregate) {
+            onRejected: function (mixed $reason, mixed $idx, mixed $aggregate): void {
                 $aggregate->reject(reason: $reason);
             }
         );
@@ -492,31 +434,23 @@ class PromiseTool
      *
      * @return bool
      */
-    public static function isFulfilled(Promise $promise)
+    public static function isFulfilled(Promise $promise): bool
     {
         return Promise::FULFILLED === $promise->getState();
     }
 
     /**
      * Returns true if a promise is rejected.
-     *
-     * @param Promise $promise
-     *
-     * @return bool
      */
-    public static function isRejected(Promise $promise)
+    public static function isRejected(Promise $promise): bool
     {
         return Promise::REJECTED === $promise->getState();
     }
 
     /**
      * Returns true if a promise is fulfilled or rejected.
-     *
-     * @param Promise $promise
-     *
-     * @return bool
      */
-    public static function isSettled(Promise $promise)
+    public static function isSettled(Promise $promise): bool
     {
         return Promise::PENDING !== $promise->getState();
     }
