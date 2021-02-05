@@ -9,8 +9,7 @@ before_script:
   - composer install --prefer-dist
 
 script:
-  - cd tests/
-  - php ../vendor/bin/phpunit --coverage-clover=coverage.xml --testdox --testsuite unit
+  - php vendor/bin/phpunit --coverage-clover=coverage.xml --testdox --testsuite unit
 
 after_success:
 - bash <(curl -s https://codecov.io/bash)
