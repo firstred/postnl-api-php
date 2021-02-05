@@ -9,6 +9,7 @@ before_script:
   - composer install --prefer-dist
 
 script:
+  - php vendor/bin/psalm
   - XDEBUG_MODE=coverage php vendor/bin/phpunit --coverage-clover=coverage.xml --testdox --testsuite unit
 
 after_success:
