@@ -18,8 +18,8 @@
     "phpcs:fix:src": "vendor/bin/php-cs-fixer fix --config=.php_cs.dist src",
     "phpcs:fix:tests": "vendor/bin/php-cs-fixer fix  --config=.php_cs.dist tests",
     "test": "vendor/bin/phpunit --testdox",
-    "test:unit": "vendor/bin/phpunit --testdox --testsuite Unit",
-    "test:integration": "vendor/bin/phpunit --testdox --testsuite Integration"
+    "test:unit": "vendor/bin/phpunit --testdox --testsuite unit",
+    "test:integration": "vendor/bin/phpunit --testdox --testsuite integration"
   },
   "require": {
     "php": "^8.0",
