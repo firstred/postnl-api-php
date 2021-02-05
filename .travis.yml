@@ -9,7 +9,7 @@ before_script:
   - composer install --prefer-dist
 
 script:
-  - php vendor/bin/phpunit --coverage-clover=coverage.xml --testdox --testsuite unit
+  - XDEBUG_MODE=coverage php vendor/bin/phpunit --coverage-clover=coverage.xml --testdox --testsuite unit
 
 after_success:
 - bash <(curl -s https://codecov.io/bash)
