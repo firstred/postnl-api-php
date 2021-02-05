@@ -41,6 +41,8 @@ use JetBrains\PhpStorm\ExpectedValues;
  */
 class Barcode extends SerializableObject
 {
+    public const TYPES = ['2S', '3S', 'CC', 'CP', 'CD', 'CF', 'LA'];
+
     /**
      * @var string|null
      */

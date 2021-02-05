@@ -89,7 +89,7 @@ class EntityTest extends TestCase
         );
 
         $this->assertEqualsCanonicalizing(
-            expected: ['Type', 'Serie'],
+            expected: ['Type'],
             actual: $generateBarcode->getSerializableProps(asStrings: true, required: true),
         );
     }

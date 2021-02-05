@@ -40,7 +40,7 @@ use function is_numeric;
 use function ltrim;
 
 /**
- * Class CalculateTimeframesRequestDTO
+ * Class CalculateTimeframesRequestDTO.
  *
  * @see https://developer.postnl.nl/browse-apis/delivery-options/timeframe-webservice/testtool-rest/#/Timeframe/get_calculate_timeframes
  */

@@ -52,8 +52,9 @@ class GenerateBarcodesRequestDTO extends CacheableDTO implements ArrayAccess, Co
      */
     private int $idx = 0;
 
-    /** @psalm-var array<int|string, GenerateBarcodeRequestDTO>
-     * @var mixed[]|\Firstred\PostNL\DTO\Request\GenerateBarcodeRequestDTO[]|array<int|string, \Firstred\PostNL\DTO\Request\GenerateBarcodeRequestDTO> */
+    /**
+     * @var array<int|string, GenerateBarcodeRequestDTO>
+     */
     protected array $requests = [];
 
     /**
@@ -134,6 +135,8 @@ class GenerateBarcodesRequestDTO extends CacheableDTO implements ArrayAccess, Co
     }
 
     /**
+     * @param mixed $offset
+     *
      * @return GenerateBarcodeRequestDTO|null
      */
     #[Pure]
@@ -200,7 +203,7 @@ class GenerateBarcodesRequestDTO extends CacheableDTO implements ArrayAccess, Co
     }
 
     /**
-     * @return array|GenerateBarcodeRequestDTO[]
+     * @return array<int|string, GenerateBarcodeRequestDTO>
      */
     public function getRequests(): array
     {

@@ -17,54 +17,81 @@ use function is_numeric;
 use function strtotime;
 
 /**
- * Class GetNearestLocationsRequestDTO
+ * Class GetNearestLocationsRequestDTO.
+ *
+ * @see https://developer.postnl.nl/browse-apis/delivery-options/location-webservice/testtool-rest/#/default/get_v2_1_locations_nearest
  */
 class GetNearestLocationsRequestDTO extends CacheableDTO
 {
     /**
+     * The ISO2 country codes
+     *
+     * Available values: NL, BE
+     *
+     * Default: NL
+     *
      * @var string|null
      */
+    #[ExpectedValues(values: ['NL', 'BE'])]
     #[RequestProp(requiredFor: [LocationServiceInterface::class])]
     protected string|null $CountryCode = null;
 
     /**
+     * Zipcode of the address. Mandatory when no coordinates are entered.
+     *
      * @var string|null
      */
     #[RequestProp(requiredFor: [LocationServiceInterface::class])]
     protected string|null $PostalCode = null;
 
     /**
+     * City of the address.
+     *
      * @var string|null
      */
     #[RequestProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $City = null;
 
     /**
+     * The street name of the delivery address.
+     *
      * @var string|null
      */
     #[RequestProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $Street = null;
 
     /**
+     * The house number of the delivery address.
+     *
      * @var int|null
      */
     #[RequestProp(optionalFor: [LocationServiceInterface::class])]
     protected int|null $HouseNumber = null;
 
     /**
+     * The date of the earliest delivery date. Format: dd-mm-yyyy Note: this date cannot be in the past, otherwise an error is returned.
+     *
      * @var string|null
      */
     #[RequestProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $DeliveryDate = null;
 
     /**
+     * Time of opening. Format: hh:mm:ss. This field will be used to filter the locations on opening hours.
+     *
      * @var string|null
      */
     #[RequestProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $OpeningTime = null;
 
     /**
-     * @var mixed[]|null
+     * One or more delivery options (related to the product). See Guidelines on this page for possible values
+     *
+     * Available values: PG
+     *
+     * Default: PG
+     *
+     * @var string[]|null
      */
     #[RequestProp(requiredFor: [LocationServiceInterface::class])]
     protected array|null $DeliveryOptions = null;

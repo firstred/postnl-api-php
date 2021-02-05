@@ -66,7 +66,7 @@ class GetLocationsInAreaRequestDTO extends CacheableDTO
      *
      * @var string|null $CountryCode
      */
-    #[ExpectedValues(values: ['NL', 'BE', null])]
+    #[ExpectedValues(values: ['NL', 'BE'])]
     #[RequestProp(requiredFor: [LocationServiceInterface::class])]
     protected string|null $CountryCode = null;
 
@@ -95,7 +95,7 @@ class GetLocationsInAreaRequestDTO extends CacheableDTO
      *
      * @var array|null $DeliveryOptions
      */
-    #[ExpectedValues(values: ['PG', null])]
+    #[ExpectedValues(values: ['PG'])]
     #[RequestProp(requiredFor: [LocationServiceInterface::class])]
     protected array|null $DeliveryOptions = null;
 

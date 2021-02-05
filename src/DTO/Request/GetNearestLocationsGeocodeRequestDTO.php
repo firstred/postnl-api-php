@@ -14,30 +14,49 @@ use JetBrains\PhpStorm\ExpectedValues;
 use function is_numeric;
 
 /**
- * Class GetNearestLocationsGeocodeRequestDTO
+ * Class GetNearestLocationsGeocodeRequestDTO.
+ *
+ * @see https://developer.postnl.nl/browse-apis/delivery-options/location-webservice/testtool-rest/#/default/get_v2_1_locations_nearest_geocode
  */
 class GetNearestLocationsGeocodeRequestDTO extends CacheableDTO
 {
     /**
+     * The latitude of the location
+     *
      * @var float|null
      */
     #[RequestProp(requiredFor: [LocationServiceInterface::class])]
     protected float|null $Latitude = null;
 
     /**
+     * The longitude of the location
+     *
      * @var float|null
      */
     #[RequestProp(requiredFor: [LocationServiceInterface::class])]
     protected float|null $Longitude = null;
 
     /**
+     * The ISO2 country codes
+     *
+     * Available values: NL, BE
+     *
+     * Default: NL
+     *
      * @var string|null
      */
+    #[ExpectedValues(values: ['NL', 'BE'])]
     #[RequestProp(requiredFor: [LocationServiceInterface::class])]
     protected string|null $CountryCode = null;
 
     /**
-     * @var mixed[]|null
+     * One or more delivery options (related to the product). See Guidelines on this page for possible values.
+     *
+     * Available values: PG
+     *
+     * Default: PG
+     *
+     * @var string[]|null
      */
     #[RequestProp(requiredFor: [LocationServiceInterface::class])]
     protected array|null $DeliveryOptions = null;
@@ -49,12 +68,16 @@ class GetNearestLocationsGeocodeRequestDTO extends CacheableDTO
     protected int|null $HouseNumber = null;
 
     /**
+     * The date of the earliest delivery date. Format: dd-mm-yyyy Note: this date cannot be in the past, otherwise an error is returned.
+     *
      * @var string|null
      */
     #[RequestProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $DeliveryDate = null;
 
     /**
+     * Time of opening. Format: hh:mm:ss. This field will be used to filter the locations on opening hours.
+     *
      * @var string|null
      */
     #[RequestProp(optionalFor: [LocationServiceInterface::class])]

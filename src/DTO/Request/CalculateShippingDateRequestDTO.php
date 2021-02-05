@@ -77,7 +77,7 @@ class CalculateShippingDateRequestDTO extends CacheableDTO
      *
      * @var string|null
      */
-    #[ExpectedValues(values: ['NL', 'BE', null])]
+    #[ExpectedValues(values: ['NL', 'BE'])]
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected string|null $CountryCode = null;
 
@@ -90,7 +90,7 @@ class CalculateShippingDateRequestDTO extends CacheableDTO
      *
      * @var string|null
      */
-    #[ExpectedValues(values: ['NL', 'BE', null])]
+    #[ExpectedValues(values: ['NL', 'BE'])]
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected string|null $OriginCountryCode = null;
 

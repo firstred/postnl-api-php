@@ -31,6 +31,7 @@ namespace Firstred\PostNL\DTO\Request;
 use Firstred\PostNL\Attribute\PropInterface;
 use Firstred\PostNL\Attribute\RequestProp;
 use Firstred\PostNL\DTO\CacheableDTO;
+use Firstred\PostNL\Entity\Barcode;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\BarcodeServiceInterface;
 use Firstred\PostNL\Service\ServiceInterface;
@@ -38,22 +39,37 @@ use JetBrains\PhpStorm\ExpectedValues;
 
 /**
  * Class GenerateBarcodeRequestDTO.
+ *
+ * @see https://developer.postnl.nl/browse-apis/send-and-track/barcode-webservice/testtool-rest/#/default/get_barcode
  */
 class GenerateBarcodeRequestDTO extends CacheableDTO
 {
     /**
+     * Barcode type.
+     *
+     * Accepted values are: 2S, 3S, CC, CP, CD, CF, LA
+     *
+     * Default: 3S
+     *
      * @var string|null
      */
+    #[ExpectedValues(values: Barcode::TYPES + [null])]
     #[RequestProp(requiredFor: [BarcodeServiceInterface::class])]
     protected string|null $Type = null;
 
     /**
+     * Barcode serie in the format '###000000-###000000’, for example 100000000-500000000. The range must consist of a minimal difference of 100.000. Minimum length of the serie is 6 characters; maximum length is 9 characters. It is allowed to add extra leading zeros at the beginning of the serie. See Guidelines for more information.
+     *
+     * Default: 000000000-999999999
+     *
      * @var string|null
      */
-    #[RequestProp(requiredFor: [BarcodeServiceInterface::class])]
+    #[RequestProp(optionalFor: [BarcodeServiceInterface::class])]
     protected string|null $Serie = null;
 
     /**
+     * Range used when generating generic S10 barcodes (without a customer-specific component). If this is the case, please use ‘NL’ for this field in combination with Serie '00000000-99999999’. If you leave this field blank, the CustomerCode value will be used for the barcode.
+     *
      * @var string|null
      */
     #[RequestProp(optionalFor: [BarcodeServiceInterface::class])]

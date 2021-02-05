@@ -64,7 +64,7 @@ class CutOffTime extends SerializableObject
         #[ExpectedValues(values: PropInterface::PROP_TYPES + [''])]
         string $propType,
 
-        #[ExpectedValues(values: [self::MONDAY, self::TUESDAY, self::WEDNESDAY, self::THURSDAY, self::FRIDAY, self::SATURDAY, self::SUNDAY, null])]
+        #[ExpectedValues(values: [self::MONDAY, self::TUESDAY, self::WEDNESDAY, self::THURSDAY, self::FRIDAY, self::SATURDAY, self::SUNDAY])]
         protected int|null $Day = null,
         protected string|null $Time = null,
         protected bool|null $Available = null,
@@ -76,7 +76,7 @@ class CutOffTime extends SerializableObject
         $this->setAvailable(Available: $Available);
     }
 
-    #[ExpectedValues(values: [self::MONDAY, self::TUESDAY, self::WEDNESDAY, self::THURSDAY, self::FRIDAY, self::SATURDAY, self::SUNDAY, null])]
+    #[ExpectedValues(values: [self::MONDAY, self::TUESDAY, self::WEDNESDAY, self::THURSDAY, self::FRIDAY, self::SATURDAY, self::SUNDAY])]
     /**
      * @return int|null
      */
@@ -91,7 +91,7 @@ class CutOffTime extends SerializableObject
      * @return static
      */
     public function setDay(
-        #[ExpectedValues(values: [self::MONDAY, self::TUESDAY, self::WEDNESDAY, self::THURSDAY, self::FRIDAY, self::SATURDAY, self::SUNDAY, null])]
+        #[ExpectedValues(values: [self::MONDAY, self::TUESDAY, self::WEDNESDAY, self::THURSDAY, self::FRIDAY, self::SATURDAY, self::SUNDAY])]
         int|null $Day = null,
     ): static {
         $this->Day = $Day;

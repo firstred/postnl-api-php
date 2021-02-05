@@ -40,18 +40,25 @@ use function is_numeric;
 
 /**
  * Class LookupLocationRequestDTO.
+ *
+ * @see https://developer.postnl.nl/browse-apis/delivery-options/location-webservice/testtool-rest/#/default/get_v2_1_locations_lookup
  */
 class LookupLocationRequestDTO extends CacheableDTO
 {
     /**
+     * LocationCode information.
+     *
      * @var int|null
      */
     #[RequestProp(requiredFor: [LocationServiceInterface::class])]
     protected int|null $LocationCode = null;
 
     /**
+     * RetailNetworkID information. Always PNPNL-01 for Dutch locations. For Belgium locations PNPBE-01.
+     *
      * @var string|null
      */
+    #[ExpectedValues(values: Location::AVAILABLE_NETWORKS)]
     #[RequestProp(requiredFor: [LocationServiceInterface::class])]
     protected string|null $RetailNetworkID = null;
 
