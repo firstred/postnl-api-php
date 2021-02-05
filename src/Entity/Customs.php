@@ -58,9 +58,9 @@ class Customs extends SerializableObject
      * @throws InvalidArgumentException
      */
     public function __construct(
-        #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
+        #[ExpectedValues(values: ServiceInterface::SERVICES)]
         string $service,
-        #[ExpectedValues(values: PropInterface::PROP_TYPES + [''])]
+        #[ExpectedValues(values: PropInterface::PROP_TYPES)]
         string $propType,
 
         protected string|null $Certificate = null,

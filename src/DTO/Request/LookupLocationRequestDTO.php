@@ -63,9 +63,9 @@ class LookupLocationRequestDTO extends CacheableDTO
     protected string|null $RetailNetworkID = null;
 
     public function __construct(
-        #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
+        #[ExpectedValues(values: ServiceInterface::SERVICES)]
         string $service = LocationServiceInterface::class,
-        #[ExpectedValues(values: PropInterface::PROP_TYPES + [''])]
+        #[ExpectedValues(values: PropInterface::PROP_TYPES)]
         string $propType = RequestProp::class,
         string $cacheKey = '',
 
