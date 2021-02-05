@@ -28,7 +28,6 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Service;
 
-use function explode;
 use Firstred\PostNL\Attribute\RequestProp;
 use Firstred\PostNL\Attribute\ResponseProp;
 use Firstred\PostNL\DTO\Request\GenerateBarcodeRequestDTO;
@@ -48,16 +47,28 @@ use Firstred\PostNL\Exception\ParseError;
 use Firstred\PostNL\Gateway\BarcodeServiceGatewayInterface;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
 use Firstred\PostNL\Misc\Util;
-use function in_array;
 use JetBrains\PhpStorm\Pure;
+use function explode;
+use function in_array;
 use function strlen;
 use function strtoupper;
 
+/**
+ * Class BarcodeService.
+ */
 class BarcodeService extends ServiceBase implements BarcodeServiceInterface
 {
     use ServiceLoggerTrait;
 
     #[Pure]
+    /**
+     * BarcodeService constructor.
+     *
+     * @param Customer                       $customer
+     * @param string                         $apiKey
+     * @param bool                           $sandbox
+     * @param BarcodeServiceGatewayInterface $gateway
+     */
     public function __construct(
         protected Customer $customer,
         protected string $apiKey,
@@ -68,11 +79,18 @@ class BarcodeService extends ServiceBase implements BarcodeServiceInterface
     }
 
     /**
-     * @throws InvalidArgumentException
-     * @throws InvalidBarcodeException
+     * @param string      $type
+     * @param string|null $range
+     * @param string|null $serie
+     * @param bool        $eps
+     *
+     * @return GenerateBarcodeResponseDTO
+     *
      * @throws ApiClientException
      * @throws ApiException
      * @throws InvalidApiKeyException
+     * @throws InvalidArgumentException
+     * @throws InvalidBarcodeException
      * @throws NotAvailableException
      * @throws ParseError
      */
@@ -112,6 +130,10 @@ class BarcodeService extends ServiceBase implements BarcodeServiceInterface
     }
 
     /**
+     * @param GenerateBarcodesRequestDTO $generateBarcodesRequestDTO
+     *
+     * @return GenerateBarcodesResponseDTO
+     *
      * @throws ApiClientException
      * @throws ApiException
      * @throws InvalidApiKeyException
@@ -125,6 +147,10 @@ class BarcodeService extends ServiceBase implements BarcodeServiceInterface
     }
 
     /**
+     * @param string $iso
+     *
+     * @return GenerateBarcodeResponseDTO
+     *
      * @throws ApiClientException
      * @throws ApiException
      * @throws InvalidApiKeyException
@@ -167,6 +193,10 @@ class BarcodeService extends ServiceBase implements BarcodeServiceInterface
     }
 
     /**
+     * @param array $isos
+     *
+     * @return GenerateBarcodesByCountryCodesResponseDTO
+     *
      * @throws ApiClientException
      * @throws ApiException
      * @throws InvalidApiKeyException
@@ -244,6 +274,12 @@ class BarcodeService extends ServiceBase implements BarcodeServiceInterface
     /**
      * Find a suitable serie for the barcode.
      *
+     * @param string $type
+     * @param string $range
+     * @param bool   $eps
+     *
+     * @return string
+     *
      * @throws InvalidBarcodeException
      */
     public function findBarcodeSerie(string $type, string $range, bool $eps): string
@@ -286,11 +322,19 @@ class BarcodeService extends ServiceBase implements BarcodeServiceInterface
         return $serie;
     }
 
+    /**
+     * @return BarcodeServiceGatewayInterface
+     */
     public function getGateway(): BarcodeServiceGatewayInterface
     {
         return $this->gateway;
     }
 
+    /**
+     * @param BarcodeServiceGatewayInterface $gateway
+     *
+     * @return $this
+     */
     public function setGateway(BarcodeServiceGatewayInterface $gateway): static
     {
         $this->gateway = $gateway;
@@ -298,11 +342,19 @@ class BarcodeService extends ServiceBase implements BarcodeServiceInterface
         return $this;
     }
 
+    /**
+     * @return HttpClientInterface
+     */
     public function getHttpClient(): HttpClientInterface
     {
         return $this->getGateway()->getHttpClient();
     }
 
+    /**
+     * @param HttpClientInterface $httpClient
+     *
+     * @return $this
+     */
     public function setHttpClient(HttpClientInterface $httpClient): static
     {
         $this->getGateway()->setHttpClient(httpClient: $httpClient);

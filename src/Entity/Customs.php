@@ -29,12 +29,34 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Attribute\PropInterface;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\SerializableObject;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
 
+/**
+ * Class Customs.
+ */
 class Customs extends SerializableObject
 {
+    /**
+     * Customs constructor.
+     *
+     * @param string      $service
+     * @param string      $propType
+     * @param string|null $Certificate
+     * @param string|null $CertificateNr
+     * @param array|null  $Content
+     * @param string|null $Currency
+     * @param string|null $HandleAsNonDeliverable
+     * @param string|null $Invoice
+     * @param string|null $InvoiceNr
+     * @param string|null $License
+     * @param string|null $LicenseNr
+     * @param string|null $ShipmentType
+     *
+     * @throws InvalidArgumentException
+     */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
         string $service = '',
@@ -66,11 +88,19 @@ class Customs extends SerializableObject
         $this->setShipmentType(ShipmentType: $ShipmentType);
     }
 
+    /**
+     * @return string|null
+     */
     public function getCertificate(): string|null
     {
         return $this->Certificate;
     }
 
+    /**
+     * @param string|null $Certificate
+     *
+     * @return $this
+     */
     public function setCertificate(string|null $Certificate = null): static
     {
         $this->Certificate = $Certificate;
@@ -78,11 +108,19 @@ class Customs extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCertificateNr(): string|null
     {
         return $this->CertificateNr;
     }
 
+    /**
+     * @param string|null $CertificateNr
+     *
+     * @return $this
+     */
     public function setCertificateNr(string|null $CertificateNr = null): static
     {
         $this->CertificateNr = $CertificateNr;
@@ -90,11 +128,19 @@ class Customs extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return array|null
+     */
     public function getContent(): array|null
     {
         return $this->Content;
     }
 
+    /**
+     * @param array|null $Content
+     *
+     * @return $this
+     */
     public function setContent(array|null $Content = null): static
     {
         $this->Content = $Content;
@@ -102,11 +148,19 @@ class Customs extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCurrency(): string|null
     {
         return $this->Currency;
     }
 
+    /**
+     * @param string|null $Currency
+     *
+     * @return $this
+     */
     public function setCurrency(string|null $Currency = null): static
     {
         $this->Currency = $Currency;
@@ -114,11 +168,19 @@ class Customs extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getHandleAsNonDeliverable(): string|null
     {
         return $this->HandleAsNonDeliverable;
     }
 
+    /**
+     * @param string|null $HandleAsNonDeliverable
+     *
+     * @return $this
+     */
     public function setHandleAsNonDeliverable(string|null $HandleAsNonDeliverable = null): static
     {
         $this->HandleAsNonDeliverable = $HandleAsNonDeliverable;
@@ -126,11 +188,19 @@ class Customs extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getInvoice(): string|null
     {
         return $this->Invoice;
     }
 
+    /**
+     * @param string|null $Invoice
+     *
+     * @return $this
+     */
     public function setInvoice(string|null $Invoice = null): static
     {
         $this->Invoice = $Invoice;
@@ -138,11 +208,19 @@ class Customs extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getInvoiceNr(): string|null
     {
         return $this->InvoiceNr;
     }
 
+    /**
+     * @param string|null $InvoiceNr
+     *
+     * @return $this
+     */
     public function setInvoiceNr(string|null $InvoiceNr = null): static
     {
         $this->InvoiceNr = $InvoiceNr;
@@ -150,11 +228,19 @@ class Customs extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getLicense(): string|null
     {
         return $this->License;
     }
 
+    /**
+     * @param string|null $license
+     *
+     * @return $this
+     */
     public function setLicense(string|null $license = null): static
     {
         $this->License = $license;
@@ -162,11 +248,19 @@ class Customs extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getLicenseNr(): string|null
     {
         return $this->LicenseNr;
     }
 
+    /**
+     * @param string|null $LicenseNr
+     *
+     * @return $this
+     */
     public function setLicenseNr(string|null $LicenseNr = null): static
     {
         $this->LicenseNr = $LicenseNr;
@@ -174,11 +268,19 @@ class Customs extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getShipmentType(): string|null
     {
         return $this->ShipmentType;
     }
 
+    /**
+     * @param string|null $ShipmentType
+     *
+     * @return $this
+     */
     public function setShipmentType(string|null $ShipmentType = null): static
     {
         $this->ShipmentType = $ShipmentType;

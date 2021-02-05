@@ -39,9 +39,16 @@ use Firstred\PostNL\Exception\ParseError;
 use Firstred\PostNL\RequestBuilder\TimeframeServiceRequestBuilderInterface;
 use Firstred\PostNL\ResponseProcessor\TimeframeServiceResponseProcessorInterface;
 
+/**
+ * Interface TimeframeServiceGatewayInterface.
+ */
 interface TimeframeServiceGatewayInterface extends GatewayInterface
 {
     /**
+     * @param CalculateTimeframesRequestDTO $calculateTimeframesRequestDTO
+     *
+     * @return CalculateTimeframesResponseDTO
+     *
      * @throws ApiClientException
      * @throws ApiException
      * @throws InvalidApiKeyException
@@ -53,11 +60,27 @@ interface TimeframeServiceGatewayInterface extends GatewayInterface
         CalculateTimeframesRequestDTO $calculateTimeframesRequestDTO,
     ): CalculateTimeframesResponseDTO;
 
+    /**
+     * @return TimeframeServiceRequestBuilderInterface
+     */
     public function getRequestBuilder(): TimeframeServiceRequestBuilderInterface;
 
+    /**
+     * @param TimeframeServiceRequestBuilderInterface $requestBuilder
+     *
+     * @return $this
+     */
     public function setRequestBuilder(TimeframeServiceRequestBuilderInterface $requestBuilder): static;
 
+    /**
+     * @return TimeframeServiceResponseProcessorInterface
+     */
     public function getResponseProcessor(): TimeframeServiceResponseProcessorInterface;
 
+    /**
+     * @param TimeframeServiceResponseProcessorInterface $responseProcessor
+     *
+     * @return $this
+     */
     public function setResponseProcessor(TimeframeServiceResponseProcessorInterface $responseProcessor): static;
 }

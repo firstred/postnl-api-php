@@ -40,9 +40,15 @@ use ReflectionClass;
 use ReflectionProperty;
 use function in_array;
 
+/**
+ * Class SerializableObject.
+ */
 abstract class SerializableObject implements JsonSerializable
 {
     /**
+     * @param string $service
+     * @param string $propType
+     *
      * @throws InvalidArgumentException
      */
     public function __construct(protected string $service, protected string $propType)
@@ -79,6 +85,12 @@ abstract class SerializableObject implements JsonSerializable
     }
 
     /**
+     * @param array  $json
+     * @param string $service
+     * @param string $propType
+     *
+     * @return static
+     *
      * @throws InvalidArgumentException
      */
     public static function jsonDeserialize(array $json, string $service, string $propType): static
@@ -97,6 +109,10 @@ abstract class SerializableObject implements JsonSerializable
     }
 
     /**
+     * @param string $service
+     *
+     * @return static
+     *
      * @throws InvalidArgumentException
      */
     public function setService(
@@ -114,12 +130,19 @@ abstract class SerializableObject implements JsonSerializable
     }
 
     #[ExpectedValues(values: PropInterface::PROP_TYPES)]
+    /**
+     * @return string
+     */
     public function getPropType(): string
     {
         return $this->service;
     }
 
     /**
+     * @param string $propType
+     *
+     * @return static
+     *
      * @throws InvalidArgumentException
      */
     public function setPropType(

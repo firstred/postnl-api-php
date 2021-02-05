@@ -50,9 +50,21 @@ use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
+/**
+ * Class DeliveryDateServiceGateway.
+ */
 class DeliveryDateServiceGateway extends GatewayBase implements DeliveryDateServiceGatewayInterface
 {
     #[Pure]
+    /**
+     * DeliveryDateServiceGateway constructor.
+     *
+     * @param HttpClientInterface                           $httpClient
+     * @param CacheItemPoolInterface|null                   $cache
+     * @param int|DateTimeInterface|DateInterval|null       $ttl
+     * @param DeliveryDateServiceRequestBuilderInterface    $requestBuilder
+     * @param DeliveryDateServiceResponseProcessorInterface $responseProcessor
+     */
     public function __construct(
         protected HttpClientInterface $httpClient,
         protected CacheItemPoolInterface|null $cache,
@@ -64,6 +76,10 @@ class DeliveryDateServiceGateway extends GatewayBase implements DeliveryDateServ
     }
 
     /**
+     * @param CalculateDeliveryDateRequestDTO $calculateDeliveryDateRequestDTO
+     *
+     * @return CalculateDeliveryDateResponseDTO
+     *
      * @throws ApiClientException
      * @throws ApiException
      * @throws InvalidApiKeyException
@@ -135,6 +151,10 @@ class DeliveryDateServiceGateway extends GatewayBase implements DeliveryDateServ
     }
 
     /**
+     * @param CalculateShippingDateRequestDTO $calculateShippingDateRequestDTO
+     *
+     * @return CalculateShippingDateResponseDTO
+     *
      * @throws ApiClientException
      * @throws ApiException
      * @throws InvalidApiKeyException
@@ -205,11 +225,19 @@ class DeliveryDateServiceGateway extends GatewayBase implements DeliveryDateServ
         }
     }
 
+    /**
+     * @return DeliveryDateServiceRequestBuilderInterface
+     */
     public function getRequestBuilder(): DeliveryDateServiceRequestBuilderInterface
     {
         return $this->requestBuilder;
     }
 
+    /**
+     * @param DeliveryDateServiceRequestBuilderInterface $requestBuilder
+     *
+     * @return static
+     */
     public function setRequestBuilder(DeliveryDateServiceRequestBuilderInterface $requestBuilder): static
     {
         $this->requestBuilder = $requestBuilder;
@@ -217,11 +245,19 @@ class DeliveryDateServiceGateway extends GatewayBase implements DeliveryDateServ
         return $this;
     }
 
+    /**
+     * @return DeliveryDateServiceResponseProcessorInterface
+     */
     public function getResponseProcessor(): DeliveryDateServiceResponseProcessorInterface
     {
         return $this->responseProcessor;
     }
 
+    /**
+     * @param DeliveryDateServiceResponseProcessorInterface $responseProcessor
+     *
+     * @return static
+     */
     public function setResponseProcessor(DeliveryDateServiceResponseProcessorInterface $responseProcessor): static
     {
         $this->responseProcessor = $responseProcessor;

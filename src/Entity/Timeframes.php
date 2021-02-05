@@ -42,6 +42,9 @@ use JetBrains\PhpStorm\ExpectedValues;
 use JetBrains\PhpStorm\Pure;
 use function count;
 
+/**
+ * Class Timeframes
+ */
 class Timeframes extends SerializableObject implements ArrayAccess, Countable, Iterator
 {
     protected int $idx = 0;
@@ -51,6 +54,12 @@ class Timeframes extends SerializableObject implements ArrayAccess, Countable, I
     protected array|null $Timeframes = null;
 
     /**
+     * Timeframes constructor.
+     *
+     * @param string     $service
+     * @param string     $propType
+     * @param array|null $Timeframes
+     *
      * @throws InvalidArgumentException
      */
     public function __construct(
@@ -66,11 +75,20 @@ class Timeframes extends SerializableObject implements ArrayAccess, Countable, I
         $this->setTimeframes(Timeframes: $Timeframes);
     }
 
+    /**
+     * @return array|Timeframe[]|TimeframeTimeFrame[]|null
+     */
     public function getTimeframes(): array|null
     {
         return $this->Timeframes;
     }
 
+    /**
+     * @param array|null $Timeframes
+     *
+     * @return $this
+     * @throws InvalidArgumentException
+     */
     public function setTimeframes(array|null $Timeframes = null): static
     {
         if (!empty($Timeframes['Timeframe'])) {
@@ -98,6 +116,9 @@ class Timeframes extends SerializableObject implements ArrayAccess, Countable, I
         return $this;
     }
 
+    /**
+     * @return Timeframe|null
+     */
     public function current(): Timeframe|null
     {
         return $this->getTimeframes()[$this->idx] ?? null;
@@ -108,11 +129,17 @@ class Timeframes extends SerializableObject implements ArrayAccess, Countable, I
         ++$this->idx;
     }
 
+    /**
+     * @return int
+     */
     public function key(): int
     {
         return $this->idx;
     }
 
+    /**
+     * @return bool
+     */
     public function valid(): bool
     {
         return null !== $this->current();
@@ -124,6 +151,10 @@ class Timeframes extends SerializableObject implements ArrayAccess, Countable, I
     }
 
     /**
+     * @param mixed $offset
+     *
+     * @return bool
+     *
      * @throws InvalidArgumentException
      */
     public function offsetExists(mixed $offset): bool
@@ -135,17 +166,29 @@ class Timeframes extends SerializableObject implements ArrayAccess, Countable, I
         return (bool) ($this->getTimeframes()[$offset] ?? false);
     }
 
-    public function offsetGet($offset): Timeframe|null
+    /**
+     * @param mixed $offset
+     *
+     * @return Timeframe|null
+     */
+    public function offsetGet(mixed $offset): Timeframe|null
     {
         return $this->getTimeframes()[$offset] ?? null;
     }
 
-    public function offsetSet($offset, $value): void
+    /**
+     * @param mixed $offset
+     * @param mixed $value
+     */
+    public function offsetSet(mixed $offset, mixed $value): void
     {
         $this->Timeframes[$offset] = $value;
     }
 
-    public function offsetUnset($offset): void
+    /**
+     * @param mixed $offset
+     */
+    public function offsetUnset(mixed $offset): void
     {
         if (isset($this->Timeframes[$offset])) {
             unset($this->Timeframes[$offset]);
@@ -153,12 +196,20 @@ class Timeframes extends SerializableObject implements ArrayAccess, Countable, I
     }
 
     #[Pure]
+    /**
+     * @return int
+     */
     public function count(): int
     {
         return count(value: $this->Timeframes ?? []);
     }
 
     #[ArrayShape(shape: ['Timeframe' => "array[]|null"])]
+    /**
+     * @return array
+     *
+     * @throws InvalidArgumentException
+     */
     public function jsonSerialize(): array
     {
         $json = parent::jsonSerialize();

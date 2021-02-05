@@ -70,8 +70,8 @@ class PendingPromise implements Promise
     private array|null $handlers = [];
 
     /**
-     * @param callable $waitFn   fn that when invoked resolves the promise
-     * @param callable $cancelFn fn that when invoked cancels the promise
+     * @param callable|null $waitFn   fn that when invoked resolves the promise
+     * @param callable|null $cancelFn fn that when invoked cancels the promise
      */
     public function __construct(callable $waitFn = null, callable $cancelFn = null)
     {
@@ -79,6 +79,12 @@ class PendingPromise implements Promise
         $this->cancelFn = $cancelFn;
     }
 
+    /**
+     * @param callable|null $onFulfilled
+     * @param callable|null $onRejected
+     *
+     * @return Promise|$this
+     */
     public function then(callable $onFulfilled = null, callable $onRejected = null): Promise|PendingPromise
     {
         if (self::PENDING === $this->state) {
@@ -105,13 +111,21 @@ class PendingPromise implements Promise
         return $onRejected ? $rejection->then(onRejected: $onRejected) : $rejection;
     }
 
+    /**
+     * @param callable $onRejected
+     *
+     * @return Promise|$this
+     */
     public function otherwise(callable $onRejected): PendingPromise|Promise
     {
         return $this->then(onRejected: $onRejected);
     }
 
     /**
-     * @throws Exception|Throwable
+     * @param bool $unwrap
+     *
+     * @return mixed
+     * @throws Throwable
      */
     public function wait($unwrap = true): mixed
     {
@@ -135,6 +149,9 @@ class PendingPromise implements Promise
         return null;
     }
 
+    /**
+     * @return string
+     */
     public function getState(): string
     {
         return $this->state;
@@ -173,14 +190,18 @@ class PendingPromise implements Promise
         $this->settle(state: self::FULFILLED, value: $value);
     }
 
+    /**
+     * @param string|Throwable $reason
+     */
     public function reject(string|Throwable $reason): void
     {
         $this->settle(state: self::REJECTED, value: $reason);
     }
 
     /**
+     * @param string                      $state
      * @psalm-param string|Throwable|null $value
-     */
+*/
     private function settle(string $state, string|Throwable|null $value): void
     {
         if (self::PENDING !== $this->state || !$value) {

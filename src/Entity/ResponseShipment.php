@@ -28,6 +28,9 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+/**
+ * Class ResponseShipment
+ */
 class ResponseShipment
 {
     protected string|null $Barcode = null;
@@ -38,6 +41,17 @@ class ResponseShipment
     protected string|null $ProductCodeDelivery = null;
     protected array|null $Warnings = null;
 
+    /**
+     * ResponseShipment constructor.
+     *
+     * @param string|null $barcode
+     * @param string|null $productCodeDelivery
+     * @param array|null  $labels
+     * @param string|null $downPartnerBarcode
+     * @param string|null $downPartnerId
+     * @param string|null $downPartnerLocation
+     * @param array|null  $warnings
+     */
     public function __construct(
         string|null $barcode = null,
         string|null $productCodeDelivery = null,
@@ -56,11 +70,19 @@ class ResponseShipment
         $this->setWarnings(warnings: $warnings);
     }
 
+    /**
+     * @return string|null
+     */
     public function getBarcode(): string|null
     {
         return $this->Barcode;
     }
 
+    /**
+     * @param string|null $barcode
+     *
+     * @return $this
+     */
     public function setBarcode(string|null $barcode = null): static
     {
         $this->Barcode = $barcode;
@@ -68,11 +90,19 @@ class ResponseShipment
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getDownPartnerBarcode(): string|null
     {
         return $this->DownPartnerBarcode;
     }
 
+    /**
+     * @param string|null $downPartnerBarcode
+     *
+     * @return $this
+     */
     public function setDownPartnerBarcode(string|null $downPartnerBarcode = null): static
     {
         $this->DownPartnerBarcode = $downPartnerBarcode;
@@ -80,11 +110,19 @@ class ResponseShipment
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getDownPartnerID(): string|null
     {
         return $this->DownPartnerID;
     }
 
+    /**
+     * @param string|null $downPartnerID
+     *
+     * @return $this
+     */
     public function setDownPartnerID(string|null $downPartnerID = null): static
     {
         $this->DownPartnerID = $downPartnerID;
@@ -92,11 +130,19 @@ class ResponseShipment
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getDownPartnerLocation(): string|null
     {
         return $this->DownPartnerLocation;
     }
 
+    /**
+     * @param string|null $downPartnerLocation
+     *
+     * @return $this
+     */
     public function setDownPartnerLocation(string|null $downPartnerLocation = null): static
     {
         $this->DownPartnerLocation = $downPartnerLocation;
@@ -104,11 +150,19 @@ class ResponseShipment
         return $this;
     }
 
+    /**
+     * @return array|null
+     */
     public function getLabels(): array|null
     {
         return $this->Labels;
     }
 
+    /**
+     * @param array|null $labels
+     *
+     * @return $this
+     */
     public function setLabels(array|null $labels = null): static
     {
         $this->Labels = $labels;
@@ -116,11 +170,19 @@ class ResponseShipment
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getProductCodeDelivery(): string|null
     {
         return $this->ProductCodeDelivery;
     }
 
+    /**
+     * @param string|null $productCodeDelivery
+     *
+     * @return $this
+     */
     public function setProductCodeDelivery(string|null $productCodeDelivery = null): static
     {
         $this->ProductCodeDelivery = $productCodeDelivery;
@@ -128,11 +190,19 @@ class ResponseShipment
         return $this;
     }
 
+    /**
+     * @return array|null
+     */
     public function getWarnings(): array|null
     {
         return $this->Warnings;
     }
 
+    /**
+     * @param array|null $warnings
+     *
+     * @return $this
+     */
     public function setWarnings(array|null $warnings = null): static
     {
         $this->Warnings = $warnings;

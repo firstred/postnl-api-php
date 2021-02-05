@@ -28,6 +28,9 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+/**
+ * Class ResponseGroup.
+ */
 class ResponseGroup
 {
     /**
@@ -53,6 +56,14 @@ class ResponseGroup
      */
     protected string|null $MainBarcode = null;
 
+    /**
+     * ResponseGroup constructor.
+     *
+     * @param string|null $groupCount
+     * @param string|null $groupSequence
+     * @param string|null $groupType
+     * @param string|null $mainBarcode
+     */
     public function __construct(
         string|null $groupCount = null,
         string|null $groupSequence = null,
@@ -65,11 +76,19 @@ class ResponseGroup
         $this->setMainBarcode(mainBarcode: $mainBarcode);
     }
 
+    /**
+     * @return string|null
+     */
     public function getGroupCount(): string|null
     {
         return $this->GroupCount;
     }
 
+    /**
+     * @param string|null $groupCount
+     *
+     * @return $this
+     */
     public function setGroupCount(string|null $groupCount = null): static
     {
         $this->GroupCount = $groupCount;
@@ -77,11 +96,19 @@ class ResponseGroup
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getGroupSequence(): string|null
     {
         return $this->GroupSequence;
     }
 
+    /**
+     * @param string|null $groupSequence
+     *
+     * @return $this
+     */
     public function setGroupSequence(string|null $groupSequence = null): static
     {
         $this->GroupSequence = $groupSequence;
@@ -89,11 +116,19 @@ class ResponseGroup
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getGroupType(): string|null
     {
         return $this->GroupType;
     }
 
+    /**
+     * @param string|null $groupType
+     *
+     * @return $this
+     */
     public function setGroupType(string|null $groupType = null): static
     {
         $this->GroupType = $groupType;
@@ -101,11 +136,19 @@ class ResponseGroup
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getMainBarcode(): string|null
     {
         return $this->MainBarcode;
     }
 
+    /**
+     * @param string|null $mainBarcode
+     *
+     * @return $this
+     */
     public function setMainBarcode(string|null $mainBarcode = null): static
     {
         $this->MainBarcode = $mainBarcode;

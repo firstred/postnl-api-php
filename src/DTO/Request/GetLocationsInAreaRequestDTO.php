@@ -18,6 +18,9 @@ use function is_string;
 use function str_replace;
 use function strtotime;
 
+/**
+ * Class GetLocationsInAreaRequestDTO
+ */
 class GetLocationsInAreaRequestDTO extends CacheableDTO
 {
     #[RequestProp(requiredFor: [LocationServiceInterface::class])]
@@ -44,6 +47,23 @@ class GetLocationsInAreaRequestDTO extends CacheableDTO
     #[RequestProp(requiredFor: [LocationServiceInterface::class])]
     protected array|null $DeliveryOptions = null;
 
+    /**
+     * GetLocationsInAreaRequestDTO constructor.
+     *
+     * @param string            $service
+     * @param string            $propType
+     * @param string            $cacheKey
+     * @param float|string|null $LatitudeNorth
+     * @param float|string|null $LongitudeWest
+     * @param float|string|null $LatitudeSouth
+     * @param float|string|null $LongitudeEast
+     * @param string|null       $CountryCode
+     * @param string|null       $DeliveryDate
+     * @param string|null       $OpeningTime
+     * @param array|null        $DeliveryOptions
+     *
+     * @throws InvalidArgumentException
+     */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
         string $service = LocationServiceInterface::class,
@@ -72,12 +92,19 @@ class GetLocationsInAreaRequestDTO extends CacheableDTO
         $this->setDeliveryOptions(DeliveryOptions: $DeliveryOptions);
     }
 
+    /**
+     * @return float|null
+     */
     public function getLatitudeNorth(): float|null
     {
         return $this->LatitudeNorth;
     }
 
     /**
+     * @param float|string|null $LatitudeNorth
+     *
+     * @return static
+     *
      * @throws InvalidArgumentException
      */
     public function setLatitudeNorth(float|string|null $LatitudeNorth = null): static
@@ -95,14 +122,21 @@ class GetLocationsInAreaRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return float|null
+     */
     public function getLongitudeWest(): float|null
     {
         return $this->LongitudeWest;
     }
 
     /**
+     * @param float|string|null $LongitudeWest
+     *
+     * @return static
+     *
      * @throws InvalidArgumentException
-     */
+    */
     public function setLongitudeWest(float|string|null $LongitudeWest = null): static
     {
         if (is_string(value: $LongitudeWest)) {
@@ -118,14 +152,21 @@ class GetLocationsInAreaRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return float|null
+     */
     public function getLatitudeSouth(): float|null
     {
         return $this->LatitudeSouth;
     }
 
     /**
+     * @param float|string|null $LatitudeSouth
+     *
+     * @return static
+     *
      * @throws InvalidArgumentException
-     */
+    */
     public function setLatitudeSouth(float|string|null $LatitudeSouth = null): static
     {
         if (is_string(value: $LatitudeSouth)) {
@@ -141,14 +182,21 @@ class GetLocationsInAreaRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return float|null
+     */
     public function getLongitudeEast(): float|null
     {
         return $this->LongitudeEast;
     }
 
     /**
+     * @param float|string|null $LongitudeEast
+     *
+     * @return static
+     *
      * @throws InvalidArgumentException
-     */
+    */
     public function setLongitudeEast(float|string|null $LongitudeEast = null): static
     {
         if (is_string(value: $LongitudeEast)) {
@@ -164,11 +212,19 @@ class GetLocationsInAreaRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCountryCode(): string|null
     {
         return $this->CountryCode;
     }
 
+    /**
+     * @param string|null $CountryCode
+     *
+     * @return static
+     */
     public function setCountryCode(string|null $CountryCode = null): static
     {
         $this->CountryCode = $CountryCode;
@@ -176,11 +232,19 @@ class GetLocationsInAreaRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getDeliveryDate(): string|null
     {
         return $this->DeliveryDate;
     }
 
+    /**
+     * @param string|null $DeliveryDate
+     *
+     * @return $this
+     */
     public function setDeliveryDate(string|null $DeliveryDate = null): static
     {
         $this->DeliveryDate = $DeliveryDate;
@@ -188,11 +252,19 @@ class GetLocationsInAreaRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getOpeningTime(): string|null
     {
         return $this->OpeningTime;
     }
 
+    /**
+     * @param string|null $OpeningTime
+     *
+     * @return $this
+     */
     public function setOpeningTime(string|null $OpeningTime = null): static
     {
         $this->OpeningTime = $OpeningTime;
@@ -200,11 +272,19 @@ class GetLocationsInAreaRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return array|null
+     */
     public function getDeliveryOptions(): array|null
     {
         return $this->DeliveryOptions;
     }
 
+    /**
+     * @param array|null $DeliveryOptions
+     *
+     * @return static
+     */
     public function setDeliveryOptions(array|null $DeliveryOptions = null): static
     {
         $this->DeliveryOptions = $DeliveryOptions;
@@ -212,6 +292,11 @@ class GetLocationsInAreaRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return array
+     *
+     * @throws InvalidArgumentException
+     */
     public function jsonSerialize(): array
     {
         $query = parent::jsonSerialize();

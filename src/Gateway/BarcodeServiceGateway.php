@@ -51,9 +51,21 @@ use JetBrains\PhpStorm\Pure;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\ResponseInterface;
 
+/**
+ * Class BarcodeServiceGateway.
+ */
 class BarcodeServiceGateway extends GatewayBase implements BarcodeServiceGatewayInterface
 {
     #[Pure]
+    /**
+     * BarcodeServiceGateway constructor.
+     *
+     * @param HttpClientInterface                      $httpClient
+     * @param CacheItemPoolInterface|null              $cache
+     * @param int|DateTimeInterface|DateInterval|null  $ttl
+     * @param BarcodeServiceRequestBuilderInterface    $requestBuilder
+     * @param BarcodeServiceResponseProcessorInterface $responseProcessor
+     */
     public function __construct(
         protected HttpClientInterface $httpClient,
         protected CacheItemPoolInterface|null $cache,
@@ -65,6 +77,10 @@ class BarcodeServiceGateway extends GatewayBase implements BarcodeServiceGateway
     }
 
     /**
+     * @param GenerateBarcodeRequestDTO $generateBarcodeRequestDTO
+     *
+     * @return GenerateBarcodeResponseDTO
+     *
      * @throws ApiClientException
      * @throws ApiException
      * @throws InvalidApiKeyException
@@ -124,6 +140,10 @@ class BarcodeServiceGateway extends GatewayBase implements BarcodeServiceGateway
     }
 
     /**
+     * @param GenerateBarcodesRequestDTO $generateBarcodesRequestDTO
+     *
+     * @return GenerateBarcodesResponseDTO
+     *
      * @throws ApiClientException
      * @throws ApiException
      * @throws InvalidApiKeyException
@@ -192,11 +212,19 @@ class BarcodeServiceGateway extends GatewayBase implements BarcodeServiceGateway
         return $barcodes;
     }
 
+    /**
+     * @return BarcodeServiceRequestBuilderInterface
+     */
     public function getRequestBuilder(): BarcodeServiceRequestBuilderInterface
     {
         return $this->requestBuilder;
     }
 
+    /**
+     * @param BarcodeServiceRequestBuilderInterface $requestBuilder
+     *
+     * @return $this
+     */
     public function setRequestBuilder(BarcodeServiceRequestBuilderInterface $requestBuilder): static
     {
         $this->requestBuilder = $requestBuilder;
@@ -204,11 +232,19 @@ class BarcodeServiceGateway extends GatewayBase implements BarcodeServiceGateway
         return $this;
     }
 
+    /**
+     * @return BarcodeServiceResponseProcessorInterface
+     */
     public function getResponseProcessor(): BarcodeServiceResponseProcessorInterface
     {
         return $this->responseProcessor;
     }
 
+    /**
+     * @param BarcodeServiceResponseProcessorInterface $responseProcessor
+     *
+     * @return $this
+     */
     public function setResponseProcessor(BarcodeServiceResponseProcessorInterface $responseProcessor): static
     {
         $this->responseProcessor = $responseProcessor;

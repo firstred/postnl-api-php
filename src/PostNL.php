@@ -78,6 +78,9 @@ use JetBrains\PhpStorm\ArrayShape;
 use JetBrains\PhpStorm\ExpectedValues;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Class PostNL.
+ */
 class PostNL
 {
     /**
@@ -86,7 +89,6 @@ class PostNL
      * @param Customer                            $customer
      * @param string                              $apiKey
      * @param bool                                $sandbox
-     * @param LoggerInterface|null                $logger
      * @param BarcodeServiceInterface|null        $barcodeService
      * @param LabellingServiceInterface|null      $labellingService
      * @param ConfirmingServiceInterface|null     $confirmingService
@@ -95,6 +97,8 @@ class PostNL
      * @param TimeframeServiceInterface|null      $timeframeService
      * @param LocationServiceInterface|null       $locationService
      * @param ShippingServiceInterface|null       $shippingService
+     * @param HttpClientInterface|null            $httpClient
+     * @param LoggerInterface|null                $logger
      */
     public function __construct(
         protected Customer $customer,
@@ -382,6 +386,7 @@ class PostNL
      * @param array $isos key = iso code, value = amount of barcodes requested
      *
      * @return GenerateBarcodesByCountryCodesResponseDTO Country isos with stringable barcode response objects
+     *
      * @throws Exception\ApiClientException
      * @throws Exception\ApiException
      * @throws Exception\InvalidApiKeyException
@@ -1449,7 +1454,7 @@ class PostNL
     /**
      * Set the location service.
      *
-     * @param LocationService $service
+     * @param LocationServiceInterface $service
      */
     public function setLocationService(LocationServiceInterface $service): void
     {

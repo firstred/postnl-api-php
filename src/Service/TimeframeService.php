@@ -41,11 +41,22 @@ use Firstred\PostNL\Gateway\TimeframeServiceGatewayInterface;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
 use JetBrains\PhpStorm\Pure;
 
+/**
+ * Class TimeframeService.
+ */
 class TimeframeService extends ServiceBase implements TimeframeServiceInterface
 {
     use ServiceLoggerTrait;
 
     #[Pure]
+    /**
+     * TimeframeService constructor.
+     *
+     * @param Customer                         $customer
+     * @param string                           $apiKey
+     * @param bool                             $sandbox
+     * @param TimeframeServiceGatewayInterface $gateway
+     */
     public function __construct(
         protected Customer $customer,
         protected string $apiKey,
@@ -56,6 +67,10 @@ class TimeframeService extends ServiceBase implements TimeframeServiceInterface
     }
 
     /**
+     * @param CalculateTimeframesRequestDTO $calculateTimeframesRequestDTO
+     *
+     * @return CalculateTimeframesResponseDTO
+     *
      * @throws ApiClientException
      * @throws ApiException
      * @throws InvalidApiKeyException
@@ -68,11 +83,19 @@ class TimeframeService extends ServiceBase implements TimeframeServiceInterface
         return $this->getGateway()->doCalculateTimeframesRequest(calculateTimeframesRequestDTO: $calculateTimeframesRequestDTO);
     }
 
+    /**
+     * @return TimeframeServiceGatewayInterface
+     */
     public function getGateway(): TimeframeServiceGatewayInterface
     {
         return $this->gateway;
     }
 
+    /**
+     * @param TimeframeServiceGatewayInterface $gateway
+     *
+     * @return $this
+     */
     public function setGateway(TimeframeServiceGatewayInterface $gateway): static
     {
         $this->gateway = $gateway;
@@ -80,11 +103,19 @@ class TimeframeService extends ServiceBase implements TimeframeServiceInterface
         return $this;
     }
 
+    /**
+     * @return HttpClientInterface
+     */
     public function getHttpClient(): HttpClientInterface
     {
         return $this->getGateway()->getHttpClient();
     }
 
+    /**
+     * @param HttpClientInterface $httpClient
+     *
+     * @return $this
+     */
     public function setHttpClient(HttpClientInterface $httpClient): static
     {
         $this->getGateway()->setHttpClient(httpClient: $httpClient);

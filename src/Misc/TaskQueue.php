@@ -63,11 +63,17 @@ class TaskQueue
         }
     }
 
+    /**
+     * @return bool
+     */
     public function isEmpty(): bool
     {
         return !$this->queue;
     }
 
+    /**
+     * @param callable $task
+     */
     public function add(callable $task): void
     {
         $this->queue[] = $task;

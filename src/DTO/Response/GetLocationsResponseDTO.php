@@ -38,13 +38,17 @@ use Firstred\PostNL\Entity\Warning;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\LocationServiceInterface;
 use Firstred\PostNL\Service\ServiceInterface;
-use Iterator;
 use JetBrains\PhpStorm\ExpectedValues;
 use JetBrains\PhpStorm\Pure;
+use OutOfBoundsException;
+use SeekableIterator;
 use function is_int;
 use function is_string;
 
-class GetLocationsResponseDTO extends CacheableDTO implements ArrayAccess, Countable, Iterator
+/**
+ * Class GetLocationsResponseDTO
+ */
+class GetLocationsResponseDTO extends CacheableDTO implements ArrayAccess, Countable, SeekableIterator
 {
     protected int $idx = 0;
 
@@ -56,6 +60,17 @@ class GetLocationsResponseDTO extends CacheableDTO implements ArrayAccess, Count
     #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected array|null $Warnings = null;
 
+    /**
+     * GetLocationsResponseDTO constructor.
+     *
+     * @param string     $service
+     * @param string     $propType
+     * @param string     $cacheKey
+     * @param array      $GetLocationsResult
+     * @param array|null $Warnings
+     *
+     * @throws InvalidArgumentException
+     */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
         string $service,
@@ -77,6 +92,9 @@ class GetLocationsResponseDTO extends CacheableDTO implements ArrayAccess, Count
     }
 
     #[Pure]
+    /**
+     * @return ResponseLocation|null
+     */
     public function current(): ResponseLocation|null
     {
         return array_values(array: $this->GetLocationsResult)[$this->idx] ?? null;
@@ -88,12 +106,18 @@ class GetLocationsResponseDTO extends CacheableDTO implements ArrayAccess, Count
     }
 
     #[Pure]
+    /**
+     * @return string|null
+     */
     public function key(): string|null
     {
         return array_keys(array: $this->GetLocationsResult)[$this->idx] ?? null;
     }
 
     #[Pure]
+    /**
+     * @return bool
+     */
     public function valid(): bool
     {
         return isset(array_values(array: $this->GetLocationsResult)[$this->idx]);
@@ -105,6 +129,11 @@ class GetLocationsResponseDTO extends CacheableDTO implements ArrayAccess, Count
     }
 
     #[Pure]
+    /**
+     * @param mixed $offset
+     *
+     * @return bool
+     */
     public function offsetExists(mixed $offset): bool
     {
         if (!is_int(value: $offset) && !is_string(value: $offset)) {
@@ -115,6 +144,11 @@ class GetLocationsResponseDTO extends CacheableDTO implements ArrayAccess, Count
     }
 
     #[Pure]
+    /**
+     * @param mixed $offset
+     *
+     * @return ResponseLocation|null
+     */
     public function offsetGet(mixed $offset): ResponseLocation|null
     {
         if (!$this->offsetExists(offset: $offset)) {
@@ -125,6 +159,9 @@ class GetLocationsResponseDTO extends CacheableDTO implements ArrayAccess, Count
     }
 
     /**
+     * @param mixed $offset
+     * @param mixed $value
+     *
      * @throws InvalidArgumentException
      */
     public function offsetSet(mixed $offset, mixed $value): void
@@ -140,7 +177,10 @@ class GetLocationsResponseDTO extends CacheableDTO implements ArrayAccess, Count
         $this->GetLocationsResult[$offset] = $value;
     }
 
-    public function offsetUnset($offset): void
+    /**
+     * @param mixed $offset
+     */
+    public function offsetUnset(mixed $offset): void
     {
         if (!$this->offsetExists(offset: $offset)) {
             return;
@@ -149,23 +189,36 @@ class GetLocationsResponseDTO extends CacheableDTO implements ArrayAccess, Count
         unset($this->GetLocationsResult[$offset]);
     }
 
+    /**
+     * @param ResponseLocation $generateBarcodeResponseDTO
+     */
     public function add(ResponseLocation $generateBarcodeResponseDTO): void
     {
         $this->GetLocationsResult[] = $generateBarcodeResponseDTO;
     }
 
     #[Pure]
+    /**
+     * @return int
+     */
     public function count(): int
     {
         return count(value: $this->GetLocationsResult);
     }
 
+    /**
+     * @return array|ResponseLocation[]
+     */
     public function getGetLocationsResult(): array
     {
         return $this->GetLocationsResult;
     }
 
     /**
+     * @param array|null $GetLocationsResult
+     *
+     * @return static
+     *
      * @throws InvalidArgumentException
      */
     public function setGetLocationsResult(array $GetLocationsResult = null): static
@@ -190,17 +243,30 @@ class GetLocationsResponseDTO extends CacheableDTO implements ArrayAccess, Count
         return $this;
     }
 
+    /**
+     * @return array|Warning[]|null
+     */
     public function getWarnings(): array|null
     {
         return $this->Warnings;
     }
 
+    /**
+     * @param array|null $Warnings
+     *
+     * @return $this
+     */
     public function setWarnings(array|null $Warnings = null): static
     {
         $this->Warnings = $Warnings;
         return $this;
     }
 
+    /**
+     * @return array
+     *
+     * @throws InvalidArgumentException
+     */
     public function jsonSerialize(): array
     {
         $json = parent::jsonSerialize();
@@ -211,5 +277,19 @@ class GetLocationsResponseDTO extends CacheableDTO implements ArrayAccess, Count
         );
 
         return $json;
+    }
+
+    /**
+     * @param mixed $position
+     *
+     * @throws OutOfBoundsException
+     */
+    public function seek(mixed $position): void
+    {
+        if (!is_int(value: $position) || !isset($this->array[$position])) {
+            throw new OutOfBoundsException("invalid seek position ($position)");
+        }
+
+        $this->idx = $position;
     }
 }

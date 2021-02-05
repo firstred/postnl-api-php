@@ -37,10 +37,21 @@ use Firstred\PostNL\Exception\NotAvailableException;
 use Firstred\PostNL\Exception\ParseError;
 use Psr\Http\Message\ResponseInterface;
 
+/**
+ * Class LocationServiceResponseProcessor.
+ */
 class LocationServiceResponseProcessor extends ResponseProcessorBase implements LocationServiceResponseProcessorInterface
 {
     /**
-     * @throws InvalidArgumentException|ParseError|ApiException|InvalidApiKeyException|NotAvailableException
+     * @param ResponseInterface $response
+     *
+     * @return GetLocationResponseDTO
+     *
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws InvalidArgumentException
+     * @throws NotAvailableException
+     * @throws ParseError
      */
     public function processGetLocationResponse(ResponseInterface $response): GetLocationResponseDTO
     {
@@ -54,7 +65,15 @@ class LocationServiceResponseProcessor extends ResponseProcessorBase implements 
     }
 
     /**
-     * @throws InvalidArgumentException|ParseError|ApiException|InvalidApiKeyException|NotAvailableException
+     * @param ResponseInterface $response
+     *
+     * @return GetLocationsResponseDTO
+     *
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws InvalidArgumentException
+     * @throws NotAvailableException
+     * @throws ParseError
      */
     public function processGetLocationsResponse(ResponseInterface $response): GetLocationsResponseDTO
     {

@@ -32,9 +32,20 @@ use JetBrains\PhpStorm\Pure;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
+/**
+ * Class ApiException.
+ */
 abstract class ApiException extends PostNLClientException implements HasResponse
 {
     #[Pure]
+    /**
+     * ApiException constructor.
+     *
+     * @param mixed $message
+     * @param mixed $code
+     * @param Throwable $previous
+     * @param ResponseInterface|null $response
+     */
     public function __construct(
         mixed $message = '',
         mixed $code = 0,
@@ -45,6 +56,9 @@ abstract class ApiException extends PostNLClientException implements HasResponse
         parent::__construct($message, $code, $previous);
     }
 
+    /**
+     * @return ResponseInterface|null
+     */
     public function getResponse(): ResponseInterface|null
     {
         return $this->response;

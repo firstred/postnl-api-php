@@ -28,6 +28,9 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Exception;
 
+/**
+ * Class ApiServerException.
+ */
 class ApiServerException extends ApiException implements HasResponse
 {
 }

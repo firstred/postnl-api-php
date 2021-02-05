@@ -34,21 +34,56 @@ use Firstred\PostNL\HttpClient\HttpClientInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Interface GatewayInterface.
+ */
 interface GatewayInterface
 {
+    /**
+     * @return HttpClientInterface
+     */
     public function getHttpClient(): HttpClientInterface;
 
+    /**
+     * @param HttpClientInterface $httpClient
+     *
+     * @return $this
+     */
     public function setHttpClient(HttpClientInterface $httpClient): static;
 
+    /**
+     * @return CacheItemPoolInterface|null
+     */
     public function getCache(): ?CacheItemPoolInterface;
 
+    /**
+     * @param CacheItemPoolInterface|null $cache
+     *
+     * @return $this
+     */
     public function setCache(CacheItemPoolInterface $cache = null): static;
 
+    /**
+     * @return DateInterval|DateTimeInterface|int|null
+     */
     public function getTtl(): DateInterval|DateTimeInterface|int|null;
 
+    /**
+     * @param DateInterval|DateTimeInterface|int|null $ttl
+     *
+     * @return $this
+     */
     public function setTtl(DateInterval|DateTimeInterface|int|null $ttl = null): static;
 
+    /**
+     * @return LoggerInterface|null
+     */
     public function getLogger(): LoggerInterface|null;
 
+    /**
+     * @param LoggerInterface|null $logger
+     *
+     * @return $this
+     */
     public function setLogger(LoggerInterface|null $logger = null): static;
 }

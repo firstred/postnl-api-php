@@ -33,6 +33,9 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Psr\Http\Message\RequestInterface;
 
+/**
+ * Class BarcodeServiceRequestBuilder.
+ */
 class BarcodeServiceRequestBuilder extends RequestBuilderBase implements BarcodeServiceRequestBuilderInterface
 {
     public const DEFAULT_VERSION = '1.1';
@@ -41,6 +44,10 @@ class BarcodeServiceRequestBuilder extends RequestBuilderBase implements Barcode
     public const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/{{version}}/barcode';
 
     /**
+     * @param GenerateBarcodeRequestDTO $generateBarcodeRequestDTO
+     *
+     * @return RequestInterface
+     *
      * @throws InvalidArgumentException
      */
     public function buildGenerateBarcodeRequest(GenerateBarcodeRequestDTO $generateBarcodeRequestDTO): RequestInterface

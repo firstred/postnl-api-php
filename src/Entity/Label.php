@@ -33,11 +33,25 @@ use Firstred\PostNL\Misc\SerializableObject;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
 
+/**
+ * Class Label.
+ */
 class Label extends SerializableObject
 {
     public const FORMAT_A4 = 1;
     public const FORMAT_A6 = 2;
 
+    /**
+     * Label constructor.
+     *
+     * @param string      $service
+     * @param string      $propType
+     * @param string|null $Content
+     * @param string|null $Contenttype
+     * @param string|null $Labeltype
+     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
         string $service = '',
@@ -58,11 +72,19 @@ class Label extends SerializableObject
         $this->setLabeltype(Labeltype: $Labeltype);
     }
 
+    /**
+     * @return string|null
+     */
     public function getContent(): string|null
     {
         return $this->Content;
     }
 
+    /**
+     * @param string|null $Content
+     *
+     * @return $this
+     */
     public function setContent(string|null $Content = null): static
     {
         $this->Content = $Content;
@@ -70,11 +92,19 @@ class Label extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getContenttype(): string|null
     {
         return $this->Contenttype;
     }
 
+    /**
+     * @param string|null $Contenttype
+     *
+     * @return $this
+     */
     public function setContenttype(string|null $Contenttype = null): static
     {
         $this->Contenttype = $Contenttype;
@@ -82,11 +112,19 @@ class Label extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getLabeltype(): string|null
     {
         return $this->Labeltype;
     }
 
+    /**
+     * @param string|null $Labeltype
+     *
+     * @return $this
+     */
     public function setLabeltype(string|null $Labeltype = null): static
     {
         $this->Labeltype = $Labeltype;

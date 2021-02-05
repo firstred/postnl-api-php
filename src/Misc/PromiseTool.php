@@ -51,7 +51,6 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Misc;
 
 use ArrayIterator;
-use Exception;
 use Firstred\PostNL\Exception\Promise\AggregateException;
 use Firstred\PostNL\Exception\Promise\RejectionException;
 use Http\Promise\FulfilledPromise;
@@ -78,6 +77,10 @@ class PromiseTool
      *     queue()->run();
      * }
      * </code>
+     *
+     * @param TaskQueue|null $assign
+     *
+     * @return TaskQueue
      */
     public static function queue(TaskQueue $assign = null): TaskQueue
     {
@@ -119,6 +122,10 @@ class PromiseTool
 
     /**
      * Creates a promise for a value if the value is not a promise.
+     *
+     * @param mixed $value
+     *
+     * @return Promise
      */
     public static function promiseFor(mixed $value): Promise
     {
@@ -138,11 +145,15 @@ class PromiseTool
         return new FulfilledPromise(result: $value);
     }
 
+    #[Pure]
     /**
      * Creates a rejected promise for a reason if the reason is not a promise. If
      * the provided reason is a promise, then it is returned as-is.
+     *
+     * @param mixed $reason
+     *
+     * @return Promise
      */
-    #[Pure]
     public static function rejectionFor(mixed $reason): Promise
     {
         if ($reason instanceof Promise) {
@@ -154,6 +165,10 @@ class PromiseTool
 
     /**
      * Create an exception for a rejected promise value.
+     *
+     * @param mixed $reason
+     *
+     * @return Throwable
      */
     public static function exceptionFor(mixed $reason): Throwable
     {
@@ -162,6 +177,10 @@ class PromiseTool
 
     /**
      * Returns an iterator for the given value.
+     *
+     * @param mixed $value
+     *
+     * @return Iterator
      */
     public static function iterFor(mixed $value): Iterator
     {
@@ -184,6 +203,10 @@ class PromiseTool
      * will contain a "value" key mapping to the fulfilled value of the promise. If
      * the promise is rejected, the array will contain a "reason" key mapping to
      * the rejection reason of the promise.
+     *
+     * @param Promise $promise
+     *
+     * @return array
      */
     public static function inspect(Promise $promise): array
     {
@@ -204,6 +227,10 @@ class PromiseTool
      * as thrown exception.
      *
      * Returns an array of inspection state arrays.
+     *
+     * @param array $promises
+     *
+     * @return array
      */
     public static function inspectAll(array $promises): array
     {
@@ -222,8 +249,9 @@ class PromiseTool
      * the promises were provided). An exception is thrown if any of the promises
      * are rejected.
      *
-     * @throws Exception on error
-     * @throws Throwable on error in PHP >=7
+     * @param mixed $promises
+     *
+     * @return array
      */
     public static function unwrap(mixed $promises): array
     {
@@ -291,6 +319,11 @@ class PromiseTool
      * When count amount of promises have been fulfilled, the returned promise is
      * fulfilled with an array that contains the fulfillment values of the winners
      * in order of resolution.
+     *
+     * @param int   $count
+     * @param array $promises
+     *
+     * @return Promise|null
      */
     public static function some(int $count, array $promises): Promise|null
     {
@@ -327,6 +360,10 @@ class PromiseTool
     /**
      * Like some(), with 1 as count. However, if the promise fulfills, the
      * fulfillment value is not an array of 1 but the value directly.
+     *
+     * @param array $promises
+     *
+     * @return Promise|null
      */
     public static function any(array $promises): Promise|null
     {
@@ -342,6 +379,10 @@ class PromiseTool
      * been fulfilled or rejected.
      *
      * The returned promise is fulfilled with an array of inspection state arrays.
+     *
+     * @param mixed $promises
+     *
+     * @return Promise|null
      */
     public static function settle(mixed $promises): Promise|null
     {
@@ -376,6 +417,12 @@ class PromiseTool
      * $onRejected is a function that accepts the rejection reason, iterator
      * index, and the aggregate promise. The callback can invoke any necessary side
      * effects and choose to resolve or reject the aggregate promise if needed.
+     *
+     * @param array         $iterable
+     * @param callable|null $onFulfilled
+     * @param callable|null $onRejected
+     *
+     * @return Promise|null
      */
     public static function each(array $iterable, callable $onFulfilled = null, callable $onRejected = null): Promise|null
     {
@@ -395,6 +442,13 @@ class PromiseTool
      * $concurrency may be an integer or a function that accepts the number of
      * pending promises and returns a numeric concurrency limit value to allow for
      * dynamic a concurrency size.
+     *
+     * @param mixed         $iterable
+     * @param int|callable  $concurrency
+     * @param callable|null $onFulfilled
+     * @param callable|null $onRejected
+     *
+     * @return Promise|null
      */
     public static function eachLimit(mixed $iterable, int|callable $concurrency, callable $onFulfilled = null, callable $onRejected = null): Promise|null
     {
@@ -414,6 +468,12 @@ class PromiseTool
      * rejected with the encountered rejection.
      *
      * @noinspection PhpUnusedParameterInspection
+     *
+     * @param mixed         $iterable
+     * @param int|callable  $concurrency
+     * @param callable|null $onFulfilled
+     *
+     * @return Promise|null
      */
     public static function eachLimitAll(mixed $iterable, int|callable $concurrency, callable $onFulfilled = null): Promise|null
     {
@@ -441,6 +501,10 @@ class PromiseTool
 
     /**
      * Returns true if a promise is rejected.
+     *
+     * @param Promise $promise
+     *
+     * @return bool
      */
     public static function isRejected(Promise $promise): bool
     {
@@ -449,6 +513,10 @@ class PromiseTool
 
     /**
      * Returns true if a promise is fulfilled or rejected.
+     *
+     * @param Promise $promise
+     *
+     * @return bool
      */
     public static function isSettled(Promise $promise): bool
     {

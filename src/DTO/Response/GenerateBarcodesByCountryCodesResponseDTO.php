@@ -34,16 +34,31 @@ use Firstred\PostNL\Attribute\PropInterface;
 use Firstred\PostNL\DTO\CacheableDTO;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\ServiceInterface;
-use Iterator;
 use JetBrains\PhpStorm\ExpectedValues;
 use JetBrains\PhpStorm\Pure;
+use OutOfBoundsException;
+use SeekableIterator;
+use function is_int;
 
-class GenerateBarcodesByCountryCodesResponseDTO extends CacheableDTO implements ArrayAccess, Countable, Iterator
+/**
+ * Class GenerateBarcodesByCountryCodesResponseDTO.
+ */
+class GenerateBarcodesByCountryCodesResponseDTO extends CacheableDTO implements ArrayAccess, Countable, SeekableIterator
 {
     private int $idx = 0;
 
     protected array $countries = [];
 
+    /**
+     * GenerateBarcodesByCountryCodesResponseDTO constructor.
+     *
+     * @param string $service
+     * @param string $propType
+     * @param string $cacheKey
+     * @param array  $countries
+     *
+     * @throws InvalidArgumentException
+     */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES)]
         string $service,
@@ -69,6 +84,11 @@ class GenerateBarcodesByCountryCodesResponseDTO extends CacheableDTO implements 
     }
 
     #[Pure]
+    /**
+     * @param mixed $offset
+     *
+     * @return bool
+     */
     public function offsetExists(mixed $offset): bool
     {
         if (!static::isCountryIso(countryIso: $offset)) {
@@ -79,7 +99,12 @@ class GenerateBarcodesByCountryCodesResponseDTO extends CacheableDTO implements 
     }
 
     #[Pure]
-    public function offsetGet(mixed $offset): ?GenerateBarcodesResponseDTO
+    /**
+     * @param mixed $offset
+     *
+     * @return GenerateBarcodeResponseDTO|null
+     */
+    public function offsetGet(mixed $offset): GenerateBarcodesResponseDTO|null
     {
         if (!$this->offsetExists(offset: $offset)) {
             return null;
@@ -89,6 +114,9 @@ class GenerateBarcodesByCountryCodesResponseDTO extends CacheableDTO implements 
     }
 
     /**
+     * @param mixed $offset
+     * @param mixed $value
+     *
      * @throws InvalidArgumentException
      */
     public function offsetSet(mixed $offset, mixed $value): void
@@ -104,7 +132,10 @@ class GenerateBarcodesByCountryCodesResponseDTO extends CacheableDTO implements 
         $this->countries[$offset] = $value;
     }
 
-    public function offsetUnset($offset): void
+    /**
+     * @param mixed $offset
+     */
+    public function offsetUnset(mixed $offset): void
     {
         if (!$this->offsetExists(offset: $offset)) {
             return;
@@ -114,12 +145,20 @@ class GenerateBarcodesByCountryCodesResponseDTO extends CacheableDTO implements 
     }
 
     #[Pure]
+    /**
+     * @param string $countryIso
+     *
+     * @return bool
+     */
     private static function isCountryIso(string $countryIso): bool
     {
         return 2 === strlen(string: $countryIso);
     }
 
     #[Pure]
+    /**
+     * @return array|null
+     */
     public function current(): array|null
     {
         $currentIso = array_keys(array: $this->countries)[$this->idx] ?? null;
@@ -136,12 +175,18 @@ class GenerateBarcodesByCountryCodesResponseDTO extends CacheableDTO implements 
     }
 
     #[Pure]
+    /**
+     * @return string|null
+     */
     public function key(): string|null
     {
         return array_keys(array: $this->countries)[$this->idx] ?? null;
     }
 
     #[Pure]
+    /**
+     * @return bool
+     */
     public function valid(): bool
     {
         return (bool) $this->key();
@@ -153,11 +198,17 @@ class GenerateBarcodesByCountryCodesResponseDTO extends CacheableDTO implements 
     }
 
     #[Pure]
+    /**
+     * @return int
+     */
     public function count(): int
     {
         return count(value: $this->countries);
     }
 
+    /**
+     * @return array
+     */
     public function getCountries(): array
     {
         return $this->countries;
@@ -165,6 +216,9 @@ class GenerateBarcodesByCountryCodesResponseDTO extends CacheableDTO implements 
 
     /**
      * @psalm-param array<int|string, GenerateBarcodesResponseDTO> $countries
+     * @param array $countries
+     *
+     * @return static
      */
     public function setCountries(array $countries): static
     {
@@ -173,6 +227,11 @@ class GenerateBarcodesByCountryCodesResponseDTO extends CacheableDTO implements 
         return $this;
     }
 
+    /**
+     * @return array
+     *
+     * @throws InvalidArgumentException
+     */
     public function jsonSerialize(): array
     {
         $json = [];
@@ -182,5 +241,19 @@ class GenerateBarcodesByCountryCodesResponseDTO extends CacheableDTO implements 
         }
 
         return $json;
+    }
+
+    /**
+     * @param mixed $position
+     *
+     * @throws OutOfBoundsException
+     */
+    public function seek(mixed $position): void
+    {
+        if (!is_int(value: $position) || !isset($this->array[$position])) {
+            throw new OutOfBoundsException("invalid seek position ($position)");
+        }
+
+        $this->idx = $position;
     }
 }

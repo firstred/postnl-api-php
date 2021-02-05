@@ -29,10 +29,14 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Attribute\PropInterface;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\SerializableObject;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
 
+/**
+ * Class CutOffTime.
+ */
 class CutOffTime extends SerializableObject
 {
     public const MONDAY = 0;
@@ -43,6 +47,17 @@ class CutOffTime extends SerializableObject
     public const SATURDAY = 5;
     public const SUNDAY = 6;
 
+    /**
+     * CutOffTime constructor.
+     *
+     * @param string      $service
+     * @param string      $propType
+     * @param int|null    $Day
+     * @param string|null $Time
+     * @param bool|null   $Available
+     *
+     * @throws InvalidArgumentException
+     */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
         string $service = '',
@@ -62,11 +77,19 @@ class CutOffTime extends SerializableObject
     }
 
     #[ExpectedValues(values: [self::MONDAY, self::TUESDAY, self::WEDNESDAY, self::THURSDAY, self::FRIDAY, self::SATURDAY, self::SUNDAY, null])]
+    /**
+     * @return int|null
+     */
     public function getDay(): int|null
     {
         return $this->Day;
     }
 
+    /**
+     * @param int|null $Day
+     *
+     * @return $this
+     */
     public function setDay(
         #[ExpectedValues(values: [self::MONDAY, self::TUESDAY, self::WEDNESDAY, self::THURSDAY, self::FRIDAY, self::SATURDAY, self::SUNDAY, null])]
         int|null $Day = null,
@@ -76,11 +99,19 @@ class CutOffTime extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getTime(): string|null
     {
         return $this->Time;
     }
 
+    /**
+     * @param string|null $Time
+     *
+     * @return $this
+     */
     public function setTime(string|null $Time = null): static
     {
         $this->Time = $Time;
@@ -88,11 +119,19 @@ class CutOffTime extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return bool|null
+     */
     public function getAvailable(): bool|null
     {
         return $this->Available;
     }
 
+    /**
+     * @param bool|null $Available
+     *
+     * @return $this
+     */
     public function setAvailable(bool|null $Available = null): static
     {
         $this->Available = $Available;

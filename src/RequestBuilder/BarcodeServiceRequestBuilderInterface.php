@@ -32,9 +32,16 @@ use Firstred\PostNL\DTO\Request\GenerateBarcodeRequestDTO;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 
+/**
+ * Interface BarcodeServiceRequestBuilderInterface.
+ */
 interface BarcodeServiceRequestBuilderInterface extends RequestBuilderInterface
 {
     /**
+     * @param GenerateBarcodeRequestDTO $generateBarcodeRequestDTO
+     *
+     * @return RequestInterface
+     *
      * @throws InvalidArgumentException
      */
     public function buildGenerateBarcodeRequest(GenerateBarcodeRequestDTO $generateBarcodeRequestDTO): RequestInterface;

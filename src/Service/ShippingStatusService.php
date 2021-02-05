@@ -28,7 +28,6 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Service;
 
-use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\JsonSerializableObject;
 use Firstred\PostNL\Entity\Response\CompleteStatusResponse;
 use Firstred\PostNL\Entity\Response\CurrentStatusResponse;
@@ -43,6 +42,9 @@ use Psr\Cache\CacheItemInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
+/**
+ * Class ShippingStatusService.
+ */
 class ShippingStatusService extends ServiceBase implements ShippingStatusServiceInterface
 {
     use ServiceLoggerTrait;
@@ -471,11 +473,19 @@ class ShippingStatusService extends ServiceBase implements ShippingStatusService
         return null;
     }
 
+    /**
+     * @return HttpClientInterface
+     */
     public function getHttpClient(): HttpClientInterface
     {
         return $this->getGateway()->getHttpClient();
     }
 
+    /**
+     * @param HttpClientInterface $httpClient
+     *
+     * @return $this
+     */
     public function setHttpClient(HttpClientInterface $httpClient): static
     {
         $this->getGateway()->setHttpClient(httpClient: $httpClient);

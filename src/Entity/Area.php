@@ -29,20 +29,34 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Attribute\PropInterface;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\SerializableObject;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
 
+/**
+ * Class Area.
+ */
 class Area extends SerializableObject
 {
+    /**
+     * Area constructor.
+     *
+     * @param string           $service
+     * @param string           $propType
+     * @param Coordinates|null $CoordinatesNorthWest
+     * @param Coordinates|null $CoordinatesSouthEast
+     *
+     * @throws InvalidArgumentException
+     */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
         string $service = '',
         #[ExpectedValues(values: PropInterface::PROP_TYPES + [''])]
         string $propType = '',
 
-        protected ?Coordinates $CoordinatesNorthWest = null,
-        protected ?Coordinates $CoordinatesSouthEast = null,
+        protected Coordinates|null $CoordinatesNorthWest = null,
+        protected Coordinates|null $CoordinatesSouthEast = null,
     ) {
         parent::__construct(service: $service, propType: $propType);
 
@@ -50,24 +64,40 @@ class Area extends SerializableObject
         $this->setCoordinatesSouthEast(CoordinatesSouthEast: $CoordinatesSouthEast);
     }
 
-    public function getCoordinatesNorthWest(): ?Coordinates
+    /**
+     * @return Coordinates|null
+     */
+    public function getCoordinatesNorthWest(): Coordinates|null
     {
         return $this->CoordinatesNorthWest;
     }
 
-    public function setCoordinatesNorthWest(?Coordinates $CoordinatesNorthWest = null): static
+    /**
+     * @param Coordinates|null $CoordinatesNorthWest
+     *
+     * @return $this
+     */
+    public function setCoordinatesNorthWest(Coordinates|null $CoordinatesNorthWest = null): static
     {
         $this->CoordinatesNorthWest = $CoordinatesNorthWest;
 
         return $this;
     }
 
-    public function getCoordinatesSouthEast(): ?Coordinates
+    /**
+     * @return Coordinates|null
+     */
+    public function getCoordinatesSouthEast(): Coordinates|null
     {
         return $this->CoordinatesSouthEast;
     }
 
-    public function setCoordinatesSouthEast(?Coordinates $CoordinatesSouthEast = null): static
+    /**
+     * @param Coordinates|null $CoordinatesSouthEast
+     *
+     * @return $this
+     */
+    public function setCoordinatesSouthEast(Coordinates|null $CoordinatesSouthEast = null): static
     {
         $this->CoordinatesSouthEast = $CoordinatesSouthEast;
 

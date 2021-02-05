@@ -29,12 +29,29 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Attribute\PropInterface;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\SerializableObject;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
 
+/**
+ * Class Dimension.
+ */
 class Dimension extends SerializableObject
 {
+    /**
+     * Dimension constructor.
+     *
+     * @param string      $service
+     * @param string      $propType
+     * @param string|null $Height
+     * @param string|null $Length
+     * @param string|null $Volume
+     * @param string|null $Weight
+     * @param string|null $Width
+     *
+     * @throws InvalidArgumentException
+     */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
         string $service = '',
@@ -58,11 +75,19 @@ class Dimension extends SerializableObject
         $this->setWidth(width: $Width);
     }
 
+    /**
+     * @return string|null
+     */
     public function getHeight(): string|null
     {
         return $this->Height;
     }
 
+    /**
+     * @param string|null $Height
+     *
+     * @return $this
+     */
     public function setHeight(string|null $Height = null): static
     {
         $this->Height = $Height;
@@ -70,11 +95,19 @@ class Dimension extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getLength(): string|null
     {
         return $this->Length;
     }
 
+    /**
+     * @param string|null $Length
+     *
+     * @return $this
+     */
     public function setLength(string|null $Length = null): static
     {
         $this->Length = $Length;
@@ -82,11 +115,19 @@ class Dimension extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getVolume(): string|null
     {
         return $this->Volume;
     }
 
+    /**
+     * @param string|null $Volume
+     *
+     * @return $this
+     */
     public function setVolume(string|null $Volume = null): static
     {
         $this->Volume = $Volume;
@@ -94,11 +135,19 @@ class Dimension extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getWeight(): string|null
     {
         return $this->Weight;
     }
 
+    /**
+     * @param string|null $Weight
+     *
+     * @return $this
+     */
     public function setWeight(string|null $Weight = null): static
     {
         $this->Weight = $Weight;
@@ -106,11 +155,19 @@ class Dimension extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getWidth(): string|null
     {
         return $this->Width;
     }
 
+    /**
+     * @param string|null $Width
+     *
+     * @return $this
+     */
     public function setWidth(string|null $Width = null): static
     {
         $this->Width = $Width;

@@ -29,12 +29,31 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Attribute\PropInterface;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\SerializableObject;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
 
+/**
+ * Class Content.
+ */
 class Content extends SerializableObject
 {
+    /**
+     * Content constructor.
+     *
+     * @param string      $service
+     * @param string      $propType
+     * @param string|null $CountryOfOrigin
+     * @param string|null $Description
+     * @param string|null $HSTariffNr
+     * @param string|null $Quantity
+     * @param string|null $Value
+     * @param string|null $Weight
+     * @param array|null  $Content
+     *
+     * @throws InvalidArgumentException
+     */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
         string $service = '',
@@ -60,11 +79,19 @@ class Content extends SerializableObject
         $this->setContent(Content: $Content);
     }
 
+    /**
+     * @return string|null
+     */
     public function getCountryOfOrigin(): string|null
     {
         return $this->CountryOfOrigin;
     }
 
+    /**
+     * @param string|null $CountryOfOrigin
+     *
+     * @return $this
+     */
     public function setCountryOfOrigin(string|null $CountryOfOrigin = null): static
     {
         $this->CountryOfOrigin = $CountryOfOrigin;
@@ -72,11 +99,19 @@ class Content extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getDescription(): string|null
     {
         return $this->Description;
     }
 
+    /**
+     * @param string|null $Description
+     *
+     * @return $this
+     */
     public function setDescription(string|null $Description = null): static
     {
         $this->Description = $Description;
@@ -84,11 +119,19 @@ class Content extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getHSTariffNr(): string|null
     {
         return $this->HSTariffNr;
     }
 
+    /**
+     * @param string|null $HSTariffNr
+     *
+     * @return $this
+     */
     public function setHSTariffNr(string|null $HSTariffNr = null): static
     {
         $this->HSTariffNr = $HSTariffNr;
@@ -96,11 +139,19 @@ class Content extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getQuantity(): string|null
     {
         return $this->Quantity;
     }
 
+    /**
+     * @param string|null $Quantity
+     *
+     * @return $this
+     */
     public function setQuantity(string|null $Quantity = null): static
     {
         $this->Quantity = $Quantity;
@@ -108,11 +159,19 @@ class Content extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getValue(): string|null
     {
         return $this->Value;
     }
 
+    /**
+     * @param string|null $Value
+     *
+     * @return $this
+     */
     public function setValue(string|null $Value = null): static
     {
         $this->Value = $Value;
@@ -120,11 +179,19 @@ class Content extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getWeight(): string|null
     {
         return $this->Weight;
     }
 
+    /**
+     * @param string|null $Weight
+     *
+     * @return $this
+     */
     public function setWeight(string|null $Weight = null): static
     {
         $this->Weight = $Weight;
@@ -132,11 +199,19 @@ class Content extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return array|null
+     */
     public function getContent(): array|null
     {
         return $this->Content;
     }
 
+    /**
+     * @param array|null $Content
+     *
+     * @return $this
+     */
     public function setContent(array|null $Content = null): static
     {
         $this->Content = $Content;

@@ -41,6 +41,9 @@ use JetBrains\PhpStorm\ArrayShape;
 use JetBrains\PhpStorm\ExpectedValues;
 use JetBrains\PhpStorm\Pure;
 
+/**
+ * Class ReasonNoTimeframes
+ */
 class ReasonNoTimeframes extends SerializableObject implements ArrayAccess, Countable, Iterator
 {
     protected int $idx = 0;
@@ -50,6 +53,12 @@ class ReasonNoTimeframes extends SerializableObject implements ArrayAccess, Coun
     protected array|null $ReasonNoTimeframes = null;
 
     /**
+     * ReasonNoTimeframes constructor.
+     *
+     * @param string     $service
+     * @param string     $propType
+     * @param array|null $ReasonNoTimeframes
+     *
      * @throws InvalidArgumentException
      */
     public function __construct(
@@ -65,11 +74,20 @@ class ReasonNoTimeframes extends SerializableObject implements ArrayAccess, Coun
         $this->setReasonNoTimeframes(ReasonNoTimeframes: $ReasonNoTimeframes);
     }
 
+    /**
+     * @return array|ReasonNoTimeframe[]|null
+     */
     public function getReasonNoTimeframes(): array|null
     {
         return $this->ReasonNoTimeframes;
     }
 
+    /**
+     * @param array|null $ReasonNoTimeframes
+     *
+     * @return $this
+     * @throws InvalidArgumentException
+     */
     public function setReasonNoTimeframes(array|null $ReasonNoTimeframes = null): static
     {
         if (!empty($ReasonNoTimeframes['ReasonNoTimeframe'])) {
@@ -91,6 +109,9 @@ class ReasonNoTimeframes extends SerializableObject implements ArrayAccess, Coun
         return $this;
     }
 
+    /**
+     * @return Timeframe|null
+     */
     public function current(): Timeframe|null
     {
         return $this->getReasonNoTimeframes()[$this->idx] ?? null;
@@ -106,6 +127,9 @@ class ReasonNoTimeframes extends SerializableObject implements ArrayAccess, Coun
         return $this->idx;
     }
 
+    /**
+     * @return bool
+     */
     public function valid(): bool
     {
         return null !== $this->current();
@@ -117,6 +141,10 @@ class ReasonNoTimeframes extends SerializableObject implements ArrayAccess, Coun
     }
 
     /**
+     * @param mixed $offset
+     *                     
+     * @return bool
+     *             
      * @throws InvalidArgumentException
      */
     public function offsetExists(mixed $offset): bool
@@ -128,17 +156,29 @@ class ReasonNoTimeframes extends SerializableObject implements ArrayAccess, Coun
         return (bool) ($this->getReasonNoTimeframes()[$offset] ?? false);
     }
 
-    public function offsetGet($offset): ReasonNoTimeframe|null
+    /**
+     * @param mixed $offset
+     *
+     * @return ReasonNoTimeframe|null
+     */
+    public function offsetGet(mixed $offset): ReasonNoTimeframe|null
     {
         return $this->getReasonNoTimeframes()[$offset] ?? null;
     }
 
-    public function offsetSet($offset, $value): void
+    /**
+     * @param mixed $offset
+     * @param mixed $value
+     */
+    public function offsetSet(mixed $offset, mixed $value): void
     {
         $this->ReasonNoTimeframes[$offset] = $value;
     }
 
-    public function offsetUnset($offset): void
+    /**
+     * @param mixed $offset
+     */
+    public function offsetUnset(mixed $offset): void
     {
         if (isset($this->ReasonNoTimeframes[$offset])) {
             unset($this->ReasonNoTimeframes[$offset]);
@@ -146,12 +186,18 @@ class ReasonNoTimeframes extends SerializableObject implements ArrayAccess, Coun
     }
 
     #[Pure]
+    /**
+     * @return int
+     */
     public function count(): int
     {
         return count(value: $this->ReasonNoTimeframes ?? []);
     }
 
     #[ArrayShape(shape: ['ReasonNoTimeframe' => "array[]|null"])]
+    /**
+     * @return array
+     */
     public function jsonSerialize(): array
     {
         $json = parent::jsonSerialize();

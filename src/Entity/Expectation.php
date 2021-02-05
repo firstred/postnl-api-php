@@ -29,12 +29,26 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Attribute\PropInterface;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\SerializableObject;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
 
+/**
+ * Class Expectation.
+ */
 class Expectation extends SerializableObject
 {
+    /**
+     * Expectation constructor.
+     *
+     * @param string      $service
+     * @param string      $propType
+     * @param string|null $ETAFrom
+     * @param string|null $ETATo
+     *
+     * @throws InvalidArgumentException
+     */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
         string $service = '',
@@ -50,11 +64,19 @@ class Expectation extends SerializableObject
         $this->setETATo(ETATo: $ETATo);
     }
 
+    /**
+     * @return string|null
+     */
     public function getETAFrom(): string|null
     {
         return $this->ETAFrom;
     }
 
+    /**
+     * @param string|null $ETAFrom
+     *
+     * @return $this
+     */
     public function setETAFrom(string|null $ETAFrom = null): static
     {
         $this->ETAFrom = $ETAFrom;
@@ -62,11 +84,19 @@ class Expectation extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getETATo(): string|null
     {
         return $this->ETATo;
     }
 
+    /**
+     * @param string|null $ETATo
+     *
+     * @return $this
+     */
     public function setETATo(string|null $ETATo = null): static
     {
         $this->ETATo = $ETATo;

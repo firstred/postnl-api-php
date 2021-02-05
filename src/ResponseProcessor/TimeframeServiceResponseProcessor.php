@@ -36,9 +36,16 @@ use Firstred\PostNL\Exception\NotAvailableException;
 use Firstred\PostNL\Exception\ParseError;
 use Psr\Http\Message\ResponseInterface;
 
+/**
+ * Class TimeframeServiceResponseProcessor.
+ */
 class TimeframeServiceResponseProcessor extends ResponseProcessorBase implements TimeframeServiceResponseProcessorInterface
 {
     /**
+     * @param ResponseInterface $response
+     *
+     * @return CalculateTimeframesResponseDTO
+     *
      * @throws ApiException
      * @throws InvalidApiKeyException
      * @throws InvalidArgumentException

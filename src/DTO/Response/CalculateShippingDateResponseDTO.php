@@ -31,17 +31,31 @@ namespace Firstred\PostNL\DTO\Response;
 use Firstred\PostNL\Attribute\PropInterface;
 use Firstred\PostNL\Attribute\ResponseProp;
 use Firstred\PostNL\DTO\CacheableDTO;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\DeliveryDateServiceInterface;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
 use JetBrains\PhpStorm\Pure;
 use Stringable;
 
+/**
+ * Class CalculateShippingDateResponseDTO.
+ */
 class CalculateShippingDateResponseDTO extends CacheableDTO implements Stringable
 {
     #[ResponseProp(requiredFor: [DeliveryDateServiceInterface::class])]
     protected string|null $SentDate = null;
 
+    /**
+     * CalculateShippingDateResponseDTO constructor.
+     *
+     * @param string      $service
+     * @param string      $propType
+     * @param string      $cacheKey
+     * @param string|null $SentDate
+     *
+     * @throws InvalidArgumentException
+     */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES)]
         string $service,
@@ -56,11 +70,19 @@ class CalculateShippingDateResponseDTO extends CacheableDTO implements Stringabl
         $this->setSentDate(SentDate: $SentDate);
     }
 
+    /**
+     * @return string|null
+     */
     public function getSentDate(): string|null
     {
         return $this->SentDate;
     }
 
+    /**
+     * @param string|null $SentDate
+     *
+     * @return $this
+     */
     public function setSentDate(string|null $SentDate = null): static
     {
         $this->SentDate = $SentDate;
@@ -69,6 +91,9 @@ class CalculateShippingDateResponseDTO extends CacheableDTO implements Stringabl
     }
 
     #[Pure]
+    /**
+     * @return string
+     */
     public function __toString(): string
     {
         return (string) $this->getSentDate();

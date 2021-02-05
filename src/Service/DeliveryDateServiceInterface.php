@@ -40,11 +40,18 @@ use Firstred\PostNL\Exception\NotAvailableException;
 use Firstred\PostNL\Exception\ParseError;
 use Firstred\PostNL\Gateway\DeliveryDateServiceGatewayInterface;
 
+/**
+ * Interface DeliveryDateServiceInterface.
+ */
 interface DeliveryDateServiceInterface extends ServiceInterface
 {
     public const DELIVERY_OPTION_VALUES = ['Daytime', 'Evening', 'Morning', 'Noon', 'Sunday', 'Sameday', 'Afternoon', 'MyTime', 'Pickup'];
 
     /**
+     * @param CalculateDeliveryDateRequestDTO $calculateDeliveryDateRequestDTO
+     *
+     * @return CalculateDeliveryDateResponseDTO
+     *
      * @throws ApiClientException
      * @throws ApiException
      * @throws InvalidApiKeyException
@@ -57,6 +64,10 @@ interface DeliveryDateServiceInterface extends ServiceInterface
     ): CalculateDeliveryDateResponseDTO;
 
     /**
+     * @param CalculateShippingDateRequestDTO $getShippingDateRequestDTO
+     *
+     * @return CalculateShippingDateResponseDTO
+     *
      * @throws ApiClientException
      * @throws ApiException
      * @throws InvalidApiKeyException
@@ -68,7 +79,15 @@ interface DeliveryDateServiceInterface extends ServiceInterface
         CalculateShippingDateRequestDTO $getShippingDateRequestDTO,
     ): CalculateShippingDateResponseDTO;
 
+    /**
+     * @param DeliveryDateServiceGatewayInterface $gateway
+     *
+     * @return $this
+     */
     public function setGateway(DeliveryDateServiceGatewayInterface $gateway): static;
 
+    /**
+     * @return DeliveryDateServiceGatewayInterface
+     */
     public function getGateway(): DeliveryDateServiceGatewayInterface;
 }

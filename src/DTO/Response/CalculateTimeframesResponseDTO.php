@@ -38,6 +38,9 @@ use Firstred\PostNL\Service\ServiceInterface;
 use Firstred\PostNL\Service\TimeframeServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
 
+/**
+ * Class CalculateTimeframesResponseDTO.
+ */
 class CalculateTimeframesResponseDTO extends CacheableDTO
 {
     #[ResponseProp(requiredFor: [TimeframeServiceInterface::class])]
@@ -47,6 +50,14 @@ class CalculateTimeframesResponseDTO extends CacheableDTO
     protected ReasonNoTimeframes|null $ReasonNoTimeframes = null;
 
     /**
+     * CalculateTimeframesResponseDTO constructor.
+     *
+     * @param string                        $service
+     * @param string                        $propType
+     * @param string                        $cacheKey
+     * @param Timeframes|array|null         $Timeframes
+     * @param ReasonNoTimeframes|array|null $ReasonNoTimeframes
+     *
      * @throws InvalidArgumentException
      */
     public function __construct(
@@ -65,12 +76,19 @@ class CalculateTimeframesResponseDTO extends CacheableDTO
         $this->setReasonNoTimeframes(ReasonNoTimeframes: $ReasonNoTimeframes);
     }
 
+    /**
+     * @return Timeframes|null
+     */
     public function getTimeframes(): Timeframes|null
     {
         return $this->Timeframes;
     }
 
     /**
+     * @param Timeframes|array|null $Timeframes
+     *
+     * @return static
+     *
      * @throws InvalidArgumentException
      */
     public function setTimeframes(Timeframes|array|null $Timeframes = null): static
@@ -88,12 +106,19 @@ class CalculateTimeframesResponseDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return ReasonNoTimeframes|null
+     */
     public function getReasonNoTimeframes(): ReasonNoTimeframes|null
     {
         return $this->ReasonNoTimeframes;
     }
 
     /**
+     * @param ReasonNoTimeframes|array|null $ReasonNoTimeframes
+     *
+     * @return static
+     *
      * @throws InvalidArgumentException
      */
     public function setReasonNoTimeframes(ReasonNoTimeframes|array|null $ReasonNoTimeframes = null): static

@@ -32,10 +32,24 @@ use Firstred\PostNL\Attribute\PropInterface;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
 
+/**
+ * Class LabellingMessage.
+ */
 class LabellingMessage extends Message
 {
     protected string|null $PrinterType = null;
 
+    /**
+     * LabellingMessage constructor.
+     *
+     * @param string      $service
+     * @param string      $propType
+     * @param string|null $PrinterType
+     * @param string|null $MessageID
+     * @param string|null $MessageTimeStamp
+     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
         string $service = '',
@@ -56,11 +70,17 @@ class LabellingMessage extends Message
         $this->setPrintertype(PrinterType: $PrinterType);
     }
 
+    /**
+     * @return string|null
+     */
     public function getPrinterType(): string|null
     {
         return $this->PrinterType;
     }
 
+    /**
+     * @param string|null $PrinterType
+     */
     public function setPrinterType(string|null $PrinterType = null): void
     {
         $this->PrinterType = $PrinterType;

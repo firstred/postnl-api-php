@@ -30,13 +30,27 @@ namespace Firstred\PostNL\Entity;
 
 use DateTime;
 use Firstred\PostNL\Attribute\PropInterface;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\SerializableObject;
 use Firstred\PostNL\Misc\UUID;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
 
+/**
+ * Class Message.
+ */
 class Message extends SerializableObject
 {
+    /**
+     * Message constructor.
+     *
+     * @param string      $service
+     * @param string      $propType
+     * @param string|null $MessageID
+     * @param string|null $MessageTimeStamp
+     *
+     * @throws InvalidArgumentException
+     */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
         string $service = '',
@@ -52,11 +66,19 @@ class Message extends SerializableObject
         $this->setMessageTimeStamp(messageTimeStamp: $MessageTimeStamp ?: (new DateTime())->format(format: 'd-m-Y H:i:s'));
     }
 
+    /**
+     * @return string|null
+     */
     public function getMessageID(): string|null
     {
         return $this->MessageID;
     }
 
+    /**
+     * @param string|null $messageID
+     *
+     * @return $this
+     */
     public function setMessageID(string|null $messageID): static
     {
         $this->MessageID = $messageID;
@@ -64,11 +86,19 @@ class Message extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getMessageTimeStamp(): string|null
     {
         return $this->MessageTimeStamp;
     }
 
+    /**
+     * @param string|null $messageTimeStamp
+     *
+     * @return $this
+     */
     public function setMessageTimeStamp(string|null $messageTimeStamp): static
     {
         $this->MessageTimeStamp = $messageTimeStamp;

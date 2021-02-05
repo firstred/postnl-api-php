@@ -48,9 +48,21 @@ use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
+/**
+ * Class TimeframeServiceGateway.
+ */
 class TimeframeServiceGateway extends GatewayBase implements TimeframeServiceGatewayInterface
 {
     #[Pure]
+    /**
+     * TimeframeServiceGateway constructor.
+     *
+     * @param HttpClientInterface                        $httpClient
+     * @param CacheItemPoolInterface|null                $cache
+     * @param int|DateTimeInterface|DateInterval|null    $ttl
+     * @param TimeframeServiceRequestBuilderInterface    $requestBuilder
+     * @param TimeframeServiceResponseProcessorInterface $responseProcessor
+     */
     public function __construct(
         protected HttpClientInterface $httpClient,
         protected CacheItemPoolInterface|null $cache,
@@ -62,6 +74,10 @@ class TimeframeServiceGateway extends GatewayBase implements TimeframeServiceGat
     }
 
     /**
+     * @param CalculateTimeframesRequestDTO $calculateTimeframesRequestDTO
+     *
+     * @return CalculateTimeframesResponseDTO
+     *
      * @throws ApiClientException
      * @throws ApiException
      * @throws InvalidApiKeyException
@@ -81,7 +97,6 @@ class TimeframeServiceGateway extends GatewayBase implements TimeframeServiceGat
                 $request = $this->getRequestBuilder()->buildCalculateTimeframesRequest(
                     calculateTimeframesRequestDTO: $calculateTimeframesRequestDTO,
                 );
-
             } catch (InvalidArgumentException $e) {
                 if ($request) {
                     /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
@@ -134,11 +149,19 @@ class TimeframeServiceGateway extends GatewayBase implements TimeframeServiceGat
         }
     }
 
+    /**
+     * @return TimeframeServiceRequestBuilderInterface
+     */
     public function getRequestBuilder(): TimeframeServiceRequestBuilderInterface
     {
         return $this->requestBuilder;
     }
 
+    /**
+     * @param TimeframeServiceRequestBuilderInterface $requestBuilder
+     *
+     * @return $this
+     */
     public function setRequestBuilder(TimeframeServiceRequestBuilderInterface $requestBuilder): static
     {
         $this->requestBuilder = $requestBuilder;
@@ -146,11 +169,19 @@ class TimeframeServiceGateway extends GatewayBase implements TimeframeServiceGat
         return $this;
     }
 
+    /**
+     * @return TimeframeServiceResponseProcessorInterface
+     */
     public function getResponseProcessor(): TimeframeServiceResponseProcessorInterface
     {
         return $this->responseProcessor;
     }
 
+    /**
+     * @param TimeframeServiceResponseProcessorInterface $responseProcessor
+     *
+     * @return $this
+     */
     public function setResponseProcessor(TimeframeServiceResponseProcessorInterface $responseProcessor): static
     {
         $this->responseProcessor = $responseProcessor;

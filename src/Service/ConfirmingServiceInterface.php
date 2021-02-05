@@ -28,6 +28,9 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Service;
 
+/**
+ * Interface ConfirmingServiceInterface.
+ */
 interface ConfirmingServiceInterface extends ServiceInterface
 {
 }

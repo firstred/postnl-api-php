@@ -78,6 +78,10 @@ $config
         'phpdoc_no_empty_return'              => true,
         'phpdoc_var_annotation_correct_order' => true,
         'single_line_throw'                   => false,
+        'imports_order' => [
+            'class', 'function', 'const',
+        ],
+        'sort_algorithm' => 'alpha',
     ])
     ->setFinder(finder: $finder);
 

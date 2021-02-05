@@ -28,7 +28,6 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Service;
 
-use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Response\ConfirmingResponseShipment;
 use Firstred\PostNL\Exception\ApiDownException;
 use Firstred\PostNL\Exception\ApiException;
@@ -38,6 +37,9 @@ use Firstred\PostNL\HttpClient\HttpClientInterface;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Psr\Http\Message\RequestInterface;
 
+/**
+ * Class ConfirmingService.
+ */
 class ConfirmingService extends ServiceBase implements ConfirmingServiceInterface
 {
     use ServiceLoggerTrait;
@@ -161,11 +163,19 @@ class ConfirmingService extends ServiceBase implements ConfirmingServiceInterfac
         return null;
     }
 
+    /**
+     * @return HttpClientInterface
+     */
     public function getHttpClient(): HttpClientInterface
     {
         return $this->getGateway()->getHttpClient();
     }
 
+    /**
+     * @param HttpClientInterface $httpClient
+     *
+     * @return $this
+     */
     public function setHttpClient(HttpClientInterface $httpClient): static
     {
         $this->getGateway()->setHttpClient(httpClient: $httpClient);

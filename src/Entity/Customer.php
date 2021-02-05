@@ -33,8 +33,28 @@ use Firstred\PostNL\Misc\SerializableObject;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
 
+/**
+ * Class Customer.
+ */
 class Customer extends SerializableObject
 {
+    /**
+     * Customer constructor.
+     *
+     * @param string       $service
+     * @param string       $propType
+     * @param Address|null $Address
+     * @param string|null  $CollectionLocation
+     * @param string|null  $ContactPerson
+     * @param string|null  $CustomerCode
+     * @param string|null  $CustomerNumber
+     * @param string|null  $GlobalPackCustomerCode
+     * @param string|null  $GlobalPackBarcodeType
+     * @param string|null  $Email
+     * @param string|null  $Name
+     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
         string $service = '',
@@ -62,11 +82,19 @@ class Customer extends SerializableObject
         $this->setAddress(Address: $Address);
     }
 
+    /**
+     * @return Address|null
+     */
     public function getAddress(): ?Address
     {
         return $this->Address;
     }
 
+    /**
+     * @param Address|null $Address
+     *
+     * @return $this
+     */
     public function setAddress(?Address $Address = null): static
     {
         $this->Address = $Address;
@@ -74,11 +102,19 @@ class Customer extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCollectionLocation(): string|null
     {
         return $this->CollectionLocation;
     }
 
+    /**
+     * @param string|null $CollectionLocation
+     *
+     * @return $this
+     */
     public function setCollectionLocation(string|null $CollectionLocation = null): static
     {
         $this->CollectionLocation = $CollectionLocation;
@@ -86,11 +122,19 @@ class Customer extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getContactPerson(): string|null
     {
         return $this->ContactPerson;
     }
 
+    /**
+     * @param string|null $ContactPerson
+     *
+     * @return $this
+     */
     public function setContactPerson(string|null $ContactPerson = null): static
     {
         $this->ContactPerson = $ContactPerson;
@@ -98,11 +142,19 @@ class Customer extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCustomerCode(): string|null
     {
         return $this->CustomerCode;
     }
 
+    /**
+     * @param string|null $CustomerCode
+     *
+     * @return $this
+     */
     public function setCustomerCode(string|null $CustomerCode = null): static
     {
         $this->CustomerCode = $CustomerCode;
@@ -110,11 +162,19 @@ class Customer extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCustomerNumber(): string|null
     {
         return $this->CustomerNumber;
     }
 
+    /**
+     * @param string|null $CustomerNumber
+     *
+     * @return $this
+     */
     public function setCustomerNumber(string|null $CustomerNumber = null): static
     {
         $this->CustomerNumber = $CustomerNumber;
@@ -122,11 +182,19 @@ class Customer extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getGlobalPackCustomerCode(): string|null
     {
         return $this->GlobalPackCustomerCode;
     }
 
+    /**
+     * @param string|null $GlobalPackCustomerCode
+     *
+     * @return $this
+     */
     public function setGlobalPackCustomerCode(string|null $GlobalPackCustomerCode = null): static
     {
         $this->GlobalPackCustomerCode = $GlobalPackCustomerCode;
@@ -134,11 +202,19 @@ class Customer extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getGlobalPackBarcodeType(): string|null
     {
         return $this->GlobalPackBarcodeType;
     }
 
+    /**
+     * @param string|null $GlobalPackBarcodeType
+     *
+     * @return $this
+     */
     public function setGlobalPackBarcodeType(string|null $GlobalPackBarcodeType = null): static
     {
         $this->GlobalPackBarcodeType = $GlobalPackBarcodeType;
@@ -146,11 +222,19 @@ class Customer extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getEmail(): string|null
     {
         return $this->Email;
     }
 
+    /**
+     * @param string|null $Email
+     *
+     * @return $this
+     */
     public function setEmail(string|null $Email = null): static
     {
         $this->Email = $Email;
@@ -158,11 +242,19 @@ class Customer extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getName(): string|null
     {
         return $this->Name;
     }
 
+    /**
+     * @param string|null $Name
+     *
+     * @return $this
+     */
     public function setName(string|null $Name = null): static
     {
         $this->Name = $Name;

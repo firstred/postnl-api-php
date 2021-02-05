@@ -36,6 +36,9 @@ use Firstred\PostNL\Service\ServiceInterface;
 use Firstred\PostNL\Service\TimeframeServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
 
+/**
+ * Class Timeframe
+ */
 class Timeframe extends SerializableObject
 {
     #[ResponseProp(optionalFor: [TimeframeServiceInterface::class])]
@@ -78,6 +81,27 @@ class Timeframe extends SerializableObject
     #[ResponseProp(requiredFor: [TimeframeServiceInterface::class])]
     protected array|null $Timeframes = null;
 
+    /**
+     * Timeframe constructor.
+     *
+     * @param string           $service
+     * @param string           $propType
+     * @param string|null      $City
+     * @param string|null      $CountryCode
+     * @param string|null      $Date
+     * @param string|null      $EndDate
+     * @param string|null      $HouseNr
+     * @param string|null      $HouseNrExt
+     * @param array|null       $Options
+     * @param string|null      $PostalCode
+     * @param string|null      $Street
+     * @param bool|string|null $SundaySorting
+     * @param string|null      $Interval
+     * @param string|null      $Range
+     * @param array|null       $Timeframes
+     *
+     * @throws InvalidArgumentException
+     */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
         string $service = '',
@@ -116,11 +140,19 @@ class Timeframe extends SerializableObject
         $this->setTimeframes(Timeframes: $Timeframes);
     }
 
+    /**
+     * @return string|null
+     */
     public function getPostalCode(): string|null
     {
         return $this->PostalCode;
     }
 
+    /**
+     * @param string|null $PostalCode
+     *
+     * @return $this
+     */
     public function setPostalCode(string|null $PostalCode = null): static
     {
         if (is_null(value: $PostalCode)) {
@@ -132,11 +164,19 @@ class Timeframe extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCity(): string|null
     {
         return $this->City;
     }
 
+    /**
+     * @param string|null $City
+     *
+     * @return $this
+     */
     public function setCity(string|null $City = null): static
     {
         $this->City = $City;
@@ -144,11 +184,19 @@ class Timeframe extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCountryCode(): string|null
     {
         return $this->CountryCode;
     }
 
+    /**
+     * @param string|null $CountryCode
+     *
+     * @return $this
+     */
     public function setCountryCode(string|null $CountryCode = null): static
     {
         $this->CountryCode = $CountryCode;
@@ -156,11 +204,19 @@ class Timeframe extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getDate(): string|null
     {
         return $this->Date;
     }
 
+    /**
+     * @param string|null $Date
+     *
+     * @return $this
+     */
     public function setDate(string|null $Date = null): static
     {
         $this->Date = $Date;
@@ -168,11 +224,19 @@ class Timeframe extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getEndDate(): string|null
     {
         return $this->EndDate;
     }
 
+    /**
+     * @param string|null $EndDate
+     *
+     * @return $this
+     */
     public function setEndDate(string|null $EndDate = null): static
     {
         $this->EndDate = $EndDate;
@@ -180,11 +244,19 @@ class Timeframe extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getHouseNr(): string|null
     {
         return $this->HouseNr;
     }
 
+    /**
+     * @param string|null $HouseNr
+     *
+     * @return $this
+     */
     public function setHouseNr(string|null $HouseNr = null): static
     {
         $this->HouseNr = $HouseNr;
@@ -192,11 +264,19 @@ class Timeframe extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getHouseNrExt(): string|null
     {
         return $this->HouseNrExt;
     }
 
+    /**
+     * @param string|null $HouseNrExt
+     *
+     * @return $this
+     */
     public function setHouseNrExt(string|null $HouseNrExt = null): static
     {
         $this->HouseNrExt = $HouseNrExt;
@@ -204,11 +284,19 @@ class Timeframe extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return array|null
+     */
     public function getOptions(): array|null
     {
         return $this->Options;
     }
 
+    /**
+     * @param array|null $Options
+     *
+     * @return $this
+     */
     public function setOptions(array|null $Options = null): static
     {
         $this->Options = $Options;
@@ -216,11 +304,19 @@ class Timeframe extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getStreet(): string|null
     {
         return $this->Street;
     }
 
+    /**
+     * @param string|null $Street
+     *
+     * @return $this
+     */
     public function setStreet(string|null $Street = null): static
     {
         $this->Street = $Street;
@@ -228,11 +324,19 @@ class Timeframe extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return bool|null
+     */
     public function getSundaySorting(): bool|null
     {
         return $this->SundaySorting;
     }
 
+    /**
+     * @param bool|string|null $SundaySorting
+     *
+     * @return $this
+     */
     public function setSundaySorting(bool|string|null $SundaySorting = null): static
     {
         if (is_string(value: $SundaySorting)) {
@@ -248,11 +352,19 @@ class Timeframe extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getInterval(): string|null
     {
         return $this->Interval;
     }
 
+    /**
+     * @param string|null $Interval
+     *
+     * @return $this
+     */
     public function setInterval(string|null $Interval = null): static
     {
         $this->Interval = $Interval;
@@ -260,11 +372,19 @@ class Timeframe extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getRange(): string|null
     {
         return $this->Range;
     }
 
+    /**
+     * @param string|null $Range
+     *
+     * @return $this
+     */
     public function setRange(string|null $Range = null): static
     {
         $this->Range = $Range;
@@ -272,13 +392,19 @@ class Timeframe extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return array|TimeframeTimeFrame[]|null
+     */
     public function getTimeframes(): array|null
     {
         return $this->Timeframes;
     }
 
     /**
+     * @param array|null $Timeframes
      * @psalm-param list<TimeframeTimeFrame>|array{Timeframes: array<array-key, array>}|null $Timeframes
+     *
+     * @return static
      *
      * @throws InvalidArgumentException
      */

@@ -37,8 +37,6 @@ use Firstred\PostNL\Service\DeliveryDateServiceInterface;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ArrayShape;
 use JetBrains\PhpStorm\ExpectedValues;
-use JetBrains\PhpStorm\Pure;
-use ReflectionClass;
 use TypeError;
 use function date;
 use function is_array;
@@ -46,6 +44,9 @@ use function is_numeric;
 use function is_string;
 use function strtotime;
 
+/**
+ * Class CalculateDeliveryDateRequestDTO
+ */
 class CalculateDeliveryDateRequestDTO extends CacheableDTO
 {
     public const CUTOFF_TIME_ARRAY_SHAPE = [
@@ -133,6 +134,41 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected bool|null $AvailableSunday = null;
 
+    /**
+     * CalculateDeliveryDateRequestDTO constructor.
+     *
+     * @param string          $service
+     * @param string          $propType
+     * @param string          $cacheKey
+     * @param string|null     $ShippingDate
+     * @param int|string|null $ShippingDuration
+     * @param string|null     $CutOffTime
+     * @param string|null     $PostalCode
+     * @param string|null     $CountryCode
+     * @param string|null     $OriginCountryCode
+     * @param string|null     $City
+     * @param string|null     $Street
+     * @param int|string|null $HouseNumber
+     * @param string|null     $HouseNrExt
+     * @param array|null      $Options
+     * @param string|null     $CutOffTimeMonday
+     * @param bool|null       $AvailableMonday
+     * @param string|null     $CutOffTimeTuesday
+     * @param bool|null       $AvailableTuesday
+     * @param string|null     $CutOffTimeWednesday
+     * @param bool|null       $AvailableWednesday
+     * @param string|null     $CutOffTimeThursday
+     * @param bool|null       $AvailableThursday
+     * @param string|null     $CutOffTimeFriday
+     * @param bool|null       $AvailableFriday
+     * @param string|null     $CutOffTimeSaturday
+     * @param bool|null       $AvailableSaturday
+     * @param string|null     $CutOffTimeSunday
+     * @param bool|null       $AvailableSunday
+     * @param array|null      $cutOffTimes
+     *
+     * @throws InvalidArgumentException
+     */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES)]
         string $service = DeliveryDateServiceInterface::class,
@@ -201,11 +237,19 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
         }
     }
 
+    /**
+     * @return string|null
+     */
     public function getShippingDate(): string|null
     {
         return $this->ShippingDate;
     }
 
+    /**
+     * @param string|null $ShippingDate
+     *
+     * @return $this
+     */
     public function setShippingDate(string|null $ShippingDate = null): static
     {
         $this->ShippingDate = $ShippingDate;
@@ -213,11 +257,19 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getShippingDuration(): int|null
     {
         return $this->ShippingDuration;
     }
 
+    /**
+     * @param int|string|null $ShippingDuration
+     *
+     * @return $this
+     */
     public function setShippingDuration(int|string|null $ShippingDuration = null): static
     {
         if (is_string(value: $ShippingDuration)) {
@@ -233,11 +285,19 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCutOffTime(): string|null
     {
         return $this->CutOffTime;
     }
 
+    /**
+     * @param string|null $CutOffTime
+     *
+     * @return $this
+     */
     public function setCutOffTime(string|null $CutOffTime = null): static
     {
         $this->CutOffTime = $CutOffTime;
@@ -245,11 +305,19 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getPostalCode(): string|null
     {
         return $this->PostalCode;
     }
 
+    /**
+     * @param string|null $PostalCode
+     *
+     * @return $this
+     */
     public function setPostalCode(string|null $PostalCode = null): static
     {
         $this->PostalCode = $PostalCode;
@@ -257,11 +325,19 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCountryCode(): string|null
     {
         return $this->CountryCode;
     }
 
+    /**
+     * @param string|null $CountryCode
+     *
+     * @return $this
+     */
     public function setCountryCode(string|null $CountryCode = null): static
     {
         $this->CountryCode = $CountryCode;
@@ -269,11 +345,19 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getOriginCountryCode(): string|null
     {
         return $this->OriginCountryCode;
     }
 
+    /**
+     * @param string|null $OriginCountryCode
+     *
+     * @return $this
+     */
     public function setOriginCountryCode(string|null $OriginCountryCode = null): static
     {
         $this->OriginCountryCode = $OriginCountryCode;
@@ -281,11 +365,19 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCity(): string|null
     {
         return $this->City;
     }
 
+    /**
+     * @param string|null $City
+     *
+     * @return $this
+     */
     public function setCity(string|null $City = null): static
     {
         $this->City = $City;
@@ -293,11 +385,19 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getStreet(): string|null
     {
         return $this->Street;
     }
 
+    /**
+     * @param string|null $Street
+     *
+     * @return $this
+     */
     public function setStreet(string|null $Street = null): static
     {
         $this->Street = $Street;
@@ -305,11 +405,19 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getHouseNumber(): int|null
     {
         return $this->HouseNumber;
     }
 
+    /**
+     * @param int|string|null $HouseNumber
+     *
+     * @return $this
+     */
     public function setHouseNumber(int|string|null $HouseNumber = null): static
     {
         if (is_string(value: $HouseNumber)) {
@@ -325,11 +433,19 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getHouseNrExt(): string|null
     {
         return $this->HouseNrExt;
     }
 
+    /**
+     * @param string|null $HouseNrExt
+     *
+     * @return $this
+     */
     public function setHouseNrExt(string|null $HouseNrExt = null): static
     {
         $this->HouseNrExt = $HouseNrExt;
@@ -337,11 +453,19 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return array|null
+     */
     public function getOptions(): array|null
     {
         return $this->Options;
     }
 
+    /**
+     * @param array|null $Options
+     *
+     * @return $this
+     */
     public function setOptions(array|null $Options = null): static
     {
         $this->Options = $Options;
@@ -349,11 +473,19 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCutOffTimeMonday(): string|null
     {
         return $this->CutOffTimeMonday;
     }
 
+    /**
+     * @param string|null $CutOffTimeMonday
+     *
+     * @return $this
+     */
     public function setCutOffTimeMonday(string|null $CutOffTimeMonday = null): static
     {
         $this->CutOffTimeMonday = $CutOffTimeMonday;
@@ -361,11 +493,19 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return bool|null
+     */
     public function getAvailableMonday(): bool|null
     {
         return $this->AvailableMonday;
     }
 
+    /**
+     * @param bool|null $AvailableMonday
+     *
+     * @return $this
+     */
     public function setAvailableMonday(bool|null $AvailableMonday = null): static
     {
         $this->AvailableMonday = $AvailableMonday;
@@ -373,11 +513,19 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCutOffTimeTuesday(): string|null
     {
         return $this->CutOffTimeTuesday;
     }
 
+    /**
+     * @param string|null $CutOffTimeTuesday
+     *
+     * @return $this
+     */
     public function setCutOffTimeTuesday(string|null $CutOffTimeTuesday = null): static
     {
         $this->CutOffTimeTuesday = $CutOffTimeTuesday;
@@ -385,11 +533,19 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return bool|null
+     */
     public function getAvailableTuesday(): bool|null
     {
         return $this->AvailableTuesday;
     }
 
+    /**
+     * @param bool|null $AvailableTuesday
+     *
+     * @return $this
+     */
     public function setAvailableTuesday(bool|null $AvailableTuesday = null): static
     {
         $this->AvailableTuesday = $AvailableTuesday;
@@ -397,11 +553,19 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCutOffTimeWednesday(): string|null
     {
         return $this->CutOffTimeWednesday;
     }
 
+    /**
+     * @param string|null $CutOffTimeWednesday
+     *
+     * @return $this
+     */
     public function setCutOffTimeWednesday(string|null $CutOffTimeWednesday = null): static
     {
         $this->CutOffTimeWednesday = $CutOffTimeWednesday;
@@ -409,11 +573,19 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return bool|null
+     */
     public function getAvailableWednesday(): bool|null
     {
         return $this->AvailableWednesday;
     }
 
+    /**
+     * @param bool|null $AvailableWednesday
+     *
+     * @return $this
+     */
     public function setAvailableWednesday(bool|null $AvailableWednesday = null): static
     {
         $this->AvailableWednesday = $AvailableWednesday;
@@ -421,11 +593,19 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCutOffTimeThursday(): string|null
     {
         return $this->CutOffTimeThursday;
     }
 
+    /**
+     * @param string|null $CutOffTimeThursday
+     *
+     * @return $this
+     */
     public function setCutOffTimeThursday(string|null $CutOffTimeThursday = null): static
     {
         $this->CutOffTimeThursday = $CutOffTimeThursday;
@@ -433,11 +613,19 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return bool|null
+     */
     public function getAvailableThursday(): bool|null
     {
         return $this->AvailableThursday;
     }
 
+    /**
+     * @param bool|null $AvailableThursday
+     *
+     * @return $this
+     */
     public function setAvailableThursday(bool|null $AvailableThursday = null): static
     {
         $this->AvailableThursday = $AvailableThursday;
@@ -445,11 +633,19 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCutOffTimeFriday(): string|null
     {
         return $this->CutOffTimeFriday;
     }
 
+    /**
+     * @param string|null $CutOffTimeFriday
+     *
+     * @return $this
+     */
     public function setCutOffTimeFriday(string|null $CutOffTimeFriday = null): static
     {
         $this->CutOffTimeFriday = $CutOffTimeFriday;
@@ -457,11 +653,19 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return bool|null
+     */
     public function getAvailableFriday(): bool|null
     {
         return $this->AvailableFriday;
     }
 
+    /**
+     * @param bool|null $AvailableFriday
+     *
+     * @return $this
+     */
     public function setAvailableFriday(bool|null $AvailableFriday = null): static
     {
         $this->AvailableFriday = $AvailableFriday;
@@ -469,11 +673,19 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCutOffTimeSaturday(): string|null
     {
         return $this->CutOffTimeSaturday;
     }
 
+    /**
+     * @param string|null $CutOffTimeSaturday
+     *
+     * @return $this
+     */
     public function setCutOffTimeSaturday(string|null $CutOffTimeSaturday = null): static
     {
         $this->CutOffTimeSaturday = $CutOffTimeSaturday;
@@ -481,11 +693,19 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return bool|null
+     */
     public function getAvailableSaturday(): bool|null
     {
         return $this->AvailableSaturday;
     }
 
+    /**
+     * @param bool|null $AvailableSaturday
+     *
+     * @return $this
+     */
     public function setAvailableSaturday(bool|null $AvailableSaturday = null): static
     {
         $this->AvailableSaturday = $AvailableSaturday;
@@ -493,11 +713,19 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCutOffTimeSunday(): string|null
     {
         return $this->CutOffTimeSunday;
     }
 
+    /**
+     * @param string|null $CutOffTimeSunday
+     *
+     * @return $this
+     */
     public function setCutOffTimeSunday(string|null $CutOffTimeSunday = null): static
     {
         $this->CutOffTimeSunday = $CutOffTimeSunday;
@@ -505,11 +733,19 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return bool|null
+     */
     public function getAvailableSunday(): bool|null
     {
         return $this->AvailableSunday;
     }
 
+    /**
+     * @param bool|null $AvailableSunday
+     *
+     * @return $this
+     */
     public function setAvailableSunday(bool|null $AvailableSunday = null): static
     {
         $this->AvailableSunday = $AvailableSunday;
@@ -520,6 +756,8 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
     #[ArrayShape(shape: self::CUTOFF_TIME_ARRAY_SHAPE)]
     /**
      * @throws InvalidArgumentException
+     *
+     * @return array
      */
     public function getCutOffTimes(): array
     {
@@ -580,6 +818,10 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
     }
 
     /**
+     * @param array $cutOffTimes
+     *
+     * @return static
+     *
      * @throws InvalidArgumentException
      */
     public function setCutOffTimes(array $cutOffTimes): static
@@ -624,6 +866,9 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return static
+     */
     public function resetCutOffTimes(): static
     {
         $this->setCutOffTimeMonday();
@@ -643,6 +888,9 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getUniqueId(): string
     {
         $optionsArray = implode(separator: '+', array: $this->getOptions() ?? []);
@@ -650,6 +898,11 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
         return "{$this->getShortClassName()}-{$this->getShippingDate()}|{$this->getShippingDuration()}|{$this->getCutOffTime()}|{$this->getPostalCode()}|{$this->getCountryCode()}|{$this->getOriginCountryCode()}|{$this->getCity()}|{$this->getStreet()}|{$this->getHouseNumber()}|{$this->getHouseNrExt()}|{$optionsArray}|{$this->getAvailableMonday()}|{$this->getCutOffTimeMonday()}|{$this->getAvailableTuesday()}|{$this->getCutOffTimeTuesday()}|{$this->getAvailableWednesday()}|{$this->getCutOffTimeWednesday()}|{$this->getAvailableThursday()}|{$this->getCutOffTimeThursday()}|{$this->getAvailableFriday()}|{$this->getCutOffTimeFriday()}|{$this->getAvailableSaturday()}|{$this->getCutOffTimeSaturday()}|{$this->getAvailableSunday()}|{$this->getCutOffTimeSunday()}";
     }
 
+    /**
+     * @return array
+     *
+     * @throws InvalidArgumentException
+     */
     public function jsonSerialize(): array
     {
         $query = parent::jsonSerialize();

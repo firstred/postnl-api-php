@@ -43,11 +43,22 @@ use Firstred\PostNL\Gateway\DeliveryDateServiceGatewayInterface;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
 use JetBrains\PhpStorm\Pure;
 
+/**
+ * Class DeliveryDateService.
+ */
 class DeliveryDateService extends ServiceBase implements DeliveryDateServiceInterface
 {
     use ServiceLoggerTrait;
 
     #[Pure]
+    /**
+     * DeliveryDateService constructor.
+     *
+     * @param Customer                            $customer
+     * @param string                              $apiKey
+     * @param bool                                $sandbox
+     * @param DeliveryDateServiceGatewayInterface $gateway
+     */
     public function __construct(
         protected Customer $customer,
         protected string $apiKey,
@@ -58,6 +69,10 @@ class DeliveryDateService extends ServiceBase implements DeliveryDateServiceInte
     }
 
     /**
+     * @param CalculateDeliveryDateRequestDTO $calculateDeliveryDateRequestDTO
+     *
+     * @return CalculateDeliveryDateResponseDTO
+     *
      * @throws ApiClientException
      * @throws ApiException
      * @throws InvalidApiKeyException
@@ -72,6 +87,10 @@ class DeliveryDateService extends ServiceBase implements DeliveryDateServiceInte
     }
 
     /**
+     * @param CalculateShippingDateRequestDTO $getShippingDateRequestDTO
+     *
+     * @return CalculateShippingDateResponseDTO
+     *
      * @throws ApiClientException
      * @throws ApiException
      * @throws InvalidApiKeyException
@@ -85,11 +104,19 @@ class DeliveryDateService extends ServiceBase implements DeliveryDateServiceInte
         return $this->getGateway()->doCalculateShippingDateRequest(calculateShippingDateRequestDTO: $getShippingDateRequestDTO);
     }
 
+    /**
+     * @return DeliveryDateServiceGatewayInterface
+     */
     public function getGateway(): DeliveryDateServiceGatewayInterface
     {
         return $this->gateway;
     }
 
+    /**
+     * @param DeliveryDateServiceGatewayInterface $gateway
+     *
+     * @return $this
+     */
     public function setGateway(DeliveryDateServiceGatewayInterface $gateway): static
     {
         $this->gateway = $gateway;
@@ -97,11 +124,19 @@ class DeliveryDateService extends ServiceBase implements DeliveryDateServiceInte
         return $this;
     }
 
+    /**
+     * @return HttpClientInterface
+     */
     public function getHttpClient(): HttpClientInterface
     {
         return $this->getGateway()->getHttpClient();
     }
 
+    /**
+     * @param HttpClientInterface $httpClient
+     *
+     * @return $this
+     */
     public function setHttpClient(HttpClientInterface $httpClient): static
     {
         $this->getGateway()->setHttpClient(httpClient: $httpClient);

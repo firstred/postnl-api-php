@@ -35,10 +35,19 @@ use Firstred\PostNL\Misc\SerializableObject;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Cache\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
-use ReflectionClass;
 
+/**
+ * Class GatewayBase.
+ */
 abstract class GatewayBase implements GatewayInterface
 {
+    /**
+     * GatewayBase constructor.
+     *
+     * @param HttpClientInterface                     $httpClient
+     * @param CacheItemPoolInterface|null             $cache
+     * @param int|DateTimeInterface|DateInterval|null $ttl
+     */
     public function __construct(
         protected HttpClientInterface $httpClient,
         protected CacheItemPoolInterface|null $cache,
@@ -46,11 +55,19 @@ abstract class GatewayBase implements GatewayInterface
     ) {
     }
 
+    /**
+     * @return HttpClientInterface
+     */
     public function getHttpClient(): HttpClientInterface
     {
         return $this->httpClient;
     }
 
+    /**
+     * @param HttpClientInterface $httpClient
+     *
+     * @return $this
+     */
     public function setHttpClient(HttpClientInterface $httpClient): static
     {
         $this->httpClient = $httpClient;
@@ -58,11 +75,19 @@ abstract class GatewayBase implements GatewayInterface
         return $this;
     }
 
+    /**
+     * @return CacheItemPoolInterface|null
+     */
     public function getCache(): CacheItemPoolInterface|null
     {
         return $this->cache;
     }
 
+    /**
+     * @param CacheItemPoolInterface|null $cache
+     *
+     * @return $this
+     */
     public function setCache(CacheItemPoolInterface|null $cache = null): static
     {
         $this->cache = $cache;
@@ -70,11 +95,19 @@ abstract class GatewayBase implements GatewayInterface
         return $this;
     }
 
+    /**
+     * @return DateInterval|DateTimeInterface|int|null
+     */
     public function getTtl(): DateInterval|DateTimeInterface|int|null
     {
         return $this->ttl;
     }
 
+    /**
+     * @param DateInterval|DateTimeInterface|int|null $ttl
+     *
+     * @return $this
+     */
     public function setTtl(DateInterval|DateTimeInterface|int|null $ttl = null): static
     {
         $this->ttl = $ttl;
@@ -82,11 +115,19 @@ abstract class GatewayBase implements GatewayInterface
         return $this;
     }
 
+    /**
+     * @return LoggerInterface|null
+     */
     public function getLogger(): LoggerInterface|null
     {
         return $this->getHttpClient()->getLogger();
     }
 
+    /**
+     * @param LoggerInterface|null $logger
+     *
+     * @return $this
+     */
     public function setLogger(?LoggerInterface $logger = null): static
     {
         $this->getHttpClient()->setLogger();
@@ -94,11 +135,19 @@ abstract class GatewayBase implements GatewayInterface
         return $this;
     }
 
+    /**
+     * @param SerializableObject $object
+     * @param string             $cacheKey
+     */
     protected function cacheItem(SerializableObject $object, string $cacheKey): void
     {
-
     }
 
+    /**
+     * @param string $cacheKey
+     *
+     * @return SerializableObject|null
+     */
     protected function retrieveCachedItem(string $cacheKey): SerializableObject|null
     {
         // An empty cache key means it should not be cached

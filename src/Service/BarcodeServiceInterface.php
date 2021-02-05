@@ -42,9 +42,19 @@ use Firstred\PostNL\Exception\NotAvailableException;
 use Firstred\PostNL\Exception\ParseError;
 use Firstred\PostNL\Gateway\BarcodeServiceGatewayInterface;
 
+/**
+ * Interface BarcodeServiceInterface.
+ */
 interface BarcodeServiceInterface extends ServiceInterface
 {
     /**
+     * @param string      $type
+     * @param string|null $range
+     * @param string|null $serie
+     * @param bool        $eps
+     *
+     * @return GenerateBarcodeResponseDTO
+     *
      * @throws InvalidArgumentException
      * @throws InvalidBarcodeException
      * @throws ApiClientException
@@ -61,6 +71,10 @@ interface BarcodeServiceInterface extends ServiceInterface
     ): GenerateBarcodeResponseDTO;
 
     /**
+     * @param GenerateBarcodesRequestDTO $generateBarcodesRequestDTO
+     *
+     * @return GenerateBarcodesResponseDTO
+     *
      * @throws ApiClientException
      * @throws ApiException
      * @throws InvalidApiKeyException
@@ -71,6 +85,10 @@ interface BarcodeServiceInterface extends ServiceInterface
     public function generateBarcodes(GenerateBarcodesRequestDTO $generateBarcodesRequestDTO): GenerateBarcodesResponseDTO;
 
     /**
+     * @param string $iso
+     *
+     * @return GenerateBarcodeResponseDTO
+     *
      * @throws ApiClientException
      * @throws ApiException
      * @throws InvalidApiKeyException
@@ -83,6 +101,10 @@ interface BarcodeServiceInterface extends ServiceInterface
     public function generateBarcodeByCountryCode(string $iso): GenerateBarcodeResponseDTO;
 
     /**
+     * @param array $isos
+     *
+     * @return GenerateBarcodesByCountryCodesResponseDTO
+     *
      * @throws ApiClientException
      * @throws ApiException
      * @throws InvalidApiKeyException
@@ -94,7 +116,15 @@ interface BarcodeServiceInterface extends ServiceInterface
      */
     public function generateBarcodesByCountryCodes(array $isos): GenerateBarcodesByCountryCodesResponseDTO;
 
+    /**
+     * @param BarcodeServiceGatewayInterface $gateway
+     *
+     * @return $this
+     */
     public function setGateway(BarcodeServiceGatewayInterface $gateway): static;
 
+    /**
+     * @return BarcodeServiceGatewayInterface
+     */
     public function getGateway(): BarcodeServiceGatewayInterface;
 }

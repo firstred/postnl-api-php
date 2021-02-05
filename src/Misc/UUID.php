@@ -28,8 +28,6 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Misc;
 
-use JetBrains\PhpStorm\Pure;
-
 /**
  * Class UUID.
  */

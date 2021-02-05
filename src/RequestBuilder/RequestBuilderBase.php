@@ -29,19 +29,22 @@ declare(strict_types=1);
 namespace Firstred\PostNL\RequestBuilder;
 
 use Firstred\PostNL\Entity\Customer;
-use Firstred\PostNL\Exception\ApiException;
-use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Exception\NotAvailableException;
-use Firstred\PostNL\Exception\ParseError;
-use Firstred\PostNL\Misc\Message;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Log\LoggerInterface;
 
+/**
+ * Class RequestBuilderBase.
+ */
 abstract class RequestBuilderBase implements RequestBuilderInterface
 {
     public const DEFAULT_VERSION = '';
 
+    /**
+     * RequestBuilderBase constructor.
+     *
+     * @param Customer $customer
+     * @param string   $apiKey
+     * @param bool     $sandbox
+     * @param string   $version
+     */
     public function __construct(
         protected Customer $customer,
         protected string $apiKey,
@@ -53,11 +56,19 @@ abstract class RequestBuilderBase implements RequestBuilderInterface
         }
     }
 
+    /**
+     * @return Customer
+     */
     public function getCustomer(): Customer
     {
         return $this->customer;
     }
 
+    /**
+     * @param Customer $customer
+     *
+     * @return $this
+     */
     public function setCustomer(Customer $customer): static
     {
         $this->customer = $customer;
@@ -65,11 +76,19 @@ abstract class RequestBuilderBase implements RequestBuilderInterface
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getApiKey(): string
     {
         return $this->apiKey;
     }
 
+    /**
+     * @param string $apiKey
+     *
+     * @return $this
+     */
     public function setApiKey(string $apiKey): static
     {
         $this->apiKey = $apiKey;
@@ -77,11 +96,19 @@ abstract class RequestBuilderBase implements RequestBuilderInterface
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function getSandbox(): bool
     {
         return $this->sandbox;
     }
 
+    /**
+     * @param bool $sandbox
+     *
+     * @return $this
+     */
     public function setSandbox(bool $sandbox): static
     {
         $this->sandbox = $sandbox;
@@ -89,11 +116,19 @@ abstract class RequestBuilderBase implements RequestBuilderInterface
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getVersion(): string
     {
         return $this->version;
     }
 
+    /**
+     * @param string $version
+     *
+     * @return $this
+     */
     public function setVersion(string $version): static
     {
         $this->version = $version;

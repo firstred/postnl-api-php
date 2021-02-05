@@ -38,6 +38,9 @@ use Psr\Http\Message\RequestInterface;
 use function http_build_query;
 use function str_replace;
 
+/**
+ * Class LocationServiceRequestBuilder.
+ */
 class LocationServiceRequestBuilder extends RequestBuilderBase implements LocationServiceRequestBuilderInterface
 {
     public const VERSION = '2.1';
@@ -46,6 +49,10 @@ class LocationServiceRequestBuilder extends RequestBuilderBase implements Locati
     public const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2_1/locations';
 
     /**
+     * @param LookupLocationRequestDTO $lookupLocationRequestDTO
+     *
+     * @return RequestInterface
+     *
      * @throws InvalidArgumentException
      */
     public function buildLookupLocationRequest(LookupLocationRequestDTO $lookupLocationRequestDTO, ): RequestInterface
@@ -70,6 +77,10 @@ class LocationServiceRequestBuilder extends RequestBuilderBase implements Locati
     }
 
     /**
+     * @param GetNearestLocationsRequestDTO $getNearestLocationsRequestDTO
+     *
+     * @return RequestInterface
+     *
      * @throws InvalidArgumentException
      */
     public function buildGetNearestLocationsRequest(GetNearestLocationsRequestDTO $getNearestLocationsRequestDTO): RequestInterface
@@ -94,6 +105,10 @@ class LocationServiceRequestBuilder extends RequestBuilderBase implements Locati
     }
 
     /**
+     * @param GetNearestLocationsGeocodeRequestDTO $getNearestLocationsGeocodeRequestDTO
+     *
+     * @return RequestInterface
+     *
      * @throws InvalidArgumentException
      */
     public function buildGetNearestLocationsGeocodeRequest(GetNearestLocationsGeocodeRequestDTO $getNearestLocationsGeocodeRequestDTO): RequestInterface
@@ -118,6 +133,10 @@ class LocationServiceRequestBuilder extends RequestBuilderBase implements Locati
     }
 
     /**
+     * @param GetLocationsInAreaRequestDTO $getLocationsInAreaRequestDTO
+     *
+     * @return RequestInterface
+     *
      * @throws InvalidArgumentException
      */
     public function buildGetLocationsInAreaRequest(GetLocationsInAreaRequestDTO $getLocationsInAreaRequestDTO): RequestInterface

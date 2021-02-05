@@ -37,9 +37,16 @@ use Firstred\PostNL\Exception\NotAvailableException;
 use Firstred\PostNL\Exception\ParseError;
 use Psr\Http\Message\ResponseInterface;
 
+/**
+ * Interface DeliveryDateServiceResponseProcessorInterface.
+ */
 interface DeliveryDateServiceResponseProcessorInterface extends ResponseProcessorInterface
 {
     /**
+     * @param ResponseInterface $response
+     *
+     * @return CalculateDeliveryDateResponseDTO
+     *
      * @throws ApiException
      * @throws InvalidApiKeyException
      * @throws InvalidArgumentException
@@ -49,6 +56,10 @@ interface DeliveryDateServiceResponseProcessorInterface extends ResponseProcesso
     public function processCalculateDeliveryDateResponse(ResponseInterface $response): CalculateDeliveryDateResponseDTO;
 
     /**
+     * @param ResponseInterface $response
+     *
+     * @return CalculateShippingDateResponseDTO
+     *
      * @throws ApiException
      * @throws InvalidApiKeyException
      * @throws InvalidArgumentException

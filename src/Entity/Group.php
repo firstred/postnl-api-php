@@ -29,12 +29,28 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Attribute\PropInterface;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\SerializableObject;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
 
+/**
+ * Class Group.
+ */
 class Group extends SerializableObject
 {
+    /**
+     * Group constructor.
+     *
+     * @param string      $service
+     * @param string      $propType
+     * @param string|null $GroupCount
+     * @param string|null $GroupSequence
+     * @param string|null $GroupType
+     * @param string|null $MainBarcode
+     *
+     * @throws InvalidArgumentException
+     */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
         string $service = '',
@@ -72,11 +88,19 @@ class Group extends SerializableObject
         $this->setMainBarcode(MainBarcode: $MainBarcode);
     }
 
+    /**
+     * @return string|null
+     */
     public function getGroupCount(): string|null
     {
         return $this->GroupCount;
     }
 
+    /**
+     * @param string|null $GroupCount
+     *
+     * @return $this
+     */
     public function setGroupCount(string|null $GroupCount = null): static
     {
         $this->GroupCount = $GroupCount;
@@ -84,11 +108,19 @@ class Group extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getGroupSequence(): string|null
     {
         return $this->GroupSequence;
     }
 
+    /**
+     * @param string|null $GroupSequence
+     *
+     * @return $this
+     */
     public function setGroupSequence(string|null $GroupSequence = null): static
     {
         $this->GroupSequence = $GroupSequence;
@@ -96,11 +128,19 @@ class Group extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getGroupType(): string|null
     {
         return $this->GroupType;
     }
 
+    /**
+     * @param string|null $GroupType
+     *
+     * @return $this
+     */
     public function setGroupType(string|null $GroupType = null): static
     {
         $this->GroupType = $GroupType;
@@ -108,11 +148,19 @@ class Group extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getMainBarcode(): string|null
     {
         return $this->MainBarcode;
     }
 
+    /**
+     * @param string|null $MainBarcode
+     *
+     * @return $this
+     */
     public function setMainBarcode(string|null $MainBarcode = null): static
     {
         $this->MainBarcode = $MainBarcode;

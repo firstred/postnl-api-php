@@ -33,8 +33,21 @@ use Firstred\PostNL\Misc\SerializableObject;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
 
+/**
+ * Class Warning.
+ */
 class Warning extends SerializableObject
 {
+    /**
+     * Warning constructor.
+     *
+     * @param string      $service
+     * @param string      $propType
+     * @param string|null $Code
+     * @param string|null $Description
+     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
         string $service = '',
@@ -50,11 +63,19 @@ class Warning extends SerializableObject
         $this->setDescription(description: $Description);
     }
 
+    /**
+     * @return string|null
+     */
     public function getCode(): string|null
     {
         return $this->Code;
     }
 
+    /**
+     * @param string|null $code
+     *
+     * @return $this
+     */
     public function setCode(string|null $code = null): static
     {
         $this->Code = $code;
@@ -62,11 +83,19 @@ class Warning extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getDescription(): string|null
     {
         return $this->Description;
     }
 
+    /**
+     * @param string|null $description
+     *
+     * @return $this
+     */
     public function setDescription(string|null $description = null): static
     {
         $this->Description = $description;

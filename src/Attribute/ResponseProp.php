@@ -33,6 +33,9 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\ServiceInterface;
 use function is_a;
 
+/**
+ * Class ResponseProp.
+ */
 #[Attribute(Attribute::TARGET_PROPERTY)]
 final class ResponseProp implements PropInterface
 {
@@ -42,8 +45,8 @@ final class ResponseProp implements PropInterface
     /**
      * ResponseProp constructor.
      *
-     * @psalm-param list<string> $requiredFor
-     * @psalm-param list<string> $optionalFor
+     * @param array $requiredFor
+     * @param array $optionalFor
      */
     public function __construct(array $requiredFor = [], array $optionalFor = [])
     {

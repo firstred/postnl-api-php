@@ -42,9 +42,16 @@ use Firstred\PostNL\Exception\NotAvailableException;
 use Firstred\PostNL\Exception\ParseError;
 use Firstred\PostNL\Gateway\LocationServiceGatewayInterface;
 
+/**
+ * Interface LocationServiceInterface.
+ */
 interface LocationServiceInterface extends ServiceInterface
 {
     /**
+     * @param LookupLocationRequestDTO $lookupLocationRequestDTO
+     *
+     * @return GetLocationResponseDTO
+     *
      * @throws ApiClientException
      * @throws ApiException
      * @throws InvalidApiKeyException
@@ -57,6 +64,10 @@ interface LocationServiceInterface extends ServiceInterface
     ): GetLocationResponseDTO;
 
     /**
+     * @param GetNearestLocationsRequestDTO $getNearestLocationsRequestDTO
+     *
+     * @return GetLocationsResponseDTO
+     *
      * @throws ApiClientException
      * @throws ApiException
      * @throws InvalidApiKeyException
@@ -69,6 +80,10 @@ interface LocationServiceInterface extends ServiceInterface
     ): GetLocationsResponseDTO;
 
     /**
+     * @param GetNearestLocationsGeocodeRequestDTO $getNearestLocationsGeocodeRequestDTO
+     *
+     * @return GetLocationsResponseDTO
+     *
      * @throws ApiClientException
      * @throws ApiException
      * @throws InvalidApiKeyException
@@ -81,6 +96,10 @@ interface LocationServiceInterface extends ServiceInterface
     ): GetLocationsResponseDTO;
 
     /**
+     * @param GetLocationsInAreaRequestDTO $getLocationsInAreaRequestDTO
+     *
+     * @return GetLocationsResponseDTO
+     *
      * @throws ApiClientException
      * @throws ApiException
      * @throws InvalidApiKeyException
@@ -92,7 +111,15 @@ interface LocationServiceInterface extends ServiceInterface
         GetLocationsInAreaRequestDTO $getLocationsInAreaRequestDTO,
     ): GetLocationsResponseDTO;
 
+    /**
+     * @param LocationServiceGatewayInterface $gateway
+     *
+     * @return $this
+     */
     public function setGateway(LocationServiceGatewayInterface $gateway): static;
 
+    /**
+     * @return LocationServiceGatewayInterface
+     */
     public function getGateway(): LocationServiceGatewayInterface;
 }

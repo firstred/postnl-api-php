@@ -52,9 +52,21 @@ use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
+/**
+ * Class LocationServiceGateway.
+ */
 class LocationServiceGateway extends GatewayBase implements LocationServiceGatewayInterface
 {
     #[Pure]
+    /**
+     * LocationServiceGateway constructor.
+     *
+     * @param HttpClientInterface                       $httpClient
+     * @param CacheItemPoolInterface|null               $cache
+     * @param int|DateTimeInterface|DateInterval|null   $ttl
+     * @param LocationServiceRequestBuilderInterface    $requestBuilder
+     * @param LocationServiceResponseProcessorInterface $responseProcessor
+     */
     public function __construct(
         protected HttpClientInterface $httpClient,
         protected CacheItemPoolInterface|null $cache,
@@ -66,6 +78,10 @@ class LocationServiceGateway extends GatewayBase implements LocationServiceGatew
     }
 
     /**
+     * @param LookupLocationRequestDTO $lookupLocationRequestDTO
+     *
+     * @return GetLocationResponseDTO
+     *
      * @throws ApiClientException
      * @throws ApiException
      * @throws InvalidApiKeyException
@@ -84,7 +100,6 @@ class LocationServiceGateway extends GatewayBase implements LocationServiceGatew
                 $request = $this->getRequestBuilder()->buildLookupLocationRequest(
                     lookupLocationRequestDTO: $lookupLocationRequestDTO,
                 );
-
             } catch (InvalidArgumentException $e) {
                 if ($request) {
                     /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
@@ -138,6 +153,10 @@ class LocationServiceGateway extends GatewayBase implements LocationServiceGatew
     }
 
     /**
+     * @param GetNearestLocationsRequestDTO $getNearestLocationsRequestDTO
+     *
+     * @return GetLocationsResponseDTO
+     *
      * @throws ApiClientException
      * @throws ApiException
      * @throws InvalidApiKeyException
@@ -157,7 +176,6 @@ class LocationServiceGateway extends GatewayBase implements LocationServiceGatew
                 $request = $this->getRequestBuilder()->buildGetNearestLocationsRequest(
                     getNearestLocationsRequestDTO: $getNearestLocationsRequestDTO,
                 );
-
             } catch (InvalidArgumentException $e) {
                 if ($request) {
                     /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
@@ -211,6 +229,10 @@ class LocationServiceGateway extends GatewayBase implements LocationServiceGatew
     }
 
     /**
+     * @param GetNearestLocationsGeocodeRequestDTO $getNearestLocationsGeocodeRequestDTO
+     *
+     * @return GetLocationsResponseDTO
+     *
      * @throws ApiClientException
      * @throws ApiException
      * @throws InvalidApiKeyException
@@ -230,7 +252,6 @@ class LocationServiceGateway extends GatewayBase implements LocationServiceGatew
                 $request = $this->getRequestBuilder()->buildGetNearestLocationsGeocodeRequest(
                     getNearestLocationsGeocodeRequestDTO: $getNearestLocationsGeocodeRequestDTO,
                 );
-
             } catch (InvalidArgumentException $e) {
                 if ($request) {
                     /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
@@ -284,6 +305,10 @@ class LocationServiceGateway extends GatewayBase implements LocationServiceGatew
     }
 
     /**
+     * @param GetLocationsInAreaRequestDTO $getLocationsInAreaRequestDTO
+     *
+     * @return GetLocationsResponseDTO
+     *
      * @throws ApiClientException
      * @throws ApiException
      * @throws InvalidApiKeyException
@@ -303,7 +328,6 @@ class LocationServiceGateway extends GatewayBase implements LocationServiceGatew
                 $request = $this->getRequestBuilder()->buildGetLocationsInAreaRequest(
                     getLocationsInAreaRequestDTO: $getLocationsInAreaRequestDTO,
                 );
-
             } catch (InvalidArgumentException $e) {
                 if ($request) {
                     /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
@@ -356,11 +380,19 @@ class LocationServiceGateway extends GatewayBase implements LocationServiceGatew
         }
     }
 
+    /**
+     * @return LocationServiceRequestBuilderInterface
+     */
     public function getRequestBuilder(): LocationServiceRequestBuilderInterface
     {
         return $this->requestBuilder;
     }
 
+    /**
+     * @param LocationServiceRequestBuilderInterface $requestBuilder
+     *
+     * @return $this
+     */
     public function setRequestBuilder(LocationServiceRequestBuilderInterface $requestBuilder): static
     {
         $this->requestBuilder = $requestBuilder;
@@ -368,11 +400,19 @@ class LocationServiceGateway extends GatewayBase implements LocationServiceGatew
         return $this;
     }
 
+    /**
+     * @return LocationServiceResponseProcessorInterface
+     */
     public function getResponseProcessor(): LocationServiceResponseProcessorInterface
     {
         return $this->responseProcessor;
     }
 
+    /**
+     * @param LocationServiceResponseProcessorInterface $responseProcessor
+     *
+     * @return $this
+     */
     public function setResponseProcessor(LocationServiceResponseProcessorInterface $responseProcessor): static
     {
         $this->responseProcessor = $responseProcessor;

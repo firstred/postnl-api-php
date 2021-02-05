@@ -30,16 +30,24 @@ namespace Firstred\PostNL\Attribute;
 
 use Attribute;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Service\AbstractService;
 use Firstred\PostNL\Service\ServiceInterface;
 use function is_a;
 
+/**
+ * Class RequestProp.
+ */
 #[Attribute(Attribute::TARGET_PROPERTY)]
 final class RequestProp implements PropInterface
 {
     private array $requiredForServices = [];
     private array $optionalForServices = [];
 
+    /**
+     * RequestProp constructor.
+     *
+     * @param array $requiredFor
+     * @param array $optionalFor
+     */
     public function __construct(array $requiredFor = [], array $optionalFor = [])
     {
         function checkService(string $service): void

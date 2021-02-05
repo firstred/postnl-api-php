@@ -37,10 +37,21 @@ use Firstred\PostNL\Exception\NotAvailableException;
 use Firstred\PostNL\Exception\ParseError;
 use Psr\Http\Message\ResponseInterface;
 
+/**
+ * Class DeliveryDateServiceResponseProcessor.
+ */
 class DeliveryDateServiceResponseProcessor extends ResponseProcessorBase implements DeliveryDateServiceResponseProcessorInterface
 {
     /**
-     * @throws ApiException|InvalidApiKeyException|InvalidArgumentException|NotAvailableException|ParseError
+     * @param ResponseInterface $response
+     *
+     * @return CalculateDeliveryDateResponseDTO
+     *
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws InvalidArgumentException
+     * @throws NotAvailableException
+     * @throws ParseError
      */
     public function processCalculateDeliveryDateResponse(ResponseInterface $response): CalculateDeliveryDateResponseDTO
     {
@@ -51,7 +62,15 @@ class DeliveryDateServiceResponseProcessor extends ResponseProcessorBase impleme
     }
 
     /**
-     * @throws ApiException|InvalidApiKeyException|InvalidArgumentException|NotAvailableException|ParseError
+     * @param ResponseInterface $response
+     *
+     * @return CalculateShippingDateResponseDTO
+     *
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws InvalidArgumentException
+     * @throws NotAvailableException
+     * @throws ParseError
      */
     public function processGetShippingDateResponse(ResponseInterface $response): CalculateShippingDateResponseDTO
     {

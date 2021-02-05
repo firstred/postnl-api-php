@@ -30,11 +30,15 @@ namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Attribute\PropInterface;
 use Firstred\PostNL\Attribute\ResponseProp;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\SerializableObject;
 use Firstred\PostNL\Service\ServiceInterface;
 use Firstred\PostNL\Service\TimeframeServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
 
+/**
+ * Class ReasonNoTimeframe
+ */
 class ReasonNoTimeframe extends SerializableObject
 {
     #[ResponseProp(requiredFor: [TimeframeServiceInterface::class])]
@@ -55,6 +59,20 @@ class ReasonNoTimeframe extends SerializableObject
     #[ResponseProp(requiredFor: [TimeframeServiceInterface::class])]
     protected string|null $To = null;
 
+    /**
+     * ReasonNoTimeframe constructor.
+     *
+     * @param string      $service
+     * @param string      $propType
+     * @param string|null $Code
+     * @param string|null $Date
+     * @param string|null $Description
+     * @param array|null  $Options
+     * @param string|null $From
+     * @param string|null $To
+     *
+     * @throws InvalidArgumentException
+     */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
         string $service = '',
@@ -78,11 +96,19 @@ class ReasonNoTimeframe extends SerializableObject
         $this->setTo(To: $To);
     }
 
+    /**
+     * @return string|null
+     */
     public function getCode(): string|null
     {
         return $this->Code;
     }
 
+    /**
+     * @param string|null $Code
+     *
+     * @return $this
+     */
     public function setCode(string|null $Code = null): static
     {
         $this->Code = $Code;
@@ -90,11 +116,19 @@ class ReasonNoTimeframe extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getDate(): string|null
     {
         return $this->Date;
     }
 
+    /**
+     * @param string|null $Date
+     *
+     * @return $this
+     */
     public function setDate(string|null $Date = null): static
     {
         $this->Date = $Date;
@@ -102,11 +136,19 @@ class ReasonNoTimeframe extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getDescription(): string|null
     {
         return $this->Description;
     }
 
+    /**
+     * @param string|null $Description
+     *
+     * @return $this
+     */
     public function setDescription(string|null $Description = null): static
     {
         $this->Description = $Description;
@@ -114,11 +156,19 @@ class ReasonNoTimeframe extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return array|null
+     */
     public function getOptions(): array|null
     {
         return $this->Options;
     }
 
+    /**
+     * @param array|null $Options
+     *
+     * @return $this
+     */
     public function setOptions(array|null $Options = null): static
     {
         $this->Options = $Options;
@@ -126,11 +176,19 @@ class ReasonNoTimeframe extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getFrom(): string|null
     {
         return $this->From;
     }
 
+    /**
+     * @param string|null $From
+     *
+     * @return $this
+     */
     public function setFrom(string|null $From = null): static
     {
         $this->From = $From;
@@ -138,11 +196,19 @@ class ReasonNoTimeframe extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getTo(): string|null
     {
         return $this->To;
     }
 
+    /**
+     * @param string|null $To
+     *
+     * @return $this
+     */
     public function setTo(string|null $To = null): static
     {
         $this->To = $To;

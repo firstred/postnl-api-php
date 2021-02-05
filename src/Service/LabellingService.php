@@ -29,7 +29,6 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Service;
 
 use Exception;
-use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\JsonSerializableObject;
 use Firstred\PostNL\Entity\Request\LabellingResponseDto;
 use Firstred\PostNL\Entity\Response\GenerateLabelResponse;
@@ -50,6 +49,9 @@ use function json_encode;
 use const JSON_PRETTY_PRINT;
 use const JSON_UNESCAPED_SLASHES;
 
+/**
+ * Class LabellingService.
+ */
 class LabellingService extends ServiceBase implements LabellingServiceInterface
 {
     use ServiceLoggerTrait;
@@ -220,11 +222,19 @@ class LabellingService extends ServiceBase implements LabellingServiceInterface
         return null;
     }
 
+    /**
+     * @return HttpClientInterface
+     */
     public function getHttpClient(): HttpClientInterface
     {
         return $this->getGateway()->getHttpClient();
     }
 
+    /**
+     * @param HttpClientInterface $httpClient
+     *
+     * @return $this
+     */
     public function setHttpClient(HttpClientInterface $httpClient): static
     {
         $this->getGateway()->setHttpClient(httpClient: $httpClient);

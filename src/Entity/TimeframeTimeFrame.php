@@ -33,8 +33,23 @@ use Firstred\PostNL\Misc\SerializableObject;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
 
+/**
+ * Class TimeframeTimeFrame.
+ */
 class TimeframeTimeFrame extends SerializableObject
 {
+    /**
+     * TimeframeTimeFrame constructor.
+     *
+     * @param string      $service
+     * @param string      $propType
+     * @param string|null $Date
+     * @param string|null $From
+     * @param array|null  $Options
+     * @param string|null $To
+     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
         string $service = '',
@@ -54,11 +69,19 @@ class TimeframeTimeFrame extends SerializableObject
         $this->setOptions(Options: $Options);
     }
 
+    /**
+     * @return string|null
+     */
     public function getDate(): string|null
     {
         return $this->Date;
     }
 
+    /**
+     * @param string|null $Date
+     *
+     * @return $this
+     */
     public function setDate(string|null $Date = null): static
     {
         $this->Date = $Date;
@@ -66,11 +89,19 @@ class TimeframeTimeFrame extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getFrom(): string|null
     {
         return $this->From;
     }
 
+    /**
+     * @param string|null $From
+     *
+     * @return $this
+     */
     public function setFrom(string|null $From = null): static
     {
         $this->From = $From;
@@ -78,11 +109,19 @@ class TimeframeTimeFrame extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return array|null
+     */
     public function getOptions(): array|null
     {
         return $this->Options;
     }
 
+    /**
+     * @param array|null $Options
+     *
+     * @return $this
+     */
     public function setOptions(array|null $Options = null): static
     {
         $this->Options = $Options;
@@ -90,11 +129,19 @@ class TimeframeTimeFrame extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getTo(): string|null
     {
         return $this->To;
     }
 
+    /**
+     * @param string|null $To
+     *
+     * @return $this
+     */
     public function setTo(string|null $To = null): static
     {
         $this->To = $To;

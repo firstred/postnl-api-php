@@ -35,11 +35,13 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\ServiceInterface;
 use Firstred\PostNL\Service\TimeframeServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
-use JetBrains\PhpStorm\Pure;
 use function implode;
 use function is_numeric;
 use function ltrim;
 
+/**
+ * Class CalculateTimeframesRequestDTO
+ */
 class CalculateTimeframesRequestDTO extends CacheableDTO
 {
     #[RequestProp(requiredFor: ([TimeframeServiceInterface::class]))]
@@ -79,6 +81,24 @@ class CalculateTimeframesRequestDTO extends CacheableDTO
     protected string|null $TimeframeRange = null;
 
     /**
+     * CalculateTimeframesRequestDTO constructor.
+     *
+     * @param string          $service
+     * @param string          $propType
+     * @param string          $cacheKey
+     * @param string|null     $StartDate
+     * @param string|null     $EndDate
+     * @param array|null      $Options
+     * @param bool|null       $AllowSundaySorting
+     * @param string|null     $CountryCode
+     * @param string|null     $City
+     * @param string|null     $PostalCode
+     * @param string|null     $Street
+     * @param int|string|null $HouseNumber
+     * @param string|null     $HouseNrExt
+     * @param int|string|null $Interval
+     * @param string|null     $TimeframeRange
+     *
      * @throws InvalidArgumentException
      */
     public function __construct(
@@ -117,55 +137,95 @@ class CalculateTimeframesRequestDTO extends CacheableDTO
         $this->setTimeframeRange(TimeframeRange: $TimeframeRange);
     }
 
+    /**
+     * @return string|null
+     */
     public function getStartDate(): string|null
     {
         return $this->StartDate;
     }
 
+    /**
+     * @param string|null $StartDate
+     *
+     * @return $this
+     */
     public function setStartDate(string|null $StartDate = null): static
     {
         $this->StartDate = $StartDate;
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getEndDate(): string|null
     {
         return $this->EndDate;
     }
 
+    /**
+     * @param string|null $EndDate
+     *
+     * @return $this
+     */
     public function setEndDate(string|null $EndDate = null): static
     {
         $this->EndDate = $EndDate;
         return $this;
     }
 
+    /**
+     * @return array|null
+     */
     public function getOptions(): array|null
     {
         return $this->Options;
     }
 
+    /**
+     * @param array|null $Options
+     *
+     * @return $this
+     */
     public function setOptions(array|null $Options = null): static
     {
         $this->Options = $Options;
         return $this;
     }
 
+    /**
+     * @return bool|null
+     */
     public function getAllowSundaySorting(): bool|null
     {
         return $this->AllowSundaySorting;
     }
 
+    /**
+     * @param bool|null $AllowSundaySorting
+     *
+     * @return $this
+     */
     public function setAllowSundaySorting(bool|null $AllowSundaySorting = null): static
     {
         $this->AllowSundaySorting = $AllowSundaySorting;
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCountryCode(): string|null
     {
         return $this->CountryCode;
     }
 
+    /**
+     * @param string|null $CountryCode
+     *
+     * @return $this
+     */
     public function setCountryCode(string|null $CountryCode = null): static
     {
         $this->CountryCode = $CountryCode;
@@ -173,45 +233,76 @@ class CalculateTimeframesRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCity(): string|null
     {
         return $this->City;
     }
 
+    /**
+     * @param string|null $City
+     *
+     * @return $this
+     */
     public function setCity(string|null $City = null): static
     {
         $this->City = $City;
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getPostalCode(): string|null
     {
         return $this->PostalCode;
     }
 
+    /**
+     * @param string|null $PostalCode
+     *
+     * @return $this
+     */
     public function setPostalCode(string|null $PostalCode = null): static
     {
         $this->PostalCode = $PostalCode;
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getStreet(): string|null
     {
         return $this->Street;
     }
 
+    /**
+     * @param string|null $Street
+     *
+     * @return $this
+     */
     public function setStreet(string|null $Street = null): static
     {
         $this->Street = $Street;
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getHouseNumber(): int|null
     {
         return $this->HouseNumber;
     }
 
     /**
+     * @param int|string|null $HouseNumber
+     *
+     * @return static
+     *
      * @throws InvalidArgumentException
      */
     public function setHouseNumber(int|string|null $HouseNumber = null): static
@@ -229,23 +320,38 @@ class CalculateTimeframesRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getHouseNrExt(): string|null
     {
         return $this->HouseNrExt;
     }
 
+    /**
+     * @param string|null $HouseNrExt
+     *
+     * @return $this
+     */
     public function setHouseNrExt(string|null $HouseNrExt = null): static
     {
         $this->HouseNrExt = $HouseNrExt;
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getInterval(): int|null
     {
         return $this->Interval;
     }
 
     /**
+     * @param int|string|null $Interval
+     *
+     * @return static
+     *
      * @throws InvalidArgumentException
      */
     public function setInterval(int|string|null $Interval = null): static
@@ -264,17 +370,28 @@ class CalculateTimeframesRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getTimeframeRange(): string|null
     {
         return $this->TimeframeRange;
     }
 
+    /**
+     * @param string|null $TimeframeRange
+     *
+     * @return $this
+     */
     public function setTimeframeRange(string|null $TimeframeRange = null): static
     {
         $this->TimeframeRange = $TimeframeRange;
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getUniqueId(): string
     {
         $options = implode(separator: '+', array: $this->getOptions());

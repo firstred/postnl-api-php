@@ -32,9 +32,16 @@ use Firstred\PostNL\DTO\Request\CalculateTimeframesRequestDTO;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 
+/**
+ * Interface TimeframeServiceRequestBuilderInterface.
+ */
 interface TimeframeServiceRequestBuilderInterface extends RequestBuilderInterface
 {
     /**
+     * @param CalculateTimeframesRequestDTO $calculateTimeframesRequestDTO
+     *
+     * @return RequestInterface
+     *
      * @throws InvalidArgumentException
      */
     public function buildCalculateTimeframesRequest(CalculateTimeframesRequestDTO $calculateTimeframesRequestDTO): RequestInterface;

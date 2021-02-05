@@ -33,8 +33,24 @@ use Firstred\PostNL\Misc\SerializableObject;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
 
+/**
+ * Class Status.
+ */
 class Status extends SerializableObject
 {
+    /**
+     * Status constructor.
+     *
+     * @param string      $service
+     * @param string      $propType
+     * @param string|null $CurrentPhaseCode
+     * @param string|null $CurrentPhaseDescription
+     * @param string|null $CurrentStatusCode
+     * @param string|null $CurrentStatusDescription
+     * @param string|null $CurrentStatusTimeStamp
+     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
         string $service = '',
@@ -56,11 +72,19 @@ class Status extends SerializableObject
         $this->setCurrentStatusTimeStamp(CurrentStatusTimeStamp: $CurrentStatusTimeStamp);
     }
 
+    /**
+     * @return string|null
+     */
     public function getCurrentPhaseCode(): string|null
     {
         return $this->CurrentPhaseCode;
     }
 
+    /**
+     * @param string|null $CurrentPhaseCode
+     *
+     * @return $this
+     */
     public function setCurrentPhaseCode(string|null $CurrentPhaseCode = null): static
     {
         $this->CurrentPhaseCode = $CurrentPhaseCode;
@@ -68,11 +92,19 @@ class Status extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCurrentPhaseDescription(): string|null
     {
         return $this->CurrentPhaseDescription;
     }
 
+    /**
+     * @param string|null $CurrentPhaseDescription
+     *
+     * @return $this
+     */
     public function setCurrentPhaseDescription(string|null $CurrentPhaseDescription = null): static
     {
         $this->CurrentPhaseDescription = $CurrentPhaseDescription;
@@ -80,11 +112,19 @@ class Status extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCurrentStatusCode(): string|null
     {
         return $this->CurrentStatusCode;
     }
 
+    /**
+     * @param string|null $CurrentStatusCode
+     *
+     * @return $this
+     */
     public function setCurrentStatusCode(string|null $CurrentStatusCode = null): static
     {
         $this->CurrentStatusCode = $CurrentStatusCode;
@@ -92,11 +132,19 @@ class Status extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCurrentStatusDescription(): string|null
     {
         return $this->CurrentStatusDescription;
     }
 
+    /**
+     * @param string|null $CurrentStatusDescription
+     *
+     * @return $this
+     */
     public function setCurrentStatusDescription(string|null $CurrentStatusDescription = null): static
     {
         $this->CurrentStatusDescription = $CurrentStatusDescription;
@@ -104,11 +152,19 @@ class Status extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCurrentStatusTimeStamp(): string|null
     {
         return $this->CurrentStatusTimeStamp;
     }
 
+    /**
+     * @param string|null $CurrentStatusTimeStamp
+     *
+     * @return $this
+     */
     public function setCurrentStatusTimeStamp(string|null $CurrentStatusTimeStamp = null): static
     {
         $this->CurrentStatusTimeStamp = $CurrentStatusTimeStamp;

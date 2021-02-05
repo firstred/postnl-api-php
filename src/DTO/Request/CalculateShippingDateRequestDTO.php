@@ -35,9 +35,11 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\DeliveryDateServiceInterface;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
-use JetBrains\PhpStorm\Pure;
 use function is_numeric;
 
+/**
+ * Class CalculateShippingDateRequestDTO.
+ */
 class CalculateShippingDateRequestDTO extends CacheableDTO
 {
     #[RequestProp(requiredFor: [DeliveryDateServiceInterface::class])]
@@ -68,6 +70,21 @@ class CalculateShippingDateRequestDTO extends CacheableDTO
     protected string|null $HouseNrExt = null;
 
     /**
+     * CalculateShippingDateRequestDTO constructor.
+     *
+     * @param string          $service
+     * @param string          $propType
+     * @param string          $cacheKey
+     * @param string|null     $DeliveryDate
+     * @param int|string|null $ShippingDuration
+     * @param string|null     $PostalCode
+     * @param string|null     $CountryCode
+     * @param string|null     $OriginCountryCode
+     * @param string|null     $City
+     * @param string|null     $Street
+     * @param int|string|null $HouseNumber
+     * @param string|null     $HouseNrExt
+     *
      * @throws InvalidArgumentException
      */
     public function __construct(
@@ -100,11 +117,19 @@ class CalculateShippingDateRequestDTO extends CacheableDTO
         $this->setHouseNrExt(HouseNrExt: $HouseNrExt);
     }
 
+    /**
+     * @return string|null
+     */
     public function getDeliveryDate(): string|null
     {
         return $this->DeliveryDate;
     }
 
+    /**
+     * @param string|null $DeliveryDate
+     *
+     * @return $this
+     */
     public function setDeliveryDate(string|null $DeliveryDate = null): static
     {
         $this->DeliveryDate = $DeliveryDate;
@@ -112,12 +137,19 @@ class CalculateShippingDateRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getShippingDuration(): int|null
     {
         return $this->ShippingDuration;
     }
 
     /**
+     * @param int|string|null $ShippingDuration
+     *
+     * @return static
+     *
      * @throws InvalidArgumentException
      */
     public function setShippingDuration(int|string|null $ShippingDuration = null): static
@@ -135,11 +167,19 @@ class CalculateShippingDateRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getPostalCode(): string|null
     {
         return $this->PostalCode;
     }
 
+    /**
+     * @param string|null $PostalCode
+     *
+     * @return $this
+     */
     public function setPostalCode(string|null $PostalCode = null): static
     {
         $this->PostalCode = $PostalCode;
@@ -147,11 +187,19 @@ class CalculateShippingDateRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCountryCode(): string|null
     {
         return $this->CountryCode;
     }
 
+    /**
+     * @param string|null $CountryCode
+     *
+     * @return $this
+     */
     public function setCountryCode(string|null $CountryCode = null): static
     {
         $this->CountryCode = $CountryCode;
@@ -159,11 +207,19 @@ class CalculateShippingDateRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getOriginCountryCode(): string|null
     {
         return $this->OriginCountryCode;
     }
 
+    /**
+     * @param string|null $OriginCountryCode
+     *
+     * @return $this
+     */
     public function setOriginCountryCode(string|null $OriginCountryCode = null): static
     {
         $this->OriginCountryCode = $OriginCountryCode;
@@ -171,11 +227,19 @@ class CalculateShippingDateRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCity(): string|null
     {
         return $this->City;
     }
 
+    /**
+     * @param string|null $City
+     *
+     * @return $this
+     */
     public function setCity(string|null $City = null): static
     {
         $this->City = $City;
@@ -183,11 +247,19 @@ class CalculateShippingDateRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getStreet(): string|null
     {
         return $this->Street;
     }
 
+    /**
+     * @param string|null $Street
+     *
+     * @return $this
+     */
     public function setStreet(string|null $Street = null): static
     {
         $this->Street = $Street;
@@ -195,12 +267,19 @@ class CalculateShippingDateRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getHouseNumber(): int|null
     {
         return $this->HouseNumber;
     }
 
     /**
+     * @param int|string|null $HouseNumber
+     *
+     * @return static
+     *
      * @throws InvalidArgumentException
      */
     public function setHouseNumber(int|string|null $HouseNumber = null): static
@@ -218,11 +297,19 @@ class CalculateShippingDateRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getHouseNrExt(): string|null
     {
         return $this->HouseNrExt;
     }
 
+    /**
+     * @param string|null $HouseNrExt
+     *
+     * @return $this
+     */
     public function setHouseNrExt(string|null $HouseNrExt = null): static
     {
         $this->HouseNrExt = $HouseNrExt;
@@ -230,6 +317,9 @@ class CalculateShippingDateRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getUniqueId(): string
     {
         return "{$this->getShortClassName()}-{$this->getDeliveryDate()}|{$this->getShippingDuration()}|{$this->getPostalCode()}|{$this->getCountryCode()}|{$this->getOriginCountryCode()}|{$this->getCity()}|{$this->getStreet()}|{$this->getHouseNumber()}|{$this->getHouseNrExt()}";

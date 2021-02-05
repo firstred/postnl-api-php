@@ -42,7 +42,9 @@ class RFPdi extends Fpdi
     public int $angle = 0;
 
     /**
-     * @param int $angle
+     * @param int   $angle
+     * @param mixed $x
+     * @param mixed $y
      */
     public function rotate(int $angle, mixed $x = -1, mixed $y = -1): void
     {

@@ -28,6 +28,9 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Attribute;
 
+/**
+ * Interface PropInterface.
+ */
 interface PropInterface
 {
     public const PROP_TYPES = [RequestProp::class, ResponseProp::class];

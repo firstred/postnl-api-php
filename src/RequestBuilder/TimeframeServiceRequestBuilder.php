@@ -34,6 +34,9 @@ use Http\Discovery\Psr17FactoryDiscovery;
 use Psr\Http\Message\RequestInterface;
 use function http_build_query;
 
+/**
+ * Class TimeframeServiceRequestBuilder.
+ */
 class TimeframeServiceRequestBuilder extends RequestBuilderBase implements TimeframeServiceRequestBuilderInterface
 {
     public const DEFAULT_VERSION = '2.1';
@@ -42,6 +45,10 @@ class TimeframeServiceRequestBuilder extends RequestBuilderBase implements Timef
     public const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2_1/calculate/timeframes';
 
     /**
+     * @param CalculateTimeframesRequestDTO $calculateTimeframesRequestDTO
+     *
+     * @return RequestInterface
+     *
      * @throws InvalidArgumentException
      */
     public function buildCalculateTimeframesRequest(CalculateTimeframesRequestDTO $calculateTimeframesRequestDTO): RequestInterface

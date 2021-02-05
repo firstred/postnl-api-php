@@ -36,10 +36,21 @@ use Firstred\PostNL\Exception\NotAvailableException;
 use Firstred\PostNL\Exception\ParseError;
 use Psr\Http\Message\ResponseInterface;
 
+/**
+ * Class BarcodeServiceResponseProcessor.
+ */
 class BarcodeServiceResponseProcessor extends ResponseProcessorBase implements BarcodeServiceResponseProcessorInterface
 {
     /**
-     * @throws InvalidArgumentException|ParseError|ApiException|InvalidApiKeyException|NotAvailableException
+     * @param ResponseInterface $response
+     *
+     * @return GenerateBarcodeResponseDTO
+     *
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws InvalidArgumentException
+     * @throws NotAvailableException
+     * @throws ParseError
      */
     public function processGenerateBarcodeResponse(ResponseInterface $response): GenerateBarcodeResponseDTO
     {

@@ -30,19 +30,33 @@ namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Attribute\PropInterface;
 use Firstred\PostNL\Entity\Response\GetSignatureResponseSignature;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\SerializableObject;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
 
+/**
+ * Class Signature.
+ */
 class Signature extends SerializableObject
 {
+    /**
+     * Signature constructor.
+     *
+     * @param string                             $service
+     * @param string                             $propType
+     * @param GetSignatureResponseSignature|null $GetSignatureResponseSignature
+     * @param array|null                         $Warnings
+     *
+     * @throws InvalidArgumentException
+     */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
         string $service = '',
         #[ExpectedValues(values: PropInterface::PROP_TYPES + [''])]
         string $propType = '',
 
-        protected ?GetSignatureResponseSignature $GetSignatureResponseSignature = null,
+        protected GetSignatureResponseSignature|null $GetSignatureResponseSignature = null,
         protected array|null $Warnings = null,
     ) {
         parent::__construct(service: $service, propType: $propType);
@@ -51,11 +65,19 @@ class Signature extends SerializableObject
         $this->setWarnings(Warnings: $Warnings);
     }
 
+    /**
+     * @return GetSignatureResponseSignature|null
+     */
     public function getGetSignatureResponseSignature(): ?GetSignatureResponseSignature
     {
         return $this->GetSignatureResponseSignature;
     }
 
+    /**
+     * @param GetSignatureResponseSignature|null $GetSignatureResponseSignature
+     *
+     * @return $this
+     */
     public function setGetSignatureResponseSignature(?GetSignatureResponseSignature $GetSignatureResponseSignature = null): static
     {
         $this->GetSignatureResponseSignature = $GetSignatureResponseSignature;
@@ -63,11 +85,19 @@ class Signature extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return array|null
+     */
     public function getWarnings(): array|null
     {
         return $this->Warnings;
     }
 
+    /**
+     * @param array|null $Warnings
+     *
+     * @return $this
+     */
     public function setWarnings(array|null $Warnings = null): static
     {
         $this->Warnings = $Warnings;

@@ -28,6 +28,9 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Exception;
 
+/**
+ * Class NotImplementedException.
+ */
 class NotImplementedException extends PostNLClientException
 {
 }

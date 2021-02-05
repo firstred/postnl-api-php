@@ -16,6 +16,9 @@ use function is_null;
 use function is_numeric;
 use function strtotime;
 
+/**
+ * Class GetNearestLocationsRequestDTO
+ */
 class GetNearestLocationsRequestDTO extends CacheableDTO
 {
     #[RequestProp(requiredFor: [LocationServiceInterface::class])]
@@ -42,6 +45,23 @@ class GetNearestLocationsRequestDTO extends CacheableDTO
     #[RequestProp(requiredFor: [LocationServiceInterface::class])]
     protected array|null $DeliveryOptions = null;
 
+    /**
+     * GetNearestLocationsRequestDTO constructor.
+     *
+     * @param string          $service
+     * @param string          $propType
+     * @param string          $cacheKey
+     * @param string|null     $CountryCode
+     * @param string|null     $PostalCode
+     * @param string|null     $City
+     * @param string|null     $Street
+     * @param int|string|null $HouseNumber
+     * @param string|null     $DeliveryDate
+     * @param string|null     $OpeningTime
+     * @param array|null      $DeliveryOptions
+     *
+     * @throws InvalidArgumentException
+     */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
         string $service = LocationServiceInterface::class,
@@ -70,29 +90,48 @@ class GetNearestLocationsRequestDTO extends CacheableDTO
         $this->setDeliveryOptions(DeliveryOptions: $DeliveryOptions);
     }
 
+    /**
+     * @return string|null
+     */
     public function getCountryCode(): ?string
     {
         return $this->CountryCode;
     }
 
-    public function setCountryCode(?string $CountryCode = null): static
+    /**
+     * @param string|null $CountryCode
+     *
+     * @return $this
+     */
+    public function setCountryCode(string|null $CountryCode = null): static
     {
         $this->CountryCode = $CountryCode;
         return $this;
     }
 
-    public function getPostalCode(): ?string
+    /**
+     * @return string|null
+     */
+    public function getPostalCode(): string|null
     {
         return $this->PostalCode;
     }
 
-    public function setPostalCode(?string $PostalCode = null): static
+    /**
+     * @param string|null $PostalCode
+     *
+     * @return $this
+     */
+    public function setPostalCode(string|null $PostalCode = null): static
     {
         $this->PostalCode = $PostalCode;
         return $this;
     }
 
-    public function getCity(): ?string
+    /**
+     * @return string|null
+     */
+    public function getCity(): string|null
     {
         return $this->City;
     }
@@ -114,12 +153,16 @@ class GetNearestLocationsRequestDTO extends CacheableDTO
         return $this;
     }
 
-    public function getHouseNumber(): ?int
+    public function getHouseNumber(): int|null
     {
         return $this->HouseNumber;
     }
 
     /**
+     * @param int|string|null $HouseNumber
+     *
+     * @return static
+     *
      * @throws InvalidArgumentException
      */
     public function setHouseNumber(int|string|null $HouseNumber = null): static
@@ -137,34 +180,34 @@ class GetNearestLocationsRequestDTO extends CacheableDTO
         return $this;
     }
 
-    public function getDeliveryDate(): ?string
+    public function getDeliveryDate(): string|null
     {
         return $this->DeliveryDate;
     }
 
-    public function setDeliveryDate(?string $DeliveryDate = null): static
+    public function setDeliveryDate(string|null $DeliveryDate = null): static
     {
         $this->DeliveryDate = $DeliveryDate;
         return $this;
     }
 
-    public function getOpeningTime(): ?string
+    public function getOpeningTime(): string|null
     {
         return $this->OpeningTime;
     }
 
-    public function setOpeningTime(?string $OpeningTime = null): static
+    public function setOpeningTime(string|null $OpeningTime = null): static
     {
         $this->OpeningTime = $OpeningTime;
         return $this;
     }
 
-    public function getDeliveryOptions(): ?array
+    public function getDeliveryOptions(): array|null
     {
         return $this->DeliveryOptions;
     }
 
-    public function setDeliveryOptions(?array $DeliveryOptions = null): static
+    public function setDeliveryOptions(array|null $DeliveryOptions = null): static
     {
         $this->DeliveryOptions = $DeliveryOptions;
         return $this;

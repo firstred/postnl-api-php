@@ -41,9 +41,16 @@ use Firstred\PostNL\Exception\ParseError;
 use Firstred\PostNL\RequestBuilder\DeliveryDateServiceRequestBuilderInterface;
 use Firstred\PostNL\ResponseProcessor\DeliveryDateServiceResponseProcessorInterface;
 
+/**
+ * Interface DeliveryDateServiceGatewayInterface.
+ */
 interface DeliveryDateServiceGatewayInterface extends GatewayInterface
 {
     /**
+     * @param CalculateDeliveryDateRequestDTO $calculateDeliveryDateRequestDTO
+     *
+     * @return CalculateDeliveryDateResponseDTO
+     *
      * @throws ApiClientException
      * @throws ApiException
      * @throws InvalidApiKeyException
@@ -54,6 +61,10 @@ interface DeliveryDateServiceGatewayInterface extends GatewayInterface
     public function doCalculateDeliveryDateRequest(CalculateDeliveryDateRequestDTO $calculateDeliveryDateRequestDTO): CalculateDeliveryDateResponseDTO;
 
     /**
+     * @param CalculateShippingDateRequestDTO $calculateShippingDateRequestDTO
+     *
+     * @return CalculateShippingDateResponseDTO
+     *
      * @throws ApiClientException
      * @throws ApiException
      * @throws InvalidApiKeyException
@@ -63,11 +74,27 @@ interface DeliveryDateServiceGatewayInterface extends GatewayInterface
      */
     public function doCalculateShippingDateRequest(CalculateShippingDateRequestDTO $calculateShippingDateRequestDTO): CalculateShippingDateResponseDTO;
 
+    /**
+     * @return DeliveryDateServiceRequestBuilderInterface
+     */
     public function getRequestBuilder(): DeliveryDateServiceRequestBuilderInterface;
 
+    /**
+     * @param DeliveryDateServiceRequestBuilderInterface $requestBuilder
+     *
+     * @return static
+     */
     public function setRequestBuilder(DeliveryDateServiceRequestBuilderInterface $requestBuilder): static;
 
+    /**
+     * @return DeliveryDateServiceResponseProcessorInterface
+     */
     public function getResponseProcessor(): DeliveryDateServiceResponseProcessorInterface;
 
+    /**
+     * @param DeliveryDateServiceResponseProcessorInterface $responseProcessor
+     *
+     * @return static
+     */
     public function setResponseProcessor(DeliveryDateServiceResponseProcessorInterface $responseProcessor): static;
 }

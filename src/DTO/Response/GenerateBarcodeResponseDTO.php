@@ -31,17 +31,31 @@ namespace Firstred\PostNL\DTO\Response;
 use Firstred\PostNL\Attribute\PropInterface;
 use Firstred\PostNL\Attribute\ResponseProp;
 use Firstred\PostNL\DTO\CacheableDTO;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\BarcodeServiceInterface;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
 use JetBrains\PhpStorm\Pure;
 use Stringable;
 
+/**
+ * Class GenerateBarcodeResponseDTO.
+ */
 class GenerateBarcodeResponseDTO extends CacheableDTO implements Stringable
 {
     #[ResponseProp(requiredFor: [BarcodeServiceInterface::class])]
     protected string|null $Barcode = null;
 
+    /**
+     * GenerateBarcodeResponseDTO constructor.
+     *
+     * @param string      $service
+     * @param string      $propType
+     * @param string      $cacheKey
+     * @param string|null $Barcode
+     *
+     * @throws InvalidArgumentException
+     */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES)]
         string $service = BarcodeServiceInterface::class,
@@ -56,11 +70,19 @@ class GenerateBarcodeResponseDTO extends CacheableDTO implements Stringable
         $this->setBarcode(Barcode: $Barcode);
     }
 
+    /**
+     * @return string|null
+     */
     public function getBarcode(): string|null
     {
         return $this->Barcode;
     }
 
+    /**
+     * @param string|null $Barcode
+     *
+     * @return $this
+     */
     public function setBarcode(string|null $Barcode = null): static
     {
         $this->Barcode = $Barcode;
@@ -69,6 +91,9 @@ class GenerateBarcodeResponseDTO extends CacheableDTO implements Stringable
     }
 
     #[Pure]
+    /**
+     * @return string
+     */
     public function __toString(): string
     {
         return (string) $this->getBarcode();

@@ -36,6 +36,9 @@ use Psr\Http\Message\RequestInterface;
 use function http_build_query;
 use function str_replace;
 
+/**
+ * Class DeliveryDateServiceRequestBuilder.
+ */
 class DeliveryDateServiceRequestBuilder extends RequestBuilderBase implements DeliveryDateServiceRequestBuilderInterface
 {
     public const DEFAULT_VERSION = '2.2';
@@ -44,6 +47,10 @@ class DeliveryDateServiceRequestBuilder extends RequestBuilderBase implements De
     public const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/{{version}}/calculate/date';
 
     /**
+     * @param CalculateDeliveryDateRequestDTO $calculateDeliveryDateRequestDTO
+     *
+     * @return RequestInterface
+     *
      * @throws InvalidArgumentException
      */
     public function buildCalculateDeliveryDateRequest(CalculateDeliveryDateRequestDTO $calculateDeliveryDateRequestDTO): RequestInterface
@@ -62,6 +69,10 @@ class DeliveryDateServiceRequestBuilder extends RequestBuilderBase implements De
     }
 
     /**
+     * @param CalculateShippingDateRequestDTO $calculateShippingDateRequestDTO
+     *
+     * @return RequestInterface
+     *
      * @throws InvalidArgumentException
      */
     public function buildCalculateShippingDateRequest(CalculateShippingDateRequestDTO $calculateShippingDateRequestDTO): RequestInterface

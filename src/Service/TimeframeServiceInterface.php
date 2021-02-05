@@ -38,9 +38,16 @@ use Firstred\PostNL\Exception\NotAvailableException;
 use Firstred\PostNL\Exception\ParseError;
 use Firstred\PostNL\Gateway\TimeframeServiceGatewayInterface;
 
+/**
+ * Interface TimeframeServiceInterface.
+ */
 interface TimeframeServiceInterface extends ServiceInterface
 {
     /**
+     * @param CalculateTimeframesRequestDTO $calculateTimeframesRequestDTO
+     *
+     * @return CalculateTimeframesResponseDTO
+     *
      * @throws ApiClientException
      * @throws ApiException
      * @throws InvalidApiKeyException
@@ -50,7 +57,15 @@ interface TimeframeServiceInterface extends ServiceInterface
      */
     public function calculateTimeframes(CalculateTimeframesRequestDTO $calculateTimeframesRequestDTO): CalculateTimeframesResponseDTO;
 
+    /**
+     * @param TimeframeServiceGatewayInterface $gateway
+     *
+     * @return $this
+     */
     public function setGateway(TimeframeServiceGatewayInterface $gateway): static;
 
+    /**
+     * @return TimeframeServiceGatewayInterface
+     */
     public function getGateway(): TimeframeServiceGatewayInterface;
 }

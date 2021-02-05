@@ -35,9 +35,16 @@ use Firstred\PostNL\DTO\Request\LookupLocationRequestDTO;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 
+/**
+ * Interface LocationServiceRequestBuilderInterface.
+ */
 interface LocationServiceRequestBuilderInterface extends RequestBuilderInterface
 {
     /**
+     * @param LookupLocationRequestDTO $lookupLocationRequestDTO
+     *
+     * @return RequestInterface
+     *
      * @throws InvalidArgumentException
      */
     public function buildLookupLocationRequest(
@@ -45,6 +52,10 @@ interface LocationServiceRequestBuilderInterface extends RequestBuilderInterface
     ): RequestInterface;
 
     /**
+     * @param GetNearestLocationsRequestDTO $getNearestLocationsRequestDTO
+     *
+     * @return RequestInterface
+     *
      * @throws InvalidArgumentException
      */
     public function buildGetNearestLocationsRequest(
@@ -52,6 +63,10 @@ interface LocationServiceRequestBuilderInterface extends RequestBuilderInterface
     ): RequestInterface;
 
     /**
+     * @param GetNearestLocationsGeocodeRequestDTO $getNearestLocationsGeocodeRequestDTO
+     *
+     * @return RequestInterface
+     *
      * @throws InvalidArgumentException
      */
     public function buildGetNearestLocationsGeocodeRequest(
@@ -59,6 +74,10 @@ interface LocationServiceRequestBuilderInterface extends RequestBuilderInterface
     ): RequestInterface;
 
     /**
+     * @param GetLocationsInAreaRequestDTO $getLocationsInAreaRequestDTO
+     *
+     * @return RequestInterface
+     *
      * @throws InvalidArgumentException
      */
     public function buildGetLocationsInAreaRequest(

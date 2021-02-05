@@ -54,8 +54,8 @@ use ArrayIterator;
 use Exception;
 use Http\Promise\Promise;
 use Iterator;
-use function reset;
 use Throwable;
+use function reset;
 
 /**
  * Represents a promise that iterates over many promises and invokes
@@ -114,6 +114,9 @@ class EachPromise
         $this->onRejected = $config['rejected']     ?? null;
     }
 
+    /**
+     * @return Promise|null
+     */
     public function promise(): Promise|null
     {
         if ($this->aggregate) {
@@ -246,6 +249,9 @@ class EachPromise
         return true;
     }
 
+    /**
+     * @return bool
+     */
     private function advanceIterator(): bool
     {
         // Place a lock on the iterator so that we ensure to not recurse,
@@ -269,6 +275,9 @@ class EachPromise
         }
     }
 
+    /**
+     * @param mixed $idx
+     */
     private function step(mixed $idx): void
     {
         // If the promise was already resolved, then ignore this step.
@@ -287,6 +296,9 @@ class EachPromise
         }
     }
 
+    /**
+     * @return bool
+     */
     private function checkIfFinished(): bool
     {
         if (!$this->pending && !$this->iterable->valid()) {

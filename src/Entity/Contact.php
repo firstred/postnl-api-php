@@ -30,11 +30,15 @@ namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Attribute\PropInterface;
 use Firstred\PostNL\Attribute\RequestProp;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\SerializableObject;
 use Firstred\PostNL\Service\LabellingServiceInterface;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
 
+/**
+ * Class Contact.
+ */
 class Contact extends SerializableObject
 {
     #[RequestProp(optionalFor: [LabellingServiceInterface::class])]
@@ -46,6 +50,18 @@ class Contact extends SerializableObject
     #[RequestProp(optionalFor: [LabellingServiceInterface::class])]
     protected string|null $TelNr = null;
 
+    /**
+     * Contact constructor.
+     *
+     * @param string      $service
+     * @param string      $propType
+     * @param string|null $ContactType
+     * @param string|null $Email
+     * @param string|null $SMSNr
+     * @param string|null $TelNr
+     *
+     * @throws InvalidArgumentException
+     */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
         string $service = '',
@@ -65,11 +81,19 @@ class Contact extends SerializableObject
         $this->setTelNr(TelNr: $TelNr);
     }
 
+    /**
+     * @return string|null
+     */
     public function getContactType(): string|null
     {
         return $this->ContactType;
     }
 
+    /**
+     * @param string|null $ContactType
+     *
+     * @return $this
+     */
     public function setContactType(string|null $ContactType = null): static
     {
         $this->ContactType = $ContactType;
@@ -77,11 +101,19 @@ class Contact extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getEmail(): string|null
     {
         return $this->Email;
     }
 
+    /**
+     * @param string|null $Email
+     *
+     * @return $this
+     */
     public function setEmail(string|null $Email = null): static
     {
         $this->Email = $Email;
@@ -89,11 +121,19 @@ class Contact extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getSMSNr(): string|null
     {
         return $this->SMSNr;
     }
 
+    /**
+     * @param string|null $SMSNr
+     *
+     * @return $this
+     */
     public function setSMSNr(string|null $SMSNr = null): static
     {
         $this->SMSNr = $SMSNr;
@@ -101,11 +141,19 @@ class Contact extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getTelNr(): string|null
     {
         return $this->TelNr;
     }
 
+    /**
+     * @param string|null $TelNr
+     *
+     * @return $this
+     */
     public function setTelNr(string|null $TelNr = null): static
     {
         $this->TelNr = $TelNr;

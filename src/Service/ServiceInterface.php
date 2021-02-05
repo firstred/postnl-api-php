@@ -32,6 +32,9 @@ use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Interface ServiceInterface.
+ */
 interface ServiceInterface
 {
     public const SERVICES = [
@@ -45,23 +48,63 @@ interface ServiceInterface
         TimeframeServiceInterface::class,
     ];
 
+    /**
+     * @return Customer
+     */
     public function getCustomer(): Customer;
 
+    /**
+     * @param Customer $customer
+     *
+     * @return $this
+     */
     public function setCustomer(Customer $customer): static;
 
+    /**
+     * @return string
+     */
     public function getApiKey(): string;
 
+    /**
+     * @param string $apiKey
+     *
+     * @return $this
+     */
     public function setApiKey(string $apiKey): static;
 
+    /**
+     * @return bool
+     */
     public function isSandbox(): bool;
 
+    /**
+     * @param bool $sandbox
+     *
+     * @return $this
+     */
     public function setSandbox(bool $sandbox): static;
 
+    /**
+     * @return HttpClientInterface
+     */
     public function getHttpClient(): HttpClientInterface;
 
+    /**
+     * @param HttpClientInterface $httpClient
+     *
+     * @return $this
+     */
     public function setHttpClient(HttpClientInterface $httpClient): static;
 
+    /**
+     * @return LoggerInterface|null
+     */
     public function getLogger(): LoggerInterface|null;
 
+    /**
+     * @param LoggerInterface|null $logger
+     *
+     * @return $this
+     */
     public function setLogger(LoggerInterface|null $logger): static;
 }

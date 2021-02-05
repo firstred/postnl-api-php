@@ -33,8 +33,27 @@ use Firstred\PostNL\Misc\SerializableObject;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
 
+/**
+ * Class Amount.
+ */
 class Amount extends SerializableObject
 {
+    /**
+     * Amount constructor.
+     *
+     * @param string      $service
+     * @param string      $propType
+     * @param string|null $AccountName
+     * @param string|null $AmountType
+     * @param string|null $BIC
+     * @param string|null $Currency
+     * @param string|null $IBAN
+     * @param string|null $Reference
+     * @param string|null $TransactionNumber
+     * @param string|null $Value
+     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
         string $service = '',
@@ -62,11 +81,19 @@ class Amount extends SerializableObject
         $this->setValue(Value: $Value);
     }
 
+    /**
+     * @return string|null
+     */
     public function getAmountType(): string|null
     {
         return $this->AmountType;
     }
 
+    /**
+     * @param string|int|null $AmountType
+     *
+     * @return $this
+     */
     public function setAmountType(string|int|null $AmountType = null): static
     {
         if (is_null(value: $AmountType)) {
@@ -78,11 +105,19 @@ class Amount extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getAccountName(): string|null
     {
         return $this->AccountName;
     }
 
+    /**
+     * @param string|null $AccountName
+     *
+     * @return $this
+     */
     public function setAccountName(string|null $AccountName = null): static
     {
         $this->AccountName = $AccountName;
@@ -90,11 +125,19 @@ class Amount extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getBIC(): string|null
     {
         return $this->BIC;
     }
 
+    /**
+     * @param string|null $BIC
+     *
+     * @return $this
+     */
     public function setBIC(string|null $BIC = null): static
     {
         $this->BIC = $BIC;
@@ -102,11 +145,19 @@ class Amount extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCurrency(): string|null
     {
         return $this->Currency;
     }
 
+    /**
+     * @param string|null $Currency
+     *
+     * @return $this
+     */
     public function setCurrency(string|null $Currency = null): static
     {
         $this->Currency = $Currency;
@@ -114,11 +165,19 @@ class Amount extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getIBAN(): string|null
     {
         return $this->IBAN;
     }
 
+    /**
+     * @param string|null $IBAN
+     *
+     * @return $this
+     */
     public function setIBAN(string|null $IBAN = null): static
     {
         $this->IBAN = $IBAN;
@@ -126,11 +185,19 @@ class Amount extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getReference(): string|null
     {
         return $this->Reference;
     }
 
+    /**
+     * @param string|null $Reference
+     *
+     * @return $this
+     */
     public function setReference(string|null $Reference = null): static
     {
         $this->Reference = $Reference;
@@ -138,11 +205,19 @@ class Amount extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getTransactionNumber(): string|null
     {
         return $this->TransactionNumber;
     }
 
+    /**
+     * @param string|null $TransactionNumber
+     *
+     * @return $this
+     */
     public function setTransactionNumber(string|null $TransactionNumber = null): static
     {
         $this->TransactionNumber = $TransactionNumber;
@@ -150,11 +225,19 @@ class Amount extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getValue(): string|null
     {
         return $this->Value;
     }
 
+    /**
+     * @param string|null $Value
+     *
+     * @return $this
+     */
     public function setValue(string|null $Value = null): static
     {
         $this->Value = $Value;

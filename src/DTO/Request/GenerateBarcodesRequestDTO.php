@@ -42,6 +42,9 @@ use JetBrains\PhpStorm\Pure;
 use function array_key_exists;
 use function array_keys;
 
+/**
+ * Class GenerateBarcodesRequestDTO.
+ */
 class GenerateBarcodesRequestDTO extends CacheableDTO implements ArrayAccess, Countable, Iterator
 {
     private int $idx = 0;
@@ -50,6 +53,13 @@ class GenerateBarcodesRequestDTO extends CacheableDTO implements ArrayAccess, Co
     protected array $requests = [];
 
     /**
+     * GenerateBarcodesRequestDTO constructor.
+     *
+     * @param string $service
+     * @param string $propType
+     * @param string $cacheKey
+     * @param array  $requests
+     *
      * @throws InvalidArgumentException
      */
     public function __construct(
@@ -68,6 +78,9 @@ class GenerateBarcodesRequestDTO extends CacheableDTO implements ArrayAccess, Co
     }
 
     #[Pure]
+    /**
+     * @return GenerateBarcodeRequestDTO
+     */
     public function current(): GenerateBarcodeRequestDTO
     {
         return array_values(array: $this->requests)[$this->idx];
@@ -79,12 +92,18 @@ class GenerateBarcodesRequestDTO extends CacheableDTO implements ArrayAccess, Co
     }
 
     #[Pure]
+    /**
+     * @return string
+     */
     public function key(): string
     {
         return array_keys(array: $this->requests)[$this->idx];
     }
 
     #[Pure]
+    /**
+     * @return bool
+     */
     public function valid(): bool
     {
         return isset(array_keys(array: $this->requests)[$this->idx]);
@@ -96,6 +115,11 @@ class GenerateBarcodesRequestDTO extends CacheableDTO implements ArrayAccess, Co
     }
 
     #[Pure]
+    /**
+     * @param mixed $offset
+     *
+     * @return bool
+     */
     public function offsetExists(mixed $offset): bool
     {
         if (!is_string(value: $offset)) {
@@ -106,6 +130,9 @@ class GenerateBarcodesRequestDTO extends CacheableDTO implements ArrayAccess, Co
     }
 
     #[Pure]
+    /**
+     * @return GenerateBarcodeRequestDTO|null
+     */
     public function offsetGet(mixed $offset): GenerateBarcodeRequestDTO|null
     {
         if (!$this->offsetExists(offset: $offset)) {
@@ -116,6 +143,9 @@ class GenerateBarcodesRequestDTO extends CacheableDTO implements ArrayAccess, Co
     }
 
     /**
+     * @param mixed $offset
+     * @param mixed $value
+     *
      * @throws InvalidArgumentException
      */
     public function offsetSet(mixed $offset, mixed $value): void
@@ -144,6 +174,9 @@ class GenerateBarcodesRequestDTO extends CacheableDTO implements ArrayAccess, Co
         $this->requests[$offset] = $value;
     }
 
+    /**
+     * @param mixed $offset
+     */
     public function offsetUnset(mixed $offset): void
     {
         if (!$this->offsetExists(offset: $offset)) {
@@ -154,18 +187,27 @@ class GenerateBarcodesRequestDTO extends CacheableDTO implements ArrayAccess, Co
     }
 
     #[Pure]
+    /**
+     * @return int
+     */
     public function count(): int
     {
         return count(value: $this->requests);
     }
 
+    /**
+     * @return array|GenerateBarcodeRequestDTO[]
+     */
     public function getRequests(): array
     {
         return $this->requests;
     }
 
     /**
+     * @param array $requests
      * @psalm-param array<int|string, GenerateBarcodeRequestDTO> $requests
+     *
+     * @return static
      */
     public function setRequests(array $requests): static
     {
@@ -174,6 +216,10 @@ class GenerateBarcodesRequestDTO extends CacheableDTO implements ArrayAccess, Co
         return $this;
     }
 
+    /**
+     * @return array
+     * @throws InvalidArgumentException
+     */
     public function jsonSerialize(): array
     {
         return array_map(

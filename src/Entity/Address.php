@@ -37,6 +37,9 @@ use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
 use function is_numeric;
 
+/**
+ * Class Address
+ */
 class Address extends SerializableObject
 {
     /*
@@ -123,6 +126,33 @@ class Address extends SerializableObject
     /** @var array|null Array with optional properties */
     protected array|null $other = null;
 
+    /**
+     * Address constructor.
+     *
+     * @param string          $service
+     * @param string          $propType
+     * @param string|null     $AddressType
+     * @param string|null     $Area
+     * @param string|null     $Buildingname
+     * @param string|null     $City
+     * @param string|null     $CompanyName
+     * @param string|null     $Countrycode
+     * @param string|null     $Department
+     * @param string|null     $Doorcode
+     * @param string|null     $FirstName
+     * @param string|null     $Floor
+     * @param int|string|null $HouseNr
+     * @param int|string|null $HouseNrExt
+     * @param string|null     $StreetHouseNrExt
+     * @param string|null     $Name
+     * @param string|null     $Region
+     * @param string|null     $Remark
+     * @param string|null     $Street
+     * @param string|null     $Zipcode
+     * @param array|null      $other
+     *
+     * @throws InvalidArgumentException
+     */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
         string $service = '',
@@ -175,11 +205,19 @@ class Address extends SerializableObject
         $this->setOther(other: $other);
     }
 
+    /**
+     * @return string|null
+     */
     public function getZipcode(): string|null
     {
         return $this->Zipcode;
     }
 
+    /**
+     * @param string|null $Zipcode
+     *
+     * @return $this
+     */
     public function setZipcode(string|null $Zipcode = null): static
     {
         if (is_null(value: $Zipcode)) {
@@ -191,11 +229,19 @@ class Address extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getAddressType(): string|null
     {
         return $this->AddressType;
     }
 
+    /**
+     * @param string|int|null $AddressType
+     *
+     * @return $this
+     */
     public function setAddressType(string|int|null $AddressType = null): static
     {
         if (is_null(value: $AddressType)) {
@@ -207,11 +253,19 @@ class Address extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getArea(): string|null
     {
         return $this->Area;
     }
 
+    /**
+     * @param string|null $Area
+     *
+     * @return $this
+     */
     public function setArea(string|null $Area = null): static
     {
         $this->Area = $Area;
@@ -219,11 +273,19 @@ class Address extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getBuildingname(): string|null
     {
         return $this->Buildingname;
     }
 
+    /**
+     * @param string|null $Buildingname
+     *
+     * @return $this
+     */
     public function setBuildingname(string|null $Buildingname = null): static
     {
         $this->Buildingname = $Buildingname;
@@ -231,11 +293,19 @@ class Address extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCity(): string|null
     {
         return $this->City;
     }
 
+    /**
+     * @param string|null $City
+     *
+     * @return $this
+     */
     public function setCity(string|null $City = null): static
     {
         $this->City = $City;
@@ -243,11 +313,19 @@ class Address extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCompanyName(): string|null
     {
         return $this->CompanyName;
     }
 
+    /**
+     * @param string|null $CompanyName
+     *
+     * @return $this
+     */
     public function setCompanyName(string|null $CompanyName = null): static
     {
         $this->CompanyName = $CompanyName;
@@ -255,11 +333,19 @@ class Address extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCountrycode(): string|null
     {
         return $this->Countrycode;
     }
 
+    /**
+     * @param string|null $Countrycode
+     *
+     * @return $this
+     */
     public function setCountrycode(string|null $Countrycode = null): static
     {
         $this->Countrycode = $Countrycode;
@@ -267,11 +353,19 @@ class Address extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getDepartment(): string|null
     {
         return $this->Department;
     }
 
+    /**
+     * @param string|null $Department
+     *
+     * @return $this
+     */
     public function setDepartment(string|null $Department = null): static
     {
         $this->Department = $Department;
@@ -279,11 +373,19 @@ class Address extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getDoorcode(): string|null
     {
         return $this->Doorcode;
     }
 
+    /**
+     * @param string|null $Doorcode
+     *
+     * @return $this
+     */
     public function setDoorcode(string|null $Doorcode = null): static
     {
         $this->Doorcode = $Doorcode;
@@ -291,11 +393,19 @@ class Address extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getFirstName(): string|null
     {
         return $this->FirstName;
     }
 
+    /**
+     * @param string|null $FirstName
+     *
+     * @return $this
+     */
     public function setFirstName(string|null $FirstName = null): static
     {
         $this->FirstName = $FirstName;
@@ -303,11 +413,19 @@ class Address extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getFloor(): string|null
     {
         return $this->Floor;
     }
 
+    /**
+     * @param string|null $Floor
+     *
+     * @return $this
+     */
     public function setFloor(string|null $Floor = null): static
     {
         $this->Floor = $Floor;
@@ -315,11 +433,21 @@ class Address extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getHouseNr(): int|null
     {
         return $this->HouseNr;
     }
 
+    /**
+     * @param int|string|null $HouseNr
+     *
+     * @return $this
+     *
+     * @throws InvalidArgumentException
+     */
     public function setHouseNr(int|string|null $HouseNr = null): static
     {
         if (is_string(value: $HouseNr)) {
@@ -335,11 +463,19 @@ class Address extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getHouseNrExt(): string|null
     {
         return $this->HouseNrExt;
     }
 
+    /**
+     * @param int|string|null $HouseNrExt
+     *
+     * @return $this
+     */
     public function setHouseNrExt(int|string|null $HouseNrExt = null): static
     {
         if (is_int(value: $HouseNrExt)) {
@@ -351,11 +487,19 @@ class Address extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getStreetHouseNrExt(): string|null
     {
         return $this->StreetHouseNrExt;
     }
 
+    /**
+     * @param string|null $StreetHouseNrExt
+     *
+     * @return $this
+     */
     public function setStreetHouseNrExt(string|null $StreetHouseNrExt = null): static
     {
         $this->StreetHouseNrExt = $StreetHouseNrExt;
@@ -363,11 +507,19 @@ class Address extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getName(): string|null
     {
         return $this->Name;
     }
 
+    /**
+     * @param string|null $Name
+     *
+     * @return $this
+     */
     public function setName(string|null $Name = null): static
     {
         $this->Name = $Name;
@@ -375,11 +527,19 @@ class Address extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getRegion(): string|null
     {
         return $this->Region;
     }
 
+    /**
+     * @param string|null $Region
+     *
+     * @return $this
+     */
     public function setRegion(string|null $Region = null): static
     {
         $this->Region = $Region;
@@ -387,11 +547,19 @@ class Address extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getRemark(): string|null
     {
         return $this->Remark;
     }
 
+    /**
+     * @param string|null $Remark
+     *
+     * @return $this
+     */
     public function setRemark(string|null $Remark = null): static
     {
         $this->Remark = $Remark;
@@ -399,11 +567,19 @@ class Address extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getStreet(): string|null
     {
         return $this->Street;
     }
 
+    /**
+     * @param string|null $Street
+     *
+     * @return $this
+     */
     public function setStreet(string|null $Street = null): static
     {
         $this->Street = $Street;
@@ -411,11 +587,19 @@ class Address extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return array|null
+     */
     public function getOther(): array|null
     {
         return $this->other;
     }
 
+    /**
+     * @param array|null $other
+     *
+     * @return $this
+     */
     public function setOther(array|null $other = null): static
     {
         $this->other = $other;

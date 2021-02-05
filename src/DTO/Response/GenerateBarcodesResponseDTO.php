@@ -37,19 +37,33 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\SerializableObject;
 use Firstred\PostNL\Service\BarcodeServiceInterface;
 use Firstred\PostNL\Service\ServiceInterface;
-use Iterator;
 use JetBrains\PhpStorm\ExpectedValues;
 use JetBrains\PhpStorm\Pure;
+use OutOfBoundsException;
+use SeekableIterator;
 use function is_int;
 use function is_string;
 
-class GenerateBarcodesResponseDTO extends CacheableDTO implements ArrayAccess, Countable, Iterator
+/**
+ * Class GenerateBarcodesResponseDTO.
+ */
+class GenerateBarcodesResponseDTO extends CacheableDTO implements SeekableIterator, ArrayAccess, Countable
 {
     private int $idx = 0;
 
     /** @psalm-var array<array-key, GenerateBarcodeResponseDTO> $responses */
     protected array $responses = [];
 
+    /**
+     * GenerateBarcodesResponseDTO constructor.
+     *
+     * @param string $service
+     * @param string $propType
+     * @param string $cacheKey
+     * @param array  $responses
+     *
+     * @throws InvalidArgumentException
+     */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES)]
         string $service = BarcodeServiceInterface::class,
@@ -66,6 +80,9 @@ class GenerateBarcodesResponseDTO extends CacheableDTO implements ArrayAccess, C
     }
 
     #[Pure]
+    /**
+     * @return GenerateBarcodeResponseDTO|null
+     */
     public function current(): GenerateBarcodeResponseDTO|null
     {
         return array_values(array: $this->responses)[$this->idx] ?? null;
@@ -77,12 +94,18 @@ class GenerateBarcodesResponseDTO extends CacheableDTO implements ArrayAccess, C
     }
 
     #[Pure]
+    /**
+     * @return string|null
+     */
     public function key(): string|null
     {
         return array_keys(array: $this->responses)[$this->idx] ?? null;
     }
 
     #[Pure]
+    /**
+     * @return bool
+     */
     public function valid(): bool
     {
         return isset(array_values(array: $this->responses)[$this->idx]);
@@ -94,6 +117,11 @@ class GenerateBarcodesResponseDTO extends CacheableDTO implements ArrayAccess, C
     }
 
     #[Pure]
+    /**
+     * @param mixed $offset
+     *
+     * @return bool
+     */
     public function offsetExists(mixed $offset): bool
     {
         if (!is_int(value: $offset) && !is_string(value: $offset)) {
@@ -104,6 +132,11 @@ class GenerateBarcodesResponseDTO extends CacheableDTO implements ArrayAccess, C
     }
 
     #[Pure]
+    /**
+     * @param mixed $offset
+     *
+     * @return GenerateBarcodeResponseDTO|null
+     */
     public function offsetGet(mixed $offset): GenerateBarcodeResponseDTO|null
     {
         if (!$this->offsetExists(offset: $offset)) {
@@ -114,6 +147,9 @@ class GenerateBarcodesResponseDTO extends CacheableDTO implements ArrayAccess, C
     }
 
     /**
+     * @param mixed $offset
+     * @param mixed $value
+     *
      * @throws InvalidArgumentException
      */
     public function offsetSet(mixed $offset, mixed $value): void
@@ -129,7 +165,10 @@ class GenerateBarcodesResponseDTO extends CacheableDTO implements ArrayAccess, C
         $this->responses[$offset] = $value;
     }
 
-    public function offsetUnset($offset): void
+    /**
+     * @param mixed $offset
+     */
+    public function offsetUnset(mixed $offset): void
     {
         if (!$this->offsetExists(offset: $offset)) {
             return;
@@ -138,23 +177,36 @@ class GenerateBarcodesResponseDTO extends CacheableDTO implements ArrayAccess, C
         unset($this->responses[$offset]);
     }
 
+    /**
+     * @param GenerateBarcodeResponseDTO $generateBarcodeResponseDTO
+     */
     public function add(GenerateBarcodeResponseDTO $generateBarcodeResponseDTO): void
     {
         $this->responses[] = $generateBarcodeResponseDTO;
     }
 
+    /**
+     * @return int
+     */
     #[Pure]
-    public function count(): int
-    {
-        return count(value: $this->responses);
-    }
+ public function count(): int
+ {
+     return count(value: $this->responses);
+ }
 
+    /**
+     * @return array|GenerateBarcodeResponseDTO[]
+     */
     public function getResponses(): array
     {
         return $this->responses;
     }
 
     /**
+     * @param array $responses
+     *
+     * @return static
+     *
      * @throws InvalidArgumentException
      */
     public function setResponses(array $responses): static
@@ -170,11 +222,30 @@ class GenerateBarcodesResponseDTO extends CacheableDTO implements ArrayAccess, C
         return $this;
     }
 
+    /**
+     * @return array
+     *
+     * @throws InvalidArgumentException
+     */
     public function jsonSerialize(): array
     {
         return array_map(
             callback: fn (SerializableObject $item) => $item->jsonSerialize(),
             array: $this->responses,
         );
+    }
+
+    /**
+     * @param mixed $position
+     *
+     * @throws OutOfBoundsException
+     */
+    public function seek(mixed $position): void
+    {
+        if (!is_int(value: $position) || !isset($this->array[$position])) {
+            throw new OutOfBoundsException("invalid seek position ($position)");
+        }
+
+        $this->idx = $position;
     }
 }

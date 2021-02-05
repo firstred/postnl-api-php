@@ -32,9 +32,19 @@ use Exception;
 use JetBrains\PhpStorm\Pure;
 use Throwable;
 
+/**
+ * Class PostNLClientException.
+ */
 abstract class PostNLClientException extends Exception
 {
     #[Pure]
+    /**
+     * PostNLClientException constructor.
+     *
+     * @param mixed|string   $message
+     * @param mixed|int      $code
+     * @param Throwable|null $previous
+     */
     public function __construct(mixed $message = '', mixed $code = 0, Throwable $previous = null)
     {
         /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */

@@ -29,12 +29,26 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Attribute\PropInterface;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\SerializableObject;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
 
+/**
+ * Class ProductOption.
+ */
 class ProductOption extends SerializableObject
 {
+    /**
+     * ProductOption constructor.
+     *
+     * @param string      $service
+     * @param string      $propType
+     * @param string|null $Characteristic
+     * @param string|null $Option
+     *
+     * @throws InvalidArgumentException
+     */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
         string $service = '',
@@ -50,11 +64,19 @@ class ProductOption extends SerializableObject
         $this->setOption(Option: $Option);
     }
 
+    /**
+     * @return string|null
+     */
     public function getCharacteristic(): string|null
     {
         return $this->Characteristic;
     }
 
+    /**
+     * @param string|null $Characteristic
+     *
+     * @return $this
+     */
     public function setCharacteristic(string|null $Characteristic = null): static
     {
         $this->Characteristic = $Characteristic;
@@ -62,11 +84,19 @@ class ProductOption extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getOption(): string|null
     {
         return $this->Option;
     }
 
+    /**
+     * @param string|null $Option
+     *
+     * @return $this
+     */
     public function setOption(string|null $Option = null): static
     {
         $this->Option = $Option;

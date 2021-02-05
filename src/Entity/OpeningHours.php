@@ -37,6 +37,9 @@ use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
 use function is_array;
 
+/**
+ * Class OpeningHours.
+ */
 class OpeningHours extends SerializableObject
 {
     #[ResponseProp(requiredFor: [LocationServiceInterface::class])]
@@ -60,6 +63,21 @@ class OpeningHours extends SerializableObject
     #[ResponseProp(requiredFor: [LocationServiceInterface::class])]
     protected array $Sunday = [];
 
+    /**
+     * OpeningHours constructor.
+     *
+     * @param string               $service
+     * @param string               $propType
+     * @param string|array|array[] $Monday
+     * @param string|array|array[] $Tuesday
+     * @param string|array|array[] $Wednesday
+     * @param string|array|array[] $Thursday
+     * @param string|array|array[] $Friday
+     * @param string|array|array[] $Saturday
+     * @param string|array|array[] $Sunday
+     *
+     * @throws InvalidArgumentException
+     */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
         string $service = '',
@@ -85,12 +103,19 @@ class OpeningHours extends SerializableObject
         $this->setSunday(Sunday: $Sunday);
     }
 
+    /**
+     * @return array
+     */
     public function getMonday(): array
     {
         return $this->Monday;
     }
 
     /**
+     * @param array|string $Monday
+     *
+     * @return static
+     *
      * @throws InvalidArgumentException
      */
     public function setMonday(array|string $Monday): static
@@ -108,12 +133,19 @@ class OpeningHours extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return array
+     */
     public function getTuesday(): array
     {
         return $this->Tuesday;
     }
 
     /**
+     * @param array|string $Tuesday
+     *
+     * @return static
+     *
      * @throws InvalidArgumentException
      */
     public function setTuesday(array|string $Tuesday): static
@@ -131,12 +163,19 @@ class OpeningHours extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return array
+     */
     public function getWednesday(): array
     {
         return $this->Wednesday;
     }
 
     /**
+     * @param array|string $Wednesday
+     *
+     * @return static
+     *
      * @throws InvalidArgumentException
      */
     public function setWednesday(array|string $Wednesday): static
@@ -154,12 +193,19 @@ class OpeningHours extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return array
+     */
     public function getThursday(): array
     {
         return $this->Thursday;
     }
 
     /**
+     * @param array|string $Thursday
+     *
+     * @return static
+     *
      * @throws InvalidArgumentException
      */
     public function setThursday(array|string $Thursday): static
@@ -177,12 +223,19 @@ class OpeningHours extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return array
+     */
     public function getFriday(): array
     {
         return $this->Friday;
     }
 
     /**
+     * @param array|string $Friday
+     *
+     * @return static
+     *
      * @throws InvalidArgumentException
      */
     public function setFriday(array|string $Friday): static
@@ -200,12 +253,19 @@ class OpeningHours extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return array
+     */
     public function getSaturday(): array
     {
         return $this->Saturday;
     }
 
     /**
+     * @param array|string $Saturday
+     *
+     * @return static
+     *
      * @throws InvalidArgumentException
      */
     public function setSaturday(array|string $Saturday): static
@@ -229,6 +289,10 @@ class OpeningHours extends SerializableObject
     }
 
     /**
+     * @param array|string $Sunday
+     *
+     * @return static
+     *
      * @throws InvalidArgumentException
      */
     public function setSunday(array|string $Sunday): static
@@ -246,6 +310,11 @@ class OpeningHours extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return array
+     *              
+     * @throws InvalidArgumentException
+     */
     public function jsonSerialize(): array
     {
         $json = parent::jsonSerialize();

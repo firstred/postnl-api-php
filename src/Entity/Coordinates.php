@@ -29,12 +29,26 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Attribute\PropInterface;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\SerializableObject;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
 
+/**
+ * Class Coordinates.
+ */
 class Coordinates extends SerializableObject
 {
+    /**
+     * Coordinates constructor.
+     *
+     * @param string      $service
+     * @param string      $propType
+     * @param string|null $Latitude
+     * @param string|null $Longitude
+     *
+     * @throws InvalidArgumentException
+     */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
         string $service = '',
@@ -50,11 +64,19 @@ class Coordinates extends SerializableObject
         $this->setLongitude(Longitude: $Longitude);
     }
 
+    /**
+     * @return string|null
+     */
     public function getLatitude(): string|null
     {
         return $this->Latitude;
     }
 
+    /**
+     * @param string|null $Latitude
+     *
+     * @return $this
+     */
     public function setLatitude(string|null $Latitude = null): static
     {
         $this->Latitude = $Latitude;
@@ -62,11 +84,19 @@ class Coordinates extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getLongitude(): string|null
     {
         return $this->Longitude;
     }
 
+    /**
+     * @param string|null $Longitude
+     *
+     * @return $this
+     */
     public function setLongitude(string|null $Longitude = null): static
     {
         $this->Longitude = $Longitude;

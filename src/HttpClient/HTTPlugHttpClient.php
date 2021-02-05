@@ -53,6 +53,10 @@ class HTTPlugHttpClient implements HttpClientInterface
 
     /**
      * HTTPlugClient constructor.
+     *
+     * @param HttpAsyncClient|null $asyncClient
+     * @param LoggerInterface|null $logger
+     * @param int                  $concurrency
      */
     public function __construct(
         HttpAsyncClient|null $asyncClient = null,
@@ -65,6 +69,11 @@ class HTTPlugHttpClient implements HttpClientInterface
     /**
      * Adds a request to the list of pending requests
      * Using the ID you can replace a request.
+     *
+     * @param string           $id
+     * @param RequestInterface $request
+     *
+     * @return string
      */
     public function addOrUpdateRequest(string $id, RequestInterface $request): string
     {
@@ -75,6 +84,8 @@ class HTTPlugHttpClient implements HttpClientInterface
 
     /**
      * Remove a request from the list of pending requests.
+     *
+     * @param string $id
      */
     public function removeRequest(string $id): void
     {
@@ -88,7 +99,7 @@ class HTTPlugHttpClient implements HttpClientInterface
      *
      * @psalm-param array<string, RequestInterface> $requests
      *
-     * @psalm-return array<string, ResponseInterface|HttpClientException>
+     * @return array
      */
     public function doRequests(array $requests = []): array
     {
@@ -146,6 +157,10 @@ class HTTPlugHttpClient implements HttpClientInterface
      *
      * Exceptions are captured into the result array
      *
+     * @param RequestInterface $request
+     *
+     * @return ResponseInterface
+     *
      * @throws HttpClientException
      */
     public function doRequest(RequestInterface $request): ResponseInterface
@@ -160,11 +175,19 @@ class HTTPlugHttpClient implements HttpClientInterface
         }
     }
 
+    /**
+     * @return int
+     */
     public function getConcurrency(): int
     {
         return $this->concurrency;
     }
 
+    /**
+     * @param int $concurrency
+     *
+     * @return $this
+     */
     public function setConcurrency(int $concurrency): static
     {
         $this->concurrency = $concurrency;
@@ -172,22 +195,39 @@ class HTTPlugHttpClient implements HttpClientInterface
         return $this;
     }
 
+    /**
+     * @return LoggerInterface|null
+     */
     public function getLogger(): ?LoggerInterface
     {
         return $this->logger;
     }
 
+    /**
+     * @param LoggerInterface|null $logger
+     *
+     * @return $this
+     */
     public function setLogger(?LoggerInterface $logger = null): static
     {
         $this->logger = $logger;
+
         return $this;
     }
 
+    /**
+     * @return HttpAsyncClient
+     */
     public function getHttpAsyncClient(): HttpAsyncClient
     {
         return $this->asyncClient;
     }
 
+    /**
+     * @param HttpAsyncClient $client
+     *
+     * @return $this
+     */
     public function setHttpAsyncClient(HttpAsyncClient $client): static
     {
         $this->asyncClient = $client;

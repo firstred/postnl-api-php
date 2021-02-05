@@ -15,6 +15,9 @@ use function is_array;
 use function is_numeric;
 use function is_string;
 
+/**
+ * Class ResponseLocation
+ */
 class ResponseLocation extends CacheableDTO
 {
     #[ResponseProp(requiredFor: [LocationServiceInterface::class])]
@@ -59,6 +62,29 @@ class ResponseLocation extends CacheableDTO
     #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected array|null $Warnings = null;
 
+    /**
+     * ResponseLocation constructor.
+     *
+     * @param string                  $service
+     * @param string                  $propType
+     * @param string                  $cacheKey
+     * @param int|string|null         $LocationCode
+     * @param string|null             $Name
+     * @param int|string|null         $Distance
+     * @param float|string|null       $Latitude
+     * @param float|string|null       $Longitude
+     * @param Address|array|null      $Address
+     * @param array|null              $DeliveryOptions
+     * @param OpeningHours|array|null $OpeningHours
+     * @param string|null             $PartnerName
+     * @param string|null             $PhoneNumber
+     * @param string|null             $RetailNetworkID
+     * @param string|null             $Saleschannel
+     * @param string|null             $TerminalType
+     * @param array|null              $Warnings
+     *
+     * @throws InvalidArgumentException
+     */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
         string $service = '',
@@ -100,12 +126,19 @@ class ResponseLocation extends CacheableDTO
         $this->setWarnings(Warnings: $Warnings);
     }
 
+    /**
+     * @return int|null
+     */
     public function getLocationCode(): int|null
     {
         return $this->LocationCode;
     }
 
     /**
+     * @param int|string|null $LocationCode
+     *
+     * @return static
+     *                         
      * @throws InvalidArgumentException
      */
     public function setLocationCode(int|string|null $LocationCode = null): static
@@ -123,26 +156,41 @@ class ResponseLocation extends CacheableDTO
         return $this;
     }
 
-    public function getName(): ?string
+    /**
+     * @return string|null
+     */
+    public function getName(): string|null
     {
         return $this->Name;
     }
 
-    public function setName(?string $Name = null): static
+    /**
+     * @param string|null $Name
+     *
+     * @return $this
+     */
+    public function setName(string|null $Name = null): static
     {
         $this->Name = $Name;
 
         return $this;
     }
 
-    public function getDistance(): ?int
+    /**
+     * @return int|null
+     */
+    public function getDistance(): int|null
     {
         return $this->Distance;
     }
 
     /**
+     * @param int|string|null $Distance
+     *
+     * @return static
+     *
      * @throws InvalidArgumentException
-     */
+    */
     public function setDistance(int|string|null $Distance = null): static
     {
         if (is_string(value: $Distance)) {
@@ -158,14 +206,21 @@ class ResponseLocation extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return float|string|null
+     */
     public function getLatitude(): float|string|null
     {
         return $this->Latitude;
     }
 
     /**
+     * @param float|string|null $Latitude
+     *                                   
+     * @return static
+     *                         
      * @throws InvalidArgumentException
-     */
+    */
     public function setLatitude(float|string|null $Latitude = null): static
     {
         if (is_string(value: $Latitude)) {
@@ -187,8 +242,12 @@ class ResponseLocation extends CacheableDTO
     }
 
     /**
+     * @param float|string|null $Longitude
+     *                                    
+     * @return static
+     *               
      * @throws InvalidArgumentException
-     */
+    */
     public function setLongitude(float|string|null $Longitude = null): static
     {
         if (is_string(value: $Longitude)) {
@@ -204,11 +263,20 @@ class ResponseLocation extends CacheableDTO
         return $this;
     }
 
-    public function getAddress(): ?Address
+    /**
+     * @return Address|null
+     */
+    public function getAddress(): Address|null
     {
         return $this->Address;
     }
 
+    /**
+     * @param Address|array|null $Address
+     *
+     * @return $this
+     * @throws InvalidArgumentException
+     */
     public function setAddress(Address|array|null $Address = null): static
     {
         if (is_array(value: $Address)) {
@@ -223,11 +291,19 @@ class ResponseLocation extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return array|null
+     */
     public function getDeliveryOptions(): array|null
     {
         return $this->DeliveryOptions;
     }
 
+    /**
+     * @param array|null $DeliveryOptions
+     *
+     * @return $this
+     */
     public function setDeliveryOptions(array|null $DeliveryOptions = null): static
     {
         if (isset($DeliveryOptions['string'])) {
@@ -243,11 +319,20 @@ class ResponseLocation extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return OpeningHours|null
+     */
     public function getOpeningHours(): OpeningHours|null
     {
         return $this->OpeningHours;
     }
 
+    /**
+     * @param OpeningHours|array|null $OpeningHours
+     *
+     * @return $this
+     * @throws InvalidArgumentException
+     */
     public function setOpeningHours(OpeningHours|array|null $OpeningHours = null): static
     {
         if (is_array(value: $OpeningHours)) {
@@ -262,11 +347,19 @@ class ResponseLocation extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getPartnerName(): string|null
     {
         return $this->PartnerName;
     }
 
+    /**
+     * @param string|null $PartnerName
+     *
+     * @return $this
+     */
     public function setPartnerName(string|null $PartnerName = null): static
     {
         $this->PartnerName = $PartnerName;
@@ -274,11 +367,19 @@ class ResponseLocation extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getPhoneNumber(): string|null
     {
         return $this->PhoneNumber;
     }
 
+    /**
+     * @param string|null $PhoneNumber
+     *
+     * @return $this
+     */
     public function setPhoneNumber(string|null $PhoneNumber = null): static
     {
         $this->PhoneNumber = $PhoneNumber;
@@ -286,45 +387,77 @@ class ResponseLocation extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getRetailNetworkID(): string|null
     {
         return $this->RetailNetworkID;
     }
 
-    public function setRetailNetworkID(?string $RetailNetworkID = null): static
+    /**
+     * @param string|null $RetailNetworkID
+     *
+     * @return $this
+     */
+    public function setRetailNetworkID(string|null $RetailNetworkID = null): static
     {
         $this->RetailNetworkID = $RetailNetworkID;
 
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getSaleschannel(): string|null
     {
         return $this->Saleschannel;
     }
 
+    /**
+     * @param string|null $Saleschannel
+     *
+     * @return $this
+     */
     public function setSaleschannel(string|null $Saleschannel = null): static
     {
         $this->Saleschannel = $Saleschannel;
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getTerminalType(): string|null
     {
         return $this->TerminalType;
     }
 
+    /**
+     * @param string|null $TerminalType
+     *
+     * @return $this
+     */
     public function setTerminalType(string|null $TerminalType = null): static
     {
         $this->TerminalType = $TerminalType;
         return $this;
     }
 
+    /**
+     * @return array|null
+     */
     public function getWarnings(): array|null
     {
         return $this->Warnings;
     }
 
+    /**
+     * @param array|null $Warnings
+     *
+     * @return $this
+     */
     public function setWarnings(array|null $Warnings = null): static
     {
         $this->Warnings = $Warnings;

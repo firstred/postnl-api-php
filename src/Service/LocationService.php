@@ -45,11 +45,22 @@ use Firstred\PostNL\Gateway\LocationServiceGatewayInterface;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
 use JetBrains\PhpStorm\Pure;
 
+/**
+ * Class LocationService.
+ */
 class LocationService extends ServiceBase implements LocationServiceInterface
 {
     use ServiceLoggerTrait;
 
     #[Pure]
+    /**
+     * LocationService constructor.
+     *
+     * @param Customer                        $customer
+     * @param string                          $apiKey
+     * @param bool                            $sandbox
+     * @param LocationServiceGatewayInterface $gateway
+     */
     public function __construct(
         protected Customer $customer,
         protected string $apiKey,
@@ -60,6 +71,10 @@ class LocationService extends ServiceBase implements LocationServiceInterface
     }
 
     /**
+     * @param LookupLocationRequestDTO $lookupLocationRequestDTO
+     *
+     * @return GetLocationResponseDTO
+     *
      * @throws ApiClientException
      * @throws ApiException
      * @throws InvalidApiKeyException
@@ -73,6 +88,10 @@ class LocationService extends ServiceBase implements LocationServiceInterface
     }
 
     /**
+     * @param GetNearestLocationsRequestDTO $getNearestLocationsRequestDTO
+     *
+     * @return GetLocationsResponseDTO
+     *
      * @throws ApiClientException
      * @throws ApiException
      * @throws InvalidApiKeyException
@@ -86,6 +105,10 @@ class LocationService extends ServiceBase implements LocationServiceInterface
     }
 
     /**
+     * @param GetNearestLocationsGeocodeRequestDTO $getNearestLocationsGeocodeRequestDTO
+     *
+     * @return GetLocationsResponseDTO
+     *
      * @throws ApiClientException
      * @throws ApiException
      * @throws InvalidApiKeyException
@@ -102,6 +125,10 @@ class LocationService extends ServiceBase implements LocationServiceInterface
     }
 
     /**
+     * @param GetLocationsInAreaRequestDTO $getLocationsInAreaRequestDTO
+     *
+     * @return GetLocationsResponseDTO
+     *
      * @throws ApiClientException
      * @throws ApiException
      * @throws InvalidApiKeyException
@@ -116,6 +143,11 @@ class LocationService extends ServiceBase implements LocationServiceInterface
         );
     }
 
+    /**
+     * @param LocationServiceGatewayInterface $gateway
+     *
+     * @return $this
+     */
     public function setGateway(LocationServiceGatewayInterface $gateway): static
     {
         $this->gateway = $gateway;
@@ -123,16 +155,27 @@ class LocationService extends ServiceBase implements LocationServiceInterface
         return $this;
     }
 
+    /**
+     * @return LocationServiceGatewayInterface
+     */
     public function getGateway(): LocationServiceGatewayInterface
     {
         return $this->gateway;
     }
 
+    /**
+     * @return HttpClientInterface
+     */
     public function getHttpClient(): HttpClientInterface
     {
         return $this->getGateway()->getHttpClient();
     }
 
+    /**
+     * @param HttpClientInterface $httpClient
+     *
+     * @return $this
+     */
     public function setHttpClient(HttpClientInterface $httpClient): static
     {
         $this->getGateway()->setHttpClient(httpClient: $httpClient);

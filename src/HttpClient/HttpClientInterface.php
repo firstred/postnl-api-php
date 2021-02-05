@@ -33,16 +33,26 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Interface HttpClientInterface.
+ */
 interface HttpClientInterface
 {
     /**
      * Adds a request to the list of pending requests
      * Using the ID you can replace a request.
+     *
+     * @param string           $id
+     * @param RequestInterface $request
+     *
+     * @return string
      */
     public function addOrUpdateRequest(string $id, RequestInterface $request): string;
 
     /**
      * Remove a request from the list of pending requests.
+     *
+     * @param string $id
      */
     public function removeRequest(string $id): void;
 
@@ -56,6 +66,10 @@ interface HttpClientInterface
      *
      * Exceptions are captured into the result array
      *
+     * @param RequestInterface $request
+     *
+     * @return ResponseInterface
+     *
      * @throws HttpClientException
      */
     public function doRequest(RequestInterface $request): ResponseInterface;
@@ -65,17 +79,34 @@ interface HttpClientInterface
      *
      * Exceptions are captured into the result array
      *
+     * @param array $requests
      * @psalm-param array<string, RequestInterface> $requests
      *
-     * @psalm-return array<string, ResponseInterface|HttpClientException>
+     * @return array
      */
     public function doRequests(array $requests = []): array;
 
+    /**
+     * @return int
+     */
     public function getConcurrency(): int;
 
+    /**
+     * @param int $concurrency
+     *
+     * @return $this
+     */
     public function setConcurrency(int $concurrency): static;
 
+    /**
+     * @return LoggerInterface|null
+     */
     public function getLogger(): LoggerInterface|null;
 
+    /**
+     * @param LoggerInterface|null $logger
+     *
+     * @return $this
+     */
     public function setLogger(LoggerInterface|null $logger = null): static;
 }

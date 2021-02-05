@@ -37,6 +37,9 @@ use JetBrains\PhpStorm\ExpectedValues;
 use JetBrains\PhpStorm\Pure;
 use Stringable;
 
+/**
+ * Class CalculateDeliveryDateResponseDTO
+ */
 class CalculateDeliveryDateResponseDTO extends CacheableDTO implements Stringable
 {
     #[ResponseProp(requiredFor: [DeliveryDateServiceInterface::class])]
@@ -45,6 +48,17 @@ class CalculateDeliveryDateResponseDTO extends CacheableDTO implements Stringabl
     #[ResponseProp(requiredFor: [DeliveryDateServiceInterface::class])]
     protected array|null $Options = null;
 
+    /**
+     * CalculateDeliveryDateResponseDTO constructor.
+     *
+     * @param string      $service
+     * @param string      $propType
+     * @param string      $cacheKey
+     * @param string|null $DeliveryDate
+     * @param array|null  $Options
+     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES)]
         string $service,
@@ -61,11 +75,19 @@ class CalculateDeliveryDateResponseDTO extends CacheableDTO implements Stringabl
         $this->setOptions(Options: $Options);
     }
 
+    /**
+     * @return string|null
+     */
     public function getDeliveryDate(): string|null
     {
         return $this->DeliveryDate;
     }
 
+    /**
+     * @param string|null $DeliveryDate
+     *
+     * @return $this
+     */
     public function setDeliveryDate(string|null $DeliveryDate = null): static
     {
         $this->DeliveryDate = $DeliveryDate;
@@ -73,11 +95,19 @@ class CalculateDeliveryDateResponseDTO extends CacheableDTO implements Stringabl
         return $this;
     }
 
+    /**
+     * @return array|null
+     */
     public function getOptions(): array|null
     {
         return $this->Options;
     }
 
+    /**
+     * @param array|null $Options
+     *
+     * @return $this
+     */
     public function setOptions(array|null $Options = null): static
     {
         $this->Options = $Options;
@@ -86,6 +116,9 @@ class CalculateDeliveryDateResponseDTO extends CacheableDTO implements Stringabl
     }
 
     #[Pure]
+    /**
+     * @return string
+     */
     public function __toString(): string
     {
         return (string) $this->getDeliveryDate();

@@ -33,8 +33,22 @@ use Firstred\PostNL\Misc\SerializableObject;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
 
+/**
+ * Class Barcode.
+ */
 class Barcode extends SerializableObject
 {
+    /**
+     * Barcode constructor.
+     *
+     * @param string      $service
+     * @param string      $propType
+     * @param string|null $Type
+     * @param string|null $Range
+     * @param string|null $Serie
+     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
         string $service = '',
@@ -52,11 +66,19 @@ class Barcode extends SerializableObject
         $this->setSerie(Serie: $Serie);
     }
 
+    /**
+     * @return string|null
+     */
     public function getType(): string|null
     {
         return $this->Type;
     }
 
+    /**
+     * @param string|null $Type
+     *
+     * @return $this
+     */
     public function setType(string|null $Type = null): static
     {
         $this->Type = $Type;
@@ -64,11 +86,19 @@ class Barcode extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getRange(): string|null
     {
         return $this->Range;
     }
 
+    /**
+     * @param string|null $Range
+     *
+     * @return $this
+     */
     public function setRange(string|null $Range = null): static
     {
         $this->Range = $Range;
@@ -76,11 +106,19 @@ class Barcode extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getSerie(): string|null
     {
         return $this->Serie;
     }
 
+    /**
+     * @param string|null $Serie
+     *
+     * @return $this
+     */
     public function setSerie(string|null $Serie = null): static
     {
         $this->Serie = $Serie;

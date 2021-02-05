@@ -38,6 +38,9 @@ use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
 use function is_numeric;
 
+/**
+ * Class LookupLocationRequestDTO.
+ */
 class LookupLocationRequestDTO extends CacheableDTO
 {
     #[RequestProp(requiredFor: [LocationServiceInterface::class])]
@@ -64,12 +67,19 @@ class LookupLocationRequestDTO extends CacheableDTO
         $this->setRetailNetworkID(RetailNetworkID: $RetailNetworkID);
     }
 
+    /**
+     * @return int|null
+     */
     public function getLocationCode(): int|null
     {
         return $this->LocationCode;
     }
 
     /**
+     * @param int|string|null $LocationCode
+     *
+     * @return static
+     *
      * @throws InvalidArgumentException
      */
     public function setLocationCode(int|string|null $LocationCode = null): static
@@ -87,11 +97,19 @@ class LookupLocationRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getRetailNetworkID(): string|null
     {
         return $this->RetailNetworkID;
     }
 
+    /**
+     * @param string|null $RetailNetworkID
+     *
+     * @return $this
+     */
     public function setRetailNetworkID(string|null $RetailNetworkID = null): static
     {
         $this->RetailNetworkID = $RetailNetworkID;

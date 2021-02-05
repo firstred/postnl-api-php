@@ -43,9 +43,16 @@ use Firstred\PostNL\Exception\ParseError;
 use Firstred\PostNL\RequestBuilder\LocationServiceRequestBuilderInterface;
 use Firstred\PostNL\ResponseProcessor\LocationServiceResponseProcessorInterface;
 
+/**
+ * Interface LocationServiceGatewayInterface.
+ */
 interface LocationServiceGatewayInterface extends GatewayInterface
 {
     /**
+     * @param LookupLocationRequestDTO $lookupLocationRequestDTO
+     *
+     * @return GetLocationResponseDTO
+     *
      * @throws ApiClientException
      * @throws ApiException
      * @throws InvalidApiKeyException
@@ -58,6 +65,10 @@ interface LocationServiceGatewayInterface extends GatewayInterface
     ): GetLocationResponseDTO;
 
     /**
+     * @param GetNearestLocationsRequestDTO $getNearestLocationsRequestDTO
+     *
+     * @return GetLocationsResponseDTO
+     *
      * @throws ApiClientException
      * @throws ApiException
      * @throws InvalidApiKeyException
@@ -70,6 +81,10 @@ interface LocationServiceGatewayInterface extends GatewayInterface
     ): GetLocationsResponseDTO;
 
     /**
+     * @param GetNearestLocationsGeocodeRequestDTO $getNearestLocationsGeocodeRequestDTO
+     *
+     * @return GetLocationsResponseDTO
+     *
      * @throws ApiClientException
      * @throws ApiException
      * @throws InvalidApiKeyException
@@ -82,6 +97,10 @@ interface LocationServiceGatewayInterface extends GatewayInterface
     ): GetLocationsResponseDTO;
 
     /**
+     * @param GetLocationsInAreaRequestDTO $getLocationsInAreaRequestDTO
+     *
+     * @return GetLocationsResponseDTO
+     *
      * @throws ApiClientException
      * @throws ApiException
      * @throws InvalidApiKeyException
@@ -93,11 +112,27 @@ interface LocationServiceGatewayInterface extends GatewayInterface
         GetLocationsInAreaRequestDTO $getLocationsInAreaRequestDTO,
     ): GetLocationsResponseDTO;
 
+    /**
+     * @return LocationServiceRequestBuilderInterface
+     */
     public function getRequestBuilder(): LocationServiceRequestBuilderInterface;
 
+    /**
+     * @param LocationServiceRequestBuilderInterface $requestBuilder
+     *
+     * @return $this
+     */
     public function setRequestBuilder(LocationServiceRequestBuilderInterface $requestBuilder): static;
 
+    /**
+     * @return LocationServiceResponseProcessorInterface
+     */
     public function getResponseProcessor(): LocationServiceResponseProcessorInterface;
 
+    /**
+     * @param LocationServiceResponseProcessorInterface $responseProcessor
+     *
+     * @return $this
+     */
     public function setResponseProcessor(LocationServiceResponseProcessorInterface $responseProcessor): static;
 }

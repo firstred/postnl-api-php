@@ -28,21 +28,56 @@ namespace Firstred\PostNL\RequestBuilder;
 
 use Firstred\PostNL\Entity\Customer;
 
+/**
+ * Interface RequestBuilderInterface.
+ */
 interface RequestBuilderInterface
 {
+    /**
+     * @return Customer
+     */
     public function getCustomer(): Customer;
 
+    /**
+     * @param Customer $customer
+     *
+     * @return $this
+     */
     public function setCustomer(Customer $customer): static;
 
+    /**
+     * @return string
+     */
     public function getApiKey(): string;
 
+    /**
+     * @param string $apiKey
+     *
+     * @return $this
+     */
     public function setApiKey(string $apiKey): static;
 
+    /**
+     * @return bool
+     */
     public function getSandbox(): bool;
 
+    /**
+     * @param bool $sandbox
+     *
+     * @return $this
+     */
     public function setSandbox(bool $sandbox): static;
 
+    /**
+     * @return string
+     */
     public function getVersion(): string;
 
+    /**
+     * @param string $version
+     *
+     * @return $this
+     */
     public function setVersion(string $version): static;
 }

@@ -29,12 +29,62 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Attribute\PropInterface;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\SerializableObject;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
 
+/**
+ * Class Shipment.
+ */
 class Shipment extends SerializableObject
 {
+    /**
+     * Shipment constructor.
+     *
+     * @param string         $service
+     * @param string         $propType
+     * @param array|null     $Addresses
+     * @param array|null     $Amounts
+     * @param string|null    $Barcode
+     * @param string|null    $CollectionTimeStampEnd
+     * @param string|null    $CollectionTimeStampStart
+     * @param array|null     $Contacts
+     * @param string|null    $Content
+     * @param string|null    $CostCenter
+     * @param string|null    $CustomerOrderNumber
+     * @param Customer|null  $Customer
+     * @param Customs|null   $Customs
+     * @param string|null    $StatusCode
+     * @param int|null       $PhaseCode
+     * @param string|null    $DateFrom
+     * @param string|null    $DateTo
+     * @param string|null    $DeliveryAddress
+     * @param string|null    $DeliveryTimeStampStart
+     * @param string|null    $DeliveryTimeStampEnd
+     * @param string|null    $DeliveryDate
+     * @param Dimension|null $Dimension
+     * @param string|null    $DownPartnerBarcode
+     * @param string|null    $DownPartnerID
+     * @param string|null    $DownPartnerLocation
+     * @param array|null     $Events
+     * @param array|null     $Groups
+     * @param string|null    $IDExpiration
+     * @param string|null    $IDNumber
+     * @param string|null    $IDType
+     * @param string|null    $OldStatuses
+     * @param string|null    $ProductCodeCollect
+     * @param string|null    $ProductCodeDelivery
+     * @param array|null     $ProductOptions
+     * @param string|null    $ReceiverDateOfBirth
+     * @param string|null    $Reference
+     * @param string|null    $ReferenceCollect
+     * @param string|null    $Remark
+     * @param string|null    $ReturnBarcode
+     * @param string|null    $ReturnReference
+     *
+     * @throws InvalidArgumentException
+     */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
         string $service = '',
@@ -119,11 +169,19 @@ class Shipment extends SerializableObject
         $this->setDateTo(DateTo: $DateTo);
     }
 
+    /**
+     * @return array|null
+     */
     public function getAddresses(): array|null
     {
         return $this->Addresses;
     }
 
+    /**
+     * @param array|null $Addresses
+     *
+     * @return $this
+     */
     public function setAddresses(array|null $Addresses = null): static
     {
         $this->Addresses = $Addresses;
@@ -131,11 +189,19 @@ class Shipment extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return array|null
+     */
     public function getAmounts(): array|null
     {
         return $this->Amounts;
     }
 
+    /**
+     * @param array|null $Amounts
+     *
+     * @return $this
+     */
     public function setAmounts(array|null $Amounts = null): static
     {
         $this->Amounts = $Amounts;
@@ -143,11 +209,19 @@ class Shipment extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getBarcode(): string|null
     {
         return $this->Barcode;
     }
 
+    /**
+     * @param string|null $Barcode
+     *
+     * @return $this
+     */
     public function setBarcode(string|null $Barcode = null): static
     {
         $this->Barcode = $Barcode;
@@ -155,11 +229,19 @@ class Shipment extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCollectionTimeStampEnd(): string|null
     {
         return $this->CollectionTimeStampEnd;
     }
 
+    /**
+     * @param string|null $CollectionTimeStampEnd
+     *
+     * @return $this
+     */
     public function setCollectionTimeStampEnd(string|null $CollectionTimeStampEnd = null): static
     {
         $this->CollectionTimeStampEnd = $CollectionTimeStampEnd;
@@ -167,11 +249,19 @@ class Shipment extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCollectionTimeStampStart(): string|null
     {
         return $this->CollectionTimeStampStart;
     }
 
+    /**
+     * @param string|null $CollectionTimeStampStart
+     *
+     * @return $this
+     */
     public function setCollectionTimeStampStart(string|null $CollectionTimeStampStart = null): static
     {
         $this->CollectionTimeStampStart = $CollectionTimeStampStart;
@@ -179,11 +269,19 @@ class Shipment extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return array|null
+     */
     public function getContacts(): array|null
     {
         return $this->Contacts;
     }
 
+    /**
+     * @param array|null $Contacts
+     *
+     * @return $this
+     */
     public function setContacts(array|null $Contacts = null): static
     {
         $this->Contacts = $Contacts;
@@ -191,11 +289,19 @@ class Shipment extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getContent(): string|null
     {
         return $this->Content;
     }
 
+    /**
+     * @param string|null $Content
+     *
+     * @return $this
+     */
     public function setContent(string|null $Content = null): static
     {
         $this->Content = $Content;
@@ -203,11 +309,19 @@ class Shipment extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCostCenter(): string|null
     {
         return $this->CostCenter;
     }
 
+    /**
+     * @param string|null $CostCenter
+     *
+     * @return $this
+     */
     public function setCostCenter(string|null $CostCenter = null): static
     {
         $this->CostCenter = $CostCenter;
@@ -215,11 +329,19 @@ class Shipment extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCustomerOrderNumber(): string|null
     {
         return $this->CustomerOrderNumber;
     }
 
+    /**
+     * @param string|null $CustomerOrderNumber
+     *
+     * @return $this
+     */
     public function setCustomerOrderNumber(string|null $CustomerOrderNumber = null): static
     {
         $this->CustomerOrderNumber = $CustomerOrderNumber;
@@ -227,35 +349,59 @@ class Shipment extends SerializableObject
         return $this;
     }
 
-    public function getCustomer(): ?Customer
+    /**
+     * @return Customer|null
+     */
+    public function getCustomer(): Customer|null
     {
         return $this->Customer;
     }
 
-    public function setCustomer(?Customer $Customer = null): static
+    /**
+     * @param Customer|null $Customer
+     *
+     * @return $this
+     */
+    public function setCustomer(Customer|null $Customer = null): static
     {
         $this->Customer = $Customer;
 
         return $this;
     }
 
-    public function getCustoms(): ?Customs
+    /**
+     * @return Customs|null
+     */
+    public function getCustoms(): Customs|null
     {
         return $this->Customs;
     }
 
-    public function setCustoms(?Customs $Customs = null): static
+    /**
+     * @param Customs|null $Customs
+     *
+     * @return $this
+     */
+    public function setCustoms(Customs|null $Customs = null): static
     {
         $this->Customs = $Customs;
 
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getStatusCode(): string|null
     {
         return $this->StatusCode;
     }
 
+    /**
+     * @param string|null $StatusCode
+     *
+     * @return $this
+     */
     public function setStatusCode(string|null $StatusCode = null): static
     {
         $this->StatusCode = $StatusCode;
@@ -263,11 +409,19 @@ class Shipment extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getPhaseCode(): int|null
     {
         return $this->PhaseCode;
     }
 
+    /**
+     * @param int|null $PhaseCode
+     *
+     * @return $this
+     */
     public function setPhaseCode(int|null $PhaseCode = null): static
     {
         $this->PhaseCode = $PhaseCode;
@@ -275,11 +429,19 @@ class Shipment extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getDateFrom(): string|null
     {
         return $this->DateFrom;
     }
 
+    /**
+     * @param string|null $DateFrom
+     *
+     * @return $this
+     */
     public function setDateFrom(string|null $DateFrom = null): static
     {
         $this->DateFrom = $DateFrom;
@@ -287,11 +449,19 @@ class Shipment extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getDateTo(): string|null
     {
         return $this->DateTo;
     }
 
+    /**
+     * @param string|null $DateTo
+     *
+     * @return $this
+     */
     public function setDateTo(string|null $DateTo = null): static
     {
         $this->DateTo = $DateTo;
@@ -299,11 +469,19 @@ class Shipment extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getDeliveryAddress(): string|null
     {
         return $this->DeliveryAddress;
     }
 
+    /**
+     * @param string|null $DeliveryAddress
+     *
+     * @return $this
+     */
     public function setDeliveryAddress(string|null $DeliveryAddress = null): static
     {
         $this->DeliveryAddress = $DeliveryAddress;
@@ -311,11 +489,19 @@ class Shipment extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getDeliveryTimeStampStart(): string|null
     {
         return $this->DeliveryTimeStampStart;
     }
 
+    /**
+     * @param string|null $DeliveryTimeStampStart
+     *
+     * @return $this
+     */
     public function setDeliveryTimeStampStart(string|null $DeliveryTimeStampStart = null): static
     {
         $this->DeliveryTimeStampStart = $DeliveryTimeStampStart;
@@ -323,11 +509,19 @@ class Shipment extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getDeliveryTimeStampEnd(): string|null
     {
         return $this->DeliveryTimeStampEnd;
     }
 
+    /**
+     * @param string|null $DeliveryTimeStampEnd
+     *
+     * @return $this
+     */
     public function setDeliveryTimeStampEnd(string|null $DeliveryTimeStampEnd = null): static
     {
         $this->DeliveryTimeStampEnd = $DeliveryTimeStampEnd;
@@ -335,11 +529,19 @@ class Shipment extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function calculateDeliveryDate(): string|null
     {
         return $this->DeliveryDate;
     }
 
+    /**
+     * @param string|null $DeliveryDate
+     *
+     * @return $this
+     */
     public function setDeliveryDate(string|null $DeliveryDate = null): static
     {
         $this->DeliveryDate = $DeliveryDate;
@@ -347,23 +549,39 @@ class Shipment extends SerializableObject
         return $this;
     }
 
-    public function getDimension(): ?Dimension
+    /**
+     * @return Dimension|null
+     */
+    public function getDimension(): Dimension|null
     {
         return $this->Dimension;
     }
 
-    public function setDimension(?Dimension $Dimension = null): static
+    /**
+     * @param Dimension|null $Dimension
+     *
+     * @return $this
+     */
+    public function setDimension(Dimension|null $Dimension = null): static
     {
         $this->Dimension = $Dimension;
 
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getDownPartnerBarcode(): string|null
     {
         return $this->DownPartnerBarcode;
     }
 
+    /**
+     * @param string|null $DownPartnerBarcode
+     *
+     * @return $this
+     */
     public function setDownPartnerBarcode(string|null $DownPartnerBarcode = null): static
     {
         $this->DownPartnerBarcode = $DownPartnerBarcode;
@@ -371,11 +589,19 @@ class Shipment extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getDownPartnerID(): string|null
     {
         return $this->DownPartnerID;
     }
 
+    /**
+     * @param string|null $DownPartnerID
+     *
+     * @return $this
+     */
     public function setDownPartnerID(string|null $DownPartnerID = null): static
     {
         $this->DownPartnerID = $DownPartnerID;
@@ -383,11 +609,19 @@ class Shipment extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getDownPartnerLocation(): string|null
     {
         return $this->DownPartnerLocation;
     }
 
+    /**
+     * @param string|null $DownPartnerLocation
+     *
+     * @return $this
+     */
     public function setDownPartnerLocation(string|null $DownPartnerLocation = null): static
     {
         $this->DownPartnerLocation = $DownPartnerLocation;
@@ -395,11 +629,19 @@ class Shipment extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return array|null
+     */
     public function getEvents(): array|null
     {
         return $this->Events;
     }
 
+    /**
+     * @param array|null $Events
+     *
+     * @return $this
+     */
     public function setEvents(array|null $Events = null): static
     {
         $this->Events = $Events;
@@ -407,11 +649,19 @@ class Shipment extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return array|null
+     */
     public function getGroups(): array|null
     {
         return $this->Groups;
     }
 
+    /**
+     * @param array|null $Groups
+     *
+     * @return $this
+     */
     public function setGroups(array|null $Groups = null): static
     {
         $this->Groups = $Groups;
@@ -419,11 +669,19 @@ class Shipment extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getIDExpiration(): string|null
     {
         return $this->IDExpiration;
     }
 
+    /**
+     * @param string|null $IDExpiration
+     *
+     * @return $this
+     */
     public function setIDExpiration(string|null $IDExpiration = null): static
     {
         $this->IDExpiration = $IDExpiration;
@@ -431,11 +689,19 @@ class Shipment extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getIDNumber(): string|null
     {
         return $this->IDNumber;
     }
 
+    /**
+     * @param string|null $IDNumber
+     *
+     * @return $this
+     */
     public function setIDNumber(string|null $IDNumber = null): static
     {
         $this->IDNumber = $IDNumber;
@@ -443,11 +709,19 @@ class Shipment extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getIDType(): string|null
     {
         return $this->IDType;
     }
 
+    /**
+     * @param string|null $IDType
+     *
+     * @return $this
+     */
     public function setIDType(string|null $IDType = null): static
     {
         $this->IDType = $IDType;
@@ -455,11 +729,19 @@ class Shipment extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getOldStatuses(): string|null
     {
         return $this->OldStatuses;
     }
 
+    /**
+     * @param string|null $OldStatuses
+     *
+     * @return $this
+     */
     public function setOldStatuses(string|null $OldStatuses = null): static
     {
         $this->OldStatuses = $OldStatuses;
@@ -467,11 +749,19 @@ class Shipment extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getProductCodeCollect(): string|null
     {
         return $this->ProductCodeCollect;
     }
 
+    /**
+     * @param string|null $ProductCodeCollect
+     *
+     * @return $this
+     */
     public function setProductCodeCollect(string|null $ProductCodeCollect = null): static
     {
         $this->ProductCodeCollect = $ProductCodeCollect;
@@ -479,11 +769,19 @@ class Shipment extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getProductCodeDelivery(): string|null
     {
         return $this->ProductCodeDelivery;
     }
 
+    /**
+     * @param string|null $ProductCodeDelivery
+     *
+     * @return $this
+     */
     public function setProductCodeDelivery(string|null $ProductCodeDelivery = null): static
     {
         $this->ProductCodeDelivery = $ProductCodeDelivery;
@@ -491,11 +789,19 @@ class Shipment extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return array|null
+     */
     public function getProductOptions(): array|null
     {
         return $this->ProductOptions;
     }
 
+    /**
+     * @param array|null $ProductOptions
+     *
+     * @return $this
+     */
     public function setProductOptions(array|null $ProductOptions = null): static
     {
         $this->ProductOptions = $ProductOptions;
@@ -503,11 +809,19 @@ class Shipment extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getReceiverDateOfBirth(): string|null
     {
         return $this->ReceiverDateOfBirth;
     }
 
+    /**
+     * @param string|null $ReceiverDateOfBirth
+     *
+     * @return $this
+     */
     public function setReceiverDateOfBirth(string|null $ReceiverDateOfBirth = null): static
     {
         $this->ReceiverDateOfBirth = $ReceiverDateOfBirth;
@@ -515,11 +829,19 @@ class Shipment extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getReference(): string|null
     {
         return $this->Reference;
     }
 
+    /**
+     * @param string|null $Reference
+     *
+     * @return $this
+     */
     public function setReference(string|null $Reference = null): static
     {
         $this->Reference = $Reference;
@@ -527,11 +849,19 @@ class Shipment extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getReferenceCollect(): string|null
     {
         return $this->ReferenceCollect;
     }
 
+    /**
+     * @param string|null $ReferenceCollect
+     *
+     * @return $this
+     */
     public function setReferenceCollect(string|null $ReferenceCollect = null): static
     {
         $this->ReferenceCollect = $ReferenceCollect;
@@ -539,11 +869,19 @@ class Shipment extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getRemark(): string|null
     {
         return $this->Remark;
     }
 
+    /**
+     * @param string|null $Remark
+     *
+     * @return $this
+     */
     public function setRemark(string|null $Remark = null): static
     {
         $this->Remark = $Remark;
@@ -551,11 +889,19 @@ class Shipment extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getReturnBarcode(): string|null
     {
         return $this->ReturnBarcode;
     }
 
+    /**
+     * @param string|null $ReturnBarcode
+     *
+     * @return $this
+     */
     public function setReturnBarcode(string|null $ReturnBarcode = null): static
     {
         $this->ReturnBarcode = $ReturnBarcode;
@@ -563,11 +909,19 @@ class Shipment extends SerializableObject
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getReturnReference(): string|null
     {
         return $this->ReturnReference;
     }
 
+    /**
+     * @param string|null $ReturnReference
+     *
+     * @return $this
+     */
     public function setReturnReference(string|null $ReturnReference = null): static
     {
         $this->ReturnReference = $ReturnReference;

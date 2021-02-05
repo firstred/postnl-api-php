@@ -28,22 +28,39 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+/**
+ * Class MergedLabel
+ */
 class MergedLabel
 {
     protected array|null $Barcodes = null;
     protected array|null $Labels = null;
 
+    /**
+     * MergedLabel constructor.
+     *
+     * @param array|null $barcodes
+     * @param array|null $labels
+     */
     public function __construct(array|null $barcodes = null, array|null $labels = null)
     {
         $this->setBarcodes(barcodes: $barcodes);
         $this->setLabels(labels: $labels);
     }
 
+    /**
+     * @return array|null
+     */
     public function getBarcodes(): array|null
     {
         return $this->Barcodes;
     }
 
+    /**
+     * @param array|null $barcodes
+     *
+     * @return $this
+     */
     public function setBarcodes(array|null $barcodes = null): static
     {
         $this->Barcodes = $barcodes;
@@ -51,11 +68,19 @@ class MergedLabel
         return $this;
     }
 
+    /**
+     * @return array|null
+     */
     public function getLabels(): array|null
     {
         return $this->Labels;
     }
 
+    /**
+     * @param array|null $labels
+     *
+     * @return $this
+     */
     public function setLabels(array|null $labels = null): static
     {
         $this->Labels = $labels;

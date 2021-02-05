@@ -41,9 +41,16 @@ use Firstred\PostNL\Exception\ParseError;
 use Firstred\PostNL\RequestBuilder\BarcodeServiceRequestBuilderInterface;
 use Firstred\PostNL\ResponseProcessor\BarcodeServiceResponseProcessorInterface;
 
+/**
+ * Interface BarcodeServiceGatewayInterface.
+ */
 interface BarcodeServiceGatewayInterface extends GatewayInterface
 {
     /**
+     * @param GenerateBarcodeRequestDTO $generateBarcodeRequestDTO
+     *
+     * @return GenerateBarcodeResponseDTO
+     *
      * @throws ApiClientException
      * @throws ApiException
      * @throws InvalidApiKeyException
@@ -54,6 +61,10 @@ interface BarcodeServiceGatewayInterface extends GatewayInterface
     public function doGenerateBarcodeRequest(GenerateBarcodeRequestDTO $generateBarcodeRequestDTO): GenerateBarcodeResponseDTO;
 
     /**
+     * @param GenerateBarcodesRequestDTO $generateBarcodesRequestDTO
+     *
+     * @return GenerateBarcodesResponseDTO
+     *
      * @throws ApiClientException
      * @throws ApiException
      * @throws InvalidApiKeyException
@@ -63,11 +74,27 @@ interface BarcodeServiceGatewayInterface extends GatewayInterface
      */
     public function doGenerateBarcodesRequest(GenerateBarcodesRequestDTO $generateBarcodesRequestDTO): GenerateBarcodesResponseDTO;
 
+    /**
+     * @return BarcodeServiceRequestBuilderInterface
+     */
     public function getRequestBuilder(): BarcodeServiceRequestBuilderInterface;
 
+    /**
+     * @param BarcodeServiceRequestBuilderInterface $requestBuilder
+     *
+     * @return $this
+     */
     public function setRequestBuilder(BarcodeServiceRequestBuilderInterface $requestBuilder): static;
 
+    /**
+     * @return BarcodeServiceResponseProcessorInterface
+     */
     public function getResponseProcessor(): BarcodeServiceResponseProcessorInterface;
 
+    /**
+     * @param BarcodeServiceResponseProcessorInterface $responseProcessor
+     *
+     * @return $this
+     */
     public function setResponseProcessor(BarcodeServiceResponseProcessorInterface $responseProcessor): static;
 }

@@ -30,8 +30,18 @@ namespace Firstred\PostNL\Service;
 
 use Firstred\PostNL\Entity\Customer;
 
+/**
+ * Class ServiceBase.
+ */
 abstract class ServiceBase implements ServiceInterface
 {
+    /**
+     * ServiceBase constructor.
+     *
+     * @param Customer $customer
+     * @param string   $apiKey
+     * @param bool     $sandbox
+     */
     public function __construct(
         protected Customer $customer,
         protected string $apiKey,
@@ -39,11 +49,19 @@ abstract class ServiceBase implements ServiceInterface
     ) {
     }
 
+    /**
+     * @return Customer
+     */
     public function getCustomer(): Customer
     {
         return $this->customer;
     }
 
+    /**
+     * @param Customer $customer
+     *
+     * @return $this
+     */
     public function setCustomer(Customer $customer): static
     {
         $this->customer = $customer;
@@ -51,11 +69,19 @@ abstract class ServiceBase implements ServiceInterface
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getApiKey(): string
     {
         return $this->apiKey;
     }
 
+    /**
+     * @param string $apiKey
+     *
+     * @return $this
+     */
     public function setApiKey(string $apiKey): static
     {
         $this->apiKey = $apiKey;
@@ -63,11 +89,19 @@ abstract class ServiceBase implements ServiceInterface
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function isSandbox(): bool
     {
         return $this->sandbox;
     }
 
+    /**
+     * @param bool $sandbox
+     *
+     * @return $this
+     */
     public function setSandbox(bool $sandbox): static
     {
         $this->sandbox = $sandbox;

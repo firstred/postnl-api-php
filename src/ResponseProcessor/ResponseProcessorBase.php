@@ -40,21 +40,25 @@ use Firstred\PostNL\Exception\NotAvailableException;
 use Firstred\PostNL\Exception\ParseError;
 use Firstred\PostNL\Misc\SerializableObject;
 use Firstred\PostNL\Service\BarcodeServiceInterface;
-use Firstred\PostNL\Service\ConfirmingServiceInterface;
 use Firstred\PostNL\Service\DeliveryDateServiceInterface;
-use Firstred\PostNL\Service\LabellingServiceInterface;
 use Firstred\PostNL\Service\LocationServiceInterface;
-use Firstred\PostNL\Service\ShippingServiceInterface;
-use Firstred\PostNL\Service\ShippingStatusServiceInterface;
 use Firstred\PostNL\Service\TimeframeServiceInterface;
 use function json_decode;
 use Psr\Http\Message\ResponseInterface;
 use TypeError;
 
+/**
+ * Class ResponseProcessorBase.
+ */
 abstract class ResponseProcessorBase implements ResponseProcessorInterface
 {
     /**
-     * @throws ApiException|InvalidApiKeyException|NotAvailableException
+     * @param ResponseInterface $response
+     *
+     * @throws ApiClientException
+     * @throws ApiServerException
+     * @throws InvalidApiKeyException
+     * @throws NotAvailableException
      */
     protected function checkResponse(ResponseInterface $response): void
     {
@@ -84,7 +88,11 @@ abstract class ResponseProcessorBase implements ResponseProcessorInterface
     }
 
     /**
+     * @param string             $className
+     * @param ResponseInterface  $response
      * @psalm-param class-string $className
+     *
+     * @return SerializableObject
      *
      * @throws ApiException
      * @throws InvalidApiKeyException
@@ -103,9 +111,14 @@ abstract class ResponseProcessorBase implements ResponseProcessorInterface
     }
 
     /**
+     * @param string             $className
+     * @param ResponseInterface  $response
      * @psalm-param class-string $className
      *
-     * @throws ParseError|InvalidArgumentException
+     * @return SerializableObject
+     *
+     * @throws InvalidArgumentException
+     * @throws ParseError
      */
     protected function deserialize(string $className, ResponseInterface $response): SerializableObject
     {
@@ -145,16 +158,31 @@ abstract class ResponseProcessorBase implements ResponseProcessorInterface
         }
     }
 
+    /**
+     * @param string $responseBody
+     *
+     * @return string
+     */
     protected static function getFaultString(string $responseBody): string
     {
         return @json_decode(json: $responseBody, associative: true)['fault']['faultString'] ?? '';
     }
 
+    /**
+     * @param string $responseBody
+     *
+     * @return string
+     */
     protected static function getFaultCode(string $responseBody): string
     {
         return @json_decode(json: $responseBody, associative: true)['fault']['detail']['errorCode'] ?? '';
     }
 
+    /**
+     * @param string $responseBody
+     *
+     * @return string
+     */
     protected static function getErrorMessage(string $responseBody): string
     {
         $json = @json_decode(json: $responseBody, associative: true);
@@ -162,6 +190,11 @@ abstract class ResponseProcessorBase implements ResponseProcessorInterface
         return (string) ($json['ErrorMsg'] ?? $json[0]['ErrorMsg'] ?? '');
     }
 
+    /**
+     * @param string $responseBody
+     *
+     * @return int
+     */
     protected static function getErrorNumber(string $responseBody): int
     {
         $json = @json_decode(json: $responseBody, associative: true);

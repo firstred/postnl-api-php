@@ -36,6 +36,9 @@ use Firstred\PostNL\Service\BarcodeServiceInterface;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
 
+/**
+ * Class GenerateBarcodeRequestDTO.
+ */
 class GenerateBarcodeRequestDTO extends CacheableDTO
 {
     #[RequestProp(requiredFor: [BarcodeServiceInterface::class])]
@@ -48,6 +51,15 @@ class GenerateBarcodeRequestDTO extends CacheableDTO
     protected string|null $Range = null;
 
     /**
+     * GenerateBarcodeRequestDTO constructor.
+     *
+     * @param string      $service
+     * @param string      $propType
+     * @param string      $cacheKey
+     * @param string|null $Type
+     * @param string|null $Serie
+     * @param string|null $Range
+     *
      * @throws InvalidArgumentException
      */
     public function __construct(
@@ -68,11 +80,19 @@ class GenerateBarcodeRequestDTO extends CacheableDTO
         $this->setRange(Range: $Range);
     }
 
+    /**
+     * @return string|null
+     */
     public function getType(): string|null
     {
         return $this->Type;
     }
 
+    /**
+     * @param string|null $Type
+     *
+     * @return static
+     */
     public function setType(string|null $Type): static
     {
         $this->Type = $Type;
@@ -80,11 +100,19 @@ class GenerateBarcodeRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getSerie(): string|null
     {
         return $this->Serie;
     }
 
+    /**
+     * @param string|null $Serie
+     *
+     * @return $this
+     */
     public function setSerie(string|null $Serie): static
     {
         $this->Serie = $Serie;
@@ -92,11 +120,19 @@ class GenerateBarcodeRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getRange(): string|null
     {
         return $this->Range;
     }
 
+    /**
+     * @param string|null $Range
+     *
+     * @return $this
+     */
     public function setRange(string|null $Range = null): static
     {
         $this->Range = $Range;

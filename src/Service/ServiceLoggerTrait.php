@@ -30,13 +30,24 @@ namespace Firstred\PostNL\Service;
 
 use Psr\Log\LoggerInterface;
 
+/**
+ * Trait ServiceLoggerTrait.
+ */
 trait ServiceLoggerTrait
 {
+    /**
+     * @return LoggerInterface|null
+     */
     public function getLogger(): LoggerInterface|null
     {
         return $this->getGateway()->getLogger();
     }
 
+    /**
+     * @param LoggerInterface|null $logger
+     *
+     * @return $this
+     */
     public function setLogger(?LoggerInterface $logger): static
     {
         $this->getGateway()->setLogger(logger: $logger);
