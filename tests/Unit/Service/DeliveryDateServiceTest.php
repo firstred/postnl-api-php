@@ -102,6 +102,7 @@ class DeliveryDateServiceTest extends ServiceTestBase
 
     /**
      * @testdox Returns a valid delivery date
+     * @throws \Firstred\PostNL\Exception\HttpClientException
      */
     public function testCalculateDeliveryDate()
     {
@@ -121,7 +122,7 @@ class DeliveryDateServiceTest extends ServiceTestBase
             )));
         $mockClient->addResponse(response: $response);
         $this->postnl->getDeliveryDateService()->getGateway()->setHttpClient(
-            httpClient: new HTTPlugHttpClient(asyncClient: $mockClient),
+            httpClient: new HTTPlugHttpClient(client: $mockClient),
         );
 
         $response = $this->postnl->calculateDeliveryDate(
@@ -188,7 +189,7 @@ class DeliveryDateServiceTest extends ServiceTestBase
             )));
         $mockClient->addResponse(response: $response);
         $this->postnl->getDeliveryDateService()->getGateway()->setHttpClient(
-            httpClient: new HTTPlugHttpClient(asyncClient: $mockClient),
+            httpClient: new HTTPlugHttpClient(client: $mockClient),
         );
 
         $response = $this->postnl->calculateShippingDate(

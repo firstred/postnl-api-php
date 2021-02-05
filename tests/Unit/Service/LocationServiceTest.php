@@ -36,11 +36,15 @@ use Firstred\PostNL\DTO\Request\GetNearestLocationsRequestDTO;
 use Firstred\PostNL\DTO\Request\LookupLocationRequestDTO;
 use Firstred\PostNL\DTO\Response\GetLocationResponseDTO;
 use Firstred\PostNL\DTO\Response\GetLocationsResponseDTO;
-use Firstred\PostNL\Exception\ApiDownException;
+use Firstred\PostNL\Exception\ApiClientException;
+use Firstred\PostNL\Exception\ApiException;
+use Firstred\PostNL\Exception\InvalidApiKeyException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\NotAvailableException;
+use Firstred\PostNL\Exception\ParseError;
 use Firstred\PostNL\HttpClient\HTTPlugHttpClient;
 use Firstred\PostNL\Service\LocationServiceInterface;
-use Http\Client\Exception as HttpClientException;
+use Firstred\PostNL\Exception\HttpClientException;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Mock\Client;
 use Psr\Http\Message\RequestInterface;
@@ -102,6 +106,12 @@ class LocationServiceTest extends ServiceTestBase
      * @testdox Can handle situations where no locations could be found
      *
      * @throws InvalidArgumentException
+     * @throws ApiClientException
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws NotAvailableException
+     * @throws ParseError
+     * @throws HttpClientException
      */
     public function testNoNearestLocationsFound()
     {
@@ -111,12 +121,12 @@ class LocationServiceTest extends ServiceTestBase
         /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
         $response = $responseFactory->createResponse(200, 'OK')
             ->withHeader('Content-Type', 'application/json;charset=UTF-8')
-            ->withBody($streamFactory->createStream(file_get_contents(filename: __DIR__.'/../../data/responses/nonearestlocations.json')))
+            ->withBody($streamFactory->createStream(file_get_contents(filename: __DIR__.'/../../data/responses/location/nonearestlocations.json')))
         ;
         /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
         $mockClient->addResponse($response);
         $this->postnl->getLocationService()->getGateway()->setHttpClient(
-            httpClient: new HTTPlugHttpClient(asyncClient: $mockClient),
+            httpClient: new HTTPlugHttpClient(client: $mockClient),
         );
 
         $response = $this->postnl->getNearestLocations(
@@ -136,6 +146,7 @@ class LocationServiceTest extends ServiceTestBase
 
     /**
      * @testdox Can request nearest locations
+     * @throws HttpClientException
      */
     public function testGetNearestLocations()
     {
@@ -145,12 +156,12 @@ class LocationServiceTest extends ServiceTestBase
         /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
         $response = $responseFactory->createResponse(200, 'OK')
             ->withHeader('Content-Type', 'application/json;charset=UTF-8')
-            ->withBody($streamFactory->createStream(file_get_contents(filename: __DIR__.'/../../data/responses/nearestlocations.json')))
+            ->withBody($streamFactory->createStream(file_get_contents(filename: __DIR__.'/../../data/responses/location/nearestlocations.json')))
         ;
         /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
         $mockClient->addResponse($response);
         $this->postnl->getLocationService()->getGateway()->setHttpClient(
-            httpClient: new HTTPlugHttpClient(asyncClient: $mockClient),
+            httpClient: new HTTPlugHttpClient(client: $mockClient),
         );
 
         $response = $this->postnl->getNearestLocations(
@@ -223,12 +234,12 @@ class LocationServiceTest extends ServiceTestBase
         /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
         $response = $responseFactory->createResponse(200, 'OK')
             ->withHeader('Content-Type', 'application/json;charset=UTF-8')
-            ->withBody($streamFactory->createStream(file_get_contents(filename: __DIR__.'/../../data/responses/nearestlocationsgeocode.json')))
+            ->withBody($streamFactory->createStream(file_get_contents(filename: __DIR__.'/../../data/responses/location/nearestlocationsgeocode.json')))
         ;
         /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
         $mockClient->addResponse($response);
         $this->postnl->getLocationService()->getGateway()->setHttpClient(
-            httpClient: new HTTPlugHttpClient(asyncClient: $mockClient),
+            httpClient: new HTTPlugHttpClient(client: $mockClient),
         );
 
         $response = $this->postnl->getNearestLocationsByGeolocation(
@@ -299,12 +310,12 @@ class LocationServiceTest extends ServiceTestBase
         /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
         $response = $responseFactory->createResponse(200, 'OK')
             ->withHeader('Content-Type', 'application/json;charset=UTF-8')
-            ->withBody($streamFactory->createStream(file_get_contents(filename: __DIR__.'/../../data/responses/nearestlocationsgeocode.json')))
+            ->withBody($streamFactory->createStream(file_get_contents(filename: __DIR__.'/../../data/responses/location/nearestlocationsgeocode.json')))
         ;
         /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
         $mockClient->addResponse($response);
         $this->postnl->getLocationService()->getGateway()->setHttpClient(
-            httpClient: new HTTPlugHttpClient(asyncClient: $mockClient),
+            httpClient: new HTTPlugHttpClient(client: $mockClient),
         );
 
         $response = $this->postnl->getNearestLocationsByGeolocation(
@@ -361,12 +372,12 @@ class LocationServiceTest extends ServiceTestBase
         /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
         $response = $responseFactory->createResponse(200, 'OK')
             ->withHeader('Content-Type', 'application/json;charset=UTF-8')
-            ->withBody($streamFactory->createStream(file_get_contents(filename: __DIR__.'/../../data/responses/lookuplocation.json')))
+            ->withBody($streamFactory->createStream(file_get_contents(filename: __DIR__.'/../../data/responses/location/lookuplocation.json')))
         ;
         /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
         $mockClient->addResponse($response);
         $this->postnl->getLocationService()->getGateway()->setHttpClient(
-            httpClient: new HTTPlugHttpClient(asyncClient: $mockClient),
+            httpClient: new HTTPlugHttpClient(client: $mockClient),
         );
 
         $response = $this->postnl->lookupLocation(

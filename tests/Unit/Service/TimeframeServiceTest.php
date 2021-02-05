@@ -32,12 +32,17 @@ use Firstred\PostNL\Attribute\RequestProp;
 use Firstred\PostNL\DTO\Request\CalculateTimeframesRequestDTO;
 use Firstred\PostNL\Entity\ReasonNoTimeframe;
 use Firstred\PostNL\Entity\Timeframe;
+use Firstred\PostNL\Exception\ApiClientException;
+use Firstred\PostNL\Exception\ApiException;
+use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\InvalidApiKeyException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\NotAvailableException;
+use Firstred\PostNL\Exception\ParseError;
 use Firstred\PostNL\HttpClient\HTTPlugHttpClient;
 use Firstred\PostNL\Service\TimeframeServiceInterface;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Mock\Client;
-use function count;
 use function json_encode;
 
 /**
@@ -94,10 +99,16 @@ class TimeframeServiceTest extends ServiceTestBase
      * @testdox Can retrieve the available timeframes
      *
      * @throws InvalidArgumentException
+     * @throws ApiClientException
+     * @throws ApiException
+     * @throws HttpClientException
+     * @throws InvalidApiKeyException
+     * @throws NotAvailableException
+     * @throws ParseError
      */
     public function testGetTimeframesRest()
     {
-        $payload = file_get_contents(filename: __DIR__.'/../../data/responses/timeframes.json');
+        $payload = file_get_contents(filename: __DIR__.'/../../data/responses/timeframe/timeframes.json');
 
         $mockClient = new Client();
         $responseFactory = Psr17FactoryDiscovery::findResponseFactory();
@@ -108,7 +119,7 @@ class TimeframeServiceTest extends ServiceTestBase
             ->withBody($streamFactory->createStream($payload));
         $mockClient->addResponse(response: $response);
         $this->postnl->getTimeframeService()->getGateway()->setHttpClient(
-            httpClient: new HTTPlugHttpClient(asyncClient: $mockClient),
+            httpClient: new HTTPlugHttpClient(client: $mockClient),
         );
 
         $responseTimeframes = $this->postnl->calculateTimeframes(
@@ -124,9 +135,9 @@ class TimeframeServiceTest extends ServiceTestBase
         );
 
         // There are 5 Timeframes
-        $this->assertEquals(expected: 5, actual: count(value: $responseTimeframes->getTimeframes()));
+        $this->assertCount(expectedCount: 5, haystack: $responseTimeframes->getTimeframes());
         // There are 5 ReasonNoTimeframes
-        $this->assertEquals(expected: 5, actual: count(value: $responseTimeframes->getReasonNoTimeframes()));
+        $this->assertCount(expectedCount: 5, haystack: $responseTimeframes->getReasonNoTimeframes());
 
         // The first reason should be an instanceof of ReasonNoTimeframe
         $this->assertInstanceOf(expected: ReasonNoTimeframe::class, actual: $responseTimeframes->getReasonNoTimeframes()[0]);

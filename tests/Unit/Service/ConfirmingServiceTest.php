@@ -32,7 +32,6 @@ use Exception;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Dimension;
 use Firstred\PostNL\Entity\Shipment;
-use Firstred\PostNL\Exception\ApiDownException;
 use Firstred\PostNL\Service\ConfirmingService;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Mock\Client;

@@ -35,9 +35,15 @@ use Firstred\PostNL\DTO\Request\GenerateBarcodeRequestDTO;
 use Firstred\PostNL\DTO\Response\GenerateBarcodeResponseDTO;
 use Firstred\PostNL\DTO\Response\GenerateBarcodesByCountryCodesResponseDTO;
 use Firstred\PostNL\DTO\Response\GenerateBarcodesResponseDTO;
+use Firstred\PostNL\Exception\ApiClientException;
+use Firstred\PostNL\Exception\ApiException;
+use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidApiKeyException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\InvalidBarcodeException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
+use Firstred\PostNL\Exception\NotAvailableException;
+use Firstred\PostNL\Exception\ParseError;
 use Firstred\PostNL\HttpClient\HTTPlugHttpClient;
 use Firstred\PostNL\Service\BarcodeServiceInterface;
 use Http\Discovery\Psr17FactoryDiscovery;
@@ -75,6 +81,7 @@ class BarcodeServiceTest extends ServiceTestBase
             ),
         );
 
+        $query = [];
         parse_str(string: $request->getUri()->getQuery(), result: $query);
 
         $this->assertEqualsCanonicalizing(
@@ -100,6 +107,13 @@ class BarcodeServiceTest extends ServiceTestBase
      * @testdox Returns a valid single barcode
      *
      * @throws InvalidArgumentException
+     * @throws InvalidBarcodeException
+     * @throws ApiClientException
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws NotAvailableException
+     * @throws ParseError
+     * @throws HttpClientException
      */
     public function testSingleBarcodeRest()
     {
@@ -113,7 +127,7 @@ class BarcodeServiceTest extends ServiceTestBase
         /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
         $mockClient->addResponse($response);
         $this->postnl->getBarcodeService()->getGateway()->setHttpClient(
-            httpClient: new HTTPlugHttpClient(asyncClient: $mockClient),
+            httpClient: new HTTPlugHttpClient(client: $mockClient),
         );
 
         $response = $this->postnl->generateBarcode();
@@ -124,6 +138,16 @@ class BarcodeServiceTest extends ServiceTestBase
 
     /**
      * @testdox Returns a valid single barcode for a country
+     *
+     * @throws ApiClientException
+     * @throws ApiException
+     * @throws InvalidApiKeyException
+     * @throws InvalidArgumentException
+     * @throws InvalidBarcodeException
+     * @throws NotAvailableException
+     * @throws ParseError
+     * @throws InvalidConfigurationException
+     * @throws HttpClientException
      */
     public function testSingleBarCodeByCountryRest()
     {
@@ -137,7 +161,7 @@ class BarcodeServiceTest extends ServiceTestBase
         /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
         $mockClient->addResponse($response);
         $this->postnl->getBarcodeService()->getGateway()->setHttpClient(
-            httpClient: new HTTPlugHttpClient(asyncClient: $mockClient),
+            httpClient: new HTTPlugHttpClient(client: $mockClient),
         );
 
         $response = $this->postnl->generateBarcodeByCountryCode(iso: 'NL');
@@ -148,7 +172,15 @@ class BarcodeServiceTest extends ServiceTestBase
     /**
      * @testdox Returns several barcodes
      *
+     * @throws ApiClientException
+     * @throws ApiException
+     * @throws InvalidApiKeyException
      * @throws InvalidArgumentException
+     * @throws InvalidBarcodeException
+     * @throws InvalidConfigurationException
+     * @throws NotAvailableException
+     * @throws ParseError
+     * @throws HttpClientException
      */
     public function testMultipleNLBarcodesRest()
     {
@@ -182,11 +214,12 @@ class BarcodeServiceTest extends ServiceTestBase
                 ->withBody($streamFactory->createStream(json_encode(value: ['Barcode' => '3SDEVC816223395'])))
         );
         $this->postnl->getBarcodeService()->getGateway()->setHttpClient(
-            httpClient: new HTTPlugHttpClient(asyncClient: $mockClient),
+            httpClient: new HTTPlugHttpClient(client: $mockClient),
         );
 
         $barcodes = $this->postnl->generateBarcodesByCountryCodes(isos: ['NL' => 4]);
 
+        /** @noinspection PhpExpectedValuesShouldBeUsedInspection */
         $this->assertEquals(
             expected: new GenerateBarcodesByCountryCodesResponseDTO(
                 service: BarcodeServiceInterface::class,
