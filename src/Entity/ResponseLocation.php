@@ -87,9 +87,9 @@ class ResponseLocation extends CacheableDTO
      */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
-        string $service = '',
+        string $service = LocationServiceInterface::class,
         #[ExpectedValues(values: PropInterface::PROP_TYPES + [''])]
-        string $propType = '',
+        string $propType = ResponseProp::class,
         string $cacheKey = '',
 
         int|string|null $LocationCode = null,
@@ -463,5 +463,22 @@ class ResponseLocation extends CacheableDTO
         $this->Warnings = $Warnings;
 
         return $this;
+    }
+
+    /**
+     * @return array
+     *
+     * @throws InvalidArgumentException
+     */
+    public function jsonSerialize(): array
+    {
+        $json =  parent::jsonSerialize();
+
+        $deliveryOptions = $this->getDeliveryOptions();
+        if ($deliveryOptions) {
+            $json['DeliveryOptions'] = ['string' => $deliveryOptions];
+        }
+
+        return $json;
     }
 }

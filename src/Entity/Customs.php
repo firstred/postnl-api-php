@@ -59,9 +59,9 @@ class Customs extends SerializableObject
      */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
-        string $service = '',
+        string $service,
         #[ExpectedValues(values: PropInterface::PROP_TYPES + [''])]
-        string $propType = '',
+        string $propType,
 
         protected string|null $Certificate = null,
         protected string|null $CertificateNr = null,

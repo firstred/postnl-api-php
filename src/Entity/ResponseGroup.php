@@ -28,10 +28,13 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Misc\SerializableObject;
+
 /**
  * Class ResponseGroup.
  */
-class ResponseGroup
+class ResponseGroup extends SerializableObject
 {
     /**
      * Amount of shipments in the ResponseGroup.
@@ -59,21 +62,30 @@ class ResponseGroup
     /**
      * ResponseGroup constructor.
      *
-     * @param string|null $groupCount
-     * @param string|null $groupSequence
-     * @param string|null $groupType
-     * @param string|null $mainBarcode
+     * @param string      $service
+     * @param string      $propType
+     * @param string|null $GroupCount
+     * @param string|null $GroupSequence
+     * @param string|null $GroupType
+     * @param string|null $MainBarcode
+     *
+     * @throws InvalidArgumentException
      */
     public function __construct(
-        string|null $groupCount = null,
-        string|null $groupSequence = null,
-        string|null $groupType = null,
-        string|null $mainBarcode = null
+        string $service,
+        string $propType,
+
+        string|null $GroupCount = null,
+        string|null $GroupSequence = null,
+        string|null $GroupType = null,
+        string|null $MainBarcode = null
     ) {
-        $this->setGroupCount(groupCount: $groupCount);
-        $this->setGroupSequence(groupSequence: $groupSequence);
-        $this->setGroupType(groupType: $groupType);
-        $this->setMainBarcode(mainBarcode: $mainBarcode);
+        parent::__construct(service: $service, propType: $propType);
+
+        $this->setGroupCount(GroupCount: $GroupCount);
+        $this->setGroupSequence(GroupSequence: $GroupSequence);
+        $this->setGroupType(GroupType: $GroupType);
+        $this->setMainBarcode(MainBarcode: $MainBarcode);
     }
 
     /**
@@ -85,13 +97,13 @@ class ResponseGroup
     }
 
     /**
-     * @param string|null $groupCount
+     * @param string|null $GroupCount
      *
      * @return static
      */
-    public function setGroupCount(string|null $groupCount = null): static
+    public function setGroupCount(string|null $GroupCount = null): static
     {
-        $this->GroupCount = $groupCount;
+        $this->GroupCount = $GroupCount;
 
         return $this;
     }
@@ -105,13 +117,13 @@ class ResponseGroup
     }
 
     /**
-     * @param string|null $groupSequence
+     * @param string|null $GroupSequence
      *
      * @return static
      */
-    public function setGroupSequence(string|null $groupSequence = null): static
+    public function setGroupSequence(string|null $GroupSequence = null): static
     {
-        $this->GroupSequence = $groupSequence;
+        $this->GroupSequence = $GroupSequence;
 
         return $this;
     }
@@ -125,13 +137,13 @@ class ResponseGroup
     }
 
     /**
-     * @param string|null $groupType
+     * @param string|null $GroupType
      *
      * @return static
      */
-    public function setGroupType(string|null $groupType = null): static
+    public function setGroupType(string|null $GroupType = null): static
     {
-        $this->GroupType = $groupType;
+        $this->GroupType = $GroupType;
 
         return $this;
     }
@@ -145,13 +157,13 @@ class ResponseGroup
     }
 
     /**
-     * @param string|null $mainBarcode
+     * @param string|null $MainBarcode
      *
      * @return static
      */
-    public function setMainBarcode(string|null $mainBarcode = null): static
+    public function setMainBarcode(string|null $MainBarcode = null): static
     {
-        $this->MainBarcode = $mainBarcode;
+        $this->MainBarcode = $MainBarcode;
 
         return $this;
     }

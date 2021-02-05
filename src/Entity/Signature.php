@@ -52,9 +52,9 @@ class Signature extends SerializableObject
      */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
-        string $service = '',
+        string $service,
         #[ExpectedValues(values: PropInterface::PROP_TYPES + [''])]
-        string $propType = '',
+        string $propType,
 
         protected GetSignatureResponseSignature|null $GetSignatureResponseSignature = null,
         protected array|null $Warnings = null,

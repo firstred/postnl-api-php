@@ -41,15 +41,42 @@ use function ltrim;
 
 /**
  * Class CalculateTimeframesRequestDTO
+ *
+ * @see https://developer.postnl.nl/browse-apis/delivery-options/timeframe-webservice/testtool-rest/#/Timeframe/get_calculate_timeframes
  */
 class CalculateTimeframesRequestDTO extends CacheableDTO
 {
+    /**
+     * Date of the beginning of the timeframe.
+     *
+     * Format:dd-mm-yyyy
+     *
+     * @var string|null $StartDate
+     */
     #[RequestProp(requiredFor: ([TimeframeServiceInterface::class]))]
     protected string|null $StartDate = null;
 
+    /**
+     * Date of the enddate of the timeframe.
+     *
+     * Format:dd-mm-yyyy
+     *
+     * Enddate may not be before StartDate.
+     *
+     * @var string|null $EndDate
+     */
     #[RequestProp(requiredFor: ([TimeframeServiceInterface::class]))]
     protected string|null $EndDate = null;
 
+    /**
+     * The delivery options for which timeframes should be returned. At least one delivery option must be specified. See Guidelines for possible values.
+     *
+     * Available values : Daytime, Sameday, Evening, Morning, Noon, Sunday, Afternoon, MyTime
+     *
+     * Default value: Daytime
+     *
+     * @var array|null $Options
+     */
     #[RequestProp(requiredFor: ([TimeframeServiceInterface::class]))]
     protected array|null $Options = null;
 

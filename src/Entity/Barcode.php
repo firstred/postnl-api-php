@@ -29,7 +29,10 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Attribute\PropInterface;
+use Firstred\PostNL\Attribute\ResponseProp;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\SerializableObject;
+use Firstred\PostNL\Service\BarcodeServiceInterface;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
 
@@ -38,6 +41,13 @@ use JetBrains\PhpStorm\ExpectedValues;
  */
 class Barcode extends SerializableObject
 {
+    #[ResponseProp(requiredFor: [BarcodeServiceInterface::class])]
+    protected string|null $Type = null;
+    #[ResponseProp(requiredFor: [BarcodeServiceInterface::class])]
+    protected string|null $Range = null;
+    #[ResponseProp(requiredFor: [BarcodeServiceInterface::class])]
+    protected string|null $Serie = '000000000-999999999';
+
     /**
      * Barcode constructor.
      *
@@ -47,17 +57,17 @@ class Barcode extends SerializableObject
      * @param string|null $Range
      * @param string|null $Serie
      *
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
-        string $service = '',
+        string $service,
         #[ExpectedValues(values: PropInterface::PROP_TYPES + [''])]
-        string $propType = '',
+        string $propType,
 
-        protected string|null $Type = null,
-        protected string|null $Range = null,
-        protected string|null $Serie = '000000000-999999999',
+        string|null $Type = null,
+        string|null $Range = null,
+        string|null $Serie = '000000000-999999999',
     ) {
         parent::__construct(service: $service, propType: $propType);
 

@@ -58,9 +58,9 @@ class CalculateShippingDateResponseDTO extends CacheableDTO implements Stringabl
      */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES)]
-        string $service,
+        string $service = DeliveryDateServiceInterface::class,
         #[ExpectedValues(values: PropInterface::PROP_TYPES)]
-        string $propType,
+        string $propType = ResponseProp::class,
         string $cacheKey = '',
 
         string|null $SentDate = null,

@@ -30,6 +30,7 @@ namespace Firstred\PostNL\Entity;
 
 use DateTime;
 use Firstred\PostNL\Attribute\PropInterface;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\SerializableObject;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
@@ -39,7 +40,28 @@ use JetBrains\PhpStorm\ExpectedValues;
  */
 class Location extends SerializableObject
 {
-    public const AVAILABLE_NETWORKS = ['PNPNL-01', 'LD-01'];
+    public const AVAILABLE_NETWORKS = ['PNPNL-01', 'PNPBE-01'];
+
+    protected string|null $AllowSundaySorting = null;
+    protected string|null $DeliveryDate = null;
+    protected array|null $DeliveryOptions = null;
+    protected string|null $OpeningTime = null;
+    protected array|null $Options = null;
+    protected string|null $City = null;
+    protected string|null $HouseNr = null;
+    protected string|null $HouseNrExt = null;
+    protected string|null $Postalcode = null;
+    protected string|null $Street = null;
+    protected Coordinates|null $Coordinates = null;
+    protected CoordinatesNorthWest|null $CoordinatesNorthWest = null;
+    protected CoordinatesSouthEast|null $CoordinatesSouthEast = null;
+    protected string|null $LocationCode = null;
+    protected string|null $Saleschannel = null;
+    protected string|null $TerminalType = null;
+    #[ExpectedValues(values: self::AVAILABLE_NETWORKS)]
+    protected string|null $RetailNetworkID = null;
+    protected string|null $DownPartnerID = null;
+    protected string|null $DownPartnerLocation = null;
 
     /**
      * Location constructor.
@@ -66,34 +88,34 @@ class Location extends SerializableObject
      * @param string|null               $DownPartnerID
      * @param string|null               $DownPartnerLocation
      *
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
-        string $service = '',
+        string $service,
         #[ExpectedValues(values: PropInterface::PROP_TYPES + [''])]
-        string $propType = '',
+        string $propType,
 
-        protected string|null $AllowSundaySorting = null,
-        protected string|null $DeliveryDate = null,
-        protected array|null $DeliveryOptions = null,
-        protected string|null $OpeningTime = null,
-        protected array|null $Options = null,
-        protected string|null $City = null,
-        protected string|null $HouseNr = null,
-        protected string|null $HouseNrExt = null,
-        protected string|null $Postalcode = null,
-        protected string|null $Street = null,
-        protected Coordinates|null $Coordinates = null,
-        protected CoordinatesNorthWest|null $CoordinatesNorthWest = null,
-        protected CoordinatesSouthEast|null $CoordinatesSouthEast = null,
-        protected string|null $LocationCode = null,
-        protected string|null $Saleschannel = null,
-        protected string|null $TerminalType = null,
-        #[ExpectedValues(values: self::AVAILABLE_NETWORKS)]
-        protected string|null $RetailNetworkID = null,
-        protected string|null $DownPartnerID = null,
-        protected string|null $DownPartnerLocation = null,
+        string|null $AllowSundaySorting = null,
+        string|null $DeliveryDate = null,
+        array|null $DeliveryOptions = null,
+        string|null $OpeningTime = null,
+        array|null $Options = null,
+        string|null $City = null,
+        string|null $HouseNr = null,
+        string|null $HouseNrExt = null,
+        string|null $Postalcode = null,
+        string|null $Street = null,
+        Coordinates|null $Coordinates = null,
+        CoordinatesNorthWest|null $CoordinatesNorthWest = null,
+        CoordinatesSouthEast|null $CoordinatesSouthEast = null,
+        string|null $LocationCode = null,
+        string|null $Saleschannel = null,
+        string|null $TerminalType = null,
+        #[ExpectedValues(values: self::AVAILABLE_NETWORKS + [null])]
+        string|null $RetailNetworkID = null,
+        string|null $DownPartnerID = null,
+        string|null $DownPartnerLocation = null,
     ) {
         parent::__construct(service: $service, propType: $propType);
 
@@ -164,7 +186,7 @@ class Location extends SerializableObject
     /**
      * @return string|null
      */
-    public function calculateDeliveryDate(): string|null
+    public function getDeliveryDate(): string|null
     {
         return $this->DeliveryDate;
     }

@@ -29,6 +29,7 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Attribute\PropInterface;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
 
@@ -48,21 +49,21 @@ class LabellingMessage extends Message
      * @param string|null $MessageID
      * @param string|null $MessageTimeStamp
      *
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
-        string $service = '',
+        string $service,
         #[ExpectedValues(values: PropInterface::PROP_TYPES + [''])]
-        string $propType = '',
+        string $propType,
 
         string|null $PrinterType = 'GraphicFile|PDF',
         string|null $MessageID = null,
         string|null $MessageTimeStamp = null
     ) {
         parent::__construct(
-            service: $service = '',
-            propType: $propType = '',
+            service: $service,
+            propType: $propType,
             MessageID: $MessageID,
             MessageTimeStamp: $MessageTimeStamp,
         );

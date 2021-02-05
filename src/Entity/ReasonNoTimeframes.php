@@ -63,9 +63,9 @@ class ReasonNoTimeframes extends SerializableObject implements ArrayAccess, Coun
      */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
-        string $service = '',
+        string $service,
         #[ExpectedValues(values: PropInterface::PROP_TYPES + [''])]
-        string $propType = '',
+        string $propType,
 
         array|null $ReasonNoTimeframes = null,
     ) {

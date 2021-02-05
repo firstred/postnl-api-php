@@ -29,6 +29,7 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Attribute\PropInterface;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\SerializableObject;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
@@ -38,6 +39,15 @@ use JetBrains\PhpStorm\ExpectedValues;
  */
 class Amount extends SerializableObject
 {
+    protected string|null $AccountName = null;
+    protected string|null $AmountType = null;
+    protected string|null $BIC = null;
+    protected string|null $Currency = null;
+    protected string|null $IBAN = null;
+    protected string|null $Reference = null;
+    protected string|null $TransactionNumber = null;
+    protected string|null $Value = null;
+
     /**
      * Amount constructor.
      *
@@ -52,22 +62,22 @@ class Amount extends SerializableObject
      * @param string|null $TransactionNumber
      * @param string|null $Value
      *
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
-        string $service = '',
+        string $service,
         #[ExpectedValues(values: PropInterface::PROP_TYPES + [''])]
-        string $propType = '',
+        string $propType,
 
-        protected string|null $AccountName = null,
-        protected string|null $AmountType = null,
-        protected string|null $BIC = null,
-        protected string|null $Currency = null,
-        protected string|null $IBAN = null,
-        protected string|null $Reference = null,
-        protected string|null $TransactionNumber = null,
-        protected string|null $Value = null,
+        string|null $AccountName = null,
+        string|null $AmountType = null,
+        string|null $BIC = null,
+        string|null $Currency = null,
+        string|null $IBAN = null,
+        string|null $Reference = null,
+        string|null $TransactionNumber = null,
+        string|null $Value = null,
     ) {
         parent::__construct(service: $service, propType: $propType);
 

@@ -52,11 +52,17 @@ class GetLocationsResponseDTO extends CacheableDTO implements ArrayAccess, Count
 {
     protected int $idx = 0;
 
-    /** @psalm-var array<int|string, ResponseLocation> */
+    /**
+     * @var array|ResponseLocation[] $GetLocationsResult
+     * @psalm-var array<int|string, ResponseLocation> $GetLocationsResult
+     */
     #[ResponseProp(requiredFor: [LocationServiceInterface::class])]
     protected array $GetLocationsResult;
 
-    /** @psalm-var array<int|string, Warning> */
+    /**
+     * @var array|Warning[] $Warnings
+     * @psalm-var array<int|string, Warning> $Warnings
+     */
     #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected array|null $Warnings = null;
 
@@ -73,9 +79,9 @@ class GetLocationsResponseDTO extends CacheableDTO implements ArrayAccess, Count
      */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
-        string $service,
+        string $service = LocationServiceInterface::class,
         #[ExpectedValues(values: PropInterface::PROP_TYPES + [''])]
-        string $propType,
+        string $propType = ResponseProp::class,
         string $cacheKey = '',
 
         /** @psalm-var list<GetLocationResponseDTO>|array */
@@ -207,7 +213,7 @@ class GetLocationsResponseDTO extends CacheableDTO implements ArrayAccess, Count
     }
 
     /**
-     * @return array|ResponseLocation[]
+     * @return array
      */
     public function getGetLocationsResult(): array
     {
@@ -244,7 +250,7 @@ class GetLocationsResponseDTO extends CacheableDTO implements ArrayAccess, Count
     }
 
     /**
-     * @return array|Warning[]|null
+     * @return array|null
      */
     public function getWarnings(): array|null
     {
@@ -271,10 +277,10 @@ class GetLocationsResponseDTO extends CacheableDTO implements ArrayAccess, Count
     {
         $json = parent::jsonSerialize();
 
-        $json['GetLocationsResult'] = array_map(
+        $json['GetLocationsResult'] = ['ResponseLocation' => array_map(
             callback: fn (ResponseLocation $location): array => $location->jsonSerialize(),
             array: $this->getGetLocationsResult(),
-        );
+        )];
 
         return $json;
     }

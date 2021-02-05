@@ -77,10 +77,10 @@ class GenerateBarcodesRequestDTO extends CacheableDTO implements ArrayAccess, Co
         $this->setRequests(requests: $requests);
     }
 
-    #[Pure]
     /**
      * @return GenerateBarcodeRequestDTO
      */
+    #[Pure]
     public function current(): GenerateBarcodeRequestDTO
     {
         return array_values(array: $this->requests)[$this->idx];
@@ -91,19 +91,19 @@ class GenerateBarcodesRequestDTO extends CacheableDTO implements ArrayAccess, Co
         ++$this->idx;
     }
 
-    #[Pure]
     /**
      * @return string
      */
+    #[Pure]
     public function key(): string
     {
         return array_keys(array: $this->requests)[$this->idx];
     }
 
-    #[Pure]
     /**
      * @return bool
      */
+    #[Pure]
     public function valid(): bool
     {
         return isset(array_keys(array: $this->requests)[$this->idx]);
@@ -114,12 +114,12 @@ class GenerateBarcodesRequestDTO extends CacheableDTO implements ArrayAccess, Co
         $this->idx = 0;
     }
 
-    #[Pure]
     /**
      * @param mixed $offset
      *
      * @return bool
      */
+    #[Pure]
     public function offsetExists(mixed $offset): bool
     {
         if (!is_string(value: $offset)) {
@@ -129,10 +129,10 @@ class GenerateBarcodesRequestDTO extends CacheableDTO implements ArrayAccess, Co
         return isset($this->requests[$offset]);
     }
 
-    #[Pure]
     /**
      * @return GenerateBarcodeRequestDTO|null
      */
+    #[Pure]
     public function offsetGet(mixed $offset): GenerateBarcodeRequestDTO|null
     {
         if (!$this->offsetExists(offset: $offset)) {
@@ -186,10 +186,10 @@ class GenerateBarcodesRequestDTO extends CacheableDTO implements ArrayAccess, Co
         unset($this->requests[$offset]);
     }
 
-    #[Pure]
     /**
      * @return int
      */
+    #[Pure]
     public function count(): int
     {
         return count(value: $this->requests);

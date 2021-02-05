@@ -64,9 +64,9 @@ class Timeframes extends SerializableObject implements ArrayAccess, Countable, I
      */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
-        string $service = '',
+        string $service,
         #[ExpectedValues(values: PropInterface::PROP_TYPES + [''])]
-        string $propType = '',
+        string $propType,
 
         array|null $Timeframes = null,
     ) {

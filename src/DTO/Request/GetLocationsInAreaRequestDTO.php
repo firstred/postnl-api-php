@@ -19,31 +19,83 @@ use function str_replace;
 use function strtotime;
 
 /**
- * Class GetLocationsInAreaRequestDTO
+ * Class GetLocationsInAreaRequestDTO.
+ *
+ * @see https://developer.postnl.nl/browse-apis/delivery-options/location-webservice/testtool-rest/#/default/get_v2_1_locations_area
  */
 class GetLocationsInAreaRequestDTO extends CacheableDTO
 {
+    /**
+     * The coordinates of the north point of the area.
+     *
+     * @var float|null $LatitudeNorth
+     */
     #[RequestProp(requiredFor: [LocationServiceInterface::class])]
     protected float|null $LatitudeNorth = null;
 
+    /**
+     * The coordinates of the west point of the area.
+     *
+     * @var float|null $LongitudeWest
+     */
     #[RequestProp(requiredFor: [LocationServiceInterface::class])]
     protected float|null $LongitudeWest = null;
 
+    /**
+     * The coordinates of the south point of the area.
+     *
+     * @var float|null $LatitudeSouth
+     */
     #[RequestProp(requiredFor: [LocationServiceInterface::class])]
     protected float|null $LatitudeSouth = null;
 
+    /**
+     * The coordinates of the east point of the area.
+     *
+     * @var float|null $LongitudeEast
+     */
     #[RequestProp(requiredFor: [LocationServiceInterface::class])]
     protected float|null $LongitudeEast = null;
 
+    /**
+     * Country code.
+     *
+     * Available values: NL, BE
+     *
+     * Default value: NL
+     *
+     * @var string|null $CountryCode
+     */
+    #[ExpectedValues(values: ['NL', 'BE', null])]
     #[RequestProp(requiredFor: [LocationServiceInterface::class])]
     protected string|null $CountryCode = null;
 
+    /**
+     * The date of the earliest delivery date. Format: dd-mm-yyyy Note: this date cannot be in the past, otherwise an error is returned.
+     *
+     * @var string|null $DeliveryDate
+     */
     #[RequestProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $DeliveryDate = null;
 
+    /**
+     * Time of opening. Format: hh:mm:ss. This field will be used to filter the locations on opening hours.
+     *
+     * @var string|null $OpeningTime
+     */
     #[RequestProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $OpeningTime = null;
 
+    /**
+     * The delivery options (timeframes) for which locations should be returned. See Guidelines.
+     *
+     * Available values: PG
+     *
+     * Default value: PG
+     *
+     * @var array|null $DeliveryOptions
+     */
+    #[ExpectedValues(values: ['PG', null])]
     #[RequestProp(requiredFor: [LocationServiceInterface::class])]
     protected array|null $DeliveryOptions = null;
 

@@ -29,9 +29,12 @@ declare(strict_types=1);
 namespace Firstred\PostNL\DTO\Response;
 
 use Firstred\PostNL\Attribute\PropInterface;
+use Firstred\PostNL\Attribute\ResponseProp;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\OpeningHours;
 use Firstred\PostNL\Entity\ResponseLocation;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Service\LocationServiceInterface;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
 
@@ -42,9 +45,9 @@ class GetLocationResponseDTO extends ResponseLocation
 {
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
-        string $service = '',
+        string $service = LocationServiceInterface::class,
         #[ExpectedValues(values: PropInterface::PROP_TYPES + [''])]
-        string $propType = '',
+        string $propType = ResponseProp::class,
         string $cacheKey = '',
 
         int|string|null $LocationCode = null,
@@ -85,6 +88,19 @@ class GetLocationResponseDTO extends ResponseLocation
         $this->setGetLocationsResult(GetLocationsResult: $GetLocationsResult);
     }
 
+    /**
+     * @return static
+     */
+    public function getGetLocationsResult(): static
+    {
+        return $this;
+    }
+
+    /**
+     * @param array|null $GetLocationsResult
+     *
+     * @return $this
+     */
     protected function setGetLocationsResult(array|null $GetLocationsResult): static
     {
         if (is_array(value: $GetLocationsResult)
@@ -97,5 +113,18 @@ class GetLocationResponseDTO extends ResponseLocation
         }
 
         return $this;
+    }
+
+    /**
+     * @return array[]
+     *
+     * @throws InvalidArgumentException
+     */
+    public function jsonSerialize(): array
+    {
+        $responseLocationJson = parent::jsonSerialize();
+
+        return ['GetLocationsResult' => ['ResponseLocation' => $responseLocationJson]];
+
     }
 }

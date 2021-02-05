@@ -47,12 +47,14 @@ final class ResponseProp implements PropInterface
      *
      * @param array $requiredFor
      * @param array $optionalFor
+     *
+     * @throws InvalidArgumentException
      */
     public function __construct(array $requiredFor = [], array $optionalFor = [])
     {
         function checkService(string $service): void
         {
-            if (!is_a(object_or_class: $service = '', class: ServiceInterface::class)) {
+            if (!is_a(object_or_class: $service, class: ServiceInterface::class)) {
                 throw new InvalidArgumentException(message: "$service is not a valid service");
             }
         }

@@ -28,10 +28,16 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use Firstred\PostNL\Attribute\PropInterface;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Misc\SerializableObject;
+use Firstred\PostNL\Service\ServiceInterface;
+use JetBrains\PhpStorm\ExpectedValues;
+
 /**
  * Class ResponseShipment
  */
-class ResponseShipment
+class ResponseShipment extends SerializableObject
 {
     protected string|null $Barcode = null;
     protected string|null $DownPartnerBarcode = null;
@@ -44,6 +50,8 @@ class ResponseShipment
     /**
      * ResponseShipment constructor.
      *
+     * @param string      $service
+     * @param string      $propType
      * @param string|null $barcode
      * @param string|null $productCodeDelivery
      * @param array|null  $labels
@@ -51,8 +59,15 @@ class ResponseShipment
      * @param string|null $downPartnerId
      * @param string|null $downPartnerLocation
      * @param array|null  $warnings
+     *
+     * @throws InvalidArgumentException
      */
     public function __construct(
+        #[ExpectedValues(values: ServiceInterface::SERVICES)]
+        string $service,
+        #[ExpectedValues(values: PropInterface::PROP_TYPES)]
+        string $propType,
+
         string|null $barcode = null,
         string|null $productCodeDelivery = null,
         array|null $labels = null,
@@ -61,6 +76,8 @@ class ResponseShipment
         string|null $downPartnerLocation = null,
         array|null $warnings = null,
     ) {
+        parent::__construct(service: $service, propType: $propType);
+
         $this->setBarcode(barcode: $barcode);
         $this->setProductCodeDelivery(productCodeDelivery: $productCodeDelivery);
         $this->setDownPartnerBarcode(downPartnerBarcode: $downPartnerBarcode);

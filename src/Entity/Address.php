@@ -30,15 +30,18 @@ namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Attribute\PropInterface;
 use Firstred\PostNL\Attribute\RequestProp;
+use Firstred\PostNL\Attribute\ResponseProp;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\SerializableObject;
 use Firstred\PostNL\Service\LabellingService;
+use Firstred\PostNL\Service\LabellingServiceInterface;
+use Firstred\PostNL\Service\LocationServiceInterface;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
 use function is_numeric;
 
 /**
- * Class Address
+ * Class Address.
  */
 class Address extends SerializableObject
 {
@@ -71,60 +74,81 @@ class Address extends SerializableObject
      * At least one other AddressType must be specified, other than AddressType 02
      * In most cases this will be AddressType 01, the receiver address.
      */
-    #[RequestProp(requiredFor: [LabellingService::class])]
+    /** @var string|null $AddressType */
+    #[RequestProp(requiredFor: [LabellingServiceInterface::class])]
+    #[ResponseProp(requiredFor: [LabellingServiceInterface::class, LocationServiceInterface::class])]
     protected string|null $AddressType = null;
 
+    /** @var string|null $Area */
     #[RequestProp(optionalFor: [LabellingService::class])]
+    #[ResponseProp(optionalFor: [LabellingServiceInterface::class, LocationServiceInterface::class])]
     protected string|null $Area = null;
 
+    /** @var string|null $Buildingname */
     #[RequestProp(optionalFor: [LabellingService::class])]
+    #[ResponseProp(optionalFor: [LabellingServiceInterface::class, LocationServiceInterface::class])]
     protected string|null $Buildingname = null;
 
+    /** @var string|null $City */
     #[RequestProp(optionalFor: [LabellingService::class])]
+    #[ResponseProp(optionalFor: [LabellingServiceInterface::class, LocationServiceInterface::class])]
     protected string|null $City = null;
 
+    /** @var string|null $CompanyName */
     #[RequestProp(optionalFor: [LabellingService::class])]
+    #[ResponseProp(optionalFor: [LabellingServiceInterface::class, LocationServiceInterface::class])]
     protected string|null $CompanyName = null;
 
     #[RequestProp(requiredFor: [LabellingService::class])]
+    #[ResponseProp(requiredFor: [LabellingServiceInterface::class, LocationServiceInterface::class])]
     protected string|null $Countrycode = null;
 
     #[RequestProp(optionalFor: [LabellingService::class])]
+    #[ResponseProp(optionalFor: [LabellingServiceInterface::class, LocationServiceInterface::class])]
     protected string|null $Department = null;
+
     #[RequestProp(optionalFor: [LabellingService::class])]
+    #[ResponseProp(optionalFor: [LabellingServiceInterface::class, LocationServiceInterface::class])]
     protected string|null $Doorcode = null;
 
     #[RequestProp(optionalFor: [LabellingService::class])]
+    #[ResponseProp(optionalFor: [LabellingServiceInterface::class, LocationServiceInterface::class])]
     protected string|null $FirstName = null;
 
     #[RequestProp(optionalFor: [LabellingService::class])]
+    #[ResponseProp(optionalFor: [LabellingServiceInterface::class, LocationServiceInterface::class])]
     protected string|null $Floor = null;
 
     #[RequestProp(optionalFor: [LabellingService::class])]
+    #[ResponseProp(optionalFor: [LabellingServiceInterface::class, LocationServiceInterface::class])]
     protected int|null $HouseNr = null;
 
     #[RequestProp(optionalFor: [LabellingService::class])]
+    #[ResponseProp(optionalFor: [LabellingServiceInterface::class, LocationServiceInterface::class])]
     protected string|null $HouseNrExt = null;
 
     #[RequestProp(optionalFor: [LabellingService::class])]
+    #[ResponseProp(optionalFor: [LabellingServiceInterface::class, LocationServiceInterface::class])]
     protected string|null $StreetHouseNrExt = null;
 
     #[RequestProp(optionalFor: [LabellingService::class])]
+    #[ResponseProp(optionalFor: [LabellingServiceInterface::class, LocationServiceInterface::class])]
     protected string|null $Name = null;
 
     #[RequestProp(optionalFor: [LabellingService::class])]
+    #[ResponseProp(optionalFor: [LabellingServiceInterface::class, LocationServiceInterface::class])]
     protected string|null $Region = null;
 
+    #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $Remark = null;
 
     #[RequestProp(optionalFor: [LabellingService::class])]
+    #[ResponseProp(optionalFor: [LabellingServiceInterface::class, LocationServiceInterface::class])]
     protected string|null $Street = null;
 
     #[RequestProp(optionalFor: [LabellingService::class])]
+    #[ResponseProp(optionalFor: [LabellingServiceInterface::class, LocationServiceInterface::class])]
     protected string|null $Zipcode = null;
-
-    /** @var array|null Array with optional properties */
-    protected array|null $other = null;
 
     /**
      * Address constructor.
@@ -149,7 +173,6 @@ class Address extends SerializableObject
      * @param string|null     $Remark
      * @param string|null     $Street
      * @param string|null     $Zipcode
-     * @param array|null      $other
      *
      * @throws InvalidArgumentException
      */
@@ -177,7 +200,6 @@ class Address extends SerializableObject
         string|null $Remark = null,
         string|null $Street = null,
         string|null $Zipcode = null,
-        array|null $other = null,
     ) {
         parent::__construct(service: $service, propType: $propType);
 
@@ -201,8 +223,6 @@ class Address extends SerializableObject
         $this->setRegion(Region: $Region);
         $this->setRemark(Remark: $Remark);
         $this->setStreetHouseNrExt(StreetHouseNrExt: $StreetHouseNrExt);
-
-        $this->setOther(other: $other);
     }
 
     /**
@@ -583,26 +603,6 @@ class Address extends SerializableObject
     public function setStreet(string|null $Street = null): static
     {
         $this->Street = $Street;
-
-        return $this;
-    }
-
-    /**
-     * @return array|null
-     */
-    public function getOther(): array|null
-    {
-        return $this->other;
-    }
-
-    /**
-     * @param array|null $other
-     *
-     * @return static
-     */
-    public function setOther(array|null $other = null): static
-    {
-        $this->other = $other;
 
         return $this;
     }

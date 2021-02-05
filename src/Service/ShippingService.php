@@ -30,6 +30,7 @@ namespace Firstred\PostNL\Service;
 
 use Firstred\PostNL\Entity\Request\Shipping;
 use Firstred\PostNL\Entity\Response\GenerateShippingResponse;
+use Firstred\PostNL\Exception\ApiClientException;
 use Firstred\PostNL\Exception\ApiDownException;
 use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifException;
@@ -103,10 +104,10 @@ class ShippingService extends ServiceBase implements ShippingServiceInterface
         }
 
         if (200 === $response->getStatusCode()) {
-            throw new WithResponse(message: 'Invalid API response', code: null, previous: null, response: $response);
+            throw new ApiClientException(message: 'Invalid API response', code: null, previous: null, response: $response);
         }
 
-        throw new ApiException('Unable to ship order');
+        throw new ApiClientException(message: 'Unable to ship order');
     }
 
     /**

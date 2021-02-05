@@ -39,7 +39,14 @@ use function is_a;
 #[Attribute(Attribute::TARGET_PROPERTY)]
 final class RequestProp implements PropInterface
 {
+    /**
+     * @var array
+     */
     private array $requiredForServices = [];
+
+    /**
+     * @var array
+     */
     private array $optionalForServices = [];
 
     /**

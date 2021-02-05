@@ -99,6 +99,40 @@ class EntityTest extends TestCase
      *
      * @throws ReflectionException
      */
+    public function testConstructorParametersHaveGettersAndSetters()
+    {
+        $classmap = array_keys(array: include __DIR__.'/../../../vendor/composer/autoload_classmap.php');
+        foreach ($classmap as $class) {
+            try {
+                if (is_a(object_or_class: $class, class: SerializableObject::class, allow_string: true)
+                    && SerializableObject::class !== $class
+                ) {
+                    $reflectionClass = new ReflectionClass(objectOrClass: $class);
+                    foreach ($reflectionClass->getConstructor()->getParameters() as $reflectionParameter) {
+                        if (in_array(needle: $reflectionParameter->getName(), haystack: ['service', 'propType', 'cacheKey'])) {
+                            continue;
+                        }
+
+                        $this->assertTrue(
+                            condition: method_exists(object_or_class: $class, method: "get{$reflectionParameter->getName()}"),
+                            message: "Class `$class` does not have required the method `get{$reflectionParameter->getName()}`",
+                        );
+                        $this->assertTrue(
+                            condition: method_exists(object_or_class: $class, method: "set{$reflectionParameter->getName()}"),
+                            message: "Class `$class` does not have required the method `set{$reflectionParameter->getName()}`",
+                        );
+                    }
+                }
+            } catch (Error | LogicException) {
+            }
+        }
+    }
+
+    /**
+     * @testdox Properties should have dedicated getters and setters
+     *
+     * @throws ReflectionException
+     */
     public function testPropsHaveGettersAndSetters()
     {
         $classmap = array_keys(array: include __DIR__.'/../../../vendor/composer/autoload_classmap.php');

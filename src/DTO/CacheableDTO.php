@@ -28,6 +28,7 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\DTO;
 
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\SerializableObject;
 use ReflectionClass;
 
@@ -43,7 +44,7 @@ abstract class CacheableDTO extends SerializableObject implements CacheableDTOIn
      * @param string $propType
      * @param string $cacheKey
      *
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function __construct(
         string $service,

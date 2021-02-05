@@ -28,10 +28,16 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use Firstred\PostNL\Attribute\PropInterface;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Misc\SerializableObject;
+use Firstred\PostNL\Service\ServiceInterface;
+use JetBrains\PhpStorm\ExpectedValues;
+
 /**
  * Class Shipping
  */
-class Shipping
+class Shipping extends SerializableObject
 {
     protected Customer|null $Customer = null;
     protected LabellingMessage|null $Message = null;
@@ -40,17 +46,28 @@ class Shipping
     /**
      * Shipping constructor.
      *
+     * @param string                $service
+     * @param string                $propType
      * @param array|null            $shipments
      * @param LabellingMessage|null $message
      * @param Customer|null         $customer
+     *
+     * @throws InvalidArgumentException
      */
     public function __construct(
+        #[ExpectedValues(values: ServiceInterface::SERVICES)]
+        string $service,
+        #[ExpectedValues(values: PropInterface::PROP_TYPES)]
+        string $propType,
+
         array|null $shipments = null,
         LabellingMessage|null $message = null,
         Customer|null $customer = null,
     ) {
+        parent::__construct(service: $service, propType: $propType);
+
         $this->setShipments(shipments: $shipments);
-        $this->setMessage(message: $message ?: new LabellingMessage());
+        $this->setMessage(message: $message ?: new LabellingMessage(service: $service, propType: $propType));
         $this->setCustomer(customer: $customer);
     }
 

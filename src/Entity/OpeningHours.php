@@ -35,6 +35,7 @@ use Firstred\PostNL\Misc\SerializableObject;
 use Firstred\PostNL\Service\LocationServiceInterface;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
+use function count;
 use function is_array;
 
 /**
@@ -80,9 +81,9 @@ class OpeningHours extends SerializableObject
      */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
-        string $service = '',
+        string $service,
         #[ExpectedValues(values: PropInterface::PROP_TYPES + [''])]
-        string $propType = '',
+        string $propType,
 
         string|array $Monday = ['string' => []],
         string|array $Tuesday = ['string' => []],
@@ -312,20 +313,41 @@ class OpeningHours extends SerializableObject
 
     /**
      * @return array
-     *              
+     *
      * @throws InvalidArgumentException
      */
     public function jsonSerialize(): array
     {
         $json = parent::jsonSerialize();
+        unset($json['Monday']);
+        unset($json['Tuesday']);
+        unset($json['Wednesday']);
+        unset($json['Thursday']);
+        unset($json['Friday']);
+        unset($json['Saturday']);
+        unset($json['Sunday']);
 
-        $json['Monday'] = ['string' => 1 === count(value: $this->getMonday()) ? $this->getMonday()[0] : $this->getMonday()];
-        $json['Tuesday'] = ['string' => 1 === count(value: $this->getTuesday()) ? $this->getTuesday()[0] : $this->getTuesday()];
-        $json['Wednesday'] = ['string' => 1 === count(value: $this->getWednesday()) ? $this->getWednesday()[0] : $this->getWednesday()];
-        $json['Thursday'] = ['string' => 1 === count(value: $this->getThursday()) ? $this->getThursday()[0] : $this->getThursday()];
-        $json['Friday'] = ['string' => 1 === count(value: $this->getFriday()) ? $this->getFriday()[0] : $this->getFriday()];
-        $json['Saturday'] = ['string' => 1 === count(value: $this->getSaturday()) ? $this->getSaturday()[0] : $this->getSaturday()];
-        $json['Sunday'] = ['string' => 1 === count(value: $this->getSunday()) ? $this->getSunday()[0] : $this->getSunday()];
+        if (!empty($this->getMonday())) {
+            $json['Monday'] = ['string' => 1 === count(value: $this->getMonday()) ? $this->getMonday()[0] : $this->getMonday()];
+        }
+        if (!empty($this->getTuesday())) {
+            $json['Tuesday'] = ['string' => 1 === count(value: $this->getTuesday()) ? $this->getTuesday()[0] : $this->getTuesday()];
+        }
+        if (!empty($this->getWednesday())) {
+            $json['Wednesday'] = ['string' => 1 === count(value: $this->getWednesday()) ? $this->getWednesday()[0] : $this->getWednesday()];
+        }
+        if (!empty($this->getThursday())) {
+            $json['Thursday'] = ['string' => 1 === count(value: $this->getThursday()) ? $this->getThursday()[0] : $this->getThursday()];
+        }
+        if (!empty($this->getFriday())) {
+            $json['Friday'] = ['string' => 1 === count(value: $this->getFriday()) ? $this->getFriday()[0] : $this->getFriday()];
+        }
+        if (!empty($this->getSaturday())) {
+            $json['Saturday'] = ['string' => 1 === count(value: $this->getSaturday()) ? $this->getSaturday()[0] : $this->getSaturday()];
+        }
+        if (!empty($this->getSunday())) {
+            $json['Sunday'] = ['string' => 1 === count(value: $this->getSunday()) ? $this->getSunday()[0] : $this->getSunday()];
+        }
 
         return $json;
     }

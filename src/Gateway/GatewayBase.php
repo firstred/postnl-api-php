@@ -138,9 +138,23 @@ abstract class GatewayBase implements GatewayInterface
     /**
      * @param SerializableObject $object
      * @param string             $cacheKey
+     *
+     * @throws InvalidArgumentException
      */
     protected function cacheItem(SerializableObject $object, string $cacheKey): void
     {
+        $cache = $this->getCache();
+        if (!$cache instanceof CacheItemPoolInterface) {
+            return;
+        }
+
+        /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+        $item = $cache->getItem($cacheKey);
+
+        /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+        $item->set(serialize(value: $object));
+        /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+        $cache->save($item);
     }
 
     /**
@@ -157,13 +171,16 @@ abstract class GatewayBase implements GatewayInterface
 
         $item = null;
         $cache = $this->getCache();
-        if ($cache instanceof CacheItemPoolInterface && !is_null(value: $this->getTtl())) {
-            /** @psalm-suppress InvalidCatch */
-            try {
-                /** @var SerializableObject $item */
-                $item = $cache->getItem(key: $cacheKey);
-            } catch (InvalidArgumentException) {
-            }
+        if (!$cache instanceof CacheItemPoolInterface || null === $this->getTtl()) {
+            return null;
+        }
+
+        /** @psalm-suppress InvalidCatch */
+        try {
+            /** @var string $item */
+            $item = $cache->getItem(key: $cacheKey);
+            unserialize($item);
+        } catch (InvalidArgumentException) {
         }
 
         return $item;

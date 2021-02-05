@@ -78,7 +78,15 @@ abstract class SerializableObject implements JsonSerializable
             if ($val instanceof SerializableObject) {
                 $val = $val->jsonSerialize();
             }
-            $json[$serializableProp] = $val;
+
+            // Weird flaw in the PostNL API, anything that is numeric should be an integer|float
+            if ((string) (int) $val === $val) {
+                $json[$serializableProp] = (int) $val;
+            } elseif ((string) (float) $val === $val) {
+                $json[$serializableProp] = (float) $val;
+            } else {
+                $json[$serializableProp] = $val;
+            }
         }
 
         return $json;
@@ -130,6 +138,7 @@ abstract class SerializableObject implements JsonSerializable
     }
 
     #[ExpectedValues(values: PropInterface::PROP_TYPES)]
+
     /**
      * @return string
      */
@@ -254,5 +263,35 @@ abstract class SerializableObject implements JsonSerializable
         }
 
         return true;
+    }
+
+    /**
+     * @return array
+     *
+     * @throws InvalidArgumentException
+     */
+    public function __serialize(): array
+    {
+        $response = $this->jsonSerialize();
+        $response['service'] = $this->service;
+        $response['propType'] = $this->propType;
+
+        return $response;
+    }
+
+    /**
+     * @param array $serialized
+     */
+    public function __unserialize(array $serialized): void
+    {
+        $this->service = $serialized['service']   ?? '';
+        $this->propType = $serialized['propType'] ?? '';
+        foreach ($serialized as $prop => $value) {
+            if (in_array(needle: $prop, haystack: ['service', 'propType'])) {
+                continue;
+            }
+
+            $this->{"set$prop"}($value);
+        }
     }
 }

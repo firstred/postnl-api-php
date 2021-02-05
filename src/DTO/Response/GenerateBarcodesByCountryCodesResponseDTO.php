@@ -31,8 +31,10 @@ namespace Firstred\PostNL\DTO\Response;
 use ArrayAccess;
 use Countable;
 use Firstred\PostNL\Attribute\PropInterface;
+use Firstred\PostNL\Attribute\ResponseProp;
 use Firstred\PostNL\DTO\CacheableDTO;
 use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Service\BarcodeServiceInterface;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
 use JetBrains\PhpStorm\Pure;
@@ -61,9 +63,9 @@ class GenerateBarcodesByCountryCodesResponseDTO extends CacheableDTO implements 
      */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES)]
-        string $service,
+        string $service = BarcodeServiceInterface::class,
         #[ExpectedValues(values: PropInterface::PROP_TYPES)]
-        string $propType,
+        string $propType = ResponseProp::class,
         string $cacheKey = '',
 
         array $countries = [],

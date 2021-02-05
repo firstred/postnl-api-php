@@ -39,33 +39,90 @@ use function is_numeric;
 
 /**
  * Class CalculateShippingDateRequestDTO.
+ *
+ * @see https://developer.postnl.nl/browse-apis/delivery-options/deliverydate-webservice/testtool-rest/
  */
 class CalculateShippingDateRequestDTO extends CacheableDTO
 {
+    /**
+     * Date of the expected delivery (to the final destination) of the shipment.
+     *
+     * @var string|null $DeliveryDate
+     */
     #[RequestProp(requiredFor: [DeliveryDateServiceInterface::class])]
     protected string|null $DeliveryDate = null;
 
+    /**
+     * The duration it takes for the shipment to be delivered to PostNL in days. A value of 1 means that the parcel will be delivered to PostNL on the same day as the date specified in ShippingDate. A value of 2 means the parcel will arrive at PostNL a day later etc.
+     *
+     * @var int|null $ShippingDuration
+     */
     #[RequestProp(requiredFor: [DeliveryDateServiceInterface::class])]
     protected int|null $ShippingDuration = null;
 
+    /**
+     * Zipcode of the address.
+     *
+     * @var string|null $PostalCode
+     */
     #[RequestProp(requiredFor: [DeliveryDateServiceInterface::class])]
     protected string|null $PostalCode = null;
 
+    /**
+     * The ISO2 country codes.
+     *
+     * Available values: NL, BE
+     *
+     * Default value: NL
+     *
+     * @var string|null $CountryCode
+     */
+    #[ExpectedValues(values: ['NL', 'BE', null])]
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected string|null $CountryCode = null;
 
+    /**
+     * The ISO2 country codes of the origin country.
+     *
+     * Available values: NL, BE
+     *
+     * Default value: NL
+     *
+     * @var string|null $OriginCountryCode
+     */
+    #[ExpectedValues(values: ['NL', 'BE', null])]
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected string|null $OriginCountryCode = null;
 
+    /**
+     * City of the address.
+     *
+     * @var string|null $City
+     */
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected string|null $City = null;
 
+    /**
+     * The street name of the delivery address.
+     *
+     * @var string|null $Street
+     */
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected string|null $Street = null;
 
+    /**
+     * The house number of the delivery address.
+     *
+     * @var int|null $HouseNumber
+     */
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected int|null $HouseNumber = null;
 
+    /**
+     * House number extension.
+     *
+     * @var string|null $HouseNrExt
+     */
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected string|null $HouseNrExt = null;
 

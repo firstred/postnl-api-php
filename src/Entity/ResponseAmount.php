@@ -28,10 +28,16 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use Firstred\PostNL\Attribute\PropInterface;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Misc\SerializableObject;
+use Firstred\PostNL\Service\ServiceInterface;
+use JetBrains\PhpStorm\ExpectedValues;
+
 /**
  * Class ResponseAmount.
  */
-class ResponseAmount
+class ResponseAmount extends SerializableObject
 {
     protected string|null $AccountName = null;
     protected string|null $ResponseAmountType = null;
@@ -45,33 +51,44 @@ class ResponseAmount
     /**
      * ResponseAmount constructor.
      *
-     * @param string|null $accountName
-     * @param string|null $responseAmount
-     * @param string|null $bic
-     * @param string|null $currency
-     * @param string|null $iban
-     * @param string|null $reference
-     * @param string|null $transactionNumber
-     * @param string|null $value
+     * @param string      $service
+     * @param string      $propType
+     * @param string|null $AccountName
+     * @param string|null $ResponseAmountType
+     * @param string|null $BIC
+     * @param string|null $Currency
+     * @param string|null $IBAN
+     * @param string|null $Reference
+     * @param string|null $TransactionNumber
+     * @param string|null $Value
+     *
+     * @throws InvalidArgumentException
      */
     public function __construct(
-        string|null $accountName = null,
-        string|null $responseAmount = null,
-        string|null $bic = null,
-        string|null $currency = null,
-        string|null $iban = null,
-        string|null $reference = null,
-        string|null $transactionNumber = null,
-        string|null $value = null,
+        #[ExpectedValues(values: [ServiceInterface::SERVICES])]
+        string $service,
+        #[ExpectedValues(values: [PropInterface::PROP_TYPES])]
+        string $propType,
+
+        string|null $AccountName = null,
+        string|null $ResponseAmountType = null,
+        string|null $BIC = null,
+        string|null $Currency = null,
+        string|null $IBAN = null,
+        string|null $Reference = null,
+        string|null $TransactionNumber = null,
+        string|null $Value = null,
     ) {
-        $this->setAccountName(accountName: $accountName);
-        $this->setResponseAmountType(responseAmountType: $responseAmount);
-        $this->setBIC(bic: $bic);
-        $this->setCurrency(currency: $currency);
-        $this->setIBAN(iban: $iban);
-        $this->setReference(reference: $reference);
-        $this->setTransactionNumber(transactionNumber: $transactionNumber);
-        $this->setValue(value: $value);
+        parent::__construct(service: $service, propType: $propType);
+
+        $this->setAccountName(AccountName: $AccountName);
+        $this->setResponseAmountType(ResponseAmountType: $ResponseAmountType);
+        $this->setBIC(BIC: $BIC);
+        $this->setCurrency(Currency: $Currency);
+        $this->setIBAN(IBAN: $IBAN);
+        $this->setReference(Reference: $Reference);
+        $this->setTransactionNumber(TransactionNumber: $TransactionNumber);
+        $this->setValue(Value: $Value);
     }
 
     /**
@@ -83,13 +100,13 @@ class ResponseAmount
     }
 
     /**
-     * @param string|null $accountName
+     * @param string|null $AccountName
      *
      * @return static
      */
-    public function setAccountName(string|null $accountName = null): static
+    public function setAccountName(string|null $AccountName = null): static
     {
-        $this->AccountName = $accountName;
+        $this->AccountName = $AccountName;
 
         return $this;
     }
@@ -103,13 +120,13 @@ class ResponseAmount
     }
 
     /**
-     * @param string|null $responseAmountType
+     * @param string|null $ResponseAmountType
      *
      * @return static
      */
-    public function setResponseAmountType(string|null $responseAmountType = null): static
+    public function setResponseAmountType(string|null $ResponseAmountType = null): static
     {
-        $this->ResponseAmountType = $responseAmountType;
+        $this->ResponseAmountType = $ResponseAmountType;
 
         return $this;
     }
@@ -123,13 +140,13 @@ class ResponseAmount
     }
 
     /**
-     * @param string|null $bic
+     * @param string|null $BIC
      *
      * @return static
      */
-    public function setBIC(string|null $bic = null): static
+    public function setBIC(string|null $BIC = null): static
     {
-        $this->BIC = $bic;
+        $this->BIC = $BIC;
 
         return $this;
     }
@@ -143,13 +160,13 @@ class ResponseAmount
     }
 
     /**
-     * @param string|null $currency
+     * @param string|null $Currency
      *
      * @return static
      */
-    public function setCurrency(string|null $currency = null): static
+    public function setCurrency(string|null $Currency = null): static
     {
-        $this->Currency = $currency;
+        $this->Currency = $Currency;
 
         return $this;
     }
@@ -163,13 +180,13 @@ class ResponseAmount
     }
 
     /**
-     * @param string|null $iban
+     * @param string|null $IBAN
      *
      * @return static
      */
-    public function setIBAN(string|null $iban = null): static
+    public function setIBAN(string|null $IBAN = null): static
     {
-        $this->IBAN = $iban;
+        $this->IBAN = $IBAN;
 
         return $this;
     }
@@ -183,13 +200,13 @@ class ResponseAmount
     }
 
     /**
-     * @param string|null $reference
+     * @param string|null $Reference
      *
      * @return static
      */
-    public function setReference(string|null $reference = null): static
+    public function setReference(string|null $Reference = null): static
     {
-        $this->Reference = $reference;
+        $this->Reference = $Reference;
 
         return $this;
     }
@@ -203,13 +220,13 @@ class ResponseAmount
     }
 
     /**
-     * @param string|null $transactionNumber
+     * @param string|null $TransactionNumber
      *
      * @return static
      */
-    public function setTransactionNumber(string|null $transactionNumber = null): static
+    public function setTransactionNumber(string|null $TransactionNumber = null): static
     {
-        $this->TransactionNumber = $transactionNumber;
+        $this->TransactionNumber = $TransactionNumber;
 
         return $this;
     }
@@ -223,13 +240,13 @@ class ResponseAmount
     }
 
     /**
-     * @param string|null $value
+     * @param string|null $Value
      *
      * @return static
      */
-    public function setValue(string|null $value = null): static
+    public function setValue(string|null $Value = null): static
     {
-        $this->Value = $value;
+        $this->Value = $Value;
 
         return $this;
     }

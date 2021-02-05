@@ -28,10 +28,18 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use Firstred\PostNL\Attribute\PropInterface;
+use Firstred\PostNL\Attribute\ResponseProp;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Misc\SerializableObject;
+use Firstred\PostNL\Service\LocationServiceInterface;
+use Firstred\PostNL\Service\ServiceInterface;
+use JetBrains\PhpStorm\ExpectedValues;
+
 /**
  * Class ResponseAddress
  */
-class ResponseAddress
+class ResponseAddress extends SerializableObject
 {
     /**
      * PostNL internal applications validate the receiver ResponseAddress. In case the spelling of
@@ -62,84 +70,127 @@ class ResponseAddress
      * At least one other AddressType must be specified, other than AddressType 02
      * In most cases this will be AddressType 01, the receiver ResponseAddress.
      */
+    #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $AddressType = null;
+
+    #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $Area = null;
+
+    #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $Buildingname = null;
+
+    #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $City = null;
+
+    #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $CompanyName = null;
+
+    #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $Countrycode = null;
+
+    #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $Department = null;
+
+    #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $Doorcode = null;
+
+    #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $FirstName = null;
+
+    #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $Floor = null;
+
+    #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $HouseNr = null;
+
+    #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $HouseNrExt = null;
+
+    #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $Name = null;
+
+    #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $Region = null;
+
+    #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $Remark = null;
+
+    #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $Street = null;
+
+    #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $Zipcode = null;
-    protected array|null $other = [];
 
     /**
      * ResponseAddress constructor.
      *
+     * @param string      $service
+     * @param string      $propType
      * @param string|null $AddressType
-     * @param string|null $firstName
-     * @param string|null $name
-     * @param string|null $companyName
-     * @param string|null $street
-     * @param string|null $houseNr
-     * @param string|null $houseNrExt
-     * @param string|null $zipcode
-     * @param string|null $city
-     * @param string|null $countryCode
-     * @param string|null $area
-     * @param string|null $buildingName
-     * @param string|null $department
-     * @param string|null $doorcode
-     * @param string|null $floor
-     * @param string|null $region
-     * @param string|null $remark
+     * @param string|null $FirstName
+     * @param string|null $Name
+     * @param string|null $CompanyName
+     * @param string|null $Street
+     * @param string|null $HouseNr
+     * @param string|null $HouseNrExt
+     * @param string|null $Zipcode
+     * @param string|null $City
+     * @param string|null $Countrycode
+     * @param string|null $Area
+     * @param string|null $Buildingname
+     * @param string|null $Department
+     * @param string|null $Doorcode
+     * @param string|null $Floor
+     * @param string|null $Region
+     * @param string|null $Remark
+     *
+     * @throws InvalidArgumentException
      */
     public function __construct(
+        #[ExpectedValues(values: ServiceInterface::SERVICES)]
+        string $service,
+        #[ExpectedValues(values: PropInterface::PROP_TYPES)]
+        string $propType,
+
         string|null $AddressType = null,
-        string|null $firstName = null,
-        string|null $name = null,
-        string|null $companyName = null,
-        string|null $street = null,
-        string|null $houseNr = null,
-        string|null $houseNrExt = null,
-        string|null $zipcode = null,
-        string|null $city = null,
-        string|null $countryCode = null,
-        string|null $area = null,
-        string|null $buildingName = null,
-        string|null $department = null,
-        string|null $doorcode = null,
-        string|null $floor = null,
-        string|null $region = null,
-        string|null $remark = null,
+        string|null $FirstName = null,
+        string|null $Name = null,
+        string|null $CompanyName = null,
+        string|null $Street = null,
+        string|null $HouseNr = null,
+        string|null $HouseNrExt = null,
+        string|null $Zipcode = null,
+        string|null $City = null,
+        string|null $Countrycode = null,
+        string|null $Area = null,
+        string|null $Buildingname = null,
+        string|null $Department = null,
+        string|null $Doorcode = null,
+        string|null $Floor = null,
+        string|null $Region = null,
+        string|null $Remark = null,
     ) {
-        $this->setAddressType(addressType: $AddressType);
-        $this->setFirstName(firstName: $firstName);
-        $this->setName(name: $name);
-        $this->setCompanyName(companyName: $companyName);
-        $this->setStreet(street: $street);
-        $this->setHouseNr(houseNr: $houseNr);
-        $this->setHouseNrExt(houseNrExt: $houseNrExt);
-        $this->setZipcode(zipcode: $zipcode);
-        $this->setCity(city: $city);
-        $this->setCountrycode(countryCode: $countryCode);
+        parent::__construct(service: $service, propType: $propType);
+
+        $this->setAddressType(AddressType: $AddressType);
+        $this->setFirstName(FirstName: $FirstName);
+        $this->setName(Name: $Name);
+        $this->setCompanyName(CompanyName: $CompanyName);
+        $this->setStreet(Street: $Street);
+        $this->setHouseNr(HouseNr: $HouseNr);
+        $this->setHouseNrExt(HouseNrExt: $HouseNrExt);
+        $this->setZipcode(Zipcode: $Zipcode);
+        $this->setCity(City: $City);
+        $this->setCountrycode(Countrycode: $Countrycode);
 
         // Optional parameters.
-        $this->setArea(area: $area);
-        $this->setBuildingname(buildingName: $buildingName);
-        $this->setDepartment(department: $department);
-        $this->setDoorcode(doorcode: $doorcode);
-        $this->setFloor(floor: $floor);
-        $this->setRegion(region: $region);
-        $this->setRemark(remark: $remark);
+        $this->setArea(Area: $Area);
+        $this->setBuildingname(Buildingname: $Buildingname);
+        $this->setDepartment(Department: $Department);
+        $this->setDoorcode(Doorcode: $Doorcode);
+        $this->setFloor(Floor: $Floor);
+        $this->setRegion(Region: $Region);
+        $this->setRemark(Remark: $Remark);
     }
 
     /**
@@ -151,13 +202,13 @@ class ResponseAddress
     }
 
     /**
-     * @param string|null $addressType
+     * @param string|null $AddressType
      *
      * @return static
      */
-    public function setAddressType(string|null $addressType = null): static
+    public function setAddressType(string|null $AddressType = null): static
     {
-        $this->AddressType = $addressType;
+        $this->AddressType = $AddressType;
 
         return $this;
     }
@@ -171,13 +222,13 @@ class ResponseAddress
     }
 
     /**
-     * @param string|null $area
+     * @param string|null $Area
      *
      * @return static
      */
-    public function setArea(string|null $area = null): static
+    public function setArea(string|null $Area = null): static
     {
-        $this->Area = $area;
+        $this->Area = $Area;
 
         return $this;
     }
@@ -191,13 +242,13 @@ class ResponseAddress
     }
 
     /**
-     * @param string|null $buildingName
+     * @param string|null $Buildingname
      *
      * @return static
      */
-    public function setBuildingname(string|null $buildingName = null): static
+    public function setBuildingname(string|null $Buildingname = null): static
     {
-        $this->Buildingname = $buildingName;
+        $this->Buildingname = $Buildingname;
 
         return $this;
     }
@@ -211,13 +262,13 @@ class ResponseAddress
     }
 
     /**
-     * @param string|null $city
+     * @param string|null $City
      *
      * @return static
      */
-    public function setCity(string|null $city = null): static
+    public function setCity(string|null $City = null): static
     {
-        $this->City = $city;
+        $this->City = $City;
 
         return $this;
     }
@@ -231,13 +282,13 @@ class ResponseAddress
     }
 
     /**
-     * @param string|null $companyName
+     * @param string|null $CompanyName
      *
      * @return static
      */
-    public function setCompanyName(string|null $companyName = null): static
+    public function setCompanyName(string|null $CompanyName = null): static
     {
-        $this->CompanyName = $companyName;
+        $this->CompanyName = $CompanyName;
 
         return $this;
     }
@@ -251,13 +302,13 @@ class ResponseAddress
     }
 
     /**
-     * @param string|null $countryCode
+     * @param string|null $Countrycode
      *
      * @return static
      */
-    public function setCountrycode(string|null $countryCode = null): static
+    public function setCountrycode(string|null $Countrycode = null): static
     {
-        $this->Countrycode = $countryCode;
+        $this->Countrycode = $Countrycode;
 
         return $this;
     }
@@ -271,13 +322,13 @@ class ResponseAddress
     }
 
     /**
-     * @param string|null $department
+     * @param string|null $Department
      *
      * @return static
      */
-    public function setDepartment(string|null $department = null): static
+    public function setDepartment(string|null $Department = null): static
     {
-        $this->Department = $department;
+        $this->Department = $Department;
 
         return $this;
     }
@@ -291,13 +342,13 @@ class ResponseAddress
     }
 
     /**
-     * @param string|null $doorcode
+     * @param string|null $Doorcode
      *
      * @return static
      */
-    public function setDoorcode(string|null $doorcode = null): static
+    public function setDoorcode(string|null $Doorcode = null): static
     {
-        $this->Doorcode = $doorcode;
+        $this->Doorcode = $Doorcode;
 
         return $this;
     }
@@ -311,13 +362,13 @@ class ResponseAddress
     }
 
     /**
-     * @param string|null $firstName
+     * @param string|null $FirstName
      *
      * @return static
      */
-    public function setFirstName(string|null $firstName = null): static
+    public function setFirstName(string|null $FirstName = null): static
     {
-        $this->FirstName = $firstName;
+        $this->FirstName = $FirstName;
 
         return $this;
     }
@@ -331,13 +382,13 @@ class ResponseAddress
     }
 
     /**
-     * @param string|null $floor
+     * @param string|null $Floor
      *
      * @return static
      */
-    public function setFloor(string|null $floor = null): static
+    public function setFloor(string|null $Floor = null): static
     {
-        $this->Floor = $floor;
+        $this->Floor = $Floor;
 
         return $this;
     }
@@ -351,13 +402,13 @@ class ResponseAddress
     }
 
     /**
-     * @param string|null $houseNr
+     * @param string|null $HouseNr
      *
      * @return static
      */
-    public function setHouseNr(string|null $houseNr = null): static
+    public function setHouseNr(string|null $HouseNr = null): static
     {
-        $this->HouseNr = $houseNr;
+        $this->HouseNr = $HouseNr;
 
         return $this;
     }
@@ -371,13 +422,13 @@ class ResponseAddress
     }
 
     /**
-     * @param string|null $houseNrExt
+     * @param string|null $HouseNrExt
      *
      * @return static
      */
-    public function setHouseNrExt(string|null $houseNrExt = null): static
+    public function setHouseNrExt(string|null $HouseNrExt = null): static
     {
-        $this->HouseNrExt = $houseNrExt;
+        $this->HouseNrExt = $HouseNrExt;
 
         return $this;
     }
@@ -391,13 +442,13 @@ class ResponseAddress
     }
 
     /**
-     * @param string|null $name
+     * @param string|null $Name
      *
      * @return static
      */
-    public function setName(string|null $name = null): static
+    public function setName(string|null $Name = null): static
     {
-        $this->Name = $name;
+        $this->Name = $Name;
 
         return $this;
     }
@@ -411,13 +462,13 @@ class ResponseAddress
     }
 
     /**
-     * @param string|null $region
+     * @param string|null $Region
      *
      * @return static
      */
-    public function setRegion(string|null $region = null): static
+    public function setRegion(string|null $Region = null): static
     {
-        $this->Region = $region;
+        $this->Region = $Region;
 
         return $this;
     }
@@ -431,13 +482,13 @@ class ResponseAddress
     }
 
     /**
-     * @param string|null $remark
+     * @param string|null $Remark
      *
      * @return static
      */
-    public function setRemark(string|null $remark = null): static
+    public function setRemark(string|null $Remark = null): static
     {
-        $this->Remark = $remark;
+        $this->Remark = $Remark;
 
         return $this;
     }
@@ -451,13 +502,13 @@ class ResponseAddress
     }
 
     /**
-     * @param string|null $street
+     * @param string|null $Street
      *
      * @return static
      */
-    public function setStreet(string|null $street = null): static
+    public function setStreet(string|null $Street = null): static
     {
-        $this->Street = $street;
+        $this->Street = $Street;
 
         return $this;
     }
@@ -473,16 +524,16 @@ class ResponseAddress
     /**
      * Set postcode.
      *
-     * @param string|null $zipcode
+     * @param string|null $Zipcode
      *
      * @return static
      */
-    public function setZipcode($zipcode = null): static
+    public function setZipcode(string|null $Zipcode = null): static
     {
-        if (is_null(value: $zipcode)) {
+        if (is_null(value: $Zipcode)) {
             $this->Zipcode = null;
         } else {
-            $this->Zipcode = strtoupper(string: str_replace(search: ' ', replace: '', subject: $zipcode));
+            $this->Zipcode = strtoupper(string: str_replace(search: ' ', replace: '', subject: $Zipcode));
         }
 
         return $this;

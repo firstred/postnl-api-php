@@ -29,13 +29,7 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Service;
 
 use Exception;
-use Firstred\PostNL\Entity\JsonSerializableObject;
-use Firstred\PostNL\Entity\Request\LabellingResponseDto;
-use Firstred\PostNL\Entity\Response\GenerateLabelResponse;
-use Firstred\PostNL\Exception\ApiDownException;
-use Firstred\PostNL\Exception\ApiException;
-use Firstred\PostNL\Exception\CifException;
-use Firstred\PostNL\Exception\WithResponse;
+use Firstred\PostNL\Exception\ApiClientException;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Psr\Cache\CacheItemInterface;
@@ -63,19 +57,6 @@ class LabellingService extends ServiceBase implements LabellingServiceInterface
     const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v2_1/label';
     const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2_1/label';
 
-    /**
-     * Generate a single barcode via REST.
-     *
-     * @param LabellingResponseDto $generateLabel
-     * @param bool                 $confirm
-     *
-     * @return GenerateLabelResponse
-     *
-     * @throws ApiException
-     * @throws ApiDownException
-     * @throws CifException
-     * @throws \Firstred\PostNL\Exception\WithResponse
-     */
     public function generateLabel(LabellingResponseDto $generateLabel, $confirm = true)
     {
         $item = $this->retrieveCachedItem(uuid: $generateLabel->getId());
@@ -106,10 +87,10 @@ class LabellingService extends ServiceBase implements LabellingServiceInterface
         }
 
         if (200 === $response->getStatusCode()) {
-            throw new WithResponse(message: 'Invalid API response', response: $response);
+            throw new ApiClientException(message: 'Invalid API response', response: $response);
         }
 
-        throw new ApiException('Unable to generate label');
+        throw new ApiClientException(message: 'Unable to generate label', response: $response);
     }
 
     /**

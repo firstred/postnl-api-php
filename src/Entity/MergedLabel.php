@@ -28,10 +28,16 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use Firstred\PostNL\Attribute\PropInterface;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Misc\SerializableObject;
+use Firstred\PostNL\Service\ServiceInterface;
+use JetBrains\PhpStorm\ExpectedValues;
+
 /**
  * Class MergedLabel
  */
-class MergedLabel
+class MergedLabel extends SerializableObject
 {
     protected array|null $Barcodes = null;
     protected array|null $Labels = null;
@@ -39,11 +45,23 @@ class MergedLabel
     /**
      * MergedLabel constructor.
      *
+     * @param string     $service
+     * @param string     $propType
      * @param array|null $barcodes
      * @param array|null $labels
+     *
+     * @throws InvalidArgumentException
      */
-    public function __construct(array|null $barcodes = null, array|null $labels = null)
-    {
+    public function __construct(
+        #[ExpectedValues(values: ServiceInterface::SERVICES)]
+        string $service,
+        #[ExpectedValues(values: PropInterface::PROP_TYPES)]
+        string $propType,
+
+        array|null $barcodes = null, array|null $labels = null
+    ) {
+        parent::__construct(service: $service, propType: $propType);
+
         $this->setBarcodes(barcodes: $barcodes);
         $this->setLabels(labels: $labels);
     }

@@ -41,9 +41,9 @@ abstract class ApiException extends PostNLClientException implements HasResponse
     /**
      * ApiException constructor.
      *
-     * @param mixed $message
-     * @param mixed $code
-     * @param Throwable $previous
+     * @param mixed                  $message
+     * @param mixed                  $code
+     * @param Throwable|null         $previous
      * @param ResponseInterface|null $response
      */
     public function __construct(

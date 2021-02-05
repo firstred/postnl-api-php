@@ -62,9 +62,9 @@ class CalculateTimeframesResponseDTO extends CacheableDTO
      */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES)]
-        string $service,
+        string $service = TimeframeServiceInterface::class,
         #[ExpectedValues(values: PropInterface::PROP_TYPES)]
-        string $propType,
+        string $propType = ResponseProp::class,
         string $cacheKey = '',
 
         Timeframes|array|null $Timeframes = null,

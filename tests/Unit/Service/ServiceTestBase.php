@@ -31,15 +31,15 @@ abstract class ServiceTestBase extends TestCase
             ->setCustomerCode(CustomerCode: 'DEVC')
             ->setCustomerNumber(CustomerNumber: '11223344')
             ->setContactPerson(ContactPerson: 'Test')
-            ->setAddress(Address: new Address(...[
-                'AddressType' => '02',
-                'City'        => 'Hoofddorp',
-                'CompanyName' => 'PostNL',
-                'Countrycode' => 'NL',
-                'HouseNr'     => '42',
-                'Street'      => 'Siriusdreef',
-                'Zipcode'     => '2132WT',
-            ]))
+            ->setAddress(Address: new Address(
+                AddressType: '02',
+                City: 'Hoofddorp',
+                CompanyName: 'PostNL',
+                Countrycode: 'NL',
+                HouseNr: '42',
+                Street: 'Siriusdreef',
+                Zipcode: '2132WT',
+            ))
             ->setGlobalPackBarcodeType('AB')
             ->setGlobalPackCustomerCode('1234');
 

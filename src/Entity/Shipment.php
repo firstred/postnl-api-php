@@ -39,6 +39,45 @@ use JetBrains\PhpStorm\ExpectedValues;
  */
 class Shipment extends SerializableObject
 {
+    protected array|null $Addresses = null;
+    protected array|null $Amounts = null;
+    protected string|null $Barcode = null;
+    protected string|null $CollectionTimeStampEnd = null;
+    protected string|null $CollectionTimeStampStart = null;
+    protected array|null $Contacts = null;
+    protected string|null $Content = null;
+    protected string|null $CostCenter = null;
+    protected string|null $CustomerOrderNumber = null;
+    protected Customer|null $Customer = null;
+    protected Customs|null $Customs = null;
+    protected string|null $StatusCode = null;
+    protected int|null $PhaseCode = null;
+    protected string|null $DateFrom = null;
+    protected string|null $DateTo = null;
+    protected string|null $DeliveryAddress = null;
+    protected string|null $DeliveryTimeStampStart = null;
+    protected string|null $DeliveryTimeStampEnd = null;
+    protected string|null $DeliveryDate = null;
+    protected Dimension|null $Dimension = null;
+    protected string|null $DownPartnerBarcode = null;
+    protected string|null $DownPartnerID = null;
+    protected string|null $DownPartnerLocation = null;
+    protected array|null $Events = null;
+    protected array|null $Groups = null;
+    protected string|null $IDExpiration = null;
+    protected string|null $IDNumber = null;
+    protected string|null $IDType = null;
+    protected string|null $OldStatuses = null;
+    protected string|null $ProductCodeCollect = null;
+    protected string|null $ProductCodeDelivery = null;
+    protected array|null $ProductOptions = null;
+    protected string|null $ReceiverDateOfBirth = null;
+    protected string|null $Reference = null;
+    protected string|null $ReferenceCollect = null;
+    protected string|null $Remark = null;
+    protected string|null $ReturnBarcode = null;
+    protected string|null $ReturnReference = null;
+
     /**
      * Shipment constructor.
      *
@@ -87,48 +126,48 @@ class Shipment extends SerializableObject
      */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
-        string $service = '',
+        string $service,
         #[ExpectedValues(values: PropInterface::PROP_TYPES + [''])]
-        string $propType = '',
+        string $propType,
 
-        protected array|null $Addresses = null,
-        protected array|null $Amounts = null,
-        protected string|null $Barcode = null,
-        protected string|null $CollectionTimeStampEnd = null,
-        protected string|null $CollectionTimeStampStart = null,
-        protected array|null $Contacts = null,
-        protected string|null $Content = null,
-        protected string|null $CostCenter = null,
-        protected string|null $CustomerOrderNumber = null,
-        protected Customer|null $Customer = null,
-        protected Customs|null $Customs = null,
-        protected string|null $StatusCode = null,
-        protected int|null $PhaseCode = null,
-        protected string|null $DateFrom = null,
-        protected string|null $DateTo = null,
-        protected string|null $DeliveryAddress = null,
-        protected string|null $DeliveryTimeStampStart = null,
-        protected string|null $DeliveryTimeStampEnd = null,
-        protected string|null $DeliveryDate = null,
-        protected Dimension|null $Dimension = null,
-        protected string|null $DownPartnerBarcode = null,
-        protected string|null $DownPartnerID = null,
-        protected string|null $DownPartnerLocation = null,
-        protected array|null $Events = null,
-        protected array|null $Groups = null,
-        protected string|null $IDExpiration = null,
-        protected string|null $IDNumber = null,
-        protected string|null $IDType = null,
-        protected string|null $OldStatuses = null,
-        protected string|null $ProductCodeCollect = null,
-        protected string|null $ProductCodeDelivery = null,
-        protected array|null $ProductOptions = null,
-        protected string|null $ReceiverDateOfBirth = null,
-        protected string|null $Reference = null,
-        protected string|null $ReferenceCollect = null,
-        protected string|null $Remark = null,
-        protected string|null $ReturnBarcode = null,
-        protected string|null $ReturnReference = null,
+        array|null $Addresses = null,
+        array|null $Amounts = null,
+        string|null $Barcode = null,
+        string|null $CollectionTimeStampEnd = null,
+        string|null $CollectionTimeStampStart = null,
+        array|null $Contacts = null,
+        string|null $Content = null,
+        string|null $CostCenter = null,
+        string|null $CustomerOrderNumber = null,
+        Customer|null $Customer = null,
+        Customs|null $Customs = null,
+        string|null $StatusCode = null,
+        int|null $PhaseCode = null,
+        string|null $DateFrom = null,
+        string|null $DateTo = null,
+        string|null $DeliveryAddress = null,
+        string|null $DeliveryTimeStampStart = null,
+        string|null $DeliveryTimeStampEnd = null,
+        string|null $DeliveryDate = null,
+        Dimension|null $Dimension = null,
+        string|null $DownPartnerBarcode = null,
+        string|null $DownPartnerID = null,
+        string|null $DownPartnerLocation = null,
+        array|null $Events = null,
+        array|null $Groups = null,
+        string|null $IDExpiration = null,
+        string|null $IDNumber = null,
+        string|null $IDType = null,
+        string|null $OldStatuses = null,
+        string|null $ProductCodeCollect = null,
+        string|null $ProductCodeDelivery = null,
+        array|null $ProductOptions = null,
+        string|null $ReceiverDateOfBirth = null,
+        string|null $Reference = null,
+        string|null $ReferenceCollect = null,
+        string|null $Remark = null,
+        string|null $ReturnBarcode = null,
+        string|null $ReturnReference = null,
     ) {
         parent::__construct(service: $service, propType: $propType);
 
@@ -145,6 +184,8 @@ class Shipment extends SerializableObject
         $this->setCustoms(Customs: $Customs);
         $this->setDeliveryAddress(DeliveryAddress: $DeliveryAddress);
         $this->setDeliveryDate(DeliveryDate: $DeliveryDate);
+        $this->setDeliveryTimeStampStart(DeliveryTimeStampStart: $DeliveryTimeStampStart);
+        $this->setDeliveryTimeStampEnd(DeliveryTimeStampEnd: $DeliveryTimeStampEnd);
         $this->setDimension(Dimension: $Dimension);
         $this->setDownPartnerBarcode(DownPartnerBarcode: $DownPartnerBarcode);
         $this->setDownPartnerID(DownPartnerID: $DownPartnerID);
@@ -154,6 +195,7 @@ class Shipment extends SerializableObject
         $this->setIDExpiration(IDExpiration: $IDExpiration);
         $this->setIDNumber(IDNumber: $IDNumber);
         $this->setIDType(IDType: $IDType);
+        $this->setOldStatuses(OldStatuses: $OldStatuses);
         $this->setProductCodeCollect(ProductCodeCollect: $ProductCodeCollect);
         $this->setProductCodeDelivery(ProductCodeDelivery: $ProductCodeDelivery);
         $this->setProductOptions(ProductOptions: $ProductOptions);
@@ -532,7 +574,7 @@ class Shipment extends SerializableObject
     /**
      * @return string|null
      */
-    public function calculateDeliveryDate(): string|null
+    public function getDeliveryDate(): string|null
     {
         return $this->DeliveryDate;
     }

@@ -31,6 +31,7 @@ namespace Firstred\PostNL\DTO\Response;
 use Firstred\PostNL\Attribute\PropInterface;
 use Firstred\PostNL\Attribute\ResponseProp;
 use Firstred\PostNL\DTO\CacheableDTO;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\DeliveryDateServiceInterface;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
@@ -57,13 +58,13 @@ class CalculateDeliveryDateResponseDTO extends CacheableDTO implements Stringabl
      * @param string|null $DeliveryDate
      * @param array|null  $Options
      *
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES)]
-        string $service,
+        string $service = DeliveryDateServiceInterface::class,
         #[ExpectedValues(values: PropInterface::PROP_TYPES)]
-        string $propType,
+        string $propType = ResponseProp::class,
         string $cacheKey = '',
 
         string|null $DeliveryDate = null,

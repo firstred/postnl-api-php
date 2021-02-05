@@ -45,7 +45,9 @@ use function is_string;
 use function strtotime;
 
 /**
- * Class CalculateDeliveryDateRequestDTO
+ * Class CalculateDeliveryDateRequestDTO.
+ *
+ * @see https://developer.postnl.nl/browse-apis/delivery-options/deliverydate-webservice/testtool-rest/
  */
 class CalculateDeliveryDateRequestDTO extends CacheableDTO
 {
@@ -59,78 +61,219 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
         CutOffTime::SUNDAY    => CutOffTime::class,
     ];
 
+    /**
+     * Date/time of preparing the shipment for sending.
+     *
+     * Format: 29-05-2017 14:00:00
+     *
+     * @var string|null $ShippingDate
+     */
     #[RequestProp(requiredFor: [DeliveryDateServiceInterface::class])]
     protected string|null $ShippingDate = null;
 
+    /**
+     * The duration it takes for the shipment to be delivered to PostNL in days. A value of 1 means that the parcel will be delivered to PostNL on the same day as the date specified in ShippingDate. A value of 2 means the parcel will arrive at PostNL a day later etc.
+     *
+     * Format: 1
+     *
+     * @var int|null $ShippingDuration
+     */
     #[RequestProp(requiredFor: [DeliveryDateServiceInterface::class])]
     protected int|null $ShippingDuration = null;
 
+    /**
+     * Cut off times per day. At least one cut off time must be specified.
+     *
+     * @var string|null $CutOffTime
+     */
     #[RequestProp(requiredFor: [DeliveryDateServiceInterface::class])]
     protected string|null $CutOffTime = null;
 
+    /**
+     * Zipcode of the address.
+     *
+     * @var string|null $PostalCode
+     */
     #[RequestProp(requiredFor: [DeliveryDateServiceInterface::class])]
     protected string|null $PostalCode = null;
 
+    /**
+     * The ISO2 country codes.
+     *
+     * Available values: NL, BE
+     *
+     * Default value: NL
+     *
+     * @var string|null $CountryCode
+     */
+    #[ExpectedValues(values: ['NL', 'BE', null])]
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected string|null $CountryCode = null;
 
+    /**
+     * The ISO2 country codes of the origin country.
+     *
+     * Available values: NL, BE
+     *
+     * Default value: NL
+     *
+     * @var string|null $OriginCountryCode
+     */
+    #[ExpectedValues(values: ['NL', 'BE', null])]
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected string|null $OriginCountryCode = null;
 
+    /**
+     * City of the address
+     *
+     * @var string|null $City
+     */
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected string|null $City = null;
 
+    /**
+     * The street name of the delivery address.
+     *
+     * @var string|null $City
+     */
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected string|null $Street = null;
 
+    /**
+     * The house number of the delivery address.
+     *
+     * @var int|null $HouseNumber
+     */
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected int|null $HouseNumber = null;
 
+    /**
+     * House number extension.
+     *
+     * @var string|null $HouseNrExt
+     */
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected string|null $HouseNrExt = null;
 
+    /**
+     * Specify zero or more delivery options.
+     *
+     * Available values : Daytime, Evening, Morning, Noon, Sunday, Sameday, Afternoon, MyTime, Pickup
+     *
+     * @var array|null $Options
+     */
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected array|null $Options = null;
 
+    /**
+     * Override cutoff time for mondays.
+     *
+     * @var string|null $CutOffTimeMonday
+     */
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected string|null $CutOffTimeMonday = null;
 
+    /**
+     * Specifies if you are available to ship to PostNL on mondays.
+     *
+     * @var bool|null $AvailableMonday
+     */
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected bool|null $AvailableMonday = null;
 
+    /**
+     * Override cutoff time for tuesdays.
+     *
+     * @var string|null $CutOffTimeTuesday
+     */
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected string|null $CutOffTimeTuesday = null;
 
+    /**
+     * Specifies if you are available to ship to PostNL on tuesdays.
+     *
+     * @var bool|null $AvailableTuesday
+     */
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected bool|null $AvailableTuesday = null;
 
+    /**
+     * Override cutoff time for wednesdays.
+     *
+     * @var string|null $CutOffTimeWednesday
+     */
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected string|null $CutOffTimeWednesday = null;
 
+    /**
+     * Specifies if you are available to ship to PostNL on wednesdays.
+     *
+     * @var bool|null $AvailableWednesday
+     */
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected bool|null $AvailableWednesday = null;
 
+    /**
+     * Override cutoff time for thursdays.
+     *
+     * @var string|null $CutOffTimeThursday
+     */
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected string|null $CutOffTimeThursday = null;
 
+    /**
+     * Specifies if you are available to ship to PostNL on thursdays.
+     *
+     * @var bool|null $AvailableThursday
+     */
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected bool|null $AvailableThursday = null;
 
+    /**
+     * Override cutoff time for fridays.
+     *
+     * @var string|null $CutOffTimeFriday
+     */
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected string|null $CutOffTimeFriday = null;
 
+    /**
+     * Specifies if you are available to ship to PostNL on fridays.
+     *
+     * @var bool|null $AvailableFriday
+     */
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected bool|null $AvailableFriday = null;
 
+    /**
+     * Override cutoff time for saturdays.
+     *
+     * @var string|null $CutOffTimeSaturday
+     */
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected string|null $CutOffTimeSaturday = null;
 
+    /**
+     * Specifies if you are available to ship to PostNL on saturdays.
+     *
+     * @var bool|null $AvailableSaturday
+     */
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected bool|null $AvailableSaturday = null;
 
+    /**
+     * Override cutoff time for sundays.
+     *
+     * @var string|null $CutOffTimeSunday
+     */
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected string|null $CutOffTimeSunday = null;
 
+    /**
+     * Specifies if you are available to ship to PostNL on sundays.
+     *
+     * @var bool|null $AvailableSunday
+     */
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected bool|null $AvailableSunday = null;
 
