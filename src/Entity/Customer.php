@@ -61,7 +61,7 @@ class Customer extends SerializableObject
         #[ExpectedValues(values: PropInterface::PROP_TYPES + [''])]
         string $propType = '',
 
-        protected ?Address $Address = null,
+        protected Address|null $Address = null,
         protected string|null $CollectionLocation = null,
         protected string|null $ContactPerson = null,
         protected string|null $CustomerCode = null,
@@ -85,7 +85,7 @@ class Customer extends SerializableObject
     /**
      * @return Address|null
      */
-    public function getAddress(): ?Address
+    public function getAddress(): Address|null
     {
         return $this->Address;
     }
@@ -95,7 +95,7 @@ class Customer extends SerializableObject
      *
      * @return static
      */
-    public function setAddress(?Address $Address = null): static
+    public function setAddress(Address|null $Address = null): static
     {
         $this->Address = $Address;
 

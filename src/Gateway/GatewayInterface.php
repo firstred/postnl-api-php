@@ -54,7 +54,7 @@ interface GatewayInterface
     /**
      * @return CacheItemPoolInterface|null
      */
-    public function getCache(): ?CacheItemPoolInterface;
+    public function getCache(): CacheItemPoolInterface|null;
 
     /**
      * @param CacheItemPoolInterface|null $cache

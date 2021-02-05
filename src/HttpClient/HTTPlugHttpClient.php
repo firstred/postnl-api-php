@@ -246,7 +246,7 @@ class HTTPlugHttpClient implements HttpClientInterface
     /**
      * @return LoggerInterface|null
      */
-    public function getLogger(): ?LoggerInterface
+    public function getLogger(): LoggerInterface|null
     {
         return $this->logger;
     }
@@ -256,7 +256,7 @@ class HTTPlugHttpClient implements HttpClientInterface
      *
      * @return static
      */
-    public function setLogger(?LoggerInterface $logger = null): static
+    public function setLogger(LoggerInterface|null $logger = null): static
     {
         $this->logger = $logger;
 

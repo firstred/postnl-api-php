@@ -128,7 +128,7 @@ abstract class GatewayBase implements GatewayInterface
      *
      * @return static
      */
-    public function setLogger(?LoggerInterface $logger = null): static
+    public function setLogger(LoggerInterface|null $logger = null): static
     {
         $this->getHttpClient()->setLogger();
 

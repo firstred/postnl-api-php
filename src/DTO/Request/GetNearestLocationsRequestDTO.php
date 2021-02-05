@@ -93,7 +93,7 @@ class GetNearestLocationsRequestDTO extends CacheableDTO
     /**
      * @return string|null
      */
-    public function getCountryCode(): ?string
+    public function getCountryCode(): string|null
     {
         return $this->CountryCode;
     }
@@ -136,18 +136,18 @@ class GetNearestLocationsRequestDTO extends CacheableDTO
         return $this->City;
     }
 
-    public function setCity(?string $City = null): static
+    public function setCity(string|null $City = null): static
     {
         $this->City = $City;
         return $this;
     }
 
-    public function getStreet(): ?string
+    public function getStreet(): string|null
     {
         return $this->Street;
     }
 
-    public function setStreet(?string $Street = null): static
+    public function setStreet(string|null $Street = null): static
     {
         $this->Street = $Street;
         return $this;

@@ -68,7 +68,7 @@ class Signature extends SerializableObject
     /**
      * @return GetSignatureResponseSignature|null
      */
-    public function getGetSignatureResponseSignature(): ?GetSignatureResponseSignature
+    public function getGetSignatureResponseSignature(): GetSignatureResponseSignature|null
     {
         return $this->GetSignatureResponseSignature;
     }
@@ -78,7 +78,7 @@ class Signature extends SerializableObject
      *
      * @return static
      */
-    public function setGetSignatureResponseSignature(?GetSignatureResponseSignature $GetSignatureResponseSignature = null): static
+    public function setGetSignatureResponseSignature(GetSignatureResponseSignature|null $GetSignatureResponseSignature = null): static
     {
         $this->GetSignatureResponseSignature = $GetSignatureResponseSignature;
 

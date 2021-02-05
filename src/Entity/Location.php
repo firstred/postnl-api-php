@@ -332,7 +332,7 @@ class Location extends SerializableObject
     /**
      * @return Coordinates|null
      */
-    public function getCoordinates(): ?Coordinates
+    public function getCoordinates(): Coordinates|null
     {
         return $this->Coordinates;
     }
@@ -342,7 +342,7 @@ class Location extends SerializableObject
      *
      * @return static
      */
-    public function setCoordinates(?Coordinates $Coordinates = null): static
+    public function setCoordinates(Coordinates|null $Coordinates = null): static
     {
         $this->Coordinates = $Coordinates;
 
@@ -352,7 +352,7 @@ class Location extends SerializableObject
     /**
      * @return CoordinatesNorthWest|null
      */
-    public function getCoordinatesNorthWest(): ?CoordinatesNorthWest
+    public function getCoordinatesNorthWest(): CoordinatesNorthWest|null
     {
         return $this->CoordinatesNorthWest;
     }
@@ -362,7 +362,7 @@ class Location extends SerializableObject
      *
      * @return static
      */
-    public function setCoordinatesNorthWest(?CoordinatesNorthWest $CoordinatesNorthWest = null): static
+    public function setCoordinatesNorthWest(CoordinatesNorthWest|null $CoordinatesNorthWest = null): static
     {
         $this->CoordinatesNorthWest = $CoordinatesNorthWest;
 
@@ -372,7 +372,7 @@ class Location extends SerializableObject
     /**
      * @return CoordinatesSouthEast|null
      */
-    public function getCoordinatesSouthEast(): ?CoordinatesSouthEast
+    public function getCoordinatesSouthEast(): CoordinatesSouthEast|null
     {
         return $this->CoordinatesSouthEast;
     }
@@ -382,7 +382,7 @@ class Location extends SerializableObject
      *
      * @return static
      */
-    public function setCoordinatesSouthEast(?CoordinatesSouthEast $CoordinatesSouthEast = null): static
+    public function setCoordinatesSouthEast(CoordinatesSouthEast|null $CoordinatesSouthEast = null): static
     {
         $this->CoordinatesSouthEast = $CoordinatesSouthEast;
 

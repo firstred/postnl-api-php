@@ -127,4 +127,17 @@ interface BarcodeServiceInterface extends ServiceInterface
      * @return BarcodeServiceGatewayInterface
      */
     public function getGateway(): BarcodeServiceGatewayInterface;
+
+    /**
+     * Find a suitable serie for the barcode.
+     *
+     * @param string $type
+     * @param string $range
+     * @param bool   $eps
+     *
+     * @return string
+     *
+     * @throws InvalidBarcodeException
+     */
+    public function findBarcodeSerie(string $type, string $range, bool $eps): string;
 }
