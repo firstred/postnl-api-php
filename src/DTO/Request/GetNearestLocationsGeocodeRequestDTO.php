@@ -149,7 +149,7 @@ class GetNearestLocationsGeocodeRequestDTO extends CacheableDTO
     /**
      * @param string|null $CountryCode
      *
-     * @return $this
+     * @return static
      */
     public function setCountryCode(string|null $CountryCode = null): static
     {
@@ -169,7 +169,7 @@ class GetNearestLocationsGeocodeRequestDTO extends CacheableDTO
     /**
      * @param array|null $DeliveryOptions
      *
-     * @return $this
+     * @return static
      */
     public function setDeliveryOptions(array|null $DeliveryOptions = null): static
     {
@@ -189,7 +189,7 @@ class GetNearestLocationsGeocodeRequestDTO extends CacheableDTO
     /**
      * @param int|null $HouseNumber
      *
-     * @return $this
+     * @return static
      */
     public function setHouseNumber(int|null $HouseNumber = null): static
     {
@@ -209,7 +209,7 @@ class GetNearestLocationsGeocodeRequestDTO extends CacheableDTO
     /**
      * @param string|null $DeliveryDate
      *
-     * @return $this
+     * @return static
      */
     public function setDeliveryDate(string|null $DeliveryDate = null): static
     {
@@ -229,7 +229,7 @@ class GetNearestLocationsGeocodeRequestDTO extends CacheableDTO
     /**
      * @param string|null $OpeningTime
      *
-     * @return $this
+     * @return static
      */
     public function setOpeningTime(string|null $OpeningTime = null): static
     {

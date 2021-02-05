@@ -83,7 +83,7 @@ class Label extends SerializableObject
     /**
      * @param string|null $Content
      *
-     * @return $this
+     * @return static
      */
     public function setContent(string|null $Content = null): static
     {
@@ -103,7 +103,7 @@ class Label extends SerializableObject
     /**
      * @param string|null $Contenttype
      *
-     * @return $this
+     * @return static
      */
     public function setContenttype(string|null $Contenttype = null): static
     {
@@ -123,7 +123,7 @@ class Label extends SerializableObject
     /**
      * @param string|null $Labeltype
      *
-     * @return $this
+     * @return static
      */
     public function setLabeltype(string|null $Labeltype = null): static
     {

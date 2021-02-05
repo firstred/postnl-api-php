@@ -129,11 +129,11 @@ class PostNL
 //        string $printertype = 'GraphicFile|PDF',
 //        bool $confirm = true
 //    ): GenerateShippingResponse {
-//        return $this->getShippingService()->generateShipping(
+//        return static->getShippingService()->generateShipping(
 //            generateShipping: new Shipping(
 //            shipments: [$shipment],
 //            message: new LabellingMessage(printerType: $printertype),
-//            customer: $this->customer
+//            customer: static->customer
 //        ),
 //            confirm: $confirm);
 //    }
@@ -205,11 +205,11 @@ class PostNL
 //            }
 //        }
 //
-//        $responseShipments = $this->getShippingService()->generateShipping(
+//        $responseShipments = static->getShippingService()->generateShipping(
 //            generateShipping: new Shipping(
 //            shipments: $shipments,
 //            message: new LabellingMessage(printerType: $printertype),
-//            customer: $this->customer
+//            customer: static->customer
 //        ),
 //            confirm: $confirm
 //        );
@@ -413,11 +413,11 @@ class PostNL
 //        $printertype = 'GraphicFile|PDF',
 //        $confirm = true
 //    ): GenerateLabelResponse {
-//        return $this->getLabellingService()->generateLabel(
+//        return static->getLabellingService()->generateLabel(
 //            generateLabel: new LabellingResponseDto(
 //            shipments: [$shipment],
 //            message: new LabellingMessage(printerType: $printertype),
-//            customer: $this->customer
+//            customer: static->customer
 //        ),
 //            confirm: $confirm
 //        );
@@ -496,9 +496,9 @@ class PostNL
 //
 //        $generateLabels = [];
 //        foreach ($shipments as $uuid => $shipment) {
-//            $generateLabels[$uuid] = [(new LabellingResponseDto(shipments: [$shipment], message: new LabellingMessage(printerType: $printertype), customer: $this->customer))->setId(id: $uuid), $confirm];
+//            $generateLabels[$uuid] = [(new LabellingResponseDto(shipments: [$shipment], message: new LabellingMessage(printerType: $printertype), customer: static->customer))->setId(id: $uuid), $confirm];
 //        }
-//        $responseShipments = $this->getLabellingService()->generateLabels($generateLabels, $confirm);
+//        $responseShipments = static->getLabellingService()->generateLabels($generateLabels, $confirm);
 //
 //        if (!$merge) {
 //            return $responseShipments;
@@ -631,7 +631,7 @@ class PostNL
 //     */
 //    public function confirmShipment(Shipment $shipment): ConfirmingResponseShipment
 //    {
-//        return $this->getConfirmingService()->confirmShipment(confirming: new ConfirmingResponseDto(shipments: [$shipment], customer: $this->customer));
+//        return static->getConfirmingService()->confirmShipment(confirming: new ConfirmingResponseDto(shipments: [$shipment], customer: static->customer));
 //    }
 //
 //    /**
@@ -645,10 +645,10 @@ class PostNL
 //    {
 //        $confirmings = [];
 //        foreach ($shipments as $uuid => $shipment) {
-//            $confirmings[$uuid] = (new ConfirmingResponseDto(shipments: [$shipment], customer: $this->customer))->setId(id: $uuid);
+//            $confirmings[$uuid] = (new ConfirmingResponseDto(shipments: [$shipment], customer: static->customer))->setId(id: $uuid);
 //        }
 //
-//        return $this->getConfirmingService()->confirmShipments(confirms: $confirmings);
+//        return static->getConfirmingService()->confirmShipments(confirms: $confirmings);
 //    }
 //
 //    /**
@@ -671,7 +671,7 @@ class PostNL
 //     */
 //    public function getCurrentStatus(CurrentStatus|CurrentStatusByStatus|CurrentStatusByReference|CurrentStatusByPhase $currentStatus): CurrentStatusResponse
 //    {
-//        $fullCustomer = $this->getCustomer();
+//        $fullCustomer = static->getCustomer();
 //        $currentStatus->setCustomer((new Customer())
 //            ->setCustomerCode(CustomerCode: $fullCustomer->getCustomerCode())
 //            ->setCustomerNumber(CustomerNumber: $fullCustomer->getCustomerNumber())
@@ -680,7 +680,7 @@ class PostNL
 //            $currentStatus->setMessage(new Message());
 //        }
 //
-//        return $this->getShippingStatusService()->currentStatus(currentStatus: $currentStatus);
+//        return static->getShippingStatusService()->currentStatus(currentStatus: $currentStatus);
 //    }
 //
 //    /**
@@ -703,7 +703,7 @@ class PostNL
 //     */
 //    public function getCompleteStatus(CompleteStatus|CompleteStatusByStatus|CompleteStatusByReference|CompleteStatusByPhase $completeStatus): CompleteStatusResponse
 //    {
-//        $fullCustomer = $this->getCustomer();
+//        $fullCustomer = static->getCustomer();
 //
 //        $completeStatus->setCustomer((new Customer())
 //            ->setCustomerCode(CustomerCode: $fullCustomer->getCustomerCode())
@@ -713,7 +713,7 @@ class PostNL
 //            $completeStatus->setMessage(new Message());
 //        }
 //
-//        return $this->getShippingStatusService()->completeStatus(completeStatus: $completeStatus);
+//        return static->getShippingStatusService()->completeStatus(completeStatus: $completeStatus);
 //    }
 //
 //    /**
@@ -725,12 +725,12 @@ class PostNL
 //     */
 //    public function getSignature(GetSignature $signature): GetSignature
 //    {
-//        $signature->setCustomer($this->getCustomer());
+//        $signature->setCustomer(static->getCustomer());
 //        if (!$signature->getMessage()) {
 //            $signature->setMessage(new Message());
 //        }
 //
-//        return $this->getShippingStatusService()->getSignature(getSignature: $signature);
+//        return static->getShippingStatusService()->getSignature(getSignature: $signature);
 //    }
 
     /**
@@ -1124,33 +1124,33 @@ class PostNL
 //        CalculateDeliveryDate $calculateDeliveryDate
 //    ): array {
 //        $results = [];
-//        $itemTimeframe = $this->getTimeframeService()->retrieveCachedItem(uuid: $getTimeframes->getId());
+//        $itemTimeframe = static->getTimeframeService()->retrieveCachedItem(uuid: $getTimeframes->getId());
 //        if ($itemTimeframe instanceof CacheItemInterface && $itemTimeframe->get()) {
 //            $results['timeframes'] = parse_response(message: $itemTimeframe->get());
 //        }
-//        $itemLocation = $this->getLocationService()->retrieveCachedItem(uuid: $getNearestLocations->getId());
+//        $itemLocation = static->getLocationService()->retrieveCachedItem(uuid: $getNearestLocations->getId());
 //        if ($itemLocation instanceof CacheItemInterface && $itemLocation->get()) {
 //            $results['locations'] = parse_response(message: $itemLocation->get());
 //        }
-//        $itemDeliveryDate = $this->getDeliveryDateService()->retrieveCachedItem(uuid: $calculateDeliveryDate->getId());
+//        $itemDeliveryDate = static->getDeliveryDateService()->retrieveCachedItem(uuid: $calculateDeliveryDate->getId());
 //        if ($itemDeliveryDate instanceof CacheItemInterface && $itemDeliveryDate->get()) {
 //            $results['delivery_date'] = parse_response(message: $itemDeliveryDate->get());
 //        }
 //
-//        $this->getHttpClient()->addOrUpdateRequest(
+//        static->getHttpClient()->addOrUpdateRequest(
 //            id: 'timeframes',
-//            request: $this->getTimeframeService()->buildGetTimeframesRequest($getTimeframes)
+//            request: static->getTimeframeService()->buildGetTimeframesRequest($getTimeframes)
 //        );
-//        $this->getHttpClient()->addOrUpdateRequest(
+//        static->getHttpClient()->addOrUpdateRequest(
 //            id: 'locations',
-//            request: $this->getLocationService()->buildGetNearestLocationsRequest(getNearestLocations: $getNearestLocations)
+//            request: static->getLocationService()->buildGetNearestLocationsRequest(getNearestLocations: $getNearestLocations)
 //        );
-//        $this->getHttpClient()->addOrUpdateRequest(
+//        static->getHttpClient()->addOrUpdateRequest(
 //            id: 'delivery_date',
-//            request: $this->getDeliveryDateService()->buildCalculateDeliveryDateRequest(calculateDeliveryDate: $calculateDeliveryDate)
+//            request: static->getDeliveryDateService()->buildCalculateDeliveryDateRequest(calculateDeliveryDate: $calculateDeliveryDate)
 //        );
 //
-//        $responses = $this->getHttpClient()->doRequests();
+//        $responses = static->getHttpClient()->doRequests();
 //        foreach ($responses as $uuid => $response) {
 //            if ($response instanceof Response) {
 //                $results[$uuid] = $response;
@@ -1173,21 +1173,21 @@ class PostNL
 //                    case 'timeframes':
 //                        if ($itemTimeframe instanceof CacheItemInterface) {
 //                            $itemTimeframe->set(value: str(message: $response));
-//                            $this->getTimeframeService()->cacheItem(item: $itemTimeframe);
+//                            static->getTimeframeService()->cacheItem(item: $itemTimeframe);
 //                        }
 //
 //                        break;
 //                    case 'locations':
 //                        if ($itemTimeframe instanceof CacheItemInterface) {
 //                            $itemLocation->set(value: str(message: $response));
-//                            $this->getLocationService()->cacheItem(item: $itemLocation);
+//                            static->getLocationService()->cacheItem(item: $itemLocation);
 //                        }
 //
 //                        break;
 //                    case 'delivery_date':
 //                        if ($itemTimeframe instanceof CacheItemInterface) {
 //                            $itemDeliveryDate->set(value: str(message: $response));
-//                            $this->getDeliveryDateService()->cacheItem(item: $itemDeliveryDate);
+//                            static->getDeliveryDateService()->cacheItem(item: $itemDeliveryDate);
 //                        }
 //
 //                        break;
@@ -1196,9 +1196,9 @@ class PostNL
 //        }
 //
 //        return [
-//            'timeframes'    => $this->getTimeframeService()->processGetTimeframesResponse(response: $results['timeframes']),
-//            'locations'     => $this->getLocationService()->processGetNearestLocationsResponse(response: $results['locations']),
-//            'delivery_date' => $this->getDeliveryDateService()->processCalculateDeliveryDateResponse(response: $results['delivery_date']),
+//            'timeframes'    => static->getTimeframeService()->processGetTimeframesResponse(response: $results['timeframes']),
+//            'locations'     => static->getLocationService()->processGetNearestLocationsResponse(response: $results['locations']),
+//            'delivery_date' => static->getDeliveryDateService()->processCalculateDeliveryDateResponse(response: $results['delivery_date']),
 //        ];
 //    }
 //
@@ -1211,7 +1211,7 @@ class PostNL
 //     */
 //    public function getLocationsInArea(GetLocationsInArea $getLocationsInArea): GetLocationsInAreaResponse
 //    {
-//        return $this->getLocationService()->getLocationsInArea(getLocations: $getLocationsInArea);
+//        return static->getLocationService()->getLocationsInArea(getLocations: $getLocationsInArea);
 //    }
 //
 //    /**
@@ -1223,7 +1223,7 @@ class PostNL
 //     */
 //    public function getLocation(GetLocation $getLocation): GetLocationsInAreaResponse
 //    {
-//        return $this->getLocationService()->getLocation(getLocation: $getLocation);
+//        return static->getLocationService()->getLocation(getLocation: $getLocation);
 //    }
 
     /**

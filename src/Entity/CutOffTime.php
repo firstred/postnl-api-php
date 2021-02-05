@@ -88,7 +88,7 @@ class CutOffTime extends SerializableObject
     /**
      * @param int|null $Day
      *
-     * @return $this
+     * @return static
      */
     public function setDay(
         #[ExpectedValues(values: [self::MONDAY, self::TUESDAY, self::WEDNESDAY, self::THURSDAY, self::FRIDAY, self::SATURDAY, self::SUNDAY, null])]
@@ -110,7 +110,7 @@ class CutOffTime extends SerializableObject
     /**
      * @param string|null $Time
      *
-     * @return $this
+     * @return static
      */
     public function setTime(string|null $Time = null): static
     {
@@ -130,7 +130,7 @@ class CutOffTime extends SerializableObject
     /**
      * @param bool|null $Available
      *
-     * @return $this
+     * @return static
      */
     public function setAvailable(bool|null $Available = null): static
     {

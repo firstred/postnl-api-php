@@ -60,7 +60,7 @@ interface TimeframeServiceInterface extends ServiceInterface
     /**
      * @param TimeframeServiceGatewayInterface $gateway
      *
-     * @return $this
+     * @return static
      */
     public function setGateway(TimeframeServiceGatewayInterface $gateway): static;
 

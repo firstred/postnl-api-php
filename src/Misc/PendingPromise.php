@@ -83,7 +83,7 @@ class PendingPromise implements Promise
      * @param callable|null $onFulfilled
      * @param callable|null $onRejected
      *
-     * @return Promise|$this
+     * @return Promise|static
      */
     public function then(callable $onFulfilled = null, callable $onRejected = null): Promise|PendingPromise
     {
@@ -114,7 +114,7 @@ class PendingPromise implements Promise
     /**
      * @param callable $onRejected
      *
-     * @return Promise|$this
+     * @return Promise|static
      */
     public function otherwise(callable $onRejected): PendingPromise|Promise
     {

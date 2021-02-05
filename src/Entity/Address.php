@@ -216,7 +216,7 @@ class Address extends SerializableObject
     /**
      * @param string|null $Zipcode
      *
-     * @return $this
+     * @return static
      */
     public function setZipcode(string|null $Zipcode = null): static
     {
@@ -240,7 +240,7 @@ class Address extends SerializableObject
     /**
      * @param string|int|null $AddressType
      *
-     * @return $this
+     * @return static
      */
     public function setAddressType(string|int|null $AddressType = null): static
     {
@@ -264,7 +264,7 @@ class Address extends SerializableObject
     /**
      * @param string|null $Area
      *
-     * @return $this
+     * @return static
      */
     public function setArea(string|null $Area = null): static
     {
@@ -284,7 +284,7 @@ class Address extends SerializableObject
     /**
      * @param string|null $Buildingname
      *
-     * @return $this
+     * @return static
      */
     public function setBuildingname(string|null $Buildingname = null): static
     {
@@ -304,7 +304,7 @@ class Address extends SerializableObject
     /**
      * @param string|null $City
      *
-     * @return $this
+     * @return static
      */
     public function setCity(string|null $City = null): static
     {
@@ -324,7 +324,7 @@ class Address extends SerializableObject
     /**
      * @param string|null $CompanyName
      *
-     * @return $this
+     * @return static
      */
     public function setCompanyName(string|null $CompanyName = null): static
     {
@@ -344,7 +344,7 @@ class Address extends SerializableObject
     /**
      * @param string|null $Countrycode
      *
-     * @return $this
+     * @return static
      */
     public function setCountrycode(string|null $Countrycode = null): static
     {
@@ -364,7 +364,7 @@ class Address extends SerializableObject
     /**
      * @param string|null $Department
      *
-     * @return $this
+     * @return static
      */
     public function setDepartment(string|null $Department = null): static
     {
@@ -384,7 +384,7 @@ class Address extends SerializableObject
     /**
      * @param string|null $Doorcode
      *
-     * @return $this
+     * @return static
      */
     public function setDoorcode(string|null $Doorcode = null): static
     {
@@ -404,7 +404,7 @@ class Address extends SerializableObject
     /**
      * @param string|null $FirstName
      *
-     * @return $this
+     * @return static
      */
     public function setFirstName(string|null $FirstName = null): static
     {
@@ -424,7 +424,7 @@ class Address extends SerializableObject
     /**
      * @param string|null $Floor
      *
-     * @return $this
+     * @return static
      */
     public function setFloor(string|null $Floor = null): static
     {
@@ -444,7 +444,7 @@ class Address extends SerializableObject
     /**
      * @param int|string|null $HouseNr
      *
-     * @return $this
+     * @return static
      *
      * @throws InvalidArgumentException
      */
@@ -474,7 +474,7 @@ class Address extends SerializableObject
     /**
      * @param int|string|null $HouseNrExt
      *
-     * @return $this
+     * @return static
      */
     public function setHouseNrExt(int|string|null $HouseNrExt = null): static
     {
@@ -498,7 +498,7 @@ class Address extends SerializableObject
     /**
      * @param string|null $StreetHouseNrExt
      *
-     * @return $this
+     * @return static
      */
     public function setStreetHouseNrExt(string|null $StreetHouseNrExt = null): static
     {
@@ -518,7 +518,7 @@ class Address extends SerializableObject
     /**
      * @param string|null $Name
      *
-     * @return $this
+     * @return static
      */
     public function setName(string|null $Name = null): static
     {
@@ -538,7 +538,7 @@ class Address extends SerializableObject
     /**
      * @param string|null $Region
      *
-     * @return $this
+     * @return static
      */
     public function setRegion(string|null $Region = null): static
     {
@@ -558,7 +558,7 @@ class Address extends SerializableObject
     /**
      * @param string|null $Remark
      *
-     * @return $this
+     * @return static
      */
     public function setRemark(string|null $Remark = null): static
     {
@@ -578,7 +578,7 @@ class Address extends SerializableObject
     /**
      * @param string|null $Street
      *
-     * @return $this
+     * @return static
      */
     public function setStreet(string|null $Street = null): static
     {
@@ -598,7 +598,7 @@ class Address extends SerializableObject
     /**
      * @param array|null $other
      *
-     * @return $this
+     * @return static
      */
     public function setOther(array|null $other = null): static
     {

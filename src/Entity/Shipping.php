@@ -65,7 +65,7 @@ class Shipping
     /**
      * @param Customer|null $customer
      *
-     * @return $this
+     * @return static
      */
     public function setCustomer(Customer|null $customer = null): static
     {
@@ -85,7 +85,7 @@ class Shipping
     /**
      * @param LabellingMessage|null $message
      *
-     * @return $this
+     * @return static
      */
     public function setMessage(LabellingMessage|null $message = null): static
     {
@@ -105,7 +105,7 @@ class Shipping
     /**
      * @param array|null $shipments
      *
-     * @return $this
+     * @return static
      */
     public function setShipments(array|null $shipments = null): static
     {
@@ -118,20 +118,20 @@ class Shipping
 //    public function jsonSerialize(): array
 //    {
 //        $json = [];
-//        if (!$this->currentService || !in_array(needle: $this->currentService, haystack: array_keys(array: static::$defaultProperties))) {
+//        if (!static->currentService || !in_array(needle: static->currentService, haystack: array_keys(array: static::$defaultProperties))) {
 //            return $json;
 //        }
 //
-//        foreach (array_keys(array: static::$defaultProperties[$this->currentService]) as $propertyName) {
-//            if (isset($this->{$propertyName})) {
-//                if ('Shipments' === $propertyName && count(value: $this->{$propertyName}) >= 1) {
+//        foreach (array_keys(array: static::$defaultProperties[static->currentService]) as $propertyName) {
+//            if (isset(static->{$propertyName})) {
+//                if ('Shipments' === $propertyName && count(value: static->{$propertyName}) >= 1) {
 //                    $properties = [];
-//                    foreach ($this->{$propertyName} as $property) {
+//                    foreach (static->{$propertyName} as $property) {
 //                        $properties[] = $property;
 //                    }
 //                    $json[$propertyName] = $properties;
 //                } else {
-//                    $json[$propertyName] = $this->{$propertyName};
+//                    $json[$propertyName] = static->{$propertyName};
 //                }
 //            }
 //        }

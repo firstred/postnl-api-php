@@ -46,7 +46,7 @@ interface CacheableDTOInterface
     /**
      * @param string $cacheKey
      *
-     * @return $this
+     * @return static
      */
     public function setCacheKey(string $cacheKey): static;
 }

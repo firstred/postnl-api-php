@@ -56,7 +56,7 @@ interface ServiceInterface
     /**
      * @param Customer $customer
      *
-     * @return $this
+     * @return static
      */
     public function setCustomer(Customer $customer): static;
 
@@ -68,7 +68,7 @@ interface ServiceInterface
     /**
      * @param string $apiKey
      *
-     * @return $this
+     * @return static
      */
     public function setApiKey(string $apiKey): static;
 
@@ -80,7 +80,7 @@ interface ServiceInterface
     /**
      * @param bool $sandbox
      *
-     * @return $this
+     * @return static
      */
     public function setSandbox(bool $sandbox): static;
 
@@ -92,7 +92,7 @@ interface ServiceInterface
     /**
      * @param HttpClientInterface $httpClient
      *
-     * @return $this
+     * @return static
      */
     public function setHttpClient(HttpClientInterface $httpClient): static;
 
@@ -104,7 +104,7 @@ interface ServiceInterface
     /**
      * @param LoggerInterface|null $logger
      *
-     * @return $this
+     * @return static
      */
     public function setLogger(LoggerInterface|null $logger): static;
 }

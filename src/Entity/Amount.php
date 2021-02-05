@@ -92,7 +92,7 @@ class Amount extends SerializableObject
     /**
      * @param string|int|null $AmountType
      *
-     * @return $this
+     * @return static
      */
     public function setAmountType(string|int|null $AmountType = null): static
     {
@@ -116,7 +116,7 @@ class Amount extends SerializableObject
     /**
      * @param string|null $AccountName
      *
-     * @return $this
+     * @return static
      */
     public function setAccountName(string|null $AccountName = null): static
     {
@@ -136,7 +136,7 @@ class Amount extends SerializableObject
     /**
      * @param string|null $BIC
      *
-     * @return $this
+     * @return static
      */
     public function setBIC(string|null $BIC = null): static
     {
@@ -156,7 +156,7 @@ class Amount extends SerializableObject
     /**
      * @param string|null $Currency
      *
-     * @return $this
+     * @return static
      */
     public function setCurrency(string|null $Currency = null): static
     {
@@ -176,7 +176,7 @@ class Amount extends SerializableObject
     /**
      * @param string|null $IBAN
      *
-     * @return $this
+     * @return static
      */
     public function setIBAN(string|null $IBAN = null): static
     {
@@ -196,7 +196,7 @@ class Amount extends SerializableObject
     /**
      * @param string|null $Reference
      *
-     * @return $this
+     * @return static
      */
     public function setReference(string|null $Reference = null): static
     {
@@ -216,7 +216,7 @@ class Amount extends SerializableObject
     /**
      * @param string|null $TransactionNumber
      *
-     * @return $this
+     * @return static
      */
     public function setTransactionNumber(string|null $TransactionNumber = null): static
     {
@@ -236,7 +236,7 @@ class Amount extends SerializableObject
     /**
      * @param string|null $Value
      *
-     * @return $this
+     * @return static
      */
     public function setValue(string|null $Value = null): static
     {

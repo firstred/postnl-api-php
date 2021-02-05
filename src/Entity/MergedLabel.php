@@ -59,7 +59,7 @@ class MergedLabel
     /**
      * @param array|null $barcodes
      *
-     * @return $this
+     * @return static
      */
     public function setBarcodes(array|null $barcodes = null): static
     {
@@ -79,7 +79,7 @@ class MergedLabel
     /**
      * @param array|null $labels
      *
-     * @return $this
+     * @return static
      */
     public function setLabels(array|null $labels = null): static
     {

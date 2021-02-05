@@ -119,7 +119,7 @@ interface BarcodeServiceInterface extends ServiceInterface
     /**
      * @param BarcodeServiceGatewayInterface $gateway
      *
-     * @return $this
+     * @return static
      */
     public function setGateway(BarcodeServiceGatewayInterface $gateway): static;
 

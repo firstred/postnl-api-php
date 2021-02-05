@@ -74,7 +74,7 @@ class Warning extends SerializableObject
     /**
      * @param string|null $code
      *
-     * @return $this
+     * @return static
      */
     public function setCode(string|null $code = null): static
     {
@@ -94,7 +94,7 @@ class Warning extends SerializableObject
     /**
      * @param string|null $description
      *
-     * @return $this
+     * @return static
      */
     public function setDescription(string|null $description = null): static
     {

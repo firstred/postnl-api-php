@@ -186,7 +186,7 @@ class HTTPlugHttpClient implements HttpClientInterface
     /**
      * @param int $concurrency
      *
-     * @return $this
+     * @return static
      */
     public function setConcurrency(int $concurrency): static
     {
@@ -206,7 +206,7 @@ class HTTPlugHttpClient implements HttpClientInterface
     /**
      * @param LoggerInterface|null $logger
      *
-     * @return $this
+     * @return static
      */
     public function setLogger(?LoggerInterface $logger = null): static
     {
@@ -226,7 +226,7 @@ class HTTPlugHttpClient implements HttpClientInterface
     /**
      * @param HttpAsyncClient $client
      *
-     * @return $this
+     * @return static
      */
     public function setHttpAsyncClient(HttpAsyncClient $client): static
     {

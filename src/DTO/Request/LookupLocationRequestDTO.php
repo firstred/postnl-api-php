@@ -108,7 +108,7 @@ class LookupLocationRequestDTO extends CacheableDTO
     /**
      * @param string|null $RetailNetworkID
      *
-     * @return $this
+     * @return static
      */
     public function setRetailNetworkID(string|null $RetailNetworkID = null): static
     {

@@ -47,7 +47,7 @@ interface GatewayInterface
     /**
      * @param HttpClientInterface $httpClient
      *
-     * @return $this
+     * @return static
      */
     public function setHttpClient(HttpClientInterface $httpClient): static;
 
@@ -59,7 +59,7 @@ interface GatewayInterface
     /**
      * @param CacheItemPoolInterface|null $cache
      *
-     * @return $this
+     * @return static
      */
     public function setCache(CacheItemPoolInterface $cache = null): static;
 
@@ -71,7 +71,7 @@ interface GatewayInterface
     /**
      * @param DateInterval|DateTimeInterface|int|null $ttl
      *
-     * @return $this
+     * @return static
      */
     public function setTtl(DateInterval|DateTimeInterface|int|null $ttl = null): static;
 
@@ -83,7 +83,7 @@ interface GatewayInterface
     /**
      * @param LoggerInterface|null $logger
      *
-     * @return $this
+     * @return static
      */
     public function setLogger(LoggerInterface|null $logger = null): static;
 }

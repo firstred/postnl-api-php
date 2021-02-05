@@ -114,7 +114,7 @@ interface LocationServiceInterface extends ServiceInterface
     /**
      * @param LocationServiceGatewayInterface $gateway
      *
-     * @return $this
+     * @return static
      */
     public function setGateway(LocationServiceGatewayInterface $gateway): static;
 

@@ -223,7 +223,7 @@ class BarcodeServiceGateway extends GatewayBase implements BarcodeServiceGateway
     /**
      * @param BarcodeServiceRequestBuilderInterface $requestBuilder
      *
-     * @return $this
+     * @return static
      */
     public function setRequestBuilder(BarcodeServiceRequestBuilderInterface $requestBuilder): static
     {
@@ -243,7 +243,7 @@ class BarcodeServiceGateway extends GatewayBase implements BarcodeServiceGateway
     /**
      * @param BarcodeServiceResponseProcessorInterface $responseProcessor
      *
-     * @return $this
+     * @return static
      */
     public function setResponseProcessor(BarcodeServiceResponseProcessorInterface $responseProcessor): static
     {

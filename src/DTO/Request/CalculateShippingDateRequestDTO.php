@@ -128,7 +128,7 @@ class CalculateShippingDateRequestDTO extends CacheableDTO
     /**
      * @param string|null $DeliveryDate
      *
-     * @return $this
+     * @return static
      */
     public function setDeliveryDate(string|null $DeliveryDate = null): static
     {
@@ -178,7 +178,7 @@ class CalculateShippingDateRequestDTO extends CacheableDTO
     /**
      * @param string|null $PostalCode
      *
-     * @return $this
+     * @return static
      */
     public function setPostalCode(string|null $PostalCode = null): static
     {
@@ -198,7 +198,7 @@ class CalculateShippingDateRequestDTO extends CacheableDTO
     /**
      * @param string|null $CountryCode
      *
-     * @return $this
+     * @return static
      */
     public function setCountryCode(string|null $CountryCode = null): static
     {
@@ -218,7 +218,7 @@ class CalculateShippingDateRequestDTO extends CacheableDTO
     /**
      * @param string|null $OriginCountryCode
      *
-     * @return $this
+     * @return static
      */
     public function setOriginCountryCode(string|null $OriginCountryCode = null): static
     {
@@ -238,7 +238,7 @@ class CalculateShippingDateRequestDTO extends CacheableDTO
     /**
      * @param string|null $City
      *
-     * @return $this
+     * @return static
      */
     public function setCity(string|null $City = null): static
     {
@@ -258,7 +258,7 @@ class CalculateShippingDateRequestDTO extends CacheableDTO
     /**
      * @param string|null $Street
      *
-     * @return $this
+     * @return static
      */
     public function setStreet(string|null $Street = null): static
     {
@@ -308,7 +308,7 @@ class CalculateShippingDateRequestDTO extends CacheableDTO
     /**
      * @param string|null $HouseNrExt
      *
-     * @return $this
+     * @return static
      */
     public function setHouseNrExt(string|null $HouseNrExt = null): static
     {

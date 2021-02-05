@@ -115,7 +115,7 @@ class DeliveryDateService extends ServiceBase implements DeliveryDateServiceInte
     /**
      * @param DeliveryDateServiceGatewayInterface $gateway
      *
-     * @return $this
+     * @return static
      */
     public function setGateway(DeliveryDateServiceGatewayInterface $gateway): static
     {
@@ -135,7 +135,7 @@ class DeliveryDateService extends ServiceBase implements DeliveryDateServiceInte
     /**
      * @param HttpClientInterface $httpClient
      *
-     * @return $this
+     * @return static
      */
     public function setHttpClient(HttpClientInterface $httpClient): static
     {

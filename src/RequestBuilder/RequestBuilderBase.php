@@ -67,7 +67,7 @@ abstract class RequestBuilderBase implements RequestBuilderInterface
     /**
      * @param Customer $customer
      *
-     * @return $this
+     * @return static
      */
     public function setCustomer(Customer $customer): static
     {
@@ -87,7 +87,7 @@ abstract class RequestBuilderBase implements RequestBuilderInterface
     /**
      * @param string $apiKey
      *
-     * @return $this
+     * @return static
      */
     public function setApiKey(string $apiKey): static
     {
@@ -107,7 +107,7 @@ abstract class RequestBuilderBase implements RequestBuilderInterface
     /**
      * @param bool $sandbox
      *
-     * @return $this
+     * @return static
      */
     public function setSandbox(bool $sandbox): static
     {
@@ -127,7 +127,7 @@ abstract class RequestBuilderBase implements RequestBuilderInterface
     /**
      * @param string $version
      *
-     * @return $this
+     * @return static
      */
     public function setVersion(string $version): static
     {

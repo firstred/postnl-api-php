@@ -46,7 +46,7 @@ trait ServiceLoggerTrait
     /**
      * @param LoggerInterface|null $logger
      *
-     * @return $this
+     * @return static
      */
     public function setLogger(?LoggerInterface $logger): static
     {

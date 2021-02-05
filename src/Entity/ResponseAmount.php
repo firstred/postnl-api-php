@@ -85,7 +85,7 @@ class ResponseAmount
     /**
      * @param string|null $accountName
      *
-     * @return $this
+     * @return static
      */
     public function setAccountName(string|null $accountName = null): static
     {
@@ -105,7 +105,7 @@ class ResponseAmount
     /**
      * @param string|null $responseAmountType
      *
-     * @return $this
+     * @return static
      */
     public function setResponseAmountType(string|null $responseAmountType = null): static
     {
@@ -125,7 +125,7 @@ class ResponseAmount
     /**
      * @param string|null $bic
      *
-     * @return $this
+     * @return static
      */
     public function setBIC(string|null $bic = null): static
     {
@@ -145,7 +145,7 @@ class ResponseAmount
     /**
      * @param string|null $currency
      *
-     * @return $this
+     * @return static
      */
     public function setCurrency(string|null $currency = null): static
     {
@@ -165,7 +165,7 @@ class ResponseAmount
     /**
      * @param string|null $iban
      *
-     * @return $this
+     * @return static
      */
     public function setIBAN(string|null $iban = null): static
     {
@@ -185,7 +185,7 @@ class ResponseAmount
     /**
      * @param string|null $reference
      *
-     * @return $this
+     * @return static
      */
     public function setReference(string|null $reference = null): static
     {
@@ -205,7 +205,7 @@ class ResponseAmount
     /**
      * @param string|null $transactionNumber
      *
-     * @return $this
+     * @return static
      */
     public function setTransactionNumber(string|null $transactionNumber = null): static
     {
@@ -225,7 +225,7 @@ class ResponseAmount
     /**
      * @param string|null $value
      *
-     * @return $this
+     * @return static
      */
     public function setValue(string|null $value = null): static
     {

@@ -233,7 +233,7 @@ class LabellingService extends ServiceBase implements LabellingServiceInterface
     /**
      * @param HttpClientInterface $httpClient
      *
-     * @return $this
+     * @return static
      */
     public function setHttpClient(HttpClientInterface $httpClient): static
     {

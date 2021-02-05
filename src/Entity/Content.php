@@ -90,7 +90,7 @@ class Content extends SerializableObject
     /**
      * @param string|null $CountryOfOrigin
      *
-     * @return $this
+     * @return static
      */
     public function setCountryOfOrigin(string|null $CountryOfOrigin = null): static
     {
@@ -110,7 +110,7 @@ class Content extends SerializableObject
     /**
      * @param string|null $Description
      *
-     * @return $this
+     * @return static
      */
     public function setDescription(string|null $Description = null): static
     {
@@ -130,7 +130,7 @@ class Content extends SerializableObject
     /**
      * @param string|null $HSTariffNr
      *
-     * @return $this
+     * @return static
      */
     public function setHSTariffNr(string|null $HSTariffNr = null): static
     {
@@ -150,7 +150,7 @@ class Content extends SerializableObject
     /**
      * @param string|null $Quantity
      *
-     * @return $this
+     * @return static
      */
     public function setQuantity(string|null $Quantity = null): static
     {
@@ -170,7 +170,7 @@ class Content extends SerializableObject
     /**
      * @param string|null $Value
      *
-     * @return $this
+     * @return static
      */
     public function setValue(string|null $Value = null): static
     {
@@ -190,7 +190,7 @@ class Content extends SerializableObject
     /**
      * @param string|null $Weight
      *
-     * @return $this
+     * @return static
      */
     public function setWeight(string|null $Weight = null): static
     {
@@ -210,7 +210,7 @@ class Content extends SerializableObject
     /**
      * @param array|null $Content
      *
-     * @return $this
+     * @return static
      */
     public function setContent(array|null $Content = null): static
     {

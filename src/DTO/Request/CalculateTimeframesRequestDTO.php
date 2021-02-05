@@ -148,7 +148,7 @@ class CalculateTimeframesRequestDTO extends CacheableDTO
     /**
      * @param string|null $StartDate
      *
-     * @return $this
+     * @return static
      */
     public function setStartDate(string|null $StartDate = null): static
     {
@@ -167,7 +167,7 @@ class CalculateTimeframesRequestDTO extends CacheableDTO
     /**
      * @param string|null $EndDate
      *
-     * @return $this
+     * @return static
      */
     public function setEndDate(string|null $EndDate = null): static
     {
@@ -186,7 +186,7 @@ class CalculateTimeframesRequestDTO extends CacheableDTO
     /**
      * @param array|null $Options
      *
-     * @return $this
+     * @return static
      */
     public function setOptions(array|null $Options = null): static
     {
@@ -205,7 +205,7 @@ class CalculateTimeframesRequestDTO extends CacheableDTO
     /**
      * @param bool|null $AllowSundaySorting
      *
-     * @return $this
+     * @return static
      */
     public function setAllowSundaySorting(bool|null $AllowSundaySorting = null): static
     {
@@ -224,7 +224,7 @@ class CalculateTimeframesRequestDTO extends CacheableDTO
     /**
      * @param string|null $CountryCode
      *
-     * @return $this
+     * @return static
      */
     public function setCountryCode(string|null $CountryCode = null): static
     {
@@ -244,7 +244,7 @@ class CalculateTimeframesRequestDTO extends CacheableDTO
     /**
      * @param string|null $City
      *
-     * @return $this
+     * @return static
      */
     public function setCity(string|null $City = null): static
     {
@@ -263,7 +263,7 @@ class CalculateTimeframesRequestDTO extends CacheableDTO
     /**
      * @param string|null $PostalCode
      *
-     * @return $this
+     * @return static
      */
     public function setPostalCode(string|null $PostalCode = null): static
     {
@@ -282,7 +282,7 @@ class CalculateTimeframesRequestDTO extends CacheableDTO
     /**
      * @param string|null $Street
      *
-     * @return $this
+     * @return static
      */
     public function setStreet(string|null $Street = null): static
     {
@@ -331,7 +331,7 @@ class CalculateTimeframesRequestDTO extends CacheableDTO
     /**
      * @param string|null $HouseNrExt
      *
-     * @return $this
+     * @return static
      */
     public function setHouseNrExt(string|null $HouseNrExt = null): static
     {
@@ -381,7 +381,7 @@ class CalculateTimeframesRequestDTO extends CacheableDTO
     /**
      * @param string|null $TimeframeRange
      *
-     * @return $this
+     * @return static
      */
     public function setTimeframeRange(string|null $TimeframeRange = null): static
     {

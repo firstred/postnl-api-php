@@ -86,7 +86,7 @@ class CalculateDeliveryDateResponseDTO extends CacheableDTO implements Stringabl
     /**
      * @param string|null $DeliveryDate
      *
-     * @return $this
+     * @return static
      */
     public function setDeliveryDate(string|null $DeliveryDate = null): static
     {
@@ -106,7 +106,7 @@ class CalculateDeliveryDateResponseDTO extends CacheableDTO implements Stringabl
     /**
      * @param array|null $Options
      *
-     * @return $this
+     * @return static
      */
     public function setOptions(array|null $Options = null): static
     {

@@ -86,7 +86,7 @@ class Timeframes extends SerializableObject implements ArrayAccess, Countable, I
     /**
      * @param array|null $Timeframes
      *
-     * @return $this
+     * @return static
      * @throws InvalidArgumentException
      */
     public function setTimeframes(array|null $Timeframes = null): static

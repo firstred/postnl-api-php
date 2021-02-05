@@ -66,7 +66,7 @@ abstract class GatewayBase implements GatewayInterface
     /**
      * @param HttpClientInterface $httpClient
      *
-     * @return $this
+     * @return static
      */
     public function setHttpClient(HttpClientInterface $httpClient): static
     {
@@ -86,7 +86,7 @@ abstract class GatewayBase implements GatewayInterface
     /**
      * @param CacheItemPoolInterface|null $cache
      *
-     * @return $this
+     * @return static
      */
     public function setCache(CacheItemPoolInterface|null $cache = null): static
     {
@@ -106,7 +106,7 @@ abstract class GatewayBase implements GatewayInterface
     /**
      * @param DateInterval|DateTimeInterface|int|null $ttl
      *
-     * @return $this
+     * @return static
      */
     public function setTtl(DateInterval|DateTimeInterface|int|null $ttl = null): static
     {
@@ -126,7 +126,7 @@ abstract class GatewayBase implements GatewayInterface
     /**
      * @param LoggerInterface|null $logger
      *
-     * @return $this
+     * @return static
      */
     public function setLogger(?LoggerInterface $logger = null): static
     {

@@ -99,7 +99,7 @@ class Group extends SerializableObject
     /**
      * @param string|null $GroupCount
      *
-     * @return $this
+     * @return static
      */
     public function setGroupCount(string|null $GroupCount = null): static
     {
@@ -119,7 +119,7 @@ class Group extends SerializableObject
     /**
      * @param string|null $GroupSequence
      *
-     * @return $this
+     * @return static
      */
     public function setGroupSequence(string|null $GroupSequence = null): static
     {
@@ -139,7 +139,7 @@ class Group extends SerializableObject
     /**
      * @param string|null $GroupType
      *
-     * @return $this
+     * @return static
      */
     public function setGroupType(string|null $GroupType = null): static
     {
@@ -159,7 +159,7 @@ class Group extends SerializableObject
     /**
      * @param string|null $MainBarcode
      *
-     * @return $this
+     * @return static
      */
     public function setMainBarcode(string|null $MainBarcode = null): static
     {

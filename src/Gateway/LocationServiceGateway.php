@@ -391,7 +391,7 @@ class LocationServiceGateway extends GatewayBase implements LocationServiceGatew
     /**
      * @param LocationServiceRequestBuilderInterface $requestBuilder
      *
-     * @return $this
+     * @return static
      */
     public function setRequestBuilder(LocationServiceRequestBuilderInterface $requestBuilder): static
     {
@@ -411,7 +411,7 @@ class LocationServiceGateway extends GatewayBase implements LocationServiceGatew
     /**
      * @param LocationServiceResponseProcessorInterface $responseProcessor
      *
-     * @return $this
+     * @return static
      */
     public function setResponseProcessor(LocationServiceResponseProcessorInterface $responseProcessor): static
     {

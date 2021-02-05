@@ -94,7 +94,7 @@ interface HttpClientInterface
     /**
      * @param int $concurrency
      *
-     * @return $this
+     * @return static
      */
     public function setConcurrency(int $concurrency): static;
 
@@ -106,7 +106,7 @@ interface HttpClientInterface
     /**
      * @param LoggerInterface|null $logger
      *
-     * @return $this
+     * @return static
      */
     public function setLogger(LoggerInterface|null $logger = null): static;
 }

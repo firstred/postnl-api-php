@@ -128,7 +128,7 @@ class Location extends SerializableObject
     /**
      * @param string|null $Postalcode
      *
-     * @return $this
+     * @return static
      */
     public function setPostalcode(string|null $Postalcode = null): static
     {
@@ -152,7 +152,7 @@ class Location extends SerializableObject
     /**
      * @param string|null $AllowSundaySorting
      *
-     * @return $this
+     * @return static
      */
     public function setAllowSundaySorting(string|null $AllowSundaySorting = null): static
     {
@@ -172,7 +172,7 @@ class Location extends SerializableObject
     /**
      * @param string|null $DeliveryDate
      *
-     * @return $this
+     * @return static
      */
     public function setDeliveryDate(string|null $DeliveryDate = null): static
     {
@@ -192,7 +192,7 @@ class Location extends SerializableObject
     /**
      * @param array|null $DeliveryOptions
      *
-     * @return $this
+     * @return static
      */
     public function setDeliveryOptions(array|null $DeliveryOptions = null): static
     {
@@ -212,7 +212,7 @@ class Location extends SerializableObject
     /**
      * @param string|null $OpeningTime
      *
-     * @return $this
+     * @return static
      */
     public function setOpeningTime(string|null $OpeningTime = null): static
     {
@@ -232,7 +232,7 @@ class Location extends SerializableObject
     /**
      * @param array|null $Options
      *
-     * @return $this
+     * @return static
      */
     public function setOptions(array|null $Options = null): static
     {
@@ -260,7 +260,7 @@ class Location extends SerializableObject
     /**
      * @param string|null $City
      *
-     * @return $this
+     * @return static
      */
     public function setCity(string|null $City = null): static
     {
@@ -280,7 +280,7 @@ class Location extends SerializableObject
     /**
      * @param string|null $HouseNr
      *
-     * @return $this
+     * @return static
      */
     public function setHouseNr(string|null $HouseNr = null): static
     {
@@ -300,7 +300,7 @@ class Location extends SerializableObject
     /**
      * @param string|null $HouseNrExt
      *
-     * @return $this
+     * @return static
      */
     public function setHouseNrExt(string|null $HouseNrExt = null): static
     {
@@ -320,7 +320,7 @@ class Location extends SerializableObject
     /**
      * @param string|null $Street
      *
-     * @return $this
+     * @return static
      */
     public function setStreet(string|null $Street = null): static
     {
@@ -340,7 +340,7 @@ class Location extends SerializableObject
     /**
      * @param Coordinates|null $Coordinates
      *
-     * @return $this
+     * @return static
      */
     public function setCoordinates(?Coordinates $Coordinates = null): static
     {
@@ -360,7 +360,7 @@ class Location extends SerializableObject
     /**
      * @param CoordinatesNorthWest|null $CoordinatesNorthWest
      *
-     * @return $this
+     * @return static
      */
     public function setCoordinatesNorthWest(?CoordinatesNorthWest $CoordinatesNorthWest = null): static
     {
@@ -380,7 +380,7 @@ class Location extends SerializableObject
     /**
      * @param CoordinatesSouthEast|null $CoordinatesSouthEast
      *
-     * @return $this
+     * @return static
      */
     public function setCoordinatesSouthEast(?CoordinatesSouthEast $CoordinatesSouthEast = null): static
     {
@@ -400,7 +400,7 @@ class Location extends SerializableObject
     /**
      * @param string|null $LocationCode
      *
-     * @return $this
+     * @return static
      */
     public function setLocationCode(string|null $LocationCode = null): static
     {
@@ -420,7 +420,7 @@ class Location extends SerializableObject
     /**
      * @param string|null $Saleschannel
      *
-     * @return $this
+     * @return static
      */
     public function setSaleschannel(string|null $Saleschannel = null): static
     {
@@ -440,7 +440,7 @@ class Location extends SerializableObject
     /**
      * @param string|null $TerminalType
      *
-     * @return $this
+     * @return static
      */
     public function setTerminalType(string|null $TerminalType = null): static
     {
@@ -460,7 +460,7 @@ class Location extends SerializableObject
     /**
      * @param string|null $RetailNetworkID
      *
-     * @return $this
+     * @return static
      */
     public function setRetailNetworkID(string|null $RetailNetworkID = null): static
     {
@@ -480,7 +480,7 @@ class Location extends SerializableObject
     /**
      * @param string|null $DownPartnerID
      *
-     * @return $this
+     * @return static
      */
     public function setDownPartnerID(string|null $DownPartnerID = null): static
     {
@@ -500,7 +500,7 @@ class Location extends SerializableObject
     /**
      * @param string|null $DownPartnerLocation
      *
-     * @return $this
+     * @return static
      */
     public function setDownPartnerLocation(string|null $DownPartnerLocation = null): static
     {

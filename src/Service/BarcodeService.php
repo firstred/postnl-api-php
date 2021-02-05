@@ -333,7 +333,7 @@ class BarcodeService extends ServiceBase implements BarcodeServiceInterface
     /**
      * @param BarcodeServiceGatewayInterface $gateway
      *
-     * @return $this
+     * @return static
      */
     public function setGateway(BarcodeServiceGatewayInterface $gateway): static
     {
@@ -353,7 +353,7 @@ class BarcodeService extends ServiceBase implements BarcodeServiceInterface
     /**
      * @param HttpClientInterface $httpClient
      *
-     * @return $this
+     * @return static
      */
     public function setHttpClient(HttpClientInterface $httpClient): static
     {

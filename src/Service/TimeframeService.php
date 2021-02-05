@@ -94,7 +94,7 @@ class TimeframeService extends ServiceBase implements TimeframeServiceInterface
     /**
      * @param TimeframeServiceGatewayInterface $gateway
      *
-     * @return $this
+     * @return static
      */
     public function setGateway(TimeframeServiceGatewayInterface $gateway): static
     {
@@ -114,7 +114,7 @@ class TimeframeService extends ServiceBase implements TimeframeServiceInterface
     /**
      * @param HttpClientInterface $httpClient
      *
-     * @return $this
+     * @return static
      */
     public function setHttpClient(HttpClientInterface $httpClient): static
     {

@@ -81,7 +81,7 @@ class CalculateShippingDateResponseDTO extends CacheableDTO implements Stringabl
     /**
      * @param string|null $SentDate
      *
-     * @return $this
+     * @return static
      */
     public function setSentDate(string|null $SentDate = null): static
     {

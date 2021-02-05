@@ -153,7 +153,7 @@ class ResponseAddress
     /**
      * @param string|null $addressType
      *
-     * @return $this
+     * @return static
      */
     public function setAddressType(string|null $addressType = null): static
     {
@@ -173,7 +173,7 @@ class ResponseAddress
     /**
      * @param string|null $area
      *
-     * @return $this
+     * @return static
      */
     public function setArea(string|null $area = null): static
     {
@@ -193,7 +193,7 @@ class ResponseAddress
     /**
      * @param string|null $buildingName
      *
-     * @return $this
+     * @return static
      */
     public function setBuildingname(string|null $buildingName = null): static
     {
@@ -213,7 +213,7 @@ class ResponseAddress
     /**
      * @param string|null $city
      *
-     * @return $this
+     * @return static
      */
     public function setCity(string|null $city = null): static
     {
@@ -233,7 +233,7 @@ class ResponseAddress
     /**
      * @param string|null $companyName
      *
-     * @return $this
+     * @return static
      */
     public function setCompanyName(string|null $companyName = null): static
     {
@@ -253,7 +253,7 @@ class ResponseAddress
     /**
      * @param string|null $countryCode
      *
-     * @return $this
+     * @return static
      */
     public function setCountrycode(string|null $countryCode = null): static
     {
@@ -273,7 +273,7 @@ class ResponseAddress
     /**
      * @param string|null $department
      *
-     * @return $this
+     * @return static
      */
     public function setDepartment(string|null $department = null): static
     {
@@ -293,7 +293,7 @@ class ResponseAddress
     /**
      * @param string|null $doorcode
      *
-     * @return $this
+     * @return static
      */
     public function setDoorcode(string|null $doorcode = null): static
     {
@@ -313,7 +313,7 @@ class ResponseAddress
     /**
      * @param string|null $firstName
      *
-     * @return $this
+     * @return static
      */
     public function setFirstName(string|null $firstName = null): static
     {
@@ -333,7 +333,7 @@ class ResponseAddress
     /**
      * @param string|null $floor
      *
-     * @return $this
+     * @return static
      */
     public function setFloor(string|null $floor = null): static
     {
@@ -353,7 +353,7 @@ class ResponseAddress
     /**
      * @param string|null $houseNr
      *
-     * @return $this
+     * @return static
      */
     public function setHouseNr(string|null $houseNr = null): static
     {
@@ -373,7 +373,7 @@ class ResponseAddress
     /**
      * @param string|null $houseNrExt
      *
-     * @return $this
+     * @return static
      */
     public function setHouseNrExt(string|null $houseNrExt = null): static
     {
@@ -393,7 +393,7 @@ class ResponseAddress
     /**
      * @param string|null $name
      *
-     * @return $this
+     * @return static
      */
     public function setName(string|null $name = null): static
     {
@@ -413,7 +413,7 @@ class ResponseAddress
     /**
      * @param string|null $region
      *
-     * @return $this
+     * @return static
      */
     public function setRegion(string|null $region = null): static
     {
@@ -433,7 +433,7 @@ class ResponseAddress
     /**
      * @param string|null $remark
      *
-     * @return $this
+     * @return static
      */
     public function setRemark(string|null $remark = null): static
     {
@@ -453,7 +453,7 @@ class ResponseAddress
     /**
      * @param string|null $street
      *
-     * @return $this
+     * @return static
      */
     public function setStreet(string|null $street = null): static
     {
@@ -475,7 +475,7 @@ class ResponseAddress
      *
      * @param string|null $zipcode
      *
-     * @return $this
+     * @return static
      */
     public function setZipcode($zipcode = null): static
     {

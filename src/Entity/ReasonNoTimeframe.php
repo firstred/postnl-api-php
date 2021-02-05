@@ -107,7 +107,7 @@ class ReasonNoTimeframe extends SerializableObject
     /**
      * @param string|null $Code
      *
-     * @return $this
+     * @return static
      */
     public function setCode(string|null $Code = null): static
     {
@@ -127,7 +127,7 @@ class ReasonNoTimeframe extends SerializableObject
     /**
      * @param string|null $Date
      *
-     * @return $this
+     * @return static
      */
     public function setDate(string|null $Date = null): static
     {
@@ -147,7 +147,7 @@ class ReasonNoTimeframe extends SerializableObject
     /**
      * @param string|null $Description
      *
-     * @return $this
+     * @return static
      */
     public function setDescription(string|null $Description = null): static
     {
@@ -167,7 +167,7 @@ class ReasonNoTimeframe extends SerializableObject
     /**
      * @param array|null $Options
      *
-     * @return $this
+     * @return static
      */
     public function setOptions(array|null $Options = null): static
     {
@@ -187,7 +187,7 @@ class ReasonNoTimeframe extends SerializableObject
     /**
      * @param string|null $From
      *
-     * @return $this
+     * @return static
      */
     public function setFrom(string|null $From = null): static
     {
@@ -207,7 +207,7 @@ class ReasonNoTimeframe extends SerializableObject
     /**
      * @param string|null $To
      *
-     * @return $this
+     * @return static
      */
     public function setTo(string|null $To = null): static
     {

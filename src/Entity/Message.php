@@ -77,7 +77,7 @@ class Message extends SerializableObject
     /**
      * @param string|null $messageID
      *
-     * @return $this
+     * @return static
      */
     public function setMessageID(string|null $messageID): static
     {
@@ -97,7 +97,7 @@ class Message extends SerializableObject
     /**
      * @param string|null $messageTimeStamp
      *
-     * @return $this
+     * @return static
      */
     public function setMessageTimeStamp(string|null $messageTimeStamp): static
     {

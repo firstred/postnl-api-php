@@ -85,7 +85,7 @@ class ReasonNoTimeframes extends SerializableObject implements ArrayAccess, Coun
     /**
      * @param array|null $ReasonNoTimeframes
      *
-     * @return $this
+     * @return static
      * @throws InvalidArgumentException
      */
     public function setReasonNoTimeframes(array|null $ReasonNoTimeframes = null): static

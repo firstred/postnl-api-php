@@ -74,7 +74,7 @@ class CoordinatesSouthEast extends SerializableObject
     /**
      * @param string|null $Latitude
      *
-     * @return $this
+     * @return static
      */
     public function setLatitude(string|null $Latitude = null): static
     {
@@ -94,7 +94,7 @@ class CoordinatesSouthEast extends SerializableObject
     /**
      * @param string|null $Longitude
      *
-     * @return $this
+     * @return static
      */
     public function setLongitude(string|null $Longitude = null): static
     {

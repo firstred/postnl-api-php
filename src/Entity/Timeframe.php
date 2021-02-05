@@ -151,7 +151,7 @@ class Timeframe extends SerializableObject
     /**
      * @param string|null $PostalCode
      *
-     * @return $this
+     * @return static
      */
     public function setPostalCode(string|null $PostalCode = null): static
     {
@@ -175,7 +175,7 @@ class Timeframe extends SerializableObject
     /**
      * @param string|null $City
      *
-     * @return $this
+     * @return static
      */
     public function setCity(string|null $City = null): static
     {
@@ -195,7 +195,7 @@ class Timeframe extends SerializableObject
     /**
      * @param string|null $CountryCode
      *
-     * @return $this
+     * @return static
      */
     public function setCountryCode(string|null $CountryCode = null): static
     {
@@ -215,7 +215,7 @@ class Timeframe extends SerializableObject
     /**
      * @param string|null $Date
      *
-     * @return $this
+     * @return static
      */
     public function setDate(string|null $Date = null): static
     {
@@ -235,7 +235,7 @@ class Timeframe extends SerializableObject
     /**
      * @param string|null $EndDate
      *
-     * @return $this
+     * @return static
      */
     public function setEndDate(string|null $EndDate = null): static
     {
@@ -255,7 +255,7 @@ class Timeframe extends SerializableObject
     /**
      * @param string|null $HouseNr
      *
-     * @return $this
+     * @return static
      */
     public function setHouseNr(string|null $HouseNr = null): static
     {
@@ -275,7 +275,7 @@ class Timeframe extends SerializableObject
     /**
      * @param string|null $HouseNrExt
      *
-     * @return $this
+     * @return static
      */
     public function setHouseNrExt(string|null $HouseNrExt = null): static
     {
@@ -295,7 +295,7 @@ class Timeframe extends SerializableObject
     /**
      * @param array|null $Options
      *
-     * @return $this
+     * @return static
      */
     public function setOptions(array|null $Options = null): static
     {
@@ -315,7 +315,7 @@ class Timeframe extends SerializableObject
     /**
      * @param string|null $Street
      *
-     * @return $this
+     * @return static
      */
     public function setStreet(string|null $Street = null): static
     {
@@ -335,7 +335,7 @@ class Timeframe extends SerializableObject
     /**
      * @param bool|string|null $SundaySorting
      *
-     * @return $this
+     * @return static
      */
     public function setSundaySorting(bool|string|null $SundaySorting = null): static
     {
@@ -363,7 +363,7 @@ class Timeframe extends SerializableObject
     /**
      * @param string|null $Interval
      *
-     * @return $this
+     * @return static
      */
     public function setInterval(string|null $Interval = null): static
     {
@@ -383,7 +383,7 @@ class Timeframe extends SerializableObject
     /**
      * @param string|null $Range
      *
-     * @return $this
+     * @return static
      */
     public function setRange(string|null $Range = null): static
     {

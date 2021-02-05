@@ -82,7 +82,7 @@ interface DeliveryDateServiceInterface extends ServiceInterface
     /**
      * @param DeliveryDateServiceGatewayInterface $gateway
      *
-     * @return $this
+     * @return static
      */
     public function setGateway(DeliveryDateServiceGatewayInterface $gateway): static;
 

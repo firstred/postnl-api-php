@@ -167,7 +167,7 @@ class ResponseLocation extends CacheableDTO
     /**
      * @param string|null $Name
      *
-     * @return $this
+     * @return static
      */
     public function setName(string|null $Name = null): static
     {
@@ -274,7 +274,7 @@ class ResponseLocation extends CacheableDTO
     /**
      * @param Address|array|null $Address
      *
-     * @return $this
+     * @return static
      * @throws InvalidArgumentException
      */
     public function setAddress(Address|array|null $Address = null): static
@@ -302,7 +302,7 @@ class ResponseLocation extends CacheableDTO
     /**
      * @param array|null $DeliveryOptions
      *
-     * @return $this
+     * @return static
      */
     public function setDeliveryOptions(array|null $DeliveryOptions = null): static
     {
@@ -330,7 +330,7 @@ class ResponseLocation extends CacheableDTO
     /**
      * @param OpeningHours|array|null $OpeningHours
      *
-     * @return $this
+     * @return static
      * @throws InvalidArgumentException
      */
     public function setOpeningHours(OpeningHours|array|null $OpeningHours = null): static
@@ -358,7 +358,7 @@ class ResponseLocation extends CacheableDTO
     /**
      * @param string|null $PartnerName
      *
-     * @return $this
+     * @return static
      */
     public function setPartnerName(string|null $PartnerName = null): static
     {
@@ -378,7 +378,7 @@ class ResponseLocation extends CacheableDTO
     /**
      * @param string|null $PhoneNumber
      *
-     * @return $this
+     * @return static
      */
     public function setPhoneNumber(string|null $PhoneNumber = null): static
     {
@@ -398,7 +398,7 @@ class ResponseLocation extends CacheableDTO
     /**
      * @param string|null $RetailNetworkID
      *
-     * @return $this
+     * @return static
      */
     public function setRetailNetworkID(string|null $RetailNetworkID = null): static
     {
@@ -418,7 +418,7 @@ class ResponseLocation extends CacheableDTO
     /**
      * @param string|null $Saleschannel
      *
-     * @return $this
+     * @return static
      */
     public function setSaleschannel(string|null $Saleschannel = null): static
     {
@@ -437,7 +437,7 @@ class ResponseLocation extends CacheableDTO
     /**
      * @param string|null $TerminalType
      *
-     * @return $this
+     * @return static
      */
     public function setTerminalType(string|null $TerminalType = null): static
     {
@@ -456,7 +456,7 @@ class ResponseLocation extends CacheableDTO
     /**
      * @param array|null $Warnings
      *
-     * @return $this
+     * @return static
      */
     public function setWarnings(array|null $Warnings = null): static
     {

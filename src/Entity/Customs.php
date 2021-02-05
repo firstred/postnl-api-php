@@ -99,7 +99,7 @@ class Customs extends SerializableObject
     /**
      * @param string|null $Certificate
      *
-     * @return $this
+     * @return static
      */
     public function setCertificate(string|null $Certificate = null): static
     {
@@ -119,7 +119,7 @@ class Customs extends SerializableObject
     /**
      * @param string|null $CertificateNr
      *
-     * @return $this
+     * @return static
      */
     public function setCertificateNr(string|null $CertificateNr = null): static
     {
@@ -139,7 +139,7 @@ class Customs extends SerializableObject
     /**
      * @param array|null $Content
      *
-     * @return $this
+     * @return static
      */
     public function setContent(array|null $Content = null): static
     {
@@ -159,7 +159,7 @@ class Customs extends SerializableObject
     /**
      * @param string|null $Currency
      *
-     * @return $this
+     * @return static
      */
     public function setCurrency(string|null $Currency = null): static
     {
@@ -179,7 +179,7 @@ class Customs extends SerializableObject
     /**
      * @param string|null $HandleAsNonDeliverable
      *
-     * @return $this
+     * @return static
      */
     public function setHandleAsNonDeliverable(string|null $HandleAsNonDeliverable = null): static
     {
@@ -199,7 +199,7 @@ class Customs extends SerializableObject
     /**
      * @param string|null $Invoice
      *
-     * @return $this
+     * @return static
      */
     public function setInvoice(string|null $Invoice = null): static
     {
@@ -219,7 +219,7 @@ class Customs extends SerializableObject
     /**
      * @param string|null $InvoiceNr
      *
-     * @return $this
+     * @return static
      */
     public function setInvoiceNr(string|null $InvoiceNr = null): static
     {
@@ -239,7 +239,7 @@ class Customs extends SerializableObject
     /**
      * @param string|null $license
      *
-     * @return $this
+     * @return static
      */
     public function setLicense(string|null $license = null): static
     {
@@ -259,7 +259,7 @@ class Customs extends SerializableObject
     /**
      * @param string|null $LicenseNr
      *
-     * @return $this
+     * @return static
      */
     public function setLicenseNr(string|null $LicenseNr = null): static
     {
@@ -279,7 +279,7 @@ class Customs extends SerializableObject
     /**
      * @param string|null $ShipmentType
      *
-     * @return $this
+     * @return static
      */
     public function setShipmentType(string|null $ShipmentType = null): static
     {

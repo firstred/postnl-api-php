@@ -81,7 +81,7 @@ class ResponseShipment
     /**
      * @param string|null $barcode
      *
-     * @return $this
+     * @return static
      */
     public function setBarcode(string|null $barcode = null): static
     {
@@ -101,7 +101,7 @@ class ResponseShipment
     /**
      * @param string|null $downPartnerBarcode
      *
-     * @return $this
+     * @return static
      */
     public function setDownPartnerBarcode(string|null $downPartnerBarcode = null): static
     {
@@ -121,7 +121,7 @@ class ResponseShipment
     /**
      * @param string|null $downPartnerID
      *
-     * @return $this
+     * @return static
      */
     public function setDownPartnerID(string|null $downPartnerID = null): static
     {
@@ -141,7 +141,7 @@ class ResponseShipment
     /**
      * @param string|null $downPartnerLocation
      *
-     * @return $this
+     * @return static
      */
     public function setDownPartnerLocation(string|null $downPartnerLocation = null): static
     {
@@ -161,7 +161,7 @@ class ResponseShipment
     /**
      * @param array|null $labels
      *
-     * @return $this
+     * @return static
      */
     public function setLabels(array|null $labels = null): static
     {
@@ -181,7 +181,7 @@ class ResponseShipment
     /**
      * @param string|null $productCodeDelivery
      *
-     * @return $this
+     * @return static
      */
     public function setProductCodeDelivery(string|null $productCodeDelivery = null): static
     {
@@ -201,7 +201,7 @@ class ResponseShipment
     /**
      * @param array|null $warnings
      *
-     * @return $this
+     * @return static
      */
     public function setWarnings(array|null $warnings = null): static
     {

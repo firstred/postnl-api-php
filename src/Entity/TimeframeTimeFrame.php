@@ -80,7 +80,7 @@ class TimeframeTimeFrame extends SerializableObject
     /**
      * @param string|null $Date
      *
-     * @return $this
+     * @return static
      */
     public function setDate(string|null $Date = null): static
     {
@@ -100,7 +100,7 @@ class TimeframeTimeFrame extends SerializableObject
     /**
      * @param string|null $From
      *
-     * @return $this
+     * @return static
      */
     public function setFrom(string|null $From = null): static
     {
@@ -120,7 +120,7 @@ class TimeframeTimeFrame extends SerializableObject
     /**
      * @param array|null $Options
      *
-     * @return $this
+     * @return static
      */
     public function setOptions(array|null $Options = null): static
     {
@@ -140,7 +140,7 @@ class TimeframeTimeFrame extends SerializableObject
     /**
      * @param string|null $To
      *
-     * @return $this
+     * @return static
      */
     public function setTo(string|null $To = null): static
     {

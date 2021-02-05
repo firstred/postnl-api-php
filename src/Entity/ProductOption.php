@@ -75,7 +75,7 @@ class ProductOption extends SerializableObject
     /**
      * @param string|null $Characteristic
      *
-     * @return $this
+     * @return static
      */
     public function setCharacteristic(string|null $Characteristic = null): static
     {
@@ -95,7 +95,7 @@ class ProductOption extends SerializableObject
     /**
      * @param string|null $Option
      *
-     * @return $this
+     * @return static
      */
     public function setOption(string|null $Option = null): static
     {

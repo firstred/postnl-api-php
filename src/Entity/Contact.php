@@ -92,7 +92,7 @@ class Contact extends SerializableObject
     /**
      * @param string|null $ContactType
      *
-     * @return $this
+     * @return static
      */
     public function setContactType(string|null $ContactType = null): static
     {
@@ -112,7 +112,7 @@ class Contact extends SerializableObject
     /**
      * @param string|null $Email
      *
-     * @return $this
+     * @return static
      */
     public function setEmail(string|null $Email = null): static
     {
@@ -132,7 +132,7 @@ class Contact extends SerializableObject
     /**
      * @param string|null $SMSNr
      *
-     * @return $this
+     * @return static
      */
     public function setSMSNr(string|null $SMSNr = null): static
     {
@@ -152,7 +152,7 @@ class Contact extends SerializableObject
     /**
      * @param string|null $TelNr
      *
-     * @return $this
+     * @return static
      */
     public function setTelNr(string|null $TelNr = null): static
     {

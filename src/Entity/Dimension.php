@@ -86,7 +86,7 @@ class Dimension extends SerializableObject
     /**
      * @param string|null $Height
      *
-     * @return $this
+     * @return static
      */
     public function setHeight(string|null $Height = null): static
     {
@@ -106,7 +106,7 @@ class Dimension extends SerializableObject
     /**
      * @param string|null $Length
      *
-     * @return $this
+     * @return static
      */
     public function setLength(string|null $Length = null): static
     {
@@ -126,7 +126,7 @@ class Dimension extends SerializableObject
     /**
      * @param string|null $Volume
      *
-     * @return $this
+     * @return static
      */
     public function setVolume(string|null $Volume = null): static
     {
@@ -146,7 +146,7 @@ class Dimension extends SerializableObject
     /**
      * @param string|null $Weight
      *
-     * @return $this
+     * @return static
      */
     public function setWeight(string|null $Weight = null): static
     {
@@ -166,7 +166,7 @@ class Dimension extends SerializableObject
     /**
      * @param string|null $Width
      *
-     * @return $this
+     * @return static
      */
     public function setWidth(string|null $Width = null): static
     {

@@ -41,7 +41,7 @@ interface RequestBuilderInterface
     /**
      * @param Customer $customer
      *
-     * @return $this
+     * @return static
      */
     public function setCustomer(Customer $customer): static;
 
@@ -53,7 +53,7 @@ interface RequestBuilderInterface
     /**
      * @param string $apiKey
      *
-     * @return $this
+     * @return static
      */
     public function setApiKey(string $apiKey): static;
 
@@ -65,7 +65,7 @@ interface RequestBuilderInterface
     /**
      * @param bool $sandbox
      *
-     * @return $this
+     * @return static
      */
     public function setSandbox(bool $sandbox): static;
 
@@ -77,7 +77,7 @@ interface RequestBuilderInterface
     /**
      * @param string $version
      *
-     * @return $this
+     * @return static
      */
     public function setVersion(string $version): static;
 }

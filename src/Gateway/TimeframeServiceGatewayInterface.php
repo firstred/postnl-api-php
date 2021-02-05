@@ -68,7 +68,7 @@ interface TimeframeServiceGatewayInterface extends GatewayInterface
     /**
      * @param TimeframeServiceRequestBuilderInterface $requestBuilder
      *
-     * @return $this
+     * @return static
      */
     public function setRequestBuilder(TimeframeServiceRequestBuilderInterface $requestBuilder): static;
 
@@ -80,7 +80,7 @@ interface TimeframeServiceGatewayInterface extends GatewayInterface
     /**
      * @param TimeframeServiceResponseProcessorInterface $responseProcessor
      *
-     * @return $this
+     * @return static
      */
     public function setResponseProcessor(TimeframeServiceResponseProcessorInterface $responseProcessor): static;
 }

@@ -180,7 +180,7 @@ class Shipment extends SerializableObject
     /**
      * @param array|null $Addresses
      *
-     * @return $this
+     * @return static
      */
     public function setAddresses(array|null $Addresses = null): static
     {
@@ -200,7 +200,7 @@ class Shipment extends SerializableObject
     /**
      * @param array|null $Amounts
      *
-     * @return $this
+     * @return static
      */
     public function setAmounts(array|null $Amounts = null): static
     {
@@ -220,7 +220,7 @@ class Shipment extends SerializableObject
     /**
      * @param string|null $Barcode
      *
-     * @return $this
+     * @return static
      */
     public function setBarcode(string|null $Barcode = null): static
     {
@@ -240,7 +240,7 @@ class Shipment extends SerializableObject
     /**
      * @param string|null $CollectionTimeStampEnd
      *
-     * @return $this
+     * @return static
      */
     public function setCollectionTimeStampEnd(string|null $CollectionTimeStampEnd = null): static
     {
@@ -260,7 +260,7 @@ class Shipment extends SerializableObject
     /**
      * @param string|null $CollectionTimeStampStart
      *
-     * @return $this
+     * @return static
      */
     public function setCollectionTimeStampStart(string|null $CollectionTimeStampStart = null): static
     {
@@ -280,7 +280,7 @@ class Shipment extends SerializableObject
     /**
      * @param array|null $Contacts
      *
-     * @return $this
+     * @return static
      */
     public function setContacts(array|null $Contacts = null): static
     {
@@ -300,7 +300,7 @@ class Shipment extends SerializableObject
     /**
      * @param string|null $Content
      *
-     * @return $this
+     * @return static
      */
     public function setContent(string|null $Content = null): static
     {
@@ -320,7 +320,7 @@ class Shipment extends SerializableObject
     /**
      * @param string|null $CostCenter
      *
-     * @return $this
+     * @return static
      */
     public function setCostCenter(string|null $CostCenter = null): static
     {
@@ -340,7 +340,7 @@ class Shipment extends SerializableObject
     /**
      * @param string|null $CustomerOrderNumber
      *
-     * @return $this
+     * @return static
      */
     public function setCustomerOrderNumber(string|null $CustomerOrderNumber = null): static
     {
@@ -360,7 +360,7 @@ class Shipment extends SerializableObject
     /**
      * @param Customer|null $Customer
      *
-     * @return $this
+     * @return static
      */
     public function setCustomer(Customer|null $Customer = null): static
     {
@@ -380,7 +380,7 @@ class Shipment extends SerializableObject
     /**
      * @param Customs|null $Customs
      *
-     * @return $this
+     * @return static
      */
     public function setCustoms(Customs|null $Customs = null): static
     {
@@ -400,7 +400,7 @@ class Shipment extends SerializableObject
     /**
      * @param string|null $StatusCode
      *
-     * @return $this
+     * @return static
      */
     public function setStatusCode(string|null $StatusCode = null): static
     {
@@ -420,7 +420,7 @@ class Shipment extends SerializableObject
     /**
      * @param int|null $PhaseCode
      *
-     * @return $this
+     * @return static
      */
     public function setPhaseCode(int|null $PhaseCode = null): static
     {
@@ -440,7 +440,7 @@ class Shipment extends SerializableObject
     /**
      * @param string|null $DateFrom
      *
-     * @return $this
+     * @return static
      */
     public function setDateFrom(string|null $DateFrom = null): static
     {
@@ -460,7 +460,7 @@ class Shipment extends SerializableObject
     /**
      * @param string|null $DateTo
      *
-     * @return $this
+     * @return static
      */
     public function setDateTo(string|null $DateTo = null): static
     {
@@ -480,7 +480,7 @@ class Shipment extends SerializableObject
     /**
      * @param string|null $DeliveryAddress
      *
-     * @return $this
+     * @return static
      */
     public function setDeliveryAddress(string|null $DeliveryAddress = null): static
     {
@@ -500,7 +500,7 @@ class Shipment extends SerializableObject
     /**
      * @param string|null $DeliveryTimeStampStart
      *
-     * @return $this
+     * @return static
      */
     public function setDeliveryTimeStampStart(string|null $DeliveryTimeStampStart = null): static
     {
@@ -520,7 +520,7 @@ class Shipment extends SerializableObject
     /**
      * @param string|null $DeliveryTimeStampEnd
      *
-     * @return $this
+     * @return static
      */
     public function setDeliveryTimeStampEnd(string|null $DeliveryTimeStampEnd = null): static
     {
@@ -540,7 +540,7 @@ class Shipment extends SerializableObject
     /**
      * @param string|null $DeliveryDate
      *
-     * @return $this
+     * @return static
      */
     public function setDeliveryDate(string|null $DeliveryDate = null): static
     {
@@ -560,7 +560,7 @@ class Shipment extends SerializableObject
     /**
      * @param Dimension|null $Dimension
      *
-     * @return $this
+     * @return static
      */
     public function setDimension(Dimension|null $Dimension = null): static
     {
@@ -580,7 +580,7 @@ class Shipment extends SerializableObject
     /**
      * @param string|null $DownPartnerBarcode
      *
-     * @return $this
+     * @return static
      */
     public function setDownPartnerBarcode(string|null $DownPartnerBarcode = null): static
     {
@@ -600,7 +600,7 @@ class Shipment extends SerializableObject
     /**
      * @param string|null $DownPartnerID
      *
-     * @return $this
+     * @return static
      */
     public function setDownPartnerID(string|null $DownPartnerID = null): static
     {
@@ -620,7 +620,7 @@ class Shipment extends SerializableObject
     /**
      * @param string|null $DownPartnerLocation
      *
-     * @return $this
+     * @return static
      */
     public function setDownPartnerLocation(string|null $DownPartnerLocation = null): static
     {
@@ -640,7 +640,7 @@ class Shipment extends SerializableObject
     /**
      * @param array|null $Events
      *
-     * @return $this
+     * @return static
      */
     public function setEvents(array|null $Events = null): static
     {
@@ -660,7 +660,7 @@ class Shipment extends SerializableObject
     /**
      * @param array|null $Groups
      *
-     * @return $this
+     * @return static
      */
     public function setGroups(array|null $Groups = null): static
     {
@@ -680,7 +680,7 @@ class Shipment extends SerializableObject
     /**
      * @param string|null $IDExpiration
      *
-     * @return $this
+     * @return static
      */
     public function setIDExpiration(string|null $IDExpiration = null): static
     {
@@ -700,7 +700,7 @@ class Shipment extends SerializableObject
     /**
      * @param string|null $IDNumber
      *
-     * @return $this
+     * @return static
      */
     public function setIDNumber(string|null $IDNumber = null): static
     {
@@ -720,7 +720,7 @@ class Shipment extends SerializableObject
     /**
      * @param string|null $IDType
      *
-     * @return $this
+     * @return static
      */
     public function setIDType(string|null $IDType = null): static
     {
@@ -740,7 +740,7 @@ class Shipment extends SerializableObject
     /**
      * @param string|null $OldStatuses
      *
-     * @return $this
+     * @return static
      */
     public function setOldStatuses(string|null $OldStatuses = null): static
     {
@@ -760,7 +760,7 @@ class Shipment extends SerializableObject
     /**
      * @param string|null $ProductCodeCollect
      *
-     * @return $this
+     * @return static
      */
     public function setProductCodeCollect(string|null $ProductCodeCollect = null): static
     {
@@ -780,7 +780,7 @@ class Shipment extends SerializableObject
     /**
      * @param string|null $ProductCodeDelivery
      *
-     * @return $this
+     * @return static
      */
     public function setProductCodeDelivery(string|null $ProductCodeDelivery = null): static
     {
@@ -800,7 +800,7 @@ class Shipment extends SerializableObject
     /**
      * @param array|null $ProductOptions
      *
-     * @return $this
+     * @return static
      */
     public function setProductOptions(array|null $ProductOptions = null): static
     {
@@ -820,7 +820,7 @@ class Shipment extends SerializableObject
     /**
      * @param string|null $ReceiverDateOfBirth
      *
-     * @return $this
+     * @return static
      */
     public function setReceiverDateOfBirth(string|null $ReceiverDateOfBirth = null): static
     {
@@ -840,7 +840,7 @@ class Shipment extends SerializableObject
     /**
      * @param string|null $Reference
      *
-     * @return $this
+     * @return static
      */
     public function setReference(string|null $Reference = null): static
     {
@@ -860,7 +860,7 @@ class Shipment extends SerializableObject
     /**
      * @param string|null $ReferenceCollect
      *
-     * @return $this
+     * @return static
      */
     public function setReferenceCollect(string|null $ReferenceCollect = null): static
     {
@@ -880,7 +880,7 @@ class Shipment extends SerializableObject
     /**
      * @param string|null $Remark
      *
-     * @return $this
+     * @return static
      */
     public function setRemark(string|null $Remark = null): static
     {
@@ -900,7 +900,7 @@ class Shipment extends SerializableObject
     /**
      * @param string|null $ReturnBarcode
      *
-     * @return $this
+     * @return static
      */
     public function setReturnBarcode(string|null $ReturnBarcode = null): static
     {
@@ -920,7 +920,7 @@ class Shipment extends SerializableObject
     /**
      * @param string|null $ReturnReference
      *
-     * @return $this
+     * @return static
      */
     public function setReturnReference(string|null $ReturnReference = null): static
     {

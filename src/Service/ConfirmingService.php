@@ -174,7 +174,7 @@ class ConfirmingService extends ServiceBase implements ConfirmingServiceInterfac
     /**
      * @param HttpClientInterface $httpClient
      *
-     * @return $this
+     * @return static
      */
     public function setHttpClient(HttpClientInterface $httpClient): static
     {

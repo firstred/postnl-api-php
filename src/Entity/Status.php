@@ -83,7 +83,7 @@ class Status extends SerializableObject
     /**
      * @param string|null $CurrentPhaseCode
      *
-     * @return $this
+     * @return static
      */
     public function setCurrentPhaseCode(string|null $CurrentPhaseCode = null): static
     {
@@ -103,7 +103,7 @@ class Status extends SerializableObject
     /**
      * @param string|null $CurrentPhaseDescription
      *
-     * @return $this
+     * @return static
      */
     public function setCurrentPhaseDescription(string|null $CurrentPhaseDescription = null): static
     {
@@ -123,7 +123,7 @@ class Status extends SerializableObject
     /**
      * @param string|null $CurrentStatusCode
      *
-     * @return $this
+     * @return static
      */
     public function setCurrentStatusCode(string|null $CurrentStatusCode = null): static
     {
@@ -143,7 +143,7 @@ class Status extends SerializableObject
     /**
      * @param string|null $CurrentStatusDescription
      *
-     * @return $this
+     * @return static
      */
     public function setCurrentStatusDescription(string|null $CurrentStatusDescription = null): static
     {
@@ -163,7 +163,7 @@ class Status extends SerializableObject
     /**
      * @param string|null $CurrentStatusTimeStamp
      *
-     * @return $this
+     * @return static
      */
     public function setCurrentStatusTimeStamp(string|null $CurrentStatusTimeStamp = null): static
     {

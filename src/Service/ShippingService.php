@@ -166,7 +166,7 @@ class ShippingService extends ServiceBase implements ShippingServiceInterface
     /**
      * @param HttpClientInterface $httpClient
      *
-     * @return $this
+     * @return static
      */
     public function setHttpClient(HttpClientInterface $httpClient): static
     {

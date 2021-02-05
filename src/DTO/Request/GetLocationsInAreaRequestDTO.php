@@ -243,7 +243,7 @@ class GetLocationsInAreaRequestDTO extends CacheableDTO
     /**
      * @param string|null $DeliveryDate
      *
-     * @return $this
+     * @return static
      */
     public function setDeliveryDate(string|null $DeliveryDate = null): static
     {
@@ -263,7 +263,7 @@ class GetLocationsInAreaRequestDTO extends CacheableDTO
     /**
      * @param string|null $OpeningTime
      *
-     * @return $this
+     * @return static
      */
     public function setOpeningTime(string|null $OpeningTime = null): static
     {

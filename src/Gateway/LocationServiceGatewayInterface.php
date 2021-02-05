@@ -120,7 +120,7 @@ interface LocationServiceGatewayInterface extends GatewayInterface
     /**
      * @param LocationServiceRequestBuilderInterface $requestBuilder
      *
-     * @return $this
+     * @return static
      */
     public function setRequestBuilder(LocationServiceRequestBuilderInterface $requestBuilder): static;
 
@@ -132,7 +132,7 @@ interface LocationServiceGatewayInterface extends GatewayInterface
     /**
      * @param LocationServiceResponseProcessorInterface $responseProcessor
      *
-     * @return $this
+     * @return static
      */
     public function setResponseProcessor(LocationServiceResponseProcessorInterface $responseProcessor): static;
 }

@@ -75,7 +75,7 @@ class Area extends SerializableObject
     /**
      * @param Coordinates|null $CoordinatesNorthWest
      *
-     * @return $this
+     * @return static
      */
     public function setCoordinatesNorthWest(Coordinates|null $CoordinatesNorthWest = null): static
     {
@@ -95,7 +95,7 @@ class Area extends SerializableObject
     /**
      * @param Coordinates|null $CoordinatesSouthEast
      *
-     * @return $this
+     * @return static
      */
     public function setCoordinatesSouthEast(Coordinates|null $CoordinatesSouthEast = null): static
     {

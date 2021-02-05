@@ -484,7 +484,7 @@ class ShippingStatusService extends ServiceBase implements ShippingStatusService
     /**
      * @param HttpClientInterface $httpClient
      *
-     * @return $this
+     * @return static
      */
     public function setHttpClient(HttpClientInterface $httpClient): static
     {

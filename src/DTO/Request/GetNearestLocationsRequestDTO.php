@@ -101,7 +101,7 @@ class GetNearestLocationsRequestDTO extends CacheableDTO
     /**
      * @param string|null $CountryCode
      *
-     * @return $this
+     * @return static
      */
     public function setCountryCode(string|null $CountryCode = null): static
     {
@@ -120,7 +120,7 @@ class GetNearestLocationsRequestDTO extends CacheableDTO
     /**
      * @param string|null $PostalCode
      *
-     * @return $this
+     * @return static
      */
     public function setPostalCode(string|null $PostalCode = null): static
     {

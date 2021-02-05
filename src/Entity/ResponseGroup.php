@@ -87,7 +87,7 @@ class ResponseGroup
     /**
      * @param string|null $groupCount
      *
-     * @return $this
+     * @return static
      */
     public function setGroupCount(string|null $groupCount = null): static
     {
@@ -107,7 +107,7 @@ class ResponseGroup
     /**
      * @param string|null $groupSequence
      *
-     * @return $this
+     * @return static
      */
     public function setGroupSequence(string|null $groupSequence = null): static
     {
@@ -127,7 +127,7 @@ class ResponseGroup
     /**
      * @param string|null $groupType
      *
-     * @return $this
+     * @return static
      */
     public function setGroupType(string|null $groupType = null): static
     {
@@ -147,7 +147,7 @@ class ResponseGroup
     /**
      * @param string|null $mainBarcode
      *
-     * @return $this
+     * @return static
      */
     public function setMainBarcode(string|null $mainBarcode = null): static
     {

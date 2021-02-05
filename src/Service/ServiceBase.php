@@ -60,7 +60,7 @@ abstract class ServiceBase implements ServiceInterface
     /**
      * @param Customer $customer
      *
-     * @return $this
+     * @return static
      */
     public function setCustomer(Customer $customer): static
     {
@@ -80,7 +80,7 @@ abstract class ServiceBase implements ServiceInterface
     /**
      * @param string $apiKey
      *
-     * @return $this
+     * @return static
      */
     public function setApiKey(string $apiKey): static
     {
@@ -100,7 +100,7 @@ abstract class ServiceBase implements ServiceInterface
     /**
      * @param bool $sandbox
      *
-     * @return $this
+     * @return static
      */
     public function setSandbox(bool $sandbox): static
     {

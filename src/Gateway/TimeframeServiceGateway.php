@@ -160,7 +160,7 @@ class TimeframeServiceGateway extends GatewayBase implements TimeframeServiceGat
     /**
      * @param TimeframeServiceRequestBuilderInterface $requestBuilder
      *
-     * @return $this
+     * @return static
      */
     public function setRequestBuilder(TimeframeServiceRequestBuilderInterface $requestBuilder): static
     {
@@ -180,7 +180,7 @@ class TimeframeServiceGateway extends GatewayBase implements TimeframeServiceGat
     /**
      * @param TimeframeServiceResponseProcessorInterface $responseProcessor
      *
-     * @return $this
+     * @return static
      */
     public function setResponseProcessor(TimeframeServiceResponseProcessorInterface $responseProcessor): static
     {

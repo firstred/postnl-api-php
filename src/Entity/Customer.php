@@ -93,7 +93,7 @@ class Customer extends SerializableObject
     /**
      * @param Address|null $Address
      *
-     * @return $this
+     * @return static
      */
     public function setAddress(?Address $Address = null): static
     {
@@ -113,7 +113,7 @@ class Customer extends SerializableObject
     /**
      * @param string|null $CollectionLocation
      *
-     * @return $this
+     * @return static
      */
     public function setCollectionLocation(string|null $CollectionLocation = null): static
     {
@@ -133,7 +133,7 @@ class Customer extends SerializableObject
     /**
      * @param string|null $ContactPerson
      *
-     * @return $this
+     * @return static
      */
     public function setContactPerson(string|null $ContactPerson = null): static
     {
@@ -153,7 +153,7 @@ class Customer extends SerializableObject
     /**
      * @param string|null $CustomerCode
      *
-     * @return $this
+     * @return static
      */
     public function setCustomerCode(string|null $CustomerCode = null): static
     {
@@ -173,7 +173,7 @@ class Customer extends SerializableObject
     /**
      * @param string|null $CustomerNumber
      *
-     * @return $this
+     * @return static
      */
     public function setCustomerNumber(string|null $CustomerNumber = null): static
     {
@@ -193,7 +193,7 @@ class Customer extends SerializableObject
     /**
      * @param string|null $GlobalPackCustomerCode
      *
-     * @return $this
+     * @return static
      */
     public function setGlobalPackCustomerCode(string|null $GlobalPackCustomerCode = null): static
     {
@@ -213,7 +213,7 @@ class Customer extends SerializableObject
     /**
      * @param string|null $GlobalPackBarcodeType
      *
-     * @return $this
+     * @return static
      */
     public function setGlobalPackBarcodeType(string|null $GlobalPackBarcodeType = null): static
     {
@@ -233,7 +233,7 @@ class Customer extends SerializableObject
     /**
      * @param string|null $Email
      *
-     * @return $this
+     * @return static
      */
     public function setEmail(string|null $Email = null): static
     {
@@ -253,7 +253,7 @@ class Customer extends SerializableObject
     /**
      * @param string|null $Name
      *
-     * @return $this
+     * @return static
      */
     public function setName(string|null $Name = null): static
     {

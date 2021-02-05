@@ -77,7 +77,7 @@ class Barcode extends SerializableObject
     /**
      * @param string|null $Type
      *
-     * @return $this
+     * @return static
      */
     public function setType(string|null $Type = null): static
     {
@@ -97,7 +97,7 @@ class Barcode extends SerializableObject
     /**
      * @param string|null $Range
      *
-     * @return $this
+     * @return static
      */
     public function setRange(string|null $Range = null): static
     {
@@ -117,7 +117,7 @@ class Barcode extends SerializableObject
     /**
      * @param string|null $Serie
      *
-     * @return $this
+     * @return static
      */
     public function setSerie(string|null $Serie = null): static
     {

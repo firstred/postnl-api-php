@@ -146,7 +146,7 @@ class LocationService extends ServiceBase implements LocationServiceInterface
     /**
      * @param LocationServiceGatewayInterface $gateway
      *
-     * @return $this
+     * @return static
      */
     public function setGateway(LocationServiceGatewayInterface $gateway): static
     {
@@ -174,7 +174,7 @@ class LocationService extends ServiceBase implements LocationServiceInterface
     /**
      * @param HttpClientInterface $httpClient
      *
-     * @return $this
+     * @return static
      */
     public function setHttpClient(HttpClientInterface $httpClient): static
     {

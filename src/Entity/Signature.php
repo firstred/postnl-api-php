@@ -76,7 +76,7 @@ class Signature extends SerializableObject
     /**
      * @param GetSignatureResponseSignature|null $GetSignatureResponseSignature
      *
-     * @return $this
+     * @return static
      */
     public function setGetSignatureResponseSignature(?GetSignatureResponseSignature $GetSignatureResponseSignature = null): static
     {
@@ -96,7 +96,7 @@ class Signature extends SerializableObject
     /**
      * @param array|null $Warnings
      *
-     * @return $this
+     * @return static
      */
     public function setWarnings(array|null $Warnings = null): static
     {

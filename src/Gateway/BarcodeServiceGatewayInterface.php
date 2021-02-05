@@ -82,7 +82,7 @@ interface BarcodeServiceGatewayInterface extends GatewayInterface
     /**
      * @param BarcodeServiceRequestBuilderInterface $requestBuilder
      *
-     * @return $this
+     * @return static
      */
     public function setRequestBuilder(BarcodeServiceRequestBuilderInterface $requestBuilder): static;
 
@@ -94,7 +94,7 @@ interface BarcodeServiceGatewayInterface extends GatewayInterface
     /**
      * @param BarcodeServiceResponseProcessorInterface $responseProcessor
      *
-     * @return $this
+     * @return static
      */
     public function setResponseProcessor(BarcodeServiceResponseProcessorInterface $responseProcessor): static;
 }

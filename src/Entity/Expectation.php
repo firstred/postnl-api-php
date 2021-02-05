@@ -75,7 +75,7 @@ class Expectation extends SerializableObject
     /**
      * @param string|null $ETAFrom
      *
-     * @return $this
+     * @return static
      */
     public function setETAFrom(string|null $ETAFrom = null): static
     {
@@ -95,7 +95,7 @@ class Expectation extends SerializableObject
     /**
      * @param string|null $ETATo
      *
-     * @return $this
+     * @return static
      */
     public function setETATo(string|null $ETATo = null): static
     {

@@ -81,7 +81,7 @@ class GenerateBarcodeResponseDTO extends CacheableDTO implements Stringable
     /**
      * @param string|null $Barcode
      *
-     * @return $this
+     * @return static
      */
     public function setBarcode(string|null $Barcode = null): static
     {
