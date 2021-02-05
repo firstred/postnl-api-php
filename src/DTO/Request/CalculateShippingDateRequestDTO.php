@@ -47,7 +47,7 @@ class CalculateShippingDateRequestDTO extends CacheableDTO
     /**
      * Date of the expected delivery (to the final destination) of the shipment.
      *
-     * @var string|null $DeliveryDate
+     * @var string|null
      */
     #[RequestProp(requiredFor: [DeliveryDateServiceInterface::class])]
     protected string|null $DeliveryDate = null;
@@ -55,7 +55,7 @@ class CalculateShippingDateRequestDTO extends CacheableDTO
     /**
      * The duration it takes for the shipment to be delivered to PostNL in days. A value of 1 means that the parcel will be delivered to PostNL on the same day as the date specified in ShippingDate. A value of 2 means the parcel will arrive at PostNL a day later etc.
      *
-     * @var int|null $ShippingDuration
+     * @var int|null
      */
     #[RequestProp(requiredFor: [DeliveryDateServiceInterface::class])]
     protected int|null $ShippingDuration = null;
@@ -63,7 +63,7 @@ class CalculateShippingDateRequestDTO extends CacheableDTO
     /**
      * Zipcode of the address.
      *
-     * @var string|null $PostalCode
+     * @var string|null
      */
     #[RequestProp(requiredFor: [DeliveryDateServiceInterface::class])]
     protected string|null $PostalCode = null;
@@ -75,7 +75,7 @@ class CalculateShippingDateRequestDTO extends CacheableDTO
      *
      * Default value: NL
      *
-     * @var string|null $CountryCode
+     * @var string|null
      */
     #[ExpectedValues(values: ['NL', 'BE', null])]
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
@@ -88,7 +88,7 @@ class CalculateShippingDateRequestDTO extends CacheableDTO
      *
      * Default value: NL
      *
-     * @var string|null $OriginCountryCode
+     * @var string|null
      */
     #[ExpectedValues(values: ['NL', 'BE', null])]
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
@@ -97,7 +97,7 @@ class CalculateShippingDateRequestDTO extends CacheableDTO
     /**
      * City of the address.
      *
-     * @var string|null $City
+     * @var string|null
      */
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected string|null $City = null;
@@ -105,7 +105,7 @@ class CalculateShippingDateRequestDTO extends CacheableDTO
     /**
      * The street name of the delivery address.
      *
-     * @var string|null $Street
+     * @var string|null
      */
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected string|null $Street = null;
@@ -113,7 +113,7 @@ class CalculateShippingDateRequestDTO extends CacheableDTO
     /**
      * The house number of the delivery address.
      *
-     * @var int|null $HouseNumber
+     * @var int|null
      */
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected int|null $HouseNumber = null;
@@ -121,7 +121,7 @@ class CalculateShippingDateRequestDTO extends CacheableDTO
     /**
      * House number extension.
      *
-     * @var string|null $HouseNrExt
+     * @var string|null
      */
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected string|null $HouseNrExt = null;

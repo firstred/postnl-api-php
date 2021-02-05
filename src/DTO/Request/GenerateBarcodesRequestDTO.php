@@ -47,9 +47,13 @@ use function array_keys;
  */
 class GenerateBarcodesRequestDTO extends CacheableDTO implements ArrayAccess, Countable, Iterator
 {
+    /**
+     * @var int
+     */
     private int $idx = 0;
 
-    /** @psalm-var array<int|string, GenerateBarcodeRequestDTO> */
+    /** @psalm-var array<int|string, GenerateBarcodeRequestDTO>
+     * @var mixed[]|\Firstred\PostNL\DTO\Request\GenerateBarcodeRequestDTO[]|array<int|string, \Firstred\PostNL\DTO\Request\GenerateBarcodeRequestDTO> */
     protected array $requests = [];
 
     /**

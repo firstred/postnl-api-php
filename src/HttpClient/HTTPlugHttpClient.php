@@ -51,10 +51,14 @@ use function call_user_func;
  */
 class HTTPlugHttpClient implements HttpClientInterface
 {
+    /**
+     * @var \Http\Client\HttpAsyncClient|\Psr\Http\Client\ClientInterface|\Http\Client\HttpClient|null
+     */
     protected HttpAsyncClient|ClientInterface|HttpClient $client;
 
     /**
      * List of pending PSR-7 requests.
+     * @var \Psr\Http\Message\RequestInterface[]|mixed[]
      */
     protected array $pendingRequests = [];
 

@@ -47,8 +47,14 @@ use function is_int;
  */
 class GenerateBarcodesByCountryCodesResponseDTO extends CacheableDTO implements ArrayAccess, Countable, SeekableIterator
 {
+    /**
+     * @var int
+     */
     private int $idx = 0;
 
+    /**
+     * @var mixed[]|\Firstred\PostNL\DTO\Response\GenerateBarcodesResponseDTO[]|array<int|string, \Firstred\PostNL\DTO\Response\GenerateBarcodesResponseDTO>
+     */
     protected array $countries = [];
 
     /**

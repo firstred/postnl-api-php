@@ -69,55 +69,104 @@ class ResponseAddress extends SerializableObject
      * If there is no Customer/ResponseAddress, the message will be rejected.
      * At least one other AddressType must be specified, other than AddressType 02
      * In most cases this will be AddressType 01, the receiver ResponseAddress.
+     * @var null|string
      */
     #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $AddressType = null;
 
+    /**
+     * @var null|string
+     */
     #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $Area = null;
 
+    /**
+     * @var null|string
+     */
     #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $Buildingname = null;
 
+    /**
+     * @var null|string
+     */
     #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $City = null;
 
+    /**
+     * @var null|string
+     */
     #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $CompanyName = null;
 
+    /**
+     * @var null|string
+     */
     #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $Countrycode = null;
 
+    /**
+     * @var null|string
+     */
     #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $Department = null;
 
+    /**
+     * @var null|string
+     */
     #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $Doorcode = null;
 
+    /**
+     * @var null|string
+     */
     #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $FirstName = null;
 
+    /**
+     * @var null|string
+     */
     #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $Floor = null;
 
+    /**
+     * @var null|string
+     */
     #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $HouseNr = null;
 
+    /**
+     * @var null|string
+     */
     #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $HouseNrExt = null;
 
+    /**
+     * @var null|string
+     */
     #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $Name = null;
 
+    /**
+     * @var null|string
+     */
     #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $Region = null;
 
+    /**
+     * @var null|string
+     */
     #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $Remark = null;
 
+    /**
+     * @var null|string
+     */
     #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $Street = null;
 
+    /**
+     * @var null|string
+     */
     #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $Zipcode = null;
 

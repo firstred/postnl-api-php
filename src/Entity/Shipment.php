@@ -39,43 +39,157 @@ use JetBrains\PhpStorm\ExpectedValues;
  */
 class Shipment extends SerializableObject
 {
+    /**
+     * @var null|mixed[]
+     */
     protected array|null $Addresses = null;
+    /**
+     * @var null|mixed[]
+     */
     protected array|null $Amounts = null;
+    /**
+     * @var null|string
+     */
     protected string|null $Barcode = null;
+    /**
+     * @var null|string
+     */
     protected string|null $CollectionTimeStampEnd = null;
+    /**
+     * @var null|string
+     */
     protected string|null $CollectionTimeStampStart = null;
+    /**
+     * @var null|mixed[]
+     */
     protected array|null $Contacts = null;
+    /**
+     * @var null|string
+     */
     protected string|null $Content = null;
+    /**
+     * @var null|string
+     */
     protected string|null $CostCenter = null;
+    /**
+     * @var null|string
+     */
     protected string|null $CustomerOrderNumber = null;
+    /**
+     * @var null|\Firstred\PostNL\Entity\Customer
+     */
     protected Customer|null $Customer = null;
+    /**
+     * @var null|\Firstred\PostNL\Entity\Customs
+     */
     protected Customs|null $Customs = null;
+    /**
+     * @var null|string
+     */
     protected string|null $StatusCode = null;
+    /**
+     * @var null|int
+     */
     protected int|null $PhaseCode = null;
+    /**
+     * @var null|string
+     */
     protected string|null $DateFrom = null;
+    /**
+     * @var null|string
+     */
     protected string|null $DateTo = null;
+    /**
+     * @var null|string
+     */
     protected string|null $DeliveryAddress = null;
+    /**
+     * @var null|string
+     */
     protected string|null $DeliveryTimeStampStart = null;
+    /**
+     * @var null|string
+     */
     protected string|null $DeliveryTimeStampEnd = null;
+    /**
+     * @var null|string
+     */
     protected string|null $DeliveryDate = null;
+    /**
+     * @var null|\Firstred\PostNL\Entity\Dimension
+     */
     protected Dimension|null $Dimension = null;
+    /**
+     * @var null|string
+     */
     protected string|null $DownPartnerBarcode = null;
+    /**
+     * @var null|string
+     */
     protected string|null $DownPartnerID = null;
+    /**
+     * @var null|string
+     */
     protected string|null $DownPartnerLocation = null;
+    /**
+     * @var null|mixed[]
+     */
     protected array|null $Events = null;
+    /**
+     * @var null|mixed[]
+     */
     protected array|null $Groups = null;
+    /**
+     * @var null|string
+     */
     protected string|null $IDExpiration = null;
+    /**
+     * @var null|string
+     */
     protected string|null $IDNumber = null;
+    /**
+     * @var null|string
+     */
     protected string|null $IDType = null;
+    /**
+     * @var null|string
+     */
     protected string|null $OldStatuses = null;
+    /**
+     * @var null|string
+     */
     protected string|null $ProductCodeCollect = null;
+    /**
+     * @var null|string
+     */
     protected string|null $ProductCodeDelivery = null;
+    /**
+     * @var null|mixed[]
+     */
     protected array|null $ProductOptions = null;
+    /**
+     * @var null|string
+     */
     protected string|null $ReceiverDateOfBirth = null;
+    /**
+     * @var null|string
+     */
     protected string|null $Reference = null;
+    /**
+     * @var null|string
+     */
     protected string|null $ReferenceCollect = null;
+    /**
+     * @var null|string
+     */
     protected string|null $Remark = null;
+    /**
+     * @var null|string
+     */
     protected string|null $ReturnBarcode = null;
+    /**
+     * @var null|string
+     */
     protected string|null $ReturnReference = null;
 
     /**

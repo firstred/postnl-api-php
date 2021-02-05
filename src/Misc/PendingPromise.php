@@ -62,11 +62,29 @@ use Throwable;
  */
 class PendingPromise implements Promise
 {
+    /**
+     * @var string
+     */
     private string $state = self::PENDING;
+    /**
+     * @var null|string|\Throwable
+     */
     private mixed $result;
+    /**
+     * @var null|callable
+     */
     private mixed $cancelFn;
+    /**
+     * @var null|callable
+     */
     private mixed $waitFn;
+    /**
+     * @var null|$this[]|mixed[]
+     */
     private array|null $waitList = null;
+    /**
+     * @var callable[][]|$this[][]|null[][]|null|mixed[]
+     */
     private array|null $handlers = [];
 
     /**

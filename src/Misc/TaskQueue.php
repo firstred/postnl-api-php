@@ -39,8 +39,14 @@ namespace Firstred\PostNL\Misc;
  */
 class TaskQueue
 {
+    /**
+     * @var bool
+     */
     private bool $enableShutdown = true;
 
+    /**
+     * @var (callable)[]
+     */
     private array $queue = [];
 
     /**

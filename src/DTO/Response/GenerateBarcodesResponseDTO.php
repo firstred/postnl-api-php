@@ -49,9 +49,13 @@ use function is_string;
  */
 class GenerateBarcodesResponseDTO extends CacheableDTO implements SeekableIterator, ArrayAccess, Countable
 {
+    /**
+     * @var int
+     */
     private int $idx = 0;
 
-    /** @psalm-var array<array-key, GenerateBarcodeResponseDTO> $responses */
+    /** @psalm-var array<array-key, GenerateBarcodeResponseDTO> $responses
+     * @var mixed[]|\Firstred\PostNL\DTO\Response\GenerateBarcodeResponseDTO[] */
     protected array $responses = [];
 
     /**

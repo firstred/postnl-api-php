@@ -18,24 +18,45 @@ use function is_numeric;
  */
 class GetNearestLocationsGeocodeRequestDTO extends CacheableDTO
 {
+    /**
+     * @var null|float
+     */
     #[RequestProp(requiredFor: [LocationServiceInterface::class])]
     protected float|null $Latitude = null;
 
+    /**
+     * @var null|float
+     */
     #[RequestProp(requiredFor: [LocationServiceInterface::class])]
     protected float|null $Longitude = null;
 
+    /**
+     * @var null|string
+     */
     #[RequestProp(requiredFor: [LocationServiceInterface::class])]
     protected string|null $CountryCode = null;
 
+    /**
+     * @var null|mixed[]
+     */
     #[RequestProp(requiredFor: [LocationServiceInterface::class])]
     protected array|null $DeliveryOptions = null;
 
+    /**
+     * @var null|int
+     */
     #[RequestProp(optionalFor: [LocationServiceInterface::class])]
     protected int|null $HouseNumber = null;
 
+    /**
+     * @var null|string
+     */
     #[RequestProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $DeliveryDate = null;
 
+    /**
+     * @var null|string
+     */
     #[RequestProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $OpeningTime = null;
 

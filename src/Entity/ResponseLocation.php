@@ -20,45 +20,87 @@ use function is_string;
  */
 class ResponseLocation extends CacheableDTO
 {
+    /**
+     * @var null|int
+     */
     #[ResponseProp(requiredFor: [LocationServiceInterface::class])]
     protected int|null $LocationCode = null;
 
+    /**
+     * @var null|string
+     */
     #[ResponseProp(requiredFor: [LocationServiceInterface::class])]
     protected string|null $Name = null;
 
+    /**
+     * @var null|int
+     */
     #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected int|null $Distance = null;
 
+    /**
+     * @var null|float|string
+     */
     #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected float|null $Latitude = null;
 
+    /**
+     * @var null|float|string
+     */
     #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected float|null $Longitude = null;
 
+    /**
+     * @var null|\Firstred\PostNL\Entity\Address
+     */
     #[ResponseProp(requiredFor: [LocationServiceInterface::class])]
     protected Address|null $Address = null;
 
+    /**
+     * @var null|mixed[]
+     */
     #[ResponseProp(requiredFor: [LocationServiceInterface::class])]
     protected array|null $DeliveryOptions = null;
 
+    /**
+     * @var null|\Firstred\PostNL\Entity\OpeningHours
+     */
     #[ResponseProp(requiredFor: [LocationServiceInterface::class])]
     protected OpeningHours|null $OpeningHours = null;
 
+    /**
+     * @var null|string
+     */
     #[ResponseProp(requiredFor: [LocationServiceInterface::class])]
     protected string|null $PartnerName = null;
 
+    /**
+     * @var null|string
+     */
     #[ResponseProp(requiredFor: [LocationServiceInterface::class])]
     protected string|null $PhoneNumber = null;
 
+    /**
+     * @var null|string
+     */
     #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $RetailNetworkID = null;
 
+    /**
+     * @var null|string
+     */
     #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $Saleschannel = null;
 
+    /**
+     * @var null|string
+     */
     #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $TerminalType = null;
 
+    /**
+     * @var null|mixed[]
+     */
     #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected array|null $Warnings = null;
 

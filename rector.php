@@ -1,11 +1,14 @@
 <?php
+/** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
 
 declare(strict_types=1);
 
-use Rector\Php74\Rector\Property\TypedPropertyRector;
+use Rector\TypeDeclaration\Rector\Property\CompleteVarDocTypePropertyRector;
+use Rector\TypeDeclaration\Rector\Property\PropertyTypeDeclarationRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
+return function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(TypedPropertyRector::class);
+    $services->set(PropertyTypeDeclarationRector::class);
+    $services->set(CompleteVarDocTypePropertyRector::class);
 };

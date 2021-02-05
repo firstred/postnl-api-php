@@ -46,9 +46,13 @@ use JetBrains\PhpStorm\Pure;
  */
 class ReasonNoTimeframes extends SerializableObject implements ArrayAccess, Countable, Iterator
 {
+    /**
+     * @var int
+     */
     protected int $idx = 0;
 
-    /** @psalm-var list<ReasonNoTimeframe>|null */
+    /** @psalm-var list<ReasonNoTimeframe>|null
+     * @var null|mixed[] */
     #[ResponseProp(requiredFor: [TimeframeServiceInterface::class])]
     protected array|null $ReasonNoTimeframes = null;
 

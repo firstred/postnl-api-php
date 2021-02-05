@@ -43,24 +43,45 @@ use function is_array;
  */
 class OpeningHours extends SerializableObject
 {
+    /**
+     * @var mixed[]
+     */
     #[ResponseProp(requiredFor: [LocationServiceInterface::class])]
     protected array $Monday = [];
 
+    /**
+     * @var mixed[]
+     */
     #[ResponseProp(requiredFor: [LocationServiceInterface::class])]
     protected array $Tuesday = [];
 
+    /**
+     * @var mixed[]
+     */
     #[ResponseProp(requiredFor: [LocationServiceInterface::class])]
     protected array $Wednesday = [];
 
+    /**
+     * @var mixed[]
+     */
     #[ResponseProp(requiredFor: [LocationServiceInterface::class])]
     protected array $Thursday = [];
 
+    /**
+     * @var mixed[]
+     */
     #[ResponseProp(requiredFor: [LocationServiceInterface::class])]
     protected array $Friday = [];
 
+    /**
+     * @var mixed[]
+     */
     #[ResponseProp(requiredFor: [LocationServiceInterface::class])]
     protected array $Saturday = [];
 
+    /**
+     * @var mixed[]
+     */
     #[ResponseProp(requiredFor: [LocationServiceInterface::class])]
     protected array $Sunday = [];
 

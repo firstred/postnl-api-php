@@ -39,13 +39,37 @@ use JetBrains\PhpStorm\ExpectedValues;
  */
 class ResponseAmount extends SerializableObject
 {
+    /**
+     * @var null|string
+     */
     protected string|null $AccountName = null;
+    /**
+     * @var null|string
+     */
     protected string|null $ResponseAmountType = null;
+    /**
+     * @var null|string
+     */
     protected string|null $BIC = null;
+    /**
+     * @var null|string
+     */
     protected string|null $Currency = null;
+    /**
+     * @var null|string
+     */
     protected string|null $IBAN = null;
+    /**
+     * @var null|string
+     */
     protected string|null $Reference = null;
+    /**
+     * @var null|string
+     */
     protected string|null $TransactionNumber = null;
+    /**
+     * @var null|string
+     */
     protected string|null $Value = null;
 
     /**

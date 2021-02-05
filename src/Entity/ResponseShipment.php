@@ -39,12 +39,33 @@ use JetBrains\PhpStorm\ExpectedValues;
  */
 class ResponseShipment extends SerializableObject
 {
+    /**
+     * @var null|string
+     */
     protected string|null $Barcode = null;
+    /**
+     * @var null|string
+     */
     protected string|null $DownPartnerBarcode = null;
+    /**
+     * @var null|string
+     */
     protected string|null $DownPartnerID = null;
+    /**
+     * @var null|string
+     */
     protected string|null $DownPartnerLocation = null;
+    /**
+     * @var null|mixed[]
+     */
     protected array|null $Labels = null;
+    /**
+     * @var null|string
+     */
     protected string|null $ProductCodeDelivery = null;
+    /**
+     * @var null|mixed[]
+     */
     protected array|null $Warnings = null;
 
     /**

@@ -66,7 +66,7 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
      *
      * Format: 29-05-2017 14:00:00
      *
-     * @var string|null $ShippingDate
+     * @var string|null
      */
     #[RequestProp(requiredFor: [DeliveryDateServiceInterface::class])]
     protected string|null $ShippingDate = null;
@@ -76,7 +76,7 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
      *
      * Format: 1
      *
-     * @var int|null $ShippingDuration
+     * @var int|null
      */
     #[RequestProp(requiredFor: [DeliveryDateServiceInterface::class])]
     protected int|null $ShippingDuration = null;
@@ -84,7 +84,7 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
     /**
      * Cut off times per day. At least one cut off time must be specified.
      *
-     * @var string|null $CutOffTime
+     * @var string|null
      */
     #[RequestProp(requiredFor: [DeliveryDateServiceInterface::class])]
     protected string|null $CutOffTime = null;
@@ -92,7 +92,7 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
     /**
      * Zipcode of the address.
      *
-     * @var string|null $PostalCode
+     * @var string|null
      */
     #[RequestProp(requiredFor: [DeliveryDateServiceInterface::class])]
     protected string|null $PostalCode = null;
@@ -104,7 +104,7 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
      *
      * Default value: NL
      *
-     * @var string|null $CountryCode
+     * @var string|null
      */
     #[ExpectedValues(values: ['NL', 'BE', null])]
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
@@ -117,7 +117,7 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
      *
      * Default value: NL
      *
-     * @var string|null $OriginCountryCode
+     * @var string|null
      */
     #[ExpectedValues(values: ['NL', 'BE', null])]
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
@@ -126,7 +126,7 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
     /**
      * City of the address
      *
-     * @var string|null $City
+     * @var string|null
      */
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected string|null $City = null;
@@ -134,7 +134,7 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
     /**
      * The street name of the delivery address.
      *
-     * @var string|null $City
+     * @var string|null
      */
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected string|null $Street = null;
@@ -142,7 +142,7 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
     /**
      * The house number of the delivery address.
      *
-     * @var int|null $HouseNumber
+     * @var int|null
      */
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected int|null $HouseNumber = null;
@@ -150,7 +150,7 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
     /**
      * House number extension.
      *
-     * @var string|null $HouseNrExt
+     * @var string|null
      */
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected string|null $HouseNrExt = null;
@@ -160,7 +160,7 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
      *
      * Available values : Daytime, Evening, Morning, Noon, Sunday, Sameday, Afternoon, MyTime, Pickup
      *
-     * @var array|null $Options
+     * @var array|null
      */
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected array|null $Options = null;
@@ -168,7 +168,7 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
     /**
      * Override cutoff time for mondays.
      *
-     * @var string|null $CutOffTimeMonday
+     * @var string|null
      */
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected string|null $CutOffTimeMonday = null;
@@ -176,7 +176,7 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
     /**
      * Specifies if you are available to ship to PostNL on mondays.
      *
-     * @var bool|null $AvailableMonday
+     * @var bool|null
      */
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected bool|null $AvailableMonday = null;
@@ -184,7 +184,7 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
     /**
      * Override cutoff time for tuesdays.
      *
-     * @var string|null $CutOffTimeTuesday
+     * @var string|null
      */
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected string|null $CutOffTimeTuesday = null;
@@ -192,7 +192,7 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
     /**
      * Specifies if you are available to ship to PostNL on tuesdays.
      *
-     * @var bool|null $AvailableTuesday
+     * @var bool|null
      */
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected bool|null $AvailableTuesday = null;
@@ -200,7 +200,7 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
     /**
      * Override cutoff time for wednesdays.
      *
-     * @var string|null $CutOffTimeWednesday
+     * @var string|null
      */
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected string|null $CutOffTimeWednesday = null;
@@ -208,7 +208,7 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
     /**
      * Specifies if you are available to ship to PostNL on wednesdays.
      *
-     * @var bool|null $AvailableWednesday
+     * @var bool|null
      */
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected bool|null $AvailableWednesday = null;
@@ -216,7 +216,7 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
     /**
      * Override cutoff time for thursdays.
      *
-     * @var string|null $CutOffTimeThursday
+     * @var string|null
      */
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected string|null $CutOffTimeThursday = null;
@@ -224,7 +224,7 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
     /**
      * Specifies if you are available to ship to PostNL on thursdays.
      *
-     * @var bool|null $AvailableThursday
+     * @var bool|null
      */
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected bool|null $AvailableThursday = null;
@@ -232,7 +232,7 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
     /**
      * Override cutoff time for fridays.
      *
-     * @var string|null $CutOffTimeFriday
+     * @var string|null
      */
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected string|null $CutOffTimeFriday = null;
@@ -240,7 +240,7 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
     /**
      * Specifies if you are available to ship to PostNL on fridays.
      *
-     * @var bool|null $AvailableFriday
+     * @var bool|null
      */
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected bool|null $AvailableFriday = null;
@@ -248,7 +248,7 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
     /**
      * Override cutoff time for saturdays.
      *
-     * @var string|null $CutOffTimeSaturday
+     * @var string|null
      */
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected string|null $CutOffTimeSaturday = null;
@@ -256,7 +256,7 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
     /**
      * Specifies if you are available to ship to PostNL on saturdays.
      *
-     * @var bool|null $AvailableSaturday
+     * @var bool|null
      */
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected bool|null $AvailableSaturday = null;
@@ -264,7 +264,7 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
     /**
      * Override cutoff time for sundays.
      *
-     * @var string|null $CutOffTimeSunday
+     * @var string|null
      */
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected string|null $CutOffTimeSunday = null;
@@ -272,7 +272,7 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
     /**
      * Specifies if you are available to ship to PostNL on sundays.
      *
-     * @var bool|null $AvailableSunday
+     * @var bool|null
      */
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected bool|null $AvailableSunday = null;

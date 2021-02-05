@@ -49,12 +49,14 @@ class Util
 
     /**
      * 3S (or EU Pack Special) countries.
+     * @var string[]
      */
     public static array $threeSCountries = ['AT', 'BE', 'BG', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'EE'];
 
     /**
      * A6 positions
      * (index = amount of a6 left on the page).
+     * @var array<int, array<int>>
      */
     public static array $a6positions = [
         4 => [-276, 2],

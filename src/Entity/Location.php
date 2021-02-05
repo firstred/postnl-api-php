@@ -42,25 +42,82 @@ class Location extends SerializableObject
 {
     public const AVAILABLE_NETWORKS = ['PNPNL-01', 'PNPBE-01'];
 
+    /**
+     * @var null|string
+     */
     protected string|null $AllowSundaySorting = null;
+    /**
+     * @var null|string
+     */
     protected string|null $DeliveryDate = null;
+    /**
+     * @var null|mixed[]
+     */
     protected array|null $DeliveryOptions = null;
+    /**
+     * @var null|string
+     */
     protected string|null $OpeningTime = null;
+    /**
+     * @var null|mixed[]
+     */
     protected array|null $Options = null;
+    /**
+     * @var null|string
+     */
     protected string|null $City = null;
+    /**
+     * @var null|string
+     */
     protected string|null $HouseNr = null;
+    /**
+     * @var null|string
+     */
     protected string|null $HouseNrExt = null;
+    /**
+     * @var null|string
+     */
     protected string|null $Postalcode = null;
+    /**
+     * @var null|string
+     */
     protected string|null $Street = null;
+    /**
+     * @var null|\Firstred\PostNL\Entity\Coordinates
+     */
     protected Coordinates|null $Coordinates = null;
+    /**
+     * @var null|\Firstred\PostNL\Entity\CoordinatesNorthWest
+     */
     protected CoordinatesNorthWest|null $CoordinatesNorthWest = null;
+    /**
+     * @var null|\Firstred\PostNL\Entity\CoordinatesSouthEast
+     */
     protected CoordinatesSouthEast|null $CoordinatesSouthEast = null;
+    /**
+     * @var null|string
+     */
     protected string|null $LocationCode = null;
+    /**
+     * @var null|string
+     */
     protected string|null $Saleschannel = null;
+    /**
+     * @var null|string
+     */
     protected string|null $TerminalType = null;
+    /**
+     * @var null|string
+     */
     #[ExpectedValues(values: self::AVAILABLE_NETWORKS)]
     protected string|null $RetailNetworkID = null;
+    /**
+     * @var null|string
+     */
     protected string|null $DownPartnerID = null;
+    /**
+     * @var null|string
+     */
     protected string|null $DownPartnerLocation = null;
 
     /**

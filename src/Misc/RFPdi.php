@@ -39,6 +39,9 @@ use setasign\Fpdi\Fpdi;
  */
 class RFPdi extends Fpdi
 {
+    /**
+     * @var int
+     */
     public int $angle = 0;
 
     /**

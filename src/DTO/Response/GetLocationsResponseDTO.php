@@ -50,17 +50,20 @@ use function is_string;
  */
 class GetLocationsResponseDTO extends CacheableDTO implements ArrayAccess, Countable, SeekableIterator
 {
+    /**
+     * @var int
+     */
     protected int $idx = 0;
 
     /**
-     * @var array|ResponseLocation[] $GetLocationsResult
+     * @var mixed[]|\Firstred\PostNL\Entity\ResponseLocation[]|null $GetLocationsResult
      * @psalm-var array<int|string, ResponseLocation> $GetLocationsResult
      */
     #[ResponseProp(requiredFor: [LocationServiceInterface::class])]
     protected array $GetLocationsResult;
 
     /**
-     * @var array|Warning[] $Warnings
+     * @var null|mixed[] $Warnings
      * @psalm-var array<int|string, Warning> $Warnings
      */
     #[ResponseProp(optionalFor: [LocationServiceInterface::class])]

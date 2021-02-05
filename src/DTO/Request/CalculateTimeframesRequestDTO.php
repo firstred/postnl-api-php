@@ -51,7 +51,7 @@ class CalculateTimeframesRequestDTO extends CacheableDTO
      *
      * Format:dd-mm-yyyy
      *
-     * @var string|null $StartDate
+     * @var string|null
      */
     #[RequestProp(requiredFor: ([TimeframeServiceInterface::class]))]
     protected string|null $StartDate = null;
@@ -63,7 +63,7 @@ class CalculateTimeframesRequestDTO extends CacheableDTO
      *
      * Enddate may not be before StartDate.
      *
-     * @var string|null $EndDate
+     * @var string|null
      */
     #[RequestProp(requiredFor: ([TimeframeServiceInterface::class]))]
     protected string|null $EndDate = null;
@@ -75,35 +75,62 @@ class CalculateTimeframesRequestDTO extends CacheableDTO
      *
      * Default value: Daytime
      *
-     * @var array|null $Options
+     * @var array|null
      */
     #[RequestProp(requiredFor: ([TimeframeServiceInterface::class]))]
     protected array|null $Options = null;
 
+    /**
+     * @var null|bool
+     */
     #[RequestProp(requiredFor: ([TimeframeServiceInterface::class]))]
     protected bool|null $AllowSundaySorting = null;
 
+    /**
+     * @var null|string
+     */
     #[RequestProp(requiredFor: ([TimeframeServiceInterface::class]))]
     protected string|null $CountryCode = null;
 
+    /**
+     * @var null|string
+     */
     #[RequestProp(optionalFor: ([TimeframeServiceInterface::class]))]
     protected string|null $City = null;
 
+    /**
+     * @var null|string
+     */
     #[RequestProp(requiredFor: ([TimeframeServiceInterface::class]))]
     protected string|null $PostalCode = null;
 
+    /**
+     * @var null|string
+     */
     #[RequestProp(requiredFor: ([TimeframeServiceInterface::class]))]
     protected string|null $Street = null;
 
+    /**
+     * @var null|int
+     */
     #[RequestProp(requiredFor: ([TimeframeServiceInterface::class]))]
     protected int|null $HouseNumber = null;
 
+    /**
+     * @var null|string
+     */
     #[RequestProp(optionalFor: ([TimeframeServiceInterface::class]))]
     protected string|null $HouseNrExt = null;
 
+    /**
+     * @var null|int
+     */
     #[RequestProp(optionalFor: ([TimeframeServiceInterface::class]))]
     protected int|null $Interval = null;
 
+    /**
+     * @var null|string
+     */
     #[RequestProp(optionalFor: ([TimeframeServiceInterface::class]))]
     protected string|null $TimeframeRange = null;
 

@@ -38,10 +38,12 @@ class ResponseGroup extends SerializableObject
 {
     /**
      * Amount of shipments in the ResponseGroup.
+     * @var null|string
      */
     protected string|null $GroupCount = null;
     /**
      * Sequence number.
+     * @var null|string
      */
     protected string|null $GroupSequence = null;
     /**
@@ -52,10 +54,12 @@ class ResponseGroup extends SerializableObject
      * - `01`: Collection request
      * - `03`: Multiple parcels in one shipment (multi-colli)
      * - `04`: Single parcel in one shipment
+     * @var null|string
      */
     protected string|null $GroupType = null;
     /**
      * Main barcode for the shipment.
+     * @var null|string
      */
     protected string|null $MainBarcode = null;
 

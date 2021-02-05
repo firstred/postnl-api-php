@@ -43,9 +43,15 @@ use JetBrains\PhpStorm\ExpectedValues;
  */
 class CalculateTimeframesResponseDTO extends CacheableDTO
 {
+    /**
+     * @var null|\Firstred\PostNL\Entity\Timeframes
+     */
     #[ResponseProp(requiredFor: [TimeframeServiceInterface::class])]
     protected Timeframes|null $Timeframes = null;
 
+    /**
+     * @var null|\Firstred\PostNL\Entity\ReasonNoTimeframes
+     */
     #[ResponseProp(optionalFor: [TimeframeServiceInterface::class])]
     protected ReasonNoTimeframes|null $ReasonNoTimeframes = null;
 

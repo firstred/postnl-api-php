@@ -38,6 +38,9 @@ use JetBrains\PhpStorm\ExpectedValues;
  */
 class LabellingMessage extends Message
 {
+    /**
+     * @var null|string
+     */
     protected string|null $PrinterType = null;
 
     /**

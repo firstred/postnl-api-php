@@ -39,7 +39,13 @@ use function is_a;
 #[Attribute(Attribute::TARGET_PROPERTY)]
 final class ResponseProp implements PropInterface
 {
+    /**
+     * @var mixed[]
+     */
     private array $requiredForServices = [];
+    /**
+     * @var mixed[]
+     */
     private array $optionalForServices = [];
 
     /**

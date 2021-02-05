@@ -47,9 +47,13 @@ use function count;
  */
 class Timeframes extends SerializableObject implements ArrayAccess, Countable, Iterator
 {
+    /**
+     * @var int
+     */
     protected int $idx = 0;
 
-    /** @psalm-var list<Timeframe|TimeframeTimeFrame>|null */
+    /** @psalm-var list<Timeframe|TimeframeTimeFrame>|null
+     * @var null|mixed[] */
     #[ResponseProp(requiredFor: [TimeframeServiceInterface::class])]
     protected array|null $Timeframes = null;
 

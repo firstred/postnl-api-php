@@ -41,21 +41,39 @@ use JetBrains\PhpStorm\ExpectedValues;
  */
 class ReasonNoTimeframe extends SerializableObject
 {
+    /**
+     * @var null|string
+     */
     #[ResponseProp(requiredFor: [TimeframeServiceInterface::class])]
     protected string|null $Code = null;
 
+    /**
+     * @var null|string
+     */
     #[ResponseProp(requiredFor: [TimeframeServiceInterface::class])]
     protected string|null $Date = null;
 
+    /**
+     * @var null|string
+     */
     #[ResponseProp(requiredFor: [TimeframeServiceInterface::class])]
     protected string|null $Description = null;
 
+    /**
+     * @var null|mixed[]
+     */
     #[ResponseProp(requiredFor: [TimeframeServiceInterface::class])]
     protected array|null $Options = null;
 
+    /**
+     * @var null|string
+     */
     #[ResponseProp(requiredFor: [TimeframeServiceInterface::class])]
     protected string|null $From = null;
 
+    /**
+     * @var null|string
+     */
     #[ResponseProp(requiredFor: [TimeframeServiceInterface::class])]
     protected string|null $To = null;
 

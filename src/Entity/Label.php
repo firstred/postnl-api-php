@@ -29,7 +29,12 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Attribute\PropInterface;
+use Firstred\PostNL\Attribute\ResponseProp;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\SerializableObject;
+use Firstred\PostNL\Service\ConfirmingServiceInterface;
+use Firstred\PostNL\Service\LabellingService;
+use Firstred\PostNL\Service\LabellingServiceInterface;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
 
@@ -42,6 +47,20 @@ class Label extends SerializableObject
     public const FORMAT_A6 = 2;
 
     /**
+     * Base 64 encoded content.
+     *
+     * @var string|null
+     */
+    #[ResponseProp(optionalFor: [LabellingServiceInterface::class, ConfirmingServiceInterface::class])]
+    protected string|null $Content = null;
+
+    #[ResponseProp(optionalFor: [LabellingServiceInterface::class, ConfirmingServiceInterface::class])]
+    protected string|null $Contenttype = null;
+
+    #[ResponseProp(optionalFor: [LabellingServiceInterface::class, ConfirmingServiceInterface::class])]
+    protected string|null $Labeltype = null;
+
+    /**
      * Label constructor.
      *
      * @param string      $service
@@ -50,7 +69,7 @@ class Label extends SerializableObject
      * @param string|null $Contenttype
      * @param string|null $Labeltype
      *
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES + [''])]
@@ -58,12 +77,9 @@ class Label extends SerializableObject
         #[ExpectedValues(values: PropInterface::PROP_TYPES + [''])]
         string $propType,
 
-        /*
-         * Base 64 encoded content.
-         */
-        protected string|null $Content = null,
-        protected string|null $Contenttype = null,
-        protected string|null $Labeltype = null,
+        string|null $Content = null,
+        string|null $Contenttype = null,
+        string|null $Labeltype = null,
     ) {
         parent::__construct(service: $service, propType: $propType);
 
