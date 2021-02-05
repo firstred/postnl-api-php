@@ -4,9 +4,6 @@
          bootstrap="vendor/autoload.php"
          cacheResultFile=".phpunit.cache/test-results"
          executionOrder="depends,defects"
-         failOnRisky="true"
-         failOnWarning="true"
-         verbose="true"
 >
     <testsuites>
         <testsuite name="unit">
