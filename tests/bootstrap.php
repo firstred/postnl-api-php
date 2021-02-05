@@ -30,12 +30,17 @@ use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
 use Psr\Log\LogLevel;
 use Symfony\Component\Dotenv\Dotenv;
+use Symfony\Component\Dotenv\Exception\FormatException;
+use Symfony\Component\Dotenv\Exception\PathException;
 use wappr\Logger;
 
 require __DIR__.'/../vendor/autoload.php';
 
 $dotenv = new Dotenv();
-$dotenv->loadEnv(path: __DIR__.'/../.env');
+try {
+    $dotenv->loadEnv(path: __DIR__.'/../.env');
+} catch (FormatException | PathException) {
+}
 
 $filesystemAdapter = new Local(root: __DIR__.'/');
 $filesystem = new Filesystem(adapter: $filesystemAdapter);
