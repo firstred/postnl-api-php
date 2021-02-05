@@ -48,7 +48,7 @@ class Shipping extends SerializableObject
      */
     protected LabellingMessage|null $Message = null;
     /**
-     * @var null|mixed[]
+     * @var mixed[]|null
      */
     protected array|null $Shipments = null;
 

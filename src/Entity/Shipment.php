@@ -40,39 +40,39 @@ use JetBrains\PhpStorm\ExpectedValues;
 class Shipment extends SerializableObject
 {
     /**
-     * @var null|mixed[]
+     * @var mixed[]|null
      */
     protected array|null $Addresses = null;
     /**
-     * @var null|mixed[]
+     * @var mixed[]|null
      */
     protected array|null $Amounts = null;
     /**
-     * @var null|string
+     * @var string|null
      */
     protected string|null $Barcode = null;
     /**
-     * @var null|string
+     * @var string|null
      */
     protected string|null $CollectionTimeStampEnd = null;
     /**
-     * @var null|string
+     * @var string|null
      */
     protected string|null $CollectionTimeStampStart = null;
     /**
-     * @var null|mixed[]
+     * @var mixed[]|null
      */
     protected array|null $Contacts = null;
     /**
-     * @var null|string
+     * @var string|null
      */
     protected string|null $Content = null;
     /**
-     * @var null|string
+     * @var string|null
      */
     protected string|null $CostCenter = null;
     /**
-     * @var null|string
+     * @var string|null
      */
     protected string|null $CustomerOrderNumber = null;
     /**
@@ -84,35 +84,35 @@ class Shipment extends SerializableObject
      */
     protected Customs|null $Customs = null;
     /**
-     * @var null|string
+     * @var string|null
      */
     protected string|null $StatusCode = null;
     /**
-     * @var null|int
+     * @var int|null
      */
     protected int|null $PhaseCode = null;
     /**
-     * @var null|string
+     * @var string|null
      */
     protected string|null $DateFrom = null;
     /**
-     * @var null|string
+     * @var string|null
      */
     protected string|null $DateTo = null;
     /**
-     * @var null|string
+     * @var string|null
      */
     protected string|null $DeliveryAddress = null;
     /**
-     * @var null|string
+     * @var string|null
      */
     protected string|null $DeliveryTimeStampStart = null;
     /**
-     * @var null|string
+     * @var string|null
      */
     protected string|null $DeliveryTimeStampEnd = null;
     /**
-     * @var null|string
+     * @var string|null
      */
     protected string|null $DeliveryDate = null;
     /**
@@ -120,75 +120,75 @@ class Shipment extends SerializableObject
      */
     protected Dimension|null $Dimension = null;
     /**
-     * @var null|string
+     * @var string|null
      */
     protected string|null $DownPartnerBarcode = null;
     /**
-     * @var null|string
+     * @var string|null
      */
     protected string|null $DownPartnerID = null;
     /**
-     * @var null|string
+     * @var string|null
      */
     protected string|null $DownPartnerLocation = null;
     /**
-     * @var null|mixed[]
+     * @var mixed[]|null
      */
     protected array|null $Events = null;
     /**
-     * @var null|mixed[]
+     * @var mixed[]|null
      */
     protected array|null $Groups = null;
     /**
-     * @var null|string
+     * @var string|null
      */
     protected string|null $IDExpiration = null;
     /**
-     * @var null|string
+     * @var string|null
      */
     protected string|null $IDNumber = null;
     /**
-     * @var null|string
+     * @var string|null
      */
     protected string|null $IDType = null;
     /**
-     * @var null|string
+     * @var string|null
      */
     protected string|null $OldStatuses = null;
     /**
-     * @var null|string
+     * @var string|null
      */
     protected string|null $ProductCodeCollect = null;
     /**
-     * @var null|string
+     * @var string|null
      */
     protected string|null $ProductCodeDelivery = null;
     /**
-     * @var null|mixed[]
+     * @var mixed[]|null
      */
     protected array|null $ProductOptions = null;
     /**
-     * @var null|string
+     * @var string|null
      */
     protected string|null $ReceiverDateOfBirth = null;
     /**
-     * @var null|string
+     * @var string|null
      */
     protected string|null $Reference = null;
     /**
-     * @var null|string
+     * @var string|null
      */
     protected string|null $ReferenceCollect = null;
     /**
-     * @var null|string
+     * @var string|null
      */
     protected string|null $Remark = null;
     /**
-     * @var null|string
+     * @var string|null
      */
     protected string|null $ReturnBarcode = null;
     /**
-     * @var null|string
+     * @var string|null
      */
     protected string|null $ReturnReference = null;
 

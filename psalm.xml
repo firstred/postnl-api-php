@@ -18,6 +18,8 @@
         </ignoreFiles>
     </projectFiles>
     <issueHandlers>
+        <InvalidCatch errorLevel="suppress" />
         <InvalidNamedArgument errorLevel="suppress" />
+        <InvalidThrow errorLevel="suppress" />
     </issueHandlers>
 </psalm>

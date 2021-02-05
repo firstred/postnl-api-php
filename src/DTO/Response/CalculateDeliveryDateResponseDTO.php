@@ -44,13 +44,13 @@ use Stringable;
 class CalculateDeliveryDateResponseDTO extends CacheableDTO implements Stringable
 {
     /**
-     * @var null|string
+     * @var string|null
      */
     #[ResponseProp(requiredFor: [DeliveryDateServiceInterface::class])]
     protected string|null $DeliveryDate = null;
 
     /**
-     * @var null|mixed[]
+     * @var mixed[]|null
      */
     #[ResponseProp(requiredFor: [DeliveryDateServiceInterface::class])]
     protected array|null $Options = null;

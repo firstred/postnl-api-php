@@ -68,26 +68,26 @@ class EachPromise
     public const REJECTED = 'rejected';
 
     /**
-     * @var mixed[]|\Http\Promise\Promise[]
+     * @var Promise[]
      */
     private array $pending = [];
 
     /**
-     * @var \Iterator|\ArrayIterator
+     * @var Iterator
      */
     private Iterator $iterable;
 
-    /** @var mixed */
+    /** @var callable|int */
     private mixed $concurrency;
 
-    /** @var null */
+    /** @var callable|null */
     private mixed $onFulfilled;
 
-    /** @var null */
+    /** @var callable|null */
     private mixed $onRejected;
 
     /**
-     * @var null|\Firstred\PostNL\Misc\PendingPromise
+     * @var PendingPromise|null
      */
     private PendingPromise|null $aggregate = null;
 

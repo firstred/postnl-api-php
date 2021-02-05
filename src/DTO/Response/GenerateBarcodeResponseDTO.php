@@ -44,7 +44,7 @@ use Stringable;
 class GenerateBarcodeResponseDTO extends CacheableDTO implements Stringable
 {
     /**
-     * @var null|string
+     * @var string|null
      */
     #[ResponseProp(requiredFor: [BarcodeServiceInterface::class])]
     protected string|null $Barcode = null;

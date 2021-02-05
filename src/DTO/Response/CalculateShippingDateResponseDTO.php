@@ -44,7 +44,7 @@ use Stringable;
 class CalculateShippingDateResponseDTO extends CacheableDTO implements Stringable
 {
     /**
-     * @var null|string
+     * @var string|null
      */
     #[ResponseProp(requiredFor: [DeliveryDateServiceInterface::class])]
     protected string|null $SentDate = null;

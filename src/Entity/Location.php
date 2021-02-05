@@ -43,43 +43,43 @@ class Location extends SerializableObject
     public const AVAILABLE_NETWORKS = ['PNPNL-01', 'PNPBE-01'];
 
     /**
-     * @var null|string
+     * @var string|null
      */
     protected string|null $AllowSundaySorting = null;
     /**
-     * @var null|string
+     * @var string|null
      */
     protected string|null $DeliveryDate = null;
     /**
-     * @var null|mixed[]
+     * @var mixed[]|null
      */
     protected array|null $DeliveryOptions = null;
     /**
-     * @var null|string
+     * @var string|null
      */
     protected string|null $OpeningTime = null;
     /**
-     * @var null|mixed[]
+     * @var mixed[]|null
      */
     protected array|null $Options = null;
     /**
-     * @var null|string
+     * @var string|null
      */
     protected string|null $City = null;
     /**
-     * @var null|string
+     * @var string|null
      */
     protected string|null $HouseNr = null;
     /**
-     * @var null|string
+     * @var string|null
      */
     protected string|null $HouseNrExt = null;
     /**
-     * @var null|string
+     * @var string|null
      */
     protected string|null $Postalcode = null;
     /**
-     * @var null|string
+     * @var string|null
      */
     protected string|null $Street = null;
     /**
@@ -95,28 +95,28 @@ class Location extends SerializableObject
      */
     protected CoordinatesSouthEast|null $CoordinatesSouthEast = null;
     /**
-     * @var null|string
+     * @var string|null
      */
     protected string|null $LocationCode = null;
     /**
-     * @var null|string
+     * @var string|null
      */
     protected string|null $Saleschannel = null;
     /**
-     * @var null|string
+     * @var string|null
      */
     protected string|null $TerminalType = null;
     /**
-     * @var null|string
+     * @var string|null
      */
     #[ExpectedValues(values: self::AVAILABLE_NETWORKS)]
     protected string|null $RetailNetworkID = null;
     /**
-     * @var null|string
+     * @var string|null
      */
     protected string|null $DownPartnerID = null;
     /**
-     * @var null|string
+     * @var string|null
      */
     protected string|null $DownPartnerLocation = null;
 

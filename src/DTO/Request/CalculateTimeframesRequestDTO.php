@@ -87,49 +87,49 @@ class CalculateTimeframesRequestDTO extends CacheableDTO
     protected bool|null $AllowSundaySorting = null;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     #[RequestProp(requiredFor: ([TimeframeServiceInterface::class]))]
     protected string|null $CountryCode = null;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     #[RequestProp(optionalFor: ([TimeframeServiceInterface::class]))]
     protected string|null $City = null;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     #[RequestProp(requiredFor: ([TimeframeServiceInterface::class]))]
     protected string|null $PostalCode = null;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     #[RequestProp(requiredFor: ([TimeframeServiceInterface::class]))]
     protected string|null $Street = null;
 
     /**
-     * @var null|int
+     * @var int|null
      */
     #[RequestProp(requiredFor: ([TimeframeServiceInterface::class]))]
     protected int|null $HouseNumber = null;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     #[RequestProp(optionalFor: ([TimeframeServiceInterface::class]))]
     protected string|null $HouseNrExt = null;
 
     /**
-     * @var null|int
+     * @var int|null
      */
     #[RequestProp(optionalFor: ([TimeframeServiceInterface::class]))]
     protected int|null $Interval = null;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     #[RequestProp(optionalFor: ([TimeframeServiceInterface::class]))]
     protected string|null $TimeframeRange = null;

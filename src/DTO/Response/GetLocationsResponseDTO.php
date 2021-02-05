@@ -63,7 +63,7 @@ class GetLocationsResponseDTO extends CacheableDTO implements ArrayAccess, Count
     protected array $GetLocationsResult;
 
     /**
-     * @var null|mixed[] $Warnings
+     * @var mixed[]|null $Warnings
      * @psalm-var array<int|string, Warning> $Warnings
      */
     #[ResponseProp(optionalFor: [LocationServiceInterface::class])]

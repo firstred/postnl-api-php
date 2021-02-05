@@ -42,22 +42,22 @@ use JetBrains\PhpStorm\ExpectedValues;
 class Contact extends SerializableObject
 {
     /**
-     * @var null|string
+     * @var string|null
      */
     #[RequestProp(optionalFor: [LabellingServiceInterface::class])]
     protected string|null $ContactType = null;
     /**
-     * @var null|string
+     * @var string|null
      */
     #[RequestProp(optionalFor: [LabellingServiceInterface::class])]
     protected string|null $Email = null;
     /**
-     * @var null|string
+     * @var string|null
      */
     #[RequestProp(optionalFor: [LabellingServiceInterface::class])]
     protected string|null $SMSNr = null;
     /**
-     * @var null|string
+     * @var string|null
      */
     #[RequestProp(optionalFor: [LabellingServiceInterface::class])]
     protected string|null $TelNr = null;

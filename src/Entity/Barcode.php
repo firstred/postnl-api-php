@@ -42,12 +42,12 @@ use JetBrains\PhpStorm\ExpectedValues;
 class Barcode extends SerializableObject
 {
     /**
-     * @var null|string
+     * @var string|null
      */
     #[ResponseProp(requiredFor: [BarcodeServiceInterface::class])]
     protected string|null $Type = null;
     /**
-     * @var null|string
+     * @var string|null
      */
     #[ResponseProp(requiredFor: [BarcodeServiceInterface::class])]
     protected string|null $Range = null;

@@ -40,11 +40,11 @@ use JetBrains\PhpStorm\ExpectedValues;
 class MergedLabel extends SerializableObject
 {
     /**
-     * @var null|mixed[]
+     * @var mixed[]|null
      */
     protected array|null $Barcodes = null;
     /**
-     * @var null|mixed[]
+     * @var mixed[]|null
      */
     protected array|null $Labels = null;
 

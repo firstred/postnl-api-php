@@ -42,55 +42,55 @@ use JetBrains\PhpStorm\ExpectedValues;
 class Timeframe extends SerializableObject
 {
     /**
-     * @var null|string
+     * @var string|null
      */
     #[ResponseProp(optionalFor: [TimeframeServiceInterface::class])]
     protected string|null $City = null;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     #[ResponseProp(optionalFor: [TimeframeServiceInterface::class])]
     protected string|null $CountryCode = null;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     #[ResponseProp(requiredFor: [TimeframeServiceInterface::class])]
     protected string|null $Date = null;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     #[ResponseProp(optionalFor: [TimeframeServiceInterface::class])]
     protected string|null $EndDate = null;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     #[ResponseProp(optionalFor: [TimeframeServiceInterface::class])]
     protected string|null $HouseNr = null;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     #[ResponseProp(optionalFor: [TimeframeServiceInterface::class])]
     protected string|null $HouseNrExt = null;
 
     /**
-     * @var null|mixed[]
+     * @var mixed[]|null
      */
     #[ResponseProp(optionalFor: [TimeframeServiceInterface::class])]
     protected array|null $Options = null;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     #[ResponseProp(optionalFor: [TimeframeServiceInterface::class])]
     protected string|null $PostalCode = null;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     #[ResponseProp(optionalFor: [TimeframeServiceInterface::class])]
     protected string|null $Street = null;
@@ -102,19 +102,19 @@ class Timeframe extends SerializableObject
     protected bool|null $SundaySorting = false;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     #[ResponseProp(optionalFor: [TimeframeServiceInterface::class])]
     protected string|null $Interval = null;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     #[ResponseProp(optionalFor: [TimeframeServiceInterface::class])]
     protected string|null $Range = null;
 
     /** @psalm-var list<TimeframeTimeFrame>|null
-     * @var null|mixed[]|mixed[][][]|\Firstred\PostNL\Entity\TimeframeTimeFrame[]  */
+     * @var mixed[]|null|mixed[][][]|\Firstred\PostNL\Entity\TimeframeTimeFrame[]  */
     #[ResponseProp(requiredFor: [TimeframeServiceInterface::class])]
     protected array|null $Timeframes = null;
 

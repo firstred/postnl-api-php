@@ -35,6 +35,7 @@ use Firstred\PostNL\Misc\SerializableObject;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Cache\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
+use function unserialize;
 
 /**
  * Class GatewayBase.
@@ -175,11 +176,12 @@ abstract class GatewayBase implements GatewayInterface
             return null;
         }
 
-        /** @psalm-suppress InvalidCatch */
         try {
-            /** @var string $item */
-            $item = $cache->getItem(key: $cacheKey);
-            unserialize($item);
+            $cachedItem = $cache->getItem(key: $cacheKey)->get();
+            if (is_string(value: $cachedItem)) {
+                /** @var SerializableObject $item */
+                $item = unserialize(data: $cachedItem);
+            }
         } catch (InvalidArgumentException) {
         }
 

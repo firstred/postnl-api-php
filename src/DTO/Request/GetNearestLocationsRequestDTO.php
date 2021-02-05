@@ -22,49 +22,49 @@ use function strtotime;
 class GetNearestLocationsRequestDTO extends CacheableDTO
 {
     /**
-     * @var null|string
+     * @var string|null
      */
     #[RequestProp(requiredFor: [LocationServiceInterface::class])]
     protected string|null $CountryCode = null;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     #[RequestProp(requiredFor: [LocationServiceInterface::class])]
     protected string|null $PostalCode = null;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     #[RequestProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $City = null;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     #[RequestProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $Street = null;
 
     /**
-     * @var null|int
+     * @var int|null
      */
     #[RequestProp(optionalFor: [LocationServiceInterface::class])]
     protected int|null $HouseNumber = null;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     #[RequestProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $DeliveryDate = null;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     #[RequestProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $OpeningTime = null;
 
     /**
-     * @var null|mixed[]
+     * @var mixed[]|null
      */
     #[RequestProp(requiredFor: [LocationServiceInterface::class])]
     protected array|null $DeliveryOptions = null;

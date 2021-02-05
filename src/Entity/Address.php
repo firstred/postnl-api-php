@@ -110,90 +110,90 @@ class Address extends SerializableObject
     protected string|null $CompanyName = null;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     #[RequestProp(requiredFor: [LabellingService::class])]
     #[ResponseProp(requiredFor: [LabellingServiceInterface::class, LocationServiceInterface::class])]
     protected string|null $Countrycode = null;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     #[RequestProp(optionalFor: [LabellingService::class])]
     #[ResponseProp(optionalFor: [LabellingServiceInterface::class, LocationServiceInterface::class])]
     protected string|null $Department = null;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     #[RequestProp(optionalFor: [LabellingService::class])]
     #[ResponseProp(optionalFor: [LabellingServiceInterface::class, LocationServiceInterface::class])]
     protected string|null $Doorcode = null;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     #[RequestProp(optionalFor: [LabellingService::class])]
     #[ResponseProp(optionalFor: [LabellingServiceInterface::class, LocationServiceInterface::class])]
     protected string|null $FirstName = null;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     #[RequestProp(optionalFor: [LabellingService::class])]
     #[ResponseProp(optionalFor: [LabellingServiceInterface::class, LocationServiceInterface::class])]
     protected string|null $Floor = null;
 
     /**
-     * @var null|int
+     * @var int|null
      */
     #[RequestProp(optionalFor: [LabellingService::class])]
     #[ResponseProp(optionalFor: [LabellingServiceInterface::class, LocationServiceInterface::class])]
     protected int|null $HouseNr = null;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     #[RequestProp(optionalFor: [LabellingService::class])]
     #[ResponseProp(optionalFor: [LabellingServiceInterface::class, LocationServiceInterface::class])]
     protected string|null $HouseNrExt = null;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     #[RequestProp(optionalFor: [LabellingService::class])]
     #[ResponseProp(optionalFor: [LabellingServiceInterface::class, LocationServiceInterface::class])]
     protected string|null $StreetHouseNrExt = null;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     #[RequestProp(optionalFor: [LabellingService::class])]
     #[ResponseProp(optionalFor: [LabellingServiceInterface::class, LocationServiceInterface::class])]
     protected string|null $Name = null;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     #[RequestProp(optionalFor: [LabellingService::class])]
     #[ResponseProp(optionalFor: [LabellingServiceInterface::class, LocationServiceInterface::class])]
     protected string|null $Region = null;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $Remark = null;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     #[RequestProp(optionalFor: [LabellingService::class])]
     #[ResponseProp(optionalFor: [LabellingServiceInterface::class, LocationServiceInterface::class])]
     protected string|null $Street = null;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     #[RequestProp(optionalFor: [LabellingService::class])]
     #[ResponseProp(optionalFor: [LabellingServiceInterface::class, LocationServiceInterface::class])]

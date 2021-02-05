@@ -53,7 +53,7 @@ class Timeframes extends SerializableObject implements ArrayAccess, Countable, I
     protected int $idx = 0;
 
     /** @psalm-var list<Timeframe|TimeframeTimeFrame>|null
-     * @var null|mixed[] */
+     * @var mixed[]|null */
     #[ResponseProp(requiredFor: [TimeframeServiceInterface::class])]
     protected array|null $Timeframes = null;
 

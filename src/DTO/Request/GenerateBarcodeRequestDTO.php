@@ -42,19 +42,19 @@ use JetBrains\PhpStorm\ExpectedValues;
 class GenerateBarcodeRequestDTO extends CacheableDTO
 {
     /**
-     * @var null|string
+     * @var string|null
      */
     #[RequestProp(requiredFor: [BarcodeServiceInterface::class])]
     protected string|null $Type = null;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     #[RequestProp(requiredFor: [BarcodeServiceInterface::class])]
     protected string|null $Serie = null;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     #[RequestProp(optionalFor: [BarcodeServiceInterface::class])]
     protected string|null $Range = null;

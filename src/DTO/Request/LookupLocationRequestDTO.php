@@ -44,13 +44,13 @@ use function is_numeric;
 class LookupLocationRequestDTO extends CacheableDTO
 {
     /**
-     * @var null|int
+     * @var int|null
      */
     #[RequestProp(requiredFor: [LocationServiceInterface::class])]
     protected int|null $LocationCode = null;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     #[RequestProp(requiredFor: [LocationServiceInterface::class])]
     protected string|null $RetailNetworkID = null;

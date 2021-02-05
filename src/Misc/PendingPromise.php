@@ -67,7 +67,7 @@ class PendingPromise implements Promise
      */
     private string $state = self::PENDING;
     /**
-     * @var null|string|\Throwable
+     * @var string|null|Throwable
      */
     private mixed $result;
     /**
@@ -83,7 +83,7 @@ class PendingPromise implements Promise
      */
     private array|null $waitList = null;
     /**
-     * @var callable[][]|$this[][]|null[][]|null|mixed[]
+     * @var callable[][]|$this[][]|null[][]|mixed[]|null
      */
     private array|null $handlers = [];
 
@@ -218,8 +218,8 @@ class PendingPromise implements Promise
 
     /**
      * @param string                      $state
-     * @psalm-param string|Throwable|null $value
-*/
+     * @param string|Throwable|null       $value
+    */
     private function settle(string $state, string|Throwable|null $value): void
     {
         if (self::PENDING !== $this->state || !$value) {
@@ -236,7 +236,6 @@ class PendingPromise implements Promise
         }
 
         // Clear out the state of the promise but stash the handlers.
-        /** @var string $state */
         $this->state = $state;
         $this->result = $value;
         $handlers = $this->handlers;
@@ -362,7 +361,9 @@ class PendingPromise implements Promise
         try {
             $wfn = $this->waitFn;
             $this->waitFn = null;
-            $wfn(true);
+            if (is_callable(value: $wfn)) {
+                $wfn(true);
+            }
         } catch (Exception $reason) {
             if (self::PENDING === $this->state) {
                 // The promise has not been resolved yet, so reject the promise
