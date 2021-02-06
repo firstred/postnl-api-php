@@ -22,6 +22,8 @@
  * @author    Michael Dekker <git@michaeldekker.nl>
  * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
+ *
+ * @noinspection PhpDocMissingThrowsInspection (due to PhpStorm 2020.3.2 bug)
  */
 
 declare(strict_types=1);
@@ -49,6 +51,7 @@ class Util
 
     /**
      * 3S (or EU Pack Special) countries.
+     *
      * @var string[]
      */
     public static array $threeSCountries = ['AT', 'BE', 'BG', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'EE'];
@@ -56,6 +59,7 @@ class Util
     /**
      * A6 positions
      * (index = amount of a6 left on the page).
+     *
      * @var array<int, array<int>>
      */
     public static array $a6positions = [
@@ -154,7 +158,7 @@ class Util
      * @param bool   $mondayDelivery Sunday sorting/Monday delivery enabled
      * @param bool   $sundayDelivery Sunday delivery enabled
      *
-     * @return string (format: `Y-m-d H:i:s`)
+     * @return string format: `Y-m-d H:i:s`
      *
      * @throws Exception
      */
@@ -180,8 +184,12 @@ class Util
     /**
      * Offline shipping date calculation.
      *
+     * @param string $deliveryDate
+     * @param array  $days
+     *
+     * @return string
+     *
      * @throws InvalidArgumentException
-     * @throws Exception
      */
     public static function getShippingDate(
         string $deliveryDate,
@@ -255,15 +263,13 @@ class Util
     /**
      * Get an array with all Dutch holidays for the given year.
      *
-     * @param string $year
+     * @param int|string $year
      *
      * @return array
      *
      * Credits to @tvlooy (https://gist.github.com/tvlooy/1894247)
      *
      * @throws Exception
-     *
-     * @noinspection PhpDocMissingThrowsInspection
      */
     protected static function getHolidaysForYear(int|string $year): array
     {
