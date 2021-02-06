@@ -60,6 +60,10 @@ class BarcodeServiceRestTest extends ServiceTestBase
      */
     public function testSingleBarcodeRest()
     {
+        if (isset($_ENV['CI'])) {
+            $this->markTestSkipped();
+        }
+
         $this->assertStringStartsWith(prefix: '3S', string: (string) $this->postnl->generateBarcode());
     }
 
@@ -77,6 +81,10 @@ class BarcodeServiceRestTest extends ServiceTestBase
      */
     public function testSingleBarCodeByCountryRest()
     {
+        if (isset($_ENV['CI'])) {
+            $this->markTestSkipped();
+        }
+
         $this->assertStringStartsWith(prefix: '3S', string: (string) $this->postnl->generateBarcodeByCountryCode(iso: 'NL'));
     }
 
@@ -94,6 +102,10 @@ class BarcodeServiceRestTest extends ServiceTestBase
      */
     public function testMultipleNLBarcodesRest()
     {
+        if (isset($_ENV['CI'])) {
+            $this->markTestSkipped();
+        }
+
         $barcodes = $this->postnl->generateBarcodesByCountryCodes(isos: ['NL' => 2]);
 
         $this->assertStringStartsWith(prefix: '3S', string: (string) $barcodes['NL'][1]);
