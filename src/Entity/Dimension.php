@@ -40,6 +40,31 @@ use JetBrains\PhpStorm\ExpectedValues;
 class Dimension extends SerializableObject
 {
     /**
+     * @var string|null
+     */
+    protected string|null $Height = null;
+
+    /**
+     * @var string|null
+     */
+    protected string|null $Length = null;
+
+    /**
+     * @var string|null
+     */
+    protected string|null $Volume = null;
+
+    /**
+     * @var string|null
+     */
+    protected string|null $Weight = null;
+
+    /**
+     * @var string|null
+     */
+    protected string|null $Width = null;
+
+    /**
      * Dimension constructor.
      *
      * @param string      $service
@@ -58,11 +83,11 @@ class Dimension extends SerializableObject
         #[ExpectedValues(values: PropInterface::PROP_TYPES)]
         string $propType,
 
-        protected string|null $Height = null,
-        protected string|null $Length = null,
-        protected string|null $Volume = null,
-        protected string|null $Weight = null,
-        protected string|null $Width = null,
+        string|null $Height = null,
+        string|null $Length = null,
+        string|null $Volume = null,
+        string|null $Weight = null,
+        string|null $Width = null,
     ) {
         parent::__construct(service: $service, propType: $propType);
 

@@ -43,30 +43,37 @@ class ResponseAmount extends SerializableObject
      * @var string|null
      */
     protected string|null $AccountName = null;
+
     /**
      * @var string|null
      */
     protected string|null $ResponseAmountType = null;
+
     /**
      * @var string|null
      */
     protected string|null $BIC = null;
+
     /**
      * @var string|null
      */
     protected string|null $Currency = null;
+
     /**
      * @var string|null
      */
     protected string|null $IBAN = null;
+
     /**
      * @var string|null
      */
     protected string|null $Reference = null;
+
     /**
      * @var string|null
      */
     protected string|null $TransactionNumber = null;
+
     /**
      * @var string|null
      */

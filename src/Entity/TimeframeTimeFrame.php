@@ -40,6 +40,26 @@ use JetBrains\PhpStorm\ExpectedValues;
 class TimeframeTimeFrame extends SerializableObject
 {
     /**
+     * @var string|null
+     */
+    protected string|null $Date = null;
+
+    /**
+     * @var string|null
+     */
+    protected string|null $From = null;
+
+    /**
+     * @var array|null
+     */
+    protected array|null $Options = null;
+
+    /**
+     * @var string|null
+     */
+    protected string|null $To = null;
+
+    /**
      * TimeframeTimeFrame constructor.
      *
      * @param string      $service
@@ -57,10 +77,10 @@ class TimeframeTimeFrame extends SerializableObject
         #[ExpectedValues(values: PropInterface::PROP_TYPES)]
         string $propType,
 
-        protected string|null $Date = null,
-        protected string|null $From = null,
-        protected array|null $Options = null,
-        protected string|null $To = null,
+        string|null $Date = null,
+        string|null $From = null,
+        array|null $Options = null,
+        string|null $To = null,
     ) {
         parent::__construct(service: $service, propType: $propType);
 

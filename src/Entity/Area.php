@@ -29,8 +29,10 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Attribute\PropInterface;
+use Firstred\PostNL\Attribute\ResponseProp;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\SerializableObject;
+use Firstred\PostNL\Service\LocationServiceInterface;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
 
@@ -39,6 +41,18 @@ use JetBrains\PhpStorm\ExpectedValues;
  */
 class Area extends SerializableObject
 {
+    /**
+     * @var Coordinates|null
+     */
+    #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
+    protected Coordinates|null $CoordinatesNorthWest = null;
+
+    /**
+     * @var Coordinates|null
+     */
+    #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
+    protected Coordinates|null $CoordinatesSouthEast = null;
+
     /**
      * Area constructor.
      *
@@ -55,8 +69,8 @@ class Area extends SerializableObject
         #[ExpectedValues(values: PropInterface::PROP_TYPES)]
         string $propType,
 
-        protected Coordinates|null $CoordinatesNorthWest = null,
-        protected Coordinates|null $CoordinatesSouthEast = null,
+        Coordinates|null $CoordinatesNorthWest = null,
+        Coordinates|null $CoordinatesSouthEast = null,
     ) {
         parent::__construct(service: $service, propType: $propType);
 

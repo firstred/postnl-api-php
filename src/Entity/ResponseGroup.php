@@ -41,11 +41,13 @@ class ResponseGroup extends SerializableObject
      * @var string|null
      */
     protected string|null $GroupCount = null;
+
     /**
      * Sequence number.
      * @var string|null
      */
     protected string|null $GroupSequence = null;
+
     /**
      * The type of Group.
      *
@@ -57,6 +59,7 @@ class ResponseGroup extends SerializableObject
      * @var string|null
      */
     protected string|null $GroupType = null;
+
     /**
      * Main barcode for the shipment.
      * @var string|null

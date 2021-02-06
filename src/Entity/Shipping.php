@@ -40,13 +40,15 @@ use JetBrains\PhpStorm\ExpectedValues;
 class Shipping extends SerializableObject
 {
     /**
-     * @var null|\Firstred\PostNL\Entity\Customer
+     * @var null|Customer
      */
     protected Customer|null $Customer = null;
+
     /**
-     * @var null|\Firstred\PostNL\Entity\LabellingMessage
+     * @var null|LabellingMessage
      */
     protected LabellingMessage|null $Message = null;
+
     /**
      * @var mixed[]|null
      */

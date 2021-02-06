@@ -43,6 +43,7 @@ class MergedLabel extends SerializableObject
      * @var mixed[]|null
      */
     protected array|null $Barcodes = null;
+
     /**
      * @var mixed[]|null
      */

@@ -48,6 +48,21 @@ class CutOffTime extends SerializableObject
     public const SUNDAY = 6;
 
     /**
+     * @var int|null
+     */
+    protected int|null $Day = null;
+
+    /**
+     * @var string|null
+     */
+    protected string|null $Time = null;
+
+    /**
+     * @var bool|null 
+     */
+    protected bool|null $Available = null;
+
+    /**
      * CutOffTime constructor.
      *
      * @param string      $service
@@ -65,9 +80,9 @@ class CutOffTime extends SerializableObject
         string $propType,
 
         #[ExpectedValues(values: [self::MONDAY, self::TUESDAY, self::WEDNESDAY, self::THURSDAY, self::FRIDAY, self::SATURDAY, self::SUNDAY])]
-        protected int|null $Day = null,
-        protected string|null $Time = null,
-        protected bool|null $Available = null,
+        int|null $Day = null,
+        string|null $Time = null,
+        bool|null $Available = null,
     ) {
         parent::__construct(service: $service, propType: $propType);
 

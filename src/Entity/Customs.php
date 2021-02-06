@@ -40,6 +40,56 @@ use JetBrains\PhpStorm\ExpectedValues;
 class Customs extends SerializableObject
 {
     /**
+     * @var string|null
+     */
+    protected string|null $Certificate = null;
+
+    /**
+     * @var string|null
+     */
+    protected string|null $CertificateNr = null;
+
+    /**
+     * @var array|null
+     */
+    protected array|null $Content = null;
+
+    /**
+     * @var string|null
+     */
+    protected string|null $Currency = null;
+
+    /**
+     * @var string|null
+     */
+    protected string|null $HandleAsNonDeliverable = null;
+
+    /**
+     * @var string|null
+     */
+    protected string|null $Invoice = null;
+
+    /**
+     * @var string|null
+     */
+    protected string|null $InvoiceNr = null;
+
+    /**
+     * @var string|null
+     */
+    protected string|null $License = null;
+
+    /**
+     * @var string|null
+     */
+    protected string|null $LicenseNr = null;
+
+    /**
+     * @var string|null
+     */
+    protected string|null $ShipmentType = null;
+
+    /**
      * Customs constructor.
      *
      * @param string      $service
@@ -63,16 +113,16 @@ class Customs extends SerializableObject
         #[ExpectedValues(values: PropInterface::PROP_TYPES)]
         string $propType,
 
-        protected string|null $Certificate = null,
-        protected string|null $CertificateNr = null,
-        protected array|null $Content = null,
-        protected string|null $Currency = null,
-        protected string|null $HandleAsNonDeliverable = null,
-        protected string|null $Invoice = null,
-        protected string|null $InvoiceNr = null,
-        protected string|null $License = null,
-        protected string|null $LicenseNr = null,
-        protected string|null $ShipmentType = null,
+        string|null $Certificate = null,
+        string|null $CertificateNr = null,
+        array|null $Content = null,
+        string|null $Currency = null,
+        string|null $HandleAsNonDeliverable = null,
+        string|null $Invoice = null,
+        string|null $InvoiceNr = null,
+        string|null $License = null,
+        string|null $LicenseNr = null,
+        string|null $ShipmentType = null,
     ) {
         parent::__construct(service: $service, propType: $propType);
 

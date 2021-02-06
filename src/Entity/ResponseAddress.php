@@ -37,7 +37,7 @@ use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
 
 /**
- * Class ResponseAddress
+ * Class ResponseAddress.
  */
 class ResponseAddress extends SerializableObject
 {
@@ -69,8 +69,10 @@ class ResponseAddress extends SerializableObject
      * If there is no Customer/ResponseAddress, the message will be rejected.
      * At least one other AddressType must be specified, other than AddressType 02
      * In most cases this will be AddressType 01, the receiver ResponseAddress.
+     *
      * @var string|null
      */
+    #[ExpectedValues(values: Address::ADDRESS_TYPES)]
     #[ResponseProp(optionalFor: [LocationServiceInterface::class])]
     protected string|null $AddressType = null;
 

@@ -29,8 +29,11 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Attribute\PropInterface;
+use Firstred\PostNL\Attribute\RequestProp;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\SerializableObject;
+use Firstred\PostNL\Service\ConfirmingServiceInterface;
+use Firstred\PostNL\Service\LabellingServiceInterface;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
 
@@ -39,6 +42,69 @@ use JetBrains\PhpStorm\ExpectedValues;
  */
 class Content extends SerializableObject
 {
+    /**
+     * @var string|null
+     */
+    #[RequestProp(optionalFor: [
+        LabellingServiceInterface::class,
+        ConfirmingServiceInterface::class,
+    ])]
+    protected string|null $CountryOfOrigin = null;
+
+    /**
+     * @var string|null
+     */
+    #[RequestProp(optionalFor: [
+        LabellingServiceInterface::class,
+        ConfirmingServiceInterface::class,
+    ])]
+    protected string|null $Description = null;
+
+    /**
+     * @var string|null
+     */
+    #[RequestProp(optionalFor: [
+        LabellingServiceInterface::class,
+        ConfirmingServiceInterface::class,
+    ])]
+    protected string|null $HSTariffNr = null;
+
+    /**
+     * @var string|null
+     */
+    #[RequestProp(optionalFor: [
+        LabellingServiceInterface::class,
+        ConfirmingServiceInterface::class,
+    ])]
+    protected string|null $Quantity = null;
+
+    /**
+     * @var string|null
+     */
+    #[RequestProp(optionalFor: [
+        LabellingServiceInterface::class,
+        ConfirmingServiceInterface::class,
+    ])]
+    protected string|null $Value = null;
+
+    /**
+     * @var string|null
+     */
+    #[RequestProp(optionalFor: [
+        LabellingServiceInterface::class,
+        ConfirmingServiceInterface::class,
+    ])]
+    protected string|null $Weight = null;
+
+    /**
+     * @var array|null
+     */
+    #[RequestProp(optionalFor: [
+        LabellingServiceInterface::class,
+        ConfirmingServiceInterface::class,
+    ])]
+    protected array|null $Content = null;
+
     /**
      * Content constructor.
      *
@@ -60,13 +126,13 @@ class Content extends SerializableObject
         #[ExpectedValues(values: PropInterface::PROP_TYPES)]
         string $propType,
 
-        protected string|null $CountryOfOrigin = null,
-        protected string|null $Description = null,
-        protected string|null $HSTariffNr = null,
-        protected string|null $Quantity = null,
-        protected string|null $Value = null,
-        protected string|null $Weight = null,
-        protected array|null $Content = null,
+        string|null $CountryOfOrigin = null,
+        string|null $Description = null,
+        string|null $HSTariffNr = null,
+        string|null $Quantity = null,
+        string|null $Value = null,
+        string|null $Weight = null,
+        array|null $Content = null,
     ) {
         parent::__construct(service: $service, propType: $propType);
 

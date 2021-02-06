@@ -40,6 +40,31 @@ use JetBrains\PhpStorm\ExpectedValues;
 class Status extends SerializableObject
 {
     /**
+     * @var string|null
+     */
+    protected string|null $CurrentPhaseCode = null;
+
+    /**
+     * @var string|null
+     */
+    protected string|null $CurrentPhaseDescription = null;
+
+    /**
+     * @var string|null
+     */
+    protected string|null $CurrentStatusCode = null;
+
+    /**
+     * @var string|null
+     */
+    protected string|null $CurrentStatusDescription = null;
+
+    /**
+     * @var string|null
+     */
+    protected string|null $CurrentStatusTimeStamp = null;
+
+    /**
      * Status constructor.
      *
      * @param string      $service
@@ -58,11 +83,11 @@ class Status extends SerializableObject
         #[ExpectedValues(values: PropInterface::PROP_TYPES)]
         string $propType,
 
-        protected string|null $CurrentPhaseCode = null,
-        protected string|null $CurrentPhaseDescription = null,
-        protected string|null $CurrentStatusCode = null,
-        protected string|null $CurrentStatusDescription = null,
-        protected string|null $CurrentStatusTimeStamp = null,
+        string|null $CurrentPhaseCode = null,
+        string|null $CurrentPhaseDescription = null,
+        string|null $CurrentStatusCode = null,
+        string|null $CurrentStatusDescription = null,
+        string|null $CurrentStatusTimeStamp = null,
     ) {
         parent::__construct(service: $service, propType: $propType);
 

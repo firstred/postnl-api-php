@@ -42,6 +42,16 @@ use JetBrains\PhpStorm\ExpectedValues;
 class Message extends SerializableObject
 {
     /**
+     * @var string|null
+     */
+    protected string|null $MessageID = null;
+
+    /**
+     * @var string|null
+     */
+    protected string|null $MessageTimeStamp = null;
+
+    /**
      * Message constructor.
      *
      * @param string      $service
@@ -57,8 +67,8 @@ class Message extends SerializableObject
         #[ExpectedValues(values: PropInterface::PROP_TYPES)]
         string $propType,
 
-        protected string|null $MessageID = null,
-        protected string|null $MessageTimeStamp = null,
+        string|null $MessageID = null,
+        string|null $MessageTimeStamp = null,
     ) {
         parent::__construct(service: $service, propType: $propType);
 

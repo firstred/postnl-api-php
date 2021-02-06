@@ -41,6 +41,16 @@ use JetBrains\PhpStorm\ExpectedValues;
 class Signature extends SerializableObject
 {
     /**
+     * @var GetSignatureResponseSignature|null
+     */
+    protected GetSignatureResponseSignature|null $GetSignatureResponseSignature = null;
+
+    /**
+     * @var array|null
+     */
+    protected array|null $Warnings = null;
+
+    /**
      * Signature constructor.
      *
      * @param string                             $service
@@ -56,8 +66,8 @@ class Signature extends SerializableObject
         #[ExpectedValues(values: PropInterface::PROP_TYPES)]
         string $propType,
 
-        protected GetSignatureResponseSignature|null $GetSignatureResponseSignature = null,
-        protected array|null $Warnings = null,
+        GetSignatureResponseSignature|null $GetSignatureResponseSignature = null,
+        array|null $Warnings = null,
     ) {
         parent::__construct(service: $service, propType: $propType);
 

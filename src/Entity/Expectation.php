@@ -40,6 +40,16 @@ use JetBrains\PhpStorm\ExpectedValues;
 class Expectation extends SerializableObject
 {
     /**
+     * @var string|null
+     */
+    protected string|null $ETAFrom = null;
+
+    /**
+     * @var string|null
+     */
+    protected string|null $ETATo = null;
+
+    /**
      * Expectation constructor.
      *
      * @param string      $service
@@ -55,8 +65,8 @@ class Expectation extends SerializableObject
         #[ExpectedValues(values: PropInterface::PROP_TYPES)]
         string $propType,
 
-        protected string|null $ETAFrom = null,
-        protected string|null $ETATo = null,
+        string|null $ETAFrom = null,
+        string|null $ETATo = null,
     ) {
         parent::__construct(service: $service, propType: $propType);
 

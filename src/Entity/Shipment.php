@@ -43,150 +43,187 @@ class Shipment extends SerializableObject
      * @var mixed[]|null
      */
     protected array|null $Addresses = null;
+
     /**
      * @var mixed[]|null
      */
     protected array|null $Amounts = null;
+
     /**
      * @var string|null
      */
     protected string|null $Barcode = null;
+
     /**
      * @var string|null
      */
     protected string|null $CollectionTimeStampEnd = null;
+
     /**
      * @var string|null
      */
     protected string|null $CollectionTimeStampStart = null;
+
     /**
      * @var mixed[]|null
      */
     protected array|null $Contacts = null;
+
     /**
      * @var string|null
      */
     protected string|null $Content = null;
+
     /**
      * @var string|null
      */
     protected string|null $CostCenter = null;
+
     /**
      * @var string|null
      */
     protected string|null $CustomerOrderNumber = null;
+
     /**
-     * @var null|\Firstred\PostNL\Entity\Customer
+     * @var Customer|null
      */
     protected Customer|null $Customer = null;
+
     /**
-     * @var null|\Firstred\PostNL\Entity\Customs
+     * @var Customs|null
      */
     protected Customs|null $Customs = null;
+
     /**
      * @var string|null
      */
     protected string|null $StatusCode = null;
+
     /**
      * @var int|null
      */
     protected int|null $PhaseCode = null;
+
     /**
      * @var string|null
      */
     protected string|null $DateFrom = null;
+
     /**
      * @var string|null
      */
     protected string|null $DateTo = null;
+
     /**
      * @var string|null
      */
     protected string|null $DeliveryAddress = null;
+
     /**
      * @var string|null
      */
     protected string|null $DeliveryTimeStampStart = null;
+
     /**
      * @var string|null
      */
     protected string|null $DeliveryTimeStampEnd = null;
+
     /**
      * @var string|null
      */
     protected string|null $DeliveryDate = null;
+
     /**
      * @var null|\Firstred\PostNL\Entity\Dimension
      */
     protected Dimension|null $Dimension = null;
+
     /**
      * @var string|null
      */
     protected string|null $DownPartnerBarcode = null;
+
     /**
      * @var string|null
      */
     protected string|null $DownPartnerID = null;
+
     /**
      * @var string|null
      */
     protected string|null $DownPartnerLocation = null;
+
     /**
      * @var mixed[]|null
      */
     protected array|null $Events = null;
+
     /**
      * @var mixed[]|null
      */
     protected array|null $Groups = null;
+
     /**
      * @var string|null
      */
     protected string|null $IDExpiration = null;
+
     /**
      * @var string|null
      */
     protected string|null $IDNumber = null;
+
     /**
      * @var string|null
      */
     protected string|null $IDType = null;
+
     /**
      * @var string|null
      */
     protected string|null $OldStatuses = null;
+
     /**
      * @var string|null
      */
     protected string|null $ProductCodeCollect = null;
+
     /**
      * @var string|null
      */
     protected string|null $ProductCodeDelivery = null;
+
     /**
      * @var mixed[]|null
      */
     protected array|null $ProductOptions = null;
+
     /**
      * @var string|null
      */
     protected string|null $ReceiverDateOfBirth = null;
+
     /**
      * @var string|null
      */
     protected string|null $Reference = null;
+
     /**
      * @var string|null
      */
     protected string|null $ReferenceCollect = null;
+
     /**
      * @var string|null
      */
     protected string|null $Remark = null;
+
     /**
      * @var string|null
      */
     protected string|null $ReturnBarcode = null;
+
     /**
      * @var string|null
      */

@@ -40,6 +40,16 @@ use JetBrains\PhpStorm\ExpectedValues;
 class CoordinatesSouthEast extends SerializableObject
 {
     /**
+     * @var string|null
+     */
+    protected string|null $Latitude = null;
+
+    /**
+     * @var string|null
+     */
+    protected string|null $Longitude = null;
+
+    /**
      * CoordinatesSouthEast constructor.
      *
      * @param string      $service
@@ -55,8 +65,8 @@ class CoordinatesSouthEast extends SerializableObject
         #[ExpectedValues(values: PropInterface::PROP_TYPES)]
         string $propType,
 
-        protected string|null $Latitude = null,
-        protected string|null $Longitude = null,
+        string|null $Latitude = null,
+        string|null $Longitude = null,
     ) {
         parent::__construct(service: $service, propType: $propType);
 

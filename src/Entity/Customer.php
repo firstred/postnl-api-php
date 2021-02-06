@@ -40,6 +40,51 @@ use JetBrains\PhpStorm\ExpectedValues;
 class Customer extends SerializableObject
 {
     /**
+     * @var Address|null
+     */
+    protected Address|null $Address = null;
+
+    /**
+     * @var string|null
+     */
+    protected string|null $CollectionLocation = null;
+
+    /**
+     * @var string|null
+     */
+    protected string|null $ContactPerson = null;
+
+    /**
+     * @var string|null
+     */
+    protected string|null $CustomerCode = null;
+
+    /**
+     * @var string|null
+     */
+    protected string|null $CustomerNumber = null;
+
+    /**
+     * @var string|null
+     */
+    protected string|null $GlobalPackCustomerCode = null;
+
+    /**
+     * @var string|null
+     */
+    protected string|null $GlobalPackBarcodeType = null;
+
+    /**
+     * @var string|null
+     */
+    protected string|null $Email = null;
+
+    /**
+     * @var string|null
+     */
+    protected string|null $Name = null;
+
+    /**
      * Customer constructor.
      *
      * @param string       $service
@@ -62,25 +107,27 @@ class Customer extends SerializableObject
         #[ExpectedValues(values: PropInterface::PROP_TYPES)]
         string $propType = '',
 
-        protected Address|null $Address = null,
-        protected string|null $CollectionLocation = null,
-        protected string|null $ContactPerson = null,
-        protected string|null $CustomerCode = null,
-        protected string|null $CustomerNumber = null,
-        protected string|null $GlobalPackCustomerCode = null,
-        protected string|null $GlobalPackBarcodeType = null,
-        protected string|null $Email = null,
-        protected string|null $Name = null,
+        Address|null $Address = null,
+        string|null $CollectionLocation = null,
+        string|null $ContactPerson = null,
+        string|null $CustomerCode = null,
+        string|null $CustomerNumber = null,
+        string|null $GlobalPackCustomerCode = null,
+        string|null $GlobalPackBarcodeType = null,
+        string|null $Email = null,
+        string|null $Name = null,
     ) {
         parent::__construct(service: $service, propType: $propType);
 
-        $this->setCustomerNumber(CustomerNumber: $CustomerNumber);
-        $this->setCustomerCode(CustomerCode: $CustomerCode);
+        $this->setAddress(Address: $Address);
         $this->setCollectionLocation(CollectionLocation: $CollectionLocation);
         $this->setContactPerson(ContactPerson: $ContactPerson);
+        $this->setCustomerCode(CustomerCode: $CustomerCode);
+        $this->setCustomerNumber(CustomerNumber: $CustomerNumber);
+        $this->setGlobalPackCustomerCode(GlobalPackCustomerCode: $GlobalPackCustomerCode);
+        $this->setGlobalPackBarcodeType(GlobalPackBarcodeType: $GlobalPackBarcodeType);
         $this->setEmail(Email: $Email);
         $this->setName(Name: $Name);
-        $this->setAddress(Address: $Address);
     }
 
     /**

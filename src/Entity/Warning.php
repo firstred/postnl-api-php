@@ -40,6 +40,16 @@ use JetBrains\PhpStorm\ExpectedValues;
 class Warning extends SerializableObject
 {
     /**
+     * @var string|null
+     */
+    protected string|null $Code = null;
+
+    /**
+     * @var string|null
+     */
+    protected string|null $Description = null;
+
+    /**
      * Warning constructor.
      *
      * @param string      $service
@@ -55,8 +65,8 @@ class Warning extends SerializableObject
         #[ExpectedValues(values: PropInterface::PROP_TYPES)]
         string $propType,
 
-        protected string|null $Code = null,
-        protected string|null $Description = null,
+        string|null $Code = null,
+        string|null $Description = null,
     ) {
         parent::__construct(service: $service, propType: $propType);
 

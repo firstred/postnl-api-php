@@ -51,8 +51,10 @@ class ReasonNoTimeframes extends SerializableObject implements ArrayAccess, Coun
      */
     protected int $idx = 0;
 
-    /** @psalm-var list<ReasonNoTimeframe>|null
-     * @var mixed[]|null */
+    /**
+     * @psalm-var list<ReasonNoTimeframe>|null
+     * @var mixed[]|null
+     */
     #[ResponseProp(requiredFor: [TimeframeServiceInterface::class])]
     protected array|null $ReasonNoTimeframes = null;
 

@@ -40,6 +40,16 @@ use JetBrains\PhpStorm\ExpectedValues;
 class ProductOption extends SerializableObject
 {
     /**
+     * @var string|null
+     */
+    protected string|null $Characteristic = null;
+
+    /**
+     * @var string|null
+     */
+    protected string|null $Option = null;
+
+    /**
      * ProductOption constructor.
      *
      * @param string      $service
@@ -55,8 +65,8 @@ class ProductOption extends SerializableObject
         #[ExpectedValues(values: PropInterface::PROP_TYPES)]
         string $propType,
 
-        protected string|null $Characteristic = null,
-        protected string|null $Option = null,
+        string|null $Characteristic = null,
+        string|null $Option = null,
     ) {
         parent::__construct(service: $service, propType: $propType);
 

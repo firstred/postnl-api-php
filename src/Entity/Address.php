@@ -45,7 +45,23 @@ use function is_numeric;
  */
 class Address extends SerializableObject
 {
-    /*
+    public const ADDRESS_TYPE_RECEIVER = '01';
+    public const ADDRESS_TYPE_SENDER = '02';
+    public const ADDRESS_TYPE_ALTERNATIVE_SENDER = '03';
+    public const ADDRESS_TYPE_COLLECTION = '04';
+    public const ADDRESS_TYPE_RETURN = '08';
+    public const ADDRESS_TYPE_DROP_OFF_LOCATION = '09';
+
+    public const ADDRESS_TYPES = [
+        self::ADDRESS_TYPE_RECEIVER,
+        self::ADDRESS_TYPE_SENDER,
+        self::ADDRESS_TYPE_ALTERNATIVE_SENDER,
+        self::ADDRESS_TYPE_COLLECTION,
+        self::ADDRESS_TYPE_RETURN,
+        self::ADDRESS_TYPE_DROP_OFF_LOCATION,
+    ];
+
+    /**
      * PostNL internal applications validate the receiver address. In case the spelling of
      * addresses should be different according to our PostNL information, the address details will
      * be corrected. This can be noticed in Track & Trace.
@@ -73,10 +89,10 @@ class Address extends SerializableObject
      * If there is no Customer/Address, the message will be rejected.
      * At least one other AddressType must be specified, other than AddressType 02
      * In most cases this will be AddressType 01, the receiver address.
-     */
-    /**
+     *
      * @var string|null
      */
+    #[ExpectedValues(values: self::ADDRESS_TYPES)]
     #[RequestProp(requiredFor: [LabellingServiceInterface::class])]
     #[ResponseProp(requiredFor: [LabellingServiceInterface::class, LocationServiceInterface::class])]
     protected string|null $AddressType = null;
@@ -231,6 +247,7 @@ class Address extends SerializableObject
         #[ExpectedValues(values: PropInterface::PROP_TYPES)]
         string $propType = '',
 
+        #[ExpectedValues(values: self::ADDRESS_TYPES)]
         string|null $AddressType = null,
         string|null $Area = null,
         string|null $Buildingname = null,

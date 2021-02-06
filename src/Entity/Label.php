@@ -54,9 +54,15 @@ class Label extends SerializableObject
     #[ResponseProp(optionalFor: [LabellingServiceInterface::class, ConfirmingServiceInterface::class])]
     protected string|null $Content = null;
 
+    /**
+     * @var string|null
+     */
     #[ResponseProp(optionalFor: [LabellingServiceInterface::class, ConfirmingServiceInterface::class])]
     protected string|null $Contenttype = null;
 
+    /**
+     * @var string|null
+     */
     #[ResponseProp(optionalFor: [LabellingServiceInterface::class, ConfirmingServiceInterface::class])]
     protected string|null $Labeltype = null;
 

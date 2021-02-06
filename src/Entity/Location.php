@@ -46,75 +46,93 @@ class Location extends SerializableObject
      * @var string|null
      */
     protected string|null $AllowSundaySorting = null;
+
     /**
      * @var string|null
      */
     protected string|null $DeliveryDate = null;
+
     /**
      * @var mixed[]|null
      */
     protected array|null $DeliveryOptions = null;
+
     /**
      * @var string|null
      */
     protected string|null $OpeningTime = null;
+
     /**
      * @var mixed[]|null
      */
     protected array|null $Options = null;
+
     /**
      * @var string|null
      */
     protected string|null $City = null;
+
     /**
      * @var string|null
      */
     protected string|null $HouseNr = null;
+
     /**
      * @var string|null
      */
     protected string|null $HouseNrExt = null;
+
     /**
      * @var string|null
      */
     protected string|null $Postalcode = null;
+
     /**
      * @var string|null
      */
     protected string|null $Street = null;
+
     /**
-     * @var null|\Firstred\PostNL\Entity\Coordinates
+     * @var null|Coordinates
      */
     protected Coordinates|null $Coordinates = null;
+
     /**
-     * @var null|\Firstred\PostNL\Entity\CoordinatesNorthWest
+     * @var null|CoordinatesNorthWest
      */
     protected CoordinatesNorthWest|null $CoordinatesNorthWest = null;
+
     /**
-     * @var null|\Firstred\PostNL\Entity\CoordinatesSouthEast
+     * @var null|CoordinatesSouthEast
      */
     protected CoordinatesSouthEast|null $CoordinatesSouthEast = null;
+
     /**
      * @var string|null
      */
     protected string|null $LocationCode = null;
+
     /**
      * @var string|null
      */
     protected string|null $Saleschannel = null;
+
     /**
      * @var string|null
      */
     protected string|null $TerminalType = null;
+
     /**
      * @var string|null
      */
     #[ExpectedValues(values: self::AVAILABLE_NETWORKS)]
     protected string|null $RetailNetworkID = null;
+
     /**
      * @var string|null
      */
     protected string|null $DownPartnerID = null;
+
     /**
      * @var string|null
      */

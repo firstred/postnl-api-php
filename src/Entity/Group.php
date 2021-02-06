@@ -39,6 +39,43 @@ use JetBrains\PhpStorm\ExpectedValues;
  */
 class Group extends SerializableObject
 {
+    public const GROUP_TYPES = ['01' , '03', '04'];
+
+    /**
+     * Amount of shipments in the group.
+     *
+     * @var string|null
+     */
+    protected string|null $GroupCount = null;
+
+    /**
+     * Sequence number.
+     *
+     * @var string|null
+     */
+    protected string|null $GroupSequence = null;
+
+    /**
+     * The type of group.
+     *
+     * Possible values:
+     *
+     * - `01`: Collection request
+     * - `03`: Multiple parcels in one shipment (multi-colli)
+     * - `04`: Single parcel in one shipment
+     *
+     * @var string|null
+     */
+    #[ExpectedValues(values: self::GROUP_TYPES)]
+    protected string|null $GroupType = null;
+
+    /**
+     * Main barcode for the shipment.
+     *
+     * @var string|null
+     */
+    protected string|null $MainBarcode = null;
+
     /**
      * Group constructor.
      *
@@ -57,28 +94,11 @@ class Group extends SerializableObject
         #[ExpectedValues(values: PropInterface::PROP_TYPES)]
         string $propType,
 
-        /*
-         * Amount of shipments in the group.
-         */
-        protected string|null $GroupCount = null,
-        /*
-         * Sequence number.
-         */
-        protected string|null $GroupSequence = null,
-        /*
-         * The type of group.
-         *
-         * Possible values:
-         *
-         * - `01`: Collection request
-         * - `03`: Multiple parcels in one shipment (multi-colli)
-         * - `04`: Single parcel in one shipment
-         */
-        protected string|null $GroupType = null,
-        /*
-         * Main barcode for the shipment.
-         */
-        protected string|null $MainBarcode = null,
+        string|null $GroupCount = null,
+        string|null $GroupSequence = null,
+        #[ExpectedValues(values: self::GROUP_TYPES)]
+        string|null $GroupType = null,
+        string|null $MainBarcode = null,
     ) {
         parent::__construct(service: $service, propType: $propType);
 
