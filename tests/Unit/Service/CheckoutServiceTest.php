@@ -35,11 +35,15 @@ use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\CutOffTime;
 use Firstred\PostNL\Entity\CutOffTimes;
 use Firstred\PostNL\Entity\Dimension;
+use Firstred\PostNL\Entity\PickupOptions;
 use Firstred\PostNL\Entity\Shipment;
+use Firstred\PostNL\HttpClient\HTTPlugHttpClient;
 use Firstred\PostNL\Service\CheckoutService;
 use Firstred\PostNL\Service\CheckoutServiceInterface;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Mock\Client;
+use function file_get_contents;
+use function json_encode;
 
 /**
  * Class CheckoutServiceTest.
@@ -131,232 +135,43 @@ class CheckoutServiceTest extends ServiceTestBase
     }
 
     /**
-     * @testdox Can generate a single label
+     * @testdox Can get delivery information
      *
      * @throws Exception
      */
-    public function testConfirmsALabelRest()
+    public function testCanGetDeliveryInformation()
     {
-        $this->markTestIncomplete();
-
+        $mockClient = new Client();
         $responseFactory = Psr17FactoryDiscovery::findResponseFactory();
         $streamFactory = Psr17FactoryDiscovery::findStreamFactory();
-        $mockClient = new Client();
-        $mockClient->addResponse(
-            response: $responseFactory->createResponse(code: 200, reasonPhrase: 'OK')
-                ->withHeader(name: 'Content-Type', value: 'application/json;charset=UTF-8')
-                ->withBody(
-                    body: $streamFactory->createStream(
-                        content: json_encode(
-                            value: [
-                                'CheckoutResponseShipments' => [
-                                    'ConfirmShipmentResponse' => [
-                                        'Barcode'  => '3SDEVC987119100',
-                                        'Warnings' => [],
-                                        'Errors'   => [],
-                                    ],
-                                ],
-                            ]
-                        )
-                    )
-                )
-        );
-        \Firstred\PostNL\Http\Client::getInstance()->setAsyncClient($mockClient);
-
-        $confirm = $this->postnl->confirmShipment(
-            shipment: (new Shipment())
-                ->setAddresses([
-                    Address::create(properties: [
-                        'AddressType' => '01',
-                        'City'        => 'Utrecht',
-                        'Countrycode' => 'NL',
-                        'FirstName'   => 'Peter',
-                        'HouseNr'     => '9',
-                        'HouseNrExt'  => 'a bis',
-                        'Name'        => 'de Ruijter',
-                        'Street'      => 'Bilderdijkstraat',
-                        'Zipcode'     => '3521VA',
-                    ]),
-                    Address::create(properties: [
-                        'AddressType' => '02',
-                        'City'        => 'Hoofddorp',
-                        'CompanyName' => 'PostNL',
-                        'Countrycode' => 'NL',
-                        'HouseNr'     => '42',
-                        'Street'      => 'Siriusdreef',
-                        'Zipcode'     => '2132WT',
-                    ]),
-                ])
-                ->setBarcode('3S1234567890123')
-                ->setDeliveryAddress('01')
-                ->setDimension(new Dimension(weight: '2000'))
-                ->setProductCodeDelivery('3085')
+        /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+        $response = $responseFactory->createResponse(200, 'OK')
+            ->withHeader('Content-Type', 'application/json;charset=UTF-8')
+            ->withBody($streamFactory->createStream(file_get_contents(__DIR__.'/../../data/responses/checkout/checkout.json')));
+        /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+        $mockClient->addResponse($response);
+        $this->postnl->getCheckoutService()->getGateway()->setHttpClient(
+            httpClient: new HTTPlugHttpClient(client: $mockClient),
         );
 
-        $this->assertInstanceOf(expected: ConfirmShipmentResponse::class, actual: $confirm);
-    }
-
-    /**
-     * @testdox Can confirm multiple labels
-     *
-     * @throws Exception
-     */
-    public function testConfirmMultipleLabelsRest()
-    {
-        $this->markTestIncomplete();
-
-        $responseFactory = Psr17FactoryDiscovery::findResponseFactory();
-        $streamFactory = Psr17FactoryDiscovery::findStreamFactory();
-        $mockClient = new Client();
-        $mockClient->addResponse(
-            response: $responseFactory->createResponse(code: 200, reasonPhrase: 'OK')
-                ->withHeader(name: 'Content-Type', value: 'application/json;charset=UTF-8')
-                ->withBody(
-                    body: $streamFactory->createStream(
-                        content: json_encode(
-                            value: [
-                                'CheckoutResponseShipments' => [
-                                    'ConfirmShipmentResponse' => [
-                                        'Barcode'  => '3SDEVC201611210',
-                                        'Warnings' => [],
-                                        'Errors'   => [],
-                                    ],
-                                ],
-                            ]
-                        )
-                    )
-                )
+        $response = $this->postnl->getDeliveryInformation(
+            orderDate: 	'11-07-2019 12:34:54',
+            addresses: [new Address(AddressType: '01', Countrycode: 'NL', HouseNr: 42, Street: 'Siriusdreef', Zipcode: '2132WT')],cutOffTimes: [new CutOffTime(Day: '00', Available: true, Time: '14:00')],
         );
-        $mockClient->addResponse(
-            response: $responseFactory->createResponse(code: 200, reasonPhrase: 'OK')
-                ->withHeader(name: 'Content-Type', value: 'application/json;charset=UTF-8')
-                ->withBody(
-                    body: $streamFactory->createStream(
-                        content: json_encode(
-                            value: [
-                                'CheckoutResponseShipments' => [
-                                    'ConfirmShipmentResponse' => [
-                                        'Barcode'  => '3SDEVC201611211',
-                                        'Warnings' => [],
-                                        'Errors'   => [],
-                                    ],
-                                ],
-                            ]
-                        )
-                    )
-                )
+
+        $pickupOptions = $response->getPickupOptions();
+        $this->assertInstanceOf(expected: PickupOptions::class, actual: $pickupOptions);
+        $this->assertCount(
+            expectedCount: 3,
+            haystack: $response->getDeliveryOptions(),
         );
-        \Firstred\PostNL\Http\Client::getInstance()->setAsyncClient($mockClient);
-
-        $confirms = $this->postnl->confirmShipments(shipments: [
-                (new Shipment())
-                    ->setAddresses([
-                        Address::create(properties: [
-                            'AddressType' => '01',
-                            'City'        => 'Utrecht',
-                            'Countrycode' => 'NL',
-                            'FirstName'   => 'Peter',
-                            'HouseNr'     => '9',
-                            'HouseNrExt'  => 'a bis',
-                            'Name'        => 'de Ruijter',
-                            'Street'      => 'Bilderdijkstraat',
-                            'Zipcode'     => '3521VA',
-                        ]),
-                        Address::create(properties: [
-                            'AddressType' => '02',
-                            'City'        => 'Hoofddorp',
-                            'CompanyName' => 'PostNL',
-                            'Countrycode' => 'NL',
-                            'HouseNr'     => '42',
-                            'Street'      => 'Siriusdreef',
-                            'Zipcode'     => '2132WT',
-                        ]),
-                    ])
-                    ->setBarcode('3SDEVC201611210')
-                    ->setDeliveryAddress('01')
-                    ->setDimension(new Dimension(weight: '2000'))
-                    ->setProductCodeDelivery('3085'),
-                (new Shipment())
-                    ->setAddresses([
-                        Address::create(properties: [
-                            'AddressType' => '01',
-                            'City'        => 'Utrecht',
-                            'Countrycode' => 'NL',
-                            'FirstName'   => 'Peter',
-                            'HouseNr'     => '9',
-                            'HouseNrExt'  => 'a bis',
-                            'Name'        => 'de Ruijter',
-                            'Street'      => 'Bilderdijkstraat',
-                            'Zipcode'     => '3521VA',
-                        ]),
-                        Address::create(properties: [
-                            'AddressType' => '02',
-                            'City'        => 'Hoofddorp',
-                            'CompanyName' => 'PostNL',
-                            'Countrycode' => 'NL',
-                            'HouseNr'     => '42',
-                            'Street'      => 'Siriusdreef',
-                            'Zipcode'     => '2132WT',
-                        ]),
-                    ])
-                    ->setBarcode('3SDEVC201611211')
-                    ->setDeliveryAddress('01')
-                    ->setDimension(new Dimension(weight: '2000'))
-                    ->setProductCodeDelivery('3085'),
-        ]);
-
-        $this->assertInstanceOf(expected: ConfirmShipmentResponse::class, actual: $confirms[1]);
-    }
-
-    /**
-     * @testdox Throws exception on invalid response
-     *
-     * @throws Exception
-     */
-    public function testNegativeGenerateLabelInvalidResponseRest()
-    {
-        $this->markTestIncomplete();
-
-        $this->expectException(exception: ApiDownException::class);
-
-        $responseFactory = Psr17FactoryDiscovery::findResponseFactory();
-        $streamFactory = Psr17FactoryDiscovery::findStreamFactory();
-        $mockClient = new Client();
-        $mockClient->addResponse(
-            response: $responseFactory->createResponse(code: 200, reasonPhrase: 'OK')
-                ->withHeader(name: 'Content-Type', value: 'application/json;charset=UTF-8')
-                ->withBody(body: $streamFactory->createStream(content: 'asdfojasuidfo'))
+        $this->assertCount(
+            expectedCount: 1,
+            haystack: $response->getPickupOptions(),
         );
-        \Firstred\PostNL\Http\Client::getInstance()->setAsyncClient($mockClient);
-
-        $this->postnl->confirmShipment(
-            shipment: (new Shipment())
-                ->setAddresses([
-                    Address::create(properties: [
-                        'AddressType' => '01',
-                        'City'        => 'Utrecht',
-                        'Countrycode' => 'NL',
-                        'FirstName'   => 'Peter',
-                        'HouseNr'     => '9',
-                        'HouseNrExt'  => 'a bis',
-                        'Name'        => 'de Ruijter',
-                        'Street'      => 'Bilderdijkstraat',
-                        'Zipcode'     => '3521VA',
-                    ]),
-                    Address::create(properties: [
-                        'AddressType' => '02',
-                        'City'        => 'Hoofddorp',
-                        'CompanyName' => 'PostNL',
-                        'Countrycode' => 'NL',
-                        'HouseNr'     => '42',
-                        'Street'      => 'Siriusdreef',
-                        'Zipcode'     => '2132WT',
-                    ]),
-                ])
-                ->setBarcode('3S1234567890123')
-                ->setDeliveryAddress('01')
-                ->setDimension(new Dimension(weight: '2000'))
-                ->setProductCodeDelivery('3085')
+        $this->assertCount(
+            expectedCount: 4,
+            haystack: $response->getWarnings(),
         );
     }
 }

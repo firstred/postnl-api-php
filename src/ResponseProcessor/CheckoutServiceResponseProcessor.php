@@ -12,7 +12,7 @@ use Firstred\PostNL\Exception\NotAvailableException;
 use Firstred\PostNL\Exception\ParseError;
 use Psr\Http\Message\ResponseInterface;
 
-class CheckoutServiceResponseProcessor implements CheckoutServiceResponseProcessorInterface
+class CheckoutServiceResponseProcessor extends ResponseProcessorBase implements CheckoutServiceResponseProcessorInterface
 {
 
     /**
@@ -20,6 +20,12 @@ class CheckoutServiceResponseProcessor implements CheckoutServiceResponseProcess
      */
     public function processGetDeliveryInformationResponse(ResponseInterface $response): GetDeliveryInformationResponseDTO
     {
-        return new GetDeliveryInformationResponseDTO();
+        /** @var GetDeliveryInformationResponseDTO $dto */
+        $dto = $this->fullyProcessResponse(
+            className: GetDeliveryInformationResponseDTO::class,
+            response: $response,
+        );
+
+        return $dto;
     }
 }

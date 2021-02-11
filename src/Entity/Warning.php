@@ -29,8 +29,10 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Attribute\PropInterface;
+use Firstred\PostNL\Attribute\ResponseProp;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\SerializableObject;
+use Firstred\PostNL\Service\CheckoutServiceInterface;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
 
@@ -42,20 +44,36 @@ class Warning extends SerializableObject
     /**
      * @var string|null
      */
+    #[ResponseProp(optionalFor: [CheckoutServiceInterface::class])]
+    protected string|null $DeliveryDate = null;
+
+    /**
+     * @var string|null
+     */
+    #[ResponseProp(optionalFor: [CheckoutServiceInterface::class])]
     protected string|null $Code = null;
 
     /**
      * @var string|null
      */
+    #[ResponseProp(optionalFor: [CheckoutServiceInterface::class])]
     protected string|null $Description = null;
+
+    /**
+     * @var array|null
+     */
+    #[ResponseProp(optionalFor: [CheckoutServiceInterface::class])]
+    protected array|null $Options = null;
 
     /**
      * Warning constructor.
      *
      * @param string      $service
      * @param string      $propType
+     * @param string|null $DeliveryDate
      * @param string|null $Code
      * @param string|null $Description
+     * @param array|null  $Options
      *
      * @throws InvalidArgumentException
      */
@@ -65,13 +83,17 @@ class Warning extends SerializableObject
         #[ExpectedValues(values: PropInterface::PROP_TYPES)]
         string $propType,
 
+        string|null $DeliveryDate = null,
         string|null $Code = null,
         string|null $Description = null,
+        array|null $Options = null,
     ) {
         parent::__construct(service: $service, propType: $propType);
 
-        $this->setCode(code: $Code);
-        $this->setDescription(description: $Description);
+        $this->setDeliveryDate(DeliveryDate: $DeliveryDate);
+        $this->setCode(Code: $Code);
+        $this->setDescription(Description: $Description);
+        $this->setOptions(Options: $Options);
     }
 
     /**
@@ -83,13 +105,13 @@ class Warning extends SerializableObject
     }
 
     /**
-     * @param string|null $code
+     * @param string|null $Code
      *
      * @return static
      */
-    public function setCode(string|null $code = null): static
+    public function setCode(string|null $Code = null): static
     {
-        $this->Code = $code;
+        $this->Code = $Code;
 
         return $this;
     }
@@ -103,13 +125,53 @@ class Warning extends SerializableObject
     }
 
     /**
-     * @param string|null $description
+     * @param string|null $Description
      *
      * @return static
      */
-    public function setDescription(string|null $description = null): static
+    public function setDescription(string|null $Description = null): static
     {
-        $this->Description = $description;
+        $this->Description = $Description;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getDeliveryDate(): string|null
+    {
+        return $this->DeliveryDate;
+    }
+
+    /**
+     * @param string|null $DeliveryDate
+     *
+     * @return static
+     */
+    public function setDeliveryDate(string|null $DeliveryDate = null): static
+    {
+        $this->DeliveryDate = $DeliveryDate;
+
+        return $this;
+    }
+
+    /**
+     * @return string[]|null
+     */
+    public function getOptions(): array|null
+    {
+        return $this->Options;
+    }
+
+    /**
+     * @param string[]|null $Options
+     *
+     * @return static
+     */
+    public function setOptions(array|null $Options = null): static
+    {
+        $this->Options = $Options;
 
         return $this;
     }

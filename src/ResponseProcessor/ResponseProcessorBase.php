@@ -29,6 +29,7 @@ declare(strict_types=1);
 namespace Firstred\PostNL\ResponseProcessor;
 
 use ArgumentCountError;
+use Firstred\PostNL\Service\CheckoutServiceInterface;
 use function class_implements;
 use Firstred\PostNL\Attribute\ResponseProp;
 use Firstred\PostNL\Exception\ApiClientException;
@@ -128,6 +129,7 @@ abstract class ResponseProcessorBase implements ResponseProcessorInterface
         $json['service'] = match (end(array: $interfaces)) {
             BarcodeServiceResponseProcessorInterface::class        => BarcodeServiceInterface::class,
 //            ConfirmingServiceResponseProcessorInterface::class     => ConfirmingServiceInterface::class,
+            CheckoutServiceResponseProcessorInterface::class       => CheckoutServiceInterface::class,
             DeliveryDateServiceResponseProcessorInterface::class   => DeliveryDateServiceInterface::class,
 //            LabellingServiceResponseProcessorInterface::class      => LabellingServiceInterface::class,
             LocationServiceResponseProcessorInterface::class       => LocationServiceInterface::class,

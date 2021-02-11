@@ -45,37 +45,37 @@ class Timeframe extends SerializableObject
     /**
      * @var string|null
      */
-    #[ResponseProp(optionalFor: [TimeframeServiceInterface::class])]
+    #[ResponseProp(optionalFor: [TimeframeServiceInterface::class, CheckoutServiceInterface::class])]
     protected string|null $City = null;
 
     /**
      * @var string|null
      */
-    #[ResponseProp(optionalFor: [TimeframeServiceInterface::class])]
+    #[ResponseProp(optionalFor: [TimeframeServiceInterface::class, CheckoutServiceInterface::class])]
     protected string|null $CountryCode = null;
 
     /**
      * @var string|null
      */
-    #[ResponseProp(requiredFor: [TimeframeServiceInterface::class])]
+    #[ResponseProp(requiredFor: [TimeframeServiceInterface::class, CheckoutServiceInterface::class])]
     protected string|null $Date = null;
 
     /**
      * @var string|null
      */
-    #[ResponseProp(optionalFor: [TimeframeServiceInterface::class])]
+    #[ResponseProp(optionalFor: [TimeframeServiceInterface::class, CheckoutServiceInterface::class])]
     protected string|null $EndDate = null;
 
     /**
      * @var string|null
      */
-    #[ResponseProp(optionalFor: [TimeframeServiceInterface::class])]
+    #[ResponseProp(optionalFor: [TimeframeServiceInterface::class, CheckoutServiceInterface::class])]
     protected string|null $HouseNr = null;
 
     /**
      * @var string|null
      */
-    #[ResponseProp(optionalFor: [TimeframeServiceInterface::class])]
+    #[ResponseProp(optionalFor: [TimeframeServiceInterface::class, CheckoutServiceInterface::class])]
     protected string|null $HouseNrExt = null;
 
     /**
@@ -90,47 +90,47 @@ class Timeframe extends SerializableObject
     /**
      * @var string|null
      */
-    #[ResponseProp(optionalFor: [TimeframeServiceInterface::class])]
+    #[ResponseProp(optionalFor: [TimeframeServiceInterface::class, CheckoutServiceInterface::class])]
     protected string|null $PostalCode = null;
 
     /**
      * @var string|null
      */
-    #[ResponseProp(optionalFor: [TimeframeServiceInterface::class])]
+    #[ResponseProp(optionalFor: [TimeframeServiceInterface::class, CheckoutServiceInterface::class])]
     protected string|null $Street = null;
 
     /**
      * @var bool|null
      */
-    #[ResponseProp(optionalFor: [TimeframeServiceInterface::class])]
+    #[ResponseProp(optionalFor: [TimeframeServiceInterface::class, CheckoutServiceInterface::class])]
     protected bool|null $SundaySorting = false;
 
     /**
      * @var string|null
      */
-    #[ResponseProp(optionalFor: [TimeframeServiceInterface::class])]
+    #[ResponseProp(optionalFor: [TimeframeServiceInterface::class, CheckoutServiceInterface::class])]
     protected string|null $Interval = null;
 
     /**
      * @var string|null
      */
-    #[ResponseProp(optionalFor: [TimeframeServiceInterface::class])]
+    #[ResponseProp(optionalFor: [TimeframeServiceInterface::class, CheckoutServiceInterface::class])]
     protected string|null $Range = null;
 
     /**
      * @psalm-var list<TimeframeTimeFrame>|null
      * @var TimeframeTimeFrame[]|null
      */
-    #[ResponseProp(requiredFor: [TimeframeServiceInterface::class])]
+    #[ResponseProp(requiredFor: [TimeframeServiceInterface::class, CheckoutServiceInterface::class])]
     protected array|null $Timeframes = null;
 
-    #[ResponseProp(requiredFor: [CheckoutServiceInterface::class])]
+    #[ResponseProp(requiredFor: [CheckoutServiceInterface::class, CheckoutServiceInterface::class])]
     protected string|null $From = null;
 
-    #[ResponseProp(requiredFor: [CheckoutServiceInterface::class])]
+    #[ResponseProp(requiredFor: [CheckoutServiceInterface::class, CheckoutServiceInterface::class])]
     protected string|null $To = null;
 
-    #[ResponseProp(requiredFor: [CheckoutServiceInterface::class])]
+    #[ResponseProp(requiredFor: [CheckoutServiceInterface::class, CheckoutServiceInterface::class])]
     protected string|null $ShippingDate = null;
 
     /**

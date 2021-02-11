@@ -32,6 +32,7 @@ use Firstred\PostNL\Attribute\RequestProp;
 use Firstred\PostNL\DTO\Request\CalculateDeliveryDateRequestDTO;
 use Firstred\PostNL\DTO\Request\CalculateShippingDateRequestDTO;
 use Firstred\PostNL\DTO\Request\CalculateTimeframesRequestDTO;
+use Firstred\PostNL\DTO\Request\GetDeliveryInformationRequestDTO;
 use Firstred\PostNL\DTO\Request\GetLocationsInAreaRequestDTO;
 use Firstred\PostNL\DTO\Request\GetNearestLocationsGeocodeRequestDTO;
 use Firstred\PostNL\DTO\Request\GetNearestLocationsRequestDTO;
@@ -41,6 +42,7 @@ use Firstred\PostNL\DTO\Response\CalculateShippingDateResponseDTO;
 use Firstred\PostNL\DTO\Response\CalculateTimeframesResponseDTO;
 use Firstred\PostNL\DTO\Response\GenerateBarcodeResponseDTO;
 use Firstred\PostNL\DTO\Response\GenerateBarcodesByCountryCodesResponseDTO;
+use Firstred\PostNL\DTO\Response\GetDeliveryInformationResponseDTO;
 use Firstred\PostNL\DTO\Response\GetLocationResponseDTO;
 use Firstred\PostNL\DTO\Response\GetLocationsResponseDTO;
 use Firstred\PostNL\Entity\Customer;
@@ -1108,6 +1110,30 @@ class PostNL
             OpeningTime: $OpeningTime,
             DeliveryOptions: $DeliveryOptions,
         ));
+    }
+
+    public function getDeliveryInformation(
+        string $orderDate,
+        array $addresses,
+        array $cutOffTimes,
+        int $locations = 3,
+        int $days = 5,
+        int $shippingDuration = 1,
+        array $options = ['Daytime'],
+        bool $holidaySorting = false,
+    ): GetDeliveryInformationResponseDTO {
+        return $this->getCheckoutService()->getDeliveryInformation(
+            getDeliveryInformationRequestDTO: new GetDeliveryInformationRequestDTO(
+                OrderDate: $orderDate,
+                ShippingDuration: $shippingDuration,
+                CutOffTimes: $cutOffTimes,
+                HolidaySorting: $holidaySorting,
+                Options: $options,
+                Locations: $locations,
+                Days: $days,
+                Addresses: $addresses,
+            ),
+        );
     }
 
 //

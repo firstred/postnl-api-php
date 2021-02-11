@@ -58,7 +58,7 @@ class DeliveryOption extends SerializableObject
         parent::__construct(service: $service, propType: $propType);
 
         $this->setDeliveryDate(DeliveryDate: $DeliveryDate);
-        $this->setTimeframe(Locations: $Timeframe);
+        $this->setTimeframe(Timeframe: $Timeframe);
     }
 
     /**

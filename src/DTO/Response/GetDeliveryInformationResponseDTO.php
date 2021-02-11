@@ -33,6 +33,7 @@ use Firstred\PostNL\Attribute\ResponseProp;
 use Firstred\PostNL\DTO\CacheableDTO;
 use Firstred\PostNL\Entity\DeliveryOptions;
 use Firstred\PostNL\Entity\PickupOptions;
+use Firstred\PostNL\Entity\Warning;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\CheckoutServiceInterface;
 use Firstred\PostNL\Service\DeliveryDateServiceInterface;
@@ -50,6 +51,9 @@ class GetDeliveryInformationResponseDTO extends CacheableDTO
     #[ResponseProp(requiredFor: [CheckoutServiceInterface::class])]
     protected PickupOptions|null $PickupOptions = null;
 
+    #[ResponseProp(optionalFor: [CheckoutServiceInterface::class])]
+    protected array|null $Warnings = null;
+
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES)]
         string $service = DeliveryDateServiceInterface::class,
@@ -59,17 +63,19 @@ class GetDeliveryInformationResponseDTO extends CacheableDTO
 
         DeliveryOptions|array|null $DeliveryOptions = null,
         PickupOptions|array|null $PickupOptions = null,
+        array|null $Warnings = null,
     ) {
         parent::__construct(service: $service, propType: $propType, cacheKey: $cacheKey);
 
         $this->setDeliveryOptions(DeliveryOptions: $DeliveryOptions);
         $this->setPickupOptions(PickupOptions: $PickupOptions);
+        $this->setWarnings(Warnings: $Warnings);
     }
 
     /**
      * @return DeliveryOptions|null
      */
-    public function getDeliveryOptions(): ?DeliveryOptions
+    public function getDeliveryOptions(): DeliveryOptions|null
     {
         return $this->DeliveryOptions;
     }
@@ -128,6 +134,48 @@ class GetDeliveryInformationResponseDTO extends CacheableDTO
 
         $this->PickupOptions?->setService(service: $this->getService());
         $this->PickupOptions?->setPropType(propType: $this->getPropType());
+
+        return $this;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getWarnings(): array|null
+    {
+        return $this->Warnings;
+    }
+
+    /**
+     * @param array|null $Warnings
+     *
+     * @return static
+     *
+     * @throws InvalidArgumentException
+     */
+    public function setWarnings(array|null $Warnings = null): static
+    {
+        if (is_array(value: $Warnings)) {
+            foreach ($Warnings as $idx => $warning) {
+                if (is_array(value: $warning)) {
+                    $warning['service'] = $this->getService();
+                    $warning['propType'] = $this->getPropType();
+
+                    /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+                    $Warnings[$idx] = new Warning(...$warning);
+                }
+            }
+        }
+
+        $this->Warnings = $Warnings;
+
+        if (is_array(value: $this->Warnings)) {
+            foreach ($this->Warnings as &$warning) {
+                /** @var Warning $warning */
+                $warning->setService(service: $this->getService());
+                $warning->setPropType(propType: $this->getPropType());
+            }
+        }
 
         return $this;
     }
