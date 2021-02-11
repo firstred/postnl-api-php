@@ -28,33 +28,35 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\RequestBuilder;
 
-use Firstred\PostNL\DTO\Request\CalculateTimeframesRequestDTO;
+use Firstred\PostNL\DTO\Request\GetDeliveryInformationRequestDTO;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Psr\Http\Message\RequestInterface;
-use function http_build_query;
+use function json_encode;
+use const JSON_PRETTY_PRINT;
+use const JSON_UNESCAPED_SLASHES;
 
 /**
- * Class TimeframeServiceRequestBuilder.
+ * Class CheckoutServiceRequestBuilder.
  */
-class TimeframeServiceRequestBuilder extends RequestBuilderBase implements TimeframeServiceRequestBuilderInterface
+class CheckoutServiceRequestBuilder extends RequestBuilderBase implements CheckoutServiceRequestBuilderInterface
 {
-    public const DEFAULT_VERSION = '2.1';
+    public const DEFAULT_VERSION = '1';
 
-    public const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/{{version}}/calculate/timeframes';
-    public const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/{{version}}/calculate/timeframes';
+    public const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/{{version}}/checkout';
+    public const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/{{version}}/checkout';
 
     /**
-     * @param CalculateTimeframesRequestDTO $calculateTimeframesRequestDTO
+     * @param GetDeliveryInformationRequestDTO $getDeliveryInformationRequestDTO
      *
      * @return RequestInterface
      *
      * @throws InvalidArgumentException
      */
-    public function buildCalculateTimeframesRequest(CalculateTimeframesRequestDTO $calculateTimeframesRequestDTO): RequestInterface
+    public function buildGetDeliveryInformationRequest(GetDeliveryInformationRequestDTO $getDeliveryInformationRequestDTO): RequestInterface
     {
-        if (!$calculateTimeframesRequestDTO->isValid()) {
-            throw new InvalidArgumentException(message: 'Invalid calculate timeframes request');
+        if (!$getDeliveryInformationRequestDTO->isValid()) {
+            throw new InvalidArgumentException(message: 'Invalid generate Checkout request');
         }
 
         /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
@@ -64,10 +66,11 @@ class TimeframeServiceRequestBuilder extends RequestBuilderBase implements Timef
                 search: '{{version}}',
                 replace: 'v'.str_replace(search: '.', replace: '_', subject: $this->getVersion()),
                 subject: $this->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT,
-            )
-            .'?'.http_build_query(data: $calculateTimeframesRequestDTO->jsonSerialize())
+            ),
         )
+            ->withBody(Psr17FactoryDiscovery::findStreamFactory()->createStream(json_encode(value: $getDeliveryInformationRequestDTO->jsonSerialize())))
             ->withHeader('Accept', 'application/json')
+            ->withHeader('Content-Type', 'application/json;charset=UTF-8')
             ->withHeader('apikey', $this->getApiKey())
             ;
     }

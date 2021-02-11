@@ -45,7 +45,6 @@ use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\NotAvailableException;
 use Firstred\PostNL\Exception\ParseError;
 use Firstred\PostNL\Gateway\BarcodeServiceGatewayInterface;
-use Firstred\PostNL\HttpClient\HttpClientInterface;
 use Firstred\PostNL\Misc\Util;
 use JetBrains\PhpStorm\Pure;
 use function explode;
@@ -55,10 +54,13 @@ use function strtoupper;
 
 /**
  * Class BarcodeService.
+ *
+ * @see https://developer.postnl.nl/browse-apis/send-and-track/barcode-webservice/
  */
 class BarcodeService extends ServiceBase implements BarcodeServiceInterface
 {
     use ServiceLoggerTrait;
+    use ServiceHttpClientTrait;
 
     #[Pure]
     /**
@@ -338,26 +340,6 @@ class BarcodeService extends ServiceBase implements BarcodeServiceInterface
     public function setGateway(BarcodeServiceGatewayInterface $gateway): static
     {
         $this->gateway = $gateway;
-
-        return $this;
-    }
-
-    /**
-     * @return HttpClientInterface
-     */
-    public function getHttpClient(): HttpClientInterface
-    {
-        return $this->getGateway()->getHttpClient();
-    }
-
-    /**
-     * @param HttpClientInterface $httpClient
-     *
-     * @return static
-     */
-    public function setHttpClient(HttpClientInterface $httpClient): static
-    {
-        $this->getGateway()->setHttpClient(httpClient: $httpClient);
 
         return $this;
     }

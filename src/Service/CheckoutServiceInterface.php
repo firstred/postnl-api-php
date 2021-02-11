@@ -26,76 +26,48 @@
 
 declare(strict_types=1);
 
-namespace Firstred\PostNL\DTO;
+namespace Firstred\PostNL\Service;
 
-use Firstred\PostNL\Attribute\PropInterface;
+use Firstred\PostNL\DTO\Request\GetDeliveryInformationRequestDTO;
+use Firstred\PostNL\DTO\Response\GetDeliveryInformationResponseDTO;
+use Firstred\PostNL\Exception\ApiClientException;
+use Firstred\PostNL\Exception\ApiException;
+use Firstred\PostNL\Exception\InvalidApiKeyException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Misc\SerializableObject;
-use Firstred\PostNL\Service\ServiceInterface;
-use JetBrains\PhpStorm\ExpectedValues;
-use ReflectionClass;
+use Firstred\PostNL\Exception\NotAvailableException;
+use Firstred\PostNL\Exception\ParseError;
+use Firstred\PostNL\Gateway\CheckoutServiceGatewayInterface;
 
 /**
- * Class CacheableDTO.
+ * Interface CheckoutServiceInterface.
  */
-abstract class CacheableDTO extends SerializableObject implements CacheableDTOInterface
+interface CheckoutServiceInterface extends ServiceInterface
 {
     /**
-     * CacheableDTO constructor.
+     * @param GetDeliveryInformationRequestDTO $getDeliveryInformationRequestDTO
      *
-     * @param string $service
-     * @param string $propType
-     * @param string $cacheKey
+     * @return GetDeliveryInformationResponseDTO
      *
+     * @throws ApiClientException
+     * @throws ApiException
+     * @throws InvalidApiKeyException
      * @throws InvalidArgumentException
+     * @throws NotAvailableException
+     * @throws ParseError
      */
-    public function __construct(
-        #[ExpectedValues(values: ServiceInterface::SERVICES)] string $service,
-        #[ExpectedValues(values: PropInterface::PROP_TYPES)] string $propType,
-        protected string $cacheKey = '',
-    ) {
-        parent::__construct(service: $service, propType: $propType);
-
-        $this->setCacheKey(cacheKey: $this->cacheKey);
-    }
+    public function getDeliveryInformation(
+        GetDeliveryInformationRequestDTO $getDeliveryInformationRequestDTO,
+    ): GetDeliveryInformationResponseDTO;
 
     /**
-     * @return string
+     * @return CheckoutServiceGatewayInterface
      */
-    public function getUniqueId(): string
-    {
-        return '';
-    }
+    public function getGateway(): CheckoutServiceGatewayInterface;
 
     /**
-     * @return string
-     */
-    public function getCacheKey(): string
-    {
-        if (!$this->cacheKey) {
-            return $this->getUniqueId();
-        }
-
-        return $this->cacheKey;
-    }
-
-    /**
-     * @param string $cacheKey
+     * @param CheckoutServiceGatewayInterface $gateway
      *
      * @return static
      */
-    public function setCacheKey(string $cacheKey): static
-    {
-        $this->cacheKey = $cacheKey;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    protected function getShortClassName(): string
-    {
-        return (new ReflectionClass(objectOrClass: $this))->getShortName();
-    }
+    public function setGateway(CheckoutServiceGatewayInterface $gateway): static;
 }

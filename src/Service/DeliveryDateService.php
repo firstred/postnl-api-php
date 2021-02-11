@@ -40,15 +40,17 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\NotAvailableException;
 use Firstred\PostNL\Exception\ParseError;
 use Firstred\PostNL\Gateway\DeliveryDateServiceGatewayInterface;
-use Firstred\PostNL\HttpClient\HttpClientInterface;
 use JetBrains\PhpStorm\Pure;
 
 /**
  * Class DeliveryDateService.
+ *
+ * @see https://developer.postnl.nl/browse-apis/delivery-options/deliverydate-webservice/
  */
 class DeliveryDateService extends ServiceBase implements DeliveryDateServiceInterface
 {
     use ServiceLoggerTrait;
+    use ServiceHttpClientTrait;
 
     #[Pure]
     /**
@@ -120,26 +122,6 @@ class DeliveryDateService extends ServiceBase implements DeliveryDateServiceInte
     public function setGateway(DeliveryDateServiceGatewayInterface $gateway): static
     {
         $this->gateway = $gateway;
-
-        return $this;
-    }
-
-    /**
-     * @return HttpClientInterface
-     */
-    public function getHttpClient(): HttpClientInterface
-    {
-        return $this->getGateway()->getHttpClient();
-    }
-
-    /**
-     * @param HttpClientInterface $httpClient
-     *
-     * @return static
-     */
-    public function setHttpClient(HttpClientInterface $httpClient): static
-    {
-        $this->getGateway()->setHttpClient(httpClient: $httpClient);
 
         return $this;
     }

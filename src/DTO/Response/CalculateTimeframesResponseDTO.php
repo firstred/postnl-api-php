@@ -109,6 +109,9 @@ class CalculateTimeframesResponseDTO extends CacheableDTO
 
         $this->Timeframes = $Timeframes;
 
+        $this->Timeframes?->setService(service: $this->getService());
+        $this->Timeframes?->setPropType(propType: $this->getPropType());
+
         return $this;
     }
 
@@ -138,6 +141,9 @@ class CalculateTimeframesResponseDTO extends CacheableDTO
         }
 
         $this->ReasonNoTimeframes = $ReasonNoTimeframes;
+
+        $this->ReasonNoTimeframes?->setService(service: $this->getService());
+        $this->ReasonNoTimeframes?->setPropType(propType: $this->getPropType());
 
         return $this;
     }

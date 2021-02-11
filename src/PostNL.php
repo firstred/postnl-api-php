@@ -46,21 +46,26 @@ use Firstred\PostNL\DTO\Response\GetLocationsResponseDTO;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Location;
 use Firstred\PostNL\Gateway\BarcodeServiceGateway;
+use Firstred\PostNL\Gateway\CheckoutServiceGateway;
 use Firstred\PostNL\Gateway\DeliveryDateServiceGateway;
 use Firstred\PostNL\Gateway\LocationServiceGateway;
 use Firstred\PostNL\Gateway\TimeframeServiceGateway;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
 use Firstred\PostNL\HttpClient\HTTPlugHttpClient;
 use Firstred\PostNL\RequestBuilder\BarcodeServiceRequestBuilder;
+use Firstred\PostNL\RequestBuilder\CheckoutServiceRequestBuilder;
 use Firstred\PostNL\RequestBuilder\DeliveryDateServiceRequestBuilder;
 use Firstred\PostNL\RequestBuilder\LocationServiceRequestBuilder;
 use Firstred\PostNL\RequestBuilder\TimeframeServiceRequestBuilder;
 use Firstred\PostNL\ResponseProcessor\BarcodeServiceResponseProcessor;
+use Firstred\PostNL\ResponseProcessor\CheckoutServiceResponseProcessor;
 use Firstred\PostNL\ResponseProcessor\DeliveryDateServiceResponseProcessor;
 use Firstred\PostNL\ResponseProcessor\LocationServiceResponseProcessor;
 use Firstred\PostNL\ResponseProcessor\TimeframeServiceResponseProcessor;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\BarcodeServiceInterface;
+use Firstred\PostNL\Service\CheckoutService;
+use Firstred\PostNL\Service\CheckoutServiceInterface;
 use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\ConfirmingServiceInterface;
 use Firstred\PostNL\Service\DeliveryDateService;
@@ -90,13 +95,14 @@ class PostNL
      * @param string                              $apiKey
      * @param bool                                $sandbox
      * @param BarcodeServiceInterface|null        $barcodeService
-     * @param LabellingServiceInterface|null      $labellingService
+     * @param CheckoutServiceInterface|null       $checkoutService
      * @param ConfirmingServiceInterface|null     $confirmingService
-     * @param ShippingStatusServiceInterface|null $shippingStatusService
      * @param DeliveryDateServiceInterface|null   $deliveryDateService
-     * @param TimeframeServiceInterface|null      $timeframeService
+     * @param LabellingServiceInterface|null      $labellingService
      * @param LocationServiceInterface|null       $locationService
      * @param ShippingServiceInterface|null       $shippingService
+     * @param ShippingStatusServiceInterface|null $shippingStatusService
+     * @param TimeframeServiceInterface|null      $timeframeService
      * @param HttpClientInterface|null            $httpClient
      * @param LoggerInterface|null                $logger
      */
@@ -105,13 +111,14 @@ class PostNL
         protected string $apiKey,
         protected bool $sandbox,
         protected BarcodeServiceInterface|null $barcodeService = null,
-        protected LabellingServiceInterface|null $labellingService = null,
+        protected CheckoutServiceInterface|null $checkoutService = null,
         protected ConfirmingServiceInterface|null $confirmingService = null,
-        protected ShippingStatusServiceInterface|null $shippingStatusService = null,
         protected DeliveryDateServiceInterface|null $deliveryDateService = null,
-        protected TimeframeServiceInterface|null $timeframeService = null,
+        protected LabellingServiceInterface|null $labellingService = null,
         protected LocationServiceInterface|null $locationService = null,
         protected ShippingServiceInterface|null $shippingService = null,
+        protected ShippingStatusServiceInterface|null $shippingStatusService = null,
+        protected TimeframeServiceInterface|null $timeframeService = null,
         protected HttpClientInterface|null $httpClient = null,
         protected LoggerInterface|null $logger = null,
     ) {
@@ -1266,6 +1273,49 @@ class PostNL
     }
 
     /**
+     * Checkout service.
+     *
+     * Automatically load the checkout service
+     *
+     * @return CheckoutServiceInterface
+     */
+    public function getCheckoutService(): CheckoutServiceInterface
+    {
+        if (!$this->checkoutService) {
+            $this->setCheckoutService(
+                service: new CheckoutService(
+                    customer: $this->getCustomer(),
+                    apiKey: $this->getApiKey(),
+                    sandbox: $this->getSandbox(),
+                    gateway: new CheckoutServiceGateway(
+                        httpClient: $this->getHttpClient(),
+                        cache: null,
+                        ttl: null,
+                        requestBuilder: new CheckoutServiceRequestBuilder(
+                            customer: $this->getCustomer(),
+                            apiKey: $this->getApiKey(),
+                            sandbox: $this->getSandbox(),
+                        ),
+                        responseProcessor: new CheckoutServiceResponseProcessor(),
+                    ),
+                )
+            );
+        }
+
+        return $this->checkoutService;
+    }
+
+    /**
+     * Set the checkout service.
+     *
+     * @param CheckoutServiceInterface $service
+     */
+    public function setCheckoutService(CheckoutServiceInterface $service): void
+    {
+        $this->checkoutService = $service;
+    }
+
+    /**
      * Labelling service.
      *
      * Automatically load the labelling service
@@ -1489,6 +1539,7 @@ class PostNL
 
     #[ArrayShape(shape: [
         BarcodeServiceInterface::class        => BarcodeServiceInterface::class,
+        CheckoutServiceInterface::class       => CheckoutServiceInterface::class,
         ConfirmingServiceInterface::class     => ConfirmingServiceInterface::class,
         DeliveryDateServiceInterface::class   => DeliveryDateServiceInterface::class,
         LabellingServiceInterface::class      => LabellingServiceInterface::class,
@@ -1501,6 +1552,7 @@ class PostNL
     {
         return [
             BarcodeServiceInterface::class        => $this->getBarcodeService(),
+            CheckoutService::class                => $this->getConfirmingService(),
             ConfirmingServiceInterface::class     => $this->getConfirmingService(),
             DeliveryDateServiceInterface::class   => $this->getDeliveryDateService(),
             LabellingServiceInterface::class      => $this->getLabellingService(),
@@ -1561,6 +1613,7 @@ class PostNL
         $this->httpClient = $httpClient;
 
         $this->getBarcodeService()->setHttpClient(httpClient: $httpClient);
+        $this->getCheckoutService()->setHttpClient(httpClient: $httpClient);
         $this->getConfirmingService()->setHttpClient(httpClient: $httpClient);
         $this->getDeliveryDateService()->setHttpClient(httpClient: $httpClient);
         $this->getLabellingService()->setHttpClient(httpClient: $httpClient);
@@ -1582,6 +1635,7 @@ class PostNL
         $this->logger = $logger;
 
         $this->getBarcodeService()->setLogger(logger: $logger);
+        $this->getCheckoutService()->setLogger(logger: $logger);
         $this->getConfirmingService()->setLogger(logger: $logger);
         $this->getDeliveryDateService()->setLogger(logger: $logger);
         $this->getLabellingService()->setLogger(logger: $logger);

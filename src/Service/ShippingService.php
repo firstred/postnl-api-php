@@ -47,10 +47,13 @@ use const JSON_UNESCAPED_SLASHES;
 
 /**
  * Class ShippingService.
+ *
+ * @see https://developer.postnl.nl/browse-apis/send-and-track/shipping-webservice/
  */
 class ShippingService extends ServiceBase implements ShippingServiceInterface
 {
     use ServiceLoggerTrait;
+    use ServiceHttpClientTrait;
 
     // API Version
     const VERSION = '1';

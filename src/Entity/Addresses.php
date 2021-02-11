@@ -26,7 +26,7 @@
 
 declare(strict_types=1);
 
-namespace Firstred\PostNL\DTO\Response;
+namespace Firstred\PostNL\Entity;
 
 use ArrayAccess;
 use Countable;
@@ -41,23 +41,28 @@ use JetBrains\PhpStorm\ExpectedValues;
 use JetBrains\PhpStorm\Pure;
 use OutOfBoundsException;
 use SeekableIterator;
+use function array_keys;
+use function array_map;
+use function array_values;
+use function count;
 use function is_int;
 use function is_string;
 
 /**
- * Class GenerateBarcodesResponseDTO.
+ * Class Addresses.
  */
-class GenerateBarcodesResponseDTO extends CacheableDTO implements SeekableIterator, ArrayAccess, Countable
+class Addresses extends CacheableDTO implements SeekableIterator, ArrayAccess, Countable
 {
     /**
      * @var int
      */
     private int $idx = 0;
 
-    /** @psalm-var array<array-key, GenerateBarcodeResponseDTO> $responses
-     * @var mixed[]|GenerateBarcodeResponseDTO[]
+    /**
+     * @psalm-var array<array-key, Address>
+     * @var Address[]
      */
-    protected array $responses = [];
+    protected array $Addresses = [];
 
     /**
      * GenerateBarcodesResponseDTO constructor.
@@ -65,32 +70,31 @@ class GenerateBarcodesResponseDTO extends CacheableDTO implements SeekableIterat
      * @param string $service
      * @param string $propType
      * @param string $cacheKey
-     * @param array  $responses
+     * @param array  $addresses
      *
      * @throws InvalidArgumentException
      */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES)]
-        string $service = BarcodeServiceInterface::class,
+        string $service = '',
         #[ExpectedValues(values: PropInterface::PROP_TYPES)]
-        string $propType = ResponseProp::class,
+        string $propType = '',
         string $cacheKey = '',
 
-        /** @psalm-var array<array-key, GenerateBarcodeResponseDTO> $responses */
-        array $responses = [],
+        array $addresses = [],
     ) {
         parent::__construct(service: $service, propType: $propType, cacheKey: $cacheKey);
 
-        $this->setResponses(responses: $responses);
+        $this->setAddresses(Addresses: $addresses);
     }
 
     #[Pure]
     /**
-     * @return GenerateBarcodeResponseDTO|null
+     * @return Address|null
      */
-    public function current(): GenerateBarcodeResponseDTO|null
+    public function current(): Address|null
     {
-        return array_values(array: $this->responses)[$this->idx] ?? null;
+        return array_values(array: $this->Addresses)[$this->idx] ?? null;
     }
 
     public function next(): void
@@ -104,7 +108,7 @@ class GenerateBarcodesResponseDTO extends CacheableDTO implements SeekableIterat
      */
     public function key(): string|null
     {
-        return array_keys(array: $this->responses)[$this->idx] ?? null;
+        return array_keys(array: $this->Addresses)[$this->idx] ?? null;
     }
 
     #[Pure]
@@ -113,7 +117,7 @@ class GenerateBarcodesResponseDTO extends CacheableDTO implements SeekableIterat
      */
     public function valid(): bool
     {
-        return isset(array_values(array: $this->responses)[$this->idx]);
+        return isset(array_values(array: $this->Addresses)[$this->idx]);
     }
 
     public function rewind(): void
@@ -121,39 +125,39 @@ class GenerateBarcodesResponseDTO extends CacheableDTO implements SeekableIterat
         $this->idx = 0;
     }
 
-    #[Pure]
     /**
      * @param mixed $offset
      *
      * @return bool
      */
+    #[Pure]
     public function offsetExists(mixed $offset): bool
     {
         if (!is_int(value: $offset) && !is_string(value: $offset)) {
             return false;
         }
 
-        return isset($this->responses[$offset]);
+        return isset($this->Addresses[$offset]);
     }
 
-    #[Pure]
     /**
      * @param mixed $offset
      *
-     * @return GenerateBarcodeResponseDTO|null
+     * @return Address|null
      */
-    public function offsetGet(mixed $offset): GenerateBarcodeResponseDTO|null
+    #[Pure]
+    public function offsetGet(mixed $offset): Address|null
     {
         if (!$this->offsetExists(offset: $offset)) {
             return null;
         }
 
-        return $this->responses[$offset] ?? null;
+        return $this->Addresses[$offset] ?? null;
     }
 
     /**
-     * @param mixed $offset
-     * @param mixed $value
+     * @param mixed         $offset
+     * @param Address|array $value
      *
      * @throws InvalidArgumentException
      */
@@ -163,11 +167,20 @@ class GenerateBarcodesResponseDTO extends CacheableDTO implements SeekableIterat
             throw new InvalidArgumentException('Invalid offset given');
         }
 
-        if (!$value instanceof GenerateBarcodeResponseDTO) {
+        if (is_array(value: $value)) {
+            $value['service'] = $this->getService();
+            $value['propType'] = $this->getService();
+
+            /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+            $value = new Address(...$value);
+        }
+
+        /** @psalm-suppress DocblockTypeContradiction */
+        if (!$value instanceof Address) {
             throw new InvalidArgumentException('Invalid `GenerateBarcodeResponse` given');
         }
 
-        $this->responses[$offset] = $value;
+        $this->Addresses[$offset] = $value;
     }
 
     /**
@@ -179,65 +192,65 @@ class GenerateBarcodesResponseDTO extends CacheableDTO implements SeekableIterat
             return;
         }
 
-        unset($this->responses[$offset]);
+        unset($this->Addresses[$offset]);
     }
 
     /**
-     * @param GenerateBarcodeResponseDTO $generateBarcodeResponseDTO
+     * @param Address $address
      */
-    public function add(GenerateBarcodeResponseDTO $generateBarcodeResponseDTO): void
+    public function add(Address $address): void
     {
-        $this->responses[] = $generateBarcodeResponseDTO;
+        $this->Addresses[] = $address;
     }
 
     /**
      * @return int
      */
     #[Pure]
- public function count(): int
- {
-     return count(value: $this->responses);
- }
-
-    /**
-     * @return GenerateBarcodeResponseDTO[]
-     */
-    public function getResponses(): array
+    public function count(): int
     {
-        return $this->responses;
+        return count(value: $this->Addresses);
     }
 
     /**
-     * @param array $responses
+     * @return Address[]
+     */
+    public function getAddresses(): array
+    {
+        return $this->Addresses;
+    }
+
+    /**
+     * @param array $Addresses
      *
      * @return static
      *
      * @throws InvalidArgumentException
      */
-    public function setResponses(array $responses): static
+    public function setAddresses(array $Addresses): static
     {
-        foreach ($responses as $idx => $response) {
-            if (!$response instanceof GenerateBarcodeResponseDTO) {
-                $responses[$idx] = new GenerateBarcodeResponseDTO(Barcode: $response);
+        foreach ($Addresses as $idx => $address) {
+            if (is_array(value: $address)) {
+                $address['service'] = $this->getService();
+                $address['propType'] = $this->getPropType();
+
+                /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
+                $address = new Address(...$address);
+            }
+            $Addresses[$idx] = $address;
+        }
+
+        $this->Addresses = $Addresses;
+
+        if (is_array(value: $this->Addresses)) {
+            foreach ($this->Addresses as $address) {
+                /** @var Address $address */
+                $address->setService(service: $this->getService());
+                $address->setPropType(propType: $this->getPropType());
             }
         }
 
-        $this->responses = $responses;
-
         return $this;
-    }
-
-    /**
-     * @return array
-     *
-     * @throws InvalidArgumentException
-     */
-    public function jsonSerialize(): array
-    {
-        return array_map(
-            callback: fn (SerializableObject $item) => $item->jsonSerialize(),
-            array: $this->responses,
-        );
     }
 
     /**
@@ -252,5 +265,20 @@ class GenerateBarcodesResponseDTO extends CacheableDTO implements SeekableIterat
         }
 
         $this->idx = $position;
+    }
+
+    /**
+     * @return array
+     *
+     * @throws InvalidArgumentException
+     */
+    public function jsonSerialize(): array
+    {
+        $addresses = $this->getAddresses();
+
+        return array_map(
+            callback: fn (SerializableObject $item) => (object) $item->jsonSerialize(),
+            array: $addresses,
+        );
     }
 }

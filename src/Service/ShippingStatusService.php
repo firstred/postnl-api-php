@@ -28,14 +28,7 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Service;
 
-use Firstred\PostNL\Entity\JsonSerializableObject;
-use Firstred\PostNL\Entity\Response\CompleteStatusResponse;
-use Firstred\PostNL\Entity\Response\CurrentStatusResponse;
-use Firstred\PostNL\Entity\Response\GetSignatureResponseSignature;
-use Firstred\PostNL\Exception\ApiDownException;
 use Firstred\PostNL\Exception\ApiException;
-use Firstred\PostNL\Exception\CifException;
-use Firstred\PostNL\Exception\WithResponse;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Psr\Cache\CacheItemInterface;
@@ -44,10 +37,13 @@ use Psr\Http\Message\ResponseInterface;
 
 /**
  * Class ShippingStatusService.
+ *
+ * @see https://developer.postnl.nl/browse-apis/send-and-track/shippingstatus-webservice/
  */
 class ShippingStatusService extends ServiceBase implements ShippingStatusServiceInterface
 {
     use ServiceLoggerTrait;
+    use ServiceHttpClientTrait;
 
     // API Version
     const VERSION = '1.6';

@@ -26,76 +26,78 @@
 
 declare(strict_types=1);
 
-namespace Firstred\PostNL\DTO;
+namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Attribute\PropInterface;
-use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Attribute\ResponseProp;
 use Firstred\PostNL\Misc\SerializableObject;
+use Firstred\PostNL\Service\CheckoutServiceInterface;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
-use ReflectionClass;
 
 /**
- * Class CacheableDTO.
+ * Class DeliveryOption.
  */
-abstract class CacheableDTO extends SerializableObject implements CacheableDTOInterface
+class DeliveryOption extends SerializableObject
 {
-    /**
-     * CacheableDTO constructor.
-     *
-     * @param string $service
-     * @param string $propType
-     * @param string $cacheKey
-     *
-     * @throws InvalidArgumentException
-     */
+    #[ResponseProp(requiredFor: [CheckoutServiceInterface::class])]
+    protected string|null $DeliveryDate = null;
+
+    #[ResponseProp(requiredFor: [CheckoutServiceInterface::class])]
+    protected array|null $Timeframe = null;
+
     public function __construct(
-        #[ExpectedValues(values: ServiceInterface::SERVICES)] string $service,
-        #[ExpectedValues(values: PropInterface::PROP_TYPES)] string $propType,
-        protected string $cacheKey = '',
+        #[ExpectedValues(values: ServiceInterface::SERVICES)]
+        string $service = '',
+        #[ExpectedValues(values: PropInterface::PROP_TYPES)]
+        string $propType = '',
+
+        string|null $DeliveryDate = null,
+        array|null $Timeframe = null,
     ) {
         parent::__construct(service: $service, propType: $propType);
 
-        $this->setCacheKey(cacheKey: $this->cacheKey);
+        $this->setDeliveryDate(DeliveryDate: $DeliveryDate);
+        $this->setTimeframe(Locations: $Timeframe);
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getUniqueId(): string
+    public function getDeliveryDate(): string|null
     {
-        return '';
+        return $this->DeliveryDate;
     }
 
     /**
-     * @return string
-     */
-    public function getCacheKey(): string
-    {
-        if (!$this->cacheKey) {
-            return $this->getUniqueId();
-        }
-
-        return $this->cacheKey;
-    }
-
-    /**
-     * @param string $cacheKey
+     * @param string|null $DeliveryDate
      *
      * @return static
      */
-    public function setCacheKey(string $cacheKey): static
+    public function setDeliveryDate(string|null $DeliveryDate = null): static
     {
-        $this->cacheKey = $cacheKey;
+        $this->DeliveryDate = $DeliveryDate;
 
         return $this;
     }
 
     /**
-     * @return string
+     * @return array|null
      */
-    protected function getShortClassName(): string
+    public function getTimeframe(): array|null
     {
-        return (new ReflectionClass(objectOrClass: $this))->getShortName();
+        return $this->Timeframe;
+    }
+
+    /**
+     * @param array|null $Timeframe
+     *
+     * @return static
+     */
+    public function setTimeframe(array|null $Timeframe = null): static
+    {
+        $this->Timeframe = $Timeframe;
+
+        return $this;
     }
 }

@@ -135,7 +135,7 @@ class TimeframeServiceGateway extends GatewayBase implements TimeframeServiceGat
             $response = $e->getResponse();
             if ($response instanceof ResponseInterface) {
                 /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
-                $this->getLogger()?->critical("PostNL API - critical - REQUEST:\n".Message::str(message: $response));
+                $logger?->critical("PostNL API - critical - REQUEST:\n".Message::str(message: $response));
             }
 
             throw $e;

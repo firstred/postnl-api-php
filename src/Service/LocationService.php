@@ -47,10 +47,13 @@ use JetBrains\PhpStorm\Pure;
 
 /**
  * Class LocationService.
+ *
+ * @see https://developer.postnl.nl/browse-apis/delivery-options/location-webservice/
  */
 class LocationService extends ServiceBase implements LocationServiceInterface
 {
     use ServiceLoggerTrait;
+    use ServiceHttpClientTrait;
 
     #[Pure]
     /**

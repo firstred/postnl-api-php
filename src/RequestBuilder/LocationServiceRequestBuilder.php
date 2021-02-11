@@ -45,8 +45,8 @@ class LocationServiceRequestBuilder extends RequestBuilderBase implements Locati
 {
     public const VERSION = '2.1';
 
-    public const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v2_1/locations';
-    public const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2_1/locations';
+    public const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/{{version}}/locations';
+    public const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/{{version}}/locations';
 
     /**
      * @param LookupLocationRequestDTO $lookupLocationRequestDTO

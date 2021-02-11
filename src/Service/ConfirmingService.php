@@ -43,6 +43,7 @@ use Psr\Http\Message\RequestInterface;
 class ConfirmingService extends ServiceBase implements ConfirmingServiceInterface
 {
     use ServiceLoggerTrait;
+    use ServiceHttpClientTrait;
 
     // API Version
     const VERSION = '2.0';

@@ -28,47 +28,23 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\RequestBuilder;
 
-use Firstred\PostNL\DTO\Request\CalculateTimeframesRequestDTO;
+use Firstred\PostNL\DTO\Request\GetDeliveryInformationRequestDTO;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Http\Discovery\Psr17FactoryDiscovery;
 use Psr\Http\Message\RequestInterface;
-use function http_build_query;
 
 /**
- * Class TimeframeServiceRequestBuilder.
+ * Interface CheckoutServiceRequestBuilderInterface.
  */
-class TimeframeServiceRequestBuilder extends RequestBuilderBase implements TimeframeServiceRequestBuilderInterface
+interface CheckoutServiceRequestBuilderInterface extends RequestBuilderInterface
 {
-    public const DEFAULT_VERSION = '2.1';
-
-    public const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/{{version}}/calculate/timeframes';
-    public const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/{{version}}/calculate/timeframes';
-
     /**
-     * @param CalculateTimeframesRequestDTO $calculateTimeframesRequestDTO
+     * @param GetDeliveryInformationRequestDTO $getDeliveryInformationRequestDTO
      *
      * @return RequestInterface
      *
      * @throws InvalidArgumentException
      */
-    public function buildCalculateTimeframesRequest(CalculateTimeframesRequestDTO $calculateTimeframesRequestDTO): RequestInterface
-    {
-        if (!$calculateTimeframesRequestDTO->isValid()) {
-            throw new InvalidArgumentException(message: 'Invalid calculate timeframes request');
-        }
-
-        /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
-        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
-            'GET',
-            str_replace(
-                search: '{{version}}',
-                replace: 'v'.str_replace(search: '.', replace: '_', subject: $this->getVersion()),
-                subject: $this->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT,
-            )
-            .'?'.http_build_query(data: $calculateTimeframesRequestDTO->jsonSerialize())
-        )
-            ->withHeader('Accept', 'application/json')
-            ->withHeader('apikey', $this->getApiKey())
-            ;
-    }
+    public function buildGetDeliveryInformationRequest(
+        GetDeliveryInformationRequestDTO $getDeliveryInformationRequestDTO,
+    ): RequestInterface;
 }

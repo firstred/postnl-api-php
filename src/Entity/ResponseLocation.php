@@ -373,18 +373,22 @@ class ResponseLocation extends CacheableDTO
      * @param OpeningHours|array|null $OpeningHours
      *
      * @return static
+     *
      * @throws InvalidArgumentException
      */
     public function setOpeningHours(OpeningHours|array|null $OpeningHours = null): static
     {
         if (is_array(value: $OpeningHours)) {
-            $OpeningHours['service'] = LocationServiceInterface::class;
-            $OpeningHours['propType'] = ResponseProp::class;
+            $OpeningHours['service'] = $this->getService();
+            $OpeningHours['propType'] = $this->getPropType();
             /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
             $OpeningHours = new OpeningHours(...$OpeningHours);
         }
 
         $this->OpeningHours = $OpeningHours;
+
+        $this->OpeningHours?->setService(service: $this->getService());
+        $this->OpeningHours?->setPropType(propType: $this->getPropType());
 
         return $this;
     }

@@ -51,12 +51,16 @@ abstract class SerializableObject implements JsonSerializable
      *
      * @throws InvalidArgumentException
      */
-    public function __construct(protected string $service, protected string $propType)
-    {
+    public function __construct(
+        #[ExpectedValues(values: ServiceInterface::SERVICES)]
+        protected string $service,
+        #[ExpectedValues(values: PropInterface::PROP_TYPES)]
+        protected string $propType
+    ) {
         if ($this->propType
             && !in_array(needle: $this->propType, haystack: [ResponseProp::class, RequestProp::class])
         ) {
-            throw new InvalidArgumentException(message: 'Invalid prop type given');
+            throw new InvalidArgumentException(message: "Invalid prop type given: {$this->propType}");
         }
     }
 
@@ -70,7 +74,7 @@ abstract class SerializableObject implements JsonSerializable
         $json = [];
 
         foreach ($this->getSerializableProps(asStrings: true) as $serializableProp) {
-            /** @psalm-var string $serializableProp */
+            /** @var string $serializableProp */
             $val = $this->{"get$serializableProp"}();
             if (null === $val) {
                 continue;
@@ -127,6 +131,8 @@ abstract class SerializableObject implements JsonSerializable
         #[ExpectedValues(values: ServiceInterface::SERVICES)]
         string $service,
     ): static {
+        $this->service = $service;
+
         foreach ($this->getSerializableProps(asStrings: true) as $serializableProp) {
             $object = $this->{"get$serializableProp"}();
             if ($object instanceof SerializableObject) {
@@ -144,7 +150,7 @@ abstract class SerializableObject implements JsonSerializable
      */
     public function getPropType(): string
     {
-        return $this->service;
+        return $this->propType;
     }
 
     /**
@@ -158,6 +164,8 @@ abstract class SerializableObject implements JsonSerializable
         #[ExpectedValues(values: PropInterface::PROP_TYPES)]
         string $propType,
     ): static {
+        $this->propType = $propType;
+
         foreach ($this->getSerializableProps(asStrings: true) as $serializableProp) {
             $object = $this->{"get$serializableProp"}();
             if ($object instanceof SerializableObject) {
@@ -208,17 +216,19 @@ abstract class SerializableObject implements JsonSerializable
                 $services = [];
                 if (!$this->propType || RequestProp::class === $this->propType) {
                     if ($requestPropReflectionAttribute instanceof ReflectionAttribute) {
-                        $services += $requestPropReflectionAttribute->getArguments()['requiredFor'] ?? [];
+                        $arguments = $requestPropReflectionAttribute->getArguments();
+                        $services = array_merge($services, $arguments['requiredFor'] ?? []);
                         if (!$required) {
-                            $services += $requestPropReflectionAttribute->getArguments()['optionalFor'] ?? [];
+                            $services = array_merge($services, $arguments['optionalFor'] ?? []);
                         }
                     }
                 }
                 if (!$this->propType || ResponseProp::class === $this->propType) {
                     if ($responsePropReflectionAttribute instanceof ReflectionAttribute) {
-                        $services += $responsePropReflectionAttribute->getArguments()['requiredFor'] ?? [];
+                        $arguments = $responsePropReflectionAttribute->getArguments();
+                        $services = array_merge($services, $arguments['requiredFor'] ?? []);
                         if (!$required) {
-                            $services += $responsePropReflectionAttribute->getArguments()['optionalFor'] ?? [];
+                            $services = array_merge($services, $arguments['optionalFor'] ?? []);
                         }
                     }
                 }

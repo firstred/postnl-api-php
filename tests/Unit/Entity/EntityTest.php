@@ -28,6 +28,8 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Tests\Unit\Entity;
 
+use Firstred\PostNL\Entity\Address;
+use Firstred\PostNL\Service\CheckoutServiceInterface;
 use function array_keys;
 use Error;
 use Firstred\PostNL\Attribute\RequestProp;
@@ -217,6 +219,43 @@ class EntityTest extends TestCase
         $this->assertTrue(condition: $generateBarcodeResponseDTO->isValid());
     }
 
+    /**
+     * @testdox Should be able to find both required and optional serializable props
+     *
+     * @throws InvalidArgumentException
+     */
+    public function testCanFindBothRequiredAndOptionalSerializableProps()
+    {
+        $address = new Address(
+            service: CheckoutServiceInterface::class,
+            propType: RequestProp::class,
+
+            AddressType: '01',
+            Countrycode: 'NL',
+            HouseNr: 42,
+            Street: 'Teststraat',
+            Zipcode: '2132WT',
+        );
+
+        $this->assertEquals(
+            expected: [
+                'AddressType',
+                'City',
+                'Countrycode',
+                'HouseNr',
+                'HouseNrExt',
+                'Street',
+                'Zipcode',
+            ],
+            actual: $address->getSerializableProps(asStrings: true),
+        );
+    }
+
+    /**
+     * @testdox Should be able to serialize an object
+     *
+     * @throws InvalidArgumentException
+     */
     public function testCanJsonSerializeObject()
     {
         $generateBarcode = new GenerateBarcodeRequestDTO(
@@ -227,7 +266,7 @@ class EntityTest extends TestCase
             Serie: 'test',
         );
 
-        $this->assertEqualsCanonicalizing(
+        $this->assertEquals(
             expected: [
                 'Type'  => 'test',
                 'Serie' => 'test',

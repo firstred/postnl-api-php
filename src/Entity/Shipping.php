@@ -94,10 +94,15 @@ class Shipping extends SerializableObject
      * @param Customer|null $customer
      *
      * @return static
+     *
+     * @throws InvalidArgumentException
      */
     public function setCustomer(Customer|null $customer = null): static
     {
         $this->Customer = $customer;
+
+        $this->Customer?->setService(service: $this->getService());
+        $this->Customer?->setPropType(propType: $this->getPropType());
 
         return $this;
     }
@@ -118,6 +123,9 @@ class Shipping extends SerializableObject
     public function setMessage(LabellingMessage|null $message = null): static
     {
         $this->Message = $message;
+
+        $this->Message?->setService(service: $this->getService());
+        $this->Message?->setPropType(propType: $this->getPropType());
 
         return $this;
     }

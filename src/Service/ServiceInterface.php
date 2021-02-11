@@ -39,6 +39,7 @@ interface ServiceInterface
 {
     public const SERVICES = [
         BarcodeServiceInterface::class,
+        CheckoutServiceInterface::class,
         ConfirmingServiceInterface::class,
         DeliveryDateServiceInterface::class,
         LabellingServiceInterface::class,

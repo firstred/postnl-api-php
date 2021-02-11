@@ -30,85 +30,79 @@ namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Attribute\PropInterface;
 use Firstred\PostNL\Attribute\ResponseProp;
-use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\SerializableObject;
-use Firstred\PostNL\Service\ConfirmingServiceInterface;
-use Firstred\PostNL\Service\LabellingServiceInterface;
+use Firstred\PostNL\Service\CheckoutServiceInterface;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
 
 /**
- * Class Label.
+ * Class PickupOption.
  */
-class Label extends SerializableObject
+class PickupOption extends SerializableObject
 {
-    public const FORMAT_A4 = 1;
-    public const FORMAT_A6 = 2;
+    #[ResponseProp(requiredFor: [CheckoutServiceInterface::class])]
+    protected string|null $PickupDate = null;
 
-    /**
-     * Base 64 encoded content.
-     *
-     * @var string|null
-     */
-    #[ResponseProp(optionalFor: [LabellingServiceInterface::class, ConfirmingServiceInterface::class])]
-    protected string|null $Content = null;
+    #[ResponseProp(requiredFor: [CheckoutServiceInterface::class])]
+    protected string|null $ShippingDate = null;
 
-    /**
-     * @var string|null
-     */
-    #[ResponseProp(optionalFor: [LabellingServiceInterface::class, ConfirmingServiceInterface::class])]
-    protected string|null $Contenttype = null;
+    #[ResponseProp(requiredFor: [CheckoutServiceInterface::class])]
+    protected string|null $Option = null;
 
-    /**
-     * @var string|null
-     */
-    #[ResponseProp(optionalFor: [LabellingServiceInterface::class, ConfirmingServiceInterface::class])]
-    protected string|null $Labeltype = null;
+    #[ResponseProp(requiredFor: [CheckoutServiceInterface::class])]
+    protected array|null $Locations = null;
 
-    /**
-     * Label constructor.
-     *
-     * @param string      $service
-     * @param string      $propType
-     * @param string|null $Content
-     * @param string|null $Contenttype
-     * @param string|null $Labeltype
-     *
-     * @throws InvalidArgumentException
-     */
     public function __construct(
         #[ExpectedValues(values: ServiceInterface::SERVICES)]
-        string $service,
+        string $service = '',
         #[ExpectedValues(values: PropInterface::PROP_TYPES)]
-        string $propType,
+        string $propType = '',
 
-        string|null $Content = null,
-        string|null $Contenttype = null,
-        string|null $Labeltype = null,
+        string|null $PickupDate = null,
+        array|null $Locations = null,
     ) {
         parent::__construct(service: $service, propType: $propType);
 
-        $this->setContent(Content: $Content);
-        $this->setContenttype(Contenttype: $Contenttype);
-        $this->setLabeltype(Labeltype: $Labeltype);
+        $this->setPickupDate(PickupDate: $PickupDate);
+        $this->setLocations(Locations: $Locations);
     }
 
     /**
      * @return string|null
      */
-    public function getContent(): string|null
+    public function getPickupDate(): string|null
     {
-        return $this->Content;
+        return $this->PickupDate;
     }
 
     /**
-     * @param string|null $Content
+     * @param string|null $PickupDate
      *
      * @return static
      */
-    public function setContent(string|null $Content = null): static
+    public function setPickupDate(string|null $PickupDate = null): static
     {
-        $this->Content = $Content;
+        $this->PickupDate = $PickupDate;
+
+        return $this;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getLocations(): array|null
+    {
+        return $this->Locations;
+    }
+
+    /**
+     * @param array|null $Locations
+     *
+     * @return static
+     */
+    public function setLocations(array|null $Locations = null): static
+    {
+        $this->Locations = $Locations;
 
         return $this;
     }
@@ -116,40 +110,38 @@ class Label extends SerializableObject
     /**
      * @return string|null
      */
-    public function getContenttype(): string|null
+    public function getShippingDate(): string|null
     {
-        return $this->Contenttype;
+        return $this->ShippingDate;
     }
 
     /**
-     * @param string|null $Contenttype
+     * @param string|null $ShippingDate
      *
-     * @return static
+     * @return $this
      */
-    public function setContenttype(string|null $Contenttype = null): static
+    public function setShippingDate(string|null $ShippingDate = null): static
     {
-        $this->Contenttype = $Contenttype;
-
+        $this->ShippingDate = $ShippingDate;
         return $this;
     }
 
     /**
      * @return string|null
      */
-    public function getLabeltype(): string|null
+    public function getOption(): string|null
     {
-        return $this->Labeltype;
+        return $this->Option;
     }
 
     /**
-     * @param string|null $Labeltype
+     * @param string|null $Option
      *
-     * @return static
+     * @return $this
      */
-    public function setLabeltype(string|null $Labeltype = null): static
+    public function setOption(string|null $Option = null): static
     {
-        $this->Labeltype = $Labeltype;
-
+        $this->Option = $Option;
         return $this;
     }
 }

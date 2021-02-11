@@ -28,9 +28,12 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Tests\Unit\Entity;
 
+use Firstred\PostNL\Attribute\RequestProp;
 use Firstred\PostNL\DTO\Response\GetLocationResponseDTO;
 use Firstred\PostNL\DTO\Response\GetLocationsResponseDTO;
+use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Service\CheckoutServiceInterface;
 use PHPUnit\Framework\TestCase;
 use function file_get_contents;
 use function json_decode;
@@ -78,6 +81,39 @@ class JsonSerializationTest extends TestCase
         $this->assertJsonStringEqualsJsonString(
             expectedJson: json_encode(value: json_decode(json: $json, associative: true), flags: JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
             actualJson: json_encode(value: $response->jsonSerialize(), flags: JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
+        );
+    }
+
+    /**
+     * @testdox Should be able to JSON serialize addresses for the checkout service
+     *
+     * @throws InvalidArgumentException
+     */
+    public function testSerializesAddressForCheckoutServiceProperly()
+    {
+        $address = new Address(
+            service: CheckoutServiceInterface::class,
+            propType: RequestProp::class,
+
+            AddressType: '01',
+            Countrycode: 'NL',
+            HouseNr: 42,
+            Street: 'Teststraat',
+            Zipcode: '2132WT',
+        );
+
+        $this->assertJsonStringEqualsJsonString(
+            expectedJson: /** @lang JSON */ <<<JSON
+            {
+              "AddressType": "01",
+              "Countrycode": "NL",
+              "HouseNr": 42,
+              "Street": "Teststraat",
+              "Zipcode": "2132WT"
+            }
+            JSON,
+            actualJson: json_encode(value: $address->jsonSerialize()),
+
         );
     }
 }

@@ -26,7 +26,7 @@
 
 declare(strict_types=1);
 
-namespace Firstred\PostNL\DTO\Response;
+namespace Firstred\PostNL\Entity;
 
 use ArrayAccess;
 use Countable;
@@ -34,38 +34,43 @@ use Firstred\PostNL\Attribute\PropInterface;
 use Firstred\PostNL\Attribute\ResponseProp;
 use Firstred\PostNL\DTO\CacheableDTO;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Misc\SerializableObject;
 use Firstred\PostNL\Service\BarcodeServiceInterface;
+use Firstred\PostNL\Service\CheckoutServiceInterface;
 use Firstred\PostNL\Service\ServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
 use JetBrains\PhpStorm\Pure;
 use OutOfBoundsException;
 use SeekableIterator;
+use function array_keys;
+use function array_values;
+use function count;
 use function is_int;
 use function is_string;
 
 /**
- * Class GenerateBarcodesResponseDTO.
+ * Class PickupOptions.
  */
-class GenerateBarcodesResponseDTO extends CacheableDTO implements SeekableIterator, ArrayAccess, Countable
+class PickupOptions extends CacheableDTO implements SeekableIterator, ArrayAccess, Countable
 {
     /**
      * @var int
      */
     private int $idx = 0;
 
-    /** @psalm-var array<array-key, GenerateBarcodeResponseDTO> $responses
-     * @var mixed[]|GenerateBarcodeResponseDTO[]
+    /**
+     * @psalm-var array<array-key, PickupOption> $responses
+     * @var PickupOption[]
      */
-    protected array $responses = [];
+    #[ResponseProp(requiredFor: [CheckoutServiceInterface::class])]
+    protected array $PickupOptions = [];
 
     /**
      * GenerateBarcodesResponseDTO constructor.
      *
-     * @param string $service
-     * @param string $propType
-     * @param string $cacheKey
-     * @param array  $responses
+     * @param string           $service
+     * @param string           $propType
+     * @param string           $cacheKey
+     * @param PickupOption[] $PickupOptions
      *
      * @throws InvalidArgumentException
      */
@@ -76,21 +81,21 @@ class GenerateBarcodesResponseDTO extends CacheableDTO implements SeekableIterat
         string $propType = ResponseProp::class,
         string $cacheKey = '',
 
-        /** @psalm-var array<array-key, GenerateBarcodeResponseDTO> $responses */
-        array $responses = [],
+        /** @psalm-var array<array-key, PickupOption> $PickupOptions */
+        array $PickupOptions = [],
     ) {
         parent::__construct(service: $service, propType: $propType, cacheKey: $cacheKey);
 
-        $this->setResponses(responses: $responses);
+        $this->setPickupOptions(PickupOptions: $PickupOptions);
     }
 
     #[Pure]
     /**
-     * @return GenerateBarcodeResponseDTO|null
+     * @return PickupOption|null
      */
-    public function current(): GenerateBarcodeResponseDTO|null
+    public function current(): PickupOption|null
     {
-        return array_values(array: $this->responses)[$this->idx] ?? null;
+        return array_values(array: $this->PickupOptions)[$this->idx] ?? null;
     }
 
     public function next(): void
@@ -104,7 +109,7 @@ class GenerateBarcodesResponseDTO extends CacheableDTO implements SeekableIterat
      */
     public function key(): string|null
     {
-        return array_keys(array: $this->responses)[$this->idx] ?? null;
+        return array_keys(array: $this->PickupOptions)[$this->idx] ?? null;
     }
 
     #[Pure]
@@ -113,7 +118,7 @@ class GenerateBarcodesResponseDTO extends CacheableDTO implements SeekableIterat
      */
     public function valid(): bool
     {
-        return isset(array_values(array: $this->responses)[$this->idx]);
+        return isset(array_values(array: $this->PickupOptions)[$this->idx]);
     }
 
     public function rewind(): void
@@ -133,22 +138,22 @@ class GenerateBarcodesResponseDTO extends CacheableDTO implements SeekableIterat
             return false;
         }
 
-        return isset($this->responses[$offset]);
+        return isset($this->PickupOptions[$offset]);
     }
 
     #[Pure]
     /**
      * @param mixed $offset
      *
-     * @return GenerateBarcodeResponseDTO|null
+     * @return PickupOption|null
      */
-    public function offsetGet(mixed $offset): GenerateBarcodeResponseDTO|null
+    public function offsetGet(mixed $offset): PickupOption|null
     {
         if (!$this->offsetExists(offset: $offset)) {
             return null;
         }
 
-        return $this->responses[$offset] ?? null;
+        return $this->PickupOptions[$offset] ?? null;
     }
 
     /**
@@ -163,11 +168,11 @@ class GenerateBarcodesResponseDTO extends CacheableDTO implements SeekableIterat
             throw new InvalidArgumentException('Invalid offset given');
         }
 
-        if (!$value instanceof GenerateBarcodeResponseDTO) {
-            throw new InvalidArgumentException('Invalid `GenerateBarcodeResponse` given');
+        if (!$value instanceof PickupOption) {
+            throw new InvalidArgumentException('Invalid `PickupOption` given');
         }
 
-        $this->responses[$offset] = $value;
+        $this->PickupOptions[$offset] = $value;
     }
 
     /**
@@ -179,65 +184,56 @@ class GenerateBarcodesResponseDTO extends CacheableDTO implements SeekableIterat
             return;
         }
 
-        unset($this->responses[$offset]);
+        unset($this->PickupOptions[$offset]);
     }
 
     /**
-     * @param GenerateBarcodeResponseDTO $generateBarcodeResponseDTO
+     * @param PickupOption $option
      */
-    public function add(GenerateBarcodeResponseDTO $generateBarcodeResponseDTO): void
+    public function add(PickupOption $option): void
     {
-        $this->responses[] = $generateBarcodeResponseDTO;
+        $this->PickupOptions[] = $option;
     }
 
     /**
      * @return int
      */
     #[Pure]
- public function count(): int
- {
-     return count(value: $this->responses);
- }
-
-    /**
-     * @return GenerateBarcodeResponseDTO[]
-     */
-    public function getResponses(): array
+    public function count(): int
     {
-        return $this->responses;
+        return count(value: $this->PickupOptions);
     }
 
     /**
-     * @param array $responses
+     * @return PickupOption[]
+     */
+    public function getPickupOptions(): array
+    {
+        return $this->PickupOptions;
+    }
+
+    /**
+     * @param PickupOption[] $PickupOptions
      *
      * @return static
-     *
-     * @throws InvalidArgumentException
      */
-    public function setResponses(array $responses): static
+    public function setPickupOptions(array $PickupOptions): static
     {
-        foreach ($responses as $idx => $response) {
-            if (!$response instanceof GenerateBarcodeResponseDTO) {
-                $responses[$idx] = new GenerateBarcodeResponseDTO(Barcode: $response);
-            }
+        foreach ($PickupOptions as $idx => $option) {
+            $PickupOptions[$idx] = $option;
         }
 
-        $this->responses = $responses;
+        $this->PickupOptions = $PickupOptions;
 
         return $this;
     }
 
     /**
      * @return array
-     *
-     * @throws InvalidArgumentException
      */
     public function jsonSerialize(): array
     {
-        return array_map(
-            callback: fn (SerializableObject $item) => $item->jsonSerialize(),
-            array: $this->responses,
-        );
+        return $this->PickupOptions;
     }
 
     /**

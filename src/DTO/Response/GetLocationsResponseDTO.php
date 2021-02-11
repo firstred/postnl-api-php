@@ -268,6 +268,7 @@ class GetLocationsResponseDTO extends CacheableDTO implements ArrayAccess, Count
     public function setWarnings(array|null $Warnings = null): static
     {
         $this->Warnings = $Warnings;
+
         return $this;
     }
 

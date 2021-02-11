@@ -32,6 +32,7 @@ use Firstred\PostNL\Attribute\PropInterface;
 use Firstred\PostNL\Attribute\ResponseProp;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\SerializableObject;
+use Firstred\PostNL\Service\CheckoutServiceInterface;
 use Firstred\PostNL\Service\ServiceInterface;
 use Firstred\PostNL\Service\TimeframeServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
@@ -78,9 +79,12 @@ class Timeframe extends SerializableObject
     protected string|null $HouseNrExt = null;
 
     /**
-     * @var mixed[]|null
+     * @var string[]|null
      */
-    #[ResponseProp(optionalFor: [TimeframeServiceInterface::class])]
+    #[ResponseProp(
+        requiredFor: [CheckoutServiceInterface::class],
+        optionalFor: [TimeframeServiceInterface::class],
+    )]
     protected array|null $Options = null;
 
     /**
@@ -113,10 +117,21 @@ class Timeframe extends SerializableObject
     #[ResponseProp(optionalFor: [TimeframeServiceInterface::class])]
     protected string|null $Range = null;
 
-    /** @psalm-var list<TimeframeTimeFrame>|null
-     * @var mixed[]|null|mixed[][][]|\Firstred\PostNL\Entity\TimeframeTimeFrame[]  */
+    /**
+     * @psalm-var list<TimeframeTimeFrame>|null
+     * @var TimeframeTimeFrame[]|null
+     */
     #[ResponseProp(requiredFor: [TimeframeServiceInterface::class])]
     protected array|null $Timeframes = null;
+
+    #[ResponseProp(requiredFor: [CheckoutServiceInterface::class])]
+    protected string|null $From = null;
+
+    #[ResponseProp(requiredFor: [CheckoutServiceInterface::class])]
+    protected string|null $To = null;
+
+    #[ResponseProp(requiredFor: [CheckoutServiceInterface::class])]
+    protected string|null $ShippingDate = null;
 
     /**
      * Timeframe constructor.
@@ -136,6 +151,9 @@ class Timeframe extends SerializableObject
      * @param string|null      $Interval
      * @param string|null      $Range
      * @param array|null       $Timeframes
+     * @param string|null      $From
+     * @param string|null      $To
+     * @param string|null      $ShippingDate
      *
      * @throws InvalidArgumentException
      */
@@ -159,6 +177,10 @@ class Timeframe extends SerializableObject
         string|null $Range = null,
         /** @psalm-param list<TimeframeTimeFrame>|array|null */
         array|null $Timeframes = null,
+
+        string|null $From = null,
+        string|null $To = null,
+        string|null $ShippingDate = null,
     ) {
         parent::__construct(service: $service, propType: $propType);
 
@@ -175,6 +197,10 @@ class Timeframe extends SerializableObject
         $this->setInterval(Interval: $Interval);
         $this->setRange(Range: $Range);
         $this->setTimeframes(Timeframes: $Timeframes);
+
+        $this->setFrom(From: $From);
+        $this->setTo(To: $To);
+        $this->setShippingDate(ShippingDate: $ShippingDate);
     }
 
     /**
@@ -460,6 +486,63 @@ class Timeframe extends SerializableObject
 
         $this->Timeframes = $Timeframes;
 
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getFrom(): string|null
+    {
+        return $this->From;
+    }
+
+    /**
+     * @param string|null $From
+     *
+     * @return static
+     */
+    public function setFrom(string|null $From = null): static
+    {
+        $this->From = $From;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getTo(): string|null
+    {
+        return $this->To;
+    }
+
+    /**
+     * @param string|null $To
+     *
+     * @return static
+     */
+    public function setTo(string|null $To = null): static
+    {
+        $this->To = $To;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getShippingDate(): string|null
+    {
+        return $this->ShippingDate;
+    }
+
+    /**
+     * @param string|null $ShippingDate
+     *
+     * @return static
+     */
+    public function setShippingDate(string|null $ShippingDate = null): static
+    {
+        $this->ShippingDate = $ShippingDate;
         return $this;
     }
 }

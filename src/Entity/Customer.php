@@ -29,9 +29,19 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Attribute\PropInterface;
+use Firstred\PostNL\Attribute\RequestProp;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\SerializableObject;
+use Firstred\PostNL\Service\BarcodeServiceInterface;
+use Firstred\PostNL\Service\CheckoutServiceInterface;
+use Firstred\PostNL\Service\ConfirmingServiceInterface;
+use Firstred\PostNL\Service\DeliveryDateServiceInterface;
+use Firstred\PostNL\Service\LabellingServiceInterface;
+use Firstred\PostNL\Service\LocationServiceInterface;
 use Firstred\PostNL\Service\ServiceInterface;
+use Firstred\PostNL\Service\ShippingServiceInterface;
+use Firstred\PostNL\Service\ShippingStatusServiceInterface;
+use Firstred\PostNL\Service\TimeframeServiceInterface;
 use JetBrains\PhpStorm\ExpectedValues;
 
 /**
@@ -42,46 +52,173 @@ class Customer extends SerializableObject
     /**
      * @var Address|null
      */
+    #[RequestProp(
+        requiredFor: [
+            ConfirmingServiceInterface::class,
+            LabellingServiceInterface::class,
+        ],
+        optionalFor: [
+            BarcodeServiceInterface::class,
+            CheckoutServiceInterface::class,
+            DeliveryDateServiceInterface::class,
+            LocationServiceInterface::class,
+            ShippingServiceInterface::class,
+            ShippingStatusServiceInterface::class,
+            TimeframeServiceInterface::class,
+        ]
+    )]
     protected Address|null $Address = null;
 
     /**
      * @var string|null
      */
+    #[RequestProp(
+        requiredFor: [
+            LabellingServiceInterface::class,
+        ],
+        optionalFor: [
+            BarcodeServiceInterface::class,
+            CheckoutServiceInterface::class,
+            ConfirmingServiceInterface::class,
+            DeliveryDateServiceInterface::class,
+            LocationServiceInterface::class,
+            ShippingServiceInterface::class,
+            ShippingStatusServiceInterface::class,
+            TimeframeServiceInterface::class,
+        ],
+    )]
     protected string|null $CollectionLocation = null;
 
     /**
      * @var string|null
      */
+    #[RequestProp(
+        requiredFor: [
+            ConfirmingServiceInterface::class,
+            LabellingServiceInterface::class,
+        ],
+        optionalFor: [
+            BarcodeServiceInterface::class,
+            CheckoutServiceInterface::class,
+            DeliveryDateServiceInterface::class,
+            LocationServiceInterface::class,
+            ShippingServiceInterface::class,
+            ShippingStatusServiceInterface::class,
+            TimeframeServiceInterface::class,
+        ],
+    )]
     protected string|null $ContactPerson = null;
 
     /**
      * @var string|null
      */
+    #[RequestProp(
+        requiredFor: [
+            BarcodeServiceInterface::class,
+            ConfirmingServiceInterface::class,
+            LabellingServiceInterface::class,
+        ],
+        optionalFor: [
+            CheckoutServiceInterface::class,
+            DeliveryDateServiceInterface::class,
+            LocationServiceInterface::class,
+            ShippingServiceInterface::class,
+            ShippingStatusServiceInterface::class,
+            TimeframeServiceInterface::class,
+        ],
+    )]
     protected string|null $CustomerCode = null;
 
     /**
      * @var string|null
      */
+    #[RequestProp(
+        requiredFor: [
+            BarcodeServiceInterface::class,
+            ConfirmingServiceInterface::class,
+            LabellingServiceInterface::class,
+        ],
+        optionalFor: [
+            CheckoutServiceInterface::class,
+            DeliveryDateServiceInterface::class,
+            LocationServiceInterface::class,
+            ShippingServiceInterface::class,
+            ShippingStatusServiceInterface::class,
+            TimeframeServiceInterface::class,
+        ]
+    )]
     protected string|null $CustomerNumber = null;
 
     /**
      * @var string|null
      */
+    #[RequestProp(optionalFor: [
+        BarcodeServiceInterface::class,
+        CheckoutServiceInterface::class,
+        ConfirmingServiceInterface::class,
+        DeliveryDateServiceInterface::class,
+        LabellingServiceInterface::class,
+        LocationServiceInterface::class,
+        ShippingServiceInterface::class,
+        ShippingStatusServiceInterface::class,
+        TimeframeServiceInterface::class,
+    ])]
     protected string|null $GlobalPackCustomerCode = null;
 
     /**
      * @var string|null
      */
+    #[RequestProp(optionalFor: [
+        BarcodeServiceInterface::class,
+        CheckoutServiceInterface::class,
+        ConfirmingServiceInterface::class,
+        DeliveryDateServiceInterface::class,
+        LabellingServiceInterface::class,
+        LocationServiceInterface::class,
+        ShippingServiceInterface::class,
+        ShippingStatusServiceInterface::class,
+        TimeframeServiceInterface::class,
+    ])]
     protected string|null $GlobalPackBarcodeType = null;
 
     /**
      * @var string|null
      */
+    #[RequestProp(
+        requiredFor: [
+            ConfirmingServiceInterface::class,
+            LabellingServiceInterface::class,
+        ],
+        optionalFor: [
+            BarcodeServiceInterface::class,
+            CheckoutServiceInterface::class,
+            DeliveryDateServiceInterface::class,
+            LocationServiceInterface::class,
+            ShippingServiceInterface::class,
+            ShippingStatusServiceInterface::class,
+            TimeframeServiceInterface::class,
+        ],
+    )]
     protected string|null $Email = null;
 
     /**
      * @var string|null
      */
+    #[RequestProp(
+        requiredFor: [
+            ConfirmingServiceInterface::class,
+            LabellingServiceInterface::class,
+        ],
+        optionalFor: [
+            BarcodeServiceInterface::class,
+            CheckoutServiceInterface::class,
+            DeliveryDateServiceInterface::class,
+            LocationServiceInterface::class,
+            ShippingServiceInterface::class,
+            ShippingStatusServiceInterface::class,
+            TimeframeServiceInterface::class,
+        ],
+    )]
     protected string|null $Name = null;
 
     /**

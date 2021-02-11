@@ -554,10 +554,15 @@ class Shipment extends SerializableObject
      * @param Customer|null $Customer
      *
      * @return static
+     *
+     * @throws InvalidArgumentException
      */
     public function setCustomer(Customer|null $Customer = null): static
     {
         $this->Customer = $Customer;
+
+        $this->Customer?->setService(service: $this->getService());
+        $this->Customer?->setPropType(propType: $this->getPropType());
 
         return $this;
     }
@@ -574,10 +579,15 @@ class Shipment extends SerializableObject
      * @param Customs|null $Customs
      *
      * @return static
+     *
+     * @throws InvalidArgumentException
      */
     public function setCustoms(Customs|null $Customs = null): static
     {
         $this->Customs = $Customs;
+
+        $this->Customs?->setService(service: $this->getService());
+        $this->Customs?->setPropType(propType: $this->getPropType());
 
         return $this;
     }

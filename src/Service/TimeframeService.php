@@ -43,10 +43,13 @@ use JetBrains\PhpStorm\Pure;
 
 /**
  * Class TimeframeService.
+ *
+ * @see https://developer.postnl.nl/browse-apis/delivery-options/timeframe-webservice/
  */
 class TimeframeService extends ServiceBase implements TimeframeServiceInterface
 {
     use ServiceLoggerTrait;
+    use ServiceHttpClientTrait;
 
     #[Pure]
     /**

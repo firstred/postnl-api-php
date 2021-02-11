@@ -45,10 +45,13 @@ use const JSON_UNESCAPED_SLASHES;
 
 /**
  * Class LabellingService.
+ *
+ * @see https://developer.postnl.nl/browse-apis/send-and-track/labelling-webservice/
  */
 class LabellingService extends ServiceBase implements LabellingServiceInterface
 {
     use ServiceLoggerTrait;
+    use ServiceHttpClientTrait;
 
     // API Version
     const VERSION = '2.1';
@@ -174,9 +177,9 @@ class LabellingService extends ServiceBase implements LabellingServiceInterface
             uri: ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).'?'.http_build_query(data: [
                 'confirm' => $confirm,
             ]))
-            ->withHeader(name: 'apikey', value: $apiKey)
-            ->withHeader(name: 'Accept', value: 'application/json')
-            ->withHeader(name: 'Content-Type', value: 'application/json;charset=UTF-8')
+            ->withHeader('apikey', $apiKey)
+            ->withHeader('Accept', 'application/json')
+            ->withHeader('Content-Type', 'application/json;charset=UTF-8')
             ->withBody(body: Psr17FactoryDiscovery::findStreamFactory()->createStream(content: json_encode(value: $generateLabel, flags: JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES)));
     }
 

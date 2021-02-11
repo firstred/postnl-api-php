@@ -32,7 +32,13 @@ use Exception;
 use Firstred\PostNL\Attribute\RequestProp;
 use Firstred\PostNL\DTO\Request\CalculateDeliveryDateRequestDTO;
 use Firstred\PostNL\DTO\Request\CalculateShippingDateRequestDTO;
+use Firstred\PostNL\Exception\ApiClientException;
+use Firstred\PostNL\Exception\ApiException;
+use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\InvalidApiKeyException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\NotAvailableException;
+use Firstred\PostNL\Exception\ParseError;
 use Firstred\PostNL\HttpClient\HTTPlugHttpClient;
 use Firstred\PostNL\Service\DeliveryDateServiceInterface;
 use Http\Discovery\Psr17FactoryDiscovery;
@@ -78,19 +84,19 @@ class DeliveryDateServiceTest extends ServiceTestBase
 
         $this->assertEquals(
             expected: [
-            'ShippingDate'     => '29-06-2016 14:00:00',
-            'ShippingDuration' => '1',
-            'CountryCode'      => 'NL',
-            'Options'          => 'Daytime',
-            'CutOffTime'       => '14:00:00',
-            'PostalCode'       => '2132WT',
-            'City'             => 'Hoofddorp',
-            'HouseNumber'      => '42',
-            'HouseNrExt'       => 'A',
-            'AvailableMonday'  => 'true',
-            'CutOffTimeMonday' => '14:00:00',
-            'Street'           => 'Siriusdreef',
-        ],
+                'ShippingDate'     => '29-06-2016 14:00:00',
+                'ShippingDuration' => '1',
+                'CountryCode'      => 'NL',
+                'Options'          => ['Daytime'],
+                'CutOffTime'       => '14:00:00',
+                'PostalCode'       => '2132WT',
+                'City'             => 'Hoofddorp',
+                'HouseNumber'      => '42',
+                'HouseNrExt'       => 'A',
+                'AvailableMonday'  => 'true',
+                'CutOffTimeMonday' => '14:00:00',
+                'Street'           => 'Siriusdreef',
+            ],
             actual: $query
         );
 
@@ -102,7 +108,14 @@ class DeliveryDateServiceTest extends ServiceTestBase
 
     /**
      * @testdox Returns a valid delivery date
-     * @throws \Firstred\PostNL\Exception\HttpClientException
+     *
+     * @throws InvalidArgumentException
+     * @throws ApiClientException
+     * @throws ApiException
+     * @throws HttpClientException
+     * @throws InvalidApiKeyException
+     * @throws NotAvailableException
+     * @throws ParseError
      */
     public function testCalculateDeliveryDate()
     {
@@ -151,18 +164,18 @@ class DeliveryDateServiceTest extends ServiceTestBase
     {
         $this->lastRequest = $request = $this->postnl->getDeliveryDateService()->getGateway()->getRequestBuilder()->buildCalculateShippingDateRequest(
             calculateShippingDateRequestDTO: new CalculateShippingDateRequestDTO(
-                service: DeliveryDateServiceInterface::class,
-                propType: RequestProp::class,
+            service: DeliveryDateServiceInterface::class,
+            propType: RequestProp::class,
 
-                DeliveryDate: '30-06-2016',
-                ShippingDuration: 1,
-                PostalCode: '2132WT',
-                CountryCode: 'NL',
-                City: 'Hoofddorp',
-                Street: 'Siriusdreef',
-                HouseNumber: 42,
-                HouseNrExt: 'A',
-            ),
+            DeliveryDate: '30-06-2016',
+            ShippingDuration: 1,
+            PostalCode: '2132WT',
+            CountryCode: 'NL',
+            City: 'Hoofddorp',
+            Street: 'Siriusdreef',
+            HouseNumber: 42,
+            HouseNrExt: 'A',
+        ),
         );
 
         /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */

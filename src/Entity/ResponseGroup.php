@@ -28,8 +28,11 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use Firstred\PostNL\Attribute\PropInterface;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Misc\SerializableObject;
+use Firstred\PostNL\Service\ServiceInterface;
+use JetBrains\PhpStorm\ExpectedValues;
 
 /**
  * Class ResponseGroup.
@@ -79,8 +82,8 @@ class ResponseGroup extends SerializableObject
      * @throws InvalidArgumentException
      */
     public function __construct(
-        string $service,
-        string $propType,
+        #[ExpectedValues(values: ServiceInterface::SERVICES)] string $service,
+        #[ExpectedValues(values: PropInterface::PROP_TYPES)] string $propType,
 
         string|null $GroupCount = null,
         string|null $GroupSequence = null,

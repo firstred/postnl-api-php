@@ -52,13 +52,13 @@ use function strtotime;
 class CalculateDeliveryDateRequestDTO extends CacheableDTO
 {
     public const CUTOFF_TIME_ARRAY_SHAPE = [
-        CutOffTime::MONDAY    => CutOffTime::class,
-        CutOffTime::TUESDAY   => CutOffTime::class,
-        CutOffTime::WEDNESDAY => CutOffTime::class,
-        CutOffTime::THURSDAY  => CutOffTime::class,
-        CutOffTime::FRIDAY    => CutOffTime::class,
-        CutOffTime::SATURDAY  => CutOffTime::class,
-        CutOffTime::SUNDAY    => CutOffTime::class,
+        CutOffTime::DAY_MONDAY    => CutOffTime::class,
+        CutOffTime::DAY_TUESDAY   => CutOffTime::class,
+        CutOffTime::DAY_WEDNESDAY => CutOffTime::class,
+        CutOffTime::DAY_THURSDAY  => CutOffTime::class,
+        CutOffTime::DAY_FRIDAY    => CutOffTime::class,
+        CutOffTime::DAY_SATURDAY  => CutOffTime::class,
+        CutOffTime::DAY_SUNDAY    => CutOffTime::class,
     ];
 
     /**
@@ -276,6 +276,20 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
      */
     #[RequestProp(optionalFor: [DeliveryDateServiceInterface::class])]
     protected bool|null $AvailableSunday = null;
+
+    /**
+     * Default cutoff time.
+     *
+     * @var string|null
+     */
+    protected string|null $CutOffTimeDefault = null;
+
+    /**
+     * Specifies if you are available to ship to PostNL.
+     *
+     * @var bool|null
+     */
+    protected bool|null $AvailableDefault = null;
 
     /**
      * CalculateDeliveryDateRequestDTO constructor.
@@ -896,6 +910,46 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
+    public function getCutOffTimeDefault(): string|null
+    {
+        return $this->CutOffTimeDefault;
+    }
+
+    /**
+     * @param string|null $CutOffTimeDefault
+     *
+     * @return static
+     */
+    public function setCutOffTimeDefault(string|null $CutOffTimeDefault = null): static
+    {
+        $this->CutOffTimeDefault = $CutOffTimeDefault;
+
+        return $this;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getAvailableDefault(): bool|null
+    {
+        return $this->AvailableDefault;
+    }
+
+    /**
+     * @param bool|null $AvailableDefault
+     *
+     * @return static
+     */
+    public function setAvailableDefault(bool|null $AvailableDefault = null): static
+    {
+        $this->AvailableDefault = $AvailableDefault;
+
+        return $this;
+    }
+
     #[ArrayShape(shape: self::CUTOFF_TIME_ARRAY_SHAPE)]
     /**
      * @throws InvalidArgumentException
@@ -908,54 +962,54 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
         $propType = RequestProp::class;
 
         return [
-            CutOffTime::MONDAY => new CutOffTime(
+            CutOffTime::DAY_MONDAY => new CutOffTime(
                 service: $service,
                 propType: $propType,
-                Day: CutOffTime::MONDAY,
-                Time: $this->getCutOffTimeMonday(),
+                Day: CutOffTime::DAY_MONDAY,
                 Available: $this->getAvailableMonday(),
+                Time: $this->getCutOffTimeMonday(),
             ),
-            CutOffTime::TUESDAY => new CutOffTime(
+            CutOffTime::DAY_TUESDAY => new CutOffTime(
                 service: $service,
                 propType: $propType,
-                Day: CutOffTime::TUESDAY,
-                Time: $this->getCutOffTimeTuesday(),
+                Day: CutOffTime::DAY_TUESDAY,
                 Available: $this->getAvailableTuesday(),
+                Time: $this->getCutOffTimeTuesday(),
             ),
-            CutOffTime::WEDNESDAY => new CutOffTime(
+            CutOffTime::DAY_WEDNESDAY => new CutOffTime(
                 service: $service,
                 propType: $propType,
-                Day: CutOffTime::WEDNESDAY,
-                Time: $this->getCutOffTimeWednesday(),
+                Day: CutOffTime::DAY_WEDNESDAY,
                 Available: $this->getAvailableWednesday(),
+                Time: $this->getCutOffTimeWednesday(),
             ),
-            CutOffTime::THURSDAY => new CutOffTime(
+            CutOffTime::DAY_THURSDAY => new CutOffTime(
                 service: $service,
                 propType: $propType,
-                Day: CutOffTime::THURSDAY,
-                Time: $this->getCutOffTimeThursday(),
+                Day: CutOffTime::DAY_THURSDAY,
                 Available: $this->getAvailableThursday(),
+                Time: $this->getCutOffTimeThursday(),
             ),
-            CutOffTime::FRIDAY => new CutOffTime(
+            CutOffTime::DAY_FRIDAY => new CutOffTime(
                 service: $service,
                 propType: $propType,
-                Day: CutOffTime::FRIDAY,
-                Time: $this->getCutOffTimeFriday(),
+                Day: CutOffTime::DAY_FRIDAY,
                 Available: $this->getAvailableFriday(),
+                Time: $this->getCutOffTimeFriday(),
             ),
-            CutOffTime::SATURDAY => new CutOffTime(
+            CutOffTime::DAY_SATURDAY => new CutOffTime(
                 service: $service,
                 propType: $propType,
-                Day: CutOffTime::SATURDAY,
-                Time: $this->getCutOffTimeSaturday(),
+                Day: CutOffTime::DAY_SATURDAY,
                 Available: $this->getAvailableSaturday(),
+                Time: $this->getCutOffTimeSaturday(),
             ),
-            CutOffTime::SUNDAY => new CutOffTime(
+            CutOffTime::DAY_SUNDAY => new CutOffTime(
                 service: $service,
                 propType: $propType,
-                Day: CutOffTime::SUNDAY,
-                Time: $this->getCutOffTimeSunday(),
+                Day: CutOffTime::DAY_SUNDAY,
                 Available: $this->getAvailableSunday(),
+                Time: $this->getCutOffTimeSunday(),
             ),
         ];
     }
@@ -969,37 +1023,42 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
      */
     public function setCutOffTimes(array $cutOffTimes): static
     {
-        foreach ($cutOffTimes as $dayOfWeek => $cutOffTime) {
+        foreach ($cutOffTimes as $cutOffTime) {
             if (!$cutOffTime instanceof CutOffTime) {
                 throw new InvalidArgumentException(message: 'Invalid CutOffTime passed');
             }
+            $dayOfWeek = $cutOffTime->getDay();
 
             switch ($dayOfWeek) {
-                case CutOffTime::MONDAY:
+                case CutOffTime::DAY_DEFAULT:
+                    $this->setAvailableDefault(AvailableDefault: $cutOffTime->getAvailable());
+                    $this->setCutOffTimeDefault(CutOffTimeDefault: $cutOffTime->getTime());
+                    break;
+                case CutOffTime::DAY_MONDAY:
                     $this->setAvailableMonday(AvailableMonday: $cutOffTime->getAvailable());
                     $this->setCutOffTimeMonday(CutOffTimeMonday: $cutOffTime->getTime());
                     break;
-                case CutOffTime::TUESDAY:
+                case CutOffTime::DAY_TUESDAY:
                     $this->setAvailableTuesday(AvailableTuesday: $cutOffTime->getAvailable());
                     $this->setCutOffTimeTuesday(CutOffTimeTuesday: $cutOffTime->getTime());
                     break;
-                case CutOffTime::WEDNESDAY:
+                case CutOffTime::DAY_WEDNESDAY:
                     $this->setAvailableWednesday(AvailableWednesday: $cutOffTime->getAvailable());
                     $this->setCutOffTimeWednesday(CutOffTimeWednesday: $cutOffTime->getTime());
                     break;
-                case CutOffTime::THURSDAY:
+                case CutOffTime::DAY_THURSDAY:
                     $this->setAvailableThursday(AvailableThursday: $cutOffTime->getAvailable());
                     $this->setCutOffTimeThursday(CutOffTimeThursday: $cutOffTime->getTime());
                     break;
-                case CutOffTime::FRIDAY:
+                case CutOffTime::DAY_FRIDAY:
                     $this->setAvailableFriday(AvailableFriday: $cutOffTime->getAvailable());
                     $this->setCutOffTimeFriday(CutOffTimeFriday: $cutOffTime->getTime());
                     break;
-                case CutOffTime::SATURDAY:
+                case CutOffTime::DAY_SATURDAY:
                     $this->setAvailableSaturday(AvailableSaturday: $cutOffTime->getAvailable());
                     $this->setCutOffTimeSaturday(CutOffTimeSaturday: $cutOffTime->getTime());
                     break;
-                case CutOffTime::SUNDAY:
+                case CutOffTime::DAY_SUNDAY:
                     $this->setAvailableSunday(AvailableSunday: $cutOffTime->getAvailable());
                     $this->setCutOffTimeSunday(CutOffTimeSunday: $cutOffTime->getTime());
                     break;
@@ -1050,25 +1109,18 @@ class CalculateDeliveryDateRequestDTO extends CacheableDTO
     {
         $query = parent::jsonSerialize();
 
-        $query['Options'] = 'Daytime';
-        $options = $this->getOptions();
-        if (is_array(value: $options)) {
-            foreach ($options as $option) {
-                if ('Daytime' === $option) {
-                    continue;
-                }
-
-                $query['Options'] .= ",$option";
-            }
-        }
-
         $query['CutOffTime'] = date(format: 'H:i:s', timestamp: strtotime(datetime: (string) $this->getCutOffTime()));
-        foreach ($this->getCutOffTimes() as $idx => $time) {
-            $day = (int) $idx + 1;
+        $times = $this->getCutOffTimes();
+        foreach ($times as $time) {
+            if (!$time->getTime()) {
+                continue;
+            }
+
+            $day = $time->getDay();
             $dayName = date(format: 'l', timestamp: strtotime(datetime: "Sunday +{$day} days"));
             if (null !== $this->{"getAvailable$dayName"}()) {
-                $query["CutOffTime{$dayName}"] = date(format: 'H:i:s', timestamp: strtotime(datetime: $time->getTime() ?? '15:30:00'));
-                $query["Available{$dayName}"] = 'true';
+                $query["CutOffTime{$dayName}"] = date(format: 'H:i:s', timestamp: strtotime(datetime: $time->getTime()));
+                $query["Available{$dayName}"] = $time->getAvailable() ? 'true' : 'false';
             }
         }
 
