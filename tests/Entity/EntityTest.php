@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Sabre\Xml\Service as XmlService;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
 use ThirtyBees\PostNL\Entity\Address;
+use ThirtyBees\PostNL\Exception\InvalidArgumentException;
 
 /**
  * @testdox The Entities
@@ -25,7 +26,7 @@ class EntityTest extends TestCase
             $entityName = substr($entityName, 0, strlen($entityName) - 4);
             $entityName = "\\ThirtyBees\\PostNL\\Entity\\$entityName";
             $entity = new $entityName();
-            $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\AbstractEntity', $entity);
+            $this->assertInstanceOf(AbstractEntity::class, $entity);
         }
 
         foreach (scandir(__DIR__.'/../../src/Entity/Message') as $entityName) {
@@ -36,7 +37,7 @@ class EntityTest extends TestCase
             $entityName = substr($entityName, 0, strlen($entityName) - 4);
             $entityName = "\\ThirtyBees\\PostNL\\Entity\\Message\\$entityName";
             $entity = new $entityName();
-            $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\AbstractEntity', $entity);
+            $this->assertInstanceOf(AbstractEntity::class, $entity);
         }
 
         foreach (scandir(__DIR__.'/../../src/Entity/Request') as $entityName) {
@@ -47,7 +48,7 @@ class EntityTest extends TestCase
             $entityName = substr($entityName, 0, strlen($entityName) - 4);
             $entityName = "\\ThirtyBees\\PostNL\\Entity\\Request\\$entityName";
             $entity = new $entityName();
-            $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\AbstractEntity', $entity);
+            $this->assertInstanceOf(AbstractEntity::class, $entity);
         }
 
         foreach (scandir(__DIR__.'/../../src/Entity/Response') as $entityName) {
@@ -58,7 +59,7 @@ class EntityTest extends TestCase
             $entityName = substr($entityName, 0, strlen($entityName) - 4);
             $entityName = "\\ThirtyBees\\PostNL\\Entity\\Response\\$entityName";
             $entity = new $entityName();
-            $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\AbstractEntity', $entity);
+            $this->assertInstanceOf(AbstractEntity::class, $entity);
         }
     }
 
@@ -67,7 +68,7 @@ class EntityTest extends TestCase
      */
     public function testNegativeMissingValue()
     {
-        $this->expectException('\\ThirtyBees\\PostNL\\Exception\\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
 
         (new Address())
             ->setArea()
@@ -95,7 +96,7 @@ class EntityTest extends TestCase
      */
     public function testNegativeThrowExceptionWhenMethodDoesNotExist()
     {
-        $this->expectException('\\ThirtyBees\\PostNL\\Exception\\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
 
         (new Address())->blab();
     }
@@ -105,7 +106,7 @@ class EntityTest extends TestCase
      */
     public function testNegativeThrowExceptionWhenServiceNotSetJson()
     {
-        $this->expectException('\\ThirtyBees\\PostNL\\Exception\\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
 
         json_encode(new Address());
     }
@@ -115,7 +116,7 @@ class EntityTest extends TestCase
      */
     public function testNegativeThrowExceptionWhenServiceNotSetXml()
     {
-        $this->expectException('\\ThirtyBees\\PostNL\\Exception\\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
 
         $service = new XmlService();
 

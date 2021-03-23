@@ -45,20 +45,25 @@ class UsernameTokenTest extends TestCase
         $token = new UsernameToken('test', 'test');
         $token->setCurrentService('Barcode');
         $xmlService = new XmlService();
-        $write = $xmlService->write(
+        $actual = $xmlService->write(
             '{test}UserNameToken',
             [
                 '{test}token' => $token,
             ]
         );
 
-        $this->assertEquals('<?xml version="1.0"?>
+        $expected = <<<XML
+<?xml version="1.0"?>
 <x1:UserNameToken xmlns:x1="test">
- <x1:token xmlns:x1="test">
-  <x2:Username xmlns:x2="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">test</x2:Username>
-  <x2:Password xmlns:x2="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">a94a8fe5ccb19ba61c4c0873d391e987982fbbd3</x2:Password>
- </x1:token>
+  <x1:token xmlns:x1="test">
+    <x2:Username xmlns:x2="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">test</x2:Username>
+    <x2:Password xmlns:x2="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">a94a8fe5ccb19ba61c4c0873d391e987982fbbd3</x2:Password>
+  </x1:token>
 </x1:UserNameToken>
-', $write);
+XML;
+        $this->assertEquals(
+            preg_replace('/\s+/', '', $expected),
+            preg_replace('/\s+/', '', $actual)
+        );
     }
 }

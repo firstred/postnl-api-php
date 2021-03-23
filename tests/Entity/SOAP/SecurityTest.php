@@ -46,6 +46,6 @@ class SecurityTest extends TestCase
             ->setUsernameToken(UsernameToken::create())
         ;
 
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\SOAP\\UsernameToken', $envelope->getUsernameToken());
+        $this->assertInstanceOf(UsernameToken::class, $envelope->getUsernameToken());
     }
 }

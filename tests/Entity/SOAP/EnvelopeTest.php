@@ -47,7 +47,7 @@ class EnvelopeTest extends TestCase
             ->setHeader(Header::create())
         ;
 
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\SOAP\\Header', $envelope->getHeader());
+        $this->assertInstanceOf(Header::class, $envelope->getHeader());
     }
 
     /**
@@ -59,6 +59,6 @@ class EnvelopeTest extends TestCase
             ->setBody(Body::create())
         ;
 
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\SOAP\\Body', $envelope->getBody());
+        $this->assertInstanceOf(Body::class, $envelope->getBody());
     }
 }

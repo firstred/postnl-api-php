@@ -41,6 +41,7 @@ use ThirtyBees\PostNL\Entity\Request\GenerateLabel;
 use ThirtyBees\PostNL\Entity\Response\GenerateLabelResponse;
 use ThirtyBees\PostNL\Entity\Shipment;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
+use ThirtyBees\PostNL\Exception\ResponseException;
 use ThirtyBees\PostNL\HttpClient\MockClient;
 use ThirtyBees\PostNL\PostNL;
 use ThirtyBees\PostNL\Service\LabellingService;
@@ -317,7 +318,7 @@ xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">
                 ->setProductCodeDelivery('3085')
         );
 
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\GenerateLabelResponse', $label);
+        $this->assertInstanceOf(GenerateLabelResponse::class, $label);
     }
 
     /**
@@ -479,7 +480,7 @@ XML
      */
     public function testNegativeGenerateLabelInvalidResponseSoap()
     {
-        $this->expectException('ThirtyBees\\PostNL\\Exception\\ResponseException');
+        $this->expectException(ResponseException::class);
 
         $mock = new MockHandler([
             new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], 'asdfojasuidfo'),

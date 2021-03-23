@@ -42,6 +42,8 @@ use ThirtyBees\PostNL\Entity\Message\Message;
 use ThirtyBees\PostNL\Entity\Request\GetLocation;
 use ThirtyBees\PostNL\Entity\Request\GetLocationsInArea;
 use ThirtyBees\PostNL\Entity\Request\GetNearestLocations;
+use ThirtyBees\PostNL\Entity\Response\GetLocationsInAreaResponse;
+use ThirtyBees\PostNL\Entity\Response\GetNearestLocationsResponse;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
 use ThirtyBees\PostNL\HttpClient\MockClient;
 use ThirtyBees\PostNL\PostNL;
@@ -140,8 +142,18 @@ class LocationServiceSoapTest extends TestCase
                 ]))
         );
 
-        $this->assertEquals("<?xml version=\"1.0\"?>
-<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:services=\"http://postnl.nl/cif/services/LocationWebService/\" xmlns:domain=\"http://postnl.nl/cif/domain/LocationWebService/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\" xmlns:schema=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:common=\"http://postnl.nl/cif/services/common/\" xmlns:arr=\"http://schemas.microsoft.com/2003/10/Serialization/Arrays\">
+        $this->assertXmlStringEqualsXmlString(<<<XML
+<?xml version="1.0"?>
+<soap:Envelope 
+    xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" 
+    xmlns:env="http://www.w3.org/2003/05/soap-envelope" 
+    xmlns:services="http://postnl.nl/cif/services/LocationWebService/"
+    xmlns:domain="http://postnl.nl/cif/domain/LocationWebService/"
+    xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" 
+    xmlns:schema="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:common="http://postnl.nl/cif/services/common/" 
+    xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays"
+>
  <soap:Header>
   <wsse:Security>
    <wsse:UsernameToken>
@@ -175,7 +187,8 @@ class LocationServiceSoapTest extends TestCase
   </services:GetNearestLocations>
  </soap:Body>
 </soap:Envelope>
-", (string) $request->getBody());
+XML
+            , (string) $request->getBody());
         $this->assertEmpty($request->getHeaderLine('apikey'));
         $this->assertEquals('text/xml', $request->getHeaderLine('Accept'));
     }
@@ -213,7 +226,7 @@ class LocationServiceSoapTest extends TestCase
                 'Street'     => 'Siriusdreef',
             ])));
 
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\GetNearestLocationsResponse', $response);
+        $this->assertInstanceOf(GetNearestLocationsResponse::class, $response);
         $this->assertEquals(1, count($response->getGetLocationsResult()));
     }
 
@@ -250,8 +263,9 @@ class LocationServiceSoapTest extends TestCase
                 ]))
         );
 
-        $this->assertEquals("<?xml version=\"1.0\"?>
-<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:services=\"http://postnl.nl/cif/services/LocationWebService/\" xmlns:domain=\"http://postnl.nl/cif/domain/LocationWebService/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\" xmlns:schema=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:common=\"http://postnl.nl/cif/services/common/\" xmlns:arr=\"http://schemas.microsoft.com/2003/10/Serialization/Arrays\">
+        $this->assertXmlStringEqualsXmlString(<<<XML
+<?xml version="1.0"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:env="http://www.w3.org/2003/05/soap-envelope" xmlns:services="http://postnl.nl/cif/services/LocationWebService/" xmlns:domain="http://postnl.nl/cif/domain/LocationWebService/" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" xmlns:schema="http://www.w3.org/2001/XMLSchema-instance" xmlns:common="http://postnl.nl/cif/services/common/" xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
  <soap:Header>
   <wsse:Security>
    <wsse:UsernameToken>
@@ -288,7 +302,8 @@ class LocationServiceSoapTest extends TestCase
   </services:GetLocationsInArea>
  </soap:Body>
 </soap:Envelope>
-", (string) $request->getBody());
+XML
+            , (string) $request->getBody());
         $this->assertEmpty($request->getHeaderLine('apikey'));
         $this->assertEquals('text/xml', $request->getHeaderLine('Accept'));
     }
@@ -328,7 +343,7 @@ class LocationServiceSoapTest extends TestCase
                 ]),
             ])));
 
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\GetLocationsInAreaResponse', $response);
+        $this->assertInstanceOf(GetLocationsInAreaResponse::class, $response);
         $this->assertEquals(1, count($response->getGetLocationsResult()));
     }
 
@@ -347,27 +362,38 @@ class LocationServiceSoapTest extends TestCase
                 ->setRetailNetworkID('PNPNL-01')
         );
 
-        $this->assertEquals("<?xml version=\"1.0\"?>
-<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:services=\"http://postnl.nl/cif/services/LocationWebService/\" xmlns:domain=\"http://postnl.nl/cif/domain/LocationWebService/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\" xmlns:schema=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:common=\"http://postnl.nl/cif/services/common/\" xmlns:arr=\"http://schemas.microsoft.com/2003/10/Serialization/Arrays\">
- <soap:Header>
-  <wsse:Security>
-   <wsse:UsernameToken>
-    <wsse:Password>test</wsse:Password>
-   </wsse:UsernameToken>
-  </wsse:Security>
- </soap:Header>
- <soap:Body>
-  <services:GetLocation>
-   <domain:LocationCode>161503</domain:LocationCode>
-   <domain:Message>
-    <domain:MessageID>{$message->getMessageID()}</domain:MessageID>
-    <domain:MessageTimeStamp>{$message->getMessageTimeStamp()}</domain:MessageTimeStamp>
-   </domain:Message>
-   <domain:RetailNetworkID>PNPNL-01</domain:RetailNetworkID>
-  </services:GetLocation>
- </soap:Body>
+        $this->assertXmlStringEqualsXmlString(<<<XML
+<?xml version="1.0"?>
+<soap:Envelope
+    xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" 
+    xmlns:env="http://www.w3.org/2003/05/soap-envelope" 
+    xmlns:services="http://postnl.nl/cif/services/LocationWebService/"
+    xmlns:domain="http://postnl.nl/cif/domain/LocationWebService/"
+    xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" 
+    xmlns:schema="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:common="http://postnl.nl/cif/services/common/" 
+    xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays"
+>
+  <soap:Header>
+    <wsse:Security>
+      <wsse:UsernameToken>
+        <wsse:Password>test</wsse:Password>
+      </wsse:UsernameToken>
+    </wsse:Security>
+  </soap:Header>
+  <soap:Body>
+    <services:GetLocation>
+      <domain:LocationCode>161503</domain:LocationCode>
+      <domain:Message>
+        <domain:MessageID>{$message->getMessageID()}</domain:MessageID>
+        <domain:MessageTimeStamp>{$message->getMessageTimeStamp()}</domain:MessageTimeStamp>
+      </domain:Message>
+      <domain:RetailNetworkID>PNPNL-01</domain:RetailNetworkID>
+    </services:GetLocation>
+  </soap:Body>
 </soap:Envelope>
-", (string) $request->getBody());
+XML
+            , (string) $request->getBody());
         $this->assertEmpty($request->getHeaderLine('apikey'));
         $this->assertEquals('text/xml', $request->getHeaderLine('Accept'));
     }
@@ -391,7 +417,7 @@ class LocationServiceSoapTest extends TestCase
                 ->setRetailNetworkID('PNPNL-01')
         );
 
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\GetLocationsInAreaResponse', $response);
+        $this->assertInstanceOf(GetLocationsInAreaResponse::class, $response);
         $this->assertEquals(1, count($response->getGetLocationsResult()));
     }
 

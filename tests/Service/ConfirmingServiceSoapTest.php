@@ -159,8 +159,17 @@ class ConfirmingServiceSoapTest extends TestCase
                 ->setCustomer($this->postnl->getCustomer())
         );
 
-        $this->assertEquals("<?xml version=\"1.0\"?>
-<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:services=\"http://postnl.nl/cif/services/ConfirmingWebService/\" xmlns:domain=\"http://postnl.nl/cif/domain/ConfirmingWebService/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\" xmlns:schema=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:common=\"http://postnl.nl/cif/services/common/\">
+        $this->assertXmlStringEqualsXmlString(<<<XML
+<?xml version="1.0"?>
+<soap:Envelope 
+  xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+  xmlns:env="http://www.w3.org/2003/05/soap-envelope"
+  xmlns:services="http://postnl.nl/cif/services/ConfirmingWebService/"
+  xmlns:domain="http://postnl.nl/cif/domain/ConfirmingWebService/" 
+  xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" 
+  xmlns:schema="http://www.w3.org/2001/XMLSchema-instance" 
+  xmlns:common="http://postnl.nl/cif/services/common/"
+>
  <soap:Header>
   <wsse:Security>
    <wsse:UsernameToken>
@@ -225,7 +234,8 @@ class ConfirmingServiceSoapTest extends TestCase
   </services:Confirming>
  </soap:Body>
 </soap:Envelope>
-",
+XML
+            ,
             (string) $request->getBody());
         $this->assertEquals('', $request->getHeaderLine('apikey'));
         $this->assertEquals('text/xml;charset=UTF-8', $request->getHeaderLine('Content-Type'));

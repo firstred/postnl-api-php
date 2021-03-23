@@ -37,6 +37,7 @@ use ThirtyBees\PostNL\Entity\Address;
 use ThirtyBees\PostNL\Entity\Customer;
 use ThirtyBees\PostNL\Entity\Message\Message;
 use ThirtyBees\PostNL\Entity\Request\GetTimeframes;
+use ThirtyBees\PostNL\Entity\Response\ResponseTimeframes;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
 use ThirtyBees\PostNL\Entity\Timeframe;
 use ThirtyBees\PostNL\HttpClient\MockClient;
@@ -135,8 +136,18 @@ class TimeframeServiceSoapTest extends TestCase
 
         $this->assertEmpty($request->getHeaderLine('apikey'));
         $this->assertEquals('text/xml', $request->getHeaderLine('Accept'));
-        $this->assertEquals("<?xml version=\"1.0\"?>
-<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:services=\"http://postnl.nl/cif/services/TimeframeWebService/\" xmlns:domain=\"http://postnl.nl/cif/domain/TimeframeWebService/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\" xmlns:schema=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:common=\"http://postnl.nl/cif/services/common/\" xmlns:arr=\"http://schemas.microsoft.com/2003/10/Serialization/Arrays\">
+        $this->assertXmlStringEqualsXmlString(<<<XML
+<?xml version="1.0"?>
+<soap:Envelope
+    xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+    xmlns:env="http://www.w3.org/2003/05/soap-envelope"
+    xmlns:services="http://postnl.nl/cif/services/TimeframeWebService/" 
+    xmlns:domain="http://postnl.nl/cif/domain/TimeframeWebService/"
+    xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd"
+    xmlns:schema="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:common="http://postnl.nl/cif/services/common/" 
+    xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays"
+>
  <soap:Header>
   <wsse:Security>
    <wsse:UsernameToken>
@@ -167,7 +178,8 @@ class TimeframeServiceSoapTest extends TestCase
   </services:GetTimeframes>
  </soap:Body>
 </soap:Envelope>
-", (string) $request->getBody());
+XML
+            , (string) $request->getBody());
     }
 
     /**
@@ -254,7 +266,7 @@ class TimeframeServiceSoapTest extends TestCase
         );
 
         // Should be a ResponeTimefarmes instance
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\ResponseTimeframes', $responseTimeframes);
+        $this->assertInstanceOf(ResponseTimeframes::class, $responseTimeframes);
         // Check for data loss
         $this->assertEquals(2, count($responseTimeframes->getReasonNoTimeframes()));
         $this->assertEquals(2, count($responseTimeframes->getTimeframes()));

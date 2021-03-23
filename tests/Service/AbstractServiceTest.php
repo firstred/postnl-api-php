@@ -29,6 +29,8 @@ namespace ThirtyBees\PostNL\Tests\Service;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
+use ThirtyBees\PostNL\Exception\CifDownException;
+use ThirtyBees\PostNL\Exception\CifException;
 use ThirtyBees\PostNL\Service\AbstractService;
 
 /**
@@ -72,7 +74,7 @@ class AbstractServiceTest extends TestCase
      */
     public function testCifDownExceptionRest()
     {
-        $this->expectException('\\ThirtyBees\\PostNL\\Exception\\CifDownException');
+        $this->expectException(CifDownException::class);
 
         $response = new Response(500, [], json_encode([
             'Envelope' => ['Body' => ['Fault' => ['Reason' => ['Text' => ['' => 'error']]]]],
@@ -91,7 +93,7 @@ class AbstractServiceTest extends TestCase
      */
     public function testCifExceptionRest()
     {
-        $this->expectException('\\ThirtyBees\\PostNL\\Exception\\CifException');
+        $this->expectException(CifException::class);
 
         $response = new Response(500, [], json_encode([
             'Errors' => [
@@ -116,22 +118,25 @@ class AbstractServiceTest extends TestCase
      */
     public function testCifDownExceptionSoap()
     {
-        $this->expectException('\\ThirtyBees\\PostNL\\Exception\\CifDownException');
+        $this->expectException(CifDownException::class);
 
-        $response = simplexml_load_string('<?xml version="1.0" encoding="UTF-8"?>
+        $response = simplexml_load_string(<<<XML
+<?xml version="1.0" encoding="UTF-8"?>
 <Envelope xmlns:env="http://www.w3.org/2003/05/soap-envelope">
-    <encodingStyle>http://schemas.xmlsoap.org/soap/encoding/</encodingStyle>
-    <env:Body>
-        <env:Fault>
-            <faultcode>soap:Server</faultcode>
-            <faultstring>Failed to execute the ExtractVariables: payloadExtractVariables</faultstring>
-            <faultactor/>
-            <env:Reason>
-                <env:Text>steps.extractvariables.ExecutionFailed</env:Text>
-            </env:Reason>
-        </env:Fault>
-    </env:Body>
-</Envelope>');
+  <encodingStyle>http://schemas.xmlsoap.org/soap/encoding/</encodingStyle>
+  <env:Body>
+    <env:Fault>
+      <faultcode>soap:Server</faultcode>
+      <faultstring>Failed to execute the ExtractVariables: payloadExtractVariables</faultstring>
+      <faultactor/>
+      <env:Reason>
+        <env:Text>steps.extractvariables.ExecutionFailed</env:Text>
+      </env:Reason>
+    </env:Fault>
+  </env:Body>
+</Envelope>
+XML
+        );
         $response->registerXPathNamespace('env', 'http://www.w3.org/2003/05/soap-envelope');
         $response->registerXPathNamespace('common', 'http://postnl.nl/cif/services/common/');
 
@@ -146,21 +151,24 @@ class AbstractServiceTest extends TestCase
      */
     public function testCifExceptionSoap()
     {
-        $this->expectException('\\ThirtyBees\\PostNL\\Exception\\CifException');
+        $this->expectException(CifException::class);
 
-        $response = simplexml_load_string('<?xml version="1.0" encoding="UTF-8"?>
+        $response = simplexml_load_string(<<<XML
+<?xml version="1.0" encoding="UTF-8"?>
 <Envelope xmlns:common="http://postnl.nl/cif/services/common/">
-    <encodingStyle>http://schemas.xmlsoap.org/soap/encoding/</encodingStyle>
-    <common:CifException>
-        <common:Errors>
-            <common:ExceptionData>
-                <common:Description>ExecutionFailed</common:Description>
-                <common:ErrorMsg>steps.extractvariables.ExecutionFailed</common:ErrorMsg>
-                <common:ErrorNumber>1</common:ErrorNumber>
-            </common:ExceptionData>
-        </common:Errors>
-    </common:CifException>
-</Envelope>');
+  <encodingStyle>http://schemas.xmlsoap.org/soap/encoding/</encodingStyle>
+  <common:CifException>
+    <common:Errors>
+      <common:ExceptionData>
+        <common:Description>ExecutionFailed</common:Description>
+        <common:ErrorMsg>steps.extractvariables.ExecutionFailed</common:ErrorMsg>
+        <common:ErrorNumber>1</common:ErrorNumber>
+      </common:ExceptionData>
+    </common:Errors>
+  </common:CifException>
+</Envelope>
+XML
+        );
         $response->registerXPathNamespace('env', 'http://www.w3.org/2003/05/soap-envelope');
         $response->registerXPathNamespace('common', 'http://postnl.nl/cif/services/common/');
 

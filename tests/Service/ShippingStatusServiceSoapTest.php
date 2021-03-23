@@ -41,6 +41,9 @@ use ThirtyBees\PostNL\Entity\Request\CompleteStatusByPhase;
 use ThirtyBees\PostNL\Entity\Request\CompleteStatusByStatus;
 use ThirtyBees\PostNL\Entity\Request\CurrentStatus;
 use ThirtyBees\PostNL\Entity\Request\GetSignature;
+use ThirtyBees\PostNL\Entity\Response\CompleteStatusResponse;
+use ThirtyBees\PostNL\Entity\Response\CurrentStatusResponse;
+use ThirtyBees\PostNL\Entity\Response\SignatureResponse;
 use ThirtyBees\PostNL\Entity\Shipment;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
 use ThirtyBees\PostNL\HttpClient\MockClient;
@@ -127,8 +130,17 @@ class ShippingStatusServiceSoapTest extends TestCase
                 ->setMessage($message)
         );
 
-        $this->assertEquals("<?xml version=\"1.0\"?>
-<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:services=\"http://postnl.nl/cif/services/ShippingStatusWebService/\" xmlns:domain=\"http://postnl.nl/cif/domain/ShippingStatusWebService/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\" xmlns:schema=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:common=\"http://postnl.nl/cif/services/common/\">
+        $this->assertXmlStringEqualsXmlString(<<<XML
+<?xml version="1.0"?>
+<soap:Envelope 
+    xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+    xmlns:env="http://www.w3.org/2003/05/soap-envelope" 
+    xmlns:services="http://postnl.nl/cif/services/ShippingStatusWebService/" 
+    xmlns:domain="http://postnl.nl/cif/domain/ShippingStatusWebService/" 
+    xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd"
+    xmlns:schema="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:common="http://postnl.nl/cif/services/common/"
+>
  <soap:Header>
   <wsse:Security>
    <wsse:UsernameToken>
@@ -152,7 +164,8 @@ class ShippingStatusServiceSoapTest extends TestCase
   </services:CurrentStatus>
  </soap:Body>
 </soap:Envelope>
-", (string) $request->getBody());
+XML
+            , (string) $request->getBody());
     }
 
     /**
@@ -225,7 +238,7 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
                 )
         );
 
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\CurrentStatusResponse', $currentStatusResponse);
+        $this->assertInstanceOf(CurrentStatusResponse::class, $currentStatusResponse);
     }
 
     /**
@@ -245,8 +258,17 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
                 ->setMessage($message)
         );
 
-        $this->assertEquals("<?xml version=\"1.0\"?>
-<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:services=\"http://postnl.nl/cif/services/ShippingStatusWebService/\" xmlns:domain=\"http://postnl.nl/cif/domain/ShippingStatusWebService/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\" xmlns:schema=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:common=\"http://postnl.nl/cif/services/common/\">
+        $this->assertXmlStringEqualsXmlString(<<<XML
+<?xml version="1.0"?>
+<soap:Envelope 
+    xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+    xmlns:env="http://www.w3.org/2003/05/soap-envelope" 
+    xmlns:services="http://postnl.nl/cif/services/ShippingStatusWebService/" 
+    xmlns:domain="http://postnl.nl/cif/domain/ShippingStatusWebService/" 
+    xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" 
+    xmlns:schema="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:common="http://postnl.nl/cif/services/common/"
+>
  <soap:Header>
   <wsse:Security>
    <wsse:UsernameToken>
@@ -270,7 +292,8 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
   </services:CurrentStatus>
  </soap:Body>
 </soap:Envelope>
-", (string) $request->getBody());
+XML
+            , (string) $request->getBody());
     }
 
     /**
@@ -290,8 +313,17 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
                 ->setMessage($message)
         );
 
-        $this->assertEquals("<?xml version=\"1.0\"?>
-<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:services=\"http://postnl.nl/cif/services/ShippingStatusWebService/\" xmlns:domain=\"http://postnl.nl/cif/domain/ShippingStatusWebService/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\" xmlns:schema=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:common=\"http://postnl.nl/cif/services/common/\">
+        $this->assertXmlStringEqualsXmlString(<<<XML
+<?xml version="1.0"?>
+<soap:Envelope 
+    xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" 
+    xmlns:env="http://www.w3.org/2003/05/soap-envelope"
+    xmlns:services="http://postnl.nl/cif/services/ShippingStatusWebService/" 
+    xmlns:domain="http://postnl.nl/cif/domain/ShippingStatusWebService/" 
+    xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" 
+    xmlns:schema="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:common="http://postnl.nl/cif/services/common/"
+>
  <soap:Header>
   <wsse:Security>
    <wsse:UsernameToken>
@@ -315,7 +347,8 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
   </services:CurrentStatus>
  </soap:Body>
 </soap:Envelope>
-", (string) $request->getBody());
+XML
+            , (string) $request->getBody());
     }
 
     /**
@@ -335,8 +368,17 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
                 ->setMessage($message)
         );
 
-        $this->assertEquals("<?xml version=\"1.0\"?>
-<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:services=\"http://postnl.nl/cif/services/ShippingStatusWebService/\" xmlns:domain=\"http://postnl.nl/cif/domain/ShippingStatusWebService/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\" xmlns:schema=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:common=\"http://postnl.nl/cif/services/common/\">
+        $this->assertXmlStringEqualsXmlString(<<<XML
+<?xml version="1.0"?>
+<soap:Envelope 
+    xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+    xmlns:env="http://www.w3.org/2003/05/soap-envelope" 
+    xmlns:services="http://postnl.nl/cif/services/ShippingStatusWebService/" 
+    xmlns:domain="http://postnl.nl/cif/domain/ShippingStatusWebService/" 
+    xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd"
+    xmlns:schema="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:common="http://postnl.nl/cif/services/common/"
+>
  <soap:Header>
   <wsse:Security>
    <wsse:UsernameToken>
@@ -360,7 +402,8 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
   </services:CurrentStatus>
  </soap:Body>
 </soap:Envelope>
-", (string) $request->getBody());
+XML
+            , (string) $request->getBody());
     }
 
     /**
@@ -380,8 +423,17 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
                 ->setMessage($message)
         );
 
-        $this->assertEquals("<?xml version=\"1.0\"?>
-<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:services=\"http://postnl.nl/cif/services/ShippingStatusWebService/\" xmlns:domain=\"http://postnl.nl/cif/domain/ShippingStatusWebService/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\" xmlns:schema=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:common=\"http://postnl.nl/cif/services/common/\">
+        $this->assertXmlStringEqualsXmlString(<<<XML
+<?xml version="1.0"?>
+<soap:Envelope
+    xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" 
+    xmlns:env="http://www.w3.org/2003/05/soap-envelope"
+    xmlns:services="http://postnl.nl/cif/services/ShippingStatusWebService/" 
+    xmlns:domain="http://postnl.nl/cif/domain/ShippingStatusWebService/" 
+    xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" 
+    xmlns:schema="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:common="http://postnl.nl/cif/services/common/"
+>
  <soap:Header>
   <wsse:Security>
    <wsse:UsernameToken>
@@ -405,7 +457,8 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
   </services:CompleteStatus>
  </soap:Body>
 </soap:Envelope>
-", (string) $request->getBody());
+XML
+            , (string) $request->getBody());
     }
 
     /**
@@ -425,8 +478,17 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
                 ->setMessage($message)
         );
 
-        $this->assertEquals("<?xml version=\"1.0\"?>
-<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:services=\"http://postnl.nl/cif/services/ShippingStatusWebService/\" xmlns:domain=\"http://postnl.nl/cif/domain/ShippingStatusWebService/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\" xmlns:schema=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:common=\"http://postnl.nl/cif/services/common/\">
+        $this->assertXmlStringEqualsXmlString(<<<XML
+<?xml version="1.0"?>
+<soap:Envelope 
+    xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+    xmlns:env="http://www.w3.org/2003/05/soap-envelope" 
+    xmlns:services="http://postnl.nl/cif/services/ShippingStatusWebService/" 
+    xmlns:domain="http://postnl.nl/cif/domain/ShippingStatusWebService/" 
+    xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd"
+    xmlns:schema="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:common="http://postnl.nl/cif/services/common/"
+>
  <soap:Header>
   <wsse:Security>
    <wsse:UsernameToken>
@@ -450,7 +512,8 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
   </services:CompleteStatus>
  </soap:Body>
 </soap:Envelope>
-", (string) $request->getBody());
+XML
+            , (string) $request->getBody());
     }
 
     /**
@@ -606,12 +669,12 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
                 )
         );
 
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\CompleteStatusResponse', $completeStatusResponse);
+        $this->assertInstanceOf(CompleteStatusResponse::class, $completeStatusResponse);
         $this->assertEquals(1, count($completeStatusResponse->getShipments()[0]->getAddresses()));
         $this->assertEquals(2, count($completeStatusResponse->getShipments()[0]->getAmounts()));
         $this->assertEquals(5, count($completeStatusResponse->getShipments()[0]->getEvents()));
         $this->assertEquals(1, count($completeStatusResponse->getShipments()[0]->getGroups()));
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Customer', $completeStatusResponse->getShipments()[0]->getCustomer());
+        $this->assertInstanceOf(Customer::class, $completeStatusResponse->getShipments()[0]->getCustomer());
         $this->assertEquals('19-04-2016 06:06:16', $completeStatusResponse->getShipments()[0]->getOldStatuses()[4]->getTimeStamp());
     }
 
@@ -634,8 +697,17 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
                 ->setMessage($message)
         );
 
-        $this->assertEquals("<?xml version=\"1.0\"?>
-<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:services=\"http://postnl.nl/cif/services/ShippingStatusWebService/\" xmlns:domain=\"http://postnl.nl/cif/domain/ShippingStatusWebService/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\" xmlns:schema=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:common=\"http://postnl.nl/cif/services/common/\">
+        $this->assertXmlStringEqualsXmlString(<<<XML
+<?xml version="1.0"?>
+<soap:Envelope 
+    xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" 
+    xmlns:env="http://www.w3.org/2003/05/soap-envelope" 
+    xmlns:services="http://postnl.nl/cif/services/ShippingStatusWebService/"
+    xmlns:domain="http://postnl.nl/cif/domain/ShippingStatusWebService/" 
+    xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" 
+    xmlns:schema="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:common="http://postnl.nl/cif/services/common/"
+>
  <soap:Header>
   <wsse:Security>
    <wsse:UsernameToken>
@@ -661,7 +733,8 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
   </services:CompleteStatusByStatus>
  </soap:Body>
 </soap:Envelope>
-", (string) $request->getBody());
+XML
+            , (string) $request->getBody());
     }
 
     /**
@@ -684,8 +757,17 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
         );
 
         $this->assertEquals('"'.ShippingStatusService::SOAP_ACTION_COMPLETE_PHASE.'"', $request->getHeaderLine('SOAPAction'));
-        $this->assertEquals("<?xml version=\"1.0\"?>
-<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:services=\"http://postnl.nl/cif/services/ShippingStatusWebService/\" xmlns:domain=\"http://postnl.nl/cif/domain/ShippingStatusWebService/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\" xmlns:schema=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:common=\"http://postnl.nl/cif/services/common/\">
+        $this->assertXmlStringEqualsXmlString(<<<XML
+<?xml version="1.0"?>
+<soap:Envelope 
+    xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" 
+    xmlns:env="http://www.w3.org/2003/05/soap-envelope" 
+    xmlns:services="http://postnl.nl/cif/services/ShippingStatusWebService/"
+    xmlns:domain="http://postnl.nl/cif/domain/ShippingStatusWebService/"
+    xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" 
+    xmlns:schema="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:common="http://postnl.nl/cif/services/common/"
+>
  <soap:Header>
   <wsse:Security>
    <wsse:UsernameToken>
@@ -711,7 +793,8 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
   </services:CompleteStatusByPhase>
  </soap:Body>
 </soap:Envelope>
-", (string) $request->getBody());
+XML
+            , (string) $request->getBody());
     }
 
     /**
@@ -730,8 +813,17 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
                 )
         );
 
-        $this->assertEquals("<?xml version=\"1.0\"?>
-<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:services=\"http://postnl.nl/cif/services/ShippingStatusWebService/\" xmlns:domain=\"http://postnl.nl/cif/domain/ShippingStatusWebService/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\" xmlns:schema=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:common=\"http://postnl.nl/cif/services/common/\">
+        $this->assertXmlStringEqualsXmlString(<<<XML
+<?xml version="1.0"?>
+<soap:Envelope 
+    xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+    xmlns:env="http://www.w3.org/2003/05/soap-envelope" 
+    xmlns:services="http://postnl.nl/cif/services/ShippingStatusWebService/" 
+    xmlns:domain="http://postnl.nl/cif/domain/ShippingStatusWebService/" 
+    xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" 
+    xmlns:schema="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:common="http://postnl.nl/cif/services/common/"
+>
  <soap:Header>
   <wsse:Security>
    <wsse:UsernameToken>
@@ -755,7 +847,8 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
   </services:GetSignature>
  </soap:Body>
 </soap:Envelope>
-", (string) $request->getBody());
+XML
+            , (string) $request->getBody());
     }
 
     /**
@@ -796,6 +889,6 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
                 )
         );
 
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\SignatureResponse', $signatureResponse);
+        $this->assertInstanceOf(SignatureResponse::class, $signatureResponse);
     }
 }

@@ -37,6 +37,7 @@ use ThirtyBees\PostNL\Entity\Address;
 use ThirtyBees\PostNL\Entity\Customer;
 use ThirtyBees\PostNL\Entity\Message\Message;
 use ThirtyBees\PostNL\Entity\Request\GetTimeframes;
+use ThirtyBees\PostNL\Entity\Response\ResponseTimeframes;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
 use ThirtyBees\PostNL\Entity\Timeframe;
 use ThirtyBees\PostNL\HttpClient\MockClient;
@@ -351,12 +352,12 @@ class TimeframeServiceRestTest extends TestCase
                 ])
         );
 
-        // Should be a ResponeTimeframes instance
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\ResponseTimeframes', $responseTimeframes);
+        // Should be a ResponseTimeframes instance
+        $this->assertInstanceOf(ResponseTimeframes::class, $responseTimeframes);
         // Check for data loss
         $this->assertEquals(5, count($responseTimeframes->getReasonNoTimeframes()));
         $this->assertEquals(6, count($responseTimeframes->getTimeframes()));
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Timeframe', $responseTimeframes->getTimeframes()[0]);
+        $this->assertInstanceOf(Timeframe::class, $responseTimeframes->getTimeframes()[0]);
         $this->assertEquals(json_encode($payload), json_encode($responseTimeframes));
     }
 }

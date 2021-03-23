@@ -39,6 +39,9 @@ use ThirtyBees\PostNL\Entity\Message\Message;
 use ThirtyBees\PostNL\Entity\Request\CompleteStatus;
 use ThirtyBees\PostNL\Entity\Request\CurrentStatus;
 use ThirtyBees\PostNL\Entity\Request\GetSignature;
+use ThirtyBees\PostNL\Entity\Response\CompleteStatusResponse;
+use ThirtyBees\PostNL\Entity\Response\CurrentStatusResponse;
+use ThirtyBees\PostNL\Entity\Response\GetSignatureResponseSignature;
 use ThirtyBees\PostNL\Entity\Shipment;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
 use ThirtyBees\PostNL\HttpClient\MockClient;
@@ -223,7 +226,7 @@ class ShippingStatusServiceRestTest extends TestCase
                 )
         );
 
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\CurrentStatusResponse', $currentStatusResponse);
+        $this->assertInstanceOf(CurrentStatusResponse::class, $currentStatusResponse);
     }
 
     /**
@@ -499,12 +502,12 @@ class ShippingStatusServiceRestTest extends TestCase
                 )
         );
 
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\CompleteStatusResponse', $completeStatusResponse);
+        $this->assertInstanceOf(CompleteStatusResponse::class, $completeStatusResponse);
         $this->assertEquals(2, count($completeStatusResponse->getShipments()[0]->getAddresses()));
         $this->assertNull($completeStatusResponse->getShipments()[0]->getAmounts());
         $this->assertEquals(3, count($completeStatusResponse->getShipments()[0]->getEvents()));
         $this->assertNull($completeStatusResponse->getShipments()[0]->getGroups());
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Customer', $completeStatusResponse->getShipments()[0]->getCustomer());
+        $this->assertInstanceOf(Customer::class, $completeStatusResponse->getShipments()[0]->getCustomer());
         $this->assertEquals('07-03-2018 09:50:47', $completeStatusResponse->getShipments()[0]->getOldStatuses()[4]->getTimeStamp());
     }
 
@@ -656,6 +659,6 @@ class ShippingStatusServiceRestTest extends TestCase
                 )
         );
 
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\GetSignatureResponseSignature', $signatureResponse);
+        $this->assertInstanceOf(GetSignatureResponseSignature::class, $signatureResponse);
     }
 }
