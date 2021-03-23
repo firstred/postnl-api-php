@@ -30,6 +30,7 @@ namespace Firstred\PostNL\ResponseProcessor;
 
 use ArgumentCountError;
 use Firstred\PostNL\Service\CheckoutServiceInterface;
+use Firstred\PostNL\Service\LabellingServiceInterface;
 use function class_implements;
 use Firstred\PostNL\Attribute\ResponseProp;
 use Firstred\PostNL\Exception\ApiClientException;
@@ -131,7 +132,7 @@ abstract class ResponseProcessorBase implements ResponseProcessorInterface
 //            ConfirmingServiceResponseProcessorInterface::class     => ConfirmingServiceInterface::class,
             CheckoutServiceResponseProcessorInterface::class       => CheckoutServiceInterface::class,
             DeliveryDateServiceResponseProcessorInterface::class   => DeliveryDateServiceInterface::class,
-//            LabellingServiceResponseProcessorInterface::class      => LabellingServiceInterface::class,
+            LabellingServiceResponseProcessorInterface::class      => LabellingServiceInterface::class,
             LocationServiceResponseProcessorInterface::class       => LocationServiceInterface::class,
 //            ShippingServiceResponseProcessorInterface::class       => ShippingServiceInterface::class,
 //            ShippingStatusServiceResponseProcessorInterface::class => ShippingStatusServiceInterface::class,

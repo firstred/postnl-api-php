@@ -26,36 +26,59 @@
 
 declare(strict_types=1);
 
-namespace Firstred\PostNL\ResponseProcessor;
+namespace Firstred\PostNL\Gateway;
 
-use Firstred\PostNL\DTO\Response\GetDeliveryInformationResponseDTO;
+use Firstred\PostNL\DTO\Request\GenerateLabelsRequestDTO;
+use Firstred\PostNL\DTO\Response\GenerateLabelsResponseDTO;
+use Firstred\PostNL\Exception\ApiClientException;
 use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\InvalidApiKeyException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\NotAvailableException;
 use Firstred\PostNL\Exception\ParseError;
-use Psr\Http\Message\ResponseInterface;
+use Firstred\PostNL\RequestBuilder\LabellingServiceRequestBuilderInterface;
+use Firstred\PostNL\ResponseProcessor\LabellingServiceResponseProcessorInterface;
 
-class CheckoutServiceResponseProcessor extends ResponseProcessorBase implements CheckoutServiceResponseProcessorInterface
+/**
+ * Interface LabellingServiceGatewayInterface.
+ */
+interface LabellingServiceGatewayInterface extends GatewayInterface
 {
     /**
-     * @param ResponseInterface $response
+     * @param GenerateLabelsRequestDTO $generateLabelsRequestDTO
      *
-     * @return GetDeliveryInformationResponseDTO
+     * @return GenerateLabelsResponseDTO
+     *
+     * @throws ApiClientException
      * @throws ApiException
      * @throws InvalidApiKeyException
      * @throws InvalidArgumentException
      * @throws NotAvailableException
      * @throws ParseError
      */
-    public function processGetDeliveryInformationResponse(ResponseInterface $response): GetDeliveryInformationResponseDTO
-    {
-        /** @var GetDeliveryInformationResponseDTO $dto */
-        $dto = $this->fullyProcessResponse(
-            className: GetDeliveryInformationResponseDTO::class,
-            response: $response,
-        );
+    public function doGenerateLabelsRequest(GenerateLabelsRequestDTO $generateLabelsRequestDTO): GenerateLabelsResponseDTO;
 
-        return $dto;
-    }
+    /**
+     * @return LabellingServiceRequestBuilderInterface
+     */
+    public function getRequestBuilder(): LabellingServiceRequestBuilderInterface;
+
+    /**
+     * @param LabellingServiceRequestBuilderInterface $requestBuilder
+     *
+     * @return static
+     */
+    public function setRequestBuilder(LabellingServiceRequestBuilderInterface $requestBuilder): static;
+
+    /**
+     * @return LabellingServiceResponseProcessorInterface
+     */
+    public function getResponseProcessor(): LabellingServiceResponseProcessorInterface;
+
+    /**
+     * @param LabellingServiceResponseProcessorInterface $responseProcessor
+     *
+     * @return static
+     */
+    public function setResponseProcessor(LabellingServiceResponseProcessorInterface $responseProcessor): static;
 }

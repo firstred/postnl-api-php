@@ -42,8 +42,55 @@ use JetBrains\PhpStorm\ExpectedValues;
  */
 class Label extends SerializableObject
 {
-    public const FORMAT_A4 = 1;
-    public const FORMAT_A6 = 2;
+    public const FORMAT_A4 = 'A4';
+    public const FORMAT_A6 = 'A6';
+    public const FORMATS = [self::FORMAT_A4, self::FORMAT_A6];
+
+    public const POSITION_BOTTOM_LEFT = 1;
+    public const POSITION_BOTTOM_RIGHT = 3;
+    public const POSITION_TOP_LEFT = 2;
+    public const POSITION_TOP_RIGHT = 4;
+    public const POSITIONS = [
+        self::POSITION_BOTTOM_LEFT,
+        self::POSITION_BOTTOM_RIGHT,
+        self::POSITION_TOP_LEFT,
+        self::POSITION_TOP_RIGHT,
+    ];
+
+    public const ORIENTATION_LANDSCAPE = 'L';
+    public const ORIENTATION_PORTRAIT = 'P';
+    public const ORIENTATIONS = [self::ORIENTATION_LANDSCAPE, self::ORIENTATION_PORTRAIT];
+
+    public const PRINTER_TYPE_GRAPHIC_FILE_GIF_200_DPI = 'GraphicFile|GIF 200 dpi';
+    public const PRINTER_TYPE_GRAPHIC_FILE_GIF_300_DPI = 'GraphicFile|GIF 300 dpi';
+    public const PRINTER_TYPE_GRAPHIC_FILE_GIF_600_DPI = 'GraphicFile|GIF 600 dpi';
+    public const PRINTER_TYPE_GRAPHIC_FILE_JPG_200_DPI = 'GraphicFile|JPG 200 dpi';
+    public const PRINTER_TYPE_GRAPHIC_FILE_JPG_300_DPI = 'GraphicFile|JPG 300 dpi';
+    public const PRINTER_TYPE_GRAPHIC_FILE_JPG_600_DPI = 'GraphicFile|JPG 600 dpi';
+    public const PRINTER_TYPE_GRAPHIC_FILE_PDF = 'GraphicFile|PDF';
+    public const PRINTER_TYPE_GRAPHIC_FILE_PDF_MERGE_A = 'GraphicFile|PDF|MergeA';
+    public const PRINTER_TYPE_GRAPHIC_FILE_PDF_MERGE_B = 'GraphicFile|PDF|MergeB';
+    public const PRINTER_TYPE_GRAPHIC_FILE_PDF_MERGE_C = 'GraphicFile|PDF|MergeC';
+    public const PRINTER_TYPE_GRAPHIC_FILE_PDF_MERGE_D = 'GraphicFile|PDF|MergeD';
+    public const PRINTER_TYPE_ZEBRA_GENERIC_ZPL_II_200_DPI = 'Zebra|Generic ZPL II 200 dpi';
+    public const PRINTER_TYPE_ZEBRA_GENERIC_ZPL_II_300_DPI = 'Zebra|Generic ZPL II 300 dpi';
+    public const PRINTER_TYPE_ZEBRA_GENERIC_ZPL_II_600_DPI = 'Zebra|Generic ZPL II 600 dpi';
+    public const PRINTER_TYPES = [
+        self::PRINTER_TYPE_GRAPHIC_FILE_GIF_200_DPI,
+        self::PRINTER_TYPE_GRAPHIC_FILE_GIF_300_DPI,
+        self::PRINTER_TYPE_GRAPHIC_FILE_GIF_600_DPI,
+        self::PRINTER_TYPE_GRAPHIC_FILE_JPG_200_DPI,
+        self::PRINTER_TYPE_GRAPHIC_FILE_JPG_300_DPI,
+        self::PRINTER_TYPE_GRAPHIC_FILE_JPG_600_DPI,
+        self::PRINTER_TYPE_GRAPHIC_FILE_PDF,
+        self::PRINTER_TYPE_GRAPHIC_FILE_PDF_MERGE_A,
+        self::PRINTER_TYPE_GRAPHIC_FILE_PDF_MERGE_B,
+        self::PRINTER_TYPE_GRAPHIC_FILE_PDF_MERGE_C,
+        self::PRINTER_TYPE_GRAPHIC_FILE_PDF_MERGE_D,
+        self::PRINTER_TYPE_ZEBRA_GENERIC_ZPL_II_200_DPI,
+        self::PRINTER_TYPE_ZEBRA_GENERIC_ZPL_II_300_DPI,
+        self::PRINTER_TYPE_ZEBRA_GENERIC_ZPL_II_600_DPI,
+    ];
 
     /**
      * Base 64 encoded content.

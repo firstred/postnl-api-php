@@ -29,6 +29,7 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Service;
 
 use Exception;
+use Firstred\PostNL\DTO\Response\GenerateLabelsResponseDTO;
 use Firstred\PostNL\Exception\ApiClientException;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
 use Http\Discovery\Psr17FactoryDiscovery;
@@ -60,7 +61,7 @@ class LabellingService extends ServiceBase implements LabellingServiceInterface
     const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v2_1/label';
     const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2_1/label';
 
-    public function generateLabel(LabellingResponseDto $generateLabel, $confirm = true)
+    public function generateLabel(GenerateLabelRequestDTO $generateLabelRequestDTO, bool $confirm = true)
     {
         $item = $this->retrieveCachedItem(uuid: $generateLabel->getId());
         $response = null;
@@ -99,11 +100,12 @@ class LabellingService extends ServiceBase implements LabellingServiceInterface
     /**
      * Generate multiple labels at once.
      *
-     * @param array $generateLabels ['uuid' => [GenerateBarcode, confirm], ...]
+     * @param array $generateLabels ['uuid' => GenerateLabelsRequestDTO, ...]
+     * @param bool  $confirm
      *
-     * @return array
+     * @return GenerateLabelsResponseDTO
      */
-    public function generateLabels(array $generateLabels)
+    public function generateLabels(array $generateLabels, bool $confirm = false): GenerateLabelsResponseDTO
     {
         $httpClient = $this->postnl->getHttpClient();
 

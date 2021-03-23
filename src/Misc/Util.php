@@ -34,9 +34,12 @@ use DateInterval;
 use DateTime;
 use Exception;
 use Firstred\PostNL\Exception\InvalidArgumentException;
+use JetBrains\PhpStorm\ArrayShape;
 use JetBrains\PhpStorm\Pure;
 use setasign\Fpdi\Fpdi;
+use setasign\Fpdi\PdfParser\PdfParserException;
 use setasign\Fpdi\PdfParser\StreamReader;
+use setasign\Fpdi\PdfReader\PdfReaderException;
 use function array_keys;
 use function count;
 use function is_array;
@@ -106,41 +109,42 @@ class Util
         return implode(separator: '&', array: $r);
     }
 
+    #[ArrayShape(shape: ['orientation' => 'string', 'iso' => 'string', 'width' => 'int', 'height' => 'int'])]
     /**
      * @param string $pdf Raw PDF string
      *
-     * @return array|false|string Returns an array with the dimensions or ISO size and orientation
-     *                            The orientation is in FPDF format, so L for Landscape and P for Portrait
-     *                            Sizes are in mm
+     * @return array Returns an array with the dimensions or ISO size and orientation
+     *               The orientation is in FPDF format, so L for Landscape and P for Portrait
+     *               Sizes are in mm
+     *
+     * @psalm-return array{orientation => string, iso => string, width => int, height => int}
+     * @throws PdfParserException
+     * @throws PdfReaderException
      */
-    public static function getPdfSizeAndOrientation(string $pdf): array|false|string
+    public static function getPdfSizeAndOrientation(string $pdf): array
     {
-        try {
-            $fpdi = new Fpdi('P', 'mm');
-            $fpdi->setSourceFile(file: StreamReader::createByString(content: $pdf));
-            // import page 1
-            $tplIdx1 = $fpdi->importPage(pageNumber: 1);
-            $size = $fpdi->getTemplateSize(tpl: $tplIdx1);
-            $width = $size['width']             ?? 0;
-            $height = $size['height']           ?? 0;
-            $orientation = $size['orientation'] ?? 'P';
+        $fpdi = new Fpdi('P', 'mm');
+        $fpdi->setSourceFile(file: StreamReader::createByString(content: $pdf));
+        // import page 1
+        $tplIdx1 = $fpdi->importPage(pageNumber: 1);
+        $size = $fpdi->getTemplateSize(tpl: $tplIdx1);
+        $width = $size['width']             ?? 0;
+        $height = $size['height']           ?? 0;
+        $orientation = $size['orientation'] ?? 'P';
 
-            $length = 'P' === $orientation ? $height : $width;
-            if ($length >= (148 - static::ERROR_MARGIN) && $length <= (148 + static::ERROR_MARGIN)) {
-                $iso = 'A6';
-            } elseif ($length >= (210 - static::ERROR_MARGIN) && $length <= (210 + static::ERROR_MARGIN)) {
-                $iso = 'A5';
-            } elseif ($length >= (420 - static::ERROR_MARGIN) && $length <= (420 + static::ERROR_MARGIN)) {
-                $iso = 'A3';
-            } elseif ($length >= (594 - static::ERROR_MARGIN) && $length <= (594 + static::ERROR_MARGIN)) {
-                $iso = 'A2';
-            } elseif ($length >= (841 - static::ERROR_MARGIN) && $length <= (841 + static::ERROR_MARGIN)) {
-                $iso = 'A1';
-            } else {
-                $iso = 'A4';
-            }
-        } catch (Exception) {
-            return false;
+        $length = 'P' === $orientation ? $height : $width;
+        if ($length >= (148 - static::ERROR_MARGIN) && $length <= (148 + static::ERROR_MARGIN)) {
+            $iso = 'A6';
+        } elseif ($length >= (210 - static::ERROR_MARGIN) && $length <= (210 + static::ERROR_MARGIN)) {
+            $iso = 'A5';
+        } elseif ($length >= (420 - static::ERROR_MARGIN) && $length <= (420 + static::ERROR_MARGIN)) {
+            $iso = 'A3';
+        } elseif ($length >= (594 - static::ERROR_MARGIN) && $length <= (594 + static::ERROR_MARGIN)) {
+            $iso = 'A2';
+        } elseif ($length >= (841 - static::ERROR_MARGIN) && $length <= (841 + static::ERROR_MARGIN)) {
+            $iso = 'A1';
+        } else {
+            $iso = 'A4';
         }
 
         return [

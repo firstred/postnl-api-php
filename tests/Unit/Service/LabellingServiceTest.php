@@ -32,8 +32,6 @@ use Exception;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Dimension;
 use Firstred\PostNL\Entity\Label;
-use Firstred\PostNL\Entity\Request\GenerateShipmentLabelRequest;
-use Firstred\PostNL\Entity\Response\GenerateLabelResponse;
 use Firstred\PostNL\Entity\Shipment;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\LabellingService;

@@ -28,37 +28,31 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\RequestBuilder;
 
-use Firstred\PostNL\DTO\Request\GetDeliveryInformationRequestDTO;
+use Firstred\PostNL\DTO\Request\GenerateLabelsRequestDTO;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Psr\Http\Message\RequestInterface;
-use function json_encode;
-use const JSON_PRETTY_PRINT;
-use const JSON_UNESCAPED_SLASHES;
+use function str_replace;
 
 /**
- * Class CheckoutServiceRequestBuilder.
+ * Class LabellingServiceRequestBuilder.
  */
-class CheckoutServiceRequestBuilder extends RequestBuilderBase implements CheckoutServiceRequestBuilderInterface
+class LabellingServiceRequestBuilder extends RequestBuilderBase implements LabellingServiceRequestBuilderInterface
 {
-    public const DEFAULT_VERSION = '1';
+    const DEFAULT_VERSION = '2.1';
 
-    public const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/{{version}}/checkout';
-    public const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/{{version}}/checkout';
+    const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/{{version}}/label';
+    const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/{{version}}/label';
 
     /**
-     * @param GetDeliveryInformationRequestDTO $getDeliveryInformationRequestDTO
+     * @param GenerateLabelsRequestDTO $generateLabelRequestDTO
      *
      * @return RequestInterface
      *
      * @throws InvalidArgumentException
      */
-    public function buildGetDeliveryInformationRequest(GetDeliveryInformationRequestDTO $getDeliveryInformationRequestDTO): RequestInterface
+    public function buildGenerateLabelRequest(GenerateLabelsRequestDTO $generateLabelRequestDTO): RequestInterface
     {
-        if (!$getDeliveryInformationRequestDTO->isValid()) {
-            throw new InvalidArgumentException(message: 'Invalid generate Checkout request');
-        }
-
         /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
         return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
             'POST',
@@ -68,10 +62,10 @@ class CheckoutServiceRequestBuilder extends RequestBuilderBase implements Checko
                 subject: $this->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT,
             ),
         )
-            ->withBody(Psr17FactoryDiscovery::findStreamFactory()->createStream(json_encode(value: $getDeliveryInformationRequestDTO->jsonSerialize())))
+            ->withBody(Psr17FactoryDiscovery::findStreamFactory()->createStream(json_encode(value: $generateLabelRequestDTO->jsonSerialize())))
+            ->withHeader('apikey', $this->getApiKey())
             ->withHeader('Accept', 'application/json')
             ->withHeader('Content-Type', 'application/json;charset=UTF-8')
-            ->withHeader('apikey', $this->getApiKey())
             ;
     }
 }

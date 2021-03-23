@@ -30,8 +30,8 @@ namespace Firstred\PostNL\Gateway;
 
 use DateInterval;
 use DateTimeInterface;
-use Firstred\PostNL\DTO\Request\GetDeliveryInformationRequestDTO;
-use Firstred\PostNL\DTO\Response\GetDeliveryInformationResponseDTO;
+use Firstred\PostNL\DTO\Request\GenerateLabelsRequestDTO;
+use Firstred\PostNL\DTO\Response\GenerateLabelsResponseDTO;
 use Firstred\PostNL\Exception\ApiClientException;
 use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\HttpClientException;
@@ -41,32 +41,32 @@ use Firstred\PostNL\Exception\NotAvailableException;
 use Firstred\PostNL\Exception\ParseError;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
 use Firstred\PostNL\Misc\Message;
-use Firstred\PostNL\RequestBuilder\CheckoutServiceRequestBuilderInterface;
-use Firstred\PostNL\ResponseProcessor\CheckoutServiceResponseProcessorInterface;
+use Firstred\PostNL\RequestBuilder\LabellingServiceRequestBuilderInterface;
+use Firstred\PostNL\ResponseProcessor\LabellingServiceResponseProcessorInterface;
 use JetBrains\PhpStorm\Pure;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\ResponseInterface;
 
-class CheckoutServiceGateway extends GatewayBase implements CheckoutServiceGatewayInterface
+class LabellingServiceGateway extends GatewayBase implements LabellingServiceGatewayInterface
 {
     #[Pure]
     public function __construct(
         protected HttpClientInterface $httpClient,
         protected CacheItemPoolInterface|null $cache,
         protected int|DateTimeInterface|DateInterval|null $ttl,
-        protected CheckoutServiceRequestBuilderInterface $requestBuilder,
-        protected CheckoutServiceResponseProcessorInterface $responseProcessor,
+        protected LabellingServiceRequestBuilderInterface $requestBuilder,
+        protected LabellingServiceResponseProcessorInterface $responseProcessor,
     ) {
         parent::__construct(httpClient: $this->httpClient, cache: $cache, ttl: $ttl);
     }
 
-    public function doGetDeliveryInformationRequest(GetDeliveryInformationRequestDTO $getDeliveryInformationRequestDTO): GetDeliveryInformationResponseDTO
+    public function doGenerateLabelsRequest(GenerateLabelsRequestDTO $generateLabelsRequestDTO): GenerateLabelsResponseDTO
     {
         $logger = $this->getLogger();
         $request = null;
 
         try {
-            $request = $this->requestBuilder->buildGetDeliveryInformationRequest(getDeliveryInformationRequestDTO: $getDeliveryInformationRequestDTO);
+            $request = $this->requestBuilder->buildGenerateLabelRequest(generateLabelRequestDTO: $generateLabelsRequestDTO);
         } catch (InvalidArgumentException $e) {
             if ($request) {
                 /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
@@ -82,7 +82,7 @@ class CheckoutServiceGateway extends GatewayBase implements CheckoutServiceGatew
             /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
             $logger?->debug("PostNL API - debug - REQUEST:\n".Message::str(message: $request));
 
-            $dto = $this->responseProcessor->processGetDeliveryInformationResponse(response: $response);
+            $dto = $this->responseProcessor->processGenerateLabelsResponse(response: $response);
 
             /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
             $logger?->debug("PostNL API - debug - RESPONSE:\n".Message::str(message: $response));
@@ -111,24 +111,24 @@ class CheckoutServiceGateway extends GatewayBase implements CheckoutServiceGatew
         }
     }
 
-    public function getRequestBuilder(): CheckoutServiceRequestBuilderInterface
+    public function getRequestBuilder(): LabellingServiceRequestBuilderInterface
     {
         return $this->requestBuilder;
     }
 
-    public function setRequestBuilder(CheckoutServiceRequestBuilderInterface $requestBuilder): static
+    public function setRequestBuilder(LabellingServiceRequestBuilderInterface $requestBuilder): static
     {
         $this->requestBuilder = $requestBuilder;
 
         return $this;
     }
 
-    public function getResponseProcessor(): CheckoutServiceResponseProcessorInterface
+    public function getResponseProcessor(): LabellingServiceResponseProcessorInterface
     {
         return $this->responseProcessor;
     }
 
-    public function setResponseProcessor(CheckoutServiceResponseProcessorInterface $responseProcessor): static
+    public function setResponseProcessor(LabellingServiceResponseProcessorInterface $responseProcessor): static
     {
         $this->responseProcessor = $responseProcessor;
 

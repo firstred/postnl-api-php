@@ -32,6 +32,7 @@ use Firstred\PostNL\Attribute\RequestProp;
 use Firstred\PostNL\DTO\Request\CalculateDeliveryDateRequestDTO;
 use Firstred\PostNL\DTO\Request\CalculateShippingDateRequestDTO;
 use Firstred\PostNL\DTO\Request\CalculateTimeframesRequestDTO;
+use Firstred\PostNL\DTO\Request\GenerateLabelsRequestDTO;
 use Firstred\PostNL\DTO\Request\GetDeliveryInformationRequestDTO;
 use Firstred\PostNL\DTO\Request\GetLocationsInAreaRequestDTO;
 use Firstred\PostNL\DTO\Request\GetNearestLocationsGeocodeRequestDTO;
@@ -42,11 +43,18 @@ use Firstred\PostNL\DTO\Response\CalculateShippingDateResponseDTO;
 use Firstred\PostNL\DTO\Response\CalculateTimeframesResponseDTO;
 use Firstred\PostNL\DTO\Response\GenerateBarcodeResponseDTO;
 use Firstred\PostNL\DTO\Response\GenerateBarcodesByCountryCodesResponseDTO;
+use Firstred\PostNL\DTO\Response\GenerateLabelsResponseDTO;
 use Firstred\PostNL\DTO\Response\GetDeliveryInformationResponseDTO;
 use Firstred\PostNL\DTO\Response\GetLocationResponseDTO;
 use Firstred\PostNL\DTO\Response\GetLocationsResponseDTO;
 use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Entity\Label;
+use Firstred\PostNL\Entity\LabellingMessage;
 use Firstred\PostNL\Entity\Location;
+use Firstred\PostNL\Entity\Shipment;
+use Firstred\PostNL\Exception\ApiClientException;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\PostNLClientException;
 use Firstred\PostNL\Gateway\BarcodeServiceGateway;
 use Firstred\PostNL\Gateway\CheckoutServiceGateway;
 use Firstred\PostNL\Gateway\DeliveryDateServiceGateway;
@@ -54,6 +62,8 @@ use Firstred\PostNL\Gateway\LocationServiceGateway;
 use Firstred\PostNL\Gateway\TimeframeServiceGateway;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
 use Firstred\PostNL\HttpClient\HTTPlugHttpClient;
+use Firstred\PostNL\Misc\RFPdi;
+use Firstred\PostNL\Misc\Util;
 use Firstred\PostNL\RequestBuilder\BarcodeServiceRequestBuilder;
 use Firstred\PostNL\RequestBuilder\CheckoutServiceRequestBuilder;
 use Firstred\PostNL\RequestBuilder\DeliveryDateServiceRequestBuilder;
@@ -84,6 +94,9 @@ use Firstred\PostNL\Service\TimeframeServiceInterface;
 use JetBrains\PhpStorm\ArrayShape;
 use JetBrains\PhpStorm\ExpectedValues;
 use Psr\Log\LoggerInterface;
+use setasign\Fpdi\PdfParser\PdfParserException;
+use setasign\Fpdi\PdfParser\StreamReader;
+use setasign\Fpdi\PdfReader\PdfReaderException;
 
 /**
  * Class PostNL.
@@ -410,227 +423,230 @@ class PostNL
         return $this->getBarcodeService()->generateBarcodesByCountryCodes(isos: $isos);
     }
 
-//    /**
-//     * @param Shipment $shipment
-//     * @param string   $printertype
-//     * @param bool     $confirm
-//     *
-//     * @return GenerateLabelResponse
-//     */
-//    public function generateLabel(
-//        Shipment $shipment,
-//        $printertype = 'GraphicFile|PDF',
-//        $confirm = true
-//    ): GenerateLabelResponse {
-//        return static->getLabellingService()->generateLabel(
-//            generateLabel: new LabellingResponseDto(
-//            shipments: [$shipment],
-//            message: new LabellingMessage(printerType: $printertype),
-//            customer: static->customer
-//        ),
-//            confirm: $confirm
-//        );
-//    }
-//
-//    /**
-//     * Generate or retrieve multiple labels.
-//     *
-//     * Note that instead of returning a GenerateLabelResponse this function can merge the labels and return a
-//     * string which contains the PDF with the merged pages as well.
-//     *
-//     * @param Shipment[] $shipments     (key = ID) Shipments
-//     * @param string     $printertype   Printer type, see PostNL dev docs for available types
-//     * @param bool       $confirm       Immediately confirm the shipments
-//     * @param bool       $merge         Merge the PDFs and return them in a MyParcel way
-//     * @param int        $format        A4 or A6
-//     * @param array      $positions     Set the positions of the A6s on the first A4
-//     *                                  The indices should be the position number, marked with `true` or `false`
-//     *                                  These are the position numbers:
-//     *                                  ```
-//     *                                  +-+-+
-//     *                                  |2|4|
-//     *                                  +-+-+
-//     *                                  |1|3|
-//     *                                  +-+-+
-//     *                                  ```
-//     *                                  So, for
-//     *                                  ```
-//     *                                  +-+-+
-//     *                                  |x|✔|
-//     *                                  +-+-+
-//     *                                  |✔|x|
-//     *                                  +-+-+
-//     *                                  ```
-//     *                                  you would have to pass:
-//     *                                  ```php
-//     *                                  [
-//     *                                  1 => true,
-//     *                                  2 => false,
-//     *                                  3 => false,
-//     *                                  4 => true,
-//     *                                  ]
-//     *                                  ```
-//     * @param string     $a6Orientation A6 orientation (P or L)
-//     *
-//     * @return GenerateLabelResponse[]|string
-//     *
-//     * @throws AbstractException
-//     * @throws NotSupportedException
-//     * @throws PdfReaderException
-//     */
-//    public function generateLabels(
-//        array $shipments,
-//        $printertype = 'GraphicFile|PDF',
-//        $confirm = true,
-//        $merge = false,
-//        $format = Label::FORMAT_A4,
-//        $positions = [
-//            1 => true,
-//            2 => true,
-//            3 => true,
-//            4 => true,
-//        ],
-//        $a6Orientation = 'P'
-//    ): array|string {
-//        if ($merge) {
-//            if ('GraphicFile|PDF' !== $printertype) {
-//                throw new NotSupportedException('Labels with the chosen printer type cannot be merged');
-//            }
-//            foreach ([1, 2, 3, 4] as $i) {
-//                if (!array_key_exists(key: $i, array: $positions)) {
-//                    throw new NotSupportedException('All label positions need to be passed for merge mode');
-//                }
-//            }
-//        }
-//
-//        $generateLabels = [];
-//        foreach ($shipments as $uuid => $shipment) {
-//            $generateLabels[$uuid] = [(new LabellingResponseDto(shipments: [$shipment], message: new LabellingMessage(printerType: $printertype), customer: static->customer))->setId(id: $uuid), $confirm];
-//        }
-//        $responseShipments = static->getLabellingService()->generateLabels($generateLabels, $confirm);
-//
-//        if (!$merge) {
-//            return $responseShipments;
-//        } else {
-//            foreach ($responseShipments as $responseShipment) {
-//                if (!$responseShipment instanceof GenerateLabelResponse) {
-//                    return $responseShipments;
-//                }
-//            }
-//        }
-//
-//        // Disable header and footer
-//        $pdf = new RFPdi('P', 'mm', Label::FORMAT_A4 === $format ? [210, 297] : [105, 148]);
-//        $deferred = [];
-//        $firstPage = true;
-//        if (Label::FORMAT_A6 === $format) {
-//            foreach ($responseShipments as $responseShipment) {
-//                foreach ($responseShipment->getResponseShipments()[0]->getLabels() as $label) {
-//                    $pdfContent = base64_decode(string: $label->getContent());
-//                    $sizes = Util::getPdfSizeAndOrientation(pdf: $pdfContent);
-//                    if ('A6' === $sizes['iso']) {
-//                        $pdf->addPage(orientation: $a6Orientation);
-//                        $correction = [0, 0];
-//                        if ('L' === $a6Orientation && 'P' === $sizes['orientation']) {
-//                            $correction[0] = -84;
-//                            $correction[1] = -0.5;
-//                            $pdf->rotateCounterClockWise();
-//                        } elseif ('P' === $a6Orientation && 'L' === $sizes['orientation']) {
-//                            $pdf->rotateCounterClockWise();
-//                        }
-//                        $pdf->setSourceFile(file: StreamReader::createByString(content: $pdfContent));
-//                        $pdf->useTemplate(tpl: $pdf->importPage(pageNumber: 1), x: $correction[0], y: $correction[1]);
-//                    } else {
-//                        // Assuming A4 here (could be multi-page) - defer to end
-//                        $stream = StreamReader::createByString(content: $pdfContent);
-//                        $deferred[] = ['stream' => $stream, 'sizes' => $sizes];
-//                    }
-//                }
-//            }
-//        } else {
-//            $a6s = 4; // Amount of A6s available
-//            foreach ($responseShipments as $responseShipment) {
-//                if ($responseShipment instanceof AbstractException) {
-//                    throw $responseShipment;
-//                }
-//                $pdfContent = base64_decode(string: $responseShipment->getResponseShipments()[0]->getLabels()[0]->getContent());
-//                $sizes = Util::getPdfSizeAndOrientation(pdf: $pdfContent);
-//                if ('A6' === $sizes['iso']) {
-//                    if ($firstPage) {
-//                        $pdf->addPage(orientation: 'P', size: [297, 210], rotation: 90);
-//                    }
-//                    $firstPage = false;
-//                    while (empty($positions[5 - $a6s]) && $a6s >= 1) {
-//                        $positions[5 - $a6s] = true;
-//                        --$a6s;
-//                    }
-//                    if ($a6s < 1) {
-//                        $pdf->addPage(orientation: 'P', size: [297, 210], rotation: 90);
-//                        $a6s = 4;
-//                    }
-//                    $pdf->rotateCounterClockWise();
-//                    $pdf->setSourceFile(file: StreamReader::createByString(content: $pdfContent));
-//                    $pdf->useTemplate(tpl: $pdf->importPage(pageNumber: 1), x: static::$a6positions[$a6s][0], y: static::$a6positions[$a6s][1]);
-//                    --$a6s;
-//                    if ($a6s < 1) {
-//                        if ($responseShipment !== end(array: $responseShipments)) {
-//                            $pdf->addPage(orientation: 'P', size: [297, 210], rotation: 90);
-//                        }
-//                        $a6s = 4;
-//                    }
-//                } else {
-//                    // Assuming A4 here (could be multi-page) - defer to end
-//                    if (count(value: $responseShipment->getResponseShipments()[0]->getLabels()) > 1) {
-//                        $stream = [];
-//                        foreach ($responseShipment->getResponseShipments()[0]->getLabels() as $labelContent) {
-//                            $stream[] = StreamReader::createByString(content: base64_decode(string: $labelContent->getContent()));
-//                        }
-//                        $deferred[] = ['stream' => $stream, 'sizes' => $sizes];
-//                    } else {
-//                        $stream = StreamReader::createByString(content: base64_decode(string: $pdfContent));
-//                        $deferred[] = ['stream' => $stream, 'sizes' => $sizes];
-//                    }
-//                }
-//            }
-//        }
-//        foreach ($deferred as $defer) {
-//            $sizes = $defer['sizes'];
-//            $pdf->addPage(orientation: $sizes['orientation'], size: 'A4');
-//            $pdf->rotateCounterClockWise();
-//            if (is_array(value: $defer['stream']) && count(value: $defer['stream']) > 1) {
-//                // Multilabel
-//                if (2 === count(value: $deferred['stream'])) {
-//                    $pdf->setSourceFile(file: $defer['stream'][0]);
-//                    $pdf->useTemplate(tpl: $pdf->importPage(pageNumber: 1), x: -190, y: 0);
-//                    $pdf->setSourceFile(file: $defer['stream'][1]);
-//                    $pdf->useTemplate(tpl: $pdf->importPage(pageNumber: 1), x: -190, y: 148);
-//                } else {
-//                    $pdf->setSourceFile(file: $defer['stream'][0]);
-//                    $pdf->useTemplate(tpl: $pdf->importPage(pageNumber: 1), x: -190, y: 0);
-//                    $pdf->setSourceFile(file: $defer['stream'][1]);
-//                    $pdf->useTemplate(tpl: $pdf->importPage(pageNumber: 1), x: -190, y: 148);
-//                    for ($i = 2; $i < count(value: $defer['stream']); ++$i) {
-//                        $pages = $pdf->setSourceFile(file: $defer['stream'][$i]);
-//                        for ($j = 1; $j < $pages + 1; ++$j) {
-//                            $pdf->addPage(orientation: $sizes['orientation'], size: 'A4');
-//                            $pdf->rotateCounterClockWise();
-//                            $pdf->useTemplate(tpl: $pdf->importPage(pageNumber: 1), x: -190, y: 0);
-//                        }
-//                    }
-//                }
-//            } else {
-//                if (is_resource(value: $defer['stream']) || $defer['stream'] instanceof StreamReader) {
-//                    $pdf->setSourceFile(file: $defer['stream']);
-//                } else {
-//                    $pdf->setSourceFile(file: $defer['stream'][0]);
-//                }
-//                $pdf->useTemplate(tpl: $pdf->importPage(pageNumber: 1), x: -190, y: 0);
-//            }
-//        }
-//
-//        return $pdf->output(dest: '', name: 'S');
-//    }
-//
+    /**
+     * @param Shipment $shipment
+     * @param string   $printertype
+     * @param bool     $confirm
+     *
+     * @return GenerateLabelsResponseDTO
+     *
+     * @throws ApiClientException
+     * @throws InvalidArgumentException
+     */
+    public function generateLabel(
+        Shipment $shipment,
+        $printertype = 'GraphicFile|PDF',
+        $confirm = true
+    ): GenerateLabelsResponseDTO {
+        return $this->getLabellingService()->generateLabel(
+            generateLabelRequestDTO: new GenerateLabelsRequestDTO(
+                LabellingMessage: new LabellingMessage(printerType: $printertype),
+                Shipments: [$shipment],
+            ),
+            confirm: $confirm
+        );
+    }
+
+    /**
+     * Generate or retrieve multiple labels.
+     *
+     * Note that instead of returning a GenerateLabelResponse this function can merge the labels and return a
+     * string which contains the PDF with the merged pages as well.
+     *
+     * @param Shipment[] $shipments     (key = ID) Shipments
+     * @param string     $printertype   Printer type, see PostNL dev docs for available types
+     * @param bool       $confirm       Immediately confirm the shipments
+     * @param string     $format        A4 or A6
+     * @param array      $positions     Set the positions of the A6s on the first A4
+     *                                  The indices should be the position number, marked with `true` or `false`
+     *                                  These are the position numbers:
+     *                                  ```
+     *                                  +-+-+
+     *                                  |2|4|
+     *                                  +-+-+
+     *                                  |1|3|
+     *                                  +-+-+
+     *                                  ```
+     *                                  So, for
+     *                                  ```
+     *                                  +-+-+
+     *                                  |x|✔|
+     *                                  +-+-+
+     *                                  |✔|x|
+     *                                  +-+-+
+     *                                  ```
+     *                                  you would have to pass:
+     *                                  ```php
+     *                                  [
+     *                                    1 => true,
+     *                                    2 => false,
+     *                                    3 => false,
+     *                                    4 => true,
+     *                                  ]
+     *                                  ```
+     * @param string     $orientation   Orientation (Portrait `P` or Landscape `L`)
+     * @param bool       $merge         Merge the labels into one single PDF file
+     *
+     * @return GenerateLabelsResponseDTO[]|string
+     *
+     * @throws PdfReaderException
+     * @throws InvalidArgumentException
+     * @throws PdfParserException
+     * @throws PostNLClientException
+     */
+    public function generateLabels(
+        array $shipments,
+        $confirm = true,
+        $printertype = 'GraphicFile|PDF',
+        $format = Label::FORMAT_A4,
+        $positions = [
+            Label::POSITION_TOP_LEFT     => true,
+            Label::POSITION_TOP_RIGHT    => true,
+            Label::POSITION_BOTTOM_LEFT  => true,
+            Label::POSITION_BOTTOM_RIGHT => true,
+        ],
+        $orientation = Label::ORIENTATION_PORTRAIT,
+        $merge = false,
+    ): array|string {
+        if ($merge) {
+            if ('GraphicFile|PDF' !== $printertype) {
+                throw new InvalidArgumentException('Labels with the chosen printer type cannot be merged');
+            }
+            foreach (Label::POSITIONS as $i) {
+                if (!is_bool(value: $positions[$i] ?? null)) {
+                    throw new InvalidArgumentException('All label positions need to be passed for merge mode');
+                }
+            }
+        }
+
+        $generateLabels = [];
+        foreach ($shipments as $uuid => $shipment) {
+            $generateLabels[$uuid] = [(new GenerateLabelsRequestDTO(Customer: $this->customer, LabellingMessage: new LabellingMessage(PrinterType: $printertype), Shipments: [$shipment])), $confirm];
+        }
+        $responseShipments = $this->getLabellingService()->generateLabels($generateLabels, $confirm);
+
+        if (!$merge) {
+            return $responseShipments;
+        } else {
+            foreach ($responseShipments as $responseShipment) {
+                if (!$responseShipment instanceof GenerateLabelsResponseDTO) {
+                    return $responseShipments;
+                }
+            }
+        }
+
+        // Disable header and footer
+        $pdf = new RFPdi(Label::ORIENTATION_PORTRAIT, 'mm', Label::FORMAT_A4 === $format ? [210, 297] : [105, 148]);
+        $deferred = [];
+        $firstPage = true;
+        if (Label::FORMAT_A6 === $format) {
+            foreach ($responseShipments as $responseShipment) {
+                foreach ($responseShipment->getResponseShipments()[0]->getLabels() as $label) {
+                    $pdfContent = base64_decode(string: $label->getContent());
+                    $sizes = Util::getPdfSizeAndOrientation(pdf: $pdfContent);
+                    if (Label::FORMAT_A6 === $sizes['iso']) {
+                        $pdf->addPage(orientation: $orientation);
+                        $correction = [0, 0];
+                        if (Label::ORIENTATION_LANDSCAPE === $orientation && Label::ORIENTATION_PORTRAIT === $sizes['orientation']) {
+                            $correction[0] = -84;
+                            $correction[1] = -0.5;
+                            $pdf->rotateCounterClockWise();
+                        } elseif (Label::ORIENTATION_PORTRAIT === $orientation && Label::ORIENTATION_LANDSCAPE === $sizes['orientation']) {
+                            $pdf->rotateCounterClockWise();
+                        }
+                        $pdf->setSourceFile(file: StreamReader::createByString(content: $pdfContent));
+                        $pdf->useTemplate(tpl: $pdf->importPage(pageNumber: 1), x: $correction[0], y: $correction[1]);
+                    } else {
+                        // Assuming A4 here (could be multi-page) - defer to end
+                        $stream = StreamReader::createByString(content: $pdfContent);
+                        $deferred[] = ['stream' => $stream, 'sizes' => $sizes];
+                    }
+                }
+            }
+        } else {
+            $a6s = 4; // Amount of A6s available
+            foreach ($responseShipments as $responseShipment) {
+                if ($responseShipment instanceof PostNLClientException) {
+                    throw $responseShipment;
+                }
+                $pdfContent = base64_decode(string: $responseShipment->getResponseShipments()[0]->getLabels()[0]->getContent());
+                $sizes = Util::getPdfSizeAndOrientation(pdf: $pdfContent);
+                if (Label::FORMAT_A6 === $sizes['iso']) {
+                    if ($firstPage) {
+                        $pdf->addPage(orientation: Label::ORIENTATION_PORTRAIT, size: [297, 210], rotation: 90);
+                    }
+                    $firstPage = false;
+                    while (empty($positions[5 - $a6s]) && $a6s >= 1) {
+                        $positions[5 - $a6s] = true;
+                        --$a6s;
+                    }
+                    if ($a6s < 1) {
+                        $pdf->addPage(orientation: Label::ORIENTATION_PORTRAIT, size: [297, 210], rotation: 90);
+                        $a6s = 4;
+                    }
+                    $pdf->rotateCounterClockWise();
+                    $pdf->setSourceFile(file: StreamReader::createByString(content: $pdfContent));
+                    $pdf->useTemplate(tpl: $pdf->importPage(pageNumber: 1), x: Util::$a6positions[$a6s][0], y: Util::$a6positions[$a6s][1]);
+                    --$a6s;
+                    if ($a6s < 1) {
+                        if ($responseShipment !== end(array: $responseShipments)) {
+                            $pdf->addPage(orientation: Label::ORIENTATION_PORTRAIT, size: [297, 210], rotation: 90);
+                        }
+                        $a6s = 4;
+                    }
+                } else {
+                    // Assuming A4 here (could be multi-page) - defer to end
+                    if (count(value: $responseShipment->getResponseShipments()[0]->getLabels()) > 1) {
+                        $stream = [];
+                        foreach ($responseShipment->getResponseShipments()[0]->getLabels() as $labelContent) {
+                            $stream[] = StreamReader::createByString(content: base64_decode(string: $labelContent->getContent()));
+                        }
+                        $deferred[] = ['stream' => $stream, 'sizes' => $sizes];
+                    } else {
+                        $stream = StreamReader::createByString(content: base64_decode(string: $pdfContent));
+                        $deferred[] = ['stream' => $stream, 'sizes' => $sizes];
+                    }
+                }
+            }
+        }
+        foreach ($deferred as $defer) {
+            $sizes = $defer['sizes'];
+            $pdf->addPage(orientation: $sizes['orientation'], size: Label::FORMAT_A4);
+            $pdf->rotateCounterClockWise();
+            if (is_array(value: $defer['stream']) && count(value: $defer['stream']) > 1) {
+                // Multilabel
+                if (2 === count(value: $deferred['stream'])) {
+                    $pdf->setSourceFile(file: $defer['stream'][0]);
+                    $pdf->useTemplate(tpl: $pdf->importPage(pageNumber: 1), x: -190, y: 0);
+                    $pdf->setSourceFile(file: $defer['stream'][1]);
+                    $pdf->useTemplate(tpl: $pdf->importPage(pageNumber: 1), x: -190, y: 148);
+                } else {
+                    $pdf->setSourceFile(file: $defer['stream'][0]);
+                    $pdf->useTemplate(tpl: $pdf->importPage(pageNumber: 1), x: -190, y: 0);
+                    $pdf->setSourceFile(file: $defer['stream'][1]);
+                    $pdf->useTemplate(tpl: $pdf->importPage(pageNumber: 1), x: -190, y: 148);
+                    for ($i = 2; $i < count(value: $defer['stream']); ++$i) {
+                        $pages = $pdf->setSourceFile(file: $defer['stream'][$i]);
+                        for ($j = 1; $j < $pages + 1; ++$j) {
+                            $pdf->addPage(orientation: $sizes['orientation'], size: Label::FORMAT_A4);
+                            $pdf->rotateCounterClockWise();
+                            $pdf->useTemplate(tpl: $pdf->importPage(pageNumber: 1), x: -190, y: 0);
+                        }
+                    }
+                }
+            } else {
+                if ($defer['stream'] instanceof StreamReader) {
+                    $pdf->setSourceFile(file: $defer['stream']);
+                } else {
+                    $pdf->setSourceFile(file: $defer['stream'][0]);
+                }
+                $pdf->useTemplate(tpl: $pdf->importPage(pageNumber: 1), x: -190, y: 0);
+            }
+        }
+
+        return $pdf->output(dest: '', name: 'S');
+    }
+
 //    /**
 //     * Confirm a single shipment.
 //     *
@@ -1233,30 +1249,6 @@ class PostNL
 //            'locations'     => static->getLocationService()->processGetNearestLocationsResponse(response: $results['locations']),
 //            'delivery_date' => static->getDeliveryDateService()->processCalculateDeliveryDateResponse(response: $results['delivery_date']),
 //        ];
-//    }
-//
-//    /**
-//     * Get locations in area.
-//     *
-//     * @param GetLocationsInArea $getLocationsInArea
-//     *
-//     * @return GetLocationsInAreaResponse
-//     */
-//    public function getLocationsInArea(GetLocationsInArea $getLocationsInArea): GetLocationsInAreaResponse
-//    {
-//        return static->getLocationService()->getLocationsInArea(getLocations: $getLocationsInArea);
-//    }
-//
-//    /**
-//     * Get locations in area.
-//     *
-//     * @param GetLocation $getLocation
-//     *
-//     * @return GetLocationsInAreaResponse
-//     */
-//    public function getLocation(GetLocation $getLocation): GetLocationsInAreaResponse
-//    {
-//        return static->getLocationService()->getLocation(getLocation: $getLocation);
 //    }
 
     /**
