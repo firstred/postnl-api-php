@@ -129,7 +129,7 @@ class ShippingService extends AbstractService
         )
             ->withHeader('apikey', $apiKey)
             ->withHeader('Accept', 'application/json')
-            ->withHeader('Accept', 'application/json;charset=UTF-8')
+            ->withHeader('Content-Type', 'application/json;charset=UTF-8')
             ->withBody($this->postnl->getStreamFactory()->createStream(json_encode($generateShipping, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES)));
     }
 

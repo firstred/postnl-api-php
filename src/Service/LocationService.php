@@ -398,11 +398,18 @@ class LocationService extends AbstractService
         }
         if ($deliveryOptions = $location->getDeliveryOptions()) {
             foreach ($deliveryOptions as $option) {
+                if ($option === 'PGE') {
+                    continue; // No longer supported
+                }
+
                 if (!array_key_exists('DeliveryOptions', $query)) {
                     $query['DeliveryOptions'] = $option;
                 } else {
                     $query['DeliveryOptions'] .= ','.$option;
                 }
+            }
+            if (!isset($query['DeliveryOptions'])) {
+                $query['DeliveryOptions'] = 'PG';
             }
         } else {
             $query['DeliveryOptions'] = 'PG';

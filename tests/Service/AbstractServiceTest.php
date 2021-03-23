@@ -57,7 +57,7 @@ class AbstractServiceTest extends TestCase
      */
     public function testGetResponseTextFromException()
     {
-        $response = new \GuzzleHttp\Exception\ClientException(null, new Request('POST', 'localhost', []), new Response(500, [], 'test'));
+        $response = new \GuzzleHttp\Exception\ClientException('', new Request('POST', 'localhost', []), new Response(500, [], 'test'));
 
         $this->assertEquals('test', AbstractService::getResponseText(['value' => $response]));
     }

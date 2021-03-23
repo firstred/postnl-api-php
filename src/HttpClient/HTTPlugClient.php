@@ -7,10 +7,9 @@ use Http\Client\Exception\HttpException;
 use Http\Client\Exception\TransferException;
 use Http\Client\HttpAsyncClient;
 use Http\Client\HttpClient;
-use Http\Client\Psr18Client;
 use Http\Discovery\Exception\DiscoveryFailedException;
 use Http\Discovery\Exception\NoCandidateFoundException;
-use Http\Discovery\Exception\NotFoundException;
+use Http\Discovery\NotFoundException;
 use Http\Discovery\HttpAsyncClientDiscovery;
 use Http\Discovery\HttpClientDiscovery;
 use Http\Discovery\Psr18ClientDiscovery;
@@ -30,7 +29,7 @@ class HTTPlugClient implements ClientInterface
     private static $instance;
 
     /**
-     * @var HttpAsyncClient|Psr18Client|HttpClient
+     * @var HttpAsyncClient|HttpClient
      */
     protected $client;
 
@@ -54,9 +53,9 @@ class HTTPlugClient implements ClientInterface
     /**
      * HTTPlugClient constructor.
      *
-     * @param HttpAsyncClient|Psr18Client|HttpClient|null $client
-     * @param LoggerInterface|null                        $logger
-     * @param int                                         $concurrency
+     * @param HttpAsyncClient|HttpClient|null $client
+     * @param LoggerInterface|null            $logger
+     * @param int                             $concurrency
      *
      * @throws HttpClientException
      */
@@ -265,7 +264,7 @@ class HTTPlugClient implements ClientInterface
      *
      * @return static
      */
-    public function setLogger(LoggerInterface $logger)
+    public function setLogger($logger)
     {
         $this->logger = $logger;
 
@@ -273,7 +272,7 @@ class HTTPlugClient implements ClientInterface
     }
 
     /**
-     * @return HttpAsyncClient|Psr18Client|HttpClient
+     * @return HttpAsyncClient|HttpClient
      */
     public function getClient()
     {
@@ -281,7 +280,7 @@ class HTTPlugClient implements ClientInterface
     }
 
     /**
-     * @param HttpAsyncClient|Psr18Client|HttpClient $client
+     * @param HttpAsyncClient|HttpClient $client
      *
      * @return static
      */
@@ -293,7 +292,7 @@ class HTTPlugClient implements ClientInterface
     }
 
     /**
-     * @param HttpAsyncClient|Psr18Client|HttpClient|null $client
+     * @param HttpAsyncClient|HttpClient|null $client
      *
      * @return HTTPlugClient|void
      * @throws HttpClientException

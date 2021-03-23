@@ -39,8 +39,10 @@ use ThirtyBees\PostNL\Entity\Dimension;
 use ThirtyBees\PostNL\Entity\Label;
 use ThirtyBees\PostNL\Entity\Message\LabellingMessage;
 use ThirtyBees\PostNL\Entity\Request\GenerateLabel;
+use ThirtyBees\PostNL\Entity\Response\GenerateLabelResponse;
 use ThirtyBees\PostNL\Entity\Shipment;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
+use ThirtyBees\PostNL\Exception\ResponseException;
 use ThirtyBees\PostNL\HttpClient\MockClient;
 use ThirtyBees\PostNL\PostNL;
 use ThirtyBees\PostNL\Service\LabellingService;
@@ -116,7 +118,7 @@ class LabellingServiceRestTest extends TestCase
      */
     public function testHasValidLabellingService()
     {
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Service\\LabellingService', $this->service);
+        $this->assertInstanceOf(LabellingService::class, $this->service);
     }
 
     /**
@@ -162,7 +164,7 @@ class LabellingServiceRestTest extends TestCase
             false
         );
 
-        $this->assertEquals([
+        $this->assertEqualsCanonicalizing([
             'Customer' => [
                 'Address' => [
                     'AddressType' => '02',
@@ -214,7 +216,7 @@ class LabellingServiceRestTest extends TestCase
                 'ProductCodeDelivery' => '3085',
             ],
         ],
-            json_decode((string) $request->getBody(), true), null, 0, 10, true);
+            json_decode((string) $request->getBody(), true));
         $this->assertEquals('test', $request->getHeaderLine('apikey'));
         $this->assertEquals('application/json;charset=UTF-8', $request->getHeaderLine('Content-Type'));
         $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
@@ -278,7 +280,7 @@ class LabellingServiceRestTest extends TestCase
                 ->setProductCodeDelivery('3085')
         );
 
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\GenerateLabelResponse', $label);
+        $this->assertInstanceOf(GenerateLabelResponse::class, $label);
     }
 
     /**
@@ -622,7 +624,7 @@ class LabellingServiceRestTest extends TestCase
             ]
         );
 
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\GenerateLabelResponse', $label[1]);
+        $this->assertInstanceOf(GenerateLabelResponse::class, $label[1]);
     }
 
     /**
@@ -630,7 +632,7 @@ class LabellingServiceRestTest extends TestCase
      */
     public function testNegativeGenerateLabelInvalidResponseRest()
     {
-        $this->expectException('ThirtyBees\\PostNL\\Exception\\ResponseException');
+        $this->expectException(ResponseException::class);
 
         $mock = new MockHandler([
             new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], 'asdfojasuidfo'),

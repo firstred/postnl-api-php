@@ -39,8 +39,10 @@ use ThirtyBees\PostNL\Entity\Dimension;
 use ThirtyBees\PostNL\Entity\Label;
 use ThirtyBees\PostNL\Entity\Message\LabellingMessage;
 use ThirtyBees\PostNL\Entity\Request\GenerateShipping;
+use ThirtyBees\PostNL\Entity\Response\GenerateShippingResponse;
 use ThirtyBees\PostNL\Entity\Shipment;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
+use ThirtyBees\PostNL\Exception\ResponseException;
 use ThirtyBees\PostNL\HttpClient\MockClient;
 use ThirtyBees\PostNL\PostNL;
 use ThirtyBees\PostNL\Service\ShippingService;
@@ -116,7 +118,7 @@ class ShippingServiceRestTest extends TestCase
      */
     public function testHasValidShippingService()
     {
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Service\\ShippingService', $this->service);
+        $this->assertInstanceOf(ShippingService::class, $this->service);
     }
 
     /**
@@ -161,7 +163,7 @@ class ShippingServiceRestTest extends TestCase
             false
         );
 
-        $this->assertEquals([
+        $this->assertEqualsCanonicalizing([
             'Customer' => [
                 'Address' => [
                     'AddressType' => '02',
@@ -214,7 +216,7 @@ class ShippingServiceRestTest extends TestCase
                 ],
             ],
         ],
-            json_decode((string) $request->getBody(), true), null, 0, 10, true);
+            json_decode((string) $request->getBody(), true));
         $this->assertEquals('test', $request->getHeaderLine('apikey'));
         $this->assertEquals('application/json;charset=UTF-8', $request->getHeaderLine('Content-Type'));
         $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
@@ -277,7 +279,7 @@ class ShippingServiceRestTest extends TestCase
                 ->setProductCodeDelivery('3085')
         );
 
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\GenerateShippingResponse', $shipping);
+        $this->assertInstanceOf(GenerateShippingResponse::class, $shipping);
     }
 
     /**
@@ -285,7 +287,7 @@ class ShippingServiceRestTest extends TestCase
      */
     public function testNegativeGenerateShippingInvalidResponseRest()
     {
-        $this->expectException('ThirtyBees\\PostNL\\Exception\\ResponseException');
+        $this->expectException(ResponseException::class);
 
         $mock = new MockHandler([
             new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], 'asdfojasuidfo'),
@@ -666,6 +668,6 @@ class ShippingServiceRestTest extends TestCase
             ]
         );
 
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\GenerateShippingResponse', $shippings);
+        $this->assertInstanceOf(GenerateShippingResponse::class, $shippings);
     }
 }

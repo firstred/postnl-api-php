@@ -42,6 +42,8 @@ use ThirtyBees\PostNL\Entity\Message\Message;
 use ThirtyBees\PostNL\Entity\Request\GetLocation;
 use ThirtyBees\PostNL\Entity\Request\GetLocationsInArea;
 use ThirtyBees\PostNL\Entity\Request\GetNearestLocations;
+use ThirtyBees\PostNL\Entity\Response\GetLocationsInAreaResponse;
+use ThirtyBees\PostNL\Entity\Response\GetNearestLocationsResponse;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
 use ThirtyBees\PostNL\HttpClient\MockClient;
 use ThirtyBees\PostNL\PostNL;
@@ -126,6 +128,7 @@ class LocationServiceRestTest extends TestCase
                     'AllowSundaySorting' => true,
                     'DeliveryDate'       => '29-06-2016',
                     'DeliveryOptions'    => [
+                        'PG',
                         'PGE',
                     ],
                     'OpeningTime' => '09:00:00',
@@ -142,8 +145,8 @@ class LocationServiceRestTest extends TestCase
 
         $query = \GuzzleHttp\Psr7\parse_query($request->getUri()->getQuery());
 
-        $this->assertEquals([
-            'DeliveryOptions' => 'PG,PGE',
+        $this->assertEqualsCanonicalizing([
+            'DeliveryOptions' => 'PG',
             'City'            => 'Hoofddorp',
             'Street'          => 'Siriusdreef',
             'HouseNumber'     => '42',
@@ -154,7 +157,6 @@ class LocationServiceRestTest extends TestCase
         ], $query);
         $this->assertEquals('test', $request->getHeaderLine('apikey'));
         $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
-        $this->assertEquals('application/json;charset=UTF-8', $request->getHeaderLine('Content-Type'));
     }
 
     /**
@@ -190,8 +192,8 @@ class LocationServiceRestTest extends TestCase
                 'Street'     => 'Siriusdreef',
             ])));
 
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\GetNearestLocationsResponse', $response);
-        $this->assertEquals(20, count((array) $response->getGetLocationsResult()));
+        $this->assertInstanceOf(GetNearestLocationsResponse::class, $response);
+        $this->assertCount(20, (array) $response->getGetLocationsResult());
     }
 
     /**
@@ -229,7 +231,7 @@ class LocationServiceRestTest extends TestCase
 
         $query = \GuzzleHttp\Psr7\parse_query($request->getUri()->getQuery());
 
-        $this->assertEquals([
+        $this->assertEqualsCanonicalizing([
             'DeliveryOptions' => 'PG',
             'LatitudeNorth'   => '52.156439',
             'LongitudeWest'   => '5.015643',
@@ -240,7 +242,6 @@ class LocationServiceRestTest extends TestCase
         ], $query);
         $this->assertEquals('test', $request->getHeaderLine('apikey'));
         $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
-        $this->assertEquals('application/json;charset=UTF-8', $request->getHeaderLine('Content-Type'));
     }
 
     /**
@@ -278,7 +279,7 @@ class LocationServiceRestTest extends TestCase
                 ]),
             ])));
 
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\GetLocationsInAreaResponse', $response);
+        $this->assertInstanceOf(GetLocationsInAreaResponse::class, $response);
         $this->assertEquals(20, count((array) $response->getGetLocationsResult()));
     }
 
@@ -299,13 +300,12 @@ class LocationServiceRestTest extends TestCase
 
         $query = \GuzzleHttp\Psr7\parse_query($request->getUri()->getQuery());
 
-        $this->assertEquals([
+        $this->assertEqualsCanonicalizing([
             'LocationCode'    => '161503',
             'RetailNetworkID' => 'PNPNL-01',
         ], $query);
         $this->assertEquals('test', $request->getHeaderLine('apikey'));
         $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
-        $this->assertEquals('application/json;charset=UTF-8', $request->getHeaderLine('Content-Type'));
     }
 
     /**
@@ -327,7 +327,7 @@ class LocationServiceRestTest extends TestCase
                 ->setRetailNetworkID('PNPNL-01')
         );
 
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\GetLocationsInAreaResponse', $response);
+        $this->assertInstanceOf(GetLocationsInAreaResponse::class, $response);
         $this->assertEquals(1, count((array) $response->getGetLocationsResult()));
     }
 

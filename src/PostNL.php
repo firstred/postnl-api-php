@@ -30,6 +30,9 @@ use GuzzleHttp\Psr7\Response;
 use Http\Discovery\HttpAsyncClientDiscovery;
 use Http\Discovery\Psr18ClientDiscovery;
 use Http\Discovery\HttpClientDiscovery;
+use Http\Discovery\NotFoundException;
+use Http\Discovery\Exception\NoCandidateFoundException;
+use Http\Discovery\Exception\DiscoveryFailedException;
 use Psr\Cache\CacheItemInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
@@ -460,12 +463,12 @@ class PostNL implements LoggerAwareInterface
             }
 
             if (interface_exists(GuzzleClientInterface::class)
-                && (version_compare(
+                && (defined(GuzzleClientInterface::class.'::VERSION') && version_compare(
                     constant(GuzzleClientInterface::class.'::VERSION'),
                     '6.0.0',
                     '>='
                 ))
-                || (version_compare(
+                || (defined(GuzzleClientInterface::class.'::MAJOR_VERSION') && version_compare(
                     constant(GuzzleClientInterface::class.'::MAJOR_VERSION'),
                     '7.0.0',
                     '>='

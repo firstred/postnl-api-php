@@ -38,6 +38,7 @@ use ThirtyBees\PostNL\Entity\Customer;
 use ThirtyBees\PostNL\Entity\Message\Message;
 use ThirtyBees\PostNL\Entity\Request\GenerateBarcode;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
+use ThirtyBees\PostNL\Exception\ResponseException;
 use ThirtyBees\PostNL\HttpClient\MockClient;
 use ThirtyBees\PostNL\PostNL;
 use ThirtyBees\PostNL\Service\BarcodeService;
@@ -108,7 +109,7 @@ class BarcodeServiceRestTest extends TestCase
      */
     public function testHasValidBarcodeService()
     {
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Service\\BarcodeService', $this->service);
+        $this->assertInstanceOf(BarcodeService::class, $this->service);
     }
 
     /**
@@ -136,17 +137,13 @@ class BarcodeServiceRestTest extends TestCase
 
         $query = \GuzzleHttp\Psr7\parse_query($request->getUri()->getQuery());
 
-        $this->assertEquals([
+        $this->assertEqualsCanonicalizing([
             'CustomerCode'   => 'DEVC',
             'CustomerNumber' => '11223344',
             'Type'           => '3S',
             'Serie'          => '987000000-987600000',
         ],
-            $query,
-            null,
-            0,
-            10,
-            true
+            $query
         );
         $this->assertEmpty((string) $request->getBody());
         $this->assertEquals('test', $request->getHeaderLine('apikey'));
@@ -257,7 +254,7 @@ class BarcodeServiceRestTest extends TestCase
      */
     public function testNegativeSingleBarcodeInvalidResponse()
     {
-        $this->expectException('ThirtyBees\\PostNL\\Exception\\ResponseException');
+        $this->expectException(ResponseException::class);
 
         $mock = new MockHandler([
             new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], 'asdfojasuidfo'),

@@ -231,9 +231,9 @@ class ConfirmingService extends AbstractService
     {
         static::validateRESTResponse($response);
         $body = @json_decode(static::getResponseText($response), true);
-        if (isset($body['ConfirmingResponseShipments'])) {
+        if (isset($body['ResponseShipments'])) {
             /** @var ConfirmingResponseShipment $object */
-            $object = AbstractEntity::jsonDeserialize(['ConfirmingResponseShipment' => $body['ConfirmingResponseShipments']['ConfirmingResponseShipment']]);
+            $object = AbstractEntity::jsonDeserialize(['ConfirmingResponseShipment' => $body['ResponseShipments']]);
             $this->setService($object);
 
             return $object;

@@ -133,34 +133,44 @@ class BarcodeServiceSoapTest extends TestCase
 
         $this->assertEmpty($request->getHeaderLine('apikey'));
         $this->assertEquals('text/xml', $request->getHeaderLine('Accept'));
-        $this->assertEquals("<?xml version=\"1.0\"?>
-<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:services=\"http://postnl.nl/cif/services/BarcodeWebService/\" xmlns:domain=\"http://postnl.nl/cif/domain/BarcodeWebService/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\" xmlns:schema=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:common=\"http://postnl.nl/cif/services/common/\">
- <soap:Header>
-  <wsse:Security>
-   <wsse:UsernameToken>
-    <wsse:Password>test</wsse:Password>
-   </wsse:UsernameToken>
-  </wsse:Security>
- </soap:Header>
- <soap:Body>
-  <services:GenerateBarcode>
-   <domain:Message>
-    <domain:MessageID>{$message->getMessageID()}</domain:MessageID>
-    <domain:MessageTimeStamp>{$message->getMessageTimeStamp()}</domain:MessageTimeStamp>
-   </domain:Message>
-   <domain:Customer>
-    <domain:CustomerCode>DEVC</domain:CustomerCode>
-    <domain:CustomerNumber>11223344</domain:CustomerNumber>
-   </domain:Customer>
-   <domain:Barcode>
-    <domain:Type>3S</domain:Type>
-    <domain:Range>DEVC</domain:Range>
-    <domain:Serie>987000000-987600000</domain:Serie>
-   </domain:Barcode>
-  </services:GenerateBarcode>
- </soap:Body>
+        $this->assertXmlStringEqualsXmlString(<<<XML
+<?xml version="1.0"?>
+<soap:Envelope
+  xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" 
+  xmlns:env="http://www.w3.org/2003/05/soap-envelope"
+  xmlns:services="http://postnl.nl/cif/services/BarcodeWebService/"
+  xmlns:domain="http://postnl.nl/cif/domain/BarcodeWebService/"
+  xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" 
+  xmlns:schema="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:common="http://postnl.nl/cif/services/common/"
+>
+  <soap:Header>
+    <wsse:Security>
+      <wsse:UsernameToken>
+        <wsse:Password>test</wsse:Password>
+      </wsse:UsernameToken>
+    </wsse:Security>
+  </soap:Header>
+  <soap:Body>
+    <services:GenerateBarcode>
+      <domain:Message>
+        <domain:MessageID>{$message->getMessageID()}</domain:MessageID>
+        <domain:MessageTimeStamp>{$message->getMessageTimeStamp()}</domain:MessageTimeStamp>
+      </domain:Message>
+      <domain:Customer>
+        <domain:CustomerCode>DEVC</domain:CustomerCode>
+        <domain:CustomerNumber>11223344</domain:CustomerNumber>
+      </domain:Customer>
+      <domain:Barcode>
+        <domain:Type>3S</domain:Type>
+        <domain:Range>DEVC</domain:Range>
+        <domain:Serie>987000000-987600000</domain:Serie>
+      </domain:Barcode>
+    </services:GenerateBarcode>
+  </soap:Body>
 </soap:Envelope>
-", (string) $request->getBody());
+XML
+            , (string) $request->getBody());
     }
 
     /**
@@ -235,15 +245,16 @@ class BarcodeServiceSoapTest extends TestCase
      */
     protected function mockValidBarcodeResponse($barcode)
     {
-        return "<code><s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\">
+        return <<<XML
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
   <s:Body>
-    <GenerateBarcodeResponse xmlns=\"http://postnl.nl/cif/services/BarcodeWebService/\"
-xmlns:a=\"http://postnl.nl/cif/domain/BarcodeWebService/\"
-xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">
+    <GenerateBarcodeResponse xmlns="http://postnl.nl/cif/services/BarcodeWebService/"
+xmlns:a="http://postnl.nl/cif/domain/BarcodeWebService/"
+xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
       <a:Barcode>{$barcode}</a:Barcode>
     </GenerateBarcodeResponse>
   </s:Body>
 </s:Envelope>
-</code>";
+XML;
     }
 }

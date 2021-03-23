@@ -40,6 +40,8 @@ use ThirtyBees\PostNL\Entity\Message\Message;
 use ThirtyBees\PostNL\Entity\Request\GetDeliveryDate;
 use ThirtyBees\PostNL\Entity\Request\GetSentDate;
 use ThirtyBees\PostNL\Entity\Request\GetSentDateRequest;
+use ThirtyBees\PostNL\Entity\Response\GetDeliveryDateResponse;
+use ThirtyBees\PostNL\Entity\Response\GetSentDateResponse;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
 use ThirtyBees\PostNL\HttpClient\MockClient;
 use ThirtyBees\PostNL\PostNL;
@@ -198,7 +200,7 @@ class DeliveryDateServiceRestTest extends TestCase
         );
 
         $this->assertInstanceOf(
-            '\\ThirtyBees\\PostNL\\Entity\\Response\\GetDeliveryDateResponse',
+            GetDeliveryDateResponse::class,
             $response
         );
         $this->assertEquals('30-06-2016', $response->getDeliveryDate());
@@ -269,7 +271,7 @@ class DeliveryDateServiceRestTest extends TestCase
         );
 
         $this->assertInstanceOf(
-            '\\ThirtyBees\\PostNL\\Entity\\Response\\GetSentDateResponse',
+            GetSentDateResponse::class,
             $response
         );
         $this->assertEquals('29-06-2016', $response->getSentDate());

@@ -38,8 +38,10 @@ use ThirtyBees\PostNL\Entity\Customer;
 use ThirtyBees\PostNL\Entity\Dimension;
 use ThirtyBees\PostNL\Entity\Message\LabellingMessage;
 use ThirtyBees\PostNL\Entity\Request\Confirming;
+use ThirtyBees\PostNL\Entity\Response\ConfirmingResponseShipment;
 use ThirtyBees\PostNL\Entity\Shipment;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
+use ThirtyBees\PostNL\Exception\ResponseException;
 use ThirtyBees\PostNL\HttpClient\MockClient;
 use ThirtyBees\PostNL\PostNL;
 use ThirtyBees\PostNL\Service\ConfirmingService;
@@ -112,7 +114,7 @@ class ConfirmingServiceRestTest extends TestCase
      */
     public function testHasValidConfirmingService()
     {
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Service\\ConfirmingService', $this->service);
+        $this->assertInstanceOf(ConfirmingService::class, $this->service);
     }
 
     /**
@@ -270,7 +272,7 @@ class ConfirmingServiceRestTest extends TestCase
                 ->setProductCodeDelivery('3085')
         );
 
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\ConfirmingResponseShipment', $confirm);
+        $this->assertInstanceOf(ConfirmingResponseShipment::class, $confirm);
     }
 
     /**
@@ -371,7 +373,7 @@ class ConfirmingServiceRestTest extends TestCase
             ]
         );
 
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\ConfirmingResponseShipment', $confirms[1]);
+        $this->assertInstanceOf(ConfirmingResponseShipment::class, $confirms[1]);
     }
 
     /**
@@ -379,7 +381,7 @@ class ConfirmingServiceRestTest extends TestCase
      */
     public function testNegativeGenerateLabelInvalidResponseRest()
     {
-        $this->expectException('ThirtyBees\\PostNL\\Exception\\ResponseException');
+        $this->expectException(ResponseException::class);
 
         $mock = new MockHandler([
             new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], 'asdfojasuidfo'),

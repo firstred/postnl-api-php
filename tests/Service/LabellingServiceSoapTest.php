@@ -38,6 +38,7 @@ use ThirtyBees\PostNL\Entity\Customer;
 use ThirtyBees\PostNL\Entity\Dimension;
 use ThirtyBees\PostNL\Entity\Message\LabellingMessage;
 use ThirtyBees\PostNL\Entity\Request\GenerateLabel;
+use ThirtyBees\PostNL\Entity\Response\GenerateLabelResponse;
 use ThirtyBees\PostNL\Entity\Shipment;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
 use ThirtyBees\PostNL\HttpClient\MockClient;
@@ -116,7 +117,7 @@ class LabellingServiceSoapTest extends TestCase
      */
     public function testHasValidLabellingService()
     {
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Service\\LabellingService', $this->service);
+        $this->assertInstanceOf(LabellingService::class, $this->service);
     }
 
     /**
@@ -162,73 +163,83 @@ class LabellingServiceSoapTest extends TestCase
             false
         );
 
-        $this->assertEquals("<?xml version=\"1.0\"?>
-<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:services=\"http://postnl.nl/cif/services/LabellingWebService/\" xmlns:domain=\"http://postnl.nl/cif/domain/LabellingWebService/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\" xmlns:schema=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:common=\"http://postnl.nl/cif/services/common/\">
- <soap:Header>
-  <wsse:Security>
-   <wsse:UsernameToken>
-    <wsse:Password>test</wsse:Password>
-   </wsse:UsernameToken>
-  </wsse:Security>
- </soap:Header>
- <soap:Body>
-  <services:GenerateLabel>
-   <domain:Customer>
-    <domain:Address>
-     <domain:AddressType>02</domain:AddressType>
-     <domain:City>Hoofddorp</domain:City>
-     <domain:CompanyName>PostNL</domain:CompanyName>
-     <domain:Countrycode>NL</domain:Countrycode>
-     <domain:HouseNr>42</domain:HouseNr>
-     <domain:Street>Siriusdreef</domain:Street>
-     <domain:Zipcode>2132WT</domain:Zipcode>
-    </domain:Address>
-    <domain:CollectionLocation>123456</domain:CollectionLocation>
-    <domain:ContactPerson>Test</domain:ContactPerson>
-    <domain:CustomerCode>DEVC</domain:CustomerCode>
-    <domain:CustomerNumber>11223344</domain:CustomerNumber>
-   </domain:Customer>
-   <domain:Message>
-    <domain:MessageID>{$message->getMessageID()}</domain:MessageID>
-    <domain:MessageTimeStamp>{$message->getMessageTimeStamp()}</domain:MessageTimeStamp>
-    <domain:Printertype>GraphicFile|PDF</domain:Printertype>
-   </domain:Message>
-   <domain:Shipments>
-    <domain:Shipment>
-     <domain:Addresses>
-      <domain:Address>
-       <domain:AddressType>01</domain:AddressType>
-       <domain:City>Utrecht</domain:City>
-       <domain:Countrycode>NL</domain:Countrycode>
-       <domain:FirstName>Peter</domain:FirstName>
-       <domain:HouseNr>9</domain:HouseNr>
-       <domain:HouseNrExt>a bis</domain:HouseNrExt>
-       <domain:Name>de Ruijter</domain:Name>
-       <domain:Street>Bilderdijkstraat</domain:Street>
-       <domain:Zipcode>3521VA</domain:Zipcode>
-      </domain:Address>
-      <domain:Address>
-       <domain:AddressType>02</domain:AddressType>
-       <domain:City>Hoofddorp</domain:City>
-       <domain:CompanyName>PostNL</domain:CompanyName>
-       <domain:Countrycode>NL</domain:Countrycode>
-       <domain:HouseNr>42</domain:HouseNr>
-       <domain:Street>Siriusdreef</domain:Street>
-       <domain:Zipcode>2132WT</domain:Zipcode>
-      </domain:Address>
-     </domain:Addresses>
-     <domain:Barcode>3S1234567890123</domain:Barcode>
-     <domain:DeliveryAddress>01</domain:DeliveryAddress>
-     <domain:Dimension>
-      <domain:Weight>2000</domain:Weight>
-     </domain:Dimension>
-     <domain:ProductCodeDelivery>3085</domain:ProductCodeDelivery>
-    </domain:Shipment>
-   </domain:Shipments>
-  </services:GenerateLabel>
- </soap:Body>
+        $this->assertXmlStringEqualsXmlString(<<<XML
+<?xml version="1.0"?>
+<soap:Envelope
+  xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" 
+  xmlns:env="http://www.w3.org/2003/05/soap-envelope" 
+  xmlns:services="http://postnl.nl/cif/services/LabellingWebService/"
+  xmlns:domain="http://postnl.nl/cif/domain/LabellingWebService/"
+  xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" 
+  xmlns:schema="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:common="http://postnl.nl/cif/services/common/"
+>
+  <soap:Header>
+    <wsse:Security>
+      <wsse:UsernameToken>
+        <wsse:Password>test</wsse:Password>
+      </wsse:UsernameToken>
+    </wsse:Security>
+  </soap:Header>
+  <soap:Body>
+    <services:GenerateLabel>
+      <domain:Customer>
+        <domain:Address>
+          <domain:AddressType>02</domain:AddressType>
+          <domain:City>Hoofddorp</domain:City>
+          <domain:CompanyName>PostNL</domain:CompanyName>
+          <domain:Countrycode>NL</domain:Countrycode>
+          <domain:HouseNr>42</domain:HouseNr>
+          <domain:Street>Siriusdreef</domain:Street>
+          <domain:Zipcode>2132WT</domain:Zipcode>
+        </domain:Address>
+        <domain:CollectionLocation>123456</domain:CollectionLocation>
+        <domain:ContactPerson>Test</domain:ContactPerson>
+        <domain:CustomerCode>DEVC</domain:CustomerCode>
+        <domain:CustomerNumber>11223344</domain:CustomerNumber>
+      </domain:Customer>
+      <domain:Message>
+        <domain:MessageID>{$message->getMessageID()}</domain:MessageID>
+        <domain:MessageTimeStamp>{$message->getMessageTimeStamp()}</domain:MessageTimeStamp>
+        <domain:Printertype>GraphicFile|PDF</domain:Printertype>
+      </domain:Message>
+      <domain:Shipments>
+        <domain:Shipment>
+          <domain:Addresses>
+           <domain:Address>
+            <domain:AddressType>01</domain:AddressType>
+            <domain:City>Utrecht</domain:City>
+            <domain:Countrycode>NL</domain:Countrycode>
+            <domain:FirstName>Peter</domain:FirstName>
+            <domain:HouseNr>9</domain:HouseNr>
+            <domain:HouseNrExt>a bis</domain:HouseNrExt>
+            <domain:Name>de Ruijter</domain:Name>
+            <domain:Street>Bilderdijkstraat</domain:Street>
+            <domain:Zipcode>3521VA</domain:Zipcode>
+           </domain:Address>
+           <domain:Address>
+            <domain:AddressType>02</domain:AddressType>
+            <domain:City>Hoofddorp</domain:City>
+            <domain:CompanyName>PostNL</domain:CompanyName>
+            <domain:Countrycode>NL</domain:Countrycode>
+            <domain:HouseNr>42</domain:HouseNr>
+            <domain:Street>Siriusdreef</domain:Street>
+            <domain:Zipcode>2132WT</domain:Zipcode>
+           </domain:Address>
+          </domain:Addresses>
+          <domain:Barcode>3S1234567890123</domain:Barcode>
+          <domain:DeliveryAddress>01</domain:DeliveryAddress>
+          <domain:Dimension>
+           <domain:Weight>2000</domain:Weight>
+          </domain:Dimension>
+          <domain:ProductCodeDelivery>3085</domain:ProductCodeDelivery>
+        </domain:Shipment>
+      </domain:Shipments>
+    </services:GenerateLabel>
+  </soap:Body>
 </soap:Envelope>
-",
+XML
+            ,
             (string) $request->getBody());
         $this->assertEquals('', $request->getHeaderLine('apikey'));
         $this->assertEquals('text/xml;charset=UTF-8', $request->getHeaderLine('Content-Type'));
@@ -319,61 +330,72 @@ xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">
     {
         $base64Content = static::$base64LabelContent;
         $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], "<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\">
+            new Response(
+                200,
+                ['Content-Type' => 'application/json;charset=UTF-8'],
+                <<<XML
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
   <s:Body>
     <GenerateLabelResponse
-xmlns=\"http://postnl.nl/cif/services/LabellingWebService/\"
-xmlns:a=\"http://postnl.nl/cif/domain/LabellingWebService/\"
-xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">
-      <a:MergedLabels i:nil=\"true\"/>
+xmlns="http://postnl.nl/cif/services/LabellingWebService/"
+xmlns:a="http://postnl.nl/cif/domain/LabellingWebService/"
+xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+      <a:MergedLabels i:nil="true"/>
       <a:ResponseShipments>
         <a:ResponseShipment>
           <a:Barcode>3SDEVC201611210</a:Barcode>
-          <a:DownPartnerBarcode i:nil=\"true\"/>
-          <a:DownPartnerID i:nil=\"true\"/>
-          <a:DownPartnerLocation i:nil=\"true\"/>
+          <a:DownPartnerBarcode i:nil="true"/>
+          <a:DownPartnerID i:nil="true"/>
+          <a:DownPartnerLocation i:nil="true"/>
           <a:Labels>
             <a:Label>
               <a:Content>{$base64Content}</a:Content>
-              <a:Contenttype i:nil=\"true\"/>
+              <a:Contenttype i:nil="true"/>
               <a:Labeltype>Label</a:Labeltype>
             </a:Label>
           </a:Labels>
           <a:ProductCodeDelivery>3085</a:ProductCodeDelivery>
-          <a:Warnings i:nil=\"true\"/>
+          <a:Warnings i:nil="true"/>
         </a:ResponseShipment>
       </a:ResponseShipments>
     </GenerateLabelResponse>
   </s:Body>
 </s:Envelope>
-"), new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], "<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\">
+XML
+            ), new Response(
+                200,
+                ['Content-Type' => 'application/json;charset=UTF-8'],
+                <<<XML
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
   <s:Body>
     <GenerateLabelResponse
-xmlns=\"http://postnl.nl/cif/services/LabellingWebService/\"
-xmlns:a=\"http://postnl.nl/cif/domain/LabellingWebService/\"
-xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">
-      <a:MergedLabels i:nil=\"true\"/>
+        xmlns="http://postnl.nl/cif/services/LabellingWebService/"
+        xmlns:a="http://postnl.nl/cif/domain/LabellingWebService/"
+        xmlns:i="http://www.w3.org/2001/XMLSchema-instance"
+    >
+      <a:MergedLabels i:nil="true"/>
       <a:ResponseShipments>
         <a:ResponseShipment>
           <a:Barcode>3SDEVC201611211</a:Barcode>
-          <a:DownPartnerBarcode i:nil=\"true\"/>
-          <a:DownPartnerID i:nil=\"true\"/>
-          <a:DownPartnerLocation i:nil=\"true\"/>
+          <a:DownPartnerBarcode i:nil="true"/>
+          <a:DownPartnerID i:nil="true"/>
+          <a:DownPartnerLocation i:nil="true"/>
           <a:Labels>
             <a:Label>
               <a:Content>{$base64Content}</a:Content>
-              <a:Contenttype i:nil=\"true\"/>
+              <a:Contenttype i:nil="true"/>
               <a:Labeltype>Label</a:Labeltype>
             </a:Label>
           </a:Labels>
           <a:ProductCodeDelivery>3085</a:ProductCodeDelivery>
-          <a:Warnings i:nil=\"true\"/>
+          <a:Warnings i:nil="true"/>
         </a:ResponseShipment>
       </a:ResponseShipments>
     </GenerateLabelResponse>
   </s:Body>
 </s:Envelope>
-"),
+XML
+            ),
         ]);
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();
@@ -438,7 +460,7 @@ xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">
             ]
         );
 
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\GenerateLabelResponse', $label[1]);
+        $this->assertInstanceOf(GenerateLabelResponse::class, $label[1]);
     }
 
     /**

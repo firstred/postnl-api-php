@@ -137,7 +137,7 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
      *
      * @return CurlClient
      */
-    public function setLogger(LoggerInterface $logger = null)
+    public function setLogger(LoggerInterface $logger)
     {
         $this->logger = $logger;
 

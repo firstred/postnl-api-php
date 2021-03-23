@@ -45,7 +45,7 @@ class MockClient implements ClientInterface, LoggerAwareInterface
     /**
      * List of pending PSR-7 requests.
      *
-     * @var Request[]
+     * @var RequestInterface[]
      */
     protected $pendingRequests = [];
     /** @var LoggerInterface */
@@ -162,7 +162,7 @@ class MockClient implements ClientInterface, LoggerAwareInterface
      *
      * @return MockClient
      */
-    public function setLogger(LoggerInterface $logger = null)
+    public function setLogger(LoggerInterface $logger)
     {
         $this->logger = $logger;
 
@@ -313,7 +313,7 @@ class MockClient implements ClientInterface, LoggerAwareInterface
             } elseif (isset($response['reason'])) {
                 $response = $response['reason'];
             } else {
-                $response = ThirtyBees\PostNL\Exception\ResponseException('Unknown reponse type');
+                $response = new \ThirtyBees\PostNL\Exception\ResponseException('Unknown reponse type');
             }
             if ($response instanceof ResponseInterface && $this->logger instanceof LoggerInterface) {
                 $this->logger->debug(\GuzzleHttp\Psr7\str($response));
