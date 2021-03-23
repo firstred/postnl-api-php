@@ -1,6 +1,8 @@
 language: php
 php:
   - '7.3'
+  - '7.4'
+  - '8.0'
 
 directories:
   - $HOME/.composer/cache
@@ -10,7 +12,7 @@ before_script:
 
 script:
   - cd tests/
-  - php ../vendor/bin/phpunit --testdox --testsuite Unit
+  - php ../vendor/bin/phpunit --testdox tests
 
 after_success:
 - bash <(curl -s https://codecov.io/bash)
