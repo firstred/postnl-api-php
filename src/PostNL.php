@@ -1027,7 +1027,7 @@ class PostNL implements LoggerAwareInterface
      */
     public function generateBarcode($type = '3S', $range = null, $serie = null, $eps = false)
     {
-        if (!in_array($type, ['2S', '3S']) || 2 !== strlen($type)) {
+        if (2 !== strlen($type)) {
             throw new InvalidBarcodeException("Barcode type `$type` is invalid");
         }
 
