@@ -884,7 +884,9 @@ class PostNL implements LoggerAwareInterface
         }
 
         if (!$range) {
-            if (in_array($type, ['2S', '3S'])) {
+            if (in_array($type, ['LA', 'UE', 'RI'])) {
+                $range = 'NL';
+            } elseif (in_array($type, ['2S', '3S'])) {
                 $range = $this->getCustomer()->getCustomerCode();
             } else {
                 $range = $this->getCustomer()->getGlobalPackCustomerCode();
@@ -1540,6 +1542,12 @@ class PostNL implements LoggerAwareInterface
                 }
                 // Regular domestic codes
                 $serie = (4 === strlen($range) ? '987000000-987600000' : '0000000-9999999');
+
+                break;
+            case 'LA':
+            case 'UE':
+            case 'RI':
+                $serie = '00000000-99999999';
 
                 break;
             default:
