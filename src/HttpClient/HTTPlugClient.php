@@ -3,14 +3,19 @@
 namespace ThirtyBees\PostNL\HttpClient;
 
 use Exception;
-use Http\Client\Exception as HttpClientException;
 use Http\Client\Exception\HttpException;
 use Http\Client\Exception\TransferException;
 use Http\Client\HttpAsyncClient;
+use Http\Client\HttpClient;
+use Http\Discovery\Exception\NotFoundException;
 use Http\Discovery\HttpAsyncClientDiscovery;
+use Http\Discovery\HttpClientDiscovery;
+use Http\Discovery\Psr18ClientDiscovery;
+use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
+use ThirtyBees\PostNL\Exception\HttpClientException;
 use ThirtyBees\PostNL\Util\EachPromise;
 
 /**
@@ -18,19 +23,6 @@ use ThirtyBees\PostNL\Util\EachPromise;
  */
 class HTTPlugClient implements ClientInterface
 {
-    /**
-     * List of pending PSR-7 requests.
-     *
-     * @var RequestInterface[]
-     */
-    protected $pendingRequests = [];
-
-    /** @var int */
-    private $concurrency = 5;
-
-    /** @var LoggerInterface */
-    private $logger;
-
     /** @var HttpAsyncClient */
     private $asyncClient;
 
@@ -38,29 +30,81 @@ class HTTPlugClient implements ClientInterface
     private static $instance;
 
     /**
-     * HTTPlugClient constructor.
+     * @var HttpAsyncClient|ClientInterface|HttpClient
      */
-    public function __construct(HttpAsyncClient $client = null)
-    {
-        $this->setHttpAsyncClient($client ?: HttpAsyncClientDiscovery::find());
+    protected $client;
+
+    /**
+     * List of pending PSR-7 requests.
+     *
+     * @var RequestInterface[]
+     */
+    protected $pendingRequests = [];
+
+    /**
+     * @var LoggerInterface|null
+     */
+    protected $logger;
+
+    /**
+     * @var int
+     */
+    protected $concurrency;
+
+    /**
+     * HTTPlugClient constructor.
+     *
+     * @param HttpAsyncClient|ClientInterface|HttpClient|null $client
+     * @param LoggerInterface|null                            $logger
+     * @param int                                             $concurrency
+     *
+     * @throws HttpClientException
+     */
+    public function __construct(
+        $client = null,
+        $logger = null,
+        $concurrency = 5
+    ) {
+        $this->logger = $logger;
+        $this->concurrency = $concurrency;
+
+        if (null === $client) {
+            try {
+                $client = HttpAsyncClientDiscovery::find();
+            } catch (NotFoundException $e) {
+            }
+        }
+        if (null === $client) {
+            try {
+                $client = Psr18ClientDiscovery::find();
+            } catch (NotFoundException $e) {
+            }
+        }
+        if (null === $client) {
+            try {
+                $client = HttpClientDiscovery::find();
+            } catch (NotFoundException $e) {
+            }
+        }
+
+        if (!$client) {
+            throw new HttpClientException('HTTP Client could not be found');
+        }
+
+        $this->setClient($client);
     }
 
     /**
      * Adds a request to the list of pending requests
      * Using the ID you can replace a request.
      *
-     * @param string           $id      Request ID
-     * @param RequestInterface $request PSR-7 request
+     * @param string           $id
+     * @param RequestInterface $request
      *
-     * @since 2.0.0 Strict typing
-     * @since 1.0.0
+     * @return string
      */
     public function addOrUpdateRequest($id, RequestInterface $request)
     {
-        if (is_null($id)) {
-            return (string) array_push($this->pendingRequests, $request);
-        }
-
         $this->pendingRequests[$id] = $request;
 
         return $id;
@@ -69,8 +113,7 @@ class HTTPlugClient implements ClientInterface
     /**
      * Remove a request from the list of pending requests.
      *
-     * @since 2.0.0 Strict typing
-     * @since 1.0.0
+     * @param string $id
      */
     public function removeRequest($id)
     {
@@ -82,60 +125,64 @@ class HTTPlugClient implements ClientInterface
      *
      * Exceptions are captured into the result array
      *
-     * @param RequestInterface[] $requests
+     * @param array $requests
+     * @psalm-param array<string, RequestInterface> $requests
      *
-     * @return ResponseInterface[]
-     *
-     * @throws HttpClientException
-     *
-     * @since 2.0.0 Strict typing
+     * @return array
      */
     public function doRequests($requests = [])
     {
-        // If this is a single request, create the requests array
-        if (!is_array($requests)) {
-            if (!$requests instanceof RequestInterface) {
-                return [];
-            }
-
-            $requests = [$requests];
-        }
-
         // Handle pending requests
         $requests = $this->pendingRequests + $requests;
         $this->clearRequests();
 
-        $client = $this->getAsyncClient();
-        // Concurrent requests
-        $promises = call_user_func(
-            function () use ($requests, $client) {
-                foreach ($requests as $index => $request) {
-                    yield $index             => $client->sendAsyncRequest($request);
-                }
-            }
-        );
+        $client = $this->getClient();
 
         $responses = [];
-        try {
-            (new EachPromise(
-                $promises,
-                [
-                    'concurrency' => $this->concurrency,
-                    'fulfilled'   => function ($response, $index) use (&$responses) {
-                        $responses[$index] = $response;
-                    },
-                    'rejected' => function ($response, $index) use (&$responses) {
-                        $responses[$index] = $response;
-                    },
-                ]
-            ))->promise()->wait(true);
-        } catch (HttpException $e) {
-            // Ignore HttpExceptions, we are going to handle them in the response validator
-        } catch (TransferException $e) {
-            // Other transfer exceptions should be thrown
-            throw $e;
-        } catch (Exception $e) {
-            // Unreachable code, these kinds of exceptions should not be unwrapped
+        if ($client instanceof HttpAsyncClient) {
+            // Concurrent requests
+            $promises = call_user_func(function () use ($requests, $client) {
+                foreach ($requests as $index => $request) {
+                    try {
+                        yield $index => $client->sendAsyncRequest($request);
+                    } catch (Exception $e) {
+                    }
+                }
+            });
+
+            try {
+                $promise = (new EachPromise(
+                    $promises,
+                    [
+                        'concurrency' => $this->concurrency,
+                        'fulfilled'   => function (ResponseInterface $response, $index) use (&$responses) {
+                            $responses[$index] = $response;
+                        },
+                        'rejected'    => function (ResponseInterface $response, $index) use (&$responses) {
+                            $responses[$index] = $response;
+                        },
+                    ]
+                ))->promise();
+
+                if ($promise) {
+                    $promise->wait(true);
+                }
+            } catch (HttpException $e) {
+                // Ignore HttpExceptions, we are going to handle them in the response validator
+            } catch (TransferException $e) {
+                // Other transfer exceptions should be thrown
+                throw $e;
+            } catch (Exception $e) {
+                // Unreachable code, these kinds of exceptions should not be unwrapped
+            }
+        } else {
+            foreach ($requests as $idx => $request) {
+                try {
+                    $responses[$idx] = $this->doRequest($request);
+                } catch (HttpClientException $e) {
+                    $responses[$idx] = $e;
+                }
+            }
         }
 
         return $responses;
@@ -143,8 +190,6 @@ class HTTPlugClient implements ClientInterface
 
     /**
      * Clear all pending requests.
-     *
-     * @since 1.0.0
      */
     public function clearRequests()
     {
@@ -156,25 +201,32 @@ class HTTPlugClient implements ClientInterface
      *
      * Exceptions are captured into the result array
      *
-     * @throws Exception
+     * @param RequestInterface $request
      *
-     * @since 2.0.0 Strict typing
-     * @since 1.0.0
+     * @return ResponseInterface
+     *
+     * @throws HttpClientException
      */
     public function doRequest(RequestInterface $request)
     {
         // Initialize HttpAsyncClient, include the default options
-        $client = $this->getAsyncClient();
+        $client = $this->getClient();
 
-        return $client->sendAsyncRequest($request)->wait();
+        try {
+            if ($client instanceof HttpAsyncClient) {
+                return $client->sendAsyncRequest($request)->wait();
+            }
+
+            return $client->sendRequest($request);
+        } catch (Exception $e) {
+            throw new HttpClientException($e->getMessage(), $e->getCode(), $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new HttpClientException($e->getMessage(), $e->getCode(), $e);
+        }
     }
 
     /**
-     * Return concurrency.
-     *
      * @return int
-     *
-     * @since 1.0.0
      */
     public function getConcurrency()
     {
@@ -182,9 +234,9 @@ class HTTPlugClient implements ClientInterface
     }
 
     /**
-     * Set the concurrency.
+     * @param int $concurrency
      *
-     * @since 1.0.0
+     * @return static
      */
     public function setConcurrency($concurrency)
     {
@@ -192,6 +244,48 @@ class HTTPlugClient implements ClientInterface
 
         return $this;
     }
+
+    /**
+     * @return LoggerInterface|null
+     */
+    public function getLogger()
+    {
+        return $this->logger;
+    }
+
+    /**
+     * @param LoggerInterface|null $logger
+     *
+     * @return static
+     */
+    public function setLogger(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+
+        return $this;
+    }
+
+    /**
+     * @return HttpAsyncClient|ClientInterface|HttpClient
+     */
+    public function getClient()
+    {
+        return $this->client;
+    }
+
+    /**
+     * @param HttpAsyncClient|ClientInterface|HttpClient $client
+     *
+     * @return static
+     */
+    public function setClient( $client)
+    {
+        $this->client = $client;
+
+        return $this;
+    }
+
+
 
     /**
      * Get the HttpAsyncClient.
@@ -206,6 +300,9 @@ class HTTPlugClient implements ClientInterface
     /**
      * Set the HttpAsyncClient.
      *
+     * @param HttpAsyncClient $client
+     *
+     * @return HTTPlugClient
      * @since 2.0.0
      */
     public function setHttpAsyncClient(HttpAsyncClient $client)
@@ -216,7 +313,10 @@ class HTTPlugClient implements ClientInterface
     }
 
     /**
+     * @param HttpAsyncClient|null $client
+     *
      * @return HTTPlugClient|void
+     * @throws HttpClientException
      */
     public static function getInstance(HttpAsyncClient $client = null)
     {
@@ -225,30 +325,6 @@ class HTTPlugClient implements ClientInterface
         }
 
         return static::$instance;
-    }
-
-    /**
-     * Set the logger.
-     *
-     * @param LoggerInterface $logger
-     *
-     * @return HTTPlugClient
-     */
-    public function setLogger(LoggerInterface $logger = null)
-    {
-        $this->logger = $logger;
-
-        return $this;
-    }
-
-    /**
-     * Get the logger.
-     *
-     * @return LoggerInterface
-     */
-    public function getLogger()
-    {
-        return $this->logger;
     }
 
     /**
