@@ -3,6 +3,7 @@ composer.lock
 tests/.phpunit.result.cache
 tests/logs
 tests/clover.xml
+.phpunit.cache
 
 # PHP CS fixer
 .php_cs.cache
