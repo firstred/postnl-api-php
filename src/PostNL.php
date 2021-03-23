@@ -28,6 +28,8 @@ namespace ThirtyBees\PostNL;
 
 use GuzzleHttp\Psr7\Response;
 use Http\Discovery\HttpAsyncClientDiscovery;
+use Http\Discovery\Psr18ClientDiscovery;
+use Http\Discovery\HttpClientDiscovery;
 use Psr\Cache\CacheItemInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
@@ -68,6 +70,12 @@ use ThirtyBees\PostNL\Exception\InvalidArgumentException;
 use ThirtyBees\PostNL\Exception\InvalidBarcodeException;
 use ThirtyBees\PostNL\Exception\InvalidConfigurationException;
 use ThirtyBees\PostNL\Exception\NotSupportedException;
+use ThirtyBees\PostNL\Factory\GuzzleRequestFactory;
+use ThirtyBees\PostNL\Factory\GuzzleResponseFactory;
+use ThirtyBees\PostNL\Factory\GuzzleStreamFactory;
+use ThirtyBees\PostNL\Factory\RequestFactoryInterface;
+use ThirtyBees\PostNL\Factory\ResponseFactoryInterface;
+use ThirtyBees\PostNL\Factory\StreamFactoryInterface;
 use ThirtyBees\PostNL\HttpClient\ClientInterface;
 use ThirtyBees\PostNL\HttpClient\CurlClient;
 use ThirtyBees\PostNL\HttpClient\GuzzleClient;
@@ -82,8 +90,12 @@ use ThirtyBees\PostNL\Service\LocationService;
 use ThirtyBees\PostNL\Service\ShippingService;
 use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
+use GuzzleHttp\ClientInterface as GuzzleClientInterface;
 use function base64_decode;
 use function class_exists;
+use function constant;
+use function interface_exists;
+use function version_compare;
 
 /**
  * Class PostNL.
@@ -183,6 +195,21 @@ class PostNL implements LoggerAwareInterface
 
     /** @var LoggerInterface */
     protected $logger;
+
+    /**
+     * @var RequestFactoryInterface
+     */
+    protected $requestFactory;
+
+    /**
+     * @var ResponseFactoryInterface
+     */
+    protected $responseFactory;
+
+    /**
+     * @var StreamFactoryInterface
+     */
+    protected $streamFactory;
 
     /**
      * This is the current mode.
@@ -386,23 +413,68 @@ class PostNL implements LoggerAwareInterface
      * Automatically load Guzzle when available
      *
      * @return ClientInterface
+     * @throws HttpClientException
      */
     public function getHttpClient()
     {
         // @codeCoverageIgnoreStart
         if (!$this->httpClient) {
-            // Detect PHP HTTPlug async HTTP client support
-            $client = HttpAsyncClientDiscovery::find();
-            if ($client) {
-                $this->httpClient = HTTPlugClient::getInstance();
-            } elseif (interface_exists(ClientInterface::class)
-                && version_compare(
-                    \GuzzleHttp\ClientInterface::VERSION,
+            $client = null;
+            if (class_exists(HttpAsyncClientDiscovery::class)) {
+                try {
+                    // Detect PHP HTTPlug async HTTP client support
+                    $client = HttpAsyncClientDiscovery::find();
+                    if ($client) {
+                        $this->httpClient = HTTPlugClient::getInstance();
+                    }
+                } catch (NotFoundException $e) {
+                } catch (NoCandidateFoundException $e) {
+                } catch (DiscoveryFailedException $e) {
+                }
+            }
+
+            if (class_exists(Psr18ClientDiscovery::class)) {
+                try {
+                    // Detect PHP HTTPlug PSR-18 HTTP client support
+                    $client = Psr18ClientDiscovery::find();
+                    if ($client) {
+                        $this->httpClient = HTTPlugClient::getInstance();
+                    }
+                } catch (NotFoundException $e) {
+                } catch (NoCandidateFoundException $e) {
+                } catch (DiscoveryFailedException $e) {
+                }
+            }
+
+            if (class_exists(HttpClientDiscovery::class)) {
+                try {
+                    // Detect PHP HTTPlug HTTP client support
+                    $client = HttpClientDiscovery::find();
+                    if ($client) {
+                        $this->httpClient = HTTPlugClient::getInstance();
+                    }
+                } catch (NotFoundException $e) {
+                } catch (NoCandidateFoundException $e) {
+                } catch (DiscoveryFailedException $e) {
+                }
+            }
+
+            if (interface_exists(GuzzleClientInterface::class)
+                && (version_compare(
+                    constant(GuzzleClientInterface::class.'::VERSION'),
                     '6.0.0',
                     '>='
-                )) {
+                ))
+                || (version_compare(
+                    constant(GuzzleClientInterface::class.'::MAJOR_VERSION'),
+                    '7.0.0',
+                    '>='
+                ))
+            ) {
                 $this->httpClient = GuzzleClient::getInstance();
-            } else {
+            }
+
+            if (!$client) {
                 $this->httpClient = CurlClient::getInstance();
             }
         }
@@ -437,6 +509,7 @@ class PostNL implements LoggerAwareInterface
      * @param LoggerInterface $logger
      *
      * @return PostNL
+     * @throws HttpClientException
      */
     public function setLogger(LoggerInterface $logger = null)
     {
@@ -444,6 +517,78 @@ class PostNL implements LoggerAwareInterface
         if ($this->getHttpClient() instanceof ClientInterface) {
             $this->getHttpClient()->setLogger($logger);
         }
+
+        return $this;
+    }
+
+    /**
+     * @return RequestFactoryInterface
+     */
+    public function getRequestFactory()
+    {
+        if (!$this->requestFactory) {
+            $this->requestFactory = new GuzzleRequestFactory();
+        }
+
+        return $this->requestFactory;
+    }
+
+    /**
+     * @param RequestFactoryInterface $requestFactory
+     *
+     * @return $this
+     */
+    public function setRequestFactory($requestFactory)
+    {
+        $this->requestFactory = $requestFactory;
+
+        return $this;
+    }
+
+    /**
+     * @return ResponseFactoryInterface
+     */
+    public function getResponseFactory()
+    {
+        if (!$this->responseFactory) {
+            $this->responseFactory = new GuzzleResponseFactory();
+        }
+
+        return $this->responseFactory;
+    }
+
+    /**
+     * @param ResponseFactoryInterface $responseFactory
+     *
+     * @return $this
+     */
+    public function setResponseFactory($responseFactory)
+    {
+        $this->responseFactory = $responseFactory;
+
+        return $this;
+    }
+
+    /**
+     * @return StreamFactoryInterface
+     */
+    public function getStreamFactory()
+    {
+        if (!$this->streamFactory) {
+            $this->streamFactory = new GuzzleStreamFactory();
+        }
+
+        return $this->streamFactory;
+    }
+
+    /**
+     * @param StreamFactoryInterface $streamFactory
+     *
+     * @return $this
+     */
+    public function setStreamFactory($streamFactory)
+    {
+        $this->streamFactory = $streamFactory;
 
         return $this;
     }
@@ -1261,9 +1406,9 @@ class PostNL implements LoggerAwareInterface
      *   - Fill the Shipment->PhaseCode property, do not pass Barcode or Reference.
      *     Optionally add DateFrom and/or DateTo.
      * - CurrentStatusByStatus:
-     *   - Fill the Shipment->StatuCode property. Leave the rest empty.
+     *   - Fill the Shipment->StatusCode property. Leave the rest empty.
      *
-     * @param CurrentStatus|CurrentStatusByStatus|CurrentStatusByReference|CurrentStatusByPhase $currentStatus
+     * @param CurrentStatus $currentStatus
      *
      * @return CurrentStatusResponse
      */
@@ -1295,7 +1440,7 @@ class PostNL implements LoggerAwareInterface
      * - CurrentStatusByStatus:
      *   - Fill the Shipment->StatuCode property. Leave the rest empty.
      *
-     * @param CompleteStatus|CompleteStatusByStatus|CompleteStatusByReference|CompleteStatusByPhase $completeStatus
+     * @param CompleteStatus $completeStatus
      *
      * @return CompleteStatusResponse
      */

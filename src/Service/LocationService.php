@@ -26,7 +26,6 @@
 
 namespace ThirtyBees\PostNL\Service;
 
-use Http\Discovery\Psr17FactoryDiscovery;
 use Psr\Cache\CacheItemInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -414,7 +413,7 @@ class LocationService extends AbstractService
 
         $endpoint .= '?'.http_build_query($query);
 
-        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
+        return $this->postnl->getRequestFactory()->createRequest(
             'GET',
             ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint
         )
@@ -508,14 +507,14 @@ class LocationService extends AbstractService
             ]
         );
 
-        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
+        return $this->postnl->getRequestFactory()->createRequest(
             'POST',
             $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT
         )
             ->withHeader('SOAPAction', "\"$soapAction\"")
             ->withHeader('Accept', 'text/xml')
             ->withHeader('Content-Type', 'text/xml;charset=UTF-8')
-            ->withBody(Psr17FactoryDiscovery::findStreamFactory()->createStream($request));
+            ->withBody($this->postnl->getStreamFactory()->createStream($request));
     }
 
     /**
@@ -605,7 +604,7 @@ class LocationService extends AbstractService
         }
         $endpoint = '/area?'.http_build_query($query);
 
-        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
+        return $this->postnl->getRequestFactory()->createRequest(
             'GET',
             ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint
         )
@@ -699,14 +698,14 @@ class LocationService extends AbstractService
             ]
         );
 
-        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
+        return $this->postnl->getRequestFactory()->createRequest(
             'POST',
             $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT
         )
             ->withHeader('SOAPAction', "\"$soapAction\"")
             ->withHeader('Accept', 'text/xml')
             ->withHeader('Content-Type', 'text/xml;charset=UTF-8')
-            ->withBody(Psr17FactoryDiscovery::findStreamFactory()->createStream($request));
+            ->withBody($this->postnl->getStreamFactory()->createStream($request));
     }
 
     /**
@@ -773,7 +772,7 @@ class LocationService extends AbstractService
         }
         $endpoint = '/lookup?'.http_build_query($query);
 
-        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
+        return $this->postnl->getRequestFactory()->createRequest(
             'GET',
             ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint
         )
@@ -863,14 +862,14 @@ class LocationService extends AbstractService
             ]
         );
 
-        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
+        return $this->postnl->getRequestFactory()->createRequest(
             'POST',
             $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT
         )
             ->withHeader('SOAPAction', "\"$soapAction\"")
             ->withHeader('Accept', 'text/xml')
             ->withHeader('Content-Type', 'text/xml;charset=UTF-8')
-            ->withBody(Psr17FactoryDiscovery::findStreamFactory()->createStream($request));
+            ->withBody($this->postnl->getStreamFactory()->createStream($request));
     }
 
     /**

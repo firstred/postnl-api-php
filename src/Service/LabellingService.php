@@ -26,7 +26,6 @@
 
 namespace ThirtyBees\PostNL\Service;
 
-use Http\Discovery\Psr17FactoryDiscovery;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\RequestInterface;
@@ -318,7 +317,7 @@ class LabellingService extends AbstractService
         $apiKey = $this->postnl->getRestApiKey();
         $this->setService($generateLabel);
 
-        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
+        return $this->postnl->getRequestFactory()->createRequest(
             'POST',
             ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).'?'.http_build_query([
                 'confirm' => $confirm,
@@ -326,7 +325,7 @@ class LabellingService extends AbstractService
             ->withHeader('apikey', $apiKey)
             ->withHeader('Accept', 'application/json')
             ->withHeader('Content-Type', 'application/json;charset=UTF-8')
-            ->withBody(Psr17FactoryDiscovery::findStreamFactory()->createStream(json_encode($generateLabel, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES)));
+            ->withBody($this->postnl->getStreamFactory()->createStream(json_encode($generateLabel, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES)));
     }
 
     /**
@@ -384,14 +383,14 @@ class LabellingService extends AbstractService
             ]
         );
 
-        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
+        return $this->postnl->getRequestFactory()->createRequest(
             'POST',
             $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT
         )
             ->withHeader('SOAPAction', "\"$soapAction\"")
             ->withHeader('Accept', 'text/xml')
             ->withHeader('Content-Type', 'text/xml;charset=UTF-8')
-            ->withBody(Psr17FactoryDiscovery::findStreamFactory()->createStream($request));
+            ->withBody($this->postnl->getStreamFactory()->createStream($request));
     }
 
     /**

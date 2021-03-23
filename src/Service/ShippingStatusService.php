@@ -26,7 +26,6 @@
 
 namespace ThirtyBees\PostNL\Service;
 
-use Http\Discovery\Psr17FactoryDiscovery;
 use Psr\Cache\CacheItemInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -491,7 +490,7 @@ class ShippingStatusService extends AbstractService
         }
         $endpoint .= '?'.http_build_query($query);
 
-        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
+        return $this->postnl->getRequestFactory()->createRequest(
             'GET',
             ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint
         )
@@ -577,14 +576,14 @@ class ShippingStatusService extends AbstractService
             ]
         );
 
-        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
+        return $this->postnl->getRequestFactory()->createRequest(
             'POST',
             $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT
         )
             ->withHeader('SOAPAction', "\"$soapAction\"")
             ->withHeader('Accept', 'text/xml')
             ->withHeader('Content-Type', 'text/xml;charset=UTF-8')
-            ->withBody(Psr17FactoryDiscovery::findStreamFactory()->createStream($request));
+            ->withBody($this->postnl->getStreamFactory()->createStream($request));
     }
 
     /**
@@ -680,7 +679,7 @@ class ShippingStatusService extends AbstractService
         }
         $endpoint .= '?'.http_build_query($query);
 
-        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
+        return $this->postnl->getRequestFactory()->createRequest(
             'GET',
             ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint
         )
@@ -804,14 +803,14 @@ class ShippingStatusService extends AbstractService
             ]
         );
 
-        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
+        return $this->postnl->getRequestFactory()->createRequest(
             'POST',
             $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT
         )
             ->withHeader('SOAPAction', "\"$soapAction\"")
             ->withHeader('Accept', 'text/xml')
             ->withHeader('Content-Type', 'text/xml;charset=UTF-8')
-            ->withBody(Psr17FactoryDiscovery::findStreamFactory()->createStream($request));
+            ->withBody($this->postnl->getStreamFactory()->createStream($request));
     }
 
     /**
@@ -857,7 +856,7 @@ class ShippingStatusService extends AbstractService
         $apiKey = $this->postnl->getRestApiKey();
         $this->setService($getSignature);
 
-        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
+        return $this->postnl->getRequestFactory()->createRequest(
             'GET',
             ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT)."/signature/{$getSignature->getShipment()->getBarcode()}"
         )
@@ -926,7 +925,7 @@ class ShippingStatusService extends AbstractService
             ]
         );
 
-        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
+        return $this->postnl->getRequestFactory()->createRequest(
             'POST',
             $this->postnl->getSandbox()
                 ? static::SANDBOX_ENDPOINT
@@ -935,7 +934,7 @@ class ShippingStatusService extends AbstractService
             ->withHeader('SOAPAction', "\"$soapAction\"")
             ->withHeader('Accept', 'text/xml')
             ->withHeader('Content-Type', 'text/xml;charset=UTF-8')
-            ->withBody(Psr17FactoryDiscovery::findStreamFactory()->createStream($request));
+            ->withBody($this->postnl->getStreamFactory()->createStream($request));
     }
 
     /**

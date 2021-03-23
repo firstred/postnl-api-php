@@ -26,7 +26,6 @@
 
 namespace ThirtyBees\PostNL\Service;
 
-use Http\Discovery\Psr17FactoryDiscovery;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Sabre\Xml\Service as XmlService;
@@ -35,6 +34,7 @@ use ThirtyBees\PostNL\Entity\SOAP\Security;
 use ThirtyBees\PostNL\Exception\ApiException;
 use ThirtyBees\PostNL\Exception\CifDownException;
 use ThirtyBees\PostNL\Exception\CifException;
+use ThirtyBees\PostNL\Exception\HttpClientException;
 use ThirtyBees\PostNL\Exception\ResponseException;
 use ThirtyBees\PostNL\PostNL;
 
@@ -54,8 +54,6 @@ class BarcodeService extends AbstractService
     const VERSION = '1.1';
     const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v1_1/barcode';
     const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v1_1/barcode';
-    const LEGACY_SANDBOX_ENDPOINT = 'https://testservice.postnl.com/CIF_SB/BarcodeWebService/1_1/BarcodeWebService.svc';
-    const LEGACY_LIVE_ENDPOINT = 'https://service.postnl.com/CIF/BarcodeWebService/1_1/BarcodeWebService.svc';
 
     const SOAP_ACTION = 'http://postnl.nl/cif/services/BarcodeWebService/IBarcodeWebService/GenerateBarcode';
     const ENVELOPE_NAMESPACE = 'http://schemas.xmlsoap.org/soap/envelope/';
@@ -91,7 +89,6 @@ class BarcodeService extends AbstractService
      */
     public function generateBarcodeREST(GenerateBarcode $generateBarcode)
     {
-        /** @var ResponseInterface $response */
         $response = $this->postnl
             ->getHttpClient()
             ->doRequest($this->buildGenerateBarcodeRequestREST($generateBarcode));
@@ -107,6 +104,7 @@ class BarcodeService extends AbstractService
      * @param GenerateBarcode[] $generateBarcodes
      *
      * @return string[]|ResponseException[]|ApiException[]|CifDownException[]|CifException[] Barcodes
+     * @throws HttpClientException
      */
     public function generateBarcodesREST(array $generateBarcodes)
     {
@@ -202,7 +200,7 @@ class BarcodeService extends AbstractService
         $apiKey = $this->postnl->getRestApiKey();
         $this->setService($generateBarcode);
 
-        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
+        return $this->postnl->getRequestFactory()->createRequest(
             'GET',
             ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT)
                 .'?'.http_build_query([
@@ -274,7 +272,7 @@ class BarcodeService extends AbstractService
             ]
         );
 
-        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
+        return $this->postnl->getRequestFactory()->createRequest(
             'POST',
             $this->postnl->getSandbox()
                 ? static::SANDBOX_ENDPOINT
@@ -283,7 +281,7 @@ class BarcodeService extends AbstractService
             ->withHeader('SOAPAction', "\"$soapAction\"")
             ->withHeader('Accept', 'text/xml')
             ->withHeader('Content-Type', 'text/xml;charset=UTF-8')
-            ->withBody(Psr17FactoryDiscovery::findStreamFactory()->createStream($request))
+            ->withBody($this->postnl->getStreamFactory()->createStream($request))
         ;
     }
 

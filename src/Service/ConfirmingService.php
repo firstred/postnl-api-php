@@ -26,7 +26,6 @@
 
 namespace ThirtyBees\PostNL\Service;
 
-use Http\Discovery\Psr17FactoryDiscovery;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Sabre\Xml\LibXMLException;
@@ -207,14 +206,14 @@ class ConfirmingService extends AbstractService
 
         $this->setService($confirming);
 
-        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
+        return $this->postnl->getRequestFactory()->createRequest(
             'POST',
             ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT)
         )
             ->withHeader('apikey', $apiKey)
             ->withHeader('Accept', 'application/json')
             ->withHeader('Content-Type', 'application/json;charset=UTF-8')
-            ->withBody(Psr17FactoryDiscovery::findStreamFactory()->createStream(json_encode($confirming)))
+            ->withBody($this->postnl->getStreamFactory()->createStream(json_encode($confirming)))
         ;
     }
 
@@ -274,14 +273,14 @@ class ConfirmingService extends AbstractService
             ]
         );
 
-        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
+        return $this->postnl->getRequestFactory()->createRequest(
             'POST',
             $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT
         )
             ->withHeader('SOAPAction', "\"$soapAction\"")
             ->withHeader('Accept', 'text/xml')
             ->withHeader('Content-Type', 'text/xml;charset=UTF-8')
-            ->withBody(Psr17FactoryDiscovery::findStreamFactory()->createStream($body))
+            ->withBody($this->postnl->getStreamFactory()->createStream($body))
         ;
     }
 

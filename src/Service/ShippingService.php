@@ -26,7 +26,6 @@
 
 namespace ThirtyBees\PostNL\Service;
 
-use Http\Discovery\Psr17FactoryDiscovery;
 use Psr\Cache\CacheItemInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -122,7 +121,7 @@ class ShippingService extends AbstractService
         $apiKey = $this->postnl->getRestApiKey();
         $this->setService($generateShipping);
 
-        return Psr17FactoryDiscovery::findRequestFactory()->createRequest(
+        return $this->postnl->getRequestFactory()->createRequest(
             'POST',
             ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).'?'.http_build_query([
                 'confirm' => $confirm,
@@ -131,7 +130,7 @@ class ShippingService extends AbstractService
             ->withHeader('apikey', $apiKey)
             ->withHeader('Accept', 'application/json')
             ->withHeader('Accept', 'application/json;charset=UTF-8')
-            ->withBody(Psr17FactoryDiscovery::findStreamFactory()->createStream(json_encode($generateShipping, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES)));
+            ->withBody($this->postnl->getStreamFactory()->createStream(json_encode($generateShipping, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES)));
     }
 
     /**

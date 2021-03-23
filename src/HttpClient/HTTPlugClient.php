@@ -7,6 +7,9 @@ use Http\Client\Exception\HttpException;
 use Http\Client\Exception\TransferException;
 use Http\Client\HttpAsyncClient;
 use Http\Client\HttpClient;
+use Http\Client\Psr18Client;
+use Http\Discovery\Exception\DiscoveryFailedException;
+use Http\Discovery\Exception\NoCandidateFoundException;
 use Http\Discovery\Exception\NotFoundException;
 use Http\Discovery\HttpAsyncClientDiscovery;
 use Http\Discovery\HttpClientDiscovery;
@@ -23,14 +26,11 @@ use ThirtyBees\PostNL\Util\EachPromise;
  */
 class HTTPlugClient implements ClientInterface
 {
-    /** @var HttpAsyncClient */
-    private $asyncClient;
-
     /** @var static */
     private static $instance;
 
     /**
-     * @var HttpAsyncClient|ClientInterface|HttpClient
+     * @var HttpAsyncClient|Psr18Client|HttpClient
      */
     protected $client;
 
@@ -54,9 +54,9 @@ class HTTPlugClient implements ClientInterface
     /**
      * HTTPlugClient constructor.
      *
-     * @param HttpAsyncClient|ClientInterface|HttpClient|null $client
-     * @param LoggerInterface|null                            $logger
-     * @param int                                             $concurrency
+     * @param HttpAsyncClient|Psr18Client|HttpClient|null $client
+     * @param LoggerInterface|null                        $logger
+     * @param int                                         $concurrency
      *
      * @throws HttpClientException
      */
@@ -72,18 +72,24 @@ class HTTPlugClient implements ClientInterface
             try {
                 $client = HttpAsyncClientDiscovery::find();
             } catch (NotFoundException $e) {
+            } catch (NoCandidateFoundException $e) {
+            } catch (DiscoveryFailedException $e) {
             }
         }
         if (null === $client) {
             try {
                 $client = Psr18ClientDiscovery::find();
             } catch (NotFoundException $e) {
+            } catch (NoCandidateFoundException $e) {
+            } catch (DiscoveryFailedException $e) {
             }
         }
         if (null === $client) {
             try {
                 $client = HttpClientDiscovery::find();
             } catch (NotFoundException $e) {
+            } catch (NoCandidateFoundException $e) {
+            } catch (DiscoveryFailedException $e) {
             }
         }
 
@@ -125,7 +131,8 @@ class HTTPlugClient implements ClientInterface
      *
      * Exceptions are captured into the result array
      *
-     * @param array $requests
+     * @param array                                 $requests
+     *
      * @psalm-param array<string, RequestInterface> $requests
      *
      * @return array
@@ -266,7 +273,7 @@ class HTTPlugClient implements ClientInterface
     }
 
     /**
-     * @return HttpAsyncClient|ClientInterface|HttpClient
+     * @return HttpAsyncClient|Psr18Client|HttpClient
      */
     public function getClient()
     {
@@ -274,51 +281,24 @@ class HTTPlugClient implements ClientInterface
     }
 
     /**
-     * @param HttpAsyncClient|ClientInterface|HttpClient $client
+     * @param HttpAsyncClient|Psr18Client|HttpClient $client
      *
      * @return static
      */
-    public function setClient( $client)
+    public function setClient($client)
     {
         $this->client = $client;
 
         return $this;
     }
 
-
-
     /**
-     * Get the HttpAsyncClient.
-     *
-     * @since 1.0.0
-     */
-    public function getAsyncClient()
-    {
-        return $this->asyncClient;
-    }
-
-    /**
-     * Set the HttpAsyncClient.
-     *
-     * @param HttpAsyncClient $client
-     *
-     * @return HTTPlugClient
-     * @since 2.0.0
-     */
-    public function setHttpAsyncClient(HttpAsyncClient $client)
-    {
-        $this->asyncClient = $client;
-
-        return $this;
-    }
-
-    /**
-     * @param HttpAsyncClient|null $client
+     * @param HttpAsyncClient|Psr18Client|HttpClient|null $client
      *
      * @return HTTPlugClient|void
      * @throws HttpClientException
      */
-    public static function getInstance(HttpAsyncClient $client = null)
+    public static function getInstance($client = null)
     {
         if (!static::$instance) {
             static::$instance = new static($client);
@@ -331,8 +311,6 @@ class HTTPlugClient implements ClientInterface
      * @param bool|string $verify
      *
      * @return HTTPlugClient|void
-     *
-     * @deprecated 1.2.0 Configure the HTTPlug HTTP client implementation instead
      */
     public function setVerify($verify)
     {
@@ -341,8 +319,6 @@ class HTTPlugClient implements ClientInterface
 
     /**
      * @return bool|string|void
-     *
-     * @deprecated 1.2.0 Configure the HTTPlug HTTP client implementation instead
      */
     public function getVerify()
     {
