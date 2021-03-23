@@ -12,7 +12,7 @@ before_script:
 
 script:
   - cd tests/
-  - php ../vendor/bin/phpunit --testdox tests
+  - php ../vendor/bin/phpunit --testdox -- tests
 
 after_success:
 - bash <(curl -s https://codecov.io/bash)
