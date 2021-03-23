@@ -26,6 +26,7 @@
 
 namespace ThirtyBees\PostNL\Tests\Misc;
 
+use PHPUnit\Framework\TestCase;
 use ThirtyBees\PostNL\Entity\Address;
 use ThirtyBees\PostNL\Entity\Customer;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
@@ -36,7 +37,7 @@ use ThirtyBees\PostNL\PostNL;
  *
  * @testdox The PostNL object
  */
-class PostNLTest extends \PHPUnit_Framework_TestCase
+class PostNLTest extends TestCase
 {
     /** @var PostNL */
     protected $postnl;

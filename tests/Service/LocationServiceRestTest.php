@@ -31,6 +31,7 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use ThirtyBees\PostNL\Entity\Address;
 use ThirtyBees\PostNL\Entity\CoordinatesNorthWest;
@@ -51,7 +52,7 @@ use ThirtyBees\PostNL\Service\LocationService;
  *
  * @testdox The LocationService (REST)
  */
-class LocationServiceRestTest extends \PHPUnit_Framework_TestCase
+class LocationServiceRestTest extends TestCase
 {
     /** @var PostNL */
     protected $postnl;

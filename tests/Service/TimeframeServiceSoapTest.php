@@ -31,6 +31,7 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use ThirtyBees\PostNL\Entity\Address;
 use ThirtyBees\PostNL\Entity\Customer;
@@ -47,7 +48,7 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @testdox The TimeframeService (SOAP)
  */
-class TimeframeServiceSoapTest extends \PHPUnit_Framework_TestCase
+class TimeframeServiceSoapTest extends TestCase
 {
     /** @var PostNL */
     protected $postnl;

@@ -31,6 +31,7 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use ThirtyBees\PostNL\Entity\Address;
 use ThirtyBees\PostNL\Entity\Customer;
@@ -49,7 +50,7 @@ use ThirtyBees\PostNL\Service\ShippingStatusService;
  *
  * @testdox The ShippingStatusService (REST)
  */
-class ShippingStatusRestTest extends \PHPUnit_Framework_TestCase
+class ShippingStatusServiceRestTest extends TestCase
 {
     /** @var PostNL */
     protected $postnl;

@@ -29,6 +29,7 @@ namespace ThirtyBees\PostNL\Tests\Misc;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\TestCase;
 use ThirtyBees\PostNL\Entity\Address;
 use ThirtyBees\PostNL\Entity\Customer;
 use ThirtyBees\PostNL\Entity\CutOffTime;
@@ -46,7 +47,7 @@ use ThirtyBees\PostNL\PostNL;
  *
  * @testdox The PostNL object
  */
-class PostNLRestTest extends \PHPUnit_Framework_TestCase
+class PostNLRestTest extends TestCase
 {
     /** @var PostNL */
     protected $postnl;

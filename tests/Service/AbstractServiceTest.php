@@ -28,6 +28,7 @@ namespace ThirtyBees\PostNL\Tests\Service;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\TestCase;
 use ThirtyBees\PostNL\Service\AbstractService;
 
 /**
@@ -35,7 +36,7 @@ use ThirtyBees\PostNL\Service\AbstractService;
  *
  * @testdox The AbstractService class
  */
-class AbstractServiceTest extends \PHPUnit_Framework_TestCase
+class AbstractServiceTest extends TestCase
 {
     /**
      * @testdox can get the response text from the value property

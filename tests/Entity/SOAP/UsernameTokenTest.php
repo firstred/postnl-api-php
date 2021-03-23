@@ -26,6 +26,7 @@
 
 namespace ThirtyBees\PostNL\Tests\Entity\SOAP;
 
+use PHPUnit\Framework\TestCase;
 use Sabre\Xml\Service as XmlService;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
 
@@ -34,7 +35,7 @@ use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
  *
  * @testdox The UsernameToken class
  */
-class UsernameTokenTest extends \PHPUnit_Framework_TestCase
+class UsernameTokenTest extends TestCase
 {
     /**
      * @testdox should automatically hash the password for the legacy API

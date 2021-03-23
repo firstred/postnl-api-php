@@ -26,6 +26,7 @@
 
 namespace ThirtyBees\PostNL\Tests\Entity\SOAP;
 
+use PHPUnit\Framework\TestCase;
 use ThirtyBees\PostNL\Entity\SOAP\Body;
 use ThirtyBees\PostNL\Entity\SOAP\Envelope;
 use ThirtyBees\PostNL\Entity\SOAP\Header;
@@ -35,7 +36,7 @@ use ThirtyBees\PostNL\Entity\SOAP\Header;
  *
  * @testdox The Envelope class
  */
-class EnvelopeTest extends \PHPUnit_Framework_TestCase
+class EnvelopeTest extends TestCase
 {
     /**
      * @testdox can return the header

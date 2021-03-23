@@ -26,6 +26,7 @@
 
 namespace ThirtyBees\PostNL\Tests\Entity\SOAP;
 
+use PHPUnit\Framework\TestCase;
 use ThirtyBees\PostNL\Entity\SOAP\Security;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
 
@@ -34,7 +35,7 @@ use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
  *
  * @testdox The Envelope class
  */
-class SecurityTest extends \PHPUnit_Framework_TestCase
+class SecurityTest extends TestCase
 {
     /**
      * @testdox can return the header

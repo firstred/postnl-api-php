@@ -2,6 +2,7 @@
 
 namespace ThirtyBees\PostNL\Tests\Entity;
 
+use PHPUnit\Framework\TestCase;
 use Sabre\Xml\Service as XmlService;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
 use ThirtyBees\PostNL\Entity\Address;
@@ -9,7 +10,7 @@ use ThirtyBees\PostNL\Entity\Address;
 /**
  * @testdox The Entities
  */
-class EntityTest extends \PHPUnit_Framework_TestCase
+class EntityTest extends TestCase
 {
     /**
      * @testdox have a working constructor
