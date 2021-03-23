@@ -33,7 +33,7 @@
         "psr/http-factory": "^1.0",
         "psr/http-message-implementation": "^1.0",
         "psr/log": "^1.0",
-        "sabre/xml": "Necessary if you want to use the SOAP API",
+        "sabre/xml": "~1.5.1",
         "setasign/fpdf": "^1.8",
         "setasign/fpdi": "^2.0"
     },
