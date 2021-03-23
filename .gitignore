@@ -1,5 +1,6 @@
 vendor/
 composer.lock
+tests/.phpunit.result.cache
 tests/logs
 tests/clover.xml
 
