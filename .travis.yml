@@ -1,11 +1,15 @@
+os: linux
+dist: xenial
 language: php
 php:
   - '7.3'
   - '7.4'
   - '8.0'
 
-directories:
-  - $HOME/.composer/cache
+cache:
+  directories:
+    - .autoconf
+    - $HOME/.m2
 
 before_script:
   - composer install --prefer-dist
