@@ -431,7 +431,7 @@ class PostNL implements LoggerAwareInterface
         }
 
         if (in_array($mode, [static::MODE_SOAP, static::MODE_LEGACY])
-            && (!class_exists(Version::class) || version_compare('2.0.0', Version::VERSION, '>='))
+            && (!class_exists(Version::class) || version_compare(Version::VERSION, '2.0.0', '>='))
         ) {
             // Seamlessly switch to the REST API
             $mode = static::MODE_REST;
