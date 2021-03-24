@@ -401,8 +401,9 @@ class PostNL implements LoggerAwareInterface
             throw new InvalidArgumentException('Mode not supported');
         }
 
-        if (in_array($mode, [static::MODE_SOAP, static::MODE_LEGACY]) && !interface_exists(Element::class)) {
-            throw new InvalidArgumentException('Mode not supported. Please install sabre/xml to connect with the SOAP API');
+        if (in_array($mode, [static::MODE_SOAP, static::MODE_LEGACY])) {
+            // Seamlessly switch to the REST API
+            $mode = static::MODE_REST;
         }
 
         $this->mode = (int) $mode;
