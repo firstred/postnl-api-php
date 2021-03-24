@@ -523,7 +523,7 @@ class PostNL implements LoggerAwareInterface
                 $this->httpClient = new GuzzleClient();
             }
 
-            if (!$client) {
+            if (!$this->httpClient) {
                 $this->httpClient = new CurlClient();
             }
 
