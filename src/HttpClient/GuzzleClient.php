@@ -42,8 +42,6 @@ use function method_exists;
  * Class GuzzleClient.
  *
  * @since 1.0.0
- *
- * @deprecated 2.0.0 Please use HTTPlug
  */
 class GuzzleClient implements ClientInterface, LoggerAwareInterface
 {

@@ -49,8 +49,6 @@ if (!defined('CURLE_SSL_CACERT_BADFILE')) {
  * Class CurlClient.
  *
  * @since 1.0.0
- *
- * @deprecated 2.0.0 Please use HTTPlug
  */
 class CurlClient implements ClientInterface, LoggerAwareInterface
 {
