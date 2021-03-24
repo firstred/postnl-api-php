@@ -9,6 +9,7 @@ use Http\Client\HttpAsyncClient;
 use Http\Client\HttpClient;
 use Http\Discovery\Exception\DiscoveryFailedException;
 use Http\Discovery\Exception\NoCandidateFoundException;
+use Http\Discovery\Exception\NotFoundException as DiscoveryNotFoundException;
 use Http\Discovery\NotFoundException;
 use Http\Discovery\HttpAsyncClientDiscovery;
 use Http\Discovery\HttpClientDiscovery;
@@ -73,6 +74,7 @@ class HTTPlugClient implements ClientInterface
             try {
                 $client = HttpAsyncClientDiscovery::find();
             } catch (NotFoundException $e) {
+            } catch (DiscoveryNotFoundException $e) {
             } catch (NoCandidateFoundException $e) {
             } catch (DiscoveryFailedException $e) {
             }
@@ -81,6 +83,7 @@ class HTTPlugClient implements ClientInterface
             try {
                 $client = Psr18ClientDiscovery::find();
             } catch (NotFoundException $e) {
+            } catch (DiscoveryNotFoundException $e) {
             } catch (NoCandidateFoundException $e) {
             } catch (DiscoveryFailedException $e) {
             }
@@ -89,6 +92,7 @@ class HTTPlugClient implements ClientInterface
             try {
                 $client = HttpClientDiscovery::find();
             } catch (NotFoundException $e) {
+            } catch (DiscoveryNotFoundException $e) {
             } catch (NoCandidateFoundException $e) {
             } catch (DiscoveryFailedException $e) {
             }
