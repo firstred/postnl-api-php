@@ -26,6 +26,9 @@
 
 namespace ThirtyBees\PostNL\Util;
 
+use DateInterVal;
+use DateTime;
+use Exception;
 use setasign\Fpdi\Fpdi;
 use setasign\Fpdi\PdfParser\StreamReader;
 use ThirtyBees\PostNL\Exception\InvalidArgumentException;
@@ -111,7 +114,7 @@ class Util
             } else {
                 $iso = 'A4';
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return false;
         }
 
@@ -132,16 +135,16 @@ class Util
      *
      * @return string (format: `Y-m-d H:i:s`)
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public static function getDeliveryDate($deliveryDate, $mondayDelivery = false, $sundayDelivery = false)
     {
-        $deliveryDate = new \DateTime($deliveryDate);
+        $deliveryDate = new DateTime($deliveryDate);
 
         $holidays = static::getHolidaysForYear(date('Y', $deliveryDate->getTimestamp()));
 
         do {
-            $deliveryDate->add(new \DateInterval('P1D'));
+            $deliveryDate->add(new DateInterval('P1D'));
         } while (in_array($deliveryDate->format('Y-m-d'), $holidays)
             || (!$sundayDelivery && 0 == $deliveryDate->format('w'))
             || (!$mondayDelivery && 1 == $deliveryDate->format('w'))
@@ -168,14 +171,14 @@ class Util
             throw new InvalidArgumentException('There should be at least one shipping day');
         }
 
-        $deliveryDate = new \DateTime($deliveryDate);
+        $deliveryDate = new DateTime($deliveryDate);
 
         $holidays = static::getHolidaysForYear(date('Y', $deliveryDate->getTimestamp()));
 
         do {
             try {
-                $deliveryDate->sub(new \DateInterval('P1D'));
-            } catch (\Exception $e) {
+                $deliveryDate->sub(new DateInterval('P1D'));
+            } catch (Exception $e) {
                 throw new InvalidArgumentException('Invalid date provided');
             }
         } while (in_array($deliveryDate->format('Y-m-d'), $holidays)
@@ -200,7 +203,7 @@ class Util
      *
      * @return int
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public static function getShippingDaysRemaining($shippingDate, $preferredDeliveryDate)
     {
@@ -211,8 +214,8 @@ class Util
         $nearestDeliveryDate = static::getDeliveryDate($shippingDate);
 
         // Calculate the interval
-        $nearestDeliveryDate = new \DateTime($nearestDeliveryDate);
-        $preferredDeliveryDate = new \DateTime(date('Y-m-d 00:00:00', strtotime($preferredDeliveryDate)));
+        $nearestDeliveryDate = new DateTime($nearestDeliveryDate);
+        $preferredDeliveryDate = new DateTime(date('Y-m-d 00:00:00', strtotime($preferredDeliveryDate)));
 
         $daysRemaining = (int) $nearestDeliveryDate->diff($preferredDeliveryDate)->format('%R%a');
 
@@ -246,32 +249,32 @@ class Util
     {
         // Avoid holidays
         // Fixed
-        $nieuwjaar = new \DateTime($year.'-01-01');
-        $eersteKerstDag = new \DateTime($year.'-12-25');
-        $tweedeKerstDag = new \DateTime($year.'-12-25');
-        $koningsdag = new \DateTime($year.'-04-27');
+        $nieuwjaar = new DateTime($year.'-01-01');
+        $eersteKerstDag = new DateTime($year.'-12-25');
+        $tweedeKerstDag = new DateTime($year.'-12-25');
+        $koningsdag = new DateTime($year.'-04-27');
         // Dynamic
-        $pasen = new \DateTime();
+        $pasen = new DateTime();
         $pasen->setTimestamp(easter_date($year)); // thanks PHP!
         $paasMaandag = clone $pasen;
         try {
-            $paasMaandag->add(new \DateInterVal('P1D'));
-        } catch (\Exception $e) {
+            $paasMaandag->add(new DateInterVal('P1D'));
+        } catch (Exception $e) {
         }
         $hemelvaart = clone $pasen;
         try {
-            $hemelvaart->add(new \DateInterVal('P39D'));
-        } catch (\Exception $e) {
+            $hemelvaart->add(new DateInterVal('P39D'));
+        } catch (Exception $e) {
         }
         $pinksteren = clone $hemelvaart;
         try {
-            $pinksteren->add(new \DateInterVal('P10D'));
-        } catch (\Exception $e) {
+            $pinksteren->add(new DateInterVal('P10D'));
+        } catch (Exception $e) {
         }
         $pinksterMaandag = clone $pinksteren;
         try {
-            $pinksterMaandag->add(new \DateInterVal('P1D'));
-        } catch (\Exception $e) {
+            $pinksterMaandag->add(new DateInterVal('P1D'));
+        } catch (Exception $e) {
         }
 
         $holidays = [

@@ -266,7 +266,7 @@ class HTTPlugClient implements ClientInterface
      *
      * @return static
      */
-    public function setLogger($logger)
+    public function setLogger(LoggerInterface $logger)
     {
         $this->logger = $logger;
 

@@ -26,6 +26,8 @@
 
 namespace ThirtyBees\PostNL\Exception;
 
+use Throwable;
+
 /**
  * Class CifException.
  *
@@ -47,7 +49,7 @@ class CifException extends AbstractException
      *                                  ]
      *                                  The code param will be discarded if `$message` is an array
      * @param int             $code
-     * @param \Throwable|null $previous
+     * @param Throwable|null $previous
      */
     public function __construct($message = '', $code = 0, $previous = null)
     {

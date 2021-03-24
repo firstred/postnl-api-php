@@ -26,12 +26,14 @@
 
 namespace ThirtyBees\PostNL\HttpClient;
 
+use Exception;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use ThirtyBees\PostNL\Exception\ApiConnectionException;
 use ThirtyBees\PostNL\Exception\ApiException;
+use GuzzleHttp\Psr7\Message as PsrMessage;
 
 if (!defined('CURL_SSLVERSION_TLSv1')) {
     define('CURL_SSLVERSION_TLSv1', 1);
@@ -190,8 +192,8 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
      * Adds a request to the list of pending requests
      * Using the ID you can replace a request.
      *
-     * @param string $id      Request ID
-     * @param string $request PSR-7 request
+     * @param string           $id      Request ID
+     * @param RequestInterface $request PSR-7 request
      *
      * @return int|string
      */
@@ -233,12 +235,12 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
      *
      * @return ResponseInterface
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function doRequest(RequestInterface $request)
     {
         if ($this->logger instanceof LoggerInterface) {
-            $this->logger->debug(\GuzzleHttp\Psr7\Message::toString($request));
+            $this->logger->debug(PsrMessage::toString($request));
         }
 
         $curl = curl_init();
@@ -257,7 +259,7 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
             $this->logger->debug($rbody);
         }
 
-        return \GuzzleHttp\Psr7\Message::parseResponse($rbody);
+        return PsrMessage::parseResponse($rbody);
     }
 
     /**
@@ -267,7 +269,7 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
      *
      * @param RequestInterface[] $requests
      *
-     * @return ResponseInterface|ResponseInterface[]|\Exception|\Exception[]
+     * @return ResponseInterface|ResponseInterface[]|Exception|Exception[]
      *
      * @throws ApiException
      */
@@ -278,7 +280,7 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
         $mh = curl_multi_init();
         foreach ($this->pendingRequests + $requests as $uuid => $request) {
             if ($request instanceof RequestInterface && $this->logger instanceof LoggerInterface) {
-                $this->logger->debug(\GuzzleHttp\Psr7\Message::toString($request));
+                $this->logger->debug(PsrMessage::toString($request));
             }
 
             $curl = curl_init();
@@ -307,7 +309,7 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
             if ($this->logger instanceof LoggerInterface) {
                 $this->logger->debug($responseBody);
             }
-            $responses[$uuid] = \GuzzleHttp\Psr7\Message::parseResponse($responseBody);
+            $responses[$uuid] = PsrMessage::parseResponse($responseBody);
         }
 
         // Reset pending requests
@@ -375,6 +377,7 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
+     * @param        $url
      * @param number $errno
      * @param string $message
      *

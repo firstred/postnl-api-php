@@ -21,14 +21,16 @@ namespace ThirtyBees\PostNL\HttpClient;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Promise\Utils;
-use GuzzleHttp\Psr7\Message;
+use GuzzleHttp\Psr7\Message as PsrMessage;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use ThirtyBees\PostNL\Exception\HttpClientException;
+use ThirtyBees\PostNL\Exception\ResponseException;
 
 /**
  * Class MockClient.
@@ -112,7 +114,7 @@ class MockClient implements ClientInterface, LoggerAwareInterface
      *
      * @param bool|string $verify
      *
-     * @return $this
+     * @return static
      */
     public function setVerify($verify)
     {
@@ -140,7 +142,7 @@ class MockClient implements ClientInterface, LoggerAwareInterface
      *
      * @param int $maxRetries
      *
-     * @return $this
+     * @return static
      */
     public function setMaxRetries($maxRetries)
     {
@@ -265,6 +267,8 @@ class MockClient implements ClientInterface, LoggerAwareInterface
 
         try {
             return $guzzle->send($request);
+        } catch (RequestException $e) {
+            throw new HttpClientException(null, null, $e, $e->getResponse());
         } catch (GuzzleException $e) {
             throw new HttpClientException(null, null, $e);
         }
@@ -317,10 +321,10 @@ class MockClient implements ClientInterface, LoggerAwareInterface
             } elseif (isset($response['reason'])) {
                 $response = $response['reason'];
             } else {
-                $response = new \ThirtyBees\PostNL\Exception\ResponseException('Unknown reponse type');
+                $response = new ResponseException('Unknown reponse type');
             }
             if ($response instanceof ResponseInterface && $this->logger instanceof LoggerInterface) {
-                $this->logger->debug(Message::toString($response));
+                $this->logger->debug(PsrMessage::toString($response));
             }
         }
 

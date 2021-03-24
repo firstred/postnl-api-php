@@ -26,6 +26,7 @@
 
 namespace ThirtyBees\PostNL\Entity;
 
+use DateTime;
 use Sabre\Xml\Writer;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
@@ -314,7 +315,7 @@ class Location extends AbstractEntity
         parent::__construct();
 
         $this->setAllowSundaySorting($allowSundaySorting);
-        $this->setDeliveryDate($deliveryDate ?: (new \DateTime('next monday'))->format('d-m-Y'));
+        $this->setDeliveryDate($deliveryDate ?: (new DateTime('next monday'))->format('d-m-Y'));
         $this->setDeliveryOptions($deliveryOptions);
         $this->setOptions($options);
         $this->setPostalcode($zipcode);

@@ -26,6 +26,8 @@
 
 namespace ThirtyBees\PostNL;
 
+use Exception;
+use GuzzleHttp\Psr7\Message as PsrMessage;
 use GuzzleHttp\Psr7\Response;
 use Http\Discovery\HttpAsyncClientDiscovery;
 use Http\Discovery\Psr18ClientDiscovery;
@@ -38,7 +40,12 @@ use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Sabre\Xml\Element;
 use Sabre\Xml\Version;
+use setasign\Fpdi\PdfParser\CrossReference\CrossReferenceException;
+use setasign\Fpdi\PdfParser\Filter\FilterException;
+use setasign\Fpdi\PdfParser\PdfParserException;
 use setasign\Fpdi\PdfParser\StreamReader;
+use setasign\Fpdi\PdfParser\Type\PdfTypeException;
+use setasign\Fpdi\PdfReader\PdfReaderException;
 use ThirtyBees\PostNL\Entity\Barcode;
 use ThirtyBees\PostNL\Entity\Customer;
 use ThirtyBees\PostNL\Entity\Label;
@@ -93,6 +100,7 @@ use ThirtyBees\PostNL\Service\LocationServiceInterface;
 use ThirtyBees\PostNL\Service\ShippingServiceInterface;
 use ThirtyBees\PostNL\Service\ShippingStatusServiceInterface;
 use ThirtyBees\PostNL\Service\TimeframeServiceInterface;
+use ThirtyBees\PostNL\Util\DummyLogger;
 use ThirtyBees\PostNL\Util\RFPdi;
 use ThirtyBees\PostNL\Util\Util;
 use ThirtyBees\PostNL\Service\BarcodeService;
@@ -547,6 +555,10 @@ class PostNL implements LoggerAwareInterface
      */
     public function getLogger()
     {
+        if (!$this->logger) {
+            $this->resetLogger();
+        }
+
         return $this->logger;
     }
 
@@ -561,12 +573,26 @@ class PostNL implements LoggerAwareInterface
      *
      * @since 1.0.0
      */
-    public function setLogger(LoggerInterface $logger = null)
+    public function setLogger(LoggerInterface $logger)
     {
         $this->logger = $logger;
         if ($this->getHttpClient() instanceof ClientInterface) {
             $this->getHttpClient()->setLogger($logger);
         }
+
+        return $this;
+    }
+
+    /**
+     * Set a dummy logger
+     *
+     * @return static
+     *
+     * @since 1.2.0
+     */
+    public function resetLogger()
+    {
+        $this->logger = new DummyLogger();
 
         return $this;
     }
@@ -588,7 +614,7 @@ class PostNL implements LoggerAwareInterface
     /**
      * @param RequestFactoryInterface $requestFactory
      *
-     * @return $this
+     * @return static
      *
      * @since 1.2.0
      */
@@ -616,7 +642,7 @@ class PostNL implements LoggerAwareInterface
     /**
      * @param ResponseFactoryInterface $responseFactory
      *
-     * @return $this
+     * @return static
      *
      * @since 1.2.0
      */
@@ -644,7 +670,7 @@ class PostNL implements LoggerAwareInterface
     /**
      * @param StreamFactoryInterface $streamFactory
      *
-     * @return $this
+     * @return static
      *
      * @since 1.2.0
      */
@@ -1096,11 +1122,11 @@ class PostNL implements LoggerAwareInterface
      * @return GenerateShippingResponse|string
      *
      * @throws NotSupportedException
-     * @throws \setasign\Fpdi\PdfParser\CrossReference\CrossReferenceException
-     * @throws \setasign\Fpdi\PdfParser\Filter\FilterException
-     * @throws \setasign\Fpdi\PdfParser\PdfParserException
-     * @throws \setasign\Fpdi\PdfParser\Type\PdfTypeException
-     * @throws \setasign\Fpdi\PdfReader\PdfReaderException
+     * @throws CrossReferenceException
+     * @throws FilterException
+     * @throws PdfParserException
+     * @throws PdfTypeException
+     * @throws PdfReaderException
      *
      * @since 1.2.0
      */
@@ -1318,11 +1344,11 @@ class PostNL implements LoggerAwareInterface
      *
      * @throws AbstractException
      * @throws NotSupportedException
-     * @throws \setasign\Fpdi\PdfParser\CrossReference\CrossReferenceException
-     * @throws \setasign\Fpdi\PdfParser\Filter\FilterException
-     * @throws \setasign\Fpdi\PdfParser\PdfParserException
-     * @throws \setasign\Fpdi\PdfParser\Type\PdfTypeException
-     * @throws \setasign\Fpdi\PdfReader\PdfReaderException
+     * @throws CrossReferenceException
+     * @throws FilterException
+     * @throws PdfParserException
+     * @throws PdfTypeException
+     * @throws PdfReaderException
      *
      * @since 1.0.0
      */
@@ -1682,15 +1708,15 @@ class PostNL implements LoggerAwareInterface
         $results = [];
         $itemTimeframe = $this->getTimeframeService()->retrieveCachedItem($getTimeframes->getId());
         if ($itemTimeframe instanceof CacheItemInterface && $itemTimeframe->get()) {
-            $results['timeframes'] = \GuzzleHttp\Psr7\Message::parseResponse($itemTimeframe->get());
+            $results['timeframes'] = PsrMessage::parseResponse($itemTimeframe->get());
         }
         $itemLocation = $this->getLocationService()->retrieveCachedItem($getNearestLocations->getId());
         if ($itemLocation instanceof CacheItemInterface && $itemLocation->get()) {
-            $results['locations'] = \GuzzleHttp\Psr7\Message::parseResponse($itemLocation->get());
+            $results['locations'] = PsrMessage::parseResponse($itemLocation->get());
         }
         $itemDeliveryDate = $this->getDeliveryDateService()->retrieveCachedItem($getDeliveryDate->getId());
         if ($itemDeliveryDate instanceof CacheItemInterface && $itemDeliveryDate->get()) {
-            $results['delivery_date'] = \GuzzleHttp\Psr7\Message::parseResponse($itemDeliveryDate->get());
+            $results['delivery_date'] = PsrMessage::parseResponse($itemDeliveryDate->get());
         }
 
         $this->getHttpClient()->addOrUpdateRequest(
@@ -1711,7 +1737,7 @@ class PostNL implements LoggerAwareInterface
             if ($response instanceof Response) {
                 $results[$uuid] = $response;
             } else {
-                if ($response instanceof \Exception) {
+                if ($response instanceof Exception) {
                     throw $response;
                 }
                 throw new InvalidArgumentException('Invalid multi-request');
@@ -1720,7 +1746,7 @@ class PostNL implements LoggerAwareInterface
 
         foreach ($responses as $type => $response) {
             if (!$response instanceof Response) {
-                if ($response instanceof \Exception) {
+                if ($response instanceof Exception) {
                     throw $response;
                 }
                 throw new InvalidArgumentException('Invalid multi-request');
@@ -1728,21 +1754,21 @@ class PostNL implements LoggerAwareInterface
                 switch ($type) {
                     case 'timeframes':
                         if ($itemTimeframe instanceof CacheItemInterface) {
-                            $itemTimeframe->set(\GuzzleHttp\Psr7\Message::toString($response));
+                            $itemTimeframe->set(PsrMessage::toString($response));
                             $this->getTimeframeService()->cacheItem($itemTimeframe);
                         }
 
                         break;
                     case 'locations':
                         if ($itemTimeframe instanceof CacheItemInterface) {
-                            $itemLocation->set(\GuzzleHttp\Psr7\Message::toString($response));
+                            $itemLocation->set(PsrMessage::toString($response));
                             $this->getLocationService()->cacheItem($itemLocation);
                         }
 
                         break;
                     case 'delivery_date':
                         if ($itemTimeframe instanceof CacheItemInterface) {
-                            $itemDeliveryDate->set(\GuzzleHttp\Psr7\Message::toString($response));
+                            $itemDeliveryDate->set(PsrMessage::toString($response));
                             $this->getDeliveryDateService()->cacheItem($itemDeliveryDate);
                         }
 

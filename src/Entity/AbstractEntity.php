@@ -26,6 +26,10 @@
 
 namespace ThirtyBees\PostNL\Entity;
 
+use Exception;
+use JsonSerializable;
+use ReflectionClass;
+use ReflectionException;
 use Sabre\Xml\Writer;
 use ThirtyBees\PostNL\Util\XmlSerializable;
 use ThirtyBees\PostNL\Exception\InvalidArgumentException;
@@ -39,7 +43,7 @@ use ThirtyBees\PostNL\Util\UUID;
  * @method AbstractEntity setId(string $id)
  * @method AbstractEntity setCurrentService(string $service)
  */
-abstract class AbstractEntity implements \JsonSerializable, XmlSerializable
+abstract class AbstractEntity implements JsonSerializable, XmlSerializable
 {
     // @codingStandardsIgnoreStart
     /** @var array */
@@ -65,7 +69,7 @@ abstract class AbstractEntity implements \JsonSerializable, XmlSerializable
      * @param array $properties
      *
      * @return static|object|null
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public static function create(array $properties = [])
     {
@@ -74,8 +78,8 @@ abstract class AbstractEntity implements \JsonSerializable, XmlSerializable
         }
 
         try {
-            $reflectionClass = new \ReflectionClass(get_called_class());
-        } catch (\Exception $e) {
+            $reflectionClass = new ReflectionClass(get_called_class());
+        } catch (Exception $e) {
             return null;
         }
 

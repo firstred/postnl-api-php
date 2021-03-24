@@ -26,6 +26,7 @@
 
 namespace ThirtyBees\PostNL\Service;
 
+use InvalidArgumentException;
 use Psr\Cache\CacheItemInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -44,6 +45,10 @@ use ThirtyBees\PostNL\Exception\ApiException;
 use ThirtyBees\PostNL\Exception\CifDownException;
 use ThirtyBees\PostNL\Exception\CifException;
 use ThirtyBees\PostNL\Exception\ResponseException;
+use GuzzleHttp\Psr7\Message as PsrMessage;
+use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
+use ThirtyBees\PostNL\Exception\HttpClientException;
+use ReflectionException;
 
 /**
  * Class LocationService.
@@ -102,10 +107,9 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \ReflectionException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @throws PsrCacheInvalidArgumentException
+     * @throws ReflectionException
+     * @throws HttpClientException
      *
      * @since 1.0.0
      */
@@ -116,8 +120,8 @@ class LocationService extends AbstractService implements LocationServiceInterfac
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\Message::parseResponse($response);
-            } catch (\InvalidArgumentException $e) {
+                $response = PsrMessage::parseResponse($response);
+            } catch (InvalidArgumentException $e) {
             }
         }
         if (!$response instanceof ResponseInterface) {
@@ -131,7 +135,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
                 && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
-                $item->set(\GuzzleHttp\Psr7\Message::toString($response));
+                $item->set(PsrMessage::toString($response));
                 $this->cacheItem($item);
             }
 
@@ -153,10 +157,9 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws CifException
      * @throws LibXMLException
      * @throws ResponseException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \ReflectionException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @throws PsrCacheInvalidArgumentException
+     * @throws ReflectionException
+     * @throws HttpClientException
      *
      * @since 1.0.0
      */
@@ -167,8 +170,8 @@ class LocationService extends AbstractService implements LocationServiceInterfac
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\Message::parseResponse($response);
-            } catch (\InvalidArgumentException $e) {
+                $response = PsrMessage::parseResponse($response);
+            } catch (InvalidArgumentException $e) {
             }
         }
         if (!$response instanceof ResponseInterface) {
@@ -181,7 +184,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
                 && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
-                $item->set(\GuzzleHttp\Psr7\Message::toString($response));
+                $item->set(PsrMessage::toString($response));
                 $this->cacheItem($item);
             }
 
@@ -202,10 +205,9 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \ReflectionException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @throws PsrCacheInvalidArgumentException
+     * @throws ReflectionException
+     * @throws HttpClientException
      *
      * @since 1.0.0
      */
@@ -216,8 +218,8 @@ class LocationService extends AbstractService implements LocationServiceInterfac
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\Message::parseResponse($response);
-            } catch (\InvalidArgumentException $e) {
+                $response = PsrMessage::parseResponse($response);
+            } catch (InvalidArgumentException $e) {
             }
         }
         if (!$response instanceof ResponseInterface) {
@@ -231,7 +233,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
                 && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
-                $item->set(\GuzzleHttp\Psr7\Message::toString($response));
+                $item->set(PsrMessage::toString($response));
                 $this->cacheItem($item);
             }
 
@@ -253,10 +255,9 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws CifException
      * @throws LibXMLException
      * @throws ResponseException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \ReflectionException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @throws PsrCacheInvalidArgumentException
+     * @throws ReflectionException
+     * @throws HttpClientException
      *
      * @since 1.0.0
      */
@@ -267,8 +268,8 @@ class LocationService extends AbstractService implements LocationServiceInterfac
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\Message::parseResponse($response);
-            } catch (\InvalidArgumentException $e) {
+                $response = PsrMessage::parseResponse($response);
+            } catch (InvalidArgumentException $e) {
             }
         }
 
@@ -282,7 +283,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
                 && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
-                $item->set(\GuzzleHttp\Psr7\Message::toString($response));
+                $item->set(PsrMessage::toString($response));
                 $this->cacheItem($item);
             }
 
@@ -303,10 +304,9 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \ReflectionException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @throws PsrCacheInvalidArgumentException
+     * @throws ReflectionException
+     * @throws HttpClientException
      *
      * @since 1.0.0
      */
@@ -317,8 +317,8 @@ class LocationService extends AbstractService implements LocationServiceInterfac
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\Message::parseResponse($response);
-            } catch (\InvalidArgumentException $e) {
+                $response = PsrMessage::parseResponse($response);
+            } catch (InvalidArgumentException $e) {
             }
         }
         if (!$response instanceof ResponseInterface) {
@@ -332,7 +332,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
                 && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
-                $item->set(\GuzzleHttp\Psr7\Message::toString($response));
+                $item->set(PsrMessage::toString($response));
                 $this->cacheItem($item);
             }
 
@@ -354,10 +354,9 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws CifException
      * @throws LibXMLException
      * @throws ResponseException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \ReflectionException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @throws PsrCacheInvalidArgumentException
+     * @throws ReflectionException
+     * @throws HttpClientException
      *
      * @since 1.0.0
      */
@@ -368,8 +367,8 @@ class LocationService extends AbstractService implements LocationServiceInterfac
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\Message::parseResponse($response);
-            } catch (\InvalidArgumentException $e) {
+                $response = PsrMessage::parseResponse($response);
+            } catch (InvalidArgumentException $e) {
             }
         }
         if (!$response instanceof ResponseInterface) {
@@ -382,7 +381,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
                 && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
-                $item->set(\GuzzleHttp\Psr7\Message::toString($response));
+                $item->set(PsrMessage::toString($response));
                 $this->cacheItem($item);
             }
 
@@ -399,7 +398,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      *
      * @return RequestInterface
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      *
      * @since 1.0.0
      */
@@ -474,9 +473,8 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @return GetNearestLocationsResponse|null
      *
      * @throws ResponseException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \ReflectionException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @throws ReflectionException
+     * @throws HttpClientException
      *
      * @since 1.0.0
      */
@@ -533,7 +531,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      *
      * @return RequestInterface
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      *
      * @since 1.0.0
      */
@@ -582,9 +580,8 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws CifException
      * @throws LibXMLException
      * @throws ResponseException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \ReflectionException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @throws ReflectionException
+     * @throws HttpClientException
      *
      * @since 1.0.0
      */
@@ -630,7 +627,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      *
      * @return RequestInterface
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      *
      * @since 1.0.0
      */
@@ -683,9 +680,8 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @return GetLocationsInAreaResponse|null
      *
      * @throws ResponseException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \ReflectionException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @throws ReflectionException
+     * @throws HttpClientException
      *
      * @since 1.0.0
      */
@@ -742,7 +738,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      *
      * @return RequestInterface
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      *
      * @since 1.0.0
      */
@@ -789,9 +785,8 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws CifException
      * @throws LibXMLException
      * @throws ResponseException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \ReflectionException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @throws ReflectionException
+     * @throws HttpClientException
      *
      * @since 1.0.0
      */
@@ -837,7 +832,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      *
      * @return RequestInterface
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      *
      * @since 1.0.0
      */
@@ -869,9 +864,8 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @return GetLocationsInAreaResponse|null
      *
      * @throws ResponseException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \ReflectionException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @throws ReflectionException
+     * @throws HttpClientException
      *
      * @since 1.0.0
      */
@@ -924,7 +918,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      *
      * @return RequestInterface
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      *
      * @since 1.0.0
      */
@@ -973,9 +967,8 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws CifException
      * @throws LibXMLException
      * @throws ResponseException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \ReflectionException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @throws ReflectionException
+     * @throws HttpClientException
      *
      * @since 1.0.0
      */

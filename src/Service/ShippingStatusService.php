@@ -29,6 +29,7 @@ namespace ThirtyBees\PostNL\Service;
 use Psr\Cache\CacheItemInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use ReflectionException;
 use Sabre\Xml\LibXMLException;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Service as XmlService;
@@ -51,8 +52,10 @@ use ThirtyBees\PostNL\Entity\SOAP\Security;
 use ThirtyBees\PostNL\Exception\ApiException;
 use ThirtyBees\PostNL\Exception\CifDownException;
 use ThirtyBees\PostNL\Exception\CifException;
+use ThirtyBees\PostNL\Exception\HttpClientException;
 use ThirtyBees\PostNL\Exception\InvalidArgumentException;
 use ThirtyBees\PostNL\Exception\ResponseException;
+use GuzzleHttp\Psr7\Message as PsrMessage;
 
 /**
  * Class ShippingStatusService.
@@ -128,10 +131,9 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \ReflectionException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @throws ReflectionException
+     * @throws HttpClientException
      *
      * @since 1.0.0
      */
@@ -142,7 +144,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\Message::parseResponse($response);
+                $response = PsrMessage::parseResponse($response);
             } catch (\InvalidArgumentException $e) {
             }
         }
@@ -157,7 +159,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
                 && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
-                $item->set(\GuzzleHttp\Psr7\Message::toString($response));
+                $item->set(PsrMessage::toString($response));
                 $this->cacheItem($item);
             }
 
@@ -191,10 +193,9 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws InvalidArgumentException
      * @throws LibXMLException
      * @throws ResponseException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \ReflectionException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @throws ReflectionException
+     * @throws HttpClientException
      *
      * @since 1.0.0
      */
@@ -205,7 +206,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\Message::parseResponse($response);
+                $response = PsrMessage::parseResponse($response);
             } catch (\InvalidArgumentException $e) {
             }
         }
@@ -219,7 +220,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
                 && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
-                $item->set(\GuzzleHttp\Psr7\Message::toString($response));
+                $item->set(PsrMessage::toString($response));
                 $this->cacheItem($item);
             }
 
@@ -251,10 +252,9 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \ReflectionException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @throws ReflectionException
+     * @throws HttpClientException
      *
      * @since 1.0.0
      */
@@ -265,7 +265,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\Message::parseResponse($response);
+                $response = PsrMessage::parseResponse($response);
             } catch (\InvalidArgumentException $e) {
             }
         }
@@ -280,7 +280,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
                 && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
-                $item->set(\GuzzleHttp\Psr7\Message::toString($response));
+                $item->set(PsrMessage::toString($response));
                 $this->cacheItem($item);
             }
 
@@ -314,10 +314,9 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws InvalidArgumentException
      * @throws LibXMLException
      * @throws ResponseException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \ReflectionException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @throws ReflectionException
+     * @throws HttpClientException
      *
      * @since 1.0.0
      */
@@ -328,7 +327,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\Message::parseResponse($response);
+                $response = PsrMessage::parseResponse($response);
             } catch (\InvalidArgumentException $e) {
             }
         }
@@ -342,7 +341,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
                 && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
-                $item->set(\GuzzleHttp\Psr7\Message::toString($response));
+                $item->set(PsrMessage::toString($response));
                 $this->cacheItem($item);
             }
 
@@ -374,10 +373,9 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \ReflectionException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @throws ReflectionException
+     * @throws HttpClientException
      *
      * @since 1.0.0
      */
@@ -388,7 +386,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\Message::parseResponse($response);
+                $response = PsrMessage::parseResponse($response);
             } catch (\InvalidArgumentException $e) {
             }
         }
@@ -403,7 +401,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
                 && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
-                $item->set(\GuzzleHttp\Psr7\Message::toString($response));
+                $item->set(PsrMessage::toString($response));
                 $this->cacheItem($item);
             }
 
@@ -433,8 +431,8 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      *
      * @throws ApiException
      * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \ReflectionException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @throws ReflectionException
+     * @throws HttpClientException
      *
      * @since 1.0.0
      */
@@ -445,7 +443,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\Message::parseResponse($response);
+                $response = PsrMessage::parseResponse($response);
             } catch (\InvalidArgumentException $e) {
             }
         }
@@ -459,7 +457,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
                 && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
-                $item->set(\GuzzleHttp\Psr7\Message::toString($response));
+                $item->set(PsrMessage::toString($response));
                 $this->cacheItem($item);
             }
 
@@ -482,7 +480,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      *
      * @return RequestInterface
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      *
      * @since 1.0.0
      */
@@ -545,9 +543,8 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @return CurrentStatusResponse
      *
      * @throws ResponseException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \ReflectionException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @throws ReflectionException
+     * @throws HttpClientException
      *
      * @since 1.0.0
      */
@@ -573,7 +570,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @return RequestInterface
      *
      * @throws InvalidArgumentException
-     * @throws \ReflectionException
+     * @throws ReflectionException
      *
      * @since 1.0.0
      */
@@ -644,9 +641,8 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws CifException
      * @throws LibXMLException
      * @throws ResponseException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \ReflectionException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @throws ReflectionException
+     * @throws HttpClientException
      *
      * @since 1.0.0
      */
@@ -683,7 +679,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      *
      * @return RequestInterface
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      *
      * @since 1.0.0
      */
@@ -752,9 +748,8 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @return CompleteStatusResponse|null
      *
      * @throws ResponseException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \ReflectionException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @throws ReflectionException
+     * @throws HttpClientException
      *
      * @since 1.0.0
      */
@@ -817,7 +812,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @return RequestInterface
      *
      * @throws InvalidArgumentException
-     * @throws \ReflectionException
+     * @throws ReflectionException
      *
      * @since 1.0.0
      */
@@ -888,9 +883,8 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws CifException
      * @throws LibXMLException
      * @throws ResponseException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \ReflectionException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @throws ReflectionException
+     * @throws HttpClientException
      *
      * @since 1.0.0
      */
@@ -919,7 +913,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @param GetSignature $getSignature
      *
      * @return RequestInterface
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function buildGetSignatureRequestREST(GetSignature $getSignature)
     {
@@ -942,9 +936,8 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @return GetSignatureResponseSignature|null
      *
      * @throws ResponseException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \ReflectionException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @throws ReflectionException
+     * @throws HttpClientException
      *
      * @since 1.0.0
      */
@@ -969,7 +962,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      *
      * @return RequestInterface
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      *
      * @since 1.0.0
      */
@@ -1027,9 +1020,8 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws CifException
      * @throws LibXMLException
      * @throws ResponseException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \ReflectionException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @throws ReflectionException
+     * @throws HttpClientException
      *
      * @since 1.0.0
      */

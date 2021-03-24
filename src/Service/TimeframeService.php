@@ -27,6 +27,7 @@
 namespace ThirtyBees\PostNL\Service;
 
 use Psr\Cache\CacheItemInterface;
+use Psr\Cache\InvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use ReflectionException;
@@ -39,6 +40,10 @@ use ThirtyBees\PostNL\Entity\SOAP\Security;
 use ThirtyBees\PostNL\Exception\ApiException;
 use ThirtyBees\PostNL\Exception\CifDownException;
 use ThirtyBees\PostNL\Exception\CifException;
+use GuzzleHttp\Psr7\Message as PsrMessage;
+use ThirtyBees\PostNL\Exception\HttpClientException;
+use ThirtyBees\PostNL\Exception\ResponseException;
+use Sabre\Xml\LibXMLException;
 
 /**
  * Class TimeframeService.
@@ -90,10 +95,9 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
      * @throws CifDownException
      * @throws CifException
      * @throws ReflectionException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws InvalidArgumentException
+     * @throws HttpClientException
+     * @throws ResponseException
      *
      * @since 1.0.0
      */
@@ -104,7 +108,7 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\Message::parseResponse($response);
+                $response = PsrMessage::parseResponse($response);
             } catch (\InvalidArgumentException $e) {
             }
         }
@@ -119,7 +123,7 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
                 && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
-                $item->set(\GuzzleHttp\Psr7\Message::toString($response));
+                $item->set(PsrMessage::toString($response));
                 $this->cacheItem($item);
             }
 
@@ -140,11 +144,10 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
      * @throws CifDownException
      * @throws CifException
      * @throws ReflectionException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws \Sabre\Xml\LibXMLException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws HttpClientException
+     * @throws ResponseException
      * @since 1.0.0
      */
     public function getTimeframesSOAP(GetTimeframes $getTimeframes)
@@ -154,7 +157,7 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\Message::parseResponse($response);
+                $response = PsrMessage::parseResponse($response);
             } catch (\InvalidArgumentException $e) {
             }
         }
@@ -168,7 +171,7 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
                 && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
-                $item->set(\GuzzleHttp\Psr7\Message::toString($response));
+                $item->set(PsrMessage::toString($response));
                 $this->cacheItem($item);
             }
 
@@ -243,9 +246,8 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
      * @return ResponseTimeframes|null
      *
      * @throws ReflectionException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws HttpClientException
+     * @throws ResponseException
      *
      * @since 1.0.0
      */
@@ -352,10 +354,9 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
      * @throws CifDownException
      * @throws CifException
      * @throws ReflectionException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Sabre\Xml\LibXMLException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws HttpClientException
+     * @throws ResponseException
      *
      * @since 1.0.0
      */

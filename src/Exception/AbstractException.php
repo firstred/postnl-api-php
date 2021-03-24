@@ -26,11 +26,13 @@
 
 namespace ThirtyBees\PostNL\Exception;
 
+use Exception;
+
 /**
  * Class AbstractException
  *
  * @since 1.0.0
  */
-abstract class AbstractException extends \Exception
+abstract class AbstractException extends Exception
 {
 }

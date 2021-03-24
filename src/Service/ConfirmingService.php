@@ -26,6 +26,7 @@
 
 namespace ThirtyBees\PostNL\Service;
 
+use Exception;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use ReflectionException;
@@ -40,6 +41,7 @@ use ThirtyBees\PostNL\Entity\SOAP\Security;
 use ThirtyBees\PostNL\Exception\ApiException;
 use ThirtyBees\PostNL\Exception\CifDownException;
 use ThirtyBees\PostNL\Exception\CifException;
+use ThirtyBees\PostNL\Exception\HttpClientException;
 use ThirtyBees\PostNL\Exception\ResponseException;
 
 /**
@@ -94,8 +96,7 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
      * @throws CifException
      * @throws ReflectionException
      * @throws ResponseException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @throws HttpClientException
      * @since 1.0.0
      */
     public function confirmShipmentREST(Confirming $confirming)
@@ -122,8 +123,8 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
      * @return ConfirmingResponseShipment[]
      *
      * @throws ReflectionException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @throws HttpClientException
+     *
      * @since 1.0.0
      */
     public function confirmShipmentsREST(array $confirms)
@@ -144,7 +145,7 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
                 if (!$confirming instanceof ConfirmingResponseShipment) {
                     throw new ResponseException('Invalid API Response', null, null, $response);
                 }
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $confirming = $e;
             }
 
@@ -166,8 +167,8 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
      * @throws LibXMLException
      * @throws ReflectionException
      * @throws ResponseException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @throws HttpClientException
+     *
      * @since 1.0.0
      */
     public function confirmShipmentSOAP(Confirming $confirming)
@@ -184,8 +185,8 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
      * @return ConfirmingResponseShipment[]
      *
      * @throws ReflectionException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @throws HttpClientException
+     *
      * @since 1.0.0
      */
     public function confirmShipmentsSOAP(array $confirmings)
@@ -203,7 +204,7 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
         foreach ($httpClient->doRequests() as $uuid => $response) {
             try {
                 $confirmingResponse = $this->processConfirmResponseSOAP($response);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $confirmingResponse = $e;
             }
 
@@ -251,8 +252,7 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
      * @throws CifException
      * @throws ReflectionException
      * @throws ResponseException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @throws HttpClientException
      *
      * @since 1.0.0
      */
@@ -327,8 +327,7 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
      * @throws LibXMLException
      * @throws ReflectionException
      * @throws ResponseException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @throws HttpClientException
      *
      * @since 1.0.0
      */

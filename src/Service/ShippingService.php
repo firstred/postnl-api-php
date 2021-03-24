@@ -26,7 +26,8 @@
 
 namespace ThirtyBees\PostNL\Service;
 
-use GuzzleHttp\Psr7\Message;
+use GuzzleHttp\Psr7\Message as PsrMessage;
+use InvalidArgumentException;
 use Psr\Cache\CacheItemInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -37,6 +38,7 @@ use ThirtyBees\PostNL\Entity\Response\GenerateShippingResponse;
 use ThirtyBees\PostNL\Exception\ApiException;
 use ThirtyBees\PostNL\Exception\CifDownException;
 use ThirtyBees\PostNL\Exception\CifException;
+use ThirtyBees\PostNL\Exception\HttpClientException;
 use ThirtyBees\PostNL\Exception\ResponseException;
 use function http_build_query;
 use function json_encode;
@@ -76,9 +78,8 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
      * @throws CifException
      * @throws ReflectionException
      * @throws ResponseException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @throws HttpClientException
      *
      * @since 1.2.0
      */
@@ -90,8 +91,8 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\Message::parseResponse($response);
-            } catch (\InvalidArgumentException $e) {
+                $response = PsrMessage::parseResponse($response);
+            } catch (InvalidArgumentException $e) {
             }
         }
         if (!$response instanceof ResponseInterface) {
@@ -106,7 +107,7 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
                 && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
-                $item->set(Message::toString($response));
+                $item->set(PsrMessage::toString($response));
                 $this->cacheItem($item);
             }
 
@@ -156,8 +157,7 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
      *
      * @throws ReflectionException
      * @throws ResponseException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @throws HttpClientException
      *
      * @since 1.2.0
      */

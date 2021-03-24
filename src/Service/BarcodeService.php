@@ -26,7 +26,7 @@
 
 namespace ThirtyBees\PostNL\Service;
 
-use GuzzleHttp\Exception\GuzzleException;
+use Exception;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use ReflectionException;
@@ -90,7 +90,6 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
-     * @throws GuzzleException
      * @throws HttpClientException
      * @throws ReflectionException
      * @throws ResponseException
@@ -115,7 +114,6 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
      *
      * @return string[]|ResponseException[]|ApiException[]|CifDownException[]|CifException[] Barcodes
      *
-     * @throws GuzzleException
      * @throws HttpClientException
      * @throws ReflectionException
      *
@@ -162,7 +160,6 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
      *
      * @throws CifDownException
      * @throws CifException
-     * @throws GuzzleException
      * @throws HttpClientException
      * @throws ReflectionException
      * @throws ResponseException
@@ -183,7 +180,6 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
      *
      * @return string[] Barcodes
      *
-     * @throws GuzzleException
      * @throws HttpClientException
      * @throws ReflectionException
      *
@@ -204,7 +200,7 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
         foreach ($httpClient->doRequests() as $uuid => $response) {
             try {
                 $barcode = $this->processGenerateBarcodeResponseSOAP($response);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $barcode = new ResponseException($e->getMessage(), $e->getCode(), $e, $response);
             }
 
@@ -257,7 +253,6 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
      * @throws CifException
      * @throws HttpClientException
      * @throws ResponseException
-     * @throws GuzzleException
      *
      * @since 1.0.0
      */
@@ -331,7 +326,6 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
      *
      * @throws CifDownException
      * @throws CifException
-     * @throws GuzzleException
      * @throws HttpClientException
      * @throws ResponseException
      *

@@ -199,7 +199,7 @@ class Amount extends AbstractEntity
      *
      * @param string|int|null $type
      *
-     * @return $this
+     * @return static
      */
     public function setAmountType($type = null)
     {

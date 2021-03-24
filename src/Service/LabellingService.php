@@ -26,10 +26,13 @@
 
 namespace ThirtyBees\PostNL\Service;
 
+use Exception;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
+use Psr\Cache\InvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use ReflectionException;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Service as XmlService;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
@@ -39,7 +42,10 @@ use ThirtyBees\PostNL\Entity\SOAP\Security;
 use ThirtyBees\PostNL\Exception\ApiException;
 use ThirtyBees\PostNL\Exception\CifDownException;
 use ThirtyBees\PostNL\Exception\CifException;
+use ThirtyBees\PostNL\Exception\HttpClientException;
 use ThirtyBees\PostNL\Exception\ResponseException;
+use GuzzleHttp\Psr7\Message as PsrMessage;
+use \Sabre\Xml\LibXMLException;
 use function http_build_query;
 use function json_encode;
 use const JSON_PRETTY_PRINT;
@@ -97,10 +103,9 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
-     * @throws \ReflectionException
+     * @throws InvalidArgumentException
+     * @throws HttpClientException
+     * @throws ReflectionException
      *
      * @since 1.0.0
      */
@@ -111,7 +116,7 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\Message::parseResponse($response);
+                $response = PsrMessage::parseResponse($response);
             } catch (\InvalidArgumentException $e) {
                 // Invalid item in cache, skip
             }
@@ -127,7 +132,7 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
                 && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
-                $item->set(\GuzzleHttp\Psr7\Message::toString($response));
+                $item->set(PsrMessage::toString($response));
                 $this->cacheItem($item);
             }
 
@@ -148,10 +153,9 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      *
      * @return array
      *
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \ReflectionException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
+     * @throws HttpClientException
      *
      * @since 1.0.0
      */
@@ -166,7 +170,7 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
             if ($item instanceof CacheItemInterface) {
                 $response = $item->get();
                 try {
-                    $response = \GuzzleHttp\Psr7\Message::parseResponse($response);
+                    $response = PsrMessage::parseResponse($response);
                 } catch (\InvalidArgumentException $e) {
                 }
                 if ($response instanceof ResponseInterface) {
@@ -188,7 +192,7 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
             ) {
                 $item = $this->retrieveCachedItem($uuid);
                 if ($item instanceof CacheItemInterface) {
-                    $item->set(\GuzzleHttp\Psr7\Message::toString($newResponse));
+                    $item->set(PsrMessage::toString($newResponse));
                     $this->cache->saveDeferred($item);
                 }
             }
@@ -201,7 +205,7 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
         foreach ($responses + $newResponses as $uuid => $response) {
             try {
                 $generateLabelResponse = $this->processGenerateLabelResponseREST($response);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $generateLabelResponse = $e;
             }
 
@@ -223,11 +227,10 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \ReflectionException
-     * @throws \Sabre\Xml\LibXMLException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
+     * @throws LibXMLException
+     * @throws HttpClientException
      *
      * @since 1.0.0
      */
@@ -238,7 +241,7 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\Message::parseResponse($response);
+                $response = PsrMessage::parseResponse($response);
             } catch (\InvalidArgumentException $e) {
             }
         }
@@ -253,7 +256,7 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
             && $response instanceof ResponseInterface
             && 200 === $response->getStatusCode()
         ) {
-            $item->set(\GuzzleHttp\Psr7\Message::toString($response));
+            $item->set(PsrMessage::toString($response));
             $this->cacheItem($item);
         }
 
@@ -267,10 +270,9 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      *
      * @return array
      *
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \ReflectionException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
+     * @throws HttpClientException
      *
      * @since 1.0.0
      */
@@ -285,7 +287,7 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
             if ($item instanceof CacheItemInterface) {
                 $response = $item->get();
                 try {
-                    $response = \GuzzleHttp\Psr7\Message::parseResponse($response);
+                    $response = PsrMessage::parseResponse($response);
                 } catch (\InvalidArgumentException $e) {
                 }
                 if ($response instanceof ResponseInterface) {
@@ -308,7 +310,7 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
             ) {
                 $item = $this->retrieveCachedItem($uuid);
                 if ($item instanceof CacheItemInterface) {
-                    $item->set(\GuzzleHttp\Psr7\Message::toString($newResponse));
+                    $item->set(PsrMessage::toString($newResponse));
                     $this->cache->saveDeferred($item);
                 }
             }
@@ -321,7 +323,7 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
         foreach ($responses + $newResponses as $uuid => $response) {
             try {
                 $generateLabelResponse = $this->processGenerateLabelResponseSOAP($response);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $generateLabelResponse = $e;
             }
 
@@ -339,7 +341,7 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      *
      * @return RequestInterface
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      *
      * @since 1.0.0
      */
@@ -367,9 +369,8 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      * @return GenerateLabelResponse|null
      *
      * @throws ResponseException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \ReflectionException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @throws ReflectionException
+     * @throws HttpClientException
      *
      * @since 1.0.0
      */
@@ -395,7 +396,7 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      *
      * @return RequestInterface
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      *
      * @since 1.0.0
      */
@@ -442,10 +443,9 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \ReflectionException
-     * @throws \Sabre\Xml\LibXMLException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @throws ReflectionException
+     * @throws LibXMLException
+     * @throws HttpClientException
      *
      * @since 1.0.0
      */

@@ -381,7 +381,7 @@ class Address extends AbstractEntity
      *
      * @param string|null $zip
      *
-     * @return $this
+     * @return static
      */
     public function setZipcode($zip = null)
     {
@@ -399,7 +399,7 @@ class Address extends AbstractEntity
      *
      * @param int|string|null $addressType
      *
-     * @return $this
+     * @return static
      */
     public function setAddressType($addressType = null)
     {

@@ -348,7 +348,7 @@ class ResponseAddress extends AbstractEntity
      *
      * @param string|null $zip
      *
-     * @return $this
+     * @return static
      */
     public function setZipcode($zip = null)
     {

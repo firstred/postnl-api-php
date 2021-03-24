@@ -75,7 +75,7 @@ interface ClientInterface
      *
      * @param bool|string $verify
      *
-     * @return $this
+     * @return static
      */
     public function setVerify($verify);
 

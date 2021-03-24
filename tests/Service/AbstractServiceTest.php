@@ -31,6 +31,8 @@ use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use ThirtyBees\PostNL\Exception\CifDownException;
 use ThirtyBees\PostNL\Exception\CifException;
+use ThirtyBees\PostNL\Exception\HttpClientException;
+use ThirtyBees\PostNL\Exception\ResponseException;
 use ThirtyBees\PostNL\Service\AbstractService;
 
 /**
@@ -55,11 +57,12 @@ class AbstractServiceTest extends TestCase
     }
 
     /**
+     * @throws HttpClientException
      * @throws \ThirtyBees\PostNL\Exception\ResponseException
      */
     public function testGetResponseTextFromException()
     {
-        $response = new \GuzzleHttp\Exception\ClientException('', new Request('POST', 'localhost', []), new Response(500, [], 'test'));
+        $response = new HttpClientException('', 0, null, new Response(500, [], 'test'));
 
         $this->assertEquals('test', AbstractService::getResponseText(['value' => $response]));
     }

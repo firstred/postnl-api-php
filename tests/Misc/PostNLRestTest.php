@@ -41,6 +41,7 @@ use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
 use ThirtyBees\PostNL\Entity\Timeframe;
 use ThirtyBees\PostNL\HttpClient\MockClient;
 use ThirtyBees\PostNL\PostNL;
+use ThirtyBees\PostNL\Util\DummyLogger;
 
 /**
  * Class PostNLRestTest.
@@ -116,7 +117,7 @@ class PostNLRestTest extends TestCase
     public function testSetTokenObject()
     {
         $this->postnl->setToken(new UsernameToken(null, 'test'));
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\SOAP\\UsernameToken', $this->postnl->getToken());
+        $this->assertInstanceOf(UsernameToken::class, $this->postnl->getToken());
     }
 
     /**
@@ -124,9 +125,9 @@ class PostNLRestTest extends TestCase
      */
     public function testSetNullLogger()
     {
-        $this->postnl->setLogger();
+        $this->postnl->resetLogger();
 
-        $this->assertNull($this->postnl->getLogger());
+        $this->assertInstanceOf(DummyLogger::class, $this->postnl->getLogger());
     }
 
     /**

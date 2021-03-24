@@ -282,7 +282,7 @@ class GetDeliveryDate extends AbstractEntity
      *
      * @param string|null $postcode
      *
-     * @return $this
+     * @return static
      */
     public function setPostalCode($postcode = null)
     {

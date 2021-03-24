@@ -26,9 +26,13 @@
 
 namespace ThirtyBees\PostNL\Service;
 
+use GuzzleHttp\Psr7\Message as PsrMessage;
+use InvalidArgumentException;
 use Psr\Cache\CacheItemInterface;
+use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use ReflectionException;
 use Sabre\Xml\LibXMLException;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Service as XmlService;
@@ -43,6 +47,7 @@ use ThirtyBees\PostNL\Entity\SOAP\Security;
 use ThirtyBees\PostNL\Exception\ApiException;
 use ThirtyBees\PostNL\Exception\CifDownException;
 use ThirtyBees\PostNL\Exception\CifException;
+use ThirtyBees\PostNL\Exception\HttpClientException;
 use ThirtyBees\PostNL\Exception\ResponseException;
 
 /**
@@ -98,10 +103,9 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \ReflectionException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @throws PsrCacheInvalidArgumentException
+     * @throws ReflectionException
+     * @throws HttpClientException
      *
      * @since 1.0.0
      */
@@ -112,8 +116,8 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\Message::parseResponse($response);
-            } catch (\InvalidArgumentException $e) {
+                $response = PsrMessage::parseResponse($response);
+            } catch (InvalidArgumentException $e) {
             }
         }
         if (!$response instanceof ResponseInterface) {
@@ -127,7 +131,7 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
                 && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
-                $item->set(\GuzzleHttp\Psr7\Message::toString($response));
+                $item->set(PsrMessage::toString($response));
                 $this->cacheItem($item);
             }
 
@@ -149,11 +153,9 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @throws CifException
      * @throws LibXMLException
      * @throws ResponseException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \ReflectionException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
-     * @noinspection PhpUnused
+     * @throws PsrCacheInvalidArgumentException
+     * @throws ReflectionException
+     * @throws HttpClientException
      *
      * @since 1.0.0
      */
@@ -164,8 +166,8 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\Message::parseResponse($response);
-            } catch (\InvalidArgumentException $e) {
+                $response = PsrMessage::parseResponse($response);
+            } catch (InvalidArgumentException $e) {
             }
         }
         if (!$response instanceof ResponseInterface) {
@@ -178,7 +180,7 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
                 && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
-                $item->set(\GuzzleHttp\Psr7\Message::toString($response));
+                $item->set(PsrMessage::toString($response));
                 $this->cacheItem($item);
             }
 
@@ -199,10 +201,9 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
-     * @throws \ReflectionException
+     * @throws PsrCacheInvalidArgumentException
+     * @throws HttpClientException
+     * @throws ReflectionException
      *
      * @since 1.0.0
      */
@@ -213,8 +214,8 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\Message::parseResponse($response);
-            } catch (\InvalidArgumentException $e) {
+                $response = PsrMessage::parseResponse($response);
+            } catch (InvalidArgumentException $e) {
             }
         }
         if (!$response instanceof ResponseInterface) {
@@ -228,7 +229,7 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
                 && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
-                $item->set(\GuzzleHttp\Psr7\Message::toString($response));
+                $item->set(PsrMessage::toString($response));
                 $this->cacheItem($item);
             }
 
@@ -250,10 +251,9 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @throws CifException
      * @throws LibXMLException
      * @throws ResponseException
-     * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
-     *
-     * @noinspection PhpUnused
+     * @throws PsrCacheInvalidArgumentException
+     * @throws HttpClientException
+     * @throws ReflectionException
      *
      * @since 1.0.0
      */
@@ -264,8 +264,8 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\Message::parseResponse($response);
-            } catch (\InvalidArgumentException $e) {
+                $response = PsrMessage::parseResponse($response);
+            } catch (InvalidArgumentException $e) {
             }
         }
         if (!$response instanceof ResponseInterface) {
@@ -278,7 +278,7 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
                 && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
-                $item->set(\GuzzleHttp\Psr7\Message::toString($response));
+                $item->set(PsrMessage::toString($response));
                 $this->cacheItem($item);
             }
 
@@ -295,7 +295,7 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      *
      * @return RequestInterface
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      *
      * @since 1.0.0
      */
@@ -390,9 +390,8 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @return GetDeliveryDateResponse|null
      *
      * @throws ResponseException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \ReflectionException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @throws ReflectionException
+     * @throws HttpClientException
      *
      * @since 1.0.0
      */
@@ -417,7 +416,7 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      *
      * @return RequestInterface
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      *
      * @since 1.0.0
      */
@@ -464,9 +463,10 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @throws CifException
      * @throws LibXMLException
      * @throws ResponseException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \ReflectionException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @throws ReflectionException
+     * @throws HttpClientException
+     *
+     * @since 1.0.0
      */
     public function processGetDeliveryDateResponseSOAP(ResponseInterface $response)
     {
@@ -493,7 +493,9 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @param GetSentDateRequest $getSentDate
      *
      * @return RequestInterface
-     * @throws \ReflectionException
+     * @throws ReflectionException
+     *
+     * @since 1.0.0
      */
     public function buildGetSentDateRequestREST(GetSentDateRequest $getSentDate)
     {
@@ -539,9 +541,10 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @return GetSentDateResponse|null
      *
      * @throws ResponseException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \ReflectionException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @throws ReflectionException
+     * @throws HttpClientException
+     *
+     * @since 1.0.0
      */
     public function processGetSentDateResponseREST($response)
     {
@@ -563,7 +566,7 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @param GetSentDateRequest $getSentDate
      *
      * @return RequestInterface
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function buildGetSentDateRequestSOAP(GetSentDateRequest $getSentDate)
     {
@@ -610,9 +613,10 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @throws CifException
      * @throws LibXMLException
      * @throws ResponseException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \ReflectionException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @throws ReflectionException
+     * @throws HttpClientException
+     *
+     * @since 1.0.0
      */
     public function processGetSentDateResponseSOAP(ResponseInterface $response)
     {

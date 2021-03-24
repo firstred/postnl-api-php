@@ -20,7 +20,9 @@
 namespace ThirtyBees\PostNL\HttpClient;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\TransferException;
 use GuzzleHttp\HandlerStack;
@@ -32,6 +34,9 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use ThirtyBees\PostNL\Exception\HttpClientException;
+use GuzzleHttp\Psr7\Message as PsrMessage;
+use ThirtyBees\PostNL\Exception\ResponseException;
+use function method_exists;
 
 /**
  * Class GuzzleClient.
@@ -72,6 +77,8 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
      * Get the Guzzle client.
      *
      * @return Client
+     *
+     * @noinspection PhpUnusedParameterInspection
      */
     private function getClient()
     {
@@ -172,7 +179,7 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
      *
      * @param bool|string $verify
      *
-     * @return $this
+     * @return static
      */
     public function setVerify($verify)
     {
@@ -203,7 +210,7 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
      *
      * @param int $maxRetries
      *
-     * @return $this
+     * @return static
      */
     public function setMaxRetries($maxRetries)
     {
@@ -227,7 +234,7 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
      *
      * @param int $concurrency
      *
-     * @return $this
+     * @return static
      */
     public function setConcurrency($concurrency)
     {
@@ -318,7 +325,6 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
      * @return ResponseInterface
      *
      * @throws HttpClientException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function doRequest(RequestInterface $request)
     {
@@ -326,11 +332,13 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
         $guzzle = $this->getClient();
         try {
             $response = $guzzle->send($request);
-        } catch (TransferException $e) {
+        } catch (RequestException $e) {
+            throw new HttpClientException($e->getMessage(), $e->getCode(), $e->getResponse());
+        } catch (GuzzleException $e) {
             throw new HttpClientException($e->getMessage(), $e->getCode(), $e);
         }
         if ($response instanceof ResponseInterface && $this->logger instanceof LoggerInterface) {
-            $this->logger->debug(\GuzzleHttp\Psr7\Message::toString($response));
+            $this->logger->debug(PsrMessage::toString($response));
         }
 
         return $response;
@@ -365,7 +373,7 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
         $promises = call_user_func(function () use ($requests, $guzzle) {
             foreach ($requests as $index => $request) {
                 if ($request instanceof RequestInterface && $this->logger instanceof LoggerInterface) {
-                    $this->logger->debug(\GuzzleHttp\Psr7\Message::toString($request));
+                    $this->logger->debug(PsrMessage::toString($request));
                 }
                 yield $index => $guzzle->sendAsync($request);
             }
@@ -385,7 +393,20 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
             if (is_array($response) && !empty($response['value'])) {
                 $response = $response['value'];
             } elseif (is_array($response) && !empty($response['reason'])) {
-                if ($response['reason'] instanceof TransferException) {
+                if ($response['reason'] instanceof RequestException) {
+                    if (method_exists($response['reason'], 'getMessage')
+                        && method_exists($response['reason'], 'getCode')
+                    ) {
+                        $response = new HttpClientException(
+                            $response['reason']->getMessage(),
+                            $response['reason']->getCode(),
+                            $response['reason'],
+                            $response['reason']->getResponse()
+                        );
+                    } else {
+                        $response = new HttpClientException(null, null, $response['reason']);
+                    }
+                } elseif ($response['reason'] instanceof TransferException) {
                     if (method_exists($response['reason'], 'getMessage')
                         && method_exists($response['reason'], 'getCode')
                     ) {
@@ -401,10 +422,10 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
                     $response = $response['reason'];
                 }
             } elseif (!$response instanceof ResponseInterface) {
-                $response = new \ThirtyBees\PostNL\Exception\ResponseException('Unknown response type');
+                $response = new ResponseException('Unknown response type');
             }
             if ($response instanceof ResponseInterface && $this->logger instanceof LoggerInterface) {
-                $this->logger->debug(\GuzzleHttp\Psr7\Message::toString($response));
+                $this->logger->debug(PsrMessage::toString($response));
             }
         }
 

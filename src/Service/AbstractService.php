@@ -29,7 +29,6 @@ namespace ThirtyBees\PostNL\Service;
 use DateInterval;
 use DateTimeInterface;
 use Exception;
-use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Response;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
@@ -186,7 +185,6 @@ abstract class AbstractService
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
-     * @throws GuzzleException
      * @throws HttpClientException
      * @throws ResponseException
      *
@@ -288,7 +286,6 @@ abstract class AbstractService
      * @return string
      *
      * @throws ResponseException
-     * @throws GuzzleException
      * @throws HttpClientException
      *
      * @since 1.0.0
@@ -306,9 +303,7 @@ abstract class AbstractService
 
         if ($response instanceof Response) {
             return (string) $response->getBody();
-        } elseif (is_a($response, GuzzleException::class)
-            || is_a($response, HttpClientException::class)
-        ) {
+        } elseif (is_a($response, HttpClientException::class)) {
             $exception = $response;
             if (method_exists($response, 'getResponse')) {
                 $response = $response->getResponse();
