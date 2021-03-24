@@ -36,9 +36,9 @@ use Http\Discovery\NotFoundException;
 use Http\Discovery\Exception\NoCandidateFoundException;
 use Http\Discovery\Exception\DiscoveryFailedException;
 use Psr\Cache\CacheItemInterface;
+use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
-use Sabre\Xml\Element;
 use Sabre\Xml\Version;
 use setasign\Fpdi\PdfParser\CrossReference\CrossReferenceException;
 use setasign\Fpdi\PdfParser\Filter\FilterException;
@@ -1696,7 +1696,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @throws HttpClientException
      * @throws InvalidArgumentException
-     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws PsrCacheInvalidArgumentException
      *
      * @since 1.0.0
      */
