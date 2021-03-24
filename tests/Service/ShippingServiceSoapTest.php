@@ -20,7 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Jan-Wilco Peters <info@keendelivery.com>
- * @copyright 2017-2020 KeenDelivery, LLC
+ * @copyright 2017-2021 KeenDelivery, LLC
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
