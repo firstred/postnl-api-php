@@ -5,12 +5,13 @@ Overview
 Requirements
 ============
 
-#. PHP 5.5.5 or higher
+#. PHP 5.6 or higher (up to and including 8.0)
 #. JSON extension
-#. XML Support (SimpleXMLElement)
+#. (optional) XML Support [SimpleXMLElement] if you'd like to use the SOAP API
 #. By default this library utilizes cURL for communication.
 #. To use the cURL client, you must have a recent version of cURL >= 7.19.4
    compiled with OpenSSL and zlib.
+# You can install any HTTP Client that is supported by the `HTTPlug <https://httplug.io/>`_ project. See :ref:`HTTP Client` for more information.
 
 .. note::
 
