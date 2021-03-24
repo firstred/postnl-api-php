@@ -66,7 +66,7 @@ use ThirtyBees\PostNL\Exception\ResponseException;
  *
  * @since 1.2.0
  */
-interface ShippingStatusServiceInterface
+interface ShippingStatusServiceInterface extends ServiceInterface
 {
     /**
      * Gets the current status.

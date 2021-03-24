@@ -47,7 +47,7 @@ use ThirtyBees\PostNL\Exception\ResponseException;
  *
  * @since 1.2.0
  */
-interface ShippingServiceInterface
+interface ShippingServiceInterface extends ServiceInterface
 {
     /**
      * Generate a single Shipping vai REST.

@@ -48,7 +48,7 @@ use ThirtyBees\PostNL\Exception\ResponseException;
  *
  * @since 1.2.0
  */
-interface TimeframeServiceInterface
+interface TimeframeServiceInterface extends ServiceInterface
 {
     /**
      * Get timeframes via REST.

@@ -53,7 +53,7 @@ use ThirtyBees\PostNL\Exception\ResponseException;
  *
  * @since 1.2.0
  */
-interface DeliveryDateServiceInterface
+interface DeliveryDateServiceInterface extends ServiceInterface
 {
     /**
      * Get a delivery date via REST.

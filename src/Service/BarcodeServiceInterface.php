@@ -46,7 +46,7 @@ use ThirtyBees\PostNL\Exception\ResponseException;
  *
  * @since 1.2.0
  */
-interface BarcodeServiceInterface
+interface BarcodeServiceInterface extends ServiceInterface
 {
     /**
      * Generate a single barcode.

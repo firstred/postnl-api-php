@@ -48,7 +48,7 @@ use ThirtyBees\PostNL\Exception\ResponseException;
  *
  * @since 1.2.0
  */
-interface ConfirmingServiceInterface
+interface ConfirmingServiceInterface extends ServiceInterface
 {
     /**
      * Generate a single barcode via REST.

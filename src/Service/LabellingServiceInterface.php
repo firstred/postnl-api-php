@@ -49,7 +49,7 @@ use ThirtyBees\PostNL\Exception\HttpClientException;
  *
  * @since 1.2.0
  */
-interface LabellingServiceInterface
+interface LabellingServiceInterface extends ServiceInterface
 {
     /**
      * Generate a single barcode via REST.

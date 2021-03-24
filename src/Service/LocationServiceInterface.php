@@ -57,7 +57,7 @@ use ThirtyBees\PostNL\Exception\ResponseException;
  *
  * @since 1.2.0
  */
-interface LocationServiceInterface
+interface LocationServiceInterface extends ServiceInterface
 {
     /**
      * Get the nearest locations via REST.
