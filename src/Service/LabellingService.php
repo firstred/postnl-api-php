@@ -48,8 +48,6 @@ use GuzzleHttp\Psr7\Message as PsrMessage;
 use \Sabre\Xml\LibXMLException;
 use function http_build_query;
 use function json_encode;
-use const JSON_PRETTY_PRINT;
-use const JSON_UNESCAPED_SLASHES;
 
 /**
  * Class LabellingService.
@@ -358,7 +356,7 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
             ->withHeader('apikey', $apiKey)
             ->withHeader('Accept', 'application/json')
             ->withHeader('Content-Type', 'application/json;charset=UTF-8')
-            ->withBody($this->postnl->getStreamFactory()->createStream(json_encode($generateLabel, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES)));
+            ->withBody($this->postnl->getStreamFactory()->createStream(json_encode($generateLabel)));
     }
 
     /**

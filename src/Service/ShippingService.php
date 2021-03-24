@@ -42,8 +42,6 @@ use ThirtyBees\PostNL\Exception\HttpClientException;
 use ThirtyBees\PostNL\Exception\ResponseException;
 use function http_build_query;
 use function json_encode;
-use const JSON_PRETTY_PRINT;
-use const JSON_UNESCAPED_SLASHES;
 
 /**
  * Class ShippingService.
@@ -145,7 +143,7 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
             ->withHeader('apikey', $apiKey)
             ->withHeader('Accept', 'application/json')
             ->withHeader('Content-Type', 'application/json;charset=UTF-8')
-            ->withBody($this->postnl->getStreamFactory()->createStream(json_encode($generateShipping, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES)));
+            ->withBody($this->postnl->getStreamFactory()->createStream(json_encode($generateShipping)));
     }
 
     /**
