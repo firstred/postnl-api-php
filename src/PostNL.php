@@ -598,6 +598,33 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
+     * @return bool
+     *
+     * @since 1.2.0
+     */
+    public function getVerifySslCerts()
+    {
+        return $this->verifySslCerts;
+    }
+
+    /**
+     * @param bool $verifySslCerts
+     *
+     * @return static
+     *
+     * @since 1.2.0
+     */
+    public function setVerifySslCerts($verifySslCerts)
+    {
+        $this->verifySslCerts = $verifySslCerts;
+        if ($this->getHttpClient() instanceof ClientInterface) {
+            $this->getHttpClient()->setVerify($verifySslCerts);
+        }
+
+        return $this;
+    }
+
+    /**
      * @return RequestFactoryInterface
      *
      * @since 1.2.0
