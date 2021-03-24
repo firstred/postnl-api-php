@@ -401,7 +401,7 @@ class PostNL implements LoggerAwareInterface
             throw new InvalidArgumentException('Mode not supported');
         }
 
-        if (in_array($mode, [static::MODE_SOAP, static::MODE_LEGACY])) {
+        if (in_array($mode, [static::MODE_SOAP, static::MODE_LEGACY]) && !interface_exists(Element::class)) {
             // Seamlessly switch to the REST API
             $mode = static::MODE_REST;
         }
