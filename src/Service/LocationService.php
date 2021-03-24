@@ -101,8 +101,13 @@ class LocationService extends AbstractService
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
-     * @throws \Exception
      * @throws ResponseException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \ReflectionException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     *
+     * @since 1.0.0
      */
     public function getNearestLocationsREST(GetNearestLocations $getNearestLocations)
     {
@@ -111,7 +116,7 @@ class LocationService extends AbstractService
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\parse_response($response);
+                $response = \GuzzleHttp\Psr7\Message::parseResponse($response);
             } catch (\InvalidArgumentException $e) {
             }
         }
@@ -148,6 +153,12 @@ class LocationService extends AbstractService
      * @throws CifException
      * @throws LibXMLException
      * @throws ResponseException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \ReflectionException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     *
+     * @since 1.0.0
      */
     public function getNearestLocationsSOAP(GetNearestLocations $getNearestLocations)
     {
@@ -156,7 +167,7 @@ class LocationService extends AbstractService
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\parse_response($response);
+                $response = \GuzzleHttp\Psr7\Message::parseResponse($response);
             } catch (\InvalidArgumentException $e) {
             }
         }
@@ -191,6 +202,12 @@ class LocationService extends AbstractService
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \ReflectionException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     *
+     * @since 1.0.0
      */
     public function getLocationsInAreaREST(GetLocationsInArea $getLocations)
     {
@@ -199,7 +216,7 @@ class LocationService extends AbstractService
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\parse_response($response);
+                $response = \GuzzleHttp\Psr7\Message::parseResponse($response);
             } catch (\InvalidArgumentException $e) {
             }
         }
@@ -236,6 +253,12 @@ class LocationService extends AbstractService
      * @throws CifException
      * @throws LibXMLException
      * @throws ResponseException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \ReflectionException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     *
+     * @since 1.0.0
      */
     public function getLocationsInAreaSOAP(GetLocationsInArea $getNearestLocations)
     {
@@ -244,7 +267,7 @@ class LocationService extends AbstractService
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\parse_response($response);
+                $response = \GuzzleHttp\Psr7\Message::parseResponse($response);
             } catch (\InvalidArgumentException $e) {
             }
         }
@@ -280,6 +303,12 @@ class LocationService extends AbstractService
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \ReflectionException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     *
+     * @since 1.0.0
      */
     public function getLocationREST(GetLocation $getLocation)
     {
@@ -288,7 +317,7 @@ class LocationService extends AbstractService
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\parse_response($response);
+                $response = \GuzzleHttp\Psr7\Message::parseResponse($response);
             } catch (\InvalidArgumentException $e) {
             }
         }
@@ -325,6 +354,12 @@ class LocationService extends AbstractService
      * @throws CifException
      * @throws LibXMLException
      * @throws ResponseException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \ReflectionException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     *
+     * @since 1.0.0
      */
     public function getLocationSOAP(GetLocation $getLocation)
     {
@@ -333,7 +368,7 @@ class LocationService extends AbstractService
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\parse_response($response);
+                $response = \GuzzleHttp\Psr7\Message::parseResponse($response);
             } catch (\InvalidArgumentException $e) {
             }
         }
@@ -363,6 +398,10 @@ class LocationService extends AbstractService
      * @param GetNearestLocations $getNearestLocations
      *
      * @return RequestInterface
+     *
+     * @throws \ReflectionException
+     *
+     * @since 1.0.0
      */
     public function buildGetNearestLocationsRequestREST(GetNearestLocations $getNearestLocations)
     {
@@ -435,6 +474,11 @@ class LocationService extends AbstractService
      * @return GetNearestLocationsResponse|null
      *
      * @throws ResponseException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \ReflectionException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     *
+     * @since 1.0.0
      */
     public function processGetNearestLocationsResponseREST($response)
     {
@@ -488,6 +532,10 @@ class LocationService extends AbstractService
      * @param GetNearestLocations $getLocations
      *
      * @return RequestInterface
+     *
+     * @throws \ReflectionException
+     *
+     * @since 1.0.0
      */
     public function buildGetNearestLocationsRequestSOAP(GetNearestLocations $getLocations)
     {
@@ -534,6 +582,11 @@ class LocationService extends AbstractService
      * @throws CifException
      * @throws LibXMLException
      * @throws ResponseException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \ReflectionException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     *
+     * @since 1.0.0
      */
     public function processGetNearestLocationsResponseSOAP(ResponseInterface $response)
     {
@@ -576,6 +629,10 @@ class LocationService extends AbstractService
      * @param GetLocationsInArea $getLocations
      *
      * @return RequestInterface
+     *
+     * @throws \ReflectionException
+     *
+     * @since 1.0.0
      */
     public function buildGetLocationsInAreaRequestREST(GetLocationsInArea $getLocations)
     {
@@ -626,6 +683,11 @@ class LocationService extends AbstractService
      * @return GetLocationsInAreaResponse|null
      *
      * @throws ResponseException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \ReflectionException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     *
+     * @since 1.0.0
      */
     public function processGetLocationsInAreaResponseREST($response)
     {
@@ -679,6 +741,10 @@ class LocationService extends AbstractService
      * @param GetLocationsInArea $getLocations
      *
      * @return RequestInterface
+     *
+     * @throws \ReflectionException
+     *
+     * @since 1.0.0
      */
     public function buildGetLocationsInAreaRequestSOAP(GetLocationsInArea $getLocations)
     {
@@ -723,6 +789,11 @@ class LocationService extends AbstractService
      * @throws CifException
      * @throws LibXMLException
      * @throws ResponseException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \ReflectionException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     *
+     * @since 1.0.0
      */
     public function processGetLocationsInAreaResponseSOAP(ResponseInterface $response)
     {
@@ -765,6 +836,10 @@ class LocationService extends AbstractService
      * @param GetLocation $getLocation
      *
      * @return RequestInterface
+     *
+     * @throws \ReflectionException
+     *
+     * @since 1.0.0
      */
     public function buildGetLocationRequestREST(GetLocation $getLocation)
     {
@@ -794,6 +869,11 @@ class LocationService extends AbstractService
      * @return GetLocationsInAreaResponse|null
      *
      * @throws ResponseException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \ReflectionException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     *
+     * @since 1.0.0
      */
     public function processGetLocationResponseREST($response)
     {
@@ -843,6 +923,10 @@ class LocationService extends AbstractService
      * @param GetLocation $getLocations
      *
      * @return RequestInterface
+     *
+     * @throws \ReflectionException
+     *
+     * @since 1.0.0
      */
     public function buildGetLocationRequestSOAP(GetLocation $getLocations)
     {
@@ -889,6 +973,11 @@ class LocationService extends AbstractService
      * @throws CifException
      * @throws LibXMLException
      * @throws ResponseException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \ReflectionException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     *
+     * @since 1.0.0
      */
     public function processGetLocationResponseSOAP(ResponseInterface $response)
     {

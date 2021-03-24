@@ -95,7 +95,7 @@ class BarcodeService extends AbstractService
      * @throws ReflectionException
      * @throws ResponseException
      *
-     * @noinspection PhpUnused
+     * @since 1.0.0
      */
     public function generateBarcodeREST(GenerateBarcode $generateBarcode)
     {
@@ -167,7 +167,7 @@ class BarcodeService extends AbstractService
      * @throws ReflectionException
      * @throws ResponseException
      *
-     * @noinspection PhpUnused
+     * @since 1.0.0
      */
     public function generateBarcodeSOAP(GenerateBarcode $generateBarcode)
     {
@@ -187,7 +187,7 @@ class BarcodeService extends AbstractService
      * @throws HttpClientException
      * @throws ReflectionException
      *
-     * @noinspection PhpUnused
+     * @since 1.0.0
      */
     public function generateBarcodesSOAP(array $generateBarcodes)
     {
@@ -222,6 +222,8 @@ class BarcodeService extends AbstractService
      * @return RequestInterface
      *
      * @throws ReflectionException
+     *
+     * @since 1.0.0
      */
     public function buildGenerateBarcodeRequestREST(GenerateBarcode $generateBarcode)
     {
@@ -256,6 +258,8 @@ class BarcodeService extends AbstractService
      * @throws HttpClientException
      * @throws ResponseException
      * @throws GuzzleException
+     *
+     * @since 1.0.0
      */
     public function processGenerateBarcodeResponseREST(ResponseInterface $response)
     {
@@ -277,6 +281,8 @@ class BarcodeService extends AbstractService
      *
      * @return RequestInterface
      * @throws ReflectionException
+     *
+     * @since 1.0.0
      */
     public function buildGenerateBarcodeRequestSOAP(GenerateBarcode $generateBarcode)
     {
@@ -328,6 +334,8 @@ class BarcodeService extends AbstractService
      * @throws GuzzleException
      * @throws HttpClientException
      * @throws ResponseException
+     *
+     * @since 1.0.0
      */
     public function processGenerateBarcodeResponseSOAP(ResponseInterface $response)
     {

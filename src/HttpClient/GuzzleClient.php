@@ -316,7 +316,8 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
      *
      * @return ResponseInterface
      *
-     * @throws \Exception|HttpClientException
+     * @throws HttpClientException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function doRequest(RequestInterface $request)
     {

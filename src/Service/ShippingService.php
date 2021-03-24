@@ -26,9 +26,11 @@
 
 namespace ThirtyBees\PostNL\Service;
 
+use GuzzleHttp\Psr7\Message;
 use Psr\Cache\CacheItemInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use ReflectionException;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
 use ThirtyBees\PostNL\Entity\Request\GenerateShipping;
 use ThirtyBees\PostNL\Entity\Response\GenerateShippingResponse;
@@ -72,7 +74,13 @@ class ShippingService extends AbstractService
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
+     * @throws ReflectionException
      * @throws ResponseException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     *
+     * @since 1.2.0
      */
     public function generateShippingREST(GenerateShipping $generateShipping, $confirm = true)
     {
@@ -82,7 +90,7 @@ class ShippingService extends AbstractService
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\parse_response($response);
+                $response = \GuzzleHttp\Psr7\Message::parseResponse($response);
             } catch (\InvalidArgumentException $e) {
             }
         }
@@ -98,7 +106,7 @@ class ShippingService extends AbstractService
                 && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
-                $item->set(\GuzzleHttp\Psr7\str($response));
+                $item->set(Message::toString($response));
                 $this->cacheItem($item);
             }
 
@@ -117,6 +125,10 @@ class ShippingService extends AbstractService
      * @param bool             $confirm
      *
      * @return RequestInterface
+     *
+     * @throws ReflectionException
+     *
+     * @since 1.2.0
      */
     public function buildGenerateShippingRequestREST(GenerateShipping $generateShipping, $confirm = true)
     {
@@ -142,7 +154,12 @@ class ShippingService extends AbstractService
      *
      * @return GenerateShippingResponse|null
      *
+     * @throws ReflectionException
      * @throws ResponseException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     *
+     * @since 1.2.0
      */
     public function processGenerateShippingResponseREST($response)
     {

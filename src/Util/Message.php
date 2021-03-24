@@ -32,6 +32,8 @@ use Psr\Http\Message\ResponseInterface;
 
 /**
  * Class Message.
+ *
+ * @deprecated 1.2.0
  */
 class Message
 {

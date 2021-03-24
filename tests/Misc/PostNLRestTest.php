@@ -132,8 +132,9 @@ class PostNLRestTest extends TestCase
     /**
      * @testdox returns a combinations of timeframes, locations and the delivery date
      *
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
-     * @throws \ThirtyBees\PostNL\Exception\ApiException
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
      */
     public function testGetTimeframesAndLocations()
     {

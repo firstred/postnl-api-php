@@ -97,8 +97,13 @@ class DeliveryDateService extends AbstractService
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
-     * @throws \Exception
      * @throws ResponseException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \ReflectionException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     *
+     * @since 1.0.0
      */
     public function getDeliveryDateREST(GetDeliveryDate $getDeliveryDate)
     {
@@ -107,7 +112,7 @@ class DeliveryDateService extends AbstractService
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\parse_response($response);
+                $response = \GuzzleHttp\Psr7\Message::parseResponse($response);
             } catch (\InvalidArgumentException $e) {
             }
         }
@@ -139,11 +144,18 @@ class DeliveryDateService extends AbstractService
      *
      * @return GetDeliveryDateResponse
      *
+     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws LibXMLException
      * @throws ResponseException
-     * @throws ApiException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \ReflectionException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @noinspection PhpUnused
+     *
+     * @since 1.0.0
      */
     public function getDeliveryDateSOAP(GetDeliveryDate $getDeliveryDate)
     {
@@ -152,7 +164,7 @@ class DeliveryDateService extends AbstractService
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\parse_response($response);
+                $response = \GuzzleHttp\Psr7\Message::parseResponse($response);
             } catch (\InvalidArgumentException $e) {
             }
         }
@@ -187,6 +199,12 @@ class DeliveryDateService extends AbstractService
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @throws \ReflectionException
+     *
+     * @since 1.0.0
      */
     public function getSentDateREST(GetSentDateRequest $getSentDate)
     {
@@ -195,7 +213,7 @@ class DeliveryDateService extends AbstractService
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\parse_response($response);
+                $response = \GuzzleHttp\Psr7\Message::parseResponse($response);
             } catch (\InvalidArgumentException $e) {
             }
         }
@@ -227,11 +245,17 @@ class DeliveryDateService extends AbstractService
      *
      * @return GetSentDateResponse
      *
+     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
-     * @throws \Exception
      * @throws LibXMLException
      * @throws ResponseException
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     *
+     * @noinspection PhpUnused
+     *
+     * @since 1.0.0
      */
     public function getSentDateSOAP(GetSentDateRequest $getSentDate)
     {
@@ -240,7 +264,7 @@ class DeliveryDateService extends AbstractService
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\parse_response($response);
+                $response = \GuzzleHttp\Psr7\Message::parseResponse($response);
             } catch (\InvalidArgumentException $e) {
             }
         }
@@ -270,6 +294,10 @@ class DeliveryDateService extends AbstractService
      * @param GetDeliveryDate $getDeliveryDate
      *
      * @return RequestInterface
+     *
+     * @throws \ReflectionException
+     *
+     * @since 1.0.0
      */
     public function buildGetDeliveryDateRequestREST(GetDeliveryDate $getDeliveryDate)
     {
@@ -362,6 +390,11 @@ class DeliveryDateService extends AbstractService
      * @return GetDeliveryDateResponse|null
      *
      * @throws ResponseException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \ReflectionException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     *
+     * @since 1.0.0
      */
     public function processGetDeliveryDateResponseREST($response)
     {
@@ -383,6 +416,10 @@ class DeliveryDateService extends AbstractService
      * @param GetDeliveryDate $getDeliveryDate
      *
      * @return RequestInterface
+     *
+     * @throws \ReflectionException
+     *
+     * @since 1.0.0
      */
     public function buildGetDeliveryDateRequestSOAP(GetDeliveryDate $getDeliveryDate)
     {
@@ -425,8 +462,11 @@ class DeliveryDateService extends AbstractService
      *
      * @throws CifDownException
      * @throws CifException
-     * @throws ResponseException
      * @throws LibXMLException
+     * @throws ResponseException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \ReflectionException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
      */
     public function processGetDeliveryDateResponseSOAP(ResponseInterface $response)
     {
@@ -453,6 +493,7 @@ class DeliveryDateService extends AbstractService
      * @param GetSentDateRequest $getSentDate
      *
      * @return RequestInterface
+     * @throws \ReflectionException
      */
     public function buildGetSentDateRequestREST(GetSentDateRequest $getSentDate)
     {
@@ -498,6 +539,9 @@ class DeliveryDateService extends AbstractService
      * @return GetSentDateResponse|null
      *
      * @throws ResponseException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \ReflectionException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
      */
     public function processGetSentDateResponseREST($response)
     {
@@ -519,6 +563,7 @@ class DeliveryDateService extends AbstractService
      * @param GetSentDateRequest $getSentDate
      *
      * @return RequestInterface
+     * @throws \ReflectionException
      */
     public function buildGetSentDateRequestSOAP(GetSentDateRequest $getSentDate)
     {
@@ -563,8 +608,11 @@ class DeliveryDateService extends AbstractService
      *
      * @throws CifDownException
      * @throws CifException
-     * @throws ResponseException
      * @throws LibXMLException
+     * @throws ResponseException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \ReflectionException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
      */
     public function processGetSentDateResponseSOAP(ResponseInterface $response)
     {

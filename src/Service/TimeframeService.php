@@ -29,6 +29,7 @@ namespace ThirtyBees\PostNL\Service;
 use Psr\Cache\CacheItemInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use ReflectionException;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Service as XmlService;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
@@ -89,7 +90,12 @@ class TimeframeService extends AbstractService
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
+     * @throws ReflectionException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
      * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @since 1.0.0
      */
     public function getTimeframesREST(GetTimeframes $getTimeframes)
     {
@@ -98,7 +104,7 @@ class TimeframeService extends AbstractService
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\parse_response($response);
+                $response = \GuzzleHttp\Psr7\Message::parseResponse($response);
             } catch (\InvalidArgumentException $e) {
             }
         }
@@ -133,8 +139,13 @@ class TimeframeService extends AbstractService
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
+     * @throws ReflectionException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Sabre\Xml\LibXMLException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
      * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @since 1.0.0
      */
     public function getTimeframesSOAP(GetTimeframes $getTimeframes)
     {
@@ -143,7 +154,7 @@ class TimeframeService extends AbstractService
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\parse_response($response);
+                $response = \GuzzleHttp\Psr7\Message::parseResponse($response);
             } catch (\InvalidArgumentException $e) {
             }
         }
@@ -173,6 +184,10 @@ class TimeframeService extends AbstractService
      * @param GetTimeframes $getTimeframes
      *
      * @return RequestInterface
+     *
+     * @throws ReflectionException
+     *
+     * @since 1.0.0
      */
     public function buildGetTimeframesRequestREST(GetTimeframes $getTimeframes)
     {
@@ -227,7 +242,12 @@ class TimeframeService extends AbstractService
      *
      * @return ResponseTimeframes|null
      *
+     * @throws ReflectionException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
      * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     *
+     * @since 1.0.0
      */
     public function processGetTimeframesResponseREST($response)
     {
@@ -283,6 +303,10 @@ class TimeframeService extends AbstractService
      * @param GetTimeframes $getTimeframes
      *
      * @return RequestInterface
+     *
+     * @throws ReflectionException
+     *
+     * @since 1.0.0
      */
     public function buildGetTimeframesRequestSOAP(GetTimeframes $getTimeframes)
     {
@@ -327,8 +351,13 @@ class TimeframeService extends AbstractService
      *
      * @throws CifDownException
      * @throws CifException
+     * @throws ReflectionException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Sabre\Xml\LibXMLException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
      * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     *
+     * @since 1.0.0
      */
     public function processGetTimeframesResponseSOAP(ResponseInterface $response)
     {

@@ -179,6 +179,7 @@ class PromiseTool
      * @param Promise $promise promise or value
      *
      * @return array
+     * @throws Exception
      */
     public static function inspect(Promise $promise)
     {

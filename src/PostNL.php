@@ -456,6 +456,7 @@ class PostNL implements LoggerAwareInterface
                         $this->httpClient = HTTPlugClient::getInstance();
                     }
                 } catch (NotFoundException $e) {
+                } catch (\Http\Discovery\Exception\NotFoundException $e) {
                 } catch (NoCandidateFoundException $e) {
                 } catch (DiscoveryFailedException $e) {
                 }
@@ -469,6 +470,7 @@ class PostNL implements LoggerAwareInterface
                         $this->httpClient = HTTPlugClient::getInstance();
                     }
                 } catch (NotFoundException $e) {
+                } catch (\Http\Discovery\Exception\NotFoundException $e) {
                 } catch (NoCandidateFoundException $e) {
                 } catch (DiscoveryFailedException $e) {
                 }
@@ -482,6 +484,7 @@ class PostNL implements LoggerAwareInterface
                         $this->httpClient = HTTPlugClient::getInstance();
                     }
                 } catch (NotFoundException $e) {
+                } catch (\Http\Discovery\Exception\NotFoundException $e) {
                 } catch (NoCandidateFoundException $e) {
                 } catch (DiscoveryFailedException $e) {
                 }
@@ -1667,15 +1670,15 @@ class PostNL implements LoggerAwareInterface
         $results = [];
         $itemTimeframe = $this->getTimeframeService()->retrieveCachedItem($getTimeframes->getId());
         if ($itemTimeframe instanceof CacheItemInterface && $itemTimeframe->get()) {
-            $results['timeframes'] = \GuzzleHttp\Psr7\parse_response($itemTimeframe->get());
+            $results['timeframes'] = \GuzzleHttp\Psr7\Message::parseResponse($itemTimeframe->get());
         }
         $itemLocation = $this->getLocationService()->retrieveCachedItem($getNearestLocations->getId());
         if ($itemLocation instanceof CacheItemInterface && $itemLocation->get()) {
-            $results['locations'] = \GuzzleHttp\Psr7\parse_response($itemLocation->get());
+            $results['locations'] = \GuzzleHttp\Psr7\Message::parseResponse($itemLocation->get());
         }
         $itemDeliveryDate = $this->getDeliveryDateService()->retrieveCachedItem($getDeliveryDate->getId());
         if ($itemDeliveryDate instanceof CacheItemInterface && $itemDeliveryDate->get()) {
-            $results['delivery_date'] = \GuzzleHttp\Psr7\parse_response($itemDeliveryDate->get());
+            $results['delivery_date'] = \GuzzleHttp\Psr7\Message::parseResponse($itemDeliveryDate->get());
         }
 
         $this->getHttpClient()->addOrUpdateRequest(
@@ -1713,21 +1716,21 @@ class PostNL implements LoggerAwareInterface
                 switch ($type) {
                     case 'timeframes':
                         if ($itemTimeframe instanceof CacheItemInterface) {
-                            $itemTimeframe->set(\GuzzleHttp\Psr7\str($response));
+                            $itemTimeframe->set(\GuzzleHttp\Psr7\Message::toString($response));
                             $this->getTimeframeService()->cacheItem($itemTimeframe);
                         }
 
                         break;
                     case 'locations':
                         if ($itemTimeframe instanceof CacheItemInterface) {
-                            $itemLocation->set(\GuzzleHttp\Psr7\str($response));
+                            $itemLocation->set(\GuzzleHttp\Psr7\Message::toString($response));
                             $this->getLocationService()->cacheItem($itemLocation);
                         }
 
                         break;
                     case 'delivery_date':
                         if ($itemTimeframe instanceof CacheItemInterface) {
-                            $itemDeliveryDate->set(\GuzzleHttp\Psr7\str($response));
+                            $itemDeliveryDate->set(\GuzzleHttp\Psr7\Message::toString($response));
                             $this->getDeliveryDateService()->cacheItem($itemDeliveryDate);
                         }
 

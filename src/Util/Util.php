@@ -239,6 +239,8 @@ class Util
      * Credits to @tvlooy (https://gist.github.com/tvlooy/1894247)
      *
      * @throws \Exception
+     * @throws \Exception
+     * @throws \Exception
      */
     protected static function getHolidaysForYear($year)
     {

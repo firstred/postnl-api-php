@@ -100,8 +100,9 @@ class LabellingService extends AbstractService
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @throws \ReflectionException
      *
-     * @noinspection PhpUnused
+     * @since 1.0.0
      */
     public function generateLabelREST(GenerateLabel $generateLabel, $confirm = true)
     {
@@ -110,7 +111,7 @@ class LabellingService extends AbstractService
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\parse_response($response);
+                $response = \GuzzleHttp\Psr7\Message::parseResponse($response);
             } catch (\InvalidArgumentException $e) {
                 // Invalid item in cache, skip
             }
@@ -146,6 +147,13 @@ class LabellingService extends AbstractService
      * @param array $generateLabels ['uuid' => [GenerateBarcode, confirm], ...]
      *
      * @return array
+     *
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \ReflectionException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     *
+     * @since 1.0.0
      */
     public function generateLabelsREST(array $generateLabels)
     {
@@ -158,7 +166,7 @@ class LabellingService extends AbstractService
             if ($item instanceof CacheItemInterface) {
                 $response = $item->get();
                 try {
-                    $response = \GuzzleHttp\Psr7\parse_response($response);
+                    $response = \GuzzleHttp\Psr7\Message::parseResponse($response);
                 } catch (\InvalidArgumentException $e) {
                 }
                 if ($response instanceof ResponseInterface) {
@@ -215,7 +223,13 @@ class LabellingService extends AbstractService
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \ReflectionException
      * @throws \Sabre\Xml\LibXMLException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     *
+     * @since 1.0.0
      */
     public function generateLabelSOAP(GenerateLabel $generateLabel, $confirm = true)
     {
@@ -224,7 +238,7 @@ class LabellingService extends AbstractService
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\parse_response($response);
+                $response = \GuzzleHttp\Psr7\Message::parseResponse($response);
             } catch (\InvalidArgumentException $e) {
             }
         }
@@ -252,6 +266,13 @@ class LabellingService extends AbstractService
      * @param array $generateLabels ['uuid' => [GenerateBarcode, confirm], ...]
      *
      * @return array
+     *
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \ReflectionException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     *
+     * @since 1.0.0
      */
     public function generateLabelsSOAP(array $generateLabels)
     {
@@ -264,7 +285,7 @@ class LabellingService extends AbstractService
             if ($item instanceof CacheItemInterface) {
                 $response = $item->get();
                 try {
-                    $response = \GuzzleHttp\Psr7\parse_response($response);
+                    $response = \GuzzleHttp\Psr7\Message::parseResponse($response);
                 } catch (\InvalidArgumentException $e) {
                 }
                 if ($response instanceof ResponseInterface) {
@@ -314,9 +335,13 @@ class LabellingService extends AbstractService
      * Build the GenerateLabel request for the REST API.
      *
      * @param GenerateLabel $generateLabel
-     * @param               $confirm
+     * @param bool          $confirm
      *
      * @return RequestInterface
+     *
+     * @throws \ReflectionException
+     *
+     * @since 1.0.0
      */
     public function buildGenerateLabelRequestREST(GenerateLabel $generateLabel, $confirm = true)
     {
@@ -342,6 +367,11 @@ class LabellingService extends AbstractService
      * @return GenerateLabelResponse|null
      *
      * @throws ResponseException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \ReflectionException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     *
+     * @since 1.0.0
      */
     public function processGenerateLabelResponseREST($response)
     {
@@ -361,9 +391,13 @@ class LabellingService extends AbstractService
      * Build the GenerateLabel request for the SOAP API.
      *
      * @param GenerateLabel $generateLabel
-     * @param               $confirm
+     * @param bool          $confirm
      *
      * @return RequestInterface
+     *
+     * @throws \ReflectionException
+     *
+     * @since 1.0.0
      */
     public function buildGenerateLabelRequestSOAP(GenerateLabel $generateLabel, $confirm = true)
     {
@@ -412,6 +446,8 @@ class LabellingService extends AbstractService
      * @throws \ReflectionException
      * @throws \Sabre\Xml\LibXMLException
      * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     *
+     * @since 1.0.0
      */
     public function processGenerateLabelResponseSOAP(ResponseInterface $response)
     {

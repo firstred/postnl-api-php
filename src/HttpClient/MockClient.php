@@ -22,6 +22,8 @@ namespace ThirtyBees\PostNL\HttpClient;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Promise\Utils;
+use GuzzleHttp\Psr7\Message;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerAwareInterface;
@@ -308,7 +310,7 @@ class MockClient implements ClientInterface, LoggerAwareInterface
             $promises[$index] = $guzzle->sendAsync($request);
         }
 
-        $responses = \GuzzleHttp\Promise\settle($promises)->wait();
+        $responses = Utils::settle($promises)->wait();
         foreach ($responses as &$response) {
             if (isset($response['value'])) {
                 $response = $response['value'];
@@ -318,7 +320,7 @@ class MockClient implements ClientInterface, LoggerAwareInterface
                 $response = new \ThirtyBees\PostNL\Exception\ResponseException('Unknown reponse type');
             }
             if ($response instanceof ResponseInterface && $this->logger instanceof LoggerInterface) {
-                $this->logger->debug(\GuzzleHttp\Psr7\str($response));
+                $this->logger->debug(Message::toString($response));
             }
         }
 

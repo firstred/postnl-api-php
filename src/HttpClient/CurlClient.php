@@ -26,13 +26,13 @@
 
 namespace ThirtyBees\PostNL\HttpClient;
 
-use JetBrains\PhpStorm\Deprecated;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use ThirtyBees\PostNL\Exception\ApiConnectionException;
 use ThirtyBees\PostNL\Exception\ApiException;
+use ThirtyBees\PostNL\Util\Message;
 
 if (!defined('CURL_SSLVERSION_TLSv1')) {
     define('CURL_SSLVERSION_TLSv1', 1);
@@ -239,7 +239,7 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
     public function doRequest(RequestInterface $request)
     {
         if ($this->logger instanceof LoggerInterface) {
-            $this->logger->debug(\GuzzleHttp\Psr7\str($request));
+            $this->logger->debug(\GuzzleHttp\Psr7\Message::toString($request));
         }
 
         $curl = curl_init();
@@ -258,7 +258,7 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
             $this->logger->debug($rbody);
         }
 
-        return \GuzzleHttp\Psr7\parse_response($rbody);
+        return \GuzzleHttp\Psr7\Message($rbody);
     }
 
     /**
@@ -279,7 +279,7 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
         $mh = curl_multi_init();
         foreach ($this->pendingRequests + $requests as $uuid => $request) {
             if ($request instanceof RequestInterface && $this->logger instanceof LoggerInterface) {
-                $this->logger->debug(\GuzzleHttp\Psr7\str($request));
+                $this->logger->debug(\GuzzleHttp\Psr7\Message::toString($request));
             }
 
             $curl = curl_init();
@@ -308,7 +308,7 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
             if ($this->logger instanceof LoggerInterface) {
                 $this->logger->debug($responseBody);
             }
-            $responses[$uuid] = \GuzzleHttp\Psr7\parse_response($responseBody);
+            $responses[$uuid] = Message::parseResponse($responseBody);
         }
 
         // Reset pending requests

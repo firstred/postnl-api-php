@@ -28,6 +28,7 @@ namespace ThirtyBees\PostNL\Service;
 
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use ReflectionException;
 use Sabre\Xml\LibXMLException;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Service as XmlService;
@@ -91,7 +92,11 @@ class ConfirmingService extends AbstractService
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
+     * @throws ReflectionException
      * @throws ResponseException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @since 1.0.0
      */
     public function confirmShipmentREST(Confirming $confirming)
     {
@@ -115,6 +120,11 @@ class ConfirmingService extends AbstractService
      * @param Confirming[] $confirms ['uuid' => Confirming, ...]
      *
      * @return ConfirmingResponseShipment[]
+     *
+     * @throws ReflectionException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @since 1.0.0
      */
     public function confirmShipmentsREST(array $confirms)
     {
@@ -151,17 +161,19 @@ class ConfirmingService extends AbstractService
      *
      * @return ConfirmingResponseShipment
      *
-     * @throws LibXMLException
      * @throws CifDownException
      * @throws CifException
+     * @throws LibXMLException
+     * @throws ReflectionException
      * @throws ResponseException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @since 1.0.0
      */
     public function confirmShipmentSOAP(Confirming $confirming)
     {
         $response = $this->postnl->getHttpClient()->doRequest($this->buildConfirmRequestSOAP($confirming));
-        $object = $this->processConfirmResponseSOAP($response);
-
-        return $object;
+        return $this->processConfirmResponseSOAP($response);
     }
 
     /**
@@ -170,6 +182,11 @@ class ConfirmingService extends AbstractService
      * @param array $confirmings ['uuid' => Confirming, ...]
      *
      * @return ConfirmingResponseShipment[]
+     *
+     * @throws ReflectionException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     * @since 1.0.0
      */
     public function confirmShipmentsSOAP(array $confirmings)
     {
@@ -200,6 +217,10 @@ class ConfirmingService extends AbstractService
      * @param Confirming $confirming
      *
      * @return RequestInterface
+     *
+     * @throws ReflectionException
+     *
+     * @since 1.0.0
      */
     public function buildConfirmRequestREST(Confirming $confirming)
     {
@@ -226,9 +247,14 @@ class ConfirmingService extends AbstractService
      * @return ConfirmingResponseShipment|null
      *
      * @throws ApiException
-     * @throws ResponseException
      * @throws CifDownException
      * @throws CifException
+     * @throws ReflectionException
+     * @throws ResponseException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     *
+     * @since 1.0.0
      */
     public function processConfirmResponseREST($response)
     {
@@ -249,6 +275,10 @@ class ConfirmingService extends AbstractService
      * @param Confirming $confirming
      *
      * @return RequestInterface
+     *
+     * @throws ReflectionException
+     *
+     * @since 1.0.0
      */
     public function buildConfirmRequestSOAP(Confirming $confirming)
     {
@@ -292,10 +322,15 @@ class ConfirmingService extends AbstractService
      *
      * @return ConfirmingResponseShipment
      *
-     * @throws ResponseException
-     * @throws LibXMLException
      * @throws CifDownException
      * @throws CifException
+     * @throws LibXMLException
+     * @throws ReflectionException
+     * @throws ResponseException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     *
+     * @since 1.0.0
      */
     public function processConfirmResponseSOAP(ResponseInterface $response)
     {

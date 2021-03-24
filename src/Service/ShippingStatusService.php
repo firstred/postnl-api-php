@@ -128,6 +128,12 @@ class ShippingStatusService extends AbstractService
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \ReflectionException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     *
+     * @since 1.0.0
      */
     public function currentStatusREST($currentStatus)
     {
@@ -136,7 +142,7 @@ class ShippingStatusService extends AbstractService
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\parse_response($response);
+                $response = \GuzzleHttp\Psr7\Message::parseResponse($response);
             } catch (\InvalidArgumentException $e) {
             }
         }
@@ -183,8 +189,14 @@ class ShippingStatusService extends AbstractService
      * @throws CifDownException
      * @throws CifException
      * @throws InvalidArgumentException
-     * @throws ResponseException
      * @throws LibXMLException
+     * @throws ResponseException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \ReflectionException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     *
+     * @since 1.0.0
      */
     public function currentStatusSOAP($currentStatus)
     {
@@ -193,7 +205,7 @@ class ShippingStatusService extends AbstractService
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\parse_response($response);
+                $response = \GuzzleHttp\Psr7\Message::parseResponse($response);
             } catch (\InvalidArgumentException $e) {
             }
         }
@@ -239,6 +251,12 @@ class ShippingStatusService extends AbstractService
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \ReflectionException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     *
+     * @since 1.0.0
      */
     public function completeStatusREST(CompleteStatus $completeStatus)
     {
@@ -247,7 +265,7 @@ class ShippingStatusService extends AbstractService
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\parse_response($response);
+                $response = \GuzzleHttp\Psr7\Message::parseResponse($response);
             } catch (\InvalidArgumentException $e) {
             }
         }
@@ -293,9 +311,15 @@ class ShippingStatusService extends AbstractService
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
-     * @throws ResponseException
-     * @throws LibXMLException
      * @throws InvalidArgumentException
+     * @throws LibXMLException
+     * @throws ResponseException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \ReflectionException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     *
+     * @since 1.0.0
      */
     public function completeStatusSOAP($completeStatus)
     {
@@ -304,7 +328,7 @@ class ShippingStatusService extends AbstractService
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\parse_response($response);
+                $response = \GuzzleHttp\Psr7\Message::parseResponse($response);
             } catch (\InvalidArgumentException $e) {
             }
         }
@@ -340,7 +364,7 @@ class ShippingStatusService extends AbstractService
      *   - Fill the Shipment->PhaseCode property, do not pass Barcode or Reference.
      *     Optionally add DateFrom and/or DateTo.
      * - CurrentStatusByStatus:
-     *   - Fill the Shipment->StatuCode property. Leave the rest empty.
+     *   - Fill the Shipment->StatusCode property. Leave the rest empty.
      *
      * @param GetSignature $getSignature
      *
@@ -350,6 +374,12 @@ class ShippingStatusService extends AbstractService
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \ReflectionException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     *
+     * @since 1.0.0
      */
     public function getSignatureREST(GetSignature $getSignature)
     {
@@ -358,7 +388,7 @@ class ShippingStatusService extends AbstractService
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\parse_response($response);
+                $response = \GuzzleHttp\Psr7\Message::parseResponse($response);
             } catch (\InvalidArgumentException $e) {
             }
         }
@@ -399,9 +429,14 @@ class ShippingStatusService extends AbstractService
      *
      * @param GetSignature $getSignature
      *
-     * @return GetSignature
+     * @return SignatureResponse
      *
      * @throws ApiException
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \ReflectionException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     *
+     * @since 1.0.0
      */
     public function getSignatureSOAP(GetSignature $getSignature)
     {
@@ -410,7 +445,7 @@ class ShippingStatusService extends AbstractService
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\parse_response($response);
+                $response = \GuzzleHttp\Psr7\Message::parseResponse($response);
             } catch (\InvalidArgumentException $e) {
             }
         }
@@ -446,6 +481,10 @@ class ShippingStatusService extends AbstractService
      * @param CurrentStatus|CurrentStatusByReference|CurrentStatusByPhase|CurrentStatusByStatus $currentStatus
      *
      * @return RequestInterface
+     *
+     * @throws \ReflectionException
+     *
+     * @since 1.0.0
      */
     public function buildCurrentStatusRequestREST($currentStatus)
     {
@@ -506,6 +545,11 @@ class ShippingStatusService extends AbstractService
      * @return CurrentStatusResponse
      *
      * @throws ResponseException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \ReflectionException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     *
+     * @since 1.0.0
      */
     public function processCurrentStatusResponseREST($response)
     {
@@ -529,6 +573,9 @@ class ShippingStatusService extends AbstractService
      * @return RequestInterface
      *
      * @throws InvalidArgumentException
+     * @throws \ReflectionException
+     *
+     * @since 1.0.0
      */
     public function buildCurrentStatusRequestSOAP($currentStatus)
     {
@@ -597,6 +644,11 @@ class ShippingStatusService extends AbstractService
      * @throws CifException
      * @throws LibXMLException
      * @throws ResponseException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \ReflectionException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     *
+     * @since 1.0.0
      */
     public function processCurrentStatusResponseSOAP(ResponseInterface $response)
     {
@@ -630,6 +682,10 @@ class ShippingStatusService extends AbstractService
      * @param CompleteStatus $completeStatus
      *
      * @return RequestInterface
+     *
+     * @throws \ReflectionException
+     *
+     * @since 1.0.0
      */
     public function buildCompleteStatusRequestREST(CompleteStatus $completeStatus)
     {
@@ -696,6 +752,11 @@ class ShippingStatusService extends AbstractService
      * @return CompleteStatusResponse|null
      *
      * @throws ResponseException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \ReflectionException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     *
+     * @since 1.0.0
      */
     public function processCompleteStatusResponseREST($response)
     {
@@ -756,6 +817,9 @@ class ShippingStatusService extends AbstractService
      * @return RequestInterface
      *
      * @throws InvalidArgumentException
+     * @throws \ReflectionException
+     *
+     * @since 1.0.0
      */
     public function buildCompleteStatusRequestSOAP($completeStatus)
     {
@@ -822,8 +886,13 @@ class ShippingStatusService extends AbstractService
      *
      * @throws CifDownException
      * @throws CifException
-     * @throws ResponseException
      * @throws LibXMLException
+     * @throws ResponseException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \ReflectionException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     *
+     * @since 1.0.0
      */
     public function processCompleteStatusResponseSOAP(ResponseInterface $response)
     {
@@ -850,6 +919,7 @@ class ShippingStatusService extends AbstractService
      * @param GetSignature $getSignature
      *
      * @return RequestInterface
+     * @throws \ReflectionException
      */
     public function buildGetSignatureRequestREST(GetSignature $getSignature)
     {
@@ -872,6 +942,11 @@ class ShippingStatusService extends AbstractService
      * @return GetSignatureResponseSignature|null
      *
      * @throws ResponseException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \ReflectionException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     *
+     * @since 1.0.0
      */
     public function processGetSignatureResponseREST($response)
     {
@@ -893,6 +968,10 @@ class ShippingStatusService extends AbstractService
      * @param GetSignature $getSignature
      *
      * @return RequestInterface
+     *
+     * @throws \ReflectionException
+     *
+     * @since 1.0.0
      */
     public function buildGetSignatureRequestSOAP(GetSignature $getSignature)
     {
@@ -946,8 +1025,13 @@ class ShippingStatusService extends AbstractService
      *
      * @throws CifDownException
      * @throws CifException
-     * @throws ResponseException
      * @throws LibXMLException
+     * @throws ResponseException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \ReflectionException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     *
+     * @since 1.0.0
      */
     public function processGetSignatureResponseSOAP(ResponseInterface $response)
     {
