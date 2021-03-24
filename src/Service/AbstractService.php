@@ -206,11 +206,19 @@ abstract class AbstractService
         if (!empty($body['Errors']['Error'])) {
             $exceptionData = [];
             foreach ($body['Errors']['Error'] as $error) {
-                $exceptionData[] = [
-                    'description' => isset($error['Description']) ? (string) $error['Description'] : null,
-                    'message'     => isset($error['ErrorMsg']) ? (string) $error['ErrorMsg'] : null,
-                    'code'        => isset($error['ErrorNumber']) ? (int) $error['ErrorNumber'] : 0,
-                ];
+                if (isset($error['ErrorMsg'])) {
+                    $exceptionData[] = [
+                        'description' => isset($error['ErrorMsg']) ? $error['ErrorMsg'] : '',
+                        'message'     => isset($error['ErrorMsg']) ? $error['ErrorMsg'] : '',
+                        'code'        => isset($error['ErrorNumber']) ? (int) $error['ErrorNumber'] : 0,
+                    ];
+                } else {
+                    $exceptionData[] = [
+                        'description' => isset($error['Description']) ? (string) $error['Description'] : null,
+                        'message'     => isset($error['ErrorMsg']) ? (string) $error['ErrorMsg'] : null,
+                        'code'        => isset($error['ErrorNumber']) ? (int) $error['ErrorNumber'] : 0,
+                    ];
+                }
             }
             throw new CifException($exceptionData);
         }
@@ -218,11 +226,19 @@ abstract class AbstractService
         if (!empty($body['Errors'])) {
             $exceptionData = [];
             foreach ($body['Errors'] as $error) {
-                $exceptionData[] = [
-                    'description' => isset($error['Description']) ? (string) $error['Description'] : null,
-                    'message'     => isset($error['Error']) ? (string) $error['Error'] : null,
-                    'code'        => isset($error['Code']) ? (int) $error['Code'] : 0,
-                ];
+                if (isset($error['ErrorMsg'])) {
+                    $exceptionData[] = [
+                        'description' => isset($error['ErrorMsg']) ? $error['ErrorMsg'] : '',
+                        'message'     => isset($error['ErrorMsg']) ? $error['ErrorMsg'] : '',
+                        'code'        => isset($error['ErrorNumber']) ? (int) $error['ErrorNumber'] : 0,
+                    ];
+                } else {
+                    $exceptionData[] = [
+                        'description' => isset($error['Description']) ? (string) $error['Description'] : null,
+                        'message'     => isset($error['Error']) ? (string) $error['Error'] : null,
+                        'code'        => isset($error['Code']) ? (int) $error['Code'] : 0,
+                    ];
+                }
             }
             throw new CifException($exceptionData);
         }
