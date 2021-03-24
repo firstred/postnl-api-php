@@ -180,7 +180,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @var string
      */
-    protected $token;
+    protected $apiKey;
 
     /**
      * The PostNL Customer to be used for requests.
@@ -251,26 +251,25 @@ class PostNL implements LoggerAwareInterface
     /**
      * PostNL constructor.
      *
-     * @param Customer             $customer
-     * @param UsernameToken|string $token
-     * @param bool                 $sandbox
+     * @param Customer             $customer Customer object.
+     * @param UsernameToken|string $apiKey   API key or UsernameToken object.
+     * @param bool                 $sandbox  Whether the testing environment should be used.
      * @param int                  $mode     Set the preferred connection strategy.
      *                                       Valid options are:
      *                                       - `MODE_REST`: New REST API
      *                                       - `MODE_SOAP`: New SOAP API
-     *                                       - `MODE_LEGACY`: Use the legacy API (the plug can
-     *                                       be pulled at any time)
+     *                                       - `MODE_LEGACY`: Not supported anymore, converts to `MODE_SOAP`
      *
      * @throws InvalidArgumentException
      */
     public function __construct(
         Customer $customer,
-        $token,
+        $apiKey,
         $sandbox,
         $mode = self::MODE_REST
     ) {
         $this->setCustomer($customer);
-        $this->setToken($token);
+        $this->setToken($apiKey);
         $this->setSandbox((bool) $sandbox);
         $this->setMode((int) $mode);
     }
@@ -278,7 +277,7 @@ class PostNL implements LoggerAwareInterface
     /**
      * Set the token.
      *
-     * @param string|UsernameToken $token
+     * @param string|UsernameToken $apiKey
      *
      * @return PostNL
      *
@@ -286,14 +285,14 @@ class PostNL implements LoggerAwareInterface
      *
      * @since 1.0.0
      */
-    public function setToken($token)
+    public function setToken($apiKey)
     {
-        if ($token instanceof UsernameToken) {
-            $this->token = $token;
+        if ($apiKey instanceof UsernameToken) {
+            $this->apiKey = $apiKey;
 
             return $this;
-        } elseif (is_string($token)) {
-            $this->token = new UsernameToken(null, $token);
+        } elseif (is_string($apiKey)) {
+            $this->apiKey = new UsernameToken(null, $apiKey);
 
             return $this;
         }
@@ -310,8 +309,8 @@ class PostNL implements LoggerAwareInterface
      */
     public function getRestApiKey()
     {
-        if ($this->token instanceof UsernameToken) {
-            return $this->token->getPassword();
+        if ($this->apiKey instanceof UsernameToken) {
+            return $this->apiKey->getPassword();
         }
 
         return false;
@@ -326,8 +325,8 @@ class PostNL implements LoggerAwareInterface
      */
     public function getToken()
     {
-        if ($this->token instanceof UsernameToken) {
-            return $this->token;
+        if ($this->apiKey instanceof UsernameToken) {
+            return $this->apiKey;
         }
 
         return false;
@@ -425,6 +424,8 @@ class PostNL implements LoggerAwareInterface
         if (in_array($mode, [static::MODE_SOAP, static::MODE_LEGACY]) && !interface_exists(Element::class)) {
             // Seamlessly switch to the REST API
             $mode = static::MODE_REST;
+        } elseif (static::MODE_LEGACY === $mode) {
+            $mode = static::MODE_SOAP;
         }
 
         $this->mode = (int) $mode;
