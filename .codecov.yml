@@ -12,8 +12,5 @@ coverage:
       default: off
 
 comment:
-  layout: "header, reach, diff, flags, files, footer"
+  layout: "reach, diff, flags, files, footer"
   behavior: default
-  require_changes: false
-  require_base: false
-  require_head: true
