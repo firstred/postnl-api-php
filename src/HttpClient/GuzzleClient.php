@@ -82,7 +82,8 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
     {
         if (!$this->client) {
             // Initialize Guzzle and the retry middleware, include the default options
-            $stack = HandlerStack::create(Utils::chooseHandler());
+            $handler = method_exists('\\GuzzleHttp\\Utils', 'chooseHandler') ? Utils::chooseHandler() : \GuzzleHttp\choose_handler();
+            $stack = HandlerStack::create($handler);
             $stack->push(Middleware::retry(function (
                 $retries,
                 RequestInterface $request,
