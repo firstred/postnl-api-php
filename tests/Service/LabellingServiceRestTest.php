@@ -47,6 +47,7 @@ use ThirtyBees\PostNL\HttpClient\MockClient;
 use ThirtyBees\PostNL\PostNL;
 use ThirtyBees\PostNL\Service\LabellingService;
 use ThirtyBees\PostNL\Service\LabellingServiceInterface;
+use function json_decode;
 
 /**
  * Class LabellingServiceRestTest.
@@ -219,6 +220,109 @@ class LabellingServiceRestTest extends TestCase
         ],
             json_decode((string) $request->getBody(), true));
         $this->assertEquals('test', $request->getHeaderLine('apikey'));
+        $this->assertStringContainsString('v2_2', $request->getUri()->getPath());
+        $this->assertEquals('application/json;charset=UTF-8', $request->getHeaderLine('Content-Type'));
+        $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
+    }
+
+    /**
+     * @testdox creates a valid label request
+     */
+    public function testFallsBackOntoOlderApiIfInsuredRequest()
+    {
+        $message = new LabellingMessage();
+
+        $this->lastRequest = $request = $this->service->buildGenerateLabelRequestREST(
+            GenerateLabel::create()
+                ->setShipments([
+                    Shipment::create()
+                        ->setAddresses([
+                            Address::create([
+                                'AddressType' => '01',
+                                'City'        => 'Utrecht',
+                                'Countrycode' => 'NL',
+                                'FirstName'   => 'Peter',
+                                'HouseNr'     => '9',
+                                'HouseNrExt'  => 'a bis',
+                                'Name'        => 'de Ruijter',
+                                'Street'      => 'Bilderdijkstraat',
+                                'Zipcode'     => '3521VA',
+                            ]),
+                            Address::create([
+                                'AddressType' => '02',
+                                'City'        => 'Hoofddorp',
+                                'CompanyName' => 'PostNL',
+                                'Countrycode' => 'NL',
+                                'HouseNr'     => '42',
+                                'Street'      => 'Siriusdreef',
+                                'Zipcode'     => '2132WT',
+                            ]),
+                        ])
+                        ->setBarcode('3S1234567890123')
+                        ->setDeliveryAddress('01')
+                        ->setDimension(new Dimension('2000'))
+                        ->setProductCodeDelivery('3094'),
+                ])
+                ->setMessage($message)
+                ->setCustomer($this->postnl->getCustomer()),
+            false
+        );
+
+        $this->assertEqualsCanonicalizing([
+            'Customer' => [
+                'Address' => [
+                    'AddressType' => '02',
+                    'City'        => 'Hoofddorp',
+                    'CompanyName' => 'PostNL',
+                    'Countrycode' => 'NL',
+                    'HouseNr'     => '42',
+                    'Street'      => 'Siriusdreef',
+                    'Zipcode'     => '2132WT',
+                ],
+                'CollectionLocation' => '123456',
+                'ContactPerson'      => 'Test',
+                'CustomerCode'       => 'DEVC',
+                'CustomerNumber'     => '11223344',
+            ],
+            'Message' => [
+                'MessageID'        => (string) $message->getMessageID(),
+                'MessageTimeStamp' => (string) $message->getMessageTimeStamp(),
+                'Printertype'      => 'GraphicFile|PDF',
+            ],
+            'Shipments' => [
+                'Addresses' => [
+                    [
+                        'AddressType' => '01',
+                        'City'        => 'Utrecht',
+                        'Countrycode' => 'NL',
+                        'FirstName'   => 'Peter',
+                        'HouseNr'     => '9',
+                        'HouseNrExt'  => 'a bis',
+                        'Name'        => 'de Ruijter',
+                        'Street'      => 'Bilderdijkstraat',
+                        'Zipcode'     => '3521VA',
+                    ],
+                    [
+                        'AddressType' => '02',
+                        'City'        => 'Hoofddorp',
+                        'CompanyName' => 'PostNL',
+                        'Countrycode' => 'NL',
+                        'HouseNr'     => '42',
+                        'Street'      => 'Siriusdreef',
+                        'Zipcode'     => '2132WT',
+                    ],
+                ],
+                'Barcode'         => '3S1234567890123',
+                'DeliveryAddress' => '01',
+                'Dimension'       => [
+                    'Weight' => '2000',
+                ],
+                'ProductCodeDelivery' => '3094',
+            ],
+        ],
+            json_decode((string) $request->getBody(), true));
+        $this->assertEquals('test', $request->getHeaderLine('apikey'));
+        $this->assertStringContainsString('v2_1', $request->getUri()->getPath());
         $this->assertEquals('application/json;charset=UTF-8', $request->getHeaderLine('Content-Type'));
         $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
     }

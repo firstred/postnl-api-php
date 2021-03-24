@@ -47,7 +47,9 @@ use ThirtyBees\PostNL\Exception\ResponseException;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use \Sabre\Xml\LibXMLException;
 use function http_build_query;
+use function in_array;
 use function json_encode;
+use function str_replace;
 
 /**
  * Class LabellingService.
@@ -88,6 +90,8 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
         self::XML_SCHEMA_NAMESPACE   => 'schema',
         self::COMMON_NAMESPACE       => 'common',
     ];
+
+    private static $insuranceProductCodes =  [3534, 3544, 3087, 3094];
 
     /**
      * Generate a single barcode via REST.
@@ -347,10 +351,17 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
     {
         $apiKey = $this->postnl->getRestApiKey();
         $this->setService($generateLabel);
+        $endpoint = $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT;
+        foreach ($generateLabel->getShipments() as $shipment) {
+            if (in_array($shipment->getProductCodeDelivery(), static::$insuranceProductCodes)) {
+                // Insurance behaves a bit strange w/ v2.2, falling back on v2.1
+                $endpoint = str_replace('v2_2', 'v2_1', $endpoint);
+            }
+        }
 
         return $this->postnl->getRequestFactory()->createRequest(
             'POST',
-            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).'?'.http_build_query([
+            $endpoint.'?'.http_build_query([
                 'confirm' => $confirm,
             ]))
             ->withHeader('apikey', $apiKey)
@@ -422,10 +433,16 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
             ]
         );
 
-        return $this->postnl->getRequestFactory()->createRequest(
-            'POST',
-            $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT
-        )
+        $endpoint = $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT;
+
+        foreach ($generateLabel->getShipments() as $shipment) {
+            if (in_array($shipment->getProductCodeDelivery(), self::$insuranceProductCodes)) {
+                // Insurance behaves a bit strange w/ v2.2, falling back on v2.1
+                $endpoint = str_replace('v2_2', 'v2_1', $endpoint);
+            }
+        }
+
+        return $this->postnl->getRequestFactory()->createRequest('POST', $endpoint)
             ->withHeader('SOAPAction', "\"$soapAction\"")
             ->withHeader('Accept', 'text/xml')
             ->withHeader('Content-Type', 'text/xml;charset=UTF-8')
