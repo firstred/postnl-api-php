@@ -39,7 +39,6 @@ use ThirtyBees\PostNL\Entity\SOAP\Security;
 use ThirtyBees\PostNL\Exception\ApiException;
 use ThirtyBees\PostNL\Exception\CifDownException;
 use ThirtyBees\PostNL\Exception\CifException;
-use function GuzzleHttp\Psr7\str;
 
 /**
  * Class TimeframeService.
@@ -95,6 +94,7 @@ class TimeframeService extends AbstractService
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \ThirtyBees\PostNL\Exception\HttpClientException
      * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     *
      * @since 1.0.0
      */
     public function getTimeframesREST(GetTimeframes $getTimeframes)
@@ -119,7 +119,7 @@ class TimeframeService extends AbstractService
                 && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
-                $item->set(\GuzzleHttp\Psr7\str($response));
+                $item->set(\GuzzleHttp\Psr7\Message::toString($response));
                 $this->cacheItem($item);
             }
 
@@ -168,7 +168,7 @@ class TimeframeService extends AbstractService
                 && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
-                $item->set(str($response));
+                $item->set(\GuzzleHttp\Psr7\Message::toString($response));
                 $this->cacheItem($item);
             }
 

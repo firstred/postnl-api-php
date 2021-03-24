@@ -127,7 +127,7 @@ class LabellingService extends AbstractService
                 && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
-                $item->set(\GuzzleHttp\Psr7\str($response));
+                $item->set(\GuzzleHttp\Psr7\Message::toString($response));
                 $this->cacheItem($item);
             }
 
@@ -188,7 +188,7 @@ class LabellingService extends AbstractService
             ) {
                 $item = $this->retrieveCachedItem($uuid);
                 if ($item instanceof CacheItemInterface) {
-                    $item->set(\GuzzleHttp\Psr7\str($newResponse));
+                    $item->set(\GuzzleHttp\Psr7\Message::toString($newResponse));
                     $this->cache->saveDeferred($item);
                 }
             }
@@ -253,7 +253,7 @@ class LabellingService extends AbstractService
             && $response instanceof ResponseInterface
             && 200 === $response->getStatusCode()
         ) {
-            $item->set(\GuzzleHttp\Psr7\str($response));
+            $item->set(\GuzzleHttp\Psr7\Message::toString($response));
             $this->cacheItem($item);
         }
 
@@ -308,7 +308,7 @@ class LabellingService extends AbstractService
             ) {
                 $item = $this->retrieveCachedItem($uuid);
                 if ($item instanceof CacheItemInterface) {
-                    $item->set(\GuzzleHttp\Psr7\str($newResponse));
+                    $item->set(\GuzzleHttp\Psr7\Message::toString($newResponse));
                     $this->cache->saveDeferred($item);
                 }
             }

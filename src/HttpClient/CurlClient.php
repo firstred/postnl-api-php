@@ -32,7 +32,6 @@ use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use ThirtyBees\PostNL\Exception\ApiConnectionException;
 use ThirtyBees\PostNL\Exception\ApiException;
-use ThirtyBees\PostNL\Util\Message;
 
 if (!defined('CURL_SSLVERSION_TLSv1')) {
     define('CURL_SSLVERSION_TLSv1', 1);
@@ -258,7 +257,7 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
             $this->logger->debug($rbody);
         }
 
-        return \GuzzleHttp\Psr7\Message($rbody);
+        return \GuzzleHttp\Psr7\Message::parseResponse($rbody);
     }
 
     /**
@@ -308,7 +307,7 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
             if ($this->logger instanceof LoggerInterface) {
                 $this->logger->debug($responseBody);
             }
-            $responses[$uuid] = Message::parseResponse($responseBody);
+            $responses[$uuid] = \GuzzleHttp\Psr7\Message::parseResponse($responseBody);
         }
 
         // Reset pending requests

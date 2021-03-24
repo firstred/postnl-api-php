@@ -26,6 +26,7 @@ use GuzzleHttp\Exception\TransferException;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\Promise\EachPromise;
+use GuzzleHttp\Utils;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerAwareInterface;
@@ -76,7 +77,7 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
     {
         if (!$this->client) {
             // Initialize Guzzle and the retry middleware, include the default options
-            $stack = HandlerStack::create(\GuzzleHttp\choose_handler());
+            $stack = HandlerStack::create(Utils::chooseHandler());
             $stack->push(Middleware::retry(function (
                 $retries,
                 RequestInterface $request,
@@ -329,7 +330,7 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
             throw new HttpClientException($e->getMessage(), $e->getCode(), $e);
         }
         if ($response instanceof ResponseInterface && $this->logger instanceof LoggerInterface) {
-            $this->logger->debug(\GuzzleHttp\Psr7\str($response));
+            $this->logger->debug(\GuzzleHttp\Psr7\Message::toString($response));
         }
 
         return $response;
@@ -364,7 +365,7 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
         $promises = call_user_func(function () use ($requests, $guzzle) {
             foreach ($requests as $index => $request) {
                 if ($request instanceof RequestInterface && $this->logger instanceof LoggerInterface) {
-                    $this->logger->debug(\GuzzleHttp\Psr7\str($request));
+                    $this->logger->debug(\GuzzleHttp\Psr7\Message::toString($request));
                 }
                 yield $index => $guzzle->sendAsync($request);
             }
@@ -403,7 +404,7 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
                 $response = new \ThirtyBees\PostNL\Exception\ResponseException('Unknown response type');
             }
             if ($response instanceof ResponseInterface && $this->logger instanceof LoggerInterface) {
-                $this->logger->debug(\GuzzleHttp\Psr7\str($response));
+                $this->logger->debug(\GuzzleHttp\Psr7\Message::toString($response));
             }
         }
 

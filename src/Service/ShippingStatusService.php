@@ -157,7 +157,7 @@ class ShippingStatusService extends AbstractService
                 && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
-                $item->set(\GuzzleHttp\Psr7\str($response));
+                $item->set(\GuzzleHttp\Psr7\Message::toString($response));
                 $this->cacheItem($item);
             }
 
@@ -219,7 +219,7 @@ class ShippingStatusService extends AbstractService
                 && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
-                $item->set(\GuzzleHttp\Psr7\str($response));
+                $item->set(\GuzzleHttp\Psr7\Message::toString($response));
                 $this->cacheItem($item);
             }
 
@@ -280,7 +280,7 @@ class ShippingStatusService extends AbstractService
                 && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
-                $item->set(\GuzzleHttp\Psr7\str($response));
+                $item->set(\GuzzleHttp\Psr7\Message::toString($response));
                 $this->cacheItem($item);
             }
 
@@ -342,7 +342,7 @@ class ShippingStatusService extends AbstractService
                 && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
-                $item->set(\GuzzleHttp\Psr7\str($response));
+                $item->set(\GuzzleHttp\Psr7\Message::toString($response));
                 $this->cacheItem($item);
             }
 
@@ -403,7 +403,7 @@ class ShippingStatusService extends AbstractService
                 && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
-                $item->set(\GuzzleHttp\Psr7\str($response));
+                $item->set(\GuzzleHttp\Psr7\Message::toString($response));
                 $this->cacheItem($item);
             }
 
@@ -459,7 +459,7 @@ class ShippingStatusService extends AbstractService
                 && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
-                $item->set(\GuzzleHttp\Psr7\str($response));
+                $item->set(\GuzzleHttp\Psr7\Message::toString($response));
                 $this->cacheItem($item);
             }
 
