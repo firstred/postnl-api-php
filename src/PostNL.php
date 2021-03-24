@@ -459,8 +459,6 @@ class PostNL implements LoggerAwareInterface
      *
      * @return ClientInterface
      *
-     * @throws HttpClientException
-     *
      * @since 1.0.0
      */
     public function getHttpClient()
@@ -473,7 +471,7 @@ class PostNL implements LoggerAwareInterface
                     // Detect PHP HTTPlug async HTTP client support
                     $client = HttpAsyncClientDiscovery::find();
                     if ($client) {
-                        $this->httpClient = new HTTPlugClient(null, $this->getLogger());
+                        $this->httpClient = new HTTPlugClient();
                     }
                 } catch (NotFoundException $e) {
                 } catch (\Http\Discovery\Exception\NotFoundException $e) {
@@ -487,7 +485,7 @@ class PostNL implements LoggerAwareInterface
                     // Detect PHP HTTPlug PSR-18 HTTP client support
                     $client = Psr18ClientDiscovery::find();
                     if ($client) {
-                        $this->httpClient = new HTTPlugClient(null, $this->getLogger());
+                        $this->httpClient = new HTTPlugClient();
                     }
                 } catch (NotFoundException $e) {
                 } catch (\Http\Discovery\Exception\NotFoundException $e) {
@@ -501,7 +499,7 @@ class PostNL implements LoggerAwareInterface
                     // Detect PHP HTTPlug HTTP client support
                     $client = HttpClientDiscovery::find();
                     if ($client) {
-                        $this->httpClient = new HTTPlugClient(null, $this->getLogger());
+                        $this->httpClient = new HTTPlugClient();
                     }
                 } catch (NotFoundException $e) {
                 } catch (\Http\Discovery\Exception\NotFoundException $e) {
@@ -528,8 +526,12 @@ class PostNL implements LoggerAwareInterface
             if (!$client) {
                 $this->httpClient = new CurlClient();
             }
+
+            $this->httpClient->setLogger($this->getLogger());
+            $this->httpClient->setVerify($this->verifySslCerts);
         }
         // @codeCoverageIgnoreEnd
+
 
         return $this->httpClient;
     }
@@ -568,8 +570,6 @@ class PostNL implements LoggerAwareInterface
      * @param LoggerInterface $logger
      *
      * @return PostNL
-     *
-     * @throws HttpClientException
      *
      * @since 1.0.0
      */
