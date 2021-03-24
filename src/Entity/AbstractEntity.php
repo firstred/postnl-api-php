@@ -28,6 +28,7 @@ namespace ThirtyBees\PostNL\Entity;
 
 use Exception;
 use JsonSerializable;
+use libphonenumber\NumberParseException;
 use ReflectionClass;
 use ReflectionException;
 use Sabre\Xml\Writer;
@@ -69,7 +70,11 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
      * @param array $properties
      *
      * @return static|object|null
+     *
      * @throws ReflectionException
+     * @throws NumberParseException
+     *
+     * @since 1.0.0
      */
     public static function create(array $properties = [])
     {

@@ -26,6 +26,7 @@
 
 namespace ThirtyBees\PostNL\Entity;
 
+use libphonenumber\PhoneNumberFormat;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
@@ -34,6 +35,10 @@ use ThirtyBees\PostNL\Service\LocationService;
 use ThirtyBees\PostNL\Service\ShippingService;
 use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
+use libphonenumber\PhoneNumberUtil;
+use libphonenumber\NumberParseException;
+use function class_exists;
+use function is_null;
 
 /**
  * Class Contact.
@@ -44,8 +49,6 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method string|null getTelNr()
  * @method Contact     setContactType(string|null $contactType = null)
  * @method Contact     setEmail(string|null $email = null)
- * @method Contact     setSMSNr(string|null $smsNr = null)
- * @method Contact     setTelNr(string|null $telNr = null)
  *
  * @since 1.0.0
  */
@@ -114,10 +117,14 @@ class Contact extends AbstractEntity
     // @codingStandardsIgnoreEnd
 
     /**
+     * Contact constructor.
+     *
      * @param string|null $contactType
      * @param string|null $email
      * @param string|null $smsNr
      * @param string|null $telNr
+     *
+     * @throws NumberParseException
      */
     public function __construct($contactType = null, $email = null, $smsNr = null, $telNr = null)
     {
@@ -127,5 +134,65 @@ class Contact extends AbstractEntity
         $this->setEmail($email);
         $this->setSMSNr($smsNr);
         $this->setTelNr($telNr);
+    }
+
+    /**
+     * Set the telephone number.
+     *
+     * @param string|null $telNr
+     * @param string|null $countryCode
+     *
+     * @return static
+     *
+     * @throws NumberParseException
+     *
+     * @since 1.0.0
+     * @since 1.2.0 Possibility to auto format number
+     */
+    public function setTelNr($telNr = null, $countryCode = null)
+    {
+        if (is_null($telNr)) {
+            $this->TelNr = null;
+        } else {
+            if ($countryCode && class_exists(PhoneNumberUtil::class)) {
+                $phoneUtil = PhoneNumberUtil::getInstance();
+                $parsedNumber = $phoneUtil->parse($telNr, $countryCode);
+                $telNr = $phoneUtil->format($parsedNumber, PhoneNumberFormat::E164);
+            }
+
+            $this->TelNr = $telNr;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set the mobile number.
+     *
+     * @param string|null $smsNr
+     * @param string|null $countryCode
+     *
+     * @return static
+     *
+     * @throws NumberParseException
+     *
+     * @since 1.0.0
+     * @since 1.2.0 Possibility to auto format number
+     */
+    public function setSMSNr($smsNr = null, $countryCode = null)
+    {
+        if (is_null($smsNr)) {
+            $this->SMSNr = null;
+        } else {
+            if ($countryCode && class_exists(PhoneNumberUtil::class)) {
+                $phoneUtil = PhoneNumberUtil::getInstance();
+                $parsedNumber = $phoneUtil->parse($smsNr, $countryCode);
+                $smsNr = $phoneUtil->format($parsedNumber, PhoneNumberFormat::E164);
+            }
+
+            $this->SMSNr = $smsNr;
+        }
+
+        return $this;
     }
 }

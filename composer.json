@@ -37,11 +37,13 @@
         "phpunit/phpunit": ">=5.0",
         "sabre/xml": "^1.5",
         "symfony/dotenv": "^3.0 || ^4.0 || ^5.0",
-        "wappr/logger": "^1.2"
+        "wappr/logger": "^1.2",
+        "giggsey/libphonenumber-for-php": "^8.12"
     },
     "suggest": {
         "sabre/xml": "To use the SOAP API -- supports ^1.5.0",
         "guzzlehttp/guzzle": "One of the most popular HTTP clients available -- supports ^6.5.3 || ^7.0",
+        "giggsey/libphonenumber-for-php": "To automatically format and check phone numbers -- supports ^8.12",
         "php-http/async-client-implementation": "Required if you want to use an alternative PSR-18, async or HTTPlug Client",
         "php-http/client-common": "Required if you want to use an alternative PSR-18, async or HTTPlug Client",
         "php-http/discovery": "Required if you want to use an alternative PSR-18, async or HTTPlug Client",
