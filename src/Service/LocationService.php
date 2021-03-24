@@ -49,13 +49,13 @@ use ThirtyBees\PostNL\Exception\ResponseException;
  * Class LocationService.
  *
  * @method GetNearestLocationsResponse getNearestLocations(GetNearestLocations $getNearestLocations)
- * @method RequestInterface                     buildGetNearestLocationsRequest(GetNearestLocations $getNearestLocations)
+ * @method RequestInterface            buildGetNearestLocationsRequest(GetNearestLocations $getNearestLocations)
  * @method GetNearestLocationsResponse processGetNearestLocationsResponse(mixed $response)
  * @method GetLocationsInAreaResponse  getLocationsInArea(GetLocationsInArea $getLocationsInArea)
- * @method RequestInterface                     buildGetLocationsInAreaRequest(GetLocationsInArea $getLocationsInArea)
+ * @method RequestInterface            buildGetLocationsInAreaRequest(GetLocationsInArea $getLocationsInArea)
  * @method GetLocationsInAreaResponse  processGetLocationsInAreaResponse(mixed $response)
  * @method GetLocationsInAreaResponse  getLocation(GetLocation $getLocation)
- * @method RequestInterface                     buildGetLocationRequest(GetLocation $getLocation)
+ * @method RequestInterface            buildGetLocationRequest(GetLocation $getLocation)
  * @method GetLocationsInAreaResponse  processGetLocationResponse(mixed $response)
  *
  * @since 1.0.0

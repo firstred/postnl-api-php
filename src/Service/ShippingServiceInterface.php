@@ -17,7 +17,7 @@ use ThirtyBees\PostNL\Exception\ResponseException;
  * Class ShippingService.
  *
  * @method GenerateShippingResponse generateShipping(GenerateShipping $generateShipping, bool $confirm)
- * @method RequestInterface                  buildGenerateShippingRequest(GenerateShipping $generateShipping, bool $confirm)
+ * @method RequestInterface         buildGenerateShippingRequest(GenerateShipping $generateShipping, bool $confirm)
  * @method GenerateShippingResponse processGenerateShippingResponse(mixed $response)
  *
  * @since 1.2.0
