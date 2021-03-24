@@ -473,7 +473,7 @@ class PostNL implements LoggerAwareInterface
                     // Detect PHP HTTPlug async HTTP client support
                     $client = HttpAsyncClientDiscovery::find();
                     if ($client) {
-                        $this->httpClient = HTTPlugClient::getInstance();
+                        $this->httpClient = new HTTPlugClient(null, $this->getLogger());
                     }
                 } catch (NotFoundException $e) {
                 } catch (\Http\Discovery\Exception\NotFoundException $e) {
@@ -487,7 +487,7 @@ class PostNL implements LoggerAwareInterface
                     // Detect PHP HTTPlug PSR-18 HTTP client support
                     $client = Psr18ClientDiscovery::find();
                     if ($client) {
-                        $this->httpClient = HTTPlugClient::getInstance();
+                        $this->httpClient = new HTTPlugClient(null, $this->getLogger());
                     }
                 } catch (NotFoundException $e) {
                 } catch (\Http\Discovery\Exception\NotFoundException $e) {
@@ -501,7 +501,7 @@ class PostNL implements LoggerAwareInterface
                     // Detect PHP HTTPlug HTTP client support
                     $client = HttpClientDiscovery::find();
                     if ($client) {
-                        $this->httpClient = HTTPlugClient::getInstance();
+                        $this->httpClient = new HTTPlugClient(null, $this->getLogger());
                     }
                 } catch (NotFoundException $e) {
                 } catch (\Http\Discovery\Exception\NotFoundException $e) {
@@ -522,11 +522,11 @@ class PostNL implements LoggerAwareInterface
                     '>='
                 ))
             ) {
-                $this->httpClient = GuzzleClient::getInstance();
+                $this->httpClient = new GuzzleClient();
             }
 
             if (!$client) {
-                $this->httpClient = CurlClient::getInstance();
+                $this->httpClient = new CurlClient();
             }
         }
         // @codeCoverageIgnoreEnd

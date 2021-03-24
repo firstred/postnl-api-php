@@ -80,6 +80,8 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
      * CurlClient Singleton.
      *
      * @return CurlClient
+     *
+     * @deprecated Please instantiate a new client rather than using this singleton
      */
     public static function getInstance()
     {

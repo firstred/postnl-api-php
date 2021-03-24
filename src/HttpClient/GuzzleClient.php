@@ -128,6 +128,8 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
 
     /**
      * @return GuzzleClient|static
+     *
+     * @deprecated Please instantiate a new client rather than using this singleton
      */
     public static function getInstance()
     {

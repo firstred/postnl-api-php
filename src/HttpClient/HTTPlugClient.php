@@ -296,8 +296,11 @@ class HTTPlugClient implements ClientInterface
     /**
      * @param HttpAsyncClient|HttpClient|null $client
      *
-     * @return HTTPlugClient|void
+     * @return HTTPlugClient
+     *
      * @throws HttpClientException
+     *
+     * @deprecated Please instantiate a new client rather than using this singleton
      */
     public static function getInstance($client = null)
     {
