@@ -1,7 +1,7 @@
 coverage:
   precision: 2
   round: down
-  range: "70...90"
+  range: "70...100"
 
   status:
     project:
@@ -14,6 +14,6 @@ coverage:
 comment:
   layout: "header, reach, diff, flags, files, footer"
   behavior: default
-  require_changes: no
-  require_base: no
-  require_head: yes
+  require_changes: false
+  require_base: false
+  require_head: true
