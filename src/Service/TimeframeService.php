@@ -49,7 +49,7 @@ use ThirtyBees\PostNL\Exception\CifException;
  *
  * @since 1.0.0
  */
-class TimeframeService extends AbstractService
+class TimeframeService extends AbstractService implements TimeframeServiceInterface
 {
     // API Version
     const VERSION = '2.1';

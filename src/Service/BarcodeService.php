@@ -51,7 +51,7 @@ use ThirtyBees\PostNL\PostNL;
  *
  * @since 1.0.0
  */
-class BarcodeService extends AbstractService
+class BarcodeService extends AbstractService implements BarcodeServiceInterface
 {
     /** @var PostNL */
     protected $postnl;

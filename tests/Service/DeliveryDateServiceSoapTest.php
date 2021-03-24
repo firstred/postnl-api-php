@@ -46,6 +46,7 @@ use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
 use ThirtyBees\PostNL\HttpClient\MockClient;
 use ThirtyBees\PostNL\PostNL;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
+use ThirtyBees\PostNL\Service\DeliveryDateServiceInterface;
 
 /**
  * Class DeliveryDateServiceSoapTest.
@@ -56,7 +57,7 @@ class DeliveryDateServiceSoapTest extends TestCase
 {
     /** @var PostNL */
     protected $postnl;
-    /** @var DeliveryDateService */
+    /** @var DeliveryDateServiceInterface */
     protected $service;
     /** @var */
     protected $lastRequest;

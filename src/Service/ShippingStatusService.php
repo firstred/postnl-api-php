@@ -69,7 +69,7 @@ use ThirtyBees\PostNL\Exception\ResponseException;
  *
  * @since 1.0.0
  */
-class ShippingStatusService extends AbstractService
+class ShippingStatusService extends AbstractService implements ShippingStatusServiceInterface
 {
     // API Version
     const VERSION = '1.6';

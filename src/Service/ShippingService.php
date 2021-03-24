@@ -52,7 +52,7 @@ use const JSON_UNESCAPED_SLASHES;
  *
  * @since 1.2.0
  */
-class ShippingService extends AbstractService
+class ShippingService extends AbstractService implements ShippingServiceInterface
 {
     // API Version
     const VERSION = '1';

@@ -45,6 +45,7 @@ use ThirtyBees\PostNL\Exception\ResponseException;
 use ThirtyBees\PostNL\HttpClient\MockClient;
 use ThirtyBees\PostNL\PostNL;
 use ThirtyBees\PostNL\Service\LabellingService;
+use ThirtyBees\PostNL\Service\LabellingServiceInterface;
 use ThirtyBees\PostNL\Util\Util;
 
 /**
@@ -56,7 +57,7 @@ class LabellingServiceSoapTest extends TestCase
 {
     /** @var PostNL */
     protected $postnl;
-    /** @var LabellingService */
+    /** @var LabellingServiceInterface */
     protected $service;
     /** @var */
     protected $lastRequest;

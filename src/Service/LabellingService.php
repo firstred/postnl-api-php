@@ -55,7 +55,7 @@ use const JSON_UNESCAPED_SLASHES;
  *
  * @since 1.0.0
  */
-class LabellingService extends AbstractService
+class LabellingService extends AbstractService implements LabellingServiceInterface
 {
     // API Version
     const VERSION = '2.2';

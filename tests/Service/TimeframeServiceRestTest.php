@@ -43,6 +43,7 @@ use ThirtyBees\PostNL\Entity\Timeframe;
 use ThirtyBees\PostNL\HttpClient\MockClient;
 use ThirtyBees\PostNL\PostNL;
 use ThirtyBees\PostNL\Service\TimeframeService;
+use ThirtyBees\PostNL\Service\TimeframeServiceInterface;
 
 /**
  * Class TimeframeServiceRestTest.
@@ -53,7 +54,7 @@ class TimeframeServiceRestTest extends TestCase
 {
     /** @var PostNL */
     protected $postnl;
-    /** @var TimeframeService */
+    /** @var TimeframeServiceInterface */
     protected $service;
     /** @var */
     protected $lastRequest;

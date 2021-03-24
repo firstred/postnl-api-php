@@ -42,6 +42,7 @@ use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
 use ThirtyBees\PostNL\HttpClient\MockClient;
 use ThirtyBees\PostNL\PostNL;
 use ThirtyBees\PostNL\Service\BarcodeService;
+use ThirtyBees\PostNL\Service\BarcodeServiceInterface;
 
 /**
  * Class BarcodeServiceSoapTest.
@@ -52,7 +53,7 @@ class BarcodeServiceSoapTest extends TestCase
 {
     /** @var PostNL */
     protected $postnl;
-    /** @var BarcodeService */
+    /** @var BarcodeServiceInterface */
     protected $service;
     /** @var */
     protected $lastRequest;

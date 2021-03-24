@@ -84,6 +84,14 @@ use ThirtyBees\PostNL\HttpClient\ClientInterface;
 use ThirtyBees\PostNL\HttpClient\CurlClient;
 use ThirtyBees\PostNL\HttpClient\GuzzleClient;
 use ThirtyBees\PostNL\HttpClient\HTTPlugClient;
+use ThirtyBees\PostNL\Service\BarcodeServiceInterface;
+use ThirtyBees\PostNL\Service\ConfirmingServiceInterface;
+use ThirtyBees\PostNL\Service\DeliveryDateServiceInterface;
+use ThirtyBees\PostNL\Service\LabellingServiceInterface;
+use ThirtyBees\PostNL\Service\LocationServiceInterface;
+use ThirtyBees\PostNL\Service\ShippingServiceInterface;
+use ThirtyBees\PostNL\Service\ShippingStatusServiceInterface;
+use ThirtyBees\PostNL\Service\TimeframeServiceInterface;
 use ThirtyBees\PostNL\Util\RFPdi;
 use ThirtyBees\PostNL\Util\Util;
 use ThirtyBees\PostNL\Service\BarcodeService;
@@ -224,28 +232,28 @@ class PostNL implements LoggerAwareInterface
      */
     protected $mode;
 
-    /** @var BarcodeService */
+    /** @var BarcodeServiceInterface */
     protected $barcodeService;
 
-    /** @var LabellingService */
+    /** @var LabellingServiceInterface */
     protected $labellingService;
 
-    /** @var ConfirmingService */
+    /** @var ConfirmingServiceInterface */
     protected $confirmingService;
 
-    /** @var ShippingStatusService */
+    /** @var ShippingStatusServiceInterface */
     protected $shippingStatusService;
 
-    /** @var DeliveryDateService */
+    /** @var DeliveryDateServiceInterface */
     protected $deliveryDateService;
 
-    /** @var TimeframeService */
+    /** @var TimeframeServiceInterface */
     protected $timeframeService;
 
-    /** @var LocationService */
+    /** @var LocationServiceInterface */
     protected $locationService;
 
-    /** @var ShippingService */
+    /** @var ShippingServiceInterface */
     protected $shippingService;
 
     /**
@@ -649,7 +657,7 @@ class PostNL implements LoggerAwareInterface
      *
      * Automatically load the barcode service
      *
-     * @return BarcodeService
+     * @return BarcodeServiceInterface
      *
      * @since 1.0.0
      */
@@ -665,11 +673,11 @@ class PostNL implements LoggerAwareInterface
     /**
      * Set the barcode service.
      *
-     * @param BarcodeService $service
+     * @param BarcodeServiceInterface $service
      *
      * @since 1.0.0
      */
-    public function setBarcodeService(BarcodeService $service)
+    public function setBarcodeService(BarcodeServiceInterface $service)
     {
         $this->barcodeService = $service;
     }
@@ -679,7 +687,7 @@ class PostNL implements LoggerAwareInterface
      *
      * Automatically load the labelling service
      *
-     * @return LabellingService
+     * @return LabellingServiceInterface
      *
      * @since 1.0.0
      */
@@ -695,11 +703,11 @@ class PostNL implements LoggerAwareInterface
     /**
      * Set the labelling service.
      *
-     * @param LabellingService $service
+     * @param LabellingServiceInterface $service
      *
      * @since 1.0.0
      */
-    public function setLabellingService(LabellingService $service)
+    public function setLabellingService(LabellingServiceInterface $service)
     {
         $this->labellingService = $service;
     }
@@ -709,7 +717,7 @@ class PostNL implements LoggerAwareInterface
      *
      * Automatically load the confirming service
      *
-     * @return ConfirmingService
+     * @return ConfirmingServiceInterface
      *
      * @since 1.0.0
      */
@@ -725,11 +733,11 @@ class PostNL implements LoggerAwareInterface
     /**
      * Set the confirming service.
      *
-     * @param ConfirmingService $service
+     * @param ConfirmingServiceInterface $service
      *
      * @since 1.0.0
      */
-    public function setConfirmingService(ConfirmingService $service)
+    public function setConfirmingService(ConfirmingServiceInterface $service)
     {
         $this->confirmingService = $service;
     }
@@ -739,7 +747,7 @@ class PostNL implements LoggerAwareInterface
      *
      * Automatically load the shipping status service
      *
-     * @return ShippingStatusService
+     * @return ShippingStatusServiceInterface
      *
      * @since 1.0.0
      */
@@ -755,11 +763,11 @@ class PostNL implements LoggerAwareInterface
     /**
      * Set the shipping status service.
      *
-     * @param ShippingStatusService $service
+     * @param ShippingStatusServiceInterface $service
      *
      * @since 1.0.0
      */
-    public function setShippingStatusService(ShippingStatusService $service)
+    public function setShippingStatusService(ShippingStatusServiceInterface $service)
     {
         $this->shippingStatusService = $service;
     }
@@ -769,7 +777,7 @@ class PostNL implements LoggerAwareInterface
      *
      * Automatically load the delivery date service
      *
-     * @return DeliveryDateService
+     * @return DeliveryDateServiceInterface
      *
      * @since 1.0.0
      */
@@ -785,11 +793,11 @@ class PostNL implements LoggerAwareInterface
     /**
      * Set the delivery date service.
      *
-     * @param DeliveryDateService $service
+     * @param DeliveryDateServiceInterface $service
      *
      * @since 1.0.0
      */
-    public function setDeliveryDateService(DeliveryDateService $service)
+    public function setDeliveryDateService(DeliveryDateServiceInterface $service)
     {
         $this->deliveryDateService = $service;
     }
@@ -799,7 +807,7 @@ class PostNL implements LoggerAwareInterface
      *
      * Automatically load the timeframe service
      *
-     * @return TimeframeService
+     * @return TimeframeServiceInterface
      *
      * @since 1.0.0
      */
@@ -815,11 +823,11 @@ class PostNL implements LoggerAwareInterface
     /**
      * Set the timeframe service.
      *
-     * @param TimeframeService $service
+     * @param TimeframeServiceInterface $service
      *
      * @since 1.0.0
      */
-    public function setTimeframeService(TimeframeService $service)
+    public function setTimeframeService(TimeframeServiceInterface $service)
     {
         $this->timeframeService = $service;
     }
@@ -829,7 +837,7 @@ class PostNL implements LoggerAwareInterface
      *
      * Automatically load the location service
      *
-     * @return LocationService
+     * @return LocationServiceInterface
      *
      * @since 1.0.0
      */
@@ -845,11 +853,11 @@ class PostNL implements LoggerAwareInterface
     /**
      * Set the location service.
      *
-     * @param LocationService $service
+     * @param LocationServiceInterface $service
      *
      * @since 1.0.0
      */
-    public function setLocationService(LocationService $service)
+    public function setLocationService(LocationServiceInterface $service)
     {
         $this->locationService = $service;
     }
@@ -875,11 +883,11 @@ class PostNL implements LoggerAwareInterface
     /**
      * Set the shipping service.
      *
-     * @param ShippingService $service
+     * @param ShippingServiceInterface $service
      *
      * @since 1.2.0
      */
-    public function setShippingService(ShippingService $service)
+    public function setShippingService(ShippingServiceInterface $service)
     {
         $this->shippingService = $service;
     }

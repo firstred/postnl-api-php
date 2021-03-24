@@ -48,6 +48,7 @@ use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
 use ThirtyBees\PostNL\HttpClient\MockClient;
 use ThirtyBees\PostNL\PostNL;
 use ThirtyBees\PostNL\Service\LocationService;
+use ThirtyBees\PostNL\Service\LocationServiceInterface;
 
 /**
  * Class LocationServiceSoapTest.
@@ -58,7 +59,7 @@ class LocationServiceSoapTest extends TestCase
 {
     /** @var PostNL */
     protected $postnl;
-    /** @var LocationService */
+    /** @var LocationServiceInterface */
     protected $service;
     /** @var */
     protected $lastRequest;

@@ -52,7 +52,7 @@ use ThirtyBees\PostNL\Exception\ResponseException;
  *
  * @since 1.0.0
  */
-class ConfirmingService extends AbstractService
+class ConfirmingService extends AbstractService implements ConfirmingServiceInterface
 {
     // API Version
     const VERSION = '2.0';

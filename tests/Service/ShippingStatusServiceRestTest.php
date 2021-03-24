@@ -47,6 +47,7 @@ use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
 use ThirtyBees\PostNL\HttpClient\MockClient;
 use ThirtyBees\PostNL\PostNL;
 use ThirtyBees\PostNL\Service\ShippingStatusService;
+use ThirtyBees\PostNL\Service\ShippingStatusServiceInterface;
 
 /**
  * Class ShippingStatusRestTest.
@@ -57,7 +58,7 @@ class ShippingStatusServiceRestTest extends TestCase
 {
     /** @var PostNL */
     protected $postnl;
-    /** @var ShippingStatusService */
+    /** @var ShippingStatusServiceInterface */
     protected $service;
     /** @var */
     protected $lastRequest;

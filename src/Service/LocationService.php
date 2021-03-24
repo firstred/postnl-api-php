@@ -60,7 +60,7 @@ use ThirtyBees\PostNL\Exception\ResponseException;
  *
  * @since 1.0.0
  */
-class LocationService extends AbstractService
+class LocationService extends AbstractService implements LocationServiceInterface
 {
     // API Version
     const VERSION = '2.1';

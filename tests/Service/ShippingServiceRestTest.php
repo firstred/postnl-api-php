@@ -46,6 +46,7 @@ use ThirtyBees\PostNL\Exception\ResponseException;
 use ThirtyBees\PostNL\HttpClient\MockClient;
 use ThirtyBees\PostNL\PostNL;
 use ThirtyBees\PostNL\Service\ShippingService;
+use ThirtyBees\PostNL\Service\ShippingServiceInterface;
 
 /**
  * Class ShippingServiceRestTest.
@@ -56,7 +57,7 @@ class ShippingServiceRestTest extends TestCase
 {
     /** @var PostNL */
     protected $postnl;
-    /** @var ShippingService */
+    /** @var ShippingServiceInterface */
     protected $service;
     /** @var */
     protected $lastRequest;

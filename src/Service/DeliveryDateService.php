@@ -57,7 +57,7 @@ use ThirtyBees\PostNL\Exception\ResponseException;
  *
  * @since 1.0.0
  */
-class DeliveryDateService extends AbstractService
+class DeliveryDateService extends AbstractService implements DeliveryDateServiceInterface
 {
     // API Version
     const VERSION = '2.2';

@@ -45,6 +45,7 @@ use ThirtyBees\PostNL\Exception\ResponseException;
 use ThirtyBees\PostNL\HttpClient\MockClient;
 use ThirtyBees\PostNL\PostNL;
 use ThirtyBees\PostNL\Service\ConfirmingService;
+use ThirtyBees\PostNL\Service\ConfirmingServiceInterface;
 
 /**
  * Class ConfirmingServiceRestTest.
@@ -55,7 +56,7 @@ class ConfirmingServiceRestTest extends TestCase
 {
     /** @var PostNL */
     protected $postnl;
-    /** @var ConfirmingService */
+    /** @var ConfirmingServiceInterface */
     protected $service;
     /** @var */
     protected $lastRequest;
