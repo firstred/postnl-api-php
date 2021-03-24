@@ -44,14 +44,10 @@
         "sabre/xml": "To use the SOAP API -- supports ^1.5.0",
         "guzzlehttp/guzzle": "One of the most popular HTTP clients available -- supports ^6.5.3 || ^7.0",
         "giggsey/libphonenumber-for-php": "To automatically format and check phone numbers -- supports ^8.12",
-        "php-http/async-client-implementation": "Required if you want to use an alternative PSR-18, async or HTTPlug Client",
-        "php-http/client-common": "Required if you want to use an alternative PSR-18, async or HTTPlug Client",
         "php-http/discovery": "Required if you want to use an alternative PSR-18, async or HTTPlug Client",
         "php-http/httplug": "Required if you want to use an alternative PSR-18, async or HTTPlug Client",
-        "php-http/message": "Required if you want to use an alternative PSR-18, async or HTTPlug Client",
-        "psr/http-client": "Required if you want to use an alternative PSR-18, async or HTTPlug Client",
-        "psr/http-factory": "Required if you want to use an alternative PSR-18, async or HTTPlug Client",
-        "psr/http-message-implementation": "Required if you want to use an alternative PSR-18, async or HTTPlug Client"
+        "php-http/message-factory": "Required if you want to use an alternative PSR-18, async or HTTPlug Client",
+        "psr/http-factory": "Required if you want to use an alternative PSR-18, async or HTTPlug Client"
     },
     "autoload": {
         "psr-4": {
