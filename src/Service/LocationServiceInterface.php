@@ -29,7 +29,7 @@ use ThirtyBees\PostNL\Exception\ResponseException;
  * @method RequestInterface                     buildGetLocationRequest(GetLocation $getLocation)
  * @method GetLocationsInAreaResponse  processGetLocationResponse(mixed $response)
  *
- * @since 1.0.0
+ * @since 1.2.0
  */
 interface LocationServiceInterface
 {

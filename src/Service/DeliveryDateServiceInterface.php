@@ -25,7 +25,7 @@ use ThirtyBees\PostNL\Exception\ResponseException;
  * @method RequestInterface        buildGetSentDateRequest(GetSentDateRequest $getSentDate)
  * @method GetSentDateResponse     processGetSentDateResponse(mixed $response)
  *
- * @since 1.0.0
+ * @since 1.2.0
  */
 interface DeliveryDateServiceInterface
 {

@@ -38,7 +38,7 @@ use ThirtyBees\PostNL\Exception\ResponseException;
  * @method RequestInterface       buildGetSignatureRequest(GetSignature $getSignature)
  * @method GetSignature           processGetSignatureResponse(mixed $response)
  *
- * @since 1.0.0
+ * @since 1.2.0
  */
 interface ShippingStatusServiceInterface
 {

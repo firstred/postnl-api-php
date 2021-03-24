@@ -20,7 +20,7 @@ use ThirtyBees\PostNL\Exception\ResponseException;
  * @method GenerateLabelResponse   processGenerateLabelResponse(mixed $response)
  * @method GenerateLabelResponse[] generateLabels(GenerateLabel[] $generateLabel, bool $confirm)
  *
- * @since 1.0.0
+ * @since 1.2.0
  */
 interface LabellingServiceInterface
 {

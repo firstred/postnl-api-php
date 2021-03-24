@@ -22,7 +22,7 @@ use ThirtyBees\PostNL\Exception\ResponseException;
  * @method ConfirmingResponseShipment   processConfirmShipmentResponse(mixed $response)
  * @method ConfirmingResponseShipment[] confirmShipments(Confirming[] $shipments)
  *
- * @since 1.0.0
+ * @since 1.2.0
  */
 interface ConfirmingServiceInterface
 {

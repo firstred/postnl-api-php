@@ -22,7 +22,7 @@ use ThirtyBees\PostNL\Exception\ResponseException;
  * @method string           processGenerateBarcodeResponse(mixed $response)
  * @method string[]         generateBarcodes(GenerateBarcode[] $generateBarcode)
  *
- * @since 1.0.0
+ * @since 1.2.0
  */
 interface BarcodeServiceInterface
 {
