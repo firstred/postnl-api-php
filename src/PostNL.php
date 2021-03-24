@@ -37,6 +37,7 @@ use Psr\Cache\CacheItemInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Sabre\Xml\Element;
+use Sabre\Xml\Version;
 use setasign\Fpdi\PdfParser\StreamReader;
 use ThirtyBees\PostNL\Entity\Barcode;
 use ThirtyBees\PostNL\Entity\Customer;
@@ -429,7 +430,9 @@ class PostNL implements LoggerAwareInterface
             throw new InvalidArgumentException('Mode not supported');
         }
 
-        if (in_array($mode, [static::MODE_SOAP, static::MODE_LEGACY]) && !interface_exists(Element::class)) {
+        if (in_array($mode, [static::MODE_SOAP, static::MODE_LEGACY])
+            && (!class_exists(Version::class) || version_compare('2.0.0', Version::VERSION, '>='))
+        ) {
             // Seamlessly switch to the REST API
             $mode = static::MODE_REST;
         } elseif (static::MODE_LEGACY === $mode) {
