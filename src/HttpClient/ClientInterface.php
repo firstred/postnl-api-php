@@ -33,6 +33,8 @@ use ThirtyBees\PostNL\Exception\HttpClientException;
 
 /**
  * Interface ClientInterface.
+ *
+ * @since 1.0.0
  */
 interface ClientInterface
 {

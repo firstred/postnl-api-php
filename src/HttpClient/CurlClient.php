@@ -26,6 +26,7 @@
 
 namespace ThirtyBees\PostNL\HttpClient;
 
+use JetBrains\PhpStorm\Deprecated;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerAwareInterface;
@@ -45,6 +46,8 @@ if (!defined('CURLE_SSL_CACERT_BADFILE')) {
 
 /**
  * Class CurlClient.
+ *
+ * @since 1.0.0
  *
  * @deprecated 2.0.0 Please use HTTPlug
  */

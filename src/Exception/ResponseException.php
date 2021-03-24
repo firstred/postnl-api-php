@@ -27,21 +27,25 @@
 namespace ThirtyBees\PostNL\Exception;
 
 use Exception;
-use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
 
+/**
+ * Class ResponseException
+ *
+ * @since 1.0.0
+ */
 class ResponseException extends AbstractException
 {
-    /** @var Response */
+    /** @var ResponseInterface */
     private $response;
 
     /**
      * ResponseException constructor.
      *
-     * @param string         $message
-     * @param int            $code
-     * @param Exception|null $previous
-     * @param Response|null  $response
+     * @param string                 $message
+     * @param int                    $code
+     * @param Exception|null         $previous
+     * @param ResponseInterface|null $response
      */
     public function __construct($message = '', $code = 0, $previous = null, ResponseInterface $response = null)
     {
@@ -51,15 +55,15 @@ class ResponseException extends AbstractException
     }
 
     /**
-     * @param Response $response
+     * @param ResponseInterface $response
      */
-    public function setResponse(Response $response)
+    public function setResponse(ResponseInterface $response)
     {
         $this->response = $response;
     }
 
     /**
-     * @return Response
+     * @return ResponseInterface
      */
     public function getResponse()
     {

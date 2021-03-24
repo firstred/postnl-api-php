@@ -41,6 +41,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method string|null getETATo()
  * @method Expectation setETAFrom(string|null $dateTime = null)
  * @method Expectation setETATo(string|null $dateTime = null)
+ *
+ * @since 1.0.0
  */
 class Expectation extends AbstractEntity
 {

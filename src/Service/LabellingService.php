@@ -52,6 +52,8 @@ use const JSON_UNESCAPED_SLASHES;
  * @method RequestInterface        buildGenerateLabelRequest(GenerateLabel $generateLabel, bool $confirm)
  * @method GenerateLabelResponse   processGenerateLabelResponse(mixed $response)
  * @method GenerateLabelResponse[] generateLabels(GenerateLabel[] $generateLabel, bool $confirm)
+ *
+ * @since 1.0.0
  */
 class LabellingService extends AbstractService
 {
@@ -94,7 +96,12 @@ class LabellingService extends AbstractService
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws ResponseException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
+     *
+     * @noinspection PhpUnused
      */
     public function generateLabelREST(GenerateLabel $generateLabel, $confirm = true)
     {
@@ -105,6 +112,7 @@ class LabellingService extends AbstractService
             try {
                 $response = \GuzzleHttp\Psr7\parse_response($response);
             } catch (\InvalidArgumentException $e) {
+                // Invalid item in cache, skip
             }
         }
         if (!$response instanceof ResponseInterface) {
@@ -400,7 +408,10 @@ class LabellingService extends AbstractService
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \ReflectionException
      * @throws \Sabre\Xml\LibXMLException
+     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
      */
     public function processGenerateLabelResponseSOAP(ResponseInterface $response)
     {

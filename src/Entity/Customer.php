@@ -56,6 +56,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method Customer    setAddress(Address|null $address = null)
  * @method Customer    setGlobalPackCustomerCode(string|null $code = null)
  * @method Customer    setGlobalPackBarcodeType(string|null $type = null)
+ *
+ * @since 1.0.0
  */
 class Customer extends AbstractEntity
 {

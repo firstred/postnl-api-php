@@ -26,6 +26,11 @@
 
 namespace ThirtyBees\PostNL\Exception;
 
+/**
+ * Class HttpClientException
+ *
+ * @since 1.0.0
+ */
 class HttpClientException extends \Exception
 {
 }

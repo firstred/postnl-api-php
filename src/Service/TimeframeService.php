@@ -46,6 +46,8 @@ use function GuzzleHttp\Psr7\str;
  * @method ResponseTimeframes getTimeframes(GetTimeframes $getTimeframes)
  * @method RequestInterface   buildGetTimeframesRequest(GetTimeframes $getTimeframes)
  * @method ResponseTimeframes processGetTimeframesResponse(mixed $response)
+ *
+ * @since 1.0.0
  */
 class TimeframeService extends AbstractService
 {
@@ -330,7 +332,7 @@ class TimeframeService extends AbstractService
      */
     public function processGetTimeframesResponseSOAP(ResponseInterface $response)
     {
-        $xml = @simplexml_load_string(static::getResponseText($response));
+        $xml = simplexml_load_string(static::getResponseText($response));
 
         static::registerNamespaces($xml);
         static::validateSOAPResponse($xml);

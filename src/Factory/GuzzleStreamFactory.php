@@ -26,13 +26,35 @@
 
 namespace ThirtyBees\PostNL\Factory;
 
+use Psr\Http\Message\StreamInterface;
+
+/**
+ * Class GuzzleStreamFactory
+ *
+ * @since 1.2.0
+ */
 final class GuzzleStreamFactory implements StreamFactoryInterface
 {
+    /**
+     * Creat a new stream from a string.
+     *
+     * @param string $content
+     *
+     * @return StreamInterface
+     */
     public function createStream($content = '')
     {
         return \GuzzleHttp\Psr7\stream_for($content);
     }
 
+    /**
+     * Create a new PSR-7 stream from file.
+     *
+     * @param string $file
+     * @param string $mode
+     *
+     * @return StreamInterface
+     */
     public function createStreamFromFile($file, $mode = 'r')
     {
         $resource = \GuzzleHttp\Psr7\try_fopen($file, $mode);
@@ -40,6 +62,13 @@ final class GuzzleStreamFactory implements StreamFactoryInterface
         return \GuzzleHttp\Psr7\stream_for($resource);
     }
 
+    /**
+     * Create a new PSR-7 stream from resource.
+     *
+     * @param resource $resource
+     *
+     * @return StreamInterface
+     */
     public function createStreamFromResource($resource)
     {
         return \GuzzleHttp\Psr7\stream_for($resource);

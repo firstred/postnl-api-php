@@ -26,6 +26,8 @@ namespace ThirtyBees\PostNL\Exception\Promise;
 
 /**
  * Exception thrown when too many errors occur in the some() or any() methods.
+ *
+ * @since 1.0.0
  */
 class AggregateException extends RejectionException
 {

@@ -47,6 +47,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method GenerateBarcode setCustomer(Customer|null $customer = null)
  * @method GenerateBarcode setMessage(Message|null $message = null)
  * @method GenerateBarcode setBarcode(Barcode|null $shipments = null)
+ *
+ * @since 1.0.0
  */
 class GenerateBarcode extends AbstractEntity
 {

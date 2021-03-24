@@ -50,6 +50,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method ReasonNoTimeframe setOptions(string[]|null $options = null)
  * @method ReasonNoTimeframe setFrom(string|null $from = null)
  * @method ReasonNoTimeframe setTo(string|null $to = null)
+ *
+ * @since 1.0.0
  */
 class ReasonNoTimeframe extends AbstractEntity
 {

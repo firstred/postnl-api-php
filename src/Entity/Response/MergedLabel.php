@@ -44,6 +44,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method Label[]|null  getLabels()
  * @method MergedLabel   setBarcodes(string[]|null $barcodes = null)
  * @method MergedLabel   setLabels(Label[]|null $labels = null)
+ *
+ * @since 1.0.0
  */
 class MergedLabel extends AbstractEntity
 {

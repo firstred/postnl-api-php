@@ -44,6 +44,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method SignatureResponse setBarcode(string|null $barcode = null)
  * @method SignatureResponse setSignatureDate(string|null $signatureDate = null)
  * @method SignatureResponse setSignatureImage(string|null $signatureImage = null)
+ *
+ * @since 1.0.0
  */
 class GetSignatureResponseSignature extends AbstractEntity
 {

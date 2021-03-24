@@ -44,6 +44,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method Barcode     setType(string|null $type = null)
  * @method Barcode     setRange(string|null $range = null)
  * @method Barcode     setSerie(string|null $serie = null)
+ *
+ * @since 1.0.0
  */
 class Barcode extends AbstractEntity
 {

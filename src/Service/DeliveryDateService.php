@@ -32,6 +32,7 @@ use Psr\Http\Message\ResponseInterface;
 use Sabre\Xml\LibXMLException;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Service as XmlService;
+use SimpleXMLElement;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
 use ThirtyBees\PostNL\Entity\CutOffTime;
 use ThirtyBees\PostNL\Entity\Request\GetDeliveryDate;
@@ -53,6 +54,8 @@ use ThirtyBees\PostNL\Exception\ResponseException;
  * @method GetSentDateResponse     getSentDate(GetSentDateRequest $getSentDate)
  * @method RequestInterface        buildGetSentDateRequest(GetSentDateRequest $getSentDate)
  * @method GetSentDateResponse     processGetSentDateResponse(mixed $response)
+ *
+ * @since 1.0.0
  */
 class DeliveryDateService extends AbstractService
 {
@@ -427,7 +430,7 @@ class DeliveryDateService extends AbstractService
      */
     public function processGetDeliveryDateResponseSOAP(ResponseInterface $response)
     {
-        $xml = @simplexml_load_string(static::getResponseText($response));
+        $xml = new SimpleXMLElement(static::getResponseText($response));
 
         static::registerNamespaces($xml);
         static::validateSOAPResponse($xml);
@@ -565,7 +568,7 @@ class DeliveryDateService extends AbstractService
      */
     public function processGetSentDateResponseSOAP(ResponseInterface $response)
     {
-        $xml = @simplexml_load_string(static::getResponseText($response));
+        $xml = new SimpleXMLElement(static::getResponseText($response));
 
         static::registerNamespaces($xml);
         static::validateSOAPResponse($xml);

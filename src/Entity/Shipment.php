@@ -111,6 +111,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method Shipment             setReturnBarcode(string|null $returnBarcode = null)
  * @method Shipment             setReturnReference(string|null $returnReference = null)
  * @method Shipment             setStatusCode(string|null $statusCode = null)
+ *
+ * @since 1.0.0
  */
 class Shipment extends AbstractEntity
 {

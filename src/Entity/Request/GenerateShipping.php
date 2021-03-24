@@ -42,6 +42,8 @@ use ThirtyBees\PostNL\Service\ShippingService;
  * @method GenerateShipping setCustomer(Customer|null $customer = null)
  * @method GenerateShipping setMessage(Message|null $message = null)
  * @method GenerateShipping setShipments(Shipment[]|null $shipments = null)
+ *
+ * @since 1.0.0
  */
 class GenerateShipping extends AbstractEntity
 {

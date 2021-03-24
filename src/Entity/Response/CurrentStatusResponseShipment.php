@@ -72,6 +72,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method CurrentStatusResponseShipment setReference(string|null $reference = null)
  * @method CurrentStatusResponseShipment setStatus(Status|null $status = null)
  * @method CurrentStatusResponseShipment setWarnings(Warning[]|null $warnings = null)
+ *
+ * @since 1.0.0
  */
 class CurrentStatusResponseShipment extends AbstractEntity
 {

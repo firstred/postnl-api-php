@@ -57,6 +57,8 @@ use ThirtyBees\PostNL\Exception\ResponseException;
  * @method GetLocationsInAreaResponse  getLocation(GetLocation $getLocation)
  * @method RequestInterface                     buildGetLocationRequest(GetLocation $getLocation)
  * @method GetLocationsInAreaResponse  processGetLocationResponse(mixed $response)
+ *
+ * @since 1.0.0
  */
 class LocationService extends AbstractService
 {
@@ -535,7 +537,7 @@ class LocationService extends AbstractService
      */
     public function processGetNearestLocationsResponseSOAP(ResponseInterface $response)
     {
-        $xml = @simplexml_load_string(static::getResponseText($response));
+        $xml = simplexml_load_string(static::getResponseText($response));
 
         static::registerNamespaces($xml);
         static::validateSOAPResponse($xml);
@@ -724,7 +726,7 @@ class LocationService extends AbstractService
      */
     public function processGetLocationsInAreaResponseSOAP(ResponseInterface $response)
     {
-        $xml = @simplexml_load_string(static::getResponseText($response));
+        $xml = simplexml_load_string(static::getResponseText($response));
 
         static::registerNamespaces($xml);
         static::validateSOAPResponse($xml);
@@ -890,7 +892,7 @@ class LocationService extends AbstractService
      */
     public function processGetLocationResponseSOAP(ResponseInterface $response)
     {
-        $xml = @simplexml_load_string(static::getResponseText($response));
+        $xml = simplexml_load_string(static::getResponseText($response));
 
         static::registerNamespaces($xml);
         static::validateSOAPResponse($xml);

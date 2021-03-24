@@ -31,6 +31,7 @@ use Psr\Http\Message\ResponseInterface;
 use Sabre\Xml\LibXMLException;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Service as XmlService;
+use SimpleXMLElement;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
 use ThirtyBees\PostNL\Entity\Request\Confirming;
 use ThirtyBees\PostNL\Entity\Response\ConfirmingResponseShipment;
@@ -47,6 +48,8 @@ use ThirtyBees\PostNL\Exception\ResponseException;
  * @method RequestInterface             buildConfirmShipmentRequest(Confirming $shipment)
  * @method ConfirmingResponseShipment   processConfirmShipmentResponse(mixed $response)
  * @method ConfirmingResponseShipment[] confirmShipments(Confirming[] $shipments)
+ *
+ * @since 1.0.0
  */
 class ConfirmingService extends AbstractService
 {
@@ -296,7 +299,7 @@ class ConfirmingService extends AbstractService
      */
     public function processConfirmResponseSOAP(ResponseInterface $response)
     {
-        $xml = @simplexml_load_string(static::getResponseText($response));
+        $xml = new SimpleXMLElement(static::getResponseText($response));
 
         static::registerNamespaces($xml);
         static::validateSOAPResponse($xml);

@@ -44,6 +44,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method CutOffTime  setDay(string|null $day = null)
  * @method CutOffTime  setTime(string|null $time = null)
  * @method CutOffTime  setAvailable(bool|null $available = null)
+ *
+ * @since 1.0.0
  */
 class CutOffTime extends AbstractEntity
 {

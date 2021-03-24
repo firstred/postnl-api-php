@@ -41,6 +41,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method Coordinates|null getCoordinatesSouthEast()
  * @method Area             setCoordinatesNorthWest(Coordinates|null $NW = null)
  * @method Area             setCoordinatesSouthEast(Coordinates|null $SE = null)
+ *
+ * @since 1.0.0
  */
 class Area extends AbstractEntity
 {

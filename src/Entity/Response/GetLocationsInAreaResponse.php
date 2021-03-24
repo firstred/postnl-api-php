@@ -40,6 +40,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @method GetLocationsResult|null    getGetLocationsResult()
  * @method GetLocationsInAreaResponse setGetLocationsResult(GetLocationsResult|null $result = null)
+ *
+ * @since 1.0.0
  */
 class GetLocationsInAreaResponse extends AbstractEntity
 {

@@ -48,6 +48,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method GenerateLabel         setCustomer(Customer|null $customer = null)
  * @method GenerateLabel         setMessage(LabellingMessage|null $message = null)
  * @method GenerateLabel         setShipments(Shipment[]|null $shipments = null)
+ *
+ * @since 1.0.0
  */
 class GenerateLabel extends AbstractEntity
 {

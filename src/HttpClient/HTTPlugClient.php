@@ -22,6 +22,8 @@ use ThirtyBees\PostNL\Util\EachPromise;
 
 /**
  * Class HTTPlugClient.
+ *
+ * @since 1.2.0
  */
 class HTTPlugClient implements ClientInterface
 {

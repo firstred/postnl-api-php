@@ -52,6 +52,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method Content        setValue(string|null $val = null)
  * @method Content        setWeight(string|null $weight = null)
  * @method Content        setContent(Content[]|null $content = null)
+ *
+ * @since 1.0.0
  */
 class Content extends AbstractEntity
 {

@@ -43,6 +43,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method string[]|null       getOptions()
  * @method GetSentDateResponse setSentDate(string|null $date = null)
  * @method GetSentDateResponse setOptions(string[]|null $options = null)
+ *
+ * @since 1.0.0
  */
 class GetSentDateResponse extends AbstractEntity
 {

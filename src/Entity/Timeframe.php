@@ -66,6 +66,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method Timeframe        setInterval(string|null $interval = null)
  * @method Timeframe        setTimeframeRange(string|null $range = null)
  * @method Timeframe        setTimeframes(Timeframe[]|null $timeframes = null)
+ *
+ * @since 1.0.0
  */
 class Timeframe extends AbstractEntity
 {

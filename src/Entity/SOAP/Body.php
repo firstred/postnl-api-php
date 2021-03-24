@@ -36,6 +36,8 @@ use ThirtyBees\PostNL\Service\LabellingService;
  * Class Body.
  *
  * NOTE: this class has been introduced for deserializing
+ *
+ * @since 1.0.0
  */
 class Body extends AbstractEntity
 {

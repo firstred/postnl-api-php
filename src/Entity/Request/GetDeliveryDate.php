@@ -70,6 +70,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method GetDeliveryDate      setStreet(string|null $street = null)
  * @method GetDeliveryDate      setGetDeliveryDate(GetDeliveryDate|null $date = null)
  * @method GetDeliveryDate      setMessage(Message|null $message = null)
+ *
+ * @since 1.0.0
  */
 class GetDeliveryDate extends AbstractEntity
 {

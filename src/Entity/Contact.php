@@ -46,6 +46,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method Contact     setEmail(string|null $email = null)
  * @method Contact     setSMSNr(string|null $smsNr = null)
  * @method Contact     setTelNr(string|null $telNr = null)
+ *
+ * @since 1.0.0
  */
 class Contact extends AbstractEntity
 {

@@ -55,6 +55,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method MergedLabel    setDownPartnerLocation(string|null $downPartnerLocation = null)
  * @method MergedLabel    setLabels(Label[]|null $labels = null)
  * @method MergedLabel    setWarnings(Warning[]|null $warnings = null)
+ *
+ * @since 1.0.0
  */
 class ResponseShipment extends AbstractEntity
 {

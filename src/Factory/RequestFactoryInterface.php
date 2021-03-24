@@ -33,6 +33,8 @@ use Psr\Http\Message\UriInterface;
  * Factory for PSR-7 Request.
  *
  * @author Márk Sági-Kazár <mark.sagikazar@gmail.com>
+ *
+ * @since 1.2.0
  */
 interface RequestFactoryInterface
 {

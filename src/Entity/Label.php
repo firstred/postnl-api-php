@@ -44,6 +44,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method Label       setContent(string|null $content = null)
  * @method Label       setContentType(string|null $contentType = null)
  * @method Label       setLabelType(string|null $labelType = null)
+ *
+ * @since 1.0.0
  */
 class Label extends AbstractEntity
 {

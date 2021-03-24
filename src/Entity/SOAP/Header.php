@@ -32,6 +32,8 @@ use ThirtyBees\PostNL\Entity\AbstractEntity;
  * Class Header.
  *
  * NOTE: this class has been introduced for deserializing
+ *
+ * @since 1.0.0
  */
 class Header extends AbstractEntity
 {

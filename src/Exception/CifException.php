@@ -28,6 +28,8 @@ namespace ThirtyBees\PostNL\Exception;
 
 /**
  * Class CifException.
+ *
+ * @since 1.0.0
  */
 class CifException extends AbstractException
 {

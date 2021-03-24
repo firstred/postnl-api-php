@@ -28,6 +28,8 @@ namespace ThirtyBees\PostNL\Exception;
 
 /**
  * Class InvalidMethodException.
+ *
+ * @since 1.0.0
  */
 class InvalidMethodException extends AbstractException
 {

@@ -46,6 +46,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method Timeframe[]|null         getTimeframes()
  * @method ResponseTimeframes       setReasonNoTimeframes(ReasonNoTimeframe[]|null $noTimeframes = null)
  * @method ResponseTimeframes       setTimeframes(Timeframe[]|null $timeframes = null)
+ *
+ * @since 1.0.0
  */
 class ResponseTimeframes extends AbstractEntity
 {

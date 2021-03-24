@@ -60,6 +60,7 @@ use ThirtyBees\PostNL\Entity\Response\CompleteStatusResponse;
 use ThirtyBees\PostNL\Entity\Response\ConfirmingResponseShipment;
 use ThirtyBees\PostNL\Entity\Response\CurrentStatusResponse;
 use ThirtyBees\PostNL\Entity\Response\GenerateLabelResponse;
+use ThirtyBees\PostNL\Entity\Response\GenerateShippingResponse;
 use ThirtyBees\PostNL\Entity\Response\GetDeliveryDateResponse;
 use ThirtyBees\PostNL\Entity\Response\GetLocationsInAreaResponse;
 use ThirtyBees\PostNL\Entity\Response\GetNearestLocationsResponse;
@@ -102,6 +103,8 @@ use function version_compare;
 
 /**
  * Class PostNL.
+ *
+ * @since 1.0.0
  */
 class PostNL implements LoggerAwareInterface
 {
@@ -280,6 +283,8 @@ class PostNL implements LoggerAwareInterface
      * @return PostNL
      *
      * @throws InvalidArgumentException
+     *
+     * @since 1.0.0
      */
     public function setToken($token)
     {
@@ -300,6 +305,8 @@ class PostNL implements LoggerAwareInterface
      * Get REST API Key.
      *
      * @return bool|string
+     *
+     * @since 1.0.0
      */
     public function getRestApiKey()
     {
@@ -314,6 +321,8 @@ class PostNL implements LoggerAwareInterface
      * Get UsernameToken object (for SOAP).
      *
      * @return bool|UsernameToken
+     *
+     * @since 1.0.0
      */
     public function getToken()
     {
@@ -328,6 +337,8 @@ class PostNL implements LoggerAwareInterface
      * Get PostNL Customer.
      *
      * @return Customer
+     *
+     * @since 1.0.0
      */
     public function getCustomer()
     {
@@ -340,6 +351,8 @@ class PostNL implements LoggerAwareInterface
      * @param Customer $customer
      *
      * @return PostNL
+     *
+     * @since 1.0.0
      */
     public function setCustomer(Customer $customer)
     {
@@ -352,6 +365,8 @@ class PostNL implements LoggerAwareInterface
      * Get sandbox mode.
      *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function getSandbox()
     {
@@ -364,6 +379,8 @@ class PostNL implements LoggerAwareInterface
      * @param bool $sandbox
      *
      * @return PostNL
+     *
+     * @since 1.0.0
      */
     public function setSandbox($sandbox)
     {
@@ -376,6 +393,8 @@ class PostNL implements LoggerAwareInterface
      * Get the current mode.
      *
      * @return int
+     *
+     * @since 1.0.0
      */
     public function getMode()
     {
@@ -390,6 +409,8 @@ class PostNL implements LoggerAwareInterface
      * @return PostNL
      *
      * @throws InvalidArgumentException
+     *
+     * @since 1.0.0
      */
     public function setMode($mode)
     {
@@ -417,7 +438,10 @@ class PostNL implements LoggerAwareInterface
      * Automatically load Guzzle when available
      *
      * @return ClientInterface
+     *
      * @throws HttpClientException
+     *
+     * @since 1.0.0
      */
     public function getHttpClient()
     {
@@ -491,6 +515,8 @@ class PostNL implements LoggerAwareInterface
      * Set the HttpClient.
      *
      * @param ClientInterface $client
+     *
+     * @since 1.0.0
      */
     public function setHttpClient(ClientInterface $client)
     {
@@ -501,6 +527,8 @@ class PostNL implements LoggerAwareInterface
      * Get the logger.
      *
      * @return LoggerInterface
+     *
+     * @since 1.0.0
      */
     public function getLogger()
     {
@@ -513,7 +541,10 @@ class PostNL implements LoggerAwareInterface
      * @param LoggerInterface $logger
      *
      * @return PostNL
+     *
      * @throws HttpClientException
+     *
+     * @since 1.0.0
      */
     public function setLogger(LoggerInterface $logger = null)
     {
@@ -527,6 +558,8 @@ class PostNL implements LoggerAwareInterface
 
     /**
      * @return RequestFactoryInterface
+     *
+     * @since 1.2.0
      */
     public function getRequestFactory()
     {
@@ -541,6 +574,8 @@ class PostNL implements LoggerAwareInterface
      * @param RequestFactoryInterface $requestFactory
      *
      * @return $this
+     *
+     * @since 1.2.0
      */
     public function setRequestFactory($requestFactory)
     {
@@ -551,6 +586,8 @@ class PostNL implements LoggerAwareInterface
 
     /**
      * @return ResponseFactoryInterface
+     *
+     * @since 1.2.0
      */
     public function getResponseFactory()
     {
@@ -565,6 +602,8 @@ class PostNL implements LoggerAwareInterface
      * @param ResponseFactoryInterface $responseFactory
      *
      * @return $this
+     *
+     * @since 1.2.0
      */
     public function setResponseFactory($responseFactory)
     {
@@ -575,6 +614,8 @@ class PostNL implements LoggerAwareInterface
 
     /**
      * @return StreamFactoryInterface
+     *
+     * @since 1.2.0
      */
     public function getStreamFactory()
     {
@@ -589,6 +630,8 @@ class PostNL implements LoggerAwareInterface
      * @param StreamFactoryInterface $streamFactory
      *
      * @return $this
+     *
+     * @since 1.2.0
      */
     public function setStreamFactory($streamFactory)
     {
@@ -603,6 +646,8 @@ class PostNL implements LoggerAwareInterface
      * Automatically load the barcode service
      *
      * @return BarcodeService
+     *
+     * @since 1.0.0
      */
     public function getBarcodeService()
     {
@@ -617,6 +662,8 @@ class PostNL implements LoggerAwareInterface
      * Set the barcode service.
      *
      * @param BarcodeService $service
+     *
+     * @since 1.0.0
      */
     public function setBarcodeService(BarcodeService $service)
     {
@@ -629,6 +676,8 @@ class PostNL implements LoggerAwareInterface
      * Automatically load the labelling service
      *
      * @return LabellingService
+     *
+     * @since 1.0.0
      */
     public function getLabellingService()
     {
@@ -643,6 +692,8 @@ class PostNL implements LoggerAwareInterface
      * Set the labelling service.
      *
      * @param LabellingService $service
+     *
+     * @since 1.0.0
      */
     public function setLabellingService(LabellingService $service)
     {
@@ -655,6 +706,8 @@ class PostNL implements LoggerAwareInterface
      * Automatically load the confirming service
      *
      * @return ConfirmingService
+     *
+     * @since 1.0.0
      */
     public function getConfirmingService()
     {
@@ -669,6 +722,8 @@ class PostNL implements LoggerAwareInterface
      * Set the confirming service.
      *
      * @param ConfirmingService $service
+     *
+     * @since 1.0.0
      */
     public function setConfirmingService(ConfirmingService $service)
     {
@@ -681,6 +736,8 @@ class PostNL implements LoggerAwareInterface
      * Automatically load the shipping status service
      *
      * @return ShippingStatusService
+     *
+     * @since 1.0.0
      */
     public function getShippingStatusService()
     {
@@ -695,6 +752,8 @@ class PostNL implements LoggerAwareInterface
      * Set the shipping status service.
      *
      * @param ShippingStatusService $service
+     *
+     * @since 1.0.0
      */
     public function setShippingStatusService(ShippingStatusService $service)
     {
@@ -707,6 +766,8 @@ class PostNL implements LoggerAwareInterface
      * Automatically load the delivery date service
      *
      * @return DeliveryDateService
+     *
+     * @since 1.0.0
      */
     public function getDeliveryDateService()
     {
@@ -721,6 +782,8 @@ class PostNL implements LoggerAwareInterface
      * Set the delivery date service.
      *
      * @param DeliveryDateService $service
+     *
+     * @since 1.0.0
      */
     public function setDeliveryDateService(DeliveryDateService $service)
     {
@@ -733,6 +796,8 @@ class PostNL implements LoggerAwareInterface
      * Automatically load the timeframe service
      *
      * @return TimeframeService
+     *
+     * @since 1.0.0
      */
     public function getTimeframeService()
     {
@@ -747,6 +812,8 @@ class PostNL implements LoggerAwareInterface
      * Set the timeframe service.
      *
      * @param TimeframeService $service
+     *
+     * @since 1.0.0
      */
     public function setTimeframeService(TimeframeService $service)
     {
@@ -759,6 +826,8 @@ class PostNL implements LoggerAwareInterface
      * Automatically load the location service
      *
      * @return LocationService
+     *
+     * @since 1.0.0
      */
     public function getLocationService()
     {
@@ -773,6 +842,8 @@ class PostNL implements LoggerAwareInterface
      * Set the location service.
      *
      * @param LocationService $service
+     *
+     * @since 1.0.0
      */
     public function setLocationService(LocationService $service)
     {
@@ -785,6 +856,8 @@ class PostNL implements LoggerAwareInterface
      * Automatically load the shipping service
      *
      * @return mixed
+     *
+     * @since 1.2.0
      */
     public function getShippingService()
     {
@@ -799,10 +872,152 @@ class PostNL implements LoggerAwareInterface
      * Set the shipping service.
      *
      * @param ShippingService $service
+     *
+     * @since 1.2.0
      */
     public function setShippingService(ShippingService $service)
     {
         $this->shippingService = $service;
+    }
+
+    /**
+     * Generate a single barcode.
+     *
+     * @param string $type
+     * @param string $range
+     * @param string $serie
+     * @param bool   $eps
+     *
+     * @return string The barcode as a string
+     *
+     * @throws InvalidBarcodeException
+     *
+     * @since 1.0.0
+     */
+    public function generateBarcode($type = '3S', $range = null, $serie = null, $eps = false)
+    {
+        if (2 !== strlen($type)) {
+            throw new InvalidBarcodeException("Barcode type `$type` is invalid");
+        }
+
+        if (!$range) {
+            if (in_array($type, ['LA', 'UE', 'RI'])) {
+                $range = 'NL';
+            } elseif (in_array($type, ['2S', '3S'])) {
+                $range = $this->getCustomer()->getCustomerCode();
+            } else {
+                $range = $this->getCustomer()->getGlobalPackCustomerCode();
+            }
+        }
+        if (!$range) {
+            throw new InvalidBarcodeException('Unable to find a valid range');
+        }
+
+        if (!$serie) {
+            $serie = $this->findBarcodeSerie($type, $range, $eps);
+        }
+
+        return $this->getBarcodeService()->generateBarcode(new GenerateBarcode(new Barcode($type, $range, $serie), $this->customer));
+    }
+
+    /**
+     * Generate a single barcode by country code.
+     *
+     * @param string $iso 2-letter Country ISO Code
+     *
+     * @return string The Barcode as a string
+     *
+     * @throws InvalidConfigurationException
+     * @throws InvalidBarcodeException
+     *
+     * @since 1.0.0
+     */
+    public function generateBarcodeByCountryCode($iso)
+    {
+        if (in_array(strtoupper($iso), static::$threeSCountries)) {
+            $range = $this->getCustomer()->getCustomerCode();
+            $type = '3S';
+        } else {
+            $range = $this->getCustomer()->getGlobalPackCustomerCode();
+            $type = $this->getCustomer()->getGlobalPackBarcodeType();
+
+            if (!$range) {
+                throw new InvalidConfigurationException('GlobalPack customer code has not been set for the current customer');
+            }
+            if (!$type) {
+                throw new InvalidConfigurationException('GlobalPack barcode type has not been set for the current customer');
+            }
+        }
+
+        $serie = $this->findBarcodeSerie(
+            $type,
+            $range,
+            'NL' !== strtoupper($iso) && in_array(strtoupper($iso), static::$threeSCountries)
+        );
+
+        return $this->getBarcodeService()->generateBarcode(new GenerateBarcode(new Barcode($type, $range, $serie), $this->customer));
+    }
+
+    /**
+     * Generate a single barcode by country code.
+     *
+     * @param array $isos key = iso code, value = amount of barcodes requested
+     *
+     * @return array Country isos with the barcode as string
+     *
+     * @throws InvalidConfigurationException
+     * @throws InvalidBarcodeException
+     *
+     * @since 1.0.0
+     */
+    public function generateBarcodesByCountryCodes(array $isos)
+    {
+        $customerCode = $this->getCustomer()->getCustomerCode();
+        $globalPackRange = $this->getCustomer()->getGlobalPackCustomerCode();
+        $globalPackType = $this->getCustomer()->getGlobalPackBarcodeType();
+
+        $generateBarcodes = [];
+        $index = 0;
+        foreach ($isos as $iso => $qty) {
+            if (in_array(strtoupper($iso), static::$threeSCountries)) {
+                $range = $customerCode;
+                $type = '3S';
+            } else {
+                $range = $globalPackRange;
+                $type = $globalPackType;
+
+                if (!$range) {
+                    throw new InvalidConfigurationException('GlobalPack customer code has not been set for the current customer');
+                }
+                if (!$type) {
+                    throw new InvalidConfigurationException('GlobalPack barcode type has not been set for the current customer');
+                }
+            }
+
+            $serie = $this->findBarcodeSerie(
+                $type,
+                $range,
+                'NL' !== strtoupper($iso) && in_array(strtoupper($iso), static::$threeSCountries)
+            );
+
+            for ($i = 0; $i < $qty; ++$i) {
+                $generateBarcodes[] = (new GenerateBarcode(new Barcode($type, $range, $serie), $this->customer))->setId("$iso-$index");
+                ++$index;
+            }
+        }
+
+        $results = $this->getBarcodeService()->generateBarcodes($generateBarcodes);
+
+        $barcodes = [];
+        foreach ($results as $id => $barcode) {
+            list($iso) = explode('-', $id);
+            if (!isset($barcodes[$iso])) {
+                $barcodes[$iso] = [];
+            }
+            $barcodes[$iso][] = $barcode;
+        }
+
+        return $barcodes;
     }
 
     /**
@@ -811,8 +1026,10 @@ class PostNL implements LoggerAwareInterface
      * @param bool     $confirm
      *
      * @return Entity\Response\GenerateShippingResponse
+     *
+     * @since 1.2.0
      */
-    public function generateShipping(
+    public function sendShipment(
         Shipment $shipment,
         $printertype = 'GraphicFile|PDF',
         $confirm = true
@@ -863,11 +1080,16 @@ class PostNL implements LoggerAwareInterface
      *
      * @return GenerateShippingResponse|string
      *
-     * @throws AbstractException
      * @throws NotSupportedException
+     * @throws \setasign\Fpdi\PdfParser\CrossReference\CrossReferenceException
+     * @throws \setasign\Fpdi\PdfParser\Filter\FilterException
+     * @throws \setasign\Fpdi\PdfParser\PdfParserException
+     * @throws \setasign\Fpdi\PdfParser\Type\PdfTypeException
      * @throws \setasign\Fpdi\PdfReader\PdfReaderException
+     *
+     * @since 1.2.0
      */
-    public function generateShippings(
+    public function sendShipments(
         array $shipments,
         $printertype = 'GraphicFile|PDF',
         $confirm = true,
@@ -935,7 +1157,8 @@ class PostNL implements LoggerAwareInterface
             }
         } else {
             $a6s = 4; // Amount of A6s available
-            foreach ($responseShipments->getResponseShipments() as $label) {
+            $responseShipmentsArray = $responseShipments->getResponseShipments();
+            foreach ($responseShipmentsArray as $label) {
                 $pdfContent = base64_decode($label->getLabels()[0]->getContent());
                 $sizes = Util::getPdfSizeAndOrientation($pdfContent);
                 if ('A6' === $sizes['iso']) {
@@ -956,7 +1179,7 @@ class PostNL implements LoggerAwareInterface
                     $pdf->useTemplate($pdf->importPage(1), static::$a6positions[$a6s][0], static::$a6positions[$a6s][1]);
                     --$a6s;
                     if ($a6s < 1) {
-                        if ($label !== end($responseShipments)) {
+                        if ($label !== end($responseShipmentsArray)) {
                             $pdf->addPage('P', [297, 210], 90);
                         }
                         $a6s = 4;
@@ -1012,140 +1235,6 @@ class PostNL implements LoggerAwareInterface
         }
 
         return $pdf->output('', 'S');
-    }
-
-    /**
-     * Generate a single barcode.
-     *
-     * @param string $type
-     * @param string $range
-     * @param string $serie
-     * @param bool   $eps
-     *
-     * @return string The barcode as a string
-     *
-     * @throws InvalidBarcodeException
-     */
-    public function generateBarcode($type = '3S', $range = null, $serie = null, $eps = false)
-    {
-        if (2 !== strlen($type)) {
-            throw new InvalidBarcodeException("Barcode type `$type` is invalid");
-        }
-
-        if (!$range) {
-            if (in_array($type, ['LA', 'UE', 'RI'])) {
-                $range = 'NL';
-            } elseif (in_array($type, ['2S', '3S'])) {
-                $range = $this->getCustomer()->getCustomerCode();
-            } else {
-                $range = $this->getCustomer()->getGlobalPackCustomerCode();
-            }
-        }
-        if (!$range) {
-            throw new InvalidBarcodeException('Unable to find a valid range');
-        }
-
-        if (!$serie) {
-            $serie = $this->findBarcodeSerie($type, $range, $eps);
-        }
-
-        return $this->getBarcodeService()->generateBarcode(new GenerateBarcode(new Barcode($type, $range, $serie), $this->customer));
-    }
-
-    /**
-     * Generate a single barcode by country code.
-     *
-     * @param string $iso 2-letter Country ISO Code
-     *
-     * @return string The Barcode as a string
-     *
-     * @throws InvalidConfigurationException
-     * @throws InvalidBarcodeException
-     */
-    public function generateBarcodeByCountryCode($iso)
-    {
-        if (in_array(strtoupper($iso), static::$threeSCountries)) {
-            $range = $this->getCustomer()->getCustomerCode();
-            $type = '3S';
-        } else {
-            $range = $this->getCustomer()->getGlobalPackCustomerCode();
-            $type = $this->getCustomer()->getGlobalPackBarcodeType();
-
-            if (!$range) {
-                throw new InvalidConfigurationException('GlobalPack customer code has not been set for the current customer');
-            }
-            if (!$type) {
-                throw new InvalidConfigurationException('GlobalPack barcode type has not been set for the current customer');
-            }
-        }
-
-        $serie = $this->findBarcodeSerie(
-            $type,
-            $range,
-            'NL' !== strtoupper($iso) && in_array(strtoupper($iso), static::$threeSCountries)
-        );
-
-        return $this->getBarcodeService()->generateBarcode(new GenerateBarcode(new Barcode($type, $range, $serie), $this->customer));
-    }
-
-    /**
-     * Generate a single barcode by country code.
-     *
-     * @param array $isos key = iso code, value = amount of barcodes requested
-     *
-     * @return array Country isos with the barcode as string
-     *
-     * @throws InvalidConfigurationException
-     * @throws InvalidBarcodeException
-     */
-    public function generateBarcodesByCountryCodes(array $isos)
-    {
-        $customerCode = $this->getCustomer()->getCustomerCode();
-        $globalPackRange = $this->getCustomer()->getGlobalPackCustomerCode();
-        $globalPackType = $this->getCustomer()->getGlobalPackBarcodeType();
-
-        $generateBarcodes = [];
-        $index = 0;
-        foreach ($isos as $iso => $qty) {
-            if (in_array(strtoupper($iso), static::$threeSCountries)) {
-                $range = $customerCode;
-                $type = '3S';
-            } else {
-                $range = $globalPackRange;
-                $type = $globalPackType;
-
-                if (!$range) {
-                    throw new InvalidConfigurationException('GlobalPack customer code has not been set for the current customer');
-                }
-                if (!$type) {
-                    throw new InvalidConfigurationException('GlobalPack barcode type has not been set for the current customer');
-                }
-            }
-
-            $serie = $this->findBarcodeSerie(
-                $type,
-                $range,
-                'NL' !== strtoupper($iso) && in_array(strtoupper($iso), static::$threeSCountries)
-            );
-
-            for ($i = 0; $i < $qty; ++$i) {
-                $generateBarcodes[] = (new GenerateBarcode(new Barcode($type, $range, $serie), $this->customer))->setId("$iso-$index");
-                ++$index;
-            }
-        }
-
-        $results = $this->getBarcodeService()->generateBarcodes($generateBarcodes);
-
-        $barcodes = [];
-        foreach ($results as $id => $barcode) {
-            list($iso) = explode('-', $id);
-            if (!isset($barcodes[$iso])) {
-                $barcodes[$iso] = [];
-            }
-            $barcodes[$iso][] = $barcode;
-        }
-
-        return $barcodes;
     }
 
     /**
@@ -1214,7 +1303,13 @@ class PostNL implements LoggerAwareInterface
      *
      * @throws AbstractException
      * @throws NotSupportedException
+     * @throws \setasign\Fpdi\PdfParser\CrossReference\CrossReferenceException
+     * @throws \setasign\Fpdi\PdfParser\Filter\FilterException
+     * @throws \setasign\Fpdi\PdfParser\PdfParserException
+     * @throws \setasign\Fpdi\PdfParser\Type\PdfTypeException
      * @throws \setasign\Fpdi\PdfReader\PdfReaderException
+     *
+     * @since 1.0.0
      */
     public function generateLabels(
         array $shipments,
@@ -1375,6 +1470,8 @@ class PostNL implements LoggerAwareInterface
      * @param Shipment $shipment
      *
      * @return ConfirmingResponseShipment
+     *
+     * @since 1.0.0
      */
     public function confirmShipment(Shipment $shipment)
     {
@@ -1387,6 +1484,8 @@ class PostNL implements LoggerAwareInterface
      * @param array $shipments
      *
      * @return ConfirmingResponseShipment[]
+     *
+     * @since 1.0.0
      */
     public function confirmShipments(array $shipments)
     {
@@ -1415,6 +1514,8 @@ class PostNL implements LoggerAwareInterface
      * @param CurrentStatus $currentStatus
      *
      * @return CurrentStatusResponse
+     *
+     * @since 1.0.0
      */
     public function getCurrentStatus($currentStatus)
     {
@@ -1442,11 +1543,13 @@ class PostNL implements LoggerAwareInterface
      *   - Fill the Shipment->PhaseCode property, do not pass Barcode or Reference.
      *     Optionally add DateFrom and/or DateTo.
      * - CurrentStatusByStatus:
-     *   - Fill the Shipment->StatuCode property. Leave the rest empty.
+     *   - Fill the Shipment->StatusCode property. Leave the rest empty.
      *
      * @param CompleteStatus $completeStatus
      *
      * @return CompleteStatusResponse
+     *
+     * @since 1.0.0
      */
     public function getCompleteStatus($completeStatus)
     {
@@ -1469,6 +1572,8 @@ class PostNL implements LoggerAwareInterface
      * @param GetSignature $signature
      *
      * @return GetSignature
+     *
+     * @since 1.0.0
      */
     public function getSignature(GetSignature $signature)
     {
@@ -1486,6 +1591,8 @@ class PostNL implements LoggerAwareInterface
      * @param GetDeliveryDate $getDeliveryDate
      *
      * @return GetDeliveryDateResponse
+     *
+     * @since 1.0.0
      */
     public function getDeliveryDate(GetDeliveryDate $getDeliveryDate)
     {
@@ -1498,6 +1605,8 @@ class PostNL implements LoggerAwareInterface
      * @param GetSentDateRequest $getSentDate
      *
      * @return GetSentDateResponse
+     *
+     * @since 1.0.0
      */
     public function getSentDate(GetSentDateRequest $getSentDate)
     {
@@ -1510,6 +1619,8 @@ class PostNL implements LoggerAwareInterface
      * @param GetTimeframes $getTimeframes
      *
      * @return ResponseTimeframes
+     *
+     * @since 1.0.0
      */
     public function getTimeframes(GetTimeframes $getTimeframes)
     {
@@ -1522,6 +1633,8 @@ class PostNL implements LoggerAwareInterface
      * @param GetNearestLocations $getNearestLocations
      *
      * @return GetNearestLocationsResponse
+     *
+     * @since 1.0.0
      */
     public function getNearestLocations(GetNearestLocations $getNearestLocations)
     {
@@ -1542,6 +1655,9 @@ class PostNL implements LoggerAwareInterface
      *
      * @throws HttpClientException
      * @throws InvalidArgumentException
+     * @throws \Psr\Cache\InvalidArgumentException
+     *
+     * @since 1.0.0
      */
     public function getTimeframesAndNearestLocations(
         GetTimeframes $getTimeframes,
@@ -1633,6 +1749,8 @@ class PostNL implements LoggerAwareInterface
      * @param GetLocationsInArea $getLocationsInArea
      *
      * @return GetLocationsInAreaResponse
+     *
+     * @since 1.0.0
      */
     public function getLocationsInArea(GetLocationsInArea $getLocationsInArea)
     {
@@ -1645,6 +1763,8 @@ class PostNL implements LoggerAwareInterface
      * @param GetLocation $getLocation
      *
      * @return GetLocationsInAreaResponse
+     *
+     * @since 1.0.0
      */
     public function getLocation(GetLocation $getLocation)
     {
@@ -1661,6 +1781,8 @@ class PostNL implements LoggerAwareInterface
      * @return string
      *
      * @throws InvalidBarcodeException
+     *
+     * @since 1.0.0
      */
     public function findBarcodeSerie($type, $range, $eps)
     {
@@ -1686,7 +1808,6 @@ class PostNL implements LoggerAwareInterface
                             break 2;
                         default:
                             throw new InvalidBarcodeException('Invalid range');
-                            break;
                     }
                 }
                 // Regular domestic codes

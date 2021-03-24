@@ -44,6 +44,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method string|null getMessageTimeStamp()
  * @method Message     setMessageID(string|null $mid = null)
  * @method Message     setMessageTimeStamp(string|null $timestamp = null)
+ *
+ * @since 1.0.0
  */
 class Message extends AbstractEntity
 {

@@ -41,6 +41,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method string|null getDescription()
  * @method Warning     setCode(string|null $code = null)
  * @method Warning     setDescription(string|null $description = null)
+ *
+ * @since 1.0.0
  */
 class Warning extends AbstractEntity
 {

@@ -41,6 +41,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @method string|null       getSignature()
  * @method SignatureResponse setSignature(Signature|null $signature = null)
+ *
+ * @since 1.0.0
  */
 class SignatureResponse extends AbstractEntity
 {

@@ -41,6 +41,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @method ResponseLocation[]|null getResponseLocation()
  * @method GetLocationsResult      setResponseLocation(ResponseLocation|null $location = null)
+ *
+ * @since 1.0.0
  */
 class GetLocationsResult extends AbstractEntity
 {

@@ -42,6 +42,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @method string|null           getShipments()
  * @method CurrentStatusResponse setShipments(Shipment[]|null $shipments = null)
+ *
+ * @since 1.0.0
  */
 class CurrentStatusResponse extends AbstractEntity
 {

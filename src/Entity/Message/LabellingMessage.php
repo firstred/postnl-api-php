@@ -44,6 +44,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method Message     setMessageID(string|null $mid = null)
  * @method Message     setMessageTimeStamp(string|null $timestamp = null)
  * @method Message     setPrinterType(string|null $printerType = null)
+ *
+ * @since 1.0.0
  */
 class LabellingMessage extends Message
 {

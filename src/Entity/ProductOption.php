@@ -42,6 +42,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method string|null   getOption()
  * @method ProductOption setCharacteristic(string|null $characteristic = null)
  * @method ProductOption setOption(string|null $option = null)
+ *
+ * @since 1.0.0
  */
 class ProductOption extends AbstractEntity
 {

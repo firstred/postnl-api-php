@@ -48,6 +48,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method GetSignature  setMessage(Message|null $message = null)
  * @method GetSignature  setCustomer(Customer|null $customer = null)
  * @method GetSignature  setShipment(Shipment|null $shipment = null)
+ *
+ * @since 1.0.0
  */
 class GetSignature extends AbstractEntity
 {

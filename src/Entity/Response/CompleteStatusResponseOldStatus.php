@@ -48,6 +48,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method CompleteStatusResponseOldStatus setPhaseCode(string|null $code = null)
  * @method CompleteStatusResponseOldStatus setPhaseDescription(string|null $description = null)
  * @method CompleteStatusResponseOldStatus setTimeStamp(string|null $timestamp = null)
+ *
+ * @since 1.0.0
  */
 class CompleteStatusResponseOldStatus extends AbstractEntity
 {

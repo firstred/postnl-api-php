@@ -51,6 +51,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method OpeningHours setFriday(string|null $friday = null)
  * @method OpeningHours setSaturday(string|null $saturday = null)
  * @method OpeningHours setSunday(string|null $sunday = null)
+ *
+ * @since 1.0.0
  */
 class OpeningHours extends AbstractEntity
 {

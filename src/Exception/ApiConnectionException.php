@@ -28,6 +28,8 @@ namespace ThirtyBees\PostNL\Exception;
 
 /**
  * Class ApiConnectionException.
+ *
+ * @since 1.0.0
  */
 class ApiConnectionException extends AbstractException
 {

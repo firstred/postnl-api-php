@@ -58,14 +58,16 @@ use ThirtyBees\PostNL\Exception\ResponseException;
  * Class ShippingStatusService.
  *
  * @method CurrentStatusResponse  currentStatus(CurrentStatus|CurrentStatusByReference|CurrentStatusByPhase|CurrentStatusByStatus $currentStatus)
- * @method RequestInterface                buildCurrentStatusRequest(CurrentStatus|CurrentStatusByReference|CurrentStatusByPhase|CurrentStatusByStatus $currentStatus)
+ * @method RequestInterface       buildCurrentStatusRequest(CurrentStatus|CurrentStatusByReference|CurrentStatusByPhase|CurrentStatusByStatus $currentStatus)
  * @method CurrentStatusResponse  processCurrentStatusResponse(mixed $response)
  * @method CompleteStatusResponse completeStatus(CompleteStatus|CompleteStatusByReference|CompleteStatusByPhase|CompleteStatusByStatus $completeStatus)
- * @method RequestInterface                buildCompleteStatusRequest(CompleteStatus|CompleteStatusByReference|CompleteStatusByPhase|CompleteStatusByStatus $completeStatus)
+ * @method RequestInterface       buildCompleteStatusRequest(CompleteStatus|CompleteStatusByReference|CompleteStatusByPhase|CompleteStatusByStatus $completeStatus)
  * @method CompleteStatusResponse processCompleteStatusResponse(mixed $response)
  * @method GetSignature           getSignature(GetSignature $getSignature)
- * @method RequestInterface                buildGetSignatureRequest(GetSignature $getSignature)
+ * @method RequestInterface       buildGetSignatureRequest(GetSignature $getSignature)
  * @method GetSignature           processGetSignatureResponse(mixed $response)
+ *
+ * @since 1.0.0
  */
 class ShippingStatusService extends AbstractService
 {
@@ -598,7 +600,7 @@ class ShippingStatusService extends AbstractService
      */
     public function processCurrentStatusResponseSOAP(ResponseInterface $response)
     {
-        $xml = @simplexml_load_string(static::getResponseText($response));
+        $xml = simplexml_load_string(static::getResponseText($response));
 
         static::registerNamespaces($xml);
         static::validateSOAPResponse($xml);
@@ -825,7 +827,7 @@ class ShippingStatusService extends AbstractService
      */
     public function processCompleteStatusResponseSOAP(ResponseInterface $response)
     {
-        $xml = @simplexml_load_string(static::getResponseText($response));
+        $xml = simplexml_load_string(static::getResponseText($response));
 
         static::registerNamespaces($xml);
         static::validateSOAPResponse($xml);
@@ -949,7 +951,7 @@ class ShippingStatusService extends AbstractService
      */
     public function processGetSignatureResponseSOAP(ResponseInterface $response)
     {
-        $xml = @simplexml_load_string(static::getResponseText($response));
+        $xml = simplexml_load_string(static::getResponseText($response));
 
         static::registerNamespaces($xml);
         static::validateSOAPResponse($xml);

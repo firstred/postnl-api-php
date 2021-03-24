@@ -43,6 +43,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method Message|null       getMessage()
  * @method GetSentDateRequest setGetSentDate(GetSentDate|null $date = null)
  * @method GetSentDateRequest setMessage(Message|null $message = null)
+ *
+ * @since 1.0.0
  */
 class GetSentDateRequest extends AbstractEntity
 {

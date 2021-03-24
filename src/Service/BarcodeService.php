@@ -26,9 +26,12 @@
 
 namespace ThirtyBees\PostNL\Service;
 
+use GuzzleHttp\Exception\GuzzleException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use ReflectionException;
 use Sabre\Xml\Service as XmlService;
+use SimpleXMLElement;
 use ThirtyBees\PostNL\Entity\Request\GenerateBarcode;
 use ThirtyBees\PostNL\Entity\SOAP\Security;
 use ThirtyBees\PostNL\Exception\ApiException;
@@ -45,6 +48,8 @@ use ThirtyBees\PostNL\PostNL;
  * @method RequestInterface buildGenerateBarcodeRequest(GenerateBarcode $generateBarcode)
  * @method string           processGenerateBarcodeResponse(mixed $response)
  * @method string[]         generateBarcodes(GenerateBarcode[] $generateBarcode)
+ *
+ * @since 1.0.0
  */
 class BarcodeService extends AbstractService
 {
@@ -85,7 +90,12 @@ class BarcodeService extends AbstractService
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
+     * @throws GuzzleException
+     * @throws HttpClientException
+     * @throws ReflectionException
      * @throws ResponseException
+     *
+     * @noinspection PhpUnused
      */
     public function generateBarcodeREST(GenerateBarcode $generateBarcode)
     {
@@ -104,7 +114,12 @@ class BarcodeService extends AbstractService
      * @param GenerateBarcode[] $generateBarcodes
      *
      * @return string[]|ResponseException[]|ApiException[]|CifDownException[]|CifException[] Barcodes
+     *
+     * @throws GuzzleException
      * @throws HttpClientException
+     * @throws ReflectionException
+     *
+     * @noinspection PhpUnused
      */
     public function generateBarcodesREST(array $generateBarcodes)
     {
@@ -145,9 +160,14 @@ class BarcodeService extends AbstractService
      *
      * @return string Barcode
      *
+     * @throws CifDownException
+     * @throws CifException
+     * @throws GuzzleException
+     * @throws HttpClientException
+     * @throws ReflectionException
      * @throws ResponseException
-     * @throws \ThirtyBees\PostNL\Exception\CifDownException
-     * @throws \ThirtyBees\PostNL\Exception\CifException
+     *
+     * @noinspection PhpUnused
      */
     public function generateBarcodeSOAP(GenerateBarcode $generateBarcode)
     {
@@ -162,6 +182,12 @@ class BarcodeService extends AbstractService
      * @param GenerateBarcode[] $generateBarcodes
      *
      * @return string[] Barcodes
+     *
+     * @throws GuzzleException
+     * @throws HttpClientException
+     * @throws ReflectionException
+     *
+     * @noinspection PhpUnused
      */
     public function generateBarcodesSOAP(array $generateBarcodes)
     {
@@ -194,6 +220,8 @@ class BarcodeService extends AbstractService
      * @param GenerateBarcode $generateBarcode
      *
      * @return RequestInterface
+     *
+     * @throws ReflectionException
      */
     public function buildGenerateBarcodeRequestREST(GenerateBarcode $generateBarcode)
     {
@@ -225,7 +253,9 @@ class BarcodeService extends AbstractService
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
+     * @throws HttpClientException
      * @throws ResponseException
+     * @throws GuzzleException
      */
     public function processGenerateBarcodeResponseREST(ResponseInterface $response)
     {
@@ -246,6 +276,7 @@ class BarcodeService extends AbstractService
      * @param GenerateBarcode $generateBarcode
      *
      * @return RequestInterface
+     * @throws ReflectionException
      */
     public function buildGenerateBarcodeRequestSOAP(GenerateBarcode $generateBarcode)
     {
@@ -294,11 +325,13 @@ class BarcodeService extends AbstractService
      *
      * @throws CifDownException
      * @throws CifException
+     * @throws GuzzleException
+     * @throws HttpClientException
      * @throws ResponseException
      */
     public function processGenerateBarcodeResponseSOAP(ResponseInterface $response)
     {
-        $xml = @simplexml_load_string(static::getResponseText($response));
+        $xml = new SimpleXMLElement(static::getResponseText($response));
 
         static::registerNamespaces($xml);
         static::validateSOAPResponse($xml);

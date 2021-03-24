@@ -47,6 +47,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method OldStatus   setCurrentOldStatusCode(string|null $code)
  * @method OldStatus   setCurrentOldStatusDescription(string|null $desc)
  * @method OldStatus   setCurrentOldStatusTimeStamp(string|null $dateTime)
+ *
+ * @since 1.0.0
  */
 class OldStatus extends AbstractEntity
 {

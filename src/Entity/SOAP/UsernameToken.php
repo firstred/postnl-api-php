@@ -36,6 +36,8 @@ use ThirtyBees\PostNL\Entity\AbstractEntity;
  * @method string|null   getPassword()
  * @method UsernameToken setUsername(string|null $username = null)
  * @method UsernameToken setPassword(string|null $password = null)
+ *
+ * @since 1.0.0
  */
 class UsernameToken extends AbstractEntity
 {

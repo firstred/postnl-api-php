@@ -55,6 +55,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method Amount      setReference(string|null $reference = null)
  * @method Amount      setTransactionNumber(string|null $transactionNr = null)
  * @method Amount      setValue(string|null $value = null)
+ *
+ * @since 1.0.0
  */
 class Amount extends AbstractEntity
 {

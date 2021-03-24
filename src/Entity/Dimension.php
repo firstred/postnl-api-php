@@ -48,6 +48,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method Dimension   setVolume(string|null $volume = null)
  * @method Dimension   setWeight(string|null $weight = null)
  * @method Dimension   setWidth(string|null $width = null)
+ *
+ * @since 1.0.0
  */
 class Dimension extends AbstractEntity
 {

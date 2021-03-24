@@ -31,6 +31,8 @@ use RuntimeException;
  * A special exception that is thrown when waiting on a rejected promise.
  *
  * The reason value is available via the getReason() method.
+ *
+ * @since 1.0.0
  */
 class RejectionException extends RuntimeException
 {

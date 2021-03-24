@@ -26,6 +26,11 @@
 
 namespace ThirtyBees\PostNL\Exception;
 
+/**
+ * Class NotSupportedException
+ *
+ * @since 1.0.0
+ */
 class NotSupportedException extends AbstractException
 {
 }

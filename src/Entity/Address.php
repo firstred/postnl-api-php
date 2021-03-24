@@ -72,6 +72,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method Address     setRegion(string|null $region = null)
  * @method Address     setRemark(string|null $remark = null)
  * @method Address     setStreetHouseNrExt(string|null $streetHouseNrExt = null)
+ *
+ * @since 1.0.0
  */
 class Address extends AbstractEntity
 {

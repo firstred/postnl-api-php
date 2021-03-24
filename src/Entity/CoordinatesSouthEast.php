@@ -41,6 +41,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method string|null          getLongitude()
  * @method CoordinatesSouthEast setLatitude(string|null $lat = null)
  * @method CoordinatesSouthEast setLongitude(string|null $long = null)
+ *
+ * @since 1.0.0
  */
 class CoordinatesSouthEast extends AbstractEntity
 {

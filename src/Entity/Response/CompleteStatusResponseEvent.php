@@ -52,6 +52,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method CompleteStatusResponseEvent setRouteCode(string|null $code = null)
  * @method CompleteStatusResponseEvent setRouteName(string|null $name = null)
  * @method CompleteStatusResponseEvent setTimeStamp(string|null $timestamp = null)
+ *
+ * @since 1.0.0
  */
 class CompleteStatusResponseEvent extends AbstractEntity
 {

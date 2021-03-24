@@ -48,6 +48,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method Confirming      setCustomer(Customer|null $customer = null)
  * @method Confirming      setMessage(Message|null $message = null)
  * @method Confirming      setShipments(Shipment[]|null $shipments = null)
+ *
+ * @since 1.0.0
  */
 class Confirming extends AbstractEntity
 {

@@ -72,6 +72,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method ResponseLocation setWarnings(Warning[]|null $warnings = null)
  * @method ResponseLocation setDownPartnerID(string|null $downPartnerID = null)
  * @method ResponseLocation setDownPartnerLocation(string|null $downPartnerLocation = null)
+ *
+ * @since 1.0.0
  */
 class ResponseLocation extends AbstractEntity
 {

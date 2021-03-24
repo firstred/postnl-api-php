@@ -43,6 +43,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method ResponseShipment[]|null  getResponseShipments()
  * @method GenerateShippingResponse setMergedLabels(MergedLabel[]|null $mergedLabels = null)
  * @method GenerateShippingResponse setResponseShipments(ResponseShipment[]|null $responseShipment = null)
+ *
+ * @since 1.0.0
  */
 class GenerateShippingResponse extends AbstractEntity
 {

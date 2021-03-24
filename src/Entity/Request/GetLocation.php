@@ -47,6 +47,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method GetLocation  setLocationCode(string|null $location = null)
  * @method GetLocation  setMessage(Message|null $message = null)
  * @method GetLocation  setRetailNetworkID(string|null $id = null)
+ *
+ * @since 1.0.0
  */
 class GetLocation extends AbstractEntity
 {

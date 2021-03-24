@@ -28,6 +28,8 @@ namespace ThirtyBees\PostNL\Exception;
 
 /**
  * Class InvalidConfigurationException.
+ *
+ * @since 1.0.0
  */
 class InvalidConfigurationException extends AbstractException
 {

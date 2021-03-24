@@ -71,6 +71,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method ResponseAddress setFloor(string|null $floor = null)
  * @method ResponseAddress setRegion(string|null $region = null)
  * @method ResponseAddress setRemark(string|null $remark = null)
+ *
+ * @since 1.0.0
  */
 class ResponseAddress extends AbstractEntity
 {

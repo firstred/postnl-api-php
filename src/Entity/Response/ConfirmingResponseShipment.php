@@ -43,6 +43,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method Warning[]|null             getWarnings()
  * @method ConfirmingResponseShipment setBarcode(string|null $barcode = null)
  * @method ConfirmingResponseShipment setWarnings(Warning[]|null $warnings = null)
+ *
+ * @since 1.0.0
  */
 class ConfirmingResponseShipment extends AbstractEntity
 {

@@ -28,6 +28,8 @@ namespace ThirtyBees\PostNL\Exception;
 
 /**
  * Class InvalidBarcodeException.
+ *
+ * @since 1.0.0
  */
 class InvalidBarcodeException extends AbstractException
 {

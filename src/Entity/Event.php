@@ -40,6 +40,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * @method string|null getCompleteStatusResponseEvent()
  * @method Event       setCompleteStatusResponseEvent(CompleteStatusResponseEvent|null $event = null)
+ *
+ * @since 1.0.0
  */
 class Event extends AbstractEntity
 {

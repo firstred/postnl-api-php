@@ -46,6 +46,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method Group       setGroupSequence(string|null $groupSequence = null)
  * @method Group       setGroupType(string|null $groupType = null)
  * @method Group       setMainBarcode(string|null $mainBarcode = null)
+ *
+ * @since 1.0.0
  */
 class Group extends AbstractEntity
 {

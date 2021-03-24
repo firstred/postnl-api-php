@@ -250,7 +250,7 @@ class ShippingServiceRestTest extends TestCase
         $mockClient->setHandler($handler);
         $this->postnl->setHttpClient($mockClient);
 
-        $shipping = $this->postnl->generateShipping(
+        $sentShipment = $this->postnl->sendShipment(
             (new Shipment())
                 ->setAddresses([
                     Address::create([
@@ -279,7 +279,7 @@ class ShippingServiceRestTest extends TestCase
                 ->setProductCodeDelivery('3085')
         );
 
-        $this->assertInstanceOf(GenerateShippingResponse::class, $shipping);
+        $this->assertInstanceOf(GenerateShippingResponse::class, $sentShipment);
     }
 
     /**
@@ -297,7 +297,7 @@ class ShippingServiceRestTest extends TestCase
         $mockClient->setHandler($handler);
         $this->postnl->setHttpClient($mockClient);
 
-        $this->postnl->generateShipping(
+        $this->postnl->sendShipment(
             (new Shipment())
                 ->setAddresses([
                     Address::create([
@@ -376,7 +376,7 @@ class ShippingServiceRestTest extends TestCase
         $mockClient->setHandler($handler);
         $this->postnl->setHttpClient($mockClient);
 
-        $shipping = $this->postnl->generateShippings([
+        $sentShipments = $this->postnl->sendShipments([
             (new Shipment())
                 ->setAddresses([
                     Address::create([
@@ -442,7 +442,7 @@ class ShippingServiceRestTest extends TestCase
             ]
         );
 
-        $this->assertTrue(is_string($shipping));
+        $this->assertTrue(is_string($sentShipments));
     }
 
     /**
@@ -494,7 +494,7 @@ class ShippingServiceRestTest extends TestCase
         $mockClient->setHandler($handler);
         $this->postnl->setHttpClient($mockClient);
 
-        $label = $this->postnl->generateShippings([
+        $sentShipments = $this->postnl->sendShipments([
             (new Shipment())
                 ->setAddresses([
                     Address::create([
@@ -560,7 +560,7 @@ class ShippingServiceRestTest extends TestCase
             ]
         );
 
-        $this->assertTrue(is_string($label));
+        $this->assertTrue(is_string($sentShipments));
     }
 
     /**
@@ -612,7 +612,7 @@ class ShippingServiceRestTest extends TestCase
         $mockClient->setHandler($handler);
         $this->postnl->setHttpClient($mockClient);
 
-        $shippings = $this->postnl->generateShippings([
+        $shipments = $this->postnl->sendShipments([
                 (new Shipment())
                     ->setAddresses([
                         Address::create([
@@ -668,6 +668,6 @@ class ShippingServiceRestTest extends TestCase
             ]
         );
 
-        $this->assertInstanceOf(GenerateShippingResponse::class, $shippings);
+        $this->assertInstanceOf(GenerateShippingResponse::class, $shipments);
     }
 }

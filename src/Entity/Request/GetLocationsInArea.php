@@ -48,6 +48,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method GetLocationsInArea setCountrycode(string|null $Countrycode = null)
  * @method GetLocationsInArea setLocation(Location|null $location = null)
  * @method GetLocationsInArea setMessage(Message|null $message = null)
+ *
+ * @since 1.0.0
  */
 class GetLocationsInArea extends AbstractEntity
 {

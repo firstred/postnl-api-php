@@ -40,6 +40,8 @@ use ThirtyBees\PostNL\Service\LabellingService;
  * @method Envelope    setBody(Body|null $body = null)
  *
  * NOTE: this class has been introduced for deserializing
+ *
+ * @since 1.0.0
  */
 class Envelope extends AbstractEntity
 {

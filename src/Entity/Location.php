@@ -75,6 +75,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method Location                  setRetailNetworkID(string|null $id = null)
  * @method Location                  setDownPartnerID(string|null $id = null)
  * @method Location                  setDownPartnerLocation(string|null $location = null)
+ *
+ * @since 1.0.0
  */
 class Location extends AbstractEntity
 {

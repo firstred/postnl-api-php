@@ -58,6 +58,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method Customs        setLicense(string|null $license = null)
  * @method Customs        setLicenseNr(string|null $licenseNr = null)
  * @method Customs        setShipmentType(string|null $shipmentType = null)
+ *
+ * @since 1.0.0
  */
 class Customs extends AbstractEntity
 {

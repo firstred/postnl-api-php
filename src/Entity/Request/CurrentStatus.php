@@ -48,6 +48,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method CurrentStatus setMessage(Message|null $message = null)
  * @method CurrentStatus setCustomer(Customer|null $customer = null)
  * @method CurrentStatus setShipment(Shipment|null $shipment = null)
+ *
+ * @since 1.0.0
  */
 class CurrentStatus extends AbstractEntity
 {
