@@ -115,6 +115,7 @@ use GuzzleHttp\ClientInterface as GuzzleClientInterface;
 use function base64_decode;
 use function class_exists;
 use function constant;
+use function defined;
 use function interface_exists;
 use function version_compare;
 
@@ -480,7 +481,7 @@ class PostNL implements LoggerAwareInterface
                 }
             }
 
-            if (class_exists(Psr18ClientDiscovery::class)) {
+            if (!$this->httpClient && class_exists(Psr18ClientDiscovery::class)) {
                 try {
                     // Detect PHP HTTPlug PSR-18 HTTP client support
                     $client = Psr18ClientDiscovery::find();
@@ -494,7 +495,7 @@ class PostNL implements LoggerAwareInterface
                 }
             }
 
-            if (class_exists(HttpClientDiscovery::class)) {
+            if (!$this->httpClient && class_exists(HttpClientDiscovery::class)) {
                 try {
                     // Detect PHP HTTPlug HTTP client support
                     $client = HttpClientDiscovery::find();
@@ -508,17 +509,18 @@ class PostNL implements LoggerAwareInterface
                 }
             }
 
-            if (interface_exists(GuzzleClientInterface::class)
-                && (defined(GuzzleClientInterface::class.'::VERSION') && version_compare(
-                    constant(GuzzleClientInterface::class.'::VERSION'),
-                    '6.0.0',
-                    '>='
-                ))
-                || (defined(GuzzleClientInterface::class.'::MAJOR_VERSION') && version_compare(
-                    constant(GuzzleClientInterface::class.'::MAJOR_VERSION'),
-                    '7.0.0',
-                    '>='
-                ))
+            if (!$this->httpClient
+                && interface_exists(GuzzleClientInterface::class)
+                && ((defined(GuzzleClientInterface::class.'::VERSION') && version_compare(
+                            constant(GuzzleClientInterface::class.'::VERSION'),
+                            '6.0.0',
+                            '>='
+                        ))
+                    || (defined(GuzzleClientInterface::class.'::MAJOR_VERSION') && version_compare(
+                            constant(GuzzleClientInterface::class.'::MAJOR_VERSION'),
+                            '7.0.0',
+                            '>='
+                        )))
             ) {
                 $this->httpClient = new GuzzleClient();
             }
@@ -531,7 +533,6 @@ class PostNL implements LoggerAwareInterface
             $this->httpClient->setVerify($this->verifySslCerts);
         }
         // @codeCoverageIgnoreEnd
-
 
         return $this->httpClient;
     }
