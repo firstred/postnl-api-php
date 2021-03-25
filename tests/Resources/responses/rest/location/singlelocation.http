@@ -1,0 +1,56 @@
+HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+
+{
+  "GetLocationsResult": {
+    "ResponseLocation": {
+      "Address": {
+        "City": "Utrecht",
+        "Countrycode": "NL",
+        "HouseNr": 46,
+        "Remark": "Dit is een Postkantoor. Post en pakketten die u op werkdagen vóór de lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag. Pakketten die u op zaterdag voor 17:00 uur afgeeft worden maandag bezorgd.",
+        "Street": "Merelstraat",
+        "Zipcode": "3514CN"
+      },
+      "DeliveryOptions": {
+        "string": [
+          "DO",
+          "UL",
+          "RETA"
+        ]
+      },
+      "Latitude": 52.1005511031476,
+      "LocationCode": 161503,
+      "Longitude": 5.11515973586749,
+      "Name": "Jumbo Utrecht Merelstraat",
+      "OpeningHours": {
+        "Friday": {
+          "string": "07:00-22:00"
+        },
+        "Monday": {
+          "string": "07:00-22:00"
+        },
+        "Saturday": {
+          "string": "07:00-22:00"
+        },
+        "Sunday": {
+          "string": "10:00-21:00"
+        },
+        "Thursday": {
+          "string": "07:00-22:00"
+        },
+        "Tuesday": {
+          "string": "07:00-22:00"
+        },
+        "Wednesday": {
+          "string": "07:00-22:00"
+        }
+      },
+      "PartnerName": "PostNL",
+      "PhoneNumber": "030-6630160",
+      "RetailNetworkID": "PNPNL-01",
+      "Saleschannel": "PKT M",
+      "TerminalType": "NRS"
+    }
+  }
+}
