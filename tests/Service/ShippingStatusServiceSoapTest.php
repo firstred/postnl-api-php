@@ -37,22 +37,21 @@ use ThirtyBees\PostNL\Entity\Address;
 use ThirtyBees\PostNL\Entity\Customer;
 use ThirtyBees\PostNL\Entity\Message\Message;
 use ThirtyBees\PostNL\Entity\Request\CompleteStatus;
-use ThirtyBees\PostNL\Entity\Request\CompleteStatusByPhase;
-use ThirtyBees\PostNL\Entity\Request\CompleteStatusByStatus;
 use ThirtyBees\PostNL\Entity\Request\CurrentStatus;
 use ThirtyBees\PostNL\Entity\Request\GetSignature;
 use ThirtyBees\PostNL\Entity\Response\CompleteStatusResponse;
 use ThirtyBees\PostNL\Entity\Response\CurrentStatusResponse;
-use ThirtyBees\PostNL\Entity\Response\SignatureResponse;
+use ThirtyBees\PostNL\Entity\Response\GetSignatureResponseSignature;
 use ThirtyBees\PostNL\Entity\Shipment;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
 use ThirtyBees\PostNL\HttpClient\MockClient;
 use ThirtyBees\PostNL\PostNL;
 use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\ShippingStatusServiceInterface;
+use function count;
 
 /**
- * Class ShippingStatusSoapTest.
+ * Class ShippingStatusRestTest.
  *
  * @testdox The ShippingStatusService (SOAP)
  */
@@ -122,7 +121,7 @@ class ShippingStatusServiceSoapTest extends TestCase
         $barcode = '3SDEVC201611210';
         $message = new Message();
 
-        $this->lastRequest = $request = $this->service->buildCurrentStatusRequestSOAP(
+        $this->lastRequest = $request = $this->service->buildCurrentStatusRequest(
             (new CurrentStatus())
                 ->setShipment(
                     (new Shipment())
@@ -131,42 +130,12 @@ class ShippingStatusServiceSoapTest extends TestCase
                 ->setMessage($message)
         );
 
-        $this->assertXmlStringEqualsXmlString(<<<XML
-<?xml version="1.0"?>
-<soap:Envelope 
-    xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
-    xmlns:env="http://www.w3.org/2003/05/soap-envelope" 
-    xmlns:services="http://postnl.nl/cif/services/ShippingStatusWebService/" 
-    xmlns:domain="http://postnl.nl/cif/domain/ShippingStatusWebService/" 
-    xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd"
-    xmlns:schema="http://www.w3.org/2001/XMLSchema-instance" 
-    xmlns:common="http://postnl.nl/cif/services/common/"
->
- <soap:Header>
-  <wsse:Security>
-   <wsse:UsernameToken>
-    <wsse:Password>test</wsse:Password>
-   </wsse:UsernameToken>
-  </wsse:Security>
- </soap:Header>
- <soap:Body>
-  <services:CurrentStatus>
-   <domain:Message>
-    <domain:MessageID>{$message->getMessageID()}</domain:MessageID>
-    <domain:MessageTimeStamp>{$message->getMessageTimeStamp()}</domain:MessageTimeStamp>
-   </domain:Message>
-   <domain:Customer>
-    <domain:CustomerCode>{$this->postnl->getCustomer()->getCustomerCode()}</domain:CustomerCode>
-    <domain:CustomerNumber>{$this->postnl->getCustomer()->getCustomerNumber()}</domain:CustomerNumber>
-   </domain:Customer>
-   <domain:Shipment>
-    <domain:Barcode>{$barcode}</domain:Barcode>
-   </domain:Shipment>
-  </services:CurrentStatus>
- </soap:Body>
-</soap:Envelope>
-XML
-            , (string) $request->getBody());
+        $query = \GuzzleHttp\Psr7\parse_query($request->getUri()->getQuery());
+
+        $this->assertEmpty($query);
+        $this->assertEquals('test', $request->getHeaderLine('apikey'));
+        $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
+        $this->assertEquals("/shipment/v2/status/barcode/$barcode", $request->getUri()->getPath());
     }
 
     /**
@@ -175,57 +144,77 @@ XML
     public function testGetCurrentStatusSoap()
     {
         $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
-   <s:Body>
-     <CurrentStatusResponse
-xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://postnl.nl/cif/domain/ShippingStatusWebService/" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-       <a:Shipments>
-         <a:CurrentStatusResponseShipment>
-           <a:Addresses>
-             <a:ResponseAddress>
-               <a:AddressType>01</a:AddressType>
-               <a:City>Hoofddorp</a:City>
-               <a:CountryCode>NL</a:CountryCode>
-               <a:LastName>de Ruiter</a:LastName>
-               <a:RegistrationDate>01-01-0001 00:00:00</a:RegistrationDate>
-               <a:Street>Siriusdreef</a:Street>
-               <a:Zipcode>2132WT</a:Zipcode>
-             </a:ResponseAddress>
-             <a:ResponseAddress>
-               <a:AddressType>02</a:AddressType>
-               <a:City>Vianen</a:City>
-               <a:CompanyName>PostNL</a:CompanyName>
-               <a:CountryCode>NL</a:CountryCode>
-               <a:HouseNumber>1</a:HouseNumber>
-               <a:HouseNumberSuffix>A</a:HouseNumberSuffix>
-               <a:RegistrationDate>01-01-0001 00:00:00</a:RegistrationDate>
-               <a:Street>Lage Biezenweg</a:Street>
-               <a:Zipcode>4131LV</a:Zipcode>
-             </a:ResponseAddress>
-           </a:Addresses>
-           <a:Barcode>3SABCD6659149</a:Barcode>
-           <a:Groups>
-             <a:ResponseGroup>
-               <a:GroupType>4</a:GroupType>
-               <a:MainBarcode>3SABCD6659149</a:MainBarcode>
-               <a:ShipmentAmount>1</a:ShipmentAmount>
-               <a:ShipmentCounter>1</a:ShipmentCounter>
-             </a:ResponseGroup>
-           </a:Groups>
-           <a:ProductCode>003052</a:ProductCode>
-           <a:Reference>2016014567</a:Reference>
-           <a:Status>
-             <a:CurrentPhaseCode>4</a:CurrentPhaseCode>
-             <a:CurrentPhaseDescription>Afgeleverd</a:CurrentPhaseDescription>
-             <a:CurrentStatusCode>11</a:CurrentStatusCode>
-             <a:CurrentStatusDescription>Zending afgeleverd</a:CurrentStatusDescription>
-             <a:CurrentStatusTimeStamp>06-06-2016 18:00:41</a:CurrentStatusTimeStamp>
-           </a:Status>
-         </a:CurrentStatusResponseShipment>
-       </a:Shipments>
-     </CurrentStatusResponse>
-   </s:Body>
-</s:Envelope>'), ]);
+            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], '{
+  "CurrentStatus": {
+    "Shipment": {
+      "MainBarcode": "3SDEVC302392342",
+      "Barcode": "3SDEVC302392342",
+      "ShipmentAmount": "1",
+      "ShipmentCounter": "1",
+      "Customer": {
+        "CustomerCode": "DEVC",
+        "CustomerNumber": "11223344",
+        "Name": "kja fasdfasdf"
+      },
+      "ProductCode": "003089",
+      "ProductDescription": "Handtek. voor Ontvangst\/Alleen huisadres",
+      "Reference": "SK123456",
+      "Dimension": {
+        "Height": "110",
+        "Length": "255",
+        "Volume": "5330",
+        "Weight": "260",
+        "Width": "190"
+      },
+      "Address": [
+        {
+          "AddressType": "01",
+          "Building": {},
+          "City": "Nijmegen",
+          "CompanyName": {},
+          "CountryCode": "NL",
+          "DepartmentName": {},
+          "District": {},
+          "FirstName": "A",
+          "Floor": {},
+          "HouseNumber": "12",
+          "HouseNumberSuffix": {},
+          "LastName": "B",
+          "Region": {},
+          "Remark": {},
+          "Street": "Ergens",
+          "Zipcode": "1234GN"
+        },
+        {
+          "AddressType": "02",
+          "Building": {},
+          "City": "Hoofddorp",
+          "CompanyName": "PostNL",
+          "CountryCode": "NL",
+          "DepartmentName": {},
+          "District": {},
+          "FirstName": {},
+          "Floor": {},
+          "HouseNumber": "42",
+          "HouseNumberSuffix": {},
+          "LastName": {},
+          "Region": {},
+          "Remark": {},
+          "Street": "Siriusdreef",
+          "Zipcode": "3212WT"
+        }
+      ],
+      "Status": {
+        "TimeStamp": "07-03-2018 23:20:05",
+        "StatusCode": "2",
+        "StatusDescription": "Zending in ontvangst genomen",
+        "PhaseCode": "1",
+        "PhaseDescription": "Collectie"
+      }
+    }
+  }
+}
+'), ]);
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();
         $mockClient->setHandler($handler);
@@ -250,7 +239,7 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
         $reference = '339820938';
         $message = new Message();
 
-        $this->lastRequest = $request = $this->service->buildCurrentStatusRequestSOAP(
+        $this->lastRequest = $request = $this->service->buildCurrentStatusRequest(
             (new CurrentStatus())
                 ->setShipment(
                     (new Shipment())
@@ -259,42 +248,15 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
                 ->setMessage($message)
         );
 
-        $this->assertXmlStringEqualsXmlString(<<<XML
-<?xml version="1.0"?>
-<soap:Envelope 
-    xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
-    xmlns:env="http://www.w3.org/2003/05/soap-envelope" 
-    xmlns:services="http://postnl.nl/cif/services/ShippingStatusWebService/" 
-    xmlns:domain="http://postnl.nl/cif/domain/ShippingStatusWebService/" 
-    xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" 
-    xmlns:schema="http://www.w3.org/2001/XMLSchema-instance" 
-    xmlns:common="http://postnl.nl/cif/services/common/"
->
- <soap:Header>
-  <wsse:Security>
-   <wsse:UsernameToken>
-    <wsse:Password>test</wsse:Password>
-   </wsse:UsernameToken>
-  </wsse:Security>
- </soap:Header>
- <soap:Body>
-  <services:CurrentStatus>
-   <domain:Message>
-    <domain:MessageID>{$message->getMessageID()}</domain:MessageID>
-    <domain:MessageTimeStamp>{$message->getMessageTimeStamp()}</domain:MessageTimeStamp>
-   </domain:Message>
-   <domain:Customer>
-    <domain:CustomerCode>{$this->postnl->getCustomer()->getCustomerCode()}</domain:CustomerCode>
-    <domain:CustomerNumber>{$this->postnl->getCustomer()->getCustomerNumber()}</domain:CustomerNumber>
-   </domain:Customer>
-   <domain:Shipment>
-    <domain:Reference>{$reference}</domain:Reference>
-   </domain:Shipment>
-  </services:CurrentStatus>
- </soap:Body>
-</soap:Envelope>
-XML
-            , (string) $request->getBody());
+        $query = \GuzzleHttp\Psr7\parse_query($request->getUri()->getQuery());
+
+        $this->assertEquals([
+            'customerCode'   => $this->postnl->getCustomer()->getCustomerCode(),
+            'customerNumber' => $this->postnl->getCustomer()->getCustomerNumber(),
+        ], $query);
+        $this->assertEquals('test', $request->getHeaderLine('apikey'));
+        $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
+        $this->assertEquals("/shipment/v2/status/reference/$reference", $request->getUri()->getPath());
     }
 
     /**
@@ -305,7 +267,7 @@ XML
         $status = '1';
         $message = new Message();
 
-        $this->lastRequest = $request = $this->service->buildCurrentStatusRequestSOAP(
+        $this->lastRequest = $request = $this->service->buildCurrentStatusRequest(
             (new CurrentStatus())
                 ->setShipment(
                     (new Shipment())
@@ -314,97 +276,16 @@ XML
                 ->setMessage($message)
         );
 
-        $this->assertXmlStringEqualsXmlString(<<<XML
-<?xml version="1.0"?>
-<soap:Envelope 
-    xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" 
-    xmlns:env="http://www.w3.org/2003/05/soap-envelope"
-    xmlns:services="http://postnl.nl/cif/services/ShippingStatusWebService/" 
-    xmlns:domain="http://postnl.nl/cif/domain/ShippingStatusWebService/" 
-    xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" 
-    xmlns:schema="http://www.w3.org/2001/XMLSchema-instance" 
-    xmlns:common="http://postnl.nl/cif/services/common/"
->
- <soap:Header>
-  <wsse:Security>
-   <wsse:UsernameToken>
-    <wsse:Password>test</wsse:Password>
-   </wsse:UsernameToken>
-  </wsse:Security>
- </soap:Header>
- <soap:Body>
-  <services:CurrentStatus>
-   <domain:Message>
-    <domain:MessageID>{$message->getMessageID()}</domain:MessageID>
-    <domain:MessageTimeStamp>{$message->getMessageTimeStamp()}</domain:MessageTimeStamp>
-   </domain:Message>
-   <domain:Customer>
-    <domain:CustomerCode>{$this->postnl->getCustomer()->getCustomerCode()}</domain:CustomerCode>
-    <domain:CustomerNumber>{$this->postnl->getCustomer()->getCustomerNumber()}</domain:CustomerNumber>
-   </domain:Customer>
-   <domain:Shipment>
-    <domain:StatusCode>{$status}</domain:StatusCode>
-   </domain:Shipment>
-  </services:CurrentStatus>
- </soap:Body>
-</soap:Envelope>
-XML
-            , (string) $request->getBody());
-    }
+        $query = \GuzzleHttp\Psr7\parse_query($request->getUri()->getQuery());
 
-    /**
-     * @testdox creates a valid CurrentStatusByPhase request
-     */
-    public function testGetCurrentStatusByPhaseRequestSoap()
-    {
-        $phase = '1';
-        $message = new Message();
-
-        $this->lastRequest = $request = $this->service->buildCurrentStatusRequestSOAP(
-            (new CurrentStatus())
-                ->setShipment(
-                    (new Shipment())
-                        ->setPhaseCode($phase)
-                )
-                ->setMessage($message)
-        );
-
-        $this->assertXmlStringEqualsXmlString(<<<XML
-<?xml version="1.0"?>
-<soap:Envelope 
-    xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
-    xmlns:env="http://www.w3.org/2003/05/soap-envelope" 
-    xmlns:services="http://postnl.nl/cif/services/ShippingStatusWebService/" 
-    xmlns:domain="http://postnl.nl/cif/domain/ShippingStatusWebService/" 
-    xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd"
-    xmlns:schema="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:common="http://postnl.nl/cif/services/common/"
->
- <soap:Header>
-  <wsse:Security>
-   <wsse:UsernameToken>
-    <wsse:Password>test</wsse:Password>
-   </wsse:UsernameToken>
-  </wsse:Security>
- </soap:Header>
- <soap:Body>
-  <services:CurrentStatus>
-   <domain:Message>
-    <domain:MessageID>{$message->getMessageID()}</domain:MessageID>
-    <domain:MessageTimeStamp>{$message->getMessageTimeStamp()}</domain:MessageTimeStamp>
-   </domain:Message>
-   <domain:Customer>
-    <domain:CustomerCode>{$this->postnl->getCustomer()->getCustomerCode()}</domain:CustomerCode>
-    <domain:CustomerNumber>{$this->postnl->getCustomer()->getCustomerNumber()}</domain:CustomerNumber>
-   </domain:Customer>
-   <domain:Shipment>
-    <domain:PhaseCode>{$phase}</domain:PhaseCode>
-   </domain:Shipment>
-  </services:CurrentStatus>
- </soap:Body>
-</soap:Envelope>
-XML
-            , (string) $request->getBody());
+        $this->assertEquals([
+            'customerCode'   => $this->postnl->getCustomer()->getCustomerCode(),
+            'customerNumber' => $this->postnl->getCustomer()->getCustomerNumber(),
+            'status'         => $status,
+        ], $query);
+        $this->assertEquals('test', $request->getHeaderLine('apikey'));
+        $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
+        $this->assertEquals('/shipment/v2/status/search', $request->getUri()->getPath());
     }
 
     /**
@@ -415,7 +296,7 @@ XML
         $barcode = '3SDEVC201611210';
         $message = new Message();
 
-        $this->lastRequest = $request = $this->service->buildCompleteStatusRequestSOAP(
+        $this->lastRequest = $request = $this->service->buildCompleteStatusRequest(
             (new CompleteStatus())
                 ->setShipment(
                     (new Shipment())
@@ -424,239 +305,163 @@ XML
                 ->setMessage($message)
         );
 
-        $this->assertXmlStringEqualsXmlString(<<<XML
-<?xml version="1.0"?>
-<soap:Envelope
-    xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" 
-    xmlns:env="http://www.w3.org/2003/05/soap-envelope"
-    xmlns:services="http://postnl.nl/cif/services/ShippingStatusWebService/" 
-    xmlns:domain="http://postnl.nl/cif/domain/ShippingStatusWebService/" 
-    xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" 
-    xmlns:schema="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:common="http://postnl.nl/cif/services/common/"
->
- <soap:Header>
-  <wsse:Security>
-   <wsse:UsernameToken>
-    <wsse:Password>test</wsse:Password>
-   </wsse:UsernameToken>
-  </wsse:Security>
- </soap:Header>
- <soap:Body>
-  <services:CompleteStatus>
-   <domain:Message>
-    <domain:MessageID>{$message->getMessageID()}</domain:MessageID>
-    <domain:MessageTimeStamp>{$message->getMessageTimeStamp()}</domain:MessageTimeStamp>
-   </domain:Message>
-   <domain:Customer>
-    <domain:CustomerCode>{$this->postnl->getCustomer()->getCustomerCode()}</domain:CustomerCode>
-    <domain:CustomerNumber>{$this->postnl->getCustomer()->getCustomerNumber()}</domain:CustomerNumber>
-   </domain:Customer>
-   <domain:Shipment>
-    <domain:Barcode>{$barcode}</domain:Barcode>
-   </domain:Shipment>
-  </services:CompleteStatus>
- </soap:Body>
-</soap:Envelope>
-XML
-            , (string) $request->getBody());
+        $query = \GuzzleHttp\Psr7\parse_query($request->getUri()->getQuery());
+
+        $this->assertEquals([
+            'detail' => 'true',
+        ], $query);
+        $this->assertEquals('test', $request->getHeaderLine('apikey'));
+        $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
+        $this->assertEquals("/shipment/v2/status/barcode/$barcode", $request->getUri()->getPath());
     }
 
     /**
-     * @testdox creates a valid CompleteStatusByReference request
-     */
-    public function testGetCompleteStatusByReferenceRequestSoap()
-    {
-        $reference = '339820938';
-        $message = new Message();
-
-        $this->lastRequest = $request = $this->service->buildCompleteStatusRequestSOAP(
-            (new CompleteStatus())
-                ->setShipment(
-                    (new Shipment())
-                        ->setReference($reference)
-                )
-                ->setMessage($message)
-        );
-
-        $this->assertXmlStringEqualsXmlString(<<<XML
-<?xml version="1.0"?>
-<soap:Envelope 
-    xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
-    xmlns:env="http://www.w3.org/2003/05/soap-envelope" 
-    xmlns:services="http://postnl.nl/cif/services/ShippingStatusWebService/" 
-    xmlns:domain="http://postnl.nl/cif/domain/ShippingStatusWebService/" 
-    xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd"
-    xmlns:schema="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:common="http://postnl.nl/cif/services/common/"
->
- <soap:Header>
-  <wsse:Security>
-   <wsse:UsernameToken>
-    <wsse:Password>test</wsse:Password>
-   </wsse:UsernameToken>
-  </wsse:Security>
- </soap:Header>
- <soap:Body>
-  <services:CompleteStatus>
-   <domain:Message>
-    <domain:MessageID>{$message->getMessageID()}</domain:MessageID>
-    <domain:MessageTimeStamp>{$message->getMessageTimeStamp()}</domain:MessageTimeStamp>
-   </domain:Message>
-   <domain:Customer>
-    <domain:CustomerCode>{$this->postnl->getCustomer()->getCustomerCode()}</domain:CustomerCode>
-    <domain:CustomerNumber>{$this->postnl->getCustomer()->getCustomerNumber()}</domain:CustomerNumber>
-   </domain:Customer>
-   <domain:Shipment>
-    <domain:Reference>{$reference}</domain:Reference>
-   </domain:Shipment>
-  </services:CompleteStatus>
- </soap:Body>
-</soap:Envelope>
-XML
-            , (string) $request->getBody());
-    }
-
-    /**
-     * @testdox can get the complete status
+     * @testdox can retrieve the complete status
      */
     public function testGetCompleteStatusSoap()
     {
         $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
-   <s:Body>
-     <CompleteStatusResponse
-xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://postnl.nl/cif/domain/ShippingStatusWebService/" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-       <a:Shipments>
-         <a:CompleteStatusResponseShipment>
-           <a:Addresses>
-             <a:ResponseAddress>
-               <a:AddressType>01</a:AddressType>
-               <a:City>Rimini</a:City>
-               <a:CountryCode>IT</a:CountryCode>
-               <a:HouseNumber>37</a:HouseNumber>
-               <a:HouseNumberSuffix>b</a:HouseNumberSuffix>
-               <a:LastName>Carlo</a:LastName>
-               <a:RegistrationDate>01-01-0001 00:00:00</a:RegistrationDate>
-               <a:Street>Via Italia </a:Street>
-               <a:Zipcode>46855</a:Zipcode>
-             </a:ResponseAddress>
-           </a:Addresses>
-           <a:Amounts>
-             <a:ResponseAmount>
-               <a:AmountType>RemboursBedrag</a:AmountType>
-               <a:Value>0</a:Value>
-             </a:ResponseAmount>
-             <a:ResponseAmount>
-               <a:AmountType>VerzekerdBedrag</a:AmountType>
-               <a:Value>0</a:Value>
-             </a:ResponseAmount>
-           </a:Amounts>
-           <a:Barcode>3SABCD6659149</a:Barcode>
-           <a:Customer>
-             <a:CustomerCode>ABCD</a:CustomerCode>
-             <a:CustomerNumber>11223344</a:CustomerNumber>
-           </a:Customer>
-           <a:Dimension>
-             <a:Height>1400</a:Height>
-             <a:Length>2000</a:Length>
-             <a:Volume>30000</a:Volume>
-             <a:Weight>4300</a:Weight>
-             <a:Width>1500</a:Width>
-           </a:Dimension>
-           <a:Events>
-             <a:CompleteStatusResponseEvent>
-               <a:Code>01A</a:Code>
-               <a:Description>Zending is aangemeld maar nog niet ontvangen door PostNL</a:Description>
-               <a:LocationCode>156789</a:LocationCode>
-               <a:TimeStamp>03-08-2015 18:27:00</a:TimeStamp>
-             </a:CompleteStatusResponseEvent>
-             <a:CompleteStatusResponseEvent>
-               <a:Code>05Y</a:Code>
-               <a:Description>Bezorger is onderweg</a:Description>
-               <a:LocationCode>166253</a:LocationCode>
-               <a:TimeStamp>21-04-2016 09:50:53</a:TimeStamp>
-             </a:CompleteStatusResponseEvent>
-             <a:CompleteStatusResponseEvent>
-               <a:Code>01B</a:Code>
-               <a:Description>Zending is ontvangen door PostNL</a:Description>
-               <a:DestinationLocationCode>160662</a:DestinationLocationCode>
-               <a:LocationCode>160662</a:LocationCode>
-               <a:TimeStamp>20-04-2016 00:39:13</a:TimeStamp>
-             </a:CompleteStatusResponseEvent>
-             <a:CompleteStatusResponseEvent>
-               <a:Code>02M</a:Code>
-               <a:Description>Voorgemelde zending niet aangetroffen: manco</a:Description>
-               <a:LocationCode>888888</a:LocationCode>
-               <a:TimeStamp>20-04-2016 06:06:16</a:TimeStamp>
-             </a:CompleteStatusResponseEvent>
-             <a:CompleteStatusResponseEvent>
-               <a:Code>01A</a:Code>
-               <a:Description>Zending is aangemeld maar nog niet ontvangen door PostNL</a:Description>
-               <a:LocationCode>888888</a:LocationCode>
-               <a:TimeStamp>20-04-2016 06:06:16</a:TimeStamp>
-             </a:CompleteStatusResponseEvent>
-           </a:Events>
-           <a:Groups>
-             <a:ResponseGroup>
-               <a:GroupType>4</a:GroupType>
-               <a:MainBarcode>3SDUGS0101223</a:MainBarcode>
-               <a:ShipmentAmount>1</a:ShipmentAmount>
-               <a:ShipmentCounter>1</a:ShipmentCounter>
-             </a:ResponseGroup>
-           </a:Groups>
-           <a:OldStatuses>
-             <a:CompleteStatusResponseOldStatus>
-               <a:Code>99</a:Code>
-               <a:Description>niet van toepassing</a:Description>
-               <a:PhaseCode>99</a:PhaseCode>
-               <a:PhaseDescription>niet van toepassing</a:PhaseDescription>
-               <a:TimeStamp>20-04-2016 00:00:00</a:TimeStamp>
-             </a:CompleteStatusResponseOldStatus>
-             <a:CompleteStatusResponseOldStatus>
-               <a:Code>7</a:Code>
-               <a:Description>Zending in distributieproces</a:Description>
-               <a:PhaseCode>3</a:PhaseCode>
-               <a:PhaseDescription>Distributie</a:PhaseDescription>
-               <a:TimeStamp>19-04-2016 23:53:58</a:TimeStamp>
-             </a:CompleteStatusResponseOldStatus>
-             <a:CompleteStatusResponseOldStatus>
-               <a:Code>3</a:Code>
-               <a:Description>Zending afgehaald</a:Description>
-               <a:PhaseCode>1</a:PhaseCode>
-               <a:PhaseDescription>Collectie</a:PhaseDescription>
-               <a:TimeStamp>19-04-2016 23:50:15</a:TimeStamp>
-             </a:CompleteStatusResponseOldStatus>
-             <a:CompleteStatusResponseOldStatus>
-               <a:Code>13</a:Code>
-               <a:Description>Voorgemeld: nog niet aangenomen</a:Description>
-               <a:PhaseCode>1</a:PhaseCode>
-               <a:PhaseDescription>Collectie</a:PhaseDescription>
-               <a:TimeStamp>19-04-2016 06:06:16</a:TimeStamp>
-             </a:CompleteStatusResponseOldStatus>
-             <a:CompleteStatusResponseOldStatus>
-               <a:Code>1</a:Code>
-               <a:Description>Zending voorgemeld</a:Description>
-               <a:PhaseCode>1</a:PhaseCode>
-               <a:PhaseDescription>Collectie</a:PhaseDescription>
-               <a:TimeStamp>19-04-2016 06:06:16</a:TimeStamp>
-             </a:CompleteStatusResponseOldStatus>
-           </a:OldStatuses>
-           <a:ProductCode>004944</a:ProductCode>
-           <a:ProductDescription>EPS to Consumer</a:ProductDescription>
-           <a:Reference>100101101</a:Reference>
-           <a:Status>
-             <a:CurrentPhaseCode>4</a:CurrentPhaseCode>
-             <a:CurrentPhaseDescription>Afgeleverd</a:CurrentPhaseDescription>
-             <a:CurrentStatusCode>11</a:CurrentStatusCode>
-             <a:CurrentStatusDescription>Zending afgeleverd</a:CurrentStatusDescription>
-             <a:CurrentStatusTimeStamp>19-04-2016 18:27:00</a:CurrentStatusTimeStamp>
-           </a:Status>
-         </a:CompleteStatusResponseShipment>
-       </a:Shipments>
-     </CompleteStatusResponse>
-   </s:Body>
-</s:Envelope>'), ]);
+            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], '{
+  "CompleteStatus": {
+    "Shipment": {
+      "MainBarcode": "33DEVC123456789",
+      "Barcode": "3SDEVC123456789",
+      "ShipmentAmount": "1",
+      "ShipmentCounter": "1",
+      "Customer": {
+        "CustomerCode": "DEVC",
+        "CustomerNumber": "11223344",
+        "Name": "ASDFASDFASDFASFDD"
+      },
+      "ProductCode": "003089",
+      "ProductDescription": "Handtek. voor Ontvangst\/Alleen huisadres",
+      "Reference": "DF00DF91",
+      "Dimension": {
+        "Height": "110",
+        "Length": "255",
+        "Volume": "5330",
+        "Weight": "260",
+        "Width": "190"
+      },
+      "Address": [
+        {
+          "AddressType": "01",
+          "Building": {},
+          "City": "Nijmegen",
+          "CompanyName": {},
+          "CountryCode": "NL",
+          "DepartmentName": {},
+          "District": {},
+          "FirstName": "SADFASDF",
+          "Floor": {},
+          "HouseNumber": "12",
+          "HouseNumberSuffix": {},
+          "LastName": "SAD ASDF",
+          "Region": {},
+          "Remark": {},
+          "Street": "ASDFDFDFD",
+          "Zipcode": "1234DF"
+        },
+        {
+          "AddressType": "02",
+          "Building": {},
+          "City": "ASDFD DF ASDFDFDFD",
+          "CompanyName": "ASD ASDFASDF DF",
+          "CountryCode": "NL",
+          "DepartmentName": {},
+          "District": {},
+          "FirstName": {},
+          "Floor": {},
+          "HouseNumber": "7",
+          "HouseNumberSuffix": {},
+          "LastName": {},
+          "Region": {},
+          "Remark": {},
+          "Street": "ASDFASDFASDD ASDFASDFASDF",
+          "Zipcode": "1234DF"
+        }
+      ],
+      "Event": [
+        {
+          "Code": "01B",
+          "Description": "Zending is bij PostNL",
+          "DestinationLocationCode": "156731",
+          "LocationCode": "166886",
+          "RouteCode": "419",
+          "RouteName": "419 Nm-Altrada",
+          "TimeStamp": "07-03-2018 23:20:05"
+        },
+        {
+          "Code": "01A",
+          "Description": "Zending wordt verwacht, maar zit nog niet in sorteerproces",
+          "DestinationLocationCode": {},
+          "LocationCode": "888888",
+          "RouteCode": {},
+          "RouteName": {},
+          "TimeStamp": "07-03-2018 09:51:08"
+        },
+        {
+          "Code": "01A",
+          "Description": "Zending wordt verwacht, maar zit nog niet in sorteerproces",
+          "DestinationLocationCode": {},
+          "LocationCode": "888888",
+          "RouteCode": {},
+          "RouteName": {},
+          "TimeStamp": "07-03-2018 09:50:47"
+        }
+      ],
+      "Expectation": {
+        "ETAFrom": "2018-03-08T11:30:00",
+        "ETATo": "2018-03-08T14:00:00"
+      },
+      "Status": {
+        "TimeStamp": "07-03-2018 23:20:05",
+        "StatusCode": "2",
+        "StatusDescription": "Zending in ontvangst genomen",
+        "PhaseCode": "1",
+        "PhaseDescription": "Collectie"
+      },
+      "OldStatus": [
+        {
+          "TimeStamp": "07-03-2018 23:22:56.326",
+          "StatusCode": "99",
+          "StatusDescription": "Niet van toepassing",
+          "PhaseCode": "99",
+          "PhaseDescription": "Niet van toepassing"
+        },
+        {
+          "TimeStamp": "07-03-2018 23:20:05",
+          "StatusCode": "2",
+          "StatusDescription": "Zending in ontvangst genomen",
+          "PhaseCode": "1",
+          "PhaseDescription": "Collectie"
+        },
+        {
+          "TimeStamp": "07-03-2018 09:55:35.976",
+          "StatusCode": "99",
+          "StatusDescription": "Niet van toepassing",
+          "PhaseCode": "99",
+          "PhaseDescription": "Niet van toepassing"
+        },
+        {
+          "TimeStamp": "07-03-2018 09:51:08",
+          "StatusCode": "1",
+          "StatusDescription": "Zending voorgemeld",
+          "PhaseCode": "1",
+          "PhaseDescription": "Collectie"
+        },
+        {
+          "TimeStamp": "07-03-2018 09:50:47",
+          "StatusCode": "1",
+          "StatusDescription": "Zending voorgemeld",
+          "PhaseCode": "1",
+          "PhaseDescription": "Collectie"
+        }
+      ]
+    }
+  }
+}
+'), ]);
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();
         $mockClient->setHandler($handler);
@@ -671,12 +476,41 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
         );
 
         $this->assertInstanceOf(CompleteStatusResponse::class, $completeStatusResponse);
-        $this->assertEquals(1, count($completeStatusResponse->getShipments()[0]->getAddresses()));
-        $this->assertEquals(2, count($completeStatusResponse->getShipments()[0]->getAmounts()));
-        $this->assertEquals(5, count($completeStatusResponse->getShipments()[0]->getEvents()));
-        $this->assertEquals(1, count($completeStatusResponse->getShipments()[0]->getGroups()));
+        $this->assertEquals(2, count($completeStatusResponse->getShipments()[0]->getAddresses()));
+        $this->assertNull($completeStatusResponse->getShipments()[0]->getAmounts());
+        $this->assertEquals(3, count($completeStatusResponse->getShipments()[0]->getEvents()));
+        $this->assertNull($completeStatusResponse->getShipments()[0]->getGroups());
         $this->assertInstanceOf(Customer::class, $completeStatusResponse->getShipments()[0]->getCustomer());
-        $this->assertEquals('19-04-2016 06:06:16', $completeStatusResponse->getShipments()[0]->getOldStatuses()[4]->getTimeStamp());
+        $this->assertEquals('07-03-2018 09:50:47', $completeStatusResponse->getShipments()[0]->getOldStatuses()[4]->getTimeStamp());
+    }
+
+    /**
+     * @testdox creates a valid CompleteStatusByReference request
+     */
+    public function testGetCompleteStatusByReferenceRequestSoap()
+    {
+        $reference = '339820938';
+        $message = new Message();
+
+        $this->lastRequest = $request = $this->service->buildCompleteStatusRequest(
+            (new CompleteStatus())
+                ->setShipment(
+                    (new Shipment())
+                        ->setReference($reference)
+                )
+                ->setMessage($message)
+        );
+
+        $query = \GuzzleHttp\Psr7\parse_query($request->getUri()->getQuery());
+
+        $this->assertEquals([
+            'customerCode'   => $this->postnl->getCustomer()->getCustomerCode(),
+            'customerNumber' => $this->postnl->getCustomer()->getCustomerNumber(),
+            'detail'         => 'true',
+        ], $query);
+        $this->assertEquals('test', $request->getHeaderLine('apikey'));
+        $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
+        $this->assertEquals("/shipment/v2/status/reference/$reference", $request->getUri()->getPath());
     }
 
     /**
@@ -687,8 +521,8 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
         $status = '1';
         $message = new Message();
 
-        $this->lastRequest = $request = $this->service->buildCompleteStatusRequestSOAP(
-            (new CompleteStatusByStatus())
+        $this->lastRequest = $request = $this->service->buildCompleteStatusRequest(
+            (new CompleteStatus())
                 ->setShipment(
                     (new Shipment())
                         ->setStatusCode($status)
@@ -698,104 +532,19 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
                 ->setMessage($message)
         );
 
-        $this->assertXmlStringEqualsXmlString(<<<XML
-<?xml version="1.0"?>
-<soap:Envelope 
-    xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" 
-    xmlns:env="http://www.w3.org/2003/05/soap-envelope" 
-    xmlns:services="http://postnl.nl/cif/services/ShippingStatusWebService/"
-    xmlns:domain="http://postnl.nl/cif/domain/ShippingStatusWebService/" 
-    xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" 
-    xmlns:schema="http://www.w3.org/2001/XMLSchema-instance" 
-    xmlns:common="http://postnl.nl/cif/services/common/"
->
- <soap:Header>
-  <wsse:Security>
-   <wsse:UsernameToken>
-    <wsse:Password>test</wsse:Password>
-   </wsse:UsernameToken>
-  </wsse:Security>
- </soap:Header>
- <soap:Body>
-  <services:CompleteStatusByStatus>
-   <domain:Message>
-    <domain:MessageID>{$message->getMessageID()}</domain:MessageID>
-    <domain:MessageTimeStamp>{$message->getMessageTimeStamp()}</domain:MessageTimeStamp>
-   </domain:Message>
-   <domain:Customer>
-    <domain:CustomerCode>{$this->postnl->getCustomer()->getCustomerCode()}</domain:CustomerCode>
-    <domain:CustomerNumber>{$this->postnl->getCustomer()->getCustomerNumber()}</domain:CustomerNumber>
-   </domain:Customer>
-   <domain:Shipment>
-    <domain:StatusCode>{$status}</domain:StatusCode>
-    <domain:DateFrom>29-06-2016</domain:DateFrom>
-    <domain:DateTo>20-07-2016</domain:DateTo>
-   </domain:Shipment>
-  </services:CompleteStatusByStatus>
- </soap:Body>
-</soap:Envelope>
-XML
-            , (string) $request->getBody());
-    }
+        $query = \GuzzleHttp\Psr7\parse_query($request->getUri()->getQuery());
 
-    /**
-     * @testdox creates a valid CompleteStatusByPhase request
-     */
-    public function testGetCompleteStatusByPhaseRequestSoap()
-    {
-        $phase = '1';
-        $message = new Message();
-
-        $this->lastRequest = $request = $this->service->buildCompleteStatusRequestSOAP(
-            (new CompleteStatusByPhase())
-                ->setShipment(
-                    (new Shipment())
-                        ->setPhaseCode($phase)
-                        ->setDateFrom('29-06-2016')
-                        ->setDateTo('20-07-2016')
-                )
-                ->setMessage($message)
-        );
-
-        $this->assertEquals('"'.ShippingStatusService::SOAP_ACTION_COMPLETE_PHASE.'"', $request->getHeaderLine('SOAPAction'));
-        $this->assertXmlStringEqualsXmlString(<<<XML
-<?xml version="1.0"?>
-<soap:Envelope 
-    xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" 
-    xmlns:env="http://www.w3.org/2003/05/soap-envelope" 
-    xmlns:services="http://postnl.nl/cif/services/ShippingStatusWebService/"
-    xmlns:domain="http://postnl.nl/cif/domain/ShippingStatusWebService/"
-    xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" 
-    xmlns:schema="http://www.w3.org/2001/XMLSchema-instance" 
-    xmlns:common="http://postnl.nl/cif/services/common/"
->
- <soap:Header>
-  <wsse:Security>
-   <wsse:UsernameToken>
-    <wsse:Password>test</wsse:Password>
-   </wsse:UsernameToken>
-  </wsse:Security>
- </soap:Header>
- <soap:Body>
-  <services:CompleteStatusByPhase>
-   <domain:Message>
-    <domain:MessageID>{$message->getMessageID()}</domain:MessageID>
-    <domain:MessageTimeStamp>{$message->getMessageTimeStamp()}</domain:MessageTimeStamp>
-   </domain:Message>
-   <domain:Customer>
-    <domain:CustomerCode>{$this->postnl->getCustomer()->getCustomerCode()}</domain:CustomerCode>
-    <domain:CustomerNumber>{$this->postnl->getCustomer()->getCustomerNumber()}</domain:CustomerNumber>
-   </domain:Customer>
-   <domain:Shipment>
-    <domain:PhaseCode>{$phase}</domain:PhaseCode>
-    <domain:DateFrom>29-06-2016</domain:DateFrom>
-    <domain:DateTo>20-07-2016</domain:DateTo>
-   </domain:Shipment>
-  </services:CompleteStatusByPhase>
- </soap:Body>
-</soap:Envelope>
-XML
-            , (string) $request->getBody());
+        $this->assertEquals([
+            'customerCode'   => $this->postnl->getCustomer()->getCustomerCode(),
+            'customerNumber' => $this->postnl->getCustomer()->getCustomerNumber(),
+            'status'         => $status,
+            'detail'         => 'true',
+            'startDate'      => '29-06-2016',
+            'endDate'        => '20-07-2016',
+        ], $query);
+        $this->assertEquals('test', $request->getHeaderLine('apikey'));
+        $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
+        $this->assertEquals('/shipment/v2/status/search', $request->getUri()->getPath());
     }
 
     /**
@@ -806,50 +555,21 @@ XML
         $barcode = '3S9283920398234';
         $message = new Message();
 
-        $this->lastRequest = $request = $this->service->buildGetSignatureRequestSOAP(
+        $this->lastRequest = $request = $this->service->buildGetSignatureRequest(
             (new GetSignature())
+                ->setCustomer($this->postnl->getCustomer())
                 ->setMessage($message)
                 ->setShipment((new Shipment())
                     ->setBarcode($barcode)
                 )
         );
 
-        $this->assertXmlStringEqualsXmlString(<<<XML
-<?xml version="1.0"?>
-<soap:Envelope 
-    xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
-    xmlns:env="http://www.w3.org/2003/05/soap-envelope" 
-    xmlns:services="http://postnl.nl/cif/services/ShippingStatusWebService/" 
-    xmlns:domain="http://postnl.nl/cif/domain/ShippingStatusWebService/" 
-    xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" 
-    xmlns:schema="http://www.w3.org/2001/XMLSchema-instance" 
-    xmlns:common="http://postnl.nl/cif/services/common/"
->
- <soap:Header>
-  <wsse:Security>
-   <wsse:UsernameToken>
-    <wsse:Password>test</wsse:Password>
-   </wsse:UsernameToken>
-  </wsse:Security>
- </soap:Header>
- <soap:Body>
-  <services:GetSignature>
-   <domain:Message>
-    <domain:MessageID>{$message->getMessageID()}</domain:MessageID>
-    <domain:MessageTimeStamp>{$message->getMessageTimeStamp()}</domain:MessageTimeStamp>
-   </domain:Message>
-   <domain:Customer>
-    <domain:CustomerCode>{$this->postnl->getCustomer()->getCustomerCode()}</domain:CustomerCode>
-    <domain:CustomerNumber>{$this->postnl->getCustomer()->getCustomerNumber()}</domain:CustomerNumber>
-   </domain:Customer>
-   <domain:Shipment>
-    <domain:Barcode>{$barcode}</domain:Barcode>
-   </domain:Shipment>
-  </services:GetSignature>
- </soap:Body>
-</soap:Envelope>
-XML
-            , (string) $request->getBody());
+        $query = \GuzzleHttp\Psr7\parse_query($request->getUri()->getQuery());
+
+        $this->assertEmpty($query);
+        $this->assertEquals('test', $request->getHeaderLine('apikey'));
+        $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
+        $this->assertEquals("/shipment/v2/status/signature/$barcode", $request->getUri()->getPath());
     }
 
     /**
@@ -858,26 +578,14 @@ XML
     public function testGetSignatureSoap()
     {
         $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
-   <s:Body>
-     <SignatureResponse
-xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://postnl.nl/cif/domain/ShippingStatusWebService/" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-          <a:Signature>
-             <a:GetSignatureResponseSignature>
-                <a:Barcode>3SABCD6659149</a:Barcode>
-                <a:SignatureDate>27-06-2015 13:34:19</a:SignatureDate>
-                <a:SignatureImage>[Base64 string]</a:SignatureImage>
-             </a:GetSignatureResponseSignature>
-             <a:Warnings>
-                 <a:Warning>
-                   <a:Code>00</a:Code>
-                   <a:Description>Warning</a:Description>
-                </a:Warning>
-             </a:Warnings>
-          </a:Signature>
-       </SignatureResponse>
-    </s:Body>
-</s:Envelope>'), ]);
+            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], '{
+  "Signature": {
+    "Barcode": "3SDEVC123456789",
+    "SignatureDate": "2018-03-07T13:52:45.000+01:00",
+    "SignatureImage": "R0lGODdh8ACRADMAACwAAAAA8ACRAIMAAACAAAAAgACAgAAAAICAAIAAgICAgIDAwMD\/AAAA\/wD\/\/wAAAP\/\/AP8A\/\/\/\/\/\/8E\/\/DJSau9OOvNu\/8XAIBkaZ5oqq5sW4miK890bd8rHON87\/9AD+yxCxqPyCRqSBwpn9CoskiUWq\/YGVNCzXq\/YMyWGy6bwePmec1+dtXtuJyX5jrn+HzuDdf7\/x91doCEhSF3FnyGi3mKg4yQeo59kZVtk1WWmmuYmJufboiHoKRZnp6lqT2ooqquQKytr7M3qJS0uDS2trm9ILy8vsIawbLDx0LGYsrIzaO\/zM7StxzB077W1NfT2Znb393d36ri0eO9gtXm57Tp6uzO7u\/wyOJk9Mf29\/jY68T+\/DbpeyRJB8CAEwYSjGNQHsJlLRQGMdjkYEN8EheioVhxQ0OO9P8yasRy0Y6xjyJxOSRx8EfJhHxePnyR0lsUmRVF4ZyZqOW8UIJ0wATJM0NNbT52mnSitOgzLT5VEKUZo6lTiDaOHpKHMqpTrTBrTe1p9apHsGFljCW71mwgr9BYlB0q1G0KtDSXtKVa1+5duCWy7eW70m8HvE\/PFs652PBhwCY69VU82fEeJJUHU\/hoGSrQuYwrd5YLec\/arqJHk57SF\/UQzar\/YnaXBnZs2UZSG9V92wVivtAa99YLq7Ht4ZeTLj6OfDUO3oSbTyz9L5Zw6c51QV9KHXvg7lQp\/\/aOVe0k0OTFQlXGPL36iEG3u3fZfTLn+VJEVr2P\/4r+9v1NFyD\/OQOmMl6BVhyI4E3gLVhGgw5uFKFAEE5oSoUWZqjhhhx26OGHIIYo4ogklmjiiSimqOKKLLbo4oswxijjjDTWaOONOOao44489ujjj0AGKeSQRBZp5JFIJqnkkkw26eSTUEZp5AFUHkCBlVdKUOWWWm6JZZZgToCllzB++cCXZp6pJQZpmmmlm26uKaaLaapp55x3VtBmlnGiKSeeK9YJqJyC5pnnm3ziuSeLhRo6ppdj6gmon3ZGGqaKaFb5J6FskjmpopxemmKdloJ6AaVdeupnqZuOagGrlbIZ5qKrttpoiXF+2uqgsK4J56a3msilnlReCamthvoq6ZnDSunsCLPQRistHhEAADs="
+  }
+}
+'), ]);
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();
         $mockClient->setHandler($handler);
@@ -890,6 +598,6 @@ xmlns="http://postnl.nl/cif/services/ShippingStatusWebService/" xmlns:a="http://
                 )
         );
 
-        $this->assertInstanceOf(SignatureResponse::class, $signatureResponse);
+        $this->assertInstanceOf(GetSignatureResponseSignature::class, $signatureResponse);
     }
 }

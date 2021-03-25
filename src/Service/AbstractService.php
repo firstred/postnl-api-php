@@ -112,7 +112,10 @@ abstract class AbstractService
      */
     public function __call($name, $args)
     {
-        $mode = (PostNL::MODE_REST === $this->postnl->getMode() || $this instanceof ShippingServiceInterface) ? 'Rest' : 'Soap';
+        $mode = (PostNL::MODE_REST === $this->postnl->getMode()
+            || $this instanceof ShippingServiceInterface
+            || $this instanceof ShippingStatusServiceInterface
+        ) ? 'Rest' : 'Soap';
 
         if (method_exists($this, "{$name}{$mode}")) {
             return call_user_func_array([$this, "{$name}{$mode}"], $args);
@@ -337,7 +340,10 @@ abstract class AbstractService
         }
 
         $reflection = new ReflectionClass($this);
-        $uuid .= (PostNL::MODE_REST === $this->postnl->getMode() || $this instanceof ShippingServiceInterface) ? 'rest' : 'soap';
+        $uuid .= (PostNL::MODE_REST === $this->postnl->getMode()
+            || $this instanceof ShippingServiceInterface
+            || $this instanceof ShippingStatusServiceInterface
+        ) ? 'rest' : 'soap';
         $uuid .= strtolower(substr($reflection->getShortName(), 0, strlen($reflection->getShortName()) - 7));
         $item = null;
         if ($this->cache instanceof CacheItemPoolInterface && !is_null($this->ttl)) {

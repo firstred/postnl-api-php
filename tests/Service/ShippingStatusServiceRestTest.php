@@ -134,7 +134,7 @@ class ShippingStatusServiceRestTest extends TestCase
         $this->assertEmpty($query);
         $this->assertEquals('test', $request->getHeaderLine('apikey'));
         $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
-        $this->assertEquals("/shipment/v1_6/status/barcode/$barcode", $request->getUri()->getPath());
+        $this->assertEquals("/shipment/v2/status/barcode/$barcode", $request->getUri()->getPath());
     }
 
     /**
@@ -255,7 +255,7 @@ class ShippingStatusServiceRestTest extends TestCase
         ], $query);
         $this->assertEquals('test', $request->getHeaderLine('apikey'));
         $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
-        $this->assertEquals("/shipment/v1_6/status/reference/$reference", $request->getUri()->getPath());
+        $this->assertEquals("/shipment/v2/status/reference/$reference", $request->getUri()->getPath());
     }
 
     /**
@@ -284,36 +284,7 @@ class ShippingStatusServiceRestTest extends TestCase
         ], $query);
         $this->assertEquals('test', $request->getHeaderLine('apikey'));
         $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
-        $this->assertEquals('/shipment/v1_6/status/search', $request->getUri()->getPath());
-    }
-
-    /**
-     * @testdox creates a valid CurrentStatusByPhase request
-     */
-    public function testGetCurrentStatusByPhaseRequestRest()
-    {
-        $phase = '1';
-        $message = new Message();
-
-        $this->lastRequest = $request = $this->service->buildCurrentStatusRequestREST(
-            (new CurrentStatus())
-                ->setShipment(
-                    (new Shipment())
-                        ->setPhaseCode($phase)
-                )
-                ->setMessage($message)
-        );
-
-        $query = \GuzzleHttp\Psr7\parse_query($request->getUri()->getQuery());
-
-        $this->assertEquals([
-            'customerCode'   => $this->postnl->getCustomer()->getCustomerCode(),
-            'customerNumber' => $this->postnl->getCustomer()->getCustomerNumber(),
-            'phase'          => $phase,
-        ], $query);
-        $this->assertEquals('test', $request->getHeaderLine('apikey'));
-        $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
-        $this->assertEquals('/shipment/v1_6/status/search', $request->getUri()->getPath());
+        $this->assertEquals('/shipment/v2/status/search', $request->getUri()->getPath());
     }
 
     /**
@@ -340,7 +311,7 @@ class ShippingStatusServiceRestTest extends TestCase
         ], $query);
         $this->assertEquals('test', $request->getHeaderLine('apikey'));
         $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
-        $this->assertEquals("/shipment/v1_6/status/barcode/$barcode", $request->getUri()->getPath());
+        $this->assertEquals("/shipment/v2/status/barcode/$barcode", $request->getUri()->getPath());
     }
 
     /**
@@ -538,7 +509,7 @@ class ShippingStatusServiceRestTest extends TestCase
         ], $query);
         $this->assertEquals('test', $request->getHeaderLine('apikey'));
         $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
-        $this->assertEquals("/shipment/v1_6/status/reference/$reference", $request->getUri()->getPath());
+        $this->assertEquals("/shipment/v2/status/reference/$reference", $request->getUri()->getPath());
     }
 
     /**
@@ -572,41 +543,7 @@ class ShippingStatusServiceRestTest extends TestCase
         ], $query);
         $this->assertEquals('test', $request->getHeaderLine('apikey'));
         $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
-        $this->assertEquals('/shipment/v1_6/status/search', $request->getUri()->getPath());
-    }
-
-    /**
-     * @testdox creates a valid CompleteStatusByPhase request
-     */
-    public function testGetCompleteStatusByPhaseRequestRest()
-    {
-        $phase = '1';
-        $message = new Message();
-
-        $this->lastRequest = $request = $this->service->buildCompleteStatusRequestREST(
-            (new CompleteStatus())
-                ->setShipment(
-                    (new Shipment())
-                        ->setPhaseCode($phase)
-                        ->setDateFrom('29-06-2016')
-                        ->setDateTo('20-07-2016')
-                )
-                ->setMessage($message)
-        );
-
-        $query = \GuzzleHttp\Psr7\parse_query($request->getUri()->getQuery());
-
-        $this->assertEquals([
-            'customerCode'   => $this->postnl->getCustomer()->getCustomerCode(),
-            'customerNumber' => $this->postnl->getCustomer()->getCustomerNumber(),
-            'phase'          => $phase,
-            'detail'         => 'true',
-            'startDate'      => '29-06-2016',
-            'endDate'        => '20-07-2016',
-        ], $query);
-        $this->assertEquals('test', $request->getHeaderLine('apikey'));
-        $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
-        $this->assertEquals('/shipment/v1_6/status/search', $request->getUri()->getPath());
+        $this->assertEquals('/shipment/v2/status/search', $request->getUri()->getPath());
     }
 
     /**
@@ -631,7 +568,7 @@ class ShippingStatusServiceRestTest extends TestCase
         $this->assertEmpty($query);
         $this->assertEquals('test', $request->getHeaderLine('apikey'));
         $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
-        $this->assertEquals("/shipment/v1_6/status/signature/$barcode", $request->getUri()->getPath());
+        $this->assertEquals("/shipment/v2/status/signature/$barcode", $request->getUri()->getPath());
     }
 
     /**
