@@ -31,8 +31,10 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use libphonenumber\NumberParseException;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use ReflectionException;
 use ThirtyBees\PostNL\Entity\Address;
 use ThirtyBees\PostNL\Entity\Customer;
 use ThirtyBees\PostNL\Entity\CutOffTime;
@@ -43,6 +45,7 @@ use ThirtyBees\PostNL\Entity\Request\GetSentDateRequest;
 use ThirtyBees\PostNL\Entity\Response\GetDeliveryDateResponse;
 use ThirtyBees\PostNL\Entity\Response\GetSentDateResponse;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
+use ThirtyBees\PostNL\Exception\InvalidArgumentException;
 use ThirtyBees\PostNL\HttpClient\MockClient;
 use ThirtyBees\PostNL\PostNL;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
@@ -65,7 +68,9 @@ class DeliveryDateServiceSoapTest extends TestCase
     /**
      * @before
      *
-     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     * @throws ReflectionException
+     * @throws InvalidArgumentException
+     * @throws NumberParseException
      */
     public function setupPostNL()
     {

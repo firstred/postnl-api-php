@@ -29,6 +29,7 @@ namespace ThirtyBees\PostNL\Tests\Service;
 use Cache\Adapter\Void\VoidCachePool;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Message as PsrMessage;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
@@ -46,8 +47,9 @@ use ThirtyBees\PostNL\Entity\Shipment;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
 use ThirtyBees\PostNL\HttpClient\MockClient;
 use ThirtyBees\PostNL\PostNL;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\ShippingStatusServiceInterface;
+use function file_get_contents;
+use const _RESPONSES_DIR_;
 
 /**
  * Class ShippingStatusRestTest.
@@ -577,14 +579,8 @@ class ShippingStatusServiceRestTest extends TestCase
     public function testGetSignatureRest()
     {
         $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], '{
-  "Signature": {
-    "Barcode": "3SDEVC123456789",
-    "SignatureDate": "2018-03-07T13:52:45.000+01:00",
-    "SignatureImage": "R0lGODdh8ACRADMAACwAAAAA8ACRAIMAAACAAAAAgACAgAAAAICAAIAAgICAgIDAwMD\/AAAA\/wD\/\/wAAAP\/\/AP8A\/\/\/\/\/\/8E\/\/DJSau9OOvNu\/8XAIBkaZ5oqq5sW4miK890bd8rHON87\/9AD+yxCxqPyCRqSBwpn9CoskiUWq\/YGVNCzXq\/YMyWGy6bwePmec1+dtXtuJyX5jrn+HzuDdf7\/x91doCEhSF3FnyGi3mKg4yQeo59kZVtk1WWmmuYmJufboiHoKRZnp6lqT2ooqquQKytr7M3qJS0uDS2trm9ILy8vsIawbLDx0LGYsrIzaO\/zM7StxzB077W1NfT2Znb393d36ri0eO9gtXm57Tp6uzO7u\/wyOJk9Mf29\/jY68T+\/DbpeyRJB8CAEwYSjGNQHsJlLRQGMdjkYEN8EheioVhxQ0OO9P8yasRy0Y6xjyJxOSRx8EfJhHxePnyR0lsUmRVF4ZyZqOW8UIJ0wATJM0NNbT52mnSitOgzLT5VEKUZo6lTiDaOHpKHMqpTrTBrTe1p9apHsGFljCW71mwgr9BYlB0q1G0KtDSXtKVa1+5duCWy7eW70m8HvE\/PFs652PBhwCY69VU82fEeJJUHU\/hoGSrQuYwrd5YLec\/arqJHk57SF\/UQzar\/YnaXBnZs2UZSG9V92wVivtAa99YLq7Ht4ZeTLj6OfDUO3oSbTyz9L5Zw6c51QV9KHXvg7lQp\/\/aOVe0k0OTFQlXGPL36iEG3u3fZfTLn+VJEVr2P\/4r+9v1NFyD\/OQOmMl6BVhyI4E3gLVhGgw5uFKFAEE5oSoUWZqjhhhx26OGHIIYo4ogklmjiiSimqOKKLLbo4oswxijjjDTWaOONOOao44489ujjj0AGKeSQRBZp5JFIJqnkkkw26eSTUEZp5AFUHkCBlVdKUOWWWm6JZZZgToCllzB++cCXZp6pJQZpmmmlm26uKaaLaapp55x3VtBmlnGiKSeeK9YJqJyC5pnnm3ziuSeLhRo6ppdj6gmon3ZGGqaKaFb5J6FskjmpopxemmKdloJ6AaVdeupnqZuOagGrlbIZ5qKrttpoiXF+2uqgsK4J56a3msilnlReCamthvoq6ZnDSunsCLPQRistHhEAADs="
-  }
-}
-'), ]);
+            PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/shippingstatus/signature.http')),
+        ]);
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();
         $mockClient->setHandler($handler);
@@ -598,5 +594,7 @@ class ShippingStatusServiceRestTest extends TestCase
         );
 
         $this->assertInstanceOf(GetSignatureResponseSignature::class, $signatureResponse);
+        $this->assertEquals('2018-03-07T13:52:45.000+01:00', $signatureResponse->getSignatureDate());
+        $this->assertNotNull($signatureResponse->getSignatureImage());
     }
 }

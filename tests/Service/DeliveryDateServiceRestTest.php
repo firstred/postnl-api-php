@@ -29,10 +29,13 @@ namespace ThirtyBees\PostNL\Tests\Service;
 use Cache\Adapter\Void\VoidCachePool;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Message as PsrMessage;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use libphonenumber\NumberParseException;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use ReflectionException;
 use ThirtyBees\PostNL\Entity\Address;
 use ThirtyBees\PostNL\Entity\Customer;
 use ThirtyBees\PostNL\Entity\CutOffTime;
@@ -43,10 +46,13 @@ use ThirtyBees\PostNL\Entity\Request\GetSentDateRequest;
 use ThirtyBees\PostNL\Entity\Response\GetDeliveryDateResponse;
 use ThirtyBees\PostNL\Entity\Response\GetSentDateResponse;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
+use ThirtyBees\PostNL\Exception\InvalidArgumentException;
 use ThirtyBees\PostNL\HttpClient\MockClient;
 use ThirtyBees\PostNL\PostNL;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
 use ThirtyBees\PostNL\Service\DeliveryDateServiceInterface;
+use function file_get_contents;
+use const _RESPONSES_DIR_;
 
 /**
  * Class DeliveryDateRestTest.
@@ -65,7 +71,9 @@ class DeliveryDateServiceRestTest extends TestCase
     /**
      * @before
      *
-     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     * @throws ReflectionException
+     * @throws InvalidArgumentException
+     * @throws NumberParseException
      */
     public function setupPostNL()
     {
@@ -162,18 +170,11 @@ class DeliveryDateServiceRestTest extends TestCase
 
     /**
      * @testdox return a valid delivery date
+     * @dataProvider singleDeliveryDateResponseProvider
      */
-    public function testGetDeliveryDateRest()
+    public function testGetDeliveryDateRest($response)
     {
-        $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'text/xml;charset=UTF-8'], json_encode([
-                'DeliveryDate' => '30-06-2016',
-                'Options'      => [
-                    'string' => 'Daytime',
-                ],
-            ])),
-        ]);
-
+        $mock = new MockHandler([$response]);
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();
         $mockClient->setHandler($handler);
@@ -205,6 +206,7 @@ class DeliveryDateServiceRestTest extends TestCase
             $response
         );
         $this->assertEquals('30-06-2016', $response->getDeliveryDate());
+        $this->assertEquals('Daytime', $response->getOptions()[0]);
     }
 
     /**
@@ -276,5 +278,14 @@ class DeliveryDateServiceRestTest extends TestCase
             $response
         );
         $this->assertEquals('29-06-2016', $response->getSentDate());
+    }
+
+    public function singleDeliveryDateResponseProvider()
+    {
+        return [
+            [PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/deliverydate/deliverydate.http'))],
+            [PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/deliverydate/deliverydate2.http'))],
+            [PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/deliverydate/deliverydate3.http'))],
+        ];
     }
 }

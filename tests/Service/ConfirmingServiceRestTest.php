@@ -27,12 +27,17 @@
 namespace ThirtyBees\PostNL\Tests\Service;
 
 use Cache\Adapter\Void\VoidCachePool;
+use Exception;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Psr7\Message as PsrMessage;
+use libphonenumber\NumberParseException;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
+use ReflectionException;
 use ThirtyBees\PostNL\Entity\Address;
 use ThirtyBees\PostNL\Entity\Customer;
 use ThirtyBees\PostNL\Entity\Dimension;
@@ -41,11 +46,14 @@ use ThirtyBees\PostNL\Entity\Request\Confirming;
 use ThirtyBees\PostNL\Entity\Response\ConfirmingResponseShipment;
 use ThirtyBees\PostNL\Entity\Shipment;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
+use ThirtyBees\PostNL\Entity\Warning;
 use ThirtyBees\PostNL\Exception\ResponseException;
 use ThirtyBees\PostNL\HttpClient\MockClient;
 use ThirtyBees\PostNL\PostNL;
 use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\ConfirmingServiceInterface;
+use function file_get_contents;
+use const _RESPONSES_DIR_;
 
 /**
  * Class ConfirmingServiceRestTest.
@@ -219,25 +227,17 @@ class ConfirmingServiceRestTest extends TestCase
     }
 
     /**
-     * @testdox can generate a single label
+     * @testdox      can generate a single label
+     * @dataProvider singleLabelConfirmationsProvider
+     *
+     * @param ResponseInterface
+     *
+     * @throws ReflectionException
+     * @throws NumberParseException
      */
-    public function testConfirmsALabelRest()
+    public function testConfirmsALabelRest($response)
     {
-        $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode([
-                'ResponseShipments' => [
-                    [
-                        'Barcode'  => '3SDEVC201611210',
-                        'Warnings' => [
-                            [
-                                'Code'        => '',
-                                'Description' => '',
-                            ],
-                        ],
-                    ],
-                ],
-            ])),
-        ]);
+        $mock = new MockHandler([$response]);
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();
         $mockClient->setHandler($handler);
@@ -267,50 +267,26 @@ class ConfirmingServiceRestTest extends TestCase
                         'Zipcode'     => '2132WT',
                     ]),
                 ])
-                ->setBarcode('3S1234567890123')
+                ->setBarcode('3SDEVC201611210')
                 ->setDeliveryAddress('01')
                 ->setDimension(new Dimension('2000'))
                 ->setProductCodeDelivery('3085')
         );
 
         $this->assertInstanceOf(ConfirmingResponseShipment::class, $confirm);
+        $this->assertEquals('3SDEVC201611210', $confirm->getBarcode());
+        $this->assertInstanceOf(Warning::class, $confirm->getWarnings()[0]);
     }
 
     /**
      * @testdox can confirm multiple labels
+     * @dataProvider multipleLabelsConfirmationsProvider
      *
-     * @throws \Exception
+     * @throws Exception
      */
-    public function testConfirmMultipleLabelsRest()
+    public function testConfirmMultipleLabelsRest($responses)
     {
-        $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode([
-                'ResponseShipments' => [
-                    [
-                        'Barcode'  => '3SDEVC201611210',
-                        'Warnings' => [
-                            [
-                                'Code'        => '',
-                                'Description' => '',
-                            ],
-                        ],
-                    ],
-                ],
-            ])),
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode([
-                'ResponseShipments' => [
-                    [
-                        'Barcode'  => '3SDEVC201611211',
-                        'Warnings' => [
-                            [
-                                'Code'        => '',
-                                'Description' => '',
-                            ],
-                        ],
-                    ],
-                ],
-            ])),
-        ]);
+        $mock = new MockHandler($responses);
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();
         $mockClient->setHandler($handler);
@@ -367,7 +343,7 @@ class ConfirmingServiceRestTest extends TestCase
                             'Zipcode'     => '2132WT',
                         ]),
                     ])
-                    ->setBarcode('3SDEVC201611211')
+                    ->setBarcode('3SDEVC201611210')
                     ->setDeliveryAddress('01')
                     ->setDimension(new Dimension('2000'))
                     ->setProductCodeDelivery('3085'),
@@ -375,6 +351,8 @@ class ConfirmingServiceRestTest extends TestCase
         );
 
         $this->assertInstanceOf(ConfirmingResponseShipment::class, $confirms[1]);
+        $this->assertEquals('3SDEVC201611210', $confirms[1]->getBarcode());
+        $this->assertInstanceOf(Warning::class, $confirms[1]->getWarnings()[0]);
     }
 
     /**
@@ -421,5 +399,40 @@ class ConfirmingServiceRestTest extends TestCase
                 ->setDimension(new Dimension('2000'))
                 ->setProductCodeDelivery('3085')
         );
+    }
+
+    /**
+     * @return ResponseInterface[][]
+     * @psalm-return non-empty-list<non-empty-list<ResponseInterface>>
+     */
+    public function singleLabelConfirmationsProvider()
+    {
+        return [
+            [PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel.http'))],
+            [PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel2.http'))],
+            [PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel3.http'))],
+        ];
+    }
+
+    /**
+     * @return ResponseInterface[][][]
+     * @psalm-return non-empty-list<non-empty-list<non-empty-list<ResponseInterface>>>
+     */
+    public function multipleLabelsConfirmationsProvider()
+    {
+        return [
+            [[
+                PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel.http')),
+                PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel.http')),
+            ]],
+            [[
+                PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel2.http')),
+                PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel2.http')),
+            ]],
+            [[
+                PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel3.http')),
+                PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel3.http')),
+            ]],
+        ];
     }
 }

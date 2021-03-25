@@ -41,8 +41,8 @@ use ThirtyBees\PostNL\Entity\Request\GenerateBarcode;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
 use ThirtyBees\PostNL\HttpClient\MockClient;
 use ThirtyBees\PostNL\PostNL;
-use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\BarcodeServiceInterface;
+use GuzzleHttp\Psr7\Message as PsrMessage;
 
 /**
  * Class BarcodeServiceSoapTest.
@@ -102,7 +102,7 @@ class BarcodeServiceSoapTest extends TestCase
 
         global $logger;
         if ($logger instanceof LoggerInterface) {
-            $logger->debug($this->getName()." Request\n".\GuzzleHttp\Psr7\str($this->lastRequest));
+            $logger->debug($this->getName()." Request\n".PsrMessage::toString($this->lastRequest));
         }
         $this->lastRequest = null;
     }
@@ -111,6 +111,8 @@ class BarcodeServiceSoapTest extends TestCase
      * @testdox creates a valid 3S barcode request
      *
      * @throws \ThirtyBees\PostNL\Exception\InvalidBarcodeException
+     * @throws \ReflectionException
+     * @throws \libphonenumber\NumberParseException
      */
     public function testCreatesAValid3SBarcodeRequest()
     {
@@ -182,7 +184,11 @@ XML
     public function testSingleBarcodeSoap()
     {
         $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'text/xml;charset=UTF-8'], $this->mockValidBarcodeResponse('3SDEVC816223392')),
+            new Response(
+                200,
+                ['Content-Type' => 'text/xml;charset=UTF-8'],
+                $this->mockValidBarcodeResponse('3SDEVC816223392')
+            ),
         ]);
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();
@@ -201,10 +207,26 @@ XML
     public function testMultipleNLBarcodesSoap()
     {
         $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'text/xml;charset=UTF-8'], $this->mockValidBarcodeResponse('3SDEVC816223392')),
-            new Response(200, ['Content-Type' => 'text/xml;charset=UTF-8'], $this->mockValidBarcodeResponse('3SDEVC816223393')),
-            new Response(200, ['Content-Type' => 'text/xml;charset=UTF-8'], $this->mockValidBarcodeResponse('3SDEVC816223394')),
-            new Response(200, ['Content-Type' => 'text/xml;charset=UTF-8'], $this->mockValidBarcodeResponse('3SDEVC816223395')),
+            new Response(
+                200,
+                ['Content-Type' => 'text/xml;charset=UTF-8'],
+                $this->mockValidBarcodeResponse('3SDEVC816223392')
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'text/xml;charset=UTF-8'],
+                $this->mockValidBarcodeResponse('3SDEVC816223393')
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'text/xml;charset=UTF-8'],
+                $this->mockValidBarcodeResponse('3SDEVC816223394')
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'text/xml;charset=UTF-8'],
+                $this->mockValidBarcodeResponse('3SDEVC816223395')
+            ),
         ]);
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();

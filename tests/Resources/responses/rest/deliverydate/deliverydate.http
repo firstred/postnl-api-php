@@ -1,0 +1,10 @@
+HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+
+{
+  "DeliveryDate": "30-06-2016",
+  "Options": [
+    "Daytime",
+    "Evening"
+  ]
+}

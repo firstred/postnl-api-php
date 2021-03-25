@@ -246,24 +246,9 @@ XML
     /**
      * @testdox can confirm a single label
      */
-    public function testGenerateSingleLabelSoap()
+    public function testGenerateSingleLabelSoap($response)
     {
-        $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
-  <s:Body>
-    <ConfirmingResponseShipments
-xmlns="http://postnl.nl/cif/services/ConfirmingWebService/"
-xmlns:a="http://postnl.nl/cif/domain/ConfirmingWebService/"
-xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-      <a:ConfirmingResponseShipment>
-        <a:Barcode>3S1234567890123</a:Barcode>
-        <a:Warnings i:nil= "true"/>
-      </a:ConfirmingResponseShipment>
-    </ConfirmingResponseShipments>
-  </s:Body>
-</s:Envelope>
-'),
-        ]);
+        $mock = new MockHandler([$response]);
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();
         $mockClient->setHandler($handler);
@@ -309,35 +294,7 @@ xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
      */
     public function testGenerateMultipleLabelsSoap()
     {
-        $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
-  <s:Body>
-    <ConfirmingResponseShipments
-xmlns="http://postnl.nl/cif/services/ConfirmingWebService/"
-xmlns:a="http://postnl.nl/cif/domain/ConfirmingWebService/"
-xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-      <a:ConfirmingResponseShipment>
-        <a:Barcode>3SDEVC201611210</a:Barcode>
-        <a:Warnings i:nil= "true"/>
-      </a:ConfirmingResponseShipment>
-    </ConfirmingResponseShipments>
-  </s:Body>
-</s:Envelope>
-'), new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
-  <s:Body>
-    <ConfirmingResponseShipments
-xmlns="http://postnl.nl/cif/services/ConfirmingWebService/"
-xmlns:a="http://postnl.nl/cif/domain/ConfirmingWebService/"
-xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-      <a:ConfirmingResponseShipment>
-        <a:Barcode>3SDEVC201611211</a:Barcode>
-        <a:Warnings i:nil= "true"/>
-      </a:ConfirmingResponseShipment>
-    </ConfirmingResponseShipments>
-  </s:Body>
-</s:Envelope>
-'),
-        ]);
+        $mock = new MockHandler();
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();
         $mockClient->setHandler($handler);

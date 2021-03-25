@@ -10,6 +10,8 @@ error_reporting(E_ALL ^ E_DEPRECATED);
 $autoloader = require __DIR__.'/../vendor/autoload.php';
 $autoloader->add('ThirtyBees\\PostNL\\Tests\\', __DIR__);
 
+define('_RESPONSES_DIR_', __DIR__.'/Resources/responses');
+
 $filesystemAdapter = new Local(__DIR__.'/');
 $filesystem = new Filesystem($filesystemAdapter);
 

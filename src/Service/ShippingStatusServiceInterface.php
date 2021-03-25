@@ -50,15 +50,15 @@ use ThirtyBees\PostNL\Exception\ResponseException;
 /**
  * Class ShippingStatusService.
  *
- * @method CurrentStatusResponse  currentStatus(CurrentStatus|CurrentStatusByReference|CurrentStatusByPhase|CurrentStatusByStatus $currentStatus)
- * @method RequestInterface       buildCurrentStatusRequest(CurrentStatus|CurrentStatusByReference|CurrentStatusByPhase|CurrentStatusByStatus $currentStatus)
- * @method CurrentStatusResponse  processCurrentStatusResponse(mixed $response)
- * @method CompleteStatusResponse completeStatus(CompleteStatus|CompleteStatusByReference|CompleteStatusByPhase|CompleteStatusByStatus $completeStatus)
- * @method RequestInterface       buildCompleteStatusRequest(CompleteStatus|CompleteStatusByReference|CompleteStatusByPhase|CompleteStatusByStatus $completeStatus)
- * @method CompleteStatusResponse processCompleteStatusResponse(mixed $response)
- * @method GetSignature           getSignature(GetSignature $getSignature)
- * @method RequestInterface       buildGetSignatureRequest(GetSignature $getSignature)
- * @method GetSignature           processGetSignatureResponse(mixed $response)
+ * @method CurrentStatusResponse         currentStatus(CurrentStatus|CurrentStatusByReference|CurrentStatusByPhase|CurrentStatusByStatus $currentStatus)
+ * @method RequestInterface              buildCurrentStatusRequest(CurrentStatus|CurrentStatusByReference|CurrentStatusByPhase|CurrentStatusByStatus $currentStatus)
+ * @method CurrentStatusResponse         processCurrentStatusResponse(mixed $response)
+ * @method CompleteStatusResponse        completeStatus(CompleteStatus|CompleteStatusByReference|CompleteStatusByPhase|CompleteStatusByStatus $completeStatus)
+ * @method RequestInterface              buildCompleteStatusRequest(CompleteStatus|CompleteStatusByReference|CompleteStatusByPhase|CompleteStatusByStatus $completeStatus)
+ * @method CompleteStatusResponse        processCompleteStatusResponse(mixed $response)
+ * @method GetSignatureResponseSignature getSignature(GetSignature $getSignature)
+ * @method RequestInterface              buildGetSignatureRequest(GetSignature $getSignature)
+ * @method GetSignature                  processGetSignatureResponse(mixed $response)
  *
  * @since 1.2.0
  */

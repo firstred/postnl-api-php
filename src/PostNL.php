@@ -73,6 +73,7 @@ use ThirtyBees\PostNL\Entity\Response\GetDeliveryDateResponse;
 use ThirtyBees\PostNL\Entity\Response\GetLocationsInAreaResponse;
 use ThirtyBees\PostNL\Entity\Response\GetNearestLocationsResponse;
 use ThirtyBees\PostNL\Entity\Response\GetSentDateResponse;
+use ThirtyBees\PostNL\Entity\Response\GetSignatureResponseSignature;
 use ThirtyBees\PostNL\Entity\Response\ResponseTimeframes;
 use ThirtyBees\PostNL\Entity\Shipment;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
@@ -1640,7 +1641,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @param GetSignature $signature
      *
-     * @return GetSignature
+     * @return GetSignatureResponseSignature
      *
      * @since 1.0.0
      */
