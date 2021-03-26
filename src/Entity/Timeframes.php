@@ -113,7 +113,7 @@ class Timeframes extends AbstractEntity
         }
 
         foreach (array_keys(static::$defaultProperties[$this->currentService]) as $propertyName) {
-            if (isset($this->{$propertyName})) {
+            if (isset($this->$propertyName)) {
                 if ('Timeframes' === $propertyName) {
                     $timeframes = [];
                     foreach ($this->Timeframes as $timeframe) {
@@ -127,7 +127,7 @@ class Timeframes extends AbstractEntity
                     }
                     $json[$propertyName] = ['TimeframeTimeFrame' => $timeframes];
                 } else {
-                    $json[$propertyName] = $this->{$propertyName};
+                    $json[$propertyName] = $this->$propertyName;
                 }
             }
         }

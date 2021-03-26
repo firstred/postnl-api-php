@@ -116,7 +116,7 @@ class ResponseTimeframes extends AbstractEntity
         }
 
         foreach (array_keys(static::$defaultProperties[$this->currentService]) as $propertyName) {
-            if (isset($this->{$propertyName})) {
+            if (isset($this->$propertyName)) {
                 if ('ReasonNoTimeframes' === $propertyName) {
                     $noTimeframes = [];
                     foreach ($this->ReasonNoTimeframes as $noTimeframe) {
@@ -130,7 +130,7 @@ class ResponseTimeframes extends AbstractEntity
                     }
                     $json[$propertyName] = ['Timeframe' => $timeframes];
                 } else {
-                    $json[$propertyName] = $this->{$propertyName};
+                    $json[$propertyName] = $this->$propertyName;
                 }
             }
         }
@@ -167,8 +167,8 @@ class ResponseTimeframes extends AbstractEntity
 //                    $timeframes[] = ["{{$namespace}}Timeframe" => $timeframe];
 //                }
 //                $xml["{{$namespace}}Timeframes"] = $timeframes;
-//            } elseif (!is_null($this->{$propertyName})) {
-//                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
+//            } elseif (!is_null($this->$propertyName)) {
+//                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->$propertyName;
 //            }
 //        }
 //

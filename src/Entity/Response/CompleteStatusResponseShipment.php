@@ -26,6 +26,9 @@
 
 namespace ThirtyBees\PostNL\Entity\Response;
 
+use DateTimeImmutable;
+use DateTimeInterface;
+use Exception;
 use Sabre\Xml\Writer;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
 use ThirtyBees\PostNL\Entity\Address;
@@ -53,7 +56,7 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method Amount[]|null                        getAmounts()
  * @method Barcode|null                         getBarcode()
  * @method Customer|null                        getCustomer()
- * @method string|null                          getDeliveryDate()
+ * @method DateTimeInterface|null               getDeliveryDate()
  * @method Dimension|null                       getDimension()
  * @method CompleteStatusResponseEvent[]|null   getEvents()
  * @method Expectation|null                     getExpectation()
@@ -68,7 +71,6 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method CompleteStatusResponseShipment       setAmounts(Amount[]|null $amounts = null)
  * @method CompleteStatusResponseShipment       setBarcode(string|null $barcode = null)
  * @method CompleteStatusResponseShipment       setCustomer(Customer|null $customer = null)
- * @method CompleteStatusResponseShipment       setDeliveryDate(string|null $date = null)
  * @method CompleteStatusResponseShipment       setDimension(Dimension|null $dimension = null)
  * @method CompleteStatusResponseShipment       setEvents(CompleteStatusResponseEvent[]|null $events = null)
  * @method CompleteStatusResponseShipment       setExpectation(Expectation|null $expectation = null)
@@ -215,7 +217,7 @@ class CompleteStatusResponseShipment extends AbstractEntity
     protected $Barcode;
     /** @var Customer|null */
     protected $Customer;
-    /** @var string|null */
+    /** @var DateTimeInterface|null */
     protected $DeliveryDate;
     /** @var Dimension|null Dimension */
     protected $Dimension;
@@ -246,17 +248,19 @@ class CompleteStatusResponseShipment extends AbstractEntity
      * @param Amount[]|null                          $amounts
      * @param string|null                            $barcode
      * @param Customer|null                          $customer
-     * @param string|null                            $deliveryDate
+     * @param DateTimeInterface|string|null          $deliveryDate
      * @param Dimension|null                         $dimension
      * @param CompleteStatusResponseEvent[]|null     $events
      * @param Expectation|null                       $expectation
      * @param Group[]|null                           $groups
-     * @param string|null                            $productCode
      * @param CompleteStatusResponseOldStatus[]|null $oldStatuses
+     * @param string|null                            $productCode
      * @param ProductOption[]|null                   $productOptions
      * @param string|null                            $reference
      * @param Status|null                            $status
      * @param Warning[]|null                         $warnings
+     *
+     * @throws Exception
      */
     public function __construct(
         array $addresses = null,
@@ -292,6 +296,26 @@ class CompleteStatusResponseShipment extends AbstractEntity
         $this->setReference($reference);
         $this->setStatus($status);
         $this->setWarnings($warnings);
+    }
+
+    /**
+     * @param string|DateTimeInterface|null $deliveryDate
+     *
+     * @return static
+     *
+     * @throws Exception
+     *
+     * @since 1.2.0
+     */
+    public function setDeliveryDate($deliveryDate = null)
+    {
+        if (is_string($deliveryDate)) {
+            $deliveryDate = new DateTimeImmutable($deliveryDate);
+        }
+
+        $this->DeliveryDate = $deliveryDate;
+
+        return $this;
     }
 
     /**
@@ -353,8 +377,8 @@ class CompleteStatusResponseShipment extends AbstractEntity
                     $warnings[] = ["{{$namespace}}Warning" => $warning];
                 }
                 $xml["{{$namespace}}Warnings"] = $warnings;
-            } elseif (isset($this->{$propertyName})) {
-                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
+            } elseif (isset($this->$propertyName)) {
+                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->$propertyName;
             }
         }
         // Auto extending this object with other properties is not supported with SOAP

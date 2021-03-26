@@ -49,7 +49,7 @@ use GuzzleHttp\Psr7\Message as PsrMessage;
  *
  * @testdox The BarcodeService (SOAP)
  */
-class BarcodeServiceSoapTest extends TestCase
+class BarcodeServiceSoapTest extends ServiceTest
 {
     /** @var PostNL */
     protected $postnl;
@@ -159,7 +159,7 @@ class BarcodeServiceSoapTest extends TestCase
     <services:GenerateBarcode>
       <domain:Message>
         <domain:MessageID>{$message->getMessageID()}</domain:MessageID>
-        <domain:MessageTimeStamp>{$message->getMessageTimeStamp()}</domain:MessageTimeStamp>
+        <domain:MessageTimeStamp>{$message->getMessageTimeStamp()->format('d-m-Y H:i:s')}</domain:MessageTimeStamp>
       </domain:Message>
       <domain:Customer>
         <domain:CustomerCode>DEVC</domain:CustomerCode>

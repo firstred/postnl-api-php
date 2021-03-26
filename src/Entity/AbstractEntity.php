@@ -26,6 +26,7 @@
 
 namespace ThirtyBees\PostNL\Entity;
 
+use DateTimeInterface;
 use Exception;
 use JsonSerializable;
 use ReflectionClass;
@@ -34,7 +35,6 @@ use ReflectionObject;
 use ReflectionProperty;
 use Sabre\Xml\Writer;
 use stdClass;
-use ThirtyBees\PostNL\Exception\ApiException;
 use ThirtyBees\PostNL\Exception\InvalidArgumentException;
 use ThirtyBees\PostNL\Exception\NotSupportedException;
 use ThirtyBees\PostNL\Util\UUID;
@@ -125,7 +125,7 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
 
         if ('get' === $methodName) {
             if (property_exists($this, $propertyName)) {
-                return $this->{$propertyName};
+                return $this->$propertyName;
             } else {
                 return null;
             }
@@ -135,7 +135,7 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
             }
 
             if (property_exists($this, $propertyName)) {
-                $this->{$propertyName} = $value[0];
+                $this->$propertyName = $value[0];
             }
 
             return $this;
@@ -159,8 +159,12 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
         }
 
         foreach (array_keys(static::$defaultProperties[$this->currentService]) as $propertyName) {
-            if (isset($this->{$propertyName})) {
-                $json[$propertyName] = $this->{$propertyName};
+            if (isset($this->$propertyName)) {
+                if ($this->$propertyName instanceof DateTimeInterface) {
+                    $json[$propertyName] = $this->$propertyName->format('d-m-Y H:i:s');
+                } else {
+                    $json[$propertyName] = $this->$propertyName;
+                }
             }
         }
 
@@ -184,8 +188,8 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
         }
 
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if (isset($this->{$propertyName})) {
-                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
+            if (isset($this->$propertyName)) {
+                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->$propertyName;
             }
         }
 
@@ -238,6 +242,10 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
             return $json->$entityName;
         }
 
+        if ($json->$entityName instanceof DateTimeInterface) {
+            return $json->$entityName->format('d-m-Y H:i:s');
+        }
+
         // Instantiate a new entity
         $object = call_user_func([$entityFqcn, 'create']);
 
@@ -263,8 +271,12 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
 
             // Handle cases where the API returns {} instead of a `null` value
             if ($value instanceof stdClass && empty((array) $value)) {
-                $value = null;
+                return null;
             }
+            if ($value instanceof DateTimeInterface) {
+                return $value->format('d-m-Y H:i:s');
+            }
+
 
             if ($singularEntityName = static::shouldBeAnArray($entityFqcn, $propertyName)) {
                 if (null === $value) {

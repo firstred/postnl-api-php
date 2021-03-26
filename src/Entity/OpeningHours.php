@@ -258,8 +258,8 @@ class OpeningHours extends AbstractEntity
     {
         $array = [];
         foreach (array_keys(static::$defaultProperties['Barcode']) as $property) {
-            if (isset($this->{$property})) {
-                $array[$property] = $this->{$property};
+            if (isset($this->$property)) {
+                $array[$property] = $this->$property;
             }
         }
 

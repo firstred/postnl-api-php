@@ -27,7 +27,6 @@
 namespace ThirtyBees\PostNL\Tests\Service;
 
 use GuzzleHttp\Psr7\Response;
-use PHPUnit\Framework\TestCase;
 use ThirtyBees\PostNL\Exception\ApiException;
 use ThirtyBees\PostNL\Exception\CifDownException;
 use ThirtyBees\PostNL\Exception\CifException;
@@ -40,7 +39,7 @@ use ThirtyBees\PostNL\Service\AbstractService;
  *
  * @testdox The AbstractService class
  */
-class AbstractServiceTest extends TestCase
+class AbstractServiceTest extends ServiceTest
 {
     /**
      * @testdox can get the response text from the value property

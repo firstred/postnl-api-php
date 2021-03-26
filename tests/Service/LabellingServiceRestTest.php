@@ -32,8 +32,7 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
-use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use setasign\Fpdi\PdfReader\PdfReaderException;
 use ThirtyBees\PostNL\Entity\Address;
@@ -59,7 +58,7 @@ use const _RESPONSES_DIR_;
  *
  * @testdox The LabellingService (REST)
  */
-class LabellingServiceRestTest extends TestCase
+class LabellingServiceRestTest extends ServiceTest
 {
     /** @var PostNL */
     protected $postnl;
@@ -190,7 +189,7 @@ class LabellingServiceRestTest extends TestCase
             ],
             'Message' => [
                 'MessageID'        => (string) $message->getMessageID(),
-                'MessageTimeStamp' => (string) $message->getMessageTimeStamp(),
+                'MessageTimeStamp' => (string) $message->getMessageTimeStamp()->format('d-m-Y H:i:s'),
                 'Printertype'      => 'GraphicFile|PDF',
             ],
             'Shipments' => [
@@ -292,7 +291,7 @@ class LabellingServiceRestTest extends TestCase
             ],
             'Message' => [
                 'MessageID'        => (string) $message->getMessageID(),
-                'MessageTimeStamp' => (string) $message->getMessageTimeStamp(),
+                'MessageTimeStamp' => (string) $message->getMessageTimeStamp()->format('d-m-Y H:i:s'),
                 'Printertype'      => 'GraphicFile|PDF',
             ],
             'Shipments' => [
@@ -380,14 +379,18 @@ class LabellingServiceRestTest extends TestCase
         $this->assertIsString($label->getResponseShipments()[0]->getLabels()[0]->getContent());
         $this->assertInstanceOf(Label::class, $label->getResponseShipments()[0]->getLabels()[0]);
         $this->assertEquals('Label', $label->getResponseShipments()[0]->getLabels()[0]->getLabeltype());
+        $this->assertNotTrue($this->containsStdClass($label));
     }
 
     /**
      * @testdox can generate multiple A4-merged labels
      * @dataProvider multipleLabelsProvider
      *
-     * @throws \setasign\Fpdi\PdfReader\PdfReaderException
-     * @throws \Exception
+     * @param array $responses
+     * @psalm-param non-empty-list<ResponseInterface> $responses
+     *
+     * @throws PdfReaderException
+     * @throws Exception
      */
     public function testMergeMultipleA4LabelsRest($responses)
     {
@@ -471,6 +474,9 @@ class LabellingServiceRestTest extends TestCase
     /**
      * @testdox can generate multiple A6-merged labels
      * @dataProvider multipleLabelsProvider
+     *
+     * @param array $responses
+     * @psalm-param non-empty-list<ResponseInterface> $responses
      *
      * @throws PdfReaderException
      * @throws Exception
@@ -558,6 +564,9 @@ class LabellingServiceRestTest extends TestCase
      * @testdox can generate multiple labels
      * @dataProvider multipleLabelsProvider
      *
+     * @param array $responses
+     * @psalm-param non-empty-list<ResponseInterface>
+     *
      * @throws PdfReaderException
      * @throws Exception
      */
@@ -628,6 +637,7 @@ class LabellingServiceRestTest extends TestCase
         );
 
         $this->assertInstanceOf(GenerateLabelResponse::class, $label[1]);
+        $this->assertNotTrue($this->containsStdClass($label[1]));
     }
 
     /**

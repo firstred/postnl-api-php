@@ -114,8 +114,8 @@ class GetLocationsResult extends AbstractEntity
                     $locations[] = $location;
                 }
                 $xml["{{$namespace}}ResponseLocation"] = $locations;
-            } elseif (isset($this->{$propertyName})) {
-                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
+            } elseif (isset($this->$propertyName)) {
+                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->$propertyName;
             }
         }
         // Auto extending this object with other properties is not supported with SOAP

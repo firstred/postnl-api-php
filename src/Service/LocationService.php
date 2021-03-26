@@ -26,6 +26,7 @@
 
 namespace ThirtyBees\PostNL\Service;
 
+use DateTimeImmutable;
 use InvalidArgumentException;
 use ThirtyBees\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use Psr\Cache\CacheItemInterface;
@@ -433,7 +434,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
             $query['HouseNumber'] = $houseNumber;
         }
         if ($deliveryDate = $location->getDeliveryDate()) {
-            $query['DeliveryDate'] = date('d-m-Y', strtotime($deliveryDate));
+            $query['DeliveryDate'] = $deliveryDate->format('d-m-Y');
         }
         if ($openingTime = $location->getOpeningTime()) {
             $query['OpeningTime'] = date('H:i:00', strtotime($openingTime));
@@ -520,6 +521,8 @@ class LocationService extends AbstractService implements LocationServiceInterfac
         foreach (static::$namespaces as $namespace => $prefix) {
             $xmlService->namespaceMap[$namespace] = $prefix;
         }
+        $xmlService->classMap[DateTimeImmutable::class] = [__CLASS__, 'defaultDateFormat'];
+
         $security = new Security($this->postnl->getToken());
 
         $this->setService($security);
@@ -624,7 +627,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
             $query['CountryCode'] = $countryCode;
         }
         if ($deliveryDate = $location->getDeliveryDate()) {
-            $query['DeliveryDate'] = date('d-m-Y', strtotime($deliveryDate));
+            $query['DeliveryDate'] = $deliveryDate->format('d-m-Y');
         }
         if ($openingTime = $location->getOpeningTime()) {
             $query['OpeningTime'] = date('H:i:00', strtotime($openingTime));
@@ -696,6 +699,8 @@ class LocationService extends AbstractService implements LocationServiceInterfac
         foreach (static::$namespaces as $namespace => $prefix) {
             $xmlService->namespaceMap[$namespace] = $prefix;
         }
+        $xmlService->classMap[DateTimeImmutable::class] = [__CLASS__, 'defaultDateFormat'];
+
         $security = new Security($this->postnl->getToken());
 
         $this->setService($security);
@@ -879,6 +884,8 @@ class LocationService extends AbstractService implements LocationServiceInterfac
         foreach (static::$namespaces as $namespace => $prefix) {
             $xmlService->namespaceMap[$namespace] = $prefix;
         }
+        $xmlService->classMap[DateTimeImmutable::class] = [__CLASS__, 'defaultDateFormat'];
+
         $security = new Security($this->postnl->getToken());
 
         $this->setService($security);

@@ -26,6 +26,9 @@
 
 namespace ThirtyBees\PostNL\Entity\Response;
 
+use DateTimeImmutable;
+use DateTimeInterface;
+use Exception;
 use Sabre\Xml\Writer;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
 use ThirtyBees\PostNL\Service\BarcodeService;
@@ -39,10 +42,9 @@ use ThirtyBees\PostNL\Service\TimeframeService;
 /**
  * Class GetSentDateResponse.
  *
- * @method string|null         getSentDate()
- * @method string[]|null       getOptions()
- * @method GetSentDateResponse setSentDate(string|null $date = null)
- * @method GetSentDateResponse setOptions(string[]|null $options = null)
+ * @method DateTimeInterface|null getSentDate()
+ * @method string[]|null          getOptions()
+ * @method GetSentDateResponse    setOptions(string[]|null $options = null)
  *
  * @since 1.0.0
  */
@@ -84,7 +86,7 @@ class GetSentDateResponse extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string|null */
+    /** @var DateTimeInterface|null */
     protected $SentDate;
     /** @var string[]|null */
     protected $Options;
@@ -93,8 +95,10 @@ class GetSentDateResponse extends AbstractEntity
     /**
      * GetSentDateResponse constructor.
      *
-     * @param string|null   $date
-     * @param string[]|null $options
+     * @param DateTimeInterface|string|null $date
+     * @param string[]|null                 $options
+     *
+     * @throws Exception
      */
     public function __construct($date = null, array $options = null)
     {
@@ -102,6 +106,26 @@ class GetSentDateResponse extends AbstractEntity
 
         $this->setSentDate($date);
         $this->setOptions($options);
+    }
+
+    /**
+     * @param string|DateTimeInterface|null $SentDate
+     *
+     * @return static
+     *
+     * @throws Exception
+     *
+     * @since 1.2.0
+     */
+    public function setSentDate($SentDate = null)
+    {
+        if (is_string($SentDate)) {
+            $SentDate = new DateTimeImmutable($SentDate);
+        }
+
+        $this->SentDate = $SentDate;
+
+        return $this;
     }
 
     /**
@@ -131,8 +155,8 @@ class GetSentDateResponse extends AbstractEntity
                     }
                     $xml["{{$namespace}}Options"] = $options;
                 }
-            } elseif (isset($this->{$propertyName})) {
-                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
+            } elseif (isset($this->$propertyName)) {
+                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->$propertyName;
             }
         }
         // Auto extending this object with other properties is not supported with SOAP

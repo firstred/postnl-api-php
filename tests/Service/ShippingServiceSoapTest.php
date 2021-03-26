@@ -53,7 +53,7 @@ use ThirtyBees\PostNL\Service\ShippingServiceInterface;
  *
  * @testdox The ShippingService (SOAP)
  */
-class ShippingServiceSoapTest extends TestCase
+class ShippingServiceSoapTest extends ServiceTest
 {
     /** @var PostNL */
     protected $postnl;
@@ -183,7 +183,7 @@ class ShippingServiceSoapTest extends TestCase
             ],
             'Message' => [
                 'MessageID'        => (string) $message->getMessageID(),
-                'MessageTimeStamp' => (string) $message->getMessageTimeStamp(),
+                'MessageTimeStamp' => (string) $message->getMessageTimeStamp()->format('d-m-Y H:i:s'),
                 'Printertype'      => 'GraphicFile|PDF',
             ],
             'Shipments' => [

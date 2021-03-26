@@ -27,12 +27,11 @@
 namespace ThirtyBees\PostNL\Tests\Service;
 
 use Cache\Adapter\Void\VoidCachePool;
+use DateTimeInterface;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Message as PsrMessage;
-use PHPUnit\Framework\TestCase;
+use GuzzleHttp\Psr7\Request;
 use Psr\Log\LoggerInterface;
 use ThirtyBees\PostNL\Entity\Address;
 use ThirtyBees\PostNL\Entity\Customer;
@@ -48,10 +47,7 @@ use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
 use ThirtyBees\PostNL\HttpClient\MockClient;
 use ThirtyBees\PostNL\PostNL;
 use ThirtyBees\PostNL\Service\ShippingStatusServiceInterface;
-use function count;
-use function file;
 use function file_get_contents;
-use function get_resource_type;
 use const _RESPONSES_DIR_;
 
 /**
@@ -59,7 +55,7 @@ use const _RESPONSES_DIR_;
  *
  * @testdox The ShippingStatusService (SOAP)
  */
-class ShippingStatusServiceSoapTest extends TestCase
+class ShippingStatusServiceSoapTest extends ServiceTest
 {
     /** @var PostNL */
     protected $postnl;
@@ -247,7 +243,7 @@ class ShippingStatusServiceSoapTest extends TestCase
         $this->assertEquals('01B', $completeStatusResponse->getShipments()[0]->getEvents()[0]->getCode());
         $this->assertNull($completeStatusResponse->getShipments()[0]->getGroups());
         $this->assertInstanceOf(Customer::class, $completeStatusResponse->getShipments()[0]->getCustomer());
-        $this->assertEquals('07-03-2018 23:22:56.326', $completeStatusResponse->getShipments()[0]->getOldStatuses()[0]->getTimeStamp());
+        $this->assertInstanceOf(DateTimeInterface::class, $completeStatusResponse->getShipments()[0]->getOldStatuses()[0]->getTimeStamp());
     }
 
     /**

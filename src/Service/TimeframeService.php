@@ -26,6 +26,7 @@
 
 namespace ThirtyBees\PostNL\Service;
 
+use DateTimeImmutable;
 use InvalidArgumentException;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
@@ -207,8 +208,8 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
         $timeframe = $getTimeframes->getTimeframe()[0];
         $query = [
             'AllowSundaySorting' => in_array($timeframe->getSundaySorting(), [true, 'true', 1], 1) ? '1' : '0',
-            'StartDate'          => $timeframe->getStartDate(),
-            'EndDate'            => $timeframe->getEndDate(),
+            'StartDate'          => $timeframe->getStartDate()->format('d-m-Y'),
+            'EndDate'            => $timeframe->getEndDate()->format('d-m-Y'),
             'PostalCode'         => $timeframe->getPostalCode(),
             'HouseNumber'        => $timeframe->getHouseNr(),
             'CountryCode'        => $timeframe->getCountryCode(),
@@ -325,6 +326,8 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
         foreach (static::$namespaces as $namespace => $prefix) {
             $xmlService->namespaceMap[$namespace] = $prefix;
         }
+        $xmlService->classMap[DateTimeImmutable::class] = [__CLASS__, 'defaultDateFormat'];
+
         $security = new Security($this->postnl->getToken());
 
         $this->setService($security);

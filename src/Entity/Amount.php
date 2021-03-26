@@ -229,11 +229,11 @@ class Amount extends AbstractEntity
         }
 
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if (isset($this->{$propertyName})) {
+            if (isset($this->$propertyName)) {
                 if ('Value' === $propertyName) {
                     $xml["{{$namespace}}Value"] = number_format($this->Value, 2, '.', '');
                 } else {
-                    $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
+                    $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->$propertyName;
                 }
             }
         }

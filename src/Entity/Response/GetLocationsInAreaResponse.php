@@ -103,7 +103,7 @@ class GetLocationsInAreaResponse extends AbstractEntity
         }
 
         foreach (array_keys(static::$defaultProperties[$this->currentService]) as $propertyName) {
-            if (isset($this->{$propertyName})) {
+            if (isset($this->$propertyName)) {
                 if ('GetLocationsResult' === $propertyName) {
                     $locations = [];
                     foreach ($this->GetLocationsResult as $location) {
@@ -111,7 +111,7 @@ class GetLocationsInAreaResponse extends AbstractEntity
                     }
                     $json[$propertyName] = ['ResponseLocation' => $locations];
                 } else {
-                    $json[$propertyName] = $this->{$propertyName};
+                    $json[$propertyName] = $this->$propertyName;
                 }
             }
         }

@@ -49,7 +49,7 @@ trait FlexibleEntityTrait
         $propertyName = lcfirst(substr($name, 3, strlen($name)));
         if ('get' === $methodName) {
             if (property_exists($this, $propertyName)) {
-                return $this->{$propertyName};
+                return $this->$propertyName;
             }
 
             return null;
@@ -58,7 +58,7 @@ trait FlexibleEntityTrait
                 throw new InvalidArgumentException('Value is missing');
             }
             if (property_exists($this, $propertyName)) {
-                $this->{$propertyName} = $value[0];
+                $this->$propertyName = $value[0];
             }
 
             return $this;

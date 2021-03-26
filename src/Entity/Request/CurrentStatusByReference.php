@@ -137,8 +137,8 @@ class CurrentStatusByReference extends AbstractEntity
         }
 
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if (isset($this->{$propertyName})) {
-                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
+            if (isset($this->$propertyName)) {
+                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->$propertyName;
             }
         }
         // Auto extending this object with other properties is not supported with SOAP

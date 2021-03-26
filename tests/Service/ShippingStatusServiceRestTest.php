@@ -27,12 +27,11 @@
 namespace ThirtyBees\PostNL\Tests\Service;
 
 use Cache\Adapter\Void\VoidCachePool;
+use DateTimeInterface;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
-use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use ThirtyBees\PostNL\Entity\Address;
@@ -44,6 +43,7 @@ use ThirtyBees\PostNL\Entity\Request\GetSignature;
 use ThirtyBees\PostNL\Entity\Response\CompleteStatusResponse;
 use ThirtyBees\PostNL\Entity\Response\CompleteStatusResponseEvent;
 use ThirtyBees\PostNL\Entity\Response\CurrentStatusResponse;
+use ThirtyBees\PostNL\Entity\Response\CurrentStatusResponseShipment;
 use ThirtyBees\PostNL\Entity\Response\GetSignatureResponseSignature;
 use ThirtyBees\PostNL\Entity\Shipment;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
@@ -58,7 +58,7 @@ use const _RESPONSES_DIR_;
  *
  * @testdox The ShippingStatusService (REST)
  */
-class ShippingStatusServiceRestTest extends TestCase
+class ShippingStatusServiceRestTest extends ServiceTest
 {
     /** @var PostNL */
     protected $postnl;
@@ -145,6 +145,8 @@ class ShippingStatusServiceRestTest extends TestCase
     /**
      * @testdox can get the current status
      * @dataProvider getCurrentStatusByBarcodeProvider
+     *
+     * @param ResponseInterface $response
      */
     public function testGetCurrentStatusByBarcodeRest($response)
     {
@@ -163,6 +165,8 @@ class ShippingStatusServiceRestTest extends TestCase
         );
 
         $this->assertInstanceOf(CurrentStatusResponse::class, $currentStatusResponse);
+        $this->assertInstanceOf(CurrentStatusResponseShipment::class, $currentStatusResponse->getShipments()[0]);
+        $this->assertNotTrue($this->containsStdClass($currentStatusResponse));
     }
 
     /**
@@ -249,7 +253,8 @@ class ShippingStatusServiceRestTest extends TestCase
         $this->assertEquals('01B', $completeStatusResponse->getShipments()[0]->getEvents()[0]->getCode());
         $this->assertNull($completeStatusResponse->getShipments()[0]->getGroups());
         $this->assertInstanceOf(Customer::class, $completeStatusResponse->getShipments()[0]->getCustomer());
-        $this->assertEquals('07-03-2018 09:50:47', $completeStatusResponse->getShipments()[0]->getOldStatuses()[4]->getTimeStamp());
+        $this->assertInstanceOf(DateTimeInterface::class, $completeStatusResponse->getShipments()[0]->getOldStatuses()[0]->getTimeStamp());
+        $this->assertNotTrue($this->containsStdClass($completeStatusResponse));
     }
 
     /**
@@ -327,8 +332,9 @@ class ShippingStatusServiceRestTest extends TestCase
         );
 
         $this->assertInstanceOf(GetSignatureResponseSignature::class, $signatureResponse);
-        $this->assertEquals('2018-03-07T13:52:45.000+01:00', $signatureResponse->getSignatureDate());
+        $this->assertEquals('2018-03-07 13:52:45', $signatureResponse->getSignatureDate()->format('Y-m-d H:i:s'));
         $this->assertNotNull($signatureResponse->getSignatureImage());
+        $this->assertNotTrue($this->containsStdClass($signatureResponse));
     }
 
     /**

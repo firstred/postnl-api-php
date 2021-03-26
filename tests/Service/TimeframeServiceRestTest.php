@@ -31,7 +31,6 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use ThirtyBees\PostNL\Entity\Address;
 use ThirtyBees\PostNL\Entity\Customer;
@@ -42,7 +41,6 @@ use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
 use ThirtyBees\PostNL\Entity\Timeframe;
 use ThirtyBees\PostNL\HttpClient\MockClient;
 use ThirtyBees\PostNL\PostNL;
-use ThirtyBees\PostNL\Service\TimeframeService;
 use ThirtyBees\PostNL\Service\TimeframeServiceInterface;
 
 /**
@@ -50,7 +48,7 @@ use ThirtyBees\PostNL\Service\TimeframeServiceInterface;
  *
  * @testdox The TimeframeService (REST)
  */
-class TimeframeServiceRestTest extends TestCase
+class TimeframeServiceRestTest extends ServiceTest
 {
     /** @var PostNL */
     protected $postnl;
@@ -361,5 +359,6 @@ class TimeframeServiceRestTest extends TestCase
         $this->assertEquals(6, count($responseTimeframes->getTimeframes()));
         $this->assertInstanceOf(Timeframe::class, $responseTimeframes->getTimeframes()[0]);
         $this->assertEquals(json_encode($payload), json_encode($responseTimeframes));
+        $this->assertNotTrue($this->containsStdClass($responseTimeframes));
     }
 }

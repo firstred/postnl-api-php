@@ -26,6 +26,9 @@
 
 namespace ThirtyBees\PostNL\Entity\Response;
 
+use DateTimeImmutable;
+use DateTimeInterface;
+use Exception;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
@@ -38,12 +41,11 @@ use ThirtyBees\PostNL\Service\TimeframeService;
 /**
  * Class GetSignatureResponseSignature.
  *
- * @method string|null       getBarcode()
- * @method string|null       getSignatureDate()
- * @method string|null       getSignatureImage()
- * @method SignatureResponse setBarcode(string|null $barcode = null)
- * @method SignatureResponse setSignatureDate(string|null $signatureDate = null)
- * @method SignatureResponse setSignatureImage(string|null $signatureImage = null)
+ * @method string|null            getBarcode()
+ * @method DateTimeInterface|null getSignatureDate()
+ * @method string|null            getSignatureImage()
+ * @method SignatureResponse      setBarcode(string|null $barcode = null)
+ * @method SignatureResponse      setSignatureImage(string|null $signatureImage = null)
  *
  * @since 1.0.0
  */
@@ -114,5 +116,25 @@ class GetSignatureResponseSignature extends AbstractEntity
         $this->setBarcode($barcode);
         $this->setSignatureDate($signatureDate);
         $this->setSignatureImage($signatureImage);
+    }
+
+    /**
+     * @param string|DateTimeInterface|null $signatureDate
+     *
+     * @return static
+     *
+     * @throws Exception
+     *
+     * @since 1.2.0
+     */
+    public function setSignatureDate($signatureDate = null)
+    {
+        if (is_string($signatureDate)) {
+            $signatureDate = new DateTimeImmutable($signatureDate);
+        }
+
+        $this->SignatureDate = $signatureDate;
+
+        return $this;
     }
 }

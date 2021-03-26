@@ -26,7 +26,9 @@
 
 namespace ThirtyBees\PostNL\Entity;
 
-use DateTime;
+use DateTimeImmutable;
+use DateTimeInterface;
+use Exception;
 use Sabre\Xml\Writer;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
@@ -48,7 +50,7 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method string|null               getHouseNr()
  * @method string|null               getHouseNrExt()
  * @method string|null               getAllowSundaySorting()
- * @method string|null               getDeliveryDate()
+ * @method DateTimeInterface|null    getDeliveryDate()
  * @method string[]|null             getDeliveryOptions()
  * @method string|null               getOpeningTime()
  * @method string[]|null             getOptions()
@@ -66,7 +68,6 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method Location                  setHouseNr(string|null $houseNr = null)
  * @method Location                  setHouseNrExt(string|null $houseNrExt = null)
  * @method Location                  setAllowSundaySorting(string|null $sundaySorting = null)
- * @method Location                  setDeliveryDate(string|null $deliveryDate = null)
  * @method Location                  setDeliveryOptions(string[]|null $deliveryOptions = null)
  * @method Location                  setOpeningTime(string|null $openingTime = null)
  * @method Location                  setOptions(string[]|null $options = null)
@@ -273,24 +274,24 @@ class Location extends AbstractEntity
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string|null               $zipcode
-     * @param string|null               $allowSundaySorting
-     * @param string|null               $deliveryDate
-     * @param array|null                $deliveryOptions
-     * @param array|null                $options
-     * @param Coordinates|null          $coordinates
-     * @param CoordinatesNorthWest|null $coordinatesNW
-     * @param CoordinatesSouthEast|null $coordinatesSE
-     * @param string|null               $city
-     * @param string|null               $street
-     * @param string|null               $houseNr
-     * @param string|null               $houseNrExt
-     * @param string|null               $locationCode
-     * @param string|null               $saleschannel
-     * @param string|null               $terminalType
-     * @param string|null               $retailNetworkId
-     * @param string|null               $downPartnerID
-     * @param string|null               $downPartnerLocation
+     * @param string|null                   $zipcode
+     * @param string|null                   $allowSundaySorting
+     * @param string|DateTimeInterface|null $deliveryDate
+     * @param array|null                    $deliveryOptions
+     * @param array|null                    $options
+     * @param Coordinates|null              $coordinates
+     * @param CoordinatesNorthWest|null     $coordinatesNW
+     * @param CoordinatesSouthEast|null     $coordinatesSE
+     * @param string|null                   $city
+     * @param string|null                   $street
+     * @param string|null                   $houseNr
+     * @param string|null                   $houseNrExt
+     * @param string|null                   $locationCode
+     * @param string|null                   $saleschannel
+     * @param string|null                   $terminalType
+     * @param string|null                   $retailNetworkId
+     * @param string|null                   $downPartnerID
+     * @param string|null                   $downPartnerLocation
      */
     public function __construct(
         $zipcode = null,
@@ -315,7 +316,7 @@ class Location extends AbstractEntity
         parent::__construct();
 
         $this->setAllowSundaySorting($allowSundaySorting);
-        $this->setDeliveryDate($deliveryDate ?: (new DateTime('next monday'))->format('d-m-Y'));
+        $this->setDeliveryDate($deliveryDate ?: (new DateTimeImmutable('next monday')));
         $this->setDeliveryOptions($deliveryOptions);
         $this->setOptions($options);
         $this->setPostalcode($zipcode);
@@ -332,6 +333,26 @@ class Location extends AbstractEntity
         $this->setRetailNetworkID($retailNetworkId);
         $this->setDownPartnerID($downPartnerID);
         $this->setDownPartnerLocation($downPartnerLocation);
+    }
+
+    /**
+     * @param string|DateTimeInterface|null $deliveryDate
+     *
+     * @return static
+     *
+     * @throws Exception
+     *
+     * @since 1.2.0
+     */
+    public function setDeliveryDate($deliveryDate = null)
+    {
+        if (is_string($deliveryDate)) {
+            $deliveryDate = new DateTimeImmutable($deliveryDate);
+        }
+
+        $this->DeliveryDate = $deliveryDate;
+
+        return $this;
     }
 
     /**
@@ -369,7 +390,11 @@ class Location extends AbstractEntity
         }
 
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if ('Options' === $propertyName) {
+            if ('DeliveryDate' === $propertyName) {
+                if ($this->DeliveryDate instanceof DateTimeImmutable) {
+                    $xml["{{$namespace}}DeliveryDate"] = $this->DeliveryDate->format('d-m-Y');
+                }
+            } elseif ('Options' === $propertyName) {
                 if (is_array($this->Options)) {
                     $options = [];
                     foreach ($this->Options as $option) {
@@ -393,8 +418,8 @@ class Location extends AbstractEntity
                         $xml["{{$namespace}}AllowSundaySorting"] = $this->AllowSundaySorting;
                     }
                 }
-            } elseif (isset($this->{$propertyName})) {
-                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
+            } elseif (isset($this->$propertyName)) {
+                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->$propertyName;
             }
         }
         // Auto extending this object with other properties is not supported with SOAP

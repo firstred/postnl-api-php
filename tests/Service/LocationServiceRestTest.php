@@ -31,7 +31,6 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use GuzzleHttp\Psr7\Request;
-use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use ReflectionException;
@@ -59,7 +58,7 @@ use const _RESPONSES_DIR_;
  *
  * @testdox The LocationService (REST)
  */
-class LocationServiceRestTest extends TestCase
+class LocationServiceRestTest extends ServiceTest
 {
     /** @var PostNL */
     protected $postnl;
@@ -202,6 +201,8 @@ class LocationServiceRestTest extends TestCase
         $this->assertInstanceOf(GetNearestLocationsResponse::class, $response);
         $this->assertInstanceOf(ResponseLocation::class, $response->getGetLocationsResult()->getResponseLocation()[0]);
 
+        $this->assertNotTrue($this->containsStdClass($response));
+
         foreach ($response->getGetLocationsResult()->getResponseLocation() as $responseLocation) {
             foreach (['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] as $day) {
                 foreach ($responseLocation->getOpeningHours()->{"get$day"}() as $time) {
@@ -302,6 +303,7 @@ class LocationServiceRestTest extends TestCase
 
         $this->assertInstanceOf(GetLocationsInAreaResponse::class, $response);
         $this->assertEquals(20, count((array) $response->getGetLocationsResult()->getResponseLocation()));
+        $this->assertNotTrue($this->containsStdClass($response));
     }
 
     /**
@@ -349,6 +351,7 @@ class LocationServiceRestTest extends TestCase
 
         $this->assertInstanceOf(GetLocationsInAreaResponse::class, $response);
         $this->assertEquals(1, count((array) $response->getGetLocationsResult()));
+        $this->assertNotTrue($this->containsStdClass($response));
     }
 
     public function nearestLocationsByPostcodeProvider()

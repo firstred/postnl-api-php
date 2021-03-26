@@ -31,7 +31,6 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use ThirtyBees\PostNL\Entity\Address;
 use ThirtyBees\PostNL\Entity\CoordinatesNorthWest;
@@ -47,7 +46,6 @@ use ThirtyBees\PostNL\Entity\Response\GetNearestLocationsResponse;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
 use ThirtyBees\PostNL\HttpClient\MockClient;
 use ThirtyBees\PostNL\PostNL;
-use ThirtyBees\PostNL\Service\LocationService;
 use ThirtyBees\PostNL\Service\LocationServiceInterface;
 
 /**
@@ -55,7 +53,7 @@ use ThirtyBees\PostNL\Service\LocationServiceInterface;
  *
  * @testdox The LocationService (SOAP)
  */
-class LocationServiceSoapTest extends TestCase
+class LocationServiceSoapTest extends ServiceTest
 {
     /** @var PostNL */
     protected $postnl;
@@ -184,7 +182,7 @@ class LocationServiceSoapTest extends TestCase
    </domain:Location>
    <domain:Message>
     <domain:MessageID>{$message->getMessageID()}</domain:MessageID>
-    <domain:MessageTimeStamp>{$message->getMessageTimeStamp()}</domain:MessageTimeStamp>
+    <domain:MessageTimeStamp>{$message->getMessageTimeStamp()->format('d-m-Y H:i:s')}</domain:MessageTimeStamp>
    </domain:Message>
   </services:GetNearestLocations>
  </soap:Body>
@@ -299,7 +297,7 @@ XML
    </domain:Location>
    <domain:Message>
     <domain:MessageID>{$message->getMessageID()}</domain:MessageID>
-    <domain:MessageTimeStamp>{$message->getMessageTimeStamp()}</domain:MessageTimeStamp>
+    <domain:MessageTimeStamp>{$message->getMessageTimeStamp()->format('d-m-Y H:i:s')}</domain:MessageTimeStamp>
    </domain:Message>
   </services:GetLocationsInArea>
  </soap:Body>
@@ -388,7 +386,7 @@ XML
       <domain:LocationCode>161503</domain:LocationCode>
       <domain:Message>
         <domain:MessageID>{$message->getMessageID()}</domain:MessageID>
-        <domain:MessageTimeStamp>{$message->getMessageTimeStamp()}</domain:MessageTimeStamp>
+        <domain:MessageTimeStamp>{$message->getMessageTimeStamp()->format('d-m-Y H:i:s')}</domain:MessageTimeStamp>
       </domain:Message>
       <domain:RetailNetworkID>PNPNL-01</domain:RetailNetworkID>
     </services:GetLocation>

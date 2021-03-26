@@ -26,6 +26,7 @@
 
 namespace ThirtyBees\PostNL\Service;
 
+use DateTimeImmutable;
 use Exception;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -286,6 +287,7 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
         foreach (static::$namespaces as $namespace => $prefix) {
             $xmlService->namespaceMap[$namespace] = $prefix;
         }
+        $xmlService->classMap[DateTimeImmutable::class] = [__CLASS__, 'defaultDateFormat'];
 
         $security = new Security($this->postnl->getToken());
 

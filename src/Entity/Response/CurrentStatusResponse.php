@@ -115,8 +115,8 @@ class CurrentStatusResponse extends AbstractEntity
                     $shipments[] = ["{{$namespace}}Shipment" => $shipment];
                 }
                 $xml["{{$namespace}}Shipments"] = $shipments;
-            } elseif (isset($this->{$propertyName})) {
-                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
+            } elseif (isset($this->$propertyName)) {
+                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->$propertyName;
             }
         }
         // Auto extending this object with other properties is not supported with SOAP

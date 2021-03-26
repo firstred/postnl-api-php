@@ -26,6 +26,9 @@
 
 namespace ThirtyBees\PostNL\Entity;
 
+use DateTimeImmutable;
+use DateTimeInterface;
+use Exception;
 use InvalidArgumentException;
 use Sabre\Xml\Writer;
 use ThirtyBees\PostNL\Service\BarcodeService;
@@ -39,33 +42,30 @@ use ThirtyBees\PostNL\Service\TimeframeService;
 /**
  * Class Timeframe.
  *
- * @method string|null      getCity()
- * @method string|null      getCountryCode()
- * @method string|null      getDate()
- * @method string|null      getEndDate()
- * @method string|null      getHouseNr()
- * @method string|null      getHouseNrExt()
- * @method string[]|null    getOptions()
- * @method string|null      getPostalCode()
- * @method string|null      getStartDate()
- * @method string|null      getStreet()
- * @method string|null      getSundaySorting()
- * @method string|null      getInterval()
- * @method string|null      getTimeframeRange()
- * @method Timeframe[]|null getTimeframes()
- * @method Timeframe        setCity(string|null $city = null)
- * @method Timeframe        setCountryCode(string|null $code = null)
- * @method Timeframe        setDate(string|null $date = null)
- * @method Timeframe        setEndDate(string|null $date = null)
- * @method Timeframe        setHouseNr(string|null $houseNr = null)
- * @method Timeframe        setHouseNrExt(string|null $houseNrExt = null)
- * @method Timeframe        setOptions(string[]|null $options = null)
- * @method Timeframe        setStartDate(string|null $date = null)
- * @method Timeframe        setStreet(string|null $street = null)
- * @method Timeframe        setSundaySorting(string|null $sunday = null)
- * @method Timeframe        setInterval(string|null $interval = null)
- * @method Timeframe        setTimeframeRange(string|null $range = null)
- * @method Timeframe        setTimeframes(Timeframe[]|null $timeframes = null)
+ * @method string|null            getCity()
+ * @method string|null            getCountryCode()
+ * @method DateTimeInterface|null getDate()
+ * @method DateTimeInterface|null getEndDate()
+ * @method string|null            getHouseNr()
+ * @method string|null            getHouseNrExt()
+ * @method string[]|null          getOptions()
+ * @method string|null            getPostalCode()
+ * @method DateTimeInterface|null getStartDate()
+ * @method string|null            getStreet()
+ * @method string|null            getSundaySorting()
+ * @method string|null            getInterval()
+ * @method string|null            getTimeframeRange()
+ * @method Timeframe[]|null       getTimeframes()
+ * @method Timeframe              setCity(string|null $city = null)
+ * @method Timeframe              setCountryCode(string|null $code = null)
+ * @method Timeframe              setHouseNr(string|null $houseNr = null)
+ * @method Timeframe              setHouseNrExt(string|null $houseNrExt = null)
+ * @method Timeframe              setOptions(string[]|null $options = null)
+ * @method Timeframe              setStreet(string|null $street = null)
+ * @method Timeframe              setSundaySorting(string|null $sunday = null)
+ * @method Timeframe              setInterval(string|null $interval = null)
+ * @method Timeframe              setTimeframeRange(string|null $range = null)
+ * @method Timeframe              setTimeframes(Timeframe[]|null $timeframes = null)
  *
  * @since 1.0.0
  */
@@ -191,9 +191,9 @@ class Timeframe extends AbstractEntity
     protected $City;
     /** @var string|null */
     protected $CountryCode;
-    /** @var string|null */
+    /** @var DateTimeInterface|null */
     protected $Date;
-    /** @var string|null */
+    /** @var DateTimeInterface|null */
     protected $EndDate;
     /** @var string|null */
     protected $HouseNr;
@@ -220,19 +220,22 @@ class Timeframe extends AbstractEntity
     /**
      * Timeframe constructor.
      *
-     * @param string|null      $city
-     * @param string|null      $countryCode
-     * @param string|null      $date
-     * @param string|null      $endDate
-     * @param string|null      $houseNr
-     * @param string|null      $houseNrExt
-     * @param array|null       $options
-     * @param string|null      $postalCode
-     * @param string|null      $street
-     * @param string|null      $sundaySorting
-     * @param string|null      $interval
-     * @param string|null      $range
-     * @param Timeframe[]|null $timeframes
+     * @param string|null                   $city
+     * @param string|null                   $countryCode
+     * @param string|DateTimeInterface|null $date
+     * @param string|DateTimeInterface|null $endDate
+     * @param string|null                   $houseNr
+     * @param string|null                   $houseNrExt
+     * @param array|null                    $options
+     * @param string|null                   $postalCode
+     * @param string|null                   $street
+     * @param string|null                   $sundaySorting
+     * @param string|null                   $interval
+     * @param string|null                   $range
+     * @param Timeframe[]|null              $timeframes
+     * @param string|DateTimeInterface|null $startDate
+     *
+     * @throws Exception
      */
     public function __construct(
         $city = null,
@@ -247,7 +250,8 @@ class Timeframe extends AbstractEntity
         $sundaySorting = 'false',
         $interval = null,
         $range = null,
-        array $timeframes = null
+        array $timeframes = null,
+        $startDate = null
     ) {
         parent::__construct();
 
@@ -264,6 +268,67 @@ class Timeframe extends AbstractEntity
         $this->setInterval($interval);
         $this->setTimeframeRange($range);
         $this->setTimeframes($timeframes);
+        $this->setStartDate($startDate);
+    }
+
+    /**
+     * @param null $date
+     *
+     * @return static
+     *
+     * @throws Exception
+     *
+     * @since 1.2.0
+     */
+    public function setDate($date = null)
+    {
+        if (is_string($date)) {
+            $date = new DateTimeImmutable($date);
+        }
+
+        $this->Date = $date;
+
+        return $this;
+    }
+
+    /**
+     * @param string|DateTimeInterface|null $startDate
+     *
+     * @return static
+     *
+     * @throws Exception
+     *
+     * @since 1.2.0
+     */
+    public function setStartDate($startDate = null)
+    {
+        if (is_string($startDate)) {
+            $startDate = new DateTimeImmutable($startDate);
+        }
+
+        $this->StartDate = $startDate;
+
+        return $this;
+    }
+
+    /**
+     * @param string|DateTimeInterface|null $endDate
+     *
+     * @return static
+     *
+     * @throws Exception
+     *
+     * @since 1.2.0
+     */
+    public function setEndDate($endDate = null)
+    {
+        if (is_string($endDate)) {
+            $endDate = new DateTimeImmutable($endDate);
+        }
+
+        $this->EndDate = $endDate;
+
+        return $this;
     }
 
     /**
@@ -297,9 +362,9 @@ class Timeframe extends AbstractEntity
         }
 
         foreach (array_keys(static::$defaultProperties[$this->currentService]) as $propertyName) {
-            if (isset($this->{$propertyName})) {
+            if (isset($this->$propertyName)) {
                 if ('Options' === $propertyName) {
-                    $json[$propertyName] = $this->{$propertyName};
+                    $json[$propertyName] = $this->$propertyName;
                 } elseif ('Timeframes' === $propertyName) {
                     $timeframes = [];
                     foreach ($this->Timeframes as $timeframe) {
@@ -307,17 +372,17 @@ class Timeframe extends AbstractEntity
                     }
                     $json['Timeframes'] = ['TimeframeTimeFrame' => $timeframes];
                 } elseif ('SundaySorting' === $propertyName) {
-                    if (isset($this->{$propertyName})) {
-                        if (is_bool($this->{$propertyName})) {
-                            $value = $this->{$propertyName} ? 'true' : 'false';
+                    if (isset($this->$propertyName)) {
+                        if (is_bool($this->$propertyName)) {
+                            $value = $this->$propertyName ? 'true' : 'false';
                         } else {
-                            $value = $this->{$propertyName};
+                            $value = $this->$propertyName;
                         }
 
                         $json[$propertyName] = $value;
                     }
                 } else {
-                    $json[$propertyName] = $this->{$propertyName};
+                    $json[$propertyName] = $this->$propertyName;
                 }
             }
         }
@@ -342,7 +407,15 @@ class Timeframe extends AbstractEntity
         }
 
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if ('SundaySorting' === $propertyName) {
+            if ('StartDate' === $propertyName) {
+                if ($this->StartDate instanceof DateTimeInterface) {
+                    $xml["{{$namespace}}StartDate"] = $this->StartDate->format('d-m-Y');
+                }
+            } elseif ('EndDate' === $propertyName) {
+                if ($this->StartDate instanceof DateTimeInterface) {
+                    $xml["{{$namespace}}EndDate"] = $this->EndDate->format('d-m-Y');
+                }
+            }elseif ('SundaySorting' === $propertyName) {
                 if (isset($this->SundaySorting)) {
                     if (is_bool($this->SundaySorting)) {
                         $xml["{{$namespace}}SundaySorting"] = $this->SundaySorting ? 'true' : 'false';
@@ -358,8 +431,8 @@ class Timeframe extends AbstractEntity
                     }
                     $xml["{{$namespace}}Options"] = $options;
                 }
-            } elseif (isset($this->{$propertyName})) {
-                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
+            } elseif (isset($this->$propertyName)) {
+                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->$propertyName;
             }
         }
 

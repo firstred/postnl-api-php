@@ -34,7 +34,6 @@ use GuzzleHttp\Psr7\Message as PsrMessage;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use libphonenumber\NumberParseException;
-use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use ReflectionException;
 use ThirtyBees\PostNL\Entity\Address;
@@ -50,7 +49,6 @@ use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
 use ThirtyBees\PostNL\Exception\InvalidArgumentException;
 use ThirtyBees\PostNL\HttpClient\MockClient;
 use ThirtyBees\PostNL\PostNL;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
 use ThirtyBees\PostNL\Service\DeliveryDateServiceInterface;
 use function file_get_contents;
 use const _RESPONSES_DIR_;
@@ -60,7 +58,7 @@ use const _RESPONSES_DIR_;
  *
  * @testdox The DeliveryDateService (REST)
  */
-class DeliveryDateServiceRestTest extends TestCase
+class DeliveryDateServiceRestTest extends ServiceTest
 {
     /** @var PostNL */
     protected $postnl;
@@ -209,6 +207,7 @@ class DeliveryDateServiceRestTest extends TestCase
         $this->assertInstanceof(DateTimeInterface::class, $response->getDeliveryDate());
         $this->assertEquals('30-06-2016', $response->getDeliveryDate()->format('d-m-Y'));
         $this->assertEquals('Daytime', $response->getOptions()[0]);
+        $this->assertNotTrue($this->containsStdClass($response));
     }
 
     /**
@@ -279,7 +278,8 @@ class DeliveryDateServiceRestTest extends TestCase
             GetSentDateResponse::class,
             $response
         );
-        $this->assertEquals('29-06-2016', $response->getSentDate());
+        $this->assertEquals('29-06-2016', $response->getSentDate()->format('d-m-Y'));
+        $this->assertNotTrue($this->containsStdClass($response));
     }
 
     public function singleDeliveryDateResponseProvider()

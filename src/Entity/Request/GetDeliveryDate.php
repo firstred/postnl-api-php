@@ -26,10 +26,14 @@
 
 namespace ThirtyBees\PostNL\Entity\Request;
 
+use DateTimeImmutable;
+use DateTimeInterface;
+use Exception;
 use Sabre\Xml\Writer;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
 use ThirtyBees\PostNL\Entity\CutOffTime;
 use ThirtyBees\PostNL\Entity\Message\Message;
+use ThirtyBees\PostNL\Exception\InvalidArgumentException;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
@@ -43,33 +47,32 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  *
  * This class is both the container and can be the actual GetDeliveryDate object itself!
  *
- * @method bool|null            getAllowSundaySorting()
- * @method string|null          getCity()
- * @method string|null          getCountryCode()
- * @method CutOffTime[]|null    getCutOffTimes()
- * @method string|null          getHouseNr()
- * @method string|null          getHouseNrExt()
- * @method string[]|null        getOptions()
- * @method string|null          getOriginCountryCode()
- * @method string|null          getPostalCode()
- * @method string|null          getShippingDate()
- * @method string|null          getShippingDuration()
- * @method string|null          getStreet()
- * @method GetDeliveryDate|null getGetDeliveryDate()
- * @method Message|null         getMessage()
- * @method GetDeliveryDate      setAllowSundaySorting(bool|null $allowSundaySorting = null)
- * @method GetDeliveryDate      setCity(string|null $city = null)
- * @method GetDeliveryDate      setCountryCode(string|null $code = null)
- * @method GetDeliveryDate      setCutOffTimes(CutOffTime[]|null $times = null)
- * @method GetDeliveryDate      setHouseNr(string|null $houseNr = null)
- * @method GetDeliveryDate      setHouseNrExt(string|null $houseNrExt = null)
- * @method GetDeliveryDate      setOptions(string[]|null $options = null)
- * @method GetDeliveryDate      setOriginCountryCode(string|null $code = null)
- * @method GetDeliveryDate      setShippingDate(string|null $date = null)
- * @method GetDeliveryDate      setShippingDuration(int|null $duration = null)
- * @method GetDeliveryDate      setStreet(string|null $street = null)
- * @method GetDeliveryDate      setGetDeliveryDate(GetDeliveryDate|null $date = null)
- * @method GetDeliveryDate      setMessage(Message|null $message = null)
+ * @method bool|null              getAllowSundaySorting()
+ * @method string|null            getCity()
+ * @method string|null            getCountryCode()
+ * @method CutOffTime[]|null      getCutOffTimes()
+ * @method string|null            getHouseNr()
+ * @method string|null            getHouseNrExt()
+ * @method string[]|null          getOptions()
+ * @method string|null            getOriginCountryCode()
+ * @method string|null            getPostalCode()
+ * @method DateTimeInterface|null getShippingDate()
+ * @method string|null            getShippingDuration()
+ * @method string|null            getStreet()
+ * @method GetDeliveryDate|null   getGetDeliveryDate()
+ * @method Message|null           getMessage()
+ * @method GetDeliveryDate        setAllowSundaySorting(bool|null $allowSundaySorting = null)
+ * @method GetDeliveryDate        setCity(string|null $city = null)
+ * @method GetDeliveryDate        setCountryCode(string|null $code = null)
+ * @method GetDeliveryDate        setCutOffTimes(CutOffTime[]|null $times = null)
+ * @method GetDeliveryDate        setHouseNr(string|null $houseNr = null)
+ * @method GetDeliveryDate        setHouseNrExt(string|null $houseNrExt = null)
+ * @method GetDeliveryDate        setOptions(string[]|null $options = null)
+ * @method GetDeliveryDate        setOriginCountryCode(string|null $code = null)
+ * @method GetDeliveryDate        setShippingDuration(int|null $duration = null)
+ * @method GetDeliveryDate        setStreet(string|null $street = null)
+ * @method GetDeliveryDate        setGetDeliveryDate(GetDeliveryDate|null $date = null)
+ * @method GetDeliveryDate        setMessage(Message|null $message = null)
  *
  * @since 1.0.0
  */
@@ -213,7 +216,7 @@ class GetDeliveryDate extends AbstractEntity
     protected $OriginCountryCode;
     /** @var string|null */
     protected $PostalCode;
-    /** @var string|null */
+    /** @var DateTimeInterface|null */
     protected $ShippingDate;
     /** @var string|null */
     protected $ShippingDuration;
@@ -228,20 +231,22 @@ class GetDeliveryDate extends AbstractEntity
     /**
      * GetDeliveryDate constructor.
      *
-     * @param bool|null            $allowSundaySorting
-     * @param string|null          $city
-     * @param string|null          $countryCode
-     * @param array|null           $cutOffTimes
-     * @param string|null          $houseNr
-     * @param string|null          $houseNrExt
-     * @param array|null           $options
-     * @param string|null          $originCountryCode
-     * @param string|null          $postalCode
-     * @param string|null          $shippingDate
-     * @param string|null          $shippingDuration
-     * @param string|null          $street
-     * @param GetDeliveryDate|null $getDeliveryDate
-     * @param Message|null         $message
+     * @param bool|null                     $allowSundaySorting
+     * @param string|null                   $city
+     * @param string|null                   $countryCode
+     * @param array|null                    $cutOffTimes
+     * @param string|null                   $houseNr
+     * @param string|null                   $houseNrExt
+     * @param array|null                    $options
+     * @param string|null                   $originCountryCode
+     * @param string|null                   $postalCode
+     * @param DateTimeInterface|string|null $shippingDate
+     * @param string|null                   $shippingDuration
+     * @param string|null                   $street
+     * @param GetDeliveryDate|null          $getDeliveryDate
+     * @param Message|null                  $message
+     *
+     * @throws InvalidArgumentException
      */
     public function __construct(
         $allowSundaySorting = null,
@@ -275,6 +280,30 @@ class GetDeliveryDate extends AbstractEntity
         $this->setStreet($street);
         $this->setGetDeliveryDate($getDeliveryDate);
         $this->setMessage($message);
+    }
+
+    /**
+     * @param string|DateTimeInterface|null $shippingDate
+     *
+     * @return static
+     *
+     * @throws InvalidArgumentException
+     *
+     * @since 1.2.0
+     */
+    public function setShippingDate($shippingDate = null)
+    {
+        if (is_string($shippingDate)) {
+            try {
+                $shippingDate = new DateTimeImmutable($shippingDate);
+            } catch (Exception $e) {
+                throw new InvalidArgumentException($e->getMessage(), 0, $e);
+            }
+        }
+
+        $this->ShippingDate = $shippingDate;
+
+        return $this;
     }
 
     /**
@@ -336,8 +365,8 @@ class GetDeliveryDate extends AbstractEntity
                         $xml["{{$namespace}}AllowSundaySorting"] = $this->AllowSundaySorting;
                     }
                 }
-            } elseif (isset($this->{$propertyName})) {
-                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
+            } elseif (isset($this->$propertyName)) {
+                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->$propertyName;
             }
         }
         // Auto extending this object with other properties is not supported with SOAP

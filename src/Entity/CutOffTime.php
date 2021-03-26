@@ -127,17 +127,17 @@ class CutOffTime extends AbstractEntity
         }
 
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if (isset($this->{$propertyName})) {
+            if (isset($this->$propertyName)) {
                 if ('Available' === $propertyName) {
-                    if (is_bool($this->{$propertyName})) {
-                        $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName} ? 'true' : 'false';
-                    } elseif (is_int($this->{$propertyName})) {
-                        $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = 1 === $this->{$propertyName} ? 'true' : 'false';
+                    if (is_bool($this->$propertyName)) {
+                        $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->$propertyName ? 'true' : 'false';
+                    } elseif (is_int($this->$propertyName)) {
+                        $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = 1 === $this->$propertyName ? 'true' : 'false';
                     } else {
-                        $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
+                        $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->$propertyName;
                     }
                 } else {
-                    $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
+                    $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->$propertyName;
                 }
             }
         }

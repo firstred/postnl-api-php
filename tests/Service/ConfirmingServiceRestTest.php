@@ -32,7 +32,6 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use ReflectionException;
@@ -42,7 +41,6 @@ use ThirtyBees\PostNL\Entity\Dimension;
 use ThirtyBees\PostNL\Entity\Message\LabellingMessage;
 use ThirtyBees\PostNL\Entity\Request\Confirming;
 use ThirtyBees\PostNL\Entity\Response\ConfirmingResponseShipment;
-use ThirtyBees\PostNL\Entity\Response\ConfirmingShipmentResponse;
 use ThirtyBees\PostNL\Entity\Shipment;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
 use ThirtyBees\PostNL\Entity\Warning;
@@ -59,7 +57,7 @@ use const _RESPONSES_DIR_;
  *
  * @testdox The ConfirmingService (REST)
  */
-class ConfirmingServiceRestTest extends TestCase
+class ConfirmingServiceRestTest extends ServiceTest
 {
     /** @var PostNL */
     protected $postnl;
@@ -186,7 +184,7 @@ class ConfirmingServiceRestTest extends TestCase
             ],
             'Message' => [
                 'MessageID'        => (string) $message->getMessageID(),
-                'MessageTimeStamp' => (string) $message->getMessageTimeStamp(),
+                'MessageTimeStamp' => $message->getMessageTimeStamp()->format('d-m-Y H:i:s'),
                 'Printertype'      => 'GraphicFile|PDF',
             ],
             'Shipments' => [
@@ -275,6 +273,7 @@ class ConfirmingServiceRestTest extends TestCase
         $this->assertInstanceOf(ConfirmingResponseShipment::class, $confirm);
         $this->assertEquals('3SDEVC201611210', $confirm->getBarcode());
         $this->assertInstanceOf(Warning::class, $confirm->getWarnings()[0]);
+        $this->assertNotTrue($this->containsStdClass($confirm));
     }
 
     /**

@@ -57,7 +57,7 @@ use ThirtyBees\PostNL\Service\DeliveryDateServiceInterface;
  *
  * @testdox The DeliveryDateService (SOAP)
  */
-class DeliveryDateServiceSoapTest extends TestCase
+class DeliveryDateServiceSoapTest extends ServiceTest
 {
     /** @var PostNL */
     protected $postnl;
@@ -192,7 +192,7 @@ class DeliveryDateServiceSoapTest extends TestCase
    </domain:GetDeliveryDate>
    <domain:Message>
     <domain:MessageID>{$message->getMessageID()}</domain:MessageID>
-    <domain:MessageTimeStamp>{$message->getMessageTimeStamp()}</domain:MessageTimeStamp>
+    <domain:MessageTimeStamp>{$message->getMessageTimeStamp()->format('d-m-Y H:i:s')}</domain:MessageTimeStamp>
    </domain:Message>
   </services:GetDeliveryDate>
  </soap:Body>
@@ -326,7 +326,7 @@ XML
       </domain:GetSentDate>
       <domain:Message>
         <domain:MessageID>{$message->getMessageID()}</domain:MessageID>
-        <domain:MessageTimeStamp>{$message->getMessageTimeStamp()}</domain:MessageTimeStamp>
+        <domain:MessageTimeStamp>{$message->getMessageTimeStamp()->format('d-m-Y H:i:s')}</domain:MessageTimeStamp>
       </domain:Message>
     </services:GetSentDateRequest>
   </soap:Body>
@@ -388,6 +388,6 @@ XML
             GetSentDateResponse::class,
             $response
         );
-        $this->assertEquals('29-06-2016', $response->getSentDate());
+        $this->assertEquals('29-06-2016', $response->getSentDate()->format('d-m-Y'));
     }
 }

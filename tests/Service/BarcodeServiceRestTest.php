@@ -30,8 +30,6 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
-use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use ThirtyBees\PostNL\Entity\Address;
 use ThirtyBees\PostNL\Entity\Barcode;
@@ -52,7 +50,7 @@ use const _RESPONSES_DIR_;
  *
  * @testdox The BarcodeService (REST)
  */
-class BarcodeServiceRestTest extends TestCase
+class BarcodeServiceRestTest extends ServiceTest
 {
     /** @var PostNL */
     protected $postnl;

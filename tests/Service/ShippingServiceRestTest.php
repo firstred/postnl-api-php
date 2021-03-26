@@ -31,7 +31,6 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use ThirtyBees\PostNL\Entity\Address;
 use ThirtyBees\PostNL\Entity\Customer;
@@ -53,7 +52,7 @@ use ThirtyBees\PostNL\Service\ShippingServiceInterface;
  *
  * @testdox The ShippingService (REST)
  */
-class ShippingServiceRestTest extends TestCase
+class ShippingServiceRestTest extends ServiceTest
 {
     /** @var PostNL */
     protected $postnl;
@@ -183,7 +182,7 @@ class ShippingServiceRestTest extends TestCase
             ],
             'Message' => [
                 'MessageID'        => (string) $message->getMessageID(),
-                'MessageTimeStamp' => (string) $message->getMessageTimeStamp(),
+                'MessageTimeStamp' => (string) $message->getMessageTimeStamp()->format('d-m-Y H:i:s'),
                 'Printertype'      => 'GraphicFile|PDF',
             ],
             'Shipments' => [
@@ -282,6 +281,7 @@ class ShippingServiceRestTest extends TestCase
         );
 
         $this->assertInstanceOf(GenerateShippingResponse::class, $sentShipment);
+        $this->assertNotTrue($this->containsStdClass($sentShipment));
     }
 
     /**
@@ -671,5 +671,6 @@ class ShippingServiceRestTest extends TestCase
         );
 
         $this->assertInstanceOf(GenerateShippingResponse::class, $shipments);
+        $this->assertNotTrue($this->containsStdClass($shipments));
     }
 }

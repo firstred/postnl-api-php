@@ -26,6 +26,9 @@
 
 namespace ThirtyBees\PostNL\Entity;
 
+use DateTimeImmutable;
+use DateTimeInterface;
+use Exception;
 use Sabre\Xml\Writer;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
@@ -38,18 +41,17 @@ use ThirtyBees\PostNL\Service\TimeframeService;
 /**
  * Class ReasonNoTimeframe.
  *
- * @method string|null       getCode()
- * @method string|null       getDate()
- * @method string|null       getDescription()
- * @method string[]|null     getOptions()
- * @method string|null       getFrom()
- * @method string|null       getTo()
- * @method ReasonNoTimeframe setCode(string|null $code = null)
- * @method ReasonNoTimeframe setDate(string|null $date = null)
- * @method ReasonNoTimeframe setDescription(string|null $desc = null)
- * @method ReasonNoTimeframe setOptions(string[]|null $options = null)
- * @method ReasonNoTimeframe setFrom(string|null $from = null)
- * @method ReasonNoTimeframe setTo(string|null $to = null)
+ * @method string|null            getCode()
+ * @method DateTimeInterface|null getDate()
+ * @method string|null            getDescription()
+ * @method string[]|null          getOptions()
+ * @method string|null            getFrom()
+ * @method string|null            getTo()
+ * @method ReasonNoTimeframe      setCode(string|null $code = null)
+ * @method ReasonNoTimeframe      setDescription(string|null $desc = null)
+ * @method ReasonNoTimeframe      setOptions(string[]|null $options = null)
+ * @method ReasonNoTimeframe      setFrom(string|null $from = null)
+ * @method ReasonNoTimeframe      setTo(string|null $to = null)
  *
  * @since 1.0.0
  */
@@ -117,7 +119,7 @@ class ReasonNoTimeframe extends AbstractEntity
     // @codingStandardsIgnoreStart
     /** @var string|null */
     protected $Code;
-    /** @var string|null */
+    /** @var DateTimeInterface|null */
     protected $Date;
     /** @var string|null */
     protected $Description;
@@ -130,12 +132,16 @@ class ReasonNoTimeframe extends AbstractEntity
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string|null   $code
-     * @param string|null   $date
-     * @param string|null   $desc
-     * @param string[]|null $options
-     * @param string|null   $from
-     * @param string|null   $to
+     * ReasonNoTimeframe constructor.
+     *
+     * @param string|null                   $code
+     * @param string|DateTimeInterface|null $date
+     * @param string|null                   $desc
+     * @param string[]|null                 $options
+     * @param string|null                   $from
+     * @param string|null                   $to
+     *
+     * @throws Exception
      */
     public function __construct(
         $code = null,
@@ -153,6 +159,28 @@ class ReasonNoTimeframe extends AbstractEntity
         $this->setOptions($options);
         $this->setFrom($from);
         $this->setTo($to);
+    }
+
+    /**
+     * Set date
+     *
+     * @param string|DateTimeInterface|null $date
+     *
+     * @return static
+     *
+     * @throws Exception
+     *
+     * @since 1.2.0
+     */
+    public function setDate($date = null)
+    {
+        if (is_string($date)) {
+            $date = new DateTimeImmutable($date);
+        }
+
+        $this->Date = $date;
+
+        return $this;
     }
 
     /**
@@ -182,8 +210,8 @@ class ReasonNoTimeframe extends AbstractEntity
                     }
                     $xml["{{$namespace}}Options"] = $options;
                 }
-            } elseif (isset($this->{$propertyName})) {
-                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
+            } elseif (isset($this->$propertyName)) {
+                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->$propertyName;
             }
         }
         // Auto extending this object with other properties is not supported with SOAP

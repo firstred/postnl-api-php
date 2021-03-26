@@ -27,6 +27,7 @@
 namespace ThirtyBees\PostNL\Service;
 
 use DateInterval;
+use DateTimeImmutable;
 use DateTimeInterface;
 use Exception;
 use GuzzleHttp\Psr7\Response;
@@ -36,6 +37,7 @@ use Psr\Cache\InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
 use ReflectionClass;
 use ReflectionException;
+use Sabre\Xml\Writer;
 use SimpleXMLElement;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
 use ThirtyBees\PostNL\Exception\ApiException;
@@ -390,5 +392,10 @@ abstract class AbstractService
             $this->cache->deleteItem($item->getKey());
         } catch (InvalidArgumentException $e) {
         }
+    }
+
+    public static function defaultDateFormat(Writer $writer, DateTimeImmutable $value)
+    {
+        $writer->write($value->format('d-m-Y H:i:s'));
     }
 }

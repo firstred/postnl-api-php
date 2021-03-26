@@ -27,7 +27,12 @@
 namespace ThirtyBees\PostNL\Entity\Message;
 
 use DateTime;
+use DateTimeImmutable;
+use DateTimeInterface;
+use Exception;
+use Sabre\Xml\Writer;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
+use ThirtyBees\PostNL\Exception\InvalidArgumentException;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
@@ -36,14 +41,15 @@ use ThirtyBees\PostNL\Service\LocationService;
 use ThirtyBees\PostNL\Service\ShippingService;
 use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
+use function array_keys;
+use function in_array;
 
 /**
  * Class Message.
  *
- * @method string|null getMessageID()
- * @method string|null getMessageTimeStamp()
- * @method Message     setMessageID(string|null $mid = null)
- * @method Message     setMessageTimeStamp(string|null $timestamp = null)
+ * @method string|null            getMessageID()
+ * @method DateTimeInterface|null getMessageTimeStamp()
+ * @method Message                setMessageID(string|null $mid = null)
  *
  * @since 1.0.0
  */
@@ -92,14 +98,36 @@ class Message extends AbstractEntity
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string|null $mid
-     * @param string|null $timestamp
+     * @param string|null                   $mid
+     * @param string|DateTimeInterface|null $timestamp
+     *
+     * @throws Exception
      */
     public function __construct($mid = null, $timestamp = null)
     {
         parent::__construct();
 
         $this->setMessageID($mid ?: substr(str_replace('-', '', $this->getid()), 0, 12));
-        $this->setMessageTimeStamp($timestamp ?: (new DateTime())->format('d-m-Y H:i:s'));
+        $this->setMessageTimeStamp($timestamp ?: new DateTimeImmutable());
+    }
+
+    /**
+     * @param string|DateTimeInterface|null $timeStamp
+     *
+     * @return static
+     *
+     * @throws Exception
+     *
+     * @since 1.2.0
+     */
+    public function setMessageTimeStamp($timeStamp = null)
+    {
+        if (is_string($timeStamp)) {
+            $timeStamp = new DateTimeImmutable($timeStamp);
+        }
+
+        $this->MessageTimeStamp = $timeStamp;
+
+        return $this;
     }
 }

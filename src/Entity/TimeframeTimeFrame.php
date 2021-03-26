@@ -26,6 +26,9 @@
 
 namespace ThirtyBees\PostNL\Entity;
 
+use DateTimeImmutable;
+use DateTimeInterface;
+use Exception;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
@@ -37,14 +40,13 @@ use ThirtyBees\PostNL\Service\TimeframeService;
 /**
  * Class TimeframeTimeFrame.
  *
- * @method string|null        getDate()
- * @method string|null        getFrom()
- * @method string|null        getTo()
- * @method string[]|null      getOptions()
- * @method TimeframeTimeFrame setDate(string|null $date = null)
- * @method TimeframeTimeFrame setFrom(string|null $from = null)
- * @method TimeframeTimeFrame setTo(string|null $to = null)
- * @method TimeframeTimeFrame setOptions(string[]|null $options = null)
+ * @method DateTimeInterface|null getDate()
+ * @method string|null            getFrom()
+ * @method string|null            getTo()
+ * @method string[]|null          getOptions()
+ * @method TimeframeTimeFrame     setFrom(string|null $from = null)
+ * @method TimeframeTimeFrame     setTo(string|null $to = null)
+ * @method TimeframeTimeFrame     setOptions(string[]|null $options = null)
  *
  * @since 1.0.0
  */
@@ -52,19 +54,19 @@ class TimeframeTimeFrame extends AbstractEntity
 {
     /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode' => [
+        'Barcode'        => [
             'Date'    => BarcodeService::DOMAIN_NAMESPACE,
             'From'    => BarcodeService::DOMAIN_NAMESPACE,
             'Options' => BarcodeService::DOMAIN_NAMESPACE,
             'To'      => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming' => [
+        'Confirming'     => [
             'Date'    => ConfirmingService::DOMAIN_NAMESPACE,
             'From'    => ConfirmingService::DOMAIN_NAMESPACE,
             'Options' => ConfirmingService::DOMAIN_NAMESPACE,
             'To'      => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling' => [
+        'Labelling'      => [
             'Date'    => LabellingService::DOMAIN_NAMESPACE,
             'From'    => LabellingService::DOMAIN_NAMESPACE,
             'Options' => LabellingService::DOMAIN_NAMESPACE,
@@ -76,19 +78,19 @@ class TimeframeTimeFrame extends AbstractEntity
             'Options' => ShippingStatusService::DOMAIN_NAMESPACE,
             'To'      => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate' => [
+        'DeliveryDate'   => [
             'Date'    => DeliveryDateService::DOMAIN_NAMESPACE,
             'From'    => DeliveryDateService::DOMAIN_NAMESPACE,
             'Options' => DeliveryDateService::DOMAIN_NAMESPACE,
             'To'      => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location' => [
+        'Location'       => [
             'Date'    => LocationService::DOMAIN_NAMESPACE,
             'From'    => LocationService::DOMAIN_NAMESPACE,
             'Options' => LocationService::DOMAIN_NAMESPACE,
             'To'      => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe' => [
+        'Timeframe'      => [
             'Date'    => TimeframeService::DOMAIN_NAMESPACE,
             'From'    => TimeframeService::DOMAIN_NAMESPACE,
             'Options' => TimeframeService::DOMAIN_NAMESPACE,
@@ -107,10 +109,12 @@ class TimeframeTimeFrame extends AbstractEntity
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string|null   $date
-     * @param string|null   $from
-     * @param string|null   $to
-     * @param string[]|null $options
+     * @param string|DateTimeInterface|null $date
+     * @param string|null                   $from
+     * @param string|null                   $to
+     * @param string[]|null                 $options
+     *
+     * @throws Exception
      */
     public function __construct($date = null, $from = null, $to = null, array $options = null)
     {
@@ -120,5 +124,25 @@ class TimeframeTimeFrame extends AbstractEntity
         $this->setFrom($from);
         $this->setTo($to);
         $this->setOptions($options);
+    }
+
+    /**
+     * @param string|DateTimeInterface|null $date
+     *
+     * @return static
+     *
+     * @throws Exception
+     *
+     * @since 1.2.0
+     */
+    public function setDate($date = null)
+    {
+        if (is_string($date)) {
+            $date = new DateTimeImmutable($date);
+        }
+
+        $this->Date = $date;
+
+        return $this;
     }
 }

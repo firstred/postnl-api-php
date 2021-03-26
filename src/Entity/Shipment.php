@@ -26,6 +26,9 @@
 
 namespace ThirtyBees\PostNL\Entity;
 
+use DateTimeImmutable;
+use DateTimeInterface;
+use Exception;
 use Sabre\Xml\Writer;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
@@ -39,78 +42,77 @@ use ThirtyBees\PostNL\Service\TimeframeService;
 /**
  * Class Shipment.
  *
- * @method Address[]|null       getAddresses()
- * @method string|null          getBarcode()
- * @method int|null             getPhaseCode()
- * @method string|null          getDateFrom()
- * @method string|null          getDateTo()
- * @method Dimension|null       getDimension()
- * @method string|null          getProductCodeDelivery()
- * @method Amount[]|null        getAmounts()
- * @method string|null          getCollectionTimeStampEnd()
- * @method string|null          getCollectionTimeStampStart()
- * @method Contact[]|null       getContacts()
- * @method string|null          getContent()
- * @method string|null          getCostCenter()
- * @method Customer|null        getCustomer()
- * @method string|null          getCustomerOrderNumber()
- * @method Customs|null         getCustoms()
- * @method string|null          getDeliveryAddress()
- * @method string|null          getDeliveryDate()
- * @method string|null          getDownPartnerBarcode()
- * @method string|null          getDownPartnerID()
- * @method string|null          getDownPartnerLocation()
- * @method Event[]|null         getEvents()
- * @method Group[]|null         getGroups()
- * @method string|null          getIDExpiration()
- * @method string|null          getIDNumber()
- * @method string|null          getIDType()
- * @method OldStatus[]|null     getOldStatuses()
- * @method string|null          getProductCodeCollect()
- * @method ProductOption[]|null getProductOptions()
- * @method string|null          getReceiverDateOfBirth()
- * @method string|null          getReference()
- * @method string|null          getReferenceCollect()
- * @method string|null          getRemark()
- * @method string|null          getReturnBarcode()
- * @method string|null          getReturnReference()
- * @method string|null          getStatusCode()
- * @method Shipment             setAddresses(Address[]|null $addresses = null)
- * @method Shipment             setBarcode(string|null $barcode = null)
- * @method Shipment             setDimension(string|null $dimension = null)
- * @method Shipment             setProductCodeDelivery(string|null $productCodeDelivery = null)
- * @method Shipment             setAmounts(Amount[]|null $amounts = null)
- * @method Shipment             setCollectionTimeStampEnd(string|null $value = null)
- * @method Shipment             setCollectionTimeStampStart(string|null $value = null)
- * @method Shipment             setContacts(Contact[]|null $contact = null)
- * @method Shipment             setContent(string|null $content = null)
- * @method Shipment             setCostCenter(string|null $costCenter = null)
- * @method Shipment             setCustomer(Customer|null $customer = null)
- * @method Shipment             setCustomerOrderNumber(string|null $customerOrderNumber = null)
- * @method Shipment             setCustoms(Customs|null $customs = null)
- * @method Shipment             setPhaseCode(int|null $phaseCode = null)
- * @method Shipment             setDateFrom(string|null $date = null)
- * @method Shipment             setDateTo(string $date = null)
- * @method Shipment             setDeliveryAddress(string|null $deliveryAddress = null)
- * @method Shipment             setDeliveryDate(string|null $deliveryDate = null)
- * @method Shipment             setDownPartnerBarcode(string|null $downPartnerBarcode = null)
- * @method Shipment             setDownPartnerID(string|null $downPartnerID = null)
- * @method Shipment             setDownPartnerLocation(string|null $downPartnerLocation = null)
- * @method Shipment             setEvents(Event[]|null $events = null)
- * @method Shipment             setGroups(Group[]|null $groups = null)
- * @method Shipment             setIDExpiration(string|null $idExpiration = null)
- * @method Shipment             setIDNumber(string|null $idNumber = null)
- * @method Shipment             setIDType(string|null $idType = null)
- * @method Shipment             setOldStatuses(OldStatus[]|null $oldStatuses = null)
- * @method Shipment             setProductCodeCollect(string|null $productCodeCollect = null)
- * @method Shipment             setProductOptions(ProductOption[]|null $productOptions = null)
- * @method Shipment             setReceiverDateOfBirth(string|null $receiverDateOfBirth = null)
- * @method Shipment             setReference(string|null $reference = null)
- * @method Shipment             setReferenceCollect(string|null $referenceCollect = null)
- * @method Shipment             setRemark(string|null $remark = null)
- * @method Shipment             setReturnBarcode(string|null $returnBarcode = null)
- * @method Shipment             setReturnReference(string|null $returnReference = null)
- * @method Shipment             setStatusCode(string|null $statusCode = null)
+ * @method Address[]|null         getAddresses()
+ * @method string|null            getBarcode()
+ * @method int|null               getPhaseCode()
+ * @method string|null            getDateFrom()
+ * @method string|null            getDateTo()
+ * @method Dimension|null         getDimension()
+ * @method string|null            getProductCodeDelivery()
+ * @method Amount[]|null          getAmounts()
+ * @method DateTimeInterface|null getCollectionTimeStampEnd()
+ * @method DateTimeInterface|null getCollectionTimeStampStart()
+ * @method Contact[]|null         getContacts()
+ * @method string|null            getContent()
+ * @method string|null            getCostCenter()
+ * @method Customer|null          getCustomer()
+ * @method string|null            getCustomerOrderNumber()
+ * @method Customs|null           getCustoms()
+ * @method string|null            getDeliveryAddress()
+ * @method DateTimeInterface|null getDeliveryDate()
+ * @method DateTimeInterface|null getDeliveryTimeStampStart()
+ * @method DateTimeInterface|null getDeliveryTimeStampEnd()
+ * @method string|null            getDownPartnerBarcode()
+ * @method string|null            getDownPartnerID()
+ * @method string|null            getDownPartnerLocation()
+ * @method Event[]|null           getEvents()
+ * @method Group[]|null           getGroups()
+ * @method string|null            getIDExpiration()
+ * @method string|null            getIDNumber()
+ * @method string|null            getIDType()
+ * @method OldStatus[]|null       getOldStatuses()
+ * @method string|null            getProductCodeCollect()
+ * @method ProductOption[]|null   getProductOptions()
+ * @method string|null            getReceiverDateOfBirth()
+ * @method string|null            getReference()
+ * @method string|null            getReferenceCollect()
+ * @method string|null            getRemark()
+ * @method string|null            getReturnBarcode()
+ * @method string|null            getReturnReference()
+ * @method string|null            getStatusCode()
+ * @method Shipment               setAddresses(Address[]|null $addresses = null)
+ * @method Shipment               setBarcode(string|null $barcode = null)
+ * @method Shipment               setDimension(string|null $dimension = null)
+ * @method Shipment               setProductCodeDelivery(string|null $productCodeDelivery = null)
+ * @method Shipment               setAmounts(Amount[]|null $amounts = null)
+ * @method Shipment               setContacts(Contact[]|null $contact = null)
+ * @method Shipment               setContent(string|null $content = null)
+ * @method Shipment               setCostCenter(string|null $costCenter = null)
+ * @method Shipment               setCustomer(Customer|null $customer = null)
+ * @method Shipment               setCustomerOrderNumber(string|null $customerOrderNumber = null)
+ * @method Shipment               setCustoms(Customs|null $customs = null)
+ * @method Shipment               setPhaseCode(int|null $phaseCode = null)
+ * @method Shipment               setDateFrom(string|null $date = null)
+ * @method Shipment               setDateTo(string $date = null)
+ * @method Shipment               setDeliveryAddress(string|null $deliveryAddress = null)
+ * @method Shipment               setDownPartnerBarcode(string|null $downPartnerBarcode = null)
+ * @method Shipment               setDownPartnerID(string|null $downPartnerID = null)
+ * @method Shipment               setDownPartnerLocation(string|null $downPartnerLocation = null)
+ * @method Shipment               setEvents(Event[]|null $events = null)
+ * @method Shipment               setGroups(Group[]|null $groups = null)
+ * @method Shipment               setIDExpiration(string|null $idExpiration = null)
+ * @method Shipment               setIDNumber(string|null $idNumber = null)
+ * @method Shipment               setIDType(string|null $idType = null)
+ * @method Shipment               setOldStatuses(OldStatus[]|null $oldStatuses = null)
+ * @method Shipment               setProductCodeCollect(string|null $productCodeCollect = null)
+ * @method Shipment               setProductOptions(ProductOption[]|null $productOptions = null)
+ * @method Shipment               setReceiverDateOfBirth(string|null $receiverDateOfBirth = null)
+ * @method Shipment               setReference(string|null $reference = null)
+ * @method Shipment               setReferenceCollect(string|null $referenceCollect = null)
+ * @method Shipment               setRemark(string|null $remark = null)
+ * @method Shipment               setReturnBarcode(string|null $returnBarcode = null)
+ * @method Shipment               setReturnReference(string|null $returnReference = null)
+ * @method Shipment               setStatusCode(string|null $statusCode = null)
  *
  * @since 1.0.0
  */
@@ -446,9 +448,9 @@ class Shipment extends AbstractEntity
     protected $Amounts;
     /** @var string|null */
     protected $Barcode;
-    /** @var string|null */
+    /** @var DateTimeInterface|null */
     protected $CollectionTimeStampEnd;
-    /** @var string|null */
+    /** @var DateTimeInterface|null */
     protected $CollectionTimeStampStart;
     /** @var Contact[]|null */
     protected $Contacts;
@@ -466,17 +468,17 @@ class Shipment extends AbstractEntity
     protected $StatusCode;
     /** @var int|null */
     protected $PhaseCode;
-    /** @var string|null */
+    /** @var DateTimeInterface|null */
     protected $DateFrom;
-    /** @var string|null */
+    /** @var DateTimeInterface|null */
     protected $DateTo;
     /** @var string|null */
     protected $DeliveryAddress;
-    /** @var string|null */
+    /** @var DateTimeInterface|null */
     protected $DeliveryTimeStampStart;
-    /** @var string|null */
+    /** @var DateTimeInterface|null */
     protected $DeliveryTimeStampEnd;
-    /** @var string|null */
+    /** @var DateTimeInterface|null */
     protected $DeliveryDate;
     /** @var Dimension|null */
     protected $Dimension;
@@ -521,42 +523,46 @@ class Shipment extends AbstractEntity
     /**
      * Shipment constructor.
      *
-     * @param Address[]|null       $addresses
-     * @param array|null           $amounts
-     * @param string|null          $barcode
-     * @param Contact[]|null       $contacts
-     * @param string|null          $content
-     * @param string|null          $collectionTimeStampEnd
-     * @param string|null          $collectionTimeStampStart
-     * @param string|null          $costCenter
-     * @param Customer|null        $customer
-     * @param string|null          $customerOrderNumber
-     * @param Customs|null         $customs
-     * @param string|null          $deliveryAddress
-     * @param string|null          $deliveryDate
-     * @param Dimension|null       $dimension
-     * @param string|null          $downPartnerBarcode
-     * @param string|null          $downPartnerId
-     * @param string|null          $downPartnerLocation
-     * @param Event[]|null         $events
-     * @param Group[]|null         $groups
-     * @param string|null          $idExpiration
-     * @param string|null          $idNumber
-     * @param string|null          $idType
-     * @param array|null           $oldStatuses
-     * @param string|null          $productCodeCollect
-     * @param string|null          $productCodeDelivery
-     * @param ProductOption[]|null $productOptions
-     * @param string|null          $receiverDateOfBirth
-     * @param string|null          $reference
-     * @param string|null          $referenceCollect
-     * @param string|null          $remark
-     * @param string|null          $returnBarcode
-     * @param string|null          $returnReference
-     * @param string|null          $statusCode
-     * @param int|null             $phaseCode
-     * @param string|null          $dateFrom
-     * @param string|null          $dateTo
+     * @param Address[]|null                $addresses
+     * @param array|null                    $amounts
+     * @param string|null                   $barcode
+     * @param Contact[]|null                $contacts
+     * @param string|null                   $content
+     * @param string|DateTimeInterface|null $collectionTimeStampEnd
+     * @param string|DateTimeInterface|null $collectionTimeStampStart
+     * @param string|null                   $costCenter
+     * @param Customer|null                 $customer
+     * @param string|null                   $customerOrderNumber
+     * @param Customs|null                  $customs
+     * @param string|null                   $deliveryAddress
+     * @param string|DateTimeInterface|null $deliveryDate
+     * @param Dimension|null                $dimension
+     * @param string|null                   $downPartnerBarcode
+     * @param string|null                   $downPartnerId
+     * @param string|null                   $downPartnerLocation
+     * @param Event[]|null                  $events
+     * @param Group[]|null                  $groups
+     * @param string|null                   $idExpiration
+     * @param string|null                   $idNumber
+     * @param string|null                   $idType
+     * @param array|null                    $oldStatuses
+     * @param string|null                   $productCodeCollect
+     * @param string|null                   $productCodeDelivery
+     * @param ProductOption[]|null          $productOptions
+     * @param string|null                   $receiverDateOfBirth
+     * @param string|null                   $reference
+     * @param string|null                   $referenceCollect
+     * @param string|null                   $remark
+     * @param string|null                   $returnBarcode
+     * @param string|null                   $returnReference
+     * @param string|null                   $statusCode
+     * @param int|null                      $phaseCode
+     * @param string|null                   $dateFrom
+     * @param string|null                   $dateTo
+     * @param string|DateTimeInterface|null $deliveryTimeStampStart
+     * @param string|DateTimeInterface|null $deliveryTimeStampEnd
+     *
+     * @throws Exception
      */
     public function __construct(
         array $addresses = null,
@@ -594,7 +600,9 @@ class Shipment extends AbstractEntity
         $statusCode = null,
         $phaseCode = null,
         $dateFrom = null,
-        $dateTo = null
+        $dateTo = null,
+        $deliveryTimeStampStart = null,
+        $deliveryTimeStampEnd = null
     ) {
         parent::__construct();
 
@@ -634,6 +642,108 @@ class Shipment extends AbstractEntity
         $this->setPhaseCode($phaseCode);
         $this->setDateFrom($dateFrom);
         $this->setDateTo($dateTo);
+        $this->setDeliveryTimeStampStart($deliveryTimeStampStart);
+        $this->setDeliveryTimeStampEnd($deliveryTimeStampEnd);
+    }
+
+    /**
+     * @param string|DateTimeInterface|null $collectionTimeStampStart
+     *
+     * @return static
+     *
+     * @throws Exception
+     *
+     * @since 1.2.0
+     */
+    public function setCollectionTimeStampStart($collectionTimeStampStart = null)
+    {
+        if (is_string($collectionTimeStampStart)) {
+            $collectionTimeStampStart = new DateTimeImmutable($collectionTimeStampStart);
+        }
+
+        $this->CollectionTimeStampStart = $collectionTimeStampStart;
+
+        return $this;
+    }
+
+    /**
+     * @param string|DateTimeInterface|null $collectionTimeStampEnd
+     *
+     * @return static
+     *
+     * @throws Exception
+     *
+     * @since 1.2.0
+     */
+    public function setCollectionTimeStampEnd($collectionTimeStampEnd = null)
+    {
+        if (is_string($collectionTimeStampEnd)) {
+            $collectionTimeStampEnd = new DateTimeImmutable($collectionTimeStampEnd);
+        }
+
+        $this->CollectionTimeStampEnd = $collectionTimeStampEnd;
+
+        return $this;
+    }
+
+    /**
+     * @param string|DateTimeInterface|null $deliveryTimeStampStart
+     *
+     * @return static
+     *
+     * @throws Exception
+     *
+     * @since 1.2.0
+     */
+    public function setDeliveryTimeStampStart($deliveryTimeStampStart = null)
+    {
+        if (is_string($deliveryTimeStampStart)) {
+            $deliveryTimeStampStart = new DateTimeImmutable($deliveryTimeStampStart);
+        }
+
+        $this->DeliveryTimeStampStart = $deliveryTimeStampStart;
+
+        return $this;
+    }
+
+    /**
+     * @param string|DateTimeInterface|null $deliveryTimeStampEnd
+     *
+     * @return static
+     *
+     * @throws Exception
+     *
+     * @since 1.2.0
+     */
+    public function setDeliveryTimeStampEnd($deliveryTimeStampEnd = null)
+    {
+        if (is_string($deliveryTimeStampEnd)) {
+            $deliveryTimeStampEnd = new DateTimeImmutable($deliveryTimeStampEnd);
+        }
+
+        $this->DeliveryTimeStampEnd = $deliveryTimeStampEnd;
+
+        return $this;
+    }
+
+    /**
+     * @param string|DateTimeInterface|null $deliveryDate
+     *
+     * @return static
+     *
+     * @throws Exception
+     *
+     * @since 1.2.0
+     */
+    public function setDeliveryDate($deliveryDate = null)
+    {
+        if (is_string($deliveryDate)) {
+            $deliveryDate = new DateTimeImmutable($deliveryDate);
+        }
+
+        $this->DeliveryDate = $deliveryDate;
+
+        return $this;
     }
 
     /**
@@ -687,17 +797,7 @@ class Shipment extends AbstractEntity
                     }
                     $xml["{{$namespace}}Groups"] = $items;
                 }
-            }
-//            elseif ($propertyName === 'OldStatuses') {
-//                if (is_array($this->OldStatuses)) {
-//                    $items = [];
-//                    foreach ($this->OldStatuses as $option) {
-//                        $items[] = ["{{$namespace}}OldStatus" => $option];
-//                    }
-//                    $xml["{{$namespace}}OldStatuses"] = $items;
-//                }
-//            }
-            elseif ('ProductOptions' === $propertyName) {
+            } elseif ('ProductOptions' === $propertyName) {
                 if (is_array($this->ProductOptions)) {
                     $items = [];
                     foreach ($this->ProductOptions as $option) {
@@ -705,8 +805,12 @@ class Shipment extends AbstractEntity
                     }
                     $xml["{{$namespace}}ProductOptions"] = $items;
                 }
-            } elseif (isset($this->{$propertyName})) {
-                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
+            } elseif (isset($this->$propertyName)) {
+                if ($this->$propertyName instanceof DateTimeInterface) {
+                    $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->$propertyName->format('d-m-y');
+                } else {
+                    $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->$propertyName;
+                }
             }
         }
         // Auto extending this object with other properties is not supported with SOAP

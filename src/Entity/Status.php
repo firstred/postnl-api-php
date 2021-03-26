@@ -26,6 +26,9 @@
 
 namespace ThirtyBees\PostNL\Entity;
 
+use DateTimeImmutable;
+use DateTimeInterface;
+use Exception;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
@@ -37,16 +40,15 @@ use ThirtyBees\PostNL\Service\TimeframeService;
 /**
  * Class Status.
  *
- * @method string|null getCurrentPhaseCode()
- * @method string|null getCurrentPhaseDescription()
- * @method string|null getCurrentStatusCode()
- * @method string|null getCurrentStatusDescription()
- * @method string|null getCurrentStatusTimeStamp()
- * @method Status      setCurrentPhaseCode(string|null $code = null)
- * @method Status      setCurrentPhaseDescription(string|null $desc = null)
- * @method Status      setCurrentStatusCode(string|null $code = null)
- * @method Status      setCurrentStatusDescription(string|null $desc = null)
- * @method Status      setCurrentStatusTimeStamp(string|null $dateTime = null)
+ * @method string|null            getCurrentPhaseCode()
+ * @method string|null            getCurrentPhaseDescription()
+ * @method string|null            getCurrentStatusCode()
+ * @method string|null            getCurrentStatusDescription()
+ * @method DateTimeInterface|null getCurrentStatusTimeStamp()
+ * @method Status                 setCurrentPhaseCode(string|null $code = null)
+ * @method Status                 setCurrentPhaseDescription(string|null $desc = null)
+ * @method Status                 setCurrentStatusCode(string|null $code = null)
+ * @method Status                 setCurrentStatusDescription(string|null $desc = null)
  *
  * @since 1.0.0
  */
@@ -113,16 +115,20 @@ class Status extends AbstractEntity
     protected $CurrentStatusCode;
     /** @var string|null */
     protected $CurrentStatusDescription;
-    /** @var string|null */
+    /** @var DateTimeInterface|null */
     protected $CurrentStatusTimeStamp;
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string|null $phaseCode
-     * @param string|null $phaseDesc
-     * @param string|null $statusCode
-     * @param string|null $statusDesc
-     * @param string|null $timeStamp
+     * Status contructor.
+     *
+     * @param string|null                   $phaseCode
+     * @param string|null                   $phaseDesc
+     * @param string|null                   $statusCode
+     * @param string|null                   $statusDesc
+     * @param string|DateTimeInterface|null $timeStamp
+     *
+     * @throws Exception
      */
     public function __construct(
         $phaseCode = null,
@@ -138,5 +144,25 @@ class Status extends AbstractEntity
         $this->setCurrentStatusCode($statusCode);
         $this->setCurrentStatusDescription($statusDesc);
         $this->setCurrentStatusTimeStamp($timeStamp);
+    }
+
+    /**
+     * @param string|DateTimeInterface|null $timeStamp
+     *
+     * @return static
+     *
+     * @throws Exception
+     *
+     * @since 1.2.0
+     */
+    public function setCurrentStatusTimeStamp($timeStamp = null)
+    {
+        if (is_string($timeStamp)) {
+            $timeStamp = new DateTimeImmutable($timeStamp);
+        }
+
+        $this->CurrentStatusTimeStamp = $timeStamp;
+
+        return $this;
     }
 }

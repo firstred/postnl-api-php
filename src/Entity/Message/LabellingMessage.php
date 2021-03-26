@@ -26,6 +26,7 @@
 
 namespace ThirtyBees\PostNL\Entity\Message;
 
+use DateTimeInterface;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
@@ -38,12 +39,11 @@ use ThirtyBees\PostNL\Service\TimeframeService;
 /**
  * Class LabellingMessage.
  *
- * @method string|null getMessageID()
- * @method string|null getMessageTimeStamp()
- * @method string|null getPrinterType()
- * @method Message     setMessageID(string|null $mid = null)
- * @method Message     setMessageTimeStamp(string|null $timestamp = null)
- * @method Message     setPrinterType(string|null $printerType = null)
+ * @method string|null            getMessageID()
+ * @method DateTimeInterface|null getMessageTimeStamp()
+ * @method string|null            getPrinterType()
+ * @method Message                setMessageID(string|null $mid = null)
+ * @method Message                setPrinterType(string|null $printerType = null)
  *
  * @since 1.0.0
  */
@@ -98,9 +98,9 @@ class LabellingMessage extends Message
     protected $Printertype;
 
     /**
-     * @param string|null $printerType
-     * @param string|null $mid
-     * @param string|null $timestamp
+     * @param string|null                   $printerType
+     * @param string|null                   $mid
+     * @param string|DateTimeInterface|null $timestamp
      */
     public function __construct(
         $printerType = 'GraphicFile|PDF',

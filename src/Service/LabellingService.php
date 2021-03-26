@@ -26,6 +26,7 @@
 
 namespace ThirtyBees\PostNL\Service;
 
+use DateTimeImmutable;
 use Exception;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
@@ -43,6 +44,8 @@ use ThirtyBees\PostNL\Exception\ApiException;
 use ThirtyBees\PostNL\Exception\CifDownException;
 use ThirtyBees\PostNL\Exception\CifException;
 use ThirtyBees\PostNL\Exception\HttpClientException;
+use ThirtyBees\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use ThirtyBees\PostNL\Exception\NotSupportedException;
 use ThirtyBees\PostNL\Exception\ResponseException;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use \Sabre\Xml\LibXMLException;
@@ -108,7 +111,8 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      * @throws InvalidArgumentException
      * @throws HttpClientException
      * @throws ReflectionException
-     * @throws \ThirtyBees\PostNL\Exception\NotSupportedException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
      *
      * @since 1.0.0
      */
@@ -381,8 +385,8 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      * @throws ResponseException
      * @throws ReflectionException
      * @throws HttpClientException
-     * @throws \ThirtyBees\PostNL\Exception\NotSupportedException
-     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
      *
      * @since 1.0.0
      */
@@ -419,6 +423,8 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
         foreach (static::$namespaces as $namespace => $prefix) {
             $xmlService->namespaceMap[$namespace] = $prefix;
         }
+        $xmlService->classMap[DateTimeImmutable::class] = [__CLASS__, 'defaultDateFormat'];
+
         $security = new Security($this->postnl->getToken());
 
         $this->setService($security);

@@ -31,7 +31,6 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use ThirtyBees\PostNL\Entity\Address;
 use ThirtyBees\PostNL\Entity\Customer;
@@ -42,7 +41,6 @@ use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
 use ThirtyBees\PostNL\Entity\Timeframe;
 use ThirtyBees\PostNL\HttpClient\MockClient;
 use ThirtyBees\PostNL\PostNL;
-use ThirtyBees\PostNL\Service\TimeframeService;
 use ThirtyBees\PostNL\Service\TimeframeServiceInterface;
 
 /**
@@ -50,7 +48,7 @@ use ThirtyBees\PostNL\Service\TimeframeServiceInterface;
  *
  * @testdox The TimeframeService (SOAP)
  */
-class TimeframeServiceSoapTest extends TestCase
+class TimeframeServiceSoapTest extends ServiceTest
 {
     /** @var PostNL */
     protected $postnl;
@@ -161,7 +159,7 @@ class TimeframeServiceSoapTest extends TestCase
   <services:GetTimeframes>
    <domain:Message>
     <domain:MessageID>{$message->getMessageID()}</domain:MessageID>
-    <domain:MessageTimeStamp>{$message->getMessageTimeStamp()}</domain:MessageTimeStamp>
+    <domain:MessageTimeStamp>{$message->getMessageTimeStamp()->format('d-m-Y H:i:s')}</domain:MessageTimeStamp>
    </domain:Message>
    <domain:Timeframe>
     <domain:City>Hoofddorp</domain:City>

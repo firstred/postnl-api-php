@@ -104,12 +104,12 @@ class UsernameToken extends AbstractEntity
     {
         $xml = [];
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if (isset($this->{$propertyName})) {
+            if (isset($this->$propertyName)) {
                 // Lack of username means new API and no hash needed
                 if ($this->Username && 'Password' === $propertyName) {
-                    $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = sha1($this->{$propertyName});
+                    $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = sha1($this->$propertyName);
                 } else {
-                    $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
+                    $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->$propertyName;
                 }
             }
         }

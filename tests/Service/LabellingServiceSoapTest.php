@@ -31,7 +31,6 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use ThirtyBees\PostNL\Entity\Address;
 use ThirtyBees\PostNL\Entity\Customer;
@@ -53,7 +52,7 @@ use ThirtyBees\PostNL\Util\Util;
  *
  * @testdox The LabellingService (SOAP)
  */
-class LabellingServiceSoapTest extends TestCase
+class LabellingServiceSoapTest extends ServiceTest
 {
     /** @var PostNL */
     protected $postnl;
@@ -203,7 +202,7 @@ class LabellingServiceSoapTest extends TestCase
       </domain:Customer>
       <domain:Message>
         <domain:MessageID>{$message->getMessageID()}</domain:MessageID>
-        <domain:MessageTimeStamp>{$message->getMessageTimeStamp()}</domain:MessageTimeStamp>
+        <domain:MessageTimeStamp>{$message->getMessageTimeStamp()->format('d-m-Y H:i:s')}</domain:MessageTimeStamp>
         <domain:Printertype>GraphicFile|PDF</domain:Printertype>
       </domain:Message>
       <domain:Shipments>

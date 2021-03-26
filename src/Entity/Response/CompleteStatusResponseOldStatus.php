@@ -26,6 +26,9 @@
 
 namespace ThirtyBees\PostNL\Entity\Response;
 
+use DateTimeImmutable;
+use DateTimeInterface;
+use Exception;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
@@ -34,6 +37,8 @@ use ThirtyBees\PostNL\Service\LabellingService;
 use ThirtyBees\PostNL\Service\LocationService;
 use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
+use function is_string;
+use function is_subclass_of;
 
 /**
  * Class CompleteStatusResponseOldStatus.
@@ -42,12 +47,11 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method string|null                     getStatusDescription()
  * @method string|null                     getPhaseCode()
  * @method string|null                     getPhaseDescription()
- * @method string|null                     getTimeStamp()
+ * @method DateTimeInterface|null          getTimeStamp()
  * @method CompleteStatusResponseOldStatus setStatusCode(string|null $code = null)
  * @method CompleteStatusResponseOldStatus setStatusDescription(string|null $description = null)
  * @method CompleteStatusResponseOldStatus setPhaseCode(string|null $code = null)
  * @method CompleteStatusResponseOldStatus setPhaseDescription(string|null $description = null)
- * @method CompleteStatusResponseOldStatus setTimeStamp(string|null $timestamp = null)
  *
  * @since 1.0.0
  */
@@ -118,18 +122,20 @@ class CompleteStatusResponseOldStatus extends AbstractEntity
     protected $PhaseCode;
     /** @var string|null */
     protected $PhaseDescription;
-    /** @var string|null */
+    /** @var DateTimeInterface|null */
     protected $TimeStamp;
     // @codingStandardsIgnoreEnd
 
     /**
      * CompleteStatusResponseOldStatus constructor.
      *
-     * @param string|null $code
-     * @param string|null $description
-     * @param string|null $phaseCode
-     * @param string|null $phaseDescription
-     * @param string|null $timeStamp
+     * @param string|null                   $code
+     * @param string|null                   $description
+     * @param string|null                   $phaseCode
+     * @param string|null                   $phaseDescription
+     * @param DateTimeInterface|string|null $timeStamp
+     *
+     * @throws Exception
      */
     public function __construct(
         $code = null,
@@ -145,5 +151,24 @@ class CompleteStatusResponseOldStatus extends AbstractEntity
         $this->setPhaseCode($phaseCode);
         $this->setPhaseDescription($phaseDescription);
         $this->setTimeStamp($timeStamp);
+    }
+
+    /**
+     * @param string|DateTimeInterface|null $timeStamp
+     *
+     * @return static
+     *
+     * @throws Exception
+     *
+     * @since 1.2.0
+     */
+    public function setTimeStamp($timeStamp = null)
+    {
+        if (is_string($timeStamp)) {
+            $timeStamp = new DateTimeImmutable($timeStamp);
+        }
+
+        $this->TimeStamp = $timeStamp;
+        return $this;
     }
 }

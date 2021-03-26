@@ -133,12 +133,12 @@ class GenerateLabel extends AbstractEntity
         }
 
         foreach (array_keys(static::$defaultProperties[$this->currentService]) as $propertyName) {
-            if (isset($this->{$propertyName})) {
+            if (isset($this->$propertyName)) {
                 // The REST API only seems to accept one shipment per request at the moment of writing (Sep. 24th, 2017)
-                if ('Shipments' === $propertyName && count($this->{$propertyName}) >= 1) {
+                if ('Shipments' === $propertyName && count($this->$propertyName) >= 1) {
                     $json[$propertyName] = $this->{$propertyName}[0];
                 } else {
-                    $json[$propertyName] = $this->{$propertyName};
+                    $json[$propertyName] = $this->$propertyName;
                 }
             }
         }
@@ -169,8 +169,8 @@ class GenerateLabel extends AbstractEntity
                     $shipments[] = ["{{$namespace}}Shipment" => $shipment];
                 }
                 $xml["{{$namespace}}Shipments"] = $shipments;
-            } elseif (isset($this->{$propertyName})) {
-                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
+            } elseif (isset($this->$propertyName)) {
+                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->$propertyName;
             }
         }
         // Auto extending this object with other properties is not supported with SOAP

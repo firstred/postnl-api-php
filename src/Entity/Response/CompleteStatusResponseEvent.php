@@ -26,6 +26,9 @@
 
 namespace ThirtyBees\PostNL\Entity\Response;
 
+use DateTimeImmutable;
+use DateTimeInterface;
+use Exception;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
@@ -44,14 +47,13 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method string|null                 getLocationCode()
  * @method string|null                 getRouteCode()
  * @method string|null                 getRouteName()
- * @method string|null                 getTimeStamp()
+ * @method DateTimeInterface|null      getTimeStamp()
  * @method CompleteStatusResponseEvent setCode(string|null $code = null)
  * @method CompleteStatusResponseEvent setDescription(string|null $description = null)
  * @method CompleteStatusResponseEvent setDestinationLocationCode(string|null $code = null)
  * @method CompleteStatusResponseEvent setLocationCode(string|null $code = null)
  * @method CompleteStatusResponseEvent setRouteCode(string|null $code = null)
  * @method CompleteStatusResponseEvent setRouteName(string|null $name = null)
- * @method CompleteStatusResponseEvent setTimeStamp(string|null $timestamp = null)
  *
  * @since 1.0.0
  */
@@ -173,5 +175,25 @@ class CompleteStatusResponseEvent extends AbstractEntity
         $this->setRouteCode($routeCode);
         $this->setRouteName($routeName);
         $this->setTimeStamp($timeStamp);
+    }
+
+    /**
+     * @param string|DateTimeInterface|null $timeStamp
+     *
+     * @return static
+     *
+     * @throws Exception
+     *
+     * @since 1.2.0
+     */
+    public function setTimeStamp($timeStamp = null)
+    {
+        if (is_string($timeStamp)) {
+            $timeStamp = new DateTimeImmutable($timeStamp);
+        }
+
+        $this->TimeStamp = $timeStamp;
+
+        return $this;
     }
 }

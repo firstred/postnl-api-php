@@ -26,6 +26,7 @@
 
 namespace ThirtyBees\PostNL\Service;
 
+use DateTimeImmutable;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use InvalidArgumentException;
 use Psr\Cache\CacheItemInterface;
@@ -308,7 +309,7 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
         $deliveryDate = $getDeliveryDate->getGetDeliveryDate();
 
         $query = [
-            'ShippingDate' => $deliveryDate->getShippingDate(),
+            'ShippingDate' => $deliveryDate->getShippingDate()->format('d-m-Y H:i:s'),
             'Options'      => 'Daytime',
         ];
         if ($shippingDuration = $deliveryDate->getShippingDuration()) {
@@ -430,6 +431,8 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
         foreach (static::$namespaces as $namespace => $prefix) {
             $xmlService->namespaceMap[$namespace] = $prefix;
         }
+        $xmlService->classMap[DateTimeImmutable::class] = [__CLASS__, 'defaultDateFormat'];
+
         $security = new Security($this->postnl->getToken());
 
         $this->setService($security);
@@ -580,6 +583,8 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
         foreach (static::$namespaces as $namespace => $prefix) {
             $xmlService->namespaceMap[$namespace] = $prefix;
         }
+        $xmlService->classMap[DateTimeImmutable::class] = [__CLASS__, 'defaultDateFormat'];
+
         $security = new Security($this->postnl->getToken());
 
         $this->setService($security);
