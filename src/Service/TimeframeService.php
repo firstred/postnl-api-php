@@ -26,24 +26,29 @@
 
 namespace ThirtyBees\PostNL\Service;
 
+use InvalidArgumentException;
 use Psr\Cache\CacheItemInterface;
-use Psr\Cache\InvalidArgumentException;
+use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use ReflectionException;
 use Sabre\Xml\Reader;
+use Sabre\Xml\LibXMLException;
 use Sabre\Xml\Service as XmlService;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
+use ThirtyBees\PostNL\Entity\ReasonNoTimeframe;
 use ThirtyBees\PostNL\Entity\Request\GetTimeframes;
 use ThirtyBees\PostNL\Entity\Response\ResponseTimeframes;
 use ThirtyBees\PostNL\Entity\SOAP\Security;
+use ThirtyBees\PostNL\Entity\TimeframeTimeFrame;
 use ThirtyBees\PostNL\Exception\ApiException;
 use ThirtyBees\PostNL\Exception\CifDownException;
 use ThirtyBees\PostNL\Exception\CifException;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use ThirtyBees\PostNL\Exception\HttpClientException;
+use ThirtyBees\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use ThirtyBees\PostNL\Exception\NotSupportedException;
 use ThirtyBees\PostNL\Exception\ResponseException;
-use Sabre\Xml\LibXMLException;
 
 /**
  * Class TimeframeService.
@@ -94,9 +99,11 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
-     * @throws ReflectionException
-     * @throws InvalidArgumentException
      * @throws HttpClientException
+     * @throws PsrCacheInvalidArgumentException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
+     * @throws ReflectionException
      * @throws ResponseException
      *
      * @since 1.0.0
@@ -109,7 +116,7 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
             $response = $item->get();
             try {
                 $response = PsrMessage::parseResponse($response);
-            } catch (\InvalidArgumentException $e) {
+            } catch (InvalidArgumentException $e) {
             }
         }
         if (!$response instanceof ResponseInterface) {
@@ -144,10 +151,11 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
      * @throws CifDownException
      * @throws CifException
      * @throws ReflectionException
-     * @throws InvalidArgumentException
-     * @throws \Sabre\Xml\LibXMLException
+     * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
      * @throws ResponseException
+     * @throws LibXMLException
+     *
      * @since 1.0.0
      */
     public function getTimeframesSOAP(GetTimeframes $getTimeframes)
@@ -158,7 +166,7 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
             $response = $item->get();
             try {
                 $response = PsrMessage::parseResponse($response);
-            } catch (\InvalidArgumentException $e) {
+            } catch (InvalidArgumentException $e) {
             }
         }
         if (!$response instanceof ResponseInterface) {
@@ -248,55 +256,55 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
      * @throws ReflectionException
      * @throws HttpClientException
      * @throws ResponseException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
      *
      * @since 1.0.0
      */
     public function processGetTimeframesResponseREST($response)
     {
-        $body = @json_decode(static::getResponseText($response), true);
-        if (isset($body['Timeframes'])) {
-            // Standardize the object here
-            if (isset($body['ReasonNotimeframes']['ReasonNoTimeframe'])) {
-                if (isset($body['ReasonNotimeframes']['ReasonNoTimeframe']['Code'])) {
-                    $body['ReasonNotimeframes']['ReasonNoTimeframe'] = [$body['ReasonNotimeframes']['ReasonNoTimeframe']];
-                }
-
-                $newNotimeframes = [];
-                foreach ($body['ReasonNotimeframes']['ReasonNoTimeframe'] as &$reasonNotimeframe) {
-                    $newNotimeframes[] = AbstractEntity::jsonDeserialize(['ReasonNoTimeFrame' => $reasonNotimeframe]);
-                }
-                $body['ReasonNotimeframes'] = $newNotimeframes;
+        $body = json_decode(static::getResponseText($response));
+        // Standardize the object here
+        if (isset($body->ReasonNotimeframes->ReasonNoTimeframe)) {
+            if (!is_array($body->ReasonNotimeframes->ReasonNoTimeframe)) {
+                $body->ReasonNotimeframes->ReasonNoTimeframe = [$body->ReasonNotimeframes->ReasonNoTimeframe];
             }
 
-            if (isset($body['Timeframes']['Timeframe'])) {
-                if (isset($body['Timeframes']['Timeframe']['Date'])) {
-                    $body['Timeframes']['Timeframe'] = [$body['Timeframes']['Timeframe']];
-                }
-
-                $newTimeframes = [];
-                foreach ($body['Timeframes']['Timeframe'] as $timeframe) {
-                    $newTimeframeTimeframe = [];
-                    if (isset($timeframe['Timeframes']['TimeframeTimeFrame']['From'])) {
-                        $timeframe['Timeframes']['TimeframeTimeFrame'] = [$timeframe['Timeframes']['TimeframeTimeFrame']];
-                    }
-                    foreach ($timeframe['Timeframes']['TimeframeTimeFrame'] as $timeframetimeframe) {
-                        $newTimeframeTimeframe[] = AbstractEntity::jsonDeserialize(['TimeframeTimeFrame' => $timeframetimeframe]);
-                    }
-                    $timeframe['Timeframes'] = $newTimeframeTimeframe;
-
-                    $newTimeframes[] = AbstractEntity::jsonDeserialize(['Timeframe' => $timeframe]);
-                }
-                $body['Timeframes'] = $newTimeframes;
+            $newNotimeframes = [];
+            foreach ($body->ReasonNotimeframes->ReasonNoTimeframe as $reasonNotimeframe) {
+                $newNotimeframes[] = ReasonNoTimeframe::jsonDeserialize((object) ['ReasonNoTimeframe' => $reasonNotimeframe]);
             }
-
-            /** @var ResponseTimeframes $object */
-            $object = AbstractEntity::jsonDeserialize(['ResponseTimeframes' => $body]);
-            $this->setService($object);
-
-            return $object;
+            $body->ReasonNotimeframes = $newNotimeframes;
         }
 
-        return null;
+        if (isset($body->Timeframes->Timeframe)) {
+            if (!is_array($body->Timeframes->Timeframe)) {
+                $body->Timeframes->Timeframe = [$body->Timeframes->Timeframe];
+            }
+
+            $newTimeframes = [];
+            foreach ($body->Timeframes->Timeframe as $timeframe) {
+                $newTimeframeTimeframe = [];
+                if (!is_array($timeframe->Timeframes->TimeframeTimeFrame)) {
+                    $timeframe->Timeframes->TimeframeTimeFrame = [$timeframe->Timeframes->TimeframeTimeFrame];
+                }
+                foreach ($timeframe->Timeframes->TimeframeTimeFrame as $timeframetimeframe) {
+                    $newTimeframeTimeframe[] = TimeframeTimeFrame::jsonDeserialize(
+                        (object) ['TimeframeTimeFrame' => $timeframetimeframe]
+                    );
+                }
+                $timeframe->Timeframes = $newTimeframeTimeframe;
+
+                $newTimeframes[] = AbstractEntity::jsonDeserialize((object) ['Timeframe' => $timeframe]);
+            }
+            $body->Timeframes = $newTimeframes;
+        }
+
+        /** @var ResponseTimeframes $object */
+        $object = AbstractEntity::jsonDeserialize((object) ['ResponseTimeframes' => $body]);
+        $this->setService($object);
+
+        return $object;
     }
 
     /**
@@ -354,7 +362,7 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
      * @throws CifDownException
      * @throws CifException
      * @throws ReflectionException
-     * @throws \Sabre\Xml\LibXMLException
+     * @throws LibXMLException
      * @throws HttpClientException
      * @throws ResponseException
      *

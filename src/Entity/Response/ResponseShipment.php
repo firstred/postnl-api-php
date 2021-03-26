@@ -153,13 +153,13 @@ class ResponseShipment extends AbstractEntity
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string|null  $barcode
-     * @param string|null  $productCodeDelivery
-     * @param Label[]|null $labels
-     * @param string|null  $downPartnerBarcode
-     * @param string|null  $downPartnerId
-     * @param string|null  $downPartnerLocation
-     * @param array|null   $warnings
+     * @param string|null    $barcode
+     * @param string|null    $productCodeDelivery
+     * @param Label[]|null   $labels
+     * @param string|null    $downPartnerBarcode
+     * @param string|null    $downPartnerId
+     * @param string|null    $downPartnerLocation
+     * @param Warning[]|null $warnings
      */
     public function __construct(
         $barcode = null,

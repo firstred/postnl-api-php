@@ -248,7 +248,7 @@ class CompleteStatusResponseShipment extends AbstractEntity
      * @param Customer|null                          $customer
      * @param string|null                            $deliveryDate
      * @param Dimension|null                         $dimension
-     * @param array|null                             $events
+     * @param CompleteStatusResponseEvent[]|null     $events
      * @param Expectation|null                       $expectation
      * @param Group[]|null                           $groups
      * @param string|null                            $productCode

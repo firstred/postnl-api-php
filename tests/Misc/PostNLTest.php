@@ -46,6 +46,7 @@ class PostNLTest extends TestCase
      * @before
      *
      * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     * @throws \ReflectionException
      */
     public function setupPostNL()
     {

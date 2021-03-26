@@ -37,6 +37,9 @@ use ThirtyBees\PostNL\Entity\Location;
 use ThirtyBees\PostNL\Entity\Request\GetDeliveryDate;
 use ThirtyBees\PostNL\Entity\Request\GetNearestLocations;
 use ThirtyBees\PostNL\Entity\Request\GetTimeframes;
+use ThirtyBees\PostNL\Entity\Response\GetDeliveryDateResponse;
+use ThirtyBees\PostNL\Entity\Response\GetNearestLocationsResponse;
+use ThirtyBees\PostNL\Entity\Response\ResponseTimeframes;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
 use ThirtyBees\PostNL\Entity\Timeframe;
 use ThirtyBees\PostNL\HttpClient\MockClient;
@@ -57,6 +60,7 @@ class PostNLRestTest extends TestCase
      * @before
      *
      * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     * @throws \ReflectionException
      */
     public function setupPostNL()
     {
@@ -136,6 +140,7 @@ class PostNLRestTest extends TestCase
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \ThirtyBees\PostNL\Exception\HttpClientException
      * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     * @throws \ReflectionException
      */
     public function testGetTimeframesAndLocations()
     {
@@ -383,9 +388,9 @@ class PostNLRestTest extends TestCase
         );
 
         $this->assertTrue(is_array($results));
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\ResponseTimeframes', $results['timeframes']);
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\GetNearestLocationsResponse', $results['locations']);
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\GetDeliveryDateResponse', $results['delivery_date']);
+        $this->assertInstanceOf(ResponseTimeframes::class, $results['timeframes']);
+        $this->assertInstanceOf(GetNearestLocationsResponse::class, $results['locations']);
+        $this->assertInstanceOf(GetDeliveryDateResponse::class, $results['delivery_date']);
     }
 
     /**

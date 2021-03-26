@@ -27,6 +27,7 @@
 namespace ThirtyBees\PostNL\Tests\Service;
 
 use Cache\Adapter\Void\VoidCachePool;
+use DateTimeInterface;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
@@ -257,7 +258,8 @@ XML
             GetDeliveryDateResponse::class,
             $response
         );
-        $this->assertEquals('30-06-2016', $response->getDeliveryDate());
+        $this->assertInstanceOf(DateTimeInterface::class, $response->getDeliveryDate());
+        $this->assertEquals('30-06-2016', $response->getDeliveryDate()->format('d-m-Y'));
     }
 
     /**

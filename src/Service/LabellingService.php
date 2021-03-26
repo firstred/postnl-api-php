@@ -108,6 +108,7 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      * @throws InvalidArgumentException
      * @throws HttpClientException
      * @throws ReflectionException
+     * @throws \ThirtyBees\PostNL\Exception\NotSupportedException
      *
      * @since 1.0.0
      */
@@ -380,15 +381,17 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      * @throws ResponseException
      * @throws ReflectionException
      * @throws HttpClientException
+     * @throws \ThirtyBees\PostNL\Exception\NotSupportedException
+     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
      *
      * @since 1.0.0
      */
     public function processGenerateLabelResponseREST($response)
     {
-        $body = @json_decode(static::getResponseText($response), true);
-        if (isset($body['ResponseShipments'])) {
+        $body = json_decode(static::getResponseText($response));
+        if (isset($body->ResponseShipments)) {
             /** @var GenerateLabelResponse $object */
-            $object = AbstractEntity::jsonDeserialize(['GenerateLabelResponse' => $body]);
+            $object = AbstractEntity::jsonDeserialize((object) ['GenerateLabelResponse' => $body]);
             $this->setService($object);
 
             return $object;

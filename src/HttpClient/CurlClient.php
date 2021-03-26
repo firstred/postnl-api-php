@@ -34,6 +34,7 @@ use Psr\Log\LoggerInterface;
 use ThirtyBees\PostNL\Exception\ApiConnectionException;
 use ThirtyBees\PostNL\Exception\ApiException;
 use GuzzleHttp\Psr7\Message as PsrMessage;
+use ThirtyBees\PostNL\Exception\HttpClientException;
 
 if (!defined('CURL_SSLVERSION_TLSv1')) {
     define('CURL_SSLVERSION_TLSv1', 1);
@@ -271,7 +272,7 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
      *
      * @return ResponseInterface|ResponseInterface[]|Exception|Exception[]
      *
-     * @throws ApiException
+     * @throws HttpClientException
      */
     public function doRequests($requests = [])
     {
@@ -322,7 +323,7 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
      * @param resource         $curl
      * @param RequestInterface $request
      *
-     * @throws ApiException
+     * @throws HttpClientException
      */
     protected function prepareRequest($curl, RequestInterface $request)
     {
@@ -338,7 +339,7 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
         if (is_callable($this->defaultOptions)) { // call defaultOptions callback, set options to return value
             $opts = call_user_func_array($this->defaultOptions, func_get_args());
             if (!is_array($opts)) {
-                throw new ApiException('Non-array value returned by defaultOptions CurlClient callback');
+                throw new HttpClientException('Non-array value returned by defaultOptions CurlClient callback');
             }
         } elseif (is_array($this->defaultOptions)) { // set default curlopts from array
             $opts = $this->defaultOptions;
@@ -353,7 +354,7 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
         } elseif ('delete' == $method) {
             $opts[CURLOPT_CUSTOMREQUEST] = 'DELETE';
         } else {
-            throw new ApiException("Unrecognized method $method");
+            throw new HttpClientException("Unrecognized method $method");
         }
         $opts[CURLOPT_URL] = $request->getUri();
         $opts[CURLOPT_RETURNTRANSFER] = true;

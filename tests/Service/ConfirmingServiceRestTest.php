@@ -27,13 +27,11 @@
 namespace ThirtyBees\PostNL\Tests\Service;
 
 use Cache\Adapter\Void\VoidCachePool;
-use Exception;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Message as PsrMessage;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Psr7\Message as PsrMessage;
-use libphonenumber\NumberParseException;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
@@ -44,6 +42,7 @@ use ThirtyBees\PostNL\Entity\Dimension;
 use ThirtyBees\PostNL\Entity\Message\LabellingMessage;
 use ThirtyBees\PostNL\Entity\Request\Confirming;
 use ThirtyBees\PostNL\Entity\Response\ConfirmingResponseShipment;
+use ThirtyBees\PostNL\Entity\Response\ConfirmingShipmentResponse;
 use ThirtyBees\PostNL\Entity\Shipment;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
 use ThirtyBees\PostNL\Entity\Warning;
@@ -73,6 +72,7 @@ class ConfirmingServiceRestTest extends TestCase
      * @before
      *
      * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     * @throws ReflectionException
      */
     public function setupPostNL()
     {
@@ -233,7 +233,6 @@ class ConfirmingServiceRestTest extends TestCase
      * @param ResponseInterface
      *
      * @throws ReflectionException
-     * @throws NumberParseException
      */
     public function testConfirmsALabelRest($response)
     {
@@ -279,10 +278,12 @@ class ConfirmingServiceRestTest extends TestCase
     }
 
     /**
-     * @testdox can confirm multiple labels
+     * @testdox      can confirm multiple labels
      * @dataProvider multipleLabelsConfirmationsProvider
      *
-     * @throws Exception
+     * @param ResponseInterface[] $responses
+     *
+     * @throws ReflectionException
      */
     public function testConfirmMultipleLabelsRest($responses)
     {

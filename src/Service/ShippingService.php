@@ -78,6 +78,7 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
      * @throws ResponseException
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws HttpClientException
+     * @throws \ThirtyBees\PostNL\Exception\NotSupportedException
      *
      * @since 1.2.0
      */
@@ -156,15 +157,17 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
      * @throws ReflectionException
      * @throws ResponseException
      * @throws HttpClientException
+     * @throws \ThirtyBees\PostNL\Exception\NotSupportedException
+     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
      *
      * @since 1.2.0
      */
     public function processGenerateShippingResponseREST($response)
     {
-        $body = @json_decode(static::getResponseText($response), true);
-        if (isset($body['ResponseShipments'])) {
+        $body = json_decode(static::getResponseText($response));
+        if (isset($body->ResponseShipments)) {
             /** @var GenerateShippingResponse $object */
-            $object = AbstractEntity::JsonDeserialize(['GenerateShippingResponse' => $body]);
+            $object = AbstractEntity::JsonDeserialize((object) ['GenerateShippingResponse' => $body]);
             $this->setService($object);
 
             return $object;

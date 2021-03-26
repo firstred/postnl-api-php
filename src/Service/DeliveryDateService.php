@@ -106,6 +106,7 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @throws PsrCacheInvalidArgumentException
      * @throws ReflectionException
      * @throws HttpClientException
+     * @throws \ThirtyBees\PostNL\Exception\NotSupportedException
      *
      * @since 1.0.0
      */
@@ -204,6 +205,7 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
      * @throws ReflectionException
+     * @throws \ThirtyBees\PostNL\Exception\NotSupportedException
      *
      * @since 1.0.0
      */
@@ -392,15 +394,16 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @throws ResponseException
      * @throws ReflectionException
      * @throws HttpClientException
+     * @throws \ThirtyBees\PostNL\Exception\NotSupportedException
      *
      * @since 1.0.0
      */
     public function processGetDeliveryDateResponseREST($response)
     {
-        $body = @json_decode(static::getResponseText($response), true);
-        if (isset($body['DeliveryDate'])) {
+        $body = json_decode(static::getResponseText($response));
+        if (isset($body->DeliveryDate)) {
             /** @var GetDeliveryDateResponse $object */
-            $object = AbstractEntity::jsonDeserialize(['GetDeliveryDateResponse' => $body]);
+            $object = GetDeliveryDateResponse::jsonDeserialize((object) ['GetDeliveryDateResponse' => $body]);
             $this->setService($object);
 
             return $object;
@@ -543,15 +546,17 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @throws ResponseException
      * @throws ReflectionException
      * @throws HttpClientException
+     * @throws \ThirtyBees\PostNL\Exception\NotSupportedException
+     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
      *
      * @since 1.0.0
      */
     public function processGetSentDateResponseREST($response)
     {
-        $body = @json_decode(static::getResponseText($response), true);
-        if (isset($body['SentDate'])) {
+        $body = json_decode(static::getResponseText($response));
+        if (isset($body->SentDate)) {
             /** @var GetSentDateResponse $object */
-            $object = AbstractEntity::jsonDeserialize(['GetSentDateResponse' => $body]);
+            $object = AbstractEntity::jsonDeserialize((object) ['GetSentDateResponse' => $body]);
             $this->setService($object);
 
             return $object;

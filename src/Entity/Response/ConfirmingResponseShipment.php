@@ -26,6 +26,7 @@
 
 namespace ThirtyBees\PostNL\Entity\Response;
 
+use stdClass;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
 use ThirtyBees\PostNL\Entity\Warning;
 use ThirtyBees\PostNL\Service\BarcodeService;
@@ -39,8 +40,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
 /**
  * Class ConfirmingResponseShipment.
  *
- * @method string|null                getBarcode()
- * @method Warning[]|null             getWarnings()
+ * @method string|null        getBarcode()
+ * @method Warning[]|null     getWarnings()
  * @method ConfirmingResponseShipment setBarcode(string|null $barcode = null)
  * @method ConfirmingResponseShipment setWarnings(Warning[]|null $warnings = null)
  *
@@ -98,5 +99,12 @@ class ConfirmingResponseShipment extends AbstractEntity
 
         $this->setBarcode($barcode);
         $this->setWarnings($warnings);
+    }
+
+    public static function jsonDeserialize(stdClass $json)
+    {
+
+
+        return parent::jsonDeserialize($json);
     }
 }

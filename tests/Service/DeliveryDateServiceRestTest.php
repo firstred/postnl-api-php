@@ -27,6 +27,7 @@
 namespace ThirtyBees\PostNL\Tests\Service;
 
 use Cache\Adapter\Void\VoidCachePool;
+use DateTimeInterface;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Message as PsrMessage;
@@ -205,7 +206,8 @@ class DeliveryDateServiceRestTest extends TestCase
             GetDeliveryDateResponse::class,
             $response
         );
-        $this->assertEquals('30-06-2016', $response->getDeliveryDate());
+        $this->assertInstanceof(DateTimeInterface::class, $response->getDeliveryDate());
+        $this->assertEquals('30-06-2016', $response->getDeliveryDate()->format('d-m-Y'));
         $this->assertEquals('Daytime', $response->getOptions()[0]);
     }
 

@@ -22,22 +22,20 @@ Content-Type: application/json;charset=utf-8
         "Longitude": 4.34625216973989,
         "Name": "DA Drogisterij Buitenhof",
         "OpeningHours": {
-          "Friday": [{
-            "string": "09:00-12:00",
-            "string": "13:00-19:00"
-          }],
-          "Monday": ["09:00-19:00"],
+          "Friday": [
+            { "string": "09:00-12:00" },
+            { "string": "13:00-19:00" }
+          ],
+          "Monday": ["09:00-12:00", "13:00-16:00"],
           "Saturday": {
             "string": "09:00-18:00"
           },
-          "Sunday": {
-            "string": "12:00-17:00"
-          },
+          "Sunday": ["09:00-12:00:00", "13:00-16:00:00"],
           "Thursday": {
             "string": "09:00-19:00"
           },
           "Tuesday": {
-            "string": "09:00-19:00"
+            "string": "09:00:00-19:00:00"
           },
           "Wednesday": {
             "string": "09:00-19:00"

@@ -122,6 +122,7 @@ class BarcodeServiceRestTest extends TestCase
      * @testdox creates a valid 3S barcode request
      *
      * @throws \ThirtyBees\PostNL\Exception\InvalidBarcodeException
+     * @throws \ReflectionException
      */
     public function testCreatesAValid3SBarcodeRequest()
     {

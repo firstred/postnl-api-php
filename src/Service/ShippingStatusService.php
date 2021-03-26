@@ -30,11 +30,7 @@ use Psr\Cache\CacheItemInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use ReflectionException;
-use Sabre\Xml\LibXMLException;
-use Sabre\Xml\Reader;
-use Sabre\Xml\Service as XmlService;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
-use ThirtyBees\PostNL\Entity\Customer;
 use ThirtyBees\PostNL\Entity\Request\CompleteStatus;
 use ThirtyBees\PostNL\Entity\Request\CompleteStatusByPhase;
 use ThirtyBees\PostNL\Entity\Request\CompleteStatusByReference;
@@ -47,13 +43,10 @@ use ThirtyBees\PostNL\Entity\Request\GetSignature;
 use ThirtyBees\PostNL\Entity\Response\CompleteStatusResponse;
 use ThirtyBees\PostNL\Entity\Response\CurrentStatusResponse;
 use ThirtyBees\PostNL\Entity\Response\GetSignatureResponseSignature;
-use ThirtyBees\PostNL\Entity\Response\SignatureResponse;
-use ThirtyBees\PostNL\Entity\SOAP\Security;
 use ThirtyBees\PostNL\Exception\ApiException;
 use ThirtyBees\PostNL\Exception\CifDownException;
 use ThirtyBees\PostNL\Exception\CifException;
 use ThirtyBees\PostNL\Exception\HttpClientException;
-use ThirtyBees\PostNL\Exception\InvalidArgumentException;
 use ThirtyBees\PostNL\Exception\ResponseException;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 
@@ -95,7 +88,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      *   - Fill the Shipment->PhaseCode property, do not pass Barcode or Reference.
      *     Optionally add DateFrom and/or DateTo.
      * - CurrentStatusByStatus:
-     *   - Fill the Shipment->StatuCode property. Leave the rest empty.
+     *   - Fill the Shipment->StatusCode property. Leave the rest empty.
      *
      * @param CurrentStatus|CurrentStatusByReference|CurrentStatusByPhase|CurrentStatusByStatus $currentStatus
      *
@@ -108,6 +101,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws ReflectionException
      * @throws HttpClientException
+     * @throws \ThirtyBees\PostNL\Exception\NotSupportedException
      *
      * @since 1.0.0
      */
@@ -168,6 +162,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws ReflectionException
      * @throws HttpClientException
+     * @throws \ThirtyBees\PostNL\Exception\NotSupportedException
      *
      * @since 1.0.0
      */
@@ -228,6 +223,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws ReflectionException
      * @throws HttpClientException
+     * @throws \ThirtyBees\PostNL\Exception\NotSupportedException
      *
      * @since 1.0.0
      */
@@ -341,15 +337,17 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws ResponseException
      * @throws ReflectionException
      * @throws HttpClientException
+     * @throws \ThirtyBees\PostNL\Exception\NotSupportedException
+     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
      *
      * @since 1.0.0
      */
     public function processCurrentStatusResponseREST($response)
     {
-        $body = @json_decode(static::getResponseText($response), true);
-        if (isset($body['CurrentStatus'])) {
+        $body = json_decode(static::getResponseText($response));
+        if (isset($body->CurrentStatus)) {
             /** @var CurrentStatusResponse $object */
-            $object = AbstractEntity::jsonDeserialize(['CurrentStatusResponse' => $body]);
+            $object = AbstractEntity::jsonDeserialize((object) ['CurrentStatusResponse' => $body]);
             $this->setService($object);
 
             return $object;
@@ -442,52 +440,73 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws ResponseException
      * @throws ReflectionException
      * @throws HttpClientException
+     * @throws \ThirtyBees\PostNL\Exception\NotSupportedException
+     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
      *
      * @since 1.0.0
      */
     public function processCompleteStatusResponseREST($response)
     {
-        $body = @json_decode(static::getResponseText($response), true);
-        if (isset($body['CompleteStatus'])) {
-            if (isset($body['CompleteStatus']['Shipment']['MainBarcode'])) {
-                $body['CompleteStatus']['Shipments'] = [$body['CompleteStatus']['Shipment']];
-            } else {
-                $body['CompleteStatus']['Shipments'] = $body['CompleteStatus']['Shipment'];
-            }
+        $body = json_decode(static::getResponseText($response));
 
-            unset($body['CompleteStatus']['Shipment']);
+        if (isset($body->CompleteStatus->Shipment)) {
+            $body->CompleteStatus->Shipments = $body->CompleteStatus->Shipment;
+        }
+        unset($body->CompleteStatus->Shipment);
 
-            foreach ($body['CompleteStatus']['Shipments'] as &$shipment) {
-                $shipment['Customer'] = AbstractEntity::jsonDeserialize(['Customer' => $shipment['Customer']]);
-            }
-            foreach ($body['CompleteStatus']['Shipments'] as &$shipment) {
-                $shipment['Addresses'] = $shipment['Address'];
-                unset($shipment['Address']);
-            }
-            foreach ($body['CompleteStatus']['Shipments'] as &$shipment) {
-                $shipment['Events'] = $shipment['Event'];
-                unset($shipment['Event']);
-                foreach ($shipment['Events'] as &$event) {
-                    $event = AbstractEntity::jsonDeserialize(['CompleteStatusResponseEvent' => $event]);
-                    //$event = ['CompleteStatusResponseEvent' => $event];
-                }
-            }
-            foreach ($body['CompleteStatus']['Shipments'] as &$shipment) {
-                $shipment['OldStatuses'] = $shipment['OldStatus'];
-                unset($shipment['OldStatus']);
-                foreach ($shipment['OldStatuses'] as &$oldStatus) {
-                    $oldStatus = AbstractEntity::jsonDeserialize(['CompleteStatusResponseOldStatus' => $oldStatus]);
-                }
-            }
-
-            /** @var CompleteStatusResponse $object */
-            $object = AbstractEntity::jsonDeserialize(['CompleteStatusResponse' => $body['CompleteStatus']]);
-            $this->setService($object);
-
-            return $object;
+        if (!is_array($body->CompleteStatus->Shipments)) {
+            $body->CompleteStatus->Shipments = [$body->CompleteStatus->Shipments];
         }
 
-        return null;
+        foreach ($body->CompleteStatus->Shipments as &$shipment) {
+            $shipment->Customer = AbstractEntity::jsonDeserialize((object) ['Customer' => $shipment->Customer]);
+        }
+        foreach ($body->CompleteStatus->Shipments as $shipment) {
+            if (isset($shipment->Address)) {
+                $shipment->Addresses = $shipment->Address;
+                unset($shipment->Address);
+            }
+            if (!is_array($shipment->Addresses)) {
+                $shipment->Addresses = [$shipment->Addresses];
+            }
+
+            if (isset($shipment->Event)) {
+                $shipment->Events = $shipment->Event;
+                unset($shipment->Event);
+            }
+
+            if (!is_array($shipment->Events)) {
+                $shipment->Events = [$shipment->Events];
+            }
+
+            foreach ($shipment->Events as &$event) {
+                $event = AbstractEntity::jsonDeserialize(
+                    (object) ['CompleteStatusResponseEvent' => $event]
+                );
+            }
+
+            if (isset($shipment->OldStatus)) {
+                $shipment->OldStatuses = $shipment->OldStatus;
+                unset($shipment->OldStatus);
+            }
+            if (!is_array($shipment->OldStatuses)) {
+                $shipment->OldStatuses = [$shipment->OldStatuses];
+            }
+
+            foreach ($shipment->OldStatuses as &$oldStatus) {
+                $oldStatus = AbstractEntity::jsonDeserialize(
+                    (object) ['CompleteStatusResponseOldStatus' => $oldStatus]
+                );
+            }
+        }
+
+        /** @var CompleteStatusResponse $object */
+        $object = CompleteStatusResponse::jsonDeserialize(
+            (object) ['CompleteStatusResponse' => $body->CompleteStatus]
+        );
+        $this->setService($object);
+
+        return $object;
     }
 
     /**
@@ -521,20 +540,18 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws ResponseException
      * @throws ReflectionException
      * @throws HttpClientException
+     * @throws \ThirtyBees\PostNL\Exception\NotSupportedException
+     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
      *
      * @since 1.0.0
      */
     public function processGetSignatureResponseREST($response)
     {
-        $body = @json_decode(static::getResponseText($response), true);
-        if (!empty($body['Signature'])) {
-            /** @var GetSignatureResponseSignature $object */
-            $object = AbstractEntity::jsonDeserialize(['GetSignatureResponseSignature' => $body]);
-            $this->setService($object);
+        $body = json_decode(static::getResponseText($response));
+        /** @var GetSignatureResponseSignature $object */
+        $object = AbstractEntity::jsonDeserialize((object) ['GetSignatureResponseSignature' => $body]);
+        $this->setService($object);
 
-            return $object;
-        }
-
-        return null;
+        return $object;
     }
 }

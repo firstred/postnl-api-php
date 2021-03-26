@@ -75,6 +75,7 @@ class LabellingServiceRestTest extends TestCase
      * @before
      *
      * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     * @throws \ReflectionException
      */
     public function setupPostNL()
     {
@@ -377,7 +378,8 @@ class LabellingServiceRestTest extends TestCase
         $this->assertInstanceOf(GenerateLabelResponse::class, $label);
         $this->assertEquals('3S1234567890123', $label->getResponseShipments()[0]->getBarcode());
         $this->assertIsString($label->getResponseShipments()[0]->getLabels()[0]->getContent());
-        $this->assertEquals('Label', $label->getResponseShipments()[0]->getLabels()[0]->getLabelType());
+        $this->assertInstanceOf(Label::class, $label->getResponseShipments()[0]->getLabels()[0]);
+        $this->assertEquals('Label', $label->getResponseShipments()[0]->getLabels()[0]->getLabeltype());
     }
 
     /**
@@ -636,7 +638,7 @@ class LabellingServiceRestTest extends TestCase
         $this->expectException(ResponseException::class);
 
         $mock = new MockHandler([
-            PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/test/labelling/invalid.http')),
+            PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/labelling/invalid.http')),
         ]);
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();

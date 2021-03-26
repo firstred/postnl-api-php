@@ -26,9 +26,9 @@
 
 namespace ThirtyBees\PostNL\Tests\Service;
 
-use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
+use ThirtyBees\PostNL\Exception\ApiException;
 use ThirtyBees\PostNL\Exception\CifDownException;
 use ThirtyBees\PostNL\Exception\CifException;
 use ThirtyBees\PostNL\Exception\HttpClientException;
@@ -45,7 +45,8 @@ class AbstractServiceTest extends TestCase
     /**
      * @testdox can get the response text from the value property
      *
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws ResponseException
+     * @throws HttpClientException
      */
     public function testGetResponseTextFromArray()
     {
@@ -58,7 +59,7 @@ class AbstractServiceTest extends TestCase
 
     /**
      * @throws HttpClientException
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws ResponseException
      */
     public function testGetResponseTextFromException()
     {
@@ -70,10 +71,11 @@ class AbstractServiceTest extends TestCase
     /**
      * @testdox can detect and throw a CifDownException (REST)
      *
-     * @throws \ThirtyBees\PostNL\Exception\ApiException
-     * @throws \ThirtyBees\PostNL\Exception\CifDownException
-     * @throws \ThirtyBees\PostNL\Exception\CifException
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws CifDownException
+     * @throws CifException
+     * @throws HttpClientException
+     * @throws ResponseException
+     * @throws ApiException
      */
     public function testCifDownExceptionRest()
     {
@@ -89,10 +91,11 @@ class AbstractServiceTest extends TestCase
     /**
      * @testdox can detect and throw a CifException (REST)
      *
-     * @throws \ThirtyBees\PostNL\Exception\ApiException
-     * @throws \ThirtyBees\PostNL\Exception\CifDownException
-     * @throws \ThirtyBees\PostNL\Exception\CifException
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws ApiException
+     * @throws CifDownException
+     * @throws CifException
+     * @throws ResponseException
+     * @throws HttpClientException
      */
     public function testCifExceptionRest()
     {
@@ -116,8 +119,8 @@ class AbstractServiceTest extends TestCase
     /**
      * @testdox can detect and throw a CifDownException (SOAP)
      *
-     * @throws \ThirtyBees\PostNL\Exception\CifDownException
-     * @throws \ThirtyBees\PostNL\Exception\CifException
+     * @throws CifDownException
+     * @throws CifException
      */
     public function testCifDownExceptionSoap()
     {
@@ -149,8 +152,8 @@ XML
     /**
      * @testdox can detect and throw a CifException (SOAP)
      *
-     * @throws \ThirtyBees\PostNL\Exception\CifDownException
-     * @throws \ThirtyBees\PostNL\Exception\CifException
+     * @throws CifDownException
+     * @throws CifException
      */
     public function testCifExceptionSoap()
     {

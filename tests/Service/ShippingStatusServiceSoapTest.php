@@ -49,6 +49,10 @@ use ThirtyBees\PostNL\HttpClient\MockClient;
 use ThirtyBees\PostNL\PostNL;
 use ThirtyBees\PostNL\Service\ShippingStatusServiceInterface;
 use function count;
+use function file;
+use function file_get_contents;
+use function get_resource_type;
+use const _RESPONSES_DIR_;
 
 /**
  * Class ShippingStatusRestTest.
@@ -68,6 +72,7 @@ class ShippingStatusServiceSoapTest extends TestCase
      * @before
      *
      * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     * @throws \ReflectionException
      */
     public function setupPostNL()
     {
@@ -140,81 +145,11 @@ class ShippingStatusServiceSoapTest extends TestCase
 
     /**
      * @testdox can get the current status
+     * @dataProvider \ThirtyBees\PostNL\Tests\Service\ShippingStatusServiceRestTest::getCurrentStatusByBarcodeProvider()
      */
-    public function testGetCurrentStatusSoap()
+    public function testGetCurrentStatusSoap($response)
     {
-        $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], '{
-  "CurrentStatus": {
-    "Shipment": {
-      "MainBarcode": "3SDEVC302392342",
-      "Barcode": "3SDEVC302392342",
-      "ShipmentAmount": "1",
-      "ShipmentCounter": "1",
-      "Customer": {
-        "CustomerCode": "DEVC",
-        "CustomerNumber": "11223344",
-        "Name": "kja fasdfasdf"
-      },
-      "ProductCode": "003089",
-      "ProductDescription": "Handtek. voor Ontvangst\/Alleen huisadres",
-      "Reference": "SK123456",
-      "Dimension": {
-        "Height": "110",
-        "Length": "255",
-        "Volume": "5330",
-        "Weight": "260",
-        "Width": "190"
-      },
-      "Address": [
-        {
-          "AddressType": "01",
-          "Building": {},
-          "City": "Nijmegen",
-          "CompanyName": {},
-          "CountryCode": "NL",
-          "DepartmentName": {},
-          "District": {},
-          "FirstName": "A",
-          "Floor": {},
-          "HouseNumber": "12",
-          "HouseNumberSuffix": {},
-          "LastName": "B",
-          "Region": {},
-          "Remark": {},
-          "Street": "Ergens",
-          "Zipcode": "1234GN"
-        },
-        {
-          "AddressType": "02",
-          "Building": {},
-          "City": "Hoofddorp",
-          "CompanyName": "PostNL",
-          "CountryCode": "NL",
-          "DepartmentName": {},
-          "District": {},
-          "FirstName": {},
-          "Floor": {},
-          "HouseNumber": "42",
-          "HouseNumberSuffix": {},
-          "LastName": {},
-          "Region": {},
-          "Remark": {},
-          "Street": "Siriusdreef",
-          "Zipcode": "3212WT"
-        }
-      ],
-      "Status": {
-        "TimeStamp": "07-03-2018 23:20:05",
-        "StatusCode": "2",
-        "StatusDescription": "Zending in ontvangst genomen",
-        "PhaseCode": "1",
-        "PhaseDescription": "Collectie"
-      }
-    }
-  }
-}
-'), ]);
+        $mock = new MockHandler([$response]);
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();
         $mockClient->setHandler($handler);
@@ -260,35 +195,6 @@ class ShippingStatusServiceSoapTest extends TestCase
     }
 
     /**
-     * @testdox creates a valid CurrentStatusByStatus request
-     */
-    public function testGetCurrentStatusByStatusRequestSoap()
-    {
-        $status = '1';
-        $message = new Message();
-
-        $this->lastRequest = $request = $this->service->buildCurrentStatusRequest(
-            (new CurrentStatus())
-                ->setShipment(
-                    (new Shipment())
-                        ->setStatusCode($status)
-                )
-                ->setMessage($message)
-        );
-
-        $query = \GuzzleHttp\Psr7\parse_query($request->getUri()->getQuery());
-
-        $this->assertEquals([
-            'customerCode'   => $this->postnl->getCustomer()->getCustomerCode(),
-            'customerNumber' => $this->postnl->getCustomer()->getCustomerNumber(),
-            'status'         => $status,
-        ], $query);
-        $this->assertEquals('test', $request->getHeaderLine('apikey'));
-        $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
-        $this->assertEquals('/shipment/v2/status/search', $request->getUri()->getPath());
-    }
-
-    /**
      * @testdox creates a valid CompleteStatus request
      */
     public function testGetCompleteStatusRequestSoap()
@@ -317,151 +223,11 @@ class ShippingStatusServiceSoapTest extends TestCase
 
     /**
      * @testdox can retrieve the complete status
+     * @dataProvider \ThirtyBees\PostNL\Tests\Service\ShippingStatusServiceRestTest::getCompleteStatusByBarcodeProvider()
      */
-    public function testGetCompleteStatusSoap()
+    public function testGetCompleteStatusSoap($response)
     {
-        $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], '{
-  "CompleteStatus": {
-    "Shipment": {
-      "MainBarcode": "33DEVC123456789",
-      "Barcode": "3SDEVC123456789",
-      "ShipmentAmount": "1",
-      "ShipmentCounter": "1",
-      "Customer": {
-        "CustomerCode": "DEVC",
-        "CustomerNumber": "11223344",
-        "Name": "ASDFASDFASDFASFDD"
-      },
-      "ProductCode": "003089",
-      "ProductDescription": "Handtek. voor Ontvangst\/Alleen huisadres",
-      "Reference": "DF00DF91",
-      "Dimension": {
-        "Height": "110",
-        "Length": "255",
-        "Volume": "5330",
-        "Weight": "260",
-        "Width": "190"
-      },
-      "Addresses": [
-        {
-          "AddressType": "01",
-          "Building": {},
-          "City": "Nijmegen",
-          "CompanyName": {},
-          "CountryCode": "NL",
-          "DepartmentName": {},
-          "District": {},
-          "FirstName": "SADFASDF",
-          "Floor": {},
-          "HouseNumber": "12",
-          "HouseNumberSuffix": {},
-          "LastName": "SAD ASDF",
-          "Region": {},
-          "Remark": {},
-          "Street": "ASDFDFDFD",
-          "Zipcode": "1234DF"
-        },
-        {
-          "AddressType": "02",
-          "Building": {},
-          "City": "ASDFD DF ASDFDFDFD",
-          "CompanyName": "ASD ASDFASDF DF",
-          "CountryCode": "NL",
-          "DepartmentName": {},
-          "District": {},
-          "FirstName": {},
-          "Floor": {},
-          "HouseNumber": "7",
-          "HouseNumberSuffix": {},
-          "LastName": {},
-          "Region": {},
-          "Remark": {},
-          "Street": "ASDFASDFASDD ASDFASDFASDF",
-          "Zipcode": "1234DF"
-        }
-      ],
-      "Event": [
-        {
-          "Code": "01B",
-          "Description": "Zending is bij PostNL",
-          "DestinationLocationCode": "156731",
-          "LocationCode": "166886",
-          "RouteCode": "419",
-          "RouteName": "419 Nm-Altrada",
-          "TimeStamp": "07-03-2018 23:20:05"
-        },
-        {
-          "Code": "01A",
-          "Description": "Zending wordt verwacht, maar zit nog niet in sorteerproces",
-          "DestinationLocationCode": {},
-          "LocationCode": "888888",
-          "RouteCode": {},
-          "RouteName": {},
-          "TimeStamp": "07-03-2018 09:51:08"
-        },
-        {
-          "Code": "01A",
-          "Description": "Zending wordt verwacht, maar zit nog niet in sorteerproces",
-          "DestinationLocationCode": {},
-          "LocationCode": "888888",
-          "RouteCode": {},
-          "RouteName": {},
-          "TimeStamp": "07-03-2018 09:50:47"
-        }
-      ],
-      "Expectation": {
-        "ETAFrom": "2018-03-08T11:30:00",
-        "ETATo": "2018-03-08T14:00:00"
-      },
-      "Status": {
-        "TimeStamp": "07-03-2018 23:20:05",
-        "StatusCode": "2",
-        "StatusDescription": "Zending in ontvangst genomen",
-        "PhaseCode": "1",
-        "PhaseDescription": "Collectie"
-      },
-      "OldStatus": [
-        {
-          "TimeStamp": "07-03-2018 23:22:56.326",
-          "StatusCode": "99",
-          "StatusDescription": "Niet van toepassing",
-          "PhaseCode": "99",
-          "PhaseDescription": "Niet van toepassing"
-        },
-        {
-          "TimeStamp": "07-03-2018 23:20:05",
-          "StatusCode": "2",
-          "StatusDescription": "Zending in ontvangst genomen",
-          "PhaseCode": "1",
-          "PhaseDescription": "Collectie"
-        },
-        {
-          "TimeStamp": "07-03-2018 09:55:35.976",
-          "StatusCode": "99",
-          "StatusDescription": "Niet van toepassing",
-          "PhaseCode": "99",
-          "PhaseDescription": "Niet van toepassing"
-        },
-        {
-          "TimeStamp": "07-03-2018 09:51:08",
-          "StatusCode": "1",
-          "StatusDescription": "Zending voorgemeld",
-          "PhaseCode": "1",
-          "PhaseDescription": "Collectie"
-        },
-        {
-          "TimeStamp": "07-03-2018 09:50:47",
-          "StatusCode": "1",
-          "StatusDescription": "Zending voorgemeld",
-          "PhaseCode": "1",
-          "PhaseDescription": "Collectie"
-        }
-      ]
-    }
-  }
-}
-'), ]);
+        $mock = new MockHandler([$response]);
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();
         $mockClient->setHandler($handler);
@@ -476,12 +242,12 @@ class ShippingStatusServiceSoapTest extends TestCase
         );
 
         $this->assertInstanceOf(CompleteStatusResponse::class, $completeStatusResponse);
-        $this->assertEquals(2, count($completeStatusResponse->getShipments()[0]->getAddresses()));
+        $this->assertInstanceOf(Address::class, $completeStatusResponse->getShipments()[0]->getAddresses()[0]);
         $this->assertNull($completeStatusResponse->getShipments()[0]->getAmounts());
-        $this->assertEquals(3, count($completeStatusResponse->getShipments()[0]->getEvents()));
+        $this->assertEquals('01B', $completeStatusResponse->getShipments()[0]->getEvents()[0]->getCode());
         $this->assertNull($completeStatusResponse->getShipments()[0]->getGroups());
         $this->assertInstanceOf(Customer::class, $completeStatusResponse->getShipments()[0]->getCustomer());
-        $this->assertEquals('07-03-2018 09:50:47', $completeStatusResponse->getShipments()[0]->getOldStatuses()[4]->getTimeStamp());
+        $this->assertEquals('07-03-2018 23:22:56.326', $completeStatusResponse->getShipments()[0]->getOldStatuses()[0]->getTimeStamp());
     }
 
     /**
@@ -511,40 +277,6 @@ class ShippingStatusServiceSoapTest extends TestCase
         $this->assertEquals('test', $request->getHeaderLine('apikey'));
         $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
         $this->assertEquals("/shipment/v2/status/reference/$reference", $request->getUri()->getPath());
-    }
-
-    /**
-     * @testdox creates a valid CompleteStatusByStatus request
-     */
-    public function testGetCompleteStatusByStatusRequestSoap()
-    {
-        $status = '1';
-        $message = new Message();
-
-        $this->lastRequest = $request = $this->service->buildCompleteStatusRequest(
-            (new CompleteStatus())
-                ->setShipment(
-                    (new Shipment())
-                        ->setStatusCode($status)
-                        ->setDateFrom('29-06-2016')
-                        ->setDateTo('20-07-2016')
-                )
-                ->setMessage($message)
-        );
-
-        $query = \GuzzleHttp\Psr7\parse_query($request->getUri()->getQuery());
-
-        $this->assertEquals([
-            'customerCode'   => $this->postnl->getCustomer()->getCustomerCode(),
-            'customerNumber' => $this->postnl->getCustomer()->getCustomerNumber(),
-            'status'         => $status,
-            'detail'         => 'true',
-            'startDate'      => '29-06-2016',
-            'endDate'        => '20-07-2016',
-        ], $query);
-        $this->assertEquals('test', $request->getHeaderLine('apikey'));
-        $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
-        $this->assertEquals('/shipment/v2/status/search', $request->getUri()->getPath());
     }
 
     /**
@@ -578,7 +310,7 @@ class ShippingStatusServiceSoapTest extends TestCase
     public function testGetSignatureSoap()
     {
         $mock = new MockHandler([
-
+            PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/shippingstatus/signature.http')),
         ]);
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();

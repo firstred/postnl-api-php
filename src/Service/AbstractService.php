@@ -195,49 +195,49 @@ abstract class AbstractService
      */
     public static function validateRESTResponse($response)
     {
-        $body = @json_decode(static::getResponseText($response), true);
+        $body = json_decode(static::getResponseText($response));
 
-        if (!empty($body['fault']['faultstring']) && 'Invalid ApiKey' === $body['fault']['faultstring']) {
+        if (!empty($body->fault->faultstring) && 'Invalid ApiKey' === $body->fault->faultstring) {
             throw new ApiException('Invalid Api Key');
         }
-        if (isset($body['Envelope']['Body']['Fault']['Reason']['Text'][''])) {
-            throw new CifDownException($body['Envelope']['Body']['Fault']['Reason']['Text']['']);
+        if (isset($body->Envelope->Body->Fault->Reason->Text->{''})) {
+            throw new CifDownException($body->Envelope->Body->Fault->Reason->Text->{''});
         }
 
-        if (!empty($body['Errors']['Error'])) {
+        if (!empty($body->Errors->Error)) {
             $exceptionData = [];
-            foreach ($body['Errors']['Error'] as $error) {
-                if (isset($error['ErrorMsg'])) {
+            foreach ($body->Errors->Error as $error) {
+                if (isset($error->ErrorMsg)) {
                     $exceptionData[] = [
-                        'description' => isset($error['ErrorMsg']) ? $error['ErrorMsg'] : '',
-                        'message'     => isset($error['ErrorMsg']) ? $error['ErrorMsg'] : '',
-                        'code'        => isset($error['ErrorNumber']) ? (int) $error['ErrorNumber'] : 0,
+                        'description' => isset($error->ErrorMsg) ? $error->ErrorMsg : '',
+                        'message'     => isset($error->ErrorMsg) ? $error->ErrorMsg : '',
+                        'code'        => isset($error->ErrorNumber) ? (int) $error->ErrorNumber : 0,
                     ];
                 } else {
                     $exceptionData[] = [
-                        'description' => isset($error['Description']) ? (string) $error['Description'] : null,
-                        'message'     => isset($error['ErrorMsg']) ? (string) $error['ErrorMsg'] : null,
-                        'code'        => isset($error['ErrorNumber']) ? (int) $error['ErrorNumber'] : 0,
+                        'description' => isset($error->Description) ? (string) $error->Description : null,
+                        'message'     => isset($error->ErrorMsg) ? (string) $error->ErrorMsg : null,
+                        'code'        => isset($error->ErrorNumber) ? (int) $error->ErrorNumber : 0,
                     ];
                 }
             }
             throw new CifException($exceptionData);
         }
 
-        if (!empty($body['Errors'])) {
+        if (!empty($body->Errors)) {
             $exceptionData = [];
-            foreach ($body['Errors'] as $error) {
-                if (isset($error['ErrorMsg'])) {
+            foreach ($body->Errors as $error) {
+                if (isset($error->ErrorMsg)) {
                     $exceptionData[] = [
-                        'description' => isset($error['ErrorMsg']) ? $error['ErrorMsg'] : '',
-                        'message'     => isset($error['ErrorMsg']) ? $error['ErrorMsg'] : '',
-                        'code'        => isset($error['ErrorNumber']) ? (int) $error['ErrorNumber'] : 0,
+                        'description' => isset($error->ErrorMsg) ? $error->ErrorMsg : '',
+                        'message'     => isset($error->ErrorMsg) ? $error->ErrorMsg : '',
+                        'code'        => isset($error->ErrorNumber) ? (int) $error->ErrorNumber : 0,
                     ];
                 } else {
                     $exceptionData[] = [
-                        'description' => isset($error['Description']) ? (string) $error['Description'] : null,
-                        'message'     => isset($error['Error']) ? (string) $error['Error'] : null,
-                        'code'        => isset($error['Code']) ? (int) $error['Code'] : 0,
+                        'description' => isset($error->Description) ? (string) $error->Description : null,
+                        'message'     => isset($error->Error) ? (string) $error->Error : null,
+                        'code'        => isset($error->Code) ? (int) $error->Code : 0,
                     ];
                 }
             }

@@ -40,7 +40,7 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * Class GetLocationsResult.
  *
  * @method ResponseLocation[]|null getResponseLocation()
- * @method GetLocationsResult      setResponseLocation(ResponseLocation|null $location = null)
+ * @method GetLocationsResult      setResponseLocation(ResponseLocation[]|null $location = null)
  *
  * @since 1.0.0
  */

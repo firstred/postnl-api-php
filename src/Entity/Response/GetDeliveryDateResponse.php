@@ -26,7 +26,11 @@
 
 namespace ThirtyBees\PostNL\Entity\Response;
 
+use DateTimeImmutable;
+use DateTimeInterface;
+use Exception;
 use Sabre\Xml\Writer;
+use stdClass;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
@@ -35,13 +39,13 @@ use ThirtyBees\PostNL\Service\LabellingService;
 use ThirtyBees\PostNL\Service\LocationService;
 use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
+use function is_array;
 
 /**
  * Class GetDeliveryDateResponse.
  *
- * @method string|null             getDeliveryDate()
+ * @method DateTimeInterface|null  getDeliveryDate()
  * @method string[]|null           getOptions()
- * @method GetDeliveryDateResponse setDeliveryDate(string|null $date = null)
  * @method GetDeliveryDateResponse setOptions(string[]|null $options = null)
  *
  * @since 1.0.0
@@ -93,8 +97,11 @@ class GetDeliveryDateResponse extends AbstractEntity
     /**
      * GetDeliveryDateResponse constructor.
      *
-     * @param string|null   $date
-     * @param string[]|null $options
+     * @param string|DateTimeInterface|null $date
+     * @param string[]|null                 $options
+     *
+     * @throws Exception
+     * @throws Exception
      */
     public function __construct($date = null, array $options = null)
     {
@@ -102,6 +109,26 @@ class GetDeliveryDateResponse extends AbstractEntity
 
         $this->setDeliveryDate($date);
         $this->setOptions($options);
+    }
+
+    /**
+     * @param DateTimeInterface|string|null $deliveryDate
+     *
+     * @return static
+     *
+     * @throws Exception
+     *
+     * @since 1.2.0
+     */
+    public function setDeliveryDate($deliveryDate = null)
+    {
+        if (is_string($deliveryDate)) {
+            $deliveryDate = new DateTimeImmutable($deliveryDate);
+        }
+
+        $this->DeliveryDate = $deliveryDate;
+
+        return $this;
     }
 
     /**
@@ -135,5 +162,41 @@ class GetDeliveryDateResponse extends AbstractEntity
         }
         // Auto extending this object with other properties is not supported with SOAP
         $writer->write($xml);
+    }
+
+    /**
+     * @param stdClass $json
+     *
+     * @return mixed|object|stdClass|GetDeliveryDateResponse|null
+     *
+     * @throws ReflectionException
+     * @throws \ReflectionException
+     */
+    public static function jsonDeserialize(stdClass $json)
+    {
+        if (!isset($json->GetDeliveryDateResponse)) {
+            return $json;
+        }
+
+        $getDeliveryDateResponse = self::create();
+        $getDeliveryDateResponse->DeliveryDate = new DateTimeImmutable($json->GetDeliveryDateResponse->DeliveryDate);
+        if (isset($json->GetDeliveryDateResponse->Options)) {
+            if (!is_array($json->GetDeliveryDateResponse->Options)) {
+                $json->GetDeliveryDateResponse->Options = [$json->GetDeliveryDateResponse->Options];
+            }
+
+            $options = [];
+            foreach ($json->GetDeliveryDateResponse->Options as $key => $option) {
+                if (is_string($option)) {
+                    $options[] = $option;
+                } elseif ($option instanceof stdClass && isset($option->string)) {
+                    $options[] = $option->string;
+                }
+            }
+
+            $getDeliveryDateResponse->setOptions($options);
+        }
+
+        return $getDeliveryDateResponse;
     }
 }

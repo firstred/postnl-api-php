@@ -26,7 +26,10 @@
 
 namespace ThirtyBees\PostNL\Entity\Response;
 
+use ReflectionObject;
+use ReflectionProperty;
 use Sabre\Xml\Writer;
+use stdClass;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
 use ThirtyBees\PostNL\Entity\Shipment;
 use ThirtyBees\PostNL\Service\BarcodeService;
@@ -36,6 +39,7 @@ use ThirtyBees\PostNL\Service\LabellingService;
 use ThirtyBees\PostNL\Service\LocationService;
 use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
+use function count;
 
 /**
  * Class CompleteStatusResponse.
@@ -76,20 +80,44 @@ class CompleteStatusResponse extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var array|null */
+    /** @var Shipment[]|null */
     protected $Shipments;
     // @codingStandardsIgnoreEnd
 
     /**
      * CompleteStatusResponse constructor.
      *
-     * @param array|null $shipments
+     * @param Shipment[]|null $shipments
      */
     public function __construct(array $shipments = null)
     {
         parent::__construct();
 
         $this->setShipments($shipments);
+    }
+
+    public static function jsonDeserialize(stdClass $json)
+    {
+        // Find the entity name
+        $reflection = new ReflectionObject($json);
+        $properties = $reflection->getProperties(ReflectionProperty::IS_PUBLIC);
+
+        if (!count($properties) || !isset($json->CompleteStatusResponse->Shipments)) {
+            return $json;
+        }
+
+        if (!is_array($json->CompleteStatusResponse->Shipments)) {
+            $json->CompleteStatusResponse->Shipments = [$json->CompleteStatusResponse->Shipments];
+        }
+
+        $completeStatusResponse = self::create();
+        $shipments = [];
+        foreach ($json->CompleteStatusResponse->Shipments as $shipment) {
+            $shipments[] = CompleteStatusResponseShipment::jsonDeserialize((object) ['CompleteStatusResponseShipment' => $shipment]);
+        }
+        $completeStatusResponse->setShipments($shipments);
+
+        return $completeStatusResponse;
     }
 
     /**

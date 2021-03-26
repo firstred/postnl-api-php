@@ -42,9 +42,9 @@ use ThirtyBees\PostNL\Exception\ResponseException;
  * Class ConfirmingService.
  *
  * @method ConfirmingResponseShipment   confirmShipment(Confirming $shipment)
+ * @method ConfirmingResponseShipment[] confirmShipments(Confirming[] $shipments)
  * @method RequestInterface             buildConfirmShipmentRequest(Confirming $shipment)
  * @method ConfirmingResponseShipment   processConfirmShipmentResponse(mixed $response)
- * @method ConfirmingResponseShipment[] confirmShipments(Confirming[] $shipments)
  *
  * @since 1.2.0
  */

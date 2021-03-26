@@ -1,0 +1,53 @@
+HTTP/1.1 200 OK
+Content-Type: application/json;charset=utf-8
+
+{
+  "CurrentStatus": {
+    "Shipment": {
+      "MainBarcode": "3SDEVC302392342",
+      "Barcode": "3SDEVC302392342",
+      "ShipmentAmount": "1",
+      "ShipmentCounter": "1",
+      "Customer": {
+        "CustomerCode": "DEVC",
+        "CustomerNumber": "11223344",
+        "Name": "kja fasdfasdf"
+      },
+      "ProductCode": "003089",
+      "ProductDescription": "Handtek. voor Ontvangst\/Alleen huisadres",
+      "Reference": "SK123456",
+      "Dimension": {
+        "Height": "110",
+        "Length": "255",
+        "Volume": "5330",
+        "Weight": "260",
+        "Width": "190"
+      },
+      "Address": {
+        "AddressType": "01",
+        "Building": {},
+        "City": "Nijmegen",
+        "CompanyName": {},
+        "CountryCode": "NL",
+        "DepartmentName": {},
+        "District": {},
+        "FirstName": "A",
+        "Floor": {},
+        "HouseNumber": "12",
+        "HouseNumberSuffix": {},
+        "LastName": "B",
+        "Region": {},
+        "Remark": {},
+        "Street": "Ergens",
+        "Zipcode": "1234GN"
+      },
+      "Status": {
+        "TimeStamp": "07-03-2018 23:20:05",
+        "StatusCode": "2",
+        "StatusDescription": "Zending in ontvangst genomen",
+        "PhaseCode": "1",
+        "PhaseDescription": "Collectie"
+      }
+    }
+  }
+}

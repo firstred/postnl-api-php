@@ -42,15 +42,16 @@ use ThirtyBees\PostNL\Exception\ApiException;
 use ThirtyBees\PostNL\Exception\CifDownException;
 use ThirtyBees\PostNL\Exception\CifException;
 use ThirtyBees\PostNL\Exception\HttpClientException;
+use ThirtyBees\PostNL\Exception\NotSupportedException;
 use ThirtyBees\PostNL\Exception\ResponseException;
 
 /**
  * Class ConfirmingService.
  *
  * @method ConfirmingResponseShipment   confirmShipment(Confirming $shipment)
+ * @method ConfirmingResponseShipment[] confirmShipments(Confirming[] $shipments)
  * @method RequestInterface             buildConfirmShipmentRequest(Confirming $shipment)
  * @method ConfirmingResponseShipment   processConfirmShipmentResponse(mixed $response)
- * @method ConfirmingResponseShipment[] confirmShipments(Confirming[] $shipments)
  *
  * @since 1.0.0
  */
@@ -85,7 +86,7 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
     ];
 
     /**
-     * Generate a single barcode via REST.
+     * Confirm a single shipment via REST.
      *
      * @param Confirming $confirming
      *
@@ -97,15 +98,17 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
      * @throws ReflectionException
      * @throws ResponseException
      * @throws HttpClientException
+     * @throws NotSupportedException
+     *
      * @since 1.0.0
      */
     public function confirmShipmentREST(Confirming $confirming)
     {
         $response = $this->postnl->getHttpClient()->doRequest($this->buildConfirmRequestREST($confirming));
-        $object = $this->processConfirmResponseREST($response);
+        $objects = $this->processConfirmResponseREST($response);
 
-        if ($object instanceof ConfirmingResponseShipment) {
-            return $object;
+        if (!empty($objects) && $objects[0] instanceof ConfirmingResponseShipment) {
+            return $objects[0];
         }
 
         if (200 === $response->getStatusCode()) {
@@ -140,16 +143,21 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
 
         $confirmingResponses = [];
         foreach ($httpClient->doRequests() as $uuid => $response) {
+            $confirmingResponse = null;
             try {
-                $confirming = $this->processConfirmResponseREST($response);
-                if (!$confirming instanceof ConfirmingResponseShipment) {
-                    throw new ResponseException('Invalid API Response', null, null, $response);
+                $objects = $this->processConfirmResponseREST($response);
+                foreach ($objects as $object) {
+                    if (!$object instanceof ConfirmingResponseShipment) {
+                        throw new ResponseException('Invalid API Response', null, null, $response);
+                    }
+
+                    $confirmingResponse = $object;
                 }
             } catch (Exception $e) {
-                $confirming = $e;
+                $confirmingResponse = $e;
             }
 
-            $confirmingResponses[$uuid] = $confirming;
+            $confirmingResponses[$uuid] = $confirmingResponse;
         }
 
         return $confirmingResponses;
@@ -245,7 +253,7 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
      *
      * @param mixed $response
      *
-     * @return ConfirmingResponseShipment|null
+     * @return ConfirmingResponseShipment[]|null
      *
      * @throws ApiException
      * @throws CifDownException
@@ -253,19 +261,29 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
      * @throws ReflectionException
      * @throws ResponseException
      * @throws HttpClientException
+     * @throws \ThirtyBees\PostNL\Exception\NotSupportedException
+     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
      *
      * @since 1.0.0
      */
     public function processConfirmResponseREST($response)
     {
         static::validateRESTResponse($response);
-        $body = @json_decode(static::getResponseText($response), true);
-        if (isset($body['ResponseShipments'])) {
-            /** @var ConfirmingResponseShipment $object */
-            $object = AbstractEntity::jsonDeserialize(['ConfirmingResponseShipment' => $body['ResponseShipments']]);
-            $this->setService($object);
+        $body = json_decode(static::getResponseText($response));
+        if (isset($body->ResponseShipments)) {
+            if (!is_array($body->ResponseShipments)) {
+                $body->ResponseShipments = [$body->ResponseShipments];
+            }
 
-            return $object;
+            $objects = [];
+            foreach ($body->ResponseShipments as $responseShipment) {
+                $object = ConfirmingResponseShipment::jsonDeserialize((object) ['ConfirmingResponseShipment' => $responseShipment]);
+                $this->setService($object);
+                $objects[] = $object;
+            }
+
+
+            return $objects;
         }
 
         return null;

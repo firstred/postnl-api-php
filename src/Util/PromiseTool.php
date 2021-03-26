@@ -204,6 +204,8 @@ class PromiseTool
      * @param Promise[] $promises traversable of promises to wait upon
      *
      * @return array
+     * @throws Exception
+     * @throws Exception
      */
     public static function inspectAll($promises)
     {

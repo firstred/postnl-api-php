@@ -104,7 +104,7 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
 
         $json = $this->processGenerateBarcodeResponseREST($response);
 
-        return $json['Barcode'];
+        return $json->Barcode;
     }
 
     /**
@@ -134,7 +134,7 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
         foreach ($httpClient->doRequests() as $uuid => $response) {
             try {
                 $json = $this->processGenerateBarcodeResponseREST($response);
-                $barcode = $json['Barcode'];
+                $barcode = $json->Barcode;
             } catch (ResponseException $e) {
                 $barcode = $e;
             } catch (ApiException $e) {
@@ -246,7 +246,7 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
      *
      * @param ResponseInterface $response
      *
-     * @return array
+     * @return \stdClass
      *
      * @throws ApiException
      * @throws CifDownException
@@ -260,9 +260,9 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
     {
         static::validateRESTResponse($response);
 
-        $json = @json_decode(static::getResponseText($response), true);
+        $json = json_decode(static::getResponseText($response));
 
-        if (!isset($json['Barcode'])) {
+        if (!isset($json->Barcode)) {
             throw new ResponseException('Invalid API Response', null, null, $response);
         }
 

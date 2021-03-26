@@ -28,13 +28,19 @@ namespace ThirtyBees\PostNL\Entity;
 
 use Exception;
 use JsonSerializable;
-use libphonenumber\NumberParseException;
 use ReflectionClass;
 use ReflectionException;
+use ReflectionObject;
+use ReflectionProperty;
 use Sabre\Xml\Writer;
-use ThirtyBees\PostNL\Util\XmlSerializable;
+use stdClass;
+use ThirtyBees\PostNL\Exception\ApiException;
 use ThirtyBees\PostNL\Exception\InvalidArgumentException;
+use ThirtyBees\PostNL\Exception\NotSupportedException;
 use ThirtyBees\PostNL\Util\UUID;
+use ThirtyBees\PostNL\Util\XmlSerializable;
+use function array_keys;
+use function is_array;
 
 /**
  * Class Entity.
@@ -72,7 +78,6 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
      * @return static|object|null
      *
      * @throws ReflectionException
-     * @throws NumberParseException
      *
      * @since 1.0.0
      */
@@ -190,43 +195,103 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
     /**
      * Deserialize JSON.
      *
-     * @param array $json JSON as associative array
+     * @param stdClass $json JSON object `{"EntityName": object}`
      *
-     * @return AbstractEntity
+     * @return mixed
+     *
+     * @throws NotSupportedException
+     * @throws InvalidArgumentException
      */
-    public static function jsonDeserialize(array $json)
+    public static function jsonDeserialize(stdClass $json)
     {
-        reset($json);
-        $shortClassName = key($json);
-        $fullClassName = static::getFullEntityClassName($shortClassName);
+        // Find the entity name
+        $reflection = new ReflectionObject($json);
+        $properties = $reflection->getProperties(ReflectionProperty::IS_PUBLIC);
 
-        // The only key in this associate array should be the object's name
-        // The value should be the object itself
-
-        if (!$fullClassName || !class_exists($fullClassName) || !is_array($json[$shortClassName])) {
-            // If it's not a known object, just return the property
-            return $json[$shortClassName];
+        if (!count($properties)) {
+            return $json;
         }
 
-        $object = call_user_func([$fullClassName, 'create']);
-        foreach ($json[$shortClassName] as $key => $value) {
-            $fullClassName = static::getFullEntityClassName($key);
-            $propertyName = $key;
+        $entityName = $properties[0]->getName();
+        try {
+            $entityFqcn = static::getFullyQualifiedEntityClassName($entityName);
+        } catch (InvalidArgumentException $e) {
+            $entityFqcn = null;
+        }
 
-            // If key is plural, try the singular version, because this might be an array
-            if (!$fullClassName && 's' === substr($key, -1)) {
-                $fullClassName = static::getFullEntityClassName(substr($key, 0, strlen($key) - 1));
-                $propertyName = substr($propertyName, 0, strlen($propertyName) - 1);
+        // The only key in this stdClass should be the containing object's name
+        // The value should be the object itself
+        if (!$entityFqcn
+            || !class_exists($entityFqcn)
+            || (!is_object($json->$entityName) && !is_array($json->$entityName))
+        ) {
+            if ($entityFqcn instanceof stdClass) {
+                throw new NotSupportedException('Unable to deserialize entity', 0, $entityFqcn);
             }
 
-            if (is_array($value) && is_subclass_of($fullClassName, AbstractEntity::class)) {
+            // Handle {} => `null` values
+            if (is_object($json->$entityName) && empty((array) $json->$entityName)) {
+                return null;
+            }
+
+            // If it's not a known object, just return the property
+            return $json->$entityName;
+        }
+
+        // Instantiate a new entity
+        $object = call_user_func([$entityFqcn, 'create']);
+
+        if (is_array($json->$entityName)) {
+            return array_map(function ($item) use ($entityName) {
+                $fqcn = static::getFullyQualifiedEntityClassName($entityName);
+                /** @noinspection PhpUndefinedMethodInspection */
+                return $fqcn::jsonDeserialize((object) [$entityName => $item]);
+            }, $json->$entityName);
+        }
+
+        // Iterate over all the possible properties
+        /** @noinspection PhpUndefinedVariableInspection */
+        $propertyNames = isset($entityFqcn::$defaultProperties['Barcode'])
+            ? array_keys($entityFqcn::$defaultProperties['Barcode'])
+            : [];
+        foreach ($propertyNames as $propertyName) {
+            if (!isset($json->$entityName->$propertyName)) {
+                continue;
+            }
+
+            $value = $json->$entityName->$propertyName;
+
+            // Handle cases where the API returns {} instead of a `null` value
+            if ($value instanceof stdClass && empty((array) $value)) {
+                $value = null;
+            }
+
+            if ($singularEntityName = static::shouldBeAnArray($entityFqcn, $propertyName)) {
+                if (null === $value) {
+                    $value = [];
+                } elseif (!is_array($value)) {
+                    $value = [$value];
+                }
+
                 $entities = [];
                 foreach ($value as $name => $item) {
-                    $entities[] = static::jsonDeserialize([$propertyName => $item]);
+                    try {
+                        $fqcn = static::getFullyQualifiedEntityClassName($singularEntityName);
+                    } catch (InvalidArgumentException $e) {
+                        $fqcn = AbstractEntity::class;
+                    }
+                    /** @noinspection PhpUndefinedMethodInspection */
+                    $entities[] = $fqcn::jsonDeserialize((object) [$singularEntityName => $item]);
                 }
-                $object->{'set'.$key}($entities);
+                $object->{'set'.$propertyName}($entities);
             } else {
-                $object->{'set'.$key}(static::jsonDeserialize([$propertyName => $value]));
+                try {
+                    $fqcn = static::getFullyQualifiedEntityClassName($propertyName);
+                } catch (InvalidArgumentException $e) {
+                    $fqcn = AbstractEntity::class;
+                }
+                /** @noinspection PhpUndefinedMethodInspection */
+                $object->{'set'.$propertyName}($fqcn::jsonDeserialize((object) [$propertyName => $value]));
             }
         }
 
@@ -246,27 +311,41 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
             $xml = $xml[0];
         }
 
-        $shortClassName = preg_replace('/(\{.*\})([A-Za-z]+)/', '$2', $xml['name']);
-        $fullClassName = static::getFullEntityClassName($shortClassName);
+        $shortClassName = preg_replace('/({.*})([A-Za-z]+)/', '$2', $xml['name']);
+        try {
+            $fqcn = static::getFullyQualifiedEntityClassName($shortClassName);
+        } catch (InvalidArgumentException $e) {
+            $fqcn = null;
+        }
 
         // The only key in this associate array should be the object's name
         // The value should be the object itself
 
-        if (!$fullClassName || !class_exists($fullClassName) || !is_array($xml['value'])) {
+        if (!$fqcn || !class_exists($fqcn) || !is_array($xml['value'])) {
             // If it's not a known object, just return the property
             return $xml['value'];
         }
 
-        $object = call_user_func([$fullClassName, 'create']);
+        $object = call_user_func([$fqcn, 'create']);
         foreach ($xml['value'] as $value) {
-            $shortClassName = preg_replace('/(\{.*\})([A-Za-z]+)/', '$2', $value['name']);
-            $fullClassName = static::getFullEntityClassName($shortClassName);
+            $shortClassName = preg_replace('/({.*})([A-Za-z]+)/', '$2', $value['name']);
+            try {
+                $fqcn = static::getFullyQualifiedEntityClassName($shortClassName);
+            } catch (InvalidArgumentException $e) {
+                $fqcn = null;
+            }
 
             // If key is plural, try the singular version, because this might be an array
             if (in_array($shortClassName, ['OldStatuses', 'Statuses', 'Addresses'])) {
-                $fullClassName = static::getFullEntityClassName(substr($shortClassName, 0, strlen($shortClassName) - 2));
-            } elseif (!$fullClassName && 's' === substr($shortClassName, -1)) {
-                $fullClassName = static::getFullEntityClassName(substr($shortClassName, 0, strlen($shortClassName) - 1));
+                try {
+                    $fqcn = static::getFullyQualifiedEntityClassName(substr($shortClassName, 0, strlen($shortClassName) - 2));
+                } catch (InvalidArgumentException $e) {
+                }
+            } elseif (!$fqcn && 's' === substr($shortClassName, -1)) {
+                try {
+                $fqcn = static::getFullyQualifiedEntityClassName(substr($shortClassName, 0, strlen($shortClassName) - 1));
+                } catch (InvalidArgumentException $e) {
+                }
             }
 
             if (!$value['value']) {
@@ -274,7 +353,7 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
             } elseif (is_array($value['value'])
                 && count($value['value']) >= 1
                 && !in_array($shortClassName, ['Customer', 'OpeningHours', 'Customs'])
-                && is_subclass_of($fullClassName, AbstractEntity::class)
+                && is_subclass_of($fqcn, AbstractEntity::class)
             ) {
                 $entities = [];
                 if (isset($value['value'][0]['value']) && !is_array($value['value'][0]['value'])) {
@@ -299,13 +378,57 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
     }
 
     /**
-     * Get the full class (incl. namespace) for the given short class name.
+     * Whether the given property should bbe an array
+     *
+     * @param string $fqcn
+     * @param string $propertyName
+     *
+     * @return false|string If found, singular name of property
+     *
+     * @since 1.2.0
+     */
+    public static function shouldBeAnArray($fqcn, $propertyName)
+    {
+        try {
+            $reflection = new ReflectionClass($fqcn);
+            $property = $reflection->getProperty($propertyName);
+            $comment = $property->getDocComment();
+        } catch (ReflectionException $e) {
+            return false;
+        }
+        // Quick 'n dirty annotation reader
+        //
+        // A property comment could look like /** @var string|null */
+        // or
+        // /**
+        //  * @var string|null
+        //  */
+        $matches = ['types' => ''];
+        preg_match('/@var\s(?P<types>[a-zA-Z0-9|\[\]]+)/', $comment, $matches);
+        foreach (explode('|', $matches['types']) as $type) {
+            if ('array' === $type) {
+                return $propertyName;
+            } elseif (false !== strpos($type, '[]')) {
+                return substr($type, 0, -2);
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Get the fully qualified class name for the given entity name.
      *
      * @param string $shortName
      *
-     * @return false|string The full name if found, else `false`
+     * @return string The FQCN
+     * @psalm-return class-string
+     *
+     * @throws InvalidArgumentException
+     *
+     * @since 1.2.0
      */
-    public static function getFullEntityClassName($shortName)
+    public static function getFullyQualifiedEntityClassName($shortName)
     {
         foreach ([
             '\\ThirtyBees\\PostNL\\Entity',
@@ -319,22 +442,6 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
             }
         }
 
-        return false;
-    }
-
-    /**
-     * Determine if the array is associative.
-     *
-     * @param array $array
-     *
-     * @return bool
-     */
-    protected static function isAssociativeArray($array)
-    {
-        if ([] === $array || !is_array($array)) {
-            return false;
-        }
-
-        return array_keys($array) !== range(0, count($array) - 1);
+        throw new InvalidArgumentException("Entity not found: $shortName");
     }
 }

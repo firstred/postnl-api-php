@@ -32,7 +32,9 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use GuzzleHttp\Psr7\Request;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
+use ReflectionException;
 use ThirtyBees\PostNL\Entity\Address;
 use ThirtyBees\PostNL\Entity\CoordinatesNorthWest;
 use ThirtyBees\PostNL\Entity\CoordinatesSouthEast;
@@ -69,6 +71,7 @@ class LocationServiceRestTest extends TestCase
      * @before
      *
      * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     * @throws \ReflectionException
      */
     public function setupPostNL()
     {
@@ -246,12 +249,16 @@ class LocationServiceRestTest extends TestCase
     }
 
     /**
-     * @testdox can request locations in area
+     * @testdox      can request locations in area
      * @dataProvider locationsInAreaProvider
+     *
+     * @param ResponseInterface $response
+     *
+     * @throws ReflectionException
      */
     public function testGetLocationsInAreaRest($response)
     {
-        $mock = new MockHandler($response);
+        $mock = new MockHandler([$response]);
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();
         $mockClient->setHandler($handler);
