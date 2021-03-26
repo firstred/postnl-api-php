@@ -29,6 +29,7 @@ namespace ThirtyBees\PostNL\Entity;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Exception;
+use ThirtyBees\PostNL\Exception\InvalidArgumentException;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
@@ -114,7 +115,7 @@ class TimeframeTimeFrame extends AbstractEntity
      * @param string|null                   $to
      * @param string[]|null                 $options
      *
-     * @throws Exception
+     * @throws InvalidArgumentException
      */
     public function __construct($date = null, $from = null, $to = null, array $options = null)
     {
@@ -131,14 +132,18 @@ class TimeframeTimeFrame extends AbstractEntity
      *
      * @return static
      *
-     * @throws Exception
+     * @throws InvalidArgumentException
      *
      * @since 1.2.0
      */
     public function setDate($date = null)
     {
         if (is_string($date)) {
-            $date = new DateTimeImmutable($date);
+            try {
+                $date = new DateTimeImmutable($date);
+            } catch (Exception $e) {
+                throw new InvalidArgumentException($e->getMessage(), 0, $e);
+            }
         }
 
         $this->Date = $date;

@@ -30,6 +30,7 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use Exception;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
+use ThirtyBees\PostNL\Exception\InvalidArgumentException;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
@@ -57,17 +58,17 @@ class GetSignatureResponseSignature extends AbstractEntity
      * @var array
      */
     public static $defaultProperties = [
-        'Barcode' => [
+        'Barcode'        => [
             'Barcode'        => BarcodeService::DOMAIN_NAMESPACE,
             'SignatureDate'  => BarcodeService::DOMAIN_NAMESPACE,
             'SignatureImage' => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming' => [
+        'Confirming'     => [
             'Barcode'        => ConfirmingService::DOMAIN_NAMESPACE,
             'SignatureDate'  => ConfirmingService::DOMAIN_NAMESPACE,
             'SignatureImage' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling' => [
+        'Labelling'      => [
             'Barcode'        => LabellingService::DOMAIN_NAMESPACE,
             'SignatureDate'  => LabellingService::DOMAIN_NAMESPACE,
             'SignatureImage' => LabellingService::DOMAIN_NAMESPACE,
@@ -77,17 +78,17 @@ class GetSignatureResponseSignature extends AbstractEntity
             'SignatureDate'  => ShippingStatusService::DOMAIN_NAMESPACE,
             'SignatureImage' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate' => [
+        'DeliveryDate'   => [
             'Barcode'        => DeliveryDateService::DOMAIN_NAMESPACE,
             'SignatureDate'  => DeliveryDateService::DOMAIN_NAMESPACE,
             'SignatureImage' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location' => [
+        'Location'       => [
             'Barcode'        => LocationService::DOMAIN_NAMESPACE,
             'SignatureDate'  => LocationService::DOMAIN_NAMESPACE,
             'SignatureImage' => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe' => [
+        'Timeframe'      => [
             'Barcode'        => TimeframeService::DOMAIN_NAMESPACE,
             'SignatureDate'  => TimeframeService::DOMAIN_NAMESPACE,
             'SignatureImage' => TimeframeService::DOMAIN_NAMESPACE,
@@ -108,6 +109,8 @@ class GetSignatureResponseSignature extends AbstractEntity
      * @param string|null $barcode
      * @param string|null $signatureDate
      * @param string|null $signatureImage
+     *
+     * @throws InvalidArgumentException
      */
     public function __construct($barcode = null, $signatureDate = null, $signatureImage = null)
     {
@@ -123,14 +126,18 @@ class GetSignatureResponseSignature extends AbstractEntity
      *
      * @return static
      *
-     * @throws Exception
+     * @throws InvalidArgumentException
      *
      * @since 1.2.0
      */
     public function setSignatureDate($signatureDate = null)
     {
         if (is_string($signatureDate)) {
-            $signatureDate = new DateTimeImmutable($signatureDate);
+            try {
+                $signatureDate = new DateTimeImmutable($signatureDate);
+            } catch (Exception $e) {
+                throw new InvalidArgumentException($e->getMessage(), 0, $e);
+            }
         }
 
         $this->SignatureDate = $signatureDate;

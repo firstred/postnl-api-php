@@ -101,6 +101,9 @@ class LabellingMessage extends Message
      * @param string|null                   $printerType
      * @param string|null                   $mid
      * @param string|DateTimeInterface|null $timestamp
+     *
+     * @throws \Exception
+     * @throws \Exception
      */
     public function __construct(
         $printerType = 'GraphicFile|PDF',

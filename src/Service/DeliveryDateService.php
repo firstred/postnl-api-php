@@ -207,6 +207,7 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @throws HttpClientException
      * @throws ReflectionException
      * @throws \ThirtyBees\PostNL\Exception\NotSupportedException
+     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
      *
      * @since 1.0.0
      */

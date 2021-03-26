@@ -100,6 +100,7 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
      * @throws ResponseException
      * @throws HttpClientException
      * @throws NotSupportedException
+     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
      *
      * @since 1.0.0
      */

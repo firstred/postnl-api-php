@@ -30,6 +30,7 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use Exception;
 use Sabre\Xml\Writer;
+use ThirtyBees\PostNL\Exception\InvalidArgumentException;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
@@ -141,7 +142,7 @@ class ReasonNoTimeframe extends AbstractEntity
      * @param string|null                   $from
      * @param string|null                   $to
      *
-     * @throws Exception
+     * @throws InvalidArgumentException
      */
     public function __construct(
         $code = null,
@@ -168,14 +169,18 @@ class ReasonNoTimeframe extends AbstractEntity
      *
      * @return static
      *
-     * @throws Exception
+     * @throws InvalidArgumentException
      *
      * @since 1.2.0
      */
     public function setDate($date = null)
     {
         if (is_string($date)) {
-            $date = new DateTimeImmutable($date);
+            try {
+                $date = new DateTimeImmutable($date);
+            } catch (Exception $e) {
+                throw new InvalidArgumentException($e->getMessage(), 0, $e);
+            }
         }
 
         $this->Date = $date;

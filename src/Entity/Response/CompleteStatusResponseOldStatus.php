@@ -30,6 +30,7 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use Exception;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
+use ThirtyBees\PostNL\Exception\InvalidArgumentException;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
@@ -135,7 +136,7 @@ class CompleteStatusResponseOldStatus extends AbstractEntity
      * @param string|null                   $phaseDescription
      * @param DateTimeInterface|string|null $timeStamp
      *
-     * @throws Exception
+     * @throws InvalidArgumentException
      */
     public function __construct(
         $code = null,
@@ -158,17 +159,22 @@ class CompleteStatusResponseOldStatus extends AbstractEntity
      *
      * @return static
      *
-     * @throws Exception
+     * @throws InvalidArgumentException
      *
      * @since 1.2.0
      */
     public function setTimeStamp($timeStamp = null)
     {
         if (is_string($timeStamp)) {
-            $timeStamp = new DateTimeImmutable($timeStamp);
+            try {
+                $timeStamp = new DateTimeImmutable($timeStamp);
+            } catch (Exception $e) {
+                throw new InvalidArgumentException($e->getMessage(), 0, $e);
+            }
         }
 
         $this->TimeStamp = $timeStamp;
+
         return $this;
     }
 }

@@ -31,6 +31,7 @@ use DateTimeInterface;
 use Exception;
 use InvalidArgumentException;
 use Sabre\Xml\Writer;
+use ThirtyBees\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
@@ -73,7 +74,7 @@ class Timeframe extends AbstractEntity
 {
     /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode' => [
+        'Barcode'        => [
             'City'           => BarcodeService::DOMAIN_NAMESPACE,
             'CountryCode'    => BarcodeService::DOMAIN_NAMESPACE,
             'Date'           => BarcodeService::DOMAIN_NAMESPACE,
@@ -89,7 +90,7 @@ class Timeframe extends AbstractEntity
             'TimeframeRange' => BarcodeService::DOMAIN_NAMESPACE,
             'Timeframes'     => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming' => [
+        'Confirming'     => [
             'City'           => ConfirmingService::DOMAIN_NAMESPACE,
             'CountryCode'    => ConfirmingService::DOMAIN_NAMESPACE,
             'Date'           => ConfirmingService::DOMAIN_NAMESPACE,
@@ -105,7 +106,7 @@ class Timeframe extends AbstractEntity
             'TimeframeRange' => ConfirmingService::DOMAIN_NAMESPACE,
             'Timeframes'     => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling' => [
+        'Labelling'      => [
             'City'           => LabellingService::DOMAIN_NAMESPACE,
             'CountryCode'    => LabellingService::DOMAIN_NAMESPACE,
             'Date'           => LabellingService::DOMAIN_NAMESPACE,
@@ -137,7 +138,7 @@ class Timeframe extends AbstractEntity
             'TimeframeRange' => ShippingStatusService::DOMAIN_NAMESPACE,
             'Timeframes'     => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate' => [
+        'DeliveryDate'   => [
             'City'           => DeliveryDateService::DOMAIN_NAMESPACE,
             'CountryCode'    => DeliveryDateService::DOMAIN_NAMESPACE,
             'Date'           => DeliveryDateService::DOMAIN_NAMESPACE,
@@ -153,7 +154,7 @@ class Timeframe extends AbstractEntity
             'TimeframeRange' => DeliveryDateService::DOMAIN_NAMESPACE,
             'Timeframes'     => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location' => [
+        'Location'       => [
             'City'           => LocationService::DOMAIN_NAMESPACE,
             'CountryCode'    => LocationService::DOMAIN_NAMESPACE,
             'Date'           => LocationService::DOMAIN_NAMESPACE,
@@ -169,7 +170,7 @@ class Timeframe extends AbstractEntity
             'TimeframeRange' => LocationService::DOMAIN_NAMESPACE,
             'Timeframes'     => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe' => [
+        'Timeframe'      => [
             'City'           => TimeframeService::DOMAIN_NAMESPACE,
             'CountryCode'    => TimeframeService::DOMAIN_NAMESPACE,
             'Date'           => TimeframeService::DOMAIN_NAMESPACE,
@@ -235,7 +236,7 @@ class Timeframe extends AbstractEntity
      * @param Timeframe[]|null              $timeframes
      * @param string|DateTimeInterface|null $startDate
      *
-     * @throws Exception
+     * @throws PostNLInvalidArgumentException
      */
     public function __construct(
         $city = null,
@@ -276,14 +277,18 @@ class Timeframe extends AbstractEntity
      *
      * @return static
      *
-     * @throws Exception
+     * @throws PostNLInvalidArgumentException
      *
      * @since 1.2.0
      */
     public function setDate($date = null)
     {
         if (is_string($date)) {
-            $date = new DateTimeImmutable($date);
+            try {
+                $date = new DateTimeImmutable($date);
+            } catch (Exception $e) {
+                throw new PostNLInvalidArgumentException($e->getMessage, 0, $e);
+            }
         }
 
         $this->Date = $date;
@@ -296,14 +301,18 @@ class Timeframe extends AbstractEntity
      *
      * @return static
      *
-     * @throws Exception
+     * @throws PostNLInvalidArgumentException
      *
      * @since 1.2.0
      */
     public function setStartDate($startDate = null)
     {
         if (is_string($startDate)) {
-            $startDate = new DateTimeImmutable($startDate);
+            try {
+                $startDate = new DateTimeImmutable($startDate);
+            } catch (Exception $e) {
+                throw new PostNLInvalidArgumentException($e->getMessage(), 0, $e);
+            }
         }
 
         $this->StartDate = $startDate;
@@ -316,14 +325,18 @@ class Timeframe extends AbstractEntity
      *
      * @return static
      *
-     * @throws Exception
+     * @throws PostNLInvalidArgumentException
      *
      * @since 1.2.0
      */
     public function setEndDate($endDate = null)
     {
         if (is_string($endDate)) {
-            $endDate = new DateTimeImmutable($endDate);
+            try {
+                $endDate = new DateTimeImmutable($endDate);
+            } catch (Exception $e) {
+                throw new PostNLInvalidArgumentException($e->getMessage(), 0, $e);
+            }
         }
 
         $this->EndDate = $endDate;
@@ -415,7 +428,7 @@ class Timeframe extends AbstractEntity
                 if ($this->StartDate instanceof DateTimeInterface) {
                     $xml["{{$namespace}}EndDate"] = $this->EndDate->format('d-m-Y');
                 }
-            }elseif ('SundaySorting' === $propertyName) {
+            } elseif ('SundaySorting' === $propertyName) {
                 if (isset($this->SundaySorting)) {
                     if (is_bool($this->SundaySorting)) {
                         $xml["{{$namespace}}SundaySorting"] = $this->SundaySorting ? 'true' : 'false';

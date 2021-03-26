@@ -31,6 +31,7 @@ use DateTimeInterface;
 use Exception;
 use Sabre\Xml\Writer;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
+use ThirtyBees\PostNL\Exception\InvalidArgumentException;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
@@ -71,7 +72,7 @@ class GetSentDate extends AbstractEntity
      * @var array
      */
     public static $defaultProperties = [
-        'Barcode' => [
+        'Barcode'        => [
             'AllowSundaySorting' => BarcodeService::DOMAIN_NAMESPACE,
             'City'               => BarcodeService::DOMAIN_NAMESPACE,
             'CountryCode'        => BarcodeService::DOMAIN_NAMESPACE,
@@ -83,7 +84,7 @@ class GetSentDate extends AbstractEntity
             'ShippingDuration'   => BarcodeService::DOMAIN_NAMESPACE,
             'Street'             => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming' => [
+        'Confirming'     => [
             'AllowSundaySorting' => ConfirmingService::DOMAIN_NAMESPACE,
             'City'               => ConfirmingService::DOMAIN_NAMESPACE,
             'CountryCode'        => ConfirmingService::DOMAIN_NAMESPACE,
@@ -95,7 +96,7 @@ class GetSentDate extends AbstractEntity
             'ShippingDuration'   => ConfirmingService::DOMAIN_NAMESPACE,
             'Street'             => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling' => [
+        'Labelling'      => [
             'AllowSundaySorting' => LabellingService::DOMAIN_NAMESPACE,
             'City'               => LabellingService::DOMAIN_NAMESPACE,
             'CountryCode'        => LabellingService::DOMAIN_NAMESPACE,
@@ -119,7 +120,7 @@ class GetSentDate extends AbstractEntity
             'ShippingDuration'   => ShippingStatusService::DOMAIN_NAMESPACE,
             'Street'             => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate' => [
+        'DeliveryDate'   => [
             'AllowSundaySorting' => DeliveryDateService::DOMAIN_NAMESPACE,
             'City'               => DeliveryDateService::DOMAIN_NAMESPACE,
             'CountryCode'        => DeliveryDateService::DOMAIN_NAMESPACE,
@@ -131,7 +132,7 @@ class GetSentDate extends AbstractEntity
             'ShippingDuration'   => DeliveryDateService::DOMAIN_NAMESPACE,
             'Street'             => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location' => [
+        'Location'       => [
             'AllowSundaySorting' => LocationService::DOMAIN_NAMESPACE,
             'City'               => LocationService::DOMAIN_NAMESPACE,
             'CountryCode'        => LocationService::DOMAIN_NAMESPACE,
@@ -143,7 +144,7 @@ class GetSentDate extends AbstractEntity
             'ShippingDuration'   => LocationService::DOMAIN_NAMESPACE,
             'Street'             => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe' => [
+        'Timeframe'      => [
             'AllowSundaySorting' => TimeframeService::DOMAIN_NAMESPACE,
             'City'               => TimeframeService::DOMAIN_NAMESPACE,
             'CountryCode'        => TimeframeService::DOMAIN_NAMESPACE,
@@ -192,6 +193,8 @@ class GetSentDate extends AbstractEntity
      * @param DateTimeInterface|string|null $DeliveryDate
      * @param string|null                   $street
      * @param string|null                   $shippingDuration
+     *
+     * @throws InvalidArgumentException
      */
     public function __construct(
         $allowSundaySorting = false,
@@ -224,14 +227,18 @@ class GetSentDate extends AbstractEntity
      *
      * @return static
      *
-     * @throws Exception
+     * @throws InvalidArgumentException
      *
      * @since 1.2.0
      */
     public function setDeliveryDate($deliveryDate = null)
     {
         if (is_string($deliveryDate)) {
-            $deliveryDate = new DateTimeImmutable($deliveryDate);
+            try {
+                $deliveryDate = new DateTimeImmutable($deliveryDate);
+            } catch (Exception $e) {
+                throw new InvalidArgumentException($e->getMessage(), 0, $e);
+            }
         }
 
         $this->DeliveryDate = $deliveryDate;

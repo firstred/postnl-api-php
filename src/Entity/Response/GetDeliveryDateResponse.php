@@ -29,9 +29,12 @@ namespace ThirtyBees\PostNL\Entity\Response;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Exception;
+use http\Exception\InvalidArgumentException;
+use ReflectionException;
 use Sabre\Xml\Writer;
 use stdClass;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
+use ThirtyBees\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
@@ -58,15 +61,15 @@ class GetDeliveryDateResponse extends AbstractEntity
      * @var array
      */
     public static $defaultProperties = [
-        'Barcode' => [
+        'Barcode'        => [
             'DeliveryDate' => BarcodeService::DOMAIN_NAMESPACE,
             'Options'      => 'http://schemas.microsoft.com/2003/10/Serialization/Arrays',
         ],
-        'Confirming' => [
+        'Confirming'     => [
             'DeliveryDate' => ConfirmingService::DOMAIN_NAMESPACE,
             'Options'      => 'http://schemas.microsoft.com/2003/10/Serialization/Arrays',
         ],
-        'Labelling' => [
+        'Labelling'      => [
             'DeliveryDate' => LabellingService::DOMAIN_NAMESPACE,
             'Options'      => 'http://schemas.microsoft.com/2003/10/Serialization/Arrays',
         ],
@@ -74,15 +77,15 @@ class GetDeliveryDateResponse extends AbstractEntity
             'DeliveryDate' => ShippingStatusService::DOMAIN_NAMESPACE,
             'Options'      => 'http://schemas.microsoft.com/2003/10/Serialization/Arrays',
         ],
-        'DeliveryDate' => [
+        'DeliveryDate'   => [
             'DeliveryDate' => DeliveryDateService::DOMAIN_NAMESPACE,
             'Options'      => 'http://schemas.microsoft.com/2003/10/Serialization/Arrays',
         ],
-        'Location' => [
+        'Location'       => [
             'DeliveryDate' => LocationService::DOMAIN_NAMESPACE,
             'Options'      => 'http://schemas.microsoft.com/2003/10/Serialization/Arrays',
         ],
-        'Timeframe' => [
+        'Timeframe'      => [
             'DeliveryDate' => TimeframeService::DOMAIN_NAMESPACE,
             'Options'      => 'http://schemas.microsoft.com/2003/10/Serialization/Arrays',
         ],
@@ -100,8 +103,7 @@ class GetDeliveryDateResponse extends AbstractEntity
      * @param string|DateTimeInterface|null $date
      * @param string[]|null                 $options
      *
-     * @throws Exception
-     * @throws Exception
+     * @throws PostNLInvalidArgumentException
      */
     public function __construct($date = null, array $options = null)
     {
@@ -116,14 +118,18 @@ class GetDeliveryDateResponse extends AbstractEntity
      *
      * @return static
      *
-     * @throws Exception
+     * @throws PostNLInvalidArgumentException
      *
      * @since 1.2.0
      */
     public function setDeliveryDate($deliveryDate = null)
     {
         if (is_string($deliveryDate)) {
-            $deliveryDate = new DateTimeImmutable($deliveryDate);
+            try {
+                $deliveryDate = new DateTimeImmutable($deliveryDate);
+            } catch (Exception $e) {
+                throw new PostNLInvalidArgumentException($e->getMessage(), 0, $e);
+            }
         }
 
         $this->DeliveryDate = $deliveryDate;
@@ -170,7 +176,7 @@ class GetDeliveryDateResponse extends AbstractEntity
      * @return mixed|object|stdClass|GetDeliveryDateResponse|null
      *
      * @throws ReflectionException
-     * @throws \ReflectionException
+     * @throws PostNLInvalidArgumentException
      */
     public static function jsonDeserialize(stdClass $json)
     {
@@ -179,7 +185,11 @@ class GetDeliveryDateResponse extends AbstractEntity
         }
 
         $getDeliveryDateResponse = self::create();
-        $getDeliveryDateResponse->DeliveryDate = new DateTimeImmutable($json->GetDeliveryDateResponse->DeliveryDate);
+        try {
+            $getDeliveryDateResponse->DeliveryDate = new DateTimeImmutable($json->GetDeliveryDateResponse->DeliveryDate);
+        } catch (Exception $e) {
+            throw new PostNLInvalidArgumentException($e->getMessage(), 0, $e);
+        }
         if (isset($json->GetDeliveryDateResponse->Options)) {
             if (!is_array($json->GetDeliveryDateResponse->Options)) {
                 $json->GetDeliveryDateResponse->Options = [$json->GetDeliveryDateResponse->Options];

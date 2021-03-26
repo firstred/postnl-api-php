@@ -248,6 +248,8 @@ class Util
      * @throws Exception
      * @throws Exception
      * @throws Exception
+     * @throws Exception
+     * @throws Exception
      */
     protected static function getHolidaysForYear($year)
     {

@@ -101,14 +101,18 @@ class Message extends AbstractEntity
      * @param string|null                   $mid
      * @param string|DateTimeInterface|null $timestamp
      *
-     * @throws Exception
+     * @throws InvalidArgumentException
      */
     public function __construct($mid = null, $timestamp = null)
     {
         parent::__construct();
 
         $this->setMessageID($mid ?: substr(str_replace('-', '', $this->getid()), 0, 12));
-        $this->setMessageTimeStamp($timestamp ?: new DateTimeImmutable());
+        try {
+            $this->setMessageTimeStamp($timestamp ?: new DateTimeImmutable());
+        } catch (Exception $e) {
+            throw new InvalidArgumentException($e->getMessage(), 0, $e);
+        }
     }
 
     /**
@@ -116,14 +120,18 @@ class Message extends AbstractEntity
      *
      * @return static
      *
-     * @throws Exception
+     * @throws InvalidArgumentException
      *
      * @since 1.2.0
      */
     public function setMessageTimeStamp($timeStamp = null)
     {
         if (is_string($timeStamp)) {
-            $timeStamp = new DateTimeImmutable($timeStamp);
+            try {
+                $timeStamp = new DateTimeImmutable($timeStamp);
+            } catch (Exception $e) {
+                throw new InvalidArgumentException($e->getMessage(), 0, $e);
+            }
         }
 
         $this->MessageTimeStamp = $timeStamp;

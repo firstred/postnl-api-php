@@ -30,6 +30,7 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use Exception;
 use Sabre\Xml\Writer;
+use ThirtyBees\PostNL\Exception\InvalidArgumentException;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
@@ -292,6 +293,8 @@ class Location extends AbstractEntity
      * @param string|null                   $retailNetworkId
      * @param string|null                   $downPartnerID
      * @param string|null                   $downPartnerLocation
+     *
+     * @throws InvalidArgumentException
      */
     public function __construct(
         $zipcode = null,
@@ -316,7 +319,11 @@ class Location extends AbstractEntity
         parent::__construct();
 
         $this->setAllowSundaySorting($allowSundaySorting);
-        $this->setDeliveryDate($deliveryDate ?: (new DateTimeImmutable('next monday')));
+        try {
+            $this->setDeliveryDate($deliveryDate ?: (new DateTimeImmutable('next monday')));
+        } catch (Exception $e) {
+            throw new InvalidArgumentException($e->getMessage(), 0, $e);
+        }
         $this->setDeliveryOptions($deliveryOptions);
         $this->setOptions($options);
         $this->setPostalcode($zipcode);
@@ -340,14 +347,18 @@ class Location extends AbstractEntity
      *
      * @return static
      *
-     * @throws Exception
+     * @throws InvalidArgumentException
      *
      * @since 1.2.0
      */
     public function setDeliveryDate($deliveryDate = null)
     {
         if (is_string($deliveryDate)) {
-            $deliveryDate = new DateTimeImmutable($deliveryDate);
+            try {
+                $deliveryDate = new DateTimeImmutable($deliveryDate);
+            } catch (Exception $e) {
+                throw new InvalidArgumentException($e->getMessage(), 0, $e);
+            }
         }
 
         $this->DeliveryDate = $deliveryDate;

@@ -31,6 +31,7 @@ use DateTimeInterface;
 use Exception;
 use Sabre\Xml\Writer;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
+use ThirtyBees\PostNL\Exception\InvalidArgumentException;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
@@ -56,15 +57,15 @@ class GetSentDateResponse extends AbstractEntity
      * @var array
      */
     public static $defaultProperties = [
-        'Barcode' => [
+        'Barcode'        => [
             'SentDate' => BarcodeService::DOMAIN_NAMESPACE,
             'Options'  => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming' => [
+        'Confirming'     => [
             'SentDate' => ConfirmingService::DOMAIN_NAMESPACE,
             'Options'  => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling' => [
+        'Labelling'      => [
             'SentDate' => LabellingService::DOMAIN_NAMESPACE,
             'Options'  => LabellingService::DOMAIN_NAMESPACE,
         ],
@@ -72,15 +73,15 @@ class GetSentDateResponse extends AbstractEntity
             'SentDate' => ShippingStatusService::DOMAIN_NAMESPACE,
             'Options'  => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate' => [
+        'DeliveryDate'   => [
             'SentDate' => DeliveryDateService::DOMAIN_NAMESPACE,
             'Options'  => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location' => [
+        'Location'       => [
             'SentDate' => LocationService::DOMAIN_NAMESPACE,
             'Options'  => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe' => [
+        'Timeframe'      => [
             'SentDate' => TimeframeService::DOMAIN_NAMESPACE,
             'Options'  => timeframeService::DOMAIN_NAMESPACE,
         ],
@@ -98,7 +99,7 @@ class GetSentDateResponse extends AbstractEntity
      * @param DateTimeInterface|string|null $date
      * @param string[]|null                 $options
      *
-     * @throws Exception
+     * @throws InvalidArgumentException
      */
     public function __construct($date = null, array $options = null)
     {
@@ -113,14 +114,18 @@ class GetSentDateResponse extends AbstractEntity
      *
      * @return static
      *
-     * @throws Exception
+     * @throws InvalidArgumentException
      *
      * @since 1.2.0
      */
     public function setSentDate($SentDate = null)
     {
         if (is_string($SentDate)) {
-            $SentDate = new DateTimeImmutable($SentDate);
+            try {
+                $SentDate = new DateTimeImmutable($SentDate);
+            } catch (Exception $e) {
+                throw new InvalidArgumentException($e->getMessage(), 0, $e);
+            }
         }
 
         $this->SentDate = $SentDate;

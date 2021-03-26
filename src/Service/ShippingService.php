@@ -79,6 +79,7 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws HttpClientException
      * @throws \ThirtyBees\PostNL\Exception\NotSupportedException
+     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
      *
      * @since 1.2.0
      */

@@ -30,6 +30,7 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use Exception;
 use Sabre\Xml\Writer;
+use ThirtyBees\PostNL\Exception\InvalidArgumentException;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
@@ -562,7 +563,7 @@ class Shipment extends AbstractEntity
      * @param string|DateTimeInterface|null $deliveryTimeStampStart
      * @param string|DateTimeInterface|null $deliveryTimeStampEnd
      *
-     * @throws Exception
+     * @throws InvalidArgumentException
      */
     public function __construct(
         array $addresses = null,
@@ -651,14 +652,18 @@ class Shipment extends AbstractEntity
      *
      * @return static
      *
-     * @throws Exception
+     * @throws InvalidArgumentException
      *
      * @since 1.2.0
      */
     public function setCollectionTimeStampStart($collectionTimeStampStart = null)
     {
         if (is_string($collectionTimeStampStart)) {
-            $collectionTimeStampStart = new DateTimeImmutable($collectionTimeStampStart);
+            try {
+                $collectionTimeStampStart = new DateTimeImmutable($collectionTimeStampStart);
+            } catch (Exception $e) {
+                throw new InvalidArgumentException($e->getMessage(), 0, $e);
+            }
         }
 
         $this->CollectionTimeStampStart = $collectionTimeStampStart;
@@ -671,14 +676,18 @@ class Shipment extends AbstractEntity
      *
      * @return static
      *
-     * @throws Exception
+     * @throws InvalidArgumentException
      *
      * @since 1.2.0
      */
     public function setCollectionTimeStampEnd($collectionTimeStampEnd = null)
     {
         if (is_string($collectionTimeStampEnd)) {
-            $collectionTimeStampEnd = new DateTimeImmutable($collectionTimeStampEnd);
+            try {
+                $collectionTimeStampEnd = new DateTimeImmutable($collectionTimeStampEnd);
+            } catch (Exception $e) {
+                throw new InvalidArgumentException($e->getMessage(),0, $e);
+            }
         }
 
         $this->CollectionTimeStampEnd = $collectionTimeStampEnd;
@@ -691,14 +700,18 @@ class Shipment extends AbstractEntity
      *
      * @return static
      *
-     * @throws Exception
+     * @throws InvalidArgumentException
      *
      * @since 1.2.0
      */
     public function setDeliveryTimeStampStart($deliveryTimeStampStart = null)
     {
         if (is_string($deliveryTimeStampStart)) {
-            $deliveryTimeStampStart = new DateTimeImmutable($deliveryTimeStampStart);
+            try {
+                $deliveryTimeStampStart = new DateTimeImmutable($deliveryTimeStampStart);
+            } catch (Exception $e) {
+                throw new InvalidArgumentException($e->getMessage(), 0, $e);
+            }
         }
 
         $this->DeliveryTimeStampStart = $deliveryTimeStampStart;
@@ -711,14 +724,18 @@ class Shipment extends AbstractEntity
      *
      * @return static
      *
-     * @throws Exception
+     * @throws InvalidArgumentException
      *
      * @since 1.2.0
      */
     public function setDeliveryTimeStampEnd($deliveryTimeStampEnd = null)
     {
         if (is_string($deliveryTimeStampEnd)) {
-            $deliveryTimeStampEnd = new DateTimeImmutable($deliveryTimeStampEnd);
+            try {
+                $deliveryTimeStampEnd = new DateTimeImmutable($deliveryTimeStampEnd);
+            } catch (Exception $e) {
+                throw new InvalidArgumentException($e->getMessage(), 0, $e);
+            }
         }
 
         $this->DeliveryTimeStampEnd = $deliveryTimeStampEnd;
@@ -731,14 +748,18 @@ class Shipment extends AbstractEntity
      *
      * @return static
      *
-     * @throws Exception
+     * @throws InvalidArgumentException
      *
      * @since 1.2.0
      */
     public function setDeliveryDate($deliveryDate = null)
     {
         if (is_string($deliveryDate)) {
-            $deliveryDate = new DateTimeImmutable($deliveryDate);
+            try {
+                $deliveryDate = new DateTimeImmutable($deliveryDate);
+            } catch (Exception $e) {
+                throw new InvalidArgumentException($e->getMessage(), 0, $e);
+            }
         }
 
         $this->DeliveryDate = $deliveryDate;

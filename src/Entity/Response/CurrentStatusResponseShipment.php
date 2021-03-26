@@ -40,6 +40,7 @@ use ThirtyBees\PostNL\Entity\Group;
 use ThirtyBees\PostNL\Entity\ProductOption;
 use ThirtyBees\PostNL\Entity\Status;
 use ThirtyBees\PostNL\Entity\Warning;
+use ThirtyBees\PostNL\Exception\InvalidArgumentException;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
@@ -82,7 +83,7 @@ class CurrentStatusResponseShipment extends AbstractEntity
 {
     /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode' => [
+        'Barcode'        => [
             'Addresses'      => BarcodeService::DOMAIN_NAMESPACE,
             'Amounts'        => BarcodeService::DOMAIN_NAMESPACE,
             'Barcode'        => BarcodeService::DOMAIN_NAMESPACE,
@@ -96,7 +97,7 @@ class CurrentStatusResponseShipment extends AbstractEntity
             'Status'         => BarcodeService::DOMAIN_NAMESPACE,
             'Warnings'       => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming' => [
+        'Confirming'     => [
             'Addresses'      => ConfirmingService::DOMAIN_NAMESPACE,
             'Amounts'        => ConfirmingService::DOMAIN_NAMESPACE,
             'Barcode'        => ConfirmingService::DOMAIN_NAMESPACE,
@@ -110,7 +111,7 @@ class CurrentStatusResponseShipment extends AbstractEntity
             'Status'         => ConfirmingService::DOMAIN_NAMESPACE,
             'Warnings'       => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling' => [
+        'Labelling'      => [
             'Addresses'      => LabellingService::DOMAIN_NAMESPACE,
             'Amounts'        => LabellingService::DOMAIN_NAMESPACE,
             'Barcode'        => LabellingService::DOMAIN_NAMESPACE,
@@ -138,7 +139,7 @@ class CurrentStatusResponseShipment extends AbstractEntity
             'Status'         => ShippingStatusService::DOMAIN_NAMESPACE,
             'Warnings'       => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate' => [
+        'DeliveryDate'   => [
             'Addresses'      => DeliveryDateService::DOMAIN_NAMESPACE,
             'Amounts'        => DeliveryDateService::DOMAIN_NAMESPACE,
             'Barcode'        => DeliveryDateService::DOMAIN_NAMESPACE,
@@ -152,7 +153,7 @@ class CurrentStatusResponseShipment extends AbstractEntity
             'Status'         => DeliveryDateService::DOMAIN_NAMESPACE,
             'Warnings'       => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location' => [
+        'Location'       => [
             'Addresses'      => LocationService::DOMAIN_NAMESPACE,
             'Amounts'        => LocationService::DOMAIN_NAMESPACE,
             'Barcode'        => LocationService::DOMAIN_NAMESPACE,
@@ -166,7 +167,7 @@ class CurrentStatusResponseShipment extends AbstractEntity
             'Status'         => LocationService::DOMAIN_NAMESPACE,
             'Warnings'       => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe' => [
+        'Timeframe'      => [
             'Addresses'      => TimeframeService::DOMAIN_NAMESPACE,
             'Amounts'        => TimeframeService::DOMAIN_NAMESPACE,
             'Barcode'        => TimeframeService::DOMAIN_NAMESPACE,
@@ -224,7 +225,7 @@ class CurrentStatusResponseShipment extends AbstractEntity
      * @param Status|null                   $status
      * @param Warning[]|null                $warnings
      *
-     * @throws Exception
+     * @throws InvalidArgumentException
      */
     public function __construct(
         array $addresses = null,
@@ -261,14 +262,18 @@ class CurrentStatusResponseShipment extends AbstractEntity
      *
      * @return static
      *
-     * @throws Exception
+     * @throws InvalidArgumentException
      *
      * @since 1.2.0
      */
     public function setDeliveryDate($deliveryDate = null)
     {
         if (is_string($deliveryDate)) {
-            $deliveryDate = new DateTimeImmutable($deliveryDate);
+            try {
+                $deliveryDate = new DateTimeImmutable($deliveryDate);
+            } catch (Exception $e) {
+                throw new InvalidArgumentException($e->getMessage(), 0, $e);
+            }
         }
 
         $this->DeliveryDate = $deliveryDate;

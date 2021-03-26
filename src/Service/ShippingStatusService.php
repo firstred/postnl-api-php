@@ -49,6 +49,9 @@ use ThirtyBees\PostNL\Exception\CifException;
 use ThirtyBees\PostNL\Exception\HttpClientException;
 use ThirtyBees\PostNL\Exception\ResponseException;
 use GuzzleHttp\Psr7\Message as PsrMessage;
+use ThirtyBees\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
+use ThirtyBees\PostNL\Exception\NotSupportedException;
 
 /**
  * Class ShippingStatusService.
@@ -98,10 +101,11 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
-     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws PsrCacheInvalidArgumentException
      * @throws ReflectionException
      * @throws HttpClientException
-     * @throws \ThirtyBees\PostNL\Exception\NotSupportedException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
      *
      * @since 1.0.0
      */
@@ -159,10 +163,11 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
-     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws PsrCacheInvalidArgumentException
      * @throws ReflectionException
      * @throws HttpClientException
-     * @throws \ThirtyBees\PostNL\Exception\NotSupportedException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
      *
      * @since 1.0.0
      */
@@ -220,10 +225,11 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
-     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws PsrCacheInvalidArgumentException
      * @throws ReflectionException
      * @throws HttpClientException
-     * @throws \ThirtyBees\PostNL\Exception\NotSupportedException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
      *
      * @since 1.0.0
      */
@@ -337,8 +343,8 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws ResponseException
      * @throws ReflectionException
      * @throws HttpClientException
-     * @throws \ThirtyBees\PostNL\Exception\NotSupportedException
-     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
      *
      * @since 1.0.0
      */
@@ -440,8 +446,8 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws ResponseException
      * @throws ReflectionException
      * @throws HttpClientException
-     * @throws \ThirtyBees\PostNL\Exception\NotSupportedException
-     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
      *
      * @since 1.0.0
      */
@@ -540,8 +546,8 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws ResponseException
      * @throws ReflectionException
      * @throws HttpClientException
-     * @throws \ThirtyBees\PostNL\Exception\NotSupportedException
-     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
      *
      * @since 1.0.0
      */

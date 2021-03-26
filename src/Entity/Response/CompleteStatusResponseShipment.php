@@ -41,6 +41,7 @@ use ThirtyBees\PostNL\Entity\Group;
 use ThirtyBees\PostNL\Entity\ProductOption;
 use ThirtyBees\PostNL\Entity\Status;
 use ThirtyBees\PostNL\Entity\Warning;
+use ThirtyBees\PostNL\Exception\InvalidArgumentException;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
@@ -260,7 +261,7 @@ class CompleteStatusResponseShipment extends AbstractEntity
      * @param Status|null                            $status
      * @param Warning[]|null                         $warnings
      *
-     * @throws Exception
+     * @throws InvalidArgumentException
      */
     public function __construct(
         array $addresses = null,
@@ -303,14 +304,18 @@ class CompleteStatusResponseShipment extends AbstractEntity
      *
      * @return static
      *
-     * @throws Exception
+     * @throws InvalidArgumentException
      *
      * @since 1.2.0
      */
     public function setDeliveryDate($deliveryDate = null)
     {
         if (is_string($deliveryDate)) {
-            $deliveryDate = new DateTimeImmutable($deliveryDate);
+            try {
+                $deliveryDate = new DateTimeImmutable($deliveryDate);
+            } catch (Exception $e) {
+                throw new InvalidArgumentException($e->getMessage(), 0, $e);
+            }
         }
 
         $this->DeliveryDate = $deliveryDate;

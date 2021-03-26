@@ -29,6 +29,7 @@ namespace ThirtyBees\PostNL\Entity;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Exception;
+use ThirtyBees\PostNL\Exception\InvalidArgumentException;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
@@ -128,7 +129,7 @@ class Status extends AbstractEntity
      * @param string|null                   $statusDesc
      * @param string|DateTimeInterface|null $timeStamp
      *
-     * @throws Exception
+     * @throws InvalidArgumentException
      */
     public function __construct(
         $phaseCode = null,
@@ -151,14 +152,18 @@ class Status extends AbstractEntity
      *
      * @return static
      *
-     * @throws Exception
+     * @throws InvalidArgumentException
      *
      * @since 1.2.0
      */
     public function setCurrentStatusTimeStamp($timeStamp = null)
     {
         if (is_string($timeStamp)) {
-            $timeStamp = new DateTimeImmutable($timeStamp);
+            try {
+                $timeStamp = new DateTimeImmutable($timeStamp);
+            } catch (Exception $e) {
+                throw new InvalidArgumentException($e->getMessage(), 0, $e);
+            }
         }
 
         $this->CurrentStatusTimeStamp = $timeStamp;
