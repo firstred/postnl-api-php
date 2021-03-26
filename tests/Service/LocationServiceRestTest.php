@@ -46,6 +46,7 @@ use ThirtyBees\PostNL\Entity\Request\GetLocationsInArea;
 use ThirtyBees\PostNL\Entity\Request\GetNearestLocations;
 use ThirtyBees\PostNL\Entity\Response\GetLocationsInAreaResponse;
 use ThirtyBees\PostNL\Entity\Response\GetNearestLocationsResponse;
+use ThirtyBees\PostNL\Entity\Response\ResponseLocation;
 use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
 use ThirtyBees\PostNL\HttpClient\MockClient;
 use ThirtyBees\PostNL\PostNL;
@@ -167,6 +168,8 @@ class LocationServiceRestTest extends TestCase
     /**
      * @testdox can request nearest locations
      * @dataProvider nearestLocationsByPostcodeProvider
+     *
+     * @param ResponseInterface $response
      */
     public function testGetNearestLocationsRest($response)
     {
@@ -197,7 +200,18 @@ class LocationServiceRestTest extends TestCase
             ])));
 
         $this->assertInstanceOf(GetNearestLocationsResponse::class, $response);
-        $this->assertCount(20, (array) $response->getGetLocationsResult());
+        $this->assertInstanceOf(ResponseLocation::class, $response->getGetLocationsResult()->getResponseLocation()[0]);
+
+        foreach ($response->getGetLocationsResult()->getResponseLocation() as $responseLocation) {
+            foreach (['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] as $day) {
+                foreach ($responseLocation->getOpeningHours()->{"get$day"}() as $time) {
+                    $this->assertMatchesRegularExpression(
+                        '~^(([0-1][0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?)-(([0-1][0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?)$~',
+                        $time
+                    );
+                }
+            }
+        }
     }
 
     /**
@@ -287,7 +301,7 @@ class LocationServiceRestTest extends TestCase
             ])));
 
         $this->assertInstanceOf(GetLocationsInAreaResponse::class, $response);
-        $this->assertEquals(20, count((array) $response->getGetLocationsResult()));
+        $this->assertEquals(20, count((array) $response->getGetLocationsResult()->getResponseLocation()));
     }
 
     /**

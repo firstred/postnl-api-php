@@ -26,6 +26,10 @@
 
 namespace ThirtyBees\PostNL\Entity;
 
+use PharIo\Version\UnsupportedVersionConstraintException;
+use ReflectionException;
+use stdClass;
+use ThirtyBees\PostNL\Exception\NotSupportedException;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
@@ -33,6 +37,8 @@ use ThirtyBees\PostNL\Service\LabellingService;
 use ThirtyBees\PostNL\Service\LocationService;
 use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
+use ThirtyBees\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use function is_string;
 
 /**
  * Class OpeningHours.
@@ -58,7 +64,7 @@ class OpeningHours extends AbstractEntity
 {
     /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode' => [
+        'Barcode'        => [
             'Monday'    => BarcodeService::DOMAIN_NAMESPACE,
             'Tuesday'   => BarcodeService::DOMAIN_NAMESPACE,
             'Wednesday' => BarcodeService::DOMAIN_NAMESPACE,
@@ -67,7 +73,7 @@ class OpeningHours extends AbstractEntity
             'Saturday'  => BarcodeService::DOMAIN_NAMESPACE,
             'Sunday'    => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming' => [
+        'Confirming'     => [
             'Monday'    => ConfirmingService::DOMAIN_NAMESPACE,
             'Tuesday'   => ConfirmingService::DOMAIN_NAMESPACE,
             'Wednesday' => ConfirmingService::DOMAIN_NAMESPACE,
@@ -76,7 +82,7 @@ class OpeningHours extends AbstractEntity
             'Saturday'  => ConfirmingService::DOMAIN_NAMESPACE,
             'Sunday'    => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling' => [
+        'Labelling'      => [
             'Monday'    => LabellingService::DOMAIN_NAMESPACE,
             'Tuesday'   => LabellingService::DOMAIN_NAMESPACE,
             'Wednesday' => LabellingService::DOMAIN_NAMESPACE,
@@ -94,7 +100,7 @@ class OpeningHours extends AbstractEntity
             'Saturday'  => ShippingStatusService::DOMAIN_NAMESPACE,
             'Sunday'    => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate' => [
+        'DeliveryDate'   => [
             'Monday'    => DeliveryDateService::DOMAIN_NAMESPACE,
             'Tuesday'   => DeliveryDateService::DOMAIN_NAMESPACE,
             'Wednesday' => DeliveryDateService::DOMAIN_NAMESPACE,
@@ -103,7 +109,7 @@ class OpeningHours extends AbstractEntity
             'Saturday'  => DeliveryDateService::DOMAIN_NAMESPACE,
             'Sunday'    => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location' => [
+        'Location'       => [
             'Monday'    => LocationService::DOMAIN_NAMESPACE,
             'Tuesday'   => LocationService::DOMAIN_NAMESPACE,
             'Wednesday' => LocationService::DOMAIN_NAMESPACE,
@@ -112,7 +118,7 @@ class OpeningHours extends AbstractEntity
             'Saturday'  => LocationService::DOMAIN_NAMESPACE,
             'Sunday'    => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe' => [
+        'Timeframe'      => [
             'Monday'    => TimeframeService::DOMAIN_NAMESPACE,
             'Tuesday'   => TimeframeService::DOMAIN_NAMESPACE,
             'Wednesday' => TimeframeService::DOMAIN_NAMESPACE,
@@ -168,6 +174,81 @@ class OpeningHours extends AbstractEntity
         $this->setFriday($friday);
         $this->setSaturday($saturday);
         $this->setSunday($sunday);
+    }
+
+    /**
+     * Deserialize opening hours
+     *
+     * @param stdClass $json
+     *
+     * @return OpeningHours
+     *
+     * @throws NotSupportedException
+     * @throws ReflectionException
+     * @throws PostNLInvalidArgumentException
+     */
+    public static function jsonDeserialize(stdClass $json)
+    {
+        if (!isset($json->OpeningHours)) {
+            return parent::jsonDeserialize($json);
+        }
+
+        $openingHours = self::create();
+        foreach (
+            [
+                'Monday',
+                'Tuesday',
+                'Wednesday',
+                'Thursday',
+                'Friday',
+                'Saturday',
+                'Sunday',
+            ] as $day
+        ) {
+            $openingHours->$day = [];
+            if (!isset($json->OpeningHours->$day)) {
+                continue;
+            }
+
+            if (is_array($json->OpeningHours->$day)) {
+                foreach ($json->OpeningHours->$day as $item) {
+                    if (isset($item->string)) {
+                        $openingHours->$day[] = $item->string;
+                    } elseif (is_string($item)) {
+                        $openingHours->$day[] = $item;
+                    } elseif (is_array($item)) {
+                        $openingHours->$day = array_merge($openingHours->$day, $item);
+                    } else {
+                        throw new NotSupportedException('Unable to parse opening hours', 0, $json->OpeningHours->$day);
+                    }
+                }
+            } elseif (isset($json->OpeningHours->$day->string)) {
+                $openingHours->$day[] = $json->OpeningHours->$day->string;
+            } elseif (is_string($json->OpeningHours->$day)) {
+                $openingHours->$day[] = $json->OpeningHours->$day;
+            }
+
+            foreach ($openingHours->$day as &$time) {
+                if (!is_string($time)) {
+                    throw new NotSupportedException('Unable to parse opening hours', 0, $openingHours->$day);
+                }
+                $timeParts = explode('-', $time);
+                if (2 !== count($timeParts)) {
+                    throw new NotSupportedException("Unable to handle time format $time");
+                }
+
+                foreach ($timeParts as &$timePart) {
+                    if (preg_match('~^(([0-1][0-9]|2[0-3]):[0-5][0-9])$~', $timePart)) {
+                        $timePart = "$timePart:00";
+                    } elseif (!preg_match('~^(([0-1][0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?)$~', $timePart)) {
+                        throw new NotSupportedException("Unable to handle time format $time");
+                    }
+                }
+                $time = implode('-', $timeParts);
+            }
+        }
+
+        return $openingHours;
     }
 
     /**

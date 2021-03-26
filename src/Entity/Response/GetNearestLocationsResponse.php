@@ -26,6 +26,7 @@
 
 namespace ThirtyBees\PostNL\Entity\Response;
 
+use stdClass;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
@@ -34,6 +35,9 @@ use ThirtyBees\PostNL\Service\LabellingService;
 use ThirtyBees\PostNL\Service\LocationService;
 use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
+use \ThirtyBees\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use \ThirtyBees\PostNL\Exception\NotSupportedException;
+use function is_array;
 
 /**
  * Class GetNearestLocationsResponse.
@@ -88,6 +92,27 @@ class GetNearestLocationsResponse extends AbstractEntity
         parent::__construct();
 
         $this->setGetLocationsResult($result);
+    }
+
+    /**
+     * @param stdClass $json
+     *
+     * @return mixed|stdClass|null
+     *
+     * @throws PostNLInvalidArgumentException
+     * @throws NotSupportedException
+     *
+     * @since 1.2.0
+     */
+    public static function jsonDeserialize(stdClass $json)
+    {
+        if (isset($json->GetNearestLocationsResponse->GetLocationsResult)
+            && !is_array($json->GetNearestLocationsResponse->GetLocationsResult->ResponseLocation)
+        ) {
+            $json->GetNearestLocationsResponse->GetLocationsResult->ResponseLocation = [$json->GetNearestLocationsResponse->GetLocationsResult->ResponseLocation];
+        }
+
+        return parent::jsonDeserialize($json);
     }
 
     /**

@@ -42,38 +42,38 @@ use ThirtyBees\PostNL\Service\TimeframeService;
 /**
  * Class ResponseLocation.
  *
- * @method Address|null     getAddress()
- * @method string[]|null    getDeliveryOptions()
- * @method string|null      getDistance()
- * @method string|null      getLatitude()
- * @method string|null      getLongitude()
- * @method string|null      getName()
- * @method string[][]|null  getOpeningHours()
- * @method string|null      getPartnerName()
- * @method string|null      getPhoneNumber()
- * @method string|null      getRetailNetworkID()
- * @method string|null      getLocationCode()
- * @method string|null      getSaleschannel()
- * @method string|null      getTerminalType()
- * @method Warning[]|null   getWarnings()
- * @method string|null      getDownPartnerID()
- * @method string|null      getDownPartnerLocation()
- * @method ResponseLocation setAddress(Address|null $address = null)
- * @method ResponseLocation setDeliveryOptions(string[]|null $options)
- * @method ResponseLocation setDistance(string|null $dist = null)
- * @method ResponseLocation setLatitude(string|null $lat = null)
- * @method ResponseLocation setLongitude(string|null $long = null)
- * @method ResponseLocation setName(string|null $name = null)
- * @method ResponseLocation setOpeningHours(string[]|null $hours = null)
- * @method ResponseLocation setPartnerName(string|null $partnerName = null)
- * @method ResponseLocation setPhoneNumber(string|null $number = null)
- * @method ResponseLocation setRetailNetworkID(string|null $id = null)
- * @method ResponseLocation setLocationCode(string|null $code = null)
- * @method ResponseLocation setSaleschannel(string|null $channel = null)
- * @method ResponseLocation setTerminalType(string|null $type = null)
- * @method ResponseLocation setWarnings(Warning[]|null $warnings = null)
- * @method ResponseLocation setDownPartnerID(string|null $downPartnerID = null)
- * @method ResponseLocation setDownPartnerLocation(string|null $downPartnerLocation = null)
+ * @method Address|null      getAddress()
+ * @method string[]|null     getDeliveryOptions()
+ * @method string|null       getDistance()
+ * @method string|null       getLatitude()
+ * @method string|null       getLongitude()
+ * @method string|null       getName()
+ * @method OpeningHours|null getOpeningHours()
+ * @method string|null       getPartnerName()
+ * @method string|null       getPhoneNumber()
+ * @method string|null       getRetailNetworkID()
+ * @method string|null       getLocationCode()
+ * @method string|null       getSaleschannel()
+ * @method string|null       getTerminalType()
+ * @method Warning[]|null    getWarnings()
+ * @method string|null       getDownPartnerID()
+ * @method string|null       getDownPartnerLocation()
+ * @method ResponseLocation  setAddress(Address|null $address = null)
+ * @method ResponseLocation  setDeliveryOptions(string[]|null $options)
+ * @method ResponseLocation  setDistance(string|null $dist = null)
+ * @method ResponseLocation  setLatitude(string|null $lat = null)
+ * @method ResponseLocation  setLongitude(string|null $long = null)
+ * @method ResponseLocation  setName(string|null $name = null)
+ * @method ResponseLocation  setOpeningHours(string[]|null $hours = null)
+ * @method ResponseLocation  setPartnerName(string|null $partnerName = null)
+ * @method ResponseLocation  setPhoneNumber(string|null $number = null)
+ * @method ResponseLocation  setRetailNetworkID(string|null $id = null)
+ * @method ResponseLocation  setLocationCode(string|null $code = null)
+ * @method ResponseLocation  setSaleschannel(string|null $channel = null)
+ * @method ResponseLocation  setTerminalType(string|null $type = null)
+ * @method ResponseLocation  setWarnings(Warning[]|null $warnings = null)
+ * @method ResponseLocation  setDownPartnerID(string|null $downPartnerID = null)
+ * @method ResponseLocation  setDownPartnerLocation(string|null $downPartnerLocation = null)
  *
  * @since 1.0.0
  */
@@ -226,7 +226,7 @@ class ResponseLocation extends AbstractEntity
     protected $Longitude;
     /** @var string|null */
     protected $Name;
-    /** @var string[]|null */
+    /** @var OpeningHours|null */
     protected $OpeningHours;
     /** @var string|null */
     protected $PartnerName;
