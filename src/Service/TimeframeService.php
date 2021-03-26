@@ -41,6 +41,7 @@ use ThirtyBees\PostNL\Entity\ReasonNoTimeframe;
 use ThirtyBees\PostNL\Entity\Request\GetTimeframes;
 use ThirtyBees\PostNL\Entity\Response\ResponseTimeframes;
 use ThirtyBees\PostNL\Entity\SOAP\Security;
+use ThirtyBees\PostNL\Entity\Timeframe;
 use ThirtyBees\PostNL\Entity\TimeframeTimeFrame;
 use ThirtyBees\PostNL\Exception\ApiException;
 use ThirtyBees\PostNL\Exception\CifDownException;
@@ -296,13 +297,16 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
                 }
                 $timeframe->Timeframes = $newTimeframeTimeframe;
 
-                $newTimeframes[] = AbstractEntity::jsonDeserialize((object) ['Timeframe' => $timeframe]);
+                $newTimeframes[] = Timeframe::jsonDeserialize((object) ['Timeframe' => $timeframe]);
             }
             $body->Timeframes = $newTimeframes;
         }
 
         /** @var ResponseTimeframes $object */
-        $object = AbstractEntity::jsonDeserialize((object) ['ResponseTimeframes' => $body]);
+
+        $object = ResponseTimeframes::create();
+        $object->setReasonNoTimeframes($body->ReasonNotimeframes);
+        $object->setTimeframes($body->Timeframes);
         $this->setService($object);
 
         return $object;

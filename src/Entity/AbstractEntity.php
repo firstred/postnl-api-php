@@ -271,12 +271,10 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
 
             // Handle cases where the API returns {} instead of a `null` value
             if ($value instanceof stdClass && empty((array) $value)) {
-                return null;
+                $value = null;
+            } elseif ($value instanceof DateTimeInterface) {
+                $value = $value->format('d-m-Y H:i:s');
             }
-            if ($value instanceof DateTimeInterface) {
-                return $value->format('d-m-Y H:i:s');
-            }
-
 
             if ($singularEntityName = static::shouldBeAnArray($entityFqcn, $propertyName)) {
                 if (null === $value) {

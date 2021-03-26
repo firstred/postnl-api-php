@@ -76,14 +76,14 @@ class CurrentStatusResponse extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var Shipment[]|null */
+    /** @var CurrentStatusResponseShipment[]|null */
     protected $Shipments;
     // @codingStandardsIgnoreEnd
 
     /**
      * CurrentStatusResponse constructor.
      *
-     * @param Shipment[]|null $shipments
+     * @param CurrentStatusResponseShipment[]|null $shipments
      */
     public function __construct(array $shipments = null)
     {

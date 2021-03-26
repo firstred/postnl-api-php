@@ -153,7 +153,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      *   - Fill the Shipment->PhaseCode property, do not pass Barcode or Reference.
      *     Optionally add DateFrom and/or DateTo.
      * - CurrentStatusByStatus:
-     *   - Fill the Shipment->StatuCode property. Leave the rest empty.
+     *   - Fill the Shipment->StatusCode property. Leave the rest empty.
      *
      * @param CompleteStatus $completeStatus
      *
@@ -271,8 +271,6 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * This function auto-detects and adjusts the following requests:
      * - CurrentStatus
      * - CurrentStatusByReference
-     * - CurrentStatusByPhase
-     * - CurrentStatusByStatus
      *
      * @param CurrentStatus|CurrentStatusByReference|CurrentStatusByPhase|CurrentStatusByStatus $currentStatus
      *
@@ -353,7 +351,9 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
         $body = json_decode(static::getResponseText($response));
         if (isset($body->CurrentStatus)) {
             /** @var CurrentStatusResponse $object */
-            $object = AbstractEntity::jsonDeserialize((object) ['CurrentStatusResponse' => $body]);
+            $object = AbstractEntity::jsonDeserialize((object) ['CurrentStatusResponse' => (object) [
+                'Shipments' => $body->CurrentStatus->Shipment,
+            ]]);
             $this->setService($object);
 
             return $object;
@@ -555,7 +555,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
     {
         $body = json_decode(static::getResponseText($response));
         /** @var GetSignatureResponseSignature $object */
-        $object = AbstractEntity::jsonDeserialize((object) ['GetSignatureResponseSignature' => $body]);
+        $object = AbstractEntity::jsonDeserialize((object) ['GetSignatureResponseSignature' => $body->Signature]);
         $this->setService($object);
 
         return $object;

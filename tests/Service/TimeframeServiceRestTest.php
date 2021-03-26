@@ -355,10 +355,10 @@ class TimeframeServiceRestTest extends ServiceTest
         // Should be a ResponseTimeframes instance
         $this->assertInstanceOf(ResponseTimeframes::class, $responseTimeframes);
         // Check for data loss
-        $this->assertEquals(5, count($responseTimeframes->getReasonNoTimeframes()));
-        $this->assertEquals(6, count($responseTimeframes->getTimeframes()));
+        $this->assertCount(5, $responseTimeframes->getReasonNoTimeframes());
+        $this->assertCount(6, $responseTimeframes->getTimeframes());
         $this->assertInstanceOf(Timeframe::class, $responseTimeframes->getTimeframes()[0]);
-        $this->assertEquals(json_encode($payload), json_encode($responseTimeframes));
+        $this->assertJsonStringEqualsJsonString(json_encode($payload), json_encode($responseTimeframes));
         $this->assertNotTrue($this->containsStdClass($responseTimeframes));
     }
 }
