@@ -118,8 +118,13 @@ use function base64_decode;
 use function class_exists;
 use function constant;
 use function defined;
+use function ini_get;
 use function interface_exists;
+use function opcache_get_status;
+use function php_sapi_name;
+use function trigger_error;
 use function version_compare;
+use const E_USER_WARNING;
 
 /**
  * Class PostNL.
@@ -288,6 +293,8 @@ class PostNL implements LoggerAwareInterface
         $sandbox,
         $mode = self::MODE_REST
     ) {
+        $this->checkEnvironment();
+
         $this->setCustomer($customer);
         $this->setToken($apiKey);
         $this->setSandbox((bool) $sandbox);
@@ -1899,5 +1906,26 @@ class PostNL implements LoggerAwareInterface
         }
 
         return $serie;
+    }
+
+    /**
+     * Check whether this library will work in the current environment
+     *
+     * @since 1.2.0
+     */
+    private function checkEnvironment()
+    {
+        // Check access to `ini_get` function && check OPCache save_comments setting
+        if (function_exists('ini_get')
+            && (php_sapi_name() === 'cli' && ini_get('opcache.enable_cli')
+                || php_sapi_name() !== 'cli' && ini_get('opcache.enable')
+            )
+            && !ini_get('opcache.save_comments')
+        ) {
+            trigger_error(
+                'OPCache has been enabled, but comments are removed from the cache. Please set `opcache.save_comments` to `1` in order to use the PostNL library.',
+                E_USER_WARNING
+            );
+        }
     }
 }
