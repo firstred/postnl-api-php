@@ -26,8 +26,11 @@
 
 namespace ThirtyBees\PostNL\Entity;
 
+use ArrayAccess;
+use Iterator;
 use ReflectionException;
 use stdClass;
+use ThirtyBees\PostNL\Exception\InvalidArgumentException;
 use ThirtyBees\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use ThirtyBees\PostNL\Exception\NotSupportedException;
 use ThirtyBees\PostNL\Service\BarcodeService;
@@ -37,6 +40,7 @@ use ThirtyBees\PostNL\Service\LabellingService;
 use ThirtyBees\PostNL\Service\LocationService;
 use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
+use function is_numeric;
 use function is_string;
 
 /**
@@ -59,8 +63,10 @@ use function is_string;
  *
  * @since 1.0.0
  */
-class OpeningHours extends AbstractEntity
+class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
 {
+    private $currentDay = 0;
+
     /** @var string[][] */
     public static $defaultProperties = [
         'Barcode'        => [
@@ -263,5 +269,159 @@ class OpeningHours extends AbstractEntity
         }
 
         return $array;
+    }
+
+    /**
+     * @param mixed $offset
+     *
+     * @return bool
+     *
+     * @since 1.2.0
+     */
+    public function offsetExists($offset)
+    {
+        // Access as $openingHours['Monday']
+        return isset($this->$offset);
+    }
+
+    /**
+     * @param mixed $offset
+     *
+     * @return array
+     *
+     * @throws PostNLInvalidArgumentException
+     *
+     * @since 1.2.0
+     */
+    public function offsetGet($offset)
+    {
+        // Always return an array when accessing this object as an array
+        if ($this->offsetExists($offset)) {
+            $timeframes = $this->$offset;
+            if (null === $timeframes) {
+                return [];
+            }
+            return $timeframes;
+        }
+
+        if (is_int($offset) || is_float($offset) || is_string($offset)) {
+            throw new InvalidArgumentException("Given offset $offset does not exist");
+        }
+
+        throw new InvalidArgumentException("Given offset does not exist");
+    }
+
+    /**
+     * @param mixed $offset
+     * @param mixed $value
+     *
+     * @since 1.2.0
+     */
+    public function offsetSet($offset, $value)
+    {
+        if ($this->offsetExists($offset)) {
+            $this->{"set$offset"}($value);
+        }
+    }
+
+    /**
+     * @param mixed $offset
+     *
+     * @since 1.2.0
+     */
+    public function offsetUnset($offset)
+    {
+        if ($this->offsetExists($offset)) {
+            unset($this->$offset);
+        }
+    }
+
+    /**
+     * @return mixed
+     *
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
+     *
+     * @since 1.2.0
+     */
+    public function current()
+    {
+        if (!$this->valid()) {
+            throw new InvalidArgumentException('Offset does not exist');
+        }
+
+        return $this->{"get".static::findCurrentDayString($this->currentDay)}();
+    }
+
+    /**
+     * @since 1.2.0
+     */
+    public function next()
+    {
+        ++$this->currentDay;
+        // TODO: Implement next() method.
+    }
+
+    /**
+     * @return string
+     *
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
+     *
+     * @since 1.2.0
+     */
+    public function key()
+    {
+        return static::findCurrentDayString($this->currentDay);
+    }
+
+    /**
+     * @return bool
+     *
+     * @since 1.2.0
+     */
+    public function valid()
+    {
+        try {
+            static::findCurrentDayString($this->currentDay);
+            return true;
+        } catch (InvalidArgumentException $e) {
+            return false;
+        } catch (NotSupportedException $e) {
+            return false;
+        }
+    }
+
+    /**
+     * @since 1.2.0
+     */
+    public function rewind()
+    {
+        $this->currentDay = 0;
+    }
+
+    /**
+     * @param mixed $currentDay
+     *
+     * @return string
+     *
+     * @throws NotSupportedException
+     * @throws InvalidArgumentException
+     *
+     * @since 1.2.0
+     */
+    private static function findCurrentDayString($currentDay)
+    {
+        if (!is_numeric($currentDay)) {
+            throw new NotSupportedException("Given current day is not a number");
+        }
+
+        $days = array_keys(static::$defaultProperties['Barcode']);
+
+        if (!isset($days)) {
+            throw new InvalidArgumentException('Invalid current day offset');
+        }
+
+        return $days[$currentDay];
     }
 }
