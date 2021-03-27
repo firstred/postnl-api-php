@@ -37,6 +37,7 @@ use Psr\Cache\InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
 use ReflectionClass;
 use ReflectionException;
+use ReflectionObject;
 use Sabre\Xml\Writer;
 use SimpleXMLElement;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
@@ -394,6 +395,14 @@ abstract class AbstractService
         }
     }
 
+    /**
+     * Write default date format in XML
+     *
+     * @param Writer            $writer
+     * @param DateTimeImmutable $value
+     *
+     * @since 1.2.0
+     */
     public static function defaultDateFormat(Writer $writer, DateTimeImmutable $value)
     {
         $writer->write($value->format('d-m-Y H:i:s'));
