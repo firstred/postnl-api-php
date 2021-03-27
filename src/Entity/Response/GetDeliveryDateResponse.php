@@ -29,7 +29,6 @@ namespace ThirtyBees\PostNL\Entity\Response;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Exception;
-use http\Exception\InvalidArgumentException;
 use ReflectionException;
 use Sabre\Xml\Writer;
 use stdClass;

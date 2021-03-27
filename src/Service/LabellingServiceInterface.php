@@ -26,18 +26,18 @@
 
 namespace ThirtyBees\PostNL\Service;
 
+use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use ReflectionException;
+use Sabre\Xml\LibXMLException;
 use ThirtyBees\PostNL\Entity\Request\GenerateLabel;
 use ThirtyBees\PostNL\Entity\Response\GenerateLabelResponse;
 use ThirtyBees\PostNL\Exception\ApiException;
 use ThirtyBees\PostNL\Exception\CifDownException;
 use ThirtyBees\PostNL\Exception\CifException;
-use ThirtyBees\PostNL\Exception\ResponseException;
-use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
-use ReflectionException;
-use Sabre\Xml\LibXMLException;
 use ThirtyBees\PostNL\Exception\HttpClientException;
+use ThirtyBees\PostNL\Exception\ResponseException;
 
 /**
  * Class LabellingService.

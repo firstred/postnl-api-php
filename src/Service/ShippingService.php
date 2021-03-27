@@ -32,7 +32,6 @@ use Psr\Cache\CacheItemInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use ReflectionException;
-use ThirtyBees\PostNL\Entity\AbstractEntity;
 use ThirtyBees\PostNL\Entity\Request\GenerateShipping;
 use ThirtyBees\PostNL\Entity\Response\GenerateShippingResponse;
 use ThirtyBees\PostNL\Exception\ApiException;

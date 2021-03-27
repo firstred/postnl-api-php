@@ -26,8 +26,6 @@
 
 namespace ThirtyBees\PostNL\Entity\Response;
 
-use InvalidArgumentException;
-use Sabre\Xml\Writer;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
 use ThirtyBees\PostNL\Entity\ReasonNoTimeframe;
 use ThirtyBees\PostNL\Entity\Timeframe;

@@ -39,7 +39,6 @@ use ThirtyBees\PostNL\Service\LocationService;
 use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
 use function is_string;
-use function is_subclass_of;
 
 /**
  * Class CompleteStatusResponseOldStatus.

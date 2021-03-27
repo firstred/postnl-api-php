@@ -28,6 +28,8 @@ namespace ThirtyBees\PostNL\Entity\Response;
 
 use stdClass;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
+use ThirtyBees\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use ThirtyBees\PostNL\Exception\NotSupportedException;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
@@ -35,8 +37,6 @@ use ThirtyBees\PostNL\Service\LabellingService;
 use ThirtyBees\PostNL\Service\LocationService;
 use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
-use \ThirtyBees\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
-use \ThirtyBees\PostNL\Exception\NotSupportedException;
 use function is_array;
 
 /**

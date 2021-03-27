@@ -27,11 +27,13 @@
 namespace ThirtyBees\PostNL\Service;
 
 use DateTimeImmutable;
+use GuzzleHttp\Psr7\Message as PsrMessage;
 use InvalidArgumentException;
-use ThirtyBees\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use Psr\Cache\CacheItemInterface;
+use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use ReflectionException;
 use Sabre\Xml\LibXMLException;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Service as XmlService;
@@ -49,12 +51,10 @@ use ThirtyBees\PostNL\Entity\SOAP\Security;
 use ThirtyBees\PostNL\Exception\ApiException;
 use ThirtyBees\PostNL\Exception\CifDownException;
 use ThirtyBees\PostNL\Exception\CifException;
+use ThirtyBees\PostNL\Exception\HttpClientException;
+use ThirtyBees\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use ThirtyBees\PostNL\Exception\NotSupportedException;
 use ThirtyBees\PostNL\Exception\ResponseException;
-use GuzzleHttp\Psr7\Message as PsrMessage;
-use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
-use ThirtyBees\PostNL\Exception\HttpClientException;
-use ReflectionException;
 
 /**
  * Class LocationService.

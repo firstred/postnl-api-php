@@ -26,11 +26,9 @@
 
 namespace ThirtyBees\PostNL\Entity\Message;
 
-use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Exception;
-use Sabre\Xml\Writer;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
 use ThirtyBees\PostNL\Exception\InvalidArgumentException;
 use ThirtyBees\PostNL\Service\BarcodeService;
@@ -41,8 +39,6 @@ use ThirtyBees\PostNL\Service\LocationService;
 use ThirtyBees\PostNL\Service\ShippingService;
 use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
-use function array_keys;
-use function in_array;
 
 /**
  * Class Message.

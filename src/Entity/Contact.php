@@ -26,7 +26,9 @@
 
 namespace ThirtyBees\PostNL\Entity;
 
+use libphonenumber\NumberParseException;
 use libphonenumber\PhoneNumberFormat;
+use libphonenumber\PhoneNumberUtil;
 use ThirtyBees\PostNL\Service\BarcodeService;
 use ThirtyBees\PostNL\Service\ConfirmingService;
 use ThirtyBees\PostNL\Service\DeliveryDateService;
@@ -35,8 +37,6 @@ use ThirtyBees\PostNL\Service\LocationService;
 use ThirtyBees\PostNL\Service\ShippingService;
 use ThirtyBees\PostNL\Service\ShippingStatusService;
 use ThirtyBees\PostNL\Service\TimeframeService;
-use libphonenumber\PhoneNumberUtil;
-use libphonenumber\NumberParseException;
 use function class_exists;
 use function is_null;
 

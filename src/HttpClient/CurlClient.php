@@ -27,13 +27,12 @@
 namespace ThirtyBees\PostNL\HttpClient;
 
 use Exception;
+use GuzzleHttp\Psr7\Message as PsrMessage;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use ThirtyBees\PostNL\Exception\ApiConnectionException;
-use ThirtyBees\PostNL\Exception\ApiException;
-use GuzzleHttp\Psr7\Message as PsrMessage;
 use ThirtyBees\PostNL\Exception\HttpClientException;
 
 if (!defined('CURL_SSLVERSION_TLSv1')) {

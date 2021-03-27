@@ -26,7 +26,6 @@
 
 namespace ThirtyBees\PostNL\Entity\Response;
 
-use stdClass;
 use ThirtyBees\PostNL\Entity\AbstractEntity;
 use ThirtyBees\PostNL\Entity\Address;
 use ThirtyBees\PostNL\Entity\OpeningHours;
