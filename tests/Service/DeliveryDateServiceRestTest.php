@@ -31,6 +31,7 @@ use DateTimeInterface;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Message as PsrMessage;
+use GuzzleHttp\Psr7\Query;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use libphonenumber\NumberParseException;
@@ -113,7 +114,7 @@ class DeliveryDateServiceRestTest extends ServiceTest
 
         global $logger;
         if ($logger instanceof LoggerInterface) {
-            $logger->debug($this->getName()." Request\n".\GuzzleHttp\Psr7\str($this->lastRequest));
+            $logger->debug($this->getName()." Request\n".PsrMessage::toString($this->lastRequest));
         }
         $this->lastRequest = null;
     }
@@ -148,7 +149,7 @@ class DeliveryDateServiceRestTest extends ServiceTest
                 ->setMessage($message)
         );
 
-        $query = \GuzzleHttp\Psr7\parse_query($request->getUri()->getQuery());
+        $query = Query::parse($request->getUri()->getQuery());
 
         $this->assertEquals([
             'ShippingDate'     => '29-06-2016 14:00:00',

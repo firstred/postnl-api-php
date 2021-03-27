@@ -29,6 +29,8 @@ namespace ThirtyBees\PostNL\Tests\Service;
 use Cache\Adapter\Void\VoidCachePool;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Message as PsrMessage;
+use GuzzleHttp\Psr7\Query;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Psr\Log\LoggerInterface;
@@ -102,7 +104,7 @@ class TimeframeServiceRestTest extends ServiceTest
 
         global $logger;
         if ($logger instanceof LoggerInterface) {
-            $logger->debug($this->getName()." Request\n".\GuzzleHttp\Psr7\str($this->lastRequest));
+            $logger->debug($this->getName()." Request\n".PsrMessage::toString($this->lastRequest));
         }
         $this->lastRequest = null;
     }
@@ -134,7 +136,7 @@ class TimeframeServiceRestTest extends ServiceTest
                 ])
         );
 
-        $query = \GuzzleHttp\Psr7\parse_query($request->getUri()->getQuery());
+        $query = Query::parse($request->getUri()->getQuery());
 
         $this->assertEquals([
             'AllowSundaySorting' => '1',

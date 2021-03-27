@@ -111,7 +111,7 @@ class ConfirmingServiceRestTest extends ServiceTest
 
         global $logger;
         if ($logger instanceof LoggerInterface) {
-            $logger->debug($this->getName()." Request\n".\GuzzleHttp\Psr7\str($this->lastRequest));
+            $logger->debug($this->getName()." Request\n".PsrMessage::toString($this->lastRequest));
         }
         $this->lastRequest = null;
     }

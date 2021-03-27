@@ -29,6 +29,7 @@ namespace ThirtyBees\PostNL\Tests\Service;
 use Cache\Adapter\Void\VoidCachePool;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Message as PsrMessage;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Psr\Log\LoggerInterface;
@@ -102,7 +103,7 @@ class TimeframeServiceSoapTest extends ServiceTest
 
         global $logger;
         if ($logger instanceof LoggerInterface) {
-            $logger->debug($this->getName()." Request\n".\GuzzleHttp\Psr7\str($this->lastRequest));
+            $logger->debug($this->getName()." Request\n".PsrMessage::toString($this->lastRequest));
         }
         $this->lastRequest = null;
     }

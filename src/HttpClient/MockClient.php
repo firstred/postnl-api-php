@@ -43,8 +43,6 @@ use ThirtyBees\PostNL\Exception\ResponseException;
  * Class MockClient.
  *
  * @since 1.0.0
- *
- * @deprecated 2.0.0 Please use HTTPlug
  */
 class MockClient implements ClientInterface, LoggerAwareInterface
 {

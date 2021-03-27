@@ -31,6 +31,7 @@ use DateTimeInterface;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Message as PsrMessage;
+use GuzzleHttp\Psr7\Query;
 use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
@@ -112,7 +113,7 @@ class ShippingStatusServiceRestTest extends ServiceTest
 
         global $logger;
         if ($logger instanceof LoggerInterface) {
-            $logger->debug($this->getName()." Request\n".\GuzzleHttp\Psr7\str($this->lastRequest));
+            $logger->debug($this->getName()." Request\n".PsrMessage::toString($this->lastRequest));
         }
         $this->lastRequest = null;
     }
@@ -134,7 +135,7 @@ class ShippingStatusServiceRestTest extends ServiceTest
                 ->setMessage($message)
         );
 
-        $query = \GuzzleHttp\Psr7\parse_query($request->getUri()->getQuery());
+        $query = Query::parse($request->getUri()->getQuery());
 
         $this->assertEmpty($query);
         $this->assertEquals('test', $request->getHeaderLine('apikey'));
@@ -186,7 +187,7 @@ class ShippingStatusServiceRestTest extends ServiceTest
                 ->setMessage($message)
         );
 
-        $query = \GuzzleHttp\Psr7\parse_query($request->getUri()->getQuery());
+        $query = Query::parse($request->getUri()->getQuery());
 
         $this->assertEquals([
             'customerCode'   => $this->postnl->getCustomer()->getCustomerCode(),
@@ -214,7 +215,7 @@ class ShippingStatusServiceRestTest extends ServiceTest
                 ->setMessage($message)
         );
 
-        $query = \GuzzleHttp\Psr7\parse_query($request->getUri()->getQuery());
+        $query = Query::parse($request->getUri()->getQuery());
 
         $this->assertEquals([
             'detail' => 'true',
@@ -274,7 +275,7 @@ class ShippingStatusServiceRestTest extends ServiceTest
                 ->setMessage($message)
         );
 
-        $query = \GuzzleHttp\Psr7\parse_query($request->getUri()->getQuery());
+        $query = Query::parse($request->getUri()->getQuery());
 
         $this->assertEquals([
             'customerCode'   => $this->postnl->getCustomer()->getCustomerCode(),
@@ -303,7 +304,7 @@ class ShippingStatusServiceRestTest extends ServiceTest
                 )
         );
 
-        $query = \GuzzleHttp\Psr7\parse_query($request->getUri()->getQuery());
+        $query = Query::parse($request->getUri()->getQuery());
 
         $this->assertEmpty($query);
         $this->assertEquals('test', $request->getHeaderLine('apikey'));

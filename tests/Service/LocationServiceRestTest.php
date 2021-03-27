@@ -30,6 +30,7 @@ use Cache\Adapter\Void\VoidCachePool;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Message as PsrMessage;
+use GuzzleHttp\Psr7\Query;
 use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
@@ -148,7 +149,7 @@ class LocationServiceRestTest extends ServiceTest
                 ]))
         );
 
-        $query = \GuzzleHttp\Psr7\parse_query($request->getUri()->getQuery());
+        $query = Query::parse($request->getUri()->getQuery());
 
         $this->assertEqualsCanonicalizing([
             'DeliveryOptions' => 'PG',
@@ -248,7 +249,7 @@ class LocationServiceRestTest extends ServiceTest
                 ]))
         );
 
-        $query = \GuzzleHttp\Psr7\parse_query($request->getUri()->getQuery());
+        $query = Query::parse($request->getUri()->getQuery());
 
         $this->assertEqualsCanonicalizing([
             'DeliveryOptions' => 'PG',
@@ -321,7 +322,7 @@ class LocationServiceRestTest extends ServiceTest
                 ->setRetailNetworkID('PNPNL-01')
         );
 
-        $query = \GuzzleHttp\Psr7\parse_query($request->getUri()->getQuery());
+        $query = Query::parse($request->getUri()->getQuery());
 
         $this->assertEqualsCanonicalizing([
             'LocationCode'    => '161503',
