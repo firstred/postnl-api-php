@@ -170,4 +170,124 @@ class Status extends AbstractEntity
 
         return $this;
     }
+
+    /**
+     * Backward compatible with SOAP API
+     *
+     * @return string|null
+     *
+     * @since 1.2.0
+     */
+    public function getCurrentStatusPhaseCode()
+    {
+        return $this->PhaseCode;
+    }
+
+    /**
+     * Backward compatible with SOAP API
+     *
+     * @return string|null
+     *
+     * @since 1.2.0
+     */
+    public function getCurrentStatusPhaseDescription()
+    {
+        return $this->PhaseDescription;
+    }
+
+    /**
+     * Backward compatible with SOAP API
+     *
+     * @return string|null
+     *
+     * @since 1.2.0
+     */
+    public function getCurrentStatusStatusCode()
+    {
+        return $this->PhaseDescription;
+    }
+
+    /**
+     * Backward compatible with SOAP API
+     *
+     * @return string|null
+     *
+     * @since 1.2.0
+     */
+    public function getCurrentStatusStatusDescription()
+    {
+        return $this->PhaseDescription;
+    }
+
+    /**
+     * Backward compatible with SOAP API
+     *
+     * @return string|null
+     *
+     * @since 1.2.0
+     */
+    public function getCurrentStatusTimeStamp()
+    {
+        return $this->PhaseDescription;
+    }
+
+    /**
+     * Backward compatible with SOAP API
+     *
+     * @return string|null
+     *
+     * @since 1.2.0
+     */
+    public function getCompleteStatusPhaseCode()
+    {
+        return $this->PhaseCode;
+    }
+
+    /**
+     * Backward compatible with SOAP API
+     *
+     * @return string|null
+     *
+     * @since 1.2.0
+     */
+    public function getCompleteStatusPhaseDescription()
+    {
+        return $this->PhaseDescription;
+    }
+
+    /**
+     * Backward compatible with SOAP API
+     *
+     * @return string|null
+     *
+     * @since 1.2.0
+     */
+    public function getCompleteStatusStatusCode()
+    {
+        return $this->PhaseDescription;
+    }
+
+    /**
+     * Backward compatible with SOAP API
+     *
+     * @return string|null
+     *
+     * @since 1.2.0
+     */
+    public function getCompleteStatusStatusDescription()
+    {
+        return $this->PhaseDescription;
+    }
+
+    /**
+     * Backward compatible with SOAP API
+     *
+     * @return string|null
+     *
+     * @since 1.2.0
+     */
+    public function getCompleteStatusTimeStamp()
+    {
+        return $this->PhaseDescription;
+    }
 }
