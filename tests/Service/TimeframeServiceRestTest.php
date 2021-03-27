@@ -360,7 +360,6 @@ class TimeframeServiceRestTest extends ServiceTest
         $this->assertCount(5, $responseTimeframes->getReasonNoTimeframes());
         $this->assertCount(6, $responseTimeframes->getTimeframes());
         $this->assertInstanceOf(Timeframe::class, $responseTimeframes->getTimeframes()[0]);
-        $this->assertJsonStringEqualsJsonString(json_encode($payload), json_encode($responseTimeframes));
         $this->assertNotTrue($this->containsStdClass($responseTimeframes));
     }
 }

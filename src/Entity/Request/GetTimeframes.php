@@ -42,9 +42,7 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * Class GetTimeframes.
  *
  * @method Message|null     getMessage()
- * @method Timeframe[]|null getTimeframe()
  * @method GetTimeframes    setMessage(Message|null $message = null)
- * @method GetTimeframes    setTimeframe(Timeframe[]|null $timeframes = null)
  *
  * @since 1.0.0
  */
@@ -104,6 +102,65 @@ class GetTimeframes extends AbstractEntity
 
         $this->setMessage($message ?: new Message());
         $this->setTimeframe($timeframes);
+    }
+
+    /**
+     * Set timeframes
+     *
+     * @param Timeframe|Timeframe[]|null $timeframes
+     *
+     * @return $this
+     *
+     * @since 1.0.0
+     * @since 1.2.0 Accept singular timeframe object
+     */
+    public function setTimeframe($timeframes)
+    {
+        return $this->setTimeframes($timeframes);
+    }
+
+    /**
+     * Set timeframes
+     *
+     * @param Timeframe|Timeframe[]|null $timeframes
+     *
+     * @return $this
+     *
+     * @since 1.2.0
+     */
+    public function setTimeframes($timeframes)
+    {
+        if ($timeframes instanceof Timeframe) {
+            $timeframes = [$timeframes];
+        }
+
+        $this->Timeframe = $timeframes;
+
+        return $this;
+    }
+
+    /**
+     * Get timeframes
+     *
+     * @return Timeframe[]|null
+     *
+     * @sinc 1.0.0
+     */
+    public function getTimeframe()
+    {
+        return $this->getTimeframes();
+    }
+
+    /**
+     * Get timeframes
+     *
+     * @return Timeframe[]|null
+     *
+     * @since 1.2.0
+     */
+    public function getTimeframes()
+    {
+        return $this->Timeframe;
     }
 
     /**
