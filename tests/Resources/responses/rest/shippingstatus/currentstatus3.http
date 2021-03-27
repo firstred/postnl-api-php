@@ -1,0 +1,88 @@
+HTTP/1.1 200 OK
+Content-Type: application/json;charset=utf-8
+
+{
+  "CurrentStatus": {
+    "Shipment": {
+      "MainBarcode": "3SABCD987040009",
+      "Barcode": "3SABCD987040009",
+      "ShipmentAmount": "1",
+      "ShipmentCounter": "1",
+      "Customer": {
+        "CustomerCode": "ABCD",
+        "CustomerNumber": "12345678",
+        "Name": "Bedrijf"
+      },
+      "ProductCode": "003087",
+      "ProductDescription": "Verhoogde Aansprakelijkheid Zending",
+      "Reference": {},
+      "Dimension": {
+        "Height": "155",
+        "Length": "265",
+        "Volume": "6572",
+        "Weight": "520",
+        "Width": "160"
+      },
+      "Address": [
+        {
+          "AddressType": "01",
+          "Building": {},
+          "City": "Alkmaar",
+          "CompanyName": {},
+          "CountryCode": "NL",
+          "DepartmentName": {},
+          "District": {},
+          "FirstName": {},
+          "Floor": {},
+          "HouseNumber": "35",
+          "HouseNumberSuffix": {},
+          "LastName": "NAAM",
+          "Region": {},
+          "Remark": {},
+          "Street": "Straat",
+          "Zipcode": "1235JD"
+        },
+        {
+          "AddressType": "02",
+          "Building": {},
+          "City": "Afzenderstad",
+          "CompanyName": "Afzender",
+          "CountryCode": "NL",
+          "DepartmentName": {},
+          "District": {},
+          "FirstName": {},
+          "Floor": {},
+          "HouseNumber": "1",
+          "HouseNumberSuffix": {},
+          "LastName": {},
+          "Region": {},
+          "Remark": {},
+          "Street": "test",
+          "Zipcode": "1123EC"
+        }
+      ],
+      "ProductOptions": [
+        {
+          "OptionCode": "1",
+          "CharacteristicCode": "112"
+        },
+        {
+          "OptionDescription": "Bezorging door ontvanger veranderd volgens bezorgpaspoort",
+          "OptionCode": "11",
+          "CharacteristicCode": "119"
+        },
+        {
+          "OptionCode": "13",
+          "CharacteristicCode": "119"
+        }
+      ],
+      "Status": {
+        "TimeStamp": "26-02-2021 12:54:08",
+        "StatusCode": "11",
+        "StatusDescription": "Zending afgeleverd",
+        "PhaseCode": "4",
+        "PhaseDescription": "Afgeleverd"
+      }
+    }
+  }
+}

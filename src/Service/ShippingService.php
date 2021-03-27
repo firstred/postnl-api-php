@@ -168,7 +168,7 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
         $body = json_decode(static::getResponseText($response));
         if (isset($body->ResponseShipments)) {
             /** @var GenerateShippingResponse $object */
-            $object = AbstractEntity::JsonDeserialize((object) ['GenerateShippingResponse' => $body]);
+            $object = GenerateShippingResponse::JsonDeserialize((object) ['GenerateShippingResponse' => $body]);
             $this->setService($object);
 
             return $object;

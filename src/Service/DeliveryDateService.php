@@ -560,7 +560,7 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
         $body = json_decode(static::getResponseText($response));
         if (isset($body->SentDate)) {
             /** @var GetSentDateResponse $object */
-            $object = AbstractEntity::jsonDeserialize((object) ['GetSentDateResponse' => $body]);
+            $object = GetSentDateResponse::jsonDeserialize((object) ['GetSentDateResponse' => $body]);
             $this->setService($object);
 
             return $object;

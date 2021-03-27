@@ -41,15 +41,15 @@ use ThirtyBees\PostNL\Service\TimeframeService;
 /**
  * Class Status.
  *
- * @method string|null            getCurrentPhaseCode()
- * @method string|null            getCurrentPhaseDescription()
- * @method string|null            getCurrentStatusCode()
- * @method string|null            getCurrentStatusDescription()
- * @method DateTimeInterface|null getCurrentStatusTimeStamp()
- * @method Status                 setCurrentPhaseCode(string|null $code = null)
- * @method Status                 setCurrentPhaseDescription(string|null $desc = null)
- * @method Status                 setCurrentStatusCode(string|null $code = null)
- * @method Status                 setCurrentStatusDescription(string|null $desc = null)
+ * @method string|null            getPhaseCode()
+ * @method string|null            getPhaseDescription()
+ * @method string|null            getStatusCode()
+ * @method string|null            getStatusDescription()
+ * @method DateTimeInterface|null getTimeStamp()
+ * @method Status                 setPhaseCode(string|null $code = null)
+ * @method Status                 setPhaseDescription(string|null $desc = null)
+ * @method Status                 setStatusCode(string|null $code = null)
+ * @method Status                 setStatusDescription(string|null $desc = null)
  *
  * @since 1.0.0
  */
@@ -57,71 +57,71 @@ class Status extends AbstractEntity
 {
     /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode' => [
-            'CurrentPhaseCode'         => BarcodeService::DOMAIN_NAMESPACE,
-            'CurrentPhaseDescription'  => BarcodeService::DOMAIN_NAMESPACE,
-            'CurrentStatusCode'        => BarcodeService::DOMAIN_NAMESPACE,
-            'CurrentStatusDescription' => BarcodeService::DOMAIN_NAMESPACE,
-            'CurrentStatusTimeStamp'   => BarcodeService::DOMAIN_NAMESPACE,
+        'Barcode'        => [
+            'PhaseCode'         => BarcodeService::DOMAIN_NAMESPACE,
+            'PhaseDescription'  => BarcodeService::DOMAIN_NAMESPACE,
+            'StatusCode'        => BarcodeService::DOMAIN_NAMESPACE,
+            'StatusDescription' => BarcodeService::DOMAIN_NAMESPACE,
+            'TimeStamp'         => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming' => [
-            'CurrentPhaseCode'         => ConfirmingService::DOMAIN_NAMESPACE,
-            'CurrentPhaseDescription'  => ConfirmingService::DOMAIN_NAMESPACE,
-            'CurrentStatusCode'        => ConfirmingService::DOMAIN_NAMESPACE,
-            'CurrentStatusDescription' => ConfirmingService::DOMAIN_NAMESPACE,
-            'CurrentStatusTimeStamp'   => ConfirmingService::DOMAIN_NAMESPACE,
+        'Confirming'     => [
+            'PhaseCode'         => ConfirmingService::DOMAIN_NAMESPACE,
+            'PhaseDescription'  => ConfirmingService::DOMAIN_NAMESPACE,
+            'StatusCode'        => ConfirmingService::DOMAIN_NAMESPACE,
+            'StatusDescription' => ConfirmingService::DOMAIN_NAMESPACE,
+            'TimeStamp'         => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling' => [
-            'CurrentPhaseCode'         => LabellingService::DOMAIN_NAMESPACE,
-            'CurrentPhaseDescription'  => LabellingService::DOMAIN_NAMESPACE,
-            'CurrentStatusCode'        => LabellingService::DOMAIN_NAMESPACE,
-            'CurrentStatusDescription' => LabellingService::DOMAIN_NAMESPACE,
-            'CurrentStatusTimeStamp'   => LabellingService::DOMAIN_NAMESPACE,
+        'Labelling'      => [
+            'PhaseCode'         => LabellingService::DOMAIN_NAMESPACE,
+            'PhaseDescription'  => LabellingService::DOMAIN_NAMESPACE,
+            'StatusCode'        => LabellingService::DOMAIN_NAMESPACE,
+            'StatusDescription' => LabellingService::DOMAIN_NAMESPACE,
+            'TimeStamp'         => LabellingService::DOMAIN_NAMESPACE,
         ],
         'ShippingStatus' => [
-            'CurrentPhaseCode'         => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CurrentPhaseDescription'  => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CurrentStatusCode'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CurrentStatusDescription' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CurrentStatusTimeStamp'   => ShippingStatusService::DOMAIN_NAMESPACE,
+            'PhaseCode'         => ShippingStatusService::DOMAIN_NAMESPACE,
+            'PhaseDescription'  => ShippingStatusService::DOMAIN_NAMESPACE,
+            'StatusCode'        => ShippingStatusService::DOMAIN_NAMESPACE,
+            'StatusDescription' => ShippingStatusService::DOMAIN_NAMESPACE,
+            'TimeStamp'         => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate' => [
-            'CurrentPhaseCode'         => DeliveryDateService::DOMAIN_NAMESPACE,
-            'CurrentPhaseDescription'  => DeliveryDateService::DOMAIN_NAMESPACE,
-            'CurrentStatusCode'        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'CurrentStatusDescription' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'CurrentStatusTimeStamp'   => DeliveryDateService::DOMAIN_NAMESPACE,
+        'DeliveryDate'   => [
+            'PhaseCode'         => DeliveryDateService::DOMAIN_NAMESPACE,
+            'PhaseDescription'  => DeliveryDateService::DOMAIN_NAMESPACE,
+            'StatusCode'        => DeliveryDateService::DOMAIN_NAMESPACE,
+            'StatusDescription' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'TimeStamp'         => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location' => [
-            'CurrentPhaseCode'         => LocationService::DOMAIN_NAMESPACE,
-            'CurrentPhaseDescription'  => LocationService::DOMAIN_NAMESPACE,
-            'CurrentStatusCode'        => LocationService::DOMAIN_NAMESPACE,
-            'CurrentStatusDescription' => LocationService::DOMAIN_NAMESPACE,
-            'CurrentStatusTimeStamp'   => LocationService::DOMAIN_NAMESPACE,
+        'Location'       => [
+            'PhaseCode'         => LocationService::DOMAIN_NAMESPACE,
+            'PhaseDescription'  => LocationService::DOMAIN_NAMESPACE,
+            'StatusCode'        => LocationService::DOMAIN_NAMESPACE,
+            'StatusDescription' => LocationService::DOMAIN_NAMESPACE,
+            'TimeStamp'         => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe' => [
-            'CurrentPhaseCode'         => TimeframeService::DOMAIN_NAMESPACE,
-            'CurrentPhaseDescription'  => TimeframeService::DOMAIN_NAMESPACE,
-            'CurrentStatusCode'        => TimeframeService::DOMAIN_NAMESPACE,
-            'CurrentStatusDescription' => TimeframeService::DOMAIN_NAMESPACE,
-            'CurrentStatusTimeStamp'   => TimeframeService::DOMAIN_NAMESPACE,
+        'Timeframe'      => [
+            'PhaseCode'         => TimeframeService::DOMAIN_NAMESPACE,
+            'PhaseDescription'  => TimeframeService::DOMAIN_NAMESPACE,
+            'StatusCode'        => TimeframeService::DOMAIN_NAMESPACE,
+            'StatusDescription' => TimeframeService::DOMAIN_NAMESPACE,
+            'TimeStamp'         => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
     /** @var string|null */
-    protected $CurrentPhaseCode;
+    protected $PhaseCode;
     /** @var string|null */
-    protected $CurrentPhaseDescription;
+    protected $PhaseDescription;
     /** @var string|null */
-    protected $CurrentStatusCode;
+    protected $StatusCode;
     /** @var string|null */
-    protected $CurrentStatusDescription;
+    protected $StatusDescription;
     /** @var DateTimeInterface|null */
-    protected $CurrentStatusTimeStamp;
+    protected $TimeStamp;
     // @codingStandardsIgnoreEnd
 
     /**
-     * Status contructor.
+     * Status constructor.
      *
      * @param string|null                   $phaseCode
      * @param string|null                   $phaseDesc
@@ -140,11 +140,11 @@ class Status extends AbstractEntity
     ) {
         parent::__construct();
 
-        $this->setCurrentPhaseCode($phaseCode);
-        $this->setCurrentPhaseDescription($phaseDesc);
-        $this->setCurrentStatusCode($statusCode);
-        $this->setCurrentStatusDescription($statusDesc);
-        $this->setCurrentStatusTimeStamp($timeStamp);
+        $this->setPhaseCode($phaseCode);
+        $this->setPhaseDescription($phaseDesc);
+        $this->setStatusCode($statusCode);
+        $this->setStatusDescription($statusDesc);
+        $this->setTimeStamp($timeStamp);
     }
 
     /**
@@ -156,7 +156,7 @@ class Status extends AbstractEntity
      *
      * @since 1.2.0
      */
-    public function setCurrentStatusTimeStamp($timeStamp = null)
+    public function setTimeStamp($timeStamp = null)
     {
         if (is_string($timeStamp)) {
             try {
@@ -166,7 +166,7 @@ class Status extends AbstractEntity
             }
         }
 
-        $this->CurrentStatusTimeStamp = $timeStamp;
+        $this->TimeStamp = $timeStamp;
 
         return $this;
     }

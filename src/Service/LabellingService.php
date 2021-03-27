@@ -395,7 +395,7 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
         $body = json_decode(static::getResponseText($response));
         if (isset($body->ResponseShipments)) {
             /** @var GenerateLabelResponse $object */
-            $object = AbstractEntity::jsonDeserialize((object) ['GenerateLabelResponse' => $body]);
+            $object = GenerateLabelResponse::jsonDeserialize((object) ['GenerateLabelResponse' => $body]);
             $this->setService($object);
 
             return $object;

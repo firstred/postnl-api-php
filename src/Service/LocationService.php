@@ -673,7 +673,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
         $body = json_decode(static::getResponseText($response));
 
         /** @var GetLocationsInAreaResponse $object */
-        $object = AbstractEntity::jsonDeserialize(
+        $object = GetLocationsInAreaResponse::jsonDeserialize(
             (object) ['GetLocationsInAreaResponse' => $body]
         );
         $this->setService($object);
@@ -834,7 +834,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
         $newLocations = [];
         foreach ($body->GetLocationsResult->ResponseLocation as $location) {
             if (isset($location->Address)) {
-                $location->Address = AbstractEntity::jsonDeserialize((object) ['Address' => $location->Address]);
+                $location->Address = Address::jsonDeserialize((object) ['Address' => $location->Address]);
             }
 
             if (isset($location->DeliveryOptions->string)) {
@@ -848,19 +848,19 @@ class LocationService extends AbstractService implements LocationServiceInterfac
                     }
                 }
 
-                $location->OpeningHours = AbstractEntity::jsonDeserialize(
+                $location->OpeningHours = OpeningHours::jsonDeserialize(
                     (object) ['OpeningHours' => $location->OpeningHours]
                 );
             }
 
-            $newLocations[] = AbstractEntity::jsonDeserialize(
+            $newLocations[] = ResponseLocation::jsonDeserialize(
                 (object) ['ResponseLocation' => $location]
             );
         }
         $body->GetLocationsResult = $newLocations;
 
         /** @var GetLocationsInAreaResponse $object */
-        $object = AbstractEntity::jsonDeserialize((object) ['GetLocationsInAreaResponse' => $body]);
+        $object = GetLocationsInAreaResponse::jsonDeserialize((object) ['GetLocationsInAreaResponse' => $body]);
         $this->setService($object);
 
         return $object;
