@@ -167,7 +167,7 @@ class TimeframeServiceRestTest extends ServiceTest
                         'Date'        => '10-03-2018',
                         'Description' => 'Geen avondbelevering mogelijk',
                         'Options'     => [
-                            'string' => 'Evening',
+                            'Evening',
                         ],
                     ],
                     [
@@ -175,7 +175,7 @@ class TimeframeServiceRestTest extends ServiceTest
                         'Date'        => '11-03-2018',
                         'Description' => 'Dag uitgesloten van tijdvak',
                         'Options'     => [
-                            'string' => 'Daytime',
+                            'Daytime',
                         ],
                     ],
                     [
@@ -183,7 +183,7 @@ class TimeframeServiceRestTest extends ServiceTest
                         'Date'        => '11-03-2018',
                         'Description' => 'Dag uitgesloten van tijdvak',
                         'Options'     => [
-                            'string' => 'Evening',
+                            'Evening',
                         ],
                     ],
                     [
@@ -191,7 +191,7 @@ class TimeframeServiceRestTest extends ServiceTest
                         'Date'        => '12-03-2018',
                         'Description' => 'Geen routeplan tijdvak',
                         'Options'     => [
-                            'string' => 'Daytime',
+                            'Daytime',
                         ],
                     ],
                     [
@@ -199,7 +199,7 @@ class TimeframeServiceRestTest extends ServiceTest
                         'Date'        => '12-03-2018',
                         'Description' => 'Geen avondbelevering mogelijk',
                         'Options'     => [
-                            'string' => 'Evening',
+                            'Evening',
                         ],
                     ],
                 ],
@@ -213,14 +213,14 @@ class TimeframeServiceRestTest extends ServiceTest
                                 [
                                     'From'    => '16:00:00',
                                     'Options' => [
-                                        'string' => 'Daytime',
+                                        'Daytime',
                                     ],
                                     'To' => '18:30:00',
                                 ],
                                 [
                                     'From'    => '18:00:00',
                                     'Options' => [
-                                        'string' => 'Evening',
+                                        'Evening',
                                     ],
                                     'To' => '22:00:00',
                                 ],
@@ -234,14 +234,14 @@ class TimeframeServiceRestTest extends ServiceTest
                                 [
                                     'From'    => '15:45:00',
                                     'Options' => [
-                                        'string' => 'Daytime',
+                                        'Daytime',
                                     ],
                                     'To' => '18:15:00',
                                 ],
                                 [
                                     'From'    => '18:00:00',
                                     'Options' => [
-                                        'string' => 'Evening',
+                                        'Evening',
                                     ],
                                     'To' => '22:00:00',
                                 ],
@@ -255,14 +255,14 @@ class TimeframeServiceRestTest extends ServiceTest
                                 [
                                     'From'    => '15:30:00',
                                     'Options' => [
-                                        'string' => 'Daytime',
+                                        'Daytime',
                                     ],
                                     'To' => '18:00:00',
                                 ],
                                 [
                                     'From'    => '18:00:00',
                                     'Options' => [
-                                        'string' => 'Evening',
+                                        'Evening',
                                     ],
                                     'To' => '22:00:00',
                                 ],
@@ -276,7 +276,7 @@ class TimeframeServiceRestTest extends ServiceTest
                                 [
                                     'From'    => '16:15:00',
                                     'Options' => [
-                                        'string' => 'Daytime',
+                                        'Daytime',
                                     ],
                                     'To' => '18:45:00',
                                 ],
@@ -290,14 +290,14 @@ class TimeframeServiceRestTest extends ServiceTest
                                 [
                                     'From'    => '16:00:00',
                                     'Options' => [
-                                        'string' => 'Daytime',
+                                        'Daytime',
                                     ],
                                     'To' => '18:30:00',
                                 ],
                                 [
                                     'From'    => '18:00:00',
                                     'Options' => [
-                                        'string' => 'Evening',
+                                        'Evening',
                                     ],
                                     'To' => '22:00:00',
                                 ],
@@ -311,14 +311,14 @@ class TimeframeServiceRestTest extends ServiceTest
                                 [
                                     'From'    => '16:00:00',
                                     'Options' => [
-                                        'string' => 'Daytime',
+                                        'Daytime',
                                     ],
                                     'To' => '18:30:00',
                                 ],
                                 [
                                     'From'    => '18:00:00',
                                     'Options' => [
-                                        'string' => 'Evening',
+                                        'Evening',
                                     ],
                                     'To' => '20:00:00',
                                 ],
