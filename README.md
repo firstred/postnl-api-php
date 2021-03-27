@@ -35,6 +35,7 @@ The PHP bindings can connect to both PostNL's SOAP and REST API.
 | Labelling webservice                        | ✓                         | ✓                         | 2.2     |
 | Confirming webservice                       | ✓                         | ✓                         | 2.0    |
 | Shippingstatus webservice                   | ✓                         | ✓                         | 2.0     |
+| Shipping webservice                         | ✓                         | ✓*                        | 2.0     |
 | **Delivery Options**                        |                           |                           |         |
 | Deliverydate webservice                     | ✓                         | ✓                         | 2.2     |
 | Location webservice                         | ✓                         | ✓                         | 2.1     |
@@ -47,13 +48,13 @@ The PHP bindings can connect to both PostNL's SOAP and REST API.
 - Clone this repo
 - Optionally run `composer require guzzlehttp/guzzle` to use Guzzle instead of cURL directly
 - Run `composer install` (Don't have composer? Visit https://getcomposer.org/)
-- You're good to go! A few small examples can be found in this README.
+- You're good to go! A small example can be found in this README. Check out the documtation for a quick start guide.
 
 ## Documentation
 
 ### Example
 
-Creating a label using the default REST API
+Allow a user to download a label using the default REST API
 
 ```php
 <?php
@@ -85,7 +86,7 @@ $customer = Customer::create([
 ]);
 
 $apikey = 'YOUR_API_KEY_HERE';
-$sandbox = true;
+$sandbox = false;
 
 $postnl = new PostNL($customer, $apikey, $sandbox);
 
@@ -106,13 +107,22 @@ $shipment = Shipment::create([
         ]),
     ],
     'Barcode'             => $barcode,
-    'Dimension'           => new Dimension('2000'),
+    'Dimension'           => new Dimension(/* weight */ '2000'),
     'ProductCodeDelivery' => '3085',
 ]);
 
-$label = $postnl->generateLabel($shipment, 'GraphicFile|PDF', true);
-
-die(var_dump($label));
+header('Content-Type: application/pdf');
+header('Content-Disposition: attachment; filename="label.pdf"');
+echo base64_decode($postnl->generateLabel(
+    /* The actual shipment */ $shipment, 
+    /* The output format */ 'GraphicFile|PDF',
+    /* Immediately confirm the shipment */ true
+)
+    ->getResponseShipments()[0]
+    ->getLabels()[0]
+    ->getContent()
+);
+exit;
 ```
 
 ### Full documentation
@@ -122,25 +132,16 @@ The full documentation can be found on this page: [https://postnl-php.readthedoc
 ## License
 
 This library has been licensed with the MIT license.
+<details>
+  <summary>Full license text</summary>
 
-```
-Copyright (c) 2017-2018 thirty bees <https://github.com/thirtybees>
+The MIT License (MIT).
+Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
 
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-    of this software and associated documentation files (the "Software"), to deal
-    in the Software without restriction, including without limitation the rights
-    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-    copies of the Software, and to permit persons to whom the Software is
-    furnished to do so, subject to the following conditions:
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
-    The above copyright notice and this permission notice shall be included in
-    all copies or substantial portions of the Software.
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-    THE SOFTWARE.
-```
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+</details>
