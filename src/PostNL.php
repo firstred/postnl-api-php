@@ -190,6 +190,8 @@ class PostNL implements LoggerAwareInterface
      * Verify SSL certificate of the PostNL REST API.
      *
      * @var bool
+     *
+     * @deprecated
      */
     public $verifySslCerts = true;
 
@@ -473,51 +475,7 @@ class PostNL implements LoggerAwareInterface
     {
         // @codeCoverageIgnoreStart
         if (!$this->httpClient) {
-            $client = null;
-            if (class_exists(HttpAsyncClientDiscovery::class)) {
-                try {
-                    // Detect PHP HTTPlug async HTTP client support
-                    $client = HttpAsyncClientDiscovery::find();
-                    if ($client) {
-                        $this->httpClient = new HTTPlugClient();
-                    }
-                } catch (NotFoundException $e) {
-                } catch (\Http\Discovery\Exception\NotFoundException $e) {
-                } catch (NoCandidateFoundException $e) {
-                } catch (DiscoveryFailedException $e) {
-                }
-            }
-
-            if (!$this->httpClient && class_exists(Psr18ClientDiscovery::class)) {
-                try {
-                    // Detect PHP HTTPlug PSR-18 HTTP client support
-                    $client = Psr18ClientDiscovery::find();
-                    if ($client) {
-                        $this->httpClient = new HTTPlugClient();
-                    }
-                } catch (NotFoundException $e) {
-                } catch (\Http\Discovery\Exception\NotFoundException $e) {
-                } catch (NoCandidateFoundException $e) {
-                } catch (DiscoveryFailedException $e) {
-                }
-            }
-
-            if (!$this->httpClient && class_exists(HttpClientDiscovery::class)) {
-                try {
-                    // Detect PHP HTTPlug HTTP client support
-                    $client = HttpClientDiscovery::find();
-                    if ($client) {
-                        $this->httpClient = new HTTPlugClient();
-                    }
-                } catch (NotFoundException $e) {
-                } catch (\Http\Discovery\Exception\NotFoundException $e) {
-                } catch (NoCandidateFoundException $e) {
-                } catch (DiscoveryFailedException $e) {
-                }
-            }
-
-            if (!$this->httpClient
-                && interface_exists(GuzzleClientInterface::class)
+            if (interface_exists(GuzzleClientInterface::class)
                 && ((defined(GuzzleClientInterface::class.'::VERSION') && version_compare(
                             constant(GuzzleClientInterface::class.'::VERSION'),
                             '6.0.0',
@@ -530,6 +488,45 @@ class PostNL implements LoggerAwareInterface
                         )))
             ) {
                 $this->httpClient = new GuzzleClient();
+            }
+
+            if (!$this->httpClient && class_exists(HttpAsyncClientDiscovery::class)) {
+                try {
+                    // Detect PHP HTTPlug async HTTP client support
+                    if (HttpAsyncClientDiscovery::find()) {
+                        $this->httpClient = new HTTPlugClient();
+                    }
+                } catch (NotFoundException $e) {
+                } catch (\Http\Discovery\Exception\NotFoundException $e) {
+                } catch (NoCandidateFoundException $e) {
+                } catch (DiscoveryFailedException $e) {
+                }
+            }
+
+            if (!$this->httpClient && class_exists(Psr18ClientDiscovery::class)) {
+                try {
+                    // Detect PHP HTTPlug PSR-18 HTTP client support
+                    if (Psr18ClientDiscovery::find()) {
+                        $this->httpClient = new HTTPlugClient();
+                    }
+                } catch (NotFoundException $e) {
+                } catch (\Http\Discovery\Exception\NotFoundException $e) {
+                } catch (NoCandidateFoundException $e) {
+                } catch (DiscoveryFailedException $e) {
+                }
+            }
+
+            if (!$this->httpClient && class_exists(HttpClientDiscovery::class)) {
+                try {
+                    // Detect PHP HTTPlug HTTP client support
+                    if (HttpClientDiscovery::find()) {
+                        $this->httpClient = new HTTPlugClient();
+                    }
+                } catch (NotFoundException $e) {
+                } catch (\Http\Discovery\Exception\NotFoundException $e) {
+                } catch (NoCandidateFoundException $e) {
+                } catch (DiscoveryFailedException $e) {
+                }
             }
 
             if (!$this->httpClient) {
@@ -603,33 +600,6 @@ class PostNL implements LoggerAwareInterface
     public function resetLogger()
     {
         $this->logger = new DummyLogger();
-
-        return $this;
-    }
-
-    /**
-     * @return bool
-     *
-     * @since 1.2.0
-     */
-    public function getVerifySslCerts()
-    {
-        return $this->verifySslCerts;
-    }
-
-    /**
-     * @param bool $verifySslCerts
-     *
-     * @return static
-     *
-     * @since 1.2.0
-     */
-    public function setVerifySslCerts($verifySslCerts)
-    {
-        $this->verifySslCerts = $verifySslCerts;
-        if ($this->getHttpClient() instanceof ClientInterface) {
-            $this->getHttpClient()->setVerify($verifySslCerts);
-        }
 
         return $this;
     }
