@@ -91,8 +91,8 @@ class ConfirmingServiceSoapTest extends ServiceTest
         $this->postnl->setLogger($logger);
 
         $this->service = $this->postnl->getConfirmingService();
-        $this->service->cache = new VoidCachePool();
-        $this->service->ttl = 1;
+        $this->service->setCache(new VoidCachePool());
+        $this->service->setTtl(1);
     }
 
     /**

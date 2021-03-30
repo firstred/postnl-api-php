@@ -95,8 +95,8 @@ class ShippingServiceRestTest extends ServiceTest
         $this->postnl->setLogger($logger);
 
         $this->service = $this->postnl->getShippingService();
-        $this->service->cache = new VoidCachePool();
-        $this->service->ttl = 1;
+        $this->service->setCache(new VoidCachePool());
+        $this->service->setTtl(1);
     }
 
     /**

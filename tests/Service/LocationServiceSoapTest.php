@@ -94,8 +94,8 @@ class LocationServiceSoapTest extends ServiceTest
         $this->postnl->setLogger($logger);
 
         $this->service = $this->postnl->getLocationService();
-        $this->service->cache = new VoidCachePool();
-        $this->service->ttl = 1;
+        $this->service->setCache(new VoidCachePool());
+        $this->service->setTtl(1);
     }
 
     /**

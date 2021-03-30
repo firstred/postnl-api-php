@@ -387,12 +387,60 @@ abstract class AbstractService
      *
      * @since 1.2.0
      */
-    public function removeItem(CacheItemInterface $item)
+    public function removeCachedItem(CacheItemInterface $item)
     {
         try {
             $this->cache->deleteItem($item->getKey());
         } catch (InvalidArgumentException $e) {
         }
+    }
+
+    /**
+     * @return DateInterval|DateTimeInterface|int|null
+     *
+     * @since 1.2.0
+     */
+    public function getTtl()
+    {
+        return $this->ttl;
+    }
+
+    /**
+     * @param int|DateTimeInterface|DateInterval|null $ttl
+     *
+     * @return static
+     *
+     * @since 1.2.0
+     */
+    public function setTtl($ttl = null)
+    {
+        $this->ttl = $ttl;
+
+        return $this;
+    }
+
+    /**
+     * @return CacheItemPoolInterface|null
+     *
+     * @since 1.2.0
+     */
+    public function getCache()
+    {
+        return $this->cache;
+    }
+
+    /**
+     * @param CacheItemPoolInterface|null $cache
+     *
+     * @return static
+     *
+     * @since 1.2.0
+     */
+    public function setCache($cache = null)
+    {
+        $this->cache = $cache;
+
+        return $this;
     }
 
     /**

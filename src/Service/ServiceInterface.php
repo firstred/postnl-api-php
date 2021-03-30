@@ -26,11 +26,23 @@
 
 namespace Firstred\PostNL\Service;
 
+use DateInterval;
+use DateTimeInterface;
 use Psr\Cache\CacheItemInterface;
+use Psr\Cache\CacheItemPoolInterface;
 use Psr\Cache\InvalidArgumentException;
 
 interface ServiceInterface
 {
+    /**
+     * Cache an item
+     *
+     * @param CacheItemInterface $item
+     *
+     * @since 1.0.0
+     */
+    public function cacheItem(CacheItemInterface $item);
+
     /**
      * Retrieve a cached item.
      *
@@ -45,20 +57,43 @@ interface ServiceInterface
     public function retrieveCachedItem($uuid);
 
     /**
-     * Cache an item
-     *
-     * @param CacheItemInterface $item
-     *
-     * @since 1.0.0
-     */
-    public function cacheItem(CacheItemInterface $item);
-
-    /**
      * Delete an item from cache
      *
      * @param CacheItemInterface $item
      *
      * @since 1.2.0
      */
-    public function removeItem(CacheItemInterface $item);
+    public function removeCachedItem(CacheItemInterface $item);
+
+    /**
+     * @return DateInterval|DateTimeInterface|int|null
+     *
+     * @since 1.2.0
+     */
+    public function getTtl();
+
+    /**
+     * @param int|DateTimeInterface|DateInterval|null $ttl
+     *
+     * @return static
+     *
+     * @since 1.2.0
+     */
+    public function setTtl($ttl = null);
+
+    /**
+     * @return CacheItemPoolInterface|null
+     *
+     * @since 1.2.0
+     */
+    public function getCache();
+
+    /**
+     * @param CacheItemPoolInterface|null $cache
+     *
+     * @return static
+     *
+     * @since 1.2.0
+     */
+    public function setCache($cache = null);
 }
