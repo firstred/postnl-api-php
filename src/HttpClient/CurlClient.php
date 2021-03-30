@@ -27,7 +27,6 @@
 namespace Firstred\PostNL\HttpClient;
 
 use Composer\CaBundle\CaBundle;
-use Exception;
 use Firstred\PostNL\Exception\ApiException;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use Psr\Http\Message\RequestInterface;
@@ -37,10 +36,14 @@ use Psr\Log\LoggerInterface;
 use Firstred\PostNL\Exception\ApiConnectionException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Psr\Log\LogLevel;
+use function define;
+use function defined;
 use const CURLOPT_FOLLOWLOCATION;
 use const CURLOPT_HTTPHEADER;
 use const CURLOPT_PROTOCOLS;
 use const CURLOPT_REDIR_PROTOCOLS;
+use const CURLOPT_SSL_VERIFYPEER;
+use const CURLOPT_SSL_VERIFYSTATUS;
 
 if (!defined('CURL_SSLVERSION_TLSv1')) {
     define('CURL_SSLVERSION_TLSv1', 1);
@@ -363,7 +366,7 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
         $defaultOptions = [];
         if (is_callable($this->defaultOptions)) { // call defaultOptions callback, set options to return value
             $defaultOptions = call_user_func_array($this->defaultOptions, func_get_args());
-            if (!is_array($options)) {
+            if (!is_array($defaultOptions)) {
                 throw new HttpClientException('Non-array value returned by defaultOptions CurlClient callback');
             }
         } elseif (is_array($this->defaultOptions)) { // set default curlopts from array
@@ -392,8 +395,8 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
         $options[CURLOPT_PROTOCOLS] = CURLPROTO_HTTPS;
         $options[CURLOPT_REDIR_PROTOCOLS] = CURLPROTO_HTTPS;
         $options[CURLOPT_FOLLOWLOCATION] = false;
-        $options[64] = 1;
         $options[CURLOPT_SSL_VERIFYHOST] = 2;
+        $options[CURLOPT_SSL_VERIFYPEER] = true;
         $caPathOrFile = CaBundle::getSystemCaRootBundlePath();
         if (is_dir($caPathOrFile)) {
             $options[CURLOPT_CAPATH] = $caPathOrFile;
