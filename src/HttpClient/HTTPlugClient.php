@@ -354,6 +354,8 @@ class HTTPlugClient implements ClientInterface
      * @param bool|string $verify
      *
      * @return HTTPlugClient
+     *
+     * @deprecated
      */
     public function setVerify($verify)
     {
@@ -362,6 +364,8 @@ class HTTPlugClient implements ClientInterface
 
     /**
      * @return bool|string|void
+     *
+     * @deprecated
      */
     public function getVerify()
     {

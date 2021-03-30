@@ -26,7 +26,6 @@
 
 namespace Firstred\PostNL\HttpClient;
 
-use Firstred\PostNL\Exception\ApiConnectionException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
@@ -77,6 +76,8 @@ interface ClientInterface
      * @param bool|string $verify
      *
      * @return static
+     *
+     * @deprecated
      */
     public function setVerify($verify);
 
@@ -84,6 +85,8 @@ interface ClientInterface
      * Return verify setting.
      *
      * @return bool|string
+     *
+     * @deprecated
      */
     public function getVerify();
 

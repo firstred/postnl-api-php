@@ -26,6 +26,7 @@
 
 namespace Firstred\PostNL\HttpClient;
 
+use Composer\CaBundle\CaBundle;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\GuzzleException;
@@ -35,6 +36,7 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\Promise\EachPromise;
 use GuzzleHttp\Psr7\Message as PsrMessage;
+use GuzzleHttp\RequestOptions;
 use GuzzleHttp\Utils;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -117,13 +119,15 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
                 return $retries * 1000;
             }));
             $guzzle = new Client(array_merge(
-                $this->defaultOptions,
                 [
-                    'timeout'         => $this->timeout,
-                    'connect_timeout' => $this->connectTimeout,
-                    'http_errors'     => false,
-                    'handler'         => $stack,
-                ]
+                    RequestOptions::TIMEOUT         => $this->timeout,
+                    RequestOptions::CONNECT_TIMEOUT => $this->connectTimeout,
+                    RequestOptions::HTTP_ERRORS     => false,
+                    RequestOptions::ALLOW_REDIRECTS => false,
+                    RequestOptions::VERIFY          => CaBundle::getSystemCaRootBundlePath(),
+                    'handler'                       => $stack,
+                ],
+                $this->defaultOptions
             ));
 
             $this->client = $guzzle;
@@ -186,14 +190,11 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
      * @param bool|string $verify
      *
      * @return static
+     *
+     * @deprecated
      */
     public function setVerify($verify)
     {
-        // Set the verify option
-        $this->defaultOptions['verify'] = $verify;
-        // Reset the non-mutable Guzzle client
-        $this->client = null;
-
         return $this;
     }
 
@@ -201,14 +202,12 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
      * Return verify setting.
      *
      * @return bool|string
+     *
+     * @deprecated
      */
     public function getVerify()
     {
-        if (isset($this->defaultOptions['verify'])) {
-            return $this->defaultOptions['verify'];
-        }
-
-        return false;
+        return true;
     }
 
     /**
@@ -401,7 +400,7 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
             'fulfilled'   => function ($response, $index) use (&$responses) {
                 $responses[$index] = $response;
             },
-            'rejected' => function ($response, $index) use (&$responses) {
+            'rejected'    => function ($response, $index) use (&$responses) {
                 $responses[$index] = $response;
             },
         ]))->promise()->wait();

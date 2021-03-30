@@ -26,6 +26,7 @@
 
 namespace Firstred\PostNL\HttpClient;
 
+use Composer\CaBundle\CaBundle;
 use Exception;
 use Firstred\PostNL\Exception\ApiException;
 use GuzzleHttp\Psr7\Message as PsrMessage;
@@ -36,6 +37,10 @@ use Psr\Log\LoggerInterface;
 use Firstred\PostNL\Exception\ApiConnectionException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Psr\Log\LogLevel;
+use const CURLOPT_FOLLOWLOCATION;
+use const CURLOPT_HTTPHEADER;
+use const CURLOPT_PROTOCOLS;
+use const CURLOPT_REDIR_PROTOCOLS;
 
 if (!defined('CURL_SSLVERSION_TLSv1')) {
     define('CURL_SSLVERSION_TLSv1', 1);
@@ -128,6 +133,8 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
      * @param bool|string $verify
      *
      * @return CurlClient
+     *
+     * @deprecated
      */
     public function setVerify($verify)
     {
@@ -174,6 +181,8 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
      * Return verify setting.
      *
      * @return bool|string
+     *
+     * @deprecated
      */
     public function getVerify()
     {
@@ -351,46 +360,48 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
             $headers[] = "$key: $value";
         }
         $headers[] = 'Expect:';
-        $opts = [];
+        $defaultOptions = [];
         if (is_callable($this->defaultOptions)) { // call defaultOptions callback, set options to return value
-            $opts = call_user_func_array($this->defaultOptions, func_get_args());
-            if (!is_array($opts)) {
+            $defaultOptions = call_user_func_array($this->defaultOptions, func_get_args());
+            if (!is_array($options)) {
                 throw new HttpClientException('Non-array value returned by defaultOptions CurlClient callback');
             }
         } elseif (is_array($this->defaultOptions)) { // set default curlopts from array
-            $opts = $this->defaultOptions;
+            $defaultOptions = $this->defaultOptions;
         }
         if ('get' == $method) {
-            $opts[CURLOPT_HTTPGET] = 1;
+            $options[CURLOPT_HTTPGET] = 1;
         } elseif ('post' == $method) {
-            $opts[CURLOPT_POST] = 1;
+            $options[CURLOPT_POST] = 1;
             if ($body) {
-                $opts[CURLOPT_POSTFIELDS] = $body;
+                $options[CURLOPT_POSTFIELDS] = $body;
             }
         } elseif ('delete' == $method) {
-            $opts[CURLOPT_CUSTOMREQUEST] = 'DELETE';
+            $options[CURLOPT_CUSTOMREQUEST] = 'DELETE';
         } else {
             throw new HttpClientException("Unrecognized method $method");
         }
-        $opts[CURLOPT_URL] = $request->getUri();
-        $opts[CURLOPT_RETURNTRANSFER] = true;
-        $opts[CURLOPT_VERBOSE] = false;
-        $opts[CURLOPT_HEADER] = true;
-        $opts[CURLOPT_CONNECTTIMEOUT] = $this->connectTimeout;
-        $opts[CURLOPT_TIMEOUT] = $this->timeout;
-        $opts[CURLOPT_HTTPHEADER] = $headers;
-        $opts[CURLOPT_FAILONERROR] = false;
-        if ($this->verify) {
-            $opts[64] = 1;
-            $opts[CURLOPT_SSL_VERIFYHOST] = 2;
-            if (is_string($this->verify)) {
-                $opts[CURLOPT_CAINFO] = $this->verify;
-            }
+        $options[CURLOPT_URL] = $request->getUri();
+        $options[CURLOPT_RETURNTRANSFER] = true;
+        $options[CURLOPT_VERBOSE] = false;
+        $options[CURLOPT_HEADER] = true;
+        $options[CURLOPT_CONNECTTIMEOUT] = $this->connectTimeout;
+        $options[CURLOPT_TIMEOUT] = $this->timeout;
+        $options[CURLOPT_HTTPHEADER] = $headers;
+        $options[CURLOPT_FAILONERROR] = false;
+        $options[CURLOPT_PROTOCOLS] = CURLPROTO_HTTPS;
+        $options[CURLOPT_REDIR_PROTOCOLS] = CURLPROTO_HTTPS;
+        $options[CURLOPT_FOLLOWLOCATION] = false;
+        $options[64] = 1;
+        $options[CURLOPT_SSL_VERIFYHOST] = 2;
+        $caPathOrFile = CaBundle::getSystemCaRootBundlePath();
+        if (is_dir($caPathOrFile)) {
+            $options[CURLOPT_CAPATH] = $caPathOrFile;
         } else {
-            $opts[64] = 0;
-            $opts[CURLOPT_SSL_VERIFYHOST] = 0;
+            $options[CURLOPT_CAINFO] = $caPathOrFile;
         }
-        curl_setopt_array($curl, $opts);
+
+        curl_setopt_array($curl, array_merge($options, $defaultOptions));
     }
 
     /**
