@@ -24,7 +24,7 @@
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Tests\Service;
+namespace Firstred\PostNL\Tests\Service;
 
 use Cache\Adapter\Void\VoidCachePool;
 use GuzzleHttp\Handler\MockHandler;
@@ -33,21 +33,21 @@ use GuzzleHttp\Psr7\Message as PsrMessage;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Psr\Log\LoggerInterface;
-use ThirtyBees\PostNL\Entity\Address;
-use ThirtyBees\PostNL\Entity\CoordinatesNorthWest;
-use ThirtyBees\PostNL\Entity\CoordinatesSouthEast;
-use ThirtyBees\PostNL\Entity\Customer;
-use ThirtyBees\PostNL\Entity\Location;
-use ThirtyBees\PostNL\Entity\Message\Message;
-use ThirtyBees\PostNL\Entity\Request\GetLocation;
-use ThirtyBees\PostNL\Entity\Request\GetLocationsInArea;
-use ThirtyBees\PostNL\Entity\Request\GetNearestLocations;
-use ThirtyBees\PostNL\Entity\Response\GetLocationsInAreaResponse;
-use ThirtyBees\PostNL\Entity\Response\GetNearestLocationsResponse;
-use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
-use ThirtyBees\PostNL\HttpClient\MockClient;
-use ThirtyBees\PostNL\PostNL;
-use ThirtyBees\PostNL\Service\LocationServiceInterface;
+use Firstred\PostNL\Entity\Address;
+use Firstred\PostNL\Entity\CoordinatesNorthWest;
+use Firstred\PostNL\Entity\CoordinatesSouthEast;
+use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Entity\Location;
+use Firstred\PostNL\Entity\Message\Message;
+use Firstred\PostNL\Entity\Request\GetLocation;
+use Firstred\PostNL\Entity\Request\GetLocationsInArea;
+use Firstred\PostNL\Entity\Request\GetNearestLocations;
+use Firstred\PostNL\Entity\Response\GetLocationsInAreaResponse;
+use Firstred\PostNL\Entity\Response\GetNearestLocationsResponse;
+use Firstred\PostNL\Entity\SOAP\UsernameToken;
+use Firstred\PostNL\HttpClient\MockClient;
+use Firstred\PostNL\PostNL;
+use Firstred\PostNL\Service\LocationServiceInterface;
 
 /**
  * Class LocationServiceSoapTest.
@@ -66,7 +66,7 @@ class LocationServiceSoapTest extends ServiceTest
     /**
      * @before
      *
-     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @throws \ReflectionException
      */
     public function setupPostNL()

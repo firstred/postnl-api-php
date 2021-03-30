@@ -24,7 +24,7 @@
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Tests\Service;
+namespace Firstred\PostNL\Tests\Service;
 
 use Cache\Adapter\Void\VoidCachePool;
 use Exception;
@@ -35,20 +35,20 @@ use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use setasign\Fpdi\PdfReader\PdfReaderException;
-use ThirtyBees\PostNL\Entity\Address;
-use ThirtyBees\PostNL\Entity\Customer;
-use ThirtyBees\PostNL\Entity\Dimension;
-use ThirtyBees\PostNL\Entity\Label;
-use ThirtyBees\PostNL\Entity\Message\LabellingMessage;
-use ThirtyBees\PostNL\Entity\Request\GenerateLabel;
-use ThirtyBees\PostNL\Entity\Response\GenerateLabelResponse;
-use ThirtyBees\PostNL\Entity\Shipment;
-use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
-use ThirtyBees\PostNL\Exception\ResponseException;
-use ThirtyBees\PostNL\HttpClient\MockClient;
-use ThirtyBees\PostNL\PostNL;
-use ThirtyBees\PostNL\Service\LabellingService;
-use ThirtyBees\PostNL\Service\LabellingServiceInterface;
+use Firstred\PostNL\Entity\Address;
+use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Entity\Dimension;
+use Firstred\PostNL\Entity\Label;
+use Firstred\PostNL\Entity\Message\LabellingMessage;
+use Firstred\PostNL\Entity\Request\GenerateLabel;
+use Firstred\PostNL\Entity\Response\GenerateLabelResponse;
+use Firstred\PostNL\Entity\Shipment;
+use Firstred\PostNL\Entity\SOAP\UsernameToken;
+use Firstred\PostNL\Exception\ResponseException;
+use Firstred\PostNL\HttpClient\MockClient;
+use Firstred\PostNL\PostNL;
+use Firstred\PostNL\Service\LabellingService;
+use Firstred\PostNL\Service\LabellingServiceInterface;
 use function file_get_contents;
 use function json_decode;
 use const _RESPONSES_DIR_;
@@ -73,7 +73,7 @@ class LabellingServiceRestTest extends ServiceTest
     /**
      * @before
      *
-     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @throws \ReflectionException
      */
     public function setupPostNL()

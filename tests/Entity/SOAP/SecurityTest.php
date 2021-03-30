@@ -24,11 +24,11 @@
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Tests\Entity\SOAP;
+namespace Firstred\PostNL\Tests\Entity\SOAP;
 
 use PHPUnit\Framework\TestCase;
-use ThirtyBees\PostNL\Entity\SOAP\Security;
-use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
+use Firstred\PostNL\Entity\SOAP\Security;
+use Firstred\PostNL\Entity\SOAP\UsernameToken;
 
 /**
  * Class SecurityTest.

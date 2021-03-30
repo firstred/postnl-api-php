@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-namespace ThirtyBees\PostNL\Util;
+namespace Firstred\PostNL\Util;
 
 use Http\Discovery\Psr17FactoryDiscovery;
 use InvalidArgumentException;

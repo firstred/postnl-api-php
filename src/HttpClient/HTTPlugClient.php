@@ -1,6 +1,6 @@
 <?php
 
-namespace ThirtyBees\PostNL\HttpClient;
+namespace Firstred\PostNL\HttpClient;
 
 use Exception;
 use Http\Client\Exception\HttpException;
@@ -18,8 +18,8 @@ use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
-use ThirtyBees\PostNL\Exception\HttpClientException;
-use ThirtyBees\PostNL\Util\EachPromise;
+use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Util\EachPromise;
 
 /**
  * Class HTTPlugClient.

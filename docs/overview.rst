@@ -26,26 +26,23 @@ Installation
 ============
 
 The recommended way to install the PostNL library is with
-`Composer <http://getcomposer.org>`_. Composer is a dependency management tool
+`Composer <https://getcomposer.org>`_. Composer is a dependency management tool
 for PHP that allows you to declare the dependencies your project needs and
 installs them into your project.
 
-.. code-block:: bash
-
-    # Install Composer
-    curl -sS https://getcomposer.org/installer | php
+Install composer with the instructions on this page: https://getcomposer.org/download/
 
 Install the PostNL library:
 
 .. code-block:: bash
 
-    php composer.phar require thirtybees/postnl-api-php:~1.0
+    composer require firstred/postnl-api-php
 
 You can optionally add Guzzle as a dependency using the composer.phar CLI:
 
 .. code-block:: bash
 
-    php composer.phar require guzzlehttp/guzzle:~6.3
+    composer require guzzlehttp/guzzle
 
 Alternatively, you can specify Guzzle as a dependency in your project's
 existing composer.json file:
@@ -54,7 +51,7 @@ existing composer.json file:
 
     {
       "require": {
-         "guzzlehttp/guzzle": "~6.3"
+         "guzzlehttp/guzzle": "^7.0"
       }
    }
 
@@ -78,7 +75,7 @@ branch by setting the version requirement for this library to ``~1.0@dev``.
 
    {
       "require": {
-         "thirtybees/postnl-api-php": "~1.0@dev"
+         "firstred/postnl-api-php": "^1.2"
       }
    }
 
@@ -88,25 +85,24 @@ License
 
 Licensed using the `MIT license <http://opensource.org/licenses/MIT>`_.
 
-    Copyright (c) 2017-2018 thirty bees <https://github.com/thirtybees>
+    The MIT License (MIT).
 
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-    of this software and associated documentation files (the "Software"), to deal
-    in the Software without restriction, including without limitation the rights
-    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-    copies of the Software, and to permit persons to whom the Software is
-    furnished to do so, subject to the following conditions:
+    Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
 
-    The above copyright notice and this permission notice shall be included in
-    all copies or substantial portions of the Software.
+    Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
+    associated documentation files (the "Software"), to deal in the Software without restriction,
+    including without limitation the rights to use, copy, modify, merge, publish, distribute,
+    sublicense, and/or sell copies of the Software, and to permit persons to whom the Software
+    is furnished to do so, subject to the following conditions:
 
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-    THE SOFTWARE.
+    The above copyright notice and this permission notice shall be included in all copies or
+    substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT
+    NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+    NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+    DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
 Contributing
@@ -119,8 +115,8 @@ Guidelines
 1. This library utilizes PSR-1, PSR-2, PSR-3, PSR-4, PSR-6 and PSR-7.
 2. The library is meant to be lean, fast and sticks to the standards of the SOAP API. This means
    that not every feature request will be accepted.
-3. The PostNL library has a minimum PHP version requirement of PHP 5.5.5. Pull requests must
-   not require a PHP version greater than PHP 5.5.5.
+3. The PostNL library has a minimum PHP version requirement of PHP 5.6.1. Pull requests must
+   not require a PHP version greater than PHP 5.6.1.
 4. All pull requests must include unit tests to ensure the change works as
    expected and to prevent regressions.
 
@@ -133,7 +129,7 @@ install the dependencies using Composer:
 
 .. code-block:: bash
 
-    git clone https://github.com/thirtybees/postnl-api-php.git
+    git clone https://github.com/firstred/postnl-api-php.git
     cd postnl-api-php && curl -s http://getcomposer.org/installer | php && ./composer.phar install --dev
 
 This library is unit tested with PHPUnit. Run the tests using the included PHPUnit version:
@@ -145,5 +141,5 @@ This library is unit tested with PHPUnit. Run the tests using the included PHPUn
 
 .. note::
 
-    You'll need to use PHP 5.6 or newer in order to perform
+    You'll need to use PHP 7.3 or newer in order to perform
     the tests.

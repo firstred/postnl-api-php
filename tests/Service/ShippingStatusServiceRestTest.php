@@ -24,7 +24,7 @@
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Tests\Service;
+namespace Firstred\PostNL\Tests\Service;
 
 use Cache\Adapter\Void\VoidCachePool;
 use DateTimeInterface;
@@ -35,22 +35,22 @@ use GuzzleHttp\Psr7\Query;
 use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
-use ThirtyBees\PostNL\Entity\Address;
-use ThirtyBees\PostNL\Entity\Customer;
-use ThirtyBees\PostNL\Entity\Message\Message;
-use ThirtyBees\PostNL\Entity\Request\CompleteStatus;
-use ThirtyBees\PostNL\Entity\Request\CurrentStatus;
-use ThirtyBees\PostNL\Entity\Request\GetSignature;
-use ThirtyBees\PostNL\Entity\Response\CompleteStatusResponse;
-use ThirtyBees\PostNL\Entity\Response\CompleteStatusResponseEvent;
-use ThirtyBees\PostNL\Entity\Response\CurrentStatusResponse;
-use ThirtyBees\PostNL\Entity\Response\CurrentStatusResponseShipment;
-use ThirtyBees\PostNL\Entity\Response\GetSignatureResponseSignature;
-use ThirtyBees\PostNL\Entity\Shipment;
-use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
-use ThirtyBees\PostNL\HttpClient\MockClient;
-use ThirtyBees\PostNL\PostNL;
-use ThirtyBees\PostNL\Service\ShippingStatusServiceInterface;
+use Firstred\PostNL\Entity\Address;
+use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Entity\Message\Message;
+use Firstred\PostNL\Entity\Request\CompleteStatus;
+use Firstred\PostNL\Entity\Request\CurrentStatus;
+use Firstred\PostNL\Entity\Request\GetSignature;
+use Firstred\PostNL\Entity\Response\CompleteStatusResponse;
+use Firstred\PostNL\Entity\Response\CompleteStatusResponseEvent;
+use Firstred\PostNL\Entity\Response\CurrentStatusResponse;
+use Firstred\PostNL\Entity\Response\CurrentStatusResponseShipment;
+use Firstred\PostNL\Entity\Response\GetSignatureResponseSignature;
+use Firstred\PostNL\Entity\Shipment;
+use Firstred\PostNL\Entity\SOAP\UsernameToken;
+use Firstred\PostNL\HttpClient\MockClient;
+use Firstred\PostNL\PostNL;
+use Firstred\PostNL\Service\ShippingStatusServiceInterface;
 use function file_get_contents;
 use const _RESPONSES_DIR_;
 
@@ -71,7 +71,7 @@ class ShippingStatusServiceRestTest extends ServiceTest
     /**
      * @before
      *
-     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @throws \ReflectionException
      */
     public function setupPostNL()

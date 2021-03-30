@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -24,7 +24,7 @@
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Service;
+namespace Firstred\PostNL\Service;
 
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use Psr\Cache\CacheItemInterface;
@@ -32,28 +32,28 @@ use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use ReflectionException;
-use ThirtyBees\PostNL\Entity\Customer;
-use ThirtyBees\PostNL\Entity\Request\CompleteStatus;
-use ThirtyBees\PostNL\Entity\Request\CompleteStatusByPhase;
-use ThirtyBees\PostNL\Entity\Request\CompleteStatusByReference;
-use ThirtyBees\PostNL\Entity\Request\CompleteStatusByStatus;
-use ThirtyBees\PostNL\Entity\Request\CurrentStatus;
-use ThirtyBees\PostNL\Entity\Request\CurrentStatusByPhase;
-use ThirtyBees\PostNL\Entity\Request\CurrentStatusByReference;
-use ThirtyBees\PostNL\Entity\Request\CurrentStatusByStatus;
-use ThirtyBees\PostNL\Entity\Request\GetSignature;
-use ThirtyBees\PostNL\Entity\Response\CompleteStatusResponse;
-use ThirtyBees\PostNL\Entity\Response\CompleteStatusResponseEvent;
-use ThirtyBees\PostNL\Entity\Response\CompleteStatusResponseOldStatus;
-use ThirtyBees\PostNL\Entity\Response\CurrentStatusResponse;
-use ThirtyBees\PostNL\Entity\Response\GetSignatureResponseSignature;
-use ThirtyBees\PostNL\Exception\ApiException;
-use ThirtyBees\PostNL\Exception\CifDownException;
-use ThirtyBees\PostNL\Exception\CifException;
-use ThirtyBees\PostNL\Exception\HttpClientException;
-use ThirtyBees\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
-use ThirtyBees\PostNL\Exception\NotSupportedException;
-use ThirtyBees\PostNL\Exception\ResponseException;
+use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Entity\Request\CompleteStatus;
+use Firstred\PostNL\Entity\Request\CompleteStatusByPhase;
+use Firstred\PostNL\Entity\Request\CompleteStatusByReference;
+use Firstred\PostNL\Entity\Request\CompleteStatusByStatus;
+use Firstred\PostNL\Entity\Request\CurrentStatus;
+use Firstred\PostNL\Entity\Request\CurrentStatusByPhase;
+use Firstred\PostNL\Entity\Request\CurrentStatusByReference;
+use Firstred\PostNL\Entity\Request\CurrentStatusByStatus;
+use Firstred\PostNL\Entity\Request\GetSignature;
+use Firstred\PostNL\Entity\Response\CompleteStatusResponse;
+use Firstred\PostNL\Entity\Response\CompleteStatusResponseEvent;
+use Firstred\PostNL\Entity\Response\CompleteStatusResponseOldStatus;
+use Firstred\PostNL\Entity\Response\CurrentStatusResponse;
+use Firstred\PostNL\Entity\Response\GetSignatureResponseSignature;
+use Firstred\PostNL\Exception\ApiException;
+use Firstred\PostNL\Exception\CifDownException;
+use Firstred\PostNL\Exception\CifException;
+use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use Firstred\PostNL\Exception\NotSupportedException;
+use Firstred\PostNL\Exception\ResponseException;
 
 /**
  * Class ShippingStatusService.

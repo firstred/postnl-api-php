@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2020 KeenDelivery, LLC
+ * Copyright (c) 2017-2021 KeenDelivery B.V.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,11 +20,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Jan-Wilco Peters <info@keendelivery.com>
- * @copyright 2017-2021 KeenDelivery, LLC
+ * @copyright 2017-2021 KeenDelivery B.V.
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Tests\Service;
+namespace Firstred\PostNL\Tests\Service;
 
 use Cache\Adapter\Void\VoidCachePool;
 use GuzzleHttp\Handler\MockHandler;
@@ -33,20 +33,20 @@ use GuzzleHttp\Psr7\Message as PsrMessage;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Psr\Log\LoggerInterface;
-use ThirtyBees\PostNL\Entity\Address;
-use ThirtyBees\PostNL\Entity\Customer;
-use ThirtyBees\PostNL\Entity\Dimension;
-use ThirtyBees\PostNL\Entity\Label;
-use ThirtyBees\PostNL\Entity\Message\LabellingMessage;
-use ThirtyBees\PostNL\Entity\Request\GenerateShipping;
-use ThirtyBees\PostNL\Entity\Response\GenerateShippingResponse;
-use ThirtyBees\PostNL\Entity\Shipment;
-use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
-use ThirtyBees\PostNL\Exception\ResponseException;
-use ThirtyBees\PostNL\HttpClient\MockClient;
-use ThirtyBees\PostNL\PostNL;
-use ThirtyBees\PostNL\Service\ShippingService;
-use ThirtyBees\PostNL\Service\ShippingServiceInterface;
+use Firstred\PostNL\Entity\Address;
+use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Entity\Dimension;
+use Firstred\PostNL\Entity\Label;
+use Firstred\PostNL\Entity\Message\LabellingMessage;
+use Firstred\PostNL\Entity\Request\GenerateShipping;
+use Firstred\PostNL\Entity\Response\GenerateShippingResponse;
+use Firstred\PostNL\Entity\Shipment;
+use Firstred\PostNL\Entity\SOAP\UsernameToken;
+use Firstred\PostNL\Exception\ResponseException;
+use Firstred\PostNL\HttpClient\MockClient;
+use Firstred\PostNL\PostNL;
+use Firstred\PostNL\Service\ShippingService;
+use Firstred\PostNL\Service\ShippingServiceInterface;
 
 /**
  * Class ShippingServiceRestTest.
@@ -68,7 +68,7 @@ class ShippingServiceSoapTest extends ServiceTest
     /**
      * @before
      *
-     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @throws \ReflectionException
      */
     public function setupPostNL()

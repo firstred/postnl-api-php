@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -24,7 +24,7 @@
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Service;
+namespace Firstred\PostNL\Service;
 
 use DateTimeImmutable;
 use Exception;
@@ -38,17 +38,17 @@ use ReflectionException;
 use Sabre\Xml\LibXMLException;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Service as XmlService;
-use ThirtyBees\PostNL\Entity\AbstractEntity;
-use ThirtyBees\PostNL\Entity\Request\GenerateLabel;
-use ThirtyBees\PostNL\Entity\Response\GenerateLabelResponse;
-use ThirtyBees\PostNL\Entity\SOAP\Security;
-use ThirtyBees\PostNL\Exception\ApiException;
-use ThirtyBees\PostNL\Exception\CifDownException;
-use ThirtyBees\PostNL\Exception\CifException;
-use ThirtyBees\PostNL\Exception\HttpClientException;
-use ThirtyBees\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
-use ThirtyBees\PostNL\Exception\NotSupportedException;
-use ThirtyBees\PostNL\Exception\ResponseException;
+use Firstred\PostNL\Entity\AbstractEntity;
+use Firstred\PostNL\Entity\Request\GenerateLabel;
+use Firstred\PostNL\Entity\Response\GenerateLabelResponse;
+use Firstred\PostNL\Entity\SOAP\Security;
+use Firstred\PostNL\Exception\ApiException;
+use Firstred\PostNL\Exception\CifDownException;
+use Firstred\PostNL\Exception\CifException;
+use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use Firstred\PostNL\Exception\NotSupportedException;
+use Firstred\PostNL\Exception\ResponseException;
 use function http_build_query;
 use function in_array;
 use function json_encode;

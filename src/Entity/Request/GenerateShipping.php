@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2020 KeenDelivery, LLC
+ * Copyright (c) 2017-2021 KeenDelivery, LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -24,14 +24,14 @@
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity\Request;
+namespace Firstred\PostNL\Entity\Request;
 
-use ThirtyBees\PostNL\Entity\AbstractEntity;
-use ThirtyBees\PostNL\Entity\Customer;
-use ThirtyBees\PostNL\Entity\Message\LabellingMessage;
-use ThirtyBees\PostNL\Entity\Message\Message;
-use ThirtyBees\PostNL\Entity\Shipment;
-use ThirtyBees\PostNL\Service\ShippingService;
+use Firstred\PostNL\Entity\AbstractEntity;
+use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Entity\Message\LabellingMessage;
+use Firstred\PostNL\Entity\Message\Message;
+use Firstred\PostNL\Entity\Shipment;
+use Firstred\PostNL\Service\ShippingService;
 
 /**
  * Class GenerateShipping.

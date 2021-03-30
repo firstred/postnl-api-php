@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -24,7 +24,7 @@
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity;
+namespace Firstred\PostNL\Entity;
 
 use DateTimeInterface;
 use Exception;
@@ -35,10 +35,10 @@ use ReflectionObject;
 use ReflectionProperty;
 use Sabre\Xml\Writer;
 use stdClass;
-use ThirtyBees\PostNL\Exception\InvalidArgumentException;
-use ThirtyBees\PostNL\Exception\NotSupportedException;
-use ThirtyBees\PostNL\Util\UUID;
-use ThirtyBees\PostNL\Util\XmlSerializable;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\NotSupportedException;
+use Firstred\PostNL\Util\UUID;
+use Firstred\PostNL\Util\XmlSerializable;
 use function array_keys;
 use function is_array;
 
@@ -441,11 +441,11 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
     public static function getFullyQualifiedEntityClassName($shortName)
     {
         foreach ([
-            '\\ThirtyBees\\PostNL\\Entity',
-            '\\ThirtyBees\\PostNL\\Entity\\Message',
-            '\\ThirtyBees\\PostNL\\Entity\\Request',
-            '\\ThirtyBees\\PostNL\\Entity\\Response',
-            '\\ThirtyBees\\PostNL\\Entity\\SOAP',
+            '\\Firstred\\PostNL\\Entity',
+            '\\Firstred\\PostNL\\Entity\\Message',
+            '\\Firstred\\PostNL\\Entity\\Request',
+            '\\Firstred\\PostNL\\Entity\\Response',
+            '\\Firstred\\PostNL\\Entity\\SOAP',
         ] as $namespace) {
             if (class_exists("$namespace\\$shortName")) {
                 return "$namespace\\$shortName";

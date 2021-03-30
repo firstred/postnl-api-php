@@ -24,7 +24,7 @@
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Tests\Service;
+namespace Firstred\PostNL\Tests\Service;
 
 use Cache\Adapter\Void\VoidCachePool;
 use GuzzleHttp\Handler\MockHandler;
@@ -33,15 +33,15 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use ThirtyBees\PostNL\Entity\Address;
-use ThirtyBees\PostNL\Entity\Barcode;
-use ThirtyBees\PostNL\Entity\Customer;
-use ThirtyBees\PostNL\Entity\Message\Message;
-use ThirtyBees\PostNL\Entity\Request\GenerateBarcode;
-use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
-use ThirtyBees\PostNL\HttpClient\MockClient;
-use ThirtyBees\PostNL\PostNL;
-use ThirtyBees\PostNL\Service\BarcodeServiceInterface;
+use Firstred\PostNL\Entity\Address;
+use Firstred\PostNL\Entity\Barcode;
+use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Entity\Message\Message;
+use Firstred\PostNL\Entity\Request\GenerateBarcode;
+use Firstred\PostNL\Entity\SOAP\UsernameToken;
+use Firstred\PostNL\HttpClient\MockClient;
+use Firstred\PostNL\PostNL;
+use Firstred\PostNL\Service\BarcodeServiceInterface;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 
 /**
@@ -61,7 +61,7 @@ class BarcodeServiceSoapTest extends ServiceTest
     /**
      * @before
      *
-     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @throws \ReflectionException
      */
     public function setupPostNL()
@@ -111,7 +111,7 @@ class BarcodeServiceSoapTest extends ServiceTest
     /**
      * @testdox creates a valid 3S barcode request
      *
-     * @throws \ThirtyBees\PostNL\Exception\InvalidBarcodeException
+     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
      * @throws \ReflectionException
      * @throws \libphonenumber\NumberParseException
      */
@@ -180,7 +180,7 @@ XML
     /**
      * @testdox return a valid single barcode
      *
-     * @throws \ThirtyBees\PostNL\Exception\InvalidBarcodeException
+     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
      */
     public function testSingleBarcodeSoap()
     {
@@ -202,8 +202,8 @@ XML
     /**
      * @testdox returns several barcodes
      *
-     * @throws \ThirtyBees\PostNL\Exception\InvalidBarcodeException
-     * @throws \ThirtyBees\PostNL\Exception\InvalidConfigurationException
+     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
+     * @throws \Firstred\PostNL\Exception\InvalidConfigurationException
      */
     public function testMultipleNLBarcodesSoap()
     {

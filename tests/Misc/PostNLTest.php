@@ -24,13 +24,13 @@
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Tests\Misc;
+namespace Firstred\PostNL\Tests\Misc;
 
 use PHPUnit\Framework\TestCase;
-use ThirtyBees\PostNL\Entity\Address;
-use ThirtyBees\PostNL\Entity\Customer;
-use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
-use ThirtyBees\PostNL\PostNL;
+use Firstred\PostNL\Entity\Address;
+use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Entity\SOAP\UsernameToken;
+use Firstred\PostNL\PostNL;
 
 /**
  * Class PostNLTest.
@@ -45,7 +45,7 @@ class PostNLTest extends TestCase
     /**
      * @before
      *
-     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @throws \ReflectionException
      */
     public function setupPostNL()
@@ -75,12 +75,12 @@ class PostNLTest extends TestCase
     /**
      * @testdox cannot generate an international barcode without a GlobalPack range
      *
-     * @throws \ThirtyBees\PostNL\Exception\InvalidBarcodeException
-     * @throws \ThirtyBees\PostNL\Exception\InvalidConfigurationException
+     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
+     * @throws \Firstred\PostNL\Exception\InvalidConfigurationException
      */
     public function testGlobalPackWithoutRange()
     {
-        $this->expectException('\\ThirtyBees\\PostNL\\Exception\\InvalidConfigurationException');
+        $this->expectException('\\Firstred\\PostNL\\Exception\\InvalidConfigurationException');
 
         $this->postnl->getCustomer()->setGlobalPackCustomerCode(null);
 
@@ -90,12 +90,12 @@ class PostNLTest extends TestCase
     /**
      * @testdox cannot generate an international barcode without a GlobalPack type
      *
-     * @throws \ThirtyBees\PostNL\Exception\InvalidBarcodeException
-     * @throws \ThirtyBees\PostNL\Exception\InvalidConfigurationException
+     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
+     * @throws \Firstred\PostNL\Exception\InvalidConfigurationException
      */
     public function testGlobalPackWithoutType()
     {
-        $this->expectException('\\ThirtyBees\\PostNL\\Exception\\InvalidConfigurationException');
+        $this->expectException('\\Firstred\\PostNL\\Exception\\InvalidConfigurationException');
 
         $this->postnl->getCustomer()->setGlobalPackBarcodeType(null);
 

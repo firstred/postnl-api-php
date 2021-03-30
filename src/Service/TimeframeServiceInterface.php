@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -24,20 +24,20 @@
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Service;
+namespace Firstred\PostNL\Service;
 
 use Psr\Cache\InvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use ReflectionException;
 use Sabre\Xml\LibXMLException;
-use ThirtyBees\PostNL\Entity\Request\GetTimeframes;
-use ThirtyBees\PostNL\Entity\Response\ResponseTimeframes;
-use ThirtyBees\PostNL\Exception\ApiException;
-use ThirtyBees\PostNL\Exception\CifDownException;
-use ThirtyBees\PostNL\Exception\CifException;
-use ThirtyBees\PostNL\Exception\HttpClientException;
-use ThirtyBees\PostNL\Exception\ResponseException;
+use Firstred\PostNL\Entity\Request\GetTimeframes;
+use Firstred\PostNL\Entity\Response\ResponseTimeframes;
+use Firstred\PostNL\Exception\ApiException;
+use Firstred\PostNL\Exception\CifDownException;
+use Firstred\PostNL\Exception\CifException;
+use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\ResponseException;
 
 /**
  * Class TimeframeService.

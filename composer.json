@@ -16,7 +16,7 @@
         "phpcs:fix": "vendor/bin/php-cs-fixer fix --config=.php_cs.dist src tests",
         "phpcs:fix:src": "vendor/bin/php-cs-fixer fix --config=.php_cs.dist src",
         "phpcs:fix:tests": "vendor/bin/php-cs-fixer fix  --config=.php_cs.dist tests",
-        "test": "vendor/bin/phpunit --testdox tests"
+        "test": "vendor/bin/phpunit -c phpunit.xml --testdox tests"
     },
     "require": {
         "php": "^5.6 || ^7.0 || ^8.0",
@@ -51,12 +51,13 @@
     },
     "autoload": {
         "psr-4": {
-            "ThirtyBees\\PostNL\\": "src/"
-        }
+            "Firstred\\PostNL\\": "src/"
+        },
+        "files": ["src/deprecated.php"]
     },
     "autoload-dev": {
         "psr-4": {
-            "ThirtyBees\\PostNL\\Tests\\": "tests/"
+            "Firstred\\PostNL\\Tests\\": "tests/"
         }
     }
 }

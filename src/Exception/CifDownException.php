@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -24,7 +24,7 @@
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Exception;
+namespace Firstred\PostNL\Exception;
 
 /**
  * Class CifDownException.

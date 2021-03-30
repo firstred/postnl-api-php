@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-namespace ThirtyBees\PostNL\Util;
+namespace Firstred\PostNL\Util;
 
 /**
  * A task queue that executes tasks in a FIFO order.

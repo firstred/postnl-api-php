@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-namespace ThirtyBees\PostNL\Exception\Promise;
+namespace Firstred\PostNL\Exception\Promise;
 
 /**
  * Exception thrown when too many errors occur in the some() or any() methods.

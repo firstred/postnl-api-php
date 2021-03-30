@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -24,16 +24,16 @@
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity;
+namespace Firstred\PostNL\Entity;
 
-use ThirtyBees\PostNL\Service\BarcodeService;
-use ThirtyBees\PostNL\Service\ConfirmingService;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
-use ThirtyBees\PostNL\Service\LabellingService;
-use ThirtyBees\PostNL\Service\LocationService;
-use ThirtyBees\PostNL\Service\ShippingService;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
-use ThirtyBees\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Service\BarcodeService;
+use Firstred\PostNL\Service\ConfirmingService;
+use Firstred\PostNL\Service\DeliveryDateService;
+use Firstred\PostNL\Service\LabellingService;
+use Firstred\PostNL\Service\LocationService;
+use Firstred\PostNL\Service\ShippingService;
+use Firstred\PostNL\Service\ShippingStatusService;
+use Firstred\PostNL\Service\TimeframeService;
 
 /**
  * Class Barcode.

@@ -24,12 +24,12 @@
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Tests\Entity\SOAP;
+namespace Firstred\PostNL\Tests\Entity\SOAP;
 
 use PHPUnit\Framework\TestCase;
-use ThirtyBees\PostNL\Entity\SOAP\Body;
-use ThirtyBees\PostNL\Entity\SOAP\Envelope;
-use ThirtyBees\PostNL\Entity\SOAP\Header;
+use Firstred\PostNL\Entity\SOAP\Body;
+use Firstred\PostNL\Entity\SOAP\Envelope;
+use Firstred\PostNL\Entity\SOAP\Header;
 
 /**
  * Class EnvelopeTest.

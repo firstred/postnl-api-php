@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-namespace ThirtyBees\PostNL\Exception\Promise;
+namespace Firstred\PostNL\Exception\Promise;
 
 use JsonSerializable;
 use RuntimeException;

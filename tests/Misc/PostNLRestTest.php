@@ -24,27 +24,27 @@
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Tests\Misc;
+namespace Firstred\PostNL\Tests\Misc;
 
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
-use ThirtyBees\PostNL\Entity\Address;
-use ThirtyBees\PostNL\Entity\Customer;
-use ThirtyBees\PostNL\Entity\CutOffTime;
-use ThirtyBees\PostNL\Entity\Location;
-use ThirtyBees\PostNL\Entity\Request\GetDeliveryDate;
-use ThirtyBees\PostNL\Entity\Request\GetNearestLocations;
-use ThirtyBees\PostNL\Entity\Request\GetTimeframes;
-use ThirtyBees\PostNL\Entity\Response\GetDeliveryDateResponse;
-use ThirtyBees\PostNL\Entity\Response\GetNearestLocationsResponse;
-use ThirtyBees\PostNL\Entity\Response\ResponseTimeframes;
-use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
-use ThirtyBees\PostNL\Entity\Timeframe;
-use ThirtyBees\PostNL\HttpClient\MockClient;
-use ThirtyBees\PostNL\PostNL;
-use ThirtyBees\PostNL\Util\DummyLogger;
+use Firstred\PostNL\Entity\Address;
+use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Entity\CutOffTime;
+use Firstred\PostNL\Entity\Location;
+use Firstred\PostNL\Entity\Request\GetDeliveryDate;
+use Firstred\PostNL\Entity\Request\GetNearestLocations;
+use Firstred\PostNL\Entity\Request\GetTimeframes;
+use Firstred\PostNL\Entity\Response\GetDeliveryDateResponse;
+use Firstred\PostNL\Entity\Response\GetNearestLocationsResponse;
+use Firstred\PostNL\Entity\Response\ResponseTimeframes;
+use Firstred\PostNL\Entity\SOAP\UsernameToken;
+use Firstred\PostNL\Entity\Timeframe;
+use Firstred\PostNL\HttpClient\MockClient;
+use Firstred\PostNL\PostNL;
+use Firstred\PostNL\Util\DummyLogger;
 
 /**
  * Class PostNLRestTest.
@@ -59,7 +59,7 @@ class PostNLRestTest extends TestCase
     /**
      * @before
      *
-     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @throws \ReflectionException
      */
     public function setupPostNL()
@@ -99,24 +99,24 @@ class PostNLRestTest extends TestCase
      */
     public function testCustomer()
     {
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Customer', $this->postnl->getCustomer());
+        $this->assertInstanceOf('\\Firstred\\PostNL\\Entity\\Customer', $this->postnl->getCustomer());
     }
 
     /**
      * @testdox accepts a string token
      *
-     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      */
     public function testSetTokenString()
     {
         $this->postnl->setToken('test');
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\SOAP\\UsernameToken', $this->postnl->getToken());
+        $this->assertInstanceOf('\\Firstred\\PostNL\\Entity\\SOAP\\UsernameToken', $this->postnl->getToken());
     }
 
     /**
      * @testdox accepts a token object
      *
-     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      */
     public function testSetTokenObject()
     {
@@ -138,8 +138,8 @@ class PostNLRestTest extends TestCase
      * @testdox returns a combinations of timeframes, locations and the delivery date
      *
      * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \ThirtyBees\PostNL\Exception\HttpClientException
-     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\HttpClientException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @throws \ReflectionException
      */
     public function testGetTimeframesAndLocations()
@@ -396,11 +396,11 @@ class PostNLRestTest extends TestCase
     /**
      * @testdox does not accept an invalid token object
      *
-     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      */
     public function testNegativeInvalidToken()
     {
-        $this->expectException('\\ThirtyBees\\PostNL\\Exception\\InvalidArgumentException');
+        $this->expectException('\\Firstred\\PostNL\\Exception\\InvalidArgumentException');
         $this->postnl->setToken(new Address());
     }
 
@@ -411,7 +411,7 @@ class PostNLRestTest extends TestCase
      */
     public function testNegativeKeyMissing()
     {
-        $reflection = new \ReflectionClass('\\ThirtyBees\\PostNL\\PostNL');
+        $reflection = new \ReflectionClass('\\Firstred\\PostNL\\PostNL');
         /** @var PostNL $postnl */
         $postnl = $reflection->newInstanceWithoutConstructor();
 
@@ -421,11 +421,11 @@ class PostNLRestTest extends TestCase
     /**
      * @testdox throws an exception when setting an invalid mode
      *
-     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      */
     public function testNegativeInvalidMode()
     {
-        $this->expectException('\\ThirtyBees\\PostNL\\Exception\\InvalidArgumentException');
+        $this->expectException('\\Firstred\\PostNL\\Exception\\InvalidArgumentException');
 
         $this->postnl->setMode('invalid');
     }

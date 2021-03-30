@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -24,23 +24,23 @@
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity\Request;
+namespace Firstred\PostNL\Entity\Request;
 
 use DateTimeImmutable;
 use DateTimeInterface;
 use Exception;
 use Sabre\Xml\Writer;
-use ThirtyBees\PostNL\Entity\AbstractEntity;
-use ThirtyBees\PostNL\Entity\CutOffTime;
-use ThirtyBees\PostNL\Entity\Message\Message;
-use ThirtyBees\PostNL\Exception\InvalidArgumentException;
-use ThirtyBees\PostNL\Service\BarcodeService;
-use ThirtyBees\PostNL\Service\ConfirmingService;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
-use ThirtyBees\PostNL\Service\LabellingService;
-use ThirtyBees\PostNL\Service\LocationService;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
-use ThirtyBees\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Entity\AbstractEntity;
+use Firstred\PostNL\Entity\CutOffTime;
+use Firstred\PostNL\Entity\Message\Message;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Service\BarcodeService;
+use Firstred\PostNL\Service\ConfirmingService;
+use Firstred\PostNL\Service\DeliveryDateService;
+use Firstred\PostNL\Service\LabellingService;
+use Firstred\PostNL\Service\LocationService;
+use Firstred\PostNL\Service\ShippingStatusService;
+use Firstred\PostNL\Service\TimeframeService;
 
 /**
  * Class GetDeliveryDate.

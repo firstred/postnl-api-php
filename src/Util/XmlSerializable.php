@@ -1,6 +1,6 @@
 <?php
 
-namespace ThirtyBees\PostNL\Util;
+namespace Firstred\PostNL\Util;
 
 use Sabre\Xml\Writer;
 use Sabre\Xml\XmlSerializable as SabreXmlSerializable;

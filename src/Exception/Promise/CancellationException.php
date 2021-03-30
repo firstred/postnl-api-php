@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-namespace ThirtyBees\PostNL\Exception\Promise;
+namespace Firstred\PostNL\Exception\Promise;
 
 /**
  * Exception that is set as the reason for a promise that has been cancelled.

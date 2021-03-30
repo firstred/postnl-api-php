@@ -3,8 +3,8 @@
 [![Build Status](https://travis-ci.org/firstred/postnl-api-php.svg?branch=master)](https://travis-ci.org/firstred/postnl-api-php)
 [![Documentation Status](https://readthedocs.org/projects/postnl-php/badge/?version=latest)](https://postnl-php.readthedocs.io/en/latest/?badge=latest)
 [![codecov](https://codecov.io/gh/firstred/postnl-api-php/branch/master/graph/badge.svg)](https://codecov.io/gh/firstred/postnl-api-php)
-[![latest stable version](https://poser.pugx.org/firstred/postnl-api-php/v/stable.svg)](https://packagist.org/packages/thirtybees/postnl-api-php)
-[![license mit](https://poser.pugx.org/thirtybees/postnl-api-php/license.svg)](https://packagist.org/packages/thirtybees/postnl-api-php)
+[![latest stable version](https://poser.pugx.org/firstred/postnl-api-php/v/stable.svg)](https://packagist.org/packages/firstred/postnl-api-php)
+[![license mit](https://poser.pugx.org/firstred/postnl-api-php/license.svg)](https://packagist.org/packages/firstred/postnl-api-php)
 
 ## About
 
@@ -33,22 +33,25 @@ The PHP bindings can connect to both PostNL's SOAP and REST API.
 | **Send & Track**                            |                           |                           |         |
 | Barcode webservice                          | ✓                         | ✓                         | 1.1     |
 | Labelling webservice                        | ✓                         | ✓                         | 2.2     |
-| Confirming webservice                       | ✓                         | ✓                         | 2.0    |
+| Confirming webservice                       | ✓                         | ✓                         | 2.0     |
 | Shippingstatus webservice                   | ✓                         | ✓                         | 2.0     |
-| Shipping webservice                         | ✓                         | ✓*                        | 2.0     |
+| Shipping webservice                         | ✓                         | ✓\*                       | 2.0     |
 | **Delivery Options**                        |                           |                           |         |
 | Deliverydate webservice                     | ✓                         | ✓                         | 2.2     |
 | Location webservice                         | ✓                         | ✓                         | 2.1     |
 | Timeframe webservice                        | ✓                         | ✓                         | 2.1     |
+| Checkout webservice                         | Planned                   | Planned\*                 | 1.0     |
 | **Mail**                                    |                           |                           |         |
 | Bulkmail webservice                         | N/A                       | N/A                       | N/A     |
+
+\* SOAP version not available. Falls back on the REST API.
 
 ## Instructions
 
 - Clone this repo
 - Optionally run `composer require guzzlehttp/guzzle` to use Guzzle instead of cURL directly
 - Run `composer install` (Don't have composer? Visit https://getcomposer.org/)
-- You're good to go! A small example can be found in this README. Check out the documtation for a quick start guide.
+- You're good to go! A small example can be found in this README. Check out the documentation for a quick start guide.
 
 ## Documentation
 
@@ -59,11 +62,11 @@ Allow a user to download a label using the default REST API
 ```php
 <?php
 
-use ThirtyBees\PostNL\PostNL;
-use ThirtyBees\PostNL\Entity\Customer;
-use ThirtyBees\PostNL\Entity\Address;
-use ThirtyBees\PostNL\Entity\Shipment;
-use ThirtyBees\PostNL\Entity\Dimension;
+use Firstred\PostNL\PostNL;
+use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Entity\Address;
+use Firstred\PostNL\Entity\Shipment;
+use Firstred\PostNL\Entity\Dimension;
 
 require_once __DIR__.'/vendor/autoload.php';
 
@@ -71,7 +74,7 @@ $customer = Customer::create([
     'CollectionLocation' => '123456',
     'CustomerCode'       => 'DEVC',
     'CustomerNumber'     => '11223344',
-    'ContactPerson'      => 'Lesley',
+    'ContactPerson'      => 'Peter',
     'Address'            => Address::create([
         'AddressType' => '02',
         'City'        => 'Hoofddorp',
@@ -81,7 +84,7 @@ $customer = Customer::create([
         'Street'      => 'Siriusdreef',
         'Zipcode'     => '2132WT',
     ]),
-    'Email'              => 'michael@thirtybees.com',
+    'Email'              => 'info@voorbeeld.nl',
     'Name'               => 'Michael',
 ]);
 
@@ -136,7 +139,7 @@ This library has been licensed with the MIT license.
   <summary>Full license text</summary>
 
 The MIT License (MIT).
-Copyright (c) 2017-2020 Michael Dekker (https://github.com/firstred)
+Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

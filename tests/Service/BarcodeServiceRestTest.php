@@ -24,7 +24,7 @@
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Tests\Service;
+namespace Firstred\PostNL\Tests\Service;
 
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
@@ -32,17 +32,17 @@ use GuzzleHttp\Psr7\Message as PsrMessage;
 use GuzzleHttp\Psr7\Query;
 use GuzzleHttp\Psr7\Request;
 use Psr\Log\LoggerInterface;
-use ThirtyBees\PostNL\Entity\Address;
-use ThirtyBees\PostNL\Entity\Barcode;
-use ThirtyBees\PostNL\Entity\Customer;
-use ThirtyBees\PostNL\Entity\Message\Message;
-use ThirtyBees\PostNL\Entity\Request\GenerateBarcode;
-use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
-use ThirtyBees\PostNL\Exception\ResponseException;
-use ThirtyBees\PostNL\HttpClient\MockClient;
-use ThirtyBees\PostNL\PostNL;
-use ThirtyBees\PostNL\Service\BarcodeService;
-use ThirtyBees\PostNL\Service\BarcodeServiceInterface;
+use Firstred\PostNL\Entity\Address;
+use Firstred\PostNL\Entity\Barcode;
+use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Entity\Message\Message;
+use Firstred\PostNL\Entity\Request\GenerateBarcode;
+use Firstred\PostNL\Entity\SOAP\UsernameToken;
+use Firstred\PostNL\Exception\ResponseException;
+use Firstred\PostNL\HttpClient\MockClient;
+use Firstred\PostNL\PostNL;
+use Firstred\PostNL\Service\BarcodeService;
+use Firstred\PostNL\Service\BarcodeServiceInterface;
 use function file_get_contents;
 use const _RESPONSES_DIR_;
 
@@ -64,7 +64,7 @@ class BarcodeServiceRestTest extends ServiceTest
      * @before
      *
      * @throws \ReflectionException
-     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @throws \libphonenumber\NumberParseException
      */
     public function setupPostNL()
@@ -120,7 +120,7 @@ class BarcodeServiceRestTest extends ServiceTest
     /**
      * @testdox creates a valid 3S barcode request
      *
-     * @throws \ThirtyBees\PostNL\Exception\InvalidBarcodeException
+     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
      * @throws \ReflectionException
      */
     public function testCreatesAValid3SBarcodeRequest()
@@ -174,7 +174,7 @@ class BarcodeServiceRestTest extends ServiceTest
     /**
      * @testdox return a valid single barcode
      *
-     * @throws \ThirtyBees\PostNL\Exception\InvalidBarcodeException
+     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
      */
     public function testSingleBarcodeRest()
     {
@@ -192,8 +192,8 @@ class BarcodeServiceRestTest extends ServiceTest
     /**
      * @testdox return a valid single barcode for a country
      *
-     * @throws \ThirtyBees\PostNL\Exception\InvalidBarcodeException
-     * @throws \ThirtyBees\PostNL\Exception\InvalidConfigurationException
+     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
+     * @throws \Firstred\PostNL\Exception\InvalidConfigurationException
      */
     public function testSingleBarCodeByCountryRest()
     {
@@ -211,8 +211,8 @@ class BarcodeServiceRestTest extends ServiceTest
     /**
      * @testdox returns several barcodes
      *
-     * @throws \ThirtyBees\PostNL\Exception\InvalidBarcodeException
-     * @throws \ThirtyBees\PostNL\Exception\InvalidConfigurationException
+     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
+     * @throws \Firstred\PostNL\Exception\InvalidConfigurationException
      */
     public function testMultipleNLBarcodesRest()
     {
@@ -244,7 +244,7 @@ class BarcodeServiceRestTest extends ServiceTest
     /**
      * @testdox return a valid single barcode
      *
-     * @throws \ThirtyBees\PostNL\Exception\InvalidBarcodeException
+     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
      */
     public function testNegativeSingleBarcodeInvalidResponse()
     {

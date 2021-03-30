@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2020 KeenDelivery, LLC
+ * Copyright (c) 2017-2021 KeenDelivery, LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -24,7 +24,7 @@
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Service;
+namespace Firstred\PostNL\Service;
 
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use InvalidArgumentException;
@@ -32,13 +32,13 @@ use Psr\Cache\CacheItemInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use ReflectionException;
-use ThirtyBees\PostNL\Entity\Request\GenerateShipping;
-use ThirtyBees\PostNL\Entity\Response\GenerateShippingResponse;
-use ThirtyBees\PostNL\Exception\ApiException;
-use ThirtyBees\PostNL\Exception\CifDownException;
-use ThirtyBees\PostNL\Exception\CifException;
-use ThirtyBees\PostNL\Exception\HttpClientException;
-use ThirtyBees\PostNL\Exception\ResponseException;
+use Firstred\PostNL\Entity\Request\GenerateShipping;
+use Firstred\PostNL\Entity\Response\GenerateShippingResponse;
+use Firstred\PostNL\Exception\ApiException;
+use Firstred\PostNL\Exception\CifDownException;
+use Firstred\PostNL\Exception\CifException;
+use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\ResponseException;
 use function http_build_query;
 use function json_encode;
 
@@ -77,8 +77,8 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
      * @throws ResponseException
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws HttpClientException
-     * @throws \ThirtyBees\PostNL\Exception\NotSupportedException
-     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\NotSupportedException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      *
      * @since 1.2.0
      */
@@ -157,8 +157,8 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
      * @throws ReflectionException
      * @throws ResponseException
      * @throws HttpClientException
-     * @throws \ThirtyBees\PostNL\Exception\NotSupportedException
-     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\NotSupportedException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      *
      * @since 1.2.0
      */

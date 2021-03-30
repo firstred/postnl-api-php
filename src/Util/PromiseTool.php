@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-namespace ThirtyBees\PostNL\Util;
+namespace Firstred\PostNL\Util;
 
 use ArrayIterator;
 use Exception;
@@ -30,8 +30,8 @@ use Http\Promise\FulfilledPromise;
 use Http\Promise\Promise;
 use Http\Promise\RejectedPromise;
 use Iterator;
-use ThirtyBees\PostNL\Exception\Promise\AggregateException;
-use ThirtyBees\PostNL\Exception\Promise\RejectionException;
+use Firstred\PostNL\Exception\Promise\AggregateException;
+use Firstred\PostNL\Exception\Promise\RejectionException;
 
 /**
  * Class PromiseTool.
