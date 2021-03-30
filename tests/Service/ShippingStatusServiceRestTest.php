@@ -95,6 +95,9 @@ class ShippingStatusServiceRestTest extends ServiceTest
             PostNL::MODE_REST
         );
 
+        global $logger;
+        $this->postnl->setLogger($logger);
+
         $this->service = $this->postnl->getShippingStatusService();
         $this->service->cache = new VoidCachePool();
         $this->service->ttl = 1;

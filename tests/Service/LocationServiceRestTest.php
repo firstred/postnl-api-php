@@ -96,6 +96,9 @@ class LocationServiceRestTest extends ServiceTest
             PostNL::MODE_REST
         );
 
+        global $logger;
+        $this->postnl->setLogger($logger);
+
         $this->service = $this->postnl->getLocationService();
         $this->service->cache = new VoidCachePool();
         $this->service->ttl = 1;

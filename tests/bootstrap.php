@@ -16,6 +16,7 @@ $filesystem = new Filesystem($filesystemAdapter);
 
 $adapter = new Local(__DIR__.'/logs/');
 $logfs = new Filesystem($adapter);
+
+global $logger;
 $logger = new Logger($logfs, LogLevel::DEBUG);
 $logger->setFilenameFormat('Y-m-d H:i');
-$GLOBALS['logger'] = $logger;

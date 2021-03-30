@@ -91,6 +91,9 @@ class ShippingServiceSoapTest extends ServiceTest
             PostNL::MODE_SOAP
         );
 
+        global $logger;
+        $this->postnl->setLogger($logger);
+
         $this->service = $this->postnl->getShippingService();
         $this->service->cache = new VoidCachePool();
         $this->service->ttl = 1;

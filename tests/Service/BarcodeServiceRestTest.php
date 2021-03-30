@@ -26,6 +26,7 @@
 
 namespace Firstred\PostNL\Tests\Service;
 
+use Cache\Adapter\Void\VoidCachePool;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Barcode;
 use Firstred\PostNL\Entity\Customer;
@@ -88,7 +89,12 @@ class BarcodeServiceRestTest extends ServiceTest
             PostNL::MODE_REST
         );
 
+        global $logger;
+        $this->postnl->setLogger($logger);
+
         $this->service = $this->postnl->getBarcodeService();
+        $this->service->cache = new VoidCachePool();
+        $this->service->ttl = 1;
     }
 
     /**

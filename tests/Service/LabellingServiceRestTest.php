@@ -97,6 +97,9 @@ class LabellingServiceRestTest extends ServiceTest
             PostNL::MODE_REST
         );
 
+        global $logger;
+        $this->postnl->setLogger($logger);
+
         $this->service = $this->postnl->getLabellingService();
         $this->service->cache = new VoidCachePool();
         $this->service->ttl = 1;
