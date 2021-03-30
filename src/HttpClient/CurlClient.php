@@ -27,6 +27,7 @@
 namespace Firstred\PostNL\HttpClient;
 
 use Exception;
+use Firstred\PostNL\Exception\ApiException;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -34,6 +35,7 @@ use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Firstred\PostNL\Exception\ApiConnectionException;
 use Firstred\PostNL\Exception\HttpClientException;
+use Psr\Log\LogLevel;
 
 if (!defined('CURL_SSLVERSION_TLSv1')) {
     define('CURL_SSLVERSION_TLSv1', 1);
@@ -235,31 +237,43 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
      *
      * @return ResponseInterface
      *
-     * @throws Exception
+     * @throws ApiConnectionException
+     * @throws HttpClientException
      */
     public function doRequest(RequestInterface $request)
     {
-        if ($this->logger instanceof LoggerInterface) {
-            $this->logger->debug(PsrMessage::toString($request));
-        }
+        $logLevel = LogLevel::DEBUG;
+        $response = null;
 
-        $curl = curl_init();
-        // Create a callback to capture HTTP headers for the response
-        $this->prepareRequest($curl, $request);
-        $rbody = curl_exec($curl);
-        if (false === $rbody) {
-            $errno = curl_errno($curl);
-            $message = curl_error($curl);
+        try {
+            $curl = curl_init();
+            // Create a callback to capture HTTP headers for the response
+            $this->prepareRequest($curl, $request);
+            $responseBody = curl_exec($curl);
+            if (false === $responseBody) {
+                $errno = curl_errno($curl);
+                $message = curl_error($curl);
+                curl_close($curl);
+                $logLevel = LogLevel::ERROR;
+                $this->handleCurlError($request->getUri(), $errno, $message);
+            }
             curl_close($curl);
-            $this->handleCurlError($request->getUri(), $errno, $message);
-        }
-        curl_close($curl);
 
-        if ($this->logger instanceof LoggerInterface) {
-            $this->logger->debug($rbody);
-        }
+            $response = PsrMessage::parseResponse($responseBody);
+            if ($response->getStatusCode() < 200 || $response->getStatusCode() >= 400) {
+                $logLevel = LogLevel::ERROR;
+            }
 
-        return PsrMessage::parseResponse($rbody);
+            return $response;
+        } catch (ApiException $e) {
+            $logLevel = LogLevel::ERROR;
+            throw new HttpClientException('Connection error', 0, $e, $response);
+        } finally {
+            $this->getLogger()->log($logLevel, PsrMessage::toString($request));
+            if ($response instanceof ResponseInterface) {
+                $this->getLogger()->log($logLevel, PsrMessage::toString($response));
+            }
+        }
     }
 
     /**
@@ -269,9 +283,7 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
      *
      * @param RequestInterface[] $requests
      *
-     * @return ResponseInterface|ResponseInterface[]|Exception|Exception[]
-     *
-     * @throws HttpClientException
+     * @return ResponseInterface[]|HttpClientException[]
      */
     public function doRequests($requests = [])
     {
@@ -279,13 +291,13 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
         $curlHandles = [];
         $mh = curl_multi_init();
         foreach ($this->pendingRequests + $requests as $uuid => $request) {
-            if ($request instanceof RequestInterface && $this->logger instanceof LoggerInterface) {
-                $this->logger->debug(PsrMessage::toString($request));
-            }
-
             $curl = curl_init();
             $curlHandles[$uuid] = $curl;
-            $this->prepareRequest($curl, $request);
+            try {
+                $this->prepareRequest($curl, $request);
+            } catch (HttpClientException $e) {
+                // Handle later
+            }
             curl_multi_add_handle($mh, $curl);
         }
         // execute the handles
@@ -306,10 +318,15 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
         }
         $responses = [];
         foreach ($responseBodies as $uuid => $responseBody) {
-            if ($this->logger instanceof LoggerInterface) {
-                $this->logger->debug($responseBody);
+            $logLevel = LogLevel::DEBUG;
+            $response = PsrMessage::parseResponse($responseBody);
+            if ($response->getStatusCode() < 200 || $response->getStatusCode() >= 400) {
+                $logLevel = LogLevel::ERROR;
             }
-            $responses[$uuid] = PsrMessage::parseResponse($responseBody);
+            $this->getLogger()->log($logLevel, PsrMessage::toString($requests[$uuid]));
+            $this->getLogger()->log($logLevel, PsrMessage::toString($response));
+
+            $responses[$uuid] = $response;
         }
 
         // Reset pending requests

@@ -28,13 +28,6 @@ namespace Firstred\PostNL\Tests\Service;
 
 use Cache\Adapter\Void\VoidCachePool;
 use Exception;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Message as PsrMessage;
-use GuzzleHttp\Psr7\Request;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Log\LoggerInterface;
-use setasign\Fpdi\PdfReader\PdfReaderException;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Dimension;
@@ -49,6 +42,11 @@ use Firstred\PostNL\HttpClient\MockClient;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LabellingServiceInterface;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Message as PsrMessage;
+use Psr\Http\Message\ResponseInterface;
+use setasign\Fpdi\PdfReader\PdfReaderException;
 use function file_get_contents;
 use function json_decode;
 use const _RESPONSES_DIR_;
@@ -102,22 +100,6 @@ class LabellingServiceRestTest extends ServiceTest
         $this->service = $this->postnl->getLabellingService();
         $this->service->cache = new VoidCachePool();
         $this->service->ttl = 1;
-    }
-
-    /**
-     * @after
-     */
-    public function logPendingRequest()
-    {
-        if (!$this->lastRequest instanceof Request) {
-            return;
-        }
-
-        global $logger;
-        if ($logger instanceof LoggerInterface) {
-            $logger->debug($this->getName()." Request\n".PsrMessage::toString($this->lastRequest));
-        }
-        $this->lastRequest = null;
     }
 
     /**

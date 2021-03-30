@@ -28,15 +28,6 @@ namespace Firstred\PostNL\Tests\Service;
 
 use Cache\Adapter\Void\VoidCachePool;
 use DateTimeInterface;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Message as PsrMessage;
-use GuzzleHttp\Psr7\Query;
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
-use libphonenumber\NumberParseException;
-use Psr\Log\LoggerInterface;
-use ReflectionException;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\CutOffTime;
@@ -51,6 +42,13 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\HttpClient\MockClient;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\DeliveryDateServiceInterface;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Message as PsrMessage;
+use GuzzleHttp\Psr7\Query;
+use GuzzleHttp\Psr7\Response;
+use libphonenumber\NumberParseException;
+use ReflectionException;
 use function file_get_contents;
 use const _RESPONSES_DIR_;
 
@@ -101,22 +99,6 @@ class DeliveryDateServiceRestTest extends ServiceTest
         $this->service = $this->postnl->getDeliveryDateService();
         $this->service->cache = new VoidCachePool();
         $this->service->ttl = 1;
-    }
-
-    /**
-     * @after
-     */
-    public function logPendingRequest()
-    {
-        if (!$this->lastRequest instanceof Request) {
-            return;
-        }
-
-        global $logger;
-        if ($logger instanceof LoggerInterface) {
-            $logger->debug($this->getName()." Request\n".PsrMessage::toString($this->lastRequest));
-        }
-        $this->lastRequest = null;
     }
 
     /**

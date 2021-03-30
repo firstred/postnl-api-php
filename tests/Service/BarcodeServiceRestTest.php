@@ -26,12 +26,6 @@
 
 namespace Firstred\PostNL\Tests\Service;
 
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Message as PsrMessage;
-use GuzzleHttp\Psr7\Query;
-use GuzzleHttp\Psr7\Request;
-use Psr\Log\LoggerInterface;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Barcode;
 use Firstred\PostNL\Entity\Customer;
@@ -43,6 +37,10 @@ use Firstred\PostNL\HttpClient\MockClient;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\BarcodeServiceInterface;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Message as PsrMessage;
+use GuzzleHttp\Psr7\Query;
 use function file_get_contents;
 use const _RESPONSES_DIR_;
 
@@ -91,22 +89,6 @@ class BarcodeServiceRestTest extends ServiceTest
         );
 
         $this->service = $this->postnl->getBarcodeService();
-    }
-
-    /**
-     * @after
-     */
-    public function logPendingRequest()
-    {
-        if (!$this->lastRequest instanceof Request) {
-            return;
-        }
-
-        global $logger;
-        if ($logger instanceof LoggerInterface) {
-            $logger->debug($this->getName()." Request\n".PsrMessage::toString($this->lastRequest));
-        }
-        $this->lastRequest = null;
     }
 
     /**

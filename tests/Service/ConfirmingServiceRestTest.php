@@ -27,14 +27,6 @@
 namespace Firstred\PostNL\Tests\Service;
 
 use Cache\Adapter\Void\VoidCachePool;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Message as PsrMessage;
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Log\LoggerInterface;
-use ReflectionException;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Dimension;
@@ -49,6 +41,12 @@ use Firstred\PostNL\HttpClient\MockClient;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\ConfirmingServiceInterface;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Message as PsrMessage;
+use GuzzleHttp\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
+use ReflectionException;
 use function file_get_contents;
 use const _RESPONSES_DIR_;
 
@@ -98,22 +96,6 @@ class ConfirmingServiceRestTest extends ServiceTest
         $this->service = $this->postnl->getConfirmingService();
         $this->service->cache = new VoidCachePool();
         $this->service->ttl = 1;
-    }
-
-    /**
-     * @after
-     */
-    public function logPendingRequest()
-    {
-        if (!$this->lastRequest instanceof Request) {
-            return;
-        }
-
-        global $logger;
-        if ($logger instanceof LoggerInterface) {
-            $logger->debug($this->getName()." Request\n".PsrMessage::toString($this->lastRequest));
-        }
-        $this->lastRequest = null;
     }
 
     /**

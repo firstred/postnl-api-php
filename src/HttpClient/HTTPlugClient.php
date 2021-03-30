@@ -3,6 +3,9 @@
 namespace Firstred\PostNL\HttpClient;
 
 use Exception;
+use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Util\EachPromise;
+use GuzzleHttp\Psr7\Message as PsrMessage;
 use Http\Client\Exception\HttpException;
 use Http\Client\Exception\TransferException;
 use Http\Client\HttpAsyncClient;
@@ -18,8 +21,8 @@ use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
-use Firstred\PostNL\Exception\HttpClientException;
-use Firstred\PostNL\Util\EachPromise;
+use Psr\Log\LogLevel;
+use const LOG_LOCAL0;
 
 /**
  * Class HTTPlugClient.
@@ -197,6 +200,21 @@ class HTTPlugClient implements ClientInterface
             }
         }
 
+        foreach ($responses as $id => $response) {
+            $logLevel = LogLevel::DEBUG;
+            if (!$response instanceof ResponseInterface
+                || $response->getStatusCode() < 200
+                || $response->getStatusCode() >= 400
+            ) {
+                $logLevel = LogLevel::ERROR;
+            }
+
+            $this->getLogger()->log($logLevel, PsrMessage::toString($requests[$id]));
+            if ($response instanceof ResponseInterface) {
+                $this->getLogger()->log($logLevel, PsrMessage::toString($response));
+            }
+        }
+
         return $responses;
     }
 
@@ -221,19 +239,36 @@ class HTTPlugClient implements ClientInterface
      */
     public function doRequest(RequestInterface $request)
     {
+        $logLevel = LogLevel::DEBUG;
+        $response = null;
+
         // Initialize HttpAsyncClient, include the default options
         $client = $this->getClient();
 
         try {
             if ($client instanceof HttpAsyncClient) {
-                return $client->sendAsyncRequest($request)->wait();
+                $response = $client->sendAsyncRequest($request)->wait();
+            } else {
+                $response =  $client->sendRequest($request);
             }
 
-            return $client->sendRequest($request);
+            return $response;
         } catch (Exception $e) {
             throw new HttpClientException($e->getMessage(), $e->getCode(), $e);
         } catch (ClientExceptionInterface $e) {
             throw new HttpClientException($e->getMessage(), $e->getCode(), $e);
+        } finally {
+            if (!$response instanceof ResponseInterface
+                || $response->getStatusCode() < 200
+                || $response->getStatusCode() >= 400
+            ) {
+                $logLevel = LogLevel::ERROR;
+            }
+
+            $this->getLogger()->log($logLevel, PsrMessage::toString($request));
+            if ($response instanceof ResponseInterface) {
+                $this->getLogger()->log($logLevel, PsrMessage::toString($response));
+            }
         }
     }
 
@@ -318,11 +353,11 @@ class HTTPlugClient implements ClientInterface
     /**
      * @param bool|string $verify
      *
-     * @return HTTPlugClient|void
+     * @return HTTPlugClient
      */
     public function setVerify($verify)
     {
-        // Not supported by the HTTPlug client
+        return $this;
     }
 
     /**
@@ -330,6 +365,7 @@ class HTTPlugClient implements ClientInterface
      */
     public function getVerify()
     {
+        return true;
         // Not supported by the HTTPlug client
     }
 }

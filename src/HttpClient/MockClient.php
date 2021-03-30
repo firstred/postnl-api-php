@@ -26,6 +26,7 @@
 
 namespace Firstred\PostNL\HttpClient;
 
+use Firstred\PostNL\Util\DummyLogger;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
@@ -38,6 +39,7 @@ use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\ResponseException;
+use Psr\Log\LogLevel;
 
 /**
  * Class MockClient.
@@ -189,6 +191,10 @@ class MockClient implements ClientInterface, LoggerAwareInterface
      */
     public function getLogger()
     {
+        if (!$this->logger) {
+            $this->logger = new DummyLogger();
+        }
+
         return $this->logger;
     }
 
@@ -261,6 +267,9 @@ class MockClient implements ClientInterface, LoggerAwareInterface
      */
     public function doRequest(RequestInterface $request)
     {
+        $logLevel = LogLevel::DEBUG;
+        $response = null;
+
         // Initialize Guzzle, include the default options
         $guzzle = new Client(array_merge(
             $this->defaultOptions,
@@ -273,11 +282,28 @@ class MockClient implements ClientInterface, LoggerAwareInterface
         ));
 
         try {
-            return $guzzle->send($request);
+            /** @noinspection PhpUnnecessaryLocalVariableInspection */
+            $response = $guzzle->send($request);
+            return $response;
         } catch (RequestException $e) {
-            throw new HttpClientException(null, null, $e, $e->getResponse());
+            $response = $e->getResponse();
+            $logLevel = LogLevel::ERROR;
+            throw new HttpClientException(null, null, $e, $response);
         } catch (GuzzleException $e) {
+            $logLevel = LogLevel::ERROR;
             throw new HttpClientException(null, null, $e);
+        } finally {
+            if (!$response instanceof ResponseInterface
+                || $response->getStatusCode() < 200
+                || $response->getStatusCode() >= 400
+            ) {
+                $logLevel = LogLevel::ERROR;
+            }
+
+            $this->getLogger()->log($logLevel, PsrMessage::toString($request));
+            if ($response instanceof ResponseInterface) {
+                $this->getLogger()->log($logLevel, PsrMessage::toString($response));
+            }
         }
     }
 
@@ -288,7 +314,7 @@ class MockClient implements ClientInterface, LoggerAwareInterface
      *
      * @param RequestInterface[] $requests
      *
-     * @return ResponseInterface|ResponseInterface[]|HttpClientException|HttpClientException[]
+     * @return ResponseInterface[]|HttpClientException[]
      */
     public function doRequests($requests = [])
     {
@@ -317,21 +343,33 @@ class MockClient implements ClientInterface, LoggerAwareInterface
 
         // Concurrent requests
         $promises = [];
-        foreach ($requests as $index => $request) {
-            $promises[$index] = $guzzle->sendAsync($request);
+        foreach ($requests as $id => $request) {
+            $promises[$id] = $guzzle->sendAsync($request);
         }
 
         $responses = Utils::settle($promises)->wait();
-        foreach ($responses as &$response) {
+        foreach ($responses as $id => &$response) {
+            $logLevel = LogLevel::DEBUG;
             if (isset($response['value'])) {
                 $response = $response['value'];
             } elseif (isset($response['reason'])) {
+                $logLevel = LogLevel::ERROR;
                 $response = $response['reason'];
             } else {
-                $response = new ResponseException('Unknown reponse type');
+                $logLevel = LogLevel::ERROR;
+                $response = new ResponseException('Unknown response type');
             }
-            if ($response instanceof ResponseInterface && $this->logger instanceof LoggerInterface) {
-                $this->logger->debug(PsrMessage::toString($response));
+
+            if (!$response instanceof ResponseInterface
+                || $response->getStatusCode() < 200
+                || $response->getStatusCode() >= 400
+            ) {
+                $logLevel = LogLevel::ERROR;
+            }
+
+            $this->getLogger()->log($logLevel, PsrMessage::toString($requests[$id]));
+            if ($response instanceof ResponseInterface) {
+                $this->getLogger()->log($logLevel, PsrMessage::toString($response));
             }
         }
 

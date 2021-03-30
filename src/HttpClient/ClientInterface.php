@@ -26,6 +26,7 @@
 
 namespace Firstred\PostNL\HttpClient;
 
+use Firstred\PostNL\Exception\ApiConnectionException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
@@ -106,6 +107,8 @@ interface ClientInterface
      * @param RequestInterface $request
      *
      * @return ResponseInterface
+     *
+     * @throws HttpClientException
      */
     public function doRequest(RequestInterface $request);
 

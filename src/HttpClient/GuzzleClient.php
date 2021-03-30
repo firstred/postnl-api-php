@@ -42,6 +42,7 @@ use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\ResponseException;
+use Psr\Log\LogLevel;
 use function method_exists;
 
 /**
@@ -81,14 +82,12 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
      * Get the Guzzle client.
      *
      * @return Client
-     *
-     * @noinspection PhpUnusedParameterInspection
      */
     private function getClient()
     {
         if (!$this->client) {
             // Initialize Guzzle and the retry middleware, include the default options
-            $handler = method_exists('\\GuzzleHttp\\Utils', 'chooseHandler') ? Utils::chooseHandler() : \GuzzleHttp\choose_handler();
+            $handler = method_exists(Utils::class, 'chooseHandler') ? Utils::chooseHandler() : \GuzzleHttp\choose_handler();
             $stack = HandlerStack::create($handler);
             $stack->push(Middleware::retry(function (
                 $retries,
@@ -335,20 +334,33 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
      */
     public function doRequest(RequestInterface $request)
     {
+        $logLevel = LogLevel::DEBUG;
+        $response = null;
+
         // Initialize Guzzle, include the default options
         $guzzle = $this->getClient();
         try {
+            /** @noinspection PhpUnnecessaryLocalVariableInspection */
             $response = $guzzle->send($request);
+            return $response;
         } catch (RequestException $e) {
-            throw new HttpClientException($e->getMessage(), $e->getCode(), $e->getResponse());
+            $response = $e->getResponse();
+            throw new HttpClientException($e->getMessage(), $e->getCode(), $e, $response);
         } catch (GuzzleException $e) {
             throw new HttpClientException($e->getMessage(), $e->getCode(), $e);
-        }
-        if ($response instanceof ResponseInterface && $this->logger instanceof LoggerInterface) {
-            $this->logger->debug(PsrMessage::toString($response));
-        }
+        } finally {
+            if (!$response instanceof ResponseInterface
+                || $response->getStatusCode() < 200
+                || $response->getStatusCode() >= 400
+            ) {
+                $logLevel = LogLevel::ERROR;
+            }
 
-        return $response;
+            $this->logger->log($logLevel, PsrMessage::toString($request));
+            if ($response instanceof ResponseInterface) {
+                $this->logger->log($logLevel, PsrMessage::toString($response));
+            }
+        }
     }
 
     /**
@@ -358,7 +370,7 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
      *
      * @param RequestInterface[] $requests
      *
-     * @return ResponseInterface|ResponseInterface[]|HttpClientException|HttpClientException[]
+     * @return HttpClientException[]|ResponseInterface[]
      */
     public function doRequests($requests = [])
     {
@@ -379,9 +391,6 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
         // Concurrent requests
         $promises = call_user_func(function () use ($requests, $guzzle) {
             foreach ($requests as $index => $request) {
-                if ($request instanceof RequestInterface && $this->logger instanceof LoggerInterface) {
-                    $this->logger->debug(PsrMessage::toString($request));
-                }
                 yield $index => $guzzle->sendAsync($request);
             }
         });
@@ -396,7 +405,9 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
                 $responses[$index] = $response;
             },
         ]))->promise()->wait();
-        foreach ($responses as &$response) {
+        foreach ($responses as $id => &$response) {
+            $logLevel = LogLevel::DEBUG;
+
             if (is_array($response) && !empty($response['value'])) {
                 $response = $response['value'];
             } elseif (is_array($response) && !empty($response['reason'])) {
@@ -431,8 +442,17 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
             } elseif (!$response instanceof ResponseInterface) {
                 $response = new ResponseException('Unknown response type');
             }
-            if ($response instanceof ResponseInterface && $this->logger instanceof LoggerInterface) {
-                $this->logger->debug(PsrMessage::toString($response));
+
+            if (!$response instanceof ResponseInterface
+                || $response->getStatusCode() < 200
+                || $response->getStatusCode() >= 400
+            ) {
+                $logLevel = LogLevel::ERROR;
+            }
+
+            $this->logger->log($logLevel, PsrMessage::toString($requests[$id]));
+            if ($response instanceof ResponseInterface) {
+                $this->logger->log($logLevel, PsrMessage::toString($response));
             }
         }
 

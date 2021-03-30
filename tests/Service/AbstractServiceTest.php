@@ -26,13 +26,13 @@
 
 namespace Firstred\PostNL\Tests\Service;
 
-use GuzzleHttp\Psr7\Response;
 use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\Service\AbstractService;
+use GuzzleHttp\Psr7\Response;
 
 /**
  * Class AbstractServiceTest.
