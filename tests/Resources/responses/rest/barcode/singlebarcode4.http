@@ -1,5 +1,17 @@
 HTTP/1.1 200 OK
+Access-Control-Allow-Headers: origin, x-requested-with, accept, apikey, Content-Type
+Access-Control-Allow-Methods: GET, POST
+Access-Control-Allow-Origin: *
+Access-Control-Max-Age: 3628800
+Cache-Control: private, max-age=0
 Content-Type: application/json;charset=UTF-8
+Date: Wed, 31 Mar 2021 12:24:44 GMT
+Strict-Transport-Security: max-age=31536000
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-Robots-Tag: noindex
+X-XSS-Protection: 1; mode=block
+Connection: keep-alive
 
 {
   "Barcode": "3SDEVC816223395"

@@ -14,5 +14,28 @@ X-XSS-Protection: 1; mode=block
 Connection: keep-alive
 
 {
-  "Barcode": "3SDEVC816223392"
+  "ReasonNoTimeframes": {
+    "ReasonNoTimeframe": {
+      "Code": 98,
+      "Date": "29-03-2021",
+      "Description": "Gevraagde datum ligt in het verleden",
+      "Options": {
+        "string": "Daytime"
+      }
+    }
+  },
+  "Timeframes": {
+    "Timeframe": {
+      "Date": "31-03-2021",
+      "Timeframes": {
+        "TimeframeTimeFrame": {
+          "From": "10:00:00",
+          "Options": {
+            "string": "Daytime"
+          },
+          "To": "12:30:00"
+        }
+      }
+    }
+  }
 }

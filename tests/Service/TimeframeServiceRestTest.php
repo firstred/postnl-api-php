@@ -30,6 +30,7 @@ use Cache\Adapter\Void\VoidCachePool;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Message\Message;
+use Firstred\PostNL\Entity\ReasonNoTimeframe;
 use Firstred\PostNL\Entity\Request\GetTimeframes;
 use Firstred\PostNL\Entity\Response\ResponseTimeframes;
 use Firstred\PostNL\Entity\SOAP\UsernameToken;
@@ -173,9 +174,10 @@ class TimeframeServiceRestTest extends ServiceTest
         // Should be a ResponseTimeframes instance
         $this->assertInstanceOf(ResponseTimeframes::class, $responseTimeframes);
         // Check for data loss
-        $this->assertCount(5, $responseTimeframes->getReasonNoTimeframes());
-        $this->assertCount(6, $responseTimeframes->getTimeframes());
         $this->assertInstanceOf(Timeframe::class, $responseTimeframes->getTimeframes()[0]);
+        if (count($responseTimeframes->getReasonNoTimeframes())) {
+            $this->assertInstanceOf(ReasonNoTimeframe::class, $responseTimeframes->getReasonNoTimeframes()[0]);
+        }
         $this->assertNotTrue($this->containsStdClass($responseTimeframes));
     }
 
@@ -183,6 +185,7 @@ class TimeframeServiceRestTest extends ServiceTest
     {
         return [
             [PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/timeframes/timeframes.http'))],
+            [PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/timeframes/timeframes2.http'))],
         ];
     }
 }

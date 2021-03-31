@@ -51,6 +51,7 @@ use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
+use function ibase_add_user;
 
 /**
  * Class TimeframeService.
@@ -266,19 +267,30 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
     {
         $body = json_decode(static::getResponseText($response));
         // Standardize the object here
-        if (isset($body->ReasonNotimeframes->ReasonNoTimeframe)) {
-            if (!is_array($body->ReasonNotimeframes->ReasonNoTimeframe)) {
-                $body->ReasonNotimeframes->ReasonNoTimeframe = [$body->ReasonNotimeframes->ReasonNoTimeframe];
+        if (isset($body->ReasonNoTimeframes)) {
+            if (!isset($body->ReasonNoTimeframes->ReasonNoTimeframe)) {
+                $body->ReasonNoTimeframes->ReasonNoTimeframe = [];
+            }
+
+            if (!is_array($body->ReasonNoTimeframes->ReasonNoTimeframe)) {
+                $body->ReasonNoTimeframes->ReasonNoTimeframe = [$body->ReasonNoTimeframes->ReasonNoTimeframe];
             }
 
             $newNotimeframes = [];
-            foreach ($body->ReasonNotimeframes->ReasonNoTimeframe as $reasonNotimeframe) {
+            foreach ($body->ReasonNoTimeframes->ReasonNoTimeframe as $reasonNotimeframe) {
                 $newNotimeframes[] = ReasonNoTimeframe::jsonDeserialize((object) ['ReasonNoTimeframe' => $reasonNotimeframe]);
             }
-            $body->ReasonNotimeframes = $newNotimeframes;
+
+            $body->ReasonNoTimeframes = $newNotimeframes;
+        } else {
+            $body->ReasonNoTimeframes = [];
         }
 
-        if (isset($body->Timeframes->Timeframe)) {
+        if (isset($body->Timeframes)) {
+            if (!isset($body->Timeframes->Timeframe)) {
+                $body->Timeframes->Timeframe = [];
+            }
+
             if (!is_array($body->Timeframes->Timeframe)) {
                 $body->Timeframes->Timeframe = [$body->Timeframes->Timeframe];
             }
@@ -299,12 +311,14 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
                 $newTimeframes[] = Timeframe::jsonDeserialize((object) ['Timeframe' => $timeframe]);
             }
             $body->Timeframes = $newTimeframes;
+        } else {
+            $body->Timeframes = [];
         }
 
         /** @var ResponseTimeframes $object */
 
         $object = ResponseTimeframes::create();
-        $object->setReasonNoTimeframes($body->ReasonNotimeframes);
+        $object->setReasonNoTimeframes($body->ReasonNoTimeframes);
         $object->setTimeframes($body->Timeframes);
         $this->setService($object);
 
