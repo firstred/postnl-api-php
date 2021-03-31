@@ -36,6 +36,7 @@ use Firstred\PostNL\Entity\Request\CurrentStatusByPhase;
 use Firstred\PostNL\Entity\Request\CurrentStatusByReference;
 use Firstred\PostNL\Entity\Request\CurrentStatusByStatus;
 use Firstred\PostNL\Entity\Request\GetSignature;
+use Firstred\PostNL\Entity\Response\CompleteStatusResponse;
 use Firstred\PostNL\Entity\Response\CompleteStatusResponseEvent;
 use Firstred\PostNL\Entity\Response\CompleteStatusResponseOldStatus;
 use Firstred\PostNL\Entity\Response\CurrentStatusResponse;
@@ -50,6 +51,7 @@ use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentE
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use GuzzleHttp\Psr7\Message as PsrMessage;
+use InvalidArgumentException;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
@@ -181,7 +183,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
             $response = $item->get();
             try {
                 $response = PsrMessage::parseResponse($response);
-            } catch (\InvalidArgumentException $e) {
+            } catch (InvalidArgumentException $e) {
             }
         }
         if (!$response instanceof ResponseInterface) {
@@ -190,7 +192,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
         }
 
         $object = $this->processCompleteStatusResponseREST($response);
-        if ($object instanceof UpdatedShipmentsResponse) {
+        if ($object instanceof CompleteStatusResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
@@ -484,7 +486,6 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
                 );
             }
         }
-        unset($shipment);
 
         /** @var UpdatedShipmentsResponse $object */
         return UpdatedShipmentsResponse::jsonDeserialize(

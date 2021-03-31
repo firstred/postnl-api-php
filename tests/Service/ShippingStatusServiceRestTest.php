@@ -36,7 +36,7 @@ use Firstred\PostNL\Entity\ProductOption;
 use Firstred\PostNL\Entity\Request\CompleteStatus;
 use Firstred\PostNL\Entity\Request\CurrentStatus;
 use Firstred\PostNL\Entity\Request\GetSignature;
-use Firstred\PostNL\Entity\Response\UpdatedShipmentsResponse;
+use Firstred\PostNL\Entity\Response\CompleteStatusResponse;
 use Firstred\PostNL\Entity\Response\CompleteStatusResponseEvent;
 use Firstred\PostNL\Entity\Response\CurrentStatusResponse;
 use Firstred\PostNL\Entity\Response\CurrentStatusResponseShipment;
@@ -245,7 +245,7 @@ class ShippingStatusServiceRestTest extends ServiceTest
                 )
         );
 
-        $this->assertInstanceOf(UpdatedShipmentsResponse::class, $completeStatusResponse);
+        $this->assertInstanceOf(CompleteStatusResponse::class, $completeStatusResponse);
         $this->assertInstanceOf(Address::class, $completeStatusResponse->getShipments()[0]->getAddresses()[0]);
         $this->assertNull($completeStatusResponse->getShipments()[0]->getAmounts());
         if (is_array($completeStatusResponse->getShipments()[0]->getProductOptions())) {

@@ -48,6 +48,8 @@ use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\TimeframeService;
 use Sabre\Xml\Writer;
+use stdClass;
+use function is_array;
 use function is_string;
 
 /**
@@ -60,9 +62,13 @@ use function is_string;
  * @method Dimension|null                getDimension()
  * @method Expectation|null              getExpectation()
  * @method Group[]|null                  getGroups()
+ * @method string|null                   getMainBarcode()
  * @method string|null                   getProductCode()
+ * @method string|null                   getProductDescription()
  * @method ProductOption[]|null          getProductOptions()
  * @method string|null                   getReference()
+ * @method string|null                   getShipmentAmount()
+ * @method string|null                   getShipmentCounter()
  * @method Status|null                   getStatus()
  * @method Warning[]|null                getWarnings()
  * @method CurrentStatusResponseShipment setAddresses(Address[]|null $Addresses = null)
@@ -71,10 +77,14 @@ use function is_string;
  * @method CurrentStatusResponseShipment setDimension(Dimension|null $Dimension = null)
  * @method CurrentStatusResponseShipment setExpectation(Expectation|null $Expectation = null)
  * @method CurrentStatusResponseShipment setGroups(Group[]|null $Groups = null)
+ * @method CurrentStatusResponseShipment setMainBarcode(string|null $MainBarcode = null)
  * @method CurrentStatusResponseShipment setProductCode(string|null $ProductCode = null)
+ * @method CurrentStatusResponseShipment setProductDescription(string|null $ProductDescription = null)
  * @method CurrentStatusResponseShipment setProductOptions(ProductOption[]|null $ProductOptions = null)
  * @method CurrentStatusResponseShipment setReference(string|null $Reference = null)
  * @method CurrentStatusResponseShipment setStatus(Status|null $Status = null)
+ * @method CurrentStatusResponseShipment setShipmentAmount(string|null $ShipmentAmount = null)
+ * @method CurrentStatusResponseShipment setShipmentCounter(string|null $ShipmentCounter = null)
  * @method CurrentStatusResponseShipment setWarnings(Warning[]|null $Warnings = null)
  *
  * @since 1.0.0
@@ -83,89 +93,113 @@ class CurrentStatusResponseShipment extends AbstractEntity
 {
     /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode'        => [
-            'Addresses'      => BarcodeService::DOMAIN_NAMESPACE,
-            'Amounts'        => BarcodeService::DOMAIN_NAMESPACE,
-            'Barcode'        => BarcodeService::DOMAIN_NAMESPACE,
-            'DeliveryDate'   => BarcodeService::DOMAIN_NAMESPACE,
-            'Dimension'      => BarcodeService::DOMAIN_NAMESPACE,
-            'Expectation'    => BarcodeService::DOMAIN_NAMESPACE,
-            'Groups'         => BarcodeService::DOMAIN_NAMESPACE,
-            'ProductCode'    => BarcodeService::DOMAIN_NAMESPACE,
-            'ProductOptions' => BarcodeService::DOMAIN_NAMESPACE,
-            'Reference'      => BarcodeService::DOMAIN_NAMESPACE,
-            'Status'         => BarcodeService::DOMAIN_NAMESPACE,
-            'Warnings'       => BarcodeService::DOMAIN_NAMESPACE,
+        'Barcode'      => [
+            'Addresses'          => BarcodeService::DOMAIN_NAMESPACE,
+            'Amounts'            => BarcodeService::DOMAIN_NAMESPACE,
+            'Barcode'            => BarcodeService::DOMAIN_NAMESPACE,
+            'DeliveryDate'       => BarcodeService::DOMAIN_NAMESPACE,
+            'Dimension'          => BarcodeService::DOMAIN_NAMESPACE,
+            'Expectation'        => BarcodeService::DOMAIN_NAMESPACE,
+            'Groups'             => BarcodeService::DOMAIN_NAMESPACE,
+            'MainBarcode'        => BarcodeService::DOMAIN_NAMESPACE,
+            'ProductCode'        => BarcodeService::DOMAIN_NAMESPACE,
+            'ProductDescription' => BarcodeService::DOMAIN_NAMESPACE,
+            'ProductOptions'     => BarcodeService::DOMAIN_NAMESPACE,
+            'Reference'          => BarcodeService::DOMAIN_NAMESPACE,
+            'ShipmentAmount'     => BarcodeService::DOMAIN_NAMESPACE,
+            'ShipmentCounter'    => BarcodeService::DOMAIN_NAMESPACE,
+            'Status'             => BarcodeService::DOMAIN_NAMESPACE,
+            'Warnings'           => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
-            'Addresses'      => ConfirmingService::DOMAIN_NAMESPACE,
-            'Amounts'        => ConfirmingService::DOMAIN_NAMESPACE,
-            'Barcode'        => ConfirmingService::DOMAIN_NAMESPACE,
-            'DeliveryDate'   => ConfirmingService::DOMAIN_NAMESPACE,
-            'Dimension'      => ConfirmingService::DOMAIN_NAMESPACE,
-            'Expectation'    => ConfirmingService::DOMAIN_NAMESPACE,
-            'Groups'         => ConfirmingService::DOMAIN_NAMESPACE,
-            'ProductCode'    => ConfirmingService::DOMAIN_NAMESPACE,
-            'ProductOptions' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Reference'      => ConfirmingService::DOMAIN_NAMESPACE,
-            'Status'         => ConfirmingService::DOMAIN_NAMESPACE,
-            'Warnings'       => ConfirmingService::DOMAIN_NAMESPACE,
+        'Confirming'   => [
+            'Addresses'          => ConfirmingService::DOMAIN_NAMESPACE,
+            'Amounts'            => ConfirmingService::DOMAIN_NAMESPACE,
+            'Barcode'            => ConfirmingService::DOMAIN_NAMESPACE,
+            'DeliveryDate'       => ConfirmingService::DOMAIN_NAMESPACE,
+            'Dimension'          => ConfirmingService::DOMAIN_NAMESPACE,
+            'Expectation'        => ConfirmingService::DOMAIN_NAMESPACE,
+            'Groups'             => ConfirmingService::DOMAIN_NAMESPACE,
+            'MainBarcode'        => ConfirmingService::DOMAIN_NAMESPACE,
+            'ProductCode'        => ConfirmingService::DOMAIN_NAMESPACE,
+            'ProductDescription' => ConfirmingService::DOMAIN_NAMESPACE,
+            'ProductOptions'     => ConfirmingService::DOMAIN_NAMESPACE,
+            'Reference'          => ConfirmingService::DOMAIN_NAMESPACE,
+            'ShipmentAmount'     => ConfirmingService::DOMAIN_NAMESPACE,
+            'ShipmentCounter'    => ConfirmingService::DOMAIN_NAMESPACE,
+            'Status'             => ConfirmingService::DOMAIN_NAMESPACE,
+            'Warnings'           => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
-            'Addresses'      => LabellingService::DOMAIN_NAMESPACE,
-            'Amounts'        => LabellingService::DOMAIN_NAMESPACE,
-            'Barcode'        => LabellingService::DOMAIN_NAMESPACE,
-            'DeliveryDate'   => LabellingService::DOMAIN_NAMESPACE,
-            'Dimension'      => LabellingService::DOMAIN_NAMESPACE,
-            'Expectation'    => LabellingService::DOMAIN_NAMESPACE,
-            'Groups'         => LabellingService::DOMAIN_NAMESPACE,
-            'ProductCode'    => LabellingService::DOMAIN_NAMESPACE,
-            'ProductOptions' => LabellingService::DOMAIN_NAMESPACE,
-            'Reference'      => LabellingService::DOMAIN_NAMESPACE,
-            'Status'         => LabellingService::DOMAIN_NAMESPACE,
-            'Warnings'       => LabellingService::DOMAIN_NAMESPACE,
+        'Labelling'    => [
+            'Addresses'          => LabellingService::DOMAIN_NAMESPACE,
+            'Amounts'            => LabellingService::DOMAIN_NAMESPACE,
+            'Barcode'            => LabellingService::DOMAIN_NAMESPACE,
+            'DeliveryDate'       => LabellingService::DOMAIN_NAMESPACE,
+            'Dimension'          => LabellingService::DOMAIN_NAMESPACE,
+            'Expectation'        => LabellingService::DOMAIN_NAMESPACE,
+            'Groups'             => LabellingService::DOMAIN_NAMESPACE,
+            'MainBarcode'        => LabellingService::DOMAIN_NAMESPACE,
+            'ProductCode'        => LabellingService::DOMAIN_NAMESPACE,
+            'ProductDescription' => LabellingService::DOMAIN_NAMESPACE,
+            'ProductOptions'     => LabellingService::DOMAIN_NAMESPACE,
+            'Reference'          => LabellingService::DOMAIN_NAMESPACE,
+            'ShipmentAmount'     => LabellingService::DOMAIN_NAMESPACE,
+            'ShipmentCounter'    => LabellingService::DOMAIN_NAMESPACE,
+            'Status'             => LabellingService::DOMAIN_NAMESPACE,
+            'Warnings'           => LabellingService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'   => [
-            'Addresses'      => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Amounts'        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Barcode'        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'DeliveryDate'   => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Dimension'      => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Expectation'    => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Groups'         => DeliveryDateService::DOMAIN_NAMESPACE,
-            'ProductCode'    => DeliveryDateService::DOMAIN_NAMESPACE,
-            'ProductOptions' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Reference'      => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Status'         => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Warnings'       => DeliveryDateService::DOMAIN_NAMESPACE,
+        'DeliveryDate' => [
+            'Addresses'          => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Amounts'            => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Barcode'            => DeliveryDateService::DOMAIN_NAMESPACE,
+            'DeliveryDate'       => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Dimension'          => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Expectation'        => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Groups'             => DeliveryDateService::DOMAIN_NAMESPACE,
+            'MainBarcode'        => DeliveryDateService::DOMAIN_NAMESPACE,
+            'ProductCode'        => DeliveryDateService::DOMAIN_NAMESPACE,
+            'ProductDescription' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'ProductOptions'     => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Reference'          => DeliveryDateService::DOMAIN_NAMESPACE,
+            'ShipmentAmount'     => DeliveryDateService::DOMAIN_NAMESPACE,
+            'ShipmentCounter'    => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Status'             => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Warnings'           => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
-            'Addresses'      => LocationService::DOMAIN_NAMESPACE,
-            'Amounts'        => LocationService::DOMAIN_NAMESPACE,
-            'Barcode'        => LocationService::DOMAIN_NAMESPACE,
-            'DeliveryDate'   => LocationService::DOMAIN_NAMESPACE,
-            'Dimension'      => LocationService::DOMAIN_NAMESPACE,
-            'Expectation'    => LocationService::DOMAIN_NAMESPACE,
-            'Groups'         => LocationService::DOMAIN_NAMESPACE,
-            'ProductCode'    => LocationService::DOMAIN_NAMESPACE,
-            'ProductOptions' => LocationService::DOMAIN_NAMESPACE,
-            'Reference'      => LocationService::DOMAIN_NAMESPACE,
-            'Status'         => LocationService::DOMAIN_NAMESPACE,
-            'Warnings'       => LocationService::DOMAIN_NAMESPACE,
+        'Location'     => [
+            'Addresses'          => LocationService::DOMAIN_NAMESPACE,
+            'Amounts'            => LocationService::DOMAIN_NAMESPACE,
+            'Barcode'            => LocationService::DOMAIN_NAMESPACE,
+            'DeliveryDate'       => LocationService::DOMAIN_NAMESPACE,
+            'Dimension'          => LocationService::DOMAIN_NAMESPACE,
+            'Expectation'        => LocationService::DOMAIN_NAMESPACE,
+            'Groups'             => LocationService::DOMAIN_NAMESPACE,
+            'MainBarcode'        => LocationService::DOMAIN_NAMESPACE,
+            'ProductCode'        => LocationService::DOMAIN_NAMESPACE,
+            'ProductDescription' => LocationService::DOMAIN_NAMESPACE,
+            'ProductOptions'     => LocationService::DOMAIN_NAMESPACE,
+            'Reference'          => LocationService::DOMAIN_NAMESPACE,
+            'ShipmentAmount'     => LocationService::DOMAIN_NAMESPACE,
+            'ShipmentCounter'    => LocationService::DOMAIN_NAMESPACE,
+            'Status'             => LocationService::DOMAIN_NAMESPACE,
+            'Warnings'           => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
-            'Addresses'      => TimeframeService::DOMAIN_NAMESPACE,
-            'Amounts'        => TimeframeService::DOMAIN_NAMESPACE,
-            'Barcode'        => TimeframeService::DOMAIN_NAMESPACE,
-            'DeliveryDate'   => TimeframeService::DOMAIN_NAMESPACE,
-            'Dimension'      => TimeframeService::DOMAIN_NAMESPACE,
-            'Expectation'    => TimeframeService::DOMAIN_NAMESPACE,
-            'Groups'         => TimeframeService::DOMAIN_NAMESPACE,
-            'ProductCode'    => TimeframeService::DOMAIN_NAMESPACE,
-            'ProductOptions' => TimeframeService::DOMAIN_NAMESPACE,
-            'Reference'      => TimeframeService::DOMAIN_NAMESPACE,
-            'Status'         => TimeframeService::DOMAIN_NAMESPACE,
-            'Warnings'       => TimeframeService::DOMAIN_NAMESPACE,
+        'Timeframe'    => [
+            'Addresses'          => TimeframeService::DOMAIN_NAMESPACE,
+            'Amounts'            => TimeframeService::DOMAIN_NAMESPACE,
+            'Barcode'            => TimeframeService::DOMAIN_NAMESPACE,
+            'DeliveryDate'       => TimeframeService::DOMAIN_NAMESPACE,
+            'Dimension'          => TimeframeService::DOMAIN_NAMESPACE,
+            'Expectation'        => TimeframeService::DOMAIN_NAMESPACE,
+            'Groups'             => TimeframeService::DOMAIN_NAMESPACE,
+            'MainBarcode'        => TimeframeService::DOMAIN_NAMESPACE,
+            'ProductCode'        => TimeframeService::DOMAIN_NAMESPACE,
+            'ProductDescription' => TimeframeService::DOMAIN_NAMESPACE,
+            'ProductOptions'     => TimeframeService::DOMAIN_NAMESPACE,
+            'Reference'          => TimeframeService::DOMAIN_NAMESPACE,
+            'ShipmentAmount'     => TimeframeService::DOMAIN_NAMESPACE,
+            'ShipmentCounter'    => TimeframeService::DOMAIN_NAMESPACE,
+            'Status'             => TimeframeService::DOMAIN_NAMESPACE,
+            'Warnings'           => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
@@ -184,11 +218,19 @@ class CurrentStatusResponseShipment extends AbstractEntity
     /** @var Group[]|null */
     protected $Groups;
     /** @var string|null */
+    protected $MainBarcode;
+    /** @var string|null */
     protected $ProductCode;
+    /** @var string|null */
+    protected $ProductDescription;
     /** @var ProductOption[]|null */
     protected $ProductOptions;
     /** @var string|null */
     protected $Reference;
+    /** @var string|null */
+    protected $ShipmentAmount;
+    /** @var string|null */
+    protected $ShipmentCounter;
     /** @var Status|null */
     protected $Status;
     /** @var Warning[]|null */
@@ -210,6 +252,8 @@ class CurrentStatusResponseShipment extends AbstractEntity
      * @param string|null                   $Reference
      * @param Status|null                   $Status
      * @param Warning[]|null                $Warnings
+     * @param string|null                   $MainBarcode
+     * @param string|null                   $ProductDescription
      *
      * @throws InvalidArgumentException
      */
@@ -225,7 +269,11 @@ class CurrentStatusResponseShipment extends AbstractEntity
         array $ProductOptions = null,
         $Reference = null,
         $Status = null,
-        array $Warnings = null
+        array $Warnings = null,
+        $MainBarcode = null,
+        $ShipmentAmount = null,
+        $ShipmentCounter = null,
+        $ProductDescription = null
     ) {
         parent::__construct();
 
@@ -241,6 +289,10 @@ class CurrentStatusResponseShipment extends AbstractEntity
         $this->setReference($Reference);
         $this->setStatus($Status);
         $this->setWarnings($Warnings);
+        $this->setMainBarcode($MainBarcode);
+        $this->setShipmentAmount($ShipmentAmount);
+        $this->setShipmentCounter($ShipmentCounter);
+        $this->setProductDescription($ProductDescription);
     }
 
     /**
@@ -265,6 +317,30 @@ class CurrentStatusResponseShipment extends AbstractEntity
         $this->DeliveryDate = $deliveryDate;
 
         return $this;
+    }
+
+    /**
+     * @param stdClass $json
+     *
+     * @return mixed|stdClass|null
+     *
+     * @throws InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\NotSupportedException
+     *
+     * @since 1.2.0
+     */
+    public static function jsonDeserialize(stdClass $json)
+    {
+        if (isset($json->CurrentStatusResponseShipment->Address)) {
+            $json->CurrentStatusResponseShipment->Addresses = $json->CurrentStatusResponseShipment->Address;
+            unset($json->CurrentStatusResponseShipment->Address);
+
+            if (!is_array($json->CurrentStatusResponseShipment->Addresses)) {
+                $json->CurrentStatusResponseShipment->Addresses = [$json->CurrentStatusResponseShipment->Addresses];
+            }
+        }
+
+        return parent::jsonDeserialize($json);
     }
 
     /**

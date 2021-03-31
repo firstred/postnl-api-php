@@ -34,6 +34,7 @@ use Firstred\PostNL\Entity\Message\Message;
 use Firstred\PostNL\Entity\Request\CompleteStatus;
 use Firstred\PostNL\Entity\Request\CurrentStatus;
 use Firstred\PostNL\Entity\Request\GetSignature;
+use Firstred\PostNL\Entity\Response\CompleteStatusResponse;
 use Firstred\PostNL\Entity\Response\UpdatedShipmentsResponse;
 use Firstred\PostNL\Entity\Response\CurrentStatusResponse;
 use Firstred\PostNL\Entity\Response\GetSignatureResponseSignature;
@@ -223,7 +224,7 @@ class ShippingStatusServiceSoapTest extends ServiceTest
                 )
         );
 
-        $this->assertInstanceOf(UpdatedShipmentsResponse::class, $completeStatusResponse);
+        $this->assertInstanceOf(CompleteStatusResponse::class, $completeStatusResponse);
         $this->assertInstanceOf(Address::class, $completeStatusResponse->getShipments()[0]->getAddresses()[0]);
         $this->assertNull($completeStatusResponse->getShipments()[0]->getAmounts());
         $this->assertEquals('01B', $completeStatusResponse->getShipments()[0]->getEvents()[0]->getCode());
