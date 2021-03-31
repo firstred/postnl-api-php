@@ -46,19 +46,22 @@ abstract class ServiceTest extends TestCase
             return true;
         }
 
-        $result = false;
         if (is_array($value)) {
             foreach ($value as $item) {
-                $result = $result || static::containsStdClass($item);
+                if (static::containsStdClass($item)) {
+                    return true;
+                }
             }
         } elseif (is_object($value)) {
             $reflectionObject = new ReflectionObject($value);
             foreach ($reflectionObject->getProperties() as $property) {
                 $property->setAccessible(true);
-                $result = $result || static::containsStdClass($property->getValue($value));
+                if (static::containsStdClass($property->getValue($value))) {
+                    return true;
+                }
             }
         }
 
-        return $result;
+        return false;
     }
 }
