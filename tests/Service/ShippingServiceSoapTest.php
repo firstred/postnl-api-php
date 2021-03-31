@@ -32,8 +32,8 @@ use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Dimension;
 use Firstred\PostNL\Entity\Label;
 use Firstred\PostNL\Entity\Message\LabellingMessage;
-use Firstred\PostNL\Entity\Request\GenerateShipping;
-use Firstred\PostNL\Entity\Response\GenerateShippingResponse;
+use Firstred\PostNL\Entity\Request\SendShipment;
+use Firstred\PostNL\Entity\Response\SendShipmentResponse;
 use Firstred\PostNL\Entity\Shipment;
 use Firstred\PostNL\Entity\SOAP\UsernameToken;
 use Firstred\PostNL\Exception\ResponseException;
@@ -114,8 +114,8 @@ class ShippingServiceSoapTest extends ServiceTest
     {
         $message = new LabellingMessage();
 
-        $this->lastRequest = $request = $this->service->buildGenerateShippingRequest(
-            GenerateShipping::create()
+        $this->lastRequest = $request = $this->service->buildSendShipmentRequest(
+            SendShipment::create()
                 ->setShipments([
                     Shipment::create()
                         ->setAddresses([
@@ -265,13 +265,13 @@ class ShippingServiceSoapTest extends ServiceTest
                 ->setProductCodeDelivery('3085')
         );
 
-        $this->assertInstanceOf(GenerateShippingResponse::class, $sentShipment);
+        $this->assertInstanceOf(SendShipmentResponse::class, $sentShipment);
     }
 
     /**
      * @testdox throws exception on invalid response
      */
-    public function testNegativeGenerateShippingInvalidResponseSoap()
+    public function testNegativeSendShipmentInvalidResponseSoap()
     {
         $this->expectException(ResponseException::class);
 
@@ -654,6 +654,6 @@ class ShippingServiceSoapTest extends ServiceTest
             ]
         );
 
-        $this->assertInstanceOf(GenerateShippingResponse::class, $shipments);
+        $this->assertInstanceOf(SendShipmentResponse::class, $shipments);
     }
 }

@@ -32,8 +32,8 @@ use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Dimension;
 use Firstred\PostNL\Entity\Label;
 use Firstred\PostNL\Entity\Message\LabellingMessage;
-use Firstred\PostNL\Entity\Request\GenerateShipping;
-use Firstred\PostNL\Entity\Response\GenerateShippingResponse;
+use Firstred\PostNL\Entity\Request\SendShipment;
+use Firstred\PostNL\Entity\Response\SendShipmentResponse;
 use Firstred\PostNL\Entity\Shipment;
 use Firstred\PostNL\Entity\SOAP\UsernameToken;
 use Firstred\PostNL\Exception\ResponseException;
@@ -114,8 +114,8 @@ class ShippingServiceRestTest extends ServiceTest
     {
         $message = new LabellingMessage();
 
-        $this->lastRequest = $request = $this->service->buildGenerateShippingRequestREST(
-            GenerateShipping::create()
+        $this->lastRequest = $request = $this->service->buildSendShipmentRequestREST(
+            SendShipment::create()
                 ->setShipments([
                     Shipment::create()
                         ->setAddresses([
@@ -265,14 +265,14 @@ class ShippingServiceRestTest extends ServiceTest
                 ->setProductCodeDelivery('3085')
         );
 
-        $this->assertInstanceOf(GenerateShippingResponse::class, $sentShipment);
+        $this->assertInstanceOf(SendShipmentResponse::class, $sentShipment);
         $this->assertNotTrue(static::containsStdClass($sentShipment));
     }
 
     /**
      * @testdox throws exception on invalid response
      */
-    public function testNegativeGenerateShippingInvalidResponseRest()
+    public function testNegativeSendShipmentInvalidResponseRest()
     {
         $this->expectException(ResponseException::class);
 
@@ -655,7 +655,7 @@ class ShippingServiceRestTest extends ServiceTest
             ]
         );
 
-        $this->assertInstanceOf(GenerateShippingResponse::class, $shipments);
+        $this->assertInstanceOf(SendShipmentResponse::class, $shipments);
         $this->assertNotTrue(static::containsStdClass($shipments));
     }
 }

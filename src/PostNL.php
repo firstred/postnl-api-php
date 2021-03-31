@@ -39,7 +39,7 @@ use Firstred\PostNL\Entity\Request\Confirming;
 use Firstred\PostNL\Entity\Request\CurrentStatus;
 use Firstred\PostNL\Entity\Request\GenerateBarcode;
 use Firstred\PostNL\Entity\Request\GenerateLabel;
-use Firstred\PostNL\Entity\Request\GenerateShipping;
+use Firstred\PostNL\Entity\Request\SendShipment;
 use Firstred\PostNL\Entity\Request\GetDeliveryDate;
 use Firstred\PostNL\Entity\Request\GetLocation;
 use Firstred\PostNL\Entity\Request\GetLocationsInArea;
@@ -53,7 +53,7 @@ use Firstred\PostNL\Entity\Response\ConfirmingResponseShipment;
 use Firstred\PostNL\Entity\Response\CurrentStatusResponse;
 use Firstred\PostNL\Entity\Response\CurrentStatusResponseShipment;
 use Firstred\PostNL\Entity\Response\GenerateLabelResponse;
-use Firstred\PostNL\Entity\Response\GenerateShippingResponse;
+use Firstred\PostNL\Entity\Response\SendShipmentResponse;
 use Firstred\PostNL\Entity\Response\GetDeliveryDateResponse;
 use Firstred\PostNL\Entity\Response\GetLocationsInAreaResponse;
 use Firstred\PostNL\Entity\Response\GetNearestLocationsResponse;
@@ -1080,7 +1080,7 @@ class PostNL implements LoggerAwareInterface
      * @param string   $printertype
      * @param bool     $confirm
      *
-     * @return Entity\Response\GenerateShippingResponse
+     * @return Entity\Response\SendShipmentResponse
      *
      * @since 1.2.0
      */
@@ -1089,8 +1089,8 @@ class PostNL implements LoggerAwareInterface
         $printertype = 'GraphicFile|PDF',
         $confirm = true
     ) {
-        return $this->getShippingService()->generateShipping(
-            new GenerateShipping(
+        return $this->getShippingService()->sendShipment(
+            new SendShipment(
                 [$shipment],
                 new LabellingMessage($printertype),
                 $this->customer
@@ -1133,7 +1133,7 @@ class PostNL implements LoggerAwareInterface
      *                                  ```
      * @param string     $a6Orientation A6 orientation (P or L)
      *
-     * @return GenerateShippingResponse|string
+     * @return SendShipmentResponse|string
      *
      * @throws NotSupportedException
      * @throws CrossReferenceException
@@ -1169,8 +1169,8 @@ class PostNL implements LoggerAwareInterface
             }
         }
 
-        $responseShipments = $this->getShippingService()->generateShipping(
-            new GenerateShipping(
+        $responseShipments = $this->getShippingService()->sendShipment(
+            new SendShipment(
                 $shipments,
                 new LabellingMessage($printertype),
                 $this->customer

@@ -26,8 +26,8 @@
 
 namespace Firstred\PostNL\Service;
 
-use Firstred\PostNL\Entity\Request\GenerateShipping;
-use Firstred\PostNL\Entity\Response\GenerateShippingResponse;
+use Firstred\PostNL\Entity\Request\SendShipment;
+use Firstred\PostNL\Entity\Response\SendShipmentResponse;
 use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
@@ -41,9 +41,9 @@ use ReflectionException;
 /**
  * Class ShippingService.
  *
- * @method GenerateShippingResponse generateShipping(GenerateShipping $generateShipping, bool $confirm)
- * @method RequestInterface         buildGenerateShippingRequest(GenerateShipping $generateShipping, bool $confirm)
- * @method GenerateShippingResponse processGenerateShippingResponse(mixed $response)
+ * @method SendShipmentResponse sendShipment(SendShipment $sendShipment, bool $confirm)
+ * @method RequestInterface     buildSendShipmentRequest(SendShipment $sendShipment, bool $confirm)
+ * @method SendShipmentResponse processSendShipmentResponse(mixed $response)
  *
  * @since 1.2.0
  */
@@ -52,10 +52,10 @@ interface ShippingServiceInterface extends ServiceInterface
     /**
      * Generate a single Shipping vai REST.
      *
-     * @param GenerateShipping $generateShipping
-     * @param bool             $confirm
+     * @param SendShipment $sendShipment
+     * @param bool         $confirm
      *
-     * @return GenerateShippingResponse|null
+     * @return SendShipmentResponse|null
      *
      * @throws ApiException
      * @throws CifDownException
@@ -67,11 +67,11 @@ interface ShippingServiceInterface extends ServiceInterface
      *
      * @since 1.2.0
      */
-    public function generateShippingREST(GenerateShipping $generateShipping, $confirm = true);
+    public function sendShipmentRest(SendShipment $sendShipment, $confirm = true);
 
     /**
-     * @param GenerateShipping $generateShipping
-     * @param bool             $confirm
+     * @param SendShipment $sendShipment
+     * @param bool         $confirm
      *
      * @return RequestInterface
      *
@@ -79,14 +79,14 @@ interface ShippingServiceInterface extends ServiceInterface
      *
      * @since 1.2.0
      */
-    public function buildGenerateShippingRequestREST(GenerateShipping $generateShipping, $confirm = true);
+    public function buildSendShipmentRequestREST(SendShipment $sendShipment, $confirm = true);
 
     /**
-     * Process the GenerateShipping REST Response.
+     * Process the SendShipment REST Response.
      *
      * @param ResponseInterface $response
      *
-     * @return GenerateShippingResponse|null
+     * @return SendShipmentResponse|null
      *
      * @throws ReflectionException
      * @throws ResponseException
@@ -94,5 +94,5 @@ interface ShippingServiceInterface extends ServiceInterface
      *
      * @since 1.2.0
      */
-    public function processGenerateShippingResponseREST($response);
+    public function processSendShipmentResponseREST($response);
 }

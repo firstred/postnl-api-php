@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2021 KeenDelivery, LLC
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,23 +19,27 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Jan-Wilco peters <info@keendelivery.com>
- * @copyright 2017-2021 KeenDelivery, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
 namespace Firstred\PostNL\Service;
 
-use Firstred\PostNL\Entity\Request\GenerateShipping;
-use Firstred\PostNL\Entity\Response\GenerateShippingResponse;
+use Firstred\PostNL\Entity\Request\SendShipment;
+use Firstred\PostNL\Entity\Response\SendShipmentResponse;
+use Firstred\PostNL\Exception\ApiConnectionException;
 use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use InvalidArgumentException;
 use Psr\Cache\CacheItemInterface;
+use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use ReflectionException;
@@ -45,9 +49,9 @@ use function json_encode;
 /**
  * Class ShippingService.
  *
- * @method GenerateShippingResponse generateShipping(GenerateShipping $generateShipping, bool $confirm)
- * @method RequestInterface         buildGenerateShippingRequest(GenerateShipping $generateShipping, bool $confirm)
- * @method GenerateShippingResponse processGenerateShippingResponse(mixed $response)
+ * @method SendShipmentResponse sendShipment(SendShipment $sendShipment, bool $confirm)
+ * @method RequestInterface     buildSendShipmentRequest(SendShipment $sendShipment, bool $confirm)
+ * @method SendShipmentResponse processSendShipmentResponse(mixed $response)
  *
  * @since 1.2.0
  */
@@ -65,26 +69,27 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
     /**
      * Generate a single Shipping vai REST.
      *
-     * @param GenerateShipping $generateShipping
-     * @param bool             $confirm
+     * @param SendShipment $sendShipment
+     * @param bool         $confirm
      *
-     * @return GenerateShippingResponse|null
+     * @return SendShipmentResponse|null
      *
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws ReflectionException
      * @throws ResponseException
-     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
-     * @throws \Firstred\PostNL\Exception\NotSupportedException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
+     * @throws ApiConnectionException
      *
      * @since 1.2.0
      */
-    public function generateShippingREST(GenerateShipping $generateShipping, $confirm = true)
+    public function sendShipmentRest(SendShipment $sendShipment, $confirm = true)
     {
-        $item = $this->retrieveCachedItem($generateShipping->getId());
+        $item = $this->retrieveCachedItem($sendShipment->getId());
         $response = null;
 
         if ($item instanceof CacheItemInterface) {
@@ -95,13 +100,15 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
             }
         }
         if (!$response instanceof ResponseInterface) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildGenerateShippingRequestREST($generateShipping, $confirm));
+            $response = $this->postnl->getHttpClient()->doRequest(
+                $this->buildSendShipmentRequestREST($sendShipment, $confirm)
+            );
 
             static::validateRESTResponse($response);
         }
 
-        $object = $this->processGenerateShippingResponseREST($response);
-        if ($object instanceof GenerateShippingResponse) {
+        $object = $this->processSendShipmentResponseREST($response);
+        if ($object instanceof SendShipmentResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
@@ -117,12 +124,12 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
             throw new ResponseException('Invalid API response', null, null, $response);
         }
 
-        throw new ApiException('Unable to ship order');
+        throw new ApiException('Unable to create shipment');
     }
 
     /**
-     * @param GenerateShipping $generateShipping
-     * @param bool             $confirm
+     * @param SendShipment $sendShipment
+     * @param bool         $confirm
      *
      * @return RequestInterface
      *
@@ -130,10 +137,10 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
      *
      * @since 1.2.0
      */
-    public function buildGenerateShippingRequestREST(GenerateShipping $generateShipping, $confirm = true)
+    public function buildSendShipmentRequestREST(SendShipment $sendShipment, $confirm = true)
     {
         $apiKey = $this->postnl->getRestApiKey();
-        $this->setService($generateShipping);
+        $this->setService($sendShipment);
 
         return $this->postnl->getRequestFactory()->createRequest(
             'POST',
@@ -144,30 +151,30 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
             ->withHeader('apikey', $apiKey)
             ->withHeader('Accept', 'application/json')
             ->withHeader('Content-Type', 'application/json;charset=UTF-8')
-            ->withBody($this->postnl->getStreamFactory()->createStream(json_encode($generateShipping)));
+            ->withBody($this->postnl->getStreamFactory()->createStream(json_encode($sendShipment)));
     }
 
     /**
-     * Process the GenerateShipping REST Response.
+     * Process the SendShipment REST Response.
      *
      * @param ResponseInterface $response
      *
-     * @return GenerateShippingResponse|null
+     * @return SendShipmentResponse|null
      *
      * @throws ReflectionException
      * @throws ResponseException
      * @throws HttpClientException
-     * @throws \Firstred\PostNL\Exception\NotSupportedException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
      *
      * @since 1.2.0
      */
-    public function processGenerateShippingResponseREST($response)
+    public function processSendShipmentResponseREST($response)
     {
         $body = json_decode(static::getResponseText($response));
         if (isset($body->ResponseShipments)) {
-            /** @var GenerateShippingResponse $object */
-            $object = GenerateShippingResponse::JsonDeserialize((object) ['GenerateShippingResponse' => $body]);
+            /** @var SendShipmentResponse $object */
+            $object = SendShipmentResponse::JsonDeserialize((object) ['SendShipmentResponse' => $body]);
             $this->setService($object);
 
             return $object;

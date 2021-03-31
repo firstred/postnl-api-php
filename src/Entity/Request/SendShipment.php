@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2021 KeenDelivery, LLC
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,8 +19,8 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Jan-Wilco peters <info@keendelivery.com>
- * @copyright 2017-2021 KeenDelivery, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -34,18 +34,18 @@ use Firstred\PostNL\Entity\Shipment;
 use Firstred\PostNL\Service\ShippingService;
 
 /**
- * Class GenerateShipping.
+ * Class SendShipment.
  *
- * @method Customer|null    getCustomer()
- * @method Message|null     getMessage()
- * @method Shipment[]|null  getShipments()
- * @method GenerateShipping setCustomer(Customer|null $Customer = null)
- * @method GenerateShipping setMessage(Message|null $Message = null)
- * @method GenerateShipping setShipments(Shipment[]|null $Shipments = null)
+ * @method Customer|null   getCustomer()
+ * @method Message|null    getMessage()
+ * @method Shipment[]|null getShipments()
+ * @method SendShipment  setCustomer(Customer|null $Customer = null)
+ * @method SendShipment  setMessage(Message|null $Message = null)
+ * @method SendShipment  setShipments(Shipment[]|null $Shipments = null)
  *
  * @since 1.0.0
  */
-class GenerateShipping extends AbstractEntity
+class SendShipment extends AbstractEntity
 {
     /**
      * @var array
@@ -68,14 +68,17 @@ class GenerateShipping extends AbstractEntity
     // @codingStandardsIgnoreEnd
 
     /**
-     * GenerateShipping constructor.
+     * SendShipment constructor.
      *
      * @param Shipment[]|null       $Shipments
      * @param LabellingMessage|null $Message
      * @param Customer|null         $Customer
      */
-    public function __construct(array $Shipments = null, LabellingMessage $Message = null, Customer $Customer = null)
-    {
+    public function __construct(
+        array $Shipments = null,
+        LabellingMessage $Message = null,
+        Customer $Customer = null
+    ) {
         parent::__construct();
 
         $this->setShipments($Shipments);

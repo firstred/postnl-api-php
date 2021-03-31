@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2021 keenDelivery, LLC
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,8 +19,8 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Jan-Wilco peters <info@keendelivery.com>
- * @copyright 2017-2021 KeenDelivery, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -40,12 +40,12 @@ use Firstred\PostNL\Service\TimeframeService;
  *
  * @method MergedLabel[]|null       getMergedLabels()
  * @method ResponseShipment[]|null  getResponseShipments()
- * @method GenerateShippingResponse setMergedLabels(MergedLabel[]|null $mergedLabels = null)
- * @method GenerateShippingResponse setResponseShipments(ResponseShipment[]|null $responseShipment = null)
+ * @method SendShipmentResponse setMergedLabels(MergedLabel[]|null $mergedLabels = null)
+ * @method SendShipmentResponse setResponseShipments(ResponseShipment[]|null $responseShipment = null)
  *
  * @since 1.0.0
  */
-class GenerateShippingResponse extends AbstractEntity
+class SendShipmentResponse extends AbstractEntity
 {
     /**
      * @var array|null
@@ -88,7 +88,7 @@ class GenerateShippingResponse extends AbstractEntity
     // @codingStandardsIgnoreEnd
 
     /**
-     * GenerateShippingResponse constructor.
+     * SendShipmentResponse constructor.
      *
      * @param MergedLabel[]|null      $MergedLabels
      * @param ResponseShipment[]|null $ReponseShipments
