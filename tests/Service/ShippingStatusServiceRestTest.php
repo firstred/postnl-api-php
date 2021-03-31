@@ -152,7 +152,7 @@ class ShippingStatusServiceRestTest extends ServiceTest
 
         $this->assertInstanceOf(CurrentStatusResponse::class, $currentStatusResponse);
         $this->assertInstanceOf(CurrentStatusResponseShipment::class, $currentStatusResponse->getShipments()[0]);
-        $this->assertNotTrue($this->containsStdClass($currentStatusResponse));
+        $this->assertNotTrue(static::containsStdClass($currentStatusResponse));
     }
 
     /**
@@ -240,7 +240,7 @@ class ShippingStatusServiceRestTest extends ServiceTest
         $this->assertNull($completeStatusResponse->getShipments()[0]->getGroups());
         $this->assertInstanceOf(Customer::class, $completeStatusResponse->getShipments()[0]->getCustomer());
         $this->assertInstanceOf(DateTimeInterface::class, $completeStatusResponse->getShipments()[0]->getOldStatuses()[0]->getTimeStamp());
-        $this->assertNotTrue($this->containsStdClass($completeStatusResponse));
+        $this->assertNotTrue(static::containsStdClass($completeStatusResponse));
     }
 
     /**
@@ -320,7 +320,7 @@ class ShippingStatusServiceRestTest extends ServiceTest
         $this->assertInstanceOf(GetSignatureResponseSignature::class, $signatureResponse);
         $this->assertEquals('2018-03-07 13:52:45', $signatureResponse->getSignatureDate()->format('Y-m-d H:i:s'));
         $this->assertNotNull($signatureResponse->getSignatureImage());
-        $this->assertNotTrue($this->containsStdClass($signatureResponse));
+        $this->assertNotTrue(static::containsStdClass($signatureResponse));
     }
 
     /**

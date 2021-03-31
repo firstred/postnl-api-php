@@ -188,7 +188,7 @@ class LocationServiceRestTest extends ServiceTest
         $this->assertInstanceOf(GetNearestLocationsResponse::class, $response);
         $this->assertInstanceOf(ResponseLocation::class, $response->getGetLocationsResult()->getResponseLocation()[0]);
 
-        $this->assertNotTrue($this->containsStdClass($response));
+        $this->assertNotTrue(static::containsStdClass($response));
 
         foreach ($response->getGetLocationsResult()->getResponseLocation() as $responseLocation) {
             foreach (['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] as $day) {
@@ -290,7 +290,7 @@ class LocationServiceRestTest extends ServiceTest
 
         $this->assertInstanceOf(GetLocationsInAreaResponse::class, $response);
         $this->assertEquals(20, count((array) $response->getGetLocationsResult()->getResponseLocation()));
-        $this->assertNotTrue($this->containsStdClass($response));
+        $this->assertNotTrue(static::containsStdClass($response));
     }
 
     /**
@@ -338,7 +338,7 @@ class LocationServiceRestTest extends ServiceTest
 
         $this->assertInstanceOf(GetLocationsInAreaResponse::class, $response);
         $this->assertEquals(1, count((array) $response->getGetLocationsResult()));
-        $this->assertNotTrue($this->containsStdClass($response));
+        $this->assertNotTrue(static::containsStdClass($response));
     }
 
     public function nearestLocationsByPostcodeProvider()

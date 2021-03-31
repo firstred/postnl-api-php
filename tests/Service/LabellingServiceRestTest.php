@@ -364,7 +364,7 @@ class LabellingServiceRestTest extends ServiceTest
         $this->assertIsString($label->getResponseShipments()[0]->getLabels()[0]->getContent());
         $this->assertInstanceOf(Label::class, $label->getResponseShipments()[0]->getLabels()[0]);
         $this->assertEquals('Label', $label->getResponseShipments()[0]->getLabels()[0]->getLabeltype());
-        $this->assertNotTrue($this->containsStdClass($label));
+        $this->assertNotTrue(static::containsStdClass($label));
     }
 
     /**
@@ -622,7 +622,7 @@ class LabellingServiceRestTest extends ServiceTest
         );
 
         $this->assertInstanceOf(GenerateLabelResponse::class, $label[1]);
-        $this->assertNotTrue($this->containsStdClass($label[1]));
+        $this->assertNotTrue(static::containsStdClass($label[1]));
     }
 
     /**

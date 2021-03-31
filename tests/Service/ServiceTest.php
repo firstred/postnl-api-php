@@ -29,6 +29,9 @@ namespace Firstred\PostNL\Tests\Service;
 use PHPUnit\Framework\TestCase;
 use ReflectionObject;
 use stdClass;
+use function get_class;
+use function is_array;
+use function is_object;
 
 /**
  * Abstract class AbstractServiceTest.
@@ -37,31 +40,25 @@ use stdClass;
  */
 abstract class ServiceTest extends TestCase
 {
-    public function containsStdClass($object)
+    public static function containsStdClass($value)
     {
-        if (!is_object($object)) {
-            return false;
+        if ($value instanceof stdClass) {
+            return true;
         }
 
-        $reflectionObject = new ReflectionObject($object);
-        foreach ($reflectionObject->getProperties() as $property) {
-            $property->setAccessible(true);
-            $value = $property->getValue($object);
-            if (is_object($value)) {
-                if ($value instanceof stdClass) {
-                    return true;
-                }
-
-                return $this->containsStdClass($value);
-            } elseif (is_array($value)) {
-                foreach ($value as $item) {
-                    if ($this->containsStdClass($item)) {
-                        return true;
-                    }
-                }
+        $result = false;
+        if (is_array($value)) {
+            foreach ($value as $item) {
+                $result = $result || static::containsStdClass($item);
+            }
+        } elseif (is_object($value)) {
+            $reflectionObject = new ReflectionObject($value);
+            foreach ($reflectionObject->getProperties() as $property) {
+                $property->setAccessible(true);
+                $result = $result || static::containsStdClass($property->getValue($value));
             }
         }
 
-        return false;
+        return $result;
     }
 }

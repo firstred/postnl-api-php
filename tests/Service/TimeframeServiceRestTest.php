@@ -42,6 +42,7 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use GuzzleHttp\Psr7\Query;
+use stdClass;
 use function file_get_contents;
 use const _RESPONSES_DIR_;
 
@@ -178,7 +179,7 @@ class TimeframeServiceRestTest extends ServiceTest
         if (count($responseTimeframes->getReasonNoTimeframes())) {
             $this->assertInstanceOf(ReasonNoTimeframe::class, $responseTimeframes->getReasonNoTimeframes()[0]);
         }
-        $this->assertNotTrue($this->containsStdClass($responseTimeframes));
+        $this->assertNotTrue(static::containsStdClass($responseTimeframes));
     }
 
     public function timeframesProvider()

@@ -193,7 +193,7 @@ class DeliveryDateServiceRestTest extends ServiceTest
         $this->assertInstanceof(DateTimeInterface::class, $response->getDeliveryDate());
         $this->assertEquals('30-06-2016', $response->getDeliveryDate()->format('d-m-Y'));
         $this->assertEquals('Daytime', $response->getOptions()[0]);
-        $this->assertNotTrue($this->containsStdClass($response));
+        $this->assertNotTrue(static::containsStdClass($response));
     }
 
     /**
@@ -265,7 +265,7 @@ class DeliveryDateServiceRestTest extends ServiceTest
             $response
         );
         $this->assertEquals('29-06-2016', $response->getSentDate()->format('d-m-Y'));
-        $this->assertNotTrue($this->containsStdClass($response));
+        $this->assertNotTrue(static::containsStdClass($response));
     }
 
     public function singleDeliveryDateResponseProvider()

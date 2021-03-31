@@ -258,7 +258,7 @@ class ConfirmingServiceRestTest extends ServiceTest
         $this->assertInstanceOf(ConfirmingResponseShipment::class, $confirm);
         $this->assertEquals('3SDEVC201611210', $confirm->getBarcode());
         $this->assertInstanceOf(Warning::class, $confirm->getWarnings()[0]);
-        $this->assertNotTrue($this->containsStdClass($confirm));
+        $this->assertNotTrue(static::containsStdClass($confirm));
     }
 
     /**

@@ -266,7 +266,7 @@ class ShippingServiceRestTest extends ServiceTest
         );
 
         $this->assertInstanceOf(GenerateShippingResponse::class, $sentShipment);
-        $this->assertNotTrue($this->containsStdClass($sentShipment));
+        $this->assertNotTrue(static::containsStdClass($sentShipment));
     }
 
     /**
@@ -656,6 +656,6 @@ class ShippingServiceRestTest extends ServiceTest
         );
 
         $this->assertInstanceOf(GenerateShippingResponse::class, $shipments);
-        $this->assertNotTrue($this->containsStdClass($shipments));
+        $this->assertNotTrue(static::containsStdClass($shipments));
     }
 }
