@@ -36,7 +36,6 @@ use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
 use function is_string;
 
@@ -63,10 +62,6 @@ class Expectation extends AbstractEntity
         'Labelling' => [
             'ETAFrom' => LabellingService::DOMAIN_NAMESPACE,
             'ETATo'   => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'ETAFrom' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'ETATo'   => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate' => [
             'ETAFrom' => DeliveryDateService::DOMAIN_NAMESPACE,

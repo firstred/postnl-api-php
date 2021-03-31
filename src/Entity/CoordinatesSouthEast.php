@@ -31,7 +31,6 @@ use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
 
 /**
@@ -59,10 +58,6 @@ class CoordinatesSouthEast extends AbstractEntity
         'Labelling' => [
             'Latitude'  => LabellingService::DOMAIN_NAMESPACE,
             'Longitude' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Latitude'  => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Longitude' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate' => [
             'Latitude'  => DeliveryDateService::DOMAIN_NAMESPACE,

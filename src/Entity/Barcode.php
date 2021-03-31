@@ -32,7 +32,6 @@ use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\ShippingService;
-use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
 
 /**
@@ -65,11 +64,6 @@ class Barcode extends AbstractEntity
             'Type'  => LabellingService::DOMAIN_NAMESPACE,
             'Range' => LabellingService::DOMAIN_NAMESPACE,
             'Serie' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Type'  => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Range' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Serie' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate' => [
             'Type'  => DeliveryDateService::DOMAIN_NAMESPACE,

@@ -33,7 +33,6 @@ use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
 
 /**
@@ -60,9 +59,6 @@ class SignatureResponse extends AbstractEntity
         ],
         'Labelling' => [
             'Signature' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Signature' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate' => [
             'Signature' => DeliveryDateService::DOMAIN_NAMESPACE,

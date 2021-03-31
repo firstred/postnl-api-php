@@ -36,7 +36,6 @@ use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
 use stdClass;
 use function array_merge;
@@ -77,12 +76,6 @@ class TimeframeTimeFrame extends AbstractEntity
             'From'    => LabellingService::DOMAIN_NAMESPACE,
             'Options' => LabellingService::DOMAIN_NAMESPACE,
             'To'      => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Date'    => ShippingStatusService::DOMAIN_NAMESPACE,
-            'From'    => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Options' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'To'      => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate'   => [
             'Date'    => DeliveryDateService::DOMAIN_NAMESPACE,

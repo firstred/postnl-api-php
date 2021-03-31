@@ -27,16 +27,6 @@
 namespace Firstred\PostNL\Service;
 
 use DateTimeImmutable;
-use GuzzleHttp\Psr7\Message as PsrMessage;
-use InvalidArgumentException;
-use Psr\Cache\CacheItemInterface;
-use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
-use ReflectionException;
-use Sabre\Xml\LibXMLException;
-use Sabre\Xml\Reader;
-use Sabre\Xml\Service as XmlService;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Coordinates;
@@ -55,6 +45,16 @@ use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
+use GuzzleHttp\Psr7\Message as PsrMessage;
+use InvalidArgumentException;
+use Psr\Cache\CacheItemInterface;
+use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
+use ReflectionException;
+use Sabre\Xml\LibXMLException;
+use Sabre\Xml\Reader;
+use Sabre\Xml\Service as XmlService;
 
 /**
  * Class LocationService.

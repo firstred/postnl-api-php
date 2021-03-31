@@ -28,13 +28,6 @@ namespace Firstred\PostNL\Service;
 
 use DateTimeImmutable;
 use Exception;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
-use ReflectionException;
-use Sabre\Xml\LibXMLException;
-use Sabre\Xml\Reader;
-use Sabre\Xml\Service as XmlService;
-use SimpleXMLElement;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Request\Confirming;
 use Firstred\PostNL\Entity\Response\ConfirmingResponseShipment;
@@ -45,6 +38,13 @@ use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
+use ReflectionException;
+use Sabre\Xml\LibXMLException;
+use Sabre\Xml\Reader;
+use Sabre\Xml\Service as XmlService;
+use SimpleXMLElement;
 
 /**
  * Class ConfirmingService.

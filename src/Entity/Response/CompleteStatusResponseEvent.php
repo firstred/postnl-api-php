@@ -37,7 +37,6 @@ use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
 
 /**
@@ -93,15 +92,6 @@ class CompleteStatusResponseEvent extends AbstractEntity
             'RouteCode'               => LabellingService::DOMAIN_NAMESPACE,
             'RouteName'               => LabellingService::DOMAIN_NAMESPACE,
             'TimeStamp'               => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Code'                    => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Description'             => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DestinationLocationCode' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'LocationCode'            => ShippingStatusService::DOMAIN_NAMESPACE,
-            'RouteCode'               => ShippingStatusService::DOMAIN_NAMESPACE,
-            'RouteName'               => ShippingStatusService::DOMAIN_NAMESPACE,
-            'TimeStamp'               => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate' => [
             'Code'                    => DeliveryDateService::DOMAIN_NAMESPACE,

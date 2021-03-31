@@ -33,7 +33,6 @@ use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\ShippingService;
-use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
 
 /**
@@ -63,10 +62,6 @@ class GenerateShippingResponse extends AbstractEntity
         'Labelling' => [
             'MergedLabels'      => LabellingService::DOMAIN_NAMESPACE,
             'ResponseShipments' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'MergedLabels'      => ShippingStatusService::DOMAIN_NAMESPACE,
-            'ResponseShipments' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate' => [
             'MergedLabels'      => DeliveryDateService::DOMAIN_NAMESPACE,

@@ -30,15 +30,14 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use Exception;
-use Sabre\Xml\Writer;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
+use Sabre\Xml\Writer;
 
 /**
  * Class Location.
@@ -148,27 +147,6 @@ class Location extends AbstractEntity
             'RetailNetworkID'      => LabellingService::DOMAIN_NAMESPACE,
             'DownPartnerID'        => LabellingService::DOMAIN_NAMESPACE,
             'DownPartnerLocation'  => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'AllowSundaySorting'   => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DeliveryDate'         => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DeliveryOptions'      => ShippingStatusService::DOMAIN_NAMESPACE,
-            'OpeningTime'          => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Options'              => ShippingStatusService::DOMAIN_NAMESPACE,
-            'City'                 => ShippingStatusService::DOMAIN_NAMESPACE,
-            'HouseNr'              => ShippingStatusService::DOMAIN_NAMESPACE,
-            'HouseNrExt'           => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Postalcode'           => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Street'               => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Coordinates'          => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CoordinatesNorthWest' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CoordinatesSouthEast' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'LocationCode'         => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Saleschannel'         => ShippingStatusService::DOMAIN_NAMESPACE,
-            'TerminalType'         => ShippingStatusService::DOMAIN_NAMESPACE,
-            'RetailNetworkID'      => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DownPartnerID'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DownPartnerLocation'  => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate' => [
             'AllowSundaySorting'   => DeliveryDateService::DOMAIN_NAMESPACE,

@@ -26,7 +26,6 @@
 
 namespace Firstred\PostNL\Entity\Request;
 
-use Sabre\Xml\Writer;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Message\Message;
 use Firstred\PostNL\Entity\Timeframe;
@@ -35,8 +34,8 @@ use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
+use Sabre\Xml\Writer;
 
 /**
  * Class GetTimeframes.
@@ -65,10 +64,6 @@ class GetTimeframes extends AbstractEntity
         'Labelling' => [
             'Message'   => LabellingService::DOMAIN_NAMESPACE,
             'Timeframe' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Message'   => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Timeframe' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate' => [
             'Message'   => DeliveryDateService::DOMAIN_NAMESPACE,

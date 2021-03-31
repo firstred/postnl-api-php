@@ -37,7 +37,6 @@ use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
 use function is_string;
 
@@ -84,13 +83,6 @@ class CompleteStatusResponseOldStatus extends AbstractEntity
             'PhaseCode'         => LabellingService::DOMAIN_NAMESPACE,
             'PhaseDescription'  => LabellingService::DOMAIN_NAMESPACE,
             'TimeStamp'         => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'StatusCode'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'StatusDescription' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'PhaseCode'         => ShippingStatusService::DOMAIN_NAMESPACE,
-            'PhaseDescription'  => ShippingStatusService::DOMAIN_NAMESPACE,
-            'TimeStamp'         => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate' => [
             'StatusCode'        => DeliveryDateService::DOMAIN_NAMESPACE,

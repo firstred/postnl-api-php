@@ -27,14 +27,14 @@
 namespace Firstred\PostNL\HttpClient;
 
 use Composer\CaBundle\CaBundle;
+use Firstred\PostNL\Exception\ApiConnectionException;
 use Firstred\PostNL\Exception\ApiException;
+use Firstred\PostNL\Exception\HttpClientException;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
-use Firstred\PostNL\Exception\ApiConnectionException;
-use Firstred\PostNL\Exception\HttpClientException;
 use Psr\Log\LogLevel;
 use function define;
 use function defined;
@@ -43,7 +43,6 @@ use const CURLOPT_HTTPHEADER;
 use const CURLOPT_PROTOCOLS;
 use const CURLOPT_REDIR_PROTOCOLS;
 use const CURLOPT_SSL_VERIFYPEER;
-use const CURLOPT_SSL_VERIFYSTATUS;
 
 if (!defined('CURL_SSLVERSION_TLSv1')) {
     define('CURL_SSLVERSION_TLSv1', 1);

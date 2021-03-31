@@ -30,7 +30,6 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use Exception;
-use Sabre\Xml\Writer;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Amount;
@@ -48,8 +47,8 @@ use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
+use Sabre\Xml\Writer;
 
 /**
  * Class CompleteStatusResponseShipment.
@@ -140,23 +139,6 @@ class CompleteStatusResponseShipment extends AbstractEntity
             'Reference'      => LabellingService::DOMAIN_NAMESPACE,
             'Status'         => LabellingService::DOMAIN_NAMESPACE,
             'Warnings'       => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Addresses'      => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Amounts'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Barcode'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Customer'       => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DeliveryDate'   => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Dimension'      => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Events'         => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Expectation'    => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Groups'         => ShippingStatusService::DOMAIN_NAMESPACE,
-            'OldStatuses'    => ShippingStatusService::DOMAIN_NAMESPACE,
-            'ProductCode'    => ShippingStatusService::DOMAIN_NAMESPACE,
-            'ProductOptions' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Reference'      => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Status'         => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Warnings'       => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate' => [
             'Addresses'      => DeliveryDateService::DOMAIN_NAMESPACE,

@@ -27,9 +27,6 @@
 namespace Firstred\PostNL\Entity;
 
 use ArrayAccess;
-use Iterator;
-use ReflectionException;
-use stdClass;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use Firstred\PostNL\Exception\NotSupportedException;
@@ -38,8 +35,10 @@ use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
+use Iterator;
+use ReflectionException;
+use stdClass;
 use function is_numeric;
 use function is_string;
 
@@ -95,15 +94,6 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
             'Friday'    => LabellingService::DOMAIN_NAMESPACE,
             'Saturday'  => LabellingService::DOMAIN_NAMESPACE,
             'Sunday'    => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Monday'    => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Tuesday'   => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Wednesday' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Thursday'  => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Friday'    => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Saturday'  => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Sunday'    => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate'   => [
             'Monday'    => DeliveryDateService::DOMAIN_NAMESPACE,

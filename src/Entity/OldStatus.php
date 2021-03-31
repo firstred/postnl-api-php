@@ -31,7 +31,6 @@ use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
 
 /**
@@ -74,13 +73,6 @@ class OldStatus extends AbstractEntity
             'CurrentOldStatusCode'        => LabellingService::DOMAIN_NAMESPACE,
             'CurrentOldStatusDescription' => LabellingService::DOMAIN_NAMESPACE,
             'CurrentOldStatusTimeStamp'   => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'CurrentPhaseCode'            => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CurrentPhaseDescription'     => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CurrentOldStatusCode'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CurrentOldStatusDescription' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CurrentOldStatusTimeStamp'   => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate' => [
             'CurrentPhaseCode'            => DeliveryDateService::DOMAIN_NAMESPACE,

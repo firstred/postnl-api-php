@@ -33,7 +33,6 @@ use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\ShippingService;
-use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
 
 /**
@@ -65,11 +64,6 @@ class LabellingMessage extends Message
             'MessageID'        => LabellingService::DOMAIN_NAMESPACE,
             'MessageTimeStamp' => LabellingService::DOMAIN_NAMESPACE,
             'Printertype'      => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'MessageID'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'MessageTimeStamp' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Printertype'      => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate' => [
             'MessageID'        => DeliveryDateService::DOMAIN_NAMESPACE,

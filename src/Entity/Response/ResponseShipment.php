@@ -35,7 +35,6 @@ use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\ShippingService;
-use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
 
 /**
@@ -88,15 +87,6 @@ class ResponseShipment extends AbstractEntity
             'Labels'              => LabellingService::DOMAIN_NAMESPACE,
             'ProductCodeDelivery' => LabellingService::DOMAIN_NAMESPACE,
             'Warnings'            => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Barcode'             => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DownPartnerBarcode'  => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DownPartnerID'       => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DownPartnerLocation' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Labels'              => ShippingStatusService::DOMAIN_NAMESPACE,
-            'ProductCodeDelivery' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Warnings'            => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate' => [
             'Barcode'             => DeliveryDateService::DOMAIN_NAMESPACE,

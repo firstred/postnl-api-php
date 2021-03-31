@@ -28,11 +28,6 @@ namespace Firstred\PostNL\Service;
 
 use DateTimeImmutable;
 use Exception;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
-use ReflectionException;
-use Sabre\Xml\Service as XmlService;
-use SimpleXMLElement;
 use Firstred\PostNL\Entity\Request\GenerateBarcode;
 use Firstred\PostNL\Entity\SOAP\Security;
 use Firstred\PostNL\Exception\ApiException;
@@ -41,6 +36,11 @@ use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\PostNL;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
+use ReflectionException;
+use Sabre\Xml\Service as XmlService;
+use SimpleXMLElement;
 
 /**
  * Class BarcodeService.

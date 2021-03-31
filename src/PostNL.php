@@ -27,26 +27,6 @@
 namespace Firstred\PostNL;
 
 use Exception;
-use GuzzleHttp\ClientInterface as GuzzleClientInterface;
-use GuzzleHttp\Psr7\Message as PsrMessage;
-use GuzzleHttp\Psr7\Response;
-use Http\Discovery\Exception\DiscoveryFailedException;
-use Http\Discovery\Exception\NoCandidateFoundException;
-use Http\Discovery\HttpAsyncClientDiscovery;
-use Http\Discovery\HttpClientDiscovery;
-use Http\Discovery\NotFoundException;
-use Http\Discovery\Psr18ClientDiscovery;
-use Psr\Cache\CacheItemInterface;
-use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
-use Psr\Log\LoggerAwareInterface;
-use Psr\Log\LoggerInterface;
-use Sabre\Xml\Version;
-use setasign\Fpdi\PdfParser\CrossReference\CrossReferenceException;
-use setasign\Fpdi\PdfParser\Filter\FilterException;
-use setasign\Fpdi\PdfParser\PdfParserException;
-use setasign\Fpdi\PdfParser\StreamReader;
-use setasign\Fpdi\PdfParser\Type\PdfTypeException;
-use setasign\Fpdi\PdfReader\PdfReaderException;
 use Firstred\PostNL\Entity\Barcode;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Label;
@@ -65,9 +45,10 @@ use Firstred\PostNL\Entity\Request\GetNearestLocations;
 use Firstred\PostNL\Entity\Request\GetSentDateRequest;
 use Firstred\PostNL\Entity\Request\GetSignature;
 use Firstred\PostNL\Entity\Request\GetTimeframes;
-use Firstred\PostNL\Entity\Response\CompleteStatusResponse;
+use Firstred\PostNL\Entity\Response\CompleteStatusResponseShipment;
 use Firstred\PostNL\Entity\Response\ConfirmingResponseShipment;
 use Firstred\PostNL\Entity\Response\CurrentStatusResponse;
+use Firstred\PostNL\Entity\Response\CurrentStatusResponseShipment;
 use Firstred\PostNL\Entity\Response\GenerateLabelResponse;
 use Firstred\PostNL\Entity\Response\GenerateShippingResponse;
 use Firstred\PostNL\Entity\Response\GetDeliveryDateResponse;
@@ -76,6 +57,7 @@ use Firstred\PostNL\Entity\Response\GetNearestLocationsResponse;
 use Firstred\PostNL\Entity\Response\GetSentDateResponse;
 use Firstred\PostNL\Entity\Response\GetSignatureResponseSignature;
 use Firstred\PostNL\Entity\Response\ResponseTimeframes;
+use Firstred\PostNL\Entity\Response\UpdatedShipmentsResponse;
 use Firstred\PostNL\Entity\Shipment;
 use Firstred\PostNL\Entity\SOAP\UsernameToken;
 use Firstred\PostNL\Exception\AbstractException;
@@ -83,7 +65,9 @@ use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\InvalidBarcodeException;
 use Firstred\PostNL\Exception\InvalidConfigurationException;
+use Firstred\PostNL\Exception\NotImplementedException;
 use Firstred\PostNL\Exception\NotSupportedException;
+use Firstred\PostNL\Exception\ShipmentNotFoundException;
 use Firstred\PostNL\Factory\GuzzleRequestFactory;
 use Firstred\PostNL\Factory\GuzzleResponseFactory;
 use Firstred\PostNL\Factory\GuzzleStreamFactory;
@@ -113,6 +97,26 @@ use Firstred\PostNL\Service\TimeframeServiceInterface;
 use Firstred\PostNL\Util\DummyLogger;
 use Firstred\PostNL\Util\RFPdi;
 use Firstred\PostNL\Util\Util;
+use GuzzleHttp\ClientInterface as GuzzleClientInterface;
+use GuzzleHttp\Psr7\Message as PsrMessage;
+use GuzzleHttp\Psr7\Response;
+use Http\Discovery\Exception\DiscoveryFailedException;
+use Http\Discovery\Exception\NoCandidateFoundException;
+use Http\Discovery\HttpAsyncClientDiscovery;
+use Http\Discovery\HttpClientDiscovery;
+use Http\Discovery\NotFoundException;
+use Http\Discovery\Psr18ClientDiscovery;
+use Psr\Cache\CacheItemInterface;
+use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerInterface;
+use Sabre\Xml\Version;
+use setasign\Fpdi\PdfParser\CrossReference\CrossReferenceException;
+use setasign\Fpdi\PdfParser\Filter\FilterException;
+use setasign\Fpdi\PdfParser\PdfParserException;
+use setasign\Fpdi\PdfParser\StreamReader;
+use setasign\Fpdi\PdfParser\Type\PdfTypeException;
+use setasign\Fpdi\PdfReader\PdfReaderException;
 use function base64_decode;
 use function class_exists;
 use function constant;
@@ -1564,6 +1568,8 @@ class PostNL implements LoggerAwareInterface
      * @return CurrentStatusResponse
      *
      * @since 1.0.0
+     *
+     * @deprecated 1.2.0 Use the dedicated methods (get by phase and status are no longer working)
      */
     public function getCurrentStatus($currentStatus)
     {
@@ -1577,6 +1583,68 @@ class PostNL implements LoggerAwareInterface
         }
 
         return $this->getShippingStatusService()->currentStatus($currentStatus);
+    }
+
+    /**
+     * Get the current status of the given shipment by barcode.
+     *
+     * @param string $barcode  Pass one or multiple barcodes
+     * @param bool   $complete Return the complete status (incl. shipment history)
+     *
+     * @return CurrentStatusResponseShipment|CompleteStatusResponseShipment
+     *
+     * @throws ShipmentNotFoundException
+     *
+     * @since 1.2.0
+     */
+    public function getShippingStatusByBarcode($barcode, $complete = false)
+    {
+        if ($complete) {
+            $statusRequest = new CompleteStatus(
+                (new Shipment())
+                    ->setBarcode($barcode)
+
+            );
+        } else {
+            $statusRequest = new CurrentStatus(
+                (new Shipment())
+                    ->setBarcode($barcode)
+            );
+        }
+
+        if (!$statusRequest->getMessage()) {
+            $statusRequest->setMessage(new Message());
+        }
+
+        if ($complete) {
+            $shipments = $this->getShippingStatusService()->completeStatus($statusRequest)->getShipments();
+        } else {
+            $shipments = $this->getShippingStatusService()->currentStatus($statusRequest)->getShipments();
+        }
+
+        if (empty($shipments) || !is_array($shipments)) {
+            throw new ShipmentNotFoundException($barcode);
+        }
+
+        return $shipments[0];
+    }
+
+    /**
+     * Get the current statuses of the given shipments by barcodes.
+     *
+     * @param string[] $barcodes Pass one or multiple barcodes
+     * @param bool     $complete Return the complete status (incl. shipment history)
+     *
+     * @return CurrentStatusResponseShipment[]
+     * @psalm-return non-empty-array<string, CurrentStatusResponseShipment>
+     *
+     * @throws NotImplementedException
+     *
+     * @since 1.2.0
+     */
+    public function getShippingStatusesByBarcodes(array $barcodes, $complete = false)
+    {
+        throw new NotImplementedException();
     }
 
     /**
@@ -1595,9 +1663,11 @@ class PostNL implements LoggerAwareInterface
      *
      * @param CompleteStatus $completeStatus
      *
-     * @return CompleteStatusResponse
+     * @return UpdatedShipmentsResponse
      *
      * @since 1.0.0
+     *
+     * @deprecated 1.2.0 Use the dedicated getShippingStatus* methods (get by phase and status are no longer working)
      */
     public function getCompleteStatus($completeStatus)
     {
@@ -1615,6 +1685,18 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
+     * Get updated shipments
+     *
+     * @return
+     *
+     * @since 1.2.0
+     */
+    public function getUpdatedShipments()
+    {
+        throw new NotImplementedException();
+    }
+
+    /**
      * Get the signature of a shipment.
      *
      * @param GetSignature $signature
@@ -1622,6 +1704,8 @@ class PostNL implements LoggerAwareInterface
      * @return GetSignatureResponseSignature
      *
      * @since 1.0.0
+     *
+     * @deprecated 1.2.0 Use the getSignature(s)By* alternatives
      */
     public function getSignature(GetSignature $signature)
     {
@@ -1631,6 +1715,50 @@ class PostNL implements LoggerAwareInterface
         }
 
         return $this->getShippingStatusService()->getSignature($signature);
+    }
+
+    /**
+     * Get the signature of a shipment.
+     *
+     * @param string $barcode
+     *
+     * @return GetSignatureResponseSignature
+     *
+     * @since 1.2.0
+     */
+    public function getSignatureByBarcode($barcode)
+    {
+        $signatureRequest = new GetSignature((new Shipment())->setBarcode($barcode));
+        $signatureRequest->setCustomer($this->getCustomer());
+        if (!$signatureRequest->getMessage()) {
+            $signatureRequest->setMessage(new Message());
+        }
+
+        return $this->getShippingStatusService()->getSignature($signatureRequest);
+    }
+
+    /**
+     * Get the signature of a shipment.
+     *
+     * @param string[] $barcodes
+     *
+     * @return GetSignatureResponseSignature
+     *
+     * @throws NotImplementedException
+     *
+     * @since 1.2.0
+     */
+    public function getSignaturesByBarcodes(array $barcodes)
+    {
+        throw new NotImplementedException();
+
+//        $signatureRequest = new GetSignature((new Shipment())->setBarcode($barcode));
+//        $signatureRequest->setCustomer($this->getCustomer());
+//        if (!$signatureRequest->getMessage()) {
+//            $signatureRequest->setMessage(new Message());
+//        }
+//
+//        return $this->getShippingStatusService()->getSignature($signatureRequest);
     }
 
     /**

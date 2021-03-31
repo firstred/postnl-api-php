@@ -30,13 +30,11 @@ use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\OpeningHours;
 use Firstred\PostNL\Entity\Warning;
-use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
 use stdClass;
 
@@ -139,24 +137,6 @@ class ResponseLocation extends AbstractEntity
             'Warnings'            => LabellingService::DOMAIN_NAMESPACE,
             'DownPartnerID'       => LabellingService::DOMAIN_NAMESPACE,
             'DownPartnerLocation' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Address'             => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DeliveryOptions'     => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Distance'            => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Latitude'            => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Longitude'           => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Name'                => ShippingStatusService::DOMAIN_NAMESPACE,
-            'OpeningHours'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'PartnerName'         => ShippingStatusService::DOMAIN_NAMESPACE,
-            'PhoneNumber'         => ShippingStatusService::DOMAIN_NAMESPACE,
-            'LocationCode'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'RetailNetworkID'     => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Saleschannel'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'TerminalType'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Warnings'            => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DownPartnerID'       => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DownPartnerLocation' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate' => [
             'Address'             => DeliveryDateService::DOMAIN_NAMESPACE,

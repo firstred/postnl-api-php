@@ -26,26 +26,24 @@
 
 namespace Firstred\PostNL\Entity\Response;
 
-use ReflectionObject;
-use ReflectionProperty;
-use Sabre\Xml\Writer;
-use stdClass;
 use Firstred\PostNL\Entity\AbstractEntity;
-use Firstred\PostNL\Entity\Shipment;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
+use ReflectionObject;
+use ReflectionProperty;
+use Sabre\Xml\Writer;
+use stdClass;
 use function count;
 
 /**
  * Class CompleteStatusResponse.
  *
- * @method Shipment[]|null        getShipments()
- * @method CompleteStatusResponse setShipments(Shipment[] $Shipments = null)
+ * @method CompleteStatusResponseShipment[]|null getShipments()
+ * @method UpdatedShipmentsResponse                setShipments(CompleteStatusResponseShipment[] $Shipments = null)
  *
  * @since 1.0.0
  */
@@ -66,9 +64,6 @@ class CompleteStatusResponse extends AbstractEntity
         'Labelling'      => [
             'Shipments' => LabellingService::DOMAIN_NAMESPACE,
         ],
-        'ShippingStatus' => [
-            'Shipments' => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
         'DeliveryDate'   => [
             'Shipments' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
@@ -80,14 +75,14 @@ class CompleteStatusResponse extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var Shipment[]|null */
+    /** @var CompleteStatusResponseShipment[]|null */
     protected $Shipments;
     // @codingStandardsIgnoreEnd
 
     /**
      * CompleteStatusResponse constructor.
      *
-     * @param Shipment[]|null $Shipments
+     * @param CompleteStatusResponseShipment[]|null $Shipments
      */
     public function __construct(array $Shipments = null)
     {

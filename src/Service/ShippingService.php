@@ -26,12 +26,6 @@
 
 namespace Firstred\PostNL\Service;
 
-use GuzzleHttp\Psr7\Message as PsrMessage;
-use InvalidArgumentException;
-use Psr\Cache\CacheItemInterface;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
-use ReflectionException;
 use Firstred\PostNL\Entity\Request\GenerateShipping;
 use Firstred\PostNL\Entity\Response\GenerateShippingResponse;
 use Firstred\PostNL\Exception\ApiException;
@@ -39,6 +33,12 @@ use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\ResponseException;
+use GuzzleHttp\Psr7\Message as PsrMessage;
+use InvalidArgumentException;
+use Psr\Cache\CacheItemInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
+use ReflectionException;
 use function http_build_query;
 use function json_encode;
 

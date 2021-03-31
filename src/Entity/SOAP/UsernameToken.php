@@ -26,8 +26,8 @@
 
 namespace Firstred\PostNL\Entity\SOAP;
 
-use Sabre\Xml\Writer;
 use Firstred\PostNL\Entity\AbstractEntity;
+use Sabre\Xml\Writer;
 
 /**
  * Class UsernameToken.

@@ -32,7 +32,6 @@ use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
 
 /**
@@ -95,17 +94,6 @@ class ResponseAmount extends AbstractEntity
             'TransactionNumber'  => LabellingService::DOMAIN_NAMESPACE,
             'Value'              => LabellingService::DOMAIN_NAMESPACE,
             'VerzekerdBedrag'    => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'AccountName'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'ResponseAmountType' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'BIC'                => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Currency'           => ShippingStatusService::DOMAIN_NAMESPACE,
-            'IBAN'               => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Reference'          => ShippingStatusService::DOMAIN_NAMESPACE,
-            'TransactionNumber'  => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Value'              => ShippingStatusService::DOMAIN_NAMESPACE,
-            'VerzekerdBedrag'    => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate' => [
             'AccountName'        => DeliveryDateService::DOMAIN_NAMESPACE,

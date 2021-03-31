@@ -34,7 +34,6 @@ use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
 
 /**
@@ -73,11 +72,6 @@ class GetNearestLocations extends AbstractEntity
             'Countrycode' => LabellingService::DOMAIN_NAMESPACE,
             'Location'    => LabellingService::DOMAIN_NAMESPACE,
             'Message'     => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Countrycode' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Location'    => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Message'     => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate' => [
             'Countrycode' => DeliveryDateService::DOMAIN_NAMESPACE,

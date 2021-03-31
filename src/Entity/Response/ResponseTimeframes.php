@@ -34,7 +34,6 @@ use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
 
 /**
@@ -62,10 +61,6 @@ class ResponseTimeframes extends AbstractEntity
         'Labelling' => [
             'ReasonNoTimeframes' => LabellingService::DOMAIN_NAMESPACE,
             'Timeframes'         => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'ReasonNoTimeframes' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Timeframes'         => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate' => [
             'ReasonNoTimeframes' => DeliveryDateService::DOMAIN_NAMESPACE,

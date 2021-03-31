@@ -26,12 +26,6 @@
 
 namespace Firstred\PostNL\Service;
 
-use GuzzleHttp\Psr7\Message as PsrMessage;
-use Psr\Cache\CacheItemInterface;
-use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
-use ReflectionException;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Request\CompleteStatus;
 use Firstred\PostNL\Entity\Request\CompleteStatusByPhase;
@@ -42,11 +36,12 @@ use Firstred\PostNL\Entity\Request\CurrentStatusByPhase;
 use Firstred\PostNL\Entity\Request\CurrentStatusByReference;
 use Firstred\PostNL\Entity\Request\CurrentStatusByStatus;
 use Firstred\PostNL\Entity\Request\GetSignature;
-use Firstred\PostNL\Entity\Response\CompleteStatusResponse;
 use Firstred\PostNL\Entity\Response\CompleteStatusResponseEvent;
 use Firstred\PostNL\Entity\Response\CompleteStatusResponseOldStatus;
 use Firstred\PostNL\Entity\Response\CurrentStatusResponse;
 use Firstred\PostNL\Entity\Response\GetSignatureResponseSignature;
+use Firstred\PostNL\Entity\Response\UpdatedShipmentsResponse;
+use Firstred\PostNL\Exception\ApiConnectionException;
 use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
@@ -54,6 +49,11 @@ use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
+use GuzzleHttp\Psr7\Message as PsrMessage;
+use Psr\Cache\CacheItemInterface;
+use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Class ShippingStatusService.
@@ -61,9 +61,9 @@ use Firstred\PostNL\Exception\ResponseException;
  * @method CurrentStatusResponse  currentStatus(CurrentStatus|CurrentStatusByReference|CurrentStatusByPhase|CurrentStatusByStatus $currentStatus)
  * @method RequestInterface       buildCurrentStatusRequest(CurrentStatus|CurrentStatusByReference|CurrentStatusByPhase|CurrentStatusByStatus $currentStatus)
  * @method CurrentStatusResponse  processCurrentStatusResponse(mixed $response)
- * @method CompleteStatusResponse completeStatus(CompleteStatus|CompleteStatusByReference|CompleteStatusByPhase|CompleteStatusByStatus $completeStatus)
+ * @method UpdatedShipmentsResponse completeStatus(CompleteStatus|CompleteStatusByReference|CompleteStatusByPhase|CompleteStatusByStatus $completeStatus)
  * @method RequestInterface       buildCompleteStatusRequest(CompleteStatus|CompleteStatusByReference|CompleteStatusByPhase|CompleteStatusByStatus $completeStatus)
- * @method CompleteStatusResponse processCompleteStatusResponse(mixed $response)
+ * @method UpdatedShipmentsResponse processCompleteStatusResponse(mixed $response)
  * @method GetSignature           getSignature(GetSignature $getSignature)
  * @method RequestInterface       buildGetSignatureRequest(GetSignature $getSignature)
  * @method GetSignature           processGetSignatureResponse(mixed $response)
@@ -99,15 +99,15 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      *
      * @return CurrentStatusResponse
      *
+     * @throws ApiConnectionException
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
-     * @throws ResponseException
-     * @throws PsrCacheInvalidArgumentException
-     * @throws ReflectionException
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
+     * @throws PsrCacheInvalidArgumentException
+     * @throws ResponseException
      *
      * @since 1.0.0
      */
@@ -159,17 +159,17 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      *
      * @param CompleteStatus $completeStatus
      *
-     * @return CompleteStatusResponse
+     * @return UpdatedShipmentsResponse
      *
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
-     * @throws ResponseException
-     * @throws PsrCacheInvalidArgumentException
-     * @throws ReflectionException
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
+     * @throws PsrCacheInvalidArgumentException
+     * @throws ResponseException
+     * @throws ApiConnectionException
      *
      * @since 1.0.0
      */
@@ -190,7 +190,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
         }
 
         $object = $this->processCompleteStatusResponseREST($response);
-        if ($object instanceof CompleteStatusResponse) {
+        if ($object instanceof UpdatedShipmentsResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
@@ -206,18 +206,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
     }
 
     /**
-     * Gets the complete status.
-     *
-     * This is a combi-function, supporting the following:
-     * - CurrentStatus (by barcode):
-     *   - Fill the Shipment->Barcode property. Leave the rest empty.
-     * - CurrentStatusByReference:
-     *   - Fill the Shipment->Reference property. Leave the rest empty.
-     * - CurrentStatusByPhase:
-     *   - Fill the Shipment->PhaseCode property, do not pass Barcode or Reference.
-     *     Optionally add DateFrom and/or DateTo.
-     * - CurrentStatusByStatus:
-     *   - Fill the Shipment->StatusCode property. Leave the rest empty.
+     * Gets the signature.
      *
      * @param GetSignature $getSignature
      *
@@ -228,10 +217,10 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws CifException
      * @throws ResponseException
      * @throws PsrCacheInvalidArgumentException
-     * @throws ReflectionException
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
+     * @throws ApiConnectionException
      *
      * @since 1.0.0
      */
@@ -278,14 +267,11 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      *
      * @return RequestInterface
      *
-     * @throws ReflectionException
-     *
      * @since 1.0.0
      */
     public function buildCurrentStatusRequestREST($currentStatus)
     {
         $apiKey = $this->postnl->getRestApiKey();
-        $this->setService($currentStatus);
 
         if ($currentStatus->getShipment()->getReference()) {
             $query = [
@@ -341,7 +327,6 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @return CurrentStatusResponse
      *
      * @throws ResponseException
-     * @throws ReflectionException
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
@@ -352,12 +337,9 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
     {
         $body = json_decode(static::getResponseText($response));
         /** @var CurrentStatusResponse $object */
-        $object = CurrentStatusResponse::jsonDeserialize((object) ['CurrentStatusResponse' => (object) [
+        return CurrentStatusResponse::jsonDeserialize((object) ['CurrentStatusResponse' => (object) [
             'Shipments' => $body->CurrentStatus->Shipment,
         ]]);
-        $this->setService($object);
-
-        return $object;
     }
 
     /**
@@ -373,14 +355,11 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      *
      * @return RequestInterface
      *
-     * @throws ReflectionException
-     *
      * @since 1.0.0
      */
     public function buildCompleteStatusRequestREST(CompleteStatus $completeStatus)
     {
         $apiKey = $this->postnl->getRestApiKey();
-        $this->setService($completeStatus);
 
         if ($completeStatus->getShipment()->getReference()) {
             $query = [
@@ -439,10 +418,9 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      *
      * @param mixed $response
      *
-     * @return CompleteStatusResponse|null
+     * @return UpdatedShipmentsResponse|null
      *
      * @throws ResponseException
-     * @throws ReflectionException
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
@@ -465,7 +443,10 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
         foreach ($body->CompleteStatus->Shipments as &$shipment) {
             $shipment->Customer = Customer::jsonDeserialize((object) ['Customer' => $shipment->Customer]);
         }
-        foreach ($body->CompleteStatus->Shipments as $shipment) {
+        unset($shipment);
+
+        /** @noinspection PhpParameterByRefIsNotUsedAsReferenceInspection */
+        foreach ($body->CompleteStatus->Shipments as &$shipment) {
             if (isset($shipment->Address)) {
                 $shipment->Addresses = $shipment->Address;
                 unset($shipment->Address);
@@ -503,14 +484,12 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
                 );
             }
         }
+        unset($shipment);
 
-        /** @var CompleteStatusResponse $object */
-        $object = CompleteStatusResponse::jsonDeserialize(
+        /** @var UpdatedShipmentsResponse $object */
+        return UpdatedShipmentsResponse::jsonDeserialize(
             (object) ['CompleteStatusResponse' => $body->CompleteStatus]
         );
-        $this->setService($object);
-
-        return $object;
     }
 
     /**
@@ -519,12 +498,12 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @param GetSignature $getSignature
      *
      * @return RequestInterface
-     * @throws ReflectionException
+     *
+     * @since 1.0.0
      */
     public function buildGetSignatureRequestREST(GetSignature $getSignature)
     {
         $apiKey = $this->postnl->getRestApiKey();
-        $this->setService($getSignature);
 
         return $this->postnl->getRequestFactory()->createRequest(
             'GET',
@@ -542,7 +521,6 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @return GetSignatureResponseSignature|null
      *
      * @throws ResponseException
-     * @throws ReflectionException
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
@@ -553,9 +531,6 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
     {
         $body = json_decode(static::getResponseText($response));
         /** @var GetSignatureResponseSignature $object */
-        $object = GetSignatureResponseSignature::jsonDeserialize((object) ['GetSignatureResponseSignature' => $body->Signature]);
-        $this->setService($object);
-
-        return $object;
+        return GetSignatureResponseSignature::jsonDeserialize((object) ['GetSignatureResponseSignature' => $body->Signature]);
     }
 }

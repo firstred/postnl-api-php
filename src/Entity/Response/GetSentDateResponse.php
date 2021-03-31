@@ -30,7 +30,6 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use Exception;
-use Sabre\Xml\Writer;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\BarcodeService;
@@ -38,8 +37,8 @@ use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
+use Sabre\Xml\Writer;
 
 /**
  * Class GetSentDateResponse.
@@ -69,10 +68,6 @@ class GetSentDateResponse extends AbstractEntity
         'Labelling'      => [
             'SentDate' => LabellingService::DOMAIN_NAMESPACE,
             'Options'  => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'SentDate' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Options'  => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate'   => [
             'SentDate' => DeliveryDateService::DOMAIN_NAMESPACE,

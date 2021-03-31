@@ -27,6 +27,8 @@
 namespace Firstred\PostNL\HttpClient;
 
 use Composer\CaBundle\CaBundle;
+use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\ResponseException;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\GuzzleException;
@@ -42,8 +44,6 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
-use Firstred\PostNL\Exception\HttpClientException;
-use Firstred\PostNL\Exception\ResponseException;
 use Psr\Log\LogLevel;
 use function method_exists;
 

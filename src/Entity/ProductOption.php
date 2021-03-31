@@ -32,7 +32,6 @@ use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\ShippingService;
-use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
 
 /**
@@ -60,10 +59,6 @@ class ProductOption extends AbstractEntity
         'Labelling' => [
             'Characteristic' => LabellingService::DOMAIN_NAMESPACE,
             'Option'         => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Characteristic' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Option'         => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate' => [
             'Characteristic' => DeliveryDateService::DOMAIN_NAMESPACE,

@@ -22,7 +22,6 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
-use const LOG_LOCAL0;
 
 /**
  * Class HTTPlugClient.

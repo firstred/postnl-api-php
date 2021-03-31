@@ -32,7 +32,6 @@ use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
 
 /**
@@ -59,9 +58,6 @@ class GetLocationsInAreaResponse extends AbstractEntity
         ],
         'Labelling' => [
             'GetLocationsResult' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'GetLocationsResult' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate' => [
             'GetLocationsResult' => DeliveryDateService::DOMAIN_NAMESPACE,

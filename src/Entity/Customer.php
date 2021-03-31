@@ -32,7 +32,6 @@ use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\ShippingService;
-use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
 
 /**
@@ -84,15 +83,6 @@ class Customer extends AbstractEntity
             'CustomerNumber'     => LabellingService::DOMAIN_NAMESPACE,
             'Email'              => LabellingService::DOMAIN_NAMESPACE,
             'Name'               => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Address'            => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CollectionLocation' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'ContactPerson'      => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CustomerCode'       => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CustomerNumber'     => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Email'              => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Name'               => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate' => [
             'Address'            => DeliveryDateService::DOMAIN_NAMESPACE,

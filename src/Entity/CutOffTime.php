@@ -26,14 +26,13 @@
 
 namespace Firstred\PostNL\Entity;
 
-use Sabre\Xml\Writer;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
+use Sabre\Xml\Writer;
 
 /**
  * Class CutOffTime.
@@ -65,11 +64,6 @@ class CutOffTime extends AbstractEntity
             'Day'       => LabellingService::DOMAIN_NAMESPACE,
             'Time'      => LabellingService::DOMAIN_NAMESPACE,
             'Available' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Day'       => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Time'      => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Available' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate' => [
             'Day'       => DeliveryDateService::DOMAIN_NAMESPACE,

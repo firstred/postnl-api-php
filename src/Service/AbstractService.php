@@ -30,16 +30,6 @@ use DateInterval;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Exception;
-use GuzzleHttp\Psr7\Response;
-use Psr\Cache\CacheItemInterface;
-use Psr\Cache\CacheItemPoolInterface;
-use Psr\Cache\InvalidArgumentException;
-use Psr\Http\Message\ResponseInterface;
-use ReflectionClass;
-use ReflectionException;
-use ReflectionObject;
-use Sabre\Xml\Writer;
-use SimpleXMLElement;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
@@ -48,6 +38,15 @@ use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidMethodException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\PostNL;
+use GuzzleHttp\Psr7\Response;
+use Psr\Cache\CacheItemInterface;
+use Psr\Cache\CacheItemPoolInterface;
+use Psr\Cache\InvalidArgumentException;
+use Psr\Http\Message\ResponseInterface;
+use ReflectionClass;
+use ReflectionException;
+use Sabre\Xml\Writer;
+use SimpleXMLElement;
 
 /**
  * Class AbstractService.

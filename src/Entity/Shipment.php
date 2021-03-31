@@ -30,7 +30,6 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use Exception;
-use Sabre\Xml\Writer;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\ConfirmingService;
@@ -38,8 +37,8 @@ use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\ShippingService;
-use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
+use Sabre\Xml\Writer;
 
 /**
  * Class Shipment.
@@ -241,46 +240,6 @@ class Shipment extends AbstractEntity
             'StatusCode'               => LabellingService::DOMAIN_NAMESPACE,
             'DateFrom'                 => LabellingService::DOMAIN_NAMESPACE,
             'DateTo'                   => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Addresses'                => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Amounts'                  => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Barcode'                  => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CollectionTimeStampEnd'   => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CollectionTimeStampStart' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Contacts'                 => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Content'                  => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CostCenter'               => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Customer'                 => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CustomerOrderNumber'      => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Customs'                  => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DeliveryAddress'          => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DeliveryTimestampStart'   => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DeliveryTimestampEnd'     => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DeliveryDate'             => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Dimension'                => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DownPartnerBarcode'       => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DownPartnerID'            => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DownPartnerLocation'      => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Events'                   => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Groups'                   => ShippingStatusService::DOMAIN_NAMESPACE,
-            'IDExpiration'             => ShippingStatusService::DOMAIN_NAMESPACE,
-            'IDNumber'                 => ShippingStatusService::DOMAIN_NAMESPACE,
-            'IDType'                   => ShippingStatusService::DOMAIN_NAMESPACE,
-            'OldStatuses'              => ShippingStatusService::DOMAIN_NAMESPACE,
-            'PhaseCode'                => ShippingStatusService::DOMAIN_NAMESPACE,
-            'ProductCodeCollect'       => ShippingStatusService::DOMAIN_NAMESPACE,
-            'ProductCodeDelivery'      => ShippingStatusService::DOMAIN_NAMESPACE,
-            'ProductOptions'           => ShippingStatusService::DOMAIN_NAMESPACE,
-            'ReceiverDateOfBirth'      => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Reference'                => ShippingStatusService::DOMAIN_NAMESPACE,
-            'ReferenceCollect'         => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Remark'                   => ShippingStatusService::DOMAIN_NAMESPACE,
-            'ReturnBarcode'            => ShippingStatusService::DOMAIN_NAMESPACE,
-            'ReturnReference'          => ShippingStatusService::DOMAIN_NAMESPACE,
-            'StatusCode'               => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DateFrom'                 => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DateTo'                   => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate' => [
             'Addresses'                => DeliveryDateService::DOMAIN_NAMESPACE,

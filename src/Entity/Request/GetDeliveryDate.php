@@ -30,7 +30,6 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use Exception;
-use Sabre\Xml\Writer;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\CutOffTime;
 use Firstred\PostNL\Entity\Message\Message;
@@ -40,8 +39,8 @@ use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
+use Sabre\Xml\Writer;
 
 /**
  * Class GetDeliveryDate.
@@ -132,22 +131,6 @@ class GetDeliveryDate extends AbstractEntity
             'Street'             => LabellingService::DOMAIN_NAMESPACE,
             'GetDeliveryDate'    => LabellingService::DOMAIN_NAMESPACE,
             'Message'            => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'AllowSundaySorting' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'City'               => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CountryCode'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CutOffTimes'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'HouseNr'            => ShippingStatusService::DOMAIN_NAMESPACE,
-            'HouseNrExt'         => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Options'            => ShippingStatusService::DOMAIN_NAMESPACE,
-            'OriginCountryCode'  => ShippingStatusService::DOMAIN_NAMESPACE,
-            'PostalCode'         => ShippingStatusService::DOMAIN_NAMESPACE,
-            'ShippingDate'       => ShippingStatusService::DOMAIN_NAMESPACE,
-            'ShippingDuration'   => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Street'             => ShippingStatusService::DOMAIN_NAMESPACE,
-            'GetDeliveryDate'    => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Message'            => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate' => [
             'AllowSundaySorting' => DeliveryDateService::DOMAIN_NAMESPACE,

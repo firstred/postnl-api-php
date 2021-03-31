@@ -26,7 +26,6 @@
 
 namespace Firstred\PostNL\Entity\Response;
 
-use stdClass;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Warning;
 use Firstred\PostNL\Service\BarcodeService;
@@ -34,7 +33,6 @@ use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
 
 /**
@@ -62,10 +60,6 @@ class ConfirmingResponseShipment extends AbstractEntity
         'Labelling' => [
             'Barcode'  => LabellingService::DOMAIN_NAMESPACE,
             'Warnings' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Barcode'  => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Warnings' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate' => [
             'Barcode'  => DeliveryDateService::DOMAIN_NAMESPACE,

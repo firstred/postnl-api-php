@@ -30,15 +30,14 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use Exception;
-use Sabre\Xml\Writer;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
+use Sabre\Xml\Writer;
 use stdClass;
 use function array_merge;
 use function is_array;
@@ -88,14 +87,6 @@ class ReasonNoTimeframe extends AbstractEntity
             'Options'     => LabellingService::DOMAIN_NAMESPACE,
             'From'        => LabellingService::DOMAIN_NAMESPACE,
             'To'          => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Code'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Date'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Description' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Options'     => ShippingStatusService::DOMAIN_NAMESPACE,
-            'From'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'To'          => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate' => [
             'Code'        => DeliveryDateService::DOMAIN_NAMESPACE,

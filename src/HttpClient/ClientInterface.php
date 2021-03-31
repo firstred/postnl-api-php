@@ -26,10 +26,10 @@
 
 namespace Firstred\PostNL\HttpClient;
 
+use Firstred\PostNL\Exception\HttpClientException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
-use Firstred\PostNL\Exception\HttpClientException;
 
 /**
  * Interface ClientInterface.

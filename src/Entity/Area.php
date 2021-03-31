@@ -31,7 +31,6 @@ use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
 
 /**
@@ -59,10 +58,6 @@ class Area extends AbstractEntity
         'Labelling' => [
             'CoordinatesNorthWest' => LabellingService::DOMAIN_NAMESPACE,
             'CoordinatesSouthEast' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'CoordinatesNorthWest' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CoordinatesSouthEast' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate' => [
             'CoordinatesNorthWest' => DeliveryDateService::DOMAIN_NAMESPACE,

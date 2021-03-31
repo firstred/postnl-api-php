@@ -32,7 +32,6 @@ use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\ShippingService;
-use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
 
 /**
@@ -100,18 +99,6 @@ class Customs extends AbstractEntity
             'License'                => LabellingService::DOMAIN_NAMESPACE,
             'LicenseNr'              => LabellingService::DOMAIN_NAMESPACE,
             'ShipmentType'           => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Certificate'            => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CertificateNr'          => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Content'                => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Currency'               => ShippingStatusService::DOMAIN_NAMESPACE,
-            'HandleAsNonDeliverable' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Invoice'                => ShippingStatusService::DOMAIN_NAMESPACE,
-            'InvoiceNr'              => ShippingStatusService::DOMAIN_NAMESPACE,
-            'License'                => ShippingStatusService::DOMAIN_NAMESPACE,
-            'LicenseNr'              => ShippingStatusService::DOMAIN_NAMESPACE,
-            'ShipmentType'           => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate' => [
             'Certificate'            => DeliveryDateService::DOMAIN_NAMESPACE,

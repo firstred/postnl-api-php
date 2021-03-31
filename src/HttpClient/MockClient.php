@@ -26,6 +26,8 @@
 
 namespace Firstred\PostNL\HttpClient;
 
+use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\Util\DummyLogger;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
@@ -37,8 +39,6 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
-use Firstred\PostNL\Exception\HttpClientException;
-use Firstred\PostNL\Exception\ResponseException;
 use Psr\Log\LogLevel;
 
 /**

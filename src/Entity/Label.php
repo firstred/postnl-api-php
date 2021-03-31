@@ -32,7 +32,6 @@ use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\ShippingService;
-use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
 
 /**
@@ -68,11 +67,6 @@ class Label extends AbstractEntity
             'Content'     => LabellingService::DOMAIN_NAMESPACE,
             'ContentType' => LabellingService::DOMAIN_NAMESPACE,
             'Labeltype'   => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Content'     => ShippingStatusService::DOMAIN_NAMESPACE,
-            'ContentType' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Labeltype'   => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate' => [
             'Content'     => DeliveryDateService::DOMAIN_NAMESPACE,

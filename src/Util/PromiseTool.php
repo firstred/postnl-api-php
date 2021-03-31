@@ -26,12 +26,12 @@ namespace Firstred\PostNL\Util;
 
 use ArrayIterator;
 use Exception;
+use Firstred\PostNL\Exception\Promise\AggregateException;
+use Firstred\PostNL\Exception\Promise\RejectionException;
 use Http\Promise\FulfilledPromise;
 use Http\Promise\Promise;
 use Http\Promise\RejectedPromise;
 use Iterator;
-use Firstred\PostNL\Exception\Promise\AggregateException;
-use Firstred\PostNL\Exception\Promise\RejectionException;
 
 /**
  * Class PromiseTool.

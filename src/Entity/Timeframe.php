@@ -30,19 +30,15 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use Exception;
-use InvalidArgumentException;
-use Sabre\Xml\Writer;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
-use stdClass;
-use function array_merge;
-use function is_array;
+use InvalidArgumentException;
+use Sabre\Xml\Writer;
 use function is_string;
 
 /**
@@ -126,22 +122,6 @@ class Timeframe extends AbstractEntity
             'Interval'       => LabellingService::DOMAIN_NAMESPACE,
             'TimeframeRange' => LabellingService::DOMAIN_NAMESPACE,
             'Timeframes'     => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'City'           => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CountryCode'    => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Date'           => ShippingStatusService::DOMAIN_NAMESPACE,
-            'EndDate'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'HouseNr'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'HouseNrExt'     => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Options'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'PostalCode'     => ShippingStatusService::DOMAIN_NAMESPACE,
-            'StartDate'      => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Street'         => ShippingStatusService::DOMAIN_NAMESPACE,
-            'SundaySorting'  => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Interval'       => ShippingStatusService::DOMAIN_NAMESPACE,
-            'TimeframeRange' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Timeframes'     => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate'   => [
             'City'           => DeliveryDateService::DOMAIN_NAMESPACE,

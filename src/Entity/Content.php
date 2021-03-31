@@ -32,7 +32,6 @@ use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\ShippingService;
-use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
 
 /**
@@ -85,15 +84,6 @@ class Content extends AbstractEntity
             'Value'           => LabellingService::DOMAIN_NAMESPACE,
             'Weight'          => LabellingService::DOMAIN_NAMESPACE,
             'Content'         => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'CountryOfOrigin' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Description'     => ShippingStatusService::DOMAIN_NAMESPACE,
-            'HSTariffNr'      => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Quantity'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Value'           => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Weight'          => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Content'         => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate' => [
             'CountryOfOrigin' => DeliveryDateService::DOMAIN_NAMESPACE,

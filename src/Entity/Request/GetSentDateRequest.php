@@ -33,7 +33,6 @@ use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
 
 /**
@@ -65,10 +64,6 @@ class GetSentDateRequest extends AbstractEntity
         'Labelling' => [
             'GetSentDate' => LabellingService::DOMAIN_NAMESPACE,
             'Message'     => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'GetSentDate' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Message'     => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate' => [
             'GetSentDate' => DeliveryDateService::DOMAIN_NAMESPACE,

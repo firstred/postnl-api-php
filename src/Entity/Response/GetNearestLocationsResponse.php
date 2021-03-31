@@ -26,7 +26,6 @@
 
 namespace Firstred\PostNL\Entity\Response;
 
-use stdClass;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use Firstred\PostNL\Exception\NotSupportedException;
@@ -35,8 +34,8 @@ use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
+use stdClass;
 use function is_array;
 
 /**
@@ -63,9 +62,6 @@ class GetNearestLocationsResponse extends AbstractEntity
         ],
         'Labelling'      => [
             'GetLocationsResult' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'GetLocationsResult' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate'   => [
             'GetLocationsResult' => DeliveryDateService::DOMAIN_NAMESPACE,

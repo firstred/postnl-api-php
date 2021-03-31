@@ -26,7 +26,6 @@
 
 namespace Firstred\PostNL\Entity\Request;
 
-use Sabre\Xml\Writer;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Message\Message;
@@ -36,8 +35,8 @@ use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
+use Sabre\Xml\Writer;
 
 /**
  * Class CompleteStatusByReference.
@@ -73,11 +72,6 @@ class CompleteStatusByReference extends AbstractEntity
             'Message'  => LabellingService::DOMAIN_NAMESPACE,
             'Customer' => LabellingService::DOMAIN_NAMESPACE,
             'Shipment' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Message'  => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Customer' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Shipment' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate' => [
             'Message'  => DeliveryDateService::DOMAIN_NAMESPACE,

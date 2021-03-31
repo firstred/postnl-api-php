@@ -32,7 +32,6 @@ use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
 
 /**
@@ -55,9 +54,6 @@ class Event extends AbstractEntity
         ],
         'Labelling' => [
             'CompleteStatusResponseEvent' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'CompleteStatusResponseEvent' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate' => [
             'CompleteStatusResponseEvent' => DeliveryDateService::DOMAIN_NAMESPACE,

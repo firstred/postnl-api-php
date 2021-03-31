@@ -26,17 +26,16 @@
 
 namespace Firstred\PostNL\Entity;
 
-use libphonenumber\NumberParseException;
-use libphonenumber\PhoneNumberFormat;
-use libphonenumber\PhoneNumberUtil;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\ShippingService;
-use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
+use libphonenumber\NumberParseException;
+use libphonenumber\PhoneNumberFormat;
+use libphonenumber\PhoneNumberUtil;
 use function class_exists;
 use function is_null;
 
@@ -73,12 +72,6 @@ class Contact extends AbstractEntity
             'Email'       => LabellingService::DOMAIN_NAMESPACE,
             'SMSNr'       => LabellingService::DOMAIN_NAMESPACE,
             'TelNr'       => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'ContactType' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Email'       => ShippingStatusService::DOMAIN_NAMESPACE,
-            'SMSNr'       => ShippingStatusService::DOMAIN_NAMESPACE,
-            'TelNr'       => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate' => [
             'ContactType' => DeliveryDateService::DOMAIN_NAMESPACE,

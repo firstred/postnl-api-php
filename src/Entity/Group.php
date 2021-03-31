@@ -32,7 +32,6 @@ use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\ShippingService;
-use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
 
 /**
@@ -70,12 +69,6 @@ class Group extends AbstractEntity
             'GroupSequence' => LabellingService::DOMAIN_NAMESPACE,
             'GroupType'     => LabellingService::DOMAIN_NAMESPACE,
             'MainBarcode'   => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'GroupCount'    => ShippingStatusService::DOMAIN_NAMESPACE,
-            'GroupSequence' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'GroupType'     => ShippingStatusService::DOMAIN_NAMESPACE,
-            'MainBarcode'   => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate' => [
             'GroupCount'    => DeliveryDateService::DOMAIN_NAMESPACE,

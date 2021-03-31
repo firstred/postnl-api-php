@@ -28,6 +28,10 @@ namespace Firstred\PostNL\Entity;
 
 use DateTimeInterface;
 use Exception;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\NotSupportedException;
+use Firstred\PostNL\Util\UUID;
+use Firstred\PostNL\Util\XmlSerializable;
 use JsonSerializable;
 use ReflectionClass;
 use ReflectionException;
@@ -35,10 +39,6 @@ use ReflectionObject;
 use ReflectionProperty;
 use Sabre\Xml\Writer;
 use stdClass;
-use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Exception\NotSupportedException;
-use Firstred\PostNL\Util\UUID;
-use Firstred\PostNL\Util\XmlSerializable;
 use function array_keys;
 use function is_array;
 

@@ -30,9 +30,6 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use Exception;
-use ReflectionException;
-use Sabre\Xml\Writer;
-use stdClass;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use Firstred\PostNL\Service\BarcodeService;
@@ -40,8 +37,10 @@ use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
+use ReflectionException;
+use Sabre\Xml\Writer;
+use stdClass;
 use function is_array;
 
 /**
@@ -71,10 +70,6 @@ class GetDeliveryDateResponse extends AbstractEntity
         ],
         'Labelling'      => [
             'DeliveryDate' => LabellingService::DOMAIN_NAMESPACE,
-            'Options'      => 'http://schemas.microsoft.com/2003/10/Serialization/Arrays',
-        ],
-        'ShippingStatus' => [
-            'DeliveryDate' => ShippingStatusService::DOMAIN_NAMESPACE,
             'Options'      => 'http://schemas.microsoft.com/2003/10/Serialization/Arrays',
         ],
         'DeliveryDate'   => [

@@ -26,11 +26,6 @@
 
 namespace Firstred\PostNL\Service;
 
-use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
-use ReflectionException;
-use Sabre\Xml\LibXMLException;
 use Firstred\PostNL\Entity\Request\GenerateLabel;
 use Firstred\PostNL\Entity\Response\GenerateLabelResponse;
 use Firstred\PostNL\Exception\ApiException;
@@ -38,6 +33,11 @@ use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\ResponseException;
+use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
+use ReflectionException;
+use Sabre\Xml\LibXMLException;
 
 /**
  * Class LabellingService.

@@ -27,17 +27,6 @@
 namespace Firstred\PostNL\Service;
 
 use DateTimeImmutable;
-use GuzzleHttp\Psr7\Message as PsrMessage;
-use InvalidArgumentException;
-use Psr\Cache\CacheItemInterface;
-use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
-use ReflectionException;
-use Sabre\Xml\LibXMLException;
-use Sabre\Xml\Reader;
-use Sabre\Xml\Service as XmlService;
-use SimpleXMLElement;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\CutOffTime;
 use Firstred\PostNL\Entity\Request\GetDeliveryDate;
@@ -50,6 +39,17 @@ use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\ResponseException;
+use GuzzleHttp\Psr7\Message as PsrMessage;
+use InvalidArgumentException;
+use Psr\Cache\CacheItemInterface;
+use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
+use ReflectionException;
+use Sabre\Xml\LibXMLException;
+use Sabre\Xml\Reader;
+use Sabre\Xml\Service as XmlService;
+use SimpleXMLElement;
 
 /**
  * Class DeliveryDateService.

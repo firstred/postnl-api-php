@@ -33,7 +33,6 @@ use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
 
 /**
@@ -72,11 +71,6 @@ class GetLocation extends AbstractEntity
             'LocationCode'    => LabellingService::DOMAIN_NAMESPACE,
             'Message'         => LabellingService::DOMAIN_NAMESPACE,
             'RetailNetworkID' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'LocationCode'    => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Message'         => ShippingStatusService::DOMAIN_NAMESPACE,
-            'RetailNetworkID' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate' => [
             'LocationCode'    => DeliveryDateService::DOMAIN_NAMESPACE,

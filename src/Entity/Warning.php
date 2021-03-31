@@ -31,7 +31,6 @@ use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
 
 /**
@@ -59,10 +58,6 @@ class Warning extends AbstractEntity
         'Labelling' => [
             'Code'        => LabellingService::DOMAIN_NAMESPACE,
             'Description' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Code'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Description' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate' => [
             'Code'        => DeliveryDateService::DOMAIN_NAMESPACE,

@@ -29,9 +29,9 @@ namespace Firstred\PostNL\Util;
 use DateInterVal;
 use DateTime;
 use Exception;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use setasign\Fpdi\Fpdi;
 use setasign\Fpdi\PdfParser\StreamReader;
-use Firstred\PostNL\Exception\InvalidArgumentException;
 
 /**
  * Class Util.

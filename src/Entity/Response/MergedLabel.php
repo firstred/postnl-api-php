@@ -34,7 +34,6 @@ use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\ShippingService;
-use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
 
 /**
@@ -62,10 +61,6 @@ class MergedLabel extends AbstractEntity
         'Labelling'      => [
             'Barcodes' => LabellingService::DOMAIN_NAMESPACE,
             'Labels'   => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Barcodes' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Labels'   => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate'   => [
             'Barcodes' => DeliveryDateService::DOMAIN_NAMESPACE,

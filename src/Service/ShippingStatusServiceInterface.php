@@ -26,9 +26,6 @@
 
 namespace Firstred\PostNL\Service;
 
-use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
-use Psr\Http\Message\RequestInterface;
-use ReflectionException;
 use Firstred\PostNL\Entity\Request\CompleteStatus;
 use Firstred\PostNL\Entity\Request\CompleteStatusByPhase;
 use Firstred\PostNL\Entity\Request\CompleteStatusByReference;
@@ -38,14 +35,17 @@ use Firstred\PostNL\Entity\Request\CurrentStatusByPhase;
 use Firstred\PostNL\Entity\Request\CurrentStatusByReference;
 use Firstred\PostNL\Entity\Request\CurrentStatusByStatus;
 use Firstred\PostNL\Entity\Request\GetSignature;
-use Firstred\PostNL\Entity\Response\CompleteStatusResponse;
 use Firstred\PostNL\Entity\Response\CurrentStatusResponse;
 use Firstred\PostNL\Entity\Response\GetSignatureResponseSignature;
+use Firstred\PostNL\Entity\Response\UpdatedShipmentsResponse;
 use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\ResponseException;
+use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
+use Psr\Http\Message\RequestInterface;
+use ReflectionException;
 
 /**
  * Class ShippingStatusService.
@@ -53,9 +53,9 @@ use Firstred\PostNL\Exception\ResponseException;
  * @method CurrentStatusResponse         currentStatus(CurrentStatus|CurrentStatusByReference|CurrentStatusByPhase|CurrentStatusByStatus $currentStatus)
  * @method RequestInterface              buildCurrentStatusRequest(CurrentStatus|CurrentStatusByReference|CurrentStatusByPhase|CurrentStatusByStatus $currentStatus)
  * @method CurrentStatusResponse         processCurrentStatusResponse(mixed $response)
- * @method CompleteStatusResponse        completeStatus(CompleteStatus|CompleteStatusByReference|CompleteStatusByPhase|CompleteStatusByStatus $completeStatus)
+ * @method UpdatedShipmentsResponse        completeStatus(CompleteStatus|CompleteStatusByReference|CompleteStatusByPhase|CompleteStatusByStatus $completeStatus)
  * @method RequestInterface              buildCompleteStatusRequest(CompleteStatus|CompleteStatusByReference|CompleteStatusByPhase|CompleteStatusByStatus $completeStatus)
- * @method CompleteStatusResponse        processCompleteStatusResponse(mixed $response)
+ * @method UpdatedShipmentsResponse        processCompleteStatusResponse(mixed $response)
  * @method GetSignatureResponseSignature getSignature(GetSignature $getSignature)
  * @method RequestInterface              buildGetSignatureRequest(GetSignature $getSignature)
  * @method GetSignature                  processGetSignatureResponse(mixed $response)
@@ -110,7 +110,7 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      *
      * @param CompleteStatus $completeStatus
      *
-     * @return CompleteStatusResponse
+     * @return UpdatedShipmentsResponse
      *
      * @throws ApiException
      * @throws CifDownException
@@ -212,7 +212,7 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      *
      * @param mixed $response
      *
-     * @return CompleteStatusResponse|null
+     * @return UpdatedShipmentsResponse|null
      *
      * @throws ResponseException
      * @throws ReflectionException

@@ -32,7 +32,6 @@ use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\ShippingService;
-use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
 
 /**
@@ -138,26 +137,6 @@ class Address extends AbstractEntity
             'Remark'           => LabellingService::DOMAIN_NAMESPACE,
             'Street'           => LabellingService::DOMAIN_NAMESPACE,
             'Zipcode'          => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'AddressType'      => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Area'             => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Buildingname'     => ShippingStatusService::DOMAIN_NAMESPACE,
-            'City'             => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CompanyName'      => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Countrycode'      => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Department'       => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Doorcode'         => ShippingStatusService::DOMAIN_NAMESPACE,
-            'FirstName'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Floor'            => ShippingStatusService::DOMAIN_NAMESPACE,
-            'HouseNr'          => ShippingStatusService::DOMAIN_NAMESPACE,
-            'HouseNrExt'       => ShippingStatusService::DOMAIN_NAMESPACE,
-            'StreetHouseNrExt' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Name'             => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Region'           => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Remark'           => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Street'           => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Zipcode'          => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate' => [
             'AddressType'      => DeliveryDateService::DOMAIN_NAMESPACE,
