@@ -28,6 +28,7 @@ namespace Firstred\PostNL\Entity\Response;
 
 use DateTimeImmutable;
 use DateTimeInterface;
+use DateTimeZone;
 use Exception;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Exception\InvalidArgumentException;
@@ -166,7 +167,7 @@ class CompleteStatusResponseOldStatus extends AbstractEntity
     {
         if (is_string($TimeStamp)) {
             try {
-                $TimeStamp = new DateTimeImmutable($TimeStamp);
+                $TimeStamp = new DateTimeImmutable($TimeStamp, new DateTimeZone('Europe/Amsterdam'));
             } catch (Exception $e) {
                 throw new InvalidArgumentException($e->getMessage(), 0, $e);
             }

@@ -28,6 +28,7 @@ namespace Firstred\PostNL\Entity;
 
 use DateTimeImmutable;
 use DateTimeInterface;
+use DateTimeZone;
 use Exception;
 use InvalidArgumentException;
 use Sabre\Xml\Writer;
@@ -289,9 +290,9 @@ class Timeframe extends AbstractEntity
     {
         if (is_string($Date)) {
             try {
-                $Date = new DateTimeImmutable($Date);
+                $Date = new DateTimeImmutable($Date, new DateTimeZone('Europe/Amsterdam'));
             } catch (Exception $e) {
-                throw new PostNLInvalidArgumentException($e->getMessage, 0, $e);
+                throw new PostNLInvalidArgumentException($e->getMessage(), 0, $e);
             }
         }
 
@@ -313,7 +314,7 @@ class Timeframe extends AbstractEntity
     {
         if (is_string($StartDate)) {
             try {
-                $StartDate = new DateTimeImmutable($StartDate);
+                $StartDate = new DateTimeImmutable($StartDate, new DateTimeZone('Europe/Amsterdam'));
             } catch (Exception $e) {
                 throw new PostNLInvalidArgumentException($e->getMessage(), 0, $e);
             }
@@ -337,7 +338,7 @@ class Timeframe extends AbstractEntity
     {
         if (is_string($EndDate)) {
             try {
-                $EndDate = new DateTimeImmutable($EndDate);
+                $EndDate = new DateTimeImmutable($EndDate, new DateTimeZone('Europe/Amsterdam'));
             } catch (Exception $e) {
                 throw new PostNLInvalidArgumentException($e->getMessage(), 0, $e);
             }

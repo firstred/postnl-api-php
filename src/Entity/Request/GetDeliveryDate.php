@@ -28,6 +28,7 @@ namespace Firstred\PostNL\Entity\Request;
 
 use DateTimeImmutable;
 use DateTimeInterface;
+use DateTimeZone;
 use Exception;
 use Sabre\Xml\Writer;
 use Firstred\PostNL\Entity\AbstractEntity;
@@ -295,7 +296,7 @@ class GetDeliveryDate extends AbstractEntity
     {
         if (is_string($shippingDate)) {
             try {
-                $shippingDate = new DateTimeImmutable($shippingDate);
+                $shippingDate = new DateTimeImmutable($shippingDate, new DateTimeZone('Europe/Amsterdam'));
             } catch (Exception $e) {
                 throw new InvalidArgumentException($e->getMessage(), 0, $e);
             }

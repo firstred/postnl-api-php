@@ -154,7 +154,16 @@ class ShippingStatusServiceRestTest extends ServiceTest
 
         $this->assertInstanceOf(CurrentStatusResponse::class, $currentStatusResponse);
         $this->assertInstanceOf(CurrentStatusResponseShipment::class, $currentStatusResponse->getShipments()[0]);
+
         $this->assertInstanceOf(Dimension::class, $currentStatusResponse->getShipments()[0]->getDimension());
+        $this->assertInstanceOf(Address::class, $currentStatusResponse->getShipments()[0]->getAddresses()[0]);
+
+        $this->assertIsString($currentStatusResponse->getShipments()[0]->getMainBarcode());
+        $this->assertIsString($currentStatusResponse->getShipments()[0]->getBarcode());
+        $this->assertIsString($currentStatusResponse->getShipments()[0]->getShipmentAmount());
+        $this->assertIsString($currentStatusResponse->getShipments()[0]->getShipmentCounter());
+        $this->assertIsString($currentStatusResponse->getShipments()[0]->getProductDescription());
+
         $this->assertInstanceOf(DateTimeInterface::class, $currentStatusResponse->getShipments()[0]->getStatus()->getTimeStamp());
         $this->assertNotTrue(static::containsStdClass($currentStatusResponse));
     }
@@ -249,6 +258,13 @@ class ShippingStatusServiceRestTest extends ServiceTest
         $this->assertInstanceOf(DateTimeInterface::class, $completeStatusResponse->getShipments()[0]->getExpectation()->getETAFrom());
         $this->assertInstanceOf(DateTimeInterface::class, $completeStatusResponse->getShipments()[0]->getExpectation()->getETATo());
         $this->assertEquals('01B', $completeStatusResponse->getShipments()[0]->getEvents()[0]->getCode());
+
+        $this->assertIsString($completeStatusResponse->getShipments()[0]->getMainBarcode());
+        $this->assertIsString($completeStatusResponse->getShipments()[0]->getBarcode());
+        $this->assertIsString($completeStatusResponse->getShipments()[0]->getShipmentAmount());
+        $this->assertIsString($completeStatusResponse->getShipments()[0]->getShipmentCounter());
+        $this->assertIsString($completeStatusResponse->getShipments()[0]->getProductDescription());
+
         $this->assertNull($completeStatusResponse->getShipments()[0]->getGroups());
         $this->assertInstanceOf(Customer::class, $completeStatusResponse->getShipments()[0]->getCustomer());
         $this->assertInstanceOf(DateTimeInterface::class, $completeStatusResponse->getShipments()[0]->getOldStatuses()[0]->getTimeStamp());

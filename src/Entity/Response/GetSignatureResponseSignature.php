@@ -28,6 +28,7 @@ namespace Firstred\PostNL\Entity\Response;
 
 use DateTimeImmutable;
 use DateTimeInterface;
+use DateTimeZone;
 use Exception;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Exception\InvalidArgumentException;
@@ -134,7 +135,7 @@ class GetSignatureResponseSignature extends AbstractEntity
     {
         if (is_string($SignatureDate)) {
             try {
-                $SignatureDate = new DateTimeImmutable($SignatureDate);
+                $SignatureDate = new DateTimeImmutable($SignatureDate, new DateTimeZone('Europe/Amsterdam'));
             } catch (Exception $e) {
                 throw new InvalidArgumentException($e->getMessage(), 0, $e);
             }

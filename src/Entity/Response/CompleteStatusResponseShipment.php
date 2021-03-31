@@ -28,6 +28,7 @@ namespace Firstred\PostNL\Entity\Response;
 
 use DateTimeImmutable;
 use DateTimeInterface;
+use DateTimeZone;
 use Exception;
 use Sabre\Xml\Writer;
 use Firstred\PostNL\Entity\AbstractEntity;
@@ -312,7 +313,7 @@ class CompleteStatusResponseShipment extends AbstractEntity
     {
         if (is_string($deliveryDate)) {
             try {
-                $deliveryDate = new DateTimeImmutable($deliveryDate);
+                $deliveryDate = new DateTimeImmutable($deliveryDate, new DateTimeZone('Europe/Amsterdam'));
             } catch (Exception $e) {
                 throw new InvalidArgumentException($e->getMessage(), 0, $e);
             }

@@ -28,6 +28,7 @@ namespace Firstred\PostNL\Entity\Response;
 
 use DateTimeImmutable;
 use DateTimeInterface;
+use DateTimeZone;
 use Exception;
 use ReflectionException;
 use Sabre\Xml\Writer;
@@ -125,7 +126,7 @@ class GetDeliveryDateResponse extends AbstractEntity
     {
         if (is_string($DeliveryDate)) {
             try {
-                $DeliveryDate = new DateTimeImmutable($DeliveryDate);
+                $DeliveryDate = new DateTimeImmutable($DeliveryDate, new DateTimeZone('Europe/Amsterdam'));
             } catch (Exception $e) {
                 throw new PostNLInvalidArgumentException($e->getMessage(), 0, $e);
             }
@@ -185,7 +186,7 @@ class GetDeliveryDateResponse extends AbstractEntity
 
         $getDeliveryDateResponse = self::create();
         try {
-            $getDeliveryDateResponse->DeliveryDate = new DateTimeImmutable($json->GetDeliveryDateResponse->DeliveryDate);
+            $getDeliveryDateResponse->DeliveryDate = new DateTimeImmutable($json->GetDeliveryDateResponse->DeliveryDate, new DateTimeZone('Europe/Amsterdam'));
         } catch (Exception $e) {
             throw new PostNLInvalidArgumentException($e->getMessage(), 0, $e);
         }

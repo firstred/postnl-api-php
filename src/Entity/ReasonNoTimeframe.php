@@ -28,6 +28,7 @@ namespace Firstred\PostNL\Entity;
 
 use DateTimeImmutable;
 use DateTimeInterface;
+use DateTimeZone;
 use Exception;
 use Sabre\Xml\Writer;
 use Firstred\PostNL\Exception\InvalidArgumentException;
@@ -181,7 +182,7 @@ class ReasonNoTimeframe extends AbstractEntity
     {
         if (is_string($date)) {
             try {
-                $date = new DateTimeImmutable($date);
+                $date = new DateTimeImmutable($date, new DateTimeZone('Europe/Amsterdam'));
             } catch (Exception $e) {
                 throw new InvalidArgumentException($e->getMessage(), 0, $e);
             }

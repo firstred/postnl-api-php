@@ -28,6 +28,7 @@ namespace Firstred\PostNL\Entity;
 
 use DateTimeImmutable;
 use DateTimeInterface;
+use DateTimeZone;
 use Exception;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\BarcodeService;
@@ -144,7 +145,7 @@ class TimeframeTimeFrame extends AbstractEntity
     {
         if (is_string($Date)) {
             try {
-                $Date = new DateTimeImmutable($Date);
+                $Date = new DateTimeImmutable($Date, new DateTimeZone('Europe/Amsterdam'));
             } catch (Exception $e) {
                 throw new InvalidArgumentException($e->getMessage(), 0, $e);
             }

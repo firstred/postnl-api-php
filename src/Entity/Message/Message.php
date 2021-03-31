@@ -28,6 +28,7 @@ namespace Firstred\PostNL\Entity\Message;
 
 use DateTimeImmutable;
 use DateTimeInterface;
+use DateTimeZone;
 use Exception;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Exception\InvalidArgumentException;
@@ -105,7 +106,7 @@ class Message extends AbstractEntity
 
         $this->setMessageID($MessageID ?: substr(str_replace('-', '', $this->getid()), 0, 12));
         try {
-            $this->setMessageTimeStamp($MessageTimeStamp ?: new DateTimeImmutable());
+            $this->setMessageTimeStamp($MessageTimeStamp ?: new DateTimeImmutable('NOW', new DateTimeZone('Europe/Amsterdam')));
         } catch (Exception $e) {
             throw new InvalidArgumentException($e->getMessage(), 0, $e);
         }
@@ -124,7 +125,7 @@ class Message extends AbstractEntity
     {
         if (is_string($MessageTimeStamp)) {
             try {
-                $MessageTimeStamp = new DateTimeImmutable($MessageTimeStamp);
+                $MessageTimeStamp = new DateTimeImmutable($MessageTimeStamp, new DateTimeZone('Europe/Amsterdam'));
             } catch (Exception $e) {
                 throw new InvalidArgumentException($e->getMessage(), 0, $e);
             }

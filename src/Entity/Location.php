@@ -28,6 +28,7 @@ namespace Firstred\PostNL\Entity;
 
 use DateTimeImmutable;
 use DateTimeInterface;
+use DateTimeZone;
 use Exception;
 use Sabre\Xml\Writer;
 use Firstred\PostNL\Exception\InvalidArgumentException;
@@ -320,7 +321,7 @@ class Location extends AbstractEntity
 
         $this->setAllowSundaySorting($AllowSundaySorting);
         try {
-            $this->setDeliveryDate($DeliveryDate ?: (new DateTimeImmutable('next monday')));
+            $this->setDeliveryDate($DeliveryDate ?: (new DateTimeImmutable('next monday', new DateTimeZone('Europe/Amsterdam'))));
         } catch (Exception $e) {
             throw new InvalidArgumentException($e->getMessage(), 0, $e);
         }
@@ -355,7 +356,7 @@ class Location extends AbstractEntity
     {
         if (is_string($DeliveryDate)) {
             try {
-                $DeliveryDate = new DateTimeImmutable($DeliveryDate);
+                $DeliveryDate = new DateTimeImmutable($DeliveryDate, new DateTimeZone('Europe/Amsterdam'));
             } catch (Exception $e) {
                 throw new InvalidArgumentException($e->getMessage(), 0, $e);
             }

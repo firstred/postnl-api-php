@@ -28,6 +28,7 @@ namespace Firstred\PostNL\Entity;
 
 use DateTimeImmutable;
 use DateTimeInterface;
+use DateTimeZone;
 use Exception;
 use Sabre\Xml\Writer;
 use Firstred\PostNL\Exception\InvalidArgumentException;
@@ -660,7 +661,7 @@ class Shipment extends AbstractEntity
     {
         if (is_string($CollectionTimeStampStart)) {
             try {
-                $CollectionTimeStampStart = new DateTimeImmutable($CollectionTimeStampStart);
+                $CollectionTimeStampStart = new DateTimeImmutable($CollectionTimeStampStart, new DateTimeZone('Europe/Amsterdam'));
             } catch (Exception $e) {
                 throw new InvalidArgumentException($e->getMessage(), 0, $e);
             }
@@ -684,7 +685,7 @@ class Shipment extends AbstractEntity
     {
         if (is_string($CollectionTimeStampEnd)) {
             try {
-                $CollectionTimeStampEnd = new DateTimeImmutable($CollectionTimeStampEnd);
+                $CollectionTimeStampEnd = new DateTimeImmutable($CollectionTimeStampEnd, new DateTimeZone('Europe/Amsterdam'));
             } catch (Exception $e) {
                 throw new InvalidArgumentException($e->getMessage(),0, $e);
             }
@@ -708,7 +709,7 @@ class Shipment extends AbstractEntity
     {
         if (is_string($DeliveryTimeStampStart)) {
             try {
-                $DeliveryTimeStampStart = new DateTimeImmutable($DeliveryTimeStampStart);
+                $DeliveryTimeStampStart = new DateTimeImmutable($DeliveryTimeStampStart, new DateTimeZone('Europe/Amsterdam'));
             } catch (Exception $e) {
                 throw new InvalidArgumentException($e->getMessage(), 0, $e);
             }
@@ -732,7 +733,7 @@ class Shipment extends AbstractEntity
     {
         if (is_string($DeliveryTimeStampEnd)) {
             try {
-                $DeliveryTimeStampEnd = new DateTimeImmutable($DeliveryTimeStampEnd);
+                $DeliveryTimeStampEnd = new DateTimeImmutable($DeliveryTimeStampEnd, new DateTimeZone('Europe/Amsterdam'));
             } catch (Exception $e) {
                 throw new InvalidArgumentException($e->getMessage(), 0, $e);
             }
@@ -756,7 +757,7 @@ class Shipment extends AbstractEntity
     {
         if (is_string($DeliveryDate)) {
             try {
-                $DeliveryDate = new DateTimeImmutable($DeliveryDate);
+                $DeliveryDate = new DateTimeImmutable($DeliveryDate, new DateTimeZone('Europe/Amsterdam'));
             } catch (Exception $e) {
                 throw new InvalidArgumentException($e->getMessage(), 0, $e);
             }

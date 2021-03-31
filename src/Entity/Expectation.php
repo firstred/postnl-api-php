@@ -28,6 +28,7 @@ namespace Firstred\PostNL\Entity;
 
 use DateTimeImmutable;
 use DateTimeInterface;
+use DateTimeZone;
 use Exception;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\BarcodeService;
@@ -114,7 +115,7 @@ class Expectation extends AbstractEntity
     {
         if (is_string($ETAFrom)) {
             try {
-                $ETAFrom = new DateTimeImmutable($ETAFrom);
+                $ETAFrom = new DateTimeImmutable($ETAFrom, new DateTimeZone('Europe/Amsterdam'));
             } catch (Exception $e) {
                 throw new InvalidArgumentException($e->getMessage(),  0, $e);
             }
@@ -138,7 +139,7 @@ class Expectation extends AbstractEntity
     {
         if (is_string($ETATo)) {
             try {
-                $ETATo = new DateTimeImmutable($ETATo);
+                $ETATo = new DateTimeImmutable($ETATo, new DateTimeZone('Europe/Amsterdam'));
             } catch (Exception $e) {
                 throw new InvalidArgumentException($e->getMessage(), 0, $e);
             }
