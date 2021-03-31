@@ -62,9 +62,8 @@ class BarcodeServiceRestTest extends ServiceTest
     /**
      * @before
      *
-     * @throws \ReflectionException
      * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \libphonenumber\NumberParseException
+     * @throws \ReflectionException
      */
     public function setupPostNL()
     {
