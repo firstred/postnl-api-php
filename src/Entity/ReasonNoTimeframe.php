@@ -52,11 +52,11 @@ use function is_string;
  * @method string[]|null          getOptions()
  * @method string|null            getFrom()
  * @method string|null            getTo()
- * @method ReasonNoTimeframe      setCode(string|null $code = null)
- * @method ReasonNoTimeframe      setDescription(string|null $desc = null)
- * @method ReasonNoTimeframe      setOptions(string[]|null $options = null)
- * @method ReasonNoTimeframe      setFrom(string|null $from = null)
- * @method ReasonNoTimeframe      setTo(string|null $to = null)
+ * @method ReasonNoTimeframe      setCode(string|null $Code = null)
+ * @method ReasonNoTimeframe      setDescription(string|null $Description = null)
+ * @method ReasonNoTimeframe      setOptions(string[]|null $Options = null)
+ * @method ReasonNoTimeframe      setFrom(string|null $From = null)
+ * @method ReasonNoTimeframe      setTo(string|null $To = null)
  *
  * @since 1.0.0
  */
@@ -139,31 +139,31 @@ class ReasonNoTimeframe extends AbstractEntity
     /**
      * ReasonNoTimeframe constructor.
      *
-     * @param string|null                   $code
-     * @param string|DateTimeInterface|null $date
-     * @param string|null                   $desc
-     * @param string[]|null                 $options
-     * @param string|null                   $from
-     * @param string|null                   $to
+     * @param string|null                   $Code
+     * @param string|DateTimeInterface|null $Date
+     * @param string|null                   $Description
+     * @param string[]|null                 $Options
+     * @param string|null                   $From
+     * @param string|null                   $To
      *
      * @throws InvalidArgumentException
      */
     public function __construct(
-        $code = null,
-        $date = null,
-        $desc = null,
-        array $options = null,
-        $from = null,
-        $to = null
+        $Code = null,
+        $Date = null,
+        $Description = null,
+        array $Options = null,
+        $From = null,
+        $To = null
     ) {
         parent::__construct();
 
-        $this->setCode($code);
-        $this->setDate($date);
-        $this->setDescription($desc);
-        $this->setOptions($options);
-        $this->setFrom($from);
-        $this->setTo($to);
+        $this->setCode($Code);
+        $this->setDate($Date);
+        $this->setDescription($Description);
+        $this->setOptions($Options);
+        $this->setFrom($From);
+        $this->setTo($To);
     }
 
     /**

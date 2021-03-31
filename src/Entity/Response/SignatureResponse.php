@@ -40,7 +40,7 @@ use Firstred\PostNL\Service\TimeframeService;
  * Class SignatureResponse.
  *
  * @method string|null       getSignature()
- * @method SignatureResponse setSignature(Signature|null $signature = null)
+ * @method SignatureResponse setSignature(Signature|null $Signature = null)
  *
  * @since 1.0.0
  */
@@ -82,12 +82,12 @@ class SignatureResponse extends AbstractEntity
     /**
      * SignatureResponse constructor.
      *
-     * @param Signature|null $signature
+     * @param Signature|null $Signature
      */
-    public function __construct(Signature $signature = null)
+    public function __construct(Signature $Signature = null)
     {
         parent::__construct();
 
-        $this->setSignature($signature);
+        $this->setSignature($Signature);
     }
 }

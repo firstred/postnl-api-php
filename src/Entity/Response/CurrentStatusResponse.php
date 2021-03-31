@@ -40,8 +40,8 @@ use Firstred\PostNL\Service\TimeframeService;
 /**
  * Class CurrentStatusResponse.
  *
- * @method string|null           getShipments()
- * @method CurrentStatusResponse setShipments(Shipment[]|null $shipments = null)
+ * @method CurrentStatusResponseShipment[]|null getShipments()
+ * @method CurrentStatusResponse                setShipments(CurrentStatusResponseShipment[]|null $Shipments = null)
  *
  * @since 1.0.0
  */
@@ -83,13 +83,13 @@ class CurrentStatusResponse extends AbstractEntity
     /**
      * CurrentStatusResponse constructor.
      *
-     * @param CurrentStatusResponseShipment[]|null $shipments
+     * @param CurrentStatusResponseShipment[]|null $Shipments
      */
-    public function __construct(array $shipments = null)
+    public function __construct(array $Shipments = null)
     {
         parent::__construct();
 
-        $this->setShipments($shipments);
+        $this->setShipments($Shipments);
     }
 
     /**

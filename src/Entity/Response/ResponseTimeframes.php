@@ -42,8 +42,8 @@ use Firstred\PostNL\Service\TimeframeService;
  *
  * @method ReasonNoTimeframe[]|null getReasonNoTimeframes()
  * @method Timeframe[]|null         getTimeframes()
- * @method ResponseTimeframes       setReasonNoTimeframes(ReasonNoTimeframe[]|null $noTimeframes = null)
- * @method ResponseTimeframes       setTimeframes(Timeframe[]|null $timeframes = null)
+ * @method ResponseTimeframes       setReasonNoTimeframes(ReasonNoTimeframe[]|null $ReasonNoTimeframes = null)
+ * @method ResponseTimeframes       setTimeframes(Timeframe[]|null $Timeframes = null)
  *
  * @since 1.0.0
  */
@@ -88,17 +88,17 @@ class ResponseTimeframes extends AbstractEntity
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param ReasonNoTimeframe[]|null $noTimeframes
-     * @param Timeframe[]|null         $timeframes
+     * @param ReasonNoTimeframe[]|null $ReasonNoTimeframes
+     * @param Timeframe[]|null         $Timeframes
      */
     public function __construct(
-        array $noTimeframes = null,
-        array $timeframes = null
+        array $ReasonNoTimeframes = null,
+        array $Timeframes = null
     ) {
         parent::__construct();
 
-        $this->setReasonNoTimeframes($noTimeframes);
-        $this->setTimeframes($timeframes);
+        $this->setReasonNoTimeframes($ReasonNoTimeframes);
+        $this->setTimeframes($Timeframes);
     }
 
     /**

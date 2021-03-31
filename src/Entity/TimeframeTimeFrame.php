@@ -49,9 +49,9 @@ use function is_string;
  * @method string|null            getFrom()
  * @method string|null            getTo()
  * @method string[]|null          getOptions()
- * @method TimeframeTimeFrame     setFrom(string|null $from = null)
- * @method TimeframeTimeFrame     setTo(string|null $to = null)
- * @method TimeframeTimeFrame     setOptions(string[]|null $options = null)
+ * @method TimeframeTimeFrame     setFrom(string|null $From = null)
+ * @method TimeframeTimeFrame     setTo(string|null $To = null)
+ * @method TimeframeTimeFrame     setOptions(string[]|null $Options = null)
  *
  * @since 1.0.0
  */
@@ -114,25 +114,25 @@ class TimeframeTimeFrame extends AbstractEntity
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string|DateTimeInterface|null $date
-     * @param string|null                   $from
-     * @param string|null                   $to
-     * @param string[]|null                 $options
+     * @param string|DateTimeInterface|null $GetSentDate
+     * @param string|null                   $From
+     * @param string|null                   $To
+     * @param string[]|null                 $Options
      *
      * @throws InvalidArgumentException
      */
-    public function __construct($date = null, $from = null, $to = null, array $options = null)
+    public function __construct($GetSentDate = null, $From = null, $To = null, array $Options = null)
     {
         parent::__construct();
 
-        $this->setDate($date);
-        $this->setFrom($from);
-        $this->setTo($to);
-        $this->setOptions($options);
+        $this->setDate($GetSentDate);
+        $this->setFrom($From);
+        $this->setTo($To);
+        $this->setOptions($Options);
     }
 
     /**
-     * @param string|DateTimeInterface|null $date
+     * @param string|DateTimeInterface|null $Date
      *
      * @return static
      *
@@ -140,17 +140,17 @@ class TimeframeTimeFrame extends AbstractEntity
      *
      * @since 1.2.0
      */
-    public function setDate($date = null)
+    public function setDate($Date = null)
     {
-        if (is_string($date)) {
+        if (is_string($Date)) {
             try {
-                $date = new DateTimeImmutable($date);
+                $Date = new DateTimeImmutable($Date);
             } catch (Exception $e) {
                 throw new InvalidArgumentException($e->getMessage(), 0, $e);
             }
         }
 
-        $this->Date = $date;
+        $this->Date = $Date;
 
         return $this;
     }

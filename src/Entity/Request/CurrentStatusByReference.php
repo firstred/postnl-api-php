@@ -45,9 +45,9 @@ use Firstred\PostNL\Service\TimeframeService;
  * @method Message|null             getMessage()
  * @method Customer|null            getCustomer()
  * @method Shipment|null            getShipment()
- * @method CurrentStatusByReference setMessage(Message|null $message = null)
- * @method CurrentStatusByReference setCustomer(Customer|null $customer = null)
- * @method CurrentStatusByReference setShipment(Shipment|null $shipment = null)
+ * @method CurrentStatusByReference setMessage(Message|null $Message = null)
+ * @method CurrentStatusByReference setCustomer(Customer|null $Customer = null)
+ * @method CurrentStatusByReference setShipment(Shipment|null $Shipment = null)
  *
  * @since 1.0.0
  */
@@ -107,17 +107,17 @@ class CurrentStatusByReference extends AbstractEntity
     /**
      * CurrentStatusByReference constructor.
      *
-     * @param Shipment|null $shipment
-     * @param Customer|null $customer
-     * @param Message|null  $message
+     * @param Shipment|null $Shipment
+     * @param Customer|null $Customer
+     * @param Message|null  $Message
      */
-    public function __construct(Shipment $shipment = null, Customer $customer = null, Message $message = null)
+    public function __construct(Shipment $Shipment = null, Customer $Customer = null, Message $Message = null)
     {
         parent::__construct();
 
-        $this->setMessage($message ?: new Message());
-        $this->setShipment($shipment);
-        $this->setCustomer($customer);
+        $this->setMessage($Message ?: new Message());
+        $this->setShipment($Shipment);
+        $this->setCustomer($Customer);
     }
 
     /**

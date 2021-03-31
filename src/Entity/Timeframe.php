@@ -225,59 +225,59 @@ class Timeframe extends AbstractEntity
     /**
      * Timeframe constructor.
      *
-     * @param string|null                   $city
-     * @param string|null                   $countryCode
-     * @param string|DateTimeInterface|null $date
-     * @param string|DateTimeInterface|null $endDate
-     * @param string|null                   $houseNr
-     * @param string|null                   $houseNrExt
-     * @param array|null                    $options
-     * @param string|null                   $postalCode
-     * @param string|null                   $street
-     * @param string|null                   $sundaySorting
-     * @param string|null                   $interval
-     * @param string|null                   $range
-     * @param Timeframe[]|null              $timeframes
-     * @param string|DateTimeInterface|null $startDate
+     * @param string|null                   $City
+     * @param string|null                   $CountryCode
+     * @param string|DateTimeInterface|null $Date
+     * @param string|DateTimeInterface|null $EndDate
+     * @param string|null                   $HouseNr
+     * @param string|null                   $HouseNrExt
+     * @param array|null                    $Options
+     * @param string|null                   $PostalCode
+     * @param string|null                   $Street
+     * @param string|null                   $SundaySorting
+     * @param string|null                   $Interval
+     * @param string|null                   $Range
+     * @param Timeframe[]|null              $Timeframes
+     * @param string|DateTimeInterface|null $StartDate
      *
      * @throws PostNLInvalidArgumentException
      */
     public function __construct(
-        $city = null,
-        $countryCode = null,
-        $date = null,
-        $endDate = null,
-        $houseNr = null,
-        $houseNrExt = null,
-        array $options = [],
-        $postalCode = null,
-        $street = null,
-        $sundaySorting = 'false',
-        $interval = null,
-        $range = null,
-        array $timeframes = null,
-        $startDate = null
+        $City = null,
+        $CountryCode = null,
+        $Date = null,
+        $EndDate = null,
+        $HouseNr = null,
+        $HouseNrExt = null,
+        array $Options = [],
+        $PostalCode = null,
+        $Street = null,
+        $SundaySorting = 'false',
+        $Interval = null,
+        $Range = null,
+        array $Timeframes = null,
+        $StartDate = null
     ) {
         parent::__construct();
 
-        $this->setCity($city);
-        $this->setCountryCode($countryCode);
-        $this->setDate($date);
-        $this->setEndDate($endDate);
-        $this->setHouseNr($houseNr);
-        $this->setHouseNrExt($houseNrExt);
-        $this->setOptions($options);
-        $this->setPostalCode($postalCode);
-        $this->setStreet($street);
-        $this->setSundaySorting($sundaySorting);
-        $this->setInterval($interval);
-        $this->setTimeframeRange($range);
-        $this->setTimeframes($timeframes);
-        $this->setStartDate($startDate);
+        $this->setCity($City);
+        $this->setCountryCode($CountryCode);
+        $this->setDate($Date);
+        $this->setEndDate($EndDate);
+        $this->setHouseNr($HouseNr);
+        $this->setHouseNrExt($HouseNrExt);
+        $this->setOptions($Options);
+        $this->setPostalCode($PostalCode);
+        $this->setStreet($Street);
+        $this->setSundaySorting($SundaySorting);
+        $this->setInterval($Interval);
+        $this->setTimeframeRange($Range);
+        $this->setTimeframes($Timeframes);
+        $this->setStartDate($StartDate);
     }
 
     /**
-     * @param null $date
+     * @param null $Date
      *
      * @return static
      *
@@ -285,23 +285,23 @@ class Timeframe extends AbstractEntity
      *
      * @since 1.2.0
      */
-    public function setDate($date = null)
+    public function setDate($Date = null)
     {
-        if (is_string($date)) {
+        if (is_string($Date)) {
             try {
-                $date = new DateTimeImmutable($date);
+                $Date = new DateTimeImmutable($Date);
             } catch (Exception $e) {
                 throw new PostNLInvalidArgumentException($e->getMessage, 0, $e);
             }
         }
 
-        $this->Date = $date;
+        $this->Date = $Date;
 
         return $this;
     }
 
     /**
-     * @param string|DateTimeInterface|null $startDate
+     * @param string|DateTimeInterface|null $StartDate
      *
      * @return static
      *
@@ -309,23 +309,23 @@ class Timeframe extends AbstractEntity
      *
      * @since 1.2.0
      */
-    public function setStartDate($startDate = null)
+    public function setStartDate($StartDate = null)
     {
-        if (is_string($startDate)) {
+        if (is_string($StartDate)) {
             try {
-                $startDate = new DateTimeImmutable($startDate);
+                $StartDate = new DateTimeImmutable($StartDate);
             } catch (Exception $e) {
                 throw new PostNLInvalidArgumentException($e->getMessage(), 0, $e);
             }
         }
 
-        $this->StartDate = $startDate;
+        $this->StartDate = $StartDate;
 
         return $this;
     }
 
     /**
-     * @param string|DateTimeInterface|null $endDate
+     * @param string|DateTimeInterface|null $EndDate
      *
      * @return static
      *
@@ -333,17 +333,17 @@ class Timeframe extends AbstractEntity
      *
      * @since 1.2.0
      */
-    public function setEndDate($endDate = null)
+    public function setEndDate($EndDate = null)
     {
-        if (is_string($endDate)) {
+        if (is_string($EndDate)) {
             try {
-                $endDate = new DateTimeImmutable($endDate);
+                $EndDate = new DateTimeImmutable($EndDate);
             } catch (Exception $e) {
                 throw new PostNLInvalidArgumentException($e->getMessage(), 0, $e);
             }
         }
 
-        $this->EndDate = $endDate;
+        $this->EndDate = $EndDate;
 
         return $this;
     }
@@ -351,16 +351,16 @@ class Timeframe extends AbstractEntity
     /**
      * Set the postcode.
      *
-     * @param string|null $postcode
+     * @param string|null $PostalCode
      *
      * @return static
      */
-    public function setPostalCode($postcode = null)
+    public function setPostalCode($PostalCode = null)
     {
-        if (is_null($postcode)) {
+        if (is_null($PostalCode)) {
             $this->PostalCode = null;
         } else {
-            $this->PostalCode = strtoupper(str_replace(' ', '', $postcode));
+            $this->PostalCode = strtoupper(str_replace(' ', '', $PostalCode));
         }
 
         return $this;

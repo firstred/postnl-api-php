@@ -39,8 +39,8 @@ use Firstred\PostNL\Service\TimeframeService;
  *
  * @method string|null getCode()
  * @method string|null getDescription()
- * @method Warning     setCode(string|null $code = null)
- * @method Warning     setDescription(string|null $description = null)
+ * @method Warning     setCode(string|null $Code = null)
+ * @method Warning     setDescription(string|null $Description = null)
  *
  * @since 1.0.0
  */
@@ -85,14 +85,14 @@ class Warning extends AbstractEntity
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string|null $code
-     * @param string|null $description
+     * @param string|null $Code
+     * @param string|null $Description
      */
-    public function __construct($code = null, $description = null)
+    public function __construct($Code = null, $Description = null)
     {
         parent::__construct();
 
-        $this->setCode($code);
-        $this->setDescription($description);
+        $this->setCode($Code);
+        $this->setDescription($Description);
     }
 }

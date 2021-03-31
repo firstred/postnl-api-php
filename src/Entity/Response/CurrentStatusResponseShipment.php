@@ -55,7 +55,7 @@ use function is_string;
  *
  * @method Address[]|null                getAddresses()
  * @method Amount[]|null                 getAmounts()
- * @method Barcode|null                  getBarcode()
+ * @method string|null                   getBarcode()
  * @method DateTimeInterface|null        getDeliveryDate()
  * @method Dimension|null                getDimension()
  * @method Expectation|null              getExpectation()
@@ -65,17 +65,17 @@ use function is_string;
  * @method string|null                   getReference()
  * @method Status|null                   getStatus()
  * @method Warning[]|null                getWarnings()
- * @method CurrentStatusResponseShipment setAddresses(Address[]|null $addresses = null)
- * @method CurrentStatusResponseShipment setAmounts(Amount[]|null $amounts = null)
- * @method CurrentStatusResponseShipment setBarcode(string|null $barcode = null)
- * @method CurrentStatusResponseShipment setDimension(Dimension|null $dimension = null)
- * @method CurrentStatusResponseShipment setExpectation(Expectation|null $expectation = null)
- * @method CurrentStatusResponseShipment setGroups(Group[]|null $groups = null)
- * @method CurrentStatusResponseShipment setProductCode(string|null $productCode = null)
- * @method CurrentStatusResponseShipment setProductOptions(ProductOption[]|null $options = null)
- * @method CurrentStatusResponseShipment setReference(string|null $reference = null)
- * @method CurrentStatusResponseShipment setStatus(Status|null $status = null)
- * @method CurrentStatusResponseShipment setWarnings(Warning[]|null $warnings = null)
+ * @method CurrentStatusResponseShipment setAddresses(Address[]|null $Addresses = null)
+ * @method CurrentStatusResponseShipment setAmounts(Amount[]|null $Amounts = null)
+ * @method CurrentStatusResponseShipment setBarcode(string|null $Barcode = null)
+ * @method CurrentStatusResponseShipment setDimension(Dimension|null $Dimension = null)
+ * @method CurrentStatusResponseShipment setExpectation(Expectation|null $Expectation = null)
+ * @method CurrentStatusResponseShipment setGroups(Group[]|null $Groups = null)
+ * @method CurrentStatusResponseShipment setProductCode(string|null $ProductCode = null)
+ * @method CurrentStatusResponseShipment setProductOptions(ProductOption[]|null $ProductOptions = null)
+ * @method CurrentStatusResponseShipment setReference(string|null $Reference = null)
+ * @method CurrentStatusResponseShipment setStatus(Status|null $Status = null)
+ * @method CurrentStatusResponseShipment setWarnings(Warning[]|null $Warnings = null)
  *
  * @since 1.0.0
  */
@@ -212,49 +212,49 @@ class CurrentStatusResponseShipment extends AbstractEntity
     /**
      * CurrentStatusResponseShipment constructor.
      *
-     * @param Address[]|null                $addresses
-     * @param Amount[]|null                 $amounts
-     * @param Barcode|null                  $barcode
-     * @param DateTimeInterface|string|null $deliveryDate
-     * @param Dimension|null                $dimension
-     * @param Expectation|null              $expectation
-     * @param Group[]|null                  $groups
-     * @param string|null                   $productCode
-     * @param ProductOption[]|null          $productOptions
-     * @param string|null                   $reference
-     * @param Status|null                   $status
-     * @param Warning[]|null                $warnings
+     * @param Address[]|null                $Addresses
+     * @param Amount[]|null                 $Amounts
+     * @param string|null                   $Barcode
+     * @param DateTimeInterface|string|null $DeliveryDate
+     * @param Dimension|null                $Dimension
+     * @param Expectation|null              $Expectation
+     * @param Group[]|null                  $Groups
+     * @param string|null                   $ProductCode
+     * @param ProductOption[]|null          $ProductOptions
+     * @param string|null                   $Reference
+     * @param Status|null                   $Status
+     * @param Warning[]|null                $Warnings
      *
      * @throws InvalidArgumentException
      */
     public function __construct(
-        array $addresses = null,
-        array $amounts = null,
-        $barcode = null,
-        $deliveryDate = null,
-        $dimension = null,
-        $expectation = null,
-        array $groups = null,
-        $productCode = null,
-        array $productOptions = null,
-        $reference = null,
-        $status = null,
-        array $warnings = null
+        array $Addresses = null,
+        array $Amounts = null,
+        $Barcode = null,
+        $DeliveryDate = null,
+        $Dimension = null,
+        $Expectation = null,
+        array $Groups = null,
+        $ProductCode = null,
+        array $ProductOptions = null,
+        $Reference = null,
+        $Status = null,
+        array $Warnings = null
     ) {
         parent::__construct();
 
-        $this->setAddresses($addresses);
-        $this->setAmounts($amounts);
-        $this->setBarcode($barcode);
-        $this->setDeliveryDate($deliveryDate);
-        $this->setDimension($dimension);
-        $this->setExpectation($expectation);
-        $this->setGroups($groups);
-        $this->setProductCode($productCode);
-        $this->setProductOptions($productOptions);
-        $this->setReference($reference);
-        $this->setStatus($status);
-        $this->setWarnings($warnings);
+        $this->setAddresses($Addresses);
+        $this->setAmounts($Amounts);
+        $this->setBarcode($Barcode);
+        $this->setDeliveryDate($DeliveryDate);
+        $this->setDimension($Dimension);
+        $this->setExpectation($Expectation);
+        $this->setGroups($Groups);
+        $this->setProductCode($ProductCode);
+        $this->setProductOptions($ProductOptions);
+        $this->setReference($Reference);
+        $this->setStatus($Status);
+        $this->setWarnings($Warnings);
     }
 
     /**

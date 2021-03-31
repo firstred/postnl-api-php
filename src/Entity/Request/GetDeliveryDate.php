@@ -61,18 +61,18 @@ use Firstred\PostNL\Service\TimeframeService;
  * @method string|null            getStreet()
  * @method GetDeliveryDate|null   getGetDeliveryDate()
  * @method Message|null           getMessage()
- * @method GetDeliveryDate        setAllowSundaySorting(bool|null $allowSundaySorting = null)
- * @method GetDeliveryDate        setCity(string|null $city = null)
- * @method GetDeliveryDate        setCountryCode(string|null $code = null)
- * @method GetDeliveryDate        setCutOffTimes(CutOffTime[]|null $times = null)
- * @method GetDeliveryDate        setHouseNr(string|null $houseNr = null)
- * @method GetDeliveryDate        setHouseNrExt(string|null $houseNrExt = null)
- * @method GetDeliveryDate        setOptions(string[]|null $options = null)
- * @method GetDeliveryDate        setOriginCountryCode(string|null $code = null)
- * @method GetDeliveryDate        setShippingDuration(int|null $duration = null)
- * @method GetDeliveryDate        setStreet(string|null $street = null)
- * @method GetDeliveryDate        setGetDeliveryDate(GetDeliveryDate|null $date = null)
- * @method GetDeliveryDate        setMessage(Message|null $message = null)
+ * @method GetDeliveryDate        setAllowSundaySorting(bool|null $AllowSundaySorting = null)
+ * @method GetDeliveryDate        setCity(string|null $City = null)
+ * @method GetDeliveryDate        setCountryCode(string|null $CountryCode = null)
+ * @method GetDeliveryDate        setCutOffTimes(CutOffTime[]|null $CutOffTimes = null)
+ * @method GetDeliveryDate        setHouseNr(string|null $HouseNr = null)
+ * @method GetDeliveryDate        setHouseNrExt(string|null $HouseNrExt = null)
+ * @method GetDeliveryDate        setOptions(string[]|null $Options = null)
+ * @method GetDeliveryDate        setOriginCountryCode(string|null $OriginCountryCode = null)
+ * @method GetDeliveryDate        setShippingDuration(int|null $ShippingDuration = null)
+ * @method GetDeliveryDate        setStreet(string|null $Street = null)
+ * @method GetDeliveryDate        setGetDeliveryDate(GetDeliveryDate|null $GetDeliveryDate = null)
+ * @method GetDeliveryDate        setMessage(Message|null $Message = null)
  *
  * @since 1.0.0
  */
@@ -231,55 +231,55 @@ class GetDeliveryDate extends AbstractEntity
     /**
      * GetDeliveryDate constructor.
      *
-     * @param bool|null                     $allowSundaySorting
-     * @param string|null                   $city
-     * @param string|null                   $countryCode
-     * @param array|null                    $cutOffTimes
-     * @param string|null                   $houseNr
-     * @param string|null                   $houseNrExt
-     * @param array|null                    $options
-     * @param string|null                   $originCountryCode
-     * @param string|null                   $postalCode
-     * @param DateTimeInterface|string|null $shippingDate
-     * @param string|null                   $shippingDuration
-     * @param string|null                   $street
-     * @param GetDeliveryDate|null          $getDeliveryDate
-     * @param Message|null                  $message
+     * @param bool|null                     $AllowSundaySorting
+     * @param string|null                   $City
+     * @param string|null                   $CountryCode
+     * @param array|null                    $CutOffTimes
+     * @param string|null                   $HouseNr
+     * @param string|null                   $HouseNrExt
+     * @param array|null                    $Options
+     * @param string|null                   $OriginCountryCode
+     * @param string|null                   $PostalCode
+     * @param DateTimeInterface|string|null $ShippingDate
+     * @param string|null                   $ShippingDuration
+     * @param string|null                   $Street
+     * @param GetDeliveryDate|null          $GetDeliveryDate
+     * @param Message|null                  $Message
      *
      * @throws InvalidArgumentException
      */
     public function __construct(
-        $allowSundaySorting = null,
-        $city = null,
-        $countryCode = null,
-        array $cutOffTimes = null,
-        $houseNr = null,
-        $houseNrExt = null,
-        array $options = null,
-        $originCountryCode = null,
-        $postalCode = null,
-        $shippingDate = null,
-        $shippingDuration = null,
-        $street = null,
-        GetDeliveryDate $getDeliveryDate = null,
-        $message = null
+        $AllowSundaySorting = null,
+        $City = null,
+        $CountryCode = null,
+        array $CutOffTimes = null,
+        $HouseNr = null,
+        $HouseNrExt = null,
+        array $Options = null,
+        $OriginCountryCode = null,
+        $PostalCode = null,
+        $ShippingDate = null,
+        $ShippingDuration = null,
+        $Street = null,
+        GetDeliveryDate $GetDeliveryDate = null,
+        $Message = null
     ) {
         parent::__construct();
 
-        $this->setAllowSundaySorting($allowSundaySorting);
-        $this->setCity($city);
-        $this->setCountryCode($countryCode);
-        $this->setCutOffTimes($cutOffTimes);
-        $this->setHouseNr($houseNr);
-        $this->setHouseNrExt($houseNrExt);
-        $this->setOptions($options);
-        $this->setOriginCountryCode($originCountryCode);
-        $this->setPostalCode($postalCode);
-        $this->setShippingDate($shippingDate);
-        $this->setShippingDuration($shippingDuration);
-        $this->setStreet($street);
-        $this->setGetDeliveryDate($getDeliveryDate);
-        $this->setMessage($message);
+        $this->setAllowSundaySorting($AllowSundaySorting);
+        $this->setCity($City);
+        $this->setCountryCode($CountryCode);
+        $this->setCutOffTimes($CutOffTimes);
+        $this->setHouseNr($HouseNr);
+        $this->setHouseNrExt($HouseNrExt);
+        $this->setOptions($Options);
+        $this->setOriginCountryCode($OriginCountryCode);
+        $this->setPostalCode($PostalCode);
+        $this->setShippingDate($ShippingDate);
+        $this->setShippingDuration($ShippingDuration);
+        $this->setStreet($Street);
+        $this->setGetDeliveryDate($GetDeliveryDate);
+        $this->setMessage($Message);
     }
 
     /**

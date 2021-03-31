@@ -47,15 +47,15 @@ use Firstred\PostNL\Service\TimeframeService;
  * @method string|null getAddress()
  * @method string|null getGlobalPackCustomerCode()
  * @method string|null getGlobalPackBarcodeType()
- * @method Customer    setCustomerNumber(string|null $customerNr = null)
- * @method Customer    setCustomerCode(string|null $customerCode = null)
- * @method Customer    setCollectionLocation(string|null $collectionLocation = null)
- * @method Customer    setContactPerson(string|null $contactPerson = null)
- * @method Customer    setEmail(string|null $email = null)
- * @method Customer    setName(string|null $name = null)
- * @method Customer    setAddress(Address|null $address = null)
- * @method Customer    setGlobalPackCustomerCode(string|null $code = null)
- * @method Customer    setGlobalPackBarcodeType(string|null $type = null)
+ * @method Customer    setCustomerNumber(string|null $CustomerNumber = null)
+ * @method Customer    setCustomerCode(string|null $CustomerCode = null)
+ * @method Customer    setCollectionLocation(string|null $CollectionLocation = null)
+ * @method Customer    setContactPerson(string|null $ContactPerson = null)
+ * @method Customer    setEmail(string|null $Email = null)
+ * @method Customer    setName(string|null $Name = null)
+ * @method Customer    setAddress(Address|null $Address = null)
+ * @method Customer    setGlobalPackCustomerCode(string|null $GlobalPackCustomerCode = null)
+ * @method Customer    setGlobalPackBarcodeType(string|null $GlobalPackBarcodeType = null)
  *
  * @since 1.0.0
  */
@@ -153,31 +153,37 @@ class Customer extends AbstractEntity
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string  $customerNr
-     * @param string  $customerCode
-     * @param string  $collectionLocation
-     * @param string  $contactPerson
-     * @param string  $email
-     * @param string  $name
-     * @param Address $address
+     * @param string|null  $CustomerNumber
+     * @param string|null  $CustomerCode
+     * @param string|null  $CollectionLocation
+     * @param string|null  $ContactPerson
+     * @param string|null  $Email
+     * @param string|null  $Name
+     * @param Address|null $Address
+     * @param string|null  $GlobalPackCustomerCode
+     * @param string|null  $GlobalPackBarcodeType
      */
     public function __construct(
-        $customerNr = null,
-        $customerCode = null,
-        $collectionLocation = null,
-        $contactPerson = null,
-        $email = null,
-        $name = null,
-        Address $address = null
+        $CustomerNumber = null,
+        $CustomerCode = null,
+        $CollectionLocation = null,
+        $ContactPerson = null,
+        $Email = null,
+        $Name = null,
+        Address $Address = null,
+        $GlobalPackCustomerCode = null,
+        $GlobalPackBarcodeType = null
     ) {
         parent::__construct();
 
-        $this->setCustomerNumber($customerNr);
-        $this->setCustomerCode($customerCode);
-        $this->setCollectionLocation($collectionLocation);
-        $this->setContactPerson($contactPerson);
-        $this->setEmail($email);
-        $this->setName($name);
-        $this->setAddress($address);
+        $this->setCustomerNumber($CustomerNumber);
+        $this->setCustomerCode($CustomerCode);
+        $this->setCollectionLocation($CollectionLocation);
+        $this->setContactPerson($ContactPerson);
+        $this->setEmail($Email);
+        $this->setName($Name);
+        $this->setAddress($Address);
+        $this->setGlobalPackCustomerCode($GlobalPackCustomerCode);
+        $this->setGlobalPackBarcodeType($GlobalPackBarcodeType);
     }
 }

@@ -41,9 +41,9 @@ use Firstred\PostNL\Service\TimeframeService;
  * @method string|null getContent()
  * @method string|null getContentType()
  * @method string|null getLabeltype()
- * @method Label       setContent(string|null $content = null)
- * @method Label       setContentType(string|null $contentType = null)
- * @method Label       setLabeltype(string|null $labelType = null)
+ * @method Label       setContent(string|null $Content = null)
+ * @method Label       setContentType(string|null $ContentType = null)
+ * @method Label       setLabeltype(string|null $Labeltype = null)
  *
  * @since 1.0.0
  */
@@ -109,16 +109,16 @@ class Label extends AbstractEntity
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string|null $content
-     * @param string|null $contentType
-     * @param string|null $labelType
+     * @param string|null $Content
+     * @param string|null $ContentType
+     * @param string|null $Labeltype
      */
-    public function __construct($content = null, $contentType = null, $labelType = null)
+    public function __construct($Content = null, $ContentType = null, $Labeltype = null)
     {
         parent::__construct();
 
-        $this->setContent($content);
-        $this->setContenttype($contentType);
-        $this->setLabeltype($labelType);
+        $this->setContent($Content);
+        $this->setContenttype($ContentType);
+        $this->setLabeltype($Labeltype);
     }
 }

@@ -53,14 +53,14 @@ use Firstred\PostNL\Service\TimeframeService;
  * @method DateTimeInterface|null getDeliveryDate()
  * @method string|null            getShippingDuration()
  * @method string|null            getStreet()
- * @method GetSentDate            setAllowSundaySorting(bool|null $allowSundaySorting = null)
- * @method GetSentDate            setCity(string|null $city = null)
- * @method GetSentDate            setCountryCode(string|null $code = null)
- * @method GetSentDate            setHouseNr(string|null $houseNr = null)
- * @method GetSentDate            setHouseNrExt(string|null $houseNrExt = null)
- * @method GetSentDate            setOptions(array|null $options = null)
- * @method GetSentDate            setShippingDuration(string|null $duration = null)
- * @method GetSentDate            setStreet(string|null $street = null)
+ * @method GetSentDate            setAllowSundaySorting(bool|null $AllowSundaySorting = null)
+ * @method GetSentDate            setCity(string|null $City = null)
+ * @method GetSentDate            setCountryCode(string|null $CountryCode = null)
+ * @method GetSentDate            setHouseNr(string|null $HouseNr = null)
+ * @method GetSentDate            setHouseNrExt(string|null $HouseNrExt = null)
+ * @method GetSentDate            setOptions(array|null $Options = null)
+ * @method GetSentDate            setShippingDuration(string|null $ShippingDuration = null)
+ * @method GetSentDate            setStreet(string|null $Street = null)
  *
  * @since 1.0.0
  */
@@ -183,43 +183,43 @@ class GetSentDate extends AbstractEntity
     /**
      * GetSentDate constructor.
      *
-     * @param bool|null                     $allowSundaySorting
-     * @param string|null                   $city
-     * @param string|null                   $countryCode
-     * @param string|null                   $houseNr
-     * @param string|null                   $houseNrExt
-     * @param array|null                    $options
-     * @param string|null                   $postalCode
+     * @param bool|null                     $AllowSundaySorting
+     * @param string|null                   $City
+     * @param string|null                   $CountryCode
+     * @param string|null                   $HouseNr
+     * @param string|null                   $HouseNrExt
+     * @param array|null                    $Options
+     * @param string|null                   $PostalCode
      * @param DateTimeInterface|string|null $DeliveryDate
-     * @param string|null                   $street
-     * @param string|null                   $shippingDuration
+     * @param string|null                   $Street
+     * @param string|null                   $ShippingDuration
      *
      * @throws InvalidArgumentException
      */
     public function __construct(
-        $allowSundaySorting = false,
-        $city = null,
-        $countryCode = null,
-        $houseNr = null,
-        $houseNrExt = null,
-        array $options = null,
-        $postalCode = null,
+        $AllowSundaySorting = false,
+        $City = null,
+        $CountryCode = null,
+        $HouseNr = null,
+        $HouseNrExt = null,
+        array $Options = null,
+        $PostalCode = null,
         $DeliveryDate = null,
-        $street = null,
-        $shippingDuration = null
+        $Street = null,
+        $ShippingDuration = null
     ) {
         parent::__construct();
 
-        $this->setAllowSundaySorting($allowSundaySorting);
-        $this->setCity($city);
-        $this->setCountryCode($countryCode);
-        $this->setHouseNr($houseNr);
-        $this->setHouseNrExt($houseNrExt);
-        $this->setOptions($options);
-        $this->setPostalCode($postalCode);
+        $this->setAllowSundaySorting($AllowSundaySorting);
+        $this->setCity($City);
+        $this->setCountryCode($CountryCode);
+        $this->setHouseNr($HouseNr);
+        $this->setHouseNrExt($HouseNrExt);
+        $this->setOptions($Options);
+        $this->setPostalCode($PostalCode);
         $this->setDeliveryDate($DeliveryDate);
-        $this->setStreet($street);
-        $this->setShippingDuration($shippingDuration);
+        $this->setStreet($Street);
+        $this->setShippingDuration($ShippingDuration);
     }
 
     /**

@@ -41,9 +41,9 @@ use Firstred\PostNL\Service\TimeframeService;
  * @method string|null getType()
  * @method string|null getRange()
  * @method string|null getSerie()
- * @method Barcode     setType(string|null $type = null)
- * @method Barcode     setRange(string|null $range = null)
- * @method Barcode     setSerie(string|null $serie = null)
+ * @method Barcode     setType(string|null $Type = null)
+ * @method Barcode     setRange(string|null $Range = null)
+ * @method Barcode     setSerie(string|null $Serie = null)
  *
  * @since 1.0.0
  */
@@ -102,16 +102,16 @@ class Barcode extends AbstractEntity
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string|null $type
-     * @param string|null $range
-     * @param string|null $serie
+     * @param string|null $Type
+     * @param string|null $Range
+     * @param string|null $Serie
      */
-    public function __construct($type = null, $range = null, $serie = '000000000-999999999')
+    public function __construct($Type = null, $Range = null, $Serie = '000000000-999999999')
     {
         parent::__construct();
 
-        $this->setType($type);
-        $this->setRange($range);
-        $this->setSerie($serie);
+        $this->setType($Type);
+        $this->setRange($Range);
+        $this->setSerie($Serie);
     }
 }

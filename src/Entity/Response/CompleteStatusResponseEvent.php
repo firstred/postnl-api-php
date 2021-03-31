@@ -49,12 +49,12 @@ use Firstred\PostNL\Service\TimeframeService;
  * @method string|null                 getRouteCode()
  * @method string|null                 getRouteName()
  * @method DateTimeInterface|null      getTimeStamp()
- * @method CompleteStatusResponseEvent setCode(string|null $code = null)
- * @method CompleteStatusResponseEvent setDescription(string|null $description = null)
- * @method CompleteStatusResponseEvent setDestinationLocationCode(string|null $code = null)
- * @method CompleteStatusResponseEvent setLocationCode(string|null $code = null)
- * @method CompleteStatusResponseEvent setRouteCode(string|null $code = null)
- * @method CompleteStatusResponseEvent setRouteName(string|null $name = null)
+ * @method CompleteStatusResponseEvent setCode(string|null $Code = null)
+ * @method CompleteStatusResponseEvent setDescription(string|null $Description = null)
+ * @method CompleteStatusResponseEvent setDestinationLocationCode(string|null $DestinationLocationCode = null)
+ * @method CompleteStatusResponseEvent setLocationCode(string|null $LocationCode = null)
+ * @method CompleteStatusResponseEvent setRouteCode(string|null $RouteCode = null)
+ * @method CompleteStatusResponseEvent setRouteName(string|null $RouteName = null)
  *
  * @since 1.0.0
  */
@@ -150,38 +150,38 @@ class CompleteStatusResponseEvent extends AbstractEntity
     /**
      * CompleteStatusResponseEvent constructor.
      *
-     * @param string|null $code
-     * @param string|null $description
-     * @param string|null $destinationLocationCode
-     * @param string|null $locationCode
-     * @param string|null $routeCode
-     * @param string|null $routeName
-     * @param string|null $timeStamp
+     * @param string|null $Code
+     * @param string|null $Description
+     * @param string|null $DestinationLocationCode
+     * @param string|null $LocationCode
+     * @param string|null $RouteCode
+     * @param string|null $RouteName
+     * @param string|null $TimeStamp
      *
      * @throws InvalidArgumentException
      */
     public function __construct(
-        $code = null,
-        $description = null,
-        $destinationLocationCode = null,
-        $locationCode = null,
-        $routeCode = null,
-        $routeName = null,
-        $timeStamp = null
+        $Code = null,
+        $Description = null,
+        $DestinationLocationCode = null,
+        $LocationCode = null,
+        $RouteCode = null,
+        $RouteName = null,
+        $TimeStamp = null
     ) {
         parent::__construct();
 
-        $this->setCode($code);
-        $this->setDescription($description);
-        $this->setDestinationLocationCode($destinationLocationCode);
-        $this->setLocationCode($locationCode);
-        $this->setRouteCode($routeCode);
-        $this->setRouteName($routeName);
-        $this->setTimeStamp($timeStamp);
+        $this->setCode($Code);
+        $this->setDescription($Description);
+        $this->setDestinationLocationCode($DestinationLocationCode);
+        $this->setLocationCode($LocationCode);
+        $this->setRouteCode($RouteCode);
+        $this->setRouteName($RouteName);
+        $this->setTimeStamp($TimeStamp);
     }
 
     /**
-     * @param string|DateTimeInterface|null $timeStamp
+     * @param string|DateTimeInterface|null $TimeStamp
      *
      * @return static
      *
@@ -189,17 +189,17 @@ class CompleteStatusResponseEvent extends AbstractEntity
      *
      * @since 1.2.0
      */
-    public function setTimeStamp($timeStamp = null)
+    public function setTimeStamp($TimeStamp = null)
     {
-        if (is_string($timeStamp)) {
+        if (is_string($TimeStamp)) {
             try {
-                $timeStamp = new DateTimeImmutable($timeStamp);
+                $TimeStamp = new DateTimeImmutable($TimeStamp);
             } catch (Exception $e) {
                 throw new InvalidArgumentException($e->getMessage(), 0, $e);
             }
         }
 
-        $this->TimeStamp = $timeStamp;
+        $this->TimeStamp = $TimeStamp;
 
         return $this;
     }

@@ -47,8 +47,8 @@ use function is_null;
  * @method string|null getEmail()
  * @method string|null getSMSNr()
  * @method string|null getTelNr()
- * @method Contact     setContactType(string|null $contactType = null)
- * @method Contact     setEmail(string|null $email = null)
+ * @method Contact     setContactType(string|null $ContactType = null)
+ * @method Contact     setEmail(string|null $Email = null)
  *
  * @since 1.0.0
  */
@@ -119,27 +119,27 @@ class Contact extends AbstractEntity
     /**
      * Contact constructor.
      *
-     * @param string|null $contactType
-     * @param string|null $email
-     * @param string|null $smsNr
-     * @param string|null $telNr
+     * @param string|null $ContactType
+     * @param string|null $Email
+     * @param string|null $SMSNr
+     * @param string|null $TelNr
      *
      * @throws NumberParseException
      */
-    public function __construct($contactType = null, $email = null, $smsNr = null, $telNr = null)
+    public function __construct($ContactType = null, $Email = null, $SMSNr = null, $TelNr = null)
     {
         parent::__construct();
 
-        $this->setContactType($contactType);
-        $this->setEmail($email);
-        $this->setSMSNr($smsNr);
-        $this->setTelNr($telNr);
+        $this->setContactType($ContactType);
+        $this->setEmail($Email);
+        $this->setSMSNr($SMSNr);
+        $this->setTelNr($TelNr);
     }
 
     /**
      * Set the telephone number.
      *
-     * @param string|null $telNr
+     * @param string|null $TelNr
      * @param string|null $countryCode
      *
      * @return static
@@ -149,18 +149,18 @@ class Contact extends AbstractEntity
      * @since 1.0.0
      * @since 1.2.0 Possibility to auto format number
      */
-    public function setTelNr($telNr = null, $countryCode = null)
+    public function setTelNr($TelNr = null, $countryCode = null)
     {
-        if (is_null($telNr)) {
+        if (is_null($TelNr)) {
             $this->TelNr = null;
         } else {
             if ($countryCode && class_exists(PhoneNumberUtil::class)) {
                 $phoneUtil = PhoneNumberUtil::getInstance();
-                $parsedNumber = $phoneUtil->parse($telNr, $countryCode);
-                $telNr = $phoneUtil->format($parsedNumber, PhoneNumberFormat::E164);
+                $parsedNumber = $phoneUtil->parse($TelNr, $countryCode);
+                $TelNr = $phoneUtil->format($parsedNumber, PhoneNumberFormat::E164);
             }
 
-            $this->TelNr = $telNr;
+            $this->TelNr = $TelNr;
         }
 
         return $this;
@@ -169,7 +169,7 @@ class Contact extends AbstractEntity
     /**
      * Set the mobile number.
      *
-     * @param string|null $smsNr
+     * @param string|null $SMSNr
      * @param string|null $countryCode
      *
      * @return static
@@ -179,18 +179,18 @@ class Contact extends AbstractEntity
      * @since 1.0.0
      * @since 1.2.0 Possibility to auto format number
      */
-    public function setSMSNr($smsNr = null, $countryCode = null)
+    public function setSMSNr($SMSNr = null, $countryCode = null)
     {
-        if (is_null($smsNr)) {
+        if (is_null($SMSNr)) {
             $this->SMSNr = null;
         } else {
             if ($countryCode && class_exists(PhoneNumberUtil::class)) {
                 $phoneUtil = PhoneNumberUtil::getInstance();
-                $parsedNumber = $phoneUtil->parse($smsNr, $countryCode);
-                $smsNr = $phoneUtil->format($parsedNumber, PhoneNumberFormat::E164);
+                $parsedNumber = $phoneUtil->parse($SMSNr, $countryCode);
+                $SMSNr = $phoneUtil->format($parsedNumber, PhoneNumberFormat::E164);
             }
 
-            $this->SMSNr = $smsNr;
+            $this->SMSNr = $SMSNr;
         }
 
         return $this;

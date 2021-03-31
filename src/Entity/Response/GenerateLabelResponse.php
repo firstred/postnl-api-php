@@ -40,8 +40,8 @@ use Firstred\PostNL\Service\TimeframeService;
  *
  * @method MergedLabel[]|null      getMergedLabels()
  * @method ResponseShipment[]|null getResponseShipments()
- * @method GenerateLabelResponse   setMergedLabels(MergedLabel[]|null $mergedLabels = null)
- * @method GenerateLabelResponse   setResponseShipments(ResponseShipment[]|null $responseShipment = null)
+ * @method GenerateLabelResponse   setMergedLabels(MergedLabel[]|null $MergedLabels = null)
+ * @method GenerateLabelResponse   setResponseShipments(ResponseShipment[]|null $ResponseShipments = null)
  *
  * @since 1.0.0
  */
@@ -92,14 +92,14 @@ class GenerateLabelResponse extends AbstractEntity
     /**
      * GenerateLabelResponse constructor.
      *
-     * @param MergedLabel[]|null      $mergedLabels
-     * @param ResponseShipment[]|null $responseShipments
+     * @param MergedLabel[]|null      $MergedLabels
+     * @param ResponseShipment[]|null $ReponseShipments
      */
-    public function __construct(array $mergedLabels = null, array $responseShipments = null)
+    public function __construct(array $MergedLabels = null, array $ReponseShipments = null)
     {
         parent::__construct();
 
-        $this->setMergedLabels($mergedLabels);
-        $this->setResponseShipments($responseShipments);
+        $this->setMergedLabels($MergedLabels);
+        $this->setResponseShipments($ReponseShipments);
     }
 }

@@ -43,7 +43,7 @@ use function is_array;
  * Class GetNearestLocationsResponse.
  *
  * @method GetLocationsResult|null     getGetLocationsResult()
- * @method GetNearestLocationsResponse setGetLocationsResult(GetLocationsResult|null $result = null)
+ * @method GetNearestLocationsResponse setGetLocationsResult(GetLocationsResult|null $GetLocationsResult = null)
  *
  * @since 1.0.0
  */
@@ -55,25 +55,25 @@ class GetNearestLocationsResponse extends AbstractEntity
      * @var array
      */
     public static $defaultProperties = [
-        'Barcode' => [
+        'Barcode'        => [
             'GetLocationsResult' => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming' => [
+        'Confirming'     => [
             'GetLocationsResult' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling' => [
+        'Labelling'      => [
             'GetLocationsResult' => LabellingService::DOMAIN_NAMESPACE,
         ],
         'ShippingStatus' => [
             'GetLocationsResult' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate' => [
+        'DeliveryDate'   => [
             'GetLocationsResult' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location' => [
+        'Location'       => [
             'GetLocationsResult' => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe' => [
+        'Timeframe'      => [
             'GetLocationsResult' => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
@@ -85,13 +85,13 @@ class GetNearestLocationsResponse extends AbstractEntity
     /**
      * GetNearestLocationsResponse constructor.
      *
-     * @param GetLocationsResult|null $result
+     * @param GetLocationsResult|null $GetLocationsResult
      */
-    public function __construct(GetLocationsResult $result = null)
+    public function __construct(GetLocationsResult $GetLocationsResult = null)
     {
         parent::__construct();
 
-        $this->setGetLocationsResult($result);
+        $this->setGetLocationsResult($GetLocationsResult);
     }
 
     /**

@@ -40,10 +40,10 @@ use Firstred\PostNL\Service\TimeframeService;
 /**
  * Class ConfirmingResponseShipment.
  *
- * @method string|null        getBarcode()
- * @method Warning[]|null     getWarnings()
- * @method ConfirmingResponseShipment setBarcode(string|null $barcode = null)
- * @method ConfirmingResponseShipment setWarnings(Warning[]|null $warnings = null)
+ * @method string|null                getBarcode()
+ * @method Warning[]|null             getWarnings()
+ * @method ConfirmingResponseShipment setBarcode(string|null $Barcode = null)
+ * @method ConfirmingResponseShipment setWarnings(Warning[]|null $Warnings = null)
  *
  * @since 1.0.0
  */
@@ -88,23 +88,16 @@ class ConfirmingResponseShipment extends AbstractEntity
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string|null    $barcode
-     * @param Warning[]|null $warnings
+     * @param string|null    $Barcode
+     * @param Warning[]|null $Warnings
      */
     public function __construct(
-        $barcode = null,
-        $warnings = null
+        $Barcode = null,
+        $Warnings = null
     ) {
         parent::__construct();
 
-        $this->setBarcode($barcode);
-        $this->setWarnings($warnings);
-    }
-
-    public static function jsonDeserialize(stdClass $json)
-    {
-
-
-        return parent::jsonDeserialize($json);
+        $this->setBarcode($Barcode);
+        $this->setWarnings($Warnings);
     }
 }

@@ -42,7 +42,7 @@ use Firstred\PostNL\Service\TimeframeService;
  * Class GetTimeframes.
  *
  * @method Message|null     getMessage()
- * @method GetTimeframes    setMessage(Message|null $message = null)
+ * @method GetTimeframes    setMessage(Message|null $Message = null)
  *
  * @since 1.0.0
  */
@@ -93,15 +93,15 @@ class GetTimeframes extends AbstractEntity
     /**
      * GetTimeframes constructor.
      *
-     * @param Message|null     $message
-     * @param Timeframe[]|null $timeframes
+     * @param Message|null     $Message
+     * @param Timeframe[]|null $Timeframes
      */
-    public function __construct(Message $message = null, array $timeframes = null)
+    public function __construct(Message $Message = null, array $Timeframes = null)
     {
         parent::__construct();
 
-        $this->setMessage($message ?: new Message());
-        $this->setTimeframe($timeframes);
+        $this->setMessage($Message ?: new Message());
+        $this->setTimeframe($Timeframes);
     }
 
     /**

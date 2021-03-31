@@ -48,10 +48,10 @@ use function is_string;
  * @method string|null                     getPhaseCode()
  * @method string|null                     getPhaseDescription()
  * @method DateTimeInterface|null          getTimeStamp()
- * @method CompleteStatusResponseOldStatus setStatusCode(string|null $code = null)
- * @method CompleteStatusResponseOldStatus setStatusDescription(string|null $description = null)
- * @method CompleteStatusResponseOldStatus setPhaseCode(string|null $code = null)
- * @method CompleteStatusResponseOldStatus setPhaseDescription(string|null $description = null)
+ * @method CompleteStatusResponseOldStatus setStatusCode(string|null $StatusCode = null)
+ * @method CompleteStatusResponseOldStatus setStatusDescription(string|null $StatusDescription = null)
+ * @method CompleteStatusResponseOldStatus setPhaseCode(string|null $PhaseCode = null)
+ * @method CompleteStatusResponseOldStatus setPhaseDescription(string|null $PhaseDescription = null)
  *
  * @since 1.0.0
  */
@@ -129,32 +129,32 @@ class CompleteStatusResponseOldStatus extends AbstractEntity
     /**
      * CompleteStatusResponseOldStatus constructor.
      *
-     * @param string|null                   $code
-     * @param string|null                   $description
-     * @param string|null                   $phaseCode
-     * @param string|null                   $phaseDescription
-     * @param DateTimeInterface|string|null $timeStamp
+     * @param string|null                   $StatusCode
+     * @param string|null                   $StatusDescription
+     * @param string|null                   $PhaseCode
+     * @param string|null                   $PhaseDescription
+     * @param DateTimeInterface|string|null $TimeStamp
      *
      * @throws InvalidArgumentException
      */
     public function __construct(
-        $code = null,
-        $description = null,
-        $phaseCode = null,
-        $phaseDescription = null,
-        $timeStamp = null
+        $StatusCode = null,
+        $StatusDescription = null,
+        $PhaseCode = null,
+        $PhaseDescription = null,
+        $TimeStamp = null
     ) {
         parent::__construct();
 
-        $this->setStatusCode($code);
-        $this->setStatusDescription($description);
-        $this->setPhaseCode($phaseCode);
-        $this->setPhaseDescription($phaseDescription);
-        $this->setTimeStamp($timeStamp);
+        $this->setStatusCode($StatusCode);
+        $this->setStatusDescription($StatusDescription);
+        $this->setPhaseCode($PhaseCode);
+        $this->setPhaseDescription($PhaseDescription);
+        $this->setTimeStamp($TimeStamp);
     }
 
     /**
-     * @param string|DateTimeInterface|null $timeStamp
+     * @param string|DateTimeInterface|null $TimeStamp
      *
      * @return static
      *
@@ -162,17 +162,17 @@ class CompleteStatusResponseOldStatus extends AbstractEntity
      *
      * @since 1.2.0
      */
-    public function setTimeStamp($timeStamp = null)
+    public function setTimeStamp($TimeStamp = null)
     {
-        if (is_string($timeStamp)) {
+        if (is_string($TimeStamp)) {
             try {
-                $timeStamp = new DateTimeImmutable($timeStamp);
+                $TimeStamp = new DateTimeImmutable($TimeStamp);
             } catch (Exception $e) {
                 throw new InvalidArgumentException($e->getMessage(), 0, $e);
             }
         }
 
-        $this->TimeStamp = $timeStamp;
+        $this->TimeStamp = $TimeStamp;
 
         return $this;
     }

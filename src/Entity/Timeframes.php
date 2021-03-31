@@ -39,8 +39,8 @@ use Firstred\PostNL\Service\TimeframeService;
  *
  * @method Timeframe[]|null          getTimeframess()
  * @method TimeframeTimeFrame[]|null getTimeframeTimeFrame()
- * @method Timeframes                setTimeframes(Timeframe[]|null $timeframes = null)
- * @method Timeframes                setTimeframeTimeFrames(TimeframeTimeFrame[]|null $timeframes = null)
+ * @method Timeframes                setTimeframes(Timeframe[]|null $Timeframes = null)
+ * @method Timeframes                setTimeframeTimeFrames(TimeframeTimeFrame[]|null $TimeframeTimeFrames = null)
  *
  * @since 1.0.0
  */

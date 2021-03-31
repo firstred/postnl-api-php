@@ -44,9 +44,9 @@ use Firstred\PostNL\Service\TimeframeService;
  * @method Customer|null   getCustomer()
  * @method Message|null    getMessage()
  * @method Barcode|null    getBarcode()
- * @method GenerateBarcode setCustomer(Customer|null $customer = null)
- * @method GenerateBarcode setMessage(Message|null $message = null)
- * @method GenerateBarcode setBarcode(Barcode|null $shipments = null)
+ * @method GenerateBarcode setCustomer(Customer|null $Customer = null)
+ * @method GenerateBarcode setMessage(Message|null $Message = null)
+ * @method GenerateBarcode setBarcode(Barcode|null $Barcode = null)
  *
  * @since 1.0.0
  */
@@ -106,16 +106,16 @@ class GenerateBarcode extends AbstractEntity
     /**
      * GenerateBarcode constructor.
      *
-     * @param Barcode|null  $barcode
-     * @param Customer|null $customer
-     * @param Message|null  $message
+     * @param Barcode|null  $Barcode
+     * @param Customer|null $Customer
+     * @param Message|null  $Message
      */
-    public function __construct(Barcode $barcode = null, Customer $customer = null, Message $message = null)
+    public function __construct(Barcode $Barcode = null, Customer $Customer = null, Message $Message = null)
     {
         parent::__construct();
 
-        $this->setBarcode($barcode);
-        $this->setCustomer($customer);
-        $this->setMessage($message ?: new Message());
+        $this->setBarcode($Barcode);
+        $this->setCustomer($Customer);
+        $this->setMessage($Message ?: new Message());
     }
 }

@@ -39,9 +39,9 @@ use Firstred\PostNL\Service\ShippingService;
  * @method Customer|null    getCustomer()
  * @method Message|null     getMessage()
  * @method Shipment[]|null  getShipments()
- * @method GenerateShipping setCustomer(Customer|null $customer = null)
- * @method GenerateShipping setMessage(Message|null $message = null)
- * @method GenerateShipping setShipments(Shipment[]|null $shipments = null)
+ * @method GenerateShipping setCustomer(Customer|null $Customer = null)
+ * @method GenerateShipping setMessage(Message|null $Message = null)
+ * @method GenerateShipping setShipments(Shipment[]|null $Shipments = null)
  *
  * @since 1.0.0
  */
@@ -70,17 +70,17 @@ class GenerateShipping extends AbstractEntity
     /**
      * GenerateShipping constructor.
      *
-     * @param Shipment[]|null       $shipments
-     * @param LabellingMessage|null $message
-     * @param Customer|null         $customer
+     * @param Shipment[]|null       $Shipments
+     * @param LabellingMessage|null $Message
+     * @param Customer|null         $Customer
      */
-    public function __construct(array $shipments = null, LabellingMessage $message = null, Customer $customer = null)
+    public function __construct(array $Shipments = null, LabellingMessage $Message = null, Customer $Customer = null)
     {
         parent::__construct();
 
-        $this->setShipments($shipments);
-        $this->setMessage($message ?: new LabellingMessage());
-        $this->setCustomer($customer);
+        $this->setShipments($Shipments);
+        $this->setMessage($Message ?: new LabellingMessage());
+        $this->setCustomer($Customer);
     }
 
     /**

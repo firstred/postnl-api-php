@@ -44,8 +44,8 @@ use function count;
 /**
  * Class CompleteStatusResponse.
  *
- * @method string|null            getShipments()
- * @method CompleteStatusResponse setShipments(Shipment[] $shipments = null)
+ * @method Shipment[]|null        getShipments()
+ * @method CompleteStatusResponse setShipments(Shipment[] $Shipments = null)
  *
  * @since 1.0.0
  */
@@ -57,25 +57,25 @@ class CompleteStatusResponse extends AbstractEntity
      * @var array
      */
     public static $defaultProperties = [
-        'Barcode' => [
+        'Barcode'        => [
             'Shipments' => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming' => [
+        'Confirming'     => [
             'Shipments' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling' => [
+        'Labelling'      => [
             'Shipments' => LabellingService::DOMAIN_NAMESPACE,
         ],
         'ShippingStatus' => [
             'Shipments' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate' => [
+        'DeliveryDate'   => [
             'Shipments' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location' => [
+        'Location'       => [
             'Shipments' => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe' => [
+        'Timeframe'      => [
             'Shipments' => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
@@ -87,13 +87,13 @@ class CompleteStatusResponse extends AbstractEntity
     /**
      * CompleteStatusResponse constructor.
      *
-     * @param Shipment[]|null $shipments
+     * @param Shipment[]|null $Shipments
      */
-    public function __construct(array $shipments = null)
+    public function __construct(array $Shipments = null)
     {
         parent::__construct();
 
-        $this->setShipments($shipments);
+        $this->setShipments($Shipments);
     }
 
     public static function jsonDeserialize(stdClass $json)

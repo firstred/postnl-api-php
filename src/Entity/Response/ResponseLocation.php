@@ -59,22 +59,22 @@ use stdClass;
  * @method Warning[]|null    getWarnings()
  * @method string|null       getDownPartnerID()
  * @method string|null       getDownPartnerLocation()
- * @method ResponseLocation  setAddress(Address|null $address = null)
- * @method ResponseLocation  setDeliveryOptions(string[]|null $options)
- * @method ResponseLocation  setDistance(string|null $dist = null)
- * @method ResponseLocation  setLatitude(string|null $lat = null)
- * @method ResponseLocation  setLongitude(string|null $long = null)
- * @method ResponseLocation  setName(string|null $name = null)
- * @method ResponseLocation  setOpeningHours(string[]|null $hours = null)
- * @method ResponseLocation  setPartnerName(string|null $partnerName = null)
- * @method ResponseLocation  setPhoneNumber(string|null $number = null)
- * @method ResponseLocation  setRetailNetworkID(string|null $id = null)
- * @method ResponseLocation  setLocationCode(string|null $code = null)
- * @method ResponseLocation  setSaleschannel(string|null $channel = null)
- * @method ResponseLocation  setTerminalType(string|null $type = null)
- * @method ResponseLocation  setWarnings(Warning[]|null $warnings = null)
- * @method ResponseLocation  setDownPartnerID(string|null $downPartnerID = null)
- * @method ResponseLocation  setDownPartnerLocation(string|null $downPartnerLocation = null)
+ * @method ResponseLocation  setAddress(Address|null $Address = null)
+ * @method ResponseLocation  setDeliveryOptions(string[]|null $DeliveryOptions)
+ * @method ResponseLocation  setDistance(string|null $Distance = null)
+ * @method ResponseLocation  setLatitude(string|null $Latitude = null)
+ * @method ResponseLocation  setLongitude(string|null $Longitude = null)
+ * @method ResponseLocation  setName(string|null $Name = null)
+ * @method ResponseLocation  setOpeningHours(string[]|null $Hours = null)
+ * @method ResponseLocation  setPartnerName(string|null $PartnerName = null)
+ * @method ResponseLocation  setPhoneNumber(string|null $PhoneNumber = null)
+ * @method ResponseLocation  setRetailNetworkID(string|null $RetailNetworkID = null)
+ * @method ResponseLocation  setLocationCode(string|null $LocationCode = null)
+ * @method ResponseLocation  setSaleschannel(string|null $Saleschannel = null)
+ * @method ResponseLocation  setTerminalType(string|null $TerminalType = null)
+ * @method ResponseLocation  setWarnings(Warning[]|null $Warnings = null)
+ * @method ResponseLocation  setDownPartnerID(string|null $DownPartnerID = null)
+ * @method ResponseLocation  setDownPartnerLocation(string|null $DownPartnerLocation = null)
  *
  * @since 1.0.0
  */
@@ -252,59 +252,59 @@ class ResponseLocation extends AbstractEntity
     /**
      * ResponseLocation constructor.
      *
-     * @param Address|null   $address
-     * @param string[]|null  $deliveryOptions
-     * @param string|null    $distance
-     * @param string|null    $latitude
-     * @param string|null    $longitude
-     * @param string|null    $name
-     * @param string[]|null  $openingHours
-     * @param string|null    $partnerName
-     * @param string|null    $phoneNumber
-     * @param string|null    $locationCode
-     * @param string|null    $retailNetworkId
-     * @param string|null    $saleschannel
-     * @param string|null    $terminalType
-     * @param Warning[]|null $warnings
-     * @param string|null    $downPartnerID
-     * @param string|null    $downPartnerLocation
+     * @param Address|null   $Address
+     * @param string[]|null  $DeliveryOptions
+     * @param string|null    $Distance
+     * @param string|null    $Latitude
+     * @param string|null    $Longitude
+     * @param string|null    $Name
+     * @param string[]|null  $OpeningHours
+     * @param string|null    $PartnerName
+     * @param string|null    $PhoneNumber
+     * @param string|null    $LocationCode
+     * @param string|null    $RetailNetworkID
+     * @param string|null    $Saleschannel
+     * @param string|null    $TerminalType
+     * @param Warning[]|null $Warnings
+     * @param string|null    $DownPartnerID
+     * @param string|null    $DownPartnerLocation
      */
     public function __construct(
-        Address $address = null,
-        array $deliveryOptions = null,
-        $distance = null,
-        $latitude = null,
-        $longitude = null,
-        $name = null,
-        $openingHours = null,
-        $partnerName = null,
-        $phoneNumber = null,
-        $locationCode = null,
-        $retailNetworkId = null,
-        $saleschannel = null,
-        $terminalType = null,
-        $warnings = null,
-        $downPartnerID = null,
-        $downPartnerLocation = null
+        Address $Address = null,
+        array $DeliveryOptions = null,
+        $Distance = null,
+        $Latitude = null,
+        $Longitude = null,
+        $Name = null,
+        $OpeningHours = null,
+        $PartnerName = null,
+        $PhoneNumber = null,
+        $LocationCode = null,
+        $RetailNetworkID = null,
+        $Saleschannel = null,
+        $TerminalType = null,
+        $Warnings = null,
+        $DownPartnerID = null,
+        $DownPartnerLocation = null
     ) {
         parent::__construct();
 
-        $this->setAddress($address);
-        $this->setDeliveryOptions($deliveryOptions);
-        $this->setDistance($distance);
-        $this->setLatitude($latitude);
-        $this->setLongitude($longitude);
-        $this->setName($name);
-        $this->setOpeningHours($openingHours);
-        $this->setPartnerName($partnerName);
-        $this->setPhoneNumber($phoneNumber);
-        $this->setLocationCode($locationCode);
-        $this->setRetailNetworkID($retailNetworkId);
-        $this->setSaleschannel($saleschannel);
-        $this->setTerminalType($terminalType);
-        $this->setWarnings($warnings);
-        $this->setDownPartnerID($downPartnerID);
-        $this->setDownPartnerLocation($downPartnerLocation);
+        $this->setAddress($Address);
+        $this->setDeliveryOptions($DeliveryOptions);
+        $this->setDistance($Distance);
+        $this->setLatitude($Latitude);
+        $this->setLongitude($Longitude);
+        $this->setName($Name);
+        $this->setOpeningHours($OpeningHours);
+        $this->setPartnerName($PartnerName);
+        $this->setPhoneNumber($PhoneNumber);
+        $this->setLocationCode($LocationCode);
+        $this->setRetailNetworkID($RetailNetworkID);
+        $this->setSaleschannel($Saleschannel);
+        $this->setTerminalType($TerminalType);
+        $this->setWarnings($Warnings);
+        $this->setDownPartnerID($DownPartnerID);
+        $this->setDownPartnerLocation($DownPartnerLocation);
     }
 
     public static function jsonDeserialize(stdClass $json)

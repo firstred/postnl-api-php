@@ -42,8 +42,8 @@ use Firstred\PostNL\Service\TimeframeService;
  * @method string|null            getMessageID()
  * @method DateTimeInterface|null getMessageTimeStamp()
  * @method string|null            getPrinterType()
- * @method Message                setMessageID(string|null $mid = null)
- * @method Message                setPrinterType(string|null $printerType = null)
+ * @method Message                setMessageID(string|null $MessageID = null)
+ * @method Message                setPrinterType(string|null $Printertype = null)
  *
  * @since 1.0.0
  */
@@ -98,20 +98,20 @@ class LabellingMessage extends Message
     protected $Printertype;
 
     /**
-     * @param string|null                   $printerType
-     * @param string|null                   $mid
-     * @param string|DateTimeInterface|null $timestamp
+     * @param string|null                   $Printertype
+     * @param string|null                   $MessageID
+     * @param string|DateTimeInterface|null $MessageTimeStamp
      *
      * @throws \Exception
      * @throws \Exception
      */
     public function __construct(
-        $printerType = 'GraphicFile|PDF',
-        $mid = null,
-        $timestamp = null
+        $Printertype = 'GraphicFile|PDF',
+        $MessageID = null,
+        $MessageTimeStamp = null
     ) {
-        parent::__construct($mid, $timestamp);
+        parent::__construct($MessageID, $MessageTimeStamp);
 
-        $this->setPrintertype($printerType);
+        $this->setPrintertype($Printertype);
     }
 }

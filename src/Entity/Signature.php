@@ -40,8 +40,8 @@ use Firstred\PostNL\Service\TimeframeService;
  *
  * @method GetSignatureResponseSignature|null getGetSignatureResponseSignature()
  * @method Warning[]|null                     getWarnings()
- * @method Signature                          setGetSignatureResponseSignature(GetSignatureResponseSignature|null $signature = null)
- * @method Signature                          setWarnings(Warning[]|null $warnings = null)
+ * @method Signature                          setGetSignatureResponseSignature(GetSignatureResponseSignature|null $GetSignatureResponseSignature = null)
+ * @method Signature                          setWarnings(Warning[]|null $Warnings = null)
  *
  * @since 1.0.0
  */
@@ -86,12 +86,12 @@ class Signature extends AbstractEntity
     // @codingStandardsIgnoreEnd
 
     public function __construct(
-        GetSignatureResponseSignature $signature = null,
-        array $warnings = null
+        GetSignatureResponseSignature $GetSignatureResponseSignature = null,
+        array $Warnings = null
     ) {
         parent::__construct();
 
-        $this->setGetSignatureResponseSignature($signature);
-        $this->setWarnings($warnings);
+        $this->setGetSignatureResponseSignature($GetSignatureResponseSignature);
+        $this->setWarnings($Warnings);
     }
 }

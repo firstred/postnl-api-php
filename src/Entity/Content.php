@@ -45,13 +45,13 @@ use Firstred\PostNL\Service\TimeframeService;
  * @method string|null    getValue()
  * @method string|null    getWeight()
  * @method Content[]|null getContent()
- * @method Content        setCountryOfOrigin(string|null $countryOfOrigin = null)
- * @method Content        setDescription(string|null $description = null)
- * @method Content        setHSTariffNr(string|null $hsTariffNr = null)
- * @method Content        setQuantity(string|null $qty = null)
- * @method Content        setValue(string|null $val = null)
- * @method Content        setWeight(string|null $weight = null)
- * @method Content        setContent(Content[]|null $content = null)
+ * @method Content        setCountryOfOrigin(string|null $CountryOfOrigin = null)
+ * @method Content        setDescription(string|null $Description = null)
+ * @method Content        setHSTariffNr(string|null $HSTariffNr = null)
+ * @method Content        setQuantity(string|null $Quantity = null)
+ * @method Content        setValue(string|null $Value = null)
+ * @method Content        setWeight(string|null $Weight = null)
+ * @method Content        setContent(Content[]|null $Content = null)
  *
  * @since 1.0.0
  */
@@ -150,31 +150,31 @@ class Content extends AbstractEntity
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string|null    $countryOfOrigin
-     * @param string|null    $description
-     * @param string|null    $hsTariffNr
-     * @param string|null    $qty
-     * @param string|null    $val
-     * @param string|null    $weight
-     * @param Content[]|null $content
+     * @param string|null    $CountryOfOrigin
+     * @param string|null    $Description
+     * @param string|null    $HSTariffNr
+     * @param string|null    $Quantity
+     * @param string|null    $Value
+     * @param string|null    $Weight
+     * @param Content[]|null $Content
      */
     public function __construct(
-        $countryOfOrigin = null,
-        $description = null,
-        $hsTariffNr = null,
-        $qty = null,
-        $val = null,
-        $weight = null,
-        $content = null
+        $CountryOfOrigin = null,
+        $Description = null,
+        $HSTariffNr = null,
+        $Quantity = null,
+        $Value = null,
+        $Weight = null,
+        $Content = null
     ) {
         parent::__construct();
 
-        $this->setCountryOfOrigin($countryOfOrigin);
-        $this->setDescription($description);
-        $this->setHSTariffNr($hsTariffNr);
-        $this->setQuantity($qty);
-        $this->setValue($val);
-        $this->setWeight($weight);
-        $this->setContent($content);
+        $this->setCountryOfOrigin($CountryOfOrigin);
+        $this->setDescription($Description);
+        $this->setHSTariffNr($HSTariffNr);
+        $this->setQuantity($Quantity);
+        $this->setValue($Value);
+        $this->setWeight($Weight);
+        $this->setContent($Content);
     }
 }

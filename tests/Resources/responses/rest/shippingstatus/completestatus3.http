@@ -1,0 +1,230 @@
+HTTP/1.1 200 OK
+Access-Control-Allow-Headers: origin, x-requested-with, accept, apikey, Content-Type
+Access-Control-Allow-Methods: GET, OPTIONS
+Access-Control-Allow-Origin: *
+Access-Control-Max-Age: 3628800
+Content-Type: application/json
+Date: Wed, 31 Mar 2021 15:52:29 GMT
+Connection: keep-alive
+
+{
+  "CompleteStatus": {
+    "Shipment": {
+      "MainBarcode": "3SABCD987516327",
+      "Barcode": "3SABCD987516327",
+      "ShipmentAmount": "1",
+      "ShipmentCounter": "1",
+      "Customer": {
+        "CustomerCode": "ABCD",
+        "CustomerNumber": "12345678",
+        "Name": "Bedrijf B.V."
+      },
+      "ProductCode": "003087",
+      "ProductDescription": "Verhoogde Aansprakelijkheid Zending",
+      "Reference": {},
+      "Dimension": {
+        "Height": "150",
+        "Length": "260",
+        "Volume": "6435",
+        "Weight": "440",
+        "Width": "165"
+      },
+      "Amount": {
+        "VerzekerdBedrag": "EUR250.00"
+      },
+      "Address": [
+        {
+          "AddressType": "01",
+          "Building": {},
+          "City": "Stadskanaal",
+          "CompanyName": {},
+          "CountryCode": "NL",
+          "DepartmentName": {},
+          "District": {},
+          "FirstName": {},
+          "Floor": {},
+          "HouseNumber": "1",
+          "HouseNumberSuffix": {},
+          "LastName": "LASTNAME",
+          "Region": {},
+          "Remark": {},
+          "Street": "Straat",
+          "Zipcode": "9500AB"
+        },
+        {
+          "AddressType": "02",
+          "Building": {},
+          "City": "Amsterdam",
+          "CompanyName": "Bedrijf B.V.",
+          "CountryCode": "NL",
+          "DepartmentName": {},
+          "District": {},
+          "FirstName": {},
+          "Floor": {},
+          "HouseNumber": "1",
+          "HouseNumberSuffix": {},
+          "LastName": {},
+          "Region": {},
+          "Remark": {},
+          "Street": "Straat",
+          "Zipcode": "1100AB"
+        }
+      ],
+      "Event": [
+        {
+          "Code": "01B",
+          "Description": "Zending is bezorgd",
+          "DestinationLocationCode": {},
+          "LocationCode": "161102",
+          "RouteCode": "20210325_HD_161102_0450",
+          "RouteName": "0450 Vogelwijk",
+          "TimeStamp": "26-03-2021 15:06:53"
+        },
+        {
+          "Code": "J05",
+          "Description": "Bezorger is onderweg",
+          "DestinationLocationCode": {},
+          "LocationCode": "161102",
+          "RouteCode": "20210325_HD_161102_0450",
+          "RouteName": "0450 Vogelwijk",
+          "TimeStamp": "26-03-2021 09:44:45"
+        },
+        {
+          "Code": "J01",
+          "Description": "Zending is gesorteerd",
+          "DestinationLocationCode": "161104",
+          "LocationCode": "161104",
+          "RouteCode": "450",
+          "RouteName": "0450 Vogelwijk",
+          "TimeStamp": "25-03-2021 09:30:58"
+        },
+        {
+          "Code": "B01",
+          "Description": "Zending is ontvangen door PostNL",
+          "DestinationLocationCode": "161104",
+          "LocationCode": "205747",
+          "RouteCode": "450",
+          "RouteName": "0450 Vogelwijk",
+          "TimeStamp": "26-03-2021 01:15:18"
+        },
+        {
+          "Code": "A01",
+          "Description": "Pakket is nog niet door PostNL ontvangen of verwerkt",
+          "DestinationLocationCode": {},
+          "LocationCode": "888888",
+          "RouteCode": {},
+          "RouteName": {},
+          "TimeStamp": "25-03-2021 12:11:10"
+        }
+      ],
+      "ProductOptions": {
+        "OptionCode": "1",
+        "CharacteristicCode": "112"
+      },
+      "Expectation": {
+        "ETAFrom": "2021-03-26T14:05:00",
+        "ETATo": "2021-03-26T16:05:00"
+      },
+      "Status": {
+        "TimeStamp": "26-03-2021 15:06:53",
+        "StatusCode": "11",
+        "StatusDescription": "Zending afgeleverd",
+        "PhaseCode": "4",
+        "PhaseDescription": "Afgeleverd"
+      },
+      "OldStatus": [
+        {
+          "TimeStamp": "26-03-2021 15:06:53",
+          "StatusCode": "11",
+          "StatusDescription": "Zending afgeleverd",
+          "PhaseCode": "4",
+          "PhaseDescription": "Afgeleverd"
+        },
+        {
+          "TimeStamp": "26-03-2021 09:44:45",
+          "StatusCode": "99",
+          "StatusDescription": "Niet van toepassing",
+          "PhaseCode": "99",
+          "PhaseDescription": "Niet van toepassing"
+        },
+        {
+          "TimeStamp": "26-03-2021 09:44:45",
+          "StatusCode": "7",
+          "StatusDescription": "Zending in distributieproces",
+          "PhaseCode": "3",
+          "PhaseDescription": "Distributie"
+        },
+        {
+          "TimeStamp": "26-03-2021 09:41:54",
+          "StatusCode": "99",
+          "StatusDescription": "Niet van toepassing",
+          "PhaseCode": "99",
+          "PhaseDescription": "Niet van toepassing"
+        },
+        {
+          "TimeStamp": "26-03-2021 09:31:29",
+          "StatusCode": "99",
+          "StatusDescription": "Niet van toepassing",
+          "PhaseCode": "99",
+          "PhaseDescription": "Niet van toepassing"
+        },
+        {
+          "TimeStamp": "26-03-2021 09:30:58",
+          "StatusCode": "5",
+          "StatusDescription": "Zending gesorteerd",
+          "PhaseCode": "2",
+          "PhaseDescription": "Sortering"
+        },
+        {
+          "TimeStamp": "26-03-2021 01:15:18",
+          "StatusCode": "2",
+          "StatusDescription": "Zending in ontvangst genomen",
+          "PhaseCode": "1",
+          "PhaseDescription": "Collectie"
+        },
+        {
+          "TimeStamp": "26-03-2021 01:10:21.943",
+          "StatusCode": "99",
+          "StatusDescription": "Niet van toepassing",
+          "PhaseCode": "99",
+          "PhaseDescription": "Niet van toepassing"
+        },
+        {
+          "TimeStamp": "25-03-2021 12:13:09",
+          "StatusCode": "99",
+          "StatusDescription": "Niet van toepassing",
+          "PhaseCode": "99",
+          "PhaseDescription": "Niet van toepassing"
+        },
+        {
+          "TimeStamp": "25-03-2021 12:13:08.644",
+          "StatusCode": "99",
+          "StatusDescription": "Niet van toepassing",
+          "PhaseCode": "99",
+          "PhaseDescription": "Niet van toepassing"
+        },
+        {
+          "TimeStamp": "25-03-2021 12:13:08",
+          "StatusCode": "99",
+          "StatusDescription": "Niet van toepassing",
+          "PhaseCode": "99",
+          "PhaseDescription": "Niet van toepassing"
+        },
+        {
+          "TimeStamp": "25-03-2021 12:11:10",
+          "StatusCode": "1",
+          "StatusDescription": "Zending voorgemeld",
+          "PhaseCode": "1",
+          "PhaseDescription": "Collectie"
+        },
+        {
+          "TimeStamp": "25-03-2021 00:15:18",
+          "StatusCode": "99",
+          "StatusDescription": "Niet van toepassing",
+          "PhaseCode": "99",
+          "PhaseDescription": "Niet van toepassing"
+        }
+      ]
+    }
+  }
+}

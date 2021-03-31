@@ -45,9 +45,9 @@ use Firstred\PostNL\Service\TimeframeService;
  * @method Customer|null   getCustomer()
  * @method Message|null    getMessage()
  * @method Shipment[]|null getShipments()
- * @method Confirming      setCustomer(Customer|null $customer = null)
- * @method Confirming      setMessage(Message|null $message = null)
- * @method Confirming      setShipments(Shipment[]|null $shipments = null)
+ * @method Confirming      setCustomer(Customer|null $Customer = null)
+ * @method Confirming      setMessage(Message|null $Message = null)
+ * @method Confirming      setShipments(Shipment[]|null $Shipments = null)
  *
  * @since 1.0.0
  */
@@ -107,17 +107,17 @@ class Confirming extends AbstractEntity
     /**
      * Confirming constructor.
      *
-     * @param Shipment[]|null $shipments
-     * @param Customer|null   $customer
-     * @param Message|null    $message
+     * @param Shipment[]|null $Shipments
+     * @param Customer|null   $Customer
+     * @param Message|null    $Message
      */
-    public function __construct(array $shipments = null, Customer $customer = null, Message $message = null)
+    public function __construct(array $Shipments = null, Customer $Customer = null, Message $Message = null)
     {
         parent::__construct();
 
-        $this->setShipments($shipments);
-        $this->setMessage($message ?: new Message());
-        $this->setCustomer($customer);
+        $this->setShipments($Shipments);
+        $this->setMessage($Message ?: new Message());
+        $this->setCustomer($Customer);
     }
 
     /**

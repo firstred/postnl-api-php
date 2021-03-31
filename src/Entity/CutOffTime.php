@@ -41,9 +41,9 @@ use Firstred\PostNL\Service\TimeframeService;
  * @method string|null getDay()
  * @method string|null getTime()
  * @method bool|null   getAvailable()
- * @method CutOffTime  setDay(string|null $day = null)
- * @method CutOffTime  setTime(string|null $time = null)
- * @method CutOffTime  setAvailable(bool|null $available = null)
+ * @method CutOffTime  setDay(string|null $Day = null)
+ * @method CutOffTime  setTime(string|null $Time = null)
+ * @method CutOffTime  setAvailable(bool|null $Available = null)
  *
  * @since 1.0.0
  */
@@ -97,17 +97,17 @@ class CutOffTime extends AbstractEntity
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string $day
-     * @param string $time
-     * @param bool   $available
+     * @param string $Day
+     * @param string $Time
+     * @param bool   $Available
      */
-    public function __construct($day = null, $time = null, $available = null)
+    public function __construct($Day = null, $Time = null, $Available = null)
     {
         parent::__construct();
 
-        $this->setDay($day);
-        $this->setTime($time);
-        $this->setAvailable($available);
+        $this->setDay($Day);
+        $this->setTime($Time);
+        $this->setAvailable($Available);
     }
 
     /**

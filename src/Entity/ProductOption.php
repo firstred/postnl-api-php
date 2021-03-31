@@ -40,8 +40,8 @@ use Firstred\PostNL\Service\TimeframeService;
  *
  * @method string|null   getCharacteristic()
  * @method string|null   getOption()
- * @method ProductOption setCharacteristic(string|null $characteristic = null)
- * @method ProductOption setOption(string|null $option = null)
+ * @method ProductOption setCharacteristic(string|null $Characteristic = null)
+ * @method ProductOption setOption(string|null $Option = null)
  *
  * @since 1.0.0
  */
@@ -90,14 +90,14 @@ class ProductOption extends AbstractEntity
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string|null $characteristic
-     * @param string|null $option
+     * @param string|null $Characteristic
+     * @param string|null $Option
      */
-    public function __construct($characteristic = null, $option = null)
+    public function __construct($Characteristic = null, $Option = null)
     {
         parent::__construct();
 
-        $this->setCharacteristic($characteristic);
-        $this->setOption($option);
+        $this->setCharacteristic($Characteristic);
+        $this->setOption($Option);
     }
 }

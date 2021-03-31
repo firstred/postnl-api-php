@@ -44,9 +44,9 @@ use Firstred\PostNL\Service\TimeframeService;
  * @method string|null  getLocationCode()
  * @method Message|null getMessage()
  * @method string|null  getRetailNetworkID()
- * @method GetLocation  setLocationCode(string|null $location = null)
- * @method GetLocation  setMessage(Message|null $message = null)
- * @method GetLocation  setRetailNetworkID(string|null $id = null)
+ * @method GetLocation  setLocationCode(string|null $LocationCode = null)
+ * @method GetLocation  setMessage(Message|null $Message = null)
+ * @method GetLocation  setRetailNetworkID(string|null $RetailNetworkID = null)
  *
  * @since 1.0.0
  */
@@ -106,19 +106,19 @@ class GetLocation extends AbstractEntity
     /**
      * GetLocation constructor.
      *
-     * @param string|null  $location
-     * @param Message|null $message
-     * @param string|null  $networkId
+     * @param string|null  $LocationCode
+     * @param Message|null $Message
+     * @param string|null  $RetailNetworkID
      */
     public function __construct(
-        $location = null,
-        Message $message = null,
-        $networkId = null
+        $LocationCode = null,
+        Message $Message = null,
+        $RetailNetworkID = null
     ) {
         parent::__construct();
 
-        $this->setLocationCode($location);
-        $this->setMessage($message ?: new Message());
-        $this->setRetailNetworkID($networkId);
+        $this->setLocationCode($LocationCode);
+        $this->setMessage($Message ?: new Message());
+        $this->setRetailNetworkID($RetailNetworkID);
     }
 }

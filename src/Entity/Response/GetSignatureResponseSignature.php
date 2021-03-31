@@ -45,8 +45,8 @@ use Firstred\PostNL\Service\TimeframeService;
  * @method string|null            getBarcode()
  * @method DateTimeInterface|null getSignatureDate()
  * @method string|null            getSignatureImage()
- * @method SignatureResponse      setBarcode(string|null $barcode = null)
- * @method SignatureResponse      setSignatureImage(string|null $signatureImage = null)
+ * @method SignatureResponse      setBarcode(string|null $Barcode = null)
+ * @method SignatureResponse      setSignatureImage(string|null $SignatureImage = null)
  *
  * @since 1.0.0
  */
@@ -106,23 +106,23 @@ class GetSignatureResponseSignature extends AbstractEntity
     /**
      * GetSignatureResponseSignature constructor.
      *
-     * @param string|null $barcode
-     * @param string|null $signatureDate
-     * @param string|null $signatureImage
+     * @param string|null $Barcode
+     * @param string|null $SignatureDate
+     * @param string|null $SignatureImage
      *
      * @throws InvalidArgumentException
      */
-    public function __construct($barcode = null, $signatureDate = null, $signatureImage = null)
+    public function __construct($Barcode = null, $SignatureDate = null, $SignatureImage = null)
     {
         parent::__construct();
 
-        $this->setBarcode($barcode);
-        $this->setSignatureDate($signatureDate);
-        $this->setSignatureImage($signatureImage);
+        $this->setBarcode($Barcode);
+        $this->setSignatureDate($SignatureDate);
+        $this->setSignatureImage($SignatureImage);
     }
 
     /**
-     * @param string|DateTimeInterface|null $signatureDate
+     * @param string|DateTimeInterface|null $SignatureDate
      *
      * @return static
      *
@@ -130,17 +130,17 @@ class GetSignatureResponseSignature extends AbstractEntity
      *
      * @since 1.2.0
      */
-    public function setSignatureDate($signatureDate = null)
+    public function setSignatureDate($SignatureDate = null)
     {
-        if (is_string($signatureDate)) {
+        if (is_string($SignatureDate)) {
             try {
-                $signatureDate = new DateTimeImmutable($signatureDate);
+                $SignatureDate = new DateTimeImmutable($SignatureDate);
             } catch (Exception $e) {
                 throw new InvalidArgumentException($e->getMessage(), 0, $e);
             }
         }
 
-        $this->SignatureDate = $signatureDate;
+        $this->SignatureDate = $SignatureDate;
 
         return $this;
     }

@@ -45,7 +45,7 @@ use Firstred\PostNL\Service\TimeframeService;
  *
  * @method string|null            getMessageID()
  * @method DateTimeInterface|null getMessageTimeStamp()
- * @method Message                setMessageID(string|null $mid = null)
+ * @method Message                setMessageID(string|null $MessageID = null)
  *
  * @since 1.0.0
  */
@@ -94,25 +94,25 @@ class Message extends AbstractEntity
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string|null                   $mid
-     * @param string|DateTimeInterface|null $timestamp
+     * @param string|null                   $MessageID
+     * @param string|DateTimeInterface|null $MessageTimeStamp
      *
      * @throws InvalidArgumentException
      */
-    public function __construct($mid = null, $timestamp = null)
+    public function __construct($MessageID = null, $MessageTimeStamp = null)
     {
         parent::__construct();
 
-        $this->setMessageID($mid ?: substr(str_replace('-', '', $this->getid()), 0, 12));
+        $this->setMessageID($MessageID ?: substr(str_replace('-', '', $this->getid()), 0, 12));
         try {
-            $this->setMessageTimeStamp($timestamp ?: new DateTimeImmutable());
+            $this->setMessageTimeStamp($MessageTimeStamp ?: new DateTimeImmutable());
         } catch (Exception $e) {
             throw new InvalidArgumentException($e->getMessage(), 0, $e);
         }
     }
 
     /**
-     * @param string|DateTimeInterface|null $timeStamp
+     * @param string|DateTimeInterface|null $MessageTimeStamp
      *
      * @return static
      *
@@ -120,17 +120,17 @@ class Message extends AbstractEntity
      *
      * @since 1.2.0
      */
-    public function setMessageTimeStamp($timeStamp = null)
+    public function setMessageTimeStamp($MessageTimeStamp = null)
     {
-        if (is_string($timeStamp)) {
+        if (is_string($MessageTimeStamp)) {
             try {
-                $timeStamp = new DateTimeImmutable($timeStamp);
+                $MessageTimeStamp = new DateTimeImmutable($MessageTimeStamp);
             } catch (Exception $e) {
                 throw new InvalidArgumentException($e->getMessage(), 0, $e);
             }
         }
 
-        $this->MessageTimeStamp = $timeStamp;
+        $this->MessageTimeStamp = $MessageTimeStamp;
 
         return $this;
     }

@@ -95,14 +95,14 @@ class GenerateShippingResponse extends AbstractEntity
     /**
      * GenerateShippingResponse constructor.
      *
-     * @param MergedLabel[]|null      $mergedLabels
-     * @param ResponseShipment[]|null $responseShipments
+     * @param MergedLabel[]|null      $MergedLabels
+     * @param ResponseShipment[]|null $ReponseShipments
      */
-    public function __construct(array $mergedLabels = null, array $responseShipments = null)
+    public function __construct(array $MergedLabels = null, array $ReponseShipments = null)
     {
         parent::__construct();
 
-        $this->setMergedLabels($mergedLabels);
-        $this->setResponseShipments($responseShipments);
+        $this->setMergedLabels($MergedLabels);
+        $this->setResponseShipments($ReponseShipments);
     }
 }

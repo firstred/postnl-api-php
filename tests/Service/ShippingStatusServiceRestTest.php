@@ -30,7 +30,9 @@ use Cache\Adapter\Void\VoidCachePool;
 use DateTimeInterface;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Entity\Dimension;
 use Firstred\PostNL\Entity\Message\Message;
+use Firstred\PostNL\Entity\ProductOption;
 use Firstred\PostNL\Entity\Request\CompleteStatus;
 use Firstred\PostNL\Entity\Request\CurrentStatus;
 use Firstred\PostNL\Entity\Request\GetSignature;
@@ -152,6 +154,8 @@ class ShippingStatusServiceRestTest extends ServiceTest
 
         $this->assertInstanceOf(CurrentStatusResponse::class, $currentStatusResponse);
         $this->assertInstanceOf(CurrentStatusResponseShipment::class, $currentStatusResponse->getShipments()[0]);
+        $this->assertInstanceOf(Dimension::class, $currentStatusResponse->getShipments()[0]->getDimension());
+        $this->assertInstanceOf(DateTimeInterface::class, $currentStatusResponse->getShipments()[0]->getStatus()->getTimeStamp());
         $this->assertNotTrue(static::containsStdClass($currentStatusResponse));
     }
 
@@ -235,7 +239,15 @@ class ShippingStatusServiceRestTest extends ServiceTest
         $this->assertInstanceOf(CompleteStatusResponse::class, $completeStatusResponse);
         $this->assertInstanceOf(Address::class, $completeStatusResponse->getShipments()[0]->getAddresses()[0]);
         $this->assertNull($completeStatusResponse->getShipments()[0]->getAmounts());
+        if (is_array($completeStatusResponse->getShipments()[0]->getProductOptions())) {
+            $this->assertInstanceOf(ProductOption::class, $completeStatusResponse->getShipments()[0]->getProductOptions()[0]);
+        } else {
+            $this->assertNull($completeStatusResponse->getShipments()[0]->getProductOptions());
+        }
         $this->assertInstanceOf(CompleteStatusResponseEvent::class, $completeStatusResponse->getShipments()[0]->getEvents()[0]);
+        $this->assertInstanceOf(DateTimeInterface::class, $completeStatusResponse->getShipments()[0]->getEvents()[0]->getTimeStamp());
+        $this->assertInstanceOf(DateTimeInterface::class, $completeStatusResponse->getShipments()[0]->getExpectation()->getETAFrom());
+        $this->assertInstanceOf(DateTimeInterface::class, $completeStatusResponse->getShipments()[0]->getExpectation()->getETATo());
         $this->assertEquals('01B', $completeStatusResponse->getShipments()[0]->getEvents()[0]->getCode());
         $this->assertNull($completeStatusResponse->getShipments()[0]->getGroups());
         $this->assertInstanceOf(Customer::class, $completeStatusResponse->getShipments()[0]->getCustomer());
@@ -343,6 +355,7 @@ class ShippingStatusServiceRestTest extends ServiceTest
         return [
             [PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/shippingstatus/completestatus.http'))],
             [PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/shippingstatus/completestatus2.http'))],
+            [PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/shippingstatus/completestatus3.http'))],
         ];
     }
 }

@@ -42,11 +42,11 @@ use Firstred\PostNL\Service\TimeframeService;
  * @method string|null getCurrentOldStatusCode()
  * @method string|null getCurrentOldStatusDescription()
  * @method string|null getCurrentOldStatusTimeStamp()
- * @method OldStatus   setCurrentPhaseCode(string|null $code)
- * @method OldStatus   setCurrentPhaseDescription(string|null $desc)
- * @method OldStatus   setCurrentOldStatusCode(string|null $code)
- * @method OldStatus   setCurrentOldStatusDescription(string|null $desc)
- * @method OldStatus   setCurrentOldStatusTimeStamp(string|null $dateTime)
+ * @method OldStatus   setCurrentPhaseCode(string|null $CurrentPhaseCode)
+ * @method OldStatus   setCurrentPhaseDescription(string|null $CurrentPhaseDescription)
+ * @method OldStatus   setCurrentOldStatusCode(string|null $CurrentOldStatusCode)
+ * @method OldStatus   setCurrentOldStatusDescription(string|null $CurrentOldStatusDescription)
+ * @method OldStatus   setCurrentOldStatusTimeStamp(string|null $CurrentOldStatusTimeStamp)
  *
  * @since 1.0.0
  */
@@ -118,25 +118,25 @@ class OldStatus extends AbstractEntity
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string|null $phaseCode
-     * @param string|null $phaseDesc
+     * @param string|null $PhaseCode
+     * @param string|null $PhaseDescription
      * @param string|null $OldStatusCode
-     * @param string|null $OldStatusDesc
-     * @param string|null $timeStamp
+     * @param string|null $OldStatusDescription
+     * @param string|null $TimeStamp
      */
     public function __construct(
-        $phaseCode = null,
-        $phaseDesc = null,
+        $PhaseCode = null,
+        $PhaseDescription = null,
         $OldStatusCode = null,
-        $OldStatusDesc = null,
-        $timeStamp = null
+        $OldStatusDescription = null,
+        $TimeStamp = null
     ) {
         parent::__construct();
 
-        $this->setCurrentPhaseCode($phaseCode);
-        $this->setCurrentPhaseDescription($phaseDesc);
+        $this->setCurrentPhaseCode($PhaseCode);
+        $this->setCurrentPhaseDescription($PhaseDescription);
         $this->setCurrentOldStatusCode($OldStatusCode);
-        $this->setCurrentOldStatusDescription($OldStatusDesc);
-        $this->setCurrentOldStatusTimeStamp($timeStamp);
+        $this->setCurrentOldStatusDescription($OldStatusDescription);
+        $this->setCurrentOldStatusTimeStamp($TimeStamp);
     }
 }

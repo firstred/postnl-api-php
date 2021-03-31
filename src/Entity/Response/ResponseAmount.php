@@ -46,14 +46,16 @@ use Firstred\PostNL\Service\TimeframeService;
  * @method string|null    getReference()
  * @method string|null    getTransactionNumber()
  * @method string|null    getValue()
- * @method ResponseAmount setAccountName(string|null $accountName = null)
+ * @method string|null    getVerzekerdBedrag()
+ * @method ResponseAmount setAccountName(string|null $AccountName = null)
  * @method ResponseAmount setResponseAmountType(string|null $ResponseAmountType = null)
- * @method ResponseAmount setBIC(string|null $bic = null)
- * @method ResponseAmount setCurrency(string|null $currency = null)
- * @method ResponseAmount setIBAN(string|null $iban = null)
- * @method ResponseAmount setReference(string|null $reference = null)
- * @method ResponseAmount setTransactionNumber(string|null $transactionNr = null)
- * @method ResponseAmount setValue(string|null $value = null)
+ * @method ResponseAmount setBIC(string|null $BIC = null)
+ * @method ResponseAmount setCurrency(string|null $Currency = null)
+ * @method ResponseAmount setIBAN(string|null $IBAN = null)
+ * @method ResponseAmount setReference(string|null $Reference = null)
+ * @method ResponseAmount setTransactionNumber(string|null $TransactionNumber = null)
+ * @method ResponseAmount setValue(string|null $Value = null)
+ * @method ResponseAmount setVerzekerdBedrag(string|null $Value = null)
  *
  * @since 1.0.0
  */
@@ -70,6 +72,7 @@ class ResponseAmount extends AbstractEntity
             'Reference'          => BarcodeService::DOMAIN_NAMESPACE,
             'TransactionNumber'  => BarcodeService::DOMAIN_NAMESPACE,
             'Value'              => BarcodeService::DOMAIN_NAMESPACE,
+            'VerzekerdBedrag'    => BarcodeService::DOMAIN_NAMESPACE,
         ],
         'Confirming' => [
             'AccountName'        => ConfirmingService::DOMAIN_NAMESPACE,
@@ -80,6 +83,7 @@ class ResponseAmount extends AbstractEntity
             'Reference'          => ConfirmingService::DOMAIN_NAMESPACE,
             'TransactionNumber'  => ConfirmingService::DOMAIN_NAMESPACE,
             'Value'              => ConfirmingService::DOMAIN_NAMESPACE,
+            'VerzekerdBedrag'    => ConfirmingService::DOMAIN_NAMESPACE,
         ],
         'Labelling' => [
             'AccountName'        => LabellingService::DOMAIN_NAMESPACE,
@@ -90,6 +94,7 @@ class ResponseAmount extends AbstractEntity
             'Reference'          => LabellingService::DOMAIN_NAMESPACE,
             'TransactionNumber'  => LabellingService::DOMAIN_NAMESPACE,
             'Value'              => LabellingService::DOMAIN_NAMESPACE,
+            'VerzekerdBedrag'    => LabellingService::DOMAIN_NAMESPACE,
         ],
         'ShippingStatus' => [
             'AccountName'        => ShippingStatusService::DOMAIN_NAMESPACE,
@@ -100,6 +105,7 @@ class ResponseAmount extends AbstractEntity
             'Reference'          => ShippingStatusService::DOMAIN_NAMESPACE,
             'TransactionNumber'  => ShippingStatusService::DOMAIN_NAMESPACE,
             'Value'              => ShippingStatusService::DOMAIN_NAMESPACE,
+            'VerzekerdBedrag'    => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate' => [
             'AccountName'        => DeliveryDateService::DOMAIN_NAMESPACE,
@@ -110,6 +116,7 @@ class ResponseAmount extends AbstractEntity
             'Reference'          => DeliveryDateService::DOMAIN_NAMESPACE,
             'TransactionNumber'  => DeliveryDateService::DOMAIN_NAMESPACE,
             'Value'              => DeliveryDateService::DOMAIN_NAMESPACE,
+            'VerzekerdBedrag'    => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
         'Location' => [
             'AccountName'        => LocationService::DOMAIN_NAMESPACE,
@@ -120,6 +127,7 @@ class ResponseAmount extends AbstractEntity
             'Reference'          => LocationService::DOMAIN_NAMESPACE,
             'TransactionNumber'  => LocationService::DOMAIN_NAMESPACE,
             'Value'              => LocationService::DOMAIN_NAMESPACE,
+            'VerzekerdBedrag'    => LocationService::DOMAIN_NAMESPACE,
         ],
         'Timeframe' => [
             'AccountName'        => TimeframeService::DOMAIN_NAMESPACE,
@@ -130,6 +138,7 @@ class ResponseAmount extends AbstractEntity
             'Reference'          => TimeframeService::DOMAIN_NAMESPACE,
             'TransactionNumber'  => TimeframeService::DOMAIN_NAMESPACE,
             'Value'              => TimeframeService::DOMAIN_NAMESPACE,
+            'VerzekerdBedrag'    => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
@@ -149,37 +158,42 @@ class ResponseAmount extends AbstractEntity
     protected $TransactionNumber;
     /** @var string|null */
     protected $Value;
+    /** @var string|null */
+    protected $VerzekerdBedrag;
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string|null $accountName
-     * @param string|null $responseAmount
-     * @param string|null $bic
-     * @param string|null $currency
-     * @param string|null $iban
-     * @param string|null $reference
-     * @param string|null $transactionNumber
-     * @param string|null $value
+     * @param string|null $AccountName
+     * @param string|null $ResponseAmount
+     * @param string|null $BIC
+     * @param string|null $Currency
+     * @param string|null $IBAN
+     * @param string|null $Reference
+     * @param string|null $TransactionNumber
+     * @param string|null $Value
+     * @param string|null $VerzekerdBedrag
      */
     public function __construct(
-        $accountName = null,
-        $responseAmount = null,
-        $bic = null,
-        $currency = null,
-        $iban = null,
-        $reference = null,
-        $transactionNumber = null,
-        $value = null
+        $AccountName = null,
+        $ResponseAmount = null,
+        $BIC = null,
+        $Currency = null,
+        $IBAN = null,
+        $Reference = null,
+        $TransactionNumber = null,
+        $Value = null,
+        $VerzekerdBedrag = null
     ) {
         parent::__construct();
 
-        $this->setAccountName($accountName);
-        $this->setResponseAmountType($responseAmount);
-        $this->setBIC($bic);
-        $this->setCurrency($currency);
-        $this->setIBAN($iban);
-        $this->setReference($reference);
-        $this->setTransactionNumber($transactionNumber);
-        $this->setValue($value);
+        $this->setAccountName($AccountName);
+        $this->setResponseAmountType($ResponseAmount);
+        $this->setBIC($BIC);
+        $this->setCurrency($Currency);
+        $this->setIBAN($IBAN);
+        $this->setReference($Reference);
+        $this->setTransactionNumber($TransactionNumber);
+        $this->setValue($Value);
+        $this->setVerzekerdBedrag($VerzekerdBedrag);
     }
 }

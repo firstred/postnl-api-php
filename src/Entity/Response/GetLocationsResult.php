@@ -40,7 +40,7 @@ use Firstred\PostNL\Service\TimeframeService;
  * Class GetLocationsResult.
  *
  * @method ResponseLocation[]|null getResponseLocation()
- * @method GetLocationsResult      setResponseLocation(ResponseLocation[]|null $location = null)
+ * @method GetLocationsResult      setResponseLocation(ResponseLocation[]|null $ResponseLocation = null)
  *
  * @since 1.0.0
  */
@@ -82,13 +82,13 @@ class GetLocationsResult extends AbstractEntity
     /**
      * GetLocationsResult constructor.
      *
-     * @param ResponseLocation[]|null $locations
+     * @param ResponseLocation[]|null $ResponseLocation
      */
-    public function __construct(array $locations = null)
+    public function __construct(array $ResponseLocation = null)
     {
         parent::__construct();
 
-        $this->setResponseLocation($locations);
+        $this->setResponseLocation($ResponseLocation);
     }
 
     /**

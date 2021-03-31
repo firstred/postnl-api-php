@@ -48,7 +48,7 @@ use function is_array;
  *
  * @method DateTimeInterface|null  getDeliveryDate()
  * @method string[]|null           getOptions()
- * @method GetDeliveryDateResponse setOptions(string[]|null $options = null)
+ * @method GetDeliveryDateResponse setOptions(string[]|null $Options = null)
  *
  * @since 1.0.0
  */
@@ -99,21 +99,21 @@ class GetDeliveryDateResponse extends AbstractEntity
     /**
      * GetDeliveryDateResponse constructor.
      *
-     * @param string|DateTimeInterface|null $date
-     * @param string[]|null                 $options
+     * @param string|DateTimeInterface|null $DeliveryDate
+     * @param string[]|null                 $Options
      *
      * @throws PostNLInvalidArgumentException
      */
-    public function __construct($date = null, array $options = null)
+    public function __construct($DeliveryDate = null, array $Options = null)
     {
         parent::__construct();
 
-        $this->setDeliveryDate($date);
-        $this->setOptions($options);
+        $this->setDeliveryDate($DeliveryDate);
+        $this->setOptions($Options);
     }
 
     /**
-     * @param DateTimeInterface|string|null $deliveryDate
+     * @param DateTimeInterface|string|null $DeliveryDate
      *
      * @return static
      *
@@ -121,17 +121,17 @@ class GetDeliveryDateResponse extends AbstractEntity
      *
      * @since 1.2.0
      */
-    public function setDeliveryDate($deliveryDate = null)
+    public function setDeliveryDate($DeliveryDate = null)
     {
-        if (is_string($deliveryDate)) {
+        if (is_string($DeliveryDate)) {
             try {
-                $deliveryDate = new DateTimeImmutable($deliveryDate);
+                $DeliveryDate = new DateTimeImmutable($DeliveryDate);
             } catch (Exception $e) {
                 throw new PostNLInvalidArgumentException($e->getMessage(), 0, $e);
             }
         }
 
-        $this->DeliveryDate = $deliveryDate;
+        $this->DeliveryDate = $DeliveryDate;
 
         return $this;
     }
@@ -172,7 +172,7 @@ class GetDeliveryDateResponse extends AbstractEntity
     /**
      * @param stdClass $json
      *
-     * @return mixed|object|stdClass|GetDeliveryDateResponse|null
+     * @return GetDeliveryDateResponse|object|stdClass|null
      *
      * @throws ReflectionException
      * @throws PostNLInvalidArgumentException

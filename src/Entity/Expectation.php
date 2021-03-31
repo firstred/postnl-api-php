@@ -26,6 +26,10 @@
 
 namespace Firstred\PostNL\Entity;
 
+use DateTimeImmutable;
+use DateTimeInterface;
+use Exception;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
@@ -33,14 +37,13 @@ use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
+use function is_string;
 
 /**
  * Class Expectation.
  *
- * @method string|null getETAFrom()
- * @method string|null getETATo()
- * @method Expectation setETAFrom(string|null $dateTime = null)
- * @method Expectation setETATo(string|null $dateTime = null)
+ * @method DateTimeInterface|null getETAFrom()
+ * @method DateTimeInterface|null getETATo()
  *
  * @since 1.0.0
  */
@@ -78,21 +81,71 @@ class Expectation extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string|null */
+    /** @var DateTimeInterface|null */
     protected $ETAFrom;
-    /** @var string|null */
+    /** @var DateTimeInterface|null */
     protected $ETATo;
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string $from
-     * @param string $to
+     * @param DateTimeInterface|string|null $ETAFrom
+     * @param DateTimeInterface|string|null $ETATo
+     *
+     * @throws InvalidArgumentException
      */
-    public function __construct($from = null, $to = null)
+    public function __construct($ETAFrom = null, $ETATo = null)
     {
         parent::__construct();
 
-        $this->setETAFrom($from);
-        $this->setETATo($to);
+        $this->setETAFrom($ETAFrom);
+        $this->setETATo($ETATo);
+    }
+
+    /**
+     * @param DateTimeInterface|string|null $ETAFrom
+     *
+     * @return static
+     *
+     * @throws InvalidArgumentException
+     *
+     * @since 1.2.0
+     */
+    public function setETAFrom($ETAFrom = null)
+    {
+        if (is_string($ETAFrom)) {
+            try {
+                $ETAFrom = new DateTimeImmutable($ETAFrom);
+            } catch (Exception $e) {
+                throw new InvalidArgumentException($e->getMessage(),  0, $e);
+            }
+        }
+
+        $this->ETAFrom = $ETAFrom;
+
+        return $this;
+    }
+
+    /**
+     * @param DateTimeInterface|string|null $ETATo
+     *
+     * @return static
+     *
+     * @throws InvalidArgumentException
+     *
+     * @since 1.2.0
+     */
+    public function setETATo($ETATo = null)
+    {
+        if (is_string($ETATo)) {
+            try {
+                $ETATo = new DateTimeImmutable($ETATo);
+            } catch (Exception $e) {
+                throw new InvalidArgumentException($e->getMessage(), 0, $e);
+            }
+        }
+
+        $this->ETATo = $ETATo;
+
+        return $this;
     }
 }

@@ -48,13 +48,13 @@ use Firstred\PostNL\Service\TimeframeService;
  * @method string|null    getDownPartnerLocation()
  * @method Label[]|null   getLabels()
  * @method Warning[]|null getWarnings()
- * @method MergedLabel    setBarcode(string|null $barcode = null)
- * @method MergedLabel    setProductCodeDelivery(string|null $productCodeDelivery = null)
- * @method MergedLabel    setDownPartnerBarcode(string|null $downPartnerCode = null)
- * @method MergedLabel    setDownPartnerId(string|null $downPartnerId = null)
- * @method MergedLabel    setDownPartnerLocation(string|null $downPartnerLocation = null)
- * @method MergedLabel    setLabels(Label[]|null $labels = null)
- * @method MergedLabel    setWarnings(Warning[]|null $warnings = null)
+ * @method MergedLabel    setBarcode(string|null $Barcode = null)
+ * @method MergedLabel    setProductCodeDelivery(string|null $ProductCodeDelivery = null)
+ * @method MergedLabel    setDownPartnerBarcode(string|null $DownPartnerCode = null)
+ * @method MergedLabel    setDownPartnerId(string|null $DownPartnerID = null)
+ * @method MergedLabel    setDownPartnerLocation(string|null $DownPartnerLocation = null)
+ * @method MergedLabel    setLabels(Label[]|null $Labels = null)
+ * @method MergedLabel    setWarnings(Warning[]|null $Warnings = null)
  *
  * @since 1.0.0
  */
@@ -153,31 +153,31 @@ class ResponseShipment extends AbstractEntity
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string|null    $barcode
-     * @param string|null    $productCodeDelivery
-     * @param Label[]|null   $labels
-     * @param string|null    $downPartnerBarcode
-     * @param string|null    $downPartnerId
-     * @param string|null    $downPartnerLocation
-     * @param Warning[]|null $warnings
+     * @param string|null    $Barcode
+     * @param string|null    $ProductCodeDelivery
+     * @param Label[]|null   $Labels
+     * @param string|null    $DownPartnerBarcode
+     * @param string|null    $DownPartnerID
+     * @param string|null    $DownPartnerLocation
+     * @param Warning[]|null $Warnings
      */
     public function __construct(
-        $barcode = null,
-        $productCodeDelivery = null,
-        array $labels = null,
-        $downPartnerBarcode = null,
-        $downPartnerId = null,
-        $downPartnerLocation = null,
-        $warnings = null
+        $Barcode = null,
+        $ProductCodeDelivery = null,
+        array $Labels = null,
+        $DownPartnerBarcode = null,
+        $DownPartnerID = null,
+        $DownPartnerLocation = null,
+        $Warnings = null
     ) {
         parent::__construct();
 
-        $this->setBarcode($barcode);
-        $this->setProductCodeDelivery($productCodeDelivery);
-        $this->setDownPartnerBarcode($downPartnerBarcode);
-        $this->setDownPartnerId($downPartnerId);
-        $this->setDownPartnerLocation($downPartnerLocation);
-        $this->setLabels($labels);
-        $this->setWarnings($warnings);
+        $this->setBarcode($Barcode);
+        $this->setProductCodeDelivery($ProductCodeDelivery);
+        $this->setDownPartnerBarcode($DownPartnerBarcode);
+        $this->setDownPartnerId($DownPartnerID);
+        $this->setDownPartnerLocation($DownPartnerLocation);
+        $this->setLabels($Labels);
+        $this->setWarnings($Warnings);
     }
 }

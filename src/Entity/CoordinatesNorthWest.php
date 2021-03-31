@@ -85,14 +85,14 @@ class CoordinatesNorthWest extends AbstractEntity
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string $lat
-     * @param string $long
+     * @param string $Latitude
+     * @param string $Longitude
      */
-    public function __construct($lat = null, $long = null)
+    public function __construct($Latitude = null, $Longitude = null)
     {
         parent::__construct();
 
-        $this->setLatitude($lat);
-        $this->setLongitude($long);
+        $this->setLatitude($Latitude);
+        $this->setLongitude($Longitude);
     }
 }

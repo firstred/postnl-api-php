@@ -39,7 +39,7 @@ use Firstred\PostNL\Service\TimeframeService;
  * Class GenerateBarcodeResponse.
  *
  * @method string|null             getBarcode()
- * @method GenerateBarcodeResponse setBarcode(string|null $shipments = null)
+ * @method GenerateBarcodeResponse setBarcode(string|null $Barcode = null)
  *
  * @since 1.0.0
  */
@@ -51,25 +51,25 @@ class GenerateBarcodeResponse extends AbstractEntity
      * @var array
      */
     public static $defaultProperties = [
-        'Barcode' => [
+        'Barcode'        => [
             'Barcode' => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming' => [
+        'Confirming'     => [
             'Barcode' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling' => [
+        'Labelling'      => [
             'Barcode' => LabellingService::DOMAIN_NAMESPACE,
         ],
         'ShippingStatus' => [
             'Barcode' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate' => [
+        'DeliveryDate'   => [
             'Barcode' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location' => [
+        'Location'       => [
             'Barcode' => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe' => [
+        'Timeframe'      => [
             'Barcode' => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
@@ -81,12 +81,12 @@ class GenerateBarcodeResponse extends AbstractEntity
     /**
      * GenerateBarcodeResponse constructor.
      *
-     * @param string|null $barcode
+     * @param string|null $Barcode
      */
-    public function __construct($barcode = null)
+    public function __construct($Barcode = null)
     {
         parent::__construct();
 
-        $this->setBarcode($barcode);
+        $this->setBarcode($Barcode);
     }
 }

@@ -42,10 +42,10 @@ use Firstred\PostNL\Service\TimeframeService;
  * @method string|null getGroupSequence()
  * @method string|null getGroupType()
  * @method string|null getMainBarcode()
- * @method Group       setGroupCount(string|null $groupCount = null)
- * @method Group       setGroupSequence(string|null $groupSequence = null)
- * @method Group       setGroupType(string|null $groupType = null)
- * @method Group       setMainBarcode(string|null $mainBarcode = null)
+ * @method Group       setGroupCount(string|null $GroupCount = null)
+ * @method Group       setGroupSequence(string|null $GroupSequence = null)
+ * @method Group       setGroupType(string|null $GroupType = null)
+ * @method Group       setMainBarcode(string|null $MainBarcode = null)
  *
  * @since 1.0.0
  */
@@ -138,18 +138,18 @@ class Group extends AbstractEntity
     /**
      * Group Constructor.
      *
-     * @param string|null $groupCount
-     * @param string|null $groupSequence
-     * @param string|null $groupType
-     * @param string|null $mainBarcode
+     * @param string|null $GroupCount
+     * @param string|null $GroupSequence
+     * @param string|null $GroupType
+     * @param string|null $MainBarcode
      */
-    public function __construct($groupCount = null, $groupSequence = null, $groupType = null, $mainBarcode = null)
+    public function __construct($GroupCount = null, $GroupSequence = null, $GroupType = null, $MainBarcode = null)
     {
         parent::__construct();
 
-        $this->setGroupCount($groupCount);
-        $this->setGroupSequence($groupSequence);
-        $this->setGroupType($groupType);
-        $this->setMainBarcode($mainBarcode);
+        $this->setGroupCount($GroupCount);
+        $this->setGroupSequence($GroupSequence);
+        $this->setGroupType($GroupType);
+        $this->setMainBarcode($MainBarcode);
     }
 }

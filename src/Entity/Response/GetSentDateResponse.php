@@ -45,7 +45,7 @@ use Firstred\PostNL\Service\TimeframeService;
  *
  * @method DateTimeInterface|null getSentDate()
  * @method string[]|null          getOptions()
- * @method GetSentDateResponse    setOptions(string[]|null $options = null)
+ * @method GetSentDateResponse    setOptions(string[]|null $Options = null)
  *
  * @since 1.0.0
  */
@@ -96,17 +96,17 @@ class GetSentDateResponse extends AbstractEntity
     /**
      * GetSentDateResponse constructor.
      *
-     * @param DateTimeInterface|string|null $date
-     * @param string[]|null                 $options
+     * @param DateTimeInterface|string|null $GetSentDate
+     * @param string[]|null                 $Options
      *
      * @throws InvalidArgumentException
      */
-    public function __construct($date = null, array $options = null)
+    public function __construct($GetSentDate = null, array $Options = null)
     {
         parent::__construct();
 
-        $this->setSentDate($date);
-        $this->setOptions($options);
+        $this->setSentDate($GetSentDate);
+        $this->setOptions($Options);
     }
 
     /**

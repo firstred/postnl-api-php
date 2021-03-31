@@ -48,16 +48,16 @@ use Firstred\PostNL\Service\TimeframeService;
  * @method string|null    getLicense()
  * @method string|null    getLicenseNr()
  * @method string|null    getShipmentType()
- * @method Customs        setCertificate(string|null $certificate = null)
- * @method Customs        setCertificateNr(string|null $certificateNr = null)
- * @method Customs        setContent(Content[]|null $content = null)
- * @method Customs        setCurrency(string|null $currency = null)
- * @method Customs        setHandleAsNonDeliverable(string|null $nonDeliverable = null)
- * @method Customs        setInvoice(string|null $invoice = null)
- * @method Customs        setInvoiceNr(string|null $invoiceNr = null)
- * @method Customs        setLicense(string|null $license = null)
- * @method Customs        setLicenseNr(string|null $licenseNr = null)
- * @method Customs        setShipmentType(string|null $shipmentType = null)
+ * @method Customs        setCertificate(string|null $Certificate = null)
+ * @method Customs        setCertificateNr(string|null $CertificateNr = null)
+ * @method Customs        setContent(Content[]|null $Content = null)
+ * @method Customs        setCurrency(string|null $Currency = null)
+ * @method Customs        setHandleAsNonDeliverable(string|null $HandleAsNonDeliverable = null)
+ * @method Customs        setInvoice(string|null $Invoice = null)
+ * @method Customs        setInvoiceNr(string|null $InvoiceNr = null)
+ * @method Customs        setLicense(string|null $License = null)
+ * @method Customs        setLicenseNr(string|null $LicenseNr = null)
+ * @method Customs        setShipmentType(string|null $ShipmentType = null)
  *
  * @since 1.0.0
  */
@@ -186,40 +186,40 @@ class Customs extends AbstractEntity
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string|null    $certificate
-     * @param string|null    $certificateNr
-     * @param Content[]|null $content
-     * @param string|null    $currency
-     * @param string|null    $handleAsNonDeliverable
-     * @param string|null    $invoice
-     * @param string|null    $invoiceNr
-     * @param string|null    $license
-     * @param string|null    $licenseNr
-     * @param string|null    $shipmentType
+     * @param string|null    $Certificate
+     * @param string|null    $CertificateNr
+     * @param Content[]|null $Content
+     * @param string|null    $Currency
+     * @param string|null    $HandleAsNonDeliverable
+     * @param string|null    $Invoice
+     * @param string|null    $InvoiceNr
+     * @param string|null    $License
+     * @param string|null    $LicenseNr
+     * @param string|null    $ShipmentType
      */
     public function __construct(
-        $certificate = null,
-        $certificateNr = null,
-        array $content = null,
-        $currency = null,
-        $handleAsNonDeliverable = null,
-        $invoice = null,
-        $invoiceNr = null,
-        $license = null,
-        $licenseNr = null,
-        $shipmentType = null
+        $Certificate = null,
+        $CertificateNr = null,
+        array $Content = null,
+        $Currency = null,
+        $HandleAsNonDeliverable = null,
+        $Invoice = null,
+        $InvoiceNr = null,
+        $License = null,
+        $LicenseNr = null,
+        $ShipmentType = null
     ) {
         parent::__construct();
 
-        $this->setCertificate($certificate);
-        $this->setCertificateNr($certificateNr);
-        $this->setContent($content);
-        $this->setCurrency($currency);
-        $this->setHandleAsNonDeliverable($handleAsNonDeliverable);
-        $this->setInvoice($invoice);
-        $this->setInvoiceNr($invoiceNr);
-        $this->setLicense($license);
-        $this->setLicenseNr($licenseNr);
-        $this->setShipmentType($shipmentType);
+        $this->setCertificate($Certificate);
+        $this->setCertificateNr($CertificateNr);
+        $this->setContent($Content);
+        $this->setCurrency($Currency);
+        $this->setHandleAsNonDeliverable($HandleAsNonDeliverable);
+        $this->setInvoice($Invoice);
+        $this->setInvoiceNr($InvoiceNr);
+        $this->setLicense($License);
+        $this->setLicenseNr($LicenseNr);
+        $this->setShipmentType($ShipmentType);
     }
 }

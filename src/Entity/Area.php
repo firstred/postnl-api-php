@@ -39,8 +39,8 @@ use Firstred\PostNL\Service\TimeframeService;
  *
  * @method Coordinates|null getCoordinatesNorthWest()
  * @method Coordinates|null getCoordinatesSouthEast()
- * @method Area             setCoordinatesNorthWest(Coordinates|null $NW = null)
- * @method Area             setCoordinatesSouthEast(Coordinates|null $SE = null)
+ * @method Area             setCoordinatesNorthWest(Coordinates|null $CoordinatesNorthWest = null)
+ * @method Area             setCoordinatesSouthEast(Coordinates|null $CoordinatesSouthEast = null)
  *
  * @since 1.0.0
  */
@@ -85,14 +85,14 @@ class Area extends AbstractEntity
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param Coordinates|null $NW
-     * @param Coordinates|null $SE
+     * @param Coordinates|null $CoordinatesNorthWest
+     * @param Coordinates|null $CoordinatesSouthEast
      */
-    public function __construct($NW = null, $SE = null)
+    public function __construct($CoordinatesNorthWest = null, $CoordinatesSouthEast = null)
     {
         parent::__construct();
 
-        $this->setCoordinatesNorthWest($NW);
-        $this->setCoordinatesSouthEast($SE);
+        $this->setCoordinatesNorthWest($CoordinatesNorthWest);
+        $this->setCoordinatesSouthEast($CoordinatesSouthEast);
     }
 }

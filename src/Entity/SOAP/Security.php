@@ -32,7 +32,7 @@ use Firstred\PostNL\Entity\AbstractEntity;
  * Class Security.
  *
  * @method UsernameToken getUsernameToken()
- * @method Security      setUserNameToken(UsernameToken $token)
+ * @method Security      setUserNameToken(UsernameToken $UserNameToken)
  *
  * @since 1.0.0
  */
@@ -72,12 +72,12 @@ class Security extends AbstractEntity
     /**
      * Security constructor.
      *
-     * @param UsernameToken $token
+     * @param UsernameToken $UserNameToken
      */
-    public function __construct(UsernameToken $token)
+    public function __construct(UsernameToken $UserNameToken)
     {
         parent::__construct();
 
-        $this->setUsernameToken($token);
+        $this->setUsernameToken($UserNameToken);
     }
 }

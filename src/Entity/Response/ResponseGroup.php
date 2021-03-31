@@ -42,10 +42,10 @@ use Firstred\PostNL\Service\TimeframeService;
  * @method string|null   getGroupSequence()
  * @method string|null   getGroupType()
  * @method string|null   getMainBarcode()
- * @method ResponseGroup setGroupCount(string|null $groupCount = null)
- * @method ResponseGroup setGroupSequence(string|null $groupSequence = null)
- * @method ResponseGroup setGroupType(string|null $groupType = null)
- * @method ResponseGroup setMainBarcode(string|null $mainBarcode = null)
+ * @method ResponseGroup setGroupCount(string|null $GroupCount = null)
+ * @method ResponseGroup setGroupSequence(string|null $GroupSequence = null)
+ * @method ResponseGroup setGroupType(string|null $GroupType = null)
+ * @method ResponseGroup setMainBarcode(string|null $MainBarcode = null)
  *
  * @since 1.0.0
  */
@@ -132,22 +132,22 @@ class ResponseGroup extends AbstractEntity
     /**
      * ResponseGroup Constructor.
      *
-     * @param string|null $groupCount
-     * @param string|null $groupSequence
-     * @param string|null $groupType
-     * @param string|null $mainBarcode
+     * @param string|null $GroupCount
+     * @param string|null $GroupSequence
+     * @param string|null $GroupType
+     * @param string|null $MainBarcode
      */
     public function __construct(
-        $groupCount = null,
-        $groupSequence = null,
-        $groupType = null,
-        $mainBarcode = null
+        $GroupCount = null,
+        $GroupSequence = null,
+        $GroupType = null,
+        $MainBarcode = null
     ) {
         parent::__construct();
 
-        $this->setGroupCount($groupCount);
-        $this->setGroupSequence($groupSequence);
-        $this->setGroupType($groupType);
-        $this->setMainBarcode($mainBarcode);
+        $this->setGroupCount($GroupCount);
+        $this->setGroupSequence($GroupSequence);
+        $this->setGroupType($GroupType);
+        $this->setMainBarcode($MainBarcode);
     }
 }

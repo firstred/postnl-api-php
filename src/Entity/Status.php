@@ -123,32 +123,32 @@ class Status extends AbstractEntity
     /**
      * Status constructor.
      *
-     * @param string|null                   $phaseCode
-     * @param string|null                   $phaseDesc
-     * @param string|null                   $statusCode
-     * @param string|null                   $statusDesc
-     * @param string|DateTimeInterface|null $timeStamp
+     * @param string|null                   $PhaseCode
+     * @param string|null                   $PhaseDescription
+     * @param string|null                   $StatusCode
+     * @param string|null                   $StatusDescription
+     * @param string|DateTimeInterface|null $TimeStamp
      *
      * @throws InvalidArgumentException
      */
     public function __construct(
-        $phaseCode = null,
-        $phaseDesc = null,
-        $statusCode = null,
-        $statusDesc = null,
-        $timeStamp = null
+        $PhaseCode = null,
+        $PhaseDescription = null,
+        $StatusCode = null,
+        $StatusDescription = null,
+        $TimeStamp = null
     ) {
         parent::__construct();
 
-        $this->setPhaseCode($phaseCode);
-        $this->setPhaseDescription($phaseDesc);
-        $this->setStatusCode($statusCode);
-        $this->setStatusDescription($statusDesc);
-        $this->setTimeStamp($timeStamp);
+        $this->setPhaseCode($PhaseCode);
+        $this->setPhaseDescription($PhaseDescription);
+        $this->setStatusCode($StatusCode);
+        $this->setStatusDescription($StatusDescription);
+        $this->setTimeStamp($TimeStamp);
     }
 
     /**
-     * @param string|DateTimeInterface|null $timeStamp
+     * @param string|DateTimeInterface|null $TimeStamp
      *
      * @return static
      *
@@ -156,17 +156,17 @@ class Status extends AbstractEntity
      *
      * @since 1.2.0
      */
-    public function setTimeStamp($timeStamp = null)
+    public function setTimeStamp($TimeStamp = null)
     {
-        if (is_string($timeStamp)) {
+        if (is_string($TimeStamp)) {
             try {
-                $timeStamp = new DateTimeImmutable($timeStamp);
+                $TimeStamp = new DateTimeImmutable($TimeStamp);
             } catch (Exception $e) {
                 throw new InvalidArgumentException($e->getMessage(), 0, $e);
             }
         }
 
-        $this->TimeStamp = $timeStamp;
+        $this->TimeStamp = $TimeStamp;
 
         return $this;
     }

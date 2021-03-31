@@ -45,9 +45,9 @@ use Firstred\PostNL\Service\TimeframeService;
  * @method string|null         getCountrycode()
  * @method Location|null       getLocation()
  * @method Message|null        getMessage()
- * @method GetNearestLocations setCountrycode(string|null $countrycode = null)
- * @method GetNearestLocations setLocation(Location|null $location = null)
- * @method GetNearestLocations setMessage(Message|null $message = null)
+ * @method GetNearestLocations setCountrycode(string|null $Countrycode = null)
+ * @method GetNearestLocations setLocation(Location|null $Location = null)
+ * @method GetNearestLocations setMessage(Message|null $Message = null)
  *
  * @since 1.0.0
  */
@@ -108,18 +108,18 @@ class GetNearestLocations extends AbstractEntity
      * GetNearestLocations constructor.
      *
      * @param string|null   $Countrycode
-     * @param Location|null $location
-     * @param Message|null  $message
+     * @param Location|null $Location
+     * @param Message|null  $Message
      */
     public function __construct(
         $Countrycode = null,
-        Location $location = null,
-        Message $message = null
+        Location $Location = null,
+        Message $Message = null
     ) {
         parent::__construct();
 
         $this->setCountrycode($Countrycode);
-        $this->setLocation($location);
-        $this->setMessage($message ?: new Message());
+        $this->setLocation($Location);
+        $this->setMessage($Message ?: new Message());
     }
 }

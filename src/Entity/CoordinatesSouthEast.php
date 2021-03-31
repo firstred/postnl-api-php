@@ -85,14 +85,14 @@ class CoordinatesSouthEast extends AbstractEntity
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string|null $lat
-     * @param string|null $long
+     * @param string|null $Latitude
+     * @param string|null $Longitude
      */
-    public function __construct($lat = null, $long = null)
+    public function __construct($Latitude = null, $Longitude = null)
     {
         parent::__construct();
 
-        $this->setLatitude($lat);
-        $this->setLongitude($long);
+        $this->setLatitude($Latitude);
+        $this->setLongitude($Longitude);
     }
 }

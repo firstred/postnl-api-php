@@ -43,11 +43,11 @@ use Firstred\PostNL\Service\TimeframeService;
  * @method string|null getVolume()
  * @method string|null getWeight()
  * @method string|null getWidth()
- * @method Dimension   setHeight(string|null $height = null)
- * @method Dimension   setLength(string|null $length = null)
- * @method Dimension   setVolume(string|null $volume = null)
- * @method Dimension   setWeight(string|null $weight = null)
- * @method Dimension   setWidth(string|null $width = null)
+ * @method Dimension   setHeight(string|null $Height = null)
+ * @method Dimension   setLength(string|null $Length = null)
+ * @method Dimension   setVolume(string|null $Volume = null)
+ * @method Dimension   setWeight(string|null $Weight = null)
+ * @method Dimension   setWidth(string|null $Width = null)
  *
  * @since 1.0.0
  */
@@ -126,22 +126,22 @@ class Dimension extends AbstractEntity
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string $weight
-     * @param string $height
-     * @param string $length
-     * @param string $volume
-     * @param string $width
+     * @param string|null $Weight
+     * @param string|null $Height
+     * @param string|null $Length
+     * @param string|null $Volume
+     * @param string|null $Width
      */
-    public function __construct($weight = null, $height = null, $length = null, $volume = null, $width = null)
+    public function __construct($Weight = null, $Height = null, $Length = null, $Volume = null, $Width = null)
     {
         parent::__construct();
 
-        $this->setWeight($weight);
+        $this->setWeight($Weight);
 
         // Optional parameters.
-        $this->setHeight($height);
-        $this->setLength($length);
-        $this->setVolume($volume);
-        $this->setWidth($width);
+        $this->setHeight($Height);
+        $this->setLength($Length);
+        $this->setVolume($Volume);
+        $this->setWidth($Width);
     }
 }

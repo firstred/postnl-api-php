@@ -48,13 +48,15 @@ use Firstred\PostNL\Service\TimeframeService;
  * @method string|null getReference()
  * @method string|null getTransactionNumber()
  * @method string|null getValue()
- * @method Amount      setAccountName(string|null $accountName = null)
- * @method Amount      setBIC(string|null $bic = null)
- * @method Amount      setCurrency(string|null $currency = null)
- * @method Amount      setIBAN(string|null $iban = null)
- * @method Amount      setReference(string|null $reference = null)
- * @method Amount      setTransactionNumber(string|null $transactionNr = null)
- * @method Amount      setValue(string|null $value = null)
+ * @method string|null getVerzekerdBedrag()
+ * @method Amount      setAccountName(string|null $AccountName = null)
+ * @method Amount      setBIC(string|null $BIC = null)
+ * @method Amount      setCurrency(string|null $Currency = null)
+ * @method Amount      setIBAN(string|null $IBAN = null)
+ * @method Amount      setReference(string|null $Reference = null)
+ * @method Amount      setTransactionNumber(string|null $TransactionNumber = null)
+ * @method Amount      setValue(string|null $Value = null)
+ * @method Amount      setVerzekerdBedrag(string|null $VerzekerdBedrag = null)
  *
  * @since 1.0.0
  */
@@ -71,6 +73,7 @@ class Amount extends AbstractEntity
             'Reference'         => BarcodeService::DOMAIN_NAMESPACE,
             'TransactionNumber' => BarcodeService::DOMAIN_NAMESPACE,
             'Value'             => BarcodeService::DOMAIN_NAMESPACE,
+            'VerzekerdBedrag'   => BarcodeService::DOMAIN_NAMESPACE,
         ],
         'Confirming' => [
             'AccountName'       => ConfirmingService::DOMAIN_NAMESPACE,
@@ -81,6 +84,7 @@ class Amount extends AbstractEntity
             'Reference'         => ConfirmingService::DOMAIN_NAMESPACE,
             'TransactionNumber' => ConfirmingService::DOMAIN_NAMESPACE,
             'Value'             => ConfirmingService::DOMAIN_NAMESPACE,
+            'VerzekerdBedrag'   => ConfirmingService::DOMAIN_NAMESPACE,
         ],
         'Labelling' => [
             'AccountName'       => LabellingService::DOMAIN_NAMESPACE,
@@ -91,6 +95,7 @@ class Amount extends AbstractEntity
             'Reference'         => LabellingService::DOMAIN_NAMESPACE,
             'TransactionNumber' => LabellingService::DOMAIN_NAMESPACE,
             'Value'             => LabellingService::DOMAIN_NAMESPACE,
+            'VerzekerdBedrag'   => LabellingService::DOMAIN_NAMESPACE,
         ],
         'ShippingStatus' => [
             'AccountName'       => ShippingStatusService::DOMAIN_NAMESPACE,
@@ -101,6 +106,7 @@ class Amount extends AbstractEntity
             'Reference'         => ShippingStatusService::DOMAIN_NAMESPACE,
             'TransactionNumber' => ShippingStatusService::DOMAIN_NAMESPACE,
             'Value'             => ShippingStatusService::DOMAIN_NAMESPACE,
+            'VerzekerdBedrag'   => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate' => [
             'AccountName'       => DeliveryDateService::DOMAIN_NAMESPACE,
@@ -111,6 +117,7 @@ class Amount extends AbstractEntity
             'Reference'         => DeliveryDateService::DOMAIN_NAMESPACE,
             'TransactionNumber' => DeliveryDateService::DOMAIN_NAMESPACE,
             'Value'             => DeliveryDateService::DOMAIN_NAMESPACE,
+            'VerzekerdBedrag'   => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
         'Location' => [
             'AccountName'       => LocationService::DOMAIN_NAMESPACE,
@@ -121,6 +128,7 @@ class Amount extends AbstractEntity
             'Reference'         => LocationService::DOMAIN_NAMESPACE,
             'TransactionNumber' => LocationService::DOMAIN_NAMESPACE,
             'Value'             => LocationService::DOMAIN_NAMESPACE,
+            'VerzekerdBedrag'   => LocationService::DOMAIN_NAMESPACE,
         ],
         'Timeframe' => [
             'AccountName'       => TimeframeService::DOMAIN_NAMESPACE,
@@ -131,6 +139,7 @@ class Amount extends AbstractEntity
             'Reference'         => TimeframeService::DOMAIN_NAMESPACE,
             'TransactionNumber' => TimeframeService::DOMAIN_NAMESPACE,
             'Value'             => TimeframeService::DOMAIN_NAMESPACE,
+            'VerzekerdBedrag'   => TimeframeService::DOMAIN_NAMESPACE,
         ],
         'Shipping' => [
             'AccountName'       => ShippingService::DOMAIN_NAMESPACE,
@@ -141,6 +150,7 @@ class Amount extends AbstractEntity
             'Reference'         => ShippingService::DOMAIN_NAMESPACE,
             'TransactionNumber' => ShippingService::DOMAIN_NAMESPACE,
             'Value'             => ShippingService::DOMAIN_NAMESPACE,
+            'VerzekerdBedrag'   => ShippingService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
@@ -160,53 +170,57 @@ class Amount extends AbstractEntity
     protected $TransactionNumber;
     /** @var string|null */
     protected $Value;
+    /** @var string|null */
+    protected $VerzekerdBedrag;
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string|null $accountName
-     * @param string|null $amountType
-     * @param string|null $bic
-     * @param string|null $currency
-     * @param string|null $iban
-     * @param string|null $reference
-     * @param string|null $transactionNumber
-     * @param string|null $value
+     * @param string|null $AccountName
+     * @param string|null $AmountType
+     * @param string|null $BIC
+     * @param string|null $Currency
+     * @param string|null $IBAN
+     * @param string|null $Reference
+     * @param string|null $TransactionNumber
+     * @param string|null $Value
      */
     public function __construct(
-        $accountName = null,
-        $amountType = null,
-        $bic = null,
-        $currency = null,
-        $iban = null,
-        $reference = null,
-        $transactionNumber = null,
-        $value = null
+        $AccountName = null,
+        $AmountType = null,
+        $BIC = null,
+        $Currency = null,
+        $IBAN = null,
+        $Reference = null,
+        $TransactionNumber = null,
+        $Value = null,
+        $VerzekerdBedrag = null
     ) {
         parent::__construct();
 
-        $this->setAccountName($accountName);
-        $this->setAmountType($amountType);
-        $this->setBIC($bic);
-        $this->setCurrency($currency);
-        $this->setIBAN($iban);
-        $this->setReference($reference);
-        $this->setTransactionNumber($transactionNumber);
-        $this->setValue($value);
+        $this->setAccountName($AccountName);
+        $this->setAmountType($AmountType);
+        $this->setBIC($BIC);
+        $this->setCurrency($Currency);
+        $this->setIBAN($IBAN);
+        $this->setReference($Reference);
+        $this->setTransactionNumber($TransactionNumber);
+        $this->setValue($Value);
+        $this->setVerzekerdBedrag($VerzekerdBedrag);
     }
 
     /**
      * Set amount type.
      *
-     * @param string|int|null $type
+     * @param string|int|null $AmountType
      *
      * @return static
      */
-    public function setAmountType($type = null)
+    public function setAmountType($AmountType = null)
     {
-        if (is_null($type)) {
+        if (is_null($AmountType)) {
             $this->AmountType = null;
         } else {
-            $this->AmountType = str_pad($type, 2, '0', STR_PAD_LEFT);
+            $this->AmountType = str_pad($AmountType, 2, '0', STR_PAD_LEFT);
         }
 
         return $this;

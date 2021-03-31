@@ -34,8 +34,8 @@ use Firstred\PostNL\Entity\AbstractEntity;
  *
  * @method string|null   getUsername()
  * @method string|null   getPassword()
- * @method UsernameToken setUsername(string|null $username = null)
- * @method UsernameToken setPassword(string|null $password = null)
+ * @method UsernameToken setUsername(string|null $Username = null)
+ * @method UsernameToken setPassword(string|null $Password = null)
  *
  * @since 1.0.0
  */
@@ -82,15 +82,15 @@ class UsernameToken extends AbstractEntity
     /**
      * UsernameToken constructor.
      *
-     * @param string|null $username
-     * @param string|null $password Plaintext password
+     * @param string|null $Username
+     * @param string|null $Password Plaintext password
      */
-    public function __construct($username, $password)
+    public function __construct($Username, $Password)
     {
         parent::__construct();
 
-        $this->setUsername($username);
-        $this->setPassword($password);
+        $this->setUsername($Username);
+        $this->setPassword($Password);
     }
 
     /**

@@ -61,23 +61,23 @@ use Firstred\PostNL\Service\TimeframeService;
  * @method string|null               getRetailNetworkID()
  * @method string|null               getDownPartnerID()
  * @method string|null               getDownPartnerLocation()
- * @method Location                  setCoordinates(Coordinates|null $coordinates = null)
- * @method Location                  setCoordinatesNorthWest(CoordinatesNorthWest|null $coordinates = null)
- * @method Location                  setCoordinatesSouthEast(CoordinatesSouthEast|null $coordinates = null)
- * @method Location                  setCity(string|null $city = null)
- * @method Location                  setStreet(string|null $street = null)
- * @method Location                  setHouseNr(string|null $houseNr = null)
- * @method Location                  setHouseNrExt(string|null $houseNrExt = null)
- * @method Location                  setAllowSundaySorting(string|null $sundaySorting = null)
- * @method Location                  setDeliveryOptions(string[]|null $deliveryOptions = null)
- * @method Location                  setOpeningTime(string|null $openingTime = null)
- * @method Location                  setOptions(string[]|null $options = null)
- * @method Location                  setLocationCode(string|null $code = null)
- * @method Location                  setSaleschannel(string|null $channel = null)
- * @method Location                  setTerminalType(string|null $type = null)
- * @method Location                  setRetailNetworkID(string|null $id = null)
- * @method Location                  setDownPartnerID(string|null $id = null)
- * @method Location                  setDownPartnerLocation(string|null $location = null)
+ * @method Location                  setCoordinates(Coordinates|null $Coordinates = null)
+ * @method Location                  setCoordinatesNorthWest(CoordinatesNorthWest|null $CoordinatesNorthWest = null)
+ * @method Location                  setCoordinatesSouthEast(CoordinatesSouthEast|null $coordinatesSouthEast = null)
+ * @method Location                  setCity(string|null $City = null)
+ * @method Location                  setStreet(string|null $Street = null)
+ * @method Location                  setHouseNr(string|null $HouseNr = null)
+ * @method Location                  setHouseNrExt(string|null $HouseNrExt = null)
+ * @method Location                  setAllowSundaySorting(string|null $AllowSundaySorting = null)
+ * @method Location                  setDeliveryOptions(string[]|null $DeliveryOptions = null)
+ * @method Location                  setOpeningTime(string|null $OpeningTime = null)
+ * @method Location                  setOptions(string[]|null $Options = null)
+ * @method Location                  setLocationCode(string|null $LocationCode = null)
+ * @method Location                  setSaleschannel(string|null $Saleschannel = null)
+ * @method Location                  setTerminalType(string|null $TerminalType = null)
+ * @method Location                  setRetailNetworkID(string|null $RetailNetworkID = null)
+ * @method Location                  setDownPartnerID(string|null $DownPartnerID = null)
+ * @method Location                  setDownPartnerLocation(string|null $DownPartnerLocation = null)
  *
  * @since 1.0.0
  */
@@ -275,75 +275,75 @@ class Location extends AbstractEntity
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string|null                   $zipcode
-     * @param string|null                   $allowSundaySorting
-     * @param string|DateTimeInterface|null $deliveryDate
-     * @param array|null                    $deliveryOptions
-     * @param array|null                    $options
-     * @param Coordinates|null              $coordinates
-     * @param CoordinatesNorthWest|null     $coordinatesNW
-     * @param CoordinatesSouthEast|null     $coordinatesSE
-     * @param string|null                   $city
-     * @param string|null                   $street
-     * @param string|null                   $houseNr
-     * @param string|null                   $houseNrExt
-     * @param string|null                   $locationCode
-     * @param string|null                   $saleschannel
-     * @param string|null                   $terminalType
-     * @param string|null                   $retailNetworkId
-     * @param string|null                   $downPartnerID
-     * @param string|null                   $downPartnerLocation
+     * @param string|null                   $Postalcode
+     * @param string|null                   $AllowSundaySorting
+     * @param string|DateTimeInterface|null $DeliveryDate
+     * @param array|null                    $DeliveryOptions
+     * @param array|null                    $Options
+     * @param Coordinates|null              $Coordinates
+     * @param CoordinatesNorthWest|null     $CoordinatesNorthWest
+     * @param CoordinatesSouthEast|null     $CoordinatesSouthEast
+     * @param string|null                   $City
+     * @param string|null                   $Street
+     * @param string|null                   $HouseNr
+     * @param string|null               $HouseNrExt
+     * @param string|null               $LocationCode
+     * @param string|null               $Saleschannel
+     * @param string|null               $TerminalType
+     * @param string|null               $RetailNetworkID
+     * @param string|null               $DownPartnerID
+     * @param string|null               $DownPartnerLocation
      *
      * @throws InvalidArgumentException
      */
     public function __construct(
-        $zipcode = null,
-        $allowSundaySorting = null,
-        $deliveryDate = null,
-        array $deliveryOptions = null,
-        array $options = null,
-        Coordinates $coordinates = null,
-        CoordinatesNorthWest $coordinatesNW = null,
-        CoordinatesSouthEast $coordinatesSE = null,
-        $city = null,
-        $street = null,
-        $houseNr = null,
-        $houseNrExt = null,
-        $locationCode = null,
-        $saleschannel = null,
-        $terminalType = null,
-        $retailNetworkId = null,
-        $downPartnerID = null,
-        $downPartnerLocation = null
+        $Postalcode = null,
+        $AllowSundaySorting = null,
+        $DeliveryDate = null,
+        array $DeliveryOptions = null,
+        array $Options = null,
+        Coordinates $Coordinates = null,
+        CoordinatesNorthWest $CoordinatesNorthWest = null,
+        CoordinatesSouthEast $CoordinatesSouthEast = null,
+        $City = null,
+        $Street = null,
+        $HouseNr = null,
+        $HouseNrExt = null,
+        $LocationCode = null,
+        $Saleschannel = null,
+        $TerminalType = null,
+        $RetailNetworkID = null,
+        $DownPartnerID = null,
+        $DownPartnerLocation = null
     ) {
         parent::__construct();
 
-        $this->setAllowSundaySorting($allowSundaySorting);
+        $this->setAllowSundaySorting($AllowSundaySorting);
         try {
-            $this->setDeliveryDate($deliveryDate ?: (new DateTimeImmutable('next monday')));
+            $this->setDeliveryDate($DeliveryDate ?: (new DateTimeImmutable('next monday')));
         } catch (Exception $e) {
             throw new InvalidArgumentException($e->getMessage(), 0, $e);
         }
-        $this->setDeliveryOptions($deliveryOptions);
-        $this->setOptions($options);
-        $this->setPostalcode($zipcode);
-        $this->setCoordinates($coordinates);
-        $this->setCoordinatesNorthWest($coordinatesNW);
-        $this->setCoordinatesSouthEast($coordinatesSE);
-        $this->setCity($city);
-        $this->setStreet($street);
-        $this->setHouseNr($houseNr);
-        $this->setHouseNrExt($houseNrExt);
-        $this->setLocationCode($locationCode);
-        $this->setSaleschannel($saleschannel);
-        $this->setTerminalType($terminalType);
-        $this->setRetailNetworkID($retailNetworkId);
-        $this->setDownPartnerID($downPartnerID);
-        $this->setDownPartnerLocation($downPartnerLocation);
+        $this->setDeliveryOptions($DeliveryOptions);
+        $this->setOptions($Options);
+        $this->setPostalcode($Postalcode);
+        $this->setCoordinates($Coordinates);
+        $this->setCoordinatesNorthWest($CoordinatesNorthWest);
+        $this->setCoordinatesSouthEast($CoordinatesSouthEast);
+        $this->setCity($City);
+        $this->setStreet($Street);
+        $this->setHouseNr($HouseNr);
+        $this->setHouseNrExt($HouseNrExt);
+        $this->setLocationCode($LocationCode);
+        $this->setSaleschannel($Saleschannel);
+        $this->setTerminalType($TerminalType);
+        $this->setRetailNetworkID($RetailNetworkID);
+        $this->setDownPartnerID($DownPartnerID);
+        $this->setDownPartnerLocation($DownPartnerLocation);
     }
 
     /**
-     * @param string|DateTimeInterface|null $deliveryDate
+     * @param string|DateTimeInterface|null $DeliveryDate
      *
      * @return static
      *
@@ -351,17 +351,17 @@ class Location extends AbstractEntity
      *
      * @since 1.2.0
      */
-    public function setDeliveryDate($deliveryDate = null)
+    public function setDeliveryDate($DeliveryDate = null)
     {
-        if (is_string($deliveryDate)) {
+        if (is_string($DeliveryDate)) {
             try {
-                $deliveryDate = new DateTimeImmutable($deliveryDate);
+                $DeliveryDate = new DateTimeImmutable($DeliveryDate);
             } catch (Exception $e) {
                 throw new InvalidArgumentException($e->getMessage(), 0, $e);
             }
         }
 
-        $this->DeliveryDate = $deliveryDate;
+        $this->DeliveryDate = $DeliveryDate;
 
         return $this;
     }
@@ -369,16 +369,16 @@ class Location extends AbstractEntity
     /**
      * Set the postcode.
      *
-     * @param string|null $postcode
+     * @param string|null $Postalcode
      *
      * @return Location
      */
-    public function setPostalcode($postcode = null)
+    public function setPostalcode($Postalcode = null)
     {
-        if (is_null($postcode)) {
+        if (is_null($Postalcode)) {
             $this->Postalcode = null;
         } else {
-            $this->Postalcode = strtoupper(str_replace(' ', '', $postcode));
+            $this->Postalcode = strtoupper(str_replace(' ', '', $Postalcode));
         }
 
         return $this;

@@ -57,20 +57,20 @@ use Firstred\PostNL\Service\TimeframeService;
  * @method string|null     getRemark()
  * @method ResponseAddress setAddressType(string|null $AddressType = null)
  * @method ResponseAddress setFirstName(string|null $firstName = null)
- * @method ResponseAddress setName(string|null $name = null)
- * @method ResponseAddress setCompanyName(string|null $companyName = null)
- * @method ResponseAddress setStreet(string|null $street = null)
- * @method ResponseAddress setHouseNr(string|null $houseNr = null)
- * @method ResponseAddress setHouseNrExt(string|null $houseNrExt = null)
- * @method ResponseAddress setCity(string|null $city = null)
- * @method ResponseAddress setCountrycode(string|null $countrycode = null)
- * @method ResponseAddress setArea(string|null $area = null)
- * @method ResponseAddress setBuildingname(string|null $buildingName = null)
- * @method ResponseAddress setDepartment(string|null $department = null)
- * @method ResponseAddress setDoorcode(string|null $doorcode = null)
- * @method ResponseAddress setFloor(string|null $floor = null)
- * @method ResponseAddress setRegion(string|null $region = null)
- * @method ResponseAddress setRemark(string|null $remark = null)
+ * @method ResponseAddress setName(string|null $Name = null)
+ * @method ResponseAddress setCompanyName(string|null $CompanyName = null)
+ * @method ResponseAddress setStreet(string|null $Street = null)
+ * @method ResponseAddress setHouseNr(string|null $HouseNr = null)
+ * @method ResponseAddress setHouseNrExt(string|null $HouseNrExt = null)
+ * @method ResponseAddress setCity(string|null $City = null)
+ * @method ResponseAddress setCountrycode(string|null $Countrycode = null)
+ * @method ResponseAddress setArea(string|null $Area = null)
+ * @method ResponseAddress setBuildingname(string|null $BuildingName = null)
+ * @method ResponseAddress setDepartment(string|null $Department = null)
+ * @method ResponseAddress setDoorcode(string|null $Doorcode = null)
+ * @method ResponseAddress setFloor(string|null $Floor = null)
+ * @method ResponseAddress setRegion(string|null $Region = null)
+ * @method ResponseAddress setRemark(string|null $Remark = null)
  *
  * @since 1.0.0
  */
@@ -284,78 +284,78 @@ class ResponseAddress extends AbstractEntity
 
     /**
      * @param string|null $AddressType
-     * @param string|null $firstName
-     * @param string|null $name
-     * @param string|null $companyName
-     * @param string|null $street
-     * @param string|null $houseNr
-     * @param string|null $houseNrExt
-     * @param string|null $zipcode
-     * @param string|null $city
-     * @param string|null $countryCode
-     * @param string|null $area
-     * @param string|null $buildingName
-     * @param string|null $department
-     * @param string|null $doorcode
-     * @param string|null $floor
-     * @param string|null $region
-     * @param string|null $remark
+     * @param string|null $FirstName
+     * @param string|null $Name
+     * @param string|null $CompanyName
+     * @param string|null $Street
+     * @param string|null $HouseNr
+     * @param string|null $HouseNrExt
+     * @param string|null $Zipcode
+     * @param string|null $City
+     * @param string|null $Countrycode
+     * @param string|null $Area
+     * @param string|null $BuildingName
+     * @param string|null $Department
+     * @param string|null $Doorcode
+     * @param string|null $Floor
+     * @param string|null $Region
+     * @param string|null $Remark
      */
     public function __construct(
         $AddressType = null,
-        $firstName = null,
-        $name = null,
-        $companyName = null,
-        $street = null,
-        $houseNr = null,
-        $houseNrExt = null,
-        $zipcode = null,
-        $city = null,
-        $countryCode = null,
-        $area = null,
-        $buildingName = null,
-        $department = null,
-        $doorcode = null,
-        $floor = null,
-        $region = null,
-        $remark = null
+        $FirstName = null,
+        $Name = null,
+        $CompanyName = null,
+        $Street = null,
+        $HouseNr = null,
+        $HouseNrExt = null,
+        $Zipcode = null,
+        $City = null,
+        $Countrycode = null,
+        $Area = null,
+        $BuildingName = null,
+        $Department = null,
+        $Doorcode = null,
+        $Floor = null,
+        $Region = null,
+        $Remark = null
     ) {
         parent::__construct();
 
         $this->setAddressType($AddressType);
-        $this->setFirstName($firstName);
-        $this->setName($name);
-        $this->setCompanyName($companyName);
-        $this->setStreet($street);
-        $this->setHouseNr($houseNr);
-        $this->setHouseNrExt($houseNrExt);
-        $this->setZipcode($zipcode);
-        $this->setCity($city);
-        $this->setCountrycode($countryCode);
+        $this->setFirstName($FirstName);
+        $this->setName($Name);
+        $this->setCompanyName($CompanyName);
+        $this->setStreet($Street);
+        $this->setHouseNr($HouseNr);
+        $this->setHouseNrExt($HouseNrExt);
+        $this->setZipcode($Zipcode);
+        $this->setCity($City);
+        $this->setCountrycode($Countrycode);
 
         // Optional parameters.
-        $this->setArea($area);
-        $this->setBuildingname($buildingName);
-        $this->setDepartment($department);
-        $this->setDoorcode($doorcode);
-        $this->setFloor($floor);
-        $this->setRegion($region);
-        $this->setRemark($remark);
+        $this->setArea($Area);
+        $this->setBuildingname($BuildingName);
+        $this->setDepartment($Department);
+        $this->setDoorcode($Doorcode);
+        $this->setFloor($Floor);
+        $this->setRegion($Region);
+        $this->setRemark($Remark);
     }
 
     /**
      * Set postcode.
      *
-     * @param string|null $zip
+     * @param string|null $Zipcode
      *
      * @return static
      */
-    public function setZipcode($zip = null)
+    public function setZipcode($Zipcode = null)
     {
-        if (is_null($zip)) {
+        if (is_null($Zipcode)) {
             $this->Zipcode = null;
         } else {
-            $this->Zipcode = strtoupper(str_replace(' ', '', $zip));
+            $this->Zipcode = strtoupper(str_replace(' ', '', $Zipcode));
         }
 
         return $this;

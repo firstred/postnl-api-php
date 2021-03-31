@@ -41,8 +41,8 @@ use Firstred\PostNL\Service\TimeframeService;
  *
  * @method GetSentDate|null   getGetSentDate()
  * @method Message|null       getMessage()
- * @method GetSentDateRequest setGetSentDate(GetSentDate|null $date = null)
- * @method GetSentDateRequest setMessage(Message|null $message = null)
+ * @method GetSentDateRequest setGetSentDate(GetSentDate|null $GetSentDate = null)
+ * @method GetSentDateRequest setMessage(Message|null $Message = null)
  *
  * @since 1.0.0
  */
@@ -93,16 +93,16 @@ class GetSentDateRequest extends AbstractEntity
     /**
      * GetSentDate constructor.
      *
-     * @param GetSentDate|null $date
-     * @param Message|null     $message
+     * @param GetSentDate|null $GetSentDate
+     * @param Message|null     $Message
      */
     public function __construct(
-        GetSentDate $date = null,
-        Message $message = null
+        GetSentDate $GetSentDate = null,
+        Message $Message = null
     ) {
         parent::__construct();
 
-        $this->setGetSentDate($date);
-        $this->setMessage($message ?: new Message());
+        $this->setGetSentDate($GetSentDate);
+        $this->setMessage($Message ?: new Message());
     }
 }

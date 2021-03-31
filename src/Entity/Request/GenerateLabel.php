@@ -45,9 +45,9 @@ use Firstred\PostNL\Service\TimeframeService;
  * @method Customer|null         getCustomer()
  * @method LabellingMessage|null getMessage()
  * @method Shipment[]|null       getShipments()
- * @method GenerateLabel         setCustomer(Customer|null $customer = null)
- * @method GenerateLabel         setMessage(LabellingMessage|null $message = null)
- * @method GenerateLabel         setShipments(Shipment[]|null $shipments = null)
+ * @method GenerateLabel         setCustomer(Customer|null $Customer = null)
+ * @method GenerateLabel         setMessage(LabellingMessage|null $Message = null)
+ * @method GenerateLabel         setShipments(Shipment[]|null $Shipments = null)
  *
  * @since 1.0.0
  */
@@ -107,17 +107,17 @@ class GenerateLabel extends AbstractEntity
     /**
      * GenerateLabel constructor.
      *
-     * @param Shipment[]|null       $shipments
-     * @param LabellingMessage|null $message
-     * @param Customer|null         $customer
+     * @param Shipment[]|null       $Shipments
+     * @param LabellingMessage|null $Message
+     * @param Customer|null         $Customer
      */
-    public function __construct(array $shipments = null, LabellingMessage $message = null, Customer $customer = null)
+    public function __construct(array $Shipments = null, LabellingMessage $Message = null, Customer $Customer = null)
     {
         parent::__construct();
 
-        $this->setShipments($shipments);
-        $this->setMessage($message ?: new LabellingMessage());
-        $this->setCustomer($customer);
+        $this->setShipments($Shipments);
+        $this->setMessage($Message ?: new LabellingMessage());
+        $this->setCustomer($Customer);
     }
 
     /**

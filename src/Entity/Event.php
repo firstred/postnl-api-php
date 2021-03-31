@@ -38,8 +38,8 @@ use Firstred\PostNL\Service\TimeframeService;
 /**
  * Class Event.
  *
- * @method string|null getCompleteStatusResponseEvent()
- * @method Event       setCompleteStatusResponseEvent(CompleteStatusResponseEvent|null $event = null)
+ * @method CompleteStatusResponseEvent|null getCompleteStatusResponseEvent()
+ * @method Event                            setCompleteStatusResponseEvent(CompleteStatusResponseEvent|null $CompleteStatusResponseEvent = null)
  *
  * @since 1.0.0
  */
@@ -75,12 +75,12 @@ class Event extends AbstractEntity
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param CompleteStatusResponseEvent|null $completeStatusResponseEvent
+     * @param CompleteStatusResponseEvent|null $CompleteStatusResponseEvent
      */
-    public function __construct($completeStatusResponseEvent = null)
+    public function __construct($CompleteStatusResponseEvent = null)
     {
         parent::__construct();
 
-        $this->setCompleteStatusResponseEvent($completeStatusResponseEvent);
+        $this->setCompleteStatusResponseEvent($CompleteStatusResponseEvent);
     }
 }

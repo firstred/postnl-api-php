@@ -36,8 +36,8 @@ use Firstred\PostNL\Service\LabellingService;
  *
  * @method Header|null getHeader()
  * @method Body|null   getBody()
- * @method Envelope    setHeader(Header|null $header = null)
- * @method Envelope    setBody(Body|null $body = null)
+ * @method Envelope    setHeader(Header|null $Header = null)
+ * @method Envelope    setBody(Body|null $Body = null)
  *
  * NOTE: this class has been introduced for deserializing
  *
@@ -90,18 +90,18 @@ class Envelope extends AbstractEntity
     /**
      * Envelope constructor.
      *
-     * @param Header|null $header
-     * @param Body|null   $body
+     * @param Header|null $Header
+     * @param Body|null   $Body
      */
-    public function __construct(Header $header = null, Body $body = null)
+    public function __construct(Header $Header = null, Body $Body = null)
     {
         parent::__construct();
 
-        if ($header) {
-            $this->setHeader($header);
+        if ($Header) {
+            $this->setHeader($Header);
         }
-        if ($body) {
-            $this->setBody($body);
+        if ($Body) {
+            $this->setBody($Body);
         }
     }
 }

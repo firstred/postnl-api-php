@@ -53,13 +53,13 @@ use function is_string;
  * @method string|null  getFriday()
  * @method string|null  getSaturday()
  * @method string|null  getSunday()
- * @method OpeningHours setMonday(string|null $monday = null)
- * @method OpeningHours setTuesday(string|null $tuesday = null)
- * @method OpeningHours setWednesday(string|null $wednesday = null)
- * @method OpeningHours setThursday(string|null $thursday = null)
- * @method OpeningHours setFriday(string|null $friday = null)
- * @method OpeningHours setSaturday(string|null $saturday = null)
- * @method OpeningHours setSunday(string|null $sunday = null)
+ * @method OpeningHours setMonday(string|null $Monday = null)
+ * @method OpeningHours setTuesday(string|null $Tuesday = null)
+ * @method OpeningHours setWednesday(string|null $Wednesday = null)
+ * @method OpeningHours setThursday(string|null $Thursday = null)
+ * @method OpeningHours setFriday(string|null $Friday = null)
+ * @method OpeningHours setSaturday(string|null $Saturday = null)
+ * @method OpeningHours setSunday(string|null $Sunday = null)
  *
  * @since 1.0.0
  */
@@ -153,32 +153,32 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
     /**
      * OpeningHours constructor.
      *
-     * @param string|null $monday
-     * @param string|null $tuesday
-     * @param string|null $wednesday
-     * @param string|null $thursday
-     * @param string|null $friday
-     * @param string|null $saturday
-     * @param string|null $sunday
+     * @param string|null $Monday
+     * @param string|null $Tuesday
+     * @param string|null $Wednesday
+     * @param string|null $Thursday
+     * @param string|null $Friday
+     * @param string|null $Saturday
+     * @param string|null $Sunday
      */
     public function __construct(
-        $monday = '',
-        $tuesday = '',
-        $wednesday = '',
-        $thursday = '',
-        $friday = '',
-        $saturday = '',
-        $sunday = ''
+        $Monday = '',
+        $Tuesday = '',
+        $Wednesday = '',
+        $Thursday = '',
+        $Friday = '',
+        $Saturday = '',
+        $Sunday = ''
     ) {
         parent::__construct();
 
-        $this->setMonday($monday);
-        $this->setTuesday($tuesday);
-        $this->setWednesday($wednesday);
-        $this->setThursday($thursday);
-        $this->setFriday($friday);
-        $this->setSaturday($saturday);
-        $this->setSunday($sunday);
+        $this->setMonday($Monday);
+        $this->setTuesday($Tuesday);
+        $this->setWednesday($Wednesday);
+        $this->setThursday($Thursday);
+        $this->setFriday($Friday);
+        $this->setSaturday($Saturday);
+        $this->setSunday($Sunday);
     }
 
     /**
@@ -359,7 +359,6 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
     public function next()
     {
         ++$this->currentDay;
-        // TODO: Implement next() method.
     }
 
     /**
