@@ -30,6 +30,7 @@ use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\OpeningHours;
 use Firstred\PostNL\Entity\Warning;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
@@ -37,6 +38,7 @@ use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
+use stdClass;
 
 /**
  * Class ResponseLocation.
@@ -303,5 +305,35 @@ class ResponseLocation extends AbstractEntity
         $this->setWarnings($warnings);
         $this->setDownPartnerID($downPartnerID);
         $this->setDownPartnerLocation($downPartnerLocation);
+    }
+
+    public static function jsonDeserialize(stdClass $json)
+    {
+        if (isset($json->ResponseLocation->DeliveryOptions)) {
+            /** @psalm-var list<string> $deliveryOptions */
+            $deliveryOptions = [];
+            if (!is_array($json->ResponseLocation->DeliveryOptions)){
+                $json->ResponseLocation->DeliveryOptions = [$json->ResponseLocation->DeliveryOptions];
+            }
+
+            foreach ($json->ResponseLocation->DeliveryOptions as $deliveryOption) {
+                if (isset($deliveryOption->string)) {
+                    if (!is_array($deliveryOption->string)) {
+                        $deliveryOption->string = [$deliveryOption->string];
+                    }
+                    foreach ($deliveryOption->string as $optionString) {
+                        $deliveryOptions[] = $optionString;
+                    }
+                } elseif (is_array($deliveryOption)) {
+                    $deliveryOptions = array_merge($deliveryOptions, $deliveryOption);
+                } elseif (is_string($deliveryOption)) {
+                    $deliveryOptions[] = $deliveryOption;
+                }
+            }
+
+            $json->ResponseLocation->DeliveryOptions = $deliveryOptions;
+        }
+
+        return parent::jsonDeserialize($json);
     }
 }
