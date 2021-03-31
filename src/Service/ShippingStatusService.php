@@ -26,6 +26,8 @@
 
 namespace Firstred\PostNL\Service;
 
+use DateTimeInterface;
+use Exception;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Request\CompleteStatus;
 use Firstred\PostNL\Entity\Request\CompleteStatusByPhase;
@@ -56,19 +58,23 @@ use Psr\Cache\CacheItemInterface;
 use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use function json_decode;
 
 /**
  * Class ShippingStatusService.
  *
  * @method CurrentStatusResponse  currentStatus(CurrentStatus|CurrentStatusByReference|CurrentStatusByPhase|CurrentStatusByStatus $currentStatus)
  * @method RequestInterface       buildCurrentStatusRequest(CurrentStatus|CurrentStatusByReference|CurrentStatusByPhase|CurrentStatusByStatus $currentStatus)
- * @method CurrentStatusResponse  processCurrentStatusResponse(mixed $response)
+ * @method CurrentStatusResponse  processCurrentStatusResponse(ResponseInterface $response)
  * @method UpdatedShipmentsResponse completeStatus(CompleteStatus|CompleteStatusByReference|CompleteStatusByPhase|CompleteStatusByStatus $completeStatus)
  * @method RequestInterface       buildCompleteStatusRequest(CompleteStatus|CompleteStatusByReference|CompleteStatusByPhase|CompleteStatusByStatus $completeStatus)
- * @method UpdatedShipmentsResponse processCompleteStatusResponse(mixed $response)
+ * @method UpdatedShipmentsResponse processCompleteStatusResponse(ResponseInterface $response)
  * @method GetSignature           getSignature(GetSignature $getSignature)
  * @method RequestInterface       buildGetSignatureRequest(GetSignature $getSignature)
- * @method GetSignature           processGetSignatureResponse(mixed $response)
+ * @method GetSignature           processGetSignatureResponse(ResponseInterface $response)
+ * @method UpdatedShipmentsResponse[]    getUpdatedShipments(Customer $customer, DateTimeInterface|null $dateTimeFrom, DateTimeInterface|null $dateTimeTo)
+ * @method RequestInterface              buildGetUpdatedShipmentsRequest(Customer $customer, DateTimeInterface|null $dateTimeFrom, DateTimeInterface|null $dateTimeTo)
+ * @method UpdatedShipmentsResponse      processGetUpdatedShipmentsResponse(ResponseInterface $response)
  *
  * @since 1.0.0
  */
@@ -533,5 +539,126 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
         $body = json_decode(static::getResponseText($response));
         /** @var GetSignatureResponseSignature $object */
         return GetSignatureResponseSignature::jsonDeserialize((object) ['GetSignatureResponseSignature' => $body->Signature]);
+    }
+
+    /**
+     * Get updated shipments for customer REST.
+     *
+     * @param Customer               $customer
+     * @param DateTimeInterface|null $dateTimeFrom
+     * @param DateTimeInterface|null $dateTimeTo
+     *
+     * @return UpdatedShipmentsResponse[]
+     * @throws ApiConnectionException
+     * @throws ApiException
+     * @throws CifDownException
+     * @throws CifException
+     * @throws HttpClientException
+     * @throws PsrCacheInvalidArgumentException
+     * @throws ResponseException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
+     *
+     * @since 1.2.0
+     */
+    public function getUpdatedShipmentsREST(
+        Customer $customer,
+        DateTimeInterface $dateTimeFrom = null,
+        DateTimeInterface $dateTimeTo = null
+    ) {
+        if ((!$dateTimeFrom && $dateTimeTo) || ($dateTimeFrom && !$dateTimeTo)) {
+            throw new NotSupportedException('Either pass both dates or none. A single date is not supported.');
+        }
+
+        $dateTimeFromString = $dateTimeFrom ? $dateTimeFrom->format('YmdHis') : '';
+        $dateTimeToString = $dateTimeTo ? $dateTimeTo->format('YmdHis') : '';
+
+        $item = $this->retrieveCachedItem("{$customer->getCustomerNumber()}-$dateTimeFromString-$dateTimeToString");
+        $response = null;
+        if ($item instanceof CacheItemInterface) {
+            $response = $item->get();
+            try {
+                $response = PsrMessage::parseResponse($response);
+            } catch (InvalidArgumentException $e) {
+            }
+        }
+        if (!$response instanceof ResponseInterface) {
+            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetUpdatedShipmentsRequestREST($customer, $dateTimeFrom, $dateTimeTo));
+            static::validateRESTResponse($response);
+        }
+
+        $object = $this->processGetUpdatedShipmentsResponseREST($response);
+        if (is_array($object) && !empty($object) && $object[0] instanceof UpdatedShipmentsResponse) {
+            if ($item instanceof CacheItemInterface
+                && $response instanceof ResponseInterface
+                && 200 === $response->getStatusCode()
+            ) {
+                $item->set(PsrMessage::toString($response));
+                $this->cacheItem($item);
+            }
+
+            return $object;
+        }
+
+        throw new ApiException('Unable to retrieve updated shipments');
+    }
+
+    /**
+     * Build get updated shipments request REST.
+     *
+     * @param Customer               $customer
+     * @param DateTimeInterface|null $dateTimeFrom
+     * @param DateTimeInterface|null $dateTimeTo
+     *
+     * @return RequestInterface
+     *
+     * @since 1.2.0
+     */
+    public function buildGetUpdatedShipmentsRequestREST(
+        Customer $customer,
+        DateTimeInterface $dateTimeFrom = null,
+        DateTimeInterface $dateTimeTo = null
+    ) {
+        $apiKey = $this->postnl->getRestApiKey();
+
+        $range = '';
+        if ($dateTimeFrom) {
+            $range = "?period={$dateTimeFrom->format('Y-m-d\TH:i:s')}&period={$dateTimeTo->format('Y-m-d\TH:i:s')}";
+        }
+
+        return $this->postnl->getRequestFactory()->createRequest(
+            'GET',
+            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT)."/{$customer->getCustomerNumber()}/updatedshipments$range"
+        )
+            ->withHeader('apikey', $apiKey)
+            ->withHeader('Accept', 'application/json');
+    }
+
+    /**
+     * Process updated shipments response REST.
+     *
+     * @param ResponseInterface $response
+     *
+     * @return UpdatedShipmentsResponse[]
+     *
+     * @throws HttpClientException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
+     * @throws ResponseException
+     *
+     * @since 1.2.0
+     */
+    public function processGetUpdatedShipmentsResponseREST(ResponseInterface $response)
+    {
+        $body = json_decode(static::getResponseText($response));
+        if (!is_array($body)) {
+            return [];
+        }
+
+        foreach ($body as &$item) {
+            $item = UpdatedShipmentsResponse::jsonDeserialize((object) ['UpdatedShipmentsResponse' => $item]);
+        }
+
+        return $body;
     }
 }

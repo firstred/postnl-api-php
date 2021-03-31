@@ -26,6 +26,8 @@
 
 namespace Firstred\PostNL\Service;
 
+use DateTimeInterface;
+use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Request\CompleteStatus;
 use Firstred\PostNL\Entity\Request\CompleteStatusByPhase;
 use Firstred\PostNL\Entity\Request\CompleteStatusByReference;
@@ -35,16 +37,21 @@ use Firstred\PostNL\Entity\Request\CurrentStatusByPhase;
 use Firstred\PostNL\Entity\Request\CurrentStatusByReference;
 use Firstred\PostNL\Entity\Request\CurrentStatusByStatus;
 use Firstred\PostNL\Entity\Request\GetSignature;
+use Firstred\PostNL\Entity\Response\CompleteStatusResponse;
 use Firstred\PostNL\Entity\Response\CurrentStatusResponse;
 use Firstred\PostNL\Entity\Response\GetSignatureResponseSignature;
 use Firstred\PostNL\Entity\Response\UpdatedShipmentsResponse;
+use Firstred\PostNL\Exception\ApiConnectionException;
 use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use ReflectionException;
 
 /**
@@ -52,13 +59,16 @@ use ReflectionException;
  *
  * @method CurrentStatusResponse         currentStatus(CurrentStatus|CurrentStatusByReference|CurrentStatusByPhase|CurrentStatusByStatus $currentStatus)
  * @method RequestInterface              buildCurrentStatusRequest(CurrentStatus|CurrentStatusByReference|CurrentStatusByPhase|CurrentStatusByStatus $currentStatus)
- * @method CurrentStatusResponse         processCurrentStatusResponse(mixed $response)
- * @method UpdatedShipmentsResponse        completeStatus(CompleteStatus|CompleteStatusByReference|CompleteStatusByPhase|CompleteStatusByStatus $completeStatus)
+ * @method CurrentStatusResponse         processCurrentStatusResponse(ResponseInterface $response)
+ * @method CompleteStatusResponse        completeStatus(CompleteStatus|CompleteStatusByReference|CompleteStatusByPhase|CompleteStatusByStatus $completeStatus)
  * @method RequestInterface              buildCompleteStatusRequest(CompleteStatus|CompleteStatusByReference|CompleteStatusByPhase|CompleteStatusByStatus $completeStatus)
- * @method UpdatedShipmentsResponse        processCompleteStatusResponse(mixed $response)
+ * @method CompleteStatusResponse        processCompleteStatusResponse(ResponseInterface $response)
  * @method GetSignatureResponseSignature getSignature(GetSignature $getSignature)
  * @method RequestInterface              buildGetSignatureRequest(GetSignature $getSignature)
- * @method GetSignature                  processGetSignatureResponse(mixed $response)
+ * @method GetSignature                  processGetSignatureResponse(ResponseInterface $response)
+ * @method UpdatedShipmentsResponse[]    getUpdatedShipments(Customer $customer, DateTimeInterface|null $dateTimeFrom, DateTimeInterface|null $dateTimeTo)
+ * @method RequestInterface              buildGetUpdatedShipmentsRequest(Customer $customer, DateTimeInterface|null $dateTimeFrom, DateTimeInterface|null $dateTimeTo)
+ * @method UpdatedShipmentsResponse      processGetUpdatedShipmentsResponse(ResponseInterface $response)
  *
  * @since 1.2.0
  */
@@ -76,7 +86,7 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      *   - Fill the Shipment->PhaseCode property, do not pass Barcode or Reference.
      *     Optionally add DateFrom and/or DateTo.
      * - CurrentStatusByStatus:
-     *   - Fill the Shipment->StatuCode property. Leave the rest empty.
+     *   - Fill the Shipment->StatusCode property. Leave the rest empty.
      *
      * @param CurrentStatus|CurrentStatusByReference|CurrentStatusByPhase|CurrentStatusByStatus $currentStatus
      *
@@ -106,7 +116,7 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      *   - Fill the Shipment->PhaseCode property, do not pass Barcode or Reference.
      *     Optionally add DateFrom and/or DateTo.
      * - CurrentStatusByStatus:
-     *   - Fill the Shipment->StatuCode property. Leave the rest empty.
+     *   - Fill the Shipment->StatusCode property. Leave the rest empty.
      *
      * @param CompleteStatus $completeStatus
      *
@@ -246,4 +256,63 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      * @since 1.0.0
      */
     public function processGetSignatureResponseREST($response);
+
+    /**
+     * Get updated shipments for customer REST.
+     *
+     * @param Customer               $customer
+     * @param DateTimeInterface|null $dateTimeFrom
+     * @param DateTimeInterface|null $dateTimeTo
+     *
+     * @return UpdatedShipmentsResponse[]
+     * @throws ApiConnectionException
+     * @throws ApiException
+     * @throws CifDownException
+     * @throws CifException
+     * @throws HttpClientException
+     * @throws PsrCacheInvalidArgumentException
+     * @throws ResponseException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
+     *
+     * @since 1.2.0
+     */
+    public function getUpdatedShipmentsREST(
+        Customer $customer,
+        DateTimeInterface $dateTimeFrom = null,
+        DateTimeInterface $dateTimeTo = null
+    );
+
+    /**
+     * Build get updated shipments request REST.
+     *
+     * @param Customer               $customer
+     * @param DateTimeInterface|null $dateTimeFrom
+     * @param DateTimeInterface|null $dateTimeTo
+     *
+     * @return RequestInterface
+     *
+     * @since 1.2.0
+     */
+    public function buildGetUpdatedShipmentsRequestREST(
+        Customer $customer,
+        DateTimeInterface $dateTimeFrom = null,
+        DateTimeInterface $dateTimeTo = null
+    );
+
+    /**
+     * Process updated shipments response REST.
+     *
+     * @param ResponseInterface $response
+     *
+     * @return UpdatedShipmentsResponse[]
+     *
+     * @throws HttpClientException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
+     * @throws ResponseException
+     *
+     * @since 1.2.0
+     */
+    public function processGetUpdatedShipmentsResponseREST(ResponseInterface $response);
 }

@@ -27,6 +27,7 @@
 namespace Firstred\PostNL\Tests\Service;
 
 use Cache\Adapter\Void\VoidCachePool;
+use DateTimeImmutable;
 use DateTimeInterface;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Customer;
@@ -41,6 +42,7 @@ use Firstred\PostNL\Entity\Response\CompleteStatusResponseEvent;
 use Firstred\PostNL\Entity\Response\CurrentStatusResponse;
 use Firstred\PostNL\Entity\Response\CurrentStatusResponseShipment;
 use Firstred\PostNL\Entity\Response\GetSignatureResponseSignature;
+use Firstred\PostNL\Entity\Response\UpdatedShipmentsResponse;
 use Firstred\PostNL\Entity\Shipment;
 use Firstred\PostNL\Entity\SOAP\UsernameToken;
 use Firstred\PostNL\HttpClient\MockClient;
@@ -52,6 +54,7 @@ use GuzzleHttp\Psr7\Message as PsrMessage;
 use GuzzleHttp\Psr7\Query;
 use Psr\Http\Message\ResponseInterface;
 use function file_get_contents;
+use function is_array;
 use const _RESPONSES_DIR_;
 
 /**
@@ -326,6 +329,26 @@ class ShippingStatusServiceRestTest extends ServiceTest
     }
 
     /**
+     * @testdox creates a valid GetUpdatedShipments request
+     */
+    public function testGetUpdatedShipmentsRequestRest()
+    {
+        $dateTimeFrom = new DateTimeImmutable('12-02-2021 14:00');
+        $dateTimeTo = new DateTimeImmutable('14-02-2021 16:00');
+
+        $this->lastRequest = $request = $this->service->buildGetUpdatedShipmentsRequestREST(
+            $this->postnl->getCustomer(),
+            $dateTimeFrom,
+            $dateTimeTo
+        );
+
+        $this->assertEquals("period={$dateTimeFrom->format('Y-m-d\TH:i:s')}&period={$dateTimeTo->format('Y-m-d\TH:i:s')}", $request->getUri()->getQuery());
+        $this->assertEquals('test', $request->getHeaderLine('apikey'));
+        $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
+        $this->assertEquals("/shipment/v2/status/{$this->postnl->getCustomer()->getCustomerNumber()}/updatedshipments", $request->getUri()->getPath());
+    }
+
+    /**
      * @testdox can get the signature
      */
     public function testGetSignatureRest()
@@ -352,6 +375,28 @@ class ShippingStatusServiceRestTest extends ServiceTest
     }
 
     /**
+     * @testdox can retrieve updated shipments
+     * @dataProvider getUpdatedShipmentsProvider
+     *
+     * @param ResponseInterface $response
+     */
+    public function testGetUpdatedShipmentsRest($response)
+    {
+        $mock = new MockHandler([$response]);
+        $handler = HandlerStack::create($mock);
+        $mockClient = new MockClient();
+        $mockClient->setHandler($handler);
+        $this->postnl->setHttpClient($mockClient);
+
+        $updatedShipments = $this->postnl->getUpdatedShipments(
+            new DateTimeImmutable('12-02-2021 14:00'),
+            new DateTimeImmutable('12-02-2021 16:00')
+        );
+
+        $this->assertInstanceOf(UpdatedShipmentsResponse::class, $updatedShipments[0]);
+    }
+
+    /**
      * @return array[]
      */
     public function getCurrentStatusByBarcodeProvider()
@@ -372,6 +417,16 @@ class ShippingStatusServiceRestTest extends ServiceTest
             [PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/shippingstatus/completestatus.http'))],
             [PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/shippingstatus/completestatus2.http'))],
             [PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/shippingstatus/completestatus3.http'))],
+        ];
+    }
+
+    /**
+     * @return array[]
+     */
+    public function getUpdatedShipmentsProvider()
+    {
+        return [
+            [PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/shippingstatus/updatedshipments.http'))],
         ];
     }
 }

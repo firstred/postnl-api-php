@@ -26,6 +26,8 @@
 
 namespace Firstred\PostNL;
 
+use DateTimeImmutable;
+use DateTimeInterface;
 use Exception;
 use Firstred\PostNL\Entity\Barcode;
 use Firstred\PostNL\Entity\Customer;
@@ -45,6 +47,7 @@ use Firstred\PostNL\Entity\Request\GetNearestLocations;
 use Firstred\PostNL\Entity\Request\GetSentDateRequest;
 use Firstred\PostNL\Entity\Request\GetSignature;
 use Firstred\PostNL\Entity\Request\GetTimeframes;
+use Firstred\PostNL\Entity\Response\CompleteStatusResponse;
 use Firstred\PostNL\Entity\Response\CompleteStatusResponseShipment;
 use Firstred\PostNL\Entity\Response\ConfirmingResponseShipment;
 use Firstred\PostNL\Entity\Response\CurrentStatusResponse;
@@ -1567,12 +1570,21 @@ class PostNL implements LoggerAwareInterface
      *
      * @return CurrentStatusResponse
      *
+     * @throws NotSupportedException
+     *
      * @since 1.0.0
      *
      * @deprecated 1.2.0 Use the dedicated methods (get by phase and status are no longer working)
      */
     public function getCurrentStatus($currentStatus)
     {
+        if (null !== $currentStatus->getShipment()->getPhaseCode()) {
+            throw new NotSupportedException('Getting the current status by phase code is no longer supported.');
+        }
+        if (null !== $currentStatus->getShipment()->getStatusCode()) {
+            throw new NotSupportedException('Getting the current status by status code is no longer supported.');
+        }
+
         $fullCustomer = $this->getCustomer();
         $currentStatus->setCustomer((new Customer())
             ->setCustomerCode($fullCustomer->getCustomerCode())
@@ -1663,7 +1675,9 @@ class PostNL implements LoggerAwareInterface
      *
      * @param CompleteStatus $completeStatus
      *
-     * @return UpdatedShipmentsResponse
+     * @return CompleteStatusResponse
+     *
+     * @throws NotSupportedException
      *
      * @since 1.0.0
      *
@@ -1671,6 +1685,13 @@ class PostNL implements LoggerAwareInterface
      */
     public function getCompleteStatus($completeStatus)
     {
+        if (null !== $completeStatus->getShipment()->getPhaseCode()) {
+            throw new NotSupportedException('Getting the complete status by phase code is no longer supported.');
+        }
+        if (null !== $completeStatus->getShipment()->getStatusCode()) {
+            throw new NotSupportedException('Getting the complete status by status code is no longer supported.');
+        }
+
         $fullCustomer = $this->getCustomer();
 
         $completeStatus->setCustomer((new Customer())
@@ -1687,13 +1708,16 @@ class PostNL implements LoggerAwareInterface
     /**
      * Get updated shipments
      *
-     * @return
+     * @param DateTimeInterface|null $dateTimeFrom
+     * @param DateTimeInterface|null $dateTimeTo
+     *
+     * @return UpdatedShipmentsResponse[]
      *
      * @since 1.2.0
      */
-    public function getUpdatedShipments()
+    public function getUpdatedShipments($dateTimeFrom = null, $dateTimeTo = null)
     {
-        throw new NotImplementedException();
+        return $this->shippingStatusService->getUpdatedShipments($this->getCustomer(), $dateTimeFrom, $dateTimeTo);
     }
 
     /**

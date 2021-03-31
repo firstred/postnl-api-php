@@ -1,0 +1,63 @@
+HTTP/1.1 200 OK
+Access-Control-Allow-Headers: origin, x-requested-with, accept, apikey, Content-Type
+Access-Control-Allow-Methods: GET, OPTIONS
+Access-Control-Allow-Origin: *
+Access-Control-Max-Age: 3628800
+Content-Type: application/json
+Date: Wed, 31 Mar 2021 21:08:21 GMT
+Connection: keep-alive
+
+[
+  {
+    "Barcode": "3SABCD3563340",
+    "CreationDate": "2021-02-24T00:00:00",
+    "CustomerNumber": "8155626",
+    "CustomerCode": "ABCD",
+    "Status": {
+      "Timestamp": "2021-02-26T12:57:15",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SABCD987453178",
+    "CreationDate": "2021-02-26T00:00:00",
+    "CustomerNumber": "8155626",
+    "CustomerCode": "ABCD",
+    "Status": {
+      "Timestamp": "2021-02-27T13:53:18",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SABCD987578527",
+    "CreationDate": "2021-02-23T00:00:00",
+    "CustomerNumber": "8155626",
+    "CustomerCode": "ABCD",
+    "Status": {
+      "Timestamp": "2021-03-01T14:31:08",
+      "StatusCode": "22",
+      "StatusDescription": "Zending afgehaald van Postkantoor",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  },
+  {
+    "Barcode": "3SABCD987530133",
+    "CreationDate": "2021-02-19T00:00:00",
+    "CustomerNumber": "8155626",
+    "CustomerCode": "ABCD",
+    "Status": {
+      "Timestamp": "2021-03-11T13:48:50",
+      "StatusCode": "11",
+      "StatusDescription": "Zending afgeleverd",
+      "PhaseCode": "4",
+      "PhaseDescription": "Afgeleverd"
+    }
+  }
+]
