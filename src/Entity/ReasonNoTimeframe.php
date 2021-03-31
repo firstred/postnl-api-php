@@ -38,6 +38,10 @@ use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
+use stdClass;
+use function array_merge;
+use function is_array;
+use function is_string;
 
 /**
  * Class ReasonNoTimeframe.
@@ -186,6 +190,46 @@ class ReasonNoTimeframe extends AbstractEntity
         $this->Date = $date;
 
         return $this;
+    }
+
+    /**
+     * @param stdClass $json
+     *
+     * @return mixed|stdClass|null
+     *
+     * @throws InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\NotSupportedException
+     *
+     * @since 1.2.0
+     */
+    public static function jsonDeserialize(stdClass $json)
+    {
+        if (isset($json->ReasonNoTimeframe->Options)) {
+            /** @psalm-var list<string> $deliveryOptions */
+            $deliveryOptions = [];
+            if (!is_array($json->ReasonNoTimeframe->Options)){
+                $json->ReasonNoTimeframe->Options = [$json->ReasonNoTimeframe->Options];
+            }
+
+            foreach ($json->ReasonNoTimeframe->Options as $deliveryOption) {
+                if (isset($deliveryOption->string)) {
+                    if (!is_array($deliveryOption->string)) {
+                        $deliveryOption->string = [$deliveryOption->string];
+                    }
+                    foreach ($deliveryOption->string as $optionString) {
+                        $deliveryOptions[] = $optionString;
+                    }
+                } elseif (is_array($deliveryOption)) {
+                    $deliveryOptions = array_merge($deliveryOptions, $deliveryOption);
+                } elseif (is_string($deliveryOption)) {
+                    $deliveryOptions[] = $deliveryOption;
+                }
+            }
+
+            $json->ReasonNoTimeframe->Options = $deliveryOptions;
+        }
+
+        return parent::jsonDeserialize($json);
     }
 
     /**

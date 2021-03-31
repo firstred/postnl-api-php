@@ -39,6 +39,10 @@ use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
+use stdClass;
+use function array_merge;
+use function is_array;
+use function is_string;
 
 /**
  * Class Timeframe.
