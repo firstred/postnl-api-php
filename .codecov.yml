@@ -5,7 +5,10 @@ coverage:
 
   status:
     project:
-      default: on
+      default:
+        target: 70%
+        threshold: 50%
+        base: auto
     patch:
       default: off
     changes:
