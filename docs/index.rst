@@ -56,6 +56,7 @@ Developer Guide
     httpclient.rst
     caching.rst
     logging.rst
+    formats.rst
     reference/index.rst
     authors.rst
 

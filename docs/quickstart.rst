@@ -4,22 +4,34 @@
 Quickstart
 ==========
 
-This page provides a quick introduction to this library and a few examples.
+This page provides a quick introduction to this library and a few quick copy/paste examples which you can adjust to your likings.
 If you do not have the library installed, head over to the :ref:`installation`
 page.
 
+.. _doing a request:
+
 ----------------
-Making a Request
+Doing a Request
 ----------------
 
-You can send requests by creating the request objects and passing them to one of the functions in the main ``PostNL``
+You can do requests over the API by creating the request objects and passing them to one of the functions in the main :php:class`Firstred\\PostNL\\PostNL`
 class.
 
-Requesting timeframes, locations and the delivery date
-======================================================
+Creating request objects may seem a bit counter-intuitive at first, but this makes it a lot easier to follow the request examples from the `official API documentation <https://developer.postnl.nl/>`_ and quickly figure out what each field does.
 
-You can the timeframes, locations and delivery date at once to quickly retrieve all the available delivery options.
-Here's how it is done:
+Using an IDE with code completion is **strongly recommended**.
+
+--------------------------------------------------------------
+Requesting timeframes, locations and the delivery date at once
+--------------------------------------------------------------
+
+You can request the timeframes, locations and delivery date at once to quickly retrieve all the available delivery options.
+
+.. note::
+
+    For more details on how to retrieve delivery options, consult the :ref:`delivery options` chapter.
+
+Here's how it is done from scratch:
 
 .. code-block:: php
 
@@ -56,16 +68,17 @@ Here's how it is done:
     $apikey = 'YOUR_API_KEY_HERE';
     $sandbox = true;
 
-    $postnl = new PostNL($customer, $apikey, $sandbox, PostNL::MODE_SOAP);
+    $postnl = new PostNL($customer, $apikey, $sandbox, PostNL::MODE_REST);
 
     $mondayDelivery = true;
     $deliveryDaysWindow = 7; // Amount of days to show ahead
     $dropoffDelay = 0;       // Amount of days to delay delivery
 
+    // Configure the cut-off window for every day, 1 = Monday, 7 = Sunday
     $cutoffTime = '15:00:00';
     $dropoffDays = [1 => true, 2 => true, 3 => true, 4 => true, 5 => true, 6 => false, 7 => false];
     foreach (range(1, 7) as $day) {
-        if (isset($dropoffDays[$day])) {
+        if ($dropoffDays[$day]) {
             $cutOffTimes[] = new CutOffTime(
                 str_pad($day, 2, '0', STR_PAD_LEFT),
                 date('H:i:00', strtotime($cutoffTime)),
@@ -91,7 +104,7 @@ Here's how it is done:
             ->setLocation(
                 (new Location())
                     ->setAllowSundaySorting(!empty($mondayDelivery))
-                    ->setDeliveryOptions(['PG', 'PGE'])
+                    ->setDeliveryOptions(['PG'])
                     ->setOptions(['Daytime'])
                     ->setHouseNr('66')
                     ->setPostalcode('2132WT')
@@ -111,11 +124,52 @@ Here's how it is done:
             ->setMessage(new Message())
     );
 
-The response variable will contain the timeframes, nearest locations and delivery date. The reponse will be an array with the keys
-`timeframes`, `locations` and `delivery_date`. You can then use the delivery date to prune any timeframes that can no longer be guaranteed.
+The response variable will be an associative array containing the timeframes, nearest locations and delivery date. It has the following keys:
 
+.. confval:: timeframes
+
+    This is a :php:class:`Firstred\\PostNL\\Entity\\Response\\ResponseTimeframes` object containing all the timeframes. You can iterate over all the available timeframes as follows.
+
+    .. code-block:: php
+
+        foreach ($response['timeframes'] as $timeframe) {
+            $date = $timeframe->getDate()->format('Y-m-d');
+
+            // Note that a timeframe object might have multiple embedded timeframes.
+            // This might happen when you request both `Daytime` and `Evening` timeframes
+            $from = $timeframe->getTimeframes()[0]->getFrom();
+            $to = $timeframe->getTimeframes()[0]->getTo();
+
+            echo "$date - from: $from, to: $to\n";
+        }
+
+        // Output: 2020-03-03 - from: 12:15:00, to: 14:00:00
+
+    .. note::
+
+        Note that the API usually groups timeframes by date, but is not guaranteed to do so, so do not rely on it!
+
+ The embedded timeframes contain the actual timeframes on that particular day.
+
+        The response format is the same for both the SOAP and REST API and is described on this page:
+        https://developer.postnl.nl/browse-apis/delivery-options/timeframe-webservice/testtool-rest/#/Timeframe/get_calculate_timeframes
+
+    .. note::
+
+        Dates and times returned by the library always use the same format for consistency and therefore may differ from the API.
+        Please refer to the :ref:`formats` chapter for more information.
+
+.. confval:: locations
+
+    The pickup locations can be found in the :php:class:`Firstred\\PostNL\\Entity\\Response\\GetNearestLocationsResponse` object.
+
+.. confval:: delivery_date
+
+    The delivery date that was found in a :php:class:`Firstred\\PostNL\\Entity\\Response\\GetDeliveryDateResponse` object.
+
+-------------------------
 Requesting a merged label
-=========================
+-------------------------
 
 Here is how you can request two labels and have them merged into a single PDF automatically:
 

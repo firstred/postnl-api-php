@@ -2061,7 +2061,11 @@ class PostNL implements LoggerAwareInterface
      * @param GetNearestLocations $getNearestLocations
      * @param GetDeliveryDate     $getDeliveryDate
      *
-     * @return array [uuid => ResponseTimeframes, uuid => GetNearestLocationsResponse, uuid => GetDeliveryDateResponse]
+     * @return array [
+     *                   timeframes => ResponseTimeframes,
+     *                   locations => GetNearestLocationsResponse,
+     *                   delivery_date => GetDeliveryDateResponse,
+     *               ]
      *
      * @throws HttpClientException
      * @throws InvalidArgumentException
