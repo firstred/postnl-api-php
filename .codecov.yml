@@ -7,7 +7,7 @@ coverage:
     project:
       default: on
     patch:
-      default: on
+      default: off
     changes:
       default: off
 
