@@ -5,7 +5,6 @@ By default the library will use cURL or Guzzle when available. You can always sw
 
 .. code-block:: php
 
-    <?php
     $postnl = new PostNL(...);
     $postnl->setHttpClient(\Firstred\PostNL\HttpClient\CurlClient::getInstance());
 

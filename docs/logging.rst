@@ -6,7 +6,6 @@ In order to enable logging you will need to pass a PSR-3 compatible logger.
 
 .. code-block:: php
 
-    <?php
     use League\Flysystem\Adapter\Local;
     use League\Flysystem\Filesystem;
 
@@ -31,4 +30,5 @@ In order to enable logging you will need to pass a PSR-3 compatible logger.
 .. note::
 
      This example used the Wappr logger. You can use any logger you like, as long as it implements the PSR-3 standard.
-     The log level needs to be set at ``DEBUG``.
+     To log all responses the level needs to be set at ``DEBUG``.
+     For error responses you can set the debug level to ``ERROR``.

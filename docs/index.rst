@@ -3,7 +3,7 @@ Welcome to the unofficial PostNL PHP library documentation!
 
 These API bindings make it easy to connect to PostNL's CIF API, used for retrieving delivery options, printing shipment labels and finding shipment statuses.
 
-- It has a simple interface for connecting with either the legacy, SOAP or REST API.
+- It has a simple interface for connecting with either the SOAP or REST API.
 
 - Abstracts away direct requests to the API, allowing you to focus on the code itself. The object structure is based on the SOAP API.
 
@@ -19,11 +19,10 @@ These API bindings make it easy to connect to PostNL's CIF API, used for retriev
     
 - Framework agnostic. You can use this library with any framework.
 
-- A custom HTTP client interface so you can use the HTTP client of your choice. Using the Guzzle client is strongly recommended, because of its higher performance and superb error correction.
+- A custom HTTP client interface so you can use the HTTP client of your choice. Using the Guzzle or Symfony HTTP client is strongly recommended.
 
 .. code-block:: php
 
-   <?php
    $postnl = new PostNL(...);
    $timeframes = $postnl->getTimeframes(
        (new GetTimeframes())
@@ -48,7 +47,9 @@ Developer Guide
 
    overview.rst
    quickstart.rst
-   services.rst
+   deliveryoptions.rst
+   createshipments.rst
+   trackshipments.rst
    httpclient.rst
    caching.rst
    logging.rst

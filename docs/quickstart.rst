@@ -21,7 +21,6 @@ Here's how it is done:
 
 .. code-block:: php
 
-    <?php
     use Firstred\PostNL\Entity\Label;
     use Firstred\PostNL\PostNL;
     use Firstred\PostNL\Entity\Customer;
@@ -118,7 +117,6 @@ Here is how you can request two labels and have them merged into a single PDF au
 
 .. code-block:: php
 
-    <?php
     use Firstred\PostNL\Entity\Label;
     use Firstred\PostNL\PostNL;
     use Firstred\PostNL\Entity\Customer;
@@ -223,7 +221,6 @@ customer
 
     .. code-block:: php
 
-        <?php
         // Create a new customer
         $client = new Customer::create([
           'CollectionLocation' => '123456',                    // Your collection location
@@ -254,7 +251,6 @@ apikey
 
     .. code-block:: php
 
-        <?php
         $usernameToken = new UsernameToken('username', 'token');
 
     You can request an API key for the sandbox environment on this page: https://developer.postnl.nl/content/request-api-key
