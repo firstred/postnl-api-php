@@ -1,6 +1,8 @@
-**************
+.. _authentication:
+
+==============
 Authentication
-**************
+==============
 
 The PostNL API requires an API key to authenticate. You can request one via `MijnPostNL <https://mijn.postnl.nl/c/BP2_Mod_APIManagement.app>`_.
 
@@ -129,6 +131,65 @@ When you have all the required information, you are ready to configure the libra
             false,            // Sandbox = false, meaning we are now using the live environment
             PostNL::MODE_REST // We are going to use the REST API (default)
         );
+
+The PostNL client constructor accepts a few options:
+
+customer
+    ``Customer`` - `required`
+
+    The ``Customer`` object that is used to configure the client and let PostNL know
+    who is requesting the data.
+
+    .. code-block:: php
+
+        // Create a new customer
+        $client = new Customer::create([
+          'CollectionLocation' => '123456',                    // Your collection location
+          'CustomerCode'       => 'DEVC',                      // Your Customer Code
+          'CustomerNumber'     => '11223344',                  // Your Customer Number
+          'GlobalPackBarcodeType('CX'),                        // Add your GlobalPack information if you need
+          'GlobalPackCustomerCode('1234'),                     // to create international shipment labels
+          'ContactPerson'      => 'Sander',
+          'Address'            => Address::create([
+              'AddressType' => '02',                           // This address will be shown on the labels
+              'City'        => 'Hoofddorp',
+              'CompanyName' => 'PostNL',
+              'Countrycode' => 'NL',
+              'HouseNr'     => '42',
+              'Street'      => 'Siriusdreef',
+              'Zipcode'     => '2132WT',
+          ]),
+          'Email'              => 'test@voorbeeld.nl',
+          'Name'               => 'Michael',
+      ]);
+
+apikey
+    ``string``|``UsernameToken`` - `required`
+
+    The ``apikey`` to use for the API. Note that if you want to switch from the legacy API to
+    the new SOAP and REST API you will have to request a new key. The username can be omitted.
+    If you want to connect to the legacy API you should pass a ``UsernameToken`` with your username and token set:
+
+    .. code-block:: php
+
+        $usernameToken = new UsernameToken('username', 'token');
+
+    You can request an API key for the sandbox environment on this page: https://developer.postnl.nl/content/request-api-key
+    For a live key you should contact your PostNL account manager.
+
+sandbox
+    ``bool`` - `required`
+
+    Indicate whether you'd like to connect to the sandbox environment. When `false` the library uses the live endpoints.
+
+mode
+    ``int`` - `optional, defaults to REST`
+
+    This library provides three ways to connect to the API:
+
+    - 1: REST mode
+    - 2: SOAP mode
+    - 5: Legacy mode -- This is the previous SOAP API, which at the moment of writing is still in operation.
 
 -------------
 Authorization

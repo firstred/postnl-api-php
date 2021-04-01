@@ -5,8 +5,10 @@ Quickstart
 ==========
 
 This page provides a quick introduction to this library and a few quick copy/paste examples which you can adjust to your likings.
-If you do not have the library installed, head over to the :ref:`installation`
-page.
+
+This section assumess that you have installed the library and are fully authenticated.
+
+If you do not have the library installed, head over to the :ref:`installation` page. If you do not know what to pass to the main :php:class:`Firstred\\PostNL\\PostNL` class, please refer to the chapter :ref:`authentication` first.
 
 .. _doing a request:
 
@@ -163,15 +165,29 @@ The response variable will be an associative array containing the timeframes, ne
 
     The pickup locations can be found in the :php:class:`Firstred\\PostNL\\Entity\\Response\\GetNearestLocationsResponse` object.
 
+    You can iterate over the found locations as follows:
+
+    .. code-block:: php
+
+        foreach ($response['locations']->getGetLocationsResult()->getResponseLocation() as $location) {
+            var_dump($location);
+        }
+
 .. confval:: delivery_date
 
-    The delivery date that was found in a :php:class:`Firstred\\PostNL\\Entity\\Response\\GetDeliveryDateResponse` object.
+    The delivery date that was found, returned in a :php:class:`Firstred\\PostNL\\Entity\\Response\\GetDeliveryDateResponse` object.
+
+    You can print the date as follows:
+
+    .. code-block:: php
+
+        echo $response['delivery_date']->getDeliveryDate()->format('d-m-Y');
 
 -------------------------
-Requesting a merged label
+Creating a (merged) label
 -------------------------
 
-Here is how you can request two labels and have them merged into a single PDF automatically:
+Here is how you can create two labels and have them merged into a single PDF automatically:
 
 .. code-block:: php
 
@@ -269,96 +285,87 @@ This will write a ``labels.pdf`` file that looks like this:
 
 .. image:: img/mergedlabels.png
 
-The PostNL client constructor accepts a few options:
+If you'd rather have the user download a label, you can set the ``Content-Disposition`` header:
 
-customer
-    ``Customer`` - `required`
+.. code-block:: php
 
-    The ``Customer`` object that is used to configure the client and let PostNL know
-    who is requesting the data.
+    $label = ...;
 
-    .. code-block:: php
+    header('Content-Type: application/pdf');
+    header('Content-Disposition: attachment; filename="label.pdf"');
+    echo $label;
+    exit;
 
-        // Create a new customer
-        $client = new Customer::create([
-          'CollectionLocation' => '123456',                    // Your collection location
-          'CustomerCode'       => 'DEVC',                      // Your Customer Code
-          'CustomerNumber'     => '11223344',                  // Your Customer Number
-          'GlobalPackBarcodeType('CX'),                        // Add your GlobalPack information if you need
-          'GlobalPackCustomerCode('1234'),                     // to create international shipment labels
-          'ContactPerson'      => 'Sander',
-          'Address'            => Address::create([
-              'AddressType' => '02',                           // This address will be shown on the labels
-              'City'        => 'Hoofddorp',
-              'CompanyName' => 'PostNL',
-              'Countrycode' => 'NL',
-              'HouseNr'     => '42',
-              'Street'      => 'Siriusdreef',
-              'Zipcode'     => '2132WT',
-          ]),
-          'Email'              => 'test@voorbeeld.nl',
-          'Name'               => 'Michael',
-      ]);
+.. note::
 
-apikey
-    ``string``|``UsernameToken`` - `required`
-
-    The ``apikey`` to use for the API. Note that if you want to switch from the legacy API to
-    the new SOAP and REST API you will have to request a new key. The username can be omitted.
-    If you want to connect to the legacy API you should pass a ``UsernameToken`` with your username and token set:
+    Your framework might already provide a way to output files. In Symfony controllers you can use:
 
     .. code-block:: php
 
-        $usernameToken = new UsernameToken('username', 'token');
+        <?php
 
-    You can request an API key for the sandbox environment on this page: https://developer.postnl.nl/content/request-api-key
-    For a live key you should contact your PostNL account manager.
+        use Symfony\Component\HttpFoundation\Response;
+        use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
-sandbox
-    ``bool`` - `required`
+        public function downloadLabelAction()
+        {
+            // Provide a name for your file with extension
+            $filename = 'label.pdf';
 
-    Indicate whether you'd like to connect to the sandbox environment. When `false` the library uses the live endpoints.
+            // Create the label
+            $label = ...;
 
-mode
-    ``int`` - `optional, defaults to REST`
+            // Return a response with a specific content
+            $response = new Response($label);
 
-    This library provides three ways to connect to the API:
+            // Create the disposition of the file
+            $disposition = $response->headers->makeDisposition(
+                ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+                $filename
+            );
 
-    - 1: REST mode
-    - 2: SOAP mode
-    - 5: Legacy mode -- This is the previous SOAP API, which at the moment of writing is still in operation.
+            // Set the content type and disposition
+            $response->headers->set('Content-Type', 'application/pdf');
+            $response->headers->set('Content-Disposition', $disposition);
 
------------------
-Building Requests
------------------
+            // Dispatch request
+            return $response;
+        }
 
-In most cases you would want to create request objects and pass them to one of the methods of the main object (``PostNL``).
-One exception is the Barcode Service. You can directly request multiple barcodes and for multiple countries at once. The library
-will internally handle the concurrent requests to the API.
+    Source: https://ourcodeworld.com/articles/read/329/how-to-send-a-file-as-response-from-a-controller-in-symfony-3
 
-In the above-mentioned merged label example we are passing two ``Shipment`` objects, filled with the needed information to generate the labels.
+--------------------------
+Building requests manually
+--------------------------
+
+For most cases using the API through the (:php:class:`Firstred\\PostNL\\PostNL`) object would be sufficient. There might be times, however, when the main class does not align with your use case. This section aims to describe the process that is involved in creating requests, sending them and processing the responses.
+
+Interacting with the API through this library
+=============================================
+
+In the above-mentioned merged label example we are passing two :php:class:`Firstred\\PostNL\\Entity\\Shipment` objects, filled with the needed information to generate the labels.
 To merge those labels manually, we have to set the merge option to ``false`` and can omit both the ``format`` and ``positions`` parameters.
-This will in turn make the library return ``GenerateLabelResponse`` objects.
+This will in turn make the library return :php:class:`Firstred\\PostNL\\Entity\\Response\\GenerateLabelResponse` objects.
 
-These are in line with the ``GenerateLabelResponse`` nodes generated by the SOAP API, even when using the REST API.
-The main reason for this standardization is that the SOAP API has better documentation. If you need a quick reference of
-the ``GenerateLabelResponse`` object, you can either look up the code of the ``GenerateLabelResponse`` class or
+These are in line with the :php:class:`Firstred\\PostNL\\Entity\\Response\\GenerateLabelResponse` nodes generated by the SOAP API, even when using the REST API.
+The main reason for this standardization is that the initial version of this library was built for the SOAP API. If you need a quick reference of
+the :php:class:`Firstred\\PostNL\\Entity\\Response\\GenerateLabelResponse` object, you can either look up the code of the `GenerateLabelResponse <https://github.com/firstred/postnl-api-php/blob/v1.2.x/src/Entity/Response/GenerateLabelResponse.php>`_ class or
 `navigate to the API documentation directly <https://developer.postnl.nl/apis/labelling-webservice/documentation#toc-9>`_.
 
-Sending concurrent requests
-===========================
+Sending concurrent requests manually
+====================================
 
 There is no direct need to manually handle concurrent requests. This library handles most cases automatically
 and even provides a special function to quickly grab timeframe and location data for frontend delivery options widgets.
 
 In case you manually want to send a custom mix of requests, you can look up the corresponding functions in the
 Service class of your choice and call the ```buildXXXXXXRequest()``` functions manually. Thanks to the PSR-7 standard
-used by this library you can use the ``Request`` object that is returned to access the full request that would otherwise
+used by this library you can use the :php:interface:`Psr\Http\Message\RequestInterface` object that is returned to access the full request that would otherwise
 be sent directly. To pick up where you left off you can then grab the response and pass it to one of the ``processXXXXXXXResponse()```
 functions of the Service class. The easiest method is to grab the raw HTTP message and parse it with the included PSR-7 library.
 An example can be found in the `cURL client <https://github.com/firstred/postnl-api-php/blob/b3837cec23e1b8e806c5ea29d79d0fae82a0e956/src/HttpClient/CurlClient.php#L258>`_.
 
-Using Response objects
+Processing Response objects
 ======================
 
 .. note::

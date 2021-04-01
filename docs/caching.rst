@@ -1,6 +1,8 @@
-*******
+.. _caching:
+
+=======
 Caching
-*******
+=======
 
 PSR-6 caching is supported, which means you can grab any caching library for PHP that you like and plug it right into this library.
 

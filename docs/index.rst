@@ -13,15 +13,15 @@ These API bindings make it easy to connect to PostNL's CIF API, used for retriev
 
 - Follows PHP standards, some of them are:
 
-  - PSR-7 interfaces for requests and responses. Build and process functions are provided so you can create your own mix of batch requests.
+  - PSR-7 interfaces for requests and responses. Build and process functions are provided for every service so you can create your own mix of batch requests. See the `Firstred\\PostNL\\PostNL::getTimeframesAndNearestLocations <https://github.com/firstred/postnl-api-php/blob/b3f5c6e5a92edabb759ba32720b3fcb5a49635c0/src/PostNL.php#L2076-L2158>`_ method for an example.
     
-  - PSR-6 caching, so you can use your favorite cache for caching API responses.
+  - PSR-6 caching, so you can use your favorite cache for caching API responses. Chapter :ref:`caching`.
     
-  - PSR-3 logging. You can log the requests and responses for debugging purposes.
-    
+  - PSR-3 logging. You can log the requests and responses for debugging purposes. More info on the page :ref:`logging`.
+
 - Framework agnostic. You can use this library with any framework.
 
-- A custom HTTP client interface so you can use the HTTP client of your choice. Using the `Guzzle <https://docs.guzzlehttp.org/>`_ or `Symfony HTTP client <https://symfony.com/doc/current/http_client.html>`_ is strongly recommended. Any HTTPlug client can be used by installing the related packages.
+- A custom HTTP client interface so you can use the HTTP client of your choice. Using the `Guzzle <https://docs.guzzlehttp.org/>`_ or `Symfony HTTP client <https://symfony.com/doc/current/http_client.html>`_ is strongly recommended. Any HTTPlug client can be used by installing the related packages. See the :ref:`http client` chapter for more information.
 
 .. code-block:: php
 
