@@ -119,8 +119,8 @@ abstract class AbstractService
             || $this instanceof ShippingStatusServiceInterface
         ) ? 'Rest' : 'Soap';
 
-        if (method_exists($this, "{$name}{$mode}")) {
-            return call_user_func_array([$this, "{$name}{$mode}"], $args);
+        if (method_exists($this, "$name$mode")) {
+            return call_user_func_array([$this, "$name$mode"], $args);
         } elseif (method_exists($this, $name)) {
             return call_user_func_array([$this, $name], $args);
         }
@@ -138,8 +138,6 @@ abstract class AbstractService
      *
      * @return bool
      *
-     * @throws ReflectionException
-     *
      * @since 1.0.0
      */
     public function setService($object)
@@ -148,7 +146,11 @@ abstract class AbstractService
             return false;
         }
 
-        $reflection = new ReflectionClass(get_called_class());
+        try {
+            $reflection = new ReflectionClass(get_called_class());
+        } catch (ReflectionException $e) {
+            return false;
+        }
         $service = substr($reflection->getShortName(), 0, strlen($reflection->getShortName()) - 7);
         $object->setCurrentService($service);
         $defaultProperties = $object::$defaultProperties;

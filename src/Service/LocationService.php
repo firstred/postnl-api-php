@@ -51,7 +51,6 @@ use Psr\Cache\CacheItemInterface;
 use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use ReflectionException;
 use Sabre\Xml\LibXMLException;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Service as XmlService;
@@ -116,7 +115,6 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
-     * @throws ReflectionException
      * @throws ResponseException
      *
      * @since 1.0.0
@@ -166,7 +164,6 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws LibXMLException
      * @throws ResponseException
      * @throws PsrCacheInvalidArgumentException
-     * @throws ReflectionException
      * @throws HttpClientException
      *
      * @since 1.0.0
@@ -214,7 +211,6 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws CifException
      * @throws ResponseException
      * @throws PsrCacheInvalidArgumentException
-     * @throws ReflectionException
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
@@ -266,7 +262,6 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws LibXMLException
      * @throws ResponseException
      * @throws PsrCacheInvalidArgumentException
-     * @throws ReflectionException
      * @throws HttpClientException
      *
      * @since 1.0.0
@@ -315,10 +310,9 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws CifException
      * @throws ResponseException
      * @throws PsrCacheInvalidArgumentException
-     * @throws ReflectionException
-     * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
+     * @throws HttpClientException
      *
      * @since 1.0.0
      */
@@ -367,7 +361,6 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws LibXMLException
      * @throws ResponseException
      * @throws PsrCacheInvalidArgumentException
-     * @throws ReflectionException
      * @throws HttpClientException
      *
      * @since 1.0.0
@@ -409,8 +402,6 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @param GetNearestLocations $getNearestLocations
      *
      * @return RequestInterface
-     *
-     * @throws ReflectionException
      *
      * @since 1.0.0
      */
@@ -485,7 +476,6 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @return GetNearestLocationsResponse|null
      *
      * @throws ResponseException
-     * @throws ReflectionException
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
@@ -509,8 +499,6 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @param GetNearestLocations $getLocations
      *
      * @return RequestInterface
-     *
-     * @throws ReflectionException
      *
      * @since 1.0.0
      */
@@ -561,7 +549,6 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws CifException
      * @throws LibXMLException
      * @throws ResponseException
-     * @throws ReflectionException
      * @throws HttpClientException
      *
      * @since 1.0.0
@@ -607,8 +594,6 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @param GetLocationsInArea $getLocations
      *
      * @return RequestInterface
-     *
-     * @throws ReflectionException
      *
      * @since 1.0.0
      */
@@ -661,7 +646,6 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @return GetLocationsInAreaResponse|null
      *
      * @throws ResponseException
-     * @throws ReflectionException
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
@@ -687,8 +671,6 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @param GetLocationsInArea $getLocations
      *
      * @return RequestInterface
-     *
-     * @throws ReflectionException
      *
      * @since 1.0.0
      */
@@ -737,7 +719,6 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws CifException
      * @throws LibXMLException
      * @throws ResponseException
-     * @throws ReflectionException
      * @throws HttpClientException
      *
      * @since 1.0.0
@@ -784,8 +765,6 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      *
      * @return RequestInterface
      *
-     * @throws ReflectionException
-     *
      * @since 1.0.0
      */
     public function buildGetLocationRequestREST(GetLocation $getLocation)
@@ -816,7 +795,6 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @return GetLocationsInAreaResponse|null
      *
      * @throws ResponseException
-     * @throws ReflectionException
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
@@ -873,8 +851,6 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      *
      * @return RequestInterface
      *
-     * @throws ReflectionException
-     *
      * @since 1.0.0
      */
     public function buildGetLocationRequestSOAP(GetLocation $getLocations)
@@ -924,7 +900,6 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws CifException
      * @throws LibXMLException
      * @throws ResponseException
-     * @throws ReflectionException
      * @throws HttpClientException
      *
      * @since 1.0.0

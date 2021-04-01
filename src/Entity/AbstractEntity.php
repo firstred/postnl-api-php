@@ -75,9 +75,7 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
      *
      * @param array $properties
      *
-     * @return static|object|null
-     *
-     * @throws ReflectionException
+     * @return object|null
      *
      * @since 1.0.0
      */
@@ -89,11 +87,10 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
 
         try {
             $reflectionClass = new ReflectionClass(get_called_class());
+            $instance = $reflectionClass->newInstanceWithoutConstructor();
         } catch (Exception $e) {
             return null;
         }
-
-        $instance = $reflectionClass->newInstanceWithoutConstructor();
 
         foreach ($properties as $name => $value) {
             $instance->{'set'.$name}($value);
@@ -284,7 +281,7 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
                 }
 
                 $entities = [];
-                foreach ($value as $name => $item) {
+                foreach ($value as $item) {
                     try {
                         $fqcn = static::getFullyQualifiedEntityClassName($singularEntityName);
                     } catch (InvalidArgumentException $e) {

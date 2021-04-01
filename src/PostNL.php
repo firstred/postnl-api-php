@@ -37,6 +37,7 @@ use Firstred\PostNL\Entity\Message\Message;
 use Firstred\PostNL\Entity\Request\CompleteStatus;
 use Firstred\PostNL\Entity\Request\Confirming;
 use Firstred\PostNL\Entity\Request\CurrentStatus;
+use Firstred\PostNL\Entity\Request\CurrentStatusByReference;
 use Firstred\PostNL\Entity\Request\GenerateBarcode;
 use Firstred\PostNL\Entity\Request\GenerateLabel;
 use Firstred\PostNL\Entity\Request\SendShipment;
@@ -63,7 +64,7 @@ use Firstred\PostNL\Entity\Response\ResponseTimeframes;
 use Firstred\PostNL\Entity\Response\UpdatedShipmentsResponse;
 use Firstred\PostNL\Entity\Shipment;
 use Firstred\PostNL\Entity\SOAP\UsernameToken;
-use Firstred\PostNL\Exception\AbstractException;
+use Firstred\PostNL\Exception\PostNLException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\InvalidBarcodeException;
@@ -126,6 +127,7 @@ use function constant;
 use function defined;
 use function ini_get;
 use function interface_exists;
+use function is_array;
 use function php_sapi_name;
 use function trigger_error;
 use function version_compare;
@@ -612,6 +614,8 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
+     * Get PSR-7 Request factory.
+     *
      * @return RequestFactoryInterface
      *
      * @since 1.2.0
@@ -626,6 +630,8 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
+     * Set PSR-7 Request factory.
+     *
      * @param RequestFactoryInterface $requestFactory
      *
      * @return static
@@ -640,6 +646,8 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
+     * Get PSR-7 Response factory.
+     *
      * @return ResponseFactoryInterface
      *
      * @since 1.2.0
@@ -654,6 +662,8 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
+     * Set PSR-7 Response factory.
+     *
      * @param ResponseFactoryInterface $responseFactory
      *
      * @return static
@@ -668,6 +678,8 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
+     * Set PSR-7 Stream factory.
+     *
      * @return StreamFactoryInterface
      *
      * @since 1.2.0
@@ -682,6 +694,8 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
+     * Set PSR-7 Stream factory.
+     *
      * @param StreamFactoryInterface $streamFactory
      *
      * @return static
@@ -1298,6 +1312,8 @@ class PostNL implements LoggerAwareInterface
      * @param bool     $confirm
      *
      * @return GenerateLabelResponse
+     *
+     * @throws InvalidArgumentException
      */
     public function generateLabel(
         Shipment $shipment,
@@ -1356,7 +1372,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @return GenerateLabelResponse[]|string
      *
-     * @throws AbstractException
+     * @throws PostNLException
      * @throws NotSupportedException
      * @throws CrossReferenceException
      * @throws FilterException
@@ -1438,7 +1454,7 @@ class PostNL implements LoggerAwareInterface
         } else {
             $a6s = 4; // Amount of A6s available
             foreach ($responseShipments as $responseShipment) {
-                if ($responseShipment instanceof AbstractException) {
+                if ($responseShipment instanceof PostNLException) {
                     throw $responseShipment;
                 }
                 $pdfContent = base64_decode($responseShipment->getResponseShipments()[0]->getLabels()[0]->getContent());
@@ -1560,13 +1576,8 @@ class PostNL implements LoggerAwareInterface
      *   - Fill the Shipment->Barcode property. Leave the rest empty.
      * - CurrentStatusByReference:
      *   - Fill the Shipment->Reference property. Leave the rest empty.
-     * - CurrentStatusByPhase:
-     *   - Fill the Shipment->PhaseCode property, do not pass Barcode or Reference.
-     *     Optionally add DateFrom and/or DateTo.
-     * - CurrentStatusByStatus:
-     *   - Fill the Shipment->StatusCode property. Leave the rest empty.
      *
-     * @param CurrentStatus $currentStatus
+     * @param CurrentStatus|CurrentStatusByReference $currentStatus
      *
      * @return CurrentStatusResponse
      *
@@ -1600,7 +1611,7 @@ class PostNL implements LoggerAwareInterface
     /**
      * Get the current status of the given shipment by barcode.
      *
-     * @param string $barcode  Pass one or multiple barcodes
+     * @param string $barcode  Pass a single barcode
      * @param bool   $complete Return the complete status (incl. shipment history)
      *
      * @return CurrentStatusResponseShipment|CompleteStatusResponseShipment
@@ -1644,7 +1655,7 @@ class PostNL implements LoggerAwareInterface
     /**
      * Get the current statuses of the given shipments by barcodes.
      *
-     * @param string[] $barcodes Pass one or multiple barcodes
+     * @param string[] $barcodes Pass multiple barcodes
      * @param bool     $complete Return the complete status (incl. shipment history)
      *
      * @return CurrentStatusResponseShipment[]
@@ -1655,6 +1666,68 @@ class PostNL implements LoggerAwareInterface
      * @since 1.2.0
      */
     public function getShippingStatusesByBarcodes(array $barcodes, $complete = false)
+    {
+        throw new NotImplementedException();
+    }
+
+    /**
+     * Get the current status of the given shipment by reference.
+     *
+     * @param string $reference Pass a single reference
+     * @param bool   $complete  Return the complete status (incl. shipment history)
+     *
+     * @return CurrentStatusResponseShipment|CompleteStatusResponseShipment
+     *
+     * @throws ShipmentNotFoundException
+     *
+     * @since 1.2.0
+     */
+    public function getShippingStatusByReference($reference, $complete = false)
+    {
+        if ($complete) {
+            $statusRequest = new CompleteStatus(
+                (new Shipment())
+                    ->setReference($reference)
+
+            );
+        } else {
+            $statusRequest = new CurrentStatus(
+                (new Shipment())
+                    ->setReference($reference)
+            );
+        }
+
+        if (!$statusRequest->getMessage()) {
+            $statusRequest->setMessage(new Message());
+        }
+
+        if ($complete) {
+            $shipments = $this->getShippingStatusService()->completeStatus($statusRequest)->getShipments();
+        } else {
+            $shipments = $this->getShippingStatusService()->currentStatus($statusRequest)->getShipments();
+        }
+
+        if (empty($shipments) || !is_array($shipments)) {
+            throw new ShipmentNotFoundException($reference);
+        }
+
+        return $shipments[0];
+    }
+
+    /**
+     * Get the current statuses of the given shipments by references.
+     *
+     * @param string[] $references Pass multiple references
+     * @param bool     $complete   Return the complete status (incl. shipment history)
+     *
+     * @return CurrentStatusResponseShipment[]
+     * @psalm-return non-empty-array<string, CurrentStatusResponseShipment>
+     *
+     * @throws NotImplementedException
+     *
+     * @since 1.2.0
+     */
+    public function getShippingStatusesByReference(array $references, $complete = false)
     {
         throw new NotImplementedException();
     }

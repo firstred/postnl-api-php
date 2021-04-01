@@ -27,16 +27,11 @@
 namespace Firstred\PostNL\Service;
 
 use DateTimeInterface;
-use Exception;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Request\CompleteStatus;
-use Firstred\PostNL\Entity\Request\CompleteStatusByPhase;
 use Firstred\PostNL\Entity\Request\CompleteStatusByReference;
-use Firstred\PostNL\Entity\Request\CompleteStatusByStatus;
 use Firstred\PostNL\Entity\Request\CurrentStatus;
-use Firstred\PostNL\Entity\Request\CurrentStatusByPhase;
 use Firstred\PostNL\Entity\Request\CurrentStatusByReference;
-use Firstred\PostNL\Entity\Request\CurrentStatusByStatus;
 use Firstred\PostNL\Entity\Request\GetSignature;
 use Firstred\PostNL\Entity\Response\CompleteStatusResponse;
 use Firstred\PostNL\Entity\Response\CompleteStatusResponseEvent;
@@ -63,18 +58,20 @@ use function json_decode;
 /**
  * Class ShippingStatusService.
  *
- * @method CurrentStatusResponse  currentStatus(CurrentStatus|CurrentStatusByReference|CurrentStatusByPhase|CurrentStatusByStatus $currentStatus)
- * @method RequestInterface       buildCurrentStatusRequest(CurrentStatus|CurrentStatusByReference|CurrentStatusByPhase|CurrentStatusByStatus $currentStatus)
- * @method CurrentStatusResponse  processCurrentStatusResponse(ResponseInterface $response)
- * @method UpdatedShipmentsResponse completeStatus(CompleteStatus|CompleteStatusByReference|CompleteStatusByPhase|CompleteStatusByStatus $completeStatus)
- * @method RequestInterface       buildCompleteStatusRequest(CompleteStatus|CompleteStatusByReference|CompleteStatusByPhase|CompleteStatusByStatus $completeStatus)
- * @method UpdatedShipmentsResponse processCompleteStatusResponse(ResponseInterface $response)
- * @method GetSignature           getSignature(GetSignature $getSignature)
- * @method RequestInterface       buildGetSignatureRequest(GetSignature $getSignature)
- * @method GetSignature           processGetSignatureResponse(ResponseInterface $response)
- * @method UpdatedShipmentsResponse[]    getUpdatedShipments(Customer $customer, DateTimeInterface|null $dateTimeFrom, DateTimeInterface|null $dateTimeTo)
- * @method RequestInterface              buildGetUpdatedShipmentsRequest(Customer $customer, DateTimeInterface|null $dateTimeFrom, DateTimeInterface|null $dateTimeTo)
- * @method UpdatedShipmentsResponse      processGetUpdatedShipmentsResponse(ResponseInterface $response)
+ * @method CurrentStatusResponse      currentStatus(CurrentStatus|CurrentStatusByReference $currentStatus)
+ * @method CurrentStatusResponse[]    currentStatuses(CurrentStatus[]|CurrentStatusByReference[] $currentStatuses)
+ * @method RequestInterface           buildCurrentStatusRequest(CurrentStatus|CurrentStatusByReference $currentStatus)
+ * @method CurrentStatusResponse      processCurrentStatusResponse(ResponseInterface $response)
+ * @method UpdatedShipmentsResponse   completeStatus(CompleteStatus|CompleteStatusByReference $completeStatus)
+ * @method UpdatedShipmentsResponse[] completeStatuses(CompleteStatus[]|CompleteStatusByReference[] $completeStatuses)
+ * @method RequestInterface           buildCompleteStatusRequest(CompleteStatus|CompleteStatusByReference $completeStatus)
+ * @method UpdatedShipmentsResponse   processCompleteStatusResponse(ResponseInterface $response)
+ * @method GetSignature               getSignature(GetSignature $getSignature)
+ * @method RequestInterface           buildGetSignatureRequest(GetSignature $getSignature)
+ * @method GetSignature               processGetSignatureResponse(ResponseInterface $response)
+ * @method UpdatedShipmentsResponse[] getUpdatedShipments(Customer $customer, DateTimeInterface|null $dateTimeFrom, DateTimeInterface|null $dateTimeTo)
+ * @method RequestInterface           buildGetUpdatedShipmentsRequest(Customer $customer, DateTimeInterface|null $dateTimeFrom, DateTimeInterface|null $dateTimeTo)
+ * @method UpdatedShipmentsResponse   processGetUpdatedShipmentsResponse(ResponseInterface $response)
  *
  * @since 1.0.0
  */
@@ -103,7 +100,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * - CurrentStatusByStatus:
      *   - Fill the Shipment->StatusCode property. Leave the rest empty.
      *
-     * @param CurrentStatus|CurrentStatusByReference|CurrentStatusByPhase|CurrentStatusByStatus $currentStatus
+     * @param CurrentStatus|CurrentStatusByReference $currentStatus
      *
      * @return CurrentStatusResponse
      *
@@ -127,7 +124,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
             $response = $item->get();
             try {
                 $response = PsrMessage::parseResponse($response);
-            } catch (\InvalidArgumentException $e) {
+            } catch (InvalidArgumentException $e) {
             }
         }
         if (!$response instanceof ResponseInterface) {
@@ -151,6 +148,11 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
         throw new ApiException('Unable to retrieve current status');
     }
 
+    public function currentStatusesREST(array $currentStatuses)
+    {
+        // TODO: Implement currentStatusesREST() method.
+    }
+
     /**
      * Gets the complete status.
      *
@@ -159,15 +161,10 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      *   - Fill the Shipment->Barcode property. Leave the rest empty.
      * - CurrentStatusByReference:
      *   - Fill the Shipment->Reference property. Leave the rest empty.
-     * - CurrentStatusByPhase:
-     *   - Fill the Shipment->PhaseCode property, do not pass Barcode or Reference.
-     *     Optionally add DateFrom and/or DateTo.
-     * - CurrentStatusByStatus:
-     *   - Fill the Shipment->StatusCode property. Leave the rest empty.
      *
-     * @param CompleteStatus $completeStatus
+     * @param CompleteStatus|CompleteStatusByReference $completeStatus
      *
-     * @return UpdatedShipmentsResponse
+     * @return CompleteStatusResponse
      *
      * @throws ApiException
      * @throws CifDownException
@@ -175,15 +172,18 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
-     * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
      * @throws ApiConnectionException
      *
      * @since 1.0.0
      */
-    public function completeStatusREST(CompleteStatus $completeStatus)
+    public function completeStatusREST($completeStatus)
     {
-        $item = $this->retrieveCachedItem($completeStatus->getId());
+        try {
+            $item = $this->retrieveCachedItem($completeStatus->getId());
+        } catch (PsrCacheInvalidArgumentException $e) {
+            $item = null;
+        }
         $response = null;
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
@@ -213,6 +213,11 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
         throw new ApiException('Unable to retrieve complete status');
     }
 
+    public function completeStatusesREST(array $completeStatuses)
+    {
+        // TODO: Implement completeStatusesREST() method.
+    }
+
     /**
      * Gets the signature.
      *
@@ -240,7 +245,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
             $response = $item->get();
             try {
                 $response = PsrMessage::parseResponse($response);
-            } catch (\InvalidArgumentException $e) {
+            } catch (InvalidArgumentException $e) {
             }
         }
         if (!$response instanceof ResponseInterface) {
@@ -271,7 +276,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * - CurrentStatus
      * - CurrentStatusByReference
      *
-     * @param CurrentStatus|CurrentStatusByReference|CurrentStatusByPhase|CurrentStatusByStatus $currentStatus
+     * @param CurrentStatus|CurrentStatusByReference $currentStatus
      *
      * @return RequestInterface
      *
@@ -549,6 +554,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @param DateTimeInterface|null $dateTimeTo
      *
      * @return UpdatedShipmentsResponse[]
+     *
      * @throws ApiConnectionException
      * @throws ApiException
      * @throws CifDownException

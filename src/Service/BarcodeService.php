@@ -30,6 +30,7 @@ use DateTimeImmutable;
 use Exception;
 use Firstred\PostNL\Entity\Request\GenerateBarcode;
 use Firstred\PostNL\Entity\SOAP\Security;
+use Firstred\PostNL\Exception\ApiConnectionException;
 use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
@@ -38,9 +39,9 @@ use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\PostNL;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use ReflectionException;
 use Sabre\Xml\Service as XmlService;
 use SimpleXMLElement;
+use stdClass;
 
 /**
  * Class BarcodeService.
@@ -92,8 +93,8 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
-     * @throws ReflectionException
      * @throws ResponseException
+     * @throws ApiConnectionException
      *
      * @since 1.0.0
      */
@@ -113,12 +114,15 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
      *
      * @param GenerateBarcode[] $generateBarcodes
      *
-     * @return string[]|ResponseException[]|ApiException[]|CifDownException[]|CifException[] Barcodes
+     * @return string[] Barcodes
      *
+     * @throws ApiException
+     * @throws CifDownException
+     * @throws CifException
      * @throws HttpClientException
-     * @throws ReflectionException
+     * @throws ResponseException
      *
-     * @noinspection PhpUnused
+     * @since 1.0.0
      */
     public function generateBarcodesREST(array $generateBarcodes)
     {
@@ -133,19 +137,8 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
 
         $barcodes = [];
         foreach ($httpClient->doRequests() as $uuid => $response) {
-            try {
-                $json = $this->processGenerateBarcodeResponseREST($response);
-                $barcode = $json->Barcode;
-            } catch (ResponseException $e) {
-                $barcode = $e;
-            } catch (ApiException $e) {
-                $barcode = $e;
-            } catch (CifDownException $e) {
-                $barcode = $e;
-            } catch (CifException $e) {
-                $barcode = $e;
-            }
-
+            $json = $this->processGenerateBarcodeResponseREST($response);
+            $barcode = $json->Barcode;
             $barcodes[$uuid] = $barcode;
         }
 
@@ -162,7 +155,6 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
-     * @throws ReflectionException
      * @throws ResponseException
      *
      * @since 1.0.0
@@ -181,8 +173,10 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
      *
      * @return string[] Barcodes
      *
+     * @throws CifDownException
+     * @throws CifException
      * @throws HttpClientException
-     * @throws ReflectionException
+     * @throws ResponseException
      *
      * @since 1.0.0
      */
@@ -199,12 +193,7 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
 
         $barcodes = [];
         foreach ($httpClient->doRequests() as $uuid => $response) {
-            try {
-                $barcode = $this->processGenerateBarcodeResponseSOAP($response);
-            } catch (Exception $e) {
-                $barcode = new ResponseException($e->getMessage(), $e->getCode(), $e, $response);
-            }
-
+            $barcode = $this->processGenerateBarcodeResponseSOAP($response);
             $barcodes[$uuid] = $barcode;
         }
 
@@ -217,8 +206,6 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
      * @param GenerateBarcode $generateBarcode
      *
      * @return RequestInterface
-     *
-     * @throws ReflectionException
      *
      * @since 1.0.0
      */
@@ -247,7 +234,7 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
      *
      * @param ResponseInterface $response
      *
-     * @return \stdClass
+     * @return stdClass
      *
      * @throws ApiException
      * @throws CifDownException
@@ -276,7 +263,6 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
      * @param GenerateBarcode $generateBarcode
      *
      * @return RequestInterface
-     * @throws ReflectionException
      *
      * @since 1.0.0
      */
@@ -335,7 +321,15 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
      */
     public function processGenerateBarcodeResponseSOAP(ResponseInterface $response)
     {
-        $xml = new SimpleXMLElement(static::getResponseText($response));
+        try {
+            $xml = new SimpleXMLElement(static::getResponseText($response));
+        } catch (HttpClientException $e) {
+            throw $e;
+        } catch (ResponseException $e) {
+            throw $e;
+        } catch (Exception $e) {
+            throw new ResponseException($e->getMessage(), $e->getCode(), $e);
+        }
 
         static::registerNamespaces($xml);
         static::validateSOAPResponse($xml);

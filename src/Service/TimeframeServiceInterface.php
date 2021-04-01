@@ -32,12 +32,12 @@ use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
-use Psr\Cache\InvalidArgumentException;
+use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use ReflectionException;
-use Sabre\Xml\LibXMLException;
 
 /**
  * Class TimeframeService.
@@ -60,9 +60,10 @@ interface TimeframeServiceInterface extends ServiceInterface
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
-     * @throws ReflectionException
-     * @throws InvalidArgumentException
      * @throws HttpClientException
+     * @throws PsrCacheInvalidArgumentException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
      * @throws ResponseException
      *
      * @since 1.0.0
@@ -79,9 +80,7 @@ interface TimeframeServiceInterface extends ServiceInterface
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
-     * @throws ReflectionException
-     * @throws InvalidArgumentException
-     * @throws LibXMLException
+     * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
      * @throws ResponseException
      *
@@ -96,8 +95,6 @@ interface TimeframeServiceInterface extends ServiceInterface
      *
      * @return RequestInterface
      *
-     * @throws ReflectionException
-     *
      * @since 1.0.0
      */
     public function buildGetTimeframesRequestREST(GetTimeframes $getTimeframes);
@@ -109,9 +106,10 @@ interface TimeframeServiceInterface extends ServiceInterface
      *
      * @return ResponseTimeframes|null
      *
-     * @throws ReflectionException
      * @throws HttpClientException
      * @throws ResponseException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
      *
      * @since 1.0.0
      */
@@ -123,8 +121,6 @@ interface TimeframeServiceInterface extends ServiceInterface
      * @param GetTimeframes $getTimeframes
      *
      * @return RequestInterface
-     *
-     * @throws ReflectionException
      *
      * @since 1.0.0
      */
@@ -139,8 +135,6 @@ interface TimeframeServiceInterface extends ServiceInterface
      *
      * @throws CifDownException
      * @throws CifException
-     * @throws ReflectionException
-     * @throws LibXMLException
      * @throws HttpClientException
      * @throws ResponseException
      *

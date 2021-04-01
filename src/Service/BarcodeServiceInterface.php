@@ -27,6 +27,7 @@
 namespace Firstred\PostNL\Service;
 
 use Firstred\PostNL\Entity\Request\GenerateBarcode;
+use Firstred\PostNL\Exception\ApiConnectionException;
 use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
@@ -34,7 +35,6 @@ use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\ResponseException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use ReflectionException;
 
 /**
  * Class BarcodeService.
@@ -53,14 +53,14 @@ interface BarcodeServiceInterface extends ServiceInterface
      *
      * @param GenerateBarcode $generateBarcode
      *
-     * @return string|null Barcode
+     * @return string Barcode
      *
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
-     * @throws ReflectionException
      * @throws ResponseException
+     * @throws ApiConnectionException
      *
      * @since 1.0.0
      */
@@ -71,10 +71,13 @@ interface BarcodeServiceInterface extends ServiceInterface
      *
      * @param GenerateBarcode[] $generateBarcodes
      *
-     * @return string[]|ResponseException[]|ApiException[]|CifDownException[]|CifException[] Barcodes
+     * @return string[] Barcodes
      *
+     * @throws ApiException
+     * @throws CifDownException
+     * @throws CifException
      * @throws HttpClientException
-     * @throws ReflectionException
+     * @throws ResponseException
      *
      * @since 1.0.0
      */
@@ -90,7 +93,6 @@ interface BarcodeServiceInterface extends ServiceInterface
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
-     * @throws ReflectionException
      * @throws ResponseException
      *
      * @since 1.0.0
@@ -104,8 +106,10 @@ interface BarcodeServiceInterface extends ServiceInterface
      *
      * @return string[] Barcodes
      *
+     * @throws CifDownException
+     * @throws CifException
      * @throws HttpClientException
-     * @throws ReflectionException
+     * @throws ResponseException
      *
      * @since 1.0.0
      */
@@ -117,8 +121,6 @@ interface BarcodeServiceInterface extends ServiceInterface
      * @param GenerateBarcode $generateBarcode
      *
      * @return RequestInterface
-     *
-     * @throws ReflectionException
      *
      * @since 1.0.0
      */
@@ -147,7 +149,6 @@ interface BarcodeServiceInterface extends ServiceInterface
      * @param GenerateBarcode $generateBarcode
      *
      * @return RequestInterface
-     * @throws ReflectionException
      *
      * @since 1.0.0
      */

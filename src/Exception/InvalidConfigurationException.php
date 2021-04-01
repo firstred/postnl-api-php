@@ -31,6 +31,6 @@ namespace Firstred\PostNL\Exception;
  *
  * @since 1.0.0
  */
-class InvalidConfigurationException extends AbstractException
+class InvalidConfigurationException extends InvalidArgumentException
 {
 }

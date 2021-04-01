@@ -31,6 +31,6 @@ namespace Firstred\PostNL\Exception;
  *
  * @since 1.0.0
  */
-class CifDownException extends AbstractException
+class CifDownException extends ApiException
 {
 }

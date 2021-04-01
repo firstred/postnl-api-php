@@ -31,7 +31,7 @@ namespace Firstred\PostNL\Exception;
  *
  * @since 1.0.0
  */
-class ApiConnectionException extends AbstractException
+class ApiConnectionException extends ApiException
 {
     /** @var string */
     protected $body;

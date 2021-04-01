@@ -42,7 +42,6 @@ use Psr\Cache\CacheItemInterface;
 use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use ReflectionException;
 use function http_build_query;
 use function json_encode;
 
@@ -77,7 +76,6 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
-     * @throws ReflectionException
      * @throws ResponseException
      * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
@@ -133,8 +131,6 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
      *
      * @return RequestInterface
      *
-     * @throws ReflectionException
-     *
      * @since 1.2.0
      */
     public function buildSendShipmentRequestREST(SendShipment $sendShipment, $confirm = true)
@@ -161,7 +157,6 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
      *
      * @return SendShipmentResponse|null
      *
-     * @throws ReflectionException
      * @throws ResponseException
      * @throws HttpClientException
      * @throws NotSupportedException

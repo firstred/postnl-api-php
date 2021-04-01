@@ -31,6 +31,6 @@ namespace Firstred\PostNL\Exception;
  *
  * @since 1.0.0
  */
-class ApiException extends AbstractException
+class ApiException extends PostNLException
 {
 }

@@ -27,6 +27,7 @@
 namespace Firstred\PostNL\Service;
 
 use DateTimeImmutable;
+use Exception;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\CutOffTime;
 use Firstred\PostNL\Entity\Request\GetDeliveryDate;
@@ -34,10 +35,13 @@ use Firstred\PostNL\Entity\Request\GetSentDateRequest;
 use Firstred\PostNL\Entity\Response\GetDeliveryDateResponse;
 use Firstred\PostNL\Entity\Response\GetSentDateResponse;
 use Firstred\PostNL\Entity\SOAP\Security;
+use Firstred\PostNL\Exception\ApiConnectionException;
 use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use InvalidArgumentException;
@@ -45,7 +49,6 @@ use Psr\Cache\CacheItemInterface;
 use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use ReflectionException;
 use Sabre\Xml\LibXMLException;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Service as XmlService;
@@ -104,16 +107,19 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
-     * @throws PsrCacheInvalidArgumentException
-     * @throws ReflectionException
      * @throws HttpClientException
-     * @throws \Firstred\PostNL\Exception\NotSupportedException
+     * @throws ApiConnectionException
+     * @throws PostNLInvalidArgumentException
      *
      * @since 1.0.0
      */
     public function getDeliveryDateREST(GetDeliveryDate $getDeliveryDate)
     {
-        $item = $this->retrieveCachedItem($getDeliveryDate->getId());
+        try {
+            $item = $this->retrieveCachedItem($getDeliveryDate->getId());
+        } catch (PsrCacheInvalidArgumentException $e) {
+            $item = null;
+        }
         $response = null;
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
@@ -153,17 +159,19 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
-     * @throws LibXMLException
      * @throws ResponseException
-     * @throws PsrCacheInvalidArgumentException
-     * @throws ReflectionException
      * @throws HttpClientException
+     * @throws ApiConnectionException
      *
      * @since 1.0.0
      */
     public function getDeliveryDateSOAP(GetDeliveryDate $getDeliveryDate)
     {
-        $item = $this->retrieveCachedItem($getDeliveryDate->getId());
+        try {
+            $item = $this->retrieveCachedItem($getDeliveryDate->getId());
+        } catch (PsrCacheInvalidArgumentException $e) {
+            $item = null;
+        }
         $response = null;
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
@@ -203,17 +211,20 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
-     * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
-     * @throws ReflectionException
-     * @throws \Firstred\PostNL\Exception\NotSupportedException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
+     * @throws ApiConnectionException
      *
      * @since 1.0.0
      */
     public function getSentDateREST(GetSentDateRequest $getSentDate)
     {
-        $item = $this->retrieveCachedItem($getSentDate->getId());
+        try {
+            $item = $this->retrieveCachedItem($getSentDate->getId());
+        } catch (PsrCacheInvalidArgumentException $e) {
+            $item = null;
+        }
         $response = null;
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
@@ -253,17 +264,19 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
-     * @throws LibXMLException
      * @throws ResponseException
-     * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
-     * @throws ReflectionException
+     * @throws ApiConnectionException
      *
      * @since 1.0.0
      */
     public function getSentDateSOAP(GetSentDateRequest $getSentDate)
     {
-        $item = $this->retrieveCachedItem($getSentDate->getId());
+        try {
+            $item = $this->retrieveCachedItem($getSentDate->getId());
+        } catch (PsrCacheInvalidArgumentException $e) {
+            $item = null;
+        }
         $response = null;
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
@@ -298,8 +311,6 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @param GetDeliveryDate $getDeliveryDate
      *
      * @return RequestInterface
-     *
-     * @throws ReflectionException
      *
      * @since 1.0.0
      */
@@ -394,9 +405,8 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @return GetDeliveryDateResponse|null
      *
      * @throws ResponseException
-     * @throws ReflectionException
      * @throws HttpClientException
-     * @throws \Firstred\PostNL\Exception\NotSupportedException
+     * @throws PostNLInvalidArgumentException
      *
      * @since 1.0.0
      */
@@ -420,8 +430,6 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @param GetDeliveryDate $getDeliveryDate
      *
      * @return RequestInterface
-     *
-     * @throws ReflectionException
      *
      * @since 1.0.0
      */
@@ -468,23 +476,33 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      *
      * @throws CifDownException
      * @throws CifException
-     * @throws LibXMLException
      * @throws ResponseException
-     * @throws ReflectionException
      * @throws HttpClientException
      *
      * @since 1.0.0
      */
     public function processGetDeliveryDateResponseSOAP(ResponseInterface $response)
     {
-        $xml = new SimpleXMLElement(static::getResponseText($response));
+        try {
+            $xml = new SimpleXMLElement(static::getResponseText($response));
+        } catch (HttpClientException $e) {
+            throw $e;
+        } catch (ResponseException $e) {
+            throw $e;
+        } catch (Exception $e) {
+            throw new ResponseException($e->getMessage(), $e->getCode(), $e);
+        }
 
         static::registerNamespaces($xml);
         static::validateSOAPResponse($xml);
 
         $reader = new Reader();
         $reader->xml(static::getResponseText($response));
-        $array = array_values($reader->parse()['value'][0]['value']);
+        try {
+            $array = array_values($reader->parse()['value'][0]['value']);
+        } catch (LibXMLException $e) {
+            throw new ResponseException($e->getMessage(), $e->getCode(), $e);
+        }
         $array = $array[0];
 
         /** @var GetDeliveryDateResponse $object */
@@ -500,7 +518,6 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @param GetSentDateRequest $getSentDate
      *
      * @return RequestInterface
-     * @throws ReflectionException
      *
      * @since 1.0.0
      */
@@ -548,10 +565,9 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @return GetSentDateResponse|null
      *
      * @throws ResponseException
-     * @throws ReflectionException
      * @throws HttpClientException
-     * @throws \Firstred\PostNL\Exception\NotSupportedException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
      *
      * @since 1.0.0
      */
@@ -575,7 +591,8 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @param GetSentDateRequest $getSentDate
      *
      * @return RequestInterface
-     * @throws ReflectionException
+     *
+     * @since 1.0.0
      */
     public function buildGetSentDateRequestSOAP(GetSentDateRequest $getSentDate)
     {
@@ -622,23 +639,33 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      *
      * @throws CifDownException
      * @throws CifException
-     * @throws LibXMLException
      * @throws ResponseException
-     * @throws ReflectionException
      * @throws HttpClientException
      *
      * @since 1.0.0
      */
     public function processGetSentDateResponseSOAP(ResponseInterface $response)
     {
-        $xml = new SimpleXMLElement(static::getResponseText($response));
+        try {
+            $xml = new SimpleXMLElement(static::getResponseText($response));
+        } catch (HttpClientException $e) {
+            throw $e;
+        } catch (ResponseException $e) {
+            throw $e;
+        } catch (\Exception $e) {
+            throw new ResponseException($e->getMessage(), $e->getCode(), $e);
+        }
 
         static::registerNamespaces($xml);
         static::validateSOAPResponse($xml);
 
         $reader = new Reader();
         $reader->xml(static::getResponseText($response));
-        $array = array_values($reader->parse()['value'][0]['value']);
+        try {
+            $array = array_values($reader->parse()['value'][0]['value']);
+        } catch (LibXMLException $e) {
+            throw new ResponseException($e->getMessage(), $e->getCode(), $e);
+        }
         $array = $array[0];
 
         /** @var GetSentDateResponse $object */

@@ -170,7 +170,6 @@ class GetDeliveryDateResponse extends AbstractEntity
      *
      * @return GetDeliveryDateResponse|object|stdClass|null
      *
-     * @throws ReflectionException
      * @throws PostNLInvalidArgumentException
      */
     public static function jsonDeserialize(stdClass $json)

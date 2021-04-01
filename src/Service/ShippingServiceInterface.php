@@ -28,15 +28,17 @@ namespace Firstred\PostNL\Service;
 
 use Firstred\PostNL\Entity\Request\SendShipment;
 use Firstred\PostNL\Entity\Response\SendShipmentResponse;
+use Firstred\PostNL\Exception\ApiConnectionException;
 use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
-use Psr\Cache\InvalidArgumentException;
+use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use ReflectionException;
 
 /**
  * Class ShippingService.
@@ -60,10 +62,12 @@ interface ShippingServiceInterface extends ServiceInterface
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
-     * @throws ReflectionException
      * @throws ResponseException
-     * @throws InvalidArgumentException
+     * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
+     * @throws ApiConnectionException
      *
      * @since 1.2.0
      */
@@ -74,8 +78,6 @@ interface ShippingServiceInterface extends ServiceInterface
      * @param bool         $confirm
      *
      * @return RequestInterface
-     *
-     * @throws ReflectionException
      *
      * @since 1.2.0
      */
@@ -88,9 +90,10 @@ interface ShippingServiceInterface extends ServiceInterface
      *
      * @return SendShipmentResponse|null
      *
-     * @throws ReflectionException
      * @throws ResponseException
      * @throws HttpClientException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
      *
      * @since 1.2.0
      */

@@ -27,6 +27,7 @@
 namespace Firstred\PostNL\Entity\Message;
 
 use DateTimeInterface;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
@@ -92,12 +93,13 @@ class LabellingMessage extends Message
     protected $Printertype;
 
     /**
+     * LabellingMessage constructor.
+     *
      * @param string|null                   $Printertype
      * @param string|null                   $MessageID
      * @param string|DateTimeInterface|null $MessageTimeStamp
      *
-     * @throws \Exception
-     * @throws \Exception
+     * @throws InvalidArgumentException
      */
     public function __construct(
         $Printertype = 'GraphicFile|PDF',

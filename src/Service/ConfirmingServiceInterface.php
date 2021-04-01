@@ -28,15 +28,16 @@ namespace Firstred\PostNL\Service;
 
 use Firstred\PostNL\Entity\Request\Confirming;
 use Firstred\PostNL\Entity\Response\ConfirmingResponseShipment;
+use Firstred\PostNL\Exception\ApiConnectionException;
 use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use ReflectionException;
-use Sabre\Xml\LibXMLException;
 
 /**
  * Class ConfirmingService.
@@ -60,9 +61,11 @@ interface ConfirmingServiceInterface extends ServiceInterface
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
-     * @throws ReflectionException
      * @throws ResponseException
      * @throws HttpClientException
+     * @throws NotSupportedException
+     * @throws InvalidArgumentException
+     * @throws ApiConnectionException
      *
      * @since 1.0.0
      */
@@ -75,8 +78,13 @@ interface ConfirmingServiceInterface extends ServiceInterface
      *
      * @return ConfirmingResponseShipment[]
      *
-     * @throws ReflectionException
+     * @throws ApiException
+     * @throws CifDownException
+     * @throws CifException
      * @throws HttpClientException
+     * @throws InvalidArgumentException
+     * @throws NotSupportedException
+     * @throws ResponseException
      *
      * @since 1.0.0
      */
@@ -91,10 +99,8 @@ interface ConfirmingServiceInterface extends ServiceInterface
      *
      * @throws CifDownException
      * @throws CifException
-     * @throws LibXMLException
-     * @throws ReflectionException
-     * @throws ResponseException
      * @throws HttpClientException
+     * @throws ResponseException
      *
      * @since 1.0.0
      */
@@ -107,8 +113,10 @@ interface ConfirmingServiceInterface extends ServiceInterface
      *
      * @return ConfirmingResponseShipment[]
      *
-     * @throws ReflectionException
+     * @throws CifDownException
+     * @throws CifException
      * @throws HttpClientException
+     * @throws ResponseException
      *
      * @since 1.0.0
      */
@@ -118,8 +126,6 @@ interface ConfirmingServiceInterface extends ServiceInterface
      * @param Confirming $confirming
      *
      * @return RequestInterface
-     *
-     * @throws ReflectionException
      *
      * @since 1.0.0
      */
@@ -135,9 +141,10 @@ interface ConfirmingServiceInterface extends ServiceInterface
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
-     * @throws ReflectionException
      * @throws ResponseException
      * @throws HttpClientException
+     * @throws NotSupportedException
+     * @throws InvalidArgumentException
      *
      * @since 1.0.0
      */
@@ -147,8 +154,6 @@ interface ConfirmingServiceInterface extends ServiceInterface
      * @param Confirming $confirming
      *
      * @return RequestInterface
-     *
-     * @throws ReflectionException
      *
      * @since 1.0.0
      */
@@ -163,8 +168,6 @@ interface ConfirmingServiceInterface extends ServiceInterface
      *
      * @throws CifDownException
      * @throws CifException
-     * @throws LibXMLException
-     * @throws ReflectionException
      * @throws ResponseException
      * @throws HttpClientException
      *

@@ -60,7 +60,6 @@ class_alias('Firstred\\PostNL\\Entity\\Request\\CurrentStatusByReference', 'Thir
 class_alias('Firstred\\PostNL\\Entity\\Request\\CurrentStatusByStatus', 'ThirtyBees\\PostNL\\Entity\\Request\\CurrentStatusByStatus');
 class_alias('Firstred\\PostNL\\Entity\\Request\\GenerateBarcode', 'ThirtyBees\\PostNL\\Entity\\Request\\GenerateBarcode');
 class_alias('Firstred\\PostNL\\Entity\\Request\\GenerateLabel', 'ThirtyBees\\PostNL\\Entity\\Request\\GenerateLabel');
-class_alias('Firstred\\PostNL\\Entity\\Request\\GenerateShipping', 'ThirtyBees\\PostNL\\Entity\\Request\\GenerateShipping');
 class_alias('Firstred\\PostNL\\Entity\\Request\\GetDeliveryDate', 'ThirtyBees\\PostNL\\Entity\\Request\\GetDeliveryDate');
 class_alias('Firstred\\PostNL\\Entity\\Request\\GetLocation', 'ThirtyBees\\PostNL\\Entity\\Request\\GetLocation');
 class_alias('Firstred\\PostNL\\Entity\\Request\\GetLocationsInArea', 'ThirtyBees\\PostNL\\Entity\\Request\\GetLocationsInArea');
@@ -78,7 +77,6 @@ class_alias('Firstred\\PostNL\\Entity\\Response\\CurrentStatusResponse', 'Thirty
 class_alias('Firstred\\PostNL\\Entity\\Response\\CurrentStatusResponseShipment', 'ThirtyBees\\PostNL\\Entity\\Response\\CurrentStatusResponseShipment');
 class_alias('Firstred\\PostNL\\Entity\\Response\\GenerateBarcodeResponse', 'ThirtyBees\\PostNL\\Entity\\Response\\GenerateBarcodeResponse');
 class_alias('Firstred\\PostNL\\Entity\\Response\\GenerateLabelResponse', 'ThirtyBees\\PostNL\\Entity\\Response\\GenerateLabelResponse');
-class_alias('Firstred\\PostNL\\Entity\\Response\\GenerateShippingResponse', 'ThirtyBees\\PostNL\\Entity\\Response\\GenerateShippingResponse');
 class_alias('Firstred\\PostNL\\Entity\\Response\\GetDeliveryDateResponse', 'ThirtyBees\\PostNL\\Entity\\Response\\GetDeliveryDateResponse');
 class_alias('Firstred\\PostNL\\Entity\\Response\\GetLocationsInAreaResponse', 'ThirtyBees\\PostNL\\Entity\\Response\\GetLocationsInAreaResponse');
 class_alias('Firstred\\PostNL\\Entity\\Response\\GetLocationsResult', 'ThirtyBees\\PostNL\\Entity\\Response\\GetLocationsResult');
@@ -105,7 +103,6 @@ class_alias('Firstred\\PostNL\\Entity\\Timeframe', 'ThirtyBees\\PostNL\\Entity\\
 class_alias('Firstred\\PostNL\\Entity\\TimeframeTimeFrame', 'ThirtyBees\\PostNL\\Entity\\TimeframeTimeFrame');
 class_alias('Firstred\\PostNL\\Entity\\Timeframes', 'ThirtyBees\\PostNL\\Entity\\Timeframes');
 class_alias('Firstred\\PostNL\\Entity\\Warning', 'ThirtyBees\\PostNL\\Entity\\Warning');
-class_alias('Firstred\\PostNL\\Exception\\AbstractException', 'ThirtyBees\\PostNL\\Exception\\AbstractException');
 class_alias('Firstred\\PostNL\\Exception\\ApiConnectionException', 'ThirtyBees\\PostNL\\Exception\\ApiConnectionException');
 class_alias('Firstred\\PostNL\\Exception\\ApiException', 'ThirtyBees\\PostNL\\Exception\\ApiException');
 class_alias('Firstred\\PostNL\\Exception\\CifDownException', 'ThirtyBees\\PostNL\\Exception\\CifDownException');
@@ -162,3 +159,4 @@ class_alias('Firstred\\PostNL\\Util\\TaskQueue', 'ThirtyBees\\PostNL\\Util\\Task
 class_alias('Firstred\\PostNL\\Util\\UUID', 'ThirtyBees\\PostNL\\Util\\UUID');
 class_alias('Firstred\\PostNL\\Util\\Util', 'ThirtyBees\\PostNL\\Util\\Util');
 class_alias('Firstred\\PostNL\\Util\\XmlSerializable', 'ThirtyBees\\PostNL\\Util\\XmlSerializable');
+class_alias('Firstred\\PostNL\\Exception\\PostNLException', 'ThirtyBees\\PostNL\\Exception\\AbstractException');

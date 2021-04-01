@@ -179,8 +179,9 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
      * @return OpeningHours
      *
      * @throws NotSupportedException
-     * @throws ReflectionException
      * @throws PostNLInvalidArgumentException
+     *
+     * @since 1.0.0
      */
     public static function jsonDeserialize(stdClass $json)
     {
@@ -188,6 +189,7 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
             return parent::jsonDeserialize($json);
         }
 
+        /** @var OpeningHours $openingHours */
         $openingHours = self::create();
         foreach (
             [

@@ -47,7 +47,6 @@ use Psr\Cache\CacheItemInterface;
 use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use ReflectionException;
 use Sabre\Xml\LibXMLException;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Service as XmlService;
@@ -105,7 +104,6 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
      * @throws PsrCacheInvalidArgumentException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
-     * @throws ReflectionException
      * @throws ResponseException
      *
      * @since 1.0.0
@@ -152,11 +150,9 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
-     * @throws ReflectionException
      * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
      * @throws ResponseException
-     * @throws LibXMLException
      *
      * @since 1.0.0
      */
@@ -197,8 +193,6 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
      * @param GetTimeframes $getTimeframes
      *
      * @return RequestInterface
-     *
-     * @throws ReflectionException
      *
      * @since 1.0.0
      */
@@ -254,7 +248,6 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
      *
      * @return ResponseTimeframes|null
      *
-     * @throws ReflectionException
      * @throws HttpClientException
      * @throws ResponseException
      * @throws NotSupportedException
@@ -331,8 +324,6 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
      *
      * @return RequestInterface
      *
-     * @throws ReflectionException
-     *
      * @since 1.0.0
      */
     public function buildGetTimeframesRequestSOAP(GetTimeframes $getTimeframes)
@@ -380,8 +371,6 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
      *
      * @throws CifDownException
      * @throws CifException
-     * @throws ReflectionException
-     * @throws LibXMLException
      * @throws HttpClientException
      * @throws ResponseException
      *
@@ -396,7 +385,11 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
 
         $reader = new Reader();
         $reader->xml(static::getResponseText($response));
-        $array = array_values($reader->parse()['value'][0]['value']);
+        try {
+            $array = array_values($reader->parse()['value'][0]['value']);
+        } catch (LibXMLException $e) {
+            throw new ResponseException($e->getMessage(), $e->getCode(), $e);
+        }
         foreach ($array[0]['value'][1]['value'] as &$timeframes) {
             foreach ($timeframes['value'] as &$item) {
                 if (false !== strpos($item['name'], 'Timeframes')) {

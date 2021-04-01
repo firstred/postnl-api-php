@@ -33,6 +33,6 @@ use Exception;
  *
  * @since 1.0.0
  */
-abstract class AbstractException extends Exception
+abstract class PostNLException extends Exception
 {
 }

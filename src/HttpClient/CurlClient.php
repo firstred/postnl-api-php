@@ -248,7 +248,6 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
      *
      * @return ResponseInterface
      *
-     * @throws ApiConnectionException
      * @throws HttpClientException
      */
     public function doRequest(RequestInterface $request)

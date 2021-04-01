@@ -32,15 +32,16 @@ use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Request\Confirming;
 use Firstred\PostNL\Entity\Response\ConfirmingResponseShipment;
 use Firstred\PostNL\Entity\SOAP\Security;
+use Firstred\PostNL\Exception\ApiConnectionException;
 use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use ReflectionException;
 use Sabre\Xml\LibXMLException;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Service as XmlService;
@@ -96,11 +97,11 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
-     * @throws ReflectionException
      * @throws ResponseException
      * @throws HttpClientException
      * @throws NotSupportedException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     * @throws ApiConnectionException
      *
      * @since 1.0.0
      */
@@ -127,8 +128,13 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
      *
      * @return ConfirmingResponseShipment[]
      *
-     * @throws ReflectionException
+     * @throws ApiException
+     * @throws CifDownException
+     * @throws CifException
      * @throws HttpClientException
+     * @throws InvalidArgumentException
+     * @throws NotSupportedException
+     * @throws ResponseException
      *
      * @since 1.0.0
      */
@@ -146,17 +152,13 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
         $confirmingResponses = [];
         foreach ($httpClient->doRequests() as $uuid => $response) {
             $confirmingResponse = null;
-            try {
-                $objects = $this->processConfirmResponseREST($response);
-                foreach ($objects as $object) {
-                    if (!$object instanceof ConfirmingResponseShipment) {
-                        throw new ResponseException('Invalid API Response', null, null, $response);
-                    }
-
-                    $confirmingResponse = $object;
+            $objects = $this->processConfirmResponseREST($response);
+            foreach ($objects as $object) {
+                if (!$object instanceof ConfirmingResponseShipment) {
+                    throw new ResponseException('Invalid API Response', null, null, $response);
                 }
-            } catch (Exception $e) {
-                $confirmingResponse = $e;
+
+                $confirmingResponse = $object;
             }
 
             $confirmingResponses[$uuid] = $confirmingResponse;
@@ -174,10 +176,8 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
      *
      * @throws CifDownException
      * @throws CifException
-     * @throws LibXMLException
-     * @throws ReflectionException
-     * @throws ResponseException
      * @throws HttpClientException
+     * @throws ResponseException
      *
      * @since 1.0.0
      */
@@ -194,8 +194,10 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
      *
      * @return ConfirmingResponseShipment[]
      *
-     * @throws ReflectionException
+     * @throws CifDownException
+     * @throws CifException
      * @throws HttpClientException
+     * @throws ResponseException
      *
      * @since 1.0.0
      */
@@ -212,12 +214,7 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
 
         $responses = [];
         foreach ($httpClient->doRequests() as $uuid => $response) {
-            try {
-                $confirmingResponse = $this->processConfirmResponseSOAP($response);
-            } catch (Exception $e) {
-                $confirmingResponse = $e;
-            }
-
+            $confirmingResponse = $this->processConfirmResponseSOAP($response);
             $responses[$uuid] = $confirmingResponse;
         }
 
@@ -228,8 +225,6 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
      * @param Confirming $confirming
      *
      * @return RequestInterface
-     *
-     * @throws ReflectionException
      *
      * @since 1.0.0
      */
@@ -260,11 +255,10 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
-     * @throws ReflectionException
      * @throws ResponseException
      * @throws HttpClientException
-     * @throws \Firstred\PostNL\Exception\NotSupportedException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws NotSupportedException
+     * @throws InvalidArgumentException
      *
      * @since 1.0.0
      */
@@ -295,8 +289,6 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
      * @param Confirming $confirming
      *
      * @return RequestInterface
-     *
-     * @throws ReflectionException
      *
      * @since 1.0.0
      */
@@ -346,8 +338,6 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
      *
      * @throws CifDownException
      * @throws CifException
-     * @throws LibXMLException
-     * @throws ReflectionException
      * @throws ResponseException
      * @throws HttpClientException
      *
@@ -355,14 +345,26 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
      */
     public function processConfirmResponseSOAP(ResponseInterface $response)
     {
-        $xml = new SimpleXMLElement(static::getResponseText($response));
+        try {
+            $xml = new SimpleXMLElement(static::getResponseText($response));
+        } catch (HttpClientException $e) {
+            throw $e;
+        } catch (ResponseException $e) {
+            throw $e;
+        } catch (Exception $e) {
+            throw new ResponseException($e->getMessage(), $e->getCode(), $e);
+        }
 
         static::registerNamespaces($xml);
         static::validateSOAPResponse($xml);
 
         $reader = new Reader();
         $reader->xml(static::getResponseText($response));
-        $array = array_values($reader->parse()['value'][0]['value'][0]['value']);
+        try {
+            $array = array_values($reader->parse()['value'][0]['value'][0]['value']);
+        } catch (LibXMLException $e) {
+            throw new ResponseException($e->getMessage(), $e->getCode(), $e);
+        }
         $array = $array[0];
 
         /** @var ConfirmingResponseShipment $object */

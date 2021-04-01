@@ -30,16 +30,16 @@ use Firstred\PostNL\Entity\Request\GetDeliveryDate;
 use Firstred\PostNL\Entity\Request\GetSentDateRequest;
 use Firstred\PostNL\Entity\Response\GetDeliveryDateResponse;
 use Firstred\PostNL\Entity\Response\GetSentDateResponse;
+use Firstred\PostNL\Exception\ApiConnectionException;
 use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
-use Psr\Cache\InvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use ReflectionException;
-use Sabre\Xml\LibXMLException;
 
 /**
  * Class DeliveryDateService.
@@ -66,9 +66,9 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
-     * @throws InvalidArgumentException
-     * @throws ReflectionException
      * @throws HttpClientException
+     * @throws ApiConnectionException
+     * @throws PostNLInvalidArgumentException
      *
      * @since 1.0.0
      */
@@ -84,11 +84,9 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
-     * @throws LibXMLException
      * @throws ResponseException
-     * @throws InvalidArgumentException
-     * @throws ReflectionException
      * @throws HttpClientException
+     * @throws ApiConnectionException
      *
      * @since 1.0.0
      */
@@ -105,9 +103,10 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
-     * @throws InvalidArgumentException
      * @throws HttpClientException
-     * @throws ReflectionException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
+     * @throws ApiConnectionException
      *
      * @since 1.0.0
      */
@@ -123,10 +122,9 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      * @throws ApiException
      * @throws CifDownException
      * @throws CifException
-     * @throws LibXMLException
      * @throws ResponseException
-     * @throws InvalidArgumentException
      * @throws HttpClientException
+     * @throws ApiConnectionException
      *
      * @since 1.0.0
      */
@@ -138,8 +136,6 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      * @param GetDeliveryDate $getDeliveryDate
      *
      * @return RequestInterface
-     *
-     * @throws ReflectionException
      *
      * @since 1.0.0
      */
@@ -153,8 +149,8 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      * @return GetDeliveryDateResponse|null
      *
      * @throws ResponseException
-     * @throws ReflectionException
      * @throws HttpClientException
+     * @throws PostNLInvalidArgumentException
      *
      * @since 1.0.0
      */
@@ -167,8 +163,6 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      *
      * @return RequestInterface
      *
-     * @throws ReflectionException
-     *
      * @since 1.0.0
      */
     public function buildGetDeliveryDateRequestSOAP(GetDeliveryDate $getDeliveryDate);
@@ -180,9 +174,7 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      *
      * @throws CifDownException
      * @throws CifException
-     * @throws LibXMLException
      * @throws ResponseException
-     * @throws ReflectionException
      * @throws HttpClientException
      *
      * @since 1.0.0
@@ -195,7 +187,6 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      * @param GetSentDateRequest $getSentDate
      *
      * @return RequestInterface
-     * @throws ReflectionException
      *
      * @since 1.0.0
      */
@@ -209,8 +200,9 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      * @return GetSentDateResponse|null
      *
      * @throws ResponseException
-     * @throws ReflectionException
      * @throws HttpClientException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
      *
      * @since 1.0.0
      */
@@ -222,7 +214,6 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      * @param GetSentDateRequest $getSentDate
      *
      * @return RequestInterface
-     * @throws ReflectionException
      *
      * @since 1.0.0
      */
@@ -237,9 +228,7 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      *
      * @throws CifDownException
      * @throws CifException
-     * @throws LibXMLException
      * @throws ResponseException
-     * @throws ReflectionException
      * @throws HttpClientException
      *
      * @since 1.0.0

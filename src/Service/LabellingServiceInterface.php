@@ -32,12 +32,12 @@ use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use ReflectionException;
-use Sabre\Xml\LibXMLException;
 
 /**
  * Class LabellingService.
@@ -65,7 +65,8 @@ interface LabellingServiceInterface extends ServiceInterface
      * @throws ResponseException
      * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
-     * @throws ReflectionException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
      *
      * @since 1.0.0
      */
@@ -78,9 +79,11 @@ interface LabellingServiceInterface extends ServiceInterface
      *
      * @return array
      *
-     * @throws PsrCacheInvalidArgumentException
-     * @throws ReflectionException
      * @throws HttpClientException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
+     * @throws PsrCacheInvalidArgumentException
+     * @throws ResponseException
      *
      * @since 1.0.0
      */
@@ -99,8 +102,6 @@ interface LabellingServiceInterface extends ServiceInterface
      * @throws CifException
      * @throws ResponseException
      * @throws PsrCacheInvalidArgumentException
-     * @throws ReflectionException
-     * @throws LibXMLException
      * @throws HttpClientException
      *
      * @since 1.0.0
@@ -114,9 +115,12 @@ interface LabellingServiceInterface extends ServiceInterface
      *
      * @return array
      *
-     * @throws PsrCacheInvalidArgumentException
-     * @throws ReflectionException
+     * @throws ApiException
+     * @throws CifDownException
+     * @throws CifException
      * @throws HttpClientException
+     * @throws PsrCacheInvalidArgumentException
+     * @throws ResponseException
      *
      * @since 1.0.0
      */
@@ -130,8 +134,6 @@ interface LabellingServiceInterface extends ServiceInterface
      *
      * @return RequestInterface
      *
-     * @throws ReflectionException
-     *
      * @since 1.0.0
      */
     public function buildGenerateLabelRequestREST(GenerateLabel $generateLabel, $confirm = true);
@@ -144,8 +146,9 @@ interface LabellingServiceInterface extends ServiceInterface
      * @return GenerateLabelResponse|null
      *
      * @throws ResponseException
-     * @throws ReflectionException
      * @throws HttpClientException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
      *
      * @since 1.0.0
      */
@@ -158,8 +161,6 @@ interface LabellingServiceInterface extends ServiceInterface
      * @param bool          $confirm
      *
      * @return RequestInterface
-     *
-     * @throws ReflectionException
      *
      * @since 1.0.0
      */
@@ -174,8 +175,6 @@ interface LabellingServiceInterface extends ServiceInterface
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
-     * @throws ReflectionException
-     * @throws LibXMLException
      * @throws HttpClientException
      *
      * @since 1.0.0

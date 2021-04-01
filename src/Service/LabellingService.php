@@ -27,7 +27,6 @@
 namespace Firstred\PostNL\Service;
 
 use DateTimeImmutable;
-use Exception;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Request\GenerateLabel;
 use Firstred\PostNL\Entity\Response\GenerateLabelResponse;
@@ -40,12 +39,12 @@ use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentE
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use GuzzleHttp\Psr7\Message as PsrMessage;
+use InvalidArgumentException;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
-use Psr\Cache\InvalidArgumentException;
+use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use ReflectionException;
 use Sabre\Xml\LibXMLException;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Service as XmlService;
@@ -108,9 +107,8 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
-     * @throws InvalidArgumentException
+     * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
-     * @throws ReflectionException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
      *
@@ -124,7 +122,7 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
             $response = $item->get();
             try {
                 $response = PsrMessage::parseResponse($response);
-            } catch (\InvalidArgumentException $e) {
+            } catch (InvalidArgumentException $e) {
                 // Invalid item in cache, skip
             }
         }
@@ -160,9 +158,11 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      *
      * @return array
      *
-     * @throws InvalidArgumentException
-     * @throws ReflectionException
      * @throws HttpClientException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
+     * @throws PsrCacheInvalidArgumentException
+     * @throws ResponseException
      *
      * @since 1.0.0
      */
@@ -176,15 +176,8 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
             $response = null;
             if ($item instanceof CacheItemInterface) {
                 $response = $item->get();
-                try {
-                    $response = PsrMessage::parseResponse($response);
-                } catch (\InvalidArgumentException $e) {
-                }
-                if ($response instanceof ResponseInterface) {
-                    $responses[$uuid] = $response;
-
-                    continue;
-                }
+                $response = PsrMessage::parseResponse($response);
+                $responses[$uuid] = $response;
             }
 
             $httpClient->addOrUpdateRequest(
@@ -210,12 +203,7 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
 
         $labels = [];
         foreach ($responses + $newResponses as $uuid => $response) {
-            try {
-                $generateLabelResponse = $this->processGenerateLabelResponseREST($response);
-            } catch (Exception $e) {
-                $generateLabelResponse = $e;
-            }
-
+            $generateLabelResponse = $this->processGenerateLabelResponseREST($response);
             $labels[$uuid] = $generateLabelResponse;
         }
 
@@ -234,9 +222,7 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
-     * @throws InvalidArgumentException
-     * @throws ReflectionException
-     * @throws LibXMLException
+     * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
      *
      * @since 1.0.0
@@ -249,7 +235,7 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
             $response = $item->get();
             try {
                 $response = PsrMessage::parseResponse($response);
-            } catch (\InvalidArgumentException $e) {
+            } catch (InvalidArgumentException $e) {
             }
         }
         if (!$response instanceof ResponseInterface) {
@@ -277,9 +263,12 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      *
      * @return array
      *
-     * @throws InvalidArgumentException
-     * @throws ReflectionException
+     * @throws ApiException
+     * @throws CifDownException
+     * @throws CifException
      * @throws HttpClientException
+     * @throws PsrCacheInvalidArgumentException
+     * @throws ResponseException
      *
      * @since 1.0.0
      */
@@ -293,15 +282,8 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
             $response = null;
             if ($item instanceof CacheItemInterface) {
                 $response = $item->get();
-                try {
-                    $response = PsrMessage::parseResponse($response);
-                } catch (\InvalidArgumentException $e) {
-                }
-                if ($response instanceof ResponseInterface) {
-                    $responses[$uuid] = $response;
-
-                    continue;
-                }
+                $response = PsrMessage::parseResponse($response);
+                $responses[$uuid] = $response;
             }
 
             $httpClient->addOrUpdateRequest(
@@ -328,12 +310,7 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
 
         $generateLabelResponses = [];
         foreach ($responses + $newResponses as $uuid => $response) {
-            try {
-                $generateLabelResponse = $this->processGenerateLabelResponseSOAP($response);
-            } catch (Exception $e) {
-                $generateLabelResponse = $e;
-            }
-
+            $generateLabelResponse = $this->processGenerateLabelResponseSOAP($response);
             $generateLabelResponses[$uuid] = $generateLabelResponse;
         }
 
@@ -347,8 +324,6 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      * @param bool          $confirm
      *
      * @return RequestInterface
-     *
-     * @throws ReflectionException
      *
      * @since 1.0.0
      */
@@ -383,7 +358,6 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      * @return GenerateLabelResponse|null
      *
      * @throws ResponseException
-     * @throws ReflectionException
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
@@ -411,8 +385,6 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      * @param bool          $confirm
      *
      * @return RequestInterface
-     *
-     * @throws ReflectionException
      *
      * @since 1.0.0
      */
@@ -467,8 +439,6 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
-     * @throws ReflectionException
-     * @throws LibXMLException
      * @throws HttpClientException
      *
      * @since 1.0.0
@@ -489,7 +459,11 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
 
         $reader = new Reader();
         $reader->xml(static::getResponseText($response));
-        $array = array_values($reader->parse()['value'][0]['value']);
+        try {
+            $array = array_values($reader->parse()['value'][0]['value']);
+        } catch (LibXMLException $e) {
+            throw new ResponseException($e->getMessage(), $e->getCode(), $e);
+        }
         $array = $array[0];
 
         /** @var GenerateLabelResponse $object */

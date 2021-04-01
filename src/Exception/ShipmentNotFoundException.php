@@ -31,6 +31,6 @@ namespace Firstred\PostNL\Exception;
  *
  * @since 1.2.0
  */
-class ShipmentNotFoundException extends AbstractException
+class ShipmentNotFoundException extends InvalidArgumentException
 {
 }

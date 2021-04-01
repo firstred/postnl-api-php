@@ -34,7 +34,7 @@ use Psr\Http\Message\ResponseInterface;
  *
  * @since 1.0.0
  */
-class ResponseException extends AbstractException
+class ResponseException extends ApiException
 {
     /** @var ResponseInterface */
     private $response;

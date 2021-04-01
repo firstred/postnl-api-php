@@ -26,14 +26,12 @@
 
 namespace Firstred\PostNL\Exception;
 
-use Throwable;
-
 /**
  * Class CifException.
  *
  * @since 1.0.0
  */
-class CifException extends AbstractException
+class CifException extends ApiException
 {
     /** @var array */
     protected $messages;
@@ -49,7 +47,7 @@ class CifException extends AbstractException
      *                                  ]
      *                                  The code param will be discarded if `$message` is an array
      * @param int             $code
-     * @param Throwable|null $previous
+     * @param \Throwable|null $previous
      */
     public function __construct($message = '', $code = 0, $previous = null)
     {
