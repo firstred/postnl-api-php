@@ -31,11 +31,11 @@ use Firstred\PostNL\Entity\Request\GetLocationsInArea;
 use Firstred\PostNL\Entity\Request\GetNearestLocations;
 use Firstred\PostNL\Entity\Response\GetLocationsInAreaResponse;
 use Firstred\PostNL\Entity\Response\GetNearestLocationsResponse;
-use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
@@ -67,7 +67,6 @@ interface LocationServiceInterface extends ServiceInterface
      *
      * @return GetNearestLocationsResponse
      *
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
@@ -75,6 +74,7 @@ interface LocationServiceInterface extends ServiceInterface
      * @throws PostNLInvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
+     * @throws NotFoundException
      *
      * @since 1.0.0
      */
@@ -87,13 +87,13 @@ interface LocationServiceInterface extends ServiceInterface
      *
      * @return GetNearestLocationsResponse
      *
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws LibXMLException
      * @throws ResponseException
      * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
+     * @throws NotFoundException
      *
      * @since 1.0.0
      */
@@ -106,7 +106,6 @@ interface LocationServiceInterface extends ServiceInterface
      *
      * @return GetLocationsInAreaResponse
      *
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
@@ -114,6 +113,7 @@ interface LocationServiceInterface extends ServiceInterface
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
+     * @throws NotFoundException
      *
      * @since 1.0.0
      */
@@ -126,13 +126,13 @@ interface LocationServiceInterface extends ServiceInterface
      *
      * @return GetLocationsInAreaResponse
      *
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws LibXMLException
      * @throws ResponseException
      * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
+     * @throws NotFoundException
      *
      * @since 1.0.0
      */
@@ -145,7 +145,6 @@ interface LocationServiceInterface extends ServiceInterface
      *
      * @return GetLocationsInAreaResponse
      *
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
@@ -153,6 +152,7 @@ interface LocationServiceInterface extends ServiceInterface
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
      * @throws HttpClientException
+     * @throws NotFoundException
      *
      * @since 1.0.0
      */
@@ -165,13 +165,13 @@ interface LocationServiceInterface extends ServiceInterface
      *
      * @return GetLocationsInAreaResponse
      *
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws LibXMLException
      * @throws ResponseException
      * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
+     * @throws NotFoundException
      *
      * @since 1.0.0
      */

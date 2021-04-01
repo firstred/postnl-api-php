@@ -28,11 +28,11 @@ namespace Firstred\PostNL\Service;
 
 use Firstred\PostNL\Entity\Request\GetTimeframes;
 use Firstred\PostNL\Entity\Response\ResponseTimeframes;
-use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
@@ -57,7 +57,6 @@ interface TimeframeServiceInterface extends ServiceInterface
      *
      * @return ResponseTimeframes
      *
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
@@ -65,6 +64,7 @@ interface TimeframeServiceInterface extends ServiceInterface
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
      * @throws ResponseException
+     * @throws NotFoundException
      *
      * @since 1.0.0
      */
@@ -77,12 +77,12 @@ interface TimeframeServiceInterface extends ServiceInterface
      *
      * @return ResponseTimeframes
      *
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
      * @throws ResponseException
+     * @throws NotFoundException
      *
      * @since 1.0.0
      */

@@ -35,12 +35,11 @@ use Firstred\PostNL\Entity\Request\GetSentDateRequest;
 use Firstred\PostNL\Entity\Response\GetDeliveryDateResponse;
 use Firstred\PostNL\Entity\Response\GetSentDateResponse;
 use Firstred\PostNL\Entity\SOAP\Security;
-use Firstred\PostNL\Exception\ApiConnectionException;
-use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use GuzzleHttp\Psr7\Message as PsrMessage;
@@ -103,13 +102,12 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      *
      * @return GetDeliveryDateResponse
      *
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
      * @throws HttpClientException
-     * @throws ApiConnectionException
      * @throws PostNLInvalidArgumentException
+     * @throws NotFoundException
      *
      * @since 1.0.0
      */
@@ -146,7 +144,7 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
             return $object;
         }
 
-        throw new ApiException('Unable to retrieve the delivery date');
+        throw new NotFoundException('Unable to retrieve the delivery date');
     }
 
     /**
@@ -156,12 +154,11 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      *
      * @return GetDeliveryDateResponse
      *
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
      * @throws HttpClientException
-     * @throws ApiConnectionException
+     * @throws NotFoundException
      *
      * @since 1.0.0
      */
@@ -197,7 +194,7 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
             return $object;
         }
 
-        throw new ApiException('Unable to retrieve delivery date');
+        throw new NotFoundException('Unable to retrieve delivery date');
     }
 
     /**
@@ -207,14 +204,13 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      *
      * @return GetSentDateResponse
      *
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
-     * @throws ApiConnectionException
+     * @throws NotFoundException
      *
      * @since 1.0.0
      */
@@ -251,7 +247,7 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
             return $object;
         }
 
-        throw new ApiException('Unable to retrieve shipping date');
+        throw new NotFoundException('Unable to retrieve shipping date');
     }
 
     /**
@@ -261,12 +257,11 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      *
      * @return GetSentDateResponse
      *
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
      * @throws HttpClientException
-     * @throws ApiConnectionException
+     * @throws NotFoundException
      *
      * @since 1.0.0
      */
@@ -302,7 +297,7 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
             return $object;
         }
 
-        throw new ApiException('Unable to retrieve shipping date');
+        throw new NotFoundException('Unable to retrieve shipping date');
     }
 
     /**

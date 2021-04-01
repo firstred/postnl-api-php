@@ -30,12 +30,11 @@ use Firstred\PostNL\Entity\Request\GetDeliveryDate;
 use Firstred\PostNL\Entity\Request\GetSentDateRequest;
 use Firstred\PostNL\Entity\Response\GetDeliveryDateResponse;
 use Firstred\PostNL\Entity\Response\GetSentDateResponse;
-use Firstred\PostNL\Exception\ApiConnectionException;
-use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Psr\Http\Message\RequestInterface;
@@ -62,13 +61,12 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      *
      * @return GetDeliveryDateResponse
      *
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
      * @throws HttpClientException
-     * @throws ApiConnectionException
      * @throws PostNLInvalidArgumentException
+     * @throws NotFoundException
      *
      * @since 1.0.0
      */
@@ -81,12 +79,11 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      *
      * @return GetDeliveryDateResponse
      *
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
      * @throws HttpClientException
-     * @throws ApiConnectionException
+     * @throws NotFoundException
      *
      * @since 1.0.0
      */
@@ -99,14 +96,13 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      *
      * @return GetSentDateResponse
      *
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
-     * @throws ApiConnectionException
+     * @throws NotFoundException
      *
      * @since 1.0.0
      */
@@ -119,12 +115,11 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      *
      * @return GetSentDateResponse
      *
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
      * @throws HttpClientException
-     * @throws ApiConnectionException
+     * @throws NotFoundException
      *
      * @since 1.0.0
      */

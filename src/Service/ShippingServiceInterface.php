@@ -28,12 +28,11 @@ namespace Firstred\PostNL\Service;
 
 use Firstred\PostNL\Entity\Request\SendShipment;
 use Firstred\PostNL\Entity\Response\SendShipmentResponse;
-use Firstred\PostNL\Exception\ApiConnectionException;
-use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
@@ -59,7 +58,7 @@ interface ShippingServiceInterface extends ServiceInterface
      *
      * @return SendShipmentResponse|null
      *
-     * @throws ApiException
+     * @throws NotFoundException
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
@@ -67,7 +66,6 @@ interface ShippingServiceInterface extends ServiceInterface
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
-     * @throws ApiConnectionException
      *
      * @since 1.2.0
      */

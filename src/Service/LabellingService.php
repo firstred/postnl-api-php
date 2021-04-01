@@ -31,11 +31,11 @@ use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Request\GenerateLabel;
 use Firstred\PostNL\Entity\Response\GenerateLabelResponse;
 use Firstred\PostNL\Entity\SOAP\Security;
-use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use GuzzleHttp\Psr7\Message as PsrMessage;
@@ -103,7 +103,6 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      *
      * @return GenerateLabelResponse
      *
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
@@ -111,6 +110,7 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
+     * @throws NotFoundException
      *
      * @since 1.0.0
      */
@@ -148,7 +148,7 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
             throw new ResponseException('Invalid API response', null, null, $response);
         }
 
-        throw new ApiException('Unable to generate label');
+        throw new NotFoundException('Unable to generate label');
     }
 
     /**
@@ -218,7 +218,6 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      *
      * @return GenerateLabelResponse
      *
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
@@ -263,7 +262,6 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      *
      * @return array
      *
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
@@ -435,7 +433,6 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      *
      * @return GenerateLabelResponse
      *
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
@@ -450,7 +447,7 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
             if (200 === $response->getStatusCode()) {
                 throw new ResponseException('Invalid API Response', null, null, $response);
             } else {
-                throw new ApiException('Invalid API Response');
+                throw new ResponseException('Invalid API Response');
             }
         }
 

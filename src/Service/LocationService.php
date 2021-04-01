@@ -38,11 +38,11 @@ use Firstred\PostNL\Entity\Response\GetLocationsInAreaResponse;
 use Firstred\PostNL\Entity\Response\GetNearestLocationsResponse;
 use Firstred\PostNL\Entity\Response\ResponseLocation;
 use Firstred\PostNL\Entity\SOAP\Security;
-use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use GuzzleHttp\Psr7\Message as PsrMessage;
@@ -108,7 +108,6 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      *
      * @return GetNearestLocationsResponse
      *
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
@@ -116,6 +115,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws PostNLInvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
+     * @throws NotFoundException
      *
      * @since 1.0.0
      */
@@ -148,7 +148,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
             return $object;
         }
 
-        throw new ApiException('Unable to retrieve the nearest locations');
+        throw new NotFoundException('Unable to retrieve the nearest locations');
     }
 
     /**
@@ -158,13 +158,13 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      *
      * @return GetNearestLocationsResponse
      *
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws LibXMLException
      * @throws ResponseException
      * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
+     * @throws NotFoundException
      *
      * @since 1.0.0
      */
@@ -196,7 +196,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
             return $object;
         }
 
-        throw new ApiException('Unable to retrieve nearest locations');
+        throw new NotFoundException('Unable to retrieve nearest locations');
     }
 
     /**
@@ -206,7 +206,6 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      *
      * @return GetLocationsInAreaResponse
      *
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
@@ -214,6 +213,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
+     * @throws NotFoundException
      *
      * @since 1.0.0
      */
@@ -246,7 +246,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
             return $object;
         }
 
-        throw new ApiException('Unable to retrieve the nearest locations');
+        throw new NotFoundException('Unable to retrieve the nearest locations');
     }
 
     /**
@@ -256,13 +256,13 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      *
      * @return GetLocationsInAreaResponse
      *
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws LibXMLException
      * @throws ResponseException
      * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
+     * @throws NotFoundException
      *
      * @since 1.0.0
      */
@@ -295,7 +295,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
             return $object;
         }
 
-        throw new ApiException('Unable to retrieve locations in area');
+        throw new NotFoundException('Unable to retrieve locations in area');
     }
 
     /**
@@ -305,7 +305,6 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      *
      * @return GetLocationsInAreaResponse
      *
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
@@ -313,6 +312,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
      * @throws HttpClientException
+     * @throws NotFoundException
      *
      * @since 1.0.0
      */
@@ -345,7 +345,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
             return $object;
         }
 
-        throw new ApiException('Unable to retrieve the nearest locations');
+        throw new NotFoundException('Unable to retrieve the nearest locations');
     }
 
     /**
@@ -355,13 +355,13 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      *
      * @return GetLocationsInAreaResponse
      *
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws LibXMLException
      * @throws ResponseException
      * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
+     * @throws NotFoundException
      *
      * @since 1.0.0
      */
@@ -393,7 +393,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
             return $object;
         }
 
-        throw new ApiException('Unable to retrieve locations in area');
+        throw new NotFoundException('Unable to retrieve locations in area');
     }
 
     /**
@@ -639,7 +639,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
     }
 
     /**
-     * Proess GetLocationsInArea Response REST.
+     * Process GetLocationsInArea Response REST.
      *
      * @param mixed $response
      *

@@ -28,12 +28,11 @@ namespace Firstred\PostNL\Service;
 
 use Firstred\PostNL\Entity\Request\SendShipment;
 use Firstred\PostNL\Entity\Response\SendShipmentResponse;
-use Firstred\PostNL\Exception\ApiConnectionException;
-use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use GuzzleHttp\Psr7\Message as PsrMessage;
@@ -73,7 +72,7 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
      *
      * @return SendShipmentResponse|null
      *
-     * @throws ApiException
+     * @throws NotFoundException
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
@@ -81,7 +80,6 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
-     * @throws ApiConnectionException
      *
      * @since 1.2.0
      */
@@ -122,7 +120,7 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
             throw new ResponseException('Invalid API response', null, null, $response);
         }
 
-        throw new ApiException('Unable to create shipment');
+        throw new NotFoundException('Unable to create shipment');
     }
 
     /**

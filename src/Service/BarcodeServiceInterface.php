@@ -27,11 +27,10 @@
 namespace Firstred\PostNL\Service;
 
 use Firstred\PostNL\Entity\Request\GenerateBarcode;
-use Firstred\PostNL\Exception\ApiConnectionException;
-use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\ResponseException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -55,12 +54,11 @@ interface BarcodeServiceInterface extends ServiceInterface
      *
      * @return string Barcode
      *
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
      * @throws ResponseException
-     * @throws ApiConnectionException
+     * @throws InvalidConfigurationException
      *
      * @since 1.0.0
      */
@@ -73,11 +71,11 @@ interface BarcodeServiceInterface extends ServiceInterface
      *
      * @return string[] Barcodes
      *
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
      * @throws ResponseException
+     * @throws InvalidConfigurationException
      *
      * @since 1.0.0
      */
@@ -133,11 +131,11 @@ interface BarcodeServiceInterface extends ServiceInterface
      *
      * @return array
      *
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
      * @throws ResponseException
+     * @throws InvalidConfigurationException
      *
      * @since 1.0.0
      */

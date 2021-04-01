@@ -31,10 +31,10 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use Exception;
 use Firstred\PostNL\Entity\AbstractEntity;
-use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\InvalidMethodException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\PostNL;
@@ -189,11 +189,11 @@ abstract class AbstractService
      *
      * @return bool
      *
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
      * @throws ResponseException
+     * @throws InvalidConfigurationException
      *
      * @since 1.0.0
      */
@@ -202,7 +202,7 @@ abstract class AbstractService
         $body = json_decode(static::getResponseText($response));
 
         if (!empty($body->fault->faultstring) && 'Invalid ApiKey' === $body->fault->faultstring) {
-            throw new ApiException('Invalid Api Key');
+            throw new InvalidConfigurationException('Invalid Api Key');
         }
         if (isset($body->Envelope->Body->Fault->Reason->Text->{''})) {
             throw new CifDownException($body->Envelope->Body->Fault->Reason->Text->{''});

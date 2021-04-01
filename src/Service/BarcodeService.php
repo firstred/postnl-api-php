@@ -30,11 +30,10 @@ use DateTimeImmutable;
 use Exception;
 use Firstred\PostNL\Entity\Request\GenerateBarcode;
 use Firstred\PostNL\Entity\SOAP\Security;
-use Firstred\PostNL\Exception\ApiConnectionException;
-use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\PostNL;
 use Psr\Http\Message\RequestInterface;
@@ -89,12 +88,11 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
      *
      * @return string|null Barcode
      *
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
      * @throws ResponseException
-     * @throws ApiConnectionException
+     * @throws InvalidConfigurationException
      *
      * @since 1.0.0
      */
@@ -116,11 +114,11 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
      *
      * @return string[] Barcodes
      *
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
      * @throws ResponseException
+     * @throws InvalidConfigurationException
      *
      * @since 1.0.0
      */
@@ -236,11 +234,11 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
      *
      * @return stdClass
      *
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
      * @throws ResponseException
+     * @throws InvalidConfigurationException
      *
      * @since 1.0.0
      */

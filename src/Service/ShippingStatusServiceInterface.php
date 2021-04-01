@@ -37,12 +37,11 @@ use Firstred\PostNL\Entity\Response\CompleteStatusResponse;
 use Firstred\PostNL\Entity\Response\CurrentStatusResponse;
 use Firstred\PostNL\Entity\Response\GetSignatureResponseSignature;
 use Firstred\PostNL\Entity\Response\UpdatedShipmentsResponse;
-use Firstred\PostNL\Exception\ApiConnectionException;
-use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
@@ -84,8 +83,6 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      *
      * @return CurrentStatusResponse
      *
-     * @throws ApiConnectionException
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
@@ -93,6 +90,7 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      * @throws PostNLInvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
+     * @throws NotFoundException
      *
      * @since 1.0.0
      */
@@ -111,12 +109,11 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      *
      * @return CurrentStatusResponse[]
      *
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
      * @throws PsrCacheInvalidArgumentException
-          * @throws HttpClientException
+     * @throws HttpClientException
      *
      * @since 1.0.0
      */
@@ -135,14 +132,13 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      *
      * @return UpdatedShipmentsResponse
      *
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
      * @throws ResponseException
-     * @throws ApiConnectionException
+     * @throws NotFoundException
      *
      * @since 1.0.0
      */
@@ -161,12 +157,11 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      *
      * @return UpdatedShipmentsResponse[]
      *
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
      * @throws PsrCacheInvalidArgumentException
-          * @throws HttpClientException
+     * @throws HttpClientException
      *
      * @since 1.0.0
      */
@@ -185,7 +180,6 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      *
      * @return GetSignatureResponseSignature
      *
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
@@ -193,7 +187,7 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
-     * @throws ApiConnectionException
+     * @throws NotFoundException
      *
      * @since 1.0.0
      */
@@ -295,8 +289,6 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      *
      * @return UpdatedShipmentsResponse[]
      *
-     * @throws ApiConnectionException
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
@@ -304,6 +296,7 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      * @throws ResponseException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
+     * @throws NotFoundException
      *
      * @since 1.2.0
      */

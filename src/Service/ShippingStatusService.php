@@ -39,12 +39,11 @@ use Firstred\PostNL\Entity\Response\CompleteStatusResponseOldStatus;
 use Firstred\PostNL\Entity\Response\CurrentStatusResponse;
 use Firstred\PostNL\Entity\Response\GetSignatureResponseSignature;
 use Firstred\PostNL\Entity\Response\UpdatedShipmentsResponse;
-use Firstred\PostNL\Exception\ApiConnectionException;
-use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use GuzzleHttp\Psr7\Message as PsrMessage;
@@ -104,8 +103,6 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      *
      * @return CurrentStatusResponse
      *
-     * @throws ApiConnectionException
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
@@ -113,6 +110,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws PostNLInvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
+     * @throws NotFoundException
      *
      * @since 1.0.0
      */
@@ -145,7 +143,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
             return $object;
         }
 
-        throw new ApiException('Unable to retrieve current status');
+        throw new NotFoundException('Unable to retrieve current status');
     }
 
     public function currentStatusesREST(array $currentStatuses)
@@ -166,14 +164,13 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      *
      * @return CompleteStatusResponse
      *
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
      * @throws ResponseException
-     * @throws ApiConnectionException
+     * @throws NotFoundException
      *
      * @since 1.0.0
      */
@@ -210,7 +207,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
             return $object;
         }
 
-        throw new ApiException('Unable to retrieve complete status');
+        throw new NotFoundException('Unable to retrieve complete status');
     }
 
     public function completeStatusesREST(array $completeStatuses)
@@ -225,7 +222,6 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      *
      * @return GetSignatureResponseSignature
      *
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
@@ -233,7 +229,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
-     * @throws ApiConnectionException
+     * @throws NotFoundException
      *
      * @since 1.0.0
      */
@@ -266,7 +262,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
             return $object;
         }
 
-        throw new ApiException('Unable to get signature');
+        throw new NotFoundException('Unable to get signature');
     }
 
     /**
@@ -555,8 +551,6 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      *
      * @return UpdatedShipmentsResponse[]
      *
-     * @throws ApiConnectionException
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
@@ -564,6 +558,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws ResponseException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
+     * @throws NotFoundException
      *
      * @since 1.2.0
      */
@@ -606,7 +601,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
             return $object;
         }
 
-        throw new ApiException('Unable to retrieve updated shipments');
+        throw new NotFoundException('Unable to retrieve updated shipments');
     }
 
     /**

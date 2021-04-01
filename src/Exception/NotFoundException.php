@@ -26,47 +26,11 @@
 
 namespace Firstred\PostNL\Exception;
 
-use Exception;
-use Psr\Http\Message\ResponseInterface;
-
 /**
- * Class HttpClientException
+ * Class NotFoundException.
  *
- * @since 1.0.0
+ * @since 1.2.0
  */
-class HttpClientException extends Exception
+class NotFoundException extends ApiException
 {
-    /** @var ResponseInterface */
-    private $response;
-
-    /**
-     * ResponseException constructor.
-     *
-     * @param string                 $message
-     * @param int                    $code
-     * @param Exception|null         $previous
-     * @param ResponseInterface|null $response
-     */
-    public function __construct($message = '', $code = 0, $previous = null, ResponseInterface $response = null)
-    {
-        parent::__construct($message, $code, $previous);
-
-        $this->response = $response;
-    }
-
-    /**
-     * @param ResponseInterface $response
-     */
-    public function setResponse(ResponseInterface $response)
-    {
-        $this->response = $response;
-    }
-
-    /**
-     * @return ResponseInterface
-     */
-    public function getResponse()
-    {
-        return $this->response;
-    }
 }

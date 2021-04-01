@@ -28,12 +28,11 @@ namespace Firstred\PostNL\Service;
 
 use Firstred\PostNL\Entity\Request\Confirming;
 use Firstred\PostNL\Entity\Response\ConfirmingResponseShipment;
-use Firstred\PostNL\Exception\ApiConnectionException;
-use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Psr\Http\Message\RequestInterface;
@@ -58,14 +57,13 @@ interface ConfirmingServiceInterface extends ServiceInterface
      *
      * @return ConfirmingResponseShipment
      *
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws InvalidArgumentException
-     * @throws ApiConnectionException
+     * @throws NotFoundException
      *
      * @since 1.0.0
      */
@@ -78,7 +76,6 @@ interface ConfirmingServiceInterface extends ServiceInterface
      *
      * @return ConfirmingResponseShipment[]
      *
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
@@ -138,7 +135,6 @@ interface ConfirmingServiceInterface extends ServiceInterface
      *
      * @return ConfirmingResponseShipment|null
      *
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException

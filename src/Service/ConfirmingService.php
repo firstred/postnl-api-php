@@ -32,12 +32,11 @@ use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Request\Confirming;
 use Firstred\PostNL\Entity\Response\ConfirmingResponseShipment;
 use Firstred\PostNL\Entity\SOAP\Security;
-use Firstred\PostNL\Exception\ApiConnectionException;
-use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Psr\Http\Message\RequestInterface;
@@ -94,14 +93,13 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
      *
      * @return ConfirmingResponseShipment
      *
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws InvalidArgumentException
-     * @throws ApiConnectionException
+     * @throws NotFoundException
      *
      * @since 1.0.0
      */
@@ -118,7 +116,7 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
             throw new ResponseException('Invalid API Response', null, null, $response);
         }
 
-        throw new ApiException('Unable to confirm');
+        throw new NotFoundException('Unable to confirm');
     }
 
     /**
@@ -128,7 +126,6 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
      *
      * @return ConfirmingResponseShipment[]
      *
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
@@ -252,7 +249,6 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
      *
      * @return ConfirmingResponseShipment[]|null
      *
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
