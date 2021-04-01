@@ -1,6 +1,8 @@
 Delivery options
 ========
 
+The PostNL API allows you to
+
 Delivery date service
 ---------------------
 
@@ -18,7 +20,7 @@ Get the Delivery Date
 
 Here's how you can retrieve the closest delivery date:
 
-.. code-block:: php
+.. code-block:: PHP
 
     $cutoffTime = '15:00:00';
     $dropoffDays = [1 => true, 2 => true, 3 => true, 4 => true, 5 => true, 6 => false, 7 => false];
