@@ -14,7 +14,7 @@ page.
 Doing a Request
 ----------------
 
-You can do requests over the API by creating the request objects and passing them to one of the functions in the main :php:class`Firstred\\PostNL\\PostNL`
+You can do requests over the API by creating the request objects and passing them to one of the functions in the main :php:class:`Firstred\\PostNL\\PostNL`
 class.
 
 Creating request objects may seem a bit counter-intuitive at first, but this makes it a lot easier to follow the request examples from the `official API documentation <https://developer.postnl.nl/>`_ and quickly figure out what each field does.
