@@ -40,7 +40,7 @@ Required credentials
 
 .. confval:: Address
 
-    A filled address object with at least the following information:
+    A filled :php:class:`Firstred\\PostNL\\Entity\\Address` object with at least the following information:
 
     .. confval:: AddressType
         :required: true

@@ -48,9 +48,9 @@ Developer Guide
     :glob:
 
     overview.rst
-    quickstart.rst
     installation.rst
     authentication.rst
+    quickstart.rst
     deliveryoptions.rst
     sendandtrackshipments.rst
     httpclient.rst
