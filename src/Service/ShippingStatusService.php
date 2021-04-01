@@ -49,6 +49,7 @@ use Firstred\PostNL\Exception\ResponseException;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use InvalidArgumentException;
 use Psr\Cache\CacheItemInterface;
+use Psr\Cache\CacheItemPoolInterface;
 use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -57,20 +58,21 @@ use function json_decode;
 /**
  * Class ShippingStatusService.
  *
- * @method CurrentStatusResponse      currentStatus(CurrentStatus|CurrentStatusByReference $currentStatus)
- * @method CurrentStatusResponse[]    currentStatuses(CurrentStatus[]|CurrentStatusByReference[] $currentStatuses)
- * @method RequestInterface           buildCurrentStatusRequest(CurrentStatus|CurrentStatusByReference $currentStatus)
- * @method CurrentStatusResponse      processCurrentStatusResponse(ResponseInterface $response)
- * @method UpdatedShipmentsResponse   completeStatus(CompleteStatus|CompleteStatusByReference $completeStatus)
- * @method UpdatedShipmentsResponse[] completeStatuses(CompleteStatus[]|CompleteStatusByReference[] $completeStatuses)
- * @method RequestInterface           buildCompleteStatusRequest(CompleteStatus|CompleteStatusByReference $completeStatus)
- * @method UpdatedShipmentsResponse   processCompleteStatusResponse(ResponseInterface $response)
- * @method GetSignature               getSignature(GetSignature $getSignature)
- * @method RequestInterface           buildGetSignatureRequest(GetSignature $getSignature)
- * @method GetSignature               processGetSignatureResponse(ResponseInterface $response)
- * @method UpdatedShipmentsResponse[] getUpdatedShipments(Customer $customer, DateTimeInterface|null $dateTimeFrom, DateTimeInterface|null $dateTimeTo)
- * @method RequestInterface           buildGetUpdatedShipmentsRequest(Customer $customer, DateTimeInterface|null $dateTimeFrom, DateTimeInterface|null $dateTimeTo)
- * @method UpdatedShipmentsResponse   processGetUpdatedShipmentsResponse(ResponseInterface $response)
+ * @method CurrentStatusResponse           currentStatus(CurrentStatus|CurrentStatusByReference $currentStatus)
+ * @method CurrentStatusResponse[]         currentStatuses(CurrentStatus[]|CurrentStatusByReference[] $currentStatuses)
+ * @method RequestInterface                buildCurrentStatusRequest(CurrentStatus|CurrentStatusByReference $currentStatus)
+ * @method CurrentStatusResponse           processCurrentStatusResponse(ResponseInterface $response)
+ * @method UpdatedShipmentsResponse        completeStatus(CompleteStatus|CompleteStatusByReference $completeStatus)
+ * @method UpdatedShipmentsResponse[]      completeStatuses(CompleteStatus[]|CompleteStatusByReference[] $completeStatuses)
+ * @method RequestInterface                buildCompleteStatusRequest(CompleteStatus|CompleteStatusByReference $completeStatus)
+ * @method UpdatedShipmentsResponse        processCompleteStatusResponse(ResponseInterface $response)
+ * @method GetSignatureResponseSignature   getSignature(GetSignature $getSignature)
+ * @method GetSignatureResponseSignature[] getSignatures(GetSignature[] $getSignatures)
+ * @method RequestInterface                buildGetSignatureRequest(GetSignature $getSignature)
+ * @method GetSignatureResponseSignature   processGetSignatureResponse(ResponseInterface $response)
+ * @method UpdatedShipmentsResponse[]      getUpdatedShipments(Customer $customer, DateTimeInterface|null $dateTimeFrom, DateTimeInterface|null $dateTimeTo)
+ * @method RequestInterface                buildGetUpdatedShipmentsRequest(Customer $customer, DateTimeInterface|null $dateTimeFrom, DateTimeInterface|null $dateTimeTo)
+ * @method UpdatedShipmentsResponse        processGetUpdatedShipmentsResponse(ResponseInterface $response)
  *
  * @since 1.0.0
  */
@@ -146,9 +148,63 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
         throw new NotFoundException('Unable to retrieve current status');
     }
 
+    /**
+     * Get current statuses REST.
+     *
+     * @param CurrentStatus[]|CurrentStatusByReference[] $currentStatuses
+     *
+     * @return CurrentStatusResponse[]
+     *
+     * @throws HttpClientException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
+     * @throws PsrCacheInvalidArgumentException
+     * @throws ResponseException
+     *
+     * @since 1.2.0
+     */
     public function currentStatusesREST(array $currentStatuses)
     {
-        // TODO: Implement currentStatusesREST() method.
+        $httpClient = $this->postnl->getHttpClient();
+
+        $responses = [];
+        foreach ($currentStatuses as $index => $currentStatus) {
+            $item = $this->retrieveCachedItem($index);
+            $response = null;
+            if ($item instanceof CacheItemInterface) {
+                $response = $item->get();
+                $response = PsrMessage::parseResponse($response);
+                $responses[$index] = $response;
+            }
+
+            $httpClient->addOrUpdateRequest(
+                $index,
+                $this->buildCurrentStatusRequestREST($currentStatus)
+            );
+        }
+
+        $newResponses = $httpClient->doRequests();
+        foreach ($newResponses as $uuid => $newResponse) {
+            if ($newResponse instanceof ResponseInterface
+                && 200 === $newResponse->getStatusCode()
+            ) {
+                $item = $this->retrieveCachedItem($uuid);
+                if ($item instanceof CacheItemInterface) {
+                    $item->set(PsrMessage::toString($newResponse));
+                    $this->cache->saveDeferred($item);
+                }
+            }
+        }
+        if ($this->cache instanceof CacheItemPoolInterface) {
+            $this->cache->commit();
+        }
+
+        $currentStatusResponses = [];
+        foreach ($responses + $newResponses as $uuid => $response) {
+            $currentStatusResponses[$uuid] = $this->processCurrentStatusResponseREST($response);
+        }
+
+        return $currentStatusResponses;
     }
 
     /**
@@ -210,9 +266,63 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
         throw new NotFoundException('Unable to retrieve complete status');
     }
 
+    /**
+     * Get complete statuses REST.
+     *
+     * @param CompleteStatus[]|CompleteStatusByReference[] $completeStatuses
+     *
+     * @return CompleteStatusResponse[]
+     *
+     * @throws HttpClientException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
+     * @throws PsrCacheInvalidArgumentException
+     * @throws ResponseException
+     *
+     * @since 1.2.0
+     */
     public function completeStatusesREST(array $completeStatuses)
     {
-        // TODO: Implement completeStatusesREST() method.
+        $httpClient = $this->postnl->getHttpClient();
+
+        $responses = [];
+        foreach ($completeStatuses as $index => $completeStatus) {
+            $item = $this->retrieveCachedItem($index);
+            $response = null;
+            if ($item instanceof CacheItemInterface) {
+                $response = $item->get();
+                $response = PsrMessage::parseResponse($response);
+                $responses[$index] = $response;
+            }
+
+            $httpClient->addOrUpdateRequest(
+                $index,
+                $this->buildCompleteStatusRequestREST($completeStatus)
+            );
+        }
+
+        $newResponses = $httpClient->doRequests();
+        foreach ($newResponses as $uuid => $newResponse) {
+            if ($newResponse instanceof ResponseInterface
+                && 200 === $newResponse->getStatusCode()
+            ) {
+                $item = $this->retrieveCachedItem($uuid);
+                if ($item instanceof CacheItemInterface) {
+                    $item->set(PsrMessage::toString($newResponse));
+                    $this->cache->saveDeferred($item);
+                }
+            }
+        }
+        if ($this->cache instanceof CacheItemPoolInterface) {
+            $this->cache->commit();
+        }
+
+        $completeStatusResponses = [];
+        foreach ($responses + $newResponses as $uuid => $response) {
+            $completeStatusResponses[$uuid] = $this->processCompleteStatusResponseREST($response);
+        }
+
+        return $completeStatusResponses;
     }
 
     /**
@@ -263,6 +373,65 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
         }
 
         throw new NotFoundException('Unable to get signature');
+    }
+
+    /**
+     * Get multiple signatures.
+     *
+     * @param GetSignature[] $getSignatures
+     *
+     * @return GetSignatureResponseSignature[]
+     *
+     * @throws HttpClientException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
+     * @throws PsrCacheInvalidArgumentException
+     * @throws ResponseException
+     *
+     * @since 1.2.0
+     */
+    public function getSignaturesREST(array $getSignatures)
+    {
+        $httpClient = $this->postnl->getHttpClient();
+
+        $responses = [];
+        foreach ($getSignatures as $index => $getsignature) {
+            $item = $this->retrieveCachedItem($index);
+            $response = null;
+            if ($item instanceof CacheItemInterface) {
+                $response = $item->get();
+                $response = PsrMessage::parseResponse($response);
+                $responses[$index] = $response;
+            }
+
+            $httpClient->addOrUpdateRequest(
+                $index,
+                $this->buildGetSignatureRequestREST($getsignature)
+            );
+        }
+
+        $newResponses = $httpClient->doRequests();
+        foreach ($newResponses as $uuid => $newResponse) {
+            if ($newResponse instanceof ResponseInterface
+                && 200 === $newResponse->getStatusCode()
+            ) {
+                $item = $this->retrieveCachedItem($uuid);
+                if ($item instanceof CacheItemInterface) {
+                    $item->set(PsrMessage::toString($newResponse));
+                    $this->cache->saveDeferred($item);
+                }
+            }
+        }
+        if ($this->cache instanceof CacheItemPoolInterface) {
+            $this->cache->commit();
+        }
+
+        $signatureResponses = [];
+        foreach ($responses + $newResponses as $uuid => $response) {
+            $signatureResponses[$uuid] = $this->processGetSignatureResponseREST($response);
+        }
+
+        return $signatureResponses;
     }
 
     /**

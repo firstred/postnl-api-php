@@ -51,20 +51,21 @@ use Psr\Http\Message\ResponseInterface;
 /**
  * Class ShippingStatusService.
  *
- * @method CurrentStatusResponse         currentStatus(CurrentStatus|CurrentStatusByReference $currentStatus)
- * @method CurrentStatusResponse[]       currentStatuses(CurrentStatus[]|CurrentStatusByReference[] $currentStatuses)
- * @method RequestInterface              buildCurrentStatusRequest(CurrentStatus|CurrentStatusByReference $currentStatus)
- * @method CurrentStatusResponse         processCurrentStatusResponse(ResponseInterface $response)
- * @method CompleteStatusResponse        completeStatus(CompleteStatus|CompleteStatusByReference $completeStatus)
- * @method CompleteStatusResponse[]      completeStatuses(CompleteStatus[]|CompleteStatusByReference[] $completeStatuses)
- * @method RequestInterface              buildCompleteStatusRequest(CompleteStatus|CompleteStatusByReference $completeStatus)
- * @method CompleteStatusResponse        processCompleteStatusResponse(ResponseInterface $response)
- * @method GetSignatureResponseSignature getSignature(GetSignature $getSignature)
- * @method RequestInterface              buildGetSignatureRequest(GetSignature $getSignature)
- * @method GetSignature                  processGetSignatureResponse(ResponseInterface $response)
- * @method UpdatedShipmentsResponse[]    getUpdatedShipments(Customer $customer, DateTimeInterface|null $dateTimeFrom, DateTimeInterface|null $dateTimeTo)
- * @method RequestInterface              buildGetUpdatedShipmentsRequest(Customer $customer, DateTimeInterface|null $dateTimeFrom, DateTimeInterface|null $dateTimeTo)
- * @method UpdatedShipmentsResponse      processGetUpdatedShipmentsResponse(ResponseInterface $response)
+ * @method CurrentStatusResponse           currentStatus(CurrentStatus|CurrentStatusByReference $currentStatus)
+ * @method CurrentStatusResponse[]         currentStatuses(CurrentStatus[]|CurrentStatusByReference[] $currentStatuses)
+ * @method RequestInterface                buildCurrentStatusRequest(CurrentStatus|CurrentStatusByReference $currentStatus)
+ * @method CurrentStatusResponse           processCurrentStatusResponse(ResponseInterface $response)
+ * @method CompleteStatusResponse          completeStatus(CompleteStatus|CompleteStatusByReference $completeStatus)
+ * @method CompleteStatusResponse[]        completeStatuses(CompleteStatus[]|CompleteStatusByReference[] $completeStatuses)
+ * @method RequestInterface                buildCompleteStatusRequest(CompleteStatus|CompleteStatusByReference $completeStatus)
+ * @method CompleteStatusResponse          processCompleteStatusResponse(ResponseInterface $response)
+ * @method GetSignatureResponseSignature   getSignature(GetSignature $getSignature)
+ * @method GetSignatureResponseSignature[] getSignatures(GetSignature[] $getSignatures)
+ * @method RequestInterface                buildGetSignatureRequest(GetSignature $getSignature)
+ * @method GetSignature                    processGetSignatureResponse(ResponseInterface $response)
+ * @method UpdatedShipmentsResponse[]      getUpdatedShipments(Customer $customer, DateTimeInterface|null $dateTimeFrom, DateTimeInterface|null $dateTimeTo)
+ * @method RequestInterface                buildGetUpdatedShipmentsRequest(Customer $customer, DateTimeInterface|null $dateTimeFrom, DateTimeInterface|null $dateTimeTo)
+ * @method UpdatedShipmentsResponse        processGetUpdatedShipmentsResponse(ResponseInterface $response)
  *
  * @since 1.2.0
  */
@@ -97,25 +98,19 @@ interface ShippingStatusServiceInterface extends ServiceInterface
     public function currentStatusREST($currentStatus);
 
     /**
-     * Gets multiple current statuses.
-     *
-     * This is a combi-function, supporting the following:
-     * - CurrentStatus (by barcode):
-     *   - Fill the Shipment->Barcode property. Leave the rest empty.
-     * - CurrentStatusByReference:
-     *   - Fill the Shipment->Reference property. Leave the rest empty.
+     * Get current statuses REST.
      *
      * @param CurrentStatus[]|CurrentStatusByReference[] $currentStatuses
      *
      * @return CurrentStatusResponse[]
      *
-     * @throws CifDownException
-     * @throws CifException
-     * @throws ResponseException
-     * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
+     * @throws PsrCacheInvalidArgumentException
+     * @throws ResponseException
      *
-     * @since 1.0.0
+     * @since 1.2.0
      */
     public function currentStatusesREST(array $currentStatuses);
 
@@ -145,25 +140,19 @@ interface ShippingStatusServiceInterface extends ServiceInterface
     public function completeStatusREST($completeStatus);
 
     /**
-     * Gets the complete status.
-     *
-     * This is a combi-function, supporting the following:
-     * - CurrentStatus (by barcode):
-     *   - Fill the Shipment->Barcode property. Leave the rest empty.
-     * - CurrentStatusByReference:
-     *   - Fill the Shipment->Reference property. Leave the rest empty.
+     * Get complete statuses REST.
      *
      * @param CompleteStatus[]|CompleteStatusByReference[] $completeStatuses
      *
-     * @return UpdatedShipmentsResponse[]
+     * @return CompleteStatusResponse[]
      *
-     * @throws CifDownException
-     * @throws CifException
-     * @throws ResponseException
-     * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
+     * @throws PsrCacheInvalidArgumentException
+     * @throws ResponseException
      *
-     * @since 1.0.0
+     * @since 1.2.0
      */
     public function completeStatusesREST(array $completeStatuses);
 
@@ -192,6 +181,23 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      * @since 1.0.0
      */
     public function getSignatureREST(GetSignature $getSignature);
+
+    /**
+     * Get multiple signatures.
+     *
+     * @param GetSignature[] $getSignatures
+     *
+     * @return GetSignatureResponseSignature[]
+     *
+     * @throws HttpClientException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
+     * @throws PsrCacheInvalidArgumentException
+     * @throws ResponseException
+     *
+     * @since 1.2.0
+     */
+    public function getSignaturesREST(array $getSignatures);
 
     /**
      * Build the CurrentStatus request for the REST API.

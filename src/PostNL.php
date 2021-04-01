@@ -24,9 +24,10 @@
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
+/** @noinspection PhpDocRedundantThrowsInspection */
+
 namespace Firstred\PostNL;
 
-use DateTimeImmutable;
 use DateTimeInterface;
 use Exception;
 use Firstred\PostNL\Entity\Barcode;
@@ -64,13 +65,17 @@ use Firstred\PostNL\Entity\Response\ResponseTimeframes;
 use Firstred\PostNL\Entity\Response\UpdatedShipmentsResponse;
 use Firstred\PostNL\Entity\Shipment;
 use Firstred\PostNL\Entity\SOAP\UsernameToken;
+use Firstred\PostNL\Exception\CifDownException;
+use Firstred\PostNL\Exception\CifException;
+use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use Firstred\PostNL\Exception\PostNLException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\InvalidBarcodeException;
 use Firstred\PostNL\Exception\InvalidConfigurationException;
-use Firstred\PostNL\Exception\NotImplementedException;
+use Firstred\PostNL\Exception\NotFoundException as PostNLNotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
+use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\Exception\ShipmentNotFoundException;
 use Firstred\PostNL\Factory\GuzzleRequestFactory;
 use Firstred\PostNL\Factory\GuzzleResponseFactory;
@@ -121,6 +126,7 @@ use setasign\Fpdi\PdfParser\PdfParserException;
 use setasign\Fpdi\PdfParser\StreamReader;
 use setasign\Fpdi\PdfParser\Type\PdfTypeException;
 use setasign\Fpdi\PdfReader\PdfReaderException;
+use function array_map;
 use function base64_decode;
 use function class_exists;
 use function constant;
@@ -959,6 +965,11 @@ class PostNL implements LoggerAwareInterface
      *
      * @return string The barcode as a string
      *
+     * @throws CifDownException
+     * @throws CifException
+     * @throws HttpClientException
+     * @throws ResponseException
+     * @throws InvalidConfigurationException
      * @throws InvalidBarcodeException
      *
      * @since 1.0.0
@@ -997,6 +1008,11 @@ class PostNL implements LoggerAwareInterface
      * @return string The Barcode as a string
      *
      * @throws InvalidConfigurationException
+     * @throws CifDownException
+     * @throws CifException
+     * @throws HttpClientException
+     * @throws ResponseException
+     * @throws InvalidConfigurationException
      * @throws InvalidBarcodeException
      *
      * @since 1.0.0
@@ -1034,6 +1050,11 @@ class PostNL implements LoggerAwareInterface
      *
      * @return array Country isos with the barcode as string
      *
+     * @throws InvalidConfigurationException
+     * @throws CifDownException
+     * @throws CifException
+     * @throws HttpClientException
+     * @throws ResponseException
      * @throws InvalidConfigurationException
      * @throws InvalidBarcodeException
      *
@@ -1090,11 +1111,22 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
+     * Send a single shipment.
+     *
      * @param Shipment $shipment
      * @param string   $printertype
      * @param bool     $confirm
      *
-     * @return Entity\Response\SendShipmentResponse
+     * @return SendShipmentResponse
+     *
+     * @throws PostNLNotFoundException
+     * @throws CifDownException
+     * @throws CifException
+     * @throws ResponseException
+     * @throws PsrCacheInvalidArgumentException
+     * @throws HttpClientException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
      *
      * @since 1.2.0
      */
@@ -1113,6 +1145,8 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
+     * Send multiple shipments.
+     *
      * @param Shipment[] $shipments     Array of shipments
      * @param string     $printertype   Printer type, see PostNL dev docs for available types
      * @param bool       $confirm       Immediately confirm the shipments
@@ -1155,6 +1189,13 @@ class PostNL implements LoggerAwareInterface
      * @throws PdfParserException
      * @throws PdfTypeException
      * @throws PdfReaderException
+     * @throws PostNLNotFoundException
+     * @throws CifDownException
+     * @throws CifException
+     * @throws ResponseException
+     * @throws PsrCacheInvalidArgumentException
+     * @throws HttpClientException
+     * @throws PostNLInvalidArgumentException
      *
      * @since 1.2.0
      */
@@ -1307,13 +1348,24 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
+     * Generate a single label.
+     *
      * @param Shipment $shipment
      * @param string   $printertype
      * @param bool     $confirm
      *
      * @return GenerateLabelResponse
      *
-     * @throws InvalidArgumentException
+     * @throws CifDownException
+     * @throws CifException
+     * @throws ResponseException
+     * @throws PsrCacheInvalidArgumentException
+     * @throws HttpClientException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
+     * @throws PostNLNotFoundException
+     *
+     * @since 1.0.0
      */
     public function generateLabel(
         Shipment $shipment,
@@ -1379,6 +1431,11 @@ class PostNL implements LoggerAwareInterface
      * @throws PdfParserException
      * @throws PdfTypeException
      * @throws PdfReaderException
+     * @throws HttpClientException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
+     * @throws PsrCacheInvalidArgumentException
+     * @throws ResponseException
      *
      * @since 1.0.0
      */
@@ -1556,6 +1613,14 @@ class PostNL implements LoggerAwareInterface
      *
      * @return ConfirmingResponseShipment[]
      *
+     * @throws CifDownException
+     * @throws CifException
+     * @throws ResponseException
+     * @throws HttpClientException
+     * @throws NotSupportedException
+     * @throws InvalidArgumentException
+     * @throws PostNLNotFoundException
+     *
      * @since 1.0.0
      */
     public function confirmShipments(array $shipments)
@@ -1582,6 +1647,13 @@ class PostNL implements LoggerAwareInterface
      * @return CurrentStatusResponse
      *
      * @throws NotSupportedException
+     * @throws CifDownException
+     * @throws CifException
+     * @throws HttpClientException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
+     * @throws ResponseException
+     * @throws PostNLNotFoundException
      *
      * @since 1.0.0
      *
@@ -1617,22 +1689,22 @@ class PostNL implements LoggerAwareInterface
      * @return CurrentStatusResponseShipment|CompleteStatusResponseShipment
      *
      * @throws ShipmentNotFoundException
+     * @throws CifDownException
+     * @throws CifException
+     * @throws HttpClientException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
+     * @throws ResponseException
+     * @throws PostNLNotFoundException
      *
      * @since 1.2.0
      */
     public function getShippingStatusByBarcode($barcode, $complete = false)
     {
         if ($complete) {
-            $statusRequest = new CompleteStatus(
-                (new Shipment())
-                    ->setBarcode($barcode)
-
-            );
+            $statusRequest = new CompleteStatus((new Shipment())->setBarcode($barcode));
         } else {
-            $statusRequest = new CurrentStatus(
-                (new Shipment())
-                    ->setBarcode($barcode)
-            );
+            $statusRequest = new CurrentStatus((new Shipment())->setBarcode($barcode));
         }
 
         if (!$statusRequest->getMessage()) {
@@ -1658,16 +1730,43 @@ class PostNL implements LoggerAwareInterface
      * @param string[] $barcodes Pass multiple barcodes
      * @param bool     $complete Return the complete status (incl. shipment history)
      *
-     * @return CurrentStatusResponseShipment[]
-     * @psalm-return non-empty-array<string, CurrentStatusResponseShipment>
+     * @return CurrentStatusResponseShipment[]|CompleteStatusResponseShipment[]
+     * @psalm-return non-empty-array<string, CurrentStatusResponseShipment|CompleteStatusResponseShipment>
      *
-     * @throws NotImplementedException
+     * @throws HttpClientException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
+     * @throws PsrCacheInvalidArgumentException
+     * @throws ResponseException
      *
      * @since 1.2.0
      */
     public function getShippingStatusesByBarcodes(array $barcodes, $complete = false)
     {
-        throw new NotImplementedException();
+        $shipments = [];
+        if ($complete) {
+            $shipmentResponses = $this->getShippingStatusService()->completeStatuses(array_map(
+                function ($barcode) {
+                    return (new CompleteStatus())->setShipment((new Shipment())->setBarcode($barcode));
+                },
+                $barcodes
+            ));
+        } else {
+            $shipmentResponses = $this->getShippingStatusService()->currentStatuses(array_map(
+                function ($barcode) {
+                    return (new CurrentStatus())->setShipment((new Shipment())->setBarcode($barcode));
+                },
+                $barcodes
+            ));
+        }
+
+        foreach ($shipmentResponses as $shipmentResponse) {
+            foreach ($shipmentResponse->getShipments() as $shipment) {
+                $shipments[] = $shipment;
+            }
+        }
+
+        return $shipments;
     }
 
     /**
@@ -1678,23 +1777,23 @@ class PostNL implements LoggerAwareInterface
      *
      * @return CurrentStatusResponseShipment|CompleteStatusResponseShipment
      *
-     * @throws ShipmentNotFoundException
+     * @throws CifDownException
+     * @throws CifException
+     * @throws HttpClientException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
+     * @throws PsrCacheInvalidArgumentException
+     * @throws ResponseException
+     * @throws NotFoundException
      *
      * @since 1.2.0
      */
     public function getShippingStatusByReference($reference, $complete = false)
     {
         if ($complete) {
-            $statusRequest = new CompleteStatus(
-                (new Shipment())
-                    ->setReference($reference)
-
-            );
+            $statusRequest = new CompleteStatus((new Shipment())->setReference($reference));
         } else {
-            $statusRequest = new CurrentStatus(
-                (new Shipment())
-                    ->setReference($reference)
-            );
+            $statusRequest = new CurrentStatus((new Shipment())->setReference($reference));
         }
 
         if (!$statusRequest->getMessage()) {
@@ -1720,16 +1819,43 @@ class PostNL implements LoggerAwareInterface
      * @param string[] $references Pass multiple references
      * @param bool     $complete   Return the complete status (incl. shipment history)
      *
-     * @return CurrentStatusResponseShipment[]
-     * @psalm-return non-empty-array<string, CurrentStatusResponseShipment>
+     * @return CurrentStatusResponseShipment[]|CompleteStatusResponseShipment[]
+     * @psalm-return non-empty-array<string, CurrentStatusResponseShipment|CompleteStatusResponseShipment>
      *
-     * @throws NotImplementedException
+     * @throws HttpClientException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
+     * @throws PsrCacheInvalidArgumentException
+     * @throws ResponseException
      *
      * @since 1.2.0
      */
     public function getShippingStatusesByReference(array $references, $complete = false)
     {
-        throw new NotImplementedException();
+        $shipments = [];
+        if ($complete) {
+            $shipmentResponses = $this->getShippingStatusService()->completeStatuses(array_map(
+                function ($reference) {
+                    return (new CompleteStatus())->setShipment((new Shipment())->setReference($reference));
+                },
+                $references
+            ));
+        } else {
+            $shipmentResponses = $this->getShippingStatusService()->currentStatuses(array_map(
+                function ($reference) {
+                    return (new CurrentStatus())->setShipment((new Shipment())->setReference($reference));
+                },
+                $references
+            ));
+        }
+
+        foreach ($shipmentResponses as $shipmentResponse) {
+            foreach ($shipmentResponse->getShipments() as $shipment) {
+                $shipments[] = $shipment;
+            }
+        }
+
+        return $shipments;
     }
 
     /**
@@ -1749,8 +1875,13 @@ class PostNL implements LoggerAwareInterface
      * @param CompleteStatus $completeStatus
      *
      * @return CompleteStatusResponse
-     *
+     * @throws CifDownException
+     * @throws CifException
+     * @throws HttpClientException
      * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
+     * @throws ResponseException
+     * @throws PostNLNotFoundException
      *
      * @since 1.0.0
      *
@@ -1839,23 +1970,29 @@ class PostNL implements LoggerAwareInterface
      *
      * @param string[] $barcodes
      *
-     * @return GetSignatureResponseSignature
+     * @return GetSignatureResponseSignature[]
      *
-     * @throws NotImplementedException
+     * @throws HttpClientException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
+     * @throws PsrCacheInvalidArgumentException
+     * @throws ResponseException
      *
      * @since 1.2.0
      */
     public function getSignaturesByBarcodes(array $barcodes)
     {
-        throw new NotImplementedException();
-
-//        $signatureRequest = new GetSignature((new Shipment())->setBarcode($barcode));
-//        $signatureRequest->setCustomer($this->getCustomer());
-//        if (!$signatureRequest->getMessage()) {
-//            $signatureRequest->setMessage(new Message());
-//        }
-//
-//        return $this->getShippingStatusService()->getSignature($signatureRequest);
+        $customer = $this->getCustomer();
+        return $this->getShippingStatusService()->getSignatures(array_map(
+            function ($barcode) use ($customer) {
+                return new GetSignature(
+                    (new Shipment())->setBarcode($barcode),
+                    $customer,
+                    new Message()
+                );
+            },
+            $barcodes
+        ));
     }
 
     /**

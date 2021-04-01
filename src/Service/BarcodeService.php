@@ -45,11 +45,6 @@ use stdClass;
 /**
  * Class BarcodeService.
  *
- * @method string           generateBarcode(GenerateBarcode $generateBarcode)
- * @method RequestInterface buildGenerateBarcodeRequest(GenerateBarcode $generateBarcode)
- * @method string           processGenerateBarcodeResponse(mixed $response)
- * @method string[]         generateBarcodes(GenerateBarcode[] $generateBarcode)
- *
  * @since 1.0.0
  */
 class BarcodeService extends AbstractService implements BarcodeServiceInterface
@@ -108,6 +103,27 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
     }
 
     /**
+     * Generate a single barcode.
+     *
+     * @param GenerateBarcode $generateBarcode
+     *
+     * @return string Barcode
+     *
+     * @throws CifDownException
+     * @throws CifException
+     * @throws HttpClientException
+     * @throws ResponseException
+     *
+     * @since 1.0.0
+     */
+    public function generateBarcodeSOAP(GenerateBarcode $generateBarcode)
+    {
+        return $this->processGenerateBarcodeResponseSOAP(
+            $this->postnl->getHttpClient()->doRequest($this->buildGenerateBarcodeRequestSOAP($generateBarcode))
+        );
+    }
+
+    /**
      * Generate multiple barcodes at once.
      *
      * @param GenerateBarcode[] $generateBarcodes
@@ -141,27 +157,6 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
         }
 
         return $barcodes;
-    }
-
-    /**
-     * Generate a single barcode.
-     *
-     * @param GenerateBarcode $generateBarcode
-     *
-     * @return string Barcode
-     *
-     * @throws CifDownException
-     * @throws CifException
-     * @throws HttpClientException
-     * @throws ResponseException
-     *
-     * @since 1.0.0
-     */
-    public function generateBarcodeSOAP(GenerateBarcode $generateBarcode)
-    {
-        return $this->processGenerateBarcodeResponseSOAP(
-            $this->postnl->getHttpClient()->doRequest($this->buildGenerateBarcodeRequestSOAP($generateBarcode))
-        );
     }
 
     /**
@@ -228,34 +223,6 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
     }
 
     /**
-     * Process GenerateBarcode REST response.
-     *
-     * @param ResponseInterface $response
-     *
-     * @return stdClass
-     *
-     * @throws CifDownException
-     * @throws CifException
-     * @throws HttpClientException
-     * @throws ResponseException
-     * @throws InvalidConfigurationException
-     *
-     * @since 1.0.0
-     */
-    public function processGenerateBarcodeResponseREST(ResponseInterface $response)
-    {
-        static::validateRESTResponse($response);
-
-        $json = json_decode(static::getResponseText($response));
-
-        if (!isset($json->Barcode)) {
-            throw new ResponseException('Invalid API Response', null, null, $response);
-        }
-
-        return $json;
-    }
-
-    /**
      * Build the `generateBarcode` HTTP request for the SOAP API.
      *
      * @param GenerateBarcode $generateBarcode
@@ -300,7 +267,35 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
             ->withHeader('Accept', 'text/xml')
             ->withHeader('Content-Type', 'text/xml;charset=UTF-8')
             ->withBody($this->postnl->getStreamFactory()->createStream($request))
-        ;
+            ;
+    }
+
+    /**
+     * Process GenerateBarcode REST response.
+     *
+     * @param ResponseInterface $response
+     *
+     * @return stdClass
+     *
+     * @throws CifDownException
+     * @throws CifException
+     * @throws HttpClientException
+     * @throws ResponseException
+     * @throws InvalidConfigurationException
+     *
+     * @since 1.0.0
+     */
+    public function processGenerateBarcodeResponseREST(ResponseInterface $response)
+    {
+        static::validateRESTResponse($response);
+
+        $json = json_decode(static::getResponseText($response));
+
+        if (!isset($json->Barcode)) {
+            throw new ResponseException('Invalid API Response', null, null, $response);
+        }
+
+        return $json;
     }
 
     /**
