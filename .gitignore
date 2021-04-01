@@ -1,9 +1,10 @@
-vendor/
+.phpunit.cache
 composer.lock
+docsbuild/
 tests/.phpunit.result.cache
 tests/logs
 tests/clover.xml
-.phpunit.cache
+vendor/
 
 # PHP CS fixer
 .php_cs.cache

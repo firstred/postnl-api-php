@@ -1,6 +1,6 @@
-==========
+**********
 Quickstart
-==========
+**********
 
 This page provides a quick introduction to this library and a few examples.
 If you do not have the library installed, head over to the :ref:`installation`
@@ -21,6 +21,8 @@ Here's how it is done:
 
 .. code-block:: php
 
+    <?php
+
     use Firstred\PostNL\Entity\Label;
     use Firstred\PostNL\PostNL;
     use Firstred\PostNL\Entity\Customer;
@@ -35,7 +37,7 @@ Here's how it is done:
         'CollectionLocation' => '123456',
         'CustomerCode'       => 'DEVC',
         'CustomerNumber'     => '11223344',
-        'ContactPerson'      => 'Lesley',
+        'ContactPerson'      => 'Sander',
         'Address'            => Address::create([
             'AddressType' => '02',
             'City'        => 'Hoofddorp',
@@ -131,7 +133,7 @@ Here is how you can request two labels and have them merged into a single PDF au
         'CollectionLocation' => '123456',
         'CustomerCode'       => 'DEVC',
         'CustomerNumber'     => '11223344',
-        'ContactPerson'      => 'Lesley',
+        'ContactPerson'      => 'Sander',
         'Address'            => Address::create([
             'AddressType' => '02',
             'City'        => 'Hoofddorp',
@@ -228,7 +230,7 @@ customer
           'CustomerNumber'     => '11223344',                  // Your Customer Number
           'GlobalPackBarcodeType('CX'),                        // Add your GlobalPack information if you need
           'GlobalPackCustomerCode('1234'),                     // to create international shipment labels
-          'ContactPerson'      => 'Lesley',
+          'ContactPerson'      => 'Sander',
           'Address'            => Address::create([
               'AddressType' => '02',                           // This address will be shown on the labels
               'City'        => 'Hoofddorp',

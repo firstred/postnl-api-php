@@ -15,6 +15,8 @@
 import sys
 import os
 import sphinx_rtd_theme
+from sphinx.highlighting import lexers
+from pygments.lexers.web import PhpLexer
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -30,7 +32,8 @@ import sphinx_rtd_theme
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-  "sphinx_rtd_theme"
+  "sphinx_rtd_theme",
+  "sphinxcontrib.phpdomain",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -47,7 +50,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'PostNL PHP bindings'
-copyright = u'2021, Michael Dekker -- not affiliated with PostNL'
+copyright = u'2018-2021, Michael Dekker - not affiliated with PostNL'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -88,7 +91,11 @@ exclude_patterns = ['_build']
 #show_authors = False
 
 # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = 'sphinx'
+pygments_style = 'autumn'
+
+lexers['php'] = PhpLexer(startinline=True)
+lexers['php-annotations'] = PhpLexer(startinline=True)
+primary_domain = 'php'
 
 # A list of ignored prefixes for module index sorting.
 #modindex_common_prefix = []
@@ -185,14 +192,14 @@ htmlhelp_basename = 'ReadtheDocsTemplatedoc'
 # -- Options for LaTeX output ---------------------------------------------
 
 latex_elements = {
-# The paper size ('letterpaper' or 'a4paper').
-#'papersize': 'letterpaper',
+    # The paper size ('letterpaper' or 'a4paper').
+    'papersize': 'a4paper',
 
-# The font size ('10pt', '11pt' or '12pt').
-#'pointsize': '10pt',
+    # The font size ('10pt', '11pt' or '12pt').
+    #'pointsize': '10pt',
 
-# Additional stuff for the LaTeX preamble.
-#'preamble': '',
+    # Additional stuff for the LaTeX preamble.
+    #'preamble': '',
 }
 
 # Grouping the document tree into LaTeX files. List of tuples

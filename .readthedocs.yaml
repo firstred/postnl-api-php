@@ -2,7 +2,10 @@
 
 version: 2
 
+formats: all
+
 sphinx:
+    version: 3.4.2
     configuration: docs/conf.py
 
 python:

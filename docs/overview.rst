@@ -1,6 +1,6 @@
-========
+********
 Overview
-========
+********
 
 Requirements
 ============
@@ -47,7 +47,7 @@ You can optionally add Guzzle as a dependency using the composer.phar CLI:
 Alternatively, you can specify Guzzle as a dependency in your project's
 existing composer.json file:
 
-.. code-block:: js
+.. code-block:: json
 
     {
       "require": {
@@ -69,16 +69,17 @@ Bleeding edge
 -------------
 
 During your development, you can keep up with the latest changes on the master
-branch by setting the version requirement for this library to ``~1.0@dev``.
+branch by setting the version requirement for this library to ``dev-1.2.x``.
 
-.. code-block:: js
+.. code-block:: json
 
    {
       "require": {
-         "firstred/postnl-api-php": "^1.2"
+         "firstred/postnl-api-php": "dev-1.2.x"
       }
    }
 
+You will likely have to change you ``min-stability`` setting: https://getcomposer.org/doc/04-schema.md#minimum-stability
 
 License
 =======

@@ -1,5 +1,5 @@
 Welcome to the unofficial PostNL PHP library documentation!
-=============================================================
+===========================================================
 
 These API bindings make it easy to connect to PostNL's CIF API, used for retrieving delivery options, printing shipment labels and finding shipment statuses.
 
@@ -42,16 +42,17 @@ Developer Guide
 ---------------
 
 .. toctree::
-   :maxdepth: 3
-   :glob:
+    :maxdepth: 3
+    :glob:
 
-   overview.rst
-   quickstart.rst
-   deliveryoptions.rst
-   createshipments.rst
-   trackshipments.rst
-   httpclient.rst
-   caching.rst
-   logging.rst
-   authors.rst
+    overview.rst
+    quickstart.rst
+    authentication.rst
+    deliveryoptions.rst
+    sendandtrackshipments.rst
+    httpclient.rst
+    caching.rst
+    logging.rst
+    reference/index.rst
+    authors.rst
 

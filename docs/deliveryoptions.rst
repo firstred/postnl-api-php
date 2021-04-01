@@ -1,10 +1,55 @@
+****************
 Delivery options
-========
+****************
 
-The PostNL API allows you to
+The PostNL API allows you to retrieve a list of predicted timeframes and a list of possible pickup locations. For timeframes you will have to use a certain date range and to get the nearest pickup locations you can use an address or geolocation.
 
-Delivery date service
----------------------
+There are two ways to gather timeframes and pickup locations. You can
+
+#. combine the delivery date, timeframe and location webservices
+#. or use the checkout service.
+
+The checkout service is currently not supported, but this library contains an easy interface to combine the three separate services listed in this section and provides the same functionality, if not more.
+
+This section lists all the ways in which you can retrieve delivery options, using three webservices. It is possible to request:
+
+#. :ref:`delivery dates` (when a shipment could arrive, given the current shipping date)
+#. :ref:`shipping dates` (when a shipment should be dispatched, given the predicted delivery date)
+#. :ref:`timeframes`
+#. :ref:`nearest locations`
+#. :ref:`nearest locations by coordinates`
+
+.. _checkout webservice:
+
+Checkout
+--------
+
+On an e-commerce checkout page you will probably want to show timeframes and/or pickup locations based on the current day and cut-off window.
+This library provides an interface to easily combine the three webservices required to show all the delivery options. It will simultaneously contact the three webservices and request a list of timeframes and pickup locations based on the given input.
+
+.. php:method:: setDate($year, $month, $day)
+
+  Set the date.
+
+  :param int $year: The year.
+  :param int $month: The month.
+  :param int $day: The day.
+  :returns: Either false on failure, or the datetime object for method chaining.
+
+
+.. php:method:: setTime($hour, $minute[, $second])
+
+  Set the time.
+
+  :param int $hour: The hour
+  :param int $minute: The minute
+  :param int $second: The second
+  :returns: Either false on failure, or the datetime object for method chaining.
+
+.. _deliverydate webservice:
+
+Deliverydate webservice
+-----------------------
 
 .. note::
 
@@ -15,12 +60,14 @@ Use the delivery date webservice to determine the delivery and shipping date.
 You can use this service to calculate the dates 'live' and to make sure you do not promise your customers any timeframes that are no longer available.
 
 
-Get the Delivery Date
-~~~~~~~~~~~~~~~~~~~~~
+.. _delivery dates:
+
+Delivery dates
+~~~~~~~~~~~~~~
 
 Here's how you can retrieve the closest delivery date:
 
-.. code-block:: PHP
+.. code-block:: php
 
     $cutoffTime = '15:00:00';
     $dropoffDays = [1 => true, 2 => true, 3 => true, 4 => true, 5 => true, 6 => false, 7 => false];
@@ -52,14 +99,18 @@ The result will be a `GetDeliveryDateResponse`. Calling `getDeliveryDate` on thi
 
 The function accepts the following arguments
 
-deliverydaterequest
+``deliverydaterequest``
+
     ``GetDeliveryDate`` - `required`
 
     The `GetDeliveryDate` request. See the API documentation for the possibilities.
     As shown in the example you will need to provide as many details as possible to get accurate availability information.
 
-Get the Shipping Date
-~~~~~~~~~~~~~~~~~~~~~
+
+.. _shipping dates:
+
+Shipping dates
+~~~~~~~~~~~~~~
 
 The Shipping Date service almost works in the same way as the Delivery Date service, except this time you provide the actual delivery date in order to calculate the closest shipping date.
 
@@ -93,19 +144,27 @@ The Shipping Date service almost works in the same way as the Delivery Date serv
 
 The function accepts the following arguments
 
-shippingdaterequest
     ``GetSentDate`` - `required`
 
     The `GetSentDate` request. See the API documentation for the possibilities.
     As shown in the example you will need to provide as many details as possible to get accurate availability information.
 
-Timeframe service
------------------
+
+.. _timeframe webservice:
+
+Timeframe webservice
+--------------------
 
 .. note::
 
     | PostNL API documentation for this service:
     | https://developer.postnl.nl/apis/timeframe-webservice
+
+
+.. _timeframes:
+
+Timeframes
+~~~~~~~~~~
 
 .. code-block::php
 
@@ -130,8 +189,11 @@ timeframes
 
     The `GetTimeframes` request object. See the API documentation for more details.
 
-Location service
-----------------
+
+.. _location webservice:
+
+Location webservice
+-------------------
 
 .. note::
 
@@ -140,8 +202,11 @@ Location service
 
 The location service allows you to retrieve a list of locations for the given postcode or coordinates.
 
-Get Nearest Locations
-~~~~~~~~~~~~~~~~~~~~~
+
+.. _nearest locations:
+
+Nearest locations
+~~~~~~~~~~~~~~~~~
 
 Here's an example of how you can retrieve the nearest location by postcode:
 
@@ -165,8 +230,11 @@ nearestlocations
 
     The `GetNearestLocations` request object. See the API documentation for more details.
 
-Get Nearest Locations by Coordinates
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. _nearest locations by coordinates:
+
+Nearest locations by coordinates
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can also get the locations by specifying a bounding box. One can be drawn by providing the North-West and South-East corner of the box:
 
