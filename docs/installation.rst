@@ -9,7 +9,7 @@ The recommended way to install the PostNL library is through
 for PHP that allows you to declare the dependencies your project needs and
 installs them into your project.
 
-See the :ref:`overview` chapter for all requirements.
+This chapter assumes that you meet all the requirements as described in the :ref:`overview` chapter.
 
 Install composer with the instructions on this page: https://getcomposer.org/download/
 
