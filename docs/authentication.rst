@@ -123,7 +123,12 @@ When you have all the required information, you are ready to configure the libra
                 ->setGlobalPackBarcodeType('AB')
                 ->setGlobalPackCustomerCode('1234');
 
-        $postnl = new PostNL($customer, $apiKey, false, PostNL::MODE_REST);
+        $postnl = new PostNL(
+            $customer,        // The filled Customer object
+            $apiKey,          // The API key
+            false,            // Sandbox = false, meaning we are now using the live environment
+            PostNL::MODE_REST // We are going to use the REST API (default)
+        );
 
 -------------
 Authorization
