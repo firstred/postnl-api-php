@@ -1,17 +1,39 @@
-********
-Overview
-********
+.. _overview:
 
+========
+Overview
+========
+
+.. _requirements:
+
+------------
 Requirements
-============
+------------
+
+PostNL's REST API provides all of the functionality and is the recommended way to connect.
+
+.. _rest api requirements:
+
+REST API Requirements
+=====================
 
 #. PHP 5.6 or higher (up to and including 8.0)
-#. JSON extension
-#. (optional) XML Support [SimpleXMLElement] if you'd like to use the SOAP API
-#. By default this library utilizes cURL for communication.
-#. To use the cURL client, you must have a recent version of cURL >= 7.19.4
-   compiled with OpenSSL and zlib.
-# You can install any HTTP Client that is supported by the `HTTPlug <https://httplug.io/>`_ project. See :ref:`HTTP Client` for more information.
+#. `JSON extension <https://www.php.net/manual/en/book.json.php>`_
+#. A HTTP Client such as `Symfony's HTTP Client <https://symfony.com/doc/current/http_client.html>`_ or `Guzzle <https://docs.guzzlehttp.org/>`_ (or at least have the `PHP cURL extension <https://www.php.net/manual/en/book.curl.php>`_ installed)
+
+.. _soap api requirements:
+
+SOAP API Requirements
+=====================
+
+#. PHP 5.6 or higher (up to and including 8.0)
+#. `JSON extension <https://www.php.net/manual/en/book.json.php>`_
+#. `XMLWriter extension <https://www.php.net/manual/en/book.xmlwriter.php>`_
+#. `XMLReader extension <https://www.php.net/manual/en/book.xmlreader.php>`_
+#. A HTTP Client such as `Symfony's HTTP Client <https://symfony.com/doc/current/http_client.html>`_ or `Guzzle <https://docs.guzzlehttp.org/>`_ (or at least have the `PHP cURL extension <https://www.php.net/manual/en/book.curl.php>`_ installed)
+
+.. note::
+    You can install any HTTP Client that is supported by the `HTTPlug <https://httplug.io/>`_ project. See chapter :ref:`http client` for more information.
 
 .. note::
 
@@ -20,53 +42,8 @@ Requirements
    work with the PHP stream wrapper to handle HTTP requests. For more information check out
    `Guzzle's documentation <http://guzzle.readthedocs.io/en/stable/overview.html>`_.
 
-.. _installation:
-
-Installation
-============
-
-The recommended way to install the PostNL library is with
-`Composer <https://getcomposer.org>`_. Composer is a dependency management tool
-for PHP that allows you to declare the dependencies your project needs and
-installs them into your project.
-
-Install composer with the instructions on this page: https://getcomposer.org/download/
-
-Install the PostNL library:
-
-.. code-block:: bash
-
-    composer require firstred/postnl-api-php
-
-You can optionally add Guzzle as a dependency using the composer.phar CLI:
-
-.. code-block:: bash
-
-    composer require guzzlehttp/guzzle
-
-Alternatively, you can specify Guzzle as a dependency in your project's
-existing composer.json file:
-
-.. code-block:: json
-
-    {
-      "require": {
-         "guzzlehttp/guzzle": "^7.0"
-      }
-   }
-
-After installing, you need to require Composer's autoloader:
-
-.. code-block:: php
-
-    require 'vendor/autoload.php';
-
-You can find out more on how to install Composer, configure autoloading, and
-other best-practices for defining dependencies at `getcomposer.org <http://getcomposer.org>`_.
-
-
 Bleeding edge
--------------
+=============
 
 During your development, you can keep up with the latest changes on the master
 branch by setting the version requirement for this library to ``dev-1.2.x``.
@@ -81,8 +58,11 @@ branch by setting the version requirement for this library to ``dev-1.2.x``.
 
 You will likely have to change you ``min-stability`` setting: https://getcomposer.org/doc/04-schema.md#minimum-stability
 
+.. _license:
+
+-------
 License
-=======
+-------
 
 Licensed using the `MIT license <http://opensource.org/licenses/MIT>`_.
 
@@ -106,24 +86,28 @@ Licensed using the `MIT license <http://opensource.org/licenses/MIT>`_.
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
-Contributing
-============
+.. _contributing:
 
+------------
+Contributing
+------------
+
+.. _contributing guidelines:
 
 Guidelines
-----------
+==========
 
-1. This library utilizes PSR-1, PSR-2, PSR-3, PSR-4, PSR-6 and PSR-7.
+1. This library supports PSR-1, PSR-2, PSR-3, PSR-4, PSR-6, PSR-7 and PSR-18.
 2. The library is meant to be lean, fast and sticks to the standards of the SOAP API. This means
-   that not every feature request will be accepted.
-3. The PostNL library has a minimum PHP version requirement of PHP 5.6.1. Pull requests must
-   not require a PHP version greater than PHP 5.6.1.
+   that not every feature request can be accepted. When in doubt, please open an issue first.
+3. The PostNL library has a minimum PHP version requirement of PHP 5.6. Pull requests must
+   not require a PHP version greater than PHP 5.6.
 4. All pull requests must include unit tests to ensure the change works as
    expected and to prevent regressions.
 
 
 Running the tests
------------------
+=================
 
 In order to contribute, you'll need to checkout the source from GitHub and
 install the dependencies using Composer:
@@ -131,14 +115,13 @@ install the dependencies using Composer:
 .. code-block:: bash
 
     git clone https://github.com/firstred/postnl-api-php.git
-    cd postnl-api-php && curl -s http://getcomposer.org/installer | php && ./composer.phar install --dev
+    cd postnl-api-php && composer install
 
 This library is unit tested with PHPUnit. Run the tests using the included PHPUnit version:
 
 .. code-block:: bash
 
-    cd tests/
-    php ../vendor/bin/phpunit --testdox
+    composer test
 
 .. note::
 

@@ -1,3 +1,5 @@
+.. _index:
+
 Welcome to the unofficial PostNL PHP library documentation!
 ===========================================================
 
@@ -47,6 +49,7 @@ Developer Guide
 
     overview.rst
     quickstart.rst
+    installation.rst
     authentication.rst
     deliveryoptions.rst
     sendandtrackshipments.rst

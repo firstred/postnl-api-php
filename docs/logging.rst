@@ -1,5 +1,8 @@
+.. _logging:
+
+*******
 Logging
-=======
+*******
 
 Requests and responses can be logged for debugging purposes.
 In order to enable logging you will need to pass a PSR-3 compatible logger.

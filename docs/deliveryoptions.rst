@@ -1,3 +1,5 @@
+.. _delivery options:
+
 ****************
 Delivery options
 ****************

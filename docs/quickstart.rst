@@ -1,20 +1,22 @@
-**********
+.. _quickstart:
+
+==========
 Quickstart
-**********
+==========
 
 This page provides a quick introduction to this library and a few examples.
 If you do not have the library installed, head over to the :ref:`installation`
 page.
 
-
+----------------
 Making a Request
-================
+----------------
 
 You can send requests by creating the request objects and passing them to one of the functions in the main ``PostNL``
 class.
 
 Requesting timeframes, locations and the delivery date
-------------------------------------------------------
+======================================================
 
 You can the timeframes, locations and delivery date at once to quickly retrieve all the available delivery options.
 Here's how it is done:
@@ -113,7 +115,7 @@ The response variable will contain the timeframes, nearest locations and deliver
 `timeframes`, `locations` and `delivery_date`. You can then use the delivery date to prune any timeframes that can no longer be guaranteed.
 
 Requesting a merged label
--------------------------
+=========================
 
 Here is how you can request two labels and have them merged into a single PDF automatically:
 
@@ -272,9 +274,9 @@ mode
     - 2: SOAP mode
     - 5: Legacy mode -- This is the previous SOAP API, which at the moment of writing is still in operation.
 
-
+-----------------
 Building Requests
-=================
+-----------------
 
 In most cases you would want to create request objects and pass them to one of the methods of the main object (``PostNL``).
 One exception is the Barcode Service. You can directly request multiple barcodes and for multiple countries at once. The library
@@ -290,7 +292,7 @@ the ``GenerateLabelResponse`` object, you can either look up the code of the ``G
 `navigate to the API documentation directly <https://developer.postnl.nl/apis/labelling-webservice/documentation#toc-9>`_.
 
 Sending concurrent requests
----------------------------
+===========================
 
 There is no direct need to manually handle concurrent requests. This library handles most cases automatically
 and even provides a special function to quickly grab timeframe and location data for frontend delivery options widgets.
