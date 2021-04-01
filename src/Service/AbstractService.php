@@ -41,7 +41,7 @@ use Firstred\PostNL\PostNL;
 use GuzzleHttp\Psr7\Response;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
-use Psr\Cache\InvalidArgumentException;
+use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
 use ReflectionClass;
 use ReflectionException;
@@ -332,7 +332,8 @@ abstract class AbstractService
      * @param string $uuid
      *
      * @return CacheItemInterface|null
-     * @throws InvalidArgumentException
+     *
+     * @throws PsrCacheInvalidArgumentException
      *
      * @since 1.0.0
      */
@@ -386,14 +387,13 @@ abstract class AbstractService
      *
      * @param CacheItemInterface $item
      *
+     * @throws PsrCacheInvalidArgumentException
+     *
      * @since 1.2.0
      */
     public function removeCachedItem(CacheItemInterface $item)
     {
-        try {
-            $this->cache->deleteItem($item->getKey());
-        } catch (InvalidArgumentException $e) {
-        }
+        $this->cache->deleteItem($item->getKey());
     }
 
     /**

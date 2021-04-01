@@ -108,16 +108,13 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @throws HttpClientException
      * @throws PostNLInvalidArgumentException
      * @throws NotFoundException
+     * @throws PsrCacheInvalidArgumentException
      *
      * @since 1.0.0
      */
     public function getDeliveryDateREST(GetDeliveryDate $getDeliveryDate)
     {
-        try {
-            $item = $this->retrieveCachedItem($getDeliveryDate->getId());
-        } catch (PsrCacheInvalidArgumentException $e) {
-            $item = null;
-        }
+        $item = $this->retrieveCachedItem($getDeliveryDate->getId());
         $response = null;
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
@@ -159,16 +156,13 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @throws ResponseException
      * @throws HttpClientException
      * @throws NotFoundException
+     * @throws PsrCacheInvalidArgumentException
      *
      * @since 1.0.0
      */
     public function getDeliveryDateSOAP(GetDeliveryDate $getDeliveryDate)
     {
-        try {
-            $item = $this->retrieveCachedItem($getDeliveryDate->getId());
-        } catch (PsrCacheInvalidArgumentException $e) {
-            $item = null;
-        }
+        $item = $this->retrieveCachedItem($getDeliveryDate->getId());
         $response = null;
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
@@ -211,16 +205,13 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
      * @throws NotFoundException
+     * @throws PsrCacheInvalidArgumentException
      *
      * @since 1.0.0
      */
     public function getSentDateREST(GetSentDateRequest $getSentDate)
     {
-        try {
-            $item = $this->retrieveCachedItem($getSentDate->getId());
-        } catch (PsrCacheInvalidArgumentException $e) {
-            $item = null;
-        }
+        $item = $this->retrieveCachedItem($getSentDate->getId());
         $response = null;
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();
@@ -262,16 +253,13 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @throws ResponseException
      * @throws HttpClientException
      * @throws NotFoundException
+     * @throws PsrCacheInvalidArgumentException
      *
      * @since 1.0.0
      */
     public function getSentDateSOAP(GetSentDateRequest $getSentDate)
     {
-        try {
-            $item = $this->retrieveCachedItem($getSentDate->getId());
-        } catch (PsrCacheInvalidArgumentException $e) {
-            $item = null;
-        }
+        $item = $this->retrieveCachedItem($getSentDate->getId());
         $response = null;
         if ($item instanceof CacheItemInterface) {
             $response = $item->get();

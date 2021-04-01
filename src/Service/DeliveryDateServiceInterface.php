@@ -37,6 +37,7 @@ use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentE
 use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
+use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -67,6 +68,7 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      * @throws HttpClientException
      * @throws PostNLInvalidArgumentException
      * @throws NotFoundException
+     * @throws PsrCacheInvalidArgumentException
      *
      * @since 1.0.0
      */
@@ -84,6 +86,7 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      * @throws ResponseException
      * @throws HttpClientException
      * @throws NotFoundException
+     * @throws PsrCacheInvalidArgumentException
      *
      * @since 1.0.0
      */
@@ -103,6 +106,7 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
      * @throws NotFoundException
+     * @throws PsrCacheInvalidArgumentException
      *
      * @since 1.0.0
      */
@@ -120,6 +124,7 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      * @throws ResponseException
      * @throws HttpClientException
      * @throws NotFoundException
+     * @throws PsrCacheInvalidArgumentException
      *
      * @since 1.0.0
      */
