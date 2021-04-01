@@ -136,8 +136,13 @@ The full documentation can be found on this page: [https://postnl-php.readthedoc
 
 The documentation is automatically built and hosted on readthedocs.io. You can build a local HTML copy by [installing Sphinx](https://www.sphinx-doc.org/en/master/usage/installation.html) and running
 ```bash
+pip install -r docs/requirements.txt
+```
+to install the requirements, followed by
+```
 sphinx-build -b html docs builddir
 ```
+to build the HTML output in the directory `builddir`.
 
 ## License
 
