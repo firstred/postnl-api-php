@@ -132,6 +132,13 @@ exit;
 
 The full documentation can be found on this page: [https://postnl-php.readthedocs.io/](https://postnl-php.readthedocs.io/)
 
+#### Building the documentation
+
+The documentation is automatically built and hosted on readthedocs.io. You can build a local HTML copy by [installing Sphinx](https://www.sphinx-doc.org/en/master/usage/installation.html) and running
+```bash
+sphinx-build -b html docs builddir
+```
+
 ## License
 
 This library has been licensed with the MIT license.
