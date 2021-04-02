@@ -191,9 +191,9 @@ The PostNL client constructor accepts a few options:
 
     This library provides three ways to connect to the API:
 
-    - :php:const:`Firstred\\PostNL::MODE_REST`: REST mode
-    - :php:const:`Firstred\\PostNL::MODE_SOAP`: SOAP mode
-    - :php:const:`Firstred\\PostNL::MODE_LEGACY`: Legacy mode -- This is the previous SOAP API, which, at the moment of writing, has been disabled.
+    - :php:const:`Firstred\\PostNL\\PostNL::MODE_REST`: REST mode
+    - :php:const:`Firstred\\PostNL\\PostNL::MODE_SOAP`: SOAP mode
+    - :php:const:`Firstred\\PostNL\\PostNL::MODE_LEGACY`: Legacy mode -- This is the previous SOAP API, which, at the moment of writing, has been disabled.
 
 -------------
 Authorization
