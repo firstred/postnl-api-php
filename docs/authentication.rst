@@ -103,7 +103,7 @@ When you have all the required information, you are ready to configure the libra
 
 .. note::
 
-    Example configuration. You will notice that there are different ways to instantiate an object. You can worry about that later. More information on that can be found in the :ref:`quickstart` chapter.
+    Example configuration. All the credential come together in the :php:class:`Firstred\\PostNL\\Entity\\Customer` and main :php:class:`Firstred\\PostNL\\PostNL` class.
 
     .. code-block:: php
 
@@ -131,6 +131,8 @@ When you have all the required information, you are ready to configure the libra
             false,            // Sandbox = false, meaning we are now using the live environment
             PostNL::MODE_REST // We are going to use the REST API (default)
         );
+
+    You might have noticed that several different ways have been used to instantiate an object. More information about this can be found in the :ref:`object instantiation` section.
 
 The PostNL client constructor accepts a few options:
 

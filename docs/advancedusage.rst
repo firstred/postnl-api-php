@@ -6,6 +6,8 @@ Advanced usage
 
 This section describes more advanced ways to use this library. The main class :php:class:`Firstred\\PostNL\\PostNL` and separate service classes (such as :php:class:`Firstred\\PostNL\\Service\\BarcodeService`) provide more ways to interact with the API.
 
+.. _object instantiation:
+
 --------------------
 Object instantiation
 --------------------
