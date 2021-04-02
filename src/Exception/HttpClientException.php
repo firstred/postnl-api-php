@@ -34,7 +34,7 @@ use Psr\Http\Message\ResponseInterface;
  *
  * @since 1.0.0
  */
-class HttpClientException extends Exception
+class HttpClientException extends PostNLException
 {
     /** @var ResponseInterface */
     private $response;
