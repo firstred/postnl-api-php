@@ -84,11 +84,11 @@ The result will be a `GetDeliveryDateResponse`. Calling `getDeliveryDate` on thi
 
 The function accepts the following arguments
 
-``deliverydaterequest``
+.. confval:: getDeliveryDate
+    :required: true
 
-    ``GetDeliveryDate`` - `required`
 
-    The `GetDeliveryDate` request. See the API documentation for the possibilities.
+    The :php:class:`Firstred\\PostNL\\Entity\\Request\\GetDeliveryDate` request object. See the API documentation for the possibilities.
     As shown in the example you will need to provide as many details as possible to get accurate availability information.
 
 
@@ -129,9 +129,10 @@ The Shipping Date service almost works in the same way as the Delivery Date serv
 
 The function accepts the following arguments
 
-    ``GetSentDate`` - `required`
+.. confval:: getSentDate
+    :required: true
 
-    The `GetSentDate` request. See the API documentation for the possibilities.
+    The :php:class:`Firstred\\PostNL\\Entity\\Request\\GetSentDate` request object. See the API documentation for the possibilities.
     As shown in the example you will need to provide as many details as possible to get accurate availability information.
 
 
@@ -151,7 +152,7 @@ Timeframe webservice
 Timeframes
 ~~~~~~~~~~
 
-.. code-block::php
+.. code-block:: php
 
     $deliveryDaysWindow = 7;
     $dropoffDelay = 0;
@@ -169,10 +170,10 @@ Timeframes
         ])
     );
 
-timeframes
-    ``GetTimeframes`` - `required`
+.. confval:: timeframes
+    :required: true
 
-    The `GetTimeframes` request object. See the API documentation for more details.
+    The :php:class:`Firstred\\PostNL\\Entity\\Request\\GetTimeframes` request object. See the API documentation for more details.
 
 
 .. _location webservice:
@@ -210,10 +211,10 @@ Here's an example of how you can retrieve the nearest location by postcode:
             )
         );
 
-nearestlocations
-    ``GetNearestLocations`` - `required`
+.. confval:: getNearestLocations
+    :required: true
 
-    The `GetNearestLocations` request object. See the API documentation for more details.
+    The :php:class:`Firstred\\PostNL\\Entity\\Request\\GetNearestLocations` request object. See the API documentation for more details.
 
 
 .. _nearest locations by coordinates:
@@ -253,7 +254,7 @@ You can also get the locations by specifying a bounding box. One can be drawn by
 
 This function accepts the arguments:
 
-locationsinarea
-    ``GetLocationsInArea`` - `required`
+.. confval:: locationsInArea
+    :required: true
 
-    The `GetLocationsInArea` request object. See the API documentation for more details.
+    The :php:class:`Firstred\\PostNL\\Entity\\Request\\GetLocationsInArea` request object. See the API documentation for more details.
