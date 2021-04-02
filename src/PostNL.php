@@ -2067,9 +2067,13 @@ class PostNL implements LoggerAwareInterface
      *                   delivery_date => GetDeliveryDateResponse,
      *               ]
      *
+     * @throws CifDownException
+     * @throws CifException
      * @throws HttpClientException
      * @throws InvalidArgumentException
+     * @throws InvalidConfigurationException
      * @throws PsrCacheInvalidArgumentException
+     * @throws ResponseException
      *
      * @since 1.0.0
      */
@@ -2128,8 +2132,6 @@ class PostNL implements LoggerAwareInterface
                     case 'timeframes':
                         if (static::MODE_REST === $this->getMode()) {
                             TimeframeService::validateRESTResponse($response);
-                        } else {
-                            TimeframeService::validateSOAPResponse($response);
                         }
 
                         if ($itemTimeframe instanceof CacheItemInterface) {
@@ -2141,8 +2143,6 @@ class PostNL implements LoggerAwareInterface
                     case 'locations':
                         if (static::MODE_REST === $this->getMode()) {
                             LocationService::validateRESTResponse($response);
-                        } else {
-                            LocationService::validateSOAPResponse($response);
                         }
 
                         if ($itemTimeframe instanceof CacheItemInterface) {
@@ -2154,8 +2154,6 @@ class PostNL implements LoggerAwareInterface
                     case 'delivery_date':
                         if (static::MODE_REST === $this->getMode()) {
                             DeliveryDateService::validateRESTResponse($response);
-                        } else {
-                            DeliveryDateService::validateSOAPResponse($response);
                         }
 
                         if ($itemTimeframe instanceof CacheItemInterface) {
