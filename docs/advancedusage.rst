@@ -19,7 +19,7 @@ There are four ways in which entities can be instantiated. Either by
 
 | Which method to use is entirely up to you. They are all supported by the library.
 | However, if you use an IDE with code completion then the safest ways to use are (2) using named parameters (PHP 8) or by calling the setters (4), one by one.
-| Even without using an IDE with code completion you might benefit from using methods (2) and (4) since you will be able to detect errors earlier in the process.
+| Even without using an editor with code completion you might benefit from using methods (2) and (4) since you will be able to detect errors earlier in the process.
 
 .. tabs::
 
