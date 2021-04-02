@@ -49,9 +49,9 @@ The PHP bindings can connect to both PostNL's SOAP and REST API.
 ## Instructions
 
 - Clone this repo
-- Optionally run `composer require guzzlehttp/guzzle` to use Guzzle instead of cURL directly
 - Run `composer install` (Don't have composer? Visit https://getcomposer.org/)
-- You're good to go! A small example can be found in this README. Check out the documentation for a quick start guide.
+- Optionally run `composer require guzzlehttp/guzzle` to use Guzzle instead of cURL directly
+- You're good to go! A small example can be found in this README. Check out the full documentation for a [quick start guide](https://postnl-php.readthedocs.io/en/v1.2.x/quickstart.html).
 
 ## Documentation
 
