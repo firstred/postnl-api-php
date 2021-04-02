@@ -125,3 +125,21 @@ This library is unit tested with PHPUnit. Run the tests using the included PHPUn
 
     You'll need to use PHP 7.3 or newer in order to perform
     the tests.
+
+
+Building the documentation
+==========================
+
+The documentation is automatically built and hosted on readthedocs.io. You can build a local HTML copy by installing `Sphinx <https://www.sphinx-doc.org/>`_ and running
+
+.. code-block:: bash
+
+    pip install -r docs/requirements.txt
+
+to install the requirements, followed by
+
+.. code-block:: bash
+
+    sphinx-build -b html docs builddir
+
+to build the HTML output in the directory ``builddir``.
