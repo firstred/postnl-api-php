@@ -226,9 +226,7 @@ abstract class AbstractService
                 }
             }
             throw new CifException($exceptionData);
-        }
-
-        if (!empty($body->Errors)) {
+        } elseif (!empty($body->Errors)) {
             $exceptionData = [];
             foreach ($body->Errors as $error) {
                 if (isset($error->ErrorMsg)) {
@@ -245,6 +243,14 @@ abstract class AbstractService
                     ];
                 }
             }
+            throw new CifException($exceptionData);
+        } elseif (!empty($body->Array->Item->ErrorMsg)) {
+            // {"Array":{"Item":{"ErrorMsg":"Unknown option GetDeliveryDate.Options='DayTime' specified","ErrorNumber":26}}}
+            $exceptionData = [[
+                'description' => isset($body->Array->Item->ErrorMsg) ? (string) $body->Array->Item->ErrorMsg : null,
+                'message'     => isset($body->Array->Item->ErrorMsg) ? (string) $body->Array->Item->ErrorMsg : null,
+                'code'        => 0,
+            ]];
             throw new CifException($exceptionData);
         }
 

@@ -2123,9 +2123,15 @@ class PostNL implements LoggerAwareInterface
                     throw $response;
                 }
                 throw new InvalidArgumentException('Invalid multi-request');
-            } elseif (200 === $response->getStatusCode()) {
+            } else {
                 switch ($type) {
                     case 'timeframes':
+                        if (static::MODE_REST === $this->getMode()) {
+                            TimeframeService::validateRESTResponse($response);
+                        } else {
+                            TimeframeService::validateSOAPResponse($response);
+                        }
+
                         if ($itemTimeframe instanceof CacheItemInterface) {
                             $itemTimeframe->set(PsrMessage::toString($response));
                             $this->getTimeframeService()->cacheItem($itemTimeframe);
@@ -2133,6 +2139,12 @@ class PostNL implements LoggerAwareInterface
 
                         break;
                     case 'locations':
+                        if (static::MODE_REST === $this->getMode()) {
+                            LocationService::validateRESTResponse($response);
+                        } else {
+                            LocationService::validateSOAPResponse($response);
+                        }
+
                         if ($itemTimeframe instanceof CacheItemInterface) {
                             $itemLocation->set(PsrMessage::toString($response));
                             $this->getLocationService()->cacheItem($itemLocation);
@@ -2140,6 +2152,12 @@ class PostNL implements LoggerAwareInterface
 
                         break;
                     case 'delivery_date':
+                        if (static::MODE_REST === $this->getMode()) {
+                            DeliveryDateService::validateRESTResponse($response);
+                        } else {
+                            DeliveryDateService::validateSOAPResponse($response);
+                        }
+
                         if ($itemTimeframe instanceof CacheItemInterface) {
                             $itemDeliveryDate->set(PsrMessage::toString($response));
                             $this->getDeliveryDateService()->cacheItem($itemDeliveryDate);
