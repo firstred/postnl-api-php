@@ -134,10 +134,10 @@ When you have all the required information, you are ready to configure the libra
 
 The PostNL client constructor accepts a few options:
 
-customer
-    ``Customer`` - `required`
+.. confval:: customer
+    :required: true
 
-    The ``Customer`` object that is used to configure the client and let PostNL know
+    The :php:class:`Firstred\\PostNL\\Entity\\Customer` object that is used to configure the client and let PostNL know
     who is requesting the data.
 
     .. code-block:: php
@@ -163,12 +163,12 @@ customer
           'Name'               => 'Michael',
       ]);
 
-apikey
-    ``string``|``UsernameToken`` - `required`
+.. confval:: apiKey
 
-    The ``apikey`` to use for the API. Note that if you want to switch from the legacy API to
-    the new SOAP and REST API you will have to request a new key. The username can be omitted.
-    If you want to connect to the legacy API you should pass a ``UsernameToken`` with your username and token set:
+    The API key to use. Note that if you want to switch from the legacy API to
+    the new SOAP and REST API you will have to request a new key.
+
+    If you want to connect to the legacy API, you should pass a :php:class:`Firstred\\PostNL\\Entity\\SOAP\\UsernameToken` with your username and token set:
 
     .. code-block:: php
 
@@ -177,19 +177,21 @@ apikey
     You can request an API key for the sandbox environment on this page: https://developer.postnl.nl/content/request-api-key
     For a live key you should contact your PostNL account manager.
 
-sandbox
-    ``bool`` - `required`
+
+
+.. confval:: sandbox
+    :required: true
 
     Indicate whether you'd like to connect to the sandbox environment. When `false` the library uses the live endpoints.
 
-mode
-    ``int`` - `optional, defaults to REST`
+.. confval:: mode
+    :required: true
 
     This library provides three ways to connect to the API:
 
-    - 1: REST mode
-    - 2: SOAP mode
-    - 5: Legacy mode -- This is the previous SOAP API, which at the moment of writing is still in operation.
+    - :php:const:`Firstred\\PostNL::MODE_REST`: REST mode
+    - :php:const:`Firstred\\PostNL::MODE_SOAP`: SOAP mode
+    - :php:const:`Firstred\\PostNL::MODE_LEGACY`: Legacy mode -- This is the previous SOAP API, which, at the moment of writing, has been disabled.
 
 -------------
 Authorization

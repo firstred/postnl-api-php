@@ -13,6 +13,9 @@ This chapter assumes that you meet all the requirements as described in the :ref
 
 Install composer with the instructions on this page: https://getcomposer.org/download/
 
+Install through Composer
+========================
+
 Install the PostNL library:
 
 .. code-block:: bash
@@ -40,8 +43,8 @@ This library will prefer the `Guzzle client <https://docs.guzzlehttp.org/>`_ and
 You can find out more on how to install Composer, configure autoloading, and
 other best-practices for defining dependencies at `getcomposer.org <http://getcomposer.org>`_.
 
-Bleeding edge
-=============
+Install the latest development build through composer
+=====================================================
 
 During your development, you can keep up with the latest changes on the master
 branch by setting the version requirement for this library to ``dev-1.2.x``.
@@ -54,4 +57,8 @@ branch by setting the version requirement for this library to ``dev-1.2.x``.
       }
    }
 
-You will likely have to change you ``min-stability`` setting: https://getcomposer.org/doc/04-schema.md#minimum-stability
+.. note::
+
+    You will likely have to change the ``min-stability`` setting:
+
+    https://getcomposer.org/doc/04-schema.md#minimum-stability
