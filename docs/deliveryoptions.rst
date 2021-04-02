@@ -29,24 +29,7 @@ Checkout
 On an e-commerce checkout page you will probably want to show timeframes and/or pickup locations based on the current day and cut-off window.
 This library provides an interface to easily combine the three webservices required to show all the delivery options. It will simultaneously contact the three webservices and request a list of timeframes and pickup locations based on the given input.
 
-.. php:method:: setDate($year, $month, $day)
-
-  Set the date.
-
-  :param int $year: The year.
-  :param int $month: The month.
-  :param int $day: The day.
-  :returns: Either false on failure, or the datetime object for method chaining.
-
-
-.. php:method:: setTime($hour, $minute[, $second])
-
-  Set the time.
-
-  :param int $hour: The hour
-  :param int $minute: The minute
-  :param int $second: The second
-  :returns: Either false on failure, or the datetime object for method chaining.
+An example of how the interface can be used can be found in the section :ref:`requesting timeframes location and delivery date at once`, part of the :ref:`quickstart` chapter.
 
 .. _deliverydate webservice:
 

@@ -17,6 +17,8 @@ Creating request objects may seem a bit counter-intuitive at first, but this mak
 
 Using an IDE with code completion is **strongly recommended**.
 
+.. _requesting timeframes location and delivery date at once:
+
 --------------------------------------------------------------
 Requesting timeframes, locations and the delivery date at once
 --------------------------------------------------------------
