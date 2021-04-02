@@ -1762,7 +1762,7 @@ class PostNL implements LoggerAwareInterface
 
         foreach ($shipmentResponses as $shipmentResponse) {
             foreach ($shipmentResponse->getShipments() as $shipment) {
-                $shipments[] = $shipment;
+                $shipments[$shipment->getBarcode()] = $shipment;
             }
         }
 
@@ -1830,7 +1830,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @since 1.2.0
      */
-    public function getShippingStatusesByReference(array $references, $complete = false)
+    public function getShippingStatusesByReferences(array $references, $complete = false)
     {
         $shipments = [];
         if ($complete) {
@@ -1851,7 +1851,7 @@ class PostNL implements LoggerAwareInterface
 
         foreach ($shipmentResponses as $shipmentResponse) {
             foreach ($shipmentResponse->getShipments() as $shipment) {
-                $shipments[] = $shipment;
+                $shipments[$shipment->getReference()] = $shipment;
             }
         }
 
