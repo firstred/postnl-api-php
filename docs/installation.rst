@@ -28,7 +28,7 @@ You can optionally add the well-known `Guzzle <https://docs.guzzlephp.org/>`_ HT
 
     composer require guzzlehttp/guzzle
 
-This library will prefer the `Guzzle client <https://docs.guzzlehttp.org/>`_ and automatically start using it instead of the built-in cURL-client.
+This library will prefer the `Guzzle client <https://docs.guzzlephp.org/>`_ and automatically start using it instead of the built-in cURL-client.
 
 .. note::
 

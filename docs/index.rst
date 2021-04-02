@@ -21,7 +21,7 @@ These API bindings make it easier to connect to PostNL's CIF API, used for retri
 
 - Framework agnostic. You can use this library with any framework.
 
-- A custom HTTP client interface so you can use the HTTP client of your choice. Using the `Guzzle <https://docs.guzzlehttp.org/>`_ or `Symfony HTTP client <https://symfony.com/doc/current/http_client.html>`_ is strongly recommended. Any HTTPlug client can be used by installing the related packages. See the :ref:`http client` chapter for more information.
+- A custom HTTP client interface so you can use the HTTP client of your choice. Using the `Guzzle <https://docs.guzzlephp.org/>`_ or `Symfony HTTP client <https://symfony.com/doc/current/http_client.html>`_ is strongly recommended. Any HTTPlug client can be used by installing the related packages. See the :ref:`http client` chapter for more information.
 
 .. code-block:: php
 
