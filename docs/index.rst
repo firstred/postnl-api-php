@@ -57,6 +57,7 @@ Developer Guide
     caching.rst
     logging.rst
     formats.rst
+    advancedusage.rst
     reference/index.rst
     authors.rst
 

@@ -39,3 +39,19 @@ This library will prefer the `Guzzle client <https://docs.guzzlehttp.org/>`_ and
 
 You can find out more on how to install Composer, configure autoloading, and
 other best-practices for defining dependencies at `getcomposer.org <http://getcomposer.org>`_.
+
+Bleeding edge
+=============
+
+During your development, you can keep up with the latest changes on the master
+branch by setting the version requirement for this library to ``dev-1.2.x``.
+
+.. code-block:: json
+
+   {
+      "require": {
+         "firstred/postnl-api-php": "dev-1.2.x"
+      }
+   }
+
+You will likely have to change you ``min-stability`` setting: https://getcomposer.org/doc/04-schema.md#minimum-stability

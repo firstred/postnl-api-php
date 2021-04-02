@@ -1,6 +1,9 @@
-************************
+.. _sendandtrackshipments:
+.. _send and track shipments:
+
+========================
 Send and track shipments
-************************
+========================
 
 Barcode service
 ---------------
@@ -457,8 +460,8 @@ Confirming service
     | PostNL API documentation for this service:
     | https://developer.postnl.nl/apis/confirming-webservice
 
-You can confirm shipments that have previously not been confirmed. The available methods are `confirmShipment` and `confirmShipments`.
-The first method accepts a single `Shipment` object whereas the latter accepts an array of `Shipment`s.
+You can confirm shipments that have previously not been confirmed. The available methods are ``confirmShipment`` and ``confirmShipments``.
+The first method accepts a single :php:class:`Firstred\\PostNL\\Entity\\Shipment` object whereas the latter accepts an array of :php:class:`Firstred\\PostNL\\Entity\\Shipment`s.
 The output is a boolean, or an array with booleans in case you are confirming multiple shipments. The results will be tied to the keys of your request array.
 
 Shipping status service

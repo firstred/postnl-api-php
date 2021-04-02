@@ -19,7 +19,8 @@ REST API Requirements
 
 #. PHP 5.6 or higher (up to and including 8.0)
 #. `JSON extension <https://www.php.net/manual/en/book.json.php>`_
-#. A HTTP Client such as `Symfony's HTTP Client <https://symfony.com/doc/current/http_client.html>`_ or `Guzzle <https://docs.guzzlehttp.org/>`_ (or at least have the `PHP cURL extension <https://www.php.net/manual/en/book.curl.php>`_ installed)
+#. An HTTP Client such as `Symfony's HTTP Client <https://symfony.com/doc/current/http_client.html>`_ or `Guzzle <https://docs.guzzlehttp.org/>`_ (or at least have the `PHP cURL extension <https://www.php.net/manual/en/book.curl.php>`_ installed)
+#. ``opcache.save_comments`` set to ``1``
 
 .. _soap api requirements:
 
@@ -27,12 +28,25 @@ SOAP API Requirements
 =====================
 
 #. PHP 5.6 or higher (up to and including 8.0)
-#. `JSON extension <https://www.php.net/manual/en/book.json.php>`_
+#. `JSON extension <https://www.php.net/manual/en/book.json.php>`_ (both the Shipping webservice and Shipping Status webservice can only be handled by the REST API)
 #. `XMLWriter extension <https://www.php.net/manual/en/book.xmlwriter.php>`_
 #. `XMLReader extension <https://www.php.net/manual/en/book.xmlreader.php>`_
-#. A HTTP Client such as `Symfony's HTTP Client <https://symfony.com/doc/current/http_client.html>`_ or `Guzzle <https://docs.guzzlehttp.org/>`_ (or at least have the `PHP cURL extension <https://www.php.net/manual/en/book.curl.php>`_ installed)
+#. An HTTP Client such as `Symfony's HTTP Client <https://symfony.com/doc/current/http_client.html>`_ or `Guzzle <https://docs.guzzlehttp.org/>`_ (or at least have the `PHP cURL extension <https://www.php.net/manual/en/book.curl.php>`_ installed)
+#. ``opcache.save_comments`` set to ``1``
+
+.. warning::
+
+    Enabling the OPCache and setting ``opcache.save_comments`` to ``0`` will break this library since it depends on PHPDoc comments.
+
+    You can quickly check your current settings with this snippet:
+
+    .. code-block:: php
+
+        echo "OPCache is ".opcache_enabled() ? "enabled\n" : "disabled\n";
+        echo "opcache.save_comments is set to ".ini_get('opcache.save_comments') ? '1' : '0';
 
 .. note::
+
     You can install any HTTP Client that is supported by the `HTTPlug <https://httplug.io/>`_ project. See chapter :ref:`http client` for more information.
 
 .. note::
@@ -41,22 +55,6 @@ SOAP API Requirements
    As an alternative, you can enable ``allow_url_fopen`` in your system's php.ini. The included Guzzle version can
    work with the PHP stream wrapper to handle HTTP requests. For more information check out
    `Guzzle's documentation <http://guzzle.readthedocs.io/en/stable/overview.html>`_.
-
-Bleeding edge
-=============
-
-During your development, you can keep up with the latest changes on the master
-branch by setting the version requirement for this library to ``dev-1.2.x``.
-
-.. code-block:: json
-
-   {
-      "require": {
-         "firstred/postnl-api-php": "dev-1.2.x"
-      }
-   }
-
-You will likely have to change you ``min-stability`` setting: https://getcomposer.org/doc/04-schema.md#minimum-stability
 
 .. _license:
 
