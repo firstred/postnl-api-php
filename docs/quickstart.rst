@@ -100,7 +100,7 @@ Here's how it is done from scratch:
                             ->setHouseNr('66')
                             ->setOptions(['Morning', 'Daytime'])
                             ->setPostalCode('2132WT')
-                            ->setStartDate(date('d-m-Y', strtotime(" +12 days")))
+                            ->setStartDate(date('d-m-Y', strtotime("+1 days")))
                             ->setSundaySorting(!empty($mondayDelivery) && date('w', strtotime("+{$dropoffDelay} days")))
                     ]),
                 (new GetNearestLocations())
@@ -120,7 +120,7 @@ Here's how it is done from scratch:
                             ->setCountryCode('NL')
                             ->setCutOffTimes($cutOffTimes)
                             ->setHouseNr('12')
-                            ->setOptions(['DayTime', 'Evening'])
+                            ->setOptions(['Daytime', 'Evening'])
                             ->setPostalCode('2132WT')
                             ->setShippingDate(date('d-m-Y H:i:s'))
                             ->setShippingDuration(strval(1 + (int) $dropoffDelay))
@@ -145,27 +145,32 @@ Here's how it is done from scratch:
 
             // Your PostNL credentials
             $customer = new Customer(
+                CustomerNumber: '11223344',
+                CustomerCode: 'DEVC',
                 CollectionLocation: '123456',
-                CustomerCode:       'DEVC',
-                CustomerNumber:     '11223344',
-                ContactPerson:      'Sander',
-                Address:            new Address(
-                    AddressType:  '02',
-                    City:         'Hoofddorp',
-                    CompanyName:  'PostNL',
-                    Countrycode:  'NL',
-                    HouseNr:      '42',
-                    Street:       'Siriusdreef',
-                    Zipcode:      '2132WT',
+                ContactPerson: 'Sander',
+                Email: 'test@voorbeeld.nl',
+                Name: 'Michael',
+                Address: new Address(
+                    AddressType: '02',
+                    CompanyName: 'PostNL',
+                    Street: 'Siriusdreef',
+                    HouseNr: '42',
+                    Zipcode: '2132WT',
+                    City: 'Hoofddorp',
+                    Countrycode: 'NL',
                 ),
-                Email:               'test@voorbeeld.nl',
-                Name:                'Michael',
             );
 
             $apikey = 'YOUR_API_KEY_HERE';
             $sandbox = true;
 
-            $postnl = new PostNL(customer: $customer, apiKey: $apikey, sandbox: $sandbox, mode: PostNL::MODE_REST);
+            $postnl = new PostNL(
+                customer: $customer,
+                apiKey: $apikey,
+                sandbox: $sandbox,
+                mode: PostNL::MODE_REST,
+            );
 
             $mondayDelivery = true;
             $deliveryDaysWindow = 7; // Amount of days to show ahead
@@ -193,11 +198,11 @@ Here's how it is done from scratch:
                             ->setHouseNr('66')
                             ->setOptions(['Morning', 'Daytime'])
                             ->setPostalCode('2132WT')
-                            ->setStartDate(date('d-m-Y', strtotime(" +1 day +{$request['dropoff_delay']} days")))
+                            ->setStartDate(date('d-m-Y', strtotime("+1 days")))
                             ->setSundaySorting(!empty($mondayDelivery) && date('w', strtotime("+{$dropoffDelay} days")))
                     ]),
                 (new GetNearestLocations())
-                    ->setCountrycode($request['cc'])
+                    ->setCountrycode('NL')
                     ->setLocation(
                         (new Location())
                             ->setAllowSundaySorting(!empty($mondayDelivery))
@@ -212,8 +217,8 @@ Here's how it is done from scratch:
                             ->setAllowSundaySorting(!empty($mondayDelivery))
                             ->setCountryCode('NL')
                             ->setCutOffTimes($cutOffTimes)
-                            ->setHouseNr($request['number'])
-                            ->setOptions($deliveryOptions)
+                            ->setHouseNr('12')
+                            ->setOptions(['Daytime', 'Evening'])
                             ->setPostalCode('2132WT')
                             ->setShippingDate(date('d-m-Y H:i:s'))
                             ->setShippingDuration(strval(1 + (int) $dropoffDelay))
