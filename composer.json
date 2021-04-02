@@ -9,6 +9,7 @@
             "email": "git@michaeldekker.nl"
         }
     ],
+    "keywords": ["postnl", "shipping", "shipments"],
     "scripts": {
         "docs:build": "sphinx-build -b html docs docsbuild",
         "test": "vendor/bin/phpunit -c phpunit.xml --testdox tests"
@@ -55,5 +56,11 @@
         "psr-4": {
             "Firstred\\PostNL\\Tests\\": "tests/"
         }
+    },
+    "support": {
+        "email": "git@michaeldekker.nl",
+        "docs": "https://postnl-php.readthedocs.io/",
+        "source": "https://github.com/firstred/postnl-api-php",
+        "issues": "https://github.com/firstred/postnl-api-php/issues"
     }
 }
