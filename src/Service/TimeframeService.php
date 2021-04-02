@@ -50,6 +50,7 @@ use Psr\Http\Message\ResponseInterface;
 use Sabre\Xml\LibXMLException;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Service as XmlService;
+use const PHP_QUERY_RFC3986;
 
 /**
  * Class TimeframeService.
@@ -231,7 +232,7 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
         $query['Options'] = ltrim($query['Options'], ',');
         $query['Options'] = $query['Options'] ?: 'Daytime';
 
-        $endpoint = '?'.http_build_query($query);
+        $endpoint = '?'.http_build_query($query, null, '&', PHP_QUERY_RFC3986);
 
         return $this->postnl->getRequestFactory()->createRequest(
             'GET',

@@ -52,6 +52,7 @@ use function http_build_query;
 use function in_array;
 use function json_encode;
 use function str_replace;
+use const PHP_QUERY_RFC3986;
 
 /**
  * Class LabellingService.
@@ -341,7 +342,7 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
             'POST',
             $endpoint.'?'.http_build_query([
                 'confirm' => $confirm,
-            ]))
+            ], null, '&', PHP_QUERY_RFC3986))
             ->withHeader('apikey', $apiKey)
             ->withHeader('Accept', 'application/json')
             ->withHeader('Content-Type', 'application/json;charset=UTF-8')

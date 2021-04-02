@@ -41,6 +41,7 @@ use Psr\Http\Message\ResponseInterface;
 use Sabre\Xml\Service as XmlService;
 use SimpleXMLElement;
 use stdClass;
+use const PHP_QUERY_RFC3986;
 
 /**
  * Class BarcodeService.
@@ -215,7 +216,7 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
                     'CustomerNumber' => $generateBarcode->getCustomer()->getCustomerNumber(),
                     'Type'           => $generateBarcode->getBarcode()->getType(),
                     'Serie'          => $generateBarcode->getBarcode()->getSerie(),
-                ])
+                ], null, '&', PHP_QUERY_RFC3986)
         )
             ->withHeader('Accept', 'application/json')
             ->withHeader('apikey', $apiKey)

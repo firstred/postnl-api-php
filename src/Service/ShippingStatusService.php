@@ -54,6 +54,7 @@ use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use function json_decode;
+use const PHP_QUERY_RFC3986;
 
 /**
  * Class ShippingStatusService.
@@ -487,7 +488,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
             $query = [];
             $endpoint = "/barcode/{$currentStatus->getShipment()->getBarcode()}";
         }
-        $endpoint .= '?'.http_build_query($query);
+        $endpoint .= '?'.http_build_query($query, null, '&', PHP_QUERY_RFC3986);
 
         return $this->postnl->getRequestFactory()->createRequest(
             'GET',
@@ -580,7 +581,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
             ];
             $endpoint = "/barcode/{$completeStatus->getShipment()->getBarcode()}";
         }
-        $endpoint .= '?'.http_build_query($query);
+        $endpoint .= '?'.http_build_query($query, null, '&', PHP_QUERY_RFC3986);
 
         return $this->postnl->getRequestFactory()->createRequest(
             'GET',

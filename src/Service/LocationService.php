@@ -54,6 +54,7 @@ use Psr\Http\Message\ResponseInterface;
 use Sabre\Xml\LibXMLException;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Service as XmlService;
+use const PHP_QUERY_RFC3986;
 
 /**
  * Class LocationService.
@@ -458,7 +459,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
             $query['DeliveryOptions'] = 'PG';
         }
 
-        $endpoint .= '?'.http_build_query($query);
+        $endpoint .= '?'.http_build_query($query, null, '&', PHP_QUERY_RFC3986);
 
         return $this->postnl->getRequestFactory()->createRequest(
             'GET',
@@ -628,7 +629,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
         } else {
             $query['DeliveryOptions'] = 'PG';
         }
-        $endpoint = '/area?'.http_build_query($query);
+        $endpoint = '/area?'.http_build_query($query, null, '&', PHP_QUERY_RFC3986);
 
         return $this->postnl->getRequestFactory()->createRequest(
             'GET',
@@ -777,7 +778,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
         if ($id = $getLocation->getRetailNetworkID()) {
             $query['RetailNetworkID'] = $id;
         }
-        $endpoint = '/lookup?'.http_build_query($query);
+        $endpoint = '/lookup?'.http_build_query($query, null, '&', PHP_QUERY_RFC3986);
 
         return $this->postnl->getRequestFactory()->createRequest(
             'GET',

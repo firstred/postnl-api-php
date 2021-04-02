@@ -52,6 +52,8 @@ use Sabre\Xml\LibXMLException;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Service as XmlService;
 use SimpleXMLElement;
+use function strcasecmp;
+use const PHP_QUERY_RFC3986;
 
 /**
  * Class DeliveryDateService.
@@ -335,11 +337,11 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
                     return $time->getDay();
                 }, $times));
                 if (false !== $key) {
-                    $query["CutOffTime{$dayName}"] = date('H:i:s', strtotime($times[$key]->getTime()));
-                    $query["Available{$dayName}"] = 'true';
+                    $query["CutOffTime$dayName"] = date('H:i:s', strtotime($times[$key]->getTime()));
+                    $query["Available$dayName"] = 'true';
                 } else {
-                    $query["CutOffTime{$dayName}"] = '00:00:00';
-                    $query["Available{$dayName}"] = 'false';
+                    $query["CutOffTime$dayName"] = '00:00:00';
+                    $query["Available$dayName"] = 'false';
                 }
             }
         }
@@ -362,7 +364,7 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
         }
         if (is_array($deliveryDate->getOptions())) {
             foreach ($deliveryDate->getOptions() as $option) {
-                if ('Daytime' === $option) {
+                if (strcasecmp('Daytime', $option) === 0) {
                     continue;
                 }
 
@@ -370,7 +372,7 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
             }
         }
 
-        $endpoint = '/delivery?'.http_build_query($query);
+        $endpoint = '/delivery?'.http_build_query($query, null, null, PHP_QUERY_RFC3986);
 
         return $this->postnl->getRequestFactory()->createRequest(
             'GET',
@@ -530,7 +532,7 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
             $query['HouseNrExt'] = $houseNrExt;
         }
 
-        $endpoint = '/shipping?'.http_build_query($query);
+        $endpoint = '/shipping?'.http_build_query($query, null, '&', PHP_QUERY_RFC3986);
 
         return $this->postnl->getRequestFactory()->createRequest(
             'GET',
