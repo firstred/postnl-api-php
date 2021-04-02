@@ -372,7 +372,7 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
             }
         }
 
-        $endpoint = '/delivery?'.http_build_query($query, null, null, PHP_QUERY_RFC3986);
+        $endpoint = '/delivery?'.http_build_query($query, null, '&', PHP_QUERY_RFC3986);
 
         return $this->postnl->getRequestFactory()->createRequest(
             'GET',
