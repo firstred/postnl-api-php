@@ -29,96 +29,198 @@ You can request the timeframes, locations and delivery date at once to quickly r
 
 Here's how it is done from scratch:
 
-.. code-block:: php
+.. tabs::
 
-    <?php
+    .. tab:: PHP 5/7
 
-    use Firstred\PostNL\Entity\Label;
-    use Firstred\PostNL\PostNL;
-    use Firstred\PostNL\Entity\Customer;
-    use Firstred\PostNL\Entity\Address;
-    use Firstred\PostNL\Entity\Shipment;
-    use Firstred\PostNL\Entity\Dimension;
+        .. code-block:: php
 
-    require_once __DIR__.'/vendor/autoload.php';
+            <?php
 
-    // Your PostNL credentials
-    $customer = Customer::create([
-        'CollectionLocation' => '123456',
-        'CustomerCode'       => 'DEVC',
-        'CustomerNumber'     => '11223344',
-        'ContactPerson'      => 'Sander',
-        'Address'            => Address::create([
-            'AddressType' => '02',
-            'City'        => 'Hoofddorp',
-            'CompanyName' => 'PostNL',
-            'Countrycode' => 'NL',
-            'HouseNr'     => '42',
-            'Street'      => 'Siriusdreef',
-            'Zipcode'     => '2132WT',
-        ]),
-        'Email'              => 'test@voorbeeld.nl',
-        'Name'               => 'Michael',
-    ]);
+            use Firstred\PostNL\Entity\CutOffTime;
+            use Firstred\PostNL\Entity\Location;
+            use Firstred\PostNL\Entity\Message\Message;
+            use Firstred\PostNL\Entity\Request\GetDeliveryDate;
+            use Firstred\PostNL\Entity\Request\GetNearestLocations;
+            use Firstred\PostNL\Entity\Request\GetTimeframes;
+            use Firstred\PostNL\Entity\Timeframe;
+            use Firstred\PostNL\PostNL;
+            use Firstred\PostNL\Entity\Customer;
+            use Firstred\PostNL\Entity\Address;
 
-    $apikey = 'YOUR_API_KEY_HERE';
-    $sandbox = true;
+            require_once __DIR__.'/vendor/autoload.php';
 
-    $postnl = new PostNL($customer, $apikey, $sandbox, PostNL::MODE_REST);
+            // Your PostNL credentials
+            $customer = Customer::create([
+                'CollectionLocation' => '123456',
+                'CustomerCode'       => 'DEVC',
+                'CustomerNumber'     => '11223344',
+                'ContactPerson'      => 'Sander',
+                'Address'            => Address::create([
+                    'AddressType' => '02',
+                    'City'        => 'Hoofddorp',
+                    'CompanyName' => 'PostNL',
+                    'Countrycode' => 'NL',
+                    'HouseNr'     => '42',
+                    'Street'      => 'Siriusdreef',
+                    'Zipcode'     => '2132WT',
+                ]),
+                'Email'              => 'test@voorbeeld.nl',
+                'Name'               => 'Michael',
+            ]);
 
-    $mondayDelivery = true;
-    $deliveryDaysWindow = 7; // Amount of days to show ahead
-    $dropoffDelay = 0;       // Amount of days to delay delivery
+            $apikey = 'YOUR_API_KEY_HERE';
+            $sandbox = true;
 
-    // Configure the cut-off window for every day, 1 = Monday, 7 = Sunday
-    $cutoffTime = '15:00:00';
-    $dropoffDays = [1 => true, 2 => true, 3 => true, 4 => true, 5 => true, 6 => false, 7 => false];
-    foreach (range(1, 7) as $day) {
-        if ($dropoffDays[$day]) {
-            $cutOffTimes[] = new CutOffTime(
-                str_pad($day, 2, '0', STR_PAD_LEFT),
-                date('H:i:00', strtotime($cutoffTime)),
-                true
-            );
-        }
-    }
+            $postnl = new PostNL($customer, $apikey, $sandbox, PostNL::MODE_REST);
 
-    $response = $postnl->getTimeframesAndNearestLocations(
-        (new GetTimeframes())
-            ->setTimeframe([
-                (new Timeframe())
-                    ->setCountryCode('NL')
-                    ->setEndDate(date('d-m-Y', strtotime(" +{$deliveryDaysWindow} days +{$dropoffDelay} days")))
-                    ->setHouseNr('66')
-                    ->setOptions(['Morning', 'Daytime'])
-                    ->setPostalCode('2132WT')
-                    ->setStartDate(date('d-m-Y', strtotime(" +1 day +{$request['dropoff_delay']} days")))
-                    ->setSundaySorting(!empty($mondayDelivery) && date('w', strtotime("+{$dropoffDelay} days")))
-            ]),
-        (new GetNearestLocations())
-            ->setCountrycode($request['cc'])
-            ->setLocation(
-                (new Location())
-                    ->setAllowSundaySorting(!empty($mondayDelivery))
-                    ->setDeliveryOptions(['PG'])
-                    ->setOptions(['Daytime'])
-                    ->setHouseNr('66')
-                    ->setPostalcode('2132WT')
-            ),
-        (new GetDeliveryDate())
-            ->setGetDeliveryDate(
+            $mondayDelivery = true;
+            $deliveryDaysWindow = 7; // Amount of days to show ahead
+            $dropoffDelay = 0;       // Amount of days to delay delivery
+
+            // Configure the cut-off window for every day, 1 = Monday, 7 = Sunday
+            $cutoffTime = '15:00:00';
+            $dropoffDays = [1 => true, 2 => true, 3 => true, 4 => true, 5 => true, 6 => false, 7 => false];
+            foreach (range(1, 7) as $day) {
+                if ($dropoffDays[$day]) {
+                    $cutOffTimes[] = new CutOffTime(
+                        str_pad($day, 2, '0', STR_PAD_LEFT),
+                        date('H:i:00', strtotime($cutoffTime)),
+                        true
+                    );
+                }
+            }
+
+            $response = $postnl->getTimeframesAndNearestLocations(
+                (new GetTimeframes())
+                    ->setTimeframe([
+                        (new Timeframe())
+                            ->setCountryCode('NL')
+                            ->setEndDate(date('d-m-Y', strtotime(" +{$deliveryDaysWindow} days +{$dropoffDelay} days")))
+                            ->setHouseNr('66')
+                            ->setOptions(['Morning', 'Daytime'])
+                            ->setPostalCode('2132WT')
+                            ->setStartDate(date('d-m-Y', strtotime(" +12 days")))
+                            ->setSundaySorting(!empty($mondayDelivery) && date('w', strtotime("+{$dropoffDelay} days")))
+                    ]),
+                (new GetNearestLocations())
+                    ->setCountrycode('NL')
+                    ->setLocation(
+                        (new Location())
+                            ->setAllowSundaySorting(!empty($mondayDelivery))
+                            ->setDeliveryOptions(['PG'])
+                            ->setOptions(['Daytime'])
+                            ->setHouseNr('66')
+                            ->setPostalcode('2132WT')
+                    ),
                 (new GetDeliveryDate())
-                    ->setAllowSundaySorting(!empty($mondayDelivery))
-                    ->setCountryCode('NL')
-                    ->setCutOffTimes($cutOffTimes)
-                    ->setHouseNr($request['number'])
-                    ->setOptions($deliveryOptions)
-                    ->setPostalCode('2132WT')
-                    ->setShippingDate(date('d-m-Y H:i:s'))
-                    ->setShippingDuration(strval(1 + (int) $dropoffDelay))
-            )
-            ->setMessage(new Message())
-    );
+                    ->setGetDeliveryDate(
+                        (new GetDeliveryDate())
+                            ->setAllowSundaySorting(!empty($mondayDelivery))
+                            ->setCountryCode('NL')
+                            ->setCutOffTimes($cutOffTimes)
+                            ->setHouseNr('12')
+                            ->setOptions(['DayTime', 'Evening'])
+                            ->setPostalCode('2132WT')
+                            ->setShippingDate(date('d-m-Y H:i:s'))
+                            ->setShippingDuration(strval(1 + (int) $dropoffDelay))
+                    )
+                    ->setMessage(new Message())
+            );
+
+    .. tab:: PHP 8
+
+         .. code-block:: php
+
+            <?php
+
+            use Firstred\PostNL\Entity\Label;
+            use Firstred\PostNL\PostNL;
+            use Firstred\PostNL\Entity\Customer;
+            use Firstred\PostNL\Entity\Address;
+            use Firstred\PostNL\Entity\Shipment;
+            use Firstred\PostNL\Entity\Dimension;
+
+            require_once __DIR__.'/vendor/autoload.php';
+
+            // Your PostNL credentials
+            $customer = new Customer(
+                CollectionLocation: '123456',
+                CustomerCode:       'DEVC',
+                CustomerNumber:     '11223344',
+                ContactPerson:      'Sander',
+                Address:            new Address(
+                    AddressType:  '02',
+                    City:         'Hoofddorp',
+                    CompanyName:  'PostNL',
+                    Countrycode:  'NL',
+                    HouseNr:      '42',
+                    Street:       'Siriusdreef',
+                    Zipcode:      '2132WT',
+                ),
+                Email:               'test@voorbeeld.nl',
+                Name:                'Michael',
+            );
+
+            $apikey = 'YOUR_API_KEY_HERE';
+            $sandbox = true;
+
+            $postnl = new PostNL(customer: $customer, apiKey: $apikey, sandbox: $sandbox, mode: PostNL::MODE_REST);
+
+            $mondayDelivery = true;
+            $deliveryDaysWindow = 7; // Amount of days to show ahead
+            $dropoffDelay = 0;       // Amount of days to delay delivery
+
+            // Configure the cut-off window for every day, 1 = Monday, 7 = Sunday
+            $cutoffTime = '15:00:00';
+            $dropoffDays = [1 => true, 2 => true, 3 => true, 4 => true, 5 => true, 6 => false, 7 => false];
+            foreach (range(1, 7) as $day) {
+                if ($dropoffDays[$day]) {
+                    $cutOffTimes[] = new CutOffTime(
+                        str_pad($day, 2, '0', STR_PAD_LEFT),
+                        date('H:i:00', strtotime($cutoffTime)),
+                        true
+                    );
+                }
+            }
+
+            $response = $postnl->getTimeframesAndNearestLocations(
+                (new GetTimeframes())
+                    ->setTimeframe([
+                        (new Timeframe())
+                            ->setCountryCode('NL')
+                            ->setEndDate(date('d-m-Y', strtotime(" +{$deliveryDaysWindow} days +{$dropoffDelay} days")))
+                            ->setHouseNr('66')
+                            ->setOptions(['Morning', 'Daytime'])
+                            ->setPostalCode('2132WT')
+                            ->setStartDate(date('d-m-Y', strtotime(" +1 day +{$request['dropoff_delay']} days")))
+                            ->setSundaySorting(!empty($mondayDelivery) && date('w', strtotime("+{$dropoffDelay} days")))
+                    ]),
+                (new GetNearestLocations())
+                    ->setCountrycode($request['cc'])
+                    ->setLocation(
+                        (new Location())
+                            ->setAllowSundaySorting(!empty($mondayDelivery))
+                            ->setDeliveryOptions(['PG'])
+                            ->setOptions(['Daytime'])
+                            ->setHouseNr('66')
+                            ->setPostalcode('2132WT')
+                    ),
+                (new GetDeliveryDate())
+                    ->setGetDeliveryDate(
+                        (new GetDeliveryDate())
+                            ->setAllowSundaySorting(!empty($mondayDelivery))
+                            ->setCountryCode('NL')
+                            ->setCutOffTimes($cutOffTimes)
+                            ->setHouseNr($request['number'])
+                            ->setOptions($deliveryOptions)
+                            ->setPostalCode('2132WT')
+                            ->setShippingDate(date('d-m-Y H:i:s'))
+                            ->setShippingDuration(strval(1 + (int) $dropoffDelay))
+                    )
+                    ->setMessage(new Message())
+            );
+
 
 The response variable will be an associative array containing the timeframes, nearest locations and delivery date. It has the following keys:
 
@@ -367,3 +469,47 @@ If you'd rather have the user download a label, you can set the ``Content-Dispos
 
             | Source: https://laravel.com/docs/8.x/controllers
             | Source: https://gist.github.com/diegofelix/8863402
+
+-------------------
+Tracking a shipment
+-------------------
+
+You can track a single shipment by calling :php:meth:`Firstred\\PostNL\\PostNL::getShippingStatusByBarcode` with the barcode of the shipment.
+
+It accepts the following parameters:
+
+.. confval:: barcode
+
+    The actual barcode, for example: ``3SABCD1837238723``.
+
+.. confval:: complete
+
+    Whether the method should return a complete status update. A complete status update contains the shipment history as well.
+
+Code example:
+
+.. tabs::
+
+    .. tab:: PHP 5/7
+
+        .. code-block:: php
+
+            $postnl = new PostNL(...);
+
+            $currentStatusResponse = $postnl->getShippingStatusByBarcode(
+                '3SABCD1837238723', // Barcode
+                false               // Return just the current status (complete = false)
+            );
+
+    .. tab:: PHP 8
+
+        .. code-block:: php
+
+            $postnl = new PostNL(...);
+
+            $currentStatusResponse = $postnl->getShippingStatusByBarcode(
+                barcode: '3SABCD1837238723',
+                complete: false,
+            );
+
+
