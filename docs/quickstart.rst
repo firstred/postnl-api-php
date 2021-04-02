@@ -298,40 +298,72 @@ If you'd rather have the user download a label, you can set the ``Content-Dispos
 
 .. note::
 
-    Your framework might already provide a way to output files. In Symfony controllers you can use:
+    Your framework might already provide a way to output files. Here are a few examples for several popular PHP frameworks:
 
-    .. code-block:: php
+    .. tabs::
 
-        <?php
+        .. tab:: Symfony
 
-        use Symfony\Component\HttpFoundation\Response;
-        use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+            .. code-block:: php
 
-        public function downloadLabelAction()
-        {
-            // Provide a name for your file with extension
-            $filename = 'label.pdf';
+                <?php
 
-            // Create the label
-            $label = ...;
+                use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+                use Symfony\Component\HttpFoundation\Response;
+                use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
-            // Return a response with a specific content
-            $response = new Response($label);
+                class CreateShipmentController extends AbstractController
+                {
+                    public function downloadLabelAction()
+                    {
+                        // Provide a name for your file with extension
+                        $filename = 'label.pdf';
 
-            // Create the disposition of the file
-            $disposition = $response->headers->makeDisposition(
-                ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-                $filename
-            );
+                        // Create the label
+                        $label = ...;
 
-            // Set the content type and disposition
-            $response->headers->set('Content-Type', 'application/pdf');
-            $response->headers->set('Content-Disposition', $disposition);
+                        // Return a response with a specific content
+                        $response = new Response($label);
 
-            // Dispatch request
-            return $response;
-        }
+                        // Create the disposition of the file
+                        $disposition = $response->headers->makeDisposition(
+                            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+                            $filename
+                        );
 
-    Source: https://ourcodeworld.com/articles/read/329/how-to-send-a-file-as-response-from-a-controller-in-symfony-3
+                        // Set the content type and disposition
+                        $response->headers->set('Content-Type', 'application/pdf');
+                        $response->headers->set('Content-Disposition', $disposition);
+
+                        // Dispatch request
+                        return $response;
+                    }
+                }
+
+            Source: https://ourcodeworld.com/articles/read/329/how-to-send-a-file-as-response-from-a-controller-in-symfony-3
 
 
+        .. tab:: Laravel
+
+            .. code-block:: php
+
+                <?php
+
+                namespace App\Http\Controllers;
+
+                use Illuminate\Http\Request;
+
+                class DownloadLabelController extends Controller
+                {
+                     public function downloadLabelAction(Request $request) {
+                        // Create the label
+                        $label = ...;
+
+                        return response()
+                            ->header('Content-Type', 'application/pdf')
+                            ->header('Content-Disposition', 'attachment; filename="label.pdf"');
+                    }
+                }
+
+            | Source: https://laravel.com/docs/8.x/controllers
+            | Source: https://gist.github.com/diegofelix/8863402

@@ -6,6 +6,33 @@ Advanced usage
 
 This section describes more advanced ways to use this library. The main class :php:class:`Firstred\\PostNL\\PostNL` and separate service classes (such as :php:class:`Firstred\\PostNL\\Service\\BarcodeService`) provide more ways to interact with the API.
 
+--------------------
+Object instantiation
+--------------------
+
+There are three ways in which entities can be instantiated. Either by passing all arguments to the constructor, invoking the `create` method on an entity or by instantiating an empty entity and calling the setters one by one.
+
+.. tabs::
+
+  .. tab:: Constructor
+
+        .. code-block:: php
+
+            new Thing();
+
+  .. tab:: Create
+
+        .. code-block:: php
+
+            new Thing();
+
+  .. tab:: Setters
+
+        .. code-block:: php
+
+            new Thing();
+
+
 --------------------------
 Building requests manually
 --------------------------

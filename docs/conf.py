@@ -34,7 +34,8 @@ from pygments.lexers.web import PhpLexer
 extensions = [
   "sphinx_rtd_theme",
   "sphinxcontrib.phpdomain",
-  "sphinx_toolbox.confval"
+  "sphinx_toolbox.confval",
+  "sphinx_tabs.tabs"
 ]
 
 # Add any paths that contain templates here, relative to this directory.
