@@ -53,10 +53,11 @@ Developer Guide
     quickstart.rst
     deliveryoptions.rst
     sendandtrackshipments.rst
+    exceptionhandling.rst
+    formats.rst
     httpclient.rst
     caching.rst
     logging.rst
-    formats.rst
     advancedusage.rst
     reference/index.rst
     authors.rst
