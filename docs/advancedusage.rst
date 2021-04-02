@@ -10,27 +10,107 @@ This section describes more advanced ways to use this library. The main class :p
 Object instantiation
 --------------------
 
-There are three ways in which entities can be instantiated. Either by passing all arguments to the constructor, invoking the `create` method on an entity or by instantiating an empty entity and calling the setters one by one.
+There are four ways in which entities can be instantiated. Either by
+
+#. passing all arguments to the constructor in the right order
+#. or using named parameters,
+#. invoking the `create` method on an entity
+#. or by instantiating an empty entity and calling the setters one by one.
+
+| Which method to use is entirely up to you. They are all supported by the library.
+| However, if you use an IDE with code completion then the safest ways to use are (2) using named parameters (PHP 8) or by calling the setters (4), one by one.
+| Even without using an IDE with code completion you might benefit from using methods (2) and (4) since you will be able to detect errors earlier in the process.
 
 .. tabs::
 
-  .. tab:: Constructor
+    .. tab:: 1 - Constructor
 
         .. code-block:: php
 
-            new Thing();
+            // Your PostNL credentials
+            $customer = new Customer(
+                '11223344',
+                'DEVC',
+                '123456',
+                'Sander',
+                'test@voorbeeld.nl',
+                'Michael',
+                new Address(
+                    '02',
+                    'PostNL',
+                    'Siriusdreef',
+                    '42',
+                    '2132WT',
+                    'Hoofddorp',
+                    'NL',
+                ),
+            );
 
-  .. tab:: Create
+    .. tab:: 2 - Constructor named args
 
         .. code-block:: php
 
-            new Thing();
+            // Your PostNL credentials
+            $customer = new Customer(
+                CustomerNumber: '11223344',
+                CustomerCode: 'DEVC',
+                CollectionLocation: '123456',
+                ContactPerson: 'Sander',
+                Email: 'test@voorbeeld.nl',
+                Name: 'Michael',
+                Address: new Address(
+                    AddressType: '02',
+                    CompanyName: 'PostNL',
+                    Street: 'Siriusdreef',
+                    HouseNr: '42',
+                    Zipcode: '2132WT',
+                    City: 'Hoofddorp',
+                    Countrycode: 'NL',
+                ),
+            );
 
-  .. tab:: Setters
+    .. tab:: 3 - Create
 
         .. code-block:: php
 
-            new Thing();
+            $customer = Customer::create([
+                'CustomerNumber'     => '11223344',
+                'CustomerCode'       => 'DEVC',
+                'CollectionLocation' => '123456',
+                'ContactPerson'      => 'Sander',
+                'Email'              => 'test@voorbeeld.nl',
+                'Name'               => 'Michael',
+                'Address'            => Address::create([
+                    'AddressType' => '02',
+                    'CompanyName' => 'PostNL',
+                    'Street'      => 'Siriusdreef',
+                    'HouseNr'     => '42',
+                    'Zipcode'     => '2132WT',
+                    'City'        => 'Hoofddorp',
+                    'Countrycode' => 'NL',
+                ]),
+            ]);
+
+    .. tab:: 4 - Setters
+
+        .. code-block:: php
+
+            $customer = (new Customer())
+                ->setCustomerNumber('11223344')
+                ->setCustomerCode('DEVC')
+                ->setCollectionLocation('123456')
+                ->setContactPerson('Sander')
+                ->setEmail('test@voorbeeld.nl')
+                ->setName('Michael')
+                ->setAddress((new Address())
+                    ->setAddressType('02')
+                    ->setCompanyName('PostNL')
+                    ->setStreet('Siriusdreef')
+                    ->setHouseNr('42')
+                    ->setZipcode('2132WT')
+                    ->setCity('Hoofddorp')
+                    ->setCountrycode('NL')
+                );
 
 
 --------------------------
