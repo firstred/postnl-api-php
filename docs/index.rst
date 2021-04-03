@@ -1,15 +1,15 @@
 .. _index:
+=====================================================================
+Welcome to the documentation site of an unofficial PostNL PHP library
+=====================================================================
 
-Welcome to the unofficial PostNL PHP library documentation!
-===========================================================
+These PHP API bindings aim to make it easier to connect to PostNL's CIF API, used for displaying delivery options, printing shipment labels and retrieving actual shipment statuses.
 
-These API bindings make it easier to connect to PostNL's CIF API, used for retrieving delivery options, printing shipment labels and finding shipment statuses.
+- The goal is to have a simple interface for connecting with either the SOAP or REST API, while still being able to follow `the official API documentation <https://developer.postnl.nl/>`_.
 
-- It has a simple interface for connecting with either the SOAP or REST API.
+- Abstracts away direct requests to the API, allowing you to focus on the code itself. The object structure :ref:`is based on the SOAP API<soap object structure>`.
 
-- Abstracts away direct requests to the API, allowing you to focus on the code itself. The object structure is based on the SOAP API.
-
-- Can merge PDF labels (both A6 and A4) and automatically sends concurrent requests when necessary, making batch processing a lot easier easier.
+- Can merge PDF labels (both A6 and A4) and automatically handles concurrent requests when necessary, making batch processing a lot easier.
 
 - Follows PHP standards, some of them are:
 
@@ -18,6 +18,8 @@ These API bindings make it easier to connect to PostNL's CIF API, used for retri
   - PSR-6 caching, so you can use your favorite cache for caching API responses. Chapter :ref:`caching`.
     
   - PSR-3 logging. You can log the requests and responses for debugging purposes. More info on the page :ref:`logging`.
+
+  - PSR-18 HTTP Clients or HTTPlug clients.
 
 - Framework agnostic. You can use this library with any framework.
 

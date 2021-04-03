@@ -41,6 +41,8 @@ The following definitions and formats are used:
 
         die(ini_get('date.timezone'));
 
+.. _soap object structure:
+
 ---------------------
 SOAP object structure
 ---------------------
