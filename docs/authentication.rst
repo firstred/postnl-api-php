@@ -6,9 +6,10 @@ Authentication
 
 The PostNL API requires an API key to authenticate. You can request one via `MijnPostNL <https://mijn.postnl.nl/c/BP2_Mod_APIManagement.app>`_.
 
-If you do not already have a PostNL account, check out this page: https://developer.postnl.nl/request-api-key/
+If you do not already have a PostNL account, be sure to check out this page: https://developer.postnl.nl/request-api-key/
 
-The API key is automatically attached to the :php:class:`Firstred\\PostNL\\Entity\\SOAP\\UsernameToken` object (SOAP) or ``apikey`` HTTP header (REST).
+.. note::
+    The API key is automatically attached to the :php:class:`Firstred\\PostNL\\Entity\\SOAP\\UsernameToken` object (SOAP) or ``apikey`` HTTP header (REST). You do not have to manually add the API key with every request.
 
 -----------------------
 Passing all credentials

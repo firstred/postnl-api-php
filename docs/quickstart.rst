@@ -6,7 +6,7 @@ Quickstart
 
 This page provides a quick introduction to this library and a few quick copy/paste examples which you can adjust to your likings.
 
-This section assumess that you have installed the library and are fully authenticated.
+This section assumes that you have installed the library and are fully authenticated.
 
 If you do not have the library installed, head over to the :ref:`installation` page. If you do not know what to pass to the main :php:class:`Firstred\\PostNL\\PostNL` class, please refer to the chapter :ref:`authentication` first.
 

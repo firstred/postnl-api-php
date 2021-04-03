@@ -7,7 +7,7 @@ Maintainers:
 
 * `Michael Dekker <https://github.com/firstred>`_ <git@michaeldekker.nl> (maintainer)
 
-Maintainers wanted!. If you'd like to help keep this library up to date please send and email to git@michaeldekker.nl
+Looking for maintainers! If you'd like to help keep this library up to date please send and email to git@michaeldekker.nl
 
 Contributors:
 ================
