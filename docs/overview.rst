@@ -10,7 +10,7 @@ Overview
 Requirements
 ------------
 
-PostNL's REST API provides all of the functionality and is the recommended way to connect.
+Nowadays there are two APIs you can choose from: SOAP or REST. PostNL's REST API provides all of the functionality and is currently the recommended way to connect.
 
 .. _rest api requirements:
 
@@ -19,7 +19,7 @@ REST API Requirements
 
 #. PHP 5.6 or higher (up to and including 8.0)
 #. `JSON extension <https://www.php.net/manual/en/book.json.php>`_
-#. An HTTP Client such as `Symfony's HTTP Client <https://symfony.com/doc/current/http_client.html>`_ or `Guzzle <https://docs.guzzlephp.org/>`_ (or at least have the `PHP cURL extension <https://www.php.net/manual/en/book.curl.php>`_ installed)
+#. An HTTP Client such as `Symfony's HTTP Client <https://symfony.com/doc/current/http_client.html>`_ (PostNL lib v1.3.0 or higher) or `Guzzle <https://docs.guzzlephp.org/>`_ (or at least have the `PHP cURL extension <https://www.php.net/manual/en/book.curl.php>`_ installed)
 #. ``opcache.save_comments`` set to ``1``
 
 .. _soap api requirements:
@@ -31,7 +31,7 @@ SOAP API Requirements
 #. `JSON extension <https://www.php.net/manual/en/book.json.php>`_ (both the Shipping webservice and Shipping Status webservice can only be handled by the REST API)
 #. `XMLWriter extension <https://www.php.net/manual/en/book.xmlwriter.php>`_
 #. `XMLReader extension <https://www.php.net/manual/en/book.xmlreader.php>`_
-#. An HTTP Client such as `Symfony's HTTP Client <https://symfony.com/doc/current/http_client.html>`_ or `Guzzle <https://docs.guzzlephp.org/>`_ (or at least have the `PHP cURL extension <https://www.php.net/manual/en/book.curl.php>`_ installed)
+#. An HTTP Client such as `Symfony's HTTP Client <https://symfony.com/doc/current/http_client.html>`_ (PostNL lib v1.3.0 or higher) or `Guzzle <https://docs.guzzlephp.org/>`_ (or at least have the `PHP cURL extension <https://www.php.net/manual/en/book.curl.php>`_ installed)
 #. ``opcache.save_comments`` set to ``1``
 
 .. warning::
