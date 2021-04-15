@@ -75,21 +75,23 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
      *
      * @param array $properties
      *
-     * @return object|null
+     * @return static
+     *
+     * @throws InvalidArgumentException
      *
      * @since 1.0.0
      */
     public static function create(array $properties = [])
     {
         if (__CLASS__ === get_called_class()) {
-            return null;
+            throw new InvalidArgumentException('Invalid class given');
         }
 
         try {
             $reflectionClass = new ReflectionClass(get_called_class());
             $instance = $reflectionClass->newInstanceWithoutConstructor();
         } catch (Exception $e) {
-            return null;
+            throw new InvalidArgumentException('Invalid class given');
         }
 
         foreach ($properties as $name => $value) {
