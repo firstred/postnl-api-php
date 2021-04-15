@@ -90,6 +90,7 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
         try {
             $reflectionClass = new ReflectionClass(get_called_class());
             $instance = $reflectionClass->newInstanceWithoutConstructor();
+            /** @var static $instance */
         } catch (Exception $e) {
             throw new InvalidArgumentException('Invalid class given');
         }
