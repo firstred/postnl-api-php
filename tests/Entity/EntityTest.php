@@ -104,7 +104,9 @@ class EntityTest extends TestCase
      */
     public function testNegativeCannotInstantiateAbstract()
     {
-        $this->assertNull(AbstractEntity::create());
+        $this->expectException(InvalidArgumentException::class);
+
+        AbstractEntity::create();
     }
 
     /**
