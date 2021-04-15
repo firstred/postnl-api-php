@@ -83,7 +83,7 @@ use Sabre\Xml\Writer;
  * @method string|null            getStatusCode()
  * @method Shipment               setAddresses(Address[]|null $Addresses = null)
  * @method Shipment               setBarcode(string|null $Barcode = null)
- * @method Shipment               setDimension(string|null $Dimension = null)
+ * @method Shipment               setDimension(Dimension|null $Dimension = null)
  * @method Shipment               setProductCodeDelivery(string|null $ProductCodeDelivery = null)
  * @method Shipment               setAmounts(Amount[]|null $Amounts = null)
  * @method Shipment               setContacts(Contact[]|null $Contact = null)
