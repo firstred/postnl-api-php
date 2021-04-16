@@ -517,7 +517,8 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
         $body = json_decode(static::getResponseText($response));
         /** @var CurrentStatusResponse $object */
         return CurrentStatusResponse::jsonDeserialize((object) ['CurrentStatusResponse' => (object) [
-            'Shipments' => $body->CurrentStatus->Shipment,
+            'Shipments' => isset($body->CurrentStatus->Shipment) ? $body->CurrentStatus->Shipment : null,
+            'Warnings'  => isset($body->Warnings) ? $body->Warnings : null,
         ]]);
     }
 
@@ -597,7 +598,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      *
      * @param mixed $response
      *
-     * @return UpdatedShipmentsResponse|null
+     * @return CompleteStatusResponse|null
      *
      * @throws ResponseException
      * @throws HttpClientException
@@ -615,59 +616,61 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
         }
         unset($body->CompleteStatus->Shipment);
 
-        if (!is_array($body->CompleteStatus->Shipments)) {
+        if (isset($body->CompleteStatus->Shipments) && !is_array($body->CompleteStatus->Shipments)) {
             $body->CompleteStatus->Shipments = [$body->CompleteStatus->Shipments];
         }
 
-        foreach ($body->CompleteStatus->Shipments as &$shipment) {
-            $shipment->Customer = Customer::jsonDeserialize((object) ['Customer' => $shipment->Customer]);
+        if (isset($body->CompleteStatus->Shipments)) {
+            foreach ($body->CompleteStatus->Shipments as &$shipment) {
+                $shipment->Customer = Customer::jsonDeserialize((object) ['Customer' => $shipment->Customer]);
+            }
+            unset($shipment);
+
+            foreach ($body->CompleteStatus->Shipments as &$shipment) {
+                if (isset($shipment->Address)) {
+                    $shipment->Addresses = $shipment->Address;
+                    unset($shipment->Address);
+                }
+                if (!is_array($shipment->Addresses)) {
+                    $shipment->Addresses = [$shipment->Addresses];
+                }
+
+                if (isset($shipment->Event)) {
+                    $shipment->Events = $shipment->Event;
+                    unset($shipment->Event);
+                }
+
+                if (!is_array($shipment->Events)) {
+                    $shipment->Events = [$shipment->Events];
+                }
+
+                foreach ($shipment->Events as &$event) {
+                    $event = CompleteStatusResponseEvent::jsonDeserialize(
+                        (object) ['CompleteStatusResponseEvent' => $event]
+                    );
+                }
+
+                if (isset($shipment->OldStatus)) {
+                    $shipment->OldStatuses = $shipment->OldStatus;
+                    unset($shipment->OldStatus);
+                }
+                if (!is_array($shipment->OldStatuses)) {
+                    $shipment->OldStatuses = [$shipment->OldStatuses];
+                }
+
+                foreach ($shipment->OldStatuses as &$oldStatus) {
+                    $oldStatus = CompleteStatusResponseOldStatus::jsonDeserialize(
+                        (object) ['CompleteStatusResponseOldStatus' => $oldStatus]
+                    );
+                }
+            }
         }
-        unset($shipment);
 
-        /** @noinspection PhpParameterByRefIsNotUsedAsReferenceInspection */
-        foreach ($body->CompleteStatus->Shipments as &$shipment) {
-            if (isset($shipment->Address)) {
-                $shipment->Addresses = $shipment->Address;
-                unset($shipment->Address);
-            }
-            if (!is_array($shipment->Addresses)) {
-                $shipment->Addresses = [$shipment->Addresses];
-            }
-
-            if (isset($shipment->Event)) {
-                $shipment->Events = $shipment->Event;
-                unset($shipment->Event);
-            }
-
-            if (!is_array($shipment->Events)) {
-                $shipment->Events = [$shipment->Events];
-            }
-
-            foreach ($shipment->Events as &$event) {
-                $event = CompleteStatusResponseEvent::jsonDeserialize(
-                    (object) ['CompleteStatusResponseEvent' => $event]
-                );
-            }
-
-            if (isset($shipment->OldStatus)) {
-                $shipment->OldStatuses = $shipment->OldStatus;
-                unset($shipment->OldStatus);
-            }
-            if (!is_array($shipment->OldStatuses)) {
-                $shipment->OldStatuses = [$shipment->OldStatuses];
-            }
-
-            foreach ($shipment->OldStatuses as &$oldStatus) {
-                $oldStatus = CompleteStatusResponseOldStatus::jsonDeserialize(
-                    (object) ['CompleteStatusResponseOldStatus' => $oldStatus]
-                );
-            }
-        }
-
-        /** @var UpdatedShipmentsResponse $object */
-        return UpdatedShipmentsResponse::jsonDeserialize(
-            (object) ['CompleteStatusResponse' => $body->CompleteStatus]
-        );
+        /** @var CompleteStatusResponse $object */
+        return CompleteStatusResponse::jsonDeserialize((object) ['CompleteStatusResponse' => (object) [
+            'Shipments' => isset($body->CompleteStatus->Shipments) ? $body->CompleteStatus->Shipments : null,
+            'Warnings'  => isset($body->Warnings) ? $body->Warnings : null,
+        ]]);
     }
 
     /**

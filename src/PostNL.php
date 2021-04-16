@@ -1895,6 +1895,7 @@ class PostNL implements LoggerAwareInterface
      * @param CompleteStatus $completeStatus
      *
      * @return CompleteStatusResponse
+     *
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException

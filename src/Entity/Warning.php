@@ -26,12 +26,15 @@
 
 namespace Firstred\PostNL\Entity;
 
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\TimeframeService;
+use stdClass;
 
 /**
  * Class Warning.
@@ -89,5 +92,25 @@ class Warning extends AbstractEntity
 
         $this->setCode($Code);
         $this->setDescription($Description);
+    }
+
+    /**
+     * Deserialize JSON.
+     *
+     * @param stdClass $json JSON object `{"EntityName": object}`
+     *
+     * @return static
+     *
+     * @throws NotSupportedException
+     * @throws InvalidArgumentException
+     */
+    public static function jsonDeserialize(stdClass $json)
+    {
+        if (isset($json->Warning->Message)) {
+            $json->Warning->Description = $json->Warning->Message;
+            unset($json->Warning->Message);
+        }
+
+        return parent::jsonDeserialize($json);
     }
 }

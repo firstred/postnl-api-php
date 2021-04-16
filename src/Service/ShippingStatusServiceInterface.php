@@ -250,7 +250,7 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      *
      * @param mixed $response
      *
-     * @return UpdatedShipmentsResponse|null
+     * @return CompleteStatusResponse|null
      *
      * @throws ResponseException
      * @throws HttpClientException

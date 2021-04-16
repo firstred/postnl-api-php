@@ -45,6 +45,7 @@ use Firstred\PostNL\Entity\Response\GetSignatureResponseSignature;
 use Firstred\PostNL\Entity\Response\UpdatedShipmentsResponse;
 use Firstred\PostNL\Entity\Shipment;
 use Firstred\PostNL\Entity\SOAP\UsernameToken;
+use Firstred\PostNL\Entity\Warning;
 use Firstred\PostNL\HttpClient\MockClient;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\ShippingStatusServiceInterface;
@@ -397,6 +398,34 @@ class ShippingStatusServiceRestTest extends ServiceTest
     }
 
     /**
+     * @testdox can retrieve updated shipments
+     * @dataProvider getNoCurrentShipmentsProvider
+     *
+     * @param ResponseInterface $response
+     */
+    public function testNoCurrentShipmentsRest($response)
+    {
+        $mock = new MockHandler([$response]);
+        $handler = HandlerStack::create($mock);
+        $mockClient = new MockClient();
+        $mockClient->setHandler($handler);
+        $this->postnl->setHttpClient($mockClient);
+
+        $currentStatus = $this->postnl->getCurrentStatus( (new CurrentStatus())
+            ->setShipment(
+                (new Shipment())
+                    ->setBarcode('3S8392302392342')
+            ));
+
+        $this->assertInstanceOf(CurrentStatusResponse::class, $currentStatus);
+        $this->assertNull($currentStatus->getShipments());
+        $this->assertIsArray($currentStatus->getWarnings());
+        $this->assertInstanceOf(Warning::class, $currentStatus->getWarnings()[0]);
+        $this->assertEquals('No shipment found', $currentStatus->getWarnings()[0]->getDescription());
+        $this->assertEquals('2', $currentStatus->getWarnings()[0]->getCode());
+    }
+
+    /**
      * @return array[]
      */
     public function getCurrentStatusByBarcodeProvider()
@@ -427,6 +456,16 @@ class ShippingStatusServiceRestTest extends ServiceTest
     {
         return [
             [PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/shippingstatus/updatedshipments.http'))],
+        ];
+    }
+
+    /**
+     * @return array[]
+     */
+    public function getNoCurrentShipmentsProvider()
+    {
+        return [
+            [PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/shippingstatus/nocurrentshipments.http'))],
         ];
     }
 }

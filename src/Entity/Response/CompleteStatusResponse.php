@@ -27,6 +27,7 @@
 namespace Firstred\PostNL\Entity\Response;
 
 use Firstred\PostNL\Entity\AbstractEntity;
+use Firstred\PostNL\Entity\Warning;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
@@ -43,7 +44,9 @@ use function count;
  * Class CompleteStatusResponse.
  *
  * @method CompleteStatusResponseShipment[]|null getShipments()
- * @method UpdatedShipmentsResponse                setShipments(CompleteStatusResponseShipment[] $Shipments = null)
+ * @method Warning[]|null                        getWarnings()
+ * @method CompleteStatusResponse                setShipments(CompleteStatusResponseShipment[] $Shipments = null)
+ * @method CompleteStatusResponse                setWarnings(Warning[] $Warnings = null)
  *
  * @since 1.0.0
  */
@@ -57,38 +60,50 @@ class CompleteStatusResponse extends AbstractEntity
     public static $defaultProperties = [
         'Barcode'        => [
             'Shipments' => BarcodeService::DOMAIN_NAMESPACE,
+            'Warnings'  => BarcodeService::DOMAIN_NAMESPACE,
         ],
         'Confirming'     => [
             'Shipments' => ConfirmingService::DOMAIN_NAMESPACE,
+            'Warnings'  => ConfirmingService::DOMAIN_NAMESPACE,
         ],
         'Labelling'      => [
             'Shipments' => LabellingService::DOMAIN_NAMESPACE,
+            'Warnings'  => LabellingService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate'   => [
             'Shipments' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Warnings'  => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
         'Location'       => [
             'Shipments' => LocationService::DOMAIN_NAMESPACE,
+            'Warnings'  => LocationService::DOMAIN_NAMESPACE,
         ],
         'Timeframe'      => [
             'Shipments' => TimeframeService::DOMAIN_NAMESPACE,
+            'Warnings'  => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
     /** @var CompleteStatusResponseShipment[]|null */
     protected $Shipments;
+    /** @var Warning[]|null */
+    protected $Warnings;
     // @codingStandardsIgnoreEnd
 
     /**
      * CompleteStatusResponse constructor.
      *
      * @param CompleteStatusResponseShipment[]|null $Shipments
+     * @param Warnings[]|null $Warnings
      */
-    public function __construct(array $Shipments = null)
-    {
+    public function __construct(
+        array $Shipments = null,
+        array $Warnings = null
+    ) {
         parent::__construct();
 
         $this->setShipments($Shipments);
+        $this->setWarnings($Warnings);
     }
 
     public static function jsonDeserialize(stdClass $json)
@@ -97,11 +112,11 @@ class CompleteStatusResponse extends AbstractEntity
         $reflection = new ReflectionObject($json);
         $properties = $reflection->getProperties(ReflectionProperty::IS_PUBLIC);
 
-        if (!count($properties) || !isset($json->CompleteStatusResponse->Shipments)) {
+        if (!count($properties)) {
             return $json;
         }
 
-        if (!is_array($json->CompleteStatusResponse->Shipments)) {
+        if (isset($json->CompleteStatusResponse->Shipments) && !is_array($json->CompleteStatusResponse->Shipments)) {
             $json->CompleteStatusResponse->Shipments = [$json->CompleteStatusResponse->Shipments];
         }
 

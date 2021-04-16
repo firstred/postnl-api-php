@@ -105,30 +105,6 @@ class CurrentStatusResponse extends AbstractEntity
     }
 
     /**
-     * Deserialize JSON.
-     *
-     * @param stdClass $json JSON object `{"EntityName": object}`
-     *
-     * @return static
-     *
-     * @throws NotSupportedException
-     * @throws InvalidArgumentException
-     */
-    public static function jsonDeserialize(stdClass $json)
-    {
-        if (isset($json->Warnings) && is_array($json->Warnings)) {
-            foreach ($json->Warnings as $warning) {
-                if (isset($warning->Message)) {
-                    $warning->Description = $warning->Message;
-                    unset($warning->Message);
-                }
-            }
-        }
-
-        return parent::jsonDeserialize($json);
-    }
-
-    /**
      * Return a serializable array for the XMLWriter.
      *
      * @param Writer $writer
