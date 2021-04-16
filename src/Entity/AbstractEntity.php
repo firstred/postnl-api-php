@@ -201,7 +201,7 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
      *
      * @param stdClass $json JSON object `{"EntityName": object}`
      *
-     * @return mixed
+     * @return static
      *
      * @throws NotSupportedException
      * @throws InvalidArgumentException

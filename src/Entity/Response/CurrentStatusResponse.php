@@ -27,6 +27,9 @@
 namespace Firstred\PostNL\Entity\Response;
 
 use Firstred\PostNL\Entity\AbstractEntity;
+use Firstred\PostNL\Entity\Warning;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
@@ -34,12 +37,15 @@ use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\TimeframeService;
 use Sabre\Xml\Writer;
+use stdClass;
 
 /**
  * Class CurrentStatusResponse.
  *
  * @method CurrentStatusResponseShipment[]|null getShipments()
+ * @method Warning[]|null                       getWarnings()
  * @method CurrentStatusResponse                setShipments(CurrentStatusResponseShipment[]|null $Shipments = null)
+ * @method CurrentStatusResponse                setWarnings(Warning[]|null $Warnings = null)
  *
  * @since 1.0.0
  */
@@ -53,38 +59,73 @@ class CurrentStatusResponse extends AbstractEntity
     public static $defaultProperties = [
         'Barcode' => [
             'Shipments' => BarcodeService::DOMAIN_NAMESPACE,
+            'Warnings'  => BarcodeService::DOMAIN_NAMESPACE,
         ],
         'Confirming' => [
             'Shipments' => ConfirmingService::DOMAIN_NAMESPACE,
+            'Warnings'  => ConfirmingService::DOMAIN_NAMESPACE,
         ],
         'Labelling' => [
             'Shipments' => LabellingService::DOMAIN_NAMESPACE,
+            'Warnings'  => LabellingService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate' => [
-            'Shipments' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Warnings'  => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
         'Location' => [
             'Shipments' => LocationService::DOMAIN_NAMESPACE,
+            'Warnings'  => LocationService::DOMAIN_NAMESPACE,
         ],
         'Timeframe' => [
             'Shipments' => TimeframeService::DOMAIN_NAMESPACE,
+            'Warnings'  => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
     /** @var CurrentStatusResponseShipment[]|null */
     protected $Shipments;
+    /** @var Warning[]|null */
+    protected $Warnings;
     // @codingStandardsIgnoreEnd
 
     /**
      * CurrentStatusResponse constructor.
      *
      * @param CurrentStatusResponseShipment[]|null $Shipments
+     * @param Warning[]|null $Warnings
      */
-    public function __construct(array $Shipments = null)
-    {
+    public function __construct(
+        array $Shipments = null,
+        array $Warnings = null,
+    ) {
         parent::__construct();
 
         $this->setShipments($Shipments);
+        $this->setWarnings($Warnings);
+    }
+
+    /**
+     * Deserialize JSON.
+     *
+     * @param stdClass $json JSON object `{"EntityName": object}`
+     *
+     * @return static
+     *
+     * @throws NotSupportedException
+     * @throws InvalidArgumentException
+     */
+    public static function jsonDeserialize(stdClass $json)
+    {
+        if (isset($json->Warnings) && is_array($json->Warnings)) {
+            foreach ($json->Warnings as $warning) {
+                if (isset($warning->Message)) {
+                    $warning->Description = $warning->Message;
+                    unset($warning->Message);
+                }
+            }
+        }
+
+        return parent::jsonDeserialize($json);
     }
 
     /**
