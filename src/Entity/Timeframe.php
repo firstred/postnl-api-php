@@ -39,6 +39,7 @@ use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\TimeframeService;
 use InvalidArgumentException;
 use Sabre\Xml\Writer;
+use function in_array;
 use function is_string;
 
 /**
@@ -58,16 +59,15 @@ use function is_string;
  * @method string|null            getInterval()
  * @method string|null            getTimeframeRange()
  * @method Timeframe[]|null       getTimeframes()
- * @method Timeframe              setCity(string|null $city = null)
- * @method Timeframe              setCountryCode(string|null $code = null)
- * @method Timeframe              setHouseNr(string|null $houseNr = null)
- * @method Timeframe              setHouseNrExt(string|null $houseNrExt = null)
- * @method Timeframe              setOptions(string[]|null $options = null)
- * @method Timeframe              setStreet(string|null $street = null)
- * @method Timeframe              setSundaySorting(string|null $sunday = null)
- * @method Timeframe              setInterval(string|null $interval = null)
- * @method Timeframe              setTimeframeRange(string|null $range = null)
- * @method Timeframe              setTimeframes(Timeframe[]|null $timeframes = null)
+ * @method Timeframe              setCity(string|null $City = null)
+ * @method Timeframe              setCountryCode(string|null $CountyCode = null)
+ * @method Timeframe              setHouseNr(string|null $HouseNr = null)
+ * @method Timeframe              setHouseNrExt(string|null $HouseNrExt = null)
+ * @method Timeframe              setOptions(string[]|null $Options = null)
+ * @method Timeframe              setStreet(string|null $Street = null)
+ * @method Timeframe              setInterval(string|null $Interval = null)
+ * @method Timeframe              setTimeframeRange(string|null $Range = null)
+ * @method Timeframe              setTimeframes(Timeframe[]|null $Timeframes = null)
  *
  * @since 1.0.0
  */
@@ -343,6 +343,25 @@ class Timeframe extends AbstractEntity
         } else {
             $this->PostalCode = strtoupper(str_replace(' ', '', $PostalCode));
         }
+
+        return $this;
+    }
+
+    /**
+     * @param string|bool|int|null $SundaySorting
+     *
+     * @return Timeframe
+     *
+     * @since 1.0.0
+     * @since 1.3.0 Accept bool and int
+     */
+    public function setSundaySorting($SundaySorting = null)
+    {
+        if (null !== $SundaySorting) {
+            $SundaySorting = in_array($SundaySorting, [true, 'true', 1], true) ? 'true' : 'false';
+        }
+
+        $this->SundaySorting = $SundaySorting;
 
         return $this;
     }
