@@ -96,7 +96,7 @@ class CurrentStatusResponse extends AbstractEntity
      */
     public function __construct(
         array $Shipments = null,
-        array $Warnings = null,
+        array $Warnings = null
     ) {
         parent::__construct();
 
