@@ -93,7 +93,6 @@ class SymfonyHttpClient extends BaseHttpClient implements ClientInterface, Logge
                     'cafile'        => CaBundle::getSystemCaRootBundlePath(),
                     'verify_host'   => true,
                     'verify_peer'   => true,
-                    'scope'         => '^https:\/\/api(?:-sandbox)?\.postnl\.nl',
                 ],
                 $this->defaultOptions
             ), $this->getConcurrency()), $retryStrategy, $this->getMaxRetries());
