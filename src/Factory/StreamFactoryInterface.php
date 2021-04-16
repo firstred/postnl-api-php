@@ -34,6 +34,8 @@ use RuntimeException;
  * Factory for PSR-7 Stream.
  *
  * @author Márk Sági-Kazár <mark.sagikazar@gmail.com>
+ *
+ * FOR BACKWARD COMPATIBLE REASONS - NOT COMPATIBLE WITH SYMFONY HTTP CLIENT
  */
 interface StreamFactoryInterface
 {

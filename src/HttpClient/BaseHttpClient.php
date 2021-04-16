@@ -2,8 +2,17 @@
 
 namespace Firstred\PostNL\HttpClient;
 
+use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\NotSupportedException;
+use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\StreamFactoryInterface;
+use Firstred\PostNL\Factory\RequestFactoryInterface as BackwardCompatibleRequestFactoryInterface;
+use Firstred\PostNL\Factory\ResponseFactoryInterface as BackwardCompatibleResponseFactoryInterface;
+use Firstred\PostNL\Factory\StreamFactoryInterface as BackwardCompatibleStreamFactoryInterface;
 use Psr\Log\LoggerInterface;
 use function array_push;
 use function is_null;
@@ -38,6 +47,21 @@ abstract class BaseHttpClient
 
     /** @var int */
     protected $concurrency = 5;
+
+    /**
+     * @var RequestFactoryInterface|BackwardCompatibleRequestFactoryInterface
+     */
+    protected $requestFactory;
+
+    /**
+     * @var ResponseFactoryInterface|BackwardCompatibleResponseFactoryInterface
+     */
+    protected $responseFactory;
+
+    /**
+     * @var StreamFactoryInterface|BackwardCompatibleStreamFactoryInterface
+     */
+    protected $streamFactory;
 
     /**
      * Get timeout.
@@ -229,5 +253,131 @@ abstract class BaseHttpClient
     public function clearRequests()
     {
         $this->pendingRequests = [];
+    }
+
+    /**
+     * Do all async requests.
+     *
+     * Exceptions are captured into the result array
+     *
+     * @param RequestInterface[] $requests
+     *
+     * @return HttpClientException[]|ResponseInterface[]
+     */
+    public function doRequests($requests = [])
+    {
+        $responses = [];
+        foreach ($requests as $id => $request) {
+            try {
+                $response = $this->doRequest($request);
+            } catch (HttpClientException $e) {
+                $response = $e;
+            }
+            $responses[$id] = $response;
+        }
+
+        return $responses;
+    }
+
+    /**
+     * Get PSR-7 Request factory.
+     *
+     * @return RequestFactoryInterface|BackwardCompatibleRequestFactoryInterface
+     *
+     * @throws NotSupportedException
+     *
+     * @since 1.3.0
+     */
+    public function getRequestFactory()
+    {
+        if (!$this->requestFactory) {
+            throw new NotSupportedException('Request factory has to be set first');
+        }
+
+        return $this->requestFactory;
+    }
+
+    /**
+     * Set PSR-7 Request factory.
+     *
+     * @param RequestFactoryInterface|BackwardCompatibleRequestFactoryInterface $requestFactory
+     *
+     * @return static
+     *
+     * @since 1.3.0
+     */
+    public function setRequestFactory($requestFactory)
+    {
+        $this->requestFactory = $requestFactory;
+
+        return $this;
+    }
+
+    /**
+     * Get PSR-7 Response factory.
+     *
+     * @return ResponseFactoryInterface|BackwardCompatibleResponseFactoryInterface
+     *
+     * @throws NotSupportedException
+     *
+     * @since 1.3.0
+     */
+    public function getResponseFactory()
+    {
+        if (!$this->responseFactory) {
+            throw new NotSupportedException('Response factory has to be set first');
+        }
+
+        return $this->responseFactory;
+    }
+
+    /**
+     * Set PSR-7 Response factory.
+     *
+     * @param ResponseFactoryInterface|BackwardCompatibleResponseFactoryInterface $responseFactory
+     *
+     * @return static
+     *
+     * @since 1.3.0
+     */
+    public function setResponseFactory($responseFactory)
+    {
+        $this->responseFactory = $responseFactory;
+
+        return $this;
+    }
+
+    /**
+     * Set PSR-7 Stream factory.
+     *
+     * @return StreamFactoryInterface|BackwardCompatibleStreamFactoryInterface
+     *
+     * @throws NotSupportedException
+     *
+     * @since 1.3.0
+     */
+    public function getStreamFactory()
+    {
+        if (!$this->streamFactory) {
+            throw new NotSupportedException('Stream factory has to be set first');
+        }
+
+        return $this->streamFactory;
+    }
+
+    /**
+     * Set PSR-7 Stream factory.
+     *
+     * @param StreamFactoryInterface|BackwardCompatibleStreamFactoryInterface $streamFactory
+     *
+     * @return static
+     *
+     * @since 1.3.0
+     */
+    public function setStreamFactory($streamFactory)
+    {
+        $this->streamFactory = $streamFactory;
+
+        return $this;
     }
 }

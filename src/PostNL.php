@@ -80,9 +80,12 @@ use Firstred\PostNL\Exception\ShipmentNotFoundException;
 use Firstred\PostNL\Factory\GuzzleRequestFactory;
 use Firstred\PostNL\Factory\GuzzleResponseFactory;
 use Firstred\PostNL\Factory\GuzzleStreamFactory;
-use Firstred\PostNL\Factory\RequestFactoryInterface;
-use Firstred\PostNL\Factory\ResponseFactoryInterface;
-use Firstred\PostNL\Factory\StreamFactoryInterface;
+use Firstred\PostNL\Factory\RequestFactoryInterface as BackwardCompatibleRequestFactoryInterface;
+use Firstred\PostNL\Factory\ResponseFactoryInterface as BackwardCompatibleResponseFactoryInterface;
+use Firstred\PostNL\Factory\StreamFactoryInterface as BackwardCompatibleStreamFactoryInterface;
+use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 use Firstred\PostNL\HttpClient\ClientInterface;
 use Firstred\PostNL\HttpClient\CurlClient;
 use Firstred\PostNL\HttpClient\GuzzleClient;
@@ -244,17 +247,17 @@ class PostNL implements LoggerAwareInterface
     protected $logger;
 
     /**
-     * @var RequestFactoryInterface
+     * @var RequestFactoryInterface|BackwardCompatibleRequestFactoryInterface
      */
     protected $requestFactory;
 
     /**
-     * @var ResponseFactoryInterface
+     * @var ResponseFactoryInterface|BackwardCompatibleResponseFactoryInterface
      */
     protected $responseFactory;
 
     /**
-     * @var StreamFactoryInterface
+     * @var StreamFactoryInterface|BackwardCompatibleStreamFactoryInterface
      */
     protected $streamFactory;
 
@@ -557,6 +560,10 @@ class PostNL implements LoggerAwareInterface
         }
         // @codeCoverageIgnoreEnd
 
+        $this->httpClient->setRequestFactory($this->getRequestFactory());
+        $this->httpClient->setResponseFactory($this->getResponseFactory());
+        $this->httpClient->setStreamFactory($this->getStreamFactory());
+
         return $this->httpClient;
     }
 
@@ -626,7 +633,7 @@ class PostNL implements LoggerAwareInterface
     /**
      * Get PSR-7 Request factory.
      *
-     * @return RequestFactoryInterface
+     * @return RequestFactoryInterface|BackwardCompatibleRequestFactoryInterface
      *
      * @since 1.2.0
      */
@@ -642,15 +649,18 @@ class PostNL implements LoggerAwareInterface
     /**
      * Set PSR-7 Request factory.
      *
-     * @param RequestFactoryInterface $requestFactory
+     * @param RequestFactoryInterface|BackwardCompatibleRequestFactoryInterface $requestFactory
      *
      * @return static
      *
      * @since 1.2.0
+     * @since 1.3.0 Also sets the request factory on the HTTP client
      */
     public function setRequestFactory($requestFactory)
     {
         $this->requestFactory = $requestFactory;
+
+        $this->getHttpClient()->setRequestFactory($requestFactory);
 
         return $this;
     }
@@ -658,7 +668,7 @@ class PostNL implements LoggerAwareInterface
     /**
      * Get PSR-7 Response factory.
      *
-     * @return ResponseFactoryInterface
+     * @return ResponseFactoryInterface|BackwardCompatibleResponseFactoryInterface
      *
      * @since 1.2.0
      */
@@ -674,15 +684,18 @@ class PostNL implements LoggerAwareInterface
     /**
      * Set PSR-7 Response factory.
      *
-     * @param ResponseFactoryInterface $responseFactory
+     * @param ResponseFactoryInterface|BackwardCompatibleResponseFactoryInterface $responseFactory
      *
      * @return static
      *
      * @since 1.2.0
+     * @since 1.3.0 Also sets the response factory on the HTTP client
      */
     public function setResponseFactory($responseFactory)
     {
         $this->responseFactory = $responseFactory;
+
+        $this->getHttpClient()->setResponseFactory($responseFactory);
 
         return $this;
     }
@@ -690,7 +703,7 @@ class PostNL implements LoggerAwareInterface
     /**
      * Set PSR-7 Stream factory.
      *
-     * @return StreamFactoryInterface
+     * @return StreamFactoryInterface|BackwardCompatibleStreamFactoryInterface
      *
      * @since 1.2.0
      */
@@ -706,15 +719,18 @@ class PostNL implements LoggerAwareInterface
     /**
      * Set PSR-7 Stream factory.
      *
-     * @param StreamFactoryInterface $streamFactory
+     * @param StreamFactoryInterface|BackwardCompatibleStreamFactoryInterface $streamFactory
      *
      * @return static
      *
      * @since 1.2.0
+     * @since 1.3.0 Also sets the stream factory on the HTTP client
      */
     public function setStreamFactory($streamFactory)
     {
         $this->streamFactory = $streamFactory;
+
+        $this->getHttpClient()->setStreamFactory($streamFactory);
 
         return $this;
     }

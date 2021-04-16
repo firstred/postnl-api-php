@@ -34,6 +34,8 @@ use Psr\Http\Message\UriInterface;
  *
  * @author Márk Sági-Kazár <mark.sagikazar@gmail.com>
  *
+ * FOR BACKWARD COMPATIBLE REASONS - NOT COMPATIBLE WITH SYMFONY HTTP CLIENT
+ *
  * @since 1.2.0
  */
 interface RequestFactoryInterface

@@ -91,32 +91,6 @@ class HTTPlugClient extends BaseHttpClient implements ClientInterface
     }
 
     /**
-     * Adds a request to the list of pending requests
-     * Using the ID you can replace a request.
-     *
-     * @param string           $id
-     * @param RequestInterface $request
-     *
-     * @return string
-     */
-    public function addOrUpdateRequest($id, RequestInterface $request)
-    {
-        $this->pendingRequests[$id] = $request;
-
-        return $id;
-    }
-
-    /**
-     * Remove a request from the list of pending requests.
-     *
-     * @param string $id
-     */
-    public function removeRequest($id)
-    {
-        unset($this->pendingRequests[$id]);
-    }
-
-    /**
      * Do all async requests.
      *
      * Exceptions are captured into the result array
@@ -201,14 +175,6 @@ class HTTPlugClient extends BaseHttpClient implements ClientInterface
     }
 
     /**
-     * Clear all pending requests.
-     */
-    public function clearRequests()
-    {
-        $this->pendingRequests = [];
-    }
-
-    /**
      * Do a single request.
      *
      * Exceptions are captured into the result array
@@ -252,46 +218,6 @@ class HTTPlugClient extends BaseHttpClient implements ClientInterface
                 $this->getLogger()->log($logLevel, PsrMessage::toString($response));
             }
         }
-    }
-
-    /**
-     * @return int
-     */
-    public function getConcurrency()
-    {
-        return $this->concurrency;
-    }
-
-    /**
-     * @param int $concurrency
-     *
-     * @return static
-     */
-    public function setConcurrency($concurrency)
-    {
-        $this->concurrency = $concurrency;
-
-        return $this;
-    }
-
-    /**
-     * @return LoggerInterface|null
-     */
-    public function getLogger()
-    {
-        return $this->logger;
-    }
-
-    /**
-     * @param LoggerInterface|null $logger
-     *
-     * @return static
-     */
-    public function setLogger(LoggerInterface $logger)
-    {
-        $this->logger = $logger;
-
-        return $this;
     }
 
     /**
@@ -341,6 +267,8 @@ class HTTPlugClient extends BaseHttpClient implements ClientInterface
      */
     public function setVerify($verify)
     {
+        // Not supported by the HTTPlug client
+
         return $this;
     }
 
