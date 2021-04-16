@@ -40,6 +40,8 @@ use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LogLevel;
 use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
 use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Component\HttpClient\Retry\GenericRetryStrategy;
+use Symfony\Component\HttpClient\RetryableHttpClient;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
@@ -76,26 +78,25 @@ class SymfonyHttpClient extends BaseHttpClient implements ClientInterface, Logge
     private function getClient()
     {
         if (!$this->client) {
-            $client = HttpClient::create(array_merge(
+            $retryStrategy = new GenericRetryStrategy(
+                [0, 423, 425, 429, 500, 502, 503, 504, 507, 510],
+                1000,
+                3.0,
+                5000,
+                0.3
+            );
+            $client = new RetryableHttpClient(HttpClient::create(array_merge(
                 [
-                    'max_duration'  => $this->timeout,
-                    'timeout'       => $this->connectTimeout,
+                    'max_duration'  => $this->getTimeout(),
+                    'timeout'       => $this->getConnectTimeout(),
                     'max_redirects' => 0,
-                    'retry_failed'  => [
-                        'http_codes'  => [0, 423, 425, 429, 500, 502, 503, 504, 507, 510],
-                        'max_retries' => $this->getMaxRetries(),
-                        'delay'       => 1000,
-                        'multiplier'  => 3,
-                        'max_delay'   => 5000,
-                        'jitter'      => 0.3,
-                    ],
                     'cafile'        => CaBundle::getSystemCaRootBundlePath(),
                     'verify_host'   => true,
                     'verify_peer'   => true,
                     'scope'         => '^https:\/\/api(?:-sandbox)?\.postnl\.nl',
                 ],
                 $this->defaultOptions
-            ), $this->getConcurrency());
+            ), $this->getConcurrency()), $retryStrategy, $this->getMaxRetries());
 
             $this->client = $client;
         }
@@ -204,6 +205,21 @@ class SymfonyHttpClient extends BaseHttpClient implements ClientInterface, Logge
                 $this->logger->log($logLevel, PsrMessage::toString($psrResponse));
             }
         }
+    }
+
+    /**
+     * Set the amount of retries.
+     *
+     * @param int $maxRetries
+     *
+     * @return static
+     */
+    public function setMaxRetries($maxRetries)
+    {
+        // Reset immutable client
+        $this->client = null;
+
+        return parent::setMaxRetries($maxRetries);
     }
 
     /**
