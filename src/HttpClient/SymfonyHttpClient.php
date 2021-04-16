@@ -224,6 +224,22 @@ class SymfonyHttpClient extends BaseHttpClient implements ClientInterface, Logge
     }
 
     /**
+     * Do all async requests.
+     *
+     * Exceptions are captured into the result array
+     *
+     * @param RequestInterface[] $requests
+     *
+     * @return HttpClientException[]|ResponseInterface[]
+     */
+    public function doRequests($requests = [])
+    {
+        // TODO: dont forget about making this concurrent
+
+        return parent::doRequests($requests);
+    }
+
+    /**
      * Set the amount of retries.
      *
      * @param int $maxRetries
@@ -285,10 +301,10 @@ class SymfonyHttpClient extends BaseHttpClient implements ClientInterface, Logge
      * @return ResponseInterface
      *
      * @throws TransportExceptionInterface
-     * @throws \Firstred\PostNL\Exception\NotSupportedException
-     * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
+     * @throws NotSupportedException
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
      *
      * @since 1.3.0
      */
