@@ -55,7 +55,7 @@ use function is_string;
  * @method string|null            getPostalCode()
  * @method DateTimeInterface|null getStartDate()
  * @method string|null            getStreet()
- * @method string|null            getSundaySorting()
+ * @method bool|null              getSundaySorting()
  * @method string|null            getInterval()
  * @method string|null            getTimeframeRange()
  * @method Timeframe[]|null       getTimeframes()
@@ -193,7 +193,7 @@ class Timeframe extends AbstractEntity
     protected $StartDate;
     /** @var string|null */
     protected $Street;
-    /** @var string|null */
+    /** @var bool|null */
     protected $SundaySorting;
     /** @var string|null */
     protected $Interval;
@@ -358,7 +358,7 @@ class Timeframe extends AbstractEntity
     public function setSundaySorting($SundaySorting = null)
     {
         if (null !== $SundaySorting) {
-            $SundaySorting = in_array($SundaySorting, [true, 'true', 1], true) ? 'true' : 'false';
+            $SundaySorting = in_array($SundaySorting, [true, 'true', 1], true);
         }
 
         $this->SundaySorting = $SundaySorting;

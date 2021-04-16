@@ -30,6 +30,7 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use Exception;
+use Firstred\PostNL\Entity\Request\GetDeliveryDate;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\ConfirmingService;
@@ -38,6 +39,7 @@ use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\TimeframeService;
 use Sabre\Xml\Writer;
+use function in_array;
 
 /**
  * Class Location.
@@ -50,7 +52,7 @@ use Sabre\Xml\Writer;
  * @method string|null               getStreet()
  * @method string|null               getHouseNr()
  * @method string|null               getHouseNrExt()
- * @method string|null               getAllowSundaySorting()
+ * @method bool|null                 getAllowSundaySorting()
  * @method DateTimeInterface|null    getDeliveryDate()
  * @method string[]|null             getDeliveryOptions()
  * @method string|null               getOpeningTime()
@@ -68,7 +70,6 @@ use Sabre\Xml\Writer;
  * @method Location                  setStreet(string|null $Street = null)
  * @method Location                  setHouseNr(string|null $HouseNr = null)
  * @method Location                  setHouseNrExt(string|null $HouseNrExt = null)
- * @method Location                  setAllowSundaySorting(string|null $AllowSundaySorting = null)
  * @method Location                  setDeliveryOptions(string[]|null $DeliveryOptions = null)
  * @method Location                  setOpeningTime(string|null $OpeningTime = null)
  * @method Location                  setOptions(string[]|null $Options = null)
@@ -359,6 +360,25 @@ class Location extends AbstractEntity
         } else {
             $this->Postalcode = strtoupper(str_replace(' ', '', $Postalcode));
         }
+
+        return $this;
+    }
+
+    /**
+     * @param string|bool|int|null $AllowSundaySorting
+     *
+     * @return Location
+     *
+     * @since 1.0.0
+     * @since 1.3.0 Accept bool and int
+     */
+    public function setAllowSundaySorting($AllowSundaySorting = null)
+    {
+        if (null !== $AllowSundaySorting) {
+            $AllowSundaySorting = in_array($AllowSundaySorting, [true, 'true', 1], true) ? 'true' : 'false';
+        }
+
+        $this->AllowSundaySorting = $AllowSundaySorting;
 
         return $this;
     }

@@ -33,6 +33,7 @@ use Exception;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\CutOffTime;
 use Firstred\PostNL\Entity\Message\Message;
+use Firstred\PostNL\Entity\Timeframe;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\ConfirmingService;
@@ -41,6 +42,7 @@ use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\TimeframeService;
 use Sabre\Xml\Writer;
+use function in_array;
 
 /**
  * Class GetDeliveryDate.
@@ -61,7 +63,6 @@ use Sabre\Xml\Writer;
  * @method string|null            getStreet()
  * @method GetDeliveryDate|null   getGetDeliveryDate()
  * @method Message|null           getMessage()
- * @method GetDeliveryDate        setAllowSundaySorting(bool|null $AllowSundaySorting = null)
  * @method GetDeliveryDate        setCity(string|null $City = null)
  * @method GetDeliveryDate        setCountryCode(string|null $CountryCode = null)
  * @method GetDeliveryDate        setCutOffTimes(CutOffTime[]|null $CutOffTimes = null)
@@ -304,6 +305,25 @@ class GetDeliveryDate extends AbstractEntity
         } else {
             $this->PostalCode = strtoupper(str_replace(' ', '', $postcode));
         }
+
+        return $this;
+    }
+
+    /**
+     * @param string|bool|int|null $AllowSundaySorting
+     *
+     * @return GetDeliveryDate
+     *
+     * @since 1.0.0
+     * @since 1.3.0 Accept bool and int
+     */
+    public function setAllowSundaySorting($AllowSundaySorting = null)
+    {
+        if (null !== $AllowSundaySorting) {
+            $AllowSundaySorting = in_array($AllowSundaySorting, [true, 'true', 1], true);
+        }
+
+        $this->AllowSundaySorting = $AllowSundaySorting;
 
         return $this;
     }
