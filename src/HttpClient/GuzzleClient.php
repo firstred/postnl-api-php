@@ -67,6 +67,33 @@ class GuzzleClient extends BaseHttpClient implements ClientInterface, LoggerAwar
     private $client;
 
     /**
+     * GuzzleClient constructor.
+     *
+     * @param Client|null          $client
+     * @param LoggerInterface|null $logger
+     * @param int                  $concurrency
+     * @param int                  $maxRetries
+     *
+     * @since 1.3.0 Custom constructor
+     */
+    public function __construct(
+        Client $client = null,
+        LoggerInterface $logger = null,
+        $concurrency = 5,
+        $maxRetries = 5
+    ) {
+        $this->client = $client;
+        $this->logger = $logger;
+        $this->concurrency = $concurrency;
+        $this->maxRetries = $maxRetries;
+    }
+
+    private function setClient(Client $client)
+    {
+        $this->client = $client;
+    }
+
+    /**
      * Get the Guzzle client.
      *
      * @return Client

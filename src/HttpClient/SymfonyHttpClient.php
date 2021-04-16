@@ -29,16 +29,12 @@ namespace Firstred\PostNL\HttpClient;
 use Composer\CaBundle\CaBundle;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\NotSupportedException;
-use Firstred\PostNL\Exception\ResponseException;
-use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Exception\TransferException;
-use GuzzleHttp\Promise\EachPromise;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
-use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpClient\Retry\GenericRetryStrategy;
 use Symfony\Component\HttpClient\RetryableHttpClient;
@@ -49,7 +45,6 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface as SymfonyHttpClientResponseInterface;
 use function array_merge;
-use function method_exists;
 
 /**
  * Class SymfonyHttpClientInterface.
@@ -69,6 +64,28 @@ class SymfonyHttpClient extends BaseHttpClient implements ClientInterface, Logge
 
     /** @var HttpClientInterface */
     private $client;
+
+    /**
+     * SymfonyHttpClient constructor.
+     *
+     * @param HttpClientInterface|null $client
+     * @param LoggerInterface|null     $logger
+     * @param int                      $concurrency
+     * @param int                      $maxRetries
+     *
+     * @since 1.3.0 Custom constructor
+     */
+    public function __construct(
+        HttpClientInterface $client = null,
+        LoggerInterface $logger = null,
+        $concurrency = 5,
+        $maxRetries = 5
+    ) {
+        $this->client = $client;
+        $this->logger = $logger;
+        $this->concurrency = $concurrency;
+        $this->maxRetries = $maxRetries;
+    }
 
     /**
      * Get the Symfony HTTP Client.

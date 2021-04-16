@@ -46,14 +46,19 @@ class HTTPlugClient extends BaseHttpClient implements ClientInterface
      * @param int                             $concurrency
      *
      * @throws HttpClientException
+     *
+     * @since 1.0.0
+     * @since 1.3.0 $maxRetries param
      */
     public function __construct(
         $client = null,
         $logger = null,
-        $concurrency = 5
+        $concurrency = 5,
+        $maxRetries = 5
     ) {
         $this->logger = $logger;
         $this->concurrency = $concurrency;
+        $this->maxRetries = $maxRetries;
 
         if (null === $client) {
             try {
