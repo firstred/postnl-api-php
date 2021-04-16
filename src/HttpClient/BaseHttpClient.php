@@ -266,6 +266,8 @@ abstract class BaseHttpClient
      */
     public function doRequests($requests = [])
     {
+        $requests = array_merge($this->pendingRequests, $requests);
+
         $responses = [];
         foreach ($requests as $id => $request) {
             try {
