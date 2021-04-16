@@ -127,7 +127,7 @@ class TimeframeServiceRestTest extends ServiceTest
         $query = Query::parse($request->getUri()->getQuery());
 
         $this->assertEquals([
-            'AllowSundaySorting' => '1',
+            'AllowSundaySorting' => 'true',
             'StartDate'          => '30-06-2016',
             'EndDate'            => '02-07-2016',
             'PostalCode'         => '2132WT',
