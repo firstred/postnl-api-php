@@ -28,32 +28,15 @@ use Psr\Log\LogLevel;
  *
  * @since 1.2.0
  */
-class HTTPlugClient implements ClientInterface
+class HTTPlugClient extends BaseHttpClient implements ClientInterface
 {
     /** @var static */
-    private static $instance;
+    protected static $instance;
 
     /**
      * @var HttpAsyncClient|HttpClient
      */
     protected $client;
-
-    /**
-     * List of pending PSR-7 requests.
-     *
-     * @var RequestInterface[]
-     */
-    protected $pendingRequests = [];
-
-    /**
-     * @var LoggerInterface|null
-     */
-    protected $logger;
-
-    /**
-     * @var int
-     */
-    protected $concurrency;
 
     /**
      * HTTPlugClient constructor.

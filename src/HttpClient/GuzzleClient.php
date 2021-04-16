@@ -52,31 +52,17 @@ use function method_exists;
  *
  * @since 1.0.0
  */
-class GuzzleClient implements ClientInterface, LoggerAwareInterface
+class GuzzleClient extends BaseHttpClient implements ClientInterface, LoggerAwareInterface
 {
     const DEFAULT_TIMEOUT = 60;
     const DEFAULT_CONNECT_TIMEOUT = 20;
 
     /** @var static */
     protected static $instance;
+
     /** @var array */
     protected $defaultOptions = [];
-    /**
-     * List of pending PSR-7 requests.
-     *
-     * @var RequestInterface[]
-     */
-    protected $pendingRequests = [];
-    /** @var LoggerInterface */
-    protected $logger;
-    /** @var int */
-    private $timeout = self::DEFAULT_TIMEOUT;
-    /** @var int */
-    private $connectTimeout = self::DEFAULT_CONNECT_TIMEOUT;
-    /** @var int */
-    private $maxRetries = 5;
-    /** @var int */
-    private $concurrency = 5;
+
     /** @var Client */
     private $client;
 
@@ -182,142 +168,6 @@ class GuzzleClient implements ClientInterface, LoggerAwareInterface
         }
 
         return null;
-    }
-
-    /**
-     * Set the verify setting.
-     *
-     * @param bool|string $verify
-     *
-     * @return static
-     *
-     * @deprecated
-     */
-    public function setVerify($verify)
-    {
-        return $this;
-    }
-
-    /**
-     * Return verify setting.
-     *
-     * @return bool|string
-     *
-     * @deprecated
-     */
-    public function getVerify()
-    {
-        return true;
-    }
-
-    /**
-     * Set the amount of retries.
-     *
-     * @param int $maxRetries
-     *
-     * @return static
-     */
-    public function setMaxRetries($maxRetries)
-    {
-        $this->maxRetries = $maxRetries;
-
-        return $this;
-    }
-
-    /**
-     * Return max retries.
-     *
-     * @return int
-     */
-    public function getMaxRetries()
-    {
-        return $this->maxRetries;
-    }
-
-    /**
-     * Set the concurrency.
-     *
-     * @param int $concurrency
-     *
-     * @return static
-     */
-    public function setConcurrency($concurrency)
-    {
-        $this->concurrency = $concurrency;
-
-        return $this;
-    }
-
-    /**
-     * Return concurrency.
-     *
-     * @return int
-     */
-    public function getConcurrency()
-    {
-        return $this->concurrency;
-    }
-
-    /**
-     * Set the logger.
-     *
-     * @param LoggerInterface $logger
-     *
-     * @return GuzzleClient
-     */
-    public function setLogger(LoggerInterface $logger)
-    {
-        $this->logger = $logger;
-
-        return $this;
-    }
-
-    /**
-     * Get the logger.
-     *
-     * @return LoggerInterface
-     */
-    public function getLogger()
-    {
-        return $this->logger;
-    }
-
-    /**
-     * Adds a request to the list of pending requests
-     * Using the ID you can replace a request.
-     *
-     * @param string           $id      Request ID
-     * @param RequestInterface $request PSR-7 request
-     *
-     * @return int|string
-     */
-    public function addOrUpdateRequest($id, RequestInterface $request)
-    {
-        if (is_null($id)) {
-            return array_push($this->pendingRequests, $request);
-        }
-
-        $this->pendingRequests[$id] = $request;
-
-        return $id;
-    }
-
-    /**
-     * Remove a request from the list of pending requests.
-     *
-     * @param string $id
-     */
-    public function removeRequest($id)
-    {
-        unset($this->pendingRequests[$id]);
-    }
-
-    /**
-     * Clear all pending requests.
-     */
-    public function clearRequests()
-    {
-        $this->pendingRequests = [];
     }
 
     /**

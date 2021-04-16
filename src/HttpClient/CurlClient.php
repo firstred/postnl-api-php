@@ -59,31 +59,12 @@ if (!defined('CURLE_SSL_CACERT_BADFILE')) {
  *
  * @since 1.0.0
  */
-class CurlClient implements ClientInterface, LoggerAwareInterface
+class CurlClient extends BaseHttpClient implements ClientInterface, LoggerAwareInterface
 {
-    const DEFAULT_TIMEOUT = 80;
-    const DEFAULT_CONNECT_TIMEOUT = 30;
-
-    /** @var int */
-    private $timeout = self::DEFAULT_TIMEOUT;
-    /** @var int */
-    private $connectTimeout = self::DEFAULT_CONNECT_TIMEOUT;
-    /**
-     * Verify the server SSL certificate.
-     *
-     * @var bool|string
-     */
-    private $verify = true;
     /** @var static */
     private static $instance;
     /** @var array|callable|null */
     protected $defaultOptions;
-    /** @var array */
-    protected $userAgentInfo;
-    /** @var array */
-    protected $pendingRequests = [];
-    /** @var LoggerInterface */
-    protected $logger;
 
     /**
      * CurlClient Singleton.
@@ -99,144 +80,6 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
         }
 
         return static::$instance;
-    }
-
-    /**
-     * Set timeout.
-     *
-     * @param int $seconds
-     *
-     * @return CurlClient
-     */
-    public function setTimeout($seconds)
-    {
-        $this->timeout = (int) max($seconds, 0);
-
-        return $this;
-    }
-
-    /**
-     * Set connection timeout.
-     *
-     * @param int $seconds
-     *
-     * @return CurlClient
-     */
-    public function setConnectTimeout($seconds)
-    {
-        $this->connectTimeout = (int) max($seconds, 0);
-
-        return $this;
-    }
-
-    /**
-     * Set the verify setting.
-     *
-     * @param bool|string $verify
-     *
-     * @return CurlClient
-     *
-     * @deprecated
-     */
-    public function setVerify($verify)
-    {
-        $this->verify = $verify;
-
-        return $this;
-    }
-
-    /**
-     * Set the logger.
-     *
-     * @param LoggerInterface $logger
-     *
-     * @return CurlClient
-     */
-    public function setLogger(LoggerInterface $logger)
-    {
-        $this->logger = $logger;
-
-        return $this;
-    }
-
-    /**
-     * Get timeout.
-     *
-     * @return int
-     */
-    public function getTimeout()
-    {
-        return $this->timeout;
-    }
-
-    /**
-     * Get connection timeout.
-     *
-     * @return int
-     */
-    public function getConnectTimeout()
-    {
-        return $this->connectTimeout;
-    }
-
-    /**
-     * Return verify setting.
-     *
-     * @return bool|string
-     *
-     * @deprecated
-     */
-    public function getVerify()
-    {
-        return $this->verify;
-    }
-
-    /**
-     * Get logger.
-     *
-     * @return LoggerInterface
-     */
-    public function getLogger()
-    {
-        return $this->logger;
-    }
-
-    /**
-     * Adds a request to the list of pending requests
-     * Using the ID you can replace a request.
-     *
-     * @param string           $id      Request ID
-     * @param RequestInterface $request PSR-7 request
-     *
-     * @return int|string
-     */
-    public function addOrUpdateRequest($id, RequestInterface $request)
-    {
-        if (is_null($id)) {
-            return array_push($this->pendingRequests, $request);
-        }
-
-        $this->pendingRequests[$id] = $request;
-
-        return $id;
-    }
-
-    /**
-     * Remove a request from the list of pending requests.
-     *
-     * @param string $id
-     */
-    public function removeRequest($id)
-    {
-        unset($this->pendingRequests[$id]);
-    }
-
-    /**
-     * Clear all pending requests.
-     */
-    public function clearRequests()
-    {
-        $this->pendingRequests = [];
     }
 
     /**

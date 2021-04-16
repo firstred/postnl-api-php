@@ -28,7 +28,6 @@ namespace Firstred\PostNL\HttpClient;
 
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\ResponseException;
-use Firstred\PostNL\Util\DummyLogger;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
@@ -38,7 +37,6 @@ use GuzzleHttp\Psr7\Message as PsrMessage;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerAwareInterface;
-use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 
 /**
@@ -46,32 +44,19 @@ use Psr\Log\LogLevel;
  *
  * @since 1.0.0
  */
-class MockClient implements ClientInterface, LoggerAwareInterface
+class MockClient extends BaseHttpClient implements ClientInterface, LoggerAwareInterface
 {
     const DEFAULT_TIMEOUT = 60;
     const DEFAULT_CONNECT_TIMEOUT = 20;
 
     /** @var static */
     protected static $instance;
+
     /** @var array */
     protected $defaultOptions = [];
-    /**
-     * List of pending PSR-7 requests.
-     *
-     * @var RequestInterface[]
-     */
-    protected $pendingRequests = [];
-    /** @var LoggerInterface */
-    protected $logger;
-    /** @var int */
-    private $timeout = self::DEFAULT_TIMEOUT;
-    /** @var int */
-    private $connectTimeout = self::DEFAULT_CONNECT_TIMEOUT;
+
     /** @var HandlerStack */
     private $handler;
-
-    /** @var int */
-    private $maxRetries = 1;
 
     /**
      * @return MockClient|static
@@ -116,124 +101,6 @@ class MockClient implements ClientInterface, LoggerAwareInterface
         }
 
         return null;
-    }
-
-    /**
-     * Set the verify setting.
-     *
-     * @param bool|string $verify
-     *
-     * @return static
-     */
-    public function setVerify($verify)
-    {
-        $this->defaultOptions['verify'] = $verify;
-
-        return $this;
-    }
-
-    /**
-     * Return verify setting.
-     *
-     * @return bool|string
-     */
-    public function getVerify()
-    {
-        if (isset($this->defaultOptions['verify'])) {
-            return $this->defaultOptions['verify'];
-        }
-
-        return false;
-    }
-
-    /**
-     * Set the amount of retries.
-     *
-     * @param int $maxRetries
-     *
-     * @return static
-     */
-    public function setMaxRetries($maxRetries)
-    {
-        $this->maxRetries = $maxRetries;
-
-        return $this;
-    }
-
-    /**
-     * Return max retries.
-     *
-     * @return int
-     */
-    public function getMaxRetries()
-    {
-        return $this->maxRetries;
-    }
-
-    /**
-     * Set the logger.
-     *
-     * @param LoggerInterface $logger
-     *
-     * @return MockClient
-     */
-    public function setLogger(LoggerInterface $logger)
-    {
-        $this->logger = $logger;
-
-        return $this;
-    }
-
-    /**
-     * Get the logger.
-     *
-     * @return LoggerInterface
-     */
-    public function getLogger()
-    {
-        if (!$this->logger) {
-            $this->logger = new DummyLogger();
-        }
-
-        return $this->logger;
-    }
-
-    /**
-     * Adds a request to the list of pending requests
-     * Using the ID you can replace a request.
-     *
-     * @param string           $id      Request ID
-     * @param RequestInterface $request PSR-7 request
-     *
-     * @return int|string
-     */
-    public function addOrUpdateRequest($id, RequestInterface $request)
-    {
-        if (is_null($id)) {
-            return array_push($this->pendingRequests, $request);
-        }
-
-        $this->pendingRequests[$id] = $request;
-
-        return $id;
-    }
-
-    /**
-     * Remove a request from the list of pending requests.
-     *
-     * @param string $id
-     */
-    public function removeRequest($id)
-    {
-        unset($this->pendingRequests[$id]);
-    }
-
-    /**
-     * Clear all pending requests.
-     */
-    public function clearRequests()
-    {
-        $this->pendingRequests = [];
     }
 
     /**

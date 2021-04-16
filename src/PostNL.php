@@ -109,6 +109,7 @@ use Firstred\PostNL\Util\Util;
 use GuzzleHttp\ClientInterface as GuzzleClientInterface;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use GuzzleHttp\Psr7\Response;
+use Http\Discovery\Exception\ClassInstantiationFailedException;
 use Http\Discovery\Exception\DiscoveryFailedException;
 use Http\Discovery\Exception\NoCandidateFoundException;
 use Http\Discovery\HttpAsyncClientDiscovery;
@@ -515,6 +516,7 @@ class PostNL implements LoggerAwareInterface
                 } catch (\Http\Discovery\Exception\NotFoundException $e) {
                 } catch (NoCandidateFoundException $e) {
                 } catch (DiscoveryFailedException $e) {
+                } catch (ClassInstantiationFailedException $e) {
                 }
             }
 
@@ -528,6 +530,7 @@ class PostNL implements LoggerAwareInterface
                 } catch (\Http\Discovery\Exception\NotFoundException $e) {
                 } catch (NoCandidateFoundException $e) {
                 } catch (DiscoveryFailedException $e) {
+                } catch (ClassInstantiationFailedException $e) {
                 }
             }
 
@@ -541,6 +544,7 @@ class PostNL implements LoggerAwareInterface
                 } catch (\Http\Discovery\Exception\NotFoundException $e) {
                 } catch (NoCandidateFoundException $e) {
                 } catch (DiscoveryFailedException $e) {
+                } catch (ClassInstantiationFailedException $e) {
                 }
             }
 
