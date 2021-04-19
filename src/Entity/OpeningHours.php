@@ -210,9 +210,9 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
             if (is_array($json->OpeningHours->$day)) {
                 foreach ($json->OpeningHours->$day as $item) {
                     if (isset($item->string)) {
-                        $openingHours->$day[] = $item->string;
+                        $openingHours->{$day}[] = $item->string;
                     } elseif (is_string($item)) {
-                        $openingHours->$day[] = $item;
+                        $openingHours->{$day}[] = $item;
                     } elseif (is_array($item)) {
                         $openingHours->$day = array_merge($openingHours->$day, $item);
                     } else {
@@ -220,9 +220,9 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
                     }
                 }
             } elseif (isset($json->OpeningHours->$day->string)) {
-                $openingHours->$day[] = $json->OpeningHours->$day->string;
+                $openingHours->{$day}[] = $json->OpeningHours->$day->string;
             } elseif (is_string($json->OpeningHours->$day)) {
-                $openingHours->$day[] = $json->OpeningHours->$day;
+                $openingHours->{$day}[] = $json->OpeningHours->$day;
             }
 
             foreach ($openingHours->$day as &$time) {
