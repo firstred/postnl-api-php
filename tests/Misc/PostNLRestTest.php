@@ -29,7 +29,7 @@ namespace Firstred\PostNL\Tests\Misc;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
-use PHPUnit\Framework\TestCase;
+ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\CutOffTime;

@@ -26,7 +26,7 @@
 
 namespace Firstred\PostNL\Tests\Misc;
 
-use PHPUnit\Framework\TestCase;
+ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\SOAP\UsernameToken;

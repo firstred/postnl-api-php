@@ -26,7 +26,7 @@
 
 namespace Firstred\PostNL\Tests\Entity;
 
-use PHPUnit\Framework\TestCase;
+ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 use Sabre\Xml\Service as XmlService;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Address;

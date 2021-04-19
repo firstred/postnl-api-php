@@ -26,7 +26,7 @@
 
 namespace Firstred\PostNL\Tests\Service;
 
-use PHPUnit\Framework\TestCase;
+ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 use ReflectionObject;
 use stdClass;
 use function get_class;
