@@ -33,7 +33,7 @@ use Psr\Http\Message\ResponseInterface;
  *
  * This factory contract can be reused in Message and Server Message factories.
  *
- * FOR BACKWARD COMPATIBLE REASONS - NOT COMPATIBLE WITH SYMFONY HTTP CLIENT
+ * FOR BACKWARD COMPATIBLE REASONS
  *
  * @author Márk Sági-Kazár <mark.sagikazar@gmail.com>
  */
