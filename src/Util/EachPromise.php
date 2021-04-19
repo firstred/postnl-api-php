@@ -99,7 +99,7 @@ class EachPromise
     /**
      * @return Promise
      */
-    public function promise(): Promise
+    public function promise()
     {
         if ($this->aggregate) {
             return $this->aggregate;
