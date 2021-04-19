@@ -30,6 +30,7 @@ use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\Service\AbstractService;
 use GuzzleHttp\Psr7\Response;
@@ -75,6 +76,7 @@ class AbstractServiceTest extends ServiceTest
      * @throws HttpClientException
      * @throws ResponseException
      * @throws ApiException
+     * @throws InvalidConfigurationException
      */
     public function testCifDownExceptionRest()
     {

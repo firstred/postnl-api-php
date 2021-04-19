@@ -47,6 +47,7 @@ use ReflectionClass;
 use ReflectionException;
 use Sabre\Xml\Writer;
 use SimpleXMLElement;
+use function get_object_vars;
 
 /**
  * Class AbstractService.
@@ -204,8 +205,9 @@ abstract class AbstractService
         if (!empty($body->fault->faultstring) && 'Invalid ApiKey' === $body->fault->faultstring) {
             throw new InvalidConfigurationException('Invalid Api Key');
         }
-        if (isset($body->Envelope->Body->Fault->Reason->Text->{''})) {
-            throw new CifDownException($body->Envelope->Body->Fault->Reason->Text->{''});
+        if (isset($body->Envelope->Body->Fault->Reason->Text)) {
+            $vars = get_object_vars($body->Envelope->Body->Fault->Reason->Text);
+            throw new CifDownException(isset($vars['']) ? $vars[''] : 'Unknown');
         }
 
         if (!empty($body->Errors->Error)) {
