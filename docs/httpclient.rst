@@ -43,7 +43,7 @@ This package already requires a Message factory and HTTP factory implementation 
 
 .. code-block:: bash
 
-    composer require symfony/http-client guzzlehttp/promises
+    composer require symfony/http-client
 
 If you haven't installed Guzzle itself, this library should now auto-detect the Symfony HTTP Client and use it through the HTTPlug bridge.
 
