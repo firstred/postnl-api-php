@@ -234,9 +234,46 @@ class SymfonyHttpClient extends BaseHttpClient implements ClientInterface, Logge
      */
     public function doRequests($requests = [])
     {
-        // TODO: dont forget about making this concurrent
+        $httpClient = $this->getClient();
+        $responses = [];
 
-        return parent::doRequests($requests);
+        foreach ($requests as $id => $request) {
+            $symfonyHttpClientRequestParts = $this->convertPsrRequestToSymfonyHttpClientRequestParams($request);
+            $symfonyHttpClientRequestParts['options']['user_data'] = $id;
+
+            try {
+                $responses[$id] = $httpClient->request(
+                    $symfonyHttpClientRequestParts['method'],
+                    $symfonyHttpClientRequestParts['url'],
+                    $symfonyHttpClientRequestParts['options']
+                );
+            } catch (TransportExceptionInterface $e) {
+                $responses[$id] = new HttpClientException($e->getMessage(), $e->getCode(), $e);
+            }
+        }
+
+        foreach ($this->client->stream($responses) as $response => $chunk) {
+            $id = $response->getInfo('user_data');
+            try {
+                if ($chunk->isLast()) {
+                    // the full content of $response just completed
+                    // $response->getContent() is now a non-blocking call
+                    $responses[$id] = $this->convertSymfonyHttpClientResponseToPsrResponse($response);
+                }
+            } catch (TransportExceptionInterface $e) {
+                $responses[$id] = new HttpClientException($e->getMessage(), $e->getCode(), $e);
+            } catch (NotSupportedException $e) {
+                $responses[$id] = new HttpClientException($e->getMessage(), $e->getCode(), $e);
+            } catch (ClientExceptionInterface $e) {
+                $responses[$id] = new HttpClientException($e->getMessage(), $e->getCode(), $e);
+            } catch (RedirectionExceptionInterface $e) {
+                $responses[$id] = new HttpClientException($e->getMessage(), $e->getCode(), $e);
+            } catch (ServerExceptionInterface $e) {
+                $responses[$id] = new HttpClientException($e->getMessage(), $e->getCode(), $e);
+            }
+        }
+
+        return $responses;
     }
 
     /**

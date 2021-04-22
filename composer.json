@@ -39,7 +39,7 @@
     "suggest": {
         "sabre/xml": "To use the SOAP API -- supports ^1.5",
         "guzzlehttp/guzzle": "One of the most popular HTTP clients available -- supports ^6.5.3 || ^7.0",
-        "symfony/http-client": "Another popular HTTP client you can use natively -- be sure to also install symfony/psr-http-message-bridge -- supports ^5.2",
+        "symfony/http-client": "Another popular HTTP client you can use natively -- supports ^5.2",
         "giggsey/libphonenumber-for-php": "To automatically format and check phone numbers -- supports ^8.12",
         "php-http/discovery": "Required if you want to use an alternative PSR-18, async or HTTPlug Client",
         "php-http/httplug": "Required if you want to use an alternative PSR-18, async or HTTPlug Client",
