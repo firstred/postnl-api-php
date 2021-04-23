@@ -244,7 +244,7 @@ class CurlClient extends BaseHttpClient implements ClientInterface, LoggerAwareI
             $options[CURLOPT_CAINFO] = $caPathOrFile;
         }
 
-        curl_setopt_array($curl, $options + $defaultOptions);
+        curl_setopt_array($curl, $defaultOptions + $options);
     }
 
     /**
