@@ -34,7 +34,6 @@ use GuzzleHttp\Psr7\Message as PsrMessage;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerAwareInterface;
-use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use function define;
 use function defined;
@@ -225,7 +224,7 @@ class CurlClient extends BaseHttpClient implements ClientInterface, LoggerAwareI
         } else {
             throw new HttpClientException("Unrecognized method $method");
         }
-        $options[CURLOPT_URL] = $request->getUri();
+        $options[CURLOPT_URL] = (string) $request->getUri();
         $options[CURLOPT_RETURNTRANSFER] = true;
         $options[CURLOPT_VERBOSE] = false;
         $options[CURLOPT_HEADER] = true;
@@ -245,7 +244,7 @@ class CurlClient extends BaseHttpClient implements ClientInterface, LoggerAwareI
             $options[CURLOPT_CAINFO] = $caPathOrFile;
         }
 
-        curl_setopt_array($curl, array_merge($options, $defaultOptions));
+        curl_setopt_array($curl, $options + $defaultOptions);
     }
 
     /**
