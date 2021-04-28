@@ -26,18 +26,29 @@
 
 namespace Firstred\PostNL\Util;
 
+use Symfony\Component\Uid\Uuid as SymfonyUuid;
+use Ramsey\Uuid\Uuid as RamseyUuid;
+
 /**
  * Class UUID.
  */
 class UUID
 {
     /**
-     * Generate a v4 UUID.
+     * Generate a v4 UUID in RFC 4122 format.
      *
      * @return string
      */
     public static function generate()
     {
+        if (class_exists(SymfonyUuid::class) && method_exists(SymfonyUuid::class, 'v4')) {
+            return SymfonyUuid::v4()->toRfc4122();
+        }
+
+        if (class_exists(RamseyUuid::class) && method_exists(RamseyUuid::class, 'uuid4')) {
+            return RamseyUuid::uuid4()->toString();
+        }
+
         return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
             // 32 bits for "time_low"
             mt_rand(0, 0xffff), mt_rand(0, 0xffff),
