@@ -234,7 +234,7 @@ class SymfonyHttpClient extends BaseHttpClient implements ClientInterface, Logge
      */
     public function doRequests($requests = [])
     {
-        $requests = array_merge($this->pendingRequests, $requests);
+        $requests = $this->pendingRequests + $requests;
         $httpClient = $this->getClient();
         $responses = [];
 

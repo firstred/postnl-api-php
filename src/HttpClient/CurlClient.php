@@ -142,7 +142,8 @@ class CurlClient extends BaseHttpClient implements ClientInterface, LoggerAwareI
         // Reset request headers array
         $curlHandles = [];
         $mh = curl_multi_init();
-        foreach ($this->pendingRequests + $requests as $uuid => $request) {
+        $requests = $this->pendingRequests + $requests;
+        foreach ($requests as $uuid => $request) {
             $curl = curl_init();
             $curlHandles[$uuid] = $curl;
             try {
