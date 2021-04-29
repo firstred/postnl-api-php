@@ -195,6 +195,7 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
      * @throws CifException
      * @throws HttpClientException
      * @throws ResponseException
+     * @throws InvalidArgumentException
      *
      * @since 1.0.0
      */

@@ -141,6 +141,7 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
      * @throws HttpClientException
      * @throws ResponseException
      * @throws InvalidConfigurationException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      *
      * @since 1.0.0
      */
@@ -176,6 +177,7 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
      * @throws CifException
      * @throws HttpClientException
      * @throws ResponseException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      *
      * @since 1.0.0
      */

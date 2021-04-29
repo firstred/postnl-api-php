@@ -4,6 +4,7 @@ namespace Firstred\PostNL\HttpClient;
 
 use Exception;
 use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Util\EachPromise;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use Http\Client\Exception\HttpException;
@@ -22,6 +23,9 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
+use function is_array;
+use function user_error;
+use const E_USER_DEPRECATED;
 
 /**
  * Class HTTPlugClient.
@@ -100,15 +104,29 @@ class HTTPlugClient extends BaseHttpClient implements ClientInterface
      *
      * Exceptions are captured into the result array
      *
-     * @param array                                 $requests
+     * @param RequestInterface[]                    $requests
      *
-     * @psalm-param array<string, RequestInterface> $requests
+     * @return HttpClientException[]|ResponseInterface[]
      *
-     * @return array
+     * @throws InvalidArgumentException
      */
     public function doRequests($requests = [])
     {
-        // Handle pending requests
+        if ($requests instanceof RequestInterface) {
+            user_error(
+                'Passing a single request to HttpClientInterface::doRequests is deprecated',
+                E_USER_DEPRECATED
+            );
+            $requests = [$requests];
+        }
+        if (!is_array($requests)) {
+            throw new InvalidArgumentException('Invalid requests array passed');
+        }
+        if (!is_array($this->pendingRequests)) {
+            $this->pendingRequests = [];
+        }
+
+        // Handle pending requests as well
         $requests = $this->pendingRequests + $requests;
         $this->clearRequests();
 

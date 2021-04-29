@@ -1805,6 +1805,7 @@ class PostNL implements LoggerAwareInterface
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
      * @throws NotFoundException
+     * @throws ShipmentNotFoundException
      *
      * @since 1.2.0
      */

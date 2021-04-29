@@ -27,7 +27,9 @@
 namespace Firstred\PostNL\HttpClient;
 
 use Composer\CaBundle\CaBundle;
+use Exception;
 use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use Psr\Http\Message\RequestInterface;
@@ -45,6 +47,9 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface as SymfonyHttpClientResponseInterface;
 use function array_merge;
+use function is_array;
+use function user_error;
+use const E_USER_DEPRECATED;
 
 /**
  * Class SymfonyHttpClientInterface.
@@ -231,9 +236,26 @@ class SymfonyHttpClient extends BaseHttpClient implements ClientInterface, Logge
      * @param RequestInterface[] $requests
      *
      * @return HttpClientException[]|ResponseInterface[]
+     *
+     * @throws InvalidArgumentException
      */
     public function doRequests($requests = [])
     {
+        if ($requests instanceof RequestInterface) {
+            user_error(
+                'Passing a single request to HttpClientInterface::doRequests is deprecated',
+                E_USER_DEPRECATED
+            );
+            $requests = [$requests];
+        }
+        if (!is_array($requests)) {
+            throw new InvalidArgumentException('Invalid requests array passed');
+        }
+        if (!is_array($this->pendingRequests)) {
+            $this->pendingRequests = [];
+        }
+
+        // Handle pending requests as well
         $requests = $this->pendingRequests + $requests;
         $httpClient = $this->getClient();
         $responses = [];

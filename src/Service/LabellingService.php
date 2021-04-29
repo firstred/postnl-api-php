@@ -268,6 +268,7 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      * @throws HttpClientException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
+     * @throws PostNLInvalidArgumentException
      *
      * @since 1.0.0
      */

@@ -27,9 +27,11 @@
 namespace Firstred\PostNL\HttpClient;
 
 use Composer\CaBundle\CaBundle;
+use Exception;
 use Firstred\PostNL\Exception\ApiConnectionException;
 use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -37,11 +39,14 @@ use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LogLevel;
 use function define;
 use function defined;
+use function is_array;
+use function user_error;
 use const CURLOPT_FOLLOWLOCATION;
 use const CURLOPT_HTTPHEADER;
 use const CURLOPT_PROTOCOLS;
 use const CURLOPT_REDIR_PROTOCOLS;
 use const CURLOPT_SSL_VERIFYPEER;
+use const E_USER_DEPRECATED;
 
 if (!defined('CURL_SSLVERSION_TLSv1')) {
     define('CURL_SSLVERSION_TLSv1', 1);
@@ -136,12 +141,30 @@ class CurlClient extends BaseHttpClient implements ClientInterface, LoggerAwareI
      * @param RequestInterface[] $requests
      *
      * @return ResponseInterface[]|HttpClientException[]
+     *
+     * @throws InvalidArgumentException
      */
     public function doRequests($requests = [])
     {
+        if ($requests instanceof RequestInterface) {
+            user_error(
+                'Passing a single request to HttpClientInterface::doRequests is deprecated',
+                E_USER_DEPRECATED
+            );
+            $requests = [$requests];
+        }
+        if (!is_array($requests)) {
+            throw new InvalidArgumentException('Invalid requests array passed');
+        }
+        if (!is_array($this->pendingRequests)) {
+            $this->pendingRequests = [];
+        }
+
         // Reset request headers array
         $curlHandles = [];
         $mh = curl_multi_init();
+
+        // Handle pending requests as well
         $requests = $this->pendingRequests + $requests;
         foreach ($requests as $uuid => $request) {
             $curl = curl_init();

@@ -17,6 +17,8 @@ use Psr\Log\LoggerInterface;
 use function array_push;
 use function is_null;
 use function max;
+use function user_error;
+use const E_USER_DEPRECATED;
 
 abstract class BaseHttpClient
 {
@@ -263,10 +265,27 @@ abstract class BaseHttpClient
      * @param RequestInterface[] $requests
      *
      * @return HttpClientException[]|ResponseInterface[]
+     *
+     * @throws InvalidArgumentException
      */
     public function doRequests($requests = [])
     {
-        $requests = array_merge($this->pendingRequests, $requests);
+        if ($requests instanceof RequestInterface) {
+            user_error(
+                'Passing a single request to HttpClientInterface::doRequests is deprecated',
+                E_USER_DEPRECATED
+            );
+            $requests = [$requests];
+        }
+        if (!is_array($requests)) {
+            throw new InvalidArgumentException('Invalid requests array passed');
+        }
+        if (!is_array($this->pendingRequests)) {
+            $this->pendingRequests = [];
+        }
+
+        // Handle pending requests as well
+        $requests = $this->pendingRequests + $requests;
 
         $responses = [];
         foreach ($requests as $id => $request) {

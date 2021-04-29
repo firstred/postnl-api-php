@@ -136,17 +136,18 @@ class DeliveryDateServiceRestTest extends ServiceTest
 
         $query = Query::parse($request->getUri()->getQuery());
 
-        $this->assertEquals([
-            'ShippingDate'     => '29-06-2016 14:00:00',
-            'ShippingDuration' => '1',
-            'CountryCode'      => 'NL',
-            'Options'          => 'Daytime',
-            'CutOffTime'       => '14:00:00',
-            'PostalCode'       => '2132WT',
-            'City'             => 'Hoofddorp',
-            'HouseNr'          => '42',
-            'HouseNrExt'       => 'A',
-        ],
+        $this->assertEquals(
+            [
+                'ShippingDate'     => '29-06-2016 14:00:00',
+                'ShippingDuration' => '1',
+                'CountryCode'      => 'NL',
+                'Options'          => 'Daytime',
+                'CutOffTime'       => '14:00:00',
+                'PostalCode'       => '2132WT',
+                'City'             => 'Hoofddorp',
+                'HouseNr'          => '42',
+                'HouseNrExt'       => 'A',
+            ],
             $query
         );
         $this->assertEquals('test', $request->getHeaderLine('apikey'));
