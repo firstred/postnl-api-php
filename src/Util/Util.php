@@ -315,8 +315,8 @@ class Util
         if ($a === $b) {
             return  0;
         } elseif ($a > $b) {
-            return -1;
+            return 1;
         }
-        return 1;
+        return -1;
     }
 }
