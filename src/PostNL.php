@@ -495,15 +495,13 @@ class PostNL implements LoggerAwareInterface
         // @codeCoverageIgnoreStart
         if (!$this->httpClient) {
             if (interface_exists(GuzzleClientInterface::class)
-                && ((defined(GuzzleClientInterface::class.'::VERSION') && version_compare(
+                && ((defined(GuzzleClientInterface::class.'::VERSION') && Util::compareGuzzleVersion(
                             constant(GuzzleClientInterface::class.'::VERSION'),
-                            '6.0.0',
-                            '>='
+                            '6.0.0'
                         ))
-                    || (defined(GuzzleClientInterface::class.'::MAJOR_VERSION') && version_compare(
+                    || (defined(GuzzleClientInterface::class.'::MAJOR_VERSION') && Util::compareGuzzleVersion(
                             constant(GuzzleClientInterface::class.'::MAJOR_VERSION'),
-                            '7.0.0',
-                            '>='
+                            '7.0.0'
                         )))
             ) {
                 $this->httpClient = new GuzzleClient();

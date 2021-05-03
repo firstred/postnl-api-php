@@ -41,7 +41,7 @@ class Util
     const ERROR_MARGIN = 2;
 
     /**
-     * @param array       $arr    a map of param keys to values
+     * @param array       $arr a map of param keys to values
      * @param string|null $prefix
      *
      * @return string a querystring, essentially
@@ -146,8 +146,8 @@ class Util
         do {
             $deliveryDate->add(new DateInterval('P1D'));
         } while (in_array($deliveryDate->format('Y-m-d'), $holidays)
-            || (!$sundayDelivery && 0 == $deliveryDate->format('w'))
-            || (!$mondayDelivery && 1 == $deliveryDate->format('w'))
+        || (!$sundayDelivery && 0 == $deliveryDate->format('w'))
+        || (!$mondayDelivery && 1 == $deliveryDate->format('w'))
         );
 
         return $deliveryDate->format('Y-m-d H:i:s');
@@ -182,7 +182,7 @@ class Util
                 throw new InvalidArgumentException('Invalid date provided');
             }
         } while (in_array($deliveryDate->format('Y-m-d'), $holidays)
-            || empty($days[$deliveryDate->format('w')])
+        || empty($days[$deliveryDate->format('w')])
         );
 
         return $deliveryDate->format('Y-m-d H:i:s');
@@ -300,5 +300,23 @@ class Util
         ];
 
         return $holidays;
+    }
+
+    public static function compareGuzzleVersion($a, $b)
+    {
+        $a = str_replace('.', '', $a);
+        $b = str_replace('.', '', $b);
+
+        $len = max(array(strlen($a), strlen($b)));
+
+        $a = (int) str_pad($a, $len, '0', STR_PAD_RIGHT);
+        $b = (int) str_pad($b, $len, '0', STR_PAD_RIGHT);
+
+        if ($a === $b) {
+            return  0;
+        } elseif ($a > $b) {
+            return -1;
+        }
+        return 1;
     }
 }
