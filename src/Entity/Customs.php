@@ -57,6 +57,9 @@ use Firstred\PostNL\Service\TimeframeService;
  * @method Customs        setLicense(string|null $License = null)
  * @method Customs        setLicenseNr(string|null $LicenseNr = null)
  * @method Customs        setShipmentType(string|null $ShipmentType = null)
+ * @method Customs        setTrustedShipperID(string|null $TrustedShipperID = null)
+ * @method Customs        setTransactionCode(string|null $TrustedShipperID = null)
+ * @method Customs        setTransactionDescription(string|null $TrustedShipperID = null)
  *
  * @since 1.0.0
  */
@@ -75,6 +78,9 @@ class Customs extends AbstractEntity
             'License'                => BarcodeService::DOMAIN_NAMESPACE,
             'LicenseNr'              => BarcodeService::DOMAIN_NAMESPACE,
             'ShipmentType'           => BarcodeService::DOMAIN_NAMESPACE,
+            'TrustedShipperID'       => BarcodeService::DOMAIN_NAMESPACE,
+            'TransactionCode'        => BarcodeService::DOMAIN_NAMESPACE,
+            'TransactionDescription' => BarcodeService::DOMAIN_NAMESPACE,
         ],
         'Confirming' => [
             'Certificate'            => ConfirmingService::DOMAIN_NAMESPACE,
@@ -87,6 +93,9 @@ class Customs extends AbstractEntity
             'License'                => ConfirmingService::DOMAIN_NAMESPACE,
             'LicenseNr'              => ConfirmingService::DOMAIN_NAMESPACE,
             'ShipmentType'           => ConfirmingService::DOMAIN_NAMESPACE,
+            'TrustedShipperID'       => ConfirmingService::DOMAIN_NAMESPACE,
+            'TransactionCode'        => ConfirmingService::DOMAIN_NAMESPACE,
+            'TransactionDescription' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
         'Labelling' => [
             'Certificate'            => LabellingService::DOMAIN_NAMESPACE,
@@ -99,6 +108,9 @@ class Customs extends AbstractEntity
             'License'                => LabellingService::DOMAIN_NAMESPACE,
             'LicenseNr'              => LabellingService::DOMAIN_NAMESPACE,
             'ShipmentType'           => LabellingService::DOMAIN_NAMESPACE,
+            'TrustedShipperID'       => LabellingService::DOMAIN_NAMESPACE,
+            'TransactionCode'        => LabellingService::DOMAIN_NAMESPACE,
+            'TransactionDescription' => LabellingService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate' => [
             'Certificate'            => DeliveryDateService::DOMAIN_NAMESPACE,
@@ -111,6 +123,9 @@ class Customs extends AbstractEntity
             'License'                => DeliveryDateService::DOMAIN_NAMESPACE,
             'LicenseNr'              => DeliveryDateService::DOMAIN_NAMESPACE,
             'ShipmentType'           => DeliveryDateService::DOMAIN_NAMESPACE,
+            'TrustedShipperID'       => DeliveryDateService::DOMAIN_NAMESPACE,
+            'TransactionCode'        => DeliveryDateService::DOMAIN_NAMESPACE,
+            'TransactionDescription' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
         'Location' => [
             'Certificate'            => LocationService::DOMAIN_NAMESPACE,
@@ -123,6 +138,9 @@ class Customs extends AbstractEntity
             'License'                => LocationService::DOMAIN_NAMESPACE,
             'LicenseNr'              => LocationService::DOMAIN_NAMESPACE,
             'ShipmentType'           => LocationService::DOMAIN_NAMESPACE,
+            'TrustedShipperID'       => LocationService::DOMAIN_NAMESPACE,
+            'TransactionCode'        => LocationService::DOMAIN_NAMESPACE,
+            'TransactionDescription' => LocationService::DOMAIN_NAMESPACE,
         ],
         'Timeframe' => [
             'Certificate'            => TimeframeService::DOMAIN_NAMESPACE,
@@ -135,6 +153,9 @@ class Customs extends AbstractEntity
             'License'                => TimeframeService::DOMAIN_NAMESPACE,
             'LicenseNr'              => TimeframeService::DOMAIN_NAMESPACE,
             'ShipmentType'           => TimeframeService::DOMAIN_NAMESPACE,
+            'TrustedShipperID'       => TimeframeService::DOMAIN_NAMESPACE,
+            'TransactionCode'        => TimeframeService::DOMAIN_NAMESPACE,
+            'TransactionDescription' => TimeframeService::DOMAIN_NAMESPACE,
         ],
         'Shipping' => [
             'Certificate'            => ShippingService::DOMAIN_NAMESPACE,
@@ -147,6 +168,9 @@ class Customs extends AbstractEntity
             'License'                => ShippingService::DOMAIN_NAMESPACE,
             'LicenseNr'              => ShippingService::DOMAIN_NAMESPACE,
             'ShipmentType'           => ShippingService::DOMAIN_NAMESPACE,
+            'TrustedShipperID'       => ShippingService::DOMAIN_NAMESPACE,
+            'TransactionCode'        => ShippingService::DOMAIN_NAMESPACE,
+            'TransactionDescription' => ShippingService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
@@ -170,19 +194,28 @@ class Customs extends AbstractEntity
     protected $LicenseNr;
     /** @var string|null */
     protected $ShipmentType;
+    /** @var string|null */
+    protected $TrustedShipperID;
+    /** @var string|null  */
+    protected $TransactionCode;
+    /** @var string|null */
+    protected $TransactionDescription;
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string|null    $Certificate
-     * @param string|null    $CertificateNr
-     * @param Content[]|null $Content
-     * @param string|null    $Currency
-     * @param string|null    $HandleAsNonDeliverable
-     * @param string|null    $Invoice
-     * @param string|null    $InvoiceNr
-     * @param string|null    $License
-     * @param string|null    $LicenseNr
-     * @param string|null    $ShipmentType
+     * @param null $Certificate
+     * @param null $CertificateNr
+     * @param array|null $Content
+     * @param null $Currency
+     * @param null $HandleAsNonDeliverable
+     * @param null $Invoice
+     * @param null $InvoiceNr
+     * @param null $License
+     * @param null $LicenseNr
+     * @param null $ShipmentType
+     * @param null $TrustedShipperID
+     * @param null $TransactionCode
+     * @param null $TransactionDescription
      */
     public function __construct(
         $Certificate = null,
@@ -194,7 +227,10 @@ class Customs extends AbstractEntity
         $InvoiceNr = null,
         $License = null,
         $LicenseNr = null,
-        $ShipmentType = null
+        $ShipmentType = null,
+        $TrustedShipperID = null,
+        $TransactionCode = null,
+        $TransactionDescription = null
     ) {
         parent::__construct();
 
@@ -208,5 +244,8 @@ class Customs extends AbstractEntity
         $this->setLicense($License);
         $this->setLicenseNr($LicenseNr);
         $this->setShipmentType($ShipmentType);
+        $this->setTrustedShipperID($TrustedShipperID);
+        $this->setTransactionCode($TransactionCode);
+        $this->setTransactionDescription($TransactionDescription);
     }
 }
