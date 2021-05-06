@@ -20,5 +20,7 @@ These contributors have helped with making this library possible. Thank you so m
 * `niccifor <https://github.com/niccifor>`_ (contributor)
 * `fgd007 <https://github.com/fgd007>`_ (contributor)
 * `TomKriek <https://github.com/TomKriek>`_ (contributor)
+* `rowhel95 <https://github.com/rowhel95>`_ (contributor)
+* `lenvanessen <https://github.com/lenvanessen>`_ (contributor)
 * Mathieu Haverkamp (contributor)
 * Jeroen Smit (contributor)
