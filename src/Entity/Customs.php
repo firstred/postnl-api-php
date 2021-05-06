@@ -58,8 +58,8 @@ use Firstred\PostNL\Service\TimeframeService;
  * @method Customs        setLicenseNr(string|null $LicenseNr = null)
  * @method Customs        setShipmentType(string|null $ShipmentType = null)
  * @method Customs        setTrustedShipperID(string|null $TrustedShipperID = null)
- * @method Customs        setTransactionCode(string|null $TrustedShipperID = null)
- * @method Customs        setTransactionDescription(string|null $TrustedShipperID = null)
+ * @method Customs        setTransactionCode(string|null $TransactionCode = null)
+ * @method Customs        setTransactionDescription(string|null $TransactionDescription = null)
  *
  * @since 1.0.0
  */
@@ -203,19 +203,19 @@ class Customs extends AbstractEntity
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param null $Certificate
-     * @param null $CertificateNr
-     * @param array|null $Content
-     * @param null $Currency
-     * @param null $HandleAsNonDeliverable
-     * @param null $Invoice
-     * @param null $InvoiceNr
-     * @param null $License
-     * @param null $LicenseNr
-     * @param null $ShipmentType
-     * @param null $TrustedShipperID
-     * @param null $TransactionCode
-     * @param null $TransactionDescription
+     * @param string|null    $Certificate
+     * @param string|null    $CertificateNr
+     * @param Content[]|null $Content
+     * @param string|null    $Currency
+     * @param string|null    $HandleAsNonDeliverable
+     * @param string|null    $Invoice
+     * @param string|null    $InvoiceNr
+     * @param string|null    $License
+     * @param string|null    $LicenseNr
+     * @param string|null    $ShipmentType
+     * @param string|null    $TrustedShipperID
+     * @param string|null    $TransactionCode
+     * @param string|null    $TransactionDescription
      */
     public function __construct(
         $Certificate = null,
