@@ -82,12 +82,27 @@ Properties
 
 .. php:attr:: protected static LicenseNr
 
-	:Type: string | null 
+	:Type: string | null
 
 
 .. php:attr:: protected static ShipmentType
 
-	:Type: string | null 
+	:Type: string | null
+
+
+.. php:attr:: protected static TrustedShipperID
+
+	:Type: string | null
+
+
+.. php:attr:: protected static TransactionCode
+
+	:Type: string | null
+
+
+.. php:attr:: protected static TransactionDescription
+
+	:Type: string | null
 
 
 Methods
@@ -95,7 +110,7 @@ Methods
 
 .. rst-class:: public
 
-	.. php:method:: public __construct( $Certificate=null, $CertificateNr=null, $Content=null, $Currency=null, $HandleAsNonDeliverable=null, $Invoice=null, $InvoiceNr=null, $License=null, $LicenseNr=null, $ShipmentType=null)
+	.. php:method:: public __construct( $Certificate=null, $CertificateNr=null, $Content=null, $Currency=null, $HandleAsNonDeliverable=null, $Invoice=null, $InvoiceNr=null, $License=null, $LicenseNr=null, $ShipmentType=null, $TrustedShipperID = null, $TransactionCode = null, $TransactionDescription = null)
 	
 		
 		:Parameters:
@@ -109,6 +124,9 @@ Methods
 			* **$License** (string | null)  
 			* **$LicenseNr** (string | null)  
 			* **$ShipmentType** (string | null)  
+			* **TrustedShipperID** (string | null)
+			* **TransactionCode** (string | null)
+			* **TransactionDescription** (string | null)
 
 		
 	
