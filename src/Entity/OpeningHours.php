@@ -37,6 +37,8 @@ use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\TimeframeService;
 use Iterator;
+use RecursiveArrayIterator;
+use RecursiveIteratorIterator;
 use ReflectionException;
 use stdClass;
 use function is_numeric;
@@ -225,7 +227,9 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
                 $openingHours->{$day}[] = $json->OpeningHours->$day;
             }
 
-            foreach ($openingHours->$day as &$time) {
+            $openingHoursIterator = new RecursiveIteratorIterator(new RecursiveArrayIterator($openingHours->$day));
+            $newTimes = [];
+            foreach ($openingHoursIterator as $time) {
                 if (!is_string($time)) {
                     throw new NotSupportedException('Unable to parse opening hours');
                 }
@@ -241,8 +245,9 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
                         throw new NotSupportedException("Unable to handle time format $time");
                     }
                 }
-                $time = implode('-', $timeParts);
+                $newTimes[] = implode('-', $timeParts);
             }
+            $openingHours->$day = $newTimes;
         }
 
         return $openingHours;

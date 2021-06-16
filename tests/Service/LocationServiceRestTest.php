@@ -193,6 +193,7 @@ class LocationServiceRestTest extends ServiceTest
         foreach ($response->getGetLocationsResult()->getResponseLocation() as $responseLocation) {
             foreach (['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] as $day) {
                 foreach ($responseLocation->getOpeningHours()->{"get$day"}() as $time) {
+                    $this->assertIsString($time);
                     $this->assertMatchesRegularExpression(
                         '~^(([0-1][0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?)-(([0-1][0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?)$~',
                         $time
@@ -347,6 +348,7 @@ class LocationServiceRestTest extends ServiceTest
             [PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/location/nearestlocationsbypostcode.http'))],
             [PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/location/nearestlocationsbypostcode2.http'))],
             [PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/location/nearestlocationsbypostcode3.http'))],
+            [PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/location/nearestlocationsbypostcode4.http'))],
         ];
     }
 

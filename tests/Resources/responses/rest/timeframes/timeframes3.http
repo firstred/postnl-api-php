@@ -1,0 +1,417 @@
+HTTP/1.1 200 OK
+Access-Control-Allow-Headers: origin, x-requested-with, accept, apikey, Content-Type
+Access-Control-Allow-Methods: GET, POST
+Access-Control-Allow-Origin: *
+Access-Control-Max-Age: 3628800
+Cache-Control: private, max-age=0
+Content-Type: application/json;charset=UTF-8
+Date: Wed, 31 Mar 2021 12:24:44 GMT
+Strict-Transport-Security: max-age=31536000
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-Robots-Tag: noindex
+X-XSS-Protection: 1; mode=block
+Connection: keep-alive
+
+{
+  "ReasonNoTimeframes": {
+    "ReasonNoTimeframe": [
+      {
+        "Code": "05",
+        "Date": "18-06-2021",
+        "Description": "Geen avondbelevering mogelijk",
+        "Options": {
+          "string": "Evening"
+        }
+      },
+      {
+        "Code": "06",
+        "Date": "19-06-2021",
+        "Description": "Geen ochtendbelevering mogelijk",
+        "Options": {
+          "string": "Morning"
+        }
+      },
+      {
+        "Code": "05",
+        "Date": "19-06-2021",
+        "Description": "Geen avondbelevering mogelijk",
+        "Options": {
+          "string": "Evening"
+        }
+      },
+      {
+        "Code": "03",
+        "Date": "20-06-2021",
+        "Description": "Dag uitgesloten van tijdvak",
+        "Options": {
+          "string": "Morning"
+        }
+      },
+      {
+        "Code": "03",
+        "Date": "20-06-2021",
+        "Description": "Dag uitgesloten van tijdvak",
+        "Options": {
+          "string": "Evening"
+        }
+      },
+      {
+        "Code": "03",
+        "Date": "20-06-2021",
+        "Description": "Dag uitgesloten van tijdvak",
+        "Options": {
+          "string": "Daytime"
+        }
+      },
+      {
+        "Code": "05",
+        "Date": "21-06-2021",
+        "Description": "Geen avondbelevering mogelijk",
+        "Options": {
+          "string": "Evening"
+        }
+      },
+      {
+        "Code": "01",
+        "Date": "21-06-2021",
+        "Description": "Geen routeplan tijdvak",
+        "Options": {
+          "string": "Daytime"
+        }
+      },
+      {
+        "Code": "05",
+        "Date": "22-06-2021",
+        "Description": "Geen avondbelevering mogelijk",
+        "Options": {
+          "string": "Evening"
+        }
+      },
+      {
+        "Code": "05",
+        "Date": "23-06-2021",
+        "Description": "Geen avondbelevering mogelijk",
+        "Options": {
+          "string": "Evening"
+        }
+      },
+      {
+        "Code": "05",
+        "Date": "24-06-2021",
+        "Description": "Geen avondbelevering mogelijk",
+        "Options": {
+          "string": "Evening"
+        }
+      },
+      {
+        "Code": "05",
+        "Date": "25-06-2021",
+        "Description": "Geen avondbelevering mogelijk",
+        "Options": {
+          "string": "Evening"
+        }
+      },
+      {
+        "Code": "06",
+        "Date": "26-06-2021",
+        "Description": "Geen ochtendbelevering mogelijk",
+        "Options": {
+          "string": "Morning"
+        }
+      },
+      {
+        "Code": "05",
+        "Date": "26-06-2021",
+        "Description": "Geen avondbelevering mogelijk",
+        "Options": {
+          "string": "Evening"
+        }
+      },
+      {
+        "Code": "03",
+        "Date": "27-06-2021",
+        "Description": "Dag uitgesloten van tijdvak",
+        "Options": {
+          "string": "Morning"
+        }
+      },
+      {
+        "Code": "03",
+        "Date": "27-06-2021",
+        "Description": "Dag uitgesloten van tijdvak",
+        "Options": {
+          "string": "Evening"
+        }
+      },
+      {
+        "Code": "03",
+        "Date": "27-06-2021",
+        "Description": "Dag uitgesloten van tijdvak",
+        "Options": {
+          "string": "Daytime"
+        }
+      },
+      {
+        "Code": "05",
+        "Date": "28-06-2021",
+        "Description": "Geen avondbelevering mogelijk",
+        "Options": {
+          "string": "Evening"
+        }
+      },
+      {
+        "Code": "01",
+        "Date": "28-06-2021",
+        "Description": "Geen routeplan tijdvak",
+        "Options": {
+          "string": "Daytime"
+        }
+      },
+      {
+        "Code": "05",
+        "Date": "29-06-2021",
+        "Description": "Geen avondbelevering mogelijk",
+        "Options": {
+          "string": "Evening"
+        }
+      },
+      {
+        "Code": "05",
+        "Date": "30-06-2021",
+        "Description": "Geen avondbelevering mogelijk",
+        "Options": {
+          "string": "Evening"
+        }
+      },
+      {
+        "Code": "05",
+        "Date": "01-07-2021",
+        "Description": "Geen avondbelevering mogelijk",
+        "Options": {
+          "string": "Evening"
+        }
+      }
+    ]
+  },
+  "Timeframes": {
+    "Timeframe": [
+      {
+        "Date": "18-06-2021",
+        "Timeframes": {
+          "TimeframeTimeFrame": [
+            {
+              "From": "08:00:00",
+              "Options": {
+                "string": "Morning"
+              },
+              "To": "10:00:00"
+            },
+            {
+              "From": "15:00:00",
+              "Options": {
+                "string": "Daytime"
+              },
+              "To": "17:30:00"
+            }
+          ]
+        }
+      },
+      {
+        "Date": "19-06-2021",
+        "Timeframes": {
+          "TimeframeTimeFrame": {
+            "From": "15:30:00",
+            "Options": {
+              "string": "Daytime"
+            },
+            "To": "18:00:00"
+          }
+        }
+      },
+      {
+        "Date": "21-06-2021",
+        "Timeframes": {
+          "TimeframeTimeFrame": {
+            "From": "08:00:00",
+            "Options": {
+              "string": "Morning"
+            },
+            "To": "10:00:00"
+          }
+        }
+      },
+      {
+        "Date": "22-06-2021",
+        "Timeframes": {
+          "TimeframeTimeFrame": [
+            {
+              "From": "08:00:00",
+              "Options": {
+                "string": "Morning"
+              },
+              "To": "10:00:00"
+            },
+            {
+              "From": "14:15:00",
+              "Options": {
+                "string": "Daytime"
+              },
+              "To": "16:45:00"
+            }
+          ]
+        }
+      },
+      {
+        "Date": "23-06-2021",
+        "Timeframes": {
+          "TimeframeTimeFrame": [
+            {
+              "From": "08:00:00",
+              "Options": {
+                "string": "Morning"
+              },
+              "To": "10:00:00"
+            },
+            {
+              "From": "08:30:00",
+              "Options": {
+                "string": "Daytime"
+              },
+              "To": "21:30:00"
+            }
+          ]
+        }
+      },
+      {
+        "Date": "24-06-2021",
+        "Timeframes": {
+          "TimeframeTimeFrame": [
+            {
+              "From": "08:00:00",
+              "Options": {
+                "string": "Morning"
+              },
+              "To": "10:00:00"
+            },
+            {
+              "From": "14:30:00",
+              "Options": {
+                "string": "Daytime"
+              },
+              "To": "17:00:00"
+            }
+          ]
+        }
+      },
+      {
+        "Date": "25-06-2021",
+        "Timeframes": {
+          "TimeframeTimeFrame": [
+            {
+              "From": "08:00:00",
+              "Options": {
+                "string": "Morning"
+              },
+              "To": "10:00:00"
+            },
+            {
+              "From": "15:00:00",
+              "Options": {
+                "string": "Daytime"
+              },
+              "To": "17:30:00"
+            }
+          ]
+        }
+      },
+      {
+        "Date": "26-06-2021",
+        "Timeframes": {
+          "TimeframeTimeFrame": {
+            "From": "15:30:00",
+            "Options": {
+              "string": "Daytime"
+            },
+            "To": "18:00:00"
+          }
+        }
+      },
+      {
+        "Date": "28-06-2021",
+        "Timeframes": {
+          "TimeframeTimeFrame": {
+            "From": "08:00:00",
+            "Options": {
+              "string": "Morning"
+            },
+            "To": "10:00:00"
+          }
+        }
+      },
+      {
+        "Date": "29-06-2021",
+        "Timeframes": {
+          "TimeframeTimeFrame": [
+            {
+              "From": "08:00:00",
+              "Options": {
+                "string": "Morning"
+              },
+              "To": "10:00:00"
+            },
+            {
+              "From": "14:15:00",
+              "Options": {
+                "string": "Daytime"
+              },
+              "To": "16:45:00"
+            }
+          ]
+        }
+      },
+      {
+        "Date": "30-06-2021",
+        "Timeframes": {
+          "TimeframeTimeFrame": [
+            {
+              "From": "08:00:00",
+              "Options": {
+                "string": "Morning"
+              },
+              "To": "10:00:00"
+            },
+            {
+              "From": "08:30:00",
+              "Options": {
+                "string": "Daytime"
+              },
+              "To": "21:30:00"
+            }
+          ]
+        }
+      },
+      {
+        "Date": "01-07-2021",
+        "Timeframes": {
+          "TimeframeTimeFrame": [
+            {
+              "From": "08:00:00",
+              "Options": {
+                "string": "Morning"
+              },
+              "To": "10:00:00"
+            },
+            {
+              "From": "14:30:00",
+              "Options": {
+                "string": "Daytime"
+              },
+              "To": "17:00:00"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
