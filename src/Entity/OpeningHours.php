@@ -216,7 +216,7 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
                     } elseif (is_array($item)) {
                         $openingHours->$day = array_merge($openingHours->$day, $item);
                     } else {
-                        throw new NotSupportedException('Unable to parse opening hours', 0, $json->OpeningHours->$day);
+                        throw new NotSupportedException('Unable to parse opening hours');
                     }
                 }
             } elseif (isset($json->OpeningHours->$day->string)) {
@@ -227,7 +227,7 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
 
             foreach ($openingHours->$day as &$time) {
                 if (!is_string($time)) {
-                    throw new NotSupportedException('Unable to parse opening hours', 0, $openingHours->$day);
+                    throw new NotSupportedException('Unable to parse opening hours');
                 }
                 $timeParts = explode('-', $time);
                 if (2 !== count($timeParts)) {
