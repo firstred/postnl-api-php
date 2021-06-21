@@ -32,7 +32,7 @@ The following definitions and formats are used:
 
 .. note::
 
-    Every :php:class:`DateTimeImmutable` object returned by the library is adjusted to the timezone of the PostNL API (``Europe/Amsterdam``).
+    Every :php:class:`DateTimeImmutable` object and time string returned by the library is adjusted to the timezone of the PostNL API (``Europe/Amsterdam``).
     Make sure your timezone is aligned correctly, or otherwise convert dates and times manually by adding/subtracting the time difference.
 
     You can check your PHP's configured timezone by printing the ``date.timezone`` setting:
