@@ -28,6 +28,7 @@ namespace Firstred\PostNL\Util;
 
 use DateInterVal;
 use DateTime;
+use DateTimeZone;
 use Exception;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use setasign\Fpdi\Fpdi;
@@ -139,7 +140,7 @@ class Util
      */
     public static function getDeliveryDate($deliveryDate, $mondayDelivery = false, $sundayDelivery = false)
     {
-        $deliveryDate = new DateTime($deliveryDate);
+        $deliveryDate = new DateTime($deliveryDate, new DateTimeZone('Europe/Amsterdam'));
 
         $holidays = static::getHolidaysForYear(date('Y', $deliveryDate->getTimestamp()));
 
@@ -171,7 +172,7 @@ class Util
             throw new InvalidArgumentException('There should be at least one shipping day');
         }
 
-        $deliveryDate = new DateTime($deliveryDate);
+        $deliveryDate = new DateTime($deliveryDate, new DateTimeZone('Europe/Amsterdam'));
 
         $holidays = static::getHolidaysForYear(date('Y', $deliveryDate->getTimestamp()));
 
@@ -214,8 +215,11 @@ class Util
         $nearestDeliveryDate = static::getDeliveryDate($shippingDate);
 
         // Calculate the interval
-        $nearestDeliveryDate = new DateTime($nearestDeliveryDate);
-        $preferredDeliveryDate = new DateTime(date('Y-m-d 00:00:00', strtotime($preferredDeliveryDate)));
+        $nearestDeliveryDate = new DateTime($nearestDeliveryDate, new DateTimeZone('Europe/Amsterdam'));
+        $preferredDeliveryDate = new DateTime(
+            date('Y-m-d 00:00:00', strtotime($preferredDeliveryDate)),
+            new DateTimeZone('Europe/Amsterdam')
+        );
 
         $daysRemaining = (int) $nearestDeliveryDate->diff($preferredDeliveryDate)->format('%R%a');
 
@@ -240,52 +244,26 @@ class Util
      * @return array
      *
      * Credits to @tvlooy (https://gist.github.com/tvlooy/1894247)
-     *
-     * @throws \Exception
-     * @throws \Exception
-     * @throws \Exception
-     * @throws Exception
-     * @throws Exception
-     * @throws Exception
-     * @throws Exception
-     * @throws Exception
-     * @throws Exception
-     * @throws Exception
-     * @throws Exception
-     * @throws Exception
-     * @throws Exception
      */
     protected static function getHolidaysForYear($year)
     {
         // Avoid holidays
         // Fixed
-        $nieuwjaar = new DateTime($year.'-01-01');
-        $eersteKerstDag = new DateTime($year.'-12-25');
-        $tweedeKerstDag = new DateTime($year.'-12-25');
-        $koningsdag = new DateTime($year.'-04-27');
+        $nieuwjaar = new DateTime($year.'-01-01', new DateTimeZone('Europe/Amsterdam'));
+        $eersteKerstDag = new DateTime($year.'-12-25', new DateTimeZone('Europe/Amsterdam'));
+        $tweedeKerstDag = new DateTime($year.'-12-25', new DateTimeZone('Europe/Amsterdam'));
+        $koningsdag = new DateTime($year.'-04-27', new DateTimeZone('Europe/Amsterdam'));
         // Dynamic
-        $pasen = new DateTime();
+        $pasen = new DateTime('NOW', new DateTimeZone('Europe/Amsterdam'));
         $pasen->setTimestamp(easter_date($year)); // thanks PHP!
         $paasMaandag = clone $pasen;
-        try {
-            $paasMaandag->add(new DateInterVal('P1D'));
-        } catch (Exception $e) {
-        }
+        $paasMaandag->add(new DateInterVal('P1D'));
         $hemelvaart = clone $pasen;
-        try {
-            $hemelvaart->add(new DateInterVal('P39D'));
-        } catch (Exception $e) {
-        }
+        $hemelvaart->add(new DateInterVal('P39D'));
         $pinksteren = clone $hemelvaart;
-        try {
-            $pinksteren->add(new DateInterVal('P10D'));
-        } catch (Exception $e) {
-        }
+        $pinksteren->add(new DateInterVal('P10D'));
         $pinksterMaandag = clone $pinksteren;
-        try {
-            $pinksterMaandag->add(new DateInterVal('P1D'));
-        } catch (Exception $e) {
-        }
+        $pinksterMaandag->add(new DateInterVal('P1D'));
 
         $holidays = [
             $nieuwjaar->format('Y-m-d'),
