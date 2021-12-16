@@ -121,7 +121,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
     {
         $item = $this->retrieveCachedItem($currentStatus->getId());
         $response = null;
-        if ($item instanceof CacheItemInterface) {
+        if ($item instanceof CacheItemInterface && $item->isHit()) {
             $response = $item->get();
             try {
                 $response = PsrMessage::parseResponse($response);
@@ -172,7 +172,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
         foreach ($currentStatuses as $index => $currentStatus) {
             $item = $this->retrieveCachedItem($index);
             $response = null;
-            if ($item instanceof CacheItemInterface) {
+            if ($item instanceof CacheItemInterface && $item->isHit()) {
                 $response = $item->get();
                 $response = PsrMessage::parseResponse($response);
                 $responses[$index] = $response;
@@ -239,7 +239,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
             $item = null;
         }
         $response = null;
-        if ($item instanceof CacheItemInterface) {
+        if ($item instanceof CacheItemInterface && $item->isHit()) {
             $response = $item->get();
             try {
                 $response = PsrMessage::parseResponse($response);
@@ -290,7 +290,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
         foreach ($completeStatuses as $index => $completeStatus) {
             $item = $this->retrieveCachedItem($index);
             $response = null;
-            if ($item instanceof CacheItemInterface) {
+            if ($item instanceof CacheItemInterface && $item->isHit()) {
                 $response = $item->get();
                 $response = PsrMessage::parseResponse($response);
                 $responses[$index] = $response;
@@ -348,7 +348,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
     {
         $item = $this->retrieveCachedItem($getSignature->getId());
         $response = null;
-        if ($item instanceof CacheItemInterface) {
+        if ($item instanceof CacheItemInterface && $item->isHit()) {
             $response = $item->get();
             try {
                 $response = PsrMessage::parseResponse($response);
@@ -399,7 +399,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
         foreach ($getSignatures as $index => $getsignature) {
             $item = $this->retrieveCachedItem($index);
             $response = null;
-            if ($item instanceof CacheItemInterface) {
+            if ($item instanceof CacheItemInterface && $item->isHit()) {
                 $response = $item->get();
                 $response = PsrMessage::parseResponse($response);
                 $responses[$index] = $response;
@@ -749,7 +749,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
 
         $item = $this->retrieveCachedItem("{$customer->getCustomerNumber()}-$dateTimeFromString-$dateTimeToString");
         $response = null;
-        if ($item instanceof CacheItemInterface) {
+        if ($item instanceof CacheItemInterface && $item->isHit()) {
             $response = $item->get();
             try {
                 $response = PsrMessage::parseResponse($response);

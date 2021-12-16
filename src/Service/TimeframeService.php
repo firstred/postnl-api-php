@@ -113,7 +113,7 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
     {
         $item = $this->retrieveCachedItem($getTimeframes->getId());
         $response = null;
-        if ($item instanceof CacheItemInterface) {
+        if ($item instanceof CacheItemInterface && $item->isHit()) {
             $response = $item->get();
             try {
                 $response = PsrMessage::parseResponse($response);
@@ -161,7 +161,7 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
     {
         $item = $this->retrieveCachedItem($getTimeframes->getId());
         $response = null;
-        if ($item instanceof CacheItemInterface) {
+        if ($item instanceof CacheItemInterface && $item->isHit()) {
             $response = $item->get();
             try {
                 $response = PsrMessage::parseResponse($response);

@@ -124,7 +124,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
     {
         $item = $this->retrieveCachedItem($getNearestLocations->getId());
         $response = null;
-        if ($item instanceof CacheItemInterface) {
+        if ($item instanceof CacheItemInterface && $item->isHit()) {
             $response = $item->get();
             try {
                 $response = PsrMessage::parseResponse($response);
@@ -173,7 +173,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
     {
         $item = $this->retrieveCachedItem($getNearestLocations->getId());
         $response = null;
-        if ($item instanceof CacheItemInterface) {
+        if ($item instanceof CacheItemInterface && $item->isHit()) {
             $response = $item->get();
             try {
                 $response = PsrMessage::parseResponse($response);
@@ -222,7 +222,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
     {
         $item = $this->retrieveCachedItem($getLocations->getId());
         $response = null;
-        if ($item instanceof CacheItemInterface) {
+        if ($item instanceof CacheItemInterface && $item->isHit()) {
             $response = $item->get();
             try {
                 $response = PsrMessage::parseResponse($response);
@@ -271,7 +271,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
     {
         $item = $this->retrieveCachedItem($getNearestLocations->getId());
         $response = null;
-        if ($item instanceof CacheItemInterface) {
+        if ($item instanceof CacheItemInterface && $item->isHit()) {
             $response = $item->get();
             try {
                 $response = PsrMessage::parseResponse($response);
@@ -321,7 +321,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
     {
         $item = $this->retrieveCachedItem($getLocation->getId());
         $response = null;
-        if ($item instanceof CacheItemInterface) {
+        if ($item instanceof CacheItemInterface && $item->isHit()) {
             $response = $item->get();
             try {
                 $response = PsrMessage::parseResponse($response);
@@ -370,7 +370,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
     {
         $item = $this->retrieveCachedItem($getLocation->getId());
         $response = null;
-        if ($item instanceof CacheItemInterface) {
+        if ($item instanceof CacheItemInterface && $item->isHit()) {
             $response = $item->get();
             try {
                 $response = PsrMessage::parseResponse($response);

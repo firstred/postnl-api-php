@@ -118,7 +118,7 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
     {
         $item = $this->retrieveCachedItem($getDeliveryDate->getId());
         $response = null;
-        if ($item instanceof CacheItemInterface) {
+        if ($item instanceof CacheItemInterface && $item->isHit()) {
             $response = $item->get();
             try {
                 $response = PsrMessage::parseResponse($response);
@@ -166,7 +166,7 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
     {
         $item = $this->retrieveCachedItem($getDeliveryDate->getId());
         $response = null;
-        if ($item instanceof CacheItemInterface) {
+        if ($item instanceof CacheItemInterface && $item->isHit()) {
             $response = $item->get();
             try {
                 $response = PsrMessage::parseResponse($response);
@@ -215,7 +215,7 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
     {
         $item = $this->retrieveCachedItem($getSentDate->getId());
         $response = null;
-        if ($item instanceof CacheItemInterface) {
+        if ($item instanceof CacheItemInterface && $item->isHit()) {
             $response = $item->get();
             try {
                 $response = PsrMessage::parseResponse($response);
@@ -263,7 +263,7 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
     {
         $item = $this->retrieveCachedItem($getSentDate->getId());
         $response = null;
-        if ($item instanceof CacheItemInterface) {
+        if ($item instanceof CacheItemInterface && $item->isHit()) {
             $response = $item->get();
             try {
                 $response = PsrMessage::parseResponse($response);
