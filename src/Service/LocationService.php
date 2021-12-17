@@ -836,7 +836,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
                 (object) ['ResponseLocation' => $location]
             );
         }
-        $body->GetLocationsResult = $newLocations;
+        $body->GetLocationsResult->ResponseLocation = $newLocations;
 
         /** @var GetLocationsInAreaResponse $object */
         $object = GetLocationsInAreaResponse::jsonDeserialize((object) ['GetLocationsInAreaResponse' => $body]);

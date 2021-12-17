@@ -338,8 +338,11 @@ class LocationServiceRestTest extends ServiceTest
         );
 
         $this->assertInstanceOf(GetLocationsInAreaResponse::class, $response);
-        $this->assertEquals(1, count((array) $response->getGetLocationsResult()));
+        $this->assertCount(1, $response->getGetLocationsResult()->getResponseLocation());
         $this->assertNotTrue(static::containsStdClass($response));
+
+        $result = $response->getGetLocationsResult()->getResponseLocation()[0];
+        $this->assertEquals('161503', $result->getLocationCode());
     }
 
     public function nearestLocationsByPostcodeProvider()
