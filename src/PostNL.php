@@ -134,6 +134,7 @@ use function array_map;
 use function base64_decode;
 use function class_exists;
 use function constant;
+use function count;
 use function defined;
 use function ini_get;
 use function interface_exists;
@@ -1321,7 +1322,7 @@ class PostNL implements LoggerAwareInterface
                         }
                         $deferred[] = ['stream' => $stream, 'sizes' => $sizes];
                     } else {
-                        $stream = StreamReader::createByString(base64_decode($pdfContent));
+                        $stream = StreamReader::createByString($pdfContent);
                         $deferred[] = ['stream' => $stream, 'sizes' => $sizes];
                     }
                 }
@@ -1330,9 +1331,9 @@ class PostNL implements LoggerAwareInterface
         foreach ($deferred as $defer) {
             $sizes = $defer['sizes'];
             $pdf->addPage($sizes['orientation'], 'A4');
-            $pdf->rotateCounterClockWise();
             if (is_array($defer['stream']) && count($defer['stream']) > 1) {
                 // Multilabel
+                $pdf->rotateCounterClockWise();
                 if (2 === count($deferred['stream'])) {
                     $pdf->setSourceFile($defer['stream'][0]);
                     $pdf->useTemplate($pdf->importPage(1), -190, 0);
@@ -1353,12 +1354,14 @@ class PostNL implements LoggerAwareInterface
                     }
                 }
             } else {
-                if (is_resource($defer['stream']) || $defer['stream'] instanceof StreamReader) {
+                if (!is_array($defer['stream'])) {
                     $pdf->setSourceFile($defer['stream']);
                 } else {
                     $pdf->setSourceFile($defer['stream'][0]);
                 }
-                $pdf->useTemplate($pdf->importPage(1), -190, 0);
+                $width = $pdf->GetPageWidth();
+                $height = $pdf->GetPageHeight();
+                $pdf->useTemplate($pdf->importPage(1), 0, 0, $width, $height);
             }
         }
 
@@ -1566,7 +1569,7 @@ class PostNL implements LoggerAwareInterface
                         }
                         $deferred[] = ['stream' => $stream, 'sizes' => $sizes];
                     } else {
-                        $stream = StreamReader::createByString(base64_decode($pdfContent));
+                        $stream = StreamReader::createByString($pdfContent);
                         $deferred[] = ['stream' => $stream, 'sizes' => $sizes];
                     }
                 }
@@ -1575,9 +1578,9 @@ class PostNL implements LoggerAwareInterface
         foreach ($deferred as $defer) {
             $sizes = $defer['sizes'];
             $pdf->addPage($sizes['orientation'], 'A4');
-            $pdf->rotateCounterClockWise();
             if (is_array($defer['stream']) && count($defer['stream']) > 1) {
                 // Multilabel
+                $pdf->rotateCounterClockWise();
                 if (2 === count($deferred['stream'])) {
                     $pdf->setSourceFile($defer['stream'][0]);
                     $pdf->useTemplate($pdf->importPage(1), -190, 0);
@@ -1598,12 +1601,14 @@ class PostNL implements LoggerAwareInterface
                     }
                 }
             } else {
-                if (is_resource($defer['stream']) || $defer['stream'] instanceof StreamReader) {
+                if (!is_array($defer['stream'])) {
                     $pdf->setSourceFile($defer['stream']);
                 } else {
                     $pdf->setSourceFile($defer['stream'][0]);
                 }
-                $pdf->useTemplate($pdf->importPage(1), -190, 0);
+                $width = $pdf->GetPageWidth();
+                $height = $pdf->GetPageHeight();
+                $pdf->useTemplate($pdf->importPage(1), 0, 0, $width, $height);
             }
         }
 
