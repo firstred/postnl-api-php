@@ -89,7 +89,7 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
         $item = $this->retrieveCachedItem($sendShipment->getId());
         $response = null;
 
-        if ($item instanceof CacheItemInterface) {
+        if ($item instanceof CacheItemInterface && $item->isHit()) {
             $response = $item->get();
             try {
                 $response = PsrMessage::parseResponse($response);

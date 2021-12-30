@@ -119,7 +119,7 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
     {
         $item = $this->retrieveCachedItem($generateLabel->getId());
         $response = null;
-        if ($item instanceof CacheItemInterface) {
+        if ($item instanceof CacheItemInterface && $item->isHit()) {
             $response = $item->get();
             try {
                 $response = PsrMessage::parseResponse($response);
@@ -175,7 +175,7 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
         foreach ($generateLabels as $uuid => $generateLabel) {
             $item = $this->retrieveCachedItem($uuid);
             $response = null;
-            if ($item instanceof CacheItemInterface) {
+            if ($item instanceof CacheItemInterface && $item->isHit()) {
                 $response = $item->get();
                 $response = PsrMessage::parseResponse($response);
                 $responses[$uuid] = $response;
@@ -231,7 +231,7 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
     {
         $item = $this->retrieveCachedItem($generateLabel->getId());
         $response = null;
-        if ($item instanceof CacheItemInterface) {
+        if ($item instanceof CacheItemInterface && $item->isHit()) {
             $response = $item->get();
             try {
                 $response = PsrMessage::parseResponse($response);
@@ -280,7 +280,7 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
         foreach ($generateLabels as $uuid => $generateLabel) {
             $item = $this->retrieveCachedItem($uuid);
             $response = null;
-            if ($item instanceof CacheItemInterface) {
+            if ($item instanceof CacheItemInterface && $item->isHit()) {
                 $response = $item->get();
                 $response = PsrMessage::parseResponse($response);
                 $responses[$uuid] = $response;
