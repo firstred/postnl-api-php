@@ -60,6 +60,7 @@ use Firstred\PostNL\Service\TimeframeService;
  * @method Customs        setTrustedShipperID(string|null $TrustedShipperID = null)
  * @method Customs        setTransactionCode(string|null $TransactionCode = null)
  * @method Customs        setTransactionDescription(string|null $TransactionDescription = null)
+ * @method Customs        setImporterReferenceCode(string|null $ImporterReferenceCode = null)
  *
  * @since 1.0.0
  */
@@ -81,6 +82,7 @@ class Customs extends AbstractEntity
             'TrustedShipperID'       => BarcodeService::DOMAIN_NAMESPACE,
             'TransactionCode'        => BarcodeService::DOMAIN_NAMESPACE,
             'TransactionDescription' => BarcodeService::DOMAIN_NAMESPACE,
+            'ImporterReferenceCode'  => BarcodeService::DOMAIN_NAMESPACE,
         ],
         'Confirming' => [
             'Certificate'            => ConfirmingService::DOMAIN_NAMESPACE,
@@ -96,6 +98,7 @@ class Customs extends AbstractEntity
             'TrustedShipperID'       => ConfirmingService::DOMAIN_NAMESPACE,
             'TransactionCode'        => ConfirmingService::DOMAIN_NAMESPACE,
             'TransactionDescription' => ConfirmingService::DOMAIN_NAMESPACE,
+            'ImporterReferenceCode'  => ConfirmingService::DOMAIN_NAMESPACE,
         ],
         'Labelling' => [
             'Certificate'            => LabellingService::DOMAIN_NAMESPACE,
@@ -111,6 +114,7 @@ class Customs extends AbstractEntity
             'TrustedShipperID'       => LabellingService::DOMAIN_NAMESPACE,
             'TransactionCode'        => LabellingService::DOMAIN_NAMESPACE,
             'TransactionDescription' => LabellingService::DOMAIN_NAMESPACE,
+            'ImporterReferenceCode'  => LabellingService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate' => [
             'Certificate'            => DeliveryDateService::DOMAIN_NAMESPACE,
@@ -126,6 +130,7 @@ class Customs extends AbstractEntity
             'TrustedShipperID'       => DeliveryDateService::DOMAIN_NAMESPACE,
             'TransactionCode'        => DeliveryDateService::DOMAIN_NAMESPACE,
             'TransactionDescription' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'ImporterReferenceCode'  => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
         'Location' => [
             'Certificate'            => LocationService::DOMAIN_NAMESPACE,
@@ -141,6 +146,7 @@ class Customs extends AbstractEntity
             'TrustedShipperID'       => LocationService::DOMAIN_NAMESPACE,
             'TransactionCode'        => LocationService::DOMAIN_NAMESPACE,
             'TransactionDescription' => LocationService::DOMAIN_NAMESPACE,
+            'ImporterReferenceCode'  => LocationService::DOMAIN_NAMESPACE,
         ],
         'Timeframe' => [
             'Certificate'            => TimeframeService::DOMAIN_NAMESPACE,
@@ -156,6 +162,7 @@ class Customs extends AbstractEntity
             'TrustedShipperID'       => TimeframeService::DOMAIN_NAMESPACE,
             'TransactionCode'        => TimeframeService::DOMAIN_NAMESPACE,
             'TransactionDescription' => TimeframeService::DOMAIN_NAMESPACE,
+            'ImporterReferenceCode'  => TimeframeService::DOMAIN_NAMESPACE,
         ],
         'Shipping' => [
             'Certificate'            => ShippingService::DOMAIN_NAMESPACE,
@@ -171,6 +178,7 @@ class Customs extends AbstractEntity
             'TrustedShipperID'       => ShippingService::DOMAIN_NAMESPACE,
             'TransactionCode'        => ShippingService::DOMAIN_NAMESPACE,
             'TransactionDescription' => ShippingService::DOMAIN_NAMESPACE,
+            'ImporterReferenceCode'  => ShippingService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
@@ -200,6 +208,8 @@ class Customs extends AbstractEntity
     protected $TransactionCode;
     /** @var string|null */
     protected $TransactionDescription;
+    /** @var string|null */
+    protected $ImporterReferenceCode;
     // @codingStandardsIgnoreEnd
 
     /**
@@ -216,6 +226,7 @@ class Customs extends AbstractEntity
      * @param string|null    $TrustedShipperID
      * @param string|null    $TransactionCode
      * @param string|null    $TransactionDescription
+     * @param string|null    $ImporterReferenceCode
      */
     public function __construct(
         $Certificate = null,
@@ -230,7 +241,8 @@ class Customs extends AbstractEntity
         $ShipmentType = null,
         $TrustedShipperID = null,
         $TransactionCode = null,
-        $TransactionDescription = null
+        $TransactionDescription = null,
+        $ImporterReferenceCode = null
     ) {
         parent::__construct();
 
@@ -247,5 +259,6 @@ class Customs extends AbstractEntity
         $this->setTrustedShipperID($TrustedShipperID);
         $this->setTransactionCode($TransactionCode);
         $this->setTransactionDescription($TransactionDescription);
+        $this->setImporterReferenceCode($ImporterReferenceCode);
     }
 }
