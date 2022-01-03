@@ -274,6 +274,7 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
      *
      * @since 1.2.0
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         // Access as $openingHours['Monday']
@@ -289,6 +290,7 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
      *
      * @since 1.2.0
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         // Always return an array when accessing this object as an array
@@ -313,6 +315,7 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
      *
      * @since 1.2.0
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         if ($this->offsetExists($offset)) {
@@ -325,6 +328,7 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
      *
      * @since 1.2.0
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         if ($this->offsetExists($offset)) {
