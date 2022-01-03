@@ -40,20 +40,20 @@ use Firstred\PostNL\Service\TimeframeService;
 /**
  * Class ResponseShipment.
  *
- * @method string|null    getBarcode()
- * @method string|null    getProductCodeDelivery()
- * @method string|null    getDownPartnerBarcode()
- * @method string|null    getDownPartnerId()
- * @method string|null    getDownPartnerLocation()
- * @method Label[]|null   getLabels()
- * @method Warning[]|null getWarnings()
- * @method MergedLabel    setBarcode(string|null $Barcode = null)
- * @method MergedLabel    setProductCodeDelivery(string|null $ProductCodeDelivery = null)
- * @method MergedLabel    setDownPartnerBarcode(string|null $DownPartnerCode = null)
- * @method MergedLabel    setDownPartnerId(string|null $DownPartnerID = null)
- * @method MergedLabel    setDownPartnerLocation(string|null $DownPartnerLocation = null)
- * @method MergedLabel    setLabels(Label[]|null $Labels = null)
- * @method MergedLabel    setWarnings(Warning[]|null $Warnings = null)
+ * @method string|null      getBarcode()
+ * @method string|null      getProductCodeDelivery()
+ * @method string|null      getDownPartnerBarcode()
+ * @method string|null      getDownPartnerId()
+ * @method string|null      getDownPartnerLocation()
+ * @method Label[]|null     getLabels()
+ * @method Warning[]|null   getWarnings()
+ * @method ResponseShipment setBarcode(string|null $Barcode = null)
+ * @method ResponseShipment setProductCodeDelivery(string|null $ProductCodeDelivery = null)
+ * @method ResponseShipment setDownPartnerBarcode(string|null $DownPartnerCode = null)
+ * @method ResponseShipment setDownPartnerId(string|null $DownPartnerID = null)
+ * @method ResponseShipment setDownPartnerLocation(string|null $DownPartnerLocation = null)
+ * @method ResponseShipment setLabels(Label[]|null $Labels = null)
+ * @method ResponseShipment setWarnings(Warning[]|null $Warnings = null)
  *
  * @since 1.0.0
  */
