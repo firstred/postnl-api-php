@@ -345,6 +345,7 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
      *
      * @since 1.2.0
      */
+    #[\ReturnTypeWillChange]
     public function current()
     {
         if (!$this->valid()) {
@@ -357,6 +358,7 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
     /**
      * @since 1.2.0
      */
+    #[\ReturnTypeWillChange]
     public function next()
     {
         ++$this->currentDay;
@@ -370,6 +372,7 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
      *
      * @since 1.2.0
      */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return static::findCurrentDayString($this->currentDay);
@@ -380,6 +383,7 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
      *
      * @since 1.2.0
      */
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         try {
@@ -395,6 +399,7 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
     /**
      * @since 1.2.0
      */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         $this->currentDay = 0;
