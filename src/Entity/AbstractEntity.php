@@ -151,6 +151,7 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
      *
      * @throws InvalidArgumentException
      */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         $json = [];
