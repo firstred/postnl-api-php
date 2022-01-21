@@ -232,7 +232,7 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
         $query['Options'] = ltrim($query['Options'], ',');
         $query['Options'] = $query['Options'] ?: 'Daytime';
 
-        $endpoint = '?'.http_build_query($query, null, '&', PHP_QUERY_RFC3986);
+        $endpoint = '?'.http_build_query($query, '', '&', PHP_QUERY_RFC3986);
 
         return $this->postnl->getRequestFactory()->createRequest(
             'GET',
