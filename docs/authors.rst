@@ -25,5 +25,6 @@ These contributors have helped with making this library possible. Thank you so m
 * `GetMagented <https://github.com/GetMagented>`_ (contributor)
 * `rvanvelzen <https://github.com/rvanvelzen>`_ (contributor)
 * `timo002 <https://github.com/timo002>`_ (contributor)
+* `rdanklof <https://github.com/rdanklof>`_ (contributor)
 * Mathieu Haverkamp (contributor)
 * Jeroen Smit (contributor)
