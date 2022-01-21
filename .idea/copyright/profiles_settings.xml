@@ -1,0 +1,12 @@
+<component name="CopyrightManager">
+  <settings default="MIT license PostNL library">
+    <module2copyright>
+      <element module="All" copyright="MIT license PostNL library" />
+    </module2copyright>
+    <LanguageOptions name="PHP">
+      <option name="fileTypeOverride" value="3" />
+      <option name="separateBefore" value="true" />
+      <option name="lenBefore" value="1" />
+    </LanguageOptions>
+  </settings>
+</component>
