@@ -141,7 +141,7 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
             'POST',
             ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).'?'.http_build_query([
                 'confirm' => $confirm,
-            ], null, '&', PHP_QUERY_RFC3986)
+            ], '', '&', PHP_QUERY_RFC3986)
         )
             ->withHeader('apikey', $apiKey)
             ->withHeader('Accept', 'application/json')

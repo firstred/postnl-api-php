@@ -223,7 +223,7 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
                     'CustomerNumber' => $generateBarcode->getCustomer()->getCustomerNumber(),
                     'Type'           => $generateBarcode->getBarcode()->getType(),
                     'Serie'          => $generateBarcode->getBarcode()->getSerie(),
-                ], null, '&', PHP_QUERY_RFC3986)
+                ], '', '&', PHP_QUERY_RFC3986)
         )
             ->withHeader('Accept', 'application/json')
             ->withHeader('apikey', $apiKey)
