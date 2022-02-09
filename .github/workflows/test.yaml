@@ -41,17 +41,17 @@ jobs:
                 run: composer install --no-progress --prefer-dist --optimize-autoloader
 
             -   name: Test with PHPUnit
-                if: ${{ matrix.php_versions }} != '8.1'
+                if: matrix.php_versions != '8.1'
                 env:
                     XDEBUG_MODE: coverage
                 run: phpunit --testdox -- tests
 
             -   name: Test with PHPUnit (coverage)
-                if: ${{ matrix.php_versions }} == '8.1'
+                if: matrix.php_versions == '8.1'
                 env:
                     XDEBUG_MODE: coverage
                 run: phpunit --testdox --coverage-clover coverage.xml -- tests
 
             -   name: Codecov
-                if: ${{ matrix.php_versions }} == '8.1'
+                if: matrix.php_versions == '8.1'
                 uses: codecov/codecov-action@v2
