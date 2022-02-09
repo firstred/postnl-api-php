@@ -24,10 +24,8 @@
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-use League\Flysystem\Adapter\Local;
-use League\Flysystem\Filesystem;
-use Psr\Log\LogLevel;
-use wappr\Logger;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 
 require_once __DIR__.'/../vendor/autoload.php';
 
@@ -35,12 +33,14 @@ error_reporting(E_ALL ^ E_DEPRECATED);
 
 const _RESPONSES_DIR_ = __DIR__.'/Resources/responses';
 
-$filesystemAdapter = new Local(__DIR__.'/');
-$filesystem = new Filesystem($filesystemAdapter);
-
-$adapter = new Local(__DIR__.'/logs/');
-$logfs = new Filesystem($adapter);
-
 global $logger;
-$logger = new Logger($logfs, LogLevel::DEBUG);
-$logger->setFilenameFormat('Y-m-d H:i');
+$logger = new Logger('postnl_test');
+$debugHandler = new StreamHandler(__DIR__.'/logs/'.date('Y-m-d H:i').'.log', Logger::DEBUG);
+$formatter = new Monolog\Formatter\LineFormatter(
+    null, // Format of message in log, default [%datetime%] %channel%.%level_name%: %message% %context% %extra%\n
+    null, // Datetime format
+    true, // allowInlineLineBreaks option, default false
+    true  // ignoreEmptyContextAndExtra option, default false
+);
+$debugHandler->setFormatter($formatter);
+$logger->pushHandler($debugHandler);
