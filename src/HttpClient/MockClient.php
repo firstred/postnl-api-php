@@ -26,7 +26,6 @@
 
 namespace Firstred\PostNL\HttpClient;
 
-use Exception;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\ResponseException;

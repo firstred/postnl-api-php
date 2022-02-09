@@ -27,7 +27,6 @@
 namespace Firstred\PostNL\HttpClient;
 
 use Composer\CaBundle\CaBundle;
-use Exception;
 use Firstred\PostNL\Exception\ApiConnectionException;
 use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\HttpClientException;

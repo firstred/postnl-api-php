@@ -27,7 +27,6 @@
 namespace Firstred\PostNL\HttpClient;
 
 use Composer\CaBundle\CaBundle;
-use Exception;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\ResponseException;
