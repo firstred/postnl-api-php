@@ -1,6 +1,6 @@
 # PostNL REST/SOAP API PHP Bindings
 
-[![Build Status](https://travis-ci.org/firstred/postnl-api-php.svg?branch=master)](https://travis-ci.org/firstred/postnl-api-php)
+[![.github/workflows/test.yaml](https://github.com/firstred/postnl-api-php/actions/workflows/test.yaml/badge.svg)](https://github.com/firstred/postnl-api-php/actions/workflows/test.yaml)
 [![Documentation Status](https://readthedocs.org/projects/postnl-php/badge/?version=latest)](https://postnl-php.readthedocs.io/en/latest/?badge=latest)
 [![codecov](https://codecov.io/gh/firstred/postnl-api-php/branch/master/graph/badge.svg)](https://codecov.io/gh/firstred/postnl-api-php)
 [![latest stable version](https://poser.pugx.org/firstred/postnl-api-php/v/stable.svg)](https://packagist.org/packages/firstred/postnl-api-php)
