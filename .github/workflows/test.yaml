@@ -42,13 +42,13 @@ jobs:
                 if: matrix.php_versions != '8.1'
                 env:
                     XDEBUG_MODE: coverage
-                run: phpunit --testdox -- tests
+                run: vendor/bin/phpunit --testdox -- tests
 
             -   name: Test with PHPUnit (coverage)
                 if: matrix.php_versions == '8.1'
                 env:
                     XDEBUG_MODE: coverage
-                run: phpunit --testdox --coverage-clover coverage.xml -- tests
+                run: vendor/bin/phpunit --testdox --coverage-clover coverage.xml -- tests
 
             -   name: Codecov
                 if: matrix.php_versions == '8.1'
