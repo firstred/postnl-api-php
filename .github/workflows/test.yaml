@@ -43,7 +43,8 @@ jobs:
             -   name: Test with PHPUnit
                 env:
                     XDEBUG_MODE: coverage
-                run: phpunit --testdox --coverage-clover coverage.xml -- tests
+                run: [[ "${{ matrix.php_version }}" == '8.1' ]] && phpunit --testdox --coverage-clover coverage.xml -- tests || phpunit --testdox -- tests
 
             -   name: Codecov
+                if: ${{ matrix.php_versions }} == '8.1'
                 uses: codecov/codecov-action@v2
