@@ -1,0 +1,29 @@
+HTTP/1.1 200 OK
+Accept: application/json
+Content-Type: application/json;charset=UTF-8
+Date: Tue, 22 Mar 2022 11:18:38 GMT
+Content-Length: 257
+Connection: keep-alive
+
+{
+  "MergedLabels": [],
+  "ResponseShipments": [
+    {
+      "Barcode": "3SPSQR2413284",
+      "Errors": [
+        {
+          "Code": "111",
+          "Description": "No label available, Direct Infeed"
+        }
+      ],
+      "Warnings": [
+        {
+          "Code": "500",
+          "Description": "No partner found"
+        }
+      ],
+      "Labels": [],
+      "ProductCodeDelivery": "4905"
+    }
+  ]
+}
