@@ -112,7 +112,7 @@ class GuzzleClient extends BaseHttpClient implements ClientInterface, LoggerAwar
                 $retries,
                 RequestInterface $request,
                 ResponseInterface $response = null,
-                RequestException $exception = null
+                GuzzleException $exception = null
             ) {
                 // Limit the number of retries to 5
                 if ($retries >= $this->getMaxRetries()) {
