@@ -26,6 +26,11 @@
 
 namespace Firstred\PostNL\Entity;
 
+use DateTimeImmutable;
+use DateTimeInterface;
+use DateTimeZone;
+use Exception;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
@@ -33,6 +38,7 @@ use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\ShippingService;
 use Firstred\PostNL\Service\TimeframeService;
+use function is_string;
 
 /**
  * Class StatusAddress.
@@ -50,7 +56,7 @@ use Firstred\PostNL\Service\TimeframeService;
  * @method string|null getHouseNumberSuffix()
  * @method string|null getLastName()
  * @method string|null getRegion()
- * @method string|null getRegistrationDate()
+ * @method DateTimeInterface|null getRegistrationDate()
  * @method string|null getRemark()
  * @method string|null getStreet()
  * @method string|null getZipcode()
@@ -66,7 +72,6 @@ use Firstred\PostNL\Service\TimeframeService;
  * @method StatusAddress setHouseNumberSuffix(string|null $HouseNumberSuffix = null)
  * @method StatusAddress setLastName(string|null $LastName = null)
  * @method StatusAddress setRegion(string|null $Region = null)
- * @method StatusAddress setRegistrationDate(string|null $RegistrationDate = null)
  * @method StatusAddress setRemark(string|null $Remark = null)
  * @method StatusAddress setStreet(string|null $Street = null)
  *
@@ -282,23 +287,25 @@ class StatusAddress extends AbstractEntity
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string|null $AddressType
-     * @param string|null $FirstName
-     * @param string|null $LastName
-     * @param string|null $CompanyName
-     * @param string|null $DepartmentName
-     * @param string|null $Street
-     * @param string|null $HouseNumber
-     * @param string|null $HouseNumberSuffix
-     * @param string|null $Zipcode
-     * @param string|null $City
-     * @param string|null $CountryCode
-     * @param string|null $Region
-     * @param string|null $District
-     * @param string|null $Building
-     * @param string|null $Floor
-     * @param string|null $Remark
-     * @param string|null $RegistrationDate
+     * @param string|null                   $AddressType
+     * @param string|null                   $FirstName
+     * @param string|null                   $LastName
+     * @param string|null                   $CompanyName
+     * @param string|null                   $DepartmentName
+     * @param string|null                   $Street
+     * @param string|null                   $HouseNumber
+     * @param string|null                   $HouseNumberSuffix
+     * @param string|null                   $Zipcode
+     * @param string|null                   $City
+     * @param string|null                   $CountryCode
+     * @param string|null                   $Region
+     * @param string|null                   $District
+     * @param string|null                   $Building
+     * @param string|null                   $Floor
+     * @param string|null                   $Remark
+     * @param DateTimeInterface|string|null $RegistrationDate
+     *
+     * @throws InvalidArgumentException
      */
     public function __construct(
         $AddressType = null,
@@ -372,6 +379,30 @@ class StatusAddress extends AbstractEntity
         } else {
             $this->AddressType = str_pad($AddressType, 2, '0', STR_PAD_LEFT);
         }
+
+        return $this;
+    }
+
+    /**
+     * @param DateTimeInterface|string|null $RegistrationDate
+     *
+     * @return static
+     *
+     * @throws InvalidArgumentException
+     *
+     * @since 1.2.0
+     */
+    public function setRegistrationDate($RegistrationDate = null)
+    {
+        if (is_string($RegistrationDate)) {
+            try {
+                $RegistrationDate = new DateTimeImmutable($RegistrationDate, new DateTimeZone('Europe/Amsterdam'));
+            } catch (Exception $e) {
+                throw new InvalidArgumentException($e->getMessage(),  0, $e);
+            }
+        }
+
+        $this->$RegistrationDate = $RegistrationDate;
 
         return $this;
     }
