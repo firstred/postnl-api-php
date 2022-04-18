@@ -402,7 +402,7 @@ class StatusAddress extends AbstractEntity
             }
         }
 
-        $this->$RegistrationDate = $RegistrationDate;
+        $this->RegistrationDate = $RegistrationDate;
 
         return $this;
     }
