@@ -29,7 +29,7 @@ Summary
 Methods
 ~~~~~~~
 
-* :php:meth:`public \_\_construct\($Shipments\)<Firstred\\PostNL\\Entity\\Response\\CurrentStatusResponse::\_\_construct\(\)>`
+* :php:meth:`public \_\_construct\($Shipments, $Warnings\)<Firstred\\PostNL\\Entity\\Response\\CurrentStatusResponse::\_\_construct\(\)>`
 * :php:meth:`public xmlSerialize\($writer\)<Firstred\\PostNL\\Entity\\Response\\CurrentStatusResponse::xmlSerialize\(\)>`
 
 
@@ -51,12 +51,17 @@ Properties
 	:Type: :any:`\\Firstred\\PostNL\\Entity\\Response\\CurrentStatusResponseShipment\[\] <Firstred\\PostNL\\Entity\\Response\\CurrentStatusResponseShipment>` | null 
 
 
+.. php:attr:: protected static Warnings
+
+	:Type: :any:`\\Firstred\\PostNL\\Entity\\Warning\[\] <Firstred\\PostNL\\Entity\\Warning>` | null 
+
+
 Methods
 -------
 
 .. rst-class:: public
 
-	.. php:method:: public __construct( $Shipments=null)
+	.. php:method:: public __construct( $Shipments=null, $Warnings=null)
 	
 		.. rst-class:: phpdoc-description
 		
@@ -66,6 +71,7 @@ Methods
 		
 		:Parameters:
 			* **$Shipments** (:any:`Firstred\\PostNL\\Entity\\Response\\CurrentStatusResponseShipment\[\] <Firstred\\PostNL\\Entity\\Response\\CurrentStatusResponseShipment>` | null)  
+			* **$Warnings** (:any:`Firstred\\PostNL\\Entity\\Warning\[\] <Firstred\\PostNL\\Entity\\Warning>` | null)  
 
 		
 	

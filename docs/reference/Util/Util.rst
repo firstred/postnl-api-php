@@ -32,6 +32,7 @@ Methods
 * :php:meth:`public static getShippingDate\($deliveryDate, $days\)<Firstred\\PostNL\\Util\\Util::getShippingDate\(\)>`
 * :php:meth:`public static getShippingDaysRemaining\($shippingDate, $preferredDeliveryDate\)<Firstred\\PostNL\\Util\\Util::getShippingDaysRemaining\(\)>`
 * :php:meth:`protected static getHolidaysForYear\($year\)<Firstred\\PostNL\\Util\\Util::getHolidaysForYear\(\)>`
+* :php:meth:`public static compareGuzzleVersion\($a, $b\)<Firstred\\PostNL\\Util\\Util::compareGuzzleVersion\(\)>`
 
 
 Constants
@@ -157,87 +158,14 @@ Methods
 
 		
 		:Returns: array Credits to @tvlooy \(https://gist\.github\.com/tvlooy/1894247\)
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
-		:Throws: :any:`\\Exception <Exception>` 
+	
+	
+
+.. rst-class:: public static
+
+	.. php:method:: public static compareGuzzleVersion( $a, $b)
+	
+		
 	
 	
 

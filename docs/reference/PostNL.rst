@@ -79,7 +79,7 @@ Methods
 * :php:meth:`public getShippingStatusByBarcode\($barcode, $complete\)<Firstred\\PostNL\\PostNL::getShippingStatusByBarcode\(\)>`
 * :php:meth:`public getShippingStatusesByBarcodes\($barcodes, $complete\)<Firstred\\PostNL\\PostNL::getShippingStatusesByBarcodes\(\)>`
 * :php:meth:`public getShippingStatusByReference\($reference, $complete\)<Firstred\\PostNL\\PostNL::getShippingStatusByReference\(\)>`
-* :php:meth:`public getShippingStatusesByReference\($references, $complete\)<Firstred\\PostNL\\PostNL::getShippingStatusesByReference\(\)>`
+* :php:meth:`public getShippingStatusesByReferences\($references, $complete\)<Firstred\\PostNL\\PostNL::getShippingStatusesByReferences\(\)>`
 * :php:meth:`public getCompleteStatus\($completeStatus\)<Firstred\\PostNL\\PostNL::getCompleteStatus\(\)>`
 * :php:meth:`public getUpdatedShipments\($dateTimeFrom, $dateTimeTo\)<Firstred\\PostNL\\PostNL::getUpdatedShipments\(\)>`
 * :php:meth:`public getSignature\($signature\)<Firstred\\PostNL\\PostNL::getSignature\(\)>`
@@ -192,17 +192,17 @@ Properties
 
 .. php:attr:: protected static requestFactory
 
-	:Type: :any:`\\Firstred\\PostNL\\Factory\\RequestFactoryInterface <Firstred\\PostNL\\Factory\\RequestFactoryInterface>` 
+	:Type: :any:`\\Psr\\Http\\Message\\RequestFactoryInterface <Psr\\Http\\Message\\RequestFactoryInterface>` | :any:`\\Firstred\\PostNL\\Factory\\RequestFactoryInterface <Firstred\\PostNL\\Factory\\RequestFactoryInterface>` 
 
 
 .. php:attr:: protected static responseFactory
 
-	:Type: :any:`\\Firstred\\PostNL\\Factory\\ResponseFactoryInterface <Firstred\\PostNL\\Factory\\ResponseFactoryInterface>` 
+	:Type: :any:`\\Psr\\Http\\Message\\ResponseFactoryInterface <Psr\\Http\\Message\\ResponseFactoryInterface>` | :any:`\\Firstred\\PostNL\\Factory\\ResponseFactoryInterface <Firstred\\PostNL\\Factory\\ResponseFactoryInterface>` 
 
 
 .. php:attr:: protected static streamFactory
 
-	:Type: :any:`\\Firstred\\PostNL\\Factory\\StreamFactoryInterface <Firstred\\PostNL\\Factory\\StreamFactoryInterface>` 
+	:Type: :any:`\\Psr\\Http\\Message\\StreamFactoryInterface <Psr\\Http\\Message\\StreamFactoryInterface>` | :any:`\\Firstred\\PostNL\\Factory\\StreamFactoryInterface <Firstred\\PostNL\\Factory\\StreamFactoryInterface>` 
 
 
 .. php:attr:: protected static mode
@@ -530,7 +530,7 @@ Methods
 			
 		
 		
-		:Returns: :any:`\\Firstred\\PostNL\\Factory\\RequestFactoryInterface <Firstred\\PostNL\\Factory\\RequestFactoryInterface>` 
+		:Returns: :any:`\\Psr\\Http\\Message\\RequestFactoryInterface <Psr\\Http\\Message\\RequestFactoryInterface>` | :any:`\\Firstred\\PostNL\\Factory\\RequestFactoryInterface <Firstred\\PostNL\\Factory\\RequestFactoryInterface>` 
 		:Since: 1.2.0 
 	
 	
@@ -546,10 +546,11 @@ Methods
 		
 		
 		:Parameters:
-			* **$requestFactory** (:any:`Firstred\\PostNL\\Factory\\RequestFactoryInterface <Firstred\\PostNL\\Factory\\RequestFactoryInterface>`)  
+			* **$requestFactory** (:any:`Psr\\Http\\Message\\RequestFactoryInterface <Psr\\Http\\Message\\RequestFactoryInterface>` | :any:`\\Firstred\\PostNL\\Factory\\RequestFactoryInterface <Firstred\\PostNL\\Factory\\RequestFactoryInterface>`)  
 
 		
 		:Returns: static 
+		:Since: 1.2.0 
 		:Since: 1.2.0 
 	
 	
@@ -564,7 +565,7 @@ Methods
 			
 		
 		
-		:Returns: :any:`\\Firstred\\PostNL\\Factory\\ResponseFactoryInterface <Firstred\\PostNL\\Factory\\ResponseFactoryInterface>` 
+		:Returns: :any:`\\Psr\\Http\\Message\\ResponseFactoryInterface <Psr\\Http\\Message\\ResponseFactoryInterface>` | :any:`\\Firstred\\PostNL\\Factory\\ResponseFactoryInterface <Firstred\\PostNL\\Factory\\ResponseFactoryInterface>` 
 		:Since: 1.2.0 
 	
 	
@@ -580,10 +581,11 @@ Methods
 		
 		
 		:Parameters:
-			* **$responseFactory** (:any:`Firstred\\PostNL\\Factory\\ResponseFactoryInterface <Firstred\\PostNL\\Factory\\ResponseFactoryInterface>`)  
+			* **$responseFactory** (:any:`Psr\\Http\\Message\\ResponseFactoryInterface <Psr\\Http\\Message\\ResponseFactoryInterface>` | :any:`\\Firstred\\PostNL\\Factory\\ResponseFactoryInterface <Firstred\\PostNL\\Factory\\ResponseFactoryInterface>`)  
 
 		
 		:Returns: static 
+		:Since: 1.2.0 
 		:Since: 1.2.0 
 	
 	
@@ -598,7 +600,7 @@ Methods
 			
 		
 		
-		:Returns: :any:`\\Firstred\\PostNL\\Factory\\StreamFactoryInterface <Firstred\\PostNL\\Factory\\StreamFactoryInterface>` 
+		:Returns: :any:`\\Psr\\Http\\Message\\StreamFactoryInterface <Psr\\Http\\Message\\StreamFactoryInterface>` | :any:`\\Firstred\\PostNL\\Factory\\StreamFactoryInterface <Firstred\\PostNL\\Factory\\StreamFactoryInterface>` 
 		:Since: 1.2.0 
 	
 	
@@ -614,10 +616,11 @@ Methods
 		
 		
 		:Parameters:
-			* **$streamFactory** (:any:`Firstred\\PostNL\\Factory\\StreamFactoryInterface <Firstred\\PostNL\\Factory\\StreamFactoryInterface>`)  
+			* **$streamFactory** (:any:`Psr\\Http\\Message\\StreamFactoryInterface <Psr\\Http\\Message\\StreamFactoryInterface>` | :any:`\\Firstred\\PostNL\\Factory\\StreamFactoryInterface <Firstred\\PostNL\\Factory\\StreamFactoryInterface>`)  
 
 		
 		:Returns: static 
+		:Since: 1.2.0 
 		:Since: 1.2.0 
 	
 	
@@ -2014,6 +2017,7 @@ Methods
 		:Throws: :any:`\\Psr\\Cache\\InvalidArgumentException <Psr\\Cache\\InvalidArgumentException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ResponseException <Firstred\\PostNL\\Exception\\ResponseException>` 
 		:Throws: :any:`\\Http\\Discovery\\NotFoundException <Http\\Discovery\\NotFoundException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ShipmentNotFoundException <Firstred\\PostNL\\Exception\\ShipmentNotFoundException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\CifDownException <Firstred\\PostNL\\Exception\\CifDownException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\CifException <Firstred\\PostNL\\Exception\\CifException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\HttpClientException <Firstred\\PostNL\\Exception\\HttpClientException>` 
@@ -2022,6 +2026,7 @@ Methods
 		:Throws: :any:`\\Psr\\Cache\\InvalidArgumentException <Psr\\Cache\\InvalidArgumentException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ResponseException <Firstred\\PostNL\\Exception\\ResponseException>` 
 		:Throws: :any:`\\Http\\Discovery\\NotFoundException <Http\\Discovery\\NotFoundException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ShipmentNotFoundException <Firstred\\PostNL\\Exception\\ShipmentNotFoundException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\CifDownException <Firstred\\PostNL\\Exception\\CifDownException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\CifException <Firstred\\PostNL\\Exception\\CifException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\HttpClientException <Firstred\\PostNL\\Exception\\HttpClientException>` 
@@ -2030,6 +2035,7 @@ Methods
 		:Throws: :any:`\\Psr\\Cache\\InvalidArgumentException <Psr\\Cache\\InvalidArgumentException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ResponseException <Firstred\\PostNL\\Exception\\ResponseException>` 
 		:Throws: :any:`\\Http\\Discovery\\NotFoundException <Http\\Discovery\\NotFoundException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ShipmentNotFoundException <Firstred\\PostNL\\Exception\\ShipmentNotFoundException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\CifDownException <Firstred\\PostNL\\Exception\\CifDownException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\CifException <Firstred\\PostNL\\Exception\\CifException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\HttpClientException <Firstred\\PostNL\\Exception\\HttpClientException>` 
@@ -2038,6 +2044,7 @@ Methods
 		:Throws: :any:`\\Psr\\Cache\\InvalidArgumentException <Psr\\Cache\\InvalidArgumentException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ResponseException <Firstred\\PostNL\\Exception\\ResponseException>` 
 		:Throws: :any:`\\Http\\Discovery\\NotFoundException <Http\\Discovery\\NotFoundException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ShipmentNotFoundException <Firstred\\PostNL\\Exception\\ShipmentNotFoundException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\CifDownException <Firstred\\PostNL\\Exception\\CifDownException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\CifException <Firstred\\PostNL\\Exception\\CifException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\HttpClientException <Firstred\\PostNL\\Exception\\HttpClientException>` 
@@ -2046,6 +2053,7 @@ Methods
 		:Throws: :any:`\\Psr\\Cache\\InvalidArgumentException <Psr\\Cache\\InvalidArgumentException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ResponseException <Firstred\\PostNL\\Exception\\ResponseException>` 
 		:Throws: :any:`\\Http\\Discovery\\NotFoundException <Http\\Discovery\\NotFoundException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ShipmentNotFoundException <Firstred\\PostNL\\Exception\\ShipmentNotFoundException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\CifDownException <Firstred\\PostNL\\Exception\\CifDownException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\CifException <Firstred\\PostNL\\Exception\\CifException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\HttpClientException <Firstred\\PostNL\\Exception\\HttpClientException>` 
@@ -2054,6 +2062,7 @@ Methods
 		:Throws: :any:`\\Psr\\Cache\\InvalidArgumentException <Psr\\Cache\\InvalidArgumentException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ResponseException <Firstred\\PostNL\\Exception\\ResponseException>` 
 		:Throws: :any:`\\Http\\Discovery\\NotFoundException <Http\\Discovery\\NotFoundException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ShipmentNotFoundException <Firstred\\PostNL\\Exception\\ShipmentNotFoundException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\CifDownException <Firstred\\PostNL\\Exception\\CifDownException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\CifException <Firstred\\PostNL\\Exception\\CifException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\HttpClientException <Firstred\\PostNL\\Exception\\HttpClientException>` 
@@ -2062,6 +2071,7 @@ Methods
 		:Throws: :any:`\\Psr\\Cache\\InvalidArgumentException <Psr\\Cache\\InvalidArgumentException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ResponseException <Firstred\\PostNL\\Exception\\ResponseException>` 
 		:Throws: :any:`\\Http\\Discovery\\NotFoundException <Http\\Discovery\\NotFoundException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ShipmentNotFoundException <Firstred\\PostNL\\Exception\\ShipmentNotFoundException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\CifDownException <Firstred\\PostNL\\Exception\\CifDownException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\CifException <Firstred\\PostNL\\Exception\\CifException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\HttpClientException <Firstred\\PostNL\\Exception\\HttpClientException>` 
@@ -2070,13 +2080,23 @@ Methods
 		:Throws: :any:`\\Psr\\Cache\\InvalidArgumentException <Psr\\Cache\\InvalidArgumentException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ResponseException <Firstred\\PostNL\\Exception\\ResponseException>` 
 		:Throws: :any:`\\Http\\Discovery\\NotFoundException <Http\\Discovery\\NotFoundException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ShipmentNotFoundException <Firstred\\PostNL\\Exception\\ShipmentNotFoundException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\CifDownException <Firstred\\PostNL\\Exception\\CifDownException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\CifException <Firstred\\PostNL\\Exception\\CifException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\HttpClientException <Firstred\\PostNL\\Exception\\HttpClientException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
+		:Throws: :any:`\\Psr\\Cache\\InvalidArgumentException <Psr\\Cache\\InvalidArgumentException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ResponseException <Firstred\\PostNL\\Exception\\ResponseException>` 
+		:Throws: :any:`\\Http\\Discovery\\NotFoundException <Http\\Discovery\\NotFoundException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ShipmentNotFoundException <Firstred\\PostNL\\Exception\\ShipmentNotFoundException>` 
 		:Since: 1.2.0 
 	
 	
 
 .. rst-class:: public
 
-	.. php:method:: public getShippingStatusesByReference( $references, $complete=false)
+	.. php:method:: public getShippingStatusesByReferences( $references, $complete=false)
 	
 		.. rst-class:: phpdoc-description
 		
@@ -2397,16 +2417,61 @@ Methods
 			* **$getDeliveryDate** (:any:`Firstred\\PostNL\\Entity\\Request\\GetDeliveryDate <Firstred\\PostNL\\Entity\\Request\\GetDeliveryDate>`)  
 
 		
-		:Returns: array \[uuid =\> ResponseTimeframes, uuid =\> GetNearestLocationsResponse, uuid =\> GetDeliveryDateResponse\]
+		:Returns: array \[
+			    timeframes =\> ResponseTimeframes,
+			    locations =\> GetNearestLocationsResponse,
+			    delivery\_date =\> GetDeliveryDateResponse,
+			\]
+		
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\CifDownException <Firstred\\PostNL\\Exception\\CifDownException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\CifException <Firstred\\PostNL\\Exception\\CifException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\HttpClientException <Firstred\\PostNL\\Exception\\HttpClientException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
 		:Throws: :any:`\\Psr\\Cache\\InvalidArgumentException <Psr\\Cache\\InvalidArgumentException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ResponseException <Firstred\\PostNL\\Exception\\ResponseException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\CifDownException <Firstred\\PostNL\\Exception\\CifDownException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\CifException <Firstred\\PostNL\\Exception\\CifException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\HttpClientException <Firstred\\PostNL\\Exception\\HttpClientException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
 		:Throws: :any:`\\Psr\\Cache\\InvalidArgumentException <Psr\\Cache\\InvalidArgumentException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ResponseException <Firstred\\PostNL\\Exception\\ResponseException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\CifDownException <Firstred\\PostNL\\Exception\\CifDownException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\CifException <Firstred\\PostNL\\Exception\\CifException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\HttpClientException <Firstred\\PostNL\\Exception\\HttpClientException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
 		:Throws: :any:`\\Psr\\Cache\\InvalidArgumentException <Psr\\Cache\\InvalidArgumentException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ResponseException <Firstred\\PostNL\\Exception\\ResponseException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\CifDownException <Firstred\\PostNL\\Exception\\CifDownException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\CifException <Firstred\\PostNL\\Exception\\CifException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\HttpClientException <Firstred\\PostNL\\Exception\\HttpClientException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
+		:Throws: :any:`\\Psr\\Cache\\InvalidArgumentException <Psr\\Cache\\InvalidArgumentException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ResponseException <Firstred\\PostNL\\Exception\\ResponseException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\CifDownException <Firstred\\PostNL\\Exception\\CifDownException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\CifException <Firstred\\PostNL\\Exception\\CifException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\HttpClientException <Firstred\\PostNL\\Exception\\HttpClientException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
+		:Throws: :any:`\\Psr\\Cache\\InvalidArgumentException <Psr\\Cache\\InvalidArgumentException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ResponseException <Firstred\\PostNL\\Exception\\ResponseException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\CifDownException <Firstred\\PostNL\\Exception\\CifDownException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\CifException <Firstred\\PostNL\\Exception\\CifException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\HttpClientException <Firstred\\PostNL\\Exception\\HttpClientException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
+		:Throws: :any:`\\Psr\\Cache\\InvalidArgumentException <Psr\\Cache\\InvalidArgumentException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ResponseException <Firstred\\PostNL\\Exception\\ResponseException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\CifDownException <Firstred\\PostNL\\Exception\\CifDownException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\CifException <Firstred\\PostNL\\Exception\\CifException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\HttpClientException <Firstred\\PostNL\\Exception\\HttpClientException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
+		:Throws: :any:`\\Psr\\Cache\\InvalidArgumentException <Psr\\Cache\\InvalidArgumentException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ResponseException <Firstred\\PostNL\\Exception\\ResponseException>` 
 		:Since: 1.0.0 
 	
 	

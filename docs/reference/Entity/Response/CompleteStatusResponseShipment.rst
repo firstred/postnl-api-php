@@ -45,7 +45,7 @@ Properties
 
 .. php:attr:: protected static Addresses
 
-	:Type: :any:`\\Firstred\\PostNL\\Entity\\Address\[\] <Firstred\\PostNL\\Entity\\Address>` | null 
+	:Type: :any:`\\Firstred\\PostNL\\Entity\\Response\\StatusAddress\[\] <Firstred\\PostNL\\Entity\\Response\\StatusAddress>` | null 
 
 
 .. php:attr:: protected static Amounts
@@ -152,7 +152,7 @@ Methods
 		
 		
 		:Parameters:
-			* **$Addresses** (:any:`Firstred\\PostNL\\Entity\\Address\[\] <Firstred\\PostNL\\Entity\\Address>` | null)  
+			* **$Addresses** (:any:`Firstred\\PostNL\\Entity\\Response\\StatusAddress\[\] <Firstred\\PostNL\\Entity\\Response\\StatusAddress>` | null)  
 			* **$Amounts** (:any:`Firstred\\PostNL\\Entity\\Amount\[\] <Firstred\\PostNL\\Entity\\Amount>` | null)  
 			* **$Barcode** (string | null)  
 			* **$Customer** (:any:`Firstred\\PostNL\\Entity\\Customer <Firstred\\PostNL\\Entity\\Customer>` | null)  

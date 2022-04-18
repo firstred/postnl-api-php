@@ -19,7 +19,7 @@ HttpClientException
 		
 	
 	:Parent:
-		:php:class:`Exception`
+		:php:class:`Firstred\\PostNL\\Exception\\PostNLException`
 	
 
 

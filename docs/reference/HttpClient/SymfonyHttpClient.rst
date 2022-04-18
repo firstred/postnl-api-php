@@ -4,18 +4,18 @@
 	:language: php
 
 
-GuzzleClient
-============
+SymfonyHttpClient
+=================
 
 
 .. php:namespace:: Firstred\PostNL\HttpClient
 
-.. php:class:: GuzzleClient
+.. php:class:: SymfonyHttpClient
 
 
 	.. rst-class:: phpdoc-description
 	
-		| Class GuzzleClient\.
+		| Class SymfonyHttpClientInterface\.
 		
 	
 	:Parent:
@@ -32,12 +32,14 @@ Summary
 Methods
 ~~~~~~~
 
-* :php:meth:`public \_\_construct\($client, $logger, $concurrency, $maxRetries\)<Firstred\\PostNL\\HttpClient\\GuzzleClient::\_\_construct\(\)>`
-* :php:meth:`public static getInstance\(\)<Firstred\\PostNL\\HttpClient\\GuzzleClient::getInstance\(\)>`
-* :php:meth:`public setOption\($name, $value\)<Firstred\\PostNL\\HttpClient\\GuzzleClient::setOption\(\)>`
-* :php:meth:`public getOption\($name\)<Firstred\\PostNL\\HttpClient\\GuzzleClient::getOption\(\)>`
-* :php:meth:`public doRequest\($request\)<Firstred\\PostNL\\HttpClient\\GuzzleClient::doRequest\(\)>`
-* :php:meth:`public doRequests\($requests\)<Firstred\\PostNL\\HttpClient\\GuzzleClient::doRequests\(\)>`
+* :php:meth:`public \_\_construct\($client, $logger, $concurrency, $maxRetries\)<Firstred\\PostNL\\HttpClient\\SymfonyHttpClient::\_\_construct\(\)>`
+* :php:meth:`public static getInstance\(\)<Firstred\\PostNL\\HttpClient\\SymfonyHttpClient::getInstance\(\)>`
+* :php:meth:`public setOption\($name, $value\)<Firstred\\PostNL\\HttpClient\\SymfonyHttpClient::setOption\(\)>`
+* :php:meth:`public getOption\($name\)<Firstred\\PostNL\\HttpClient\\SymfonyHttpClient::getOption\(\)>`
+* :php:meth:`public doRequest\($request\)<Firstred\\PostNL\\HttpClient\\SymfonyHttpClient::doRequest\(\)>`
+* :php:meth:`public doRequests\($requests\)<Firstred\\PostNL\\HttpClient\\SymfonyHttpClient::doRequests\(\)>`
+* :php:meth:`public setMaxRetries\($maxRetries\)<Firstred\\PostNL\\HttpClient\\SymfonyHttpClient::setMaxRetries\(\)>`
+* :php:meth:`public setConcurrency\($concurrency\)<Firstred\\PostNL\\HttpClient\\SymfonyHttpClient::setConcurrency\(\)>`
 
 
 Constants
@@ -73,12 +75,12 @@ Methods
 	
 		.. rst-class:: phpdoc-description
 		
-			| GuzzleClient constructor\.
+			| SymfonyHttpClient constructor\.
 			
 		
 		
 		:Parameters:
-			* **$client** (:any:`GuzzleHttp\\Client <GuzzleHttp\\Client>` | null)  
+			* **$client** (:any:`Symfony\\Contracts\\HttpClient\\HttpClientInterface <Symfony\\Contracts\\HttpClient\\HttpClientInterface>` | null)  
 			* **$logger** (:any:`Psr\\Log\\LoggerInterface <Psr\\Log\\LoggerInterface>` | null)  
 			* **$concurrency** (int)  
 			* **$maxRetries** (int)  
@@ -93,7 +95,7 @@ Methods
 	.. php:method:: public static getInstance()
 	
 		
-		:Returns: :any:`\\Firstred\\PostNL\\HttpClient\\GuzzleClient <Firstred\\PostNL\\HttpClient\\GuzzleClient>` | static 
+		:Returns: static 
 		:Deprecated:  Please instantiate a new client rather than using this singleton
 	
 	
@@ -104,7 +106,7 @@ Methods
 	
 		.. rst-class:: phpdoc-description
 		
-			| Set Guzzle option\.
+			| Set Symfony HTTP Client option\.
 			
 		
 		
@@ -113,7 +115,7 @@ Methods
 			* **$value** (mixed)  
 
 		
-		:Returns: :any:`\\Firstred\\PostNL\\HttpClient\\GuzzleClient <Firstred\\PostNL\\HttpClient\\GuzzleClient>` 
+		:Returns: static 
 	
 	
 
@@ -123,7 +125,7 @@ Methods
 	
 		.. rst-class:: phpdoc-description
 		
-			| Get Guzzle option\.
+			| Get Symfony HTTP Client option\.
 			
 		
 		
@@ -174,6 +176,42 @@ Methods
 		
 		:Returns: :any:`\\Firstred\\PostNL\\Exception\\HttpClientException\[\] <Firstred\\PostNL\\Exception\\HttpClientException>` | :any:`\\Psr\\Http\\Message\\ResponseInterface\[\] <Psr\\Http\\Message\\ResponseInterface>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setMaxRetries( $maxRetries)
+	
+		.. rst-class:: phpdoc-description
+		
+			| Set the amount of retries\.
+			
+		
+		
+		:Parameters:
+			* **$maxRetries** (int)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setConcurrency( $concurrency)
+	
+		.. rst-class:: phpdoc-description
+		
+			| Set the concurrency\.
+			
+		
+		
+		:Parameters:
+			* **$concurrency** (int)  
+
+		
+		:Returns: static 
 	
 	
 

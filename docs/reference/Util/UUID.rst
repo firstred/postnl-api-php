@@ -38,7 +38,7 @@ Methods
 	
 		.. rst-class:: phpdoc-description
 		
-			| Generate a v4 UUID\.
+			| Generate a v4 UUID in RFC 4122 format\.
 			
 		
 		

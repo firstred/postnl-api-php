@@ -32,6 +32,7 @@ Classes
 	
 	CoordinatesSouthEast <CoordinatesSouthEast>
 	OldStatus <OldStatus>
+	StatusAddress <StatusAddress>
 	Warning <Warning>
 	ReasonNoTimeframe <ReasonNoTimeframe>
 	Area <Area>

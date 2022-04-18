@@ -56,37 +56,37 @@ Properties
 
 .. php:attr:: protected static Monday
 
-	:Type: string | null 
+	:Type: string | array | null 
 
 
 .. php:attr:: protected static Tuesday
 
-	:Type: string | null 
+	:Type: string | array | null 
 
 
 .. php:attr:: protected static Wednesday
 
-	:Type: string | null 
+	:Type: string | array | null 
 
 
 .. php:attr:: protected static Thursday
 
-	:Type: string | null 
+	:Type: string | array | null 
 
 
 .. php:attr:: protected static Friday
 
-	:Type: string | null 
+	:Type: string | array | null 
 
 
 .. php:attr:: protected static Saturday
 
-	:Type: string | null 
+	:Type: string | array | null 
 
 
 .. php:attr:: protected static Sunday
 
-	:Type: string | null 
+	:Type: string | array | null 
 
 
 Methods
@@ -94,7 +94,7 @@ Methods
 
 .. rst-class:: public
 
-	.. php:method:: public __construct( $Monday=\'\', $Tuesday=\'\', $Wednesday=\'\', $Thursday=\'\', $Friday=\'\', $Saturday=\'\', $Sunday=\'\')
+	.. php:method:: public __construct( $Monday=null, $Tuesday=null, $Wednesday=null, $Thursday=null, $Friday=null, $Saturday=null, $Sunday=null)
 	
 		.. rst-class:: phpdoc-description
 		
@@ -103,13 +103,13 @@ Methods
 		
 		
 		:Parameters:
-			* **$Monday** (string | null)  
-			* **$Tuesday** (string | null)  
-			* **$Wednesday** (string | null)  
-			* **$Thursday** (string | null)  
-			* **$Friday** (string | null)  
-			* **$Saturday** (string | null)  
-			* **$Sunday** (string | null)  
+			* **$Monday** (string | array | null)  
+			* **$Tuesday** (string | array | null)  
+			* **$Wednesday** (string | array | null)  
+			* **$Thursday** (string | array | null)  
+			* **$Friday** (string | array | null)  
+			* **$Saturday** (string | array | null)  
+			* **$Sunday** (string | array | null)  
 
 		
 	
@@ -170,7 +170,7 @@ Methods
 			* **$offset** (mixed)  
 
 		
-		:Returns: array 
+		:Returns: mixed 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
 		:Since: 1.2.0 
 	

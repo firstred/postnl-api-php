@@ -6,7 +6,7 @@
 
 .. _namespace-Firstred-PostNL:
 
-Reference
+PostNL
 ======
 
 \\Firstred\\PostNL

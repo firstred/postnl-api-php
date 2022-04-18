@@ -34,6 +34,7 @@ Methods
 * :php:meth:`public \_\_construct\($AllowSundaySorting, $City, $CountryCode, $CutOffTimes, $HouseNr, $HouseNrExt, $Options, $OriginCountryCode, $PostalCode, $ShippingDate, $ShippingDuration, $Street, $GetDeliveryDate, $Message\)<Firstred\\PostNL\\Entity\\Request\\GetDeliveryDate::\_\_construct\(\)>`
 * :php:meth:`public setShippingDate\($shippingDate\)<Firstred\\PostNL\\Entity\\Request\\GetDeliveryDate::setShippingDate\(\)>`
 * :php:meth:`public setPostalCode\($postcode\)<Firstred\\PostNL\\Entity\\Request\\GetDeliveryDate::setPostalCode\(\)>`
+* :php:meth:`public setAllowSundaySorting\($AllowSundaySorting\)<Firstred\\PostNL\\Entity\\Request\\GetDeliveryDate::setAllowSundaySorting\(\)>`
 * :php:meth:`public xmlSerialize\($writer\)<Firstred\\PostNL\\Entity\\Request\\GetDeliveryDate::xmlSerialize\(\)>`
 
 
@@ -184,6 +185,21 @@ Methods
 
 		
 		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setAllowSundaySorting( $AllowSundaySorting=null)
+	
+		
+		:Parameters:
+			* **$AllowSundaySorting** (string | bool | int | null)  
+
+		
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\Request\\GetDeliveryDate <Firstred\\PostNL\\Entity\\Request\\GetDeliveryDate>` 
+		:Since: 1.0.0 
+		:Since: 1.0.0 
 	
 	
 

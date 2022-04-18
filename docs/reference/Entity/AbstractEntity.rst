@@ -90,7 +90,8 @@ Methods
 			* **$properties** (array)  
 
 		
-		:Returns: object | null 
+		:Returns: static 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
 		:Since: 1.0.0 
 	
 	
@@ -158,7 +159,7 @@ Methods
 			* **$json** (:any:`stdClass <stdClass>`)  JSON object `{"EntityName": object}`
 
 		
-		:Returns: mixed 
+		:Returns: static 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
