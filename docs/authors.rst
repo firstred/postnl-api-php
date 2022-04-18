@@ -26,5 +26,7 @@ These contributors have helped with making this library possible. Thank you so m
 * `rvanvelzen <https://github.com/rvanvelzen>`_ (contributor)
 * `timo002 <https://github.com/timo002>`_ (contributor)
 * `rdanklof <https://github.com/rdanklof>`_ (contributor)
+* `Bert Brunekreeft <https://github.com/BBrunekreeft>`_ (contributor)
+* `Daniel Schipper <https://github.com/daniel-memo-ict>`_ (contributor)
 * Mathieu Haverkamp (contributor)
 * Jeroen Smit (contributor)
