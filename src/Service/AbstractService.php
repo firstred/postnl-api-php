@@ -48,6 +48,7 @@ use ReflectionException;
 use Sabre\Xml\Writer;
 use SimpleXMLElement;
 use function get_object_vars;
+use function is_array;
 
 /**
  * Class AbstractService.
@@ -233,8 +234,8 @@ abstract class AbstractService
             foreach ($body->Errors as $error) {
                 if (isset($error->ErrorMsg)) {
                     $exceptionData[] = [
-                        'description' => isset($error->ErrorMsg) ? $error->ErrorMsg : '',
-                        'message'     => isset($error->ErrorMsg) ? $error->ErrorMsg : '',
+                        'description' => $error->ErrorMsg,
+                        'message'     => $error->ErrorMsg,
                         'code'        => isset($error->ErrorNumber) ? (int) $error->ErrorNumber : 0,
                     ];
                 } else {
@@ -252,6 +253,20 @@ abstract class AbstractService
                 'description' => isset($body->Array->Item->ErrorMsg) ? (string) $body->Array->Item->ErrorMsg : null,
                 'message'     => isset($body->Array->Item->ErrorMsg) ? (string) $body->Array->Item->ErrorMsg : null,
                 'code'        => 0,
+            ]];
+            throw new CifException($exceptionData);
+        } elseif (isset($body->ResponseShipments)
+            && is_array($body->ResponseShipments)
+            && isset($body->ResponseShipments[0]->Errors)
+            && is_array($body->ResponseShipments[0]->Errors)
+            && !empty($body->ResponseShipments[0]->Errors)
+        ) {
+            $error = $body->ResponseShipments[0]->Errors[0];
+
+            $exceptionData = [[
+                'message'     => isset($error->Description) ? (string) $error->Description : null,
+                'description' => isset($error->Description) ? (string) $error->Description : null,
+                'code'        => isset($error->Description) ? (int) $error->Description : 0,
             ]];
             throw new CifException($exceptionData);
         }
