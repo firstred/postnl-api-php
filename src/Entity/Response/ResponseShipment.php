@@ -43,7 +43,7 @@ use Firstred\PostNL\Service\TimeframeService;
  * @method string|null      getBarcode()
  * @method string|null      getProductCodeDelivery()
  * @method string|null      getDownPartnerBarcode()
- * @method string|null      getDownPartnerId()
+ * @method string|null      getDownPartnerID()
  * @method string|null      getDownPartnerLocation()
  * @method Label[]|null     getLabels()
  * @method Warning[]|null   getWarnings()
