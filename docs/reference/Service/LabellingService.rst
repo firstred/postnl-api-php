@@ -86,6 +86,10 @@ Properties
 	:Type: array 
 
 
+.. php:attr:: private insuranceProductCodes
+
+
+
 Methods
 -------
 

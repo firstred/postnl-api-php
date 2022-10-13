@@ -29,6 +29,12 @@ Methods
 
 * :php:meth:`public \_\_construct\($iterable, $config\)<Firstred\\PostNL\\Util\\EachPromise::\_\_construct\(\)>`
 * :php:meth:`public promise\(\)<Firstred\\PostNL\\Util\\EachPromise::promise\(\)>`
+* :php:meth:`private createPromise\(\)<Firstred\\PostNL\\Util\\EachPromise::createPromise\(\)>`
+* :php:meth:`private refillPending\(\)<Firstred\\PostNL\\Util\\EachPromise::refillPending\(\)>`
+* :php:meth:`private addPending\(\)<Firstred\\PostNL\\Util\\EachPromise::addPending\(\)>`
+* :php:meth:`private advanceIterator\(\)<Firstred\\PostNL\\Util\\EachPromise::advanceIterator\(\)>`
+* :php:meth:`private step\($idx\)<Firstred\\PostNL\\Util\\EachPromise::step\(\)>`
+* :php:meth:`private checkIfFinished\(\)<Firstred\\PostNL\\Util\\EachPromise::checkIfFinished\(\)>`
 
 
 Constants
@@ -44,6 +50,43 @@ Constants
 
 .. php:const:: REJECTED = \'rejected\'
 
+
+
+Properties
+----------
+
+.. php:attr:: private static pending
+
+
+
+.. php:attr:: private static iterable
+
+	:Type: :any:`\\Iterator <Iterator>` 
+
+
+.. php:attr:: private static concurrency
+
+	:Type: callable | int 
+
+
+.. php:attr:: private static onFulfilled
+
+	:Type: callable 
+
+
+.. php:attr:: private static onRejected
+
+	:Type: callable 
+
+
+.. php:attr:: private static aggregate
+
+	:Type: :any:`\\Http\\Promise\\Promise <Http\\Promise\\Promise>` 
+
+
+.. php:attr:: private static mutex
+
+	:Type: bool 
 
 
 Methods
@@ -88,6 +131,63 @@ Methods
 	
 		
 		:Returns: :any:`\\Http\\Promise\\Promise <Http\\Promise\\Promise>` 
+	
+	
+
+.. rst-class:: private
+
+	.. php:method:: private createPromise()
+	
+		
+		:Returns: void 
+	
+	
+
+.. rst-class:: private
+
+	.. php:method:: private refillPending()
+	
+		
+		:Returns: void 
+	
+	
+
+.. rst-class:: private
+
+	.. php:method:: private addPending()
+	
+		
+		:Returns: bool 
+	
+	
+
+.. rst-class:: private
+
+	.. php:method:: private advanceIterator()
+	
+		
+		:Returns: bool 
+	
+	
+
+.. rst-class:: private
+
+	.. php:method:: private step( $idx)
+	
+		
+		:Parameters:
+			* **$idx** (mixed)  
+
+		
+	
+	
+
+.. rst-class:: private
+
+	.. php:method:: private checkIfFinished()
+	
+		
+		:Returns: bool 
 	
 	
 

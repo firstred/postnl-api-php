@@ -33,6 +33,7 @@ Methods
 ~~~~~~~
 
 * :php:meth:`public \_\_construct\($client, $logger, $concurrency, $maxRetries\)<Firstred\\PostNL\\HttpClient\\SymfonyHttpClient::\_\_construct\(\)>`
+* :php:meth:`private getClient\(\)<Firstred\\PostNL\\HttpClient\\SymfonyHttpClient::getClient\(\)>`
 * :php:meth:`public static getInstance\(\)<Firstred\\PostNL\\HttpClient\\SymfonyHttpClient::getInstance\(\)>`
 * :php:meth:`public setOption\($name, $value\)<Firstred\\PostNL\\HttpClient\\SymfonyHttpClient::setOption\(\)>`
 * :php:meth:`public getOption\($name\)<Firstred\\PostNL\\HttpClient\\SymfonyHttpClient::getOption\(\)>`
@@ -40,6 +41,8 @@ Methods
 * :php:meth:`public doRequests\($requests\)<Firstred\\PostNL\\HttpClient\\SymfonyHttpClient::doRequests\(\)>`
 * :php:meth:`public setMaxRetries\($maxRetries\)<Firstred\\PostNL\\HttpClient\\SymfonyHttpClient::setMaxRetries\(\)>`
 * :php:meth:`public setConcurrency\($concurrency\)<Firstred\\PostNL\\HttpClient\\SymfonyHttpClient::setConcurrency\(\)>`
+* :php:meth:`private convertPsrRequestToSymfonyHttpClientRequestParams\($psrRequest\)<Firstred\\PostNL\\HttpClient\\SymfonyHttpClient::convertPsrRequestToSymfonyHttpClientRequestParams\(\)>`
+* :php:meth:`private convertSymfonyHttpClientResponseToPsrResponse\($symfonyHttpClientResponse\)<Firstred\\PostNL\\HttpClient\\SymfonyHttpClient::convertSymfonyHttpClientResponseToPsrResponse\(\)>`
 
 
 Constants
@@ -66,6 +69,11 @@ Properties
 	:Type: array 
 
 
+.. php:attr:: private static client
+
+	:Type: :any:`\\Symfony\\Contracts\\HttpClient\\HttpClientInterface <Symfony\\Contracts\\HttpClient\\HttpClientInterface>` 
+
+
 Methods
 -------
 
@@ -87,6 +95,20 @@ Methods
 
 		
 		:Since: 1.3.0 Custom constructor
+	
+	
+
+.. rst-class:: private
+
+	.. php:method:: private getClient()
+	
+		.. rst-class:: phpdoc-description
+		
+			| Get the Symfony HTTP Client\.
+			
+		
+		
+		:Returns: :any:`\\Symfony\\Contracts\\HttpClient\\HttpClientInterface <Symfony\\Contracts\\HttpClient\\HttpClientInterface>` 
 	
 	
 
@@ -212,6 +234,59 @@ Methods
 
 		
 		:Returns: static 
+	
+	
+
+.. rst-class:: private
+
+	.. php:method:: private convertPsrRequestToSymfonyHttpClientRequestParams( $psrRequest)
+	
+		
+		:Parameters:
+			* **$psrRequest** (:any:`Psr\\Http\\Message\\RequestInterface <Psr\\Http\\Message\\RequestInterface>`)  
+
+		
+		:Returns: array 
+		:Since: 1.3.0 
+	
+	
+
+.. rst-class:: private
+
+	.. php:method:: private convertSymfonyHttpClientResponseToPsrResponse( $symfonyHttpClientResponse)
+	
+		
+		:Parameters:
+			* **$symfonyHttpClientResponse** (:any:`Symfony\\Contracts\\HttpClient\\ResponseInterface <Symfony\\Contracts\\HttpClient\\ResponseInterface>`)  
+
+		
+		:Returns: :any:`\\Psr\\Http\\Message\\ResponseInterface <Psr\\Http\\Message\\ResponseInterface>` 
+		:Throws: :any:`\\Symfony\\Contracts\\HttpClient\\Exception\\TransportExceptionInterface <Symfony\\Contracts\\HttpClient\\Exception\\TransportExceptionInterface>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
+		:Throws: :any:`\\Symfony\\Contracts\\HttpClient\\Exception\\ClientExceptionInterface <Symfony\\Contracts\\HttpClient\\Exception\\ClientExceptionInterface>` 
+		:Throws: :any:`\\Symfony\\Contracts\\HttpClient\\Exception\\RedirectionExceptionInterface <Symfony\\Contracts\\HttpClient\\Exception\\RedirectionExceptionInterface>` 
+		:Throws: :any:`\\Symfony\\Contracts\\HttpClient\\Exception\\ServerExceptionInterface <Symfony\\Contracts\\HttpClient\\Exception\\ServerExceptionInterface>` 
+		:Throws: :any:`\\Symfony\\Contracts\\HttpClient\\Exception\\TransportExceptionInterface <Symfony\\Contracts\\HttpClient\\Exception\\TransportExceptionInterface>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
+		:Throws: :any:`\\Symfony\\Contracts\\HttpClient\\Exception\\ClientExceptionInterface <Symfony\\Contracts\\HttpClient\\Exception\\ClientExceptionInterface>` 
+		:Throws: :any:`\\Symfony\\Contracts\\HttpClient\\Exception\\RedirectionExceptionInterface <Symfony\\Contracts\\HttpClient\\Exception\\RedirectionExceptionInterface>` 
+		:Throws: :any:`\\Symfony\\Contracts\\HttpClient\\Exception\\ServerExceptionInterface <Symfony\\Contracts\\HttpClient\\Exception\\ServerExceptionInterface>` 
+		:Throws: :any:`\\Symfony\\Contracts\\HttpClient\\Exception\\TransportExceptionInterface <Symfony\\Contracts\\HttpClient\\Exception\\TransportExceptionInterface>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
+		:Throws: :any:`\\Symfony\\Contracts\\HttpClient\\Exception\\ClientExceptionInterface <Symfony\\Contracts\\HttpClient\\Exception\\ClientExceptionInterface>` 
+		:Throws: :any:`\\Symfony\\Contracts\\HttpClient\\Exception\\RedirectionExceptionInterface <Symfony\\Contracts\\HttpClient\\Exception\\RedirectionExceptionInterface>` 
+		:Throws: :any:`\\Symfony\\Contracts\\HttpClient\\Exception\\ServerExceptionInterface <Symfony\\Contracts\\HttpClient\\Exception\\ServerExceptionInterface>` 
+		:Throws: :any:`\\Symfony\\Contracts\\HttpClient\\Exception\\TransportExceptionInterface <Symfony\\Contracts\\HttpClient\\Exception\\TransportExceptionInterface>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
+		:Throws: :any:`\\Symfony\\Contracts\\HttpClient\\Exception\\ClientExceptionInterface <Symfony\\Contracts\\HttpClient\\Exception\\ClientExceptionInterface>` 
+		:Throws: :any:`\\Symfony\\Contracts\\HttpClient\\Exception\\RedirectionExceptionInterface <Symfony\\Contracts\\HttpClient\\Exception\\RedirectionExceptionInterface>` 
+		:Throws: :any:`\\Symfony\\Contracts\\HttpClient\\Exception\\ServerExceptionInterface <Symfony\\Contracts\\HttpClient\\Exception\\ServerExceptionInterface>` 
+		:Throws: :any:`\\Symfony\\Contracts\\HttpClient\\Exception\\TransportExceptionInterface <Symfony\\Contracts\\HttpClient\\Exception\\TransportExceptionInterface>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
+		:Throws: :any:`\\Symfony\\Contracts\\HttpClient\\Exception\\ClientExceptionInterface <Symfony\\Contracts\\HttpClient\\Exception\\ClientExceptionInterface>` 
+		:Throws: :any:`\\Symfony\\Contracts\\HttpClient\\Exception\\RedirectionExceptionInterface <Symfony\\Contracts\\HttpClient\\Exception\\RedirectionExceptionInterface>` 
+		:Throws: :any:`\\Symfony\\Contracts\\HttpClient\\Exception\\ServerExceptionInterface <Symfony\\Contracts\\HttpClient\\Exception\\ServerExceptionInterface>` 
+		:Since: 1.3.0 
 	
 	
 

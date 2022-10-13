@@ -44,10 +44,15 @@ Methods
 * :php:meth:`public key\(\)<Firstred\\PostNL\\Entity\\OpeningHours::key\(\)>`
 * :php:meth:`public valid\(\)<Firstred\\PostNL\\Entity\\OpeningHours::valid\(\)>`
 * :php:meth:`public rewind\(\)<Firstred\\PostNL\\Entity\\OpeningHours::rewind\(\)>`
+* :php:meth:`private static findCurrentDayString\($currentDay\)<Firstred\\PostNL\\Entity\\OpeningHours::findCurrentDayString\(\)>`
 
 
 Properties
 ----------
+
+.. php:attr:: private static currentDay
+
+
 
 .. php:attr:: public defaultProperties
 
@@ -255,6 +260,24 @@ Methods
 	.. php:method:: public rewind()
 	
 		
+		:Since: 1.2.0 
+	
+	
+
+.. rst-class:: private static
+
+	.. php:method:: private static findCurrentDayString( $currentDay)
+	
+		
+		:Parameters:
+			* **$currentDay** (mixed)  
+
+		
+		:Returns: string 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
 		:Since: 1.2.0 
 	
 	

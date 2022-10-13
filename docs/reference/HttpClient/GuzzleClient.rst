@@ -33,6 +33,8 @@ Methods
 ~~~~~~~
 
 * :php:meth:`public \_\_construct\($client, $logger, $concurrency, $maxRetries\)<Firstred\\PostNL\\HttpClient\\GuzzleClient::\_\_construct\(\)>`
+* :php:meth:`private setClient\($client\)<Firstred\\PostNL\\HttpClient\\GuzzleClient::setClient\(\)>`
+* :php:meth:`private getClient\(\)<Firstred\\PostNL\\HttpClient\\GuzzleClient::getClient\(\)>`
 * :php:meth:`public static getInstance\(\)<Firstred\\PostNL\\HttpClient\\GuzzleClient::getInstance\(\)>`
 * :php:meth:`public setOption\($name, $value\)<Firstred\\PostNL\\HttpClient\\GuzzleClient::setOption\(\)>`
 * :php:meth:`public getOption\($name\)<Firstred\\PostNL\\HttpClient\\GuzzleClient::getOption\(\)>`
@@ -64,6 +66,11 @@ Properties
 	:Type: array 
 
 
+.. php:attr:: private static client
+
+	:Type: :any:`\\GuzzleHttp\\Client <GuzzleHttp\\Client>` 
+
+
 Methods
 -------
 
@@ -85,6 +92,28 @@ Methods
 
 		
 		:Since: 1.3.0 Custom constructor
+	
+	
+
+.. rst-class:: private
+
+	.. php:method:: private setClient( $client)
+	
+		
+	
+	
+
+.. rst-class:: private
+
+	.. php:method:: private getClient()
+	
+		.. rst-class:: phpdoc-description
+		
+			| Get the Guzzle client\.
+			
+		
+		
+		:Returns: :any:`\\GuzzleHttp\\Client <GuzzleHttp\\Client>` 
 	
 	
 

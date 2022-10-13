@@ -6,7 +6,7 @@
 
 .. _namespace-Firstred-PostNL:
 
-PostNL
+API Reference
 ======
 
 \\Firstred\\PostNL

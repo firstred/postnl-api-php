@@ -136,6 +136,26 @@ The full documentation can be found on this page: [https://postnl-php.readthedoc
 
 #### Building the documentation
 
+Generating the documentation consists of two steps:
+1. Generating the reference RST files of all PHP classes available in this library.
+2. Generating the HTML output which can be viewed with a browser.
+
+#### Generating the PHP classes reference
+
+First install the PHPdoc to RST tool.
+```bash
+composer require abbadon1334/phpdoc-to-rst -W
+```
+
+This repository includes a simple PHP file which utilizes the above-mentioned tool to generate the reference RST files programmatically. It also moves around a few files to integrate the reference with the rest of the documentation.  
+Simply run (tested w/ PHP 8.1):
+
+```
+php ./build-docs-reference.php
+```
+
+##### Generating the final HTML output
+
 The documentation is automatically built and hosted on readthedocs.io. You can build a local HTML copy by [installing Sphinx](https://www.sphinx-doc.org/en/master/usage/installation.html) and running
 ```bash
 pip install -r docs/requirements.txt

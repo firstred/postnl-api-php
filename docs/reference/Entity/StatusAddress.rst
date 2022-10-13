@@ -32,6 +32,7 @@ Methods
 * :php:meth:`public \_\_construct\($AddressType, $FirstName, $LastName, $CompanyName, $DepartmentName, $Street, $HouseNumber, $HouseNumberSuffix, $Zipcode, $City, $CountryCode, $Region, $District, $Building, $Floor, $Remark, $RegistrationDate\)<Firstred\\PostNL\\Entity\\StatusAddress::\_\_construct\(\)>`
 * :php:meth:`public setZipcode\($Zipcode\)<Firstred\\PostNL\\Entity\\StatusAddress::setZipcode\(\)>`
 * :php:meth:`public setAddressType\($AddressType\)<Firstred\\PostNL\\Entity\\StatusAddress::setAddressType\(\)>`
+* :php:meth:`public setRegistrationDate\($RegistrationDate\)<Firstred\\PostNL\\Entity\\StatusAddress::setRegistrationDate\(\)>`
 
 
 Properties
@@ -185,9 +186,10 @@ Methods
 			* **$Building** (string | null)  
 			* **$Floor** (string | null)  
 			* **$Remark** (string | null)  
-			* **$RegistrationDate** (string | null)  
+			* **$RegistrationDate** (:any:`DateTimeInterface <DateTimeInterface>` | string | null)  
 
 		
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
 	
 	
 
@@ -224,6 +226,21 @@ Methods
 
 		
 		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setRegistrationDate( $RegistrationDate=null)
+	
+		
+		:Parameters:
+			* **$RegistrationDate** (:any:`DateTimeInterface <DateTimeInterface>` | string | null)  
+
+		
+		:Returns: static 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
+		:Since: 1.2.0 
 	
 	
 

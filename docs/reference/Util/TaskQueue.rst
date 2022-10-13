@@ -39,6 +39,17 @@ Methods
 * :php:meth:`public disableShutdown\(\)<Firstred\\PostNL\\Util\\TaskQueue::disableShutdown\(\)>`
 
 
+Properties
+----------
+
+.. php:attr:: private static enableShutdown
+
+
+
+.. php:attr:: private static queue
+
+
+
 Methods
 -------
 

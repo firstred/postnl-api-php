@@ -65,6 +65,11 @@ Properties
 	:Type: array 
 
 
+.. php:attr:: private static handler
+
+	:Type: :any:`\\GuzzleHttp\\HandlerStack <GuzzleHttp\\HandlerStack>` 
+
+
 Methods
 -------
 

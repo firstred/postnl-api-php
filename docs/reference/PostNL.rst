@@ -93,6 +93,7 @@ Methods
 * :php:meth:`public getLocationsInArea\($getLocationsInArea\)<Firstred\\PostNL\\PostNL::getLocationsInArea\(\)>`
 * :php:meth:`public getLocation\($getLocation\)<Firstred\\PostNL\\PostNL::getLocation\(\)>`
 * :php:meth:`public findBarcodeSerie\($type, $range, $eps\)<Firstred\\PostNL\\PostNL::findBarcodeSerie\(\)>`
+* :php:meth:`private checkEnvironment\(\)<Firstred\\PostNL\\PostNL::checkEnvironment\(\)>`
 
 
 Constants
@@ -2533,6 +2534,20 @@ Methods
 		:Returns: string 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidBarcodeException <Firstred\\PostNL\\Exception\\InvalidBarcodeException>` 
 		:Since: 1.0.0 
+	
+	
+
+.. rst-class:: private
+
+	.. php:method:: private checkEnvironment()
+	
+		.. rst-class:: phpdoc-description
+		
+			| Check whether this library will work in the current environment
+			
+		
+		
+		:Since: 1.2.0 
 	
 	
 

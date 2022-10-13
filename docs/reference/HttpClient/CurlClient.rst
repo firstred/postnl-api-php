@@ -36,10 +36,16 @@ Methods
 * :php:meth:`public doRequest\($request\)<Firstred\\PostNL\\HttpClient\\CurlClient::doRequest\(\)>`
 * :php:meth:`public doRequests\($requests\)<Firstred\\PostNL\\HttpClient\\CurlClient::doRequests\(\)>`
 * :php:meth:`protected prepareRequest\($curl, $request\)<Firstred\\PostNL\\HttpClient\\CurlClient::prepareRequest\(\)>`
+* :php:meth:`private handleCurlError\($url, $errno, $message\)<Firstred\\PostNL\\HttpClient\\CurlClient::handleCurlError\(\)>`
 
 
 Properties
 ----------
+
+.. php:attr:: private instance
+
+	:Type: static 
+
 
 .. php:attr:: protected static defaultOptions
 
@@ -117,6 +123,21 @@ Methods
 
 		
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\HttpClientException <Firstred\\PostNL\\Exception\\HttpClientException>` 
+	
+	
+
+.. rst-class:: private
+
+	.. php:method:: private handleCurlError( $url, $errno, $message)
+	
+		
+		:Parameters:
+			* **$url**  
+			* **$errno** (:any:`Firstred\\PostNL\\HttpClient\\number <Firstred\\PostNL\\HttpClient\\number>`)  
+			* **$message** (string)  
+
+		
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ApiConnectionException <Firstred\\PostNL\\Exception\\ApiConnectionException>` 
 	
 	
 

@@ -34,6 +34,14 @@ Methods
 * :php:meth:`public getResponse\(\)<Firstred\\PostNL\\Exception\\HttpClientException::getResponse\(\)>`
 
 
+Properties
+----------
+
+.. php:attr:: private static response
+
+	:Type: :any:`\\Psr\\Http\\Message\\ResponseInterface <Psr\\Http\\Message\\ResponseInterface>` 
+
+
 Methods
 -------
 
