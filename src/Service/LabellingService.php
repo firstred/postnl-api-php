@@ -342,7 +342,7 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
         return $this->postnl->getRequestFactory()->createRequest(
             'POST',
             $endpoint.'?'.http_build_query([
-                'confirm' => $confirm,
+                'confirm' => ($confirm ? 'true' : 'false'),
             ], '', '&', PHP_QUERY_RFC3986))
             ->withHeader('apikey', $apiKey)
             ->withHeader('Accept', 'application/json')
