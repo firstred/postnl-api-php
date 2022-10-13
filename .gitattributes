@@ -8,3 +8,4 @@ tests/ export-ignore
 .readthedocs.yaml export-ignore
 .travis.yml export-ignore
 phpunit.xml export-ignore
+build-docs-reference export-ignore
