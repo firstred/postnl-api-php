@@ -36,7 +36,7 @@ use Firstred\PostNL\Service\ShippingService;
 use Firstred\PostNL\Service\TimeframeService;
 
 /**
- * Class GenerateLabelResponse.
+ * Class SendShipmentResponse.
  *
  * @method MergedLabel[]|null       getMergedLabels()
  * @method ResponseShipment[]|null  getResponseShipments()
