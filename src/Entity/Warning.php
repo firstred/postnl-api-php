@@ -33,6 +33,7 @@ use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
+use Firstred\PostNL\Service\ShippingService;
 use Firstred\PostNL\Service\TimeframeService;
 use stdClass;
 
@@ -73,6 +74,10 @@ class Warning extends AbstractEntity
         'Timeframe' => [
             'Code'        => TimeframeService::DOMAIN_NAMESPACE,
             'Description' => TimeframeService::DOMAIN_NAMESPACE,
+        ],
+        'Shipping' => [
+            'Code'        => ShippingService::DOMAIN_NAMESPACE,
+            'Description' => ShippingService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
