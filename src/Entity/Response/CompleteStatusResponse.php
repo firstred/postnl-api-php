@@ -122,8 +122,10 @@ class CompleteStatusResponse extends AbstractEntity
 
         $completeStatusResponse = self::create();
         $shipments = [];
-        foreach ($json->CompleteStatusResponse->Shipments as $shipment) {
-            $shipments[] = CompleteStatusResponseShipment::jsonDeserialize((object) ['CompleteStatusResponseShipment' => $shipment]);
+        if (!empty($json->CompleteStatusResponse->Shipments)) {
+            foreach ($json->CompleteStatusResponse->Shipments as $shipment) {
+                $shipments[] = CompleteStatusResponseShipment::jsonDeserialize((object) ['CompleteStatusResponseShipment' => $shipment]);
+            }
         }
         $completeStatusResponse->setShipments($shipments);
 
