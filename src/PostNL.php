@@ -1946,7 +1946,7 @@ class PostNL implements LoggerAwareInterface
      */
     public function getUpdatedShipments($dateTimeFrom = null, $dateTimeTo = null)
     {
-        return $this->shippingStatusService->getUpdatedShipments($this->getCustomer(), $dateTimeFrom, $dateTimeTo);
+        return $this->getShippingStatusService()->getUpdatedShipments($this->getCustomer(), $dateTimeFrom, $dateTimeTo);
     }
 
     /**
