@@ -111,7 +111,7 @@ class Warning extends AbstractEntity
      */
     public static function jsonDeserialize(stdClass $json)
     {
-        // Confirming Webservice returns code and description in lower case
+        // Confirming Webservice has the code and description properties in lower case
         if (isset($json->Warning->code)) {
             $json->Warning->Code = $json->Warning->code;
         }
