@@ -264,9 +264,9 @@ abstract class AbstractService
             $error = $body->ResponseShipments[0]->Errors[0];
 
             $exceptionData = [[
-                'message'     => isset($error->Description) ? (string) $error->Description : null,
-                'description' => isset($error->Description) ? (string) $error->Description : null,
-                'code'        => isset($error->Description) ? (int) $error->Description : 0,
+                'message'     => isset($error->message) ? (string) $error->message : null,
+                'description' => isset($error->description) ? (string) $error->description : null,
+                'code'        => isset($error->code) ? (int) $error->code : 0,
             ]];
             throw new CifException($exceptionData);
         }
