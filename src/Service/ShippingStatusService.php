@@ -631,6 +631,11 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
                     $shipment->Addresses = $shipment->Address;
                     unset($shipment->Address);
                 }
+
+                if (!isset($shipment->Addresses)) {
+                    $shipment->Addresses = [];
+                }
+
                 if (!is_array($shipment->Addresses)) {
                     $shipment->Addresses = [$shipment->Addresses];
                 }
