@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2022 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,7 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- * @copyright 2017-2021 Michael Dekker
+ * @copyright 2017-2022 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -39,6 +39,7 @@ use Firstred\PostNL\Entity\Expectation;
 use Firstred\PostNL\Entity\Group;
 use Firstred\PostNL\Entity\ProductOption;
 use Firstred\PostNL\Entity\Status;
+use Firstred\PostNL\Entity\StatusAddress;
 use Firstred\PostNL\Entity\Warning;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\BarcodeService;
@@ -55,7 +56,7 @@ use function is_string;
 /**
  * Class CurrentStatusResponseShipment.
  *
- * @method Address[]|null                getAddresses()
+ * @method StatusAddress[]|null          getAddresses()
  * @method Amount[]|null                 getAmounts()
  * @method string|null                   getBarcode()
  * @method DateTimeInterface|null        getDeliveryDate()
@@ -71,7 +72,7 @@ use function is_string;
  * @method string|null                   getShipmentCounter()
  * @method Status|null                   getStatus()
  * @method Warning[]|null                getWarnings()
- * @method CurrentStatusResponseShipment setAddresses(Address[]|null $Addresses = null)
+ * @method CurrentStatusResponseShipment setAddresses(StatusAddress[]|null $Addresses = null)
  * @method CurrentStatusResponseShipment setAmounts(Amount[]|null $Amounts = null)
  * @method CurrentStatusResponseShipment setBarcode(string|null $Barcode = null)
  * @method CurrentStatusResponseShipment setDimension(Dimension|null $Dimension = null)
@@ -203,7 +204,7 @@ class CurrentStatusResponseShipment extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var Address[]|null */
+    /** @var StatusAddress[]|null */
     protected $Addresses;
     /** @var Amount[]|null */
     protected $Amounts;
@@ -240,7 +241,7 @@ class CurrentStatusResponseShipment extends AbstractEntity
     /**
      * CurrentStatusResponseShipment constructor.
      *
-     * @param Address[]|null                $Addresses
+     * @param StatusAddress[]|null          $Addresses
      * @param Amount[]|null                 $Amounts
      * @param string|null                   $Barcode
      * @param DateTimeInterface|string|null $DeliveryDate
@@ -363,7 +364,7 @@ class CurrentStatusResponseShipment extends AbstractEntity
             if ('Addresses' === $propertyName) {
                 $addresses = [];
                 foreach ($this->Addresses as $address) {
-                    $addresses[] = ["{{$namespace}}Address" => $address];
+                    $addresses[] = ["{{$namespace}}StatusAddress" => $address];
                 }
                 $xml["{{$namespace}}Addresses"] = $addresses;
             } elseif ('Amounts' === $propertyName) {

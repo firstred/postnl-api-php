@@ -19,7 +19,7 @@ ShipmentNotFoundException
 		
 	
 	:Parent:
-		:php:class:`Firstred\\PostNL\\Exception\\InvalidArgumentException`
+		:php:class:`Firstred\\PostNL\\Exception\\ApiException`
 	
 
 

@@ -1,0 +1,54 @@
+name: tests
+on: [ push, pull_request ]
+jobs:
+    run:
+        runs-on: ${{ matrix.operating-system }}
+        strategy:
+            matrix:
+                operating-system: [ 'ubuntu-latest', 'windows-latest', 'macos-latest' ]
+                php-versions: [ '5.6', '7.0', '7.1', '7.2', '7.3', '7.4', '8.0', '8.1', '8.2' ]
+        steps:
+            -   name: Checkout repo
+                uses: actions/checkout@v2
+
+            -   name: Setup PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{ matrix.php-versions }}
+                    extensions: mbstring, intl
+                    ini-values: post_max_size=256M, max_execution_time=180
+                    coverage: xdebug
+                    tools: php-cs-fixer
+
+            -   name: Setup problem matchers for PHPUnit
+                run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+
+            -   name: Get composer cache directory
+                id: composer-cache
+                run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+            -   name: Cache composer dependencies
+                uses: actions/cache@v2
+                with:
+                    path: ${{ steps.composer-cache.outputs.dir }}
+                    key: ${{ runner.os }}-${{ matrix.php-versions }}-composer-${{ hashFiles('**/composer.json') }}
+                    restore-keys: ${{ runner.os }}-${{ matrix.php-versions }}-composer-
+
+            -   name: Install Composer dependencies
+                run: composer install --no-progress --prefer-dist --optimize-autoloader
+
+            -   name: Test with PHPUnit
+                if: matrix.php-versions != '8.1' || matrix.operating-system != 'ubuntu-latest'
+                env:
+                    XDEBUG_MODE: coverage
+                run: vendor/bin/phpunit --testdox -- tests
+
+            -   name: Test with PHPUnit (coverage)
+                if: matrix.php-versions == '8.1' && matrix.operating-system == 'ubuntu-latest'
+                env:
+                    XDEBUG_MODE: coverage
+                run: vendor/bin/phpunit --testdox --coverage-clover coverage.xml -- tests
+
+            -   name: Codecov
+                if: matrix.php-versions == '8.1' && matrix.operating-system == 'ubuntu-latest'
+                uses: codecov/codecov-action@v2

@@ -19,7 +19,7 @@ HttpClientException
 		
 	
 	:Parent:
-		:php:class:`Exception`
+		:php:class:`Firstred\\PostNL\\Exception\\PostNLException`
 	
 
 
@@ -32,6 +32,14 @@ Methods
 * :php:meth:`public \_\_construct\($message, $code, $previous, $response\)<Firstred\\PostNL\\Exception\\HttpClientException::\_\_construct\(\)>`
 * :php:meth:`public setResponse\($response\)<Firstred\\PostNL\\Exception\\HttpClientException::setResponse\(\)>`
 * :php:meth:`public getResponse\(\)<Firstred\\PostNL\\Exception\\HttpClientException::getResponse\(\)>`
+
+
+Properties
+----------
+
+.. php:attr:: private static response
+
+	:Type: :any:`\\Psr\\Http\\Message\\ResponseInterface <Psr\\Http\\Message\\ResponseInterface>` 
 
 
 Methods

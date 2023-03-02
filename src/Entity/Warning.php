@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2022 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,7 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- * @copyright 2017-2021 Michael Dekker
+ * @copyright 2017-2022 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -33,6 +33,7 @@ use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
+use Firstred\PostNL\Service\ShippingService;
 use Firstred\PostNL\Service\TimeframeService;
 use stdClass;
 
@@ -74,6 +75,10 @@ class Warning extends AbstractEntity
             'Code'        => TimeframeService::DOMAIN_NAMESPACE,
             'Description' => TimeframeService::DOMAIN_NAMESPACE,
         ],
+        'Shipping' => [
+            'Code'        => ShippingService::DOMAIN_NAMESPACE,
+            'Description' => ShippingService::DOMAIN_NAMESPACE,
+        ],
     ];
     // @codingStandardsIgnoreStart
     /** @var string|null */
@@ -106,6 +111,16 @@ class Warning extends AbstractEntity
      */
     public static function jsonDeserialize(stdClass $json)
     {
+        // Confirming Webservice has the code and description properties in lower case
+        if (isset($json->Warning->code)) {
+            $json->Warning->Code = $json->Warning->code;
+            unset($json->Warning->code);
+        }
+        if (isset($json->Warning->description)) {
+            $json->Warning->Description = $json->Warning->description;
+            unset($json->Warning->description);
+        }
+
         if (isset($json->Warning->Message)) {
             $json->Warning->Description = $json->Warning->Message;
             unset($json->Warning->Message);

@@ -37,6 +37,38 @@ Methods
 * :php:meth:`public cancel\(\)<Firstred\\PostNL\\Util\\PendingPromise::cancel\(\)>`
 * :php:meth:`public resolve\($value\)<Firstred\\PostNL\\Util\\PendingPromise::resolve\(\)>`
 * :php:meth:`public reject\($reason\)<Firstred\\PostNL\\Util\\PendingPromise::reject\(\)>`
+* :php:meth:`private settle\($state, $value\)<Firstred\\PostNL\\Util\\PendingPromise::settle\(\)>`
+* :php:meth:`private static callHandler\($index, $value, $handler\)<Firstred\\PostNL\\Util\\PendingPromise::callHandler\(\)>`
+* :php:meth:`private waitIfPending\(\)<Firstred\\PostNL\\Util\\PendingPromise::waitIfPending\(\)>`
+* :php:meth:`private invokeWaitFn\(\)<Firstred\\PostNL\\Util\\PendingPromise::invokeWaitFn\(\)>`
+* :php:meth:`private invokeWaitList\(\)<Firstred\\PostNL\\Util\\PendingPromise::invokeWaitList\(\)>`
+
+
+Properties
+----------
+
+.. php:attr:: private static state
+
+
+
+.. php:attr:: private static result
+
+
+
+.. php:attr:: private static cancelFn
+
+
+
+.. php:attr:: private static waitFn
+
+
+
+.. php:attr:: private static waitList
+
+
+
+.. php:attr:: private static handlers
+
 
 
 Methods
@@ -135,6 +167,67 @@ Methods
 			* **$reason** (mixed)  
 
 		
+	
+	
+
+.. rst-class:: private
+
+	.. php:method:: private settle( $state, $value)
+	
+		
+		:Parameters:
+			* **$state** (string)  
+			* **$value** (mixed)  
+
+		
+	
+	
+
+.. rst-class:: private static
+
+	.. php:method:: private static callHandler( $index, $value, $handler)
+	
+		.. rst-class:: phpdoc-description
+		
+			| Call a stack of handlers using a specific callback index and value\.
+			
+		
+		
+		:Parameters:
+			* **$index** (int)  1 (resolve) or 2 (reject)
+			* **$value** (mixed)  value to pass to the callback
+			* **$handler** (array)  array of handler data (promise and callbacks)
+
+		
+		:Returns: void returns the next group to resolve
+	
+	
+
+.. rst-class:: private
+
+	.. php:method:: private waitIfPending()
+	
+		
+		:Throws: :any:`\\Exception <Exception>` 
+		:Returns: void 
+	
+	
+
+.. rst-class:: private
+
+	.. php:method:: private invokeWaitFn()
+	
+		
+		:Throws: :any:`\\Exception <Exception>` 
+	
+	
+
+.. rst-class:: private
+
+	.. php:method:: private invokeWaitList()
+	
+		
+		:Throws: :any:`\\Exception <Exception>` 
 	
 	
 

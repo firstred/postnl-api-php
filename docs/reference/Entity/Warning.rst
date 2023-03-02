@@ -30,6 +30,7 @@ Methods
 ~~~~~~~
 
 * :php:meth:`public \_\_construct\($Code, $Description\)<Firstred\\PostNL\\Entity\\Warning::\_\_construct\(\)>`
+* :php:meth:`public static jsonDeserialize\($json\)<Firstred\\PostNL\\Entity\\Warning::jsonDeserialize\(\)>`
 
 
 Properties
@@ -63,6 +64,28 @@ Methods
 			* **$Description** (string | null)  
 
 		
+	
+	
+
+.. rst-class:: public static
+
+	.. php:method:: public static jsonDeserialize( $json)
+	
+		.. rst-class:: phpdoc-description
+		
+			| Deserialize JSON\.
+			
+		
+		
+		:Parameters:
+			* **$json** (:any:`stdClass <stdClass>`)  JSON object `{"EntityName": object}`
+
+		
+		:Returns: static 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
 	
 	
 

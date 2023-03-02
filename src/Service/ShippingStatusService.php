@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2022 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,7 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- * @copyright 2017-2021 Michael Dekker
+ * @copyright 2017-2022 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -488,7 +488,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
             $query = [];
             $endpoint = "/barcode/{$currentStatus->getShipment()->getBarcode()}";
         }
-        $endpoint .= '?'.http_build_query($query, null, '&', PHP_QUERY_RFC3986);
+        $endpoint .= '?'.http_build_query($query, '', '&', PHP_QUERY_RFC3986);
 
         return $this->postnl->getRequestFactory()->createRequest(
             'GET',
@@ -582,7 +582,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
             ];
             $endpoint = "/barcode/{$completeStatus->getShipment()->getBarcode()}";
         }
-        $endpoint .= '?'.http_build_query($query, null, '&', PHP_QUERY_RFC3986);
+        $endpoint .= '?'.http_build_query($query, '', '&', PHP_QUERY_RFC3986);
 
         return $this->postnl->getRequestFactory()->createRequest(
             'GET',
@@ -631,6 +631,11 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
                     $shipment->Addresses = $shipment->Address;
                     unset($shipment->Address);
                 }
+
+                if (!isset($shipment->Addresses)) {
+                    $shipment->Addresses = [];
+                }
+
                 if (!is_array($shipment->Addresses)) {
                     $shipment->Addresses = [$shipment->Addresses];
                 }

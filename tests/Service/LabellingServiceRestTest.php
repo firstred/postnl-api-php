@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2021 Michael Dekker
+ * Copyright (c) 2017-2022 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,7 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- * @copyright 2017-2021 Michael Dekker
+ * @copyright 2017-2022 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -37,6 +37,8 @@ use Firstred\PostNL\Entity\Request\GenerateLabel;
 use Firstred\PostNL\Entity\Response\GenerateLabelResponse;
 use Firstred\PostNL\Entity\Shipment;
 use Firstred\PostNL\Entity\SOAP\UsernameToken;
+use Firstred\PostNL\Exception\ApiException;
+use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\HttpClient\MockClient;
 use Firstred\PostNL\PostNL;
@@ -627,14 +629,15 @@ class LabellingServiceRestTest extends ServiceTest
 
     /**
      * @testdox throws exception on invalid response
+     * @dataProvider invalidResponseProvider
+     *
+     * @psalm-param class-string<ApiException> $exception
      */
-    public function testNegativeGenerateLabelInvalidResponseRest()
+    public function testNegativeGenerateLabelInvalidResponseRest(ResponseInterface $response, $exception)
     {
-        $this->expectException(ResponseException::class);
+        $this->expectException($exception);
 
-        $mock = new MockHandler([
-            PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/labelling/invalid.http')),
-        ]);
+        $mock = new MockHandler([$response]);
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();
         $mockClient->setHandler($handler);
@@ -695,6 +698,20 @@ class LabellingServiceRestTest extends ServiceTest
                 PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/labelling/singlelabel.http')),
                 PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/labelling/singlelabel3.http'))
             ]],
+        ];
+    }
+
+    public function invalidResponseProvider()
+    {
+        return [
+            [
+                PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/labelling/invalid.http')),
+                ResponseException::class
+            ],
+            [
+                PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/labelling/error.http')),
+                CifException::class
+            ],
         ];
     }
 }

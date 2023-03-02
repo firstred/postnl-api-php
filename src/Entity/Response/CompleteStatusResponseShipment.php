@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2022 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,7 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- * @copyright 2017-2021 Michael Dekker
+ * @copyright 2017-2022 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -54,7 +54,7 @@ use stdClass;
 /**
  * Class CompleteStatusResponseShipment.
  *
- * @method Address[]|null                         getAddresses()
+ * @method StatusAddress[]|null                   getAddresses()
  * @method Amount[]|null                          getAmounts()
  * @method Barcode|null                           getBarcode()
  * @method Customer|null                          getCustomer()
@@ -73,7 +73,7 @@ use stdClass;
  * @method string|null                            getShipmentCounter()
  * @method Status|null                            getStatus()
  * @method Warning[]|null                         getWarnings()
- * @method CompleteStatusResponseShipment         setAddresses(Address[]|null $Addresses = null)
+ * @method CompleteStatusResponseShipment         setAddresses(StatusAddress[]|null $Addresses = null)
  * @method CompleteStatusResponseShipment         setAmounts(Amount[]|null $Amounts = null)
  * @method CompleteStatusResponseShipment         setBarcode(string|null $Barcode = null)
  * @method CompleteStatusResponseShipment         setCustomer(Customer|null $Customer = null)
@@ -226,7 +226,7 @@ class CompleteStatusResponseShipment extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var Address[]|null */
+    /** @var StatusAddress[]|null */
     protected $Addresses;
     /** @var Amount[]|null */
     protected $Amounts;
@@ -269,7 +269,7 @@ class CompleteStatusResponseShipment extends AbstractEntity
     /**
      * CompleteStatusResponseShipment constructor.
      *
-     * @param Address[]|null                         $Addresses
+     * @param StatusAddress[]|null                   $Addresses
      * @param Amount[]|null                          $Amounts
      * @param string|null                            $Barcode
      * @param Customer|null                          $Customer
@@ -403,7 +403,7 @@ class CompleteStatusResponseShipment extends AbstractEntity
             if ('Addresses' === $propertyName) {
                 $addresses = [];
                 foreach ($this->Addresses as $address) {
-                    $addresses[] = ["{{$namespace}}Address" => $address];
+                    $addresses[] = ["{{$namespace}}StatusAddress" => $address];
                 }
                 $xml["{{$namespace}}Addresses"] = $addresses;
             } elseif ('Amounts' === $propertyName) {

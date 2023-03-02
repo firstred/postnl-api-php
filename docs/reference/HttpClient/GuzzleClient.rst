@@ -18,6 +18,9 @@ GuzzleClient
 		| Class GuzzleClient\.
 		
 	
+	:Parent:
+		:php:class:`Firstred\\PostNL\\HttpClient\\BaseHttpClient`
+	
 	:Implements:
 		:php:interface:`Firstred\\PostNL\\HttpClient\\ClientInterface` :php:interface:`Psr\\Log\\LoggerAwareInterface` 
 	
@@ -29,20 +32,12 @@ Summary
 Methods
 ~~~~~~~
 
+* :php:meth:`public \_\_construct\($client, $logger, $concurrency, $maxRetries\)<Firstred\\PostNL\\HttpClient\\GuzzleClient::\_\_construct\(\)>`
+* :php:meth:`private setClient\($client\)<Firstred\\PostNL\\HttpClient\\GuzzleClient::setClient\(\)>`
+* :php:meth:`private getClient\(\)<Firstred\\PostNL\\HttpClient\\GuzzleClient::getClient\(\)>`
 * :php:meth:`public static getInstance\(\)<Firstred\\PostNL\\HttpClient\\GuzzleClient::getInstance\(\)>`
 * :php:meth:`public setOption\($name, $value\)<Firstred\\PostNL\\HttpClient\\GuzzleClient::setOption\(\)>`
 * :php:meth:`public getOption\($name\)<Firstred\\PostNL\\HttpClient\\GuzzleClient::getOption\(\)>`
-* :php:meth:`public setVerify\($verify\)<Firstred\\PostNL\\HttpClient\\GuzzleClient::setVerify\(\)>`
-* :php:meth:`public getVerify\(\)<Firstred\\PostNL\\HttpClient\\GuzzleClient::getVerify\(\)>`
-* :php:meth:`public setMaxRetries\($maxRetries\)<Firstred\\PostNL\\HttpClient\\GuzzleClient::setMaxRetries\(\)>`
-* :php:meth:`public getMaxRetries\(\)<Firstred\\PostNL\\HttpClient\\GuzzleClient::getMaxRetries\(\)>`
-* :php:meth:`public setConcurrency\($concurrency\)<Firstred\\PostNL\\HttpClient\\GuzzleClient::setConcurrency\(\)>`
-* :php:meth:`public getConcurrency\(\)<Firstred\\PostNL\\HttpClient\\GuzzleClient::getConcurrency\(\)>`
-* :php:meth:`public setLogger\($logger\)<Firstred\\PostNL\\HttpClient\\GuzzleClient::setLogger\(\)>`
-* :php:meth:`public getLogger\(\)<Firstred\\PostNL\\HttpClient\\GuzzleClient::getLogger\(\)>`
-* :php:meth:`public addOrUpdateRequest\($id, $request\)<Firstred\\PostNL\\HttpClient\\GuzzleClient::addOrUpdateRequest\(\)>`
-* :php:meth:`public removeRequest\($id\)<Firstred\\PostNL\\HttpClient\\GuzzleClient::removeRequest\(\)>`
-* :php:meth:`public clearRequests\(\)<Firstred\\PostNL\\HttpClient\\GuzzleClient::clearRequests\(\)>`
 * :php:meth:`public doRequest\($request\)<Firstred\\PostNL\\HttpClient\\GuzzleClient::doRequest\(\)>`
 * :php:meth:`public doRequests\($requests\)<Firstred\\PostNL\\HttpClient\\GuzzleClient::doRequests\(\)>`
 
@@ -71,23 +66,56 @@ Properties
 	:Type: array 
 
 
-.. php:attr:: protected static pendingRequests
+.. php:attr:: private static client
 
-	.. rst-class:: phpdoc-description
-	
-		| List of pending PSR\-7 requests\.
-		
-	
-	:Type: :any:`\\Psr\\Http\\Message\\RequestInterface\[\] <Psr\\Http\\Message\\RequestInterface>` 
-
-
-.. php:attr:: protected static logger
-
-	:Type: :any:`\\Psr\\Log\\LoggerInterface <Psr\\Log\\LoggerInterface>` 
+	:Type: :any:`\\GuzzleHttp\\Client <GuzzleHttp\\Client>` 
 
 
 Methods
 -------
+
+.. rst-class:: public
+
+	.. php:method:: public __construct( $client=null, $logger=null, $concurrency=5, $maxRetries=5)
+	
+		.. rst-class:: phpdoc-description
+		
+			| GuzzleClient constructor\.
+			
+		
+		
+		:Parameters:
+			* **$client** (:any:`GuzzleHttp\\Client <GuzzleHttp\\Client>` | null)  
+			* **$logger** (:any:`Psr\\Log\\LoggerInterface <Psr\\Log\\LoggerInterface>` | null)  
+			* **$concurrency** (int)  
+			* **$maxRetries** (int)  
+
+		
+		:Since: 1.3.0 Custom constructor
+	
+	
+
+.. rst-class:: private
+
+	.. php:method:: private setClient( $client)
+	
+		
+	
+	
+
+.. rst-class:: private
+
+	.. php:method:: private getClient()
+	
+		.. rst-class:: phpdoc-description
+		
+			| Get the Guzzle client\.
+			
+		
+		
+		:Returns: :any:`\\GuzzleHttp\\Client <GuzzleHttp\\Client>` 
+	
+	
 
 .. rst-class:: public static deprecated
 
@@ -136,186 +164,6 @@ Methods
 	
 	
 
-.. rst-class:: public deprecated
-
-	.. php:method:: public setVerify( $verify)
-	
-		.. rst-class:: phpdoc-description
-		
-			| Set the verify setting\.
-			
-		
-		
-		:Parameters:
-			* **$verify** (bool | string)  
-
-		
-		:Returns: static 
-		:Deprecated:  
-	
-	
-
-.. rst-class:: public deprecated
-
-	.. php:method:: public getVerify()
-	
-		.. rst-class:: phpdoc-description
-		
-			| Return verify setting\.
-			
-		
-		
-		:Returns: bool | string 
-		:Deprecated:  
-	
-	
-
-.. rst-class:: public
-
-	.. php:method:: public setMaxRetries( $maxRetries)
-	
-		.. rst-class:: phpdoc-description
-		
-			| Set the amount of retries\.
-			
-		
-		
-		:Parameters:
-			* **$maxRetries** (int)  
-
-		
-		:Returns: static 
-	
-	
-
-.. rst-class:: public
-
-	.. php:method:: public getMaxRetries()
-	
-		.. rst-class:: phpdoc-description
-		
-			| Return max retries\.
-			
-		
-		
-		:Returns: int 
-	
-	
-
-.. rst-class:: public
-
-	.. php:method:: public setConcurrency( $concurrency)
-	
-		.. rst-class:: phpdoc-description
-		
-			| Set the concurrency\.
-			
-		
-		
-		:Parameters:
-			* **$concurrency** (int)  
-
-		
-		:Returns: static 
-	
-	
-
-.. rst-class:: public
-
-	.. php:method:: public getConcurrency()
-	
-		.. rst-class:: phpdoc-description
-		
-			| Return concurrency\.
-			
-		
-		
-		:Returns: int 
-	
-	
-
-.. rst-class:: public
-
-	.. php:method:: public setLogger( $logger)
-	
-		.. rst-class:: phpdoc-description
-		
-			| Set the logger\.
-			
-		
-		
-		:Parameters:
-			* **$logger** (:any:`Psr\\Log\\LoggerInterface <Psr\\Log\\LoggerInterface>`)  
-
-		
-		:Returns: :any:`\\Firstred\\PostNL\\HttpClient\\GuzzleClient <Firstred\\PostNL\\HttpClient\\GuzzleClient>` 
-	
-	
-
-.. rst-class:: public
-
-	.. php:method:: public getLogger()
-	
-		.. rst-class:: phpdoc-description
-		
-			| Get the logger\.
-			
-		
-		
-		:Returns: :any:`\\Psr\\Log\\LoggerInterface <Psr\\Log\\LoggerInterface>` 
-	
-	
-
-.. rst-class:: public
-
-	.. php:method:: public addOrUpdateRequest( $id, $request)
-	
-		.. rst-class:: phpdoc-description
-		
-			| Adds a request to the list of pending requests
-			| Using the ID you can replace a request\.
-			
-		
-		
-		:Parameters:
-			* **$id** (string)  Request ID
-			* **$request** (:any:`Psr\\Http\\Message\\RequestInterface <Psr\\Http\\Message\\RequestInterface>`)  PSR-7 request
-
-		
-		:Returns: int | string 
-	
-	
-
-.. rst-class:: public
-
-	.. php:method:: public removeRequest( $id)
-	
-		.. rst-class:: phpdoc-description
-		
-			| Remove a request from the list of pending requests\.
-			
-		
-		
-		:Parameters:
-			* **$id** (string)  
-
-		
-	
-	
-
-.. rst-class:: public
-
-	.. php:method:: public clearRequests()
-	
-		.. rst-class:: phpdoc-description
-		
-			| Clear all pending requests\.
-			
-		
-		
-	
-	
-
 .. rst-class:: public
 
 	.. php:method:: public doRequest( $request)
@@ -354,6 +202,7 @@ Methods
 
 		
 		:Returns: :any:`\\Firstred\\PostNL\\Exception\\HttpClientException\[\] <Firstred\\PostNL\\Exception\\HttpClientException>` | :any:`\\Psr\\Http\\Message\\ResponseInterface\[\] <Psr\\Http\\Message\\ResponseInterface>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
 	
 	
 

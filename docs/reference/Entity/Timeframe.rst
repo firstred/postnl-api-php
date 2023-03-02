@@ -34,6 +34,7 @@ Methods
 * :php:meth:`public setStartDate\($StartDate\)<Firstred\\PostNL\\Entity\\Timeframe::setStartDate\(\)>`
 * :php:meth:`public setEndDate\($EndDate\)<Firstred\\PostNL\\Entity\\Timeframe::setEndDate\(\)>`
 * :php:meth:`public setPostalCode\($PostalCode\)<Firstred\\PostNL\\Entity\\Timeframe::setPostalCode\(\)>`
+* :php:meth:`public setSundaySorting\($SundaySorting\)<Firstred\\PostNL\\Entity\\Timeframe::setSundaySorting\(\)>`
 * :php:meth:`public jsonSerialize\(\)<Firstred\\PostNL\\Entity\\Timeframe::jsonSerialize\(\)>`
 * :php:meth:`public xmlSerialize\($writer\)<Firstred\\PostNL\\Entity\\Timeframe::xmlSerialize\(\)>`
 
@@ -98,7 +99,7 @@ Properties
 
 .. php:attr:: protected static SundaySorting
 
-	:Type: string | null 
+	:Type: bool | null 
 
 
 .. php:attr:: protected static Interval
@@ -210,6 +211,21 @@ Methods
 
 		
 		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setSundaySorting( $SundaySorting=null)
+	
+		
+		:Parameters:
+			* **$SundaySorting** (string | bool | int | null)  
+
+		
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\Timeframe <Firstred\\PostNL\\Entity\\Timeframe>` 
+		:Since: 1.0.0 
+		:Since: 1.0.0 
 	
 	
 

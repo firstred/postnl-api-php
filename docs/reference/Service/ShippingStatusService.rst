@@ -551,7 +551,7 @@ Methods
 			* **$response** (mixed)  
 
 		
-		:Returns: :any:`\\Firstred\\PostNL\\Entity\\Response\\UpdatedShipmentsResponse <Firstred\\PostNL\\Entity\\Response\\UpdatedShipmentsResponse>` | null 
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\Response\\CompleteStatusResponse <Firstred\\PostNL\\Entity\\Response\\CompleteStatusResponse>` | null 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ResponseException <Firstred\\PostNL\\Exception\\ResponseException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\HttpClientException <Firstred\\PostNL\\Exception\\HttpClientException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 

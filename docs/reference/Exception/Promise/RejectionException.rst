@@ -35,6 +35,14 @@ Methods
 * :php:meth:`public getReason\(\)<Firstred\\PostNL\\Exception\\Promise\\RejectionException::getReason\(\)>`
 
 
+Properties
+----------
+
+.. php:attr:: private static reason
+
+	:Type: mixed Rejection reason\.
+
+
 Methods
 -------
 

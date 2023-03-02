@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2022 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,7 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- * @copyright 2017-2021 Michael Dekker
+ * @copyright 2017-2022 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -342,8 +342,8 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
         return $this->postnl->getRequestFactory()->createRequest(
             'POST',
             $endpoint.'?'.http_build_query([
-                'confirm' => $confirm,
-            ], null, '&', PHP_QUERY_RFC3986))
+                'confirm' => ($confirm ? 'true' : 'false'),
+            ], '', '&', PHP_QUERY_RFC3986))
             ->withHeader('apikey', $apiKey)
             ->withHeader('Accept', 'application/json')
             ->withHeader('Content-Type', 'application/json;charset=UTF-8')

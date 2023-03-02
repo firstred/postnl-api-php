@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2022 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,7 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- * @copyright 2017-2021 Michael Dekker
+ * @copyright 2017-2022 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -48,6 +48,7 @@ use ReflectionException;
 use Sabre\Xml\Writer;
 use SimpleXMLElement;
 use function get_object_vars;
+use function is_array;
 
 /**
  * Class AbstractService.
@@ -233,8 +234,8 @@ abstract class AbstractService
             foreach ($body->Errors as $error) {
                 if (isset($error->ErrorMsg)) {
                     $exceptionData[] = [
-                        'description' => isset($error->ErrorMsg) ? $error->ErrorMsg : '',
-                        'message'     => isset($error->ErrorMsg) ? $error->ErrorMsg : '',
+                        'description' => $error->ErrorMsg,
+                        'message'     => $error->ErrorMsg,
                         'code'        => isset($error->ErrorNumber) ? (int) $error->ErrorNumber : 0,
                     ];
                 } else {
@@ -252,6 +253,20 @@ abstract class AbstractService
                 'description' => isset($body->Array->Item->ErrorMsg) ? (string) $body->Array->Item->ErrorMsg : null,
                 'message'     => isset($body->Array->Item->ErrorMsg) ? (string) $body->Array->Item->ErrorMsg : null,
                 'code'        => 0,
+            ]];
+            throw new CifException($exceptionData);
+        } elseif (isset($body->ResponseShipments)
+            && is_array($body->ResponseShipments)
+            && isset($body->ResponseShipments[0]->Errors)
+            && is_array($body->ResponseShipments[0]->Errors)
+            && !empty($body->ResponseShipments[0]->Errors)
+        ) {
+            $error = $body->ResponseShipments[0]->Errors[0];
+
+            $exceptionData = [[
+                'message'     => isset($error->message) ? (string) $error->message : null,
+                'description' => isset($error->description) ? (string) $error->description : null,
+                'code'        => isset($error->code) ? (int) $error->code : 0,
             ]];
             throw new CifException($exceptionData);
         }

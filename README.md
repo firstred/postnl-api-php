@@ -1,10 +1,12 @@
 # PostNL REST/SOAP API PHP Bindings
 
-[![Build Status](https://travis-ci.org/firstred/postnl-api-php.svg?branch=master)](https://travis-ci.org/firstred/postnl-api-php)
+[![Latest Stable Version](http://poser.pugx.org/firstred/postnl-api-php/v)](https://packagist.org/packages/firstred/postnl-api-php)
+[![Total Downloads](http://poser.pugx.org/firstred/postnl-api-php/downloads)](https://packagist.org/packages/firstred/postnl-api-php)
+[![.github/workflows/test.yaml](https://github.com/firstred/postnl-api-php/actions/workflows/test.yaml/badge.svg)](https://github.com/firstred/postnl-api-php/actions/workflows/test.yaml)
 [![Documentation Status](https://readthedocs.org/projects/postnl-php/badge/?version=latest)](https://postnl-php.readthedocs.io/en/latest/?badge=latest)
 [![codecov](https://codecov.io/gh/firstred/postnl-api-php/branch/master/graph/badge.svg)](https://codecov.io/gh/firstred/postnl-api-php)
-[![latest stable version](https://poser.pugx.org/firstred/postnl-api-php/v/stable.svg)](https://packagist.org/packages/firstred/postnl-api-php)
 [![license mit](https://poser.pugx.org/firstred/postnl-api-php/license.svg)](https://packagist.org/packages/firstred/postnl-api-php)
+[![PHP Version Require](http://poser.pugx.org/firstred/postnl-api-php/require/php)](https://packagist.org/packages/firstred/postnl-api-php)
 
 ## About
 
@@ -134,6 +136,26 @@ The full documentation can be found on this page: [https://postnl-php.readthedoc
 
 #### Building the documentation
 
+Generating the documentation consists of two steps:
+1. Generating the reference RST files of all PHP classes available in this library.
+2. Generating the HTML output which can be viewed with a browser.
+
+#### Generating the PHP classes reference
+
+First install the PHPdoc to RST tool.
+```bash
+composer require abbadon1334/phpdoc-to-rst -W
+```
+
+This repository includes a simple PHP file which utilizes the above-mentioned tool to generate the reference RST files programmatically. It also moves around a few files to integrate the reference with the rest of the documentation.  
+Simply run (tested w/ PHP 8.1):
+
+```
+php ./build-docs-reference.php
+```
+
+##### Generating the final HTML output
+
 The documentation is automatically built and hosted on readthedocs.io. You can build a local HTML copy by [installing Sphinx](https://www.sphinx-doc.org/en/master/usage/installation.html) and running
 ```bash
 pip install -r docs/requirements.txt
@@ -151,7 +173,7 @@ This library has been licensed with the MIT license.
   <summary>Full license text</summary>
 
 The MIT License (MIT).
-Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
+Copyright (c) 2017-2022 Michael Dekker (https://github.com/firstred)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

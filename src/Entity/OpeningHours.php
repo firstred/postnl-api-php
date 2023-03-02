@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT).
  *
- * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
+ * Copyright (c) 2017-2022 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,7 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @author    Michael Dekker <git@michaeldekker.nl>
- * @copyright 2017-2021 Michael Dekker
+ * @copyright 2017-2022 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
@@ -39,7 +39,6 @@ use Firstred\PostNL\Service\TimeframeService;
 use Iterator;
 use RecursiveArrayIterator;
 use RecursiveIteratorIterator;
-use ReflectionException;
 use stdClass;
 use function is_numeric;
 use function is_string;
@@ -47,20 +46,20 @@ use function is_string;
 /**
  * Class OpeningHours.
  *
- * @method string|null  getMonday()
- * @method string|null  getTuesday()
- * @method string|null  getWednesday()
- * @method string|null  getThursday()
- * @method string|null  getFriday()
- * @method string|null  getSaturday()
- * @method string|null  getSunday()
- * @method OpeningHours setMonday(string|null $Monday = null)
- * @method OpeningHours setTuesday(string|null $Tuesday = null)
- * @method OpeningHours setWednesday(string|null $Wednesday = null)
- * @method OpeningHours setThursday(string|null $Thursday = null)
- * @method OpeningHours setFriday(string|null $Friday = null)
- * @method OpeningHours setSaturday(string|null $Saturday = null)
- * @method OpeningHours setSunday(string|null $Sunday = null)
+ * @method array|null  getMonday()
+ * @method array|null  getTuesday()
+ * @method array|null  getWednesday()
+ * @method array|null  getThursday()
+ * @method array|null  getFriday()
+ * @method array|null  getSaturday()
+ * @method array|null  getSunday()
+ * @method OpeningHours setMonday(string|array|null $Monday = null)
+ * @method OpeningHours setTuesday(string|array|null $Tuesday = null)
+ * @method OpeningHours setWednesday(string|array|null $Wednesday = null)
+ * @method OpeningHours setThursday(string|array|null $Thursday = null)
+ * @method OpeningHours setFriday(string|array|null $Friday = null)
+ * @method OpeningHours setSaturday(string|array|null $Saturday = null)
+ * @method OpeningHours setSunday(string|array|null $Sunday = null)
  *
  * @since 1.0.0
  */
@@ -126,41 +125,41 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string|null */
-    protected $Monday = '';
-    /** @var string|null */
-    protected $Tuesday = '';
-    /** @var string|null */
-    protected $Wednesday = '';
-    /** @var string|null */
-    protected $Thursday = '';
-    /** @var string|null */
-    protected $Friday = '';
-    /** @var string|null */
-    protected $Saturday = '';
-    /** @var string|null */
-    protected $Sunday = '';
+    /** @var string|array|null */
+    protected $Monday = null;
+    /** @var string|array|null */
+    protected $Tuesday = null;
+    /** @var string|array|null */
+    protected $Wednesday = null;
+    /** @var string|array|null */
+    protected $Thursday = null;
+    /** @var string|array|null */
+    protected $Friday = null;
+    /** @var string|array|null */
+    protected $Saturday = null;
+    /** @var string|array|null */
+    protected $Sunday = null;
     // @codingStandardsIgnoreEnd
 
     /**
      * OpeningHours constructor.
      *
-     * @param string|null $Monday
-     * @param string|null $Tuesday
-     * @param string|null $Wednesday
-     * @param string|null $Thursday
-     * @param string|null $Friday
-     * @param string|null $Saturday
-     * @param string|null $Sunday
+     * @param string|array|null $Monday
+     * @param string|array|null $Tuesday
+     * @param string|array|null $Wednesday
+     * @param string|array|null $Thursday
+     * @param string|array|null $Friday
+     * @param string|array|null $Saturday
+     * @param string|array|null $Sunday
      */
     public function __construct(
-        $Monday = '',
-        $Tuesday = '',
-        $Wednesday = '',
-        $Thursday = '',
-        $Friday = '',
-        $Saturday = '',
-        $Sunday = ''
+        $Monday = null,
+        $Tuesday = null,
+        $Wednesday = null,
+        $Thursday = null,
+        $Friday = null,
+        $Saturday = null,
+        $Sunday = null
     ) {
         parent::__construct();
 
@@ -285,7 +284,7 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
     /**
      * @param mixed $offset
      *
-     * @return array
+     * @return mixed
      *
      * @throws PostNLInvalidArgumentException
      *
@@ -345,6 +344,7 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
      *
      * @since 1.2.0
      */
+    #[\ReturnTypeWillChange]
     public function current()
     {
         if (!$this->valid()) {
@@ -357,6 +357,7 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
     /**
      * @since 1.2.0
      */
+    #[\ReturnTypeWillChange]
     public function next()
     {
         ++$this->currentDay;
@@ -370,6 +371,7 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
      *
      * @since 1.2.0
      */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return static::findCurrentDayString($this->currentDay);
@@ -380,6 +382,7 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
      *
      * @since 1.2.0
      */
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         try {
@@ -395,6 +398,7 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
     /**
      * @since 1.2.0
      */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         $this->currentDay = 0;

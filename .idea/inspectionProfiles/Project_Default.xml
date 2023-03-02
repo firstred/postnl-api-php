@@ -1,0 +1,22 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="DuplicatedCode" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+    <inspection_tool class="HttpUrlsUsage" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpArgumentWithoutNamedIdentifierInspection" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="PhpCSFixerValidationInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false">
+      <option name="CODING_STANDARD" value="Custom" />
+      <option name="CUSTOM_RULESET_PATH" value="$PROJECT_DIR$/.php_cs.dist" />
+    </inspection_tool>
+    <inspection_tool class="PhpComposerExtensionStubsInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpFullyQualifiedNameUsageInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpRedundantCatchClauseInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpRedundantOptionalArgumentInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+    <inspection_tool class="PsalmGlobal" enabled="false" level="WEAK WARNING" enabled_by_default="false">
+      <scope name="Tests" level="INFORMATION" enabled="false">
+        <option name="config" value="$PROJECT_DIR$/psalm.xml" />
+      </scope>
+      <option name="config" value="$PROJECT_DIR$/psalm.xml" />
+    </inspection_tool>
+  </profile>
+</component>
