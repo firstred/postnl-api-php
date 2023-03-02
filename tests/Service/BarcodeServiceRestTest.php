@@ -135,6 +135,48 @@ class BarcodeServiceRestTest extends ServiceTest
             'CustomerNumber' => '11223344',
             'Type'           => '3S',
             'Serie'          => '987000000-987600000',
+            'Range'          => 'DEVC',
+        ],
+            $query
+        );
+        $this->assertEmpty((string) $request->getBody());
+        $this->assertEquals('test', $request->getHeaderLine('apikey'));
+        $this->assertEquals('', $request->getHeaderLine('Content-Type'));
+        $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
+    }
+
+    /**
+     * @testdox creates a valid 10S barcode request
+     *
+     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
+     * @throws \ReflectionException
+     */
+    public function testCreatesAValid10SBarcodeRequest()
+    {
+        $type = 'LA';
+        $range = $this->getRange($type);
+        $serie = $this->postnl->findBarcodeSerie($type, $range, false);
+
+        $this->lastRequest = $request = $this->service->buildGenerateBarcodeRequestREST(
+            GenerateBarcode::create()
+                           ->setBarcode(
+                               Barcode::create()
+                                      ->setRange($range)
+                                      ->setSerie($serie)
+                                      ->setType($type)
+                           )
+                           ->setMessage(new Message())
+                           ->setCustomer($this->postnl->getCustomer())
+        );
+
+        $query = Query::parse($request->getUri()->getQuery());
+
+        $this->assertEqualsCanonicalizing([
+            'CustomerCode'   => 'DEVC',
+            'CustomerNumber' => '11223344',
+            'Type'           => 'LA',
+            'Serie'          => '00000000-99999999',
+            'Range'          => '1234'
         ],
             $query
         );
@@ -153,9 +195,9 @@ class BarcodeServiceRestTest extends ServiceTest
     {
         if (in_array($type, ['2S', '3S'])) {
             return $this->postnl->getCustomer()->getCustomerCode();
-        } else {
-            return $this->postnl->getCustomer()->getGlobalPackCustomerCode();
         }
+
+        return $this->postnl->getCustomer()->getGlobalPackCustomerCode();
     }
 
     /**
