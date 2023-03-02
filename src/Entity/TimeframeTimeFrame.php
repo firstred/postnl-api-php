@@ -1,8 +1,8 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,39 +19,45 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity;
+namespace Firstred\PostNL\Entity;
 
-use ThirtyBees\PostNL\Service\BarcodeService;
-use ThirtyBees\PostNL\Service\ConfirmingService;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
-use ThirtyBees\PostNL\Service\LabellingService;
-use ThirtyBees\PostNL\Service\LocationService;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
-use ThirtyBees\PostNL\Service\TimeframeService;
+use DateTimeImmutable;
+use DateTimeInterface;
+use DateTimeZone;
+use Exception;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Service\BarcodeService;
+use Firstred\PostNL\Service\ConfirmingService;
+use Firstred\PostNL\Service\DeliveryDateService;
+use Firstred\PostNL\Service\LabellingService;
+use Firstred\PostNL\Service\LocationService;
+use Firstred\PostNL\Service\TimeframeService;
+use stdClass;
+use function array_merge;
+use function is_array;
+use function is_string;
 
 /**
- * Class TimeframeTimeFrame
+ * Class TimeframeTimeFrame.
  *
- * @package ThirtyBees\PostNL\Entity
+ * @method DateTimeInterface|null getDate()
+ * @method string|null            getFrom()
+ * @method string|null            getTo()
+ * @method string[]|null          getOptions()
+ * @method TimeframeTimeFrame     setFrom(string|null $From = null)
+ * @method TimeframeTimeFrame     setTo(string|null $To = null)
+ * @method TimeframeTimeFrame     setOptions(string[]|null $Options = null)
  *
- * @method string|null   getDate()
- * @method string|null   getFrom()
- * @method string|null   getTo()
- * @method string[]|null getOptions()
- *
- * @method TimeframeTimeFrame setDate(string|null $date = null)
- * @method TimeframeTimeFrame setFrom(string|null $from = null)
- * @method TimeframeTimeFrame setTo(string|null $to = null)
- * @method TimeframeTimeFrame setOptions(string[]|null $options = null)
+ * @since 1.0.0
  */
 class TimeframeTimeFrame extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
+    /** @var string[][] */
     public static $defaultProperties = [
         'Barcode'        => [
             'Date'    => BarcodeService::DOMAIN_NAMESPACE,
@@ -70,12 +76,6 @@ class TimeframeTimeFrame extends AbstractEntity
             'From'    => LabellingService::DOMAIN_NAMESPACE,
             'Options' => LabellingService::DOMAIN_NAMESPACE,
             'To'      => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Date'    => ShippingStatusService::DOMAIN_NAMESPACE,
-            'From'    => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Options' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'To'      => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate'   => [
             'Date'    => DeliveryDateService::DOMAIN_NAMESPACE,
@@ -97,29 +97,95 @@ class TimeframeTimeFrame extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string|null $Date */
+    /** @var string|null */
     protected $Date;
-    /** @var string|null $From */
+    /** @var string|null */
     protected $From;
-    /** @var string[]|null $Options */
+    /** @var string[]|null */
     protected $Options;
-    /** @var string|null $To */
+    /** @var string|null */
     protected $To;
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string|null   $date
-     * @param string|null   $from
-     * @param string|null   $to
-     * @param string[]|null $options
+     * @param string|DateTimeInterface|null $GetSentDate
+     * @param string|null                   $From
+     * @param string|null                   $To
+     * @param string[]|null                 $Options
+     *
+     * @throws InvalidArgumentException
      */
-    public function __construct($date = null, $from = null, $to = null, array $options = null)
+    public function __construct($GetSentDate = null, $From = null, $To = null, array $Options = null)
     {
         parent::__construct();
 
-        $this->setDate($date);
-        $this->setFrom($from);
-        $this->setTo($to);
-        $this->setOptions($options);
+        $this->setDate($GetSentDate);
+        $this->setFrom($From);
+        $this->setTo($To);
+        $this->setOptions($Options);
+    }
+
+    /**
+     * @param string|DateTimeInterface|null $Date
+     *
+     * @return static
+     *
+     * @throws InvalidArgumentException
+     *
+     * @since 1.2.0
+     */
+    public function setDate($Date = null)
+    {
+        if (is_string($Date)) {
+            try {
+                $Date = new DateTimeImmutable($Date, new DateTimeZone('Europe/Amsterdam'));
+            } catch (Exception $e) {
+                throw new InvalidArgumentException($e->getMessage(), 0, $e);
+            }
+        }
+
+        $this->Date = $Date;
+
+        return $this;
+    }
+
+    /**
+     * @param stdClass $json
+     *
+     * @return mixed|stdClass|null
+     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\NotSupportedException
+     *
+     * @since 1.2.0
+     */
+    public static function jsonDeserialize(stdClass $json)
+    {
+        if (isset($json->TimeframeTimeFrame->Options)) {
+            /** @psalm-var list<string> $deliveryOptions */
+            $deliveryOptions = [];
+            if (!is_array($json->TimeframeTimeFrame->Options)){
+                $json->TimeframeTimeFrame->Options = [$json->TimeframeTimeFrame->Options];
+            }
+
+            foreach ($json->TimeframeTimeFrame->Options as $deliveryOption) {
+                if (isset($deliveryOption->string)) {
+                    if (!is_array($deliveryOption->string)) {
+                        $deliveryOption->string = [$deliveryOption->string];
+                    }
+                    foreach ($deliveryOption->string as $optionString) {
+                        $deliveryOptions[] = $optionString;
+                    }
+                } elseif (is_array($deliveryOption)) {
+                    $deliveryOptions = array_merge($deliveryOptions, $deliveryOption);
+                } elseif (is_string($deliveryOption)) {
+                    $deliveryOptions[] = $deliveryOption;
+                }
+            }
+
+            $json->TimeframeTimeFrame->Options = $deliveryOptions;
+        }
+
+        return parent::jsonDeserialize($json);
     }
 }

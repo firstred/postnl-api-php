@@ -1,8 +1,8 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,66 +19,65 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity\SOAP;
+namespace Firstred\PostNL\Entity\SOAP;
 
-use ThirtyBees\PostNL\Entity\AbstractEntity;
+use Firstred\PostNL\Entity\AbstractEntity;
 
 /**
- * Class Security
- *
- * @package ThirtyBees\PostNL\Entity\SOAP
+ * Class Security.
  *
  * @method UsernameToken getUsernameToken()
+ * @method Security      setUserNameToken(UsernameToken $UserNameToken)
  *
- * @method Security setUserNameToken(UsernameToken $token)
+ * @since 1.0.0
  */
 class Security extends AbstractEntity
 {
     const SECURITY_NAMESPACE = 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd';
 
-    /** @var string[][] $defaultProperties */
+    /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'UsernameToken' => self::SECURITY_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'UsernameToken' => self::SECURITY_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'UsernameToken' => self::SECURITY_NAMESPACE,
         ],
         'ShippingStatus' => [
             'UsernameToken' => self::SECURITY_NAMESPACE,
         ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'UsernameToken' => self::SECURITY_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'UsernameToken' => self::SECURITY_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'UsernameToken' => self::SECURITY_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var UsernameToken $UsernameToken */
+    /** @var UsernameToken */
     protected $UsernameToken;
     // @codingStandardsIgnoreEnd
 
     /**
      * Security constructor.
      *
-     * @param UsernameToken $token
+     * @param UsernameToken $UserNameToken
      */
-    public function __construct(UsernameToken $token)
+    public function __construct(UsernameToken $UserNameToken)
     {
         parent::__construct();
 
-        $this->setUsernameToken($token);
+        $this->setUsernameToken($UserNameToken);
     }
 }

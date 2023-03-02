@@ -1,8 +1,8 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,69 +19,63 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity;
+namespace Firstred\PostNL\Entity;
 
-use ThirtyBees\PostNL\Service\BarcodeService;
-use ThirtyBees\PostNL\Service\ConfirmingService;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
-use ThirtyBees\PostNL\Service\LabellingService;
-use ThirtyBees\PostNL\Service\LocationService;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
-use ThirtyBees\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Service\BarcodeService;
+use Firstred\PostNL\Service\ConfirmingService;
+use Firstred\PostNL\Service\DeliveryDateService;
+use Firstred\PostNL\Service\LabellingService;
+use Firstred\PostNL\Service\LocationService;
+use Firstred\PostNL\Service\TimeframeService;
 
 /**
- * Class Timeframes
+ * Class Timeframes.
  *
- * @package ThirtyBees\PostNL\Entity
- *
- * @method Timeframe[]|null getTimeframess()
+ * @method Timeframe[]|null          getTimeframess()
  * @method TimeframeTimeFrame[]|null getTimeframeTimeFrame()
+ * @method Timeframes                setTimeframes(Timeframe[]|null $Timeframes = null)
+ * @method Timeframes                setTimeframeTimeFrames(TimeframeTimeFrame[]|null $TimeframeTimeFrames = null)
  *
- * @method Timeframes setTimeframes(Timeframe[]|null $timeframes = null)
- * @method Timeframes setTimeframeTimeFrames(TimeframeTimeFrame[]|null $timeframes = null)
+ * @since 1.0.0
  */
 class Timeframes extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
+    /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode'        => [
-            'Timeframes'         => BarcodeService::DOMAIN_NAMESPACE,
+        'Barcode' => [
+            'Timeframes'          => BarcodeService::DOMAIN_NAMESPACE,
             'TimeframeTimeFrames' => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
-            'Timeframes'         => ConfirmingService::DOMAIN_NAMESPACE,
+        'Confirming' => [
+            'Timeframes'          => ConfirmingService::DOMAIN_NAMESPACE,
             'TimeframeTimeFrames' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
-            'Timeframes'         => LabellingService::DOMAIN_NAMESPACE,
+        'Labelling' => [
+            'Timeframes'          => LabellingService::DOMAIN_NAMESPACE,
             'TimeframeTimeFrames' => LabellingService::DOMAIN_NAMESPACE,
         ],
-        'ShippingStatus' => [
-            'Timeframes'         => ShippingStatusService::DOMAIN_NAMESPACE,
-            'TimeframeTimeFrames' => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
-            'Timeframes'         => DeliveryDateService::DOMAIN_NAMESPACE,
+        'DeliveryDate' => [
+            'Timeframes'          => DeliveryDateService::DOMAIN_NAMESPACE,
             'TimeframeTimeFrames' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
-            'Timeframes'         => LocationService::DOMAIN_NAMESPACE,
+        'Location' => [
+            'Timeframes'          => LocationService::DOMAIN_NAMESPACE,
             'TimeframeTimeFrames' => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
-            'Timeframes'         => TimeframeService::DOMAIN_NAMESPACE,
+        'Timeframe' => [
+            'Timeframes'          => TimeframeService::DOMAIN_NAMESPACE,
             'TimeframeTimeFrames' => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var Timeframe[]|null $Timeframes */
+    /** @var Timeframe[]|null */
     protected $Timeframes;
-    /** @var TimeframeTimeFrame[]|null $TimeframeTimeFrames */
+    /** @var TimeframeTimeFrame[]|null */
     protected $TimeframeTimeFrames;
     // @codingStandardsIgnoreEnd
 
@@ -102,7 +96,7 @@ class Timeframes extends AbstractEntity
     }
 
     /**
-     * Return a serializable array for `json_encode`
+     * Return a serializable array for `json_encode`.
      *
      * @return array
      */
@@ -114,21 +108,21 @@ class Timeframes extends AbstractEntity
         }
 
         foreach (array_keys(static::$defaultProperties[$this->currentService]) as $propertyName) {
-            if (isset($this->{$propertyName})) {
-                if ($propertyName === 'Timeframes') {
+            if (isset($this->$propertyName)) {
+                if ('Timeframes' === $propertyName) {
                     $timeframes = [];
                     foreach ($this->Timeframes as $timeframe) {
                         $timeframes[] = $timeframe;
                     }
                     $json[$propertyName] = ['TimeframeTimeFrame' => $timeframes];
-                } elseif ($propertyName === 'TimeframeTimeFrames') {
+                } elseif ('TimeframeTimeFrames' === $propertyName) {
                     $timeframes = [];
                     foreach ($this->TimeframeTimeFrames as $timeframe) {
                         $timeframes[] = $timeframe;
                     }
                     $json[$propertyName] = ['TimeframeTimeFrame' => $timeframes];
                 } else {
-                    $json[$propertyName] = $this->{$propertyName};
+                    $json[$propertyName] = $this->$propertyName;
                 }
             }
         }

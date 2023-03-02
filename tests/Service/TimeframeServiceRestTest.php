@@ -1,8 +1,8 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2021 Michael Dekker
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,48 +19,52 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Tests\Service;
+namespace Firstred\PostNL\Tests\Service;
 
 use Cache\Adapter\Void\VoidCachePool;
+use Firstred\PostNL\Entity\Address;
+use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Entity\Message\Message;
+use Firstred\PostNL\Entity\ReasonNoTimeframe;
+use Firstred\PostNL\Entity\Request\GetTimeframes;
+use Firstred\PostNL\Entity\Response\ResponseTimeframes;
+use Firstred\PostNL\Entity\SOAP\UsernameToken;
+use Firstred\PostNL\Entity\Timeframe;
+use Firstred\PostNL\HttpClient\MockClient;
+use Firstred\PostNL\PostNL;
+use Firstred\PostNL\Service\TimeframeServiceInterface;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
-use Psr\Log\LoggerInterface;
-use ThirtyBees\PostNL\Entity\Address;
-use ThirtyBees\PostNL\Entity\Customer;
-use ThirtyBees\PostNL\Entity\Message\Message;
-use ThirtyBees\PostNL\Entity\Request\GetTimeframes;
-use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
-use ThirtyBees\PostNL\Entity\Timeframe;
-use ThirtyBees\PostNL\HttpClient\MockClient;
-use ThirtyBees\PostNL\PostNL;
-use ThirtyBees\PostNL\Service\TimeframeService;
+use GuzzleHttp\Psr7\Message as PsrMessage;
+use GuzzleHttp\Psr7\Query;
+use stdClass;
+use function file_get_contents;
+use const _RESPONSES_DIR_;
 
 /**
- * Class TimeframeServiceRestTest
- *
- * @package ThirtyBees\PostNL\Tests\Service
+ * Class TimeframeServiceRestTest.
  *
  * @testdox The TimeframeService (REST)
  */
-class TimeframeServiceRestTest extends \PHPUnit_Framework_TestCase
+class TimeframeServiceRestTest extends ServiceTest
 {
-    /** @var PostNL $postnl */
+    /** @var PostNL */
     protected $postnl;
-    /** @var TimeframeService $service */
+    /** @var TimeframeServiceInterface */
     protected $service;
-    /** @var $lastRequest */
+    /** @var */
     protected $lastRequest;
 
     /**
      * @before
-     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \ReflectionException
      */
     public function setupPostNL()
     {
@@ -80,31 +84,17 @@ class TimeframeServiceRestTest extends \PHPUnit_Framework_TestCase
                     'Zipcode'     => '2132WT',
                 ]))
                 ->setGlobalPackBarcodeType('AB')
-                ->setGlobalPackCustomerCode('1234')
-            , new UsernameToken(null, 'test'),
+                ->setGlobalPackCustomerCode('1234'), new UsernameToken(null, 'test'),
             false,
             PostNL::MODE_REST
         );
 
-        $this->service = $this->postnl->getTimeframeService();
-        $this->service->cache = new VoidCachePool();
-        $this->service->ttl = 1;
-    }
-
-    /**
-     * @after
-     */
-    public function logPendingRequest()
-    {
-        if (!$this->lastRequest instanceof Request) {
-            return;
-        }
-
         global $logger;
-        if ($logger instanceof LoggerInterface) {
-            $logger->debug($this->getName()." Request\n".\GuzzleHttp\Psr7\str($this->lastRequest));
-        }
-        $this->lastRequest = null;
+        $this->postnl->setLogger($logger);
+
+        $this->service = $this->postnl->getTimeframeService();
+        $this->service->setCache(new VoidCachePool());
+        $this->service->setTtl(1);
     }
 
     /**
@@ -125,19 +115,19 @@ class TimeframeServiceRestTest extends \PHPUnit_Framework_TestCase
                         ->setHouseNr('42')
                         ->setHouseNrExt('A')
                         ->setOptions([
-                            'Evening'
+                            'Evening',
                         ])
                         ->setPostalCode('2132WT')
                         ->setStartDate('30-06-2016')
                         ->setStreet('Siriusdreef')
-                        ->setSundaySorting(true)
+                        ->setSundaySorting(true),
                 ])
         );
 
-        $query = \GuzzleHttp\Psr7\parse_query($request->getUri()->getQuery());
+        $query = Query::parse($request->getUri()->getQuery());
 
         $this->assertEquals([
-            'AllowSundaySorting' => '1',
+            'AllowSundaySorting' => 'true',
             'StartDate'          => '30-06-2016',
             'EndDate'            => '02-07-2016',
             'PostalCode'         => '2132WT',
@@ -154,181 +144,11 @@ class TimeframeServiceRestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox can retrieve the available timeframes
+     * @dataProvider timeframesProvider
      */
-    public function testGetTimeframesRest()
+    public function testGetTimeframesRest($response)
     {
-        $payload = [
-            'ReasonNotimeframes' => [
-                'ReasonNoTimeframe' => [
-                    [
-                        'Code'        => '05',
-                        'Date'        => '10-03-2018',
-                        'Description' => 'Geen avondbelevering mogelijk',
-                        'Options'     => [
-                            'string' => 'Evening',
-                        ],
-                    ],
-                    [
-                        'Code'        => '03',
-                        'Date'        => '11-03-2018',
-                        'Description' => 'Dag uitgesloten van tijdvak',
-                        'Options'     => [
-                            'string' => 'Daytime',
-                        ],
-                    ],
-                    [
-                        'Code'        => '03',
-                        'Date'        => '11-03-2018',
-                        'Description' => 'Dag uitgesloten van tijdvak',
-                        'Options'     => [
-                            'string' => 'Evening',
-                        ],
-                    ],
-                    [
-                        'Code'        => '01',
-                        'Date'        => '12-03-2018',
-                        'Description' => 'Geen routeplan tijdvak',
-                        'Options'     => [
-                            'string' => 'Daytime',
-                        ],
-                    ],
-                    [
-                        'Code'        => '05',
-                        'Date'        => '12-03-2018',
-                        'Description' => 'Geen avondbelevering mogelijk',
-                        'Options'     => [
-                            'string' => 'Evening',
-                        ],
-                    ],
-                ],
-            ],
-            'Timeframes' => [
-                'Timeframe' => [
-                    [
-                        'Date' => '07-03-2018',
-                        'Timeframes' => [
-                            'TimeframeTimeFrame' => [
-                                [
-                                    'From' => '16:00:00',
-                                    'Options' => [
-                                        'string' => 'Daytime',
-                                    ],
-                                    'To' => '18:30:00',
-                                ],
-                                [
-                                    'From' => '18:00:00',
-                                    'Options' => [
-                                        'string' => 'Evening',
-                                    ],
-                                    'To' => '22:00:00',
-                                ],
-                            ]
-                        ]
-                    ],
-                    [
-                        'Date' => '08-03-2018',
-                        'Timeframes' => [
-                            'TimeframeTimeFrame' => [
-                                [
-                                    'From' => '15:45:00',
-                                    'Options' => [
-                                        'string' => 'Daytime',
-                                    ],
-                                    'To' => '18:15:00',
-                                ],
-                                [
-                                    'From' => '18:00:00',
-                                    'Options' => [
-                                        'string' => 'Evening',
-                                    ],
-                                    'To' => '22:00:00',
-                                ],
-                            ]
-                        ]
-                    ],
-                    [
-                        'Date' => '09-03-2018',
-                        'Timeframes' => [
-                            'TimeframeTimeFrame' => [
-                                [
-                                    'From' => '15:30:00',
-                                    'Options' => [
-                                        'string' => 'Daytime',
-                                    ],
-                                    'To' => '18:00:00',
-                                ],
-                                [
-                                    'From' => '18:00:00',
-                                    'Options' => [
-                                        'string' => 'Evening',
-                                    ],
-                                    'To' => '22:00:00',
-                                ],
-                            ]
-                        ]
-                    ],
-                    [
-                        'Date' => '10-03-2018',
-                        'Timeframes' => [
-                            'TimeframeTimeFrame' => [
-                                [
-                                    'From' => '16:15:00',
-                                    'Options' => [
-                                        'string' => 'Daytime',
-                                    ],
-                                    'To' => '18:45:00',
-                                ],
-                            ]
-                        ]
-                    ],
-                    [
-                        'Date' => '13-03-2018',
-                        'Timeframes' => [
-                            'TimeframeTimeFrame' => [
-                                [
-                                    'From' => '16:00:00',
-                                    'Options' => [
-                                        'string' => 'Daytime',
-                                    ],
-                                    'To' => '18:30:00',
-                                ],
-                                [
-                                    'From' => '18:00:00',
-                                    'Options' => [
-                                        'string' => 'Evening',
-                                    ],
-                                    'To' => '22:00:00',
-                                ],
-                            ]
-                        ]
-                    ],
-                    [
-                        'Date'       => '14-03-2018',
-                        'Timeframes' => [
-                            'TimeframeTimeFrame' => [
-                                [
-                                    'From'    => '16:00:00',
-                                    'Options' => [
-                                        'string' => 'Daytime',
-                                    ],
-                                    'To'      => '18:30:00',
-                                ],
-                                [
-                                    'From'    => '18:00:00',
-                                    'Options' => [
-                                        'string' => 'Evening',
-                                    ],
-                                    'To'      => '20:00:00',
-                                ],
-                            ],
-                        ],
-                    ],
-                ]
-            ]
-        ];
-        $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode($payload)),
-        ]);
+        $mock = new MockHandler([$response]);
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();
         $mockClient->setHandler($handler);
@@ -348,16 +168,26 @@ class TimeframeServiceRestTest extends \PHPUnit_Framework_TestCase
                     ->setPostalCode('2132WT')
                     ->setStartDate('30-06-2016')
                     ->setStreet('Siriusdreef')
-                    ->setSundaySorting(false)
+                    ->setSundaySorting(false),
                 ])
         );
 
-        // Should be a ResponeTimeframes instance
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\ResponseTimeframes', $responseTimeframes);
+        // Should be a ResponseTimeframes instance
+        $this->assertInstanceOf(ResponseTimeframes::class, $responseTimeframes);
         // Check for data loss
-        $this->assertEquals(5, count($responseTimeframes->getReasonNoTimeframes()));
-        $this->assertEquals(6, count($responseTimeframes->getTimeframes()));
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Timeframe', $responseTimeframes->getTimeframes()[0]);
-        $this->assertEquals(json_encode($payload), json_encode($responseTimeframes));
+        $this->assertInstanceOf(Timeframe::class, $responseTimeframes->getTimeframes()[0]);
+        if (count($responseTimeframes->getReasonNoTimeframes())) {
+            $this->assertInstanceOf(ReasonNoTimeframe::class, $responseTimeframes->getReasonNoTimeframes()[0]);
+        }
+        $this->assertNotTrue(static::containsStdClass($responseTimeframes));
+    }
+
+    public function timeframesProvider()
+    {
+        return [
+            [PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/timeframes/timeframes.http'))],
+            [PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/timeframes/timeframes2.http'))],
+            [PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/timeframes/timeframes3.http'))],
+        ];
     }
 }

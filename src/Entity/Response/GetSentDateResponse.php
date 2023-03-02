@@ -1,8 +1,8 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,40 +19,42 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity\Response;
+namespace Firstred\PostNL\Entity\Response;
 
+use DateTimeImmutable;
+use DateTimeInterface;
+use DateTimeZone;
+use Exception;
+use Firstred\PostNL\Entity\AbstractEntity;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Service\BarcodeService;
+use Firstred\PostNL\Service\ConfirmingService;
+use Firstred\PostNL\Service\DeliveryDateService;
+use Firstred\PostNL\Service\LabellingService;
+use Firstred\PostNL\Service\LocationService;
+use Firstred\PostNL\Service\TimeframeService;
 use Sabre\Xml\Writer;
-use ThirtyBees\PostNL\Entity\AbstractEntity;
-use ThirtyBees\PostNL\Service\BarcodeService;
-use ThirtyBees\PostNL\Service\ConfirmingService;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
-use ThirtyBees\PostNL\Service\LabellingService;
-use ThirtyBees\PostNL\Service\LocationService;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
-use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class GetSentDateResponse
+ * Class GetSentDateResponse.
  *
- * @package ThirtyBees\PostNL\Entity
+ * @method DateTimeInterface|null getSentDate()
+ * @method string[]|null          getOptions()
+ * @method GetSentDateResponse    setOptions(string[]|null $Options = null)
  *
- * @method string|null   getSentDate()
- * @method string[]|null getOptions()
- *
- * @method GetSentDateResponse setSentDate(string|null $date = null)
- * @method GetSentDateResponse setOptions(string[]|null $options = null)
+ * @since 1.0.0
  */
 class GetSentDateResponse extends AbstractEntity
 {
     /**
-     * Default properties and namespaces for the SOAP API
+     * Default properties and namespaces for the SOAP API.
      *
-     * @var array $defaultProperties
+     * @var array
      */
     public static $defaultProperties = [
         'Barcode'        => [
@@ -66,10 +68,6 @@ class GetSentDateResponse extends AbstractEntity
         'Labelling'      => [
             'SentDate' => LabellingService::DOMAIN_NAMESPACE,
             'Options'  => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'SentDate' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Options'  => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate'   => [
             'SentDate' => DeliveryDateService::DOMAIN_NAMESPACE,
@@ -85,28 +83,54 @@ class GetSentDateResponse extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string|null $SentDate */
+    /** @var DateTimeInterface|null */
     protected $SentDate;
-    /** @var string[]|null $Options */
+    /** @var string[]|null */
     protected $Options;
     // @codingStandardsIgnoreEnd
 
     /**
      * GetSentDateResponse constructor.
      *
-     * @param string|null      $date
-     * @param string[]|null $options
+     * @param DateTimeInterface|string|null $GetSentDate
+     * @param string[]|null                 $Options
+     *
+     * @throws InvalidArgumentException
      */
-    public function __construct($date = null, array $options = null)
+    public function __construct($GetSentDate = null, array $Options = null)
     {
         parent::__construct();
 
-        $this->setSentDate($date);
-        $this->setOptions($options);
+        $this->setSentDate($GetSentDate);
+        $this->setOptions($Options);
     }
 
     /**
-     * Return a serializable array for the XMLWriter
+     * @param string|DateTimeInterface|null $SentDate
+     *
+     * @return static
+     *
+     * @throws InvalidArgumentException
+     *
+     * @since 1.2.0
+     */
+    public function setSentDate($SentDate = null)
+    {
+        if (is_string($SentDate)) {
+            try {
+                $SentDate = new DateTimeImmutable($SentDate, new DateTimeZone('Europe/Amsterdam'));
+            } catch (Exception $e) {
+                throw new InvalidArgumentException($e->getMessage(), 0, $e);
+            }
+        }
+
+        $this->SentDate = $SentDate;
+
+        return $this;
+    }
+
+    /**
+     * Return a serializable array for the XMLWriter.
      *
      * @param Writer $writer
      *
@@ -122,18 +146,18 @@ class GetSentDateResponse extends AbstractEntity
         }
 
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if ($propertyName === 'Options') {
+            if ('Options' === $propertyName) {
                 if (isset($this->Options)) {
                     $options = [];
                     if (is_array($this->Options)) {
                         foreach ($this->Options as $option) {
-                            $options[] = ["{http://schemas.microsoft.com/2003/10/Serialization/Arrays}string" => $option];
+                            $options[] = ['{http://schemas.microsoft.com/2003/10/Serialization/Arrays}string' => $option];
                         }
                     }
                     $xml["{{$namespace}}Options"] = $options;
                 }
-            } elseif (isset($this->{$propertyName})) {
-                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
+            } elseif (isset($this->$propertyName)) {
+                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->$propertyName;
             }
         }
         // Auto extending this object with other properties is not supported with SOAP

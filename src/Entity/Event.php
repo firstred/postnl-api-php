@@ -1,8 +1,8 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,70 +19,64 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity;
+namespace Firstred\PostNL\Entity;
 
-use Sabre\Xml\Writer;
-use ThirtyBees\PostNL\Entity\Response\CompleteStatusResponseEvent;
-use ThirtyBees\PostNL\Service\BarcodeService;
-use ThirtyBees\PostNL\Service\ConfirmingService;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
-use ThirtyBees\PostNL\Service\LabellingService;
-use ThirtyBees\PostNL\Service\LocationService;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
-use ThirtyBees\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Entity\Response\CompleteStatusResponseEvent;
+use Firstred\PostNL\Service\BarcodeService;
+use Firstred\PostNL\Service\ConfirmingService;
+use Firstred\PostNL\Service\DeliveryDateService;
+use Firstred\PostNL\Service\LabellingService;
+use Firstred\PostNL\Service\LocationService;
+use Firstred\PostNL\Service\TimeframeService;
 
 /**
- * Class Event
+ * Class Event.
  *
- * @package ThirtyBees\PostNL\Entity
+ * @method CompleteStatusResponseEvent|null getCompleteStatusResponseEvent()
+ * @method Event                            setCompleteStatusResponseEvent(CompleteStatusResponseEvent|null $CompleteStatusResponseEvent = null)
  *
- * @method string|null getCompleteStatusResponseEvent()
- *
- * @method Event setCompleteStatusResponseEvent(CompleteStatusResponseEvent|null $event = null)
+ * @since 1.0.0
  */
 class Event extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
+    /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'CompleteStatusResponseEvent' => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'CompleteStatusResponseEvent' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'CompleteStatusResponseEvent' => LabellingService::DOMAIN_NAMESPACE,
         ],
-        'ShippingStatus' => [
-            'CompleteStatusResponseEvent' => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'CompleteStatusResponseEvent' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'CompleteStatusResponseEvent' => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'CompleteStatusResponseEvent' => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var CompleteStatusResponseEvent|null $completeStatusResponseEvent */
+    /** @var CompleteStatusResponseEvent|null */
     protected $CompleteStatusResponseEvent;
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param CompleteStatusResponseEvent|null $completeStatusResponseEvent
+     * @param CompleteStatusResponseEvent|null $CompleteStatusResponseEvent
      */
-    public function __construct($completeStatusResponseEvent = null)
+    public function __construct($CompleteStatusResponseEvent = null)
     {
         parent::__construct();
 
-        $this->setCompleteStatusResponseEvent($completeStatusResponseEvent);
+        $this->setCompleteStatusResponseEvent($CompleteStatusResponseEvent);
     }
 }

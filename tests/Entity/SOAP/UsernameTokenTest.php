@@ -1,8 +1,8 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2021 Michael Dekker
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,23 +19,23 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Tests\Entity\SOAP;
+namespace Firstred\PostNL\Tests\Entity\SOAP;
+
+ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 use Sabre\Xml\Service as XmlService;
-use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
+use Firstred\PostNL\Entity\SOAP\UsernameToken;
 
 /**
- * Class UsernameTokenTest
- *
- * @package ThirtyBees\PostNL\Tests\Entity\SOAP
+ * Class UsernameTokenTest.
  *
  * @testdox The UsernameToken class
  */
-class UsernameTokenTest extends \PHPUnit_Framework_TestCase
+class UsernameTokenTest extends TestCase
 {
     /**
      * @testdox should automatically hash the password for the legacy API
@@ -45,20 +45,25 @@ class UsernameTokenTest extends \PHPUnit_Framework_TestCase
         $token = new UsernameToken('test', 'test');
         $token->setCurrentService('Barcode');
         $xmlService = new XmlService();
-        $write = $xmlService->write(
+        $actual = $xmlService->write(
             '{test}UserNameToken',
             [
                 '{test}token' => $token,
             ]
         );
 
-        $this->assertEquals('<?xml version="1.0"?>
+        $expected = <<<XML
+<?xml version="1.0"?>
 <x1:UserNameToken xmlns:x1="test">
- <x1:token xmlns:x1="test">
-  <x2:Username xmlns:x2="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">test</x2:Username>
-  <x2:Password xmlns:x2="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">a94a8fe5ccb19ba61c4c0873d391e987982fbbd3</x2:Password>
- </x1:token>
+  <x1:token xmlns:x1="test">
+    <x2:Username xmlns:x2="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">test</x2:Username>
+    <x2:Password xmlns:x2="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">a94a8fe5ccb19ba61c4c0873d391e987982fbbd3</x2:Password>
+  </x1:token>
 </x1:UserNameToken>
-', $write);
+XML;
+        $this->assertEquals(
+            preg_replace('/\s+/', '', $expected),
+            preg_replace('/\s+/', '', $actual)
+        );
     }
 }

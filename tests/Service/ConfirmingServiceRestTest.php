@@ -1,8 +1,8 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2021 Michael Dekker
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,49 +19,56 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Tests\Service;
+namespace Firstred\PostNL\Tests\Service;
 
 use Cache\Adapter\Void\VoidCachePool;
+use Firstred\PostNL\Entity\Address;
+use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Entity\Dimension;
+use Firstred\PostNL\Entity\Message\LabellingMessage;
+use Firstred\PostNL\Entity\Request\Confirming;
+use Firstred\PostNL\Entity\Response\ConfirmingResponseShipment;
+use Firstred\PostNL\Entity\Shipment;
+use Firstred\PostNL\Entity\SOAP\UsernameToken;
+use Firstred\PostNL\Entity\Warning;
+use Firstred\PostNL\Exception\ResponseException;
+use Firstred\PostNL\HttpClient\MockClient;
+use Firstred\PostNL\PostNL;
+use Firstred\PostNL\Service\ConfirmingService;
+use Firstred\PostNL\Service\ConfirmingServiceInterface;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Message as PsrMessage;
 use GuzzleHttp\Psr7\Response;
-use Psr\Log\LoggerInterface;
-use ThirtyBees\PostNL\Entity\Address;
-use ThirtyBees\PostNL\Entity\Customer;
-use ThirtyBees\PostNL\Entity\Dimension;
-use ThirtyBees\PostNL\Entity\Message\LabellingMessage;
-use ThirtyBees\PostNL\Entity\Request\Confirming;
-use ThirtyBees\PostNL\Entity\Shipment;
-use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
-use ThirtyBees\PostNL\HttpClient\MockClient;
-use ThirtyBees\PostNL\PostNL;
-use ThirtyBees\PostNL\Service\ConfirmingService;
+use Psr\Http\Message\ResponseInterface;
+use ReflectionException;
+use function file_get_contents;
+use const _RESPONSES_DIR_;
 
 /**
- * Class ConfirmingServiceRestTest
- *
- * @package ThirtyBees\PostNL\Tests\Service
+ * Class ConfirmingServiceRestTest.
  *
  * @testdox The ConfirmingService (REST)
  */
-class ConfirmingServiceRestTest extends \PHPUnit_Framework_TestCase
+class ConfirmingServiceRestTest extends ServiceTest
 {
-    /** @var PostNL $postnl */
+    /** @var PostNL */
     protected $postnl;
-    /** @var ConfirmingService $service */
+    /** @var ConfirmingServiceInterface */
     protected $service;
-    /** @var $lastRequest */
+    /** @var */
     protected $lastRequest;
 
     /**
      * @before
-     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws ReflectionException
      */
     public function setupPostNL()
     {
@@ -81,31 +88,17 @@ class ConfirmingServiceRestTest extends \PHPUnit_Framework_TestCase
                     'Zipcode'     => '2132WT',
                 ]))
                 ->setGlobalPackBarcodeType('AB')
-                ->setGlobalPackCustomerCode('1234')
-            , new UsernameToken(null, 'test'),
+                ->setGlobalPackCustomerCode('1234'), new UsernameToken(null, 'test'),
             true,
             PostNL::MODE_REST
         );
 
-        $this->service = $this->postnl->getConfirmingService();
-        $this->service->cache = new VoidCachePool();
-        $this->service->ttl = 1;
-    }
-
-    /**
-     * @after
-     */
-    public function logPendingRequest()
-    {
-        if (!$this->lastRequest instanceof Request) {
-            return;
-        }
-
         global $logger;
-        if ($logger instanceof LoggerInterface) {
-            $logger->debug($this->getName()." Request\n".\GuzzleHttp\Psr7\str($this->lastRequest));
-        }
-        $this->lastRequest = null;
+        $this->postnl->setLogger($logger);
+
+        $this->service = $this->postnl->getConfirmingService();
+        $this->service->setCache(new VoidCachePool());
+        $this->service->setTtl(1);
     }
 
     /**
@@ -113,7 +106,7 @@ class ConfirmingServiceRestTest extends \PHPUnit_Framework_TestCase
      */
     public function testHasValidConfirmingService()
     {
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Service\\ConfirmingService', $this->service);
+        $this->assertInstanceOf(ConfirmingService::class, $this->service);
     }
 
     /**
@@ -152,15 +145,15 @@ class ConfirmingServiceRestTest extends \PHPUnit_Framework_TestCase
                         ->setBarcode('3S1234567890123')
                         ->setDeliveryAddress('01')
                         ->setDimension(new Dimension('2000'))
-                        ->setProductCodeDelivery('3085')
+                        ->setProductCodeDelivery('3085'),
                 ])
                 ->setMessage($message)
                 ->setCustomer($this->postnl->getCustomer())
         );
 
         $this->assertEquals([
-            'Customer'  => [
-                'Address'            => [
+            'Customer' => [
+                'Address' => [
                     'AddressType' => '02',
                     'City'        => 'Hoofddorp',
                     'CompanyName' => 'PostNL',
@@ -174,13 +167,13 @@ class ConfirmingServiceRestTest extends \PHPUnit_Framework_TestCase
                 'CustomerCode'       => 'DEVC',
                 'CustomerNumber'     => '11223344',
             ],
-            'Message'   => [
+            'Message' => [
                 'MessageID'        => (string) $message->getMessageID(),
-                'MessageTimeStamp' => (string) $message->getMessageTimeStamp(),
+                'MessageTimeStamp' => $message->getMessageTimeStamp()->format('d-m-Y H:i:s'),
                 'Printertype'      => 'GraphicFile|PDF',
             ],
             'Shipments' => [
-                'Addresses'           => [
+                'Addresses' => [
                     [
                         'AddressType' => '01',
                         'City'        => 'Utrecht',
@@ -202,9 +195,9 @@ class ConfirmingServiceRestTest extends \PHPUnit_Framework_TestCase
                         'Zipcode'     => '2132WT',
                     ],
                 ],
-                'Barcode'             => '3S1234567890123',
-                'DeliveryAddress'     => '01',
-                'Dimension'           => [
+                'Barcode'         => '3S1234567890123',
+                'DeliveryAddress' => '01',
+                'Dimension'       => [
                     'Weight' => '2000',
                 ],
                 'ProductCodeDelivery' => '3085',
@@ -217,25 +210,16 @@ class ConfirmingServiceRestTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @testdox can generate a single label
+     * @testdox      can generate a single label
+     * @dataProvider singleLabelConfirmationsProvider
+     *
+     * @param ResponseInterface
+     *
+     * @throws ReflectionException
      */
-    public function testConfirmsALabelRest()
+    public function testConfirmsALabelRest($response)
     {
-        $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode([
-                'ResponseShipments' => [
-                    [
-                        'Barcode'  => '3SDEVC201611210',
-                        'Warnings' => [
-                            [
-                                'Code'        => '',
-                                'Description' => '',
-                            ],
-                        ],
-                    ],
-                ]
-            ])),
-        ]);
+        $mock = new MockHandler([$response]);
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();
         $mockClient->setHandler($handler);
@@ -265,50 +249,29 @@ class ConfirmingServiceRestTest extends \PHPUnit_Framework_TestCase
                         'Zipcode'     => '2132WT',
                     ]),
                 ])
-                ->setBarcode('3S1234567890123')
+                ->setBarcode('3SDEVC201611210')
                 ->setDeliveryAddress('01')
                 ->setDimension(new Dimension('2000'))
                 ->setProductCodeDelivery('3085')
         );
 
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\ConfirmingResponseShipment', $confirm);
+        $this->assertInstanceOf(ConfirmingResponseShipment::class, $confirm);
+        $this->assertEquals('3SDEVC201611210', $confirm->getBarcode());
+        $this->assertInstanceOf(Warning::class, $confirm->getWarnings()[0]);
+        $this->assertNotTrue(static::containsStdClass($confirm));
     }
 
     /**
-     * @testdox can confirm multiple labels
+     * @testdox      can confirm multiple labels
+     * @dataProvider multipleLabelsConfirmationsProvider
      *
-     * @throws \Exception
+     * @param ResponseInterface[] $responses
+     *
+     * @throws ReflectionException
      */
-    public function testConfirmMultipleLabelsRest()
+    public function testConfirmMultipleLabelsRest($responses)
     {
-        $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode([
-                'ResponseShipments' => [
-                    [
-                        'Barcode'  => '3SDEVC201611210',
-                        'Warnings' => [
-                            [
-                                'Code'        => '',
-                                'Description' => '',
-                            ],
-                        ],
-                    ],
-                ]
-            ])),
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode([
-                'ResponseShipments' => [
-                    [
-                        'Barcode'  => '3SDEVC201611211',
-                        'Warnings' => [
-                            [
-                                'Code'        => '',
-                                'Description' => '',
-                            ],
-                        ],
-                    ],
-                ]
-            ])),
-        ]);
+        $mock = new MockHandler($responses);
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();
         $mockClient->setHandler($handler);
@@ -365,14 +328,16 @@ class ConfirmingServiceRestTest extends \PHPUnit_Framework_TestCase
                             'Zipcode'     => '2132WT',
                         ]),
                     ])
-                    ->setBarcode('3SDEVC201611211')
+                    ->setBarcode('3SDEVC201611210')
                     ->setDeliveryAddress('01')
                     ->setDimension(new Dimension('2000'))
                     ->setProductCodeDelivery('3085'),
             ]
         );
 
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\ConfirmingResponseShipment', $confirms[1]);
+        $this->assertInstanceOf(ConfirmingResponseShipment::class, $confirms[1]);
+        $this->assertEquals('3SDEVC201611210', $confirms[1]->getBarcode());
+        $this->assertInstanceOf(Warning::class, $confirms[1]->getWarnings()[0]);
     }
 
     /**
@@ -380,7 +345,7 @@ class ConfirmingServiceRestTest extends \PHPUnit_Framework_TestCase
      */
     public function testNegativeGenerateLabelInvalidResponseRest()
     {
-        $this->expectException('ThirtyBees\\PostNL\\Exception\\ResponseException');
+        $this->expectException(ResponseException::class);
 
         $mock = new MockHandler([
             new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], 'asdfojasuidfo'),
@@ -419,5 +384,40 @@ class ConfirmingServiceRestTest extends \PHPUnit_Framework_TestCase
                 ->setDimension(new Dimension('2000'))
                 ->setProductCodeDelivery('3085')
         );
+    }
+
+    /**
+     * @return ResponseInterface[][]
+     * @psalm-return non-empty-list<non-empty-list<ResponseInterface>>
+     */
+    public function singleLabelConfirmationsProvider()
+    {
+        return [
+            [PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel.http'))],
+            [PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel2.http'))],
+            [PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel3.http'))],
+        ];
+    }
+
+    /**
+     * @return ResponseInterface[][][]
+     * @psalm-return non-empty-list<non-empty-list<non-empty-list<ResponseInterface>>>
+     */
+    public function multipleLabelsConfirmationsProvider()
+    {
+        return [
+            [[
+                PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel.http')),
+                PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel.http')),
+            ]],
+            [[
+                PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel2.http')),
+                PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel2.http')),
+            ]],
+            [[
+                PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel3.http')),
+                PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel3.http')),
+            ]],
+        ];
     }
 }

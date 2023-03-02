@@ -1,8 +1,8 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,94 +19,85 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity\Response;
+namespace Firstred\PostNL\Entity\Response;
 
-use InvalidArgumentException;
-use Sabre\Xml\Writer;
-use ThirtyBees\PostNL\Entity\AbstractEntity;
-use ThirtyBees\PostNL\Entity\ReasonNoTimeframe;
-use ThirtyBees\PostNL\Entity\Timeframe;
-use ThirtyBees\PostNL\Entity\TimeframeTimeFrame;
-use ThirtyBees\PostNL\Service\BarcodeService;
-use ThirtyBees\PostNL\Service\ConfirmingService;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
-use ThirtyBees\PostNL\Service\LabellingService;
-use ThirtyBees\PostNL\Service\LocationService;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
-use ThirtyBees\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Entity\AbstractEntity;
+use Firstred\PostNL\Entity\ReasonNoTimeframe;
+use Firstred\PostNL\Entity\Timeframe;
+use Firstred\PostNL\Service\BarcodeService;
+use Firstred\PostNL\Service\ConfirmingService;
+use Firstred\PostNL\Service\DeliveryDateService;
+use Firstred\PostNL\Service\LabellingService;
+use Firstred\PostNL\Service\LocationService;
+use Firstred\PostNL\Service\TimeframeService;
 
 /**
- * Class ResponseTimeframes
- *
- * @package ThirtyBees\PostNL\Entity
+ * Class ResponseTimeframes.
  *
  * @method ReasonNoTimeframe[]|null getReasonNoTimeframes()
  * @method Timeframe[]|null         getTimeframes()
+ * @method ResponseTimeframes       setReasonNoTimeframes(ReasonNoTimeframe[]|null $ReasonNoTimeframes = null)
+ * @method ResponseTimeframes       setTimeframes(Timeframe[]|null $Timeframes = null)
  *
- * @method ResponseTimeframes setReasonNoTimeframes(ReasonNoTimeframe[]|null $noTimeframes = null)
- * @method ResponseTimeframes setTimeframes(Timeframe[]|null $timeframes = null)
+ * @since 1.0.0
  */
 class ResponseTimeframes extends AbstractEntity
 {
-    /** @var array $defaultProperties */
+    /** @var array */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'ReasonNoTimeframes' => BarcodeService::DOMAIN_NAMESPACE,
             'Timeframes'         => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'ReasonNoTimeframes' => ConfirmingService::DOMAIN_NAMESPACE,
             'Timeframes'         => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'ReasonNoTimeframes' => LabellingService::DOMAIN_NAMESPACE,
             'Timeframes'         => LabellingService::DOMAIN_NAMESPACE,
         ],
-        'ShippingStatus' => [
-            'ReasonNoTimeframes' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Timeframes'         => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'ReasonNoTimeframes' => DeliveryDateService::DOMAIN_NAMESPACE,
             'Timeframes'         => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'ReasonNoTimeframes' => LocationService::DOMAIN_NAMESPACE,
             'Timeframes'         => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'ReasonNoTimeframes' => TimeframeService::DOMAIN_NAMESPACE,
             'Timeframes'         => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var ReasonNoTimeframe[]|null $ReasonNoTimeframes */
+    /** @var ReasonNoTimeframe[]|null */
     protected $ReasonNoTimeframes;
-    /** @var Timeframe[]|null $Timeframes */
+    /** @var Timeframe[]|null */
     protected $Timeframes;
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param ReasonNoTimeframe[]|null $noTimeframes
-     * @param Timeframe[]|null         $timeframes
+     * @param ReasonNoTimeframe[]|null $ReasonNoTimeframes
+     * @param Timeframe[]|null         $Timeframes
      */
     public function __construct(
-        array $noTimeframes = null,
-        array $timeframes = null
+        array $ReasonNoTimeframes = null,
+        array $Timeframes = null
     ) {
         parent::__construct();
 
-        $this->setReasonNoTimeframes($noTimeframes);
-        $this->setTimeframes($timeframes);
+        $this->setReasonNoTimeframes($ReasonNoTimeframes);
+        $this->setTimeframes($Timeframes);
     }
 
     /**
-     * Return a serializable array for `json_encode`
+     * Return a serializable array for `json_encode`.
      *
      * @return array
      */
@@ -118,27 +109,28 @@ class ResponseTimeframes extends AbstractEntity
         }
 
         foreach (array_keys(static::$defaultProperties[$this->currentService]) as $propertyName) {
-            if (isset($this->{$propertyName})) {
-                if ($propertyName === 'ReasonNoTimeframes') {
+            if (isset($this->$propertyName)) {
+                if ('ReasonNoTimeframes' === $propertyName) {
                     $noTimeframes = [];
                     foreach ($this->ReasonNoTimeframes as $noTimeframe) {
                         $noTimeframes[] = $noTimeframe;
                     }
                     $json['ReasonNotimeframes'] = ['ReasonNoTimeframe' => $noTimeframes];
-                } elseif ($propertyName === 'Timeframes') {
+                } elseif ('Timeframes' === $propertyName) {
                     $timeframes = [];
                     foreach ($this->Timeframes as $timeframe) {
                         $timeframes[] = $timeframe;
                     }
                     $json[$propertyName] = ['Timeframe' => $timeframes];
                 } else {
-                    $json[$propertyName] = $this->{$propertyName};
+                    $json[$propertyName] = $this->$propertyName;
                 }
             }
         }
 
         return $json;
     }
+
 //
 //    /**
 //     * Return a serializable array for the XMLWriter
@@ -168,8 +160,8 @@ class ResponseTimeframes extends AbstractEntity
 //                    $timeframes[] = ["{{$namespace}}Timeframe" => $timeframe];
 //                }
 //                $xml["{{$namespace}}Timeframes"] = $timeframes;
-//            } elseif (!is_null($this->{$propertyName})) {
-//                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
+//            } elseif (!is_null($this->$propertyName)) {
+//                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->$propertyName;
 //            }
 //        }
 //

@@ -1,8 +1,8 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2021 Michael Dekker
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,48 +19,47 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Tests\Service;
+namespace Firstred\PostNL\Tests\Service;
 
 use Cache\Adapter\Void\VoidCachePool;
+use Firstred\PostNL\Entity\Address;
+use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Entity\Message\Message;
+use Firstred\PostNL\Entity\Request\GetTimeframes;
+use Firstred\PostNL\Entity\Response\ResponseTimeframes;
+use Firstred\PostNL\Entity\SOAP\UsernameToken;
+use Firstred\PostNL\Entity\Timeframe;
+use Firstred\PostNL\HttpClient\MockClient;
+use Firstred\PostNL\PostNL;
+use Firstred\PostNL\Service\TimeframeServiceInterface;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use Psr\Log\LoggerInterface;
-use ThirtyBees\PostNL\Entity\Address;
-use ThirtyBees\PostNL\Entity\Customer;
-use ThirtyBees\PostNL\Entity\Message\Message;
-use ThirtyBees\PostNL\Entity\Request\GetTimeframes;
-use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
-use ThirtyBees\PostNL\Entity\Timeframe;
-use ThirtyBees\PostNL\HttpClient\MockClient;
-use ThirtyBees\PostNL\PostNL;
-use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class TimeframeServiceSoapTest
- *
- * @package ThirtyBees\PostNL\Tests\Service
+ * Class TimeframeServiceSoapTest.
  *
  * @testdox The TimeframeService (SOAP)
  */
-class TimeframeServiceSoapTest extends \PHPUnit_Framework_TestCase
+class TimeframeServiceSoapTest extends ServiceTest
 {
-    /** @var PostNL $postnl */
+    /** @var PostNL */
     protected $postnl;
-    /** @var TimeframeService $service */
+    /** @var TimeframeServiceInterface */
     protected $service;
-    /** @var $lastRequest */
+    /** @var */
     protected $lastRequest;
 
     /**
      * @before
-     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \ReflectionException
      */
     public function setupPostNL()
     {
@@ -80,31 +79,17 @@ class TimeframeServiceSoapTest extends \PHPUnit_Framework_TestCase
                     'Zipcode'     => '2132WT',
                 ]))
                 ->setGlobalPackBarcodeType('AB')
-                ->setGlobalPackCustomerCode('1234')
-            , new UsernameToken(null, 'test'),
+                ->setGlobalPackCustomerCode('1234'), new UsernameToken(null, 'test'),
             false,
             PostNL::MODE_SOAP
         );
 
-        $this->service = $this->postnl->getTimeframeService();
-        $this->service->cache = new VoidCachePool();
-        $this->service->ttl = 1;
-    }
-
-    /**
-     * @after
-     */
-    public function logPendingRequest()
-    {
-        if (!$this->lastRequest instanceof Request) {
-            return;
-        }
-
         global $logger;
-        if ($logger instanceof LoggerInterface) {
-            $logger->debug($this->getName()." Request\n".\GuzzleHttp\Psr7\str($this->lastRequest));
-        }
-        $this->lastRequest = null;
+        $this->postnl->setLogger($logger);
+
+        $this->service = $this->postnl->getTimeframeService();
+        $this->service->setCache(new VoidCachePool());
+        $this->service->setTtl(1);
     }
 
     /**
@@ -125,19 +110,29 @@ class TimeframeServiceSoapTest extends \PHPUnit_Framework_TestCase
                         ->setHouseNr('42')
                         ->setHouseNrExt('A')
                         ->setOptions([
-                            'Evening'
+                            'Evening',
                         ])
                         ->setPostalCode('2132WT')
                         ->setStartDate('30-06-2016')
                         ->setStreet('Siriusdreef')
-                        ->setSundaySorting(true)
+                        ->setSundaySorting(true),
                 ])
         );
 
         $this->assertEmpty($request->getHeaderLine('apikey'));
         $this->assertEquals('text/xml', $request->getHeaderLine('Accept'));
-        $this->assertEquals("<?xml version=\"1.0\"?>
-<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:services=\"http://postnl.nl/cif/services/TimeframeWebService/\" xmlns:domain=\"http://postnl.nl/cif/domain/TimeframeWebService/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\" xmlns:schema=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:common=\"http://postnl.nl/cif/services/common/\" xmlns:arr=\"http://schemas.microsoft.com/2003/10/Serialization/Arrays\">
+        $this->assertXmlStringEqualsXmlString(<<<XML
+<?xml version="1.0"?>
+<soap:Envelope
+    xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+    xmlns:env="http://www.w3.org/2003/05/soap-envelope"
+    xmlns:services="http://postnl.nl/cif/services/TimeframeWebService/" 
+    xmlns:domain="http://postnl.nl/cif/domain/TimeframeWebService/"
+    xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd"
+    xmlns:schema="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:common="http://postnl.nl/cif/services/common/" 
+    xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays"
+>
  <soap:Header>
   <wsse:Security>
    <wsse:UsernameToken>
@@ -149,7 +144,7 @@ class TimeframeServiceSoapTest extends \PHPUnit_Framework_TestCase
   <services:GetTimeframes>
    <domain:Message>
     <domain:MessageID>{$message->getMessageID()}</domain:MessageID>
-    <domain:MessageTimeStamp>{$message->getMessageTimeStamp()}</domain:MessageTimeStamp>
+    <domain:MessageTimeStamp>{$message->getMessageTimeStamp()->format('d-m-Y H:i:s')}</domain:MessageTimeStamp>
    </domain:Message>
    <domain:Timeframe>
     <domain:City>Hoofddorp</domain:City>
@@ -168,7 +163,8 @@ class TimeframeServiceSoapTest extends \PHPUnit_Framework_TestCase
   </services:GetTimeframes>
  </soap:Body>
 </soap:Envelope>
-", (string) $request->getBody());
+XML
+            , (string) $request->getBody());
     }
 
     /**
@@ -250,12 +246,12 @@ class TimeframeServiceSoapTest extends \PHPUnit_Framework_TestCase
                                     ->setPostalCode('2132WT')
                                     ->setStartDate('30-06-2016')
                                     ->setStreet('Siriusdreef')
-                                    ->setSundaySorting(false)
+                                    ->setSundaySorting(false),
                 ])
         );
 
         // Should be a ResponeTimefarmes instance
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\ResponseTimeframes', $responseTimeframes);
+        $this->assertInstanceOf(ResponseTimeframes::class, $responseTimeframes);
         // Check for data loss
         $this->assertEquals(2, count($responseTimeframes->getReasonNoTimeframes()));
         $this->assertEquals(2, count($responseTimeframes->getTimeframes()));

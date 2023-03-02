@@ -1,8 +1,8 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,37 +19,49 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Service;
+namespace Firstred\PostNL\Service;
 
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
+use DateTimeImmutable;
+use Firstred\PostNL\Entity\AbstractEntity;
+use Firstred\PostNL\Entity\ReasonNoTimeframe;
+use Firstred\PostNL\Entity\Request\GetTimeframes;
+use Firstred\PostNL\Entity\Response\ResponseTimeframes;
+use Firstred\PostNL\Entity\SOAP\Security;
+use Firstred\PostNL\Entity\Timeframe;
+use Firstred\PostNL\Entity\TimeframeTimeFrame;
+use Firstred\PostNL\Exception\CifDownException;
+use Firstred\PostNL\Exception\CifException;
+use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use Firstred\PostNL\Exception\NotFoundException;
+use Firstred\PostNL\Exception\NotSupportedException;
+use Firstred\PostNL\Exception\ResponseException;
+use GuzzleHttp\Psr7\Message as PsrMessage;
+use InvalidArgumentException;
 use Psr\Cache\CacheItemInterface;
+use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
+use Sabre\Xml\LibXMLException;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Service as XmlService;
-use ThirtyBees\PostNL\Entity\AbstractEntity;
-use ThirtyBees\PostNL\Entity\Request\GetTimeframes;
-use ThirtyBees\PostNL\Entity\Response\ResponseTimeframes;
-use ThirtyBees\PostNL\Entity\SOAP\Security;
-use ThirtyBees\PostNL\Exception\ApiException;
-use ThirtyBees\PostNL\Exception\CifDownException;
-use ThirtyBees\PostNL\Exception\CifException;
-use ThirtyBees\PostNL\PostNL;
+use const PHP_QUERY_RFC3986;
 
 /**
- * Class TimeframeService
- *
- * @package ThirtyBees\PostNL\Service
+ * Class TimeframeService.
  *
  * @method ResponseTimeframes getTimeframes(GetTimeframes $getTimeframes)
- * @method Request            buildGetTimeframesRequest(GetTimeframes $getTimeframes)
+ * @method RequestInterface   buildGetTimeframesRequest(GetTimeframes $getTimeframes)
  * @method ResponseTimeframes processGetTimeframesResponse(mixed $response)
+ *
+ * @since 1.0.0
  */
-class TimeframeService extends AbstractService
+class TimeframeService extends AbstractService implements TimeframeServiceInterface
 {
     // API Version
     const VERSION = '2.1';
@@ -57,8 +69,6 @@ class TimeframeService extends AbstractService
     // Endpoints
     const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v2_1/calculate/timeframes';
     const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2_1/calculate/timeframes';
-    const LEGACY_SANDBOX_ENDPOINT = 'https://testservice.postnl.com/CIF_SB/TimeframeWebService/2_0/TimeframeWebService.svc';
-    const LEGACY_LIVE_ENDPOINT = 'https://service.postnl.com/CIF/TimeframeWebService/2_0/TimeframeWebService.svc';
 
     // SOAP API
     const SOAP_ACTION = 'http://postnl.nl/cif/services/TimeframeWebService/ITimeframeWebService/GetTimeframes';
@@ -66,9 +76,9 @@ class TimeframeService extends AbstractService
     const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/TimeframeWebService/';
 
     /**
-     * Namespaces uses for the SOAP version of this service
+     * Namespaces uses for the SOAP version of this service.
      *
-     * @var array $namespaces
+     * @var array
      */
     public static $namespaces = [
         self::ENVELOPE_NAMESPACE                                    => 'soap',
@@ -82,29 +92,35 @@ class TimeframeService extends AbstractService
     ];
 
     /**
-     * Get timeframes via REST
+     * Get timeframes via REST.
      *
      * @param GetTimeframes $getTimeframes
      *
      * @return ResponseTimeframes
      *
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws HttpClientException
+     * @throws PsrCacheInvalidArgumentException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
+     * @throws ResponseException
+     * @throws NotFoundException
+     *
+     * @since 1.0.0
      */
     public function getTimeframesREST(GetTimeframes $getTimeframes)
     {
         $item = $this->retrieveCachedItem($getTimeframes->getId());
         $response = null;
-        if ($item instanceof CacheItemInterface) {
+        if ($item instanceof CacheItemInterface && $item->isHit()) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\parse_response($response);
-            } catch (\InvalidArgumentException $e) {
+                $response = PsrMessage::parseResponse($response);
+            } catch (InvalidArgumentException $e) {
             }
         }
-        if (!$response instanceof Response) {
+        if (!$response instanceof ResponseInterface) {
             $response = $this->postnl->getHttpClient()->doRequest($this->buildGetTimeframesRequestREST($getTimeframes));
             static::validateRESTResponse($response);
         }
@@ -112,69 +128,74 @@ class TimeframeService extends AbstractService
         $object = $this->processGetTimeframesResponseREST($response);
         if ($object instanceof ResponseTimeframes) {
             if ($item instanceof CacheItemInterface
-                && $response instanceof Response
-                && $response->getStatusCode() === 200
+                && $response instanceof ResponseInterface
+                && 200 === $response->getStatusCode()
             ) {
-                $item->set(\GuzzleHttp\Psr7\str($response));
+                $item->set(PsrMessage::toString($response));
                 $this->cacheItem($item);
             }
 
             return $object;
         }
 
-        throw new ApiException('Unable to retrieve timeframes');
+        throw new NotFoundException('Unable to retrieve timeframes');
     }
 
     /**
-     * Get timeframes via SOAP
+     * Get timeframes via SOAP.
      *
      * @param GetTimeframes $getTimeframes
      *
      * @return ResponseTimeframes
      *
-     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
-     * @throws \Sabre\Xml\LibXMLException
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws PsrCacheInvalidArgumentException
+     * @throws HttpClientException
+     * @throws ResponseException
+     * @throws NotFoundException
+     *
+     * @since 1.0.0
      */
     public function getTimeframesSOAP(GetTimeframes $getTimeframes)
     {
         $item = $this->retrieveCachedItem($getTimeframes->getId());
         $response = null;
-        if ($item instanceof CacheItemInterface) {
+        if ($item instanceof CacheItemInterface && $item->isHit()) {
             $response = $item->get();
             try {
-                $response = \GuzzleHttp\Psr7\parse_response($response);
-            } catch (\InvalidArgumentException $e) {
+                $response = PsrMessage::parseResponse($response);
+            } catch (InvalidArgumentException $e) {
             }
         }
-        if (!$response instanceof Response) {
+        if (!$response instanceof ResponseInterface) {
             $response = $this->postnl->getHttpClient()->doRequest($this->buildGetTimeframesRequestSOAP($getTimeframes));
         }
 
         $object = $this->processGetTimeframesResponseSOAP($response);
         if ($object instanceof ResponseTimeframes) {
             if ($item instanceof CacheItemInterface
-                && $response instanceof Response
-                && $response->getStatusCode() === 200
+                && $response instanceof ResponseInterface
+                && 200 === $response->getStatusCode()
             ) {
-                $item->set(\GuzzleHttp\Psr7\str($response));
+                $item->set(PsrMessage::toString($response));
                 $this->cacheItem($item);
             }
 
             return $object;
         }
 
-        throw new ApiException('Unable to retrieve timeframes');
+        throw new NotFoundException('Unable to retrieve timeframes');
     }
 
     /**
-     * Build the GetTimeframes request for the REST API
+     * Build the GetTimeframes request for the REST API.
      *
      * @param GetTimeframes $getTimeframes
      *
-     * @return Request
+     * @return RequestInterface
+     *
+     * @since 1.0.0
      */
     public function buildGetTimeframesRequestREST(GetTimeframes $getTimeframes)
     {
@@ -182,9 +203,9 @@ class TimeframeService extends AbstractService
         $this->setService($getTimeframes);
         $timeframe = $getTimeframes->getTimeframe()[0];
         $query = [
-            'AllowSundaySorting' => in_array($timeframe->getSundaySorting(), [true, 'true', 1], 1) ? '1' : '0' ,
-            'StartDate'          => $timeframe->getStartDate(),
-            'EndDate'            => $timeframe->getEndDate(),
+            'AllowSundaySorting' => in_array($timeframe->getSundaySorting(), [true, 'true', 1], true) ? 'true' : 'false',
+            'StartDate'          => $timeframe->getStartDate()->format('d-m-Y'),
+            'EndDate'            => $timeframe->getEndDate()->format('d-m-Y'),
             'PostalCode'         => $timeframe->getPostalCode(),
             'HouseNumber'        => $timeframe->getHouseNr(),
             'CountryCode'        => $timeframe->getCountryCode(),
@@ -206,87 +227,105 @@ class TimeframeService extends AbstractService
             $query['City'] = $city;
         }
         foreach ($timeframe->getOptions() as $option) {
-            if ($option === 'PG') {
-                continue;
-            }
             $query['Options'] .= ",$option";
         }
         $query['Options'] = ltrim($query['Options'], ',');
-        $endpoint = '?'.\GuzzleHttp\Psr7\build_query($query);
+        $query['Options'] = $query['Options'] ?: 'Daytime';
 
-        return new Request(
+        $endpoint = '?'.http_build_query($query, null, '&', PHP_QUERY_RFC3986);
+
+        return $this->postnl->getRequestFactory()->createRequest(
             'GET',
-            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint,
-            [
-                'apikey'       => $apiKey,
-                'Accept'       => 'application/json',
-                'Content-Type' => 'application/json;charset=UTF-8',
-            ]
-        );
+            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint
+        )
+            ->withHeader('apikey', $apiKey)
+            ->withHeader('Accept', 'application/json');
     }
 
     /**
-     * Process GetTimeframes Response REST
+     * Process GetTimeframes Response REST.
      *
      * @param mixed $response
      *
-     * @return null|ResponseTimeframes
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @return ResponseTimeframes|null
+     *
+     * @throws HttpClientException
+     * @throws ResponseException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
+     *
+     * @since 1.0.0
      */
     public function processGetTimeframesResponseREST($response)
     {
-        $body = json_decode(static::getResponseText($response), true);
-        if (isset($body['Timeframes'])) {
-            // Standardize the object here
-            if (isset($body['ReasonNotimeframes']['ReasonNoTimeframe'])) {
-                if (isset($body['ReasonNotimeframes']['ReasonNoTimeframe']['Code'])) {
-                    $body['ReasonNotimeframes']['ReasonNoTimeframe'] = [$body['ReasonNotimeframes']['ReasonNoTimeframe']];
-                }
-
-                $newNotimeframes = [];
-                foreach ($body['ReasonNotimeframes']['ReasonNoTimeframe'] as &$reasonNotimeframe) {
-                    $newNotimeframes[] = AbstractEntity::jsonDeserialize(['ReasonNoTimeFrame' => $reasonNotimeframe]);
-                }
-                $body['ReasonNotimeframes'] = $newNotimeframes;
+        $body = json_decode(static::getResponseText($response));
+        // Standardize the object here
+        if (isset($body->ReasonNoTimeframes)) {
+            if (!isset($body->ReasonNoTimeframes->ReasonNoTimeframe)) {
+                $body->ReasonNoTimeframes->ReasonNoTimeframe = [];
             }
 
-            if (isset($body['Timeframes']['Timeframe'])) {
-                if (isset($body['Timeframes']['Timeframe']['Date'])) {
-                    $body['Timeframes']['Timeframe'] = [$body['Timeframes']['Timeframe']];
-                }
-
-                $newTimeframes = [];
-                foreach ($body['Timeframes']['Timeframe'] as $timeframe) {
-                    $newTimeframeTimeframe = [];
-                    if (isset($timeframe['Timeframes']['TimeframeTimeFrame']['From'])) {
-                        $timeframe['Timeframes']['TimeframeTimeFrame'] = [$timeframe['Timeframes']['TimeframeTimeFrame']];
-                    }
-                    foreach ($timeframe['Timeframes']['TimeframeTimeFrame'] as $timeframetimeframe) {
-                        $newTimeframeTimeframe[] = AbstractEntity::jsonDeserialize(['TimeframeTimeFrame' => $timeframetimeframe]);
-                    }
-                    $timeframe['Timeframes'] = $newTimeframeTimeframe;
-
-                    $newTimeframes[] = AbstractEntity::jsonDeserialize(['Timeframe' => $timeframe]);
-                }
-                $body['Timeframes'] = $newTimeframes;
+            if (!is_array($body->ReasonNoTimeframes->ReasonNoTimeframe)) {
+                $body->ReasonNoTimeframes->ReasonNoTimeframe = [$body->ReasonNoTimeframes->ReasonNoTimeframe];
             }
 
-            /** @var ResponseTimeframes $object */
-            $object = AbstractEntity::jsonDeserialize(['ResponseTimeframes' => $body]);
-            $this->setService($object);
+            $newNotimeframes = [];
+            foreach ($body->ReasonNoTimeframes->ReasonNoTimeframe as $reasonNotimeframe) {
+                $newNotimeframes[] = ReasonNoTimeframe::jsonDeserialize((object) ['ReasonNoTimeframe' => $reasonNotimeframe]);
+            }
 
-            return $object;
+            $body->ReasonNoTimeframes = $newNotimeframes;
+        } else {
+            $body->ReasonNoTimeframes = [];
         }
 
-        return null;
+        if (isset($body->Timeframes)) {
+            if (!isset($body->Timeframes->Timeframe)) {
+                $body->Timeframes->Timeframe = [];
+            }
+
+            if (!is_array($body->Timeframes->Timeframe)) {
+                $body->Timeframes->Timeframe = [$body->Timeframes->Timeframe];
+            }
+
+            $newTimeframes = [];
+            foreach ($body->Timeframes->Timeframe as $timeframe) {
+                $newTimeframeTimeframe = [];
+                if (!is_array($timeframe->Timeframes->TimeframeTimeFrame)) {
+                    $timeframe->Timeframes->TimeframeTimeFrame = [$timeframe->Timeframes->TimeframeTimeFrame];
+                }
+                foreach ($timeframe->Timeframes->TimeframeTimeFrame as $timeframetimeframe) {
+                    $newTimeframeTimeframe[] = TimeframeTimeFrame::jsonDeserialize(
+                        (object) ['TimeframeTimeFrame' => $timeframetimeframe]
+                    );
+                }
+                $timeframe->Timeframes = $newTimeframeTimeframe;
+
+                $newTimeframes[] = Timeframe::jsonDeserialize((object) ['Timeframe' => $timeframe]);
+            }
+            $body->Timeframes = $newTimeframes;
+        } else {
+            $body->Timeframes = [];
+        }
+
+        /** @var ResponseTimeframes $object */
+
+        $object = ResponseTimeframes::create();
+        $object->setReasonNoTimeframes($body->ReasonNoTimeframes);
+        $object->setTimeframes($body->Timeframes);
+        $this->setService($object);
+
+        return $object;
     }
 
     /**
-     * Build the GetTimeframes request for the SOAP API
+     * Build the GetTimeframes request for the SOAP API.
      *
      * @param GetTimeframes $getTimeframes
      *
-     * @return Request
+     * @return RequestInterface
+     *
+     * @since 1.0.0
      */
     public function buildGetTimeframesRequestSOAP(GetTimeframes $getTimeframes)
     {
@@ -295,6 +334,8 @@ class TimeframeService extends AbstractService
         foreach (static::$namespaces as $namespace => $prefix) {
             $xmlService->namespaceMap[$namespace] = $prefix;
         }
+        $xmlService->classMap[DateTimeImmutable::class] = [__CLASS__, 'defaultDateFormat'];
+
         $security = new Security($this->postnl->getToken());
 
         $this->setService($security);
@@ -312,34 +353,31 @@ class TimeframeService extends AbstractService
             ]
         );
 
-        $endpoint = $this->postnl->getSandbox()
-            ? ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_SANDBOX_ENDPOINT : static::SANDBOX_ENDPOINT)
-            : ($this->postnl->getMode() === PostNL::MODE_LEGACY ? static::LEGACY_LIVE_ENDPOINT : static::LIVE_ENDPOINT);
-
-        return new Request(
+        return $this->postnl->getRequestFactory()->createRequest(
             'POST',
-            $endpoint,
-            [
-                'SOAPAction'   => "\"$soapAction\"",
-                'Accept'       => 'text/xml',
-                'Content-Type' => 'text/xml;charset=UTF-8',
-            ],
-            $request
-        );
+            $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT
+        )
+            ->withHeader('SOAPAction', "\"$soapAction\"")
+            ->withHeader('Accept', 'text/xml')
+            ->withHeader('Content-Type', 'text/xml;charset=UTF-8')
+            ->withBody($this->postnl->getStreamFactory()->createStream($request));
     }
 
     /**
-     * Process GetTimeframes Response SOAP
+     * Process GetTimeframes Response SOAP.
      *
-     * @param mixed $response
+     * @param ResponseInterface $response
      *
      * @return ResponseTimeframes
+     *
      * @throws CifDownException
      * @throws CifException
-     * @throws \Sabre\Xml\LibXMLException
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
+     * @throws HttpClientException
+     * @throws ResponseException
+     *
+     * @since 1.0.0
      */
-    public function processGetTimeframesResponseSOAP($response)
+    public function processGetTimeframesResponseSOAP(ResponseInterface $response)
     {
         $xml = simplexml_load_string(static::getResponseText($response));
 
@@ -348,13 +386,17 @@ class TimeframeService extends AbstractService
 
         $reader = new Reader();
         $reader->xml(static::getResponseText($response));
-        $array = array_values($reader->parse()['value'][0]['value']);
+        try {
+            $array = array_values($reader->parse()['value'][0]['value']);
+        } catch (LibXMLException $e) {
+            throw new ResponseException($e->getMessage(), $e->getCode(), $e);
+        }
         foreach ($array[0]['value'][1]['value'] as &$timeframes) {
             foreach ($timeframes['value'] as &$item) {
-                if (strpos($item['name'], 'Timeframes') !== false) {
+                if (false !== strpos($item['name'], 'Timeframes')) {
                     foreach ($item['value'] as &$timeframeTimeframe) {
                         foreach ($timeframeTimeframe['value'] as &$thing) {
-                            if (strpos($thing['name'], 'Options') !== false) {
+                            if (false !== strpos($thing['name'], 'Options')) {
                                 $thing['value'] = [$thing['value'][0]['value']];
                             }
                         }

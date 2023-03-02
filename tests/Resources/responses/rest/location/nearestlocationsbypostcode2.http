@@ -1,0 +1,991 @@
+HTTP/1.1 200 OK
+Cache-Control: private, max-age=0
+Content-Type: application/json;charset=UTF-8
+Date: Wed, 31 Mar 2021 12:42:12 GMT
+Strict-Transport-Security: max-age=31536000
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-Robots-Tag: noindex
+X-XSS-Protection: 1; mode=block
+Connection: keep-alive
+
+{
+  "GetLocationsResult": {
+    "ResponseLocation": [
+      {
+        "Address": {
+          "City": "HOOFDDORP",
+          "Countrycode": "NL",
+          "HouseNr": 124,
+          "Remark": "Dit is een Afhaalpunt+. Pakketten die u op werkdagen vóór lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag. Je kunt hier pakketten -  voorzien van scanbare barcode - versturen en pakketten ophalen.",
+          "Street": "Marktlaan",
+          "Zipcode": "2132DM"
+        },
+        "DeliveryOptions": {
+          "string": [
+            "DO",
+            "PG",
+            "PG_EX"
+          ]
+        },
+        "Distance": 1652,
+        "Latitude": 52.30227039,
+        "LocationCode": 217171,
+        "Longitude": 4.69345856,
+        "Name": "Media Markt Hoofddorp B.V.",
+        "OpeningHours": {
+          "Friday": {
+            "string": "10:00-20:00"
+          },
+          "Monday": {
+            "string": "10:00-20:00"
+          },
+          "Saturday": {
+            "string": "10:00-18:00"
+          },
+          "Thursday": {
+            "string": "10:00-20:00"
+          },
+          "Tuesday": {
+            "string": "10:00-20:00"
+          },
+          "Wednesday": {
+            "string": "10:00-20:00"
+          }
+        },
+        "PartnerName": "PostNL",
+        "RetailNetworkID": "PNPNL-01",
+        "Saleschannel": "AFHAALPUNT",
+        "TerminalType": "NRS"
+      },
+      {
+        "Address": {
+          "City": "Hoofddorp",
+          "Countrycode": "NL",
+          "HouseNr": 1,
+          "Remark": "Dit is een Postkantoor. Post en pakketten die u op werkdagen vóór de lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag. Op zaterdag worden alléén pakketten die u afgeeft voor 15:00 uur maandag bezorgd.",
+          "Street": "Polderplein",
+          "Zipcode": "2132BA"
+        },
+        "DeliveryOptions": {
+          "string": [
+            "DO",
+            "PG",
+            "UL",
+            "BW",
+            "PG_EX",
+            "BWUL",
+            "RETA"
+          ]
+        },
+        "Distance": 1706,
+        "Latitude": 52.30335598,
+        "LocationCode": 216877,
+        "Longitude": 4.69465854,
+        "Name": "Primera Sanders",
+        "OpeningHours": {
+          "Friday": {
+            "string": "09:00-21:00"
+          },
+          "Monday": {
+            "string": "11:00-18:00"
+          },
+          "Saturday": {
+            "string": "09:00-18:00"
+          },
+          "Sunday": {
+            "string": "12:00-17:00"
+          },
+          "Thursday": {
+            "string": "09:00-18:00"
+          },
+          "Tuesday": {
+            "string": "09:00-18:00"
+          },
+          "Wednesday": {
+            "string": "09:00-18:00"
+          }
+        },
+        "PartnerName": "PostNL",
+        "RetailNetworkID": "PNPNL-01",
+        "Saleschannel": "PKT M",
+        "TerminalType": "NRS"
+      },
+      {
+        "Address": {
+          "City": "Hoofddorp",
+          "Countrycode": "NL",
+          "HouseNr": 10,
+          "Remark": "Dit is een Business Point. Post en pakketten die u op werkdagen vóór de lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag.",
+          "Street": "Jacobus Spijkerdreef",
+          "Zipcode": "2132PZ"
+        },
+        "DeliveryOptions": {
+          "string": [
+            "DO",
+            "PG",
+            "UL",
+            "BW",
+            "PG_EX",
+            "BWUL",
+            "RETA",
+            "PBK"
+          ]
+        },
+        "Distance": 1798,
+        "Latitude": 52.28646696,
+        "LocationCode": 173187,
+        "Longitude": 4.68239056,
+        "Name": "Office Centre",
+        "OpeningHours": {
+          "Friday": {
+            "string": "09:00-18:00"
+          },
+          "Monday": {
+            "string": "09:00-18:00"
+          },
+          "Saturday": {
+            "string": "09:00-17:00"
+          },
+          "Thursday": {
+            "string": "09:00-18:00"
+          },
+          "Tuesday": {
+            "string": "09:00-18:00"
+          },
+          "Wednesday": {
+            "string": "09:00-18:00"
+          }
+        },
+        "PartnerName": "PostNL",
+        "RetailNetworkID": "PNPNL-01",
+        "Saleschannel": "BUPO SOC",
+        "TerminalType": "NRS"
+      },
+      {
+        "Address": {
+          "City": "Hoofddorp",
+          "Countrycode": "NL",
+          "HouseNr": 22,
+          "HouseNrExt": -30,
+          "Remark": "Dit is een Pakketpunt. Pakketten die u op werkdagen vóór lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag. Op zaterdag worden alléén pakketten die u afgeeft voor 15:00 uur maandag bezorgd.",
+          "Street": "Noordmeerstraat",
+          "Zipcode": "2131AD"
+        },
+        "DeliveryOptions": {
+          "string": [
+            "DO",
+            "PG",
+            "UL",
+            "BW",
+            "PG_EX"
+          ]
+        },
+        "Distance": 2782,
+        "Latitude": 52.31437647,
+        "LocationCode": 167536,
+        "Longitude": 4.69640792,
+        "Name": "GAMMA Hoofddorp",
+        "OpeningHours": {
+          "Friday": {
+            "string": "09:00-19:00"
+          },
+          "Monday": {
+            "string": "09:00-19:00"
+          },
+          "Saturday": {
+            "string": "09:00-18:00"
+          },
+          "Thursday": {
+            "string": "09:00-19:00"
+          },
+          "Tuesday": {
+            "string": "09:00-19:00"
+          },
+          "Wednesday": {
+            "string": "09:00-19:00"
+          }
+        },
+        "PartnerName": "PostNL",
+        "RetailNetworkID": "PNPNL-01"
+      },
+      {
+        "Address": {
+          "City": "Hoofddorp",
+          "Countrycode": "NL",
+          "HouseNr": 32,
+          "HouseNrExt": -36,
+          "Remark": "Dit is een Pakketpunt. Pakketten die u op werkdagen vóór lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag.",
+          "Street": "Noordmeerstraat",
+          "Zipcode": "2131AD"
+        },
+        "DeliveryOptions": {
+          "string": [
+            "DO",
+            "PG",
+            "UL",
+            "BW",
+            "PG_EX"
+          ]
+        },
+        "Distance": 2925,
+        "Latitude": 52.31550208,
+        "LocationCode": 171963,
+        "Longitude": 4.69523182,
+        "Name": "Karwei Hoofddorp",
+        "OpeningHours": {
+          "Friday": {
+            "string": "09:00-19:00"
+          },
+          "Monday": {
+            "string": "09:00-19:00"
+          },
+          "Saturday": {
+            "string": "09:00-18:00"
+          },
+          "Thursday": {
+            "string": "09:00-19:00"
+          },
+          "Tuesday": {
+            "string": "09:00-19:00"
+          },
+          "Wednesday": {
+            "string": "09:00-19:00"
+          }
+        },
+        "PartnerName": "PostNL",
+        "RetailNetworkID": "PNPNL-01"
+      },
+      {
+        "Address": {
+          "City": "HOOFDDORP",
+          "Countrycode": "NL",
+          "HouseNr": 46,
+          "Remark": "Dit is een Afhaalpunt+. Pakketten die u op werkdagen vóór lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag. Je kunt hier pakketten -  voorzien van scanbare barcode - versturen en pakketten ophalen.",
+          "Street": "Graftermeerstraat",
+          "Zipcode": "2131AC"
+        },
+        "DeliveryOptions": {
+          "string": [
+            "DO",
+            "PG",
+            "PG_EX"
+          ]
+        },
+        "Distance": 2934,
+        "Latitude": 52.31439357,
+        "LocationCode": 217108,
+        "Longitude": 4.69013086,
+        "Name": "Kringloop Winkel RataPlan Hoofddorp",
+        "OpeningHours": {
+          "Friday": {
+            "string": "09:00-18:00"
+          },
+          "Monday": {
+            "string": "09:00-18:00"
+          },
+          "Saturday": {
+            "string": "10:00-17:00"
+          },
+          "Sunday": {
+            "string": "12:00-17:00"
+          },
+          "Thursday": {
+            "string": "09:00-18:00"
+          },
+          "Tuesday": {
+            "string": "09:00-18:00"
+          },
+          "Wednesday": {
+            "string": "09:00-18:00"
+          }
+        },
+        "PartnerName": "PostNL",
+        "RetailNetworkID": "PNPNL-01",
+        "Saleschannel": "AFHAALPUNT",
+        "TerminalType": "NRS"
+      },
+      {
+        "Address": {
+          "City": "Hoofddorp",
+          "Countrycode": "NL",
+          "HouseNr": 218,
+          "Remark": "Dit is een Pakketpunt. Pakketten die u op werkdagen vóór lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag. Op zaterdag worden alléén pakketten die u afgeeft voor 15:00 uur maandag bezorgd.",
+          "Street": "Skagerrak",
+          "Zipcode": "2133DW"
+        },
+        "DeliveryOptions": {
+          "string": [
+            "DO",
+            "PG",
+            "UL",
+            "BW",
+            "PG_EX",
+            "BWUL",
+            "RETA"
+          ]
+        },
+        "Distance": 3270,
+        "Latitude": 52.30942816,
+        "LocationCode": 173804,
+        "Longitude": 4.67139513,
+        "Name": "Primera Sanders Skagerhof",
+        "OpeningHours": {
+          "Friday": {
+            "string": "08:30-18:00"
+          },
+          "Monday": {
+            "string": "08:30-18:00"
+          },
+          "Saturday": {
+            "string": "08:30-17:00"
+          },
+          "Thursday": {
+            "string": "08:30-18:00"
+          },
+          "Tuesday": {
+            "string": "08:30-18:00"
+          },
+          "Wednesday": {
+            "string": "08:30-18:00"
+          }
+        },
+        "PartnerName": "PostNL",
+        "RetailNetworkID": "PNPNL-01"
+      },
+      {
+        "Address": {
+          "City": "Rijsenhout",
+          "Countrycode": "NL",
+          "HouseNr": 15,
+          "Remark": "Dit is een Postkantoor. Post en pakketten die u op werkdagen vóór de lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag.",
+          "Street": "Werf",
+          "Zipcode": "1435KP"
+        },
+        "DeliveryOptions": {
+          "string": [
+            "DO",
+            "PG",
+            "UL",
+            "BW",
+            "PG_EX",
+            "BWUL",
+            "RETA"
+          ]
+        },
+        "Distance": 3567,
+        "Latitude": 52.25858754,
+        "LocationCode": 171368,
+        "Longitude": 4.71504091,
+        "Name": "Coop",
+        "OpeningHours": {
+          "Friday": {
+            "string": "08:00-20:00"
+          },
+          "Monday": {
+            "string": "08:00-19:00"
+          },
+          "Saturday": {
+            "string": "08:00-18:00"
+          },
+          "Sunday": {
+            "string": "14:00-18:00"
+          },
+          "Thursday": {
+            "string": "08:00-19:00"
+          },
+          "Tuesday": {
+            "string": "08:00-19:00"
+          },
+          "Wednesday": {
+            "string": "08:00-19:00"
+          }
+        },
+        "PartnerName": "PostNL",
+        "RetailNetworkID": "PNPNL-01",
+        "Saleschannel": "PKT M",
+        "TerminalType": "NRS"
+      },
+      {
+        "Address": {
+          "City": "AALSMEER",
+          "Countrycode": "NL",
+          "HouseNr": 38,
+          "Remark": "Dit is een Afhaalpunt+. Pakketten die u op werkdagen vóór lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag. Je kunt hier pakketten -  voorzien van scanbare barcode - versturen en pakketten ophalen.",
+          "Street": "Zijdstraat",
+          "Zipcode": "1431ED"
+        },
+        "DeliveryOptions": {
+          "string": [
+            "DO",
+            "PG",
+            "PG_EX"
+          ]
+        },
+        "Distance": 3585,
+        "Latitude": 52.26866087,
+        "LocationCode": 215795,
+        "Longitude": 4.74701676,
+        "Name": "Phone House Aalsmeer",
+        "OpeningHours": {
+          "Friday": {
+            "string": "08:00-18:00"
+          },
+          "Monday": {
+            "string": "12:00-18:00"
+          },
+          "Saturday": {
+            "string": "08:00-18:00"
+          },
+          "Thursday": {
+            "string": "08:00-18:00"
+          },
+          "Tuesday": {
+            "string": "08:00-18:00"
+          },
+          "Wednesday": {
+            "string": "08:00-18:00"
+          }
+        },
+        "PartnerName": "PostNL",
+        "RetailNetworkID": "PNPNL-01",
+        "Saleschannel": "AFHAALPUNT",
+        "TerminalType": "NRS"
+      },
+      {
+        "Address": {
+          "City": "Aalsmeer",
+          "Countrycode": "NL",
+          "HouseNr": 45,
+          "Remark": "Dit is een Postkantoor. Post en pakketten die u op werkdagen vóór de lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag. Op zaterdag worden alléén pakketten die u afgeeft voor 15:00 uur maandag bezorgd.",
+          "Street": "Zijdstraat",
+          "Zipcode": "1431EA"
+        },
+        "DeliveryOptions": {
+          "string": [
+            "DO",
+            "PG",
+            "UL",
+            "BW",
+            "PG_EX",
+            "BWUL",
+            "RETA",
+            "PBK"
+          ]
+        },
+        "Distance": 3621,
+        "Latitude": 52.26847444,
+        "LocationCode": 162062,
+        "Longitude": 4.7474443,
+        "Name": "Bruna Aalsmeer",
+        "OpeningHours": {
+          "Friday": {
+            "string": "09:00-18:00"
+          },
+          "Monday": {
+            "string": "09:00-18:00"
+          },
+          "Saturday": {
+            "string": "09:00-17:00"
+          },
+          "Thursday": {
+            "string": "09:00-18:00"
+          },
+          "Tuesday": {
+            "string": "09:00-18:00"
+          },
+          "Wednesday": {
+            "string": "09:00-18:00"
+          }
+        },
+        "PartnerName": "PostNL",
+        "RetailNetworkID": "PNPNL-01",
+        "Saleschannel": "PKT L",
+        "TerminalType": "NRS"
+      },
+      {
+        "Address": {
+          "City": "Schiphol",
+          "Countrycode": "NL",
+          "HouseNr": 4,
+          "Remark": "Dit is een Postkantoor. Post en pakketten die u op werkdagen vóór de lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag.",
+          "Street": "Aankomstpassage",
+          "Zipcode": "1118AX"
+        },
+        "DeliveryOptions": {
+          "string": [
+            "DO",
+            "PG",
+            "BW",
+            "PG_EX"
+          ]
+        },
+        "Distance": 4352,
+        "Latitude": 52.31018218,
+        "LocationCode": 176688,
+        "Longitude": 4.76326748,
+        "Name": "Service Point Schiphol Plaza",
+        "OpeningHours": {
+          "Friday": {
+            "string": "07:00-22:00"
+          },
+          "Monday": {
+            "string": "07:00-22:00"
+          },
+          "Saturday": {
+            "string": "07:00-22:00"
+          },
+          "Sunday": {
+            "string": "07:00-22:00"
+          },
+          "Thursday": {
+            "string": "07:00-22:00"
+          },
+          "Tuesday": {
+            "string": "07:00-22:00"
+          },
+          "Wednesday": {
+            "string": "07:00-22:00"
+          }
+        },
+        "PartnerName": "PostNL",
+        "RetailNetworkID": "PNPNL-01",
+        "Saleschannel": "PKT L",
+        "TerminalType": "NRS"
+      },
+      {
+        "Address": {
+          "City": "AALSMEER",
+          "Countrycode": "NL",
+          "HouseNr": 101,
+          "Remark": "Dit is een Postkantoor. Post en pakketten die u op werkdagen vóór de lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag.",
+          "Street": "Aalsmeerderweg",
+          "Zipcode": "1432CJ"
+        },
+        "DeliveryOptions": {
+          "string": [
+            "DO",
+            "PG",
+            "PG_EX"
+          ]
+        },
+        "Distance": 5199,
+        "Latitude": 52.27465028,
+        "LocationCode": 216140,
+        "Longitude": 4.78002989,
+        "Name": "Auto Garage Aalsmeer",
+        "OpeningHours": {
+          "Friday": {
+            "string": "08:30-18:00"
+          },
+          "Monday": {
+            "string": "08:30-18:00"
+          },
+          "Saturday": {
+            "string": "10:00-17:00"
+          },
+          "Thursday": {
+            "string": "08:30-18:00"
+          },
+          "Tuesday": {
+            "string": "08:30-18:00"
+          },
+          "Wednesday": {
+            "string": "08:30-18:00"
+          }
+        },
+        "PartnerName": "PostNL",
+        "RetailNetworkID": "PNPNL-01",
+        "Saleschannel": "PKT M",
+        "TerminalType": "NRS"
+      },
+      {
+        "Address": {
+          "City": "Nieuw-Vennep",
+          "Countrycode": "NL",
+          "HouseNr": 37,
+          "Remark": "Dit is een Postkantoor. Post en pakketten die u op werkdagen vóór de lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag. Op zaterdag worden alléén pakketten die u afgeeft voor 15:00 uur maandag bezorgd.",
+          "Street": "De Symfonie",
+          "Zipcode": "2151MD"
+        },
+        "DeliveryOptions": {
+          "string": [
+            "DO",
+            "PG",
+            "UL",
+            "BW",
+            "PG_EX",
+            "BWUL",
+            "RETA",
+            "PBK"
+          ]
+        },
+        "Distance": 5911,
+        "Latitude": 52.26462063,
+        "LocationCode": 161943,
+        "Longitude": 4.63203633,
+        "Name": "Bruna",
+        "OpeningHours": {
+          "Friday": {
+            "string": "09:00-20:00"
+          },
+          "Monday": {
+            "string": "09:00-18:00"
+          },
+          "Saturday": {
+            "string": "09:00-18:00"
+          },
+          "Sunday": {
+            "string": "12:00-17:00"
+          },
+          "Thursday": {
+            "string": "09:00-18:00"
+          },
+          "Tuesday": {
+            "string": "09:00-18:00"
+          },
+          "Wednesday": {
+            "string": "09:00-18:00"
+          }
+        },
+        "PartnerName": "PostNL",
+        "RetailNetworkID": "PNPNL-01",
+        "Saleschannel": "PKT XL",
+        "TerminalType": "NRS"
+      },
+      {
+        "Address": {
+          "City": "Aalsmeer",
+          "Countrycode": "NL",
+          "HouseNr": 49,
+          "HouseNrExt": "A",
+          "Remark": "Dit is een Pakketpunt. Pakketten die u op werkdagen vóór lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag. Op zaterdag worden alléén pakketten die u afgeeft voor 15:00 uur maandag bezorgd.",
+          "Street": "Lakenblekerstraat",
+          "Zipcode": "1431GE"
+        },
+        "DeliveryOptions": {
+          "string": [
+            "DO",
+            "PG",
+            "UL",
+            "BW",
+            "PG_EX",
+            "BWUL",
+            "RETA"
+          ]
+        },
+        "Distance": 6055,
+        "Latitude": 52.25670885,
+        "LocationCode": 167146,
+        "Longitude": 4.7780045,
+        "Name": "Gamma",
+        "OpeningHours": {
+          "Friday": {
+            "string": "09:00-19:00"
+          },
+          "Monday": {
+            "string": "09:00-19:00"
+          },
+          "Saturday": {
+            "string": "09:00-18:00"
+          },
+          "Thursday": {
+            "string": "09:00-19:00"
+          },
+          "Tuesday": {
+            "string": "09:00-19:00"
+          },
+          "Wednesday": {
+            "string": "09:00-19:00"
+          }
+        },
+        "PartnerName": "PostNL",
+        "RetailNetworkID": "PNPNL-01"
+      },
+      {
+        "Address": {
+          "City": "Nieuw-Vennep",
+          "Countrycode": "NL",
+          "HouseNr": 185,
+          "Remark": "Dit is een Pakketpunt. Pakketten die u op werkdagen vóór lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag. Op zaterdag worden alléén pakketten die u afgeeft voor 17:00 uur maandag bezorgd.",
+          "Street": "Händelplein",
+          "Zipcode": "2151NN"
+        },
+        "DeliveryOptions": {
+          "string": [
+            "DO",
+            "PG",
+            "UL",
+            "BW",
+            "PG_EX"
+          ]
+        },
+        "Distance": 6389,
+        "Latitude": 52.27072553,
+        "LocationCode": 114866,
+        "Longitude": 4.61978694,
+        "Name": "Albert Heijn",
+        "OpeningHours": {
+          "Friday": {
+            "string": "08:00-22:00"
+          },
+          "Monday": {
+            "string": "08:00-22:00"
+          },
+          "Saturday": {
+            "string": "08:00-22:00"
+          },
+          "Sunday": {
+            "string": "10:00-20:00"
+          },
+          "Thursday": {
+            "string": "08:00-22:00"
+          },
+          "Tuesday": {
+            "string": "08:00-22:00"
+          },
+          "Wednesday": {
+            "string": "08:00-22:00"
+          }
+        },
+        "PartnerName": "PostNL",
+        "RetailNetworkID": "PNPNL-01"
+      },
+      {
+        "Address": {
+          "City": "Nieuw-Vennep",
+          "Countrycode": "NL",
+          "HouseNr": 21,
+          "Remark": "Dit is een Postkantoor. Post en pakketten die u op werkdagen vóór de lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag. Op zaterdag worden alléén pakketten die u afgeeft voor 15:00 uur maandag bezorgd.",
+          "Street": "Händelplein",
+          "Zipcode": "2151NL"
+        },
+        "DeliveryOptions": {
+          "string": [
+            "DO",
+            "PG",
+            "UL",
+            "BW",
+            "PG_EX",
+            "BWUL",
+            "RETA"
+          ]
+        },
+        "Distance": 6398,
+        "Latitude": 52.27107384,
+        "LocationCode": 214704,
+        "Longitude": 4.61944395,
+        "Name": "Primera Getsewoud",
+        "OpeningHours": {
+          "Friday": {
+            "string": "10:00-18:00"
+          },
+          "Monday": {
+            "string": "10:00-18:00"
+          },
+          "Saturday": {
+            "string": "10:00-17:00"
+          },
+          "Thursday": {
+            "string": "10:00-18:00"
+          },
+          "Tuesday": {
+            "string": "10:00-18:00"
+          },
+          "Wednesday": {
+            "string": "10:00-18:00"
+          }
+        },
+        "PartnerName": "PostNL",
+        "RetailNetworkID": "PNPNL-01",
+        "Saleschannel": "PKT M",
+        "TerminalType": "NRS"
+      },
+      {
+        "Address": {
+          "City": "Nieuw-Vennep",
+          "Countrycode": "NL",
+          "HouseNr": 25,
+          "Remark": "Dit is een Pakketpunt. Pakketten die u op werkdagen vóór lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag.",
+          "Street": "Kalslagerring",
+          "Zipcode": "2151TA"
+        },
+        "DeliveryOptions": {
+          "string": [
+            "DO",
+            "PG",
+            "UL",
+            "BW",
+            "PG_EX"
+          ]
+        },
+        "Distance": 6779,
+        "Latitude": 52.26264214,
+        "LocationCode": 203353,
+        "Longitude": 4.61931112,
+        "Name": "Hoogvliet",
+        "OpeningHours": {
+          "Friday": {
+            "string": "08:00-21:00"
+          },
+          "Monday": {
+            "string": "08:00-20:00"
+          },
+          "Saturday": {
+            "string": "08:00-20:00"
+          },
+          "Sunday": {
+            "string": "12:00-18:00"
+          },
+          "Thursday": {
+            "string": "08:00-20:00"
+          },
+          "Tuesday": {
+            "string": "08:00-20:00"
+          },
+          "Wednesday": {
+            "string": "08:00-20:00"
+          }
+        },
+        "PartnerName": "PostNL",
+        "RetailNetworkID": "PNPNL-01"
+      },
+      {
+        "Address": {
+          "City": "Badhoevedorp",
+          "Countrycode": "NL",
+          "HouseNr": 218,
+          "HouseNrExt": -220,
+          "Remark": "Dit is een Pakketpunt. Pakketten die u op werkdagen vóór lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag.",
+          "Street": "Sloterweg",
+          "Zipcode": "1171CX"
+        },
+        "DeliveryOptions": {
+          "string": [
+            "DO",
+            "PG",
+            "UL",
+            "BW",
+            "PG_EX"
+          ]
+        },
+        "Distance": 6780,
+        "Latitude": 52.33518852,
+        "LocationCode": 214594,
+        "Longitude": 4.77571026,
+        "Name": "Ottenhoff Motoren Garage Ottenhoff",
+        "OpeningHours": {
+          "Friday": {
+            "string": "09:00-18:00"
+          },
+          "Monday": {
+            "string": "09:00-18:00"
+          },
+          "Thursday": {
+            "string": "09:00-18:00"
+          },
+          "Tuesday": {
+            "string": "09:00-18:00"
+          },
+          "Wednesday": {
+            "string": "09:00-18:00"
+          }
+        },
+        "PartnerName": "PostNL",
+        "RetailNetworkID": "PNPNL-01"
+      },
+      {
+        "Address": {
+          "City": "Cruquius",
+          "Countrycode": "NL",
+          "HouseNr": 251,
+          "Remark": "Dit is een Pakketpunt. Pakketten die u op werkdagen vóór lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag. Op zaterdag worden alléén pakketten die u afgeeft voor 16:00 uur maandag bezorgd.",
+          "Street": "Spaarneweg",
+          "Zipcode": "2142EP"
+        },
+        "DeliveryOptions": {
+          "string": [
+            "DO",
+            "PG",
+            "UL",
+            "BW",
+            "PG_EX"
+          ]
+        },
+        "Distance": 6863,
+        "Latitude": 52.3303079,
+        "LocationCode": 209333,
+        "Longitude": 4.63105154,
+        "Name": "Intratuin",
+        "OpeningHours": {
+          "Friday": {
+            "string": "09:30-21:00"
+          },
+          "Monday": {
+            "string": "09:30-18:00"
+          },
+          "Saturday": {
+            "string": "09:30-18:00"
+          },
+          "Thursday": {
+            "string": "09:30-21:00"
+          },
+          "Tuesday": {
+            "string": "09:30-18:00"
+          },
+          "Wednesday": {
+            "string": "09:30-18:00"
+          }
+        },
+        "PartnerName": "PostNL",
+        "RetailNetworkID": "PNPNL-01"
+      },
+      {
+        "Address": {
+          "City": "Cruquius",
+          "Countrycode": "NL",
+          "HouseNr": 44,
+          "Remark": "Dit is een Pakketpunt. Pakketten die u op werkdagen vóór lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag.",
+          "Street": "Spaarneweg",
+          "Zipcode": "2142EN"
+        },
+        "DeliveryOptions": {
+          "string": [
+            "DO",
+            "PG",
+            "UL",
+            "BW",
+            "PG_EX"
+          ]
+        },
+        "Distance": 7074,
+        "Latitude": 52.33236749,
+        "LocationCode": 167485,
+        "Longitude": 4.62985742,
+        "Name": "GAMMA Cruquius",
+        "OpeningHours": {
+          "Friday": {
+            "string": "09:00-19:00"
+          },
+          "Monday": {
+            "string": "09:00-19:00"
+          },
+          "Saturday": {
+            "string": "09:00-18:00"
+          },
+          "Thursday": {
+            "string": "09:00-19:00"
+          },
+          "Tuesday": {
+            "string": "09:00-19:00"
+          },
+          "Wednesday": {
+            "string": "09:00-19:00"
+          }
+        },
+        "PartnerName": "PostNL",
+        "RetailNetworkID": "PNPNL-01"
+      }
+    ]
+  }
+}

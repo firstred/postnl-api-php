@@ -1,8 +1,8 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,82 +19,119 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity\Response;
+namespace Firstred\PostNL\Entity\Response;
 
+use Firstred\PostNL\Entity\AbstractEntity;
+use Firstred\PostNL\Entity\Warning;
+use Firstred\PostNL\Service\BarcodeService;
+use Firstred\PostNL\Service\ConfirmingService;
+use Firstred\PostNL\Service\DeliveryDateService;
+use Firstred\PostNL\Service\LabellingService;
+use Firstred\PostNL\Service\LocationService;
+use Firstred\PostNL\Service\TimeframeService;
+use ReflectionObject;
+use ReflectionProperty;
 use Sabre\Xml\Writer;
-use ThirtyBees\PostNL\Entity\AbstractEntity;
-use ThirtyBees\PostNL\Entity\Shipment;
-use ThirtyBees\PostNL\Service\BarcodeService;
-use ThirtyBees\PostNL\Service\ConfirmingService;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
-use ThirtyBees\PostNL\Service\LabellingService;
-use ThirtyBees\PostNL\Service\LocationService;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
-use ThirtyBees\PostNL\Service\TimeframeService;
+use stdClass;
+use function count;
 
 /**
- * Class CompleteStatusResponse
+ * Class CompleteStatusResponse.
  *
- * @package ThirtyBees\PostNL\Entity
+ * @method CompleteStatusResponseShipment[]|null getShipments()
+ * @method Warning[]|null                        getWarnings()
+ * @method CompleteStatusResponse                setShipments(CompleteStatusResponseShipment[] $Shipments = null)
+ * @method CompleteStatusResponse                setWarnings(Warning[] $Warnings = null)
  *
- * @method string|null getShipments()
- *
- * @method CompleteStatusResponse setShipments(Shipment[] $shipments = null)
+ * @since 1.0.0
  */
 class CompleteStatusResponse extends AbstractEntity
 {
     /**
-     * Default properties and namespaces for the SOAP API
+     * Default properties and namespaces for the SOAP API.
      *
-     * @var array $defaultProperties
+     * @var array
      */
     public static $defaultProperties = [
         'Barcode'        => [
             'Shipments' => BarcodeService::DOMAIN_NAMESPACE,
+            'Warnings'  => BarcodeService::DOMAIN_NAMESPACE,
         ],
         'Confirming'     => [
             'Shipments' => ConfirmingService::DOMAIN_NAMESPACE,
+            'Warnings'  => ConfirmingService::DOMAIN_NAMESPACE,
         ],
         'Labelling'      => [
             'Shipments' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Shipments' => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Warnings'  => LabellingService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate'   => [
             'Shipments' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Warnings'  => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
         'Location'       => [
             'Shipments' => LocationService::DOMAIN_NAMESPACE,
+            'Warnings'  => LocationService::DOMAIN_NAMESPACE,
         ],
         'Timeframe'      => [
             'Shipments' => TimeframeService::DOMAIN_NAMESPACE,
+            'Warnings'  => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var array|null $Shipments */
+    /** @var CompleteStatusResponseShipment[]|null */
     protected $Shipments;
+    /** @var Warning[]|null */
+    protected $Warnings;
     // @codingStandardsIgnoreEnd
 
     /**
      * CompleteStatusResponse constructor.
      *
-     * @param array|null $shipments
+     * @param CompleteStatusResponseShipment[]|null $Shipments
+     * @param Warnings[]|null $Warnings
      */
-    public function __construct(array $shipments = null)
-    {
+    public function __construct(
+        array $Shipments = null,
+        array $Warnings = null
+    ) {
         parent::__construct();
 
-        $this->setShipments($shipments);
+        $this->setShipments($Shipments);
+        $this->setWarnings($Warnings);
+    }
+
+    public static function jsonDeserialize(stdClass $json)
+    {
+        // Find the entity name
+        $reflection = new ReflectionObject($json);
+        $properties = $reflection->getProperties(ReflectionProperty::IS_PUBLIC);
+
+        if (!count($properties)) {
+            return $json;
+        }
+
+        if (isset($json->CompleteStatusResponse->Shipments) && !is_array($json->CompleteStatusResponse->Shipments)) {
+            $json->CompleteStatusResponse->Shipments = [$json->CompleteStatusResponse->Shipments];
+        }
+
+        $completeStatusResponse = self::create();
+        $shipments = [];
+        foreach ($json->CompleteStatusResponse->Shipments as $shipment) {
+            $shipments[] = CompleteStatusResponseShipment::jsonDeserialize((object) ['CompleteStatusResponseShipment' => $shipment]);
+        }
+        $completeStatusResponse->setShipments($shipments);
+
+        return $completeStatusResponse;
     }
 
     /**
-     * Return a serializable array for the XMLWriter
+     * Return a serializable array for the XMLWriter.
      *
      * @param Writer $writer
      *
@@ -110,7 +147,7 @@ class CompleteStatusResponse extends AbstractEntity
         }
 
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if ($propertyName === 'Shipments') {
+            if ('Shipments' === $propertyName) {
                 $shipments = [];
                 if (is_array($this->Shipments)) {
                     foreach ($this->Shipments as $shipment) {
@@ -118,8 +155,8 @@ class CompleteStatusResponse extends AbstractEntity
                     }
                 }
                 $xml["{{$namespace}}Shipments"] = $shipments;
-            } elseif (isset($this->{$propertyName})) {
-                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
+            } elseif (isset($this->$propertyName)) {
+                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->$propertyName;
             }
         }
         // Auto extending this object with other properties is not supported with SOAP

@@ -1,8 +1,8 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2021 Michael Dekker
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,47 +19,51 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Tests\Service;
+namespace Firstred\PostNL\Tests\Service;
 
+use Cache\Adapter\Void\VoidCachePool;
+use Firstred\PostNL\Entity\Address;
+use Firstred\PostNL\Entity\Barcode;
+use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Entity\Message\Message;
+use Firstred\PostNL\Entity\Request\GenerateBarcode;
+use Firstred\PostNL\Entity\SOAP\UsernameToken;
+use Firstred\PostNL\Exception\ResponseException;
+use Firstred\PostNL\HttpClient\MockClient;
+use Firstred\PostNL\PostNL;
+use Firstred\PostNL\Service\BarcodeService;
+use Firstred\PostNL\Service\BarcodeServiceInterface;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
-use Psr\Log\LoggerInterface;
-use ThirtyBees\PostNL\Entity\Address;
-use ThirtyBees\PostNL\Entity\Barcode;
-use ThirtyBees\PostNL\Entity\Customer;
-use ThirtyBees\PostNL\Entity\Message\Message;
-use ThirtyBees\PostNL\Entity\Request\GenerateBarcode;
-use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
-use ThirtyBees\PostNL\HttpClient\MockClient;
-use ThirtyBees\PostNL\PostNL;
-use ThirtyBees\PostNL\Service\BarcodeService;
+use GuzzleHttp\Psr7\Message as PsrMessage;
+use GuzzleHttp\Psr7\Query;
+use function file_get_contents;
+use const _RESPONSES_DIR_;
 
 /**
- * Class BarcodeServiceRestTest
- *
- * @package ThirtyBees\PostNL\Tests\Service
+ * Class BarcodeServiceRestTest.
  *
  * @testdox The BarcodeService (REST)
  */
-class BarcodeServiceRestTest extends \PHPUnit_Framework_TestCase
+class BarcodeServiceRestTest extends ServiceTest
 {
-    /** @var PostNL $postnl */
+    /** @var PostNL */
     protected $postnl;
-    /** @var BarcodeService $service */
+    /** @var BarcodeServiceInterface */
     protected $service;
-    /** @var $lastRequest */
+    /** @var */
     protected $lastRequest;
 
     /**
      * @before
-     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \ReflectionException
      */
     public function setupPostNL()
     {
@@ -79,29 +83,17 @@ class BarcodeServiceRestTest extends \PHPUnit_Framework_TestCase
                     'Zipcode'     => '2132WT',
                 ]))
                 ->setGlobalPackBarcodeType('AB')
-                ->setGlobalPackCustomerCode('1234')
-            , new UsernameToken(null, 'test'),
+                ->setGlobalPackCustomerCode('1234'), new UsernameToken(null, 'test'),
             true,
             PostNL::MODE_REST
         );
-        
-        $this->service = $this->postnl->getBarcodeService();
-    }
-
-    /**
-     * @after
-     */
-    public function logPendingRequest()
-    {
-        if (!$this->lastRequest instanceof Request) {
-            return;
-        }
 
         global $logger;
-        if ($logger instanceof LoggerInterface) {
-            $logger->debug($this->getName()." Request\n".\GuzzleHttp\Psr7\str($this->lastRequest));
-        }
-        $this->lastRequest = null;
+        $this->postnl->setLogger($logger);
+
+        $this->service = $this->postnl->getBarcodeService();
+        $this->service->setCache(new VoidCachePool());
+        $this->service->setTtl(1);
     }
 
     /**
@@ -109,13 +101,14 @@ class BarcodeServiceRestTest extends \PHPUnit_Framework_TestCase
      */
     public function testHasValidBarcodeService()
     {
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Service\\BarcodeService', $this->service);
+        $this->assertInstanceOf(BarcodeService::class, $this->service);
     }
 
     /**
      * @testdox creates a valid 3S barcode request
      *
-     * @throws \ThirtyBees\PostNL\Exception\InvalidBarcodeException
+     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
+     * @throws \ReflectionException
      */
     public function testCreatesAValid3SBarcodeRequest()
     {
@@ -135,19 +128,15 @@ class BarcodeServiceRestTest extends \PHPUnit_Framework_TestCase
                 ->setCustomer($this->postnl->getCustomer())
         );
 
-        $query = \GuzzleHttp\Psr7\parse_query($request->getUri()->getQuery());
+        $query = Query::parse($request->getUri()->getQuery());
 
-        $this->assertEquals([
+        $this->assertEqualsCanonicalizing([
             'CustomerCode'   => 'DEVC',
             'CustomerNumber' => '11223344',
             'Type'           => '3S',
             'Serie'          => '987000000-987600000',
         ],
-            $query,
-            null,
-            0,
-            10,
-            true
+            $query
         );
         $this->assertEmpty((string) $request->getBody());
         $this->assertEquals('test', $request->getHeaderLine('apikey'));
@@ -172,14 +161,12 @@ class BarcodeServiceRestTest extends \PHPUnit_Framework_TestCase
     /**
      * @testdox return a valid single barcode
      *
-     * @throws \ThirtyBees\PostNL\Exception\InvalidBarcodeException
+     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
      */
     public function testSingleBarcodeRest()
     {
         $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode([
-                'Barcode' => '3SDEVC816223392',
-            ])),
+            PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/barcode/singlebarcode.http')),
         ]);
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();
@@ -192,15 +179,13 @@ class BarcodeServiceRestTest extends \PHPUnit_Framework_TestCase
     /**
      * @testdox return a valid single barcode for a country
      *
-     * @throws \ThirtyBees\PostNL\Exception\InvalidBarcodeException
-     * @throws \ThirtyBees\PostNL\Exception\InvalidConfigurationException
+     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
+     * @throws \Firstred\PostNL\Exception\InvalidConfigurationException
      */
     public function testSingleBarCodeByCountryRest()
     {
         $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode([
-                'Barcode' => '3SDEVC816223392',
-            ])),
+            PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/barcode/singlebarcode.http')),
         ]);
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();
@@ -213,24 +198,16 @@ class BarcodeServiceRestTest extends \PHPUnit_Framework_TestCase
     /**
      * @testdox returns several barcodes
      *
-     * @throws \ThirtyBees\PostNL\Exception\InvalidBarcodeException
-     * @throws \ThirtyBees\PostNL\Exception\InvalidConfigurationException
+     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
+     * @throws \Firstred\PostNL\Exception\InvalidConfigurationException
      */
     public function testMultipleNLBarcodesRest()
     {
         $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode([
-                'Barcode' => '3SDEVC816223392',
-            ])),
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode([
-                'Barcode' => '3SDEVC816223393',
-            ])),
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode([
-                'Barcode' => '3SDEVC816223394',
-            ])),
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode([
-                'Barcode' => '3SDEVC816223395',
-            ])),
+            PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/barcode/singlebarcode.http')),
+            PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/barcode/singlebarcode2.http')),
+            PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/barcode/singlebarcode3.http')),
+            PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/barcode/singlebarcode4.http')),
         ]);
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();
@@ -253,14 +230,15 @@ class BarcodeServiceRestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox return a valid single barcode
-     * @throws \ThirtyBees\PostNL\Exception\InvalidBarcodeException
+     *
+     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
      */
     public function testNegativeSingleBarcodeInvalidResponse()
     {
-        $this->expectException('ThirtyBees\\PostNL\\Exception\\ResponseException');
+        $this->expectException(ResponseException::class);
 
         $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], 'asdfojasuidfo'),
+            PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/barcode/invalid.http')),
         ]);
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();

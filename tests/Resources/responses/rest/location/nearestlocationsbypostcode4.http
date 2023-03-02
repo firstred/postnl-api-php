@@ -1,0 +1,1007 @@
+HTTP/1.1 200 OK
+Cache-Control: private, max-age=0
+Content-Type: application/json;charset=UTF-8
+Date: Wed, 31 Mar 2021 12:42:12 GMT
+Strict-Transport-Security: max-age=31536000
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-Robots-Tag: noindex
+X-XSS-Protection: 1; mode=block
+Connection: keep-alive
+
+{
+  "GetLocationsResult": {
+    "ResponseLocation": [
+      {
+        "Address": {
+          "City": "Apeldoorn",
+          "Countrycode": "NL",
+          "HouseNr": 122,
+          "Remark": "Dit is een Postkantoor. Post en pakketten die u op werkdagen vóór de lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag. Op zaterdag worden alléén pakketten die u afgeeft voor 15:00 uur maandag bezorgd.",
+          "Street": "Adelaarslaan",
+          "Zipcode": "7331GH"
+        },
+        "DeliveryOptions": {
+          "string": [
+            "DO",
+            "PG",
+            "UL",
+            "BW",
+            "PG_EX",
+            "BWUL",
+            "RETA"
+          ]
+        },
+        "Distance": 706,
+        "Latitude": 52.19967282,
+        "LocationCode": 162371,
+        "Longitude": 5.96529081,
+        "Name": "Primera Pijpers",
+        "OpeningHours": {
+          "Friday": {
+            "string": "08:30-18:00"
+          },
+          "Monday": {
+            "string": "10:00-18:00"
+          },
+          "Saturday": {
+            "string": "08:30-16:30"
+          },
+          "Thursday": {
+            "string": "08:30-18:00"
+          },
+          "Tuesday": {
+            "string": "08:30-18:00"
+          },
+          "Wednesday": {
+            "string": "08:30-18:00"
+          }
+        },
+        "PartnerName": "PostNL",
+        "RetailNetworkID": "PNPNL-01",
+        "Saleschannel": "PKT M",
+        "TerminalType": "NRS"
+      },
+      {
+        "Address": {
+          "City": "Apeldoorn",
+          "Countrycode": "NL",
+          "HouseNr": 30,
+          "Remark": "Dit is een Business Point. Post en pakketten die u op werkdagen vóór de lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag.",
+          "Street": "Oude Berghuizerweg",
+          "Zipcode": "7336AW"
+        },
+        "DeliveryOptions": {
+          "string": [
+            "DO",
+            "PG",
+            "UL",
+            "BW",
+            "PG_EX",
+            "BWUL",
+            "RETA",
+            "PBK"
+          ]
+        },
+        "Distance": 1091,
+        "Latitude": 52.1966295,
+        "LocationCode": 176643,
+        "Longitude": 5.94015229,
+        "Name": "MINC Apeldoorn BV",
+        "OpeningHours": {
+          "Friday": {
+            "string": "08:00-18:30"
+          },
+          "Monday": {
+            "string": "08:00-18:30"
+          },
+          "Saturday": {
+            "string": "08:00-09:00"
+          },
+          "Thursday": {
+            "string": "08:00-18:30"
+          },
+          "Tuesday": {
+            "string": "08:00-18:30"
+          },
+          "Wednesday": {
+            "string": "08:00-18:30"
+          }
+        },
+        "PartnerName": "PostNL",
+        "RetailNetworkID": "PNPNL-01",
+        "Saleschannel": "BUPO RET",
+        "TerminalType": "NRS"
+      },
+      {
+        "Address": {
+          "City": "Apeldoorn",
+          "Countrycode": "NL",
+          "HouseNr": 261,
+          "Remark": "Dit is een Postkantoor. Post en pakketten die u op werkdagen vóór de lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag. Op zaterdag worden alléén pakketten die u afgeeft voor 15:00 uur maandag bezorgd.",
+          "Street": "Asselsestraat",
+          "Zipcode": "7312CT"
+        },
+        "DeliveryOptions": {
+          "string": [
+            "DO",
+            "PG",
+            "UL",
+            "BW",
+            "PG_EX",
+            "BWUL",
+            "RETA"
+          ]
+        },
+        "Distance": 1287,
+        "Latitude": 52.20853171,
+        "LocationCode": 162814,
+        "Longitude": 5.9416314,
+        "Name": "Primera",
+        "OpeningHours": {
+          "Friday": {
+            "string": "08:00-18:00"
+          },
+          "Monday": {
+            "string": "08:00-18:00"
+          },
+          "Saturday": {
+            "string": "08:00-17:00"
+          },
+          "Thursday": {
+            "string": "08:00-18:00"
+          },
+          "Tuesday": {
+            "string": "08:00-18:00"
+          },
+          "Wednesday": {
+            "string": "08:00-18:00"
+          }
+        },
+        "PartnerName": "PostNL",
+        "RetailNetworkID": "PNPNL-01",
+        "Saleschannel": "PKT M",
+        "TerminalType": "NRS"
+      },
+      {
+        "Address": {
+          "City": "Apeldoorn",
+          "Countrycode": "NL",
+          "HouseNr": 14,
+          "Remark": "Dit is een Postkantoor. Post en pakketten die u op werkdagen vóór de lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag. Op zaterdag worden alléén pakketten die u afgeeft voor 15:00 uur maandag bezorgd.",
+          "Street": "Schubertlaan",
+          "Zipcode": "7333CV"
+        },
+        "DeliveryOptions": {
+          "string": [
+            "DO",
+            "PG",
+            "UL",
+            "BW",
+            "PG_EX",
+            "BWUL",
+            "RETA"
+          ]
+        },
+        "Distance": 1341,
+        "Latitude": 52.18994037,
+        "LocationCode": 161356,
+        "Longitude": 5.96495983,
+        "Name": "Vivant Apeldoorn",
+        "OpeningHours": {
+          "Friday": {
+            "string": "09:00-18:00"
+          },
+          "Monday": {
+            "string": "09:00-18:00"
+          },
+          "Saturday": {
+            "string": "09:00-17:00"
+          },
+          "Thursday": {
+            "string": "09:00-18:00"
+          },
+          "Tuesday": {
+            "string": "09:00-18:00"
+          },
+          "Wednesday": {
+            "string": "09:00-18:00"
+          }
+        },
+        "PartnerName": "PostNL",
+        "RetailNetworkID": "PNPNL-01",
+        "Saleschannel": "PKT L",
+        "TerminalType": "NRS"
+      },
+      {
+        "Address": {
+          "City": "Apeldoorn",
+          "Countrycode": "NL",
+          "HouseNr": 50,
+          "Remark": "Dit is een Pakketpunt. Pakketten die u op werkdagen vóór lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag. Op zaterdag worden alléén pakketten die u afgeeft voor 15:00 uur maandag bezorgd.",
+          "Street": "Ordenplein",
+          "Zipcode": "7312NL"
+        },
+        "DeliveryOptions": {
+          "string": [
+            "DO",
+            "PG",
+            "UL",
+            "BW",
+            "PG_EX",
+            "BWUL",
+            "RETA"
+          ]
+        },
+        "Distance": 1555,
+        "Latitude": 52.20074719,
+        "LocationCode": 173171,
+        "Longitude": 5.93217272,
+        "Name": "Primera",
+        "OpeningHours": {
+          "Friday": {
+            "string": "08:30-20:00"
+          },
+          "Monday": {
+            "string": "11:00-18:00"
+          },
+          "Saturday": {
+            "string": "08:30-17:00"
+          },
+          "Thursday": {
+            "string": "08:30-18:00"
+          },
+          "Tuesday": {
+            "string": "08:30-18:00"
+          },
+          "Wednesday": {
+            "string": "08:30-18:00"
+          }
+        },
+        "PartnerName": "PostNL",
+        "RetailNetworkID": "PNPNL-01"
+      },
+      {
+        "Address": {
+          "City": "Apeldoorn",
+          "Countrycode": "NL",
+          "HouseNr": 104,
+          "Remark": "Dit is een Pakketpunt. Pakketten die u op werkdagen vóór lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag.",
+          "Street": "Laan van Spitsbergen",
+          "Zipcode": "7336AX"
+        },
+        "DeliveryOptions": {
+          "string": [
+            "DO",
+            "PG",
+            "UL",
+            "BW",
+            "PG_EX"
+          ]
+        },
+        "Distance": 1572,
+        "Latitude": 52.19405018,
+        "LocationCode": 167161,
+        "Longitude": 5.93431391,
+        "Name": "GAMMA Apeldoorn-West",
+        "OpeningHours": {
+          "Friday": {
+            "string": "09:00-20:00"
+          },
+          "Monday": {
+            "string": "09:00-20:00"
+          },
+          "Saturday": {
+            "string": "09:00-18:00"
+          },
+          "Thursday": {
+            "string": "09:00-20:00"
+          },
+          "Tuesday": {
+            "string": "09:00-20:00"
+          },
+          "Wednesday": {
+            "string": "09:00-20:00"
+          }
+        },
+        "PartnerName": "PostNL",
+        "RetailNetworkID": "PNPNL-01"
+      },
+      {
+        "Address": {
+          "City": "Apeldoorn",
+          "Countrycode": "NL",
+          "HouseNr": 153,
+          "Remark": "Dit is een Postkantoor. Post en pakketten die u op werkdagen vóór de lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag. Op zaterdag worden alléén pakketten die u afgeeft voor 15:00 uur maandag bezorgd.",
+          "Street": "Oranjerie",
+          "Zipcode": "7311WG"
+        },
+        "DeliveryOptions": {
+          "string": [
+            "DO",
+            "PG",
+            "UL",
+            "BW",
+            "PG_EX",
+            "BWUL",
+            "RETA",
+            "PBK"
+          ]
+        },
+        "Distance": 1594,
+        "Latitude": 52.21400652,
+        "LocationCode": 210623,
+        "Longitude": 5.96206755,
+        "Name": "The Read Shop",
+        "OpeningHours": {
+          "Friday": {
+            "string": "08:00-17:30"
+          },
+          "Monday": {
+            "string": "08:00-17:30"
+          },
+          "Saturday": {
+            "string": "08:00-17:00"
+          },
+          "Thursday": {
+            "string": "08:00-21:00"
+          },
+          "Tuesday": {
+            "string": "08:00-17:30"
+          },
+          "Wednesday": {
+            "string": "08:00-17:30"
+          }
+        },
+        "PartnerName": "PostNL",
+        "RetailNetworkID": "PNPNL-01",
+        "Saleschannel": "PKT M",
+        "TerminalType": "NRS"
+      },
+      {
+        "Address": {
+          "City": "Apeldoorn",
+          "Countrycode": "NL",
+          "HouseNr": 37,
+          "HouseNrExt": "PBA",
+          "Remark": "Dit is een Pakket- en briefautomaat. Hier kunt u pakketten voorzien van een barcodelabel versturen. Pakketten en brieven die u op werkdagen vóór de lichtingstijd afgeeft worden binnen Nederland de volgende dag bezorgd.",
+          "Street": "Marchantstraat",
+          "Zipcode": "7331NS"
+        },
+        "DeliveryOptions": {
+          "string": [
+            "DO",
+            "PG",
+            "PBA"
+          ]
+        },
+        "Distance": 1604,
+        "Latitude": 52.19379578,
+        "LocationCode": 214377,
+        "Longitude": 5.97596437,
+        "Name": "Pakket- en Briefautomaat",
+        "OpeningHours": {
+          "Friday": {
+            "string": "00:00-23:59"
+          },
+          "Monday": {
+            "string": "00:00-23:59"
+          },
+          "Saturday": {
+            "string": "00:00-23:59"
+          },
+          "Sunday": {
+            "string": "00:00-23:59"
+          },
+          "Thursday": {
+            "string": "00:00-23:59"
+          },
+          "Tuesday": {
+            "string": "00:00-23:59"
+          },
+          "Wednesday": {
+            "string": "00:00-23:59"
+          }
+        },
+        "PartnerName": "PostNL",
+        "RetailNetworkID": "PNPNL-01"
+      },
+      {
+        "Address": {
+          "City": "Ugchelen",
+          "Countrycode": "NL",
+          "HouseNr": 54,
+          "Remark": "Dit is een Postkantoor. Post en pakketten die u op werkdagen vóór de lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag. Op zaterdag worden alléén pakketten die u afgeeft voor 15:00 uur maandag bezorgd.",
+          "Street": "Ugchelseweg",
+          "Zipcode": "7339CK"
+        },
+        "DeliveryOptions": {
+          "string": [
+            "DO",
+            "PG",
+            "UL",
+            "BW",
+            "PG_EX",
+            "BWUL",
+            "RETA"
+          ]
+        },
+        "Distance": 1673,
+        "Latitude": 52.1873606,
+        "LocationCode": 162801,
+        "Longitude": 5.9425379,
+        "Name": "Primera Westra Ugchelen",
+        "OpeningHours": {
+          "Friday": {
+            "string": "09:00-20:00"
+          },
+          "Monday": {
+            "string": "11:00-18:00"
+          },
+          "Saturday": {
+            "string": "09:00-17:00"
+          },
+          "Thursday": {
+            "string": "09:00-18:00"
+          },
+          "Tuesday": {
+            "string": "09:00-18:00"
+          },
+          "Wednesday": {
+            "string": "09:00-18:00"
+          }
+        },
+        "PartnerName": "PostNL",
+        "RetailNetworkID": "PNPNL-01",
+        "Saleschannel": "PKT M",
+        "TerminalType": "NRS"
+      },
+      {
+        "Address": {
+          "City": "APELDOORN",
+          "Countrycode": "NL",
+          "HouseNr": 10,
+          "Remark": "Dit is een Afhaalpunt+. Pakketten die u op werkdagen vóór lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag. Je kunt hier pakketten -  voorzien van scanbare barcode - versturen en pakketten ophalen.",
+          "Street": "Raadhuisplein",
+          "Zipcode": "7311LK"
+        },
+        "DeliveryOptions": {
+          "string": [
+            "DO",
+            "PG",
+            "UL",
+            "BW",
+            "PG_EX",
+            "BWUL"
+          ]
+        },
+        "Distance": 1689,
+        "Latitude": 52.21468436,
+        "LocationCode": 215232,
+        "Longitude": 5.96314447,
+        "Name": "Phone House Apeldoorn",
+        "OpeningHours": {
+          "Friday": {
+            "string": "10:00-21:00"
+          },
+          "Monday": {
+            "string": "10:00-18:00"
+          },
+          "Saturday": {
+            "string": "10:00-17:00"
+          },
+          "Thursday": {
+            "string": "10:00-18:00"
+          },
+          "Tuesday": {
+            "string": "10:00-18:00"
+          },
+          "Wednesday": {
+            "string": "10:00-18:00"
+          }
+        },
+        "PartnerName": "PostNL",
+        "RetailNetworkID": "PNPNL-01",
+        "Saleschannel": "AFHAALPUNT",
+        "TerminalType": "NRS"
+      },
+      {
+        "Address": {
+          "City": "Apeldoorn",
+          "Countrycode": "NL",
+          "HouseNr": 37,
+          "Remark": "Dit is een Pakketpunt. Pakketten die u op werkdagen vóór lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag. Op zaterdag worden alléén pakketten die u afgeeft voor 15:00 uur maandag bezorgd.",
+          "Street": "Imkersplaats",
+          "Zipcode": "7328CJ"
+        },
+        "DeliveryOptions": {
+          "string": [
+            "DO",
+            "PG",
+            "UL",
+            "BW",
+            "PG_EX",
+            "BWUL",
+            "RETA"
+          ]
+        },
+        "Distance": 2041,
+        "Latitude": 52.1996739,
+        "LocationCode": 111953,
+        "Longitude": 5.98492094,
+        "Name": "Tabakspeciaalzaak Willemsen",
+        "OpeningHours": {
+          "Friday": {
+            "string": "09:00-18:00"
+          },
+          "Monday": {
+            "string": "09:00-18:00"
+          },
+          "Saturday": {
+            "string": "09:00-17:00"
+          },
+          "Thursday": {
+            "string": "09:00-18:00"
+          },
+          "Tuesday": {
+            "string": "09:00-18:00"
+          },
+          "Wednesday": {
+            "string": "09:00-18:00"
+          }
+        },
+        "PartnerName": "PostNL",
+        "RetailNetworkID": "PNPNL-01"
+      },
+      {
+        "Address": {
+          "City": "APELDOORN",
+          "Countrycode": "NL",
+          "HouseNr": 41,
+          "Remark": "Dit is een Afhaalpunt+. Pakketten die u op werkdagen vóór lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag. Je kunt hier pakketten -  voorzien van scanbare barcode - versturen en pakketten ophalen.",
+          "Street": "Deventerstraat",
+          "Zipcode": "7311LV"
+        },
+        "DeliveryOptions": {
+          "string": [
+            "DO",
+            "PG",
+            "UL",
+            "BW",
+            "PG_EX",
+            "BWUL"
+          ]
+        },
+        "Distance": 2109,
+        "Latitude": 52.21724398,
+        "LocationCode": 215903,
+        "Longitude": 5.96904551,
+        "Name": "Ensing Autoverhuur",
+        "OpeningHours": {
+          "Friday": {
+            "string": [
+              "08:00-18:00",
+              "19:00-21:00"
+            ]
+          },
+          "Monday": {
+            "string": "08:00-18:00"
+          },
+          "Saturday": {
+            "string": "08:00-18:00"
+          },
+          "Sunday": {
+            "string": "09:00-12:00"
+          },
+          "Thursday": {
+            "string": "08:00-18:00"
+          },
+          "Tuesday": {
+            "string": "08:00-18:00"
+          },
+          "Wednesday": {
+            "string": "08:00-18:00"
+          }
+        },
+        "PartnerName": "PostNL",
+        "RetailNetworkID": "PNPNL-01",
+        "Saleschannel": "AFHAALPUNT",
+        "TerminalType": "NRS"
+      },
+      {
+        "Address": {
+          "City": "Apeldoorn",
+          "Countrycode": "NL",
+          "HouseNr": 22,
+          "Remark": "Dit is een Pakketpunt. Pakketten die u op werkdagen vóór lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag.",
+          "Street": "Soerenseweg",
+          "Zipcode": "7314CD"
+        },
+        "DeliveryOptions": {
+          "string": [
+            "DO",
+            "PG",
+            "UL",
+            "BW",
+            "PG_EX",
+            "BWUL",
+            "RETA"
+          ]
+        },
+        "Distance": 2235,
+        "Latitude": 52.22034733,
+        "LocationCode": 214688,
+        "Longitude": 5.95187615,
+        "Name": "The Free From Shop",
+        "OpeningHours": {
+          "Friday": {
+            "string": "10:00-17:30"
+          },
+          "Monday": {
+            "string": "13:00-17:30"
+          },
+          "Saturday": {
+            "string": "10:00-17:00"
+          },
+          "Thursday": {
+            "string": "10:00-17:30"
+          },
+          "Tuesday": {
+            "string": "10:00-17:30"
+          },
+          "Wednesday": {
+            "string": "10:00-17:30"
+          }
+        },
+        "PartnerName": "PostNL",
+        "RetailNetworkID": "PNPNL-01"
+      },
+      {
+        "Address": {
+          "City": "Apeldoorn",
+          "Countrycode": "NL",
+          "HouseNr": 168,
+          "Remark": "Dit is een Pakketpunt. Pakketten die u op werkdagen vóór lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag. Op zaterdag worden alléén pakketten die u afgeeft voor 16:00 uur maandag bezorgd.",
+          "Street": "Koning Lodewijklaan",
+          "Zipcode": "7314GL"
+        },
+        "DeliveryOptions": {
+          "string": [
+            "DO",
+            "PG",
+            "UL",
+            "BW",
+            "PG_EX",
+            "BWUL",
+            "RETA"
+          ]
+        },
+        "Distance": 2256,
+        "Latitude": 52.21983698,
+        "LocationCode": 201705,
+        "Longitude": 5.94579653,
+        "Name": "Spar",
+        "OpeningHours": {
+          "Friday": {
+            "string": "08:00-19:00"
+          },
+          "Monday": {
+            "string": "08:00-19:00"
+          },
+          "Saturday": {
+            "string": "08:00-18:00"
+          },
+          "Sunday": {
+            "string": "12:00-18:00"
+          },
+          "Thursday": {
+            "string": "08:00-19:00"
+          },
+          "Tuesday": {
+            "string": "08:00-19:00"
+          },
+          "Wednesday": {
+            "string": "08:00-19:00"
+          }
+        },
+        "PartnerName": "PostNL",
+        "RetailNetworkID": "PNPNL-01"
+      },
+      {
+        "Address": {
+          "City": "APELDOORN",
+          "Countrycode": "NL",
+          "HouseNr": 171,
+          "HouseNrExt": -175,
+          "Remark": "Dit is een Afhaalpunt+. Pakketten die u op werkdagen vóór lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag. Je kunt hier pakketten -  voorzien van scanbare barcode - versturen en pakketten ophalen.",
+          "Street": "Kayersdijk",
+          "Zipcode": "7332AS"
+        },
+        "DeliveryOptions": {
+          "string": [
+            "DO",
+            "PG",
+            "UL",
+            "BW",
+            "PG_EX",
+            "BWUL"
+          ]
+        },
+        "Distance": 2389,
+        "Latitude": 52.18679872,
+        "LocationCode": 215922,
+        "Longitude": 5.98220382,
+        "Name": "ALLSAFE Mini Opslag Apeldoorn",
+        "OpeningHours": {
+          "Friday": {
+            "string": "09:00-18:00"
+          },
+          "Monday": {
+            "string": "09:00-18:00"
+          },
+          "Saturday": {
+            "string": "09:00-17:00"
+          },
+          "Thursday": {
+            "string": "09:00-18:00"
+          },
+          "Tuesday": {
+            "string": "09:00-18:00"
+          },
+          "Wednesday": {
+            "string": "09:00-18:00"
+          }
+        },
+        "PartnerName": "PostNL",
+        "RetailNetworkID": "PNPNL-01",
+        "Saleschannel": "AFHAALPUNT",
+        "TerminalType": "NRS"
+      },
+      {
+        "Address": {
+          "City": "APELDOORN",
+          "Countrycode": "NL",
+          "HouseNr": 64,
+          "Remark": "Dit is een Afhaalpunt+. Pakketten die u op werkdagen vóór lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag. Je kunt hier pakketten -  voorzien van scanbare barcode - versturen en pakketten ophalen.",
+          "Street": "Koninginnelaan",
+          "Zipcode": "7315BT"
+        },
+        "DeliveryOptions": {
+          "string": [
+            "DO",
+            "PG",
+            "UL",
+            "BW",
+            "PG_EX",
+            "BWUL"
+          ]
+        },
+        "Distance": 2844,
+        "Latitude": 52.22588546,
+        "LocationCode": 214980,
+        "Longitude": 5.95717148,
+        "Name": "Accuworld",
+        "OpeningHours": {
+          "Friday": {
+            "string": "09:00-17:30"
+          },
+          "Saturday": {
+            "string": "09:00-15:00"
+          },
+          "Thursday": {
+            "string": "09:00-17:30"
+          },
+          "Tuesday": {
+            "string": "09:00-17:30"
+          },
+          "Wednesday": {
+            "string": "09:00-17:30"
+          }
+        },
+        "PartnerName": "PostNL",
+        "RetailNetworkID": "PNPNL-01",
+        "Saleschannel": "AFHAALPUNT",
+        "TerminalType": "NRS"
+      },
+      {
+        "Address": {
+          "City": "APELDOORN",
+          "Countrycode": "NL",
+          "HouseNr": 13,
+          "Remark": "Dit is een Afhaalpunt+. Pakketten die u op werkdagen vóór lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag. Je kunt hier pakketten -  voorzien van scanbare barcode - versturen en pakketten ophalen.",
+          "Street": "De Voorwaarts",
+          "Zipcode": "7321MA"
+        },
+        "DeliveryOptions": {
+          "string": [
+            "DO",
+            "PG",
+            "BW",
+            "PG_EX"
+          ]
+        },
+        "Distance": 2880,
+        "Latitude": 52.20884466,
+        "LocationCode": 216699,
+        "Longitude": 5.99490497,
+        "Name": "Media Markt Apeldoorn B.V.",
+        "OpeningHours": {
+          "Friday": {
+            "string": "10:00-20:00"
+          },
+          "Monday": {
+            "string": "10:00-20:00"
+          },
+          "Saturday": {
+            "string": "10:00-18:00"
+          },
+          "Thursday": {
+            "string": "10:00-20:00"
+          },
+          "Tuesday": {
+            "string": "10:00-20:00"
+          },
+          "Wednesday": {
+            "string": "10:00-20:00"
+          }
+        },
+        "PartnerName": "PostNL",
+        "RetailNetworkID": "PNPNL-01",
+        "Saleschannel": "AFHAALPUNT",
+        "TerminalType": "NRS"
+      },
+      {
+        "Address": {
+          "City": "Apeldoorn",
+          "Countrycode": "NL",
+          "HouseNr": 420,
+          "Remark": "Dit is een Pakketpunt. Pakketten die u op werkdagen vóór lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag. Op zaterdag worden alléén pakketten die u afgeeft voor 16:00 uur maandag bezorgd.",
+          "Street": "De Voorwaarts",
+          "Zipcode": "7321MG"
+        },
+        "DeliveryOptions": {
+          "string": [
+            "DO",
+            "PG",
+            "UL",
+            "BW",
+            "PG_EX",
+            "BWUL",
+            "RETA"
+          ]
+        },
+        "Distance": 3003,
+        "Latitude": 52.21142285,
+        "LocationCode": 211203,
+        "Longitude": 5.99517425,
+        "Name": "Intratuin Apeldoorn",
+        "OpeningHours": {
+          "Friday": {
+            "string": "09:30-21:00"
+          },
+          "Monday": {
+            "string": "09:30-18:00"
+          },
+          "Saturday": {
+            "string": "09:30-18:00"
+          },
+          "Sunday": {
+            "string": "12:00-17:00"
+          },
+          "Thursday": {
+            "string": "09:30-18:00"
+          },
+          "Tuesday": {
+            "string": "09:30-18:00"
+          },
+          "Wednesday": {
+            "string": "09:30-18:00"
+          }
+        },
+        "PartnerName": "PostNL",
+        "RetailNetworkID": "PNPNL-01"
+      },
+      {
+        "Address": {
+          "City": "Apeldoorn",
+          "Countrycode": "NL",
+          "HouseNr": 2,
+          "HouseNrExt": "B",
+          "Remark": "Dit is een Postkantoor. Post en pakketten die u op werkdagen vóór de lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag. Op zaterdag worden alléén pakketten die u afgeeft voor 15:00 uur maandag bezorgd.",
+          "Street": "Mercatorplein",
+          "Zipcode": "7316HL"
+        },
+        "DeliveryOptions": {
+          "string": [
+            "DO",
+            "PG",
+            "UL",
+            "BW",
+            "PG_EX",
+            "BWUL",
+            "RETA"
+          ]
+        },
+        "Distance": 3285,
+        "Latitude": 52.22964091,
+        "LocationCode": 215319,
+        "Longitude": 5.96120091,
+        "Name": "Primera Westra Kerschoten",
+        "OpeningHours": {
+          "Friday": {
+            "string": "08:30-20:00"
+          },
+          "Monday": {
+            "string": "11:00-18:00"
+          },
+          "Saturday": {
+            "string": "08:30-17:00"
+          },
+          "Thursday": {
+            "string": "08:30-18:00"
+          },
+          "Tuesday": {
+            "string": "08:30-18:00"
+          },
+          "Wednesday": {
+            "string": "08:30-18:00"
+          }
+        },
+        "PartnerName": "PostNL",
+        "RetailNetworkID": "PNPNL-01",
+        "Saleschannel": "PKT L",
+        "TerminalType": "NRS"
+      },
+      {
+        "Address": {
+          "City": "Apeldoorn",
+          "Countrycode": "NL",
+          "HouseNr": 422,
+          "Remark": "Dit is een Postkantoor. Post en pakketten die u op werkdagen vóór de lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag. Op zaterdag worden alléén pakketten die u afgeeft voor 15:00 uur maandag bezorgd.",
+          "Street": "De Eglantier",
+          "Zipcode": "7329DL"
+        },
+        "DeliveryOptions": {
+          "string": [
+            "DO",
+            "PG",
+            "UL",
+            "BW",
+            "PG_EX",
+            "BWUL",
+            "RETA"
+          ]
+        },
+        "Distance": 3422,
+        "Latitude": 52.19504333,
+        "LocationCode": 163236,
+        "Longitude": 6.00445768,
+        "Name": "The Readshop Eglantier",
+        "OpeningHours": {
+          "Friday": {
+            "string": "09:00-21:00"
+          },
+          "Monday": {
+            "string": "09:00-18:00"
+          },
+          "Saturday": {
+            "string": "09:00-17:00"
+          },
+          "Thursday": {
+            "string": "09:00-18:00"
+          },
+          "Tuesday": {
+            "string": "09:00-18:00"
+          },
+          "Wednesday": {
+            "string": "09:00-18:00"
+          }
+        },
+        "PartnerName": "PostNL",
+        "RetailNetworkID": "PNPNL-01",
+        "Saleschannel": "PKT L",
+        "TerminalType": "NRS"
+      }
+    ]
+  }
+}

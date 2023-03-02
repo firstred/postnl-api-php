@@ -1,8 +1,8 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,30 +19,35 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Exception;
+namespace Firstred\PostNL\Exception;
 
-use GuzzleHttp\Psr7\Response;
-use Throwable;
+use Exception;
+use Psr\Http\Message\ResponseInterface;
 
-class ResponseException extends AbstractException
+/**
+ * Class ResponseException
+ *
+ * @since 1.0.0
+ */
+class ResponseException extends ApiException
 {
-    /** @var Response $response */
+    /** @var ResponseInterface */
     private $response;
 
     /**
      * ResponseException constructor.
      *
-     * @param string         $message
-     * @param int            $code
-     * @param Throwable|null $previous
-     * @param Response|null  $response
+     * @param string                 $message
+     * @param int                    $code
+     * @param Exception|null         $previous
+     * @param ResponseInterface|null $response
      */
-    public function __construct($message = "", $code = 0, $previous = null, Response $response = null)
+    public function __construct($message = '', $code = 0, $previous = null, ResponseInterface $response = null)
     {
         parent::__construct($message, $code, $previous);
 
@@ -50,15 +55,15 @@ class ResponseException extends AbstractException
     }
 
     /**
-     * @param Response $response
+     * @param ResponseInterface $response
      */
-    public function setResponse(Response $response)
+    public function setResponse(ResponseInterface $response)
     {
         $this->response = $response;
     }
 
     /**
-     * @return Response
+     * @return ResponseInterface
      */
     public function getResponse()
     {

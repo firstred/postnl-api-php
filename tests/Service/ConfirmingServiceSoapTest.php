@@ -1,8 +1,8 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2021 Michael Dekker
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,49 +19,50 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Tests\Service;
+namespace Firstred\PostNL\Tests\Service;
 
 use Cache\Adapter\Void\VoidCachePool;
+use Firstred\PostNL\Entity\Address;
+use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Entity\Dimension;
+use Firstred\PostNL\Entity\Message\LabellingMessage;
+use Firstred\PostNL\Entity\Request\Confirming;
+use Firstred\PostNL\Entity\Response\ConfirmingResponseShipment;
+use Firstred\PostNL\Entity\Shipment;
+use Firstred\PostNL\Entity\SOAP\UsernameToken;
+use Firstred\PostNL\Exception\ResponseException;
+use Firstred\PostNL\HttpClient\MockClient;
+use Firstred\PostNL\PostNL;
+use Firstred\PostNL\Service\ConfirmingService;
+use Firstred\PostNL\Service\ConfirmingServiceInterface;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use Psr\Log\LoggerInterface;
-use ThirtyBees\PostNL\Entity\Address;
-use ThirtyBees\PostNL\Entity\Customer;
-use ThirtyBees\PostNL\Entity\Dimension;
-use ThirtyBees\PostNL\Entity\Message\LabellingMessage;
-use ThirtyBees\PostNL\Entity\Request\Confirming;
-use ThirtyBees\PostNL\Entity\Shipment;
-use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
-use ThirtyBees\PostNL\HttpClient\MockClient;
-use ThirtyBees\PostNL\PostNL;
-use ThirtyBees\PostNL\Service\ConfirmingService;
 
 /**
- * Class ConfirmingServiceSoapTest
- *
- * @package ThirtyBees\PostNL\Tests\Service
+ * Class ConfirmingServiceSoapTest.
  *
  * @testdox The ConfirmingService (SOAP)
  */
-class ConfirmingServiceSoapTest extends \PHPUnit_Framework_TestCase
+class ConfirmingServiceSoapTest extends ServiceTest
 {
-    /** @var PostNL $postnl */
+    /** @var PostNL */
     protected $postnl;
-    /** @var ConfirmingService $service */
+    /** @var ConfirmingServiceInterface */
     protected $service;
-    /** @var $lastRequest */
+    /** @var */
     protected $lastRequest;
 
     /**
      * @before
-     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \ReflectionException
      */
     public function setupPostNL()
     {
@@ -81,31 +82,17 @@ class ConfirmingServiceSoapTest extends \PHPUnit_Framework_TestCase
                     'Zipcode'     => '2132WT',
                 ]))
                 ->setGlobalPackBarcodeType('AB')
-                ->setGlobalPackCustomerCode('1234')
-            , new UsernameToken(null, 'test'),
+                ->setGlobalPackCustomerCode('1234'), new UsernameToken(null, 'test'),
             true,
             PostNL::MODE_SOAP
         );
 
-        $this->service = $this->postnl->getConfirmingService();
-        $this->service->cache = new VoidCachePool();
-        $this->service->ttl = 1;
-    }
-
-    /**
-     * @after
-     */
-    public function logPendingRequest()
-    {
-        if (!$this->lastRequest instanceof Request) {
-            return;
-        }
-
         global $logger;
-        if ($logger instanceof LoggerInterface) {
-            $logger->debug($this->getName()." Request\n".\GuzzleHttp\Psr7\str($this->lastRequest));
-        }
-        $this->lastRequest = null;
+        $this->postnl->setLogger($logger);
+
+        $this->service = $this->postnl->getConfirmingService();
+        $this->service->setCache(new VoidCachePool());
+        $this->service->setTtl(1);
     }
 
     /**
@@ -113,7 +100,7 @@ class ConfirmingServiceSoapTest extends \PHPUnit_Framework_TestCase
      */
     public function testHasValidConfirmingService()
     {
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Service\\ConfirmingService', $this->service);
+        $this->assertInstanceOf(ConfirmingService::class, $this->service);
     }
 
     /**
@@ -152,14 +139,23 @@ class ConfirmingServiceSoapTest extends \PHPUnit_Framework_TestCase
                         ->setBarcode('3S1234567890123')
                         ->setDeliveryAddress('01')
                         ->setDimension(new Dimension('2000'))
-                        ->setProductCodeDelivery('3085')
+                        ->setProductCodeDelivery('3085'),
                 ])
                 ->setMessage($message)
                 ->setCustomer($this->postnl->getCustomer())
         );
 
-        $this->assertEquals("<?xml version=\"1.0\"?>
-<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:services=\"http://postnl.nl/cif/services/ConfirmingWebService/\" xmlns:domain=\"http://postnl.nl/cif/domain/ConfirmingWebService/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\" xmlns:schema=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:common=\"http://postnl.nl/cif/services/common/\">
+        $this->assertXmlStringEqualsXmlString(<<<XML
+<?xml version="1.0"?>
+<soap:Envelope 
+  xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+  xmlns:env="http://www.w3.org/2003/05/soap-envelope"
+  xmlns:services="http://postnl.nl/cif/services/ConfirmingWebService/"
+  xmlns:domain="http://postnl.nl/cif/domain/ConfirmingWebService/" 
+  xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" 
+  xmlns:schema="http://www.w3.org/2001/XMLSchema-instance" 
+  xmlns:common="http://postnl.nl/cif/services/common/"
+>
  <soap:Header>
   <wsse:Security>
    <wsse:UsernameToken>
@@ -186,7 +182,7 @@ class ConfirmingServiceSoapTest extends \PHPUnit_Framework_TestCase
    </domain:Customer>
    <domain:Message>
     <domain:MessageID>{$message->getMessageID()}</domain:MessageID>
-    <domain:MessageTimeStamp>{$message->getMessageTimeStamp()}</domain:MessageTimeStamp>
+    <domain:MessageTimeStamp>{$message->getMessageTimeStamp()->format('d-m-Y H:i:s')}</domain:MessageTimeStamp>
     <domain:Printertype>GraphicFile|PDF</domain:Printertype>
    </domain:Message>
    <domain:Shipments>
@@ -224,7 +220,8 @@ class ConfirmingServiceSoapTest extends \PHPUnit_Framework_TestCase
   </services:Confirming>
  </soap:Body>
 </soap:Envelope>
-",
+XML
+            ,
             (string) $request->getBody());
         $this->assertEquals('', $request->getHeaderLine('apikey'));
         $this->assertEquals('text/xml;charset=UTF-8', $request->getHeaderLine('Content-Type'));
@@ -237,20 +234,20 @@ class ConfirmingServiceSoapTest extends \PHPUnit_Framework_TestCase
     public function testGenerateSingleLabelSoap()
     {
         $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], "<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\">
+            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
   <s:Body>
     <ConfirmingResponseShipments
-xmlns=\"http://postnl.nl/cif/services/ConfirmingWebService/\"
-xmlns:a=\"http://postnl.nl/cif/domain/ConfirmingWebService/\"
-xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">
+xmlns="http://postnl.nl/cif/services/ConfirmingWebService/"
+xmlns:a="http://postnl.nl/cif/domain/ConfirmingWebService/"
+xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
       <a:ConfirmingResponseShipment>
         <a:Barcode>3S1234567890123</a:Barcode>
-        <a:Warnings i:nil= \"true\"/>
+        <a:Warnings i:nil= "true"/>
       </a:ConfirmingResponseShipment>
     </ConfirmingResponseShipments>
   </s:Body>
 </s:Envelope>
-"),
+'),
         ]);
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();
@@ -287,7 +284,7 @@ xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">
                 ->setProductCodeDelivery('3085')
         );
 
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\ConfirmingResponseShipment', $confirm);
+        $this->assertInstanceOf(ConfirmingResponseShipment::class, $confirm);
     }
 
     /**
@@ -298,33 +295,33 @@ xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">
     public function testGenerateMultipleLabelsSoap()
     {
         $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], "<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\">
+            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
   <s:Body>
     <ConfirmingResponseShipments
-xmlns=\"http://postnl.nl/cif/services/ConfirmingWebService/\"
-xmlns:a=\"http://postnl.nl/cif/domain/ConfirmingWebService/\"
-xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">
+xmlns="http://postnl.nl/cif/services/ConfirmingWebService/"
+xmlns:a="http://postnl.nl/cif/domain/ConfirmingWebService/"
+xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
       <a:ConfirmingResponseShipment>
         <a:Barcode>3SDEVC201611210</a:Barcode>
-        <a:Warnings i:nil= \"true\"/>
+        <a:Warnings i:nil= "true"/>
       </a:ConfirmingResponseShipment>
     </ConfirmingResponseShipments>
   </s:Body>
 </s:Envelope>
-"),new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], "<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\">
+'), new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
   <s:Body>
     <ConfirmingResponseShipments
-xmlns=\"http://postnl.nl/cif/services/ConfirmingWebService/\"
-xmlns:a=\"http://postnl.nl/cif/domain/ConfirmingWebService/\"
-xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">
+xmlns="http://postnl.nl/cif/services/ConfirmingWebService/"
+xmlns:a="http://postnl.nl/cif/domain/ConfirmingWebService/"
+xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
       <a:ConfirmingResponseShipment>
         <a:Barcode>3SDEVC201611211</a:Barcode>
-        <a:Warnings i:nil= \"true\"/>
+        <a:Warnings i:nil= "true"/>
       </a:ConfirmingResponseShipment>
     </ConfirmingResponseShipments>
   </s:Body>
 </s:Envelope>
-"),
+'),
         ]);
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();
@@ -389,7 +386,7 @@ xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">
             ]
         );
 
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\ConfirmingResponseShipment', $confirmShipments[1]);
+        $this->assertInstanceOf(ConfirmingResponseShipment::class, $confirmShipments[1]);
     }
 
     /**
@@ -397,7 +394,7 @@ xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">
      */
     public function testNegativeGenerateLabelInvalidResponseSoap()
     {
-        $this->expectException('ThirtyBees\\PostNL\\Exception\\ResponseException');
+        $this->expectException(ResponseException::class);
 
         $mock = new MockHandler([
             new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], 'asdfojasuidfo'),

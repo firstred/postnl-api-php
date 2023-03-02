@@ -1,8 +1,8 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,13 +19,54 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Exception;
+namespace Firstred\PostNL\Exception;
 
-class HttpClientException extends \Exception
+use Exception;
+use Psr\Http\Message\ResponseInterface;
+
+/**
+ * Class HttpClientException
+ *
+ * @since 1.0.0
+ */
+class HttpClientException extends PostNLException
 {
+    /** @var ResponseInterface */
+    private $response;
+
+    /**
+     * ResponseException constructor.
+     *
+     * @param string                 $message
+     * @param int                    $code
+     * @param Exception|null         $previous
+     * @param ResponseInterface|null $response
+     */
+    public function __construct($message = '', $code = 0, $previous = null, ResponseInterface $response = null)
+    {
+        parent::__construct($message, $code, $previous);
+
+        $this->response = $response;
+    }
+
+    /**
+     * @param ResponseInterface $response
+     */
+    public function setResponse(ResponseInterface $response)
+    {
+        $this->response = $response;
+    }
+
+    /**
+     * @return ResponseInterface
+     */
+    public function getResponse()
+    {
+        return $this->response;
+    }
 }

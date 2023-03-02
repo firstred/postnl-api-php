@@ -1,8 +1,8 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,25 +19,23 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity;
+namespace Firstred\PostNL\Entity;
 
-use ThirtyBees\PostNL\Service\BarcodeService;
-use ThirtyBees\PostNL\Service\ConfirmingService;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
-use ThirtyBees\PostNL\Service\LabellingService;
-use ThirtyBees\PostNL\Service\LocationService;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
-use ThirtyBees\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Service\BarcodeService;
+use Firstred\PostNL\Service\ConfirmingService;
+use Firstred\PostNL\Service\DeliveryDateService;
+use Firstred\PostNL\Service\LabellingService;
+use Firstred\PostNL\Service\LocationService;
+use Firstred\PostNL\Service\ShippingService;
+use Firstred\PostNL\Service\TimeframeService;
 
 /**
- * Class Customs
- *
- * @package ThirtyBees\PostNL\Entity
+ * Class Customs.
  *
  * @method string|null    getCertificate()
  * @method string|null    getCertificateNr()
@@ -49,27 +47,28 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method string|null    getLicense()
  * @method string|null    getLicenseNr()
  * @method string|null    getShipmentType()
- * @method string|null    getTransactionCode()
- * @method string|null    getTransactionDescription()
+ * @method Customs        setCertificate(string|null $Certificate = null)
+ * @method Customs        setCertificateNr(string|null $CertificateNr = null)
+ * @method Customs        setContent(Content[]|null $Content = null)
+ * @method Customs        setCurrency(string|null $Currency = null)
+ * @method Customs        setHandleAsNonDeliverable(string|null $HandleAsNonDeliverable = null)
+ * @method Customs        setInvoice(string|null $Invoice = null)
+ * @method Customs        setInvoiceNr(string|null $InvoiceNr = null)
+ * @method Customs        setLicense(string|null $License = null)
+ * @method Customs        setLicenseNr(string|null $LicenseNr = null)
+ * @method Customs        setShipmentType(string|null $ShipmentType = null)
+ * @method Customs        setTrustedShipperID(string|null $TrustedShipperID = null)
+ * @method Customs        setTransactionCode(string|null $TransactionCode = null)
+ * @method Customs        setTransactionDescription(string|null $TransactionDescription = null)
+ * @method Customs        setImporterReferenceCode(string|null $ImporterReferenceCode = null)
  *
- * @method Customs setCertificate(string|null $certificate = null)
- * @method Customs setCertificateNr(string|null $certificateNr = null)
- * @method Customs setContent(Content[]|null $content = null)
- * @method Customs setCurrency(string|null $currency = null)
- * @method Customs setHandleAsNonDeliverable(string|null $nonDeliverable = null)
- * @method Customs setInvoice(string|null $invoice = null)
- * @method Customs setInvoiceNr(string|null $invoiceNr = null)
- * @method Customs setLicense(string|null $license = null)
- * @method Customs setLicenseNr(string|null $licenseNr = null)
- * @method Customs setShipmentType(string|null $shipmentType = null)
- * @method Customs setTransactionCode(string|null $transactionCode = null)
- * @method Customs setTransactionDescription(string|null $transactionDescription = null)
+ * @since 1.0.0
  */
 class Customs extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
+    /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'Certificate'            => BarcodeService::DOMAIN_NAMESPACE,
             'CertificateNr'          => BarcodeService::DOMAIN_NAMESPACE,
             'Content'                => BarcodeService::DOMAIN_NAMESPACE,
@@ -80,8 +79,12 @@ class Customs extends AbstractEntity
             'License'                => BarcodeService::DOMAIN_NAMESPACE,
             'LicenseNr'              => BarcodeService::DOMAIN_NAMESPACE,
             'ShipmentType'           => BarcodeService::DOMAIN_NAMESPACE,
+            'TrustedShipperID'       => BarcodeService::DOMAIN_NAMESPACE,
+            'TransactionCode'        => BarcodeService::DOMAIN_NAMESPACE,
+            'TransactionDescription' => BarcodeService::DOMAIN_NAMESPACE,
+            'ImporterReferenceCode'  => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'Certificate'            => ConfirmingService::DOMAIN_NAMESPACE,
             'CertificateNr'          => ConfirmingService::DOMAIN_NAMESPACE,
             'Content'                => ConfirmingService::DOMAIN_NAMESPACE,
@@ -92,8 +95,12 @@ class Customs extends AbstractEntity
             'License'                => ConfirmingService::DOMAIN_NAMESPACE,
             'LicenseNr'              => ConfirmingService::DOMAIN_NAMESPACE,
             'ShipmentType'           => ConfirmingService::DOMAIN_NAMESPACE,
+            'TrustedShipperID'       => ConfirmingService::DOMAIN_NAMESPACE,
+            'TransactionCode'        => ConfirmingService::DOMAIN_NAMESPACE,
+            'TransactionDescription' => ConfirmingService::DOMAIN_NAMESPACE,
+            'ImporterReferenceCode'  => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'Certificate'            => LabellingService::DOMAIN_NAMESPACE,
             'CertificateNr'          => LabellingService::DOMAIN_NAMESPACE,
             'Content'                => LabellingService::DOMAIN_NAMESPACE,
@@ -104,22 +111,12 @@ class Customs extends AbstractEntity
             'License'                => LabellingService::DOMAIN_NAMESPACE,
             'LicenseNr'              => LabellingService::DOMAIN_NAMESPACE,
             'ShipmentType'           => LabellingService::DOMAIN_NAMESPACE,
+            'TrustedShipperID'       => LabellingService::DOMAIN_NAMESPACE,
             'TransactionCode'        => LabellingService::DOMAIN_NAMESPACE,
             'TransactionDescription' => LabellingService::DOMAIN_NAMESPACE,
+            'ImporterReferenceCode'  => LabellingService::DOMAIN_NAMESPACE,
         ],
-        'ShippingStatus' => [
-            'Certificate'            => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CertificateNr'          => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Content'                => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Currency'               => ShippingStatusService::DOMAIN_NAMESPACE,
-            'HandleAsNonDeliverable' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Invoice'                => ShippingStatusService::DOMAIN_NAMESPACE,
-            'InvoiceNr'              => ShippingStatusService::DOMAIN_NAMESPACE,
-            'License'                => ShippingStatusService::DOMAIN_NAMESPACE,
-            'LicenseNr'              => ShippingStatusService::DOMAIN_NAMESPACE,
-            'ShipmentType'           => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'Certificate'            => DeliveryDateService::DOMAIN_NAMESPACE,
             'CertificateNr'          => DeliveryDateService::DOMAIN_NAMESPACE,
             'Content'                => DeliveryDateService::DOMAIN_NAMESPACE,
@@ -130,8 +127,12 @@ class Customs extends AbstractEntity
             'License'                => DeliveryDateService::DOMAIN_NAMESPACE,
             'LicenseNr'              => DeliveryDateService::DOMAIN_NAMESPACE,
             'ShipmentType'           => DeliveryDateService::DOMAIN_NAMESPACE,
+            'TrustedShipperID'       => DeliveryDateService::DOMAIN_NAMESPACE,
+            'TransactionCode'        => DeliveryDateService::DOMAIN_NAMESPACE,
+            'TransactionDescription' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'ImporterReferenceCode'  => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'Certificate'            => LocationService::DOMAIN_NAMESPACE,
             'CertificateNr'          => LocationService::DOMAIN_NAMESPACE,
             'Content'                => LocationService::DOMAIN_NAMESPACE,
@@ -142,8 +143,12 @@ class Customs extends AbstractEntity
             'License'                => LocationService::DOMAIN_NAMESPACE,
             'LicenseNr'              => LocationService::DOMAIN_NAMESPACE,
             'ShipmentType'           => LocationService::DOMAIN_NAMESPACE,
+            'TrustedShipperID'       => LocationService::DOMAIN_NAMESPACE,
+            'TransactionCode'        => LocationService::DOMAIN_NAMESPACE,
+            'TransactionDescription' => LocationService::DOMAIN_NAMESPACE,
+            'ImporterReferenceCode'  => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'Certificate'            => TimeframeService::DOMAIN_NAMESPACE,
             'CertificateNr'          => TimeframeService::DOMAIN_NAMESPACE,
             'Content'                => TimeframeService::DOMAIN_NAMESPACE,
@@ -154,76 +159,106 @@ class Customs extends AbstractEntity
             'License'                => TimeframeService::DOMAIN_NAMESPACE,
             'LicenseNr'              => TimeframeService::DOMAIN_NAMESPACE,
             'ShipmentType'           => TimeframeService::DOMAIN_NAMESPACE,
+            'TrustedShipperID'       => TimeframeService::DOMAIN_NAMESPACE,
+            'TransactionCode'        => TimeframeService::DOMAIN_NAMESPACE,
+            'TransactionDescription' => TimeframeService::DOMAIN_NAMESPACE,
+            'ImporterReferenceCode'  => TimeframeService::DOMAIN_NAMESPACE,
+        ],
+        'Shipping' => [
+            'Certificate'            => ShippingService::DOMAIN_NAMESPACE,
+            'CertificateNr'          => ShippingService::DOMAIN_NAMESPACE,
+            'Content'                => ShippingService::DOMAIN_NAMESPACE,
+            'Currency'               => ShippingService::DOMAIN_NAMESPACE,
+            'HandleAsNonDeliverable' => ShippingService::DOMAIN_NAMESPACE,
+            'Invoice'                => ShippingService::DOMAIN_NAMESPACE,
+            'InvoiceNr'              => ShippingService::DOMAIN_NAMESPACE,
+            'License'                => ShippingService::DOMAIN_NAMESPACE,
+            'LicenseNr'              => ShippingService::DOMAIN_NAMESPACE,
+            'ShipmentType'           => ShippingService::DOMAIN_NAMESPACE,
+            'TrustedShipperID'       => ShippingService::DOMAIN_NAMESPACE,
+            'TransactionCode'        => ShippingService::DOMAIN_NAMESPACE,
+            'TransactionDescription' => ShippingService::DOMAIN_NAMESPACE,
+            'ImporterReferenceCode'  => ShippingService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string|null $Certificate */
+    /** @var string|null */
     protected $Certificate;
-    /** @var string|null $CertificateNr */
+    /** @var string|null */
     protected $CertificateNr;
-    /** @var Content[]|null $Content */
+    /** @var Content[]|null */
     protected $Content;
-    /** @var string|null $Currency */
+    /** @var string|null */
     protected $Currency;
-    /** @var string|null $HandleAsNonDeliverable */
+    /** @var string|null */
     protected $HandleAsNonDeliverable;
-    /** @var string|null $Invoice */
+    /** @var string|null */
     protected $Invoice;
-    /** @var string|null $InvoiceNr */
+    /** @var string|null */
     protected $InvoiceNr;
-    /** @var string|null $License */
+    /** @var string|null */
     protected $License;
-    /** @var string|null $LicenseNr */
+    /** @var string|null */
     protected $LicenseNr;
-    /** @var string|null $ShipmentType */
+    /** @var string|null */
     protected $ShipmentType;
-    /** @var bool $TransactionCode */
+    /** @var string|null */
+    protected $TrustedShipperID;
+    /** @var string|null  */
     protected $TransactionCode;
-    /** @var bool $TransactionDescription */
+    /** @var string|null */
     protected $TransactionDescription;
+    /** @var string|null */
+    protected $ImporterReferenceCode;
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string|null    $certificate
-     * @param string|null    $certificateNr
-     * @param Content[]|null $content
-     * @param string|null    $currency
-     * @param string|null    $handleAsNonDeliverable
-     * @param string|null    $invoice
-     * @param string|null    $invoiceNr
-     * @param string|null    $license
-     * @param string|null    $licenseNr
-     * @param string|null    $shipmentType
-     * @param string|null    $transactionCode
-     * @param string|null    $transactionDescription
+     * @param string|null    $Certificate
+     * @param string|null    $CertificateNr
+     * @param Content[]|null $Content
+     * @param string|null    $Currency
+     * @param string|null    $HandleAsNonDeliverable
+     * @param string|null    $Invoice
+     * @param string|null    $InvoiceNr
+     * @param string|null    $License
+     * @param string|null    $LicenseNr
+     * @param string|null    $ShipmentType
+     * @param string|null    $TrustedShipperID
+     * @param string|null    $TransactionCode
+     * @param string|null    $TransactionDescription
+     * @param string|null    $ImporterReferenceCode
      */
     public function __construct(
-        $certificate = null,
-        $certificateNr = null,
-        array $content = null,
-        $currency = null,
-        $handleAsNonDeliverable = null,
-        $invoice = null,
-        $invoiceNr = null,
-        $license = null,
-        $licenseNr = null,
-        $shipmentType = null,
-        $transactionCode = null,
-        $transactionDescription = null
+        $Certificate = null,
+        $CertificateNr = null,
+        array $Content = null,
+        $Currency = null,
+        $HandleAsNonDeliverable = null,
+        $Invoice = null,
+        $InvoiceNr = null,
+        $License = null,
+        $LicenseNr = null,
+        $ShipmentType = null,
+        $TrustedShipperID = null,
+        $TransactionCode = null,
+        $TransactionDescription = null,
+        $ImporterReferenceCode = null
     ) {
         parent::__construct();
 
-        $this->setCertificate($certificate);
-        $this->setCertificateNr($certificateNr);
-        $this->setContent($content);
-        $this->setCurrency($currency);
-        $this->setHandleAsNonDeliverable($handleAsNonDeliverable);
-        $this->setInvoice($invoice);
-        $this->setInvoiceNr($invoiceNr);
-        $this->setLicense($license);
-        $this->setLicenseNr($licenseNr);
-        $this->setShipmentType($shipmentType);
-        $this->setTransactionCode($transactionCode);
-        $this->setTransactionDescription($transactionDescription);
+        $this->setCertificate($Certificate);
+        $this->setCertificateNr($CertificateNr);
+        $this->setContent($Content);
+        $this->setCurrency($Currency);
+        $this->setHandleAsNonDeliverable($HandleAsNonDeliverable);
+        $this->setInvoice($Invoice);
+        $this->setInvoiceNr($InvoiceNr);
+        $this->setLicense($License);
+        $this->setLicenseNr($LicenseNr);
+        $this->setShipmentType($ShipmentType);
+        $this->setTrustedShipperID($TrustedShipperID);
+        $this->setTransactionCode($TransactionCode);
+        $this->setTransactionDescription($TransactionDescription);
+        $this->setImporterReferenceCode($ImporterReferenceCode);
     }
 }

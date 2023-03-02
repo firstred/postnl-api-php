@@ -1,8 +1,8 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2021 Michael Dekker
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,50 +19,55 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Tests\Service;
+namespace Firstred\PostNL\Tests\Service;
 
 use Cache\Adapter\Void\VoidCachePool;
+use DateTimeInterface;
+use Firstred\PostNL\Entity\Address;
+use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Entity\CutOffTime;
+use Firstred\PostNL\Entity\Message\Message;
+use Firstred\PostNL\Entity\Request\GetDeliveryDate;
+use Firstred\PostNL\Entity\Request\GetSentDate;
+use Firstred\PostNL\Entity\Request\GetSentDateRequest;
+use Firstred\PostNL\Entity\Response\GetDeliveryDateResponse;
+use Firstred\PostNL\Entity\Response\GetSentDateResponse;
+use Firstred\PostNL\Entity\SOAP\UsernameToken;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\HttpClient\MockClient;
+use Firstred\PostNL\PostNL;
+use Firstred\PostNL\Service\DeliveryDateServiceInterface;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use Psr\Log\LoggerInterface;
-use ThirtyBees\PostNL\Entity\Address;
-use ThirtyBees\PostNL\Entity\Customer;
-use ThirtyBees\PostNL\Entity\CutOffTime;
-use ThirtyBees\PostNL\Entity\Message\Message;
-use ThirtyBees\PostNL\Entity\Request\GetDeliveryDate;
-use ThirtyBees\PostNL\Entity\Request\GetSentDate;
-use ThirtyBees\PostNL\Entity\Request\GetSentDateRequest;
-use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
-use ThirtyBees\PostNL\HttpClient\MockClient;
-use ThirtyBees\PostNL\PostNL;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
+use libphonenumber\NumberParseException;
+use ReflectionException;
 
 /**
- * Class DeliveryDateSoapTest
- *
- * @package ThirtyBees\PostNL\Tests\Service
+ * Class DeliveryDateServiceSoapTest.
  *
  * @testdox The DeliveryDateService (SOAP)
  */
-class DeliveryDateSoapTest extends \PHPUnit_Framework_TestCase
+class DeliveryDateServiceSoapTest extends ServiceTest
 {
-    /** @var PostNL $postnl */
+    /** @var PostNL */
     protected $postnl;
-    /** @var DeliveryDateService $service */
+    /** @var DeliveryDateServiceInterface */
     protected $service;
-    /** @var $lastRequest */
+    /** @var */
     protected $lastRequest;
 
     /**
      * @before
-     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     *
+     * @throws ReflectionException
+     * @throws InvalidArgumentException
+     * @throws NumberParseException
      */
     public function setupPostNL()
     {
@@ -82,31 +87,17 @@ class DeliveryDateSoapTest extends \PHPUnit_Framework_TestCase
                     'Zipcode'     => '2132WT',
                 ]))
                 ->setGlobalPackBarcodeType('AB')
-                ->setGlobalPackCustomerCode('1234')
-            , new UsernameToken(null, 'test'),
+                ->setGlobalPackCustomerCode('1234'), new UsernameToken(null, 'test'),
             false,
             PostNL::MODE_SOAP
         );
 
-        $this->service = $this->postnl->getDeliveryDateService();
-        $this->service->cache = new VoidCachePool();
-        $this->service->ttl = 1;
-    }
-
-    /**
-     * @after
-     */
-    public function logPendingRequest()
-    {
-        if (!$this->lastRequest instanceof Request) {
-            return;
-        }
-
         global $logger;
-        if ($logger instanceof LoggerInterface) {
-            $logger->debug($this->getName()." Request\n".\GuzzleHttp\Psr7\str($this->lastRequest));
-        }
-        $this->lastRequest = null;
+        $this->postnl->setLogger($logger);
+
+        $this->service = $this->postnl->getDeliveryDateService();
+        $this->service->setCache(new VoidCachePool());
+        $this->service->setTtl(1);
     }
 
     /**
@@ -124,7 +115,7 @@ class DeliveryDateSoapTest extends \PHPUnit_Framework_TestCase
                         ->setCity('Hoofddorp')
                         ->setCountryCode('NL')
                         ->setCutOffTimes([
-                            new CutOffTime('00', '14:00:00')
+                            new CutOffTime('00', '14:00:00'),
                         ])
                         ->setHouseNr('42')
                         ->setHouseNrExt('A')
@@ -141,8 +132,18 @@ class DeliveryDateSoapTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEmpty($request->getHeaderLine('apikey'));
         $this->assertEquals('text/xml', $request->getHeaderLine('Accept'));
-        $this->assertEquals("<?xml version=\"1.0\"?>
-<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:services=\"http://postnl.nl/cif/services/DeliveryDateWebService/\" xmlns:domain=\"http://postnl.nl/cif/domain/DeliveryDateWebService/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\" xmlns:schema=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:common=\"http://postnl.nl/cif/services/common/\" xmlns:arr=\"http://schemas.microsoft.com/2003/10/Serialization/Arrays\">
+        $this->assertXmlStringEqualsXmlString(<<<XML
+<?xml version="1.0"?>
+<soap:Envelope 
+  xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" 
+  xmlns:env="http://www.w3.org/2003/05/soap-envelope"
+  xmlns:services="http://postnl.nl/cif/services/DeliveryDateWebService/" 
+  xmlns:domain="http://postnl.nl/cif/domain/DeliveryDateWebService/"
+  xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd"
+  xmlns:schema="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:common="http://postnl.nl/cif/services/common/" 
+  xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays"
+>
  <soap:Header>
   <wsse:Security>
    <wsse:UsernameToken>
@@ -174,12 +175,13 @@ class DeliveryDateSoapTest extends \PHPUnit_Framework_TestCase
    </domain:GetDeliveryDate>
    <domain:Message>
     <domain:MessageID>{$message->getMessageID()}</domain:MessageID>
-    <domain:MessageTimeStamp>{$message->getMessageTimeStamp()}</domain:MessageTimeStamp>
+    <domain:MessageTimeStamp>{$message->getMessageTimeStamp()->format('d-m-Y H:i:s')}</domain:MessageTimeStamp>
    </domain:Message>
   </services:GetDeliveryDate>
  </soap:Body>
 </soap:Envelope>
-", (string) $request->getBody());
+XML
+            , (string) $request->getBody());
     }
 
     /**
@@ -188,19 +190,25 @@ class DeliveryDateSoapTest extends \PHPUnit_Framework_TestCase
     public function testGetDeliveryDateSoap()
     {
         $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'text/xml;charset=UTF-8'], '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
-   <s:Body>
-      <GetDeliveryDateResponse
+            new Response(
+                200,
+                ['Content-Type' => 'text/xml;charset=UTF-8'],
+                <<<XML
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+  <s:Body>
+    <GetDeliveryDateResponse
 xmlns="http://postnl.nl/cif/services/DeliveryDateWebService/"
 xmlns:a="http://postnl.nl/cif/domain/DeliveryDateWebService/"
 xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-         <a:DeliveryDate>30-06-2016</a:DeliveryDate>
-         <a:Options xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
-            <b:string>Daytime</b:string>
-         </a:Options>
-      </GetDeliveryDateResponse>
-   </s:Body>
-</s:Envelope>'),
+      <a:DeliveryDate>30-06-2016</a:DeliveryDate>
+      <a:Options xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+        <b:string>Daytime</b:string>
+      </a:Options>
+    </GetDeliveryDateResponse>
+  </s:Body>
+</s:Envelope>
+XML
+            ),
         ]);
 
         $handler = HandlerStack::create($mock);
@@ -215,7 +223,7 @@ xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
                     ->setCity('Hoofddorp')
                     ->setCountryCode('NL')
                     ->setCutOffTimes([
-                        new CutOffTime('00', '14:00:00')
+                        new CutOffTime('00', '14:00:00'),
                     ])
                     ->setHouseNr('42')
                     ->setHouseNrExt('A')
@@ -230,10 +238,11 @@ xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
         );
 
         $this->assertInstanceOf(
-            '\\ThirtyBees\\PostNL\\Entity\\Response\\GetDeliveryDateResponse',
+            GetDeliveryDateResponse::class,
             $response
         );
-        $this->assertEquals('30-06-2016', $response->getDeliveryDate());
+        $this->assertInstanceOf(DateTimeInterface::class, $response->getDeliveryDate());
+        $this->assertEquals('30-06-2016', $response->getDeliveryDate()->format('d-m-Y'));
     }
 
     /**
@@ -264,39 +273,49 @@ xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
 
         $this->assertEmpty($request->getHeaderLine('apikey'));
         $this->assertEquals('text/xml', $request->getHeaderLine('Accept'));
-        $this->assertEquals("<?xml version=\"1.0\"?>
-<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:services=\"http://postnl.nl/cif/services/DeliveryDateWebService/\" xmlns:domain=\"http://postnl.nl/cif/domain/DeliveryDateWebService/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\" xmlns:schema=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:common=\"http://postnl.nl/cif/services/common/\" xmlns:arr=\"http://schemas.microsoft.com/2003/10/Serialization/Arrays\">
- <soap:Header>
-  <wsse:Security>
-   <wsse:UsernameToken>
-    <wsse:Password>test</wsse:Password>
-   </wsse:UsernameToken>
-  </wsse:Security>
- </soap:Header>
- <soap:Body>
-  <services:GetSentDateRequest>
-   <domain:GetSentDate>
-    <domain:AllowSundaySorting>true</domain:AllowSundaySorting>
-    <domain:City>Hoofddorp</domain:City>
-    <domain:CountryCode>NL</domain:CountryCode>
-    <domain:DeliveryDate>30-06-2016</domain:DeliveryDate>
-    <domain:HouseNr>42</domain:HouseNr>
-    <domain:HouseNrExt>A</domain:HouseNrExt>
-    <domain:Options>
-     <arr:string>Daytime</arr:string>
-    </domain:Options>
-    <domain:PostalCode>2132WT</domain:PostalCode>
-    <domain:ShippingDuration>1</domain:ShippingDuration>
-    <domain:Street>Siriusdreef</domain:Street>
-   </domain:GetSentDate>
-   <domain:Message>
-    <domain:MessageID>{$message->getMessageID()}</domain:MessageID>
-    <domain:MessageTimeStamp>{$message->getMessageTimeStamp()}</domain:MessageTimeStamp>
-   </domain:Message>
-  </services:GetSentDateRequest>
- </soap:Body>
+        $this->assertXmlStringEqualsXmlString(<<<XML
+<?xml version="1.0"?>
+<soap:Envelope 
+    xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" 
+    xmlns:env="http://www.w3.org/2003/05/soap-envelope" 
+    xmlns:services="http://postnl.nl/cif/services/DeliveryDateWebService/" 
+    xmlns:domain="http://postnl.nl/cif/domain/DeliveryDateWebService/"
+    xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd"
+    xmlns:schema="http://www.w3.org/2001/XMLSchema-instance" xmlns:common="http://postnl.nl/cif/services/common/" 
+    xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays"
+>
+  <soap:Header>
+    <wsse:Security>
+      <wsse:UsernameToken>
+        <wsse:Password>test</wsse:Password>
+      </wsse:UsernameToken>
+    </wsse:Security>
+  </soap:Header>
+  <soap:Body>
+    <services:GetSentDateRequest>
+      <domain:GetSentDate>
+        <domain:AllowSundaySorting>true</domain:AllowSundaySorting>
+        <domain:City>Hoofddorp</domain:City>
+        <domain:CountryCode>NL</domain:CountryCode>
+        <domain:DeliveryDate>30-06-2016</domain:DeliveryDate>
+        <domain:HouseNr>42</domain:HouseNr>
+        <domain:HouseNrExt>A</domain:HouseNrExt>
+        <domain:Options>
+          <arr:string>Daytime</arr:string>
+        </domain:Options>
+        <domain:PostalCode>2132WT</domain:PostalCode>
+        <domain:ShippingDuration>1</domain:ShippingDuration>
+        <domain:Street>Siriusdreef</domain:Street>
+      </domain:GetSentDate>
+      <domain:Message>
+        <domain:MessageID>{$message->getMessageID()}</domain:MessageID>
+        <domain:MessageTimeStamp>{$message->getMessageTimeStamp()->format('d-m-Y H:i:s')}</domain:MessageTimeStamp>
+      </domain:Message>
+    </services:GetSentDateRequest>
+  </soap:Body>
 </soap:Envelope>
-", (string) $request->getBody());
+XML
+            , (string) $request->getBody());
     }
 
     /**
@@ -305,17 +324,24 @@ xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
     public function testGetSentDateSoap()
     {
         $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'text/xml;charset=UTF-8'], '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
-   <s:Body>
-      <GetSentDateResponse
-xmlns="http://postnl.nl/cif/services/DeliveryDateWebService/"
-xmlns:a="http://postnl.nl/cif/domain/DeliveryDateWebService/"
-xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-         <a:SentDate>29-06-2016</a:SentDate>
-         <a:Options xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
-       </GetSentDateResponse>
-   </s:Body>
-</s:Envelope>'),
+            new Response(
+                200,
+                ['Content-Type' => 'text/xml;charset=UTF-8'],
+                <<<XML
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+  <s:Body>
+    <GetSentDateResponse
+        xmlns="http://postnl.nl/cif/services/DeliveryDateWebService/"
+        xmlns:a="http://postnl.nl/cif/domain/DeliveryDateWebService/"
+        xmlns:i="http://www.w3.org/2001/XMLSchema-instance"
+    >
+      <a:SentDate>29-06-2016</a:SentDate>
+      <a:Options xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+    </GetSentDateResponse>
+  </s:Body>
+</s:Envelope>
+XML
+            ),
         ]);
 
         $handler = HandlerStack::create($mock);
@@ -342,9 +368,9 @@ xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
         );
 
         $this->assertInstanceOf(
-            '\\ThirtyBees\\PostNL\\Entity\\Response\\GetSentDateResponse',
+            GetSentDateResponse::class,
             $response
         );
-        $this->assertEquals('29-06-2016', $response->getSentDate());
+        $this->assertEquals('29-06-2016', $response->getSentDate()->format('d-m-Y'));
     }
 }

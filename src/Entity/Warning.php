@@ -1,8 +1,8 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,81 +19,98 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity;
+namespace Firstred\PostNL\Entity;
 
-use ThirtyBees\PostNL\Service\BarcodeService;
-use ThirtyBees\PostNL\Service\ConfirmingService;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
-use ThirtyBees\PostNL\Service\LabellingService;
-use ThirtyBees\PostNL\Service\LocationService;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
-use ThirtyBees\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\NotSupportedException;
+use Firstred\PostNL\Service\BarcodeService;
+use Firstred\PostNL\Service\ConfirmingService;
+use Firstred\PostNL\Service\DeliveryDateService;
+use Firstred\PostNL\Service\LabellingService;
+use Firstred\PostNL\Service\LocationService;
+use Firstred\PostNL\Service\TimeframeService;
+use stdClass;
 
 /**
- * Class Warning
- *
- * @package ThirtyBees\PostNL\Entity
+ * Class Warning.
  *
  * @method string|null getCode()
  * @method string|null getDescription()
+ * @method Warning     setCode(string|null $Code = null)
+ * @method Warning     setDescription(string|null $Description = null)
  *
- * @method Warning setCode(string|null $code = null)
- * @method Warning setDescription(string|null $description = null)
+ * @since 1.0.0
  */
 class Warning extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
+    /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'Code'        => BarcodeService::DOMAIN_NAMESPACE,
             'Description' => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'Code'        => ConfirmingService::DOMAIN_NAMESPACE,
             'Description' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'Code'        => LabellingService::DOMAIN_NAMESPACE,
             'Description' => LabellingService::DOMAIN_NAMESPACE,
         ],
-        'ShippingStatus' => [
-            'Code'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Description' => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'Code'        => DeliveryDateService::DOMAIN_NAMESPACE,
             'Description' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'Code'        => LocationService::DOMAIN_NAMESPACE,
             'Description' => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'Code'        => TimeframeService::DOMAIN_NAMESPACE,
             'Description' => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string|null $Code */
+    /** @var string|null */
     protected $Code;
-    /** @var string|null $Description */
+    /** @var string|null */
     protected $Description;
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string|null $code
-     * @param string|null $description
+     * @param string|null $Code
+     * @param string|null $Description
      */
-    public function __construct($code = null, $description = null)
+    public function __construct($Code = null, $Description = null)
     {
         parent::__construct();
 
-        $this->setCode($code);
-        $this->setDescription($description);
+        $this->setCode($Code);
+        $this->setDescription($Description);
+    }
+
+    /**
+     * Deserialize JSON.
+     *
+     * @param stdClass $json JSON object `{"EntityName": object}`
+     *
+     * @return static
+     *
+     * @throws NotSupportedException
+     * @throws InvalidArgumentException
+     */
+    public static function jsonDeserialize(stdClass $json)
+    {
+        if (isset($json->Warning->Message)) {
+            $json->Warning->Description = $json->Warning->Message;
+            unset($json->Warning->Message);
+        }
+
+        return parent::jsonDeserialize($json);
     }
 }

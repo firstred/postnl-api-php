@@ -1,8 +1,8 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,100 +19,93 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity;
+namespace Firstred\PostNL\Entity;
 
+use Firstred\PostNL\Service\BarcodeService;
+use Firstred\PostNL\Service\ConfirmingService;
+use Firstred\PostNL\Service\DeliveryDateService;
+use Firstred\PostNL\Service\LabellingService;
+use Firstred\PostNL\Service\LocationService;
+use Firstred\PostNL\Service\TimeframeService;
 use Sabre\Xml\Writer;
-use ThirtyBees\PostNL\Service\BarcodeService;
-use ThirtyBees\PostNL\Service\ConfirmingService;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
-use ThirtyBees\PostNL\Service\LabellingService;
-use ThirtyBees\PostNL\Service\LocationService;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
-use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class CutOffTime
- *
- * @package ThirtyBees\PostNL\Entity
+ * Class CutOffTime.
  *
  * @method string|null getDay()
  * @method string|null getTime()
  * @method bool|null   getAvailable()
+ * @method CutOffTime  setDay(string|null $Day = null)
+ * @method CutOffTime  setTime(string|null $Time = null)
+ * @method CutOffTime  setAvailable(bool|null $Available = null)
  *
- * @method CutOffTime setDay(string|null $day = null)
- * @method CutOffTime setTime(string|null $time = null)
- * @method CutOffTime setAvailable(bool|null $available = null)
+ * @since 1.0.0
  */
 class CutOffTime extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
+    /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'Day'       => BarcodeService::DOMAIN_NAMESPACE,
             'Time'      => BarcodeService::DOMAIN_NAMESPACE,
             'Available' => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'Day'       => ConfirmingService::DOMAIN_NAMESPACE,
             'Time'      => ConfirmingService::DOMAIN_NAMESPACE,
             'Available' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'Day'       => LabellingService::DOMAIN_NAMESPACE,
             'Time'      => LabellingService::DOMAIN_NAMESPACE,
             'Available' => LabellingService::DOMAIN_NAMESPACE,
         ],
-        'ShippingStatus' => [
-            'Day'       => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Time'      => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Available' => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'Day'       => DeliveryDateService::DOMAIN_NAMESPACE,
             'Time'      => DeliveryDateService::DOMAIN_NAMESPACE,
             'Available' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'Day'       => LocationService::DOMAIN_NAMESPACE,
             'Time'      => LocationService::DOMAIN_NAMESPACE,
             'Available' => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'Day'       => TimeframeService::DOMAIN_NAMESPACE,
             'Time'      => TimeframeService::DOMAIN_NAMESPACE,
             'Available' => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string|null $Day */
+    /** @var string|null */
     protected $Day;
-    /** @var string|null $Time */
+    /** @var string|null */
     protected $Time;
-    /** @var bool|null $Available */
+    /** @var bool|null */
     protected $Available;
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string $day
-     * @param string $time
-     * @param bool $available
+     * @param string $Day
+     * @param string $Time
+     * @param bool   $Available
      */
-    public function __construct($day = null, $time = null, $available = null)
+    public function __construct($Day = null, $Time = null, $Available = null)
     {
         parent::__construct();
 
-        $this->setDay($day);
-        $this->setTime($time);
-        $this->setAvailable($available);
+        $this->setDay($Day);
+        $this->setTime($Time);
+        $this->setAvailable($Available);
     }
 
     /**
-     * Return a serializable array for the XMLWriter
+     * Return a serializable array for the XMLWriter.
      *
      * @param Writer $writer
      *
@@ -128,17 +121,17 @@ class CutOffTime extends AbstractEntity
         }
 
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if (isset($this->{$propertyName})) {
-                if ($propertyName === 'Available') {
-                    if (is_bool($this->{$propertyName})) {
-                        $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName} ? 'true' : 'false';
-                    } elseif (is_int($this->{$propertyName})) {
-                        $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName} === 1 ? 'true' : 'false';
+            if (isset($this->$propertyName)) {
+                if ('Available' === $propertyName) {
+                    if (is_bool($this->$propertyName)) {
+                        $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->$propertyName ? 'true' : 'false';
+                    } elseif (is_int($this->$propertyName)) {
+                        $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = 1 === $this->$propertyName ? 'true' : 'false';
                     } else {
-                        $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
+                        $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->$propertyName;
                     }
                 } else {
-                    $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
+                    $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->$propertyName;
                 }
             }
         }

@@ -1,8 +1,8 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2021 Michael Dekker
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,43 +19,34 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Tests\Misc;
+namespace Firstred\PostNL\Tests\Misc;
 
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Response;
-use ThirtyBees\PostNL\Entity\Address;
-use ThirtyBees\PostNL\Entity\Customer;
-use ThirtyBees\PostNL\Entity\CutOffTime;
-use ThirtyBees\PostNL\Entity\Location;
-use ThirtyBees\PostNL\Entity\Request\GetDeliveryDate;
-use ThirtyBees\PostNL\Entity\Request\GetNearestLocations;
-use ThirtyBees\PostNL\Entity\Request\GetTimeframes;
-use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
-use ThirtyBees\PostNL\Entity\Timeframe;
-use ThirtyBees\PostNL\HttpClient\MockClient;
-use ThirtyBees\PostNL\PostNL;
+ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use Firstred\PostNL\Entity\Address;
+use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Entity\SOAP\UsernameToken;
+use Firstred\PostNL\PostNL;
 
 /**
- * Class PostNLTest
- *
- * @package ThirtyBees\PostNL\Tests\Misc
+ * Class PostNLTest.
  *
  * @testdox The PostNL object
  */
-class PostNLTest extends \PHPUnit_Framework_TestCase
+class PostNLTest extends TestCase
 {
-    /** @var PostNL $postnl */
+    /** @var PostNL */
     protected $postnl;
 
     /**
      * @before
-     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \ReflectionException
      */
     public function setupPostNL()
     {
@@ -75,8 +66,7 @@ class PostNLTest extends \PHPUnit_Framework_TestCase
                     'Zipcode'     => '2132WT',
                 ]))
                 ->setGlobalPackBarcodeType('AB')
-                ->setGlobalPackCustomerCode('1234')
-            , new UsernameToken(null, 'test'),
+                ->setGlobalPackCustomerCode('1234'), new UsernameToken(null, 'test'),
             true,
             PostNL::MODE_REST
         );
@@ -85,12 +75,12 @@ class PostNLTest extends \PHPUnit_Framework_TestCase
     /**
      * @testdox cannot generate an international barcode without a GlobalPack range
      *
-     * @throws \ThirtyBees\PostNL\Exception\InvalidBarcodeException
-     * @throws \ThirtyBees\PostNL\Exception\InvalidConfigurationException
+     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
+     * @throws \Firstred\PostNL\Exception\InvalidConfigurationException
      */
     public function testGlobalPackWithoutRange()
     {
-        $this->expectException('\\ThirtyBees\\PostNL\\Exception\\InvalidConfigurationException');
+        $this->expectException('\\Firstred\\PostNL\\Exception\\InvalidConfigurationException');
 
         $this->postnl->getCustomer()->setGlobalPackCustomerCode(null);
 
@@ -100,12 +90,12 @@ class PostNLTest extends \PHPUnit_Framework_TestCase
     /**
      * @testdox cannot generate an international barcode without a GlobalPack type
      *
-     * @throws \ThirtyBees\PostNL\Exception\InvalidBarcodeException
-     * @throws \ThirtyBees\PostNL\Exception\InvalidConfigurationException
+     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
+     * @throws \Firstred\PostNL\Exception\InvalidConfigurationException
      */
     public function testGlobalPackWithoutType()
     {
-        $this->expectException('\\ThirtyBees\\PostNL\\Exception\\InvalidConfigurationException');
+        $this->expectException('\\Firstred\\PostNL\\Exception\\InvalidConfigurationException');
 
         $this->postnl->getCustomer()->setGlobalPackBarcodeType(null);
 

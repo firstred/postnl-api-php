@@ -1,8 +1,8 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,81 +19,76 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity\Response;
+namespace Firstred\PostNL\Entity\Response;
 
+use Firstred\PostNL\Entity\AbstractEntity;
+use Firstred\PostNL\Service\BarcodeService;
+use Firstred\PostNL\Service\ConfirmingService;
+use Firstred\PostNL\Service\DeliveryDateService;
+use Firstred\PostNL\Service\LabellingService;
+use Firstred\PostNL\Service\LocationService;
+use Firstred\PostNL\Service\TimeframeService;
 use Sabre\Xml\Writer;
-use ThirtyBees\PostNL\Entity\AbstractEntity;
-use ThirtyBees\PostNL\Service\BarcodeService;
-use ThirtyBees\PostNL\Service\ConfirmingService;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
-use ThirtyBees\PostNL\Service\LabellingService;
-use ThirtyBees\PostNL\Service\LocationService;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
-use ThirtyBees\PostNL\Service\TimeframeService;
 
 /**
- * Class GetLocationsResult
- *
- * @package ThirtyBees\PostNL\Entity
+ * Class GetLocationsResult.
  *
  * @method ResponseLocation[]|null getResponseLocation()
+ * @method GetLocationsResult      setResponseLocation(ResponseLocation[]|null $ResponseLocation = null)
  *
- * @method GetLocationsResult setResponseLocation(ResponseLocation|null $location = null)
+ * @since 1.0.0
  */
 class GetLocationsResult extends AbstractEntity
 {
     /**
-     * Default properties and namespaces for the SOAP API
+     * Default properties and namespaces for the SOAP API.
      *
-     * @var array $defaultProperties
+     * @var array
      */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'ResponseLocation' => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'ResponseLocation' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'ResponseLocation' => LabellingService::DOMAIN_NAMESPACE,
         ],
-        'ShippingStatus' => [
-            'ResponseLocation' => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'ResponseLocation' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'ResponseLocation' => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'ResponseLocation' => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var ResponseLocation[]|null $ResponseLocation */
+    /** @var ResponseLocation[]|null */
     protected $ResponseLocation;
     // @codingStandardsIgnoreEnd
 
     /**
      * GetLocationsResult constructor.
      *
-     * @param ResponseLocation[]|null $locations
+     * @param ResponseLocation[]|null $ResponseLocation
      */
-    public function __construct(array $locations = null)
+    public function __construct(array $ResponseLocation = null)
     {
         parent::__construct();
 
-        $this->setResponseLocation($locations);
+        $this->setResponseLocation($ResponseLocation);
     }
 
     /**
-     * Return a serializable array for the XMLWriter
+     * Return a serializable array for the XMLWriter.
      *
      * @param Writer $writer
      *
@@ -109,14 +104,14 @@ class GetLocationsResult extends AbstractEntity
         }
 
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if ($propertyName === 'ResponseLocation') {
+            if ('ResponseLocation' === $propertyName) {
                 $locations = [];
                 foreach ($this->ResponseLocation as $location) {
                     $locations[] = $location;
                 }
                 $xml["{{$namespace}}ResponseLocation"] = $locations;
-            } elseif (isset($this->{$propertyName})) {
-                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
+            } elseif (isset($this->$propertyName)) {
+                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->$propertyName;
             }
         }
         // Auto extending this object with other properties is not supported with SOAP

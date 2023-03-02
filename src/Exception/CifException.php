@@ -1,8 +1,8 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,21 +19,21 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Exception;
+namespace Firstred\PostNL\Exception;
 
 /**
- * Class CifException
+ * Class CifException.
  *
- * @package ThirtyBees\PostNL\Exception
+ * @since 1.0.0
  */
-class CifException extends AbstractException
+class CifException extends ApiException
 {
-    /** @var array $messages */
+    /** @var array */
     protected $messages;
 
     /**
@@ -41,15 +41,15 @@ class CifException extends AbstractException
      *
      * @param string|string[] $message  In case of multiple errors, the format looks like:
      *                                  [
-     *                                    'description' => string <The description>,
-     *                                    'message'     => string <The error message>,
-     *                                    'code'        => int <The error code>
+     *                                  'description' => string <The description>,
+     *                                  'message'     => string <The error message>,
+     *                                  'code'        => int <The error code>
      *                                  ]
      *                                  The code param will be discarded if `$message` is an array
      * @param int             $code
      * @param \Throwable|null $previous
      */
-    public function __construct($message = "", $code = 0, $previous = null)
+    public function __construct($message = '', $code = 0, $previous = null)
     {
         if (is_array($message)) {
             $this->messages = $message;
@@ -62,7 +62,7 @@ class CifException extends AbstractException
     }
 
     /**
-     * Get error messages and codes
+     * Get error messages and codes.
      *
      * @return array|string|string[]
      */

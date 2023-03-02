@@ -1,0 +1,64 @@
+.. rst-class:: phpdoctorst
+
+.. role:: php(code)
+	:language: php
+
+
+.. _namespace-Firstred-PostNL-Entity:
+
+Entity
+======
+
+\\Firstred\\PostNL\\Entity
+
+
+Namespaces
+----------
+
+.. toctree::
+	:maxdepth: 1
+	
+	Message <Message/index>
+	Request <Request/index>
+	Response <Response/index>
+	SOAP <SOAP/index>
+
+
+Classes
+-------
+
+.. toctree::
+	:maxdepth: 1
+	
+	CoordinatesSouthEast <CoordinatesSouthEast>
+	OldStatus <OldStatus>
+	Warning <Warning>
+	ReasonNoTimeframe <ReasonNoTimeframe>
+	Area <Area>
+	Contact <Contact>
+	Event <Event>
+	AbstractEntity <AbstractEntity>
+	Label <Label>
+	Expectation <Expectation>
+	Timeframes <Timeframes>
+	Group <Group>
+	Address <Address>
+	Customer <Customer>
+	Coordinates <Coordinates>
+	Signature <Signature>
+	Amount <Amount>
+	Dimension <Dimension>
+	Barcode <Barcode>
+	Location <Location>
+	ProductOption <ProductOption>
+	Shipment <Shipment>
+	Status <Status>
+	Timeframe <Timeframe>
+	Customs <Customs>
+	TimeframeTimeFrame <TimeframeTimeFrame>
+	CoordinatesNorthWest <CoordinatesNorthWest>
+	CutOffTime <CutOffTime>
+	Content <Content>
+	OpeningHours <OpeningHours>
+
+

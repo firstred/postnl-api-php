@@ -1,8 +1,8 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,40 +19,45 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity\Response;
+namespace Firstred\PostNL\Entity\Response;
 
+use DateTimeImmutable;
+use DateTimeInterface;
+use DateTimeZone;
+use Exception;
+use Firstred\PostNL\Entity\AbstractEntity;
+use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use Firstred\PostNL\Service\BarcodeService;
+use Firstred\PostNL\Service\ConfirmingService;
+use Firstred\PostNL\Service\DeliveryDateService;
+use Firstred\PostNL\Service\LabellingService;
+use Firstred\PostNL\Service\LocationService;
+use Firstred\PostNL\Service\TimeframeService;
+use ReflectionException;
 use Sabre\Xml\Writer;
-use ThirtyBees\PostNL\Entity\AbstractEntity;
-use ThirtyBees\PostNL\Service\BarcodeService;
-use ThirtyBees\PostNL\Service\ConfirmingService;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
-use ThirtyBees\PostNL\Service\LabellingService;
-use ThirtyBees\PostNL\Service\LocationService;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
-use ThirtyBees\PostNL\Service\TimeframeService;
+use stdClass;
+use function is_array;
 
 /**
- * Class GetDeliveryDateResponse
+ * Class GetDeliveryDateResponse.
  *
- * @package ThirtyBees\PostNL\Entity
+ * @method DateTimeInterface|null  getDeliveryDate()
+ * @method string[]|null           getOptions()
+ * @method GetDeliveryDateResponse setOptions(string[]|null $Options = null)
  *
- * @method string|null   getDeliveryDate()
- * @method string[]|null getOptions()
- *
- * @method GetDeliveryDateResponse setDeliveryDate(string|null $date = null)
- * @method GetDeliveryDateResponse setOptions(string[]|null $options = null)
+ * @since 1.0.0
  */
 class GetDeliveryDateResponse extends AbstractEntity
 {
     /**
-     * Default properties and namespaces for the SOAP API
+     * Default properties and namespaces for the SOAP API.
      *
-     * @var array $defaultProperties
+     * @var array
      */
     public static $defaultProperties = [
         'Barcode'        => [
@@ -65,10 +70,6 @@ class GetDeliveryDateResponse extends AbstractEntity
         ],
         'Labelling'      => [
             'DeliveryDate' => LabellingService::DOMAIN_NAMESPACE,
-            'Options'      => 'http://schemas.microsoft.com/2003/10/Serialization/Arrays',
-        ],
-        'ShippingStatus' => [
-            'DeliveryDate' => ShippingStatusService::DOMAIN_NAMESPACE,
             'Options'      => 'http://schemas.microsoft.com/2003/10/Serialization/Arrays',
         ],
         'DeliveryDate'   => [
@@ -85,28 +86,54 @@ class GetDeliveryDateResponse extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string|null $DeliveryDate */
+    /** @var string|null */
     protected $DeliveryDate;
-    /** @var string[]|null $Options */
+    /** @var string[]|null */
     protected $Options;
     // @codingStandardsIgnoreEnd
 
     /**
      * GetDeliveryDateResponse constructor.
      *
-     * @param string|null      $date
-     * @param string[]|null $options
+     * @param string|DateTimeInterface|null $DeliveryDate
+     * @param string[]|null                 $Options
+     *
+     * @throws PostNLInvalidArgumentException
      */
-    public function __construct($date = null, array $options = null)
+    public function __construct($DeliveryDate = null, array $Options = null)
     {
         parent::__construct();
 
-        $this->setDeliveryDate($date);
-        $this->setOptions($options);
+        $this->setDeliveryDate($DeliveryDate);
+        $this->setOptions($Options);
     }
 
     /**
-     * Return a serializable array for the XMLWriter
+     * @param DateTimeInterface|string|null $DeliveryDate
+     *
+     * @return static
+     *
+     * @throws PostNLInvalidArgumentException
+     *
+     * @since 1.2.0
+     */
+    public function setDeliveryDate($DeliveryDate = null)
+    {
+        if (is_string($DeliveryDate)) {
+            try {
+                $DeliveryDate = new DateTimeImmutable($DeliveryDate, new DateTimeZone('Europe/Amsterdam'));
+            } catch (Exception $e) {
+                throw new PostNLInvalidArgumentException($e->getMessage(), 0, $e);
+            }
+        }
+
+        $this->DeliveryDate = $DeliveryDate;
+
+        return $this;
+    }
+
+    /**
+     * Return a serializable array for the XMLWriter.
      *
      * @param Writer $writer
      *
@@ -122,7 +149,7 @@ class GetDeliveryDateResponse extends AbstractEntity
         }
 
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if ($propertyName === 'Shipments') {
+            if ('Shipments' === $propertyName) {
                 $options = [];
                 if (is_array($this->Options)) {
                     foreach ($this->Options as $option) {
@@ -130,11 +157,50 @@ class GetDeliveryDateResponse extends AbstractEntity
                     }
                 }
                 $xml["{{$namespace}}Options"] = $options;
-            } elseif (isset($this->{$propertyName})) {
-                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
+            } elseif (isset($this->$propertyName)) {
+                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->$propertyName;
             }
         }
         // Auto extending this object with other properties is not supported with SOAP
         $writer->write($xml);
+    }
+
+    /**
+     * @param stdClass $json
+     *
+     * @return GetDeliveryDateResponse|object|stdClass|null
+     *
+     * @throws PostNLInvalidArgumentException
+     */
+    public static function jsonDeserialize(stdClass $json)
+    {
+        if (!isset($json->GetDeliveryDateResponse)) {
+            return $json;
+        }
+
+        $getDeliveryDateResponse = self::create();
+        try {
+            $getDeliveryDateResponse->DeliveryDate = new DateTimeImmutable($json->GetDeliveryDateResponse->DeliveryDate, new DateTimeZone('Europe/Amsterdam'));
+        } catch (Exception $e) {
+            throw new PostNLInvalidArgumentException($e->getMessage(), 0, $e);
+        }
+        if (isset($json->GetDeliveryDateResponse->Options)) {
+            if (!is_array($json->GetDeliveryDateResponse->Options)) {
+                $json->GetDeliveryDateResponse->Options = [$json->GetDeliveryDateResponse->Options];
+            }
+
+            $options = [];
+            foreach ($json->GetDeliveryDateResponse->Options as $key => $option) {
+                if (is_string($option)) {
+                    $options[] = $option;
+                } elseif ($option instanceof stdClass && isset($option->string)) {
+                    $options[] = $option->string;
+                }
+            }
+
+            $getDeliveryDateResponse->setOptions($options);
+        }
+
+        return $getDeliveryDateResponse;
     }
 }

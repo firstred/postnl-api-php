@@ -1,8 +1,8 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,73 +19,72 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity\Response;
+namespace Firstred\PostNL\Entity\Response;
 
-use ThirtyBees\PostNL\Entity\AbstractEntity;
-use ThirtyBees\PostNL\Entity\Address;
-use ThirtyBees\PostNL\Entity\Location;
-use ThirtyBees\PostNL\Entity\Warning;
-use ThirtyBees\PostNL\Service\BarcodeService;
-use ThirtyBees\PostNL\Service\ConfirmingService;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
-use ThirtyBees\PostNL\Service\LabellingService;
-use ThirtyBees\PostNL\Service\LocationService;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
-use ThirtyBees\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Entity\AbstractEntity;
+use Firstred\PostNL\Entity\Address;
+use Firstred\PostNL\Entity\OpeningHours;
+use Firstred\PostNL\Entity\Warning;
+use Firstred\PostNL\Service\BarcodeService;
+use Firstred\PostNL\Service\ConfirmingService;
+use Firstred\PostNL\Service\DeliveryDateService;
+use Firstred\PostNL\Service\LabellingService;
+use Firstred\PostNL\Service\LocationService;
+use Firstred\PostNL\Service\TimeframeService;
+use stdClass;
 
 /**
- * Class ResponseLocation
+ * Class ResponseLocation.
  *
- * @package ThirtyBees\PostNL\Entity
+ * @method Address|null      getAddress()
+ * @method string[]|null     getDeliveryOptions()
+ * @method string|null       getDistance()
+ * @method string|null       getLatitude()
+ * @method string|null       getLongitude()
+ * @method string|null       getName()
+ * @method OpeningHours|null getOpeningHours()
+ * @method string|null       getPartnerName()
+ * @method string|null       getPhoneNumber()
+ * @method string|null       getRetailNetworkID()
+ * @method string|null       getLocationCode()
+ * @method string|null       getSaleschannel()
+ * @method string|null       getTerminalType()
+ * @method Warning[]|null    getWarnings()
+ * @method string|null       getDownPartnerID()
+ * @method string|null       getDownPartnerLocation()
+ * @method ResponseLocation  setAddress(Address|null $Address = null)
+ * @method ResponseLocation  setDeliveryOptions(string[]|null $DeliveryOptions)
+ * @method ResponseLocation  setDistance(string|null $Distance = null)
+ * @method ResponseLocation  setLatitude(string|null $Latitude = null)
+ * @method ResponseLocation  setLongitude(string|null $Longitude = null)
+ * @method ResponseLocation  setName(string|null $Name = null)
+ * @method ResponseLocation  setOpeningHours(string[]|null $Hours = null)
+ * @method ResponseLocation  setPartnerName(string|null $PartnerName = null)
+ * @method ResponseLocation  setPhoneNumber(string|null $PhoneNumber = null)
+ * @method ResponseLocation  setRetailNetworkID(string|null $RetailNetworkID = null)
+ * @method ResponseLocation  setLocationCode(string|null $LocationCode = null)
+ * @method ResponseLocation  setSaleschannel(string|null $Saleschannel = null)
+ * @method ResponseLocation  setTerminalType(string|null $TerminalType = null)
+ * @method ResponseLocation  setWarnings(Warning[]|null $Warnings = null)
+ * @method ResponseLocation  setDownPartnerID(string|null $DownPartnerID = null)
+ * @method ResponseLocation  setDownPartnerLocation(string|null $DownPartnerLocation = null)
  *
- * @method Address|null    getAddress()
- * @method string[]|null   getDeliveryOptions()
- * @method string|null     getDistance()
- * @method string|null     getLatitude()
- * @method string|null     getLongitude()
- * @method string|null     getName()
- * @method string[][]|null getOpeningHours()
- * @method string|null     getPartnerName()
- * @method string|null     getPhoneNumber()
- * @method string|null     getRetailNetworkID()
- * @method string|null     getLocationCode()
- * @method string|null     getSaleschannel()
- * @method string|null     getTerminalType()
- * @method Warning[]|null  getWarnings()
- * @method string|null     getDownPartnerID()
- * @method string|null     getDownPartnerLocation()
- *
- * @method ResponseLocation setAddress(Address|null $address = null)
- * @method ResponseLocation setDeliveryOptions(string[]|null $options)
- * @method ResponseLocation setDistance(string|null $dist = null)
- * @method ResponseLocation setLatitude(string|null $lat = null)
- * @method ResponseLocation setLongitude(string|null $long = null)
- * @method ResponseLocation setName(string|null $name = null)
- * @method ResponseLocation setOpeningHours(string[]|null $hours = null)
- * @method ResponseLocation setPartnerName(string|null $partnerName = null)
- * @method ResponseLocation setPhoneNumber(string|null $number = null)
- * @method ResponseLocation setRetailNetworkID(string|null $id = null)
- * @method ResponseLocation setLocationCode(string|null $code = null)
- * @method ResponseLocation setSaleschannel(string|null $channel = null)
- * @method ResponseLocation setTerminalType(string|null $type = null)
- * @method ResponseLocation setWarnings(Warning[]|null $warnings = null)
- * @method ResponseLocation setDownPartnerID(string|null $downPartnerID = null)
- * @method ResponseLocation setDownPartnerLocation(string|null $downPartnerLocation = null)
+ * @since 1.0.0
  */
 class ResponseLocation extends AbstractEntity
 {
     /**
-     * Default properties and namespaces for the SOAP API
+     * Default properties and namespaces for the SOAP API.
      *
-     * @var array $defaultProperties
+     * @var array
      */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'Address'             => BarcodeService::DOMAIN_NAMESPACE,
             'DeliveryOptions'     => BarcodeService::DOMAIN_NAMESPACE,
             'Distance'            => BarcodeService::DOMAIN_NAMESPACE,
@@ -103,7 +102,7 @@ class ResponseLocation extends AbstractEntity
             'DownPartnerID'       => BarcodeService::DOMAIN_NAMESPACE,
             'DownPartnerLocation' => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'Address'             => ConfirmingService::DOMAIN_NAMESPACE,
             'DeliveryOptions'     => ConfirmingService::DOMAIN_NAMESPACE,
             'Distance'            => ConfirmingService::DOMAIN_NAMESPACE,
@@ -121,7 +120,7 @@ class ResponseLocation extends AbstractEntity
             'DownPartnerID'       => ConfirmingService::DOMAIN_NAMESPACE,
             'DownPartnerLocation' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'Address'             => LabellingService::DOMAIN_NAMESPACE,
             'DeliveryOptions'     => LabellingService::DOMAIN_NAMESPACE,
             'Distance'            => LabellingService::DOMAIN_NAMESPACE,
@@ -139,25 +138,7 @@ class ResponseLocation extends AbstractEntity
             'DownPartnerID'       => LabellingService::DOMAIN_NAMESPACE,
             'DownPartnerLocation' => LabellingService::DOMAIN_NAMESPACE,
         ],
-        'ShippingStatus' => [
-            'Address'             => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DeliveryOptions'     => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Distance'            => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Latitude'            => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Longitude'           => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Name'                => ShippingStatusService::DOMAIN_NAMESPACE,
-            'OpeningHours'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'PartnerName'         => ShippingStatusService::DOMAIN_NAMESPACE,
-            'PhoneNumber'         => ShippingStatusService::DOMAIN_NAMESPACE,
-            'LocationCode'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'RetailNetworkID'     => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Saleschannel'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'TerminalType'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Warnings'            => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DownPartnerID'       => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DownPartnerLocation' => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'Address'             => DeliveryDateService::DOMAIN_NAMESPACE,
             'DeliveryOptions'     => DeliveryDateService::DOMAIN_NAMESPACE,
             'Distance'            => DeliveryDateService::DOMAIN_NAMESPACE,
@@ -175,7 +156,7 @@ class ResponseLocation extends AbstractEntity
             'DownPartnerID'       => DeliveryDateService::DOMAIN_NAMESPACE,
             'DownPartnerLocation' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'Address'             => LocationService::DOMAIN_NAMESPACE,
             'DeliveryOptions'     => LocationService::DOMAIN_NAMESPACE,
             'Distance'            => LocationService::DOMAIN_NAMESPACE,
@@ -193,7 +174,7 @@ class ResponseLocation extends AbstractEntity
             'DownPartnerID'       => LocationService::DOMAIN_NAMESPACE,
             'DownPartnerLocation' => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'Address'             => TimeframeService::DOMAIN_NAMESPACE,
             'DeliveryOptions'     => TimeframeService::DOMAIN_NAMESPACE,
             'Distance'            => TimeframeService::DOMAIN_NAMESPACE,
@@ -214,95 +195,125 @@ class ResponseLocation extends AbstractEntity
     ];
 
     // @codingStandardsIgnoreStart
-    /** @var Address|null $Address */
+    /** @var Address|null */
     protected $Address;
-    /** @var string[]|null $DeliveryOptions */
+    /** @var string[]|null */
     protected $DeliveryOptions;
-    /** @var string|null $Distance */
+    /** @var string|null */
     protected $Distance;
-    /** @var string|null $Latitude */
+    /** @var string|null */
     protected $Latitude;
-    /** @var string|null $Longitude */
+    /** @var string|null */
     protected $Longitude;
-    /** @var string|null $Name */
+    /** @var string|null */
     protected $Name;
-    /** @var string[]|null $OpeningHours */
+    /** @var OpeningHours|null */
     protected $OpeningHours;
-    /** @var string|null $PartnerName */
+    /** @var string|null */
     protected $PartnerName;
-    /** @var string|null $PhoneNumber */
+    /** @var string|null */
     protected $PhoneNumber;
-    /** @var string|null $LocationCode */
+    /** @var string|null */
     protected $LocationCode;
-    /** @var string|null $RetailNetworkID */
+    /** @var string|null */
     protected $RetailNetworkID;
-    /** @var string|null $Saleschannel */
+    /** @var string|null */
     protected $Saleschannel;
-    /** @var string|null $TerminalType */
+    /** @var string|null */
     protected $TerminalType;
-    /** @var Warning[]|null $Warnings */
+    /** @var Warning[]|null */
     protected $Warnings;
-    /** @var string|null $DownPartnerID */
+    /** @var string|null */
     protected $DownPartnerID;
-    /** @var string|null $DownPartnerLocation */
+    /** @var string|null */
     protected $DownPartnerLocation;
     // @codingStandardsIgnoreEnd
 
     /**
      * ResponseLocation constructor.
      *
-     * @param Address|null   $address
-     * @param string[]|null  $deliveryOptions
-     * @param string|null    $distance
-     * @param string|null    $latitude
-     * @param string|null    $longitude
-     * @param string|null    $name
-     * @param string[]|null  $openingHours
-     * @param string|null    $partnerName
-     * @param string|null    $phoneNumber
-     * @param string|null    $locationCode
-     * @param string|null    $retailNetworkId
-     * @param string|null    $saleschannel
-     * @param string|null    $terminalType
-     * @param Warning[]|null $warnings
-     * @param string|null    $downPartnerID
-     * @param string|null    $downPartnerLocation
+     * @param Address|null   $Address
+     * @param string[]|null  $DeliveryOptions
+     * @param string|null    $Distance
+     * @param string|null    $Latitude
+     * @param string|null    $Longitude
+     * @param string|null    $Name
+     * @param string[]|null  $OpeningHours
+     * @param string|null    $PartnerName
+     * @param string|null    $PhoneNumber
+     * @param string|null    $LocationCode
+     * @param string|null    $RetailNetworkID
+     * @param string|null    $Saleschannel
+     * @param string|null    $TerminalType
+     * @param Warning[]|null $Warnings
+     * @param string|null    $DownPartnerID
+     * @param string|null    $DownPartnerLocation
      */
     public function __construct(
-        Address $address = null,
-        array $deliveryOptions = null,
-        $distance = null,
-        $latitude = null,
-        $longitude = null,
-        $name = null,
-        $openingHours = null,
-        $partnerName = null,
-        $phoneNumber = null,
-        $locationCode = null,
-        $retailNetworkId = null,
-        $saleschannel = null,
-        $terminalType = null,
-        $warnings = null,
-        $downPartnerID = null,
-        $downPartnerLocation = null
+        Address $Address = null,
+        array $DeliveryOptions = null,
+        $Distance = null,
+        $Latitude = null,
+        $Longitude = null,
+        $Name = null,
+        $OpeningHours = null,
+        $PartnerName = null,
+        $PhoneNumber = null,
+        $LocationCode = null,
+        $RetailNetworkID = null,
+        $Saleschannel = null,
+        $TerminalType = null,
+        $Warnings = null,
+        $DownPartnerID = null,
+        $DownPartnerLocation = null
     ) {
         parent::__construct();
 
-        $this->setAddress($address);
-        $this->setDeliveryOptions($deliveryOptions);
-        $this->setDistance($distance);
-        $this->setLatitude($latitude);
-        $this->setLongitude($longitude);
-        $this->setName($name);
-        $this->setOpeningHours($openingHours);
-        $this->setPartnerName($partnerName);
-        $this->setPhoneNumber($phoneNumber);
-        $this->setLocationCode($locationCode);
-        $this->setRetailNetworkID($retailNetworkId);
-        $this->setSaleschannel($saleschannel);
-        $this->setTerminalType($terminalType);
-        $this->setWarnings($warnings);
-        $this->setDownPartnerID($downPartnerID);
-        $this->setDownPartnerLocation($downPartnerLocation);
+        $this->setAddress($Address);
+        $this->setDeliveryOptions($DeliveryOptions);
+        $this->setDistance($Distance);
+        $this->setLatitude($Latitude);
+        $this->setLongitude($Longitude);
+        $this->setName($Name);
+        $this->setOpeningHours($OpeningHours);
+        $this->setPartnerName($PartnerName);
+        $this->setPhoneNumber($PhoneNumber);
+        $this->setLocationCode($LocationCode);
+        $this->setRetailNetworkID($RetailNetworkID);
+        $this->setSaleschannel($Saleschannel);
+        $this->setTerminalType($TerminalType);
+        $this->setWarnings($Warnings);
+        $this->setDownPartnerID($DownPartnerID);
+        $this->setDownPartnerLocation($DownPartnerLocation);
+    }
+
+    public static function jsonDeserialize(stdClass $json)
+    {
+        if (isset($json->ResponseLocation->DeliveryOptions)) {
+            /** @psalm-var list<string> $deliveryOptions */
+            $deliveryOptions = [];
+            if (!is_array($json->ResponseLocation->DeliveryOptions)){
+                $json->ResponseLocation->DeliveryOptions = [$json->ResponseLocation->DeliveryOptions];
+            }
+
+            foreach ($json->ResponseLocation->DeliveryOptions as $deliveryOption) {
+                if (isset($deliveryOption->string)) {
+                    if (!is_array($deliveryOption->string)) {
+                        $deliveryOption->string = [$deliveryOption->string];
+                    }
+                    foreach ($deliveryOption->string as $optionString) {
+                        $deliveryOptions[] = $optionString;
+                    }
+                } elseif (is_array($deliveryOption)) {
+                    $deliveryOptions = array_merge($deliveryOptions, $deliveryOption);
+                } elseif (is_string($deliveryOption)) {
+                    $deliveryOptions[] = $deliveryOption;
+                }
+            }
+
+            $json->ResponseLocation->DeliveryOptions = $deliveryOptions;
+        }
+
+        return parent::jsonDeserialize($json);
     }
 }

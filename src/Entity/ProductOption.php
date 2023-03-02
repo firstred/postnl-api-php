@@ -1,8 +1,8 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,37 +19,36 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity;
+namespace Firstred\PostNL\Entity;
 
-use ThirtyBees\PostNL\Service\BarcodeService;
-use ThirtyBees\PostNL\Service\ConfirmingService;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
-use ThirtyBees\PostNL\Service\LabellingService;
-use ThirtyBees\PostNL\Service\LocationService;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
-use ThirtyBees\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Service\BarcodeService;
+use Firstred\PostNL\Service\ConfirmingService;
+use Firstred\PostNL\Service\DeliveryDateService;
+use Firstred\PostNL\Service\LabellingService;
+use Firstred\PostNL\Service\LocationService;
+use Firstred\PostNL\Service\ShippingService;
+use Firstred\PostNL\Service\TimeframeService;
 
 /**
- * Class ProductOption
+ * Class ProductOption.
  *
- * @package ThirtyBees\PostNL\Entity
+ * @method string|null   getCharacteristic()
+ * @method string|null   getOption()
+ * @method ProductOption setCharacteristic(string|null $Characteristic = null)
+ * @method ProductOption setOption(string|null $Option = null)
  *
- * @method string|null getCharacteristic()
- * @method string|null getOption()
- *
- * @method ProductOption setCharacteristic(string|null $characteristic = null)
- * @method ProductOption setOption(string|null $option = null)
+ * @since 1.0.0
  */
 class ProductOption extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
+    /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode'    => [
+        'Barcode' => [
             'Characteristic' => BarcodeService::DOMAIN_NAMESPACE,
             'Option'         => BarcodeService::DOMAIN_NAMESPACE,
         ],
@@ -57,43 +56,43 @@ class ProductOption extends AbstractEntity
             'Characteristic' => ConfirmingService::DOMAIN_NAMESPACE,
             'Option'         => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'  => [
+        'Labelling' => [
             'Characteristic' => LabellingService::DOMAIN_NAMESPACE,
             'Option'         => LabellingService::DOMAIN_NAMESPACE,
         ],
-        'ShippingStatus'  => [
-            'Characteristic' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Option'         => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'  => [
+        'DeliveryDate' => [
             'Characteristic' => DeliveryDateService::DOMAIN_NAMESPACE,
             'Option'         => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'  => [
+        'Location' => [
             'Characteristic' => LocationService::DOMAIN_NAMESPACE,
             'Option'         => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'  => [
+        'Timeframe' => [
             'Characteristic' => TimeframeService::DOMAIN_NAMESPACE,
             'Option'         => TimeframeService::DOMAIN_NAMESPACE,
         ],
+        'Shipping' => [
+            'Characteristic' => ShippingService::DOMAIN_NAMESPACE,
+            'Option'         => ShippingService::DOMAIN_NAMESPACE,
+        ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string|null $Characteristic */
+    /** @var string|null */
     protected $Characteristic;
-    /** @var string|null $Option */
+    /** @var string|null */
     protected $Option;
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string|null $characteristic
-     * @param string|null $option
+     * @param string|null $Characteristic
+     * @param string|null $Option
      */
-    public function __construct($characteristic = null, $option = null)
+    public function __construct($Characteristic = null, $Option = null)
     {
         parent::__construct();
 
-        $this->setCharacteristic($characteristic);
-        $this->setOption($option);
+        $this->setCharacteristic($Characteristic);
+        $this->setOption($Option);
     }
 }

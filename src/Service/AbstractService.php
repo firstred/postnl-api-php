@@ -1,8 +1,8 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,35 +19,47 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Service;
+namespace Firstred\PostNL\Service;
 
+use DateInterval;
+use DateTimeImmutable;
+use DateTimeInterface;
+use Exception;
+use Firstred\PostNL\Entity\AbstractEntity;
+use Firstred\PostNL\Exception\CifDownException;
+use Firstred\PostNL\Exception\CifException;
+use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
+use Firstred\PostNL\Exception\InvalidMethodException;
+use Firstred\PostNL\Exception\ResponseException;
+use Firstred\PostNL\PostNL;
 use GuzzleHttp\Psr7\Response;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
-use ThirtyBees\PostNL\Entity\AbstractEntity;
-use ThirtyBees\PostNL\Exception\ApiException;
-use ThirtyBees\PostNL\Exception\CifDownException;
-use ThirtyBees\PostNL\Exception\CifException;
-use ThirtyBees\PostNL\Exception\InvalidMethodException;
-use ThirtyBees\PostNL\Exception\ResponseException;
-use ThirtyBees\PostNL\PostNL;
+use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
+use Psr\Http\Message\ResponseInterface;
+use ReflectionClass;
+use ReflectionException;
+use Sabre\Xml\Writer;
+use SimpleXMLElement;
+use function get_object_vars;
 
 /**
- * Class AbstractService
+ * Class AbstractService.
  *
- * @package ThirtyBees\PostNL\Service
+ * @since 1.0.0
  */
 abstract class AbstractService
 {
-    /** @var array $namespaces */
+    /** @var array */
     public static $namespaces = [];
 
-    /** @var PostNL $postnl */
+    /** @var PostNL */
     protected $postnl;
 
     const COMMON_NAMESPACE = 'http://postnl.nl/cif/services/common/';
@@ -55,35 +67,34 @@ abstract class AbstractService
     const ENVELOPE_NAMESPACE = 'http://schemas.xmlsoap.org/soap/envelope/';
     const OLD_ENVELOPE_NAMESPACE = 'http://www.w3.org/2003/05/soap-envelope';
 
-
     /**
-     * TTL for the cache
+     * TTL for the cache.
      *
      * `null` disables the cache
      * `int` is the TTL in seconds
      * Any `DateTime` will be used as the exact date/time at which to expire the data (auto calculate TTL)
      * A `DateInterval` can be used as well to set the TTL
      *
-     * @var null|int|\DateTimeInterface|\DateInterval $ttl
+     * @var int|DateTimeInterface|DateInterval|null
      */
     public $ttl = null;
 
     /**
-     * The [PSR-6](https://www.php-fig.org/psr/psr-6/) CacheItemPoolInterface
+     * The [PSR-6](https://www.php-fig.org/psr/psr-6/) CacheItemPoolInterface.
      *
      * Use a caching library that implements [PSR-6](https://www.php-fig.org/psr/psr-6/) and you'll be good to go
      * `null` disables the cache
      *
-     * @var null|CacheItemPoolInterface
+     * @var CacheItemPoolInterface|null
      */
     public $cache = null;
 
     /**
      * AbstractService constructor.
      *
-     * @param PostNL                                    $postnl PostNL instance
-     * @param null|CacheItemPoolInterface               $cache
-     * @param null|int|\DateTimeInterface|\DateInterval $ttl
+     * @param PostNL                                  $postnl PostNL instance
+     * @param CacheItemPoolInterface|null             $cache
+     * @param int|DateTimeInterface|DateInterval|null $ttl
      */
     public function __construct($postnl, $cache = null, $ttl = null)
     {
@@ -99,13 +110,18 @@ abstract class AbstractService
      * @return mixed
      *
      * @throws InvalidMethodException
+     *
+     * @since 1.0.0
      */
     public function __call($name, $args)
     {
-        $mode = $this->postnl->getMode() === PostNL::MODE_REST ? 'Rest' : 'Soap';
+        $mode = (PostNL::MODE_REST === $this->postnl->getMode()
+            || $this instanceof ShippingServiceInterface
+            || $this instanceof ShippingStatusServiceInterface
+        ) ? 'Rest' : 'Soap';
 
-        if (method_exists($this, "{$name}{$mode}")) {
-            return call_user_func_array([$this, "{$name}{$mode}"], $args);
+        if (method_exists($this, "$name$mode")) {
+            return call_user_func_array([$this, "$name$mode"], $args);
         } elseif (method_exists($this, $name)) {
             return call_user_func_array([$this, $name], $args);
         }
@@ -115,13 +131,15 @@ abstract class AbstractService
     }
 
     /**
-     * Set the webservice on the object
+     * Set the webservice on the object.
      *
      * This lets the object know for which service it should serialize
      *
      * @param AbstractEntity $object
      *
      * @return bool
+     *
+     * @since 1.0.0
      */
     public function setService($object)
     {
@@ -130,8 +148,8 @@ abstract class AbstractService
         }
 
         try {
-            $reflection = new \ReflectionClass(get_called_class());
-        } catch (\ReflectionException $e) {
+            $reflection = new ReflectionClass(get_called_class());
+        } catch (ReflectionException $e) {
             return false;
         }
         $service = substr($reflection->getShortName(), 0, strlen($reflection->getShortName()) - 7);
@@ -154,11 +172,13 @@ abstract class AbstractService
     }
 
     /**
-     * Register namespaces
+     * Register namespaces.
      *
-     * @param \SimpleXMLElement $element
+     * @param SimpleXMLElement $element
+     *
+     * @since 1.0.0
      */
-    public static function registerNamespaces(\SimpleXMLElement $element)
+    public static function registerNamespaces(SimpleXMLElement $element)
     {
         foreach (static::$namespaces as $namespace => $prefix) {
             $element->registerXPathNamespace($prefix, $namespace);
@@ -166,35 +186,73 @@ abstract class AbstractService
     }
 
     /**
-     * @param Response|\Exception $response
+     * @param ResponseInterface|Exception $response
      *
      * @return bool
      *
      * @throws CifDownException
      * @throws CifException
+     * @throws HttpClientException
      * @throws ResponseException
-     * @throws ApiException
+     * @throws InvalidConfigurationException
+     *
+     * @since 1.0.0
      */
     public static function validateRESTResponse($response)
     {
-        $body = json_decode(static::getResponseText($response), true);
+        $body = json_decode(static::getResponseText($response));
 
-        if (!empty($body['fault']['faultstring']) && $body['fault']['faultstring'] === 'Invalid ApiKey') {
-            throw new ApiException('Invalid Api Key');
+        if (!empty($body->fault->faultstring) && 'Invalid ApiKey' === $body->fault->faultstring) {
+            throw new InvalidConfigurationException('Invalid Api Key');
         }
-        if (isset($body['Envelope']['Body']['Fault']['Reason']['Text'][''])) {
-            throw new CifDownException($body['Envelope']['Body']['Fault']['Reason']['Text']['']);
+        if (isset($body->Envelope->Body->Fault->Reason->Text)) {
+            $vars = get_object_vars($body->Envelope->Body->Fault->Reason->Text);
+            throw new CifDownException(isset($vars['']) ? $vars[''] : 'Unknown');
         }
 
-        if (!empty($body['Errors']['Error'])) {
+        if (!empty($body->Errors->Error)) {
             $exceptionData = [];
-            foreach ($body['Errors']['Error'] as $error) {
-                $exceptionData[] = [
-                    'description' => isset($error['Description']) ? (string) $error['Description'] : null,
-                    'message'     => isset($error['ErrorMsg']) ? (string) $error['ErrorMsg'] : null,
-                    'code'        => isset($error['ErrorNumber']) ? (int) $error['ErrorNumber'] : 0,
-                ];
+            foreach ($body->Errors->Error as $error) {
+                if (isset($error->ErrorMsg)) {
+                    $exceptionData[] = [
+                        'description' => isset($error->ErrorMsg) ? $error->ErrorMsg : '',
+                        'message'     => isset($error->ErrorMsg) ? $error->ErrorMsg : '',
+                        'code'        => isset($error->ErrorNumber) ? (int) $error->ErrorNumber : 0,
+                    ];
+                } else {
+                    $exceptionData[] = [
+                        'description' => isset($error->Description) ? (string) $error->Description : null,
+                        'message'     => isset($error->ErrorMsg) ? (string) $error->ErrorMsg : null,
+                        'code'        => isset($error->ErrorNumber) ? (int) $error->ErrorNumber : 0,
+                    ];
+                }
             }
+            throw new CifException($exceptionData);
+        } elseif (!empty($body->Errors)) {
+            $exceptionData = [];
+            foreach ($body->Errors as $error) {
+                if (isset($error->ErrorMsg)) {
+                    $exceptionData[] = [
+                        'description' => isset($error->ErrorMsg) ? $error->ErrorMsg : '',
+                        'message'     => isset($error->ErrorMsg) ? $error->ErrorMsg : '',
+                        'code'        => isset($error->ErrorNumber) ? (int) $error->ErrorNumber : 0,
+                    ];
+                } else {
+                    $exceptionData[] = [
+                        'description' => isset($error->Description) ? (string) $error->Description : null,
+                        'message'     => isset($error->Error) ? (string) $error->Error : null,
+                        'code'        => isset($error->Code) ? (int) $error->Code : 0,
+                    ];
+                }
+            }
+            throw new CifException($exceptionData);
+        } elseif (!empty($body->Array->Item->ErrorMsg)) {
+            // {"Array":{"Item":{"ErrorMsg":"Unknown option GetDeliveryDate.Options='DayTime' specified","ErrorNumber":26}}}
+            $exceptionData = [[
+                'description' => isset($body->Array->Item->ErrorMsg) ? (string) $body->Array->Item->ErrorMsg : null,
+                'message'     => isset($body->Array->Item->ErrorMsg) ? (string) $body->Array->Item->ErrorMsg : null,
+                'code'        => 0,
+            ]];
             throw new CifException($exceptionData);
         }
 
@@ -202,13 +260,16 @@ abstract class AbstractService
     }
 
     /**
-     * @param \SimpleXMLElement $xml
+     * @param SimpleXMLElement $xml
      *
      * @return bool
+     *
      * @throws CifDownException
      * @throws CifException
+     *
+     * @since 1.0.0
      */
-    public static function validateSOAPResponse(\SimpleXMLElement $xml)
+    public static function validateSOAPResponse(SimpleXMLElement $xml)
     {
         if (count($xml->xpath('//env:Fault/env:Reason/env:Text')) >= 1) {
             throw new CifDownException((string) $xml->xpath('//env:Fault/env:Reason/env:Text')[0]);
@@ -219,7 +280,6 @@ abstract class AbstractService
         if (count($cifErrors)) {
             $exceptionData = [];
             foreach ($cifErrors as $error) {
-                /** @var \SimpleXMLElement $error */
                 static::registerNamespaces($error);
                 $exceptionData[] = [
                     'description' => (string) $error->xpath('//common:Description')[0],
@@ -234,12 +294,16 @@ abstract class AbstractService
     }
 
     /**
-     * Get the response
+     * Get the response.
      *
      * @param $response
      *
      * @return string
+     *
      * @throws ResponseException
+     * @throws HttpClientException
+     *
+     * @since 1.0.0
      */
     public static function getResponseText($response)
     {
@@ -254,9 +318,7 @@ abstract class AbstractService
 
         if ($response instanceof Response) {
             return (string) $response->getBody();
-        } elseif (is_a($response, 'GuzzleHttp\\Exception\\GuzzleException')
-            || is_a($response, 'ThirtyBees\\PostNL\\Exception\\HttpClientException')
-        ) {
+        } elseif (is_a($response, HttpClientException::class)) {
             $exception = $response;
             if (method_exists($response, 'getResponse')) {
                 $response = $response->getResponse();
@@ -265,7 +327,7 @@ abstract class AbstractService
                 throw $exception;
             }
 
-            /** @var Response $response */
+            /* @var Response $response */
             return (string) $response->getBody();
         } else {
             throw new ResponseException('Unknown response type');
@@ -273,43 +335,47 @@ abstract class AbstractService
     }
 
     /**
-     * Retrieve a cached item
+     * Retrieve a cached item.
      *
      * @param string $uuid
      *
-     * @return null|CacheItemInterface
+     * @return CacheItemInterface|null
+     *
+     * @throws PsrCacheInvalidArgumentException
+     *
+     * @since 1.0.0
      */
     public function retrieveCachedItem($uuid)
     {
         // An integer cache key means it should not be cached
-        if (is_int($uuid)) {
+        if (!is_string($uuid)) {
             return null;
         }
 
-        try {
-            $reflection = new \ReflectionClass($this);
-        } catch (\ReflectionException $exception) {
-            return null;
-        }
-        $uuid .= $this->postnl->getMode() === PostNL::MODE_REST ? 'rest' : 'soap';
+        $reflection = new ReflectionClass($this);
+        $uuid .= (PostNL::MODE_REST === $this->postnl->getMode()
+            || $this instanceof ShippingServiceInterface
+            || $this instanceof ShippingStatusServiceInterface
+        ) ? 'rest' : 'soap';
         $uuid .= strtolower(substr($reflection->getShortName(), 0, strlen($reflection->getShortName()) - 7));
         $item = null;
         if ($this->cache instanceof CacheItemPoolInterface && !is_null($this->ttl)) {
-            try {
-                $item = $this->cache->getItem($uuid);
-            } catch (\Psr\Cache\InvalidArgumentException $e) {
-            }
+            $item = $this->cache->getItem($uuid);
         }
 
         return $item;
     }
 
     /**
+     * Cache an item
+     *
      * @param CacheItemInterface $item
+     *
+     * @since 1.0.0
      */
     public function cacheItem(CacheItemInterface $item)
     {
-        if ($this->ttl instanceof \DateInterval || is_int($this->ttl)) {
+        if ($this->ttl instanceof DateInterval || is_int($this->ttl)) {
             // Reset expires at first -- it might have been set
             $item->expiresAt(null);
             // Then set the interval
@@ -322,5 +388,80 @@ abstract class AbstractService
         }
 
         $this->cache->save($item);
+    }
+
+    /**
+     * Delete an item from cache
+     *
+     * @param CacheItemInterface $item
+     *
+     * @throws PsrCacheInvalidArgumentException
+     *
+     * @since 1.2.0
+     */
+    public function removeCachedItem(CacheItemInterface $item)
+    {
+        $this->cache->deleteItem($item->getKey());
+    }
+
+    /**
+     * @return DateInterval|DateTimeInterface|int|null
+     *
+     * @since 1.2.0
+     */
+    public function getTtl()
+    {
+        return $this->ttl;
+    }
+
+    /**
+     * @param int|DateTimeInterface|DateInterval|null $ttl
+     *
+     * @return static
+     *
+     * @since 1.2.0
+     */
+    public function setTtl($ttl = null)
+    {
+        $this->ttl = $ttl;
+
+        return $this;
+    }
+
+    /**
+     * @return CacheItemPoolInterface|null
+     *
+     * @since 1.2.0
+     */
+    public function getCache()
+    {
+        return $this->cache;
+    }
+
+    /**
+     * @param CacheItemPoolInterface|null $cache
+     *
+     * @return static
+     *
+     * @since 1.2.0
+     */
+    public function setCache($cache = null)
+    {
+        $this->cache = $cache;
+
+        return $this;
+    }
+
+    /**
+     * Write default date format in XML
+     *
+     * @param Writer            $writer
+     * @param DateTimeImmutable $value
+     *
+     * @since 1.2.0
+     */
+    public static function defaultDateFormat(Writer $writer, DateTimeImmutable $value)
+    {
+        $writer->write($value->format('d-m-Y H:i:s'));
     }
 }

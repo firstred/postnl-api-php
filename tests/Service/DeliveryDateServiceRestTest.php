@@ -1,8 +1,8 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2021 Michael Dekker
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,50 +19,59 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Tests\Service;
+namespace Firstred\PostNL\Tests\Service;
 
 use Cache\Adapter\Void\VoidCachePool;
+use DateTimeInterface;
+use Firstred\PostNL\Entity\Address;
+use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Entity\CutOffTime;
+use Firstred\PostNL\Entity\Message\Message;
+use Firstred\PostNL\Entity\Request\GetDeliveryDate;
+use Firstred\PostNL\Entity\Request\GetSentDate;
+use Firstred\PostNL\Entity\Request\GetSentDateRequest;
+use Firstred\PostNL\Entity\Response\GetDeliveryDateResponse;
+use Firstred\PostNL\Entity\Response\GetSentDateResponse;
+use Firstred\PostNL\Entity\SOAP\UsernameToken;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\HttpClient\MockClient;
+use Firstred\PostNL\PostNL;
+use Firstred\PostNL\Service\DeliveryDateServiceInterface;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Message as PsrMessage;
+use GuzzleHttp\Psr7\Query;
 use GuzzleHttp\Psr7\Response;
-use Psr\Log\LoggerInterface;
-use ThirtyBees\PostNL\Entity\Address;
-use ThirtyBees\PostNL\Entity\Customer;
-use ThirtyBees\PostNL\Entity\CutOffTime;
-use ThirtyBees\PostNL\Entity\Message\Message;
-use ThirtyBees\PostNL\Entity\Request\GetDeliveryDate;
-use ThirtyBees\PostNL\Entity\Request\GetSentDate;
-use ThirtyBees\PostNL\Entity\Request\GetSentDateRequest;
-use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
-use ThirtyBees\PostNL\HttpClient\MockClient;
-use ThirtyBees\PostNL\PostNL;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
+use libphonenumber\NumberParseException;
+use ReflectionException;
+use function file_get_contents;
+use const _RESPONSES_DIR_;
 
 /**
- * Class DeliveryDateRestTest
- *
- * @package ThirtyBees\PostNL\Tests\Service
+ * Class DeliveryDateRestTest.
  *
  * @testdox The DeliveryDateService (REST)
  */
-class DeliveryDateRestTest extends \PHPUnit_Framework_TestCase
+class DeliveryDateServiceRestTest extends ServiceTest
 {
-    /** @var PostNL $postnl */
+    /** @var PostNL */
     protected $postnl;
-    /** @var DeliveryDateService $service */
+    /** @var DeliveryDateServiceInterface */
     protected $service;
-    /** @var $lastRequest */
+    /** @var */
     protected $lastRequest;
 
     /**
      * @before
-     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     *
+     * @throws ReflectionException
+     * @throws InvalidArgumentException
+     * @throws NumberParseException
      */
     public function setupPostNL()
     {
@@ -82,31 +91,17 @@ class DeliveryDateRestTest extends \PHPUnit_Framework_TestCase
                     'Zipcode'     => '2132WT',
                 ]))
                 ->setGlobalPackBarcodeType('AB')
-                ->setGlobalPackCustomerCode('1234')
-            , new UsernameToken(null, 'test'),
+                ->setGlobalPackCustomerCode('1234'), new UsernameToken(null, 'test'),
             true,
             PostNL::MODE_REST
         );
 
-        $this->service = $this->postnl->getDeliveryDateService();
-        $this->service->cache = new VoidCachePool();
-        $this->service->ttl = 1;
-    }
-
-    /**
-     * @after
-     */
-    public function logPendingRequest()
-    {
-        if (!$this->lastRequest instanceof Request) {
-            return;
-        }
-
         global $logger;
-        if ($logger instanceof LoggerInterface) {
-            $logger->debug($this->getName()." Request\n".\GuzzleHttp\Psr7\str($this->lastRequest));
-        }
-        $this->lastRequest = null;
+        $this->postnl->setLogger($logger);
+
+        $this->service = $this->postnl->getDeliveryDateService();
+        $this->service->setCache(new VoidCachePool());
+        $this->service->setTtl(1);
     }
 
     /**
@@ -124,7 +119,7 @@ class DeliveryDateRestTest extends \PHPUnit_Framework_TestCase
                         ->setCity('Hoofddorp')
                         ->setCountryCode('NL')
                         ->setCutOffTimes([
-                            new CutOffTime('00', '14:00:00')
+                            new CutOffTime('00', '14:00:00'),
                         ])
                         ->setHouseNr('42')
                         ->setHouseNrExt('A')
@@ -139,19 +134,20 @@ class DeliveryDateRestTest extends \PHPUnit_Framework_TestCase
                 ->setMessage($message)
         );
 
-        $query = \GuzzleHttp\Psr7\parse_query($request->getUri()->getQuery());
+        $query = Query::parse($request->getUri()->getQuery());
 
-        $this->assertEquals([
-            'ShippingDate'     => '29-06-2016 14:00:00',
-            'ShippingDuration' => '1',
-            'CountryCode'      => 'NL',
-            'Options'          => 'Daytime',
-            'CutOffTime'       => '14:00:00',
-            'PostalCode'       => '2132WT',
-            'City'             => 'Hoofddorp',
-            'HouseNr'          => '42',
-            'HouseNrExt'       => 'A',
-        ],
+        $this->assertEquals(
+            [
+                'ShippingDate'     => '29-06-2016 14:00:00',
+                'ShippingDuration' => '1',
+                'CountryCode'      => 'NL',
+                'Options'          => 'Daytime',
+                'CutOffTime'       => '14:00:00',
+                'PostalCode'       => '2132WT',
+                'City'             => 'Hoofddorp',
+                'HouseNr'          => '42',
+                'HouseNrExt'       => 'A',
+            ],
             $query
         );
         $this->assertEquals('test', $request->getHeaderLine('apikey'));
@@ -160,18 +156,11 @@ class DeliveryDateRestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox return a valid delivery date
+     * @dataProvider singleDeliveryDateResponseProvider
      */
-    public function testGetDeliveryDateRest()
+    public function testGetDeliveryDateRest($response)
     {
-        $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'text/xml;charset=UTF-8'], json_encode([
-                'DeliveryDate' => '30-06-2016',
-                'Options' => [
-                    'string' => 'Daytime',
-                ],
-            ])),
-        ]);
-
+        $mock = new MockHandler([$response]);
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();
         $mockClient->setHandler($handler);
@@ -184,7 +173,7 @@ class DeliveryDateRestTest extends \PHPUnit_Framework_TestCase
                     ->setCity('Hoofddorp')
                     ->setCountryCode('NL')
                     ->setCutOffTimes([
-                        new CutOffTime('00', '14:00:00')
+                        new CutOffTime('00', '14:00:00'),
                     ])
                     ->setHouseNr('42')
                     ->setHouseNrExt('A')
@@ -199,10 +188,13 @@ class DeliveryDateRestTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertInstanceOf(
-            '\\ThirtyBees\\PostNL\\Entity\\Response\\GetDeliveryDateResponse',
+            GetDeliveryDateResponse::class,
             $response
         );
-        $this->assertEquals('30-06-2016', $response->getDeliveryDate());
+        $this->assertInstanceof(DateTimeInterface::class, $response->getDeliveryDate());
+        $this->assertEquals('30-06-2016', $response->getDeliveryDate()->format('d-m-Y'));
+        $this->assertEquals('Daytime', $response->getOptions()[0]);
+        $this->assertNotTrue(static::containsStdClass($response));
     }
 
     /**
@@ -270,9 +262,19 @@ class DeliveryDateRestTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertInstanceOf(
-            '\\ThirtyBees\\PostNL\\Entity\\Response\\GetSentDateResponse',
+            GetSentDateResponse::class,
             $response
         );
-        $this->assertEquals('29-06-2016', $response->getSentDate());
+        $this->assertEquals('29-06-2016', $response->getSentDate()->format('d-m-Y'));
+        $this->assertNotTrue(static::containsStdClass($response));
+    }
+
+    public function singleDeliveryDateResponseProvider()
+    {
+        return [
+            [PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/deliverydate/deliverydate.http'))],
+            [PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/deliverydate/deliverydate2.http'))],
+            [PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/deliverydate/deliverydate3.http'))],
+        ];
     }
 }

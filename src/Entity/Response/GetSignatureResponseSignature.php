@@ -1,8 +1,8 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,41 +19,43 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity\Response;
+namespace Firstred\PostNL\Entity\Response;
 
-use ThirtyBees\PostNL\Entity\AbstractEntity;
-use ThirtyBees\PostNL\Service\BarcodeService;
-use ThirtyBees\PostNL\Service\ConfirmingService;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
-use ThirtyBees\PostNL\Service\LabellingService;
-use ThirtyBees\PostNL\Service\LocationService;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
-use ThirtyBees\PostNL\Service\TimeframeService;
+use DateTimeImmutable;
+use DateTimeInterface;
+use DateTimeZone;
+use Exception;
+use Firstred\PostNL\Entity\AbstractEntity;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Service\BarcodeService;
+use Firstred\PostNL\Service\ConfirmingService;
+use Firstred\PostNL\Service\DeliveryDateService;
+use Firstred\PostNL\Service\LabellingService;
+use Firstred\PostNL\Service\LocationService;
+use Firstred\PostNL\Service\TimeframeService;
 
 /**
- * Class GetSignatureResponseSignature
+ * Class GetSignatureResponseSignature.
  *
- * @package ThirtyBees\PostNL\Entity
+ * @method string|null            getBarcode()
+ * @method DateTimeInterface|null getSignatureDate()
+ * @method string|null            getSignatureImage()
+ * @method SignatureResponse      setBarcode(string|null $Barcode = null)
+ * @method SignatureResponse      setSignatureImage(string|null $SignatureImage = null)
  *
- * @method string|null getBarcode()
- * @method string|null getSignatureDate()
- * @method string|null getSignatureImage()
- *
- * @method SignatureResponse setBarcode(string|null $barcode = null)
- * @method SignatureResponse setSignatureDate(string|null $signatureDate = null)
- * @method SignatureResponse setSignatureImage(string|null $signatureImage = null)
+ * @since 1.0.0
  */
 class GetSignatureResponseSignature extends AbstractEntity
 {
     /**
-     * Default properties and namespaces for the SOAP API
+     * Default properties and namespaces for the SOAP API.
      *
-     * @var array $defaultProperties
+     * @var array
      */
     public static $defaultProperties = [
         'Barcode'        => [
@@ -70,11 +72,6 @@ class GetSignatureResponseSignature extends AbstractEntity
             'Barcode'        => LabellingService::DOMAIN_NAMESPACE,
             'SignatureDate'  => LabellingService::DOMAIN_NAMESPACE,
             'SignatureImage' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'Barcode'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'SignatureDate'  => ShippingStatusService::DOMAIN_NAMESPACE,
-            'SignatureImage' => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate'   => [
             'Barcode'        => DeliveryDateService::DOMAIN_NAMESPACE,
@@ -93,27 +90,53 @@ class GetSignatureResponseSignature extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string|null $Barcode */
+    /** @var string|null */
     protected $Barcode;
-    /** @var string|null $SignatureDate */
+    /** @var string|null */
     protected $SignatureDate;
-    /** @var string|null $SignatureImage */
+    /** @var string|null */
     protected $SignatureImage;
     // @codingStandardsIgnoreEnd
 
     /**
      * GetSignatureResponseSignature constructor.
      *
-     * @param string|null $barcode
-     * @param string|null $signatureDate
-     * @param string|null $signatureImage
+     * @param string|null $Barcode
+     * @param string|null $SignatureDate
+     * @param string|null $SignatureImage
+     *
+     * @throws InvalidArgumentException
      */
-    public function __construct($barcode = null, $signatureDate = null, $signatureImage = null)
+    public function __construct($Barcode = null, $SignatureDate = null, $SignatureImage = null)
     {
         parent::__construct();
 
-        $this->setBarcode($barcode);
-        $this->setSignatureDate($signatureDate);
-        $this->setSignatureImage($signatureImage);
+        $this->setBarcode($Barcode);
+        $this->setSignatureDate($SignatureDate);
+        $this->setSignatureImage($SignatureImage);
+    }
+
+    /**
+     * @param string|DateTimeInterface|null $SignatureDate
+     *
+     * @return static
+     *
+     * @throws InvalidArgumentException
+     *
+     * @since 1.2.0
+     */
+    public function setSignatureDate($SignatureDate = null)
+    {
+        if (is_string($SignatureDate)) {
+            try {
+                $SignatureDate = new DateTimeImmutable($SignatureDate, new DateTimeZone('Europe/Amsterdam'));
+            } catch (Exception $e) {
+                throw new InvalidArgumentException($e->getMessage(), 0, $e);
+            }
+        }
+
+        $this->SignatureDate = $SignatureDate;
+
+        return $this;
     }
 }

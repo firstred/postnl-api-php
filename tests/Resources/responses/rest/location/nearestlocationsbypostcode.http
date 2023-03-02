@@ -1,0 +1,69 @@
+HTTP/1.1 200 OK
+Cache-Control: private, max-age=0
+Content-Type: application/json;charset=UTF-8
+Date: Wed, 31 Mar 2021 12:42:12 GMT
+Strict-Transport-Security: max-age=31536000
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-Robots-Tag: noindex
+X-XSS-Protection: 1; mode=block
+Connection: keep-alive
+
+{
+  "GetLocationsResult": {
+    "ResponseLocation": {
+      "Address": {
+        "City": "Delft",
+        "Countrycode": "NL",
+        "HouseNr": 22,
+        "Remark": "Dit is een Postkantoor. Post en pakketten die u op werkdagen vóór de lichtingstijd afgeeft, bezorgen we binnen Nederland de volgende dag. Pakketten die u op zaterdag voor 16:00 uur afgeeft worden maandag bezorgd.",
+        "Street": "Vrijheidslaan",
+        "Zipcode": "2625RD"
+      },
+      "DeliveryOptions": {
+        "string": [
+          "DO",
+          "PG",
+          "UL",
+          "BW",
+          "PG_EX",
+          "BWUL",
+          "RETA"
+        ]
+      },
+      "Distance": 244,
+      "Latitude": 51.987855746674,
+      "LocationCode": 161457,
+      "Longitude": 4.34625216973989,
+      "Name": "DA Drogisterij Buitenhof",
+      "OpeningHours": {
+        "Friday": {
+          "string": "09:00-19:00"
+        },
+        "Monday": {
+          "string": "09:00-19:00"
+        },
+        "Saturday": {
+          "string": "09:00-18:00"
+        },
+        "Sunday": {
+          "string": "12:00-17:00"
+        },
+        "Thursday": {
+          "string": "09:00-19:00"
+        },
+        "Tuesday": {
+          "string": "09:00-19:00"
+        },
+        "Wednesday": {
+          "string": "09:00-19:00"
+        }
+      },
+      "PartnerName": "PostNL",
+      "PhoneNumber": "015-2560615",
+      "RetailNetworkID": "PNPNL-01",
+      "Saleschannel": "PKT L",
+      "TerminalType": "NRS"
+    }
+  }
+}

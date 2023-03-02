@@ -1,8 +1,8 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,81 +19,129 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity;
+namespace Firstred\PostNL\Entity;
 
-use ThirtyBees\PostNL\Service\BarcodeService;
-use ThirtyBees\PostNL\Service\ConfirmingService;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
-use ThirtyBees\PostNL\Service\LabellingService;
-use ThirtyBees\PostNL\Service\LocationService;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
-use ThirtyBees\PostNL\Service\TimeframeService;
+use DateTimeImmutable;
+use DateTimeInterface;
+use DateTimeZone;
+use Exception;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Service\BarcodeService;
+use Firstred\PostNL\Service\ConfirmingService;
+use Firstred\PostNL\Service\DeliveryDateService;
+use Firstred\PostNL\Service\LabellingService;
+use Firstred\PostNL\Service\LocationService;
+use Firstred\PostNL\Service\TimeframeService;
+use function is_string;
 
 /**
- * Class Expectation
+ * Class Expectation.
  *
- * @package ThirtyBees\PostNL\Entity
+ * @method DateTimeInterface|null getETAFrom()
+ * @method DateTimeInterface|null getETATo()
  *
- * @method string|null getETAFrom()
- * @method string|null getETATo()
- *
- * @method Expectation setETAFrom(string|null $dateTime = null)
- * @method Expectation setETATo(string|null $dateTime = null)
+ * @since 1.0.0
  */
 class Expectation extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
+    /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'ETAFrom' => BarcodeService::DOMAIN_NAMESPACE,
             'ETATo'   => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'ETAFrom' => ConfirmingService::DOMAIN_NAMESPACE,
             'ETATo'   => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'ETAFrom' => LabellingService::DOMAIN_NAMESPACE,
             'ETATo'   => LabellingService::DOMAIN_NAMESPACE,
         ],
-        'ShippingStatus' => [
-            'ETAFrom' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'ETATo'   => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'ETAFrom' => DeliveryDateService::DOMAIN_NAMESPACE,
             'ETATo'   => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'ETAFrom' => LocationService::DOMAIN_NAMESPACE,
             'ETATo'   => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'ETAFrom' => TimeframeService::DOMAIN_NAMESPACE,
             'ETATo'   => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string|null $ETAFrom */
+    /** @var DateTimeInterface|null */
     protected $ETAFrom;
-    /** @var string|null $ETATo */
+    /** @var DateTimeInterface|null */
     protected $ETATo;
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string $from
-     * @param string $to
+     * @param DateTimeInterface|string|null $ETAFrom
+     * @param DateTimeInterface|string|null $ETATo
+     *
+     * @throws InvalidArgumentException
      */
-    public function __construct($from = null, $to = null)
+    public function __construct($ETAFrom = null, $ETATo = null)
     {
         parent::__construct();
 
-        $this->setETAFrom($from);
-        $this->setETATo($to);
+        $this->setETAFrom($ETAFrom);
+        $this->setETATo($ETATo);
+    }
+
+    /**
+     * @param DateTimeInterface|string|null $ETAFrom
+     *
+     * @return static
+     *
+     * @throws InvalidArgumentException
+     *
+     * @since 1.2.0
+     */
+    public function setETAFrom($ETAFrom = null)
+    {
+        if (is_string($ETAFrom)) {
+            try {
+                $ETAFrom = new DateTimeImmutable($ETAFrom, new DateTimeZone('Europe/Amsterdam'));
+            } catch (Exception $e) {
+                throw new InvalidArgumentException($e->getMessage(),  0, $e);
+            }
+        }
+
+        $this->ETAFrom = $ETAFrom;
+
+        return $this;
+    }
+
+    /**
+     * @param DateTimeInterface|string|null $ETATo
+     *
+     * @return static
+     *
+     * @throws InvalidArgumentException
+     *
+     * @since 1.2.0
+     */
+    public function setETATo($ETATo = null)
+    {
+        if (is_string($ETATo)) {
+            try {
+                $ETATo = new DateTimeImmutable($ETATo, new DateTimeZone('Europe/Amsterdam'));
+            } catch (Exception $e) {
+                throw new InvalidArgumentException($e->getMessage(), 0, $e);
+            }
+        }
+
+        $this->ETATo = $ETATo;
+
+        return $this;
     }
 }

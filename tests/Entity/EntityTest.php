@@ -1,14 +1,41 @@
 <?php
+/**
+ * The MIT License (MIT).
+ *
+ * Copyright (c) 2017-2021 Michael Dekker
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
+ * associated documentation files (the "Software"), to deal in the Software without restriction,
+ * including without limitation the rights to use, copy, modify, merge, publish, distribute,
+ * sublicense, and/or sell copies of the Software, and to permit persons to whom the Software
+ * is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or
+ * substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT
+ * NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
+ * @license   https://opensource.org/licenses/MIT The MIT License
+ */
 
-namespace ThirtyBees\PostNL\Tests\Entity;
-use ThirtyBees\PostNL\Entity\AbstractEntity;
-use ThirtyBees\PostNL\Entity\Address;
+namespace Firstred\PostNL\Tests\Entity;
+
+ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 use Sabre\Xml\Service as XmlService;
+use Firstred\PostNL\Entity\AbstractEntity;
+use Firstred\PostNL\Entity\Address;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 
 /**
  * @testdox The Entities
  */
-class EntityTest extends \PHPUnit_Framework_TestCase
+class EntityTest extends TestCase
 {
     /**
      * @testdox have a working constructor
@@ -21,9 +48,9 @@ class EntityTest extends \PHPUnit_Framework_TestCase
             }
 
             $entityName = substr($entityName, 0, strlen($entityName) - 4);
-            $entityName = "\\ThirtyBees\\PostNL\\Entity\\$entityName";
+            $entityName = "\\Firstred\\PostNL\\Entity\\$entityName";
             $entity = new $entityName();
-            $this->assertInstanceOf("\\ThirtyBees\\PostNL\\Entity\\AbstractEntity", $entity);
+            $this->assertInstanceOf(AbstractEntity::class, $entity);
         }
 
         foreach (scandir(__DIR__.'/../../src/Entity/Message') as $entityName) {
@@ -32,9 +59,9 @@ class EntityTest extends \PHPUnit_Framework_TestCase
             }
 
             $entityName = substr($entityName, 0, strlen($entityName) - 4);
-            $entityName = "\\ThirtyBees\\PostNL\\Entity\\Message\\$entityName";
+            $entityName = "\\Firstred\\PostNL\\Entity\\Message\\$entityName";
             $entity = new $entityName();
-            $this->assertInstanceOf("\\ThirtyBees\\PostNL\\Entity\\AbstractEntity", $entity);
+            $this->assertInstanceOf(AbstractEntity::class, $entity);
         }
 
         foreach (scandir(__DIR__.'/../../src/Entity/Request') as $entityName) {
@@ -43,9 +70,9 @@ class EntityTest extends \PHPUnit_Framework_TestCase
             }
 
             $entityName = substr($entityName, 0, strlen($entityName) - 4);
-            $entityName = "\\ThirtyBees\\PostNL\\Entity\\Request\\$entityName";
+            $entityName = "\\Firstred\\PostNL\\Entity\\Request\\$entityName";
             $entity = new $entityName();
-            $this->assertInstanceOf("\\ThirtyBees\\PostNL\\Entity\\AbstractEntity", $entity);
+            $this->assertInstanceOf(AbstractEntity::class, $entity);
         }
 
         foreach (scandir(__DIR__.'/../../src/Entity/Response') as $entityName) {
@@ -54,9 +81,9 @@ class EntityTest extends \PHPUnit_Framework_TestCase
             }
 
             $entityName = substr($entityName, 0, strlen($entityName) - 4);
-            $entityName = "\\ThirtyBees\\PostNL\\Entity\\Response\\$entityName";
+            $entityName = "\\Firstred\\PostNL\\Entity\\Response\\$entityName";
             $entity = new $entityName();
-            $this->assertInstanceOf("\\ThirtyBees\\PostNL\\Entity\\AbstractEntity", $entity);
+            $this->assertInstanceOf(AbstractEntity::class, $entity);
         }
     }
 
@@ -65,7 +92,7 @@ class EntityTest extends \PHPUnit_Framework_TestCase
      */
     public function testNegativeMissingValue()
     {
-        $this->expectException('\\ThirtyBees\\PostNL\\Exception\\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
 
         (new Address())
             ->setArea()
@@ -77,7 +104,9 @@ class EntityTest extends \PHPUnit_Framework_TestCase
      */
     public function testNegativeCannotInstantiateAbstract()
     {
-        $this->assertNull(AbstractEntity::create());
+        $this->expectException(InvalidArgumentException::class);
+
+        AbstractEntity::create();
     }
 
     /**
@@ -93,7 +122,7 @@ class EntityTest extends \PHPUnit_Framework_TestCase
      */
     public function testNegativeThrowExceptionWhenMethodDoesNotExist()
     {
-        $this->expectException('\\ThirtyBees\\PostNL\\Exception\\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
 
         (new Address())->blab();
     }
@@ -103,7 +132,7 @@ class EntityTest extends \PHPUnit_Framework_TestCase
      */
     public function testNegativeThrowExceptionWhenServiceNotSetJson()
     {
-        $this->expectException('\\ThirtyBees\\PostNL\\Exception\\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
 
         json_encode(new Address());
     }
@@ -113,7 +142,7 @@ class EntityTest extends \PHPUnit_Framework_TestCase
      */
     public function testNegativeThrowExceptionWhenServiceNotSetXml()
     {
-        $this->expectException('\\ThirtyBees\\PostNL\\Exception\\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
 
         $service = new XmlService();
 

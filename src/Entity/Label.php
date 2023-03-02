@@ -1,8 +1,8 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,101 +19,100 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity;
+namespace Firstred\PostNL\Entity;
 
-use ThirtyBees\PostNL\Service\BarcodeService;
-use ThirtyBees\PostNL\Service\ConfirmingService;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
-use ThirtyBees\PostNL\Service\LabellingService;
-use ThirtyBees\PostNL\Service\LocationService;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
-use ThirtyBees\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Service\BarcodeService;
+use Firstred\PostNL\Service\ConfirmingService;
+use Firstred\PostNL\Service\DeliveryDateService;
+use Firstred\PostNL\Service\LabellingService;
+use Firstred\PostNL\Service\LocationService;
+use Firstred\PostNL\Service\ShippingService;
+use Firstred\PostNL\Service\TimeframeService;
 
 /**
- * Class Label
- *
- * @package ThirtyBees\PostNL\Entity
+ * Class Label.
  *
  * @method string|null getContent()
  * @method string|null getContentType()
- * @method string|null getLabelType()
+ * @method string|null getLabeltype()
+ * @method Label       setContent(string|null $Content = null)
+ * @method Label       setContentType(string|null $ContentType = null)
+ * @method Label       setLabeltype(string|null $Labeltype = null)
  *
- * @method Label setContent(string|null $content = null)
- * @method Label setContentType(string|null $contentType = null)
- * @method Label setLabelType(string|null $labelType = null)
+ * @since 1.0.0
  */
 class Label extends AbstractEntity
 {
     const FORMAT_A4 = 1;
     const FORMAT_A6 = 2;
 
-    /** @var string[][] $defaultProperties */
+    /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'Content'     => BarcodeService::DOMAIN_NAMESPACE,
             'ContentType' => BarcodeService::DOMAIN_NAMESPACE,
             'Labeltype'   => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'Content'     => ConfirmingService::DOMAIN_NAMESPACE,
             'ContentType' => ConfirmingService::DOMAIN_NAMESPACE,
             'Labeltype'   => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'Content'     => LabellingService::DOMAIN_NAMESPACE,
             'ContentType' => LabellingService::DOMAIN_NAMESPACE,
             'Labeltype'   => LabellingService::DOMAIN_NAMESPACE,
         ],
-        'ShippingStatus' => [
-            'Content'     => ShippingStatusService::DOMAIN_NAMESPACE,
-            'ContentType' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Labeltype'   => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'Content'     => DeliveryDateService::DOMAIN_NAMESPACE,
             'ContentType' => DeliveryDateService::DOMAIN_NAMESPACE,
             'Labeltype'   => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'Content'     => LocationService::DOMAIN_NAMESPACE,
             'ContentType' => LocationService::DOMAIN_NAMESPACE,
             'Labeltype'   => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'Content'     => TimeframeService::DOMAIN_NAMESPACE,
             'ContentType' => TimeframeService::DOMAIN_NAMESPACE,
             'Labeltype'   => TimeframeService::DOMAIN_NAMESPACE,
         ],
+        'Shipping' => [
+            'Content'     => ShippingService::DOMAIN_NAMESPACE,
+            'ContentType' => ShippingService::DOMAIN_NAMESPACE,
+            'Labeltype'   => ShippingService::DOMAIN_NAMESPACE,
+        ],
     ];
     // @codingStandardsIgnoreStart
     /**
-     * @var string|null $Content
+     * @var string|null
      *
      * Base 64 encoded content
      */
     protected $Content;
-    /** @var string|null $Contenttype */
+    /** @var string|null */
     protected $Contenttype;
-    /** @var string|null $Labeltype */
+    /** @var string|null */
     protected $Labeltype;
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string|null $content
-     * @param string|null $contentType
-     * @param string|null $labelType
+     * @param string|null $Content
+     * @param string|null $ContentType
+     * @param string|null $Labeltype
      */
-    public function __construct($content = null, $contentType = null, $labelType = null)
+    public function __construct($Content = null, $ContentType = null, $Labeltype = null)
     {
         parent::__construct();
 
-        $this->setContent($content);
-        $this->setContenttype($contentType);
-        $this->setLabeltype($labelType);
+        $this->setContent($Content);
+        $this->setContenttype($ContentType);
+        $this->setLabeltype($Labeltype);
     }
 }

@@ -1,8 +1,8 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,88 +19,82 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity\Response;
+namespace Firstred\PostNL\Entity\Response;
 
-use ThirtyBees\PostNL\Entity\AbstractEntity;
-use ThirtyBees\PostNL\Service\BarcodeService;
-use ThirtyBees\PostNL\Service\ConfirmingService;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
-use ThirtyBees\PostNL\Service\LabellingService;
-use ThirtyBees\PostNL\Service\LocationService;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
-use ThirtyBees\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Entity\AbstractEntity;
+use Firstred\PostNL\Service\BarcodeService;
+use Firstred\PostNL\Service\ConfirmingService;
+use Firstred\PostNL\Service\DeliveryDateService;
+use Firstred\PostNL\Service\LabellingService;
+use Firstred\PostNL\Service\LocationService;
+use Firstred\PostNL\Service\TimeframeService;
 
 /**
- * Class GenerateLabelResponse
- *
- * @package ThirtyBees\PostNL\Entity
+ * Class GenerateLabelResponse.
  *
  * @method MergedLabel[]|null      getMergedLabels()
  * @method ResponseShipment[]|null getResponseShipments()
+ * @method GenerateLabelResponse   setMergedLabels(MergedLabel[]|null $MergedLabels = null)
+ * @method GenerateLabelResponse   setResponseShipments(ResponseShipment[]|null $ResponseShipments = null)
  *
- * @method GenerateLabelResponse setMergedLabels(MergedLabel[]|null $mergedLabels = null)
- * @method GenerateLabelResponse setResponseShipments(ResponseShipment[]|null $responseShipment = null)
+ * @since 1.0.0
  */
 class GenerateLabelResponse extends AbstractEntity
 {
     /**
-     * Default properties and namespaces for the SOAP API
+     * Default properties and namespaces for the SOAP API.
      *
-     * @var array|null $defaultProperties
+     * @var array|null
      */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'MergedLabels'      => BarcodeService::DOMAIN_NAMESPACE,
             'ResponseShipments' => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'MergedLabels'      => ConfirmingService::DOMAIN_NAMESPACE,
             'ResponseShipments' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'MergedLabels'      => LabellingService::DOMAIN_NAMESPACE,
             'ResponseShipments' => LabellingService::DOMAIN_NAMESPACE,
         ],
-        'ShippingStatus' => [
-            'MergedLabels'      => ShippingStatusService::DOMAIN_NAMESPACE,
-            'ResponseShipments' => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'MergedLabels'      => DeliveryDateService::DOMAIN_NAMESPACE,
             'ResponseShipments' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'MergedLabels'      => LocationService::DOMAIN_NAMESPACE,
             'ResponseShipments' => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'MergedLabels'      => TimeframeService::DOMAIN_NAMESPACE,
             'ResponseShipments' => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var MergedLabel[]|null $MergedLabels */
+    /** @var MergedLabel[]|null */
     protected $MergedLabels;
-    /** @var ResponseShipment[]|null $ResponseShipments */
+    /** @var ResponseShipment[]|null */
     protected $ResponseShipments;
     // @codingStandardsIgnoreEnd
 
     /**
      * GenerateLabelResponse constructor.
      *
-     * @param MergedLabel[]|null      $mergedLabels
-     * @param ResponseShipment[]|null $responseShipments
+     * @param MergedLabel[]|null      $MergedLabels
+     * @param ResponseShipment[]|null $ReponseShipments
      */
-    public function __construct(array $mergedLabels = null, array $responseShipments = null)
+    public function __construct(array $MergedLabels = null, array $ReponseShipments = null)
     {
         parent::__construct();
 
-        $this->setMergedLabels($mergedLabels);
-        $this->setResponseShipments($responseShipments);
+        $this->setMergedLabels($MergedLabels);
+        $this->setResponseShipments($ReponseShipments);
     }
 }

@@ -1,8 +1,8 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2021 Michael Dekker
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,43 +19,48 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Tests\Misc;
+namespace Firstred\PostNL\Tests\Misc;
 
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
-use ThirtyBees\PostNL\Entity\Address;
-use ThirtyBees\PostNL\Entity\Customer;
-use ThirtyBees\PostNL\Entity\CutOffTime;
-use ThirtyBees\PostNL\Entity\Location;
-use ThirtyBees\PostNL\Entity\Request\GetDeliveryDate;
-use ThirtyBees\PostNL\Entity\Request\GetNearestLocations;
-use ThirtyBees\PostNL\Entity\Request\GetTimeframes;
-use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
-use ThirtyBees\PostNL\Entity\Timeframe;
-use ThirtyBees\PostNL\HttpClient\MockClient;
-use ThirtyBees\PostNL\PostNL;
+ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use Firstred\PostNL\Entity\Address;
+use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Entity\CutOffTime;
+use Firstred\PostNL\Entity\Location;
+use Firstred\PostNL\Entity\Request\GetDeliveryDate;
+use Firstred\PostNL\Entity\Request\GetNearestLocations;
+use Firstred\PostNL\Entity\Request\GetTimeframes;
+use Firstred\PostNL\Entity\Response\GetDeliveryDateResponse;
+use Firstred\PostNL\Entity\Response\GetNearestLocationsResponse;
+use Firstred\PostNL\Entity\Response\ResponseTimeframes;
+use Firstred\PostNL\Entity\SOAP\UsernameToken;
+use Firstred\PostNL\Entity\Timeframe;
+use Firstred\PostNL\HttpClient\MockClient;
+use Firstred\PostNL\PostNL;
+use Firstred\PostNL\Util\DummyLogger;
 
 /**
- * Class PostNLRestTest
- *
- * @package ThirtyBees\PostNL\Tests\Misc
+ * Class PostNLRestTest.
  *
  * @testdox The PostNL object
  */
-class PostNLRestTest extends \PHPUnit_Framework_TestCase
+class PostNLRestTest extends TestCase
 {
-    /** @var PostNL $postnl */
+    /** @var PostNL */
     protected $postnl;
 
     /**
      * @before
-     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \ReflectionException
      */
     public function setupPostNL()
     {
@@ -75,8 +80,7 @@ class PostNLRestTest extends \PHPUnit_Framework_TestCase
                     'Zipcode'     => '2132WT',
                 ]))
                 ->setGlobalPackBarcodeType('AB')
-                ->setGlobalPackCustomerCode('1234')
-            , new UsernameToken(null, 'test'),
+                ->setGlobalPackCustomerCode('1234'), new UsernameToken(null, 'test'),
             true,
             PostNL::MODE_REST
         );
@@ -95,29 +99,29 @@ class PostNLRestTest extends \PHPUnit_Framework_TestCase
      */
     public function testCustomer()
     {
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Customer', $this->postnl->getCustomer());
+        $this->assertInstanceOf('\\Firstred\\PostNL\\Entity\\Customer', $this->postnl->getCustomer());
     }
 
     /**
      * @testdox accepts a string token
      *
-     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      */
     public function testSetTokenString()
     {
         $this->postnl->setToken('test');
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\SOAP\\UsernameToken', $this->postnl->getToken());
+        $this->assertInstanceOf('\\Firstred\\PostNL\\Entity\\SOAP\\UsernameToken', $this->postnl->getToken());
     }
 
     /**
      * @testdox accepts a token object
      *
-     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      */
     public function testSetTokenObject()
     {
         $this->postnl->setToken(new UsernameToken(null, 'test'));
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\SOAP\\UsernameToken', $this->postnl->getToken());
+        $this->assertInstanceOf(UsernameToken::class, $this->postnl->getToken());
     }
 
     /**
@@ -125,15 +129,18 @@ class PostNLRestTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetNullLogger()
     {
-        $this->postnl->setLogger();
+        $this->postnl->resetLogger();
 
-        $this->assertNull($this->postnl->getLogger());
+        $this->assertInstanceOf(DummyLogger::class, $this->postnl->getLogger());
     }
 
     /**
      * @testdox returns a combinations of timeframes, locations and the delivery date
-     * @throws \ThirtyBees\PostNL\Exception\ResponseException
-     * @throws \ThirtyBees\PostNL\Exception\ApiException
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\HttpClientException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \ReflectionException
      */
     public function testGetTimeframesAndLocations()
     {
@@ -185,102 +192,102 @@ class PostNLRestTest extends \PHPUnit_Framework_TestCase
             'Timeframes' => [
                 'Timeframe' => [
                     [
-                        'Date' => '07-03-2018',
+                        'Date'       => '07-03-2018',
                         'Timeframes' => [
                             'TimeframeTimeFrame' => [
                                 [
-                                    'From' => '16:00:00',
+                                    'From'    => '16:00:00',
                                     'Options' => [
                                         'string' => 'Daytime',
                                     ],
                                     'To' => '18:30:00',
                                 ],
                                 [
-                                    'From' => '18:00:00',
+                                    'From'    => '18:00:00',
                                     'Options' => [
                                         'string' => 'Evening',
                                     ],
                                     'To' => '22:00:00',
                                 ],
-                            ]
-                        ]
+                            ],
+                        ],
                     ],
                     [
-                        'Date' => '08-03-2018',
+                        'Date'       => '08-03-2018',
                         'Timeframes' => [
                             'TimeframeTimeFrame' => [
                                 [
-                                    'From' => '15:45:00',
+                                    'From'    => '15:45:00',
                                     'Options' => [
                                         'string' => 'Daytime',
                                     ],
                                     'To' => '18:15:00',
                                 ],
                                 [
-                                    'From' => '18:00:00',
+                                    'From'    => '18:00:00',
                                     'Options' => [
                                         'string' => 'Evening',
                                     ],
                                     'To' => '22:00:00',
                                 ],
-                            ]
-                        ]
+                            ],
+                        ],
                     ],
                     [
-                        'Date' => '09-03-2018',
+                        'Date'       => '09-03-2018',
                         'Timeframes' => [
                             'TimeframeTimeFrame' => [
                                 [
-                                    'From' => '15:30:00',
+                                    'From'    => '15:30:00',
                                     'Options' => [
                                         'string' => 'Daytime',
                                     ],
                                     'To' => '18:00:00',
                                 ],
                                 [
-                                    'From' => '18:00:00',
+                                    'From'    => '18:00:00',
                                     'Options' => [
                                         'string' => 'Evening',
                                     ],
                                     'To' => '22:00:00',
                                 ],
-                            ]
-                        ]
+                            ],
+                        ],
                     ],
                     [
-                        'Date' => '10-03-2018',
+                        'Date'       => '10-03-2018',
                         'Timeframes' => [
                             'TimeframeTimeFrame' => [
                                 [
-                                    'From' => '16:15:00',
+                                    'From'    => '16:15:00',
                                     'Options' => [
                                         'string' => 'Daytime',
                                     ],
                                     'To' => '18:45:00',
                                 ],
-                            ]
-                        ]
+                            ],
+                        ],
                     ],
                     [
-                        'Date' => '13-03-2018',
+                        'Date'       => '13-03-2018',
                         'Timeframes' => [
                             'TimeframeTimeFrame' => [
                                 [
-                                    'From' => '16:00:00',
+                                    'From'    => '16:00:00',
                                     'Options' => [
                                         'string' => 'Daytime',
                                     ],
                                     'To' => '18:30:00',
                                 ],
                                 [
-                                    'From' => '18:00:00',
+                                    'From'    => '18:00:00',
                                     'Options' => [
                                         'string' => 'Evening',
                                     ],
                                     'To' => '22:00:00',
                                 ],
-                            ]
-                        ]
+                            ],
+                        ],
                     ],
                     [
                         'Date'       => '14-03-2018',
@@ -291,25 +298,25 @@ class PostNLRestTest extends \PHPUnit_Framework_TestCase
                                     'Options' => [
                                         'string' => 'Daytime',
                                     ],
-                                    'To'      => '18:30:00',
+                                    'To' => '18:30:00',
                                 ],
                                 [
                                     'From'    => '18:00:00',
                                     'Options' => [
                                         'string' => 'Evening',
                                     ],
-                                    'To'      => '20:00:00',
+                                    'To' => '20:00:00',
                                 ],
                             ],
                         ],
                     ],
-                ]
-            ]
+                ],
+            ],
         ];
         $locationsPayload = json_decode($this->getNearestLocationsMockResponse());
         $deliveryDatePayload = [
             'DeliveryDate' => '30-06-2016',
-            'Options' => [
+            'Options'      => [
                 'string' => 'Daytime',
             ],
         ];
@@ -339,7 +346,7 @@ class PostNLRestTest extends \PHPUnit_Framework_TestCase
                         ->setPostalCode('2132WT')
                         ->setStartDate('30-06-2016')
                         ->setStreet('Siriusdreef')
-                        ->setSundaySorting(false)
+                        ->setSundaySorting(false),
                 ]),
             (new GetNearestLocations())
                 ->setCountrycode('NL')
@@ -349,15 +356,15 @@ class PostNLRestTest extends \PHPUnit_Framework_TestCase
                     'DeliveryOptions'    => [
                         'PGE',
                     ],
-                    'OpeningTime'        => '09:00:00',
-                    'Options'    => [
-                        'Daytime'
+                    'OpeningTime' => '09:00:00',
+                    'Options'     => [
+                        'Daytime',
                     ],
-                    'City'               => 'Hoofddorp',
-                    'HouseNr'            => '42',
-                    'HouseNrExt'         => 'A',
-                    'Postalcode'         => '2132WT',
-                    'Street'             => 'Siriusdreef',
+                    'City'       => 'Hoofddorp',
+                    'HouseNr'    => '42',
+                    'HouseNrExt' => 'A',
+                    'Postalcode' => '2132WT',
+                    'Street'     => 'Siriusdreef',
                 ])),
             (new GetDeliveryDate())
                 ->setGetDeliveryDate(
@@ -366,7 +373,7 @@ class PostNLRestTest extends \PHPUnit_Framework_TestCase
                         ->setCity('Hoofddorp')
                         ->setCountryCode('NL')
                         ->setCutOffTimes([
-                            new CutOffTime('00', '14:00:00')
+                            new CutOffTime('00', '14:00:00'),
                         ])
                         ->setHouseNr('42')
                         ->setHouseNrExt('A')
@@ -381,19 +388,19 @@ class PostNLRestTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertTrue(is_array($results));
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\ResponseTimeframes', $results['timeframes']);
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\GetNearestLocationsResponse', $results['locations']);
-        $this->assertInstanceOf('\\ThirtyBees\\PostNL\\Entity\\Response\\GetDeliveryDateResponse', $results['delivery_date']);
+        $this->assertInstanceOf(ResponseTimeframes::class, $results['timeframes']);
+        $this->assertInstanceOf(GetNearestLocationsResponse::class, $results['locations']);
+        $this->assertInstanceOf(GetDeliveryDateResponse::class, $results['delivery_date']);
     }
 
     /**
      * @testdox does not accept an invalid token object
      *
-     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      */
     public function testNegativeInvalidToken()
     {
-        $this->expectException('\\ThirtyBees\\PostNL\\Exception\\InvalidArgumentException');
+        $this->expectException('\\Firstred\\PostNL\\Exception\\InvalidArgumentException');
         $this->postnl->setToken(new Address());
     }
 
@@ -404,7 +411,7 @@ class PostNLRestTest extends \PHPUnit_Framework_TestCase
      */
     public function testNegativeKeyMissing()
     {
-        $reflection = new \ReflectionClass('\\ThirtyBees\\PostNL\\PostNL');
+        $reflection = new \ReflectionClass('\\Firstred\\PostNL\\PostNL');
         /** @var PostNL $postnl */
         $postnl = $reflection->newInstanceWithoutConstructor();
 
@@ -414,11 +421,11 @@ class PostNLRestTest extends \PHPUnit_Framework_TestCase
     /**
      * @testdox throws an exception when setting an invalid mode
      *
-     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      */
     public function testNegativeInvalidMode()
     {
-        $this->expectException('\\ThirtyBees\\PostNL\\Exception\\InvalidArgumentException');
+        $this->expectException('\\Firstred\\PostNL\\Exception\\InvalidArgumentException');
 
         $this->postnl->setMode('invalid');
     }

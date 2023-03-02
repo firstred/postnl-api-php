@@ -1,8 +1,8 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,85 +19,79 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity\Response;
+namespace Firstred\PostNL\Entity\Response;
 
-use ThirtyBees\PostNL\Entity\AbstractEntity;
-use ThirtyBees\PostNL\Entity\Warning;
-use ThirtyBees\PostNL\Service\BarcodeService;
-use ThirtyBees\PostNL\Service\ConfirmingService;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
-use ThirtyBees\PostNL\Service\LabellingService;
-use ThirtyBees\PostNL\Service\LocationService;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
-use ThirtyBees\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Entity\AbstractEntity;
+use Firstred\PostNL\Entity\Warning;
+use Firstred\PostNL\Service\BarcodeService;
+use Firstred\PostNL\Service\ConfirmingService;
+use Firstred\PostNL\Service\DeliveryDateService;
+use Firstred\PostNL\Service\LabellingService;
+use Firstred\PostNL\Service\LocationService;
+use Firstred\PostNL\Service\TimeframeService;
 
 /**
- * Class ConfirmingResponseShipment
+ * Class ConfirmingResponseShipment.
  *
- * @package ThirtyBees\PostNL\Entity
+ * @method string|null                getBarcode()
+ * @method Warning[]|null             getWarnings()
+ * @method ConfirmingResponseShipment setBarcode(string|null $Barcode = null)
+ * @method ConfirmingResponseShipment setWarnings(Warning[]|null $Warnings = null)
  *
- * @method string|null    getBarcode()
- * @method Warning[]|null getWarnings()
- *
- * @method ConfirmingResponseShipment setBarcode(string|null $barcode = null)
- * @method ConfirmingResponseShipment setWarnings(Warning[]|null $warnings = null)
+ * @since 1.0.0
  */
 class ConfirmingResponseShipment extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
+    /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'Barcode'  => BarcodeService::DOMAIN_NAMESPACE,
             'Warnings' => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'Barcode'  => ConfirmingService::DOMAIN_NAMESPACE,
             'Warnings' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'Barcode'  => LabellingService::DOMAIN_NAMESPACE,
             'Warnings' => LabellingService::DOMAIN_NAMESPACE,
         ],
-        'ShippingStatus' => [
-            'Barcode'  => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Warnings' => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'Barcode'  => DeliveryDateService::DOMAIN_NAMESPACE,
             'Warnings' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'Barcode'  => LocationService::DOMAIN_NAMESPACE,
             'Warnings' => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'Barcode'  => TimeframeService::DOMAIN_NAMESPACE,
             'Warnings' => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string|null $Barcode */
+    /** @var string|null */
     protected $Barcode;
-    /** @var Warning[]|null $warnings */
+    /** @var Warning[]|null */
     protected $Warnings;
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string|null    $barcode
-     * @param Warning[]|null $warnings
+     * @param string|null    $Barcode
+     * @param Warning[]|null $Warnings
      */
     public function __construct(
-        $barcode = null,
-        $warnings = null
+        $Barcode = null,
+        $Warnings = null
     ) {
         parent::__construct();
 
-        $this->setBarcode($barcode);
-        $this->setWarnings($warnings);
+        $this->setBarcode($Barcode);
+        $this->setWarnings($Warnings);
     }
 }

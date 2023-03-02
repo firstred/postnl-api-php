@@ -1,0 +1,155 @@
+HTTP/1.1 200 OK
+Access-Control-Allow-Headers: origin, x-requested-with, accept, apikey, Content-Type
+Access-Control-Allow-Methods: GET, POST
+Access-Control-Allow-Origin: *
+Access-Control-Max-Age: 3628800
+Cache-Control: private, max-age=0
+Content-Type: application/json;charset=UTF-8
+Date: Wed, 31 Mar 2021 12:24:44 GMT
+Strict-Transport-Security: max-age=31536000
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-Robots-Tag: noindex
+X-XSS-Protection: 1; mode=block
+Connection: keep-alive
+
+{
+  "CompleteStatus": {
+    "Shipment": {
+      "MainBarcode": "33DEVC123456789",
+      "Barcode": "3SDEVC123456789",
+      "ShipmentAmount": "1",
+      "ShipmentCounter": "1",
+      "Customer": {
+        "CustomerCode": "DEVC",
+        "CustomerNumber": "11223344",
+        "Name": "ASDFASDFASDFASFDD"
+      },
+      "ProductCode": "003089",
+      "ProductDescription": "Handtek. voor Ontvangst\/Alleen huisadres",
+      "Reference": "DF00DF91",
+      "Dimension": {
+        "Height": "110",
+        "Length": "255",
+        "Volume": "5330",
+        "Weight": "260",
+        "Width": "190"
+      },
+      "Address": [
+        {
+          "AddressType": "01",
+          "Building": {},
+          "City": "Nijmegen",
+          "CompanyName": {},
+          "CountryCode": "NL",
+          "DepartmentName": {},
+          "District": {},
+          "FirstName": "SADFASDF",
+          "Floor": {},
+          "HouseNumber": "12",
+          "HouseNumberSuffix": {},
+          "LastName": "SAD ASDF",
+          "Region": {},
+          "Remark": {},
+          "Street": "ASDFDFDFD",
+          "Zipcode": "1234DF"
+        },
+        {
+          "AddressType": "02",
+          "Building": {},
+          "City": "ASDFD DF ASDFDFDFD",
+          "CompanyName": "ASD ASDFASDF DF",
+          "CountryCode": "NL",
+          "DepartmentName": {},
+          "District": {},
+          "FirstName": {},
+          "Floor": {},
+          "HouseNumber": "7",
+          "HouseNumberSuffix": {},
+          "LastName": {},
+          "Region": {},
+          "Remark": {},
+          "Street": "ASDFASDFASDD ASDFASDFASDF",
+          "Zipcode": "1234DF"
+        }
+      ],
+      "Event": [
+        {
+          "Code": "01B",
+          "Description": "Zending is bij PostNL",
+          "DestinationLocationCode": "156731",
+          "LocationCode": "166886",
+          "RouteCode": "419",
+          "RouteName": "419 Nm-Altrada",
+          "TimeStamp": "07-03-2018 23:20:05"
+        },
+        {
+          "Code": "01A",
+          "Description": "Zending wordt verwacht, maar zit nog niet in sorteerproces",
+          "DestinationLocationCode": {},
+          "LocationCode": "888888",
+          "RouteCode": {},
+          "RouteName": {},
+          "TimeStamp": "07-03-2018 09:51:08"
+        },
+        {
+          "Code": "01A",
+          "Description": "Zending wordt verwacht, maar zit nog niet in sorteerproces",
+          "DestinationLocationCode": {},
+          "LocationCode": "888888",
+          "RouteCode": {},
+          "RouteName": {},
+          "TimeStamp": "07-03-2018 09:50:47"
+        }
+      ],
+      "Expectation": {
+        "ETAFrom": "2018-03-08T11:30:00",
+        "ETATo": "2018-03-08T14:00:00"
+      },
+      "Status": {
+        "TimeStamp": "07-03-2018 23:20:05",
+        "StatusCode": "2",
+        "StatusDescription": "Zending in ontvangst genomen",
+        "PhaseCode": "1",
+        "PhaseDescription": "Collectie"
+      },
+      "OldStatus": [
+        {
+          "TimeStamp": "07-03-2018 23:22:56.326",
+          "StatusCode": "99",
+          "StatusDescription": "Niet van toepassing",
+          "PhaseCode": "99",
+          "PhaseDescription": "Niet van toepassing"
+        },
+        {
+          "TimeStamp": "07-03-2018 23:20:05",
+          "StatusCode": "2",
+          "StatusDescription": "Zending in ontvangst genomen",
+          "PhaseCode": "1",
+          "PhaseDescription": "Collectie"
+        },
+        {
+          "TimeStamp": "07-03-2018 09:55:35.976",
+          "StatusCode": "99",
+          "StatusDescription": "Niet van toepassing",
+          "PhaseCode": "99",
+          "PhaseDescription": "Niet van toepassing"
+        },
+        {
+          "TimeStamp": "07-03-2018 09:51:08",
+          "StatusCode": "1",
+          "StatusDescription": "Zending voorgemeld",
+          "PhaseCode": "1",
+          "PhaseDescription": "Collectie"
+        },
+        {
+          "TimeStamp": "07-03-2018 09:50:47",
+          "StatusCode": "1",
+          "StatusDescription": "Zending voorgemeld",
+          "PhaseCode": "1",
+          "PhaseDescription": "Collectie"
+        }
+      ]
+    }
+  }
+}

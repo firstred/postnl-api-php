@@ -1,8 +1,8 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,241 +19,332 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity\Response;
+namespace Firstred\PostNL\Entity\Response;
 
+use DateTimeImmutable;
+use DateTimeInterface;
+use DateTimeZone;
+use Exception;
+use Firstred\PostNL\Entity\AbstractEntity;
+use Firstred\PostNL\Entity\Address;
+use Firstred\PostNL\Entity\Amount;
+use Firstred\PostNL\Entity\Barcode;
+use Firstred\PostNL\Entity\Dimension;
+use Firstred\PostNL\Entity\Expectation;
+use Firstred\PostNL\Entity\Group;
+use Firstred\PostNL\Entity\ProductOption;
+use Firstred\PostNL\Entity\Status;
+use Firstred\PostNL\Entity\Warning;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Service\BarcodeService;
+use Firstred\PostNL\Service\ConfirmingService;
+use Firstred\PostNL\Service\DeliveryDateService;
+use Firstred\PostNL\Service\LabellingService;
+use Firstred\PostNL\Service\LocationService;
+use Firstred\PostNL\Service\TimeframeService;
 use Sabre\Xml\Writer;
-use ThirtyBees\PostNL\Entity\Address;
-use ThirtyBees\PostNL\Entity\AbstractEntity;
-use ThirtyBees\PostNL\Entity\Amount;
-use ThirtyBees\PostNL\Entity\Barcode;
-use ThirtyBees\PostNL\Entity\Dimension;
-use ThirtyBees\PostNL\Entity\Expectation;
-use ThirtyBees\PostNL\Entity\Group;
-use ThirtyBees\PostNL\Entity\ProductOption;
-use ThirtyBees\PostNL\Entity\Status;
-use ThirtyBees\PostNL\Entity\Warning;
-use ThirtyBees\PostNL\Service\BarcodeService;
-use ThirtyBees\PostNL\Service\ConfirmingService;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
-use ThirtyBees\PostNL\Service\LabellingService;
-use ThirtyBees\PostNL\Service\LocationService;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
-use ThirtyBees\PostNL\Service\TimeframeService;
+use stdClass;
+use function is_array;
+use function is_string;
 
 /**
- * Class CurrentStatusResponseShipment
+ * Class CurrentStatusResponseShipment.
  *
- * @package ThirtyBees\PostNL\Entity
+ * @method Address[]|null                getAddresses()
+ * @method Amount[]|null                 getAmounts()
+ * @method string|null                   getBarcode()
+ * @method DateTimeInterface|null        getDeliveryDate()
+ * @method Dimension|null                getDimension()
+ * @method Expectation|null              getExpectation()
+ * @method Group[]|null                  getGroups()
+ * @method string|null                   getMainBarcode()
+ * @method string|null                   getProductCode()
+ * @method string|null                   getProductDescription()
+ * @method ProductOption[]|null          getProductOptions()
+ * @method string|null                   getReference()
+ * @method string|null                   getShipmentAmount()
+ * @method string|null                   getShipmentCounter()
+ * @method Status|null                   getStatus()
+ * @method Warning[]|null                getWarnings()
+ * @method CurrentStatusResponseShipment setAddresses(Address[]|null $Addresses = null)
+ * @method CurrentStatusResponseShipment setAmounts(Amount[]|null $Amounts = null)
+ * @method CurrentStatusResponseShipment setBarcode(string|null $Barcode = null)
+ * @method CurrentStatusResponseShipment setDimension(Dimension|null $Dimension = null)
+ * @method CurrentStatusResponseShipment setExpectation(Expectation|null $Expectation = null)
+ * @method CurrentStatusResponseShipment setGroups(Group[]|null $Groups = null)
+ * @method CurrentStatusResponseShipment setMainBarcode(string|null $MainBarcode = null)
+ * @method CurrentStatusResponseShipment setProductCode(string|null $ProductCode = null)
+ * @method CurrentStatusResponseShipment setProductDescription(string|null $ProductDescription = null)
+ * @method CurrentStatusResponseShipment setProductOptions(ProductOption[]|null $ProductOptions = null)
+ * @method CurrentStatusResponseShipment setReference(string|null $Reference = null)
+ * @method CurrentStatusResponseShipment setStatus(Status|null $Status = null)
+ * @method CurrentStatusResponseShipment setShipmentAmount(string|null $ShipmentAmount = null)
+ * @method CurrentStatusResponseShipment setShipmentCounter(string|null $ShipmentCounter = null)
+ * @method CurrentStatusResponseShipment setWarnings(Warning[]|null $Warnings = null)
  *
- * @method Address[]|null       getAddresses()
- * @method Amount[]|null        getAmounts()
- * @method Barcode|null         getBarcode()
- * @method string|null          getDeliveryDate()
- * @method Dimension|null       getDimension()
- * @method Expectation|null     getExpectation()
- * @method Group[]|null         getGroups()
- * @method string|null          getProductCode()
- * @method ProductOption[]|null getProductOptions()
- * @method string|null          getReference()
- * @method Status|null          getStatus()
- * @method Warning[]|null       getWarnings()
- *
- * @method CurrentStatusResponseShipment setAddresses(Address[]|null $addresses = null)
- * @method CurrentStatusResponseShipment setAmounts(Amount[]|null $amounts = null)
- * @method CurrentStatusResponseShipment setBarcode(string|null $barcode = null)
- * @method CurrentStatusResponseShipment setDeliveryDate(string|null $date = null)
- * @method CurrentStatusResponseShipment setDimension(Dimension|null $dimension = null)
- * @method CurrentStatusResponseShipment setExpectation(Expectation|null $expectation = null)
- * @method CurrentStatusResponseShipment setGroups(Group[]|null $groups = null)
- * @method CurrentStatusResponseShipment setProductCode(string|null $productCode = null)
- * @method CurrentStatusResponseShipment setProductOptions(ProductOption[]|null $options = null)
- * @method CurrentStatusResponseShipment setReference(string|null $reference = null)
- * @method CurrentStatusResponseShipment setStatus(Status|null $status = null)
- * @method CurrentStatusResponseShipment setWarnings(Warning[]|null $warnings = null)
+ * @since 1.0.0
  */
 class CurrentStatusResponseShipment extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
+    /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode'        => [
-            'Addresses'      => BarcodeService::DOMAIN_NAMESPACE,
-            'Amounts'        => BarcodeService::DOMAIN_NAMESPACE,
-            'Barcode'        => BarcodeService::DOMAIN_NAMESPACE,
-            'DeliveryDate'   => BarcodeService::DOMAIN_NAMESPACE,
-            'Dimension'      => BarcodeService::DOMAIN_NAMESPACE,
-            'Expectation'    => BarcodeService::DOMAIN_NAMESPACE,
-            'Groups'         => BarcodeService::DOMAIN_NAMESPACE,
-            'ProductCode'    => BarcodeService::DOMAIN_NAMESPACE,
-            'ProductOptions' => BarcodeService::DOMAIN_NAMESPACE,
-            'Reference'      => BarcodeService::DOMAIN_NAMESPACE,
-            'Status'         => BarcodeService::DOMAIN_NAMESPACE,
-            'Warnings'       => BarcodeService::DOMAIN_NAMESPACE,
+        'Barcode'      => [
+            'Addresses'          => BarcodeService::DOMAIN_NAMESPACE,
+            'Amounts'            => BarcodeService::DOMAIN_NAMESPACE,
+            'Barcode'            => BarcodeService::DOMAIN_NAMESPACE,
+            'DeliveryDate'       => BarcodeService::DOMAIN_NAMESPACE,
+            'Dimension'          => BarcodeService::DOMAIN_NAMESPACE,
+            'Expectation'        => BarcodeService::DOMAIN_NAMESPACE,
+            'Groups'             => BarcodeService::DOMAIN_NAMESPACE,
+            'MainBarcode'        => BarcodeService::DOMAIN_NAMESPACE,
+            'ProductCode'        => BarcodeService::DOMAIN_NAMESPACE,
+            'ProductDescription' => BarcodeService::DOMAIN_NAMESPACE,
+            'ProductOptions'     => BarcodeService::DOMAIN_NAMESPACE,
+            'Reference'          => BarcodeService::DOMAIN_NAMESPACE,
+            'ShipmentAmount'     => BarcodeService::DOMAIN_NAMESPACE,
+            'ShipmentCounter'    => BarcodeService::DOMAIN_NAMESPACE,
+            'Status'             => BarcodeService::DOMAIN_NAMESPACE,
+            'Warnings'           => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
-            'Addresses'      => ConfirmingService::DOMAIN_NAMESPACE,
-            'Amounts'        => ConfirmingService::DOMAIN_NAMESPACE,
-            'Barcode'        => ConfirmingService::DOMAIN_NAMESPACE,
-            'DeliveryDate'   => ConfirmingService::DOMAIN_NAMESPACE,
-            'Dimension'      => ConfirmingService::DOMAIN_NAMESPACE,
-            'Expectation'    => ConfirmingService::DOMAIN_NAMESPACE,
-            'Groups'         => ConfirmingService::DOMAIN_NAMESPACE,
-            'ProductCode'    => ConfirmingService::DOMAIN_NAMESPACE,
-            'ProductOptions' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Reference'      => ConfirmingService::DOMAIN_NAMESPACE,
-            'Status'         => ConfirmingService::DOMAIN_NAMESPACE,
-            'Warnings'       => ConfirmingService::DOMAIN_NAMESPACE,
+        'Confirming'   => [
+            'Addresses'          => ConfirmingService::DOMAIN_NAMESPACE,
+            'Amounts'            => ConfirmingService::DOMAIN_NAMESPACE,
+            'Barcode'            => ConfirmingService::DOMAIN_NAMESPACE,
+            'DeliveryDate'       => ConfirmingService::DOMAIN_NAMESPACE,
+            'Dimension'          => ConfirmingService::DOMAIN_NAMESPACE,
+            'Expectation'        => ConfirmingService::DOMAIN_NAMESPACE,
+            'Groups'             => ConfirmingService::DOMAIN_NAMESPACE,
+            'MainBarcode'        => ConfirmingService::DOMAIN_NAMESPACE,
+            'ProductCode'        => ConfirmingService::DOMAIN_NAMESPACE,
+            'ProductDescription' => ConfirmingService::DOMAIN_NAMESPACE,
+            'ProductOptions'     => ConfirmingService::DOMAIN_NAMESPACE,
+            'Reference'          => ConfirmingService::DOMAIN_NAMESPACE,
+            'ShipmentAmount'     => ConfirmingService::DOMAIN_NAMESPACE,
+            'ShipmentCounter'    => ConfirmingService::DOMAIN_NAMESPACE,
+            'Status'             => ConfirmingService::DOMAIN_NAMESPACE,
+            'Warnings'           => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
-            'Addresses'      => LabellingService::DOMAIN_NAMESPACE,
-            'Amounts'        => LabellingService::DOMAIN_NAMESPACE,
-            'Barcode'        => LabellingService::DOMAIN_NAMESPACE,
-            'DeliveryDate'   => LabellingService::DOMAIN_NAMESPACE,
-            'Dimension'      => LabellingService::DOMAIN_NAMESPACE,
-            'Expectation'    => LabellingService::DOMAIN_NAMESPACE,
-            'Groups'         => LabellingService::DOMAIN_NAMESPACE,
-            'ProductCode'    => LabellingService::DOMAIN_NAMESPACE,
-            'ProductOptions' => LabellingService::DOMAIN_NAMESPACE,
-            'Reference'      => LabellingService::DOMAIN_NAMESPACE,
-            'Status'         => LabellingService::DOMAIN_NAMESPACE,
-            'Warnings'       => LabellingService::DOMAIN_NAMESPACE,
+        'Labelling'    => [
+            'Addresses'          => LabellingService::DOMAIN_NAMESPACE,
+            'Amounts'            => LabellingService::DOMAIN_NAMESPACE,
+            'Barcode'            => LabellingService::DOMAIN_NAMESPACE,
+            'DeliveryDate'       => LabellingService::DOMAIN_NAMESPACE,
+            'Dimension'          => LabellingService::DOMAIN_NAMESPACE,
+            'Expectation'        => LabellingService::DOMAIN_NAMESPACE,
+            'Groups'             => LabellingService::DOMAIN_NAMESPACE,
+            'MainBarcode'        => LabellingService::DOMAIN_NAMESPACE,
+            'ProductCode'        => LabellingService::DOMAIN_NAMESPACE,
+            'ProductDescription' => LabellingService::DOMAIN_NAMESPACE,
+            'ProductOptions'     => LabellingService::DOMAIN_NAMESPACE,
+            'Reference'          => LabellingService::DOMAIN_NAMESPACE,
+            'ShipmentAmount'     => LabellingService::DOMAIN_NAMESPACE,
+            'ShipmentCounter'    => LabellingService::DOMAIN_NAMESPACE,
+            'Status'             => LabellingService::DOMAIN_NAMESPACE,
+            'Warnings'           => LabellingService::DOMAIN_NAMESPACE,
         ],
-        'ShippingStatus' => [
-            'Addresses'      => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Amounts'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Barcode'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DeliveryDate'   => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Dimension'      => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Expectation'    => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Groups'         => ShippingStatusService::DOMAIN_NAMESPACE,
-            'ProductCode'    => ShippingStatusService::DOMAIN_NAMESPACE,
-            'ProductOptions' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Reference'      => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Status'         => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Warnings'       => ShippingStatusService::DOMAIN_NAMESPACE,
+        'DeliveryDate' => [
+            'Addresses'          => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Amounts'            => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Barcode'            => DeliveryDateService::DOMAIN_NAMESPACE,
+            'DeliveryDate'       => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Dimension'          => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Expectation'        => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Groups'             => DeliveryDateService::DOMAIN_NAMESPACE,
+            'MainBarcode'        => DeliveryDateService::DOMAIN_NAMESPACE,
+            'ProductCode'        => DeliveryDateService::DOMAIN_NAMESPACE,
+            'ProductDescription' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'ProductOptions'     => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Reference'          => DeliveryDateService::DOMAIN_NAMESPACE,
+            'ShipmentAmount'     => DeliveryDateService::DOMAIN_NAMESPACE,
+            'ShipmentCounter'    => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Status'             => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Warnings'           => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'   => [
-            'Addresses'      => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Amounts'        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Barcode'        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'DeliveryDate'   => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Dimension'      => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Expectation'    => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Groups'         => DeliveryDateService::DOMAIN_NAMESPACE,
-            'ProductCode'    => DeliveryDateService::DOMAIN_NAMESPACE,
-            'ProductOptions' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Reference'      => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Status'         => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Warnings'       => DeliveryDateService::DOMAIN_NAMESPACE,
+        'Location'     => [
+            'Addresses'          => LocationService::DOMAIN_NAMESPACE,
+            'Amounts'            => LocationService::DOMAIN_NAMESPACE,
+            'Barcode'            => LocationService::DOMAIN_NAMESPACE,
+            'DeliveryDate'       => LocationService::DOMAIN_NAMESPACE,
+            'Dimension'          => LocationService::DOMAIN_NAMESPACE,
+            'Expectation'        => LocationService::DOMAIN_NAMESPACE,
+            'Groups'             => LocationService::DOMAIN_NAMESPACE,
+            'MainBarcode'        => LocationService::DOMAIN_NAMESPACE,
+            'ProductCode'        => LocationService::DOMAIN_NAMESPACE,
+            'ProductDescription' => LocationService::DOMAIN_NAMESPACE,
+            'ProductOptions'     => LocationService::DOMAIN_NAMESPACE,
+            'Reference'          => LocationService::DOMAIN_NAMESPACE,
+            'ShipmentAmount'     => LocationService::DOMAIN_NAMESPACE,
+            'ShipmentCounter'    => LocationService::DOMAIN_NAMESPACE,
+            'Status'             => LocationService::DOMAIN_NAMESPACE,
+            'Warnings'           => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
-            'Addresses'      => LocationService::DOMAIN_NAMESPACE,
-            'Amounts'        => LocationService::DOMAIN_NAMESPACE,
-            'Barcode'        => LocationService::DOMAIN_NAMESPACE,
-            'DeliveryDate'   => LocationService::DOMAIN_NAMESPACE,
-            'Dimension'      => LocationService::DOMAIN_NAMESPACE,
-            'Expectation'    => LocationService::DOMAIN_NAMESPACE,
-            'Groups'         => LocationService::DOMAIN_NAMESPACE,
-            'ProductCode'    => LocationService::DOMAIN_NAMESPACE,
-            'ProductOptions' => LocationService::DOMAIN_NAMESPACE,
-            'Reference'      => LocationService::DOMAIN_NAMESPACE,
-            'Status'         => LocationService::DOMAIN_NAMESPACE,
-            'Warnings'       => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe'      => [
-            'Addresses'      => TimeframeService::DOMAIN_NAMESPACE,
-            'Amounts'        => TimeframeService::DOMAIN_NAMESPACE,
-            'Barcode'        => TimeframeService::DOMAIN_NAMESPACE,
-            'DeliveryDate'   => TimeframeService::DOMAIN_NAMESPACE,
-            'Dimension'      => TimeframeService::DOMAIN_NAMESPACE,
-            'Expectation'    => TimeframeService::DOMAIN_NAMESPACE,
-            'Groups'         => TimeframeService::DOMAIN_NAMESPACE,
-            'ProductCode'    => TimeframeService::DOMAIN_NAMESPACE,
-            'ProductOptions' => TimeframeService::DOMAIN_NAMESPACE,
-            'Reference'      => TimeframeService::DOMAIN_NAMESPACE,
-            'Status'         => TimeframeService::DOMAIN_NAMESPACE,
-            'Warnings'       => TimeframeService::DOMAIN_NAMESPACE,
+        'Timeframe'    => [
+            'Addresses'          => TimeframeService::DOMAIN_NAMESPACE,
+            'Amounts'            => TimeframeService::DOMAIN_NAMESPACE,
+            'Barcode'            => TimeframeService::DOMAIN_NAMESPACE,
+            'DeliveryDate'       => TimeframeService::DOMAIN_NAMESPACE,
+            'Dimension'          => TimeframeService::DOMAIN_NAMESPACE,
+            'Expectation'        => TimeframeService::DOMAIN_NAMESPACE,
+            'Groups'             => TimeframeService::DOMAIN_NAMESPACE,
+            'MainBarcode'        => TimeframeService::DOMAIN_NAMESPACE,
+            'ProductCode'        => TimeframeService::DOMAIN_NAMESPACE,
+            'ProductDescription' => TimeframeService::DOMAIN_NAMESPACE,
+            'ProductOptions'     => TimeframeService::DOMAIN_NAMESPACE,
+            'Reference'          => TimeframeService::DOMAIN_NAMESPACE,
+            'ShipmentAmount'     => TimeframeService::DOMAIN_NAMESPACE,
+            'ShipmentCounter'    => TimeframeService::DOMAIN_NAMESPACE,
+            'Status'             => TimeframeService::DOMAIN_NAMESPACE,
+            'Warnings'           => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var Address[]|null $Addresses */
+    /** @var Address[]|null */
     protected $Addresses;
-    /** @var Amount[]|null $Amounts */
+    /** @var Amount[]|null */
     protected $Amounts;
-    /** @var Barcode|null $Barcode */
+    /** @var Barcode|null */
     protected $Barcode;
-    /** @var string|null $DeliveryDate */
+    /** @var string|null */
     protected $DeliveryDate;
     /** @var Dimension|null Dimension */
     protected $Dimension;
-    /** @var Expectation|null $Expectation */
+    /** @var Expectation|null */
     protected $Expectation;
-    /** @var Group[]|null $Groups */
+    /** @var Group[]|null */
     protected $Groups;
-    /** @var string|null $ProductCode */
+    /** @var string|null */
+    protected $MainBarcode;
+    /** @var string|null */
     protected $ProductCode;
-    /** @var ProductOption[]|null $ProuctOptions */
+    /** @var string|null */
+    protected $ProductDescription;
+    /** @var ProductOption[]|null */
     protected $ProductOptions;
-    /** @var string|null $Reference */
+    /** @var string|null */
     protected $Reference;
-    /** @var Status|null $Status */
+    /** @var string|null */
+    protected $ShipmentAmount;
+    /** @var string|null */
+    protected $ShipmentCounter;
+    /** @var Status|null */
     protected $Status;
-    /** @var Warning[]|null $Warnings */
+    /** @var Warning[]|null */
     protected $Warnings;
     // @codingStandardsIgnoreEnd
 
     /**
      * CurrentStatusResponseShipment constructor.
      *
-     * @param Address[]|null       $addresses
-     * @param Amount[]|null        $amounts
-     * @param Barcode|null         $barcode
-     * @param string|null          $deliveryDate
-     * @param Dimension|null       $dimension
-     * @param Expectation|null     $expectation
-     * @param Group[]|null         $groups
-     * @param string|null          $productCode
-     * @param ProductOption[]|null $productOptions
-     * @param string|null          $reference
-     * @param Status|null          $status
-     * @param Warning[]|null       $warnings
+     * @param Address[]|null                $Addresses
+     * @param Amount[]|null                 $Amounts
+     * @param string|null                   $Barcode
+     * @param DateTimeInterface|string|null $DeliveryDate
+     * @param Dimension|null                $Dimension
+     * @param Expectation|null              $Expectation
+     * @param Group[]|null                  $Groups
+     * @param string|null                   $ProductCode
+     * @param ProductOption[]|null          $ProductOptions
+     * @param string|null                   $Reference
+     * @param Status|null                   $Status
+     * @param Warning[]|null                $Warnings
+     * @param string|null                   $MainBarcode
+     * @param string|null                   $ProductDescription
+     *
+     * @throws InvalidArgumentException
      */
     public function __construct(
-        array $addresses = null,
-        array $amounts = null,
-        $barcode = null,
-        $deliveryDate = null,
-        $dimension = null,
-        $expectation = null,
-        array $groups = null,
-        $productCode = null,
-        array $productOptions = null,
-        $reference = null,
-        $status = null,
-        array $warnings = null
+        array $Addresses = null,
+        array $Amounts = null,
+        $Barcode = null,
+        $DeliveryDate = null,
+        $Dimension = null,
+        $Expectation = null,
+        array $Groups = null,
+        $ProductCode = null,
+        array $ProductOptions = null,
+        $Reference = null,
+        $Status = null,
+        array $Warnings = null,
+        $MainBarcode = null,
+        $ShipmentAmount = null,
+        $ShipmentCounter = null,
+        $ProductDescription = null
     ) {
         parent::__construct();
 
-        $this->setAddresses($addresses);
-        $this->setAmounts($amounts);
-        $this->setBarcode($barcode);
-        $this->setDeliveryDate($deliveryDate);
-        $this->setDimension($dimension);
-        $this->setExpectation($expectation);
-        $this->setGroups($groups);
-        $this->setProductCode($productCode);
-        $this->setProductOptions($productOptions);
-        $this->setReference($reference);
-        $this->setStatus($status);
-        $this->setWarnings($warnings);
+        $this->setAddresses($Addresses);
+        $this->setAmounts($Amounts);
+        $this->setBarcode($Barcode);
+        $this->setDeliveryDate($DeliveryDate);
+        $this->setDimension($Dimension);
+        $this->setExpectation($Expectation);
+        $this->setGroups($Groups);
+        $this->setProductCode($ProductCode);
+        $this->setProductOptions($ProductOptions);
+        $this->setReference($Reference);
+        $this->setStatus($Status);
+        $this->setWarnings($Warnings);
+        $this->setMainBarcode($MainBarcode);
+        $this->setShipmentAmount($ShipmentAmount);
+        $this->setShipmentCounter($ShipmentCounter);
+        $this->setProductDescription($ProductDescription);
     }
 
     /**
-     * Return a serializable array for the XMLWriter
+     * @param string|DateTimeInterface|null $deliveryDate
+     *
+     * @return static
+     *
+     * @throws InvalidArgumentException
+     *
+     * @since 1.2.0
+     */
+    public function setDeliveryDate($deliveryDate = null)
+    {
+        if (is_string($deliveryDate)) {
+            try {
+                $deliveryDate = new DateTimeImmutable($deliveryDate, new DateTimeZone('Europe/Amsterdam'));
+            } catch (Exception $e) {
+                throw new InvalidArgumentException($e->getMessage(), 0, $e);
+            }
+        }
+
+        $this->DeliveryDate = $deliveryDate;
+
+        return $this;
+    }
+
+    /**
+     * @param stdClass $json
+     *
+     * @return mixed|stdClass|null
+     *
+     * @throws InvalidArgumentException
+     * @throws \Firstred\PostNL\Exception\NotSupportedException
+     *
+     * @since 1.2.0
+     */
+    public static function jsonDeserialize(stdClass $json)
+    {
+        if (isset($json->CurrentStatusResponseShipment->Address)) {
+            $json->CurrentStatusResponseShipment->Addresses = $json->CurrentStatusResponseShipment->Address;
+            unset($json->CurrentStatusResponseShipment->Address);
+
+            if (!is_array($json->CurrentStatusResponseShipment->Addresses)) {
+                $json->CurrentStatusResponseShipment->Addresses = [$json->CurrentStatusResponseShipment->Addresses];
+            }
+        }
+
+        return parent::jsonDeserialize($json);
+    }
+
+    /**
+     * Return a serializable array for the XMLWriter.
      *
      * @param Writer $writer
      *
@@ -269,38 +360,38 @@ class CurrentStatusResponseShipment extends AbstractEntity
         }
 
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if ($propertyName === 'Addresses') {
+            if ('Addresses' === $propertyName) {
                 $addresses = [];
                 foreach ($this->Addresses as $address) {
                     $addresses[] = ["{{$namespace}}Address" => $address];
                 }
                 $xml["{{$namespace}}Addresses"] = $addresses;
-            } elseif ($propertyName === 'Amounts') {
+            } elseif ('Amounts' === $propertyName) {
                 $amounts = [];
                 foreach ($this->Amounts as $amount) {
                     $amounts[] = ["{{$namespace}}Amount" => $amount];
                 }
                 $xml["{{$namespace}}Amounts"] = $amounts;
-            } elseif ($propertyName === 'Groups') {
+            } elseif ('Groups' === $propertyName) {
                 $groups = [];
                 foreach ($this->Groups as $group) {
                     $groups[] = ["{{$namespace}}Group" => $group];
                 }
                 $xml["{{$namespace}}Groups"] = $groups;
-            } elseif ($propertyName === 'ProductOption') {
+            } elseif ('ProductOption' === $propertyName) {
                 $productOptions = [];
                 foreach ($this->ProductOptions as $productOption) {
                     $productOptions[] = ["{{$namespace}}ProductOptions" => $productOption];
                 }
                 $xml["{{$namespace}}ProductOptions"] = $productOptions;
-            } elseif ($propertyName === 'Warnings') {
+            } elseif ('Warnings' === $propertyName) {
                 $warnings = [];
                 foreach ($this->Warnings as $warning) {
                     $warnings[] = ["{{$namespace}}Warning" => $warning];
                 }
                 $xml["{{$namespace}}Warnings"] = $warnings;
-            } elseif (isset($this->{$propertyName})) {
-                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
+            } elseif (isset($this->$propertyName)) {
+                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->$propertyName;
             }
         }
         // Auto extending this object with other properties is not supported with SOAP

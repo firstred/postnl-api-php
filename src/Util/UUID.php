@@ -1,8 +1,8 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,27 +19,36 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Util;
+namespace Firstred\PostNL\Util;
+
+use Symfony\Component\Uid\Uuid as SymfonyUuid;
+use Ramsey\Uuid\Uuid as RamseyUuid;
 
 /**
- * Class UUID
- *
- * @package ThirtyBees\PostNL\Util
+ * Class UUID.
  */
 class UUID
 {
     /**
-     * Generate a v4 UUID
+     * Generate a v4 UUID in RFC 4122 format.
      *
      * @return string
      */
     public static function generate()
     {
+        if (class_exists(SymfonyUuid::class) && method_exists(SymfonyUuid::class, 'v4')) {
+            return SymfonyUuid::v4()->toRfc4122();
+        }
+
+        if (class_exists(RamseyUuid::class) && method_exists(RamseyUuid::class, 'uuid4')) {
+            return RamseyUuid::uuid4()->toString();
+        }
+
         return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
             // 32 bits for "time_low"
             mt_rand(0, 0xffff), mt_rand(0, 0xffff),

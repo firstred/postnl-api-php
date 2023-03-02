@@ -1,8 +1,8 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,81 +19,75 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity;
+namespace Firstred\PostNL\Entity;
 
-use ThirtyBees\PostNL\Service\BarcodeService;
-use ThirtyBees\PostNL\Service\ConfirmingService;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
-use ThirtyBees\PostNL\Service\LabellingService;
-use ThirtyBees\PostNL\Service\LocationService;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
-use ThirtyBees\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Service\BarcodeService;
+use Firstred\PostNL\Service\ConfirmingService;
+use Firstred\PostNL\Service\DeliveryDateService;
+use Firstred\PostNL\Service\LabellingService;
+use Firstred\PostNL\Service\LocationService;
+use Firstred\PostNL\Service\TimeframeService;
 
 /**
- * Class CoordinatesNorthWest
+ * Class CoordinatesNorthWest.
  *
- * @package ThirtyBees\PostNL\Entity
- *
- * @method string|null getLatitude()
- * @method string|null getLongitude()
- *
+ * @method string|null          getLatitude()
+ * @method string|null          getLongitude()
  * @method CoordinatesNorthWest setLatitude(string|null $lat = null)
  * @method CoordinatesNorthWest setLongitude(string|null $long = null)
+ *
+ * @since 1.0.0
  */
 class CoordinatesNorthWest extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
+    /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'Latitude'  => BarcodeService::DOMAIN_NAMESPACE,
             'Longitude' => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'Latitude'  => ConfirmingService::DOMAIN_NAMESPACE,
             'Longitude' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'Latitude'  => LabellingService::DOMAIN_NAMESPACE,
             'Longitude' => LabellingService::DOMAIN_NAMESPACE,
         ],
-        'ShippingStatus' => [
-            'Latitude'  => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Longitude' => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'Latitude'  => DeliveryDateService::DOMAIN_NAMESPACE,
             'Longitude' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'Latitude'  => LocationService::DOMAIN_NAMESPACE,
             'Longitude' => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'Latitude'  => TimeframeService::DOMAIN_NAMESPACE,
             'Longitude' => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string|null $Latitude */
+    /** @var string|null */
     protected $Latitude;
-    /** @var string|null $Longitude */
+    /** @var string|null */
     protected $Longitude;
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string $lat
-     * @param string $long
+     * @param string $Latitude
+     * @param string $Longitude
      */
-    public function __construct($lat = null, $long = null)
+    public function __construct($Latitude = null, $Longitude = null)
     {
         parent::__construct();
 
-        $this->setLatitude($lat);
-        $this->setLongitude($long);
+        $this->setLatitude($Latitude);
+        $this->setLongitude($Longitude);
     }
 }

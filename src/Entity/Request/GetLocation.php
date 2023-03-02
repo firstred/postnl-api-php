@@ -1,8 +1,8 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,108 +19,100 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity\Request;
+namespace Firstred\PostNL\Entity\Request;
 
-use ThirtyBees\PostNL\Entity\AbstractEntity;
-use ThirtyBees\PostNL\Entity\Location;
-use ThirtyBees\PostNL\Entity\Message\Message;
-use ThirtyBees\PostNL\Service\BarcodeService;
-use ThirtyBees\PostNL\Service\ConfirmingService;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
-use ThirtyBees\PostNL\Service\LabellingService;
-use ThirtyBees\PostNL\Service\LocationService;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
-use ThirtyBees\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Entity\AbstractEntity;
+use Firstred\PostNL\Entity\Message\Message;
+use Firstred\PostNL\Service\BarcodeService;
+use Firstred\PostNL\Service\ConfirmingService;
+use Firstred\PostNL\Service\DeliveryDateService;
+use Firstred\PostNL\Service\LabellingService;
+use Firstred\PostNL\Service\LocationService;
+use Firstred\PostNL\Service\TimeframeService;
 
 /**
- * Class GetLocation
+ * Class GetLocation.
  *
  * This class is both the container and can be the actual GetLocation object itself!
- *
- * @package ThirtyBees\PostNL\Entity
  *
  * @method string|null  getLocationCode()
  * @method Message|null getMessage()
  * @method string|null  getRetailNetworkID()
+ * @method GetLocation  setLocationCode(string|null $LocationCode = null)
+ * @method GetLocation  setMessage(Message|null $Message = null)
+ * @method GetLocation  setRetailNetworkID(string|null $RetailNetworkID = null)
  *
- * @method GetLocation setLocationCode(string|null $location = null)
- * @method GetLocation setMessage(Message|null $message = null)
- * @method GetLocation setRetailNetworkID(string|null $id = null)
+ * @since 1.0.0
  */
 class GetLocation extends AbstractEntity
 {
     /**
-     * Default properties and namespaces for the SOAP API
+     * Default properties and namespaces for the SOAP API.
      *
-     * @var array $defaultProperties
+     * @var array
      */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'LocationCode'    => BarcodeService::DOMAIN_NAMESPACE,
             'Message'         => BarcodeService::DOMAIN_NAMESPACE,
             'RetailNetworkID' => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'LocationCode'    => ConfirmingService::DOMAIN_NAMESPACE,
             'Message'         => ConfirmingService::DOMAIN_NAMESPACE,
             'RetailNetworkID' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'LocationCode'    => LabellingService::DOMAIN_NAMESPACE,
             'Message'         => LabellingService::DOMAIN_NAMESPACE,
             'RetailNetworkID' => LabellingService::DOMAIN_NAMESPACE,
         ],
-        'ShippingStatus' => [
-            'LocationCode'    => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Message'         => ShippingStatusService::DOMAIN_NAMESPACE,
-            'RetailNetworkID' => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'LocationCode'    => DeliveryDateService::DOMAIN_NAMESPACE,
             'Message'         => DeliveryDateService::DOMAIN_NAMESPACE,
             'RetailNetworkID' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'LocationCode'    => LocationService::DOMAIN_NAMESPACE,
             'Message'         => LocationService::DOMAIN_NAMESPACE,
             'RetailNetworkID' => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'LocationCode'    => TimeframeService::DOMAIN_NAMESPACE,
             'Message'         => TimeframeService::DOMAIN_NAMESPACE,
             'RetailNetworkID' => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string|null $LocationCode */
+    /** @var string|null */
     protected $LocationCode;
-    /** @var Message|null $Message */
+    /** @var Message|null */
     protected $Message;
-    /** @var string|null $RetailNetworkID */
+    /** @var string|null */
     protected $RetailNetworkID;
     // @codingStandardsIgnoreEnd
 
     /**
      * GetLocation constructor.
      *
-     * @param string|null  $location
-     * @param Message|null $message
-     * @param string|null  $networkId
+     * @param string|null  $LocationCode
+     * @param Message|null $Message
+     * @param string|null  $RetailNetworkID
      */
     public function __construct(
-        $location = null,
-        Message $message = null,
-        $networkId = null
+        $LocationCode = null,
+        Message $Message = null,
+        $RetailNetworkID = null
     ) {
         parent::__construct();
 
-        $this->setLocationCode($location);
-        $this->setMessage($message ?: new Message());
-        $this->setRetailNetworkID($networkId);
+        $this->setLocationCode($LocationCode);
+        $this->setMessage($Message ?: new Message());
+        $this->setRetailNetworkID($RetailNetworkID);
     }
 }

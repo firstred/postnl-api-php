@@ -1,8 +1,8 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,26 +19,30 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity;
+namespace Firstred\PostNL\Entity;
 
+use DateTimeImmutable;
+use DateTimeInterface;
+use DateTimeZone;
+use Exception;
+use Firstred\PostNL\Entity\Request\GetDeliveryDate;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Service\BarcodeService;
+use Firstred\PostNL\Service\ConfirmingService;
+use Firstred\PostNL\Service\DeliveryDateService;
+use Firstred\PostNL\Service\LabellingService;
+use Firstred\PostNL\Service\LocationService;
+use Firstred\PostNL\Service\TimeframeService;
 use Sabre\Xml\Writer;
-use ThirtyBees\PostNL\Service\BarcodeService;
-use ThirtyBees\PostNL\Service\ConfirmingService;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
-use ThirtyBees\PostNL\Service\LabellingService;
-use ThirtyBees\PostNL\Service\LocationService;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
-use ThirtyBees\PostNL\Service\TimeframeService;
+use function in_array;
 
 /**
- * Class Location
- *
- * @package ThirtyBees\PostNL\Entity
+ * Class Location.
  *
  * @method string|null               getPostalcode()
  * @method Coordinates|null          getCoordinates()
@@ -48,8 +52,8 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method string|null               getStreet()
  * @method string|null               getHouseNr()
  * @method string|null               getHouseNrExt()
- * @method string|null               getAllowSundaySorting()
- * @method string|null               getDeliveryDate()
+ * @method bool|null                 getAllowSundaySorting()
+ * @method DateTimeInterface|null    getDeliveryDate()
  * @method string[]|null             getDeliveryOptions()
  * @method string|null               getOpeningTime()
  * @method string[]|null             getOptions()
@@ -59,31 +63,30 @@ use ThirtyBees\PostNL\Service\TimeframeService;
  * @method string|null               getRetailNetworkID()
  * @method string|null               getDownPartnerID()
  * @method string|null               getDownPartnerLocation()
+ * @method Location                  setCoordinates(Coordinates|null $Coordinates = null)
+ * @method Location                  setCoordinatesNorthWest(CoordinatesNorthWest|null $CoordinatesNorthWest = null)
+ * @method Location                  setCoordinatesSouthEast(CoordinatesSouthEast|null $coordinatesSouthEast = null)
+ * @method Location                  setCity(string|null $City = null)
+ * @method Location                  setStreet(string|null $Street = null)
+ * @method Location                  setHouseNr(string|null $HouseNr = null)
+ * @method Location                  setHouseNrExt(string|null $HouseNrExt = null)
+ * @method Location                  setDeliveryOptions(string[]|null $DeliveryOptions = null)
+ * @method Location                  setOpeningTime(string|null $OpeningTime = null)
+ * @method Location                  setOptions(string[]|null $Options = null)
+ * @method Location                  setLocationCode(string|null $LocationCode = null)
+ * @method Location                  setSaleschannel(string|null $Saleschannel = null)
+ * @method Location                  setTerminalType(string|null $TerminalType = null)
+ * @method Location                  setRetailNetworkID(string|null $RetailNetworkID = null)
+ * @method Location                  setDownPartnerID(string|null $DownPartnerID = null)
+ * @method Location                  setDownPartnerLocation(string|null $DownPartnerLocation = null)
  *
- * @method Location setCoordinates(Coordinates|null $coordinates = null)
- * @method Location setCoordinatesNorthWest(CoordinatesNorthWest|null $coordinates = null)
- * @method Location setCoordinatesSouthEast(CoordinatesSouthEast|null $coordinates = null)
- * @method Location setCity(string|null $city = null)
- * @method Location setStreet(string|null $street = null)
- * @method Location setHouseNr(string|null $houseNr = null)
- * @method Location setHouseNrExt(string|null $houseNrExt = null)
- * @method Location setAllowSundaySorting(string|null $sundaySorting = null)
- * @method Location setDeliveryDate(string|null $deliveryDate = null)
- * @method Location setDeliveryOptions(string[]|null $deliveryOptions = null)
- * @method Location setOpeningTime(string|null $openingTime = null)
- * @method Location setOptions(string[]|null $options = null)
- * @method Location setLocationCode(string|null $code = null)
- * @method Location setSaleschannel(string|null $channel = null)
- * @method Location setTerminalType(string|null $type = null)
- * @method Location setRetailNetworkID(string|null $id = null)
- * @method Location setDownPartnerID(string|null $id = null)
- * @method Location setDownPartnerLocation(string|null $location = null)
+ * @since 1.0.0
  */
 class Location extends AbstractEntity
 {
-    /** @var string[][] $defaultProperties */
+    /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'AllowSundaySorting'   => BarcodeService::DOMAIN_NAMESPACE,
             'DeliveryDate'         => BarcodeService::DOMAIN_NAMESPACE,
             'DeliveryOptions'      => BarcodeService::DOMAIN_NAMESPACE,
@@ -104,7 +107,7 @@ class Location extends AbstractEntity
             'DownPartnerID'        => BarcodeService::DOMAIN_NAMESPACE,
             'DownPartnerLocation'  => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'AllowSundaySorting'   => ConfirmingService::DOMAIN_NAMESPACE,
             'DeliveryDate'         => ConfirmingService::DOMAIN_NAMESPACE,
             'DeliveryOptions'      => ConfirmingService::DOMAIN_NAMESPACE,
@@ -125,7 +128,7 @@ class Location extends AbstractEntity
             'DownPartnerID'        => ConfirmingService::DOMAIN_NAMESPACE,
             'DownPartnerLocation'  => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'AllowSundaySorting'   => LabellingService::DOMAIN_NAMESPACE,
             'DeliveryDate'         => LabellingService::DOMAIN_NAMESPACE,
             'DeliveryOptions'      => LabellingService::DOMAIN_NAMESPACE,
@@ -146,28 +149,7 @@ class Location extends AbstractEntity
             'DownPartnerID'        => LabellingService::DOMAIN_NAMESPACE,
             'DownPartnerLocation'  => LabellingService::DOMAIN_NAMESPACE,
         ],
-        'ShippingStatus' => [
-            'AllowSundaySorting'   => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DeliveryDate'         => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DeliveryOptions'      => ShippingStatusService::DOMAIN_NAMESPACE,
-            'OpeningTime'          => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Options'              => ShippingStatusService::DOMAIN_NAMESPACE,
-            'City'                 => ShippingStatusService::DOMAIN_NAMESPACE,
-            'HouseNr'              => ShippingStatusService::DOMAIN_NAMESPACE,
-            'HouseNrExt'           => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Postalcode'           => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Street'               => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Coordinates'          => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CoordinatesNorthWest' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'CoordinatesSouthEast' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'LocationCode'         => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Saleschannel'         => ShippingStatusService::DOMAIN_NAMESPACE,
-            'TerminalType'         => ShippingStatusService::DOMAIN_NAMESPACE,
-            'RetailNetworkID'      => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DownPartnerID'        => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DownPartnerLocation'  => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'AllowSundaySorting'   => DeliveryDateService::DOMAIN_NAMESPACE,
             'DeliveryDate'         => DeliveryDateService::DOMAIN_NAMESPACE,
             'DeliveryOptions'      => DeliveryDateService::DOMAIN_NAMESPACE,
@@ -188,7 +170,7 @@ class Location extends AbstractEntity
             'DownPartnerID'        => DeliveryDateService::DOMAIN_NAMESPACE,
             'DownPartnerLocation'  => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'AllowSundaySorting'   => LocationService::DOMAIN_NAMESPACE,
             'DeliveryDate'         => LocationService::DOMAIN_NAMESPACE,
             'DeliveryOptions'      => LocationService::DOMAIN_NAMESPACE,
@@ -209,7 +191,7 @@ class Location extends AbstractEntity
             'DownPartnerID'        => LocationService::DOMAIN_NAMESPACE,
             'DownPartnerLocation'  => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'AllowSundaySorting'   => TimeframeService::DOMAIN_NAMESPACE,
             'DeliveryDate'         => TimeframeService::DOMAIN_NAMESPACE,
             'DeliveryOptions'      => TimeframeService::DOMAIN_NAMESPACE,
@@ -232,128 +214,177 @@ class Location extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string|null $AllowSundaySorting */
+    /** @var string|null */
     protected $AllowSundaySorting;
-    /** @var string|null $DeliveryDate */
+    /** @var string|null */
     protected $DeliveryDate;
-    /** @var string[]|null $DeliveryOptions */
+    /** @var string[]|null */
     protected $DeliveryOptions;
-    /** @var string|null $OpeningTime */
+    /** @var string|null */
     protected $OpeningTime;
-    /** @var string[]|null $Options */
+    /** @var string[]|null */
     protected $Options;
-    /** @var string|null $City */
+    /** @var string|null */
     protected $City;
-    /** @var string|null $HouseNr */
+    /** @var string|null */
     protected $HouseNr;
-    /** @var string|null $HouseNrExt */
+    /** @var string|null */
     protected $HouseNrExt;
-    /** @var string|null $Postalcode */
+    /** @var string|null */
     protected $Postalcode;
-    /** @var string|null $Street */
+    /** @var string|null */
     protected $Street;
-    /** @var Coordinates|null $Coordinates */
+    /** @var Coordinates|null */
     protected $Coordinates;
-    /** @var CoordinatesNorthWest|null $CoordinatesNorthWest */
+    /** @var CoordinatesNorthWest|null */
     protected $CoordinatesNorthWest;
-    /** @var CoordinatesSouthEast|null $CoordinatesSouthEast */
+    /** @var CoordinatesSouthEast|null */
     protected $CoordinatesSouthEast;
-    /** @var string|null $LocationCode */
+    /** @var string|null */
     protected $LocationCode;
-    /** @var string|null $Saleschannel */
+    /** @var string|null */
     protected $Saleschannel;
-    /** @var string|null $TerminalType */
+    /** @var string|null */
     protected $TerminalType;
-    /** @var string|null $RetailNetworkID */
+    /** @var string|null */
     protected $RetailNetworkID;
-    /** @var string|null $DownPartnerID */
+    /** @var string|null */
     protected $DownPartnerID;
-    /** @var string|null $DownPartnerLocation */
+    /** @var string|null */
     protected $DownPartnerLocation;
     // @codingStandardsIgnoreEnd
 
     /**
-     * @param string|null               $zipcode
-     * @param string|null               $allowSundaySorting
-     * @param string|null               $deliveryDate
-     * @param array|null                $deliveryOptions
-     * @param array|null                $options
-     * @param Coordinates|null          $coordinates
-     * @param CoordinatesNorthWest|null $coordinatesNW
-     * @param CoordinatesSouthEast|null $coordinatesSE
-     * @param string|null               $city
-     * @param string|null               $street
-     * @param string|null               $houseNr
-     * @param string|null               $houseNrExt
-     * @param string|null               $locationCode
-     * @param string|null               $saleschannel
-     * @param string|null               $terminalType
-     * @param string|null               $retailNetworkId
-     * @param string|null               $downPartnerID
-     * @param string|null               $downPartnerLocation
+     * @param string|null                   $Postalcode
+     * @param string|null                   $AllowSundaySorting
+     * @param string|DateTimeInterface|null $DeliveryDate
+     * @param array|null                    $DeliveryOptions
+     * @param array|null                    $Options
+     * @param Coordinates|null              $Coordinates
+     * @param CoordinatesNorthWest|null     $CoordinatesNorthWest
+     * @param CoordinatesSouthEast|null     $CoordinatesSouthEast
+     * @param string|null                   $City
+     * @param string|null                   $Street
+     * @param string|null                   $HouseNr
+     * @param string|null               $HouseNrExt
+     * @param string|null               $LocationCode
+     * @param string|null               $Saleschannel
+     * @param string|null               $TerminalType
+     * @param string|null               $RetailNetworkID
+     * @param string|null               $DownPartnerID
+     * @param string|null               $DownPartnerLocation
+     *
+     * @throws InvalidArgumentException
      */
     public function __construct(
-        $zipcode = null,
-        $allowSundaySorting = null,
-        $deliveryDate = null,
-        array $deliveryOptions = null,
-        array $options = null,
-        Coordinates $coordinates = null,
-        CoordinatesNorthWest $coordinatesNW = null,
-        CoordinatesSouthEast $coordinatesSE = null,
-        $city = null,
-        $street = null,
-        $houseNr = null,
-        $houseNrExt = null,
-        $locationCode = null,
-        $saleschannel = null,
-        $terminalType = null,
-        $retailNetworkId = null,
-        $downPartnerID = null,
-        $downPartnerLocation = null
+        $Postalcode = null,
+        $AllowSundaySorting = null,
+        $DeliveryDate = null,
+        array $DeliveryOptions = null,
+        array $Options = null,
+        Coordinates $Coordinates = null,
+        CoordinatesNorthWest $CoordinatesNorthWest = null,
+        CoordinatesSouthEast $CoordinatesSouthEast = null,
+        $City = null,
+        $Street = null,
+        $HouseNr = null,
+        $HouseNrExt = null,
+        $LocationCode = null,
+        $Saleschannel = null,
+        $TerminalType = null,
+        $RetailNetworkID = null,
+        $DownPartnerID = null,
+        $DownPartnerLocation = null
     ) {
         parent::__construct();
 
-        $this->setAllowSundaySorting($allowSundaySorting);
-        $this->setDeliveryDate($deliveryDate ?: (new \DateTime('next monday'))->format('d-m-Y'));
-        $this->setDeliveryOptions($deliveryOptions);
-        $this->setOptions($options);
-        $this->setPostalcode($zipcode);
-        $this->setCoordinates($coordinates);
-        $this->setCoordinatesNorthWest($coordinatesNW);
-        $this->setCoordinatesSouthEast($coordinatesSE);
-        $this->setCity($city);
-        $this->setStreet($street);
-        $this->setHouseNr($houseNr);
-        $this->setHouseNrExt($houseNrExt);
-        $this->setLocationCode($locationCode);
-        $this->setSaleschannel($saleschannel);
-        $this->setTerminalType($terminalType);
-        $this->setRetailNetworkID($retailNetworkId);
-        $this->setDownPartnerID($downPartnerID);
-        $this->setDownPartnerLocation($downPartnerLocation);
+        $this->setAllowSundaySorting($AllowSundaySorting);
+        try {
+            $this->setDeliveryDate($DeliveryDate ?: (new DateTimeImmutable('next monday', new DateTimeZone('Europe/Amsterdam'))));
+        } catch (Exception $e) {
+            throw new InvalidArgumentException($e->getMessage(), 0, $e);
+        }
+        $this->setDeliveryOptions($DeliveryOptions);
+        $this->setOptions($Options);
+        $this->setPostalcode($Postalcode);
+        $this->setCoordinates($Coordinates);
+        $this->setCoordinatesNorthWest($CoordinatesNorthWest);
+        $this->setCoordinatesSouthEast($CoordinatesSouthEast);
+        $this->setCity($City);
+        $this->setStreet($Street);
+        $this->setHouseNr($HouseNr);
+        $this->setHouseNrExt($HouseNrExt);
+        $this->setLocationCode($LocationCode);
+        $this->setSaleschannel($Saleschannel);
+        $this->setTerminalType($TerminalType);
+        $this->setRetailNetworkID($RetailNetworkID);
+        $this->setDownPartnerID($DownPartnerID);
+        $this->setDownPartnerLocation($DownPartnerLocation);
     }
 
     /**
-     * Set the postcode
+     * @param string|DateTimeInterface|null $DeliveryDate
      *
-     * @param string|null $postcode
+     * @return static
+     *
+     * @throws InvalidArgumentException
+     *
+     * @since 1.2.0
+     */
+    public function setDeliveryDate($DeliveryDate = null)
+    {
+        if (is_string($DeliveryDate)) {
+            try {
+                $DeliveryDate = new DateTimeImmutable($DeliveryDate, new DateTimeZone('Europe/Amsterdam'));
+            } catch (Exception $e) {
+                throw new InvalidArgumentException($e->getMessage(), 0, $e);
+            }
+        }
+
+        $this->DeliveryDate = $DeliveryDate;
+
+        return $this;
+    }
+
+    /**
+     * Set the postcode.
+     *
+     * @param string|null $Postalcode
      *
      * @return Location
      */
-    public function setPostalcode($postcode = null)
+    public function setPostalcode($Postalcode = null)
     {
-        if (is_null($postcode)) {
+        if (is_null($Postalcode)) {
             $this->Postalcode = null;
         } else {
-            $this->Postalcode = strtoupper(str_replace(' ', '', $postcode));
+            $this->Postalcode = strtoupper(str_replace(' ', '', $Postalcode));
         }
 
         return $this;
     }
 
     /**
-     * Return a serializable array for the XMLWriter
+     * @param string|bool|int|null $AllowSundaySorting
+     *
+     * @return Location
+     *
+     * @since 1.0.0
+     * @since 1.3.0 Accept bool and int
+     */
+    public function setAllowSundaySorting($AllowSundaySorting = null)
+    {
+        if (null !== $AllowSundaySorting) {
+            $AllowSundaySorting = in_array($AllowSundaySorting, [true, 'true', 1], true) ? 'true' : 'false';
+        }
+
+        $this->AllowSundaySorting = $AllowSundaySorting;
+
+        return $this;
+    }
+
+    /**
+     * Return a serializable array for the XMLWriter.
      *
      * @param Writer $writer
      *
@@ -369,25 +400,27 @@ class Location extends AbstractEntity
         }
 
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if ($propertyName === 'Options') {
+            if ('DeliveryDate' === $propertyName) {
+                if ($this->DeliveryDate instanceof DateTimeImmutable) {
+                    $xml["{{$namespace}}DeliveryDate"] = $this->DeliveryDate->format('d-m-Y');
+                }
+            } elseif ('Options' === $propertyName) {
                 if (is_array($this->Options)) {
                     $options = [];
                     foreach ($this->Options as $option) {
-                        $options[] = ["{http://schemas.microsoft.com/2003/10/Serialization/Arrays}string" => $option];
+                        $options[] = ['{http://schemas.microsoft.com/2003/10/Serialization/Arrays}string' => $option];
                     }
                     $xml["{{$namespace}}Options"] = $options;
                 }
-
-            } elseif ($propertyName === 'DeliveryOptions') {
+            } elseif ('DeliveryOptions' === $propertyName) {
                 if (is_array($this->DeliveryOptions)) {
                     $options = [];
                     foreach ($this->DeliveryOptions as $option) {
-                        $options[] = ["{http://schemas.microsoft.com/2003/10/Serialization/Arrays}string" => $option];
+                        $options[] = ['{http://schemas.microsoft.com/2003/10/Serialization/Arrays}string' => $option];
                     }
                     $xml["{{$namespace}}DeliveryOptions"] = $options;
                 }
-
-            } elseif ($propertyName === 'AllowSundaySorting') {
+            } elseif ('AllowSundaySorting' === $propertyName) {
                 if (isset($this->AllowSundaySorting)) {
                     if (is_bool($this->AllowSundaySorting)) {
                         $xml["{{$namespace}}AllowSundaySorting"] = $this->AllowSundaySorting ? 'true' : 'false';
@@ -395,8 +428,8 @@ class Location extends AbstractEntity
                         $xml["{{$namespace}}AllowSundaySorting"] = $this->AllowSundaySorting;
                     }
                 }
-            } elseif (isset($this->{$propertyName})) {
-                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
+            } elseif (isset($this->$propertyName)) {
+                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->$propertyName;
             }
         }
         // Auto extending this object with other properties is not supported with SOAP

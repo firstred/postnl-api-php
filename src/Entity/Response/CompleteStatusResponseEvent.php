@@ -1,8 +1,8 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,52 +19,54 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity\Response;
+namespace Firstred\PostNL\Entity\Response;
 
-use ThirtyBees\PostNL\Entity\AbstractEntity;
-use ThirtyBees\PostNL\Service\BarcodeService;
-use ThirtyBees\PostNL\Service\ConfirmingService;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
-use ThirtyBees\PostNL\Service\LabellingService;
-use ThirtyBees\PostNL\Service\LocationService;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
-use ThirtyBees\PostNL\Service\TimeframeService;
+use DateTimeImmutable;
+use DateTimeInterface;
+use DateTimeZone;
+use Exception;
+use Firstred\PostNL\Entity\AbstractEntity;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Service\BarcodeService;
+use Firstred\PostNL\Service\ConfirmingService;
+use Firstred\PostNL\Service\DeliveryDateService;
+use Firstred\PostNL\Service\LabellingService;
+use Firstred\PostNL\Service\LocationService;
+use Firstred\PostNL\Service\TimeframeService;
 
 /**
- * Class CompleteStatusResponseEvent
+ * Class CompleteStatusResponseEvent.
  *
- * @package ThirtyBees\PostNL\Entity
+ * @method string|null                 getCode()
+ * @method string|null                 getDescription()
+ * @method string|null                 getDestinationLocationCode()
+ * @method string|null                 getLocationCode()
+ * @method string|null                 getRouteCode()
+ * @method string|null                 getRouteName()
+ * @method DateTimeInterface|null      getTimeStamp()
+ * @method CompleteStatusResponseEvent setCode(string|null $Code = null)
+ * @method CompleteStatusResponseEvent setDescription(string|null $Description = null)
+ * @method CompleteStatusResponseEvent setDestinationLocationCode(string|null $DestinationLocationCode = null)
+ * @method CompleteStatusResponseEvent setLocationCode(string|null $LocationCode = null)
+ * @method CompleteStatusResponseEvent setRouteCode(string|null $RouteCode = null)
+ * @method CompleteStatusResponseEvent setRouteName(string|null $RouteName = null)
  *
- * @method string|null getCode()
- * @method string|null getDescription()
- * @method string|null getDestinationLocationCode()
- * @method string|null getLocationCode()
- * @method string|null getRouteCode()
- * @method string|null getRouteName()
- * @method string|null getTimeStamp()
- *
- * @method CompleteStatusResponseEvent setCode(string|null $code = null)
- * @method CompleteStatusResponseEvent setDescription(string|null $description = null)
- * @method CompleteStatusResponseEvent setDestinationLocationCode(string|null $code = null)
- * @method CompleteStatusResponseEvent setLocationCode(string|null $code = null)
- * @method CompleteStatusResponseEvent setRouteCode(string|null $code = null)
- * @method CompleteStatusResponseEvent setRouteName(string|null $name = null)
- * @method CompleteStatusResponseEvent setTimeStamp(string|null $timestamp = null)
+ * @since 1.0.0
  */
 class CompleteStatusResponseEvent extends AbstractEntity
 {
     /**
-     * Default properties and namespaces for the SOAP API
+     * Default properties and namespaces for the SOAP API.
      *
-     * @var array $defaultProperties
+     * @var array
      */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'Code'                    => BarcodeService::DOMAIN_NAMESPACE,
             'Description'             => BarcodeService::DOMAIN_NAMESPACE,
             'DestinationLocationCode' => BarcodeService::DOMAIN_NAMESPACE,
@@ -73,7 +75,7 @@ class CompleteStatusResponseEvent extends AbstractEntity
             'RouteName'               => BarcodeService::DOMAIN_NAMESPACE,
             'TimeStamp'               => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'Code'                    => ConfirmingService::DOMAIN_NAMESPACE,
             'Description'             => ConfirmingService::DOMAIN_NAMESPACE,
             'DestinationLocationCode' => ConfirmingService::DOMAIN_NAMESPACE,
@@ -82,7 +84,7 @@ class CompleteStatusResponseEvent extends AbstractEntity
             'RouteName'               => ConfirmingService::DOMAIN_NAMESPACE,
             'TimeStamp'               => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'Code'                    => LabellingService::DOMAIN_NAMESPACE,
             'Description'             => LabellingService::DOMAIN_NAMESPACE,
             'DestinationLocationCode' => LabellingService::DOMAIN_NAMESPACE,
@@ -91,16 +93,7 @@ class CompleteStatusResponseEvent extends AbstractEntity
             'RouteName'               => LabellingService::DOMAIN_NAMESPACE,
             'TimeStamp'               => LabellingService::DOMAIN_NAMESPACE,
         ],
-        'ShippingStatus' => [
-            'Code'                    => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Description'             => ShippingStatusService::DOMAIN_NAMESPACE,
-            'DestinationLocationCode' => ShippingStatusService::DOMAIN_NAMESPACE,
-            'LocationCode'            => ShippingStatusService::DOMAIN_NAMESPACE,
-            'RouteCode'               => ShippingStatusService::DOMAIN_NAMESPACE,
-            'RouteName'               => ShippingStatusService::DOMAIN_NAMESPACE,
-            'TimeStamp'               => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'Code'                    => DeliveryDateService::DOMAIN_NAMESPACE,
             'Description'             => DeliveryDateService::DOMAIN_NAMESPACE,
             'DestinationLocationCode' => DeliveryDateService::DOMAIN_NAMESPACE,
@@ -109,7 +102,7 @@ class CompleteStatusResponseEvent extends AbstractEntity
             'RouteName'               => DeliveryDateService::DOMAIN_NAMESPACE,
             'TimeStamp'               => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'Code'                    => LocationService::DOMAIN_NAMESPACE,
             'Description'             => LocationService::DOMAIN_NAMESPACE,
             'DestinationLocationCode' => LocationService::DOMAIN_NAMESPACE,
@@ -118,7 +111,7 @@ class CompleteStatusResponseEvent extends AbstractEntity
             'RouteName'               => LocationService::DOMAIN_NAMESPACE,
             'TimeStamp'               => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'Code'                    => TimeframeService::DOMAIN_NAMESPACE,
             'Description'             => TimeframeService::DOMAIN_NAMESPACE,
             'DestinationLocationCode' => TimeframeService::DOMAIN_NAMESPACE,
@@ -129,50 +122,76 @@ class CompleteStatusResponseEvent extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var string|null $Code */
+    /** @var string|null */
     protected $Code;
-    /** @var string|null $Description */
+    /** @var string|null */
     protected $Description;
-    /** @var string|null $DestinationLocationCode */
+    /** @var string|null */
     protected $DestinationLocationCode;
-    /** @var string|null $LocationCode */
+    /** @var string|null */
     protected $LocationCode;
-    /** @var string|null $RouteCode */
+    /** @var string|null */
     protected $RouteCode;
-    /** @var string|null $RouteName */
+    /** @var string|null */
     protected $RouteName;
-    /** @var string|null $TimeStamp */
+    /** @var string|null */
     protected $TimeStamp;
     // @codingStandardsIgnoreEnd
 
     /**
      * CompleteStatusResponseEvent constructor.
      *
-     * @param string|null $code
-     * @param string|null $description
-     * @param string|null $destinationLocationCode
-     * @param string|null $locationCode
-     * @param string|null $routeCode
-     * @param string|null $routeName
-     * @param string|null $timeStamp
+     * @param string|null $Code
+     * @param string|null $Description
+     * @param string|null $DestinationLocationCode
+     * @param string|null $LocationCode
+     * @param string|null $RouteCode
+     * @param string|null $RouteName
+     * @param string|null $TimeStamp
+     *
+     * @throws InvalidArgumentException
      */
     public function __construct(
-        $code = null,
-        $description = null,
-        $destinationLocationCode = null,
-        $locationCode = null,
-        $routeCode = null,
-        $routeName = null,
-        $timeStamp = null
+        $Code = null,
+        $Description = null,
+        $DestinationLocationCode = null,
+        $LocationCode = null,
+        $RouteCode = null,
+        $RouteName = null,
+        $TimeStamp = null
     ) {
         parent::__construct();
 
-        $this->setCode($code);
-        $this->setDescription($description);
-        $this->setDestinationLocationCode($destinationLocationCode);
-        $this->setLocationCode($locationCode);
-        $this->setRouteCode($routeCode);
-        $this->setRouteName($routeName);
-        $this->setTimeStamp($timeStamp);
+        $this->setCode($Code);
+        $this->setDescription($Description);
+        $this->setDestinationLocationCode($DestinationLocationCode);
+        $this->setLocationCode($LocationCode);
+        $this->setRouteCode($RouteCode);
+        $this->setRouteName($RouteName);
+        $this->setTimeStamp($TimeStamp);
+    }
+
+    /**
+     * @param string|DateTimeInterface|null $TimeStamp
+     *
+     * @return static
+     *
+     * @throws InvalidArgumentException
+     *
+     * @since 1.2.0
+     */
+    public function setTimeStamp($TimeStamp = null)
+    {
+        if (is_string($TimeStamp)) {
+            try {
+                $TimeStamp = new DateTimeImmutable($TimeStamp, new DateTimeZone('Europe/Amsterdam'));
+            } catch (Exception $e) {
+                throw new InvalidArgumentException($e->getMessage(), 0, $e);
+            }
+        }
+
+        $this->TimeStamp = $TimeStamp;
+
+        return $this;
     }
 }

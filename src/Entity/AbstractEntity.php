@@ -1,8 +1,8 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,54 +19,45 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity;
+namespace Firstred\PostNL\Entity;
 
+use DateTimeInterface;
 use Exception;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\NotSupportedException;
+use Firstred\PostNL\Util\UUID;
+use Firstred\PostNL\Util\XmlSerializable;
 use JsonSerializable;
 use ReflectionClass;
+use ReflectionException;
+use ReflectionObject;
+use ReflectionProperty;
 use Sabre\Xml\Writer;
-use Sabre\Xml\XmlSerializable;
-use ThirtyBees\PostNL\Exception\InvalidArgumentException;
-use ThirtyBees\PostNL\Util\UUID;
-use function array_key_exists;
+use stdClass;
 use function array_keys;
-use function call_user_func;
-use function class_exists;
-use function count;
 use function is_array;
-use function is_subclass_of;
-use function key;
-use function preg_replace;
-use function property_exists;
-use function range;
-use function reset;
-use function strlen;
-use function substr;
 
 /**
- * Class Entity
+ * Class Entity.
  *
- * @package ThirtyBees\PostNL\Entity
- *
- * @method string getId()
- * @method string getCurrentService()
- *
+ * @method string         getId()
+ * @method string         getCurrentService()
  * @method AbstractEntity setId(string $id)
  * @method AbstractEntity setCurrentService(string $service)
  */
 abstract class AbstractEntity implements JsonSerializable, XmlSerializable
 {
     // @codingStandardsIgnoreStart
-    /** @var array $defaultProperties */
+    /** @var array */
     public static $defaultProperties = [];
-    /** @var string $id */
+    /** @var string */
     protected $id;
-    /** @var string $currentService */
+    /** @var string */
     protected $currentService;
     // @codingStandardsIgnoreEnd
 
@@ -80,25 +71,29 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
     }
 
     /**
-     * Create an instance of this class without touching the constructor
+     * Create an instance of this class without touching the constructor.
      *
      * @param array $properties
      *
-     * @return static|null|object
+     * @return static
+     *
+     * @throws InvalidArgumentException
+     *
+     * @since 1.0.0
      */
     public static function create(array $properties = [])
     {
-        if (static::class === __CLASS__) {
-            return null;
+        if (__CLASS__ === get_called_class()) {
+            throw new InvalidArgumentException('Invalid class given');
         }
 
         try {
-            $reflectionClass = new ReflectionClass(static::class);
+            $reflectionClass = new ReflectionClass(get_called_class());
+            $instance = $reflectionClass->newInstanceWithoutConstructor();
+            /** @var static $instance */
         } catch (Exception $e) {
-            return null;
+            throw new InvalidArgumentException('Invalid class given');
         }
-
-        $instance = $reflectionClass->newInstanceWithoutConstructor();
 
         foreach ($properties as $name => $value) {
             $instance->{'set'.$name}($value);
@@ -120,29 +115,27 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
     {
         $methodName = substr($name, 0, 3);
         $propertyName = substr($name, 3, strlen($name));
-        if ($propertyName === 'Id') {
+        if ('Id' === $propertyName) {
             $propertyName = 'id';
-        } elseif ($propertyName === 'CurrentService') {
+        } elseif ('CurrentService' === $propertyName) {
             $propertyName = 'currentService';
-        } elseif ($propertyName === 'ReasonNotimeframes') {
+        } elseif ('ReasonNotimeframes' === $propertyName) {
             $propertyName = 'ReasonNoTimeframes';
         }
 
-        if ($methodName === 'get') {
+        if ('get' === $methodName) {
             if (property_exists($this, $propertyName)) {
-                return $this->{$propertyName};
+                return $this->$propertyName;
+            } else {
+                return null;
             }
-
-            return null;
-        }
-
-        if ($methodName === 'set') {
+        } elseif ('set' === $methodName) {
             if (!is_array($value) || count($value) < 1) {
                 throw new InvalidArgumentException('Value is missing');
             }
 
             if (property_exists($this, $propertyName)) {
-                $this->{$propertyName} = $value[0];
+                $this->$propertyName = $value[0];
             }
 
             return $this;
@@ -152,21 +145,26 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
     }
 
     /**
-     * Return a serializable array for `json_encode`
+     * Return a serializable array for `json_encode`.
      *
      * @return array
+     *
      * @throws InvalidArgumentException
      */
     public function jsonSerialize()
     {
         $json = [];
-        if (!$this->currentService || !array_key_exists($this->currentService, static::$defaultProperties)) {
+        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
             throw new InvalidArgumentException('Service not set before serialization');
         }
 
         foreach (array_keys(static::$defaultProperties[$this->currentService]) as $propertyName) {
-            if (isset($this->{$propertyName})) {
-                $json[$propertyName] = $this->{$propertyName};
+            if (isset($this->$propertyName)) {
+                if ($this->$propertyName instanceof DateTimeInterface) {
+                    $json[$propertyName] = $this->$propertyName->format('d-m-Y H:i:s');
+                } else {
+                    $json[$propertyName] = $this->$propertyName;
+                }
             }
         }
 
@@ -174,23 +172,24 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
     }
 
     /**
-     * Return a serializable array for the XMLWriter
+     * Return a serializable array for the XMLWriter.
      *
      * @param Writer $writer
      *
      * @return void
+     *
      * @throws InvalidArgumentException
      */
     public function xmlSerialize(Writer $writer)
     {
         $xml = [];
-        if (!$this->currentService || !array_key_exists($this->currentService, static::$defaultProperties)) {
+        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
             throw new InvalidArgumentException('Service not set before serialization');
         }
 
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
-            if (isset($this->{$propertyName})) {
-                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->{$propertyName};
+            if (isset($this->$propertyName)) {
+                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->$propertyName;
             }
         }
 
@@ -198,45 +197,111 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
     }
 
     /**
-     * Deserialize JSON
+     * Deserialize JSON.
      *
-     * @param array $json JSON as associative array
+     * @param stdClass $json JSON object `{"EntityName": object}`
      *
-     * @return AbstractEntity
+     * @return static
+     *
+     * @throws NotSupportedException
+     * @throws InvalidArgumentException
      */
-    public static function jsonDeserialize(array $json)
+    public static function jsonDeserialize(stdClass $json)
     {
-        reset($json);
-        $shortClassName = key($json);
-        $fullClassName = static::getFullEntityClassName($shortClassName);
+        // Find the entity name
+        $reflection = new ReflectionObject($json);
+        $properties = $reflection->getProperties(ReflectionProperty::IS_PUBLIC);
 
-        // The only key in this associate array should be the object's name
-        // The value should be the object itself
-
-        if (!$fullClassName || !class_exists($fullClassName) || !is_array($json[$shortClassName])) {
-            // If it's not a known object, just return the property
-            return $json[$shortClassName];
+        if (!count($properties)) {
+            return $json;
         }
 
-        $object = call_user_func([$fullClassName, 'create']);
-        foreach ($json[$shortClassName] as $key => $value) {
-            $fullClassName = static::getFullEntityClassName($key);
-            $propertyName = $key;
+        $entityName = $properties[0]->getName();
+        try {
+            $entityFqcn = static::getFullyQualifiedEntityClassName($entityName);
+        } catch (InvalidArgumentException $e) {
+            $entityFqcn = null;
+        }
 
-            // If key is plural, try the singular version, because this might be an array
-            if (!$fullClassName && substr($key, -1) === 's') {
-                $fullClassName = static::getFullEntityClassName(substr($key, 0, strlen($key) - 1));
-                $propertyName = substr($propertyName, 0, strlen($propertyName) - 1);
+        // The only key in this stdClass should be the containing object's name
+        // The value should be the object itself
+        if (!$entityFqcn
+            || !class_exists($entityFqcn)
+            || (!is_object($json->$entityName) && !is_array($json->$entityName))
+        ) {
+            if ($entityFqcn instanceof stdClass) {
+                throw new NotSupportedException('Unable to deserialize entity', 0, $entityFqcn);
             }
 
-            if (is_array($value) && is_subclass_of($fullClassName, AbstractEntity::class)) {
-                $entities = [];
-                foreach ($value as $name => $item) {
-                    $entities[] = static::jsonDeserialize([$propertyName => $item]);
+            // Handle {} => `null` values
+            if (is_object($json->$entityName) && empty((array) $json->$entityName)) {
+                return null;
+            }
+
+            // If it's not a known object, just return the property
+            return $json->$entityName;
+        }
+
+        if ($json->$entityName instanceof DateTimeInterface) {
+            return $json->$entityName->format('d-m-Y H:i:s');
+        }
+
+        // Instantiate a new entity
+        $object = call_user_func([$entityFqcn, 'create']);
+
+        if (is_array($json->$entityName)) {
+            return array_map(function ($item) use ($entityName) {
+                $fqcn = static::getFullyQualifiedEntityClassName($entityName);
+                /** @noinspection PhpUndefinedMethodInspection */
+                return $fqcn::jsonDeserialize((object) [$entityName => $item]);
+            }, $json->$entityName);
+        }
+
+        // Iterate over all the possible properties
+        /** @noinspection PhpUndefinedVariableInspection */
+        $propertyNames = isset($entityFqcn::$defaultProperties['Barcode'])
+            ? array_keys($entityFqcn::$defaultProperties['Barcode'])
+            : [];
+        foreach ($propertyNames as $propertyName) {
+            if (!isset($json->$entityName->$propertyName)) {
+                continue;
+            }
+
+            $value = $json->$entityName->$propertyName;
+
+            // Handle cases where the API returns {} instead of a `null` value
+            if ($value instanceof stdClass && empty((array) $value)) {
+                $value = null;
+            } elseif ($value instanceof DateTimeInterface) {
+                $value = $value->format('d-m-Y H:i:s');
+            }
+
+            if ($singularEntityName = static::shouldBeAnArray($entityFqcn, $propertyName)) {
+                if (null === $value) {
+                    $value = [];
+                } elseif (!is_array($value)) {
+                    $value = [$value];
                 }
-                $object->{'set'.$key}($entities);
+
+                $entities = [];
+                foreach ($value as $item) {
+                    try {
+                        $fqcn = static::getFullyQualifiedEntityClassName($singularEntityName);
+                    } catch (InvalidArgumentException $e) {
+                        $fqcn = AbstractEntity::class;
+                    }
+                    /** @noinspection PhpUndefinedMethodInspection */
+                    $entities[] = $fqcn::jsonDeserialize((object) [$singularEntityName => $item]);
+                }
+                $object->{'set'.$propertyName}($entities);
             } else {
-                $object->{'set'.$key}(static::jsonDeserialize([$propertyName => $value]));
+                try {
+                    $fqcn = static::getFullyQualifiedEntityClassName($propertyName);
+                } catch (InvalidArgumentException $e) {
+                    $fqcn = AbstractEntity::class;
+                }
+                /** @noinspection PhpUndefinedMethodInspection */
+                $object->{'set'.$propertyName}($fqcn::jsonDeserialize((object) [$propertyName => $value]));
             }
         }
 
@@ -244,7 +309,7 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
     }
 
     /**
-     * Deserialize XML
+     * Deserialize XML.
      *
      * @param array $xml Associative array representation of XML response, using Clark notation for namespaces
      *
@@ -256,27 +321,41 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
             $xml = $xml[0];
         }
 
-        $shortClassName = preg_replace('/(\{.*\})([A-Za-z]+)/', '$2', $xml['name']);
-        $fullClassName = static::getFullEntityClassName($shortClassName);
+        $shortClassName = preg_replace('/({.*})([A-Za-z]+)/', '$2', $xml['name']);
+        try {
+            $fqcn = static::getFullyQualifiedEntityClassName($shortClassName);
+        } catch (InvalidArgumentException $e) {
+            $fqcn = null;
+        }
 
         // The only key in this associate array should be the object's name
         // The value should be the object itself
 
-        if (!$fullClassName || !class_exists($fullClassName) || !is_array($xml['value'])) {
+        if (!$fqcn || !class_exists($fqcn) || !is_array($xml['value'])) {
             // If it's not a known object, just return the property
             return $xml['value'];
         }
 
-        $object = call_user_func([$fullClassName, 'create']);
+        $object = call_user_func([$fqcn, 'create']);
         foreach ($xml['value'] as $value) {
-            $shortClassName = preg_replace('/(\{.*\})([A-Za-z]+)/', '$2', $value['name']);
-            $fullClassName = static::getFullEntityClassName($shortClassName);
+            $shortClassName = preg_replace('/({.*})([A-Za-z]+)/', '$2', $value['name']);
+            try {
+                $fqcn = static::getFullyQualifiedEntityClassName($shortClassName);
+            } catch (InvalidArgumentException $e) {
+                $fqcn = null;
+            }
 
             // If key is plural, try the singular version, because this might be an array
             if (in_array($shortClassName, ['OldStatuses', 'Statuses', 'Addresses'])) {
-                $fullClassName = static::getFullEntityClassName(substr($shortClassName, 0, strlen($shortClassName) - 2));
-            } elseif (!$fullClassName && substr($shortClassName, -1) === 's') {
-                $fullClassName = static::getFullEntityClassName(substr($shortClassName, 0, strlen($shortClassName) - 1));
+                try {
+                    $fqcn = static::getFullyQualifiedEntityClassName(substr($shortClassName, 0, strlen($shortClassName) - 2));
+                } catch (InvalidArgumentException $e) {
+                }
+            } elseif (!$fqcn && 's' === substr($shortClassName, -1)) {
+                try {
+                $fqcn = static::getFullyQualifiedEntityClassName(substr($shortClassName, 0, strlen($shortClassName) - 1));
+                } catch (InvalidArgumentException $e) {
+                }
             }
 
             if (!$value['value']) {
@@ -284,7 +363,7 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
             } elseif (is_array($value['value'])
                 && count($value['value']) >= 1
                 && !in_array($shortClassName, ['Customer', 'OpeningHours', 'Customs'])
-                && is_subclass_of($fullClassName, AbstractEntity::class)
+                && is_subclass_of($fqcn, AbstractEntity::class)
             ) {
                 $entities = [];
                 if (isset($value['value'][0]['value']) && !is_array($value['value'][0]['value'])) {
@@ -309,23 +388,38 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
     }
 
     /**
-     * Get the full class (incl. namespace) for the given short class name
+     * Whether the given property should bbe an array
      *
-     * @param string $shortName
+     * @param string $fqcn
+     * @param string $propertyName
      *
-     * @return false|string The full name if found, else `false`
+     * @return false|string If found, singular name of property
+     *
+     * @since 1.2.0
      */
-    public static function getFullEntityClassName($shortName)
+    public static function shouldBeAnArray($fqcn, $propertyName)
     {
-        foreach ([
-            '\\ThirtyBees\\PostNL\\Entity',
-            '\\ThirtyBees\\PostNL\\Entity\\Message',
-            '\\ThirtyBees\\PostNL\\Entity\\Request',
-            '\\ThirtyBees\\PostNL\\Entity\\Response',
-            '\\ThirtyBees\\PostNL\\Entity\\SOAP',
-        ] as $namespace) {
-            if (class_exists("$namespace\\$shortName")) {
-                return "$namespace\\$shortName";
+        try {
+            $reflection = new ReflectionClass($fqcn);
+            $property = $reflection->getProperty($propertyName);
+            $comment = $property->getDocComment();
+        } catch (ReflectionException $e) {
+            return false;
+        }
+        // Quick 'n dirty annotation reader
+        //
+        // A property comment could look like /** @var string|null */
+        // or
+        // /**
+        //  * @var string|null
+        //  */
+        $matches = ['types' => ''];
+        preg_match('/@var\s(?P<types>[a-zA-Z0-9|\[\]]+)/', $comment, $matches);
+        foreach (explode('|', $matches['types']) as $type) {
+            if ('array' === $type) {
+                return $propertyName;
+            } elseif (false !== strpos($type, '[]')) {
+                return substr($type, 0, -2);
             }
         }
 
@@ -333,18 +427,31 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
     }
 
     /**
-     * Determine if the array is associative
+     * Get the fully qualified class name for the given entity name.
      *
-     * @param array $array
+     * @param string $shortName
      *
-     * @return bool
+     * @return string The FQCN
+     * @psalm-return class-string
+     *
+     * @throws InvalidArgumentException
+     *
+     * @since 1.2.0
      */
-    protected static function isAssociativeArray($array)
+    public static function getFullyQualifiedEntityClassName($shortName)
     {
-        if ([] === $array || !is_array($array)) {
-            return false;
+        foreach ([
+            '\\Firstred\\PostNL\\Entity',
+            '\\Firstred\\PostNL\\Entity\\Message',
+            '\\Firstred\\PostNL\\Entity\\Request',
+            '\\Firstred\\PostNL\\Entity\\Response',
+            '\\Firstred\\PostNL\\Entity\\SOAP',
+        ] as $namespace) {
+            if (class_exists("$namespace\\$shortName")) {
+                return "$namespace\\$shortName";
+            }
         }
 
-        return array_keys($array) !== range(0, count($array) - 1);
+        throw new InvalidArgumentException("Entity not found: $shortName");
     }
 }

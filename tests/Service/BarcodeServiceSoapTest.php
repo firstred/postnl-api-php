@@ -1,8 +1,8 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2021 Michael Dekker
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,48 +19,46 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Tests\Service;
+namespace Firstred\PostNL\Tests\Service;
 
 use Cache\Adapter\Void\VoidCachePool;
+use Firstred\PostNL\Entity\Address;
+use Firstred\PostNL\Entity\Barcode;
+use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Entity\Message\Message;
+use Firstred\PostNL\Entity\Request\GenerateBarcode;
+use Firstred\PostNL\Entity\SOAP\UsernameToken;
+use Firstred\PostNL\HttpClient\MockClient;
+use Firstred\PostNL\PostNL;
+use Firstred\PostNL\Service\BarcodeServiceInterface;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use Psr\Log\LoggerInterface;
-use ThirtyBees\PostNL\Entity\Address;
-use ThirtyBees\PostNL\Entity\Barcode;
-use ThirtyBees\PostNL\Entity\Customer;
-use ThirtyBees\PostNL\Entity\Message\Message;
-use ThirtyBees\PostNL\Entity\Request\GenerateBarcode;
-use ThirtyBees\PostNL\Entity\SOAP\UsernameToken;
-use ThirtyBees\PostNL\HttpClient\MockClient;
-use ThirtyBees\PostNL\PostNL;
-use ThirtyBees\PostNL\Service\BarcodeService;
 
 /**
- * Class BarcodeServiceSoapTest
- *
- * @package ThirtyBees\PostNL\Tests\Service
+ * Class BarcodeServiceSoapTest.
  *
  * @testdox The BarcodeService (SOAP)
  */
-class BarcodeServiceSoapTest extends \PHPUnit_Framework_TestCase
+class BarcodeServiceSoapTest extends ServiceTest
 {
-    /** @var PostNL $postnl */
+    /** @var PostNL */
     protected $postnl;
-    /** @var BarcodeService $service */
+    /** @var BarcodeServiceInterface */
     protected $service;
-    /** @var $lastRequest */
+    /** @var */
     protected $lastRequest;
 
     /**
      * @before
-     * @throws \ThirtyBees\PostNL\Exception\InvalidArgumentException
+     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws \ReflectionException
      */
     public function setupPostNL()
     {
@@ -80,37 +78,25 @@ class BarcodeServiceSoapTest extends \PHPUnit_Framework_TestCase
                     'Zipcode'     => '2132WT',
                 ]))
                 ->setGlobalPackBarcodeType('AB')
-                ->setGlobalPackCustomerCode('1234')
-            , new UsernameToken(null, 'test'),
+                ->setGlobalPackCustomerCode('1234'), new UsernameToken(null, 'test'),
             true,
             PostNL::MODE_SOAP
         );
 
-        $this->service = $this->postnl->getBarcodeService();
-        $this->service->cache = new VoidCachePool();
-        $this->service->ttl = 1;
-    }
-
-    /**
-     * @after
-     */
-    public function logPendingRequest()
-    {
-        if (!$this->lastRequest instanceof Request) {
-            return;
-        }
-
         global $logger;
-        if ($logger instanceof LoggerInterface) {
-            $logger->debug($this->getName()." Request\n".\GuzzleHttp\Psr7\str($this->lastRequest));
-        }
-        $this->lastRequest = null;
+        $this->postnl->setLogger($logger);
+
+        $this->service = $this->postnl->getBarcodeService();
+        $this->service->setCache(new VoidCachePool());
+        $this->service->setTtl(1);
     }
 
     /**
      * @testdox creates a valid 3S barcode request
      *
-     * @throws \ThirtyBees\PostNL\Exception\InvalidBarcodeException
+     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
+     * @throws \ReflectionException
+     * @throws \libphonenumber\NumberParseException
      */
     public function testCreatesAValid3SBarcodeRequest()
     {
@@ -134,45 +120,59 @@ class BarcodeServiceSoapTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEmpty($request->getHeaderLine('apikey'));
         $this->assertEquals('text/xml', $request->getHeaderLine('Accept'));
-        $this->assertEquals("<?xml version=\"1.0\"?>
-<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:services=\"http://postnl.nl/cif/services/BarcodeWebService/\" xmlns:domain=\"http://postnl.nl/cif/domain/BarcodeWebService/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\" xmlns:schema=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:common=\"http://postnl.nl/cif/services/common/\">
- <soap:Header>
-  <wsse:Security>
-   <wsse:UsernameToken>
-    <wsse:Password>test</wsse:Password>
-   </wsse:UsernameToken>
-  </wsse:Security>
- </soap:Header>
- <soap:Body>
-  <services:GenerateBarcode>
-   <domain:Message>
-    <domain:MessageID>{$message->getMessageID()}</domain:MessageID>
-    <domain:MessageTimeStamp>{$message->getMessageTimeStamp()}</domain:MessageTimeStamp>
-   </domain:Message>
-   <domain:Customer>
-    <domain:CustomerCode>DEVC</domain:CustomerCode>
-    <domain:CustomerNumber>11223344</domain:CustomerNumber>
-   </domain:Customer>
-   <domain:Barcode>
-    <domain:Type>3S</domain:Type>
-    <domain:Range>DEVC</domain:Range>
-    <domain:Serie>987000000-987600000</domain:Serie>
-   </domain:Barcode>
-  </services:GenerateBarcode>
- </soap:Body>
+        $this->assertXmlStringEqualsXmlString(<<<XML
+<?xml version="1.0"?>
+<soap:Envelope
+  xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" 
+  xmlns:env="http://www.w3.org/2003/05/soap-envelope"
+  xmlns:services="http://postnl.nl/cif/services/BarcodeWebService/"
+  xmlns:domain="http://postnl.nl/cif/domain/BarcodeWebService/"
+  xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" 
+  xmlns:schema="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:common="http://postnl.nl/cif/services/common/"
+>
+  <soap:Header>
+    <wsse:Security>
+      <wsse:UsernameToken>
+        <wsse:Password>test</wsse:Password>
+      </wsse:UsernameToken>
+    </wsse:Security>
+  </soap:Header>
+  <soap:Body>
+    <services:GenerateBarcode>
+      <domain:Message>
+        <domain:MessageID>{$message->getMessageID()}</domain:MessageID>
+        <domain:MessageTimeStamp>{$message->getMessageTimeStamp()->format('d-m-Y H:i:s')}</domain:MessageTimeStamp>
+      </domain:Message>
+      <domain:Customer>
+        <domain:CustomerCode>DEVC</domain:CustomerCode>
+        <domain:CustomerNumber>11223344</domain:CustomerNumber>
+      </domain:Customer>
+      <domain:Barcode>
+        <domain:Type>3S</domain:Type>
+        <domain:Range>DEVC</domain:Range>
+        <domain:Serie>987000000-987600000</domain:Serie>
+      </domain:Barcode>
+    </services:GenerateBarcode>
+  </soap:Body>
 </soap:Envelope>
-", (string) $request->getBody());
+XML
+            , (string) $request->getBody());
     }
 
     /**
      * @testdox return a valid single barcode
      *
-     * @throws \ThirtyBees\PostNL\Exception\InvalidBarcodeException
+     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
      */
     public function testSingleBarcodeSoap()
     {
         $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'text/xml;charset=UTF-8'], $this->mockValidBarcodeResponse('3SDEVC816223392')),
+            new Response(
+                200,
+                ['Content-Type' => 'text/xml;charset=UTF-8'],
+                $this->mockValidBarcodeResponse('3SDEVC816223392')
+            ),
         ]);
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();
@@ -185,16 +185,32 @@ class BarcodeServiceSoapTest extends \PHPUnit_Framework_TestCase
     /**
      * @testdox returns several barcodes
      *
-     * @throws \ThirtyBees\PostNL\Exception\InvalidBarcodeException
-     * @throws \ThirtyBees\PostNL\Exception\InvalidConfigurationException
+     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
+     * @throws \Firstred\PostNL\Exception\InvalidConfigurationException
      */
     public function testMultipleNLBarcodesSoap()
     {
         $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'text/xml;charset=UTF-8'], $this->mockValidBarcodeResponse('3SDEVC816223392')),
-            new Response(200, ['Content-Type' => 'text/xml;charset=UTF-8'], $this->mockValidBarcodeResponse('3SDEVC816223393')),
-            new Response(200, ['Content-Type' => 'text/xml;charset=UTF-8'], $this->mockValidBarcodeResponse('3SDEVC816223394')),
-            new Response(200, ['Content-Type' => 'text/xml;charset=UTF-8'], $this->mockValidBarcodeResponse('3SDEVC816223395')),
+            new Response(
+                200,
+                ['Content-Type' => 'text/xml;charset=UTF-8'],
+                $this->mockValidBarcodeResponse('3SDEVC816223392')
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'text/xml;charset=UTF-8'],
+                $this->mockValidBarcodeResponse('3SDEVC816223393')
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'text/xml;charset=UTF-8'],
+                $this->mockValidBarcodeResponse('3SDEVC816223394')
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'text/xml;charset=UTF-8'],
+                $this->mockValidBarcodeResponse('3SDEVC816223395')
+            ),
         ]);
         $handler = HandlerStack::create($mock);
         $mockClient = new MockClient();
@@ -236,15 +252,16 @@ class BarcodeServiceSoapTest extends \PHPUnit_Framework_TestCase
      */
     protected function mockValidBarcodeResponse($barcode)
     {
-        return "<code><s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\">
+        return <<<XML
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
   <s:Body>
-    <GenerateBarcodeResponse xmlns=\"http://postnl.nl/cif/services/BarcodeWebService/\"
-xmlns:a=\"http://postnl.nl/cif/domain/BarcodeWebService/\"
-xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">
+    <GenerateBarcodeResponse xmlns="http://postnl.nl/cif/services/BarcodeWebService/"
+xmlns:a="http://postnl.nl/cif/domain/BarcodeWebService/"
+xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
       <a:Barcode>{$barcode}</a:Barcode>
     </GenerateBarcodeResponse>
   </s:Body>
 </s:Envelope>
-</code>";
+XML;
     }
 }

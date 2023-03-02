@@ -1,8 +1,8 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,19 +19,34 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\HttpClient;
+namespace Firstred\PostNL\HttpClient;
 
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
+use Composer\CaBundle\CaBundle;
+use Exception;
+use Firstred\PostNL\Exception\ApiConnectionException;
+use Firstred\PostNL\Exception\ApiException;
+use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use GuzzleHttp\Psr7\Message as PsrMessage;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerAwareInterface;
-use Psr\Log\LoggerInterface;
-use ThirtyBees\PostNL\Exception\ApiConnectionException;
-use ThirtyBees\PostNL\Exception\ApiException;
+use Psr\Log\LogLevel;
+use function define;
+use function defined;
+use function is_array;
+use function user_error;
+use const CURLOPT_FOLLOWLOCATION;
+use const CURLOPT_HTTPHEADER;
+use const CURLOPT_PROTOCOLS;
+use const CURLOPT_REDIR_PROTOCOLS;
+use const CURLOPT_SSL_VERIFYPEER;
+use const E_USER_DEPRECATED;
 
 if (!defined('CURL_SSLVERSION_TLSv1')) {
     define('CURL_SSLVERSION_TLSv1', 1);
@@ -44,40 +59,23 @@ if (!defined('CURLE_SSL_CACERT_BADFILE')) {
 }
 
 /**
- * Class CurlClient
+ * Class CurlClient.
  *
- * @package ThirtyBees\PostNL\HttpClient
+ * @since 1.0.0
  */
-class CurlClient implements ClientInterface, LoggerAwareInterface
+class CurlClient extends BaseHttpClient implements ClientInterface, LoggerAwareInterface
 {
-    const DEFAULT_TIMEOUT = 80;
-    const DEFAULT_CONNECT_TIMEOUT = 30;
-
-    /** @var int $timeout */
-    private $timeout = self::DEFAULT_TIMEOUT;
-    /** @var int $connectTimeout */
-    private $connectTimeout = self::DEFAULT_CONNECT_TIMEOUT;
-    /**
-     * Verify the server SSL certificate
-     *
-     * @var bool|string $verify
-     */
-    private $verify = true;
-    /** @var static $instance */
+    /** @var static */
     private static $instance;
-    /** @var array|callable|null $defaultOptions */
+    /** @var array|callable|null */
     protected $defaultOptions;
-    /** @var array $userAgentInfo */
-    protected $userAgentInfo;
-    /** @var array $pendingRequests */
-    protected $pendingRequests = [];
-    /** @var LoggerInterface $logger */
-    protected $logger;
 
     /**
-     * CurlClient Singleton
+     * CurlClient Singleton.
      *
      * @return CurlClient
+     *
+     * @deprecated Please instantiate a new client rather than using this singleton
      */
     public static function getInstance()
     {
@@ -89,198 +87,93 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
     }
 
     /**
-     * Set timeout
-     *
-     * @param int $seconds
-     *
-     * @return CurlClient
-     */
-    public function setTimeout($seconds)
-    {
-        $this->timeout = (int) max($seconds, 0);
-
-        return $this;
-    }
-
-    /**
-     * Set connection timeout
-     *
-     * @param int $seconds
-     *
-     * @return CurlClient
-     */
-    public function setConnectTimeout($seconds)
-    {
-        $this->connectTimeout = (int) max($seconds, 0);
-
-        return $this;
-    }
-
-    /**
-     * Set the verify setting
-     *
-     * @param bool|string $verify
-     *
-     * @return CurlClient
-     */
-    public function setVerify($verify)
-    {
-        $this->verify = $verify;
-
-        return $this;
-    }
-
-    /**
-     * Set the logger
-     *
-     * @param LoggerInterface $logger
-     *
-     * @return CurlClient
-     */
-    public function setLogger(LoggerInterface $logger = null)
-    {
-        $this->logger = $logger;
-
-        return $this;
-    }
-
-    /**
-     * Get timeout
-     *
-     * @return int
-     */
-    public function getTimeout()
-    {
-        return $this->timeout;
-    }
-
-    /**
-     * Get connection timeout
-     *
-     * @return int
-     */
-    public function getConnectTimeout()
-    {
-        return $this->connectTimeout;
-    }
-
-    /**
-     * Return verify setting
-     *
-     * @return bool|string
-     */
-    public function getVerify()
-    {
-        return $this->verify;
-    }
-
-    /**
-     * Get logger
-     *
-     * @return LoggerInterface
-     */
-    public function getLogger()
-    {
-        return $this->logger;
-    }
-
-    /**
-     * Adds a request to the list of pending requests
-     * Using the ID you can replace a request
-     *
-     * @param string $id      Request ID
-     * @param string $request PSR-7 request
-     *
-     * @return int|string
-     */
-    public function addOrUpdateRequest($id, $request)
-    {
-        if (is_null($id)) {
-            return array_push($this->pendingRequests, $request);
-        }
-
-        $this->pendingRequests[$id] = $request;
-
-        return $id;
-    }
-
-    /**
-     * Remove a request from the list of pending requests
-     *
-     * @param string $id
-     */
-    public function removeRequest($id)
-    {
-        unset($this->pendingRequests[$id]);
-    }
-
-    /**
-     * Clear all pending requests
-     */
-    public function clearRequests()
-    {
-        $this->pendingRequests = [];
-    }
-
-    /**
-     * Do a single request
+     * Do a single request.
      *
      * Exceptions are captured into the result array
      *
-     * @param Request $request
+     * @param RequestInterface $request
      *
-     * @return Response
+     * @return ResponseInterface
      *
-     * @throws \Exception
+     * @throws HttpClientException
      */
-    public function doRequest(Request $request)
+    public function doRequest(RequestInterface $request)
     {
-        if ($this->logger instanceof LoggerInterface) {
-            $this->logger->debug(\GuzzleHttp\Psr7\str($request));
-        }
+        $logLevel = LogLevel::DEBUG;
+        $response = null;
 
-        $curl = curl_init();
-        // Create a callback to capture HTTP headers for the response
-        $this->prepareRequest($curl, $request);
-        $rbody = curl_exec($curl);
-        if ($rbody === false) {
-            $errno = curl_errno($curl);
-            $message = curl_error($curl);
+        try {
+            $curl = curl_init();
+            // Create a callback to capture HTTP headers for the response
+            $this->prepareRequest($curl, $request);
+            $responseBody = curl_exec($curl);
+            if (false === $responseBody) {
+                $errno = curl_errno($curl);
+                $message = curl_error($curl);
+                curl_close($curl);
+                $logLevel = LogLevel::ERROR;
+                $this->handleCurlError($request->getUri(), $errno, $message);
+            }
             curl_close($curl);
-            $this->handleCurlError($request->getUri(), $errno, $message);
-        }
-        curl_close($curl);
 
-        if ($this->logger instanceof LoggerInterface) {
-            $this->logger->debug($rbody);
-        }
+            $response = PsrMessage::parseResponse($responseBody);
+            if ($response->getStatusCode() < 200 || $response->getStatusCode() >= 400) {
+                $logLevel = LogLevel::ERROR;
+            }
 
-        return \GuzzleHttp\Psr7\parse_response($rbody);
+            return $response;
+        } catch (ApiException $e) {
+            $logLevel = LogLevel::ERROR;
+            throw new HttpClientException('Connection error', 0, $e, $response);
+        } finally {
+            $this->getLogger()->log($logLevel, PsrMessage::toString($request));
+            if ($response instanceof ResponseInterface) {
+                $this->getLogger()->log($logLevel, PsrMessage::toString($response));
+            }
+        }
     }
 
     /**
-     * Do all async requests
+     * Do all async requests.
      *
      * Exceptions are captured into the result array
      *
-     * @param Request[] $requests
+     * @param RequestInterface[] $requests
      *
-     * @return Response|Response[]|\Exception|\Exception[]
-     * @throws ApiException
+     * @return ResponseInterface[]|HttpClientException[]
+     *
+     * @throws InvalidArgumentException
      */
     public function doRequests($requests = [])
     {
+        if ($requests instanceof RequestInterface) {
+            user_error(
+                'Passing a single request to HttpClientInterface::doRequests is deprecated',
+                E_USER_DEPRECATED
+            );
+            $requests = [$requests];
+        }
+        if (!is_array($requests)) {
+            throw new InvalidArgumentException('Invalid requests array passed');
+        }
+        if (!is_array($this->pendingRequests)) {
+            $this->pendingRequests = [];
+        }
+
         // Reset request headers array
         $curlHandles = [];
         $mh = curl_multi_init();
-        foreach ($this->pendingRequests + $requests as $uuid => $request) {
-            if ($request instanceof Request && $this->logger instanceof LoggerInterface) {
-                $this->logger->debug(\GuzzleHttp\Psr7\str($request));
-            }
 
+        // Handle pending requests as well
+        $requests = $this->pendingRequests + $requests;
+        foreach ($requests as $uuid => $request) {
             $curl = curl_init();
             $curlHandles[$uuid] = $curl;
-            $this->prepareRequest($curl, $request);
+            try {
+                $this->prepareRequest($curl, $request);
+            } catch (HttpClientException $e) {
+                // Handle later
+            }
             curl_multi_add_handle($mh, $curl);
         }
         // execute the handles
@@ -296,15 +189,20 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
             $responseCodes[$id] = curl_getinfo($c, CURLINFO_HTTP_CODE);
         }
         // all done
-        if (isset($this->multiCurlHandle) && get_resource_type($this->multiCurlHandle) === 'curl_multi') {
+        if (isset($this->multiCurlHandle) && 'curl_multi' === get_resource_type($this->multiCurlHandle)) {
             curl_multi_close($this->multiCurlHandle);
         }
         $responses = [];
         foreach ($responseBodies as $uuid => $responseBody) {
-            if ($this->logger instanceof LoggerInterface) {
-                $this->logger->debug($responseBody);
+            $logLevel = LogLevel::DEBUG;
+            $response = PsrMessage::parseResponse($responseBody);
+            if ($response->getStatusCode() < 200 || $response->getStatusCode() >= 400) {
+                $logLevel = LogLevel::ERROR;
             }
-            $responses[$uuid] = \GuzzleHttp\Psr7\parse_response($responseBody);
+            $this->getLogger()->log($logLevel, PsrMessage::toString($requests[$uuid]));
+            $this->getLogger()->log($logLevel, PsrMessage::toString($response));
+
+            $responses[$uuid] = $response;
         }
 
         // Reset pending requests
@@ -312,13 +210,14 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
 
         return $responses;
     }
+
     /**
-     * @param resource $curl
-     * @param Request   $request
+     * @param resource         $curl
+     * @param RequestInterface $request
      *
-     * @throws ApiException
+     * @throws HttpClientException
      */
-    protected function prepareRequest($curl, Request $request)
+    protected function prepareRequest($curl, RequestInterface $request)
     {
         $method = strtolower($request->getMethod());
         $body = (string) $request->getBody();
@@ -328,48 +227,52 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
             $headers[] = "$key: $value";
         }
         $headers[] = 'Expect:';
-        $opts = [];
+        $defaultOptions = [];
         if (is_callable($this->defaultOptions)) { // call defaultOptions callback, set options to return value
-            $opts = call_user_func_array($this->defaultOptions, func_get_args());
-            if (!is_array($opts)) {
-                throw new ApiException("Non-array value returned by defaultOptions CurlClient callback");
+            $defaultOptions = call_user_func_array($this->defaultOptions, func_get_args());
+            if (!is_array($defaultOptions)) {
+                throw new HttpClientException('Non-array value returned by defaultOptions CurlClient callback');
             }
         } elseif (is_array($this->defaultOptions)) { // set default curlopts from array
-            $opts = $this->defaultOptions;
+            $defaultOptions = $this->defaultOptions;
         }
-        if ($method == 'get') {
-            $opts[CURLOPT_HTTPGET] = 1;
-        } elseif ($method == 'post') {
-            $opts[CURLOPT_POST] = 1;
+        if ('get' == $method) {
+            $options[CURLOPT_HTTPGET] = 1;
+        } elseif ('post' == $method) {
+            $options[CURLOPT_POST] = 1;
             if ($body) {
-                $opts[CURLOPT_POSTFIELDS] = $body;
+                $options[CURLOPT_POSTFIELDS] = $body;
             }
-        } elseif ($method == 'delete') {
-            $opts[CURLOPT_CUSTOMREQUEST] = 'DELETE';
+        } elseif ('delete' == $method) {
+            $options[CURLOPT_CUSTOMREQUEST] = 'DELETE';
         } else {
-            throw new ApiException("Unrecognized method $method");
+            throw new HttpClientException("Unrecognized method $method");
         }
-        $opts[CURLOPT_URL] = $request->getUri();
-        $opts[CURLOPT_RETURNTRANSFER] = true;
-        $opts[CURLOPT_VERBOSE] = false;
-        $opts[CURLOPT_HEADER] = true;
-        $opts[CURLOPT_CONNECTTIMEOUT] = $this->connectTimeout;
-        $opts[CURLOPT_TIMEOUT] = $this->timeout;
-        $opts[CURLOPT_HTTPHEADER] = $headers;
-        $opts[CURLOPT_FAILONERROR] = false;
-        if ($this->verify) {
-            $opts[CURLOPT_SSL_VERIFYPEER] = 1;
-            $opts[CURLOPT_SSL_VERIFYHOST] = 2;
-            if (is_string($this->verify)) {
-                $opts[CURLOPT_CAINFO] = $this->verify;
-            }
+        $options[CURLOPT_URL] = (string) $request->getUri();
+        $options[CURLOPT_RETURNTRANSFER] = true;
+        $options[CURLOPT_VERBOSE] = false;
+        $options[CURLOPT_HEADER] = true;
+        $options[CURLOPT_CONNECTTIMEOUT] = $this->connectTimeout;
+        $options[CURLOPT_TIMEOUT] = $this->timeout;
+        $options[CURLOPT_HTTPHEADER] = $headers;
+        $options[CURLOPT_FAILONERROR] = false;
+        $options[CURLOPT_PROTOCOLS] = CURLPROTO_HTTPS;
+        $options[CURLOPT_REDIR_PROTOCOLS] = CURLPROTO_HTTPS;
+        $options[CURLOPT_FOLLOWLOCATION] = false;
+        $options[CURLOPT_SSL_VERIFYHOST] = 2;
+        $options[CURLOPT_SSL_VERIFYPEER] = true;
+        $caPathOrFile = CaBundle::getSystemCaRootBundlePath();
+        if (is_dir($caPathOrFile)) {
+            $options[CURLOPT_CAPATH] = $caPathOrFile;
         } else {
-            $opts[CURLOPT_SSL_VERIFYPEER] = 0;
-            $opts[CURLOPT_SSL_VERIFYHOST] = 0;
+            $options[CURLOPT_CAINFO] = $caPathOrFile;
         }
-        curl_setopt_array($curl, $opts);
+
+        curl_setopt_array($curl, $defaultOptions + $options);
     }
+
     /**
+     * @param        $url
      * @param number $errno
      * @param string $message
      *
@@ -382,22 +285,22 @@ class CurlClient implements ClientInterface, LoggerAwareInterface
             case CURLE_COULDNT_RESOLVE_HOST:
             case CURLE_OPERATION_TIMEOUTED:
                 $msg = "Could not connect to PostNL ($url).  Please check your "
-                    ."internet connection and try again.  If this problem persists, "
+                    .'internet connection and try again.  If this problem persists, '
                     ."you should check PostNL's service status at "
-                    ."https://developer.postnl.nl, or";
+                    .'https://developer.postnl.nl, or';
                 break;
             case CURLE_SSL_CACERT:
             case CURLE_SSL_PEER_CERTIFICATE:
                 $msg = "Could not verify PostNL's SSL certificate.  Please make sure "
-                    ."that your network is not intercepting certificates.  "
+                    .'that your network is not intercepting certificates.  '
                     ."(Try going to $url in your browser.)  "
-                    ."If this problem persists,";
+                    .'If this problem persists,';
                 break;
             default:
-                $msg = "Unexpected error communicating with PostNL.  "
-                    ."If this problem persists,";
+                $msg = 'Unexpected error communicating with PostNL.  '
+                    .'If this problem persists,';
         }
-        $msg .= " contact developer@postnl.nl";
+        $msg .= ' contact developer@postnl.nl';
         $msg .= "\n\n(Network error [errno $errno]: $message)";
         throw new ApiConnectionException($msg);
     }

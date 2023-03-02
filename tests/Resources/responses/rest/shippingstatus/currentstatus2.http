@@ -1,0 +1,65 @@
+HTTP/1.1 200 OK
+Access-Control-Allow-Headers: origin, x-requested-with, accept, apikey, Content-Type
+Access-Control-Allow-Methods: GET, POST
+Access-Control-Allow-Origin: *
+Access-Control-Max-Age: 3628800
+Cache-Control: private, max-age=0
+Content-Type: application/json;charset=UTF-8
+Date: Wed, 31 Mar 2021 12:24:44 GMT
+Strict-Transport-Security: max-age=31536000
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-Robots-Tag: noindex
+X-XSS-Protection: 1; mode=block
+Connection: keep-alive
+
+{
+  "CurrentStatus": {
+    "Shipment": {
+      "MainBarcode": "3SDEVC302392342",
+      "Barcode": "3SDEVC302392342",
+      "ShipmentAmount": "1",
+      "ShipmentCounter": "1",
+      "Customer": {
+        "CustomerCode": "DEVC",
+        "CustomerNumber": "11223344",
+        "Name": "kja fasdfasdf"
+      },
+      "ProductCode": "003089",
+      "ProductDescription": "Handtek. voor Ontvangst\/Alleen huisadres",
+      "Reference": "SK123456",
+      "Dimension": {
+        "Height": "110",
+        "Length": "255",
+        "Volume": "5330",
+        "Weight": "260",
+        "Width": "190"
+      },
+      "Address": {
+        "AddressType": "01",
+        "Building": {},
+        "City": "Nijmegen",
+        "CompanyName": {},
+        "CountryCode": "NL",
+        "DepartmentName": {},
+        "District": {},
+        "FirstName": "A",
+        "Floor": {},
+        "HouseNumber": "12",
+        "HouseNumberSuffix": {},
+        "LastName": "B",
+        "Region": {},
+        "Remark": {},
+        "Street": "Ergens",
+        "Zipcode": "1234GN"
+      },
+      "Status": {
+        "TimeStamp": "07-03-2018 23:20:05",
+        "StatusCode": "2",
+        "StatusDescription": "Zending in ontvangst genomen",
+        "PhaseCode": "1",
+        "PhaseDescription": "Collectie"
+      }
+    }
+  }
+}

@@ -1,8 +1,8 @@
 <?php
 /**
- * The MIT License (MIT)
+ * The MIT License (MIT).
  *
- * Copyright (c) 2017-2018 Thirty Development, LLC
+ * Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,104 +19,97 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @author    Michael Dekker <michael@thirtybees.com>
- * @copyright 2017-2018 Thirty Development, LLC
+ * @author    Michael Dekker <git@michaeldekker.nl>
+ * @copyright 2017-2021 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace ThirtyBees\PostNL\Entity\Request;
+namespace Firstred\PostNL\Entity\Request;
 
-use ThirtyBees\PostNL\Entity\AbstractEntity;
-use ThirtyBees\PostNL\Entity\Barcode;
-use ThirtyBees\PostNL\Entity\Customer;
-use ThirtyBees\PostNL\Entity\Message\Message;
-use ThirtyBees\PostNL\Service\BarcodeService;
-use ThirtyBees\PostNL\Service\ConfirmingService;
-use ThirtyBees\PostNL\Service\DeliveryDateService;
-use ThirtyBees\PostNL\Service\LabellingService;
-use ThirtyBees\PostNL\Service\LocationService;
-use ThirtyBees\PostNL\Service\ShippingStatusService;
-use ThirtyBees\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Entity\AbstractEntity;
+use Firstred\PostNL\Entity\Barcode;
+use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Entity\Message\Message;
+use Firstred\PostNL\Service\BarcodeService;
+use Firstred\PostNL\Service\ConfirmingService;
+use Firstred\PostNL\Service\DeliveryDateService;
+use Firstred\PostNL\Service\LabellingService;
+use Firstred\PostNL\Service\LocationService;
+use Firstred\PostNL\Service\TimeframeService;
 
 /**
- * Class GenerateLabel
+ * Class GenerateLabel.
  *
- * @package ThirtyBees\PostNL\Entity
+ * @method Customer|null   getCustomer()
+ * @method Message|null    getMessage()
+ * @method Barcode|null    getBarcode()
+ * @method GenerateBarcode setCustomer(Customer|null $Customer = null)
+ * @method GenerateBarcode setMessage(Message|null $Message = null)
+ * @method GenerateBarcode setBarcode(Barcode|null $Barcode = null)
  *
- * @method Customer|null getCustomer()
- * @method Message|null  getMessage()
- * @method Barcode|null  getBarcode()
- *
- * @method GenerateBarcode setCustomer(Customer|null $customer = null)
- * @method GenerateBarcode setMessage(Message|null $message = null)
- * @method GenerateBarcode setBarcode(Barcode|null $shipments = null)
+ * @since 1.0.0
  */
 class GenerateBarcode extends AbstractEntity
 {
     /**
-     * Default properties and namespaces for the SOAP API
+     * Default properties and namespaces for the SOAP API.
      *
-     * @var array $defaultProperties
+     * @var array
      */
     public static $defaultProperties = [
-        'Barcode'        => [
+        'Barcode' => [
             'Message'  => BarcodeService::DOMAIN_NAMESPACE,
             'Customer' => BarcodeService::DOMAIN_NAMESPACE,
             'Barcode'  => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
+        'Confirming' => [
             'Message'  => ConfirmingService::DOMAIN_NAMESPACE,
             'Customer' => ConfirmingService::DOMAIN_NAMESPACE,
             'Barcode'  => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
+        'Labelling' => [
             'Message'  => LabellingService::DOMAIN_NAMESPACE,
             'Customer' => LabellingService::DOMAIN_NAMESPACE,
             'Barcode'  => LabellingService::DOMAIN_NAMESPACE,
         ],
-        'ShippingStatus' => [
-            'Message'   => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Customer'  => ShippingStatusService::DOMAIN_NAMESPACE,
-            'Shipments' => ShippingStatusService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
+        'DeliveryDate' => [
             'Message'   => DeliveryDateService::DOMAIN_NAMESPACE,
             'Customer'  => DeliveryDateService::DOMAIN_NAMESPACE,
             'Shipments' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
+        'Location' => [
             'Message'   => LocationService::DOMAIN_NAMESPACE,
             'Customer'  => LocationService::DOMAIN_NAMESPACE,
             'Shipments' => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
+        'Timeframe' => [
             'Message'   => TimeframeService::DOMAIN_NAMESPACE,
             'Customer'  => TimeframeService::DOMAIN_NAMESPACE,
             'Shipments' => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var Message|null $Message */
+    /** @var Message|null */
     protected $Message;
-    /** @var Customer|null $Customer */
+    /** @var Customer|null */
     protected $Customer;
-    /** @var Barcode|null $Barcode */
+    /** @var Barcode|null */
     protected $Barcode;
     // @codingStandardsIgnoreEnd
 
     /**
      * GenerateBarcode constructor.
      *
-     * @param Barcode|null  $barcode
-     * @param Customer|null $customer
-     * @param Message|null  $message
+     * @param Barcode|null  $Barcode
+     * @param Customer|null $Customer
+     * @param Message|null  $Message
      */
-    public function __construct(Barcode $barcode = null, Customer $customer = null, Message $message = null)
+    public function __construct(Barcode $Barcode = null, Customer $Customer = null, Message $Message = null)
     {
         parent::__construct();
 
-        $this->setBarcode($barcode);
-        $this->setCustomer($customer);
-        $this->setMessage($message ?: new Message());
+        $this->setBarcode($Barcode);
+        $this->setCustomer($Customer);
+        $this->setMessage($Message ?: new Message());
     }
 }
