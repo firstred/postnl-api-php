@@ -67,6 +67,7 @@ use Firstred\PostNL\Entity\Shipment;
 use Firstred\PostNL\Entity\SOAP\UsernameToken;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
+use Firstred\PostNL\Exception\InternationalMailAndPacketsException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use Firstred\PostNL\Exception\PostNLException;
 use Firstred\PostNL\Exception\HttpClientException;
@@ -999,9 +1000,7 @@ class PostNL implements LoggerAwareInterface
         }
 
         if (!$range) {
-            if (in_array($type, ['LA', 'UE', 'RI'])) {
-                $range = 'NL';
-            } elseif (in_array($type, ['2S', '3S'])) {
+            if (in_array($type, ['2S', '3S'])) {
                 $range = $this->getCustomer()->getCustomerCode();
             } else {
                 $range = $this->getCustomer()->getGlobalPackCustomerCode();
