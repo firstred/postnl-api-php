@@ -29,7 +29,7 @@ Summary
 Methods
 ~~~~~~~
 
-* :php:meth:`public \_\_construct\($Shipments, $Message, $Customer\)<Firstred\\PostNL\\Entity\\Request\\GenerateLabel::\_\_construct\(\)>`
+* :php:meth:`public \_\_construct\($Shipments, $Message, $Customer, $LabelSignature\)<Firstred\\PostNL\\Entity\\Request\\GenerateLabel::\_\_construct\(\)>`
 * :php:meth:`public jsonSerialize\(\)<Firstred\\PostNL\\Entity\\Request\\GenerateLabel::jsonSerialize\(\)>`
 * :php:meth:`public xmlSerialize\($writer\)<Firstred\\PostNL\\Entity\\Request\\GenerateLabel::xmlSerialize\(\)>`
 
@@ -62,12 +62,17 @@ Properties
 	:Type: :any:`\\Firstred\\PostNL\\Entity\\Shipment\[\] <Firstred\\PostNL\\Entity\\Shipment>` | null 
 
 
+.. php:attr:: protected static LabelSignature
+
+	:Type: string | null 
+
+
 Methods
 -------
 
 .. rst-class:: public
 
-	.. php:method:: public __construct( $Shipments=null, $Message=null, $Customer=null)
+	.. php:method:: public __construct( $Shipments=null, $Message=null, $Customer=null, $LabelSignature=null)
 	
 		.. rst-class:: phpdoc-description
 		
@@ -79,6 +84,7 @@ Methods
 			* **$Shipments** (:any:`Firstred\\PostNL\\Entity\\Shipment\[\] <Firstred\\PostNL\\Entity\\Shipment>` | null)  
 			* **$Message** (:any:`Firstred\\PostNL\\Entity\\Message\\LabellingMessage <Firstred\\PostNL\\Entity\\Message\\LabellingMessage>` | null)  
 			* **$Customer** (:any:`Firstred\\PostNL\\Entity\\Customer <Firstred\\PostNL\\Entity\\Customer>` | null)  
+			* **$LabelSignature** (string | null)  
 
 		
 	

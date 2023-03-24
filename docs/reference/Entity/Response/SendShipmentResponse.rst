@@ -15,7 +15,7 @@ SendShipmentResponse
 
 	.. rst-class:: phpdoc-description
 	
-		| Class GenerateLabelResponse\.
+		| Class SendShipmentResponse\.
 		
 	
 	:Parent:
