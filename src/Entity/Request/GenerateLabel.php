@@ -44,9 +44,11 @@ use Sabre\Xml\Writer;
  * @method Customer|null         getCustomer()
  * @method LabellingMessage|null getMessage()
  * @method Shipment[]|null       getShipments()
+ * @method string|null           getLabelSignature()
  * @method GenerateLabel         setCustomer(Customer|null $Customer = null)
  * @method GenerateLabel         setMessage(LabellingMessage|null $Message = null)
  * @method GenerateLabel         setShipments(Shipment[]|null $Shipments = null)
+ * @method GenerateLabel         setLabelSignature(string|null $signature = null)
  *
  * @since 1.0.0
  */
@@ -72,6 +74,7 @@ class GenerateLabel extends AbstractEntity
             'Customer'  => LabellingService::DOMAIN_NAMESPACE,
             'Message'   => LabellingService::DOMAIN_NAMESPACE,
             'Shipments' => LabellingService::DOMAIN_NAMESPACE,
+            'LabelSignature' => LabellingService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate' => [
             'Message'   => DeliveryDateService::DOMAIN_NAMESPACE,
@@ -96,6 +99,8 @@ class GenerateLabel extends AbstractEntity
     protected $Message;
     /** @var Shipment[]|null */
     protected $Shipments;
+    /** @var string|null */
+    protected $LabelSignature;
     // @codingStandardsIgnoreEnd
 
     /**
@@ -104,14 +109,22 @@ class GenerateLabel extends AbstractEntity
      * @param Shipment[]|null       $Shipments
      * @param LabellingMessage|null $Message
      * @param Customer|null         $Customer
+     * @param string|null           $LabelSignature
      */
-    public function __construct(array $Shipments = null, LabellingMessage $Message = null, Customer $Customer = null)
-    {
+    public function __construct(
+        array $Shipments = null,
+        LabellingMessage $Message = null,
+        Customer $Customer = null,
+        $LabelSignature = null
+    ) {
         parent::__construct();
 
         $this->setShipments($Shipments);
         $this->setMessage($Message ?: new LabellingMessage());
         $this->setCustomer($Customer);
+        if ($LabelSignature) {
+            $this->setLabelSignature($LabelSignature);
+        }
     }
 
     /**
