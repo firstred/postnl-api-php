@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -24,17 +25,8 @@
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace Firstred\PostNL\Entity\SOAP;
+namespace Firstred\PostNL\Exception;
 
-use Firstred\PostNL\Entity\AbstractEntity;
-
-/**
- * Class Header.
- *
- * NOTE: this class has been introduced for deserializing
- *
- * @since 1.0.0
- */
-class Header extends AbstractEntity
+class ServiceNotSetException extends InvalidConfigurationException
 {
 }

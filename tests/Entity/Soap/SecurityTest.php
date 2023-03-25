@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -24,28 +25,28 @@
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace Firstred\PostNL\Tests\Entity\SOAP;
+namespace Firstred\PostNL\Tests\Entity\Soap;
 
- use Yoast\PHPUnitPolyfills\TestCases\TestCase;
-use Firstred\PostNL\Entity\SOAP\Security;
-use Firstred\PostNL\Entity\SOAP\UsernameToken;
+use Firstred\PostNL\Entity\Soap\Security;
+use Firstred\PostNL\Entity\Soap\UsernameToken;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class SecurityTest.
- *
  * @testdox The Envelope class
  */
 class SecurityTest extends TestCase
 {
     /**
      * @testdox can return the header
+     *
+     * @throws
      */
-    public function testUsernameToken()
+    public function testUsernameToken(): void
     {
         $envelope = Security::create()
-            ->setUsernameToken(UsernameToken::create())
+            ->setUsernameToken(UsernameToken: UsernameToken::create())
         ;
 
-        $this->assertInstanceOf(UsernameToken::class, $envelope->getUsernameToken());
+        $this->assertInstanceOf(expected: UsernameToken::class, actual: $envelope->getUsernameToken());
     }
 }

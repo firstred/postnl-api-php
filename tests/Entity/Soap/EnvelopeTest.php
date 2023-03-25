@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -24,41 +25,41 @@
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace Firstred\PostNL\Tests\Entity\SOAP;
+namespace Firstred\PostNL\Tests\Entity\Soap;
 
- use Yoast\PHPUnitPolyfills\TestCases\TestCase;
-use Firstred\PostNL\Entity\SOAP\Body;
-use Firstred\PostNL\Entity\SOAP\Envelope;
-use Firstred\PostNL\Entity\SOAP\Header;
+use Firstred\PostNL\Entity\Soap\Body;
+use Firstred\PostNL\Entity\Soap\Envelope;
+use Firstred\PostNL\Entity\Soap\Header;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class EnvelopeTest.
- *
  * @testdox The Envelope class
  */
 class EnvelopeTest extends TestCase
 {
     /**
      * @testdox can return the header
+     *
+     * @throws
      */
-    public function testHeader()
+    public function testHeader(): void
     {
         $envelope = Envelope::create()
-            ->setHeader(Header::create())
+            ->setHeader(Header: Header::create())
         ;
 
-        $this->assertInstanceOf(Header::class, $envelope->getHeader());
+        $this->assertInstanceOf(expected: Header::class, actual: $envelope->getHeader());
     }
 
     /**
      * @testdox can return the body
      */
-    public function testBody()
+    public function testBody(): void
     {
         $envelope = Envelope::create()
-            ->setBody(Body::create())
+            ->setBody(Body: Body::create())
         ;
 
-        $this->assertInstanceOf(Body::class, $envelope->getBody());
+        $this->assertInstanceOf(expected: Body::class, actual: $envelope->getBody());
     }
 }

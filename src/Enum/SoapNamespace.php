@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -24,32 +25,19 @@
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace Firstred\PostNL\Factory;
-
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\UriInterface;
+namespace Firstred\PostNL\Enum;
 
 /**
- * Factory for PSR-7 Request.
- *
- * @author Márk Sági-Kazár <mark.sagikazar@gmail.com>
- *
- * FOR BACKWARD COMPATIBLE REASONS - NOT COMPATIBLE WITH SYMFONY HTTP CLIENT
- *
- * @since 1.2.0
+ * @since 2.0.0
  */
-interface RequestFactoryInterface
+enum SoapNamespace: string
 {
-    /**
-     * Creates a new PSR-7 request.
-     *
-     * @param string              $method
-     * @param string|UriInterface $uri
-     *
-     * @return RequestInterface
-     */
-    public function createRequest(
-        $method,
-        $uri
-    );
+    case Envelope = 'soap';
+    case OldEnvelope = 'env';
+    case Services = 'services';
+    case Domain = 'domain';
+    case Security = 'wsse';
+    case XmlSchema = 'schema';
+    case Common = 'common';
+    case ArraySerialization = 'arr';
 }

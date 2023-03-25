@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -24,31 +25,43 @@
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace Firstred\PostNL\Factory;
+namespace Firstred\PostNL\Entity\Soap;
 
-use Psr\Http\Message\ResponseInterface;
+use Firstred\PostNL\Attribute\SerializableProperty;
+use Firstred\PostNL\Entity\AbstractEntity;
+use Firstred\PostNL\Enum\SoapNamespace;
 
 /**
- * Factory for PSR-7 Response.
- *
- * This factory contract can be reused in Message and Server Message factories.
- *
- * FOR BACKWARD COMPATIBLE REASONS - NOT COMPATIBLE WITH SYMFONY HTTP CLIENT
- *
- * @author Márk Sági-Kazár <mark.sagikazar@gmail.com>
+ * @since 1.0.0
  */
-interface ResponseFactoryInterface
+class Security extends AbstractEntity
 {
+    const SECURITY_NAMESPACE = 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd';
+
+    #[SerializableProperty(namespace: SoapNamespace::Security)]
+    protected UsernameToken $UsernameToken;
+
     /**
-     * Creates a new PSR-7 response.
+     * Security constructor.
      *
-     * @param int         $code
-     * @param string|null $reasonPhrase
-     *
-     * @return ResponseInterface
+     * @param UsernameToken $UserNameToken
      */
-    public function createResponse(
-        $code = 200,
-        $reasonPhrase = ''
-    );
+    public function __construct(UsernameToken $UserNameToken)
+    {
+        parent::__construct();
+
+        $this->setUsernameToken(UsernameToken: $UserNameToken);
+    }
+
+    public function getUsernameToken(): UsernameToken
+    {
+        return $this->UsernameToken;
+    }
+
+    public function setUsernameToken(UsernameToken $UsernameToken): static
+    {
+        $this->UsernameToken = $UsernameToken;
+
+        return $this;
+    }
 }

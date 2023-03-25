@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -24,28 +25,53 @@
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace Firstred\PostNL\Factory;
+namespace Firstred\PostNL\Service\Adapter;
 
-use GuzzleHttp\Psr7\Response;
+use Firstred\PostNL\Entity\Request\GetDeliveryDate;
+use Firstred\PostNL\Entity\Request\GetSentDateRequest;
+use Firstred\PostNL\Entity\Response\GetDeliveryDateResponse;
+use Firstred\PostNL\Entity\Response\GetSentDateResponse;
+use Firstred\PostNL\Exception\CifDownException;
+use Firstred\PostNL\Exception\CifException;
+use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\ResponseException;
+use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * Class GuzzleResponseFactory
- *
- * @since 1.2.0
+ * @since 2.0.0
  */
-final class GuzzleResponseFactory implements ResponseFactoryInterface
+interface DeliveryDateServiceAdapterInterface
 {
     /**
-     * Creates a new PSR-7 response.
-     *
-     * @param int         $code
-     * @param string|null $reasonPhrase
-     *
-     * @return ResponseInterface
+     * @since 2.0.0
      */
-    public function createResponse($code = 200, $reasonPhrase = '')
-    {
-        return new Response($code, [], null, '1.1', $reasonPhrase);
-    }
+    public function buildGetDeliveryDateRequest(GetDeliveryDate $getDeliveryDate): RequestInterface;
+
+    /**
+     * @throws CifDownException
+     * @throws CifException
+     * @throws ResponseException
+     * @throws HttpClientException
+     *
+     * @since 2.0.0
+     */
+    public function processGetDeliveryDateResponse(ResponseInterface $response): GetDeliveryDateResponse;
+
+    /**
+     * Build the `GetSentDate` request.
+     *
+     * @since 2.0.0
+     */
+    public function buildGetSentDateRequest(GetSentDateRequest $getSentDate): RequestInterface;
+
+    /**
+     * @throws CifDownException
+     * @throws CifException
+     * @throws ResponseException
+     * @throws HttpClientException
+     *
+     * @since 2.0.0
+     */
+    public function processGetSentDateResponse(ResponseInterface $response): GetSentDateResponse;
 }

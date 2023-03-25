@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -24,29 +25,17 @@
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace Firstred\PostNL\Factory;
+namespace Firstred\PostNL\Entity\Soap;
 
-use GuzzleHttp\Psr7\Request;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\UriInterface;
+use Firstred\PostNL\Entity\AbstractEntity;
 
 /**
- * Class GuzzleRequestFactory
+ * Class Header.
  *
- * @since 1.2.0
+ * NOTE: this class has been introduced for deserializing
+ *
+ * @since 1.0.0
  */
-final class GuzzleRequestFactory implements RequestFactoryInterface
+class Header extends AbstractEntity
 {
-    /**
-     * Creates a new PSR-7 request.
-     *
-     * @param string              $method
-     * @param string|UriInterface $uri
-     *
-     * @return RequestInterface
-     */
-    public function createRequest($method, $uri)
-    {
-        return new Request($method, $uri);
-    }
 }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -24,60 +25,58 @@
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace Firstred\PostNL\Entity\SOAP;
+namespace Firstred\PostNL\Entity\Soap;
 
+use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
+use Firstred\PostNL\Enum\SoapNamespace;
 
 /**
- * Class Security.
- *
- * @method UsernameToken getUsernameToken()
- * @method Security      setUserNameToken(UsernameToken $UserNameToken)
+ * NOTE: this class has been introduced for deserializing
  *
  * @since 1.0.0
  */
-class Security extends AbstractEntity
+class Envelope extends AbstractEntity
 {
-    const SECURITY_NAMESPACE = 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd';
+    #[SerializableProperty(namespace: SoapNamespace::Envelope)]
+    protected ?Header $Header = null;
 
-    /** @var string[][] */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'UsernameToken' => self::SECURITY_NAMESPACE,
-        ],
-        'Confirming' => [
-            'UsernameToken' => self::SECURITY_NAMESPACE,
-        ],
-        'Labelling' => [
-            'UsernameToken' => self::SECURITY_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'UsernameToken' => self::SECURITY_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'UsernameToken' => self::SECURITY_NAMESPACE,
-        ],
-        'Location' => [
-            'UsernameToken' => self::SECURITY_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'UsernameToken' => self::SECURITY_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var UsernameToken */
-    protected $UsernameToken;
-    // @codingStandardsIgnoreEnd
+    #[SerializableProperty(namespace: SoapNamespace::Envelope)]
+    protected ?Body $Body = null;
 
-    /**
-     * Security constructor.
-     *
-     * @param UsernameToken $UserNameToken
-     */
-    public function __construct(UsernameToken $UserNameToken)
+    public function __construct(Header $Header = null, Body $Body = null)
     {
         parent::__construct();
 
-        $this->setUsernameToken($UserNameToken);
+        if ($Header) {
+            $this->setHeader(Header: $Header);
+        }
+        if ($Body) {
+            $this->setBody(Body: $Body);
+        }
+    }
+
+    public function getHeader(): ?Header
+    {
+        return $this->Header;
+    }
+
+    public function setHeader(?Header $Header): static
+    {
+        $this->Header = $Header;
+
+        return $this;
+    }
+
+    public function getBody(): ?Body
+    {
+        return $this->Body;
+    }
+
+    public function setBody(?Body $Body): static
+    {
+        $this->Body = $Body;
+
+        return $this;
     }
 }

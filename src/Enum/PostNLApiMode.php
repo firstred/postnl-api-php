@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -24,54 +25,13 @@
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace Firstred\PostNL\Factory;
-
-use GuzzleHttp\Psr7\Utils;
-use Psr\Http\Message\StreamInterface;
+namespace Firstred\PostNL\Enum;
 
 /**
- * Class GuzzleStreamFactory
- *
- * @since 1.2.0
+ * @since 2.0.0
  */
-final class GuzzleStreamFactory implements StreamFactoryInterface
+enum PostNLApiMode: int
 {
-    /**
-     * Creat a new stream from a string.
-     *
-     * @param string $content
-     *
-     * @return StreamInterface
-     */
-    public function createStream($content = '')
-    {
-        return Utils::streamFor($content);
-    }
-
-    /**
-     * Create a new PSR-7 stream from file.
-     *
-     * @param string $file
-     * @param string $mode
-     *
-     * @return StreamInterface
-     */
-    public function createStreamFromFile($file, $mode = 'r')
-    {
-        $resource = Utils::tryFopen($file, $mode);
-
-        return Utils::streamFor($resource);
-    }
-
-    /**
-     * Create a new PSR-7 stream from resource.
-     *
-     * @param resource $resource
-     *
-     * @return StreamInterface
-     */
-    public function createStreamFromResource($resource)
-    {
-        return Utils::streamFor($resource);
-    }
+    case Rest = 2;
+    case Soap = 1;
 }
