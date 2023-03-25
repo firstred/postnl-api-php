@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -30,152 +31,152 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use Exception;
+use Firstred\PostNL\Attribute\SerializableProperty;
+use Firstred\PostNL\Enum\SoapNamespace;
+use Firstred\PostNL\Exception\DeserializationException;
+use Firstred\PostNL\Exception\EntityNotFoundException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Exception\NotSupportedException;
 use Sabre\Xml\Writer;
 use stdClass;
+use TypeError;
 use function array_merge;
 use function is_array;
 use function is_string;
 
 /**
- * Class ReasonNoTimeframe.
- *
- * @method string|null            getCode()
- * @method DateTimeInterface|null getDate()
- * @method string|null            getDescription()
- * @method string[]|null          getOptions()
- * @method string|null            getFrom()
- * @method string|null            getTo()
- * @method ReasonNoTimeframe      setCode(string|null $Code = null)
- * @method ReasonNoTimeframe      setDescription(string|null $Description = null)
- * @method ReasonNoTimeframe      setOptions(string[]|null $Options = null)
- * @method ReasonNoTimeframe      setFrom(string|null $From = null)
- * @method ReasonNoTimeframe      setTo(string|null $To = null)
- *
  * @since 1.0.0
  */
 class ReasonNoTimeframe extends AbstractEntity
 {
-    /** @var string[][] */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'Code'        => BarcodeService::DOMAIN_NAMESPACE,
-            'Date'        => BarcodeService::DOMAIN_NAMESPACE,
-            'Description' => BarcodeService::DOMAIN_NAMESPACE,
-            'Options'     => BarcodeService::DOMAIN_NAMESPACE,
-            'From'        => BarcodeService::DOMAIN_NAMESPACE,
-            'To'          => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'Code'        => ConfirmingService::DOMAIN_NAMESPACE,
-            'Date'        => ConfirmingService::DOMAIN_NAMESPACE,
-            'Description' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Options'     => ConfirmingService::DOMAIN_NAMESPACE,
-            'From'        => ConfirmingService::DOMAIN_NAMESPACE,
-            'To'          => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'Code'        => LabellingService::DOMAIN_NAMESPACE,
-            'Date'        => LabellingService::DOMAIN_NAMESPACE,
-            'Description' => LabellingService::DOMAIN_NAMESPACE,
-            'Options'     => LabellingService::DOMAIN_NAMESPACE,
-            'From'        => LabellingService::DOMAIN_NAMESPACE,
-            'To'          => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'Code'        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Date'        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Description' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Options'     => DeliveryDateService::DOMAIN_NAMESPACE,
-            'From'        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'To'          => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'Code'        => LocationService::DOMAIN_NAMESPACE,
-            'Date'        => LocationService::DOMAIN_NAMESPACE,
-            'Description' => LocationService::DOMAIN_NAMESPACE,
-            'Options'     => LocationService::DOMAIN_NAMESPACE,
-            'From'        => LocationService::DOMAIN_NAMESPACE,
-            'To'          => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'Code'        => TimeframeService::DOMAIN_NAMESPACE,
-            'Date'        => TimeframeService::DOMAIN_NAMESPACE,
-            'Description' => TimeframeService::DOMAIN_NAMESPACE,
-            'Options'     => TimeframeService::DOMAIN_NAMESPACE,
-            'From'        => TimeframeService::DOMAIN_NAMESPACE,
-            'To'          => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null */
-    protected $Code;
-    /** @var DateTimeInterface|null */
-    protected $Date;
-    /** @var string|null */
-    protected $Description;
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $Code = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?DateTimeInterface $Date = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $Description = null;
+
     /** @var string[]|null */
-    protected $Options;
-    /** @var string|null */
-    protected $From;
-    /** @var string|null */
-    protected $To;
-    // @codingStandardsIgnoreEnd
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?array $Options = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $From = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $To = null;
 
     /**
-     * ReasonNoTimeframe constructor.
-     *
-     * @param string|null                   $Code
-     * @param string|DateTimeInterface|null $Date
-     * @param string|null                   $Description
-     * @param string[]|null                 $Options
-     * @param string|null                   $From
-     * @param string|null                   $To
-     *
      * @throws InvalidArgumentException
      */
     public function __construct(
-        $Code = null,
-        $Date = null,
-        $Description = null,
-        array $Options = null,
-        $From = null,
-        $To = null
+        ?string            $Code = null,
+        ?DateTimeInterface $Date = null,
+        ?string            $Description = null,
+        /** @param string[]|null $Options */
+        ?array             $Options = null,
+        ?string            $From = null,
+        ?string            $To = null
     ) {
         parent::__construct();
 
-        $this->setCode($Code);
-        $this->setDate($Date);
-        $this->setDescription($Description);
-        $this->setOptions($Options);
-        $this->setFrom($From);
-        $this->setTo($To);
+        $this->setCode(Code: $Code);
+        $this->setDate(date: $Date);
+        $this->setDescription(Description: $Description);
+        $this->setOptions(Options: $Options);
+        $this->setFrom(From: $From);
+        $this->setTo(To: $To);
+    }
+
+    public function getCode(): ?string
+    {
+        return $this->Code;
+    }
+
+    public function setCode(?string $Code): ReasonNoTimeframe
+    {
+        $this->Code = $Code;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->Description;
+    }
+
+    public function setDescription(?string $Description): ReasonNoTimeframe
+    {
+        $this->Description = $Description;
+
+        return $this;
     }
 
     /**
-     * Set date
-     *
-     * @param string|DateTimeInterface|null $date
-     *
-     * @return static
-     *
+     * @return string[]|null
+     */
+    public function getOptions(): ?array
+    {
+        return $this->Options;
+    }
+
+    /**
+     * @param array|null $Options
+     * @return ReasonNoTimeframe
+     */
+    public function setOptions(?array $Options): static
+    {
+        if (is_array(value: $Options)) {
+            foreach ($Options as $option) {
+                if (!is_string(value: $option)) {
+                    throw new TypeError(message: 'Expected a string');
+                }
+            }
+        }
+
+        $this->Options = $Options;
+
+        return $this;
+    }
+
+    public function getFrom(): ?string
+    {
+        return $this->From;
+    }
+
+    public function setFrom(?string $From): static
+    {
+        $this->From = $From;
+
+        return $this;
+    }
+
+    public function getTo(): ?string
+    {
+        return $this->To;
+    }
+
+    public function setTo(?string $To): static
+    {
+        $this->To = $To;
+
+        return $this;
+    }
+
+    /**
      * @throws InvalidArgumentException
      *
      * @since 1.2.0
      */
-    public function setDate($date = null)
+    public function setDate(string|DateTimeInterface|null $date = null): static
     {
-        if (is_string($date)) {
+        if (is_string(value: $date)) {
             try {
-                $date = new DateTimeImmutable($date, new DateTimeZone('Europe/Amsterdam'));
+                $date = new DateTimeImmutable(datetime: $date, timezone: new DateTimeZone(timezone: 'Europe/Amsterdam'));
             } catch (Exception $e) {
-                throw new InvalidArgumentException($e->getMessage(), 0, $e);
+                throw new InvalidArgumentException(message: $e->getMessage(), code: 0, previous: $e);
             }
         }
 
@@ -185,35 +186,32 @@ class ReasonNoTimeframe extends AbstractEntity
     }
 
     /**
-     * @param stdClass $json
-     *
-     * @return mixed|stdClass|null
-     *
-     * @throws InvalidArgumentException
-     * @throws \Firstred\PostNL\Exception\NotSupportedException
+     * @throws NotSupportedException
+     * @throws DeserializationException
+     * @throws EntityNotFoundException
      *
      * @since 1.2.0
      */
-    public static function jsonDeserialize(stdClass $json)
+    public static function jsonDeserialize(stdClass $json): static
     {
         if (isset($json->ReasonNoTimeframe->Options)) {
             /** @psalm-var list<string> $deliveryOptions */
             $deliveryOptions = [];
-            if (!is_array($json->ReasonNoTimeframe->Options)){
+            if (!is_array(value: $json->ReasonNoTimeframe->Options)) {
                 $json->ReasonNoTimeframe->Options = [$json->ReasonNoTimeframe->Options];
             }
 
             foreach ($json->ReasonNoTimeframe->Options as $deliveryOption) {
                 if (isset($deliveryOption->string)) {
-                    if (!is_array($deliveryOption->string)) {
+                    if (!is_array(value: $deliveryOption->string)) {
                         $deliveryOption->string = [$deliveryOption->string];
                     }
                     foreach ($deliveryOption->string as $optionString) {
                         $deliveryOptions[] = $optionString;
                     }
-                } elseif (is_array($deliveryOption)) {
+                } elseif (is_array(value: $deliveryOption)) {
                     $deliveryOptions = array_merge($deliveryOptions, $deliveryOption);
-                } elseif (is_string($deliveryOption)) {
+                } elseif (is_string(value: $deliveryOption)) {
                     $deliveryOptions[] = $deliveryOption;
                 }
             }
@@ -221,21 +219,14 @@ class ReasonNoTimeframe extends AbstractEntity
             $json->ReasonNoTimeframe->Options = $deliveryOptions;
         }
 
-        return parent::jsonDeserialize($json);
+        return parent::jsonDeserialize(json: $json);
     }
 
-    /**
-     * Return a serializable array for the XMLWriter.
-     *
-     * @param Writer $writer
-     *
-     * @return void
-     */
-    public function xmlSerialize(Writer $writer)
+    public function xmlSerialize(Writer $writer): void
     {
         $xml = [];
-        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
-            $writer->write($xml);
+        if (!$this->currentService || !in_array(needle: $this->currentService, haystack: array_keys(array: static::$defaultProperties))) {
+            $writer->write(value: $xml);
 
             return;
         }
@@ -244,7 +235,7 @@ class ReasonNoTimeframe extends AbstractEntity
             if ('Options' === $propertyName) {
                 if (isset($this->Options)) {
                     $options = [];
-                    if (is_array($this->Options)) {
+                    if (is_array(value: $this->Options)) {
                         foreach ($this->Options as $option) {
                             $options[] = ['{http://schemas.microsoft.com/2003/10/Serialization/Arrays}string' => $option];
                         }
@@ -256,6 +247,6 @@ class ReasonNoTimeframe extends AbstractEntity
             }
         }
         // Auto extending this object with other properties is not supported with SOAP
-        $writer->write($xml);
+        $writer->write(value: $xml);
     }
 }

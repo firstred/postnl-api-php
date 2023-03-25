@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -26,114 +27,104 @@
 
 namespace Firstred\PostNL\Entity;
 
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingService;
-use Firstred\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Attribute\SerializableProperty;
+use Firstred\PostNL\Enum\SoapNamespace;
 
 /**
- * Class Dimension.
- *
- * @method string|null getHeight()
- * @method string|null getLength()
- * @method string|null getVolume()
- * @method string|null getWeight()
- * @method string|null getWidth()
- * @method Dimension   setHeight(string|null $Height = null)
- * @method Dimension   setLength(string|null $Length = null)
- * @method Dimension   setVolume(string|null $Volume = null)
- * @method Dimension   setWeight(string|null $Weight = null)
- * @method Dimension   setWidth(string|null $Width = null)
- *
  * @since 1.0.0
  */
 class Dimension extends AbstractEntity
 {
-    /** @var string[][] */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'Height' => BarcodeService::DOMAIN_NAMESPACE,
-            'Length' => BarcodeService::DOMAIN_NAMESPACE,
-            'Volume' => BarcodeService::DOMAIN_NAMESPACE,
-            'Weight' => BarcodeService::DOMAIN_NAMESPACE,
-            'Width'  => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'Height' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Length' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Volume' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Weight' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Width'  => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'Height' => LabellingService::DOMAIN_NAMESPACE,
-            'Length' => LabellingService::DOMAIN_NAMESPACE,
-            'Volume' => LabellingService::DOMAIN_NAMESPACE,
-            'Weight' => LabellingService::DOMAIN_NAMESPACE,
-            'Width'  => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'Height' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Length' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Volume' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Weight' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Width'  => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'Height' => LocationService::DOMAIN_NAMESPACE,
-            'Length' => LocationService::DOMAIN_NAMESPACE,
-            'Volume' => LocationService::DOMAIN_NAMESPACE,
-            'Weight' => LocationService::DOMAIN_NAMESPACE,
-            'Width'  => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'Height' => TimeframeService::DOMAIN_NAMESPACE,
-            'Length' => TimeframeService::DOMAIN_NAMESPACE,
-            'Volume' => TimeframeService::DOMAIN_NAMESPACE,
-            'Weight' => TimeframeService::DOMAIN_NAMESPACE,
-            'Width'  => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-        'Shipping' => [
-            'Height' => ShippingService::DOMAIN_NAMESPACE,
-            'Length' => ShippingService::DOMAIN_NAMESPACE,
-            'Volume' => ShippingService::DOMAIN_NAMESPACE,
-            'Weight' => ShippingService::DOMAIN_NAMESPACE,
-            'Width'  => ShippingService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null */
-    protected $Height;
-    /** @var string|null */
-    protected $Length;
-    /** @var string|null */
-    protected $Volume;
-    /** @var string|null */
-    protected $Weight;
-    /** @var string|null */
-    protected $Width;
-    // @codingStandardsIgnoreEnd
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $Height = null;
 
-    /**
-     * @param string|null $Weight
-     * @param string|null $Height
-     * @param string|null $Length
-     * @param string|null $Volume
-     * @param string|null $Width
-     */
-    public function __construct($Weight = null, $Height = null, $Length = null, $Volume = null, $Width = null)
-    {
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $Length = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $Volume = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $Weight = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $Width = null;
+
+    public function __construct(
+        ?string $Weight = null,
+        ?string $Height = null,
+        ?string $Length = null,
+        ?string $Volume = null,
+        ?string $Width = null,
+    ) {
         parent::__construct();
 
-        $this->setWeight($Weight);
+        $this->setWeight(Weight: $Weight);
 
         // Optional parameters.
-        $this->setHeight($Height);
-        $this->setLength($Length);
-        $this->setVolume($Volume);
-        $this->setWidth($Width);
+        $this->setHeight(Height: $Height);
+        $this->setLength(Length: $Length);
+        $this->setVolume(Volume: $Volume);
+        $this->setWidth(Width: $Width);
+    }
+
+    public function getHeight(): ?string
+    {
+        return $this->Height;
+    }
+
+    public function setHeight(?string $Height): static
+    {
+        $this->Height = $Height;
+
+        return $this;
+    }
+
+    public function getLength(): ?string
+    {
+        return $this->Length;
+    }
+
+    public function setLength(?string $Length): static
+    {
+        $this->Length = $Length;
+
+        return $this;
+    }
+
+    public function getVolume(): ?string
+    {
+        return $this->Volume;
+    }
+
+    public function setVolume(?string $Volume): static
+    {
+        $this->Volume = $Volume;
+
+        return $this;
+    }
+
+    public function getWeight(): ?string
+    {
+        return $this->Weight;
+    }
+
+    public function setWeight(?string $Weight): static
+    {
+        $this->Weight = $Weight;
+
+        return $this;
+    }
+
+    public function getWidth(): ?string
+    {
+        return $this->Width;
+    }
+
+    public function setWidth(?string $Width): static
+    {
+        $this->Width = $Width;
+
+        return $this;
     }
 }

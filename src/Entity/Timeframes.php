@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -26,88 +27,80 @@
 
 namespace Firstred\PostNL\Entity;
 
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Attribute\SerializableProperty;
+use Firstred\PostNL\Enum\SoapNamespace;
 
 /**
- * Class Timeframes.
- *
- * @method Timeframe[]|null          getTimeframess()
- * @method TimeframeTimeFrame[]|null getTimeframeTimeFrame()
- * @method Timeframes                setTimeframes(Timeframe[]|null $Timeframes = null)
- * @method Timeframes                setTimeframeTimeFrames(TimeframeTimeFrame[]|null $TimeframeTimeFrames = null)
- *
  * @since 1.0.0
  */
 class Timeframes extends AbstractEntity
 {
-    /** @var string[][] */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'Timeframes'          => BarcodeService::DOMAIN_NAMESPACE,
-            'TimeframeTimeFrames' => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'Timeframes'          => ConfirmingService::DOMAIN_NAMESPACE,
-            'TimeframeTimeFrames' => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'Timeframes'          => LabellingService::DOMAIN_NAMESPACE,
-            'TimeframeTimeFrames' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'Timeframes'          => DeliveryDateService::DOMAIN_NAMESPACE,
-            'TimeframeTimeFrames' => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'Timeframes'          => LocationService::DOMAIN_NAMESPACE,
-            'TimeframeTimeFrames' => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'Timeframes'          => TimeframeService::DOMAIN_NAMESPACE,
-            'TimeframeTimeFrames' => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
     /** @var Timeframe[]|null */
-    protected $Timeframes;
-    /** @var TimeframeTimeFrame[]|null */
-    protected $TimeframeTimeFrames;
-    // @codingStandardsIgnoreEnd
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?array $Timeframes = null;
 
-    /**
-     * Timeframes constructor.
-     *
-     * @param array|null                $timeframes
-     * @param TimeframeTimeFrame[]|null $timeframetimeframes
-     */
+    /** @var TimeframeTimeFrame[]|null */
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?array $TimeframeTimeFrames = null;
+
     public function __construct(
+        /** @param Timeframe[]|null $timeframes */
         array $timeframes = null,
+        /** @param TimeframeTimeFrame[]|null $timeframetimeframes */
         array $timeframetimeframes = null
     ) {
         parent::__construct();
 
-        $this->setTimeframes($timeframes);
-        $this->setTimeframeTimeFrames($timeframetimeframes);
+        $this->setTimeframes(Timeframes: $timeframes);
+        $this->setTimeframeTimeFrames(TimeframeTimeFrames: $timeframetimeframes);
     }
 
     /**
-     * Return a serializable array for `json_encode`.
-     *
-     * @return array
+     * @return Timeframe[]|null
      */
-    public function jsonSerialize()
+    public function getTimeframes(): ?array
+    {
+        return $this->Timeframes;
+    }
+
+    /**
+     * @param Timeframe[]|null $Timeframes
+     * @return static
+     */
+    public function setTimeframes(?array $Timeframes): static
+    {
+        $this->Timeframes = $Timeframes;
+
+        return $this;
+    }
+
+    /**
+     * @return TimeframeTimeFrame[]|null
+     */
+    public function getTimeframeTimeFrames(): ?array
+    {
+        return $this->TimeframeTimeFrames;
+    }
+
+    /**
+     * @param TimeframeTimeFrame[]|null $TimeframeTimeFrames
+     * @return static
+     */
+    public function setTimeframeTimeFrames(?array $TimeframeTimeFrames): static
+    {
+        $this->TimeframeTimeFrames = $TimeframeTimeFrames;
+
+        return $this;
+    }
+
+    public function jsonSerialize(): array
     {
         $json = [];
-        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
+        if (!$this->currentService || !in_array(needle: $this->currentService, haystack: array_keys(array: static::$defaultProperties))) {
             return $json;
         }
 
-        foreach (array_keys(static::$defaultProperties[$this->currentService]) as $propertyName) {
+        foreach (array_keys(array: static::$defaultProperties[$this->currentService]) as $propertyName) {
             if (isset($this->$propertyName)) {
                 if ('Timeframes' === $propertyName) {
                     $timeframes = [];

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -30,100 +31,86 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use Exception;
+use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
+use Firstred\PostNL\Enum\SoapNamespace;
+use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\TimeframeService;
-use ReflectionException;
 use Sabre\Xml\Writer;
 use stdClass;
+use TypeError;
 use function is_array;
 
 /**
- * Class GetDeliveryDateResponse.
- *
- * @method DateTimeInterface|null  getDeliveryDate()
- * @method string[]|null           getOptions()
- * @method GetDeliveryDateResponse setOptions(string[]|null $Options = null)
- *
  * @since 1.0.0
  */
 class GetDeliveryDateResponse extends AbstractEntity
 {
-    /**
-     * Default properties and namespaces for the SOAP API.
-     *
-     * @var array
-     */
-    public static $defaultProperties = [
-        'Barcode'        => [
-            'DeliveryDate' => BarcodeService::DOMAIN_NAMESPACE,
-            'Options'      => 'http://schemas.microsoft.com/2003/10/Serialization/Arrays',
-        ],
-        'Confirming'     => [
-            'DeliveryDate' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Options'      => 'http://schemas.microsoft.com/2003/10/Serialization/Arrays',
-        ],
-        'Labelling'      => [
-            'DeliveryDate' => LabellingService::DOMAIN_NAMESPACE,
-            'Options'      => 'http://schemas.microsoft.com/2003/10/Serialization/Arrays',
-        ],
-        'DeliveryDate'   => [
-            'DeliveryDate' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Options'      => 'http://schemas.microsoft.com/2003/10/Serialization/Arrays',
-        ],
-        'Location'       => [
-            'DeliveryDate' => LocationService::DOMAIN_NAMESPACE,
-            'Options'      => 'http://schemas.microsoft.com/2003/10/Serialization/Arrays',
-        ],
-        'Timeframe'      => [
-            'DeliveryDate' => TimeframeService::DOMAIN_NAMESPACE,
-            'Options'      => 'http://schemas.microsoft.com/2003/10/Serialization/Arrays',
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null */
-    protected $DeliveryDate;
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected DateTimeInterface|null $DeliveryDate = null;
+
     /** @var string[]|null */
-    protected $Options;
-    // @codingStandardsIgnoreEnd
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?array $Options = null;
 
     /**
-     * GetDeliveryDateResponse constructor.
-     *
-     * @param string|DateTimeInterface|null $DeliveryDate
-     * @param string[]|null                 $Options
-     *
      * @throws PostNLInvalidArgumentException
      */
-    public function __construct($DeliveryDate = null, array $Options = null)
-    {
+    public function __construct(
+        string|DateTimeInterface|null $DeliveryDate = null,
+        /** @param string[]|null $Options */
+        array                         $Options = null,
+    ) {
         parent::__construct();
 
-        $this->setDeliveryDate($DeliveryDate);
-        $this->setOptions($Options);
+        $this->setDeliveryDate(DeliveryDate: $DeliveryDate);
+        $this->setOptions(Options: $Options);
     }
 
     /**
-     * @param DateTimeInterface|string|null $DeliveryDate
-     *
-     * @return static
-     *
+     * @return string[]|null
+     */
+    public function getOptions(): ?array
+    {
+        return $this->Options;
+    }
+
+    /**
+     * @param string[]|null $Options
+     * @return GetDeliveryDateResponse
+     */
+    public function setOptions(?array $Options): GetDeliveryDateResponse
+    {
+        if (is_array(value: $Options)) {
+            foreach ($Options as $option) {
+                if (!is_string(value: $option)) {
+                    throw new TypeError(message: 'Expected string');
+                }
+            }
+        }
+
+        $this->Options = $Options;
+
+        return $this;
+    }
+
+    public function getDeliveryDate(): DateTimeInterface|null
+    {
+        return $this->DeliveryDate;
+    }
+
+    /**
      * @throws PostNLInvalidArgumentException
      *
      * @since 1.2.0
      */
-    public function setDeliveryDate($DeliveryDate = null)
+    public function setDeliveryDate(DateTimeInterface|string|null $DeliveryDate = null): static
     {
-        if (is_string($DeliveryDate)) {
+        if (is_string(value: $DeliveryDate)) {
             try {
-                $DeliveryDate = new DateTimeImmutable($DeliveryDate, new DateTimeZone('Europe/Amsterdam'));
+                $DeliveryDate = new DateTimeImmutable(datetime: $DeliveryDate, timezone: new DateTimeZone(timezone: 'Europe/Amsterdam'));
             } catch (Exception $e) {
-                throw new PostNLInvalidArgumentException($e->getMessage(), 0, $e);
+                throw new PostNLInvalidArgumentException(message: $e->getMessage(), code: 0, previous: $e);
             }
         }
 
@@ -132,18 +119,11 @@ class GetDeliveryDateResponse extends AbstractEntity
         return $this;
     }
 
-    /**
-     * Return a serializable array for the XMLWriter.
-     *
-     * @param Writer $writer
-     *
-     * @return void
-     */
-    public function xmlSerialize(Writer $writer)
+    public function xmlSerialize(Writer $writer): void
     {
         $xml = [];
-        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
-            $writer->write($xml);
+        if (!$this->currentService || !in_array(needle: $this->currentService, haystack: array_keys(array: static::$defaultProperties))) {
+            $writer->write(value: $xml);
 
             return;
         }
@@ -151,7 +131,7 @@ class GetDeliveryDateResponse extends AbstractEntity
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
             if ('Shipments' === $propertyName) {
                 $options = [];
-                if (is_array($this->Options)) {
+                if (is_array(value: $this->Options)) {
                     foreach ($this->Options as $option) {
                         $options[] = ["{{$namespace}}string" => $option];
                     }
@@ -162,43 +142,40 @@ class GetDeliveryDateResponse extends AbstractEntity
             }
         }
         // Auto extending this object with other properties is not supported with SOAP
-        $writer->write($xml);
+        $writer->write(value: $xml);
     }
 
     /**
-     * @param stdClass $json
-     *
-     * @return GetDeliveryDateResponse|object|stdClass|null
-     *
      * @throws PostNLInvalidArgumentException
+     * @throws DeserializationException
      */
-    public static function jsonDeserialize(stdClass $json)
+    public static function jsonDeserialize(stdClass $json): static
     {
         if (!isset($json->GetDeliveryDateResponse)) {
-            return $json;
+            throw new DeserializationException();
         }
 
         $getDeliveryDateResponse = self::create();
         try {
-            $getDeliveryDateResponse->DeliveryDate = new DateTimeImmutable($json->GetDeliveryDateResponse->DeliveryDate, new DateTimeZone('Europe/Amsterdam'));
+            $getDeliveryDateResponse->DeliveryDate = new DateTimeImmutable(datetime: $json->GetDeliveryDateResponse->DeliveryDate, timezone: new DateTimeZone(timezone: 'Europe/Amsterdam'));
         } catch (Exception $e) {
-            throw new PostNLInvalidArgumentException($e->getMessage(), 0, $e);
+            throw new PostNLInvalidArgumentException(message: $e->getMessage(), code: 0, previous: $e);
         }
         if (isset($json->GetDeliveryDateResponse->Options)) {
-            if (!is_array($json->GetDeliveryDateResponse->Options)) {
+            if (!is_array(value: $json->GetDeliveryDateResponse->Options)) {
                 $json->GetDeliveryDateResponse->Options = [$json->GetDeliveryDateResponse->Options];
             }
 
             $options = [];
             foreach ($json->GetDeliveryDateResponse->Options as $key => $option) {
-                if (is_string($option)) {
+                if (is_string(value: $option)) {
                     $options[] = $option;
                 } elseif ($option instanceof stdClass && isset($option->string)) {
                     $options[] = $option->string;
                 }
             }
 
-            $getDeliveryDateResponse->setOptions($options);
+            $getDeliveryDateResponse->setOptions(Options: $options);
         }
 
         return $getDeliveryDateResponse;

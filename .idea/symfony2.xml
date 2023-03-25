@@ -3,5 +3,6 @@
   <component name="Symfony2PluginSettings">
     <option name="pluginEnabled" value="true" />
     <option name="twigBundleNamespaceSupport" value="false" />
+    <option name="lastServiceGeneratorLanguage" value="yaml" />
   </component>
 </project>

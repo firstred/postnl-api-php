@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -26,81 +27,102 @@
 
 namespace Firstred\PostNL\Entity\Request;
 
+use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Message\LabellingMessage;
-use Firstred\PostNL\Entity\Message\Message;
 use Firstred\PostNL\Entity\Shipment;
-use Firstred\PostNL\Service\ShippingService;
+use Firstred\PostNL\Enum\SoapNamespace;
+use TypeError;
 
 /**
- * Class SendShipment.
- *
- * @method Customer|null   getCustomer()
- * @method Message|null    getMessage()
- * @method Shipment[]|null getShipments()
- * @method SendShipment  setCustomer(Customer|null $Customer = null)
- * @method SendShipment  setMessage(Message|null $Message = null)
- * @method SendShipment  setShipments(Shipment[]|null $Shipments = null)
- *
- * @since 1.0.0
+ * @since 1.2.0
  */
 class SendShipment extends AbstractEntity
 {
-    /**
-     * @var array
-     */
-    public static $defaultProperties = [
-        'Shipping' => [
-            'Customer'  => ShippingService::DOMAIN_NAMESPACE,
-            'Message'   => ShippingService::DOMAIN_NAMESPACE,
-            'Shipments' => ShippingService::DOMAIN_NAMESPACE,
-        ],
-    ];
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?Customer $Customer = null;
 
-    // @codingStandardsIgnoreStart
-    /** @var Customer|null */
-    protected $Customer;
-    /** @var LabellingMessage|null */
-    protected $Message;
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?LabellingMessage $Message = null;
+
     /** @var Shipment[]|null */
-    protected $Shipments;
-    // @codingStandardsIgnoreEnd
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?array $Shipments = null;
 
-    /**
-     * SendShipment constructor.
-     *
-     * @param Shipment[]|null       $Shipments
-     * @param LabellingMessage|null $Message
-     * @param Customer|null         $Customer
-     */
     public function __construct(
-        array $Shipments = null,
-        LabellingMessage $Message = null,
-        Customer $Customer = null
+        ?array            $Shipments = null,
+        ?LabellingMessage $Message = null,
+        ?Customer         $Customer = null
     ) {
         parent::__construct();
 
-        $this->setShipments($Shipments);
-        $this->setMessage($Message ?: new LabellingMessage());
-        $this->setCustomer($Customer);
+        $this->setShipments(Shipments: $Shipments);
+        $this->setMessage(Message: $Message ?: new LabellingMessage());
+        $this->setCustomer(Customer: $Customer);
+    }
+
+    public function getCustomer(): ?Customer
+    {
+        return $this->Customer;
+    }
+
+    public function setCustomer(?Customer $Customer): static
+    {
+        $this->Customer = $Customer;
+
+        return $this;
+    }
+
+    public function getMessage(): ?LabellingMessage
+    {
+        return $this->Message;
+    }
+
+    public function setMessage(?LabellingMessage $Message): static
+    {
+        $this->Message = $Message;
+
+        return $this;
     }
 
     /**
-     * Return a serializable array for `json_encode`.
-     *
-     * @return array
+     * @return Shipment[]|null
      */
-    public function jsonSerialize()
+    public function getShipments(): ?array
+    {
+        return $this->Shipments;
+    }
+
+    /**
+     * @param Shipment[]|null $Shipments
+     * @return static
+     */
+    public function setShipments(?array $Shipments): static
+    {
+        if (is_array(value: $Shipments)) {
+            foreach ($Shipments as $shipment) {
+                if (!$shipment instanceof Shipment) {
+                    throw new TypeError(message: 'Expected instanceof Shipment');
+                }
+            }
+        }
+
+        $this->Shipments = $Shipments;
+
+        return $this;
+    }
+
+    public function jsonSerialize(): array
     {
         $json = [];
-        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
+        if (!$this->currentService || !in_array(needle: $this->currentService, haystack: array_keys(array: static::$defaultProperties))) {
             return $json;
         }
 
-        foreach (array_keys(static::$defaultProperties[$this->currentService]) as $propertyName) {
+        foreach (array_keys(array: static::$defaultProperties[$this->currentService]) as $propertyName) {
             if (isset($this->$propertyName)) {
-                if ('Shipments' === $propertyName && count($this->$propertyName) >= 1) {
+                if ('Shipments' === $propertyName && count(value: $this->$propertyName) >= 1) {
                     $properties = [];
                     foreach ($this->$propertyName as $property) {
                         $properties[] = $property;

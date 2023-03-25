@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -30,99 +31,67 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use Exception;
+use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
+use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingService;
-use Firstred\PostNL\Service\TimeframeService;
 
 /**
- * Class Message.
- *
- * @method string|null            getMessageID()
- * @method DateTimeInterface|null getMessageTimeStamp()
- * @method Message                setMessageID(string|null $MessageID = null)
- *
  * @since 1.0.0
  */
 class Message extends AbstractEntity
 {
-    /** @var string[][] */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'MessageID'        => BarcodeService::DOMAIN_NAMESPACE,
-            'MessageTimeStamp' => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'MessageID'        => ConfirmingService::DOMAIN_NAMESPACE,
-            'MessageTimeStamp' => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'MessageID'        => LabellingService::DOMAIN_NAMESPACE,
-            'MessageTimeStamp' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'MessageID'        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'MessageTimeStamp' => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'MessageID'        => LocationService::DOMAIN_NAMESPACE,
-            'MessageTimeStamp' => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'MessageID'        => TimeframeService::DOMAIN_NAMESPACE,
-            'MessageTimeStamp' => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-        'Shipping' => [
-            'MessageID'        => ShippingService::DOMAIN_NAMESPACE,
-            'MessageTimeStamp' => ShippingService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null */
-    protected $MessageID;
-    /** @var string|null */
-    protected $MessageTimeStamp;
-    // @codingStandardsIgnoreEnd
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $MessageID = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?DateTimeInterface $MessageTimeStamp = null;
 
     /**
-     * @param string|null                   $MessageID
-     * @param string|DateTimeInterface|null $MessageTimeStamp
-     *
      * @throws InvalidArgumentException
      */
-    public function __construct($MessageID = null, $MessageTimeStamp = null)
+    public function __construct(?string $MessageID = null, string|DateTimeInterface|null $MessageTimeStamp = null)
     {
         parent::__construct();
 
-        $this->setMessageID($MessageID ?: substr(str_replace('-', '', $this->getid()), 0, 12));
+        $this->setMessageID(MessageID: $MessageID ?: substr(string: str_replace(search: '-', replace: '', subject: $this->getid()), offset: 0, length: 12));
         try {
-            $this->setMessageTimeStamp($MessageTimeStamp ?: new DateTimeImmutable('NOW', new DateTimeZone('Europe/Amsterdam')));
+            $this->setMessageTimeStamp(MessageTimeStamp: $MessageTimeStamp ?: new DateTimeImmutable(datetime: 'NOW', timezone: new DateTimeZone(timezone: 'Europe/Amsterdam')));
         } catch (Exception $e) {
-            throw new InvalidArgumentException($e->getMessage(), 0, $e);
+            throw new InvalidArgumentException(message: $e->getMessage(), code: 0, previous: $e);
         }
     }
 
-    /**
-     * @param string|DateTimeInterface|null $MessageTimeStamp
-     *
-     * @return static
-     *
-     * @throws InvalidArgumentException
-     *
-     * @since 1.2.0
-     */
-    public function setMessageTimeStamp($MessageTimeStamp = null)
+    public function getMessageID(): ?string
     {
-        if (is_string($MessageTimeStamp)) {
+        return $this->MessageID;
+    }
+
+    public function setMessageID(?string $MessageID): static
+    {
+        $this->MessageID = $MessageID;
+
+        return $this;
+    }
+
+    public function getMessageTimeStamp(): ?DateTimeInterface
+    {
+        return $this->MessageTimeStamp;
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function setMessageTimeStamp(string|DateTimeInterface|null $MessageTimeStamp = null): static
+    {
+        if (is_string(value: $MessageTimeStamp)) {
             try {
-                $MessageTimeStamp = new DateTimeImmutable($MessageTimeStamp, new DateTimeZone('Europe/Amsterdam'));
+                $MessageTimeStamp = new DateTimeImmutable(
+                    datetime: $MessageTimeStamp,
+                    timezone: new DateTimeZone(timezone: 'Europe/Amsterdam'),
+                );
             } catch (Exception $e) {
-                throw new InvalidArgumentException($e->getMessage(), 0, $e);
+                throw new InvalidArgumentException(message: $e->getMessage(), code: 0, previous: $e);
             }
         }
 

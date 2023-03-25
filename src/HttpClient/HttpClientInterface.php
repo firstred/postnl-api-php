@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -36,14 +37,14 @@ use Psr\Log\LoggerInterface;
  *
  * @since 1.0.0
  */
-interface ClientInterface
+interface HttpClientInterface
 {
     /**
      * Get the logger.
      *
      * @return LoggerInterface
      */
-    public function getLogger();
+    public function getLogger(): LoggerInterface;
 
     /**
      * Set the logger.
@@ -53,49 +54,22 @@ interface ClientInterface
     public function setLogger(LoggerInterface $logger);
 
     /**
-     * Get the HTTP Client instance.
-     *
-     * @return static
-     */
-    public static function getInstance();
-
-    /**
      * Adds a request to the list of pending requests
      * Using the ID you can replace a request.
      *
-     * @param string           $id      Request ID
+     * @param string $id Request ID
      * @param RequestInterface $request PSR-7 request
      *
      * @return int|string
      */
-    public function addOrUpdateRequest($id, RequestInterface $request);
-
-    /**
-     * Set the verify setting.
-     *
-     * @param bool|string $verify
-     *
-     * @return static
-     *
-     * @deprecated
-     */
-    public function setVerify($verify);
-
-    /**
-     * Return verify setting.
-     *
-     * @return bool|string
-     *
-     * @deprecated
-     */
-    public function getVerify();
+    public function addOrUpdateRequest(string $id, RequestInterface $request): int|string;
 
     /**
      * Remove a request from the list of pending requests.
      *
      * @param string $id
      */
-    public function removeRequest($id);
+    public function removeRequest(string $id);
 
     /**
      * Clear all requests.
@@ -113,7 +87,7 @@ interface ClientInterface
      *
      * @throws HttpClientException
      */
-    public function doRequest(RequestInterface $request);
+    public function doRequest(RequestInterface $request): ResponseInterface;
 
     /**
      * Do all async requests.
@@ -124,5 +98,5 @@ interface ClientInterface
      *
      * @return ResponseInterface|ResponseInterface[]|HttpClientException|HttpClientException[]
      */
-    public function doRequests($requests = []);
+    public function doRequests(array $requests = []): array|HttpClientException|ResponseInterface;
 }

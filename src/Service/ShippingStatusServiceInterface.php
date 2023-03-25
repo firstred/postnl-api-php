@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -39,6 +40,7 @@ use Firstred\PostNL\Entity\Response\GetSignatureResponseSignature;
 use Firstred\PostNL\Entity\Response\UpdatedShipmentsResponse;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
+use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use Firstred\PostNL\Exception\NotFoundException;
@@ -49,28 +51,12 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * Class ShippingStatusService.
- *
- * @method CurrentStatusResponse           currentStatus(CurrentStatus|CurrentStatusByReference $currentStatus)
- * @method CurrentStatusResponse[]         currentStatuses(CurrentStatus[]|CurrentStatusByReference[] $currentStatuses)
- * @method RequestInterface                buildCurrentStatusRequest(CurrentStatus|CurrentStatusByReference $currentStatus)
- * @method CurrentStatusResponse           processCurrentStatusResponse(ResponseInterface $response)
- * @method CompleteStatusResponse          completeStatus(CompleteStatus|CompleteStatusByReference $completeStatus)
- * @method CompleteStatusResponse[]        completeStatuses(CompleteStatus[]|CompleteStatusByReference[] $completeStatuses)
- * @method RequestInterface                buildCompleteStatusRequest(CompleteStatus|CompleteStatusByReference $completeStatus)
- * @method CompleteStatusResponse          processCompleteStatusResponse(ResponseInterface $response)
- * @method GetSignatureResponseSignature   getSignature(GetSignature $getSignature)
- * @method GetSignatureResponseSignature[] getSignatures(GetSignature[] $getSignatures)
- * @method RequestInterface                buildGetSignatureRequest(GetSignature $getSignature)
- * @method GetSignature                    processGetSignatureResponse(ResponseInterface $response)
- * @method UpdatedShipmentsResponse[]      getUpdatedShipments(Customer $customer, DateTimeInterface|null $dateTimeFrom, DateTimeInterface|null $dateTimeTo)
- * @method RequestInterface                buildGetUpdatedShipmentsRequest(Customer $customer, DateTimeInterface|null $dateTimeFrom, DateTimeInterface|null $dateTimeTo)
- * @method UpdatedShipmentsResponse        processGetUpdatedShipmentsResponse(ResponseInterface $response)
- *
  * @since 1.2.0
  */
 interface ShippingStatusServiceInterface extends ServiceInterface
 {
+    public const DEFAULT_VERSION = '2';
+
     /**
      * Gets the current status.
      *
@@ -95,7 +81,7 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      *
      * @since 1.0.0
      */
-    public function currentStatusREST($currentStatus);
+    public function currentStatus(CurrentStatusByReference|CurrentStatus $currentStatus): CurrentStatusResponse;
 
     /**
      * Get current statuses REST.
@@ -112,7 +98,7 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      *
      * @since 1.2.0
      */
-    public function currentStatusesREST(array $currentStatuses);
+    public function currentStatuses(array $currentStatuses): array;
 
     /**
      * Gets the complete status.
@@ -137,7 +123,7 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      *
      * @since 1.0.0
      */
-    public function completeStatusREST($completeStatus);
+    public function completeStatus(CompleteStatusByReference|CompleteStatus $completeStatus): CompleteStatusResponse;
 
     /**
      * Get complete statuses REST.
@@ -154,7 +140,7 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      *
      * @since 1.2.0
      */
-    public function completeStatusesREST(array $completeStatuses);
+    public function completeStatuses(array $completeStatuses): array;
 
     /**
      * Gets the complete status.
@@ -180,7 +166,7 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      *
      * @since 1.0.0
      */
-    public function getSignatureREST(GetSignature $getSignature);
+    public function getSignature(GetSignature $getSignature): GetSignatureResponseSignature;
 
     /**
      * Get multiple signatures.
@@ -197,151 +183,5 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      *
      * @since 1.2.0
      */
-    public function getSignaturesREST(array $getSignatures);
-
-    /**
-     * Build the CurrentStatus request for the REST API.
-     *
-     * This function auto-detects and adjusts the following requests:
-     * - CurrentStatus
-     * - CurrentStatusByReference
-     *
-     * @param CurrentStatus|CurrentStatusByReference $currentStatus
-     *
-     * @return RequestInterface
-     *
-     * @since 1.0.0
-     */
-    public function buildCurrentStatusRequestREST($currentStatus);
-
-    /**
-     * Process CurrentStatus Response REST.
-     *
-     * @param mixed $response
-     *
-     * @return CurrentStatusResponse
-     *
-     * @throws ResponseException
-     * @throws HttpClientException
-     * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
-     *
-     * @since 1.0.0
-     */
-    public function processCurrentStatusResponseREST($response);
-
-    /**
-     * Build the CompleteStatus request for the REST API.
-     *
-     * This function auto-detects and adjusts the following requests:
-     * - CompleteStatus
-     * - CompleteStatusByReference
-     *
-     * @param CompleteStatus $completeStatus
-     *
-     * @return RequestInterface
-     *
-     * @since 1.0.0
-     */
-    public function buildCompleteStatusRequestREST(CompleteStatus $completeStatus);
-
-    /**
-     * Process CompleteStatus Response REST.
-     *
-     * @param mixed $response
-     *
-     * @return CompleteStatusResponse|null
-     *
-     * @throws ResponseException
-     * @throws HttpClientException
-     * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
-     *
-     * @since 1.0.0
-     */
-    public function processCompleteStatusResponseREST($response);
-
-    /**
-     * Build the GetSignature request for the REST API.
-     *
-     * @param GetSignature $getSignature
-     *
-     * @return RequestInterface
-    */
-    public function buildGetSignatureRequestREST(GetSignature $getSignature);
-
-    /**
-     * Process GetSignature Response REST.
-     *
-     * @param mixed $response
-     *
-     * @return GetSignatureResponseSignature|null
-     *
-     * @throws ResponseException
-     * @throws HttpClientException
-     * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
-     *
-     * @since 1.0.0
-     */
-    public function processGetSignatureResponseREST($response);
-
-    /**
-     * Get updated shipments for customer REST.
-     *
-     * @param Customer               $customer
-     * @param DateTimeInterface|null $dateTimeFrom
-     * @param DateTimeInterface|null $dateTimeTo
-     *
-     * @return UpdatedShipmentsResponse[]
-     *
-     * @throws CifDownException
-     * @throws CifException
-     * @throws HttpClientException
-     * @throws PsrCacheInvalidArgumentException
-     * @throws ResponseException
-     * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
-     * @throws NotFoundException
-     *
-     * @since 1.2.0
-     */
-    public function getUpdatedShipmentsREST(
-        Customer $customer,
-        DateTimeInterface $dateTimeFrom = null,
-        DateTimeInterface $dateTimeTo = null
-    );
-
-    /**
-     * Build get updated shipments request REST.
-     *
-     * @param Customer               $customer
-     * @param DateTimeInterface|null $dateTimeFrom
-     * @param DateTimeInterface|null $dateTimeTo
-     *
-     * @return RequestInterface
-     *
-     * @since 1.2.0
-     */
-    public function buildGetUpdatedShipmentsRequestREST(
-        Customer $customer,
-        DateTimeInterface $dateTimeFrom = null,
-        DateTimeInterface $dateTimeTo = null
-    );
-
-    /**
-     * Process updated shipments response REST.
-     *
-     * @param ResponseInterface $response
-     *
-     * @return UpdatedShipmentsResponse[]
-     *
-     * @throws HttpClientException
-     * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
-     * @throws ResponseException
-     *
-     * @since 1.2.0
-     */
-    public function processGetUpdatedShipmentsResponseREST(ResponseInterface $response);
+    public function getSignatures(array $getSignatures): array;
 }

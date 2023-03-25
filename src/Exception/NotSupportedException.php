@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -31,6 +32,6 @@ namespace Firstred\PostNL\Exception;
  *
  * @since 1.0.0
  */
-class NotSupportedException extends InvalidArgumentException
+class NotSupportedException extends PostNLException
 {
 }

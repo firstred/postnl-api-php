@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -26,68 +27,60 @@
 
 namespace Firstred\PostNL\Service;
 
-use DateTimeImmutable;
-use Exception;
+use DateInterval;
+use DateTimeInterface;
 use Firstred\PostNL\Entity\Request\GenerateBarcode;
-use Firstred\PostNL\Entity\SOAP\Security;
+use Firstred\PostNL\Enum\PostNLApiMode;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\ResponseException;
-use Firstred\PostNL\PostNL;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
-use Sabre\Xml\Service as XmlService;
-use SimpleXMLElement;
-use stdClass;
-use const PHP_QUERY_RFC3986;
+use Firstred\PostNL\HttpClient\HttpClientInterface;
+use Firstred\PostNL\Service\Adapter\BarcodeServiceAdapterInterface;
+use Firstred\PostNL\Service\Adapter\Rest\BarcodeServiceRestAdapter;
+use Firstred\PostNL\Service\Adapter\ServiceAdapterSettersTrait;
+use Firstred\PostNL\Service\Adapter\Soap\BarcodeServiceSoapAdapter;
+use ParagonIE\HiddenString\HiddenString;
+use Psr\Cache\CacheItemPoolInterface;
+use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 
 /**
- * Class BarcodeService.
- *
- * @method string           generateBarcode(GenerateBarcode $generateBarcode)
- * @method RequestInterface buildGenerateBarcodeRequest(GenerateBarcode $generateBarcode)
- * @method string           processGenerateBarcodeResponse(mixed $response)
- * @method string[]         generateBarcodes(GenerateBarcode[] $generateBarcode)
- *
- * @since 1.0.0
+ * @since 2.0.0
  */
 class BarcodeService extends AbstractService implements BarcodeServiceInterface
 {
-    /** @var PostNL */
-    protected $postnl;
+    use ServiceAdapterSettersTrait;
 
-    const VERSION = '1.1';
-    const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v1_1/barcode';
-    const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v1_1/barcode';
+    protected BarcodeServiceAdapterInterface $adapter;
 
-    const SOAP_ACTION = 'http://postnl.nl/cif/services/BarcodeWebService/IBarcodeWebService/GenerateBarcode';
-    const ENVELOPE_NAMESPACE = 'http://schemas.xmlsoap.org/soap/envelope/';
-    const SERVICES_NAMESPACE = 'http://postnl.nl/cif/services/BarcodeWebService/';
-    const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/BarcodeWebService/';
-
-    /**
-     * Namespaces uses for the SOAP version of this service.
-     *
-     * @var array
-     */
-    public static $namespaces = [
-        self::ENVELOPE_NAMESPACE     => 'soap',
-        self::OLD_ENVELOPE_NAMESPACE => 'env',
-        self::SERVICES_NAMESPACE     => 'services',
-        self::DOMAIN_NAMESPACE       => 'domain',
-        Security::SECURITY_NAMESPACE => 'wsse',
-        self::XML_SCHEMA_NAMESPACE   => 'schema',
-        self::COMMON_NAMESPACE       => 'common',
-    ];
+    public function __construct(
+        HiddenString $apiKey,
+        PostNLApiMode $apiMode,
+        bool $sandbox,
+        HttpClientInterface $httpClient,
+        RequestFactoryInterface $requestFactory,
+        StreamFactoryInterface $streamFactory,
+        string $version = self::DEFAULT_VERSION,
+        CacheItemPoolInterface $cache = null,
+        DateInterval|DateTimeInterface|int $ttl = null,
+    ) {
+        parent::__construct(
+            apiKey: $apiKey,
+            apiMode: $apiMode,
+            sandbox: $sandbox,
+            httpClient: $httpClient,
+            requestFactory: $requestFactory,
+            streamFactory: $streamFactory,
+            version: $version,
+            cache: $cache,
+            ttl: $ttl,
+        );
+    }
 
     /**
      * Generate a single barcode.
-     *
-     * @param GenerateBarcode $generateBarcode
-     *
-     * @return string|null Barcode
      *
      * @throws CifDownException
      * @throws CifException
@@ -97,36 +90,13 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
      *
      * @since 1.0.0
      */
-    public function generateBarcodeREST(GenerateBarcode $generateBarcode)
+    public function generateBarcode(GenerateBarcode $generateBarcode): string
     {
-        $response = $this->postnl
+        $response = $this
             ->getHttpClient()
-            ->doRequest($this->buildGenerateBarcodeRequestREST($generateBarcode));
+            ->doRequest(request: $this->adapter->buildGenerateBarcodeRequest(generateBarcode: $generateBarcode));
 
-        $json = $this->processGenerateBarcodeResponseREST($response);
-
-        return $json->Barcode;
-    }
-
-    /**
-     * Generate a single barcode.
-     *
-     * @param GenerateBarcode $generateBarcode
-     *
-     * @return string Barcode
-     *
-     * @throws CifDownException
-     * @throws CifException
-     * @throws HttpClientException
-     * @throws ResponseException
-     *
-     * @since 1.0.0
-     */
-    public function generateBarcodeSOAP(GenerateBarcode $generateBarcode)
-    {
-        return $this->processGenerateBarcodeResponseSOAP(
-            $this->postnl->getHttpClient()->doRequest($this->buildGenerateBarcodeRequestSOAP($generateBarcode))
-        );
+        return $this->adapter->processGenerateBarcodeResponse(response: $response);
     }
 
     /**
@@ -141,25 +111,23 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
      * @throws HttpClientException
      * @throws ResponseException
      * @throws InvalidConfigurationException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      *
      * @since 1.0.0
      */
-    public function generateBarcodesREST(array $generateBarcodes)
+    public function generateBarcodes(array $generateBarcodes): array
     {
-        $httpClient = $this->postnl->getHttpClient();
+        $httpClient = $this->getHttpClient();
 
         foreach ($generateBarcodes as $generateBarcode) {
             $httpClient->addOrUpdateRequest(
-                $generateBarcode->getId(),
-                $this->buildGenerateBarcodeRequestREST($generateBarcode)
+                id: $generateBarcode->getId(),
+                request: $this->adapter->buildGenerateBarcodeRequest(generateBarcode: $generateBarcode),
             );
         }
 
         $barcodes = [];
         foreach ($httpClient->doRequests() as $uuid => $response) {
-            $json = $this->processGenerateBarcodeResponseREST($response);
-            $barcode = $json->Barcode;
+            $barcode = $this->adapter->processGenerateBarcodeResponse(response: $response);
             $barcodes[$uuid] = $barcode;
         }
 
@@ -167,175 +135,24 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
     }
 
     /**
-     * Generate multiple barcodes at once.
-     *
-     * @param GenerateBarcode[] $generateBarcodes
-     *
-     * @return string[] Barcodes
-     *
-     * @throws CifDownException
-     * @throws CifException
-     * @throws HttpClientException
-     * @throws ResponseException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     *
-     * @since 1.0.0
+     * @since 2.0.0
      */
-    public function generateBarcodesSOAP(array $generateBarcodes)
+    public function setAPIMode(PostNLApiMode $mode): void
     {
-        $httpClient = $this->postnl->getHttpClient();
-
-        foreach ($generateBarcodes as $generateBarcode) {
-            $httpClient->addOrUpdateRequest(
-                $generateBarcode->getId(),
-                $this->buildGenerateBarcodeRequestSOAP($generateBarcode)
+        $this->adapter = $mode == PostNLApiMode::Rest
+            ? new BarcodeServiceRestAdapter(
+                apiKey: $this->getApiKey(),
+                sandbox: $this->isSandbox(),
+                requestFactory: $this->getRequestFactory(),
+                streamFactory: $this->getStreamFactory(),
+                version: $this->getVersion(),
+            )
+            : new BarcodeServiceSoapAdapter(
+                apiKey: $this->getApiKey(),
+                sandbox: $this->isSandbox(),
+                requestFactory: $this->getRequestFactory(),
+                streamFactory: $this->getStreamFactory(),
+                version: $this->getVersion(),
             );
-        }
-
-        $barcodes = [];
-        foreach ($httpClient->doRequests() as $uuid => $response) {
-            $barcode = $this->processGenerateBarcodeResponseSOAP($response);
-            $barcodes[$uuid] = $barcode;
-        }
-
-        return $barcodes;
-    }
-
-    /**
-     * Build the `generateBarcode` HTTP request for the REST API.
-     *
-     * @param GenerateBarcode $generateBarcode
-     *
-     * @return RequestInterface
-     *
-     * @since 1.0.0
-     */
-    public function buildGenerateBarcodeRequestREST(GenerateBarcode $generateBarcode)
-    {
-        $apiKey = $this->postnl->getRestApiKey();
-        $this->setService($generateBarcode);
-
-        return $this->postnl->getRequestFactory()->createRequest(
-            'GET',
-            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT)
-                .'?'.http_build_query([
-                    'CustomerCode'   => $generateBarcode->getCustomer()->getCustomerCode(),
-                    'CustomerNumber' => $generateBarcode->getCustomer()->getCustomerNumber(),
-                    'Type'           => $generateBarcode->getBarcode()->getType(),
-                    'Serie'          => $generateBarcode->getBarcode()->getSerie(),
-                    'Range'          => $generateBarcode->getBarcode()->getRange(),
-                ], null, '&', PHP_QUERY_RFC3986)
-        )
-            ->withHeader('Accept', 'application/json')
-            ->withHeader('apikey', $apiKey)
-        ;
-    }
-
-    /**
-     * Build the `generateBarcode` HTTP request for the SOAP API.
-     *
-     * @param GenerateBarcode $generateBarcode
-     *
-     * @return RequestInterface
-     *
-     * @since 1.0.0
-     */
-    public function buildGenerateBarcodeRequestSOAP(GenerateBarcode $generateBarcode)
-    {
-        $soapAction = static::SOAP_ACTION;
-        $xmlService = new XmlService();
-        foreach (static::$namespaces as $namespace => $prefix) {
-            $xmlService->namespaceMap[$namespace] = $prefix;
-        }
-        $xmlService->classMap[DateTimeImmutable::class] = [__CLASS__, 'defaultDateFormat'];
-
-        $security = new Security($this->postnl->getToken());
-
-        $this->setService($security);
-        $this->setService($generateBarcode);
-
-        $request = $xmlService->write(
-            '{'.static::ENVELOPE_NAMESPACE.'}Envelope',
-            [
-                '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
-                    ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
-                ],
-                '{'.static::ENVELOPE_NAMESPACE.'}Body' => [
-                    '{'.static::SERVICES_NAMESPACE.'}GenerateBarcode' => $generateBarcode,
-                ],
-            ]
-        );
-
-        return $this->postnl->getRequestFactory()->createRequest(
-            'POST',
-            $this->postnl->getSandbox()
-                ? static::SANDBOX_ENDPOINT
-                : static::LIVE_ENDPOINT
-        )
-            ->withHeader('SOAPAction', "\"$soapAction\"")
-            ->withHeader('Accept', 'text/xml')
-            ->withHeader('Content-Type', 'text/xml;charset=UTF-8')
-            ->withBody($this->postnl->getStreamFactory()->createStream($request))
-            ;
-    }
-
-    /**
-     * Process GenerateBarcode REST response.
-     *
-     * @param ResponseInterface $response
-     *
-     * @return stdClass
-     *
-     * @throws CifDownException
-     * @throws CifException
-     * @throws HttpClientException
-     * @throws ResponseException
-     * @throws InvalidConfigurationException
-     *
-     * @since 1.0.0
-     */
-    public function processGenerateBarcodeResponseREST(ResponseInterface $response)
-    {
-        static::validateRESTResponse($response);
-
-        $json = json_decode(static::getResponseText($response));
-
-        if (!isset($json->Barcode)) {
-            throw new ResponseException('Invalid API Response', null, null, $response);
-        }
-
-        return $json;
-    }
-
-    /**
-     * Process GenerateBarcode SOAP response.
-     *
-     * @param ResponseInterface $response
-     *
-     * @return string
-     *
-     * @throws CifDownException
-     * @throws CifException
-     * @throws HttpClientException
-     * @throws ResponseException
-     *
-     * @since 1.0.0
-     */
-    public function processGenerateBarcodeResponseSOAP(ResponseInterface $response)
-    {
-        try {
-            $xml = new SimpleXMLElement(static::getResponseText($response));
-        } catch (HttpClientException $e) {
-            throw $e;
-        } catch (ResponseException $e) {
-            throw $e;
-        } catch (Exception $e) {
-            throw new ResponseException($e->getMessage(), $e->getCode(), $e);
-        }
-
-        static::registerNamespaces($xml);
-        static::validateSOAPResponse($xml);
-
-        return (string) $xml->xpath('//services:GenerateBarcodeResponse/domain:Barcode')[0][0];
     }
 }

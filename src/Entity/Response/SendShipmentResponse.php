@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -26,78 +27,70 @@
 
 namespace Firstred\PostNL\Entity\Response;
 
+use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingService;
-use Firstred\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Enum\SoapNamespace;
 
 /**
- * Class SendShipmentResponse.
- *
- * @method MergedLabel[]|null       getMergedLabels()
- * @method ResponseShipment[]|null  getResponseShipments()
- * @method SendShipmentResponse setMergedLabels(MergedLabel[]|null $mergedLabels = null)
- * @method SendShipmentResponse setResponseShipments(ResponseShipment[]|null $responseShipment = null)
- *
  * @since 1.0.0
  */
 class SendShipmentResponse extends AbstractEntity
 {
-    /**
-     * @var array|null
-     */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'MergedLabels'      => BarcodeService::DOMAIN_NAMESPACE,
-            'ResponseShipments' => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'MergedLabels'      => ConfirmingService::DOMAIN_NAMESPACE,
-            'ResponseShipments' => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'MergedLabels'      => LabellingService::DOMAIN_NAMESPACE,
-            'ResponseShipments' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'MergedLabels'      => DeliveryDateService::DOMAIN_NAMESPACE,
-            'ResponseShipments' => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'MergedLabels'      => LocationService::DOMAIN_NAMESPACE,
-            'ResponseShipments' => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'MergedLabels'      => TimeframeService::DOMAIN_NAMESPACE,
-            'ResponseShipments' => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-        'Shipping' => [
-            'MergedLabels'      => ShippingService::DOMAIN_NAMESPACE,
-            'ResponseShipments' => ShippingService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
     /** @var MergedLabel[]|null */
-    protected $MergedLabels;
-    /** @var ResponseShipment[]|null */
-    protected $ResponseShipments;
-    // @codingStandardsIgnoreEnd
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?array $MergedLabels = null;
 
-    /**
-     * SendShipmentResponse constructor.
-     *
-     * @param MergedLabel[]|null      $MergedLabels
-     * @param ResponseShipment[]|null $ReponseShipments
-     */
-    public function __construct(array $MergedLabels = null, array $ReponseShipments = null)
-    {
+    /** @var ResponseShipment[]|null */
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?array $ResponseShipments = null;
+
+    public function __construct(
+        /** @param MergedLabel[]|null $MergedLabels */
+        array $MergedLabels = null,
+        /** @param ResponseShipment[]|null $ResponseShipments */
+        array $ResponseShipments = null,
+    ) {
         parent::__construct();
 
-        $this->setMergedLabels($MergedLabels);
-        $this->setResponseShipments($ReponseShipments);
+        $this->setMergedLabels(MergedLabels: $MergedLabels);
+        $this->setResponseShipments(ResponseShipments: $ResponseShipments);
+    }
+
+    /**
+     * @return MergedLabel[]|null
+     */
+    public function getMergedLabels(): ?array
+    {
+        return $this->MergedLabels;
+    }
+
+    /**
+     * @param MergedLabel[]|null $MergedLabels
+     * @return static
+     */
+    public function setMergedLabels(?array $MergedLabels): static
+    {
+        $this->MergedLabels = $MergedLabels;
+
+        return $this;
+    }
+
+    /**
+     * @return ResponseShipment[]|null
+     */
+    public function getResponseShipments(): ?array
+    {
+        return $this->ResponseShipments;
+    }
+
+    /**
+     * @param ResponseShipment[]|null $ResponseShipments
+     * @return static
+     */
+    public function setResponseShipments(?array $ResponseShipments): static
+    {
+        $this->ResponseShipments = $ResponseShipments;
+
+        return $this;
     }
 }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -26,68 +27,49 @@
 
 namespace Firstred\PostNL\Entity;
 
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Attribute\SerializableProperty;
+use Firstred\PostNL\Enum\SoapNamespace;
 
 /**
- * Class Coordinates.
- *
- * @method string|null getLatitude()
- * @method string|null getLongitude()
- * @method Coordinates setLatitude(string|null $Latitude = null)
- * @method Coordinates setLongitude(string|null $Longitude = null)
- *
  * @since 1.0.0
  */
 class Coordinates extends AbstractEntity
 {
-    /** @var string[][] */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'Latitude'  => BarcodeService::DOMAIN_NAMESPACE,
-            'Longitude' => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'Latitude'  => ConfirmingService::DOMAIN_NAMESPACE,
-            'Longitude' => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'Latitude'  => LabellingService::DOMAIN_NAMESPACE,
-            'Longitude' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'Latitude'  => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Longitude' => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'Latitude'  => LocationService::DOMAIN_NAMESPACE,
-            'Longitude' => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'Latitude'  => TimeframeService::DOMAIN_NAMESPACE,
-            'Longitude' => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null */
-    protected $Latitude;
-    /** @var string|null */
-    protected $Longitude;
-    // @codingStandardsIgnoreEnd
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $Latitude = null;
 
-    /**
-     * @param string $Latitude
-     * @param string $Longitude
-     */
-    public function __construct($Latitude = null, $Longitude = null)
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $Longitude = null;
+
+    public function __construct(?string $Latitude = null, ?string $Longitude = null)
     {
         parent::__construct();
 
-        $this->setLatitude($Latitude);
-        $this->setLongitude($Longitude);
+        $this->setLatitude(Latitude: $Latitude);
+        $this->setLongitude(Longitude: $Longitude);
+    }
+
+    public function getLatitude(): ?string
+    {
+        return $this->Latitude;
+    }
+
+    public function setLatitude(?string $Latitude): static
+    {
+        $this->Latitude = $Latitude;
+
+        return $this;
+    }
+
+    public function getLongitude(): ?string
+    {
+        return $this->Longitude;
+    }
+
+    public function setLongitude(?string $Longitude): static
+    {
+        $this->Longitude = $Longitude;
+
+        return $this;
     }
 }

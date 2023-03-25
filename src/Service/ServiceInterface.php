@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -54,7 +55,7 @@ interface ServiceInterface
      *
      * @since 1.0.0
      */
-    public function retrieveCachedItem($uuid);
+    public function retrieveCachedItem(string $uuid): ?CacheItemInterface;
 
     /**
      * Delete an item from cache
@@ -70,23 +71,23 @@ interface ServiceInterface
      *
      * @since 1.2.0
      */
-    public function getTtl();
+    public function getTtl(): DateInterval|DateTimeInterface|int|null;
 
     /**
-     * @param int|DateTimeInterface|DateInterval|null $ttl
+     * @param DateInterval|DateTimeInterface|int|null $ttl
      *
      * @return static
      *
      * @since 1.2.0
      */
-    public function setTtl($ttl = null);
+    public function setTtl(DateInterval|DateTimeInterface|int $ttl = null): static;
 
     /**
      * @return CacheItemPoolInterface|null
      *
      * @since 1.2.0
      */
-    public function getCache();
+    public function getCache(): ?CacheItemPoolInterface;
 
     /**
      * @param CacheItemPoolInterface|null $cache
@@ -95,5 +96,15 @@ interface ServiceInterface
      *
      * @since 1.2.0
      */
-    public function setCache($cache = null);
+    public function setCache(CacheItemPoolInterface $cache = null): static;
+
+    /**
+     * @since 2.0.0
+     */
+    public function getVersion(): string;
+
+    /**
+     * @since 2.0.0
+     */
+    public function setVersion(string $version): static;
 }

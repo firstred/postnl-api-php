@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -32,44 +33,39 @@ use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Message\Message;
 use Firstred\PostNL\Entity\Request\GetTimeframes;
 use Firstred\PostNL\Entity\Response\ResponseTimeframes;
-use Firstred\PostNL\Entity\SOAP\UsernameToken;
+use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\Entity\Timeframe;
-use Firstred\PostNL\HttpClient\MockClient;
+use Firstred\PostNL\HttpClient\MockHttpClient;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\TimeframeServiceInterface;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
+use Psr\Http\Message\RequestInterface;
 
 /**
- * Class TimeframeServiceSoapTest.
- *
  * @testdox The TimeframeService (SOAP)
  */
-class TimeframeServiceSoapTest extends ServiceTest
+class TimeframeServiceSoapTest extends ServiceTestCase
 {
-    /** @var PostNL */
-    protected $postnl;
-    /** @var TimeframeServiceInterface */
-    protected $service;
-    /** @var */
-    protected $lastRequest;
+    protected PostNL $postnl;
+    protected TimeframeServiceInterface $service;
+    protected RequestInterface $lastRequest;
 
     /**
      * @before
      *
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \ReflectionException
+     * @throws
      */
-    public function setupPostNL()
+    public function setupPostNL(): void
     {
         $this->postnl = new PostNL(
-            Customer::create()
-                ->setCollectionLocation('123456')
-                ->setCustomerCode('DEVC')
-                ->setCustomerNumber('11223344')
-                ->setContactPerson('Test')
-                ->setAddress(Address::create([
+            customer: Customer::create()
+                ->setCollectionLocation(CollectionLocation: '123456')
+                ->setCustomerCode(CustomerCode: 'DEVC')
+                ->setCustomerNumber(CustomerNumber: '11223344')
+                ->setContactPerson(ContactPerson: 'Test')
+                ->setAddress(Address: Address::create(properties: [
                     'AddressType' => '02',
                     'City'        => 'Hoofddorp',
                     'CompanyName' => 'PostNL',
@@ -78,50 +74,50 @@ class TimeframeServiceSoapTest extends ServiceTest
                     'Street'      => 'Siriusdreef',
                     'Zipcode'     => '2132WT',
                 ]))
-                ->setGlobalPackBarcodeType('AB')
-                ->setGlobalPackCustomerCode('1234'), new UsernameToken(null, 'test'),
-            false,
-            PostNL::MODE_SOAP
+                ->setGlobalPackBarcodeType(GlobalPackBarcodeType: 'AB')
+                ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'), apiKey: new UsernameToken(Username: null, Password: 'test'),
+            sandbox: false,
+            mode: PostNL::MODE_Soap
         );
 
         global $logger;
-        $this->postnl->setLogger($logger);
+        $this->postnl->setLogger(logger: $logger);
 
         $this->service = $this->postnl->getTimeframeService();
-        $this->service->setCache(new VoidCachePool());
-        $this->service->setTtl(1);
+        $this->service->setCache(cache: new VoidCachePool());
+        $this->service->setTtl(ttl: 1);
     }
 
     /**
      * @testdox creates a valid timeframes request
      */
-    public function testGetTimeframesRequestSoap()
+    public function testGetTimeframesRequestSoap(): void
     {
         $message = new Message();
 
-        $this->lastRequest = $request = $this->service->buildGetTimeframesRequestSOAP(
-            (new GetTimeframes())
-                ->setMessage($message)
-                ->setTimeframe([
+        $this->lastRequest = $request = $this->service->buildGetTimeframesRequestSoap(
+            getTimeframes: (new GetTimeframes())
+                ->setMessage(Message: $message)
+                ->setTimeframe(timeframes: [
                     (new Timeframe())
-                        ->setCity('Hoofddorp')
-                        ->setCountryCode('NL')
-                        ->setEndDate('02-07-2016')
-                        ->setHouseNr('42')
-                        ->setHouseNrExt('A')
-                        ->setOptions([
+                        ->setCity(City: 'Hoofddorp')
+                        ->setCountryCode(CountryCode: 'NL')
+                        ->setEndDate(EndDate: '02-07-2016')
+                        ->setHouseNr(HouseNr: '42')
+                        ->setHouseNrExt(HouseNrExt: 'A')
+                        ->setOptions(Options: [
                             'Evening',
                         ])
-                        ->setPostalCode('2132WT')
-                        ->setStartDate('30-06-2016')
-                        ->setStreet('Siriusdreef')
-                        ->setSundaySorting(true),
+                        ->setPostalCode(PostalCode: '2132WT')
+                        ->setStartDate(StartDate: '30-06-2016')
+                        ->setStreet(Street: 'Siriusdreef')
+                        ->setSundaySorting(SundaySorting: true),
                 ])
         );
 
-        $this->assertEmpty($request->getHeaderLine('apikey'));
-        $this->assertEquals('text/xml', $request->getHeaderLine('Accept'));
-        $this->assertXmlStringEqualsXmlString(<<<XML
+        $this->assertEmpty(actual: $request->getHeaderLine('apikey'));
+        $this->assertEquals(expected: 'text/xml', actual: $request->getHeaderLine('Accept'));
+        $this->assertXmlStringEqualsXmlString(expectedXml: <<<XML
 <?xml version="1.0"?>
 <soap:Envelope
     xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
@@ -144,7 +140,7 @@ class TimeframeServiceSoapTest extends ServiceTest
   <services:GetTimeframes>
    <domain:Message>
     <domain:MessageID>{$message->getMessageID()}</domain:MessageID>
-    <domain:MessageTimeStamp>{$message->getMessageTimeStamp()->format('d-m-Y H:i:s')}</domain:MessageTimeStamp>
+    <domain:MessageTimeStamp>{$message->getMessageTimeStamp()->format(format: 'd-m-Y H:i:s')}</domain:MessageTimeStamp>
    </domain:Message>
    <domain:Timeframe>
     <domain:City>Hoofddorp</domain:City>
@@ -164,16 +160,16 @@ class TimeframeServiceSoapTest extends ServiceTest
  </soap:Body>
 </soap:Envelope>
 XML
-            , (string) $request->getBody());
+            , actualXml: (string) $request->getBody());
     }
 
     /**
      * @testdox can retrieve the available timeframes
      */
-    public function testGetTimeframesSoap()
+    public function testGetTimeframesSoap(): void
     {
-        $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], '<s:Envelope xmlns:a="http://postnl.nl/cif/domain/TimeframeWebService/"
+        $mock = new MockHandler(queue: [
+            new Response(status: 200, headers: ['Content-Type' => 'application/json;charset=UTF-8'], body: '<s:Envelope xmlns:a="http://postnl.nl/cif/domain/TimeframeWebService/"
             xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays"
             xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
     <s:Body>
@@ -227,33 +223,33 @@ XML
     </s:Body>
 </s:Envelope>'),
         ]);
-        $handler = HandlerStack::create($mock);
-        $mockClient = new MockClient();
-        $mockClient->setHandler($handler);
-        $this->postnl->setHttpClient($mockClient);
+        $handler = HandlerStack::create(handler: $mock);
+        $mockClient = new MockHttpClient();
+        $mockClient->setHandler(handler: $handler);
+        $this->postnl->setHttpClient(httpClient: $mockClient);
 
         $responseTimeframes = $this->postnl->getTimeframes(
-            (new GetTimeframes())
-                ->setTimeframe([(new Timeframe())
-                                    ->setCity('Hoofddorp')
-                                    ->setCountryCode('NL')
-                                    ->setEndDate('02-07-2016')
-                                    ->setHouseNr('42')
-                                    ->setHouseNrExt('A')
-                                    ->setOptions([
+            getTimeframes: (new GetTimeframes())
+                ->setTimeframe(timeframes: [(new Timeframe())
+                                    ->setCity(City: 'Hoofddorp')
+                                    ->setCountryCode(CountryCode: 'NL')
+                                    ->setEndDate(EndDate: '02-07-2016')
+                                    ->setHouseNr(HouseNr: '42')
+                                    ->setHouseNrExt(HouseNrExt: 'A')
+                                    ->setOptions(Options: [
                                         'Evening',
                                     ])
-                                    ->setPostalCode('2132WT')
-                                    ->setStartDate('30-06-2016')
-                                    ->setStreet('Siriusdreef')
-                                    ->setSundaySorting(false),
+                                    ->setPostalCode(PostalCode: '2132WT')
+                                    ->setStartDate(StartDate: '30-06-2016')
+                                    ->setStreet(Street: 'Siriusdreef')
+                                    ->setSundaySorting(SundaySorting: false),
                 ])
         );
 
         // Should be a ResponeTimefarmes instance
-        $this->assertInstanceOf(ResponseTimeframes::class, $responseTimeframes);
+        $this->assertInstanceOf(expected: ResponseTimeframes::class, actual: $responseTimeframes);
         // Check for data loss
-        $this->assertEquals(2, count($responseTimeframes->getReasonNoTimeframes()));
-        $this->assertEquals(2, count($responseTimeframes->getTimeframes()));
+        $this->assertEquals(expected: 2, actual: count(value: $responseTimeframes->getReasonNoTimeframes()));
+        $this->assertEquals(expected: 2, actual: count(value: $responseTimeframes->getTimeframes()));
     }
 }

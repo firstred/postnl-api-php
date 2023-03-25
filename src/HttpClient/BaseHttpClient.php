@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -34,133 +35,44 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamFactoryInterface;
-use Firstred\PostNL\Factory\RequestFactoryInterface as BackwardCompatibleRequestFactoryInterface;
-use Firstred\PostNL\Factory\ResponseFactoryInterface as BackwardCompatibleResponseFactoryInterface;
-use Firstred\PostNL\Factory\StreamFactoryInterface as BackwardCompatibleStreamFactoryInterface;
 use Psr\Log\LoggerInterface;
-use function array_push;
-use function is_null;
 use function max;
-use function user_error;
-use const E_USER_DEPRECATED;
 
 abstract class BaseHttpClient
 {
     const DEFAULT_TIMEOUT = 80;
     const DEFAULT_CONNECT_TIMEOUT = 30;
 
-    /** @var int */
-    protected $timeout = self::DEFAULT_TIMEOUT;
+    protected int $timeout = self::DEFAULT_TIMEOUT;
+    protected int $connectTimeout = self::DEFAULT_CONNECT_TIMEOUT;
+    protected array $pendingRequests = [];
+    protected ?LoggerInterface $logger;
+    protected int $maxRetries = 5;
+    protected int $concurrency = 5;
+    protected RequestFactoryInterface $requestFactory;
+    protected ResponseFactoryInterface $responseFactory;
+    protected StreamFactoryInterface $streamFactory;
 
-    /** @var int */
-    protected $connectTimeout = self::DEFAULT_CONNECT_TIMEOUT;
-
-    /**
-     * Verify the server SSL certificate.
-     *
-     * @var bool|string
-     */
-    protected $verify = true;
-
-    /** @var array */
-    protected $pendingRequests = [];
-
-    /** @var LoggerInterface */
-    protected $logger;
-
-    /** @var int */
-    protected $maxRetries = 5;
-
-    /** @var int */
-    protected $concurrency = 5;
-
-    /**
-     * @var RequestFactoryInterface|BackwardCompatibleRequestFactoryInterface
-     */
-    protected $requestFactory;
-
-    /**
-     * @var ResponseFactoryInterface|BackwardCompatibleResponseFactoryInterface
-     */
-    protected $responseFactory;
-
-    /**
-     * @var StreamFactoryInterface|BackwardCompatibleStreamFactoryInterface
-     */
-    protected $streamFactory;
-
-    /**
-     * Get timeout.
-     *
-     * @return int
-     */
-    public function getTimeout()
+    public function getTimeout(): int
     {
         return $this->timeout;
     }
 
-    /**
-     * Set timeout.
-     *
-     * @param int $seconds
-     *
-     * @return static
-     */
-    public function setTimeout($seconds)
+    public function setTimeout(int $seconds): static
     {
         $this->timeout = (int) max($seconds, 0);
 
         return $this;
     }
 
-    /**
-     * Get connection timeout.
-     *
-     * @return int
-     */
-    public function getConnectTimeout()
+    public function getConnectTimeout(): int
     {
         return $this->connectTimeout;
     }
 
-    /**
-     * Set connection timeout.
-     *
-     * @param int $seconds
-     *
-     * @return static
-     */
-    public function setConnectTimeout($seconds)
+    public function setConnectTimeout(int $seconds): static
     {
         $this->connectTimeout = (int) max($seconds, 0);
-
-        return $this;
-    }
-
-    /**
-     * Return verify setting.
-     *
-     * @return bool|string
-     *
-     * @deprecated
-     */
-    public function getVerify()
-    {
-        return $this->verify;
-    }
-
-    /**
-     * Set the verify setting.
-     *
-     * @param bool|string $verify
-     *
-     * @return static
-     *
-     * @deprecated
-     */
-    public function setVerify($verify)
-    {
-        $this->verify = $verify;
 
         return $this;
     }
@@ -170,7 +82,7 @@ abstract class BaseHttpClient
      *
      * @return LoggerInterface
      */
-    public function getLogger()
+    public function getLogger(): LoggerInterface
     {
         return $this->logger;
     }
@@ -179,14 +91,10 @@ abstract class BaseHttpClient
      * Set the logger.
      *
      * @param LoggerInterface $logger
-     *
-     * @return static
      */
-    public function setLogger(LoggerInterface $logger)
+    public function setLogger(LoggerInterface $logger): void
     {
         $this->logger = $logger;
-
-        return $this;
     }
 
     /**
@@ -194,7 +102,7 @@ abstract class BaseHttpClient
      *
      * @return int
      */
-    public function getMaxRetries()
+    public function getMaxRetries(): int
     {
         return $this->maxRetries;
     }
@@ -206,7 +114,7 @@ abstract class BaseHttpClient
      *
      * @return static
      */
-    public function setMaxRetries($maxRetries)
+    public function setMaxRetries(int $maxRetries): static
     {
         $this->maxRetries = $maxRetries;
 
@@ -220,7 +128,7 @@ abstract class BaseHttpClient
      *
      * @return static
      */
-    public function setConcurrency($concurrency)
+    public function setConcurrency(int $concurrency): static
     {
         $this->concurrency = $concurrency;
 
@@ -232,7 +140,7 @@ abstract class BaseHttpClient
      *
      * @return int
      */
-    public function getConcurrency()
+    public function getConcurrency(): int
     {
         return $this->concurrency;
     }
@@ -241,21 +149,17 @@ abstract class BaseHttpClient
      * Adds a request to the list of pending requests
      * Using the ID you can replace a request.
      *
-     * @param string           $id      Request ID
+     * @param string $id Request ID
      * @param RequestInterface $request PSR-7 request
      *
      * @return int|string
      *
      * @throws InvalidArgumentException
      */
-    public function addOrUpdateRequest($id, RequestInterface $request)
+    public function addOrUpdateRequest(string $id, RequestInterface $request): int|string
     {
-        if (is_null($id)) {
-            return array_push($this->pendingRequests, $request);
-        }
-
-        if (!in_array($request->getUri()->getHost(), ['api.postnl.nl', 'api-sandbox.postnl.nl'])) {
-            throw new InvalidArgumentException('Unsupported domain');
+        if (!in_array(needle: $request->getUri()->getHost(), haystack: ['api.postnl.nl', 'api-sandbox.postnl.nl'])) {
+            throw new InvalidArgumentException(message: 'Unsupported domain');
         }
 
         $this->pendingRequests[$id] = $request;
@@ -268,7 +172,7 @@ abstract class BaseHttpClient
      *
      * @param string $id
      */
-    public function removeRequest($id)
+    public function removeRequest(string $id): void
     {
         unset($this->pendingRequests[$id]);
     }
@@ -276,7 +180,7 @@ abstract class BaseHttpClient
     /**
      * Clear all pending requests.
      */
-    public function clearRequests()
+    public function clearRequests(): void
     {
         $this->pendingRequests = [];
     }
@@ -292,29 +196,15 @@ abstract class BaseHttpClient
      *
      * @throws InvalidArgumentException
      */
-    public function doRequests($requests = [])
+    public function doRequests(array $requests = []): array
     {
-        if ($requests instanceof RequestInterface) {
-            user_error(
-                'Passing a single request to HttpClientInterface::doRequests is deprecated',
-                E_USER_DEPRECATED
-            );
-            $requests = [$requests];
-        }
-        if (!is_array($requests)) {
-            throw new InvalidArgumentException('Invalid requests array passed');
-        }
-        if (!is_array($this->pendingRequests)) {
-            $this->pendingRequests = [];
-        }
-
         // Handle pending requests as well
         $requests = $this->pendingRequests + $requests;
 
         $responses = [];
         foreach ($requests as $id => $request) {
             try {
-                $response = $this->doRequest($request);
+                $response = $this->doRequest(request: $request);
             } catch (HttpClientException $e) {
                 $response = $e;
             }
@@ -327,16 +217,14 @@ abstract class BaseHttpClient
     /**
      * Get PSR-7 Request factory.
      *
-     * @return RequestFactoryInterface|BackwardCompatibleRequestFactoryInterface
-     *
      * @throws NotSupportedException
      *
      * @since 1.3.0
      */
-    public function getRequestFactory()
+    public function getRequestFactory(): RequestFactoryInterface
     {
-        if (!$this->requestFactory) {
-            throw new NotSupportedException('Request factory has to be set first');
+        if (!isset($this->requestFactory)) {
+            throw new NotSupportedException(message: 'Request factory has to be set first');
         }
 
         return $this->requestFactory;
@@ -345,13 +233,9 @@ abstract class BaseHttpClient
     /**
      * Set PSR-7 Request factory.
      *
-     * @param RequestFactoryInterface|BackwardCompatibleRequestFactoryInterface $requestFactory
-     *
-     * @return static
-     *
      * @since 1.3.0
      */
-    public function setRequestFactory($requestFactory)
+    public function setRequestFactory(RequestFactoryInterface $requestFactory): static
     {
         $this->requestFactory = $requestFactory;
 
@@ -361,16 +245,14 @@ abstract class BaseHttpClient
     /**
      * Get PSR-7 Response factory.
      *
-     * @return ResponseFactoryInterface|BackwardCompatibleResponseFactoryInterface
-     *
      * @throws NotSupportedException
      *
      * @since 1.3.0
      */
-    public function getResponseFactory()
+    public function getResponseFactory(): ResponseFactoryInterface
     {
-        if (!$this->responseFactory) {
-            throw new NotSupportedException('Response factory has to be set first');
+        if (!isset($this->responseFactory)) {
+            throw new NotSupportedException(message: 'Response factory has to be set first');
         }
 
         return $this->responseFactory;
@@ -379,13 +261,9 @@ abstract class BaseHttpClient
     /**
      * Set PSR-7 Response factory.
      *
-     * @param ResponseFactoryInterface|BackwardCompatibleResponseFactoryInterface $responseFactory
-     *
-     * @return static
-     *
      * @since 1.3.0
      */
-    public function setResponseFactory($responseFactory)
+    public function setResponseFactory(ResponseFactoryInterface $responseFactory): static
     {
         $this->responseFactory = $responseFactory;
 
@@ -395,16 +273,14 @@ abstract class BaseHttpClient
     /**
      * Set PSR-7 Stream factory.
      *
-     * @return StreamFactoryInterface|BackwardCompatibleStreamFactoryInterface
-     *
      * @throws NotSupportedException
      *
      * @since 1.3.0
      */
-    public function getStreamFactory()
+    public function getStreamFactory(): StreamFactoryInterface
     {
-        if (!$this->streamFactory) {
-            throw new NotSupportedException('Stream factory has to be set first');
+        if (!isset($this->streamFactory)) {
+            throw new NotSupportedException(message: 'Stream factory has to be set first');
         }
 
         return $this->streamFactory;
@@ -413,13 +289,9 @@ abstract class BaseHttpClient
     /**
      * Set PSR-7 Stream factory.
      *
-     * @param StreamFactoryInterface|BackwardCompatibleStreamFactoryInterface $streamFactory
-     *
-     * @return static
-     *
      * @since 1.3.0
      */
-    public function setStreamFactory($streamFactory)
+    public function setStreamFactory(StreamFactoryInterface $streamFactory): static
     {
         $this->streamFactory = $streamFactory;
 

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -27,11 +28,9 @@
 namespace Firstred\PostNL\Tests\Misc;
 
 use Firstred\PostNL\Util\Util;
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class PostNLTest.
- *
  * @testdox The PostNL object
  */
 class UtilTest extends TestCase
@@ -40,12 +39,12 @@ class UtilTest extends TestCase
      * @testdox Test Guzzle version compare
      * @dataProvider guzzleVersionProvider
      */
-    public function testGuzzleVersions($a, $b)
+    public function testGuzzleVersions($a, $b): void
     {
-        $this->assertTrue(Util::compareGuzzleVersion($a, $b) >= 0);
+        $this->assertTrue(condition: Util::compareGuzzleVersion(a: $a, b: $b) >= 0);
     }
 
-    public function guzzleVersionProvider()
+    public function guzzleVersionProvider(): array
     {
         return [
             [6, '6.0.0'],

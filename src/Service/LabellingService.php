@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -26,11 +27,12 @@
 
 namespace Firstred\PostNL\Service;
 
-use DateTimeImmutable;
-use Firstred\PostNL\Entity\AbstractEntity;
+use DateInterval;
+use DateTimeInterface;
+use Firstred\PostNL\Entity\Request\GenerateBarcode;
 use Firstred\PostNL\Entity\Request\GenerateLabel;
 use Firstred\PostNL\Entity\Response\GenerateLabelResponse;
-use Firstred\PostNL\Entity\SOAP\Security;
+use Firstred\PostNL\Enum\PostNLApiMode;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
@@ -38,74 +40,61 @@ use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentE
 use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
+use Firstred\PostNL\HttpClient\HttpClientInterface;
+use Firstred\PostNL\Service\Adapter\LabellingServiceAdapterInterface;
+use Firstred\PostNL\Service\Adapter\Rest\BarcodeServiceRestAdapter;
+use Firstred\PostNL\Service\Adapter\Rest\LabellingServiceRestAdapter;
+use Firstred\PostNL\Service\Adapter\ServiceAdapterSettersTrait;
+use Firstred\PostNL\Service\Adapter\Soap\BarcodeServiceSoapAdapter;
+use Firstred\PostNL\Service\Adapter\Soap\LabellingServiceSoapAdapter;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use InvalidArgumentException;
+use ParagonIE\HiddenString\HiddenString;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
-use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
-use Sabre\Xml\LibXMLException;
-use Sabre\Xml\Reader;
-use Sabre\Xml\Service as XmlService;
-use function http_build_query;
-use function in_array;
-use function json_encode;
-use function str_replace;
-use const PHP_QUERY_RFC3986;
+use Psr\Http\Message\StreamFactoryInterface;
 
 /**
- * Class LabellingService.
- *
- * @method GenerateLabelResponse   generateLabel(GenerateLabel $generateLabel, bool $confirm)
- * @method RequestInterface        buildGenerateLabelRequest(GenerateLabel $generateLabel, bool $confirm)
- * @method GenerateLabelResponse   processGenerateLabelResponse(mixed $response)
- * @method GenerateLabelResponse[] generateLabels(GenerateLabel[] $generateLabel, bool $confirm)
- *
- * @since 1.0.0
+ * @since 2.0.0
  */
 class LabellingService extends AbstractService implements LabellingServiceInterface
 {
-    // API Version
-    const VERSION = '2.2';
+    use ServiceAdapterSettersTrait;
 
-    // Endpoints
-    const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v2_2/label';
-    const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2_2/label';
+    protected LabellingServiceAdapterInterface $adapter;
 
-    // SOAP API
-    const SOAP_ACTION = 'http://postnl.nl/cif/services/LabellingWebService/ILabellingWebService/GenerateLabel';
-    const SOAP_ACTION_NO_CONFIRM = 'http://postnl.nl/cif/services/LabellingWebService/ILabellingWebService/GenerateLabelWithoutConfirm';
-    const SERVICES_NAMESPACE = 'http://postnl.nl/cif/services/LabellingWebService/';
-    const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/LabellingWebService/';
+    private static array $insuranceProductCodes = [3534, 3544, 3087, 3094];
+
+    public function __construct(
+        HiddenString $apiKey,
+        PostNLApiMode $apiMode,
+        bool $sandbox,
+        HttpClientInterface $httpClient,
+        RequestFactoryInterface $requestFactory,
+        StreamFactoryInterface $streamFactory,
+        string $version = LabellingServiceInterface::DEFAULT_VERSION,
+        CacheItemPoolInterface $cache = null,
+        DateInterval|DateTimeInterface|int $ttl = null,
+    ) {
+        parent::__construct(
+            apiKey: $apiKey,
+            apiMode: $apiMode,
+            sandbox: $sandbox,
+            httpClient: $httpClient,
+            requestFactory: $requestFactory,
+            streamFactory: $streamFactory,
+            version: $version,
+            cache: $cache,
+            ttl: $ttl,
+        );
+    }
 
     /**
-     * Namespaces uses for the SOAP version of this service.
+     * Generate a single barcode.
      *
-     * @var array
-     */
-    public static $namespaces = [
-        self::ENVELOPE_NAMESPACE     => 'soap',
-        self::OLD_ENVELOPE_NAMESPACE => 'env',
-        self::SERVICES_NAMESPACE     => 'services',
-        self::DOMAIN_NAMESPACE       => 'domain',
-        Security::SECURITY_NAMESPACE => 'wsse',
-        self::XML_SCHEMA_NAMESPACE   => 'schema',
-        self::COMMON_NAMESPACE       => 'common',
-    ];
-
-    private static $insuranceProductCodes =  [3534, 3544, 3087, 3094];
-
-    /**
-     * Generate a single barcode via REST.
-     *
-     * @param GenerateLabel $generateLabel
-     * @param bool          $confirm
-     *
-     * @return GenerateLabelResponse
-     *
-     * @throws CifDownException
-     * @throws CifException
      * @throws ResponseException
      * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
@@ -115,49 +104,53 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      *
      * @since 1.0.0
      */
-    public function generateLabelREST(GenerateLabel $generateLabel, $confirm = true)
+    public function generateLabel(GenerateLabel $generateLabel, bool $confirm = true): GenerateLabelResponse
     {
-        $item = $this->retrieveCachedItem($generateLabel->getId());
+        $item = $this->retrieveCachedItem(uuid: $generateLabel->getId());
         $response = null;
         if ($item instanceof CacheItemInterface && $item->isHit()) {
             $response = $item->get();
             try {
-                $response = PsrMessage::parseResponse($response);
-            } catch (InvalidArgumentException $e) {
+                $response = PsrMessage::parseResponse(message: $response);
+            } catch (InvalidArgumentException) {
                 // Invalid item in cache, skip
             }
         }
         if (!$response instanceof ResponseInterface) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildGenerateLabelRequestREST($generateLabel, $confirm));
-            static::validateRESTResponse($response);
+            $response = $this->getHttpClient()->doRequest(
+                request: $this->adapter->buildGenerateLabelRequest(generateLabel: $generateLabel, confirm: $confirm),
+            );
         }
 
-        $object = $this->processGenerateLabelResponseREST($response);
+        $object = $this->adapter->processGenerateLabelResponse(response: $response);
         if ($object instanceof GenerateLabelResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
-                $item->set(PsrMessage::toString($response));
-                $this->cacheItem($item);
+                $item->set(value: PsrMessage::toString(message: $response));
+                $this->cacheItem(item: $item);
             }
 
             return $object;
         }
 
         if (200 === $response->getStatusCode()) {
-            throw new ResponseException('Invalid API response', null, null, $response);
+            throw new ResponseException(
+                message: 'Invalid API response',
+                code: $response->getStatusCode(),
+                previous: null,
+                response: $response,
+            );
         }
 
-        throw new NotFoundException('Unable to generate label');
+        throw new NotFoundException(message: 'Unable to generate label');
     }
 
     /**
      * Generate multiple labels at once.
      *
-     * @param array $generateLabels ['uuid' => [GenerateBarcode, confirm], ...]
-     *
-     * @return array
+     * @phpstan-param array<int, array<GenerateBarcode, bool>> $generateLabels
      *
      * @throws HttpClientException
      * @throws NotSupportedException
@@ -167,23 +160,23 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      *
      * @since 1.0.0
      */
-    public function generateLabelsREST(array $generateLabels)
+    public function generateLabels(array $generateLabels): array
     {
-        $httpClient = $this->postnl->getHttpClient();
+        $httpClient = $this->getHttpClient();
 
         $responses = [];
         foreach ($generateLabels as $uuid => $generateLabel) {
-            $item = $this->retrieveCachedItem($uuid);
+            $item = $this->retrieveCachedItem(uuid: $uuid);
             $response = null;
             if ($item instanceof CacheItemInterface && $item->isHit()) {
                 $response = $item->get();
-                $response = PsrMessage::parseResponse($response);
+                $response = PsrMessage::parseResponse(message: $response);
                 $responses[$uuid] = $response;
             }
 
             $httpClient->addOrUpdateRequest(
-                $uuid,
-                $this->buildGenerateLabelRequestREST($generateLabel[0], $generateLabel[1])
+                id: $uuid,
+                request: $this->adapter->buildGenerateLabelRequest(generateLabel: $generateLabel[0], confirm: $generateLabel[1])
             );
         }
         $newResponses = $httpClient->doRequests();
@@ -191,20 +184,20 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
             if ($newResponse instanceof ResponseInterface
                 && 200 === $newResponse->getStatusCode()
             ) {
-                $item = $this->retrieveCachedItem($uuid);
+                $item = $this->retrieveCachedItem(uuid: $uuid);
                 if ($item instanceof CacheItemInterface) {
-                    $item->set(PsrMessage::toString($newResponse));
-                    $this->cache->saveDeferred($item);
+                    $item->set(value: PsrMessage::toString(message: $newResponse));
+                    $this->getCache()->saveDeferred(item: $item);
                 }
             }
         }
-        if ($this->cache instanceof CacheItemPoolInterface) {
-            $this->cache->commit();
+        if ($this->getCache() instanceof CacheItemPoolInterface) {
+            $this->getCache()->commit();
         }
 
         $labels = [];
         foreach ($responses + $newResponses as $uuid => $response) {
-            $generateLabelResponse = $this->processGenerateLabelResponseREST($response);
+            $generateLabelResponse = $this->adapter->processGenerateLabelResponse(response: $response);
             $labels[$uuid] = $generateLabelResponse;
         }
 
@@ -212,263 +205,24 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
     }
 
     /**
-     * Generate a single label via SOAP.
-     *
-     * @param GenerateLabel $generateLabel
-     * @param bool          $confirm
-     *
-     * @return GenerateLabelResponse
-     *
-     * @throws CifDownException
-     * @throws CifException
-     * @throws ResponseException
-     * @throws PsrCacheInvalidArgumentException
-     * @throws HttpClientException
-     *
-     * @since 1.0.0
+     * @since 2.0.0
      */
-    public function generateLabelSOAP(GenerateLabel $generateLabel, $confirm = true)
+    public function setAPIMode(PostNLApiMode $mode): void
     {
-        $item = $this->retrieveCachedItem($generateLabel->getId());
-        $response = null;
-        if ($item instanceof CacheItemInterface && $item->isHit()) {
-            $response = $item->get();
-            try {
-                $response = PsrMessage::parseResponse($response);
-            } catch (InvalidArgumentException $e) {
-            }
-        }
-        if (!$response instanceof ResponseInterface) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildGenerateLabelRequestSOAP($generateLabel, $confirm));
-        }
-
-        $object = static::processGenerateLabelResponseSOAP($response);
-
-        if ($object instanceof GenerateLabelResponse
-            && $item instanceof CacheItemInterface
-            && $response instanceof ResponseInterface
-            && 200 === $response->getStatusCode()
-        ) {
-            $item->set(PsrMessage::toString($response));
-            $this->cacheItem($item);
-        }
-
-        return $object;
-    }
-
-    /**
-     * Generate multiple labels at once via SOAP.
-     *
-     * @param array $generateLabels ['uuid' => [GenerateBarcode, confirm], ...]
-     *
-     * @return array
-     *
-     * @throws CifDownException
-     * @throws CifException
-     * @throws HttpClientException
-     * @throws PsrCacheInvalidArgumentException
-     * @throws ResponseException
-     * @throws PostNLInvalidArgumentException
-     *
-     * @since 1.0.0
-     */
-    public function generateLabelsSOAP(array $generateLabels)
-    {
-        $httpClient = $this->postnl->getHttpClient();
-
-        $responses = [];
-        foreach ($generateLabels as $uuid => $generateLabel) {
-            $item = $this->retrieveCachedItem($uuid);
-            $response = null;
-            if ($item instanceof CacheItemInterface && $item->isHit()) {
-                $response = $item->get();
-                $response = PsrMessage::parseResponse($response);
-                $responses[$uuid] = $response;
-            }
-
-            $httpClient->addOrUpdateRequest(
-                $uuid,
-                $this->buildGenerateLabelRequestSOAP($generateLabel[0], $generateLabel[1])
+        $this->adapter = $mode == PostNLApiMode::Rest
+            ? new LabellingServiceRestAdapter(
+                apiKey: $this->getApiKey(),
+                sandbox: $this->isSandbox(),
+                requestFactory: $this->getRequestFactory(),
+                streamFactory: $this->getStreamFactory(),
+                version: $this->getVersion(),
+            )
+            : new LabellingServiceSoapAdapter(
+                apiKey: $this->getApiKey(),
+                sandbox: $this->isSandbox(),
+                requestFactory: $this->getRequestFactory(),
+                streamFactory: $this->getStreamFactory(),
+                version: $this->getVersion(),
             );
-        }
-
-        $newResponses = $httpClient->doRequests();
-        foreach ($newResponses as $uuid => $newResponse) {
-            if ($newResponse instanceof ResponseInterface
-                && 200 === $newResponse->getStatusCode()
-            ) {
-                $item = $this->retrieveCachedItem($uuid);
-                if ($item instanceof CacheItemInterface) {
-                    $item->set(PsrMessage::toString($newResponse));
-                    $this->cache->saveDeferred($item);
-                }
-            }
-        }
-        if ($this->cache instanceof CacheItemPoolInterface) {
-            $this->cache->commit();
-        }
-
-        $generateLabelResponses = [];
-        foreach ($responses + $newResponses as $uuid => $response) {
-            $generateLabelResponse = $this->processGenerateLabelResponseSOAP($response);
-            $generateLabelResponses[$uuid] = $generateLabelResponse;
-        }
-
-        return $generateLabelResponses;
-    }
-
-    /**
-     * Build the GenerateLabel request for the REST API.
-     *
-     * @param GenerateLabel $generateLabel
-     * @param bool          $confirm
-     *
-     * @return RequestInterface
-     *
-     * @since 1.0.0
-     */
-    public function buildGenerateLabelRequestREST(GenerateLabel $generateLabel, $confirm = true)
-    {
-        $apiKey = $this->postnl->getRestApiKey();
-        $this->setService($generateLabel);
-        $endpoint = $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT;
-        foreach ($generateLabel->getShipments() as $shipment) {
-            if (in_array($shipment->getProductCodeDelivery(), static::$insuranceProductCodes)) {
-                // Insurance behaves a bit strange w/ v2.2, falling back on v2.1
-                $endpoint = str_replace('v2_2', 'v2_1', $endpoint);
-            }
-        }
-
-        return $this->postnl->getRequestFactory()->createRequest(
-            'POST',
-            $endpoint.'?'.http_build_query([
-                'confirm' => ($confirm ? 'true' : 'false'),
-            ], '', '&', PHP_QUERY_RFC3986))
-            ->withHeader('apikey', $apiKey)
-            ->withHeader('Accept', 'application/json')
-            ->withHeader('Content-Type', 'application/json;charset=UTF-8')
-            ->withBody($this->postnl->getStreamFactory()->createStream(json_encode($generateLabel)));
-    }
-
-    /**
-     * Process the GenerateLabel REST Response.
-     *
-     * @param ResponseInterface $response
-     *
-     * @return GenerateLabelResponse|null
-     *
-     * @throws ResponseException
-     * @throws HttpClientException
-     * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
-     *
-     * @since 1.0.0
-     */
-    public function processGenerateLabelResponseREST($response)
-    {
-        $body = json_decode(static::getResponseText($response));
-        if (isset($body->ResponseShipments)) {
-            /** @var GenerateLabelResponse $object */
-            $object = GenerateLabelResponse::jsonDeserialize((object) ['GenerateLabelResponse' => $body]);
-            $this->setService($object);
-
-            return $object;
-        }
-
-        return null;
-    }
-
-    /**
-     * Build the GenerateLabel request for the SOAP API.
-     *
-     * @param GenerateLabel $generateLabel
-     * @param bool          $confirm
-     *
-     * @return RequestInterface
-     *
-     * @since 1.0.0
-     */
-    public function buildGenerateLabelRequestSOAP(GenerateLabel $generateLabel, $confirm = true)
-    {
-        $soapAction = $confirm ? static::SOAP_ACTION : static::SOAP_ACTION_NO_CONFIRM;
-        $xmlService = new XmlService();
-        foreach (static::$namespaces as $namespace => $prefix) {
-            $xmlService->namespaceMap[$namespace] = $prefix;
-        }
-        $xmlService->classMap[DateTimeImmutable::class] = [__CLASS__, 'defaultDateFormat'];
-
-        $security = new Security($this->postnl->getToken());
-
-        $this->setService($security);
-        $this->setService($generateLabel);
-
-        $request = $xmlService->write(
-            '{'.static::ENVELOPE_NAMESPACE.'}Envelope',
-            [
-                '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
-                    ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
-                ],
-                '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
-                    '{'.static::SERVICES_NAMESPACE.'}GenerateLabel' => $generateLabel,
-                ],
-            ]
-        );
-
-        $endpoint = $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT;
-
-        foreach ($generateLabel->getShipments() as $shipment) {
-            if (in_array($shipment->getProductCodeDelivery(), self::$insuranceProductCodes)) {
-                // Insurance behaves a bit strange w/ v2.2, falling back on v2.1
-                $endpoint = str_replace('v2_2', 'v2_1', $endpoint);
-            }
-        }
-
-        return $this->postnl->getRequestFactory()->createRequest('POST', $endpoint)
-            ->withHeader('SOAPAction', "\"$soapAction\"")
-            ->withHeader('Accept', 'text/xml')
-            ->withHeader('Content-Type', 'text/xml;charset=UTF-8')
-            ->withBody($this->postnl->getStreamFactory()->createStream($request));
-    }
-
-    /**
-     * @param ResponseInterface $response
-     *
-     * @return GenerateLabelResponse
-     *
-     * @throws CifDownException
-     * @throws CifException
-     * @throws ResponseException
-     * @throws HttpClientException
-     *
-     * @since 1.0.0
-     */
-    public function processGenerateLabelResponseSOAP(ResponseInterface $response)
-    {
-        $xml = @simplexml_load_string(static::getResponseText($response));
-        if (false === $xml) {
-            if (200 === $response->getStatusCode()) {
-                throw new ResponseException('Invalid API Response', null, null, $response);
-            } else {
-                throw new ResponseException('Invalid API Response');
-            }
-        }
-
-        static::registerNamespaces($xml);
-        static::validateSOAPResponse($xml);
-
-        $reader = new Reader();
-        $reader->xml(static::getResponseText($response));
-        try {
-            $array = array_values($reader->parse()['value'][0]['value']);
-        } catch (LibXMLException $e) {
-            throw new ResponseException($e->getMessage(), $e->getCode(), $e);
-        }
-        $array = $array[0];
-
-        /** @var GenerateLabelResponse $object */
-        $object = AbstractEntity::xmlDeserialize($array);
-        $this->setService($object);
-
-        return $object;
     }
 }

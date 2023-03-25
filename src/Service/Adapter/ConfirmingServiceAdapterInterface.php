@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -24,44 +25,34 @@
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace Firstred\PostNL\Tests\Service;
+namespace Firstred\PostNL\Service\Adapter;
 
- use Yoast\PHPUnitPolyfills\TestCases\TestCase;
-use ReflectionObject;
-use stdClass;
-use function get_class;
-use function is_array;
-use function is_object;
+use Firstred\PostNL\Entity\Request\Confirming;
+use Firstred\PostNL\Entity\Response\ConfirmingResponseShipment;
+use Firstred\PostNL\Exception\CifDownException;
+use Firstred\PostNL\Exception\CifException;
+use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\ResponseException;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 /**
- * Abstract class AbstractServiceTest.
- *
- * @testdox The AbstractService class
+ * @since 2.0.0
  */
-abstract class ServiceTest extends TestCase
+interface ConfirmingServiceAdapterInterface
 {
-    public static function containsStdClass($value)
-    {
-        if ($value instanceof stdClass) {
-            return true;
-        }
+    /**
+     * @since 2.0.0
+     */
+    public function buildConfirmRequest(Confirming $confirming): RequestInterface;
 
-        if (is_array($value)) {
-            foreach ($value as $item) {
-                if (static::containsStdClass($item)) {
-                    return true;
-                }
-            }
-        } elseif (is_object($value)) {
-            $reflectionObject = new ReflectionObject($value);
-            foreach ($reflectionObject->getProperties() as $property) {
-                $property->setAccessible(true);
-                if (static::containsStdClass($property->getValue($value))) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
+    /**
+     * @throws CifDownException
+     * @throws CifException
+     * @throws ResponseException
+     * @throws HttpClientException
+     *
+     * @since 2.0.0
+     */
+    public function processConfirmResponse(ResponseInterface $response): ConfirmingResponseShipment;
 }

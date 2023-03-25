@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -30,195 +31,17 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use Exception;
+use Firstred\PostNL\Attribute\SerializableProperty;
+use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingService;
-use Firstred\PostNL\Service\TimeframeService;
 use function is_string;
 
 /**
- * Class StatusAddress.
- *
- * @method string|null            getAddressType()
- * @method string|null            getBuilding()
- * @method string|null            getCity()
- * @method string|null            getCompanyName()
- * @method string|null            getCountryCode()
- * @method string|null            getDepartmentName()
- * @method string|null            getDistrict()
- * @method string|null            getFirstName()
- * @method string|null            getFloor()
- * @method string|null            getHouseNumber()
- * @method string|null            getHouseNumberSuffix()
- * @method string|null            getLastName()
- * @method string|null            getRegion()
- * @method DateTimeInterface|null getRegistrationDate()
- * @method string|null            getRemark()
- * @method string|null            getStreet()
- * @method string|null            getZipcode()
- * @method StatusAddress          setBuilding(string|null $Building = null)
- * @method StatusAddress          setCity(string|null $City = null)
- * @method StatusAddress          setCompanyName(string|null $CompanyName = null)
- * @method StatusAddress          setCountryCode(string|null $CountryCode = null)
- * @method StatusAddress          setDepartmentName(string|null $DepartmentName = null)
- * @method StatusAddress          setDistrict(string|null $District = null)
- * @method StatusAddress          setFirstName(string|null $FirstName = null)
- * @method StatusAddress          setFloor(string|null $Floor = null)
- * @method StatusAddress          setHouseNumber(string|null $HouseNumber = null)
- * @method StatusAddress          setHouseNumberSuffix(string|null $HouseNumberSuffix = null)
- * @method StatusAddress          setLastName(string|null $LastName = null)
- * @method StatusAddress          setRegion(string|null $Region = null)
- * @method StatusAddress          setRemark(string|null $Remark = null)
- * @method StatusAddress          setStreet(string|null $Street = null)
- *
  * @since 1.0.0
  */
 class StatusAddress extends AbstractEntity
 {
-    /** @var string[][] */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'AddressType'       => BarcodeService::DOMAIN_NAMESPACE,
-            'Building'          => BarcodeService::DOMAIN_NAMESPACE,
-            'City'              => BarcodeService::DOMAIN_NAMESPACE,
-            'CompanyName'       => BarcodeService::DOMAIN_NAMESPACE,
-            'CountryCode'       => BarcodeService::DOMAIN_NAMESPACE,
-            'DepartmentName'    => BarcodeService::DOMAIN_NAMESPACE,
-            'District'          => BarcodeService::DOMAIN_NAMESPACE,
-            'FirstName'         => BarcodeService::DOMAIN_NAMESPACE,
-            'Floor'             => BarcodeService::DOMAIN_NAMESPACE,
-            'HouseNumber'       => BarcodeService::DOMAIN_NAMESPACE,
-            'HouseNumberSuffix' => BarcodeService::DOMAIN_NAMESPACE,
-            'LastName'          => BarcodeService::DOMAIN_NAMESPACE,
-            'Region'            => BarcodeService::DOMAIN_NAMESPACE,
-            'RegistrationDate'  => BarcodeService::DOMAIN_NAMESPACE,
-            'Remark'            => BarcodeService::DOMAIN_NAMESPACE,
-            'Street'            => BarcodeService::DOMAIN_NAMESPACE,
-            'Zipcode'           => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'AddressType'       => ConfirmingService::DOMAIN_NAMESPACE,
-            'Building'          => ConfirmingService::DOMAIN_NAMESPACE,
-            'City'              => ConfirmingService::DOMAIN_NAMESPACE,
-            'CompanyName'       => ConfirmingService::DOMAIN_NAMESPACE,
-            'CountryCode'       => ConfirmingService::DOMAIN_NAMESPACE,
-            'DepartmentName'    => ConfirmingService::DOMAIN_NAMESPACE,
-            'District'          => ConfirmingService::DOMAIN_NAMESPACE,
-            'FirstName'         => ConfirmingService::DOMAIN_NAMESPACE,
-            'Floor'             => ConfirmingService::DOMAIN_NAMESPACE,
-            'HouseNumber'       => ConfirmingService::DOMAIN_NAMESPACE,
-            'HouseNumberSuffix' => ConfirmingService::DOMAIN_NAMESPACE,
-            'LastName'          => ConfirmingService::DOMAIN_NAMESPACE,
-            'Region'            => ConfirmingService::DOMAIN_NAMESPACE,
-            'RegistrationDate'  => ConfirmingService::DOMAIN_NAMESPACE,
-            'Remark'            => ConfirmingService::DOMAIN_NAMESPACE,
-            'Street'            => ConfirmingService::DOMAIN_NAMESPACE,
-            'Zipcode'           => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'AddressType'       => LabellingService::DOMAIN_NAMESPACE,
-            'Building'          => LabellingService::DOMAIN_NAMESPACE,
-            'City'              => LabellingService::DOMAIN_NAMESPACE,
-            'CompanyName'       => LabellingService::DOMAIN_NAMESPACE,
-            'CountryCode'       => LabellingService::DOMAIN_NAMESPACE,
-            'DepartmentName'    => LabellingService::DOMAIN_NAMESPACE,
-            'District'          => LabellingService::DOMAIN_NAMESPACE,
-            'FirstName'         => LabellingService::DOMAIN_NAMESPACE,
-            'Floor'             => LabellingService::DOMAIN_NAMESPACE,
-            'HouseNumber'       => LabellingService::DOMAIN_NAMESPACE,
-            'HouseNumberSuffix' => LabellingService::DOMAIN_NAMESPACE,
-            'LastName'          => LabellingService::DOMAIN_NAMESPACE,
-            'Region'            => LabellingService::DOMAIN_NAMESPACE,
-            'RegistrationDate'  => LabellingService::DOMAIN_NAMESPACE,
-            'Remark'            => LabellingService::DOMAIN_NAMESPACE,
-            'Street'            => LabellingService::DOMAIN_NAMESPACE,
-            'Zipcode'           => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'AddressType'       => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Building'          => DeliveryDateService::DOMAIN_NAMESPACE,
-            'City'              => DeliveryDateService::DOMAIN_NAMESPACE,
-            'CompanyName'       => DeliveryDateService::DOMAIN_NAMESPACE,
-            'CountryCode'       => DeliveryDateService::DOMAIN_NAMESPACE,
-            'DepartmentName'    => DeliveryDateService::DOMAIN_NAMESPACE,
-            'District'          => DeliveryDateService::DOMAIN_NAMESPACE,
-            'FirstName'         => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Floor'             => DeliveryDateService::DOMAIN_NAMESPACE,
-            'HouseNumber'       => DeliveryDateService::DOMAIN_NAMESPACE,
-            'HouseNumberSuffix' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'LastName'          => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Region'            => DeliveryDateService::DOMAIN_NAMESPACE,
-            'RegistrationDate'  => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Remark'            => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Street'            => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Zipcode'           => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'AddressType'       => LocationService::DOMAIN_NAMESPACE,
-            'Building'          => LocationService::DOMAIN_NAMESPACE,
-            'City'              => LocationService::DOMAIN_NAMESPACE,
-            'CompanyName'       => LocationService::DOMAIN_NAMESPACE,
-            'CountryCode'       => LocationService::DOMAIN_NAMESPACE,
-            'DepartmentName'    => LocationService::DOMAIN_NAMESPACE,
-            'District'          => LocationService::DOMAIN_NAMESPACE,
-            'FirstName'         => LocationService::DOMAIN_NAMESPACE,
-            'Floor'             => LocationService::DOMAIN_NAMESPACE,
-            'HouseNumber'       => LocationService::DOMAIN_NAMESPACE,
-            'HouseNumberSuffix' => LocationService::DOMAIN_NAMESPACE,
-            'LastName'          => LocationService::DOMAIN_NAMESPACE,
-            'Region'            => LocationService::DOMAIN_NAMESPACE,
-            'RegistrationDate'  => LocationService::DOMAIN_NAMESPACE,
-            'Remark'            => LocationService::DOMAIN_NAMESPACE,
-            'Street'            => LocationService::DOMAIN_NAMESPACE,
-            'Zipcode'           => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'AddressType'       => TimeframeService::DOMAIN_NAMESPACE,
-            'Building'          => TimeframeService::DOMAIN_NAMESPACE,
-            'City'              => TimeframeService::DOMAIN_NAMESPACE,
-            'CompanyName'       => TimeframeService::DOMAIN_NAMESPACE,
-            'CountryCode'       => TimeframeService::DOMAIN_NAMESPACE,
-            'DepartmentName'    => TimeframeService::DOMAIN_NAMESPACE,
-            'District'          => TimeframeService::DOMAIN_NAMESPACE,
-            'FirstName'         => TimeframeService::DOMAIN_NAMESPACE,
-            'Floor'             => TimeframeService::DOMAIN_NAMESPACE,
-            'HouseNumber'       => TimeframeService::DOMAIN_NAMESPACE,
-            'HouseNumberSuffix' => TimeframeService::DOMAIN_NAMESPACE,
-            'LastName'          => TimeframeService::DOMAIN_NAMESPACE,
-            'Region'            => TimeframeService::DOMAIN_NAMESPACE,
-            'RegistrationDate'  => TimeframeService::DOMAIN_NAMESPACE,
-            'Remark'            => TimeframeService::DOMAIN_NAMESPACE,
-            'Street'            => TimeframeService::DOMAIN_NAMESPACE,
-            'Zipcode'           => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-        'Shipping' => [
-            'AddressType'       => ShippingService::DOMAIN_NAMESPACE,
-            'Building'          => ShippingService::DOMAIN_NAMESPACE,
-            'City'              => ShippingService::DOMAIN_NAMESPACE,
-            'CompanyName'       => ShippingService::DOMAIN_NAMESPACE,
-            'CountryCode'       => ShippingService::DOMAIN_NAMESPACE,
-            'DepartmentName'    => ShippingService::DOMAIN_NAMESPACE,
-            'District'          => ShippingService::DOMAIN_NAMESPACE,
-            'FirstName'         => ShippingService::DOMAIN_NAMESPACE,
-            'Floor'             => ShippingService::DOMAIN_NAMESPACE,
-            'HouseNumber'       => ShippingService::DOMAIN_NAMESPACE,
-            'HouseNumberSuffix' => ShippingService::DOMAIN_NAMESPACE,
-            'LastName'          => ShippingService::DOMAIN_NAMESPACE,
-            'Region'            => ShippingService::DOMAIN_NAMESPACE,
-            'RegistrationDate'  => ShippingService::DOMAIN_NAMESPACE,
-            'Remark'            => ShippingService::DOMAIN_NAMESPACE,
-            'Street'            => ShippingService::DOMAIN_NAMESPACE,
-            'Zipcode'           => ShippingService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
     /**
-     * @var string|null
-     *
      * PostNL internal applications validate the receiver address. In case the spelling of
      * addresses should be different according to our PostNL information, the address details will
      * be corrected. This can be noticed in Track & Trace.
@@ -248,157 +71,317 @@ class StatusAddress extends AbstractEntity
      * At least one other AddressType must be specified, other than AddressType 02
      * In most cases this will be AddressType 01, the receiver address.
      */
-    protected $AddressType;
-    /** @var string|null */
-    protected $Building;
-    /** @var string|null */
-    protected $City;
-    /** @var string|null */
-    protected $CompanyName;
-    /** @var string|null */
-    protected $CountryCode;
-    /** @var string|null */
-    protected $DepartmentName;
-    /** @var string|null */
-    protected $District;
-    /** @var string|null */
-    protected $FirstName;
-    /** @var string|null */
-    protected $Floor;
-    /** @var string|null */
-    protected $HouseNumber;
-    /** @var string|null */
-    protected $HouseNumberSuffix;
-    /** @var string|null */
-    protected $LastName;
-    /** @var string|null */
-    protected $Region;
-    /** @var string|null */
-    protected $RegistrationDate;
-    /** @var string|null */
-    protected $Remark;
-    /** @var string|null */
-    protected $Street;
-    /** @var string|null */
-    protected $Zipcode;
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $AddressType = null;
 
-    /** @var array|null Array with optional properties */
-    protected $other;
-    // @codingStandardsIgnoreEnd
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $Building = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $City = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $CompanyName = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $CountryCode = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $DepartmentName = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $District = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $FirstName = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $Floor = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $HouseNumber = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $HouseNumberSuffix = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $LastName = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $Region = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $RegistrationDate = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $Remark = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $Street = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $Zipcode = null;
 
     /**
-     * @param string|null                   $AddressType
-     * @param string|null                   $FirstName
-     * @param string|null                   $LastName
-     * @param string|null                   $CompanyName
-     * @param string|null                   $DepartmentName
-     * @param string|null                   $Street
-     * @param string|null                   $HouseNumber
-     * @param string|null                   $HouseNumberSuffix
-     * @param string|null                   $Zipcode
-     * @param string|null                   $City
-     * @param string|null                   $CountryCode
-     * @param string|null                   $Region
-     * @param string|null                   $District
-     * @param string|null                   $Building
-     * @param string|null                   $Floor
-     * @param string|null                   $Remark
-     * @param DateTimeInterface|string|null $RegistrationDate
-     *
      * @throws InvalidArgumentException
      */
     public function __construct(
-        $AddressType = null,
-        $FirstName = null,
-        $LastName = null,
-        $CompanyName = null,
-        $DepartmentName = null,
-        $Street = null,
-        $HouseNumber = null,
-        $HouseNumberSuffix = null,
-        $Zipcode = null,
-        $City = null,
-        $CountryCode = null,
-        $Region = null,
-        $District = null,
-        $Building = null,
-        $Floor = null,
-        $Remark = null,
-        $RegistrationDate = null
+        ?string                       $AddressType = null,
+        ?string                       $FirstName = null,
+        ?string                       $LastName = null,
+        ?string                       $CompanyName = null,
+        ?string                       $DepartmentName = null,
+        ?string                       $Street = null,
+        ?string                       $HouseNumber = null,
+        ?string                       $HouseNumberSuffix = null,
+        ?string                       $Zipcode = null,
+        ?string                       $City = null,
+        ?string                       $CountryCode = null,
+        ?string                       $Region = null,
+        ?string                       $District = null,
+        ?string                       $Building = null,
+        ?string                       $Floor = null,
+        ?string                       $Remark = null,
+        DateTimeInterface|string|null $RegistrationDate = null
     ) {
         parent::__construct();
 
-        $this->setAddressType($AddressType);
-        $this->setBuilding($Building);
-        $this->setCity($City);
-        $this->setCompanyName($CompanyName);
-        $this->setCountryCode($CountryCode);
-        $this->setDepartmentName($DepartmentName);
-        $this->setDistrict($District);
-        $this->setFirstName($FirstName);
-        $this->setFloor($Floor);
-        $this->setHouseNumber($HouseNumber);
-        $this->setHouseNumberSuffix($HouseNumberSuffix);
-        $this->setLastName($LastName);
-        $this->setRegion($Region);
-        $this->setRegistrationDate($RegistrationDate);
-        $this->setRemark($Remark);
-        $this->setStreet($Street);
-        $this->setZipcode($Zipcode);
+        $this->setAddressType(AddressType: $AddressType);
+        $this->setBuilding(Building: $Building);
+        $this->setCity(City: $City);
+        $this->setCompanyName(CompanyName: $CompanyName);
+        $this->setCountryCode(CountryCode: $CountryCode);
+        $this->setDepartmentName(DepartmentName: $DepartmentName);
+        $this->setDistrict(District: $District);
+        $this->setFirstName(FirstName: $FirstName);
+        $this->setFloor(Floor: $Floor);
+        $this->setHouseNumber(HouseNumber: $HouseNumber);
+        $this->setHouseNumberSuffix(HouseNumberSuffix: $HouseNumberSuffix);
+        $this->setLastName(LastName: $LastName);
+        $this->setRegion(Region: $Region);
+        $this->setRegistrationDate(RegistrationDate: $RegistrationDate);
+        $this->setRemark(Remark: $Remark);
+        $this->setStreet(Street: $Street);
+        $this->setZipcode(Zipcode: $Zipcode);
     }
 
-    /**
-     * Set postcode.
-     *
-     * @param string|null $Zipcode
-     *
-     * @return static
-     */
-    public function setZipcode($Zipcode = null)
+    public function getBuilding(): ?string
     {
-        if (is_null($Zipcode)) {
+        return $this->Building;
+    }
+
+    public function setBuilding(?string $Building): static
+    {
+        $this->Building = $Building;
+
+        return $this;
+    }
+
+    public function getCity(): ?string
+    {
+        return $this->City;
+    }
+
+    public function setCity(?string $City): static
+    {
+        $this->City = $City;
+
+        return $this;
+    }
+
+    public function getCompanyName(): ?string
+    {
+        return $this->CompanyName;
+    }
+
+    public function setCompanyName(?string $CompanyName): static
+    {
+        $this->CompanyName = $CompanyName;
+
+        return $this;
+    }
+
+    public function getCountryCode(): ?string
+    {
+        return $this->CountryCode;
+    }
+
+    public function setCountryCode(?string $CountryCode): static
+    {
+        $this->CountryCode = $CountryCode;
+
+        return $this;
+    }
+
+    public function getDepartmentName(): ?string
+    {
+        return $this->DepartmentName;
+    }
+
+    public function setDepartmentName(?string $DepartmentName): static
+    {
+        $this->DepartmentName = $DepartmentName;
+
+        return $this;
+    }
+
+    public function getDistrict(): ?string
+    {
+        return $this->District;
+    }
+
+    public function setDistrict(?string $District): static
+    {
+        $this->District = $District;
+
+        return $this;
+    }
+
+    public function getFirstName(): ?string
+    {
+        return $this->FirstName;
+    }
+
+    public function setFirstName(?string $FirstName): static
+    {
+        $this->FirstName = $FirstName;
+
+        return $this;
+    }
+
+    public function getFloor(): ?string
+    {
+        return $this->Floor;
+    }
+
+    public function setFloor(?string $Floor): static
+    {
+        $this->Floor = $Floor;
+
+        return $this;
+    }
+
+    public function getHouseNumber(): ?string
+    {
+        return $this->HouseNumber;
+    }
+
+    public function setHouseNumber(?string $HouseNumber): static
+    {
+        $this->HouseNumber = $HouseNumber;
+
+        return $this;
+    }
+
+    public function getHouseNumberSuffix(): ?string
+    {
+        return $this->HouseNumberSuffix;
+    }
+
+    public function setHouseNumberSuffix(?string $HouseNumberSuffix): static
+    {
+        $this->HouseNumberSuffix = $HouseNumberSuffix;
+
+        return $this;
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->LastName;
+    }
+
+    public function setLastName(?string $LastName): static
+    {
+        $this->LastName = $LastName;
+
+        return $this;
+    }
+
+    public function getRegion(): ?string
+    {
+        return $this->Region;
+    }
+
+    public function setRegion(?string $Region): static
+    {
+        $this->Region = $Region;
+
+        return $this;
+    }
+
+    public function getRemark(): ?string
+    {
+        return $this->Remark;
+    }
+
+    public function setRemark(?string $Remark): static
+    {
+        $this->Remark = $Remark;
+
+        return $this;
+    }
+
+    public function getStreet(): ?string
+    {
+        return $this->Street;
+    }
+
+    public function setStreet(?string $Street): static
+    {
+        $this->Street = $Street;
+
+        return $this;
+    }
+
+    public function getAddressType(): ?string
+    {
+        return $this->AddressType;
+    }
+
+    public function getRegistrationDate(): ?string
+    {
+        return $this->RegistrationDate;
+    }
+
+    public function getZipcode(): ?string
+    {
+        return $this->Zipcode;
+    }
+
+    public function setZipcode(?string $Zipcode = null): static
+    {
+        if (is_null(value: $Zipcode)) {
             $this->Zipcode = null;
         } else {
-            $this->Zipcode = strtoupper(str_replace(' ', '', $Zipcode));
+            $this->Zipcode = strtoupper(string: str_replace(search: ' ', replace: '', subject: $Zipcode));
         }
 
         return $this;
     }
 
-    /**
-     * Set the AddressType.
-     *
-     * @param int|string|null $AddressType
-     *
-     * @return static
-     */
-    public function setAddressType($AddressType = null)
+    public function setAddressType(int|string|null $AddressType = null): static
     {
-        if (is_null($AddressType)) {
+        if (is_null(value: $AddressType)) {
             $this->AddressType = null;
         } else {
-            $this->AddressType = str_pad($AddressType, 2, '0', STR_PAD_LEFT);
+            $this->AddressType = str_pad(string: $AddressType, length: 2, pad_string: '0', pad_type: STR_PAD_LEFT);
         }
 
         return $this;
     }
 
     /**
-     * @param DateTimeInterface|string|null $RegistrationDate
-     *
-     * @return static
-     *
      * @throws InvalidArgumentException
      *
      * @since 1.2.0
      */
-    public function setRegistrationDate($RegistrationDate = null)
+    public function setRegistrationDate(DateTimeInterface|string|null $RegistrationDate = null): static
     {
-        if (is_string($RegistrationDate)) {
+        if (is_string(value: $RegistrationDate)) {
             try {
-                $RegistrationDate = new DateTimeImmutable($RegistrationDate, new DateTimeZone('Europe/Amsterdam'));
+                $RegistrationDate = new DateTimeImmutable(datetime: $RegistrationDate, timezone: new DateTimeZone(timezone: 'Europe/Amsterdam'));
             } catch (Exception $e) {
-                throw new InvalidArgumentException($e->getMessage(),  0, $e);
+                throw new InvalidArgumentException(message: $e->getMessage(), code: 0, previous: $e);
             }
         }
 

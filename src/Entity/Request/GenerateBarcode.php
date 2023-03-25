@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -26,90 +27,69 @@
 
 namespace Firstred\PostNL\Entity\Request;
 
+use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Barcode;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Message\Message;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Enum\SoapNamespace;
 
 /**
- * Class GenerateLabel.
- *
- * @method Customer|null   getCustomer()
- * @method Message|null    getMessage()
- * @method Barcode|null    getBarcode()
- * @method GenerateBarcode setCustomer(Customer|null $Customer = null)
- * @method GenerateBarcode setMessage(Message|null $Message = null)
- * @method GenerateBarcode setBarcode(Barcode|null $Barcode = null)
- *
  * @since 1.0.0
  */
 class GenerateBarcode extends AbstractEntity
 {
-    /**
-     * Default properties and namespaces for the SOAP API.
-     *
-     * @var array
-     */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'Message'  => BarcodeService::DOMAIN_NAMESPACE,
-            'Customer' => BarcodeService::DOMAIN_NAMESPACE,
-            'Barcode'  => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'Message'  => ConfirmingService::DOMAIN_NAMESPACE,
-            'Customer' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Barcode'  => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'Message'  => LabellingService::DOMAIN_NAMESPACE,
-            'Customer' => LabellingService::DOMAIN_NAMESPACE,
-            'Barcode'  => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'Message'   => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Customer'  => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Shipments' => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'Message'   => LocationService::DOMAIN_NAMESPACE,
-            'Customer'  => LocationService::DOMAIN_NAMESPACE,
-            'Shipments' => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'Message'   => TimeframeService::DOMAIN_NAMESPACE,
-            'Customer'  => TimeframeService::DOMAIN_NAMESPACE,
-            'Shipments' => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var Message|null */
-    protected $Message;
-    /** @var Customer|null */
-    protected $Customer;
-    /** @var Barcode|null */
-    protected $Barcode;
-    // @codingStandardsIgnoreEnd
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?Message $Message = null;
 
-    /**
-     * GenerateBarcode constructor.
-     *
-     * @param Barcode|null  $Barcode
-     * @param Customer|null $Customer
-     * @param Message|null  $Message
-     */
-    public function __construct(Barcode $Barcode = null, Customer $Customer = null, Message $Message = null)
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?Customer $Customer = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?Barcode $Barcode = null;
+
+    public function __construct(?Barcode $Barcode = null, ?Customer $Customer = null, ?Message $Message = null)
     {
         parent::__construct();
 
-        $this->setBarcode($Barcode);
-        $this->setCustomer($Customer);
-        $this->setMessage($Message ?: new Message());
+        $this->setBarcode(Barcode: $Barcode);
+        $this->setCustomer(Customer: $Customer);
+        $this->setMessage(Message: $Message ?: new Message());
+    }
+
+    public function getMessage(): ?Message
+    {
+        return $this->Message;
+    }
+
+    public function setMessage(?Message $Message): static
+    {
+        $this->Message = $Message;
+
+        return $this;
+    }
+
+    public function getCustomer(): ?Customer
+    {
+        return $this->Customer;
+    }
+
+    public function setCustomer(?Customer $Customer): static
+    {
+        $this->Customer = $Customer;
+
+        return $this;
+    }
+
+    public function getBarcode(): ?Barcode
+    {
+        return $this->Barcode;
+    }
+
+    public function setBarcode(?Barcode $Barcode): static
+    {
+        $this->Barcode = $Barcode;
+
+        return $this;
     }
 }

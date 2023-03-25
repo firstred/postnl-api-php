@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -26,79 +27,61 @@
 
 namespace Firstred\PostNL\Entity\Response;
 
+use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Enum\SoapNamespace;
 use Sabre\Xml\Writer;
 
 /**
- * Class GetLocationsResult.
- *
- * @method ResponseLocation[]|null getResponseLocation()
- * @method GetLocationsResult      setResponseLocation(ResponseLocation[]|null $ResponseLocation = null)
- *
  * @since 1.0.0
  */
 class GetLocationsResult extends AbstractEntity
 {
-    /**
-     * Default properties and namespaces for the SOAP API.
-     *
-     * @var array
-     */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'ResponseLocation' => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'ResponseLocation' => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'ResponseLocation' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'ResponseLocation' => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'ResponseLocation' => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'ResponseLocation' => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
     /** @var ResponseLocation[]|null */
-    protected $ResponseLocation;
-    // @codingStandardsIgnoreEnd
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?array $ResponseLocation = null;
 
-    /**
-     * GetLocationsResult constructor.
-     *
-     * @param ResponseLocation[]|null $ResponseLocation
-     */
-    public function __construct(array $ResponseLocation = null)
-    {
+    public function __construct(
+        /** @param ResponseLocation[]|null $ResponseLocation */
+        ?array $ResponseLocation = null,
+    ) {
         parent::__construct();
 
-        $this->setResponseLocation($ResponseLocation);
+        $this->setResponseLocation(ResponseLocation: $ResponseLocation);
     }
 
     /**
-     * Return a serializable array for the XMLWriter.
-     *
-     * @param Writer $writer
-     *
-     * @return void
+     * @return ResponseLocation[]|null
      */
-    public function xmlSerialize(Writer $writer)
+    public function getResponseLocation(): ?array
+    {
+        return $this->ResponseLocation;
+    }
+
+    /**
+     * @param ResponseLocation[]|null $ResponseLocation
+     * @return static
+     */
+    public function setResponseLocation(?array $ResponseLocation): static
+    {
+        if (is_array(value: $ResponseLocation)) {
+            foreach ($ResponseLocation as $location) {
+                if (!$location instanceof ResponseLocation) {
+                    throw new \TypeError(message: 'Expected instance of `ResponseLocation`');
+                }
+            }
+        }
+
+        $this->ResponseLocation = $ResponseLocation;
+
+        return $this;
+    }
+
+    public function xmlSerialize(Writer $writer): void
     {
         $xml = [];
-        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
-            $writer->write($xml);
+        if (!$this->currentService || !in_array(needle: $this->currentService, haystack: array_keys(array: static::$defaultProperties))) {
+            $writer->write(value: $xml);
 
             return;
         }
@@ -115,6 +98,6 @@ class GetLocationsResult extends AbstractEntity
             }
         }
         // Auto extending this object with other properties is not supported with SOAP
-        $writer->write($xml);
+        $writer->write(value: $xml);
     }
 }

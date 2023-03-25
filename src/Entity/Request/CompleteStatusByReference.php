@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -26,106 +27,78 @@
 
 namespace Firstred\PostNL\Entity\Request;
 
+use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Message\Message;
 use Firstred\PostNL\Entity\Shipment;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Enum\SoapNamespace;
 use Sabre\Xml\Writer;
 
 /**
- * Class CompleteStatusByReference.
- *
- * @method Message|null              getMessage()
- * @method Customer|null             getCustomer()
- * @method Shipment|null             getShipment()
- * @method CompleteStatusByReference setMessage(Message|null $Message = null)
- * @method CompleteStatusByReference setCustomer(Customer|null $Customer = null)
- * @method CompleteStatusByReference setShipment(Shipment|null $Shipment = null)
- *
  * @since 1.0.0
  */
 class CompleteStatusByReference extends AbstractEntity
 {
-    /**
-     * Default properties and namespaces for the SOAP API.
-     *
-     * @var array
-     */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'Message'  => BarcodeService::DOMAIN_NAMESPACE,
-            'Customer' => BarcodeService::DOMAIN_NAMESPACE,
-            'Shipment' => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'Message'  => ConfirmingService::DOMAIN_NAMESPACE,
-            'Customer' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Shipment' => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'Message'  => LabellingService::DOMAIN_NAMESPACE,
-            'Customer' => LabellingService::DOMAIN_NAMESPACE,
-            'Shipment' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'Message'  => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Customer' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Shipment' => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'Message'  => LocationService::DOMAIN_NAMESPACE,
-            'Customer' => LocationService::DOMAIN_NAMESPACE,
-            'Shipment' => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'Message'  => TimeframeService::DOMAIN_NAMESPACE,
-            'Customer' => TimeframeService::DOMAIN_NAMESPACE,
-            'Shipment' => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var Message|null */
-    protected $Message;
-    /** @var Customer|null */
-    protected $Customer;
-    /** @var Shipment|null */
-    protected $Shipment;
-    // @codingStandardsIgnoreEnd
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?Message $Message = null;
 
-    /**
-     * CompleteStatusByReference constructor.
-     *
-     * @param Shipment|null $Shipment
-     * @param Customer|null $Customer
-     * @param Message|null  $Message
-     */
-    public function __construct(Shipment $Shipment = null, Customer $Customer = null, Message $Message = null)
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?Customer $Customer = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?Shipment $Shipment = null;
+
+    public function __construct(?Shipment $Shipment = null, ?Customer $Customer = null, ?Message $Message = null)
     {
         parent::__construct();
 
-        $this->setMessage($Message ?: new Message());
-        $this->setShipment($Shipment);
-        $this->setCustomer($Customer);
+        $this->setMessage(Message: $Message ?: new Message());
+        $this->setShipment(Shipment: $Shipment);
+        $this->setCustomer(Customer: $Customer);
     }
 
-    /**
-     * Return a serializable array for the XMLWriter.
-     *
-     * @param Writer $writer
-     *
-     * @return void
-     */
-    public function xmlSerialize(Writer $writer)
+    public function getMessage(): ?Message
+    {
+        return $this->Message;
+    }
+
+    public function setMessage(?Message $Message): static
+    {
+        $this->Message = $Message;
+
+        return $this;
+    }
+
+    public function getCustomer(): ?Customer
+    {
+        return $this->Customer;
+    }
+
+    public function setCustomer(?Customer $Customer): static
+    {
+        $this->Customer = $Customer;
+
+        return $this;
+    }
+
+    public function getShipment(): ?Shipment
+    {
+        return $this->Shipment;
+    }
+
+    public function setShipment(?Shipment $Shipment): static
+    {
+        $this->Shipment = $Shipment;
+
+        return $this;
+    }
+
+    public function xmlSerialize(Writer $writer): void
     {
         $xml = [];
-        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
-            $writer->write($xml);
+        if (!$this->currentService || !in_array(needle: $this->currentService, haystack: array_keys(array: static::$defaultProperties))) {
+            $writer->write(value: $xml);
 
             return;
         }
@@ -136,6 +109,6 @@ class CompleteStatusByReference extends AbstractEntity
             }
         }
         // Auto extending this object with other properties is not supported with SOAP
-        $writer->write($xml);
+        $writer->write(value: $xml);
     }
 }

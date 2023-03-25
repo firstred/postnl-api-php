@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -26,68 +27,51 @@
 
 namespace Firstred\PostNL\Entity;
 
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Attribute\SerializableProperty;
+use Firstred\PostNL\Enum\SoapNamespace;
 
 /**
- * Class Area.
- *
- * @method Coordinates|null getCoordinatesNorthWest()
- * @method Coordinates|null getCoordinatesSouthEast()
- * @method Area             setCoordinatesNorthWest(Coordinates|null $CoordinatesNorthWest = null)
- * @method Area             setCoordinatesSouthEast(Coordinates|null $CoordinatesSouthEast = null)
- *
  * @since 1.0.0
  */
 class Area extends AbstractEntity
 {
-    /** @var string[][] */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'CoordinatesNorthWest' => BarcodeService::DOMAIN_NAMESPACE,
-            'CoordinatesSouthEast' => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'CoordinatesNorthWest' => ConfirmingService::DOMAIN_NAMESPACE,
-            'CoordinatesSouthEast' => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'CoordinatesNorthWest' => LabellingService::DOMAIN_NAMESPACE,
-            'CoordinatesSouthEast' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'CoordinatesNorthWest' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'CoordinatesSouthEast' => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'CoordinatesNorthWest' => LocationService::DOMAIN_NAMESPACE,
-            'CoordinatesSouthEast' => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'CoordinatesNorthWest' => TimeframeService::DOMAIN_NAMESPACE,
-            'CoordinatesSouthEast' => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var Coordinates|null */
-    protected $CoordinatesNorthWest;
-    /** @var Coordinates|null */
-    protected $CoordinatesSouthEast;
-    // @codingStandardsIgnoreEnd
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?Coordinates $CoordinatesNorthWest = null;
 
-    /**
-     * @param Coordinates|null $CoordinatesNorthWest
-     * @param Coordinates|null $CoordinatesSouthEast
-     */
-    public function __construct($CoordinatesNorthWest = null, $CoordinatesSouthEast = null)
-    {
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?Coordinates $CoordinatesSouthEast = null;
+
+    public function __construct(
+        ?Coordinates $CoordinatesNorthWest = null,
+        ?Coordinates $CoordinatesSouthEast = null,
+    ) {
         parent::__construct();
 
-        $this->setCoordinatesNorthWest($CoordinatesNorthWest);
-        $this->setCoordinatesSouthEast($CoordinatesSouthEast);
+        $this->setCoordinatesNorthWest(CoordinatesNorthWest: $CoordinatesNorthWest);
+        $this->setCoordinatesSouthEast(CoordinatesSouthEast: $CoordinatesSouthEast);
+    }
+
+    public function getCoordinatesNorthWest(): ?Coordinates
+    {
+        return $this->CoordinatesNorthWest;
+    }
+
+    public function setCoordinatesNorthWest(?Coordinates $CoordinatesNorthWest): static
+    {
+        $this->CoordinatesNorthWest = $CoordinatesNorthWest;
+
+        return $this;
+    }
+
+    public function getCoordinatesSouthEast(): ?Coordinates
+    {
+        return $this->CoordinatesSouthEast;
+    }
+
+    public function setCoordinatesSouthEast(?Coordinates $CoordinatesSouthEast): static
+    {
+        $this->CoordinatesSouthEast = $CoordinatesSouthEast;
+
+        return $this;
     }
 }

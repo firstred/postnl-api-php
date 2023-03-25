@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -26,63 +27,34 @@
 
 namespace Firstred\PostNL\Entity\Response;
 
+use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Enum\SoapNamespace;
 
 /**
- * Class GenerateBarcodeResponse.
- *
- * @method string|null             getBarcode()
- * @method GenerateBarcodeResponse setBarcode(string|null $Barcode = null)
- *
  * @since 1.0.0
  */
 class GenerateBarcodeResponse extends AbstractEntity
 {
-    /**
-     * Default properties and namespaces for the SOAP API.
-     *
-     * @var array
-     */
-    public static $defaultProperties = [
-        'Barcode'        => [
-            'Barcode' => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming'     => [
-            'Barcode' => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling'      => [
-            'Barcode' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
-            'Barcode' => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location'       => [
-            'Barcode' => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe'      => [
-            'Barcode' => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null */
-    protected $Barcode;
-    // @codingStandardsIgnoreEnd
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $Barcode = null;
 
-    /**
-     * GenerateBarcodeResponse constructor.
-     *
-     * @param string|null $Barcode
-     */
-    public function __construct($Barcode = null)
+    public function __construct(?string $Barcode = null)
     {
         parent::__construct();
 
-        $this->setBarcode($Barcode);
+        $this->setBarcode(Barcode: $Barcode);
+    }
+
+    public function getBarcode(): ?string
+    {
+        return $this->Barcode;
+    }
+
+    public function setBarcode(?string $Barcode): static
+    {
+        $this->Barcode = $Barcode;
+
+        return $this;
     }
 }

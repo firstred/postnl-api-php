@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -36,23 +37,14 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * Class BarcodeService.
- *
- * @method string           generateBarcode(GenerateBarcode $generateBarcode)
- * @method RequestInterface buildGenerateBarcodeRequest(GenerateBarcode $generateBarcode)
- * @method string           processGenerateBarcodeResponse(mixed $response)
- * @method string[]         generateBarcodes(GenerateBarcode[] $generateBarcode)
- *
  * @since 1.2.0
  */
 interface BarcodeServiceInterface extends ServiceInterface
 {
+    public const DEFAULT_VERSION = '1.1';
+
     /**
      * Generate a single barcode.
-     *
-     * @param GenerateBarcode $generateBarcode
-     *
-     * @return string Barcode
      *
      * @throws CifDownException
      * @throws CifException
@@ -62,7 +54,7 @@ interface BarcodeServiceInterface extends ServiceInterface
      *
      * @since 1.0.0
      */
-    public function generateBarcodeREST(GenerateBarcode $generateBarcode);
+    public function generateBarcode(GenerateBarcode $generateBarcode): string;
 
     /**
      * Generate multiple barcodes at once.
@@ -79,92 +71,5 @@ interface BarcodeServiceInterface extends ServiceInterface
      *
      * @since 1.0.0
      */
-    public function generateBarcodesREST(array $generateBarcodes);
-
-    /**
-     * Generate a single barcode.
-     *
-     * @param GenerateBarcode $generateBarcode
-     *
-     * @return string Barcode
-     *
-     * @throws CifDownException
-     * @throws CifException
-     * @throws HttpClientException
-     * @throws ResponseException
-     *
-     * @since 1.0.0
-     */
-    public function generateBarcodeSOAP(GenerateBarcode $generateBarcode);
-
-    /**
-     * Generate multiple barcodes at once.
-     *
-     * @param GenerateBarcode[] $generateBarcodes
-     *
-     * @return string[] Barcodes
-     *
-     * @throws CifDownException
-     * @throws CifException
-     * @throws HttpClientException
-     * @throws ResponseException
-     *
-     * @since 1.0.0
-     */
-    public function generateBarcodesSOAP(array $generateBarcodes);
-
-    /**
-     * Build the `generateBarcode` HTTP request for the REST API.
-     *
-     * @param GenerateBarcode $generateBarcode
-     *
-     * @return RequestInterface
-     *
-     * @since 1.0.0
-     */
-    public function buildGenerateBarcodeRequestREST(GenerateBarcode $generateBarcode);
-
-    /**
-     * Process GenerateBarcode REST response.
-     *
-     * @param ResponseInterface $response
-     *
-     * @return array
-     *
-     * @throws CifDownException
-     * @throws CifException
-     * @throws HttpClientException
-     * @throws ResponseException
-     * @throws InvalidConfigurationException
-     *
-     * @since 1.0.0
-     */
-    public function processGenerateBarcodeResponseREST(ResponseInterface $response);
-
-    /**
-     * Build the `generateBarcode` HTTP request for the SOAP API.
-     *
-     * @param GenerateBarcode $generateBarcode
-     *
-     * @return RequestInterface
-     *
-     * @since 1.0.0
-     */
-    public function buildGenerateBarcodeRequestSOAP(GenerateBarcode $generateBarcode);
-
-    /**
-     * Process GenerateBarcode SOAP response.
-     *
-     * @param ResponseInterface $response
-     *
-     * @return string
-     *
-     * @throws CifDownException
-     * @throws CifException
-     * @throws HttpClientException
-     * @throws ResponseException
-     *
-     * @since 1.0.0
-     */
-    public function processGenerateBarcodeResponseSOAP(ResponseInterface $response);
+    public function generateBarcodes(array $generateBarcodes): array;
 }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -26,148 +27,157 @@
 
 namespace Firstred\PostNL\Entity\Response;
 
+use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Label;
 use Firstred\PostNL\Entity\Warning;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingService;
-use Firstred\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Enum\SoapNamespace;
 
 /**
- * Class ResponseShipment.
- *
- * @method string|null      getBarcode()
- * @method string|null      getProductCodeDelivery()
- * @method string|null      getDownPartnerBarcode()
- * @method string|null      getDownPartnerID()
- * @method string|null      getDownPartnerLocation()
- * @method Label[]|null     getLabels()
- * @method Warning[]|null   getWarnings()
- * @method ResponseShipment setBarcode(string|null $Barcode = null)
- * @method ResponseShipment setProductCodeDelivery(string|null $ProductCodeDelivery = null)
- * @method ResponseShipment setDownPartnerBarcode(string|null $DownPartnerCode = null)
- * @method ResponseShipment setDownPartnerId(string|null $DownPartnerID = null)
- * @method ResponseShipment setDownPartnerLocation(string|null $DownPartnerLocation = null)
- * @method ResponseShipment setLabels(Label[]|null $Labels = null)
- * @method ResponseShipment setWarnings(Warning[]|null $Warnings = null)
- *
  * @since 1.0.0
  */
 class ResponseShipment extends AbstractEntity
 {
-    /** @var string[][] */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'Barcode'             => BarcodeService::DOMAIN_NAMESPACE,
-            'DownPartnerBarcode'  => BarcodeService::DOMAIN_NAMESPACE,
-            'DownPartnerID'       => BarcodeService::DOMAIN_NAMESPACE,
-            'DownPartnerLocation' => BarcodeService::DOMAIN_NAMESPACE,
-            'Labels'              => BarcodeService::DOMAIN_NAMESPACE,
-            'ProductCodeDelivery' => BarcodeService::DOMAIN_NAMESPACE,
-            'Warnings'            => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'Barcode'             => ConfirmingService::DOMAIN_NAMESPACE,
-            'DownPartnerBarcode'  => ConfirmingService::DOMAIN_NAMESPACE,
-            'DownPartnerID'       => ConfirmingService::DOMAIN_NAMESPACE,
-            'DownPartnerLocation' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Labels'              => ConfirmingService::DOMAIN_NAMESPACE,
-            'ProductCodeDelivery' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Warnings'            => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'Barcode'             => LabellingService::DOMAIN_NAMESPACE,
-            'DownPartnerBarcode'  => LabellingService::DOMAIN_NAMESPACE,
-            'DownPartnerID'       => LabellingService::DOMAIN_NAMESPACE,
-            'DownPartnerLocation' => LabellingService::DOMAIN_NAMESPACE,
-            'Labels'              => LabellingService::DOMAIN_NAMESPACE,
-            'ProductCodeDelivery' => LabellingService::DOMAIN_NAMESPACE,
-            'Warnings'            => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'Barcode'             => DeliveryDateService::DOMAIN_NAMESPACE,
-            'DownPartnerBarcode'  => DeliveryDateService::DOMAIN_NAMESPACE,
-            'DownPartnerID'       => DeliveryDateService::DOMAIN_NAMESPACE,
-            'DownPartnerLocation' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Labels'              => DeliveryDateService::DOMAIN_NAMESPACE,
-            'ProductCodeDelivery' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Warnings'            => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'Barcode'             => LocationService::DOMAIN_NAMESPACE,
-            'DownPartnerBarcode'  => LocationService::DOMAIN_NAMESPACE,
-            'DownPartnerID'       => LocationService::DOMAIN_NAMESPACE,
-            'DownPartnerLocation' => LocationService::DOMAIN_NAMESPACE,
-            'Labels'              => LocationService::DOMAIN_NAMESPACE,
-            'ProductCodeDelivery' => LocationService::DOMAIN_NAMESPACE,
-            'Warnings'            => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'Barcode'             => TimeframeService::DOMAIN_NAMESPACE,
-            'DownPartnerBarcode'  => TimeframeService::DOMAIN_NAMESPACE,
-            'DownPartnerID'       => TimeframeService::DOMAIN_NAMESPACE,
-            'DownPartnerLocation' => TimeframeService::DOMAIN_NAMESPACE,
-            'Labels'              => TimeframeService::DOMAIN_NAMESPACE,
-            'ProductCodeDelivery' => TimeframeService::DOMAIN_NAMESPACE,
-            'Warnings'            => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-        'Shipping' => [
-            'Barcode'             => ShippingService::DOMAIN_NAMESPACE,
-            'DownPartnerBarcode'  => ShippingService::DOMAIN_NAMESPACE,
-            'DownPartnerID'       => ShippingService::DOMAIN_NAMESPACE,
-            'DownPartnerLocation' => ShippingService::DOMAIN_NAMESPACE,
-            'Labels'              => ShippingService::DOMAIN_NAMESPACE,
-            'ProductCodeDelivery' => ShippingService::DOMAIN_NAMESPACE,
-            'Warnings'            => ShippingService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null */
-    protected $Barcode;
-    /** @var string|null */
-    protected $DownPartnerBarcode;
-    /** @var string|null */
-    protected $DownPartnerID;
-    /** @var string|null */
-    protected $DownPartnerLocation;
-    /** @var Label[]|null */
-    protected $Labels;
-    /** @var string|null */
-    protected $ProductCodeDelivery;
-    /** @var Warning[]|null */
-    protected $Warnings;
-    // @codingStandardsIgnoreEnd
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $Barcode = null;
 
-    /**
-     * @param string|null    $Barcode
-     * @param string|null    $ProductCodeDelivery
-     * @param Label[]|null   $Labels
-     * @param string|null    $DownPartnerBarcode
-     * @param string|null    $DownPartnerID
-     * @param string|null    $DownPartnerLocation
-     * @param Warning[]|null $Warnings
-     */
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $DownPartnerBarcode = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $DownPartnerID = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $DownPartnerLocation = null;
+
+    /** @var Label[]|null */
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?array $Labels = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $ProductCodeDelivery = null;
+
+    /** @var Warning[]|null */
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?array $Warnings = null;
+
     public function __construct(
-        $Barcode = null,
-        $ProductCodeDelivery = null,
-        array $Labels = null,
-        $DownPartnerBarcode = null,
-        $DownPartnerID = null,
-        $DownPartnerLocation = null,
-        $Warnings = null
+        ?string $Barcode = null,
+        ?string $ProductCodeDelivery = null,
+        /** @param Label[]|null $Labels */
+        ?array  $Labels = null,
+        ?string $DownPartnerBarcode = null,
+        ?string $DownPartnerID = null,
+        ?string $DownPartnerLocation = null,
+        /** @param Warning[]|null $Warnings */
+        ?array  $Warnings = null
     ) {
         parent::__construct();
 
-        $this->setBarcode($Barcode);
-        $this->setProductCodeDelivery($ProductCodeDelivery);
-        $this->setDownPartnerBarcode($DownPartnerBarcode);
-        $this->setDownPartnerId($DownPartnerID);
-        $this->setDownPartnerLocation($DownPartnerLocation);
-        $this->setLabels($Labels);
-        $this->setWarnings($Warnings);
+        $this->setBarcode(Barcode: $Barcode);
+        $this->setProductCodeDelivery(ProductCodeDelivery: $ProductCodeDelivery);
+        $this->setDownPartnerBarcode(DownPartnerBarcode: $DownPartnerBarcode);
+        $this->setDownPartnerId(DownPartnerID: $DownPartnerID);
+        $this->setDownPartnerLocation(DownPartnerLocation: $DownPartnerLocation);
+        $this->setLabels(Labels: $Labels);
+        $this->setWarnings(Warnings: $Warnings);
+    }
+
+    public function getBarcode(): ?string
+    {
+        return $this->Barcode;
+    }
+
+    public function setBarcode(?string $Barcode): static
+    {
+        $this->Barcode = $Barcode;
+
+        return $this;
+    }
+
+    public function getDownPartnerBarcode(): ?string
+    {
+        return $this->DownPartnerBarcode;
+    }
+
+    public function setDownPartnerBarcode(?string $DownPartnerBarcode): static
+    {
+        $this->DownPartnerBarcode = $DownPartnerBarcode;
+
+        return $this;
+    }
+
+    public function getDownPartnerID(): ?string
+    {
+        return $this->DownPartnerID;
+    }
+
+    public function setDownPartnerID(?string $DownPartnerID): static
+    {
+        $this->DownPartnerID = $DownPartnerID;
+
+        return $this;
+    }
+
+    public function getDownPartnerLocation(): ?string
+    {
+        return $this->DownPartnerLocation;
+    }
+
+    public function setDownPartnerLocation(?string $DownPartnerLocation): static
+    {
+        $this->DownPartnerLocation = $DownPartnerLocation;
+
+        return $this;
+    }
+
+    /**
+     * @return Label[]|null
+     */
+    public function getLabels(): ?array
+    {
+        return $this->Labels;
+    }
+
+    /**
+     * @param Label[]|null $Labels
+     * @return static
+     */
+    public function setLabels(?array $Labels): static
+    {
+        $this->Labels = $Labels;
+
+        return $this;
+    }
+
+    public function getProductCodeDelivery(): ?string
+    {
+        return $this->ProductCodeDelivery;
+    }
+
+    public function setProductCodeDelivery(?string $ProductCodeDelivery): static
+    {
+        $this->ProductCodeDelivery = $ProductCodeDelivery;
+
+        return $this;
+    }
+
+    /**
+     * @return Warning[]|null
+     */
+    public function getWarnings(): ?array
+    {
+        return $this->Warnings;
+    }
+
+    /**
+     * @param Warning[]|null $Warnings
+     * @return static
+     */
+    public function setWarnings(?array $Warnings): static
+    {
+        $this->Warnings = $Warnings;
+
+        return $this;
     }
 }

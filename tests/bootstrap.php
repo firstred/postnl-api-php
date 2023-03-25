@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -29,18 +31,18 @@ use Monolog\Logger;
 
 require_once __DIR__.'/../vendor/autoload.php';
 
-error_reporting(E_ALL ^ E_DEPRECATED);
+error_reporting(error_level: E_ALL ^ E_DEPRECATED);
 
 const _RESPONSES_DIR_ = __DIR__.'/Resources/responses';
 
 global $logger;
-$logger = new Logger('postnl_test');
-$debugHandler = new StreamHandler(__DIR__.'/logs/'.date('Y-m-d H:i').'.log', Logger::DEBUG);
+$logger = new Logger(name: 'postnl_test');
+$debugHandler = new StreamHandler(stream: __DIR__.'/logs/'.date(format: 'Y-m-d H:i').'.log', level: Logger::DEBUG);
 $formatter = new Monolog\Formatter\LineFormatter(
-    null, // Format of message in log, default [%datetime%] %channel%.%level_name%: %message% %context% %extra%\n
-    null, // Datetime format
-    true, // allowInlineLineBreaks option, default false
-    true  // ignoreEmptyContextAndExtra option, default false
+    format: null, // Format of message in log, default [%datetime%] %channel%.%level_name%: %message% %context% %extra%\n
+    dateFormat: null, // Datetime format
+    allowInlineLineBreaks: true, // allowInlineLineBreaks option, default false
+    ignoreEmptyContextAndExtra: true  // ignoreEmptyContextAndExtra option, default false
 );
-$debugHandler->setFormatter($formatter);
-$logger->pushHandler($debugHandler);
+$debugHandler->setFormatter(formatter: $formatter);
+$logger->pushHandler(handler: $debugHandler);

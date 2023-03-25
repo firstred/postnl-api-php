@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!--
   ~ The MIT License (MIT).
   ~
@@ -24,23 +23,13 @@
   ~ @copyright 2017-2023 Michael Dekker
   ~ @license   https://opensource.org/licenses/MIT The MIT License
   -->
-
-<phpunit
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.5/phpunit.xsd"
-    colors="true"
-    cacheResultFile=".phpunit.cache/test-results"
-    bootstrap="tests/bootstrap.php"
->
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.0/phpunit.xsd" colors="true" bootstrap="tests/bootstrap.php" cacheDirectory=".phpunit.cache">
   <testsuites>
     <testsuite name="default">
       <directory>./tests</directory>
     </testsuite>
   </testsuites>
-  <coverage
-      cacheDirectory=".phpunit.cache/code-coverage"
-      processUncoveredFiles="true"
-  >
+  <coverage>
     <include>
       <directory suffix=".php">src</directory>
     </include>

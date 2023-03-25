@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -26,37 +27,33 @@
 
 namespace Firstred\PostNL\Tests\Misc;
 
- use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Customer;
-use Firstred\PostNL\Entity\SOAP\UsernameToken;
+use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\PostNL;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class PostNLTest.
- *
  * @testdox The PostNL object
  */
 class PostNLTest extends TestCase
 {
-    /** @var PostNL */
-    protected $postnl;
+    protected PostNL $postnl;
 
     /**
      * @before
      *
      * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \ReflectionException
      */
-    public function setupPostNL()
+    public function setupPostNL(): void
     {
         $this->postnl = new PostNL(
-            Customer::create()
-                ->setCollectionLocation('123456')
-                ->setCustomerCode('DEVC')
-                ->setCustomerNumber('11223344')
-                ->setContactPerson('Test')
-                ->setAddress(Address::create([
+            customer: Customer::create()
+                ->setCollectionLocation(CollectionLocation: '123456')
+                ->setCustomerCode(CustomerCode: 'DEVC')
+                ->setCustomerNumber(CustomerNumber: '11223344')
+                ->setContactPerson(ContactPerson: 'Test')
+                ->setAddress(Address: Address::create(properties: [
                     'AddressType' => '02',
                     'City'        => 'Hoofddorp',
                     'CompanyName' => 'PostNL',
@@ -65,10 +62,10 @@ class PostNLTest extends TestCase
                     'Street'      => 'Siriusdreef',
                     'Zipcode'     => '2132WT',
                 ]))
-                ->setGlobalPackBarcodeType('AB')
-                ->setGlobalPackCustomerCode('1234'), new UsernameToken(null, 'test'),
-            true,
-            PostNL::MODE_REST
+                ->setGlobalPackBarcodeType(GlobalPackBarcodeType: 'AB')
+                ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'), apiKey: new UsernameToken(Username: null, Password: 'test'),
+            sandbox: true,
+            mode: PostNL::MODE_Rest
         );
     }
 
@@ -78,13 +75,13 @@ class PostNLTest extends TestCase
      * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
      * @throws \Firstred\PostNL\Exception\InvalidConfigurationException
      */
-    public function testGlobalPackWithoutRange()
+    public function testGlobalPackWithoutRange(): void
     {
-        $this->expectException('\\Firstred\\PostNL\\Exception\\InvalidConfigurationException');
+        $this->expectException(exception: '\\Firstred\\PostNL\\Exception\\InvalidConfigurationException');
 
-        $this->postnl->getCustomer()->setGlobalPackCustomerCode(null);
+        $this->postnl->getCustomer()->setGlobalPackCustomerCode(GlobalPackCustomerCode: null);
 
-        $this->postnl->generateBarcodesByCountryCodes(['US' => 3]);
+        $this->postnl->generateBarcodesByCountryCodes(isos: ['US' => 3]);
     }
 
     /**
@@ -93,12 +90,12 @@ class PostNLTest extends TestCase
      * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
      * @throws \Firstred\PostNL\Exception\InvalidConfigurationException
      */
-    public function testGlobalPackWithoutType()
+    public function testGlobalPackWithoutType(): void
     {
-        $this->expectException('\\Firstred\\PostNL\\Exception\\InvalidConfigurationException');
+        $this->expectException(exception: '\\Firstred\\PostNL\\Exception\\InvalidConfigurationException');
 
-        $this->postnl->getCustomer()->setGlobalPackBarcodeType(null);
+        $this->postnl->getCustomer()->setGlobalPackBarcodeType(GlobalPackBarcodeType: null);
 
-        $this->postnl->generateBarcodesByCountryCodes(['US' => 3]);
+        $this->postnl->generateBarcodesByCountryCodes(isos: ['US' => 3]);
     }
 }

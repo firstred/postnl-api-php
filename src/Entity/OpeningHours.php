@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -27,139 +28,65 @@
 namespace Firstred\PostNL\Entity;
 
 use ArrayAccess;
+use Firstred\PostNL\Attribute\SerializableProperty;
+use Firstred\PostNL\Enum\SoapNamespace;
+use Firstred\PostNL\Exception\DeserializationException;
+use Firstred\PostNL\Exception\EntityNotFoundException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use Firstred\PostNL\Exception\NotSupportedException;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\TimeframeService;
 use Iterator;
 use RecursiveArrayIterator;
 use RecursiveIteratorIterator;
 use stdClass;
+use TypeError;
 use function is_numeric;
 use function is_string;
 
 /**
- * Class OpeningHours.
- *
- * @method array|null  getMonday()
- * @method array|null  getTuesday()
- * @method array|null  getWednesday()
- * @method array|null  getThursday()
- * @method array|null  getFriday()
- * @method array|null  getSaturday()
- * @method array|null  getSunday()
- * @method OpeningHours setMonday(string|array|null $Monday = null)
- * @method OpeningHours setTuesday(string|array|null $Tuesday = null)
- * @method OpeningHours setWednesday(string|array|null $Wednesday = null)
- * @method OpeningHours setThursday(string|array|null $Thursday = null)
- * @method OpeningHours setFriday(string|array|null $Friday = null)
- * @method OpeningHours setSaturday(string|array|null $Saturday = null)
- * @method OpeningHours setSunday(string|array|null $Sunday = null)
- *
  * @since 1.0.0
  */
 class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
 {
-    private $currentDay = 0;
+    private int $currentDay = 0;
 
-    /** @var string[][] */
-    public static $defaultProperties = [
-        'Barcode'        => [
-            'Monday'    => BarcodeService::DOMAIN_NAMESPACE,
-            'Tuesday'   => BarcodeService::DOMAIN_NAMESPACE,
-            'Wednesday' => BarcodeService::DOMAIN_NAMESPACE,
-            'Thursday'  => BarcodeService::DOMAIN_NAMESPACE,
-            'Friday'    => BarcodeService::DOMAIN_NAMESPACE,
-            'Saturday'  => BarcodeService::DOMAIN_NAMESPACE,
-            'Sunday'    => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming'     => [
-            'Monday'    => ConfirmingService::DOMAIN_NAMESPACE,
-            'Tuesday'   => ConfirmingService::DOMAIN_NAMESPACE,
-            'Wednesday' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Thursday'  => ConfirmingService::DOMAIN_NAMESPACE,
-            'Friday'    => ConfirmingService::DOMAIN_NAMESPACE,
-            'Saturday'  => ConfirmingService::DOMAIN_NAMESPACE,
-            'Sunday'    => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling'      => [
-            'Monday'    => LabellingService::DOMAIN_NAMESPACE,
-            'Tuesday'   => LabellingService::DOMAIN_NAMESPACE,
-            'Wednesday' => LabellingService::DOMAIN_NAMESPACE,
-            'Thursday'  => LabellingService::DOMAIN_NAMESPACE,
-            'Friday'    => LabellingService::DOMAIN_NAMESPACE,
-            'Saturday'  => LabellingService::DOMAIN_NAMESPACE,
-            'Sunday'    => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
-            'Monday'    => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Tuesday'   => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Wednesday' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Thursday'  => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Friday'    => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Saturday'  => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Sunday'    => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location'       => [
-            'Monday'    => LocationService::DOMAIN_NAMESPACE,
-            'Tuesday'   => LocationService::DOMAIN_NAMESPACE,
-            'Wednesday' => LocationService::DOMAIN_NAMESPACE,
-            'Thursday'  => LocationService::DOMAIN_NAMESPACE,
-            'Friday'    => LocationService::DOMAIN_NAMESPACE,
-            'Saturday'  => LocationService::DOMAIN_NAMESPACE,
-            'Sunday'    => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe'      => [
-            'Monday'    => TimeframeService::DOMAIN_NAMESPACE,
-            'Tuesday'   => TimeframeService::DOMAIN_NAMESPACE,
-            'Wednesday' => TimeframeService::DOMAIN_NAMESPACE,
-            'Thursday'  => TimeframeService::DOMAIN_NAMESPACE,
-            'Friday'    => TimeframeService::DOMAIN_NAMESPACE,
-            'Saturday'  => TimeframeService::DOMAIN_NAMESPACE,
-            'Sunday'    => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|array|null */
-    protected $Monday = null;
-    /** @var string|array|null */
-    protected $Tuesday = null;
-    /** @var string|array|null */
-    protected $Wednesday = null;
-    /** @var string|array|null */
-    protected $Thursday = null;
-    /** @var string|array|null */
-    protected $Friday = null;
-    /** @var string|array|null */
-    protected $Saturday = null;
-    /** @var string|array|null */
-    protected $Sunday = null;
-    // @codingStandardsIgnoreEnd
+    /** @var string|string[]|null */
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected string|array|null $Monday = null;
+    /** @var string|string[]|null */
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected string|array|null $Tuesday = null;
+    /** @var string|string[]|null */
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected string|array|null $Wednesday = null;
+    /** @var string|string[]|null */
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected string|array|null $Thursday = null;
+    /** @var string|string[]|null */
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected string|array|null $Friday = null;
+    /** @var string|string[]|null */
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected string|array|null $Saturday = null;
+    /** @var string|string[]|null */
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected string|array|null $Sunday = null;
 
-    /**
-     * OpeningHours constructor.
-     *
-     * @param string|array|null $Monday
-     * @param string|array|null $Tuesday
-     * @param string|array|null $Wednesday
-     * @param string|array|null $Thursday
-     * @param string|array|null $Friday
-     * @param string|array|null $Saturday
-     * @param string|array|null $Sunday
-     */
     public function __construct(
-        $Monday = null,
-        $Tuesday = null,
-        $Wednesday = null,
-        $Thursday = null,
-        $Friday = null,
-        $Saturday = null,
-        $Sunday = null
+        /** @param string|string[]|null $Monday */
+        string|array|null $Monday = null,
+        /** @param string|string[]|null $Tuesday */
+        string|array|null $Tuesday = null,
+        /** @param string|string[]|null $Wednesday */
+        string|array|null $Wednesday = null,
+        /** @param string|string[]|null $Thursday */
+        string|array|null $Thursday = null,
+        /** @param string|string[]|null $Friday */
+        string|array|null $Friday = null,
+        /** @param string|string[]|null $Saturday */
+        string|array|null $Saturday = null,
+        /** @param string|string[]|null $Sunday */
+        string|array|null $Sunday = null
     ) {
         parent::__construct();
 
@@ -173,24 +100,19 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
     }
 
     /**
-     * Deserialize opening hours
-     *
-     * @param stdClass $json
-     *
-     * @return OpeningHours
-     *
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
+     * @throws DeserializationException
+     * @throws EntityNotFoundException
      *
      * @since 1.0.0
      */
-    public static function jsonDeserialize(stdClass $json)
+    public static function jsonDeserialize(stdClass $json): static
     {
         if (!isset($json->OpeningHours)) {
-            return parent::jsonDeserialize($json);
+            return parent::jsonDeserialize(json: $json);
         }
 
-        /** @var OpeningHours $openingHours */
         $openingHours = self::create();
         foreach (
             [
@@ -208,43 +130,43 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
                 continue;
             }
 
-            if (is_array($json->OpeningHours->$day)) {
+            if (is_array(value: $json->OpeningHours->$day)) {
                 foreach ($json->OpeningHours->$day as $item) {
                     if (isset($item->string)) {
                         $openingHours->{$day}[] = $item->string;
-                    } elseif (is_string($item)) {
+                    } elseif (is_string(value: $item)) {
                         $openingHours->{$day}[] = $item;
-                    } elseif (is_array($item)) {
+                    } elseif (is_array(value: $item)) {
                         $openingHours->$day = array_merge($openingHours->$day, $item);
                     } else {
-                        throw new NotSupportedException('Unable to parse opening hours');
+                        throw new NotSupportedException(message: 'Unable to parse opening hours');
                     }
                 }
             } elseif (isset($json->OpeningHours->$day->string)) {
                 $openingHours->{$day}[] = $json->OpeningHours->$day->string;
-            } elseif (is_string($json->OpeningHours->$day)) {
+            } elseif (is_string(value: $json->OpeningHours->$day)) {
                 $openingHours->{$day}[] = $json->OpeningHours->$day;
             }
 
-            $openingHoursIterator = new RecursiveIteratorIterator(new RecursiveArrayIterator($openingHours->$day));
+            $openingHoursIterator = new RecursiveIteratorIterator(iterator: new RecursiveArrayIterator(array: $openingHours->$day));
             $newTimes = [];
             foreach ($openingHoursIterator as $time) {
-                if (!is_string($time)) {
-                    throw new NotSupportedException('Unable to parse opening hours');
+                if (!is_string(value: $time)) {
+                    throw new NotSupportedException(message: 'Unable to parse opening hours');
                 }
-                $timeParts = explode('-', $time);
-                if (2 !== count($timeParts)) {
-                    throw new NotSupportedException("Unable to handle time format $time");
+                $timeParts = explode(separator: '-', string: $time);
+                if (2 !== count(value: $timeParts)) {
+                    throw new NotSupportedException(message: "Unable to handle time format $time");
                 }
 
                 foreach ($timeParts as &$timePart) {
-                    if (preg_match('~^(([0-1][0-9]|2[0-3]):[0-5][0-9])$~', $timePart)) {
+                    if (preg_match(pattern: '~^(([0-1][0-9]|2[0-3]):[0-5][0-9])$~', subject: $timePart)) {
                         $timePart = "$timePart:00";
-                    } elseif (!preg_match('~^(([0-1][0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?)$~', $timePart)) {
-                        throw new NotSupportedException("Unable to handle time format $time");
+                    } elseif (!preg_match(pattern: '~^(([0-1][0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?)$~', subject: $timePart)) {
+                        throw new NotSupportedException(message: "Unable to handle time format $time");
                     }
                 }
-                $newTimes[] = implode('-', $timeParts);
+                $newTimes[] = implode(separator: '-', array: $timeParts);
             }
             $openingHours->$day = $newTimes;
         }
@@ -255,10 +177,10 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
     /**
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         $array = [];
-        foreach (array_keys(static::$defaultProperties['Barcode']) as $property) {
+        foreach (array_keys(array: static::$defaultProperties['Barcode']) as $property) {
             if (isset($this->$property)) {
                 $array[$property] = $this->$property;
             }
@@ -268,70 +190,58 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
     }
 
     /**
-     * @param mixed $offset
-     *
-     * @return bool
-     *
      * @since 1.2.0
      */
-    #[\ReturnTypeWillChange]
-    public function offsetExists($offset)
+    public function offsetExists(mixed $offset): bool
     {
+        if (!is_string(value: $offset)) {
+            throw new TypeError(message: 'Expected a string');
+        }
+
         // Access as $openingHours['Monday']
         return isset($this->$offset);
     }
 
     /**
-     * @param mixed $offset
-     *
-     * @return mixed
-     *
      * @throws PostNLInvalidArgumentException
      *
      * @since 1.2.0
      */
-    #[\ReturnTypeWillChange]
-    public function offsetGet($offset)
+    public function offsetGet(mixed $offset): mixed
     {
         // Always return an array when accessing this object as an array
-        if ($this->offsetExists($offset)) {
+        if ($this->offsetExists(offset: $offset)) {
             $timeframes = $this->$offset;
             if (null === $timeframes) {
                 return [];
             }
+
             return $timeframes;
         }
 
-        if (is_int($offset) || is_float($offset) || is_string($offset)) {
-            throw new InvalidArgumentException("Given offset $offset does not exist");
+        if (is_int(value: $offset) || is_float(value: $offset) || is_string(value: $offset)) {
+            throw new InvalidArgumentException(message: "Given offset $offset does not exist");
         }
 
-        throw new InvalidArgumentException("Given offset does not exist");
+        throw new InvalidArgumentException(message: "Given offset does not exist");
     }
 
     /**
-     * @param mixed $offset
-     * @param mixed $value
-     *
      * @since 1.2.0
      */
-    #[\ReturnTypeWillChange]
-    public function offsetSet($offset, $value)
+    public function offsetSet(mixed $offset, mixed $value): void
     {
-        if ($this->offsetExists($offset)) {
+        if ($this->offsetExists(offset: $offset)) {
             $this->{"set$offset"}($value);
         }
     }
 
     /**
-     * @param mixed $offset
-     *
      * @since 1.2.0
      */
-    #[\ReturnTypeWillChange]
-    public function offsetUnset($offset)
+    public function offsetUnset(mixed $offset): void
     {
-        if ($this->offsetExists($offset)) {
+        if ($this->offsetExists(offset: $offset)) {
             unset($this->$offset);
         }
     }
@@ -344,37 +254,33 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
      *
      * @since 1.2.0
      */
-    #[\ReturnTypeWillChange]
-    public function current()
+    public function current(): mixed
     {
         if (!$this->valid()) {
-            throw new InvalidArgumentException('Offset does not exist');
+            throw new InvalidArgumentException(message: 'Offset does not exist');
         }
 
-        return $this->{"get".static::findCurrentDayString($this->currentDay)}();
+        return $this->{"get".static::findCurrentDayString(currentDay: $this->currentDay)}();
     }
 
     /**
      * @since 1.2.0
      */
-    #[\ReturnTypeWillChange]
-    public function next()
+    public function next(): void
     {
         ++$this->currentDay;
     }
 
     /**
-     * @return string
-     *
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
      *
      * @since 1.2.0
      */
     #[\ReturnTypeWillChange]
-    public function key()
+    public function key(): string
     {
-        return static::findCurrentDayString($this->currentDay);
+        return static::findCurrentDayString(currentDay: $this->currentDay);
     }
 
     /**
@@ -382,15 +288,13 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
      *
      * @since 1.2.0
      */
-    #[\ReturnTypeWillChange]
-    public function valid()
+    public function valid(): bool
     {
         try {
-            static::findCurrentDayString($this->currentDay);
+            static::findCurrentDayString(currentDay: $this->currentDay);
+
             return true;
-        } catch (InvalidArgumentException $e) {
-            return false;
-        } catch (NotSupportedException $e) {
+        } catch (InvalidArgumentException|NotSupportedException) {
             return false;
         }
     }
@@ -405,25 +309,21 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
     }
 
     /**
-     * @param mixed $currentDay
-     *
-     * @return string
-     *
      * @throws NotSupportedException
      * @throws InvalidArgumentException
      *
      * @since 1.2.0
      */
-    private static function findCurrentDayString($currentDay)
+    private static function findCurrentDayString(string|int $currentDay): string
     {
-        if (!is_numeric($currentDay)) {
-            throw new NotSupportedException("Given current day is not a number");
+        if (!is_numeric(value: $currentDay)) {
+            throw new NotSupportedException(message: "Given current day is not a number");
         }
 
-        $days = array_keys(static::$defaultProperties['Barcode']);
+        $days = array_keys(array: static::$defaultProperties['Barcode']);
 
         if (!isset($days)) {
-            throw new InvalidArgumentException('Invalid current day offset');
+            throw new InvalidArgumentException(message: 'Invalid current day offset');
         }
 
         return $days[$currentDay];

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -26,73 +27,49 @@
 
 namespace Firstred\PostNL\Entity;
 
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingService;
-use Firstred\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Attribute\SerializableProperty;
+use Firstred\PostNL\Enum\SoapNamespace;
 
 /**
- * Class ProductOption.
- *
- * @method string|null   getCharacteristic()
- * @method string|null   getOption()
- * @method ProductOption setCharacteristic(string|null $Characteristic = null)
- * @method ProductOption setOption(string|null $Option = null)
- *
  * @since 1.0.0
  */
 class ProductOption extends AbstractEntity
 {
-    /** @var string[][] */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'Characteristic' => BarcodeService::DOMAIN_NAMESPACE,
-            'Option'         => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'Characteristic' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Option'         => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'Characteristic' => LabellingService::DOMAIN_NAMESPACE,
-            'Option'         => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'Characteristic' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Option'         => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'Characteristic' => LocationService::DOMAIN_NAMESPACE,
-            'Option'         => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'Characteristic' => TimeframeService::DOMAIN_NAMESPACE,
-            'Option'         => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-        'Shipping' => [
-            'Characteristic' => ShippingService::DOMAIN_NAMESPACE,
-            'Option'         => ShippingService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null */
-    protected $Characteristic;
-    /** @var string|null */
-    protected $Option;
-    // @codingStandardsIgnoreEnd
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $Characteristic = null;
 
-    /**
-     * @param string|null $Characteristic
-     * @param string|null $Option
-     */
-    public function __construct($Characteristic = null, $Option = null)
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $Option = null;
+
+    public function __construct(?string $Characteristic = null, ?string $Option = null)
     {
         parent::__construct();
 
-        $this->setCharacteristic($Characteristic);
-        $this->setOption($Option);
+        $this->setCharacteristic(Characteristic: $Characteristic);
+        $this->setOption(Option: $Option);
+    }
+
+    public function getCharacteristic(): ?string
+    {
+        return $this->Characteristic;
+    }
+
+    public function setCharacteristic(?string $Characteristic): static
+    {
+        $this->Characteristic = $Characteristic;
+
+        return $this;
+    }
+
+    public function getOption(): ?string
+    {
+        return $this->Option;
+    }
+
+    public function setOption(?string $Option): static
+    {
+        $this->Option = $Option;
+
+        return $this;
     }
 }

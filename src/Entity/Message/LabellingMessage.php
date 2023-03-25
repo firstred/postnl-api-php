@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -27,87 +28,40 @@
 namespace Firstred\PostNL\Entity\Message;
 
 use DateTimeInterface;
+use Firstred\PostNL\Attribute\SerializableProperty;
+use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingService;
-use Firstred\PostNL\Service\TimeframeService;
 
 /**
- * Class LabellingMessage.
- *
- * @method string|null            getMessageID()
- * @method DateTimeInterface|null getMessageTimeStamp()
- * @method string|null            getPrinterType()
- * @method Message                setMessageID(string|null $MessageID = null)
- * @method Message                setPrinterType(string|null $Printertype = null)
- *
  * @since 1.0.0
  */
 class LabellingMessage extends Message
 {
-    /** @var string[][] */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'MessageID'        => BarcodeService::DOMAIN_NAMESPACE,
-            'MessageTimeStamp' => BarcodeService::DOMAIN_NAMESPACE,
-            'Printertype'      => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'MessageID'        => ConfirmingService::DOMAIN_NAMESPACE,
-            'MessageTimeStamp' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Printertype'      => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'MessageID'        => LabellingService::DOMAIN_NAMESPACE,
-            'MessageTimeStamp' => LabellingService::DOMAIN_NAMESPACE,
-            'Printertype'      => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'MessageID'        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'MessageTimeStamp' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Printertype'      => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'MessageID'        => LocationService::DOMAIN_NAMESPACE,
-            'MessageTimeStamp' => LocationService::DOMAIN_NAMESPACE,
-            'Printertype'      => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'MessageID'        => TimeframeService::DOMAIN_NAMESPACE,
-            'MessageTimeStamp' => TimeframeService::DOMAIN_NAMESPACE,
-            'Printertype'      => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-        'Shipping' => [
-            'MessageID'        => ShippingService::DOMAIN_NAMESPACE,
-            'MessageTimeStamp' => ShippingService::DOMAIN_NAMESPACE,
-            'Printertype'      => ShippingService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    /**
-     * @var string|null
-     */
-    protected $Printertype;
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $Printertype = null;
 
     /**
-     * LabellingMessage constructor.
-     *
-     * @param string|null                   $Printertype
-     * @param string|null                   $MessageID
-     * @param string|DateTimeInterface|null $MessageTimeStamp
-     *
      * @throws InvalidArgumentException
      */
     public function __construct(
-        $Printertype = 'GraphicFile|PDF',
-        $MessageID = null,
-        $MessageTimeStamp = null
+        ?string                       $Printertype = 'GraphicFile|PDF',
+        ?string                       $MessageID = null,
+        string|DateTimeInterface|null $MessageTimeStamp = null
     ) {
-        parent::__construct($MessageID, $MessageTimeStamp);
+        parent::__construct(MessageID: $MessageID, MessageTimeStamp: $MessageTimeStamp);
 
-        $this->setPrintertype($Printertype);
+        $this->setPrintertype(Printertype: $Printertype);
+    }
+
+    public function getPrintertype(): ?string
+    {
+        return $this->Printertype;
+    }
+
+    public function setPrintertype(?string $Printertype): static
+    {
+        $this->Printertype = $Printertype;
+
+        return $this;
     }
 }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -30,42 +31,25 @@ use Exception;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * Class HttpClientException
- *
  * @since 1.0.0
  */
 class HttpClientException extends PostNLException
 {
-    /** @var ResponseInterface */
-    private $response;
+    private ResponseInterface $response;
 
-    /**
-     * ResponseException constructor.
-     *
-     * @param string                 $message
-     * @param int                    $code
-     * @param Exception|null         $previous
-     * @param ResponseInterface|null $response
-     */
-    public function __construct($message = '', $code = 0, $previous = null, ResponseInterface $response = null)
+    public function __construct(string $message = '', int $code = 0, ?Exception $previous = null, ResponseInterface $response = null)
     {
-        parent::__construct($message, $code, $previous);
+        parent::__construct(message: $message, code: $code, previous: $previous);
 
         $this->response = $response;
     }
 
-    /**
-     * @param ResponseInterface $response
-     */
     public function setResponse(ResponseInterface $response)
     {
         $this->response = $response;
     }
 
-    /**
-     * @return ResponseInterface
-     */
-    public function getResponse()
+    public function getResponse(): ResponseInterface
     {
         return $this->response;
     }

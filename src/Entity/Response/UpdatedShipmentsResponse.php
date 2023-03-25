@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -30,139 +31,117 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use Exception;
+use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Status;
+use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\TimeframeService;
 
 /**
- * Class CompleteStatusResponse.
- *
- * @method string|null              getBarcode()
- * @method DateTimeInterface|null   getCreationDate()
- * @method string|null              getCustomerNumber()
- * @method string|null              getCustomerCode()
- * @method Status|null              getStatus()
- * @method UpdatedShipmentsResponse setBarcode(string $Barcode = null)
- * @method UpdatedShipmentsResponse setCustomerNumber(string $CustomerNumber = null)
- * @method UpdatedShipmentsResponse setCustomerCode(string $CustomerCode = null)
- * @method UpdatedShipmentsResponse setStatus(Status $Status = null)
- *
  * @since 1.2.0
  */
 class UpdatedShipmentsResponse extends AbstractEntity
 {
-    /**
-     * Default properties and namespaces for the SOAP API.
-     *
-     * @var array
-     */
-    public static $defaultProperties = [
-        'Barcode'        => [
-            'Barcode'        => BarcodeService::DOMAIN_NAMESPACE,
-            'CreationDate'   => BarcodeService::DOMAIN_NAMESPACE,
-            'CustomerNumber' => BarcodeService::DOMAIN_NAMESPACE,
-            'CustomerCode'   => BarcodeService::DOMAIN_NAMESPACE,
-            'Status'         => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming'     => [
-            'Barcode'        => ConfirmingService::DOMAIN_NAMESPACE,
-            'CreationDate'   => ConfirmingService::DOMAIN_NAMESPACE,
-            'CustomerNumber' => ConfirmingService::DOMAIN_NAMESPACE,
-            'CustomerCode'   => ConfirmingService::DOMAIN_NAMESPACE,
-            'Status'         => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling'      => [
-            'Barcode'        => LabellingService::DOMAIN_NAMESPACE,
-            'CreationDate'   => LabellingService::DOMAIN_NAMESPACE,
-            'CustomerNumber' => LabellingService::DOMAIN_NAMESPACE,
-            'CustomerCode'   => LabellingService::DOMAIN_NAMESPACE,
-            'Status'         => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
-            'Barcode'        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'CreationDate'   => DeliveryDateService::DOMAIN_NAMESPACE,
-            'CustomerNumber' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'CustomerCode'   => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Status'         => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location'       => [
-            'Barcode'        => LocationService::DOMAIN_NAMESPACE,
-            'CreationDate'   => LocationService::DOMAIN_NAMESPACE,
-            'CustomerNumber' => LocationService::DOMAIN_NAMESPACE,
-            'CustomerCode'   => LocationService::DOMAIN_NAMESPACE,
-            'Status'         => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe'      => [
-            'Barcode'        => TimeframeService::DOMAIN_NAMESPACE,
-            'CreationDate'   => TimeframeService::DOMAIN_NAMESPACE,
-            'CustomerNumber' => TimeframeService::DOMAIN_NAMESPACE,
-            'CustomerCode'   => TimeframeService::DOMAIN_NAMESPACE,
-            'Status'         => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null */
-    protected $Barcode;
-    /** @var DateTimeInterface|null */
-    protected $CreationDate;
-    /** @var string|null */
-    protected $CustomerNumber;
-    /** @var string|null */
-    protected $CustomerCode;
-    /** @var Status|null */
-    protected $Status;
-    // @codingStandardsIgnoreEnd
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $Barcode = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?DateTimeInterface $CreationDate = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $CustomerNumber = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $CustomerCode = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?Status $Status = null;
 
 
     /**
-     * UpdatedShipmentsResponse constructor.
-     *
-     * @param string|null $Barcode
-     * @param string|DateTimeInterface|null $CreationDate
-     * @param string|null $CustomerNumber
-     * @param string|null $CustomerCode
-     * @param Status|null $Status
-     *
      * @throws InvalidArgumentException
      */
     public function __construct(
-        $Barcode = null,
-        $CreationDate = null,
-        $CustomerNumber = null,
-        $CustomerCode = null,
-        $Status = null
+        ?string                       $Barcode = null,
+        string|DateTimeInterface|null $CreationDate = null,
+        ?string                       $CustomerNumber = null,
+        ?string                       $CustomerCode = null,
+        ?string                       $Status = null
     ) {
         parent::__construct();
 
-        $this->setBarcode($Barcode);
-        $this->setCreationDate($CreationDate);
-        $this->setCustomerNumber($CustomerNumber);
-        $this->setCustomerCode($CustomerCode);
-        $this->setStatus($Status);
+        $this->setBarcode(Barcode: $Barcode);
+        $this->setCreationDate(CreationDate: $CreationDate);
+        $this->setCustomerNumber(CustomerNumber: $CustomerNumber);
+        $this->setCustomerCode(CustomerCode: $CustomerCode);
+        $this->setStatus(Status: $Status);
+    }
+
+    public function getBarcode(): ?string
+    {
+        return $this->Barcode;
+    }
+
+    public function setBarcode(?string $Barcode): static
+    {
+        $this->Barcode = $Barcode;
+
+        return $this;
+    }
+
+    public function getCustomerNumber(): ?string
+    {
+        return $this->CustomerNumber;
+    }
+
+    public function setCustomerNumber(?string $CustomerNumber): static
+    {
+        $this->CustomerNumber = $CustomerNumber;
+
+        return $this;
+    }
+
+    public function getCustomerCode(): ?string
+    {
+        return $this->CustomerCode;
+    }
+
+    public function setCustomerCode(?string $CustomerCode): static
+    {
+        $this->CustomerCode = $CustomerCode;
+
+        return $this;
+    }
+
+    public function getStatus(): ?Status
+    {
+        return $this->Status;
+    }
+
+    public function setStatus(?Status $Status): static
+    {
+        $this->Status = $Status;
+
+        return $this;
+    }
+
+    public function getCreationDate(): ?DateTimeInterface
+    {
+        return $this->CreationDate;
     }
 
     /**
-     * @param string|DateTimeInterface|null $CreationDate
-     *
-     * @return static
-     *
      * @throws InvalidArgumentException
      *
      * @since 1.2.0
      */
-    public function setCreationDate($CreationDate = null)
+    public function setCreationDate(string|DateTimeInterface|null $CreationDate = null): static
     {
-        if (is_string($CreationDate)) {
+        if (is_string(value: $CreationDate)) {
             try {
-                $CreationDate = new DateTimeImmutable($CreationDate, new DateTimeZone('Europe/Amsterdam'));
+                $CreationDate = new DateTimeImmutable(datetime: $CreationDate, timezone: new DateTimeZone(timezone: 'Europe/Amsterdam'));
             } catch (Exception $e) {
-                throw new InvalidArgumentException($e->getMessage(), 0, $e);
+                throw new InvalidArgumentException(message: $e->getMessage(), code: 0, previous: $e);
             }
         }
 

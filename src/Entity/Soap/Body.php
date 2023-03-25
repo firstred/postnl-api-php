@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -24,49 +25,32 @@
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace Firstred\PostNL\Entity\SOAP;
+namespace Firstred\PostNL\Entity\Soap;
 
+use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Response\GenerateBarcodeResponse;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\LabellingService;
+use Firstred\PostNL\Enum\SoapNamespace;
 
 /**
- * Class Body.
- *
  * NOTE: this class has been introduced for deserializing
  *
  * @since 1.0.0
  */
 class Body extends AbstractEntity
 {
-    /** @var array */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'GenerateBarcodeResponse' => BarcodeService::ENVELOPE_NAMESPACE,
-        ],
-        'Confirming' => [
-            'GenerateBarcodeResponse' => ConfirmingService::ENVELOPE_NAMESPACE,
-        ],
-        'Labelling' => [
-            'GenerateBarcodeResponse' => LabellingService::ENVELOPE_NAMESPACE,
-        ],
-        'ShippingStatus' => [
-            'GenerateBarcodeResponse' => LabellingService::ENVELOPE_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'GenerateBarcodeResponse' => LabellingService::ENVELOPE_NAMESPACE,
-        ],
-        'Location' => [
-            'GenerateBarcodeResponse' => LabellingService::ENVELOPE_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'GenerateBarcodeResponse' => LabellingService::ENVELOPE_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var GenerateBarcodeResponse|null */
-    protected $GenerateBarcodeResponse;
-    // @codingStandardsIgnoreEnd
+    #[SerializableProperty(namespace: SoapNamespace::Envelope)]
+    protected ?GenerateBarcodeResponse $GenerateBarcodeResponse = null;
+
+    public function getGenerateBarcodeResponse(): ?GenerateBarcodeResponse
+    {
+        return $this->GenerateBarcodeResponse;
+    }
+
+    public function setGenerateBarcodeResponse(?GenerateBarcodeResponse $GenerateBarcodeResponse): static
+    {
+        $this->GenerateBarcodeResponse = $GenerateBarcodeResponse;
+
+        return $this;
+    }
 }

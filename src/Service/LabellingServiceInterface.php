@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -26,6 +27,7 @@
 
 namespace Firstred\PostNL\Service;
 
+use Firstred\PostNL\Entity\Request\GenerateBarcode;
 use Firstred\PostNL\Entity\Request\GenerateLabel;
 use Firstred\PostNL\Entity\Response\GenerateLabelResponse;
 use Firstred\PostNL\Exception\CifDownException;
@@ -40,24 +42,14 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * Class LabellingService.
- *
- * @method GenerateLabelResponse   generateLabel(GenerateLabel $generateLabel, bool $confirm)
- * @method RequestInterface        buildGenerateLabelRequest(GenerateLabel $generateLabel, bool $confirm)
- * @method GenerateLabelResponse   processGenerateLabelResponse(mixed $response)
- * @method GenerateLabelResponse[] generateLabels(GenerateLabel[] $generateLabel, bool $confirm)
- *
  * @since 1.2.0
  */
 interface LabellingServiceInterface extends ServiceInterface
 {
+    public const DEFAULT_VERSION = '2.2';
+
     /**
      * Generate a single barcode via REST.
-     *
-     * @param GenerateLabel $generateLabel
-     * @param bool          $confirm
-     *
-     * @return GenerateLabelResponse
      *
      * @throws CifDownException
      * @throws CifException
@@ -70,14 +62,12 @@ interface LabellingServiceInterface extends ServiceInterface
      *
      * @since 1.0.0
      */
-    public function generateLabelREST(GenerateLabel $generateLabel, $confirm = true);
+    public function generateLabel(GenerateLabel $generateLabel, bool $confirm = true): GenerateLabelResponse;
 
     /**
      * Generate multiple labels at once.
      *
-     * @param array $generateLabels ['uuid' => [GenerateBarcode, confirm], ...]
-     *
-     * @return array
+     * @phpstan-param array<int, array<GenerateBarcode, bool>> $generateLabels
      *
      * @throws HttpClientException
      * @throws NotSupportedException
@@ -87,94 +77,5 @@ interface LabellingServiceInterface extends ServiceInterface
      *
      * @since 1.0.0
      */
-    public function generateLabelsREST(array $generateLabels);
-
-    /**
-     * Generate a single label via SOAP.
-     *
-     * @param GenerateLabel $generateLabel
-     * @param bool          $confirm
-     *
-     * @return GenerateLabelResponse
-     *
-     * @throws CifDownException
-     * @throws CifException
-     * @throws ResponseException
-     * @throws PsrCacheInvalidArgumentException
-     * @throws HttpClientException
-     *
-     * @since 1.0.0
-     */
-    public function generateLabelSOAP(GenerateLabel $generateLabel, $confirm = true);
-
-    /**
-     * Generate multiple labels at once via SOAP.
-     *
-     * @param array $generateLabels ['uuid' => [GenerateBarcode, confirm], ...]
-     *
-     * @return array
-     *
-     * @throws CifDownException
-     * @throws CifException
-     * @throws HttpClientException
-     * @throws PsrCacheInvalidArgumentException
-     * @throws ResponseException
-     *
-     * @since 1.0.0
-     */
-    public function generateLabelsSOAP(array $generateLabels);
-
-    /**
-     * Build the GenerateLabel request for the REST API.
-     *
-     * @param GenerateLabel $generateLabel
-     * @param bool          $confirm
-     *
-     * @return RequestInterface
-     *
-     * @since 1.0.0
-     */
-    public function buildGenerateLabelRequestREST(GenerateLabel $generateLabel, $confirm = true);
-
-    /**
-     * Process the GenerateLabel REST Response.
-     *
-     * @param ResponseInterface $response
-     *
-     * @return GenerateLabelResponse|null
-     *
-     * @throws ResponseException
-     * @throws HttpClientException
-     * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
-     *
-     * @since 1.0.0
-     */
-    public function processGenerateLabelResponseREST($response);
-
-    /**
-     * Build the GenerateLabel request for the SOAP API.
-     *
-     * @param GenerateLabel $generateLabel
-     * @param bool          $confirm
-     *
-     * @return RequestInterface
-     *
-     * @since 1.0.0
-     */
-    public function buildGenerateLabelRequestSOAP(GenerateLabel $generateLabel, $confirm = true);
-
-    /**
-     * @param ResponseInterface $response
-     *
-     * @return GenerateLabelResponse
-     *
-     * @throws CifDownException
-     * @throws CifException
-     * @throws ResponseException
-     * @throws HttpClientException
-     *
-     * @since 1.0.0
-     */
-    public function processGenerateLabelResponseSOAP(ResponseInterface $response);
+    public function generateLabels(array $generateLabels): array;
 }

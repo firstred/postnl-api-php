@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -26,10 +27,16 @@
 
 namespace Firstred\PostNL\Tests\Misc;
 
+use Firstred\PostNL\Enum\PostNLApiMode;
+use Firstred\PostNL\Exception\CifDownException;
+use Firstred\PostNL\Exception\CifException;
+use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
+use Firstred\PostNL\Exception\ResponseException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
- use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\CutOffTime;
@@ -40,37 +47,34 @@ use Firstred\PostNL\Entity\Request\GetTimeframes;
 use Firstred\PostNL\Entity\Response\GetDeliveryDateResponse;
 use Firstred\PostNL\Entity\Response\GetNearestLocationsResponse;
 use Firstred\PostNL\Entity\Response\ResponseTimeframes;
-use Firstred\PostNL\Entity\SOAP\UsernameToken;
+use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\Entity\Timeframe;
-use Firstred\PostNL\HttpClient\MockClient;
+use Firstred\PostNL\HttpClient\MockHttpClient;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Util\DummyLogger;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class PostNLRestTest.
- *
  * @testdox The PostNL object
  */
 class PostNLRestTest extends TestCase
 {
-    /** @var PostNL */
-    protected $postnl;
+    protected PostNL $postnl;
 
     /**
      * @before
      *
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \ReflectionException
+     * @throws
      */
-    public function setupPostNL()
+    public function setupPostNL(): void
     {
         $this->postnl = new PostNL(
-            Customer::create()
-                ->setCollectionLocation('123456')
-                ->setCustomerCode('DEVC')
-                ->setCustomerNumber('11223344')
-                ->setContactPerson('Test')
-                ->setAddress(Address::create([
+            customer: Customer::create()
+                ->setCollectionLocation(CollectionLocation: '123456')
+                ->setCustomerCode(CustomerCode: 'DEVC')
+                ->setCustomerNumber(CustomerNumber: '11223344')
+                ->setContactPerson(ContactPerson: 'Test')
+                ->setAddress(Address: Address::create(properties: [
                     'AddressType' => '02',
                     'City'        => 'Hoofddorp',
                     'CompanyName' => 'PostNL',
@@ -79,27 +83,27 @@ class PostNLRestTest extends TestCase
                     'Street'      => 'Siriusdreef',
                     'Zipcode'     => '2132WT',
                 ]))
-                ->setGlobalPackBarcodeType('AB')
-                ->setGlobalPackCustomerCode('1234'), new UsernameToken(null, 'test'),
-            true,
-            PostNL::MODE_REST
+                ->setGlobalPackBarcodeType(GlobalPackBarcodeType: 'AB')
+                ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'), apiKey: new UsernameToken(Username: null, Password: 'test'),
+            sandbox: true,
+            mode: PostNLApiMode::Rest,
         );
     }
 
     /**
      * @testdox returns a valid customer code in REST mode
      */
-    public function testPostNLRest()
+    public function testPostNLRest(): void
     {
-        $this->assertEquals('DEVC', $this->postnl->getCustomer()->getCustomerCode());
+        $this->assertEquals(expected: 'DEVC', actual: $this->postnl->getCustomer()->getCustomerCode());
     }
 
     /**
      * @testdox returns a valid customer
      */
-    public function testCustomer()
+    public function testCustomer(): void
     {
-        $this->assertInstanceOf('\\Firstred\\PostNL\\Entity\\Customer', $this->postnl->getCustomer());
+        $this->assertInstanceOf(expected: '\\Firstred\\PostNL\\Entity\\Customer', actual: $this->postnl->getCustomer());
     }
 
     /**
@@ -107,10 +111,10 @@ class PostNLRestTest extends TestCase
      *
      * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      */
-    public function testSetTokenString()
+    public function testSetTokenString(): void
     {
-        $this->postnl->setToken('test');
-        $this->assertInstanceOf('\\Firstred\\PostNL\\Entity\\SOAP\\UsernameToken', $this->postnl->getToken());
+        $this->postnl->setToken(apiKey: 'test');
+        $this->assertInstanceOf(expected: UsernameToken::class, actual: $this->postnl->getToken());
     }
 
     /**
@@ -118,31 +122,34 @@ class PostNLRestTest extends TestCase
      *
      * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      */
-    public function testSetTokenObject()
+    public function testSetTokenObject(): void
     {
-        $this->postnl->setToken(new UsernameToken(null, 'test'));
-        $this->assertInstanceOf(UsernameToken::class, $this->postnl->getToken());
+        $this->postnl->setToken(apiKey: new UsernameToken(Username: null, Password: 'test'));
+        $this->assertInstanceOf(expected: UsernameToken::class, actual: $this->postnl->getToken());
     }
 
     /**
      * @testdox accepts a `null` logger
      */
-    public function testSetNullLogger()
+    public function testSetNullLogger(): void
     {
         $this->postnl->resetLogger();
 
-        $this->assertInstanceOf(DummyLogger::class, $this->postnl->getLogger());
+        $this->assertInstanceOf(expected: DummyLogger::class, actual: $this->postnl->getLogger());
     }
 
     /**
      * @testdox returns a combinations of timeframes, locations and the delivery date
      *
+     * @throws CifDownException
+     * @throws CifException
+     * @throws HttpClientException
+     * @throws InvalidArgumentException
+     * @throws InvalidConfigurationException
+     * @throws ResponseException
      * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \Firstred\PostNL\Exception\HttpClientException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \ReflectionException
      */
-    public function testGetTimeframesAndLocations()
+    public function testGetTimeframesAndLocations(): void
     {
         $timeframesPayload = [
             'ReasonNotimeframes' => [
@@ -313,7 +320,7 @@ class PostNLRestTest extends TestCase
                 ],
             ],
         ];
-        $locationsPayload = json_decode($this->getNearestLocationsMockResponse());
+        $locationsPayload = json_decode(json: $this->getNearestLocationsMockResponse());
         $deliveryDatePayload = [
             'DeliveryDate' => '30-06-2016',
             'Options'      => [
@@ -321,36 +328,36 @@ class PostNLRestTest extends TestCase
             ],
         ];
 
-        $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode($timeframesPayload)),
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode($locationsPayload)),
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], json_encode($deliveryDatePayload)),
+        $mock = new MockHandler(queue: [
+            new Response(status: 200, headers: ['Content-Type' => 'application/json;charset=UTF-8'], body: json_encode(value: $timeframesPayload)),
+            new Response(status: 200, headers: ['Content-Type' => 'application/json;charset=UTF-8'], body: json_encode(value: $locationsPayload)),
+            new Response(status: 200, headers: ['Content-Type' => 'application/json;charset=UTF-8'], body: json_encode(value: $deliveryDatePayload)),
         ]);
-        $handler = HandlerStack::create($mock);
-        $mockClient = new MockClient();
-        $mockClient->setHandler($handler);
-        $this->postnl->setHttpClient($mockClient);
+        $handler = HandlerStack::create(handler: $mock);
+        $mockClient = new MockHttpClient();
+        $mockClient->setHandler(handler: $handler);
+        $this->postnl->setHttpClient(httpClient: $mockClient);
 
         $results = $this->postnl->getTimeframesAndNearestLocations(
-            (new GetTimeframes())
-                ->setTimeframe([
+            getTimeframes: (new GetTimeframes())
+                ->setTimeframe(timeframes: [
                     (new Timeframe())
-                        ->setCity('Hoofddorp')
-                        ->setCountryCode('NL')
-                        ->setEndDate('02-07-2016')
-                        ->setHouseNr('42')
-                        ->setHouseNrExt('A')
-                        ->setOptions([
+                        ->setCity(City: 'Hoofddorp')
+                        ->setCountryCode(CountryCode: 'NL')
+                        ->setEndDate(EndDate: '02-07-2016')
+                        ->setHouseNr(HouseNr: '42')
+                        ->setHouseNrExt(HouseNrExt: 'A')
+                        ->setOptions(Options: [
                             'Evening',
                         ])
-                        ->setPostalCode('2132WT')
-                        ->setStartDate('30-06-2016')
-                        ->setStreet('Siriusdreef')
-                        ->setSundaySorting(false),
+                        ->setPostalCode(PostalCode: '2132WT')
+                        ->setStartDate(StartDate: '30-06-2016')
+                        ->setStreet(Street: 'Siriusdreef')
+                        ->setSundaySorting(SundaySorting: false),
                 ]),
-            (new GetNearestLocations())
-                ->setCountrycode('NL')
-                ->setLocation(Location::create([
+            getNearestLocations: (new GetNearestLocations())
+                ->setCountrycode(Countrycode: 'NL')
+                ->setLocation(Location: Location::create(properties: [
                     'AllowSundaySorting' => true,
                     'DeliveryDate'       => '29-06-2016',
                     'DeliveryOptions'    => [
@@ -366,31 +373,31 @@ class PostNLRestTest extends TestCase
                     'Postalcode' => '2132WT',
                     'Street'     => 'Siriusdreef',
                 ])),
-            (new GetDeliveryDate())
+            getDeliveryDate: (new GetDeliveryDate())
                 ->setGetDeliveryDate(
-                    (new GetDeliveryDate())
-                        ->setAllowSundaySorting(false)
-                        ->setCity('Hoofddorp')
-                        ->setCountryCode('NL')
-                        ->setCutOffTimes([
-                            new CutOffTime('00', '14:00:00'),
+                    GetDeliveryDate: (new GetDeliveryDate())
+                        ->setAllowSundaySorting(AllowSundaySorting: false)
+                        ->setCity(City: 'Hoofddorp')
+                        ->setCountryCode(CountryCode: 'NL')
+                        ->setCutOffTimes(CutOffTimes: [
+                            new CutOffTime(Day: '00', Time: '14:00:00'),
                         ])
-                        ->setHouseNr('42')
-                        ->setHouseNrExt('A')
-                        ->setOptions([
+                        ->setHouseNr(HouseNr: '42')
+                        ->setHouseNrExt(HouseNrExt: 'A')
+                        ->setOptions(Options: [
                             'Daytime',
                         ])
-                        ->setPostalCode('2132WT')
-                        ->setShippingDate('29-06-2016 14:00:00')
-                        ->setShippingDuration('1')
-                        ->setStreet('Siriusdreef')
+                        ->setPostalCode(PostalCode: '2132WT')
+                        ->setShippingDate(shippingDate: '29-06-2016 14:00:00')
+                        ->setShippingDuration(ShippingDuration: '1')
+                        ->setStreet(Street: 'Siriusdreef')
                 )
         );
 
-        $this->assertTrue(is_array($results));
-        $this->assertInstanceOf(ResponseTimeframes::class, $results['timeframes']);
-        $this->assertInstanceOf(GetNearestLocationsResponse::class, $results['locations']);
-        $this->assertInstanceOf(GetDeliveryDateResponse::class, $results['delivery_date']);
+        $this->assertTrue(condition: is_array(value: $results));
+        $this->assertInstanceOf(expected: ResponseTimeframes::class, actual: $results['timeframes']);
+        $this->assertInstanceOf(expected: GetNearestLocationsResponse::class, actual: $results['locations']);
+        $this->assertInstanceOf(expected: GetDeliveryDateResponse::class, actual: $results['delivery_date']);
     }
 
     /**
@@ -398,10 +405,11 @@ class PostNLRestTest extends TestCase
      *
      * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      */
-    public function testNegativeInvalidToken()
+    public function testNegativeInvalidToken(): void
     {
-        $this->expectException('\\Firstred\\PostNL\\Exception\\InvalidArgumentException');
-        $this->postnl->setToken(new Address());
+        $this->expectException(exception: \TypeError::class);
+        /** @noinspection PhpParamsInspection */
+        $this->postnl->setToken(apiKey: new Address());
     }
 
     /**
@@ -409,13 +417,15 @@ class PostNLRestTest extends TestCase
      *
      * @throws \ReflectionException
      */
-    public function testNegativeKeyMissing()
+    public function testNegativeKeyMissing(): void
     {
-        $reflection = new \ReflectionClass('\\Firstred\\PostNL\\PostNL');
+        $this->expectException(exception: InvalidArgumentException::class);
+
+        $reflection = new \ReflectionClass(objectOrClass: PostNL::class);
         /** @var PostNL $postnl */
         $postnl = $reflection->newInstanceWithoutConstructor();
 
-        $this->assertFalse($postnl->getRestApiKey());
+        $postnl->getApiKey();
     }
 
     /**
@@ -423,16 +433,17 @@ class PostNLRestTest extends TestCase
      *
      * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      */
-    public function testNegativeInvalidMode()
+    public function testNegativeInvalidMode(): void
     {
-        $this->expectException('\\Firstred\\PostNL\\Exception\\InvalidArgumentException');
+        $this->expectException(exception: \TypeError::class);
 
-        $this->postnl->setMode('invalid');
+        /** @noinspection PhpStrictTypeCheckingInspection */
+        $this->postnl->setAPIMode(mode: 'invalid');
     }
 
-    protected function getNearestLocationsMockResponse()
+    protected function getNearestLocationsMockResponse(): string
     {
-        return $json = '{
+        return '{
   "GetLocationsResult": {
     "ResponseLocation": [
       {

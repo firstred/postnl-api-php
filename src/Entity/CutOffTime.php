@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -26,96 +27,74 @@
 
 namespace Firstred\PostNL\Entity;
 
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Attribute\SerializableProperty;
+use Firstred\PostNL\Enum\SoapNamespace;
 use Sabre\Xml\Writer;
 
 /**
- * Class CutOffTime.
- *
- * @method string|null getDay()
- * @method string|null getTime()
- * @method bool|null   getAvailable()
- * @method CutOffTime  setDay(string|null $Day = null)
- * @method CutOffTime  setTime(string|null $Time = null)
- * @method CutOffTime  setAvailable(bool|null $Available = null)
- *
  * @since 1.0.0
  */
 class CutOffTime extends AbstractEntity
 {
-    /** @var string[][] */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'Day'       => BarcodeService::DOMAIN_NAMESPACE,
-            'Time'      => BarcodeService::DOMAIN_NAMESPACE,
-            'Available' => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'Day'       => ConfirmingService::DOMAIN_NAMESPACE,
-            'Time'      => ConfirmingService::DOMAIN_NAMESPACE,
-            'Available' => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'Day'       => LabellingService::DOMAIN_NAMESPACE,
-            'Time'      => LabellingService::DOMAIN_NAMESPACE,
-            'Available' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'Day'       => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Time'      => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Available' => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'Day'       => LocationService::DOMAIN_NAMESPACE,
-            'Time'      => LocationService::DOMAIN_NAMESPACE,
-            'Available' => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'Day'       => TimeframeService::DOMAIN_NAMESPACE,
-            'Time'      => TimeframeService::DOMAIN_NAMESPACE,
-            'Available' => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null */
-    protected $Day;
-    /** @var string|null */
-    protected $Time;
-    /** @var bool|null */
-    protected $Available;
-    // @codingStandardsIgnoreEnd
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $Day = null;
 
-    /**
-     * @param string $Day
-     * @param string $Time
-     * @param bool   $Available
-     */
-    public function __construct($Day = null, $Time = null, $Available = null)
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $Time = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?bool $Available = null;
+
+    public function __construct(?string $Day = null, ?string $Time = null, ?bool $Available = null)
     {
         parent::__construct();
 
-        $this->setDay($Day);
-        $this->setTime($Time);
-        $this->setAvailable($Available);
+        $this->setDay(Day: $Day);
+        $this->setTime(Time: $Time);
+        $this->setAvailable(Available: $Available);
     }
 
-    /**
-     * Return a serializable array for the XMLWriter.
-     *
-     * @param Writer $writer
-     *
-     * @return void
-     */
-    public function xmlSerialize(Writer $writer)
+    public function getDay(): ?string
+    {
+        return $this->Day;
+    }
+
+    public function setDay(?string $Day): static
+    {
+        $this->Day = $Day;
+
+        return $this;
+    }
+
+    public function getTime(): ?string
+    {
+        return $this->Time;
+    }
+
+    public function setTime(?string $Time): static
+    {
+        $this->Time = $Time;
+
+        return $this;
+    }
+
+    public function getAvailable(): ?bool
+    {
+        return $this->Available;
+    }
+
+    public function setAvailable(?bool $Available): static
+    {
+        $this->Available = $Available;
+
+        return $this;
+    }
+
+    public function xmlSerialize(Writer $writer): void
     {
         $xml = [];
-        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
-            $writer->write($xml);
+        if (!$this->currentService || !in_array(needle: $this->currentService, haystack: array_keys(array: static::$defaultProperties))) {
+            $writer->write(value: $xml);
 
             return;
         }
@@ -123,9 +102,9 @@ class CutOffTime extends AbstractEntity
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
             if (isset($this->$propertyName)) {
                 if ('Available' === $propertyName) {
-                    if (is_bool($this->$propertyName)) {
+                    if (is_bool(value: $this->$propertyName)) {
                         $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->$propertyName ? 'true' : 'false';
-                    } elseif (is_int($this->$propertyName)) {
+                    } elseif (is_int(value: $this->$propertyName)) {
                         $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = 1 === $this->$propertyName ? 'true' : 'false';
                     } else {
                         $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->$propertyName;
@@ -136,6 +115,6 @@ class CutOffTime extends AbstractEntity
             }
         }
         // Auto extending this object with other properties is not supported with SOAP
-        $writer->write($xml);
+        $writer->write(value: $xml);
     }
 }

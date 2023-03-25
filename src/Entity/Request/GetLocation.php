@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -26,93 +27,70 @@
 
 namespace Firstred\PostNL\Entity\Request;
 
+use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Message\Message;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Enum\SoapNamespace;
 
 /**
- * Class GetLocation.
- *
- * This class is both the container and can be the actual GetLocation object itself!
- *
- * @method string|null  getLocationCode()
- * @method Message|null getMessage()
- * @method string|null  getRetailNetworkID()
- * @method GetLocation  setLocationCode(string|null $LocationCode = null)
- * @method GetLocation  setMessage(Message|null $Message = null)
- * @method GetLocation  setRetailNetworkID(string|null $RetailNetworkID = null)
- *
  * @since 1.0.0
  */
 class GetLocation extends AbstractEntity
 {
-    /**
-     * Default properties and namespaces for the SOAP API.
-     *
-     * @var array
-     */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'LocationCode'    => BarcodeService::DOMAIN_NAMESPACE,
-            'Message'         => BarcodeService::DOMAIN_NAMESPACE,
-            'RetailNetworkID' => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'LocationCode'    => ConfirmingService::DOMAIN_NAMESPACE,
-            'Message'         => ConfirmingService::DOMAIN_NAMESPACE,
-            'RetailNetworkID' => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'LocationCode'    => LabellingService::DOMAIN_NAMESPACE,
-            'Message'         => LabellingService::DOMAIN_NAMESPACE,
-            'RetailNetworkID' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'LocationCode'    => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Message'         => DeliveryDateService::DOMAIN_NAMESPACE,
-            'RetailNetworkID' => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'LocationCode'    => LocationService::DOMAIN_NAMESPACE,
-            'Message'         => LocationService::DOMAIN_NAMESPACE,
-            'RetailNetworkID' => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'LocationCode'    => TimeframeService::DOMAIN_NAMESPACE,
-            'Message'         => TimeframeService::DOMAIN_NAMESPACE,
-            'RetailNetworkID' => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null */
-    protected $LocationCode;
-    /** @var Message|null */
-    protected $Message;
-    /** @var string|null */
-    protected $RetailNetworkID;
-    // @codingStandardsIgnoreEnd
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $LocationCode = null;
 
-    /**
-     * GetLocation constructor.
-     *
-     * @param string|null  $LocationCode
-     * @param Message|null $Message
-     * @param string|null  $RetailNetworkID
-     */
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?Message $Message = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $RetailNetworkID = null;
+
     public function __construct(
-        $LocationCode = null,
-        Message $Message = null,
-        $RetailNetworkID = null
+        ?string  $LocationCode = null,
+        ?Message $Message = null,
+        ?string  $RetailNetworkID = null
     ) {
         parent::__construct();
 
-        $this->setLocationCode($LocationCode);
-        $this->setMessage($Message ?: new Message());
-        $this->setRetailNetworkID($RetailNetworkID);
+        $this->setLocationCode(LocationCode: $LocationCode);
+        $this->setMessage(Message: $Message ?: new Message());
+        $this->setRetailNetworkID(RetailNetworkID: $RetailNetworkID);
+    }
+
+    public function getLocationCode(): ?string
+    {
+        return $this->LocationCode;
+    }
+
+    public function setLocationCode(?string $LocationCode): static
+    {
+        $this->LocationCode = $LocationCode;
+
+        return $this;
+    }
+
+    public function getMessage(): ?Message
+    {
+        return $this->Message;
+    }
+
+    public function setMessage(?Message $Message): static
+    {
+        $this->Message = $Message;
+
+        return $this;
+    }
+
+    public function getRetailNetworkID(): ?string
+    {
+        return $this->RetailNetworkID;
+    }
+
+    public function setRetailNetworkID(?string $RetailNetworkID): static
+    {
+        $this->RetailNetworkID = $RetailNetworkID;
+
+        return $this;
     }
 }

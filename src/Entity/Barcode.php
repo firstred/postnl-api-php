@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -26,86 +27,68 @@
 
 namespace Firstred\PostNL\Entity;
 
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingService;
-use Firstred\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Attribute\SerializableProperty;
+use Firstred\PostNL\Enum\SoapNamespace;
 
 /**
- * Class Barcode.
- *
- * @method string|null getType()
- * @method string|null getRange()
- * @method string|null getSerie()
- * @method Barcode     setType(string|null $Type = null)
- * @method Barcode     setRange(string|null $Range = null)
- * @method Barcode     setSerie(string|null $Serie = null)
- *
  * @since 1.0.0
  */
 class Barcode extends AbstractEntity
 {
-    /** @var string[][] */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'Type'  => BarcodeService::DOMAIN_NAMESPACE,
-            'Range' => BarcodeService::DOMAIN_NAMESPACE,
-            'Serie' => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'Type'  => ConfirmingService::DOMAIN_NAMESPACE,
-            'Range' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Serie' => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'Type'  => LabellingService::DOMAIN_NAMESPACE,
-            'Range' => LabellingService::DOMAIN_NAMESPACE,
-            'Serie' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'Type'  => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Range' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Serie' => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'Type'  => LocationService::DOMAIN_NAMESPACE,
-            'Range' => LocationService::DOMAIN_NAMESPACE,
-            'Serie' => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'Type'  => TimeframeService::DOMAIN_NAMESPACE,
-            'Range' => TimeframeService::DOMAIN_NAMESPACE,
-            'Serie' => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-        'Shipping' => [
-            'Type'  => ShippingService::DOMAIN_NAMESPACE,
-            'Range' => ShippingService::DOMAIN_NAMESPACE,
-            'Serie' => ShippingService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null */
-    protected $Type;
-    /** @var string|null */
-    protected $Range;
-    /** @var string|null */
-    protected $Serie;
-    // @codingStandardsIgnoreEnd
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $Type = null;
 
-    /**
-     * @param string|null $Type
-     * @param string|null $Range
-     * @param string|null $Serie
-     */
-    public function __construct($Type = null, $Range = null, $Serie = '000000000-999999999')
-    {
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $Range = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $Serie = null;
+
+    public function __construct(
+        ?string $Type = null,
+        ?string $Range = null,
+        ?string $Serie = '000000000-999999999'
+    ) {
         parent::__construct();
 
-        $this->setType($Type);
-        $this->setRange($Range);
-        $this->setSerie($Serie);
+        $this->setType(Type: $Type);
+        $this->setRange(Range: $Range);
+        $this->setSerie(Serie: $Serie);
+    }
+
+    public function getType(): ?string
+    {
+        return $this->Type;
+    }
+
+    public function setType(?string $Type): static
+    {
+        $this->Type = $Type;
+
+        return $this;
+    }
+
+    public function getRange(): ?string
+    {
+        return $this->Range;
+    }
+
+    public function setRange(?string $Range): static
+    {
+        $this->Range = $Range;
+
+        return $this;
+    }
+
+    public function getSerie(): ?string
+    {
+        return $this->Serie;
+    }
+
+    public function setSerie(?string $Serie): static
+    {
+        $this->Serie = $Serie;
+
+        return $this;
     }
 }

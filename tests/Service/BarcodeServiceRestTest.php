@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -32,48 +33,43 @@ use Firstred\PostNL\Entity\Barcode;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Message\Message;
 use Firstred\PostNL\Entity\Request\GenerateBarcode;
-use Firstred\PostNL\Entity\SOAP\UsernameToken;
+use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\Exception\ResponseException;
-use Firstred\PostNL\HttpClient\MockClient;
+use Firstred\PostNL\HttpClient\MockHttpClient;
 use Firstred\PostNL\PostNL;
-use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\BarcodeServiceInterface;
+use Firstred\PostNL\Service\Rest\BarcodeServiceMessageProcessor;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use GuzzleHttp\Psr7\Query;
+use Psr\Http\Message\RequestInterface;
 use function file_get_contents;
 use const _RESPONSES_DIR_;
 
 /**
- * Class BarcodeServiceRestTest.
- *
  * @testdox The BarcodeService (REST)
  */
-class BarcodeServiceRestTest extends ServiceTest
+class BarcodeServiceRestTest extends ServiceTestCase
 {
-    /** @var PostNL */
-    protected $postnl;
-    /** @var BarcodeServiceInterface */
-    protected $service;
-    /** @var */
-    protected $lastRequest;
+    protected PostNL $postnl;
+    protected BarcodeServiceInterface $service;
+    protected RequestInterface $lastRequest;
 
     /**
      * @before
      *
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \ReflectionException
+     * @throws
      */
-    public function setupPostNL()
+    public function setupPostNL(): void
     {
         $this->postnl = new PostNL(
-            Customer::create()
-                ->setCollectionLocation('123456')
-                ->setCustomerCode('DEVC')
-                ->setCustomerNumber('11223344')
-                ->setContactPerson('Test')
-                ->setAddress(Address::create([
+            customer: Customer::create()
+                ->setCollectionLocation(CollectionLocation: '123456')
+                ->setCustomerCode(CustomerCode: 'DEVC')
+                ->setCustomerNumber(CustomerNumber: '11223344')
+                ->setContactPerson(ContactPerson: 'Test')
+                ->setAddress(Address: Address::create(properties: [
                     'AddressType' => '02',
                     'City'        => 'Hoofddorp',
                     'CompanyName' => 'PostNL',
@@ -82,118 +78,109 @@ class BarcodeServiceRestTest extends ServiceTest
                     'Street'      => 'Siriusdreef',
                     'Zipcode'     => '2132WT',
                 ]))
-                ->setGlobalPackBarcodeType('AB')
-                ->setGlobalPackCustomerCode('1234'), new UsernameToken(null, 'test'),
-            true,
-            PostNL::MODE_REST
+                ->setGlobalPackBarcodeType(GlobalPackBarcodeType: 'AB')
+                ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'), apiKey: new UsernameToken(Username: null, Password: 'test'),
+            sandbox: true,
+            mode: PostNL::MODE_Rest
         );
 
         global $logger;
-        $this->postnl->setLogger($logger);
+        $this->postnl->setLogger(logger: $logger);
 
         $this->service = $this->postnl->getBarcodeService();
-        $this->service->setCache(new VoidCachePool());
-        $this->service->setTtl(1);
+        $this->service->setCache(cache: new VoidCachePool());
+        $this->service->setTtl(ttl: 1);
     }
 
     /**
      * @testdox returns a valid service object
      */
-    public function testHasValidBarcodeService()
+    public function testHasValidBarcodeService(): void
     {
-        $this->assertInstanceOf(BarcodeService::class, $this->service);
+        $this->assertInstanceOf(expected: BarcodeServiceMessageProcessor::class, actual: $this->service);
     }
 
     /**
      * @testdox creates a valid 3S barcode request
      *
-     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
-     * @throws \ReflectionException
+     * @throws
      */
-    public function testCreatesAValid3SBarcodeRequest()
+    public function testCreatesAValid3SBarcodeRequest(): void
     {
         $type = '3S';
-        $range = $this->getRange('3S');
-        $serie = $this->postnl->findBarcodeSerie('3S', $range, false);
+        $range = $this->getRange(type: '3S');
+        $serie = $this->postnl->findBarcodeSerie(type: '3S', range: $range, eps: false);
 
-        $this->lastRequest = $request = $this->service->buildGenerateBarcodeRequestREST(
-            GenerateBarcode::create()
+        $this->lastRequest = $request = $this->service->buildGenerateBarcodeRequestRest(
+            generateBarcode: GenerateBarcode::create()
                 ->setBarcode(
-                    Barcode::create()
-                        ->setRange($range)
-                        ->setSerie($serie)
-                        ->setType($type)
+                    Barcode: Barcode::create()
+                        ->setRange(Range: $range)
+                        ->setSerie(Serie: $serie)
+                        ->setType(Type: $type)
                 )
-                ->setMessage(new Message())
-                ->setCustomer($this->postnl->getCustomer())
+                ->setMessage(Message: new Message())
+                ->setCustomer(Customer: $this->postnl->getCustomer())
         );
 
-        $query = Query::parse($request->getUri()->getQuery());
+        $query = Query::parse(str: $request->getUri()->getQuery());
 
-        $this->assertEqualsCanonicalizing([
+        $this->assertEqualsCanonicalizing(expected: [
             'CustomerCode'   => 'DEVC',
             'CustomerNumber' => '11223344',
             'Type'           => '3S',
             'Serie'          => '987000000-987600000',
             'Range'          => 'DEVC',
         ],
-            $query
+            actual: $query
         );
-        $this->assertEmpty((string) $request->getBody());
-        $this->assertEquals('test', $request->getHeaderLine('apikey'));
-        $this->assertEquals('', $request->getHeaderLine('Content-Type'));
-        $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
+        $this->assertEmpty(actual: (string) $request->getBody());
+        $this->assertEquals(expected: 'test', actual: $request->getHeaderLine('apikey'));
+        $this->assertEquals(expected: '', actual: $request->getHeaderLine('Content-Type'));
+        $this->assertEquals(expected: 'application/json', actual: $request->getHeaderLine('Accept'));
     }
 
     /**
      * @testdox creates a valid 10S barcode request
-     *
-     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
-     * @throws \ReflectionException
      */
     public function testCreatesAValid10SBarcodeRequest()
     {
         $type = 'LA';
-        $range = $this->getRange($type);
-        $serie = $this->postnl->findBarcodeSerie($type, $range, false);
+        $range = $this->getRange(type: $type);
+        $serie = $this->postnl->findBarcodeSerie(type: $type, range: $range, eps: false);
 
-        $this->lastRequest = $request = $this->service->buildGenerateBarcodeRequestREST(
-            GenerateBarcode::create()
+        $this->lastRequest = $request = $this->service->buildGenerateBarcodeRequestRest(
+            generateBarcode: GenerateBarcode::create()
                            ->setBarcode(
-                               Barcode::create()
-                                      ->setRange($range)
-                                      ->setSerie($serie)
-                                      ->setType($type)
+                               Barcode: Barcode::create()
+                                      ->setRange(Range: $range)
+                                      ->setSerie(Serie: $serie)
+                                      ->setType(Type: $type)
                            )
-                           ->setMessage(new Message())
-                           ->setCustomer($this->postnl->getCustomer())
+                           ->setMessage(Message: new Message())
+                           ->setCustomer(Customer: $this->postnl->getCustomer())
         );
 
-        $query = Query::parse($request->getUri()->getQuery());
+        $query = Query::parse(str: $request->getUri()->getQuery());
 
-        $this->assertEqualsCanonicalizing([
+        $this->assertEqualsCanonicalizing(expected: [
             'CustomerCode'   => 'DEVC',
             'CustomerNumber' => '11223344',
             'Type'           => 'LA',
             'Serie'          => '00000000-99999999',
             'Range'          => '1234'
         ],
-            $query
+            actual: $query
         );
-        $this->assertEmpty((string) $request->getBody());
-        $this->assertEquals('test', $request->getHeaderLine('apikey'));
-        $this->assertEquals('', $request->getHeaderLine('Content-Type'));
-        $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
+        $this->assertEmpty(actual: (string) $request->getBody());
+        $this->assertEquals(expected: 'test', actual: $request->getHeaderLine('apikey'));
+        $this->assertEquals(expected: '', actual: $request->getHeaderLine('Content-Type'));
+        $this->assertEquals(expected: 'application/json', actual: $request->getHeaderLine('Accept'));
     }
 
-    /**
-     * @param string $type
-     *
-     * @return string
-     */
-    protected function getRange($type)
+    protected function getRange(string $type): string
     {
-        if (in_array($type, ['2S', '3S'])) {
+        if (in_array(needle: $type, haystack: ['2S', '3S'])) {
             return $this->postnl->getCustomer()->getCustomerCode();
         }
 
@@ -202,63 +189,57 @@ class BarcodeServiceRestTest extends ServiceTest
 
     /**
      * @testdox return a valid single barcode
-     *
-     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
      */
-    public function testSingleBarcodeRest()
+    public function testSingleBarcodeRest(): void
     {
-        $mock = new MockHandler([
-            PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/barcode/singlebarcode.http')),
+        $mock = new MockHandler(queue: [
+            PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/barcode/singlebarcode.http')),
         ]);
-        $handler = HandlerStack::create($mock);
-        $mockClient = new MockClient();
-        $mockClient->setHandler($handler);
-        $this->postnl->setHttpClient($mockClient);
+        $handler = HandlerStack::create(handler: $mock);
+        $mockClient = new MockHttpClient();
+        $mockClient->setHandler(handler: $handler);
+        $this->postnl->setHttpClient(httpClient: $mockClient);
 
-        $this->assertEquals('3SDEVC816223392', $this->postnl->generateBarcode('3S'));
+        $this->assertEquals(expected: '3SDEVC816223392', actual: $this->postnl->generateBarcode(type: '3S'));
     }
 
     /**
      * @testdox return a valid single barcode for a country
-     *
-     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
-     * @throws \Firstred\PostNL\Exception\InvalidConfigurationException
      */
-    public function testSingleBarCodeByCountryRest()
+    public function testSingleBarCodeByCountryRest(): void
     {
-        $mock = new MockHandler([
-            PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/barcode/singlebarcode.http')),
+        $mock = new MockHandler(queue: [
+            PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/barcode/singlebarcode.http')),
         ]);
-        $handler = HandlerStack::create($mock);
-        $mockClient = new MockClient();
-        $mockClient->setHandler($handler);
-        $this->postnl->setHttpClient($mockClient);
+        $handler = HandlerStack::create(handler: $mock);
+        $mockClient = new MockHttpClient();
+        $mockClient->setHandler(handler: $handler);
+        $this->postnl->setHttpClient(httpClient: $mockClient);
 
-        $this->assertEquals('3SDEVC816223392', $this->postnl->generateBarcodeByCountryCode('NL'));
+        $this->assertEquals(expected: '3SDEVC816223392', actual: $this->postnl->generateBarcodeByCountryCode(iso: 'NL'));
     }
 
     /**
      * @testdox returns several barcodes
      *
-     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
-     * @throws \Firstred\PostNL\Exception\InvalidConfigurationException
+     * @throws
      */
-    public function testMultipleNLBarcodesRest()
+    public function testMultipleNLBarcodesRest(): void
     {
-        $mock = new MockHandler([
-            PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/barcode/singlebarcode.http')),
-            PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/barcode/singlebarcode2.http')),
-            PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/barcode/singlebarcode3.http')),
-            PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/barcode/singlebarcode4.http')),
+        $mock = new MockHandler(queue: [
+            PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/barcode/singlebarcode.http')),
+            PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/barcode/singlebarcode2.http')),
+            PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/barcode/singlebarcode3.http')),
+            PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/barcode/singlebarcode4.http')),
         ]);
-        $handler = HandlerStack::create($mock);
-        $mockClient = new MockClient();
-        $mockClient->setHandler($handler);
-        $this->postnl->setHttpClient($mockClient);
+        $handler = HandlerStack::create(handler: $mock);
+        $mockClient = new MockHttpClient();
+        $mockClient->setHandler(handler: $handler);
+        $this->postnl->setHttpClient(httpClient: $mockClient);
 
-        $barcodes = $this->postnl->generateBarcodesByCountryCodes(['NL' => 4]);
+        $barcodes = $this->postnl->generateBarcodesByCountryCodes(isos: ['NL' => 4]);
 
-        $this->assertEquals([
+        $this->assertEquals(expected: [
             'NL' => [
                 '3SDEVC816223392',
                 '3SDEVC816223393',
@@ -266,27 +247,27 @@ class BarcodeServiceRestTest extends ServiceTest
                 '3SDEVC816223395',
             ],
         ],
-            $barcodes
+            actual: $barcodes
         );
     }
 
     /**
      * @testdox return a valid single barcode
      *
-     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
+     * @throws
      */
-    public function testNegativeSingleBarcodeInvalidResponse()
+    public function testNegativeSingleBarcodeInvalidResponse(): void
     {
-        $this->expectException(ResponseException::class);
+        $this->expectException(exception: ResponseException::class);
 
-        $mock = new MockHandler([
-            PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/barcode/invalid.http')),
+        $mock = new MockHandler(queue: [
+            PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/barcode/invalid.http')),
         ]);
-        $handler = HandlerStack::create($mock);
-        $mockClient = new MockClient();
-        $mockClient->setHandler($handler);
-        $this->postnl->setHttpClient($mockClient);
+        $handler = HandlerStack::create(handler: $mock);
+        $mockClient = new MockHttpClient();
+        $mockClient->setHandler(handler: $handler);
+        $this->postnl->setHttpClient(httpClient: $mockClient);
 
-        $this->postnl->generateBarcode('3S');
+        $this->postnl->generateBarcode(type: '3S');
     }
 }

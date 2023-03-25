@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -26,75 +27,71 @@
 
 namespace Firstred\PostNL\Entity\Response;
 
+use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Label;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingService;
-use Firstred\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Enum\SoapNamespace;
 
 /**
- * Class MergedLabel.
- *
- * @method string[]|null getBarcodes()
- * @method Label[]|null  getLabels()
- * @method MergedLabel   setBarcodes(string[]|null $Barcodes = null)
- * @method MergedLabel   setLabels(Label[]|null $Labels = null)
- *
  * @since 1.0.0
  */
 class MergedLabel extends AbstractEntity
 {
-    /** @var string[][] */
-    public static $defaultProperties = [
-        'Barcode'        => [
-            'Barcodes' => BarcodeService::DOMAIN_NAMESPACE,
-            'Labels'   => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming'     => [
-            'Barcodes' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Labels'   => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling'      => [
-            'Barcodes' => LabellingService::DOMAIN_NAMESPACE,
-            'Labels'   => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
-            'Barcodes' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Labels'   => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location'       => [
-            'Barcodes' => LocationService::DOMAIN_NAMESPACE,
-            'Labels'   => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe'      => [
-            'Barcodes' => TimeframeService::DOMAIN_NAMESPACE,
-            'Labels'   => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-        'Shipping'       => [
-            'Barcodes' => ShippingService::DOMAIN_NAMESPACE,
-            'Labels'   => ShippingService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
     /** @var string[]|null */
-    protected $Barcodes;
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?array $Barcodes = null;
+
     /** @var Label[]|null */
-    protected $Labels;
-    // @codingStandardsIgnoreEnd
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?array $Labels = null;
+
+    public function __construct(
+        /** @param string[]|null $Barcodes */
+        ?array $Barcodes = null,
+        /** @param Label[]|null $Labels */
+        ?array $Labels = null,
+    ) {
+        parent::__construct();
+
+        $this->setBarcodes(Barcodes: $Barcodes);
+        $this->setLabels(Labels: $Labels);
+    }
+
+    /**
+     * @return string[]|null
+     */
+    public function getBarcodes(): ?array
+    {
+        return $this->Barcodes;
+    }
 
     /**
      * @param string[]|null $Barcodes
-     * @param Label[]|null  $Labels
+     * @return static
      */
-    public function __construct(array $Barcodes = null, array $Labels = null)
+    public function setBarcodes(?array $Barcodes): static
     {
-        parent::__construct();
+        $this->Barcodes = $Barcodes;
 
-        $this->setBarcodes($Barcodes);
-        $this->setLabels($Labels);
+        return $this;
+    }
+
+    /**
+     * @return Label[]|null
+     */
+    public function getLabels(): ?array
+    {
+        return $this->Labels;
+    }
+
+    /**
+     * @param Label[]|null $Labels
+     * @return static
+     */
+    public function setLabels(?array $Labels): static
+    {
+        $this->Labels = $Labels;
+
+        return $this;
     }
 }

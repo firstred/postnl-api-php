@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -30,108 +31,81 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use Exception;
+use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
+use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\TimeframeService;
 
 /**
- * Class GetSignatureResponseSignature.
- *
- * @method string|null            getBarcode()
- * @method DateTimeInterface|null getSignatureDate()
- * @method string|null            getSignatureImage()
- * @method SignatureResponse      setBarcode(string|null $Barcode = null)
- * @method SignatureResponse      setSignatureImage(string|null $SignatureImage = null)
- *
  * @since 1.0.0
  */
 class GetSignatureResponseSignature extends AbstractEntity
 {
-    /**
-     * Default properties and namespaces for the SOAP API.
-     *
-     * @var array
-     */
-    public static $defaultProperties = [
-        'Barcode'        => [
-            'Barcode'        => BarcodeService::DOMAIN_NAMESPACE,
-            'SignatureDate'  => BarcodeService::DOMAIN_NAMESPACE,
-            'SignatureImage' => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming'     => [
-            'Barcode'        => ConfirmingService::DOMAIN_NAMESPACE,
-            'SignatureDate'  => ConfirmingService::DOMAIN_NAMESPACE,
-            'SignatureImage' => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling'      => [
-            'Barcode'        => LabellingService::DOMAIN_NAMESPACE,
-            'SignatureDate'  => LabellingService::DOMAIN_NAMESPACE,
-            'SignatureImage' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
-            'Barcode'        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'SignatureDate'  => DeliveryDateService::DOMAIN_NAMESPACE,
-            'SignatureImage' => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location'       => [
-            'Barcode'        => LocationService::DOMAIN_NAMESPACE,
-            'SignatureDate'  => LocationService::DOMAIN_NAMESPACE,
-            'SignatureImage' => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe'      => [
-            'Barcode'        => TimeframeService::DOMAIN_NAMESPACE,
-            'SignatureDate'  => TimeframeService::DOMAIN_NAMESPACE,
-            'SignatureImage' => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null */
-    protected $Barcode;
-    /** @var string|null */
-    protected $SignatureDate;
-    /** @var string|null */
-    protected $SignatureImage;
-    // @codingStandardsIgnoreEnd
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $Barcode = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $SignatureDate = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $SignatureImage = null;
 
     /**
-     * GetSignatureResponseSignature constructor.
-     *
-     * @param string|null $Barcode
-     * @param string|null $SignatureDate
-     * @param string|null $SignatureImage
-     *
      * @throws InvalidArgumentException
      */
-    public function __construct($Barcode = null, $SignatureDate = null, $SignatureImage = null)
-    {
+    public function __construct(
+        ?string $Barcode = null,
+        ?string $SignatureDate = null,
+        ?string $SignatureImage = null,
+    ) {
         parent::__construct();
 
-        $this->setBarcode($Barcode);
-        $this->setSignatureDate($SignatureDate);
-        $this->setSignatureImage($SignatureImage);
+        $this->setBarcode(Barcode: $Barcode);
+        $this->setSignatureDate(SignatureDate: $SignatureDate);
+        $this->setSignatureImage(SignatureImage: $SignatureImage);
+    }
+
+    public function getBarcode(): ?string
+    {
+        return $this->Barcode;
+    }
+
+    public function setBarcode(?string $Barcode): static
+    {
+        $this->Barcode = $Barcode;
+
+        return $this;
+    }
+
+    public function getSignatureImage(): ?string
+    {
+        return $this->SignatureImage;
+    }
+
+    public function setSignatureImage(?string $SignatureImage): static
+    {
+        $this->SignatureImage = $SignatureImage;
+
+        return $this;
+    }
+
+    public function getSignatureDate(): ?string
+    {
+        return $this->SignatureDate;
     }
 
     /**
-     * @param string|DateTimeInterface|null $SignatureDate
-     *
-     * @return static
-     *
      * @throws InvalidArgumentException
      *
      * @since 1.2.0
      */
-    public function setSignatureDate($SignatureDate = null)
+    public function setSignatureDate(string|DateTimeInterface|null $SignatureDate = null): static
     {
-        if (is_string($SignatureDate)) {
+        if (is_string(value: $SignatureDate)) {
             try {
-                $SignatureDate = new DateTimeImmutable($SignatureDate, new DateTimeZone('Europe/Amsterdam'));
+                $SignatureDate = new DateTimeImmutable(datetime: $SignatureDate, timezone: new DateTimeZone(timezone: 'Europe/Amsterdam'));
             } catch (Exception $e) {
-                throw new InvalidArgumentException($e->getMessage(), 0, $e);
+                throw new InvalidArgumentException(message: $e->getMessage(), code: 0, previous: $e);
             }
         }
 

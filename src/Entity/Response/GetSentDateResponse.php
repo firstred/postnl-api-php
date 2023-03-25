@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -30,97 +31,50 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use Exception;
+use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
+use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\TimeframeService;
 use Sabre\Xml\Writer;
 
 /**
- * Class GetSentDateResponse.
- *
- * @method DateTimeInterface|null getSentDate()
- * @method string[]|null          getOptions()
- * @method GetSentDateResponse    setOptions(string[]|null $Options = null)
- *
  * @since 1.0.0
  */
 class GetSentDateResponse extends AbstractEntity
 {
-    /**
-     * Default properties and namespaces for the SOAP API.
-     *
-     * @var array
-     */
-    public static $defaultProperties = [
-        'Barcode'        => [
-            'SentDate' => BarcodeService::DOMAIN_NAMESPACE,
-            'Options'  => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming'     => [
-            'SentDate' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Options'  => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling'      => [
-            'SentDate' => LabellingService::DOMAIN_NAMESPACE,
-            'Options'  => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
-            'SentDate' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Options'  => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location'       => [
-            'SentDate' => LocationService::DOMAIN_NAMESPACE,
-            'Options'  => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe'      => [
-            'SentDate' => TimeframeService::DOMAIN_NAMESPACE,
-            'Options'  => timeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var DateTimeInterface|null */
-    protected $SentDate;
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?DateTimeInterface $SentDate = null;
+
     /** @var string[]|null */
-    protected $Options;
-    // @codingStandardsIgnoreEnd
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?array $Options = null;
 
     /**
-     * GetSentDateResponse constructor.
-     *
-     * @param DateTimeInterface|string|null $GetSentDate
-     * @param string[]|null                 $Options
-     *
      * @throws InvalidArgumentException
      */
-    public function __construct($GetSentDate = null, array $Options = null)
-    {
+    public function __construct(
+        ?DateTimeInterface $GetSentDate = null,
+        /**  @param string[]|null $Options */
+        array              $Options = null,
+    ) {
         parent::__construct();
 
-        $this->setSentDate($GetSentDate);
-        $this->setOptions($Options);
+        $this->setSentDate(SentDate: $GetSentDate);
+        $this->setOptions(Options: $Options);
     }
 
     /**
-     * @param string|DateTimeInterface|null $SentDate
-     *
-     * @return static
-     *
      * @throws InvalidArgumentException
      *
      * @since 1.2.0
      */
-    public function setSentDate($SentDate = null)
+    public function setSentDate(string|DateTimeInterface|null $SentDate = null): static
     {
-        if (is_string($SentDate)) {
+        if (is_string(value: $SentDate)) {
             try {
-                $SentDate = new DateTimeImmutable($SentDate, new DateTimeZone('Europe/Amsterdam'));
+                $SentDate = new DateTimeImmutable(datetime: $SentDate, timezone: new DateTimeZone(timezone: 'Europe/Amsterdam'));
             } catch (Exception $e) {
-                throw new InvalidArgumentException($e->getMessage(), 0, $e);
+                throw new InvalidArgumentException(message: $e->getMessage(), code: 0, previous: $e);
             }
         }
 
@@ -130,17 +84,34 @@ class GetSentDateResponse extends AbstractEntity
     }
 
     /**
-     * Return a serializable array for the XMLWriter.
-     *
-     * @param Writer $writer
-     *
-     * @return void
+     * @return string[]|null
      */
-    public function xmlSerialize(Writer $writer)
+    public function getOptions(): ?array
+    {
+        return $this->Options;
+    }
+
+    /**
+     * @param strinmg[]|null $Options
+     * @return static
+     */
+    public function setOptions(?array $Options): static
+    {
+        $this->Options = $Options;
+
+        return $this;
+    }
+
+    public function getSentDate(): ?DateTimeInterface
+    {
+        return $this->SentDate;
+    }
+
+    public function xmlSerialize(Writer $writer): void
     {
         $xml = [];
-        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
-            $writer->write($xml);
+        if (!$this->currentService || !in_array(needle: $this->currentService, haystack: array_keys(array: static::$defaultProperties))) {
+            $writer->write(value: $xml);
 
             return;
         }
@@ -149,7 +120,7 @@ class GetSentDateResponse extends AbstractEntity
             if ('Options' === $propertyName) {
                 if (isset($this->Options)) {
                     $options = [];
-                    if (is_array($this->Options)) {
+                    if (is_array(value: $this->Options)) {
                         foreach ($this->Options as $option) {
                             $options[] = ['{http://schemas.microsoft.com/2003/10/Serialization/Arrays}string' => $option];
                         }
@@ -161,6 +132,6 @@ class GetSentDateResponse extends AbstractEntity
             }
         }
         // Auto extending this object with other properties is not supported with SOAP
-        $writer->write($xml);
+        $writer->write(value: $xml);
     }
 }

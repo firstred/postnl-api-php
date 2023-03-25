@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -37,32 +38,32 @@ trait FlexibleEntityTrait
      * Add additional properties.
      *
      * @param string $name
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @return object|null
      *
      * @throws InvalidArgumentException
      */
-    public function __call($name, $value)
+    public function __call(string $name, mixed $value)
     {
-        $methodName = substr($name, 0, 3);
-        $propertyName = lcfirst(substr($name, 3, strlen($name)));
+        $methodName = substr(string: $name, offset: 0, length: 3);
+        $propertyName = lcfirst(string: substr(string: $name, offset: 3, length: strlen(string: $name)));
         if ('get' === $methodName) {
-            if (property_exists($this, $propertyName)) {
+            if (property_exists(object_or_class: $this, property: $propertyName)) {
                 return $this->$propertyName;
             }
 
             return null;
         } elseif ('set' === $methodName) {
-            if (!is_array($value) || count($value) < 1) {
-                throw new InvalidArgumentException('Value is missing');
+            if (!is_array(value: $value) || count(value: $value) < 1) {
+                throw new InvalidArgumentException(message: 'Value is missing');
             }
-            if (property_exists($this, $propertyName)) {
+            if (property_exists(object_or_class: $this, property: $propertyName)) {
                 $this->$propertyName = $value[0];
             }
 
             return $this;
         }
-        throw new InvalidArgumentException('Not a valid `get` or `set` method');
+        throw new InvalidArgumentException(message: 'Not a valid `get` or `set` method');
     }
 }

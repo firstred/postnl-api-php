@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -42,44 +43,44 @@ class Util
     const ERROR_MARGIN = 2;
 
     /**
-     * @param array       $arr a map of param keys to values
+     * @param array $arr a map of param keys to values
      * @param string|null $prefix
      *
      * @return string a querystring, essentially
      *
      * @codeCoverageIgnore
      */
-    public static function urlEncode($arr, $prefix = null)
+    public static function urlEncode(array $arr, string $prefix = null): string
     {
-        if (!is_array($arr)) {
+        if (!is_array(value: $arr)) {
             return (string) $arr;
         }
 
         $r = [];
         foreach ($arr as $k => $v) {
-            if (is_null($v)) {
+            if (is_null(value: $v)) {
                 continue;
             }
 
             if ($prefix) {
-                if (null !== $k && (!is_int($k) || is_array($v))) {
+                if (null !== $k && (!is_int(value: $k) || is_array(value: $v))) {
                     $k = $prefix.'['.$k.']';
                 } else {
                     $k = $prefix.'[]';
                 }
             }
 
-            if (is_array($v)) {
-                $enc = static::urlEncode($v, $k);
+            if (is_array(value: $v)) {
+                $enc = static::urlEncode(arr: $v, prefix: $k);
                 if ($enc) {
                     $r[] = $enc;
                 }
             } else {
-                $r[] = urlencode($k).'='.urlencode($v);
+                $r[] = urlencode(string: $k).'='.urlencode(string: $v);
             }
         }
 
-        return implode('&', $r);
+        return implode(separator: '&', array: $r);
     }
 
     /**
@@ -89,14 +90,14 @@ class Util
      *                            The orientation is in FPDF format, so L for Landscape and P for Portrait
      *                            Sizes are in mm
      */
-    public static function getPdfSizeAndOrientation($pdf)
+    public static function getPdfSizeAndOrientation(string $pdf): bool|array|string
     {
         try {
-            $fpdi = new Fpdi('P', 'mm');
-            $fpdi->setSourceFile(StreamReader::createByString($pdf));
+            $fpdi = new Fpdi(orientation: 'P', unit: 'mm');
+            $fpdi->setSourceFile(file: StreamReader::createByString(content: $pdf));
             // import page 1
-            $tplIdx1 = $fpdi->importPage(1);
-            $size = $fpdi->getTemplateSize($tplIdx1);
+            $tplIdx1 = $fpdi->importPage(pageNumber: 1);
+            $size = $fpdi->getTemplateSize(tpl: $tplIdx1);
             $width = $size['width'];
             $height = $size['height'];
             $orientation = $size['orientation'];
@@ -130,63 +131,63 @@ class Util
     /**
      * Offline delivery date calculation.
      *
-     * @param string $deliveryDate   Delivery date in any format accepted by DateTime
-     * @param bool   $mondayDelivery Sunday sorting/Monday delivery enabled
-     * @param bool   $sundayDelivery Sunday delivery enabled
+     * @param string $deliveryDate Delivery date in any format accepted by DateTime
+     * @param bool $mondayDelivery Sunday sorting/Monday delivery enabled
+     * @param bool $sundayDelivery Sunday delivery enabled
      *
      * @return string (format: `Y-m-d H:i:s`)
      *
      * @throws Exception
      */
-    public static function getDeliveryDate($deliveryDate, $mondayDelivery = false, $sundayDelivery = false)
+    public static function getDeliveryDate(string $deliveryDate, bool $mondayDelivery = false, bool $sundayDelivery = false): string
     {
-        $deliveryDate = new DateTime($deliveryDate, new DateTimeZone('Europe/Amsterdam'));
+        $deliveryDate = new DateTime(datetime: $deliveryDate, timezone: new DateTimeZone(timezone: 'Europe/Amsterdam'));
 
-        $holidays = static::getHolidaysForYear(date('Y', $deliveryDate->getTimestamp()));
+        $holidays = static::getHolidaysForYear(year: date(format: 'Y', timestamp: $deliveryDate->getTimestamp()));
 
         do {
-            $deliveryDate->add(new DateInterval('P1D'));
-        } while (in_array($deliveryDate->format('Y-m-d'), $holidays)
-        || (!$sundayDelivery && 0 == $deliveryDate->format('w'))
-        || (!$mondayDelivery && 1 == $deliveryDate->format('w'))
+            $deliveryDate->add(interval: new DateInterval(duration: 'P1D'));
+        } while (in_array(needle: $deliveryDate->format(format: 'Y-m-d'), haystack: $holidays)
+        || (!$sundayDelivery && 0 == $deliveryDate->format(format: 'w'))
+        || (!$mondayDelivery && 1 == $deliveryDate->format(format: 'w'))
         );
 
-        return $deliveryDate->format('Y-m-d H:i:s');
+        return $deliveryDate->format(format: 'Y-m-d H:i:s');
     }
 
     /**
      * Offline shipping date calculation.
      *
      * @param string $deliveryDate
-     * @param array  $days
+     * @param array $days
      *
      * @return string
      *
      * @throws InvalidArgumentException
      */
     public static function getShippingDate(
-        $deliveryDate,
-        $days = [0 => false, 1 => true, 2 => true, 3 => true, 4 => true, 5 => true, 6 => true]
-    ) {
-        if (array_sum($days) < 1) {
-            throw new InvalidArgumentException('There should be at least one shipping day');
+        string $deliveryDate,
+        array  $days = [0 => false, 1 => true, 2 => true, 3 => true, 4 => true, 5 => true, 6 => true]
+    ): string {
+        if (array_sum(array: $days) < 1) {
+            throw new InvalidArgumentException(message: 'There should be at least one shipping day');
         }
 
-        $deliveryDate = new DateTime($deliveryDate, new DateTimeZone('Europe/Amsterdam'));
+        $deliveryDate = new DateTime(datetime: $deliveryDate, timezone: new DateTimeZone(timezone: 'Europe/Amsterdam'));
 
-        $holidays = static::getHolidaysForYear(date('Y', $deliveryDate->getTimestamp()));
+        $holidays = static::getHolidaysForYear(year: date(format: 'Y', timestamp: $deliveryDate->getTimestamp()));
 
         do {
             try {
-                $deliveryDate->sub(new DateInterval('P1D'));
+                $deliveryDate->sub(interval: new DateInterval(duration: 'P1D'));
             } catch (Exception $e) {
-                throw new InvalidArgumentException('Invalid date provided');
+                throw new InvalidArgumentException(message: 'Invalid date provided');
             }
-        } while (in_array($deliveryDate->format('Y-m-d'), $holidays)
-        || empty($days[$deliveryDate->format('w')])
+        } while (in_array(needle: $deliveryDate->format(format: 'Y-m-d'), haystack: $holidays)
+        || empty($days[$deliveryDate->format(format: 'w')])
         );
 
-        return $deliveryDate->format('Y-m-d H:i:s');
+        return $deliveryDate->format(format: 'Y-m-d H:i:s');
     }
 
     /**
@@ -199,35 +200,35 @@ class Util
      * < 0 means: should've shipped in the past
      * anything higher means: you've got some more time
      *
-     * @param string $shippingDate          Shipping date (format: `Y-m-d H:i:s`)
+     * @param string $shippingDate Shipping date (format: `Y-m-d H:i:s`)
      * @param string $preferredDeliveryDate Customer preference
      *
      * @return int
      *
      * @throws Exception
      */
-    public static function getShippingDaysRemaining($shippingDate, $preferredDeliveryDate)
+    public static function getShippingDaysRemaining(string $shippingDate, string $preferredDeliveryDate): int
     {
         // Remove the hours/minutes/seconds
-        $shippingDate = date('Y-m-d 00:00:00', strtotime($shippingDate));
+        $shippingDate = date(format: 'Y-m-d 00:00:00', timestamp: strtotime(datetime: $shippingDate));
 
         // Find the nearest delivery date
-        $nearestDeliveryDate = static::getDeliveryDate($shippingDate);
+        $nearestDeliveryDate = static::getDeliveryDate(deliveryDate: $shippingDate);
 
         // Calculate the interval
-        $nearestDeliveryDate = new DateTime($nearestDeliveryDate, new DateTimeZone('Europe/Amsterdam'));
+        $nearestDeliveryDate = new DateTime(datetime: $nearestDeliveryDate, timezone: new DateTimeZone(timezone: 'Europe/Amsterdam'));
         $preferredDeliveryDate = new DateTime(
-            date('Y-m-d 00:00:00', strtotime($preferredDeliveryDate)),
-            new DateTimeZone('Europe/Amsterdam')
+            datetime: date(format: 'Y-m-d 00:00:00', timestamp: strtotime(datetime: $preferredDeliveryDate)),
+            timezone: new DateTimeZone(timezone: 'Europe/Amsterdam')
         );
 
-        $daysRemaining = (int) $nearestDeliveryDate->diff($preferredDeliveryDate)->format('%R%a');
+        $daysRemaining = (int) $nearestDeliveryDate->diff(targetObject: $preferredDeliveryDate)->format(format: '%R%a');
 
         // Subtract an additional day if we cannot ship today (Sunday or holiday)
-        if (0 == date('w', strtotime($shippingDate)) ||
+        if (0 == date(format: 'w', timestamp: strtotime(datetime: $shippingDate)) ||
             in_array(
-                date('Y-m-d', strtotime($shippingDate)),
-                static::getHolidaysForYear(date('Y', strtotime($shippingDate)))
+                needle: date(format: 'Y-m-d', timestamp: strtotime(datetime: $shippingDate)),
+                haystack: static::getHolidaysForYear(year: date(format: 'Y', timestamp: strtotime(datetime: $shippingDate)))
             )
         ) {
             --$daysRemaining;
@@ -245,56 +246,67 @@ class Util
      *
      * Credits to @tvlooy (https://gist.github.com/tvlooy/1894247)
      */
-    protected static function getHolidaysForYear($year)
+    protected static function getHolidaysForYear(string $year): array
     {
         // Avoid holidays
         // Fixed
-        $nieuwjaar = new DateTime($year.'-01-01', new DateTimeZone('Europe/Amsterdam'));
-        $eersteKerstDag = new DateTime($year.'-12-25', new DateTimeZone('Europe/Amsterdam'));
-        $tweedeKerstDag = new DateTime($year.'-12-25', new DateTimeZone('Europe/Amsterdam'));
-        $koningsdag = new DateTime($year.'-04-27', new DateTimeZone('Europe/Amsterdam'));
+        $nieuwjaar = new DateTime(datetime: $year.'-01-01', timezone: new DateTimeZone(timezone: 'Europe/Amsterdam'));
+        $eersteKerstDag = new DateTime(datetime: $year.'-12-25', timezone: new DateTimeZone(timezone: 'Europe/Amsterdam'));
+        $tweedeKerstDag = new DateTime(datetime: $year.'-12-25', timezone: new DateTimeZone(timezone: 'Europe/Amsterdam'));
+        $koningsdag = new DateTime(datetime: $year.'-04-27', timezone: new DateTimeZone(timezone: 'Europe/Amsterdam'));
         // Dynamic
-        $pasen = new DateTime('NOW', new DateTimeZone('Europe/Amsterdam'));
-        $pasen->setTimestamp(easter_date($year)); // thanks PHP!
+        $pasen = new DateTime(datetime: 'NOW', timezone: new DateTimeZone(timezone: 'Europe/Amsterdam'));
+        $pasen->setTimestamp(timestamp: easter_date(year: (int) $year)); // thanks PHP!
         $paasMaandag = clone $pasen;
-        $paasMaandag->add(new DateInterVal('P1D'));
+        $paasMaandag->add(interval: new DateInterVal(duration: 'P1D'));
         $hemelvaart = clone $pasen;
-        $hemelvaart->add(new DateInterVal('P39D'));
+        $hemelvaart->add(interval: new DateInterVal(duration: 'P39D'));
         $pinksteren = clone $hemelvaart;
-        $pinksteren->add(new DateInterVal('P10D'));
+        $pinksteren->add(interval: new DateInterVal(duration: 'P10D'));
         $pinksterMaandag = clone $pinksteren;
-        $pinksterMaandag->add(new DateInterVal('P1D'));
+        $pinksterMaandag->add(interval: new DateInterVal(duration: 'P1D'));
 
         $holidays = [
-            $nieuwjaar->format('Y-m-d'),
-            $pasen->format('Y-m-d'),
-            $koningsdag->format('Y-m-d'),
-            $paasMaandag->format('Y-m-d'),
-            $hemelvaart->format('Y-m-d'),
-            $pinksteren->format('Y-m-d'),
-            $pinksterMaandag->format('Y-m-d'),
-            $eersteKerstDag->format('Y-m-d'),
-            $tweedeKerstDag->format('Y-m-d'),
+            $nieuwjaar->format(format: 'Y-m-d'),
+            $pasen->format(format: 'Y-m-d'),
+            $koningsdag->format(format: 'Y-m-d'),
+            $paasMaandag->format(format: 'Y-m-d'),
+            $hemelvaart->format(format: 'Y-m-d'),
+            $pinksteren->format(format: 'Y-m-d'),
+            $pinksterMaandag->format(format: 'Y-m-d'),
+            $eersteKerstDag->format(format: 'Y-m-d'),
+            $tweedeKerstDag->format(format: 'Y-m-d'),
         ];
 
         return $holidays;
     }
 
-    public static function compareGuzzleVersion($a, $b)
+    public static function compareGuzzleVersion(int|float|string $a, int|float|string $b): int
     {
-        $a = str_replace('.', '', $a);
-        $b = str_replace('.', '', $b);
+        $a = str_replace(search: '.', replace: '', subject: (string) $a);
+        $b = str_replace(search: '.', replace: '', subject: (string) $b);
 
-        $len = max(array(strlen($a), strlen($b)));
+        $len = max(value: array(strlen(string: $a), strlen(string: $b)));
 
-        $a = (int) str_pad($a, $len, '0', STR_PAD_RIGHT);
-        $b = (int) str_pad($b, $len, '0', STR_PAD_RIGHT);
+        $a = (int) str_pad(string: $a, length: $len, pad_string: '0', pad_type: STR_PAD_RIGHT);
+        $b = (int) str_pad(string: $b, length: $len, pad_string: '0', pad_type: STR_PAD_RIGHT);
 
         if ($a === $b) {
-            return  0;
+            return 0;
         } elseif ($a > $b) {
             return 1;
         }
+
         return -1;
+    }
+
+    /**
+     * @since 2.0.0
+     */
+    public static function versionStringToURLString(string $version, string $url): string
+    {
+        $newVersion = 'v'.str_replace(search: '.', replace: '_', subject: (string) $version);
+
+        return str_replace(search: '${VERSION}', replace: $newVersion, subject: $url);
     }
 }

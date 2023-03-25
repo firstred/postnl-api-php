@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -61,10 +62,10 @@ use RuntimeException;
 class RejectionException extends RuntimeException
 {
     /** @var mixed Rejection reason. */
-    private $reason;
+    private mixed $reason;
 
     /**
-     * @param mixed  $reason      rejection reason
+     * @param mixed $reason rejection reason
      * @param string $description Optional description
      */
     public function __construct($reason, $description = null)
@@ -75,16 +76,16 @@ class RejectionException extends RuntimeException
 
         if ($description) {
             $message .= ' with reason: '.$description;
-        } elseif (is_string($reason)
-            || (is_object($reason) && method_exists($reason, '__toString'))
+        } elseif (is_string(value: $reason)
+            || (is_object(value: $reason) && method_exists(object_or_class: $reason, method: '__toString'))
         ) {
             $message .= ' with reason: '.$this->reason;
         } elseif ($reason instanceof JsonSerializable) {
             $message .= ' with reason: '
-                .json_encode($this->reason, JSON_PRETTY_PRINT);
+                .json_encode(value: $this->reason, flags: JSON_PRETTY_PRINT);
         }
 
-        parent::__construct($message);
+        parent::__construct(message: $message);
     }
 
     /**
@@ -92,7 +93,7 @@ class RejectionException extends RuntimeException
      *
      * @return mixed
      */
-    public function getReason()
+    public function getReason(): mixed
     {
         return $this->reason;
     }

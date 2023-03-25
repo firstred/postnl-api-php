@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -26,124 +27,85 @@
 
 namespace Firstred\PostNL\Entity\Response;
 
+use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Warning;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Enum\SoapNamespace;
+use Firstred\PostNL\Exception\DeserializationException;
 use ReflectionObject;
 use ReflectionProperty;
 use Sabre\Xml\Writer;
 use stdClass;
+use TypeError;
 use function count;
 
 /**
- * Class CompleteStatusResponse.
- *
- * @method CompleteStatusResponseShipment[]|null getShipments()
- * @method Warning[]|null                        getWarnings()
- * @method CompleteStatusResponse                setShipments(CompleteStatusResponseShipment[] $Shipments = null)
- * @method CompleteStatusResponse                setWarnings(Warning[] $Warnings = null)
- *
  * @since 1.0.0
  */
 class CompleteStatusResponse extends AbstractEntity
 {
-    /**
-     * Default properties and namespaces for the SOAP API.
-     *
-     * @var array
-     */
-    public static $defaultProperties = [
-        'Barcode'        => [
-            'Shipments' => BarcodeService::DOMAIN_NAMESPACE,
-            'Warnings'  => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming'     => [
-            'Shipments' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Warnings'  => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling'      => [
-            'Shipments' => LabellingService::DOMAIN_NAMESPACE,
-            'Warnings'  => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
-            'Shipments' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Warnings'  => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location'       => [
-            'Shipments' => LocationService::DOMAIN_NAMESPACE,
-            'Warnings'  => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe'      => [
-            'Shipments' => TimeframeService::DOMAIN_NAMESPACE,
-            'Warnings'  => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
     /** @var CompleteStatusResponseShipment[]|null */
-    protected $Shipments;
-    /** @var Warning[]|null */
-    protected $Warnings;
-    // @codingStandardsIgnoreEnd
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?array $Shipments = null;
 
-    /**
-     * CompleteStatusResponse constructor.
-     *
-     * @param CompleteStatusResponseShipment[]|null $Shipments
-     * @param Warnings[]|null $Warnings
-     */
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?Warning $Warnings = null;
+
     public function __construct(
-        array $Shipments = null,
-        array $Warnings = null
+        ?array $Shipments = null,
+        ?array $Warnings = null
     ) {
         parent::__construct();
 
-        $this->setShipments($Shipments);
-        $this->setWarnings($Warnings);
-    }
-
-    public static function jsonDeserialize(stdClass $json)
-    {
-        // Find the entity name
-        $reflection = new ReflectionObject($json);
-        $properties = $reflection->getProperties(ReflectionProperty::IS_PUBLIC);
-
-        if (!count($properties)) {
-            return $json;
-        }
-
-        if (isset($json->CompleteStatusResponse->Shipments) && !is_array($json->CompleteStatusResponse->Shipments)) {
-            $json->CompleteStatusResponse->Shipments = [$json->CompleteStatusResponse->Shipments];
-        }
-
-        $completeStatusResponse = self::create();
-        $shipments = [];
-        if (!empty($json->CompleteStatusResponse->Shipments)) {
-            foreach ($json->CompleteStatusResponse->Shipments as $shipment) {
-                $shipments[] = CompleteStatusResponseShipment::jsonDeserialize((object) ['CompleteStatusResponseShipment' => $shipment]);
-            }
-        }
-        $completeStatusResponse->setShipments($shipments);
-
-        return $completeStatusResponse;
+        $this->setShipments(Shipments: $Shipments);
+        $this->setWarnings(Warnings: $Warnings);
     }
 
     /**
-     * Return a serializable array for the XMLWriter.
-     *
-     * @param Writer $writer
-     *
-     * @return void
+     * @return CompleteStatusResponseShipment[]|null
      */
-    public function xmlSerialize(Writer $writer)
+    public function getShipments(): ?array
+    {
+        return $this->Shipments;
+    }
+
+    /**
+     * @param CompleteStatusResponseShipment[]|null $Shipments
+     * @return static
+     */
+    public function setShipments(?array $Shipments): static
+    {
+        if (is_array(value: $Shipments)) {
+            foreach ($Shipments as $shipment) {
+                if (!$shipment instanceof CompleteStatusResponseShipment) {
+                    throw new TypeError(message: 'Expected instance of `CompleteStatusResponseShipment`');
+                }
+            }
+        }
+
+
+        $this->Shipments = $Shipments;
+
+        return $this;
+    }
+
+    public function getWarnings(): ?Warning
+    {
+        return $this->Warnings;
+    }
+
+    public function setWarnings(?Warning $Warnings): static
+    {
+        $this->Warnings = $Warnings;
+
+        return $this;
+    }
+
+    public function xmlSerialize(Writer $writer): void
     {
         $xml = [];
-        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
-            $writer->write($xml);
+        if (!$this->currentService || !in_array(needle: $this->currentService, haystack: array_keys(array: static::$defaultProperties))) {
+            $writer->write(value: $xml);
 
             return;
         }
@@ -151,7 +113,7 @@ class CompleteStatusResponse extends AbstractEntity
         foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
             if ('Shipments' === $propertyName) {
                 $shipments = [];
-                if (is_array($this->Shipments)) {
+                if (is_array(value: $this->Shipments)) {
                     foreach ($this->Shipments as $shipment) {
                         $shipments[] = ["{{$namespace}}Shipment" => $shipment];
                     }
@@ -162,6 +124,32 @@ class CompleteStatusResponse extends AbstractEntity
             }
         }
         // Auto extending this object with other properties is not supported with SOAP
-        $writer->write($xml);
+        $writer->write(value: $xml);
+    }
+
+    public static function jsonDeserialize(stdClass $json): static
+    {
+        // Find the entity name
+        $reflection = new ReflectionObject(object: $json);
+        $properties = $reflection->getProperties(filter: ReflectionProperty::IS_PUBLIC);
+
+        if (!count(value: $properties)) {
+            throw new DeserializationException(message: 'Cannot deserialize empty object');
+        }
+
+        if (isset($json->CompleteStatusResponse->Shipments) && !is_array(value: $json->CompleteStatusResponse->Shipments)) {
+            $json->CompleteStatusResponse->Shipments = [$json->CompleteStatusResponse->Shipments];
+        }
+
+        $completeStatusResponse = self::create();
+        $shipments = [];
+        if (!empty($json->CompleteStatusResponse->Shipments)) {
+            foreach ($json->CompleteStatusResponse->Shipments as $shipment) {
+                $shipments[] = CompleteStatusResponseShipment::jsonDeserialize(json: (object) ['CompleteStatusResponseShipment' => $shipment]);
+            }
+        }
+        $completeStatusResponse->setShipments(Shipments: $shipments);
+
+        return $completeStatusResponse;
     }
 }

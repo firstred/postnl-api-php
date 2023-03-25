@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -30,106 +31,39 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use Exception;
+use Firstred\PostNL\Attribute\SerializableProperty;
+use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\TimeframeService;
 
 /**
- * Class Status.
- *
- * @method string|null            getPhaseCode()
- * @method string|null            getPhaseDescription()
- * @method string|null            getStatusCode()
- * @method string|null            getStatusDescription()
- * @method DateTimeInterface|null getTimeStamp()
- * @method Status                 setPhaseCode(string|null $code = null)
- * @method Status                 setPhaseDescription(string|null $desc = null)
- * @method Status                 setStatusCode(string|null $code = null)
- * @method Status                 setStatusDescription(string|null $desc = null)
- *
  * @since 1.0.0
  */
 class Status extends AbstractEntity
 {
-    /** @var string[][] */
-    public static $defaultProperties = [
-        'Barcode'        => [
-            'PhaseCode'         => BarcodeService::DOMAIN_NAMESPACE,
-            'PhaseDescription'  => BarcodeService::DOMAIN_NAMESPACE,
-            'StatusCode'        => BarcodeService::DOMAIN_NAMESPACE,
-            'StatusDescription' => BarcodeService::DOMAIN_NAMESPACE,
-            'TimeStamp'         => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming'     => [
-            'PhaseCode'         => ConfirmingService::DOMAIN_NAMESPACE,
-            'PhaseDescription'  => ConfirmingService::DOMAIN_NAMESPACE,
-            'StatusCode'        => ConfirmingService::DOMAIN_NAMESPACE,
-            'StatusDescription' => ConfirmingService::DOMAIN_NAMESPACE,
-            'TimeStamp'         => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling'      => [
-            'PhaseCode'         => LabellingService::DOMAIN_NAMESPACE,
-            'PhaseDescription'  => LabellingService::DOMAIN_NAMESPACE,
-            'StatusCode'        => LabellingService::DOMAIN_NAMESPACE,
-            'StatusDescription' => LabellingService::DOMAIN_NAMESPACE,
-            'TimeStamp'         => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
-            'PhaseCode'         => DeliveryDateService::DOMAIN_NAMESPACE,
-            'PhaseDescription'  => DeliveryDateService::DOMAIN_NAMESPACE,
-            'StatusCode'        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'StatusDescription' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'TimeStamp'         => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location'       => [
-            'PhaseCode'         => LocationService::DOMAIN_NAMESPACE,
-            'PhaseDescription'  => LocationService::DOMAIN_NAMESPACE,
-            'StatusCode'        => LocationService::DOMAIN_NAMESPACE,
-            'StatusDescription' => LocationService::DOMAIN_NAMESPACE,
-            'TimeStamp'         => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe'      => [
-            'PhaseCode'         => TimeframeService::DOMAIN_NAMESPACE,
-            'PhaseDescription'  => TimeframeService::DOMAIN_NAMESPACE,
-            'StatusCode'        => TimeframeService::DOMAIN_NAMESPACE,
-            'StatusDescription' => TimeframeService::DOMAIN_NAMESPACE,
-            'TimeStamp'         => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null */
-    protected $PhaseCode;
-    /** @var string|null */
-    protected $PhaseDescription;
-    /** @var string|null */
-    protected $StatusCode;
-    /** @var string|null */
-    protected $StatusDescription;
-    /** @var DateTimeInterface|null */
-    protected $TimeStamp;
-    // @codingStandardsIgnoreEnd
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $PhaseCode = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $PhaseDescription = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $StatusCode = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $StatusDescription = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?DateTimeInterface $TimeStamp = null;
 
     /**
-     * Status constructor.
-     *
-     * @param string|null                   $PhaseCode
-     * @param string|null                   $PhaseDescription
-     * @param string|null                   $StatusCode
-     * @param string|null                   $StatusDescription
-     * @param string|DateTimeInterface|null $TimeStamp
-     *
      * @throws InvalidArgumentException
      */
     public function __construct(
-        $PhaseCode = null,
-        $PhaseDescription = null,
-        $StatusCode = null,
-        $StatusDescription = null,
-        $TimeStamp = null
+        ?string                       $PhaseCode = null,
+        ?string                       $PhaseDescription = null,
+        ?string                       $StatusCode = null,
+        ?string                       $StatusDescription = null,
+        string|DateTimeInterface|null $TimeStamp = null
     ) {
         parent::__construct();
 
@@ -137,25 +71,21 @@ class Status extends AbstractEntity
         $this->setPhaseDescription($PhaseDescription);
         $this->setStatusCode($StatusCode);
         $this->setStatusDescription($StatusDescription);
-        $this->setTimeStamp($TimeStamp);
+        $this->setTimeStamp(TimeStamp: $TimeStamp);
     }
 
     /**
-     * @param string|DateTimeInterface|null $TimeStamp
-     *
-     * @return static
-     *
      * @throws InvalidArgumentException
      *
      * @since 1.2.0
      */
-    public function setTimeStamp($TimeStamp = null)
+    public function setTimeStamp(string|DateTimeInterface|null $TimeStamp = null): static
     {
-        if (is_string($TimeStamp)) {
+        if (is_string(value: $TimeStamp)) {
             try {
-                $TimeStamp = new DateTimeImmutable($TimeStamp, new DateTimeZone('Europe/Amsterdam'));
+                $TimeStamp = new DateTimeImmutable(datetime: $TimeStamp, timezone: new DateTimeZone(timezone: 'Europe/Amsterdam'));
             } catch (Exception $e) {
-                throw new InvalidArgumentException($e->getMessage(), 0, $e);
+                throw new InvalidArgumentException(message: $e->getMessage(), code: 0, previous: $e);
             }
         }
 
@@ -165,121 +95,101 @@ class Status extends AbstractEntity
     }
 
     /**
-     * Backward compatible with SOAP API
-     *
-     * @return string|null
+     * Backwards compatible with SOAP API
      *
      * @since 1.2.0
      */
-    public function getCurrentStatusPhaseCode()
+    public function getCurrentStatusPhaseCode(): ?string
     {
         return $this->PhaseCode;
     }
 
     /**
-     * Backward compatible with SOAP API
-     *
-     * @return string|null
+     * Backwards compatible with SOAP API
      *
      * @since 1.2.0
      */
-    public function getCurrentStatusPhaseDescription()
+    public function getCurrentStatusPhaseDescription(): ?string
     {
         return $this->PhaseDescription;
     }
 
     /**
-     * Backward compatible with SOAP API
-     *
-     * @return string|null
+     * Backwards compatible with SOAP API
      *
      * @since 1.2.0
      */
-    public function getCurrentStatusStatusCode()
+    public function getCurrentStatusStatusCode(): ?string
     {
         return $this->PhaseDescription;
     }
 
     /**
-     * Backward compatible with SOAP API
-     *
-     * @return string|null
+     * Backwards compatible with SOAP API
      *
      * @since 1.2.0
      */
-    public function getCurrentStatusStatusDescription()
+    public function getCurrentStatusStatusDescription(): ?string
     {
         return $this->PhaseDescription;
     }
 
     /**
-     * Backward compatible with SOAP API
-     *
-     * @return string|null
+     * Backwards compatible with SOAP API
      *
      * @since 1.2.0
      */
-    public function getCurrentStatusTimeStamp()
+    public function getCurrentStatusTimeStamp(): ?string
     {
         return $this->PhaseDescription;
     }
 
     /**
-     * Backward compatible with SOAP API
-     *
-     * @return string|null
+     * Backwards compatible with SOAP API
      *
      * @since 1.2.0
      */
-    public function getCompleteStatusPhaseCode()
+    public function getCompleteStatusPhaseCode(): ?string
     {
         return $this->PhaseCode;
     }
 
     /**
-     * Backward compatible with SOAP API
-     *
-     * @return string|null
+     * Backwards compatible with SOAP API
      *
      * @since 1.2.0
      */
-    public function getCompleteStatusPhaseDescription()
+    public function getCompleteStatusPhaseDescription(): ?string
     {
         return $this->PhaseDescription;
     }
 
     /**
-     * Backward compatible with SOAP API
-     *
-     * @return string|null
+     * Backwards compatible with SOAP API
      *
      * @since 1.2.0
      */
-    public function getCompleteStatusStatusCode()
+    public function getCompleteStatusStatusCode(): ?string
     {
         return $this->PhaseDescription;
     }
 
     /**
-     * Backward compatible with SOAP API
-     *
-     * @return string|null
+     * Backwards compatible with SOAP API
      *
      * @since 1.2.0
      */
-    public function getCompleteStatusStatusDescription()
+    public function getCompleteStatusStatusDescription(): ?string
     {
         return $this->PhaseDescription;
     }
 
     /**
-     * Backward compatible with SOAP API
-     *
-     * @return string|null
+     * Backwards compatible with SOAP API
      *
      * @since 1.2.0
      */
-    public function getCompleteStatusTimeStamp()
+    public function getCompleteStatusTimeStamp(): ?string
     {
         return $this->PhaseDescription;
     }

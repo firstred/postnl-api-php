@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -26,109 +27,102 @@
 
 namespace Firstred\PostNL\Entity;
 
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Attribute\SerializableProperty;
+use Firstred\PostNL\Enum\SoapNamespace;
 
 /**
- * Class OldStatus.
- *
- * @method string|null getCurrentPhaseCode()
- * @method string|null getCurrentPhaseDescription()
- * @method string|null getCurrentOldStatusCode()
- * @method string|null getCurrentOldStatusDescription()
- * @method string|null getCurrentOldStatusTimeStamp()
- * @method OldStatus   setCurrentPhaseCode(string|null $CurrentPhaseCode)
- * @method OldStatus   setCurrentPhaseDescription(string|null $CurrentPhaseDescription)
- * @method OldStatus   setCurrentOldStatusCode(string|null $CurrentOldStatusCode)
- * @method OldStatus   setCurrentOldStatusDescription(string|null $CurrentOldStatusDescription)
- * @method OldStatus   setCurrentOldStatusTimeStamp(string|null $CurrentOldStatusTimeStamp)
- *
  * @since 1.0.0
  */
 class OldStatus extends AbstractEntity
 {
-    /** @var string[][] */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'CurrentPhaseCode'            => BarcodeService::DOMAIN_NAMESPACE,
-            'CurrentPhaseDescription'     => BarcodeService::DOMAIN_NAMESPACE,
-            'CurrentOldStatusCode'        => BarcodeService::DOMAIN_NAMESPACE,
-            'CurrentOldStatusDescription' => BarcodeService::DOMAIN_NAMESPACE,
-            'CurrentOldStatusTimeStamp'   => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'CurrentPhaseCode'            => ConfirmingService::DOMAIN_NAMESPACE,
-            'CurrentPhaseDescription'     => ConfirmingService::DOMAIN_NAMESPACE,
-            'CurrentOldStatusCode'        => ConfirmingService::DOMAIN_NAMESPACE,
-            'CurrentOldStatusDescription' => ConfirmingService::DOMAIN_NAMESPACE,
-            'CurrentOldStatusTimeStamp'   => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'CurrentPhaseCode'            => LabellingService::DOMAIN_NAMESPACE,
-            'CurrentPhaseDescription'     => LabellingService::DOMAIN_NAMESPACE,
-            'CurrentOldStatusCode'        => LabellingService::DOMAIN_NAMESPACE,
-            'CurrentOldStatusDescription' => LabellingService::DOMAIN_NAMESPACE,
-            'CurrentOldStatusTimeStamp'   => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'CurrentPhaseCode'            => DeliveryDateService::DOMAIN_NAMESPACE,
-            'CurrentPhaseDescription'     => DeliveryDateService::DOMAIN_NAMESPACE,
-            'CurrentOldStatusCode'        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'CurrentOldStatusDescription' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'CurrentOldStatusTimeStamp'   => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'CurrentPhaseCode'            => LocationService::DOMAIN_NAMESPACE,
-            'CurrentPhaseDescription'     => LocationService::DOMAIN_NAMESPACE,
-            'CurrentOldStatusCode'        => LocationService::DOMAIN_NAMESPACE,
-            'CurrentOldStatusDescription' => LocationService::DOMAIN_NAMESPACE,
-            'CurrentOldStatusTimeStamp'   => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'CurrentPhaseCode'            => TimeframeService::DOMAIN_NAMESPACE,
-            'CurrentPhaseDescription'     => TimeframeService::DOMAIN_NAMESPACE,
-            'CurrentOldStatusCode'        => TimeframeService::DOMAIN_NAMESPACE,
-            'CurrentOldStatusDescription' => TimeframeService::DOMAIN_NAMESPACE,
-            'CurrentOldStatusTimeStamp'   => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null */
-    protected $CurrentPhaseCode;
-    /** @var string|null */
-    protected $CurrentPhaseDescription;
-    /** @var string|null */
-    protected $CurrentOldStatusCode;
-    /** @var string|null */
-    protected $CurrentOldStatusDescription;
-    /** @var string|null */
-    protected $CurrentOldStatusTimeStamp;
-    // @codingStandardsIgnoreEnd
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $CurrentPhaseCode = null;
 
-    /**
-     * @param string|null $PhaseCode
-     * @param string|null $PhaseDescription
-     * @param string|null $OldStatusCode
-     * @param string|null $OldStatusDescription
-     * @param string|null $TimeStamp
-     */
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $CurrentPhaseDescription = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $CurrentOldStatusCode = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $CurrentOldStatusDescription = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $CurrentOldStatusTimeStamp = null;
+
     public function __construct(
-        $PhaseCode = null,
-        $PhaseDescription = null,
-        $OldStatusCode = null,
-        $OldStatusDescription = null,
-        $TimeStamp = null
+        ?string $PhaseCode = null,
+        ?string $PhaseDescription = null,
+        ?string $OldStatusCode = null,
+        ?string $OldStatusDescription = null,
+        ?string $TimeStamp = null
     ) {
         parent::__construct();
 
-        $this->setCurrentPhaseCode($PhaseCode);
-        $this->setCurrentPhaseDescription($PhaseDescription);
-        $this->setCurrentOldStatusCode($OldStatusCode);
-        $this->setCurrentOldStatusDescription($OldStatusDescription);
-        $this->setCurrentOldStatusTimeStamp($TimeStamp);
+        $this->setCurrentPhaseCode(CurrentPhaseCode: $PhaseCode);
+        $this->setCurrentPhaseDescription(CurrentPhaseDescription: $PhaseDescription);
+        $this->setCurrentOldStatusCode(CurrentOldStatusCode: $OldStatusCode);
+        $this->setCurrentOldStatusDescription(CurrentOldStatusDescription: $OldStatusDescription);
+        $this->setCurrentOldStatusTimeStamp(CurrentOldStatusTimeStamp: $TimeStamp);
+    }
+
+    public function getCurrentPhaseCode(): ?string
+    {
+        return $this->CurrentPhaseCode;
+    }
+
+    public function setCurrentPhaseCode(?string $CurrentPhaseCode): static
+    {
+        $this->CurrentPhaseCode = $CurrentPhaseCode;
+
+        return $this;
+    }
+
+    public function getCurrentPhaseDescription(): ?string
+    {
+        return $this->CurrentPhaseDescription;
+    }
+
+    public function setCurrentPhaseDescription(?string $CurrentPhaseDescription): static
+    {
+        $this->CurrentPhaseDescription = $CurrentPhaseDescription;
+
+        return $this;
+    }
+
+    public function getCurrentOldStatusCode(): ?string
+    {
+        return $this->CurrentOldStatusCode;
+    }
+
+    public function setCurrentOldStatusCode(?string $CurrentOldStatusCode): static
+    {
+        $this->CurrentOldStatusCode = $CurrentOldStatusCode;
+
+        return $this;
+    }
+
+    public function getCurrentOldStatusDescription(): ?string
+    {
+        return $this->CurrentOldStatusDescription;
+    }
+
+    public function setCurrentOldStatusDescription(?string $CurrentOldStatusDescription): static
+    {
+        $this->CurrentOldStatusDescription = $CurrentOldStatusDescription;
+
+        return $this;
+    }
+
+    public function getCurrentOldStatusTimeStamp(): ?string
+    {
+        return $this->CurrentOldStatusTimeStamp;
+    }
+
+    public function setCurrentOldStatusTimeStamp(?string $CurrentOldStatusTimeStamp): static
+    {
+        $this->CurrentOldStatusTimeStamp = $CurrentOldStatusTimeStamp;
+
+        return $this;
     }
 }

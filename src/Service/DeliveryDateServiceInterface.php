@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -42,19 +43,12 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * Class DeliveryDateService.
- *
- * @method GetDeliveryDateResponse getDeliveryDate(GetDeliveryDate $getDeliveryDate)
- * @method RequestInterface        buildGetDeliveryDateRequest(GetDeliveryDate $getDeliveryDate)
- * @method GetDeliveryDateResponse processGetDeliveryDateResponse(mixed $response)
- * @method GetSentDateResponse     getSentDate(GetSentDateRequest $getSentDate)
- * @method RequestInterface        buildGetSentDateRequest(GetSentDateRequest $getSentDate)
- * @method GetSentDateResponse     processGetSentDateResponse(mixed $response)
- *
- * @since 1.2.0
+ * @since 2.0.0
  */
 interface DeliveryDateServiceInterface extends ServiceInterface
 {
+    public const DEFAULT_VERSION = '2.2';
+
     /**
      * Get a delivery date via REST.
      *
@@ -70,27 +64,9 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      * @throws NotFoundException
      * @throws PsrCacheInvalidArgumentException
      *
-     * @since 1.0.0
+     * @since 2.0.0
      */
-    public function getDeliveryDateREST(GetDeliveryDate $getDeliveryDate);
-
-    /**
-     * Get a delivery date via SOAP.
-     *
-     * @param GetDeliveryDate $getDeliveryDate
-     *
-     * @return GetDeliveryDateResponse
-     *
-     * @throws CifDownException
-     * @throws CifException
-     * @throws ResponseException
-     * @throws HttpClientException
-     * @throws NotFoundException
-     * @throws PsrCacheInvalidArgumentException
-     *
-     * @since 1.0.0
-     */
-    public function getDeliveryDateSOAP(GetDeliveryDate $getDeliveryDate);
+    public function getDeliveryDate(GetDeliveryDate $getDeliveryDate): GetDeliveryDateResponse;
 
     /**
      * Get the sent date via REST.
@@ -108,130 +84,7 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      * @throws NotFoundException
      * @throws PsrCacheInvalidArgumentException
      *
-     * @since 1.0.0
+     * @since 2.0.0
      */
-    public function getSentDateREST(GetSentDateRequest $getSentDate);
-
-    /**
-     * Generate a single label via SOAP.
-     *
-     * @param GetSentDateRequest $getSentDate
-     *
-     * @return GetSentDateResponse
-     *
-     * @throws CifDownException
-     * @throws CifException
-     * @throws ResponseException
-     * @throws HttpClientException
-     * @throws NotFoundException
-     * @throws PsrCacheInvalidArgumentException
-     *
-     * @since 1.0.0
-     */
-    public function getSentDateSOAP(GetSentDateRequest $getSentDate);
-
-    /**
-     * Build the GetDeliveryDate request for the REST API.
-     *
-     * @param GetDeliveryDate $getDeliveryDate
-     *
-     * @return RequestInterface
-     *
-     * @since 1.0.0
-     */
-    public function buildGetDeliveryDateRequestREST(GetDeliveryDate $getDeliveryDate);
-
-    /**
-     * Process GetDeliveryDate REST Response.
-     *
-     * @param mixed $response
-     *
-     * @return GetDeliveryDateResponse|null
-     *
-     * @throws ResponseException
-     * @throws HttpClientException
-     * @throws PostNLInvalidArgumentException
-     *
-     * @since 1.0.0
-     */
-    public function processGetDeliveryDateResponseREST($response);
-
-    /**
-     * Build the GetDeliveryDate request for the SOAP API.
-     *
-     * @param GetDeliveryDate $getDeliveryDate
-     *
-     * @return RequestInterface
-     *
-     * @since 1.0.0
-     */
-    public function buildGetDeliveryDateRequestSOAP(GetDeliveryDate $getDeliveryDate);
-
-    /**
-     * @param ResponseInterface $response
-     *
-     * @return GetDeliveryDateResponse
-     *
-     * @throws CifDownException
-     * @throws CifException
-     * @throws ResponseException
-     * @throws HttpClientException
-     *
-     * @since 1.0.0
-     */
-    public function processGetDeliveryDateResponseSOAP(ResponseInterface $response);
-
-    /**
-     * Build the GetSentDate request for the REST API.
-     *
-     * @param GetSentDateRequest $getSentDate
-     *
-     * @return RequestInterface
-     *
-     * @since 1.0.0
-     */
-    public function buildGetSentDateRequestREST(GetSentDateRequest $getSentDate);
-
-    /**
-     * Process GetSentDate REST Response.
-     *
-     * @param mixed $response
-     *
-     * @return GetSentDateResponse|null
-     *
-     * @throws ResponseException
-     * @throws HttpClientException
-     * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
-     *
-     * @since 1.0.0
-     */
-    public function processGetSentDateResponseREST($response);
-
-    /**
-     * Build the GetSentDate request for the SOAP API.
-     *
-     * @param GetSentDateRequest $getSentDate
-     *
-     * @return RequestInterface
-     *
-     * @since 1.0.0
-     */
-    public function buildGetSentDateRequestSOAP(GetSentDateRequest $getSentDate);
-
-    /**
-     * Process GetSentDate SOAP Response.
-     *
-     * @param ResponseInterface $response
-     *
-     * @return GetSentDateResponse
-     *
-     * @throws CifDownException
-     * @throws CifException
-     * @throws ResponseException
-     * @throws HttpClientException
-     *
-     * @since 1.0.0
-     */
-    public function processGetSentDateResponseSOAP(ResponseInterface $response);
+    public function getSentDate(GetSentDateRequest $getSentDate): GetSentDateResponse;
 }

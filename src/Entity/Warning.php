@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -26,90 +27,60 @@
 
 namespace Firstred\PostNL\Entity;
 
+use Firstred\PostNL\Attribute\SerializableProperty;
+use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\NotSupportedException;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingService;
-use Firstred\PostNL\Service\TimeframeService;
 use stdClass;
 
 /**
- * Class Warning.
- *
- * @method string|null getCode()
- * @method string|null getDescription()
- * @method Warning     setCode(string|null $Code = null)
- * @method Warning     setDescription(string|null $Description = null)
- *
  * @since 1.0.0
  */
 class Warning extends AbstractEntity
 {
-    /** @var string[][] */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'Code'        => BarcodeService::DOMAIN_NAMESPACE,
-            'Description' => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'Code'        => ConfirmingService::DOMAIN_NAMESPACE,
-            'Description' => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'Code'        => LabellingService::DOMAIN_NAMESPACE,
-            'Description' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'Code'        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Description' => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'Code'        => LocationService::DOMAIN_NAMESPACE,
-            'Description' => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'Code'        => TimeframeService::DOMAIN_NAMESPACE,
-            'Description' => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-        'Shipping' => [
-            'Code'        => ShippingService::DOMAIN_NAMESPACE,
-            'Description' => ShippingService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null */
-    protected $Code;
-    /** @var string|null */
-    protected $Description;
-    // @codingStandardsIgnoreEnd
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $Code = null;
 
-    /**
-     * @param string|null $Code
-     * @param string|null $Description
-     */
-    public function __construct($Code = null, $Description = null)
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $Description = null;
+
+    public function __construct(?string $Code = null, ?string $Description = null)
     {
         parent::__construct();
 
-        $this->setCode($Code);
-        $this->setDescription($Description);
+        $this->setCode(Code: $Code);
+        $this->setDescription(Description: $Description);
+    }
+
+    public function getCode(): ?string
+    {
+        return $this->Code;
+    }
+
+    public function setCode(?string $Code): static
+    {
+        $this->Code = $Code;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->Description;
+    }
+
+    public function setDescription(?string $Description): static
+    {
+        $this->Description = $Description;
+
+        return $this;
     }
 
     /**
-     * Deserialize JSON.
-     *
-     * @param stdClass $json JSON object `{"EntityName": object}`
-     *
-     * @return static
-     *
      * @throws NotSupportedException
-     * @throws InvalidArgumentException
+     * @throws InvalidArgumentException|\Firstred\PostNL\Exception\DeserializationException
      */
-    public static function jsonDeserialize(stdClass $json)
+    public static function jsonDeserialize(stdClass $json): static
     {
         // Confirming Webservice has the code and description properties in lower case
         if (isset($json->Warning->code)) {
@@ -126,6 +97,6 @@ class Warning extends AbstractEntity
             unset($json->Warning->Message);
         }
 
-        return parent::jsonDeserialize($json);
+        return parent::jsonDeserialize(json: $json);
     }
 }

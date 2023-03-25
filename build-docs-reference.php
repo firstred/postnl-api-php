@@ -31,17 +31,17 @@ require_once __DIR__.'/vendor/autoload.php';
 
 function rrmdir($dir)
 {
-    if (is_dir($dir)) {
-        $objects = scandir($dir);
+    if (is_dir(filename: $dir)) {
+        $objects = scandir(directory: $dir);
         foreach ($objects as $object) {
             if ($object != "." && $object != "..") {
-                if (is_dir($dir.DIRECTORY_SEPARATOR.$object) && !is_link($dir."/".$object))
-                    rrmdir($dir.DIRECTORY_SEPARATOR.$object);
+                if (is_dir(filename: $dir.DIRECTORY_SEPARATOR.$object) && !is_link(filename: $dir."/".$object))
+                    rrmdir(dir: $dir.DIRECTORY_SEPARATOR.$object);
                 else
-                    unlink($dir.DIRECTORY_SEPARATOR.$object);
+                    unlink(filename: $dir.DIRECTORY_SEPARATOR.$object);
             }
         }
-        rmdir($dir);
+        rmdir(directory: $dir);
     }
 }
 
@@ -83,16 +83,16 @@ $apiDocBuilder->addExtension(TocExtension::class);
 // Build documentation
 $apiDocBuilder->build();
 
-if (file_exists($referenceFolder)) {
-    rrmdir($referenceFolder);
+if (file_exists(filename: $referenceFolder)) {
+    rrmdir(dir: $referenceFolder);
 }
 
-rename("$referenceFolder-tmp/Firstred/PostNL", $referenceFolder);
+rename(from: "$referenceFolder-tmp/Firstred/PostNL", to: $referenceFolder);
 
-$referenceIndexContents = file_get_contents("$referenceFolder/index.rst");
-$referenceIndexContents = str_replace("PostNL\n======", "API Reference\n======", $referenceIndexContents);
-file_put_contents("$referenceFolder/index.rst", $referenceIndexContents);
+$referenceIndexContents = file_get_contents(filename: "$referenceFolder/index.rst");
+$referenceIndexContents = str_replace(search: "PostNL\n======", replace: "API Reference\n======", subject: $referenceIndexContents);
+file_put_contents(filename: "$referenceFolder/index.rst", data: $referenceIndexContents);
 
 // Cleanup
-rrmdir("$referenceFolder-tmp");
+rrmdir(dir: "$referenceFolder-tmp");
 

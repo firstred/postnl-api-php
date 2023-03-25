@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -34,45 +35,40 @@ use Firstred\PostNL\Entity\Message\LabellingMessage;
 use Firstred\PostNL\Entity\Request\Confirming;
 use Firstred\PostNL\Entity\Response\ConfirmingResponseShipment;
 use Firstred\PostNL\Entity\Shipment;
-use Firstred\PostNL\Entity\SOAP\UsernameToken;
+use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\Exception\ResponseException;
-use Firstred\PostNL\HttpClient\MockClient;
+use Firstred\PostNL\HttpClient\MockHttpClient;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\ConfirmingServiceInterface;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
+use Psr\Http\Message\RequestInterface;
 
 /**
- * Class ConfirmingServiceSoapTest.
- *
  * @testdox The ConfirmingService (SOAP)
  */
-class ConfirmingServiceSoapTest extends ServiceTest
+class ConfirmingServiceSoapTest extends ServiceTestCase
 {
-    /** @var PostNL */
-    protected $postnl;
-    /** @var ConfirmingServiceInterface */
-    protected $service;
-    /** @var */
-    protected $lastRequest;
+    protected PostNL $postnl;
+    protected ConfirmingServiceInterface $service;
+    protected RequestInterface $lastRequest;
 
     /**
      * @before
      *
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \ReflectionException
+     * @throws
      */
-    public function setupPostNL()
+    public function setupPostNL(): void
     {
         $this->postnl = new PostNL(
-            Customer::create()
-                ->setCollectionLocation('123456')
-                ->setCustomerCode('DEVC')
-                ->setCustomerNumber('11223344')
-                ->setContactPerson('Test')
-                ->setAddress(Address::create([
+            customer: Customer::create()
+                ->setCollectionLocation(CollectionLocation: '123456')
+                ->setCustomerCode(CustomerCode: 'DEVC')
+                ->setCustomerNumber(CustomerNumber: '11223344')
+                ->setContactPerson(ContactPerson: 'Test')
+                ->setAddress(Address: Address::create(properties: [
                     'AddressType' => '02',
                     'City'        => 'Hoofddorp',
                     'CompanyName' => 'PostNL',
@@ -81,41 +77,43 @@ class ConfirmingServiceSoapTest extends ServiceTest
                     'Street'      => 'Siriusdreef',
                     'Zipcode'     => '2132WT',
                 ]))
-                ->setGlobalPackBarcodeType('AB')
-                ->setGlobalPackCustomerCode('1234'), new UsernameToken(null, 'test'),
-            true,
-            PostNL::MODE_SOAP
+                ->setGlobalPackBarcodeType(GlobalPackBarcodeType: 'AB')
+                ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'), apiKey: new UsernameToken(Username: null, Password: 'test'),
+            sandbox: true,
+            mode: PostNL::MODE_Soap
         );
 
         global $logger;
-        $this->postnl->setLogger($logger);
+        $this->postnl->setLogger(logger: $logger);
 
         $this->service = $this->postnl->getConfirmingService();
-        $this->service->setCache(new VoidCachePool());
-        $this->service->setTtl(1);
+        $this->service->setCache(cache: new VoidCachePool());
+        $this->service->setTtl(ttl: 1);
     }
 
     /**
      * @testdox returns a valid service object
      */
-    public function testHasValidConfirmingService()
+    public function testHasValidConfirmingService(): void
     {
-        $this->assertInstanceOf(ConfirmingService::class, $this->service);
+        $this->assertInstanceOf(expected: ConfirmingService::class, actual: $this->service);
     }
 
     /**
      * @testdox creates a confirm request
+     *
+     * @throws
      */
-    public function testCreatesAValidLabelRequest()
+    public function testCreatesAValidLabelRequest(): void
     {
         $message = new LabellingMessage();
 
-        $this->lastRequest = $request = $this->service->buildConfirmRequestSOAP(
-            Confirming::create()
-                ->setShipments([
+        $this->lastRequest = $request = $this->service->buildConfirmRequestSoap(
+            confirming: Confirming::create()
+                ->setShipments(Shipments: [
                     Shipment::create()
-                        ->setAddresses([
-                            Address::create([
+                        ->setAddresses(Addresses: [
+                            Address::create(properties: [
                                 'AddressType' => '01',
                                 'City'        => 'Utrecht',
                                 'Countrycode' => 'NL',
@@ -126,7 +124,7 @@ class ConfirmingServiceSoapTest extends ServiceTest
                                 'Street'      => 'Bilderdijkstraat',
                                 'Zipcode'     => '3521VA',
                             ]),
-                            Address::create([
+                            Address::create(properties: [
                                 'AddressType' => '02',
                                 'City'        => 'Hoofddorp',
                                 'CompanyName' => 'PostNL',
@@ -136,16 +134,16 @@ class ConfirmingServiceSoapTest extends ServiceTest
                                 'Zipcode'     => '2132WT',
                             ]),
                         ])
-                        ->setBarcode('3S1234567890123')
-                        ->setDeliveryAddress('01')
-                        ->setDimension(new Dimension('2000'))
-                        ->setProductCodeDelivery('3085'),
+                        ->setBarcode(Barcode: '3S1234567890123')
+                        ->setDeliveryAddress(DeliveryAddress: '01')
+                        ->setDimension(Dimension: new Dimension(Weight: '2000'))
+                        ->setProductCodeDelivery(ProductCodeDelivery: '3085'),
                 ])
-                ->setMessage($message)
-                ->setCustomer($this->postnl->getCustomer())
+                ->setMessage(Message: $message)
+                ->setCustomer(Customer: $this->postnl->getCustomer())
         );
 
-        $this->assertXmlStringEqualsXmlString(<<<XML
+        $this->assertXmlStringEqualsXmlString(expectedXml: <<<XML
 <?xml version="1.0"?>
 <soap:Envelope 
   xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
@@ -182,7 +180,7 @@ class ConfirmingServiceSoapTest extends ServiceTest
    </domain:Customer>
    <domain:Message>
     <domain:MessageID>{$message->getMessageID()}</domain:MessageID>
-    <domain:MessageTimeStamp>{$message->getMessageTimeStamp()->format('d-m-Y H:i:s')}</domain:MessageTimeStamp>
+    <domain:MessageTimeStamp>{$message->getMessageTimeStamp()->format(format: 'd-m-Y H:i:s')}</domain:MessageTimeStamp>
     <domain:Printertype>GraphicFile|PDF</domain:Printertype>
    </domain:Message>
    <domain:Shipments>
@@ -222,19 +220,21 @@ class ConfirmingServiceSoapTest extends ServiceTest
 </soap:Envelope>
 XML
             ,
-            (string) $request->getBody());
-        $this->assertEquals('', $request->getHeaderLine('apikey'));
-        $this->assertEquals('text/xml;charset=UTF-8', $request->getHeaderLine('Content-Type'));
-        $this->assertEquals('text/xml', $request->getHeaderLine('Accept'));
+            actualXml: (string) $request->getBody());
+        $this->assertEquals(expected: '', actual: $request->getHeaderLine('apikey'));
+        $this->assertEquals(expected: 'text/xml;charset=UTF-8', actual: $request->getHeaderLine('Content-Type'));
+        $this->assertEquals(expected: 'text/xml', actual: $request->getHeaderLine('Accept'));
     }
 
     /**
      * @testdox can confirm a single label
+     *
+     * @throws
      */
-    public function testGenerateSingleLabelSoap()
+    public function testGenerateSingleLabelSoap(): void
     {
-        $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+        $mock = new MockHandler(queue: [
+            new Response(status: 200, headers: ['Content-Type' => 'application/json;charset=UTF-8'], body: '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
   <s:Body>
     <ConfirmingResponseShipments
 xmlns="http://postnl.nl/cif/services/ConfirmingWebService/"
@@ -249,15 +249,15 @@ xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
 </s:Envelope>
 '),
         ]);
-        $handler = HandlerStack::create($mock);
-        $mockClient = new MockClient();
-        $mockClient->setHandler($handler);
-        $this->postnl->setHttpClient($mockClient);
+        $handler = HandlerStack::create(handler: $mock);
+        $mockClient = new MockHttpClient();
+        $mockClient->setHandler(handler: $handler);
+        $this->postnl->setHttpClient(httpClient: $mockClient);
 
         $confirm = $this->postnl->confirmShipment(
-            (new Shipment())
-                ->setAddresses([
-                    Address::create([
+            shipment: (new Shipment())
+                ->setAddresses(Addresses: [
+                    Address::create(properties: [
                         'AddressType' => '01',
                         'City'        => 'Utrecht',
                         'Countrycode' => 'NL',
@@ -268,7 +268,7 @@ xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
                         'Street'      => 'Bilderdijkstraat',
                         'Zipcode'     => '3521VA',
                     ]),
-                    Address::create([
+                    Address::create(properties: [
                         'AddressType' => '02',
                         'City'        => 'Hoofddorp',
                         'CompanyName' => 'PostNL',
@@ -278,24 +278,24 @@ xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
                         'Zipcode'     => '2132WT',
                     ]),
                 ])
-                ->setBarcode('3S1234567890123')
-                ->setDeliveryAddress('01')
-                ->setDimension(new Dimension('2000'))
-                ->setProductCodeDelivery('3085')
+                ->setBarcode(Barcode: '3S1234567890123')
+                ->setDeliveryAddress(DeliveryAddress: '01')
+                ->setDimension(Dimension: new Dimension(Weight: '2000'))
+                ->setProductCodeDelivery(ProductCodeDelivery: '3085')
         );
 
-        $this->assertInstanceOf(ConfirmingResponseShipment::class, $confirm);
+        $this->assertInstanceOf(expected: ConfirmingResponseShipment::class, actual: $confirm);
     }
 
     /**
      * @testdox can confirm multiple labels
      *
-     * @throws \Exception
+     * @throws
      */
-    public function testGenerateMultipleLabelsSoap()
+    public function testGenerateMultipleLabelsSoap(): void
     {
-        $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+        $mock = new MockHandler(queue: [
+            new Response(status: 200, headers: ['Content-Type' => 'application/json;charset=UTF-8'], body: '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
   <s:Body>
     <ConfirmingResponseShipments
 xmlns="http://postnl.nl/cif/services/ConfirmingWebService/"
@@ -308,7 +308,7 @@ xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
     </ConfirmingResponseShipments>
   </s:Body>
 </s:Envelope>
-'), new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+'), new Response(status: 200, headers: ['Content-Type' => 'application/json;charset=UTF-8'], body: '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
   <s:Body>
     <ConfirmingResponseShipments
 xmlns="http://postnl.nl/cif/services/ConfirmingWebService/"
@@ -323,15 +323,15 @@ xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
 </s:Envelope>
 '),
         ]);
-        $handler = HandlerStack::create($mock);
-        $mockClient = new MockClient();
-        $mockClient->setHandler($handler);
-        $this->postnl->setHttpClient($mockClient);
+        $handler = HandlerStack::create(handler: $mock);
+        $mockClient = new MockHttpClient();
+        $mockClient->setHandler(handler: $handler);
+        $this->postnl->setHttpClient(httpClient: $mockClient);
 
-        $confirmShipments = $this->postnl->confirmShipments([
-                (new Shipment())
-                    ->setAddresses([
-                        Address::create([
+        $confirmShipments = $this->postnl->confirmShipments(shipments: [
+            (new Shipment())
+                    ->setAddresses(Addresses: [
+                        Address::create(properties: [
                             'AddressType' => '01',
                             'City'        => 'Utrecht',
                             'Countrycode' => 'NL',
@@ -342,7 +342,7 @@ xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
                             'Street'      => 'Bilderdijkstraat',
                             'Zipcode'     => '3521VA',
                         ]),
-                        Address::create([
+                        Address::create(properties: [
                             'AddressType' => '02',
                             'City'        => 'Hoofddorp',
                             'CompanyName' => 'PostNL',
@@ -352,13 +352,13 @@ xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
                             'Zipcode'     => '2132WT',
                         ]),
                     ])
-                    ->setBarcode('3SDEVC201611210')
-                    ->setDeliveryAddress('01')
-                    ->setDimension(new Dimension('2000'))
-                    ->setProductCodeDelivery('3085'),
-                (new Shipment())
-                    ->setAddresses([
-                        Address::create([
+                    ->setBarcode(Barcode: '3SDEVC201611210')
+                    ->setDeliveryAddress(DeliveryAddress: '01')
+                    ->setDimension(Dimension: new Dimension(Weight: '2000'))
+                    ->setProductCodeDelivery(ProductCodeDelivery: '3085'),
+            (new Shipment())
+                    ->setAddresses(Addresses: [
+                        Address::create(properties: [
                             'AddressType' => '01',
                             'City'        => 'Utrecht',
                             'Countrycode' => 'NL',
@@ -369,7 +369,7 @@ xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
                             'Street'      => 'Bilderdijkstraat',
                             'Zipcode'     => '3521VA',
                         ]),
-                        Address::create([
+                        Address::create(properties: [
                             'AddressType' => '02',
                             'City'        => 'Hoofddorp',
                             'CompanyName' => 'PostNL',
@@ -379,35 +379,37 @@ xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
                             'Zipcode'     => '2132WT',
                         ]),
                     ])
-                    ->setBarcode('3SDEVC201611211')
-                    ->setDeliveryAddress('01')
-                    ->setDimension(new Dimension('2000'))
-                    ->setProductCodeDelivery('3085'),
+                    ->setBarcode(Barcode: '3SDEVC201611211')
+                    ->setDeliveryAddress(DeliveryAddress: '01')
+                    ->setDimension(Dimension: new Dimension(Weight: '2000'))
+                    ->setProductCodeDelivery(ProductCodeDelivery: '3085'),
             ]
         );
 
-        $this->assertInstanceOf(ConfirmingResponseShipment::class, $confirmShipments[1]);
+        $this->assertInstanceOf(expected: ConfirmingResponseShipment::class, actual: $confirmShipments[1]);
     }
 
     /**
      * @testdox throws exception on invalid response
+     *
+     * @throws
      */
-    public function testNegativeGenerateLabelInvalidResponseSoap()
+    public function testNegativeGenerateLabelInvalidResponseSoap(): void
     {
-        $this->expectException(ResponseException::class);
+        $this->expectException(exception: ResponseException::class);
 
-        $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], 'asdfojasuidfo'),
+        $mock = new MockHandler(queue: [
+            new Response(status: 200, headers: ['Content-Type' => 'application/json;charset=UTF-8'], body: 'asdfojasuidfo'),
         ]);
-        $handler = HandlerStack::create($mock);
-        $mockClient = new MockClient();
-        $mockClient->setHandler($handler);
-        $this->postnl->setHttpClient($mockClient);
+        $handler = HandlerStack::create(handler: $mock);
+        $mockClient = new MockHttpClient();
+        $mockClient->setHandler(handler: $handler);
+        $this->postnl->setHttpClient(httpClient: $mockClient);
 
         $this->postnl->generateLabel(
-            (new Shipment())
-                ->setAddresses([
-                    Address::create([
+            shipment: (new Shipment())
+                ->setAddresses(Addresses: [
+                    Address::create(properties: [
                         'AddressType' => '01',
                         'City'        => 'Utrecht',
                         'Countrycode' => 'NL',
@@ -418,7 +420,7 @@ xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
                         'Street'      => 'Bilderdijkstraat',
                         'Zipcode'     => '3521VA',
                     ]),
-                    Address::create([
+                    Address::create(properties: [
                         'AddressType' => '02',
                         'City'        => 'Hoofddorp',
                         'CompanyName' => 'PostNL',
@@ -428,10 +430,10 @@ xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
                         'Zipcode'     => '2132WT',
                     ]),
                 ])
-                ->setBarcode('3S1234567890123')
-                ->setDeliveryAddress('01')
-                ->setDimension(new Dimension('2000'))
-                ->setProductCodeDelivery('3085')
+                ->setBarcode(Barcode: '3S1234567890123')
+                ->setDeliveryAddress(DeliveryAddress: '01')
+                ->setDimension(Dimension: new Dimension(Weight: '2000'))
+                ->setProductCodeDelivery(ProductCodeDelivery: '3085')
         );
     }
 }

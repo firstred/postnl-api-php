@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -26,96 +27,96 @@
 
 namespace Firstred\PostNL\Entity\Response;
 
+use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Warning;
-use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Exception\NotSupportedException;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Enum\SoapNamespace;
 use Sabre\Xml\Writer;
-use stdClass;
 
 /**
- * Class CurrentStatusResponse.
- *
- * @method CurrentStatusResponseShipment[]|null getShipments()
- * @method Warning[]|null                       getWarnings()
- * @method CurrentStatusResponse                setShipments(CurrentStatusResponseShipment[]|null $Shipments = null)
- * @method CurrentStatusResponse                setWarnings(Warning[]|null $Warnings = null)
- *
  * @since 1.0.0
  */
 class CurrentStatusResponse extends AbstractEntity
 {
-    /**
-     * Default properties and namespaces for the SOAP API.
-     *
-     * @var array
-     */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'Shipments' => BarcodeService::DOMAIN_NAMESPACE,
-            'Warnings'  => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'Shipments' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Warnings'  => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'Shipments' => LabellingService::DOMAIN_NAMESPACE,
-            'Warnings'  => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'Warnings'  => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'Shipments' => LocationService::DOMAIN_NAMESPACE,
-            'Warnings'  => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'Shipments' => TimeframeService::DOMAIN_NAMESPACE,
-            'Warnings'  => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var CurrentStatusResponseShipment[]|null */
-    protected $Shipments;
-    /** @var Warning[]|null */
-    protected $Warnings;
-    // @codingStandardsIgnoreEnd
+    /** @var CurrentStatusResponseShipment[]|null $Shipments */
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?array $Shipments = null;
 
-    /**
-     * CurrentStatusResponse constructor.
-     *
-     * @param CurrentStatusResponseShipment[]|null $Shipments
-     * @param Warning[]|null $Warnings
-     */
+    /** @var Warning[]|null $Warnings */
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?array $Warnings = null;
+
     public function __construct(
-        array $Shipments = null,
-        array $Warnings = null
+        /** @param CurrentStatusResponseShipment[]|null $Shipments */
+        ?array $Shipments = null,
+        /** @param Warning[]|null $Warnings */
+        ?array $Warnings = null
     ) {
         parent::__construct();
 
-        $this->setShipments($Shipments);
-        $this->setWarnings($Warnings);
+        $this->setShipments(Shipments: $Shipments);
+        $this->setWarnings(Warnings: $Warnings);
     }
 
     /**
-     * Return a serializable array for the XMLWriter.
-     *
-     * @param Writer $writer
-     *
-     * @return void
+     * @return CurrentStatusResponseShipment[]|null
      */
-    public function xmlSerialize(Writer $writer)
+    public function getShipments(): ?array
+    {
+        return $this->Shipments;
+    }
+
+    /**
+     * @param CurrentStatusResponseShipment[]|null $Shipments
+     * @return static
+     */
+    public function setShipments(?array $Shipments): static
+    {
+        if (is_array(value: $Shipments)) {
+            foreach ($Shipments as $shipment) {
+                if (!$shipment instanceof CurrentStatusResponseShipment) {
+                    throw new \TypeError(message: 'Expected instance of `CurrentStatusResponseShipment`');
+                }
+            }
+        }
+
+        $this->Shipments = $Shipments;
+
+        return $this;
+    }
+
+    /**
+     * @return Warning[]|null
+     */
+    public function getWarnings(): ?array
+    {
+        return $this->Warnings;
+    }
+
+    /**
+     * @param Warning[]|null $Warnings
+     * @return static
+     */
+    public function setWarnings(?array $Warnings): static
+    {
+        if (is_array(value: $Warnings)) {
+            foreach ($Warnings as $warning) {
+                if (!$warning instanceof Warning) {
+                    throw new \TypeError(message: 'Expected instance of `Warning`');
+                }
+            }
+        }
+
+        $this->Warnings = $Warnings;
+
+        return $this;
+    }
+
+    public function xmlSerialize(Writer $writer): void
     {
         $xml = [];
-        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
-            $writer->write($xml);
+        if (!$this->currentService || !in_array(needle: $this->currentService, haystack: array_keys(array: static::$defaultProperties))) {
+            $writer->write(value: $xml);
 
             return;
         }
@@ -132,6 +133,6 @@ class CurrentStatusResponse extends AbstractEntity
             }
         }
         // Auto extending this object with other properties is not supported with SOAP
-        $writer->write($xml);
+        $writer->write(value: $xml);
     }
 }

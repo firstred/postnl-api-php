@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -34,24 +35,24 @@ namespace Firstred\PostNL\Exception;
 class ApiConnectionException extends ApiException
 {
     /** @var string */
-    protected $body;
+    protected ?string $body;
     /** @var object */
-    protected $jsonBody;
+    protected ?object $jsonBody;
     /** @var array */
-    protected $headers;
+    protected ?array $headers;
 
     /**
      * ApiConnectionException constructor.
      *
-     * @param string      $message
-     * @param int         $code
+     * @param string $message
+     * @param int $code
      * @param string|null $body
      * @param object|null $jsonBody
-     * @param array|null  $headers
+     * @param array|null $headers
      */
-    public function __construct($message = '', $code = 0, $body = null, $jsonBody = null, $headers = null)
+    public function __construct(string $message = '', int $code = 0, $body = null, object $jsonBody = null, array $headers = null)
     {
-        parent::__construct($message, $code, null);
+        parent::__construct(message: $message, code: $code, previous: null);
 
         $this->body = $body;
         $this->jsonBody = $jsonBody;
@@ -61,7 +62,7 @@ class ApiConnectionException extends ApiException
     /**
      * @return string
      */
-    public function getBody()
+    public function getBody(): ?string
     {
         return $this->body;
     }
@@ -69,7 +70,7 @@ class ApiConnectionException extends ApiException
     /**
      * @return object
      */
-    public function getJsonBody()
+    public function getJsonBody(): ?object
     {
         return $this->jsonBody;
     }
@@ -77,7 +78,7 @@ class ApiConnectionException extends ApiException
     /**
      * @return array
      */
-    public function getHeaders()
+    public function getHeaders(): ?array
     {
         return $this->headers;
     }

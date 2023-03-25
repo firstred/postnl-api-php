@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -26,154 +27,127 @@
 
 namespace Firstred\PostNL\Service;
 
+use DateInterval;
+use DateTimeInterface;
 use Firstred\PostNL\Entity\Request\SendShipment;
 use Firstred\PostNL\Entity\Response\SendShipmentResponse;
-use Firstred\PostNL\Exception\CifDownException;
-use Firstred\PostNL\Exception\CifException;
+use Firstred\PostNL\Enum\PostNLApiMode;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
+use Firstred\PostNL\HttpClient\HttpClientInterface;
+use Firstred\PostNL\Service\Adapter\Rest\BarcodeServiceRestAdapter;
+use Firstred\PostNL\Service\Adapter\Rest\ShippingServiceRestAdapter;
+use Firstred\PostNL\Service\Adapter\ServiceAdapterSettersTrait;
+use Firstred\PostNL\Service\Adapter\ShippingServiceAdapterInterface;
+use Firstred\PostNL\Service\Adapter\Soap\BarcodeServiceSoapAdapter;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use InvalidArgumentException;
+use ParagonIE\HiddenString\HiddenString;
 use Psr\Cache\CacheItemInterface;
+use Psr\Cache\CacheItemPoolInterface;
 use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
-use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
-use function http_build_query;
-use function json_encode;
-use const PHP_QUERY_RFC3986;
+use Psr\Http\Message\StreamFactoryInterface;
 
 /**
- * Class ShippingService.
- *
- * @method SendShipmentResponse sendShipment(SendShipment $sendShipment, bool $confirm)
- * @method RequestInterface     buildSendShipmentRequest(SendShipment $sendShipment, bool $confirm)
- * @method SendShipmentResponse processSendShipmentResponse(mixed $response)
- *
- * @since 1.2.0
+ * @since 2.0.0
  */
 class ShippingService extends AbstractService implements ShippingServiceInterface
 {
-    // API Version
-    const VERSION = '1';
+    use ServiceAdapterSettersTrait;
 
-    // Endpoints
-    const LIVE_ENDPOINT = 'https://api.postnl.nl/v1/shipment';
-    const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/v1/shipment';
+    protected ShippingServiceAdapterInterface $adapter;
 
-    const DOMAIN_NAMESPACE = 'http://postnl.nl/';
+    public function __construct(
+        HiddenString                       $apiKey,
+        PostNLApiMode                      $apiMode,
+        bool                               $sandbox,
+        HttpClientInterface                $httpClient,
+        RequestFactoryInterface            $requestFactory,
+        StreamFactoryInterface             $streamFactory,
+        string                             $version = ShippingServiceInterface::DEFAULT_VERSION,
+        CacheItemPoolInterface             $cache = null,
+        DateInterval|DateTimeInterface|int $ttl = null,
+    ) {
+        parent::__construct(
+            apiKey: $apiKey,
+            apiMode: $apiMode,
+            sandbox: $sandbox,
+            httpClient: $httpClient,
+            requestFactory: $requestFactory,
+            streamFactory: $streamFactory,
+            version: $version,
+            cache: $cache,
+            ttl: $ttl,
+        );
+    }
 
     /**
      * Generate a single Shipping vai REST.
      *
-     * @param SendShipment $sendShipment
-     * @param bool         $confirm
-     *
-     * @return SendShipmentResponse|null
-     *
-     * @throws NotFoundException
-     * @throws CifDownException
-     * @throws CifException
-     * @throws ResponseException
-     * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
+     * @throws NotFoundException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
-     *
+     * @throws PsrCacheInvalidArgumentException
+     * @throws ResponseException
      * @since 1.2.0
      */
-    public function sendShipmentRest(SendShipment $sendShipment, $confirm = true)
+    public function sendShipment(SendShipment $sendShipment, bool $confirm = true): ?SendShipmentResponse
     {
-        $item = $this->retrieveCachedItem($sendShipment->getId());
+        $item = $this->retrieveCachedItem(uuid: $sendShipment->getId());
         $response = null;
 
         if ($item instanceof CacheItemInterface && $item->isHit()) {
             $response = $item->get();
             try {
-                $response = PsrMessage::parseResponse($response);
-            } catch (InvalidArgumentException $e) {
+                $response = PsrMessage::parseResponse(message: $response);
+            } catch (InvalidArgumentException) {
             }
         }
         if (!$response instanceof ResponseInterface) {
-            $response = $this->postnl->getHttpClient()->doRequest(
-                $this->buildSendShipmentRequestREST($sendShipment, $confirm)
+            $response = $this->getHttpClient()->doRequest(
+                request: $this->adapter->buildSendShipmentRequest(sendShipment: $sendShipment, confirm: $confirm)
             );
-
-            static::validateRESTResponse($response);
         }
 
-        $object = $this->processSendShipmentResponseREST($response);
+        $object = $this->adapter->processSendShipmentResponse(response: $response);
         if ($object instanceof SendShipmentResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof ResponseInterface
                 && 200 === $response->getStatusCode()
             ) {
-                $item->set(PsrMessage::toString($response));
-                $this->cacheItem($item);
+                $item->set(value: PsrMessage::toString(message: $response));
+                $this->cacheItem(item: $item);
             }
 
             return $object;
         }
 
         if (200 === $response->getStatusCode()) {
-            throw new ResponseException('Invalid API response', null, null, $response);
+            throw new ResponseException(message: 'Invalid API response', response: $response);
         }
 
-        throw new NotFoundException('Unable to create shipment');
+        throw new NotFoundException(message: 'Unable to create shipment');
     }
 
     /**
-     * @param SendShipment $sendShipment
-     * @param bool         $confirm
-     *
-     * @return RequestInterface
-     *
-     * @since 1.2.0
+     * @since 2.0.0
      */
-    public function buildSendShipmentRequestREST(SendShipment $sendShipment, $confirm = true)
+    public function setAPIMode(PostNLApiMode $mode): void
     {
-        $apiKey = $this->postnl->getRestApiKey();
-        $this->setService($sendShipment);
-
-        return $this->postnl->getRequestFactory()->createRequest(
-            'POST',
-            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).'?'.http_build_query([
-                'confirm' => $confirm,
-            ], '', '&', PHP_QUERY_RFC3986)
-        )
-            ->withHeader('apikey', $apiKey)
-            ->withHeader('Accept', 'application/json')
-            ->withHeader('Content-Type', 'application/json;charset=UTF-8')
-            ->withBody($this->postnl->getStreamFactory()->createStream(json_encode($sendShipment)));
-    }
-
-    /**
-     * Process the SendShipment REST Response.
-     *
-     * @param ResponseInterface $response
-     *
-     * @return SendShipmentResponse|null
-     *
-     * @throws ResponseException
-     * @throws HttpClientException
-     * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
-     *
-     * @since 1.2.0
-     */
-    public function processSendShipmentResponseREST($response)
-    {
-        $body = json_decode(static::getResponseText($response));
-        if (isset($body->ResponseShipments)) {
-            /** @var SendShipmentResponse $object */
-            $object = SendShipmentResponse::JsonDeserialize((object) ['SendShipmentResponse' => $body]);
-            $this->setService($object);
-
-            return $object;
+        if (!isset($this->adapter)) {
+            $this->adapter = new ShippingServiceRestAdapter(
+                apiKey: $this->getApiKey(),
+                sandbox: $this->isSandbox(),
+                requestFactory: $this->getRequestFactory(),
+                streamFactory: $this->getStreamFactory(),
+                version: $this->getVersion(),
+            );
         }
-
-        return null;
     }
 }

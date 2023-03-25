@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -30,163 +31,144 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use Exception;
+use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
+use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\TimeframeService;
 
 /**
- * Class CompleteStatusResponseEvent.
- *
- * @method string|null                 getCode()
- * @method string|null                 getDescription()
- * @method string|null                 getDestinationLocationCode()
- * @method string|null                 getLocationCode()
- * @method string|null                 getRouteCode()
- * @method string|null                 getRouteName()
- * @method DateTimeInterface|null      getTimeStamp()
- * @method CompleteStatusResponseEvent setCode(string|null $Code = null)
- * @method CompleteStatusResponseEvent setDescription(string|null $Description = null)
- * @method CompleteStatusResponseEvent setDestinationLocationCode(string|null $DestinationLocationCode = null)
- * @method CompleteStatusResponseEvent setLocationCode(string|null $LocationCode = null)
- * @method CompleteStatusResponseEvent setRouteCode(string|null $RouteCode = null)
- * @method CompleteStatusResponseEvent setRouteName(string|null $RouteName = null)
- *
  * @since 1.0.0
  */
 class CompleteStatusResponseEvent extends AbstractEntity
 {
-    /**
-     * Default properties and namespaces for the SOAP API.
-     *
-     * @var array
-     */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'Code'                    => BarcodeService::DOMAIN_NAMESPACE,
-            'Description'             => BarcodeService::DOMAIN_NAMESPACE,
-            'DestinationLocationCode' => BarcodeService::DOMAIN_NAMESPACE,
-            'LocationCode'            => BarcodeService::DOMAIN_NAMESPACE,
-            'RouteCode'               => BarcodeService::DOMAIN_NAMESPACE,
-            'RouteName'               => BarcodeService::DOMAIN_NAMESPACE,
-            'TimeStamp'               => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'Code'                    => ConfirmingService::DOMAIN_NAMESPACE,
-            'Description'             => ConfirmingService::DOMAIN_NAMESPACE,
-            'DestinationLocationCode' => ConfirmingService::DOMAIN_NAMESPACE,
-            'LocationCode'            => ConfirmingService::DOMAIN_NAMESPACE,
-            'RouteCode'               => ConfirmingService::DOMAIN_NAMESPACE,
-            'RouteName'               => ConfirmingService::DOMAIN_NAMESPACE,
-            'TimeStamp'               => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'Code'                    => LabellingService::DOMAIN_NAMESPACE,
-            'Description'             => LabellingService::DOMAIN_NAMESPACE,
-            'DestinationLocationCode' => LabellingService::DOMAIN_NAMESPACE,
-            'LocationCode'            => LabellingService::DOMAIN_NAMESPACE,
-            'RouteCode'               => LabellingService::DOMAIN_NAMESPACE,
-            'RouteName'               => LabellingService::DOMAIN_NAMESPACE,
-            'TimeStamp'               => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'Code'                    => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Description'             => DeliveryDateService::DOMAIN_NAMESPACE,
-            'DestinationLocationCode' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'LocationCode'            => DeliveryDateService::DOMAIN_NAMESPACE,
-            'RouteCode'               => DeliveryDateService::DOMAIN_NAMESPACE,
-            'RouteName'               => DeliveryDateService::DOMAIN_NAMESPACE,
-            'TimeStamp'               => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'Code'                    => LocationService::DOMAIN_NAMESPACE,
-            'Description'             => LocationService::DOMAIN_NAMESPACE,
-            'DestinationLocationCode' => LocationService::DOMAIN_NAMESPACE,
-            'LocationCode'            => LocationService::DOMAIN_NAMESPACE,
-            'RouteCode'               => LocationService::DOMAIN_NAMESPACE,
-            'RouteName'               => LocationService::DOMAIN_NAMESPACE,
-            'TimeStamp'               => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'Code'                    => TimeframeService::DOMAIN_NAMESPACE,
-            'Description'             => TimeframeService::DOMAIN_NAMESPACE,
-            'DestinationLocationCode' => TimeframeService::DOMAIN_NAMESPACE,
-            'LocationCode'            => TimeframeService::DOMAIN_NAMESPACE,
-            'RouteCode'               => TimeframeService::DOMAIN_NAMESPACE,
-            'RouteName'               => TimeframeService::DOMAIN_NAMESPACE,
-            'TimeStamp'               => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null */
-    protected $Code;
-    /** @var string|null */
-    protected $Description;
-    /** @var string|null */
-    protected $DestinationLocationCode;
-    /** @var string|null */
-    protected $LocationCode;
-    /** @var string|null */
-    protected $RouteCode;
-    /** @var string|null */
-    protected $RouteName;
-    /** @var string|null */
-    protected $TimeStamp;
-    // @codingStandardsIgnoreEnd
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $Code = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $Description = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $DestinationLocationCode = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $LocationCode = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $RouteCode = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $RouteName = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $TimeStamp = null;
 
     /**
-     * CompleteStatusResponseEvent constructor.
-     *
-     * @param string|null $Code
-     * @param string|null $Description
-     * @param string|null $DestinationLocationCode
-     * @param string|null $LocationCode
-     * @param string|null $RouteCode
-     * @param string|null $RouteName
-     * @param string|null $TimeStamp
-     *
      * @throws InvalidArgumentException
      */
     public function __construct(
-        $Code = null,
-        $Description = null,
-        $DestinationLocationCode = null,
-        $LocationCode = null,
-        $RouteCode = null,
-        $RouteName = null,
-        $TimeStamp = null
+        ?string $Code = null,
+        ?string $Description = null,
+        ?string $DestinationLocationCode = null,
+        ?string $LocationCode = null,
+        ?string $RouteCode = null,
+        ?string $RouteName = null,
+        ?string $TimeStamp = null
     ) {
         parent::__construct();
 
-        $this->setCode($Code);
-        $this->setDescription($Description);
-        $this->setDestinationLocationCode($DestinationLocationCode);
-        $this->setLocationCode($LocationCode);
-        $this->setRouteCode($RouteCode);
-        $this->setRouteName($RouteName);
-        $this->setTimeStamp($TimeStamp);
+        $this->setCode(Code: $Code);
+        $this->setDescription(Description: $Description);
+        $this->setDestinationLocationCode(DestinationLocationCode: $DestinationLocationCode);
+        $this->setLocationCode(LocationCode: $LocationCode);
+        $this->setRouteCode(RouteCode: $RouteCode);
+        $this->setRouteName(RouteName: $RouteName);
+        $this->setTimeStamp(TimeStamp: $TimeStamp);
+    }
+
+    public function getCode(): ?string
+    {
+        return $this->Code;
+    }
+
+    public function setCode(?string $Code): static
+    {
+        $this->Code = $Code;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->Description;
+    }
+
+    public function setDescription(?string $Description): static
+    {
+        $this->Description = $Description;
+
+        return $this;
+    }
+
+    public function getDestinationLocationCode(): ?string
+    {
+        return $this->DestinationLocationCode;
+    }
+
+    public function setDestinationLocationCode(?string $DestinationLocationCode): static
+    {
+        $this->DestinationLocationCode = $DestinationLocationCode;
+
+        return $this;
+    }
+
+    public function getLocationCode(): ?string
+    {
+        return $this->LocationCode;
+    }
+
+    public function setLocationCode(?string $LocationCode): static
+    {
+        $this->LocationCode = $LocationCode;
+
+        return $this;
+    }
+
+    public function getRouteCode(): ?string
+    {
+        return $this->RouteCode;
+    }
+
+    public function setRouteCode(?string $RouteCode): static
+    {
+        $this->RouteCode = $RouteCode;
+
+        return $this;
+    }
+
+    public function getRouteName(): ?string
+    {
+        return $this->RouteName;
+    }
+
+    public function setRouteName(?string $RouteName): static
+    {
+        $this->RouteName = $RouteName;
+
+        return $this;
     }
 
     /**
-     * @param string|DateTimeInterface|null $TimeStamp
-     *
-     * @return static
-     *
      * @throws InvalidArgumentException
      *
      * @since 1.2.0
      */
-    public function setTimeStamp($TimeStamp = null)
+    public function setTimeStamp(string|DateTimeInterface|null $TimeStamp = null): static
     {
-        if (is_string($TimeStamp)) {
+        if (is_string(value: $TimeStamp)) {
             try {
-                $TimeStamp = new DateTimeImmutable($TimeStamp, new DateTimeZone('Europe/Amsterdam'));
+                $TimeStamp = new DateTimeImmutable(datetime: $TimeStamp, timezone: new DateTimeZone(timezone: 'Europe/Amsterdam'));
             } catch (Exception $e) {
-                throw new InvalidArgumentException($e->getMessage(), 0, $e);
+                throw new InvalidArgumentException(message: $e->getMessage(), code: 0, previous: $e);
             }
         }
 

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -30,138 +31,119 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use Exception;
+use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
+use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\TimeframeService;
 use function is_string;
 
 /**
- * Class CompleteStatusResponseOldStatus.
- *
- * @method string|null                     getStatusCode()
- * @method string|null                     getStatusDescription()
- * @method string|null                     getPhaseCode()
- * @method string|null                     getPhaseDescription()
- * @method DateTimeInterface|null          getTimeStamp()
- * @method CompleteStatusResponseOldStatus setStatusCode(string|null $StatusCode = null)
- * @method CompleteStatusResponseOldStatus setStatusDescription(string|null $StatusDescription = null)
- * @method CompleteStatusResponseOldStatus setPhaseCode(string|null $PhaseCode = null)
- * @method CompleteStatusResponseOldStatus setPhaseDescription(string|null $PhaseDescription = null)
- *
  * @since 1.0.0
  */
 class CompleteStatusResponseOldStatus extends AbstractEntity
 {
-    /**
-     * Default properties and namespaces for the SOAP API.
-     *
-     * @var array
-     */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'StatusCode'        => BarcodeService::DOMAIN_NAMESPACE,
-            'StatusDescription' => BarcodeService::DOMAIN_NAMESPACE,
-            'PhaseCode'         => BarcodeService::DOMAIN_NAMESPACE,
-            'PhaseDescription'  => BarcodeService::DOMAIN_NAMESPACE,
-            'TimeStamp'         => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'StatusCode'        => ConfirmingService::DOMAIN_NAMESPACE,
-            'StatusDescription' => ConfirmingService::DOMAIN_NAMESPACE,
-            'PhaseCode'         => ConfirmingService::DOMAIN_NAMESPACE,
-            'PhaseDescription'  => ConfirmingService::DOMAIN_NAMESPACE,
-            'TimeStamp'         => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'StatusCode'        => LabellingService::DOMAIN_NAMESPACE,
-            'StatusDescription' => LabellingService::DOMAIN_NAMESPACE,
-            'PhaseCode'         => LabellingService::DOMAIN_NAMESPACE,
-            'PhaseDescription'  => LabellingService::DOMAIN_NAMESPACE,
-            'TimeStamp'         => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'StatusCode'        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'StatusDescription' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'PhaseCode'         => DeliveryDateService::DOMAIN_NAMESPACE,
-            'PhaseDescription'  => DeliveryDateService::DOMAIN_NAMESPACE,
-            'TimeStamp'         => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'StatusCode'        => LocationService::DOMAIN_NAMESPACE,
-            'StatusDescription' => LocationService::DOMAIN_NAMESPACE,
-            'PhaseCode'         => LocationService::DOMAIN_NAMESPACE,
-            'PhaseDescription'  => LocationService::DOMAIN_NAMESPACE,
-            'TimeStamp'         => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'StatusCode'        => TimeframeService::DOMAIN_NAMESPACE,
-            'StatusDescription' => TimeframeService::DOMAIN_NAMESPACE,
-            'PhaseCode'         => TimeframeService::DOMAIN_NAMESPACE,
-            'PhaseDescription'  => TimeframeService::DOMAIN_NAMESPACE,
-            'TimeStamp'         => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null */
-    protected $StatusCode;
-    /** @var string|null */
-    protected $StatusDescription;
-    /** @var string|null */
-    protected $PhaseCode;
-    /** @var string|null */
-    protected $PhaseDescription;
-    /** @var DateTimeInterface|null */
-    protected $TimeStamp;
-    // @codingStandardsIgnoreEnd
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $StatusCode = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $StatusDescription = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $PhaseCode = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $PhaseDescription = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?DateTimeInterface $TimeStamp = null;
 
     /**
-     * CompleteStatusResponseOldStatus constructor.
-     *
-     * @param string|null                   $StatusCode
-     * @param string|null                   $StatusDescription
-     * @param string|null                   $PhaseCode
-     * @param string|null                   $PhaseDescription
-     * @param DateTimeInterface|string|null $TimeStamp
-     *
      * @throws InvalidArgumentException
      */
     public function __construct(
-        $StatusCode = null,
-        $StatusDescription = null,
-        $PhaseCode = null,
-        $PhaseDescription = null,
-        $TimeStamp = null
+        ?string                       $StatusCode = null,
+        ?string                       $StatusDescription = null,
+        ?string                       $PhaseCode = null,
+        ?string                       $PhaseDescription = null,
+        DateTimeInterface|string|null $TimeStamp = null
     ) {
         parent::__construct();
 
-        $this->setStatusCode($StatusCode);
-        $this->setStatusDescription($StatusDescription);
-        $this->setPhaseCode($PhaseCode);
-        $this->setPhaseDescription($PhaseDescription);
-        $this->setTimeStamp($TimeStamp);
+        $this->setStatusCode(StatusCode: $StatusCode);
+        $this->setStatusDescription(StatusDescription: $StatusDescription);
+        $this->setPhaseCode(PhaseCode: $PhaseCode);
+        $this->setPhaseDescription(PhaseDescription: $PhaseDescription);
+        $this->setTimeStamp(TimeStamp: $TimeStamp);
     }
 
     /**
-     * @param string|DateTimeInterface|null $TimeStamp
-     *
-     * @return static
-     *
+     * @return string|null
+     */
+    public function getStatusCode(): ?string
+    {
+        return $this->StatusCode;
+    }
+
+    public function setStatusCode(?string $StatusCode): static
+    {
+        $this->StatusCode = $StatusCode;
+
+        return $this;
+    }
+
+    public function getStatusDescription(): ?string
+    {
+        return $this->StatusDescription;
+    }
+
+    public function setStatusDescription(?string $StatusDescription): static
+    {
+        $this->StatusDescription = $StatusDescription;
+
+        return $this;
+    }
+
+    public function getPhaseCode(): ?string
+    {
+        return $this->PhaseCode;
+    }
+
+    public function setPhaseCode(?string $PhaseCode): static
+    {
+        $this->PhaseCode = $PhaseCode;
+
+        return $this;
+    }
+
+    public function getPhaseDescription(): ?string
+    {
+        return $this->PhaseDescription;
+    }
+
+    public function setPhaseDescription(?string $PhaseDescription): static
+    {
+        $this->PhaseDescription = $PhaseDescription;
+
+        return $this;
+    }
+
+    public function getTimeStamp(): ?DateTimeInterface
+    {
+        return $this->TimeStamp;
+    }
+
+    /**
      * @throws InvalidArgumentException
      *
      * @since 1.2.0
      */
-    public function setTimeStamp($TimeStamp = null)
+    public function setTimeStamp(DateTimeInterface|string|null $TimeStamp = null): static
     {
-        if (is_string($TimeStamp)) {
+        if (is_string(value: $TimeStamp)) {
             try {
-                $TimeStamp = new DateTimeImmutable($TimeStamp, new DateTimeZone('Europe/Amsterdam'));
+                $TimeStamp = new DateTimeImmutable(datetime: $TimeStamp, timezone: new DateTimeZone(timezone: 'Europe/Amsterdam'));
             } catch (Exception $e) {
-                throw new InvalidArgumentException($e->getMessage(), 0, $e);
+                throw new InvalidArgumentException(message: $e->getMessage(), code: 0, previous: $e);
             }
         }
 

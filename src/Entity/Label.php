@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -26,24 +27,10 @@
 
 namespace Firstred\PostNL\Entity;
 
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingService;
-use Firstred\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Attribute\SerializableProperty;
+use Firstred\PostNL\Enum\SoapNamespace;
 
 /**
- * Class Label.
- *
- * @method string|null getContent()
- * @method string|null getContentType()
- * @method string|null getLabeltype()
- * @method Label       setContent(string|null $Content = null)
- * @method Label       setContentType(string|null $ContentType = null)
- * @method Label       setLabeltype(string|null $Labeltype = null)
- *
  * @since 1.0.0
  */
 class Label extends AbstractEntity
@@ -51,68 +38,63 @@ class Label extends AbstractEntity
     const FORMAT_A4 = 1;
     const FORMAT_A6 = 2;
 
-    /** @var string[][] */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'Content'     => BarcodeService::DOMAIN_NAMESPACE,
-            'ContentType' => BarcodeService::DOMAIN_NAMESPACE,
-            'Labeltype'   => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'Content'     => ConfirmingService::DOMAIN_NAMESPACE,
-            'ContentType' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Labeltype'   => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'Content'     => LabellingService::DOMAIN_NAMESPACE,
-            'ContentType' => LabellingService::DOMAIN_NAMESPACE,
-            'Labeltype'   => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'Content'     => DeliveryDateService::DOMAIN_NAMESPACE,
-            'ContentType' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Labeltype'   => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'Content'     => LocationService::DOMAIN_NAMESPACE,
-            'ContentType' => LocationService::DOMAIN_NAMESPACE,
-            'Labeltype'   => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'Content'     => TimeframeService::DOMAIN_NAMESPACE,
-            'ContentType' => TimeframeService::DOMAIN_NAMESPACE,
-            'Labeltype'   => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-        'Shipping' => [
-            'Content'     => ShippingService::DOMAIN_NAMESPACE,
-            'ContentType' => ShippingService::DOMAIN_NAMESPACE,
-            'Labeltype'   => ShippingService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
     /**
-     * @var string|null
-     *
      * Base 64 encoded content
      */
-    protected $Content;
-    /** @var string|null */
-    protected $Contenttype;
-    /** @var string|null */
-    protected $Labeltype;
-    // @codingStandardsIgnoreEnd
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $Content = null;
 
-    /**
-     * @param string|null $Content
-     * @param string|null $ContentType
-     * @param string|null $Labeltype
-     */
-    public function __construct($Content = null, $ContentType = null, $Labeltype = null)
-    {
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $Contenttype = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $Labeltype = null;
+
+    public function __construct(
+        ?string $Content = null,
+        ?string $ContentType = null,
+        ?string $Labeltype = null,
+    ) {
         parent::__construct();
 
-        $this->setContent($Content);
-        $this->setContenttype($ContentType);
-        $this->setLabeltype($Labeltype);
+        $this->setContent(Content: $Content);
+        $this->setContenttype(Contenttype: $ContentType);
+        $this->setLabeltype(Labeltype: $Labeltype);
+    }
+
+    public function getContent(): ?string
+    {
+        return $this->Content;
+    }
+
+    public function setContent(?string $Content): static
+    {
+        $this->Content = $Content;
+
+        return $this;
+    }
+
+    public function getContenttype(): ?string
+    {
+        return $this->Contenttype;
+    }
+
+    public function setContenttype(?string $Contenttype): static
+    {
+        $this->Contenttype = $Contenttype;
+
+        return $this;
+    }
+
+    public function getLabeltype(): ?string
+    {
+        return $this->Labeltype;
+    }
+
+    public function setLabeltype(?string $Labeltype): static
+    {
+        $this->Labeltype = $Labeltype;
+
+        return $this;
     }
 }

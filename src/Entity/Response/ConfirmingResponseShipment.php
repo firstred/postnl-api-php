@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -26,72 +27,62 @@
 
 namespace Firstred\PostNL\Entity\Response;
 
+use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Warning;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Enum\SoapNamespace;
 
 /**
- * Class ConfirmingResponseShipment.
- *
- * @method string|null                getBarcode()
- * @method Warning[]|null             getWarnings()
- * @method ConfirmingResponseShipment setBarcode(string|null $Barcode = null)
- * @method ConfirmingResponseShipment setWarnings(Warning[]|null $Warnings = null)
- *
  * @since 1.0.0
  */
 class ConfirmingResponseShipment extends AbstractEntity
 {
-    /** @var string[][] */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'Barcode'  => BarcodeService::DOMAIN_NAMESPACE,
-            'Warnings' => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'Barcode'  => ConfirmingService::DOMAIN_NAMESPACE,
-            'Warnings' => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'Barcode'  => LabellingService::DOMAIN_NAMESPACE,
-            'Warnings' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'Barcode'  => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Warnings' => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'Barcode'  => LocationService::DOMAIN_NAMESPACE,
-            'Warnings' => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'Barcode'  => TimeframeService::DOMAIN_NAMESPACE,
-            'Warnings' => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null */
-    protected $Barcode;
-    /** @var Warning[]|null */
-    protected $Warnings;
-    // @codingStandardsIgnoreEnd
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $Barcode = null;
 
-    /**
-     * @param string|null    $Barcode
-     * @param Warning[]|null $Warnings
-     */
+    /** @var Warning[]|null */
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?array $Warnings = null;
+
     public function __construct(
-        $Barcode = null,
-        $Warnings = null
+        ?string $Barcode = null,
+        /** @param Warning[]|null $Warnings */
+        ?array  $Warnings = null
     ) {
         parent::__construct();
 
-        $this->setBarcode($Barcode);
-        $this->setWarnings($Warnings);
+        $this->setBarcode(Barcode: $Barcode);
+        $this->setWarnings(Warnings: $Warnings);
+    }
+
+    public function getBarcode(): ?string
+    {
+        return $this->Barcode;
+    }
+
+    public function setBarcode(?string $Barcode): static
+    {
+        $this->Barcode = $Barcode;
+
+        return $this;
+    }
+
+    /**
+     * @return Warning[]|null
+     */
+    public function getWarnings(): ?array
+    {
+        return $this->Warnings;
+    }
+
+    /**
+     * @param Warning[]|null $Warnings
+     * @return static
+     */
+    public function setWarnings(?array $Warnings): static
+    {
+        $this->Warnings = $Warnings;
+
+        return $this;
     }
 }

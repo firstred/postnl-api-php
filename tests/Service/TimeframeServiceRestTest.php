@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -33,48 +34,43 @@ use Firstred\PostNL\Entity\Message\Message;
 use Firstred\PostNL\Entity\ReasonNoTimeframe;
 use Firstred\PostNL\Entity\Request\GetTimeframes;
 use Firstred\PostNL\Entity\Response\ResponseTimeframes;
-use Firstred\PostNL\Entity\SOAP\UsernameToken;
+use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\Entity\Timeframe;
-use Firstred\PostNL\HttpClient\MockClient;
+use Firstred\PostNL\HttpClient\MockHttpClient;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\TimeframeServiceInterface;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use GuzzleHttp\Psr7\Query;
-use stdClass;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use function file_get_contents;
 use const _RESPONSES_DIR_;
 
 /**
- * Class TimeframeServiceRestTest.
- *
  * @testdox The TimeframeService (REST)
  */
-class TimeframeServiceRestTest extends ServiceTest
+class TimeframeServiceRestTest extends ServiceTestCase
 {
-    /** @var PostNL */
-    protected $postnl;
-    /** @var TimeframeServiceInterface */
-    protected $service;
-    /** @var */
-    protected $lastRequest;
+    protected PostNL $postnl;
+    protected TimeframeServiceInterface $service;
+    protected RequestInterface $lastRequest;
 
     /**
      * @before
      *
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \ReflectionException
+     * @throws
      */
-    public function setupPostNL()
+    public function setupPostNL(): void
     {
         $this->postnl = new PostNL(
-            Customer::create()
-                ->setCollectionLocation('123456')
-                ->setCustomerCode('DEVC')
-                ->setCustomerNumber('11223344')
-                ->setContactPerson('Test')
-                ->setAddress(Address::create([
+            customer: Customer::create()
+                ->setCollectionLocation(CollectionLocation: '123456')
+                ->setCustomerCode(CustomerCode: 'DEVC')
+                ->setCustomerNumber(CustomerNumber: '11223344')
+                ->setContactPerson(ContactPerson: 'Test')
+                ->setAddress(Address: Address::create(properties: [
                     'AddressType' => '02',
                     'City'        => 'Hoofddorp',
                     'CompanyName' => 'PostNL',
@@ -83,50 +79,50 @@ class TimeframeServiceRestTest extends ServiceTest
                     'Street'      => 'Siriusdreef',
                     'Zipcode'     => '2132WT',
                 ]))
-                ->setGlobalPackBarcodeType('AB')
-                ->setGlobalPackCustomerCode('1234'), new UsernameToken(null, 'test'),
-            false,
-            PostNL::MODE_REST
+                ->setGlobalPackBarcodeType(GlobalPackBarcodeType: 'AB')
+                ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'), apiKey: new UsernameToken(Username: null, Password: 'test'),
+            sandbox: false,
+            mode: PostNL::MODE_Rest
         );
 
         global $logger;
-        $this->postnl->setLogger($logger);
+        $this->postnl->setLogger(logger: $logger);
 
         $this->service = $this->postnl->getTimeframeService();
-        $this->service->setCache(new VoidCachePool());
-        $this->service->setTtl(1);
+        $this->service->setCache(cache: new VoidCachePool());
+        $this->service->setTtl(ttl: 1);
     }
 
     /**
      * @testdox creates a valid timeframes request
      */
-    public function testGetTimeframesRequestRest()
+    public function testGetTimeframesRequestRest(): void
     {
         $message = new Message();
 
-        $this->lastRequest = $request = $this->service->buildGetTimeframesRequestREST(
-            (new GetTimeframes())
-                ->setMessage($message)
-                ->setTimeframe([
+        $this->lastRequest = $request = $this->service->buildGetTimeframesRequestRest(
+            getTimeframes: (new GetTimeframes())
+                ->setMessage(Message: $message)
+                ->setTimeframe(timeframes: [
                     (new Timeframe())
-                        ->setCity('Hoofddorp')
-                        ->setCountryCode('NL')
-                        ->setEndDate('02-07-2016')
-                        ->setHouseNr('42')
-                        ->setHouseNrExt('A')
-                        ->setOptions([
+                        ->setCity(City: 'Hoofddorp')
+                        ->setCountryCode(CountryCode: 'NL')
+                        ->setEndDate(EndDate: '02-07-2016')
+                        ->setHouseNr(HouseNr: '42')
+                        ->setHouseNrExt(HouseNrExt: 'A')
+                        ->setOptions(Options: [
                             'Evening',
                         ])
-                        ->setPostalCode('2132WT')
-                        ->setStartDate('30-06-2016')
-                        ->setStreet('Siriusdreef')
-                        ->setSundaySorting(true),
+                        ->setPostalCode(PostalCode: '2132WT')
+                        ->setStartDate(StartDate: '30-06-2016')
+                        ->setStreet(Street: 'Siriusdreef')
+                        ->setSundaySorting(SundaySorting: true),
                 ])
         );
 
-        $query = Query::parse($request->getUri()->getQuery());
+        $query = Query::parse(str: $request->getUri()->getQuery());
 
-        $this->assertEquals([
+        $this->assertEquals(expected: [
             'AllowSundaySorting' => 'true',
             'StartDate'          => '30-06-2016',
             'EndDate'            => '02-07-2016',
@@ -137,57 +133,57 @@ class TimeframeServiceRestTest extends ServiceTest
             'HouseNrExt'         => 'A',
             'Street'             => 'Siriusdreef',
             'City'               => 'Hoofddorp',
-        ], $query);
-        $this->assertEquals('test', $request->getHeaderLine('apikey'));
-        $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
+        ], actual: $query);
+        $this->assertEquals(expected: 'test', actual: $request->getHeaderLine('apikey'));
+        $this->assertEquals(expected: 'application/json', actual: $request->getHeaderLine('Accept'));
     }
 
     /**
      * @testdox can retrieve the available timeframes
      * @dataProvider timeframesProvider
      */
-    public function testGetTimeframesRest($response)
+    public function testGetTimeframesRest(ResponseInterface $response): void
     {
-        $mock = new MockHandler([$response]);
-        $handler = HandlerStack::create($mock);
-        $mockClient = new MockClient();
-        $mockClient->setHandler($handler);
-        $this->postnl->setHttpClient($mockClient);
+        $mock = new MockHandler(queue: [$response]);
+        $handler = HandlerStack::create(handler: $mock);
+        $mockClient = new MockHttpClient();
+        $mockClient->setHandler(handler: $handler);
+        $this->postnl->setHttpClient(httpClient: $mockClient);
 
         $responseTimeframes = $this->postnl->getTimeframes(
-            (new GetTimeframes())
-                ->setTimeframe([(new Timeframe())
-                    ->setCity('Hoofddorp')
-                    ->setCountryCode('NL')
-                    ->setEndDate('02-07-2016')
-                    ->setHouseNr('42')
-                    ->setHouseNrExt('A')
-                    ->setOptions([
+            getTimeframes: (new GetTimeframes())
+                ->setTimeframe(timeframes: [(new Timeframe())
+                    ->setCity(City: 'Hoofddorp')
+                    ->setCountryCode(CountryCode: 'NL')
+                    ->setEndDate(EndDate: '02-07-2016')
+                    ->setHouseNr(HouseNr: '42')
+                    ->setHouseNrExt(HouseNrExt: 'A')
+                    ->setOptions(Options: [
                         'Evening',
                     ])
-                    ->setPostalCode('2132WT')
-                    ->setStartDate('30-06-2016')
-                    ->setStreet('Siriusdreef')
-                    ->setSundaySorting(false),
+                    ->setPostalCode(PostalCode: '2132WT')
+                    ->setStartDate(StartDate: '30-06-2016')
+                    ->setStreet(Street: 'Siriusdreef')
+                    ->setSundaySorting(SundaySorting: false),
                 ])
         );
 
         // Should be a ResponseTimeframes instance
-        $this->assertInstanceOf(ResponseTimeframes::class, $responseTimeframes);
+        $this->assertInstanceOf(expected: ResponseTimeframes::class, actual: $responseTimeframes);
         // Check for data loss
-        $this->assertInstanceOf(Timeframe::class, $responseTimeframes->getTimeframes()[0]);
-        if (count($responseTimeframes->getReasonNoTimeframes())) {
-            $this->assertInstanceOf(ReasonNoTimeframe::class, $responseTimeframes->getReasonNoTimeframes()[0]);
+        $this->assertInstanceOf(expected: Timeframe::class, actual: $responseTimeframes->getTimeframes()[0]);
+        if (count(value: $responseTimeframes->getReasonNoTimeframes())) {
+            $this->assertInstanceOf(expected: ReasonNoTimeframe::class, actual: $responseTimeframes->getReasonNoTimeframes()[0]);
         }
-        $this->assertNotTrue(static::containsStdClass($responseTimeframes));
+        $this->assertNotTrue(condition: static::containsStdClass(value: $responseTimeframes));
     }
 
-    public function timeframesProvider()
+    public function timeframesProvider(): array
     {
         return [
-            [PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/timeframes/timeframes.http'))],
-            [PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/timeframes/timeframes2.http'))],
-            [PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/timeframes/timeframes3.http'))],
+            [PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/timeframes/timeframes.http'))],
+            [PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/timeframes/timeframes2.http'))],
+            [PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/timeframes/timeframes3.http'))],
         ];
     }
 }

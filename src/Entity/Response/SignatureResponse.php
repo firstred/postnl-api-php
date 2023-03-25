@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -26,64 +27,35 @@
 
 namespace Firstred\PostNL\Entity\Response;
 
+use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Signature;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Enum\SoapNamespace;
 
 /**
- * Class SignatureResponse.
- *
- * @method string|null       getSignature()
- * @method SignatureResponse setSignature(Signature|null $Signature = null)
- *
  * @since 1.0.0
  */
 class SignatureResponse extends AbstractEntity
 {
-    /**
-     * Default properties and namespaces for the SOAP API.
-     *
-     * @var array
-     */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'Signature' => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'Signature' => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'Signature' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'Signature' => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'Signature' => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'Signature' => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var Signature|null */
-    protected $Signature;
-    // @codingStandardsIgnoreEnd
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?Signature $Signature = null;
 
-    /**
-     * SignatureResponse constructor.
-     *
-     * @param Signature|null $Signature
-     */
     public function __construct(Signature $Signature = null)
     {
         parent::__construct();
 
-        $this->setSignature($Signature);
+        $this->setSignature(Signature: $Signature);
+    }
+
+    public function getSignature(): ?Signature
+    {
+        return $this->Signature;
+    }
+
+    public function setSignature(?Signature $Signature): static
+    {
+        $this->Signature = $Signature;
+
+        return $this;
     }
 }

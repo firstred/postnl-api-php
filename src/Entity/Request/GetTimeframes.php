@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -26,107 +27,65 @@
 
 namespace Firstred\PostNL\Entity\Request;
 
+use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Message\Message;
 use Firstred\PostNL\Entity\Timeframe;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Enum\SoapNamespace;
+use Firstred\PostNL\Service\LabellingServiceRestAdapter;
+use Firstred\PostNL\Service\LocationServiceRestAdapter;
+use Firstred\PostNL\Service\Rest\BarcodeServiceMessageProcessor;
+use Firstred\PostNL\Service\TimeframeServiceRestAdapter;
+use http\Exception\InvalidArgumentException;
 use Sabre\Xml\Writer;
 
 /**
- * Class GetTimeframes.
- *
- * @method Message|null     getMessage()
- * @method GetTimeframes    setMessage(Message|null $Message = null)
- *
  * @since 1.0.0
  */
 class GetTimeframes extends AbstractEntity
 {
-    /**
-     * Default properties and namespaces for the SOAP API.
-     *
-     * @var array
-     */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'Message'   => BarcodeService::DOMAIN_NAMESPACE,
-            'Timeframe' => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'Message'   => ConfirmingService::DOMAIN_NAMESPACE,
-            'Timeframe' => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'Message'   => LabellingService::DOMAIN_NAMESPACE,
-            'Timeframe' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'Message'   => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Timeframe' => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'Message'   => LocationService::DOMAIN_NAMESPACE,
-            'Timeframe' => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'Message'   => TimeframeService::DOMAIN_NAMESPACE,
-            'Timeframe' => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var Message|null */
-    protected $Message;
-    /** @var Timeframe[]|null */
-    protected $Timeframe;
-    // @codingStandardsIgnoreEnd
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?Message $Message = null;
 
-    /**
-     * GetTimeframes constructor.
-     *
-     * @param Message|null     $Message
-     * @param Timeframe[]|null $Timeframes
-     */
-    public function __construct(Message $Message = null, array $Timeframes = null)
-    {
+    /** @var Timeframe[]|null */
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?array $Timeframe = null;
+
+    public function __construct(
+        ?Message $Message = null,
+        /** @param $Timeframes Timeframe[]|null */
+        ?array   $Timeframes = null,
+    ) {
         parent::__construct();
 
-        $this->setMessage($Message ?: new Message());
-        $this->setTimeframe($Timeframes);
+        $this->setMessage(Message: $Message ?: new Message());
+        $this->setTimeframe(timeframes: $Timeframes);
     }
 
     /**
-     * Set timeframes
-     *
-     * @param Timeframe|Timeframe[]|null $timeframes
-     *
-     * @return $this
-     *
      * @since 1.0.0
      * @since 1.2.0 Accept singular timeframe object
      */
-    public function setTimeframe($timeframes)
+    public function setTimeframe($timeframes): static
     {
-        return $this->setTimeframes($timeframes);
+        return $this->setTimeframes(timeframes: $timeframes);
     }
 
     /**
-     * Set timeframes
-     *
-     * @param Timeframe|Timeframe[]|null $timeframes
-     *
-     * @return $this
+     * @param $timeframes TimeFrame|Timeframe[]|null
      *
      * @since 1.2.0
      */
-    public function setTimeframes($timeframes)
+    public function setTimeframes(TimeFrame|array|null $timeframes): static
     {
         if ($timeframes instanceof Timeframe) {
             $timeframes = [$timeframes];
+        } elseif (is_array(value: $timeframes)) {
+            foreach ($timeframes as $timeframe) {
+                if (!$timeframe instanceof Timeframe) {
+                    throw new InvalidArgumentException(message: 'Expected a Timeframe entity in the array');
+                }
+            }
         }
 
         $this->Timeframe = $timeframes;
@@ -135,41 +94,42 @@ class GetTimeframes extends AbstractEntity
     }
 
     /**
-     * Get timeframes
-     *
      * @return Timeframe[]|null
      *
-     * @sinc 1.0.0
+     * @since 1.0.0
      */
-    public function getTimeframe()
+    public function getTimeframe(): ?array
     {
         return $this->getTimeframes();
     }
 
     /**
-     * Get timeframes
-     *
      * @return Timeframe[]|null
      *
      * @since 1.2.0
      */
-    public function getTimeframes()
+    public function getTimeframes(): ?array
     {
         return $this->Timeframe;
     }
 
-    /**
-     * Return a serializable array for the XMLWriter.
-     *
-     * @param Writer $writer
-     *
-     * @return void
-     */
-    public function xmlSerialize(Writer $writer)
+    public function getMessage(): ?Message
+    {
+        return $this->Message;
+    }
+
+    public function setMessage(?Message $Message): static
+    {
+        $this->Message = $Message;
+
+        return $this;
+    }
+
+    public function xmlSerialize(Writer $writer): void
     {
         $xml = [];
-        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
-            $writer->write($xml);
+        if (!$this->currentService || !in_array(needle: $this->currentService, haystack: array_keys(array: static::$defaultProperties))) {
+            $writer->write(value: $xml);
 
             return;
         }
@@ -186,6 +146,6 @@ class GetTimeframes extends AbstractEntity
             }
         }
         // Auto extending this object with other properties is not supported with SOAP
-        $writer->write($xml);
+        $writer->write(value: $xml);
     }
 }

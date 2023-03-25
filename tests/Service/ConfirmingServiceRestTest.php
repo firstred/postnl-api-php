@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -34,10 +35,16 @@ use Firstred\PostNL\Entity\Message\LabellingMessage;
 use Firstred\PostNL\Entity\Request\Confirming;
 use Firstred\PostNL\Entity\Response\ConfirmingResponseShipment;
 use Firstred\PostNL\Entity\Shipment;
-use Firstred\PostNL\Entity\SOAP\UsernameToken;
+use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\Entity\Warning;
+use Firstred\PostNL\Exception\CifDownException;
+use Firstred\PostNL\Exception\CifException;
+use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\NotFoundException;
+use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
-use Firstred\PostNL\HttpClient\MockClient;
+use Firstred\PostNL\HttpClient\MockHttpClient;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\ConfirmingServiceInterface;
@@ -45,40 +52,35 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use GuzzleHttp\Psr7\Response;
+use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use ReflectionException;
 use function file_get_contents;
 use const _RESPONSES_DIR_;
 
 /**
- * Class ConfirmingServiceRestTest.
- *
  * @testdox The ConfirmingService (REST)
  */
-class ConfirmingServiceRestTest extends ServiceTest
+class ConfirmingServiceRestTest extends ServiceTestCase
 {
-    /** @var PostNL */
-    protected $postnl;
-    /** @var ConfirmingServiceInterface */
-    protected $service;
-    /** @var */
-    protected $lastRequest;
+    protected PostNL $postnl;
+    protected ConfirmingServiceInterface $service;
+    protected RequestInterface $lastRequest;
 
     /**
      * @before
      *
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws ReflectionException
+     * @throws
      */
-    public function setupPostNL()
+    public function setupPostNL(): void
     {
         $this->postnl = new PostNL(
-            Customer::create()
-                ->setCollectionLocation('123456')
-                ->setCustomerCode('DEVC')
-                ->setCustomerNumber('11223344')
-                ->setContactPerson('Test')
-                ->setAddress(Address::create([
+            customer: Customer::create()
+                ->setCollectionLocation(CollectionLocation: '123456')
+                ->setCustomerCode(CustomerCode: 'DEVC')
+                ->setCustomerNumber(CustomerNumber: '11223344')
+                ->setContactPerson(ContactPerson: 'Test')
+                ->setAddress(Address: Address::create(properties: [
                     'AddressType' => '02',
                     'City'        => 'Hoofddorp',
                     'CompanyName' => 'PostNL',
@@ -87,41 +89,41 @@ class ConfirmingServiceRestTest extends ServiceTest
                     'Street'      => 'Siriusdreef',
                     'Zipcode'     => '2132WT',
                 ]))
-                ->setGlobalPackBarcodeType('AB')
-                ->setGlobalPackCustomerCode('1234'), new UsernameToken(null, 'test'),
-            true,
-            PostNL::MODE_REST
+                ->setGlobalPackBarcodeType(GlobalPackBarcodeType: 'AB')
+                ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'), apiKey: new UsernameToken(Username: null, Password: 'test'),
+            sandbox: true,
+            mode: PostNL::MODE_Rest
         );
 
         global $logger;
-        $this->postnl->setLogger($logger);
+        $this->postnl->setLogger(logger: $logger);
 
         $this->service = $this->postnl->getConfirmingService();
-        $this->service->setCache(new VoidCachePool());
-        $this->service->setTtl(1);
+        $this->service->setCache(cache: new VoidCachePool());
+        $this->service->setTtl(ttl: 1);
     }
 
     /**
      * @testdox returns a valid service object
      */
-    public function testHasValidConfirmingService()
+    public function testHasValidConfirmingService(): void
     {
-        $this->assertInstanceOf(ConfirmingService::class, $this->service);
+        $this->assertInstanceOf(expected: ConfirmingService::class, actual: $this->service);
     }
 
     /**
      * @testdox confirms a label properly
      */
-    public function testConfirmsALabelRequestRest()
+    public function testConfirmsALabelRequestRest(): void
     {
         $message = new LabellingMessage();
 
-        $this->lastRequest = $request = $this->service->buildConfirmRequestREST(
-            Confirming::create()
-                ->setShipments([
+        $this->lastRequest = $request = $this->service->buildConfirmRequestRest(
+            confirming: Confirming::create()
+                ->setShipments(Shipments: [
                     Shipment::create()
-                        ->setAddresses([
-                            Address::create([
+                        ->setAddresses(Addresses: [
+                            Address::create(properties: [
                                 'AddressType' => '01',
                                 'City'        => 'Utrecht',
                                 'Countrycode' => 'NL',
@@ -132,7 +134,7 @@ class ConfirmingServiceRestTest extends ServiceTest
                                 'Street'      => 'Bilderdijkstraat',
                                 'Zipcode'     => '3521VA',
                             ]),
-                            Address::create([
+                            Address::create(properties: [
                                 'AddressType' => '02',
                                 'City'        => 'Hoofddorp',
                                 'CompanyName' => 'PostNL',
@@ -142,16 +144,16 @@ class ConfirmingServiceRestTest extends ServiceTest
                                 'Zipcode'     => '2132WT',
                             ]),
                         ])
-                        ->setBarcode('3S1234567890123')
-                        ->setDeliveryAddress('01')
-                        ->setDimension(new Dimension('2000'))
-                        ->setProductCodeDelivery('3085'),
+                        ->setBarcode(Barcode: '3S1234567890123')
+                        ->setDeliveryAddress(DeliveryAddress: '01')
+                        ->setDimension(Dimension: new Dimension(Weight: '2000'))
+                        ->setProductCodeDelivery(ProductCodeDelivery: '3085'),
                 ])
-                ->setMessage($message)
-                ->setCustomer($this->postnl->getCustomer())
+                ->setMessage(Message: $message)
+                ->setCustomer(Customer: $this->postnl->getCustomer())
         );
 
-        $this->assertEquals([
+        $this->assertEquals(expected: [
             'Customer' => [
                 'Address' => [
                     'AddressType' => '02',
@@ -169,7 +171,7 @@ class ConfirmingServiceRestTest extends ServiceTest
             ],
             'Message' => [
                 'MessageID'        => (string) $message->getMessageID(),
-                'MessageTimeStamp' => $message->getMessageTimeStamp()->format('d-m-Y H:i:s'),
+                'MessageTimeStamp' => $message->getMessageTimeStamp()->format(format: 'd-m-Y H:i:s'),
                 'Printertype'      => 'GraphicFile|PDF',
             ],
             'Shipments' => [
@@ -203,32 +205,30 @@ class ConfirmingServiceRestTest extends ServiceTest
                 'ProductCodeDelivery' => '3085',
             ],
         ],
-            json_decode((string) $request->getBody(), true));
-        $this->assertEquals('test', $request->getHeaderLine('apikey'));
-        $this->assertEquals('application/json;charset=UTF-8', $request->getHeaderLine('Content-Type'));
-        $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
+            actual: json_decode(json: (string) $request->getBody(), associative: true));
+        $this->assertEquals(expected: 'test', actual: $request->getHeaderLine('apikey'));
+        $this->assertEquals(expected: 'application/json;charset=UTF-8', actual: $request->getHeaderLine('Content-Type'));
+        $this->assertEquals(expected: 'application/json', actual: $request->getHeaderLine('Accept'));
     }
 
     /**
      * @testdox      can generate a single label
      * @dataProvider singleLabelConfirmationsProvider
      *
-     * @param ResponseInterface
-     *
-     * @throws ReflectionException
+     * @throws
      */
-    public function testConfirmsALabelRest($response)
+    public function testConfirmsALabelRest(ResponseInterface $response): void
     {
-        $mock = new MockHandler([$response]);
-        $handler = HandlerStack::create($mock);
-        $mockClient = new MockClient();
-        $mockClient->setHandler($handler);
-        $this->postnl->setHttpClient($mockClient);
+        $mock = new MockHandler(queue: [$response]);
+        $handler = HandlerStack::create(handler: $mock);
+        $mockClient = new MockHttpClient();
+        $mockClient->setHandler(handler: $handler);
+        $this->postnl->setHttpClient(httpClient: $mockClient);
 
         $confirm = $this->postnl->confirmShipment(
-            (new Shipment())
-                ->setAddresses([
-                    Address::create([
+            shipment: (new Shipment())
+                ->setAddresses(Addresses: [
+                    Address::create(properties: [
                         'AddressType' => '01',
                         'City'        => 'Utrecht',
                         'Countrycode' => 'NL',
@@ -239,7 +239,7 @@ class ConfirmingServiceRestTest extends ServiceTest
                         'Street'      => 'Bilderdijkstraat',
                         'Zipcode'     => '3521VA',
                     ]),
-                    Address::create([
+                    Address::create(properties: [
                         'AddressType' => '02',
                         'City'        => 'Hoofddorp',
                         'CompanyName' => 'PostNL',
@@ -249,16 +249,16 @@ class ConfirmingServiceRestTest extends ServiceTest
                         'Zipcode'     => '2132WT',
                     ]),
                 ])
-                ->setBarcode('3SDEVC201611210')
-                ->setDeliveryAddress('01')
-                ->setDimension(new Dimension('2000'))
-                ->setProductCodeDelivery('3085')
+                ->setBarcode(Barcode: '3SDEVC201611210')
+                ->setDeliveryAddress(DeliveryAddress: '01')
+                ->setDimension(Dimension: new Dimension(Weight: '2000'))
+                ->setProductCodeDelivery(ProductCodeDelivery: '3085')
         );
 
-        $this->assertInstanceOf(ConfirmingResponseShipment::class, $confirm);
-        $this->assertEquals('3SDEVC201611210', $confirm->getBarcode());
-        $this->assertInstanceOf(Warning::class, $confirm->getWarnings()[0]);
-        $this->assertNotTrue(static::containsStdClass($confirm));
+        $this->assertInstanceOf(expected: ConfirmingResponseShipment::class, actual: $confirm);
+        $this->assertEquals(expected: '3SDEVC201611210', actual: $confirm->getBarcode());
+        $this->assertInstanceOf(expected: Warning::class, actual: $confirm->getWarnings()[0]);
+        $this->assertNotTrue(condition: static::containsStdClass(value: $confirm));
     }
 
     /**
@@ -267,20 +267,26 @@ class ConfirmingServiceRestTest extends ServiceTest
      *
      * @param ResponseInterface[] $responses
      *
-     * @throws ReflectionException
+     * @throws InvalidArgumentException
+     * @throws ResponseException
+     * @throws CifDownException
+     * @throws CifException
+     * @throws HttpClientException
+     * @throws NotFoundException
+     * @throws NotSupportedException
      */
-    public function testConfirmMultipleLabelsRest($responses)
+    public function testConfirmMultipleLabelsRest(array $responses): void
     {
-        $mock = new MockHandler($responses);
-        $handler = HandlerStack::create($mock);
-        $mockClient = new MockClient();
-        $mockClient->setHandler($handler);
-        $this->postnl->setHttpClient($mockClient);
+        $mock = new MockHandler(queue: $responses);
+        $handler = HandlerStack::create(handler: $mock);
+        $mockClient = new MockHttpClient();
+        $mockClient->setHandler(handler: $handler);
+        $this->postnl->setHttpClient(httpClient: $mockClient);
 
-        $confirms = $this->postnl->confirmShipments([
-                (new Shipment())
-                    ->setAddresses([
-                        Address::create([
+        $confirms = $this->postnl->confirmShipments(shipments: [
+            (new Shipment())
+                    ->setAddresses(Addresses: [
+                        Address::create(properties: [
                             'AddressType' => '01',
                             'City'        => 'Utrecht',
                             'Countrycode' => 'NL',
@@ -291,7 +297,7 @@ class ConfirmingServiceRestTest extends ServiceTest
                             'Street'      => 'Bilderdijkstraat',
                             'Zipcode'     => '3521VA',
                         ]),
-                        Address::create([
+                        Address::create(properties: [
                             'AddressType' => '02',
                             'City'        => 'Hoofddorp',
                             'CompanyName' => 'PostNL',
@@ -301,13 +307,13 @@ class ConfirmingServiceRestTest extends ServiceTest
                             'Zipcode'     => '2132WT',
                         ]),
                     ])
-                    ->setBarcode('3SDEVC201611210')
-                    ->setDeliveryAddress('01')
-                    ->setDimension(new Dimension('2000'))
-                    ->setProductCodeDelivery('3085'),
-                (new Shipment())
-                    ->setAddresses([
-                        Address::create([
+                    ->setBarcode(Barcode: '3SDEVC201611210')
+                    ->setDeliveryAddress(DeliveryAddress: '01')
+                    ->setDimension(Dimension: new Dimension(Weight: '2000'))
+                    ->setProductCodeDelivery(ProductCodeDelivery: '3085'),
+            (new Shipment())
+                    ->setAddresses(Addresses: [
+                        Address::create(properties: [
                             'AddressType' => '01',
                             'City'        => 'Utrecht',
                             'Countrycode' => 'NL',
@@ -318,7 +324,7 @@ class ConfirmingServiceRestTest extends ServiceTest
                             'Street'      => 'Bilderdijkstraat',
                             'Zipcode'     => '3521VA',
                         ]),
-                        Address::create([
+                        Address::create(properties: [
                             'AddressType' => '02',
                             'City'        => 'Hoofddorp',
                             'CompanyName' => 'PostNL',
@@ -328,37 +334,37 @@ class ConfirmingServiceRestTest extends ServiceTest
                             'Zipcode'     => '2132WT',
                         ]),
                     ])
-                    ->setBarcode('3SDEVC201611210')
-                    ->setDeliveryAddress('01')
-                    ->setDimension(new Dimension('2000'))
-                    ->setProductCodeDelivery('3085'),
+                    ->setBarcode(Barcode: '3SDEVC201611210')
+                    ->setDeliveryAddress(DeliveryAddress: '01')
+                    ->setDimension(Dimension: new Dimension(Weight: '2000'))
+                    ->setProductCodeDelivery(ProductCodeDelivery: '3085'),
             ]
         );
 
-        $this->assertInstanceOf(ConfirmingResponseShipment::class, $confirms[1]);
-        $this->assertEquals('3SDEVC201611210', $confirms[1]->getBarcode());
-        $this->assertInstanceOf(Warning::class, $confirms[1]->getWarnings()[0]);
+        $this->assertInstanceOf(expected: ConfirmingResponseShipment::class, actual: $confirms[1]);
+        $this->assertEquals(expected: '3SDEVC201611210', actual: $confirms[1]->getBarcode());
+        $this->assertInstanceOf(expected: Warning::class, actual: $confirms[1]->getWarnings()[0]);
     }
 
     /**
      * @testdox throws exception on invalid response
      */
-    public function testNegativeGenerateLabelInvalidResponseRest()
+    public function testNegativeGenerateLabelInvalidResponseRest(): void
     {
-        $this->expectException(ResponseException::class);
+        $this->expectException(exception: ResponseException::class);
 
-        $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], 'asdfojasuidfo'),
+        $mock = new MockHandler(queue: [
+            new Response(status: 200, headers: ['Content-Type' => 'application/json;charset=UTF-8'], body: 'asdfojasuidfo'),
         ]);
-        $handler = HandlerStack::create($mock);
-        $mockClient = new MockClient();
-        $mockClient->setHandler($handler);
-        $this->postnl->setHttpClient($mockClient);
+        $handler = HandlerStack::create(handler: $mock);
+        $mockClient = new MockHttpClient();
+        $mockClient->setHandler(handler: $handler);
+        $this->postnl->setHttpClient(httpClient: $mockClient);
 
         $this->postnl->confirmShipment(
-            (new Shipment())
-                ->setAddresses([
-                    Address::create([
+            shipment: (new Shipment())
+                ->setAddresses(Addresses: [
+                    Address::create(properties: [
                         'AddressType' => '01',
                         'City'        => 'Utrecht',
                         'Countrycode' => 'NL',
@@ -369,7 +375,7 @@ class ConfirmingServiceRestTest extends ServiceTest
                         'Street'      => 'Bilderdijkstraat',
                         'Zipcode'     => '3521VA',
                     ]),
-                    Address::create([
+                    Address::create(properties: [
                         'AddressType' => '02',
                         'City'        => 'Hoofddorp',
                         'CompanyName' => 'PostNL',
@@ -379,10 +385,10 @@ class ConfirmingServiceRestTest extends ServiceTest
                         'Zipcode'     => '2132WT',
                     ]),
                 ])
-                ->setBarcode('3S1234567890123')
-                ->setDeliveryAddress('01')
-                ->setDimension(new Dimension('2000'))
-                ->setProductCodeDelivery('3085')
+                ->setBarcode(Barcode: '3S1234567890123')
+                ->setDeliveryAddress(DeliveryAddress: '01')
+                ->setDimension(Dimension: new Dimension(Weight: '2000'))
+                ->setProductCodeDelivery(ProductCodeDelivery: '3085')
         );
     }
 
@@ -390,12 +396,12 @@ class ConfirmingServiceRestTest extends ServiceTest
      * @return ResponseInterface[][]
      * @psalm-return non-empty-list<non-empty-list<ResponseInterface>>
      */
-    public function singleLabelConfirmationsProvider()
+    public function singleLabelConfirmationsProvider(): array
     {
         return [
-            [PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel.http'))],
-            [PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel2.http'))],
-            [PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel3.http'))],
+            [PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel.http'))],
+            [PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel2.http'))],
+            [PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel3.http'))],
         ];
     }
 
@@ -403,20 +409,20 @@ class ConfirmingServiceRestTest extends ServiceTest
      * @return ResponseInterface[][][]
      * @psalm-return non-empty-list<non-empty-list<non-empty-list<ResponseInterface>>>
      */
-    public function multipleLabelsConfirmationsProvider()
+    public function multipleLabelsConfirmationsProvider(): array
     {
         return [
             [[
-                PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel.http')),
-                PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel.http')),
+                PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel.http')),
+                PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel.http')),
             ]],
             [[
-                PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel2.http')),
-                PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel2.http')),
+                PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel2.http')),
+                PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel2.http')),
             ]],
             [[
-                PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel3.http')),
-                PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel3.http')),
+                PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel3.http')),
+                PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel3.http')),
             ]],
         ];
     }

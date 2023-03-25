@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -26,57 +27,34 @@
 
 namespace Firstred\PostNL\Entity;
 
+use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\Response\CompleteStatusResponseEvent;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Enum\SoapNamespace;
 
 /**
- * Class Event.
- *
- * @method CompleteStatusResponseEvent|null getCompleteStatusResponseEvent()
- * @method Event                            setCompleteStatusResponseEvent(CompleteStatusResponseEvent|null $CompleteStatusResponseEvent = null)
- *
  * @since 1.0.0
  */
 class Event extends AbstractEntity
 {
-    /** @var string[][] */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'CompleteStatusResponseEvent' => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'CompleteStatusResponseEvent' => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'CompleteStatusResponseEvent' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'CompleteStatusResponseEvent' => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'CompleteStatusResponseEvent' => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'CompleteStatusResponseEvent' => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var CompleteStatusResponseEvent|null */
-    protected $CompleteStatusResponseEvent;
-    // @codingStandardsIgnoreEnd
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?CompleteStatusResponseEvent $CompleteStatusResponseEvent = null;
 
-    /**
-     * @param CompleteStatusResponseEvent|null $CompleteStatusResponseEvent
-     */
-    public function __construct($CompleteStatusResponseEvent = null)
+    public function __construct(?CompleteStatusResponseEvent $CompleteStatusResponseEvent = null)
     {
         parent::__construct();
 
-        $this->setCompleteStatusResponseEvent($CompleteStatusResponseEvent);
+        $this->setCompleteStatusResponseEvent(CompleteStatusResponseEvent: $CompleteStatusResponseEvent);
+    }
+
+    public function getCompleteStatusResponseEvent(): ?CompleteStatusResponseEvent
+    {
+        return $this->CompleteStatusResponseEvent;
+    }
+
+    public function setCompleteStatusResponseEvent(?CompleteStatusResponseEvent $CompleteStatusResponseEvent): static
+    {
+        $this->CompleteStatusResponseEvent = $CompleteStatusResponseEvent;
+
+        return $this;
     }
 }

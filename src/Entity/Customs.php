@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -26,239 +27,272 @@
 
 namespace Firstred\PostNL\Entity;
 
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingService;
-use Firstred\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Attribute\SerializableProperty;
+use Firstred\PostNL\Enum\SoapNamespace;
 
 /**
- * Class Customs.
- *
- * @method string|null    getCertificate()
- * @method string|null    getCertificateNr()
- * @method Content[]|null getContent()
- * @method string|null    getCurrency()
- * @method string|null    getHandleAsNonDeliverable()
- * @method string|null    getInvoice()
- * @method string|null    getInvoiceNr()
- * @method string|null    getLicense()
- * @method string|null    getLicenseNr()
- * @method string|null    getShipmentType()
- * @method Customs        setCertificate(string|null $Certificate = null)
- * @method Customs        setCertificateNr(string|null $CertificateNr = null)
- * @method Customs        setContent(Content[]|null $Content = null)
- * @method Customs        setCurrency(string|null $Currency = null)
- * @method Customs        setHandleAsNonDeliverable(string|null $HandleAsNonDeliverable = null)
- * @method Customs        setInvoice(string|null $Invoice = null)
- * @method Customs        setInvoiceNr(string|null $InvoiceNr = null)
- * @method Customs        setLicense(string|null $License = null)
- * @method Customs        setLicenseNr(string|null $LicenseNr = null)
- * @method Customs        setShipmentType(string|null $ShipmentType = null)
- * @method Customs        setTrustedShipperID(string|null $TrustedShipperID = null)
- * @method Customs        setTransactionCode(string|null $TransactionCode = null)
- * @method Customs        setTransactionDescription(string|null $TransactionDescription = null)
- * @method Customs        setImporterReferenceCode(string|null $ImporterReferenceCode = null)
- *
  * @since 1.0.0
  */
 class Customs extends AbstractEntity
 {
-    /** @var string[][] */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'Certificate'            => BarcodeService::DOMAIN_NAMESPACE,
-            'CertificateNr'          => BarcodeService::DOMAIN_NAMESPACE,
-            'Content'                => BarcodeService::DOMAIN_NAMESPACE,
-            'Currency'               => BarcodeService::DOMAIN_NAMESPACE,
-            'HandleAsNonDeliverable' => BarcodeService::DOMAIN_NAMESPACE,
-            'Invoice'                => BarcodeService::DOMAIN_NAMESPACE,
-            'InvoiceNr'              => BarcodeService::DOMAIN_NAMESPACE,
-            'License'                => BarcodeService::DOMAIN_NAMESPACE,
-            'LicenseNr'              => BarcodeService::DOMAIN_NAMESPACE,
-            'ShipmentType'           => BarcodeService::DOMAIN_NAMESPACE,
-            'TrustedShipperID'       => BarcodeService::DOMAIN_NAMESPACE,
-            'TransactionCode'        => BarcodeService::DOMAIN_NAMESPACE,
-            'TransactionDescription' => BarcodeService::DOMAIN_NAMESPACE,
-            'ImporterReferenceCode'  => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'Certificate'            => ConfirmingService::DOMAIN_NAMESPACE,
-            'CertificateNr'          => ConfirmingService::DOMAIN_NAMESPACE,
-            'Content'                => ConfirmingService::DOMAIN_NAMESPACE,
-            'Currency'               => ConfirmingService::DOMAIN_NAMESPACE,
-            'HandleAsNonDeliverable' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Invoice'                => ConfirmingService::DOMAIN_NAMESPACE,
-            'InvoiceNr'              => ConfirmingService::DOMAIN_NAMESPACE,
-            'License'                => ConfirmingService::DOMAIN_NAMESPACE,
-            'LicenseNr'              => ConfirmingService::DOMAIN_NAMESPACE,
-            'ShipmentType'           => ConfirmingService::DOMAIN_NAMESPACE,
-            'TrustedShipperID'       => ConfirmingService::DOMAIN_NAMESPACE,
-            'TransactionCode'        => ConfirmingService::DOMAIN_NAMESPACE,
-            'TransactionDescription' => ConfirmingService::DOMAIN_NAMESPACE,
-            'ImporterReferenceCode'  => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'Certificate'            => LabellingService::DOMAIN_NAMESPACE,
-            'CertificateNr'          => LabellingService::DOMAIN_NAMESPACE,
-            'Content'                => LabellingService::DOMAIN_NAMESPACE,
-            'Currency'               => LabellingService::DOMAIN_NAMESPACE,
-            'HandleAsNonDeliverable' => LabellingService::DOMAIN_NAMESPACE,
-            'Invoice'                => LabellingService::DOMAIN_NAMESPACE,
-            'InvoiceNr'              => LabellingService::DOMAIN_NAMESPACE,
-            'License'                => LabellingService::DOMAIN_NAMESPACE,
-            'LicenseNr'              => LabellingService::DOMAIN_NAMESPACE,
-            'ShipmentType'           => LabellingService::DOMAIN_NAMESPACE,
-            'TrustedShipperID'       => LabellingService::DOMAIN_NAMESPACE,
-            'TransactionCode'        => LabellingService::DOMAIN_NAMESPACE,
-            'TransactionDescription' => LabellingService::DOMAIN_NAMESPACE,
-            'ImporterReferenceCode'  => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'Certificate'            => DeliveryDateService::DOMAIN_NAMESPACE,
-            'CertificateNr'          => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Content'                => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Currency'               => DeliveryDateService::DOMAIN_NAMESPACE,
-            'HandleAsNonDeliverable' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Invoice'                => DeliveryDateService::DOMAIN_NAMESPACE,
-            'InvoiceNr'              => DeliveryDateService::DOMAIN_NAMESPACE,
-            'License'                => DeliveryDateService::DOMAIN_NAMESPACE,
-            'LicenseNr'              => DeliveryDateService::DOMAIN_NAMESPACE,
-            'ShipmentType'           => DeliveryDateService::DOMAIN_NAMESPACE,
-            'TrustedShipperID'       => DeliveryDateService::DOMAIN_NAMESPACE,
-            'TransactionCode'        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'TransactionDescription' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'ImporterReferenceCode'  => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'Certificate'            => LocationService::DOMAIN_NAMESPACE,
-            'CertificateNr'          => LocationService::DOMAIN_NAMESPACE,
-            'Content'                => LocationService::DOMAIN_NAMESPACE,
-            'Currency'               => LocationService::DOMAIN_NAMESPACE,
-            'HandleAsNonDeliverable' => LocationService::DOMAIN_NAMESPACE,
-            'Invoice'                => LocationService::DOMAIN_NAMESPACE,
-            'InvoiceNr'              => LocationService::DOMAIN_NAMESPACE,
-            'License'                => LocationService::DOMAIN_NAMESPACE,
-            'LicenseNr'              => LocationService::DOMAIN_NAMESPACE,
-            'ShipmentType'           => LocationService::DOMAIN_NAMESPACE,
-            'TrustedShipperID'       => LocationService::DOMAIN_NAMESPACE,
-            'TransactionCode'        => LocationService::DOMAIN_NAMESPACE,
-            'TransactionDescription' => LocationService::DOMAIN_NAMESPACE,
-            'ImporterReferenceCode'  => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'Certificate'            => TimeframeService::DOMAIN_NAMESPACE,
-            'CertificateNr'          => TimeframeService::DOMAIN_NAMESPACE,
-            'Content'                => TimeframeService::DOMAIN_NAMESPACE,
-            'Currency'               => TimeframeService::DOMAIN_NAMESPACE,
-            'HandleAsNonDeliverable' => TimeframeService::DOMAIN_NAMESPACE,
-            'Invoice'                => TimeframeService::DOMAIN_NAMESPACE,
-            'InvoiceNr'              => TimeframeService::DOMAIN_NAMESPACE,
-            'License'                => TimeframeService::DOMAIN_NAMESPACE,
-            'LicenseNr'              => TimeframeService::DOMAIN_NAMESPACE,
-            'ShipmentType'           => TimeframeService::DOMAIN_NAMESPACE,
-            'TrustedShipperID'       => TimeframeService::DOMAIN_NAMESPACE,
-            'TransactionCode'        => TimeframeService::DOMAIN_NAMESPACE,
-            'TransactionDescription' => TimeframeService::DOMAIN_NAMESPACE,
-            'ImporterReferenceCode'  => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-        'Shipping' => [
-            'Certificate'            => ShippingService::DOMAIN_NAMESPACE,
-            'CertificateNr'          => ShippingService::DOMAIN_NAMESPACE,
-            'Content'                => ShippingService::DOMAIN_NAMESPACE,
-            'Currency'               => ShippingService::DOMAIN_NAMESPACE,
-            'HandleAsNonDeliverable' => ShippingService::DOMAIN_NAMESPACE,
-            'Invoice'                => ShippingService::DOMAIN_NAMESPACE,
-            'InvoiceNr'              => ShippingService::DOMAIN_NAMESPACE,
-            'License'                => ShippingService::DOMAIN_NAMESPACE,
-            'LicenseNr'              => ShippingService::DOMAIN_NAMESPACE,
-            'ShipmentType'           => ShippingService::DOMAIN_NAMESPACE,
-            'TrustedShipperID'       => ShippingService::DOMAIN_NAMESPACE,
-            'TransactionCode'        => ShippingService::DOMAIN_NAMESPACE,
-            'TransactionDescription' => ShippingService::DOMAIN_NAMESPACE,
-            'ImporterReferenceCode'  => ShippingService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null */
-    protected $Certificate;
-    /** @var string|null */
-    protected $CertificateNr;
-    /** @var Content[]|null */
-    protected $Content;
-    /** @var string|null */
-    protected $Currency;
-    /** @var string|null */
-    protected $HandleAsNonDeliverable;
-    /** @var string|null */
-    protected $Invoice;
-    /** @var string|null */
-    protected $InvoiceNr;
-    /** @var string|null */
-    protected $License;
-    /** @var string|null */
-    protected $LicenseNr;
-    /** @var string|null */
-    protected $ShipmentType;
-    /** @var string|null */
-    protected $TrustedShipperID;
-    /** @var string|null  */
-    protected $TransactionCode;
-    /** @var string|null */
-    protected $TransactionDescription;
-    /** @var string|null */
-    protected $ImporterReferenceCode;
-    // @codingStandardsIgnoreEnd
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $Certificate = null;
 
-    /**
-     * @param string|null    $Certificate
-     * @param string|null    $CertificateNr
-     * @param Content[]|null $Content
-     * @param string|null    $Currency
-     * @param string|null    $HandleAsNonDeliverable
-     * @param string|null    $Invoice
-     * @param string|null    $InvoiceNr
-     * @param string|null    $License
-     * @param string|null    $LicenseNr
-     * @param string|null    $ShipmentType
-     * @param string|null    $TrustedShipperID
-     * @param string|null    $TransactionCode
-     * @param string|null    $TransactionDescription
-     * @param string|null    $ImporterReferenceCode
-     */
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $CertificateNr = null;
+
+    /** @var Content[]|null */
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?array $Content = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $Currency = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $HandleAsNonDeliverable = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $Invoice = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+
+    protected ?string $InvoiceNr = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $License = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $LicenseNr = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $ShipmentType = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $TrustedShipperID = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $TransactionCode = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $TransactionDescription = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $ImporterReferenceCode = null;
+
     public function __construct(
-        $Certificate = null,
-        $CertificateNr = null,
-        array $Content = null,
-        $Currency = null,
-        $HandleAsNonDeliverable = null,
-        $Invoice = null,
-        $InvoiceNr = null,
-        $License = null,
-        $LicenseNr = null,
-        $ShipmentType = null,
-        $TrustedShipperID = null,
-        $TransactionCode = null,
-        $TransactionDescription = null,
-        $ImporterReferenceCode = null
+        ?string $Certificate = null,
+        ?string $CertificateNr = null,
+        ?array  $Content = null,
+        ?string $Currency = null,
+        ?string $HandleAsNonDeliverable = null,
+        ?string $Invoice = null,
+        ?string $InvoiceNr = null,
+        ?string $License = null,
+        ?string $LicenseNr = null,
+        ?string $ShipmentType = null,
+        ?string $TrustedShipperID = null,
+        ?string $TransactionCode = null,
+        ?string $TransactionDescription = null,
+        ?string $ImporterReferenceCode = null
     ) {
         parent::__construct();
 
-        $this->setCertificate($Certificate);
-        $this->setCertificateNr($CertificateNr);
-        $this->setContent($Content);
-        $this->setCurrency($Currency);
-        $this->setHandleAsNonDeliverable($HandleAsNonDeliverable);
-        $this->setInvoice($Invoice);
-        $this->setInvoiceNr($InvoiceNr);
-        $this->setLicense($License);
-        $this->setLicenseNr($LicenseNr);
-        $this->setShipmentType($ShipmentType);
-        $this->setTrustedShipperID($TrustedShipperID);
-        $this->setTransactionCode($TransactionCode);
-        $this->setTransactionDescription($TransactionDescription);
-        $this->setImporterReferenceCode($ImporterReferenceCode);
+        $this->setCertificate(Certificate: $Certificate);
+        $this->setCertificateNr(CertificateNr: $CertificateNr);
+        $this->setContent(Content: $Content);
+        $this->setCurrency(Currency: $Currency);
+        $this->setHandleAsNonDeliverable(HandleAsNonDeliverable: $HandleAsNonDeliverable);
+        $this->setInvoice(Invoice: $Invoice);
+        $this->setInvoiceNr(InvoiceNr: $InvoiceNr);
+        $this->setLicense(License: $License);
+        $this->setLicenseNr(LicenseNr: $LicenseNr);
+        $this->setShipmentType(ShipmentType: $ShipmentType);
+        $this->setTrustedShipperID(TrustedShipperID: $TrustedShipperID);
+        $this->setTransactionCode(TransactionCode: $TransactionCode);
+        $this->setTransactionDescription(TransactionDescription: $TransactionDescription);
+        $this->setImporterReferenceCode(ImporterReferenceCode: $ImporterReferenceCode);
+    }
+
+    public function getCertificate(): ?string
+    {
+        return $this->Certificate;
+    }
+
+    public function setCertificate(?string $Certificate): static
+    {
+        $this->Certificate = $Certificate;
+
+        return $this;
+    }
+
+    public function getCertificateNr(): ?string
+    {
+        return $this->CertificateNr;
+    }
+
+    public function setCertificateNr(?string $CertificateNr): static
+    {
+        $this->CertificateNr = $CertificateNr;
+
+        return $this;
+    }
+
+    /**
+     * @return Content[]|null
+     */
+    public function getContent(): ?array
+    {
+        return $this->Content;
+    }
+
+    /**
+     * @param Content[]|null $Content
+     * @return $this
+     */
+    public function setContent(?array $Content): static
+    {
+        if (is_array(value: $Content)) {
+            foreach ($Content as $content) {
+                if (!$content instanceof Content) {
+                    throw new \TypeError(message: 'Expected instance of `Content`');
+                }
+            }
+        }
+
+        $this->Content = $Content;
+
+        return $this;
+    }
+
+    public function getCurrency(): ?string
+    {
+        return $this->Currency;
+    }
+
+    public function setCurrency(?string $Currency): static
+    {
+        $this->Currency = $Currency;
+
+        return $this;
+    }
+
+    public function getHandleAsNonDeliverable(): ?string
+    {
+        return $this->HandleAsNonDeliverable;
+    }
+
+    public function setHandleAsNonDeliverable(?string $HandleAsNonDeliverable): static
+    {
+        $this->HandleAsNonDeliverable = $HandleAsNonDeliverable;
+
+        return $this;
+    }
+
+    public function getInvoice(): ?string
+    {
+        return $this->Invoice;
+    }
+
+    public function setInvoice(?string $Invoice): static
+    {
+        $this->Invoice = $Invoice;
+
+        return $this;
+    }
+
+    public function getInvoiceNr(): ?string
+    {
+        return $this->InvoiceNr;
+    }
+
+    public function setInvoiceNr(?string $InvoiceNr): static
+    {
+        $this->InvoiceNr = $InvoiceNr;
+
+        return $this;
+    }
+
+    public function getLicense(): ?string
+    {
+        return $this->License;
+    }
+
+    public function setLicense(?string $License): static
+    {
+        $this->License = $License;
+
+        return $this;
+    }
+
+    public function getLicenseNr(): ?string
+    {
+        return $this->LicenseNr;
+    }
+
+    public function setLicenseNr(?string $LicenseNr): static
+    {
+        $this->LicenseNr = $LicenseNr;
+
+        return $this;
+    }
+
+    public function getShipmentType(): ?string
+    {
+        return $this->ShipmentType;
+    }
+
+    public function setShipmentType(?string $ShipmentType): static
+    {
+        $this->ShipmentType = $ShipmentType;
+
+        return $this;
+    }
+
+    public function getTrustedShipperID(): ?string
+    {
+        return $this->TrustedShipperID;
+    }
+
+    public function setTrustedShipperID(?string $TrustedShipperID): static
+    {
+        $this->TrustedShipperID = $TrustedShipperID;
+
+        return $this;
+    }
+
+    public function getTransactionCode(): ?string
+    {
+        return $this->TransactionCode;
+    }
+
+    public function setTransactionCode(?string $TransactionCode): static
+    {
+        $this->TransactionCode = $TransactionCode;
+
+        return $this;
+    }
+
+    public function getTransactionDescription(): ?string
+    {
+        return $this->TransactionDescription;
+    }
+
+    public function setTransactionDescription(?string $TransactionDescription): static
+    {
+        $this->TransactionDescription = $TransactionDescription;
+
+        return $this;
+    }
+
+    public function getImporterReferenceCode(): ?string
+    {
+        return $this->ImporterReferenceCode;
+    }
+
+    public function setImporterReferenceCode(?string $ImporterReferenceCode): static
+    {
+        $this->ImporterReferenceCode = $ImporterReferenceCode;
+
+        return $this;
     }
 }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -26,133 +27,125 @@
 
 namespace Firstred\PostNL\Service;
 
-use DateTimeImmutable;
-use Exception;
-use Firstred\PostNL\Entity\AbstractEntity;
+use DateInterval;
+use DateTimeInterface;
 use Firstred\PostNL\Entity\Request\Confirming;
 use Firstred\PostNL\Entity\Response\ConfirmingResponseShipment;
-use Firstred\PostNL\Entity\SOAP\Security;
+use Firstred\PostNL\Enum\PostNLApiMode;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
-use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\NotFoundException;
-use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
-use Sabre\Xml\LibXMLException;
-use Sabre\Xml\Reader;
-use Sabre\Xml\Service as XmlService;
-use SimpleXMLElement;
+use Firstred\PostNL\HttpClient\HttpClientInterface;
+use Firstred\PostNL\Service\Adapter\ConfirmingServiceAdapterInterface;
+use Firstred\PostNL\Service\Adapter\Rest\ConfirmingServiceRestAdapter;
+use Firstred\PostNL\Service\Adapter\ServiceAdapterSettersTrait;
+use Firstred\PostNL\Service\Adapter\Soap\ConfirmingServiceSoapAdapter;
+use ParagonIE\HiddenString\HiddenString;
+use Psr\Cache\CacheItemPoolInterface;
+use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 
 /**
- * Class ConfirmingService.
- *
- * @method ConfirmingResponseShipment   confirmShipment(Confirming $shipment)
- * @method ConfirmingResponseShipment[] confirmShipments(Confirming[] $shipments)
- * @method RequestInterface             buildConfirmShipmentRequest(Confirming $shipment)
- * @method ConfirmingResponseShipment   processConfirmShipmentResponse(mixed $response)
- *
- * @since 1.0.0
+ * @since 2.0.0
  */
 class ConfirmingService extends AbstractService implements ConfirmingServiceInterface
 {
-    // API Version
-    const VERSION = '2.0';
+    use ServiceAdapterSettersTrait;
 
-    // Endpoints
-    const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v2/confirm';
-    const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2/confirm';
+    protected ConfirmingServiceAdapterInterface $adapter;
 
-    // SOAP API
-    const SOAP_ACTION = 'http://postnl.nl/cif/services/ConfirmingWebService/IConfirmingWebService/Confirming';
-    const ENVELOPE_NAMESPACE = 'http://schemas.xmlsoap.org/soap/envelope/';
-    const SERVICES_NAMESPACE = 'http://postnl.nl/cif/services/ConfirmingWebService/';
-    const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/ConfirmingWebService/';
-
-    /**
-     * Namespaces uses for the SOAP version of this service.
-     *
-     * @var array
-     */
-    public static $namespaces = [
-        self::ENVELOPE_NAMESPACE     => 'soap',
-        self::OLD_ENVELOPE_NAMESPACE => 'env',
-        self::SERVICES_NAMESPACE     => 'services',
-        self::DOMAIN_NAMESPACE       => 'domain',
-        Security::SECURITY_NAMESPACE => 'wsse',
-        self::XML_SCHEMA_NAMESPACE   => 'schema',
-        self::COMMON_NAMESPACE       => 'common',
-    ];
+    public function __construct(
+        HiddenString $apiKey,
+        PostNLApiMode $apiMode,
+        bool $sandbox,
+        HttpClientInterface $httpClient,
+        RequestFactoryInterface $requestFactory,
+        StreamFactoryInterface $streamFactory,
+        string $version = ConfirmingServiceInterface::DEFAULT_VERSION,
+        CacheItemPoolInterface $cache = null,
+        DateInterval|DateTimeInterface|int $ttl = null
+    ) {
+        parent::__construct(
+            apiKey: $apiKey,
+            apiMode: $apiMode,
+            sandbox: $sandbox,
+            httpClient: $httpClient,
+            requestFactory: $requestFactory,
+            streamFactory: $streamFactory,
+            version: $version,
+            cache: $cache,
+            ttl: $ttl,
+        );
+    }
 
     /**
      * Confirm a single shipment via REST.
-     *
-     * @param Confirming $confirming
-     *
-     * @return ConfirmingResponseShipment
      *
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
      * @throws HttpClientException
-     * @throws NotSupportedException
-     * @throws InvalidArgumentException
      * @throws NotFoundException
      *
      * @since 1.0.0
      */
-    public function confirmShipmentREST(Confirming $confirming)
+    public function confirmShipment(Confirming $confirming): ConfirmingResponseShipment
     {
-        $response = $this->postnl->getHttpClient()->doRequest($this->buildConfirmRequestREST($confirming));
-        $objects = $this->processConfirmResponseREST($response);
+        $response = $this->getHttpClient()->doRequest(request: $this->adapter->buildConfirmRequest(confirming: $confirming));
+        $objects = $this->adapter->processConfirmResponse(response: $response);
 
         if (!empty($objects) && $objects[0] instanceof ConfirmingResponseShipment) {
             return $objects[0];
         }
 
         if (200 === $response->getStatusCode()) {
-            throw new ResponseException('Invalid API Response', null, null, $response);
+            throw new ResponseException(message: 'Invalid API Response', response: $response);
         }
 
-        throw new NotFoundException('Unable to confirm');
+        throw new NotFoundException(message: 'Unable to confirm');
     }
 
     /**
      * Confirm multiple shipments.
      *
      * @param Confirming[] $confirms ['uuid' => Confirming, ...]
+     * @phpstan-param array<string, Confirming> $confirms
      *
      * @return ConfirmingResponseShipment[]
+     * @phpstan-return array<string, ConfirmingResponseShipment>
      *
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
-     * @throws InvalidArgumentException
-     * @throws NotSupportedException
      * @throws ResponseException
      *
      * @since 1.0.0
      */
-    public function confirmShipmentsREST(array $confirms)
+    public function confirmShipments(array $confirms): array
     {
-        $httpClient = $this->postnl->getHttpClient();
+        $httpClient = $this->getHttpClient();
 
         foreach ($confirms as $confirm) {
             $httpClient->addOrUpdateRequest(
-                $confirm->getId(),
-                $this->buildConfirmRequestREST($confirm)
+                id: $confirm->getId(),
+                request: $this->adapter->buildConfirmRequest(confirming: $confirm),
             );
         }
 
         $confirmingResponses = [];
         foreach ($httpClient->doRequests() as $uuid => $response) {
             $confirmingResponse = null;
-            $objects = $this->processConfirmResponseREST($response);
+            $objects = $this->adapter->processConfirmResponse(response: $response);
             foreach ($objects as $object) {
                 if (!$object instanceof ConfirmingResponseShipment) {
-                    throw new ResponseException('Invalid API Response', null, null, $response);
+                    throw new ResponseException(
+                        message: 'Invalid API Response',
+                        code: $response->getStatusCode(),
+                        previous: null,
+                        response: $response,
+                    );
                 }
 
                 $confirmingResponse = $object;
@@ -165,209 +158,24 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
     }
 
     /**
-     * Generate a single label via SOAP.
-     *
-     * @param Confirming $confirming
-     *
-     * @return ConfirmingResponseShipment
-     *
-     * @throws CifDownException
-     * @throws CifException
-     * @throws HttpClientException
-     * @throws ResponseException
-     *
-     * @since 1.0.0
+     * @since 2.0.0
      */
-    public function confirmShipmentSOAP(Confirming $confirming)
+    public function setAPIMode(PostNLApiMode $mode): void
     {
-        $response = $this->postnl->getHttpClient()->doRequest($this->buildConfirmRequestSOAP($confirming));
-        return $this->processConfirmResponseSOAP($response);
-    }
-
-    /**
-     * Generate multiple labels at once.
-     *
-     * @param array $confirmings ['uuid' => Confirming, ...]
-     *
-     * @return ConfirmingResponseShipment[]
-     *
-     * @throws CifDownException
-     * @throws CifException
-     * @throws HttpClientException
-     * @throws ResponseException
-     * @throws InvalidArgumentException
-     *
-     * @since 1.0.0
-     */
-    public function confirmShipmentsSOAP(array $confirmings)
-    {
-        $httpClient = $this->postnl->getHttpClient();
-
-        foreach ($confirmings as $confirming) {
-            $httpClient->addOrUpdateRequest(
-                $confirming->getId(),
-                $this->buildConfirmRequestSOAP($confirming)
+        $this->adapter = $mode == PostNLApiMode::Rest
+            ? new ConfirmingServiceRestAdapter(
+                apiKey: $this->getApiKey(),
+                sandbox: $this->isSandbox(),
+                requestFactory: $this->getRequestFactory(),
+                streamFactory: $this->getStreamFactory(),
+                version: $this->getVersion(),
+            )
+            : new ConfirmingServiceSoapAdapter(
+                apiKey: $this->getApiKey(),
+                sandbox: $this->isSandbox(),
+                requestFactory: $this->getRequestFactory(),
+                streamFactory: $this->getStreamFactory(),
+                version: $this->getVersion(),
             );
-        }
-
-        $responses = [];
-        foreach ($httpClient->doRequests() as $uuid => $response) {
-            $confirmingResponse = $this->processConfirmResponseSOAP($response);
-            $responses[$uuid] = $confirmingResponse;
-        }
-
-        return $responses;
-    }
-
-    /**
-     * @param Confirming $confirming
-     *
-     * @return RequestInterface
-     *
-     * @since 1.0.0
-     */
-    public function buildConfirmRequestREST(Confirming $confirming)
-    {
-        $apiKey = $this->postnl->getRestApiKey();
-
-        $this->setService($confirming);
-
-        return $this->postnl->getRequestFactory()->createRequest(
-            'POST',
-            ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT)
-        )
-            ->withHeader('apikey', $apiKey)
-            ->withHeader('Accept', 'application/json')
-            ->withHeader('Content-Type', 'application/json;charset=UTF-8')
-            ->withBody($this->postnl->getStreamFactory()->createStream(json_encode($confirming)))
-        ;
-    }
-
-    /**
-     * Proces Confirm REST Response.
-     *
-     * @param mixed $response
-     *
-     * @return ConfirmingResponseShipment[]|null
-     *
-     * @throws CifDownException
-     * @throws CifException
-     * @throws ResponseException
-     * @throws HttpClientException
-     * @throws NotSupportedException
-     * @throws InvalidArgumentException
-     *
-     * @since 1.0.0
-     */
-    public function processConfirmResponseREST($response)
-    {
-        static::validateRESTResponse($response);
-        $body = json_decode(static::getResponseText($response));
-        if (isset($body->ResponseShipments)) {
-            if (!is_array($body->ResponseShipments)) {
-                $body->ResponseShipments = [$body->ResponseShipments];
-            }
-
-            $objects = [];
-            foreach ($body->ResponseShipments as $responseShipment) {
-                $object = ConfirmingResponseShipment::jsonDeserialize((object) ['ConfirmingResponseShipment' => $responseShipment]);
-                $this->setService($object);
-                $objects[] = $object;
-            }
-
-
-            return $objects;
-        }
-
-        return null;
-    }
-
-    /**
-     * @param Confirming $confirming
-     *
-     * @return RequestInterface
-     *
-     * @since 1.0.0
-     */
-    public function buildConfirmRequestSOAP(Confirming $confirming)
-    {
-        $soapAction = static::SOAP_ACTION;
-        $xmlService = new XmlService();
-        foreach (static::$namespaces as $namespace => $prefix) {
-            $xmlService->namespaceMap[$namespace] = $prefix;
-        }
-        $xmlService->classMap[DateTimeImmutable::class] = [__CLASS__, 'defaultDateFormat'];
-
-        $security = new Security($this->postnl->getToken());
-
-        $this->setService($security);
-        $this->setService($confirming);
-
-        $body = $xmlService->write(
-            '{'.static::ENVELOPE_NAMESPACE.'}Envelope',
-            [
-                '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
-                    ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
-                ],
-                '{'.static::ENVELOPE_NAMESPACE.'}Body' => [
-                    '{'.static::SERVICES_NAMESPACE.'}Confirming' => $confirming,
-                ],
-            ]
-        );
-
-        return $this->postnl->getRequestFactory()->createRequest(
-            'POST',
-            $this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT
-        )
-            ->withHeader('SOAPAction', "\"$soapAction\"")
-            ->withHeader('Accept', 'text/xml')
-            ->withHeader('Content-Type', 'text/xml;charset=UTF-8')
-            ->withBody($this->postnl->getStreamFactory()->createStream($body))
-        ;
-    }
-
-    /**
-     * Process Confirm SOAP response.
-     *
-     * @param ResponseInterface $response
-     *
-     * @return ConfirmingResponseShipment
-     *
-     * @throws CifDownException
-     * @throws CifException
-     * @throws ResponseException
-     * @throws HttpClientException
-     *
-     * @since 1.0.0
-     */
-    public function processConfirmResponseSOAP(ResponseInterface $response)
-    {
-        try {
-            $xml = new SimpleXMLElement(static::getResponseText($response));
-        } catch (HttpClientException $e) {
-            throw $e;
-        } catch (ResponseException $e) {
-            throw $e;
-        } catch (Exception $e) {
-            throw new ResponseException($e->getMessage(), $e->getCode(), $e);
-        }
-
-        static::registerNamespaces($xml);
-        static::validateSOAPResponse($xml);
-
-        $reader = new Reader();
-        $reader->xml(static::getResponseText($response));
-        try {
-            $array = array_values($reader->parse()['value'][0]['value'][0]['value']);
-        } catch (LibXMLException $e) {
-            throw new ResponseException($e->getMessage(), $e->getCode(), $e);
-        }
-        $array = $array[0];
-
-        /** @var ConfirmingResponseShipment $object */
-        $object = AbstractEntity::xmlDeserialize($array);
-        $this->setService($object);
-
-        return $object;
     }
 }

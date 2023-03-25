@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -26,104 +27,68 @@
 
 namespace Firstred\PostNL\Entity\Response;
 
+use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
+use Firstred\PostNL\Enum\SoapNamespace;
+use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use Firstred\PostNL\Exception\NotSupportedException;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\TimeframeService;
 use stdClass;
 use function is_array;
 
 /**
- * Class GetNearestLocationsResponse.
- *
- * @method GetLocationsResult|null     getGetLocationsResult()
- * @method GetNearestLocationsResponse setGetLocationsResult(GetLocationsResult|null $GetLocationsResult = null)
- *
  * @since 1.0.0
  */
 class GetNearestLocationsResponse extends AbstractEntity
 {
-    /**
-     * Default properties and namespaces for the SOAP API.
-     *
-     * @var array
-     */
-    public static $defaultProperties = [
-        'Barcode'        => [
-            'GetLocationsResult' => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming'     => [
-            'GetLocationsResult' => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling'      => [
-            'GetLocationsResult' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate'   => [
-            'GetLocationsResult' => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location'       => [
-            'GetLocationsResult' => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe'      => [
-            'GetLocationsResult' => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var GetLocationsResult|null */
-    protected $GetLocationsResult;
-    // @codingStandardsIgnoreEnd
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?GetLocationsResult $GetLocationsResult = null;
 
-    /**
-     * GetNearestLocationsResponse constructor.
-     *
-     * @param GetLocationsResult|null $GetLocationsResult
-     */
     public function __construct(GetLocationsResult $GetLocationsResult = null)
     {
         parent::__construct();
 
-        $this->setGetLocationsResult($GetLocationsResult);
+        $this->setGetLocationsResult(GetLocationsResult: $GetLocationsResult);
+    }
+
+    public function getGetLocationsResult(): ?GetLocationsResult
+    {
+        return $this->GetLocationsResult;
+    }
+
+    public function setGetLocationsResult(?GetLocationsResult $GetLocationsResult): static
+    {
+        $this->GetLocationsResult = $GetLocationsResult;
+
+        return $this;
     }
 
     /**
-     * @param stdClass $json
-     *
-     * @return mixed|stdClass|null
-     *
      * @throws PostNLInvalidArgumentException
      * @throws NotSupportedException
+     * @throws DeserializationException
      *
      * @since 1.2.0
      */
-    public static function jsonDeserialize(stdClass $json)
+    public static function jsonDeserialize(stdClass $json): static
     {
         if (isset($json->GetNearestLocationsResponse->GetLocationsResult)
-            && !is_array($json->GetNearestLocationsResponse->GetLocationsResult->ResponseLocation)
+            && !is_array(value: $json->GetNearestLocationsResponse->GetLocationsResult->ResponseLocation)
         ) {
             $json->GetNearestLocationsResponse->GetLocationsResult->ResponseLocation = [$json->GetNearestLocationsResponse->GetLocationsResult->ResponseLocation];
         }
 
-        return parent::jsonDeserialize($json);
+        return parent::jsonDeserialize(json: $json);
     }
 
-    /**
-     * Return a serializable array for `json_encode`.
-     *
-     * @return array
-     */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         $json = [];
-        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
+        if (!$this->currentService || !in_array(needle: $this->currentService, haystack: array_keys(array: static::$defaultProperties))) {
             return $json;
         }
 
-        foreach (array_keys(static::$defaultProperties[$this->currentService]) as $propertyName) {
+        foreach (array_keys(array: static::$defaultProperties[$this->currentService]) as $propertyName) {
             if (isset($this->$propertyName)) {
                 if ('GetLocationsResult' === $propertyName) {
                     $locations = [];

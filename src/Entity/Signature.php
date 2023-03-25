@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -26,67 +27,61 @@
 
 namespace Firstred\PostNL\Entity;
 
+use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\Response\GetSignatureResponseSignature;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Enum\SoapNamespace;
 
 /**
- * Class Signature.
- *
- * @method GetSignatureResponseSignature|null getGetSignatureResponseSignature()
- * @method Warning[]|null                     getWarnings()
- * @method Signature                          setGetSignatureResponseSignature(GetSignatureResponseSignature|null $GetSignatureResponseSignature = null)
- * @method Signature                          setWarnings(Warning[]|null $Warnings = null)
- *
  * @since 1.0.0
  */
 class Signature extends AbstractEntity
 {
-    /** @var string[][] */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'GetSignatureResponseSignature' => BarcodeService::DOMAIN_NAMESPACE,
-            'Warnings'                      => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'GetSignatureResponseSignature' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Warnings'                      => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'GetSignatureResponseSignature' => LabellingService::DOMAIN_NAMESPACE,
-            'Warnings'                      => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'GetSignatureResponseSignature' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Warnings'                      => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'GetSignatureResponseSignature' => LocationService::DOMAIN_NAMESPACE,
-            'Warnings'                      => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'GetSignatureResponseSignature' => TimeframeService::DOMAIN_NAMESPACE,
-            'Warnings'                      => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var GetSignatureResponseSignature|null */
-    protected $GetSignatureResponseSignature;
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?GetSignatureResponseSignature $GetSignatureResponseSignature = null;
+
     /** @var Warning[]|null */
-    protected $Warnings;
-    // @codingStandardsIgnoreEnd
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?array $Warnings = null;
 
     public function __construct(
-        GetSignatureResponseSignature $GetSignatureResponseSignature = null,
-        array $Warnings = null
+        ?GetSignatureResponseSignature $GetSignatureResponseSignature = null,
+        /** @param Warning[]|null $Warnings */
+        ?array                         $Warnings = null
     ) {
         parent::__construct();
 
-        $this->setGetSignatureResponseSignature($GetSignatureResponseSignature);
-        $this->setWarnings($Warnings);
+        $this->setGetSignatureResponseSignature(GetSignatureResponseSignature: $GetSignatureResponseSignature);
+        $this->setWarnings(Warnings: $Warnings);
+    }
+
+    public function getGetSignatureResponseSignature(): ?GetSignatureResponseSignature
+    {
+        return $this->GetSignatureResponseSignature;
+    }
+
+    public function setGetSignatureResponseSignature(?GetSignatureResponseSignature $GetSignatureResponseSignature): static
+    {
+        $this->GetSignatureResponseSignature = $GetSignatureResponseSignature;
+
+        return $this;
+    }
+
+    /**
+     * @return Warning|null
+     */
+    public function getWarnings(): ?array
+    {
+        return $this->Warnings;
+    }
+
+    /**
+     * @param Warning[]|null $Warnings
+     * @return static
+     */
+    public function setWarnings(?array $Warnings): static
+    {
+        $this->Warnings = $Warnings;
+
+        return $this;
     }
 }

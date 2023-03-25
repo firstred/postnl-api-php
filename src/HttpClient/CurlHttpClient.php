@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -39,22 +40,20 @@ use Psr\Log\LogLevel;
 use function define;
 use function defined;
 use function is_array;
-use function user_error;
 use const CURLOPT_FOLLOWLOCATION;
 use const CURLOPT_HTTPHEADER;
 use const CURLOPT_PROTOCOLS;
 use const CURLOPT_REDIR_PROTOCOLS;
 use const CURLOPT_SSL_VERIFYPEER;
-use const E_USER_DEPRECATED;
 
-if (!defined('CURL_SSLVERSION_TLSv1')) {
-    define('CURL_SSLVERSION_TLSv1', 1);
+if (!defined(constant_name: 'CURL_SSLVERSION_TLSv1')) {
+    define(constant_name: 'CURL_SSLVERSION_TLSv1', value: 1);
 }
-if (!defined('CURL_SSLVERSION_TLSv1_2')) {
-    define('CURL_SSLVERSION_TLSv1_2', 6);
+if (!defined(constant_name: 'CURL_SSLVERSION_TLSv1_2')) {
+    define(constant_name: 'CURL_SSLVERSION_TLSv1_2', value: 6);
 }
-if (!defined('CURLE_SSL_CACERT_BADFILE')) {
-    define('CURLE_SSL_CACERT_BADFILE', 77);  // constant not defined in PHP
+if (!defined(constant_name: 'CURLE_SSL_CACERT_BADFILE')) {
+    define(constant_name: 'CURLE_SSL_CACERT_BADFILE', value: 77);  // constant not defined in PHP
 }
 
 /**
@@ -62,41 +61,19 @@ if (!defined('CURLE_SSL_CACERT_BADFILE')) {
  *
  * @since 1.0.0
  */
-class CurlClient extends BaseHttpClient implements ClientInterface, LoggerAwareInterface
+class CurlHttpClient extends BaseHttpClient implements HttpClientInterface, LoggerAwareInterface
 {
-    /** @var static */
-    private static $instance;
     /** @var array|callable|null */
     protected $defaultOptions;
-
-    /**
-     * CurlClient Singleton.
-     *
-     * @return CurlClient
-     *
-     * @deprecated Please instantiate a new client rather than using this singleton
-     */
-    public static function getInstance()
-    {
-        if (!static::$instance) {
-            static::$instance = new self();
-        }
-
-        return static::$instance;
-    }
 
     /**
      * Do a single request.
      *
      * Exceptions are captured into the result array
      *
-     * @param RequestInterface $request
-     *
-     * @return ResponseInterface
-     *
      * @throws HttpClientException
      */
-    public function doRequest(RequestInterface $request)
+    public function doRequest(RequestInterface $request): ResponseInterface
     {
         $logLevel = LogLevel::DEBUG;
         $response = null;
@@ -104,18 +81,18 @@ class CurlClient extends BaseHttpClient implements ClientInterface, LoggerAwareI
         try {
             $curl = curl_init();
             // Create a callback to capture HTTP headers for the response
-            $this->prepareRequest($curl, $request);
-            $responseBody = curl_exec($curl);
+            $this->prepareRequest(curl: $curl, request: $request);
+            $responseBody = curl_exec(handle: $curl);
             if (false === $responseBody) {
-                $errno = curl_errno($curl);
-                $message = curl_error($curl);
-                curl_close($curl);
+                $errno = curl_errno(handle: $curl);
+                $message = curl_error(handle: $curl);
+                curl_close(handle: $curl);
                 $logLevel = LogLevel::ERROR;
-                $this->handleCurlError($request->getUri(), $errno, $message);
+                $this->handleCurlError(url: $request->getUri(), errno: $errno, message: $message);
             }
-            curl_close($curl);
+            curl_close(handle: $curl);
 
-            $response = PsrMessage::parseResponse($responseBody);
+            $response = PsrMessage::parseResponse(message: $responseBody);
             if ($response->getStatusCode() < 200 || $response->getStatusCode() >= 400) {
                 $logLevel = LogLevel::ERROR;
             }
@@ -123,11 +100,11 @@ class CurlClient extends BaseHttpClient implements ClientInterface, LoggerAwareI
             return $response;
         } catch (ApiException $e) {
             $logLevel = LogLevel::ERROR;
-            throw new HttpClientException('Connection error', 0, $e, $response);
+            throw new HttpClientException(message: 'Connection error', code: 0, previous: $e, response: $response);
         } finally {
-            $this->getLogger()->log($logLevel, PsrMessage::toString($request));
+            $this->getLogger()->log(level: $logLevel, message: PsrMessage::toString(message: $request));
             if ($response instanceof ResponseInterface) {
-                $this->getLogger()->log($logLevel, PsrMessage::toString($response));
+                $this->getLogger()->log(level: $logLevel, message: PsrMessage::toString(message: $response));
             }
         }
     }
@@ -143,20 +120,10 @@ class CurlClient extends BaseHttpClient implements ClientInterface, LoggerAwareI
      *
      * @throws InvalidArgumentException
      */
-    public function doRequests($requests = [])
+    public function doRequests(array $requests = []): array
     {
-        if ($requests instanceof RequestInterface) {
-            user_error(
-                'Passing a single request to HttpClientInterface::doRequests is deprecated',
-                E_USER_DEPRECATED
-            );
-            $requests = [$requests];
-        }
-        if (!is_array($requests)) {
-            throw new InvalidArgumentException('Invalid requests array passed');
-        }
-        if (!is_array($this->pendingRequests)) {
-            $this->pendingRequests = [];
+        if (!is_array(value: $requests)) {
+            throw new InvalidArgumentException(message: 'Invalid requests array passed');
         }
 
         // Reset request headers array
@@ -169,37 +136,37 @@ class CurlClient extends BaseHttpClient implements ClientInterface, LoggerAwareI
             $curl = curl_init();
             $curlHandles[$uuid] = $curl;
             try {
-                $this->prepareRequest($curl, $request);
+                $this->prepareRequest(curl: $curl, request: $request);
             } catch (HttpClientException $e) {
                 // Handle later
             }
-            curl_multi_add_handle($mh, $curl);
+            curl_multi_add_handle(multi_handle: $mh, handle: $curl);
         }
         // execute the handles
         $running = null;
         do {
-            curl_multi_exec($mh, $running);
+            curl_multi_exec(multi_handle: $mh, still_running: $running);
         } while ($running > 0);
         // get content and remove handles
         $responseBodies = [];
         foreach ($curlHandles as $id => &$c) {
-            $responseBodies[$id] = curl_multi_getcontent($c);
-            curl_multi_remove_handle($mh, $c);
-            $responseCodes[$id] = curl_getinfo($c, CURLINFO_HTTP_CODE);
+            $responseBodies[$id] = curl_multi_getcontent(handle: $c);
+            curl_multi_remove_handle(multi_handle: $mh, handle: $c);
+            $responseCodes[$id] = curl_getinfo(handle: $c, option: CURLINFO_HTTP_CODE);
         }
         // all done
-        if (isset($this->multiCurlHandle) && 'curl_multi' === get_resource_type($this->multiCurlHandle)) {
-            curl_multi_close($this->multiCurlHandle);
+        if (isset($this->multiCurlHandle) && 'curl_multi' === get_resource_type(resource: $this->multiCurlHandle)) {
+            curl_multi_close(multi_handle: $this->multiCurlHandle);
         }
         $responses = [];
         foreach ($responseBodies as $uuid => $responseBody) {
             $logLevel = LogLevel::DEBUG;
-            $response = PsrMessage::parseResponse($responseBody);
+            $response = PsrMessage::parseResponse(message: $responseBody);
             if ($response->getStatusCode() < 200 || $response->getStatusCode() >= 400) {
                 $logLevel = LogLevel::ERROR;
             }
-            $this->getLogger()->log($logLevel, PsrMessage::toString($requests[$uuid]));
-            $this->getLogger()->log($logLevel, PsrMessage::toString($response));
+            $this->getLogger()->log(level: $logLevel, message: PsrMessage::toString(message: $requests[$uuid]));
+            $this->getLogger()->log(level: $logLevel, message: PsrMessage::toString(message: $response));
 
             $responses[$uuid] = $response;
         }
@@ -211,28 +178,28 @@ class CurlClient extends BaseHttpClient implements ClientInterface, LoggerAwareI
     }
 
     /**
-     * @param resource         $curl
+     * @param resource $curl
      * @param RequestInterface $request
      *
      * @throws HttpClientException
      */
     protected function prepareRequest($curl, RequestInterface $request)
     {
-        $method = strtolower($request->getMethod());
+        $method = strtolower(string: $request->getMethod());
         $body = (string) $request->getBody();
         $headers = [];
-        foreach (array_keys($request->getHeaders()) as $key) {
+        foreach (array_keys(array: $request->getHeaders()) as $key) {
             $value = $request->getHeaderLine($key);
             $headers[] = "$key: $value";
         }
         $headers[] = 'Expect:';
         $defaultOptions = [];
-        if (is_callable($this->defaultOptions)) { // call defaultOptions callback, set options to return value
-            $defaultOptions = call_user_func_array($this->defaultOptions, func_get_args());
-            if (!is_array($defaultOptions)) {
-                throw new HttpClientException('Non-array value returned by defaultOptions CurlClient callback');
+        if (is_callable(value: $this->defaultOptions)) { // call defaultOptions callback, set options to return value
+            $defaultOptions = call_user_func_array(callback: $this->defaultOptions, args: func_get_args());
+            if (!is_array(value: $defaultOptions)) {
+                throw new HttpClientException(message: 'Non-array value returned by defaultOptions CurlClient callback');
             }
-        } elseif (is_array($this->defaultOptions)) { // set default curlopts from array
+        } elseif (is_array(value: $this->defaultOptions)) { // set default curlopts from array
             $defaultOptions = $this->defaultOptions;
         }
         if ('get' == $method) {
@@ -245,7 +212,7 @@ class CurlClient extends BaseHttpClient implements ClientInterface, LoggerAwareI
         } elseif ('delete' == $method) {
             $options[CURLOPT_CUSTOMREQUEST] = 'DELETE';
         } else {
-            throw new HttpClientException("Unrecognized method $method");
+            throw new HttpClientException(message: "Unrecognized method $method");
         }
         $options[CURLOPT_URL] = (string) $request->getUri();
         $options[CURLOPT_RETURNTRANSFER] = true;
@@ -261,13 +228,13 @@ class CurlClient extends BaseHttpClient implements ClientInterface, LoggerAwareI
         $options[CURLOPT_SSL_VERIFYHOST] = 2;
         $options[CURLOPT_SSL_VERIFYPEER] = true;
         $caPathOrFile = CaBundle::getSystemCaRootBundlePath();
-        if (is_dir($caPathOrFile)) {
+        if (is_dir(filename: $caPathOrFile)) {
             $options[CURLOPT_CAPATH] = $caPathOrFile;
         } else {
             $options[CURLOPT_CAINFO] = $caPathOrFile;
         }
 
-        curl_setopt_array($curl, $defaultOptions + $options);
+        curl_setopt_array(handle: $curl, options: $defaultOptions + $options);
     }
 
     /**
@@ -277,7 +244,7 @@ class CurlClient extends BaseHttpClient implements ClientInterface, LoggerAwareI
      *
      * @throws ApiConnectionException
      */
-    private function handleCurlError($url, $errno, $message)
+    private function handleCurlError($url, $errno, string $message)
     {
         switch ($errno) {
             case CURLE_COULDNT_CONNECT:
@@ -301,6 +268,6 @@ class CurlClient extends BaseHttpClient implements ClientInterface, LoggerAwareI
         }
         $msg .= ' contact developer@postnl.nl';
         $msg .= "\n\n(Network error [errno $errno]: $message)";
-        throw new ApiConnectionException($msg);
+        throw new ApiConnectionException(message: $msg);
     }
 }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -26,145 +27,137 @@
 
 namespace Firstred\PostNL\Entity;
 
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingService;
-use Firstred\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Attribute\SerializableProperty;
+use Firstred\PostNL\Enum\SoapNamespace;
 
 /**
- * Class Content.
- *
- * @method string|null    getCountryOfOrigin()
- * @method string|null    getDescription()
- * @method string|null    getHSTariffNr()
- * @method string|null    getQuantity()
- * @method string|null    getValue()
- * @method string|null    getWeight()
- * @method Content[]|null getContent()
- * @method Content        setCountryOfOrigin(string|null $CountryOfOrigin = null)
- * @method Content        setDescription(string|null $Description = null)
- * @method Content        setHSTariffNr(string|null $HSTariffNr = null)
- * @method Content        setQuantity(string|null $Quantity = null)
- * @method Content        setValue(string|null $Value = null)
- * @method Content        setWeight(string|null $Weight = null)
- * @method Content        setContent(Content[]|null $Content = null)
- *
  * @since 1.0.0
  */
 class Content extends AbstractEntity
 {
-    /** @var string[][] */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'CountryOfOrigin' => BarcodeService::DOMAIN_NAMESPACE,
-            'Description'     => BarcodeService::DOMAIN_NAMESPACE,
-            'HSTariffNr'      => BarcodeService::DOMAIN_NAMESPACE,
-            'Quantity'        => BarcodeService::DOMAIN_NAMESPACE,
-            'Value'           => BarcodeService::DOMAIN_NAMESPACE,
-            'Weight'          => BarcodeService::DOMAIN_NAMESPACE,
-            'Content'         => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'CountryOfOrigin' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Description'     => ConfirmingService::DOMAIN_NAMESPACE,
-            'HSTariffNr'      => ConfirmingService::DOMAIN_NAMESPACE,
-            'Quantity'        => ConfirmingService::DOMAIN_NAMESPACE,
-            'Value'           => ConfirmingService::DOMAIN_NAMESPACE,
-            'Weight'          => ConfirmingService::DOMAIN_NAMESPACE,
-            'Content'         => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'CountryOfOrigin' => LabellingService::DOMAIN_NAMESPACE,
-            'Description'     => LabellingService::DOMAIN_NAMESPACE,
-            'HSTariffNr'      => LabellingService::DOMAIN_NAMESPACE,
-            'Quantity'        => LabellingService::DOMAIN_NAMESPACE,
-            'Value'           => LabellingService::DOMAIN_NAMESPACE,
-            'Weight'          => LabellingService::DOMAIN_NAMESPACE,
-            'Content'         => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'CountryOfOrigin' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Description'     => DeliveryDateService::DOMAIN_NAMESPACE,
-            'HSTariffNr'      => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Quantity'        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Value'           => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Weight'          => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Content'         => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'CountryOfOrigin' => LocationService::DOMAIN_NAMESPACE,
-            'Description'     => LocationService::DOMAIN_NAMESPACE,
-            'HSTariffNr'      => LocationService::DOMAIN_NAMESPACE,
-            'Quantity'        => LocationService::DOMAIN_NAMESPACE,
-            'Value'           => LocationService::DOMAIN_NAMESPACE,
-            'Weight'          => LocationService::DOMAIN_NAMESPACE,
-            'Content'         => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'CountryOfOrigin' => TimeframeService::DOMAIN_NAMESPACE,
-            'Description'     => TimeframeService::DOMAIN_NAMESPACE,
-            'HSTariffNr'      => TimeframeService::DOMAIN_NAMESPACE,
-            'Quantity'        => TimeframeService::DOMAIN_NAMESPACE,
-            'Value'           => TimeframeService::DOMAIN_NAMESPACE,
-            'Weight'          => TimeframeService::DOMAIN_NAMESPACE,
-            'Content'         => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-        'Shipping' => [
-            'CountryOfOrigin' => ShippingService::DOMAIN_NAMESPACE,
-            'Description'     => ShippingService::DOMAIN_NAMESPACE,
-            'HSTariffNr'      => ShippingService::DOMAIN_NAMESPACE,
-            'Quantity'        => ShippingService::DOMAIN_NAMESPACE,
-            'Value'           => ShippingService::DOMAIN_NAMESPACE,
-            'Weight'          => ShippingService::DOMAIN_NAMESPACE,
-            'Content'         => ShippingService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null */
-    protected $CountryOfOrigin;
-    /** @var string|null */
-    protected $Description;
-    /** @var string|null */
-    protected $HSTariffNr;
-    /** @var string|null */
-    protected $Quantity;
-    /** @var string|null */
-    protected $Value;
-    /** @var string|null */
-    protected $Weight;
-    /** @var Content[]|null */
-    protected $Content;
-    // @codingStandardsIgnoreEnd
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $CountryOfOrigin = null;
 
-    /**
-     * @param string|null    $CountryOfOrigin
-     * @param string|null    $Description
-     * @param string|null    $HSTariffNr
-     * @param string|null    $Quantity
-     * @param string|null    $Value
-     * @param string|null    $Weight
-     * @param Content[]|null $Content
-     */
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $Description = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $HSTariffNr = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $Quantity = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $Value = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $Weight = null;
+
+    /** @var Content[]|null */
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?array $Content = null;
+
     public function __construct(
-        $CountryOfOrigin = null,
-        $Description = null,
-        $HSTariffNr = null,
-        $Quantity = null,
-        $Value = null,
-        $Weight = null,
-        $Content = null
+        ?string $CountryOfOrigin = null,
+        ?string $Description = null,
+        ?string $HSTariffNr = null,
+        ?string $Quantity = null,
+        ?string $Value = null,
+        ?string $Weight = null,
+        ?array  $Content = null
     ) {
         parent::__construct();
 
-        $this->setCountryOfOrigin($CountryOfOrigin);
-        $this->setDescription($Description);
-        $this->setHSTariffNr($HSTariffNr);
-        $this->setQuantity($Quantity);
-        $this->setValue($Value);
-        $this->setWeight($Weight);
-        $this->setContent($Content);
+        $this->setCountryOfOrigin(CountryOfOrigin: $CountryOfOrigin);
+        $this->setDescription(Description: $Description);
+        $this->setHSTariffNr(HSTariffNr: $HSTariffNr);
+        $this->setQuantity(Quantity: $Quantity);
+        $this->setValue(Value: $Value);
+        $this->setWeight(Weight: $Weight);
+        $this->setContent(Content: $Content);
+    }
+
+    public function getCountryOfOrigin(): ?string
+    {
+        return $this->CountryOfOrigin;
+    }
+
+    public function setCountryOfOrigin(?string $CountryOfOrigin): static
+    {
+        $this->CountryOfOrigin = $CountryOfOrigin;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->Description;
+    }
+
+    public function setDescription(?string $Description): static
+    {
+        $this->Description = $Description;
+
+        return $this;
+    }
+
+    public function getHSTariffNr(): ?string
+    {
+        return $this->HSTariffNr;
+    }
+
+    public function setHSTariffNr(?string $HSTariffNr): static
+    {
+        $this->HSTariffNr = $HSTariffNr;
+
+        return $this;
+    }
+
+    public function getQuantity(): ?string
+    {
+        return $this->Quantity;
+    }
+
+    public function setQuantity(?string $Quantity): static
+    {
+        $this->Quantity = $Quantity;
+
+        return $this;
+    }
+
+    public function getValue(): ?string
+    {
+        return $this->Value;
+    }
+
+    public function setValue(?string $Value): static
+    {
+        $this->Value = $Value;
+
+        return $this;
+    }
+
+    public function getWeight(): ?string
+    {
+        return $this->Weight;
+    }
+
+    public function setWeight(?string $Weight): static
+    {
+        $this->Weight = $Weight;
+
+        return $this;
+    }
+
+    public function getContent(): ?array
+    {
+        return $this->Content;
+    }
+
+    public function setContent(?array $Content): static
+    {
+        $this->Content = $Content;
+
+        return $this;
     }
 }

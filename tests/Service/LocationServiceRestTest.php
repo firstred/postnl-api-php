@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -39,8 +40,8 @@ use Firstred\PostNL\Entity\Request\GetNearestLocations;
 use Firstred\PostNL\Entity\Response\GetLocationsInAreaResponse;
 use Firstred\PostNL\Entity\Response\GetNearestLocationsResponse;
 use Firstred\PostNL\Entity\Response\ResponseLocation;
-use Firstred\PostNL\Entity\SOAP\UsernameToken;
-use Firstred\PostNL\HttpClient\MockClient;
+use Firstred\PostNL\Entity\Soap\UsernameToken;
+use Firstred\PostNL\HttpClient\MockHttpClient;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\LocationServiceInterface;
 use GuzzleHttp\Handler\MockHandler;
@@ -48,40 +49,35 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use GuzzleHttp\Psr7\Query;
 use GuzzleHttp\Psr7\Request;
+use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use ReflectionException;
 use function file_get_contents;
 use const _RESPONSES_DIR_;
 
 /**
- * Class LocationServiceRestTest.
- *
  * @testdox The LocationService (REST)
  */
-class LocationServiceRestTest extends ServiceTest
+class LocationServiceRestTest extends ServiceTestCase
 {
-    /** @var PostNL */
-    protected $postnl;
-    /** @var LocationServiceInterface */
-    protected $service;
-    /** @var */
-    protected $lastRequest;
+    protected PostNL $postnl;
+    protected LocationServiceInterface $service;
+    protected RequestInterface $lastRequest;
 
     /**
      * @before
      *
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \ReflectionException
+     * @throws
      */
-    public function setupPostNL()
+    public function setupPostNL(): void
     {
         $this->postnl = new PostNL(
-            Customer::create()
-                ->setCollectionLocation('123456')
-                ->setCustomerCode('DEVC')
-                ->setCustomerNumber('11223344')
-                ->setContactPerson('Test')
-                ->setAddress(Address::create([
+            customer: Customer::create()
+                ->setCollectionLocation(CollectionLocation: '123456')
+                ->setCustomerCode(CustomerCode: 'DEVC')
+                ->setCustomerNumber(CustomerNumber: '11223344')
+                ->setContactPerson(ContactPerson: 'Test')
+                ->setAddress(Address: Address::create(properties: [
                     'AddressType' => '02',
                     'City'        => 'Hoofddorp',
                     'CompanyName' => 'PostNL',
@@ -90,33 +86,33 @@ class LocationServiceRestTest extends ServiceTest
                     'Street'      => 'Siriusdreef',
                     'Zipcode'     => '2132WT',
                 ]))
-                ->setGlobalPackBarcodeType('AB')
-                ->setGlobalPackCustomerCode('1234'), new UsernameToken(null, 'test'),
-            false,
-            PostNL::MODE_REST
+                ->setGlobalPackBarcodeType(GlobalPackBarcodeType: 'AB')
+                ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'), apiKey: new UsernameToken(Username: null, Password: 'test'),
+            sandbox: false,
+            mode: PostNL::MODE_Rest
         );
 
         global $logger;
-        $this->postnl->setLogger($logger);
+        $this->postnl->setLogger(logger: $logger);
 
         $this->service = $this->postnl->getLocationService();
-        $this->service->setCache(new VoidCachePool());
-        $this->service->setTtl(1);
+        $this->service->setCache(cache: new VoidCachePool());
+        $this->service->setTtl(ttl: 1);
     }
 
     /**
      * @testdox creates a valid NearestLocations request
      */
-    public function testGetNearestLocationsRequestRest()
+    public function testGetNearestLocationsRequestRest(): void
     {
         $message = new Message();
 
         /* @var Request $request */
-        $this->lastRequest = $request = $this->service->buildGetNearestLocationsRequestREST(
-            (new GetNearestLocations())
-                ->setMessage($message)
-                ->setCountrycode('NL')
-                ->setLocation(Location::create([
+        $this->lastRequest = $request = $this->service->buildGetNearestLocationsRequestRest(
+            getNearestLocations: (new GetNearestLocations())
+                ->setMessage(Message: $message)
+                ->setCountrycode(Countrycode: 'NL')
+                ->setLocation(Location: Location::create(properties: [
                     'AllowSundaySorting' => true,
                     'DeliveryDate'       => '29-06-2016',
                     'DeliveryOptions'    => [
@@ -135,9 +131,9 @@ class LocationServiceRestTest extends ServiceTest
                 ]))
         );
 
-        $query = Query::parse($request->getUri()->getQuery());
+        $query = Query::parse(str: $request->getUri()->getQuery());
 
-        $this->assertEqualsCanonicalizing([
+        $this->assertEqualsCanonicalizing(expected: [
             'DeliveryOptions' => 'PG',
             'City'            => 'Hoofddorp',
             'Street'          => 'Siriusdreef',
@@ -146,9 +142,9 @@ class LocationServiceRestTest extends ServiceTest
             'OpeningTime'     => '09:00:00',
             'PostalCode'      => '2132WT',
             'CountryCode'     => 'NL',
-        ], $query);
-        $this->assertEquals('test', $request->getHeaderLine('apikey'));
-        $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
+        ], actual: $query);
+        $this->assertEquals(expected: 'test', actual: $request->getHeaderLine(header: 'apikey'));
+        $this->assertEquals(expected: 'application/json', actual: $request->getHeaderLine(header: 'Accept'));
     }
 
     /**
@@ -157,17 +153,17 @@ class LocationServiceRestTest extends ServiceTest
      *
      * @param ResponseInterface $response
      */
-    public function testGetNearestLocationsRest($response)
+    public function testGetNearestLocationsRest(ResponseInterface $response): void
     {
-        $mock = new MockHandler([$response]);
-        $handler = HandlerStack::create($mock);
-        $mockClient = new MockClient();
-        $mockClient->setHandler($handler);
-        $this->postnl->setHttpClient($mockClient);
+        $mock = new MockHandler(queue: [$response]);
+        $handler = HandlerStack::create(handler: $mock);
+        $mockClient = new MockHttpClient();
+        $mockClient->setHandler(handler: $handler);
+        $this->postnl->setHttpClient(httpClient: $mockClient);
 
-        $response = $this->postnl->getNearestLocations((new GetNearestLocations())
-            ->setCountrycode('NL')
-            ->setLocation(Location::create([
+        $response = $this->postnl->getNearestLocations(getNearestLocations: (new GetNearestLocations())
+            ->setCountrycode(Countrycode: 'NL')
+            ->setLocation(Location: Location::create(properties: [
                 'AllowSundaySorting' => true,
                 'DeliveryDate'       => '29-06-2016',
                 'DeliveryOptions'    => [
@@ -185,18 +181,18 @@ class LocationServiceRestTest extends ServiceTest
                 'Street'     => 'Siriusdreef',
             ])));
 
-        $this->assertInstanceOf(GetNearestLocationsResponse::class, $response);
-        $this->assertInstanceOf(ResponseLocation::class, $response->getGetLocationsResult()->getResponseLocation()[0]);
+        $this->assertInstanceOf(expected: GetNearestLocationsResponse::class, actual: $response);
+        $this->assertInstanceOf(expected: ResponseLocation::class, actual: $response->getGetLocationsResult()->getResponseLocation()[0]);
 
-        $this->assertNotTrue(static::containsStdClass($response));
+        $this->assertNotTrue(condition: static::containsStdClass(value: $response));
 
         foreach ($response->getGetLocationsResult()->getResponseLocation() as $responseLocation) {
             foreach (['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] as $day) {
                 foreach ($responseLocation->getOpeningHours()->{"get$day"}() as $time) {
-                    $this->assertIsString($time);
+                    $this->assertIsString(actual: $time);
                     $this->assertMatchesRegularExpression(
-                        '~^(([0-1][0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?)-(([0-1][0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?)$~',
-                        $time
+                        pattern: '~^(([0-1][0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?)-(([0-1][0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?)$~',
+                        string: $time
                     );
                 }
             }
@@ -206,16 +202,16 @@ class LocationServiceRestTest extends ServiceTest
     /**
      * @testdox creates a valid GetLocationsInArea request
      */
-    public function testGetLocationsInAreaRequestRest()
+    public function testGetLocationsInAreaRequestRest(): void
     {
         $message = new Message();
 
         /* @var Request $request */
         $this->lastRequest = $request = $this->service->buildGetLocationsInAreaRequest(
             (new GetLocationsInArea())
-                ->setMessage($message)
-                ->setCountrycode('NL')
-                ->setLocation(Location::create([
+                ->setMessage(Message: $message)
+                ->setCountrycode(Countrycode: 'NL')
+                ->setLocation(Location: Location::create(properties: [
                     'AllowSundaySorting' => true,
                     'DeliveryDate'       => '29-06-2016',
                     'DeliveryOptions'    => [
@@ -225,20 +221,20 @@ class LocationServiceRestTest extends ServiceTest
                     'Options'     => [
                         'Daytime',
                     ],
-                    'CoordinatesNorthWest' => CoordinatesNorthWest::create([
+                    'CoordinatesNorthWest' => CoordinatesNorthWest::create(properties: [
                         'Latitude'  => '52.156439',
                         'Longitude' => '5.015643',
                     ]),
-                    'CoordinatesSouthEast' => CoordinatesSouthEast::create([
+                    'CoordinatesSouthEast' => CoordinatesSouthEast::create(properties: [
                         'Latitude'  => '52.017473',
                         'Longitude' => '5.065254',
                     ]),
                 ]))
         );
 
-        $query = Query::parse($request->getUri()->getQuery());
+        $query = Query::parse(str: $request->getUri()->getQuery());
 
-        $this->assertEqualsCanonicalizing([
+        $this->assertEqualsCanonicalizing(expected: [
             'DeliveryOptions' => 'PG',
             'LatitudeNorth'   => '52.156439',
             'LongitudeWest'   => '5.015643',
@@ -246,9 +242,9 @@ class LocationServiceRestTest extends ServiceTest
             'LongitudeEast'   => '5.065254',
             'DeliveryDate'    => '29-06-2016',
             'OpeningTime'     => '09:00:00',
-        ], $query);
-        $this->assertEquals('test', $request->getHeaderLine('apikey'));
-        $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
+        ], actual: $query);
+        $this->assertEquals(expected: 'test', actual: $request->getHeaderLine(header: 'apikey'));
+        $this->assertEquals(expected: 'application/json', actual: $request->getHeaderLine(header: 'Accept'));
     }
 
     /**
@@ -259,17 +255,17 @@ class LocationServiceRestTest extends ServiceTest
      *
      * @throws ReflectionException
      */
-    public function testGetLocationsInAreaRest($response)
+    public function testGetLocationsInAreaRest(ResponseInterface $response): void
     {
-        $mock = new MockHandler([$response]);
-        $handler = HandlerStack::create($mock);
-        $mockClient = new MockClient();
-        $mockClient->setHandler($handler);
-        $this->postnl->setHttpClient($mockClient);
+        $mock = new MockHandler(queue: [$response]);
+        $handler = HandlerStack::create(handler: $mock);
+        $mockClient = new MockHttpClient();
+        $mockClient->setHandler(handler: $handler);
+        $this->postnl->setHttpClient(httpClient: $mockClient);
 
-        $response = $this->postnl->getLocationsInArea((new GetLocationsInArea())
-            ->setCountrycode('NL')
-            ->setLocation(Location::create([
+        $response = $this->postnl->getLocationsInArea(getLocationsInArea: (new GetLocationsInArea())
+            ->setCountrycode(Countrycode: 'NL')
+            ->setLocation(Location: Location::create(properties: [
                 'AllowSundaySorting' => true,
                 'DeliveryDate'       => '29-06-2016',
                 'DeliveryOptions'    => [
@@ -279,44 +275,44 @@ class LocationServiceRestTest extends ServiceTest
                 'Options'     => [
                     'Daytime',
                 ],
-                'CoordinatesNorthWest' => CoordinatesNorthWest::create([
+                'CoordinatesNorthWest' => CoordinatesNorthWest::create(properties: [
                     'Latitude'  => '52.156439',
                     'Longitude' => '5.015643',
                 ]),
-                'CoordinatesSouthEast' => CoordinatesSouthEast::create([
+                'CoordinatesSouthEast' => CoordinatesSouthEast::create(properties: [
                     'Latitude'  => '52.017473',
                     'Longitude' => '5.065254',
                 ]),
             ])));
 
-        $this->assertInstanceOf(GetLocationsInAreaResponse::class, $response);
-        $this->assertEquals(20, count((array) $response->getGetLocationsResult()->getResponseLocation()));
-        $this->assertNotTrue(static::containsStdClass($response));
+        $this->assertInstanceOf(expected: GetLocationsInAreaResponse::class, actual: $response);
+        $this->assertEquals(expected: 20, actual: count(value: (array) $response->getGetLocationsResult()->getResponseLocation()));
+        $this->assertNotTrue(condition: static::containsStdClass(value: $response));
     }
 
     /**
      * @testdox creates a valid GetLocation request
      */
-    public function testGetLocationRequestRest()
+    public function testGetLocationRequestRest(): void
     {
         $message = new Message();
 
         /* @var Request $request */
         $this->lastRequest = $request = $this->service->buildGetLocationRequest(
             (new GetLocation())
-                ->setLocationCode('161503')
-                ->setMessage($message)
-                ->setRetailNetworkID('PNPNL-01')
+                ->setLocationCode(LocationCode: '161503')
+                ->setMessage(Message: $message)
+                ->setRetailNetworkID(RetailNetworkID: 'PNPNL-01')
         );
 
-        $query = Query::parse($request->getUri()->getQuery());
+        $query = Query::parse(str: $request->getUri()->getQuery());
 
-        $this->assertEqualsCanonicalizing([
+        $this->assertEqualsCanonicalizing(expected: [
             'LocationCode'    => '161503',
             'RetailNetworkID' => 'PNPNL-01',
-        ], $query);
-        $this->assertEquals('test', $request->getHeaderLine('apikey'));
-        $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
+        ], actual: $query);
+        $this->assertEquals(expected: 'test', actual: $request->getHeaderLine(header: 'apikey'));
+        $this->assertEquals(expected: 'application/json', actual: $request->getHeaderLine(header: 'Accept'));
     }
 
     /**
@@ -325,47 +321,47 @@ class LocationServiceRestTest extends ServiceTest
      */
     public function testGetLocationRest($response)
     {
-        $mock = new MockHandler([$response]);
-        $handler = HandlerStack::create($mock);
-        $mockClient = new MockClient();
-        $mockClient->setHandler($handler);
-        $this->postnl->setHttpClient($mockClient);
+        $mock = new MockHandler(queue: [$response]);
+        $handler = HandlerStack::create(handler: $mock);
+        $mockClient = new MockHttpClient();
+        $mockClient->setHandler(handler: $handler);
+        $this->postnl->setHttpClient(httpClient: $mockClient);
 
         $response = $this->postnl->getLocation(
-            (new GetLocation())
-                ->setLocationCode('161503')
-                ->setRetailNetworkID('PNPNL-01')
+            getLocation: (new GetLocation())
+                ->setLocationCode(LocationCode: '161503')
+                ->setRetailNetworkID(RetailNetworkID: 'PNPNL-01')
         );
 
-        $this->assertInstanceOf(GetLocationsInAreaResponse::class, $response);
-        $this->assertCount(1, $response->getGetLocationsResult()->getResponseLocation());
-        $this->assertNotTrue(static::containsStdClass($response));
+        $this->assertInstanceOf(expected: GetLocationsInAreaResponse::class, actual: $response);
+        $this->assertCount(expectedCount: 1, haystack: $response->getGetLocationsResult()->getResponseLocation());
+        $this->assertNotTrue(condition: static::containsStdClass(value: $response));
 
         $result = $response->getGetLocationsResult()->getResponseLocation()[0];
-        $this->assertEquals('161503', $result->getLocationCode());
+        $this->assertEquals(expected: '161503', actual: $result->getLocationCode());
     }
 
-    public function nearestLocationsByPostcodeProvider()
+    public function nearestLocationsByPostcodeProvider(): array
     {
         return [
-            [PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/location/nearestlocationsbypostcode.http'))],
-            [PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/location/nearestlocationsbypostcode2.http'))],
-            [PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/location/nearestlocationsbypostcode3.http'))],
-            [PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/location/nearestlocationsbypostcode4.http'))],
+            [PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/location/nearestlocationsbypostcode.http'))],
+            [PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/location/nearestlocationsbypostcode2.http'))],
+            [PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/location/nearestlocationsbypostcode3.http'))],
+            [PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/location/nearestlocationsbypostcode4.http'))],
         ];
     }
 
-    public function locationsInAreaProvider()
+    public function locationsInAreaProvider(): array
     {
         return [
-            [PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/location/locationsinarea.http'))],
+            [PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/location/locationsinarea.http'))],
         ];
     }
 
-    public function singleLocationProvider()
+    public function singleLocationProvider(): array
     {
         return [
-            [PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/location/singlelocation.http'))],
+            [PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/location/singlelocation.http'))],
         ];
     }
 }

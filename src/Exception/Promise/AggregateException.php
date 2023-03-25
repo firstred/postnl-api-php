@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -64,8 +65,8 @@ class AggregateException extends RejectionException
     public function __construct($msg, array $reasons)
     {
         parent::__construct(
-            $reasons,
-            sprintf('%s; %d rejected promises', $msg, count($reasons))
+            reason: $reasons,
+            description: sprintf('%s; %d rejected promises', $msg, count(value: $reasons))
         );
     }
 }

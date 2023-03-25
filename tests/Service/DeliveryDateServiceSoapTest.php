@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -37,47 +38,40 @@ use Firstred\PostNL\Entity\Request\GetSentDate;
 use Firstred\PostNL\Entity\Request\GetSentDateRequest;
 use Firstred\PostNL\Entity\Response\GetDeliveryDateResponse;
 use Firstred\PostNL\Entity\Response\GetSentDateResponse;
-use Firstred\PostNL\Entity\SOAP\UsernameToken;
+use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\HttpClient\MockClient;
+use Firstred\PostNL\HttpClient\MockHttpClient;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\DeliveryDateServiceInterface;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
-use libphonenumber\NumberParseException;
+use Psr\Http\Message\RequestInterface;
 use ReflectionException;
 
 /**
- * Class DeliveryDateServiceSoapTest.
- *
  * @testdox The DeliveryDateService (SOAP)
  */
-class DeliveryDateServiceSoapTest extends ServiceTest
+class DeliveryDateServiceSoapTest extends ServiceTestCase
 {
-    /** @var PostNL */
-    protected $postnl;
-    /** @var DeliveryDateServiceInterface */
-    protected $service;
-    /** @var */
-    protected $lastRequest;
+    protected PostNL $postnl;
+    protected DeliveryDateServiceInterface $service;
+    protected RequestInterface $lastRequest;
 
     /**
      * @before
      *
-     * @throws ReflectionException
-     * @throws InvalidArgumentException
-     * @throws NumberParseException
+     * @throws
      */
-    public function setupPostNL()
+    public function setupPostNL(): void
     {
         $this->postnl = new PostNL(
-            Customer::create()
-                ->setCollectionLocation('123456')
-                ->setCustomerCode('DEVC')
-                ->setCustomerNumber('11223344')
-                ->setContactPerson('Test')
-                ->setAddress(Address::create([
+            customer: Customer::create()
+                ->setCollectionLocation(CollectionLocation: '123456')
+                ->setCustomerCode(CustomerCode: 'DEVC')
+                ->setCustomerNumber(CustomerNumber: '11223344')
+                ->setContactPerson(ContactPerson: 'Test')
+                ->setAddress(Address: Address::create(properties: [
                     'AddressType' => '02',
                     'City'        => 'Hoofddorp',
                     'CompanyName' => 'PostNL',
@@ -86,53 +80,53 @@ class DeliveryDateServiceSoapTest extends ServiceTest
                     'Street'      => 'Siriusdreef',
                     'Zipcode'     => '2132WT',
                 ]))
-                ->setGlobalPackBarcodeType('AB')
-                ->setGlobalPackCustomerCode('1234'), new UsernameToken(null, 'test'),
-            false,
-            PostNL::MODE_SOAP
+                ->setGlobalPackBarcodeType(GlobalPackBarcodeType: 'AB')
+                ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'), apiKey: new UsernameToken(Username: null, Password: 'test'),
+            sandbox: false,
+            mode: PostNL::MODE_Soap
         );
 
         global $logger;
-        $this->postnl->setLogger($logger);
+        $this->postnl->setLogger(logger: $logger);
 
         $this->service = $this->postnl->getDeliveryDateService();
-        $this->service->setCache(new VoidCachePool());
-        $this->service->setTtl(1);
+        $this->service->setCache(cache: new VoidCachePool());
+        $this->service->setTtl(ttl: 1);
     }
 
     /**
      * @testdox creates a valid delivery date request
      */
-    public function testGetDeliveryDateRequestSoap()
+    public function testGetDeliveryDateRequestSoap(): void
     {
         $message = new Message();
 
-        $this->lastRequest = $request = $this->service->buildGetDeliveryDateRequestSOAP(
-            (new GetDeliveryDate())
+        $this->lastRequest = $request = $this->service->buildGetDeliveryDateRequestSoap(
+            getDeliveryDate: (new GetDeliveryDate())
                 ->setGetDeliveryDate(
-                    (new GetDeliveryDate())
-                        ->setAllowSundaySorting('false')
-                        ->setCity('Hoofddorp')
-                        ->setCountryCode('NL')
-                        ->setCutOffTimes([
-                            new CutOffTime('00', '14:00:00'),
+                    GetDeliveryDate: (new GetDeliveryDate())
+                        ->setAllowSundaySorting(AllowSundaySorting: 'false')
+                        ->setCity(City: 'Hoofddorp')
+                        ->setCountryCode(CountryCode: 'NL')
+                        ->setCutOffTimes(CutOffTimes: [
+                            new CutOffTime(Day: '00', Time: '14:00:00'),
                         ])
-                        ->setHouseNr('42')
-                        ->setHouseNrExt('A')
-                        ->setOptions([
+                        ->setHouseNr(HouseNr: '42')
+                        ->setHouseNrExt(HouseNrExt: 'A')
+                        ->setOptions(Options: [
                             'Daytime',
                         ])
-                        ->setPostalCode('2132WT')
-                        ->setShippingDate('29-06-2016 14:00:00')
-                        ->setShippingDuration('1')
-                        ->setStreet('Siriusdreef')
+                        ->setPostalCode(PostalCode: '2132WT')
+                        ->setShippingDate(shippingDate: '29-06-2016 14:00:00')
+                        ->setShippingDuration(ShippingDuration: '1')
+                        ->setStreet(Street: 'Siriusdreef')
                 )
-                ->setMessage($message)
+                ->setMessage(Message: $message)
         );
 
-        $this->assertEmpty($request->getHeaderLine('apikey'));
-        $this->assertEquals('text/xml', $request->getHeaderLine('Accept'));
-        $this->assertXmlStringEqualsXmlString(<<<XML
+        $this->assertEmpty(actual: $request->getHeaderLine('apikey'));
+        $this->assertEquals(expected: 'text/xml', actual: $request->getHeaderLine('Accept'));
+        $this->assertXmlStringEqualsXmlString(expectedXml: <<<XML
 <?xml version="1.0"?>
 <soap:Envelope 
   xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" 
@@ -175,25 +169,25 @@ class DeliveryDateServiceSoapTest extends ServiceTest
    </domain:GetDeliveryDate>
    <domain:Message>
     <domain:MessageID>{$message->getMessageID()}</domain:MessageID>
-    <domain:MessageTimeStamp>{$message->getMessageTimeStamp()->format('d-m-Y H:i:s')}</domain:MessageTimeStamp>
+    <domain:MessageTimeStamp>{$message->getMessageTimeStamp()->format(format: 'd-m-Y H:i:s')}</domain:MessageTimeStamp>
    </domain:Message>
   </services:GetDeliveryDate>
  </soap:Body>
 </soap:Envelope>
 XML
-            , (string) $request->getBody());
+            , actualXml: (string) $request->getBody());
     }
 
     /**
      * @testdox return a valid delivery date
      */
-    public function testGetDeliveryDateSoap()
+    public function testGetDeliveryDateSoap(): void
     {
-        $mock = new MockHandler([
+        $mock = new MockHandler(queue: [
             new Response(
-                200,
-                ['Content-Type' => 'text/xml;charset=UTF-8'],
-                <<<XML
+                status: 200,
+                headers: ['Content-Type' => 'text/xml;charset=UTF-8'],
+                body: <<<XML
 <s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
   <s:Body>
     <GetDeliveryDateResponse
@@ -211,69 +205,69 @@ XML
             ),
         ]);
 
-        $handler = HandlerStack::create($mock);
-        $mockClient = new MockClient();
-        $mockClient->setHandler($handler);
-        $this->postnl->setHttpClient($mockClient);
+        $handler = HandlerStack::create(handler: $mock);
+        $mockClient = new MockHttpClient();
+        $mockClient->setHandler(handler: $handler);
+        $this->postnl->setHttpClient(httpClient: $mockClient);
 
-        $response = $this->postnl->getDeliveryDate((new GetDeliveryDate())
+        $response = $this->postnl->getDeliveryDate(getDeliveryDate: (new GetDeliveryDate())
             ->setGetDeliveryDate(
-                (new GetDeliveryDate())
-                    ->setAllowSundaySorting('false')
-                    ->setCity('Hoofddorp')
-                    ->setCountryCode('NL')
-                    ->setCutOffTimes([
-                        new CutOffTime('00', '14:00:00'),
+                GetDeliveryDate: (new GetDeliveryDate())
+                    ->setAllowSundaySorting(AllowSundaySorting: 'false')
+                    ->setCity(City: 'Hoofddorp')
+                    ->setCountryCode(CountryCode: 'NL')
+                    ->setCutOffTimes(CutOffTimes: [
+                        new CutOffTime(Day: '00', Time: '14:00:00'),
                     ])
-                    ->setHouseNr('42')
-                    ->setHouseNrExt('A')
-                    ->setOptions([
+                    ->setHouseNr(HouseNr: '42')
+                    ->setHouseNrExt(HouseNrExt: 'A')
+                    ->setOptions(Options: [
                         'Daytime',
                     ])
-                    ->setPostalCode('2132WT')
-                    ->setShippingDate('29-06-2016 14:00:00')
-                    ->setShippingDuration('1')
-                    ->setStreet('Siriusdreef')
+                    ->setPostalCode(PostalCode: '2132WT')
+                    ->setShippingDate(shippingDate: '29-06-2016 14:00:00')
+                    ->setShippingDuration(ShippingDuration: '1')
+                    ->setStreet(Street: 'Siriusdreef')
             )
         );
 
         $this->assertInstanceOf(
-            GetDeliveryDateResponse::class,
-            $response
+            expected: GetDeliveryDateResponse::class,
+            actual: $response
         );
-        $this->assertInstanceOf(DateTimeInterface::class, $response->getDeliveryDate());
-        $this->assertEquals('30-06-2016', $response->getDeliveryDate()->format('d-m-Y'));
+        $this->assertInstanceOf(expected: DateTimeInterface::class, actual: $response->getDeliveryDate());
+        $this->assertEquals(expected: '30-06-2016', actual: $response->getDeliveryDate()->format(format: 'd-m-Y'));
     }
 
     /**
      * @testdox creates a valid sent date request
      */
-    public function testGetSentDateRequestSoap()
+    public function testGetSentDateRequestSoap(): void
     {
         $message = new Message();
 
-        $this->lastRequest = $request = $this->service->buildGetSentDateRequestSOAP((new GetSentDateRequest())
+        $this->lastRequest = $request = $this->service->buildGetSentDateRequestSoap(getSentDate: (new GetSentDateRequest())
             ->setGetSentDate(
-                (new GetSentDate())
-                    ->setAllowSundaySorting(true)
-                    ->setCity('Hoofddorp')
-                    ->setCountryCode('NL')
-                    ->setDeliveryDate('30-06-2016')
-                    ->setHouseNr('42')
-                    ->setHouseNrExt('A')
-                    ->setOptions([
+                GetSentDate: (new GetSentDate())
+                    ->setAllowSundaySorting(AllowSundaySorting: true)
+                    ->setCity(City: 'Hoofddorp')
+                    ->setCountryCode(CountryCode: 'NL')
+                    ->setDeliveryDate(deliveryDate: '30-06-2016')
+                    ->setHouseNr(HouseNr: '42')
+                    ->setHouseNrExt(HouseNrExt: 'A')
+                    ->setOptions(Options: [
                         'Daytime',
                     ])
-                    ->setPostalCode('2132WT')
-                    ->setShippingDuration('1')
-                    ->setStreet('Siriusdreef')
+                    ->setPostalCode(postcode: '2132WT')
+                    ->setShippingDuration(ShippingDuration: '1')
+                    ->setStreet(Street: 'Siriusdreef')
             )
-            ->setMessage($message)
+            ->setMessage(Message: $message)
         );
 
-        $this->assertEmpty($request->getHeaderLine('apikey'));
-        $this->assertEquals('text/xml', $request->getHeaderLine('Accept'));
-        $this->assertXmlStringEqualsXmlString(<<<XML
+        $this->assertEmpty(actual: $request->getHeaderLine('apikey'));
+        $this->assertEquals(expected: 'text/xml', actual: $request->getHeaderLine('Accept'));
+        $this->assertXmlStringEqualsXmlString(expectedXml: <<<XML
 <?xml version="1.0"?>
 <soap:Envelope 
     xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" 
@@ -309,25 +303,25 @@ XML
       </domain:GetSentDate>
       <domain:Message>
         <domain:MessageID>{$message->getMessageID()}</domain:MessageID>
-        <domain:MessageTimeStamp>{$message->getMessageTimeStamp()->format('d-m-Y H:i:s')}</domain:MessageTimeStamp>
+        <domain:MessageTimeStamp>{$message->getMessageTimeStamp()->format(format: 'd-m-Y H:i:s')}</domain:MessageTimeStamp>
       </domain:Message>
     </services:GetSentDateRequest>
   </soap:Body>
 </soap:Envelope>
 XML
-            , (string) $request->getBody());
+            , actualXml: (string) $request->getBody());
     }
 
     /**
      * @testdox return a valid sent date
      */
-    public function testGetSentDateSoap()
+    public function testGetSentDateSoap(): void
     {
-        $mock = new MockHandler([
+        $mock = new MockHandler(queue: [
             new Response(
-                200,
-                ['Content-Type' => 'text/xml;charset=UTF-8'],
-                <<<XML
+                status: 200,
+                headers: ['Content-Type' => 'text/xml;charset=UTF-8'],
+                body: <<<XML
 <s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
   <s:Body>
     <GetSentDateResponse
@@ -344,33 +338,33 @@ XML
             ),
         ]);
 
-        $handler = HandlerStack::create($mock);
-        $mockClient = new MockClient();
-        $mockClient->setHandler($handler);
-        $this->postnl->setHttpClient($mockClient);
+        $handler = HandlerStack::create(handler: $mock);
+        $mockClient = new MockHttpClient();
+        $mockClient->setHandler(handler: $handler);
+        $this->postnl->setHttpClient(httpClient: $mockClient);
 
-        $response = $this->postnl->getSentDate((new GetSentDateRequest())
+        $response = $this->postnl->getSentDate(getSentDate: (new GetSentDateRequest())
             ->setGetSentDate(
-                (new GetSentDate())
-                    ->setAllowSundaySorting(true)
-                    ->setCity('Hoofddorp')
-                    ->setCountryCode('NL')
-                    ->setDeliveryDate('30-06-2016')
-                    ->setHouseNr('42')
-                    ->setHouseNrExt('A')
-                    ->setOptions([
+                GetSentDate: (new GetSentDate())
+                    ->setAllowSundaySorting(AllowSundaySorting: true)
+                    ->setCity(City: 'Hoofddorp')
+                    ->setCountryCode(CountryCode: 'NL')
+                    ->setDeliveryDate(deliveryDate: '30-06-2016')
+                    ->setHouseNr(HouseNr: '42')
+                    ->setHouseNrExt(HouseNrExt: 'A')
+                    ->setOptions(Options: [
                         'Daytime',
                     ])
-                    ->setPostalCode('2132WT')
-                    ->setShippingDuration('1')
-                    ->setStreet('Siriusdreef')
+                    ->setPostalCode(postcode: '2132WT')
+                    ->setShippingDuration(ShippingDuration: '1')
+                    ->setStreet(Street: 'Siriusdreef')
             )
         );
 
         $this->assertInstanceOf(
-            GetSentDateResponse::class,
-            $response
+            expected: GetSentDateResponse::class,
+            actual: $response
         );
-        $this->assertEquals('29-06-2016', $response->getSentDate()->format('d-m-Y'));
+        $this->assertEquals(expected: '29-06-2016', actual: $response->getSentDate()->format(format: 'd-m-Y'));
     }
 }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -40,60 +41,22 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * Class ShippingService.
- *
- * @method SendShipmentResponse sendShipment(SendShipment $sendShipment, bool $confirm)
- * @method RequestInterface     buildSendShipmentRequest(SendShipment $sendShipment, bool $confirm)
- * @method SendShipmentResponse processSendShipmentResponse(mixed $response)
- *
  * @since 1.2.0
  */
 interface ShippingServiceInterface extends ServiceInterface
 {
+    public const DEFAULT_VERSION = '1';
+
     /**
      * Generate a single Shipping vai REST.
      *
-     * @param SendShipment $sendShipment
-     * @param bool         $confirm
-     *
-     * @return SendShipmentResponse|null
-     *
+     * @throws HttpClientException
      * @throws NotFoundException
-     * @throws CifDownException
-     * @throws CifException
-     * @throws ResponseException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
-     * @throws HttpClientException
-     * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
-     *
-     * @since 1.2.0
-     */
-    public function sendShipmentRest(SendShipment $sendShipment, $confirm = true);
-
-    /**
-     * @param SendShipment $sendShipment
-     * @param bool         $confirm
-     *
-     * @return RequestInterface
-     *
-     * @since 1.2.0
-     */
-    public function buildSendShipmentRequestREST(SendShipment $sendShipment, $confirm = true);
-
-    /**
-     * Process the SendShipment REST Response.
-     *
-     * @param ResponseInterface $response
-     *
-     * @return SendShipmentResponse|null
-     *
      * @throws ResponseException
-     * @throws HttpClientException
-     * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
-     *
      * @since 1.2.0
      */
-    public function processSendShipmentResponseREST($response);
+    public function sendShipment(SendShipment $sendShipment, bool $confirm = true): ?SendShipmentResponse;
 }

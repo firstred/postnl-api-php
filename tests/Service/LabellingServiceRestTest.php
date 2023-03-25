@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -36,17 +37,18 @@ use Firstred\PostNL\Entity\Message\LabellingMessage;
 use Firstred\PostNL\Entity\Request\GenerateLabel;
 use Firstred\PostNL\Entity\Response\GenerateLabelResponse;
 use Firstred\PostNL\Entity\Shipment;
-use Firstred\PostNL\Entity\SOAP\UsernameToken;
+use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\ResponseException;
-use Firstred\PostNL\HttpClient\MockClient;
+use Firstred\PostNL\HttpClient\MockHttpClient;
 use Firstred\PostNL\PostNL;
-use Firstred\PostNL\Service\LabellingService;
+use Firstred\PostNL\Service\LabellingServiceRestAdapter;
 use Firstred\PostNL\Service\LabellingServiceInterface;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Message as PsrMessage;
+use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use setasign\Fpdi\PdfReader\PdfReaderException;
 use function file_get_contents;
@@ -54,21 +56,15 @@ use function json_decode;
 use const _RESPONSES_DIR_;
 
 /**
- * Class LabellingServiceRestTest.
- *
  * @testdox The LabellingService (REST)
  */
-class LabellingServiceRestTest extends ServiceTest
+class LabellingServiceRestTest extends ServiceTestCase
 {
-    /** @var PostNL */
-    protected $postnl;
-    /** @var LabellingServiceInterface */
-    protected $service;
-    /** @var */
-    protected $lastRequest;
+    protected PostNL $postnl;
+    protected LabellingServiceInterface $service;
+    protected RequestInterface $lastRequest;
 
-    /** @var string */
-    private static $base64LabelContent = '';
+    private static string $base64LabelContent = '';
 
     /**
      * @before
@@ -76,15 +72,15 @@ class LabellingServiceRestTest extends ServiceTest
      * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      * @throws \ReflectionException
      */
-    public function setupPostNL()
+    public function setupPostNL(): void
     {
         $this->postnl = new PostNL(
-            Customer::create()
-                ->setCollectionLocation('123456')
-                ->setCustomerCode('DEVC')
-                ->setCustomerNumber('11223344')
-                ->setContactPerson('Test')
-                ->setAddress(Address::create([
+            customer: Customer::create()
+                ->setCollectionLocation(CollectionLocation: '123456')
+                ->setCustomerCode(CustomerCode: 'DEVC')
+                ->setCustomerNumber(CustomerNumber: '11223344')
+                ->setContactPerson(ContactPerson: 'Test')
+                ->setAddress(Address: Address::create(properties: [
                     'AddressType' => '02',
                     'City'        => 'Hoofddorp',
                     'CompanyName' => 'PostNL',
@@ -93,41 +89,41 @@ class LabellingServiceRestTest extends ServiceTest
                     'Street'      => 'Siriusdreef',
                     'Zipcode'     => '2132WT',
                 ]))
-                ->setGlobalPackBarcodeType('AB')
-                ->setGlobalPackCustomerCode('1234'), new UsernameToken(null, 'test'),
-            true,
-            PostNL::MODE_REST
+                ->setGlobalPackBarcodeType(GlobalPackBarcodeType: 'AB')
+                ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'), apiKey: new UsernameToken(Username: null, Password: 'test'),
+            sandbox: true,
+            mode: PostNL::MODE_Rest
         );
 
         global $logger;
-        $this->postnl->setLogger($logger);
+        $this->postnl->setLogger(logger: $logger);
 
         $this->service = $this->postnl->getLabellingService();
-        $this->service->setCache(new VoidCachePool());
-        $this->service->setTtl(1);
+        $this->service->setCache(cache: new VoidCachePool());
+        $this->service->setTtl(ttl: 1);
     }
 
     /**
      * @testdox returns a valid service object
      */
-    public function testHasValidLabellingService()
+    public function testHasValidLabellingService(): void
     {
-        $this->assertInstanceOf(LabellingService::class, $this->service);
+        $this->assertInstanceOf(expected: LabellingServiceRestAdapter::class, actual: $this->service);
     }
 
     /**
      * @testdox creates a valid label request
      */
-    public function testCreatesAValidLabelRequest()
+    public function testCreatesAValidLabelRequest(): void
     {
         $message = new LabellingMessage();
 
-        $this->lastRequest = $request = $this->service->buildGenerateLabelRequestREST(
-            GenerateLabel::create()
-                ->setShipments([
+        $this->lastRequest = $request = $this->service->buildGenerateLabelRequestRest(
+            generateLabel: GenerateLabel::create()
+                ->setShipments(Shipments: [
                     Shipment::create()
-                        ->setAddresses([
-                            Address::create([
+                        ->setAddresses(Addresses: [
+                            Address::create(properties: [
                                 'AddressType' => '01',
                                 'City'        => 'Utrecht',
                                 'Countrycode' => 'NL',
@@ -138,7 +134,7 @@ class LabellingServiceRestTest extends ServiceTest
                                 'Street'      => 'Bilderdijkstraat',
                                 'Zipcode'     => '3521VA',
                             ]),
-                            Address::create([
+                            Address::create(properties: [
                                 'AddressType' => '02',
                                 'City'        => 'Hoofddorp',
                                 'CompanyName' => 'PostNL',
@@ -148,17 +144,17 @@ class LabellingServiceRestTest extends ServiceTest
                                 'Zipcode'     => '2132WT',
                             ]),
                         ])
-                        ->setBarcode('3S1234567890123')
-                        ->setDeliveryAddress('01')
-                        ->setDimension(new Dimension('2000'))
-                        ->setProductCodeDelivery('3085'),
+                        ->setBarcode(Barcode: '3S1234567890123')
+                        ->setDeliveryAddress(DeliveryAddress: '01')
+                        ->setDimension(Dimension: new Dimension(Weight: '2000'))
+                        ->setProductCodeDelivery(ProductCodeDelivery: '3085'),
                 ])
-                ->setMessage($message)
-                ->setCustomer($this->postnl->getCustomer()),
-            false
+                ->setMessage(Message: $message)
+                ->setCustomer(Customer: $this->postnl->getCustomer()),
+            confirm: false
         );
 
-        $this->assertEqualsCanonicalizing([
+        $this->assertEqualsCanonicalizing(expected: [
             'Customer' => [
                 'Address' => [
                     'AddressType' => '02',
@@ -176,7 +172,7 @@ class LabellingServiceRestTest extends ServiceTest
             ],
             'Message' => [
                 'MessageID'        => (string) $message->getMessageID(),
-                'MessageTimeStamp' => (string) $message->getMessageTimeStamp()->format('d-m-Y H:i:s'),
+                'MessageTimeStamp' => (string) $message->getMessageTimeStamp()->format(format: 'd-m-Y H:i:s'),
                 'Printertype'      => 'GraphicFile|PDF',
             ],
             'Shipments' => [
@@ -210,26 +206,26 @@ class LabellingServiceRestTest extends ServiceTest
                 'ProductCodeDelivery' => '3085',
             ],
         ],
-            json_decode((string) $request->getBody(), true));
-        $this->assertEquals('test', $request->getHeaderLine('apikey'));
-        $this->assertStringContainsString('v2_2', $request->getUri()->getPath());
-        $this->assertEquals('application/json;charset=UTF-8', $request->getHeaderLine('Content-Type'));
-        $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
+            actual: json_decode(json: (string) $request->getBody(), associative: true));
+        $this->assertEquals(expected: 'test', actual: $request->getHeaderLine('apikey'));
+        $this->assertStringContainsString(needle: 'v2_2', haystack: $request->getUri()->getPath());
+        $this->assertEquals(expected: 'application/json;charset=UTF-8', actual: $request->getHeaderLine('Content-Type'));
+        $this->assertEquals(expected: 'application/json', actual: $request->getHeaderLine('Accept'));
     }
 
     /**
      * @testdox creates a valid label request
      */
-    public function testFallsBackOntoOlderApiIfInsuredRequest()
+    public function testFallsBackOntoOlderApiIfInsuredRequest(): void
     {
         $message = new LabellingMessage();
 
-        $this->lastRequest = $request = $this->service->buildGenerateLabelRequestREST(
-            GenerateLabel::create()
-                ->setShipments([
+        $this->lastRequest = $request = $this->service->buildGenerateLabelRequestRest(
+            generateLabel: GenerateLabel::create()
+                ->setShipments(Shipments: [
                     Shipment::create()
-                        ->setAddresses([
-                            Address::create([
+                        ->setAddresses(Addresses: [
+                            Address::create(properties: [
                                 'AddressType' => '01',
                                 'City'        => 'Utrecht',
                                 'Countrycode' => 'NL',
@@ -240,7 +236,7 @@ class LabellingServiceRestTest extends ServiceTest
                                 'Street'      => 'Bilderdijkstraat',
                                 'Zipcode'     => '3521VA',
                             ]),
-                            Address::create([
+                            Address::create(properties: [
                                 'AddressType' => '02',
                                 'City'        => 'Hoofddorp',
                                 'CompanyName' => 'PostNL',
@@ -250,17 +246,17 @@ class LabellingServiceRestTest extends ServiceTest
                                 'Zipcode'     => '2132WT',
                             ]),
                         ])
-                        ->setBarcode('3S1234567890123')
-                        ->setDeliveryAddress('01')
-                        ->setDimension(new Dimension('2000'))
-                        ->setProductCodeDelivery('3094'),
+                        ->setBarcode(Barcode: '3S1234567890123')
+                        ->setDeliveryAddress(DeliveryAddress: '01')
+                        ->setDimension(Dimension: new Dimension(Weight: '2000'))
+                        ->setProductCodeDelivery(ProductCodeDelivery: '3094'),
                 ])
-                ->setMessage($message)
-                ->setCustomer($this->postnl->getCustomer()),
-            false
+                ->setMessage(Message: $message)
+                ->setCustomer(Customer: $this->postnl->getCustomer()),
+            confirm: false
         );
 
-        $this->assertEqualsCanonicalizing([
+        $this->assertEqualsCanonicalizing(expected: [
             'Customer' => [
                 'Address' => [
                     'AddressType' => '02',
@@ -278,7 +274,7 @@ class LabellingServiceRestTest extends ServiceTest
             ],
             'Message' => [
                 'MessageID'        => (string) $message->getMessageID(),
-                'MessageTimeStamp' => (string) $message->getMessageTimeStamp()->format('d-m-Y H:i:s'),
+                'MessageTimeStamp' => (string) $message->getMessageTimeStamp()->format(format: 'd-m-Y H:i:s'),
                 'Printertype'      => 'GraphicFile|PDF',
             ],
             'Shipments' => [
@@ -312,29 +308,29 @@ class LabellingServiceRestTest extends ServiceTest
                 'ProductCodeDelivery' => '3094',
             ],
         ],
-            json_decode((string) $request->getBody(), true));
-        $this->assertEquals('test', $request->getHeaderLine('apikey'));
-        $this->assertStringContainsString('v2_1', $request->getUri()->getPath());
-        $this->assertEquals('application/json;charset=UTF-8', $request->getHeaderLine('Content-Type'));
-        $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
+            actual: json_decode(json: (string) $request->getBody(), associative: true));
+        $this->assertEquals(expected: 'test', actual: $request->getHeaderLine('apikey'));
+        $this->assertStringContainsString(needle: 'v2_1', haystack: $request->getUri()->getPath());
+        $this->assertEquals(expected: 'application/json;charset=UTF-8', actual: $request->getHeaderLine('Content-Type'));
+        $this->assertEquals(expected: 'application/json', actual: $request->getHeaderLine('Accept'));
     }
 
     /**
      * @testdox can generate a single label
      * @dataProvider singleLabelsProvider
      */
-    public function testGenerateSingleLabelRest($response)
+    public function testGenerateSingleLabelRest(ResponseInterface $response): void
     {
-        $mock = new MockHandler([$response]);
-        $handler = HandlerStack::create($mock);
-        $mockClient = new MockClient();
-        $mockClient->setHandler($handler);
-        $this->postnl->setHttpClient($mockClient);
+        $mock = new MockHandler(queue: [$response]);
+        $handler = HandlerStack::create(handler: $mock);
+        $mockClient = new MockHttpClient();
+        $mockClient->setHandler(handler: $handler);
+        $this->postnl->setHttpClient(httpClient: $mockClient);
 
         $label = $this->postnl->generateLabel(
-            (new Shipment())
-                ->setAddresses([
-                    Address::create([
+            shipment: (new Shipment())
+                ->setAddresses(Addresses: [
+                    Address::create(properties: [
                         'AddressType' => '01',
                         'City'        => 'Utrecht',
                         'Countrycode' => 'NL',
@@ -345,7 +341,7 @@ class LabellingServiceRestTest extends ServiceTest
                         'Street'      => 'Bilderdijkstraat',
                         'Zipcode'     => '3521VA',
                     ]),
-                    Address::create([
+                    Address::create(properties: [
                         'AddressType' => '02',
                         'City'        => 'Hoofddorp',
                         'CompanyName' => 'PostNL',
@@ -355,18 +351,18 @@ class LabellingServiceRestTest extends ServiceTest
                         'Zipcode'     => '2132WT',
                     ]),
                 ])
-                ->setBarcode('3S1234567890123')
-                ->setDeliveryAddress('01')
-                ->setDimension(new Dimension('2000'))
-                ->setProductCodeDelivery('3085')
+                ->setBarcode(Barcode: '3S1234567890123')
+                ->setDeliveryAddress(DeliveryAddress: '01')
+                ->setDimension(Dimension: new Dimension(Weight: '2000'))
+                ->setProductCodeDelivery(ProductCodeDelivery: '3085')
         );
 
-        $this->assertInstanceOf(GenerateLabelResponse::class, $label);
-        $this->assertEquals('3S1234567890123', $label->getResponseShipments()[0]->getBarcode());
-        $this->assertIsString($label->getResponseShipments()[0]->getLabels()[0]->getContent());
-        $this->assertInstanceOf(Label::class, $label->getResponseShipments()[0]->getLabels()[0]);
-        $this->assertEquals('Label', $label->getResponseShipments()[0]->getLabels()[0]->getLabeltype());
-        $this->assertNotTrue(static::containsStdClass($label));
+        $this->assertInstanceOf(expected: GenerateLabelResponse::class, actual: $label);
+        $this->assertEquals(expected: '3S1234567890123', actual: $label->getResponseShipments()[0]->getBarcode());
+        $this->assertIsString(actual: $label->getResponseShipments()[0]->getLabels()[0]->getContent());
+        $this->assertInstanceOf(expected: Label::class, actual: $label->getResponseShipments()[0]->getLabels()[0]);
+        $this->assertEquals(expected: 'Label', actual: $label->getResponseShipments()[0]->getLabels()[0]->getLabeltype());
+        $this->assertNotTrue(condition: static::containsStdClass(value: $label));
     }
 
     /**
@@ -379,18 +375,18 @@ class LabellingServiceRestTest extends ServiceTest
      * @throws PdfReaderException
      * @throws Exception
      */
-    public function testMergeMultipleA4LabelsRest($responses)
+    public function testMergeMultipleA4LabelsRest(array $responses): void
     {
-        $mock = new MockHandler($responses);
-        $handler = HandlerStack::create($mock);
-        $mockClient = new MockClient();
-        $mockClient->setHandler($handler);
-        $this->postnl->setHttpClient($mockClient);
+        $mock = new MockHandler(queue: $responses);
+        $handler = HandlerStack::create(handler: $mock);
+        $mockClient = new MockHttpClient();
+        $mockClient->setHandler(handler: $handler);
+        $this->postnl->setHttpClient(httpClient: $mockClient);
 
-        $label = $this->postnl->generateLabels([
-                (new Shipment())
-                    ->setAddresses([
-                        Address::create([
+        $label = $this->postnl->generateLabels(shipments: [
+            (new Shipment())
+                    ->setAddresses(Addresses: [
+                        Address::create(properties: [
                             'AddressType' => '01',
                             'City'        => 'Utrecht',
                             'Countrycode' => 'NL',
@@ -401,7 +397,7 @@ class LabellingServiceRestTest extends ServiceTest
                             'Street'      => 'Bilderdijkstraat',
                             'Zipcode'     => '3521VA',
                         ]),
-                        Address::create([
+                        Address::create(properties: [
                             'AddressType' => '02',
                             'City'        => 'Hoofddorp',
                             'CompanyName' => 'PostNL',
@@ -411,13 +407,13 @@ class LabellingServiceRestTest extends ServiceTest
                             'Zipcode'     => '2132WT',
                         ]),
                     ])
-                    ->setBarcode('3SDEVC201611210')
-                    ->setDeliveryAddress('01')
-                    ->setDimension(new Dimension('2000'))
-                    ->setProductCodeDelivery('3085'),
-                (new Shipment())
-                    ->setAddresses([
-                        Address::create([
+                    ->setBarcode(Barcode: '3SDEVC201611210')
+                    ->setDeliveryAddress(DeliveryAddress: '01')
+                    ->setDimension(Dimension: new Dimension(Weight: '2000'))
+                    ->setProductCodeDelivery(ProductCodeDelivery: '3085'),
+            (new Shipment())
+                    ->setAddresses(Addresses: [
+                        Address::create(properties: [
                             'AddressType' => '01',
                             'City'        => 'Utrecht',
                             'Countrycode' => 'NL',
@@ -428,7 +424,7 @@ class LabellingServiceRestTest extends ServiceTest
                             'Street'      => 'Bilderdijkstraat',
                             'Zipcode'     => '3521VA',
                         ]),
-                        Address::create([
+                        Address::create(properties: [
                             'AddressType' => '02',
                             'City'        => 'Hoofddorp',
                             'CompanyName' => 'PostNL',
@@ -438,16 +434,16 @@ class LabellingServiceRestTest extends ServiceTest
                             'Zipcode'     => '2132WT',
                         ]),
                     ])
-                    ->setBarcode('3SDEVC201611211')
-                    ->setDeliveryAddress('01')
-                    ->setDimension(new Dimension('2000'))
-                    ->setProductCodeDelivery('3085'),
+                    ->setBarcode(Barcode: '3SDEVC201611211')
+                    ->setDeliveryAddress(DeliveryAddress: '01')
+                    ->setDimension(Dimension: new Dimension(Weight: '2000'))
+                    ->setProductCodeDelivery(ProductCodeDelivery: '3085'),
             ],
-            'GraphicFile|PDF',
-            true,
-            true,
-            Label::FORMAT_A4,
-            [
+            printertype: 'GraphicFile|PDF',
+            confirm: true,
+            merge: true,
+            format: Label::FORMAT_A4,
+            positions: [
                 1 => true,
                 2 => true,
                 3 => true,
@@ -455,7 +451,7 @@ class LabellingServiceRestTest extends ServiceTest
             ]
         );
 
-        $this->assertIsString($label);
+        $this->assertIsString(actual: $label);
     }
 
     /**
@@ -468,18 +464,18 @@ class LabellingServiceRestTest extends ServiceTest
      * @throws PdfReaderException
      * @throws Exception
      */
-    public function testMergeMultipleA6LabelsRest($responses)
+    public function testMergeMultipleA6LabelsRest(array $responses): void
     {
-        $mock = new MockHandler($responses);
-        $handler = HandlerStack::create($mock);
-        $mockClient = new MockClient();
-        $mockClient->setHandler($handler);
-        $this->postnl->setHttpClient($mockClient);
+        $mock = new MockHandler(queue: $responses);
+        $handler = HandlerStack::create(handler: $mock);
+        $mockClient = new MockHttpClient();
+        $mockClient->setHandler(handler: $handler);
+        $this->postnl->setHttpClient(httpClient: $mockClient);
 
-        $label = $this->postnl->generateLabels([
+        $label = $this->postnl->generateLabels(shipments: [
             (new Shipment())
-                ->setAddresses([
-                    Address::create([
+                ->setAddresses(Addresses: [
+                    Address::create(properties: [
                         'AddressType' => '01',
                         'City'        => 'Utrecht',
                         'Countrycode' => 'NL',
@@ -490,7 +486,7 @@ class LabellingServiceRestTest extends ServiceTest
                         'Street'      => 'Bilderdijkstraat',
                         'Zipcode'     => '3521VA',
                     ]),
-                    Address::create([
+                    Address::create(properties: [
                         'AddressType' => '02',
                         'City'        => 'Hoofddorp',
                         'CompanyName' => 'PostNL',
@@ -500,13 +496,13 @@ class LabellingServiceRestTest extends ServiceTest
                         'Zipcode'     => '2132WT',
                     ]),
                 ])
-                ->setBarcode('3SDEVC201611210')
-                ->setDeliveryAddress('01')
-                ->setDimension(new Dimension('2000'))
-                ->setProductCodeDelivery('3085'),
+                ->setBarcode(Barcode: '3SDEVC201611210')
+                ->setDeliveryAddress(DeliveryAddress: '01')
+                ->setDimension(Dimension: new Dimension(Weight: '2000'))
+                ->setProductCodeDelivery(ProductCodeDelivery: '3085'),
             (new Shipment())
-                ->setAddresses([
-                    Address::create([
+                ->setAddresses(Addresses: [
+                    Address::create(properties: [
                         'AddressType' => '01',
                         'City'        => 'Utrecht',
                         'Countrycode' => 'NL',
@@ -517,7 +513,7 @@ class LabellingServiceRestTest extends ServiceTest
                         'Street'      => 'Bilderdijkstraat',
                         'Zipcode'     => '3521VA',
                     ]),
-                    Address::create([
+                    Address::create(properties: [
                         'AddressType' => '02',
                         'City'        => 'Hoofddorp',
                         'CompanyName' => 'PostNL',
@@ -527,16 +523,16 @@ class LabellingServiceRestTest extends ServiceTest
                         'Zipcode'     => '2132WT',
                     ]),
                 ])
-                ->setBarcode('3SDEVC201611211')
-                ->setDeliveryAddress('01')
-                ->setDimension(new Dimension('2000'))
-                ->setProductCodeDelivery('3085'),
+                ->setBarcode(Barcode: '3SDEVC201611211')
+                ->setDeliveryAddress(DeliveryAddress: '01')
+                ->setDimension(Dimension: new Dimension(Weight: '2000'))
+                ->setProductCodeDelivery(ProductCodeDelivery: '3085'),
         ],
-            'GraphicFile|PDF',
-            true,
-            true,
-            Label::FORMAT_A6,
-            [
+            printertype: 'GraphicFile|PDF',
+            confirm: true,
+            merge: true,
+            format: Label::FORMAT_A6,
+            positions: [
                 1 => true,
                 2 => true,
                 3 => true,
@@ -544,7 +540,7 @@ class LabellingServiceRestTest extends ServiceTest
             ]
         );
 
-        $this->assertTrue(is_string($label));
+        $this->assertTrue(condition: is_string(value: $label));
     }
 
     /**
@@ -557,18 +553,18 @@ class LabellingServiceRestTest extends ServiceTest
      * @throws PdfReaderException
      * @throws Exception
      */
-    public function testGenerateMultipleLabelsRest($responses)
+    public function testGenerateMultipleLabelsRest(array $responses): void
     {
-        $mock = new MockHandler($responses);
-        $handler = HandlerStack::create($mock);
-        $mockClient = new MockClient();
-        $mockClient->setHandler($handler);
-        $this->postnl->setHttpClient($mockClient);
+        $mock = new MockHandler(queue: $responses);
+        $handler = HandlerStack::create(handler: $mock);
+        $mockClient = new MockHttpClient();
+        $mockClient->setHandler(handler: $handler);
+        $this->postnl->setHttpClient(httpClient: $mockClient);
 
-        $label = $this->postnl->generateLabels([
-                (new Shipment())
-                    ->setAddresses([
-                        Address::create([
+        $label = $this->postnl->generateLabels(shipments: [
+            (new Shipment())
+                    ->setAddresses(Addresses: [
+                        Address::create(properties: [
                             'AddressType' => '01',
                             'City'        => 'Utrecht',
                             'Countrycode' => 'NL',
@@ -579,7 +575,7 @@ class LabellingServiceRestTest extends ServiceTest
                             'Street'      => 'Bilderdijkstraat',
                             'Zipcode'     => '3521VA',
                         ]),
-                        Address::create([
+                        Address::create(properties: [
                             'AddressType' => '02',
                             'City'        => 'Hoofddorp',
                             'CompanyName' => 'PostNL',
@@ -589,13 +585,13 @@ class LabellingServiceRestTest extends ServiceTest
                             'Zipcode'     => '2132WT',
                         ]),
                     ])
-                    ->setBarcode('3SDEVC201611210')
-                    ->setDeliveryAddress('01')
-                    ->setDimension(new Dimension('2000'))
-                    ->setProductCodeDelivery('3085'),
-                (new Shipment())
-                    ->setAddresses([
-                        Address::create([
+                    ->setBarcode(Barcode: '3SDEVC201611210')
+                    ->setDeliveryAddress(DeliveryAddress: '01')
+                    ->setDimension(Dimension: new Dimension(Weight: '2000'))
+                    ->setProductCodeDelivery(ProductCodeDelivery: '3085'),
+            (new Shipment())
+                    ->setAddresses(Addresses: [
+                        Address::create(properties: [
                             'AddressType' => '01',
                             'City'        => 'Utrecht',
                             'Countrycode' => 'NL',
@@ -606,7 +602,7 @@ class LabellingServiceRestTest extends ServiceTest
                             'Street'      => 'Bilderdijkstraat',
                             'Zipcode'     => '3521VA',
                         ]),
-                        Address::create([
+                        Address::create(properties: [
                             'AddressType' => '02',
                             'City'        => 'Hoofddorp',
                             'CompanyName' => 'PostNL',
@@ -616,15 +612,15 @@ class LabellingServiceRestTest extends ServiceTest
                             'Zipcode'     => '2132WT',
                         ]),
                     ])
-                    ->setBarcode('3SDEVC201611211')
-                    ->setDeliveryAddress('01')
-                    ->setDimension(new Dimension('2000'))
-                    ->setProductCodeDelivery('3085'),
+                    ->setBarcode(Barcode: '3SDEVC201611211')
+                    ->setDeliveryAddress(DeliveryAddress: '01')
+                    ->setDimension(Dimension: new Dimension(Weight: '2000'))
+                    ->setProductCodeDelivery(ProductCodeDelivery: '3085'),
             ]
         );
 
-        $this->assertInstanceOf(GenerateLabelResponse::class, $label[1]);
-        $this->assertNotTrue(static::containsStdClass($label[1]));
+        $this->assertInstanceOf(expected: GenerateLabelResponse::class, actual: $label[1]);
+        $this->assertNotTrue(condition: static::containsStdClass(value: $label[1]));
     }
 
     /**
@@ -633,20 +629,20 @@ class LabellingServiceRestTest extends ServiceTest
      *
      * @psalm-param class-string<ApiException> $exception
      */
-    public function testNegativeGenerateLabelInvalidResponseRest(ResponseInterface $response, $exception)
+    public function testNegativeGenerateLabelInvalidResponseRest(ResponseInterface $response, $exception): void
     {
-        $this->expectException($exception);
+        $this->expectException(exception: $exception);
 
-        $mock = new MockHandler([$response]);
-        $handler = HandlerStack::create($mock);
-        $mockClient = new MockClient();
-        $mockClient->setHandler($handler);
-        $this->postnl->setHttpClient($mockClient);
+        $mock = new MockHandler(queue: [$response]);
+        $handler = HandlerStack::create(handler: $mock);
+        $mockClient = new MockHttpClient();
+        $mockClient->setHandler(handler: $handler);
+        $this->postnl->setHttpClient(httpClient: $mockClient);
 
         $this->postnl->generateLabel(
-            (new Shipment())
-                ->setAddresses([
-                    Address::create([
+            shipment: (new Shipment())
+                ->setAddresses(Addresses: [
+                    Address::create(properties: [
                         'AddressType' => '01',
                         'City'        => 'Utrecht',
                         'Countrycode' => 'NL',
@@ -657,7 +653,7 @@ class LabellingServiceRestTest extends ServiceTest
                         'Street'      => 'Bilderdijkstraat',
                         'Zipcode'     => '3521VA',
                     ]),
-                    Address::create([
+                    Address::create(properties: [
                         'AddressType' => '02',
                         'City'        => 'Hoofddorp',
                         'CompanyName' => 'PostNL',
@@ -667,49 +663,49 @@ class LabellingServiceRestTest extends ServiceTest
                         'Zipcode'     => '2132WT',
                     ]),
                 ])
-                ->setBarcode('3S1234567890123')
-                ->setDeliveryAddress('01')
-                ->setDimension(new Dimension('2000'))
-                ->setProductCodeDelivery('3085')
+                ->setBarcode(Barcode: '3S1234567890123')
+                ->setDeliveryAddress(DeliveryAddress: '01')
+                ->setDimension(Dimension: new Dimension(Weight: '2000'))
+                ->setProductCodeDelivery(ProductCodeDelivery: '3085')
         );
     }
 
-    public function singleLabelsProvider()
+    public function singleLabelsProvider(): array
     {
         return [
-            [PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/labelling/singlelabel.http'))],
-            [PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/labelling/singlelabel2.http'))],
-            [PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/labelling/singlelabel3.http'))],
+            [PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/labelling/singlelabel.http'))],
+            [PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/labelling/singlelabel2.http'))],
+            [PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/labelling/singlelabel3.http'))],
         ];
     }
 
-    public function multipleLabelsProvider()
+    public function multipleLabelsProvider(): array
     {
         return [
             [[
-                PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/labelling/singlelabel.http')),
-                PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/labelling/singlelabel2.http'))
+                PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/labelling/singlelabel.http')),
+                PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/labelling/singlelabel2.http'))
             ]],
             [[
-                PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/labelling/singlelabel2.http')),
-                PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/labelling/singlelabel3.http'))
+                PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/labelling/singlelabel2.http')),
+                PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/labelling/singlelabel3.http'))
             ]],
             [[
-                PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/labelling/singlelabel.http')),
-                PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/labelling/singlelabel3.http'))
+                PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/labelling/singlelabel.http')),
+                PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/labelling/singlelabel3.http'))
             ]],
         ];
     }
 
-    public function invalidResponseProvider()
+    public function invalidResponseProvider(): array
     {
         return [
             [
-                PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/labelling/invalid.http')),
+                PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/labelling/invalid.http')),
                 ResponseException::class
             ],
             [
-                PsrMessage::parseResponse(file_get_contents(_RESPONSES_DIR_.'/rest/labelling/error.http')),
+                PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/labelling/error.http')),
                 CifException::class
             ],
         ];

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -26,106 +27,98 @@
 
 namespace Firstred\PostNL\Entity\Request;
 
+use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Message\Message;
 use Firstred\PostNL\Entity\Shipment;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Enum\SoapNamespace;
 use Sabre\Xml\Writer;
 
 /**
- * Class Confirming.
- *
- * @method Customer|null   getCustomer()
- * @method Message|null    getMessage()
- * @method Shipment[]|null getShipments()
- * @method Confirming      setCustomer(Customer|null $Customer = null)
- * @method Confirming      setMessage(Message|null $Message = null)
- * @method Confirming      setShipments(Shipment[]|null $Shipments = null)
- *
  * @since 1.0.0
  */
 class Confirming extends AbstractEntity
 {
-    /**
-     * Default properties and namespaces for the SOAP API.
-     *
-     * @var array
-     */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'Customer'  => BarcodeService::DOMAIN_NAMESPACE,
-            'Message'   => BarcodeService::DOMAIN_NAMESPACE,
-            'Shipments' => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'Customer'  => ConfirmingService::DOMAIN_NAMESPACE,
-            'Message'   => ConfirmingService::DOMAIN_NAMESPACE,
-            'Shipments' => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'Customer'  => LabellingService::DOMAIN_NAMESPACE,
-            'Message'   => LabellingService::DOMAIN_NAMESPACE,
-            'Shipments' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'Message'   => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Customer'  => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Shipments' => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'Message'   => LocationService::DOMAIN_NAMESPACE,
-            'Customer'  => LocationService::DOMAIN_NAMESPACE,
-            'Shipments' => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'Message'   => TimeframeService::DOMAIN_NAMESPACE,
-            'Customer'  => TimeframeService::DOMAIN_NAMESPACE,
-            'Shipments' => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var Customer|null */
-    protected $Customer;
-    /** @var Message|null */
-    protected $Message;
-    /** @var Shipment[]|null */
-    protected $Shipments;
-    // @codingStandardsIgnoreEnd
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?Customer $Customer = null;
 
-    /**
-     * Confirming constructor.
-     *
-     * @param Shipment[]|null $Shipments
-     * @param Customer|null   $Customer
-     * @param Message|null    $Message
-     */
-    public function __construct(array $Shipments = null, Customer $Customer = null, Message $Message = null)
-    {
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?Message $Message = null;
+
+    /** @var Shipment[]|null */
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?array $Shipments = null;
+
+    public function __construct(
+        /** @param $Shipments Shipment[]|null */
+        ?array    $Shipments = null,
+        ?Customer $Customer = null,
+        ?Message  $Message = null,
+    ) {
         parent::__construct();
 
-        $this->setShipments($Shipments);
-        $this->setMessage($Message ?: new Message());
-        $this->setCustomer($Customer);
+        $this->setShipments(Shipments: $Shipments);
+        $this->setMessage(Message: $Message ?: new Message());
+        $this->setCustomer(Customer: $Customer);
+    }
+
+    public function getCustomer(): ?Customer
+    {
+        return $this->Customer;
+    }
+
+    public function setCustomer(?Customer $Customer): static
+    {
+        $this->Customer = $Customer;
+
+        return $this;
+    }
+
+    public function getMessage(): ?Message
+    {
+        return $this->Message;
+    }
+
+    public function setMessage(?Message $Message): static
+    {
+        $this->Message = $Message;
+
+        return $this;
     }
 
     /**
-     * Return a serializable array for the XMLWriter.
-     *
-     * @param Writer $writer
-     *
-     * @return void
+     * @return Shipment[]|null
      */
-    public function xmlSerialize(Writer $writer)
+    public function getShipments(): ?array
+    {
+        return $this->Shipments;
+    }
+
+    /**
+     * @param Shipment[]|null $Shipments
+     * @return static
+     */
+    public function setShipments(?array $Shipments): static
+    {
+        if (is_array(value: $Shipments)) {
+            foreach ($Shipments as $shipment) {
+                if (!$shipment instanceof Shipment) {
+                    throw new \TypeError(message: 'Expected instanceof Shipment');
+                }
+            }
+        }
+
+        $this->Shipments = $Shipments;
+
+        return $this;
+    }
+
+    public function xmlSerialize(Writer $writer): void
     {
         $xml = [];
-        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
-            $writer->write($xml);
+        if (!$this->currentService || !in_array(needle: $this->currentService, haystack: array_keys(array: static::$defaultProperties))) {
+            $writer->write(value: $xml);
 
             return;
         }
@@ -142,25 +135,20 @@ class Confirming extends AbstractEntity
             }
         }
         // Auto extending this object with other properties is not supported with SOAP
-        $writer->write($xml);
+        $writer->write(value: $xml);
     }
 
-    /**
-     * Return a serializable array for `json_encode`.
-     *
-     * @return array
-     */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         $json = [];
-        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
+        if (!$this->currentService || !in_array(needle: $this->currentService, haystack: array_keys(array: static::$defaultProperties))) {
             return $json;
         }
 
-        foreach (array_keys(static::$defaultProperties[$this->currentService]) as $propertyName) {
+        foreach (array_keys(array: static::$defaultProperties[$this->currentService]) as $propertyName) {
             if (isset($this->$propertyName)) {
                 // The REST API only seems to accept one shipment per request at the moment of writing (Sep. 24th, 2017)
-                if ('Shipments' === $propertyName && count($this->$propertyName) >= 1) {
+                if ('Shipments' === $propertyName && count(value: $this->$propertyName) >= 1) {
                     $json[$propertyName] = $this->{$propertyName}[0];
                 } else {
                     $json[$propertyName] = $this->$propertyName;

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -34,31 +35,31 @@ namespace Firstred\PostNL\Exception;
 class CifException extends ApiException
 {
     /** @var array */
-    protected $messages;
+    protected array $messages;
 
     /**
      * CifException constructor.
      *
-     * @param string|string[] $message  In case of multiple errors, the format looks like:
+     * @param string|string[] $message In case of multiple errors, the format looks like:
      *                                  [
      *                                  'description' => string <The description>,
      *                                  'message'     => string <The error message>,
      *                                  'code'        => int <The error code>
      *                                  ]
      *                                  The code param will be discarded if `$message` is an array
-     * @param int             $code
+     * @param int $code
      * @param \Throwable|null $previous
      */
-    public function __construct($message = '', $code = 0, $previous = null)
+    public function __construct($message = '', int $code = 0, \Throwable $previous = null)
     {
-        if (is_array($message)) {
+        if (is_array(value: $message)) {
             $this->messages = $message;
 
             $message = $this->messages[0]['message'];
             $code = $this->messages[0]['code'];
         }
 
-        parent::__construct($message, $code, $previous);
+        parent::__construct(message: $message, code: $code, previous: $previous);
     }
 
     /**
@@ -66,7 +67,7 @@ class CifException extends ApiException
      *
      * @return array|string|string[]
      */
-    public function getMessagesDescriptionsAndCodes()
+    public function getMessagesDescriptionsAndCodes(): array|string
     {
         return $this->messages;
     }

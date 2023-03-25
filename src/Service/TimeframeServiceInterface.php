@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -40,16 +41,12 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * Class TimeframeService.
- *
- * @method ResponseTimeframes getTimeframes(GetTimeframes $getTimeframes)
- * @method RequestInterface   buildGetTimeframesRequest(GetTimeframes $getTimeframes)
- * @method ResponseTimeframes processGetTimeframesResponse(mixed $response)
- *
  * @since 1.2.0
  */
 interface TimeframeServiceInterface extends ServiceInterface
 {
+    public const DEFAULT_VERSION = '2.1';
+
     /**
      * Get timeframes via REST.
      *
@@ -68,77 +65,5 @@ interface TimeframeServiceInterface extends ServiceInterface
      *
      * @since 1.0.0
      */
-    public function getTimeframesREST(GetTimeframes $getTimeframes);
-
-    /**
-     * Get timeframes via SOAP.
-     *
-     * @param GetTimeframes $getTimeframes
-     *
-     * @return ResponseTimeframes
-     *
-     * @throws CifDownException
-     * @throws CifException
-     * @throws PsrCacheInvalidArgumentException
-     * @throws HttpClientException
-     * @throws ResponseException
-     * @throws NotFoundException
-     *
-     * @since 1.0.0
-     */
-    public function getTimeframesSOAP(GetTimeframes $getTimeframes);
-
-    /**
-     * Build the GetTimeframes request for the REST API.
-     *
-     * @param GetTimeframes $getTimeframes
-     *
-     * @return RequestInterface
-     *
-     * @since 1.0.0
-     */
-    public function buildGetTimeframesRequestREST(GetTimeframes $getTimeframes);
-
-    /**
-     * Process GetTimeframes Response REST.
-     *
-     * @param mixed $response
-     *
-     * @return ResponseTimeframes|null
-     *
-     * @throws HttpClientException
-     * @throws ResponseException
-     * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
-     *
-     * @since 1.0.0
-     */
-    public function processGetTimeframesResponseREST($response);
-
-    /**
-     * Build the GetTimeframes request for the SOAP API.
-     *
-     * @param GetTimeframes $getTimeframes
-     *
-     * @return RequestInterface
-     *
-     * @since 1.0.0
-     */
-    public function buildGetTimeframesRequestSOAP(GetTimeframes $getTimeframes);
-
-    /**
-     * Process GetTimeframes Response SOAP.
-     *
-     * @param ResponseInterface $response
-     *
-     * @return ResponseTimeframes
-     *
-     * @throws CifDownException
-     * @throws CifException
-     * @throws HttpClientException
-     * @throws ResponseException
-     *
-     * @since 1.0.0
-     */
-    public function processGetTimeframesResponseSOAP(ResponseInterface $response);
+    public function getTimeframes(GetTimeframes $getTimeframes): ResponseTimeframes;
 }

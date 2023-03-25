@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -37,7 +38,7 @@ use setasign\Fpdi\Fpdi;
  */
 class RFPdi extends Fpdi
 {
-    public $angle = 0;
+    public int $angle = 0;
 
     public function rotate($angle, $x = -1, $y = -1)
     {
@@ -50,38 +51,38 @@ class RFPdi extends Fpdi
         }
 
         if (0 != $this->angle) {
-            $this->_out('Q');
+            $this->_out(s: 'Q');
         }
 
         $this->angle = $angle;
 
         if (0 != $angle) {
             $angle *= M_PI / 180;
-            $c = cos($angle);
-            $s = sin($angle);
-            $cx = $x              *$this->k;
+            $c = cos(num: $angle);
+            $s = sin(num: $angle);
+            $cx = $x * $this->k;
             $cy = ($this->h - $y) * $this->k;
             $this->_out(
-                sprintf('q %.5F %.5F %.5F %.5F %.2F %.2F cm 1 0 0 1 %.2F %.2F cm', $c, $s, -$s, $c, $cx, $cy, -$cx, -$cy)
+                s: sprintf('q %.5F %.5F %.5F %.5F %.2F %.2F cm 1 0 0 1 %.2F %.2F cm', $c, $s, -$s, $c, $cx, $cy, -$cx, -$cy)
             );
         }
     }
 
     public function rotateClockWise()
     {
-        $this->rotate(270);
+        $this->rotate(angle: 270);
     }
 
     public function rotateCounterClockWise()
     {
-        $this->rotate(90);
+        $this->rotate(angle: 90);
     }
 
     public function _endpage()
     {
         if (0 != $this->angle) {
             $this->angle = 0;
-            $this->_out('Q');
+            $this->_out(s: 'Q');
         }
         parent::_endpage();
     }

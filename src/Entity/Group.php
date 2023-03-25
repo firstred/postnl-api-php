@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -26,88 +27,26 @@
 
 namespace Firstred\PostNL\Entity;
 
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\ShippingService;
-use Firstred\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Attribute\SerializableProperty;
+use Firstred\PostNL\Enum\SoapNamespace;
 
 /**
- * Class Group.
- *
- * @method string|null getGroupCount()
- * @method string|null getGroupSequence()
- * @method string|null getGroupType()
- * @method string|null getMainBarcode()
- * @method Group       setGroupCount(string|null $GroupCount = null)
- * @method Group       setGroupSequence(string|null $GroupSequence = null)
- * @method Group       setGroupType(string|null $GroupType = null)
- * @method Group       setMainBarcode(string|null $MainBarcode = null)
- *
  * @since 1.0.0
  */
 class Group extends AbstractEntity
 {
-    /** @var string[][] */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'GroupCount'    => BarcodeService::DOMAIN_NAMESPACE,
-            'GroupSequence' => BarcodeService::DOMAIN_NAMESPACE,
-            'GroupType'     => BarcodeService::DOMAIN_NAMESPACE,
-            'MainBarcode'   => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'GroupCount'    => ConfirmingService::DOMAIN_NAMESPACE,
-            'GroupSequence' => ConfirmingService::DOMAIN_NAMESPACE,
-            'GroupType'     => ConfirmingService::DOMAIN_NAMESPACE,
-            'MainBarcode'   => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'GroupCount'    => LabellingService::DOMAIN_NAMESPACE,
-            'GroupSequence' => LabellingService::DOMAIN_NAMESPACE,
-            'GroupType'     => LabellingService::DOMAIN_NAMESPACE,
-            'MainBarcode'   => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'GroupCount'    => DeliveryDateService::DOMAIN_NAMESPACE,
-            'GroupSequence' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'GroupType'     => DeliveryDateService::DOMAIN_NAMESPACE,
-            'MainBarcode'   => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'GroupCount'    => LocationService::DOMAIN_NAMESPACE,
-            'GroupSequence' => LocationService::DOMAIN_NAMESPACE,
-            'GroupType'     => LocationService::DOMAIN_NAMESPACE,
-            'MainBarcode'   => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'GroupCount'    => TimeframeService::DOMAIN_NAMESPACE,
-            'GroupSequence' => TimeframeService::DOMAIN_NAMESPACE,
-            'GroupType'     => TimeframeService::DOMAIN_NAMESPACE,
-            'MainBarcode'   => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-        'Shipping' => [
-            'GroupCount'    => ShippingService::DOMAIN_NAMESPACE,
-            'GroupSequence' => ShippingService::DOMAIN_NAMESPACE,
-            'GroupType'     => ShippingService::DOMAIN_NAMESPACE,
-            'MainBarcode'   => ShippingService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
     /**
      * Amount of shipments in the group.
-     *
-     * @var string|null
      */
-    protected $GroupCount;
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $GroupCount = null;
+
     /**
      * Sequence number.
-     *
-     * @var string|null
      */
-    protected $GroupSequence;
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $GroupSequence = null;
+
     /**
      * The type of group.
      *
@@ -116,33 +55,75 @@ class Group extends AbstractEntity
      * - `01`: Collection request
      * - `03`: Multiple parcels in one shipment (multi-colli)
      * - `04`: Single parcel in one shipment
-     *
-     * @var string|null
      */
-    protected $GroupType;
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $GroupType;
+
     /**
      * Main barcode for the shipment.
-     *
-     * @var string|null
      */
-    protected $MainBarcode;
-    // @codingStandardsIgnoreEnd
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $MainBarcode;
 
-    /**
-     * Group Constructor.
-     *
-     * @param string|null $GroupCount
-     * @param string|null $GroupSequence
-     * @param string|null $GroupType
-     * @param string|null $MainBarcode
-     */
-    public function __construct($GroupCount = null, $GroupSequence = null, $GroupType = null, $MainBarcode = null)
-    {
+    public function __construct(
+        ?string $GroupCount = null,
+        ?string $GroupSequence = null,
+        ?string $GroupType = null,
+        ?string $MainBarcode = null,
+    ) {
         parent::__construct();
 
-        $this->setGroupCount($GroupCount);
-        $this->setGroupSequence($GroupSequence);
-        $this->setGroupType($GroupType);
-        $this->setMainBarcode($MainBarcode);
+        $this->setGroupCount(GroupCount: $GroupCount);
+        $this->setGroupSequence(GroupSequence: $GroupSequence);
+        $this->setGroupType(GroupType: $GroupType);
+        $this->setMainBarcode(MainBarcode: $MainBarcode);
+    }
+
+    public function getGroupCount(): ?string
+    {
+        return $this->GroupCount;
+    }
+
+    public function setGroupCount(?string $GroupCount): static
+    {
+        $this->GroupCount = $GroupCount;
+
+        return $this;
+    }
+
+    public function getGroupSequence(): ?string
+    {
+        return $this->GroupSequence;
+    }
+
+    public function setGroupSequence(?string $GroupSequence): static
+    {
+        $this->GroupSequence = $GroupSequence;
+
+        return $this;
+    }
+
+    public function getGroupType(): ?string
+    {
+        return $this->GroupType;
+    }
+
+    public function setGroupType(?string $GroupType): static
+    {
+        $this->GroupType = $GroupType;
+
+        return $this;
+    }
+
+    public function getMainBarcode(): ?string
+    {
+        return $this->MainBarcode;
+    }
+
+    public function setMainBarcode(?string $MainBarcode): static
+    {
+        $this->MainBarcode = $MainBarcode;
+
+        return $this;
     }
 }

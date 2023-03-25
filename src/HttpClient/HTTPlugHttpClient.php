@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -56,22 +57,22 @@ use const E_USER_DEPRECATED;
  *
  * @since 1.2.0
  */
-class HTTPlugClient extends BaseHttpClient implements ClientInterface
+class HTTPlugHttpClient extends BaseHttpClient implements HttpClientInterface
 {
     /** @var static */
-    protected static $instance;
+    protected static HTTPlugHttpClient $instance;
 
     /**
      * @var HttpAsyncClient|HttpClient
      */
-    protected $client;
+    protected HttpClient|HttpAsyncClient $client;
 
     /**
      * HTTPlugClient constructor.
      *
      * @param HttpAsyncClient|HttpClient|null $client
-     * @param LoggerInterface|null            $logger
-     * @param int                             $concurrency
+     * @param LoggerInterface|null $logger
+     * @param int $concurrency
      *
      * @throws HttpClientException
      *
@@ -79,10 +80,10 @@ class HTTPlugClient extends BaseHttpClient implements ClientInterface
      * @since 1.3.0 $maxRetries param
      */
     public function __construct(
-        $client = null,
-        $logger = null,
-        $concurrency = 5,
-        $maxRetries = 5
+        HttpAsyncClient|HttpClient $client = null,
+        LoggerInterface            $logger = null,
+        int                        $concurrency = 5,
+                                   $maxRetries = 5
     ) {
         $this->logger = $logger;
         $this->concurrency = $concurrency;
@@ -117,10 +118,10 @@ class HTTPlugClient extends BaseHttpClient implements ClientInterface
         }
 
         if (!$client) {
-            throw new HttpClientException('HTTP Client could not be found');
+            throw new HttpClientException(message: 'HTTP Client could not be found');
         }
 
-        $this->setClient($client);
+        $this->setClient(client: $client);
     }
 
     /**
@@ -128,25 +129,25 @@ class HTTPlugClient extends BaseHttpClient implements ClientInterface
      *
      * Exceptions are captured into the result array
      *
-     * @param RequestInterface[]                    $requests
+     * @param RequestInterface[] $requests
      *
      * @return HttpClientException[]|ResponseInterface[]
      *
      * @throws InvalidArgumentException
      */
-    public function doRequests($requests = [])
+    public function doRequests(array $requests = []): array
     {
         if ($requests instanceof RequestInterface) {
             user_error(
-                'Passing a single request to HttpClientInterface::doRequests is deprecated',
-                E_USER_DEPRECATED
+                message: 'Passing a single request to HttpClientInterface::doRequests is deprecated',
+                error_level: E_USER_DEPRECATED
             );
             $requests = [$requests];
         }
-        if (!is_array($requests)) {
-            throw new InvalidArgumentException('Invalid requests array passed');
+        if (!is_array(value: $requests)) {
+            throw new InvalidArgumentException(message: 'Invalid requests array passed');
         }
-        if (!is_array($this->pendingRequests)) {
+        if (!is_array(value: $this->pendingRequests)) {
             $this->pendingRequests = [];
         }
 
@@ -159,10 +160,10 @@ class HTTPlugClient extends BaseHttpClient implements ClientInterface
         $responses = [];
         if ($client instanceof HttpAsyncClient) {
             // Concurrent requests
-            $promises = call_user_func(function () use ($requests, $client) {
+            $promises = call_user_func(callback: function () use ($requests, $client) {
                 foreach ($requests as $index => $request) {
                     try {
-                        yield $index => $client->sendAsyncRequest($request);
+                        yield $index => $client->sendAsyncRequest(request: $request);
                     } catch (Exception $e) {
                     }
                 }
@@ -170,8 +171,8 @@ class HTTPlugClient extends BaseHttpClient implements ClientInterface
 
             try {
                 $promise = (new EachPromise(
-                    $promises,
-                    [
+                    iterable: $promises,
+                    config: [
                         'concurrency' => $this->concurrency,
                         'fulfilled'   => function (ResponseInterface $response, $index) use (&$responses) {
                             $responses[$index] = $response;
@@ -183,7 +184,7 @@ class HTTPlugClient extends BaseHttpClient implements ClientInterface
                 ))->promise();
 
                 if ($promise) {
-                    $promise->wait(true);
+                    $promise->wait(unwrap: true);
                 }
             } catch (HttpException $e) {
                 // Ignore HttpExceptions, we are going to handle them in the response validator
@@ -196,7 +197,7 @@ class HTTPlugClient extends BaseHttpClient implements ClientInterface
         } else {
             foreach ($requests as $idx => $request) {
                 try {
-                    $responses[$idx] = $this->doRequest($request);
+                    $responses[$idx] = $this->doRequest(request: $request);
                 } catch (HttpClientException $e) {
                     $responses[$idx] = $e;
                 }
@@ -212,9 +213,9 @@ class HTTPlugClient extends BaseHttpClient implements ClientInterface
                 $logLevel = LogLevel::ERROR;
             }
 
-            $this->getLogger()->log($logLevel, PsrMessage::toString($requests[$id]));
+            $this->getLogger()->log(level: $logLevel, message: PsrMessage::toString(message: $requests[$id]));
             if ($response instanceof ResponseInterface) {
-                $this->getLogger()->log($logLevel, PsrMessage::toString($response));
+                $this->getLogger()->log(level: $logLevel, message: PsrMessage::toString(message: $response));
             }
         }
 
@@ -232,7 +233,7 @@ class HTTPlugClient extends BaseHttpClient implements ClientInterface
      *
      * @throws HttpClientException
      */
-    public function doRequest(RequestInterface $request)
+    public function doRequest(RequestInterface $request): ResponseInterface
     {
         $logLevel = LogLevel::DEBUG;
         $response = null;
@@ -242,16 +243,16 @@ class HTTPlugClient extends BaseHttpClient implements ClientInterface
 
         try {
             if ($client instanceof HttpAsyncClient) {
-                $response = $client->sendAsyncRequest($request)->wait();
+                $response = $client->sendAsyncRequest(request: $request)->wait();
             } else {
-                $response =  $client->sendRequest($request);
+                $response = $client->sendRequest(request: $request);
             }
 
             return $response;
         } catch (Exception $e) {
-            throw new HttpClientException($e->getMessage(), $e->getCode(), $e);
+            throw new HttpClientException(message: $e->getMessage(), code: $e->getCode(), previous: $e);
         } catch (ClientExceptionInterface $e) {
-            throw new HttpClientException($e->getMessage(), $e->getCode(), $e);
+            throw new HttpClientException(message: $e->getMessage(), code: $e->getCode(), previous: $e);
         } finally {
             if (!$response instanceof ResponseInterface
                 || $response->getStatusCode() < 200
@@ -260,9 +261,9 @@ class HTTPlugClient extends BaseHttpClient implements ClientInterface
                 $logLevel = LogLevel::ERROR;
             }
 
-            $this->getLogger()->log($logLevel, PsrMessage::toString($request));
+            $this->getLogger()->log(level: $logLevel, message: PsrMessage::toString(message: $request));
             if ($response instanceof ResponseInterface) {
-                $this->getLogger()->log($logLevel, PsrMessage::toString($response));
+                $this->getLogger()->log(level: $logLevel, message: PsrMessage::toString(message: $response));
             }
         }
     }
@@ -270,7 +271,7 @@ class HTTPlugClient extends BaseHttpClient implements ClientInterface
     /**
      * @return HttpAsyncClient|HttpClient
      */
-    public function getClient()
+    public function getClient(): HttpAsyncClient|HttpClient
     {
         return $this->client;
     }
@@ -280,53 +281,10 @@ class HTTPlugClient extends BaseHttpClient implements ClientInterface
      *
      * @return static
      */
-    public function setClient($client)
+    public function setClient(HttpAsyncClient|HttpClient $client): static
     {
         $this->client = $client;
 
         return $this;
-    }
-
-    /**
-     * @param HttpAsyncClient|HttpClient|null $client
-     *
-     * @return HTTPlugClient
-     *
-     * @throws HttpClientException
-     *
-     * @deprecated Please instantiate a new client rather than using this singleton
-     */
-    public static function getInstance($client = null)
-    {
-        if (!static::$instance) {
-            static::$instance = new static($client);
-        }
-
-        return static::$instance;
-    }
-
-    /**
-     * @param bool|string $verify
-     *
-     * @return HTTPlugClient
-     *
-     * @deprecated
-     */
-    public function setVerify($verify)
-    {
-        // Not supported by the HTTPlug client
-
-        return $this;
-    }
-
-    /**
-     * @return bool|string|void
-     *
-     * @deprecated
-     */
-    public function getVerify()
-    {
-        return true;
-        // Not supported by the HTTPlug client
     }
 }

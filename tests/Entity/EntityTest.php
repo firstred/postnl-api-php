@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -26,11 +27,13 @@
 
 namespace Firstred\PostNL\Tests\Entity;
 
- use Yoast\PHPUnitPolyfills\TestCases\TestCase;
-use Sabre\Xml\Service as XmlService;
+use Error;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Address;
-use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\ServiceNotSetException;
+use PHPUnit\Framework\TestCase;
+use Sabre\Xml\Service as XmlService;
+use TypeError;
 
 /**
  * @testdox The Entities
@@ -40,71 +43,70 @@ class EntityTest extends TestCase
     /**
      * @testdox have a working constructor
      */
-    public function testConstructors()
+    public function testConstructors(): void
     {
-        foreach (scandir(__DIR__.'/../../src/Entity') as $entityName) {
-            if (in_array($entityName, ['.', '..', 'AbstractEntity.php']) || is_dir(__DIR__."/../../src/Entity/$entityName")) {
+        foreach (scandir(directory: __DIR__ . '/../../src/Entity') as $entityName) {
+            if (in_array(needle: $entityName, haystack: ['.', '..', 'AbstractEntity.php']) || is_dir(filename: __DIR__ . "/../../src/Entity/$entityName")) {
                 continue;
             }
 
-            $entityName = substr($entityName, 0, strlen($entityName) - 4);
+            $entityName = substr(string: $entityName, offset: 0, length: strlen(string: $entityName) - 4);
             $entityName = "\\Firstred\\PostNL\\Entity\\$entityName";
             $entity = new $entityName();
-            $this->assertInstanceOf(AbstractEntity::class, $entity);
+            $this->assertInstanceOf(expected: AbstractEntity::class, actual: $entity);
         }
 
-        foreach (scandir(__DIR__.'/../../src/Entity/Message') as $entityName) {
-            if (in_array($entityName, ['.', '..']) || is_dir(__DIR__."/../../src/Entity/Message/$entityName")) {
+        foreach (scandir(directory: __DIR__ . '/../../src/Entity/Message') as $entityName) {
+            if (in_array(needle: $entityName, haystack: ['.', '..']) || is_dir(filename: __DIR__ . "/../../src/Entity/Message/$entityName")) {
                 continue;
             }
 
-            $entityName = substr($entityName, 0, strlen($entityName) - 4);
+            $entityName = substr(string: $entityName, offset: 0, length: strlen(string: $entityName) - 4);
             $entityName = "\\Firstred\\PostNL\\Entity\\Message\\$entityName";
             $entity = new $entityName();
-            $this->assertInstanceOf(AbstractEntity::class, $entity);
+            $this->assertInstanceOf(expected: AbstractEntity::class, actual: $entity);
         }
 
-        foreach (scandir(__DIR__.'/../../src/Entity/Request') as $entityName) {
-            if (in_array($entityName, ['.', '..']) || is_dir(__DIR__."/../../src/Entity/Request/$entityName")) {
+        foreach (scandir(directory: __DIR__ . '/../../src/Entity/Request') as $entityName) {
+            if (in_array(needle: $entityName, haystack: ['.', '..']) || is_dir(filename: __DIR__ . "/../../src/Entity/Request/$entityName")) {
                 continue;
             }
 
-            $entityName = substr($entityName, 0, strlen($entityName) - 4);
+            $entityName = substr(string: $entityName, offset: 0, length: strlen(string: $entityName) - 4);
             $entityName = "\\Firstred\\PostNL\\Entity\\Request\\$entityName";
             $entity = new $entityName();
-            $this->assertInstanceOf(AbstractEntity::class, $entity);
+            $this->assertInstanceOf(expected: AbstractEntity::class, actual: $entity);
         }
 
-        foreach (scandir(__DIR__.'/../../src/Entity/Response') as $entityName) {
-            if (in_array($entityName, ['.', '..']) || is_dir(__DIR__."/../../src/Entity/Response/$entityName")) {
+        foreach (scandir(directory: __DIR__ . '/../../src/Entity/Response') as $entityName) {
+            if (in_array(needle: $entityName, haystack: ['.', '..']) || is_dir(filename: __DIR__ . "/../../src/Entity/Response/$entityName")) {
                 continue;
             }
 
-            $entityName = substr($entityName, 0, strlen($entityName) - 4);
+            $entityName = substr(string: $entityName, offset: 0, length: strlen(string: $entityName) - 4);
             $entityName = "\\Firstred\\PostNL\\Entity\\Response\\$entityName";
             $entity = new $entityName();
-            $this->assertInstanceOf(AbstractEntity::class, $entity);
+            $this->assertInstanceOf(expected: AbstractEntity::class, actual: $entity);
         }
     }
 
     /**
-     * @testdox should throw an exception when the value to set is missing
+     * @testdox should throw a `TypeError` when the value to set is missing
      */
-    public function testNegativeMissingValue()
+    public function testNegativeMissingValue(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(exception: TypeError::class);
 
-        (new Address())
-            ->setArea()
-        ;
+        /** @noinspection PhpParamsInspection */
+        (new Address())->setArea();
     }
 
     /**
      * @testdox should be `null` when instantiating the AbstractEntity
      */
-    public function testNegativeCannotInstantiateAbstract()
+    public function testNegativeCannotInstantiateAbstract(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(exception: TypeError::class);
 
         AbstractEntity::create();
     }
@@ -112,42 +114,43 @@ class EntityTest extends TestCase
     /**
      * @testdox should return `null` when the property does not exist
      */
-    public function testNegativeReturnNullWhenPropertyDoesNotExist()
+    public function testNegativeReturnNullWhenPropertyDoesNotExist(): void
     {
-        $this->assertNull((new Address())->getNothing());
+        /** @noinspection PhpUndefinedMethodInspection */
+        $this->assertNull(actual: (new Address())->getNothing());
     }
 
     /**
-     * @testdox should throw an exception when the method does not exist
+     * @testdox should throw a `TypeError` when the method does not exist
      */
-    public function testNegativeThrowExceptionWhenMethodDoesNotExist()
+    public function testNegativeThrowExceptionWhenMethodDoesNotExist(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(exception: TypeError::class);
 
         (new Address())->blab();
     }
 
     /**
-     * @testdox should throw an exception when json serializing without having a service
+     * @testdox should throw a `ServiceNotSetException` when json serializing without having a service
      */
-    public function testNegativeThrowExceptionWhenServiceNotSetJson()
+    public function testNegativeThrowExceptionWhenServiceNotSetJson(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(exception: ServiceNotSetException::class);
 
-        json_encode(new Address());
+        json_encode(value: new Address());
     }
 
     /**
-     * @testdox should throw an exception when xml serializing without having a service
+     * @testdox should throw an `Error` when xml serializing without having a service
      */
-    public function testNegativeThrowExceptionWhenServiceNotSetXml()
+    public function testNegativeThrowExceptionWhenServiceNotSetXml(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(exception: ServiceNotSetException::class);
 
         $service = new XmlService();
 
-        $service->write('{test}a',
-            new Address()
+        $service->write(rootElementName: '{test}a',
+            value: new Address()
         );
     }
 }

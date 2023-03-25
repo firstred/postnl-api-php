@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -26,79 +27,47 @@
 
 namespace Firstred\PostNL\Entity\Response;
 
+use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Enum\SoapNamespace;
 
 /**
- * Class GetLocationsInAreaResponse.
- *
- * @method GetLocationsResult|null    getGetLocationsResult()
- * @method GetLocationsInAreaResponse setGetLocationsResult(GetLocationsResult|null $GetLocationsResult = null)
- *
  * @since 1.0.0
  */
 class GetLocationsInAreaResponse extends AbstractEntity
 {
-    /**
-     * Default properties and namespaces for the SOAP API.
-     *
-     * @var array
-     */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'GetLocationsResult' => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'GetLocationsResult' => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'GetLocationsResult' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'GetLocationsResult' => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'GetLocationsResult' => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'GetLocationsResult' => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var GetLocationsResult|null */
-    protected $GetLocationsResult;
-    // @codingStandardsIgnoreEnd
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?GetLocationsResult $GetLocationsResult = null;
 
-    /**
-     * GetLocationsInAreaResponse constructor.
-     *
-     * @param GetLocationsResult|null $GetLocationsResult
-     */
-    public function __construct(GetLocationsResult $GetLocationsResult = null)
-    {
+    public function __construct(
+        /** @param GetLocationsResult|null $GetLocationsResult */
+        GetLocationsResult $GetLocationsResult = null,
+    ) {
         parent::__construct();
 
-        $this->setGetLocationsResult($GetLocationsResult);
+        $this->setGetLocationsResult(GetLocationsResult: $GetLocationsResult);
     }
 
-    /**
-     * Return a serializable array for `json_encode`.
-     *
-     * @return array
-     */
-    public function jsonSerialize()
+    public function getGetLocationsResult(): ?GetLocationsResult
+    {
+        return $this->GetLocationsResult;
+    }
+
+    public function setGetLocationsResult(?GetLocationsResult $GetLocationsResult): static
+    {
+        $this->GetLocationsResult = $GetLocationsResult;
+
+        return $this;
+    }
+
+    public function jsonSerialize(): array
     {
         $json = [];
-        if (!$this->currentService || !in_array($this->currentService, array_keys(static::$defaultProperties))) {
+        if (!$this->currentService || !in_array(needle: $this->currentService, haystack: array_keys(array: static::$defaultProperties))) {
             return $json;
         }
 
-        foreach (array_keys(static::$defaultProperties[$this->currentService]) as $propertyName) {
+        foreach (array_keys(array: static::$defaultProperties[$this->currentService]) as $propertyName) {
             if (isset($this->$propertyName)) {
                 if ('GetLocationsResult' === $propertyName) {
                     $locations = [];

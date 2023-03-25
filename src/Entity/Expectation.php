@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -30,89 +31,47 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use Exception;
+use Firstred\PostNL\Attribute\SerializableProperty;
+use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\TimeframeService;
 use function is_string;
 
 /**
- * Class Expectation.
- *
- * @method DateTimeInterface|null getETAFrom()
- * @method DateTimeInterface|null getETATo()
- *
  * @since 1.0.0
  */
 class Expectation extends AbstractEntity
 {
-    /** @var string[][] */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'ETAFrom' => BarcodeService::DOMAIN_NAMESPACE,
-            'ETATo'   => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'ETAFrom' => ConfirmingService::DOMAIN_NAMESPACE,
-            'ETATo'   => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'ETAFrom' => LabellingService::DOMAIN_NAMESPACE,
-            'ETATo'   => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'ETAFrom' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'ETATo'   => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'ETAFrom' => LocationService::DOMAIN_NAMESPACE,
-            'ETATo'   => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'ETAFrom' => TimeframeService::DOMAIN_NAMESPACE,
-            'ETATo'   => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var DateTimeInterface|null */
-    protected $ETAFrom;
-    /** @var DateTimeInterface|null */
-    protected $ETATo;
-    // @codingStandardsIgnoreEnd
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?DateTimeInterface $ETAFrom = null;
+
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?DateTimeInterface $ETATo = null;
 
     /**
-     * @param DateTimeInterface|string|null $ETAFrom
-     * @param DateTimeInterface|string|null $ETATo
-     *
      * @throws InvalidArgumentException
      */
-    public function __construct($ETAFrom = null, $ETATo = null)
-    {
+    public function __construct(
+        DateTimeInterface|string|null $ETAFrom = null,
+        DateTimeInterface|string|null $ETATo = null,
+    ) {
         parent::__construct();
 
-        $this->setETAFrom($ETAFrom);
-        $this->setETATo($ETATo);
+        $this->setETAFrom(ETAFrom: $ETAFrom);
+        $this->setETATo(ETATo: $ETATo);
     }
 
     /**
-     * @param DateTimeInterface|string|null $ETAFrom
-     *
-     * @return static
-     *
      * @throws InvalidArgumentException
      *
      * @since 1.2.0
      */
-    public function setETAFrom($ETAFrom = null)
+    public function setETAFrom(DateTimeInterface|string|null $ETAFrom = null): static
     {
-        if (is_string($ETAFrom)) {
+        if (is_string(value: $ETAFrom)) {
             try {
-                $ETAFrom = new DateTimeImmutable($ETAFrom, new DateTimeZone('Europe/Amsterdam'));
+                $ETAFrom = new DateTimeImmutable(datetime: $ETAFrom, timezone: new DateTimeZone(timezone: 'Europe/Amsterdam'));
             } catch (Exception $e) {
-                throw new InvalidArgumentException($e->getMessage(),  0, $e);
+                throw new InvalidArgumentException(message: $e->getMessage(), code: 0, previous: $e);
             }
         }
 
@@ -122,21 +81,17 @@ class Expectation extends AbstractEntity
     }
 
     /**
-     * @param DateTimeInterface|string|null $ETATo
-     *
-     * @return static
-     *
      * @throws InvalidArgumentException
      *
      * @since 1.2.0
      */
-    public function setETATo($ETATo = null)
+    public function setETATo(DateTimeInterface|string|null $ETATo = null): static
     {
-        if (is_string($ETATo)) {
+        if (is_string(value: $ETATo)) {
             try {
-                $ETATo = new DateTimeImmutable($ETATo, new DateTimeZone('Europe/Amsterdam'));
+                $ETATo = new DateTimeImmutable(datetime: $ETATo, timezone: new DateTimeZone(timezone: 'Europe/Amsterdam'));
             } catch (Exception $e) {
-                throw new InvalidArgumentException($e->getMessage(), 0, $e);
+                throw new InvalidArgumentException(message: $e->getMessage(), code: 0, previous: $e);
             }
         }
 

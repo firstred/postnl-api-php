@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -38,44 +39,40 @@ use Firstred\PostNL\Entity\Request\GetLocationsInArea;
 use Firstred\PostNL\Entity\Request\GetNearestLocations;
 use Firstred\PostNL\Entity\Response\GetLocationsInAreaResponse;
 use Firstred\PostNL\Entity\Response\GetNearestLocationsResponse;
-use Firstred\PostNL\Entity\SOAP\UsernameToken;
-use Firstred\PostNL\HttpClient\MockClient;
+use Firstred\PostNL\Entity\Soap\UsernameToken;
+use Firstred\PostNL\HttpClient\MockHttpClient;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\LocationServiceInterface;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 /**
- * Class LocationServiceSoapTest.
- *
  * @testdox The LocationService (SOAP)
  */
-class LocationServiceSoapTest extends ServiceTest
+class LocationServiceSoapTest extends ServiceTestCase
 {
-    /** @var PostNL */
-    protected $postnl;
-    /** @var LocationServiceInterface */
-    protected $service;
-    /** @var */
-    protected $lastRequest;
+    protected PostNL $postnl;
+    protected LocationServiceInterface $service;
+    protected RequestInterface $lastRequest;
 
     /**
      * @before
      *
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \ReflectionException
+     * @throws
      */
-    public function setupPostNL()
+    public function setupPostNL(): void
     {
         $this->postnl = new PostNL(
-            Customer::create()
-                ->setCollectionLocation('123456')
-                ->setCustomerCode('DEVC')
-                ->setCustomerNumber('11223344')
-                ->setContactPerson('Test')
-                ->setAddress(Address::create([
+            customer: Customer::create()
+                ->setCollectionLocation(CollectionLocation: '123456')
+                ->setCustomerCode(CustomerCode: 'DEVC')
+                ->setCustomerNumber(CustomerNumber: '11223344')
+                ->setContactPerson(ContactPerson: 'Test')
+                ->setAddress(Address: Address::create(properties: [
                     'AddressType' => '02',
                     'City'        => 'Hoofddorp',
                     'CompanyName' => 'PostNL',
@@ -84,33 +81,33 @@ class LocationServiceSoapTest extends ServiceTest
                     'Street'      => 'Siriusdreef',
                     'Zipcode'     => '2132WT',
                 ]))
-                ->setGlobalPackBarcodeType('AB')
-                ->setGlobalPackCustomerCode('1234'), new UsernameToken(null, 'test'),
-            false,
-            PostNL::MODE_SOAP
+                ->setGlobalPackBarcodeType(GlobalPackBarcodeType: 'AB')
+                ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'), apiKey: new UsernameToken(Username: null, Password: 'test'),
+            sandbox: false,
+            mode: PostNL::MODE_Soap
         );
 
         global $logger;
-        $this->postnl->setLogger($logger);
+        $this->postnl->setLogger(logger: $logger);
 
         $this->service = $this->postnl->getLocationService();
-        $this->service->setCache(new VoidCachePool());
-        $this->service->setTtl(1);
+        $this->service->setCache(cache: new VoidCachePool());
+        $this->service->setTtl(ttl: 1);
     }
 
     /**
      * @testdox creates a valid NearestLocations request
      */
-    public function testGetNearestLocationsRequestSoap()
+    public function testGetNearestLocationsRequestSoap(): void
     {
         $message = new Message();
 
         /* @var Request $request */
         $this->lastRequest = $request = $this->service->buildGetNearestLocationsRequest(
             (new GetNearestLocations())
-                ->setMessage($message)
-                ->setCountrycode('NL')
-                ->setLocation(Location::create([
+                ->setMessage(Message: $message)
+                ->setCountrycode(Countrycode: 'NL')
+                ->setLocation(Location: Location::create(properties: [
                     'AllowSundaySorting' => true,
                     'DeliveryDate'       => '29-06-2016',
                     'DeliveryOptions'    => [
@@ -128,7 +125,7 @@ class LocationServiceSoapTest extends ServiceTest
                 ]))
         );
 
-        $this->assertXmlStringEqualsXmlString(<<<XML
+        $this->assertXmlStringEqualsXmlString(expectedXml: <<<XML
 <?xml version="1.0"?>
 <soap:Envelope 
     xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" 
@@ -168,33 +165,33 @@ class LocationServiceSoapTest extends ServiceTest
    </domain:Location>
    <domain:Message>
     <domain:MessageID>{$message->getMessageID()}</domain:MessageID>
-    <domain:MessageTimeStamp>{$message->getMessageTimeStamp()->format('d-m-Y H:i:s')}</domain:MessageTimeStamp>
+    <domain:MessageTimeStamp>{$message->getMessageTimeStamp()->format(format: 'd-m-Y H:i:s')}</domain:MessageTimeStamp>
    </domain:Message>
   </services:GetNearestLocations>
  </soap:Body>
 </soap:Envelope>
 XML
-            , (string) $request->getBody());
-        $this->assertEmpty($request->getHeaderLine('apikey'));
-        $this->assertEquals('text/xml', $request->getHeaderLine('Accept'));
+            , actualXml: (string) $request->getBody());
+        $this->assertEmpty(actual: $request->getHeaderLine(header: 'apikey'));
+        $this->assertEquals(expected: 'text/xml', actual: $request->getHeaderLine(header: 'Accept'));
     }
 
     /**
      * @testdox can request nearest locations
      */
-    public function testGetNearestLocationsSoap()
+    public function testGetNearestLocationsSoap(): void
     {
-        $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], static::getNearestLocationsMockResponse()),
+        $mock = new MockHandler(queue: [
+            new Response(status: 200, headers: ['Content-Type' => 'application/json;charset=UTF-8'], body: static::getNearestLocationsMockResponse()),
         ]);
-        $handler = HandlerStack::create($mock);
-        $mockClient = new MockClient();
-        $mockClient->setHandler($handler);
-        $this->postnl->setHttpClient($mockClient);
+        $handler = HandlerStack::create(handler: $mock);
+        $mockClient = new MockHttpClient();
+        $mockClient->setHandler(handler: $handler);
+        $this->postnl->setHttpClient(httpClient: $mockClient);
 
-        $response = $this->postnl->getNearestLocations((new GetNearestLocations())
-            ->setCountrycode('NL')
-            ->setLocation(Location::create([
+        $response = $this->postnl->getNearestLocations(getNearestLocations: (new GetNearestLocations())
+            ->setCountrycode(Countrycode: 'NL')
+            ->setLocation(Location: Location::create(properties: [
                 'AllowSundaySorting' => true,
                 'DeliveryDate'       => '29-06-2016',
                 'DeliveryOptions'    => [
@@ -212,23 +209,23 @@ XML
                 'Street'     => 'Siriusdreef',
             ])));
 
-        $this->assertInstanceOf(GetNearestLocationsResponse::class, $response);
-        $this->assertEquals(1, count($response->getGetLocationsResult()));
+        $this->assertInstanceOf(expected: GetNearestLocationsResponse::class, actual: $response);
+        $this->assertEquals(expected: 1, actual: count(value: $response->getGetLocationsResult()));
     }
 
     /**
      * @testdox creates a valid GetLocationsInArea request
      */
-    public function testGetLocationsInAreaRequestSoap()
+    public function testGetLocationsInAreaRequestSoap(): void
     {
         $message = new Message();
 
         /* @var Request $request */
         $this->lastRequest = $request = $this->service->buildGetLocationsInAreaRequest(
             (new GetLocationsInArea())
-                ->setMessage($message)
-                ->setCountrycode('NL')
-                ->setLocation(Location::create([
+                ->setMessage(Message: $message)
+                ->setCountrycode(Countrycode: 'NL')
+                ->setLocation(Location: Location::create(properties: [
                     'AllowSundaySorting' => true,
                     'DeliveryDate'       => '29-06-2016',
                     'DeliveryOptions'    => [
@@ -238,18 +235,18 @@ XML
                     'Options'     => [
                         'Daytime',
                     ],
-                    'CoordinatesNorthWest' => CoordinatesNorthWest::create([
+                    'CoordinatesNorthWest' => CoordinatesNorthWest::create(properties: [
                         'Latitude'  => '52.156439',
                         'Longitude' => '5.015643',
                     ]),
-                    'CoordinatesSouthEast' => CoordinatesSouthEast::create([
+                    'CoordinatesSouthEast' => CoordinatesSouthEast::create(properties: [
                         'Latitude'  => '52.017473',
                         'Longitude' => '5.065254',
                     ]),
                 ]))
         );
 
-        $this->assertXmlStringEqualsXmlString(<<<XML
+        $this->assertXmlStringEqualsXmlString(expectedXml: <<<XML
 <?xml version="1.0"?>
 <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:env="http://www.w3.org/2003/05/soap-envelope" xmlns:services="http://postnl.nl/cif/services/LocationWebService/" xmlns:domain="http://postnl.nl/cif/domain/LocationWebService/" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" xmlns:schema="http://www.w3.org/2001/XMLSchema-instance" xmlns:common="http://postnl.nl/cif/services/common/" xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
  <soap:Header>
@@ -283,33 +280,33 @@ XML
    </domain:Location>
    <domain:Message>
     <domain:MessageID>{$message->getMessageID()}</domain:MessageID>
-    <domain:MessageTimeStamp>{$message->getMessageTimeStamp()->format('d-m-Y H:i:s')}</domain:MessageTimeStamp>
+    <domain:MessageTimeStamp>{$message->getMessageTimeStamp()->format(format: 'd-m-Y H:i:s')}</domain:MessageTimeStamp>
    </domain:Message>
   </services:GetLocationsInArea>
  </soap:Body>
 </soap:Envelope>
 XML
-            , (string) $request->getBody());
-        $this->assertEmpty($request->getHeaderLine('apikey'));
-        $this->assertEquals('text/xml', $request->getHeaderLine('Accept'));
+            , actualXml: (string) $request->getBody());
+        $this->assertEmpty(actual: $request->getHeaderLine(header: 'apikey'));
+        $this->assertEquals(expected: 'text/xml', actual: $request->getHeaderLine(header: 'Accept'));
     }
 
     /**
      * @testdox can request locations in area
      */
-    public function testGetLocationsInAreaSoap()
+    public function testGetLocationsInAreaSoap(): void
     {
-        $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], static::getLocationsInAreaMockResponse()),
+        $mock = new MockHandler(queue: [
+            new Response(status: 200, headers: ['Content-Type' => 'application/json;charset=UTF-8'], body: static::getLocationsInAreaMockResponse()),
         ]);
-        $handler = HandlerStack::create($mock);
-        $mockClient = new MockClient();
-        $mockClient->setHandler($handler);
-        $this->postnl->setHttpClient($mockClient);
+        $handler = HandlerStack::create(handler: $mock);
+        $mockClient = new MockHttpClient();
+        $mockClient->setHandler(handler: $handler);
+        $this->postnl->setHttpClient(httpClient: $mockClient);
 
-        $response = $this->postnl->getLocationsInArea((new GetLocationsInArea())
-            ->setCountrycode('NL')
-            ->setLocation(Location::create([
+        $response = $this->postnl->getLocationsInArea(getLocationsInArea: (new GetLocationsInArea())
+            ->setCountrycode(Countrycode: 'NL')
+            ->setLocation(Location: Location::create(properties: [
                 'AllowSundaySorting' => true,
                 'DeliveryDate'       => '29-06-2016',
                 'DeliveryOptions'    => [
@@ -319,36 +316,38 @@ XML
                 'Options'     => [
                     'Daytime',
                 ],
-                'CoordinatesNorthWest' => CoordinatesNorthWest::create([
+                'CoordinatesNorthWest' => CoordinatesNorthWest::create(properties: [
                     'Latitude'  => '52.156439',
                     'Longitude' => '5.015643',
                 ]),
-                'CoordinatesSouthEast' => CoordinatesSouthEast::create([
+                'CoordinatesSouthEast' => CoordinatesSouthEast::create(properties: [
                     'Latitude'  => '52.017473',
                     'Longitude' => '5.065254',
                 ]),
             ])));
 
-        $this->assertInstanceOf(GetLocationsInAreaResponse::class, $response);
-        $this->assertEquals(1, count($response->getGetLocationsResult()));
+        $this->assertInstanceOf(expected: GetLocationsInAreaResponse::class, actual: $response);
+        $this->assertEquals(expected: 1, actual: count(value: $response->getGetLocationsResult()));
     }
 
     /**
      * @testdox creates a valid GetLocation request
+     *
+     * @throws
      */
-    public function testGetLocationRequestSoap()
+    public function testGetLocationRequestSoap(): void
     {
         $message = new Message();
 
         /* @var Request $request */
         $this->lastRequest = $request = $this->service->buildGetLocationRequest(
             (new GetLocation())
-                ->setLocationCode('161503')
-                ->setMessage($message)
-                ->setRetailNetworkID('PNPNL-01')
+                ->setLocationCode(LocationCode: '161503')
+                ->setMessage(Message: $message)
+                ->setRetailNetworkID(RetailNetworkID: 'PNPNL-01')
         );
 
-        $this->assertXmlStringEqualsXmlString(<<<XML
+        $this->assertXmlStringEqualsXmlString(expectedXml: <<<XML
 <?xml version="1.0"?>
 <soap:Envelope
     xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" 
@@ -372,45 +371,45 @@ XML
       <domain:LocationCode>161503</domain:LocationCode>
       <domain:Message>
         <domain:MessageID>{$message->getMessageID()}</domain:MessageID>
-        <domain:MessageTimeStamp>{$message->getMessageTimeStamp()->format('d-m-Y H:i:s')}</domain:MessageTimeStamp>
+        <domain:MessageTimeStamp>{$message->getMessageTimeStamp()->format(format: 'd-m-Y H:i:s')}</domain:MessageTimeStamp>
       </domain:Message>
       <domain:RetailNetworkID>PNPNL-01</domain:RetailNetworkID>
     </services:GetLocation>
   </soap:Body>
 </soap:Envelope>
 XML
-            , (string) $request->getBody());
-        $this->assertEmpty($request->getHeaderLine('apikey'));
-        $this->assertEquals('text/xml', $request->getHeaderLine('Accept'));
+            , actualXml: (string) $request->getBody());
+        $this->assertEmpty(actual: $request->getHeaderLine(header: 'apikey'));
+        $this->assertEquals(expected: 'text/xml', actual: $request->getHeaderLine(header: 'Accept'));
     }
 
     /**
      * @testdox can request locations in area
      */
-    public function testGetLocationSoap()
+    public function testGetLocationSoap(): void
     {
-        $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json;charset=UTF-8'], static::getLocationMockResponse()),
+        $mock = new MockHandler(queue: [
+            new Response(status: 200, headers: ['Content-Type' => 'application/json;charset=UTF-8'], body: static::getLocationMockResponse()),
         ]);
-        $handler = HandlerStack::create($mock);
-        $mockClient = new MockClient();
-        $mockClient->setHandler($handler);
-        $this->postnl->setHttpClient($mockClient);
+        $handler = HandlerStack::create(handler: $mock);
+        $mockClient = new MockHttpClient();
+        $mockClient->setHandler(handler: $handler);
+        $this->postnl->setHttpClient(httpClient: $mockClient);
 
         $response = $this->postnl->getLocation(
-            (new GetLocation())
-                ->setLocationCode('161503')
-                ->setRetailNetworkID('PNPNL-01')
+            getLocation: (new GetLocation())
+                ->setLocationCode(LocationCode: '161503')
+                ->setRetailNetworkID(RetailNetworkID: 'PNPNL-01')
         );
 
-        $this->assertInstanceOf(GetLocationsInAreaResponse::class, $response);
-        $this->assertEquals(1, count($response->getGetLocationsResult()));
+        $this->assertInstanceOf(expected: GetLocationsInAreaResponse::class, actual: $response);
+        $this->assertEquals(expected: 1, actual: count(value: $response->getGetLocationsResult()));
     }
 
     /**
      * @return string
      */
-    protected function getNearestLocationsMockResponse()
+    protected function getNearestLocationsMockResponse(): string
     {
         return $json = '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
   <s:Body>
@@ -473,7 +472,7 @@ xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
     /**
      * @return string
      */
-    protected function getLocationsInAreaMockResponse()
+    protected function getLocationsInAreaMockResponse(): string
     {
         return '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
    <s:Body>
@@ -534,7 +533,7 @@ xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
     /**
      * @return string
      */
-    protected function getLocationMockResponse()
+    protected function getLocationMockResponse(): string
     {
         return '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
    <s:Body>

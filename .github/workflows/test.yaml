@@ -6,7 +6,7 @@ jobs:
         strategy:
             matrix:
                 operating-system: [ 'ubuntu-latest', 'windows-latest', 'macos-latest' ]
-                php-versions: [ '5.6', '7.0', '7.1', '7.2', '7.3', '7.4', '8.0', '8.1', '8.2' ]
+                php-versions: [ '8.1', '8.2' ]
         steps:
             -   name: Checkout repo
                 uses: actions/checkout@v2
@@ -38,17 +38,17 @@ jobs:
                 run: composer install --no-progress --prefer-dist --optimize-autoloader
 
             -   name: Test with PHPUnit
-                if: matrix.php-versions != '8.1' || matrix.operating-system != 'ubuntu-latest'
+                if: matrix.php-versions != '8.2' || matrix.operating-system != 'ubuntu-latest'
                 env:
                     XDEBUG_MODE: coverage
                 run: vendor/bin/phpunit --testdox -- tests
 
             -   name: Test with PHPUnit (coverage)
-                if: matrix.php-versions == '8.1' && matrix.operating-system == 'ubuntu-latest'
+                if: matrix.php-versions == '8.2' && matrix.operating-system == 'ubuntu-latest'
                 env:
                     XDEBUG_MODE: coverage
                 run: vendor/bin/phpunit --testdox --coverage-clover coverage.xml -- tests
 
             -   name: Codecov
-                if: matrix.php-versions == '8.1' && matrix.operating-system == 'ubuntu-latest'
+                if: matrix.php-versions == '8.2' && matrix.operating-system == 'ubuntu-latest'
                 uses: codecov/codecov-action@v2

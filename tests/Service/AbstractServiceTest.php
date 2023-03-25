@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -33,14 +34,13 @@ use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\Service\AbstractService;
+use Firstred\PostNL\Service\Adapter\AbstractApiAdapter;
 use GuzzleHttp\Psr7\Response;
 
 /**
- * Class AbstractServiceTest.
- *
  * @testdox The AbstractService class
  */
-class AbstractServiceTest extends ServiceTest
+class AbstractServiceTest extends ServiceTestCase
 {
     /**
      * @testdox can get the response text from the value property
@@ -48,24 +48,24 @@ class AbstractServiceTest extends ServiceTest
      * @throws ResponseException
      * @throws HttpClientException
      */
-    public function testGetResponseTextFromArray()
+    public function testGetResponseTextFromArray(): void
     {
-        $response = new Response(200, [], 'test');
+        $response = new Response(status: 200, headers: [], body: 'test');
 
-        $result = AbstractService::getResponseText(['value' => $response]);
+        $result = AbstractApiAdapter::getResponseText(response: ['value' => $response]);
 
-        $this->assertEquals('test', $result);
+        $this->assertEquals(expected: 'test', actual: $result);
     }
 
     /**
      * @throws HttpClientException
      * @throws ResponseException
      */
-    public function testGetResponseTextFromException()
+    public function testGetResponseTextFromException(): void
     {
-        $response = new HttpClientException('', 0, null, new Response(500, [], 'test'));
+        $response = new HttpClientException(message: '', code: 0, previous: null, response: new Response(status: 500, headers: [], body: 'test'));
 
-        $this->assertEquals('test', AbstractService::getResponseText(['value' => $response]));
+        $this->assertEquals(expected: 'test', actual: AbstractApiAdapter::getResponseText(response: ['value' => $response]));
     }
 
     /**
@@ -78,15 +78,15 @@ class AbstractServiceTest extends ServiceTest
      * @throws ApiException
      * @throws InvalidConfigurationException
      */
-    public function testCifDownExceptionRest()
+    public function testCifDownExceptionRest(): void
     {
-        $this->expectException(CifDownException::class);
+        $this->expectException(exception: CifDownException::class);
 
-        $response = new Response(500, [], json_encode([
+        $response = new Response(status: 500, headers: [], body: json_encode(value: [
             'Envelope' => ['Body' => ['Fault' => ['Reason' => ['Text' => ['' => 'error']]]]],
         ]));
 
-        AbstractService::validateRESTResponse($response);
+        AbstractService::validateRestResponse(response: $response);
     }
 
     /**
@@ -98,11 +98,11 @@ class AbstractServiceTest extends ServiceTest
      * @throws ResponseException
      * @throws HttpClientException
      */
-    public function testCifExceptionRest()
+    public function testCifExceptionRest(): void
     {
-        $this->expectException(CifException::class);
+        $this->expectException(exception: CifException::class);
 
-        $response = new Response(500, [], json_encode([
+        $response = new Response(status: 500, headers: [], body: json_encode(value: [
             'Errors' => [
                 'Error' => [
                     [
@@ -114,7 +114,7 @@ class AbstractServiceTest extends ServiceTest
             ],
         ]));
 
-        AbstractService::validateRESTResponse($response);
+        AbstractService::validateRestResponse(response: $response);
     }
 
     /**
@@ -123,11 +123,11 @@ class AbstractServiceTest extends ServiceTest
      * @throws CifDownException
      * @throws CifException
      */
-    public function testCifDownExceptionSoap()
+    public function testCifDownExceptionSoap(): void
     {
-        $this->expectException(CifDownException::class);
+        $this->expectException(exception: CifDownException::class);
 
-        $response = simplexml_load_string(<<<XML
+        $response = simplexml_load_string(data: <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
 <Envelope xmlns:env="http://www.w3.org/2003/05/soap-envelope">
   <encodingStyle>http://schemas.xmlsoap.org/soap/encoding/</encodingStyle>
@@ -144,10 +144,10 @@ class AbstractServiceTest extends ServiceTest
 </Envelope>
 XML
         );
-        $response->registerXPathNamespace('env', 'http://www.w3.org/2003/05/soap-envelope');
-        $response->registerXPathNamespace('common', 'http://postnl.nl/cif/services/common/');
+        $response->registerXPathNamespace(prefix: 'env', namespace: 'http://www.w3.org/2003/05/soap-envelope');
+        $response->registerXPathNamespace(prefix: 'common', namespace: 'http://postnl.nl/cif/services/common/');
 
-        AbstractService::validateSOAPResponse($response);
+        AbstractService::validateSoapResponse(xml: $response);
     }
 
     /**
@@ -156,11 +156,11 @@ XML
      * @throws CifDownException
      * @throws CifException
      */
-    public function testCifExceptionSoap()
+    public function testCifExceptionSoap(): void
     {
-        $this->expectException(CifException::class);
+        $this->expectException(exception: CifException::class);
 
-        $response = simplexml_load_string(<<<XML
+        $response = simplexml_load_string(data: <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
 <Envelope xmlns:common="http://postnl.nl/cif/services/common/">
   <encodingStyle>http://schemas.xmlsoap.org/soap/encoding/</encodingStyle>
@@ -176,9 +176,9 @@ XML
 </Envelope>
 XML
         );
-        $response->registerXPathNamespace('env', 'http://www.w3.org/2003/05/soap-envelope');
-        $response->registerXPathNamespace('common', 'http://postnl.nl/cif/services/common/');
+        $response->registerXPathNamespace(prefix: 'env', namespace: 'http://www.w3.org/2003/05/soap-envelope');
+        $response->registerXPathNamespace(prefix: 'common', namespace: 'http://postnl.nl/cif/services/common/');
 
-        AbstractService::validateSOAPResponse($response);
+        AbstractService::validateSoapResponse(xml: $response);
     }
 }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -48,43 +49,26 @@ use const E_USER_DEPRECATED;
  *
  * @since 1.0.0
  */
-class MockClient extends BaseHttpClient implements ClientInterface, LoggerAwareInterface
+class MockHttpClient extends BaseHttpClient implements HttpClientInterface, LoggerAwareInterface
 {
     const DEFAULT_TIMEOUT = 60;
     const DEFAULT_CONNECT_TIMEOUT = 20;
 
-    /** @var static */
-    protected static $instance;
-
     /** @var array */
-    protected $defaultOptions = [];
+    protected array $defaultOptions = [];
 
     /** @var HandlerStack */
-    private $handler;
-
-    /**
-     * @return MockClient|static
-     *
-     * @deprecated Please instantiate a new client rather than using this singleton
-     */
-    public static function getInstance()
-    {
-        if (!static::$instance) {
-            static::$instance = new static();
-        }
-
-        return static::$instance;
-    }
+    private HandlerStack $handler;
 
     /**
      * Set Guzzle option.
      *
      * @param string $name
-     * @param mixed  $value
+     * @param mixed $value
      *
-     * @return MockClient
+     * @return MockHttpClient
      */
-    public function setOption($name, $value)
+    public function setOption(string $name, mixed $value): static
     {
         $this->defaultOptions[$name] = $value;
 
@@ -98,7 +82,7 @@ class MockClient extends BaseHttpClient implements ClientInterface, LoggerAwareI
      *
      * @return mixed|null
      */
-    public function getOption($name)
+    public function getOption(string $name): mixed
     {
         if (isset($this->defaultOptions[$name])) {
             return $this->defaultOptions[$name];
@@ -107,20 +91,14 @@ class MockClient extends BaseHttpClient implements ClientInterface, LoggerAwareI
         return null;
     }
 
-    /**
-     * @return MockClient
-     */
-    public function setHandler(HandlerStack $handler)
+    public function setHandler(HandlerStack $handler): static
     {
         $this->handler = $handler;
 
         return $this;
     }
 
-    /**
-     * @return HandlerStack
-     */
-    public function getHandler()
+    public function getHandler(): HandlerStack
     {
         return $this->handler;
     }
@@ -130,19 +108,15 @@ class MockClient extends BaseHttpClient implements ClientInterface, LoggerAwareI
      *
      * Exceptions are captured into the result array
      *
-     * @param RequestInterface $request
-     *
-     * @return ResponseInterface
-     *
      * @throws HttpClientException
      */
-    public function doRequest(RequestInterface $request)
+    public function doRequest(RequestInterface $request): ResponseInterface
     {
         $logLevel = LogLevel::DEBUG;
         $response = null;
 
         // Initialize Guzzle, include the default options
-        $guzzle = new Client(array_merge(
+        $guzzle = new Client(config: array_merge(
             $this->defaultOptions,
             [
                 'timeout'         => $this->timeout,
@@ -154,15 +128,16 @@ class MockClient extends BaseHttpClient implements ClientInterface, LoggerAwareI
 
         try {
             /** @noinspection PhpUnnecessaryLocalVariableInspection */
-            $response = $guzzle->send($request);
+            $response = $guzzle->send(request: $request);
+
             return $response;
         } catch (RequestException $e) {
             $response = $e->getResponse();
             $logLevel = LogLevel::ERROR;
-            throw new HttpClientException(null, null, $e, $response);
+            throw new HttpClientException(message: (string) null, code: (int) null, previous: $e, response: $response);
         } catch (GuzzleException $e) {
             $logLevel = LogLevel::ERROR;
-            throw new HttpClientException(null, null, $e);
+            throw new HttpClientException(message: (string) null, code: (int) null, previous: $e);
         } finally {
             if (!$response instanceof ResponseInterface
                 || $response->getStatusCode() < 200
@@ -171,9 +146,9 @@ class MockClient extends BaseHttpClient implements ClientInterface, LoggerAwareI
                 $logLevel = LogLevel::ERROR;
             }
 
-            $this->getLogger()->log($logLevel, PsrMessage::toString($request));
+            $this->getLogger()->log(level: $logLevel, message: PsrMessage::toString(message: $request));
             if ($response instanceof ResponseInterface) {
-                $this->getLogger()->log($logLevel, PsrMessage::toString($response));
+                $this->getLogger()->log(level: $logLevel, message: PsrMessage::toString(message: $response));
             }
         }
     }
@@ -189,19 +164,19 @@ class MockClient extends BaseHttpClient implements ClientInterface, LoggerAwareI
      *
      * @throws InvalidArgumentException
      */
-    public function doRequests($requests = [])
+    public function doRequests(array $requests = []): array
     {
         if ($requests instanceof RequestInterface) {
             user_error(
-                'Passing a single request to HttpClientInterface::doRequests is deprecated',
-                E_USER_DEPRECATED
+                message: 'Passing a single request to HttpClientInterface::doRequests is deprecated',
+                error_level: E_USER_DEPRECATED
             );
             $requests = [$requests];
         }
-        if (!is_array($requests)) {
-            throw new InvalidArgumentException('Invalid requests array passed');
+        if (!is_array(value: $requests)) {
+            throw new InvalidArgumentException(message: 'Invalid requests array passed');
         }
-        if (!is_array($this->pendingRequests)) {
+        if (!is_array(value: $this->pendingRequests)) {
             $this->pendingRequests = [];
         }
 
@@ -210,7 +185,7 @@ class MockClient extends BaseHttpClient implements ClientInterface, LoggerAwareI
         $this->clearRequests();
 
         // Initialize Guzzle and the retry middleware, include the default options
-        $guzzle = new Client(array_merge(
+        $guzzle = new Client(config: array_merge(
             $this->defaultOptions,
             [
                 'timeout'         => $this->timeout,
@@ -222,10 +197,10 @@ class MockClient extends BaseHttpClient implements ClientInterface, LoggerAwareI
         // Concurrent requests
         $promises = [];
         foreach ($requests as $id => $request) {
-            $promises[$id] = $guzzle->sendAsync($request);
+            $promises[$id] = $guzzle->sendAsync(request: $request);
         }
 
-        $responses = Utils::settle($promises)->wait();
+        $responses = Utils::settle(promises: $promises)->wait();
         foreach ($responses as $id => &$response) {
             $logLevel = LogLevel::DEBUG;
             if (isset($response['value'])) {
@@ -235,7 +210,7 @@ class MockClient extends BaseHttpClient implements ClientInterface, LoggerAwareI
                 $response = $response['reason'];
             } else {
                 $logLevel = LogLevel::ERROR;
-                $response = new ResponseException('Unknown response type');
+                $response = new ResponseException(message: 'Unknown response type');
             }
 
             if (!$response instanceof ResponseInterface
@@ -245,9 +220,9 @@ class MockClient extends BaseHttpClient implements ClientInterface, LoggerAwareI
                 $logLevel = LogLevel::ERROR;
             }
 
-            $this->getLogger()->log($logLevel, PsrMessage::toString($requests[$id]));
+            $this->getLogger()->log(level: $logLevel, message: PsrMessage::toString(message: $requests[$id]));
             if ($response instanceof ResponseInterface) {
-                $this->getLogger()->log($logLevel, PsrMessage::toString($response));
+                $this->getLogger()->log(level: $logLevel, message: PsrMessage::toString(message: $response));
             }
         }
 

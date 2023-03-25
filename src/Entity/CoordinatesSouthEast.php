@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -26,68 +27,9 @@
 
 namespace Firstred\PostNL\Entity;
 
-use Firstred\PostNL\Service\BarcodeService;
-use Firstred\PostNL\Service\ConfirmingService;
-use Firstred\PostNL\Service\DeliveryDateService;
-use Firstred\PostNL\Service\LabellingService;
-use Firstred\PostNL\Service\LocationService;
-use Firstred\PostNL\Service\TimeframeService;
-
 /**
- * Class CoordinatesSouthEast.
- *
- * @method string|null          getLatitude()
- * @method string|null          getLongitude()
- * @method CoordinatesSouthEast setLatitude(string|null $lat = null)
- * @method CoordinatesSouthEast setLongitude(string|null $long = null)
- *
  * @since 1.0.0
  */
-class CoordinatesSouthEast extends AbstractEntity
+class CoordinatesSouthEast extends Coordinates
 {
-    /** @var string[][] */
-    public static $defaultProperties = [
-        'Barcode' => [
-            'Latitude'  => BarcodeService::DOMAIN_NAMESPACE,
-            'Longitude' => BarcodeService::DOMAIN_NAMESPACE,
-        ],
-        'Confirming' => [
-            'Latitude'  => ConfirmingService::DOMAIN_NAMESPACE,
-            'Longitude' => ConfirmingService::DOMAIN_NAMESPACE,
-        ],
-        'Labelling' => [
-            'Latitude'  => LabellingService::DOMAIN_NAMESPACE,
-            'Longitude' => LabellingService::DOMAIN_NAMESPACE,
-        ],
-        'DeliveryDate' => [
-            'Latitude'  => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Longitude' => DeliveryDateService::DOMAIN_NAMESPACE,
-        ],
-        'Location' => [
-            'Latitude'  => LocationService::DOMAIN_NAMESPACE,
-            'Longitude' => LocationService::DOMAIN_NAMESPACE,
-        ],
-        'Timeframe' => [
-            'Latitude'  => TimeframeService::DOMAIN_NAMESPACE,
-            'Longitude' => TimeframeService::DOMAIN_NAMESPACE,
-        ],
-    ];
-    // @codingStandardsIgnoreStart
-    /** @var string|null */
-    protected $Latitude;
-    /** @var string|null */
-    protected $Longitude;
-    // @codingStandardsIgnoreEnd
-
-    /**
-     * @param string|null $Latitude
-     * @param string|null $Longitude
-     */
-    public function __construct($Latitude = null, $Longitude = null)
-    {
-        parent::__construct();
-
-        $this->setLatitude($Latitude);
-        $this->setLongitude($Longitude);
-    }
 }
