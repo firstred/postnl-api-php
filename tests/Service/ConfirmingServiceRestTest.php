@@ -52,26 +52,24 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use ReflectionException;
 use function file_get_contents;
 use const _RESPONSES_DIR_;
 
-/**
- * @testdox The ConfirmingService (REST)
- */
+#[TestDox(text: 'The ConfirmingService (REST)')]
 class ConfirmingServiceRestTest extends ServiceTestCase
 {
     protected PostNL $postnl;
     protected ConfirmingServiceInterface $service;
     protected RequestInterface $lastRequest;
 
-    /**
-     * @before
-     *
-     * @throws
-     */
+    /** @throws */
+    #[Before]
     public function setupPostNL(): void
     {
         $this->postnl = new PostNL(
@@ -103,17 +101,15 @@ class ConfirmingServiceRestTest extends ServiceTestCase
         $this->service->setTtl(ttl: 1);
     }
 
-    /**
-     * @testdox returns a valid service object
-     */
+    /** @throws */
+    #[TestDox(text: 'returns a valid service object')]
     public function testHasValidConfirmingService(): void
     {
         $this->assertInstanceOf(expected: ConfirmingService::class, actual: $this->service);
     }
 
-    /**
-     * @testdox confirms a label properly
-     */
+    /** @throws */
+    #[TestDox(text: 'confirms a label properly')]
     public function testConfirmsALabelRequestRest(): void
     {
         $message = new LabellingMessage();
@@ -211,12 +207,9 @@ class ConfirmingServiceRestTest extends ServiceTestCase
         $this->assertEquals(expected: 'application/json', actual: $request->getHeaderLine('Accept'));
     }
 
-    /**
-     * @testdox      can generate a single label
-     * @dataProvider singleLabelConfirmationsProvider
-     *
-     * @throws
-     */
+    /** @throws */
+    #[TestDox(text: 'can generate a single label')]
+    #[DataProvider(methodName: 'singleLabelConfirmationsProvider')]
     public function testConfirmsALabelRest(ResponseInterface $response): void
     {
         $mock = new MockHandler(queue: [$response]);
@@ -262,19 +255,12 @@ class ConfirmingServiceRestTest extends ServiceTestCase
     }
 
     /**
-     * @testdox      can confirm multiple labels
-     * @dataProvider multipleLabelsConfirmationsProvider
-     *
      * @param ResponseInterface[] $responses
      *
-     * @throws InvalidArgumentException
-     * @throws ResponseException
-     * @throws CifDownException
-     * @throws CifException
-     * @throws HttpClientException
-     * @throws NotFoundException
-     * @throws NotSupportedException
+     * @throws
      */
+    #[TestDox(text: 'can confirm multiple labels')]
+    #[DataProvider(methodName: 'multipleLabelsConfirmationsProvider')]
     public function testConfirmMultipleLabelsRest(array $responses): void
     {
         $mock = new MockHandler(queue: $responses);
@@ -346,9 +332,8 @@ class ConfirmingServiceRestTest extends ServiceTestCase
         $this->assertInstanceOf(expected: Warning::class, actual: $confirms[1]->getWarnings()[0]);
     }
 
-    /**
-     * @testdox throws exception on invalid response
-     */
+    /** @throws */
+    #[TestDox(text: 'throws exception on invalid response')]
     public function testNegativeGenerateLabelInvalidResponseRest(): void
     {
         $this->expectException(exception: ResponseException::class);
@@ -394,6 +379,7 @@ class ConfirmingServiceRestTest extends ServiceTestCase
 
     /**
      * @return ResponseInterface[][]
+     * @phpstan-return non-empty-list<non-empty-list<ResponseInterface>>
      * @psalm-return non-empty-list<non-empty-list<ResponseInterface>>
      */
     public function singleLabelConfirmationsProvider(): array
@@ -407,6 +393,7 @@ class ConfirmingServiceRestTest extends ServiceTestCase
 
     /**
      * @return ResponseInterface[][][]
+     * @phpstan-return non-empty-list<non-empty-list<non-empty-list<ResponseInterface>>>
      * @psalm-return non-empty-list<non-empty-list<non-empty-list<ResponseInterface>>>
      */
     public function multipleLabelsConfirmationsProvider(): array

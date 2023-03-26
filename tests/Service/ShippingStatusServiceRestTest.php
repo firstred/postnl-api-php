@@ -55,6 +55,9 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use GuzzleHttp\Psr7\Query;
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use function file_get_contents;
@@ -70,11 +73,8 @@ class ShippingStatusServiceRestTest extends ServiceTestCase
     protected ShippingStatusServiceInterface $service;
     protected RequestInterface $lastRequest;
 
-    /**
-     * @before
-     *
-     * @throws
-     */
+    /** @throws */
+    #[Before]
     public function setupPostNL(): void
     {
         $this->postnl = new PostNL(
@@ -106,9 +106,8 @@ class ShippingStatusServiceRestTest extends ServiceTestCase
         $this->service->setTtl(ttl: 1);
     }
 
-    /**
-     * @testdox creates a valid CurrentStatus request
-     */
+    /** @throws */
+    #[TestDox(text: 'creates a valid CurrentStatus request')]
     public function testGetCurrentStatusByBarcodeRequestRest(): void
     {
         $barcode = '3SDEVC201611210';
@@ -131,12 +130,9 @@ class ShippingStatusServiceRestTest extends ServiceTestCase
         $this->assertEquals(expected: "/shipment/v2/status/barcode/$barcode", actual: $request->getUri()->getPath());
     }
 
-    /**
-     * @testdox can get the current status
-     * @dataProvider getCurrentStatusByBarcodeProvider
-     *
-     * @throws
-     */
+    /** @throws */
+    #[TestDox(text: 'can get the current status')]
+    #[DataProvider(methodName: 'getCurrentStatusByBarcodeProvider')]
     public function testGetCurrentStatusByBarcodeRest(ResponseInterface $response): void
     {
         $mock = new MockHandler(queue: [$response]);
@@ -169,9 +165,8 @@ class ShippingStatusServiceRestTest extends ServiceTestCase
         $this->assertNotTrue(condition: static::containsStdClass(value: $currentStatusResponse));
     }
 
-    /**
-     * @testdox creates a valid CurrentStatusByReference request
-     */
+    /** @throws */
+    #[TestDox(text: 'creates a valid CurrentStatusByReference request')]
     public function testGetCurrentStatusByReferenceRequestRest(): void
     {
         $reference = '339820938';
@@ -197,9 +192,8 @@ class ShippingStatusServiceRestTest extends ServiceTestCase
         $this->assertEquals(expected: "/shipment/v2/status/reference/$reference", actual: $request->getUri()->getPath());
     }
 
-    /**
-     * @testdox creates a valid CompleteStatus request
-     */
+    /** @throws */
+    #[TestDox(text: 'creates a valid CompleteStatus request')]
     public function testGetCompleteStatusRequestRest(): void
     {
         $barcode = '3SDEVC201611210';
@@ -225,11 +219,12 @@ class ShippingStatusServiceRestTest extends ServiceTestCase
     }
 
     /**
-     * @testdox can retrieve the complete status
-     * @dataProvider getCompleteStatusByBarcodeProvider
-     *
      * @param ResponseInterface $response
+     *
+     * @throws
      */
+    #[TestDox(text: 'can retrieve the complete status')]
+    #[DataProvider(methodName: 'getCompleteStatusByBarcodeProvider')]
     public function testGetCompleteStatusByBarcodeRest(ResponseInterface $response): void
     {
         $mock = new MockHandler(queue: [$response]);
@@ -272,9 +267,8 @@ class ShippingStatusServiceRestTest extends ServiceTestCase
         $this->assertNotTrue(condition: static::containsStdClass(value: $completeStatusResponse));
     }
 
-    /**
-     * @testdox creates a valid CompleteStatusByReference request
-     */
+    /** @throws */
+    #[TestDox(text: 'creates a valid CompleteStatusByReference request')]
     public function testGetCompleteStatusByReferenceRequestRest(): void
     {
         $reference = '339820938';
@@ -301,9 +295,8 @@ class ShippingStatusServiceRestTest extends ServiceTestCase
         $this->assertEquals(expected: "/shipment/v2/status/reference/$reference", actual: $request->getUri()->getPath());
     }
 
-    /**
-     * @testdox creates a valid GetSignature request
-     */
+    /** @throws */
+    #[TestDox(text: 'creates a valid GetSignature request')]
     public function testGetSignatureRequestRest(): void
     {
         $barcode = '3S9283920398234';
@@ -326,9 +319,8 @@ class ShippingStatusServiceRestTest extends ServiceTestCase
         $this->assertEquals(expected: "/shipment/v2/status/signature/$barcode", actual: $request->getUri()->getPath());
     }
 
-    /**
-     * @testdox creates a valid GetUpdatedShipments request
-     */
+    /** @throws */
+    #[TestDox(text: 'creates a valid GetUpdatedShipments request')]
     public function testGetUpdatedShipmentsRequestRest(): void
     {
         $dateTimeFrom = new DateTimeImmutable(datetime: '12-02-2021 14:00');
@@ -346,9 +338,8 @@ class ShippingStatusServiceRestTest extends ServiceTestCase
         $this->assertEquals(expected: "/shipment/v2/status/{$this->postnl->getCustomer()->getCustomerNumber()}/updatedshipments", actual: $request->getUri()->getPath());
     }
 
-    /**
-     * @testdox can get the signature
-     */
+    /** @throws */
+    #[TestDox(text: 'can get the signature')]
     public function testGetSignatureRest(): void
     {
         $mock = new MockHandler(queue: [
@@ -373,11 +364,12 @@ class ShippingStatusServiceRestTest extends ServiceTestCase
     }
 
     /**
-     * @testdox can retrieve updated shipments
-     * @dataProvider getUpdatedShipmentsProvider
-     *
      * @param ResponseInterface $response
+     *
+     * @throws
      */
+    #[TestDox(text: 'can retrieve updated shipments')]
+    #[DataProvider(methodName: 'getUpdatedShipmentsProvider')]
     public function testGetUpdatedShipmentsRest(ResponseInterface $response): void
     {
         $mock = new MockHandler(queue: [$response]);
@@ -395,11 +387,12 @@ class ShippingStatusServiceRestTest extends ServiceTestCase
     }
 
     /**
-     * @testdox can retrieve updated shipments
-     * @dataProvider getNoCurrentShipmentsProvider
-     *
      * @param ResponseInterface $response
+     *
+     * @throws
      */
+    #[TestDox(text: 'can retrieve updated shipments')]
+    #[DataProvider(methodName: 'getNoCurrentShipmentsProvider')]
     public function testNoCurrentShipmentsRest(ResponseInterface $response): void
     {
         $mock = new MockHandler(queue: [$response]);

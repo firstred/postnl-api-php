@@ -43,9 +43,7 @@ use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\MockObject\Exception;
 
-/**
- * @testdox The AbstractService class
- */
+#[TestDox(text: 'The `AbstractService` class')]
 class AbstractServiceTest extends ServiceTestCase
 {
     /** @throws */

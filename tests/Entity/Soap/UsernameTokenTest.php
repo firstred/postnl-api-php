@@ -30,18 +30,16 @@ namespace Firstred\PostNL\Tests\Entity\Soap;
 use Firstred\PostNL\Entity\Soap\Security;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Service\BarcodeService;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Sabre\Xml\Service as XmlService;
 use Firstred\PostNL\Entity\Soap\UsernameToken;
 
-/**
- * @testdox The UsernameToken class
- */
+#[TestDox(text: 'The `UsernameToken` class')]
 class UsernameTokenTest extends TestCase
 {
-    /**
-     * @testdox should automatically hash the password for the legacy API
-     */
+    /** @throws */
+    #[TestDox(text: 'should automatically hash the password for the legacy API')]
     public function testLegacyPassword(): void
     {
         $token = new UsernameToken(Username: 'test', Password: 'test');

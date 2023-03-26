@@ -43,25 +43,24 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use GuzzleHttp\Psr7\Query;
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use function file_get_contents;
 use const _RESPONSES_DIR_;
 
-/**
- * @testdox The TimeframeService (REST)
- */
+#[TestDox(text: 'The TimeframeService (REST)')]
 class TimeframeServiceRestTest extends ServiceTestCase
 {
     protected PostNL $postnl;
     protected TimeframeServiceInterface $service;
     protected RequestInterface $lastRequest;
 
-    /**
-     * @before
-     *
-     * @throws
-     */
+    /** @throws */
+    #[Before]
     public function setupPostNL(): void
     {
         $this->postnl = new PostNL(
@@ -93,9 +92,8 @@ class TimeframeServiceRestTest extends ServiceTestCase
         $this->service->setTtl(ttl: 1);
     }
 
-    /**
-     * @testdox creates a valid timeframes request
-     */
+    /** @throws */
+    #[TestDox(text: 'creates a valid timeframes request')]
     public function testGetTimeframesRequestRest(): void
     {
         $message = new Message();
@@ -138,10 +136,9 @@ class TimeframeServiceRestTest extends ServiceTestCase
         $this->assertEquals(expected: 'application/json', actual: $request->getHeaderLine('Accept'));
     }
 
-    /**
-     * @testdox can retrieve the available timeframes
-     * @dataProvider timeframesProvider
-     */
+    /** @throws */
+    #[TestDox(text: 'can retrieve the available timeframes')]
+    #[DataProvider(methodName: 'timeframesProvider')]
     public function testGetTimeframesRest(ResponseInterface $response): void
     {
         $mock = new MockHandler(queue: [$response]);
@@ -178,6 +175,9 @@ class TimeframeServiceRestTest extends ServiceTestCase
         $this->assertNotTrue(condition: static::containsStdClass(value: $responseTimeframes));
     }
 
+    /**
+     * @return array[]
+     */
     public function timeframesProvider(): array
     {
         return [

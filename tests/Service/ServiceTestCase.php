@@ -27,17 +27,21 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Tests\Service;
 
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use ReflectionObject;
 use stdClass;
 use function is_array;
 use function is_object;
 
-/**
- * @testdox The AbstractService class
- */
+#[TestDox(text: 'The AbstractService class')]
 abstract class ServiceTestCase extends TestCase
 {
+    /**
+     * @param mixed $value
+     *
+     * @return bool
+     */
     public static function containsStdClass(mixed $value): bool
     {
         if ($value instanceof stdClass) {

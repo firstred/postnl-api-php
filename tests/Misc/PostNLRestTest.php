@@ -52,11 +52,10 @@ use Firstred\PostNL\Entity\Timeframe;
 use Firstred\PostNL\HttpClient\MockHttpClient;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Util\DummyLogger;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @testdox The PostNL object
- */
+#[TestDox(text: 'The PostNL object')]
 class PostNLRestTest extends TestCase
 {
     protected PostNL $postnl;
@@ -90,47 +89,38 @@ class PostNLRestTest extends TestCase
         );
     }
 
-    /**
-     * @testdox returns a valid customer code in REST mode
-     */
+    /** @throws */
+    #[TestDox(text: 'returns a valid customer code in REST mode')]
     public function testPostNLRest(): void
     {
         $this->assertEquals(expected: 'DEVC', actual: $this->postnl->getCustomer()->getCustomerCode());
     }
 
-    /**
-     * @testdox returns a valid customer
-     */
+    /** @throws */
+    #[TestDox(text: 'returns a valid customer')]
     public function testCustomer(): void
     {
         $this->assertInstanceOf(expected: '\\Firstred\\PostNL\\Entity\\Customer', actual: $this->postnl->getCustomer());
     }
 
-    /**
-     * @testdox accepts a string token
-     *
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     */
+    /** @throws */
+    #[TestDox(text: 'accepts a string token')]
     public function testSetTokenString(): void
     {
         $this->postnl->setToken(apiKey: 'test');
         $this->assertInstanceOf(expected: UsernameToken::class, actual: $this->postnl->getToken());
     }
 
-    /**
-     * @testdox accepts a token object
-     *
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     */
+    /** @throws */
+    #[TestDox(text: 'accepts a token object')]
     public function testSetTokenObject(): void
     {
         $this->postnl->setToken(apiKey: new UsernameToken(Username: null, Password: 'test'));
         $this->assertInstanceOf(expected: UsernameToken::class, actual: $this->postnl->getToken());
     }
 
-    /**
-     * @testdox accepts a `null` logger
-     */
+    /** @throws */
+    #[TestDox(text: 'accepts a `null` logger')]
     public function testSetNullLogger(): void
     {
         $this->postnl->resetLogger();
@@ -138,17 +128,8 @@ class PostNLRestTest extends TestCase
         $this->assertInstanceOf(expected: DummyLogger::class, actual: $this->postnl->getLogger());
     }
 
-    /**
-     * @testdox returns a combinations of timeframes, locations and the delivery date
-     *
-     * @throws CifDownException
-     * @throws CifException
-     * @throws HttpClientException
-     * @throws InvalidArgumentException
-     * @throws InvalidConfigurationException
-     * @throws ResponseException
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
+    /** @throws */
+    #[TestDox(text: 'returns a combinations of timeframes, locations and the delivery date')]
     public function testGetTimeframesAndLocations(): void
     {
         $timeframesPayload = [
@@ -400,11 +381,8 @@ class PostNLRestTest extends TestCase
         $this->assertInstanceOf(expected: GetDeliveryDateResponse::class, actual: $results['delivery_date']);
     }
 
-    /**
-     * @testdox does not accept an invalid token object
-     *
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     */
+    /** @throws */
+    #[TestDox(text: 'does not accept an invalid token object')]
     public function testNegativeInvalidToken(): void
     {
         $this->expectException(exception: \TypeError::class);
@@ -412,11 +390,8 @@ class PostNLRestTest extends TestCase
         $this->postnl->setToken(apiKey: new Address());
     }
 
-    /**
-     * @testdox returns `false` when the API key is missing
-     *
-     * @throws \ReflectionException
-     */
+    /** @throws */
+    #[TestDox(text: 'returns `false` when the API key is missing')]
     public function testNegativeKeyMissing(): void
     {
         $this->expectException(exception: InvalidArgumentException::class);
@@ -428,11 +403,8 @@ class PostNLRestTest extends TestCase
         $postnl->getApiKey();
     }
 
-    /**
-     * @testdox throws an exception when setting an invalid mode
-     *
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     */
+    /** @throws */
+    #[TestDox(text: 'throws an exception when setting an invalid mode')]
     public function testNegativeInvalidMode(): void
     {
         $this->expectException(exception: \TypeError::class);
@@ -441,6 +413,7 @@ class PostNLRestTest extends TestCase
         $this->postnl->setApiMode(mode: 'invalid');
     }
 
+    /** @throws */
     protected function getNearestLocationsMockResponse(): string
     {
         return '{

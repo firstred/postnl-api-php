@@ -29,18 +29,14 @@ namespace Firstred\PostNL\Tests\Entity\Soap;
 
 use Firstred\PostNL\Entity\Soap\Security;
 use Firstred\PostNL\Entity\Soap\UsernameToken;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @testdox The Envelope class
- */
+#[TestDox(text: 'The Envelope class')]
 class SecurityTest extends TestCase
 {
-    /**
-     * @testdox can return the header
-     *
-     * @throws
-     */
+    /** @throws */
+    #[TestDox(text: 'can return the header')]
     public function testUsernameToken(): void
     {
         $envelope = Security::create()

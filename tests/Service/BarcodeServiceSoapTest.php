@@ -40,22 +40,19 @@ use Firstred\PostNL\Service\BarcodeServiceInterface;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Http\Message\RequestInterface;
 
-/**
- * @testdox The BarcodeService (SOAP)
- */
+#[TestDox(text: 'The BarcodeService (SOAP)')]
 class BarcodeServiceSoapTest extends ServiceTestCase
 {
     protected PostNL $postnl;
     protected BarcodeServiceInterface $service;
     protected RequestInterface $lastRequest;
 
-    /**
-     * @before
-     *
-     * @throws
-     */
+    /** @throws */
+    #[Before]
     public function setupPostNL(): void
     {
         $this->postnl = new PostNL(
@@ -87,11 +84,8 @@ class BarcodeServiceSoapTest extends ServiceTestCase
         $this->service->setTtl(ttl: 1);
     }
 
-    /**
-     * @testdox creates a valid 3S barcode request
-     *
-     * @throws
-     */
+    /** @throws */
+    #[TestDox(text: 'creates a valid 3S barcode request')]
     public function testCreatesAValid3SBarcodeRequest(): void
     {
         $type = '3S';
@@ -154,11 +148,8 @@ XML
             , actualXml: (string) $request->getBody());
     }
 
-    /**
-     * @testdox return a valid single barcode
-     *
-     * @throws
-     */
+    /** @throws */
+    #[TestDox(text: 'return a valid single barcode')]
     public function testSingleBarcodeSoap(): void
     {
         $mock = new MockHandler(queue: [
@@ -176,11 +167,8 @@ XML
         $this->assertEquals(expected: '3SDEVC816223392', actual: $this->postnl->generateBarcode(type: '3S'));
     }
 
-    /**
-     * @testdox returns several barcodes
-     *
-     * @throws
-     */
+    /** @throws */
+    #[TestDox(text: 'returns several barcodes')]
     public function testMultipleNLBarcodesSoap(): void
     {
         $mock = new MockHandler(queue: [
@@ -224,6 +212,7 @@ XML
         );
     }
 
+    /** @throws */
     protected function getRange(string $type): string
     {
         if (in_array(needle: $type, haystack: ['2S', '3S'])) {
@@ -233,6 +222,7 @@ XML
         }
     }
 
+    /** @throws */
     protected function mockValidBarcodeResponse(string $barcode): string
     {
         return <<<XML

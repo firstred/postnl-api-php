@@ -49,26 +49,24 @@ use GuzzleHttp\Psr7\Message as PsrMessage;
 use GuzzleHttp\Psr7\Query;
 use GuzzleHttp\Psr7\Response;
 use libphonenumber\NumberParseException;
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use ReflectionException;
 use function file_get_contents;
 use const _RESPONSES_DIR_;
 
-/**
- * @testdox The DeliveryDateService (REST)
- */
+#[TestDox(text: 'The DeliveryDateService (REST)')]
 class DeliveryDateServiceRestTest extends ServiceTestCase
 {
     protected PostNL $postnl;
     protected DeliveryDateServiceInterface $service;
     protected RequestInterface $lastRequest;
 
-    /**
-     * @before
-     *
-     * @throws
-     */
+    /** @throws */
+    #[Before]
     public function setupPostNL(): void
     {
         $this->postnl = new PostNL(
@@ -100,9 +98,8 @@ class DeliveryDateServiceRestTest extends ServiceTestCase
         $this->service->setTtl(ttl: 1);
     }
 
-    /**
-     * @testdox creates a valid delivery date request
-     */
+    /** @throws */
+    #[TestDox(text: 'creates a valid delivery date request')]
     public function testGetDeliveryDateRequestRest()
     {
         $message = new Message();
@@ -150,10 +147,9 @@ class DeliveryDateServiceRestTest extends ServiceTestCase
         $this->assertEquals(expected: 'application/json', actual: $request->getHeaderLine('Accept'));
     }
 
-    /**
-     * @testdox return a valid delivery date
-     * @dataProvider singleDeliveryDateResponseProvider
-     */
+    /** @throws */
+    #[TestDox(text: 'return a valid delivery date')]
+    #[DataProvider(methodName: 'singleDeliveryDateResponseProvider')]
     public function testGetDeliveryDateRest(ResponseInterface $response): void
     {
         $mock = new MockHandler(queue: [$response]);
@@ -193,9 +189,8 @@ class DeliveryDateServiceRestTest extends ServiceTestCase
         $this->assertNotTrue(condition: static::containsStdClass(value: $response));
     }
 
-    /**
-     * @testdox creates a valid sent date request
-     */
+    /** @throws */
+    #[TestDox(text: 'creates a valid sent date request')]
     public function testGetSentDateRequestRest(): void
     {
         $message = new Message();
@@ -223,9 +218,8 @@ class DeliveryDateServiceRestTest extends ServiceTestCase
         $this->assertEquals(expected: 'application/json', actual: $request->getHeaderLine('Accept'));
     }
 
-    /**
-     * @testdox return a valid sent date
-     */
+    /** @throws */
+    #[TestDox(text: 'return a valid sent date')]
     public function testGetSentDateRest(): void
     {
         $mock = new MockHandler(queue: [
@@ -265,6 +259,7 @@ class DeliveryDateServiceRestTest extends ServiceTestCase
         $this->assertNotTrue(condition: static::containsStdClass(value: $response));
     }
 
+    /** @return string[][] */
     public function singleDeliveryDateResponseProvider(): array
     {
         return [

@@ -30,6 +30,7 @@ namespace Firstred\PostNL\Tests\Entity\Soap;
 use Firstred\PostNL\Entity\Soap\Body;
 use Firstred\PostNL\Entity\Soap\Envelope;
 use Firstred\PostNL\Entity\Soap\Header;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -37,11 +38,8 @@ use PHPUnit\Framework\TestCase;
  */
 class EnvelopeTest extends TestCase
 {
-    /**
-     * @testdox can return the header
-     *
-     * @throws
-     */
+    /** @throws */
+    #[TestDox(text: 'can return the header')]
     public function testHeader(): void
     {
         $envelope = Envelope::create()
@@ -51,9 +49,9 @@ class EnvelopeTest extends TestCase
         $this->assertInstanceOf(expected: Header::class, actual: $envelope->getHeader());
     }
 
-    /**
-     * @testdox can return the body
-     */
+
+    /** @throws */
+    #[TestDox(text: 'can return the body')]
     public function testBody(): void
     {
         $envelope = Envelope::create()

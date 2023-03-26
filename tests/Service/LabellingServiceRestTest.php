@@ -48,6 +48,9 @@ use Firstred\PostNL\Service\LabellingServiceInterface;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Message as PsrMessage;
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use setasign\Fpdi\PdfReader\PdfReaderException;
@@ -55,9 +58,7 @@ use function file_get_contents;
 use function json_decode;
 use const _RESPONSES_DIR_;
 
-/**
- * @testdox The LabellingService (REST)
- */
+#[TestDox(text: 'The LabellingService (REST)')]
 class LabellingServiceRestTest extends ServiceTestCase
 {
     protected PostNL $postnl;
@@ -66,12 +67,8 @@ class LabellingServiceRestTest extends ServiceTestCase
 
     private static string $base64LabelContent = '';
 
-    /**
-     * @before
-     *
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \ReflectionException
-     */
+    /** @throws */
+    #[Before]
     public function setupPostNL(): void
     {
         $this->postnl = new PostNL(
@@ -103,17 +100,15 @@ class LabellingServiceRestTest extends ServiceTestCase
         $this->service->setTtl(ttl: 1);
     }
 
-    /**
-     * @testdox returns a valid service object
-     */
+    /** @throws */
+    #[TestDox(text: 'returns a valid service object')]
     public function testHasValidLabellingService(): void
     {
         $this->assertInstanceOf(expected: LabellingServiceRestAdapter::class, actual: $this->service);
     }
 
-    /**
-     * @testdox creates a valid label request
-     */
+    /** @throws */
+    #[TestDox(text: 'creates a valid label request')]
     public function testCreatesAValidLabelRequest(): void
     {
         $message = new LabellingMessage();
@@ -213,9 +208,8 @@ class LabellingServiceRestTest extends ServiceTestCase
         $this->assertEquals(expected: 'application/json', actual: $request->getHeaderLine('Accept'));
     }
 
-    /**
-     * @testdox creates a valid label request
-     */
+    /** @throws */
+    #[TestDox(text: 'creates a valid label request')]
     public function testFallsBackOntoOlderApiIfInsuredRequest(): void
     {
         $message = new LabellingMessage();
@@ -315,10 +309,9 @@ class LabellingServiceRestTest extends ServiceTestCase
         $this->assertEquals(expected: 'application/json', actual: $request->getHeaderLine('Accept'));
     }
 
-    /**
-     * @testdox can generate a single label
-     * @dataProvider singleLabelsProvider
-     */
+    /** @throws */
+    #[TestDox(text: 'can generate a single label')]
+    #[DataProvider(methodName: 'singleLabelsProvider')]
     public function testGenerateSingleLabelRest(ResponseInterface $response): void
     {
         $mock = new MockHandler(queue: [$response]);
@@ -366,15 +359,14 @@ class LabellingServiceRestTest extends ServiceTestCase
     }
 
     /**
-     * @testdox can generate multiple A4-merged labels
-     * @dataProvider multipleLabelsProvider
-     *
      * @param array $responses
+     * @phpstan-param non-empty-list<ResponseInterface> $responses
      * @psalm-param non-empty-list<ResponseInterface> $responses
      *
-     * @throws PdfReaderException
-     * @throws Exception
+     * @throws
      */
+    #[TestDox(text: 'can generate multiple A4-merged labels')]
+    #[DataProvider(methodName: 'multipleLabelsProvider')]
     public function testMergeMultipleA4LabelsRest(array $responses): void
     {
         $mock = new MockHandler(queue: $responses);
@@ -455,15 +447,15 @@ class LabellingServiceRestTest extends ServiceTestCase
     }
 
     /**
-     * @testdox can generate multiple A6-merged labels
-     * @dataProvider multipleLabelsProvider
-     *
      * @param array $responses
+     * @phpstan-param non-empty-list<ResponseInterface> $responses
      * @psalm-param non-empty-list<ResponseInterface> $responses
      *
      * @throws PdfReaderException
      * @throws Exception
      */
+    #[TestDox(text: 'can generate multiple A6-merged labels')]
+    #[DataProvider(methodName: 'multipleLabelsProvider')]
     public function testMergeMultipleA6LabelsRest(array $responses): void
     {
         $mock = new MockHandler(queue: $responses);
@@ -544,15 +536,15 @@ class LabellingServiceRestTest extends ServiceTestCase
     }
 
     /**
-     * @testdox can generate multiple labels
-     * @dataProvider multipleLabelsProvider
-     *
      * @param array $responses
-     * @psalm-param non-empty-list<ResponseInterface>
+     * @phpstan-param non-empty-list<ResponseInterface> $responses
+     * @psalm-param non-empty-list<ResponseInterface> $responses
      *
      * @throws PdfReaderException
      * @throws Exception
      */
+    #[TestDox(text: 'can generate multiple labels')]
+    #[DataProvider(methodName: 'multipleLabelsProvider')]
     public function testGenerateMultipleLabelsRest(array $responses): void
     {
         $mock = new MockHandler(queue: $responses);
@@ -624,12 +616,16 @@ class LabellingServiceRestTest extends ServiceTestCase
     }
 
     /**
-     * @testdox throws exception on invalid response
-     * @dataProvider invalidResponseProvider
-     *
+     * @param ResponseInterface $response
+     * @param string $exception
      * @psalm-param class-string<ApiException> $exception
+     * @phpstan-param class-string<ApiException> $exception
+     *
+     * @throws
      */
-    public function testNegativeGenerateLabelInvalidResponseRest(ResponseInterface $response, $exception): void
+    #[TestDox(text: 'throws exception on invalid response')]
+    #[DataProvider(methodName: 'invalidResponseProvider')]
+    public function testNegativeGenerateLabelInvalidResponseRest(ResponseInterface $response, string $exception): void
     {
         $this->expectException(exception: $exception);
 
@@ -670,6 +666,9 @@ class LabellingServiceRestTest extends ServiceTestCase
         );
     }
 
+    /**
+     * @return array[]
+     */
     public function singleLabelsProvider(): array
     {
         return [
@@ -679,6 +678,9 @@ class LabellingServiceRestTest extends ServiceTestCase
         ];
     }
 
+    /**
+     * @return array[]
+     */
     public function multipleLabelsProvider(): array
     {
         return [

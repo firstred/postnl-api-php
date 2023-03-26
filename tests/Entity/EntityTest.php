@@ -31,18 +31,16 @@ use Error;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Exception\ServiceNotSetException;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Sabre\Xml\Service as XmlService;
 use TypeError;
 
-/**
- * @testdox The Entities
- */
+#[TestDox(text: 'The Entities')]
 class EntityTest extends TestCase
 {
-    /**
-     * @testdox have a working constructor
-     */
+    /** @throws */
+    #[TestDox(text: 'have a working constructor')]
     public function testConstructors(): void
     {
         foreach (scandir(directory: __DIR__ . '/../../src/Entity') as $entityName) {
@@ -90,9 +88,8 @@ class EntityTest extends TestCase
         }
     }
 
-    /**
-     * @testdox should throw a `TypeError` when the value to set is missing
-     */
+    /** @throws */
+    #[TestDox(text: 'should throw a `TypeError` when the value to set is missing')]
     public function testNegativeMissingValue(): void
     {
         $this->expectException(exception: TypeError::class);
@@ -101,9 +98,8 @@ class EntityTest extends TestCase
         (new Address())->setArea();
     }
 
-    /**
-     * @testdox should be `null` when instantiating the AbstractEntity
-     */
+    /** @throws */
+    #[TestDox(text: 'should be `null` when instantiating the AbstractEntity')]
     public function testNegativeCannotInstantiateAbstract(): void
     {
         $this->expectException(exception: TypeError::class);
@@ -111,18 +107,16 @@ class EntityTest extends TestCase
         AbstractEntity::create();
     }
 
-    /**
-     * @testdox should return `null` when the property does not exist
-     */
+    /** @throws */
+    #[TestDox(text: 'should return `null` when the property does not exist')]
     public function testNegativeReturnNullWhenPropertyDoesNotExist(): void
     {
         /** @noinspection PhpUndefinedMethodInspection */
         $this->assertNull(actual: (new Address())->getNothing());
     }
 
-    /**
-     * @testdox should throw a `TypeError` when the method does not exist
-     */
+    /** @throws  */
+    #[TestDox(text: 'should throw a `TypeError` when the method does not exist')]
     public function testNegativeThrowExceptionWhenMethodDoesNotExist(): void
     {
         $this->expectException(exception: TypeError::class);
@@ -130,9 +124,8 @@ class EntityTest extends TestCase
         (new Address())->blab();
     }
 
-    /**
-     * @testdox should throw a `ServiceNotSetException` when json serializing without having a service
-     */
+    /** @throws */
+    #[TestDox(text: 'should throw a `ServiceNotSetException` when json serializing without having a service')]
     public function testNegativeThrowExceptionWhenServiceNotSetJson(): void
     {
         $this->expectException(exception: ServiceNotSetException::class);
@@ -140,9 +133,8 @@ class EntityTest extends TestCase
         json_encode(value: new Address());
     }
 
-    /**
-     * @testdox should throw an `Error` when xml serializing without having a service
-     */
+    /** @throws */
+    #[TestDox(text: 'should throw an `Error` when xml serializing without having a service')]
     public function testNegativeThrowExceptionWhenServiceNotSetXml(): void
     {
         $this->expectException(exception: ServiceNotSetException::class);

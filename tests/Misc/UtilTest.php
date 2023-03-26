@@ -28,22 +28,21 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Tests\Misc;
 
 use Firstred\PostNL\Util\Util;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @testdox The PostNL object
- */
+#[TestDox(text: 'The PostNL object')]
 class UtilTest extends TestCase
 {
-    /**
-     * @testdox Test Guzzle version compare
-     * @dataProvider guzzleVersionProvider
-     */
+    #[TestDox(text: 'Test Guzzle version compare')]
+    #[DataProvider(methodName: 'guzzleVersionProvider')]
     public function testGuzzleVersions($a, $b): void
     {
         $this->assertTrue(condition: Util::compareGuzzleVersion(a: $a, b: $b) >= 0);
     }
 
+    /** @return array */
     public function guzzleVersionProvider(): array
     {
         return [

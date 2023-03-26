@@ -43,24 +43,21 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use GuzzleHttp\Psr7\Query;
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Http\Message\RequestInterface;
 use function file_get_contents;
 use const _RESPONSES_DIR_;
 
-/**
- * @testdox The BarcodeService (REST)
- */
+#[TestDox(text: 'The BarcodeService (REST)')]
 class BarcodeServiceRestTest extends ServiceTestCase
 {
     protected PostNL $postnl;
     protected BarcodeServiceInterface $service;
     protected RequestInterface $lastRequest;
 
-    /**
-     * @before
-     *
-     * @throws
-     */
+    /** @throws */
+    #[Before]
     public function setupPostNL(): void
     {
         $this->postnl = new PostNL(
@@ -92,19 +89,15 @@ class BarcodeServiceRestTest extends ServiceTestCase
         $this->service->setTtl(ttl: 1);
     }
 
-    /**
-     * @testdox returns a valid service object
-     */
+    /** @throws */
+    #[TestDox(text: 'returns a valid service objects')]
     public function testHasValidBarcodeService(): void
     {
         $this->assertInstanceOf(expected: BarcodeServiceMessageProcessor::class, actual: $this->service);
     }
 
-    /**
-     * @testdox creates a valid 3S barcode request
-     *
-     * @throws
-     */
+    /** @throws */
+    #[TestDox(text: 'creates a valid 3S barcode request')]
     public function testCreatesAValid3SBarcodeRequest(): void
     {
         $type = '3S';
@@ -140,9 +133,8 @@ class BarcodeServiceRestTest extends ServiceTestCase
         $this->assertEquals(expected: 'application/json', actual: $request->getHeaderLine('Accept'));
     }
 
-    /**
-     * @testdox creates a valid 10S barcode request
-     */
+    /** @throws */
+    #[TestDox(text: 'creates a valid 10S barcode request')]
     public function testCreatesAValid10SBarcodeRequest()
     {
         $type = 'LA';
@@ -178,6 +170,7 @@ class BarcodeServiceRestTest extends ServiceTestCase
         $this->assertEquals(expected: 'application/json', actual: $request->getHeaderLine('Accept'));
     }
 
+    /** @throws */
     protected function getRange(string $type): string
     {
         if (in_array(needle: $type, haystack: ['2S', '3S'])) {
@@ -187,9 +180,8 @@ class BarcodeServiceRestTest extends ServiceTestCase
         return $this->postnl->getCustomer()->getGlobalPackCustomerCode();
     }
 
-    /**
-     * @testdox return a valid single barcode
-     */
+    /** @throws */
+    #[TestDox(text: 'return a valid single barcode')]
     public function testSingleBarcodeRest(): void
     {
         $mock = new MockHandler(queue: [
@@ -203,9 +195,8 @@ class BarcodeServiceRestTest extends ServiceTestCase
         $this->assertEquals(expected: '3SDEVC816223392', actual: $this->postnl->generateBarcode(type: '3S'));
     }
 
-    /**
-     * @testdox return a valid single barcode for a country
-     */
+    /** @throws */
+    #[TestDox(text: 'return a valid single barcode for a country')]
     public function testSingleBarCodeByCountryRest(): void
     {
         $mock = new MockHandler(queue: [
@@ -219,11 +210,8 @@ class BarcodeServiceRestTest extends ServiceTestCase
         $this->assertEquals(expected: '3SDEVC816223392', actual: $this->postnl->generateBarcodeByCountryCode(iso: 'NL'));
     }
 
-    /**
-     * @testdox returns several barcodes
-     *
-     * @throws
-     */
+    /** @throws */
+    #[TestDox(text: 'returns several barcodes')]
     public function testMultipleNLBarcodesRest(): void
     {
         $mock = new MockHandler(queue: [
@@ -251,11 +239,8 @@ class BarcodeServiceRestTest extends ServiceTestCase
         );
     }
 
-    /**
-     * @testdox return a valid single barcode
-     *
-     * @throws
-     */
+    /** @throws */
+    #[TestDox(text: 'return a valid single barcode')]
     public function testNegativeSingleBarcodeInvalidResponse(): void
     {
         $this->expectException(exception: ResponseException::class);

@@ -41,22 +41,20 @@ use Firstred\PostNL\Service\TimeframeServiceInterface;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Http\Message\RequestInterface;
 
-/**
- * @testdox The TimeframeService (SOAP)
- */
+#[TestDox(text: 'The TimeframeService (SOAP)')]
 class TimeframeServiceSoapTest extends ServiceTestCase
 {
     protected PostNL $postnl;
     protected TimeframeServiceInterface $service;
     protected RequestInterface $lastRequest;
 
-    /**
-     * @before
-     *
-     * @throws
-     */
+    /** @throws */
+    #[Before]
     public function setupPostNL(): void
     {
         $this->postnl = new PostNL(
@@ -88,9 +86,8 @@ class TimeframeServiceSoapTest extends ServiceTestCase
         $this->service->setTtl(ttl: 1);
     }
 
-    /**
-     * @testdox creates a valid timeframes request
-     */
+    /** @throws */
+    #[TestDox(text: 'creates a valid timeframes request')]
     public function testGetTimeframesRequestSoap(): void
     {
         $message = new Message();
@@ -163,9 +160,8 @@ XML
             , actualXml: (string) $request->getBody());
     }
 
-    /**
-     * @testdox can retrieve the available timeframes
-     */
+    /** @throws */
+    #[TestDox(text: 'can retrieve the available timeframes')]
     public function testGetTimeframesSoap(): void
     {
         $mock = new MockHandler(queue: [

@@ -48,25 +48,23 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use GuzzleHttp\Psr7\Query;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
+use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use function file_get_contents;
 use const _RESPONSES_DIR_;
 
-/**
- * @testdox The ShippingStatusService (SOAP)
- */
+#[TestDox(text: 'The ShippingStatusService (SOAP)')]
 class ShippingStatusServiceSoapTest extends ServiceTestCase
 {
     protected PostNL $postnl;
     protected ShippingStatusServiceInterface $service;
     protected RequestInterface $lastRequest;
 
-    /**
-     * @before
-     *
-     * @throws
-     */
+    /** @throws */
+    #[Before]
     public function setupPostNL(): void
     {
         $this->postnl = new PostNL(
@@ -98,9 +96,8 @@ class ShippingStatusServiceSoapTest extends ServiceTestCase
         $this->service->setTtl(ttl: 1);
     }
 
-    /**
-     * @testdox creates a valid CurrentStatus request
-     */
+    /** @throws */
+    #[TestDox(text: 'creates a valid CurrentStatus request')]
     public function testGetCurrentStatusRequestSoap(): void
     {
         $barcode = '3SDEVC201611210';
@@ -124,9 +121,14 @@ class ShippingStatusServiceSoapTest extends ServiceTestCase
     }
 
     /**
-     * @testdox can get the current status
-     * @dataProvider ShippingStatusServiceRestTest::getCurrentStatusByBarcodeProvider()
+     * @testdox
+     * @dataProvider
      */
+    #[TestDox(text: 'can get the current status')]
+    #[DataProviderExternal(
+        className: ShippingStatusServiceRestTest::class,
+        methodName: 'getCurrentStatusByBarcodeProvider()',
+    )]
     public function testGetCurrentStatusSoap(ResponseInterface $response): void
     {
         $mock = new MockHandler(queue: [$response]);
@@ -146,9 +148,8 @@ class ShippingStatusServiceSoapTest extends ServiceTestCase
         $this->assertInstanceOf(expected: CurrentStatusResponse::class, actual: $currentStatusResponse);
     }
 
-    /**
-     * @testdox creates a valid CurrentStatusByReference request
-     */
+    /** @throws */
+    #[TestDox(text: 'creates a valid CurrentStatusByReference request')]
     public function testGetCurrentStatusByReferenceRequestSoap(): void
     {
         $reference = '339820938';
@@ -174,9 +175,8 @@ class ShippingStatusServiceSoapTest extends ServiceTestCase
         $this->assertEquals(expected: "/shipment/v2/status/reference/$reference", actual: $request->getUri()->getPath());
     }
 
-    /**
-     * @testdox creates a valid CompleteStatus request
-     */
+    /** @throws */
+    #[TestDox(text: 'creates a valid CompleteStatus request')]
     public function testGetCompleteStatusRequestSoap(): void
     {
         $barcode = '3SDEVC201611210';
@@ -201,10 +201,12 @@ class ShippingStatusServiceSoapTest extends ServiceTestCase
         $this->assertEquals(expected: "/shipment/v2/status/barcode/$barcode", actual: $request->getUri()->getPath());
     }
 
-    /**
-     * @testdox can retrieve the complete status
-     * @dataProvider \Firstred\PostNL\Tests\Service\ShippingStatusServiceRestTest::getCompleteStatusByBarcodeProvider()
-     */
+    /** @throws */
+    #[TestDox(text: 'can retrieve the complete status')]
+    #[DataProviderExternal(
+        className: ShippingStatusServiceRestTest::class,
+        methodName: 'getCompleteStatusByBarcodeProvider',
+    )]
     public function testGetCompleteStatusSoap(ResponseInterface $response): void
     {
         $mock = new MockHandler(queue: [$response]);
@@ -230,9 +232,8 @@ class ShippingStatusServiceSoapTest extends ServiceTestCase
         $this->assertInstanceOf(expected: DateTimeInterface::class, actual: $completeStatusResponse->getShipments()[0]->getOldStatuses()[0]->getTimeStamp());
     }
 
-    /**
-     * @testdox creates a valid CompleteStatusByReference request
-     */
+    /** @throws */
+    #[TestDox(text: 'creates a valid CompleteStatusByReference request')]
     public function testGetCompleteStatusByReferenceRequestSoap(): void
     {
         $reference = '339820938';
@@ -259,9 +260,8 @@ class ShippingStatusServiceSoapTest extends ServiceTestCase
         $this->assertEquals(expected: "/shipment/v2/status/reference/$reference", actual: $request->getUri()->getPath());
     }
 
-    /**
-     * @testdox creates a valid GetSignature request
-     */
+    /** @throws */
+    #[TestDox(text: 'creates a valid GetSignature request')]
     public function testGetSignatureRequestSoap(): void
     {
         $barcode = '3S9283920398234';
@@ -284,9 +284,8 @@ class ShippingStatusServiceSoapTest extends ServiceTestCase
         $this->assertEquals(expected: "/shipment/v2/status/signature/$barcode", actual: $request->getUri()->getPath());
     }
 
-    /**
-     * @testdox can get the signature
-     */
+    /** @throws */
+    #[TestDox(text: 'can get the signature')]
     public function testGetSignatureSoap(): void
     {
         $mock = new MockHandler(queue: [

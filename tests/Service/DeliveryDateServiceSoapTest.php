@@ -46,23 +46,20 @@ use Firstred\PostNL\Service\DeliveryDateServiceInterface;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Http\Message\RequestInterface;
 use ReflectionException;
 
-/**
- * @testdox The DeliveryDateService (SOAP)
- */
+#[TestDox(text: 'The DeliveryDateService (SOAP)')]
 class DeliveryDateServiceSoapTest extends ServiceTestCase
 {
     protected PostNL $postnl;
     protected DeliveryDateServiceInterface $service;
     protected RequestInterface $lastRequest;
 
-    /**
-     * @before
-     *
-     * @throws
-     */
+    /** @throws */
+    #[Before]
     public function setupPostNL(): void
     {
         $this->postnl = new PostNL(
@@ -94,9 +91,8 @@ class DeliveryDateServiceSoapTest extends ServiceTestCase
         $this->service->setTtl(ttl: 1);
     }
 
-    /**
-     * @testdox creates a valid delivery date request
-     */
+    /** @throws */
+    #[TestDox(text: 'creates a valid delivery date request')]
     public function testGetDeliveryDateRequestSoap(): void
     {
         $message = new Message();
@@ -178,9 +174,8 @@ XML
             , actualXml: (string) $request->getBody());
     }
 
-    /**
-     * @testdox return a valid delivery date
-     */
+    /** @throws */
+    #[TestDox(text: 'return a valid delivery date')]
     public function testGetDeliveryDateSoap(): void
     {
         $mock = new MockHandler(queue: [
@@ -239,9 +234,8 @@ XML
         $this->assertEquals(expected: '30-06-2016', actual: $response->getDeliveryDate()->format(format: 'd-m-Y'));
     }
 
-    /**
-     * @testdox creates a valid sent date request
-     */
+    /** @throws */
+    #[TestDox(text: 'creates a valid sent date request')]
     public function testGetSentDateRequestSoap(): void
     {
         $message = new Message();
@@ -312,9 +306,8 @@ XML
             , actualXml: (string) $request->getBody());
     }
 
-    /**
-     * @testdox return a valid sent date
-     */
+    /** @throws */
+    #[TestDox(text: 'return a valid sent date')]
     public function testGetSentDateSoap(): void
     {
         $mock = new MockHandler(queue: [

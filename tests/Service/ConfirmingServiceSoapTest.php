@@ -44,22 +44,19 @@ use Firstred\PostNL\Service\ConfirmingServiceInterface;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Http\Message\RequestInterface;
 
-/**
- * @testdox The ConfirmingService (SOAP)
- */
+#[TestDox(text: 'The ConfirmingService (SOAP)')]
 class ConfirmingServiceSoapTest extends ServiceTestCase
 {
     protected PostNL $postnl;
     protected ConfirmingServiceInterface $service;
     protected RequestInterface $lastRequest;
 
-    /**
-     * @before
-     *
-     * @throws
-     */
+    /** @throws */
+    #[Before]
     public function setupPostNL(): void
     {
         $this->postnl = new PostNL(
@@ -91,19 +88,15 @@ class ConfirmingServiceSoapTest extends ServiceTestCase
         $this->service->setTtl(ttl: 1);
     }
 
-    /**
-     * @testdox returns a valid service object
-     */
+    /** @throws */
+    #[TestDox(text: 'returns a valid service object')]
     public function testHasValidConfirmingService(): void
     {
         $this->assertInstanceOf(expected: ConfirmingService::class, actual: $this->service);
     }
 
-    /**
-     * @testdox creates a confirm request
-     *
-     * @throws
-     */
+    /** @throws */
+    #[TestDox(text: 'creates a confirm request')]
     public function testCreatesAValidLabelRequest(): void
     {
         $message = new LabellingMessage();
@@ -226,11 +219,8 @@ XML
         $this->assertEquals(expected: 'text/xml', actual: $request->getHeaderLine('Accept'));
     }
 
-    /**
-     * @testdox can confirm a single label
-     *
-     * @throws
-     */
+    /** @throws */
+    #[TestDox(text: 'can confirm a single label')]
     public function testGenerateSingleLabelSoap(): void
     {
         $mock = new MockHandler(queue: [
@@ -287,11 +277,8 @@ xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
         $this->assertInstanceOf(expected: ConfirmingResponseShipment::class, actual: $confirm);
     }
 
-    /**
-     * @testdox can confirm multiple labels
-     *
-     * @throws
-     */
+    /** @throws */
+    #[TestDox(text: 'can confirm multiple labels')]
     public function testGenerateMultipleLabelsSoap(): void
     {
         $mock = new MockHandler(queue: [
@@ -389,11 +376,8 @@ xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
         $this->assertInstanceOf(expected: ConfirmingResponseShipment::class, actual: $confirmShipments[1]);
     }
 
-    /**
-     * @testdox throws exception on invalid response
-     *
-     * @throws
-     */
+    /** @throws */
+    #[TestDox(text: 'throws exception on invalid response')]
     public function testNegativeGenerateLabelInvalidResponseSoap(): void
     {
         $this->expectException(exception: ResponseException::class);

@@ -31,20 +31,17 @@ use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\PostNL;
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @testdox The PostNL object
- */
+#[TestDox(text: 'The PostNL object')]
 class PostNLTest extends TestCase
 {
     protected PostNL $postnl;
 
-    /**
-     * @before
-     *
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     */
+    /** @throws */
+    #[Before]
     public function setupPostNL(): void
     {
         $this->postnl = new PostNL(
@@ -69,12 +66,8 @@ class PostNLTest extends TestCase
         );
     }
 
-    /**
-     * @testdox cannot generate an international barcode without a GlobalPack range
-     *
-     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
-     * @throws \Firstred\PostNL\Exception\InvalidConfigurationException
-     */
+    /** @throws */
+    #[TestDox(text: 'cannot generate an international barcode without a GlobalPack range')]
     public function testGlobalPackWithoutRange(): void
     {
         $this->expectException(exception: '\\Firstred\\PostNL\\Exception\\InvalidConfigurationException');
@@ -84,12 +77,8 @@ class PostNLTest extends TestCase
         $this->postnl->generateBarcodesByCountryCodes(isos: ['US' => 3]);
     }
 
-    /**
-     * @testdox cannot generate an international barcode without a GlobalPack type
-     *
-     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
-     * @throws \Firstred\PostNL\Exception\InvalidConfigurationException
-     */
+    /** @throws */
+    #[TestDox(text: 'cannot generate an international barcode without a GlobalPack type')]
     public function testGlobalPackWithoutType(): void
     {
         $this->expectException(exception: '\\Firstred\\PostNL\\Exception\\InvalidConfigurationException');

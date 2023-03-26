@@ -47,6 +47,8 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -59,11 +61,8 @@ class LocationServiceSoapTest extends ServiceTestCase
     protected LocationServiceInterface $service;
     protected RequestInterface $lastRequest;
 
-    /**
-     * @before
-     *
-     * @throws
-     */
+    /** @throws */
+    #[Before]
     public function setupPostNL(): void
     {
         $this->postnl = new PostNL(
@@ -95,9 +94,8 @@ class LocationServiceSoapTest extends ServiceTestCase
         $this->service->setTtl(ttl: 1);
     }
 
-    /**
-     * @testdox creates a valid NearestLocations request
-     */
+    /** @throws */
+    #[TestDox(text: 'creates a valid NearestLocations request')]
     public function testGetNearestLocationsRequestSoap(): void
     {
         $message = new Message();
@@ -176,9 +174,8 @@ XML
         $this->assertEquals(expected: 'text/xml', actual: $request->getHeaderLine(header: 'Accept'));
     }
 
-    /**
-     * @testdox can request nearest locations
-     */
+    /** @throws */
+    #[TestDox(text: 'can request nearest locations')]
     public function testGetNearestLocationsSoap(): void
     {
         $mock = new MockHandler(queue: [
@@ -213,9 +210,8 @@ XML
         $this->assertEquals(expected: 1, actual: count(value: $response->getGetLocationsResult()));
     }
 
-    /**
-     * @testdox creates a valid GetLocationsInArea request
-     */
+    /** @throws */
+    #[TestDox(text: 'creates a valid GetLocationsInArea request')]
     public function testGetLocationsInAreaRequestSoap(): void
     {
         $message = new Message();
@@ -291,9 +287,8 @@ XML
         $this->assertEquals(expected: 'text/xml', actual: $request->getHeaderLine(header: 'Accept'));
     }
 
-    /**
-     * @testdox can request locations in area
-     */
+    /** @throws */
+    #[TestDox(text: 'can request locations in area')]
     public function testGetLocationsInAreaSoap(): void
     {
         $mock = new MockHandler(queue: [
@@ -330,11 +325,8 @@ XML
         $this->assertEquals(expected: 1, actual: count(value: $response->getGetLocationsResult()));
     }
 
-    /**
-     * @testdox creates a valid GetLocation request
-     *
-     * @throws
-     */
+    /** @throws */
+    #[TestDox(text: 'creates a valid GetLocation request')]
     public function testGetLocationRequestSoap(): void
     {
         $message = new Message();
@@ -383,9 +375,8 @@ XML
         $this->assertEquals(expected: 'text/xml', actual: $request->getHeaderLine(header: 'Accept'));
     }
 
-    /**
-     * @testdox can request locations in area
-     */
+    /** @throws */
+    #[TestDox(text: 'can request locations in area')]
     public function testGetLocationSoap(): void
     {
         $mock = new MockHandler(queue: [

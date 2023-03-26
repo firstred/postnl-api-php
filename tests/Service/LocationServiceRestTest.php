@@ -49,6 +49,9 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use GuzzleHttp\Psr7\Query;
 use GuzzleHttp\Psr7\Request;
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use ReflectionException;
@@ -64,11 +67,8 @@ class LocationServiceRestTest extends ServiceTestCase
     protected LocationServiceInterface $service;
     protected RequestInterface $lastRequest;
 
-    /**
-     * @before
-     *
-     * @throws
-     */
+    /** @throws */
+    #[Before]
     public function setupPostNL(): void
     {
         $this->postnl = new PostNL(
@@ -100,9 +100,8 @@ class LocationServiceRestTest extends ServiceTestCase
         $this->service->setTtl(ttl: 1);
     }
 
-    /**
-     * @testdox creates a valid NearestLocations request
-     */
+    /** @throws */
+    #[TestDox(text: 'creates a valid NearestLocations request')]
     public function testGetNearestLocationsRequestRest(): void
     {
         $message = new Message();
@@ -148,11 +147,12 @@ class LocationServiceRestTest extends ServiceTestCase
     }
 
     /**
-     * @testdox can request nearest locations
-     * @dataProvider nearestLocationsByPostcodeProvider
-     *
      * @param ResponseInterface $response
+     *
+     * @throws
      */
+    #[TestDox(text: 'can request nearest locations')]
+    #[DataProvider(methodName: 'nearestLocationsByPostcodeProvider')]
     public function testGetNearestLocationsRest(ResponseInterface $response): void
     {
         $mock = new MockHandler(queue: [$response]);
@@ -199,9 +199,8 @@ class LocationServiceRestTest extends ServiceTestCase
         }
     }
 
-    /**
-     * @testdox creates a valid GetLocationsInArea request
-     */
+    /** @throws */
+    #[TestDox(text: 'creates a valid `GetLocationsInArea` request')]
     public function testGetLocationsInAreaRequestRest(): void
     {
         $message = new Message();
@@ -248,13 +247,12 @@ class LocationServiceRestTest extends ServiceTestCase
     }
 
     /**
-     * @testdox      can request locations in area
-     * @dataProvider locationsInAreaProvider
-     *
      * @param ResponseInterface $response
      *
-     * @throws ReflectionException
+     * @throws
      */
+    #[TestDox(text: 'can request locations in area')]
+    #[DataProvider(methodName: 'locationsInAreaProvider')]
     public function testGetLocationsInAreaRest(ResponseInterface $response): void
     {
         $mock = new MockHandler(queue: [$response]);
@@ -290,9 +288,8 @@ class LocationServiceRestTest extends ServiceTestCase
         $this->assertNotTrue(condition: static::containsStdClass(value: $response));
     }
 
-    /**
-     * @testdox creates a valid GetLocation request
-     */
+    /** @throws */
+    #[TestDox(text: 'creates a valid `GetLocation` request')]
     public function testGetLocationRequestRest(): void
     {
         $message = new Message();
@@ -315,10 +312,9 @@ class LocationServiceRestTest extends ServiceTestCase
         $this->assertEquals(expected: 'application/json', actual: $request->getHeaderLine(header: 'Accept'));
     }
 
-    /**
-     * @testdox can request locations in area
-     * @dataProvider singleLocationProvider
-     */
+    /** @throws */
+    #[TestDox(text: 'can request locations in area')]
+    #[DataProvider(methodName: 'singleLocationProvider')]
     public function testGetLocationRest($response)
     {
         $mock = new MockHandler(queue: [$response]);
@@ -351,12 +347,19 @@ class LocationServiceRestTest extends ServiceTestCase
         ];
     }
 
+    /**
+     * @return array[]
+     */
     public function locationsInAreaProvider(): array
     {
         return [
             [PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/location/locationsinarea.http'))],
         ];
     }
+
+    /**
+     * @return array[]
+     */
 
     public function singleLocationProvider(): array
     {
