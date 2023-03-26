@@ -284,7 +284,7 @@ class PostNL implements LoggerAwareInterface
         $this->setCustomer(customer: $customer);
         $this->setToken(apiKey: $apiKey);
         $this->setSandbox(sandbox: $sandbox);
-        $this->setAPIMode(mode: $mode);
+        $this->setApiMode(mode: $mode);
     }
 
     /**
@@ -398,11 +398,46 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
+     * @param PostNLApiMode|int $mode
+     *
+     * @return $this
+     * @throws PostNLInvalidArgumentException
+     *
+     * @deprecated 2.0.0
+     */
+    public function setMode(PostNLApiMode|int $mode): static
+    {
+        trigger_deprecation(
+            package: 'firstred/postnl-api-php',
+            version: '2.0.0',
+            message: 'Using `PostNL::setMode` is deprecated, use `PostNL::setApiMode` instead.',
+        );
+
+        return $this->setApiMode(mode: $mode);
+    }
+
+    /**
+     * @return int
+     *
+     * @deprecated
+     */
+    public function getMode(): int
+    {
+        trigger_deprecation(
+            package: 'firstred/postnl-api-php',
+            version: '2.0.0',
+            message: 'Using `PostNL::getMode` is deprecated, use `PostNL::getApiMode` instead.',
+        );
+
+        return $this->getApiMode()->value;
+    }
+
+    /**
      * Get the current mode.
      *
      * @since 1.0.0
      */
-    public function getAPIMode(): PostNLApiMode
+    public function getApiMode(): PostNLApiMode
     {
         return $this->apiMode;
     }
@@ -415,8 +450,17 @@ class PostNL implements LoggerAwareInterface
      * @since 1.0.0
      * @since 2.0.0 PostNLApiMode enum
      */
-    public function setAPIMode(PostNLApiMode $mode): static
+    public function setApiMode(PostNLApiMode|int $mode): static
     {
+        if (is_int(value: $mode)) {
+            trigger_deprecation(
+                package: 'firstred/postnl-api-php',
+                version: '2.0.0',
+                message: 'Using `PostNL::MODE_*` is deprecated, use the `PostNLApiMode` enum instead.',
+            );
+            $mode = PostNLApiMode::tryFrom(value: $mode);
+        }
+
         $this->getBarcodeService()->setApiMode(mode: $mode);
         $this->getConfirmingService()->setApiMode(mode: $mode);
         $this->getDeliveryDateService()->setApiMode(mode: $mode);
@@ -499,8 +543,9 @@ class PostNL implements LoggerAwareInterface
     /**
      * Set the HttpClient.
      *
-     * @since 1.0.0
+     * @throws PostNLInvalidArgumentException
      * @since 2.0.0 Renamed `$client` to `$httpClient`
+     * @since 1.0.0
      */
     public function setHttpClient(HttpClientInterface $httpClient): void
     {
@@ -560,6 +605,7 @@ class PostNL implements LoggerAwareInterface
     /**
      * Get PSR-7 Request factory.
      *
+     * @throws PostNLInvalidArgumentException
      * @since 1.2.0
      */
     public function getRequestFactory(): RequestFactoryInterface
@@ -677,7 +723,7 @@ class PostNL implements LoggerAwareInterface
         if (!isset($this->barcodeService)) {
             $this->setBarcodeService(service: new BarcodeService(
                 apiKey: $this->getApiKey(),
-                apiMode: $this->getAPIMode(),
+                apiMode: $this->getApiMode(),
                 sandbox: $this->getSandbox(),
                 httpClient: $this->getHttpClient(),
                 requestFactory: $this->getRequestFactory(),
@@ -711,7 +757,7 @@ class PostNL implements LoggerAwareInterface
         if (!isset($this->labellingService)) {
             $this->setLabellingService(service: new LabellingService(
                 apiKey: $this->getApiKey(),
-                apiMode: $this->getAPIMode(),
+                apiMode: $this->getApiMode(),
                 sandbox: $this->getSandbox(),
                 httpClient: $this->getHttpClient(),
                 requestFactory: $this->getRequestFactory(),
@@ -745,7 +791,7 @@ class PostNL implements LoggerAwareInterface
         if (!isset($this->confirmingService)) {
             $this->setConfirmingService(service: new ConfirmingService(
                 apiKey: $this->getApiKey(),
-                apiMode: $this->getAPIMode(),
+                apiMode: $this->getApiMode(),
                 sandbox: $this->getSandbox(),
                 httpClient: $this->getHttpClient(),
                 requestFactory: $this->getRequestFactory(),
@@ -779,7 +825,7 @@ class PostNL implements LoggerAwareInterface
         if (!isset($this->shippingStatusService)) {
             $this->setShippingStatusService(service: new ShippingStatusService(
                 apiKey: $this->getApiKey(),
-                apiMode: $this->getAPIMode(),
+                apiMode: $this->getApiMode(),
                 sandbox: $this->getSandbox(),
                 httpClient: $this->getHttpClient(),
                 requestFactory: $this->getRequestFactory(),
@@ -817,7 +863,7 @@ class PostNL implements LoggerAwareInterface
         if (!isset($this->deliveryDateService)) {
             $this->setDeliveryDateService(service: new DeliveryDateService(
                 apiKey: $this->getApiKey(),
-                apiMode: $this->getAPIMode(),
+                apiMode: $this->getApiMode(),
                 sandbox: $this->getSandbox(),
                 httpClient: $this->getHttpClient(),
                 requestFactory: $this->getRequestFactory(),
@@ -854,7 +900,7 @@ class PostNL implements LoggerAwareInterface
         if (!isset($this->timeframeService)) {
             $this->setTimeframeService(service: new TimeframeService(
                 apiKey: $this->getApiKey(),
-                apiMode: $this->getAPIMode(),
+                apiMode: $this->getApiMode(),
                 sandbox: $this->getSandbox(),
                 httpClient: $this->getHttpClient(),
                 requestFactory: $this->getRequestFactory(),
@@ -888,7 +934,7 @@ class PostNL implements LoggerAwareInterface
         if (!isset($this->locationService)) {
             $this->setLocationService(service: new LocationService(
                 apiKey: $this->getApiKey(),
-                apiMode: $this->getAPIMode(),
+                apiMode: $this->getApiMode(),
                 sandbox: $this->getSandbox(),
                 httpClient: $this->getHttpClient(),
                 requestFactory: $this->getRequestFactory(),
@@ -921,7 +967,7 @@ class PostNL implements LoggerAwareInterface
         if (!isset($this->shippingService)) {
             $this->setShippingService(service: new ShippingService(
                 apiKey: $this->getApiKey(),
-                apiMode: $this->getAPIMode(),
+                apiMode: $this->getApiMode(),
                 sandbox: $this->getSandbox(),
                 httpClient: $this->getHttpClient(),
                 requestFactory: $this->getRequestFactory(),
@@ -2111,7 +2157,7 @@ class PostNL implements LoggerAwareInterface
             } else {
                 switch ($type) {
                     case 'timeframes':
-                        if (static::MODE_REST === $this->getAPIMode()) {
+                        if (static::MODE_REST === $this->getApiMode()) {
                             TimeframeServiceRestAdapter::validateRESTResponse(response: $response);
                         }
 
@@ -2122,7 +2168,7 @@ class PostNL implements LoggerAwareInterface
 
                         break;
                     case 'locations':
-                        if (static::MODE_REST === $this->getAPIMode()) {
+                        if (static::MODE_REST === $this->getApiMode()) {
                             LocationServiceRestAdapter::validateRESTResponse(response: $response);
                         }
 
@@ -2133,7 +2179,7 @@ class PostNL implements LoggerAwareInterface
 
                         break;
                     case 'delivery_date':
-                        if (static::MODE_REST === $this->getAPIMode()) {
+                        if (static::MODE_REST === $this->getApiMode()) {
                             DeliveryDateService::validateRESTResponse(response: $response);
                         }
 

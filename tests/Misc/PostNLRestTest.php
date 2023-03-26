@@ -438,7 +438,7 @@ class PostNLRestTest extends TestCase
         $this->expectException(exception: \TypeError::class);
 
         /** @noinspection PhpStrictTypeCheckingInspection */
-        $this->postnl->setAPIMode(mode: 'invalid');
+        $this->postnl->setApiMode(mode: 'invalid');
     }
 
     protected function getNearestLocationsMockResponse(): string
