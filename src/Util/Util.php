@@ -37,6 +37,8 @@ use setasign\Fpdi\PdfParser\StreamReader;
 
 /**
  * Class Util.
+ *
+ * @since 1.0.0
  */
 class Util
 {
@@ -47,7 +49,7 @@ class Util
      * @param string|null $prefix
      *
      * @return string a querystring, essentially
-     *
+     * @since 1.0.0
      * @codeCoverageIgnore
      */
     public static function urlEncode(array $arr, string $prefix = null): string
@@ -89,6 +91,7 @@ class Util
      * @return array|false|string Returns an array with the dimensions or ISO size and orientation
      *                            The orientation is in FPDF format, so L for Landscape and P for Portrait
      *                            Sizes are in mm
+     * @since 1.0.0
      */
     public static function getPdfSizeAndOrientation(string $pdf): bool|array|string
     {
@@ -138,6 +141,7 @@ class Util
      * @return string (format: `Y-m-d H:i:s`)
      *
      * @throws Exception
+     * @since 1.0.0
      */
     public static function getDeliveryDate(string $deliveryDate, bool $mondayDelivery = false, bool $sundayDelivery = false): string
     {
@@ -164,6 +168,7 @@ class Util
      * @return string
      *
      * @throws InvalidArgumentException
+     * @since 1.0.0
      */
     public static function getShippingDate(
         string $deliveryDate,
@@ -204,8 +209,8 @@ class Util
      * @param string $preferredDeliveryDate Customer preference
      *
      * @return int
-     *
      * @throws Exception
+     * @since 1.0.0
      */
     public static function getShippingDaysRemaining(string $shippingDate, string $preferredDeliveryDate): int
     {
@@ -245,6 +250,9 @@ class Util
      * @return array
      *
      * Credits to @tvlooy (https://gist.github.com/tvlooy/1894247)
+     *
+     * @since 1.0.0
+     * @throws Exception
      */
     protected static function getHolidaysForYear(string $year): array
     {
@@ -281,6 +289,14 @@ class Util
         return $holidays;
     }
 
+    /**
+     * @param int|float|string $a
+     * @param int|float|string $b
+     *
+     * @return int
+     *
+     * @since 1.0.0
+     */
     public static function compareGuzzleVersion(int|float|string $a, int|float|string $b): int
     {
         $a = str_replace(search: '.', replace: '', subject: (string) $a);

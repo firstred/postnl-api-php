@@ -32,6 +32,8 @@ use Symfony\Component\Uid\Uuid as SymfonyUuid;
 
 /**
  * Class UUID.
+ *
+ * @since 1.0.0
  */
 class UUID
 {
