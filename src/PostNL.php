@@ -146,6 +146,25 @@ use const E_USER_WARNING;
 class PostNL implements LoggerAwareInterface
 {
     /**
+     * REST API
+     *
+     * @deprecated See `PostNLApiMode::Rest`
+     */
+    const MODE_REST = 1;
+    /**
+     * SOAP API
+     *
+     * @deprecated See `PostNLApiMode::Soap`
+     */
+    const MODE_SOAP = 2;
+    /**
+     * Legacy SOAP API
+     *
+     * @deprecated See `PostNLApiMode::Soap`
+     */
+    const MODE_LEGACY = 2;
+
+    /**
      * 3S (or EU Pack Special) countries.
      *
      * @var array                $threeSCountries
